@@ -118,33 +118,28 @@ pub async fn process(
     }
 
     let resp = if method.as_str().eq("post") {
-        req_config
-            .config
-            .ds
-            .http_post_with_cookie(
-                url.as_str(),
-                req_config.request.cookies_string(),
-                &conf,
-                format!("{{{}}}", body.join(",")).as_str(),
-            )
-            .await
-            .map_err(|e| ftd::interpreter::Error::DSError {
-                message: format!("{:?}", e),
-            })
+        fastn_core::http::http_post_with_cookie(
+            &req_config,
+            url.as_str(),
+            &conf,
+            format!("{{{}}}", body.join(",")).as_str(),
+        )
+        .await
+        .map_err(|e| ftd::interpreter::Error::DSError {
+            message: format!("{:?}", e),
+        })
     } else {
-        req_config
-            .config
-            .ds
-            .http_get_with_cookie(
-                url.as_str(),
-                req_config.request.cookies_string(),
-                &conf,
-                false, // disable cache
-            )
-            .await
-            .map_err(|e| ftd::interpreter::Error::DSError {
-                message: format!("{:?}", e),
-            })
+        fastn_core::http::http_get_with_cookie(
+            &req_config.config.ds,
+            &req_config.request,
+            url.as_str(),
+            &conf,
+            false, // disable cache
+        )
+        .await
+        .map_err(|e| ftd::interpreter::Error::DSError {
+            message: format!("{:?}", e),
+        })
     };
 
     let response = match resp {

@@ -26,6 +26,23 @@ macro_rules! not_found {
     }};
 }
 
+pub trait HttpResponseExt {
+    fn bytes(&self) -> Vec<u8>;
+    fn text(&self) -> String;
+}
+
+impl HttpResponseExt for actix_web::HttpResponse {
+    fn bytes(&self) -> Vec<u8> {
+        // Extract the body stream from the response
+        vec![]
+    }
+
+    fn text(&self) -> String {
+        // Extract response as string
+        String::new()
+    }
+}
+
 pub fn server_error_(msg: String) -> fastn_core::http::Response {
     fastn_core::warning!("server error: {}", msg);
     server_error_without_warning(msg)
@@ -338,6 +355,19 @@ impl Request {
         self.cookies = cookies.clone();
     }
 
+    pub fn set_ip(&mut self, ip: Option<String>) {
+        self.ip = ip;
+    }
+
+    pub fn set_headers(&mut self, headers: &std::collections::HashMap<String, String>) {
+        for (key, value) in headers.iter() {
+            self.headers.insert(
+                reqwest::header::HeaderName::from_bytes(key.as_bytes()).unwrap(),
+                reqwest::header::HeaderValue::from_str(value.as_str()).unwrap(),
+            );
+        }
+    }
+
     pub fn insert_header(&mut self, name: reqwest::header::HeaderName, value: &'static str) {
         self.headers
             .insert(name, reqwest::header::HeaderValue::from_static(value));
@@ -473,10 +503,67 @@ pub(crate) async fn post_json<T: serde::de::DeserializeOwned, B: Into<reqwest::B
         .await?)
 }
 
+pub async fn http_post_with_cookie(
+    req_config: &fastn_core::RequestConfig,
+    url: &str,
+    headers: &std::collections::HashMap<String, String>,
+    body: &str,
+) -> fastn_core::Result<(fastn_core::Result<Vec<u8>>, Vec<String>)> {
+    pub use fastn_ds::RequestType;
+
+    let cookies = req_config.request.cookies().clone();
+    let mut req_headers = reqwest::header::HeaderMap::new();
+    for (key, value) in headers.iter() {
+        req_headers.insert(
+            reqwest::header::HeaderName::from_bytes(key.as_bytes()).unwrap(),
+            reqwest::header::HeaderValue::from_str(value.as_str()).unwrap(),
+        );
+    }
+
+    let mut http_request = fastn_core::http::Request::default();
+    http_request.set_method("post");
+    http_request.set_cookies(&cookies);
+    http_request.set_headers(headers);
+    http_request.set_ip(req_config.request.ip.clone());
+    http_request.set_body(actix_web::web::Bytes::copy_from_slice(body.as_bytes()));
+
+    let http_url = url::Url::parse(url).unwrap(); // todo: remove this
+    let res = req_config
+        .config
+        .ds
+        .http(http_url, &http_request, &std::collections::HashMap::new())
+        .await
+        .map_err(fastn_core::Error::DSError)?;
+
+    let mut resp_cookies = vec![];
+    res.headers().iter().for_each(|(k, v)| {
+        if k.as_str().eq("set-cookie") {
+            if let Ok(v) = v.to_str() {
+                resp_cookies.push(v.to_string());
+            }
+        }
+    });
+
+    if !res.status().eq(&reqwest::StatusCode::OK) {
+        let message = format!(
+            "url: {}, response_status: {}, response: {:?}",
+            url,
+            res.status(),
+            res.text()
+        );
+        return Ok((
+            Err(fastn_core::Error::APIResponseError(message)),
+            resp_cookies,
+        ));
+    }
+    Ok((Ok(res.bytes()), resp_cookies))
+}
+
 pub async fn http_get(url: &str) -> fastn_core::Result<Vec<u8>> {
     tracing::debug!("http_get {}", &url);
 
-    http_get_with_cookie(url, None, &std::collections::HashMap::new(), true)
+    // todo: fix this
+    http_get_with_cookie_2(url, None, &std::collections::HashMap::new(), true)
         .await?
         .0
 }
@@ -484,8 +571,75 @@ pub async fn http_get(url: &str) -> fastn_core::Result<Vec<u8>> {
 static NOT_FOUND_CACHE: once_cell::sync::Lazy<antidote::RwLock<std::collections::HashSet<String>>> =
     once_cell::sync::Lazy::new(|| antidote::RwLock::new(Default::default()));
 
+pub async fn http_get_with_cookie(
+    ds: &fastn_ds::DocumentStore,
+    req: &fastn_core::http::Request,
+    url: &str,
+    headers: &std::collections::HashMap<String, String>,
+    use_cache: bool,
+) -> fastn_core::Result<(fastn_core::Result<Vec<u8>>, Vec<String>)> {
+    pub use fastn_ds::RequestType;
+    if use_cache && NOT_FOUND_CACHE.read().contains(url) {
+        return Ok((
+            Err(fastn_core::Error::APIResponseError(
+                "page not found, cached".to_string(),
+            )),
+            vec![],
+        ));
+    }
+
+    let cookies = req.cookies().clone();
+    let mut req_headers = reqwest::header::HeaderMap::new();
+    for (key, value) in headers.iter() {
+        req_headers.insert(
+            reqwest::header::HeaderName::from_bytes(key.as_bytes()).unwrap(),
+            reqwest::header::HeaderValue::from_str(value.as_str()).unwrap(),
+        );
+    }
+
+    let mut http_request = fastn_core::http::Request::default();
+    http_request.set_method("get");
+    http_request.set_cookies(&cookies);
+    http_request.set_headers(headers);
+    http_request.set_ip(req.ip.clone());
+
+    let http_url = url::Url::parse(url).unwrap(); // todo: remove this
+    let res = ds
+        .http(http_url, &http_request, &std::collections::HashMap::new())
+        .await
+        .map_err(fastn_core::Error::DSError)?;
+
+    let mut resp_cookies = vec![];
+    res.headers().iter().for_each(|(k, v)| {
+        if k.as_str().eq("set-cookie") {
+            if let Ok(v) = v.to_str() {
+                resp_cookies.push(v.to_string());
+            }
+        }
+    });
+
+    if !res.status().eq(&reqwest::StatusCode::OK) {
+        let message = format!(
+            "url: {}, response_status: {}, response: {:?}",
+            url,
+            res.status(),
+            res
+        );
+
+        if use_cache {
+            NOT_FOUND_CACHE.write().insert(url.to_string());
+        }
+
+        return Ok((
+            Err(fastn_core::Error::APIResponseError(message)),
+            resp_cookies,
+        ));
+    }
+    Ok((Ok(res.bytes()), resp_cookies))
+}
+
 #[tracing::instrument(skip_all)]
-pub(crate) async fn http_get_with_cookie(
+pub(crate) async fn http_get_with_cookie_2(
     url: &str,
     cookie: Option<String>,
     headers: &std::collections::HashMap<String, String>,
