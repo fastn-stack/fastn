@@ -221,7 +221,9 @@ impl Library2022 {
             }
             "http" => processor::http::process(value, kind, doc, self)
                 .await
-                .map_err(|e| ftd::interpreter::Error::OtherError(format!("{:?}", e))),
+                .map_err(|e| ftd::interpreter::Error::DSError {
+                    message: format!("{:?}", e),
+                }),
             "translation-info" => processor::lang_details::process(value, kind, doc, self).await,
             "current-language" => processor::lang::process(value, kind, doc, self).await,
             "toc" => processor::toc::process(value, kind, doc),
