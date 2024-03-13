@@ -126,7 +126,7 @@ async fn serve_file(
         false,
         only_js,
     )
-        .await
+    .await
     {
         Ok(r) => r.into(),
         Err(e) => {
@@ -477,17 +477,17 @@ async fn handle_static_route(
     fn generate_dark_image_path(path: &str) -> Option<String> {
         match path.rsplit_once('.') {
             Some((remaining, ext))
-            if mime_guess::MimeGuess::from_ext(ext)
-                .first_or_octet_stream()
-                .to_string()
-                .starts_with("image/") =>
-                {
-                    Some(if remaining.ends_with("-dark") {
-                        format!("{}.{}", remaining.trim_end_matches("-dark"), ext)
-                    } else {
-                        format!("{}-dark.{}", remaining, ext)
-                    })
-                }
+                if mime_guess::MimeGuess::from_ext(ext)
+                    .first_or_octet_stream()
+                    .to_string()
+                    .starts_with("image/") =>
+            {
+                Some(if remaining.ends_with("-dark") {
+                    format!("{}.{}", remaining.trim_end_matches("-dark"), ext)
+                } else {
+                    format!("{}-dark.{}", remaining, ext)
+                })
+            }
             _ => None,
         }
     }
@@ -540,9 +540,9 @@ async fn handle_endpoints(
                             .trim_start_matches(endpoint.mountpoint.trim_end_matches('/'))
                             .trim_start_matches('/')
                     )
-                        .as_str(),
+                    .as_str(),
                 )
-                    .unwrap(),
+                .unwrap(),
                 req,
                 &std::collections::HashMap::new(),
             )
@@ -597,10 +597,10 @@ pub async fn listen(
 You can try without providing port, it will automatically pick unused port."#,
                     x.to_string().red()
                 ))
-                    .unwrap_or_else(|| {
-                        "Tried picking port between port 8000 to 9000, none are available :-("
-                            .to_string()
-                    })
+                .unwrap_or_else(|| {
+                    "Tried picking port between port 8000 to 9000, none are available :-("
+                        .to_string()
+                })
             );
             std::process::exit(2);
         }
@@ -615,7 +615,7 @@ You can try without providing port, it will automatically pick unused port."#,
                 actix_web::middleware::Logger::new(
                     r#""%r" %Ts %s %b %a "%{Referer}i" "%{User-Agent}i""#,
                 )
-                    .log_target(""),
+                .log_target(""),
             )
             .route("/{path:.*}", actix_web::web::route().to(route))
     };
