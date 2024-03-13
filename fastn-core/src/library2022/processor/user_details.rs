@@ -5,6 +5,8 @@ pub async fn process(
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+    use fastn_core::http::RequestUDType;
+
     if let Some(ud) = req_config.request.ud(&req_config.config.ds).await {
         let ud = UserDetails {
             is_logged_in: true,

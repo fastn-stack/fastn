@@ -483,6 +483,8 @@ pub(crate) async fn read_ftd_2023(
     download_assets: bool,
     only_js: bool,
 ) -> fastn_core::Result<FTDResult> {
+    use fastn_core::http::RequestUDType;
+
     let package_name = config.config.package.name.to_string();
     let c = &config.config.clone();
 

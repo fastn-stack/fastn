@@ -1,5 +1,9 @@
 extern crate self as fastn_ds;
 pub mod http;
+
+pub mod ud;
+pub use ud::UserData;
+
 mod utils;
 
 #[derive(Debug, Clone)]
@@ -117,23 +121,19 @@ pub enum WriteError {
 }
 
 #[derive(thiserror::Error, Debug)]
-pub enum HttpError {
+pub enum DSError {
     #[error("http error {0}")]
     HttpError(#[from] reqwest::Error),
     #[error("url parse error {0}")]
     URLParseError(#[from] url::ParseError),
+    #[error("serde error {0}")]
+    SerdeError(#[from] serde_json::Error),
+    #[error("generic error {message}")]
+    GenericError { message: String },
 }
 
 pub type HttpResponse = actix_web::HttpResponse;
-
-pub trait RequestType {
-    fn headers(&self) -> &reqwest::header::HeaderMap;
-    fn method(&self) -> &str;
-    fn query_string(&self) -> &str;
-    fn get_ip(&self) -> Option<String>;
-    fn cookies_string(&self) -> Option<String>;
-    fn body(&self) -> &[u8];
-}
+pub type DSResult<T> = Result<T, DSError>;
 
 impl DocumentStore {
     pub fn new<T: AsRef<camino::Utf8Path>>(root: T) -> Self {
@@ -270,15 +270,12 @@ impl DocumentStore {
 
     // This method will connect client request to the out of the world
     #[tracing::instrument(skip(req, extra_headers))]
-    pub async fn http<T>(
+    pub async fn http(
         &self,
         url: url::Url,
-        req: &T,
+        req: &fastn_ds::http::Request,
         extra_headers: &std::collections::HashMap<String, String>,
-    ) -> Result<fastn_ds::HttpResponse, HttpError>
-    where
-        T: RequestType,
-    {
+    ) -> Result<fastn_ds::HttpResponse, DSError> {
         let headers = req.headers();
 
         let mut proxy_request = reqwest::Request::new(

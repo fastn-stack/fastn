@@ -13,6 +13,7 @@ pub(crate) async fn forgot_password_request(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
+    use fastn_core::http::RequestUDType;
 
     if req_config.request.ud(&req_config.config.ds).await.is_some() {
         return Ok(fastn_core::http::api_error("Bad Request")?);
@@ -230,6 +231,7 @@ pub(crate) async fn set_password(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     use diesel::prelude::*;
     use diesel_async::RunQueryDsl;
+    use fastn_core::http::RequestUDType;
 
     if req_config.request.method() == "GET" {
         // render set password form
