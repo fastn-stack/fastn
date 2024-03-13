@@ -1425,6 +1425,7 @@ dependencies = [
  "argon2",
  "async-lock",
  "async-recursion",
+ "async-trait",
  "camino",
  "chrono",
  "clap",
@@ -1489,6 +1490,7 @@ name = "fastn-ds"
 version = "0.1.0"
 dependencies = [
  "actix-web",
+ "async-trait",
  "camino",
  "dirs",
  "ftd 0.3.0",
@@ -1496,6 +1498,7 @@ dependencies = [
  "once_cell",
  "regex",
  "reqwest",
+ "serde",
  "thiserror",
  "tokio",
  "tracing",

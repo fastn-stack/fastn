@@ -108,7 +108,11 @@ pub struct Request {
     // path_params: Vec<(String, )>
 }
 
+#[async_trait::async_trait]
 impl fastn_ds::RequestType for Request {
+    async fn ud(&self, ds: &fastn_ds::DocumentStore) -> Option<fastn_ds::UserData> {
+        self.ud(ds).await
+    }
     fn headers(&self) -> &reqwest::header::HeaderMap {
         &self.headers
     }

@@ -1,10 +1,20 @@
 extern crate self as fastn_ds;
+
 pub mod http;
 mod utils;
 
 #[derive(Debug, Clone)]
 pub struct DocumentStore {
     root: Path,
+}
+
+#[derive(serde::Deserialize, Clone)]
+pub struct UserData {
+    pub id: i64,
+    pub username: String,
+    pub name: String,
+    pub email: String,
+    pub verified_email: bool,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -126,7 +136,9 @@ pub enum HttpError {
 
 pub type HttpResponse = actix_web::HttpResponse;
 
+#[async_trait::async_trait]
 pub trait RequestType {
+    async fn ud(&self, ds: &fastn_ds::DocumentStore) -> Option<UserData>;
     fn headers(&self) -> &reqwest::header::HeaderMap;
     fn method(&self) -> &str;
     fn query_string(&self) -> &str;
