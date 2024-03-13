@@ -14,7 +14,7 @@ fn client_builder() -> reqwest::Client {
 pub static CLIENT: once_cell::sync::Lazy<std::sync::Arc<reqwest::Client>> =
     once_cell::sync::Lazy::new(|| std::sync::Arc::new(client_builder()));
 
-pub(crate) struct ResponseBuilder {}
+pub struct ResponseBuilder {}
 
 impl ResponseBuilder {
     pub async fn from_reqwest(response: reqwest::Response) -> fastn_ds::HttpResponse {

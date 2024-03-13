@@ -194,7 +194,7 @@ pub async fn serve_helper(
 
     match (req.method().to_lowercase().as_str(), req.path()) {
         (_, t) if t.starts_with("/-/auth/") => {
-            return fastn_core::auth::routes::handle_auth(req, &mut req_config, config).await
+            return fastn_core::auth::routes::handle_auth(req, &mut req_config, config).await;
         }
         ("get", "/-/clear-cache/") => return clear_cache(config, req).await,
         ("get", "/-/poll/") => return fastn_core::watcher::poll().await,
