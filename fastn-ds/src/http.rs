@@ -241,7 +241,7 @@ impl Request {
             None => return Ok(default),
         };
 
-        Ok(serde_json::from_value(value.clone())?)
+        serde_json::from_value(value.clone())
     }
 
     pub fn get_ip(&self) -> Option<String> {
