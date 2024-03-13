@@ -3,7 +3,7 @@ pub async fn process(
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &mut fastn_core::RequestConfig,
-) -> fastn_core::Result<ftd::interpreter::Value> {
+) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let (headers, line_number) = if let Ok(val) = value.get_record(doc.name) {
         (val.2.to_owned(), val.5.to_owned())
     } else {
@@ -20,8 +20,7 @@ pub async fn process(
             format!("only GET and POST methods are allowed, found: {}", method),
             doc.name,
             line_number,
-        )
-        .map_err(fastn_core::Error::FTDInterpreterError);
+        );
     }
 
     let url = match headers.get_optional_string_by_key("url", doc.name, line_number)? {
@@ -35,16 +34,14 @@ pub async fn process(
                     format!("{v} is not a variable, it's a {v2:?}"),
                     doc.name,
                     line_number,
-                )
-                .map_err(fastn_core::Error::FTDInterpreterError);
+                );
             }
             Err(e) => {
                 return ftd::interpreter::utils::e2(
                     format!("${v} not found in the document: {e:?}"),
                     doc.name,
                     line_number,
-                )
-                .map_err(fastn_core::Error::FTDInterpreterError);
+                );
             }
         },
         Some(v) => v,
@@ -56,19 +53,18 @@ pub async fn process(
                 ),
                 doc.name,
                 line_number,
-            )
-            .map_err(fastn_core::Error::FTDInterpreterError);
+            );
         }
     };
 
     let (mut url, mut conf) =
-        fastn_core::config::utils::get_clean_url(&req_config.config, url.as_str())
-            .map_err(|e| ftd::interpreter::Error::ParseError {
+        fastn_core::config::utils::get_clean_url(&req_config.config, url.as_str()).map_err(
+            |e| ftd::interpreter::Error::ParseError {
                 message: format!("invalid url: {:?}", e),
                 doc_id: doc.name.to_string(),
                 line_number,
-            })
-            .map_err(fastn_core::Error::FTDInterpreterError)?;
+            },
+        )?;
 
     let mut body = vec![];
     for header in headers.0 {
@@ -132,7 +128,9 @@ pub async fn process(
                 format!("{{{}}}", body.join(",")).as_str(),
             )
             .await
-            .map_err(fastn_core::Error::DSError)
+            .map_err(|e| ftd::interpreter::Error::DSError {
+                message: format!("{:?}", e),
+            })
     } else {
         req_config
             .config
@@ -144,7 +142,9 @@ pub async fn process(
                 false, // disable cache
             )
             .await
-            .map_err(fastn_core::Error::DSError)
+            .map_err(|e| ftd::interpreter::Error::DSError {
+                message: format!("{:?}", e),
+            })
     };
 
     let response = match resp {
@@ -158,16 +158,14 @@ pub async fn process(
                 format!("HTTP::get failed: {:?}", e),
                 doc.name,
                 line_number,
-            )
-            .map_err(fastn_core::Error::FTDInterpreterError);
+            );
         }
         Err(e) => {
             return ftd::interpreter::utils::e2(
                 format!("HTTP::get failed: {:?}", e),
                 doc.name,
                 line_number,
-            )
-            .map_err(fastn_core::Error::FTDInterpreterError);
+            );
         }
     };
 
@@ -181,5 +179,4 @@ pub async fn process(
         .map_err(|e| ftd::interpreter::Error::Serde { source: e })?;
 
     doc.from_json(&response_json, &kind, &value)
-        .map_err(fastn_core::Error::FTDInterpreterError)
 }
