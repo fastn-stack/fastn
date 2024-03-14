@@ -298,7 +298,7 @@ impl DocumentStore {
 
         // Github doesn't allow trailing slash GET requests
         let url = if req.query_string().is_empty() {
-            format!("{}", url.as_str().trim_end_matches('/'))
+            url.as_str().trim_end_matches('/').to_string()
         } else {
             format!(
                 "{}/?{}",
