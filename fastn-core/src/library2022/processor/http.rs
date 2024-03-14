@@ -119,7 +119,7 @@ pub async fn process(
 
     let resp = if method.as_str().eq("post") {
         fastn_core::http::http_post_with_cookie(
-            &req_config,
+            req_config,
             url.as_str(),
             &conf,
             format!("{{{}}}", body.join(",")).as_str(),
