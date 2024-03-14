@@ -26,20 +26,33 @@ macro_rules! not_found {
     }};
 }
 
+#[allow(async_fn_in_trait)]
 pub trait HttpResponseExt {
-    fn bytes(&self) -> Vec<u8>;
-    fn text(&self) -> String;
+    async fn actix_bytes(self) -> actix_web::web::Bytes;
+    async fn bytes(self) -> Vec<u8>;
+    async fn text(self) -> String;
 }
 
+// let body_bytes = actix_web::body::to_bytes(body).await.unwrap();
+// let body_text = str::from_utf8(&body_bytes).unwrap();
+
 impl HttpResponseExt for actix_web::HttpResponse {
-    fn bytes(&self) -> Vec<u8> {
+    async fn actix_bytes(self) -> actix_web::web::Bytes {
         // Extract the body stream from the response
-        vec![]
+        let body = actix_web::body::to_bytes(self.into_body())
+            .await
+            .unwrap_or_default();
+        body
     }
 
-    fn text(&self) -> String {
+    async fn bytes(self) -> Vec<u8> {
+        self.actix_bytes().await.to_vec()
+    }
+
+    async fn text(self) -> String {
         // Extract response as string
-        String::new()
+        let body_as_bytes = self.bytes().await;
+        String::from_utf8_lossy(&body_as_bytes).to_string()
     }
 }
 
@@ -549,23 +562,33 @@ pub async fn http_post_with_cookie(
             "url: {}, response_status: {}, response: {:?}",
             url,
             res.status(),
-            res.text()
+            res.text().await
         );
         return Ok((
             Err(fastn_core::Error::APIResponseError(message)),
             resp_cookies,
         ));
     }
-    Ok((Ok(res.bytes()), resp_cookies))
+    Ok((Ok(res.bytes().await), resp_cookies))
 }
 
 pub async fn http_get(url: &str) -> fastn_core::Result<Vec<u8>> {
     tracing::debug!("http_get {}", &url);
 
-    // todo: fix this
     http_get_with_cookie_2(url, None, &std::collections::HashMap::new(), true)
         .await?
         .0
+
+    // todo: fix this
+    // http_get_with_cookie(
+    //     &fastn_ds::DocumentStore::new("".to_string()),
+    //     &Default::default(),
+    //     url,
+    //     &Default::default(),
+    //     true,
+    // )
+    // .await?
+    // .0
 }
 
 static NOT_FOUND_CACHE: once_cell::sync::Lazy<antidote::RwLock<std::collections::HashSet<String>>> =
@@ -635,7 +658,7 @@ pub async fn http_get_with_cookie(
             resp_cookies,
         ));
     }
-    Ok((Ok(res.bytes()), resp_cookies))
+    Ok((Ok(res.bytes().await), resp_cookies))
 }
 
 #[tracing::instrument(skip_all)]
