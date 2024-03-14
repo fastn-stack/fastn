@@ -6,7 +6,7 @@ fn proxy_client_builder() -> reqwest::Client {
         .tcp_nodelay(true)
         .connect_timeout(std::time::Duration::new(150, 0))
         .connection_verbose(true)
-        .redirect(reqwest::redirect::Policy::none())
+        .redirect(reqwest::redirect::Policy::default())
         .build()
         .unwrap()
 }

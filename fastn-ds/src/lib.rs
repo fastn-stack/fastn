@@ -358,6 +358,7 @@ impl DocumentStore {
             }
         }
 
+        tracing::info!(proxy = enable_proxy);
         tracing::info!("Request details");
         tracing::info!(
             url = ?proxy_request.url(),
