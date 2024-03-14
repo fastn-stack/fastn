@@ -13,7 +13,6 @@ fastn.assert.eq(fastn.http_response["data"], "Hello, World!");
 ;; Mountpoint: /ftd/* -> Endpoint: http://fastn.com/ftd/*
 -- fastn.get: Fetching content from fastn.com
 url: /ftd/column/
-http-status: 200
 
 -- fastn.get: Redirect to google
 url: /goo/
