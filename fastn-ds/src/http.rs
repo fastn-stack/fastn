@@ -39,7 +39,7 @@ impl ResponseBuilder {
             Ok(b) => b,
             Err(e) => {
                 return actix_web::HttpResponse::from(actix_web::error::ErrorInternalServerError(
-                    fastn_ds::DSError::HttpError(e),
+                    fastn_ds::HttpError::ReqwestError(e),
                 ))
             }
         };

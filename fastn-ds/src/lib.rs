@@ -127,19 +127,16 @@ pub enum WriteError {
 }
 
 #[derive(thiserror::Error, Debug)]
-pub enum DSError {
+pub enum HttpError {
     #[error("http error {0}")]
-    HttpError(#[from] reqwest::Error),
+    ReqwestError(#[from] reqwest::Error),
     #[error("url parse error {0}")]
     URLParseError(#[from] url::ParseError),
-    #[error("serde error {0}")]
-    SerdeError(#[from] serde_json::Error),
     #[error("generic error {message}")]
     GenericError { message: String },
 }
 
 pub type HttpResponse = actix_web::HttpResponse;
-pub type DSResult<T> = Result<T, DSError>;
 
 #[async_trait::async_trait]
 pub trait RequestType {
@@ -292,7 +289,7 @@ impl DocumentStore {
         url: url::Url,
         req: &T,
         extra_headers: &std::collections::HashMap<String, String>,
-    ) -> Result<fastn_ds::HttpResponse, DSError>
+    ) -> Result<fastn_ds::HttpResponse, HttpError>
     where
         T: RequestType,
     {

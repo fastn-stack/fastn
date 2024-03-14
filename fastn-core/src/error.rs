@@ -132,7 +132,7 @@ pub enum Error {
     DSRenameError(#[from] fastn_ds::RenameError),
 
     #[error("ds::Error: {}", _0)]
-    DSError(#[from] fastn_ds::DSError),
+    DSHttpError(#[from] fastn_ds::HttpError),
 
     #[error("AssertError: {message}")]
     AssertError { message: String },
