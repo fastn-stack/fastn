@@ -1,4 +1,4 @@
-fn client_builder() -> reqwest::Client {
+fn proxy_client_builder() -> reqwest::Client {
     // TODO: Connection Pool, It by default holds the connection pool internally
     reqwest::ClientBuilder::new()
         .http2_adaptive_window(true)
@@ -11,5 +11,12 @@ fn client_builder() -> reqwest::Client {
         .unwrap()
 }
 
-pub static CLIENT: once_cell::sync::Lazy<std::sync::Arc<reqwest::Client>> =
-    once_cell::sync::Lazy::new(|| std::sync::Arc::new(client_builder()));
+fn default_client_builder() -> reqwest::Client {
+    reqwest::ClientBuilder::default().build().unwrap()
+}
+
+pub static DEFAULT_CLIENT: once_cell::sync::Lazy<std::sync::Arc<reqwest::Client>> =
+    once_cell::sync::Lazy::new(|| std::sync::Arc::new(default_client_builder()));
+
+pub static PROXY_CLIENT: once_cell::sync::Lazy<std::sync::Arc<reqwest::Client>> =
+    once_cell::sync::Lazy::new(|| std::sync::Arc::new(proxy_client_builder()));

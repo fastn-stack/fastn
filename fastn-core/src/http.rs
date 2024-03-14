@@ -549,7 +549,7 @@ pub async fn http_post_with_cookie(
     let res = req_config
         .config
         .ds
-        .http(http_url, &http_request, &std::collections::HashMap::new())
+        .http(http_url, &http_request, &Default::default(), false)
         .await
         .map_err(fastn_core::Error::DSHttpError)?;
 
@@ -583,8 +583,10 @@ pub async fn http_post_with_cookie(
 pub async fn http_get(url: &str) -> fastn_core::Result<Vec<u8>> {
     tracing::debug!("http_get {}", &url);
 
+    let current_dir = camino::Utf8PathBuf::from_path_buf(std::env::current_dir()?)
+        .expect("fastn-Error: Unable to define DocumentStore root path");
     http_get_with_cookie(
-        &fastn_ds::DocumentStore::new(""), // todo: fix root
+        &fastn_ds::DocumentStore::new(current_dir),
         &Default::default(),
         url,
         &Default::default(),
@@ -616,7 +618,6 @@ pub async fn http_get_with_cookie(
     }
 
     tracing::info!(url = url);
-    let cookies = req.cookies().clone();
     let mut req_headers = reqwest::header::HeaderMap::new();
     for (key, value) in headers.iter() {
         req_headers.insert(
@@ -627,16 +628,15 @@ pub async fn http_get_with_cookie(
 
     let mut http_request = fastn_core::http::Request::default();
     http_request.set_method("get");
-    http_request.set_cookies(&cookies);
+    http_request.set_cookies(req.cookies());
     http_request.set_headers(headers);
     http_request.set_ip(req.ip.clone());
-
     let http_url = match url::Url::parse(url) {
         Ok(url) => url,
         Err(e) => return Err(e.into()),
     };
     let res = ds
-        .http(http_url, &http_request, &std::collections::HashMap::new())
+        .http(http_url, &http_request, &Default::default(), false)
         .await
         .map_err(fastn_core::Error::DSHttpError)?;
 
