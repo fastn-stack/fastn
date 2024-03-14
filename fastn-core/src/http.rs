@@ -35,11 +35,9 @@ pub trait ReqwestBehaviour {
 
 impl ReqwestBehaviour for actix_web::HttpResponse {
     async fn actix_bytes(self) -> actix_web::web::Bytes {
-        // Extract body as Bytes from the response
-        let body = actix_web::body::to_bytes(self.into_body())
+        actix_web::body::to_bytes(self.into_body())
             .await
-            .unwrap_or_default();
-        body
+            .unwrap_or_default()
     }
 
     async fn bytes(self) -> Vec<u8> {
@@ -47,7 +45,6 @@ impl ReqwestBehaviour for actix_web::HttpResponse {
     }
 
     async fn text(self) -> String {
-        // Extract response as string
         let body_as_bytes = self.bytes().await;
         String::from_utf8_lossy(&body_as_bytes).to_string()
     }
@@ -573,7 +570,7 @@ pub async fn http_get(url: &str) -> fastn_core::Result<Vec<u8>> {
     tracing::debug!("http_get {}", &url);
 
     http_get_with_cookie(
-        &fastn_ds::DocumentStore::new("".to_string()), // todo: fix root
+        &fastn_ds::DocumentStore::new(""), // todo: fix root
         &Default::default(),
         url,
         &Default::default(),
