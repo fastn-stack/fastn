@@ -33,7 +33,6 @@ mod version;
 pub mod catch_panic;
 pub(crate) mod google_sheets;
 mod library2022;
-mod mail;
 
 pub(crate) use auto_import::AutoImport;
 pub use commands::{
