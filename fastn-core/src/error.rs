@@ -142,6 +142,9 @@ pub enum Error {
 
     #[error("FormError: {:?}", _0)]
     FormError(std::collections::HashMap<String, String>),
+
+    #[error("SSRFailed: {:?}", _0)]
+    SSRFailed(#[from] fastn_js::SSRError),
 }
 
 impl From<std::convert::Infallible> for Error {

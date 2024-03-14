@@ -169,7 +169,8 @@ fn p(
             let ssr_body = fastn_js::ssr_with_js_string(
                 "foo",
                 format!("{js_ftd_script}\n{js_document_script}").as_str(),
-            );
+            )
+            .unwrap();
 
             format!(
                 include_str!("../../ftd-js.html"),

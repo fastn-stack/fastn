@@ -536,7 +536,7 @@ pub(crate) async fn read_ftd_2023(
             fastn_js::ssr_with_js_string(
                 &package_name,
                 format!("{js_ftd_script}\n{js_document_script}").as_str(),
-            )
+            )?
         } else {
             EMPTY_HTML_BODY.to_string()
         };
