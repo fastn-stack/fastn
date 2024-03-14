@@ -125,7 +125,7 @@ pub async fn process(
             format!("{{{}}}", body.join(",")).as_str(),
         )
         .await
-        .map_err(|e| ftd::interpreter::Error::DSError {
+        .map_err(|e| ftd::interpreter::Error::DSHttpError {
             message: format!("{:?}", e),
         })
     } else {
@@ -137,7 +137,7 @@ pub async fn process(
             false, // disable cache
         )
         .await
-        .map_err(|e| ftd::interpreter::Error::DSError {
+        .map_err(|e| ftd::interpreter::Error::DSHttpError {
             message: format!("{:?}", e),
         })
     };

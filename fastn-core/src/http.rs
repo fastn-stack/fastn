@@ -542,10 +542,7 @@ pub async fn http_post_with_cookie(
     http_request.set_ip(req_config.request.ip.clone());
     http_request.set_body(actix_web::web::Bytes::copy_from_slice(body.as_bytes()));
 
-    let http_url = match url::Url::parse(url) {
-        Ok(url) => url,
-        Err(e) => return Err(e.into()),
-    };
+    let http_url = url::Url::parse(url).map_err(|e| fastn_core::Error::DSHttpError(e.into()))?;
     let res = req_config
         .config
         .ds
@@ -631,10 +628,7 @@ pub async fn http_get_with_cookie(
     http_request.set_cookies(req.cookies());
     http_request.set_headers(headers);
     http_request.set_ip(req.ip.clone());
-    let http_url = match url::Url::parse(url) {
-        Ok(url) => url,
-        Err(e) => return Err(e.into()),
-    };
+    let http_url = url::Url::parse(url).map_err(|e| fastn_core::Error::DSHttpError(e.into()))?;
     let res = ds
         .http(http_url, &http_request, &Default::default(), false)
         .await

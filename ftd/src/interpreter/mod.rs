@@ -107,8 +107,8 @@ pub enum Error {
     #[error("Invalid access: {message}, line_number: {line_number}")]
     InvalidAccessError { message: String, line_number: usize },
 
-    #[error("DSError: {message}")]
-    DSError { message: String },
+    #[error("ds:HttpError: {message}")]
+    DSHttpError { message: String },
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
