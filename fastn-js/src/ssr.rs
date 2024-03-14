@@ -1,47 +1,43 @@
+const DELETE_DENO: &str = "delete Deno;";
+
 pub fn run_test(js: &str) -> Vec<bool> {
-    #[cfg(target_os = "windows")]
-    {
-        rquickjs::Context::full(&rquickjs::Runtime::new().unwrap())
-            .unwrap()
-            .with(|ctx| ctx.eval::<Vec<bool>, _>(js).unwrap())
-    }
-    #[cfg(not(target_os = "windows"))]
-    {
-        // Added logging support from console from within context
-        let context = quick_js::Context::builder()
-            .console(
-                |level: quick_js::console::Level, args: Vec<quick_js::JsValue>| {
-                    eprintln!("{}: {:?}", level, args);
-                },
-            )
-            .build()
-            .unwrap();
-        context.eval_as::<Vec<bool>>(js).unwrap()
-    }
+    let mut runtime = deno_core::JsRuntime::new(deno_core::RuntimeOptions::default());
+
+    eval::<Vec<bool>>(
+        &mut runtime,
+        deno_core::FastString::from(format!("{DELETE_DENO}{js}")),
+    )
+    .unwrap()
 }
 
 pub fn ssr_str(js: &str) -> String {
-    let all_js = fastn_js::all_js_with_test();
-    let js = format!("{all_js}{js}");
+    let mut runtime = deno_core::JsRuntime::new(deno_core::RuntimeOptions::default());
 
-    #[cfg(target_os = "windows")]
-    {
-        rquickjs::Context::full(&rquickjs::Runtime::new().unwrap())
-            .unwrap()
-            .with(|ctx| ctx.eval::<String, _>(js).unwrap())
-    }
-    #[cfg(not(target_os = "windows"))]
-    {
-        // Added logging support from console from within context
-        let context = quick_js::Context::builder()
-            .console(
-                |level: quick_js::console::Level, args: Vec<quick_js::JsValue>| {
-                    eprintln!("{}: {:?}", level, args);
-                },
-            )
-            .build()
-            .unwrap();
-        context.eval_as::<String>(js.as_str()).unwrap()
+    let all_js = fastn_js::all_js_with_test();
+    let js = format!("{DELETE_DENO}{all_js}{js}");
+
+    eval::<String>(&mut runtime, deno_core::FastString::from(js)).unwrap()
+}
+
+fn eval<T: deno_core::serde::Deserialize<'static>>(
+    context: &mut deno_core::JsRuntime,
+    code: deno_core::FastString,
+) -> Result<T, String> {
+    let res = context.execute_script("<anon>", code);
+    match res {
+        Ok(global) => {
+            let scope = &mut context.handle_scope();
+            let local = deno_core::v8::Local::new(scope, global);
+            // Deserialize a `v8` object into a Rust type using `serde_v8`,
+            // in this case deserialize to a JSON `Value`.
+            let deserialized_value = deno_core::serde_v8::from_v8::<T>(scope, local);
+
+            match deserialized_value {
+                Ok(value) => Ok(value),
+                Err(err) => Err(format!("Cannot deserialize value: {err:?}")),
+            }
+        }
+        Err(err) => Err(format!("Evaling error: {err:?}")),
     }
 }
 
