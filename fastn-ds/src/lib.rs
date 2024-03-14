@@ -137,7 +137,7 @@ pub enum HttpError {
     GenericError { message: String },
 }
 
-pub type HttpResponse = actix_web::HttpResponse;
+pub type HttpResponse = reqwest::Response;
 
 #[async_trait::async_trait]
 pub trait RequestType {
@@ -383,11 +383,9 @@ impl DocumentStore {
         }
 
         *proxy_request.body_mut() = Some(req.body().to_vec().into());
+        let response = fastn_ds::http::CLIENT.execute(proxy_request).await?;
 
-        Ok(fastn_ds::http::ResponseBuilder::from_reqwest(
-            fastn_ds::http::CLIENT.execute(proxy_request).await?,
-        )
-        .await)
+        Ok(response)
     }
 }
 

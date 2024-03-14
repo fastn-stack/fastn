@@ -528,27 +528,32 @@ async fn handle_endpoints(
         None => return None,
     };
 
-    Some(
-        config
-            .ds
-            .http(
-                url::Url::parse(
-                    format!(
-                        "{}/{}",
-                        endpoint.endpoint.trim_end_matches('/'),
-                        req.path()
-                            .trim_start_matches(endpoint.mountpoint.trim_end_matches('/'))
-                            .trim_start_matches('/')
-                    )
-                    .as_str(),
+    let response = match config
+        .ds
+        .http(
+            url::Url::parse(
+                format!(
+                    "{}/{}",
+                    endpoint.endpoint.trim_end_matches('/'),
+                    req.path()
+                        .trim_start_matches(endpoint.mountpoint.trim_end_matches('/'))
+                        .trim_start_matches('/')
                 )
-                .unwrap(),
-                req,
-                &std::collections::HashMap::new(),
+                .as_str(),
             )
-            .await
-            .map_err(fastn_core::Error::DSHttpError),
-    )
+            .unwrap(),
+            req,
+            &std::collections::HashMap::new(),
+        )
+        .await
+        .map_err(fastn_core::Error::DSHttpError)
+    {
+        Ok(response) => response,
+        Err(e) => return Some(Err(e)),
+    };
+
+    let actix_response = fastn_core::http::ResponseBuilder::from_reqwest(response).await;
+    Some(Ok(actix_response))
 }
 
 #[tracing::instrument(skip_all)]
