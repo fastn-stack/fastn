@@ -27,18 +27,15 @@ macro_rules! not_found {
 }
 
 #[allow(async_fn_in_trait)]
-pub trait HttpResponseExt {
+pub trait ReqwestBehaviour {
     async fn actix_bytes(self) -> actix_web::web::Bytes;
     async fn bytes(self) -> Vec<u8>;
     async fn text(self) -> String;
 }
 
-// let body_bytes = actix_web::body::to_bytes(body).await.unwrap();
-// let body_text = str::from_utf8(&body_bytes).unwrap();
-
-impl HttpResponseExt for actix_web::HttpResponse {
+impl ReqwestBehaviour for actix_web::HttpResponse {
     async fn actix_bytes(self) -> actix_web::web::Bytes {
-        // Extract the body stream from the response
+        // Extract body as Bytes from the response
         let body = actix_web::body::to_bytes(self.into_body())
             .await
             .unwrap_or_default();
