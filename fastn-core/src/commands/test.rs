@@ -575,7 +575,7 @@ async fn get_post_response_for_id(
             return Ok(true);
         }
 
-        let test_result = fastn_js::run_test(test_string.as_str());
+        let test_result = fastn_js::run_test(test_string.as_str())?;
 
         if test_result.iter().any(|v| !(*v)) {
             println!("{}", "Test Failed".red());
@@ -781,7 +781,7 @@ async fn get_js_for_id(
             println!("{}", "Script file created".green());
             return Ok(true);
         }
-        let test_result = fastn_js::run_test(test_string.as_str());
+        let test_result = fastn_js::run_test(test_string.as_str())?;
         if test_result.iter().any(|v| !(*v)) {
             println!("{}", "Test Failed".red());
             return Ok(false);

@@ -1622,6 +1622,7 @@ dependencies = [
  "itertools 0.12.1",
  "prettify-js",
  "pretty",
+ "thiserror",
 ]
 
 [[package]]

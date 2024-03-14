@@ -16,6 +16,7 @@ fastn-grammar.workspace = true
 prettify-js.workspace = true
 camino.workspace = true
 deno_core.workspace = true
+thiserror.workspace = true
 
 [dev-dependencies]
 indoc.workspace = true
