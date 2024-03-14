@@ -317,11 +317,23 @@ impl DocumentStore {
         url: url::Url,
         req: &T,
         extra_headers: &std::collections::HashMap<String, String>,
+        enable_proxy: bool,
     ) -> Result<fastn_ds::HttpResponse, HttpError>
     where
         T: RequestType,
     {
         let headers = req.headers();
+
+        // Github doesn't allow trailing slash GET requests
+        let url = if req.query_string().is_empty() {
+            format!("{}", url.as_str().trim_end_matches('/'))
+        } else {
+            format!(
+                "{}/?{}",
+                url.as_str().trim_end_matches('/'),
+                req.query_string()
+            )
+        };
 
         let mut proxy_request = reqwest::Request::new(
             match req.method() {
@@ -336,18 +348,7 @@ impl DocumentStore {
                 "CONNECT" => reqwest::Method::CONNECT,
                 _ => reqwest::Method::GET,
             },
-            reqwest::Url::parse(
-                format!(
-                    "{}/{}",
-                    url.as_str().trim_end_matches('/'),
-                    if req.query_string().is_empty() {
-                        "".to_string()
-                    } else {
-                        format!("?{}", req.query_string())
-                    }
-                )
-                .as_str(),
-            )?,
+            reqwest::Url::parse(url.as_str())?,
         );
 
         *proxy_request.headers_mut() = headers.to_owned();
@@ -364,13 +365,6 @@ impl DocumentStore {
             reqwest::header::HeaderValue::from_static("fastn"),
         );
 
-        if let Some(ip) = req.get_ip() {
-            proxy_request.headers_mut().insert(
-                reqwest::header::FORWARDED,
-                reqwest::header::HeaderValue::from_str(ip.as_str()).unwrap(),
-            );
-        }
-
         if let Some(cookies) = req.cookies_string() {
             proxy_request.headers_mut().insert(
                 reqwest::header::COOKIE,
@@ -378,12 +372,39 @@ impl DocumentStore {
             );
         }
 
-        for header in fastn_ds::utils::ignore_headers() {
-            proxy_request.headers_mut().remove(header);
+        // Proxy specific
+        if enable_proxy {
+            if let Some(ip) = req.get_ip() {
+                proxy_request.headers_mut().insert(
+                    reqwest::header::FORWARDED,
+                    reqwest::header::HeaderValue::from_str(ip.as_str()).unwrap(),
+                );
+            }
+
+            for header in fastn_ds::utils::ignore_headers() {
+                proxy_request.headers_mut().remove(header);
+            }
         }
 
+        tracing::info!("Request details");
+        tracing::info!(
+            url = ?proxy_request.url(),
+            method = ?proxy_request.method(),
+            headers = ?proxy_request.headers(),
+            body = ?proxy_request.body(),
+        );
+
         *proxy_request.body_mut() = Some(req.body().to_vec().into());
-        let response = fastn_ds::http::CLIENT.execute(proxy_request).await?;
+        let response = if enable_proxy {
+            fastn_ds::http::PROXY_CLIENT.execute(proxy_request).await?
+        } else {
+            fastn_ds::http::DEFAULT_CLIENT
+                .execute(proxy_request)
+                .await?
+        };
+
+        tracing::info!("Response details");
+        tracing::info!(status = ?response.status(),headers = ?response.headers());
 
         Ok(response)
     }
