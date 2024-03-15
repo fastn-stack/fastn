@@ -115,7 +115,7 @@ impl fastn_core::Package {
     }
 
     #[tracing::instrument(skip_all)]
-    async fn http_fetch_by_file_name(&self, name: &str) -> fastn_core::Result<Vec<u8>> {
+    async fn http_fetch_by_file_name(&self, name: &str) -> fastn_core::Result<bytes::Bytes> {
         let base = self.download_base_url.as_ref().ok_or_else(|| {
             let message = format!(
                 "package base not found. Package: {}, File: {}",
@@ -132,7 +132,7 @@ impl fastn_core::Package {
     }
 
     #[tracing::instrument(skip_all)]
-    async fn http_fetch_by_id(&self, id: &str) -> fastn_core::Result<(String, Vec<u8>)> {
+    async fn http_fetch_by_id(&self, id: &str) -> fastn_core::Result<(String, bytes::Bytes)> {
         if fastn_core::file::is_static(id)? {
             if let Ok(data) = self.http_fetch_by_file_name(id).await {
                 return Ok((id.to_string(), data));
@@ -159,18 +159,13 @@ impl fastn_core::Package {
         id: &str,
         package_root: Option<&fastn_ds::Path>,
         ds: &fastn_ds::DocumentStore,
-    ) -> fastn_core::Result<(String, Vec<u8>)> {
+    ) -> fastn_core::Result<(String, bytes::Bytes)> {
         tracing::info!(document = id);
         let package_root = self.package_root_with_default(package_root)?;
 
         let (file_path, data) = self.http_fetch_by_id(id).await?;
-        fastn_core::utils::write(
-            &package_root,
-            file_path.trim_start_matches('/'),
-            data.as_slice(),
-            ds,
-        )
-        .await?;
+        fastn_core::utils::write(&package_root, file_path.trim_start_matches('/'), &data, ds)
+            .await?;
 
         Ok((file_path, data))
     }
@@ -181,11 +176,11 @@ impl fastn_core::Package {
         file_path: &str,
         package_root: Option<&fastn_ds::Path>,
         ds: &fastn_ds::DocumentStore,
-    ) -> fastn_core::Result<Vec<u8>> {
+    ) -> fastn_core::Result<bytes::Bytes> {
         let package_root = self.package_root_with_default(package_root)?;
 
         let data = self.http_fetch_by_file_name(file_path).await?;
-        fastn_core::utils::write(&package_root, file_path, data.as_slice(), ds).await?;
+        fastn_core::utils::write(&package_root, file_path, &data, ds).await?;
 
         Ok(data)
     }

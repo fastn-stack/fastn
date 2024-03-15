@@ -42,7 +42,7 @@ impl ConfigTemp {
 
         ds.write_content(
             &config_json_path,
-            serde_json::ser::to_vec_pretty(&config_temp)?,
+            &serde_json::ser::to_vec_pretty(&config_temp)?,
         )
         .await?;
 

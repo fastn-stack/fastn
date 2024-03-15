@@ -27,7 +27,7 @@ pub async fn fmt(
         let format_sections = format_sections(parsed_content, !no_indentation);
         config
             .ds
-            .write_content(&ftd_document.get_full_path(), format_sections.into_bytes())
+            .write_content(&ftd_document.get_full_path(), &format_sections.into_bytes())
             .await?;
         println!("{}", "Done".green())
     }

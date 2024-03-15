@@ -108,7 +108,7 @@ pub async fn write_manifest_file(
         .ds
         .write_content(
             &build_dir.join(fastn_core::manifest::MANIFEST_FILE),
-            serialized_manifest,
+            &serialized_manifest,
         )
         .await?;
 

@@ -2,6 +2,7 @@ extern crate self as fastn_ds;
 
 pub mod http;
 pub mod mail;
+pub mod reqwest_util;
 mod utils;
 
 #[derive(Debug, Clone)]
@@ -137,7 +138,7 @@ pub enum HttpError {
     GenericError { message: String },
 }
 
-pub type HttpResponse = reqwest::Response;
+pub type HttpResponse = ::http::Response<bytes::Bytes>;
 
 #[async_trait::async_trait]
 pub trait RequestType {
@@ -193,7 +194,7 @@ impl DocumentStore {
     pub async fn write_content(
         &self,
         path: &fastn_ds::Path,
-        data: Vec<u8>,
+        data: &[u8],
     ) -> Result<(), WriteError> {
         use tokio::io::AsyncWriteExt;
 
@@ -209,7 +210,7 @@ impl DocumentStore {
         }
 
         let mut file = tokio::fs::File::create(full_path.path).await?;
-        file.write_all(&data).await?;
+        file.write_all(data).await?;
         Ok(())
     }
 
@@ -407,7 +408,7 @@ impl DocumentStore {
         tracing::info!("Response details");
         tracing::info!(status = ?response.status(),headers = ?response.headers());
 
-        Ok(response)
+        Ok(fastn_ds::reqwest_util::to_http_response(response).await?)
     }
 }
 

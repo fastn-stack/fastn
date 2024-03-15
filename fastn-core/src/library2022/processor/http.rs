@@ -165,7 +165,7 @@ pub async fn process(
     };
 
     let response_string =
-        String::from_utf8(response).map_err(|e| ftd::interpreter::Error::ParseError {
+        String::from_utf8(response.to_vec()).map_err(|e| ftd::interpreter::Error::ParseError {
             message: format!("`http` processor API response error: {}", e),
             doc_id: doc.name.to_string(),
             line_number,
