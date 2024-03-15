@@ -185,7 +185,7 @@ impl RequestConfig {
                 &self.config.ds.root().join(file_name),
                 &self.config.get_root_for_package(&package),
             )
-            .await?;
+                .await?;
             self.current_document = Some(path.to_string());
             self.named_parameters = path_params;
             self.extra_data = extra_data;
@@ -208,7 +208,7 @@ impl RequestConfig {
                     .join(file_name.trim_start_matches('/')),
                 &self.config.get_root_for_package(&package),
             )
-            .await?;
+                .await?;
 
             if path.contains("-/") {
                 let url = path.trim_end_matches("/index.html").trim_matches('/');
@@ -259,14 +259,14 @@ impl RequestConfig {
                 &document_name,
                 true,
             )
-            .await?;
+                .await?;
 
             let belongs_to = fastn_core::user_group::belongs_to(
                 &self.config,
                 document_readers.as_slice(),
                 access_identities.iter().collect_vec().as_slice(),
             )
-            .await?;
+                .await?;
 
             if with_confidential {
                 if belongs_to {
@@ -293,14 +293,14 @@ impl RequestConfig {
                 &document_name,
                 false,
             )
-            .await?;
+                .await?;
 
             return fastn_core::user_group::belongs_to(
                 &self.config,
                 document_writers.as_slice(),
                 access_identities.iter().collect_vec().as_slice(),
             )
-            .await;
+                .await;
         }
 
         Ok(false)
@@ -506,7 +506,7 @@ impl Config {
                     content.as_slice(),
                     &self.ds,
                 )
-                .await?;
+                    .await?;
                 fastn_core::utils::print_end(format!("Processed {}", url).as_str(), start);
             }
         }
@@ -699,7 +699,7 @@ impl Config {
                     self,
                     false,
                 )
-                .await?;
+                    .await?;
                 s.readers = sitemap_temp.readers.clone();
                 s.writers = sitemap_temp.writers.clone();
                 Some(s)
@@ -858,20 +858,20 @@ impl Config {
             if let Ok(string) = crate::http::http_get_str(
                 format!("{}/index.ftd", base.trim_end_matches('/')).as_str(),
             )
-            .await
+                .await
             {
                 let base = root.join(".packages").join(package.name.as_str());
-                ds.write_content(&base.join("index.ftd"), string.into_bytes())
+                ds.write_content(&base.join("index.ftd"), &string.into_bytes())
                     .await?;
                 return Ok(format!(".packages/{}/index.ftd", package.name));
             }
             if let Ok(string) = crate::http::http_get_str(
                 format!("{}/README.md", base.trim_end_matches('/')).as_str(),
             )
-            .await
+                .await
             {
                 let base = root.join(".packages").join(package.name.as_str());
-                ds.write_content(&base.join("README.md"), string.into_bytes())
+                ds.write_content(&base.join("README.md"), &string.into_bytes())
                     .await?;
                 return Ok(format!(".packages/{}/README.md", package.name));
             }
@@ -893,17 +893,17 @@ impl Config {
                 .join(".packages")
                 .join(format!("{}{}", package.name.as_str(), prefix));
             let file_path = base.join(format!("{}.ftd", id));
-            ds.write_content(&file_path, string.into_bytes()).await?;
+            ds.write_content(&file_path, &string.into_bytes()).await?;
             return Ok(file_path.to_string());
         }
         if let Ok(string) = crate::http::http_get_str(
             format!("{}/{}/index.ftd", base.trim_end_matches('/'), id).as_str(),
         )
-        .await
+            .await
         {
             let base = root.join(".packages").join(package.name.as_str()).join(id);
             let file_path = base.join("index.ftd");
-            ds.write_content(&file_path, string.into_bytes()).await?;
+            ds.write_content(&file_path, &string.into_bytes()).await?;
             return Ok(file_path.to_string());
         }
         if let Ok(string) =
@@ -911,17 +911,17 @@ impl Config {
                 .await
         {
             let base = root.join(".packages").join(package.name.as_str());
-            ds.write_content(&base.join(format!("{}.md", id)), string.into_bytes())
+            ds.write_content(&base.join(format!("{}.md", id)), &string.into_bytes())
                 .await?;
             return Ok(format!(".packages/{}/{}.md", package.name, id));
         }
         if let Ok(string) = crate::http::http_get_str(
             format!("{}/{}/README.md", base.trim_end_matches('/'), id).as_str(),
         )
-        .await
+            .await
         {
             let base = root.join(".packages").join(package.name.as_str());
-            ds.write_content(&base.join(format!("{}/README.md", id)), string.into_bytes())
+            ds.write_content(&base.join(format!("{}/README.md", id)), &string.into_bytes())
                 .await?;
             return Ok(format!(".packages/{}/{}/README.md", package.name, id));
         }
@@ -1009,8 +1009,8 @@ impl Config {
                 None => {
                     return Err(fastn_core::Error::UsageError {
                         message:
-                            "FASTN.ftd or fastn.manifest.ftd not found in any parent directory"
-                                .to_string(),
+                        "FASTN.ftd or fastn.manifest.ftd not found in any parent directory"
+                            .to_string(),
                     });
                 }
             };
@@ -1138,8 +1138,8 @@ impl Config {
                 Some(translation) => translation,
                 None => &package,
             }
-            .sitemap_temp
-            .as_ref();
+                .sitemap_temp
+                .as_ref();
 
             match sitemap {
                 Some(sitemap_temp) => {
@@ -1149,7 +1149,7 @@ impl Config {
                         &config,
                         resolve_sitemap,
                     )
-                    .await?;
+                        .await?;
                     s.readers = sitemap_temp.readers.clone();
                     s.writers = sitemap_temp.writers.clone();
                     Some(s)

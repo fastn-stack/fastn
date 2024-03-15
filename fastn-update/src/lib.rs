@@ -281,7 +281,7 @@ async fn download_and_unpack_zip(
                 continue;
             }
             let output_path = &dependency_path.join(path_without_prefix);
-            write_archive_content(ds, output_path, buffer, package_name, check).await?;
+            write_archive_content(ds, output_path, &buffer, package_name, check).await?;
             pb.tick();
         }
     }
