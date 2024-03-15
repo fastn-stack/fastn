@@ -308,7 +308,7 @@ impl DocumentStore {
             subject,
             body_html,
         )
-            .await
+        .await
     }
 
     // This method will connect client request to the out of the world
@@ -320,8 +320,8 @@ impl DocumentStore {
         extra_headers: &std::collections::HashMap<String, String>,
         enable_proxy: bool,
     ) -> Result<fastn_ds::HttpResponse, HttpError>
-        where
-            T: RequestType,
+    where
+        T: RequestType,
     {
         let headers = req.headers();
 
