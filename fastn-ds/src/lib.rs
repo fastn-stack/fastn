@@ -408,7 +408,7 @@ impl DocumentStore {
         tracing::info!("Response details");
         tracing::info!(status = ?response.status(),headers = ?response.headers());
 
-        Ok(fastn_ds::reqwest_util::to_http_response(response))
+        Ok(fastn_ds::reqwest_util::to_http_response(response).await?)
     }
 }
 
