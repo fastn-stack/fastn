@@ -27,7 +27,7 @@ pub async fn fmt(
         let format_sections = format_sections(parsed_content, !no_indentation);
         config
             .ds
-            .write_content(&ftd_document.get_full_path(), format_sections.into_bytes())
+            .write_content(&ftd_document.get_full_path(), &format_sections.into_bytes())
             .await?;
         println!("{}", "Done".green())
     }
@@ -196,12 +196,12 @@ fn end_section(input: &mut String, sections: &mut Vec<Section>) -> bool {
                 .trim_start_matches('$')
                 .eq(name.trim_start_matches('$'))
                 && !*end =>
-            {
-                *end = true;
-                *s = sub_sections;
-                sections.push(section);
-                return true;
-            }
+                {
+                    *end = true;
+                    *s = sub_sections;
+                    sections.push(section);
+                    return true;
+                }
             _ => {
                 sub_sections.insert(0, section);
             }

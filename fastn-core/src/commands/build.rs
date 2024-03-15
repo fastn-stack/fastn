@@ -16,7 +16,7 @@ pub async fn build(
         &config.package.name,
         &config.ds,
     )
-    .await?;
+        .await?;
 
     {
         let documents = get_documents_for_current_package(config).await?;
@@ -26,7 +26,7 @@ pub async fn build(
 
         match only_id {
             Some(id) => {
-                return handle_only_id(id, config, base_url, ignore_failed, test, documents).await
+                return handle_only_id(id, config, base_url, ignore_failed, test, documents).await;
             }
             None => {
                 incremental_build(config, &documents, base_url, ignore_failed, test).await?;
@@ -190,8 +190,8 @@ fn get_dependency_name_without_package_name(package_name: &str, dependency_name:
     } else {
         dependency_name.to_string()
     }
-    .trim_end_matches('/')
-    .to_string()
+        .trim_end_matches('/')
+        .to_string()
 }
 
 fn is_virtual_dep(path: &str) -> bool {
@@ -216,7 +216,7 @@ async fn handle_dependency_file(
     for document in documents.values() {
         if remove_extension(document.get_id()).eq(name_without_package_name.as_str())
             || remove_extension(&document.get_id_with_package())
-                .eq(name_without_package_name.as_str())
+            .eq(name_without_package_name.as_str())
         {
             let id = document.get_id().to_string();
             if processed.contains(&id) {
@@ -231,7 +231,7 @@ async fn handle_dependency_file(
                 true,
                 Some(cache),
             )
-            .await?;
+                .await?;
             processed.push(id);
         }
     }
@@ -254,7 +254,7 @@ async fn remove_deleted_documents(
             for document in documents.values() {
                 if remove_extension(document.get_id()).eq(cached_document_id.as_str())
                     || remove_extension(&document.get_id_with_package())
-                        .eq(cached_document_id.as_str())
+                    .eq(cached_document_id.as_str())
                 {
                     return false;
                 }
@@ -323,7 +323,7 @@ async fn incremental_build(
                     true,
                     Some(&mut c),
                 )
-                .await?;
+                    .await?;
                 continue;
             }
 
@@ -373,7 +373,7 @@ async fn incremental_build(
                         unresolved_dependency.to_string(),
                         &mut processed,
                     )
-                    .await?;
+                        .await?;
 
                     resolved_dependencies.push(unresolved_dependency.to_string());
                     if unresolved_dependencies.is_empty() {
@@ -405,7 +405,7 @@ async fn incremental_build(
                         unresolved_dependency.to_string(),
                         &mut processed,
                     )
-                    .await?;
+                        .await?;
 
                     resolved_dependencies.push(unresolved_dependency.clone());
                 }
@@ -437,7 +437,7 @@ async fn incremental_build(
                 true,
                 Some(&mut c),
             )
-            .await?;
+                .await?;
             processed.push(id);
         }
     }
@@ -490,7 +490,7 @@ async fn handle_file(
         build_static_files,
         cache,
     )
-    .await;
+        .await;
     if process_status.is_ok() {
         fastn_core::utils::print_end(
             format!("Processed {}/{}", package_name.as_str(), document.get_id()).as_str(),
@@ -626,8 +626,8 @@ async fn handle_file_(
                 &config.ds.root().join(".build").join(doc.id.as_str()),
                 &config.ds,
             )
-            .await
-            .ok();
+                .await
+                .ok();
 
             if doc.id.eq("FASTN.ftd") {
                 return Ok(());
@@ -647,7 +647,7 @@ async fn handle_file_(
                     test,
                     file_path.as_str(),
                 )
-                .await
+                    .await
             };
 
             match (resp, ignore_failed) {
@@ -701,7 +701,7 @@ async fn handle_file_(
                 &config.package,
                 &config.ds,
             )
-            .await?;
+                .await?;
         }
     }
 
@@ -842,13 +842,13 @@ async fn process_static(
             .join(package.name.as_str());
 
         let full_file_path = build_path.join(sa.id.as_str());
-        ds.write_content(&full_file_path, sa.content.clone())
+        ds.write_content(&full_file_path, &sa.content)
             .await?;
 
         {
             // TODO: need to remove this once download_base_url is removed
             let content = ds.read_content(&sa.base_path.join(sa.id.as_str())).await?;
-            ds.write_content(&base_path.join(".build").join(sa.id.as_str()), content)
+            ds.write_content(&base_path.join(".build").join(sa.id.as_str()), &content)
                 .await?;
         }
         Ok(())

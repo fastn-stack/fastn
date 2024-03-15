@@ -65,8 +65,8 @@ pub fn get_cache_file(id: &str) -> Option<std::path::PathBuf> {
 }
 
 pub fn get_cached<T>(id: &str) -> Option<T>
-where
-    T: serde::de::DeserializeOwned,
+    where
+        T: serde::de::DeserializeOwned,
 {
     let cache_file = get_cache_file(id)?;
     serde_json::from_str(
@@ -78,16 +78,16 @@ where
             .ok()?
             .as_str(),
     )
-    .map_err(|e| {
-        tracing::debug!("not valid json: {}", e.to_string());
-        e
-    })
-    .ok()
+        .map_err(|e| {
+            tracing::debug!("not valid json: {}", e.to_string());
+            e
+        })
+        .ok()
 }
 
 pub fn cache_it<T>(id: &str, d: T) -> ftd::interpreter::Result<T>
-where
-    T: serde::ser::Serialize,
+    where
+        T: serde::ser::Serialize,
 {
     let cache_file = get_cache_file(id)
         .ok_or_else(|| ftd::interpreter::Error::OtherError("cache dir not found".to_string()))?;
@@ -195,8 +195,8 @@ pub fn value_to_colored_string(value: &serde_json::Value, indent_level: u32) -> 
                 .replace('\n', "\\n")
                 .replace('\"', "\\\"")
         )
-        .bright_yellow()
-        .to_string(),
+            .bright_yellow()
+            .to_string(),
         serde_json::Value::Array(v) => {
             let mut s = String::new();
             for (idx, value) in v.iter().enumerate() {
@@ -241,8 +241,8 @@ pub fn value_to_colored_string_without_null(
                 .replace('\n', "\\n")
                 .replace('\"', "\\\"")
         )
-        .bright_yellow()
-        .to_string(),
+            .bright_yellow()
+            .to_string(),
         serde_json::Value::Array(v) if v.is_empty() => "".to_string(),
         serde_json::Value::Array(v) => {
             let mut s = String::new();
@@ -641,75 +641,75 @@ pub async fn replace_markers_2022(
             "__ftd_meta_data__",
             ftd::html::utils::get_meta_data(&html_ui.html_data).as_str(),
         )
-        .replace(
-            "__ftd_doc_title__",
-            html_ui.html_data.title.unwrap_or_default().as_str(),
-        )
-        .replace("__ftd_data__", html_ui.variables.as_str())
-        .replace(
-            "__ftd_canonical_url__",
-            config.package.generate_canonical_url(main_id).as_str(),
-        )
-        .replace(
-            "__favicon_html_tag__",
-            resolve_favicon(
-                config.ds.root().to_string().as_str(),
-                config.package.name.as_str(),
-                &config.package.favicon,
-                &config.ds,
+            .replace(
+                "__ftd_doc_title__",
+                html_ui.html_data.title.unwrap_or_default().as_str(),
             )
-            .await
-            .unwrap_or_default()
-            .as_str(),
-        )
-        .replace("__ftd_external_children__", "{}")
-        .replace("__hashed_default_css__", hashed_default_css_name())
-        .replace("__hashed_default_js__", hashed_default_js_name())
-        .replace(
-            "__ftd__",
-            format!("{}{}", html_ui.html.as_str(), font_style).as_str(),
-        )
-        .replace(
-            "__extra_js__",
-            get_extra_js(
-                config,
-                config.ftd_external_js.as_slice(),
-                config.ftd_inline_js.as_slice(),
-                html_ui.js.as_str(),
-                html_ui.rive_data.as_str(),
+            .replace("__ftd_data__", html_ui.variables.as_str())
+            .replace(
+                "__ftd_canonical_url__",
+                config.package.generate_canonical_url(main_id).as_str(),
             )
-            .await
-            .as_str(),
-        )
-        .replace(
-            "__extra_css__",
-            get_extra_css(
-                config,
-                config.ftd_external_css.as_slice(),
-                config.ftd_inline_css.as_slice(),
-                html_ui.css.as_str(),
+            .replace(
+                "__favicon_html_tag__",
+                resolve_favicon(
+                    config.ds.root().to_string().as_str(),
+                    config.package.name.as_str(),
+                    &config.package.favicon,
+                    &config.ds,
+                )
+                    .await
+                    .unwrap_or_default()
+                    .as_str(),
             )
-            .await
-            .as_str(),
-        )
-        .replace(
-            "__ftd_functions__",
-            format!(
-                "{}\n{}\n{}\n{}\n{}\n{}\n{}",
-                html_ui.functions.as_str(),
-                html_ui.dependencies.as_str(),
-                html_ui.variable_dependencies.as_str(),
-                html_ui.dummy_html.as_str(),
-                html_ui.raw_html.as_str(),
-                html_ui.mutable_variable,
-                html_ui.immutable_variable
+            .replace("__ftd_external_children__", "{}")
+            .replace("__hashed_default_css__", hashed_default_css_name())
+            .replace("__hashed_default_js__", hashed_default_js_name())
+            .replace(
+                "__ftd__",
+                format!("{}{}", html_ui.html.as_str(), font_style).as_str(),
             )
+            .replace(
+                "__extra_js__",
+                get_extra_js(
+                    config,
+                    config.ftd_external_js.as_slice(),
+                    config.ftd_inline_js.as_slice(),
+                    html_ui.js.as_str(),
+                    html_ui.rive_data.as_str(),
+                )
+                    .await
+                    .as_str(),
+            )
+            .replace(
+                "__extra_css__",
+                get_extra_css(
+                    config,
+                    config.ftd_external_css.as_slice(),
+                    config.ftd_inline_css.as_slice(),
+                    html_ui.css.as_str(),
+                )
+                    .await
+                    .as_str(),
+            )
+            .replace(
+                "__ftd_functions__",
+                format!(
+                    "{}\n{}\n{}\n{}\n{}\n{}\n{}",
+                    html_ui.functions.as_str(),
+                    html_ui.dependencies.as_str(),
+                    html_ui.variable_dependencies.as_str(),
+                    html_ui.dummy_html.as_str(),
+                    html_ui.raw_html.as_str(),
+                    html_ui.mutable_variable,
+                    html_ui.immutable_variable
+                )
+                    .as_str(),
+            )
+            .replace("__ftd_body_events__", html_ui.outer_events.as_str())
+            .replace("__ftd_element_css__", "")
+            .replace("__base_url__", base_url)
             .as_str(),
-        )
-        .replace("__ftd_body_events__", html_ui.outer_events.as_str())
-        .replace("__ftd_element_css__", "")
-        .replace("__base_url__", base_url)
-        .as_str(),
     )
 }
 
@@ -743,11 +743,11 @@ pub async fn replace_markers_2023(
             config.ds.root().to_string().as_str(),
             config.package.name.as_str(),
             &config.package.favicon,
-            &config.ds
+            &config.ds,
         )
-        .await
-        .unwrap_or_default()
-        .as_str(),
+            .await
+            .unwrap_or_default()
+            .as_str(),
         js_script = format!("{js_script}{}", fastn_core::utils::available_code_themes()).as_str(),
         script_file = format!(
             r#"
@@ -763,7 +763,7 @@ pub async fn replace_markers_2023(
             hashed_prism_css(),
             scripts,
         )
-        .as_str(),
+            .as_str(),
         extra_js = get_extra_js(
             config,
             config.ftd_external_js.as_slice(),
@@ -771,8 +771,8 @@ pub async fn replace_markers_2023(
             "",
             "",
         )
-        .await
-        .as_str(),
+            .await
+            .as_str(),
         default_css = default_css,
         html_body = format!("{}{}", ssr_body, font_style).as_str(),
     )
@@ -817,7 +817,7 @@ pub async fn update1(
     };
 
     Ok(ds
-        .write_content(&root.join(file_root).join(file_name), data.to_vec())
+        .write_content(&root.join(file_root).join(file_name), data)
         .await?)
 }
 
@@ -853,7 +853,7 @@ pub async fn update(
     };
 
     Ok(ds
-        .write_content(&file_root.join(file_name), data.to_vec())
+        .write_content(&file_root.join(file_name), data)
         .await?)
 }
 
@@ -916,6 +916,7 @@ pub fn query(uri: &str) -> fastn_core::Result<Vec<(String, String)>> {
             .collect_vec(),
     )
 }
+
 pub fn generate_hash(content: impl AsRef<[u8]>) -> String {
     use sha2::digest::FixedOutput;
     use sha2::Digest;
@@ -954,21 +955,21 @@ pub fn hashed_default_ftd_js(package_name: &str) -> &'static str {
 }
 
 static MARKDOWN_HASH: once_cell::sync::Lazy<String> =
-    once_cell::sync::Lazy::new(|| format!("markdown-{}.js", generate_hash(ftd::markdown_js()),));
+    once_cell::sync::Lazy::new(|| format!("markdown-{}.js", generate_hash(ftd::markdown_js()), ));
 
 pub fn hashed_markdown_js() -> &'static str {
     &MARKDOWN_HASH
 }
 
 static PRISM_JS_HASH: once_cell::sync::Lazy<String> =
-    once_cell::sync::Lazy::new(|| format!("prism-{}.js", generate_hash(ftd::prism_js().as_str()),));
+    once_cell::sync::Lazy::new(|| format!("prism-{}.js", generate_hash(ftd::prism_js().as_str()), ));
 
 pub fn hashed_prism_js() -> &'static str {
     &PRISM_JS_HASH
 }
 
 static PRISM_CSS_HASH: once_cell::sync::Lazy<String> = once_cell::sync::Lazy::new(|| {
-    format!("prism-{}.css", generate_hash(ftd::prism_css().as_str()),)
+    format!("prism-{}.css", generate_hash(ftd::prism_css().as_str()), )
 });
 
 pub fn hashed_prism_css() -> &'static str {
@@ -1007,7 +1008,7 @@ mod tests {
             vec![
                 ("a".to_string(), "1".to_string()),
                 ("b".to_string(), "2".to_string()),
-                ("c".to_string(), "3".to_string())
+                ("c".to_string(), "3".to_string()),
             ]
         )
     }
@@ -1022,13 +1023,13 @@ pub(crate) fn is_ftd_path(path: &str) -> bool {
 }
 
 #[derive(
-    Clone,
-    Debug,
-    Default,
-    diesel::deserialize::FromSqlRow,
-    diesel::expression::AsExpression,
-    PartialOrd,
-    PartialEq,
+Clone,
+Debug,
+Default,
+diesel::deserialize::FromSqlRow,
+diesel::expression::AsExpression,
+PartialOrd,
+PartialEq,
 )]
 #[diesel(sql_type = fastn_core::schema::sql_types::Citext)]
 pub struct CiString(pub String);
@@ -1047,7 +1048,7 @@ impl diesel::serialize::ToSql<fastn_core::schema::sql_types::Citext, diesel::pg:
 }
 
 impl diesel::deserialize::FromSql<fastn_core::schema::sql_types::Citext, diesel::pg::Pg>
-    for CiString
+for CiString
 {
     fn from_sql(
         bytes: <diesel::pg::Pg as diesel::backend::Backend>::RawValue<'_>,
@@ -1124,14 +1125,14 @@ async fn get_interpolated_value(
                 return Err(fastn_core::error::Error::generic(format!(
                     "unknown variable '{}'.",
                     input,
-                )))
+                )));
             }
         },
         (None, Some(default_value)) => default_value,
         _ => {
             return Err(fastn_core::error::Error::generic(
                 "unsupported interpolation syntax used.".to_string(),
-            ))
+            ));
         }
     };
 
