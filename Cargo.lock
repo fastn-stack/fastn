@@ -1426,6 +1426,7 @@ dependencies = [
  "async-lock",
  "async-recursion",
  "async-trait",
+ "bytes",
  "camino",
  "chrono",
  "clap",
@@ -1449,6 +1450,7 @@ dependencies = [
  "futures",
  "futures-core",
  "futures-util",
+ "http 1.1.0",
  "hyper 1.2.0",
  "ignore",
  "indoc 2.0.4",
@@ -1491,9 +1493,11 @@ version = "0.1.0"
 dependencies = [
  "actix-web",
  "async-trait",
+ "bytes",
  "camino",
  "dirs",
  "ftd 0.3.0",
+ "http 1.1.0",
  "ignore",
  "lettre",
  "once_cell",
@@ -1585,6 +1589,7 @@ dependencies = [
 name = "fastn-update"
 version = "0.1.0"
 dependencies = [
+ "bytes",
  "colored",
  "fastn-core",
  "fastn-ds",

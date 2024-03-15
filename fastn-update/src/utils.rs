@@ -27,7 +27,7 @@ pub async fn read_current_package(
 
 pub(crate) async fn download_archive(
     url: String,
-) -> fastn_core::Result<zip::ZipArchive<std::io::Cursor<Vec<u8>>>> {
+) -> fastn_core::Result<zip::ZipArchive<std::io::Cursor<bytes::Bytes>>> {
     use std::io::Seek;
 
     let zipball = fastn_core::http::http_get(&url).await?;
@@ -53,16 +53,16 @@ pub(crate) fn read_manifest(
 /// Resolve to `fastn_core::Manifest` struct
 pub(crate) async fn get_manifest(
     package_name: &str,
-) -> Result<(fastn_core::Manifest, Vec<u8>), fastn_update::ManifestError> {
+) -> Result<(fastn_core::Manifest, bytes::Bytes), fastn_update::ManifestError> {
     let manifest_bytes = fastn_core::http::http_get(&format!(
         "https://{}/{}",
         package_name,
         fastn_core::manifest::MANIFEST_FILE
     ))
-    .await
-    .context(fastn_update::DownloadManifestSnafu {
-        package: package_name,
-    })?;
+        .await
+        .context(fastn_update::DownloadManifestSnafu {
+            package: package_name,
+        })?;
     let manifest = read_manifest(&manifest_bytes, package_name)?;
 
     Ok((manifest, manifest_bytes))

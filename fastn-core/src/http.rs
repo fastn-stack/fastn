@@ -78,8 +78,8 @@ pub fn redirect_with_code(url: String, code: i32) -> fastn_core::http::Response 
             actix_web::HttpResponse::PermanentRedirect()
         }
     }
-    .insert_header(("LOCATION", url))
-    .finish()
+        .insert_header(("LOCATION", url))
+        .finish()
 }
 
 pub fn ok_with_content_type(
@@ -95,29 +95,22 @@ pub(crate) struct ResponseBuilder {}
 
 impl ResponseBuilder {
     #[allow(dead_code)]
-    pub async fn from_reqwest(response: reqwest::Response) -> actix_web::HttpResponse {
-        let status = response.status();
+    pub async fn from_reqwest(response: http::Response<bytes::Bytes>) -> actix_web::HttpResponse {
+        let status = response.status().as_u16();
 
         // Remove `Connection` as per
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Connection#Directives
-        let mut response_builder = actix_web::HttpResponse::build(status);
-        for header in response
+        let mut response_builder = actix_web::HttpResponse::build(actix_web::http::StatusCode::from_u16(status).unwrap());
+        for (k, v) in response
             .headers()
             .iter()
             .filter(|(h, _)| *h != "connection")
         {
-            response_builder.insert_header(header);
+            response_builder.insert_header((k.as_str(), v.as_bytes()));
         }
 
-        let content = match response.bytes().await {
-            Ok(b) => b,
-            Err(e) => {
-                return actix_web::HttpResponse::from(actix_web::error::ErrorInternalServerError(
-                    fastn_ds::HttpError::ReqwestError(e),
-                ))
-            }
-        };
-        response_builder.body(content)
+        let content = response.body();
+        response_builder.body(content.to_vec())
     }
 }
 
@@ -417,8 +410,8 @@ impl Request {
     }
 
     pub fn q<T>(&self, key: &str, default: T) -> fastn_core::Result<T>
-    where
-        T: serde::de::DeserializeOwned,
+        where
+            T: serde::de::DeserializeOwned,
     {
         let value = match self.query.get(key) {
             Some(v) => v,
@@ -453,17 +446,17 @@ pub(crate) async fn construct_url_and_get_str(url: &str) -> fastn_core::Result<S
     construct_url_and_return_response(url.to_string(), |f| async move {
         http_get_str(f.as_str()).await
     })
-    .await
+        .await
 }
 
 #[tracing::instrument]
-pub(crate) async fn construct_url_and_get(url: &str) -> fastn_core::Result<Vec<u8>> {
+pub(crate) async fn construct_url_and_get(url: &str) -> fastn_core::Result<bytes::Bytes> {
     println!("http_download_by_id: {url}");
     construct_url_and_return_response(
         url.to_string(),
         |f| async move { http_get(f.as_str()).await },
     )
-    .await
+        .await
 }
 
 #[tracing::instrument(skip(f))]
@@ -471,9 +464,9 @@ pub(crate) async fn construct_url_and_return_response<T, F, D>(
     url: String,
     f: F,
 ) -> fastn_core::Result<D>
-where
-    F: FnOnce(String) -> T + Copy,
-    T: futures::Future<Output = std::result::Result<D, fastn_core::Error>> + Send + 'static,
+    where
+        F: FnOnce(String) -> T + Copy,
+        T: futures::Future<Output=std::result::Result<D, fastn_core::Error>> + Send + 'static,
 {
     let mut url = if url[1..].contains("://") || url.starts_with("//") {
         url
@@ -522,7 +515,7 @@ pub async fn http_post_with_cookie(
     url: &str,
     headers: &std::collections::HashMap<String, String>,
     body: &str,
-) -> fastn_core::Result<(fastn_core::Result<Vec<u8>>, Vec<String>)> {
+) -> fastn_core::Result<(fastn_core::Result<bytes::Bytes>, Vec<String>)> {
     pub use fastn_ds::RequestType;
     tracing::info!(url = url);
 
@@ -559,12 +552,12 @@ pub async fn http_post_with_cookie(
         }
     });
 
-    if !res.status().eq(&reqwest::StatusCode::OK) {
+    if !res.status().eq(&http::StatusCode::OK) {
         let message = format!(
             "url: {}, response_status: {}, response: {:?}",
             url,
             res.status(),
-            res.text().await?
+            res.body()
         );
 
         tracing::error!(url = url, msg = message);
@@ -574,10 +567,10 @@ pub async fn http_post_with_cookie(
         ));
     }
     tracing::info!(msg = "returning success", url = url);
-    Ok((Ok(res.bytes().await?.into()), resp_cookies))
+    Ok((Ok(res.body().clone()), resp_cookies))
 }
 
-pub async fn http_get(url: &str) -> fastn_core::Result<Vec<u8>> {
+pub async fn http_get(url: &str) -> fastn_core::Result<bytes::Bytes> {
     tracing::debug!("http_get {}", &url);
 
     let current_dir = camino::Utf8PathBuf::from_path_buf(std::env::current_dir()?)
@@ -589,8 +582,8 @@ pub async fn http_get(url: &str) -> fastn_core::Result<Vec<u8>> {
         &Default::default(),
         true,
     )
-    .await?
-    .0
+        .await?
+        .0
 }
 
 static NOT_FOUND_CACHE: once_cell::sync::Lazy<antidote::RwLock<std::collections::HashSet<String>>> =
@@ -603,7 +596,7 @@ pub async fn http_get_with_cookie(
     url: &str,
     headers: &std::collections::HashMap<String, String>,
     use_cache: bool,
-) -> fastn_core::Result<(fastn_core::Result<Vec<u8>>, Vec<String>)> {
+) -> fastn_core::Result<(fastn_core::Result<bytes::Bytes>, Vec<String>)> {
     pub use fastn_ds::RequestType;
     if use_cache && NOT_FOUND_CACHE.read().contains(url) {
         return Ok((
@@ -643,7 +636,7 @@ pub async fn http_get_with_cookie(
         }
     });
 
-    if !res.status().eq(&reqwest::StatusCode::OK) {
+    if !res.status().eq(&http::StatusCode::OK) {
         let message = format!(
             "url: {}, response_status: {}, response: {:?}",
             url,
@@ -662,13 +655,13 @@ pub async fn http_get_with_cookie(
         ));
     }
     tracing::info!(msg = "returning success", url = url);
-    Ok((Ok(res.bytes().await?.into()), resp_cookies))
+    Ok((Ok(res.body().clone()), resp_cookies))
 }
 
 pub(crate) async fn http_get_str(url: &str) -> fastn_core::Result<String> {
     let url_f = format!("{:?}", url);
     match http_get(url).await {
-        Ok(bytes) => String::from_utf8(bytes).map_err(|e| fastn_core::Error::UsageError {
+        Ok(bytes) => String::from_utf8(bytes.into()).map_err(|e| fastn_core::Error::UsageError {
             message: format!(
                 "Cannot convert the response to string: URL: {:?}, ERROR: {}",
                 url_f, e
@@ -987,8 +980,8 @@ mod test {
             #[validate(length(min = 1, message = "name must be at least 1 character long"))]
             name: String,
             #[validate(custom(
-                function = "fastn_core::auth::validator::validate_strong_password",
-                arg = "(&'v_a str, &'v_a str, &'v_a str)"
+            function = "fastn_core::auth::validator::validate_strong_password",
+            arg = "(&'v_a str, &'v_a str, &'v_a str)"
             ))]
             password: String,
         }
