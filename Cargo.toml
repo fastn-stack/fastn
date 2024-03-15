@@ -107,6 +107,8 @@ include_dir = "0.7"
 indoc = "2"
 intl-memoizer = "0.5"
 itertools = "0.12"
+http = "1"
+bytes = "1"
 log = "0.4"
 magic-crypt = { version = "3", default-features = false }
 mime_guess = "2"

@@ -124,10 +124,10 @@ pub async fn process(
             &conf,
             format!("{{{}}}", body.join(",")).as_str(),
         )
-        .await
-        .map_err(|e| ftd::interpreter::Error::DSHttpError {
-            message: format!("{:?}", e),
-        })
+            .await
+            .map_err(|e| ftd::interpreter::Error::DSHttpError {
+                message: format!("{:?}", e),
+            })
     } else {
         fastn_core::http::http_get_with_cookie(
             &req_config.config.ds,
@@ -136,10 +136,10 @@ pub async fn process(
             &conf,
             false, // disable cache
         )
-        .await
-        .map_err(|e| ftd::interpreter::Error::DSHttpError {
-            message: format!("{:?}", e),
-        })
+            .await
+            .map_err(|e| ftd::interpreter::Error::DSHttpError {
+                message: format!("{:?}", e),
+            })
     };
 
     let response = match resp {
@@ -165,7 +165,7 @@ pub async fn process(
     };
 
     let response_string =
-        String::from_utf8(response).map_err(|e| ftd::interpreter::Error::ParseError {
+        String::from_utf8(response.to_vec()).map_err(|e| ftd::interpreter::Error::ParseError {
             message: format!("`http` processor API response error: {}", e),
             doc_id: doc.name.to_string(),
             line_number,

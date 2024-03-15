@@ -3,6 +3,7 @@ extern crate self as fastn_ds;
 pub mod http;
 pub mod mail;
 mod utils;
+pub mod reqwest_util;
 
 #[derive(Debug, Clone)]
 pub struct DocumentStore {
@@ -137,7 +138,7 @@ pub enum HttpError {
     GenericError { message: String },
 }
 
-pub type HttpResponse = reqwest::Response;
+pub type HttpResponse = ::http::Response<bytes::Bytes>;
 
 #[async_trait::async_trait]
 pub trait RequestType {
@@ -193,7 +194,7 @@ impl DocumentStore {
     pub async fn write_content(
         &self,
         path: &fastn_ds::Path,
-        data: Vec<u8>,
+        data: &[u8],
     ) -> Result<(), WriteError> {
         use tokio::io::AsyncWriteExt;
 
@@ -307,7 +308,7 @@ impl DocumentStore {
             subject,
             body_html,
         )
-        .await
+            .await
     }
 
     // This method will connect client request to the out of the world
@@ -319,8 +320,8 @@ impl DocumentStore {
         extra_headers: &std::collections::HashMap<String, String>,
         enable_proxy: bool,
     ) -> Result<fastn_ds::HttpResponse, HttpError>
-    where
-        T: RequestType,
+        where
+            T: RequestType,
     {
         let headers = req.headers();
 
@@ -407,7 +408,7 @@ impl DocumentStore {
         tracing::info!("Response details");
         tracing::info!(status = ?response.status(),headers = ?response.headers());
 
-        Ok(response)
+        Ok(fastn_ds::reqwest_util::to_http_response(response))
     }
 }
 
