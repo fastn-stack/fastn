@@ -196,12 +196,12 @@ fn end_section(input: &mut String, sections: &mut Vec<Section>) -> bool {
                 .trim_start_matches('$')
                 .eq(name.trim_start_matches('$'))
                 && !*end =>
-                {
-                    *end = true;
-                    *s = sub_sections;
-                    sections.push(section);
-                    return true;
-                }
+            {
+                *end = true;
+                *s = sub_sections;
+                sections.push(section);
+                return true;
+            }
             _ => {
                 sub_sections.insert(0, section);
             }

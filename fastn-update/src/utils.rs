@@ -59,10 +59,10 @@ pub(crate) async fn get_manifest(
         package_name,
         fastn_core::manifest::MANIFEST_FILE
     ))
-        .await
-        .context(fastn_update::DownloadManifestSnafu {
-            package: package_name,
-        })?;
+    .await
+    .context(fastn_update::DownloadManifestSnafu {
+        package: package_name,
+    })?;
     let manifest = read_manifest(&manifest_bytes, package_name)?;
 
     Ok((manifest, manifest_bytes))

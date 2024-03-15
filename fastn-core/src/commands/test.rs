@@ -104,12 +104,12 @@ impl fastn_core::Config {
             .into_iter()
             .filter_map(|file| match file {
                 fastn_core::File::Ftd(ftd_document)
-                if ftd_document
-                    .id
-                    .ends_with(fastn_core::commands::test::FIXTURE_FILE_EXTENSION) =>
-                    {
-                        Some(ftd_document)
-                    }
+                    if ftd_document
+                        .id
+                        .ends_with(fastn_core::commands::test::FIXTURE_FILE_EXTENSION) =>
+                {
+                    Some(ftd_document)
+                }
                 _ => None,
             })
             .collect_vec();
@@ -143,12 +143,12 @@ impl fastn_core::Config {
             .into_iter()
             .filter_map(|file| match file {
                 fastn_core::File::Ftd(ftd_document)
-                if ftd_document
-                    .id
-                    .ends_with(fastn_core::commands::test::TEST_FILE_EXTENSION) =>
-                    {
-                        Some(ftd_document)
-                    }
+                    if ftd_document
+                        .id
+                        .ends_with(fastn_core::commands::test::TEST_FILE_EXTENSION) =>
+                {
+                    Some(ftd_document)
+                }
                 _ => None,
             })
             .collect_vec();
@@ -189,7 +189,7 @@ async fn read_only_instructions(
         false,
         0,
     )
-        .await?;
+    .await?;
 
     let doc = ftd::interpreter::TDoc::new(
         &main_ftd_doc.name,
@@ -219,7 +219,7 @@ async fn read_ftd_test_file(
         false,
         0,
     )
-        .await?;
+    .await?;
 
     let mut bag = main_ftd_doc.data.clone();
     bag.extend(ftd::interpreter::default::default_test_bag());
@@ -236,7 +236,7 @@ async fn read_ftd_test_file(
             &mut saved_cookies,
             test_parameters,
         )
-            .await?
+        .await?
         {
             break;
         }
@@ -459,7 +459,7 @@ async fn execute_post_instruction(
         doc.name,
         test_parameters,
     )
-        .await
+    .await
 }
 
 async fn get_post_response_for_id(
@@ -570,7 +570,7 @@ async fn get_post_response_for_id(
                     .as_str(),
                 &config.ds,
             )
-                .await;
+            .await;
             println!("{}", "Script file created".green());
             return Ok(true);
         }
@@ -674,7 +674,7 @@ async fn execute_get_instruction(
         doc.name,
         test_parameters,
     )
-        .await
+    .await
 }
 
 fn get_content_type(response: &actix_web::HttpResponse) -> Option<String> {
@@ -777,7 +777,7 @@ async fn get_js_for_id(
                     .as_str(),
                 &config.ds,
             )
-                .await;
+            .await;
             println!("{}", "Script file created".green());
             return Ok(true);
         }
@@ -800,7 +800,7 @@ fn make_test_results_variable(test_results: &ftd::Map<String>) -> String {
                 key.as_str(),
                 value.as_str()
             )
-                .as_str(),
+            .as_str(),
         )
     }
     test_results_variable
@@ -1022,7 +1022,7 @@ fn fastn_test_data(
                     .test_data
                     .insert(key.clone(), val.to_string());
 
-                Some(format!("fastn.test_data[\"{}\"] = \"{}\";", key, val, ))
+                Some(format!("fastn.test_data[\"{}\"] = \"{}\";", key, val,))
             } else {
                 None
             }
@@ -1032,7 +1032,7 @@ fn fastn_test_data(
     let existing_test_data = test_parameters
         .test_data
         .iter()
-        .map(|(k, v)| format!("fastn.test_data[\"{}\"] = \"{}\";", k, v, ))
+        .map(|(k, v)| format!("fastn.test_data[\"{}\"] = \"{}\";", k, v,))
         .join("\n");
 
     res.push_str(existing_test_data.as_str());
@@ -1055,8 +1055,8 @@ async fn execute_redirect_instruction(
         &property_values,
         instruction.line_number,
     )?
-        .to_json_string(doc, false)?
-        .unwrap();
+    .to_json_string(doc, false)?
+    .unwrap();
 
     let (redirect_from_url, redirect_to_url) = match redirect.split_once("->") {
         Some((from, to)) => (from.trim(), to.trim()),
@@ -1081,12 +1081,12 @@ async fn execute_redirect_instruction(
             "Redirecting from {} -> {}",
             redirect_from_url, redirect_to_url,
         )
-            .as_str(),
+        .as_str(),
         params,
         config,
         saved_cookies,
         doc.name,
         test_parameters,
     )
-        .await
+    .await
 }

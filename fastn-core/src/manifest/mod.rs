@@ -118,7 +118,7 @@ pub async fn write_manifest_file(
             &config.package.name.as_str(),
             fastn_core::manifest::MANIFEST_FILE
         )
-            .as_str(),
+        .as_str(),
         start,
     );
 
