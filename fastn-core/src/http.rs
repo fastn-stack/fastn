@@ -540,7 +540,7 @@ pub async fn http_post_with_cookie(
     let res = req_config
         .config
         .ds
-        .http(http_url, &http_request, &Default::default(), false)
+        .http(http_url, &http_request, &Default::default())
         .await
         .map_err(fastn_core::Error::DSHttpError)?;
 
@@ -624,7 +624,7 @@ pub async fn http_get_with_cookie(
     http_request.set_ip(req.ip.clone());
     let http_url = url::Url::parse(url).map_err(|e| fastn_core::Error::DSHttpError(e.into()))?;
     let res = ds
-        .http(http_url, &http_request, &Default::default(), false)
+        .http(http_url, &http_request, &Default::default())
         .await
         .map_err(fastn_core::Error::DSHttpError)?;
 

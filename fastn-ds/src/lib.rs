@@ -318,7 +318,6 @@ impl DocumentStore {
         url: url::Url,
         req: &T,
         extra_headers: &std::collections::HashMap<String, String>,
-        enable_proxy: bool,
     ) -> Result<fastn_ds::HttpResponse, HttpError>
     where
         T: RequestType,
@@ -373,21 +372,17 @@ impl DocumentStore {
             );
         }
 
-        // Proxy specific
-        if enable_proxy {
-            if let Some(ip) = req.get_ip() {
-                proxy_request.headers_mut().insert(
-                    reqwest::header::FORWARDED,
-                    reqwest::header::HeaderValue::from_str(ip.as_str()).unwrap(),
-                );
-            }
-
-            for header in fastn_ds::utils::ignore_headers() {
-                proxy_request.headers_mut().remove(header);
-            }
+        if let Some(ip) = req.get_ip() {
+            proxy_request.headers_mut().insert(
+                reqwest::header::FORWARDED,
+                reqwest::header::HeaderValue::from_str(ip.as_str()).unwrap(),
+            );
         }
 
-        tracing::info!(proxy = enable_proxy);
+        for header in fastn_ds::utils::ignore_headers() {
+            proxy_request.headers_mut().remove(header);
+        }
+
         tracing::info!("Request details");
         tracing::info!(
             url = ?proxy_request.url(),
@@ -397,13 +392,9 @@ impl DocumentStore {
         );
 
         *proxy_request.body_mut() = Some(req.body().to_vec().into());
-        let response = if enable_proxy {
-            fastn_ds::http::PROXY_CLIENT.execute(proxy_request).await?
-        } else {
-            fastn_ds::http::DEFAULT_CLIENT
-                .execute(proxy_request)
-                .await?
-        };
+        let response = fastn_ds::http::DEFAULT_CLIENT
+            .execute(proxy_request)
+            .await?;
 
         tracing::info!("Response details");
         tracing::info!(status = ?response.status(),headers = ?response.headers());
