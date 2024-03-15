@@ -9,7 +9,9 @@ pub enum SSRError {
     DeserializeError(String),
 }
 
-pub fn run_test(js: &str) -> Result<Vec<bool>, SSRError> {
+type Result<T> = std::result::Result<T, SSRError>;
+
+pub fn run_test(js: &str) -> Result<Vec<bool>> {
     let mut runtime = deno_core::JsRuntime::new(deno_core::RuntimeOptions::default());
 
     eval::<Vec<bool>>(
@@ -18,7 +20,7 @@ pub fn run_test(js: &str) -> Result<Vec<bool>, SSRError> {
     )
 }
 
-pub fn ssr_str(js: &str) -> Result<String, SSRError> {
+pub fn ssr_str(js: &str) -> Result<String> {
     let mut runtime = deno_core::JsRuntime::new(deno_core::RuntimeOptions::default());
 
     let all_js = fastn_js::all_js_with_test();
@@ -30,7 +32,7 @@ pub fn ssr_str(js: &str) -> Result<String, SSRError> {
 fn eval<T: deno_core::serde::Deserialize<'static>>(
     context: &mut deno_core::JsRuntime,
     code: deno_core::FastString,
-) -> Result<T, SSRError> {
+) -> Result<T> {
     let res = context.execute_script("<anon>", code);
     match res {
         Ok(global) => {
@@ -52,12 +54,12 @@ fn eval<T: deno_core::serde::Deserialize<'static>>(
     }
 }
 
-pub fn ssr(ast: &[fastn_js::Ast]) -> Result<String, SSRError> {
+pub fn ssr(ast: &[fastn_js::Ast]) -> Result<String> {
     let js = ssr_raw_string("foo", fastn_js::to_js(ast, "foo").as_str());
     ssr_str(&js)
 }
 
-pub fn ssr_with_js_string(package_name: &str, js: &str) -> Result<String, SSRError> {
+pub fn ssr_with_js_string(package_name: &str, js: &str) -> Result<String> {
     let js = ssr_raw_string(package_name, js);
     ssr_str(&js)
 }
