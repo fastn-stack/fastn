@@ -128,7 +128,7 @@ impl fastn_core::Package {
         crate::http::construct_url_and_get(
             format!("{}/{}", base.trim_end_matches('/'), name.trim_matches('/')).as_str(),
         )
-            .await
+        .await
     }
 
     #[tracing::instrument(skip_all)]
@@ -164,12 +164,7 @@ impl fastn_core::Package {
         let package_root = self.package_root_with_default(package_root)?;
 
         let (file_path, data) = self.http_fetch_by_id(id).await?;
-        fastn_core::utils::write(
-            &package_root,
-            file_path.trim_start_matches('/'),
-            &data,
-            ds,
-        )
+        fastn_core::utils::write(&package_root, file_path.trim_start_matches('/'), &data, ds)
             .await?;
 
         Ok((file_path, data))
@@ -203,21 +198,21 @@ impl fastn_core::Package {
             Some(manifest) => {
                 let new_file_path = match file_path.rsplit_once('.') {
                     Some((remaining, ext))
-                    if mime_guess::MimeGuess::from_ext(ext)
-                        .first_or_octet_stream()
-                        .to_string()
-                        .starts_with("image/") =>
-                        {
-                            if remaining.ends_with("-dark") {
-                                format!(
-                                    "{}.{}",
-                                    remaining.trim_matches('/').trim_end_matches("-dark"),
-                                    ext
-                                )
-                            } else {
-                                format!("{}-dark.{}", remaining.trim_matches('/'), ext)
-                            }
+                        if mime_guess::MimeGuess::from_ext(ext)
+                            .first_or_octet_stream()
+                            .to_string()
+                            .starts_with("image/") =>
+                    {
+                        if remaining.ends_with("-dark") {
+                            format!(
+                                "{}.{}",
+                                remaining.trim_matches('/').trim_end_matches("-dark"),
+                                ext
+                            )
+                        } else {
+                            format!("{}-dark.{}", remaining.trim_matches('/'), ext)
                         }
+                    }
                     _ => {
                         tracing::error!(
                             file_path = file_path,
@@ -272,21 +267,21 @@ impl fastn_core::Package {
 
                 let new_id = match id.rsplit_once('.') {
                     Some((remaining, ext))
-                    if mime_guess::MimeGuess::from_ext(ext)
-                        .first_or_octet_stream()
-                        .to_string()
-                        .starts_with("image/") =>
-                        {
-                            if remaining.ends_with("-dark") {
-                                format!(
-                                    "{}.{}",
-                                    remaining.trim_matches('/').trim_end_matches("-dark"),
-                                    ext
-                                )
-                            } else {
-                                format!("{}-dark.{}", remaining.trim_matches('/'), ext)
-                            }
+                        if mime_guess::MimeGuess::from_ext(ext)
+                            .first_or_octet_stream()
+                            .to_string()
+                            .starts_with("image/") =>
+                    {
+                        if remaining.ends_with("-dark") {
+                            format!(
+                                "{}.{}",
+                                remaining.trim_matches('/').trim_end_matches("-dark"),
+                                ext
+                            )
+                        } else {
+                            format!("{}-dark.{}", remaining.trim_matches('/'), ext)
                         }
+                    }
                     _ => {
                         tracing::error!(id = id, msg = "id error: can not get the dark");
                         return Err(fastn_core::Error::PackageError {
@@ -442,7 +437,7 @@ pub(crate) async fn read_ftd_2022(
         download_assets,
         line_number,
     )
-        .await
+    .await
     {
         Ok(v) => v,
         Err(e) => {
@@ -469,7 +464,7 @@ pub(crate) async fn read_ftd_2022(
         font_style.as_str(),
         base_url,
     )
-        .await;
+    .await;
 
     Ok(FTDResult::Html(file_content.into()))
 }
@@ -511,7 +506,7 @@ pub(crate) async fn read_ftd_2023(
         download_assets,
         line_number,
     )
-        .await
+    .await
     {
         Ok(v) => v,
         Err(e) => {
@@ -555,7 +550,7 @@ pub(crate) async fn read_ftd_2023(
             base_url,
             c,
         )
-            .await
+        .await
     };
 
     Ok(FTDResult::Html(file_content.into()))

@@ -44,7 +44,7 @@ impl ConfigTemp {
             &config_json_path,
             &serde_json::ser::to_vec_pretty(&config_temp)?,
         )
-            .await?;
+        .await?;
 
         Ok(())
     }

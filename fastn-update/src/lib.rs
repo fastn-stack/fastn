@@ -33,7 +33,7 @@ pub enum ArchiveError {
         source: std::io::Error,
     },
     #[snafu(display(
-    "Failed to read the archive entry path for the entry '{name}' in the package '{package}'"
+        "Failed to read the archive entry path for the entry '{name}' in the package '{package}'"
     ))]
     ArchiveEntryPathError { package: String, name: String },
     #[snafu(display("Failed to unpack archive for package '{package}'"))]
@@ -184,7 +184,7 @@ async fn update_dependencies(
                     pb,
                     check,
                 )
-                    .await?;
+                .await?;
 
                 write_archive_content(ds, &manifest_path, &manifest_bytes, &package_name, check)
                     .await?;
@@ -215,7 +215,7 @@ async fn update_dependencies(
             current_package.name.clone(),
             all_packages.into_iter().collect(),
         )
-            .await?;
+        .await?;
     }
 
     Ok(updated_packages)

@@ -78,8 +78,8 @@ pub fn redirect_with_code(url: String, code: i32) -> fastn_core::http::Response 
             actix_web::HttpResponse::PermanentRedirect()
         }
     }
-        .insert_header(("LOCATION", url))
-        .finish()
+    .insert_header(("LOCATION", url))
+    .finish()
 }
 
 pub fn ok_with_content_type(
@@ -100,7 +100,8 @@ impl ResponseBuilder {
 
         // Remove `Connection` as per
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Connection#Directives
-        let mut response_builder = actix_web::HttpResponse::build(actix_web::http::StatusCode::from_u16(status).unwrap());
+        let mut response_builder =
+            actix_web::HttpResponse::build(actix_web::http::StatusCode::from_u16(status).unwrap());
         for (k, v) in response
             .headers()
             .iter()
@@ -410,8 +411,8 @@ impl Request {
     }
 
     pub fn q<T>(&self, key: &str, default: T) -> fastn_core::Result<T>
-        where
-            T: serde::de::DeserializeOwned,
+    where
+        T: serde::de::DeserializeOwned,
     {
         let value = match self.query.get(key) {
             Some(v) => v,
@@ -446,7 +447,7 @@ pub(crate) async fn construct_url_and_get_str(url: &str) -> fastn_core::Result<S
     construct_url_and_return_response(url.to_string(), |f| async move {
         http_get_str(f.as_str()).await
     })
-        .await
+    .await
 }
 
 #[tracing::instrument]
@@ -456,7 +457,7 @@ pub(crate) async fn construct_url_and_get(url: &str) -> fastn_core::Result<bytes
         url.to_string(),
         |f| async move { http_get(f.as_str()).await },
     )
-        .await
+    .await
 }
 
 #[tracing::instrument(skip(f))]
@@ -464,9 +465,9 @@ pub(crate) async fn construct_url_and_return_response<T, F, D>(
     url: String,
     f: F,
 ) -> fastn_core::Result<D>
-    where
-        F: FnOnce(String) -> T + Copy,
-        T: futures::Future<Output=std::result::Result<D, fastn_core::Error>> + Send + 'static,
+where
+    F: FnOnce(String) -> T + Copy,
+    T: futures::Future<Output = std::result::Result<D, fastn_core::Error>> + Send + 'static,
 {
     let mut url = if url[1..].contains("://") || url.starts_with("//") {
         url
@@ -582,8 +583,8 @@ pub async fn http_get(url: &str) -> fastn_core::Result<bytes::Bytes> {
         &Default::default(),
         true,
     )
-        .await?
-        .0
+    .await?
+    .0
 }
 
 static NOT_FOUND_CACHE: once_cell::sync::Lazy<antidote::RwLock<std::collections::HashSet<String>>> =
@@ -980,8 +981,8 @@ mod test {
             #[validate(length(min = 1, message = "name must be at least 1 character long"))]
             name: String,
             #[validate(custom(
-            function = "fastn_core::auth::validator::validate_strong_password",
-            arg = "(&'v_a str, &'v_a str, &'v_a str)"
+                function = "fastn_core::auth::validator::validate_strong_password",
+                arg = "(&'v_a str, &'v_a str, &'v_a str)"
             ))]
             password: String,
         }

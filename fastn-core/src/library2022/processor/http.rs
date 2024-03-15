@@ -124,10 +124,10 @@ pub async fn process(
             &conf,
             format!("{{{}}}", body.join(",")).as_str(),
         )
-            .await
-            .map_err(|e| ftd::interpreter::Error::DSHttpError {
-                message: format!("{:?}", e),
-            })
+        .await
+        .map_err(|e| ftd::interpreter::Error::DSHttpError {
+            message: format!("{:?}", e),
+        })
     } else {
         fastn_core::http::http_get_with_cookie(
             &req_config.config.ds,
@@ -136,10 +136,10 @@ pub async fn process(
             &conf,
             false, // disable cache
         )
-            .await
-            .map_err(|e| ftd::interpreter::Error::DSHttpError {
-                message: format!("{:?}", e),
-            })
+        .await
+        .map_err(|e| ftd::interpreter::Error::DSHttpError {
+            message: format!("{:?}", e),
+        })
     };
 
     let response = match resp {

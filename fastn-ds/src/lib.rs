@@ -2,8 +2,8 @@ extern crate self as fastn_ds;
 
 pub mod http;
 pub mod mail;
-mod utils;
 pub mod reqwest_util;
+mod utils;
 
 #[derive(Debug, Clone)]
 pub struct DocumentStore {
@@ -210,7 +210,7 @@ impl DocumentStore {
         }
 
         let mut file = tokio::fs::File::create(full_path.path).await?;
-        file.write_all(&data).await?;
+        file.write_all(data).await?;
         Ok(())
     }
 
