@@ -793,7 +793,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="background-color: rgba(255,255,0,1); height: 40%; margin-bottom: 10px; width: 70px" class="ft_common ft_md">Hello</div><div data-id="1:main" style="background-color: rgba(255,255,0,1); padding: 70px" class="ft_common ft_md">Hello</div><div data-id="2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;function__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="cursor: pointer; padding: 40%" class="ft_common ft_md">World</div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="background-color: rgba(255,255,0,1); height: 40%; margin-bottom: 10px; width: 70px" class="ft_common ft_md">Hello</div><div data-id="1:main" style="background-color: rgba(255,255,0,1); padding: 70px" class="ft_common ft_md">Hello</div><div data-id="2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;function__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;reference&quot;:&quot;foo#flag&quot;,&quot;mutable&quot;:true}]]}]', this)" style="cursor: pointer; padding: 40%" class="ft_common ft_md">World</div></div>
 
 
 <script>
@@ -2073,8 +2073,8 @@ window.ftd.utils.set_value_helper(data, "foo#p", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#p", "main");
 window.ftd.call_immutable_value_changes("foo#p", "main");
-window.ftd.utils.node_change_call("main","0:main__width", data);
 window.ftd.utils.node_change_call("main","1:main__padding", data);
+window.ftd.utils.node_change_call("main","0:main__width", data);
 window.ftd.utils.node_change_call("main","2:main__padding", data);
 };
 
@@ -2091,9 +2091,9 @@ window.ftd.utils.set_value_helper(data, "ftd#device", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#device", "main");
 window.ftd.call_immutable_value_changes("ftd#device", "main");
-window.ftd.utils.node_change_call("main","0:main__height", data);
-window.ftd.utils.node_change_call("main","1:main__padding", data);
 window.ftd.utils.node_change_call("main","0:main__width", data);
+window.ftd.utils.node_change_call("main","1:main__padding", data);
+window.ftd.utils.node_change_call("main","0:main__height", data);
 window.ftd.utils.node_change_call("main","2:main__padding", data);
 };
 

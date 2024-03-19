@@ -813,7 +813,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="color: rgba(255,0,0,1)" class="ft_common ft_md">0</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="color: rgba(0,128,0,1); cursor: pointer; font-family: sans-serif" class="ft_common ft_md">Hello World</div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="color: rgba(255,0,0,1)" class="ft_common ft_md">0</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;reference&quot;:&quot;foo#flag&quot;,&quot;mutable&quot;:true}]]}]', this)" style="color: rgba(0,128,0,1); cursor: pointer; font-family: sans-serif" class="ft_common ft_md">Hello World</div></div>
 
 
 <script>
@@ -2142,11 +2142,11 @@ window.ftd.utils.set_value_helper(data, "foo#flag", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#flag", "main");
 window.ftd.call_immutable_value_changes("foo#flag", "main");
-window.ftd.utils.node_change_call("main","1:main__font-size", data);
-window.ftd.utils.node_change_call("main","1:main__line-height", data);
-window.ftd.utils.node_change_call("main","1:main__font-family", data);
 window.ftd.utils.node_change_call("main","1:main__letter-spacing", data);
+window.ftd.utils.node_change_call("main","1:main__line-height", data);
 window.ftd.utils.node_change_call("main","0:main__text", data);
+window.ftd.utils.node_change_call("main","1:main__font-size", data);
+window.ftd.utils.node_change_call("main","1:main__font-family", data);
 window.ftd.utils.node_change_call("main","1:main__font-weight", data);
 };
 
@@ -2155,10 +2155,10 @@ window.ftd.utils.set_value_helper(data, "ftd#device", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#device", "main");
 window.ftd.call_immutable_value_changes("ftd#device", "main");
-window.ftd.utils.node_change_call("main","1:main__font-weight", data);
-window.ftd.utils.node_change_call("main","1:main__font-size", data);
-window.ftd.utils.node_change_call("main","1:main__font-family", data);
 window.ftd.utils.node_change_call("main","1:main__line-height", data);
+window.ftd.utils.node_change_call("main","1:main__font-size", data);
+window.ftd.utils.node_change_call("main","1:main__font-weight", data);
+window.ftd.utils.node_change_call("main","1:main__font-family", data);
 window.ftd.utils.node_change_call("main","1:main__letter-spacing", data);
 };
 

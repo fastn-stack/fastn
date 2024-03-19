@@ -843,7 +843,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_column"><div data-id="0,0:main" style="display: none" class="ft_common ft_column"><div data-id="0,0,0:main" style="" class="ft_common ft_md">From desktop</div><div data-id="0,0,1:main" style="" class="ft_common ft_column"><div data-id="0,0,1,0:main" style="" class="ft_common ft_column"><div data-id="0,0,1,0,0:main" style="" class="ft_common ft_md">Desktop print-title</div><div data-id="0,0,1,0,1:main" style="" class="ft_common ft_column"><div data-id="0,0,1,0,1,0:main" style="" class="ft_common ft_column"><div data-id="0,0,1,0,1,0,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="cursor: pointer; font-family: fantasy; font-size: 20px; font-weight: 100; letter-spacing: 3px; line-height: 35px" class="ft_common ft_md">Desktop print-subtitle</div></div></div></div></div></div><div data-id="0,1:main" style="" class="ft_common ft_column"><div data-id="0,1,0:main" style="" class="ft_common ft_md">From mobile</div><div data-id="0,1,1:main" style="" class="ft_common ft_column"><div data-id="0,1,1,1:main" style="" class="ft_common ft_column"><div data-id="0,1,1,1,0:main" style="" class="ft_common ft_md">Mobile print-title</div><div data-id="0,1,1,1,1:main" style="" class="ft_common ft_column"><div data-id="0,1,1,1,1,1:main" style="" class="ft_common ft_column"><div data-id="0,1,1,1,1,1,0:main" style="font-family: cursive; font-size: 20px; font-weight: 100; letter-spacing: 3px; line-height: 35px" class="ft_common ft_md">Mobile print-subtitle</div></div></div></div></div></div></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_column"><div data-id="0,0:main" style="display: none" class="ft_common ft_column"><div data-id="0,0,0:main" style="" class="ft_common ft_md">From desktop</div><div data-id="0,0,1:main" style="" class="ft_common ft_column"><div data-id="0,0,1,0:main" style="" class="ft_common ft_column"><div data-id="0,0,1,0,0:main" style="" class="ft_common ft_md">Desktop print-title</div><div data-id="0,0,1,0,1:main" style="" class="ft_common ft_column"><div data-id="0,0,1,0,1,0:main" style="" class="ft_common ft_column"><div data-id="0,0,1,0,1,0,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;reference&quot;:&quot;foo#flag&quot;,&quot;mutable&quot;:true}]]}]', this)" style="cursor: pointer; font-family: fantasy; font-size: 20px; font-weight: 100; letter-spacing: 3px; line-height: 35px" class="ft_common ft_md">Desktop print-subtitle</div></div></div></div></div></div><div data-id="0,1:main" style="" class="ft_common ft_column"><div data-id="0,1,0:main" style="" class="ft_common ft_md">From mobile</div><div data-id="0,1,1:main" style="" class="ft_common ft_column"><div data-id="0,1,1,1:main" style="" class="ft_common ft_column"><div data-id="0,1,1,1,0:main" style="" class="ft_common ft_md">Mobile print-title</div><div data-id="0,1,1,1,1:main" style="" class="ft_common ft_column"><div data-id="0,1,1,1,1,1:main" style="" class="ft_common ft_column"><div data-id="0,1,1,1,1,1,0:main" style="font-family: cursive; font-size: 20px; font-weight: 100; letter-spacing: 3px; line-height: 35px" class="ft_common ft_md">Mobile print-subtitle</div></div></div></div></div></div></div></div>
 
 
 <script>
@@ -2136,11 +2136,11 @@ window.ftd.utils.set_value_helper(data, "foo#flag", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#flag", "main");
 window.ftd.call_immutable_value_changes("foo#flag", "main");
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__line-height", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-family", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-size", data);
 window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-weight", data);
 window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__letter-spacing", data);
-window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__line-height", data);
-window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-size", data);
-window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-family", data);
 };
 
 window.set_value_main["foo#rrtype"] = function (data, new_value, remaining) {
@@ -2148,11 +2148,11 @@ window.ftd.utils.set_value_helper(data, "foo#rrtype", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#rrtype", "main");
 window.ftd.call_immutable_value_changes("foo#rrtype", "main");
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-family", data);
 window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-size", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-weight", data);
 window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__letter-spacing", data);
 window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__line-height", data);
-window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-weight", data);
-window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-family", data);
 };
 
 window.set_value_main["foo#rtype"] = function (data, new_value, remaining) {
@@ -2160,10 +2160,10 @@ window.ftd.utils.set_value_helper(data, "foo#rtype", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#rtype", "main");
 window.ftd.call_immutable_value_changes("foo#rtype", "main");
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-family", data);
 window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-size", data);
 window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-weight", data);
 window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__letter-spacing", data);
-window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-family", data);
 window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__line-height", data);
 };
 
@@ -2172,13 +2172,13 @@ window.ftd.utils.set_value_helper(data, "ftd#device", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#device", "main");
 window.ftd.call_immutable_value_changes("ftd#device", "main");
-window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-size", data);
-window.ftd.utils.node_change_call("main","0,0:main__display", data);
-window.ftd.utils.node_change_call("main","0,1:main__display", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__letter-spacing", data);
 window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-family", data);
 window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__line-height", data);
 window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-weight", data);
-window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__letter-spacing", data);
+window.ftd.utils.node_change_call("main","0,0,1,0,1,0,0:main__font-size", data);
+window.ftd.utils.node_change_call("main","0,0:main__display", data);
+window.ftd.utils.node_change_call("main","0,1:main__display", data);
 };
 
 

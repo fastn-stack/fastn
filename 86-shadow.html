@@ -830,7 +830,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_bool___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#mouse-entered&quot;}],[&quot;v&quot;,true]]}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_bool___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#mouse-entered&quot;}],[&quot;v&quot;,false]]}]', this)" style="box-shadow:  rgba(0,0,255,1) 10px -5px 1px 3px; margin: 50px" class="ft_common ft_column"><div data-id="0,0:main" style="" class="ft_common ft_md">Testing shadow</div></div><div data-id="1:main" style="gap: 0; justify-content: space-between; width: 100%" class="ft_common ft_row"><div data-id="1,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__enable_dark_mode___main&quot;,&quot;values&quot;:[]}]', this)" style="background-color: rgba(45,212,191,1); border-radius: 2px; color: rgba(255,255,255,1); cursor: pointer; padding-bottom: 12px; padding-left: 16px; padding-right: 16px; padding-top: 12px; text-align: center; width: 132px" class="ft_common ft_md">Dark Mode</div><div data-id="1,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__enable_light_mode___main&quot;,&quot;values&quot;:[]}]', this)" style="background-color: rgba(79,178,223,1); border-radius: 2px; color: rgba(255,255,255,1); cursor: pointer; padding-bottom: 12px; padding-left: 16px; padding-right: 16px; padding-top: 12px; text-align: center; width: 132px" class="ft_common ft_md">Light Mode</div><div data-id="1,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__enable_system_mode___main&quot;,&quot;values&quot;:[]}]', this)" style="background-color: rgba(223,137,79,1); border-radius: 2px; color: rgba(255,255,255,1); cursor: pointer; padding-bottom: 12px; padding-left: 16px; padding-right: 16px; padding-top: 12px; text-align: center; width: 132px" class="ft_common ft_md">System Mode</div></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" onmouseenter="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_bool___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;reference&quot;:&quot;foo#mouse-entered&quot;,&quot;mutable&quot;:true}],[&quot;v&quot;,true]]}]', this)" onmouseleave="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_bool___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;reference&quot;:&quot;foo#mouse-entered&quot;,&quot;mutable&quot;:true}],[&quot;v&quot;,false]]}]', this)" style="box-shadow:  rgba(0,0,255,1) 10px -5px 1px 3px; margin: 50px" class="ft_common ft_column"><div data-id="0,0:main" style="" class="ft_common ft_md">Testing shadow</div></div><div data-id="1:main" style="gap: 0; justify-content: space-between; width: 100%" class="ft_common ft_row"><div data-id="1,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__enable_dark_mode___main&quot;,&quot;values&quot;:[]}]', this)" style="background-color: rgba(45,212,191,1); border-radius: 2px; color: rgba(255,255,255,1); cursor: pointer; padding-bottom: 12px; padding-left: 16px; padding-right: 16px; padding-top: 12px; text-align: center; width: 132px" class="ft_common ft_md">Dark Mode</div><div data-id="1,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__enable_light_mode___main&quot;,&quot;values&quot;:[]}]', this)" style="background-color: rgba(79,178,223,1); border-radius: 2px; color: rgba(255,255,255,1); cursor: pointer; padding-bottom: 12px; padding-left: 16px; padding-right: 16px; padding-top: 12px; text-align: center; width: 132px" class="ft_common ft_md">Light Mode</div><div data-id="1,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__enable_system_mode___main&quot;,&quot;values&quot;:[]}]', this)" style="background-color: rgba(223,137,79,1); border-radius: 2px; color: rgba(255,255,255,1); cursor: pointer; padding-bottom: 12px; padding-left: 16px; padding-right: 16px; padding-top: 12px; text-align: center; width: 132px" class="ft_common ft_md">System Mode</div></div></div>
 
 
 <script>
@@ -2185,10 +2185,10 @@ window.ftd.utils.set_value_helper(data, "foo#button:color:1,0", remaining, new_v
 window.ftd.call_mutable_value_changes("foo#button:color:1,0", "main");
 window.ftd.call_immutable_value_changes("foo#button:color:1,0", "main");
 window.ftd.utils.node_change_call("main","1,0:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","1,0:main__background-size", data);
-window.ftd.utils.node_change_call("main","1,0:main__background-image", data);
 window.ftd.utils.node_change_call("main","1,0:main__background-color", data);
+window.ftd.utils.node_change_call("main","1,0:main__background-size", data);
 window.ftd.utils.node_change_call("main","1,0:main__background-position", data);
+window.ftd.utils.node_change_call("main","1,0:main__background-image", data);
 };
 
 window.set_value_main["foo#button:color:1,1"] = function (data, new_value, remaining) {
@@ -2196,11 +2196,11 @@ window.ftd.utils.set_value_helper(data, "foo#button:color:1,1", remaining, new_v
 
 window.ftd.call_mutable_value_changes("foo#button:color:1,1", "main");
 window.ftd.call_immutable_value_changes("foo#button:color:1,1", "main");
+window.ftd.utils.node_change_call("main","1,1:main__background-size", data);
 window.ftd.utils.node_change_call("main","1,1:main__background-image", data);
 window.ftd.utils.node_change_call("main","1,1:main__background-position", data);
 window.ftd.utils.node_change_call("main","1,1:main__background-repeat", data);
 window.ftd.utils.node_change_call("main","1,1:main__background-color", data);
-window.ftd.utils.node_change_call("main","1,1:main__background-size", data);
 };
 
 window.set_value_main["foo#button:color:1,2"] = function (data, new_value, remaining) {
@@ -2210,8 +2210,8 @@ window.ftd.call_mutable_value_changes("foo#button:color:1,2", "main");
 window.ftd.call_immutable_value_changes("foo#button:color:1,2", "main");
 window.ftd.utils.node_change_call("main","1,2:main__background-size", data);
 window.ftd.utils.node_change_call("main","1,2:main__background-position", data);
-window.ftd.utils.node_change_call("main","1,2:main__background-color", data);
 window.ftd.utils.node_change_call("main","1,2:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","1,2:main__background-color", data);
 window.ftd.utils.node_change_call("main","1,2:main__background-image", data);
 };
 
@@ -2268,21 +2268,21 @@ window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-window.ftd.utils.node_change_call("main","1,0:main__background-size", data);
-window.ftd.utils.node_change_call("main","1,1:main__background-image", data);
-window.ftd.utils.node_change_call("main","1,2:main__background-position", data);
+window.ftd.utils.node_change_call("main","1,1:main__background-color", data);
+window.ftd.utils.node_change_call("main","1,2:main__background-color", data);
+window.ftd.utils.node_change_call("main","1,2:main__background-repeat", data);
 window.ftd.utils.node_change_call("main","1,1:main__background-size", data);
 window.ftd.utils.node_change_call("main","1,2:main__background-image", data);
 window.ftd.utils.node_change_call("main","1,0:main__background-color", data);
-window.ftd.utils.node_change_call("main","1,1:main__background-color", data);
-window.ftd.utils.node_change_call("main","1,2:main__background-color", data);
-window.ftd.utils.node_change_call("main","1,1:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","1,1:main__background-position", data);
-window.ftd.utils.node_change_call("main","1,2:main__background-repeat", data);
 window.ftd.utils.node_change_call("main","1,0:main__background-position", data);
-window.ftd.utils.node_change_call("main","1,2:main__background-size", data);
-window.ftd.utils.node_change_call("main","1,0:main__background-image", data);
 window.ftd.utils.node_change_call("main","1,0:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","1,1:main__background-image", data);
+window.ftd.utils.node_change_call("main","1,1:main__background-position", data);
+window.ftd.utils.node_change_call("main","1,2:main__background-size", data);
+window.ftd.utils.node_change_call("main","1,1:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","1,0:main__background-image", data);
+window.ftd.utils.node_change_call("main","1,0:main__background-size", data);
+window.ftd.utils.node_change_call("main","1,2:main__background-position", data);
 };
 
 
