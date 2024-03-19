@@ -201,6 +201,14 @@ const ftd = (function () {
             );
         }
 
+        // change ftd.http-method and this function to add support for more
+        // http methods
+        if (!["GET", "POST"].includes(method)) {
+            throw new Error(
+                `${method} is invalid. Must be one of "GET", "POST"`,
+            );
+        }
+
         if (url instanceof fastn.mutableClass) url = url.get();
         method = method.trim().toUpperCase();
         let request_json = {};
@@ -212,12 +220,7 @@ const ftd = (function () {
             redirect,
         };
 
-        if (method === "GET") {
-            console.warn("Method `GET` is not yet supported.");
-            return;
-        }
-
-        if (body && method !== "GET") {
+        if (body) {
             if (body[0] instanceof fastn.recordInstanceClass) {
                 if (body.length !== 1) {
                     console.warn(
@@ -244,7 +247,14 @@ const ftd = (function () {
             }
         }
 
-        init.body = JSON.stringify(request_json);
+        if (method === "POST") {
+            init.body = JSON.stringify(request_json);
+        }
+
+        if (method === "GET") {
+            const params = new URLSearchParams(request_json);
+            url += `?${params.toString()}`;
+        }
 
         let json;
         fetch(url, init)
