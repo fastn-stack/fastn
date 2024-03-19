@@ -252,8 +252,11 @@ const ftd = (function () {
         }
 
         if (method === "GET") {
-            const params = new URLSearchParams(request_json);
-            url += `?${params.toString()}`;
+            url = new URL(url);
+
+            for (let [key, value] of Object.entries(request_json)) {
+                url.searchParams.set(key, value);
+            }
         }
 
         let json;
