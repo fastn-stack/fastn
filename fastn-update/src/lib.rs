@@ -186,7 +186,7 @@ async fn update_dependencies(
                 )
                 .await?;
 
-                write_archive_content(ds, &manifest_path, manifest_bytes, &package_name, check)
+                write_archive_content(ds, &manifest_path, &manifest_bytes, &package_name, check)
                     .await?;
 
                 updated_packages += 1;
@@ -224,7 +224,7 @@ async fn update_dependencies(
 async fn write_archive_content(
     ds: &fastn_ds::DocumentStore,
     output_path: &fastn_ds::Path,
-    buffer: Vec<u8>,
+    buffer: &[u8],
     package_name: &str,
     check: bool,
 ) -> Result<(), UpdateError> {
@@ -281,7 +281,7 @@ async fn download_and_unpack_zip(
                 continue;
             }
             let output_path = &dependency_path.join(path_without_prefix);
-            write_archive_content(ds, output_path, buffer, package_name, check).await?;
+            write_archive_content(ds, output_path, &buffer, package_name, check).await?;
             pb.tick();
         }
     }

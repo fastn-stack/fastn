@@ -1,8 +1,22 @@
 extern crate self as fastn_ds;
 
+pub mod http;
+pub mod mail;
+pub mod reqwest_util;
+mod utils;
+
 #[derive(Debug, Clone)]
 pub struct DocumentStore {
     root: Path,
+}
+
+#[derive(serde::Deserialize, Clone)]
+pub struct UserData {
+    pub id: i64,
+    pub username: String,
+    pub name: String,
+    pub email: String,
+    pub verified_email: bool,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -114,6 +128,29 @@ pub enum WriteError {
     IOError(#[from] std::io::Error),
 }
 
+#[derive(thiserror::Error, Debug)]
+pub enum HttpError {
+    #[error("http error {0}")]
+    ReqwestError(#[from] reqwest::Error),
+    #[error("url parse error {0}")]
+    URLParseError(#[from] url::ParseError),
+    #[error("generic error {message}")]
+    GenericError { message: String },
+}
+
+pub type HttpResponse = ::http::Response<bytes::Bytes>;
+
+#[async_trait::async_trait]
+pub trait RequestType {
+    async fn ud(&self, ds: &fastn_ds::DocumentStore) -> Option<UserData>;
+    fn headers(&self) -> &reqwest::header::HeaderMap;
+    fn method(&self) -> &str;
+    fn query_string(&self) -> &str;
+    fn get_ip(&self) -> Option<String>;
+    fn cookies_string(&self) -> Option<String>;
+    fn body(&self) -> &[u8];
+}
+
 impl DocumentStore {
     pub fn new<T: AsRef<camino::Utf8Path>>(root: T) -> Self {
         Self {
@@ -157,7 +194,7 @@ impl DocumentStore {
     pub async fn write_content(
         &self,
         path: &fastn_ds::Path,
-        data: Vec<u8>,
+        data: &[u8],
     ) -> Result<(), WriteError> {
         use tokio::io::AsyncWriteExt;
 
@@ -173,7 +210,7 @@ impl DocumentStore {
         }
 
         let mut file = tokio::fs::File::create(full_path.path).await?;
-        file.write_all(&data).await?;
+        file.write_all(data).await?;
         Ok(())
     }
 
@@ -245,6 +282,124 @@ impl DocumentStore {
 
     pub async fn env(&self, key: &str) -> Result<String, EnvironmentError> {
         std::env::var(key).map_err(|_| EnvironmentError::NotSet(key.to_string()))
+    }
+    /// Send an email
+    /// to: (name, email)
+    pub async fn send_email(
+        &self,
+        to: (&str, &str),
+        subject: &str,
+        body_html: String,
+        mkind: fastn_ds::mail::EmailKind,
+    ) -> Result<(), fastn_ds::mail::MailError> {
+        let enable_email = self
+            .env_bool("FASTN_ENABLE_EMAIL", true)
+            .await
+            .unwrap_or(true);
+
+        let (name, email) = to;
+
+        tracing::info!("sending mail of {mkind}");
+
+        fastn_ds::mail::Mailer::send_raw(
+            enable_email,
+            self,
+            format!("{} <{}>", name, email).parse()?,
+            subject,
+            body_html,
+        )
+        .await
+    }
+
+    // This method will connect client request to the out of the world
+    #[tracing::instrument(skip(req, extra_headers))]
+    pub async fn http<T>(
+        &self,
+        url: url::Url,
+        req: &T,
+        extra_headers: &std::collections::HashMap<String, String>,
+    ) -> Result<fastn_ds::HttpResponse, HttpError>
+    where
+        T: RequestType,
+    {
+        let headers = req.headers();
+
+        // Github doesn't allow trailing slash GET requests
+        let url = if req.query_string().is_empty() {
+            url.as_str().trim_end_matches('/').to_string()
+        } else {
+            format!(
+                "{}/?{}",
+                url.as_str().trim_end_matches('/'),
+                req.query_string()
+            )
+        };
+
+        let mut proxy_request = reqwest::Request::new(
+            match req.method() {
+                "GET" => reqwest::Method::GET,
+                "POST" => reqwest::Method::POST,
+                "PUT" => reqwest::Method::PUT,
+                "DELETE" => reqwest::Method::DELETE,
+                "PATCH" => reqwest::Method::PATCH,
+                "HEAD" => reqwest::Method::HEAD,
+                "OPTIONS" => reqwest::Method::OPTIONS,
+                "TRACE" => reqwest::Method::TRACE,
+                "CONNECT" => reqwest::Method::CONNECT,
+                _ => reqwest::Method::GET,
+            },
+            reqwest::Url::parse(url.as_str())?,
+        );
+
+        *proxy_request.headers_mut() = headers.to_owned();
+
+        for (header_key, header_value) in extra_headers {
+            proxy_request.headers_mut().insert(
+                reqwest::header::HeaderName::from_bytes(header_key.as_bytes()).unwrap(),
+                reqwest::header::HeaderValue::from_str(header_value.as_str()).unwrap(),
+            );
+        }
+
+        proxy_request.headers_mut().insert(
+            reqwest::header::USER_AGENT,
+            reqwest::header::HeaderValue::from_static("fastn"),
+        );
+
+        if let Some(cookies) = req.cookies_string() {
+            proxy_request.headers_mut().insert(
+                reqwest::header::COOKIE,
+                reqwest::header::HeaderValue::from_str(cookies.as_str()).unwrap(),
+            );
+        }
+
+        if let Some(ip) = req.get_ip() {
+            proxy_request.headers_mut().insert(
+                reqwest::header::FORWARDED,
+                reqwest::header::HeaderValue::from_str(ip.as_str()).unwrap(),
+            );
+        }
+
+        for header in fastn_ds::utils::ignore_headers() {
+            proxy_request.headers_mut().remove(header);
+        }
+
+        tracing::info!("Request details");
+        tracing::info!(
+            url = ?proxy_request.url(),
+            method = ?proxy_request.method(),
+            headers = ?proxy_request.headers(),
+            body = ?proxy_request.body(),
+        );
+
+        *proxy_request.body_mut() = Some(req.body().to_vec().into());
+        let response = fastn_ds::http::DEFAULT_CLIENT
+            .execute(proxy_request)
+            .await?;
+
+        tracing::info!("Response details");
+        tracing::info!(status = ?response.status(),headers = ?response.headers());
+
+        Ok(fastn_ds::reqwest_util::to_http_response(response).await?)
     }
 }
 

@@ -175,17 +175,17 @@ pub(crate) async fn forgot_password_request(
         println!("RESET LINK: {}", &reset_link);
     }
 
-    fastn_core::mail::Mailer::send_raw(
-        enable_email,
-        &req_config.config.ds,
-        format!("{} <{}>", user.name, email.0)
-            .parse::<lettre::message::Mailbox>()
-            .unwrap(),
-        "Reset your password",
-        html,
-    )
-    .await
-    .map_err(|e| fastn_core::Error::generic(format!("failed to send email: {e}")))?;
+    req_config
+        .config
+        .ds
+        .send_email(
+            (&user.name, &email.0),
+            "Reset your password",
+            html,
+            fastn_ds::mail::EmailKind::PasswordReset,
+        )
+        .await
+        .map_err(|e| fastn_core::Error::generic(format!("failed to send email: {e}")))?;
 
     let resp_body = serde_json::json!({
         "success": true,

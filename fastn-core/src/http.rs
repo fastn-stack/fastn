@@ -91,6 +91,30 @@ pub fn ok_with_content_type(
         .body(data)
 }
 
+pub(crate) struct ResponseBuilder {}
+
+impl ResponseBuilder {
+    #[allow(dead_code)]
+    pub async fn from_reqwest(response: http::Response<bytes::Bytes>) -> actix_web::HttpResponse {
+        let status = response.status().as_u16();
+
+        // Remove `Connection` as per
+        // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Connection#Directives
+        let mut response_builder =
+            actix_web::HttpResponse::build(actix_web::http::StatusCode::from_u16(status).unwrap());
+        for (k, v) in response
+            .headers()
+            .iter()
+            .filter(|(h, _)| *h != "connection")
+        {
+            response_builder.insert_header((k.as_str(), v.as_bytes()));
+        }
+
+        let content = response.body();
+        response_builder.body(content.to_vec())
+    }
+}
+
 #[derive(Debug, Clone, Default)]
 pub struct Request {
     method: String,
@@ -106,6 +130,46 @@ pub struct Request {
     host: String,
     pub connection_info: actix_web::dev::ConnectionInfo,
     // path_params: Vec<(String, )>
+}
+
+#[async_trait::async_trait]
+impl fastn_ds::RequestType for Request {
+    async fn ud(&self, ds: &fastn_ds::DocumentStore) -> Option<fastn_ds::UserData> {
+        self.ud(ds).await
+    }
+    fn headers(&self) -> &reqwest::header::HeaderMap {
+        &self.headers
+    }
+
+    fn method(&self) -> &str {
+        self.method.as_str()
+    }
+
+    fn query_string(&self) -> &str {
+        self.query_string.as_str()
+    }
+
+    fn get_ip(&self) -> Option<String> {
+        self.ip.clone()
+    }
+
+    fn cookies_string(&self) -> Option<String> {
+        if self.cookies.is_empty() {
+            return None;
+        }
+        Some(
+            self.cookies()
+                .iter()
+                // TODO: check if extra escaping is needed
+                .map(|(k, v)| format!("{}={}", k, v).replace(';', "%3B"))
+                .collect::<Vec<_>>()
+                .join(";"),
+        )
+    }
+
+    fn body(&self) -> &[u8] {
+        &self.body
+    }
 }
 
 impl Request {
@@ -298,6 +362,19 @@ impl Request {
         self.cookies = cookies.clone();
     }
 
+    pub fn set_ip(&mut self, ip: Option<String>) {
+        self.ip = ip;
+    }
+
+    pub fn set_headers(&mut self, headers: &std::collections::HashMap<String, String>) {
+        for (key, value) in headers.iter() {
+            self.headers.insert(
+                reqwest::header::HeaderName::from_bytes(key.as_bytes()).unwrap(),
+                reqwest::header::HeaderValue::from_str(value.as_str()).unwrap(),
+            );
+        }
+    }
+
     pub fn insert_header(&mut self, name: reqwest::header::HeaderName, value: &'static str) {
         self.headers
             .insert(name, reqwest::header::HeaderValue::from_static(value));
@@ -359,63 +436,6 @@ impl Request {
     }
 }
 
-pub(crate) struct ResponseBuilder {
-    // headers: std::collections::HashMap<String, String>,
-    // code: u16,
-    // remaining
-}
-
-// We will no do stream, data is going to less from services
-impl ResponseBuilder {
-    // chain implementation
-    // .build
-    // response from string, json, bytes etc
-
-    pub async fn from_reqwest(response: reqwest::Response) -> fastn_core::http::Response {
-        let status = response.status();
-
-        // Remove `Connection` as per
-        // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Connection#Directives
-        let mut response_builder = actix_web::HttpResponse::build(status);
-        for header in response
-            .headers()
-            .iter()
-            .filter(|(h, _)| *h != "connection")
-        {
-            response_builder.insert_header(header);
-        }
-
-        // if status == actix_web::http::StatusCode::FOUND && false {
-        //     response_builder.status(actix_web::http::StatusCode::OK);
-        //     if let Some(location) = response.headers().get(actix_web::http::header::LOCATION) {
-        //         let redirect = location.to_str().unwrap();
-        //         let path = if redirect.trim_matches('/').is_empty() {
-        //             format!("/-/{}/", package_name)
-        //         } else {
-        //             // if it contains query-params so url should not end with /
-        //             if redirect.contains('?') {
-        //                 format!("/-/{}/{}", package_name, redirect.trim_matches('/'))
-        //             } else {
-        //                 format!("/-/{}/{}/", package_name, redirect.trim_matches('/'))
-        //             }
-        //         };
-        //         let t = serde_json::json!({"redirect": path.as_str()}).to_string();
-        //         return response_builder.body(t);
-        //     }
-        // }
-
-        let content = match response.bytes().await {
-            Ok(b) => b,
-            Err(e) => {
-                return actix_web::HttpResponse::from(actix_web::error::ErrorInternalServerError(
-                    fastn_core::Error::HttpError(e),
-                ))
-            }
-        };
-        response_builder.body(content)
-    }
-}
-
 pub(crate) fn url_regex() -> regex::Regex {
     regex::Regex::new(
         r"((([A-Za-z]{3,9}:(?://)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:/[\+~%/.\w_]*)?\??(?:[-\+=&;%@.\w_]*)\#?(?:[\w]*))?)"
@@ -431,7 +451,7 @@ pub(crate) async fn construct_url_and_get_str(url: &str) -> fastn_core::Result<S
 }
 
 #[tracing::instrument]
-pub(crate) async fn construct_url_and_get(url: &str) -> fastn_core::Result<Vec<u8>> {
+pub(crate) async fn construct_url_and_get(url: &str) -> fastn_core::Result<bytes::Bytes> {
     println!("http_download_by_id: {url}");
     construct_url_and_return_response(
         url.to_string(),
@@ -491,27 +511,17 @@ pub(crate) async fn post_json<T: serde::de::DeserializeOwned, B: Into<reqwest::B
 }
 
 #[tracing::instrument(skip_all)]
-pub(crate) async fn http_post_with_cookie(
+pub async fn http_post_with_cookie(
+    req_config: &fastn_core::RequestConfig,
     url: &str,
-    cookie: Option<String>,
     headers: &std::collections::HashMap<String, String>,
     body: &str,
-) -> fastn_core::Result<(fastn_core::Result<Vec<u8>>, Vec<String>)> {
-    let mut resp_cookies = vec![];
-
+) -> fastn_core::Result<(fastn_core::Result<bytes::Bytes>, Vec<String>)> {
+    pub use fastn_ds::RequestType;
     tracing::info!(url = url);
-    let mut req_headers = reqwest::header::HeaderMap::new();
-    req_headers.insert(
-        reqwest::header::USER_AGENT,
-        reqwest::header::HeaderValue::from_static("fastn"),
-    );
-    if let Some(cookie) = cookie {
-        req_headers.insert(
-            reqwest::header::COOKIE,
-            reqwest::header::HeaderValue::from_str(cookie.as_str()).unwrap(),
-        );
-    }
 
+    let cookies = req_config.request.cookies().clone();
+    let mut req_headers = reqwest::header::HeaderMap::new();
     for (key, value) in headers.iter() {
         req_headers.insert(
             reqwest::header::HeaderName::from_bytes(key.as_bytes()).unwrap(),
@@ -519,11 +529,22 @@ pub(crate) async fn http_post_with_cookie(
         );
     }
 
-    let c = reqwest::Client::builder()
-        .default_headers(req_headers)
-        .build()?;
+    let mut http_request = fastn_core::http::Request::default();
+    http_request.set_method("post");
+    http_request.set_cookies(&cookies);
+    http_request.set_headers(headers);
+    http_request.set_ip(req_config.request.ip.clone());
+    http_request.set_body(actix_web::web::Bytes::copy_from_slice(body.as_bytes()));
 
-    let res = c.post(url).body(body.to_string()).send().await?;
+    let http_url = url::Url::parse(url).map_err(|e| fastn_core::Error::DSHttpError(e.into()))?;
+    let res = req_config
+        .config
+        .ds
+        .http(http_url, &http_request, &Default::default())
+        .await
+        .map_err(fastn_core::Error::DSHttpError)?;
+
+    let mut resp_cookies = vec![];
     res.headers().iter().for_each(|(k, v)| {
         if k.as_str().eq("set-cookie") {
             if let Ok(v) = v.to_str() {
@@ -532,13 +553,14 @@ pub(crate) async fn http_post_with_cookie(
         }
     });
 
-    if !res.status().eq(&reqwest::StatusCode::OK) {
+    if !res.status().eq(&http::StatusCode::OK) {
         let message = format!(
             "url: {}, response_status: {}, response: {:?}",
             url,
             res.status(),
-            res.text().await
+            res.body()
         );
+
         tracing::error!(url = url, msg = message);
         return Ok((
             Err(fastn_core::Error::APIResponseError(message)),
@@ -546,51 +568,48 @@ pub(crate) async fn http_post_with_cookie(
         ));
     }
     tracing::info!(msg = "returning success", url = url);
-    Ok((Ok(res.bytes().await?.into()), resp_cookies))
+    Ok((Ok(res.body().clone()), resp_cookies))
 }
 
-pub async fn http_get(url: &str) -> fastn_core::Result<Vec<u8>> {
+pub async fn http_get(url: &str) -> fastn_core::Result<bytes::Bytes> {
     tracing::debug!("http_get {}", &url);
 
-    http_get_with_cookie(url, None, &std::collections::HashMap::new(), true)
-        .await?
-        .0
+    let current_dir = camino::Utf8PathBuf::from_path_buf(std::env::current_dir()?)
+        .expect("fastn-Error: Unable to define DocumentStore root path");
+    http_get_with_cookie(
+        &fastn_ds::DocumentStore::new(current_dir),
+        &Default::default(),
+        url,
+        &Default::default(),
+        true,
+    )
+    .await?
+    .0
 }
 
 static NOT_FOUND_CACHE: once_cell::sync::Lazy<antidote::RwLock<std::collections::HashSet<String>>> =
     once_cell::sync::Lazy::new(|| antidote::RwLock::new(Default::default()));
 
 #[tracing::instrument(skip_all)]
-pub(crate) async fn http_get_with_cookie(
+pub async fn http_get_with_cookie(
+    ds: &fastn_ds::DocumentStore,
+    req: &fastn_core::http::Request,
     url: &str,
-    cookie: Option<String>,
     headers: &std::collections::HashMap<String, String>,
     use_cache: bool,
-) -> fastn_core::Result<(fastn_core::Result<Vec<u8>>, Vec<String>)> {
-    let mut cookies = vec![];
-
+) -> fastn_core::Result<(fastn_core::Result<bytes::Bytes>, Vec<String>)> {
+    pub use fastn_ds::RequestType;
     if use_cache && NOT_FOUND_CACHE.read().contains(url) {
         return Ok((
             Err(fastn_core::Error::APIResponseError(
                 "page not found, cached".to_string(),
             )),
-            cookies,
+            vec![],
         ));
     }
 
     tracing::info!(url = url);
     let mut req_headers = reqwest::header::HeaderMap::new();
-    req_headers.insert(
-        reqwest::header::USER_AGENT,
-        reqwest::header::HeaderValue::from_static("fastn"),
-    );
-    if let Some(cookie) = cookie {
-        req_headers.insert(
-            reqwest::header::COOKIE,
-            reqwest::header::HeaderValue::from_str(cookie.as_str()).unwrap(),
-        );
-    }
-
     for (key, value) in headers.iter() {
         req_headers.insert(
             reqwest::header::HeaderName::from_bytes(key.as_bytes()).unwrap(),
@@ -598,65 +617,52 @@ pub(crate) async fn http_get_with_cookie(
         );
     }
 
-    let c = reqwest::Client::builder()
-        .default_headers(req_headers)
-        .build()?;
+    let mut http_request = fastn_core::http::Request::default();
+    http_request.set_method("get");
+    http_request.set_cookies(req.cookies());
+    http_request.set_headers(headers);
+    http_request.set_ip(req.ip.clone());
+    let http_url = url::Url::parse(url).map_err(|e| fastn_core::Error::DSHttpError(e.into()))?;
+    let res = ds
+        .http(http_url, &http_request, &Default::default())
+        .await
+        .map_err(fastn_core::Error::DSHttpError)?;
 
-    // if we are not able to send the request, we could not have read the cookie
-    let res = c.get(url).send().await?;
-
+    let mut resp_cookies = vec![];
     res.headers().iter().for_each(|(k, v)| {
         if k.as_str().eq("set-cookie") {
             if let Ok(v) = v.to_str() {
-                cookies.push(v.to_string());
+                resp_cookies.push(v.to_string());
             }
         }
     });
 
-    if !res.status().eq(&reqwest::StatusCode::OK) {
+    if !res.status().eq(&http::StatusCode::OK) {
         let message = format!(
             "url: {}, response_status: {}, response: {:?}",
             url,
             res.status(),
-            res.text().await
+            res
         );
-        tracing::error!(url = url, msg = message);
 
         if use_cache {
             NOT_FOUND_CACHE.write().insert(url.to_string());
         }
 
-        return Ok((Err(fastn_core::Error::APIResponseError(message)), cookies));
+        tracing::error!(url = url, msg = message);
+        return Ok((
+            Err(fastn_core::Error::APIResponseError(message)),
+            resp_cookies,
+        ));
     }
     tracing::info!(msg = "returning success", url = url);
-    Ok((Ok(res.bytes().await?.into()), cookies))
+    Ok((Ok(res.body().clone()), resp_cookies))
 }
-
-// pub async fn http_get_with_type<T: serde::de::DeserializeOwned>(
-//     url: url::Url,
-//     headers: reqwest::header::HeaderMap,
-//     query: &[(String, String)],
-// ) -> fastn_core::Result<T> {
-//     let c = reqwest::Client::builder()
-//         .default_headers(headers)
-//         .build()?;
-//
-//     let resp = c.get(url.to_string().as_str()).query(query).send().await?;
-//     if !resp.status().eq(&reqwest::StatusCode::OK) {
-//         return Err(fastn_core::Error::APIResponseError(format!(
-//             "url: {}, response_status: {}, response: {:?}",
-//             url,
-//             resp.status(),
-//             resp.text().await
-//         )));
-//     }
-//     Ok(resp.json::<T>().await?)
-// }
 
 pub(crate) async fn http_get_str(url: &str) -> fastn_core::Result<String> {
     let url_f = format!("{:?}", url);
     match http_get(url).await {
-        Ok(bytes) => String::from_utf8(bytes).map_err(|e| fastn_core::Error::UsageError {
+        Ok(bytes) => String::from_utf8(bytes.into()).map_err(|e| fastn_core::Error::UsageError {
             message: format!(
                 "Cannot convert the response to string: URL: {:?}, ERROR: {}",
                 url_f, e

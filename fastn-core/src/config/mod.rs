@@ -863,7 +863,7 @@ impl Config {
             .await
             {
                 let base = root.join(".packages").join(package.name.as_str());
-                ds.write_content(&base.join("index.ftd"), string.into_bytes())
+                ds.write_content(&base.join("index.ftd"), &string.into_bytes())
                     .await?;
                 return Ok(format!(".packages/{}/index.ftd", package.name));
             }
@@ -873,7 +873,7 @@ impl Config {
             .await
             {
                 let base = root.join(".packages").join(package.name.as_str());
-                ds.write_content(&base.join("README.md"), string.into_bytes())
+                ds.write_content(&base.join("README.md"), &string.into_bytes())
                     .await?;
                 return Ok(format!(".packages/{}/README.md", package.name));
             }
@@ -895,7 +895,7 @@ impl Config {
                 .join(".packages")
                 .join(format!("{}{}", package.name.as_str(), prefix));
             let file_path = base.join(format!("{}.ftd", id));
-            ds.write_content(&file_path, string.into_bytes()).await?;
+            ds.write_content(&file_path, &string.into_bytes()).await?;
             return Ok(file_path.to_string());
         }
         if let Ok(string) = crate::http::http_get_str(
@@ -905,7 +905,7 @@ impl Config {
         {
             let base = root.join(".packages").join(package.name.as_str()).join(id);
             let file_path = base.join("index.ftd");
-            ds.write_content(&file_path, string.into_bytes()).await?;
+            ds.write_content(&file_path, &string.into_bytes()).await?;
             return Ok(file_path.to_string());
         }
         if let Ok(string) =
@@ -913,7 +913,7 @@ impl Config {
                 .await
         {
             let base = root.join(".packages").join(package.name.as_str());
-            ds.write_content(&base.join(format!("{}.md", id)), string.into_bytes())
+            ds.write_content(&base.join(format!("{}.md", id)), &string.into_bytes())
                 .await?;
             return Ok(format!(".packages/{}/{}.md", package.name, id));
         }
@@ -923,8 +923,11 @@ impl Config {
         .await
         {
             let base = root.join(".packages").join(package.name.as_str());
-            ds.write_content(&base.join(format!("{}/README.md", id)), string.into_bytes())
-                .await?;
+            ds.write_content(
+                &base.join(format!("{}/README.md", id)),
+                &string.into_bytes(),
+            )
+            .await?;
             return Ok(format!(".packages/{}/{}/README.md", package.name, id));
         }
         Err(fastn_core::Error::UsageError {

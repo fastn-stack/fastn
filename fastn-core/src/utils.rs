@@ -743,7 +743,7 @@ pub async fn replace_markers_2023(
             config.ds.root().to_string().as_str(),
             config.package.name.as_str(),
             &config.package.favicon,
-            &config.ds
+            &config.ds,
         )
         .await
         .unwrap_or_default()
@@ -817,7 +817,7 @@ pub async fn update1(
     };
 
     Ok(ds
-        .write_content(&root.join(file_root).join(file_name), data.to_vec())
+        .write_content(&root.join(file_root).join(file_name), data)
         .await?)
 }
 
@@ -852,9 +852,7 @@ pub async fn update(
         });
     };
 
-    Ok(ds
-        .write_content(&file_root.join(file_name), data.to_vec())
-        .await?)
+    Ok(ds.write_content(&file_root.join(file_name), data).await?)
 }
 
 pub(crate) fn ids_matches(id1: &str, id2: &str) -> bool {
@@ -916,6 +914,7 @@ pub fn query(uri: &str) -> fastn_core::Result<Vec<(String, String)>> {
             .collect_vec(),
     )
 }
+
 pub fn generate_hash(content: impl AsRef<[u8]>) -> String {
     use sha2::digest::FixedOutput;
     use sha2::Digest;
@@ -1007,7 +1006,7 @@ mod tests {
             vec![
                 ("a".to_string(), "1".to_string()),
                 ("b".to_string(), "2".to_string()),
-                ("c".to_string(), "3".to_string())
+                ("c".to_string(), "3".to_string()),
             ]
         )
     }
@@ -1124,14 +1123,14 @@ async fn get_interpolated_value(
                 return Err(fastn_core::error::Error::generic(format!(
                     "unknown variable '{}'.",
                     input,
-                )))
+                )));
             }
         },
         (None, Some(default_value)) => default_value,
         _ => {
             return Err(fastn_core::error::Error::generic(
                 "unsupported interpolation syntax used.".to_string(),
-            ))
+            ));
         }
     };
 

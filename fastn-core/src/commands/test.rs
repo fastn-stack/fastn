@@ -171,7 +171,7 @@ impl fastn_core::Config {
     }
 }
 
-#[async_recursion::async_recursion(?Send)]
+#[async_recursion::async_recursion(? Send)]
 async fn read_only_instructions(
     ftd_document: fastn_core::Document,
     config: &fastn_core::Config,
@@ -288,7 +288,7 @@ async fn get_all_instructions(
                 return fastn_core::usage_error(format!(
                     "Unknown instruction {}, line number: {}",
                     t, instruction.line_number
-                ))
+                ));
             }
         }
     }
@@ -575,7 +575,7 @@ async fn get_post_response_for_id(
             return Ok(true);
         }
 
-        let test_result = fastn_js::run_test(test_string.as_str());
+        let test_result = fastn_js::run_test(test_string.as_str())?;
 
         if test_result.iter().any(|v| !(*v)) {
             println!("{}", "Test Failed".red());
@@ -781,7 +781,7 @@ async fn get_js_for_id(
             println!("{}", "Script file created".green());
             return Ok(true);
         }
-        let test_result = fastn_js::run_test(test_string.as_str());
+        let test_result = fastn_js::run_test(test_string.as_str())?;
         if test_result.iter().any(|v| !(*v)) {
             println!("{}", "Test Failed".red());
             return Ok(false);
@@ -991,7 +991,7 @@ async fn generate_script_file(
         content = content
     );
     let file_location = test_directory.join(test_file_name.replace(".test", ".script.html"));
-    ds.write_content(&file_location, html_content.into_bytes())
+    ds.write_content(&file_location, &html_content.into_bytes())
         .await
         .unwrap();
 }

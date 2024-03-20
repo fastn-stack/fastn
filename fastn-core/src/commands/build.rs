@@ -26,7 +26,7 @@ pub async fn build(
 
         match only_id {
             Some(id) => {
-                return handle_only_id(id, config, base_url, ignore_failed, test, documents).await
+                return handle_only_id(id, config, base_url, ignore_failed, test, documents).await;
             }
             None => {
                 incremental_build(config, &documents, base_url, ignore_failed, test).await?;
@@ -842,13 +842,12 @@ async fn process_static(
             .join(package.name.as_str());
 
         let full_file_path = build_path.join(sa.id.as_str());
-        ds.write_content(&full_file_path, sa.content.clone())
-            .await?;
+        ds.write_content(&full_file_path, &sa.content).await?;
 
         {
             // TODO: need to remove this once download_base_url is removed
             let content = ds.read_content(&sa.base_path.join(sa.id.as_str())).await?;
-            ds.write_content(&base_path.join(".build").join(sa.id.as_str()), content)
+            ds.write_content(&base_path.join(".build").join(sa.id.as_str()), &content)
                 .await?;
         }
         Ok(())

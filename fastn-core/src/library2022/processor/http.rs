@@ -34,14 +34,14 @@ pub async fn process(
                     format!("{v} is not a variable, it's a {v2:?}"),
                     doc.name,
                     line_number,
-                )
+                );
             }
             Err(e) => {
                 return ftd::interpreter::utils::e2(
                     format!("${v} not found in the document: {e:?}"),
                     doc.name,
                     line_number,
-                )
+                );
             }
         },
         Some(v) => v,
@@ -53,7 +53,7 @@ pub async fn process(
                 ),
                 doc.name,
                 line_number,
-            )
+            );
         }
     };
 
@@ -119,20 +119,27 @@ pub async fn process(
 
     let resp = if method.as_str().eq("post") {
         fastn_core::http::http_post_with_cookie(
+            req_config,
             url.as_str(),
-            req_config.request.cookies_string(),
             &conf,
             format!("{{{}}}", body.join(",")).as_str(),
         )
         .await
+        .map_err(|e| ftd::interpreter::Error::DSHttpError {
+            message: format!("{:?}", e),
+        })
     } else {
         fastn_core::http::http_get_with_cookie(
+            &req_config.config.ds,
+            &req_config.request,
             url.as_str(),
-            req_config.request.cookies_string(),
             &conf,
             false, // disable cache
         )
         .await
+        .map_err(|e| ftd::interpreter::Error::DSHttpError {
+            message: format!("{:?}", e),
+        })
     };
 
     let response = match resp {
@@ -153,12 +160,12 @@ pub async fn process(
                 format!("HTTP::get failed: {:?}", e),
                 doc.name,
                 line_number,
-            )
+            );
         }
     };
 
     let response_string =
-        String::from_utf8(response).map_err(|e| ftd::interpreter::Error::ParseError {
+        String::from_utf8(response.to_vec()).map_err(|e| ftd::interpreter::Error::ParseError {
             message: format!("`http` processor API response error: {}", e),
             doc_id: doc.name.to_string(),
             line_number,

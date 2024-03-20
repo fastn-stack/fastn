@@ -107,6 +107,8 @@ include_dir = "0.7"
 indoc = "2"
 intl-memoizer = "0.5"
 itertools = "0.12"
+http = "1"
+bytes = "1"
 log = "0.4"
 magic-crypt = { version = "3", default-features = false }
 mime_guess = "2"
@@ -121,8 +123,6 @@ regex = "1"
 reqwest = { version = "0.11", features = ["json"] }
 # rink = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
 ron = "0.8"
-rquickjs = { version = "0.5", features = ["macro"] }
-quick-js = "0.4"
 rustc-hash = "1"
 rusty-hook = "0.11"
 serde = { version = "1", features = ["derive"] }
@@ -157,6 +157,7 @@ indicatif = "0.17.1"
 snafu = "0.8.0"
 validator = { version = "0.16", features = ["derive"] }
 zxcvbn = "2"
+deno_core = "0.270.0"
 
 [workspace.dependencies.uuid]
 version = "1.6.1"

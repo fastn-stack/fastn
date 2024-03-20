@@ -785,7 +785,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="padding: 100px" class="ft_common ft_row"><div data-id="0,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__divide___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#value&quot;}],[&quot;b&quot;,2]]}]', this)" style="cursor: pointer; padding: 2px" class="ft_common ft_md">🐎</div><div data-id="0,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__diff___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#value&quot;}],[&quot;b&quot;,1]]}]', this)" style="cursor: pointer; padding: 2px" class="ft_common ft_md">🐜</div><div data-id="0,2:main" style="padding: 2px" class="ft_common ft_md">Where to??</div><div data-id="0,3:main" style="padding: 2px" class="ft_common ft_md">50</div><div data-id="0,4:main" style="padding: 2px" class="ft_common ft_md">100</div><div data-id="0,5:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__sum___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#value&quot;}],[&quot;b&quot;,1]]}]', this)" style="cursor: pointer; padding: 2px" class="ft_common ft_md">🐌</div><div data-id="0,6:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__multiply___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#value&quot;}],[&quot;b&quot;,2]]}]', this)" style="cursor: pointer; padding: 2px" class="ft_common ft_md">🐎</div></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="padding: 100px" class="ft_common ft_row"><div data-id="0,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__divide___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;reference&quot;:&quot;foo#value&quot;,&quot;mutable&quot;:true}],[&quot;b&quot;,2]]}]', this)" style="cursor: pointer; padding: 2px" class="ft_common ft_md">🐎</div><div data-id="0,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__diff___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;reference&quot;:&quot;foo#value&quot;,&quot;mutable&quot;:true}],[&quot;b&quot;,1]]}]', this)" style="cursor: pointer; padding: 2px" class="ft_common ft_md">🐜</div><div data-id="0,2:main" style="padding: 2px" class="ft_common ft_md">Where to??</div><div data-id="0,3:main" style="padding: 2px" class="ft_common ft_md">50</div><div data-id="0,4:main" style="padding: 2px" class="ft_common ft_md">100</div><div data-id="0,5:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__sum___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;reference&quot;:&quot;foo#value&quot;,&quot;mutable&quot;:true}],[&quot;b&quot;,1]]}]', this)" style="cursor: pointer; padding: 2px" class="ft_common ft_md">🐌</div><div data-id="0,6:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__multiply___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;reference&quot;:&quot;foo#value&quot;,&quot;mutable&quot;:true}],[&quot;b&quot;,2]]}]', this)" style="cursor: pointer; padding: 2px" class="ft_common ft_md">🐎</div></div></div>
 
 
 <script>
@@ -2043,14 +2043,14 @@ return (a.value *= b);
 
 window.node_change_main = {};
 window.node_change_main["0:main__padding"] = function(data) {
-document.querySelector(`[data-id="0:main"]`).style["padding"] = `{0}px`.format(JSON.stringify(window.ftd.handle_function(event, 'main', '{"name":"foo__rmultiple___main","values":[["a",{"mutable":false,"reference":"foo#value"}],["b",2]]}', this)));
+document.querySelector(`[data-id="0:main"]`).style["padding"] = `{0}px`.format(JSON.stringify(window.ftd.handle_function(event, 'main', '{"name":"foo__rmultiple___main","values":[["a",{"reference":"foo#value","mutable":false}],["b",2]]}', this)));
 }
 
 window.node_change_main["0,3:main__text"] = function(data) {
 document.querySelector(`[data-id="0,3:main"]`).innerHTML = resolve_reference("foo#value", data);
 }
 window.node_change_main["0,4:main__text"] = function(data) {
-document.querySelector(`[data-id="0,4:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"foo__rmultiple___main","values":[["a",{"mutable":false,"reference":"foo#value"}],["b",2]]}', this);
+document.querySelector(`[data-id="0,4:main"]`).innerHTML = window.ftd.handle_function(event, 'main', '{"name":"foo__rmultiple___main","values":[["a",{"reference":"foo#value","mutable":false}],["b",2]]}', this);
 }
 window.set_value_main = {};
 window.set_value_main["foo#value"] = function (data, new_value, remaining) {
