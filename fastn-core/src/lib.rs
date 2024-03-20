@@ -4,7 +4,6 @@ extern crate self as fastn_core;
 
 #[macro_use]
 pub mod utils;
-mod apis;
 mod auto_import;
 pub mod commands;
 mod config;
@@ -14,7 +13,6 @@ mod file;
 mod font;
 pub mod manifest;
 pub mod package;
-pub(crate) mod watcher;
 #[macro_use]
 pub mod http;
 pub mod auth;

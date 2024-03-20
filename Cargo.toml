@@ -200,13 +200,6 @@ version = "1"
 default-features = false
 features = ["http1", "server"]
 
-[workspace.dependencies.notify]
-# Read the following why we disable the default feature:
-# https://docs.rs/notify/5.0.0/notify/index.html#crossbeam-channel--tokio
-version = "6"
-default-features = false
-features = ["macos_kqueue"]
-
 [workspace.dependencies.fbt-lib]
 git = "https://github.com/FifthTry/fbt"
 rev = "ea0ee98"

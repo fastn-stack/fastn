@@ -65,7 +65,6 @@ lettre.workspace = true
 magic-crypt.workspace = true
 mime_guess.workspace = true
 native-tls.workspace = true
-notify.workspace = true
 oauth2.workspace = true
 once_cell.workspace = true
 postgres-native-tls.workspace = true
