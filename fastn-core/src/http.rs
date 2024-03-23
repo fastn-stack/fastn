@@ -186,7 +186,14 @@ impl Request {
         let headers = {
             let mut headers = reqwest::header::HeaderMap::new();
             for (key, value) in req.headers() {
-                headers.insert(key.clone(), value.clone());
+                if let (Ok(v), Ok(k)) = (
+                    value.to_str().unwrap_or("").parse::<http::HeaderValue>(),
+                    http::HeaderName::from_bytes(key.as_str().as_bytes()),
+                ) {
+                    headers.insert(k, v.clone());
+                } else {
+                    tracing::warn!("failed to parse header: {key:?} {value:?}");
+                }
             }
             headers
         };
@@ -255,14 +262,14 @@ impl Request {
 
     pub fn content_type(&self) -> Option<mime_guess::Mime> {
         self.headers
-            .get(actix_web::http::header::CONTENT_TYPE)
+            .get(actix_web::http::header::CONTENT_TYPE.as_str())
             .and_then(|v| v.to_str().ok())
             .and_then(|v| v.parse().ok())
     }
 
     pub fn user_agent(&self) -> Option<String> {
         self.headers
-            .get(actix_web::http::header::USER_AGENT)
+            .get(actix_web::http::header::USER_AGENT.as_str())
             .and_then(|v| v.to_str().map(|v| v.to_string()).ok())
     }
 
