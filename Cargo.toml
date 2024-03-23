@@ -157,7 +157,7 @@ indicatif = "0.17.1"
 snafu = "0.8.0"
 validator = { version = "0.16", features = ["derive"] }
 zxcvbn = "2"
-deno_core = "0.270.0"
+deno_core = "0.272.0"
 
 [workspace.dependencies.uuid]
 version = "1.6.1"
