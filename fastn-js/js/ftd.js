@@ -300,7 +300,11 @@ const ftd = (function () {
                                 "both .errors and .data are present in response, ignoring .data",
                             );
                         } else {
-                            data = response.data;
+                            for (let key of Object.keys(response.data)) {
+                                const value = response.data[key];
+                                key = fastn_module + "#" + key;
+                                data[key] = value;
+                            }
                         }
                     }
                     for (let ftd_variable of Object.keys(data)) {
