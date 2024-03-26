@@ -515,6 +515,35 @@ impl VariableValue {
         }
     }
 
+    pub fn get_processor_body(&self, doc_id: &str) -> ftd::ast::Result<Option<BodyValue>> {
+        match self {
+            VariableValue::Record { body, .. } => Ok(body.clone()),
+            VariableValue::String {
+                value, line_number, ..
+            } => {
+                if value.is_empty() {
+                    return Ok(None);
+                }
+                Ok(Some(BodyValue {
+                    value: value.to_string(),
+                    line_number: *line_number,
+                }))
+            }
+            VariableValue::List { value, .. } => {
+                let value = value
+                    .first()
+                    .map(|v| v.value.get_processor_body(doc_id).ok().flatten())
+                    .flatten();
+                return Ok(value);
+            }
+            t => ftd::ast::parse_error(
+                format!("Expected Body, found: `{:?}`", t),
+                doc_id,
+                self.line_number(),
+            ),
+        }
+    }
+
     fn into_optional(self) -> VariableValue {
         match self {
             t @ VariableValue::Optional { .. } => t,

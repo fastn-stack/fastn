@@ -3,8 +3,12 @@ pub fn process(
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    let (body, line_number) = if let Ok(val) = value.get_record(doc.name) {
-        (val.3.to_owned(), val.5.to_owned())
+    let (body, line_number) = if let Ok(body) = value.get_processor_body(doc.name) {
+        let line_number = body
+            .as_ref()
+            .map(|b| b.line_number)
+            .unwrap_or(value.line_number());
+        (body, line_number)
     } else {
         (None, value.line_number())
     };
