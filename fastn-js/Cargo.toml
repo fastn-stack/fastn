@@ -7,16 +7,26 @@ license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 
+[features]
+default = ["quickjs"]
+deno-core = ["deno_core"]
+quickjs = ["rquickjs", "quick-js"]
+
 [dependencies]
-#rquickjs = { workspace = true, optional = true }
 pretty.workspace = true
 itertools.workspace = true
 indoc.workspace = true
 fastn-grammar.workspace = true
 prettify-js.workspace = true
 camino.workspace = true
-deno_core.workspace = true
+deno_core = { workspace = true, optional = true }
 thiserror.workspace = true
+
+[target.'cfg(not(windows))'.dependencies]
+quick-js = { workspace = true, optional = true }
+
+[target.'cfg(windows)'.dependencies]
+rquickjs = { workspace = true, optional = true }
 
 [dev-dependencies]
 indoc.workspace = true
