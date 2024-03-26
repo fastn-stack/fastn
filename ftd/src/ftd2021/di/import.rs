@@ -34,7 +34,7 @@ impl Import {
             );
         }
         match &section.caption {
-            Some(ftd::p1::Header::KV(ftd::p1::header::KV {
+            Some(ftd0::p1::Header::KV(ftd0::p1::KV {
                 value: Some(value), ..
             })) => {
                 let (module, alias) = ftd::ftd2021::di::utils::split_at(value.as_str(), AS);

@@ -50,7 +50,7 @@ pub struct Field {
     pub mutable: bool,
     pub value: Option<ftd::ast::VariableValue>,
     pub line_number: usize,
-    pub access_modifier: ftd::p1::header::AccessModifier,
+    pub access_modifier: ftd0::p1::AccessModifier,
 }
 
 impl Field {
@@ -94,7 +94,7 @@ impl Field {
         mutable: bool,
         value: Option<ftd::ast::VariableValue>,
         line_number: usize,
-        access_modifier: ftd::p1::header::AccessModifier,
+        access_modifier: ftd0::p1::AccessModifier,
     ) -> Field {
         Field {
             name: name.to_string(),

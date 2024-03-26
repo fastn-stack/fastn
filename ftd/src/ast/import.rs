@@ -63,7 +63,7 @@ impl Import {
         let exports = Export::get_exports_from_headers(&section.headers, doc_id)?;
         let exposing = Exposing::get_exposing_from_headers(&section.headers, doc_id)?;
         match &section.caption {
-            Some(ftd::p1::Header::KV(ftd::p1::header::KV {
+            Some(ftd0::p1::Header::KV(ftd0::p1::KV {
                 value: Some(value), ..
             })) => {
                 let (module, alias) = ftd::ast::utils::get_import_alias(value.as_str());

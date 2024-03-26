@@ -23,7 +23,6 @@ pub mod html;
 pub mod interpreter;
 pub mod js;
 pub mod node;
-pub mod p1;
 mod parser;
 pub use parser::parse_doc;
 #[cfg(feature = "native-rendering")]
@@ -34,6 +33,8 @@ pub mod test_helper;
 mod utils;
 #[cfg(feature = "native-rendering")]
 mod wasm;
+
+pub use ftd0::p1;
 
 pub const PROCESSOR_MARKER: &str = "$processor$";
 

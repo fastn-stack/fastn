@@ -690,10 +690,10 @@ impl VariableValue {
         doc_id: &str,
     ) -> ftd::ast::Result<VariableValue> {
         Ok(match header {
-            ftd::p1::Header::KV(ftd::p1::header::KV {
+            ftd0::p1::Header::KV(ftd0::p1::KV {
                 value, line_number, ..
             }) => VariableValue::from_value(value, ftd::ast::ValueSource::Default, *line_number),
-            ftd::p1::Header::Section(ftd::p1::header::Section {
+            ftd::p1::Header::Section(ftd::p1::SectionHeader {
                 section,
                 line_number,
                 condition,
@@ -713,7 +713,7 @@ impl VariableValue {
                     .as_ref()
                     .map(|expr| ftd::ast::Condition::new(expr, *line_number)),
             },
-            ftd::p1::Header::BlockRecordHeader(ftd::p1::header::BlockRecordHeader {
+            ftd::p1::Header::BlockRecordHeader(ftd::p1::BlockRecordHeader {
                 key,
                 caption,
                 body,
