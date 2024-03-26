@@ -1,2 +1,2 @@
 -- fbt:
-build: cd .. && cargo build --profile dev --features deno-core
+build: cd .. && cargo install --path fastn --profile dev
