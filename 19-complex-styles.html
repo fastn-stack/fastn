@@ -788,7 +788,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;reference&quot;:&quot;foo#flag&quot;,&quot;mutable&quot;:true}]]}]', this)" style="cursor: pointer" class="ft_common ft_md">Click me</div><div data-id="1:main" style="align-items: start; justify-content: start; width: fit-content" class="ft_common ft_column"><div data-id="1,0:main" style="height: 30px" class="ft_common ft_md">Hello</div><div data-id="1,1:main" style="" class="ft_common ft_md">World</div></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="cursor: pointer" class="ft_common ft_md">Click me</div><div data-id="1:main" style="align-items: start; justify-content: start; width: fit-content" class="ft_common ft_column"><div data-id="1,0:main" style="height: 30px" class="ft_common ft_md">Hello</div><div data-id="1,1:main" style="" class="ft_common ft_md">World</div></div></div>
 
 
 <script>
@@ -2084,9 +2084,9 @@ set_data_value(data, "foo#foo:resize:1", value);
 window.ftd.call_mutable_value_changes("foo#flag", "main");
 window.ftd.call_immutable_value_changes("foo#flag", "main");
 window.ftd.utils.node_change_call("main","1:main__justify-content", data);
-window.ftd.utils.node_change_call("main","1:main__align-items", data);
-window.ftd.utils.node_change_call("main","1,0:main__height", data);
 window.ftd.utils.node_change_call("main","1:main__width", data);
+window.ftd.utils.node_change_call("main","1,0:main__height", data);
+window.ftd.utils.node_change_call("main","1:main__align-items", data);
 };
 
 window.set_value_main["foo#foo:align:1"] = function (data, new_value, remaining) {
@@ -2094,8 +2094,8 @@ window.ftd.utils.set_value_helper(data, "foo#foo:align:1", remaining, new_value)
 
 window.ftd.call_mutable_value_changes("foo#foo:align:1", "main");
 window.ftd.call_immutable_value_changes("foo#foo:align:1", "main");
-window.ftd.utils.node_change_call("main","1:main__justify-content", data);
 window.ftd.utils.node_change_call("main","1:main__align-items", data);
+window.ftd.utils.node_change_call("main","1:main__justify-content", data);
 };
 
 window.set_value_main["foo#foo:px:1"] = function (data, new_value, remaining) {
@@ -2117,6 +2117,15 @@ window.ftd.utils.node_change_call("main","1:main__width", data);
 };
 
 window.resolve_value_main = {};
+window.resolve_value_main["foo#foo:resize:1"] = function(data) {
+if(function(){
+return resolve_reference("foo#flag", data);
+}()){
+set_data_value(data, "foo#foo:resize:1", `fit-content`.format(JSON.stringify("ftd#resizing.hug-content")));
+}
+else {set_data_value(data, "foo#foo:resize:1", `{0}px`.format(JSON.stringify(50)));}
+
+}
 window.resolve_value_main["foo#foo:align:1"] = function(data) {
 if(function(){
 return resolve_reference("foo#flag", data);
@@ -2133,15 +2142,6 @@ return resolve_reference("foo#flag", data);
 set_data_value(data, "foo#foo:px:1", 30);
 }
 else {set_data_value(data, "foo#foo:px:1", 40);}
-
-}
-window.resolve_value_main["foo#foo:resize:1"] = function(data) {
-if(function(){
-return resolve_reference("foo#flag", data);
-}()){
-set_data_value(data, "foo#foo:resize:1", `fit-content`.format(JSON.stringify("ftd#resizing.hug-content")));
-}
-else {set_data_value(data, "foo#foo:resize:1", `{0}px`.format(JSON.stringify(50)));}
 
 }
 

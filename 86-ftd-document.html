@@ -793,7 +793,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;reference&quot;:&quot;foo#flag&quot;,&quot;mutable&quot;:true}]]}]', this)" style="cursor: pointer" class="ft_common ft_md">Click me and document title changes</div><div data-id="0,1:main" style="" class="ft_common ft_md">Text Two</div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="cursor: pointer" class="ft_common ft_md">Click me and document title changes</div><div data-id="0,1:main" style="" class="ft_common ft_md">Text Two</div></div>
 
 
 <script>
@@ -2090,11 +2090,11 @@ window.ftd.utils.set_value_helper(data, "foo#flag", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#flag", "main");
 window.ftd.call_immutable_value_changes("foo#flag", "main");
-window.ftd.utils.node_change_call("main","og_document__image", data);
-window.ftd.utils.node_change_call("main","og_document__title", data);
-window.ftd.utils.node_change_call("main","document__theme_color", data);
 window.ftd.utils.node_change_call("main","document__title", data);
 window.ftd.utils.node_change_call("main","og_document__description", data);
+window.ftd.utils.node_change_call("main","og_document__image", data);
+window.ftd.utils.node_change_call("main","document__theme_color", data);
+window.ftd.utils.node_change_call("main","og_document__title", data);
 };
 
 window.set_value_main["foo#red-yellow"] = function (data, new_value, remaining) {

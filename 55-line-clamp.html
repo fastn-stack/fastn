@@ -786,7 +786,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;reference&quot;:&quot;foo#flag&quot;,&quot;mutable&quot;:true}]]}]', this)" style="-webkit-box-orient: vertical; -webkit-line-clamp: 3; cursor: pointer; display: -webkit-box; overflow: hidden; width: 100px" class="ft_common ft_md">Hello world This is some random sample text</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;reference&quot;:&quot;foo#flag_2&quot;,&quot;mutable&quot;:true}]]}]', this)" style="-webkit-box-orient: vertical; -webkit-line-clamp: 3; background-color: rgba(33,34,44,1); cursor: pointer; display: -webkit-box; overflow: hidden" class="ft_common ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#c973d9;">pub fn </span><span style="color:#8fa1b3;">foo</span><span style="color:#c0c5ce;">() {
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="-webkit-box-orient: vertical; -webkit-line-clamp: 3; cursor: pointer; display: -webkit-box; overflow: hidden; width: 100px" class="ft_common ft_md">Hello world This is some random sample text</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag_2&quot;}]]}]', this)" style="-webkit-box-orient: vertical; -webkit-line-clamp: 3; background-color: rgba(33,34,44,1); cursor: pointer; display: -webkit-box; overflow: hidden" class="ft_common ft_md"><pre style="padding: 0.7720588235em 1.1764705882em; "><span style="color:#c973d9;">pub fn </span><span style="color:#8fa1b3;">foo</span><span style="color:#c0c5ce;">() {
 </span><span style="color:#c0c5ce;">    println!(&quot;</span><span style="color:#2fb170;">Hello world!</span><span style="color:#c0c5ce;">&quot;);
 </span><span style="color:#c0c5ce;">}
 </span></pre>
@@ -2092,10 +2092,10 @@ window.ftd.utils.set_value_helper(data, "foo#flag", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#flag", "main");
 window.ftd.call_immutable_value_changes("foo#flag", "main");
-window.ftd.utils.node_change_call("main","0:main__-webkit-box-orient", data);
 window.ftd.utils.node_change_call("main","0:main__overflow", data);
-window.ftd.utils.node_change_call("main","0:main__display", data);
+window.ftd.utils.node_change_call("main","0:main__-webkit-box-orient", data);
 window.ftd.utils.node_change_call("main","0:main__-webkit-line-clamp", data);
+window.ftd.utils.node_change_call("main","0:main__display", data);
 };
 
 window.set_value_main["foo#flag_2"] = function (data, new_value, remaining) {
@@ -2103,10 +2103,10 @@ window.ftd.utils.set_value_helper(data, "foo#flag_2", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#flag_2", "main");
 window.ftd.call_immutable_value_changes("foo#flag_2", "main");
-window.ftd.utils.node_change_call("main","1:main__-webkit-line-clamp", data);
 window.ftd.utils.node_change_call("main","1:main__overflow", data);
-window.ftd.utils.node_change_call("main","1:main__display", data);
 window.ftd.utils.node_change_call("main","1:main__-webkit-box-orient", data);
+window.ftd.utils.node_change_call("main","1:main__display", data);
+window.ftd.utils.node_change_call("main","1:main__-webkit-line-clamp", data);
 };
 
 

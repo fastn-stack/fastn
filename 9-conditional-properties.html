@@ -785,7 +785,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_md">1</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;reference&quot;:&quot;foo#g&quot;,&quot;mutable&quot;:true}]]}]', this)" style="cursor: pointer; padding: 2px" class="ft_common ft_md">Hello FTD</div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_md">1</div><div data-id="1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#g&quot;}]]}]', this)" style="cursor: pointer; padding: 2px" class="ft_common ft_md">Hello FTD</div></div>
 
 
 <script>
@@ -2041,7 +2041,7 @@ else if(function(){
 let f = resolve_reference("foo#g", data)+1;
 return (f>4);
 }()){
-document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}px`.format(JSON.stringify(window.ftd.handle_function(event, 'main', '{"name":"foo__double___main","values":[["a",{"reference":"foo#g","mutable":false}]]}', this)));
+document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}px`.format(JSON.stringify(window.ftd.handle_function(event, 'main', '{"name":"foo__double___main","values":[["a",{"mutable":false,"reference":"foo#g"}]]}', this)));
 }
 else {document.querySelector(`[data-id="1:main"]`).style["padding"] = `{0}px`.format(JSON.stringify(2));}
 }
@@ -2051,8 +2051,8 @@ window.ftd.utils.set_value_helper(data, "foo#g", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#g", "main");
 window.ftd.call_immutable_value_changes("foo#g", "main");
-window.ftd.utils.node_change_call("main","1:main__padding", data);
 window.ftd.utils.node_change_call("main","0:main__text", data);
+window.ftd.utils.node_change_call("main","1:main__padding", data);
 };
 
 

@@ -787,7 +787,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_column"><div data-id="0,0:main" style="" class="ft_common ft_column"><div data-id="0,0,0:main" style="" class="ft_common ft_column"><div data-id="0,0,0,0:main" style="" class="ft_common ft_md">boo</div><div data-id="0,0,0,1:main" style="" class="ft_common ft_md">5</div></div><div data-id="0,0,1:main" style="" class="ft_common ft_md">moo</div><div data-id="0,0,2:main" style="" class="ft_common ft_md">1</div><div data-id="0,0,3:main" style="" class="ft_common ft_md">7</div></div><div data-id="0,1:main" style="" class="ft_common ft_md">foo</div><div data-id="0,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;reference&quot;:&quot;foo#foo:fv:0&quot;,&quot;mutable&quot;:true}]]}]', this)" style="cursor: pointer" class="ft_common ft_md">1</div></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_column"><div data-id="0,0:main" style="" class="ft_common ft_column"><div data-id="0,0,0:main" style="" class="ft_common ft_column"><div data-id="0,0,0,0:main" style="" class="ft_common ft_md">boo</div><div data-id="0,0,0,1:main" style="" class="ft_common ft_md">5</div></div><div data-id="0,0,1:main" style="" class="ft_common ft_md">moo</div><div data-id="0,0,2:main" style="" class="ft_common ft_md">1</div><div data-id="0,0,3:main" style="" class="ft_common ft_md">7</div></div><div data-id="0,1:main" style="" class="ft_common ft_md">foo</div><div data-id="0,2:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;foo__increment___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#foo:fv:0&quot;}]]}]', this)" style="cursor: pointer" class="ft_common ft_md">1</div></div></div>
 
 
 <script>
@@ -2055,8 +2055,8 @@ set_data_value(data, "foo#moo:mv:0,0", value);
 window.ftd.call_mutable_value_changes("foo#foo:fv:0", "main");
 window.ftd.call_immutable_value_changes("foo#foo:fv:0", "main");
 window.ftd.utils.node_change_call("main","0,2:main__text", data);
-window.ftd.utils.node_change_call("main","0,0,0,1:main__text", data);
 window.ftd.utils.node_change_call("main","0,0,3:main__text", data);
+window.ftd.utils.node_change_call("main","0,0,0,1:main__text", data);
 window.ftd.utils.node_change_call("main","0,0,2:main__text", data);
 };
 
@@ -2069,20 +2069,11 @@ set_data_value(data, "foo#boo:bv:0,0,0", value);
 }
 window.ftd.call_mutable_value_changes("foo#moo:mv:0,0", "main");
 window.ftd.call_immutable_value_changes("foo#moo:mv:0,0", "main");
-window.ftd.utils.node_change_call("main","0,0,3:main__text", data);
 window.ftd.utils.node_change_call("main","0,0,0,1:main__text", data);
+window.ftd.utils.node_change_call("main","0,0,3:main__text", data);
 };
 
 window.resolve_value_main = {};
-window.resolve_value_main["foo#moo:mv:0,0"] = function(data) {
-if(function(){
-return (resolve_reference("foo#foo:fv:0", data)>2);
-}()){
-set_data_value(data, "foo#moo:mv:0,0", 6);
-}
-else {set_data_value(data, "foo#moo:mv:0,0", 7);}
-
-}
 window.resolve_value_main["foo#boo:bv:0,0,0"] = function(data) {
 if(function(){
 return (resolve_reference("foo#foo:fv:0", data)>10);
@@ -2095,6 +2086,15 @@ return (resolve_reference("foo#moo:mv:0,0", data)>6);
 set_data_value(data, "foo#boo:bv:0,0,0", 5);
 }
 else {set_data_value(data, "foo#boo:bv:0,0,0", 4);}
+
+}
+window.resolve_value_main["foo#moo:mv:0,0"] = function(data) {
+if(function(){
+return (resolve_reference("foo#foo:fv:0", data)>2);
+}()){
+set_data_value(data, "foo#moo:mv:0,0", 6);
+}
+else {set_data_value(data, "foo#moo:mv:0,0", 7);}
 
 }
 

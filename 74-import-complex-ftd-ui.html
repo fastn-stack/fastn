@@ -795,7 +795,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_column"><div data-id="0,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_integer___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;reference&quot;:&quot;73-complex-ftd-ui#switcher:is-active:0&quot;,&quot;mutable&quot;:true}],[&quot;v&quot;,0]]}]', this)" style="color: rgba(255,0,0,1); cursor: pointer" class="ft_common ft_md">me</div><div data-id="0,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_integer___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;reference&quot;:&quot;73-complex-ftd-ui#switcher:is-active:0&quot;,&quot;mutable&quot;:true}],[&quot;v&quot;,1]]}]', this)" style="color: rgba(88,75,66,1); cursor: pointer" class="ft_common ft_md">me22</div><div data-id="0,2:main" style="" class="ft_common ft_column"><div data-id="0,2,0:main" style="" class="ft_common ft_md">Me component</div><div data-id="0,2,1:main" style="" class="ft_common ft_md">Me component 2</div></div><div data-id="0,3:main" style="display: none" class="ft_common ft_column"><div data-id="0,3,0:main" style="" class="ft_common ft_md">Me component22</div><div data-id="0,3,1:main" style="" class="ft_common ft_md">Me component22 2</div></div></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="" class="ft_common ft_column"><div data-id="0,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_integer___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;73-complex-ftd-ui#switcher:is-active:0&quot;}],[&quot;v&quot;,0]]}]', this)" style="color: rgba(255,0,0,1); cursor: pointer" class="ft_common ft_md">me</div><div data-id="0,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__set_integer___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;73-complex-ftd-ui#switcher:is-active:0&quot;}],[&quot;v&quot;,1]]}]', this)" style="color: rgba(88,75,66,1); cursor: pointer" class="ft_common ft_md">me22</div><div data-id="0,2:main" style="" class="ft_common ft_column"><div data-id="0,2,0:main" style="" class="ft_common ft_md">Me component</div><div data-id="0,2,1:main" style="" class="ft_common ft_md">Me component 2</div></div><div data-id="0,3:main" style="display: none" class="ft_common ft_column"><div data-id="0,3,0:main" style="" class="ft_common ft_md">Me component22</div><div data-id="0,3,1:main" style="" class="ft_common ft_md">Me component22 2</div></div></div></div>
 
 
 <script>
@@ -2085,9 +2085,9 @@ window.ftd.utils.set_value_helper(data, "73-complex-ftd-ui#switcher:is-active:0"
 window.ftd.call_mutable_value_changes("73-complex-ftd-ui#switcher:is-active:0", "main");
 window.ftd.call_immutable_value_changes("73-complex-ftd-ui#switcher:is-active:0", "main");
 window.ftd.utils.node_change_call("main","0,0:main__color", data);
-window.ftd.utils.node_change_call("main","0,1:main__color", data);
 window.ftd.utils.node_change_call("main","0,2:main__display", data);
 window.ftd.utils.node_change_call("main","0,3:main__display", data);
+window.ftd.utils.node_change_call("main","0,1:main__color", data);
 };
 
 window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
@@ -2104,8 +2104,8 @@ window.ftd.utils.set_value_helper(data, "ftd#default-colors", remaining, new_val
 
 window.ftd.call_mutable_value_changes("ftd#default-colors", "main");
 window.ftd.call_immutable_value_changes("ftd#default-colors", "main");
-window.ftd.utils.node_change_call("main","0,1:main__color", data);
 window.ftd.utils.node_change_call("main","0,0:main__color", data);
+window.ftd.utils.node_change_call("main","0,1:main__color", data);
 };
 
 

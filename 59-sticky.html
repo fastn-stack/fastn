@@ -789,7 +789,7 @@ margin-block-end: 1em;
 </head>
 <body style="height: 100%; margin: 0;">
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="background-color: rgba(255,255,0,1); height: 1800px; width: 300px" class="ft_common ft_column"><div data-id="0,0:main" style="padding: 80px" class="ft_common ft_md">dummy</div><div data-id="0,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;reference&quot;:&quot;foo#flag&quot;,&quot;mutable&quot;:true}]]}]', this)" style="cursor: pointer; left: 100px; padding: 20px; position: sticky; top: 50px" class="ft_common ft_md">Sticky Hello world</div><div data-id="0,2:main" style="padding: 80px" class="ft_common ft_md">dummy</div><div data-id="0,3:main" style="padding: 80px" class="ft_common ft_md">dummy</div><div data-id="0,4:main" style="padding: 80px" class="ft_common ft_md">dummy</div><div data-id="0,5:main" style="padding: 80px" class="ft_common ft_md">dummy</div></div></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0:main" style="background-color: rgba(255,255,0,1); height: 1800px; width: 300px" class="ft_common ft_column"><div data-id="0,0:main" style="padding: 80px" class="ft_common ft_md">dummy</div><div data-id="0,1:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;foo#flag&quot;}]]}]', this)" style="cursor: pointer; left: 100px; padding: 20px; position: sticky; top: 50px" class="ft_common ft_md">Sticky Hello world</div><div data-id="0,2:main" style="padding: 80px" class="ft_common ft_md">dummy</div><div data-id="0,3:main" style="padding: 80px" class="ft_common ft_md">dummy</div><div data-id="0,4:main" style="padding: 80px" class="ft_common ft_md">dummy</div><div data-id="0,5:main" style="padding: 80px" class="ft_common ft_md">dummy</div></div></div>
 
 
 <script>
@@ -2072,11 +2072,11 @@ window.ftd.utils.set_value_helper(data, "foo#yellow", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#yellow", "main");
 window.ftd.call_immutable_value_changes("foo#yellow", "main");
+window.ftd.utils.node_change_call("main","0:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","0:main__background-size", data);
 window.ftd.utils.node_change_call("main","0:main__background-color", data);
 window.ftd.utils.node_change_call("main","0:main__background-image", data);
 window.ftd.utils.node_change_call("main","0:main__background-position", data);
-window.ftd.utils.node_change_call("main","0:main__background-repeat", data);
-window.ftd.utils.node_change_call("main","0:main__background-size", data);
 };
 
 window.set_value_main["ftd#dark-mode"] = function (data, new_value, remaining) {
@@ -2084,11 +2084,11 @@ window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-window.ftd.utils.node_change_call("main","0:main__background-size", data);
-window.ftd.utils.node_change_call("main","0:main__background-repeat", data);
 window.ftd.utils.node_change_call("main","0:main__background-color", data);
-window.ftd.utils.node_change_call("main","0:main__background-image", data);
 window.ftd.utils.node_change_call("main","0:main__background-position", data);
+window.ftd.utils.node_change_call("main","0:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","0:main__background-image", data);
+window.ftd.utils.node_change_call("main","0:main__background-size", data);
 };
 
 

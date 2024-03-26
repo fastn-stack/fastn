@@ -2042,7 +2042,7 @@ onPause: (event) => {
 const inputs = event.data;
 inputs.forEach((input) => {
 if (input === "idle") {
-window.ftd.handle_event(event, 'main', '[{"name":"ftd__set_string___main","values":[["a",{"reference":"foo#idle","mutable":true}],["v","Pausing Idle"]]}]', this)
+window.ftd.handle_event(event, 'main', '[{"name":"ftd__set_string___main","values":[["a",{"mutable":true,"reference":"foo#idle"}],["v","Pausing Idle"]]}]', this)
 }
 
 });
@@ -2052,7 +2052,7 @@ onPlay: (event) => {
 const inputs = event.data;
 inputs.forEach((input) => {
 if (input === "idle") {
-window.ftd.handle_event(event, 'main', '[{"name":"ftd__set_string___main","values":[["a",{"reference":"foo#idle","mutable":true}],["v","Playing Idle"]]}]', this)
+window.ftd.handle_event(event, 'main', '[{"name":"ftd__set_string___main","values":[["a",{"mutable":true,"reference":"foo#idle"}],["v","Playing Idle"]]}]', this)
 }
 
 });
