@@ -25,7 +25,7 @@ pub fn component_with_params(
         params: vec![
             fastn_js::COMPONENT_PARENT.to_string(),
             fastn_js::INHERITED_VARIABLE.to_string(),
-            "args".to_string(),
+            fastn_js::FUNCTION_ARGS.to_string(),
         ],
         args,
         body,

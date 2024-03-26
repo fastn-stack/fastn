@@ -649,7 +649,7 @@ impl fastn_js::OrType {
         variable_to_js(
             self.name.as_str(),
             &self.prefix,
-            text(self.variants.to_js().as_str()),
+            text(self.variant.to_js().as_str()),
             false,
         )
     }
