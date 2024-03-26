@@ -1,6 +1,3 @@
-static LOCK: once_cell::sync::Lazy<async_lock::RwLock<()>> =
-    once_cell::sync::Lazy::new(|| async_lock::RwLock::new(()));
-
 #[tracing::instrument(skip_all)]
 fn handle_redirect(
     config: &fastn_core::Config,
@@ -22,10 +19,6 @@ async fn serve_file(
     path: &camino::Utf8Path,
     only_js: bool,
 ) -> fastn_core::http::Response {
-    if let Some(r) = handle_redirect(&config.config, path) {
-        return r;
-    }
-
     let path = <&camino::Utf8Path>::clone(&path);
 
     if let Err(e) = config
@@ -177,87 +170,78 @@ pub async fn serve(
         return default_response;
     }
 
+    let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse()?;
+
+    if let Some(r) = handle_redirect(&config, &path) {
+        return Ok(r);
+    }
+
     if fastn_core::utils::is_static_path(req.path()) {
         return handle_static_route(req.path(), config.package.name.as_str(), &config.ds).await;
     }
 
-    serve_helper(config, req, only_js).await
+    let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
+
+    if req.path().starts_with("/-/auth/") {
+        return fastn_core::auth::routes::handle_auth(req, &mut req_config, config).await;
+    }
+
+    serve_helper(req_config, only_js, path).await
 }
 
 #[tracing::instrument(skip_all)]
 pub async fn serve_helper(
-    config: &fastn_core::Config,
-    req: fastn_core::http::Request,
+    mut req_config: fastn_core::RequestConfig,
     only_js: bool,
+    path: camino::Utf8PathBuf,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
-
-    match (req.method().to_lowercase().as_str(), req.path()) {
-        (_, t) if t.starts_with("/-/auth/") => {
-            return fastn_core::auth::routes::handle_auth(req, &mut req_config, config).await;
-        }
-        ("get", "/-/clear-cache/") => return clear_cache(config, req).await,
-        ("get", "/-/poll/") => return fastn_core::watcher::poll().await,
-        ("get", "/test/") => return test().await,
-        _ => {}
-    }
-
-    let _lock = LOCK.read().await;
-
-    let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse()?;
-
-    let mut resp = if path.eq(&camino::Utf8PathBuf::new().join("FASTN.ftd")) {
-        serve_fastn_file(config).await
-    } else if path.eq(&camino::Utf8PathBuf::new().join("")) {
+    let mut resp = if req_config.request.path() == "/" {
         serve_file(&mut req_config, &path.join("/"), only_js).await
     } else {
         // url is present in config or not
         // If not present than proxy pass it
 
-        let req_method = req.method().to_string();
-        let query_string = req.query_string().to_string();
+        let query_string = req_config.request.query_string().to_string();
 
         // if start with -/ and mount-point exists so send redirect to mount-point
         // We have to do -/<package-name>/remaining-url/ ==> (<package-name>, remaining-url) ==> (/config.package-name.mount-point/remaining-url/)
         // Get all the dependencies with mount-point if path_start with any package-name so send redirect to mount-point
         // fastn_core::file::is_static: checking for static file, if file is static no need to redirect it.
-        if req_method.as_str() == "GET" && !fastn_core::file::is_static(path.as_str())? {
-            // if any app name starts with package-name to redirect it to /mount-point/remaining-url/
-            for (mp, dep) in config
-                .package
-                .apps
-                .iter()
-                .map(|x| (&x.mount_point, &x.package))
+        // if any app name starts with package-name to redirect it to /mount-point/remaining-url/
+        for (mp, dep) in req_config
+            .config
+            .package
+            .apps
+            .iter()
+            .map(|x| (&x.mount_point, &x.package))
+        {
+            if let Some(remaining_path) =
+                fastn_core::config::utils::trim_package_name(path.as_str(), dep.name.as_str())
             {
-                if let Some(remaining_path) =
-                    fastn_core::config::utils::trim_package_name(path.as_str(), dep.name.as_str())
-                {
-                    let path = if remaining_path.trim_matches('/').is_empty() {
-                        format!("/{}/", mp.trim().trim_matches('/'))
-                    } else if query_string.is_empty() {
-                        format!(
-                            "/{}/{}/",
-                            mp.trim().trim_matches('/'),
-                            remaining_path.trim_matches('/')
-                        )
-                    } else {
-                        format!(
-                            "/{}/{}/?{}",
-                            mp.trim().trim_matches('/'),
-                            remaining_path.trim_matches('/'),
-                            query_string.as_str()
-                        )
-                    };
+                let path = if remaining_path.trim_matches('/').is_empty() {
+                    format!("/{}/", mp.trim().trim_matches('/'))
+                } else if query_string.is_empty() {
+                    format!(
+                        "/{}/{}/",
+                        mp.trim().trim_matches('/'),
+                        remaining_path.trim_matches('/')
+                    )
+                } else {
+                    format!(
+                        "/{}/{}/?{}",
+                        mp.trim().trim_matches('/'),
+                        remaining_path.trim_matches('/'),
+                        query_string.as_str()
+                    )
+                };
 
-                    let mut resp = actix_web::HttpResponse::new(
-                        actix_web::http::StatusCode::PERMANENT_REDIRECT,
-                    );
-                    resp.headers_mut().insert(
-                        actix_web::http::header::LOCATION,
-                        actix_web::http::header::HeaderValue::from_str(path.as_str()).unwrap(), // TODO:
-                    );
-                    return Ok(resp);
-                }
+                let mut resp =
+                    actix_web::HttpResponse::new(actix_web::http::StatusCode::PERMANENT_REDIRECT);
+                resp.headers_mut().insert(
+                    actix_web::http::header::LOCATION,
+                    actix_web::http::header::HeaderValue::from_str(path.as_str()).unwrap(), // TODO:
+                );
+                return Ok(resp);
             }
         }
 
@@ -292,45 +276,6 @@ pub(crate) async fn download_init_package(url: &Option<String>) -> std::io::Resu
         .await
         .expect("Unable to find FASTN.ftd file");
     Ok(())
-}
-
-pub async fn clear_cache(
-    config: &fastn_core::Config,
-    req: fastn_core::http::Request,
-) -> fastn_core::Result<fastn_core::http::Response> {
-    fn is_login(req: &fastn_core::http::Request) -> bool {
-        // TODO: Need refactor not happy with this
-        req.cookie(fastn_core::auth::AuthProviders::GitHub.as_str())
-            .is_some()
-    }
-
-    // TODO: Remove After Demo, Need to think about refresh content from github
-    #[derive(serde::Deserialize)]
-    struct Temp {
-        from: Option<String>,
-    }
-    let from = actix_web::web::Query::<Temp>::from_query(req.query_string())?;
-    if from.from.eq(&Some("temp-github".to_string())) {
-        let _lock = LOCK.write().await;
-        return Ok(fastn_core::apis::cache::clear(config, &req).await);
-    }
-    // TODO: Remove After Demo, till here
-
-    if !is_login(&req) {
-        return Ok(actix_web::HttpResponse::Found()
-            .append_header((
-                actix_web::http::header::LOCATION,
-                "/auth/login/?platform=github".to_string(),
-            ))
-            .finish());
-    }
-
-    let _lock = LOCK.write().await;
-    fastn_core::apis::cache::clear(config, &req).await;
-    // TODO: Redirect to Referrer uri
-    return Ok(actix_web::HttpResponse::Found()
-        .append_header((actix_web::http::header::LOCATION, "/".to_string()))
-        .finish());
 }
 
 pub fn handle_default_route(
@@ -404,18 +349,6 @@ pub fn handle_default_route(
     }
 
     None
-}
-
-#[tracing::instrument(skip_all)]
-async fn foo() {
-    tokio::time::sleep(std::time::Duration::from_secs(3)).await;
-}
-
-#[tracing::instrument(skip_all)]
-async fn test() -> fastn_core::Result<fastn_core::http::Response> {
-    tokio::time::sleep(std::time::Duration::from_secs(2)).await;
-    foo().await;
-    Ok(actix_web::HttpResponse::Ok().finish())
 }
 
 async fn handle_static_route(

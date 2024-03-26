@@ -37,7 +37,7 @@ pub enum AuthProviders {
 
 impl AuthProviders {
     // pub(crate) const AUTH_ITER: [AuthProviders; 1] = [AuthProviders::GitHub];
-    pub(crate) fn as_str(&self) -> &'static str {
+    pub fn as_str(&self) -> &'static str {
         match self {
             AuthProviders::GitHub => "github",
         }
