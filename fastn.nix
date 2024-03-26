@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ pkg-config ];
 
+  buildFeatures = [ "quickjs" ];
+
   buildInputs = lib.optional stdenv.targetPlatform.isWindows [
     windows.mingw_w64_pthreads
     windows.pthreads
