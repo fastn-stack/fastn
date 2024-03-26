@@ -84,7 +84,7 @@ impl Definition {
         definition
             .properties
             .push(ftd::ftd2021::di::Property::from_kv(
-                &ftd::p1::header::KV::new(key, kind, value, 0, condition, Default::default()),
+                &ftd0::p1::KV::new(key, kind, value, 0, condition, Default::default()),
                 ftd::ftd2021::di::Source::Header,
             ));
         definition

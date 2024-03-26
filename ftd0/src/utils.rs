@@ -1,5 +1,4 @@
-#[cfg(test)]
-pub(crate) fn find_all_files_matching_extension_recursively(
+pub fn find_all_files_matching_extension_recursively(
     dir: impl AsRef<std::path::Path> + std::fmt::Debug,
     extension: &str,
 ) -> Vec<std::path::PathBuf> {

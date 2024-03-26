@@ -177,7 +177,7 @@ impl VariableFlags {
 
     pub fn from_header(header: &ftd::p1::Header, doc_id: &str) -> ftd::ast::Result<VariableFlags> {
         let kv = match header {
-            ftd::p1::Header::KV(kv) => kv,
+            ftd0::p1::Header::KV(kv) => kv,
             ftd::p1::Header::Section(s) => {
                 return ftd::ast::parse_error(
                     format!("Expected the boolean value for flag, found: `{:?}`", s),

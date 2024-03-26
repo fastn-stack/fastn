@@ -40,11 +40,11 @@ pub const IF: &str = "if";
  * A Result of the specified type, with an error variant of `Error::ParseError`
  * containing the provided message, doc_id and line_number
  */
-pub fn parse_error<T, S1>(m: S1, doc_id: &str, line_number: usize) -> ftd::p1::Result<T>
+pub fn parse_error<T, S1>(m: S1, doc_id: &str, line_number: usize) -> ftd0::p1::Result<T>
 where
     S1: Into<String>,
 {
-    Err(ftd::p1::Error::ParseError {
+    Err(ftd0::p1::Error::ParseError {
         message: m.into(),
         doc_id: doc_id.to_string(),
         line_number,

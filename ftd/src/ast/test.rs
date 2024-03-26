@@ -68,7 +68,7 @@ fn ast_test_all() {
 
 fn find_file_groups() -> Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> {
     let files = {
-        let mut f = ftd::utils::find_all_files_matching_extension_recursively("t/ast", "ftd");
+        let mut f = ftd0::utils::find_all_files_matching_extension_recursively("t/ast", "ftd");
         f.sort();
         f
     };

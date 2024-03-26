@@ -1883,6 +1883,7 @@ dependencies = [
  "fastn-grammar",
  "fastn-js",
  "format_num",
+ "ftd0",
  "include_dir",
  "indexmap",
  "indoc 2.0.5",
@@ -1897,6 +1898,20 @@ dependencies = [
  "taffy",
  "thiserror",
  "tracing",
+]
+
+[[package]]
+name = "ftd0"
+version = "0.1.0"
+dependencies = [
+ "diffy",
+ "indoc 2.0.5",
+ "itertools 0.12.1",
+ "pretty_assertions",
+ "serde",
+ "serde_json",
+ "syntect",
+ "thiserror",
 ]
 
 [[package]]

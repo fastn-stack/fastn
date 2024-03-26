@@ -10,7 +10,9 @@ members = [
     "fastn-lang",
     "foo",
     "fastn-ds",
-    "fastn-update", "fastn-expr",
+    "fastn-update",
+    "fastn-expr",
+    "ftd0",
     # "fastn-wasm",
     # "fastn-runtime",
 ]
@@ -97,6 +99,7 @@ fastn-expr = { path = "fastn-expr" }
 fluent = "0.16"
 format_num = "0.1"
 ftd = { path = "ftd" }
+ftd0 = { path = "ftd0" }
 fastn-js = { path = "fastn-js" }
 futures = "0.3"
 futures-util = { version = "0.3", default-features = false, features = ["std"] }
