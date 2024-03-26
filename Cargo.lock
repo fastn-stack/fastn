@@ -1863,7 +1863,7 @@ dependencies = [
  "fastn-grammar",
  "fastn-js",
  "format_num",
- "ftd0",
+ "ftd-p1",
  "include_dir",
  "indexmap",
  "indoc 2.0.5",
@@ -1881,7 +1881,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "ftd0"
+name = "ftd-p1"
 version = "0.1.0"
 dependencies = [
  "diffy",

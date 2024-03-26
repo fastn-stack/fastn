@@ -161,7 +161,7 @@ pub enum Interpreter {
 #[derive(Debug, Clone)]
 pub struct ParsedDocument {
     name: String,
-    sections: Vec<ftd::p1::Section>,
+    sections: Vec<ftd_p1::Section>,
     processing_imports: bool,
     doc_aliases: ftd::Map<String>,
     foreign_variable_prefix: Vec<String>,
@@ -172,7 +172,7 @@ impl ParsedDocument {
     fn parse(id: &str, source: &str) -> ftd::ftd2021::interpreter::Result<ParsedDocument> {
         Ok(ParsedDocument {
             name: id.to_string(),
-            sections: ftd::p1::parse(source, id)?,
+            sections: ftd_p1::parse(source, id)?,
             processing_imports: true,
             doc_aliases: default_aliases(),
             foreign_variable_prefix: vec![],
@@ -201,15 +201,15 @@ impl ParsedDocument {
     /// uses [`Section::remove_comments()`] and [`SubSection::remove_comments()`] to remove comments
     /// in sections and sub_sections accordingly.
     ///
-    /// [`parser`]: ftd::p1::parser::parse
-    /// [`Section::remove_comments()`]: ftd::p1::section::Section::remove_comments
-    /// [`SubSection::remove_comments()`]: ftd::p1::sub_section::SubSection::remove_comments
+    /// [`parser`]: ftd_p1::parser::parse
+    /// [`Section::remove_comments()`]: ftd_p1::section::Section::remove_comments
+    /// [`SubSection::remove_comments()`]: ftd_p1::sub_section::SubSection::remove_comments
     fn ignore_comments(&mut self) {
         self.sections = self
             .sections
             .iter()
             .filter_map(|s| s.remove_comments())
-            .collect::<Vec<ftd::p1::Section>>();
+            .collect::<Vec<ftd_p1::Section>>();
     }
 
     fn done_processing_imports(&mut self) {

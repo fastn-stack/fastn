@@ -1776,9 +1776,9 @@ impl ParsedDocument {
     /// uses [`Section::remove_comments()`] and [`SubSection::remove_comments()`] to remove comments
     /// in sections and sub_sections accordingly.
     ///
-    /// [`parser`]: ftd::p1::parser::parse
-    /// [`Section::remove_comments()`]: ftd::p1::section::Section::remove_comments
-    /// [`SubSection::remove_comments()`]: ftd::p1::sub_section::SubSection::remove_comments
+    /// [`parser`]: ftd_p1::parser::parse
+    /// [`Section::remove_comments()`]: ftd_p1::section::Section::remove_comments
+    /// [`SubSection::remove_comments()`]: ftd_p1::sub_section::SubSection::remove_comments
     fn ignore_comments(&mut self) {
         self.sections = self
             .sections

@@ -7,7 +7,7 @@ pub struct Definition {
 }
 
 impl Definition {
-    pub(crate) fn is_definition(section: &ftd::p1::Section) -> bool {
+    pub(crate) fn is_definition(section: &ftd_p1::Section) -> bool {
         if ftd::ftd2021::di::Import::is_import(section)
             || ftd::ftd2021::di::Record::is_record(section)
         {
@@ -17,7 +17,7 @@ impl Definition {
     }
 
     pub(crate) fn from_p1(
-        section: &ftd::p1::Section,
+        section: &ftd_p1::Section,
         doc_id: &str,
     ) -> ftd::ftd2021::di::Result<Definition> {
         if !Self::is_definition(section) {
@@ -84,7 +84,7 @@ impl Definition {
         definition
             .properties
             .push(ftd::ftd2021::di::Property::from_kv(
-                &ftd0::p1::KV::new(key, kind, value, 0, condition, Default::default()),
+                &ftd_p1::KV::new(key, kind, value, 0, condition, Default::default()),
                 ftd::ftd2021::di::Source::Header,
             ));
         definition

@@ -1,3 +1,25 @@
+pub fn find_all_files_matching_extension_recursively(
+    dir: impl AsRef<std::path::Path> + std::fmt::Debug,
+    extension: &str,
+) -> Vec<std::path::PathBuf> {
+    let mut files = vec![];
+    for entry in std::fs::read_dir(dir).unwrap() {
+        let entry = entry.unwrap();
+        let path = entry.path();
+        if path.is_dir() {
+            files.extend(find_all_files_matching_extension_recursively(
+                &path, extension,
+            ));
+        } else {
+            match path.extension() {
+                Some(ext) if ext == extension => files.push(path),
+                _ => continue,
+            }
+        }
+    }
+    files
+}
+
 /**
  * Removes the comment prefix (if any) from the given value.
  *
@@ -40,11 +62,11 @@ pub const IF: &str = "if";
  * A Result of the specified type, with an error variant of `Error::ParseError`
  * containing the provided message, doc_id and line_number
  */
-pub fn parse_error<T, S1>(m: S1, doc_id: &str, line_number: usize) -> ftd0::p1::Result<T>
+pub fn parse_error<T, S1>(m: S1, doc_id: &str, line_number: usize) -> ftd_p1::Result<T>
 where
     S1: Into<String>,
 {
-    Err(ftd0::p1::Error::ParseError {
+    Err(ftd_p1::Error::ParseError {
         message: m.into(),
         doc_id: doc_id.to_string(),
         line_number,

@@ -892,7 +892,7 @@ impl ParsedDocument {
         line_number: usize,
     ) -> ftd::interpreter::Result<ParsedDocument> {
         let ast = ftd::ast::AST::from_sections(
-            ftd::p1::parse_with_line_number(source, id, line_number)?.as_slice(),
+            ftd_p1::parse_with_line_number(source, id, line_number)?.as_slice(),
             id,
         )?;
         let (doc_aliases, re_exports, exposings) = {

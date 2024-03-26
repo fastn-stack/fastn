@@ -1,3 +1,7 @@
+extern crate self as ftd_p1;
+
+pub type Map<T> = std::collections::BTreeMap<String, T>;
+
 #[cfg(test)]
 #[macro_use]
 mod test;

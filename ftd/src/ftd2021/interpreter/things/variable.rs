@@ -10,7 +10,7 @@ pub struct Variable {
 
 impl Variable {
     pub(crate) fn from_p1_section(
-        s: &ftd::p1::Section,
+        s: &ftd_p1::Section,
         doc_id: &str,
     ) -> ftd2021::interpreter::Result<Variable> {
         let value = ftd2021::interpreter::PropertyValue::from_p1_section(s, doc_id)?;
@@ -33,7 +33,7 @@ impl Variable {
         })
     }
 
-    pub(crate) fn get_flags(s: &ftd::p1::Section, doc_id: &str) -> ftd::p1::Result<VariableFlags> {
+    pub(crate) fn get_flags(s: &ftd_p1::Section, doc_id: &str) -> ftd_p1::Result<VariableFlags> {
         let header = match ftd2021::interpreter::PropertyValue::for_header_with_kind(
             s,
             doc_id,
@@ -51,7 +51,7 @@ impl Variable {
                 always_include: Some(value),
             }),
             ftd2021::interpreter::PropertyValue::Reference { .. } => unimplemented!(),
-            t => Err(ftd::p1::Error::ParseError {
+            t => Err(ftd_p1::Error::ParseError {
                 message: format!("Expected boolean found: {:?}", t),
                 doc_id: doc_id.to_string(),
                 line_number: s.line_number,
@@ -79,7 +79,7 @@ mod test {
 
     #[track_caller]
     fn p(s: &str, t: ftd2021::interpreter::Variable) {
-        let section = ftd::p1::parse(s, "foo")
+        let section = ftd_p1::parse(s, "foo")
             .unwrap_or_else(|e| panic!("{:?}", e))
             .first()
             .unwrap()
@@ -92,7 +92,7 @@ mod test {
 
     #[track_caller]
     fn f(s: &str, m: &str) {
-        let section = ftd::p1::parse(s, "foo")
+        let section = ftd_p1::parse(s, "foo")
             .unwrap_or_else(|e| panic!("{:?}", e))
             .first()
             .unwrap()

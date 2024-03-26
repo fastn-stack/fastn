@@ -3,7 +3,7 @@ use {indoc::indoc, pretty_assertions::assert_eq};
 
 #[track_caller]
 fn p(s: &str, t: &Vec<ftd::ftd2021::di::DI>) {
-    let sections = ftd::p1::parse(s, "foo").unwrap_or_else(|e| panic!("{:?}", e));
+    let sections = ftd_p1::parse(s, "foo").unwrap_or_else(|e| panic!("{:?}", e));
     let ast = ftd::ftd2021::di::DI::from_sections(sections.as_slice(), "foo")
         .unwrap_or_else(|e| panic!("{:?}", e));
     assert_eq!(t, &ast,)
@@ -11,7 +11,7 @@ fn p(s: &str, t: &Vec<ftd::ftd2021::di::DI>) {
 
 #[track_caller]
 fn f(s: &str, m: &str) {
-    let sections = ftd::p1::parse(s, "foo").unwrap_or_else(|e| panic!("{:?}", e));
+    let sections = ftd_p1::parse(s, "foo").unwrap_or_else(|e| panic!("{:?}", e));
     let ast = ftd::ftd2021::di::DI::from_sections(sections.as_slice(), "foo");
     match ast {
         Ok(r) => panic!("expected failure, found: {:?}", r),
@@ -53,7 +53,7 @@ fn test_all() {
 fn find_file_groups() -> Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> {
     let files = {
         let mut f =
-            ftd0::utils::find_all_files_matching_extension_recursively("src/ftd2021/di/t", "ftd");
+            ftd_p1::utils::find_all_files_matching_extension_recursively("src/ftd2021/di/t", "ftd");
         f.sort();
         f
     };

@@ -16,7 +16,7 @@ pub use things::Thing;
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
     #[error("P1Error: {}", _0)]
-    P1Error(#[from] ftd::p1::Error),
+    P1Error(#[from] ftd_p1::Error),
 
     #[error("InvalidKind: {doc_id}:{line_number} -> {message}")]
     InvalidKind {

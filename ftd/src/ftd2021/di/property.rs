@@ -8,7 +8,7 @@ pub struct Property {
 
 impl Property {
     pub(crate) fn from_p1(
-        section: &ftd::p1::Section,
+        section: &ftd_p1::Section,
         doc_id: &str,
     ) -> ftd::ftd2021::di::Result<Vec<Property>> {
         let mut properties = vec![];
@@ -26,18 +26,18 @@ impl Property {
     }
 
     pub(crate) fn from_header(
-        header: &ftd::p1::Header,
+        header: &ftd_p1::Header,
         doc_id: &str,
         source: Source,
     ) -> ftd::ftd2021::di::Result<Property> {
         match header {
-            ftd0::p1::Header::KV(kv) => Ok(Property::from_kv(kv, source)),
-            ftd::p1::Header::Section(section) => Property::from_section(section, doc_id, source),
-            ftd::p1::Header::BlockRecordHeader(_) => todo!(),
+            ftd_p1::Header::KV(kv) => Ok(Property::from_kv(kv, source)),
+            ftd_p1::Header::Section(section) => Property::from_section(section, doc_id, source),
+            ftd_p1::Header::BlockRecordHeader(_) => todo!(),
         }
     }
 
-    pub(crate) fn from_kv(kv: &ftd0::p1::KV, source: Source) -> Property {
+    pub(crate) fn from_kv(kv: &ftd_p1::KV, source: Source) -> Property {
         Property {
             name: kv.key.to_string(),
             kind: kv.kind.clone(),
@@ -81,7 +81,7 @@ impl Property {
     }
 
     pub(crate) fn from_section(
-        section: &ftd::p1::SectionHeader,
+        section: &ftd_p1::SectionHeader,
         doc_id: &str,
         source: Source,
     ) -> ftd::ftd2021::di::Result<Property> {

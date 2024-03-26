@@ -2,7 +2,7 @@ use pretty_assertions::assert_eq; // macro
 
 #[track_caller]
 fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
-    let sections = ftd::p1::parse(s, "foo").unwrap_or_else(|e| panic!("{:?}", e));
+    let sections = ftd_p1::parse(s, "foo").unwrap_or_else(|e| panic!("{:?}", e));
     let ast = ftd::ast::AST::from_sections(sections.as_slice(), "foo")
         .unwrap_or_else(|e| panic!("{:?}", e));
     let expected_json = serde_json::to_string_pretty(&ast).unwrap();
@@ -17,7 +17,7 @@ fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
 
 /*#[track_caller]
 fn f(s: &str, m: &str) {
-    let sections = ftd::p1::parse(s, "foo").unwrap_or_else(|e| panic!("{:?}", e));
+    let sections = ftd_p1::parse(s, "foo").unwrap_or_else(|e| panic!("{:?}", e));
     let ast = ftd::ast::AST::from_sections(sections.as_slice(), "foo");
     match ast {
         Ok(r) => panic!("expected failure, found: {:?}", r),
@@ -68,7 +68,7 @@ fn ast_test_all() {
 
 fn find_file_groups() -> Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> {
     let files = {
-        let mut f = ftd0::utils::find_all_files_matching_extension_recursively("t/ast", "ftd");
+        let mut f = ftd_p1::utils::find_all_files_matching_extension_recursively("t/ast", "ftd");
         f.sort();
         f
     };

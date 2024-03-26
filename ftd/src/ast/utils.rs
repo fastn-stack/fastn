@@ -35,7 +35,7 @@ pub(crate) fn is_condition(value: &str, kind: &Option<String>) -> bool {
 }
 
 pub(crate) fn get_js_and_fields_from_headers(
-    headers: &ftd::p1::Headers,
+    headers: &ftd_p1::Headers,
     doc_id: &str,
 ) -> ftd::ast::Result<(Option<String>, Vec<ftd::ast::Argument>)> {
     let mut fields: Vec<ftd::ast::Argument> = Default::default();
@@ -55,7 +55,7 @@ pub(crate) fn get_js_and_fields_from_headers(
 }
 
 pub(crate) fn get_css_and_fields_from_headers(
-    headers: &ftd::p1::Headers,
+    headers: &ftd_p1::Headers,
     doc_id: &str,
 ) -> ftd::ast::Result<(Option<String>, Vec<ftd::ast::Argument>)> {
     let mut fields: Vec<ftd::ast::Argument> = Default::default();
@@ -79,9 +79,9 @@ pub(crate) fn is_header_key(key: &str) -> bool {
 }
 
 pub(crate) fn get_component_id(
-    headers: &ftd::p1::Headers,
+    headers: &ftd_p1::Headers,
     doc_id: &str,
-) -> ftd::p1::Result<Option<String>> {
+) -> ftd_p1::Result<Option<String>> {
     match headers.0.iter().find(|header| header.get_key().eq("id")) {
         Some(id) => id.get_value(doc_id),
         None => Ok(None),

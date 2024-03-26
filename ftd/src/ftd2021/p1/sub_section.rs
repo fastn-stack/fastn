@@ -39,7 +39,7 @@ impl SubSection {
     ///
     /// ## NOTE: This function is only used by [`Section::remove_comments()`]
     ///
-    /// [`Section::remove_comments()`]: ftd::p1::section::Section::remove_comments
+    /// [`Section::remove_comments()`]: ftd_p1::section::Section::remove_comments
     pub fn remove_comments(&self) -> SubSection {
         /// returns body after processing comments "/" and escape "\\/" (if any)
         pub fn body_without_comment(body: &Option<(usize, String)>) -> Option<(usize, String)> {

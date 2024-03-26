@@ -30,7 +30,7 @@ impl VariableDefinition {
         }
     }
 
-    pub fn is_variable_definition(section: &ftd::p1::Section) -> bool {
+    pub fn is_variable_definition(section: &ftd_p1::Section) -> bool {
         !(ftd::ast::Import::is_import(section)
             || ftd::ast::Record::is_record(section)
             || ftd::ast::OrType::is_or_type(section)
@@ -41,7 +41,7 @@ impl VariableDefinition {
     }
 
     pub(crate) fn from_p1(
-        section: &ftd::p1::Section,
+        section: &ftd_p1::Section,
         doc_id: &str,
     ) -> ftd::ast::Result<VariableDefinition> {
         if !Self::is_variable_definition(section) {
@@ -113,12 +113,12 @@ impl VariableInvocation {
         self.line_number
     }
 
-    pub fn is_variable_invocation(section: &ftd::p1::Section) -> bool {
+    pub fn is_variable_invocation(section: &ftd_p1::Section) -> bool {
         section.kind.is_none() && section.name.starts_with(ftd::ast::utils::REFERENCE)
     }
 
     pub(crate) fn from_p1(
-        section: &ftd::p1::Section,
+        section: &ftd_p1::Section,
         doc_id: &str,
     ) -> ftd::ast::Result<VariableInvocation> {
         if !Self::is_variable_invocation(section) {
@@ -165,7 +165,7 @@ impl VariableFlags {
         variable_flag
     }
 
-    pub fn from_headers(headers: &ftd::p1::Headers, doc_id: &str) -> VariableFlags {
+    pub fn from_headers(headers: &ftd_p1::Headers, doc_id: &str) -> VariableFlags {
         for header in headers.0.iter() {
             if let Ok(flag) = ftd::ast::VariableFlags::from_header(header, doc_id) {
                 return flag;
@@ -175,17 +175,17 @@ impl VariableFlags {
         ftd::ast::VariableFlags::new()
     }
 
-    pub fn from_header(header: &ftd::p1::Header, doc_id: &str) -> ftd::ast::Result<VariableFlags> {
+    pub fn from_header(header: &ftd_p1::Header, doc_id: &str) -> ftd::ast::Result<VariableFlags> {
         let kv = match header {
-            ftd0::p1::Header::KV(kv) => kv,
-            ftd::p1::Header::Section(s) => {
+            ftd_p1::Header::KV(kv) => kv,
+            ftd_p1::Header::Section(s) => {
                 return ftd::ast::parse_error(
                     format!("Expected the boolean value for flag, found: `{:?}`", s),
                     doc_id,
                     header.get_line_number(),
                 )
             }
-            ftd::p1::Header::BlockRecordHeader(b) => {
+            ftd_p1::Header::BlockRecordHeader(b) => {
                 return ftd::ast::parse_error(
                     format!("Expected the boolean value for flag, found: `{:?}`", b),
                     doc_id,
@@ -222,7 +222,7 @@ impl VariableFlags {
 struct Processor;
 
 impl Processor {
-    fn from_headers(headers: &ftd::p1::Headers, doc_id: &str) -> ftd::ast::Result<Option<String>> {
+    fn from_headers(headers: &ftd_p1::Headers, doc_id: &str) -> ftd::ast::Result<Option<String>> {
         let processor_header = headers
             .0
             .iter()

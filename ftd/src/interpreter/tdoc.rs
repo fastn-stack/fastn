@@ -550,7 +550,7 @@ impl<'a> TDoc<'a> {
             bool,
         )>,
     > {
-        let name = ftd0::p1::AccessModifier::remove_modifiers(name);
+        let name = ftd_p1::AccessModifier::remove_modifiers(name);
         let name = name
             .strip_prefix(ftd::interpreter::utils::REFERENCE)
             .or_else(|| name.strip_prefix(ftd::interpreter::utils::CLONE))
@@ -1037,7 +1037,7 @@ impl<'a> TDoc<'a> {
         line_number: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Function>>
     {
-        let name = ftd0::p1::AccessModifier::remove_modifiers(name);
+        let name = ftd_p1::AccessModifier::remove_modifiers(name);
         let initial_thing = try_ok_state!(self.search_initial_thing(name.as_str(), line_number)?).0;
         Ok(ftd::interpreter::StateWithThing::new_thing(
             initial_thing.function(self.name, line_number)?,
@@ -1306,7 +1306,7 @@ impl<'a> TDoc<'a> {
         name: &str,
         line_number: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Thing>> {
-        let name = ftd0::p1::AccessModifier::remove_modifiers(name);
+        let name = ftd_p1::AccessModifier::remove_modifiers(name);
         let name = name
             .strip_prefix(ftd::interpreter::utils::REFERENCE)
             .or_else(|| name.strip_prefix(ftd::interpreter::utils::CLONE))
@@ -1424,7 +1424,7 @@ impl<'a> TDoc<'a> {
                         }),
                         Some(ftd::interpreter::PropertyValue::Reference { name, .. })
                         | Some(ftd::interpreter::PropertyValue::Clone { name, .. }) => {
-                            let name = ftd0::p1::AccessModifier::remove_modifiers(name);
+                            let name = ftd_p1::AccessModifier::remove_modifiers(name);
                             let (initial_thing, name) = try_ok_state!(
                                 doc.search_initial_thing(name.as_str(), line_number)?
                             );
@@ -1502,7 +1502,7 @@ impl<'a> TDoc<'a> {
     > {
         use itertools::Itertools;
 
-        let thing_name = ftd0::p1::AccessModifier::remove_modifiers(thing_name.as_str());
+        let thing_name = ftd_p1::AccessModifier::remove_modifiers(thing_name.as_str());
         let name = format!(
             "{}#{}{}",
             doc_name,
