@@ -172,7 +172,7 @@ pub async fn serve(
 
     let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse()?;
 
-    if let Some(r) = handle_redirect(&config, &path) {
+    if let Some(r) = handle_redirect(config, &path) {
         return Ok(r);
     }
 
