@@ -7,8 +7,8 @@ use itertools::Itertools;
  *
  * - `name`: A String representing the name of the section
  * - `kind`: An optional String representing the kind of the section
- * - `caption`: An optional `ftd::p1::Header` representing the caption of the section
- * - `headers`: `ftd::p1::Headers` representing the headers of the section
+ * - `caption`: An optional `ftd_p1::Header` representing the caption of the section
+ * - `headers`: `ftd_p1::Headers` representing the headers of the section
  * - `body`: An optional `Body` representing the body of the section
  * - `sub_sections`: A Vec of `Section` representing the sub sections of the section
  * - `is_commented`: A boolean representing whether the section is commented or not
@@ -21,8 +21,8 @@ use itertools::Itertools;
 pub struct Section {
     pub name: String,
     pub kind: Option<String>,
-    pub caption: Option<ftd::p1::Header>,
-    pub headers: ftd::p1::Headers,
+    pub caption: Option<ftd_p1::Header>,
+    pub headers: ftd_p1::Headers,
     pub body: Option<Body>,
     pub sub_sections: Vec<Section>,
     pub is_commented: bool,
@@ -40,7 +40,7 @@ impl Section {
             sub_sections: vec![],
             is_commented: false,
             line_number: 0,
-            headers: ftd::p1::Headers(vec![]),
+            headers: ftd_p1::Headers(vec![]),
             block_body: false,
         }
     }
@@ -55,7 +55,7 @@ impl Section {
             name: self.name.to_string(),
             kind: self.kind.to_owned(),
             caption: self.caption.as_ref().map(|v| v.without_line_number()),
-            headers: ftd::p1::Headers(
+            headers: ftd_p1::Headers(
                 self.headers
                     .0
                     .iter()
@@ -75,7 +75,7 @@ impl Section {
     }
 
     pub fn and_caption(mut self, caption: &str) -> Self {
-        self.caption = Some(ftd::p1::Header::from_caption(caption, self.line_number));
+        self.caption = Some(ftd_p1::Header::from_caption(caption, self.line_number));
         self
     }
 
@@ -85,7 +85,7 @@ impl Section {
     }
 
     pub fn add_header_str(mut self, key: &str, value: &str) -> Self {
-        self.headers.push(ftd::p1::Header::kv(
+        self.headers.push(ftd_p1::Header::kv(
             0,
             key,
             None,
@@ -104,9 +104,9 @@ impl Section {
         mut self,
         key: &str,
         value: &str,
-        source: Option<ftd::p1::header::KVSource>,
+        source: Option<ftd_p1::header::KVSource>,
     ) -> Self {
-        self.headers.push(ftd::p1::Header::kv(
+        self.headers.push(ftd_p1::Header::kv(
             0,
             key,
             None,
@@ -125,16 +125,16 @@ impl Section {
         mut self,
         key: &str,
         kind: Option<String>,
-        section: Vec<ftd::p1::Section>,
+        section: Vec<ftd_p1::Section>,
         condition: Option<String>,
     ) -> Self {
         self.headers
-            .push(ftd::p1::Header::section(0, key, kind, section, condition));
+            .push(ftd_p1::Header::section(0, key, kind, section, condition));
         self
     }
 
     pub fn and_body(mut self, body: &str) -> Self {
-        self.body = Some(ftd::p1::Body::new(0, body));
+        self.body = Some(ftd_p1::Body::new(0, body));
         self
     }
 
@@ -147,7 +147,7 @@ impl Section {
     ///
     /// ## NOTE: This function is only called by [`ParsedDocument::ignore_comments()`]
     ///
-    /// [`ParsedDocument::ignore_comments()`]: ftd::p2::interpreter::ParsedDocument::ignore_comments
+    /// [`ParsedDocument::ignore_comments()`]: ftd_p1::p2::interpreter::ParsedDocument::ignore_comments
     pub fn remove_comments(&self) -> Option<Section> {
         if self.is_commented {
             return None;
@@ -162,7 +162,7 @@ impl Section {
                 .sub_sections
                 .iter()
                 .filter_map(|s| s.remove_comments())
-                .collect::<Vec<ftd::p1::Section>>(),
+                .collect::<Vec<ftd_p1::Section>>(),
             is_commented: false,
             line_number: self.line_number,
             block_body: self.block_body,
@@ -192,7 +192,7 @@ impl Body {
 
     pub(crate) fn remove_comments(&self) -> Option<Self> {
         let mut value = Some(self.value.to_owned());
-        ftd::p1::utils::remove_value_comment(&mut value);
+        ftd_p1::utils::remove_value_comment(&mut value);
         value.map(|value| Body {
             line_number: self.line_number,
             value,

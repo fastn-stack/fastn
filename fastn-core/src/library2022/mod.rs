@@ -20,21 +20,21 @@ impl Library2022 {
         &mut self,
         name: &str,
         current_processing_module: &str,
-    ) -> ftd::p1::Result<(String, String, usize)> {
+    ) -> ftd_p1::Result<(String, String, usize)> {
         match self.get(name, current_processing_module).await {
             Ok(v) => Ok(v),
-            Err(e) => ftd::p1::utils::parse_error(e.to_string(), "", 0),
+            Err(e) => ftd_p1::utils::parse_error(e.to_string(), "", 0),
         }
     }
 
     pub(crate) fn get_current_package(
         &self,
         current_processing_module: &str,
-    ) -> ftd::p1::Result<fastn_core::Package> {
+    ) -> ftd_p1::Result<fastn_core::Package> {
         let current_package_name = self
             .module_package_map
             .get(current_processing_module.trim_matches('/'))
-            .ok_or_else(|| ftd::p1::Error::ParseError {
+            .ok_or_else(|| ftd_p1::Error::ParseError {
                 message: "The processing document stack is empty: Can't find module in any package"
                     .to_string(),
                 doc_id: current_processing_module.to_string(),
@@ -45,7 +45,7 @@ impl Library2022 {
             .all_packages
             .get(current_package_name)
             .map(|p| p.to_owned())
-            .ok_or_else(|| ftd::p1::Error::ParseError {
+            .ok_or_else(|| ftd_p1::Error::ParseError {
                 message: format!("Can't find current package: {}", current_package_name),
                 doc_id: "".to_string(),
                 line_number: 0,

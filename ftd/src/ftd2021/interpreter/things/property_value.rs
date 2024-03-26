@@ -13,7 +13,7 @@ pub enum PropertyValue {
 
 impl PropertyValue {
     pub(crate) fn from_p1_section(
-        s: &ftd::p1::Section,
+        s: &ftd_p1::Section,
         doc_id: &str,
     ) -> ftd2021::interpreter::Result<PropertyValue> {
         let kind = s
@@ -31,7 +31,7 @@ impl PropertyValue {
 
     #[allow(dead_code)]
     pub(crate) fn for_header(
-        s: &ftd::p1::Section,
+        s: &ftd_p1::Section,
         doc_id: &str,
         key: &str,
     ) -> ftd2021::interpreter::Result<PropertyValue> {
@@ -49,7 +49,7 @@ impl PropertyValue {
     }
 
     pub(crate) fn for_header_with_kind(
-        s: &ftd::p1::Section,
+        s: &ftd_p1::Section,
         doc_id: &str,
         key: &str,
         kind_data: &ftd2021::interpreter::KindData,
@@ -59,7 +59,7 @@ impl PropertyValue {
     }
 
     pub(crate) fn from_header_with_kind(
-        header: &ftd::p1::Header,
+        header: &ftd_p1::Header,
         doc_id: &str,
         kind_data: &ftd2021::interpreter::KindData,
     ) -> ftd2021::interpreter::Result<PropertyValue> {
@@ -76,7 +76,7 @@ impl PropertyValue {
     }
 
     pub(crate) fn from_p1_section_with_kind(
-        s: &ftd::p1::Section,
+        s: &ftd_p1::Section,
         doc_id: &str,
         kind_data: &ftd2021::interpreter::KindData,
     ) -> ftd2021::interpreter::Result<PropertyValue> {
@@ -148,7 +148,7 @@ pub enum Value {
 
 impl Value {
     pub(crate) fn from_p1_header(
-        s: &ftd::p1::Header,
+        s: &ftd_p1::Header,
         doc_id: &str,
         kind_data: &ftd2021::interpreter::KindData,
     ) -> ftd2021::interpreter::Result<Value> {
@@ -227,7 +227,7 @@ impl Value {
         }
     }
     pub(crate) fn from_p1_section(
-        s: &ftd::p1::Section,
+        s: &ftd_p1::Section,
         doc_id: &str,
         kind_data: &ftd2021::interpreter::KindData,
     ) -> ftd2021::interpreter::Result<Value> {
@@ -315,7 +315,7 @@ impl Value {
 }
 
 fn section_value_from_caption_or_body(
-    section: &ftd::p1::Section,
+    section: &ftd_p1::Section,
     doc_id: &str,
 ) -> ftd2021::interpreter::Result<String> {
     if let Some(ref header) = section.caption {
@@ -345,7 +345,7 @@ mod test {
 
     #[track_caller]
     fn p(s: &str, t: ftd2021::interpreter::PropertyValue) {
-        let section = ftd::p1::parse(s, "foo")
+        let section = ftd_p1::parse(s, "foo")
             .unwrap_or_else(|e| panic!("{:?}", e))
             .first()
             .unwrap()
@@ -359,7 +359,7 @@ mod test {
 
     #[track_caller]
     fn f(s: &str, m: &str) {
-        let section = ftd::p1::parse(s, "foo")
+        let section = ftd_p1::parse(s, "foo")
             .unwrap_or_else(|e| panic!("{:?}", e))
             .first()
             .unwrap()

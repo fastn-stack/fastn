@@ -8,12 +8,12 @@ pub const IMPORT: &str = "import";
 pub const AS: &str = "as";
 
 impl Import {
-    pub(crate) fn is_import(section: &ftd::p1::Section) -> bool {
+    pub(crate) fn is_import(section: &ftd_p1::Section) -> bool {
         section.name.eq(IMPORT)
     }
 
     pub(crate) fn from_p1(
-        section: &ftd::p1::Section,
+        section: &ftd_p1::Section,
         doc_id: &str,
     ) -> ftd::ftd2021::di::Result<Import> {
         if !Self::is_import(section) {
@@ -34,7 +34,7 @@ impl Import {
             );
         }
         match &section.caption {
-            Some(ftd::p1::Header::KV(ftd::p1::header::KV {
+            Some(ftd_p1::Header::KV(ftd_p1::KV {
                 value: Some(value), ..
             })) => {
                 let (module, alias) = ftd::ftd2021::di::utils::split_at(value.as_str(), AS);

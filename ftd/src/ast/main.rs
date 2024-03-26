@@ -30,10 +30,7 @@ pub enum AST {
 // -- ftd.text: hello
 
 impl AST {
-    pub fn from_sections(
-        sections: &[ftd::p1::Section],
-        doc_id: &str,
-    ) -> ftd::ast::Result<Vec<AST>> {
+    pub fn from_sections(sections: &[ftd_p1::Section], doc_id: &str) -> ftd::ast::Result<Vec<AST>> {
         let mut di_vec = vec![];
         for section in ignore_comments(sections) {
             di_vec.push(AST::from_section(&section, doc_id)?);
@@ -55,7 +52,7 @@ impl AST {
         }
     }
 
-    pub fn from_section(section: &ftd::p1::Section, doc_id: &str) -> ftd::ast::Result<AST> {
+    pub fn from_section(section: &ftd_p1::Section, doc_id: &str) -> ftd::ast::Result<AST> {
         Ok(if ftd::ast::Import::is_import(section) {
             AST::Import(ftd::ast::Import::from_p1(section, doc_id)?)
         } else if ftd::ast::Record::is_record(section) {
@@ -267,13 +264,13 @@ impl AST {
 /// uses [`Section::remove_comments()`] and [`SubSection::remove_comments()`] to remove comments
 /// in sections and sub_sections accordingly.
 ///
-/// [`parser`]: ftd::p1::parser::parse
-/// [`Section::remove_comments()`]: ftd::p1::section::Section::remove_comments
-/// [`SubSection::remove_comments()`]: ftd::p1::sub_section::SubSection::remove_comments
-fn ignore_comments(sections: &[ftd::p1::Section]) -> Vec<ftd::p1::Section> {
+/// [`parser`]: ftd_p1::parser::parse
+/// [`Section::remove_comments()`]: ftd_p1::section::Section::remove_comments
+/// [`SubSection::remove_comments()`]: ftd_p1::sub_section::SubSection::remove_comments
+fn ignore_comments(sections: &[ftd_p1::Section]) -> Vec<ftd_p1::Section> {
     // TODO: AST should contain the commented elements. Comments should not be ignored while creating AST.
     sections
         .iter()
         .filter_map(|s| s.remove_comments())
-        .collect::<Vec<ftd::p1::Section>>()
+        .collect::<Vec<ftd_p1::Section>>()
 }

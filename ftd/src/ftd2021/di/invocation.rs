@@ -6,7 +6,7 @@ pub struct Invocation {
 }
 
 impl Invocation {
-    pub(crate) fn is_invocation(section: &ftd::p1::Section) -> bool {
+    pub(crate) fn is_invocation(section: &ftd_p1::Section) -> bool {
         if ftd::ftd2021::di::Import::is_import(section)
             || ftd::ftd2021::di::Record::is_record(section)
         {
@@ -16,7 +16,7 @@ impl Invocation {
     }
 
     pub(crate) fn from_p1(
-        section: &ftd::p1::Section,
+        section: &ftd_p1::Section,
         doc_id: &str,
     ) -> ftd::ftd2021::di::Result<Invocation> {
         if !Self::is_invocation(section) {
@@ -67,7 +67,7 @@ impl Invocation {
         invocation
             .properties
             .push(ftd::ftd2021::di::Property::from_kv(
-                &ftd::p1::header::KV::new(key, kind, value, 0, None, Default::default()),
+                &ftd_p1::KV::new(key, kind, value, 0, None, Default::default()),
                 ftd::ftd2021::di::Source::Header,
             ));
         invocation

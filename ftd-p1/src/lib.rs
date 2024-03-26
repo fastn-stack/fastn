@@ -1,3 +1,7 @@
+extern crate self as ftd_p1;
+
+pub type Map<T> = std::collections::BTreeMap<String, T>;
+
 #[cfg(test)]
 #[macro_use]
 mod test;
@@ -7,7 +11,7 @@ mod parser;
 mod section;
 pub mod utils;
 
-pub use header::{Header, Headers, Section as HSection, KV};
+pub use header::{AccessModifier, BlockRecordHeader, Header, Headers, SectionHeader, KV};
 pub use parser::{parse, parse_with_line_number};
 pub use section::Body;
 pub use section::Section;

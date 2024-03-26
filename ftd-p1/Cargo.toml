@@ -1,0 +1,21 @@
+[package]
+name = "ftd-p1"
+version = "0.1.0"
+authors.workspace = true
+edition.workspace = true
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+
+[dependencies]
+syntect.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+itertools.workspace = true
+
+[dev-dependencies]
+diffy.workspace = true
+pretty_assertions.workspace = true
+indoc.workspace = true

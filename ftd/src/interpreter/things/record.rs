@@ -113,7 +113,7 @@ pub struct Field {
     pub mutable: bool,
     pub value: Option<ftd::interpreter::PropertyValue>,
     pub line_number: usize,
-    pub access_modifier: ftd::p1::header::AccessModifier,
+    pub access_modifier: ftd_p1::AccessModifier,
 }
 
 impl Field {

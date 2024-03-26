@@ -7,12 +7,12 @@ pub struct Record {
 pub const RECORD: &str = "record";
 
 impl Record {
-    pub(crate) fn is_record(section: &ftd::p1::Section) -> bool {
+    pub(crate) fn is_record(section: &ftd_p1::Section) -> bool {
         section.kind.as_ref().map_or(false, |s| s.eq(RECORD))
     }
 
     pub(crate) fn from_p1(
-        section: &ftd::p1::Section,
+        section: &ftd_p1::Section,
         doc_id: &str,
     ) -> ftd::ftd2021::di::Result<Record> {
         if !Self::is_record(section) {
@@ -55,11 +55,11 @@ pub struct Field {
 
 impl Field {
     pub(crate) fn from_header(
-        header: &ftd::p1::Header,
+        header: &ftd_p1::Header,
         doc_id: &str,
     ) -> ftd::ftd2021::di::Result<Field> {
         match header {
-            ftd::p1::Header::KV(ftd::p1::header::KV {
+            ftd_p1::Header::KV(ftd_p1::KV {
                 line_number,
                 key,
                 kind,
@@ -91,8 +91,8 @@ impl Field {
                     )
                 }
             }
-            ftd::p1::Header::Section(_) => unimplemented!(),
-            ftd::p1::Header::BlockRecordHeader(_) => unimplemented!(),
+            ftd_p1::Header::Section(_) => unimplemented!(),
+            ftd_p1::Header::BlockRecordHeader(_) => unimplemented!(),
         }
     }
 
@@ -107,7 +107,7 @@ impl Field {
 }
 
 pub(crate) fn get_fields_from_headers(
-    headers: &ftd::p1::Headers,
+    headers: &ftd_p1::Headers,
     doc_id: &str,
 ) -> ftd::ftd2021::di::Result<Vec<Field>> {
     let mut fields: Vec<Field> = Default::default();

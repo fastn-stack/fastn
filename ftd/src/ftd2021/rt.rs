@@ -21,7 +21,7 @@ impl RT {
         }
     }
 
-    // pub fn set_bool(&mut self, variable: &str, value: bool, doc_id: &str) -> ftd::p1::Result<bool> {
+    // pub fn set_bool(&mut self, variable: &str, value: bool, doc_id: &str) -> ftd_p1::Result<bool> {
     //     match self.bag.get(variable) {
     //         Some(ftd::p2::Thing::Variable(v)) => match v.value {
     //             ftd::Value::Boolean { value: old } => {

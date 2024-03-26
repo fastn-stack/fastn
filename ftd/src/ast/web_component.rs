@@ -23,12 +23,12 @@ impl WebComponentDefinition {
         }
     }
 
-    pub fn is_web_component_definition(section: &ftd::p1::Section) -> bool {
+    pub fn is_web_component_definition(section: &ftd_p1::Section) -> bool {
         section.kind.as_ref().map_or(false, |s| s.eq(WEB_COMPONENT))
     }
 
     pub fn from_p1(
-        section: &ftd::p1::Section,
+        section: &ftd_p1::Section,
         doc_id: &str,
     ) -> ftd::ast::Result<WebComponentDefinition> {
         if !Self::is_web_component_definition(section) {

@@ -10,7 +10,7 @@ pub enum DI {
 
 impl DI {
     pub fn from_sections(
-        sections: &[ftd::p1::Section],
+        sections: &[ftd_p1::Section],
         doc_id: &str,
     ) -> ftd::ftd2021::di::Result<Vec<DI>> {
         let mut di_vec = vec![];
@@ -20,7 +20,7 @@ impl DI {
         Ok(di_vec)
     }
 
-    pub fn from_section(section: &ftd::p1::Section, doc_id: &str) -> ftd::ftd2021::di::Result<DI> {
+    pub fn from_section(section: &ftd_p1::Section, doc_id: &str) -> ftd::ftd2021::di::Result<DI> {
         Ok(if ftd::ftd2021::di::Import::is_import(section) {
             DI::Import(ftd::ftd2021::di::Import::from_p1(section, doc_id)?)
         } else if ftd::ftd2021::di::Record::is_record(section) {

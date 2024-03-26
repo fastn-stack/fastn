@@ -308,7 +308,7 @@ fn find_file_groups(
     std::path::PathBuf,
 )> {
     let files = {
-        let mut f = ftd::utils::find_all_files_matching_extension_recursively("t/js", "ftd");
+        let mut f = ftd_p1::utils::find_all_files_matching_extension_recursively("t/js", "ftd");
         f.sort();
         f
     };

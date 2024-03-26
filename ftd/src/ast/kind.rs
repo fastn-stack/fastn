@@ -515,6 +515,34 @@ impl VariableValue {
         }
     }
 
+    pub fn get_processor_body(&self, doc_id: &str) -> ftd::ast::Result<Option<BodyValue>> {
+        match self {
+            VariableValue::Record { body, .. } => Ok(body.clone()),
+            VariableValue::String {
+                value, line_number, ..
+            } => {
+                if value.is_empty() {
+                    return Ok(None);
+                }
+                Ok(Some(BodyValue {
+                    value: value.to_string(),
+                    line_number: *line_number,
+                }))
+            }
+            VariableValue::List { value, .. } => {
+                let value = value
+                    .first()
+                    .and_then(|v| v.value.get_processor_body(doc_id).ok().flatten());
+                Ok(value)
+            }
+            t => ftd::ast::parse_error(
+                format!("Expected Body, found: `{:?}`", t),
+                doc_id,
+                self.line_number(),
+            ),
+        }
+    }
+
     fn into_optional(self) -> VariableValue {
         match self {
             t @ VariableValue::Optional { .. } => t,
@@ -527,7 +555,7 @@ impl VariableValue {
     }
 
     pub(crate) fn from_p1_with_modifier(
-        section: &ftd::p1::Section,
+        section: &ftd_p1::Section,
         doc_id: &str,
         kind: &ftd::ast::VariableKind,
     ) -> ftd::ast::Result<VariableValue> {
@@ -536,7 +564,7 @@ impl VariableValue {
     }
 
     pub(crate) fn from_header_with_modifier(
-        header: &ftd::p1::Header,
+        header: &ftd_p1::Header,
         doc_id: &str,
         kind: &ftd::ast::VariableKind,
     ) -> ftd::ast::Result<VariableValue> {
@@ -592,7 +620,7 @@ impl VariableValue {
     }
 
     pub(crate) fn from_p1(
-        section: &ftd::p1::Section,
+        section: &ftd_p1::Section,
         doc_id: &str,
     ) -> ftd::ast::Result<VariableValue> {
         let values = section
@@ -686,14 +714,14 @@ impl VariableValue {
     }
 
     pub(crate) fn from_p1_header(
-        header: &ftd::p1::Header,
+        header: &ftd_p1::Header,
         doc_id: &str,
     ) -> ftd::ast::Result<VariableValue> {
         Ok(match header {
-            ftd::p1::Header::KV(ftd::p1::header::KV {
+            ftd_p1::Header::KV(ftd_p1::KV {
                 value, line_number, ..
             }) => VariableValue::from_value(value, ftd::ast::ValueSource::Default, *line_number),
-            ftd::p1::Header::Section(ftd::p1::header::Section {
+            ftd_p1::Header::Section(ftd_p1::SectionHeader {
                 section,
                 line_number,
                 condition,
@@ -713,7 +741,7 @@ impl VariableValue {
                     .as_ref()
                     .map(|expr| ftd::ast::Condition::new(expr, *line_number)),
             },
-            ftd::p1::Header::BlockRecordHeader(ftd::p1::header::BlockRecordHeader {
+            ftd_p1::Header::BlockRecordHeader(ftd_p1::BlockRecordHeader {
                 key,
                 caption,
                 body,
@@ -809,7 +837,7 @@ impl Condition {
     }
 
     pub(crate) fn from_headers(
-        headers: &ftd::p1::Headers,
+        headers: &ftd_p1::Headers,
         doc_id: &str,
     ) -> ftd::ast::Result<Option<Condition>> {
         let condition = headers

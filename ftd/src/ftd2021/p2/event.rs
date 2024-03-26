@@ -274,7 +274,7 @@ impl ActionKind {
         }
     }
 
-    // pub fn from_string(s: &str, doc_id: &str) -> ftd::p1::Result<Self> {
+    // pub fn from_string(s: &str, doc_id: &str) -> ftd_p1::Result<Self> {
     //     match s {
     //         "toggle" => Ok(Self::Toggle),
     //         "increment" => Ok(Self::Increment),

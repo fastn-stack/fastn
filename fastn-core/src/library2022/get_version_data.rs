@@ -1,24 +1,24 @@
 use itertools::Itertools;
 
 pub async fn processor<'a>(
-    section: &ftd::p1::Section,
+    section: &ftd_p1::Section,
     doc: &ftd::p2::TDoc<'a>,
     config: &fastn_core::Config,
     document_id: &str,
     base_url: &str,
-) -> ftd::p1::Result<ftd::Value> {
+) -> ftd_p1::Result<ftd::Value> {
     let versions =
         config
             .get_versions(&config.package)
             .await
-            .map_err(|e| ftd::p1::Error::ParseError {
+            .map_err(|e| ftd_p1::Error::ParseError {
                 message: format!("Cant find versions: {:?}", e),
                 doc_id: doc.name.to_string(),
                 line_number: section.line_number,
             })?;
 
     let version = if let Some((v, _)) = document_id.split_once('/') {
-        fastn_core::Version::parse(v).map_err(|e| ftd::p1::Error::ParseError {
+        fastn_core::Version::parse(v).map_err(|e| ftd_p1::Error::ParseError {
             message: format!("{:?}", e),
             doc_id: doc.name.to_string(),
             line_number: section.line_number,

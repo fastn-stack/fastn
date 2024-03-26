@@ -23,7 +23,6 @@ pub mod html;
 pub mod interpreter;
 pub mod js;
 pub mod node;
-pub mod p1;
 mod parser;
 pub use parser::parse_doc;
 #[cfg(feature = "native-rendering")]
@@ -31,7 +30,6 @@ pub mod taffy;
 #[cfg(feature = "terminal")]
 pub mod terminal;
 pub mod test_helper;
-mod utils;
 #[cfg(feature = "native-rendering")]
 mod wasm;
 
@@ -50,7 +48,7 @@ static THEME_CSS_DIR: include_dir::Dir<'_> =
 
 pub fn theme_css() -> ftd::Map<String> {
     let mut themes: ftd::Map<String> = Default::default();
-    // let paths = ftd::utils::find_all_files_matching_extension_recursively("theme_css", "css");
+    // let paths = ftd_p1::utils::find_all_files_matching_extension_recursively("theme_css", "css");
     for file in THEME_CSS_DIR.files() {
         let stem = file.path().file_stem().unwrap().to_str().unwrap();
         themes.insert(stem.to_string(), file.contents_utf8().unwrap().to_string());
