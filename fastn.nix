@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ pkg-config ];
 
+  # TODO:use deno_core. can't do this until we can build rusty_v8 with musl
+  # libc
   buildFeatures = [ "quickjs" ];
 
   buildInputs = lib.optional stdenv.targetPlatform.isWindows [
