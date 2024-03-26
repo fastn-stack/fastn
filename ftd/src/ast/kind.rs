@@ -532,9 +532,8 @@ impl VariableValue {
             VariableValue::List { value, .. } => {
                 let value = value
                     .first()
-                    .map(|v| v.value.get_processor_body(doc_id).ok().flatten())
-                    .flatten();
-                return Ok(value);
+                    .and_then(|v| v.value.get_processor_body(doc_id).ok().flatten());
+                Ok(value)
             }
             t => ftd::ast::parse_error(
                 format!("Expected Body, found: `{:?}`", t),
