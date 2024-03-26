@@ -7,7 +7,7 @@ pub fn split_at(text: &str, at: &str) -> (String, Option<String>) {
 }
 
 pub fn get_import_alias(input: &str) -> (String, String) {
-    let (module, alias) = ftd::ast::utils::split_at(input, AS);
+    let (module, alias) = ftd_ast::utils::split_at(input, AS);
     if let Some(alias) = alias {
         return (module, alias);
     }
@@ -26,8 +26,8 @@ pub fn get_import_alias(input: &str) -> (String, String) {
 
 pub(crate) fn is_variable_mutable(name: &str) -> bool {
     name.starts_with(REFERENCE)
-        && !name.eq(ftd::ast::utils::PROCESSOR)
-        && !name.eq(ftd::ast::utils::LOOP)
+        && !name.eq(ftd_ast::utils::PROCESSOR)
+        && !name.eq(ftd_ast::utils::LOOP)
 }
 
 pub(crate) fn is_condition(value: &str, kind: &Option<String>) -> bool {
@@ -37,19 +37,19 @@ pub(crate) fn is_condition(value: &str, kind: &Option<String>) -> bool {
 pub(crate) fn get_js_and_fields_from_headers(
     headers: &ftd_p1::Headers,
     doc_id: &str,
-) -> ftd::ast::Result<(Option<String>, Vec<ftd::ast::Argument>)> {
-    let mut fields: Vec<ftd::ast::Argument> = Default::default();
+) -> ftd_ast::Result<(Option<String>, Vec<ftd_ast::Argument>)> {
+    let mut fields: Vec<ftd_ast::Argument> = Default::default();
     let mut js = None;
     for header in headers.0.iter() {
-        if header.get_kind().is_none() && header.get_key().eq(ftd::ast::constants::JS) {
-            js = Some(header.get_value(doc_id)?.ok_or(ftd::ast::Error::Parse {
+        if header.get_kind().is_none() && header.get_key().eq(ftd_ast::constants::JS) {
+            js = Some(header.get_value(doc_id)?.ok_or(ftd_ast::Error::Parse {
                 message: "js statement is blank".to_string(),
                 doc_id: doc_id.to_string(),
                 line_number: header.get_line_number(),
             })?);
             continue;
         }
-        fields.push(ftd::ast::Argument::from_header(header, doc_id)?);
+        fields.push(ftd_ast::Argument::from_header(header, doc_id)?);
     }
     Ok((js, fields))
 }
@@ -57,19 +57,19 @@ pub(crate) fn get_js_and_fields_from_headers(
 pub(crate) fn get_css_and_fields_from_headers(
     headers: &ftd_p1::Headers,
     doc_id: &str,
-) -> ftd::ast::Result<(Option<String>, Vec<ftd::ast::Argument>)> {
-    let mut fields: Vec<ftd::ast::Argument> = Default::default();
+) -> ftd_ast::Result<(Option<String>, Vec<ftd_ast::Argument>)> {
+    let mut fields: Vec<ftd_ast::Argument> = Default::default();
     let mut css = None;
     for header in headers.0.iter() {
-        if header.get_kind().is_none() && header.get_key().eq(ftd::ast::constants::CSS) {
-            css = Some(header.get_value(doc_id)?.ok_or(ftd::ast::Error::Parse {
+        if header.get_kind().is_none() && header.get_key().eq(ftd_ast::constants::CSS) {
+            css = Some(header.get_value(doc_id)?.ok_or(ftd_ast::Error::Parse {
                 message: "css statement is blank".to_string(),
                 doc_id: doc_id.to_string(),
                 line_number: header.get_line_number(),
             })?);
             continue;
         }
-        fields.push(ftd::ast::Argument::from_header(header, doc_id)?);
+        fields.push(ftd_ast::Argument::from_header(header, doc_id)?);
     }
     Ok((css, fields))
 }

@@ -1,5 +1,5 @@
 pub async fn process(
-    value: ftd::ast::VariableValue,
+    value: ftd_ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &mut fastn_core::RequestConfig,
@@ -7,7 +7,7 @@ pub async fn process(
     let (headers, line_number) = if let Ok(val) = value.get_record(doc.name) {
         (val.2.to_owned(), val.5.to_owned())
     } else {
-        (ftd::ast::HeaderValues::new(vec![]), value.line_number())
+        (ftd_ast::HeaderValues::new(vec![]), value.line_number())
     };
 
     let method = headers

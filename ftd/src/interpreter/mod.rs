@@ -57,7 +57,7 @@ pub enum Error {
     OldP1Error(#[from] ftd::ftd2021::p1::Error),
 
     #[error("ASTError: {}", _0)]
-    ASTError(#[from] ftd::ast::Error),
+    ASTError(#[from] ftd_ast::Error),
 
     #[error("InvalidKind: {doc_id}:{line_number} -> {message}")]
     InvalidKind {

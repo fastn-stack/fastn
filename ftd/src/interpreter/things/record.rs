@@ -15,7 +15,7 @@ impl Record {
     }
 
     pub(crate) fn scan_ast(
-        ast: ftd::ast::AST,
+        ast: ftd_ast::AST,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         let record = ast.get_record(doc.name)?;
@@ -23,7 +23,7 @@ impl Record {
     }
 
     pub(crate) fn scan_record(
-        record: ftd::ast::Record,
+        record: ftd_ast::Record,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         let name = doc.resolve_name(record.name.as_str());
@@ -36,7 +36,7 @@ impl Record {
     }
 
     pub(crate) fn from_ast(
-        ast: ftd::ast::AST,
+        ast: ftd_ast::AST,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Record>> {
         let record = ast.get_record(doc.name)?;
@@ -44,7 +44,7 @@ impl Record {
     }
 
     pub(crate) fn from_record(
-        record: ftd::ast::Record,
+        record: ftd_ast::Record,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Record>> {
         let name = doc.resolve_name(record.name.as_str());
@@ -215,7 +215,7 @@ impl Field {
     }
 
     pub(crate) fn scan_ast_fields(
-        fields: Vec<ftd::ast::Field>,
+        fields: Vec<ftd_ast::Field>,
         doc: &mut ftd::interpreter::TDoc,
         known_kinds: &ftd::Map<ftd::interpreter::Kind>,
     ) -> ftd::interpreter::Result<()> {
@@ -226,7 +226,7 @@ impl Field {
     }
 
     pub fn resolve_kinds_from_ast_fields(
-        ast_fields: Vec<ftd::ast::Field>,
+        ast_fields: Vec<ftd_ast::Field>,
         doc: &mut ftd::interpreter::TDoc,
         known_kinds: &ftd::Map<ftd::interpreter::Kind>,
     ) -> ftd::interpreter::Result<
@@ -247,7 +247,7 @@ impl Field {
 
     pub fn resolve_values_from_ast_fields(
         definition_name: &str,
-        mut fields_with_resolved_kinds: Vec<(Field, Option<ftd::ast::VariableValue>)>,
+        mut fields_with_resolved_kinds: Vec<(Field, Option<ftd_ast::VariableValue>)>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<Field>>> {
         use itertools::Itertools;
@@ -284,7 +284,7 @@ impl Field {
 
     pub(crate) fn from_ast_fields(
         name: &str,
-        fields: Vec<ftd::ast::Field>,
+        fields: Vec<ftd_ast::Field>,
         doc: &mut ftd::interpreter::TDoc,
         known_kinds: &ftd::Map<ftd::interpreter::Kind>,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<Field>>> {
@@ -303,7 +303,7 @@ impl Field {
     }
 
     pub(crate) fn scan_ast_field(
-        field: ftd::ast::Field,
+        field: ftd_ast::Field,
         doc: &mut ftd::interpreter::TDoc,
         known_kinds: &ftd::Map<ftd::interpreter::Kind>,
     ) -> ftd::interpreter::Result<()> {
@@ -317,7 +317,7 @@ impl Field {
     }
 
     pub(crate) fn from_ast_field(
-        field: ftd::ast::Field,
+        field: ftd_ast::Field,
         doc: &mut ftd::interpreter::TDoc,
         known_kinds: &ftd::Map<ftd::interpreter::Kind>,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Field>> {
@@ -352,11 +352,11 @@ impl Field {
     }
 
     pub(crate) fn from_ast_field_kind(
-        field: ftd::ast::Field,
+        field: ftd_ast::Field,
         doc: &mut ftd::interpreter::TDoc,
         known_kinds: &ftd::Map<ftd::interpreter::Kind>,
     ) -> ftd::interpreter::Result<
-        ftd::interpreter::StateWithThing<(Field, Option<ftd::ast::VariableValue>)>,
+        ftd::interpreter::StateWithThing<(Field, Option<ftd_ast::VariableValue>)>,
     > {
         let kind = try_ok_state!(ftd::interpreter::KindData::from_ast_kind(
             field.kind,

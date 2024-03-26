@@ -1,5 +1,5 @@
 pub fn process(
-    value: ftd::ast::VariableValue,
+    value: ftd_ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc,
     req_config: &fastn_core::RequestConfig,
@@ -17,7 +17,7 @@ pub fn process(
 
 /// processor: user-group-by-id
 pub fn process_by_id(
-    value: ftd::ast::VariableValue,
+    value: ftd_ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc,
     req_config: &fastn_core::RequestConfig,
@@ -55,7 +55,7 @@ pub fn process_by_id(
 /// processor: get-identities
 /// This is used to get all the identities of the current document
 pub async fn get_identities(
-    value: ftd::ast::VariableValue,
+    value: ftd_ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &fastn_core::RequestConfig,
@@ -94,7 +94,7 @@ pub async fn get_identities(
 
 // is user can_read the document or not based on defined readers in sitemap
 pub async fn is_reader<'a>(
-    value: ftd::ast::VariableValue,
+    value: ftd_ast::VariableValue,
     _kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'a>,
     req_config: &fastn_core::RequestConfig,

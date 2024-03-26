@@ -54,6 +54,7 @@ fastn-package.workspace = true
 fluent.workspace = true
 ftd.workspace = true
 ftd-p1.workspace = true
+ftd-ast.workspace = true
 futures-core.workspace = true
 futures-util.workspace = true
 futures.workspace = true

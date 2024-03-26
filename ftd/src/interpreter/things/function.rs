@@ -30,7 +30,7 @@ impl Function {
     }
 
     pub(crate) fn scan_ast(
-        ast: ftd::ast::AST,
+        ast: ftd_ast::AST,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         let function = ast.get_function(doc.name)?;
@@ -47,7 +47,7 @@ impl Function {
     }
 
     pub(crate) fn from_ast(
-        ast: ftd::ast::AST,
+        ast: ftd_ast::AST,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Function>>
     {
@@ -57,10 +57,10 @@ impl Function {
         let js = if let Some(ref js) = function.js {
             Some(try_ok_state!(
                 ftd::interpreter::PropertyValue::from_ast_value(
-                    ftd::ast::VariableValue::String {
+                    ftd_ast::VariableValue::String {
                         value: js.to_string(),
                         line_number: function.line_number(),
-                        source: ftd::ast::ValueSource::Default,
+                        source: ftd_ast::ValueSource::Default,
                         condition: None
                     },
                     doc,
@@ -423,10 +423,10 @@ impl FunctionCall {
                 }
                 try_ok_state!(
                     ftd::interpreter::PropertyValue::from_ast_value_with_argument(
-                        ftd::ast::VariableValue::String {
+                        ftd_ast::VariableValue::String {
                             value: property,
                             line_number,
-                            source: ftd::ast::ValueSource::Default,
+                            source: ftd_ast::ValueSource::Default,
                             condition: None
                         },
                         doc,

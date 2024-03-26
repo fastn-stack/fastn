@@ -1,10 +1,10 @@
 pub(crate) fn get_p1_data(
     name: &str,
-    value: &ftd::ast::VariableValue,
+    value: &ftd_ast::VariableValue,
     doc_name: &str,
-) -> ftd::interpreter::Result<(ftd::ast::HeaderValues, String)> {
-    if let ftd::ast::VariableValue::String { value, .. } = value {
-        return Ok((ftd::ast::HeaderValues::new(vec![]), value.clone()));
+) -> ftd::interpreter::Result<(ftd_ast::HeaderValues, String)> {
+    if let ftd_ast::VariableValue::String { value, .. } = value {
+        return Ok((ftd_ast::HeaderValues::new(vec![]), value.clone()));
     }
 
     match value.get_record(doc_name) {
@@ -29,12 +29,12 @@ pub(crate) fn get_p1_data(
 }
 
 pub async fn process(
-    value: ftd::ast::VariableValue,
+    value: ftd_ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &fastn_core::RequestConfig,
     db_config: &fastn_core::library2022::processor::sql::DatabaseConfig,
-    headers: ftd::ast::HeaderValues,
+    headers: ftd_ast::HeaderValues,
     query: &str,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let sqlite_database_path = req_config.config.ds.root().join(&db_config.db_url);
@@ -72,7 +72,7 @@ pub(crate) fn result_to_value(
     result: Result<Vec<Vec<serde_json::Value>>, String>,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
-    value: &ftd::ast::VariableValue,
+    value: &ftd_ast::VariableValue,
     status: usize,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     match result {
@@ -140,7 +140,7 @@ fn resolve_variable_from_headers(
     var: &str,
     param_type: &str,
     doc: &ftd::interpreter::TDoc,
-    headers: &ftd::ast::HeaderValues,
+    headers: &ftd_ast::HeaderValues,
     line_number: usize,
 ) -> ftd::interpreter::Result<Box<dyn rusqlite::ToSql>> {
     let header = match headers.optional_header_by_name(var, doc.name, line_number)? {
@@ -148,7 +148,7 @@ fn resolve_variable_from_headers(
         None => return Ok(Box::new(None::<Box<dyn rusqlite::ToSql>>)),
     };
 
-    if let ftd::ast::VariableValue::String { value, .. } = &header.value {
+    if let ftd_ast::VariableValue::String { value, .. } = &header.value {
         if let Some(stripped) = value.strip_prefix('$') {
             return Ok(Box::new(
                 resolve_variable_from_doc(stripped, doc, line_number).map(Some)?,
@@ -157,11 +157,11 @@ fn resolve_variable_from_headers(
     }
 
     let param_value: Box<dyn rusqlite::ToSql> = match (param_type, &header.value) {
-        ("TEXT", ftd::ast::VariableValue::String { value, .. }) => Box::new(value.clone()),
-        ("INTEGER", ftd::ast::VariableValue::String { value, .. }) => {
+        ("TEXT", ftd_ast::VariableValue::String { value, .. }) => Box::new(value.clone()),
+        ("INTEGER", ftd_ast::VariableValue::String { value, .. }) => {
             Box::new(value.parse::<i32>().unwrap())
         }
-        ("REAL", ftd::ast::VariableValue::String { value, .. }) => {
+        ("REAL", ftd_ast::VariableValue::String { value, .. }) => {
             Box::new(value.parse::<f32>().unwrap())
         }
         _ => unimplemented!(), // Handle other types as needed
@@ -174,7 +174,7 @@ fn resolve_param(
     param_name: &str,
     param_type: &str,
     doc: &ftd::interpreter::TDoc,
-    headers: &ftd::ast::HeaderValues,
+    headers: &ftd_ast::HeaderValues,
     line_number: usize,
 ) -> ftd::interpreter::Result<Box<dyn rusqlite::ToSql>> {
     resolve_variable_from_headers(param_name, param_type, doc, headers, line_number)
@@ -198,7 +198,7 @@ enum State {
 fn extract_named_parameters(
     query: &str,
     doc: &ftd::interpreter::TDoc,
-    headers: ftd::ast::HeaderValues,
+    headers: ftd_ast::HeaderValues,
     line_number: usize,
 ) -> ftd::interpreter::Result<Vec<Box<dyn rusqlite::ToSql>>> {
     let mut params = Vec::new();
@@ -295,7 +295,7 @@ pub(crate) async fn execute_query(
     database_path: &fastn_ds::Path,
     query: &str,
     doc: &ftd::interpreter::TDoc<'_>,
-    headers: ftd::ast::HeaderValues,
+    headers: ftd_ast::HeaderValues,
     line_number: usize,
 ) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
     let doc_name = doc.name;

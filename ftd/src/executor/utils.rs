@@ -478,11 +478,11 @@ fn update_inherited_reference_in_property_value(
 
             if let Ok(ftd::interpreter::StateWithThing::Thing(property)) =
                 ftd::interpreter::PropertyValue::from_ast_value(
-                    ftd::ast::VariableValue::String {
+                    ftd_ast::VariableValue::String {
                         // TODO: ftd#default-colors, ftd#default-types
                         value: format!("${}", reference_name),
                         line_number: 0,
-                        source: ftd::ast::ValueSource::Default,
+                        source: ftd_ast::ValueSource::Default,
                         condition: None,
                     },
                     &mut doc.itdoc(),
@@ -515,7 +515,7 @@ fn update_inherited_reference_in_property_value(
     {
         if let Ok(ftd::interpreter::StateWithThing::Thing(property)) =
             ftd::interpreter::PropertyValue::from_ast_value(
-                ftd::ast::VariableValue::String {
+                ftd_ast::VariableValue::String {
                     // TODO: ftd#default-colors, ftd#default-types
                     value: {
                         format!(
@@ -537,7 +537,7 @@ fn update_inherited_reference_in_property_value(
                         )
                     },
                     line_number: 0,
-                    source: ftd::ast::ValueSource::Default,
+                    source: ftd_ast::ValueSource::Default,
                     condition: None,
                 },
                 &mut doc.itdoc(),

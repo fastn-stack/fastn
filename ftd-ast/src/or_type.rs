@@ -8,7 +8,7 @@ pub struct OrType {
 pub const ORTYPE: &str = "or-type";
 
 impl OrType {
-    fn new(name: &str, variants: Vec<ftd::ast::OrTypeVariant>, line_number: usize) -> OrType {
+    fn new(name: &str, variants: Vec<ftd_ast::OrTypeVariant>, line_number: usize) -> OrType {
         OrType {
             name: name.to_string(),
             variants,
@@ -20,9 +20,9 @@ impl OrType {
         section.kind.as_ref().map_or(false, |s| s.eq(ORTYPE))
     }
 
-    pub(crate) fn from_p1(section: &ftd_p1::Section, doc_id: &str) -> ftd::ast::Result<OrType> {
+    pub(crate) fn from_p1(section: &ftd_p1::Section, doc_id: &str) -> ftd_ast::Result<OrType> {
         if !Self::is_or_type(section) {
-            return ftd::ast::parse_error(
+            return ftd_ast::parse_error(
                 format!("Section is not or-type section, found `{:?}`", section),
                 doc_id,
                 section.line_number,
@@ -45,13 +45,13 @@ impl OrType {
     }
 }
 
-impl ftd::ast::Field {
+impl ftd_ast::Field {
     pub(crate) fn from_p1(
         section: &ftd_p1::Section,
         doc_id: &str,
-    ) -> ftd::ast::Result<ftd::ast::Field> {
-        if !ftd::ast::VariableDefinition::is_variable_definition(section) {
-            return ftd::ast::parse_error(
+    ) -> ftd_ast::Result<ftd_ast::Field> {
+        if !ftd_ast::VariableDefinition::is_variable_definition(section) {
+            return ftd_ast::parse_error(
                 format!(
                     "Section is not or-type variant section, found `{:?}`",
                     section
@@ -61,18 +61,18 @@ impl ftd::ast::Field {
             );
         }
 
-        let kind = ftd::ast::VariableKind::get_kind(
+        let kind = ftd_ast::VariableKind::get_kind(
             section.kind.as_ref().unwrap().as_str(),
             doc_id,
             section.line_number,
         )?;
 
-        let value = ftd::ast::VariableValue::from_p1_with_modifier(section, doc_id, &kind)?.inner();
+        let value = ftd_ast::VariableValue::from_p1_with_modifier(section, doc_id, &kind)?.inner();
 
-        Ok(ftd::ast::Field::new(
-            section.name.trim_start_matches(ftd::ast::utils::REFERENCE),
+        Ok(ftd_ast::Field::new(
+            section.name.trim_start_matches(ftd_ast::utils::REFERENCE),
             kind,
-            ftd::ast::utils::is_variable_mutable(section.name.as_str()),
+            ftd_ast::utils::is_variable_mutable(section.name.as_str()),
             value,
             section.line_number,
             Default::default(),
@@ -82,21 +82,21 @@ impl ftd::ast::Field {
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum OrTypeVariant {
-    AnonymousRecord(ftd::ast::Record),
-    Regular(ftd::ast::Field),
-    Constant(ftd::ast::Field),
+    AnonymousRecord(ftd_ast::Record),
+    Regular(ftd_ast::Field),
+    Constant(ftd_ast::Field),
 }
 
 impl OrTypeVariant {
-    pub fn new_record(record: ftd::ast::Record) -> OrTypeVariant {
+    pub fn new_record(record: ftd_ast::Record) -> OrTypeVariant {
         OrTypeVariant::AnonymousRecord(record)
     }
 
-    pub fn new_variant(variant: ftd::ast::Field) -> OrTypeVariant {
+    pub fn new_variant(variant: ftd_ast::Field) -> OrTypeVariant {
         OrTypeVariant::Regular(variant)
     }
 
-    pub fn new_constant(variant: ftd::ast::Field) -> OrTypeVariant {
+    pub fn new_constant(variant: ftd_ast::Field) -> OrTypeVariant {
         OrTypeVariant::Constant(variant)
     }
 
@@ -120,26 +120,26 @@ impl OrTypeVariant {
     pub(crate) fn is_constant(section: &ftd_p1::Section) -> bool {
         section
             .name
-            .starts_with(format!("{} ", ftd::ast::constants::CONSTANT).as_str())
+            .starts_with(format!("{} ", ftd_ast::constants::CONSTANT).as_str())
     }
 
-    pub fn from_p1(section: &ftd_p1::Section, doc_id: &str) -> ftd::ast::Result<OrTypeVariant> {
-        if ftd::ast::Record::is_record(section) {
-            Ok(OrTypeVariant::new_record(ftd::ast::Record::from_p1(
+    pub fn from_p1(section: &ftd_p1::Section, doc_id: &str) -> ftd_ast::Result<OrTypeVariant> {
+        if ftd_ast::Record::is_record(section) {
+            Ok(OrTypeVariant::new_record(ftd_ast::Record::from_p1(
                 section, doc_id,
             )?))
         } else if OrTypeVariant::is_constant(section) {
             let mut section = section.to_owned();
             section.name = section
                 .name
-                .trim_start_matches(ftd::ast::constants::CONSTANT)
+                .trim_start_matches(ftd_ast::constants::CONSTANT)
                 .trim()
                 .to_string();
-            Ok(OrTypeVariant::new_constant(ftd::ast::Field::from_p1(
+            Ok(OrTypeVariant::new_constant(ftd_ast::Field::from_p1(
                 &section, doc_id,
             )?))
         } else {
-            Ok(OrTypeVariant::new_constant(ftd::ast::Field::from_p1(
+            Ok(OrTypeVariant::new_constant(ftd_ast::Field::from_p1(
                 section, doc_id,
             )?))
         }

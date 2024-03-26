@@ -209,10 +209,10 @@ impl PropertyValue {
         definition_name_with_arguments: Option<(&str, &[String])>,
         loop_object_name_and_kind: &Option<String>,
     ) -> ftd::interpreter::Result<()> {
-        let value = ftd::ast::VariableValue::String {
+        let value = ftd_ast::VariableValue::String {
             value: value.to_string(),
             line_number,
-            source: ftd::ast::ValueSource::Default,
+            source: ftd_ast::ValueSource::Default,
             condition: None,
         };
 
@@ -234,10 +234,10 @@ impl PropertyValue {
         loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::PropertyValue>>
     {
-        let value = ftd::ast::VariableValue::String {
+        let value = ftd_ast::VariableValue::String {
             value: value.to_string(),
             line_number,
-            source: ftd::ast::ValueSource::Default,
+            source: ftd_ast::ValueSource::Default,
             condition: None,
         };
 
@@ -252,14 +252,14 @@ impl PropertyValue {
     }
 
     pub(crate) fn scan_ast_value(
-        value: ftd::ast::VariableValue,
+        value: ftd_ast::VariableValue,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         PropertyValue::scan_ast_value_with_argument(value, doc, None, &None)
     }
 
     pub(crate) fn scan_ast_value_with_argument(
-        value: ftd::ast::VariableValue,
+        value: ftd_ast::VariableValue,
         doc: &mut ftd::interpreter::TDoc,
         definition_name_with_arguments: Option<(&str, &[String])>,
         loop_object_name_and_kind: &Option<String>,
@@ -282,7 +282,7 @@ impl PropertyValue {
     }
 
     fn scan_reference_from_ast_value(
-        value: ftd::ast::VariableValue,
+        value: ftd_ast::VariableValue,
         doc: &mut ftd::interpreter::TDoc,
         definition_name_with_arguments: Option<(&str, &[String])>,
         loop_object_name_and_kind: &Option<String>,
@@ -338,7 +338,7 @@ impl PropertyValue {
     }
 
     pub(crate) fn from_ast_value(
-        value: ftd::ast::VariableValue,
+        value: ftd_ast::VariableValue,
         doc: &mut ftd::interpreter::TDoc,
         mutable: bool,
         expected_kind: Option<&ftd::interpreter::KindData>,
@@ -355,7 +355,7 @@ impl PropertyValue {
     }
 
     pub(crate) fn from_ast_value_with_argument(
-        value: ftd::ast::VariableValue,
+        value: ftd_ast::VariableValue,
         doc: &mut ftd::interpreter::TDoc,
         is_mutable: bool,
         expected_kind: Option<&ftd::interpreter::KindData>,
@@ -386,7 +386,7 @@ impl PropertyValue {
 
     fn to_ui_value(
         key: &str,
-        value: ftd::ast::VariableValue,
+        value: ftd_ast::VariableValue,
         doc: &mut ftd::interpreter::TDoc,
         definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
@@ -404,7 +404,7 @@ impl PropertyValue {
                 loop_object_name_and_kind,
             );
         }
-        let ast_component = ftd::ast::Component::from_variable_value(key, value, doc.name)?;
+        let ast_component = ftd_ast::Component::from_variable_value(key, value, doc.name)?;
         let component = try_ok_state!(ftd::interpreter::Component::from_ast_component(
             ast_component,
             definition_name_with_arguments,
@@ -426,7 +426,7 @@ impl PropertyValue {
 
     fn from_record(
         record: &ftd::interpreter::Record,
-        value: ftd::ast::VariableValue,
+        value: ftd_ast::VariableValue,
         doc: &mut ftd::interpreter::TDoc,
         is_mutable: bool,
         _expected_kind: &ftd::interpreter::KindData,
@@ -452,7 +452,7 @@ impl PropertyValue {
         } else {
             (
                 Some(value.clone()),
-                ftd::ast::HeaderValues::new(vec![]),
+                ftd_ast::HeaderValues::new(vec![]),
                 None,
                 value.line_number(),
             )
@@ -477,10 +477,10 @@ impl PropertyValue {
             if field.is_body() && body.is_some() {
                 let body = body.as_ref().unwrap();
                 let property_value = try_ok_state!(PropertyValue::from_ast_value_with_argument(
-                    ftd::ast::VariableValue::String {
+                    ftd_ast::VariableValue::String {
                         value: body.value.to_string(),
                         line_number: body.line_number,
-                        source: ftd::ast::ValueSource::Body,
+                        source: ftd_ast::ValueSource::Body,
                         condition: None
                     },
                     doc,
@@ -510,7 +510,7 @@ impl PropertyValue {
                 continue;
             }
             if field.kind.is_list() {
-                let mut variable = ftd::ast::VariableValue::List {
+                let mut variable = ftd_ast::VariableValue::List {
                     value: vec![],
                     line_number: value.line_number(),
                     condition: None,
@@ -624,13 +624,13 @@ impl PropertyValue {
     }
 
     fn scan_value_from_ast_value(
-        value: ftd::ast::VariableValue,
+        value: ftd_ast::VariableValue,
         doc: &mut ftd::interpreter::TDoc,
         definition_name_with_arguments: Option<(&str, &[String])>,
         loop_object_name_and_kind: &Option<String>,
     ) -> ftd::interpreter::Result<()> {
         match value {
-            ftd::ast::VariableValue::Optional { value, .. } if value.is_some() => {
+            ftd_ast::VariableValue::Optional { value, .. } if value.is_some() => {
                 PropertyValue::scan_ast_value_with_argument(
                     value.unwrap(),
                     doc,
@@ -638,7 +638,7 @@ impl PropertyValue {
                     loop_object_name_and_kind,
                 )?;
             }
-            ftd::ast::VariableValue::List { value, .. } => {
+            ftd_ast::VariableValue::List { value, .. } => {
                 for val in value {
                     PropertyValue::scan_ast_value_with_argument(
                         val.value,
@@ -648,7 +648,7 @@ impl PropertyValue {
                     )?;
                 }
             }
-            ftd::ast::VariableValue::Record {
+            ftd_ast::VariableValue::Record {
                 caption,
                 headers,
                 body,
@@ -672,7 +672,7 @@ impl PropertyValue {
                     )?;
                     if let Some(condition) = header.condition {
                         ftd::interpreter::Expression::scan_ast_condition(
-                            ftd::ast::Condition::new(condition.as_str(), header.line_number),
+                            ftd_ast::Condition::new(condition.as_str(), header.line_number),
                             definition_name_with_arguments,
                             loop_object_name_and_kind,
                             doc,
@@ -704,7 +704,7 @@ impl PropertyValue {
     }
 
     fn value_from_ast_value(
-        value: ftd::ast::VariableValue,
+        value: ftd_ast::VariableValue,
         doc: &mut ftd::interpreter::TDoc,
         is_mutable: bool,
         expected_kind: Option<&ftd::interpreter::KindData>,
@@ -727,7 +727,7 @@ impl PropertyValue {
         );
 
         fn get_property_value(
-            value: ftd::ast::VariableValue,
+            value: ftd_ast::VariableValue,
             doc: &mut ftd::interpreter::TDoc,
             is_mutable: bool,
             expected_kind: &ftd::interpreter::KindData,
@@ -745,7 +745,7 @@ impl PropertyValue {
                     let kind = kind.clone().into_kind_data();
                     value.is_null();
                     match value {
-                        ftd::ast::VariableValue::Optional {
+                        ftd_ast::VariableValue::Optional {
                             value: ref ivalue, ..
                         } => match ivalue.as_ref() {
                             None => ftd::interpreter::StateWithThing::new_thing(
@@ -826,7 +826,7 @@ impl PropertyValue {
                 }
                 ftd::interpreter::Kind::List { kind } => {
                     let line_number = value.line_number();
-                    let value_list = value.into_list(doc.name, kind)?;
+                    let value_list = value.into_list(doc.name, kind.get_name())?;
                     let mut values = vec![];
                     for (key, value) in value_list {
                         if !try_ok_state!(ftd::interpreter::utils::kind_eq(
@@ -1011,7 +1011,7 @@ impl PropertyValue {
     }
 
     fn reference_from_ast_value(
-        value: ftd::ast::VariableValue,
+        value: ftd_ast::VariableValue,
         doc: &mut ftd::interpreter::TDoc,
         mutable: bool,
         expected_kind: Option<&ftd::interpreter::KindData>,

@@ -22,7 +22,7 @@ pub enum Error {
     FTDInterpolationError(#[from] fastn_expr::interpolator::InterpolationError),
 
     #[error("FTDAstError: {}", _0)]
-    FTDAstError(#[from] ftd::ast::Error),
+    FTDAstError(#[from] ftd_ast::Error),
 
     #[error("FTDExecError: {}", _0)]
     FTDExecError(#[from] ftd::executor::Error),

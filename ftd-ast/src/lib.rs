@@ -1,19 +1,22 @@
+extern crate self as ftd_ast;
+
 #[cfg(test)]
 #[macro_use]
 mod test;
 
+mod ast;
 mod component;
 mod constants;
 mod function;
 mod import;
 mod kind;
-mod main;
 mod or_type;
 mod record;
-pub(crate) mod utils;
+pub mod utils;
 mod variable;
 mod web_component;
 
+pub use ast::AST;
 pub use component::{
     Argument, Component, ComponentDefinition, Event, Loop, Property, PropertySource,
 };
@@ -24,7 +27,6 @@ pub use kind::{
     BodyValue, Condition, HeaderValues, ValueSource, VariableKind, VariableModifier, VariableValue,
     NULL,
 };
-pub use main::AST;
 pub use or_type::{OrType, OrTypeVariant};
 pub use record::{Field, Record};
 pub use variable::{VariableDefinition, VariableFlags, VariableInvocation};
@@ -48,7 +50,7 @@ pub enum Error {
 
 pub type Result<T> = std::result::Result<T, Error>;
 
-pub fn parse_error<T, S1>(m: S1, doc_id: &str, line_number: usize) -> ftd::ast::Result<T>
+pub fn parse_error<T, S1>(m: S1, doc_id: &str, line_number: usize) -> ftd_ast::Result<T>
 where
     S1: Into<String>,
 {

@@ -2,18 +2,18 @@
 // #[serde(tag = "ast-type", content = "c")]
 pub enum AST {
     #[serde(rename = "import")]
-    Import(ftd::ast::Import),
+    Import(ftd_ast::Import),
     #[serde(rename = "record")]
-    Record(ftd::ast::Record),
+    Record(ftd_ast::Record),
     #[serde(rename = "or-type")]
-    OrType(ftd::ast::OrType),
-    VariableDefinition(ftd::ast::VariableDefinition),
-    VariableInvocation(ftd::ast::VariableInvocation),
-    ComponentDefinition(ftd::ast::ComponentDefinition),
+    OrType(ftd_ast::OrType),
+    VariableDefinition(ftd_ast::VariableDefinition),
+    VariableInvocation(ftd_ast::VariableInvocation),
+    ComponentDefinition(ftd_ast::ComponentDefinition),
     #[serde(rename = "component-invocation")]
-    ComponentInvocation(ftd::ast::Component),
-    FunctionDefinition(ftd::ast::Function),
-    WebComponentDefinition(ftd::ast::WebComponentDefinition),
+    ComponentInvocation(ftd_ast::Component),
+    FunctionDefinition(ftd_ast::Function),
+    WebComponentDefinition(ftd_ast::WebComponentDefinition),
 }
 
 // -- foo:
@@ -30,7 +30,7 @@ pub enum AST {
 // -- ftd.text: hello
 
 impl AST {
-    pub fn from_sections(sections: &[ftd_p1::Section], doc_id: &str) -> ftd::ast::Result<Vec<AST>> {
+    pub fn from_sections(sections: &[ftd_p1::Section], doc_id: &str) -> ftd_ast::Result<Vec<AST>> {
         let mut di_vec = vec![];
         for section in ignore_comments(sections) {
             di_vec.push(AST::from_section(&section, doc_id)?);
@@ -52,27 +52,27 @@ impl AST {
         }
     }
 
-    pub fn from_section(section: &ftd_p1::Section, doc_id: &str) -> ftd::ast::Result<AST> {
-        Ok(if ftd::ast::Import::is_import(section) {
-            AST::Import(ftd::ast::Import::from_p1(section, doc_id)?)
-        } else if ftd::ast::Record::is_record(section) {
-            AST::Record(ftd::ast::Record::from_p1(section, doc_id)?)
-        } else if ftd::ast::OrType::is_or_type(section) {
-            AST::OrType(ftd::ast::OrType::from_p1(section, doc_id)?)
-        } else if ftd::ast::Function::is_function(section) {
-            AST::FunctionDefinition(ftd::ast::Function::from_p1(section, doc_id)?)
-        } else if ftd::ast::VariableDefinition::is_variable_definition(section) {
-            AST::VariableDefinition(ftd::ast::VariableDefinition::from_p1(section, doc_id)?)
-        } else if ftd::ast::VariableInvocation::is_variable_invocation(section) {
-            AST::VariableInvocation(ftd::ast::VariableInvocation::from_p1(section, doc_id)?)
-        } else if ftd::ast::ComponentDefinition::is_component_definition(section) {
-            AST::ComponentDefinition(ftd::ast::ComponentDefinition::from_p1(section, doc_id)?)
-        } else if ftd::ast::WebComponentDefinition::is_web_component_definition(section) {
-            AST::WebComponentDefinition(ftd::ast::WebComponentDefinition::from_p1(section, doc_id)?)
-        } else if ftd::ast::Component::is_component(section) {
-            AST::ComponentInvocation(ftd::ast::Component::from_p1(section, doc_id)?)
+    pub fn from_section(section: &ftd_p1::Section, doc_id: &str) -> ftd_ast::Result<AST> {
+        Ok(if ftd_ast::Import::is_import(section) {
+            AST::Import(ftd_ast::Import::from_p1(section, doc_id)?)
+        } else if ftd_ast::Record::is_record(section) {
+            AST::Record(ftd_ast::Record::from_p1(section, doc_id)?)
+        } else if ftd_ast::OrType::is_or_type(section) {
+            AST::OrType(ftd_ast::OrType::from_p1(section, doc_id)?)
+        } else if ftd_ast::Function::is_function(section) {
+            AST::FunctionDefinition(ftd_ast::Function::from_p1(section, doc_id)?)
+        } else if ftd_ast::VariableDefinition::is_variable_definition(section) {
+            AST::VariableDefinition(ftd_ast::VariableDefinition::from_p1(section, doc_id)?)
+        } else if ftd_ast::VariableInvocation::is_variable_invocation(section) {
+            AST::VariableInvocation(ftd_ast::VariableInvocation::from_p1(section, doc_id)?)
+        } else if ftd_ast::ComponentDefinition::is_component_definition(section) {
+            AST::ComponentDefinition(ftd_ast::ComponentDefinition::from_p1(section, doc_id)?)
+        } else if ftd_ast::WebComponentDefinition::is_web_component_definition(section) {
+            AST::WebComponentDefinition(ftd_ast::WebComponentDefinition::from_p1(section, doc_id)?)
+        } else if ftd_ast::Component::is_component(section) {
+            AST::ComponentInvocation(ftd_ast::Component::from_p1(section, doc_id)?)
         } else {
-            return Err(ftd::ast::Error::Parse {
+            return Err(ftd_ast::Error::Parse {
                 message: format!("Invalid AST, found: `{:?}`", section),
                 doc_id: doc_id.to_string(),
                 line_number: section.line_number,
@@ -94,33 +94,33 @@ impl AST {
         }
     }
 
-    pub fn get_record(self, doc_id: &str) -> ftd::ast::Result<ftd::ast::Record> {
-        if let ftd::ast::AST::Record(r) = self {
+    pub fn get_record(self, doc_id: &str) -> ftd_ast::Result<ftd_ast::Record> {
+        if let ftd_ast::AST::Record(r) = self {
             return Ok(r);
         }
-        ftd::ast::parse_error(
+        ftd_ast::parse_error(
             format!("`{:?}` is not a record", self),
             doc_id,
             self.line_number(),
         )
     }
 
-    pub fn get_or_type(self, doc_id: &str) -> ftd::ast::Result<ftd::ast::OrType> {
-        if let ftd::ast::AST::OrType(o) = self {
+    pub fn get_or_type(self, doc_id: &str) -> ftd_ast::Result<ftd_ast::OrType> {
+        if let ftd_ast::AST::OrType(o) = self {
             return Ok(o);
         }
-        ftd::ast::parse_error(
+        ftd_ast::parse_error(
             format!("`{:?}` is not a or-type", self),
             doc_id,
             self.line_number(),
         )
     }
 
-    pub fn get_function(self, doc_id: &str) -> ftd::ast::Result<ftd::ast::Function> {
-        if let ftd::ast::AST::FunctionDefinition(r) = self {
+    pub fn get_function(self, doc_id: &str) -> ftd_ast::Result<ftd_ast::Function> {
+        if let ftd_ast::AST::FunctionDefinition(r) = self {
             return Ok(r);
         }
-        ftd::ast::parse_error(
+        ftd_ast::parse_error(
             format!("`{:?}` is not a function", self),
             doc_id,
             self.line_number(),
@@ -130,11 +130,11 @@ impl AST {
     pub fn get_variable_definition(
         self,
         doc_id: &str,
-    ) -> ftd::ast::Result<ftd::ast::VariableDefinition> {
-        if let ftd::ast::AST::VariableDefinition(v) = self {
+    ) -> ftd_ast::Result<ftd_ast::VariableDefinition> {
+        if let ftd_ast::AST::VariableDefinition(v) = self {
             return Ok(v);
         }
-        ftd::ast::parse_error(
+        ftd_ast::parse_error(
             format!("`{:?}` is not a variable definition", self),
             doc_id,
             self.line_number(),
@@ -144,11 +144,11 @@ impl AST {
     pub fn get_variable_invocation(
         self,
         doc_id: &str,
-    ) -> ftd::ast::Result<ftd::ast::VariableInvocation> {
-        if let ftd::ast::AST::VariableInvocation(v) = self {
+    ) -> ftd_ast::Result<ftd_ast::VariableInvocation> {
+        if let ftd_ast::AST::VariableInvocation(v) = self {
             return Ok(v);
         }
-        ftd::ast::parse_error(
+        ftd_ast::parse_error(
             format!("`{:?}` is not a variable definition", self),
             doc_id,
             self.line_number(),
@@ -158,11 +158,11 @@ impl AST {
     pub fn get_component_definition(
         self,
         doc_id: &str,
-    ) -> ftd::ast::Result<ftd::ast::ComponentDefinition> {
-        if let ftd::ast::AST::ComponentDefinition(v) = self {
+    ) -> ftd_ast::Result<ftd_ast::ComponentDefinition> {
+        if let ftd_ast::AST::ComponentDefinition(v) = self {
             return Ok(v);
         }
-        ftd::ast::parse_error(
+        ftd_ast::parse_error(
             format!("`{:?}` is not a component definition", self),
             doc_id,
             self.line_number(),
@@ -172,22 +172,22 @@ impl AST {
     pub fn get_web_component_definition(
         self,
         doc_id: &str,
-    ) -> ftd::ast::Result<ftd::ast::WebComponentDefinition> {
-        if let ftd::ast::AST::WebComponentDefinition(v) = self {
+    ) -> ftd_ast::Result<ftd_ast::WebComponentDefinition> {
+        if let ftd_ast::AST::WebComponentDefinition(v) = self {
             return Ok(v);
         }
-        ftd::ast::parse_error(
+        ftd_ast::parse_error(
             format!("`{:?}` is not a web-component definition", self),
             doc_id,
             self.line_number(),
         )
     }
 
-    pub fn get_component_invocation(self, doc_id: &str) -> ftd::ast::Result<ftd::ast::Component> {
-        if let ftd::ast::AST::ComponentInvocation(v) = self {
+    pub fn get_component_invocation(self, doc_id: &str) -> ftd_ast::Result<ftd_ast::Component> {
+        if let ftd_ast::AST::ComponentInvocation(v) = self {
             return Ok(v);
         }
-        ftd::ast::parse_error(
+        ftd_ast::parse_error(
             format!("`{:?}` is not a component definition", self),
             doc_id,
             self.line_number(),
@@ -233,8 +233,8 @@ impl AST {
     pub fn is_always_included_variable_definition(&self) -> bool {
         matches!(
             self,
-            AST::VariableDefinition(ftd::ast::VariableDefinition {
-                flags: ftd::ast::VariableFlags {
+            AST::VariableDefinition(ftd_ast::VariableDefinition {
+                flags: ftd_ast::VariableFlags {
                     always_include: Some(true)
                 },
                 ..

@@ -1,5 +1,5 @@
 pub async fn fetch_files(
-    value: ftd::ast::VariableValue,
+    value: ftd_ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &fastn_core::RequestConfig,
@@ -13,7 +13,7 @@ pub async fn fetch_files(
     }
     let headers = match value.get_record(doc.name) {
         Ok(val) => val.2.to_owned(),
-        Err(_e) => ftd::ast::HeaderValues::new(vec![]),
+        Err(_e) => ftd_ast::HeaderValues::new(vec![]),
     };
     let path = headers
         .get_optional_string_by_key("path", doc.name, value.line_number())?

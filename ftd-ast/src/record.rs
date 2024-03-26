@@ -18,12 +18,12 @@ impl Record {
         section
             .kind
             .as_ref()
-            .map_or(false, |s| s.eq(ftd::ast::constants::RECORD))
+            .map_or(false, |s| s.eq(ftd_ast::constants::RECORD))
     }
 
-    pub(crate) fn from_p1(section: &ftd_p1::Section, doc_id: &str) -> ftd::ast::Result<Record> {
+    pub(crate) fn from_p1(section: &ftd_p1::Section, doc_id: &str) -> ftd_ast::Result<Record> {
         if !Self::is_record(section) {
-            return ftd::ast::parse_error(
+            return ftd_ast::parse_error(
                 format!("Section is not record section, found `{:?}`", section),
                 doc_id,
                 section.line_number,
@@ -46,9 +46,9 @@ impl Record {
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Field {
     pub name: String,
-    pub kind: ftd::ast::VariableKind,
+    pub kind: ftd_ast::VariableKind,
     pub mutable: bool,
-    pub value: Option<ftd::ast::VariableValue>,
+    pub value: Option<ftd_ast::VariableValue>,
     pub line_number: usize,
     pub access_modifier: ftd_p1::AccessModifier,
 }
@@ -58,30 +58,30 @@ impl Field {
         header.get_kind().is_some()
     }
 
-    pub(crate) fn from_header(header: &ftd_p1::Header, doc_id: &str) -> ftd::ast::Result<Field> {
+    pub(crate) fn from_header(header: &ftd_p1::Header, doc_id: &str) -> ftd_ast::Result<Field> {
         if !Self::is_field(header) {
-            return ftd::ast::parse_error(
+            return ftd_ast::parse_error(
                 format!("Header is not argument, found `{:?}`", header),
                 doc_id,
                 header.get_line_number(),
             );
         }
 
-        let kind = ftd::ast::VariableKind::get_kind(
+        let kind = ftd_ast::VariableKind::get_kind(
             header.get_kind().as_ref().unwrap().as_str(),
             doc_id,
             header.get_line_number(),
         )?;
 
         let value =
-            ftd::ast::VariableValue::from_header_with_modifier(header, doc_id, &kind)?.inner();
+            ftd_ast::VariableValue::from_header_with_modifier(header, doc_id, &kind)?.inner();
 
         let name = header.get_key();
 
         Ok(Field::new(
-            name.trim_start_matches(ftd::ast::utils::REFERENCE),
+            name.trim_start_matches(ftd_ast::utils::REFERENCE),
             kind,
-            ftd::ast::utils::is_variable_mutable(name.as_str()),
+            ftd_ast::utils::is_variable_mutable(name.as_str()),
             value,
             header.get_line_number(),
             header.get_access_modifier(),
@@ -90,9 +90,9 @@ impl Field {
 
     pub(crate) fn new(
         name: &str,
-        kind: ftd::ast::VariableKind,
+        kind: ftd_ast::VariableKind,
         mutable: bool,
-        value: Option<ftd::ast::VariableValue>,
+        value: Option<ftd_ast::VariableValue>,
         line_number: usize,
         access_modifier: ftd_p1::AccessModifier,
     ) -> Field {
@@ -110,7 +110,7 @@ impl Field {
 pub(crate) fn get_fields_from_headers(
     headers: &ftd_p1::Headers,
     doc_id: &str,
-) -> ftd::ast::Result<Vec<Field>> {
+) -> ftd_ast::Result<Vec<Field>> {
     let mut fields: Vec<Field> = Default::default();
     for header in headers.0.iter() {
         fields.push(Field::from_header(header, doc_id)?);

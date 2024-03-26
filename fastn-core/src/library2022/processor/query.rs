@@ -1,5 +1,5 @@
 pub async fn process(
-    value: ftd::ast::VariableValue,
+    value: ftd_ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &mut fastn_core::RequestConfig,
@@ -8,7 +8,7 @@ pub async fn process(
 
     let headers = match value.get_record(doc.name) {
         Ok(val) => val.2.to_owned(),
-        Err(_e) => ftd::ast::HeaderValues::new(vec![]),
+        Err(_e) => ftd_ast::HeaderValues::new(vec![]),
     };
 
     let path = headers

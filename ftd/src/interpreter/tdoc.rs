@@ -1807,7 +1807,7 @@ impl<'a> TDoc<'a> {
         &self,
         rows: &[Vec<serde_json::Value>],
         kind: &ftd::interpreter::Kind,
-        value: &ftd::ast::VariableValue,
+        value: &ftd_ast::VariableValue,
     ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
         Ok(match kind {
             ftd::interpreter::Kind::List { kind, .. } => {
@@ -1837,7 +1837,7 @@ impl<'a> TDoc<'a> {
         &self,
         row: &[serde_json::Value],
         name: &str,
-        value: &ftd::ast::VariableValue,
+        value: &ftd_ast::VariableValue,
     ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
         let rec = self.get_record(name, value.line_number())?;
         let rec_fields = rec.fields;
@@ -1870,7 +1870,7 @@ impl<'a> TDoc<'a> {
         &self,
         row: &[serde_json::Value],
         kind: &ftd::interpreter::Kind,
-        value: &ftd::ast::VariableValue,
+        value: &ftd_ast::VariableValue,
     ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
         if let ftd::interpreter::Kind::Record { name } = kind {
             return self.row_to_record(row, name, value);
@@ -1897,13 +1897,13 @@ impl<'a> TDoc<'a> {
         &self,
         json: &T,
         kind: &ftd::interpreter::Kind,
-        value: &ftd::ast::VariableValue,
+        value: &ftd_ast::VariableValue,
     ) -> ftd::interpreter::Result<ftd::interpreter::Value>
     where
         T: serde::Serialize + std::fmt::Debug,
     {
         let name = match value.inner() {
-            Some(ftd::ast::VariableValue::Record { name, .. }) => Some(name),
+            Some(ftd_ast::VariableValue::Record { name, .. }) => Some(name),
             _ => None,
         };
 

@@ -81,7 +81,7 @@ pub(crate) fn kind_eq(
     doc: &mut ftd::interpreter::TDoc,
     line_number: usize,
 ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<bool>> {
-    let var_kind = ftd::ast::VariableKind::get_kind(key, doc.name, line_number)?;
+    let var_kind = ftd_ast::VariableKind::get_kind(key, doc.name, line_number)?;
     let kind_data = try_ok_state!(ftd::interpreter::KindData::from_ast_kind(
         var_kind,
         &Default::default(),
@@ -94,7 +94,7 @@ pub(crate) fn kind_eq(
 }
 
 pub const CLONE: &str = "*$";
-pub const REFERENCE: &str = ftd::ast::utils::REFERENCE;
+pub const REFERENCE: &str = ftd_ast::utils::REFERENCE;
 
 pub(crate) fn get_function_name(
     s: &str,

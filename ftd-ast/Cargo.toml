@@ -1,0 +1,20 @@
+[package]
+name = "ftd-ast"
+version = "0.1.0"
+authors.workspace = true
+edition.workspace = true
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+
+[dependencies]
+thiserror.workspace = true
+ftd-p1.workspace = true
+itertools.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+colored.workspace = true
+
+[dev-dependencies]
+pretty_assertions.workspace = true

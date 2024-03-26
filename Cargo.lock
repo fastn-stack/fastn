@@ -1546,6 +1546,7 @@ dependencies = [
  "fbt-lib",
  "fluent",
  "ftd 0.3.0",
+ "ftd-ast",
  "ftd-p1",
  "futures",
  "futures-core",
@@ -1680,6 +1681,7 @@ dependencies = [
  "camino",
  "fastn-issues",
  "ftd 0.3.0",
+ "ftd-ast",
  "futures",
  "rusqlite",
  "serde",
@@ -1871,6 +1873,7 @@ dependencies = [
  "fastn-grammar",
  "fastn-js",
  "format_num",
+ "ftd-ast",
  "ftd-p1",
  "include_dir",
  "indexmap",
@@ -1886,6 +1889,19 @@ dependencies = [
  "taffy",
  "thiserror",
  "tracing",
+]
+
+[[package]]
+name = "ftd-ast"
+version = "0.1.0"
+dependencies = [
+ "colored",
+ "ftd-p1",
+ "itertools 0.12.1",
+ "pretty_assertions",
+ "serde",
+ "serde_json",
+ "thiserror",
 ]
 
 [[package]]
