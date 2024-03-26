@@ -73,7 +73,7 @@ pub(crate) fn get_ftd_json(
 }
 
 fn get_p1_json(document: &fastn_core::Document) -> fastn_core::Result<serde_json::Value> {
-    let p1 = ftd::p1::parse(
+    let p1 = ftd_p1::parse(
         document.content.as_str(),
         document.id_with_package().as_str(),
     )?;
@@ -84,7 +84,7 @@ fn get_p1_json(document: &fastn_core::Document) -> fastn_core::Result<serde_json
 
 fn get_ast_json(document: &fastn_core::Document) -> fastn_core::Result<serde_json::Value> {
     let id = document.id_with_package();
-    let p1 = ftd::p1::parse(document.content.as_str(), id.as_str())?;
+    let p1 = ftd_p1::parse(document.content.as_str(), id.as_str())?;
 
     let ast = ftd::ast::AST::from_sections(p1.as_slice(), id.as_str())?;
     let value = serde_json::to_value(ast)?;

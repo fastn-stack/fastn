@@ -1528,6 +1528,7 @@ dependencies = [
  "fbt-lib",
  "fluent",
  "ftd 0.3.0",
+ "ftd-p1",
  "futures",
  "futures-core",
  "futures-util",
