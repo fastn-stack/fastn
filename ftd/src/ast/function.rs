@@ -8,7 +8,7 @@ pub struct Function {
     pub js: Option<String>,
 }
 
-pub type FunctionDefinition = ftd::p1::Body;
+pub type FunctionDefinition = ftd_p1::Body;
 
 impl Function {
     pub(crate) fn new(
@@ -29,11 +29,11 @@ impl Function {
         }
     }
 
-    pub(crate) fn is_function(section: &ftd::p1::Section) -> bool {
+    pub(crate) fn is_function(section: &ftd_p1::Section) -> bool {
         Function::function_name(section).is_some()
     }
 
-    pub(crate) fn function_name(section: &ftd::p1::Section) -> Option<String> {
+    pub(crate) fn function_name(section: &ftd_p1::Section) -> Option<String> {
         if ftd::ast::Import::is_import(section)
             || ftd::ast::Record::is_record(section)
             || ftd::ast::OrType::is_or_type(section)
@@ -49,7 +49,7 @@ impl Function {
         }
     }
 
-    pub(crate) fn from_p1(section: &ftd::p1::Section, doc_id: &str) -> ftd::ast::Result<Function> {
+    pub(crate) fn from_p1(section: &ftd_p1::Section, doc_id: &str) -> ftd::ast::Result<Function> {
         let function_name = Self::function_name(section).ok_or(ftd::ast::Error::Parse {
             message: format!("Section is not function section, found `{:?}`", section),
             doc_id: doc_id.to_string(),

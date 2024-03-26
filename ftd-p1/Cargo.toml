@@ -1,5 +1,5 @@
 [package]
-name = "ftd0"
+name = "ftd-p1"
 version = "0.1.0"
 authors.workspace = true
 edition.workspace = true

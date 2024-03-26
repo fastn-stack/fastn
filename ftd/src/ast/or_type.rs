@@ -16,11 +16,11 @@ impl OrType {
         }
     }
 
-    pub(crate) fn is_or_type(section: &ftd::p1::Section) -> bool {
+    pub(crate) fn is_or_type(section: &ftd_p1::Section) -> bool {
         section.kind.as_ref().map_or(false, |s| s.eq(ORTYPE))
     }
 
-    pub(crate) fn from_p1(section: &ftd::p1::Section, doc_id: &str) -> ftd::ast::Result<OrType> {
+    pub(crate) fn from_p1(section: &ftd_p1::Section, doc_id: &str) -> ftd::ast::Result<OrType> {
         if !Self::is_or_type(section) {
             return ftd::ast::parse_error(
                 format!("Section is not or-type section, found `{:?}`", section),
@@ -47,7 +47,7 @@ impl OrType {
 
 impl ftd::ast::Field {
     pub(crate) fn from_p1(
-        section: &ftd::p1::Section,
+        section: &ftd_p1::Section,
         doc_id: &str,
     ) -> ftd::ast::Result<ftd::ast::Field> {
         if !ftd::ast::VariableDefinition::is_variable_definition(section) {
@@ -117,13 +117,13 @@ impl OrTypeVariant {
         }
     }
 
-    pub(crate) fn is_constant(section: &ftd::p1::Section) -> bool {
+    pub(crate) fn is_constant(section: &ftd_p1::Section) -> bool {
         section
             .name
             .starts_with(format!("{} ", ftd::ast::constants::CONSTANT).as_str())
     }
 
-    pub fn from_p1(section: &ftd::p1::Section, doc_id: &str) -> ftd::ast::Result<OrTypeVariant> {
+    pub fn from_p1(section: &ftd_p1::Section, doc_id: &str) -> ftd::ast::Result<OrTypeVariant> {
         if ftd::ast::Record::is_record(section) {
             Ok(OrTypeVariant::new_record(ftd::ast::Record::from_p1(
                 section, doc_id,

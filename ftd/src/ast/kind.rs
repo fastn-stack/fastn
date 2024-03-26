@@ -527,7 +527,7 @@ impl VariableValue {
     }
 
     pub(crate) fn from_p1_with_modifier(
-        section: &ftd::p1::Section,
+        section: &ftd_p1::Section,
         doc_id: &str,
         kind: &ftd::ast::VariableKind,
     ) -> ftd::ast::Result<VariableValue> {
@@ -536,7 +536,7 @@ impl VariableValue {
     }
 
     pub(crate) fn from_header_with_modifier(
-        header: &ftd::p1::Header,
+        header: &ftd_p1::Header,
         doc_id: &str,
         kind: &ftd::ast::VariableKind,
     ) -> ftd::ast::Result<VariableValue> {
@@ -592,7 +592,7 @@ impl VariableValue {
     }
 
     pub(crate) fn from_p1(
-        section: &ftd::p1::Section,
+        section: &ftd_p1::Section,
         doc_id: &str,
     ) -> ftd::ast::Result<VariableValue> {
         let values = section
@@ -686,14 +686,14 @@ impl VariableValue {
     }
 
     pub(crate) fn from_p1_header(
-        header: &ftd::p1::Header,
+        header: &ftd_p1::Header,
         doc_id: &str,
     ) -> ftd::ast::Result<VariableValue> {
         Ok(match header {
-            ftd0::p1::Header::KV(ftd0::p1::KV {
+            ftd_p1::Header::KV(ftd_p1::KV {
                 value, line_number, ..
             }) => VariableValue::from_value(value, ftd::ast::ValueSource::Default, *line_number),
-            ftd::p1::Header::Section(ftd::p1::SectionHeader {
+            ftd_p1::Header::Section(ftd_p1::SectionHeader {
                 section,
                 line_number,
                 condition,
@@ -713,7 +713,7 @@ impl VariableValue {
                     .as_ref()
                     .map(|expr| ftd::ast::Condition::new(expr, *line_number)),
             },
-            ftd::p1::Header::BlockRecordHeader(ftd::p1::BlockRecordHeader {
+            ftd_p1::Header::BlockRecordHeader(ftd_p1::BlockRecordHeader {
                 key,
                 caption,
                 body,
@@ -809,7 +809,7 @@ impl Condition {
     }
 
     pub(crate) fn from_headers(
-        headers: &ftd::p1::Headers,
+        headers: &ftd_p1::Headers,
         doc_id: &str,
     ) -> ftd::ast::Result<Option<Condition>> {
         let condition = headers

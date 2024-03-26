@@ -412,7 +412,7 @@ impl KindData {
         doc: &mut ftd::interpreter::TDoc,
         line_number: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<KindData>> {
-        let mut ast_kind = ftd0::p1::AccessModifier::remove_modifiers(var_kind.kind.as_str());
+        let mut ast_kind = ftd_p1::AccessModifier::remove_modifiers(var_kind.kind.as_str());
         // let mut ast_kind = var_kind.kind.clone();
         let (caption, body) = check_for_caption_and_body(&mut ast_kind);
         if ast_kind.is_empty() {

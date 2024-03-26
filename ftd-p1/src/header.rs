@@ -1,9 +1,9 @@
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 #[serde(tag = "type")]
 pub enum Header {
-    KV(ftd0::p1::header::KV),
-    Section(ftd0::p1::header::SectionHeader),
-    BlockRecordHeader(ftd0::p1::header::BlockRecordHeader),
+    KV(ftd_p1::header::KV),
+    Section(ftd_p1::header::SectionHeader),
+    BlockRecordHeader(ftd_p1::header::BlockRecordHeader),
 }
 
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize, Default)]
@@ -143,7 +143,7 @@ pub struct SectionHeader {
     pub line_number: usize,
     pub key: String,
     pub kind: Option<String>,
-    pub section: Vec<ftd0::p1::Section>,
+    pub section: Vec<ftd_p1::Section>,
     pub condition: Option<String>,
 }
 
@@ -151,7 +151,7 @@ impl Header {
     pub fn from_caption(value: &str, line_number: usize) -> Header {
         Header::kv(
             line_number,
-            ftd0::p1::utils::CAPTION,
+            ftd_p1::utils::CAPTION,
             None,
             Some(value.to_string()),
             None,
@@ -174,7 +174,7 @@ impl Header {
         line_number: usize,
         key: &str,
         kind: Option<String>,
-        section: Vec<ftd0::p1::Section>,
+        section: Vec<ftd_p1::Section>,
         condition: Option<String>,
     ) -> Header {
         Header::Section(SectionHeader {
@@ -235,9 +235,9 @@ impl Header {
 
     pub fn get_key(&self) -> String {
         match self {
-            Header::KV(ftd0::p1::header::KV { key, .. })
-            | Header::Section(ftd0::p1::header::SectionHeader { key, .. })
-            | Header::BlockRecordHeader(ftd0::p1::header::BlockRecordHeader { key, .. }) => {
+            Header::KV(ftd_p1::header::KV { key, .. })
+            | Header::Section(ftd_p1::header::SectionHeader { key, .. })
+            | Header::BlockRecordHeader(ftd_p1::header::BlockRecordHeader { key, .. }) => {
                 key.to_string()
             }
         }
@@ -245,11 +245,11 @@ impl Header {
 
     pub fn get_access_modifier(&self) -> AccessModifier {
         match self {
-            Header::KV(ftd0::p1::header::KV {
+            Header::KV(ftd_p1::header::KV {
                 access_modifier, ..
             }) => access_modifier.clone(),
-            Header::Section(ftd0::p1::header::SectionHeader { .. })
-            | Header::BlockRecordHeader(ftd0::p1::header::BlockRecordHeader { .. }) => {
+            Header::Section(ftd_p1::header::SectionHeader { .. })
+            | Header::BlockRecordHeader(ftd_p1::header::BlockRecordHeader { .. }) => {
                 AccessModifier::Public
             }
         }
@@ -257,9 +257,9 @@ impl Header {
 
     pub(crate) fn set_key(&mut self, value: &str) {
         match self {
-            Header::KV(ftd0::p1::header::KV { key, .. })
-            | Header::Section(ftd0::p1::header::SectionHeader { key, .. })
-            | Header::BlockRecordHeader(ftd0::p1::header::BlockRecordHeader { key, .. }) => {
+            Header::KV(ftd_p1::header::KV { key, .. })
+            | Header::Section(ftd_p1::header::SectionHeader { key, .. })
+            | Header::BlockRecordHeader(ftd_p1::header::BlockRecordHeader { key, .. }) => {
                 *key = value.to_string();
             }
         }
@@ -267,13 +267,13 @@ impl Header {
 
     pub fn set_kind(&mut self, value: &str) {
         match self {
-            Header::KV(ftd0::p1::header::KV {
+            Header::KV(ftd_p1::header::KV {
                 kind: Some(kind), ..
             })
-            | Header::Section(ftd0::p1::header::SectionHeader {
+            | Header::Section(ftd_p1::header::SectionHeader {
                 kind: Some(kind), ..
             })
-            | Header::BlockRecordHeader(ftd0::p1::header::BlockRecordHeader {
+            | Header::BlockRecordHeader(ftd_p1::header::BlockRecordHeader {
                 kind: Some(kind),
                 ..
             }) => {
@@ -283,10 +283,10 @@ impl Header {
         }
     }
 
-    pub fn get_value(&self, doc_id: &str) -> ftd0::p1::Result<Option<String>> {
+    pub fn get_value(&self, doc_id: &str) -> ftd_p1::Result<Option<String>> {
         match self {
-            Header::KV(ftd0::p1::header::KV { value, .. }) => Ok(value.to_owned()),
-            Header::Section(_) => Err(ftd0::p1::Error::ParseError {
+            Header::KV(ftd_p1::header::KV { value, .. }) => Ok(value.to_owned()),
+            Header::Section(_) => Err(ftd_p1::Error::ParseError {
                 message: format!(
                     "Expected Header of type: KV, found: Section {}",
                     self.get_key()
@@ -294,7 +294,7 @@ impl Header {
                 doc_id: doc_id.to_string(),
                 line_number: self.get_line_number(),
             }),
-            Header::BlockRecordHeader(_) => Err(ftd0::p1::Error::ParseError {
+            Header::BlockRecordHeader(_) => Err(ftd_p1::Error::ParseError {
                 message: format!(
                     "Expected Header of type: KV, found: BlockRecordHeader {}",
                     self.get_key()
@@ -305,9 +305,9 @@ impl Header {
         }
     }
 
-    pub fn get_sections(&self, doc_id: &str) -> ftd0::p1::Result<&Vec<ftd0::p1::Section>> {
+    pub fn get_sections(&self, doc_id: &str) -> ftd_p1::Result<&Vec<ftd_p1::Section>> {
         match self {
-            Header::KV(_) | Header::BlockRecordHeader(_) => Err(ftd0::p1::Error::ParseError {
+            Header::KV(_) | Header::BlockRecordHeader(_) => Err(ftd_p1::Error::ParseError {
                 message: format!(
                     "Expected Header of type: Sections, found: KV {}",
                     self.get_key()
@@ -315,15 +315,15 @@ impl Header {
                 doc_id: doc_id.to_string(),
                 line_number: self.get_line_number(),
             }),
-            Header::Section(ftd0::p1::header::SectionHeader { section, .. }) => Ok(section),
+            Header::Section(ftd_p1::header::SectionHeader { section, .. }) => Ok(section),
         }
     }
 
     pub fn get_line_number(&self) -> usize {
         match self {
-            Header::KV(ftd0::p1::header::KV { line_number, .. })
-            | Header::Section(ftd0::p1::header::SectionHeader { line_number, .. })
-            | Header::BlockRecordHeader(ftd0::p1::header::BlockRecordHeader {
+            Header::KV(ftd_p1::header::KV { line_number, .. })
+            | Header::Section(ftd_p1::header::SectionHeader { line_number, .. })
+            | Header::BlockRecordHeader(ftd_p1::header::BlockRecordHeader {
                 line_number, ..
             }) => *line_number,
         }
@@ -331,9 +331,9 @@ impl Header {
 
     pub fn get_kind(&self) -> Option<String> {
         match self {
-            Header::KV(ftd0::p1::header::KV { kind, .. })
-            | Header::Section(ftd0::p1::header::SectionHeader { kind, .. })
-            | Header::BlockRecordHeader(ftd0::p1::header::BlockRecordHeader { kind, .. }) => {
+            Header::KV(ftd_p1::header::KV { kind, .. })
+            | Header::Section(ftd_p1::header::SectionHeader { kind, .. })
+            | Header::BlockRecordHeader(ftd_p1::header::BlockRecordHeader { kind, .. }) => {
                 kind.to_owned()
             }
         }
@@ -341,9 +341,9 @@ impl Header {
 
     pub fn is_module_kind(&self) -> bool {
         match self {
-            Header::KV(ftd0::p1::header::KV { kind, .. })
-            | Header::Section(ftd0::p1::header::SectionHeader { kind, .. })
-            | Header::BlockRecordHeader(ftd0::p1::header::BlockRecordHeader { kind, .. }) => {
+            Header::KV(ftd_p1::header::KV { kind, .. })
+            | Header::Section(ftd_p1::header::SectionHeader { kind, .. })
+            | Header::BlockRecordHeader(ftd_p1::header::BlockRecordHeader { kind, .. }) => {
                 match kind {
                     Some(k) => k.trim().eq("module"),
                     None => false,
@@ -354,19 +354,19 @@ impl Header {
 
     pub fn get_condition(&self) -> Option<String> {
         match self {
-            Header::KV(ftd0::p1::header::KV { condition, .. })
-            | Header::Section(ftd0::p1::header::SectionHeader { condition, .. })
-            | Header::BlockRecordHeader(ftd0::p1::header::BlockRecordHeader {
-                condition, ..
-            }) => condition.to_owned(),
+            Header::KV(ftd_p1::header::KV { condition, .. })
+            | Header::Section(ftd_p1::header::SectionHeader { condition, .. })
+            | Header::BlockRecordHeader(ftd_p1::header::BlockRecordHeader { condition, .. }) => {
+                condition.to_owned()
+            }
         }
     }
 
     pub fn is_empty(&self) -> bool {
         match self {
-            Header::KV(ftd0::p1::header::KV { value, .. }) => value.is_none(),
-            Header::Section(ftd0::p1::header::SectionHeader { section, .. }) => section.is_empty(),
-            Header::BlockRecordHeader(ftd0::p1::header::BlockRecordHeader { fields, .. }) => {
+            Header::KV(ftd_p1::header::KV { value, .. }) => value.is_none(),
+            Header::Section(ftd_p1::header::SectionHeader { section, .. }) => section.is_empty(),
+            Header::BlockRecordHeader(ftd_p1::header::BlockRecordHeader { fields, .. }) => {
                 fields.is_empty()
             }
         }
@@ -393,9 +393,9 @@ impl Header {
         }
 
         match &mut header {
-            Header::KV(ftd0::p1::header::KV { .. })
-            | Header::BlockRecordHeader(ftd0::p1::header::BlockRecordHeader { .. }) => {}
-            Header::Section(ftd0::p1::header::SectionHeader { section, .. }) => {
+            Header::KV(ftd_p1::header::KV { .. })
+            | Header::BlockRecordHeader(ftd_p1::header::BlockRecordHeader { .. }) => {}
+            Header::Section(ftd_p1::header::SectionHeader { section, .. }) => {
                 *section = section
                     .iter_mut()
                     .filter_map(|s| s.remove_comments())
@@ -410,7 +410,7 @@ impl Header {
 pub struct Headers(pub Vec<Header>);
 
 impl Headers {
-    pub fn find(&self, key: &str) -> Vec<&ftd0::p1::Header> {
+    pub fn find(&self, key: &str) -> Vec<&ftd_p1::Header> {
         use itertools::Itertools;
 
         self.0.iter().filter(|v| v.get_key().eq(key)).collect_vec()
@@ -421,15 +421,15 @@ impl Headers {
         key: &str,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd0::p1::Result<&ftd0::p1::Header> {
+    ) -> ftd_p1::Result<&ftd_p1::Header> {
         let headers = self.find(key);
-        let header = headers.first().ok_or(ftd0::p1::Error::HeaderNotFound {
+        let header = headers.first().ok_or(ftd_p1::Error::HeaderNotFound {
             key: key.to_string(),
             doc_id: doc_id.to_string(),
             line_number,
         })?;
         if headers.len() > 1 {
-            return Err(ftd0::p1::Error::MoreThanOneHeader {
+            return Err(ftd_p1::Error::MoreThanOneHeader {
                 key: key.to_string(),
                 doc_id: doc_id.to_string(),
                 line_number: header.get_line_number(),
@@ -443,18 +443,18 @@ impl Headers {
         key: &str,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd0::p1::Result<&mut ftd0::p1::Header> {
+    ) -> ftd_p1::Result<&mut ftd_p1::Header> {
         self.0
             .iter_mut()
             .find(|v| v.get_key().eq(key))
-            .ok_or(ftd0::p1::Error::HeaderNotFound {
+            .ok_or(ftd_p1::Error::HeaderNotFound {
                 key: key.to_string(),
                 doc_id: doc_id.to_string(),
                 line_number,
             })
     }
 
-    pub fn push(&mut self, item: ftd0::p1::Header) {
+    pub fn push(&mut self, item: ftd_p1::Header) {
         self.0.push(item)
     }
 
@@ -462,8 +462,8 @@ impl Headers {
     ///
     /// only used by [`Section::remove_comments()`] and [`SubSection::remove_comments()`]
     ///
-    /// [`SubSection::remove_comments()`]: ftd0::p1::sub_section::SubSection::remove_comments
-    /// [`Section::remove_comments()`]: ftd0::p1::section::Section::remove_comments
+    /// [`SubSection::remove_comments()`]: ftd_p1::sub_section::SubSection::remove_comments
+    /// [`Section::remove_comments()`]: ftd_p1::section::Section::remove_comments
     pub fn remove_comments(self) -> Headers {
         use itertools::Itertools;
 

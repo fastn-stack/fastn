@@ -28,12 +28,12 @@ impl ComponentDefinition {
         }
     }
 
-    pub fn is_component_definition(section: &ftd::p1::Section) -> bool {
+    pub fn is_component_definition(section: &ftd_p1::Section) -> bool {
         section.kind.as_ref().map_or(false, |s| s.eq(COMPONENT))
     }
 
     pub fn from_p1(
-        section: &ftd::p1::Section,
+        section: &ftd_p1::Section,
         doc_id: &str,
     ) -> ftd::ast::Result<ComponentDefinition> {
         if !Self::is_component_definition(section) {
@@ -114,11 +114,11 @@ impl Component {
         }
     }
 
-    pub(crate) fn is_component(section: &ftd::p1::Section) -> bool {
+    pub(crate) fn is_component(section: &ftd_p1::Section) -> bool {
         section.kind.is_none() && !section.name.starts_with(ftd::ast::utils::REFERENCE)
     }
 
-    pub(crate) fn from_p1(section: &ftd::p1::Section, doc_id: &str) -> ftd::ast::Result<Component> {
+    pub(crate) fn from_p1(section: &ftd_p1::Section, doc_id: &str) -> ftd::ast::Result<Component> {
         if !Self::is_component(section) {
             return ftd::ast::parse_error(
                 format!("Section is not ComponentDefinition, found `{:?}`", section),
@@ -157,7 +157,7 @@ impl Component {
                 )?);
             }
 
-            if let Some(ftd::p1::Body {
+            if let Some(ftd_p1::Body {
                 ref value,
                 line_number,
             }) = section.body
@@ -356,7 +356,7 @@ pub struct Property {
 }
 
 impl Property {
-    fn is_property(header: &ftd::p1::Header) -> bool {
+    fn is_property(header: &ftd_p1::Header) -> bool {
         header.get_kind().is_none()
     }
 
@@ -375,7 +375,7 @@ impl Property {
     }
 
     fn from_p1_header(
-        header: &ftd::p1::Header,
+        header: &ftd_p1::Header,
         doc_id: &str,
         source: PropertySource,
     ) -> ftd::ast::Result<Property> {
@@ -555,7 +555,7 @@ impl Loop {
         )))
     }
 
-    fn from_headers(headers: &ftd::p1::Headers, doc_id: &str) -> ftd::ast::Result<Option<Loop>> {
+    fn from_headers(headers: &ftd_p1::Headers, doc_id: &str) -> ftd::ast::Result<Option<Loop>> {
         let loop_header = headers.0.iter().find(|v| {
             [ftd::ast::utils::LOOP, ftd::ast::utils::FOR].contains(&v.get_key().as_str())
         });
@@ -669,7 +669,7 @@ impl Event {
         )))
     }
 
-    fn from_headers(headers: &ftd::p1::Headers, doc_id: &str) -> ftd::ast::Result<Vec<Event>> {
+    fn from_headers(headers: &ftd_p1::Headers, doc_id: &str) -> ftd::ast::Result<Vec<Event>> {
         let mut events = vec![];
         for header in headers.0.iter() {
             if let Some(event) = Event::from_header(header, doc_id)? {
@@ -679,7 +679,7 @@ impl Event {
         Ok(events)
     }
 
-    fn from_header(header: &ftd::p1::Header, doc_id: &str) -> ftd::ast::Result<Option<Event>> {
+    fn from_header(header: &ftd_p1::Header, doc_id: &str) -> ftd::ast::Result<Option<Event>> {
         let event_name = if let Some(name) = Event::get_event_name(header.get_key().as_str()) {
             name
         } else {

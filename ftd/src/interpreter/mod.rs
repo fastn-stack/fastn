@@ -48,7 +48,7 @@ pub enum Error {
     OtherError(String),
 
     #[error("P1Error: {}", _0)]
-    P1Error(#[from] ftd::p1::Error),
+    P1Error(#[from] ftd_p1::Error),
 
     #[error("IOError: {}", _0)]
     IOError(#[from] std::io::Error),

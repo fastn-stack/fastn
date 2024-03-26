@@ -33,8 +33,6 @@ pub mod test_helper;
 #[cfg(feature = "native-rendering")]
 mod wasm;
 
-pub use ftd0::p1;
-
 pub const PROCESSOR_MARKER: &str = "$processor$";
 
 pub fn css() -> &'static str {
@@ -50,7 +48,7 @@ static THEME_CSS_DIR: include_dir::Dir<'_> =
 
 pub fn theme_css() -> ftd::Map<String> {
     let mut themes: ftd::Map<String> = Default::default();
-    // let paths = ftd0::utils::find_all_files_matching_extension_recursively("theme_css", "css");
+    // let paths = ftd_p1::utils::find_all_files_matching_extension_recursively("theme_css", "css");
     for file in THEME_CSS_DIR.files() {
         let stem = file.path().file_stem().unwrap().to_str().unwrap();
         themes.insert(stem.to_string(), file.contents_utf8().unwrap().to_string());

@@ -8,8 +8,8 @@ impl Header {
     ///
     /// only used by [`Section::remove_comments()`] and [`SubSection::remove_comments()`]
     ///
-    /// [`SubSection::remove_comments()`]: ftd::p1::sub_section::SubSection::remove_comments
-    /// [`Section::remove_comments()`]: ftd::p1::section::Section::remove_comments
+    /// [`SubSection::remove_comments()`]: ftd_p1::sub_section::SubSection::remove_comments
+    /// [`Section::remove_comments()`]: ftd_p1::section::Section::remove_comments
     pub fn uncommented_headers(&self) -> Header {
         let mut headers: Vec<(usize, String, String)> = vec![];
         for (ln, key, val) in self.0.iter() {

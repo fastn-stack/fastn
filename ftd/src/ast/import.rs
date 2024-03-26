@@ -38,11 +38,11 @@ impl Import {
             exposing,
         }
     }
-    pub(crate) fn is_import(section: &ftd::p1::Section) -> bool {
+    pub(crate) fn is_import(section: &ftd_p1::Section) -> bool {
         section.name.eq(IMPORT)
     }
 
-    pub(crate) fn from_p1(section: &ftd::p1::Section, doc_id: &str) -> ftd::ast::Result<Import> {
+    pub(crate) fn from_p1(section: &ftd_p1::Section, doc_id: &str) -> ftd::ast::Result<Import> {
         if !Self::is_import(section) {
             return ftd::ast::parse_error(
                 format!("Section is not import section, found `{:?}`", section),
@@ -63,7 +63,7 @@ impl Import {
         let exports = Export::get_exports_from_headers(&section.headers, doc_id)?;
         let exposing = Exposing::get_exposing_from_headers(&section.headers, doc_id)?;
         match &section.caption {
-            Some(ftd0::p1::Header::KV(ftd0::p1::KV {
+            Some(ftd_p1::Header::KV(ftd_p1::KV {
                 value: Some(value), ..
             })) => {
                 let (module, alias) = ftd::ast::utils::get_import_alias(value.as_str());
@@ -92,12 +92,12 @@ impl Import {
 }
 
 impl Export {
-    fn is_export(header: &ftd::p1::Header) -> bool {
+    fn is_export(header: &ftd_p1::Header) -> bool {
         header.get_key().eq(ftd::ast::constants::EXPORT) && header.get_kind().is_none()
     }
 
     pub(crate) fn get_exports_from_headers(
-        headers: &ftd::p1::Headers,
+        headers: &ftd_p1::Headers,
         doc_id: &str,
     ) -> ftd::ast::Result<Option<Export>> {
         let mut exports = vec![];
@@ -132,12 +132,12 @@ impl Export {
 }
 
 impl Exposing {
-    fn is_exposing(header: &ftd::p1::Header) -> bool {
+    fn is_exposing(header: &ftd_p1::Header) -> bool {
         header.get_key().eq(ftd::ast::constants::EXPOSING) && header.get_kind().is_none()
     }
 
     pub(crate) fn get_exposing_from_headers(
-        headers: &ftd::p1::Headers,
+        headers: &ftd_p1::Headers,
         doc_id: &str,
     ) -> ftd::ast::Result<Option<Exposing>> {
         let mut exposing = vec![];

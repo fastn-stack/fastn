@@ -1546,6 +1546,7 @@ dependencies = [
  "fbt-lib",
  "fluent",
  "ftd 0.3.0",
+ "ftd-p1",
  "futures",
  "futures-core",
  "futures-util",
@@ -1883,7 +1884,7 @@ dependencies = [
  "fastn-grammar",
  "fastn-js",
  "format_num",
- "ftd0",
+ "ftd-p1",
  "include_dir",
  "indexmap",
  "indoc 2.0.5",
@@ -1901,7 +1902,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "ftd0"
+name = "ftd-p1"
 version = "0.1.0"
 dependencies = [
  "diffy",
