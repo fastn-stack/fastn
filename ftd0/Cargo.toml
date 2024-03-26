@@ -14,3 +14,8 @@ serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
 itertools.workspace = true
+
+[dev-dependencies]
+diffy.workspace = true
+pretty_assertions.workspace = true
+indoc.workspace = true
