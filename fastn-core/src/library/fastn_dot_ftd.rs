@@ -530,10 +530,10 @@ pub(crate) async fn get(lib: &fastn_core::Library) -> String {
             .trim_end_matches('/')
             .trim_start_matches('/')
             .to_string();
-        let base_url = if !base_url.is_empty() {
-            format!("/{base_url}/")
-        } else {
+        let base_url = if base_url.is_empty() {
             String::from("/")
+        } else {
+            format!("/{base_url}/")
         };
         if let Ok(original_snapshots) = futures::executor::block_on(
             fastn_core::snapshot::get_latest_snapshots(&lib.config.config.ds, &original_path),

@@ -22,6 +22,7 @@ css-color-parser.workspace = true
 #dioxus-native-core-macro = { workspace = true, optional = true }
 format_num.workspace = true
 ftd-p1.workspace = true
+ftd-ast.workspace = true
 #futures = { workspace = true, optional = true }
 include_dir.workspace = true
 indoc.workspace = true

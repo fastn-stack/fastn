@@ -22,7 +22,7 @@ impl WebComponentDefinition {
     }
 
     pub(crate) fn scan_ast(
-        ast: ftd::ast::AST,
+        ast: ftd_ast::AST,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         let web_component_definition = ast.get_web_component_definition(doc.name)?;
@@ -37,17 +37,17 @@ impl WebComponentDefinition {
     }
 
     pub(crate) fn from_ast(
-        ast: ftd::ast::AST,
+        ast: ftd_ast::AST,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<WebComponentDefinition>> {
         let web_component_definition = ast.get_web_component_definition(doc.name)?;
         let name = doc.resolve_name(web_component_definition.name.as_str());
 
         let js = try_ok_state!(ftd::interpreter::PropertyValue::from_ast_value(
-            ftd::ast::VariableValue::String {
+            ftd_ast::VariableValue::String {
                 line_number: web_component_definition.line_number(),
                 value: web_component_definition.js,
-                source: ftd::ast::ValueSource::Default,
+                source: ftd_ast::ValueSource::Default,
                 condition: None
             },
             doc,

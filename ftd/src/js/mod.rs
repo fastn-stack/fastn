@@ -150,7 +150,7 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
             }
             document_asts.push(fastn_js::Ast::OrType(fastn_js::OrType {
                 name: ot.name.clone(),
-                variants: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
+                variant: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
                     fields,
                     other_references: vec![],
                 }),

@@ -138,7 +138,9 @@ impl RequestConfig {
 
         // TODO: The shitty code written by me ever
         let (path_with_package_name, document, path_params, extra_data) =
-            if !fastn_core::file::is_static(path)? {
+            if fastn_core::file::is_static(path)? {
+                (path.to_string(), None, vec![], Default::default())
+            } else {
                 let (path_with_package_name, sanitized_package, sanitized_path) = match self
                     .config
                     .get_mountpoint_sanitized_path(&self.config.package, path)
@@ -170,8 +172,6 @@ impl RequestConfig {
                     )
                 });
                 (path_with_package_name, document, path_params, extra_data)
-            } else {
-                (path.to_string(), None, vec![], Default::default())
             };
 
         let path = path_with_package_name.as_str();

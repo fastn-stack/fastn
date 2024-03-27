@@ -41,7 +41,7 @@ pub(crate) struct QueryResponse {
 pub(crate) fn rows_to_value(
     doc: &ftd::interpreter::TDoc<'_>,
     kind: &ftd::interpreter::Kind,
-    value: &ftd::ast::VariableValue,
+    value: &ftd_ast::VariableValue,
     rows: &[DataRow],
     schema: &[DataColumn],
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
@@ -73,7 +73,7 @@ pub(crate) fn rows_to_value(
 fn row_to_record(
     doc: &ftd::interpreter::TDoc<'_>,
     name: &str,
-    value: &ftd::ast::VariableValue,
+    value: &ftd_ast::VariableValue,
     row: &DataRow,
     schema: &[DataColumn],
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
@@ -120,7 +120,7 @@ fn row_to_record(
 fn row_to_value(
     doc: &ftd::interpreter::TDoc<'_>,
     kind: &ftd::interpreter::Kind,
-    value: &ftd::ast::VariableValue,
+    value: &ftd_ast::VariableValue,
     row: &DataRow,
     schema: &[DataColumn],
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
@@ -310,7 +310,7 @@ fn result_to_value(
     query_response: QueryResponse,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
-    value: &ftd::ast::VariableValue,
+    value: &ftd_ast::VariableValue,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     if kind.is_list() {
         rows_to_value(
@@ -407,7 +407,7 @@ fn resolve_variable_from_headers(
     var: &str,
     param_type: &str,
     doc: &ftd::interpreter::TDoc,
-    headers: &ftd::ast::HeaderValues,
+    headers: &ftd_ast::HeaderValues,
     line_number: usize,
 ) -> ftd::interpreter::Result<String> {
     let header = match headers.optional_header_by_name(var, doc.name, line_number)? {
@@ -415,17 +415,17 @@ fn resolve_variable_from_headers(
         None => return Ok("null".to_string()),
     };
 
-    if let ftd::ast::VariableValue::String { value, .. } = &header.value {
+    if let ftd_ast::VariableValue::String { value, .. } = &header.value {
         if let Some(stripped) = value.strip_prefix('$') {
             return resolve_variable_from_doc(stripped, doc, line_number);
         }
     }
 
     let param_value: String = match (param_type, &header.value) {
-        ("STRING", ftd::ast::VariableValue::String { value, .. }) => escape_string_value(value),
-        ("INTEGER", ftd::ast::VariableValue::String { value, .. })
-        | ("DECIMAL", ftd::ast::VariableValue::String { value, .. })
-        | ("BOOLEAN", ftd::ast::VariableValue::String { value, .. }) => value.to_string(),
+        ("STRING", ftd_ast::VariableValue::String { value, .. }) => escape_string_value(value),
+        ("INTEGER", ftd_ast::VariableValue::String { value, .. })
+        | ("DECIMAL", ftd_ast::VariableValue::String { value, .. })
+        | ("BOOLEAN", ftd_ast::VariableValue::String { value, .. }) => value.to_string(),
         _ => {
             return ftd::interpreter::utils::e2(
                 format!("kind {} is not supported yet.", param_type),
@@ -442,7 +442,7 @@ fn resolve_param(
     param_name: &str,
     param_type: &str,
     doc: &ftd::interpreter::TDoc,
-    headers: &ftd::ast::HeaderValues,
+    headers: &ftd_ast::HeaderValues,
     line_number: usize,
 ) -> ftd::interpreter::Result<String> {
     resolve_variable_from_headers(param_name, param_type, doc, headers, line_number)
@@ -465,7 +465,7 @@ enum State {
 pub(crate) fn parse_query(
     query: &str,
     doc: &ftd::interpreter::TDoc,
-    headers: &ftd::ast::HeaderValues,
+    headers: &ftd_ast::HeaderValues,
     line_number: usize,
 ) -> ftd::interpreter::Result<String> {
     let mut output = String::new();
@@ -572,11 +572,11 @@ pub(crate) fn parse_query(
 }
 
 pub(crate) async fn process(
-    value: ftd::ast::VariableValue,
+    value: ftd_ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     db_config: &fastn_core::library2022::processor::sql::DatabaseConfig,
-    headers: ftd::ast::HeaderValues,
+    headers: ftd_ast::HeaderValues,
     query: &str,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let query = parse_query(query, doc, &headers, value.line_number())?;

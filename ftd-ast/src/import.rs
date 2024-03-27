@@ -38,20 +38,20 @@ impl Import {
             exposing,
         }
     }
-    pub(crate) fn is_import(section: &ftd_p1::Section) -> bool {
+    pub fn is_import(section: &ftd_p1::Section) -> bool {
         section.name.eq(IMPORT)
     }
 
-    pub(crate) fn from_p1(section: &ftd_p1::Section, doc_id: &str) -> ftd::ast::Result<Import> {
+    pub fn from_p1(section: &ftd_p1::Section, doc_id: &str) -> ftd_ast::Result<Import> {
         if !Self::is_import(section) {
-            return ftd::ast::parse_error(
+            return ftd_ast::parse_error(
                 format!("Section is not import section, found `{:?}`", section),
                 doc_id,
                 section.line_number,
             );
         }
         if !section.sub_sections.is_empty() {
-            return ftd::ast::parse_error(
+            return ftd_ast::parse_error(
                 format!(
                     "SubSection not expected for import statement `{:?}`",
                     section
@@ -66,7 +66,7 @@ impl Import {
             Some(ftd_p1::Header::KV(ftd_p1::KV {
                 value: Some(value), ..
             })) => {
-                let (module, alias) = ftd::ast::utils::get_import_alias(value.as_str());
+                let (module, alias) = ftd_ast::utils::get_import_alias(value.as_str());
                 Ok(Import::new(
                     module.as_str(),
                     alias.as_str(),
@@ -75,7 +75,7 @@ impl Import {
                     exposing,
                 ))
             }
-            t => ftd::ast::parse_error(
+            t => ftd_ast::parse_error(
                 format!(
                     "Expected value in caption for import statement, found: `{:?}`",
                     t
@@ -93,18 +93,18 @@ impl Import {
 
 impl Export {
     fn is_export(header: &ftd_p1::Header) -> bool {
-        header.get_key().eq(ftd::ast::constants::EXPORT) && header.get_kind().is_none()
+        header.get_key().eq(ftd_ast::constants::EXPORT) && header.get_kind().is_none()
     }
 
     pub(crate) fn get_exports_from_headers(
         headers: &ftd_p1::Headers,
         doc_id: &str,
-    ) -> ftd::ast::Result<Option<Export>> {
+    ) -> ftd_ast::Result<Option<Export>> {
         let mut exports = vec![];
         for header in headers.0.iter() {
             if !Self::is_export(header) {
                 if !Exposing::is_exposing(header) {
-                    return ftd::ast::parse_error(
+                    return ftd_ast::parse_error(
                         format!("Expected `export` or `exposing`, found `{:?}`", header),
                         doc_id,
                         header.get_line_number(),
@@ -112,12 +112,12 @@ impl Export {
                 }
                 continue;
             }
-            let value = header.get_value(doc_id)?.ok_or(ftd::ast::Error::Parse {
+            let value = header.get_value(doc_id)?.ok_or(ftd_ast::Error::Parse {
                 message: "Expected the export thing name".to_string(),
                 doc_id: doc_id.to_string(),
                 line_number: header.get_line_number(),
             })?;
-            if value.eq(ftd::ast::constants::EVERYTHING) {
+            if value.eq(ftd_ast::constants::EVERYTHING) {
                 return Ok(Some(Export::All));
             } else {
                 exports.extend(value.split(',').map(|v| v.trim().to_string()));
@@ -133,18 +133,18 @@ impl Export {
 
 impl Exposing {
     fn is_exposing(header: &ftd_p1::Header) -> bool {
-        header.get_key().eq(ftd::ast::constants::EXPOSING) && header.get_kind().is_none()
+        header.get_key().eq(ftd_ast::constants::EXPOSING) && header.get_kind().is_none()
     }
 
     pub(crate) fn get_exposing_from_headers(
         headers: &ftd_p1::Headers,
         doc_id: &str,
-    ) -> ftd::ast::Result<Option<Exposing>> {
+    ) -> ftd_ast::Result<Option<Exposing>> {
         let mut exposing = vec![];
         for header in headers.0.iter() {
             if !Self::is_exposing(header) {
                 if !Export::is_export(header) {
-                    return ftd::ast::parse_error(
+                    return ftd_ast::parse_error(
                         format!("Expected `export` or `exposing`, found `{:?}`", header),
                         doc_id,
                         header.get_line_number(),
@@ -152,12 +152,12 @@ impl Exposing {
                 }
                 continue;
             }
-            let value = header.get_value(doc_id)?.ok_or(ftd::ast::Error::Parse {
+            let value = header.get_value(doc_id)?.ok_or(ftd_ast::Error::Parse {
                 message: "Expected the exposing thing name".to_string(),
                 doc_id: doc_id.to_string(),
                 line_number: header.get_line_number(),
             })?;
-            if value.eq(ftd::ast::constants::EVERYTHING) {
+            if value.eq(ftd_ast::constants::EVERYTHING) {
                 return Ok(Some(Exposing::All));
             } else {
                 exposing.extend(value.split(',').map(|v| v.trim().to_string()));

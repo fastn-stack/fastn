@@ -29,7 +29,7 @@ impl OrType {
     }
 
     pub(crate) fn scan_ast(
-        ast: ftd::ast::AST,
+        ast: ftd_ast::AST,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         let or_type = ast.get_or_type(doc.name)?;
@@ -41,7 +41,7 @@ impl OrType {
     }
 
     pub(crate) fn from_ast(
-        ast: ftd::ast::AST,
+        ast: ftd_ast::AST,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<OrType>> {
         let or_type = ast.get_or_type(doc.name)?;
@@ -114,42 +114,42 @@ impl OrTypeVariant {
     }
 
     pub fn scan_ast(
-        ast_variant: ftd::ast::OrTypeVariant,
+        ast_variant: ftd_ast::OrTypeVariant,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         match ast_variant {
-            ftd::ast::OrTypeVariant::AnonymousRecord(record) => {
+            ftd_ast::OrTypeVariant::AnonymousRecord(record) => {
                 ftd::interpreter::Record::scan_record(record, doc)
             }
-            ftd::ast::OrTypeVariant::Regular(variant) => {
+            ftd_ast::OrTypeVariant::Regular(variant) => {
                 ftd::interpreter::Field::scan_ast_field(variant, doc, &Default::default())
             }
-            ftd::ast::OrTypeVariant::Constant(variant) => {
+            ftd_ast::OrTypeVariant::Constant(variant) => {
                 ftd::interpreter::Field::scan_ast_field(variant, doc, &Default::default())
             }
         }
     }
 
     pub fn from_ast(
-        ast_variant: ftd::ast::OrTypeVariant,
+        ast_variant: ftd_ast::OrTypeVariant,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<OrTypeVariant>> {
         match ast_variant {
-            ftd::ast::OrTypeVariant::AnonymousRecord(record) => {
+            ftd_ast::OrTypeVariant::AnonymousRecord(record) => {
                 Ok(ftd::interpreter::StateWithThing::new_thing(
                     ftd::interpreter::OrTypeVariant::new_record(try_ok_state!(
                         ftd::interpreter::Record::from_record(record, doc)?
                     )),
                 ))
             }
-            ftd::ast::OrTypeVariant::Regular(variant) => {
+            ftd_ast::OrTypeVariant::Regular(variant) => {
                 Ok(ftd::interpreter::StateWithThing::new_thing(
                     ftd::interpreter::OrTypeVariant::new_regular(try_ok_state!(
                         ftd::interpreter::Field::from_ast_field(variant, doc, &Default::default())?
                     )),
                 ))
             }
-            ftd::ast::OrTypeVariant::Constant(variant) => {
+            ftd_ast::OrTypeVariant::Constant(variant) => {
                 let variant = try_ok_state!(ftd::interpreter::Field::from_ast_field(
                     variant,
                     doc,

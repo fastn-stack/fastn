@@ -39,11 +39,11 @@ impl VariableModifier {
     pub(crate) fn get_modifier(expr: &str) -> Option<VariableModifier> {
         let expr = expr.split_whitespace().collect::<Vec<&str>>();
         if expr.len() >= 2 {
-            if VariableModifier::is_optional_from_expr(expr.get(0).unwrap()) {
+            if VariableModifier::is_optional_from_expr(expr.first().unwrap()) {
                 return Some(VariableModifier::Optional);
             } else if VariableModifier::is_list_from_expr(expr.last().unwrap()) {
                 return Some(VariableModifier::List);
-            } else if VariableModifier::is_constant_from_expr(expr.get(0).unwrap()) {
+            } else if VariableModifier::is_constant_from_expr(expr.first().unwrap()) {
                 return Some(VariableModifier::Constant);
             }
         }
@@ -59,14 +59,10 @@ impl VariableKind {
         }
     }
 
-    pub(crate) fn get_kind(
-        kind: &str,
-        doc_id: &str,
-        line_number: usize,
-    ) -> ftd::ast::Result<VariableKind> {
+    pub fn get_kind(kind: &str, doc_id: &str, line_number: usize) -> ftd_ast::Result<VariableKind> {
         let expr = kind.split_whitespace().collect::<Vec<&str>>();
         if expr.len() > 5 || expr.is_empty() {
-            return ftd::ast::parse_error(
+            return ftd_ast::parse_error(
                 format!("Invalid variable kind, found: `{}`", kind),
                 doc_id,
                 line_number,
@@ -80,7 +76,7 @@ impl VariableKind {
             Some(VariableModifier::Constant) if expr.len() >= 2 => expr[1..].join(" "),
             None => expr.join(" "),
             _ => {
-                return ftd::ast::parse_error(
+                return ftd_ast::parse_error(
                     format!("Invalid variable kind, found: `{}`", kind),
                     doc_id,
                     line_number,
@@ -97,18 +93,18 @@ pub enum VariableValue {
     Optional {
         value: Box<Option<VariableValue>>,
         line_number: usize,
-        condition: Option<ftd::ast::Condition>,
+        condition: Option<ftd_ast::Condition>,
     },
     Constant {
         value: String,
         line_number: usize,
         source: ValueSource,
-        condition: Option<ftd::ast::Condition>,
+        condition: Option<ftd_ast::Condition>,
     },
     List {
         value: Vec<VariableKeyValue>,
         line_number: usize,
-        condition: Option<ftd::ast::Condition>,
+        condition: Option<ftd_ast::Condition>,
     },
     Record {
         name: String,
@@ -117,7 +113,7 @@ pub enum VariableValue {
         body: Option<BodyValue>,
         values: Vec<VariableKeyValue>,
         line_number: usize,
-        condition: Option<ftd::ast::Condition>,
+        condition: Option<ftd_ast::Condition>,
     },
     #[serde(rename = "string-value")]
     String {
@@ -125,7 +121,7 @@ pub enum VariableValue {
         #[serde(rename = "line-number")]
         line_number: usize,
         source: ValueSource,
-        condition: Option<ftd::ast::Condition>,
+        condition: Option<ftd_ast::Condition>,
     },
 }
 
@@ -148,15 +144,15 @@ pub enum ValueSource {
 }
 
 impl ValueSource {
-    pub(crate) fn to_property_source(&self) -> ftd::ast::PropertySource {
+    pub(crate) fn to_property_source(&self) -> ftd_ast::PropertySource {
         match self {
-            ftd::ast::ValueSource::Caption => ftd::ast::PropertySource::Caption,
-            ftd::ast::ValueSource::Body => ftd::ast::PropertySource::Body,
-            ftd::ast::ValueSource::Header { name, mutable } => ftd::ast::PropertySource::Header {
+            ftd_ast::ValueSource::Caption => ftd_ast::PropertySource::Caption,
+            ftd_ast::ValueSource::Body => ftd_ast::PropertySource::Body,
+            ftd_ast::ValueSource::Header { name, mutable } => ftd_ast::PropertySource::Header {
                 name: name.to_owned(),
                 mutable: mutable.to_owned(),
             },
-            ftd::ast::ValueSource::Default => ftd::ast::PropertySource::Caption,
+            ftd_ast::ValueSource::Default => ftd_ast::PropertySource::Caption,
         }
     }
 }
@@ -199,14 +195,14 @@ impl HeaderValues {
         name: &str,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::ast::Result<Option<&HeaderValue>> {
+    ) -> ftd_ast::Result<Option<&HeaderValue>> {
         let values = self
             .get_by_key(name)
             .into_iter()
             .filter(|v| v.key.eq(name))
             .collect::<Vec<_>>();
         if values.len() > 1 {
-            ftd::ast::parse_error(
+            ftd_ast::parse_error(
                 format!("Multiple header found `{}`", name),
                 doc_id,
                 line_number,
@@ -223,10 +219,10 @@ impl HeaderValues {
         key: &str,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::ast::Result<Option<&HeaderValue>> {
+    ) -> ftd_ast::Result<Option<&HeaderValue>> {
         let values = self.get_by_key(key);
         if values.len() > 1 {
-            ftd::ast::parse_error(
+            ftd_ast::parse_error(
                 format!("Multiple header found `{}`", key),
                 doc_id,
                 line_number,
@@ -241,7 +237,7 @@ impl HeaderValues {
         key: &str,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::ast::Result<Option<String>> {
+    ) -> ftd_ast::Result<Option<String>> {
         if let Some(header) = self.get_by_key_optional(key, doc_id, line_number)? {
             if header.value.is_null() {
                 Ok(None)
@@ -293,13 +289,13 @@ impl VariableValue {
         }
     }
 
-    pub(crate) fn condition(&self) -> &Option<ftd::ast::Condition> {
+    pub(crate) fn condition(&self) -> &Option<ftd_ast::Condition> {
         match self {
-            ftd::ast::VariableValue::Record { condition, .. }
-            | ftd::ast::VariableValue::Optional { condition, .. }
-            | ftd::ast::VariableValue::Constant { condition, .. }
-            | ftd::ast::VariableValue::List { condition, .. }
-            | ftd::ast::VariableValue::String { condition, .. } => condition,
+            ftd_ast::VariableValue::Record { condition, .. }
+            | ftd_ast::VariableValue::Optional { condition, .. }
+            | ftd_ast::VariableValue::Constant { condition, .. }
+            | ftd_ast::VariableValue::List { condition, .. }
+            | ftd_ast::VariableValue::String { condition, .. } => condition,
         }
     }
 
@@ -309,14 +305,14 @@ impl VariableValue {
             .map(|condition| condition.expression.clone())
     }
 
-    pub(crate) fn set_condition(self, condition: Option<ftd::ast::Condition>) -> Self {
+    pub(crate) fn set_condition(self, condition: Option<ftd_ast::Condition>) -> Self {
         let mut variable_value = self;
         let mut_condition = match &mut variable_value {
-            ftd::ast::VariableValue::Record { condition, .. }
-            | ftd::ast::VariableValue::Optional { condition, .. }
-            | ftd::ast::VariableValue::Constant { condition, .. }
-            | ftd::ast::VariableValue::List { condition, .. }
-            | ftd::ast::VariableValue::String { condition, .. } => condition,
+            ftd_ast::VariableValue::Record { condition, .. }
+            | ftd_ast::VariableValue::Optional { condition, .. }
+            | ftd_ast::VariableValue::Constant { condition, .. }
+            | ftd_ast::VariableValue::List { condition, .. }
+            | ftd_ast::VariableValue::String { condition, .. } => condition,
         };
         *mut_condition = condition;
         variable_value
@@ -325,7 +321,7 @@ impl VariableValue {
     pub fn record_name(&self) -> Option<String> {
         let mut name = None;
         let inner_value = self.inner();
-        if let Some(ftd::ast::VariableValue::Record {
+        if let Some(ftd_ast::VariableValue::Record {
             name: record_name, ..
         }) = inner_value.as_ref()
         {
@@ -334,11 +330,11 @@ impl VariableValue {
         name
     }
 
-    pub fn string(&self, doc_id: &str) -> ftd::ast::Result<String> {
+    pub fn string(&self, doc_id: &str) -> ftd_ast::Result<String> {
         match self {
             VariableValue::String { value, .. } => Ok(value.to_string()),
             VariableValue::Constant { value, .. } => Ok(value.to_string()),
-            t => ftd::ast::parse_error(
+            t => ftd_ast::parse_error(
                 format!("Expect Variable value string, found: `{:?}`", t),
                 doc_id,
                 t.line_number(),
@@ -361,10 +357,10 @@ impl VariableValue {
     pub fn from_string_bracket_list(
         value: &str,
         kind_name: String,
-        source: ftd::ast::ValueSource,
+        source: ftd_ast::ValueSource,
         line_number: usize,
-        condition: Option<ftd::ast::Condition>,
-    ) -> ftd::ast::VariableValue {
+        condition: Option<ftd_ast::Condition>,
+    ) -> ftd_ast::VariableValue {
         use itertools::Itertools;
 
         // Bracket list from string
@@ -433,11 +429,11 @@ impl VariableValue {
         matches!(self, VariableValue::List { .. })
     }
 
-    pub(crate) fn into_list(
+    pub fn into_list(
         self,
         doc_name: &str,
-        kind: &ftd::interpreter::Kind,
-    ) -> ftd::ast::Result<Vec<(String, VariableValue)>> {
+        kind_name: String,
+    ) -> ftd_ast::Result<Vec<(String, VariableValue)>> {
         use itertools::Itertools;
 
         match self {
@@ -450,7 +446,7 @@ impl VariableValue {
                 // Bracket list from string
                 let bracket_list = VariableValue::from_string_bracket_list(
                     &value,
-                    kind.get_name(),
+                    kind_name,
                     source,
                     line_number,
                     condition,
@@ -459,7 +455,7 @@ impl VariableValue {
                     VariableValue::List { value, .. } => {
                         Ok(value.into_iter().map(|v| (v.key, v.value)).collect_vec())
                     }
-                    t => ftd::ast::parse_error(
+                    t => ftd_ast::parse_error(
                         format!("Invalid bracket list, found: `{:?}`", t),
                         doc_name,
                         t.line_number(),
@@ -469,7 +465,7 @@ impl VariableValue {
             VariableValue::List { value, .. } => {
                 Ok(value.into_iter().map(|v| (v.key, v.value)).collect_vec())
             }
-            t => ftd::ast::parse_error(
+            t => ftd_ast::parse_error(
                 format!("Expected list, found: `{:?}`", t),
                 doc_name,
                 t.line_number(),
@@ -489,7 +485,7 @@ impl VariableValue {
     pub fn get_record(
         &self,
         doc_id: &str,
-    ) -> ftd::ast::Result<(
+    ) -> ftd_ast::Result<(
         &String,
         &Box<Option<VariableValue>>,
         &HeaderValues,
@@ -507,7 +503,7 @@ impl VariableValue {
                 line_number,
                 ..
             } => Ok((name, caption, headers, body, values, *line_number)),
-            t => ftd::ast::parse_error(
+            t => ftd_ast::parse_error(
                 format!("Expected Record, found: `{:?}`", t),
                 doc_id,
                 self.line_number(),
@@ -515,7 +511,7 @@ impl VariableValue {
         }
     }
 
-    pub fn get_processor_body(&self, doc_id: &str) -> ftd::ast::Result<Option<BodyValue>> {
+    pub fn get_processor_body(&self, doc_id: &str) -> ftd_ast::Result<Option<BodyValue>> {
         match self {
             VariableValue::Record { body, .. } => Ok(body.clone()),
             VariableValue::String {
@@ -535,7 +531,7 @@ impl VariableValue {
                     .and_then(|v| v.value.get_processor_body(doc_id).ok().flatten());
                 Ok(value)
             }
-            t => ftd::ast::parse_error(
+            t => ftd_ast::parse_error(
                 format!("Expected Body, found: `{:?}`", t),
                 doc_id,
                 self.line_number(),
@@ -557,8 +553,8 @@ impl VariableValue {
     pub(crate) fn from_p1_with_modifier(
         section: &ftd_p1::Section,
         doc_id: &str,
-        kind: &ftd::ast::VariableKind,
-    ) -> ftd::ast::Result<VariableValue> {
+        kind: &ftd_ast::VariableKind,
+    ) -> ftd_ast::Result<VariableValue> {
         let value = VariableValue::from_p1(section, doc_id)?;
         value.into_modifier(doc_id, section.line_number, kind)
     }
@@ -566,8 +562,8 @@ impl VariableValue {
     pub(crate) fn from_header_with_modifier(
         header: &ftd_p1::Header,
         doc_id: &str,
-        kind: &ftd::ast::VariableKind,
-    ) -> ftd::ast::Result<VariableValue> {
+        kind: &ftd_ast::VariableKind,
+    ) -> ftd_ast::Result<VariableValue> {
         let value = VariableValue::from_p1_header(header, doc_id)?;
         value.into_modifier(doc_id, header.get_line_number(), kind)
     }
@@ -576,8 +572,8 @@ impl VariableValue {
         self,
         doc_id: &str,
         line_number: usize,
-        kind: &ftd::ast::VariableKind,
-    ) -> ftd::ast::Result<VariableValue> {
+        kind: &ftd_ast::VariableKind,
+    ) -> ftd_ast::Result<VariableValue> {
         match &kind.modifier {
             Some(modifier) if modifier.is_list() => {
                 if self.is_null() {
@@ -601,13 +597,13 @@ impl VariableValue {
                         Ok(VariableValue::from_string_bracket_list(
                             value,
                             kind.kind.clone(),
-                            ftd::ast::ValueSource::Default,
+                            ftd_ast::ValueSource::Default,
                             line_number,
                             condition.clone(),
                         ))
                     }
                 } else {
-                    ftd::ast::parse_error(
+                    ftd_ast::parse_error(
                         format!("Expected List found: `{:?}`", self),
                         doc_id,
                         line_number,
@@ -622,7 +618,7 @@ impl VariableValue {
     pub(crate) fn from_p1(
         section: &ftd_p1::Section,
         doc_id: &str,
-    ) -> ftd::ast::Result<VariableValue> {
+    ) -> ftd_ast::Result<VariableValue> {
         let values = section
             .sub_sections
             .iter()
@@ -632,7 +628,7 @@ impl VariableValue {
                     value: VariableValue::from_p1(v, doc_id)?,
                 })
             })
-            .collect::<ftd::ast::Result<Vec<VariableKeyValue>>>()?;
+            .collect::<ftd_ast::Result<Vec<VariableKeyValue>>>()?;
 
         let caption = match section.caption.as_ref() {
             Some(header) => VariableValue::from_p1_header(header, doc_id)?.inner(),
@@ -644,32 +640,32 @@ impl VariableValue {
             .0
             .iter()
             .filter(|v| {
-                (!ftd::ast::utils::is_condition(v.get_key().as_str(), &v.get_kind())
-                    && v.get_key().ne(ftd::ast::utils::PROCESSOR))
-                    && ftd::ast::VariableFlags::from_header(v, doc_id).is_err()
+                (!ftd_ast::utils::is_condition(v.get_key().as_str(), &v.get_kind())
+                    && v.get_key().ne(ftd_ast::utils::PROCESSOR))
+                    && ftd_ast::VariableFlags::from_header(v, doc_id).is_err()
             })
             .map(|header| {
                 let key = header.get_key();
-                let header_key = if ftd::ast::utils::is_variable_mutable(key.as_str())
-                    && !ftd::ast::utils::is_header_key(key.as_str())
+                let header_key = if ftd_ast::utils::is_variable_mutable(key.as_str())
+                    && !ftd_ast::utils::is_header_key(key.as_str())
                 {
-                    key.trim_start_matches(ftd::ast::utils::REFERENCE)
+                    key.trim_start_matches(ftd_ast::utils::REFERENCE)
                 } else {
                     key.as_str()
                 };
 
                 Ok(HeaderValue::new(
                     header_key,
-                    ftd::ast::utils::is_variable_mutable(key.as_str()),
+                    ftd_ast::utils::is_variable_mutable(key.as_str()),
                     VariableValue::from_p1_header(header, doc_id)?,
                     header.get_line_number(),
                     header.get_kind(),
                     header.get_condition(),
                 ))
             })
-            .collect::<ftd::ast::Result<Vec<HeaderValue>>>()?;
+            .collect::<ftd_ast::Result<Vec<HeaderValue>>>()?;
 
-        let condition = ftd::ast::Condition::from_headers(&section.headers, doc_id)?;
+        let condition = ftd_ast::Condition::from_headers(&section.headers, doc_id)?;
         let body = section
             .body
             .as_ref()
@@ -682,7 +678,7 @@ impl VariableValue {
                 VariableValue::String {
                     value: body.value,
                     line_number: body.line_number,
-                    source: ftd::ast::ValueSource::Body,
+                    source: ftd_ast::ValueSource::Body,
                     condition,
                 }
             } else {
@@ -716,11 +712,11 @@ impl VariableValue {
     pub(crate) fn from_p1_header(
         header: &ftd_p1::Header,
         doc_id: &str,
-    ) -> ftd::ast::Result<VariableValue> {
+    ) -> ftd_ast::Result<VariableValue> {
         Ok(match header {
             ftd_p1::Header::KV(ftd_p1::KV {
                 value, line_number, ..
-            }) => VariableValue::from_value(value, ftd::ast::ValueSource::Default, *line_number),
+            }) => VariableValue::from_value(value, ftd_ast::ValueSource::Default, *line_number),
             ftd_p1::Header::Section(ftd_p1::SectionHeader {
                 section,
                 line_number,
@@ -735,11 +731,11 @@ impl VariableValue {
                             value: VariableValue::from_p1(v, doc_id)?,
                         })
                     })
-                    .collect::<ftd::ast::Result<Vec<VariableKeyValue>>>()?,
+                    .collect::<ftd_ast::Result<Vec<VariableKeyValue>>>()?,
                 line_number: *line_number,
                 condition: condition
                     .as_ref()
-                    .map(|expr| ftd::ast::Condition::new(expr, *line_number)),
+                    .map(|expr| ftd_ast::Condition::new(expr, *line_number)),
             },
             ftd_p1::Header::BlockRecordHeader(ftd_p1::BlockRecordHeader {
                 key,
@@ -762,8 +758,8 @@ impl VariableValue {
                     for header in fields.iter() {
                         let key = header.get_key();
                         headers.push(HeaderValue::new(
-                            key.trim_start_matches(ftd::ast::utils::REFERENCE),
-                            ftd::ast::utils::is_variable_mutable(key.as_str()),
+                            key.trim_start_matches(ftd_ast::utils::REFERENCE),
+                            ftd_ast::utils::is_variable_mutable(key.as_str()),
                             VariableValue::from_p1_header(header, doc_id)?,
                             header.get_line_number(),
                             header.get_kind(),
@@ -780,14 +776,14 @@ impl VariableValue {
                 line_number: *line_number,
                 condition: condition
                     .as_ref()
-                    .map(|expr| ftd::ast::Condition::new(expr, *line_number)),
+                    .map(|expr| ftd_ast::Condition::new(expr, *line_number)),
             },
         })
     }
 
     pub(crate) fn from_value(
         value: &Option<String>,
-        source: ftd::ast::ValueSource,
+        source: ftd_ast::ValueSource,
         line_number: usize,
     ) -> VariableValue {
         match value {
@@ -806,10 +802,10 @@ impl VariableValue {
     }
 
     pub fn has_request_data_header(&self) -> bool {
-        if let Some(ftd::ast::VariableValue::Record { headers, .. }) = self.inner() {
+        if let Some(ftd_ast::VariableValue::Record { headers, .. }) = self.inner() {
             for h in headers.0.iter() {
                 if h.key.trim_end_matches('$').eq("processor") {
-                    if let ftd::ast::VariableValue::String { ref value, .. } = h.value {
+                    if let ftd_ast::VariableValue::String { ref value, .. } = h.value {
                         if value.contains("request-data") {
                             return true;
                         }
@@ -839,18 +835,18 @@ impl Condition {
     pub(crate) fn from_headers(
         headers: &ftd_p1::Headers,
         doc_id: &str,
-    ) -> ftd::ast::Result<Option<Condition>> {
+    ) -> ftd_ast::Result<Option<Condition>> {
         let condition = headers
             .0
             .iter()
-            .find(|v| ftd::ast::utils::is_condition(v.get_key().as_str(), &v.get_kind()));
+            .find(|v| ftd_ast::utils::is_condition(v.get_key().as_str(), &v.get_kind()));
         let condition = if let Some(condition) = condition {
             condition
         } else {
             return Ok(None);
         };
 
-        let expression = condition.get_value(doc_id)?.ok_or(ftd::ast::Error::Parse {
+        let expression = condition.get_value(doc_id)?.ok_or(ftd_ast::Error::Parse {
             message: "`if` condition must contain expression".to_string(),
             doc_id: doc_id.to_string(),
             line_number: condition.get_line_number(),

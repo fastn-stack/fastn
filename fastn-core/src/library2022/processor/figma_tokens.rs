@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 pub fn process_figma_tokens(
-    value: ftd::ast::VariableValue,
+    value: ftd_ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &mut ftd::interpreter::TDoc,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
@@ -43,7 +43,7 @@ pub fn process_figma_tokens(
 }
 
 pub fn process_figma_tokens_old(
-    value: ftd::ast::VariableValue,
+    value: ftd_ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &mut ftd::interpreter::TDoc,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
@@ -256,7 +256,7 @@ pub fn capitalize_word(s: &str) -> String {
 }
 
 fn extract_light_dark_colors(
-    value: &ftd::ast::VariableValue,
+    value: &ftd_ast::VariableValue,
     doc: &mut ftd::interpreter::TDoc,
     variable_name: &mut Option<String>,
     light_colors: &mut ftd::Map<ftd::Map<VT>>,
@@ -264,7 +264,7 @@ fn extract_light_dark_colors(
     line_number: usize,
 ) -> ftd::interpreter::Result<()> {
     let headers = match &value {
-        ftd::ast::VariableValue::Record { headers, .. } => headers,
+        ftd_ast::VariableValue::Record { headers, .. } => headers,
         _ => {
             return Err(ftd::interpreter::Error::InvalidKind {
                 message: format!("Expected record of color-scheme found: {:?}", value),
@@ -278,7 +278,7 @@ fn extract_light_dark_colors(
     let name = headers.get_by_key_optional("name", doc.name, line_number)?;
     if let Some(name) = name {
         match &name.value {
-            ftd::ast::VariableValue::String { value: hval, .. } => {
+            ftd_ast::VariableValue::String { value: hval, .. } => {
                 *variable_name = Some(hval.to_string())
             }
             _ => {
@@ -302,7 +302,7 @@ fn extract_light_dark_colors(
     };
 
     let hval = match &variable.value {
-        ftd::ast::VariableValue::String { value: hval, .. } => hval,
+        ftd_ast::VariableValue::String { value: hval, .. } => hval,
         t => {
             return Err(ftd::interpreter::Error::InvalidKind {
                 message: format!(

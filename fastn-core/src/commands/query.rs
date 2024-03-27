@@ -86,7 +86,7 @@ fn get_ast_json(document: &fastn_core::Document) -> fastn_core::Result<serde_jso
     let id = document.id_with_package();
     let p1 = ftd_p1::parse(document.content.as_str(), id.as_str())?;
 
-    let ast = ftd::ast::AST::from_sections(p1.as_slice(), id.as_str())?;
+    let ast = ftd_ast::AST::from_sections(p1.as_slice(), id.as_str())?;
     let value = serde_json::to_value(ast)?;
 
     Ok(value)

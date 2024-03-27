@@ -1,5 +1,5 @@
 pub fn process_readers(
-    value: ftd::ast::VariableValue,
+    value: ftd_ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc,
     req_config: &fastn_core::RequestConfig,
@@ -10,7 +10,7 @@ pub fn process_readers(
 
     let headers = match value.get_record(doc.name) {
         Ok(val) => val.2.to_owned(),
-        Err(_e) => ftd::ast::HeaderValues::new(vec![]),
+        Err(_e) => ftd_ast::HeaderValues::new(vec![]),
     };
 
     let document = headers
@@ -33,7 +33,7 @@ pub fn process_readers(
 }
 
 pub fn process_writers(
-    value: ftd::ast::VariableValue,
+    value: ftd_ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc,
     req_config: &fastn_core::RequestConfig,
@@ -43,7 +43,7 @@ pub fn process_writers(
 
     let headers = match value.get_record(doc.name) {
         Ok(val) => val.2.to_owned(),
-        Err(_e) => ftd::ast::HeaderValues::new(vec![]),
+        Err(_e) => ftd_ast::HeaderValues::new(vec![]),
     };
 
     // sitemap document otherwise use current document
@@ -74,7 +74,7 @@ pub fn current_url(
 }
 
 pub fn document_id(
-    _value: ftd::ast::VariableValue,
+    _value: ftd_ast::VariableValue,
     _kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc,
     req_config: &fastn_core::RequestConfig,
@@ -103,7 +103,7 @@ pub fn document_id(
 }
 
 pub fn document_full_id(
-    _value: ftd::ast::VariableValue,
+    _value: ftd_ast::VariableValue,
     _kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc,
     req_config: &fastn_core::RequestConfig,
@@ -114,7 +114,7 @@ pub fn document_full_id(
 }
 
 pub fn document_suffix(
-    _value: ftd::ast::VariableValue,
+    _value: ftd_ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc,
     req_config: &fastn_core::RequestConfig,
@@ -141,7 +141,7 @@ pub fn document_suffix(
 }
 
 pub async fn document_name<'a>(
-    value: ftd::ast::VariableValue,
+    value: ftd_ast::VariableValue,
     _kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'a>,
     req_config: &fastn_core::RequestConfig,

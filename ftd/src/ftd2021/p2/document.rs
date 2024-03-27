@@ -318,13 +318,13 @@ impl Document {
             }
             string = format!("{}}});", string);
 
-            if !keydown_seq_event.is_empty() {
+            if keydown_seq_event.is_empty() {
+                string
+            } else {
                 format!(
                     "{}\n\n\n{}\n\n\n{}\n\n\n{}",
                     string, global_variables, keydown_events, keyup_events
                 )
-            } else {
-                string
             }
         }
 

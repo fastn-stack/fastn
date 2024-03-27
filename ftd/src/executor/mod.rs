@@ -14,7 +14,7 @@ pub(crate) mod utils;
 pub mod value;
 mod youtube_id;
 
-pub type FieldWithValue = (ftd::interpreter::Field, Option<ftd::ast::VariableValue>);
+pub type FieldWithValue = (ftd::interpreter::Field, Option<ftd_ast::VariableValue>);
 
 pub use dummy::{DummyElement, ElementConstructor};
 pub use element::{

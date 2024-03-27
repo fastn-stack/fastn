@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 pub fn process_typography_tokens(
-    value: ftd::ast::VariableValue,
+    value: ftd_ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &mut ftd::interpreter::TDoc,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
@@ -43,7 +43,7 @@ pub fn process_typography_tokens(
 }
 
 fn extract_types(
-    value: &ftd::ast::VariableValue,
+    value: &ftd_ast::VariableValue,
     doc: &mut ftd::interpreter::TDoc,
     variable_name: &mut Option<String>,
     desktop_types: &mut ftd::Map<TypeData>,
@@ -51,7 +51,7 @@ fn extract_types(
     line_number: usize,
 ) -> ftd::interpreter::Result<()> {
     let headers = match &value {
-        ftd::ast::VariableValue::Record { headers, .. } => headers,
+        ftd_ast::VariableValue::Record { headers, .. } => headers,
         _ => {
             return Err(ftd::interpreter::Error::InvalidKind {
                 message: format!("Expected record of ftd.type-data found: {:?}", value),
@@ -66,7 +66,7 @@ fn extract_types(
 
     if let Some(name) = name {
         match &name.value {
-            ftd::ast::VariableValue::String { value: hval, .. } => {
+            ftd_ast::VariableValue::String { value: hval, .. } => {
                 *variable_name = Some(hval.to_string())
             }
             _ => {
@@ -90,7 +90,7 @@ fn extract_types(
     };
 
     let variable_header_value = match &variable_header.value {
-        ftd::ast::VariableValue::String { value: hval, .. } => hval,
+        ftd_ast::VariableValue::String { value: hval, .. } => hval,
         t => {
             return Err(ftd::interpreter::Error::InvalidKind {
                 message: format!(

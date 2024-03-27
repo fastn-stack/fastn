@@ -111,7 +111,7 @@ async fn pool(
 }
 
 pub async fn process(
-    value: ftd::ast::VariableValue,
+    value: ftd_ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &fastn_core::RequestConfig,
@@ -211,7 +211,7 @@ fn resolve_variable_from_doc(
 
 fn resolve_variable_from_headers(
     doc: &ftd::interpreter::TDoc<'_>,
-    headers: &ftd::ast::HeaderValues,
+    headers: &ftd_ast::HeaderValues,
     var: &str,
     e: &postgres_types::Type,
     doc_name: &str,
@@ -222,7 +222,7 @@ fn resolve_variable_from_headers(
         None => return Ok(None),
     };
 
-    if let ftd::ast::VariableValue::String { value, .. } = &header.value {
+    if let ftd_ast::VariableValue::String { value, .. } = &header.value {
         if let Some(stripped) = value.strip_prefix('$') {
             return resolve_variable_from_doc(doc, stripped, e, line_number).map(Some);
         }
@@ -250,13 +250,13 @@ fn resolve_variable_from_headers(
     }
 
     Ok(match (e, &header.value) {
-        (&postgres_types::Type::TEXT, ftd::ast::VariableValue::String { value, .. }) => {
+        (&postgres_types::Type::TEXT, ftd_ast::VariableValue::String { value, .. }) => {
             Some(Box::new(value.to_string()))
         }
-        (&postgres_types::Type::VARCHAR, ftd::ast::VariableValue::String { value, .. }) => {
+        (&postgres_types::Type::VARCHAR, ftd_ast::VariableValue::String { value, .. }) => {
             Some(Box::new(value.to_string()))
         }
-        (&postgres_types::Type::INT4, ftd::ast::VariableValue::String { value, .. }) => {
+        (&postgres_types::Type::INT4, ftd_ast::VariableValue::String { value, .. }) => {
             Some(Box::new(friendlier_error(
                 value.parse::<i32>(),
                 var,
@@ -266,7 +266,7 @@ fn resolve_variable_from_headers(
                 line_number,
             )?))
         }
-        (&postgres_types::Type::INT8, ftd::ast::VariableValue::String { value, .. }) => {
+        (&postgres_types::Type::INT8, ftd_ast::VariableValue::String { value, .. }) => {
             Some(Box::new(friendlier_error(
                 value.parse::<i64>(),
                 var,
@@ -276,7 +276,7 @@ fn resolve_variable_from_headers(
                 line_number,
             )?))
         }
-        (&postgres_types::Type::FLOAT4, ftd::ast::VariableValue::String { value, .. }) => {
+        (&postgres_types::Type::FLOAT4, ftd_ast::VariableValue::String { value, .. }) => {
             Some(Box::new(friendlier_error(
                 value.parse::<f32>(),
                 var,
@@ -286,7 +286,7 @@ fn resolve_variable_from_headers(
                 line_number,
             )?))
         }
-        (&postgres_types::Type::FLOAT8, ftd::ast::VariableValue::String { value, .. }) => {
+        (&postgres_types::Type::FLOAT8, ftd_ast::VariableValue::String { value, .. }) => {
             Some(Box::new(friendlier_error(
                 value.parse::<f64>(),
                 var,
@@ -296,7 +296,7 @@ fn resolve_variable_from_headers(
                 line_number,
             )?))
         }
-        (&postgres_types::Type::BOOL, ftd::ast::VariableValue::String { value, .. }) => {
+        (&postgres_types::Type::BOOL, ftd_ast::VariableValue::String { value, .. }) => {
             Some(Box::new(friendlier_error(
                 value.parse::<bool>(),
                 var,
@@ -321,7 +321,7 @@ fn prepare_args(
     expected_args: &[postgres_types::Type],
     doc: &ftd::interpreter::TDoc<'_>,
     line_number: usize,
-    headers: ftd::ast::HeaderValues,
+    headers: ftd_ast::HeaderValues,
 ) -> ftd::interpreter::Result<QueryArgs> {
     if expected_args.len() != query_args.len() {
         return ftd::interpreter::utils::e2(
@@ -350,7 +350,7 @@ async fn execute_query(
     query: &str,
     doc: &ftd::interpreter::TDoc<'_>,
     line_number: usize,
-    headers: ftd::ast::HeaderValues,
+    headers: ftd_ast::HeaderValues,
     req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
     let _lock = EXECUTE_QUERY_LOCK.lock().await;

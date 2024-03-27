@@ -383,16 +383,16 @@ impl KindData {
         kind
     }
 
-    pub(crate) fn into_by_ast_modifier(self, modifier: &ftd::ast::VariableModifier) -> Self {
+    pub(crate) fn into_by_ast_modifier(self, modifier: &ftd_ast::VariableModifier) -> Self {
         match modifier {
-            ftd::ast::VariableModifier::Optional => self.optional(),
-            ftd::ast::VariableModifier::List => self.list(),
-            ftd::ast::VariableModifier::Constant => self.constant(),
+            ftd_ast::VariableModifier::Optional => self.optional(),
+            ftd_ast::VariableModifier::List => self.list(),
+            ftd_ast::VariableModifier::Constant => self.constant(),
         }
     }
 
     pub(crate) fn scan_ast_kind(
-        var_kind: ftd::ast::VariableKind,
+        var_kind: ftd_ast::VariableKind,
         known_kinds: &ftd::Map<ftd::interpreter::Kind>,
         doc: &mut ftd::interpreter::TDoc,
         line_number: usize,
@@ -407,7 +407,7 @@ impl KindData {
     }
 
     pub fn from_ast_kind(
-        var_kind: ftd::ast::VariableKind,
+        var_kind: ftd_ast::VariableKind,
         known_kinds: &ftd::Map<ftd::interpreter::Kind>,
         doc: &mut ftd::interpreter::TDoc,
         line_number: usize,

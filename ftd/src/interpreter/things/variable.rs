@@ -11,7 +11,7 @@ pub struct Variable {
 
 impl Variable {
     pub(crate) fn scan_ast(
-        ast: ftd::ast::AST,
+        ast: ftd_ast::AST,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         let variable_definition = ast.clone().get_variable_definition(doc.name)?;
@@ -71,7 +71,7 @@ impl Variable {
     }
 
     pub(crate) fn from_ast(
-        ast: ftd::ast::AST,
+        ast: ftd_ast::AST,
         doc: &mut ftd::interpreter::TDoc,
         number_of_scan: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Variable>>
@@ -187,7 +187,7 @@ impl Variable {
     }
 
     pub(crate) fn scan_update_from_ast(
-        ast: ftd::ast::AST,
+        ast: ftd_ast::AST,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         let variable_definition = ast.get_variable_invocation(doc.name)?;
@@ -195,7 +195,7 @@ impl Variable {
     }
 
     pub(crate) fn update_from_ast(
-        ast: ftd::ast::AST,
+        ast: ftd_ast::AST,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Variable>>
     {

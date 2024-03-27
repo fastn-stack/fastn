@@ -200,7 +200,7 @@ impl Library2022 {
     /// process the $processor$ and return the processor's output
     pub async fn process<'a>(
         &'a mut self,
-        ast: ftd::ast::AST,
+        ast: ftd_ast::AST,
         processor: String,
         doc: &'a mut ftd::interpreter::TDoc<'a>,
     ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
@@ -269,12 +269,12 @@ impl Library2022 {
 }
 
 fn get_processor_data(
-    ast: ftd::ast::AST,
+    ast: ftd_ast::AST,
     doc: &mut ftd::interpreter::TDoc,
 ) -> ftd::interpreter::Result<(
     String,
     String,
-    ftd::ast::VariableValue,
+    ftd_ast::VariableValue,
     ftd::interpreter::Kind,
 )> {
     let line_number = ast.line_number();

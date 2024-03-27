@@ -16,7 +16,6 @@ pub use ftd2021::ui::{
 pub use ftd2021::value_with_default::ValueWithDefault;
 pub use ftd2021::variable::{PropertyValue, TextSource, Value, Variable, VariableFlags};
 
-pub mod ast;
 pub mod executor;
 pub mod ftd2021;
 pub mod html;

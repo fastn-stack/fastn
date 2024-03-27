@@ -19,7 +19,7 @@ impl Expression {
     }
 
     pub(crate) fn scan_ast_condition(
-        condition: ftd::ast::Condition,
+        condition: ftd_ast::Condition,
         definition_name_with_arguments: Option<(&str, &[String])>,
         loop_object_name_and_kind: &Option<String>,
         doc: &mut ftd::interpreter::TDoc,
@@ -47,7 +47,7 @@ impl Expression {
     }
 
     pub(crate) fn from_ast_condition(
-        condition: ftd::ast::Condition,
+        condition: ftd_ast::Condition,
         definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         doc: &mut ftd::interpreter::TDoc,
@@ -236,9 +236,9 @@ fn get_variable_identifier_read(
         let mut values: Vec<VariableIdentifierReadNode> = vec![];
         if let Some(operator) = node.operator().get_variable_identifier_write() {
             write_variable.push(operator);
-            // TODO: if operator.eq(ftd::ast::NULL) throw error
+            // TODO: if operator.eq(ftd_ast::NULL) throw error
         } else if let Some(operator) = node.operator().get_variable_identifier_read() {
-            if operator.eq(ftd::ast::NULL) {
+            if operator.eq(ftd_ast::NULL) {
                 *node.operator_mut() = fastn_grammar::evalexpr::Operator::Const {
                     value: fastn_grammar::evalexpr::Value::Empty,
                 };

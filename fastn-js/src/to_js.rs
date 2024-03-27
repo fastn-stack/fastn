@@ -255,16 +255,18 @@ impl fastn_js::InstantiateComponent {
         pretty::RcDoc::text(format!(
             "let {} = {}(",
             self.var_name,
-            if !self.already_formatted {
-                fastn_js::utils::name_to_js(self.component.to_js().as_str())
-            } else {
+            if self.already_formatted {
                 self.component.to_js().to_owned()
+            } else {
+                fastn_js::utils::name_to_js(self.component.to_js().as_str())
             }
         ))
         .append(pretty::RcDoc::text(self.parent.clone()))
         .append(comma().append(space()))
         .append(pretty::RcDoc::text(self.inherited.clone()))
-        .append(if !self.arguments.is_empty() {
+        .append(if self.arguments.is_empty() {
+            pretty::RcDoc::nil()
+        } else {
             comma().append(space()).append(
                 text("{")
                     .append(
@@ -286,8 +288,6 @@ impl fastn_js::InstantiateComponent {
                     )
                     .append(text("}")),
             )
-        } else {
-            pretty::RcDoc::nil()
         })
         .append(text(");"))
     }
@@ -649,7 +649,7 @@ impl fastn_js::OrType {
         variable_to_js(
             self.name.as_str(),
             &self.prefix,
-            text(self.variants.to_js().as_str()),
+            text(self.variant.to_js().as_str()),
             false,
         )
     }
@@ -743,14 +743,14 @@ impl fastn_js::UDF {
             .append(text("{"))
             .append(pretty::RcDoc::intersperse(
                 self.args.iter().filter_map(|(k, v)| {
-                    if !v.is_undefined() {
+                    if v.is_undefined() {
+                        None
+                    } else {
                         Some(format!(
                             "{}: {},",
                             fastn_js::utils::name_to_js_(k),
                             v.to_js()
                         ))
-                    } else {
-                        None
                     }
                 }),
                 pretty::RcDoc::softline(),
@@ -916,10 +916,10 @@ impl ExpressionGenerator {
                             || self.is_tuple(first.operator()),
                     )
                 });
-            let f = if !only_one_child {
-                format!("({})", result.join(""))
-            } else {
+            let f = if only_one_child {
                 result.join("")
+            } else {
+                format!("({})", result.join(""))
             };
 
             return if root && !is_assignment_or_chain && !f.is_empty() {
@@ -972,15 +972,7 @@ impl ExpressionGenerator {
             // Todo: if node.children().len() != 2 {throw error}
             let first = node.children().first().unwrap(); //todo remove unwrap()
             let second = node.children().get(1).unwrap(); //todo remove unwrap()
-            if !arguments.iter().any(|v| first.to_string().eq(&v.0)) {
-                return [
-                    "let ".to_string(),
-                    self.to_js_(first, false, arguments, false),
-                    node.operator().to_string(),
-                    self.to_js_(second, false, arguments, false),
-                ]
-                .join("");
-            } else if first.operator().get_variable_identifier_write().is_some() {
+            if arguments.iter().any(|v| first.to_string().eq(&v.0)) {
                 let var = self.to_js_(first, false, arguments, false);
                 let val = self.to_js_(second, false, arguments, true);
                 return format!(
@@ -997,6 +989,14 @@ impl ExpressionGenerator {
                     var = var,
                     refined_var = fastn_js::utils::name_to_js_(var.as_str())
                 );
+            } else if first.operator().get_variable_identifier_write().is_some() {
+                return [
+                    "let ".to_string(),
+                    self.to_js_(first, false, arguments, false),
+                    node.operator().to_string(),
+                    self.to_js_(second, false, arguments, false),
+                ]
+                .join("");
             };
             return [
                 self.to_js_(first, false, arguments, false),

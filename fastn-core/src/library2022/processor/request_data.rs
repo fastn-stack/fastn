@@ -1,6 +1,6 @@
 pub fn process(
     variable_name: String,
-    value: ftd::ast::VariableValue,
+    value: ftd_ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc,
     req_config: &fastn_core::RequestConfig,
@@ -45,13 +45,13 @@ pub fn process(
     }
 
     let data = match &value {
-        ftd::ast::VariableValue::String { value, .. } => {
+        ftd_ast::VariableValue::String { value, .. } => {
             serde_json::Value::String(value.to_string())
         }
-        ftd::ast::VariableValue::Optional {
+        ftd_ast::VariableValue::Optional {
             value: ref ivalue, ..
         } => match ivalue.as_ref() {
-            Some(ftd::ast::VariableValue::String { value, .. }) => {
+            Some(ftd_ast::VariableValue::String { value, .. }) => {
                 serde_json::Value::String(value.to_string())
             }
             _ => serde_json::Value::Null,

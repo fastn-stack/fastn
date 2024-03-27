@@ -1,4 +1,4 @@
-use crate::ast::kind::{HeaderValue, HeaderValues};
+use ftd_ast::kind::{HeaderValue, HeaderValues};
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct ComponentDefinition {
@@ -35,9 +35,9 @@ impl ComponentDefinition {
     pub fn from_p1(
         section: &ftd_p1::Section,
         doc_id: &str,
-    ) -> ftd::ast::Result<ComponentDefinition> {
+    ) -> ftd_ast::Result<ComponentDefinition> {
         if !Self::is_component_definition(section) {
-            return ftd::ast::parse_error(
+            return ftd_ast::parse_error(
                 format!(
                     "Section is not component definition section, found `{:?}`",
                     section
@@ -48,7 +48,7 @@ impl ComponentDefinition {
         }
 
         if section.sub_sections.len() != 1 {
-            return ftd::ast::parse_error(
+            return ftd_ast::parse_error(
                 format!(
                     "Component definition should be exactly one, found `{:?}`",
                     section
@@ -59,7 +59,7 @@ impl ComponentDefinition {
         }
 
         let (css, arguments) =
-            ftd::ast::utils::get_css_and_fields_from_headers(&section.headers, doc_id)?;
+            ftd_ast::utils::get_css_and_fields_from_headers(&section.headers, doc_id)?;
 
         let definition = Component::from_p1(section.sub_sections.first().unwrap(), doc_id)?;
 
@@ -83,7 +83,7 @@ pub struct Component {
     pub name: String,
     pub properties: Vec<Property>,
     pub iteration: Option<Loop>,
-    pub condition: Option<ftd::ast::Condition>,
+    pub condition: Option<ftd_ast::Condition>,
     pub events: Vec<Event>,
     pub children: Vec<Component>,
     #[serde(rename = "line-number")]
@@ -97,7 +97,7 @@ impl Component {
         name: &str,
         properties: Vec<Property>,
         iteration: Option<Loop>,
-        condition: Option<ftd::ast::Condition>,
+        condition: Option<ftd_ast::Condition>,
         events: Vec<Event>,
         children: Vec<Component>,
         line_number: usize,
@@ -115,12 +115,12 @@ impl Component {
     }
 
     pub(crate) fn is_component(section: &ftd_p1::Section) -> bool {
-        section.kind.is_none() && !section.name.starts_with(ftd::ast::utils::REFERENCE)
+        section.kind.is_none() && !section.name.starts_with(ftd_ast::utils::REFERENCE)
     }
 
-    pub(crate) fn from_p1(section: &ftd_p1::Section, doc_id: &str) -> ftd::ast::Result<Component> {
+    pub(crate) fn from_p1(section: &ftd_p1::Section, doc_id: &str) -> ftd_ast::Result<Component> {
         if !Self::is_component(section) {
-            return ftd::ast::parse_error(
+            return ftd_ast::parse_error(
                 format!("Section is not ComponentDefinition, found `{:?}`", section),
                 doc_id,
                 section.line_number,
@@ -131,10 +131,10 @@ impl Component {
             let mut properties = vec![];
             for header in section.headers.0.iter() {
                 let name = header.get_key();
-                if name.eq(ftd::ast::utils::LOOP)
-                    || name.eq(ftd::ast::utils::FOR)
+                if name.eq(ftd_ast::utils::LOOP)
+                    || name.eq(ftd_ast::utils::FOR)
                     || Event::get_event_name(name.as_str()).is_some()
-                    || ftd::ast::utils::is_condition(header.get_key().as_str(), &header.get_kind())
+                    || ftd_ast::utils::is_condition(header.get_key().as_str(), &header.get_kind())
                 {
                     continue;
                 }
@@ -142,9 +142,9 @@ impl Component {
                     header,
                     doc_id,
                     PropertySource::Header {
-                        mutable: ftd::ast::utils::is_variable_mutable(name.as_str()),
+                        mutable: ftd_ast::utils::is_variable_mutable(name.as_str()),
                         name: name
-                            .trim_start_matches(ftd::ast::utils::REFERENCE)
+                            .trim_start_matches(ftd_ast::utils::REFERENCE)
                             .to_string(),
                     },
                 )?);
@@ -181,8 +181,8 @@ impl Component {
 
         let iteration = Loop::from_headers(&section.headers, doc_id)?;
         let events = Event::from_headers(&section.headers, doc_id)?;
-        let condition = ftd::ast::Condition::from_headers(&section.headers, doc_id)?;
-        let id = ftd::ast::utils::get_component_id(&section.headers, doc_id)?;
+        let condition = ftd_ast::Condition::from_headers(&section.headers, doc_id)?;
+        let id = ftd_ast::utils::get_component_id(&section.headers, doc_id)?;
 
         Ok(Component::new(
             id,
@@ -198,14 +198,14 @@ impl Component {
 
     pub fn from_variable_value(
         key: &str,
-        value: ftd::ast::VariableValue,
+        value: ftd_ast::VariableValue,
         doc_id: &str,
-    ) -> ftd::ast::Result<Component> {
+    ) -> ftd_ast::Result<Component> {
         match value {
-            ftd::ast::VariableValue::Optional { value, .. } if value.is_some() => {
+            ftd_ast::VariableValue::Optional { value, .. } if value.is_some() => {
                 Component::from_variable_value(key, value.unwrap(), doc_id)
             }
-            ftd::ast::VariableValue::Optional { line_number, .. } => Ok(ftd::ast::Component {
+            ftd_ast::VariableValue::Optional { line_number, .. } => Ok(ftd_ast::Component {
                 id: None,
                 name: key.to_string(),
                 properties: vec![],
@@ -215,7 +215,7 @@ impl Component {
                 children: vec![],
                 line_number,
             }),
-            ftd::ast::VariableValue::Constant { line_number, .. } => Ok(ftd::ast::Component {
+            ftd_ast::VariableValue::Constant { line_number, .. } => Ok(ftd_ast::Component {
                 id: None,
                 name: key.to_string(),
                 properties: vec![],
@@ -225,7 +225,7 @@ impl Component {
                 children: vec![],
                 line_number,
             }),
-            ftd::ast::VariableValue::List {
+            ftd_ast::VariableValue::List {
                 value,
                 line_number,
                 condition,
@@ -238,7 +238,7 @@ impl Component {
                         doc_id,
                     )?);
                 }
-                Ok(ftd::ast::Component {
+                Ok(ftd_ast::Component {
                     id: None,
                     name: key.to_string(),
                     properties: vec![],
@@ -249,7 +249,7 @@ impl Component {
                     line_number,
                 })
             }
-            ftd::ast::VariableValue::Record {
+            ftd_ast::VariableValue::Record {
                 name,
                 caption,
                 headers,
@@ -260,24 +260,24 @@ impl Component {
             } => {
                 let mut properties = vec![];
                 if let Some(caption) = caption.as_ref() {
-                    properties.push(ftd::ast::Property {
+                    properties.push(ftd_ast::Property {
                         value: caption.to_owned(),
-                        source: ftd::ast::PropertySource::Caption,
+                        source: ftd_ast::PropertySource::Caption,
                         condition: caption.condition_expression(),
                         line_number,
                     });
                 }
                 for header in headers.0.iter() {
-                    if header.key.eq(ftd::ast::utils::LOOP)
-                        || header.key.eq(ftd::ast::utils::FOR)
+                    if header.key.eq(ftd_ast::utils::LOOP)
+                        || header.key.eq(ftd_ast::utils::FOR)
                         || Event::get_event_name_from_header_value(header).is_some()
-                        || ftd::ast::utils::is_condition(header.key.as_str(), &header.kind)
+                        || ftd_ast::utils::is_condition(header.key.as_str(), &header.kind)
                     {
                         continue;
                     }
-                    properties.push(ftd::ast::Property {
+                    properties.push(ftd_ast::Property {
                         value: header.value.to_owned(),
-                        source: ftd::ast::PropertySource::Header {
+                        source: ftd_ast::PropertySource::Header {
                             name: header.key.to_string(),
                             mutable: header.mutable,
                         },
@@ -306,7 +306,7 @@ impl Component {
                     )?);
                 }
 
-                Ok(ftd::ast::Component {
+                Ok(ftd_ast::Component {
                     id: None,
                     name,
                     properties,
@@ -317,12 +317,12 @@ impl Component {
                     line_number,
                 })
             }
-            ftd::ast::VariableValue::String {
+            ftd_ast::VariableValue::String {
                 value,
                 line_number,
                 source: value_source,
                 condition,
-            } => Ok(ftd::ast::Component {
+            } => Ok(ftd_ast::Component {
                 id: None,
                 name: key.to_string(),
                 properties: vec![Property::from_value(
@@ -344,11 +344,11 @@ impl Component {
     }
 }
 
-pub type Argument = ftd::ast::Field;
+pub type Argument = ftd_ast::Field;
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Property {
-    pub value: ftd::ast::VariableValue,
+    pub value: ftd_ast::VariableValue,
     pub source: PropertySource,
     pub condition: Option<String>,
     #[serde(rename = "line-number")]
@@ -361,7 +361,7 @@ impl Property {
     }
 
     fn new(
-        value: ftd::ast::VariableValue,
+        value: ftd_ast::VariableValue,
         source: PropertySource,
         condition: Option<String>,
         line_number: usize,
@@ -378,20 +378,20 @@ impl Property {
         header: &ftd_p1::Header,
         doc_id: &str,
         source: PropertySource,
-    ) -> ftd::ast::Result<Property> {
+    ) -> ftd_ast::Result<Property> {
         if !Self::is_property(header)
-            || header.get_key().eq(ftd::ast::utils::LOOP)
-            || header.get_key().eq(ftd::ast::utils::FOR)
+            || header.get_key().eq(ftd_ast::utils::LOOP)
+            || header.get_key().eq(ftd_ast::utils::FOR)
             || Event::get_event_name(header.get_key().as_str()).is_some()
         {
-            return ftd::ast::parse_error(
+            return ftd_ast::parse_error(
                 format!("Header is not property, found `{:?}`", header),
                 doc_id,
                 header.get_line_number(),
             );
         }
 
-        let value = ftd::ast::VariableValue::from_p1_header(header, doc_id)?;
+        let value = ftd_ast::VariableValue::from_p1_header(header, doc_id)?;
 
         Ok(Property::new(
             value,
@@ -403,7 +403,7 @@ impl Property {
 
     fn from_value(value: Option<String>, source: PropertySource, line_number: usize) -> Property {
         let value =
-            ftd::ast::VariableValue::from_value(&value, source.to_value_source(), line_number);
+            ftd_ast::VariableValue::from_value(&value, source.to_value_source(), line_number);
         Property::new(value, source, None, line_number)
     }
 }
@@ -430,11 +430,11 @@ impl PropertySource {
         }
     }
 
-    pub fn to_value_source(&self) -> ftd::ast::ValueSource {
+    pub fn to_value_source(&self) -> ftd_ast::ValueSource {
         match self {
-            ftd::ast::PropertySource::Caption => ftd::ast::ValueSource::Caption,
-            ftd::ast::PropertySource::Body => ftd::ast::ValueSource::Body,
-            ftd::ast::PropertySource::Header { name, mutable } => ftd::ast::ValueSource::Header {
+            ftd_ast::PropertySource::Caption => ftd_ast::ValueSource::Caption,
+            ftd_ast::PropertySource::Body => ftd_ast::ValueSource::Body,
+            ftd_ast::PropertySource::Header { name, mutable } => ftd_ast::ValueSource::Header {
                 name: name.to_owned(),
                 mutable: mutable.to_owned(),
             },
@@ -466,17 +466,17 @@ impl Loop {
         is_for_loop: bool,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::ast::Result<(String, String, Option<String>)> {
+    ) -> ftd_ast::Result<(String, String, Option<String>)> {
         if is_for_loop {
-            let (pair, on) = ftd::ast::utils::split_at(loop_statement, ftd::ast::utils::IN);
+            let (pair, on) = ftd_ast::utils::split_at(loop_statement, ftd_ast::utils::IN);
 
-            let on = on.ok_or(ftd::ast::Error::Parse {
+            let on = on.ok_or(ftd_ast::Error::Parse {
                 message: "Statement \"for\" needs a list to operate on".to_string(),
                 doc_id: doc_id.to_string(),
                 line_number,
             })?;
 
-            let (alias, loop_counter_alias) = ftd::ast::utils::split_at(pair.as_str(), ", ");
+            let (alias, loop_counter_alias) = ftd_ast::utils::split_at(pair.as_str(), ", ");
 
             Ok((alias, on, loop_counter_alias))
         } else {
@@ -487,11 +487,11 @@ impl Loop {
                 "Warning: \"$loop$\" is deprecated, use \"for\" instead".bright_yellow()
             );
 
-            let (on, alias) = ftd::ast::utils::split_at(loop_statement, ftd::ast::utils::AS);
+            let (on, alias) = ftd_ast::utils::split_at(loop_statement, ftd_ast::utils::AS);
 
             let alias = if let Some(alias) = alias {
-                if !alias.starts_with(ftd::ast::utils::REFERENCE) {
-                    return ftd::ast::parse_error(
+                if !alias.starts_with(ftd_ast::utils::REFERENCE) {
+                    return ftd_ast::parse_error(
                     format!(
                         "Loop alias should start with reference, found: `{}`. Help: use `${}` instead",
                         alias, alias
@@ -510,11 +510,11 @@ impl Loop {
         }
     }
 
-    fn from_ast_headers(headers: &HeaderValues, doc_id: &str) -> ftd::ast::Result<Option<Loop>> {
+    fn from_ast_headers(headers: &HeaderValues, doc_id: &str) -> ftd_ast::Result<Option<Loop>> {
         let loop_header = headers
             .0
             .iter()
-            .find(|v| [ftd::ast::utils::LOOP, ftd::ast::utils::FOR].contains(&v.key.as_str()));
+            .find(|v| [ftd_ast::utils::LOOP, ftd_ast::utils::FOR].contains(&v.key.as_str()));
         let loop_header = if let Some(loop_header) = loop_header {
             loop_header
         } else {
@@ -523,7 +523,7 @@ impl Loop {
 
         let loop_statement = loop_header.value.string(doc_id)?;
 
-        let is_for_loop = loop_header.key.eq(ftd::ast::utils::FOR);
+        let is_for_loop = loop_header.key.eq(ftd_ast::utils::FOR);
 
         let (alias, on, loop_counter_alias) = Self::get_loop_parameters(
             loop_statement.as_str(),
@@ -532,8 +532,8 @@ impl Loop {
             loop_header.line_number,
         )?;
 
-        if !on.starts_with(ftd::ast::utils::REFERENCE) && !on.starts_with(ftd::ast::utils::CLONE) {
-            return ftd::ast::parse_error(
+        if !on.starts_with(ftd_ast::utils::REFERENCE) && !on.starts_with(ftd_ast::utils::CLONE) {
+            return ftd_ast::parse_error(
                 format!(
                     "Loop should be on some reference, found: `{}`. Help: use `${}` instead",
                     on, on
@@ -544,7 +544,7 @@ impl Loop {
         }
 
         let alias = alias
-            .trim_start_matches(ftd::ast::utils::REFERENCE)
+            .trim_start_matches(ftd_ast::utils::REFERENCE)
             .to_string();
 
         Ok(Some(Loop::new(
@@ -555,10 +555,11 @@ impl Loop {
         )))
     }
 
-    fn from_headers(headers: &ftd_p1::Headers, doc_id: &str) -> ftd::ast::Result<Option<Loop>> {
-        let loop_header = headers.0.iter().find(|v| {
-            [ftd::ast::utils::LOOP, ftd::ast::utils::FOR].contains(&v.get_key().as_str())
-        });
+    fn from_headers(headers: &ftd_p1::Headers, doc_id: &str) -> ftd_ast::Result<Option<Loop>> {
+        let loop_header = headers
+            .0
+            .iter()
+            .find(|v| [ftd_ast::utils::LOOP, ftd_ast::utils::FOR].contains(&v.get_key().as_str()));
         let loop_header = if let Some(loop_header) = loop_header {
             loop_header
         } else {
@@ -567,13 +568,13 @@ impl Loop {
 
         let loop_statement = loop_header
             .get_value(doc_id)?
-            .ok_or(ftd::ast::Error::Parse {
+            .ok_or(ftd_ast::Error::Parse {
                 message: "Loop statement is blank".to_string(),
                 doc_id: doc_id.to_string(),
                 line_number: loop_header.get_line_number(),
             })?;
 
-        let is_for_loop = loop_header.get_key().eq(ftd::ast::utils::FOR);
+        let is_for_loop = loop_header.get_key().eq(ftd_ast::utils::FOR);
 
         let (alias, on, loop_counter_alias) = Self::get_loop_parameters(
             loop_statement.as_str(),
@@ -582,8 +583,8 @@ impl Loop {
             loop_header.get_line_number(),
         )?;
 
-        if !on.starts_with(ftd::ast::utils::REFERENCE) && !on.starts_with(ftd::ast::utils::CLONE) {
-            return ftd::ast::parse_error(
+        if !on.starts_with(ftd_ast::utils::REFERENCE) && !on.starts_with(ftd_ast::utils::CLONE) {
+            return ftd_ast::parse_error(
                 format!(
                     "Loop should be on some reference, found: `{}`. Help: use `${}` instead",
                     on, on
@@ -594,7 +595,7 @@ impl Loop {
         }
 
         let alias = alias
-            .trim_start_matches(ftd::ast::utils::REFERENCE)
+            .trim_start_matches(ftd_ast::utils::REFERENCE)
             .to_string();
 
         Ok(Some(Loop::new(
@@ -632,18 +633,18 @@ impl Event {
     }
 
     fn get_event_name(input: &str) -> Option<String> {
-        if !(input.starts_with("$on-") && input.ends_with(ftd::ast::utils::REFERENCE)) {
+        if !(input.starts_with("$on-") && input.ends_with(ftd_ast::utils::REFERENCE)) {
             return None;
         }
         Some(
             input
                 .trim_start_matches("$on-")
-                .trim_end_matches(ftd::ast::utils::REFERENCE)
+                .trim_end_matches(ftd_ast::utils::REFERENCE)
                 .to_string(),
         )
     }
 
-    fn from_ast_headers(headers: &HeaderValues, doc_id: &str) -> ftd::ast::Result<Vec<Event>> {
+    fn from_ast_headers(headers: &HeaderValues, doc_id: &str) -> ftd_ast::Result<Vec<Event>> {
         let mut events = vec![];
         for header in headers.0.iter() {
             if let Some(event) = Event::from_ast_header(header, doc_id)? {
@@ -653,7 +654,7 @@ impl Event {
         Ok(events)
     }
 
-    fn from_ast_header(header: &HeaderValue, doc_id: &str) -> ftd::ast::Result<Option<Event>> {
+    fn from_ast_header(header: &HeaderValue, doc_id: &str) -> ftd_ast::Result<Option<Event>> {
         let event_name = if let Some(name) = Event::get_event_name_from_header_value(header) {
             name
         } else {
@@ -669,7 +670,7 @@ impl Event {
         )))
     }
 
-    fn from_headers(headers: &ftd_p1::Headers, doc_id: &str) -> ftd::ast::Result<Vec<Event>> {
+    fn from_headers(headers: &ftd_p1::Headers, doc_id: &str) -> ftd_ast::Result<Vec<Event>> {
         let mut events = vec![];
         for header in headers.0.iter() {
             if let Some(event) = Event::from_header(header, doc_id)? {
@@ -679,14 +680,14 @@ impl Event {
         Ok(events)
     }
 
-    fn from_header(header: &ftd_p1::Header, doc_id: &str) -> ftd::ast::Result<Option<Event>> {
+    fn from_header(header: &ftd_p1::Header, doc_id: &str) -> ftd_ast::Result<Option<Event>> {
         let event_name = if let Some(name) = Event::get_event_name(header.get_key().as_str()) {
             name
         } else {
             return Ok(None);
         };
 
-        let action = header.get_value(doc_id)?.ok_or(ftd::ast::Error::Parse {
+        let action = header.get_value(doc_id)?.ok_or(ftd_ast::Error::Parse {
             message: "Event cannot be empty".to_string(),
             doc_id: doc_id.to_string(),
             line_number: header.get_line_number(),

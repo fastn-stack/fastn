@@ -533,10 +533,10 @@ async fn get_post_response_for_id(
         log_variable!(test_parameters.verbose, &response_js_data);
 
         // Previous Test results variable
-        let test_results_variable = if !test_parameters.test_results.is_empty() {
-            make_test_results_variable(&test_parameters.test_results)
-        } else {
+        let test_results_variable = if test_parameters.test_results.is_empty() {
             "".to_string()
+        } else {
+            make_test_results_variable(&test_parameters.test_results)
         };
 
         log_message!(test_parameters.verbose, "Previous Test results");
@@ -743,10 +743,10 @@ async fn get_js_for_id(
         };
 
         // Previous Test results variable
-        let test_results_variable = if !test_parameters.test_results.is_empty() {
-            make_test_results_variable(&test_parameters.test_results)
-        } else {
+        let test_results_variable = if test_parameters.test_results.is_empty() {
             "".to_string()
+        } else {
+            make_test_results_variable(&test_parameters.test_results)
         };
 
         log_message!(test_parameters.verbose, "Previous Test results");
