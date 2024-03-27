@@ -2,7 +2,10 @@ use crate::{DocumentID, Lined, Qualified, Type};
 
 #[derive(Debug)]
 pub enum ComponentResolvable {
+    /// First step is to resolve name, to see if there is any component with this name
     Name,
+    /// Then we check the `id`. So far we are using `id` as literal, but if id was a reference
+    /// we have to resolve and prove that reference is valid
     Id,
     Loop,
     Property(String),
@@ -24,7 +27,7 @@ pub struct CI {
 impl ftd_tc::State {
     pub fn handle_ci_name(
         &mut self,
-        c: &mut CI,
+        ci: &mut CI,
         thing: &mut ComponentResolvable,
     ) -> ftd_tc::Result<Option<String>> {
         // see if name exists in self.global_types, if so move on to verifying
@@ -32,15 +35,27 @@ impl ftd_tc::State {
         // another module, and the module is already loaded, we move to CD state,
         // component definition. If the module is also not yet loaded we return
         // module name to load.
-        match self.global_types.get(&c.inner.name) {
+        match self.global_types.get(&ci.inner.name) {
             Some(Qualified {
                 v: Type::Component(c),
                 ..
             }) => {
-                todo!()
+                // we are done with the first check, there is indeed a component with this name
+                // next we have to check the `id`.
+                ci.to_resolve.push(ComponentResolvable::Id);
+                // TODO: check if the v is accessible in the current document
+                Ok(None)
             }
-            Some(t) => todo!("syntax error, foo is not a component"),
-            None => match self.symbols.get(&c.inner.name) {
+            Some(t) => {
+                self.errors.push(ftd_tc::Error::NotAComponent {
+                    name: ci.inner.name.clone(),
+                    usage_document: ci.document_id.clone(),
+                    usage_line: ci.inner.line_number,
+                    found: t.to_owned(),
+                });
+                Ok(None)
+            }
+            None => match self.symbols.get(&ci.inner.name) {
                 Some(Lined {
                     v: ftd_ast::Ast::ComponentDefinition(c),
                     ..
@@ -62,6 +77,7 @@ impl ftd_tc::State {
     ) -> ftd_tc::Result<Option<String>> {
         match thing {
             ComponentResolvable::Name => self.handle_ci_name(c, thing),
+            ComponentResolvable::Id => todo!(),
             _ => Ok(None),
         }
     }

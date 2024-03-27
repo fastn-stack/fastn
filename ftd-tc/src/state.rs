@@ -12,6 +12,7 @@ pub struct State {
     pub global_types: ftd_p1::Map<ftd_tc::Qualified<ftd_tc::Type>>,
     /// js_buffer contains the generated JS when we resolve any symbol
     pub js_buffer: String,
+    pub errors: Vec<ftd_tc::Error>,
 }
 
 #[derive(Debug)]

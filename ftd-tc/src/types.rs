@@ -10,14 +10,14 @@ pub struct FI {
     //
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RI {
     pub inner: ftd_ast::VariableDefinition,
     pub r: Record,
     pub current_field: i32,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Type {
     Integer,
     MutableInteger,
@@ -25,7 +25,7 @@ pub enum Type {
     Component(Component),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum AccessibleIn {
     /// accessible in the same document
     Module(DocumentID),
@@ -35,7 +35,7 @@ pub enum AccessibleIn {
     Public,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Qualified<T> {
     pub v: T,
     pub line_number: usize,
@@ -59,7 +59,7 @@ pub struct DocumentID {
 }
 
 /// we use field to model component arguments, record fields, and function arguments etc
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Field {
     pub name: String,
     pub type_: Type,
@@ -67,12 +67,12 @@ pub struct Field {
     pub has_default: bool,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Component {
     pub args: Vec<Field>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Record {
     pub fields: Vec<Field>,
 }
