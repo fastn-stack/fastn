@@ -104,7 +104,32 @@ impl State {
         Ok(s)
     }
 
+    fn handle_ci_thing(
+        &mut self,
+        c: &mut CI,
+        thing: &mut ComponentResolvable,
+    ) -> ftd_tc::Result<Option<String>> {
+        match thing {
+            ComponentResolvable::Name => {
+                // see if name exists in self.global_types, if so move on to verifying
+                // other stiff. if the name doesn't exist in global types, and belongs to
+                // another module, and the module is already loaded, we move to CD state,
+                // component definition. If the module is also not yet loaded we return
+                // module name to load.
+                todo!()
+            }
+            _ => Ok(None),
+        }
+    }
+
     fn resolve_component_invocation(&mut self, c: &mut CI) -> ftd_tc::Result<Option<String>> {
+        while let Some(mut thing) = c.to_resolve.pop() {
+            if let Some(document) = self.handle_ci_thing(c, &mut thing)? {
+                c.to_resolve.push(thing);
+                return Ok(Some(document));
+            }
+        }
+
         Ok(None)
     }
 
@@ -161,10 +186,23 @@ enum Type {
     Integer,
     MutableInteger,
     Record(Record),
+    Component(Component),
+}
+
+/// we use field to model component arguments, record fields, and function arguments etc
+struct Field {
+    name: String,
+    type_: Type,
+    /// if the field has a default value, we can skip passing this field in the invocation
+    has_default: bool,
+}
+
+struct Component {
+    args: Vec<Field>,
 }
 
 struct Record {
-    fields: Vec<(String, Type)>,
+    fields: Vec<Field>,
 }
 
 pub fn parse_document_to_ast(source: &str, doc_id: &str) -> ftd_ast::Result<Vec<ftd_ast::Ast>> {
