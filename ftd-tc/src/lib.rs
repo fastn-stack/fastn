@@ -112,11 +112,25 @@ impl State {
         match thing {
             ComponentResolvable::Name => {
                 // see if name exists in self.global_types, if so move on to verifying
-                // other stiff. if the name doesn't exist in global types, and belongs to
+                // other stuff. if the name doesn't exist in global types, and belongs to
                 // another module, and the module is already loaded, we move to CD state,
                 // component definition. If the module is also not yet loaded we return
                 // module name to load.
-                todo!()
+                match self.global_types.get(&c.inner.name) {
+                    Some(Type::Component(c)) => {
+                        todo!()
+                    }
+                    Some(t) => todo!(),
+                    None => match self.symbols.get(&c.inner.name) {
+                        Some(ftd_ast::Ast::ComponentDefinition(c)) => {
+                            todo!()
+                        }
+                        Some(t) => {
+                            todo!()
+                        }
+                        None => todo!(),
+                    },
+                }
             }
             _ => Ok(None),
         }
@@ -176,25 +190,25 @@ enum TCState {
     Done(State),
 }
 
-// struct Sourced<T> {
-//     file: String,
-//     line: usize,
-//     value: T,
-// }
-
 enum Type {
-    Integer,
-    MutableInteger,
+    Integer(VarMeta),
+    MutableInteger(VarMeta),
     Record(Record),
     Component(Component),
+}
+
+struct VarMeta {
+    /// if the field has a default value, we can skip passing this field in the invocation
+    has_default: bool,
+    /// we can show the precise line number where the field is defined
+    line: usize,
 }
 
 /// we use field to model component arguments, record fields, and function arguments etc
 struct Field {
     name: String,
     type_: Type,
-    /// if the field has a default value, we can skip passing this field in the invocation
-    has_default: bool,
+    meta: VarMeta,
 }
 
 struct Component {
