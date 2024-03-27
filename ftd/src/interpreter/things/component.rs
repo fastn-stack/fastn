@@ -25,7 +25,7 @@ impl ComponentDefinition {
     }
 
     pub(crate) fn scan_ast(
-        ast: ftd_ast::AST,
+        ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         use itertools::Itertools;
@@ -52,7 +52,7 @@ impl ComponentDefinition {
     }
 
     pub(crate) fn from_ast(
-        ast: ftd_ast::AST,
+        ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ComponentDefinition>> {
         let component_definition = ast.get_component_definition(doc.name)?;
@@ -271,7 +271,7 @@ impl Component {
     }
 
     pub(crate) fn scan_ast(
-        ast: ftd_ast::AST,
+        ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         let component_invocation = ast.get_component_invocation(doc.name)?;
@@ -279,7 +279,7 @@ impl Component {
     }
 
     pub(crate) fn scan_ast_component(
-        ast_component: ftd_ast::Component,
+        ast_component: ftd_ast::ComponentInvocation,
         definition_name_with_arguments: Option<(&str, &[String])>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
@@ -326,7 +326,7 @@ impl Component {
     }
 
     pub(crate) fn from_ast(
-        ast: ftd_ast::AST,
+        ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Component>> {
         let component_invocation = ast.get_component_invocation(doc.name)?;
@@ -334,7 +334,7 @@ impl Component {
     }
 
     pub(crate) fn from_ast_component(
-        ast_component: ftd_ast::Component,
+        ast_component: ftd_ast::ComponentInvocation,
         definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Component>> {
@@ -475,7 +475,7 @@ impl Component {
         loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         events: &[Event],
         ast_properties: &Vec<ftd_ast::Property>,
-        ast_children: &Vec<ftd_ast::Component>,
+        ast_children: &Vec<ftd_ast::ComponentInvocation>,
         line_number: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Option<Component>>> {
         let name = doc.resolve_name(name);
@@ -648,7 +648,7 @@ impl Property {
 
     fn from_ast_properties_and_children(
         ast_properties: Vec<ftd_ast::Property>,
-        ast_children: Vec<ftd_ast::Component>,
+        ast_children: Vec<ftd_ast::ComponentInvocation>,
         component_name: &str,
         definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
@@ -685,7 +685,7 @@ impl Property {
 
         fn validate_children_kind_property_against_children(
             properties: &[Property],
-            ast_children: &[ftd_ast::Component],
+            ast_children: &[ftd_ast::ComponentInvocation],
             doc_id: &str,
         ) -> ftd::interpreter::Result<()> {
             use itertools::Itertools;
@@ -736,7 +736,7 @@ impl Property {
     }
 
     fn from_ast_children(
-        ast_children: Vec<ftd_ast::Component>,
+        ast_children: Vec<ftd_ast::ComponentInvocation>,
         component_name: &str,
         definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
         doc: &mut ftd::interpreter::TDoc,
@@ -804,7 +804,7 @@ impl Property {
     }
 
     fn scan_ast_children(
-        ast_children: Vec<ftd_ast::Component>,
+        ast_children: Vec<ftd_ast::ComponentInvocation>,
         definition_name_with_arguments: Option<(&str, &[String])>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {

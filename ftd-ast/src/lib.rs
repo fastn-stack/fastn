@@ -16,9 +16,9 @@ pub mod utils;
 mod variable;
 mod web_component;
 
-pub use ast::AST;
+pub use ast::Ast;
 pub use component::{
-    Argument, Component, ComponentDefinition, Event, Loop, Property, PropertySource,
+    Argument, ComponentDefinition, ComponentInvocation, Event, Loop, Property, PropertySource,
 };
 pub use constants::ALWAYS_INCLUDE;
 pub use function::Function;

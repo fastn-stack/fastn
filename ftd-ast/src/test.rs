@@ -3,14 +3,14 @@ use pretty_assertions::assert_eq; // macro
 #[track_caller]
 fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
     let sections = ftd_p1::parse(s, "foo").unwrap_or_else(|e| panic!("{:?}", e));
-    let ast = ftd_ast::AST::from_sections(sections.as_slice(), "foo")
+    let ast = ftd_ast::Ast::from_sections(sections.as_slice(), "foo")
         .unwrap_or_else(|e| panic!("{:?}", e));
     let expected_json = serde_json::to_string_pretty(&ast).unwrap();
     if fix {
         std::fs::write(file_location, expected_json).unwrap();
         return;
     }
-    let t: Vec<ftd_ast::AST> = serde_json::from_str(t)
+    let t: Vec<ftd_ast::Ast> = serde_json::from_str(t)
         .unwrap_or_else(|e| panic!("{:?} Expected JSON: {}", e, expected_json));
     assert_eq!(&t, &ast, "Expected JSON: {}", expected_json)
 }

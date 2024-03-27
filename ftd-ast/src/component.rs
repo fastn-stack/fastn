@@ -4,7 +4,7 @@ use ftd_ast::kind::{HeaderValue, HeaderValues};
 pub struct ComponentDefinition {
     pub name: String,
     pub arguments: Vec<Argument>,
-    pub definition: Component,
+    pub definition: ComponentInvocation,
     pub css: Option<String>,
     pub line_number: usize,
 }
@@ -15,7 +15,7 @@ impl ComponentDefinition {
     fn new(
         name: &str,
         arguments: Vec<Argument>,
-        definition: Component,
+        definition: ComponentInvocation,
         css: Option<String>,
         line_number: usize,
     ) -> ComponentDefinition {
@@ -61,7 +61,8 @@ impl ComponentDefinition {
         let (css, arguments) =
             ftd_ast::utils::get_css_and_fields_from_headers(&section.headers, doc_id)?;
 
-        let definition = Component::from_p1(section.sub_sections.first().unwrap(), doc_id)?;
+        let definition =
+            ComponentInvocation::from_p1(section.sub_sections.first().unwrap(), doc_id)?;
 
         Ok(ComponentDefinition::new(
             section.name.as_str(),
@@ -78,19 +79,19 @@ impl ComponentDefinition {
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Component {
+pub struct ComponentInvocation {
     pub id: Option<String>,
     pub name: String,
     pub properties: Vec<Property>,
     pub iteration: Option<Loop>,
     pub condition: Option<ftd_ast::Condition>,
     pub events: Vec<Event>,
-    pub children: Vec<Component>,
+    pub children: Vec<ComponentInvocation>,
     #[serde(rename = "line-number")]
     pub line_number: usize,
 }
 
-impl Component {
+impl ComponentInvocation {
     #[allow(clippy::too_many_arguments)]
     fn new(
         id: Option<String>,
@@ -99,10 +100,10 @@ impl Component {
         iteration: Option<Loop>,
         condition: Option<ftd_ast::Condition>,
         events: Vec<Event>,
-        children: Vec<Component>,
+        children: Vec<ComponentInvocation>,
         line_number: usize,
-    ) -> Component {
-        Component {
+    ) -> ComponentInvocation {
+        ComponentInvocation {
             id,
             name: name.to_string(),
             properties,
@@ -118,7 +119,10 @@ impl Component {
         section.kind.is_none() && !section.name.starts_with(ftd_ast::utils::REFERENCE)
     }
 
-    pub(crate) fn from_p1(section: &ftd_p1::Section, doc_id: &str) -> ftd_ast::Result<Component> {
+    pub(crate) fn from_p1(
+        section: &ftd_p1::Section,
+        doc_id: &str,
+    ) -> ftd_ast::Result<ComponentInvocation> {
         if !Self::is_component(section) {
             return ftd_ast::parse_error(
                 format!("Section is not ComponentDefinition, found `{:?}`", section),
@@ -174,7 +178,7 @@ impl Component {
         let children = {
             let mut children = vec![];
             for subsection in section.sub_sections.iter() {
-                children.push(Component::from_p1(subsection, doc_id)?);
+                children.push(ComponentInvocation::from_p1(subsection, doc_id)?);
             }
             children
         };
@@ -184,7 +188,7 @@ impl Component {
         let condition = ftd_ast::Condition::from_headers(&section.headers, doc_id)?;
         let id = ftd_ast::utils::get_component_id(&section.headers, doc_id)?;
 
-        Ok(Component::new(
+        Ok(ComponentInvocation::new(
             id,
             section.name.as_str(),
             properties,
@@ -200,31 +204,35 @@ impl Component {
         key: &str,
         value: ftd_ast::VariableValue,
         doc_id: &str,
-    ) -> ftd_ast::Result<Component> {
+    ) -> ftd_ast::Result<ComponentInvocation> {
         match value {
             ftd_ast::VariableValue::Optional { value, .. } if value.is_some() => {
-                Component::from_variable_value(key, value.unwrap(), doc_id)
+                ComponentInvocation::from_variable_value(key, value.unwrap(), doc_id)
             }
-            ftd_ast::VariableValue::Optional { line_number, .. } => Ok(ftd_ast::Component {
-                id: None,
-                name: key.to_string(),
-                properties: vec![],
-                iteration: None,
-                condition: None,
-                events: vec![],
-                children: vec![],
-                line_number,
-            }),
-            ftd_ast::VariableValue::Constant { line_number, .. } => Ok(ftd_ast::Component {
-                id: None,
-                name: key.to_string(),
-                properties: vec![],
-                iteration: None,
-                condition: None,
-                events: vec![],
-                children: vec![],
-                line_number,
-            }),
+            ftd_ast::VariableValue::Optional { line_number, .. } => {
+                Ok(ftd_ast::ComponentInvocation {
+                    id: None,
+                    name: key.to_string(),
+                    properties: vec![],
+                    iteration: None,
+                    condition: None,
+                    events: vec![],
+                    children: vec![],
+                    line_number,
+                })
+            }
+            ftd_ast::VariableValue::Constant { line_number, .. } => {
+                Ok(ftd_ast::ComponentInvocation {
+                    id: None,
+                    name: key.to_string(),
+                    properties: vec![],
+                    iteration: None,
+                    condition: None,
+                    events: vec![],
+                    children: vec![],
+                    line_number,
+                })
+            }
             ftd_ast::VariableValue::List {
                 value,
                 line_number,
@@ -232,13 +240,13 @@ impl Component {
             } => {
                 let mut children = vec![];
                 for val in value {
-                    children.push(Component::from_variable_value(
+                    children.push(ComponentInvocation::from_variable_value(
                         val.key.as_str(),
                         val.value,
                         doc_id,
                     )?);
                 }
-                Ok(ftd_ast::Component {
+                Ok(ftd_ast::ComponentInvocation {
                     id: None,
                     name: key.to_string(),
                     properties: vec![],
@@ -299,14 +307,14 @@ impl Component {
                 let mut children = vec![];
 
                 for child in values {
-                    children.push(Component::from_variable_value(
+                    children.push(ComponentInvocation::from_variable_value(
                         child.key.as_str(),
                         child.value,
                         doc_id,
                     )?);
                 }
 
-                Ok(ftd_ast::Component {
+                Ok(ftd_ast::ComponentInvocation {
                     id: None,
                     name,
                     properties,
@@ -322,7 +330,7 @@ impl Component {
                 line_number,
                 source: value_source,
                 condition,
-            } => Ok(ftd_ast::Component {
+            } => Ok(ftd_ast::ComponentInvocation {
                 id: None,
                 name: key.to_string(),
                 properties: vec![Property::from_value(

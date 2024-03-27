@@ -29,7 +29,7 @@ impl OrType {
     }
 
     pub(crate) fn scan_ast(
-        ast: ftd_ast::AST,
+        ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         let or_type = ast.get_or_type(doc.name)?;
@@ -41,7 +41,7 @@ impl OrType {
     }
 
     pub(crate) fn from_ast(
-        ast: ftd_ast::AST,
+        ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<OrType>> {
         let or_type = ast.get_or_type(doc.name)?;

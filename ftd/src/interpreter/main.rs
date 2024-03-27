@@ -69,7 +69,7 @@ pub struct ToProcess {
 #[derive(Debug, Clone, PartialEq)]
 pub struct ToProcessItem {
     pub number_of_scan: usize,
-    pub ast: ftd_ast::AST,
+    pub ast: ftd_ast::Ast,
     pub exports: Vec<String>,
 }
 
@@ -430,7 +430,7 @@ impl InterpreterState {
     /// method returns a tuple containing the doc_name as a String, the `number_of_scan` as an
     /// usize, and the ast as a reference to an ftd_ast::AST. If either the last element of the
     /// stack or the first element of the ast_list field do not exist, the method returns None.
-    pub fn peek_stack(&self) -> Option<(String, usize, &ftd_ast::AST)> {
+    pub fn peek_stack(&self) -> Option<(String, usize, &ftd_ast::Ast)> {
         if let Some((doc_name, ast_list)) = self.to_process.stack.last() {
             if let Some(ftd::interpreter::ToProcessItem {
                 number_of_scan,
@@ -452,7 +452,7 @@ impl InterpreterState {
     /// in the ast_list vector. If there are no ASTs remaining in the current stack element, it
     /// checks if the stack element is empty. If it is, it removes it from the stack and
     /// continues the loop. If the stack is empty, it returns None.
-    pub fn get_next_ast(&mut self) -> Option<(String, usize, ftd_ast::AST, Vec<String>)> {
+    pub fn get_next_ast(&mut self) -> Option<(String, usize, ftd_ast::Ast, Vec<String>)> {
         loop {
             if let Some((doc_name, ast_list)) = self.to_process.stack.last() {
                 if let Some(ftd::interpreter::ToProcessItem {
@@ -750,7 +750,7 @@ impl InterpreterState {
     pub fn continue_after_processor(
         mut self,
         value: ftd::interpreter::Value,
-        ast: ftd_ast::AST,
+        ast: ftd_ast::Ast,
     ) -> ftd::interpreter::Result<Interpreter> {
         let (id, _ast_to_process) = self.to_process.stack.last().unwrap(); //TODO: remove unwrap & throw error
         let parsed_document = self.parsed_libs.get(id).unwrap();
@@ -866,7 +866,7 @@ pub fn interpret_with_line_number(
 #[derive(Debug, Clone, Default, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct ParsedDocument {
     pub name: String,
-    pub ast: Vec<ftd_ast::AST>,
+    pub ast: Vec<ftd_ast::Ast>,
     pub processing_imports: bool,
     pub doc_aliases: ftd::Map<String>,
     pub re_exports: ReExport,
@@ -891,7 +891,7 @@ impl ParsedDocument {
         source: &str,
         line_number: usize,
     ) -> ftd::interpreter::Result<ParsedDocument> {
-        let ast = ftd_ast::AST::from_sections(
+        let ast = ftd_ast::Ast::from_sections(
             ftd_p1::parse_with_line_number(source, id, line_number)?.as_slice(),
             id,
         )?;
@@ -904,7 +904,7 @@ impl ParsedDocument {
 
             let mut exposings: ftd::Map<String> = Default::default();
             for ast in ast.iter().filter(|v| v.is_import()) {
-                if let ftd_ast::AST::Import(ftd_ast::Import {
+                if let ftd_ast::Ast::Import(ftd_ast::Import {
                     module,
                     alias,
                     exports,
@@ -990,7 +990,7 @@ pub enum Interpreter {
     },
     StuckOnProcessor {
         state: InterpreterState,
-        ast: ftd_ast::AST,
+        ast: ftd_ast::Ast,
         module: String,
         processor: String,
         caller_module: String,
@@ -1013,7 +1013,7 @@ pub enum InterpreterWithoutState {
         document: Document,
     },
     StuckOnProcessor {
-        ast: ftd_ast::AST,
+        ast: ftd_ast::Ast,
         module: String,
         processor: String,
         caller_module: String,

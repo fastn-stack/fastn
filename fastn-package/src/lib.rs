@@ -10,7 +10,7 @@ pub use initialize::initialize;
 const FASTN_PACKAGE_VARIABLE: &str = "fastn#package";
 
 static FTD_CACHE: tokio::sync::OnceCell<
-    tokio::sync::RwLock<std::collections::HashMap<String, ftd_ast::AST>>,
+    tokio::sync::RwLock<std::collections::HashMap<String, ftd_ast::Ast>>,
 > = tokio::sync::OnceCell::const_new();
 
 pub fn fastn_ftd_2023() -> &'static str {

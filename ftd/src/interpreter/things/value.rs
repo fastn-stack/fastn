@@ -404,7 +404,8 @@ impl PropertyValue {
                 loop_object_name_and_kind,
             );
         }
-        let ast_component = ftd_ast::Component::from_variable_value(key, value, doc.name)?;
+        let ast_component =
+            ftd_ast::ComponentInvocation::from_variable_value(key, value, doc.name)?;
         let component = try_ok_state!(ftd::interpreter::Component::from_ast_component(
             ast_component,
             definition_name_with_arguments,

@@ -22,7 +22,7 @@ impl WebComponentDefinition {
     }
 
     pub(crate) fn scan_ast(
-        ast: ftd_ast::AST,
+        ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         let web_component_definition = ast.get_web_component_definition(doc.name)?;
@@ -37,7 +37,7 @@ impl WebComponentDefinition {
     }
 
     pub(crate) fn from_ast(
-        ast: ftd_ast::AST,
+        ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<WebComponentDefinition>> {
         let web_component_definition = ast.get_web_component_definition(doc.name)?;

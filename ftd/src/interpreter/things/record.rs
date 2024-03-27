@@ -15,7 +15,7 @@ impl Record {
     }
 
     pub(crate) fn scan_ast(
-        ast: ftd_ast::AST,
+        ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         let record = ast.get_record(doc.name)?;
@@ -36,7 +36,7 @@ impl Record {
     }
 
     pub(crate) fn from_ast(
-        ast: ftd_ast::AST,
+        ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Record>> {
         let record = ast.get_record(doc.name)?;

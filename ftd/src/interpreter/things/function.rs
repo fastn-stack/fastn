@@ -30,7 +30,7 @@ impl Function {
     }
 
     pub(crate) fn scan_ast(
-        ast: ftd_ast::AST,
+        ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         let function = ast.get_function(doc.name)?;
@@ -47,7 +47,7 @@ impl Function {
     }
 
     pub(crate) fn from_ast(
-        ast: ftd_ast::AST,
+        ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Function>>
     {
