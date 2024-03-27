@@ -11,3 +11,4 @@ homepage.workspace = true
 [dependencies]
 ftd-ast.workspace = true
 ftd-p1.workspace = true
+thiserror.workspace = true

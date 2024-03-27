@@ -9,10 +9,11 @@ pub struct State {
     /// them. If we find a reference to another document, we load that document and process it.
     /// We do this in a recursive manner.
     continuable_things: Vec<ContinuableThing>,
+    /// Raw symbols from all documents are stored here
     symbols: ftd_p1::Map<ftd_ast::Ast>,
-    /// any type we resolve is stored here
+    /// any type we have already resolved is stored here
     global_types: ftd_p1::Map<Type>,
-    /// js_buffer contains the generated JS when we resolve any type
+    /// js_buffer contains the generated JS when we resolve any symbol
     js_buffer: String,
 }
 
@@ -28,7 +29,7 @@ impl ContinuableThing {
             inner: c,
             local_types: ftd_p1::Map::new(),
             js_buffer: String::new(),
-            to_resolve: todo!(),
+            to_resolve: vec![ComponentResolvable::Name],
         })
     }
 }
@@ -43,23 +44,34 @@ struct RI {
     pub current_field: i32,
 }
 
-enum ResolvableThing {
-    Property(String),
-    Event(String),
+enum ComponentResolvable {
+    Name,
+    Id,
     Loop,
+    Property(String),
+    Argument(String),
+    Event(String),
     Condition,
     Child(i32),
 }
 
 struct CI {
     inner: ftd_ast::ComponentInvocation,
-    to_resolve: Vec<ResolvableThing>,
+    to_resolve: Vec<ComponentResolvable>,
     local_types: ftd_p1::Map<Type>,
     js_buffer: String,
 }
 
+#[derive(thiserror::Error, Debug)]
+pub enum Error {
+    #[error("ast: {0}")]
+    Ast(#[from] ftd_ast::Error),
+}
+
+type Result<T> = std::result::Result<T, Error>;
+
 impl State {
-    pub fn from_document(source: &str, doc_id: &str) -> ftd_ast::Result<Self> {
+    pub fn from_document(source: &str, doc_id: &str) -> ftd_tc::Result<Self> {
         let ast = parse_document_to_ast(source, doc_id)?;
 
         let mut continuable_things = vec![];
@@ -89,6 +101,45 @@ impl State {
             global_types: ftd_p1::Map::new(),
             js_buffer: String::new(),
         })
+    }
+
+    fn resolve_component_invocation(&mut self, c: &mut CI) -> ftd_tc::Result<Option<String>> {
+        Ok(None)
+    }
+
+    fn resolve_record_invocation(&mut self, c: &mut RI) -> ftd_tc::Result<Option<String>> {
+        Ok(None)
+    }
+
+    fn resolve_function_invocation(&mut self, c: &mut FI) -> ftd_tc::Result<Option<String>> {
+        Ok(None)
+    }
+
+    fn handle_thing(&mut self, thing: &mut ContinuableThing) -> ftd_tc::Result<Option<String>> {
+        match thing {
+            ContinuableThing::CI(c) => self.resolve_component_invocation(c),
+            ContinuableThing::RI(r) => self.resolve_record_invocation(r),
+            ContinuableThing::FI(f) => self.resolve_function_invocation(f),
+        }
+    }
+
+    fn start(mut self) -> ftd_tc::Result<TCState> {
+        while let Some(mut thing) = self.continuable_things.pop() {
+            if let Some(document) = self.handle_thing(&mut thing)? {
+                self.continuable_things.push(thing);
+                return Ok(TCState::StuckOnImport {
+                    document,
+                    state: self,
+                });
+            }
+        }
+
+        Ok(TCState::Done(self))
+    }
+
+    fn continue_after_import(mut self, doc_id: &str, source: &str) -> ftd_tc::Result<TCState> {
+        let ast = parse_document_to_ast(source, doc_id).unwrap();
+        self.start()
     }
 }
 
