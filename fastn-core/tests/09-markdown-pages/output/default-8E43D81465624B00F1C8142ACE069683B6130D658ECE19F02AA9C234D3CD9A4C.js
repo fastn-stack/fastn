@@ -4792,6 +4792,14 @@ const ftd = (function () {
             );
         }
 
+        // change ftd.http-method and this function to add support for more
+        // http methods
+        if (!["GET", "POST"].includes(method)) {
+            throw new Error(
+                `${method} is invalid. Must be one of "GET", "POST"`,
+            );
+        }
+
         if (url instanceof fastn.mutableClass) url = url.get();
         method = method.trim().toUpperCase();
         let request_json = {};
@@ -4803,12 +4811,7 @@ const ftd = (function () {
             redirect,
         };
 
-        if (method === "GET") {
-            console.warn("Method `GET` is not yet supported.");
-            return;
-        }
-
-        if (body && method !== "GET") {
+        if (body) {
             if (body[0] instanceof fastn.recordInstanceClass) {
                 if (body.length !== 1) {
                     console.warn(
@@ -4835,7 +4838,17 @@ const ftd = (function () {
             }
         }
 
-        init.body = JSON.stringify(request_json);
+        if (method === "POST") {
+            init.body = JSON.stringify(request_json);
+        }
+
+        if (method === "GET") {
+            url = new URL(url);
+
+            for (let [key, value] of Object.entries(request_json)) {
+                url.searchParams.set(key, value);
+            }
+        }
 
         let json;
         fetch(url, init)
@@ -4878,7 +4891,11 @@ const ftd = (function () {
                                 "both .errors and .data are present in response, ignoring .data",
                             );
                         } else {
-                            data = response.data;
+                            for (let key of Object.keys(response.data)) {
+                                const value = response.data[key];
+                                key = fastn_module + "#" + key;
+                                data[key] = value;
+                            }
                         }
                     }
                     for (let ftd_variable of Object.keys(data)) {

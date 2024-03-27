@@ -1,0 +1,52 @@
+-- import: fastn/processors as pr
+
+-- pr.toc-item list toc-list:
+$processor$: $pr.toc
+
+- Heading 1: /h1/
+  - Sub Heading 1: /sh1/
+  - Sub Heading 2: /sh2/
+- Heading 2: /h2/
+  - Sub Heading 3: /sh3/
+    - Sub Sub heading 1: /ssh1/
+- Heading 3: /h3/
+
+
+-- tv:
+toc: $toc-list
+
+-- component tv:
+pr.toc-item list toc:
+
+-- ftd.column:
+border-color: red
+border-width.px: 2
+width.fixed.px: 200
+height.fixed.px: 400
+padding.px: 20
+
+-- ftd.text: Start
+color: black
+
+-- tvc: $t
+for: t in $tv.toc
+
+-- end: ftd.column
+
+-- end: tv
+
+
+-- component tvc:
+caption pr.toc-item item:
+
+-- ftd.column:
+
+-- ftd.text: $tvc.item.title
+link: $tvc.item.url
+
+-- tvc: $t
+for: t in $tvc.item.children
+
+-- end: ftd.column
+
+-- end: tvc
