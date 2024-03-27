@@ -1,23 +1,7 @@
-#[derive(Default, Debug)]
-pub struct State {
-    /// These are the things we need to resolve.
-    ///
-    /// we start by adding every component invocation in the main document and try to resolve
-    /// them. If we find a reference to another document, we load that document and process it.
-    /// We do this in a recursive manner.
-    pub continuable_things: Vec<ContinuableThing>,
-    /// Raw symbols from all documents are stored here
-    pub symbols: ftd_p1::Map<Lined<ftd_ast::Ast>>,
-    /// any type we have already resolved is stored here
-    pub global_types: ftd_p1::Map<Qualified<Type>>,
-    /// js_buffer contains the generated JS when we resolve any symbol
-    pub js_buffer: String,
-}
-
 #[derive(Debug)]
 pub enum ContinuableThing {
     RI(RI),
-    CI(CI),
+    CI(ftd_tc::CI),
     FI(FI),
 }
 
@@ -31,34 +15,6 @@ pub struct RI {
     pub inner: ftd_ast::VariableDefinition,
     pub r: Record,
     pub current_field: i32,
-}
-
-#[derive(Debug)]
-pub enum ComponentResolvable {
-    Name,
-    Id,
-    Loop,
-    Property(String),
-    Argument(String),
-    Event(String),
-    Condition,
-    Child(i32),
-}
-
-#[derive(Debug)]
-pub struct CI {
-    pub inner: ftd_ast::ComponentInvocation,
-    pub to_resolve: Vec<ComponentResolvable>,
-    pub local_types: ftd_p1::Map<Type>,
-    pub js_buffer: String,
-    pub document_id: DocumentID,
-}
-
-#[derive(Debug)]
-pub enum TCState {
-    Processing(State),
-    StuckOnImport { document: String, state: State },
-    Done(State),
 }
 
 #[derive(Debug)]
@@ -119,4 +75,20 @@ pub struct Component {
 #[derive(Debug)]
 pub struct Record {
     pub fields: Vec<Field>,
+}
+
+impl DocumentID {
+    pub fn new(logical: &str, physical: &str) -> Self {
+        Self {
+            logical: logical.to_string(),
+            physical: physical.to_string(),
+        }
+    }
+
+    pub fn new0(logical: &str) -> Self {
+        Self {
+            logical: logical.to_string(),
+            physical: logical.to_string(),
+        }
+    }
 }
