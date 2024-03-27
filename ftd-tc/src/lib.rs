@@ -2,31 +2,19 @@
 
 extern crate self as ftd_tc;
 
-#[derive(Default, Debug)]
-pub struct State {
-    /// These are the things we need to resolve.
-    ///
-    /// we start by adding every component invocation in the main document and try to resolve
-    /// them. If we find a reference to another document, we load that document and process it.
-    /// We do this in a recursive manner.
-    continuable_things: Vec<ContinuableThing>,
-    /// Raw symbols from all documents are stored here
-    symbols: ftd_p1::Map<Lined<ftd_ast::Ast>>,
-    /// any type we have already resolved is stored here
-    global_types: ftd_p1::Map<Qualified<Type>>,
-    /// js_buffer contains the generated JS when we resolve any symbol
-    js_buffer: String,
-}
+mod error;
+mod parser;
+mod types;
 
-#[derive(Debug)]
-enum ContinuableThing {
-    RI(RI),
-    CI(CI),
-    FI(FI),
-}
+pub use error::*;
+pub use parser::parse_document_to_ast;
+pub use types::*;
 
 impl ContinuableThing {
-    fn from_component_invocation(c: ftd_ast::ComponentInvocation, document_id: DocumentID) -> Self {
+    pub fn from_component_invocation(
+        c: ftd_ast::ComponentInvocation,
+        document_id: DocumentID,
+    ) -> Self {
         ContinuableThing::CI(CI {
             inner: c,
             local_types: ftd_p1::Map::new(),
@@ -36,47 +24,6 @@ impl ContinuableThing {
         })
     }
 }
-
-#[derive(Debug)]
-struct FI {
-    //
-}
-
-#[derive(Debug)]
-struct RI {
-    pub inner: ftd_ast::VariableDefinition,
-    pub r: Record,
-    pub current_field: i32,
-}
-
-#[derive(Debug)]
-enum ComponentResolvable {
-    Name,
-    Id,
-    Loop,
-    Property(String),
-    Argument(String),
-    Event(String),
-    Condition,
-    Child(i32),
-}
-
-#[derive(Debug)]
-struct CI {
-    inner: ftd_ast::ComponentInvocation,
-    to_resolve: Vec<ComponentResolvable>,
-    local_types: ftd_p1::Map<Type>,
-    js_buffer: String,
-    document_id: DocumentID,
-}
-
-#[derive(thiserror::Error, Debug)]
-pub enum Error {
-    #[error("ast: {0}")]
-    Ast(#[from] ftd_ast::Error),
-}
-
-type Result<T> = std::result::Result<T, Error>;
 
 impl State {
     fn merge_ast(
@@ -216,54 +163,6 @@ impl State {
     }
 }
 
-#[derive(Debug)]
-enum TCState {
-    Processing(State),
-    StuckOnImport { document: String, state: State },
-    Done(State),
-}
-
-#[derive(Debug)]
-enum Type {
-    Integer,
-    MutableInteger,
-    Record(Record),
-    Component(Component),
-}
-
-#[derive(Debug)]
-enum AccessibleIn {
-    /// accessible in the same document
-    Module(DocumentID),
-    /// accessible in the same package
-    Package(DocumentID),
-    /// accessible to anyone who adds this package as a direct dependency
-    Public,
-}
-
-#[derive(Debug)]
-struct Qualified<T> {
-    v: T,
-    line_number: usize,
-    doc_id: DocumentID,
-    accessible_in: AccessibleIn,
-}
-
-#[derive(Debug)]
-struct Lined<T> {
-    v: T,
-    line_number: usize,
-    doc_id: DocumentID,
-}
-
-#[derive(Debug, Clone)]
-pub struct DocumentID {
-    /// logical id is what we use to refer to a document in the code, eg `amitu.com/foo`
-    logical: String,
-    /// physical id is the file name, eg `.packages/amitu.com/foo/index.ftd`
-    physical: String,
-}
-
 impl DocumentID {
     pub fn new(logical: &str, physical: &str) -> Self {
         Self {
@@ -278,34 +177,4 @@ impl DocumentID {
             physical: logical.to_string(),
         }
     }
-}
-
-/// we use field to model component arguments, record fields, and function arguments etc
-#[derive(Debug)]
-struct Field {
-    name: String,
-    type_: Type,
-    /// if the field has a default value, we can skip passing this field in the invocation
-    has_default: bool,
-}
-
-#[derive(Debug)]
-struct Component {
-    args: Vec<Field>,
-}
-
-#[derive(Debug)]
-struct Record {
-    fields: Vec<Field>,
-}
-
-pub fn parse_document_to_ast(
-    source: &str,
-    doc_id: &DocumentID,
-) -> ftd_ast::Result<Vec<ftd_ast::Ast>> {
-    let sections = ftd_p1::parse(source, doc_id.logical.as_str())?;
-    let ast = ftd_ast::Ast::from_sections(sections.as_slice(), doc_id.logical.as_str())?;
-    println!("{:?}", ast);
-
-    Ok(ast)
 }
