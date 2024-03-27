@@ -2,6 +2,7 @@
 
 extern crate self as ftd_tc;
 
+#[derive(Default)]
 pub struct State {
     /// These are the things we need to resolve.
     ///
@@ -71,12 +72,7 @@ pub enum Error {
 type Result<T> = std::result::Result<T, Error>;
 
 impl State {
-    pub fn from_document(source: &str, doc_id: &str) -> ftd_tc::Result<Self> {
-        let ast = parse_document_to_ast(source, doc_id)?;
-
-        let mut continuable_things = vec![];
-        let mut symbols = ftd_p1::Map::new();
-
+    fn merge_ast(&mut self, extend_continuable_things: bool, ast: Vec<ftd_ast::Ast>, doc_id: &str) {
         for ast in ast {
             match ast {
                 ftd_ast::Ast::Import(_)
@@ -86,21 +82,26 @@ impl State {
                 | ftd_ast::Ast::ComponentDefinition(_)
                 | ftd_ast::Ast::FunctionDefinition(_)
                 | ftd_ast::Ast::WebComponentDefinition(_) => {
-                    symbols.insert(format!("{doc_id}#{}", ast.name()), ast);
+                    self.symbols.insert(format!("{doc_id}#{}", ast.name()), ast);
                 }
                 ftd_ast::Ast::VariableInvocation(_) => unreachable!(),
                 ftd_ast::Ast::ComponentInvocation(c) => {
-                    continuable_things.push(ContinuableThing::from_component_invocation(c))
+                    if extend_continuable_things {
+                        self.continuable_things
+                            .push(ContinuableThing::from_component_invocation(c.clone()))
+                    }
                 }
             }
         }
+    }
 
-        Ok(State {
-            continuable_things,
-            symbols,
-            global_types: ftd_p1::Map::new(),
-            js_buffer: String::new(),
-        })
+    pub fn from_document(source: &str, doc_id: &str) -> ftd_tc::Result<Self> {
+        let ast = parse_document_to_ast(source, doc_id)?;
+
+        let mut s = Self::default();
+        s.merge_ast(false, ast, doc_id);
+
+        Ok(s)
     }
 
     fn resolve_component_invocation(&mut self, c: &mut CI) -> ftd_tc::Result<Option<String>> {
@@ -138,7 +139,8 @@ impl State {
     }
 
     fn continue_after_import(mut self, doc_id: &str, source: &str) -> ftd_tc::Result<TCState> {
-        let ast = parse_document_to_ast(source, doc_id).unwrap();
+        let ast = parse_document_to_ast(source, doc_id)?;
+        self.merge_ast(false, ast, doc_id);
         self.start()
     }
 }
