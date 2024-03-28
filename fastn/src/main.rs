@@ -85,7 +85,9 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         let inline_css = serve.values_of_("css");
         let offline = serve.get_flag("offline");
 
-        fastn_update::update(&ds, offline, false).await?;
+        if cfg!(not(feature = "download-on-demand")) {
+            fastn_update::update(&ds, offline, false).await?;
+        }
 
         let config = fastn_core::Config::read(ds, false)
             .await?
