@@ -327,10 +327,7 @@ pub async fn resolve_foreign_variable2022(
             if alias.eq(&package_name) {
                 let package = lib
                     .config
-                    .all_packages
-                    .get(package.name.as_str())
-                    .unwrap_or(package)
-                    .to_owned();
+                    .find_package_else_default(package.name.as_str(), Some(package.to_owned()));
                 if let Ok(value) = get_assets_value(
                     doc_name,
                     &package,

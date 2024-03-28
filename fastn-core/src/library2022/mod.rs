@@ -149,8 +149,9 @@ impl Library2022 {
             lib: &mut fastn_core::Library2022,
         ) -> fastn_core::Result<Option<(String, usize)>> {
             lib.push_package_under_process(name, package)?;
-            let packages = &lib.config.all_packages;
-            let package = packages.get(package.name.as_str()).unwrap_or(package);
+            let package = lib
+                .config
+                .find_package_else_default(package.name.as_str(), Some(package.to_owned()));
             // Explicit check for the current package.
             let name = format!("{}/", name.trim_end_matches('/'));
             if !name.starts_with(format!("{}/", package.name.as_str()).as_str()) {

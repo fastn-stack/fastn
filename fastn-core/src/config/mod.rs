@@ -508,9 +508,7 @@ impl Config {
             fonts.extend(dep.package.fonts);
         }
 
-        for package in self.all_packages.values() {
-            fonts.extend(package.fonts.clone());
-        }
+        fonts.extend(self.get_fonts_from_all_packages());
 
         for font in fonts.iter() {
             if let Some(url) = font.get_url() {
@@ -531,6 +529,24 @@ impl Config {
         }
 
         Ok(())
+    }
+
+    #[cfg(not(feature = "download-on-demand"))]
+    fn get_fonts_from_all_packages(&self) -> Vec<fastn_core::Font> {
+        let mut fonts = vec![];
+        for package in self.all_packages.values() {
+            fonts.extend(package.fonts.clone());
+        }
+        fonts
+    }
+
+    #[cfg(feature = "download-on-demand")]
+    fn get_fonts_from_all_packages(&self) -> Vec<fastn_core::Font> {
+        let mut fonts = vec![];
+        for package in self.all_packages.iter() {
+            fonts.extend(package.fonts.clone());
+        }
+        fonts
     }
 
     /*pub(crate) async fn get_versions(
@@ -848,13 +864,31 @@ impl Config {
             return Ok(package);
         }
 
-        for (package_name, package) in self.all_packages.iter().rev() {
-            if id.starts_with(package_name) {
-                return Ok((package_name.to_string(), package.to_owned()));
-            }
+        if let Some(value) = self.find_package_id_in_all_packages(id) {
+            return Ok(value);
         }
 
         Ok((self.package.name.to_string(), self.package.to_owned()))
+    }
+
+    #[cfg(feature = "download-on-demand")]
+    fn find_package_id_in_all_packages(&self, id: &str) -> Option<(String, fastn_core::Package)> {
+        for (package_name, package) in self.all_packages.iter().map(|v| (v.key(), v.value())) {
+            if id.starts_with(format!("{package_name}/").as_str()) || id.eq(package_name) {
+                return Some((package_name.to_string(), package.to_owned()));
+            }
+        }
+        None
+    }
+
+    #[cfg(not(feature = "download-on-demand"))]
+    fn find_package_id_in_all_packages(&self, id: &str) -> Option<(String, fastn_core::Package)> {
+        for (package_name, package) in self.all_packages.iter().rev() {
+            if id.starts_with(format!("{package_name}/").as_str()) || id.eq(package_name) {
+                return Some((package_name.to_string(), package.to_owned()));
+            }
+        }
+        None
     }
 
     pub(crate) async fn download_required_file(
@@ -1230,6 +1264,36 @@ impl Config {
         let doc = self.ds.read_to_string(&package_fastn_path).await?;
         let lib = fastn_core::FastnLibrary::default();
         Ok(fastn_core::doc::parse_ftd("fastn", doc.as_str(), &lib)?)
+    }
+
+    #[cfg(not(feature = "download-on-demand"))]
+    pub(crate) fn find_package_else_default(
+        &self,
+        package_name: &str,
+        default: Option<fastn_core::Package>,
+    ) -> fastn_core::Package {
+        if let Some(package) = self.all_packages.get(package_name) {
+            package.to_owned()
+        } else if let Some(package) = default {
+            package.to_owned()
+        } else {
+            self.package.to_owned()
+        }
+    }
+
+    #[cfg(feature = "download-on-demand")]
+    pub(crate) fn find_package_else_default(
+        &self,
+        package_name: &str,
+        default: Option<fastn_core::Package>,
+    ) -> fastn_core::Package {
+        if let Some(package) = self.all_packages.get(package_name) {
+            package.value().to_owned()
+        } else if let Some(package) = default {
+            package.to_owned()
+        } else {
+            self.package.to_owned()
+        }
     }
 }
 
