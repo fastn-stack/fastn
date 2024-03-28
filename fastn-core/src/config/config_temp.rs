@@ -87,7 +87,7 @@ impl ConfigTemp {
     }
 
     fn get_package_name_for_module(
-        package: &mut fastn_core::Package,
+        package: &fastn_core::Package,
         module_name: &str,
     ) -> fastn_core::Result<String> {
         if module_name.starts_with(format!("{}/", &package.name).as_str())
@@ -104,8 +104,8 @@ impl ConfigTemp {
         }
     }
 
-    fn check_dependencies_provided(
-        package: &mut fastn_core::Package,
+    pub(crate) fn check_dependencies_provided(
+        package: &fastn_core::Package,
         current_package: &mut fastn_core::Package,
     ) -> fastn_core::Result<()> {
         let mut auto_imports = vec![];
