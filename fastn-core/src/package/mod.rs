@@ -625,6 +625,7 @@ impl Package {
             .map(|f| f.into_auto_import())
             .collect();
 
+        // Todo: Add `package.files` and fix `fs_fetch_by_id` to check if file is present
         package.fonts = fastn_document.get("fastn#font")?;
         package.sitemap_temp = fastn_document.get("fastn#sitemap")?;
         *self = package;
