@@ -482,6 +482,20 @@ impl Config {
     /// `get_font_style()` returns the HTML style tag which includes all the fonts used by any
     /// ftd document. Currently this function does not check for fonts in package dependencies
     /// nor it tries to avoid fonts that are configured but not needed in current document.
+    #[cfg(feature = "download-on-demand")]
+    pub fn get_font_style(&self) -> String {
+        let generated_style = self
+            .all_packages
+            .iter()
+            .map(|package| package.get_font_html())
+            .collect::<Vec<_>>()
+            .join("\n");
+        return match generated_style.trim().is_empty() {
+            false => format!("<style>{}</style>", generated_style),
+            _ => "".to_string(),
+        };
+    }
+    #[cfg(not(feature = "download-on-demand"))]
     pub fn get_font_style(&self) -> String {
         let generated_style = self
             .all_packages
@@ -873,9 +887,10 @@ impl Config {
 
     #[cfg(feature = "download-on-demand")]
     fn find_package_id_in_all_packages(&self, id: &str) -> Option<(String, fastn_core::Package)> {
-        for (package_name, package) in self.all_packages.iter().map(|v| (v.key(), v.value())) {
+        for item in self.all_packages.iter() {
+            let package_name = item.key();
             if id.starts_with(format!("{package_name}/").as_str()) || id.eq(package_name) {
-                return Some((package_name.to_string(), package.to_owned()));
+                return Some((package_name.to_string(), item.value().to_owned()));
             }
         }
         None
@@ -1320,7 +1335,7 @@ async fn get_all_packages(
     _package_root: &fastn_ds::Path,
     _ds: &fastn_ds::DocumentStore,
 ) -> fastn_core::Result<dashmap::DashMap<String, fastn_core::Package>> {
-    let mut all_packages = dashmap::DashMap::new();
+    let all_packages = dashmap::DashMap::new();
     all_packages.insert(package.name.to_string(), package.to_owned());
     Ok(all_packages)
 }
