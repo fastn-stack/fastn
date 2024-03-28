@@ -1256,6 +1256,7 @@ impl Config {
         Ok(config)
     }
 
+    #[cfg(not(feature = "download-on-demand"))]
     pub(crate) async fn resolve_package(
         &self,
         package: &fastn_core::Package,
@@ -1266,6 +1267,38 @@ impl Config {
                 message: format!("Could not resolve package {}", &package.name),
             }),
         }
+    }
+
+    #[cfg(feature = "download-on-demand")]
+    pub(crate) async fn resolve_package(
+        &self,
+        package: &fastn_core::Package,
+    ) -> fastn_core::Result<fastn_core::Package> {
+        if self.package.name.eq(package.name.as_str()) {
+            return Ok(self.package.clone());
+        }
+
+        if let Some(package) = { self.all_packages.get(package.name.as_str()) } {
+            return Ok(package.clone());
+        }
+
+        let mut package = package
+            .get_and_resolve(&self.get_root_for_package(package), &self.ds)
+            .await?;
+
+        ConfigTemp::check_dependencies_provided(&self.package, &mut package)?;
+        package.auto_import_language(
+            self.package.requested_language.clone(),
+            self.package.selected_language.clone(),
+        )?;
+        self.add_package(&package);
+        Ok(package)
+    }
+
+    #[cfg(feature = "download-on-demand")]
+    pub(crate) fn add_package(&self, package: &fastn_core::Package) {
+        self.all_packages
+            .insert(package.name.to_string(), package.to_owned());
     }
 
     #[tracing::instrument(skip(self))]

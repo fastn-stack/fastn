@@ -102,7 +102,7 @@ impl Library2022 {
             }
 
             for (alias, package) in package.aliases() {
-                lib.push_package_under_process(name, package)?;
+                lib.push_package_under_process(name, package).await?;
                 if name.starts_with(alias) {
                     let name = name.replacen(alias, &package.name, 1);
                     if let Some((content, size)) =
@@ -148,7 +148,7 @@ impl Library2022 {
             package: &fastn_core::Package,
             lib: &mut fastn_core::Library2022,
         ) -> fastn_core::Result<Option<(String, usize)>> {
-            lib.push_package_under_process(name, package)?;
+            lib.push_package_under_process(name, package).await?;
             let package = lib
                 .config
                 .find_package_else_default(package.name.as_str(), Some(package.to_owned()));
@@ -178,7 +178,8 @@ impl Library2022 {
         }
     }
 
-    pub(crate) fn push_package_under_process(
+    #[cfg(not(feature = "download-on-demand"))]
+    pub(crate) async fn push_package_under_process(
         &mut self,
         module: &str,
         package: &fastn_core::Package,
@@ -194,6 +195,35 @@ impl Library2022 {
                 line_number: 0,
             });
         }
+
+        Ok(())
+    }
+
+    #[cfg(feature = "download-on-demand")]
+    pub(crate) async fn push_package_under_process(
+        &mut self,
+        module: &str,
+        package: &fastn_core::Package,
+    ) -> ftd::ftd2021::p1::Result<()> {
+        self.module_package_map.insert(
+            module.trim_matches('/').to_string(),
+            package.name.to_string(),
+        );
+        if self.config.all_packages.contains_key(package.name.as_str()) {
+            return Ok(());
+        }
+
+        let package = self.config.resolve_package(package).await.map_err(|e| {
+            ftd::ftd2021::p1::Error::ParseError {
+                message: format!("Cannot resolve the package: {}, Error: {}", package.name, e),
+                doc_id: self.document_id.to_string(),
+                line_number: 0,
+            }
+        })?;
+
+        self.config
+            .all_packages
+            .insert(package.name.to_string(), package);
 
         Ok(())
     }
