@@ -296,8 +296,10 @@ impl Library2 {
             lib: &mut Library2,
         ) -> Option<String> {
             lib.push_package_under_process(package).ok()?;
-            let packages = &lib.config.config.all_packages;
-            let package = packages.get(package.name.as_str()).unwrap_or(package);
+            let package = lib
+                .config
+                .config
+                .find_package_else_default(package.name.as_str(), Some(package.to_owned()));
             // Explicit check for the current package.
             if !name.starts_with(package.name.as_str()) {
                 return None;
