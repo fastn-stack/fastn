@@ -1353,10 +1353,10 @@ async fn get_all_packages(
 ) -> fastn_core::Result<std::collections::BTreeMap<String, fastn_core::Package>> {
     let mut all_packages = std::collections::BTreeMap::new();
     all_packages.insert(package.name.to_string(), package.to_owned());
-    let config_temp = config_temp::ConfigTemp::read(&ds).await?;
+    let config_temp = config_temp::ConfigTemp::read(ds).await?;
     all_packages.extend(
         config_temp
-            .get_all_packages(&ds, package, &package_root)
+            .get_all_packages(ds, package, package_root)
             .await?,
     );
     Ok(all_packages)
