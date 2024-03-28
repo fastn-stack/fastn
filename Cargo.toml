@@ -80,6 +80,7 @@ clap = "4"
 colored = "2"
 crossterm = "0.27"
 css-color-parser = "0.1"
+dashmap = "5"
 diffy = "0.3"
 dioxus-html = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
 dioxus-native-core = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }

@@ -28,6 +28,7 @@ impl FTDEdition {
     }
 }
 
+#[cfg(not(feature = "download-on-demand"))]
 #[derive(Debug, Clone)]
 pub struct Config {
     // Global Information
@@ -36,6 +37,24 @@ pub struct Config {
     pub packages_root: fastn_ds::Path,
     pub original_directory: fastn_ds::Path,
     pub all_packages: std::collections::BTreeMap<String, fastn_core::Package>,
+    pub global_ids: std::collections::HashMap<String, String>,
+    pub ftd_edition: FTDEdition,
+    pub ftd_external_js: Vec<String>,
+    pub ftd_inline_js: Vec<String>,
+    pub ftd_external_css: Vec<String>,
+    pub ftd_inline_css: Vec<String>,
+    pub test_command_running: bool,
+}
+
+#[cfg(feature = "download-on-demand")]
+#[derive(Debug, Clone)]
+pub struct Config {
+    // Global Information
+    pub ds: fastn_ds::DocumentStore,
+    pub package: fastn_core::Package,
+    pub packages_root: fastn_ds::Path,
+    pub original_directory: fastn_ds::Path,
+    pub all_packages: dashmap::DashMap<String, fastn_core::Package>,
     pub global_ids: std::collections::HashMap<String, String>,
     pub ftd_edition: FTDEdition,
     pub ftd_external_js: Vec<String>,
@@ -1104,20 +1123,9 @@ impl Config {
     ) -> fastn_core::Result<fastn_core::Config> {
         let original_directory = fastn_ds::Path::new(std::env::current_dir()?.to_str().unwrap()); // todo: remove unwrap()
         let fastn_doc = utils::fastn_doc(&ds, &fastn_ds::Path::new("FASTN.ftd")).await?;
-        let config_temp = config_temp::ConfigTemp::read(&ds).await?;
         let mut package = fastn_core::Package::from_fastn_doc(&ds, &fastn_doc)?;
         let package_root = ds.root().join(".packages");
-        let all_packages = {
-            let mut all_packages = std::collections::BTreeMap::new();
-            all_packages.insert(package.name.to_string(), package.to_owned());
-            all_packages.extend(
-                config_temp
-                    .get_all_packages(&ds, &mut package, &package_root)
-                    .await?,
-            );
-
-            all_packages
-        };
+        let all_packages = get_all_packages(&mut package, &package_root, &ds).await?;
         let mut config = Config {
             package: package.clone(),
             packages_root: package_root.clone(),
@@ -1223,4 +1231,32 @@ impl Config {
         let lib = fastn_core::FastnLibrary::default();
         Ok(fastn_core::doc::parse_ftd("fastn", doc.as_str(), &lib)?)
     }
+}
+
+#[cfg(not(feature = "download-on-demand"))]
+async fn get_all_packages(
+    package: &mut fastn_core::Package,
+    package_root: &fastn_ds::Path,
+    ds: &fastn_ds::DocumentStore,
+) -> fastn_core::Result<std::collections::BTreeMap<String, fastn_core::Package>> {
+    let mut all_packages = std::collections::BTreeMap::new();
+    all_packages.insert(package.name.to_string(), package.to_owned());
+    let config_temp = config_temp::ConfigTemp::read(&ds).await?;
+    all_packages.extend(
+        config_temp
+            .get_all_packages(&ds, package, &package_root)
+            .await?,
+    );
+    Ok(all_packages)
+}
+
+#[cfg(feature = "download-on-demand")]
+async fn get_all_packages(
+    package: &mut fastn_core::Package,
+    _package_root: &fastn_ds::Path,
+    _ds: &fastn_ds::DocumentStore,
+) -> fastn_core::Result<dashmap::DashMap<String, fastn_core::Package>> {
+    let mut all_packages = dashmap::DashMap::new();
+    all_packages.insert(package.name.to_string(), package.to_owned());
+    Ok(all_packages)
 }

@@ -26,6 +26,9 @@ controller = ["remote"]
 # is created for every user, and local edits in the workspace is allowed.
 remote = []
 
+
+download-on-demand = ["dashmap"]
+
 [dependencies]
 actix-web.workspace = true
 antidote.workspace = true
@@ -34,6 +37,7 @@ async-lock.workspace = true
 async-recursion.workspace = true
 camino.workspace = true
 chrono.workspace = true
+dashmap = { workspace = true, optional = true }
 async-trait = "0.1"
 http.workspace = true
 bytes.workspace = true
