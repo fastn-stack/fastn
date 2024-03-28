@@ -69,6 +69,43 @@ impl fastn_core::Package {
         Ok(manifest)
     }
 
+    #[cfg(feature = "download-on-demand")]
+    #[tracing::instrument(skip(self))]
+    pub(crate) async fn fs_fetch_by_id(
+        &self,
+        id: &str,
+        package_root: Option<&fastn_ds::Path>,
+        ds: &fastn_ds::DocumentStore,
+    ) -> fastn_core::Result<(String, Vec<u8>)> {
+        if fastn_core::file::is_static(id)? {
+            if let Ok(data) = self.fs_fetch_by_file_name(id, package_root, ds).await {
+                return Ok((id.to_string(), data));
+            }
+        } else {
+            for name in file_id_to_names(id) {
+                if let Ok(data) = self
+                    .fs_fetch_by_file_name(name.as_str(), package_root, ds)
+                    .await
+                {
+                    return Ok((name, data));
+                }
+            }
+        }
+
+        tracing::error!(
+            msg = "fs-error: file not found",
+            document = id,
+            package = self.name
+        );
+        Err(fastn_core::Error::PackageError {
+            message: format!(
+                "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
+                id, &self.name
+            ),
+        })
+    }
+
+    #[cfg(not(feature = "download-on-demand"))]
     pub(crate) async fn fs_fetch_by_id(
         &self,
         id: &str,
