@@ -7,6 +7,9 @@ license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 
+[features]
+download-on-demand = ["fastn-core/download-on-demand"]
+
 [dependencies]
 clap.workspace = true
 colored.workspace = true

@@ -414,10 +414,7 @@ pub(crate) async fn read_ftd_2022(
 
     let current_package = config
         .config
-        .all_packages
-        .get(main.package_name.as_str())
-        .unwrap_or(&config.config.package)
-        .to_owned();
+        .find_package_else_default(main.package_name.as_str(), None);
 
     config.document_id = main.id.clone();
     config.base_url = base_url.to_string();
@@ -483,10 +480,7 @@ pub(crate) async fn read_ftd_2023(
 
     let current_package = config
         .config
-        .all_packages
-        .get(main.package_name.as_str())
-        .unwrap_or(&config.config.package)
-        .to_owned();
+        .find_package_else_default(main.package_name.as_str(), None);
 
     config.document_id = main.id.clone();
     config.base_url = base_url.to_string();
