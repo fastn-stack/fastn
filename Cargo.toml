@@ -33,7 +33,7 @@ authors = [
 ]
 edition = "2021"
 description = "fastn: Full-stack Web Development Made Easy"
-license = "BSD-3-Clause"
+license = "AGPL-3"
 repository = "https://github.com/fastn-stack/fastn"
 homepage = "https://fastn.com"
 
