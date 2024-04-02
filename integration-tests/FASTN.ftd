@@ -2,8 +2,6 @@
 
 -- fastn.package: integration-tests
 
--- fastn.auto-import: integration-tests/authy as auth
-
 -- fastn.url-mappings:
 
 /ftd/* -> http+proxy://fastn.com/ftd/*
