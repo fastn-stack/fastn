@@ -1,68 +1,29 @@
 pub fn process_readers(
-    value: ftd_ast::VariableValue,
-    kind: ftd::interpreter::Kind,
-    doc: &ftd::interpreter::TDoc,
-    req_config: &fastn_core::RequestConfig,
-    document_id: &str,
+    _value: ftd_ast::VariableValue,
+    _kind: ftd::interpreter::Kind,
+    _doc: &ftd::interpreter::TDoc,
+    _req_config: &fastn_core::RequestConfig,
+    _document_id: &str,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    use itertools::Itertools;
-    // TODO: document key should be optional
-
-    let headers = match value.get_record(doc.name) {
-        Ok(val) => val.2.to_owned(),
-        Err(_e) => ftd_ast::HeaderValues::new(vec![]),
-    };
-
-    let document = headers
-        .get_optional_string_by_key("document", doc.name, value.line_number())?
-        .unwrap_or_else(|| document_id.to_string());
-
-    let document_name = req_config.document_name_with_default(document.as_str());
-
-    let readers = match req_config.config.package.sitemap.as_ref() {
-        Some(s) => s
-            .readers(document_name.as_str(), &req_config.config.package.groups)
-            .0
-            .into_iter()
-            .map(|g| g.to_group_compat())
-            .collect_vec(),
-        None => vec![],
-    };
-
-    doc.from_json(dbg!(&readers), &kind, &value)
+    Err(ftd::interpreter::Error::OtherError(
+        "document-readers is not implemented in this version. Switch to an \
+            older version."
+            .into(),
+    ))
 }
 
 pub fn process_writers(
-    value: ftd_ast::VariableValue,
-    kind: ftd::interpreter::Kind,
-    doc: &ftd::interpreter::TDoc,
-    req_config: &fastn_core::RequestConfig,
-    document_id: &str,
+    _value: ftd_ast::VariableValue,
+    _kind: ftd::interpreter::Kind,
+    _doc: &ftd::interpreter::TDoc,
+    _req_config: &fastn_core::RequestConfig,
+    _document_id: &str,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    use itertools::Itertools;
-
-    let headers = match value.get_record(doc.name) {
-        Ok(val) => val.2.to_owned(),
-        Err(_e) => ftd_ast::HeaderValues::new(vec![]),
-    };
-
-    // sitemap document otherwise use current document
-    // TODO: Possibly bug if we define different document as key in the sitemap
-    let document = headers
-        .get_optional_string_by_key("document", doc.name, value.line_number())?
-        .unwrap_or_else(|| document_id.to_string());
-
-    let document_name = req_config.document_name_with_default(document.as_str());
-    let writers = match req_config.config.package.sitemap.as_ref() {
-        Some(s) => s
-            .writers(document_name.as_str(), &req_config.config.package.groups)
-            .into_iter()
-            .map(|g| g.to_group_compat())
-            .collect_vec(),
-        None => vec![],
-    };
-
-    doc.from_json(&writers, &kind, &value)
+    Err(ftd::interpreter::Error::OtherError(
+        "document-writers is not implemented in this version. Switch to an \
+            older version."
+            .into(),
+    ))
 }
 
 pub fn current_url(

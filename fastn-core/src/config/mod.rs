@@ -127,6 +127,7 @@ impl RequestConfig {
     /// document_name_with_default("foo/index.ftd") -> /foo/
     /// document_name_with_default("foo/abc") -> /foo/abc/
     /// document_name_with_default("/foo/abc.ftd") -> /foo/abc/
+    #[allow(dead_code)]
     pub(crate) fn document_name_with_default(&self, document_path: &str) -> String {
         let name = self
             .doc_id()
@@ -243,86 +244,6 @@ impl RequestConfig {
             self.current_document = Some(file.get_id().to_string());
             Ok(file)
         }
-    }
-    #[tracing::instrument(skip(self))]
-    pub(crate) async fn can_read(
-        &self,
-        document_path: &str,
-        with_confidential: bool, // can read should use confidential property or not
-    ) -> fastn_core::Result<bool> {
-        // Function Docs
-        // If user can read the document based on readers, user will have read access to page
-        // If user cannot read the document based on readers, and if confidential is false so user
-        // can access the page, and if confidential is true user will not be able to access the
-        // document
-
-        // can_read: true, confidential: true => true (can access)
-        // can_read: true, confidential: false => true (can access)
-        // can_read: false, confidential: true => false (cannot access)
-        // can_read: false, confidential: false => true (can access)
-
-        use itertools::Itertools;
-        let document_name = self.document_name_with_default(document_path);
-        if let Some(sitemap) = &self.config.package.sitemap {
-            // TODO: This can be buggy in case of: if groups are used directly in sitemap are foreign groups
-            let (document_readers, confidential) =
-                sitemap.readers(document_name.as_str(), &self.config.package.groups);
-
-            // TODO: Need to check the confidential logic, if readers are not defined in the sitemap
-            if document_readers.is_empty() {
-                return Ok(true);
-            }
-            let access_identities = fastn_core::user_group::access_identities(
-                &self.config,
-                &self.request,
-                &document_name,
-                true,
-            )
-            .await?;
-
-            let belongs_to = fastn_core::user_group::belongs_to(
-                &self.config,
-                document_readers.as_slice(),
-                access_identities.iter().collect_vec().as_slice(),
-            )
-            .await?;
-
-            if with_confidential {
-                if belongs_to {
-                    return Ok(true);
-                }
-                return Ok(!confidential);
-            }
-            return Ok(belongs_to);
-        }
-        Ok(true)
-    }
-
-    #[tracing::instrument(skip(self))]
-    pub(crate) async fn can_write(&self, document_path: &str) -> fastn_core::Result<bool> {
-        use itertools::Itertools;
-        let document_name = self.document_name_with_default(document_path);
-        if let Some(sitemap) = &self.config.package.sitemap {
-            // TODO: This can be buggy in case of: if groups are used directly in sitemap are foreign groups
-            let document_writers =
-                sitemap.writers(document_name.as_str(), &self.config.package.groups);
-            let access_identities = fastn_core::user_group::access_identities(
-                &self.config,
-                &self.request,
-                &document_name,
-                false,
-            )
-            .await?;
-
-            return fastn_core::user_group::belongs_to(
-                &self.config,
-                document_writers.as_slice(),
-                access_identities.iter().collect_vec().as_slice(),
-            )
-            .await;
-        }
-
-        Ok(false)
     }
 }
 

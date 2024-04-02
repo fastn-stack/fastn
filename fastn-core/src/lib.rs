@@ -15,7 +15,6 @@ pub mod manifest;
 pub mod package;
 #[macro_use]
 pub mod http;
-pub mod auth;
 mod ds;
 mod error;
 mod i18n;
@@ -47,7 +46,6 @@ pub use library::{FastnLibrary, Library, Library2};
 pub use library2022::Library2022;
 pub use manifest::Manifest;
 pub(crate) use package::dependency::Dependency;
-pub use package::user_group;
 pub use package::Package;
 pub(crate) use snapshot::Snapshot;
 pub(crate) use tracker::Track;
