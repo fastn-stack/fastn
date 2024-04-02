@@ -108,9 +108,6 @@ pub enum Error {
     #[error("DatabaseError: {message}")]
     DatabaseError { message: String },
 
-    #[error("DatabaseQueryError: {}", _0)]
-    DatabaseQueryError(#[from] diesel::result::Error),
-
     #[error("ds::ReadError: {}", _0)]
     DSReadError(#[from] fastn_ds::ReadError),
 
