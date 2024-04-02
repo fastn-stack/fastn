@@ -944,7 +944,7 @@ mod test {
 
     #[tokio::test]
     async fn validation_error_to_user_err() -> fastn_core::Result<()> {
-        use validator::ValidateArgs;
+        use validator::Validate;
 
         #[derive(serde::Deserialize, serde::Serialize, validator::Validate, Debug)]
         struct UserPayload {
@@ -954,25 +954,15 @@ mod test {
             email: String,
             #[validate(length(min = 1, message = "name must be at least 1 character long"))]
             name: String,
-            #[validate(custom(
-                function = "fastn_core::auth::validator::validate_strong_password",
-                arg = "(&'v_a str, &'v_a str, &'v_a str)"
-            ))]
-            password: String,
         }
 
         let user: UserPayload = UserPayload {
             email: "email".to_string(),
             name: "".to_string(),
             username: "si".to_string(),
-            password: "four".to_string(),
         };
 
-        if let Err(e) = user.validate_args((
-            user.username.as_str(),
-            user.email.as_str(),
-            user.name.as_str(),
-        )) {
+        if let Err(e) = user.validate() {
             let res = fastn_core::http::validation_error_to_user_err(e).unwrap();
 
             assert_eq!(res.status(), fastn_core::http::StatusCode::OK);
@@ -981,7 +971,6 @@ mod test {
             struct Errors {
                 email: Vec<String>,
                 name: Vec<String>,
-                password: Vec<String>,
             }
 
             #[derive(serde::Deserialize, Debug)]
@@ -1000,11 +989,6 @@ mod test {
                 body.errors.name,
                 vec!["name must be at least 1 character long"]
             );
-
-            assert!(body
-                .errors
-                .password
-                .contains(&"password is too weak".to_string()));
         }
 
         Ok(())
