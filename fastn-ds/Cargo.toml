@@ -26,3 +26,5 @@ once_cell.workspace = true
 url.workspace = true
 regex.workspace = true
 serde.workspace = true
+dashmap.workspace = true
+wasmtime.workspace = true

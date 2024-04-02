@@ -19025,7 +19025,7 @@ mod document {
                 -- meta_type list meta:
 
                 -- meta:
-                license: BSD
+                license: AGPL-3
 
                 --- reader.Username: foo
                 --- reader.Who: everyone

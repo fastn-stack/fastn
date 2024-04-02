@@ -7,6 +7,7 @@ mod utils;
 
 #[derive(Debug, Clone)]
 pub struct DocumentStore {
+    pub wasm_modules: dashmap::DashMap<String, wasmtime::Module>,
     root: Path,
 }
 
@@ -129,6 +130,14 @@ pub enum WriteError {
 }
 
 #[derive(thiserror::Error, Debug)]
+pub enum WasmReadError {
+    #[error("read error {0}")]
+    ReadError(#[from] ReadError),
+    #[error("wasm error {0}")]
+    WasmError(#[from] wasmtime::Error),
+}
+
+#[derive(thiserror::Error, Debug)]
 pub enum HttpError {
     #[error("http error {0}")]
     ReqwestError(#[from] reqwest::Error),
@@ -151,10 +160,34 @@ pub trait RequestType {
     fn body(&self) -> &[u8];
 }
 
+pub static WASM_ENGINE: once_cell::sync::Lazy<wasmtime::Engine> =
+    once_cell::sync::Lazy::new(|| {
+        wasmtime::Engine::new(wasmtime::Config::new().async_support(true)).unwrap()
+    });
+
 impl DocumentStore {
     pub fn new<T: AsRef<camino::Utf8Path>>(root: T) -> Self {
         Self {
+            wasm_modules: dashmap::DashMap::new(),
             root: Path::new(root.as_ref().as_str()),
+        }
+    }
+
+    #[tracing::instrument(skip(self))]
+    pub async fn get_wasm(&self, path: &str) -> Result<wasmtime::Module, WasmReadError> {
+        // TODO: implement wasm module on disc caching, so modules load faster across
+        //       cache purge
+        match self.wasm_modules.get(path) {
+            Some(module) => Ok(module.clone()),
+            None => {
+                let source = self.read_content(&fastn_ds::Path::new(path)).await?;
+                let module = wasmtime::Module::from_binary(&WASM_ENGINE, &source)?;
+                if std::env::var("DEBUG_SERVE_SITE_FROM_FOLDER").is_err() {
+                    // we are only storing compiled module if we are not in debug mode
+                    self.wasm_modules.insert(path.to_string(), module.clone());
+                }
+                Ok(module)
+            }
         }
     }
 
