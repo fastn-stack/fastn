@@ -19038,7 +19038,7 @@ mod document {
         pretty_assertions::assert_eq!(
             bag.get::<Vec<Meta>>("meta").unwrap(),
             vec![Meta {
-                license: s("BSD"),
+                license: s("AGPL-3"),
                 reader: vec![
                     Someone::Username { username: s("foo") },
                     Someone::Who { who: s("everyone") }
