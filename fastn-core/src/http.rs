@@ -136,7 +136,7 @@ pub struct Request {
 
 #[async_trait::async_trait]
 impl fastn_ds::RequestType for Request {
-    async fn ud(&self, ds: &fastn_ds::DocumentStore) -> Option<fastn_ds::UserData> {
+    async fn ud(&self, ds: &fastn_ds::DocumentStore) -> Option<ft_sys_shared::UserData> {
         self.ud(ds).await
     }
     fn headers(&self) -> &reqwest::header::HeaderMap {
@@ -275,8 +275,8 @@ impl Request {
             .and_then(|v| v.to_str().map(|v| v.to_string()).ok())
     }
 
-    pub async fn ud(&self, _ds: &fastn_ds::DocumentStore) -> Option<fastn_core::UserData> {
-        // TODO: this function is preserved so as we not break things if someone accidently uses
+    pub async fn ud(&self, _ds: &fastn_ds::DocumentStore) -> Option<ft_sys_shared::UserData> {
+        // TODO: this function is preserved so as we not break things if someone accidentally uses
         // this version
         // There are two ways I can think of by which we can keep this function in fastn-core:
         // 1. we use fastn-community/auth as a dependency and use a function exposed by its rust

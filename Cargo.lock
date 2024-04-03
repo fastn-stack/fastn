@@ -1616,6 +1616,7 @@ dependencies = [
  "fastn-package",
  "fbt-lib",
  "fluent",
+ "ft-sys-shared",
  "ftd 0.3.0",
  "ftd-ast",
  "ftd-p1",

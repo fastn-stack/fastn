@@ -11,15 +11,6 @@ pub struct DocumentStore {
     root: Path,
 }
 
-#[derive(serde::Deserialize, Clone)]
-pub struct UserData {
-    pub id: i64,
-    pub username: String,
-    pub name: String,
-    pub email: String,
-    pub verified_email: bool,
-}
-
 #[derive(Debug, Clone, PartialEq)]
 pub struct Path {
     path: camino::Utf8PathBuf,
@@ -153,7 +144,7 @@ pub type HttpResponse = ::http::Response<bytes::Bytes>;
 
 #[async_trait::async_trait]
 pub trait RequestType {
-    async fn ud(&self, ds: &fastn_ds::DocumentStore) -> Option<UserData>;
+    async fn ud(&self, ds: &fastn_ds::DocumentStore) -> Option<ft_sys_shared::UserData>;
     fn headers(&self) -> &reqwest::header::HeaderMap;
     fn method(&self) -> &str;
     fn query_string(&self) -> &str;

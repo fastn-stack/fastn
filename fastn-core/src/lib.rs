@@ -36,7 +36,6 @@ pub use commands::{
 };
 pub use config::{config_temp, Config, ConfigTemp, FTDEdition, RequestConfig};
 pub use error::Error;
-pub use fastn_ds::UserData;
 pub use file::File;
 pub use file::{get_file, paths_to_files, Document, Static};
 pub(crate) use font::Font;
