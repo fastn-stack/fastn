@@ -55,48 +55,6 @@ async fn serve_file(
         }
     };
 
-    // Auth Stuff
-    if !f.is_static() {
-        match config.can_read(path.as_str(), true).await {
-            Ok(can_read) => {
-                if !can_read {
-                    tracing::error!(
-                        msg = "unauthorized-error: can not read",
-                        path = path.as_str()
-                    );
-                    return fastn_core::unauthorised!("You are unauthorized to access: {}", path);
-                }
-            }
-            Err(e) => {
-                tracing::error!(msg = "can_read-error", path = path.as_str());
-                return fastn_core::server_error!("fastn-Error: can_read error: {}, {:?}", path, e);
-            }
-        };
-
-        match fastn_core::package::app::can_read(config, path.as_str()).await {
-            Ok(can_read) => {
-                if !can_read {
-                    tracing::error!(
-                        msg = "unauthorized-error: can not access app",
-                        path = path.as_str()
-                    );
-                    return fastn_core::unauthorised!("You are unauthorized to access: {}", path);
-                }
-            }
-            Err(err) => {
-                tracing::error!(
-                    msg = "app::can_read-error: can not access app",
-                    path = path.as_str()
-                );
-                return fastn_core::server_error!(
-                    "fastn-Error: can_read error: {}, {:?}",
-                    path,
-                    err
-                );
-            }
-        };
-    }
-
     let main_document = match f {
         fastn_core::File::Ftd(main_document) => main_document,
         _ => {
@@ -180,11 +138,7 @@ pub async fn serve(
         return handle_static_route(req.path(), config.package.name.as_str(), &config.ds).await;
     }
 
-    let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
-
-    if req.path().starts_with("/-/auth/") {
-        return fastn_core::auth::routes::handle_auth(req, &mut req_config, config).await;
-    }
+    let req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
 
     serve_helper(req_config, only_js, path).await
 }

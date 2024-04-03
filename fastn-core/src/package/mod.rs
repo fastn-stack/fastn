@@ -2,7 +2,6 @@ pub mod app;
 pub mod dependency;
 pub mod package_doc;
 pub mod redirects;
-pub mod user_group;
 
 #[derive(Debug, Clone)]
 pub struct Package {
@@ -35,8 +34,9 @@ pub struct Package {
     pub fonts: Vec<fastn_core::Font>,
     pub import_auto_imports_from_original: bool,
 
-    pub groups: std::collections::BTreeMap<String, crate::user_group::UserGroup>,
-
+    // TODO: this needs to be moved to another fastn + wasm package or would require a redesign
+    // if we move this: think about how we can design it mostly in ftd land
+    // pub groups: std::collections::BTreeMap<String, crate::user_group::UserGroup>,
     /// sitemap stores the structure of the package. The structure includes sections, sub_sections
     /// and table of content (`toc`). This automatically converts the documents in package into the
     /// corresponding to structure.
@@ -94,7 +94,6 @@ impl Package {
             ignored_paths: vec![],
             fonts: vec![],
             import_auto_imports_from_original: true,
-            groups: std::collections::BTreeMap::new(),
             sitemap_temp: None,
             sitemap: None,
             dynamic_urls: None,
@@ -615,10 +614,6 @@ impl Package {
             .into_iter()
             .collect::<fastn_core::Result<Vec<fastn_core::Dependency>>>()?;
 
-        let user_groups: Vec<crate::user_group::UserGroupTemp> =
-            fastn_document.get("fastn#user-group")?;
-        let groups = crate::user_group::UserGroupTemp::user_groups(user_groups)?;
-        package.groups = groups;
         package.auto_import = fastn_document
             .get::<Vec<fastn_core::package::dependency::AutoImportTemp>>("fastn#auto-import")?
             .into_iter()
@@ -735,14 +730,6 @@ impl Package {
         package.fonts = fastn_doc.get("fastn#font")?;
         package.sitemap_temp = fastn_doc.get("fastn#sitemap")?;
         package.dynamic_urls_temp = fastn_doc.get("fastn#dynamic-urls")?;
-
-        // TODO: resolve group dependent packages, there may be imported group from foreign package
-        //   We need to make sure to resolve that package as well before moving ahead
-        //   Because in `UserGroup::get_identities` we have to resolve identities of a group
-        let user_groups: Vec<crate::user_group::UserGroupTemp> =
-            fastn_doc.get("fastn#user-group")?;
-        let groups = crate::user_group::UserGroupTemp::user_groups(user_groups)?;
-        package.groups = groups;
 
         // validation logic TODO: It should be ordered
         fastn_core::utils::validate_base_url(&package)?;
@@ -978,7 +965,6 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
             ignored_paths: vec![],
             fonts: vec![],
             import_auto_imports_from_original: self.import_auto_imports_from_original,
-            groups: std::collections::BTreeMap::new(),
             sitemap: None,
             sitemap_temp: None,
             dynamic_urls: None,

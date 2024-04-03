@@ -1,3 +1,5 @@
+pub const SESSION_COOKIE_NAME: &str = "fastn_session";
+
 #[macro_export]
 macro_rules! server_error {
     ($($t:tt)*) => {{
@@ -273,50 +275,15 @@ impl Request {
             .and_then(|v| v.to_str().map(|v| v.to_string()).ok())
     }
 
-    pub async fn ud(&self, ds: &fastn_ds::DocumentStore) -> Option<fastn_core::UserData> {
-        let session_data = match self.cookie(fastn_core::auth::SESSION_COOKIE_NAME) {
-            Some(c) => {
-                if c.is_empty() {
-                    return None;
-                } else {
-                    c
-                }
-            }
-            None => return None,
-        };
-
-        let session_data = match fastn_core::auth::utils::decrypt(ds, &session_data).await {
-            Ok(v) => v,
-            Err(e) => {
-                tracing::warn!("failed to decrypt session data: {:?}", e);
-                return None;
-            }
-        };
-
-        #[derive(serde::Deserialize)]
-        struct SessionData {
-            session_id: i64,
-            user: fastn_core::UserData,
-        }
-
-        let session_data = match serde_json::from_str::<SessionData>(session_data.as_str()) {
-            Ok(sd) => sd,
-            Err(e) => {
-                tracing::warn!("failed to deserialize session data: {:?}", e);
-                return None;
-            }
-        };
-
-        // if the session does not exist, return None
-        match fastn_core::auth::get_authenticated_user_with_email(&session_data.session_id, ds)
-            .await
-        {
-            Ok(_) => Some(session_data.user),
-            Err(e) => {
-                tracing::warn!("failed to get user data from session: {e}");
-                None
-            }
-        }
+    pub async fn ud(&self, _ds: &fastn_ds::DocumentStore) -> Option<fastn_core::UserData> {
+        // TODO: this function is preserved so as we not break things if someone accidently uses
+        // this version
+        // There are two ways I can think of by which we can keep this function in fastn-core:
+        // 1. we use fastn-community/auth as a dependency and use a function exposed by its rust
+        //    code in here
+        // 2. we use tokio-postgres and assume `fastn_user` table exists when FASTN_ENABLE_AUTH is
+        //    set. ud() will also only work when FASTN_ENABLE_AUTH is set
+        todo!("")
     }
 
     pub fn body(&self) -> &[u8] {
@@ -977,7 +944,7 @@ mod test {
 
     #[tokio::test]
     async fn validation_error_to_user_err() -> fastn_core::Result<()> {
-        use validator::ValidateArgs;
+        use validator::Validate;
 
         #[derive(serde::Deserialize, serde::Serialize, validator::Validate, Debug)]
         struct UserPayload {
@@ -987,25 +954,15 @@ mod test {
             email: String,
             #[validate(length(min = 1, message = "name must be at least 1 character long"))]
             name: String,
-            #[validate(custom(
-                function = "fastn_core::auth::validator::validate_strong_password",
-                arg = "(&'v_a str, &'v_a str, &'v_a str)"
-            ))]
-            password: String,
         }
 
         let user: UserPayload = UserPayload {
             email: "email".to_string(),
             name: "".to_string(),
             username: "si".to_string(),
-            password: "four".to_string(),
         };
 
-        if let Err(e) = user.validate_args((
-            user.username.as_str(),
-            user.email.as_str(),
-            user.name.as_str(),
-        )) {
+        if let Err(e) = user.validate() {
             let res = fastn_core::http::validation_error_to_user_err(e).unwrap();
 
             assert_eq!(res.status(), fastn_core::http::StatusCode::OK);
@@ -1014,7 +971,6 @@ mod test {
             struct Errors {
                 email: Vec<String>,
                 name: Vec<String>,
-                password: Vec<String>,
             }
 
             #[derive(serde::Deserialize, Debug)]
@@ -1033,11 +989,6 @@ mod test {
                 body.errors.name,
                 vec!["name must be at least 1 character long"]
             );
-
-            assert!(body
-                .errors
-                .password
-                .contains(&"password is too weak".to_string()));
         }
 
         Ok(())

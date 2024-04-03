@@ -8,6 +8,7 @@ pub struct KeyValueData {
 }
 
 impl KeyValueData {
+    #[allow(dead_code)]
     pub fn from(key: String, value: String) -> Self {
         Self { key, value }
     }
