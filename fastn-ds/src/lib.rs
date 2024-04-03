@@ -145,6 +145,8 @@ pub enum HttpError {
     URLParseError(#[from] url::ParseError),
     #[error("generic error {message}")]
     GenericError { message: String },
+    #[error("wasm read error {0}")]
+    WasmReadError(#[from] WasmReadError),
 }
 
 pub type HttpResponse = ::http::Response<bytes::Bytes>;
@@ -351,6 +353,66 @@ impl DocumentStore {
     // This method will connect client request to the out of the world
     #[tracing::instrument(skip(req, extra_headers))]
     pub async fn http<T>(
+        &self,
+        url: url::Url,
+        req: &T,
+        extra_headers: &std::collections::HashMap<String, String>,
+    ) -> Result<fastn_ds::HttpResponse, HttpError>
+    where
+        T: RequestType,
+    {
+        if url.scheme() == "wasm+proxy" {
+            return self.handle_wasm(url, req, extra_headers).await;
+        }
+        self.http_(url, req, extra_headers).await
+    }
+
+    pub async fn handle_wasm<T>(
+        &self,
+        url: url::Url,
+        req: &T,
+        extra_headers: &std::collections::HashMap<String, String>,
+    ) -> Result<fastn_ds::HttpResponse, HttpError>
+    where
+        T: RequestType,
+    {
+        let mut headers: Vec<(String, Vec<u8>)> = req
+            .headers()
+            .iter()
+            .map(|(k, v)| (k.as_str().to_string(), v.as_bytes().to_vec()))
+            .collect();
+        for (k, v) in extra_headers {
+            headers.push((k.to_string(), v.as_bytes().to_vec()));
+        }
+
+        let wasm_file = url.to_string();
+        let wasm_file = wasm_file.strip_prefix("wasm+proxy://").unwrap();
+        let wasm_file = wasm_file.split_once(".wasm").unwrap().0;
+        let _module = self.get_wasm(format!("{wasm_file}.wasm").as_str()).await?;
+
+        // let resp = hostn_wasm::wasm_stuff_shared(
+        //     ft_sys_shared::Request {
+        //         uri: url.as_str().to_string(),
+        //         method: req.method().to_string(),
+        //         headers,
+        //         body: req.body().to_vec(),
+        //     },
+        //     None,
+        //     req.ud(self).await.map(fastn_ds::ud2ud),
+        //     module,
+        //     self.wasm_pg_pools.clone(),
+        //     self.env("DATABASE_URL").await?,
+        // )
+        // .await?;
+        //
+        // Ok(resp.into())
+        //
+        todo!()
+    }
+
+    // This method will connect client request to the out of the world
+    #[tracing::instrument(skip(req, extra_headers))]
+    pub async fn http_<T>(
         &self,
         url: url::Url,
         req: &T,

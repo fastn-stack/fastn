@@ -1762,6 +1762,7 @@ dependencies = [
  "camino",
  "dashmap",
  "dirs",
+ "ft-sys-shared",
  "ftd 0.3.0",
  "http 1.1.0",
  "ignore",
@@ -2006,6 +2007,18 @@ checksum = "04412b8935272e3a9bae6f48c7bfff74c2911f60525404edfdd28e49884c3bfb"
 dependencies = [
  "libc",
  "winapi",
+]
+
+[[package]]
+name = "ft-sys-shared"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "02b9ba40e9516fd4cf1a8d11b834ea7e9d4670db6594461ddfdae8b5bf9b1d53"
+dependencies = [
+ "bytes",
+ "http 1.1.0",
+ "serde",
+ "thiserror",
 ]
 
 [[package]]
