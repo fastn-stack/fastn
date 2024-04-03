@@ -13,6 +13,7 @@ tokio.workspace = true
 thiserror.workspace = true
 ftd.workspace = true
 actix-web.workspace = true
+ft-sys-shared.workspace = true
 http.workspace = true
 bytes.workspace = true
 camino.workspace = true
