@@ -417,46 +417,6 @@ pub(crate) fn url_regex() -> regex::Regex {
 }
 
 #[tracing::instrument]
-pub(crate) async fn construct_url_and_get_str(url: &str) -> fastn_core::Result<String> {
-    construct_url_and_return_response(url.to_string(), |f| async move {
-        http_get_str(f.as_str()).await
-    })
-    .await
-}
-
-#[tracing::instrument]
-pub(crate) async fn construct_url_and_get(url: &str) -> fastn_core::Result<bytes::Bytes> {
-    println!("http_download_by_id: {url}");
-    construct_url_and_return_response(
-        url.to_string(),
-        |f| async move { http_get(f.as_str()).await },
-    )
-    .await
-}
-
-#[tracing::instrument(skip(f))]
-pub(crate) async fn construct_url_and_return_response<T, F, D>(
-    url: String,
-    f: F,
-) -> fastn_core::Result<D>
-where
-    F: FnOnce(String) -> T + Copy,
-    T: futures::Future<Output = std::result::Result<D, fastn_core::Error>> + Send + 'static,
-{
-    let mut url = if url[1..].contains("://") || url.starts_with("//") {
-        url
-    } else {
-        format!("https://{}", url)
-    };
-
-    if let Ok(package_proxy) = std::env::var("FASTN_PACKAGE_PROXY") {
-        url = format!("{}/proxy/?url={}", package_proxy, url);
-    }
-
-    f(url).await
-}
-
-#[tracing::instrument]
 pub(crate) async fn get_json<T: serde::de::DeserializeOwned>(url: &str) -> fastn_core::Result<T> {
     Ok(reqwest::Client::new()
         .get(url)
@@ -545,20 +505,12 @@ pub async fn http_post_with_cookie(
     Ok((Ok(res.body().clone()), resp_cookies))
 }
 
-pub async fn http_get(url: &str) -> fastn_core::Result<bytes::Bytes> {
+pub async fn http_get(ds: &fastn_ds::DocumentStore, url: &str) -> fastn_core::Result<bytes::Bytes> {
     tracing::debug!("http_get {}", &url);
 
-    let current_dir = camino::Utf8PathBuf::from_path_buf(std::env::current_dir()?)
-        .expect("fastn-Error: Unable to define DocumentStore root path");
-    http_get_with_cookie(
-        &fastn_ds::DocumentStore::new(current_dir),
-        &Default::default(),
-        url,
-        &Default::default(),
-        true,
-    )
-    .await?
-    .0
+    http_get_with_cookie(ds, &Default::default(), url, &Default::default(), true)
+        .await?
+        .0
 }
 
 static NOT_FOUND_CACHE: once_cell::sync::Lazy<antidote::RwLock<std::collections::HashSet<String>>> =
@@ -633,9 +585,12 @@ pub async fn http_get_with_cookie(
     Ok((Ok(res.body().clone()), resp_cookies))
 }
 
-pub(crate) async fn http_get_str(url: &str) -> fastn_core::Result<String> {
+pub(crate) async fn http_get_str(
+    ds: &fastn_ds::DocumentStore,
+    url: &str,
+) -> fastn_core::Result<String> {
     let url_f = format!("{:?}", url);
-    match http_get(url).await {
+    match http_get(ds, url).await {
         Ok(bytes) => String::from_utf8(bytes.into()).map_err(|e| fastn_core::Error::UsageError {
             message: format!(
                 "Cannot convert the response to string: URL: {:?}, ERROR: {}",

@@ -8,6 +8,7 @@ mod utils;
 #[derive(Debug, Clone)]
 pub struct DocumentStore {
     pub wasm_modules: dashmap::DashMap<String, wasmtime::Module>,
+    pub pg_pools: actix_web::web::Data<dashmap::DashMap<String, deadpool_postgres::Pool>>,
     root: Path,
 }
 
@@ -159,9 +160,24 @@ pub static WASM_ENGINE: once_cell::sync::Lazy<wasmtime::Engine> =
     });
 
 impl DocumentStore {
-    pub fn new<T: AsRef<camino::Utf8Path>>(root: T) -> Self {
+    pub async fn default_pool(&self) -> deadpool_postgres::Pool {
+        if let Some(p) = self
+            .pg_pools
+            .get(self.env("DATABASE_URL").await.unwrap().as_str())
+        {
+            return p.clone();
+        }
+
+        todo!()
+    }
+
+    pub fn new<T: AsRef<camino::Utf8Path>>(
+        root: T,
+        pg_pools: actix_web::web::Data<dashmap::DashMap<String, deadpool_postgres::Pool>>,
+    ) -> Self {
         Self {
             wasm_modules: dashmap::DashMap::new(),
+            pg_pools,
             root: Path::new(root.as_ref().as_str()),
         }
     }

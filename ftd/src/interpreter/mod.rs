@@ -109,6 +109,9 @@ pub enum Error {
 
     #[error("ds:HttpError: {message}")]
     DSHttpError { message: String },
+
+    #[error("pool error: {0}")]
+    PoolError(#[from] deadpool::managed::PoolError<tokio_postgres::Error>),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

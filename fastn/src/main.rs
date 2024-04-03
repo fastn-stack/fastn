@@ -42,17 +42,11 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return Ok(());
     }
 
-    if let Some(project) = matches.subcommand_matches("create-package") {
-        // project-name => required field (any package Url or standard project name)
-        let name = project.value_of_("name").unwrap();
-        // project-path is optional
-        let path = project.value_of_("path");
-        let download_base_url = project.value_of_("download-base-url");
-        return fastn_core::create_package(name, path, download_base_url).await;
-    }
+    let pg_pools: actix_web::web::Data<dashmap::DashMap<String, deadpool_postgres::Pool>> =
+        actix_web::web::Data::new(dashmap::DashMap::new());
 
     let current_dir: camino::Utf8PathBuf = std::env::current_dir()?.canonicalize()?.try_into()?;
-    let ds = fastn_ds::DocumentStore::new(current_dir);
+    let ds = fastn_ds::DocumentStore::new(current_dir, pg_pools);
 
     if let Some(update) = matches.subcommand_matches("update") {
         let check = update.get_flag("check");
@@ -69,7 +63,6 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         });
 
         let bind = serve.value_of_("bind").unwrap_or("127.0.0.1").to_string();
-        let download_base_url = serve.value_of_("download-base-url");
         let edition = serve.value_of_("edition");
         let external_js = serve.values_of_("external-js");
         let inline_js = serve.values_of_("js");
@@ -89,13 +82,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             .add_external_css(external_css.clone())
             .add_inline_css(inline_css.clone());
 
-        return fastn_core::listen(
-            std::sync::Arc::new(config),
-            bind.as_str(),
-            port,
-            download_base_url.map(ToString::to_string),
-        )
-        .await;
+        return fastn_core::listen(std::sync::Arc::new(config), bind.as_str(), port).await;
     }
 
     if let Some(test) = matches.subcommand_matches("test") {
@@ -246,17 +233,6 @@ fn app(version: &'static str) -> clap::Command {
         .arg(clap::arg!(verbose: -v "Sets the level of verbosity"))
         .arg(clap::arg!(--test "Runs the command in test mode").hide(true))
         .arg(clap::arg!(--trace "Activate tracing").hide(true))
-        .subcommand(
-            // Initial subcommand format
-            // fastn create-package <project-name> [project-path]
-            //                   -n or --name   -p or --path
-            // Necessary <project-name> with Optional [project-path]
-            clap::Command::new("create-package")
-                .about("Create a new fastn package")
-                .arg(clap::arg!(name: <NAME> "The name of the package to create"))
-                .arg(clap::arg!(-p --path [PATH] "Where to create the package (relative or absolute path, default value: the name)"))
-                .arg(clap::arg!(--"download-base-url" <DOWNLOAD_BASE_URL> "base url of the package where it can downloaded"))
-        )
         .subcommand(
             clap::Command::new("build")
                 .about("Build static site from this fastn package")

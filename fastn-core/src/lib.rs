@@ -31,8 +31,7 @@ mod library2022;
 
 pub(crate) use auto_import::AutoImport;
 pub use commands::{
-    build::build, check::post_build_check, create_package::create_package, fmt::fmt, query::query,
-    serve::listen, test::test,
+    build::build, check::post_build_check, fmt::fmt, query::query, serve::listen, test::test,
 };
 pub use config::{config_temp, Config, ConfigTemp, FTDEdition, RequestConfig};
 pub use error::Error;

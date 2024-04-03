@@ -68,6 +68,7 @@ pub async fn process(
         )
         .await?),
         "google_sheets" => Ok(fastn_core::library2022::processor::google_sheets::process(
+            &config.config.ds,
             value,
             kind,
             doc,

@@ -146,7 +146,7 @@ async fn update_dependencies(
 
             pb.set_message(format!("Resolving {}/manifest.json", &package_name));
 
-            let (manifest, manifest_bytes) = utils::get_manifest(&package_name).await?;
+            let (manifest, manifest_bytes) = utils::get_manifest(ds, &package_name).await?;
 
             let manifest_path = dependency_path.join(fastn_core::manifest::MANIFEST_FILE);
 
@@ -251,7 +251,7 @@ async fn download_and_unpack_zip(
     pb: &indicatif::ProgressBar,
     check: bool,
 ) -> Result<(), UpdateError> {
-    let mut archive = utils::download_archive(manifest.zip_url.clone())
+    let mut archive = utils::download_archive(ds, manifest.zip_url.clone())
         .await
         .context(DownloadArchiveSnafu {
             package: package_name,

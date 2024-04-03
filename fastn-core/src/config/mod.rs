@@ -828,7 +828,6 @@ impl Config {
     }
 
     pub(crate) async fn download_required_file(
-        root: &fastn_ds::Path,
         id: &str,
         package: &fastn_core::Package,
         ds: &fastn_ds::DocumentStore,
@@ -845,21 +844,23 @@ impl Config {
 
         if id.eq("/") {
             if let Ok(string) = crate::http::http_get_str(
+                ds,
                 format!("{}/index.ftd", base.trim_end_matches('/')).as_str(),
             )
             .await
             {
-                let base = root.join(".packages").join(package.name.as_str());
+                let base = ds.root().join(".packages").join(package.name.as_str());
                 ds.write_content(&base.join("index.ftd"), &string.into_bytes())
                     .await?;
                 return Ok(format!(".packages/{}/index.ftd", package.name));
             }
             if let Ok(string) = crate::http::http_get_str(
+                ds,
                 format!("{}/README.md", base.trim_end_matches('/')).as_str(),
             )
             .await
             {
-                let base = root.join(".packages").join(package.name.as_str());
+                let base = ds.root().join(".packages").join(package.name.as_str());
                 ds.write_content(&base.join("README.md"), &string.into_bytes())
                     .await?;
                 return Ok(format!(".packages/{}/README.md", package.name));
@@ -870,46 +871,57 @@ impl Config {
         }
 
         let id = id.trim_matches('/').to_string();
-        if let Ok(string) =
-            crate::http::http_get_str(format!("{}/{}.ftd", base.trim_end_matches('/'), id).as_str())
-                .await
+        if let Ok(string) = crate::http::http_get_str(
+            ds,
+            format!("{}/{}.ftd", base.trim_end_matches('/'), id).as_str(),
+        )
+        .await
         {
             let (prefix, id) = match id.rsplit_once('/') {
                 Some((prefix, id)) => (format!("/{}", prefix), id.to_string()),
                 None => ("".to_string(), id),
             };
-            let base = root
-                .join(".packages")
-                .join(format!("{}{}", package.name.as_str(), prefix));
+            let base =
+                ds.root()
+                    .join(".packages")
+                    .join(format!("{}{}", package.name.as_str(), prefix));
             let file_path = base.join(format!("{}.ftd", id));
             ds.write_content(&file_path, &string.into_bytes()).await?;
             return Ok(file_path.to_string());
         }
         if let Ok(string) = crate::http::http_get_str(
+            ds,
             format!("{}/{}/index.ftd", base.trim_end_matches('/'), id).as_str(),
         )
         .await
         {
-            let base = root.join(".packages").join(package.name.as_str()).join(id);
+            let base = ds
+                .root()
+                .join(".packages")
+                .join(package.name.as_str())
+                .join(id);
             let file_path = base.join("index.ftd");
             ds.write_content(&file_path, &string.into_bytes()).await?;
             return Ok(file_path.to_string());
         }
-        if let Ok(string) =
-            crate::http::http_get_str(format!("{}/{}.md", base.trim_end_matches('/'), id).as_str())
-                .await
+        if let Ok(string) = crate::http::http_get_str(
+            ds,
+            format!("{}/{}.md", base.trim_end_matches('/'), id).as_str(),
+        )
+        .await
         {
-            let base = root.join(".packages").join(package.name.as_str());
+            let base = ds.root().join(".packages").join(package.name.as_str());
             ds.write_content(&base.join(format!("{}.md", id)), &string.into_bytes())
                 .await?;
             return Ok(format!(".packages/{}/{}.md", package.name, id));
         }
         if let Ok(string) = crate::http::http_get_str(
+            ds,
             format!("{}/{}/README.md", base.trim_end_matches('/'), id).as_str(),
         )
         .await
         {
-            let base = root.join(".packages").join(package.name.as_str());
+            let base = ds.root().join(".packages").join(package.name.as_str());
             ds.write_content(
                 &base.join(format!("{}/README.md", id)),
                 &string.into_bytes(),
@@ -1077,12 +1089,6 @@ impl Config {
         let mut config = self;
         config.test_command_running = true;
         config
-    }
-
-    pub async fn read_current(resolve_sitemap: bool) -> fastn_core::Result<fastn_core::Config> {
-        let current_dir: camino::Utf8PathBuf =
-            std::env::current_dir()?.canonicalize()?.try_into()?;
-        Config::read(fastn_ds::DocumentStore::new(current_dir), resolve_sitemap).await
     }
 
     /// `read()` is the way to read a Config.

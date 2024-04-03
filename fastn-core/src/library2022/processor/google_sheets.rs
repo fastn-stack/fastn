@@ -572,6 +572,7 @@ pub(crate) fn parse_query(
 }
 
 pub(crate) async fn process(
+    ds: &fastn_ds::DocumentStore,
     value: ftd_ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
@@ -584,7 +585,7 @@ pub(crate) async fn process(
     let request_url =
         fastn_core::google_sheets::prepare_query_url(&db_config.db_url, query.as_str(), sheet);
 
-    let response = match fastn_core::http::http_get_str(&request_url).await {
+    let response = match fastn_core::http::http_get_str(ds, &request_url).await {
         Ok(v) => v,
         Err(e) => {
             return ftd::interpreter::utils::e2(

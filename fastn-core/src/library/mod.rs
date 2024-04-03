@@ -132,14 +132,9 @@ impl Library {
             lib: &Library,
         ) -> Option<String> {
             let path = lib.config.config.get_root_for_package(package);
-            fastn_core::Config::download_required_file(
-                &lib.config.config.ds.root(),
-                name,
-                package,
-                &lib.config.config.ds,
-            )
-            .await
-            .ok()?;
+            fastn_core::Config::download_required_file(name, package, &lib.config.config.ds)
+                .await
+                .ok()?;
             // Explicit check for the current package.
             if name.starts_with(package.name.as_str()) {
                 let new_name = name.replacen(package.name.as_str(), "", 1);

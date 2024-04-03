@@ -219,19 +219,6 @@ pub async fn serve_helper(
     Ok(resp)
 }
 
-pub(crate) async fn download_init_package(url: &Option<String>) -> std::io::Result<()> {
-    let mut package = fastn_core::Package::new("unknown-package");
-    package.download_base_url = url.to_owned();
-    let current_dir = camino::Utf8PathBuf::from_path_buf(std::env::current_dir()?)
-        .expect("fastn-Error: Unable to change path");
-    let ds = fastn_ds::DocumentStore::new(current_dir);
-    package
-        .http_download_by_id("FASTN.ftd", Some(&ds.root()), &ds)
-        .await
-        .expect("Unable to find FASTN.ftd file");
-    Ok(())
-}
-
 pub fn handle_default_route(
     req: &fastn_core::http::Request,
     package_name: &str,
@@ -469,14 +456,9 @@ pub async fn listen(
     config: std::sync::Arc<fastn_core::Config>,
     bind_address: &str,
     port: Option<u16>,
-    package_download_base_url: Option<String>,
 ) -> fastn_core::Result<()> {
     use colored::Colorize;
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
-
-    if package_download_base_url.is_some() {
-        download_init_package(&package_download_base_url).await?;
-    }
 
     let tcp_listener = match fastn_core::http::get_available_port(port, bind_address) {
         Some(listener) => listener,
