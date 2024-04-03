@@ -112,6 +112,9 @@ pub enum Error {
 
     #[error("pool error: {0}")]
     PoolError(#[from] deadpool::managed::PoolError<tokio_postgres::Error>),
+
+    #[error("create pool error: {0}")]
+    CreatePoolError(#[from] deadpool_postgres::CreatePoolError),
 }
 
 pub type Result<T> = std::result::Result<T, Error>;

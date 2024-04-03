@@ -1135,34 +1135,23 @@ checksum = "7e962a19be5cfc3f3bf6dd8f61eb50107f356ad6270fbb3ed41476571db78be5"
 
 [[package]]
 name = "deadpool"
-version = "0.9.5"
-source = "git+https://github.com/amitu/deadpool?rev=dbf5a46#dbf5a460d5e9dcc1db44c4a2c23e26d92462a337"
-dependencies = [
- "async-trait",
- "deadpool-runtime 0.1.2",
- "num_cpus",
- "retain_mut",
- "tokio",
-]
-
-[[package]]
-name = "deadpool"
 version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8c380a837cb8cb747898b1be7fa5ba5b871eb1210f8881d6512946c132617f80"
 dependencies = [
  "console",
- "deadpool-runtime 0.1.3",
+ "deadpool-runtime",
  "num_cpus",
  "tokio",
 ]
 
 [[package]]
 name = "deadpool-postgres"
-version = "0.10.5"
-source = "git+https://github.com/amitu/deadpool?rev=dbf5a46#dbf5a460d5e9dcc1db44c4a2c23e26d92462a337"
+version = "0.13.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4aa08f5c838496cbabb672e3614534444145fc6632995f102e13d30a29a25a13"
 dependencies = [
- "deadpool 0.9.5",
+ "deadpool",
  "tokio",
  "tokio-postgres",
  "tracing",
@@ -1170,17 +1159,12 @@ dependencies = [
 
 [[package]]
 name = "deadpool-runtime"
-version = "0.1.2"
-source = "git+https://github.com/amitu/deadpool?rev=dbf5a46#dbf5a460d5e9dcc1db44c4a2c23e26d92462a337"
-dependencies = [
- "tokio",
-]
-
-[[package]]
-name = "deadpool-runtime"
 version = "0.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "63dfa964fe2a66f3fde91fc70b267fe193d822c7e603e2a675a49a7f46ad3f49"
+dependencies = [
+ "tokio",
+]
 
 [[package]]
 name = "debug-helper"
@@ -1978,7 +1962,8 @@ dependencies = [
  "comrak 0.21.0",
  "crossterm",
  "css-color-parser",
- "deadpool 0.11.0",
+ "deadpool",
+ "deadpool-postgres",
  "diffy",
  "fastn-grammar",
  "fastn-js",
@@ -3805,12 +3790,6 @@ dependencies = [
  "log",
  "unicode-xid",
 ]
-
-[[package]]
-name = "retain_mut"
-version = "0.1.9"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4389f1d5789befaf6029ebd9f7dac4af7f7e3d61b69d4f30e2ac02b57e7712b0"
 
 [[package]]
 name = "ring"
