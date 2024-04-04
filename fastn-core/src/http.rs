@@ -283,7 +283,7 @@ impl Request {
         //    code in here
         // 2. we use tokio-postgres and assume `fastn_user` table exists when FASTN_ENABLE_AUTH is
         //    set. ud() will also only work when FASTN_ENABLE_AUTH is set
-        todo!("")
+        None
     }
 
     pub fn body(&self) -> &[u8] {
