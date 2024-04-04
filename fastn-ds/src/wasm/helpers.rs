@@ -71,10 +71,15 @@ async fn _dealloc(
         .into_func()
         .expect("dealloc is not a func");
 
-    dealloc
+    let res = dealloc
         .call_async(caller, &[wasmtime::Val::I32(ptr)], &mut result)
-        .await
-        .inspect_err(|e| println!("got error when calling func: {e:?}"))
+        .await;
+
+    if let Err(ref e) = res {
+        println!("got error when calling dealloc: {e:?}");
+    }
+
+    res
 }
 
 async fn _dealloc_with_len(
@@ -89,14 +94,19 @@ async fn _dealloc_with_len(
         .into_func()
         .expect("dealloc_with_len is not a func");
 
-    dealloc_with_len
+    let res = dealloc_with_len
         .call_async(
             caller,
             &[wasmtime::Val::I32(ptr), wasmtime::Val::I32(len)],
             &mut result,
         )
-        .await
-        .inspect_err(|e| println!("got error when calling func: {e:?}"))
+        .await;
+
+    if let Err(ref e) = res {
+        println!("got error when calling func: {e:?}");
+    }
+
+    res
 }
 
 async fn alloc(
@@ -110,10 +120,13 @@ async fn alloc(
         .into_func()
         .expect("alloc is not a func");
 
-    alloc
+    let res = alloc
         .call_async(caller, &[wasmtime::Val::I32(size)], &mut result)
-        .await
-        .inspect_err(|e| println!("got error when calling func: {e:?}"))?;
+        .await;
+
+    if let Err(ref e) = res {
+        println!("got error when calling func: {e:?}");
+    }
 
     Ok(result[0].i32().expect("result is not i32"))
 }
