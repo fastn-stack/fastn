@@ -62,6 +62,7 @@ futures-util.workspace = true
 futures.workspace = true
 hyper.workspace = true
 ignore.workspace = true
+deadpool.workspace = true
 indoc.workspace = true
 intl-memoizer.workspace = true
 itertools.workspace = true

@@ -240,7 +240,7 @@ async fn execute_query(
     line_number: usize,
     headers: ftd_ast::HeaderValues,
     req_config: &fastn_core::RequestConfig,
-) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
+) -> fastn_core::Result<Vec<Vec<serde_json::Value>>> {
     let (query, query_args) = super::sql::extract_arguments(query)?;
     let pool = req_config.config.ds.default_pool().await?;
     let client = pool.get().await?;

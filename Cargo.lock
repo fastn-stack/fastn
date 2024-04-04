@@ -1609,6 +1609,7 @@ dependencies = [
  "clap",
  "colored",
  "dashmap",
+ "deadpool",
  "deadpool-postgres",
  "diffy",
  "dirs",
@@ -1962,8 +1963,6 @@ dependencies = [
  "comrak 0.21.0",
  "crossterm",
  "css-color-parser",
- "deadpool",
- "deadpool-postgres",
  "diffy",
  "fastn-grammar",
  "fastn-js",
@@ -1983,7 +1982,6 @@ dependencies = [
  "syntect",
  "taffy",
  "thiserror",
- "tokio-postgres",
  "tracing",
 ]
 

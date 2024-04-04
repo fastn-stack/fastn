@@ -123,6 +123,12 @@ pub enum Error {
     #[error("ds::RenameError: {}", _0)]
     DSRenameError(#[from] fastn_ds::RenameError),
 
+    #[error("ds::CreatePoolError: {}", _0)]
+    CreatePool(#[from] fastn_ds::CreatePoolError),
+
+    #[error("pool error: {0}")]
+    PoolError(#[from] deadpool::managed::PoolError<tokio_postgres::Error>),
+
     #[error("ds::HttpError: {}", _0)]
     DSHttpError(#[from] fastn_ds::HttpError),
 

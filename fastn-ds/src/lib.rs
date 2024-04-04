@@ -255,11 +255,21 @@ pub static WASM_ENGINE: once_cell::sync::Lazy<wasmtime::Engine> =
 //     cfg.create_pool(runtime, tls)
 // }
 
+#[derive(thiserror::Error, Debug)]
+pub enum CreatePoolError {
+    #[error("pool error {0}")]
+    PoolError(#[from] deadpool_postgres::CreatePoolError),
+
+    #[error("env error {0}")]
+    EnvError(#[from] EnvironmentError),
+}
+
 impl DocumentStore {
-    pub async fn default_pool(
-        &self,
-    ) -> Result<deadpool_postgres::Pool, deadpool_postgres::CreatePoolError> {
-        let db_url = self.env("DATABASE_URL").await.unwrap();
+    pub async fn default_pool(&self) -> Result<deadpool_postgres::Pool, CreatePoolError> {
+        let db_url = match self.env("FASTN_DB_URL").await {
+            Ok(v) => v,
+            Err(_) => self.env("DATABASE_URL").await?,
+        };
 
         if let Some(p) = self.pg_pools.get(db_url.as_str()) {
             return Ok(p.clone());

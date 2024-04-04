@@ -43,9 +43,6 @@ fastn-js.workspace = true
 fastn-grammar.workspace = true
 indexmap.workspace = true
 colored.workspace = true
-deadpool.workspace = true
-tokio-postgres.workspace = true
-deadpool-postgres.workspace = true
 
 
 [dev-dependencies]
