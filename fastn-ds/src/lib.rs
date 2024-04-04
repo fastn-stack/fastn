@@ -6,6 +6,7 @@ pub mod http;
 pub mod mail;
 pub mod reqwest_util;
 mod utils;
+pub mod wasm;
 
 #[derive(Debug, Clone)]
 pub struct DocumentStore {
@@ -141,6 +142,10 @@ pub enum HttpError {
     GenericError { message: String },
     #[error("wasm read error {0}")]
     WasmReadError(#[from] WasmReadError),
+    #[error("wasm error {0}")]
+    Wasm(#[from] wasmtime::Error),
+    #[error("env error {0}")]
+    EnvironmentError(#[from] EnvironmentError),
 }
 
 pub type HttpResponse = ::http::Response<bytes::Bytes>;
@@ -511,26 +516,23 @@ impl DocumentStore {
         let wasm_file = url.to_string();
         let wasm_file = wasm_file.strip_prefix("wasm+proxy://").unwrap();
         let wasm_file = wasm_file.split_once(".wasm").unwrap().0;
-        let _module = self.get_wasm(format!("{wasm_file}.wasm").as_str()).await?;
+        let module = self.get_wasm(format!("{wasm_file}.wasm").as_str()).await?;
 
-        // let resp = hostn_wasm::wasm_stuff_shared(
-        //     ft_sys_shared::Request {
-        //         uri: url.as_str().to_string(),
-        //         method: req.method().to_string(),
-        //         headers,
-        //         body: req.body().to_vec(),
-        //     },
-        //     None,
-        //     req.ud(self).await.map(fastn_ds::ud2ud),
-        //     module,
-        //     self.wasm_pg_pools.clone(),
-        //     self.env("DATABASE_URL").await?,
-        // )
-        // .await?;
-        //
-        // Ok(resp.into())
-        //
-        todo!()
+        let resp = fastn_ds::wasm::process_http_request_(
+            ft_sys_shared::Request {
+                uri: url.as_str().to_string(),
+                method: req.method().to_string(),
+                headers,
+                body: req.body().to_vec(),
+            },
+            req.ud(self).await,
+            module,
+            self.pg_pools.clone(),
+            self.env("DATABASE_URL").await?,
+        )
+        .await?;
+
+        Ok(resp.into())
     }
 
     // This method will connect client request to the out of the world

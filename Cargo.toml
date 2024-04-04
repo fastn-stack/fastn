@@ -62,6 +62,7 @@ strip = true
 
 accept-language = "3"
 actix-web = "4"
+actix-http = "3"
 antidote = "1"
 dirs = "5"
 native-tls = "0.2"
