@@ -42,6 +42,11 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return Ok(());
     }
 
+    if matches.subcommand_matches("upload").is_some() {
+        clift::upload(matches).await;
+        return Ok(());
+    }
+
     let pg_pools: actix_web::web::Data<dashmap::DashMap<String, deadpool_postgres::Pool>> =
         actix_web::web::Data::new(dashmap::DashMap::new());
 
@@ -226,7 +231,7 @@ async fn check_for_update(report: bool) -> fastn_core::Result<()> {
 }
 
 fn app(version: &'static str) -> clap::Command {
-    clap::Command::new("fastn: Full-stack Web Development Made Easy")
+    clift::attach_cmd(clap::Command::new("fastn: Full-stack Web Development Made Easy")
         .version(version)
         .arg(clap::arg!(-c --"check-for-updates" "Check for updates"))
         .arg_required_else_help(true)
@@ -295,7 +300,7 @@ fn app(version: &'static str) -> clap::Command {
                 .about("Update dependency packages for this fastn package")
                 .arg(clap::arg!(--check "Check if packages are in sync with FASTN.ftd without performing updates."))
         )
-        .subcommand(sub_command::serve())
+        .subcommand(sub_command::serve()))
 }
 
 mod sub_command {

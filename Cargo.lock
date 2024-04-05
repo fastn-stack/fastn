@@ -731,6 +731,25 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "98cc8fbded0c607b7ba9dd60cd98df59af97e84d24e49c8557331cfc26d301ce"
 
 [[package]]
+name = "clift"
+version = "0.1.6"
+dependencies = [
+ "clap",
+ "env_logger",
+ "fastn-observer",
+ "ignore",
+ "mime_guess",
+ "reqwest 0.12.2",
+ "serde",
+ "serde_json",
+ "sha2 0.10.8",
+ "thiserror",
+ "tokio",
+ "tracing",
+ "url",
+]
+
+[[package]]
 name = "colorchoice"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1576,6 +1595,7 @@ dependencies = [
  "actix-web",
  "camino",
  "clap",
+ "clift",
  "colored",
  "dashmap",
  "deadpool-postgres",

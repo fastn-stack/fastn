@@ -115,7 +115,7 @@ async fn serve_fastn_file(config: &fastn_core::Config) -> fastn_core::http::Resp
 }
 
 #[tracing::instrument(skip_all)]
-pub async fn serve_app(
+pub async fn serve(
     config: &fastn_core::Config,
     req: fastn_core::http::Request,
     only_js: bool,
@@ -438,11 +438,14 @@ async fn handle_apps(
     config: &fastn_core::Config,
     req: &fastn_core::http::Request,
 ) -> Option<fastn_core::Result<fastn_core::http::Response>> {
-    let matched_app = config
-        .package
-        .apps
-        .iter()
-        .find(|a| req.path().starts_with(a.end_point.trim_end_matches('/')));
+    let matched_app = config.package.apps.iter().find(|a| {
+        req.path().starts_with(
+            a.end_point
+                .clone()
+                .unwrap_or_default()
+                .trim_end_matches('/'),
+        )
+    });
 
     let _app = match matched_app {
         Some(e) => e,

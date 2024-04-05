@@ -11,6 +11,7 @@ homepage.workspace = true
 download-on-demand = ["fastn-core/download-on-demand"]
 
 [dependencies]
+clift.workspace = true
 clap.workspace = true
 colored.workspace = true
 fastn-observer.workspace = true

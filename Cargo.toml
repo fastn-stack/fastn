@@ -1,5 +1,6 @@
 [workspace]
 members = [
+    "clift",
     "fastn",
     "fastn-core",
     "fastn-ds",
@@ -64,6 +65,7 @@ accept-language = "3"
 actix-web = "4"
 actix-http = "3"
 antidote = "1"
+clift = { path = "clift" }
 dirs = "5"
 native-tls = "0.2"
 deadpool-postgres = "0.12"
