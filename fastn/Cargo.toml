@@ -8,10 +8,12 @@ repository.workspace = true
 homepage.workspace = true
 
 [features]
+default = ["fifthtry"]
 download-on-demand = ["fastn-core/download-on-demand"]
+fifthtry = ["clift"]
 
 [dependencies]
-clift.workspace = true
+clift = { workspace = true, optional = true }
 clap.workspace = true
 colored.workspace = true
 fastn-observer.workspace = true

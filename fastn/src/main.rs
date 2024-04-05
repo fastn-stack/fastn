@@ -22,7 +22,13 @@ pub enum Error {
 }
 
 async fn async_main() -> Result<(), Error> {
-    let matches = app(version()).get_matches();
+    #[allow(unused_mut)]
+    let mut app = app(version());
+    #[cfg(feature = "fifthtry")]
+    {
+        app = clift::attach_cmd(app);
+    }
+    let matches = app.get_matches();
 
     set_env_vars(matches.subcommand_matches("test").is_some());
 
@@ -42,6 +48,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return Ok(());
     }
 
+    #[cfg(feature = "fifthtry")]
     if matches.subcommand_matches("upload").is_some() {
         clift::upload(matches).await;
         return Ok(());
@@ -231,7 +238,7 @@ async fn check_for_update(report: bool) -> fastn_core::Result<()> {
 }
 
 fn app(version: &'static str) -> clap::Command {
-    clift::attach_cmd(clap::Command::new("fastn: Full-stack Web Development Made Easy")
+    clap::Command::new("fastn: Full-stack Web Development Made Easy")
         .version(version)
         .arg(clap::arg!(-c --"check-for-updates" "Check for updates"))
         .arg_required_else_help(true)
@@ -300,7 +307,7 @@ fn app(version: &'static str) -> clap::Command {
                 .about("Update dependency packages for this fastn package")
                 .arg(clap::arg!(--check "Check if packages are in sync with FASTN.ftd without performing updates."))
         )
-        .subcommand(sub_command::serve()))
+        .subcommand(sub_command::serve())
 }
 
 mod sub_command {
