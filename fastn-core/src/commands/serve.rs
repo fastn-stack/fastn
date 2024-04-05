@@ -64,9 +64,29 @@ async fn serve_file(
     };
 
     if fastn_core::utils::is_ftd_path(path.as_str()) {
-        return fastn_core::http::not_found_without_warning(
-            "we do not serve ftd file source".to_string(),
-        );
+        if std::env::var_os("FASTN_ALLOW_FTD_READ").is_none() {
+            return fastn_core::http::not_found_without_warning(
+                "we do not serve ftd file source".to_string(),
+            );
+        }
+
+        return match config
+            .config
+            .ds
+            .read_content(&fastn_ds::Path::new(path))
+            .await
+            .map(|r| fastn_core::http::ok_with_content_type(r, mime_guess::mime::TEXT_PLAIN_UTF_8))
+        {
+            Ok(r) => r,
+            Err(e) => {
+                tracing::error!(
+                    msg = "fastn-Error",
+                    path = path.as_str(),
+                    error = e.to_string()
+                );
+                fastn_core::server_error!("fastn-Error: path: {}, {:?}", path, e)
+            }
+        };
     }
 
     match fastn_core::package::package_doc::read_ftd_(
