@@ -115,13 +115,17 @@ async fn serve_fastn_file(config: &fastn_core::Config) -> fastn_core::http::Resp
 }
 
 #[tracing::instrument(skip_all)]
-pub async fn serve(
+pub async fn serve_app(
     config: &fastn_core::Config,
     req: fastn_core::http::Request,
     only_js: bool,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     if let Some(endpoint_response) = handle_endpoints(config, &req).await {
         return endpoint_response;
+    }
+
+    if let Some(app_response) = handle_apps(config, &req).await {
+        return app_response;
     }
 
     if let Some(default_response) = handle_default_route(&req, config.package.name.as_str()) {
@@ -428,6 +432,29 @@ async fn handle_endpoints(
 
     let actix_response = fastn_core::http::ResponseBuilder::from_reqwest(response).await;
     Some(Ok(actix_response))
+}
+
+async fn handle_apps(
+    config: &fastn_core::Config,
+    req: &fastn_core::http::Request,
+) -> Option<fastn_core::Result<fastn_core::http::Response>> {
+    let matched_app = config
+        .package
+        .apps
+        .iter()
+        .find(|a| req.path().starts_with(a.end_point.trim_end_matches('/')));
+
+    let _app = match matched_app {
+        Some(e) => e,
+        None => return None,
+    };
+
+    // app.package.endpoints
+    // app.package.apps
+
+    // see if app.pack
+
+    None
 }
 
 #[tracing::instrument(skip_all)]
