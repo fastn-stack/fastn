@@ -16,9 +16,7 @@ pub mod package;
 pub mod http;
 mod ds;
 mod error;
-mod i18n;
 pub mod library;
-mod proxy;
 pub mod sitemap;
 mod snapshot;
 mod tracker;
@@ -34,6 +32,7 @@ pub use commands::{
     build::build, check::post_build_check, fmt::fmt, query::query, serve::listen, test::test,
 };
 pub use config::{config_temp, Config, ConfigTemp, FTDEdition, RequestConfig};
+pub use doc::resolve_foreign_variable2;
 pub use error::Error;
 pub use file::File;
 pub use file::{get_file, paths_to_files, Document, Static};
@@ -46,7 +45,6 @@ pub use package::Package;
 pub(crate) use snapshot::Snapshot;
 pub(crate) use tracker::Track;
 pub(crate) use translation::{TranslatedDocument, TranslationData};
-pub use {doc::resolve_foreign_variable2, doc::resolve_import};
 
 pub const FASTN_UI_INTERFACE: &str = "fastn-stack.github.io/fastn-ui";
 pub const PACKAGE_THEME_INTERFACE: &str = "ftd-lang.github.io/theme";
@@ -64,19 +62,11 @@ fn processor_ftd() -> &'static str {
     include_str!("../ftd/processors.ftd")
 }
 
-fn design_ftd() -> &'static str {
-    include_str!("../ftd/design.ftd")
-}
-
 fn fastn_2022_js() -> &'static str {
     if fastn_core::utils::is_test() {
         return "FASTN_JS";
     }
     include_str!("../fastn2022.js")
-}
-
-fn fastn_lib_ftd() -> &'static str {
-    include_str!("../ftd/fastn-lib.ftd")
 }
 
 #[allow(dead_code)]

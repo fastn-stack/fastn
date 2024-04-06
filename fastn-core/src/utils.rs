@@ -321,16 +321,6 @@ impl<T> HasElements for Vec<T> {
     }
 }
 
-pub(crate) fn language_to_human(language: &str) -> String {
-    realm_lang::Language::from_2_letter_code(language)
-        .map(|v| v.human())
-        .unwrap_or_else(|_| language.to_string())
-}
-
-pub(crate) fn nanos_to_rfc3339(nanos: &u128) -> String {
-    nanos.to_string() // TODO
-}
-
 pub(crate) fn history_path(
     id: &str,
     base_path: &fastn_ds::Path,
@@ -356,13 +346,6 @@ pub(crate) async fn get_number_of_documents(
     _config: &fastn_core::Config,
 ) -> fastn_core::Result<String> {
     Ok(0.to_string())
-}
-
-pub(crate) async fn get_current_document_last_modified_on(
-    _config: &fastn_core::Config,
-    _document_id: &str,
-) -> Option<String> {
-    None
 }
 
 pub(crate) async fn get_last_modified_on(

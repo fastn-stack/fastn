@@ -112,51 +112,6 @@ pub async fn interpret_helper(
     Ok(document)
 }
 
-pub async fn resolve_import(
-    lib: &mut fastn_core::Library2,
-    state: &mut ftd::ftd2021::InterpreterState,
-    module: &str,
-) -> ftd::ftd2021::p1::Result<String> {
-    lib.packages_under_process
-        .truncate(state.document_stack.len());
-    let current_package = lib.get_current_package()?;
-    let source = if module.eq("fastn/time") {
-        state.add_foreign_variable_prefix(module, vec![module.to_string()]);
-        lib.push_package_under_process(&current_package)?;
-        "".to_string()
-    } else if module.ends_with("assets") {
-        state.add_foreign_variable_prefix(module, vec![format!("{}#files", module)]);
-
-        if module.starts_with(current_package.name.as_str()) {
-            lib.push_package_under_process(&current_package)?;
-            lib.get_current_package()?
-                .get_font_ftd()
-                .unwrap_or_default()
-        } else {
-            let mut font_ftd = "".to_string();
-            for (alias, package) in current_package.aliases() {
-                if module.starts_with(alias) {
-                    lib.push_package_under_process(package)?;
-                    font_ftd = lib
-                        .config
-                        .config
-                        .all_packages
-                        .get(package.name.as_str())
-                        .unwrap()
-                        .get_font_ftd()
-                        .unwrap_or_default();
-                    break;
-                }
-            }
-            font_ftd
-        }
-    } else {
-        lib.get_with_result(module).await?
-    };
-
-    Ok(source)
-}
-
 // source, foreign_variable, foreign_function
 pub async fn resolve_import_2022(
     lib: &mut fastn_core::Library2022,

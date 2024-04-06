@@ -86,9 +86,6 @@ crossterm = "0.27"
 css-color-parser = "0.1"
 dashmap = "5"
 diffy = "0.3"
-dioxus-html = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
-dioxus-native-core = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
-dioxus-native-core-macro = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
 dotenvy = "0.15"
 edit = "0.1"
 env_logger = "0.11"
@@ -118,7 +115,6 @@ home = "0.5"
 ignore = "0.4"
 include_dir = "0.7"
 indoc = "2"
-intl-memoizer = "0.5"
 itertools = "0.12"
 http = "1"
 bytes = "1"
@@ -134,7 +130,6 @@ rand_pcg = "0.3"
 realm-lang = "0.1"
 regex = "1"
 reqwest = { version = "0.12", features = ["json"] }
-# rink = { git = "https://github.com/DioxusLabs/dioxus", rev = "fb52673433cc57a70c86185ffa7da5fa3a2394da" }
 ron = "0.8"
 rustc-hash = "1"
 rusty-hook = "0.11"
@@ -144,7 +139,6 @@ sha2 = "0.10"
 slotmap = "1"
 slug = "0.1"
 taffy = "0.4"
-tejar = "0.1"
 thiserror = "1"
 tokio = { version = "1", features = ["full"] }
 tracing = "0.1"
@@ -155,30 +149,20 @@ walkdir = "2"
 smallvec = "1"
 wasm-bindgen = "0.2"
 wasmtime = "19"
-wgpu = "0.19"
-winit = "0.29"
+#wgpu = "0.19"
+#winit = "0.29"
 zip = "0.6"
 prettify-js = "0.1.0"
 indexmap = { version = "2", features = ["serde"] }
-argon2 = "0.5"
+#argon2 = "0.5"
 lettre = { version = "0.11", features = ["serde", "tokio1", "tokio1-native-tls"] }
 chrono = { version = "0.4", features = ["serde"] }
 indicatif = "0.17.1"
 snafu = "0.8.0"
-validator = { version = "0.16", features = ["derive"] }
-zxcvbn = "2"
 deno_core = "0.272.0"
 rquickjs = { version = "0.5", features = ["macro"] }
 quick-js = "0.4"
 
-[workspace.dependencies.uuid]
-version = "1.6.1"
-features = [
-    "v4", # Lets you generate random UUIDs
-    "fast-rng", # Use a faster (but still sufficiently random) RNG
-    "macro-diagnostics", # Enable better diagnostics for compile-time UUIDs
-    "serde",
-]
 
 [workspace.dependencies.fastn-observer]
 git = "https://github.com/fastn-stack/fastn-observer"
@@ -236,7 +220,7 @@ features = [
 
 [workspace.dependencies.comrak]
 # We use comrak for markup processing.
-version = "0.21"
+version = "0.22"
 # By default, comrak ships with support for syntax highlighting using syntext for "fenced
 # code blocks". We have disabled that by not using default features. We did that because
 # we already have a way to show code in ftd, ftd.code. Further, comark requires syntect 4.6,

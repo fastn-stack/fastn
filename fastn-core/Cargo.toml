@@ -8,31 +8,11 @@ repository.workspace = true
 homepage.workspace = true
 
 [features]
-default = []
-# fastn comes with some feature to integrate with fastn controller. fastn controller is a
-# separate software, optional. fastn controller is responsible for creating a new fastn
-# package, and deploying it on some server, backing content up and so on. fastn has to
-# speak with fastn controller, when fastn is managed by fastn controller. Enabling the
-# "controller" feature enables that communication.
-controller = ["remote"]
-
-# fastn runs in local mode (to be used on your local laptop, or single use server), and in
-# remote mode (to be used as a shared server for your entire team). The default is
-# local mode.
-#
-# In local mode the editor acts like a local file editor, any changes done directly
-# update the file. In remote mode, only sync can be called, and no direct edits are
-# allowed. In future we will also have workspace mode, in which in remote a workspace
-# is created for every user, and local edits in the workspace is allowed.
-remote = []
-
-
 download-on-demand = ["dashmap"]
 
 [dependencies]
 actix-web.workspace = true
 antidote.workspace = true
-argon2.workspace = true
 async-lock.workspace = true
 async-recursion.workspace = true
 camino.workspace = true
@@ -52,7 +32,6 @@ fastn-js.workspace = true
 fastn-ds.workspace = true
 fastn-observer.workspace = true
 fastn-package.workspace = true
-fluent.workspace = true
 ftd.workspace = true
 ftd-p1.workspace = true
 ftd-ast.workspace = true
@@ -64,12 +43,9 @@ hyper.workspace = true
 ignore.workspace = true
 deadpool.workspace = true
 indoc.workspace = true
-intl-memoizer.workspace = true
 itertools.workspace = true
-lettre.workspace = true
 magic-crypt.workspace = true
 mime_guess.workspace = true
-native-tls.workspace = true
 oauth2.workspace = true
 once_cell.workspace = true
 postgres-native-tls.workspace = true
@@ -82,16 +58,12 @@ rusqlite.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 sha2.workspace = true
-slug.workspace = true
 thiserror.workspace = true
 tokio-postgres.workspace = true
 tokio.workspace = true
 tracing-subscriber.workspace = true
 tracing.workspace = true
 url.workspace = true
-uuid.workspace = true
-validator.workspace = true
-zxcvbn.workspace = true
 zip.workspace = true
 fastn-expr.workspace = true
 
