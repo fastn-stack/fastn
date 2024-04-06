@@ -4,12 +4,14 @@ pub async fn send_response(
     len: i32,
 ) -> wasmtime::Result<()> {
     let r = fastn_ds::wasm::helpers::get_json(ptr, len, &mut caller).await?;
-    caller.data_mut().store_response(r);
+    caller
+        .data_mut()
+        .store_response(fastn_ds::wasm::Response::Http(r));
     Ok(())
 }
 
 impl fastn_ds::wasm::Store {
-    pub fn store_response(&mut self, r: ft_sys_shared::Request) {
+    pub fn store_response(&mut self, r: fastn_ds::wasm::Response) {
         self.response = Some(r);
     }
 }

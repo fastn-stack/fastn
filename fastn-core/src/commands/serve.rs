@@ -406,23 +406,28 @@ async fn handle_endpoints(
         None => return None,
     };
 
+    let url = url::Url::parse(
+        format!(
+            "{}/{}",
+            endpoint.endpoint.trim_end_matches('/'),
+            req.path()
+                .trim_start_matches(endpoint.mountpoint.trim_end_matches('/'))
+                .trim_start_matches('/')
+        )
+        .as_str(),
+    )
+    .unwrap();
+
+    if url.scheme() == "wasm+proxy" {
+        return match config.ds.handle_wasm(url, req, &Default::default()).await {
+            Ok(fastn_ds::wasm::Response::Http(r)) => Some(Ok(fastn_ds::wasm::to_response(r))),
+            _ => todo!(),
+        };
+    }
+
     let response = match config
         .ds
-        .http(
-            url::Url::parse(
-                format!(
-                    "{}/{}",
-                    endpoint.endpoint.trim_end_matches('/'),
-                    req.path()
-                        .trim_start_matches(endpoint.mountpoint.trim_end_matches('/'))
-                        .trim_start_matches('/')
-                )
-                .as_str(),
-            )
-            .unwrap(),
-            req,
-            &std::collections::HashMap::new(),
-        )
+        .http(url, req, &std::collections::HashMap::new())
         .await
         .map_err(fastn_core::Error::DSHttpError)
     {

@@ -41,6 +41,11 @@ impl fastn_ds::wasm::Store {
             "http_send_response",
             fastn_ds::wasm::exports::http::send_response
         );
+        fastn_ds::func2!(
+            linker,
+            "http_send_ftd",
+            fastn_ds::wasm::exports::http::send_ftd
+        );
 
         // document store related
         fastn_ds::func2ret!(

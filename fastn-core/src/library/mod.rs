@@ -211,7 +211,7 @@ impl Library2 {
                 line_number: 0,
             })
     }
-    // TODO: async
+
     pub async fn get_with_result(&mut self, name: &str) -> ftd::ftd2021::p1::Result<String> {
         match self.get(name).await {
             Some(v) => Ok(v),

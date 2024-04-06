@@ -161,6 +161,11 @@ pub trait RequestType {
     fn body(&self) -> &[u8];
 }
 
+pub enum HttpResponseWrapper {
+    Http(HttpResponse),
+    Ftd(fastn_ds::wasm::FtdResponse),
+}
+
 pub static WASM_ENGINE: once_cell::sync::Lazy<wasmtime::Engine> =
     once_cell::sync::Lazy::new(|| {
         wasmtime::Engine::new(wasmtime::Config::new().async_support(true)).unwrap()
@@ -450,7 +455,7 @@ impl DocumentStore {
     pub async fn env(&self, key: &str) -> Result<String, EnvironmentError> {
         std::env::var(key).map_err(|_| EnvironmentError::NotSet(key.to_string()))
     }
-    /// Send an email
+    /// Send an email.
     /// to: (name, email)
     pub async fn send_email(
         &self,
@@ -478,29 +483,12 @@ impl DocumentStore {
         .await
     }
 
-    // This method will connect client request to the out of the world
-    #[tracing::instrument(skip(req, extra_headers))]
-    pub async fn http<T>(
-        &self,
-        url: url::Url,
-        req: &T,
-        extra_headers: &std::collections::HashMap<String, String>,
-    ) -> Result<fastn_ds::HttpResponse, HttpError>
-    where
-        T: RequestType,
-    {
-        if url.scheme() == "wasm+proxy" {
-            return self.handle_wasm(url, req, extra_headers).await;
-        }
-        self.http_(url, req, extra_headers).await
-    }
-
     pub async fn handle_wasm<T>(
         &self,
         url: url::Url,
         req: &T,
         extra_headers: &std::collections::HashMap<String, String>,
-    ) -> Result<fastn_ds::HttpResponse, HttpError>
+    ) -> Result<fastn_ds::wasm::Response, HttpError>
     where
         T: RequestType,
     {
@@ -518,7 +506,7 @@ impl DocumentStore {
         let wasm_file = wasm_file.split_once(".wasm").unwrap().0;
         let module = self.get_wasm(format!("{wasm_file}.wasm").as_str()).await?;
 
-        let resp = fastn_ds::wasm::process_http_request_(
+        Ok(fastn_ds::wasm::process_http_request(
             ft_sys_shared::Request {
                 uri: url.as_str().to_string(),
                 method: req.method().to_string(),
@@ -530,14 +518,12 @@ impl DocumentStore {
             self.pg_pools.clone(),
             self.env("DATABASE_URL").await?,
         )
-        .await?;
-
-        Ok(resp.into())
+        .await?)
     }
 
     // This method will connect client request to the out of the world
     #[tracing::instrument(skip(req, extra_headers))]
-    pub async fn http_<T>(
+    pub async fn http<T>(
         &self,
         url: url::Url,
         req: &T,
@@ -548,7 +534,7 @@ impl DocumentStore {
     {
         let headers = req.headers();
 
-        // Github doesn't allow trailing slash GET requests
+        // GitHub doesn't allow trailing slash in GET requests
         let url = if req.query_string().is_empty() {
             url.as_str().trim_end_matches('/').to_string()
         } else {

@@ -8,20 +8,6 @@ macro_rules! server_error {
 }
 
 #[macro_export]
-macro_rules! server_error_without_warning {
-    ($($t:tt)*) => {{
-        fastn_core::http::server_error_without_warning(format!($($t)*))
-    }};
-}
-
-#[macro_export]
-macro_rules! unauthorised {
-    ($($t:tt)*) => {{
-        fastn_core::http::unauthorised_(format!($($t)*))
-    }};
-}
-
-#[macro_export]
 macro_rules! not_found {
     ($($t:tt)*) => {{
         fastn_core::http::not_found_(format!($($t)*) + "\n")
@@ -35,11 +21,6 @@ pub fn server_error_(msg: String) -> fastn_core::http::Response {
 
 pub fn server_error_without_warning(msg: String) -> fastn_core::http::Response {
     actix_web::HttpResponse::InternalServerError().body(msg)
-}
-
-pub fn unauthorised_(msg: String) -> fastn_core::http::Response {
-    fastn_core::warning!("unauthorised: {}", msg);
-    actix_web::HttpResponse::Unauthorized().body(msg)
 }
 
 pub fn not_found_without_warning(msg: String) -> fastn_core::http::Response {
@@ -56,16 +37,8 @@ impl actix_web::ResponseError for fastn_core::Error {}
 pub type Response = actix_web::HttpResponse;
 pub type StatusCode = actix_web::http::StatusCode;
 
-pub fn ok(data: Vec<u8>) -> fastn_core::http::Response {
-    actix_web::HttpResponse::Ok().body(data)
-}
-
 pub fn permanent_redirect(url: String) -> fastn_core::http::Response {
     redirect_with_code(url, 308)
-}
-
-pub fn temporary_redirect(url: String) -> fastn_core::http::Response {
-    redirect_with_code(url, 307)
 }
 
 pub fn redirect_with_code(url: String, code: i32) -> fastn_core::http::Response {
@@ -128,8 +101,6 @@ pub struct Request {
     query: std::collections::HashMap<String, serde_json::Value>,
     body: actix_web::web::Bytes,
     ip: Option<String>,
-    scheme: String,
-    host: String,
     pub connection_info: actix_web::dev::ConnectionInfo,
     // path_params: Vec<(String, )>
 }
@@ -175,15 +146,6 @@ impl fastn_ds::RequestType for Request {
 }
 
 impl Request {
-    //pub fn get_named_params() -> {}
-    pub fn full_path(&self) -> String {
-        if self.query_string.is_empty() {
-            self.path.clone()
-        } else {
-            format!("{}?{}", self.path, self.query_string)
-        }
-    }
-
     pub fn from_actix(req: actix_web::HttpRequest, body: actix_web::web::Bytes) -> Self {
         let headers = {
             let mut headers = reqwest::header::HeaderMap::new();
@@ -215,8 +177,6 @@ impl Request {
                 ).unwrap().0
             },
             ip: req.peer_addr().map(|x| x.ip().to_string()),
-            scheme: req.connection_info().scheme().to_string(),
-            host: req.connection_info().host().to_string(),
         };
 
         fn get_cookies(
@@ -238,10 +198,6 @@ impl Request {
             }
             cookies
         }
-    }
-
-    pub fn json<T: serde::de::DeserializeOwned>(&self) -> serde_json::Result<T> {
-        serde_json::from_slice(&self.body)
     }
 
     pub fn body_as_json(
@@ -286,18 +242,6 @@ impl Request {
         None
     }
 
-    pub fn body(&self) -> &[u8] {
-        &self.body
-    }
-
-    pub fn method(&self) -> &str {
-        self.method.as_str()
-    }
-
-    pub fn uri(&self) -> &str {
-        self.uri.as_str()
-    }
-
     pub fn path(&self) -> &str {
         self.path.as_str()
     }
@@ -308,20 +252,6 @@ impl Request {
 
     pub fn cookies(&self) -> &std::collections::HashMap<String, String> {
         &self.cookies
-    }
-
-    pub fn cookies_string(&self) -> Option<String> {
-        if self.cookies.is_empty() {
-            return None;
-        }
-        Some(
-            self.cookies()
-                .iter()
-                // TODO: check if extra escaping is needed
-                .map(|(k, v)| format!("{}={}", k, v).replace(';', "%3B"))
-                .collect::<Vec<_>>()
-                .join(";"),
-        )
     }
 
     pub fn cookie(&self, name: &str) -> Option<String> {
@@ -349,11 +279,6 @@ impl Request {
         }
     }
 
-    pub fn insert_header(&mut self, name: reqwest::header::HeaderName, value: &'static str) {
-        self.headers
-            .insert(name, reqwest::header::HeaderValue::from_static(value));
-    }
-
     pub fn set_method(&mut self, method: &str) {
         self.method = method.to_uppercase();
     }
@@ -365,43 +290,10 @@ impl Request {
         ).unwrap().0;
     }
 
-    pub fn host(&self) -> String {
-        self.host.to_string()
-        // use std::borrow::Borrow;
-        // self.headers
-        //     .borrow()
-        //     .get("host")
-        //     .and_then(|v| v.to_str().ok())
-        //     .unwrap_or("localhost")
-        //     .to_string()
-    }
-
-    pub fn headers(&self) -> &reqwest::header::HeaderMap {
-        &self.headers
-    }
-
     pub fn query(&self) -> &std::collections::HashMap<String, serde_json::Value> {
         &self.query
     }
 
-    pub fn q<T>(&self, key: &str, default: T) -> fastn_core::Result<T>
-    where
-        T: serde::de::DeserializeOwned,
-    {
-        let value = match self.query.get(key) {
-            Some(v) => v,
-            None => return Ok(default),
-        };
-
-        Ok(serde_json::from_value(value.clone())?)
-    }
-
-    pub fn get_ip(&self) -> Option<String> {
-        self.ip.clone()
-    }
-    pub fn scheme(&self) -> String {
-        self.scheme.to_string()
-    }
     pub fn is_bot(&self) -> bool {
         match self.user_agent() {
             Some(user_agent) => is_bot(&user_agent),
@@ -414,34 +306,6 @@ pub(crate) fn url_regex() -> regex::Regex {
     regex::Regex::new(
         r"((([A-Za-z]{3,9}:(?://)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:/[\+~%/.\w_]*)?\??(?:[-\+=&;%@.\w_]*)\#?(?:[\w]*))?)"
     ).unwrap()
-}
-
-#[tracing::instrument]
-pub(crate) async fn get_json<T: serde::de::DeserializeOwned>(url: &str) -> fastn_core::Result<T> {
-    Ok(reqwest::Client::new()
-        .get(url)
-        .header(reqwest::header::CONTENT_TYPE, "application/json")
-        .header(reqwest::header::USER_AGENT, "fastn")
-        .send()
-        .await?
-        .json::<T>()
-        .await?)
-}
-
-#[tracing::instrument(skip(body))]
-pub(crate) async fn post_json<T: serde::de::DeserializeOwned, B: Into<reqwest::Body>>(
-    url: &str,
-    body: B,
-) -> fastn_core::Result<T> {
-    Ok(reqwest::Client::new()
-        .post(url)
-        .header(reqwest::header::CONTENT_TYPE, "application/json")
-        .header(reqwest::header::USER_AGENT, "fastn")
-        .body(body)
-        .send()
-        .await?
-        .json()
-        .await?)
 }
 
 #[tracing::instrument(skip_all)]
@@ -581,6 +445,7 @@ pub async fn http_get_with_cookie(
             resp_cookies,
         ));
     }
+
     tracing::info!(msg = "returning success", url = url);
     Ok((Ok(res.body().clone()), resp_cookies))
 }
@@ -599,68 +464,6 @@ pub(crate) async fn http_get_str(
         }),
         Err(e) => Err(e),
     }
-}
-
-pub fn frontend_reload() -> fastn_core::http::Response {
-    fastn_core::http::Response::Ok()
-        .content_type("application/json")
-        .json(serde_json::json!({"reload": true}))
-}
-
-pub fn frontend_redirect<T: AsRef<str>>(url: T) -> fastn_core::http::Response {
-    fastn_core::http::Response::Ok()
-        .content_type("application/json")
-        .json(serde_json::json!({"redirect": url.as_ref()}))
-}
-
-pub fn frontend_data<T: serde::Serialize>(data: T) -> fastn_core::http::Response {
-    fastn_core::http::Response::Ok()
-        .content_type("application/json")
-        .json(serde_json::json!({"data": data}))
-}
-
-pub fn frontend_error<T: serde::Serialize>(errors: T) -> fastn_core::http::Response {
-    fastn_core::http::Response::Ok()
-        .content_type("application/json")
-        .json(serde_json::json!({"errors": errors}))
-}
-
-pub fn api_ok(data: impl serde::Serialize) -> serde_json::Result<fastn_core::http::Response> {
-    #[derive(serde::Serialize)]
-    struct SuccessResponse<T: serde::Serialize> {
-        data: T,
-        success: bool,
-    }
-
-    let data = serde_json::to_vec(&SuccessResponse {
-        data,
-        success: true,
-    })?;
-
-    Ok(ok_with_content_type(
-        data,
-        mime_guess::mime::APPLICATION_JSON,
-    ))
-}
-
-// construct an error response with `message`
-/// and `status_code`. Use 200 if `status_code` is None
-pub fn api_error<T: Into<String>>(message: T) -> serde_json::Result<fastn_core::http::Response> {
-    #[derive(serde::Serialize, Debug)]
-    struct ErrorResponse {
-        message: String,
-        success: bool,
-    }
-
-    let resp = ErrorResponse {
-        message: message.into(),
-        success: false,
-    };
-
-    Ok(actix_web::HttpResponse::Ok()
-        .content_type(actix_web::http::header::ContentType::json())
-        .status(actix_web::http::StatusCode::OK)
-        .body(serde_json::to_string(&resp)?))
 }
 
 pub(crate) fn get_available_port(
@@ -684,67 +487,6 @@ pub(crate) fn get_available_port(
         }
     }
     None
-}
-
-pub async fn get_api<T: serde::de::DeserializeOwned>(
-    url: impl AsRef<str>,
-    bearer_token: &str,
-) -> fastn_core::Result<T> {
-    let response = reqwest::Client::new()
-        .get(url.as_ref())
-        .header(
-            reqwest::header::AUTHORIZATION,
-            format!("{} {}", "Bearer", bearer_token),
-        )
-        .header(reqwest::header::ACCEPT, "application/json")
-        .header(
-            reqwest::header::USER_AGENT,
-            reqwest::header::HeaderValue::from_static("fastn"),
-        )
-        .send()
-        .await?;
-
-    if !response.status().eq(&reqwest::StatusCode::OK) {
-        return Err(fastn_core::Error::APIResponseError(format!(
-            "fastn-API-ERROR: {}, Error: {}",
-            url.as_ref(),
-            response.text().await?
-        )));
-    }
-
-    Ok(response.json().await?)
-}
-
-pub async fn github_graphql<T: serde::de::DeserializeOwned>(
-    query: &str,
-    token: &str,
-) -> fastn_core::Result<T> {
-    let mut map: std::collections::HashMap<&str, &str> = std::collections::HashMap::new();
-    map.insert("query", query);
-
-    let response = reqwest::Client::new()
-        .post("https://api.github.com/graphql")
-        .json(&map)
-        .header(
-            reqwest::header::AUTHORIZATION,
-            format!("{} {}", "Bearer", token),
-        )
-        .header(reqwest::header::ACCEPT, "application/json")
-        .header(
-            reqwest::header::USER_AGENT,
-            reqwest::header::HeaderValue::from_static("fastn"),
-        )
-        .send()
-        .await?;
-    if !response.status().eq(&reqwest::StatusCode::OK) {
-        return Err(fastn_core::Error::APIResponseError(format!(
-            "GitHub API ERROR: {}",
-            response.status()
-        )));
-    }
-    let return_obj = response.json::<T>().await?;
-
-    Ok(return_obj)
 }
 
 /// construct `ftd.http` consumable error responses
@@ -809,45 +551,6 @@ fn test_is_bot() {
     assert!(!is_bot("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"));
 }
 
-pub fn validation_error_to_user_err(
-    e: validator::ValidationErrors,
-) -> fastn_core::Result<fastn_core::http::Response> {
-    use itertools::Itertools;
-
-    let converted_error = e
-        .into_errors()
-        .into_iter()
-        .filter_map(|(k, v)| match v {
-            validator::ValidationErrorsKind::Field(f) => {
-                let messages = f
-                    .iter()
-                    .flat_map(|v| {
-                        let param_messages = v
-                            .params
-                            .iter()
-                            .filter(|(k, _)| k != &"value")
-                            .collect::<std::collections::HashMap<_, _>>()
-                            .values()
-                            // remove " from serde_json::Value::String
-                            .map(|&x| x.to_string().replace('\"', ""))
-                            .collect_vec();
-
-                        v.message
-                            .clone()
-                            .map(|x| vec![x.to_string()])
-                            .unwrap_or(param_messages)
-                    })
-                    .collect();
-
-                Some((k.to_string(), messages))
-            }
-            _ => None,
-        })
-        .collect();
-
-    fastn_core::http::user_err(converted_error, fastn_core::http::StatusCode::OK)
-}
-
 pub(crate) fn get_header_key(header_key: &str) -> Option<&str> {
     if let Some(remaining) = header_key.strip_prefix("$header-") {
         return remaining.strip_suffix('$');
@@ -893,58 +596,6 @@ mod test {
         assert_eq!(body.success, false);
         assert_eq!(body.errors.user, user_err);
         assert_eq!(body.errors.token, token_err);
-
-        Ok(())
-    }
-
-    #[tokio::test]
-    async fn validation_error_to_user_err() -> fastn_core::Result<()> {
-        use validator::Validate;
-
-        #[derive(serde::Deserialize, serde::Serialize, validator::Validate, Debug)]
-        struct UserPayload {
-            #[validate(length(min = 4, message = "username must be at least 4 character long"))]
-            username: String,
-            #[validate(email(message = "invalid email format"))]
-            email: String,
-            #[validate(length(min = 1, message = "name must be at least 1 character long"))]
-            name: String,
-        }
-
-        let user: UserPayload = UserPayload {
-            email: "email".to_string(),
-            name: "".to_string(),
-            username: "si".to_string(),
-        };
-
-        if let Err(e) = user.validate() {
-            let res = fastn_core::http::validation_error_to_user_err(e).unwrap();
-
-            assert_eq!(res.status(), fastn_core::http::StatusCode::OK);
-
-            #[derive(serde::Deserialize, Debug)]
-            struct Errors {
-                email: Vec<String>,
-                name: Vec<String>,
-            }
-
-            #[derive(serde::Deserialize, Debug)]
-            struct TestErrorResponse {
-                success: bool,
-                errors: Errors,
-            }
-
-            let bytes = res.into_body().try_into_bytes().unwrap();
-
-            let body: TestErrorResponse = serde_json::from_slice(&bytes).unwrap();
-
-            assert_eq!(body.success, false);
-            assert_eq!(body.errors.email, vec!["invalid email format"]);
-            assert_eq!(
-                body.errors.name,
-                vec!["name must be at least 1 character long"]
-            );
-        }
 
         Ok(())
     }
