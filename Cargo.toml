@@ -149,12 +149,9 @@ walkdir = "2"
 smallvec = "1"
 wasm-bindgen = "0.2"
 wasmtime = "19"
-#wgpu = "0.19"
-#winit = "0.29"
 zip = "0.6"
 prettify-js = "0.1.0"
 indexmap = { version = "2", features = ["serde"] }
-#argon2 = "0.5"
 lettre = { version = "0.11", features = ["serde", "tokio1", "tokio1-native-tls"] }
 chrono = { version = "0.4", features = ["serde"] }
 indicatif = "0.17.1"

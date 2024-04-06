@@ -41,7 +41,7 @@ async fn async_main() -> Result<(), Error> {
 }
 
 async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
-    use colored::Colorize;
+    // use colored::Colorize;
     use fastn_core::utils::ValueOf;
 
     if matches.subcommand_name().is_none() {
@@ -62,14 +62,14 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
 
     if let Some(update) = matches.subcommand_matches("update") {
         let check = update.get_flag("check");
-        return fastn_update::update(&ds, false, check).await;
+        return fastn_update::update(&ds, check).await;
     }
 
     if let Some(serve) = matches.subcommand_matches("serve") {
         let port = serve.value_of_("port").map(|p| match p.parse::<u16>() {
             Ok(v) => v,
             Err(_) => {
-                eprintln!("Provided port {} is not a valid port.", p.to_string().red());
+                eprintln!("Provided port {p} is not a valid port.");
                 std::process::exit(1);
             }
         });
@@ -82,8 +82,8 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         let inline_css = serve.values_of_("css");
         let offline = serve.get_flag("offline");
 
-        if cfg!(not(feature = "download-on-demand")) {
-            fastn_update::update(&ds, offline, false).await?;
+        if cfg!(not(feature = "download-on-demand")) && !offline {
+            fastn_update::update(&ds, false).await?;
         }
 
         let config = fastn_core::Config::read(ds, false)
@@ -105,7 +105,9 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         let inline_css = test.values_of_("css");
         let offline: bool = test.get_flag("offline");
 
-        fastn_update::update(&ds, offline, false).await?;
+        if !offline {
+            fastn_update::update(&ds, false).await?;
+        }
 
         let mut config = fastn_core::Config::read(ds, true).await?;
 
@@ -141,7 +143,9 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         let zip_url = build.value_of_("zip-url");
         let offline: bool = build.get_flag("offline");
 
-        fastn_update::update(&ds, offline, false).await?;
+        if !offline {
+            fastn_update::update(&ds, false).await?;
+        }
 
         let mut config = fastn_core::Config::read(ds, true).await?;
 
@@ -198,7 +202,7 @@ async fn check_for_update_cmd(matches: &clap::ArgMatches) -> fastn_core::Result<
 
     let flag = matches.get_flag("check-for-updates");
 
-    // if the env var is set or the -c flag is passed then check for updates
+    // if the env var is set or the -c flag is passed, then check for updates
     if flag || env_var_set {
         check_for_update(flag).await?;
     }
@@ -226,9 +230,9 @@ async fn check_for_update(report: bool) -> fastn_core::Result<()> {
 
     if release.tag_name != current_version {
         println!(
-                "You are using fastn {}, and latest release is {}, visit https://fastn.com/install/ to learn how to upgrade.",
-                current_version, release.tag_name
-            );
+            "You are using fastn {current_version}, and latest release is {}, visit https://fastn.com/install/ to learn how to upgrade.",
+            release.tag_name
+        );
     } else if report {
         // log only when -c is passed
         println!("You are using the latest release of fastn.");

@@ -15,7 +15,6 @@ fifthtry = ["clift"]
 [dependencies]
 clift = { workspace = true, optional = true }
 clap.workspace = true
-colored.workspace = true
 fastn-observer.workspace = true
 fastn-update.workspace = true
 fastn-core.workspace = true

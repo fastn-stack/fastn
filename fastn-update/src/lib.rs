@@ -111,7 +111,6 @@ async fn update_dependencies(
     packages_root: fastn_ds::Path,
     current_package: &fastn_core::Package,
     pb: &indicatif::ProgressBar,
-    offline: bool,
     check: bool,
 ) -> Result<usize, UpdateError> {
     let mut stack = vec![current_package.clone()];
@@ -130,20 +129,6 @@ async fn update_dependencies(
             let package_name = dep_package.name.clone();
             let dependency_path = &packages_root.join(&package_name);
 
-            if offline {
-                if package_name.eq(&fastn_core::FASTN_UI_INTERFACE) {
-                    resolved.insert(package_name.to_string());
-                    continue;
-                }
-
-                let dep_package =
-                    utils::resolve_dependency_package(ds, &dependency, dependency_path).await?;
-                resolved.insert(package_name.to_string());
-                pb.inc_length(1);
-                stack.push(dep_package);
-                continue;
-            }
-
             pb.set_message(format!("Resolving {}/manifest.json", &package_name));
 
             let (manifest, manifest_bytes) = utils::get_manifest(ds, &package_name).await?;
@@ -151,8 +136,9 @@ async fn update_dependencies(
             let manifest_path = dependency_path.join(fastn_core::manifest::MANIFEST_FILE);
 
             // Download the archive if:
-            // 1. The package does not already exist
-            // 2. The checksums of the downloaded package manifest and the existing manifest do not match
+            // 1. The package does not yet exist
+            // 2. The checksums of the downloaded package manifest
+            //    and the existing manifest does not match
             let should_download_archive = if !ds.exists(dependency_path).await {
                 true
             } else {
@@ -209,14 +195,12 @@ async fn update_dependencies(
         pb.inc(1);
     }
 
-    if !offline {
-        fastn_core::ConfigTemp::write(
-            ds,
-            current_package.name.clone(),
-            all_packages.into_iter().collect(),
-        )
-        .await?;
-    }
+    fastn_core::ConfigTemp::write(
+        ds,
+        current_package.name.clone(),
+        all_packages.into_iter().collect(),
+    )
+    .await?;
 
     Ok(updated_packages)
 }
@@ -290,11 +274,7 @@ async fn download_and_unpack_zip(
 }
 
 #[tracing::instrument(skip_all)]
-pub async fn update(
-    ds: &fastn_ds::DocumentStore,
-    offline: bool,
-    check: bool,
-) -> fastn_core::Result<()> {
+pub async fn update(ds: &fastn_ds::DocumentStore, check: bool) -> fastn_core::Result<()> {
     let packages_root = ds.root().join(".packages");
     let current_package = utils::read_current_package(ds).await?;
 
@@ -313,7 +293,7 @@ pub async fn update(
     pb.set_prefix("Updating dependencies");
 
     let updated_packages =
-        match update_dependencies(ds, packages_root, &current_package, &pb, offline, check).await {
+        match update_dependencies(ds, packages_root, &current_package, &pb, check).await {
             Ok(n) => n,
             Err(UpdateError::Check(e)) => {
                 eprintln!("{}", e);

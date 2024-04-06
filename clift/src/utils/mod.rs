@@ -5,7 +5,6 @@ mod github_token;
 mod site_token;
 mod update_token;
 mod uploader;
-mod version;
 
 pub use call_api::call_api;
 pub use generate_hash::generate_hash;
@@ -16,4 +15,3 @@ pub use github_token::{
 pub use site_token::SiteToken;
 pub use update_token::{update_token, UpdateToken, UpdateTokenError};
 pub use uploader::{Uploader, UploaderError};
-pub use version::version;

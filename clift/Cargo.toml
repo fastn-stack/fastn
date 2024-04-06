@@ -9,7 +9,6 @@ clap.workspace = true
 env_logger.workspace = true
 fastn-observer.workspace = true
 ignore.workspace = true
-mime_guess.workspace = true
 reqwest.workspace = true
 serde.workspace = true
 serde_json.workspace = true
