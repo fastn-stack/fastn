@@ -117,7 +117,27 @@ pub async fn process(
         println!("calling `http` processor with url: {}", &url);
     }
 
-    let resp = if method.as_str().eq("post") {
+    let resp = if url.scheme() == "wasm+proxy" {
+        match req_config
+            .config
+            .ds
+            .handle_wasm(url, &req_config.request, &Default::default())
+            .await
+        {
+            Ok(fastn_ds::wasm::Response::Http(r)) => {
+                let mut resp_cookies = vec![];
+                r.headers.into_iter().for_each(|(k, v)| {
+                    if k.as_str().eq("set-cookie") {
+                        if let Ok(v) = String::from_utf8(v) {
+                            resp_cookies.push(v.to_string());
+                        }
+                    }
+                });
+                Ok((Ok(r.body.into()), resp_cookies))
+            }
+            _ => todo!(),
+        }
+    } else if method.as_str().eq("post") {
         fastn_core::http::http_post_with_cookie(
             req_config,
             url.as_str(),
