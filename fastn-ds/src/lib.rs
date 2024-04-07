@@ -274,6 +274,15 @@ pub enum CreatePoolError {
     EnvError(#[from] EnvironmentError),
 }
 
+/// wasmc compiles path.wasm to path.wasmc
+pub async fn wasmc(path: &str) -> wasmtime::Result<()> {
+    Ok(tokio::fs::write(
+        format!("{path}c"),
+        wasmtime::Module::from_file(&WASM_ENGINE, path)?.serialize()?,
+    )
+    .await?)
+}
+
 impl DocumentStore {
     pub async fn default_pool(&self) -> Result<deadpool_postgres::Pool, CreatePoolError> {
         let db_url = match self.env("FASTN_DB_URL").await {
@@ -315,8 +324,21 @@ impl DocumentStore {
         match self.wasm_modules.get(path) {
             Some(module) => Ok(module.clone()),
             None => {
-                let source = self.read_content(&fastn_ds::Path::new(path)).await?;
-                let module = wasmtime::Module::from_binary(&WASM_ENGINE, &source)?;
+                let wasmc_path = fastn_ds::Path::new(format!("{path}c").as_str());
+                let module = match unsafe {
+                    wasmtime::Module::from_trusted_file(&WASM_ENGINE, &wasmc_path.path)
+                } {
+                    Ok(m) => {
+                        tracing::info!("loaded wasmc file for {path}");
+                        m
+                    }
+                    Err(e) => {
+                        tracing::info!("could not read {wasmc_path:?} file: {e:?}");
+                        let source = self.read_content(&fastn_ds::Path::new(path)).await?;
+                        wasmtime::Module::from_binary(&WASM_ENGINE, &source)?
+                    }
+                };
+
                 // we are only storing compiled module if we are not in debug mode
                 self.wasm_modules.insert(path.to_string(), module.clone());
                 Ok(module)

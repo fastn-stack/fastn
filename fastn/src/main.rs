@@ -174,6 +174,13 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return fastn_core::fmt(&config, fmt.value_of_("file"), fmt.get_flag("noidentation")).await;
     }
 
+    if let Some(wasmc) = matches.subcommand_matches("wasmc") {
+        if let Err(e) = fastn_ds::wasmc(wasmc.value_of_("file").unwrap()).await {
+            eprintln!("failed to compile: {e:?}");
+            std::process::exit(1);
+        }
+    }
+
     if let Some(query) = matches.subcommand_matches("query") {
         return fastn_core::query(
             &config,
@@ -273,6 +280,11 @@ fn app(version: &'static str) -> clap::Command {
                 .about("Format the fastn package")
                 .arg(clap::arg!(file: [FILE]... "The file to format").required(false))
                 .arg(clap::arg!(-i --noidentation "No identation added to file/package").required(false))
+        )
+        .subcommand(
+            clap::Command::new("wasmc")
+                .about("Convert .wasm to .wasmc file")
+                .arg(clap::arg!(file: [FILE]... "The file to compile").required(false))
         )
         .subcommand(
             clap::Command::new("test")
