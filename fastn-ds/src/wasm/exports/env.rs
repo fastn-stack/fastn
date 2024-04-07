@@ -30,14 +30,10 @@ pub async fn ud(mut caller: wasmtime::Caller<'_, fastn_ds::wasm::Store>) -> wasm
     fastn_ds::wasm::helpers::send_json(caller.data().get_ud().await, &mut caller).await
 }
 
-fn random_seed() -> f64 {
-    rand::random::<f64>()
-}
-
 pub async fn random(
     mut caller: wasmtime::Caller<'_, fastn_ds::wasm::Store>,
 ) -> wasmtime::Result<i32> {
-    fastn_ds::wasm::helpers::send_json(random_seed(), &mut caller).await
+    fastn_ds::wasm::helpers::send_json(rand::random::<f64>(), &mut caller).await
 }
 
 impl<'a> fastn_ds::wasm::Store {

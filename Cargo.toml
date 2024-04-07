@@ -8,7 +8,7 @@ members = [
     "fastn-grammar",
     "fastn-issues",
     "fastn-js",
-    "fastn-lang",
+    "fastn-lang", "fastn-migration",
     "fastn-package",
     "fastn-update",
     "foo",

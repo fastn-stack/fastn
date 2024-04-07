@@ -317,14 +317,8 @@ impl DocumentStore {
             None => {
                 let source = self.read_content(&fastn_ds::Path::new(path)).await?;
                 let module = wasmtime::Module::from_binary(&WASM_ENGINE, &source)?;
-                if self
-                    .env_bool("DEBUG_SERVE_SITE_FROM_FOLDER", false)
-                    .await
-                    .unwrap_or(false)
-                {
-                    // we are only storing compiled module if we are not in debug mode
-                    self.wasm_modules.insert(path.to_string(), module.clone());
-                }
+                // we are only storing compiled module if we are not in debug mode
+                self.wasm_modules.insert(path.to_string(), module.clone());
                 Ok(module)
             }
         }
