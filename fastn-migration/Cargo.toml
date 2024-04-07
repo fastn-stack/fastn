@@ -9,3 +9,4 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
+deadpool-postgres.workspace = true

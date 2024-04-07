@@ -8,7 +8,8 @@ members = [
     "fastn-grammar",
     "fastn-issues",
     "fastn-js",
-    "fastn-lang", "fastn-migration",
+    "fastn-lang",
+    "fastn-migration",
     "fastn-package",
     "fastn-update",
     "foo",
@@ -92,6 +93,7 @@ env_logger = "0.11"
 enum-iterator = "0.6"
 enum-iterator-derive = "0.6"
 fastn-ds = { path = "fastn-ds" }
+fastn-migration = { path = "fastn-migration" }
 fastn-update = { path = "fastn-update" }
 fastn-core = { path = "fastn-core" }
 fastn-issues = { path = "fastn-issues" }

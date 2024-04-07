@@ -1657,6 +1657,7 @@ dependencies = [
  "deadpool",
  "deadpool-postgres",
  "dirs",
+ "fastn-migration",
  "ft-sys-shared",
  "ftd 0.3.0",
  "futures-util",
@@ -1732,6 +1733,9 @@ dependencies = [
 [[package]]
 name = "fastn-migration"
 version = "0.1.0"
+dependencies = [
+ "deadpool-postgres",
+]
 
 [[package]]
 name = "fastn-observer"

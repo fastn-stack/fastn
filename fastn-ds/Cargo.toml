@@ -14,6 +14,7 @@ thiserror.workspace = true
 ftd.workspace = true
 actix-web.workspace = true
 ft-sys-shared.workspace = true
+fastn-migration.workspace = true
 deadpool-postgres.workspace = true
 deadpool.workspace = true
 actix-http.workspace = true

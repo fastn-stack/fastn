@@ -1,15 +1,9 @@
 // async fn create_pool(
-//     req_config: &fastn_core::RequestConfig,
+//     db_url: &str,
 // ) -> Result<deadpool_postgres::Pool, deadpool_postgres::CreatePoolError> {
-//     let mut cfg = deadpool_postgres::Config::new();
-//     cfg.libpq_style_connection_string = match req_config.config.ds.env("FASTN_DB_URL").await {
-//         Ok(v) => Some(v),
-//         Err(_) => {
-//             fastn_core::warning!("FASTN_DB_URL is not set");
-//             return Err(deadpool_postgres::CreatePoolError::Config(
-//                 deadpool_postgres::ConfigError::ConnectionStringInvalid,
-//             ));
-//         }
+//     let mut cfg = deadpool_postgres::Config {
+//         url: Some(db_url.to_string()),
+//         ..Default::default()
 //     };
 //     cfg.manager = Some(deadpool_postgres::ManagerConfig {
 //         // TODO: make this configurable
@@ -94,14 +88,20 @@
 
 pub async fn create_pool(
     db_url: &str,
-    _is_default: bool,
+    is_default: bool,
 ) -> Result<deadpool_postgres::Pool, deadpool_postgres::CreatePoolError> {
-    deadpool_postgres::Config {
+    let pool = deadpool_postgres::Config {
         url: Some(db_url.to_string()),
         ..Default::default()
     }
     .create_pool(
         Some(deadpool_postgres::Runtime::Tokio1),
         tokio_postgres::NoTls,
-    )
+    )?;
+
+    if is_default {
+        fastn_migration::migrate(&pool);
+    }
+
+    Ok(pool)
 }
