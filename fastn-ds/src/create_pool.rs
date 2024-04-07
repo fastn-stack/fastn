@@ -88,20 +88,13 @@
 
 pub async fn create_pool(
     db_url: &str,
-    is_default: bool,
 ) -> Result<deadpool_postgres::Pool, deadpool_postgres::CreatePoolError> {
-    let pool = deadpool_postgres::Config {
+    deadpool_postgres::Config {
         url: Some(db_url.to_string()),
         ..Default::default()
     }
     .create_pool(
         Some(deadpool_postgres::Runtime::Tokio1),
         tokio_postgres::NoTls,
-    )?;
-
-    if is_default {
-        fastn_migration::migrate(&pool);
-    }
-
-    Ok(pool)
+    )
 }

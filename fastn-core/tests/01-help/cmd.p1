@@ -10,6 +10,7 @@ Usage: fastn [OPTIONS] [COMMAND]
 Commands:
   build   Build static site from this fastn package
   fmt     Format the fastn package
+  wasmc   Convert .wasm to .wasmc file
   test    Run the test files in `_tests` folder
   query   JSON Dump in various stages
   update  Update dependency packages for this fastn package

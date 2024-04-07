@@ -149,6 +149,8 @@ pub enum HttpError {
     Wasm(#[from] wasmtime::Error),
     #[error("env error {0}")]
     EnvironmentError(#[from] EnvironmentError),
+    #[error("create pool error {0}")]
+    CreatePoolError(#[from] CreatePoolError),
 }
 
 pub type HttpResponse = ::http::Response<bytes::Bytes>;
@@ -203,7 +205,10 @@ impl DocumentStore {
             return Ok(p.clone());
         }
 
-        let pool = fastn_ds::create_pool(db_url.as_str(), true).await?;
+        let pool = fastn_ds::create_pool(db_url.as_str()).await?;
+
+        fastn_migration::migrate(&pool);
+
         self.pg_pools.insert(db_url.to_string(), pool.clone());
         Ok(pool)
     }
@@ -425,6 +430,11 @@ impl DocumentStore {
         let wasm_file = wasm_file.strip_prefix("wasm+proxy://").unwrap();
         let wasm_file = wasm_file.split_once(".wasm").unwrap().0;
         let module = self.get_wasm(format!("{wasm_file}.wasm").as_str()).await?;
+
+        // we create the default pool, so we can handle proper migration etc here, else the pool
+        // would be constructed from inside wasm connect call, and we will not have enough data
+        // there to do migration.
+        self.default_pool().await?;
 
         Ok(fastn_ds::wasm::process_http_request(
             ft_sys_shared::Request {
