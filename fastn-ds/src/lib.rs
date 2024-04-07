@@ -130,6 +130,8 @@ pub enum WasmReadError {
     ReadError(#[from] ReadError),
     #[error("wasm error {0}")]
     WasmError(#[from] wasmtime::Error),
+    #[error("env error {0}")]
+    BoolEnvironmentError(#[from] BoolEnvironmentError),
 }
 
 #[derive(thiserror::Error, Debug)]
@@ -340,7 +342,9 @@ impl DocumentStore {
                 };
 
                 // we are only storing compiled module if we are not in debug mode
-                self.wasm_modules.insert(path.to_string(), module.clone());
+                if !self.env_bool("FASTN_DEBUG", false).await? {
+                    self.wasm_modules.insert(path.to_string(), module.clone());
+                }
                 Ok(module)
             }
         }
