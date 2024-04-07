@@ -9,4 +9,7 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
+deadpool.workspace = true
 deadpool-postgres.workspace = true
+thiserror.workspace = true
+tokio-postgres.workspace = true

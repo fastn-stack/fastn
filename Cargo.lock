@@ -1734,7 +1734,10 @@ dependencies = [
 name = "fastn-migration"
 version = "0.1.0"
 dependencies = [
+ "deadpool",
  "deadpool-postgres",
+ "thiserror",
+ "tokio-postgres",
 ]
 
 [[package]]

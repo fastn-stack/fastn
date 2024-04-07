@@ -183,6 +183,9 @@ pub enum CreatePoolError {
 
     #[error("env error {0}")]
     EnvError(#[from] EnvironmentError),
+
+    #[error("migration error {0}")]
+    Migration(#[from] fastn_migration::MigrationError),
 }
 
 /// wasmc compiles path.wasm to path.wasmc
@@ -207,7 +210,7 @@ impl DocumentStore {
 
         let pool = fastn_ds::create_pool(db_url.as_str()).await?;
 
-        fastn_migration::migrate(&pool);
+        fastn_migration::migrate(&pool).await?;
 
         self.pg_pools.insert(db_url.to_string(), pool.clone());
         Ok(pool)
