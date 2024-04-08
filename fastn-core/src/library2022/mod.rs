@@ -179,7 +179,7 @@ impl Library2022 {
         }
     }
 
-    #[cfg(not(feature = "download-on-demand"))]
+    #[cfg(feature = "use-config-json")]
     pub(crate) async fn push_package_under_process(
         &mut self,
         module: &str,
@@ -200,7 +200,7 @@ impl Library2022 {
         Ok(())
     }
 
-    #[cfg(feature = "download-on-demand")]
+    #[cfg(not(feature = "use-config-json"))]
     pub(crate) async fn push_package_under_process(
         &mut self,
         module: &str,

@@ -13,14 +13,15 @@ CREATE TABLE IF NOT EXISTS fastn.fastn_user
 
 CREATE TABLE IF NOT EXISTS fastn.fastn_session
 (
-    id     BIGSERIAL primary key,
-    "user" BIGINT,
-    data   JSONB,
+    id   BIGSERIAL primary key,
+    uid  BIGINT,
+    data JSONB,
 
-    constraint fk_tests_students
-        foreign key ("user")
+    CONSTRAINT fk_tests_students
+        FOREIGN KEY (uid)
             REFERENCES fastn.fastn_user (id)
 );
+
 
 
 

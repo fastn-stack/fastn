@@ -69,7 +69,7 @@ impl fastn_core::Package {
         Ok(manifest)
     }
 
-    #[cfg(feature = "download-on-demand")]
+    #[cfg(not(feature = "use-config-json"))]
     #[tracing::instrument(skip(self))]
     pub(crate) async fn fs_fetch_by_id(
         &self,
@@ -105,7 +105,7 @@ impl fastn_core::Package {
         })
     }
 
-    #[cfg(not(feature = "download-on-demand"))]
+    #[cfg(feature = "use-config-json")]
     pub(crate) async fn fs_fetch_by_id(
         &self,
         id: &str,

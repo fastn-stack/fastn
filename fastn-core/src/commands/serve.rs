@@ -19,8 +19,6 @@ async fn serve_file(
     path: &camino::Utf8Path,
     only_js: bool,
 ) -> fastn_core::http::Response {
-    let path = <&camino::Utf8Path>::clone(&path);
-
     if let Err(e) = config
         .config
         .package
@@ -421,7 +419,9 @@ async fn handle_endpoints(
     if url.scheme() == "wasm+proxy" {
         return match config.ds.handle_wasm(url, req, &Default::default()).await {
             Ok(fastn_ds::wasm::Response::Http(r)) => Some(Ok(fastn_ds::wasm::to_response(r))),
-            Ok(_) => todo!(),
+            Ok(fastn_ds::wasm::Response::Ftd(_f)) => {
+                todo!()
+            }
             Err(e) => return Some(Err(e.into())),
         };
     }

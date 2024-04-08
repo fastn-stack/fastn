@@ -1,6 +1,3 @@
-// Document: https://fastn_core.dev/crate/config/
-// Document: https://fastn_core.dev/crate/package/
-
 pub mod config_temp;
 pub(crate) mod utils;
 
@@ -28,7 +25,7 @@ impl FTDEdition {
     }
 }
 
-#[cfg(not(feature = "download-on-demand"))]
+#[cfg(feature = "use-config-json")]
 #[derive(Debug, Clone)]
 pub struct Config {
     // Global Information
@@ -46,7 +43,7 @@ pub struct Config {
     pub test_command_running: bool,
 }
 
-#[cfg(feature = "download-on-demand")]
+#[cfg(not(feature = "use-config-json"))]
 #[derive(Debug, Clone)]
 pub struct Config {
     // Global Information
@@ -403,7 +400,7 @@ impl Config {
     /// `get_font_style()` returns the HTML style tag which includes all the fonts used by any
     /// ftd document. Currently this function does not check for fonts in package dependencies
     /// nor it tries to avoid fonts that are configured but not needed in current document.
-    #[cfg(feature = "download-on-demand")]
+    #[cfg(not(feature = "use-config-json"))]
     pub fn get_font_style(&self) -> String {
         let generated_style = self
             .all_packages
@@ -416,7 +413,7 @@ impl Config {
             _ => "".to_string(),
         };
     }
-    #[cfg(not(feature = "download-on-demand"))]
+    #[cfg(feature = "use-config-json")]
     pub fn get_font_style(&self) -> String {
         let generated_style = self
             .all_packages
@@ -466,7 +463,7 @@ impl Config {
         Ok(())
     }
 
-    #[cfg(not(feature = "download-on-demand"))]
+    #[cfg(feature = "use-config-json")]
     fn get_fonts_from_all_packages(&self) -> Vec<fastn_core::Font> {
         let mut fonts = vec![];
         for package in self.all_packages.values() {
@@ -475,7 +472,7 @@ impl Config {
         fonts
     }
 
-    #[cfg(feature = "download-on-demand")]
+    #[cfg(not(feature = "use-config-json"))]
     fn get_fonts_from_all_packages(&self) -> Vec<fastn_core::Font> {
         let mut fonts = vec![];
         for package in self.all_packages.iter() {
@@ -806,7 +803,7 @@ impl Config {
         Ok((self.package.name.to_string(), self.package.to_owned()))
     }
 
-    #[cfg(feature = "download-on-demand")]
+    #[cfg(not(feature = "use-config-json"))]
     fn find_package_id_in_all_packages(&self, id: &str) -> Option<(String, fastn_core::Package)> {
         for item in self.all_packages.iter() {
             let package_name = item.key();
@@ -817,7 +814,7 @@ impl Config {
         None
     }
 
-    #[cfg(not(feature = "download-on-demand"))]
+    #[cfg(feature = "use-config-json")]
     fn find_package_id_in_all_packages(&self, id: &str) -> Option<(String, fastn_core::Package)> {
         for (package_name, package) in self.all_packages.iter().rev() {
             if id.starts_with(format!("{package_name}/").as_str()) || id.eq(package_name) {
@@ -1183,7 +1180,7 @@ impl Config {
         Ok(config)
     }
 
-    #[cfg(not(feature = "download-on-demand"))]
+    #[cfg(feature = "use-config-json")]
     pub(crate) async fn resolve_package(
         &self,
         package: &fastn_core::Package,
@@ -1196,7 +1193,7 @@ impl Config {
         }
     }
 
-    #[cfg(feature = "download-on-demand")]
+    #[cfg(not(feature = "use-config-json"))]
     pub(crate) async fn resolve_package(
         &self,
         package: &fastn_core::Package,
@@ -1222,7 +1219,7 @@ impl Config {
         Ok(package)
     }
 
-    #[cfg(feature = "download-on-demand")]
+    #[cfg(not(feature = "use-config-json"))]
     pub(crate) fn add_package(&self, package: &fastn_core::Package) {
         self.all_packages
             .insert(package.name.to_string(), package.to_owned());
@@ -1241,7 +1238,7 @@ impl Config {
         Ok(fastn_core::doc::parse_ftd("fastn", doc.as_str(), &lib)?)
     }
 
-    #[cfg(not(feature = "download-on-demand"))]
+    #[cfg(feature = "use-config-json")]
     pub(crate) fn find_package_else_default(
         &self,
         package_name: &str,
@@ -1256,7 +1253,7 @@ impl Config {
         }
     }
 
-    #[cfg(feature = "download-on-demand")]
+    #[cfg(not(feature = "use-config-json"))]
     pub(crate) fn find_package_else_default(
         &self,
         package_name: &str,
@@ -1272,7 +1269,7 @@ impl Config {
     }
 }
 
-#[cfg(not(feature = "download-on-demand"))]
+#[cfg(feature = "use-config-json")]
 async fn get_all_packages(
     package: &mut fastn_core::Package,
     package_root: &fastn_ds::Path,
@@ -1289,7 +1286,7 @@ async fn get_all_packages(
     Ok(all_packages)
 }
 
-#[cfg(feature = "download-on-demand")]
+#[cfg(not(feature = "use-config-json"))]
 async fn get_all_packages(
     package: &mut fastn_core::Package,
     _package_root: &fastn_ds::Path,

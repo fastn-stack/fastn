@@ -9,7 +9,6 @@ homepage.workspace = true
 
 [features]
 default = ["fifthtry"]
-download-on-demand = ["fastn-core/download-on-demand"]
 fifthtry = ["clift"]
 
 [dependencies]
