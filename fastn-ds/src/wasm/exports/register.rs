@@ -19,6 +19,13 @@ impl fastn_ds::wasm::Store {
             fastn_ds::wasm::exports::crypto::decrypt
         );
 
+        // sqlite
+        fastn_ds::func2ret!(
+            linker,
+            "sqlite_connect",
+            fastn_ds::wasm::exports::sqlite::connect
+        );
+
         // pg related stuff
         fastn_ds::func2ret!(linker, "pg_connect", fastn_ds::wasm::exports::pg::connect);
         fastn_ds::func3ret!(linker, "pg_query", fastn_ds::wasm::exports::pg::query);

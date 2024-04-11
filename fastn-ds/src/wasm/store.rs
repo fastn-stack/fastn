@@ -7,6 +7,7 @@ pub struct Store {
     pub db_url: String,
 }
 
+#[derive(Debug)]
 pub enum Response {
     /// When wasm worker sent HTTP response.
     Http(ft_sys_shared::Request),
@@ -14,7 +15,7 @@ pub enum Response {
     Ftd(FtdResponse),
 }
 
-#[derive(serde::Deserialize)]
+#[derive(serde::Deserialize, Debug)]
 pub struct FtdResponse {
     /// This is the ID of the file, relative to the package in which wasm worker
     /// is present.
