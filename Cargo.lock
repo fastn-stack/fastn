@@ -1669,6 +1669,7 @@ dependencies = [
  "rand",
  "regex",
  "reqwest 0.12.3",
+ "rusqlite",
  "serde",
  "serde_json",
  "thiserror",

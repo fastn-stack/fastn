@@ -3,6 +3,7 @@ pub struct Store {
     pub ud: Option<ft_sys_shared::UserData>,
     pub clients: std::sync::Arc<async_lock::Mutex<Vec<Conn>>>,
     pub wasm_pg_pools: actix_web::web::Data<dashmap::DashMap<String, deadpool_postgres::Pool>>,
+    pub sqlite: Option<std::sync::Arc<async_lock::Mutex<rusqlite::Connection>>>,
     pub response: Option<Response>,
     pub db_url: String,
 }
@@ -43,6 +44,7 @@ impl Store {
             clients: Default::default(),
             wasm_pg_pools,
             db_url,
+            sqlite: None,
         }
     }
 }
