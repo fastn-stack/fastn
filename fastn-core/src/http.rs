@@ -14,6 +14,36 @@ macro_rules! not_found {
     }};
 }
 
+#[macro_export]
+macro_rules! unauthorised {
+    ($($t:tt)*) => {{
+        fastn_core::http::unauthorised_(format!($($t)*))
+    }};
+}
+
+pub fn api_ok(data: impl serde::Serialize) -> serde_json::Result<fastn_core::http::Response> {
+    #[derive(serde::Serialize)]
+    struct SuccessResponse<T: serde::Serialize> {
+        data: T,
+        success: bool,
+    }
+
+    let data = serde_json::to_vec(&SuccessResponse {
+        data,
+        success: true,
+    })?;
+
+    Ok(ok_with_content_type(
+        data,
+        mime_guess::mime::APPLICATION_JSON,
+    ))
+}
+
+pub fn unauthorised_(msg: String) -> fastn_core::http::Response {
+    fastn_core::warning!("unauthorised: {}", msg);
+    actix_web::HttpResponse::Unauthorized().body(msg)
+}
+
 pub fn server_error_(msg: String) -> fastn_core::http::Response {
     fastn_core::warning!("server error: {}", msg);
     server_error_without_warning(msg)
@@ -251,6 +281,14 @@ impl Request {
         self.headers
             .get(actix_web::http::header::USER_AGENT.as_str())
             .and_then(|v| v.to_str().map(|v| v.to_string()).ok())
+    }
+
+    pub fn headers(&self) -> &reqwest::header::HeaderMap {
+        &self.headers
+    }
+
+    pub fn json<T: serde::de::DeserializeOwned>(&self) -> serde_json::Result<T> {
+        serde_json::from_slice(&self.body)
     }
 
     pub async fn ud(&self, _ds: &fastn_ds::DocumentStore) -> Option<ft_sys_shared::UserData> {
