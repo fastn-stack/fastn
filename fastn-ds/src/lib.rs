@@ -413,24 +413,19 @@ impl DocumentStore {
 
     pub async fn handle_wasm<T>(
         &self,
-        url: url::Url,
+        wasm_url: String,
         req: &T,
-        extra_headers: &std::collections::HashMap<String, String>,
     ) -> Result<fastn_ds::wasm::Response, HttpError>
     where
         T: RequestType,
     {
-        let mut headers: Vec<(String, Vec<u8>)> = req
+        let headers: Vec<(String, Vec<u8>)> = req
             .headers()
             .iter()
             .map(|(k, v)| (k.as_str().to_string(), v.as_bytes().to_vec()))
             .collect();
-        for (k, v) in extra_headers {
-            headers.push((k.to_string(), v.as_bytes().to_vec()));
-        }
 
-        let wasm_file = url.to_string();
-        let wasm_file = wasm_file.strip_prefix("wasm+proxy://").unwrap();
+        let wasm_file = wasm_url.strip_prefix("wasm+proxy://").unwrap();
         let wasm_file = wasm_file.split_once(".wasm").unwrap().0;
         let module = self.get_wasm(format!("{wasm_file}.wasm").as_str()).await?;
 
@@ -441,7 +436,7 @@ impl DocumentStore {
 
         Ok(fastn_ds::wasm::process_http_request(
             ft_sys_shared::Request {
-                uri: url.as_str().to_string(),
+                uri: wasm_url,
                 method: req.method().to_string(),
                 headers,
                 body: req.body().to_vec(),

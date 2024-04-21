@@ -121,7 +121,7 @@ pub async fn process(
         match req_config
             .config
             .ds
-            .handle_wasm(url, &req_config.request, &Default::default())
+            .handle_wasm(url.to_string(), &req_config.request)
             .await
         {
             Ok(fastn_ds::wasm::Response::Http(r)) => {
