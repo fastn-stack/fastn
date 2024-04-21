@@ -92,6 +92,7 @@ impl ResponseBuilder {
 
 #[derive(Debug, Clone, Default)]
 pub struct Request {
+    host: String,
     method: String,
     pub uri: String,
     pub path: String,
@@ -165,6 +166,7 @@ impl Request {
         return Request {
             cookies: get_cookies(&headers),
             body,
+            host: req.connection_info().host().to_string(),
             method: req.method().to_string(),
             uri: req.uri().to_string(),
             path: req.path().to_string(),
@@ -198,6 +200,26 @@ impl Request {
             }
             cookies
         }
+    }
+
+    pub fn full_path(&self) -> String {
+        if self.query_string.is_empty() {
+            self.path.clone()
+        } else {
+            format!("{}?{}", self.path, self.query_string)
+        }
+    }
+
+    pub fn body(&self) -> &[u8] {
+        &self.body
+    }
+
+    pub fn method(&self) -> &str {
+        self.method.as_str()
+    }
+
+    pub fn uri(&self) -> &str {
+        self.uri.as_str()
     }
 
     pub fn body_as_json(
@@ -292,6 +314,10 @@ impl Request {
 
     pub fn query(&self) -> &std::collections::HashMap<String, serde_json::Value> {
         &self.query
+    }
+
+    pub fn host(&self) -> String {
+        self.host.to_string()
     }
 
     pub fn is_bot(&self) -> bool {
