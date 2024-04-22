@@ -140,9 +140,6 @@ pub enum Error {
 
     #[error("SSRError: {:?}", _0)]
     SSRError(#[from] fastn_js::SSRError),
-
-    #[error("Diesel: {_0:?}")]
-    Diesel(#[from] diesel::result::Error),
 }
 
 impl From<std::convert::Infallible> for Error {

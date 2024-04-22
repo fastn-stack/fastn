@@ -19,7 +19,6 @@ async-recursion.workspace = true
 camino.workspace = true
 chrono.workspace = true
 dashmap.workspace = true
-diesel.workspace = true
 async-trait = "0.1"
 http.workspace = true
 bytes.workspace = true

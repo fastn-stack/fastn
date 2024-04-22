@@ -162,7 +162,6 @@ snafu = "0.8.0"
 deno_core = "0.272.0"
 rquickjs = { version = "0.5", features = ["macro"] }
 quick-js = "0.4"
-diesel = { version = "2", default-features = false }
 
 
 [workspace.dependencies.fastn-observer]
