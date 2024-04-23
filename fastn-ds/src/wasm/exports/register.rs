@@ -48,7 +48,7 @@ impl fastn_ds::wasm::Store {
             fastn_ds::wasm::exports::http::get_request
         );
 
-        fastn_ds::func0ret!(
+        fastn_ds::func2ret!(
             linker,
             "http_send_request",
             fastn_ds::wasm::exports::http::send_request

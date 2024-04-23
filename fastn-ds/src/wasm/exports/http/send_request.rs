@@ -8,7 +8,7 @@ pub async fn send_request(
 
     let mut headers = reqwest::header::HeaderMap::new();
     for (header_name, header_value) in r.headers {
-        let header_name = reqwest::header::HeaderName::from_static(header_name.as_str());
+        let header_name = reqwest::header::HeaderName::from_bytes(header_name.as_bytes()).unwrap(); // todo: remove unwrap()
         let header_value =
             reqwest::header::HeaderValue::from_bytes(header_value.as_slice()).unwrap(); // todo: remove unwrap()
         headers.insert(header_name, header_value);
@@ -16,7 +16,7 @@ pub async fn send_request(
     let reqwest_response = if r.method.to_uppercase().eq("GET") {
         reqwest::Client::new().get(r.uri)
     } else {
-        reqwest::Client::new().post(r.uri).body(r.body.as_slice())
+        reqwest::Client::new().post(r.uri).body(r.body)
     }
     .headers(headers)
     .send()
@@ -26,7 +26,7 @@ pub async fn send_request(
     for (header_name, header_value) in reqwest_response.headers() {
         response = response.header(header_name, header_value);
     }
-    let response = response.body(reqwest_response.bytes()?)?;
+    let response = response.body(reqwest_response.bytes().await?)?;
 
     fastn_ds::wasm::helpers::send_json(ft_sys_shared::Request::from(response), &mut caller).await
 }
