@@ -95,5 +95,12 @@ impl fastn_ds::wasm::Store {
             "hostn_get_all_document",
             fastn_ds::wasm::exports::ds::get_all_document
         );
+
+        // aws
+        fastn_ds::func2ret!(
+            linker,
+            "hostn_aws_pre_signed_request",
+            fastn_ds::wasm::exports::aws::pre_signed_request
+        );
     }
 }
