@@ -40,27 +40,28 @@ repository = "https://github.com/fastn-stack/fastn"
 homepage = "https://fastn.com"
 
 [profile.release]
-# enabling this descreased our binary size from 30M to 27M on linux (as of 12th Jun 2023). The build time went up (no
-# objective data). Disabling it for now. It made a huge difference in fastn-runtime wasm size (without lto: 2.1M with
-# lto: 518K).
-#lto = true
+# Enabling this descreased our binary size from 30M to 27M on linux (as of 12th Jun 2023).
+# The build time went up (no objective data). Disabling it for now. It made a huge difference
+# in fastn-runtime wasm size (without lto: 2.1M with lto: 518K).
+
 strip = true
-#opt-level = "z"
-#panic = "abort"
+# lto = true
+# opt-level = "z"
+# panic = "abort"
 
 [workspace.dependencies]
 # Please do not specify a dependency more precisely than needed. If version "1" works, do
-# not specify "1.1.42". This reduces the number of total dependencies, as if you specify
-# 1.1.42 and someone else who only needed "1" also specified 1.1.37, we end up having same
-# dependency getting compiled twice.
+# not specify "1.1.42". This reduces the number of total dependencies. For example, if you
+# specify 1.1.42 and someone else who only needed "1" also specified 1.1.37, we end up having
+# the same dependency getting compiled twice.
 #
 # In the future, we may discover that our code does not indeed work with "1", say it ony works
 # for 1.1 onwards, or 1.1.25 onwards, in which case use >= 1.1.25 etc. Saying our code
 # only works for 1.1.42 and not 1.1.41 nor 1.1.43 is really weird, and most likely wrong.
 #
 # If you are not using the latest version intentionally, please do not list it in this section
-# and create its  own [dependencies.<name>] section, and document it with why are you not
-# using the latest dependency, and what is the plan to moving to the latest version.
+# and create its own [dependencies.<name>] section. Also, document it with why are you not
+# using the latest dependency, and what is the plan to move to the latest version.
 
 accept-language = "3"
 actix-web = "4"
@@ -69,8 +70,8 @@ antidote = "1"
 clift = { path = "clift" }
 dirs = "5"
 native-tls = "0.2"
-deadpool-postgres = "0.13"
-deadpool = "0.11"
+deadpool-postgres = "0.12"
+deadpool = "0.10"
 postgres-native-tls = "0.5"
 tokio-postgres = { version = "0.7", features = ["with-serde_json-1", "with-uuid-1"] }
 postgres-types = "0.2"

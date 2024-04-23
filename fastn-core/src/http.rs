@@ -14,6 +14,36 @@ macro_rules! not_found {
     }};
 }
 
+#[macro_export]
+macro_rules! unauthorised {
+    ($($t:tt)*) => {{
+        fastn_core::http::unauthorised_(format!($($t)*))
+    }};
+}
+
+pub fn api_ok(data: impl serde::Serialize) -> serde_json::Result<fastn_core::http::Response> {
+    #[derive(serde::Serialize)]
+    struct SuccessResponse<T: serde::Serialize> {
+        data: T,
+        success: bool,
+    }
+
+    let data = serde_json::to_vec(&SuccessResponse {
+        data,
+        success: true,
+    })?;
+
+    Ok(ok_with_content_type(
+        data,
+        mime_guess::mime::APPLICATION_JSON,
+    ))
+}
+
+pub fn unauthorised_(msg: String) -> fastn_core::http::Response {
+    fastn_core::warning!("unauthorised: {}", msg);
+    actix_web::HttpResponse::Unauthorized().body(msg)
+}
+
 pub fn server_error_(msg: String) -> fastn_core::http::Response {
     fastn_core::warning!("server error: {}", msg);
     server_error_without_warning(msg)
@@ -92,6 +122,7 @@ impl ResponseBuilder {
 
 #[derive(Debug, Clone, Default)]
 pub struct Request {
+    host: String,
     method: String,
     pub uri: String,
     pub path: String,
@@ -165,6 +196,7 @@ impl Request {
         return Request {
             cookies: get_cookies(&headers),
             body,
+            host: req.connection_info().host().to_string(),
             method: req.method().to_string(),
             uri: req.uri().to_string(),
             path: req.path().to_string(),
@@ -200,6 +232,26 @@ impl Request {
         }
     }
 
+    pub fn full_path(&self) -> String {
+        if self.query_string.is_empty() {
+            self.path.clone()
+        } else {
+            format!("{}?{}", self.path, self.query_string)
+        }
+    }
+
+    pub fn body(&self) -> &[u8] {
+        &self.body
+    }
+
+    pub fn method(&self) -> &str {
+        self.method.as_str()
+    }
+
+    pub fn uri(&self) -> &str {
+        self.uri.as_str()
+    }
+
     pub fn body_as_json(
         &self,
     ) -> fastn_core::Result<Option<std::collections::HashMap<String, serde_json::Value>>> {
@@ -229,6 +281,14 @@ impl Request {
         self.headers
             .get(actix_web::http::header::USER_AGENT.as_str())
             .and_then(|v| v.to_str().map(|v| v.to_string()).ok())
+    }
+
+    pub fn headers(&self) -> &reqwest::header::HeaderMap {
+        &self.headers
+    }
+
+    pub fn json<T: serde::de::DeserializeOwned>(&self) -> serde_json::Result<T> {
+        serde_json::from_slice(&self.body)
     }
 
     pub async fn ud(&self, _ds: &fastn_ds::DocumentStore) -> Option<ft_sys_shared::UserData> {
@@ -292,6 +352,10 @@ impl Request {
 
     pub fn query(&self) -> &std::collections::HashMap<String, serde_json::Value> {
         &self.query
+    }
+
+    pub fn host(&self) -> String {
+        self.host.to_string()
     }
 
     pub fn is_bot(&self) -> bool {
