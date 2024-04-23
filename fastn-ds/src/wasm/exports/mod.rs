@@ -1,3 +1,4 @@
+mod aws;
 mod crypto;
 mod ds;
 mod env;
