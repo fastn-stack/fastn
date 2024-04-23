@@ -6,6 +6,14 @@ pub async fn get_content(
     unimplemented!()
 }
 
+pub async fn get_all_document(
+    _caller: wasmtime::Caller<'_, fastn_ds::wasm::Store>,
+    _ptr: i32,
+    _len: i32,
+) -> wasmtime::Result<i32> {
+    unimplemented!()
+}
+
 pub async fn delete_file(
     _caller: wasmtime::Caller<'_, fastn_ds::wasm::Store>,
     _ptr: i32,
