@@ -74,18 +74,6 @@ impl fastn_ds::wasm::Store {
 
         fastn_ds::func2ret!(
             linker,
-            "hostn_delete_file",
-            fastn_ds::wasm::exports::ds::delete_file
-        );
-
-        fastn_ds::func2ret!(
-            linker,
-            "hostn_create_file",
-            fastn_ds::wasm::exports::ds::create_file
-        );
-
-        fastn_ds::func2ret!(
-            linker,
             "hostn_save_file",
             fastn_ds::wasm::exports::ds::save_file
         );
@@ -94,6 +82,12 @@ impl fastn_ds::wasm::Store {
             linker,
             "hostn_get_all_document",
             fastn_ds::wasm::exports::ds::get_all_document
+        );
+
+        fastn_ds::func2ret!(
+            linker,
+            "hostn_tejar_write",
+            fastn_ds::wasm::exports::ds::tejar_write
         );
 
         // aws
