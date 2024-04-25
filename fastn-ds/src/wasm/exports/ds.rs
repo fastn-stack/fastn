@@ -30,7 +30,6 @@ pub async fn tejar_read(
     unimplemented!()
 }
 
-
 pub async fn sample_content(
     _caller: wasmtime::Caller<'_, fastn_ds::wasm::Store>,
     _ptr: i32,
