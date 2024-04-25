@@ -11,8 +11,15 @@ pub async fn connect(
 
 impl fastn_ds::wasm::Store {
     pub async fn sqlite_connect(&mut self, db_url: &str) -> wasmtime::Result<i32> {
+        assert_eq!(db_url, "default", "we currently only support default");
+        let mut conn = self.sqlite.as_ref().lock().await;
+        if conn.is_some() {
+            return Ok(0);
+        }
+
         let db = rusqlite::Connection::open(db_url)?;
-        self.sqlite = Some(std::sync::Arc::new(async_lock::Mutex::new(db)));
+        *conn = Some(db);
+
         Ok(0)
     }
 }

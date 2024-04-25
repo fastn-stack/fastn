@@ -220,12 +220,11 @@ impl DocumentStore {
     pub fn new<T: AsRef<camino::Utf8Path>>(
         root: T,
         pg_pools: actix_web::web::Data<dashmap::DashMap<String, deadpool_postgres::Pool>>,
-        sqlite: actix_web::web::Data<async_lock::Mutex<Option<rusqlite::Connection>>>,
     ) -> Self {
         Self {
             wasm_modules: dashmap::DashMap::new(),
             pg_pools,
-            sqlite,
+            sqlite: Default::default(),
             root: Path::new(root.as_ref().as_str()),
         }
     }
@@ -446,6 +445,7 @@ impl DocumentStore {
             },
             module,
             self.pg_pools.clone(),
+            self.sqlite.clone(),
             self.env("DATABASE_URL").await?,
         )
         .await?)

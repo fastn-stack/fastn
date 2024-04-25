@@ -17,10 +17,15 @@ async fn main() {
     )
     .unwrap();
 
-    let resp =
-        fastn_ds::wasm::process_http_request(req, None, module, Default::default(), "".to_string())
-            .await
-            .unwrap();
+    let resp = fastn_ds::wasm::process_http_request(
+        req,
+        module,
+        Default::default(),
+        Default::default(),
+        "".to_string(),
+    )
+    .await
+    .unwrap();
 
     println!("{:?}", resp);
 }

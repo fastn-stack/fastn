@@ -105,33 +105,34 @@ impl fastn_ds::wasm::Store {
         &mut self,
         q: Query,
     ) -> wasmtime::Result<Result<Cursor, ft_sys_shared::DbError>> {
-        let conn = match self.sqlite {
-            Some(ref mut conn) => conn,
+        let conn = self.sqlite.as_ref().lock().await;
+        match conn.as_ref() {
+            Some(conn) => {
+                println!("conn, sql: {}", q.sql.as_str());
+                let mut stmt = conn.prepare(q.sql.as_str())?;
+                println!("stmt");
+
+                let columns: Vec<String> = stmt
+                    .column_names()
+                    .into_iter()
+                    .map(|s| s.to_string())
+                    .collect();
+
+                let mut rows = vec![];
+                let mut r = stmt.query(rusqlite::params_from_iter(q.binds))?;
+
+                while let Ok(Some(row)) = r.next() {
+                    rows.push(Row::from_sqlite(columns.len(), row));
+                }
+
+                Ok(Ok(Cursor { columns, rows }))
+            }
             None => {
-                return Ok(Err(ft_sys_shared::DbError::UnableToSendCommand(
-                    "No connection".into(),
+                println!("no conn");
+                Ok(Err(ft_sys_shared::DbError::UnableToSendCommand(
+                    "no connection".to_string(),
                 )))
             }
-        };
-
-        let conn = conn.lock().await;
-        println!("conn, sql: {}", q.sql.as_str());
-        let mut stmt = conn.prepare(q.sql.as_str())?;
-        println!("stmt");
-
-        let columns: Vec<String> = stmt
-            .column_names()
-            .into_iter()
-            .map(|s| s.to_string())
-            .collect();
-
-        let mut rows = vec![];
-        let mut r = stmt.query(rusqlite::params_from_iter(q.binds))?;
-
-        while let Ok(Some(row)) = r.next() {
-            rows.push(Row::from_sqlite(columns.len(), row));
         }
-
-        Ok(Ok(Cursor { columns, rows }))
     }
 }
