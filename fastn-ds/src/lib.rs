@@ -167,11 +167,6 @@ pub trait RequestType {
     fn body(&self) -> &[u8];
 }
 
-pub enum HttpResponseWrapper {
-    Http(HttpResponse),
-    Ftd(fastn_ds::wasm::FtdResponse),
-}
-
 pub static WASM_ENGINE: once_cell::sync::Lazy<wasmtime::Engine> =
     once_cell::sync::Lazy::new(|| {
         wasmtime::Engine::new(wasmtime::Config::new().async_support(true)).unwrap()
@@ -211,7 +206,7 @@ impl DocumentStore {
 
         let pool = fastn_ds::create_pool(db_url.as_str()).await?;
 
-        fastn_migration::migrate(&pool, self.sqlite.clone()).await?;
+        fastn_migration::migrate(&pool, self.sqlite.clone(), db_url.as_str()).await?;
 
         self.pg_pools.insert(db_url.to_string(), pool.clone());
         Ok(pool)
@@ -417,7 +412,7 @@ impl DocumentStore {
         &self,
         wasm_url: String,
         req: &T,
-    ) -> Result<fastn_ds::wasm::Response, HttpError>
+    ) -> Result<actix_web::HttpResponse, HttpError>
     where
         T: RequestType,
     {

@@ -17,7 +17,14 @@ impl fastn_ds::wasm::Store {
             return Ok(0);
         }
 
-        let db = rusqlite::Connection::open(db_url)?;
+        // TODO: convert this to an error instead of assert
+        assert_eq!(
+            self.db_url.starts_with("sqlite"),
+            true,
+            "only sqlite is supported"
+        );
+
+        let db = rusqlite::Connection::open(self.db_url.as_str())?;
         *conn = Some(db);
 
         Ok(0)

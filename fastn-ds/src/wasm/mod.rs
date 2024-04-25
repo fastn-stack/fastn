@@ -3,7 +3,7 @@ pub mod helpers;
 pub mod macros;
 mod store;
 
-pub use store::{Conn, FtdResponse, Response, Store};
+pub use store::{Conn, Store};
 
 #[tracing::instrument(skip_all)]
 pub async fn process_http_request(
@@ -12,7 +12,20 @@ pub async fn process_http_request(
     pg_pools: actix_web::web::Data<dashmap::DashMap<String, deadpool_postgres::Pool>>,
     sqlite: actix_web::web::Data<async_lock::Mutex<Option<rusqlite::Connection>>>,
     db_url: String,
-) -> wasmtime::Result<fastn_ds::wasm::Response> {
+) -> wasmtime::Result<actix_web::HttpResponse> {
+    process_http_request_(req, module, pg_pools, sqlite, db_url)
+        .await
+        .map(to_response)
+}
+
+#[tracing::instrument(skip_all)]
+async fn process_http_request_(
+    req: ft_sys_shared::Request,
+    module: wasmtime::Module,
+    pg_pools: actix_web::web::Data<dashmap::DashMap<String, deadpool_postgres::Pool>>,
+    sqlite: actix_web::web::Data<async_lock::Mutex<Option<rusqlite::Connection>>>,
+    db_url: String,
+) -> wasmtime::Result<ft_sys_shared::Request> {
     let hostn_store = fastn_ds::wasm::Store::new(req, pg_pools, sqlite, db_url);
     let mut linker = wasmtime::Linker::new(module.engine());
     hostn_store.register_functions(&mut linker);
@@ -22,22 +35,18 @@ pub async fn process_http_request(
     let instance = match linker.instantiate_async(&mut wasm_store, &module).await {
         Ok(i) => i,
         Err(e) => {
-            return Ok(fastn_ds::wasm::Response::Http(
-                ft_sys_shared::Request::server_error(format!(
-                    "failed to instantiate wasm module: {e:?}"
-                )),
-            ));
+            return Ok(ft_sys_shared::Request::server_error(format!(
+                "failed to instantiate wasm module: {e:?}"
+            )));
         }
     };
 
     let main = match instance.get_typed_func::<(), ()>(&mut wasm_store, "main_ft") {
         Ok(f) => f,
         Err(e) => {
-            return Ok(fastn_ds::wasm::Response::Http(
-                ft_sys_shared::Request::server_error(format!(
-                    "no main_ft function found in wasm: {e:?}"
-                )),
-            ));
+            return Ok(ft_sys_shared::Request::server_error(format!(
+                "no main_ft function found in wasm: {e:?}"
+            )));
         }
     };
 
@@ -49,7 +58,7 @@ pub async fn process_http_request(
     }))
 }
 
-pub fn to_response(req: ft_sys_shared::Request) -> actix_web::HttpResponse {
+fn to_response(req: ft_sys_shared::Request) -> actix_web::HttpResponse {
     println!("{req:?}");
     let mut builder = actix_web::HttpResponse::build(req.method.parse().unwrap());
     let mut resp = builder.status(req.method.parse().unwrap()).body(req.body);

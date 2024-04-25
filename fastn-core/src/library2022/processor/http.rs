@@ -124,7 +124,7 @@ pub async fn process(
             .handle_wasm(url.to_string(), &req_config.request)
             .await
         {
-            Ok(fastn_ds::wasm::Response::Http(r)) => {
+            Ok(r) => {
                 let mut resp_cookies = vec![];
                 r.headers.into_iter().for_each(|(k, v)| {
                     if k.as_str().eq("set-cookie") {
@@ -133,9 +133,9 @@ pub async fn process(
                         }
                     }
                 });
-                Ok((Ok(r.body.into()), resp_cookies))
+                Ok((Ok(r.body().into()), resp_cookies))
             }
-            _ => todo!(),
+            Err(e) => Err(e.into()),
         }
     } else if method.as_str().eq("post") {
         fastn_core::http::http_post_with_cookie(

@@ -413,13 +413,7 @@ async fn handle_endpoints(
     );
 
     if url.starts_with("wasm+proxy://") {
-        return match config.ds.handle_wasm(url, req).await {
-            Ok(fastn_ds::wasm::Response::Http(r)) => Some(Ok(fastn_ds::wasm::to_response(r))),
-            Ok(fastn_ds::wasm::Response::Ftd(_f)) => {
-                todo!()
-            }
-            Err(e) => return Some(Err(e.into())),
-        };
+        return Some(config.ds.handle_wasm(url, req).await.map_err(|e| e.into()));
     }
 
     let response = match config
