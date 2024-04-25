@@ -90,6 +90,12 @@ impl fastn_ds::wasm::Store {
             fastn_ds::wasm::exports::ds::tejar_write
         );
 
+        fastn_ds::func2ret!(
+            linker,
+            "hostn_tejar_read",
+            fastn_ds::wasm::exports::ds::tejar_read
+        );
+
         // aws
         fastn_ds::func2ret!(
             linker,
