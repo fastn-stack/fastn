@@ -68,18 +68,6 @@ impl fastn_ds::wasm::Store {
         // document store related
         fastn_ds::func2ret!(
             linker,
-            "hostn_get_content",
-            fastn_ds::wasm::exports::ds::get_content
-        );
-
-        fastn_ds::func2ret!(
-            linker,
-            "hostn_save_file",
-            fastn_ds::wasm::exports::ds::save_file
-        );
-
-        fastn_ds::func2ret!(
-            linker,
             "hostn_get_all_document",
             fastn_ds::wasm::exports::ds::get_all_document
         );
