@@ -299,6 +299,25 @@ impl Request {
         //    code in here
         // 2. we use tokio-postgres and assume `fastn_user` table exists when FASTN_ENABLE_AUTH is
         //    set. ud() will also only work when FASTN_ENABLE_AUTH is set
+        let sqlite = _ds.sqlite.lock();
+        if let Some(sqlite) = &*sqlite {
+            let mut conn = sqlite.lock().await;
+            let user = conn
+                .query_one(
+                    "SELECT * FROM fastn_user WHERE id = $1",
+                    &[&self.cookies.get(SESSION_COOKIE_NAME)],
+                )
+                .await
+                .ok()?;
+            Some(ft_sys_shared::UserData {
+                id: user.get("id"),
+                email: user.get("email"),
+                name: user.get("name"),
+                role: user.get("role"),
+            })
+        } else {
+            None
+        }
         None
     }
 

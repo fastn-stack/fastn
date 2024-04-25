@@ -10,6 +10,9 @@ homepage.workspace = true
 
 [dependencies]
 deadpool.workspace = true
+actix-web.workspace = true
+async-lock.workspace = true
+rusqlite.workspace = true
 deadpool-postgres.workspace = true
 thiserror.workspace = true
 tokio-postgres.workspace = true

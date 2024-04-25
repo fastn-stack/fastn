@@ -8,16 +8,16 @@ CREATE TABLE IF NOT EXISTS fastn.fastn_user
     id       BIGSERIAL primary key,
     name     TEXT NULL,
     username TEXT NULL,
-    data     JSONB
+    data     JSONB -- this stores ft_sdk::auth::UserData
 );
 
 CREATE TABLE IF NOT EXISTS fastn.fastn_session
 (
     id   BIGSERIAL primary key,
-    uid  BIGINT,
-    data JSONB,
+    uid  BIGINT NULL,
+    data JSONB, -- this is the session data only
 
-    CONSTRAINT fk_tests_students
+    CONSTRAINT fk_fastn_user
         FOREIGN KEY (uid)
             REFERENCES fastn.fastn_user (id)
 );

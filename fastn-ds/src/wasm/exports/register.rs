@@ -3,7 +3,6 @@ impl fastn_ds::wasm::Store {
         // general utility functions
         fastn_ds::func2!(linker, "env_print", fastn_ds::wasm::exports::env::print);
         fastn_ds::func0ret!(linker, "env_now", fastn_ds::wasm::exports::env::now);
-        fastn_ds::func0ret!(linker, "env_ud", fastn_ds::wasm::exports::env::ud);
         fastn_ds::func2ret!(linker, "env_var", fastn_ds::wasm::exports::env::var);
         fastn_ds::func0ret!(linker, "env_random", fastn_ds::wasm::exports::env::random);
 

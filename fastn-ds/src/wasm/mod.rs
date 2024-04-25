@@ -8,12 +8,12 @@ pub use store::{Conn, FtdResponse, Response, Store};
 #[tracing::instrument(skip_all)]
 pub async fn process_http_request(
     req: ft_sys_shared::Request,
-    ud: Option<ft_sys_shared::UserData>,
     module: wasmtime::Module,
-    wasm_pg_pools: actix_web::web::Data<dashmap::DashMap<String, deadpool_postgres::Pool>>,
+    pg_pools: actix_web::web::Data<dashmap::DashMap<String, deadpool_postgres::Pool>>,
+    sqlite: actix_web::web::Data<async_lock::Mutex<Option<rusqlite::Connection>>>,
     db_url: String,
 ) -> wasmtime::Result<fastn_ds::wasm::Response> {
-    let hostn_store = fastn_ds::wasm::Store::new(req, ud, wasm_pg_pools, db_url);
+    let hostn_store = fastn_ds::wasm::Store::new(req, pg_pools, sqlite, db_url);
     let mut linker = wasmtime::Linker::new(module.engine());
     hostn_store.register_functions(&mut linker);
 

@@ -15,12 +15,12 @@ impl fastn_ds::wasm::Store {
             db_url
         };
 
-        let pool = match self.wasm_pg_pools.get(db_url) {
+        let pool = match self.pg_pools.get(db_url) {
             Some(pool) => pool,
             None => {
                 let pool = fastn_ds::create_pool(db_url).await?;
-                self.wasm_pg_pools.insert(db_url.to_string(), pool);
-                self.wasm_pg_pools.get(db_url).unwrap() // expect to be there
+                self.pg_pools.insert(db_url.to_string(), pool);
+                self.pg_pools.get(db_url).unwrap() // expect to be there
             }
         };
 

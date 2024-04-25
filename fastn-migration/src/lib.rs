@@ -7,10 +7,13 @@ pub enum MigrationError {
     Pg(#[from] tokio_postgres::Error),
 }
 
-pub async fn migrate(pool: &deadpool_postgres::Pool) -> Result<(), MigrationError> {
-    let client = pool.get().await?;
+pub async fn migrate(
+    pg_pool: &deadpool_postgres::Pool,
+    _sqlite: actix_web::web::Data<async_lock::Mutex<Option<rusqlite::Connection>>>,
+) -> Result<(), MigrationError> {
+    let client = pg_pool.get().await?;
     client
-        .batch_execute(include_str!("../user-core.sql"))
+        .batch_execute(include_str!("../user-core-pg.sql"))
         .await?;
     // TODO: get list of migrations from all dependencies and see if any of them needs to
     //       be applied

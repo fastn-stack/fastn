@@ -1736,8 +1736,11 @@ dependencies = [
 name = "fastn-migration"
 version = "0.1.0"
 dependencies = [
+ "actix-web",
+ "async-lock",
  "deadpool",
  "deadpool-postgres",
+ "rusqlite",
  "thiserror",
  "tokio-postgres",
 ]

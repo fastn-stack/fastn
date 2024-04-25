@@ -13,6 +13,7 @@ pub use create_pool::create_pool;
 pub struct DocumentStore {
     pub wasm_modules: dashmap::DashMap<String, wasmtime::Module>,
     pub pg_pools: actix_web::web::Data<dashmap::DashMap<String, deadpool_postgres::Pool>>,
+    pub sqlite: actix_web::web::Data<async_lock::Mutex<Option<rusqlite::Connection>>>,
     root: Path,
 }
 
@@ -210,7 +211,7 @@ impl DocumentStore {
 
         let pool = fastn_ds::create_pool(db_url.as_str()).await?;
 
-        fastn_migration::migrate(&pool).await?;
+        fastn_migration::migrate(&pool, self.sqlite.clone()).await?;
 
         self.pg_pools.insert(db_url.to_string(), pool.clone());
         Ok(pool)
@@ -219,10 +220,12 @@ impl DocumentStore {
     pub fn new<T: AsRef<camino::Utf8Path>>(
         root: T,
         pg_pools: actix_web::web::Data<dashmap::DashMap<String, deadpool_postgres::Pool>>,
+        sqlite: actix_web::web::Data<async_lock::Mutex<Option<rusqlite::Connection>>>,
     ) -> Self {
         Self {
             wasm_modules: dashmap::DashMap::new(),
             pg_pools,
+            sqlite,
             root: Path::new(root.as_ref().as_str()),
         }
     }
@@ -441,7 +444,6 @@ impl DocumentStore {
                 headers,
                 body: req.body().to_vec(),
             },
-            req.ud(self).await,
             module,
             self.pg_pools.clone(),
             self.env("DATABASE_URL").await?,
