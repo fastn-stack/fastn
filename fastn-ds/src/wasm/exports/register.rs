@@ -68,12 +68,6 @@ impl fastn_ds::wasm::Store {
         // document store related
         fastn_ds::func2ret!(
             linker,
-            "hostn_get_all_document",
-            fastn_ds::wasm::exports::ds::get_all_document
-        );
-
-        fastn_ds::func2ret!(
-            linker,
             "hostn_tejar_write",
             fastn_ds::wasm::exports::ds::tejar_write
         );
