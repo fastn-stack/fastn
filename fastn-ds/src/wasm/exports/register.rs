@@ -78,12 +78,6 @@ impl fastn_ds::wasm::Store {
             fastn_ds::wasm::exports::ds::tejar_read
         );
 
-        fastn_ds::func2ret!(
-            linker,
-            "hostn_sample_content",
-            fastn_ds::wasm::exports::ds::sample_content
-        );
-
         // aws
         fastn_ds::func2ret!(
             linker,
