@@ -9,9 +9,10 @@ pub use batch_execute::batch_execute;
 
 mod execute;
 pub use execute::execute;
+use fastn_ds::wasm::exports::sqlite::query::Value;
 
 #[derive(serde::Serialize, serde::Deserialize, Debug)]
 struct Query {
     sql: String,
-    binds: Vec<ft_sys_shared::SqliteRawValue>,
+    binds: Vec<Value>,
 }
