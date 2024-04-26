@@ -432,7 +432,8 @@ impl DocumentStore {
         // we create the default pool, so we can handle proper migration etc here, else the pool
         // would be constructed from inside wasm connect call, and we will not have enough data
         // there to do migration.
-        self.default_pool().await?;
+        // Todo: Add support for this later
+        // self.default_pool().await?;
 
         Ok(fastn_ds::wasm::process_http_request(
             ft_sys_shared::Request {
