@@ -407,10 +407,9 @@ const fastn = (function (fastn) {
 
                 let fields = {};
                 for (let key in value.#fields) {
-                    fields[key] = value.#fields[key];
+                    this.#fields[key].set(value.#fields[key].get());
                 }
 
-                this.#fields = fields;
             } else if (this.#fields[key] === undefined) {
                 this.#fields[key] = fastn.mutable(null);
                 this.#fields[key].setWithoutUpdate(value);

@@ -149,6 +149,15 @@ let fastn_utils = {
             return obj;
         }
     },
+    flattenMutable(value) {
+        if (!(value instanceof fastn.mutableClass))
+            return value;
+
+        if (value.get() instanceof fastn.mutableClass)
+            return this.flattenMutable(value.get());
+
+        return value;
+    },
     getFlattenStaticValue(obj) {
         let staticValue = fastn_utils.getStaticValue(obj);
         if (Array.isArray(staticValue)) {
