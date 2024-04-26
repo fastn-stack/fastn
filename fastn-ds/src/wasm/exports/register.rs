@@ -41,6 +41,12 @@ impl fastn_ds::wasm::Store {
             fastn_ds::wasm::exports::pg::batch_execute
         );
 
+        fastn_ds::func2ret!(
+            linker,
+            "sqlite_batch_execute",
+            fastn_ds::wasm::exports::sqlite::batch_execute
+        );
+
         // request related stuff
         fastn_ds::func0ret!(
             linker,
