@@ -41,4 +41,4 @@ serde.workspace = true
 serde_json.workspace = true
 dashmap.workspace = true
 wasmtime.workspace = true
-ft-sys-shared = { workspace = true, features = ["sqlite"] }
+ft-sys-shared.workspace = true

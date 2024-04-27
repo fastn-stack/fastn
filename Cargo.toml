@@ -110,7 +110,7 @@ ftd-p1 = { path = "ftd-p1" }
 ftd-tc = { path = "ftd-tc" }
 ftd-ast = { path = "ftd-ast" }
 fastn-js = { path = "fastn-js" }
-ft-sys-shared = { path = "../../fifthtry/ft-sdk/ft-sys-shared", version = "0.1" }
+ft-sys-shared = { path = "../ft-sdk/ft-sys-shared", version = "0.1.1-alpha.1" }
 futures = "0.3"
 futures-util = { version = "0.3", default-features = false, features = ["std"] }
 futures-core = "0.3"
