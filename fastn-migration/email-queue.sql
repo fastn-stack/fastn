@@ -1,7 +1,4 @@
--- all table managed by fastn are stored in fastn schema
-CREATE SCHEMA IF NOT EXISTS fastn;
-
-CREATE TABLE IF NOT EXISTS fastn.fastn_email_queue
+CREATE TABLE IF NOT EXISTS fastn_email_queue
 (
     id          BIGSERIAL PRIMARY KEY,
     to_email    TEXT NOT NULL,
