@@ -1880,11 +1880,10 @@ dependencies = [
 
 [[package]]
 name = "ft-sys-shared"
-version = "0.1.1"
+version = "0.1.1-alpha.1"
 dependencies = [
  "bytes",
  "http 1.1.0",
- "rusqlite",
  "serde",
  "thiserror",
 ]
