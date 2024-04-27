@@ -67,7 +67,7 @@ accept-language = "3"
 actix-web = "4"
 actix-http = "3"
 antidote = "1"
-clift = { path = "clift" }
+clift.path = "clift"
 dirs = "5"
 native-tls = "0.2"
 deadpool-postgres = "0.12"
@@ -93,22 +93,22 @@ edit = "0.1"
 env_logger = "0.11"
 enum-iterator = "0.6"
 enum-iterator-derive = "0.6"
-fastn-ds = { path = "fastn-ds" }
-fastn-migration = { path = "fastn-migration" }
-fastn-update = { path = "fastn-update" }
-fastn-core = { path = "fastn-core" }
-fastn-issues = { path = "fastn-issues" }
-fastn-package = { path = "fastn-package" }
-fastn-runtime = { path = "fastn-runtime" }
-fastn-wasm = { path = "fastn-wasm" }
-fastn-grammar = { path = "fastn-grammar" }
-fastn-expr = { path = "fastn-expr" }
+fastn-ds.path = "fastn-ds"
+fastn-migration.path = "fastn-migration"
+fastn-update.path = "fastn-update"
+fastn-core.path = "fastn-core"
+fastn-issues.path = "fastn-issues"
+fastn-package.path = "fastn-package"
+fastn-runtime.path = "fastn-runtime"
+fastn-wasm.path = "fastn-wasm"
+fastn-grammar.path = "fastn-grammar"
+fastn-expr.path = "fastn-expr"
 fluent = "0.16"
 format_num = "0.1"
-ftd = { path = "ftd" }
-ftd-p1 = { path = "ftd-p1" }
-ftd-tc = { path = "ftd-tc" }
-ftd-ast = { path = "ftd-ast" }
+ftd.path = "ftd"
+ftd-p1.path = "ftd-p1"
+ftd-tc.path = "ftd-tc"
+ftd-ast.path = "ftd-ast"
 fastn-js.path = "fastn-js"
 ft-sys-shared = "0.1.1-alpha.1"
 futures = "0.3"
