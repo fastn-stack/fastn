@@ -2,7 +2,6 @@ extern crate self as fastn_ds;
 
 mod create_pool;
 pub mod http;
-pub mod mail;
 pub mod reqwest_util;
 mod utils;
 pub mod wasm;
@@ -382,33 +381,6 @@ impl DocumentStore {
 
     pub async fn env(&self, key: &str) -> Result<String, EnvironmentError> {
         std::env::var(key).map_err(|_| EnvironmentError::NotSet(key.to_string()))
-    }
-    /// Send an email.
-    /// to: (name, email)
-    pub async fn send_email(
-        &self,
-        to: (&str, &str),
-        subject: &str,
-        body_html: String,
-        mkind: fastn_ds::mail::EmailKind,
-    ) -> Result<(), fastn_ds::mail::MailError> {
-        let enable_email = self
-            .env_bool("FASTN_ENABLE_EMAIL", true)
-            .await
-            .unwrap_or(true);
-
-        let (name, email) = to;
-
-        tracing::info!("sending mail of {mkind}");
-
-        fastn_ds::mail::Mailer::send_raw(
-            enable_email,
-            self,
-            format!("{} <{}>", name, email).parse()?,
-            subject,
-            body_html,
-        )
-        .await
     }
 
     pub async fn handle_wasm<T>(
