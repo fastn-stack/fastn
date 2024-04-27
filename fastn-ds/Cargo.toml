@@ -31,7 +31,6 @@ rand.workspace = true
 dirs.workspace = true
 tracing.workspace = true
 rusqlite.workspace = true
-lettre.workspace = true
 reqwest.workspace = true
 once_cell.workspace = true
 url.workspace = true
