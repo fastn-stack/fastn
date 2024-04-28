@@ -179,12 +179,8 @@ pub static WASM_ENGINE: once_cell::sync::Lazy<wasmtime::Engine> =
 pub enum CreatePoolError {
     #[error("pool error {0}")]
     PoolError(#[from] deadpool_postgres::CreatePoolError),
-
     #[error("env error {0}")]
     EnvError(#[from] EnvironmentError),
-
-    #[error("migration error {0}")]
-    Migration(#[from] fastn_migration::MigrationError),
 }
 
 /// wasmc compiles path.wasm to path.wasmc
@@ -197,7 +193,7 @@ pub async fn wasmc(path: &str) -> wasmtime::Result<()> {
 }
 
 impl DocumentStore {
-    pub async fn default_pool(&self) -> Result<deadpool_postgres::Pool, CreatePoolError> {
+    pub async fn default_pg_pool(&self) -> Result<deadpool_postgres::Pool, CreatePoolError> {
         let db_url = match self.env("FASTN_DB_URL").await {
             Ok(v) => v,
             Err(_) => self.env("DATABASE_URL").await?,
@@ -208,8 +204,6 @@ impl DocumentStore {
         }
 
         let pool = fastn_ds::create_pool(db_url.as_str()).await?;
-
-        fastn_migration::migrate(&pool).await?;
 
         self.pg_pools.insert(db_url.to_string(), pool.clone());
         Ok(pool)
@@ -400,12 +394,6 @@ impl DocumentStore {
         let wasm_file = wasm_url.strip_prefix("wasm+proxy://").unwrap();
         let wasm_file = wasm_file.split_once(".wasm").unwrap().0;
         let module = self.get_wasm(format!("{wasm_file}.wasm").as_str()).await?;
-
-        // we create the default pool, so we can handle proper migration etc here, else the pool
-        // would be constructed from inside wasm connect call, and we will not have enough data
-        // there to do migration.
-        // Todo: Add support for this later
-        // self.default_pool().await?;
 
         Ok(fastn_ds::wasm::process_http_request(
             ft_sys_shared::Request {

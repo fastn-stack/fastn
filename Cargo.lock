@@ -1632,7 +1632,6 @@ dependencies = [
  "deadpool",
  "deadpool-postgres",
  "dirs",
- "fastn-migration",
  "ft-sys-shared",
  "ftd 0.3.0",
  "futures-util",
@@ -1703,16 +1702,6 @@ dependencies = [
  "enum-iterator-derive",
  "serde",
  "thiserror",
-]
-
-[[package]]
-name = "fastn-migration"
-version = "0.1.0"
-dependencies = [
- "deadpool",
- "deadpool-postgres",
- "thiserror",
- "tokio-postgres",
 ]
 
 [[package]]

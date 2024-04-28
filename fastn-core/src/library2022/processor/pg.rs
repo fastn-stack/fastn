@@ -242,7 +242,7 @@ async fn execute_query(
     req_config: &fastn_core::RequestConfig,
 ) -> fastn_core::Result<Vec<Vec<serde_json::Value>>> {
     let (query, query_args) = super::sql::extract_arguments(query)?;
-    let pool = req_config.config.ds.default_pool().await?;
+    let pool = req_config.config.ds.default_pg_pool().await?;
     let client = pool.get().await?;
 
     let stmt = client.prepare_cached(query.as_str()).await.unwrap();

@@ -9,7 +9,6 @@ members = [
     "fastn-issues",
     "fastn-js",
     "fastn-lang",
-    "fastn-migration",
     "fastn-package",
     "fastn-update",
     "foo",
