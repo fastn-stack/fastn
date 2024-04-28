@@ -1,4 +1,5 @@
 #![allow(unused)]
+#![deny(unused_crate_dependencies)]
 
 extern crate self as ftd_tc;
 

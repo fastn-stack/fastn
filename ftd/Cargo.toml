@@ -42,7 +42,6 @@ tracing.workspace = true
 fastn-js.workspace = true
 fastn-grammar.workspace = true
 indexmap.workspace = true
-colored.workspace = true
 
 
 [dev-dependencies]

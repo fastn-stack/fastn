@@ -1,3 +1,5 @@
+#![deny(unused_crate_dependencies)]
+
 pub extern crate self as fastn_expr;
 
 pub mod interpolator;

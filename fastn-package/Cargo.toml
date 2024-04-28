@@ -9,11 +9,12 @@ homepage.workspace = true
 
 [dependencies]
 async-trait.workspace = true
-camino.workspace = true
 fastn-issues.workspace = true
 ftd.workspace = true
 ftd-ast.workspace = true
-futures.workspace = true
 rusqlite.workspace = true
 serde.workspace = true
 tokio.workspace = true
+
+[dev-dependencies]
+futures.workspace = true

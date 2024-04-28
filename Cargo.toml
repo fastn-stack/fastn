@@ -123,7 +123,6 @@ bytes = "1"
 log = "0.4"
 magic-crypt = { version = "3", default-features = false }
 mime_guess = "2"
-oauth2 = { version = "4" }
 once_cell = "1"
 pretty = "0.12"
 pretty_assertions = "1"

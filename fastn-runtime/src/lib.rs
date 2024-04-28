@@ -1,4 +1,5 @@
 #![allow(dead_code)]
+#![deny(unused_crate_dependencies)]
 
 extern crate self as fastn_runtime;
 
@@ -38,9 +39,9 @@ mod web;
 pub use control::ControlFlow;
 #[cfg(not(feature = "browser"))]
 pub use document::Document;
-pub use dom::{NodeKey, DomT, node_key_to_id};
 #[cfg(not(feature = "browser"))]
 pub use dom::Dom;
+pub use dom::{node_key_to_id, DomT, NodeKey};
 pub use element::{CommonStyle, Container, Dimension, Element, ElementKind, Image, Text};
 pub use event::{DomEventKind, ExternalEvent, MouseState};
 pub use memory::heap::{Attachment, Heap, HeapData, HeapValue};

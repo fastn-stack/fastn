@@ -1,3 +1,5 @@
+#![deny(unused_crate_dependencies)]
+
 extern crate self as clift;
 
 pub mod commands;

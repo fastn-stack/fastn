@@ -13,8 +13,8 @@ thiserror.workspace = true
 ftd-p1.workspace = true
 itertools.workspace = true
 serde.workspace = true
-serde_json.workspace = true
 colored.workspace = true
 
 [dev-dependencies]
+serde_json.workspace = true
 pretty_assertions.workspace = true

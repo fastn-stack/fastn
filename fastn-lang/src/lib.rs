@@ -1,3 +1,5 @@
+#![deny(unused_crate_dependencies)]
+
 extern crate self as fastn_lang;
 
 pub mod error;

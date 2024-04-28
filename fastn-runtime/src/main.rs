@@ -1,3 +1,5 @@
+#![deny(unused_crate_dependencies)]
+
 extern crate self as fastn_runtime;
 
 #[cfg(feature = "browser")]

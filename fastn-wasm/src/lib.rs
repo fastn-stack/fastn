@@ -1,3 +1,5 @@
+#![deny(unused_crate_dependencies)]
+
 extern crate core;
 extern crate self as fastn_wasm;
 

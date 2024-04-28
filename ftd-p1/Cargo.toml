@@ -9,9 +9,7 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
-syntect.workspace = true
 serde.workspace = true
-serde_json.workspace = true
 thiserror.workspace = true
 itertools.workspace = true
 
@@ -19,3 +17,4 @@ itertools.workspace = true
 diffy.workspace = true
 pretty_assertions.workspace = true
 indoc.workspace = true
+serde_json.workspace = true

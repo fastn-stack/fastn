@@ -1,3 +1,5 @@
+#![deny(unused_crate_dependencies)]
+
 extern crate self as ftd_p1;
 
 pub type Map<T> = std::collections::BTreeMap<String, T>;

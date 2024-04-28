@@ -1,3 +1,6 @@
+#![warn(unused_extern_crates)]
+#![deny(unused_crate_dependencies)]
+
 extern crate self as fastn_ds;
 
 mod create_pool;

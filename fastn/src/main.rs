@@ -1,3 +1,5 @@
+#![deny(unused_crate_dependencies)]
+
 pub fn main() {
     fastn_observer::observe();
 

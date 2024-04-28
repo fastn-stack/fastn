@@ -18,7 +18,6 @@ itertools.workspace = true
 indoc.workspace = true
 fastn-grammar.workspace = true
 prettify-js.workspace = true
-camino.workspace = true
 deno_core = { workspace = true, optional = true }
 thiserror.workspace = true
 
@@ -29,4 +28,4 @@ quick-js = { workspace = true, optional = true }
 rquickjs = { workspace = true, optional = true }
 
 [dev-dependencies]
-indoc.workspace = true
+#indoc.workspace = true

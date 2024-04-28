@@ -1,3 +1,5 @@
+#![deny(unused_crate_dependencies)]
+
 use snafu::prelude::*;
 
 extern crate self as fastn_update;

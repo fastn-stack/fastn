@@ -11,7 +11,6 @@ homepage.workspace = true
 [dependencies]
 tokio.workspace = true
 thiserror.workspace = true
-ftd.workspace = true
 actix-web.workspace = true
 deadpool-postgres.workspace = true
 deadpool.workspace = true
@@ -33,7 +32,7 @@ rusqlite.workspace = true
 reqwest.workspace = true
 once_cell.workspace = true
 url.workspace = true
-regex.workspace = true
+#regex.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 dashmap.workspace = true
