@@ -16,6 +16,7 @@ impl fastn_ds::wasm::Store {
         let conn = if let Some(ref mut conn) = self.sqlite {
             conn
         } else {
+            eprintln!("sqlite connection not found");
             todo!()
         };
 
@@ -23,7 +24,10 @@ impl fastn_ds::wasm::Store {
 
         Ok(match conn.execute_batch(q.as_str()) {
             Ok(()) => Ok(()),
-            Err(_e) => todo!(),
+            Err(e) => {
+                eprintln!("sqlite batch execute error: {e}");
+                todo!()
+            }
         })
     }
 }

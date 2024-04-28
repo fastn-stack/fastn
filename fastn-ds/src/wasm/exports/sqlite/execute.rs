@@ -17,6 +17,7 @@ impl fastn_ds::wasm::Store {
         let conn = if let Some(ref mut conn) = self.sqlite {
             conn
         } else {
+            eprintln!("sqlite connection not found");
             todo!()
         };
 
@@ -24,7 +25,10 @@ impl fastn_ds::wasm::Store {
         Ok(
             match conn.execute(q.sql.as_str(), rusqlite::params_from_iter(q.binds)) {
                 Ok(u) => Ok(u),
-                Err(_) => todo!(),
+                Err(e) => {
+                    eprintln!("sqlite execute error: {e}");
+                    todo!()
+                }
             },
         )
     }
