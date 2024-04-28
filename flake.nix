@@ -4,7 +4,6 @@
 
     # TODO: use nixpkgs/unstable when this is merged:
     # https://github.com/NixOS/nixpkgs/pull/282798
-    nixpkgs.url = "github:junjihashimoto/nixpkgs/feature/rust-dup";
   };
 
   outputs = { self, flake-utils, nixpkgs }:

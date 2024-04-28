@@ -20,18 +20,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1705901790,
-        "narHash": "sha256-gZzL+E91/DJyvF+OxRNbgzAGTLkcm9CxIgFZyeDXCBU=",
-        "owner": "junjihashimoto",
+        "lastModified": 1713442664,
+        "narHash": "sha256-LoExypse3c/uun/39u4bPTN4wejIF7hNsdITZO41qTw=",
+        "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "8c2abbaad6456d7a3c9752bfc2caf4d982427100",
+        "rev": "d764f230634fa4f86dc8d01c6af9619c7cc5d225",
         "type": "github"
       },
       "original": {
-        "owner": "junjihashimoto",
-        "ref": "feature/rust-dup",
-        "repo": "nixpkgs",
-        "type": "github"
+        "id": "nixpkgs",
+        "type": "indirect"
       }
     },
     "root": {
