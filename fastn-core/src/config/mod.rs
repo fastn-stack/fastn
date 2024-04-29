@@ -51,7 +51,7 @@ pub struct Config {
     pub package: fastn_core::Package,
     pub packages_root: fastn_ds::Path,
     pub original_directory: fastn_ds::Path,
-    pub all_packages: dashmap::DashMap<String, fastn_core::Package>,
+    pub all_packages: scc::HashMap<String, fastn_core::Package>,
     pub global_ids: std::collections::HashMap<String, String>,
     pub ftd_edition: FTDEdition,
     pub ftd_external_js: Vec<String>,
@@ -1203,7 +1203,7 @@ impl Config {
         }
 
         if let Some(package) = { self.all_packages.get(package.name.as_str()) } {
-            return Ok(package.clone());
+            return Ok(package.get().clone());
         }
 
         let mut package = package
@@ -1260,7 +1260,7 @@ impl Config {
         default: Option<fastn_core::Package>,
     ) -> fastn_core::Package {
         if let Some(package) = self.all_packages.get(package_name) {
-            package.value().to_owned()
+            package.get().to_owned()
         } else if let Some(package) = default {
             package.to_owned()
         } else {
@@ -1291,8 +1291,8 @@ async fn get_all_packages(
     package: &mut fastn_core::Package,
     _package_root: &fastn_ds::Path,
     _ds: &fastn_ds::DocumentStore,
-) -> fastn_core::Result<dashmap::DashMap<String, fastn_core::Package>> {
-    let all_packages = dashmap::DashMap::new();
+) -> fastn_core::Result<scc::HashMap<String, fastn_core::Package>> {
+    let all_packages = scc::HashMap::new();
     all_packages.insert(package.name.to_string(), package.to_owned());
     Ok(all_packages)
 }

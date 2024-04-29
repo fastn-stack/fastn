@@ -45,7 +45,7 @@ impl Library2022 {
         self.config
             .all_packages
             .get(current_package_name)
-            .map(|p| p.to_owned())
+            .map(|p| p.get().to_owned())
             .ok_or_else(|| ftd_p1::Error::ParseError {
                 message: format!("Can't find current package: {}", current_package_name),
                 doc_id: "".to_string(),
@@ -210,7 +210,7 @@ impl Library2022 {
             module.trim_matches('/').to_string(),
             package.name.to_string(),
         );
-        if self.config.all_packages.contains_key(package.name.as_str()) {
+        if self.config.all_packages.contains(package.name.as_str()) {
             return Ok(());
         }
 
