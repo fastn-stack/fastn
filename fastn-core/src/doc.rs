@@ -314,7 +314,7 @@ pub async fn resolve_foreign_variable2022(
 
         // remove :type=module when used with js files
         let mut files = files
-            .rsplit_once(":")
+            .rsplit_once(':')
             .map_or(files.to_string(), |(f, _)| f.to_string());
 
         let light = {
