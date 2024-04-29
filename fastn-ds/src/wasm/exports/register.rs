@@ -48,6 +48,12 @@ impl fastn_ds::wasm::Store {
             fastn_ds::wasm::exports::http::get_request
         );
 
+        fastn_ds::func2ret!(
+            linker,
+            "http_send_request",
+            fastn_ds::wasm::exports::http::send_request
+        );
+
         fastn_ds::func2!(
             linker,
             "http_send_response",
@@ -62,26 +68,21 @@ impl fastn_ds::wasm::Store {
         // document store related
         fastn_ds::func2ret!(
             linker,
-            "hostn_get_content",
-            fastn_ds::wasm::exports::ds::get_content
+            "hostn_tejar_write",
+            fastn_ds::wasm::exports::ds::tejar_write
         );
 
         fastn_ds::func2ret!(
             linker,
-            "hostn_delete_file",
-            fastn_ds::wasm::exports::ds::delete_file
+            "hostn_tejar_read",
+            fastn_ds::wasm::exports::ds::tejar_read
         );
 
+        // aws
         fastn_ds::func2ret!(
             linker,
-            "hostn_create_file",
-            fastn_ds::wasm::exports::ds::create_file
-        );
-
-        fastn_ds::func2ret!(
-            linker,
-            "hostn_save_file",
-            fastn_ds::wasm::exports::ds::save_file
+            "hostn_aws_pre_signed_request",
+            fastn_ds::wasm::exports::aws::pre_signed_request
         );
     }
 }
