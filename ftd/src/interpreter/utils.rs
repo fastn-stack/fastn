@@ -8,7 +8,7 @@ pub fn resolve_name(name: &str, doc_name: &str, aliases: &ftd::Map<String>) -> S
         return name;
     }
 
-    let doc_name = doc_name.trim_end_matches("/");
+    let doc_name = doc_name.trim_end_matches('/');
     match ftd::interpreter::utils::split_module(name.as_str()) {
         (Some(m), v, None) => match aliases.get(m) {
             Some(m) => format!("{}#{}", m, v),
