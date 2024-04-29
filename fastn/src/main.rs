@@ -56,8 +56,8 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return Ok(());
     }
 
-    let pg_pools: actix_web::web::Data<dashmap::DashMap<String, deadpool_postgres::Pool>> =
-        actix_web::web::Data::new(dashmap::DashMap::new());
+    let pg_pools: actix_web::web::Data<scc::HashMap<String, deadpool_postgres::Pool>> =
+        actix_web::web::Data::new(scc::HashMap::new());
 
     let current_dir: camino::Utf8PathBuf = std::env::current_dir()?.canonicalize()?.try_into()?;
     let ds = fastn_ds::DocumentStore::new(current_dir, pg_pools);

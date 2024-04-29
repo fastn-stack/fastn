@@ -14,7 +14,7 @@ pub use create_pool::create_pool;
 #[derive(Debug, Clone)]
 pub struct DocumentStore {
     pub wasm_modules: scc::HashMap<String, wasmtime::Module>,
-    pub pg_pools: actix_web::web::Data<dashmap::DashMap<String, deadpool_postgres::Pool>>,
+    pub pg_pools: actix_web::web::Data<scc::HashMap<String, deadpool_postgres::Pool>>,
     root: Path,
 }
 
@@ -203,18 +203,25 @@ impl DocumentStore {
         };
 
         if let Some(p) = self.pg_pools.get(db_url.as_str()) {
-            return Ok(p.clone());
+            return Ok(p.get().clone());
         }
 
         let pool = fastn_ds::create_pool(db_url.as_str()).await?;
 
-        self.pg_pools.insert(db_url.to_string(), pool.clone());
+        if self
+            .pg_pools
+            .insert(db_url.to_string(), pool.clone())
+            .is_err()
+        {
+            tracing::info!("failed to insert pool into pg_pools");
+        }
+
         Ok(pool)
     }
 
     pub fn new<T: AsRef<camino::Utf8Path>>(
         root: T,
-        pg_pools: actix_web::web::Data<dashmap::DashMap<String, deadpool_postgres::Pool>>,
+        pg_pools: actix_web::web::Data<scc::HashMap<String, deadpool_postgres::Pool>>,
     ) -> Self {
         Self {
             wasm_modules: Default::default(),

@@ -10,7 +10,7 @@ pub async fn process_http_request(
     req: ft_sys_shared::Request,
     ud: Option<ft_sys_shared::UserData>,
     module: wasmtime::Module,
-    wasm_pg_pools: actix_web::web::Data<dashmap::DashMap<String, deadpool_postgres::Pool>>,
+    wasm_pg_pools: actix_web::web::Data<scc::HashMap<String, deadpool_postgres::Pool>>,
     db_url: String,
 ) -> wasmtime::Result<fastn_ds::wasm::Response> {
     let hostn_store = fastn_ds::wasm::Store::new(req, ud, wasm_pg_pools, db_url);

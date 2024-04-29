@@ -26,6 +26,6 @@ dotenvy.workspace = true
 fastn-ds.workspace = true
 camino.workspace = true
 actix-web.workspace = true
-dashmap.workspace = true
+scc.workspace = true
 deadpool-postgres.workspace = true
 
