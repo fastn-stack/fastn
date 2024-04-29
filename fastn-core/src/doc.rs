@@ -189,6 +189,7 @@ pub async fn resolve_import_2022(
                         .all_packages
                         .get(package.name.as_str())
                         .unwrap()
+                        .get()
                         .get_font_ftd()
                         .unwrap_or_default();
                     path = format!("{name}/-/fonts.ftd", name = package.name);

@@ -16,6 +16,7 @@ actix-web.workspace = true
 antidote.workspace = true
 async-lock.workspace = true
 async-recursion.workspace = true
+scc.workspace = true
 camino.workspace = true
 chrono.workspace = true
 async-trait = "0.1"
