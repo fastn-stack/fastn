@@ -13,7 +13,7 @@ pub use create_pool::create_pool;
 
 #[derive(Debug, Clone)]
 pub struct DocumentStore {
-    pub wasm_modules: dashmap::DashMap<String, wasmtime::Module>,
+    pub wasm_modules: scc::HashMap<String, wasmtime::Module>,
     pub pg_pools: actix_web::web::Data<dashmap::DashMap<String, deadpool_postgres::Pool>>,
     root: Path,
 }
@@ -217,7 +217,7 @@ impl DocumentStore {
         pg_pools: actix_web::web::Data<dashmap::DashMap<String, deadpool_postgres::Pool>>,
     ) -> Self {
         Self {
-            wasm_modules: dashmap::DashMap::new(),
+            wasm_modules: Default::default(),
             pg_pools,
             root: Path::new(root.as_ref().as_str()),
         }
@@ -228,7 +228,7 @@ impl DocumentStore {
         // TODO: implement wasm module on disc caching, so modules load faster across
         //       cache purge
         match self.wasm_modules.get(path) {
-            Some(module) => Ok(module.clone()),
+            Some(module) => Ok(module.get().clone()),
             None => {
                 let wasmc_path = fastn_ds::Path::new(format!("{path}c").as_str());
                 let module = match unsafe {
@@ -246,9 +246,15 @@ impl DocumentStore {
                 };
 
                 // we are only storing compiled module if we are not in debug mode
-                if !self.env_bool("FASTN_DEBUG", false).await? {
-                    self.wasm_modules.insert(path.to_string(), module.clone());
+                if !self.env_bool("FASTN_DEBUG", false).await?
+                    && self
+                        .wasm_modules
+                        .insert(path.to_string(), module.clone())
+                        .is_err()
+                {
+                    tracing::info!("could not insert module into cache");
                 }
+
                 Ok(module)
             }
         }
