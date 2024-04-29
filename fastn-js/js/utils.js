@@ -150,8 +150,7 @@ let fastn_utils = {
         }
     },
     flattenMutable(value) {
-        if (!(value instanceof fastn.mutableClass))
-            return value;
+        if (!(value instanceof fastn.mutableClass)) return value;
 
         if (value.get() instanceof fastn.mutableClass)
             return this.flattenMutable(value.get());
