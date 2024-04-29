@@ -21,36 +21,7 @@ pub struct Cursor {
     rows: Vec<Row>,
 }
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
-pub enum Value {
-    Null,
-    Integer(i64),
-    Real(f64),
-    Text(String),
-    Blob(Vec<u8>),
-}
-
-impl rusqlite::types::ToSql for Value {
-    fn to_sql(&self) -> rusqlite::Result<rusqlite::types::ToSqlOutput> {
-        match self {
-            Value::Null => Ok(rusqlite::types::ToSqlOutput::Owned(
-                rusqlite::types::Value::Null,
-            )),
-            Value::Integer(i) => Ok(rusqlite::types::ToSqlOutput::Owned(
-                rusqlite::types::Value::Integer(*i),
-            )),
-            Value::Real(f) => Ok(rusqlite::types::ToSqlOutput::Owned(
-                rusqlite::types::Value::Real(*f),
-            )),
-            Value::Text(s) => Ok(rusqlite::types::ToSqlOutput::Owned(
-                rusqlite::types::Value::Text(s.clone()),
-            )),
-            Value::Blob(b) => Ok(rusqlite::types::ToSqlOutput::Owned(
-                rusqlite::types::Value::Blob(b.clone()),
-            )),
-        }
-    }
-}
+pub type Value = ft_sys_shared::SqliteRawValue;
 
 #[derive(Debug, Hash, PartialEq, Eq, Clone, Copy, serde::Deserialize, serde::Serialize)]
 pub enum SqliteType {
