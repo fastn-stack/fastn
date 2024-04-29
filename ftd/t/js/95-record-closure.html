@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    
+    <meta content="fastn" name="generator">
+    
+    
+    <script>
+        let __fastn_package_name__ = "foo";
+    </script>
+
+    <script src="fastn-js.js"></script>
+    
+
+    <style>
+       
+    </style>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __w-3 __p-4 __g-5"><div data-id="4" class="__rl-6 __c-7">Default</div><comment data-id="5"></comment><div data-id="6" class="__rl-8 __cur-9">Change name to XYZ (by header reference)</div><div data-id="7" class="__rl-10 __cur-11">Change name to Lorem (by header reference)</div><div data-id="8" class="__rl-12 __cur-13">Change name to Anonymous (by global)</div><div data-id="9" class="__rl-14 __cur-15">Set age</div></div></div></body><style id="styles">
+    .__w-1 { width: 100%; }
+	.__h-2 { height: 100%; }
+	.__w-3 { width: 100%; }
+	.__p-4 { padding: 10px; }
+	.__g-5 { gap: 5px; }
+	.__rl-6 {  font-family: sans-serif; font-size: 24px; font-weight: 400; line-height: 31px; }
+	body.mobile .__rl-6 {  font-family: sans-serif; font-size: 22px; font-weight: 400; line-height: 29px; }
+	.__c-7 { color: red !important; }
+	.__rl-8 {  font-family: sans-serif; font-size: 18px; font-weight: 400; line-height: 30px; }
+	body.mobile .__rl-8 {  font-family: sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__cur-9 { cursor: pointer; }
+	.__rl-10 {  font-family: sans-serif; font-size: 18px; font-weight: 400; line-height: 30px; }
+	body.mobile .__rl-10 {  font-family: sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__cur-11 { cursor: pointer; }
+	.__rl-12 {  font-family: sans-serif; font-size: 18px; font-weight: 400; line-height: 30px; }
+	body.mobile .__rl-12 {  font-family: sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__cur-13 { cursor: pointer; }
+	.__rl-14 {  font-family: sans-serif; font-size: 18px; font-weight: 400; line-height: 30px; }
+	body.mobile .__rl-14 {  font-family: sans-serif; font-size: 16px; font-weight: 400; line-height: 24px; }
+	.__cur-15 { cursor: pointer; }
+    </style>
+<script>
+    (function() {
+        let main = function (parent) {
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let parenti0 = foo__show_person(parent, inherited, {
+      person: fastn.wrapMutable(global.foo__p)
+    });
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["main"] = main;
+fastn_utils.createNestedObject(global, "foo__p", function () {
+  let record = fastn.recordInstance({
+  });
+  record.set("name", "Default");
+  record.set("age", null);
+  return record;
+}());
+let foo__show_person = function (parent, inherited, args)
+{
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "foo";
+  try {
+    let __args__ = {
+    };
+    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
+    __args__ = fastn_utils.getArgs(__args__, args);
+    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+    parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(5)), inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("heading_small"), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, __args__.person.get("name"), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+        let record = fastn.recordInstance({
+        });
+        record.set("light", "red");
+        record.set("dark", "red");
+        return record;
+      }(), inherited);
+    },
+    function (root, inherited) {
+      fastn_dom.conditionalDom(root, [
+        __args__.person.get("age")
+      ], function () {
+        return (fastn_utils.getStaticValue(__args__.person.get("age")) !== null);
+      }, function (root) {
+        let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
+        rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, __args__.person.get("age"), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
+          let record = fastn.recordInstance({
+          });
+          record.set("light", "green");
+          record.set("dark", "green");
+          return record;
+        }(), inherited);
+        rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_regular"), inherited);
+        return rooti0;
+      });
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_regular"), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Change name to XYZ (by header reference)", inherited);
+      rooti0.addEventHandler(fastn_dom.Event.Click, function () {
+        ftd.set_string({
+          a: __args__.person.get("name"),
+          v: "XYZ",
+        }, rooti0);
+      });
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_regular"), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Change name to Lorem (by header reference)", inherited);
+      rooti0.addEventHandler(fastn_dom.Event.Click, function () {
+        ftd.set_string({
+          a: __args__.person.get("name"),
+          v: "Lorem",
+        }, rooti0);
+      });
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_regular"), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Change name to Anonymous (by global)", inherited);
+      rooti0.addEventHandler(fastn_dom.Event.Click, function () {
+        ftd.set_string({
+          a: global.foo__p.get("name"),
+          v: "Anonymous",
+        }, rooti0);
+      });
+    },
+    function (root, inherited) {
+      let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
+      rooti0.setProperty(fastn_dom.PropertyKind.Role, inherited.get("types").get("copy_regular"), inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Set age", inherited);
+      rooti0.addEventHandler(fastn_dom.Event.Click, function () {
+        ftd.set_integer({
+          a: __args__.person.get("age"),
+          v: 23,
+        }, rooti0);
+      });
+    }
+    ]), inherited);
+    return parenti0;
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+global["foo__show_person"] = foo__show_person;
+fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
+fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
+fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
+fastn_dom.codeData.availableThemes["dracula-theme"] = "../../theme_css/dracula-theme.css";
+fastn_dom.codeData.availableThemes["duotone-theme.dark"] = "../../theme_css/duotone-theme.dark.css";
+fastn_dom.codeData.availableThemes["duotone-theme.earth"] = "../../theme_css/duotone-theme.earth.css";
+fastn_dom.codeData.availableThemes["duotone-theme.forest"] = "../../theme_css/duotone-theme.forest.css";
+fastn_dom.codeData.availableThemes["duotone-theme.light"] = "../../theme_css/duotone-theme.light.css";
+fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "../../theme_css/duotone-theme.sea.css";
+fastn_dom.codeData.availableThemes["duotone-theme.space"] = "../../theme_css/duotone-theme.space.css";
+fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
+fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
+fastn_dom.codeData.availableThemes["fire.light"] = "../../theme_css/fire.light.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "../../theme_css/gruvbox-theme.dark.css";
+fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "../../theme_css/gruvbox-theme.light.css";
+fastn_dom.codeData.availableThemes["laserwave-theme"] = "../../theme_css/laserwave-theme.css";
+fastn_dom.codeData.availableThemes["material-theme.dark"] = "../../theme_css/material-theme.dark.css";
+fastn_dom.codeData.availableThemes["material-theme.light"] = "../../theme_css/material-theme.light.css";
+fastn_dom.codeData.availableThemes["nightowl-theme"] = "../../theme_css/nightowl-theme.css";
+fastn_dom.codeData.availableThemes["one-theme.dark"] = "../../theme_css/one-theme.dark.css";
+fastn_dom.codeData.availableThemes["one-theme.light"] = "../../theme_css/one-theme.light.css";
+fastn_dom.codeData.availableThemes["vs-theme.dark"] = "../../theme_css/vs-theme.dark.css";
+fastn_dom.codeData.availableThemes["vs-theme.light"] = "../../theme_css/vs-theme.light.css";
+fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-theme.css";
+
+        let main_wrapper = function (parent) {
+            let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
+            parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+            parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
+            main(parenti0);
+        }
+        fastnVirtual.doubleBuffer(main_wrapper);
+        ftd.post_init();
+    })();
+
+    window.onload = function() {
+        fastn_utils.resetFullHeight();
+        fastn_utils.setFullHeight();
+        ftd.emit_on_load();
+    };
+</script>
+</html>

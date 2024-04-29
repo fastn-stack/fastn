@@ -407,7 +407,7 @@ const fastn = (function (fastn) {
 
                 let fields = {};
                 for (let key in value.#fields) {
-                    this.#fields[key].set(value.#fields[key].get());
+                    this.#fields[key].set(value.#fields[key]);
                 }
 
             } else if (this.#fields[key] === undefined) {

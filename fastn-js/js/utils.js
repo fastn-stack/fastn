@@ -196,6 +196,7 @@ let fastn_utils = {
         }
     },
     setter(variable, value) {
+        variable = fastn_utils.flattenMutable(variable);
         if (!fastn_utils.isNull(variable) && variable.set) {
             variable.set(value);
             return true;
