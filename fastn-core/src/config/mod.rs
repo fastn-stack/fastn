@@ -402,12 +402,13 @@ impl Config {
     /// nor it tries to avoid fonts that are configured but not needed in current document.
     #[cfg(not(feature = "use-config-json"))]
     pub fn get_font_style(&self) -> String {
-        let generated_style = self
-            .all_packages
-            .iter()
-            .map(|package| package.get_font_html())
-            .collect::<Vec<_>>()
-            .join("\n");
+        let mut generated_style = String::new();
+        let mut entry = self.all_packages.first_entry();
+        while let Some(package) = entry {
+            generated_style.push_str(package.get().get_font_html().as_str());
+            generated_style.push_str("\n");
+            entry = package.next();
+        }
         return match generated_style.trim().is_empty() {
             false => format!("<style>{}</style>", generated_style),
             _ => "".to_string(),
