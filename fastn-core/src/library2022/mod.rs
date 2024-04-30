@@ -222,13 +222,11 @@ impl Library2022 {
             }
         })?;
 
-        if let Err(e) = self
-            .config
-            .all_packages
-            .insert(package.name.to_string(), package)
-        {
-            eprintln!("Error: {e:?}");
-        }
+        fastn_core::config::utils::insert_or_update(
+            &self.config.all_packages,
+            package.name.clone(),
+            package,
+        );
 
         Ok(())
     }

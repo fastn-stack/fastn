@@ -17,6 +17,21 @@ pub(crate) async fn find_root_for_file(
     }
 }
 
+pub fn insert_or_update(
+    all_packages: &scc::HashMap<String, fastn_core::Package>,
+    package_name: String,
+    current_package: fastn_core::Package,
+) {
+    match all_packages.entry(package_name) {
+        scc::hash_map::Entry::Occupied(mut ov) => {
+            ov.insert(current_package);
+        }
+        scc::hash_map::Entry::Vacant(vv) => {
+            vv.insert_entry(current_package);
+        }
+    }
+}
+
 pub async fn fastn_doc(
     ds: &fastn_ds::DocumentStore,
     path: &fastn_ds::Path,
