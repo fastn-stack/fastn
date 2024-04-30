@@ -222,11 +222,7 @@ impl Library2022 {
             }
         })?;
 
-        fastn_core::config::utils::insert_or_update(
-            &self.config.all_packages,
-            package.name.clone(),
-            package,
-        );
+        fastn_ds::insert_or_update(&self.config.all_packages, package.name.clone(), package);
 
         Ok(())
     }

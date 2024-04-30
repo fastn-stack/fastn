@@ -1,5 +1,3 @@
-use crate::wasm::Conn;
-
 pub async fn connect(
     mut caller: wasmtime::Caller<'_, fastn_ds::wasm::Store>,
     ptr: i32,
@@ -23,16 +21,14 @@ impl fastn_ds::wasm::Store {
             Some(pool) => get_client(pool.get(), &mut clients).await,
             None => {
                 let pool = fastn_ds::create_pool(db_url).await?;
-                if self.pg_pools.insert(db_url.to_string(), pool).is_err() {
-                    tracing::info!("failed to insert pool into pg_pools");
-                }
+                fastn_ds::insert_or_update(&self.pg_pools, db_url.to_string(), pool);
                 get_client(self.pg_pools.get(db_url).unwrap().get(), &mut clients).await
             }
         };
 
         async fn get_client(
             pool: &deadpool_postgres::Pool,
-            clients: &mut Vec<Conn>,
+            clients: &mut Vec<fastn_ds::wasm::Conn>,
         ) -> wasmtime::Result<i32> {
             let client = pool.get().await?;
             clients.push(fastn_ds::wasm::Conn { client });
