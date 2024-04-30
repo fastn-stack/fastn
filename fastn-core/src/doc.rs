@@ -312,7 +312,12 @@ pub async fn resolve_foreign_variable2022(
     ) -> ftd::ftd2021::p1::Result<ftd::interpreter::Value> {
         lib.push_package_under_process(module, package).await?;
         let _base_url = base_url.trim_end_matches('/');
-        let mut files = files.to_string();
+
+        // remove :type=module when used with js files
+        let mut files = files
+            .rsplit_once(':')
+            .map_or(files.to_string(), |(f, _)| f.to_string());
+
         let light = {
             if let Some(f) = files.strip_suffix(".light") {
                 files = f.to_string();

@@ -518,10 +518,8 @@ const fastn = (function (fastn) {
 
                 let fields = {};
                 for (let key in value.#fields) {
-                    fields[key] = value.#fields[key];
+                    this.#fields[key].set(value.#fields[key]);
                 }
-
-                this.#fields = fields;
             } else if (this.#fields[key] === undefined) {
                 this.#fields[key] = fastn.mutable(null);
                 this.#fields[key].setWithoutUpdate(value);
@@ -2365,6 +2363,92 @@ class Node2 {
             }
         }
     }
+
+    attachImageSrcClosures(staticValue) {
+        if (fastn_utils.isNull(staticValue)) return;
+
+        if (staticValue instanceof fastn.recordInstanceClass) {
+            let value = staticValue;
+            let fields = value.getAllFields();
+
+            let light_field_value = fastn_utils.flattenMutable(fields["light"]);
+            light_field_value.addClosure(
+                fastn
+                    .closure(() => {
+                        const is_dark_mode = ftd.dark_mode.get();
+                        if (is_dark_mode) return;
+
+                        const src =
+                            fastn_utils.getStaticValue(light_field_value);
+                        if (!ssr) {
+                            let image_node = this.#node;
+                            if (!fastn_utils.isNull(image_node)) {
+                                if (image_node.nodeName.toLowerCase() === "a") {
+                                    let childNodes = image_node.childNodes;
+                                    childNodes.forEach(function (child) {
+                                        if (
+                                            child.nodeName.toLowerCase() ===
+                                            "img"
+                                        )
+                                            image_node = child;
+                                    });
+                                }
+                                image_node.setAttribute(
+                                    "src",
+                                    fastn_utils.getStaticValue(src),
+                                );
+                            }
+                        } else {
+                            this.attachAttribute(
+                                "src",
+                                fastn_utils.getStaticValue(src),
+                            );
+                        }
+                    })
+                    .addNodeProperty(this, null, inherited),
+            );
+            this.#mutables.push(light_field_value);
+
+            let dark_field_value = fastn_utils.flattenMutable(fields["dark"]);
+            dark_field_value.addClosure(
+                fastn
+                    .closure(() => {
+                        const is_dark_mode = ftd.dark_mode.get();
+                        if (!is_dark_mode) return;
+
+                        const src =
+                            fastn_utils.getStaticValue(dark_field_value);
+                        if (!ssr) {
+                            let image_node = this.#node;
+                            if (!fastn_utils.isNull(image_node)) {
+                                if (image_node.nodeName.toLowerCase() === "a") {
+                                    let childNodes = image_node.childNodes;
+                                    childNodes.forEach(function (child) {
+                                        if (
+                                            child.nodeName.toLowerCase() ===
+                                            "img"
+                                        )
+                                            image_node = child;
+                                    });
+                                }
+                                image_node.setAttribute(
+                                    "src",
+                                    fastn_utils.getStaticValue(src),
+                                );
+                            }
+                        } else {
+                            this.attachAttribute(
+                                "src",
+                                fastn_utils.getStaticValue(src),
+                            );
+                        }
+                    })
+                    .addNodeProperty(this, null, inherited),
+            );
+            this.#mutables.push(dark_field_value);
+        }
+    }
+
     attachLinkColor(value) {
         ftd.dark_mode.addClosure(
             fastn
@@ -2944,6 +3028,7 @@ class Node2 {
         } else if (kind === fastn_dom.PropertyKind.Src) {
             this.attachAttribute("src", staticValue);
         } else if (kind === fastn_dom.PropertyKind.ImageSrc) {
+            this.attachImageSrcClosures(staticValue);
             ftd.dark_mode.addClosure(
                 fastn
                     .closure(() => {
@@ -3664,6 +3749,14 @@ let fastn_utils = {
             return obj;
         }
     },
+    flattenMutable(value) {
+        if (!(value instanceof fastn.mutableClass)) return value;
+
+        if (value.get() instanceof fastn.mutableClass)
+            return this.flattenMutable(value.get());
+
+        return value;
+    },
     getFlattenStaticValue(obj) {
         let staticValue = fastn_utils.getStaticValue(obj);
         if (Array.isArray(staticValue)) {
@@ -3702,6 +3795,7 @@ let fastn_utils = {
         }
     },
     setter(variable, value) {
+        variable = fastn_utils.flattenMutable(variable);
         if (!fastn_utils.isNull(variable) && variable.set) {
             variable.set(value);
             return true;

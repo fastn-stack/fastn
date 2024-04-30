@@ -1,0 +1,47 @@
+-- record Person:
+caption name:
+optional integer age:
+
+-- Person $p: Default
+
+-- string $name: ABCD
+
+-- show-person: $p
+
+
+-- component show-person:
+caption Person $person:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 5
+padding.px: 10
+
+-- ftd.text: $show-person.person.name
+color: red
+role: $inherited.types.heading-small
+
+-- ftd.integer: $show-person.person.age
+if: { $show-person.person.age != NULL }
+color: green
+role: $inherited.types.copy-regular
+
+-- ftd.text: Change name to XYZ (by header reference)
+role: $inherited.types.copy-regular
+$on-click$: $ftd.set-string($a = $show-person.person.name, v = XYZ)
+
+-- ftd.text: Change name to Lorem (by header reference)
+role: $inherited.types.copy-regular
+$on-click$: $ftd.set-string($a = $show-person.person.name, v = Lorem)
+
+-- ftd.text: Change name to Anonymous (by global)
+role: $inherited.types.copy-regular
+$on-click$: $ftd.set-string($a = $p.name, v = Anonymous)
+
+-- ftd.text: Set age
+role: $inherited.types.copy-regular
+$on-click$: $ftd.set-integer($a = $show-person.person.age, v = 23)
+
+-- end: ftd.column
+
+-- end: show-person
