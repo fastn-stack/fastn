@@ -80,11 +80,7 @@ impl ConfigTemp {
                 .to_package(package_root, package_name, ds, package)
                 .await?;
             ConfigTemp::check_dependencies_provided(package, &mut current_package)?;
-            fastn_core::config::utils::insert_or_update(
-                &all_packages,
-                package_name.clone(),
-                current_package,
-            );
+            fastn_ds::insert_or_update(&all_packages, package_name.clone(), current_package);
         }
 
         Ok(all_packages)

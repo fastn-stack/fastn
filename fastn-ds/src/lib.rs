@@ -208,13 +208,7 @@ impl DocumentStore {
 
         let pool = fastn_ds::create_pool(db_url.as_str()).await?;
 
-        if self
-            .pg_pools
-            .insert(db_url.to_string(), pool.clone())
-            .is_err()
-        {
-            tracing::info!("failed to insert pool into pg_pools");
-        }
+        fastn_ds::insert_or_update(&self.pg_pools, db_url.to_string(), pool.clone());
 
         Ok(pool)
     }
@@ -253,13 +247,8 @@ impl DocumentStore {
                 };
 
                 // we are only storing compiled module if we are not in debug mode
-                if !self.env_bool("FASTN_DEBUG", false).await?
-                    && self
-                        .wasm_modules
-                        .insert(path.to_string(), module.clone())
-                        .is_err()
-                {
-                    tracing::info!("could not insert module into cache");
+                if !self.env_bool("FASTN_DEBUG", false).await? {
+                    fastn_ds::insert_or_update(&self.wasm_modules, path.to_string(), module.clone())
                 }
 
                 Ok(module)
@@ -541,4 +530,19 @@ fn home() -> camino::Utf8PathBuf {
         }
     };
     camino::Utf8PathBuf::from_path_buf(home).expect("Issue while reading your home directory")
+}
+
+pub fn insert_or_update<K, V>(map: &scc::HashMap<K, V>, key: K, value: V)
+where
+    K: std::hash::Hash,
+    K: std::cmp::Eq,
+{
+    match map.entry(key) {
+        scc::hash_map::Entry::Occupied(mut ov) => {
+            ov.insert(value);
+        }
+        scc::hash_map::Entry::Vacant(vv) => {
+            vv.insert_entry(value);
+        }
+    }
 }
