@@ -539,6 +539,7 @@ You can try without providing port, it will automatically pick unused port."#,
     let app = move || {
         actix_web::App::new()
             .app_data(actix_web::web::Data::new(std::sync::Arc::clone(&config)))
+            .app_data(actix_web::web::PayloadConfig::new(1024 * 1024 * 10))
             .wrap(actix_web::middleware::Compress::default())
             .wrap(fastn_core::catch_panic::CatchPanic::default())
             .wrap(
