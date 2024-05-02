@@ -22,14 +22,11 @@ impl fastn_ds::wasm::Store {
         };
 
         let conn = conn.lock().await;
-        Ok(
-            match conn.execute(q.sql.as_str(), rusqlite::params_from_iter(q.binds)) {
-                Ok(u) => Ok(u),
-                Err(e) => {
-                    eprintln!("sqlite execute error: {e}");
-                    todo!()
-                }
-            },
-        )
+        match conn.execute(q.sql.as_str(), rusqlite::params_from_iter(q.binds)) {
+            Ok(cursor) => Ok(Ok(cursor)),
+            Err(e) => Ok(Err(ft_sys_shared::DbError::UnableToSendCommand(
+                e.to_string(),
+            ))),
+        }
     }
 }
