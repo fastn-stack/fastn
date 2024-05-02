@@ -148,7 +148,7 @@ ansi_term = "0.12"
 walkdir = "2"
 smallvec = "1"
 wasm-bindgen = "0.2"
-wasmtime = "19"
+wasmtime = "20"
 zip = "0.6"
 prettify-js = "0.1.0"
 indexmap = { version = "2", features = ["serde"] }
@@ -177,15 +177,6 @@ features = [
     "column_decltype",
 ]
 
-[workspace.dependencies.web-sys]
-version = "0.3"
-features = [
-    'Document',
-    'Element',
-    'HtmlElement',
-    'Node',
-    'Window',
-]
 
 [workspace.dependencies.hyper]
 version = "1"
@@ -216,7 +207,7 @@ features = [
 
 [workspace.dependencies.comrak]
 # We use comrak for markup processing.
-version = "0.22"
+version = "0.23"
 # By default, comrak ships with support for syntax highlighting using syntext for "fenced
 # code blocks". We have disabled that by not using default features. We did that because
 # we already have a way to show code in ftd, ftd.code. Further, comark requires syntect 4.6,
