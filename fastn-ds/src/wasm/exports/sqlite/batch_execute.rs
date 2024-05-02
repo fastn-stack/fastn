@@ -3,7 +3,7 @@ pub async fn batch_execute(
     ptr: i32,
     len: i32,
 ) -> wasmtime::Result<i32> {
-    let q = fastn_ds::wasm::helpers::get_str(ptr, len, &mut caller).await?;
+    let q = fastn_ds::wasm::helpers::get_str(ptr, len, &mut caller)?;
     let res = caller.data_mut().sqlite_batch_execute(q).await?;
     fastn_ds::wasm::helpers::send_json(res, &mut caller).await
 }

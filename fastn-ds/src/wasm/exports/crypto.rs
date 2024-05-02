@@ -5,7 +5,7 @@ pub async fn encrypt(
     ptr: i32,
     len: i32,
 ) -> wasmtime::Result<i32> {
-    let input = fastn_ds::wasm::helpers::get_str(ptr, len, &mut caller).await?;
+    let input = fastn_ds::wasm::helpers::get_str(ptr, len, &mut caller)?;
     #[cfg(feature = "hostn")]
     let secret_key = ft_aws::fastn_secret_key();
     #[cfg(not(feature = "hostn"))]
@@ -20,7 +20,7 @@ pub async fn decrypt(
     ptr: i32,
     len: i32,
 ) -> wasmtime::Result<i32> {
-    let input = fastn_ds::wasm::helpers::get_str(ptr, len, &mut caller).await?;
+    let input = fastn_ds::wasm::helpers::get_str(ptr, len, &mut caller)?;
     #[cfg(feature = "hostn")]
     let secret_key = ft_aws::fastn_secret_key();
     #[cfg(not(feature = "hostn"))]
