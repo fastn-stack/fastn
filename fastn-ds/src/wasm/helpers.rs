@@ -17,14 +17,12 @@ pub async fn send_bytes(
     Ok(ptr)
 }
 
-pub async fn get_str(
+pub fn get_str(
     ptr: i32,
     len: i32,
     caller: &mut wasmtime::Caller<'_, fastn_ds::wasm::Store>,
 ) -> wasmtime::Result<String> {
-    get_bytes(ptr, len, caller)
-        .await
-        .map(|v| unsafe { String::from_utf8_unchecked(v) })
+    get_bytes(ptr, len, caller).map(|v| unsafe { String::from_utf8_unchecked(v) })
 }
 
 pub async fn send_json<T: serde::Serialize>(
@@ -35,18 +33,18 @@ pub async fn send_json<T: serde::Serialize>(
     send_bytes(&bytes, caller).await
 }
 
-pub async fn get_json<T: serde::de::DeserializeOwned>(
+pub fn get_json<T: serde::de::DeserializeOwned>(
     ptr: i32,
     len: i32,
     caller: &mut wasmtime::Caller<'_, fastn_ds::wasm::Store>,
 ) -> wasmtime::Result<T> {
-    let bytes = get_bytes(ptr, len, caller).await?;
+    let bytes = get_bytes(ptr, len, caller)?;
     println!("q: {}", String::from_utf8_lossy(&bytes));
     Ok(serde_json::from_slice(&bytes).unwrap())
 }
 
 #[allow(clippy::uninit_vec)]
-pub async fn get_bytes(
+pub fn get_bytes(
     ptr: i32,
     len: i32,
     caller: &mut wasmtime::Caller<'_, fastn_ds::wasm::Store>,

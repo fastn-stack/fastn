@@ -3,7 +3,7 @@ pub async fn send_response(
     ptr: i32,
     len: i32,
 ) -> wasmtime::Result<()> {
-    let r = fastn_ds::wasm::helpers::get_json(ptr, len, &mut caller).await?;
+    let r = fastn_ds::wasm::helpers::get_json(ptr, len, &mut caller)?;
     caller
         .data_mut()
         .store_response(fastn_ds::wasm::Response::Http(r));
