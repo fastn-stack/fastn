@@ -87,7 +87,14 @@ impl fastn_ds::wasm::Store {
 
         let conn = conn.lock().await;
         println!("conn, sql: {}", q.sql.as_str());
-        let mut stmt = conn.prepare(q.sql.as_str())?;
+        let mut stmt = match conn.prepare(q.sql.as_str()) {
+            Ok(v) => v,
+            Err(e) => {
+                return Ok(Err(ft_sys_shared::DbError::UnableToSendCommand(
+                    e.to_string(),
+                )))
+            }
+        };
         println!("stmt");
 
         let columns: Vec<String> = stmt
@@ -97,7 +104,14 @@ impl fastn_ds::wasm::Store {
             .collect();
 
         let mut rows = vec![];
-        let mut r = stmt.query(rusqlite::params_from_iter(q.binds))?;
+        let mut r = match stmt.query(rusqlite::params_from_iter(q.binds)) {
+            Ok(v) => v,
+            Err(e) => {
+                return Ok(Err(ft_sys_shared::DbError::UnableToSendCommand(
+                    e.to_string(),
+                )))
+            }
+        };
 
         while let Ok(Some(row)) = r.next() {
             rows.push(Row::from_sqlite(columns.len(), row));
