@@ -1700,6 +1700,7 @@ dependencies = [
  "futures",
  "rusqlite",
  "serde",
+ "thiserror",
  "tokio",
 ]
 

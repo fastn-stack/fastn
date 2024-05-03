@@ -72,6 +72,111 @@ pub struct EndpointData {
     pub user_id: Option<bool>,
 }
 
+#[derive(Debug, thiserror::Error)]
+pub enum TFileError {
+    #[error("endpoint does not start with {0}")]
+    EndpointDoesNotStartWithPrefix(&'static str),
+    #[error("file missing")]
+    FileMissing,
+}
+
+#[derive(Debug, thiserror::Error)]
+pub enum TPathError {
+    #[error("file error {0}")]
+    FileError(#[from] TFileError),
+    #[error("path doesn't start with mountpoint")]
+    PathDoesntStartWithMountpoint,
+    #[error("endpoint lacks star")]
+    EndpointLacksStar,
+    #[error("mountpoint lacks star")]
+    MountpointLacksStar,
+}
+
+impl EndpointData {
+    const WASM: (&'static str, &'static str) = ("wasm+proxy://", ".wasm");
+    const JS: (&'static str, &'static str) = ("js+proxy://", ".js");
+
+    pub fn is_wasm(&self) -> bool {
+        self.is_t(Self::WASM)
+    }
+
+    pub fn is_js(&self) -> bool {
+        self.is_t(Self::JS)
+    }
+
+    fn is_t(&self, t: (&'static str, &'static str)) -> bool {
+        self.endpoint.starts_with(t.0)
+    }
+
+    // say we have the following in FASTN.ftd (under -- fastn.url-mappings:)
+    // /ft-wasm/* -> wasm+proxy://sample.wasm/*
+    // mountpoint: /ft-wasm/*
+    // endpoint: wasm+proxy://sample.wasm/*
+    // we want to extract the sample.wasm from the endpoint
+    pub fn wasm_file(&self) -> Result<&str, TFileError> {
+        self.t_file(Self::WASM)
+    }
+
+    pub fn wasm_path(&self, path: &str) -> Result<String, TPathError> {
+        self.t_path(path, Self::WASM)
+    }
+
+    fn t_file(&self, t: (&'static str, &'static str)) -> Result<&str, TFileError> {
+        if !self.is_t(t) {
+            return Err(TFileError::EndpointDoesNotStartWithPrefix(t.0));
+        }
+
+        match self.endpoint.find(t.1) {
+            Some(idx) => Ok(&self.endpoint[t.0.len()..idx]),
+            None => Err(TFileError::FileMissing),
+        }
+    }
+
+    // with: /ft-wasm/* -> wasm+proxy://sample.wasm/foo/bar/*
+    // and requested path: /ft-wasm/yo/123, we need to return /foo/bar/yo/123
+    pub fn t_path(
+        &self,
+        path: &str,
+        t: (&'static str, &'static str),
+    ) -> Result<String, TPathError> {
+        if !self.is_t(t) {
+            return Err(TPathError::FileError(
+                TFileError::EndpointDoesNotStartWithPrefix(t.0),
+            ));
+        }
+
+        let wasm_file = self.t_file(t)?; // sample.wasm
+
+        let endpoint_rest = // /foo/bar/*
+            &self.endpoint[self.endpoint.find(wasm_file).unwrap() + wasm_file.len()..];
+
+        if !endpoint_rest.ends_with("*") {
+            return Err(TPathError::EndpointLacksStar);
+        }
+        let mut endpoint_rest = endpoint_rest.trim_end_matches('*'); // /foo/bar/
+        if endpoint_rest.ends_with('/') {
+            endpoint_rest = &endpoint_rest[..endpoint_rest.len() - 1];
+        }
+
+        if !self.mountpoint.ends_with('*') {
+            return Err(TPathError::MountpointLacksStar);
+        }
+        if path.starts_with(&self.mountpoint) {
+            return Err(TPathError::PathDoesntStartWithMountpoint);
+        }
+
+        // /ft-wasm/
+        let mountpoint = self.mountpoint.trim_end_matches('*');
+        let mut path_rest = &path[mountpoint.len()..]; // /ft-wasm/yo/123 -> /yo/123
+
+        if path_rest.starts_with('/') {
+            path_rest = &path_rest[1..];
+        }
+
+        Ok(format!("{}/{}", endpoint_rest, path_rest))
+    }
+}
+
 /// PackageTemp is a struct that is used for mapping the `fastn.package` data in FASTN.ftd file. It is
 /// not used elsewhere in program, it is immediately converted to `fastn_core::Package` struct during
 /// deserialization process

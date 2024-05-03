@@ -424,20 +424,27 @@ async fn handle_endpoints(
         None => return None,
     };
 
-    let url = format!(
-        "{}/{}",
-        endpoint.endpoint.trim_end_matches('/'),
-        req.path()
-            .trim_start_matches(endpoint.mountpoint.trim_end_matches('/'))
-            .trim_start_matches('/')
-    );
-
-    if url.starts_with("wasm+proxy://") {
-        return match config.ds.handle_wasm(url, req).await {
+    if endpoint.is_wasm() {
+        return match config
+            .ds
+            .handle_wasm(
+                endpoint.wasm_file().unwrap(),
+                endpoint.wasm_path(req.path()).unwrap(),
+                req,
+            )
+            .await
+        {
             Ok(r) => Some(Ok(fastn_ds::wasm::to_response(r))),
             Err(e) => return Some(Err(e.into())),
         };
     }
+
+    // if url.starts_with("js+proxy://") {
+    //     return match config.ds.handle_js(url, req).await {
+    //         Ok(r) => Some(Ok(fastn_ds::wasm::to_response(r))),
+    //         Err(e) => return Some(Err(e.into())),
+    //     };
+    // }
 
     let response = match config
         .ds
