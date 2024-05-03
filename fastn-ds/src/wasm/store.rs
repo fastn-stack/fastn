@@ -6,6 +6,18 @@ pub struct Store {
     pub sqlite: Option<std::sync::Arc<async_lock::Mutex<rusqlite::Connection>>>,
     pub response: Option<Response>,
     pub db_url: String,
+
+    table: wasmtime::component::ResourceTable,
+    ctx: wasmtime_wasi::WasiCtx,
+}
+
+impl wasmtime_wasi::WasiView for Store {
+    fn table(&mut self) -> &mut wasmtime::component::ResourceTable {
+        &mut self.table
+    }
+    fn ctx(&mut self) -> &mut wasmtime_wasi::WasiCtx {
+        &mut self.ctx
+    }
 }
 
 #[derive(Debug)]
@@ -37,6 +49,8 @@ impl Store {
         pg_pools: actix_web::web::Data<scc::HashMap<String, deadpool_postgres::Pool>>,
         db_url: String,
     ) -> Store {
+        let mut builder = wasmtime_wasi::WasiCtxBuilder::new();
+
         Self {
             req,
             ud,
@@ -45,6 +59,9 @@ impl Store {
             pg_pools,
             db_url,
             sqlite: None,
+
+            ctx: builder.build(),
+            table: Default::default(),
         }
     }
 }

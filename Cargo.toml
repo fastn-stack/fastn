@@ -149,6 +149,7 @@ walkdir = "2"
 smallvec = "1"
 wasm-bindgen = "0.2"
 wasmtime = "20"
+wasmtime-wasi = "20"
 zip = "0.6"
 prettify-js = "0.1.0"
 indexmap = { version = "2", features = ["serde"] }

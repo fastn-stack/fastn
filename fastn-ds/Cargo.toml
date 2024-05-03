@@ -36,4 +36,5 @@ scc.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 wasmtime.workspace = true
+wasmtime-wasi.workspace = true
 ft-sys-shared = { workspace = true, features = ["rusqlite"] }
