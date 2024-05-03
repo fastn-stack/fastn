@@ -737,7 +737,9 @@ impl Package {
         if package.import_auto_imports_from_original {
             if let Some(ref original_package) = *package.translation_of {
                 if package.auto_import.is_empty() {
-                    package.auto_import = original_package.auto_import.clone()
+                    package
+                        .auto_import
+                        .clone_from(&original_package.auto_import)
                 } else {
                     return Err(fastn_core::Error::PackageError {
                         message: format!("Can't use `inherit-auto-imports-from-original` along with auto-imports defined for the translation package. Either set `inherit-auto-imports-from-original` to false or remove `fastn.auto-import` from the {package_name}/FASTN.ftd file", package_name=package.name.as_str()),

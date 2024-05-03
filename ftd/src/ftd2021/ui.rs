@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 #[derive(serde::Deserialize, Clone, Debug, PartialEq, serde::Serialize)]
 #[serde(tag = "type")]
 pub enum Element {
@@ -418,7 +420,7 @@ impl Element {
                                     format!("{}-external:{}", id, index_string)
                                 }
                             });
-                            col.common.data_id = external_id.clone();
+                            col.common.data_id.clone_from(&external_id);
                             if let Some(val) = container.first_mut() {
                                 index_vec.append(&mut val.to_vec());
                                 Self::set_id(&mut col.container.children, &index_vec, external_id);
@@ -615,7 +617,7 @@ impl Element {
             })
             && external_children_container.is_empty()
         {
-            ext_child_condition = id.clone();
+            ext_child_condition.clone_from(id);
             if open_id.is_none() {
                 let id = ext_child_condition.expect("");
                 d.push(ftd::ExternalChildrenCondition {
@@ -2019,9 +2021,9 @@ pub enum Region {
     AnnounceUrgently,
 }
 
-impl ToString for Region {
-    fn to_string(&self) -> String {
-        match self {
+impl Display for Region {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let str = match self {
             Self::H0 => "h0",
             Self::H1 => "h1",
             Self::H2 => "h2",
@@ -2039,7 +2041,8 @@ impl ToString for Region {
             Self::Announce => "announce",
             Self::AnnounceUrgently => "announce-urgently",
         }
-        .to_string()
+        .to_string();
+        write!(f, "{}", str)
     }
 }
 
@@ -2106,7 +2109,7 @@ impl Region {
             Self::H6 => Ok(-6),
             Self::H7 => Ok(-7),
             _ => ftd::ftd2021::p2::utils::e2(
-                format!("{} is not a valid heading region", self.to_string()),
+                format!("{} is not a valid heading region", self),
                 doc_id,
                 0,
             ),
@@ -2723,15 +2726,16 @@ impl NamedFont {
     }
 }
 
-impl ToString for NamedFont {
-    fn to_string(&self) -> String {
-        match self {
+impl Display for NamedFont {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let str = match self {
             ftd::NamedFont::Monospace => "monospace",
             ftd::NamedFont::Serif => "serif",
             ftd::NamedFont::SansSerif => "sansSerif",
             ftd::NamedFont::Named { value } => value,
         }
-        .to_string()
+        .to_string();
+        write!(f, "{}", str)
     }
 }
 

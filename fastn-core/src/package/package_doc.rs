@@ -382,7 +382,7 @@ pub(crate) async fn read_ftd_2022(
         .config
         .find_package_else_default(main.package_name.as_str(), None);
 
-    config.document_id = main.id.clone();
+    config.document_id.clone_from(&main.id);
     config.base_url = base_url.to_string();
 
     // Get Prefix Body => [AutoImports + Actual Doc content]
@@ -448,7 +448,7 @@ pub(crate) async fn read_ftd_2023(
         .config
         .find_package_else_default(main.package_name.as_str(), None);
 
-    config.document_id = main.id.clone();
+    config.document_id.clone_from(&main.id);
     config.base_url = base_url.to_string();
 
     // Get Prefix Body => [AutoImports + Actual Doc content]

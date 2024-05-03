@@ -1,5 +1,7 @@
 #![allow(dead_code, unused, unused_variables)]
 
+use std::fmt::Display;
+
 #[derive(Debug)]
 pub(crate) enum TranslatedDocument {
     Missing {
@@ -266,20 +268,20 @@ pub struct TranslationStatusSummary {
     pub last_modified_on: Option<String>,
 }
 
-impl ToString for TranslationStatusSummary {
-    fn to_string(&self) -> String {
-        format!(
+impl Display for TranslationStatusSummary {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let str = format!(
             indoc::indoc! {"
                 Never marked: {never_marked}
                 Missing: {missing}
                 Out-dated: {out_dated}
                 Up to date: {upto_date}
-
-                "},
+            "},
             never_marked = self.never_marked,
             missing = self.missing,
             out_dated = self.out_dated,
             upto_date = self.upto_date
-        )
+        );
+        write!(f, "{}", str)
     }
 }

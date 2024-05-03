@@ -3,16 +3,16 @@ pub mod helpers;
 pub mod macros;
 mod store;
 
-pub use store::{Conn, FtdResponse, Response, Store};
+pub use store::{Conn, Store};
 
 #[tracing::instrument(skip_all)]
 pub async fn process_http_request(
     req: ft_sys_shared::Request,
     ud: Option<ft_sys_shared::UserData>,
     module: wasmtime::Module,
-    wasm_pg_pools: actix_web::web::Data<dashmap::DashMap<String, deadpool_postgres::Pool>>,
+    wasm_pg_pools: actix_web::web::Data<scc::HashMap<String, deadpool_postgres::Pool>>,
     db_url: String,
-) -> wasmtime::Result<fastn_ds::wasm::Response> {
+) -> wasmtime::Result<ft_sys_shared::Request> {
     let hostn_store = fastn_ds::wasm::Store::new(req, ud, wasm_pg_pools, db_url);
     let mut linker = wasmtime::Linker::new(module.engine());
     hostn_store.register_functions(&mut linker);
@@ -22,22 +22,18 @@ pub async fn process_http_request(
     let instance = match linker.instantiate_async(&mut wasm_store, &module).await {
         Ok(i) => i,
         Err(e) => {
-            return Ok(fastn_ds::wasm::Response::Http(
-                ft_sys_shared::Request::server_error(format!(
-                    "failed to instantiate wasm module: {e:?}"
-                )),
-            ));
+            return Ok(ft_sys_shared::Request::server_error(format!(
+                "failed to instantiate wasm module: {e:?}"
+            )));
         }
     };
 
     let main = match instance.get_typed_func::<(), ()>(&mut wasm_store, "main_ft") {
         Ok(f) => f,
         Err(e) => {
-            return Ok(fastn_ds::wasm::Response::Http(
-                ft_sys_shared::Request::server_error(format!(
-                    "no main_ft function found in wasm: {e:?}"
-                )),
-            ));
+            return Ok(ft_sys_shared::Request::server_error(format!(
+                "no main_ft function found in wasm: {e:?}"
+            )));
         }
     };
 

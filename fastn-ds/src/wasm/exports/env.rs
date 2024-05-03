@@ -5,7 +5,7 @@ pub async fn print(
 ) -> wasmtime::Result<()> {
     println!(
         "wasm: {}",
-        fastn_ds::wasm::helpers::get_str(ptr, len, &mut caller).await?
+        fastn_ds::wasm::helpers::get_str(ptr, len, &mut caller)?
     );
 
     Ok(())
@@ -16,7 +16,7 @@ pub async fn var(
     ptr: i32,
     len: i32,
 ) -> wasmtime::Result<i32> {
-    let key = fastn_ds::wasm::helpers::get_str(ptr, len, &mut caller).await?;
+    let key = fastn_ds::wasm::helpers::get_str(ptr, len, &mut caller)?;
     let value = std::env::var(key).ok();
 
     fastn_ds::wasm::helpers::send_json(value, &mut caller).await

@@ -13,8 +13,8 @@ pub use create_pool::create_pool;
 
 #[derive(Debug, Clone)]
 pub struct DocumentStore {
-    pub wasm_modules: dashmap::DashMap<String, wasmtime::Module>,
-    pub pg_pools: actix_web::web::Data<dashmap::DashMap<String, deadpool_postgres::Pool>>,
+    pub wasm_modules: scc::HashMap<String, wasmtime::Module>,
+    pub pg_pools: actix_web::web::Data<scc::HashMap<String, deadpool_postgres::Pool>>,
     root: Path,
 }
 
@@ -168,11 +168,6 @@ pub trait RequestType {
     fn body(&self) -> &[u8];
 }
 
-pub enum HttpResponseWrapper {
-    Http(HttpResponse),
-    Ftd(fastn_ds::wasm::FtdResponse),
-}
-
 pub static WASM_ENGINE: once_cell::sync::Lazy<wasmtime::Engine> =
     once_cell::sync::Lazy::new(|| {
         wasmtime::Engine::new(wasmtime::Config::new().async_support(true)).unwrap()
@@ -203,21 +198,22 @@ impl DocumentStore {
         };
 
         if let Some(p) = self.pg_pools.get(db_url.as_str()) {
-            return Ok(p.clone());
+            return Ok(p.get().clone());
         }
 
         let pool = fastn_ds::create_pool(db_url.as_str()).await?;
 
-        self.pg_pools.insert(db_url.to_string(), pool.clone());
+        fastn_ds::insert_or_update(&self.pg_pools, db_url.to_string(), pool.clone());
+
         Ok(pool)
     }
 
     pub fn new<T: AsRef<camino::Utf8Path>>(
         root: T,
-        pg_pools: actix_web::web::Data<dashmap::DashMap<String, deadpool_postgres::Pool>>,
+        pg_pools: actix_web::web::Data<scc::HashMap<String, deadpool_postgres::Pool>>,
     ) -> Self {
         Self {
-            wasm_modules: dashmap::DashMap::new(),
+            wasm_modules: Default::default(),
             pg_pools,
             root: Path::new(root.as_ref().as_str()),
         }
@@ -228,7 +224,7 @@ impl DocumentStore {
         // TODO: implement wasm module on disc caching, so modules load faster across
         //       cache purge
         match self.wasm_modules.get(path) {
-            Some(module) => Ok(module.clone()),
+            Some(module) => Ok(module.get().clone()),
             None => {
                 let wasmc_path = fastn_ds::Path::new(format!("{path}c").as_str());
                 let module = match unsafe {
@@ -247,8 +243,9 @@ impl DocumentStore {
 
                 // we are only storing compiled module if we are not in debug mode
                 if !self.env_bool("FASTN_DEBUG", false).await? {
-                    self.wasm_modules.insert(path.to_string(), module.clone());
+                    fastn_ds::insert_or_update(&self.wasm_modules, path.to_string(), module.clone())
                 }
+
                 Ok(module)
             }
         }
@@ -384,7 +381,7 @@ impl DocumentStore {
         &self,
         wasm_url: String,
         req: &T,
-    ) -> Result<fastn_ds::wasm::Response, HttpError>
+    ) -> Result<ft_sys_shared::Request, HttpError>
     where
         T: RequestType,
     {
@@ -453,7 +450,7 @@ impl DocumentStore {
             reqwest::Url::parse(url.as_str())?,
         );
 
-        *proxy_request.headers_mut() = headers.to_owned();
+        headers.clone_into(proxy_request.headers_mut());
 
         for (header_key, header_value) in extra_headers {
             proxy_request.headers_mut().insert(
@@ -528,4 +525,19 @@ fn home() -> camino::Utf8PathBuf {
         }
     };
     camino::Utf8PathBuf::from_path_buf(home).expect("Issue while reading your home directory")
+}
+
+pub fn insert_or_update<K, V>(map: &scc::HashMap<K, V>, key: K, value: V)
+where
+    K: std::hash::Hash,
+    K: std::cmp::Eq,
+{
+    match map.entry(key) {
+        scc::hash_map::Entry::Occupied(mut ov) => {
+            ov.insert(value);
+        }
+        scc::hash_map::Entry::Vacant(vv) => {
+            vv.insert_entry(value);
+        }
+    }
 }

@@ -488,7 +488,7 @@ impl Field {
                 check_variant_if_constant(or_variant, remaining, doc)?;
                 let variant = Some(format!("{}.{}", name, variant));
 
-                *v = variant.clone();
+                v.clone_from(&variant);
                 *full_variant = variant;
                 Ok(ftd::interpreter::StateWithThing::new_thing(()))
             }

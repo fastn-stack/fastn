@@ -72,15 +72,15 @@ impl ConfigTemp {
         ds: &fastn_ds::DocumentStore,
         package: &mut fastn_core::Package,
         package_root: &fastn_ds::Path,
-    ) -> fastn_core::Result<std::collections::BTreeMap<String, fastn_core::Package>> {
-        let mut all_packages = std::collections::BTreeMap::new();
+    ) -> fastn_core::Result<scc::HashMap<String, fastn_core::Package>> {
+        let all_packages = scc::HashMap::new();
 
         for (package_name, manifest) in &self.all_packages {
             let mut current_package = manifest
                 .to_package(package_root, package_name, ds, package)
                 .await?;
             ConfigTemp::check_dependencies_provided(package, &mut current_package)?;
-            all_packages.insert(package_name.clone(), current_package);
+            fastn_ds::insert_or_update(&all_packages, package_name.clone(), current_package);
         }
 
         Ok(all_packages)

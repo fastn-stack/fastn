@@ -418,7 +418,7 @@ fn update_local_variable_reference_in_property_value(
     }
 
     if let Some(replace_with) = replace_property_value.get(reference_or_clone.as_str()) {
-        *property_value = replace_with.to_owned();
+        replace_with.clone_into(property_value);
     }
 
     if !is_children {

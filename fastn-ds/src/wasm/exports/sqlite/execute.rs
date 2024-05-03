@@ -4,7 +4,7 @@ pub async fn execute(
     len: i32,
 ) -> wasmtime::Result<i32> {
     let q: fastn_ds::wasm::exports::sqlite::Query =
-        fastn_ds::wasm::helpers::get_json(ptr, len, &mut caller).await?;
+        fastn_ds::wasm::helpers::get_json(ptr, len, &mut caller)?;
     let res = caller.data_mut().sqlite_execute(q).await?;
     fastn_ds::wasm::helpers::send_json(res, &mut caller).await
 }
@@ -17,15 +17,16 @@ impl fastn_ds::wasm::Store {
         let conn = if let Some(ref mut conn) = self.sqlite {
             conn
         } else {
+            eprintln!("sqlite connection not found");
             todo!()
         };
 
         let conn = conn.lock().await;
-        Ok(
-            match conn.execute(q.sql.as_str(), rusqlite::params_from_iter(q.binds)) {
-                Ok(u) => Ok(u),
-                Err(_) => todo!(),
-            },
-        )
+        match conn.execute(q.sql.as_str(), rusqlite::params_from_iter(q.binds)) {
+            Ok(cursor) => Ok(Ok(cursor)),
+            Err(e) => Ok(Err(ft_sys_shared::DbError::UnableToSendCommand(
+                e.to_string(),
+            ))),
+        }
     }
 }

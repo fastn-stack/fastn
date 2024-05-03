@@ -4,7 +4,7 @@ pub async fn query(
     ptr: i32,
     len: i32,
 ) -> wasmtime::Result<i32> {
-    let q: Query = fastn_ds::wasm::helpers::get_json(ptr, len, &mut caller).await?;
+    let q: Query = fastn_ds::wasm::helpers::get_json(ptr, len, &mut caller)?;
     let res = caller.data_mut().sqlite_query(q).await?;
     fastn_ds::wasm::helpers::send_json(res, &mut caller).await
 }
@@ -21,36 +21,7 @@ pub struct Cursor {
     rows: Vec<Row>,
 }
 
-#[derive(Clone, Debug, serde::Deserialize, serde::Serialize)]
-pub enum Value {
-    Null,
-    Integer(i64),
-    Real(f64),
-    Text(String),
-    Blob(Vec<u8>),
-}
-
-impl rusqlite::types::ToSql for Value {
-    fn to_sql(&self) -> rusqlite::Result<rusqlite::types::ToSqlOutput> {
-        match self {
-            Value::Null => Ok(rusqlite::types::ToSqlOutput::Owned(
-                rusqlite::types::Value::Null,
-            )),
-            Value::Integer(i) => Ok(rusqlite::types::ToSqlOutput::Owned(
-                rusqlite::types::Value::Integer(*i),
-            )),
-            Value::Real(f) => Ok(rusqlite::types::ToSqlOutput::Owned(
-                rusqlite::types::Value::Real(*f),
-            )),
-            Value::Text(s) => Ok(rusqlite::types::ToSqlOutput::Owned(
-                rusqlite::types::Value::Text(s.clone()),
-            )),
-            Value::Blob(b) => Ok(rusqlite::types::ToSqlOutput::Owned(
-                rusqlite::types::Value::Blob(b.clone()),
-            )),
-        }
-    }
-}
+pub type Value = ft_sys_shared::SqliteRawValue;
 
 #[derive(Debug, Hash, PartialEq, Eq, Clone, Copy, serde::Deserialize, serde::Serialize)]
 pub enum SqliteType {
@@ -116,7 +87,14 @@ impl fastn_ds::wasm::Store {
 
         let conn = conn.lock().await;
         println!("conn, sql: {}", q.sql.as_str());
-        let mut stmt = conn.prepare(q.sql.as_str())?;
+        let mut stmt = match conn.prepare(q.sql.as_str()) {
+            Ok(v) => v,
+            Err(e) => {
+                return Ok(Err(ft_sys_shared::DbError::UnableToSendCommand(
+                    e.to_string(),
+                )))
+            }
+        };
         println!("stmt");
 
         let columns: Vec<String> = stmt
@@ -126,7 +104,14 @@ impl fastn_ds::wasm::Store {
             .collect();
 
         let mut rows = vec![];
-        let mut r = stmt.query(rusqlite::params_from_iter(q.binds))?;
+        let mut r = match stmt.query(rusqlite::params_from_iter(q.binds)) {
+            Ok(v) => v,
+            Err(e) => {
+                return Ok(Err(ft_sys_shared::DbError::UnableToSendCommand(
+                    e.to_string(),
+                )))
+            }
+        };
 
         while let Ok(Some(row)) = r.next() {
             rows.push(Row::from_sqlite(columns.len(), row));

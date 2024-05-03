@@ -189,6 +189,7 @@ pub async fn resolve_import_2022(
                         .all_packages
                         .get(package.name.as_str())
                         .unwrap()
+                        .get()
                         .get_font_ftd()
                         .unwrap_or_default();
                     path = format!("{name}/-/fonts.ftd", name = package.name);
@@ -311,7 +312,12 @@ pub async fn resolve_foreign_variable2022(
     ) -> ftd::ftd2021::p1::Result<ftd::interpreter::Value> {
         lib.push_package_under_process(module, package).await?;
         let _base_url = base_url.trim_end_matches('/');
-        let mut files = files.to_string();
+
+        // remove :type=module when used with js files
+        let mut files = files
+            .rsplit_once(':')
+            .map_or(files.to_string(), |(f, _)| f.to_string());
+
         let light = {
             if let Some(f) = files.strip_suffix(".light") {
                 files = f.to_string();
@@ -431,7 +437,7 @@ pub async fn resolve_foreign_variable2022(
                             start,
                         );
                     } else {
-                        dark_mode = light_mode.clone();
+                        dark_mode.clone_from(&light_mode);
                     }
                     lib.downloaded_assets.insert(
                         format!("{}/{}", package.name, dark_path),
@@ -717,7 +723,7 @@ pub async fn resolve_foreign_variable2(
                             start,
                         );
                     } else {
-                        dark_mode = light_mode.clone();
+                        dark_mode.clone_from(&light_mode);
                     }
                     lib.config.downloaded_assets.insert(
                         format!("{}/{}", package.name, dark_path),

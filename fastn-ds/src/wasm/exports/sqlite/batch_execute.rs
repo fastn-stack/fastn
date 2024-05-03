@@ -3,7 +3,7 @@ pub async fn batch_execute(
     ptr: i32,
     len: i32,
 ) -> wasmtime::Result<i32> {
-    let q = fastn_ds::wasm::helpers::get_str(ptr, len, &mut caller).await?;
+    let q = fastn_ds::wasm::helpers::get_str(ptr, len, &mut caller)?;
     let res = caller.data_mut().sqlite_batch_execute(q).await?;
     fastn_ds::wasm::helpers::send_json(res, &mut caller).await
 }
@@ -16,6 +16,7 @@ impl fastn_ds::wasm::Store {
         let conn = if let Some(ref mut conn) = self.sqlite {
             conn
         } else {
+            eprintln!("sqlite connection not found");
             todo!()
         };
 
@@ -23,7 +24,10 @@ impl fastn_ds::wasm::Store {
 
         Ok(match conn.execute_batch(q.as_str()) {
             Ok(()) => Ok(()),
-            Err(_e) => todo!(),
+            Err(e) => {
+                eprintln!("sqlite batch execute error: {e}");
+                todo!()
+            }
         })
     }
 }

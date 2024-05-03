@@ -40,7 +40,7 @@ impl Library2 {
             .config
             .config
             .all_packages
-            .contains_key(package.name.as_str())
+            .contains(package.name.as_str())
         {
             return Err(ftd::ftd2021::p1::Error::ParseError {
                 message: format!("Cannot resolve the package: {}", package.name),
@@ -65,7 +65,7 @@ impl Library2 {
             .config
             .all_packages
             .get(current_package_name)
-            .map(|p| p.to_owned())
+            .map(|p| p.get().to_owned())
             .ok_or_else(|| ftd::ftd2021::p1::Error::ParseError {
                 message: format!("Can't find current package: {}", current_package_name),
                 doc_id: "".to_string(),

@@ -3,7 +3,7 @@ pub async fn connect(
     ptr: i32,
     len: i32,
 ) -> wasmtime::Result<i32> {
-    let db_url = fastn_ds::wasm::helpers::get_str(ptr, len, &mut caller).await?;
+    let db_url = fastn_ds::wasm::helpers::get_str(ptr, len, &mut caller)?;
     caller.data_mut().pg_connect(db_url.as_str()).await
 }
 
@@ -15,19 +15,24 @@ impl fastn_ds::wasm::Store {
             db_url
         };
 
-        let pool = match self.wasm_pg_pools.get(db_url) {
-            Some(pool) => pool,
+        let mut clients = self.clients.lock().await;
+
+        return match self.pg_pools.get(db_url) {
+            Some(pool) => get_client(pool.get(), &mut clients).await,
             None => {
                 let pool = fastn_ds::create_pool(db_url).await?;
-                self.wasm_pg_pools.insert(db_url.to_string(), pool);
-                self.wasm_pg_pools.get(db_url).unwrap() // expect to be there
+                fastn_ds::insert_or_update(&self.pg_pools, db_url.to_string(), pool);
+                get_client(self.pg_pools.get(db_url).unwrap().get(), &mut clients).await
             }
         };
 
-        let client = pool.get().await?;
-
-        let mut clients = self.clients.lock().await;
-        clients.push(fastn_ds::wasm::Conn { client });
-        Ok(clients.len() as i32 - 1)
+        async fn get_client(
+            pool: &deadpool_postgres::Pool,
+            clients: &mut Vec<fastn_ds::wasm::Conn>,
+        ) -> wasmtime::Result<i32> {
+            let client = pool.get().await?;
+            clients.push(fastn_ds::wasm::Conn { client });
+            Ok(clients.len() as i32 - 1)
+        }
     }
 }

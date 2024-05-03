@@ -573,7 +573,7 @@
 "ftd#non-breaking-space": "&nbsp;",
 "ftd#space": " ",
 "ftd#system-dark-mode": false,
-"www.amitu.com/#dtype": {
+"www.amitu.com#dtype": {
 "font-family": [
 "cursive"
 ],
@@ -582,12 +582,12 @@
 "size": "40px",
 "weight": 700
 },
-"www.amitu.com/#flag": true,
-"www.amitu.com/#image": {
+"www.amitu.com#flag": true,
+"www.amitu.com#image": {
 "dark": "https://fastn.io/-/fastn.io/images/fastn-dark.svg",
 "light": "https://fastn.io/-/fastn.io/images/fastn.svg"
 },
-"www.amitu.com/#mtype": {
+"www.amitu.com#mtype": {
 "font-family": [
 "fantasy"
 ],
@@ -596,7 +596,7 @@
 "size": "20px",
 "weight": 100
 },
-"www.amitu.com/#rtype": {
+"www.amitu.com#rtype": {
 "desktop": {
 "font-family": [
 "cursive"
@@ -635,7 +635,7 @@
 <script src="default-47D9AFCD179BB157D8432FE0DC7B328F231E1CDACA1CB36790A41EAC123C7461.js"></script>
 
 
-<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;www.amitu.com/#flag&quot;}]]}]', this)" style="cursor: pointer" class="ft_common ft_md">Click me and document title changes</div><div data-id="0,1:main" style="" class="ft_common ft_md">hello</div><h2 data-id="0,2:main" id="hello-world" style="font-family: cursive; font-size: 40px; font-weight: 700; letter-spacing: 5px; line-height: 65px" class="ft_common ft_md">Hello World</h2><h1 data-id="0,3:main" id="hello-h1" style="color: rgba(88,75,66,1); font-family: sans-serif; font-size: 18px; font-weight: 400; line-height: 30px" class="ft_common ft_md">hello_h1</h1><h3 data-id="0,4:main" id="hello-h0" style="font-family: cursive; font-size: 40px; font-weight: 700; letter-spacing: 5px; line-height: 65px" class="ft_common ft_md">hello_h0</h3></div>
+<div data-id="main" style="height: 100%; width: 100%" class="ft_common ft_column"><div data-id="0,0:main" onclick="window.ftd.handle_event(event, 'main', '[{&quot;name&quot;:&quot;ftd__toggle___main&quot;,&quot;values&quot;:[[&quot;a&quot;,{&quot;mutable&quot;:true,&quot;reference&quot;:&quot;www.amitu.com#flag&quot;}]]}]', this)" style="cursor: pointer" class="ft_common ft_md">Click me and document title changes</div><div data-id="0,1:main" style="" class="ft_common ft_md">hello</div><h2 data-id="0,2:main" id="hello-world" style="font-family: cursive; font-size: 40px; font-weight: 700; letter-spacing: 5px; line-height: 65px" class="ft_common ft_md">Hello World</h2><h1 data-id="0,3:main" id="hello-h1" style="color: rgba(88,75,66,1); font-family: sans-serif; font-size: 18px; font-weight: 400; line-height: 30px" class="ft_common ft_md">hello_h1</h1><h3 data-id="0,4:main" id="hello-h0" style="font-family: cursive; font-size: 40px; font-weight: 700; letter-spacing: 5px; line-height: 65px" class="ft_common ft_md">hello_h0</h3></div>
 <script>
 
 
@@ -767,7 +767,7 @@ a.value = v
 window.node_change_main = {};
 window.node_change_main["document__title"] = function(data) {
 if(function(){
-return (!resolve_reference("www.amitu.com/#flag", data));
+return (!resolve_reference("www.amitu.com#flag", data));
 }()){
 document.title = "MY TITLE";
 }
@@ -776,7 +776,7 @@ else {document.title = "My title";}
 
 window.node_change_main["og_document__title"] = function(data) {
 if(function(){
-return (!resolve_reference("www.amitu.com/#flag", data));
+return (!resolve_reference("www.amitu.com#flag", data));
 }()){
 eval(`let ti = document.head.querySelector('meta[property="og:title"]');if (!!ti) { ti.content = {0}; }`.format(JSON.stringify("MY OG TITLE")))
 }
@@ -785,7 +785,7 @@ else {eval(`let ti = document.head.querySelector('meta[property="og:title"]');if
 
 window.node_change_main["og_document__description"] = function(data) {
 if(function(){
-return (!resolve_reference("www.amitu.com/#flag", data));
+return (!resolve_reference("www.amitu.com#flag", data));
 }()){
 eval(`let ti = document.head.querySelector('meta[property="og:description"]');if (!!ti) { ti.content = {0}; }`.format(JSON.stringify("MY OG DESCRIPTION")))
 }
@@ -794,7 +794,7 @@ else {eval(`let ti = document.head.querySelector('meta[property="og:description"
 
 window.node_change_main["og_document__image"] = function(data) {
 if(function(){
-return (!resolve_reference("www.amitu.com/#flag", data));
+return (!resolve_reference("www.amitu.com#flag", data));
 }()){
 eval(`let ti = document.head.querySelector('meta[property="og:image"]');if (!!ti) { ti.content = {0}; }`.format(JSON.stringify(eval(`
 let c = {0};
@@ -804,42 +804,42 @@ if (typeof c === 'object' && !!c && "src" in c) {c.src} else {c}
 else {eval(`let ti = document.head.querySelector('meta[property="og:image"]');if (!!ti) { ti.content = {0}; }`.format(JSON.stringify(eval(`
 let c = {0};
 if (typeof c === 'object' && !!c && "src" in c) {c.src} else {c}
-`.format(JSON.stringify({"src": resolve_reference("www.amitu.com/#image.light", data)}))))))}
+`.format(JSON.stringify({"src": resolve_reference("www.amitu.com#image.light", data)}))))))}
 }
 
 window.node_change_main["0,2:main__font-family"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("www.amitu.com/#rtype", data).desktop)));
+document.querySelector(`[data-id="0,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("www.amitu.com#rtype", data).desktop)));
 }
-else {document.querySelector(`[data-id="0,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("www.amitu.com/#rtype", data).mobile)));}
+else {document.querySelector(`[data-id="0,2:main"]`).style["font-family"] = eval(`({0})["font-family"]`.format(JSON.stringify(resolve_reference("www.amitu.com#rtype", data).mobile)));}
 }
 
 window.node_change_main["0,2:main__font-size"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("www.amitu.com/#rtype", data).desktop)));
+document.querySelector(`[data-id="0,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("www.amitu.com#rtype", data).desktop)));
 }
-else {document.querySelector(`[data-id="0,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("www.amitu.com/#rtype", data).mobile)));}
+else {document.querySelector(`[data-id="0,2:main"]`).style["font-size"] = eval(`({0})["size"]`.format(JSON.stringify(resolve_reference("www.amitu.com#rtype", data).mobile)));}
 }
 
 window.node_change_main["0,2:main__font-weight"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("www.amitu.com/#rtype", data).desktop)));
+document.querySelector(`[data-id="0,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("www.amitu.com#rtype", data).desktop)));
 }
-else {document.querySelector(`[data-id="0,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("www.amitu.com/#rtype", data).mobile)));}
+else {document.querySelector(`[data-id="0,2:main"]`).style["font-weight"] = eval(`({0}).weight`.format(JSON.stringify(resolve_reference("www.amitu.com#rtype", data).mobile)));}
 }
 
 window.node_change_main["0,2:main__letter-spacing"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("www.amitu.com/#rtype", data).desktop)));
+document.querySelector(`[data-id="0,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("www.amitu.com#rtype", data).desktop)));
 }
-else {document.querySelector(`[data-id="0,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("www.amitu.com/#rtype", data).mobile)));}
+else {document.querySelector(`[data-id="0,2:main"]`).style["letter-spacing"] = eval(`({0})["letter-spacing"]`.format(JSON.stringify(resolve_reference("www.amitu.com#rtype", data).mobile)));}
 }
 
 window.node_change_main["0,2:main__line-height"] = function(data) {
 if(data["ftd#device"] == "desktop"){
-document.querySelector(`[data-id="0,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("www.amitu.com/#rtype", data).desktop)));
+document.querySelector(`[data-id="0,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("www.amitu.com#rtype", data).desktop)));
 }
-else {document.querySelector(`[data-id="0,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("www.amitu.com/#rtype", data).mobile)));}
+else {document.querySelector(`[data-id="0,2:main"]`).style["line-height"] = eval(`({0})["line-height"]`.format(JSON.stringify(resolve_reference("www.amitu.com#rtype", data).mobile)));}
 }
 window.node_change_main["0,3:main__color"] = function(data) {
 if(!data["ftd#dark-mode"]){
@@ -934,22 +934,22 @@ window.ftd.utils.node_change_call("main","0,4:main__letter-spacing", data);
 window.ftd.utils.node_change_call("main","0,4:main__line-height", data);
 };
 
-window.set_value_main["www.amitu.com/#flag"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "www.amitu.com/#flag", remaining, new_value);
+window.set_value_main["www.amitu.com#flag"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "www.amitu.com#flag", remaining, new_value);
 
-window.ftd.call_mutable_value_changes("www.amitu.com/#flag", "main");
-window.ftd.call_immutable_value_changes("www.amitu.com/#flag", "main");
+window.ftd.call_mutable_value_changes("www.amitu.com#flag", "main");
+window.ftd.call_immutable_value_changes("www.amitu.com#flag", "main");
 window.ftd.utils.node_change_call("main","document__title", data);
 window.ftd.utils.node_change_call("main","og_document__description", data);
 window.ftd.utils.node_change_call("main","og_document__image", data);
 window.ftd.utils.node_change_call("main","og_document__title", data);
 };
 
-window.set_value_main["www.amitu.com/#rtype"] = function (data, new_value, remaining) {
-window.ftd.utils.set_value_helper(data, "www.amitu.com/#rtype", remaining, new_value);
+window.set_value_main["www.amitu.com#rtype"] = function (data, new_value, remaining) {
+window.ftd.utils.set_value_helper(data, "www.amitu.com#rtype", remaining, new_value);
 
-window.ftd.call_mutable_value_changes("www.amitu.com/#rtype", "main");
-window.ftd.call_immutable_value_changes("www.amitu.com/#rtype", "main");
+window.ftd.call_mutable_value_changes("www.amitu.com#rtype", "main");
+window.ftd.call_immutable_value_changes("www.amitu.com#rtype", "main");
 window.ftd.utils.node_change_call("main","0,2:main__font-family", data);
 window.ftd.utils.node_change_call("main","0,2:main__font-size", data);
 window.ftd.utils.node_change_call("main","0,2:main__font-weight", data);

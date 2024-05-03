@@ -27,7 +27,7 @@ async fn original_package_status(config: &fastn_core::Config) -> fastn_core::Res
     for translation in config.package.translations.iter() {
         if let Some(ref status) = translation.translation_status_summary {
             println!("Status for `{}` package:", translation.name);
-            println!("{}", status.to_string());
+            println!("{status}");
         }
     }
     Ok(())

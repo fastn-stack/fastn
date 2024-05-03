@@ -25,7 +25,6 @@ impl FTDEdition {
     }
 }
 
-#[cfg(feature = "use-config-json")]
 #[derive(Debug, Clone)]
 pub struct Config {
     // Global Information
@@ -33,25 +32,7 @@ pub struct Config {
     pub package: fastn_core::Package,
     pub packages_root: fastn_ds::Path,
     pub original_directory: fastn_ds::Path,
-    pub all_packages: std::collections::BTreeMap<String, fastn_core::Package>,
-    pub global_ids: std::collections::HashMap<String, String>,
-    pub ftd_edition: FTDEdition,
-    pub ftd_external_js: Vec<String>,
-    pub ftd_inline_js: Vec<String>,
-    pub ftd_external_css: Vec<String>,
-    pub ftd_inline_css: Vec<String>,
-    pub test_command_running: bool,
-}
-
-#[cfg(not(feature = "use-config-json"))]
-#[derive(Debug, Clone)]
-pub struct Config {
-    // Global Information
-    pub ds: fastn_ds::DocumentStore,
-    pub package: fastn_core::Package,
-    pub packages_root: fastn_ds::Path,
-    pub original_directory: fastn_ds::Path,
-    pub all_packages: dashmap::DashMap<String, fastn_core::Package>,
+    pub all_packages: scc::HashMap<String, fastn_core::Package>,
     pub global_ids: std::collections::HashMap<String, String>,
     pub ftd_edition: FTDEdition,
     pub ftd_external_js: Vec<String>,
@@ -400,27 +381,14 @@ impl Config {
     /// `get_font_style()` returns the HTML style tag which includes all the fonts used by any
     /// ftd document. Currently this function does not check for fonts in package dependencies
     /// nor it tries to avoid fonts that are configured but not needed in current document.
-    #[cfg(not(feature = "use-config-json"))]
     pub fn get_font_style(&self) -> String {
-        let generated_style = self
-            .all_packages
-            .iter()
-            .map(|package| package.get_font_html())
-            .collect::<Vec<_>>()
-            .join("\n");
-        return match generated_style.trim().is_empty() {
-            false => format!("<style>{}</style>", generated_style),
-            _ => "".to_string(),
-        };
-    }
-    #[cfg(feature = "use-config-json")]
-    pub fn get_font_style(&self) -> String {
-        let generated_style = self
-            .all_packages
-            .values()
-            .map(|package| package.get_font_html())
-            .collect::<Vec<_>>()
-            .join("\n");
+        let mut generated_style = String::new();
+        let mut entry = self.all_packages.first_entry();
+        while let Some(package) = entry {
+            generated_style.push_str(package.get().get_font_html().as_str());
+            generated_style.push('\n');
+            entry = package.next();
+        }
         return match generated_style.trim().is_empty() {
             false => format!("<style>{}</style>", generated_style),
             _ => "".to_string(),
@@ -463,20 +431,12 @@ impl Config {
         Ok(())
     }
 
-    #[cfg(feature = "use-config-json")]
     fn get_fonts_from_all_packages(&self) -> Vec<fastn_core::Font> {
         let mut fonts = vec![];
-        for package in self.all_packages.values() {
-            fonts.extend(package.fonts.clone());
-        }
-        fonts
-    }
-
-    #[cfg(not(feature = "use-config-json"))]
-    fn get_fonts_from_all_packages(&self) -> Vec<fastn_core::Font> {
-        let mut fonts = vec![];
-        for package in self.all_packages.iter() {
-            fonts.extend(package.fonts.clone());
+        let mut entry = self.all_packages.first_entry();
+        while let Some(package) = entry {
+            fonts.extend(package.get().fonts.clone());
+            entry = package.next();
         }
         fonts
     }
@@ -667,8 +627,8 @@ impl Config {
                     false,
                 )
                 .await?;
-                s.readers = sitemap_temp.readers.clone();
-                s.writers = sitemap_temp.writers.clone();
+                s.readers.clone_from(&sitemap_temp.readers);
+                s.writers.clone_from(&sitemap_temp.writers);
                 Some(s)
             }
             None => None,
@@ -803,23 +763,14 @@ impl Config {
         Ok((self.package.name.to_string(), self.package.to_owned()))
     }
 
-    #[cfg(not(feature = "use-config-json"))]
     fn find_package_id_in_all_packages(&self, id: &str) -> Option<(String, fastn_core::Package)> {
-        for item in self.all_packages.iter() {
-            let package_name = item.key();
+        let mut item = self.all_packages.first_entry();
+        while let Some(package) = item {
+            let package_name = package.key();
             if id.starts_with(format!("{package_name}/").as_str()) || id.eq(package_name) {
-                return Some((package_name.to_string(), item.value().to_owned()));
+                return Some((package_name.to_string(), package.get().to_owned()));
             }
-        }
-        None
-    }
-
-    #[cfg(feature = "use-config-json")]
-    fn find_package_id_in_all_packages(&self, id: &str) -> Option<(String, fastn_core::Package)> {
-        for (package_name, package) in self.all_packages.iter().rev() {
-            if id.starts_with(format!("{package_name}/").as_str()) || id.eq(package_name) {
-                return Some((package_name.to_string(), package.to_owned()));
-            }
+            item = package.next();
         }
         None
     }
@@ -1134,8 +1085,8 @@ impl Config {
                         resolve_sitemap,
                     )
                     .await?;
-                    s.readers = sitemap_temp.readers.clone();
-                    s.writers = sitemap_temp.writers.clone();
+                    s.readers.clone_from(&sitemap_temp.readers);
+                    s.writers.clone_from(&sitemap_temp.writers);
                     Some(s)
                 }
                 None => None,
@@ -1173,9 +1124,11 @@ impl Config {
             config.package.endpoints
         };
 
-        config
-            .all_packages
-            .insert(package.name.to_string(), package.to_owned());
+        fastn_ds::insert_or_update(
+            &config.all_packages,
+            package.name.to_string(),
+            package.to_owned(),
+        );
 
         Ok(config)
     }
@@ -1186,7 +1139,7 @@ impl Config {
         package: &fastn_core::Package,
     ) -> fastn_core::Result<fastn_core::Package> {
         match self.all_packages.get(&package.name) {
-            Some(package) => Ok(package.clone()),
+            Some(package) => Ok(package.get().clone()),
             None => Err(fastn_core::Error::PackageError {
                 message: format!("Could not resolve package {}", &package.name),
             }),
@@ -1203,7 +1156,7 @@ impl Config {
         }
 
         if let Some(package) = { self.all_packages.get(package.name.as_str()) } {
-            return Ok(package.clone());
+            return Ok(package.get().clone());
         }
 
         let mut package = package
@@ -1221,8 +1174,11 @@ impl Config {
 
     #[cfg(not(feature = "use-config-json"))]
     pub(crate) fn add_package(&self, package: &fastn_core::Package) {
-        self.all_packages
-            .insert(package.name.to_string(), package.to_owned());
+        fastn_ds::insert_or_update(
+            &self.all_packages,
+            package.name.to_string(),
+            package.to_owned(),
+        );
     }
 
     #[tracing::instrument(skip(self))]
@@ -1245,7 +1201,7 @@ impl Config {
         default: Option<fastn_core::Package>,
     ) -> fastn_core::Package {
         if let Some(package) = self.all_packages.get(package_name) {
-            package.to_owned()
+            package.get().to_owned()
         } else if let Some(package) = default {
             package.to_owned()
         } else {
@@ -1260,7 +1216,7 @@ impl Config {
         default: Option<fastn_core::Package>,
     ) -> fastn_core::Package {
         if let Some(package) = self.all_packages.get(package_name) {
-            package.value().to_owned()
+            package.get().to_owned()
         } else if let Some(package) = default {
             package.to_owned()
         } else {
@@ -1274,15 +1230,20 @@ async fn get_all_packages(
     package: &mut fastn_core::Package,
     package_root: &fastn_ds::Path,
     ds: &fastn_ds::DocumentStore,
-) -> fastn_core::Result<std::collections::BTreeMap<String, fastn_core::Package>> {
-    let mut all_packages = std::collections::BTreeMap::new();
-    all_packages.insert(package.name.to_string(), package.to_owned());
+) -> fastn_core::Result<scc::HashMap<String, fastn_core::Package>> {
+    let all_packages = scc::HashMap::new();
+    fastn_ds::insert_or_update(&all_packages, package.name.to_string(), package.to_owned());
     let config_temp = config_temp::ConfigTemp::read(ds).await?;
-    all_packages.extend(
-        config_temp
-            .get_all_packages(ds, package, package_root)
-            .await?,
-    );
+    let other = config_temp
+        .get_all_packages(ds, package, package_root)
+        .await?;
+    let mut entry = other.first_entry();
+    while let Some(package) = entry {
+        all_packages
+            .insert(package.key().to_string(), package.get().to_owned())
+            .unwrap();
+        entry = package.next();
+    }
     Ok(all_packages)
 }
 
@@ -1291,8 +1252,8 @@ async fn get_all_packages(
     package: &mut fastn_core::Package,
     _package_root: &fastn_ds::Path,
     _ds: &fastn_ds::DocumentStore,
-) -> fastn_core::Result<dashmap::DashMap<String, fastn_core::Package>> {
-    let all_packages = dashmap::DashMap::new();
-    all_packages.insert(package.name.to_string(), package.to_owned());
+) -> fastn_core::Result<scc::HashMap<String, fastn_core::Package>> {
+    let all_packages = scc::HashMap::new();
+    fastn_ds::insert_or_update(&all_packages, package.name.to_string(), package.to_owned());
     Ok(all_packages)
 }
