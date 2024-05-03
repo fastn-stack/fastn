@@ -323,7 +323,7 @@ impl Request {
     }
 
     pub fn set_cookies(&mut self, cookies: &std::collections::HashMap<String, String>) {
-        self.cookies = cookies.clone();
+        self.cookies.clone_from(cookies);
     }
 
     pub fn set_ip(&mut self, ip: Option<String>) {

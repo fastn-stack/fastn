@@ -41,7 +41,7 @@ impl VariableDependencyGenerator<'_> {
                     self.doc,
                 );
             }
-            if result.value.get(&variable.name).is_none() {
+            if !result.value.contains_key(&variable.name) {
                 result.extend(variable.name.to_string(), vec![]);
             }
         }

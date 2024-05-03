@@ -281,7 +281,7 @@ impl State {
 
                         match kv.source {
                             ftd_p1::header::KVSource::Caption => {
-                                existing_header_caption = kv.value.to_owned()
+                                kv.value.clone_into(&mut existing_header_caption)
                             }
                             ftd_p1::header::KVSource::Body => {
                                 existing_header_body = (kv.value.to_owned(), Some(kv.line_number))
