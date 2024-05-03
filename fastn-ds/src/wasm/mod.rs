@@ -3,7 +3,7 @@ pub mod helpers;
 pub mod macros;
 mod store;
 
-pub use store::{Conn, FtdResponse, Response, Store};
+pub use store::{Conn, Response, Store};
 
 #[tracing::instrument(skip_all)]
 pub async fn process_http_request(
