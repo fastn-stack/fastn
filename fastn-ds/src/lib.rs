@@ -170,7 +170,6 @@ pub trait RequestType {
 
 pub enum HttpResponseWrapper {
     Http(HttpResponse),
-    Ftd(fastn_ds::wasm::FtdResponse),
 }
 
 pub static WASM_ENGINE: once_cell::sync::Lazy<wasmtime::Engine> =
