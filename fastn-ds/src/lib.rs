@@ -381,7 +381,7 @@ impl DocumentStore {
         &self,
         wasm_url: String,
         req: &T,
-    ) -> Result<fastn_ds::wasm::Response, HttpError>
+    ) -> Result<ft_sys_shared::Request, HttpError>
     where
         T: RequestType,
     {

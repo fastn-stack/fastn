@@ -434,7 +434,7 @@ async fn handle_endpoints(
 
     if url.starts_with("wasm+proxy://") {
         return match config.ds.handle_wasm(url, req).await {
-            Ok(fastn_ds::wasm::Response::Http(r)) => Some(Ok(fastn_ds::wasm::to_response(r))),
+            Ok(r) => Some(Ok(fastn_ds::wasm::to_response(r))),
             Err(e) => return Some(Err(e.into())),
         };
     }
