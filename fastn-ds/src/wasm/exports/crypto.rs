@@ -6,9 +6,6 @@ pub async fn encrypt(
     len: i32,
 ) -> wasmtime::Result<i32> {
     let input = fastn_ds::wasm::helpers::get_str(ptr, len, &mut caller)?;
-    #[cfg(feature = "hostn")]
-    let secret_key = ft_aws::fastn_secret_key();
-    #[cfg(not(feature = "hostn"))]
     let secret_key = std::env::var("FASTN_SECRET_KEY").unwrap();
     let mc_obj = magic_crypt::new_magic_crypt!(secret_key, 256);
     let o = mc_obj.encrypt_to_base64(input.as_str()).as_str().to_owned();
@@ -21,9 +18,6 @@ pub async fn decrypt(
     len: i32,
 ) -> wasmtime::Result<i32> {
     let input = fastn_ds::wasm::helpers::get_str(ptr, len, &mut caller)?;
-    #[cfg(feature = "hostn")]
-    let secret_key = ft_aws::fastn_secret_key();
-    #[cfg(not(feature = "hostn"))]
     let secret_key = std::env::var("FASTN_SECRET_KEY").unwrap();
     let mc_obj = magic_crypt::new_magic_crypt!(secret_key, 256);
     let o = mc_obj

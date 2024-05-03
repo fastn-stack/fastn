@@ -44,7 +44,6 @@ ignore.workspace = true
 deadpool.workspace = true
 indoc.workspace = true
 itertools.workspace = true
-magic-crypt.workspace = true
 mime_guess.workspace = true
 once_cell.workspace = true
 postgres-types.workspace = true
