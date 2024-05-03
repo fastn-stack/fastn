@@ -437,7 +437,7 @@ pub async fn resolve_foreign_variable2022(
                             start,
                         );
                     } else {
-                        dark_mode = light_mode.clone();
+                        dark_mode.clone_from(&light_mode);
                     }
                     lib.downloaded_assets.insert(
                         format!("{}/{}", package.name, dark_path),
@@ -723,7 +723,7 @@ pub async fn resolve_foreign_variable2(
                             start,
                         );
                     } else {
-                        dark_mode = light_mode.clone();
+                        dark_mode.clone_from(&light_mode);
                     }
                     lib.config.downloaded_assets.insert(
                         format!("{}/{}", package.name, dark_path),

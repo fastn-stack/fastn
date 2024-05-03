@@ -263,7 +263,7 @@ async fn download_and_unpack_zip(
                 Some((_, path)) => path,
                 None => &path_normalized,
             };
-            if manifest.files.get(path_without_prefix).is_none() {
+            if !manifest.files.contains_key(path_without_prefix) {
                 continue;
             }
             let output_path = &dependency_path.join(path_without_prefix);

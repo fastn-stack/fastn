@@ -450,7 +450,7 @@ impl DocumentStore {
             reqwest::Url::parse(url.as_str())?,
         );
 
-        *proxy_request.headers_mut() = headers.to_owned();
+        headers.clone_into(proxy_request.headers_mut());
 
         for (header_key, header_value) in extra_headers {
             proxy_request.headers_mut().insert(

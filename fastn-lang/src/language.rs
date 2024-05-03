@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use std::fmt::Display;
 
 #[derive(Copy, Debug, PartialEq, Clone, Eq, Hash, enum_iterator_derive::IntoEnumIterator)]
 pub enum Language {
@@ -246,9 +247,9 @@ impl std::str::FromStr for Language {
     }
 }
 
-impl ToString for Language {
-    fn to_string(&self) -> String {
-        self.human()
+impl Display for Language {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.human())
     }
 }
 

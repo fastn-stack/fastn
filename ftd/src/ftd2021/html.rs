@@ -793,7 +793,7 @@ impl ftd::Collector {
 
     fn insert_class(&mut self, styles: ftd::Map<String>, prefix: Option<String>) -> String {
         if let Some(ref prefix) = prefix {
-            if self.classes.get(prefix).is_some() {
+            if self.classes.contains_key(prefix) {
                 return prefix.to_owned();
             }
             self.classes.insert(

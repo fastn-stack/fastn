@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 #[derive(Clone, Eq, PartialEq, Hash, Debug)]
 pub(crate) struct Version {
     pub major: u64,

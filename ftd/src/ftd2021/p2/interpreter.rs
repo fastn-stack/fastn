@@ -697,7 +697,7 @@ impl InterpreterState {
         }
 
         fn adjust_heading_number_in_component(child: &mut ftd::ChildComponent, number: &str) {
-            if child.properties.get("heading-number").is_none() {
+            if !child.properties.contains_key("heading-number") {
                 let number_property = ftd::ftd2021::component::Property {
                     default: Some(ftd::PropertyValue::Value {
                         value: (ftd::Value::List {

@@ -627,8 +627,8 @@ impl Config {
                     false,
                 )
                 .await?;
-                s.readers = sitemap_temp.readers.clone();
-                s.writers = sitemap_temp.writers.clone();
+                s.readers.clone_from(&sitemap_temp.readers);
+                s.writers.clone_from(&sitemap_temp.writers);
                 Some(s)
             }
             None => None,
@@ -1085,8 +1085,8 @@ impl Config {
                         resolve_sitemap,
                     )
                     .await?;
-                    s.readers = sitemap_temp.readers.clone();
-                    s.writers = sitemap_temp.writers.clone();
+                    s.readers.clone_from(&sitemap_temp.readers);
+                    s.writers.clone_from(&sitemap_temp.writers);
                     Some(s)
                 }
                 None => None,

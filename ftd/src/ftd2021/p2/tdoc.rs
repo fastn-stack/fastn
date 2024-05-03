@@ -627,7 +627,7 @@ impl TDoc<'_> {
         )
     }
 
-    #[cfg_attr(feature = "cargo-clippy", allow(clippy::wrong_self_convention))]
+    #[allow(clippy::wrong_self_convention)]
     fn from_json_(
         &self,
         line_number: usize,
@@ -811,7 +811,7 @@ impl TDoc<'_> {
         )
     }
 
-    #[cfg_attr(feature = "cargo-clippy", allow(clippy::wrong_self_convention))]
+    #[allow(clippy::wrong_self_convention)]
     fn from_json_row_(
         &self,
         line_number: usize,
