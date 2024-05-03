@@ -168,10 +168,6 @@ pub trait RequestType {
     fn body(&self) -> &[u8];
 }
 
-pub enum HttpResponseWrapper {
-    Http(HttpResponse),
-}
-
 pub static WASM_ENGINE: once_cell::sync::Lazy<wasmtime::Engine> =
     once_cell::sync::Lazy::new(|| {
         wasmtime::Engine::new(wasmtime::Config::new().async_support(true)).unwrap()
