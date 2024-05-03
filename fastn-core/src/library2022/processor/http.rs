@@ -124,7 +124,7 @@ pub async fn process(
             .handle_wasm(url.to_string(), &req_config.request)
             .await
         {
-            Ok(fastn_ds::wasm::Response::Http(r)) => {
+            Ok(r) => {
                 let mut resp_cookies = vec![];
                 r.headers.into_iter().for_each(|(k, v)| {
                     if k.as_str().eq("set-cookie") {

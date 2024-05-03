@@ -4,14 +4,8 @@ pub struct Store {
     pub clients: std::sync::Arc<async_lock::Mutex<Vec<Conn>>>,
     pub pg_pools: actix_web::web::Data<scc::HashMap<String, deadpool_postgres::Pool>>,
     pub sqlite: Option<std::sync::Arc<async_lock::Mutex<rusqlite::Connection>>>,
-    pub response: Option<Response>,
+    pub response: Option<ft_sys_shared::Request>,
     pub db_url: String,
-}
-
-#[derive(Debug)]
-pub enum Response {
-    /// When wasm worker sent HTTP response.
-    Http(ft_sys_shared::Request),
 }
 
 pub struct Conn {
