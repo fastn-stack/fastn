@@ -321,7 +321,9 @@ async fn handle_static_route(
 ) -> fastn_core::Result<fastn_core::http::Response> {
     return match handle_static_route_(path, package_name, ds).await {
         Ok(r) => Ok(r),
-        Err(fastn_ds::ReadError::NotFound) => handle_not_found_image(path, package_name, ds).await,
+        Err(fastn_ds::ReadError::NotFound(_)) => {
+            handle_not_found_image(path, package_name, ds).await
+        }
         Err(e) => Err(e.into()),
     };
 
@@ -359,8 +361,8 @@ async fn handle_static_route(
             return handle_static_route_(new_file_path.as_str(), package_name, ds)
                 .await
                 .or_else(|e| {
-                    if let fastn_ds::ReadError::NotFound = e {
-                        Ok(fastn_core::http::not_found_without_warning("".to_string()))
+                    if let fastn_ds::ReadError::NotFound(e) = e {
+                        Ok(fastn_core::http::not_found_without_warning(e))
                     } else {
                         Err(e.into())
                     }
@@ -393,7 +395,9 @@ async fn handle_static_route(
     ) -> Result<fastn_core::http::Response, fastn_ds::ReadError> {
         match static_file(ds, "favicon.ico").await {
             Ok(r) => Ok(r),
-            Err(fastn_ds::ReadError::NotFound) => Ok(static_file(ds, "static/favicon.ico").await?),
+            Err(fastn_ds::ReadError::NotFound(_)) => {
+                Ok(static_file(ds, "static/favicon.ico").await?)
+            }
             Err(e) => Err(e),
         }
     }

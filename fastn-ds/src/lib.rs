@@ -97,28 +97,18 @@ pub enum RenameError {
 
 #[derive(thiserror::Error, Debug)]
 pub enum ReadError {
-    #[error("io error {0}")]
-    IOError(std::io::Error),
-    #[error("not found")]
-    NotFound,
-}
-
-impl From<std::io::Error> for ReadError {
-    fn from(err: std::io::Error) -> Self {
-        if err.kind() == std::io::ErrorKind::NotFound {
-            ReadError::NotFound
-        } else {
-            ReadError::IOError(err)
-        }
-    }
+    #[error("io error {1}: {0}")]
+    IOError(std::io::Error, String),
+    #[error("not found {0}")]
+    NotFound(String),
 }
 
 #[derive(thiserror::Error, Debug)]
 pub enum ReadStringError {
     #[error("read error {0}")]
     ReadError(#[from] ReadError),
-    #[error("utf-8 error {0}")]
-    UTF8Error(#[from] std::string::FromUtf8Error),
+    #[error("utf-8 error {1}: {0}")]
+    UTF8Error(std::string::FromUtf8Error, String),
 }
 
 #[derive(thiserror::Error, Debug)]
@@ -264,9 +254,19 @@ impl DocumentStore {
 
         tracing::debug!("read_content {}", &path);
 
-        let mut file = tokio::fs::File::open(self.root.join(&path.path).path).await?;
+        let mut file = tokio::fs::File::open(self.root.join(&path.path).path)
+            .await
+            .map_err(|e| {
+                if e.kind() == std::io::ErrorKind::NotFound {
+                    ReadError::NotFound(path.to_string())
+                } else {
+                    ReadError::IOError(e, path.to_string())
+                }
+            })?;
         let mut contents = vec![];
-        file.read_to_end(&mut contents).await?;
+        file.read_to_end(&mut contents)
+            .await
+            .map_err(|e| ReadError::IOError(e, path.to_string()))?;
         Ok(contents)
     }
 
@@ -274,7 +274,9 @@ impl DocumentStore {
         self.read_content(path)
             .await
             .map_err(ReadStringError::ReadError)
-            .and_then(|v| String::from_utf8(v).map_err(ReadStringError::UTF8Error))
+            .and_then(|v| {
+                String::from_utf8(v).map_err(|e| ReadStringError::UTF8Error(e, path.to_string()))
+            })
     }
 
     pub async fn copy(&self, from: &fastn_ds::Path, to: &fastn_ds::Path) -> Result<(), WriteError> {

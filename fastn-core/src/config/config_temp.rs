@@ -55,7 +55,7 @@ impl ConfigTemp {
         let bytes = match ds.read_content(&config_json_path).await {
             Ok(v) => v,
             Err(e) => {
-                if let fastn_ds::ReadError::NotFound = e {
+                if let fastn_ds::ReadError::NotFound(_) = e {
                     return Err(Error::NotFound(e));
                 }
 
