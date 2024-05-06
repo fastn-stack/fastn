@@ -41,6 +41,7 @@ pub async fn process_http_request(
 
     Ok(wasm_store.into_data().response.unwrap_or_else(|| {
         // actix_web::HttpResponse::InternalServerError().body("no response from wasm")
+        eprintln!("wasm file returned no http response");
         todo!()
     }))
 }

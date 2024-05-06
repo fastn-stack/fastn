@@ -37,3 +37,4 @@ serde.workspace = true
 serde_json.workspace = true
 wasmtime.workspace = true
 ft-sys-shared = { workspace = true, features = ["rusqlite"] }
+
