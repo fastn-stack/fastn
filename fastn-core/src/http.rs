@@ -138,6 +138,10 @@ pub struct Request {
 
 #[async_trait::async_trait]
 impl fastn_ds::RequestType for Request {
+    fn path(&self) -> &str {
+        self.path.as_str()
+    }
+
     async fn ud(&self, ds: &fastn_ds::DocumentStore) -> Option<ft_sys_shared::UserData> {
         self.ud(ds).await
     }

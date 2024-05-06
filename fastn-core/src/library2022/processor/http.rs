@@ -57,14 +57,7 @@ pub async fn process(
         }
     };
 
-    let (mut url, mut conf) =
-        fastn_core::config::utils::get_clean_url(&req_config.config, url.as_str()).map_err(
-            |e| ftd::interpreter::Error::ParseError {
-                message: format!("invalid url: {:?}", e),
-                doc_id: doc.name.to_string(),
-                line_number,
-            },
-        )?;
+    let mut extra_headers = std::collections::HashMap::new();
 
     let mut body = vec![];
     for header in headers.0 {
@@ -85,7 +78,7 @@ pub async fn process(
                 .to_json_string(doc, true)?
             {
                 if let Some(key) = fastn_core::http::get_header_key(header.key.as_str()) {
-                    conf.insert(key.to_string(), value.trim_matches('"').to_string());
+                    extra_headers.insert(key.to_string(), value.trim_matches('"').to_string());
                     continue;
                 }
                 if method.as_str().eq("post") {
@@ -97,7 +90,7 @@ pub async fn process(
             }
         } else {
             if let Some(key) = fastn_core::http::get_header_key(header.key.as_str()) {
-                conf.insert(key.to_string(), value);
+                extra_headers.insert(key.to_string(), value);
                 continue;
             }
             if method.as_str().eq("post") {
@@ -135,13 +128,17 @@ pub async fn process(
                 });
                 Ok((Ok(r.body.into()), resp_cookies))
             }
-            _ => todo!(),
+            Err(e) => {
+                return Err(ftd::interpreter::Error::DSHttpError {
+                    message: format!("{:?}", e),
+                })
+            }
         }
     } else if method.as_str().eq("post") {
         fastn_core::http::http_post_with_cookie(
             req_config,
             url.as_str(),
-            &conf,
+            &extra_headers,
             format!("{{{}}}", body.join(",")).as_str(),
         )
         .await
@@ -153,7 +150,7 @@ pub async fn process(
             &req_config.config.ds,
             &req_config.request,
             url.as_str(),
-            &conf,
+            &extra_headers,
             false, // disable cache
         )
         .await

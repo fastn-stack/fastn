@@ -149,6 +149,7 @@ pub type HttpResponse = ::http::Response<bytes::Bytes>;
 
 #[async_trait::async_trait]
 pub trait RequestType {
+    fn path(&self) -> &str;
     async fn ud(&self, ds: &fastn_ds::DocumentStore) -> Option<ft_sys_shared::UserData>;
     fn headers(&self) -> &reqwest::header::HeaderMap;
     fn method(&self) -> &str;
@@ -381,7 +382,8 @@ impl DocumentStore {
 
     pub async fn handle_wasm<T>(
         &self,
-        wasm_url: String,
+        wasm_file: &str,
+        wasm_path: String,
         req: &T,
     ) -> Result<ft_sys_shared::Request, HttpError>
     where
@@ -393,13 +395,13 @@ impl DocumentStore {
             .map(|(k, v)| (k.as_str().to_string(), v.as_bytes().to_vec()))
             .collect();
 
-        let wasm_file = wasm_url.strip_prefix("wasm+proxy://").unwrap();
-        let wasm_file = wasm_file.split_once(".wasm").unwrap().0;
-        let module = self.get_wasm(format!("{wasm_file}.wasm").as_str()).await?;
+        // .unwrap() is okay because the callers of this function should only call if the
+        // exact string matches
+        let module = self.get_wasm(wasm_file).await?;
 
         Ok(fastn_ds::wasm::process_http_request(
             ft_sys_shared::Request {
-                uri: wasm_url,
+                uri: wasm_path,
                 method: req.method().to_string(),
                 headers,
                 body: req.body().to_vec(),
