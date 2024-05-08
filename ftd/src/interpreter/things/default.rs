@@ -10305,6 +10305,38 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
+            "ftd#string-field".to_string(),
+            ftd::interpreter::Thing::Record(ftd::interpreter::Record {
+                name: "ftd#string-field".to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ftd::interpreter::Field {
+                        name: "name".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data().caption(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "value".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data(),
+                        mutable: true,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "error".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_optional().into_kind_data(),
+                        mutable: true,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                ]).collect(),
+                line_number: 0,
+            }),
+        ),        (
             "ftd#http-method".to_string(),
             ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
                 name: "ftd#http-method".to_string(),

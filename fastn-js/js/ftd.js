@@ -57,6 +57,10 @@ const ftd = (function () {
     // Todo: Implement this (Remove highlighter)
     exports.clean_code = (args) => args.a;
 
+    exports.go_back = () => {
+        window.history.back();
+    }
+
     exports.set_rive_boolean = (args, node) => {
         if (!!args.rive) {
             let riveNode = riveNodes[`${args.rive}__${exports.device.get()}`];
@@ -186,7 +190,7 @@ const ftd = (function () {
         method = method.trim().toUpperCase();
         const init = {
             method,
-            headers: {}
+            headers: {'Content-Type': 'application/json'}
         };
         if (headers && headers instanceof fastn.recordInstanceClass) {
             Object.assign(init.headers, headers.toObject());
@@ -216,7 +220,7 @@ const ftd = (function () {
         fetch(url, init)
             .then(res => {
                 if (!res.ok) {
-                    return new Error("[http]: Request failed", res)
+                    return new Error("[http]: Request failed: " + res)
                 }
 
                 return res.json();
@@ -244,7 +248,7 @@ const ftd = (function () {
                     }
                     if (!!response.data) {
                         if (Object.keys(data).length !== 0) {
-                            console.log("both .errrors and .data are present in response, ignoring .data");
+                            console.log("both .errors and .data are present in response, ignoring .data");
                         } else {
                             data = response.data;
                         }
@@ -455,6 +459,68 @@ const ftd = (function () {
         return fastn_utils.private.getCookie("fastn-lang");
     };
 
+    exports.http_post = function (url, ...args) {
+        if (url instanceof fastn.mutableClass) url = url.get();
+
+        let data = {};
+        let arg_map = {};
+
+        for (let i = 0, len = args.length; i < len; i += 1) {
+            let obj = args[i];
+            console.assert(obj instanceof fastn.recordInstanceClass);
+            let name = obj.get("name").get();
+            arg_map[name] = obj;
+            obj.get("error").set(null);
+            data[name] = fastn_utils.getFlattenStaticValue(obj.get("value"));
+        }
+
+        let init = {
+            method: "POST",
+            redirect: "error",
+            // TODO: set credentials?
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data),
+        }
+
+        console.log(url, data);
+
+        fetch(url, init)
+            .then(res => {
+                if (!res.ok) {
+                    return new Error("[http_post]: Request failed: " + res)
+                }
+                return res.json();
+            })
+            .then(response => {
+                console.log("[http]: Response OK", response);
+                if (response.redirect) {
+                    window.location.href = response.redirect;
+                } else if (!!response && !!response.reload) {
+                    window.location.reload();
+                } else if (!!response.errors) {
+                    for (let key of Object.keys(response.errors)) {
+                        let obj = arg_map[key];
+                        if (!obj) {
+                            console.warn("found unknown key, ignoring: ", key);
+                            continue;
+                        }
+                        let error = response.errors[key];
+                        if (Array.isArray(error)) {
+                            // django returns a list of strings
+                            error = error.join(" ");
+                        }
+                        // @ts-ignore
+                        obj.get("error").set(error);
+                    }
+                } else if (!!response.data) {
+                    console.error("data not yet implemented");
+                } else {
+                    console.error("found invalid response", response)
+                }
+            })
+            .catch(console.error);
+
+    };
     return exports;
 })();
 
