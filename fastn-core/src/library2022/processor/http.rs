@@ -135,7 +135,7 @@ pub async fn process(
                 });
                 Ok((Ok(r.body.into()), resp_cookies))
             }
-            _ => todo!(),
+            e => todo!("error: {e:?}"),
         }
     } else if method.as_str().eq("post") {
         fastn_core::http::http_post_with_cookie(

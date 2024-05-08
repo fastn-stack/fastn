@@ -184,7 +184,10 @@ impl DocumentStore {
     pub async fn default_pg_pool(&self) -> Result<deadpool_postgres::Pool, CreatePoolError> {
         let db_url = match self.env("FASTN_DB_URL").await {
             Ok(v) => v,
-            Err(_) => self.env("DATABASE_URL").await?,
+            Err(_) => self
+                .env("DATABASE_URL")
+                .await
+                .unwrap_or_else(|_| "fastn.sqlite".to_string()),
         };
 
         if let Some(p) = self.pg_pools.get(db_url.as_str()) {
@@ -407,7 +410,9 @@ impl DocumentStore {
             req.ud(self).await,
             module,
             self.pg_pools.clone(),
-            self.env("DATABASE_URL").await?,
+            self.env("DATABASE_URL")
+                .await
+                .unwrap_or_else(|_| "fastn.sqlite".to_string()),
         )
         .await?)
     }
