@@ -674,7 +674,7 @@ impl Package {
         }
 
         // reading dependencies
-        let mut deps = {
+        let deps = {
             let temp_deps: Vec<fastn_core::package::dependency::DependencyTemp> =
                 fastn_doc.get("fastn#dependency")?;
 

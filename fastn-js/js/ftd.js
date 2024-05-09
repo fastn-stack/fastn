@@ -59,7 +59,7 @@ const ftd = (function () {
 
     exports.go_back = () => {
         window.history.back();
-    }
+    };
 
     exports.set_rive_boolean = (args, node) => {
         if (!!args.rive) {
@@ -190,23 +190,31 @@ const ftd = (function () {
         method = method.trim().toUpperCase();
         const init = {
             method,
-            headers: {'Content-Type': 'application/json'}
+            headers: { "Content-Type": "application/json" },
         };
         if (headers && headers instanceof fastn.recordInstanceClass) {
             Object.assign(init.headers, headers.toObject());
         }
-        if (method !== 'GET') {
-            init.headers['Content-Type'] = 'application/json';
+        if (method !== "GET") {
+            init.headers["Content-Type"] = "application/json";
         }
-        if (body && body instanceof fastn.recordInstanceClass && method !== 'GET') {
+        if (
+            body &&
+            body instanceof fastn.recordInstanceClass &&
+            method !== "GET"
+        ) {
             init.body = JSON.stringify(body.toObject());
-        } else if (body && method !== 'GET') {
+        } else if (body && method !== "GET") {
             let json = body[0];
-            if (body.length !== 1 || (body[0].length === 2 && Array.isArray(body[0]))) {
+            if (
+                body.length !== 1 ||
+                (body[0].length === 2 && Array.isArray(body[0]))
+            ) {
                 let new_json = {};
                 // @ts-ignore
                 for (let [header, value] of Object.entries(body)) {
-                    let [key, val] = value.length == 2 ? value : [header, value];
+                    let [key, val] =
+                        value.length == 2 ? value : [header, value];
 
                     new_json[key] = fastn_utils.getFlattenStaticValue(val);
                 }
@@ -218,14 +226,14 @@ const ftd = (function () {
         let json;
 
         fetch(url, init)
-            .then(res => {
+            .then((res) => {
                 if (!res.ok) {
-                    return new Error("[http]: Request failed: " + res)
+                    return new Error("[http]: Request failed: " + res);
                 }
 
                 return res.json();
             })
-            .then(response => {
+            .then((response) => {
                 console.log("[http]: Response OK", response);
                 if (response.redirect) {
                     window.location.href = response.redirect;
@@ -248,12 +256,14 @@ const ftd = (function () {
                     }
                     if (!!response.data) {
                         if (Object.keys(data).length !== 0) {
-                            console.log("both .errors and .data are present in response, ignoring .data");
+                            console.log(
+                                "both .errors and .data are present in response, ignoring .data",
+                            );
                         } else {
                             data = response.data;
                         }
                     }
-                    console.log(response)
+                    console.log(response);
                     for (let ftd_variable of Object.keys(data)) {
                         // @ts-ignore
                         window.ftd.set_value(ftd_variable, data[ftd_variable]);
@@ -478,20 +488,20 @@ const ftd = (function () {
             method: "POST",
             redirect: "error",
             // TODO: set credentials?
-            headers: {'Content-Type': 'application/json'},
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
-        }
+        };
 
         console.log(url, data);
 
         fetch(url, init)
-            .then(res => {
+            .then((res) => {
                 if (!res.ok) {
-                    return new Error("[http_post]: Request failed: " + res)
+                    return new Error("[http_post]: Request failed: " + res);
                 }
                 return res.json();
             })
-            .then(response => {
+            .then((response) => {
                 console.log("[http]: Response OK", response);
                 if (response.redirect) {
                     window.location.href = response.redirect;
@@ -515,11 +525,10 @@ const ftd = (function () {
                 } else if (!!response.data) {
                     console.error("data not yet implemented");
                 } else {
-                    console.error("found invalid response", response)
+                    console.error("found invalid response", response);
                 }
             })
             .catch(console.error);
-
     };
     return exports;
 })();
