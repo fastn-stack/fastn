@@ -4,7 +4,7 @@ output: .build
 
 -- stdout:
 
-Updated package dependency.
+No dependencies to update.
 Processing fastn-stack.github.io/toc-processor-test/manifest.json ... done in <omitted>
 Processing fastn-stack.github.io/toc-processor-test/FASTN/ ... done in <omitted>
 Processing fastn-stack.github.io/toc-processor-test/ ... done in <omitted>
