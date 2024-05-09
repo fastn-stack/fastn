@@ -282,6 +282,14 @@ pub async fn update(ds: &fastn_ds::DocumentStore, check: bool) -> fastn_core::Re
 
     if current_package.dependencies.is_empty() {
         println!("No dependencies to update.");
+
+        // Creating Empty config file for packages with no dependencies
+        fastn_core::ConfigTemp::write(
+            ds,
+            current_package.name.clone(),
+            Default::default(),
+        ).await?;
+
         return Ok(());
     }
 
