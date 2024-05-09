@@ -686,22 +686,6 @@ impl Package {
                 .collect::<fastn_core::Result<Vec<fastn_core::Dependency>>>()?
         };
 
-        if package.name != fastn_core::FASTN_UI_INTERFACE
-            && !deps.iter().any(|dep| {
-                dep.implements
-                    .contains(&fastn_core::FASTN_UI_INTERFACE.to_string())
-            })
-        {
-            deps.push(fastn_core::Dependency {
-                package: fastn_core::Package::new(fastn_core::FASTN_UI_INTERFACE),
-                version: None,
-                notes: None,
-                alias: None,
-                implements: Vec::new(),
-                provided_via: None,
-                required_as: None,
-            });
-        };
         // setting dependencies
         package.dependencies = deps;
         // package.resolve_system_dependencies()?;
