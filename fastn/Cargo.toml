@@ -11,7 +11,7 @@ homepage.workspace = true
 default = ["fifthtry", "use-config-json"]
 
 fifthtry = ["clift"]
-use-config-json = ["fastn-core/default"]
+use-config-json = []
 
 [dependencies]
 clift = { workspace = true, optional = true }
