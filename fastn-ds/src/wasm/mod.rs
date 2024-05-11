@@ -66,7 +66,6 @@ enum PathToEndpointError {
 }
 
 fn path_to_endpoint(path: String) -> wasmtime::Result<String> {
-    println!("path: {path}");
     match path.split_once(".wasm/") {
         Some((_, l)) => {
             let l = l.trim_end_matches('/');
