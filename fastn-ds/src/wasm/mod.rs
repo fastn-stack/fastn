@@ -13,6 +13,7 @@ pub async fn process_http_request(
     wasm_pg_pools: actix_web::web::Data<scc::HashMap<String, deadpool_postgres::Pool>>,
     db_url: String,
 ) -> wasmtime::Result<ft_sys_shared::Request> {
+    let path = req.uri.clone();
     let hostn_store = fastn_ds::wasm::Store::new(req, ud, wasm_pg_pools, db_url);
     let mut linker = wasmtime::Linker::new(module.engine());
     hostn_store.register_functions(&mut linker);
@@ -28,22 +29,54 @@ pub async fn process_http_request(
         }
     };
 
-    let main = match instance.get_typed_func::<(), ()>(&mut wasm_store, "main_ft") {
-        Ok(f) => f,
-        Err(e) => {
-            return Ok(ft_sys_shared::Request::server_error(format!(
-                "no main_ft function found in wasm: {e:?}"
-            )));
-        }
-    };
-
-    main.call_async(&mut wasm_store, ()).await.unwrap(); // TODO
+    let (main, mut wasm_store) = get_entrypoint(instance, wasm_store, path)?;
+    main.call_async(&mut wasm_store, ()).await?;
 
     Ok(wasm_store.into_data().response.unwrap_or_else(|| {
         // actix_web::HttpResponse::InternalServerError().body("no response from wasm")
         eprintln!("wasm file returned no http response");
         todo!()
     }))
+}
+
+pub fn get_entrypoint(
+    instance: wasmtime::Instance,
+    mut store: wasmtime::Store<fastn_ds::wasm::Store>,
+    path: String,
+) -> wasmtime::Result<(
+    wasmtime::TypedFunc<(), ()>,
+    wasmtime::Store<fastn_ds::wasm::Store>,
+)> {
+    if let Ok(f) = instance.get_typed_func::<(), ()>(&mut store, "main_ft") {
+        return Ok((f, store));
+    }
+    let endpoint = path_to_endpoint(path)?;
+    println!("main_ft not found, trying {endpoint}");
+    instance
+        .get_typed_func(&mut store, endpoint.as_str())
+        .map(|v| (v, store))
+}
+
+#[derive(Debug, thiserror::Error)]
+enum PathToEndpointError {
+    #[error("no wasm file found in path")]
+    NoWasm,
+    #[error("multiple slashes in path")]
+    MultipleSlashes,
+}
+
+fn path_to_endpoint(path: String) -> wasmtime::Result<String> {
+    println!("path: {path}");
+    match path.split_once(".wasm/") {
+        Some((_, l)) => {
+            let l = l.trim_end_matches('/');
+            if l.contains('/') {
+                return Err(PathToEndpointError::MultipleSlashes.into());
+            }
+            Ok(l.trim_end_matches('/').replace('-', "_") + "__endpoint")
+        }
+        None => Err(PathToEndpointError::NoWasm.into()),
+    }
 }
 
 pub fn to_response(req: ft_sys_shared::Request) -> actix_web::HttpResponse {
