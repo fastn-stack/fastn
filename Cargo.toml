@@ -70,7 +70,6 @@ clift.path = "clift"
 dirs = "5"
 deadpool-postgres = "0.12"
 deadpool = "0.10"
-postgres-native-tls = "0.5"
 tokio-postgres = { version = "0.7", features = ["with-serde_json-1", "with-uuid-1"] }
 postgres-types = "0.2"
 async-lock = "3"
@@ -119,7 +118,7 @@ pretty_assertions = "1"
 rand = "0.8"
 realm-lang = "0.1"
 regex = "1"
-reqwest = { version = "0.12", features = ["json"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 sha2 = "0.10"
