@@ -13,6 +13,7 @@ pub async fn process_http_request(
     wasm_pg_pools: actix_web::web::Data<scc::HashMap<String, deadpool_postgres::Pool>>,
     db_url: String,
 ) -> wasmtime::Result<ft_sys_shared::Request> {
+    let path = req.uri.clone();
     let hostn_store = fastn_ds::wasm::Store::new(req, ud, wasm_pg_pools, db_url);
     let mut linker = wasmtime::Linker::new(module.engine());
     hostn_store.register_functions(&mut linker);
@@ -28,21 +29,90 @@ pub async fn process_http_request(
         }
     };
 
-    let main = match instance.get_typed_func::<(), ()>(&mut wasm_store, "main_ft") {
-        Ok(f) => f,
+    let wasm_store = match apply_migration(instance, wasm_store).await {
+        Ok(((), store)) => store,
         Err(e) => {
             return Ok(ft_sys_shared::Request::server_error(format!(
-                "no main_ft function found in wasm: {e:?}"
+                "failed to apply migration: {e:?}"
             )));
         }
     };
 
-    main.call_async(&mut wasm_store, ()).await.unwrap(); // TODO
+    let (main, mut wasm_store) = get_entrypoint(instance, wasm_store, path)?;
+    main.call_async(&mut wasm_store, ()).await?;
 
     Ok(wasm_store.into_data().response.unwrap_or_else(|| {
         // actix_web::HttpResponse::InternalServerError().body("no response from wasm")
+        eprintln!("wasm file returned no http response");
         todo!()
     }))
+}
+
+#[derive(Debug, thiserror::Error)]
+enum ApplyMigrationError {
+    #[error("failed to get migration__entrypoint: {0}")]
+    GetMigrationEntrypoint(#[from] wasmtime::Error),
+    #[error("migration failed: {0}")]
+    MigrationFailed(i32),
+}
+
+async fn apply_migration(
+    instance: wasmtime::Instance,
+    mut store: wasmtime::Store<fastn_ds::wasm::Store>,
+) -> Result<((), wasmtime::Store<fastn_ds::wasm::Store>), ApplyMigrationError> {
+    let ep = match instance.get_typed_func::<(), i32>(&mut store, "migration__entrypoint") {
+        Ok(v) => v,
+        Err(e) => {
+            println!("failed to get migration__entrypoint ({e}), proceeding without migration");
+            return Ok(((), store));
+        }
+    };
+
+    let i = ep.call_async(&mut store, ()).await?;
+    if i != 0 {
+        return Err(ApplyMigrationError::MigrationFailed(i));
+    }
+
+    Ok(((), store))
+}
+
+pub fn get_entrypoint(
+    instance: wasmtime::Instance,
+    mut store: wasmtime::Store<fastn_ds::wasm::Store>,
+    path: String,
+) -> wasmtime::Result<(
+    wasmtime::TypedFunc<(), ()>,
+    wasmtime::Store<fastn_ds::wasm::Store>,
+)> {
+    if let Ok(f) = instance.get_typed_func::<(), ()>(&mut store, "main_ft") {
+        return Ok((f, store));
+    }
+    let entrypoint = path_to_entrypoint(path)?;
+    println!("main_ft not found, trying {entrypoint}");
+    instance
+        .get_typed_func(&mut store, entrypoint.as_str())
+        .map(|v| (v, store))
+}
+
+#[derive(Debug, thiserror::Error)]
+enum PathToEndpointError {
+    #[error("no wasm file found in path")]
+    NoWasm,
+    #[error("multiple slashes in path")]
+    MultipleSlashes,
+}
+
+fn path_to_entrypoint(path: String) -> wasmtime::Result<String> {
+    match path.split_once(".wasm/") {
+        Some((_, l)) => {
+            let l = l.trim_end_matches('/');
+            if l.contains('/') {
+                return Err(PathToEndpointError::MultipleSlashes.into());
+            }
+            Ok(l.trim_end_matches('/').replace('-', "_") + "__entrypoint")
+        }
+        None => Err(PathToEndpointError::NoWasm.into()),
+    }
 }
 
 pub fn to_response(req: ft_sys_shared::Request) -> actix_web::HttpResponse {

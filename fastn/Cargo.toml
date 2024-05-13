@@ -8,8 +8,10 @@ repository.workspace = true
 homepage.workspace = true
 
 [features]
-default = ["fifthtry"]
+default = ["fifthtry", "use-config-json"]
+
 fifthtry = ["clift"]
+use-config-json = []
 
 [dependencies]
 clift = { workspace = true, optional = true }
