@@ -85,7 +85,7 @@ jobs:
     - uses: actions/download-artifact@v4
       with:
         name: windows_x64_latest
-        path: results/bin/
+        path: result/bin/
     - name: check exe
       run: |
           ls -la result/bin/
