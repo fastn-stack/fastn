@@ -1,9 +1,6 @@
 {
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
-
-    # TODO: use nixpkgs/unstable when this is merged:
-    # https://github.com/NixOS/nixpkgs/pull/282798
   };
 
   outputs = { self, flake-utils, nixpkgs }:
@@ -14,20 +11,8 @@
 
           overlays = [ ];
         };
-
-
-        fastn = pkgs.pkgsStatic.callPackage ./fastn.nix { };
-        fastn-win = pkgs.pkgsStatic.pkgsCross.mingwW64.callPackage ./fastn.nix { };
       in
       rec {
-        # For `nix build` & `nix run`:
-        defaultPackage = fastn;
-
-        packages = {
-          inherit fastn;
-          inherit fastn-win;
-        };
-
         # nix develop
         devShell = pkgs.mkShell {
           name = "fastn-shell";
