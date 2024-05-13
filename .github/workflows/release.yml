@@ -16,10 +16,8 @@ jobs:
     env:
       CARGO_TERM_COLOR: always
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
       - uses: actions/cache@v4
         with:
           path: |
@@ -32,10 +30,7 @@ jobs:
       - name: print rustc version
         run: rustc --version
       - name: cargo build (linux)
-        uses: actions-rs/cargo@v1
-        with:
-          command: build 
-          args: --release --features quickjs
+        run: cargo build --release --features quickjs,fifthtry
       - name: print fastn version
         run: ./target/release/fastn --version
       - name: print file info
@@ -51,9 +46,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
+      - uses: dtolnay/rust-toolchain@stable
       - uses: actions/cache@v4
         with:
           path: |
@@ -66,10 +59,7 @@ jobs:
       - name: print rustc version
         run: rustc --version
       - name: cargo build (windows)
-        uses: actions-rs/cargo@v1
-        with:
-          command: build 
-          args: --release --features quickjs 
+        run: cargo build --release --features quickjs,fifthtry
       - name: print fastn version
         run: target\release\fastn.exe --version
       - uses: actions/upload-artifact@v4
@@ -81,7 +71,7 @@ jobs:
     needs: [build-windows]
     name: Make installer for windows build
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - uses: actions/download-artifact@v4
       with:
         name: windows_x64_latest
@@ -110,9 +100,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
+      - uses: dtolnay/rust-toolchain@stable
       - uses: actions/cache@v4
         with:
           path: |
@@ -127,10 +115,7 @@ jobs:
       - name: Run Build
         id: build-macos
         continue-on-error: false
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --release --features quickjs
+        run: cargo build --release --features quickjs,fifthtry
       - name: print fastn version
         run: ./target/release/fastn --version
       - name: print file info
