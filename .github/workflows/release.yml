@@ -78,6 +78,7 @@ jobs:
           path: target/release/fastn.exe
   release-windows:
     runs-on: ubuntu-latest
+    needs: [build-windows]
     name: Make installer for windows build
     steps:
     - uses: actions/checkout@v2
