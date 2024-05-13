@@ -190,7 +190,7 @@ const ftd = (function () {
         method = method.trim().toUpperCase();
         const init = {
             method,
-            headers: {"Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
         };
         if (headers && headers instanceof fastn.recordInstanceClass) {
             Object.assign(init.headers, headers.toObject());
@@ -488,7 +488,7 @@ const ftd = (function () {
             method: "POST",
             redirect: "error",
             // TODO: set credentials?
-            headers: {"Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
         };
 
