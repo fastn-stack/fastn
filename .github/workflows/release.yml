@@ -44,7 +44,7 @@ jobs:
           ldd ./target/release/fastn
       - uses: actions/upload-artifact@v2
         with:
-          name: linux_musl_x86_64
+          name: linux_x86_64
           path: target/release/fastn
   build-windows:
     name: Build for Windows
@@ -86,6 +86,9 @@ jobs:
       with:
         name: windows_x64_latest
         path: results/bin/
+    - name: check exe
+      run: |
+          ls -la result/bin/
     - name: Install NSIS & Plugins
       run: |
         sudo apt update && sudo apt install -y nsis nsis-pluginapi
@@ -151,8 +154,8 @@ jobs:
           path: ~/download/macos
       - uses: actions/download-artifact@v4
         with:
-          name: linux_musl_x86_64
-          path: ~/download/linux_musl
+          name: linux_x86_64
+          path: ~/download/linux
       - uses: actions/download-artifact@v4
         with:
           name: windows_x64_latest
@@ -166,14 +169,14 @@ jobs:
           mv ~/download/windows/fastn.exe ~/download/windows/fastn_windows_x86_64.exe
           mv ~/download/windows/windows_x64_installer.exe ~/download/windows/fastn_setup.exe
           mv ~/download/macos/fastn ~/download/macos/fastn_macos_x86_64
-          mv ~/download/linux_musl/fastn ~/download/linux_musl/fastn_linux_musl_x86_64
+          mv ~/download/linux/fastn ~/download/linux/fastn_linux_x86_64
       - name: Update .github/RELEASE_TEMPLATE.md
         run: |
             sed -i "s/GITHUB_SHA/${GITHUB_SHA}/g" .github/RELEASE_TEMPLATE.md
             sed -i "s/DATE/$(date)/g" .github/RELEASE_TEMPLATE.md
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "~/download/windows/fastn_windows_x86_64.exe,~/download/windows/fastn_setup.exe,~/download/macos/fastn_macos_x86_64,~/download/linux_musl/fastn_linux_musl_x86_64"
+          artifacts: "~/download/windows/fastn_windows_x86_64.exe,~/download/windows/fastn_setup.exe,~/download/macos/fastn_macos_x86_64,~/download/linux/fastn_linux_x86_64"
           generateReleaseNotes: true
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event.inputs.releaseTag }}

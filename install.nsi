@@ -52,9 +52,9 @@ Section "Fastn Installer" SectionOne
     
     ; CURRENT_WD is provided through cmd arguments
     ; Copy application files
-    File ${CURRENT_WD}\result\bin\fastn.exe
-    File ${CURRENT_WD}\LICENSE
-    File ${CURRENT_WD}\README.md
+    File ${CURRENT_WD}/result/bin/fastn.exe
+    File ${CURRENT_WD}/LICENSE
+    File ${CURRENT_WD}/README.md
 
     ; Set the Path variables
     EnVar::SetHKCU
