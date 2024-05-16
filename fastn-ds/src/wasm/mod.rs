@@ -87,7 +87,7 @@ pub fn get_entrypoint(
     if let Ok(f) = instance.get_typed_func::<(), ()>(&mut store, "main_ft") {
         return Ok((f, store));
     }
-    let entrypoint = path_to_entrypoint(path)?;
+    let entrypoint = path_to_entrypoint(path.as_str())?;
     println!("main_ft not found, trying {entrypoint}");
     instance
         .get_typed_func(&mut store, entrypoint.as_str())
@@ -100,8 +100,8 @@ enum PathToEndpointError {
     NoWasm,
 }
 
-fn path_to_entrypoint(path: String) -> wasmtime::Result<String> {
-    let path = path.split_once('?').map(|(f, _)| f).unwrap_or_default();
+fn path_to_entrypoint(path: &str) -> wasmtime::Result<String> {
+    let path = path.split_once('?').map(|(f, _)| f).unwrap_or(path);
     match path.split_once(".wasm/") {
         Some((_, l)) => {
             let l = l.trim_end_matches('/').replace('/', "_");
