@@ -98,17 +98,12 @@ pub fn get_entrypoint(
 enum PathToEndpointError {
     #[error("no wasm file found in path")]
     NoWasm,
-    #[error("multiple slashes in path")]
-    MultipleSlashes,
 }
 
 fn path_to_entrypoint(path: String) -> wasmtime::Result<String> {
     match path.split_once(".wasm/") {
         Some((_, l)) => {
-            let l = l.trim_end_matches('/');
-            if l.contains('/') {
-                return Err(PathToEndpointError::MultipleSlashes.into());
-            }
+            let l = l.trim_end_matches('/').replace('/', "_");
             Ok(l.trim_end_matches('/').replace('-', "_") + "__entrypoint")
         }
         None => Err(PathToEndpointError::NoWasm.into()),
