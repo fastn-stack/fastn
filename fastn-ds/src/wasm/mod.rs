@@ -101,6 +101,7 @@ enum PathToEndpointError {
 }
 
 fn path_to_entrypoint(path: String) -> wasmtime::Result<String> {
+    let path = path.split_once('?').map(|(f, _)| f).unwrap_or_default();
     match path.split_once(".wasm/") {
         Some((_, l)) => {
             let l = l.trim_end_matches('/').replace('/', "_");
