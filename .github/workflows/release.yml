@@ -12,7 +12,8 @@ on:
 jobs:
   release-ubuntu:
     name: Build for Linux
-    runs-on: ubuntu-latest
+    # using the oldest available ubuntu on github CI to provide maximum compatibility with glibc versions
+    runs-on: ubuntu-20.04
     env:
       CARGO_TERM_COLOR: always
     steps:
@@ -154,14 +155,14 @@ jobs:
           mv ~/download/windows/fastn.exe ~/download/windows/fastn_windows_x86_64.exe
           mv ~/download/windows/windows_x64_installer.exe ~/download/windows/fastn_setup.exe
           mv ~/download/macos/fastn ~/download/macos/fastn_macos_x86_64
-          mv ~/download/linux/fastn ~/download/linux/fastn_linux_x86_64
+          mv ~/download/linux/fastn ~/download/linux/fastn_linux_musl_x86_64
       - name: Update .github/RELEASE_TEMPLATE.md
         run: |
             sed -i "s/GITHUB_SHA/${GITHUB_SHA}/g" .github/RELEASE_TEMPLATE.md
             sed -i "s/DATE/$(date)/g" .github/RELEASE_TEMPLATE.md
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "~/download/windows/fastn_windows_x86_64.exe,~/download/windows/fastn_setup.exe,~/download/macos/fastn_macos_x86_64,~/download/linux/fastn_linux_x86_64"
+          artifacts: "~/download/windows/fastn_windows_x86_64.exe,~/download/windows/fastn_setup.exe,~/download/macos/fastn_macos_x86_64,~/download/linux/fastn_linux_musl_x86_64"
           generateReleaseNotes: true
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.event.inputs.releaseTag }}
