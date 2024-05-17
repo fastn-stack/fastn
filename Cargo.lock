@@ -1603,6 +1603,7 @@ dependencies = [
  "deadpool",
  "deadpool-postgres",
  "dirs",
+ "fastn-utils",
  "ft-sys-shared",
  "futures-util",
  "http 1.1.0",
@@ -1712,6 +1713,14 @@ dependencies = [
  "thiserror",
  "tracing",
  "zip",
+]
+
+[[package]]
+name = "fastn-utils"
+version = "0.1.0"
+dependencies = [
+ "thiserror",
+ "wasmtime",
 ]
 
 [[package]]

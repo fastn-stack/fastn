@@ -11,6 +11,7 @@ members = [
     "fastn-lang",
     "fastn-package",
     "fastn-update",
+    "fastn-utils",
     "foo",
     "ftd",
     "ftd-ast",
@@ -89,6 +90,7 @@ fastn-update.path = "fastn-update"
 fastn-core.path = "fastn-core"
 fastn-issues.path = "fastn-issues"
 fastn-package.path = "fastn-package"
+fastn-utils.path = "fastn-utils"
 fastn-runtime.path = "fastn-runtime"
 fastn-wasm.path = "fastn-wasm"
 fastn-grammar.path = "fastn-grammar"

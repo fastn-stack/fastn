@@ -29,7 +29,7 @@ pub async fn process_http_request(
         }
     };
 
-    let wasm_store = match apply_migration(instance, wasm_store).await {
+    let wasm_store = match fastn_utils::apply_migration(instance, wasm_store).await {
         Ok(((), store)) => store,
         Err(e) => {
             return Ok(ft_sys_shared::Request::server_error(format!(
@@ -38,77 +38,13 @@ pub async fn process_http_request(
         }
     };
 
-    let (main, mut wasm_store) = get_entrypoint(instance, wasm_store, path)?;
+    let (main, mut wasm_store) = fastn_utils::get_entrypoint(instance, wasm_store, path)?;
     main.call_async(&mut wasm_store, ()).await?;
 
-    Ok(wasm_store.into_data().response.unwrap_or_else(|| {
-        // actix_web::HttpResponse::InternalServerError().body("no response from wasm")
-        eprintln!("wasm file returned no http response");
-        todo!()
-    }))
-}
-
-#[derive(Debug, thiserror::Error)]
-enum ApplyMigrationError {
-    #[error("failed to get migration__entrypoint: {0}")]
-    GetMigrationEntrypoint(#[from] wasmtime::Error),
-    #[error("migration failed: {0}")]
-    MigrationFailed(i32),
-}
-
-async fn apply_migration(
-    instance: wasmtime::Instance,
-    mut store: wasmtime::Store<fastn_ds::wasm::Store>,
-) -> Result<((), wasmtime::Store<fastn_ds::wasm::Store>), ApplyMigrationError> {
-    let ep = match instance.get_typed_func::<(), i32>(&mut store, "migration__entrypoint") {
-        Ok(v) => v,
-        Err(e) => {
-            println!("failed to get migration__entrypoint ({e}), proceeding without migration");
-            return Ok(((), store));
-        }
-    };
-
-    let i = ep.call_async(&mut store, ()).await?;
-    if i != 0 {
-        return Err(ApplyMigrationError::MigrationFailed(i));
-    }
-
-    Ok(((), store))
-}
-
-pub fn get_entrypoint(
-    instance: wasmtime::Instance,
-    mut store: wasmtime::Store<fastn_ds::wasm::Store>,
-    path: String,
-) -> wasmtime::Result<(
-    wasmtime::TypedFunc<(), ()>,
-    wasmtime::Store<fastn_ds::wasm::Store>,
-)> {
-    if let Ok(f) = instance.get_typed_func::<(), ()>(&mut store, "main_ft") {
-        return Ok((f, store));
-    }
-    let entrypoint = path_to_entrypoint(path.as_str())?;
-    println!("main_ft not found, trying {entrypoint}");
-    instance
-        .get_typed_func(&mut store, entrypoint.as_str())
-        .map(|v| (v, store))
-}
-
-#[derive(Debug, thiserror::Error)]
-enum PathToEndpointError {
-    #[error("no wasm file found in path")]
-    NoWasm,
-}
-
-fn path_to_entrypoint(path: &str) -> wasmtime::Result<String> {
-    let path = path.split_once('?').map(|(f, _)| f).unwrap_or(path);
-    match path.split_once(".wasm/") {
-        Some((_, l)) => {
-            let l = l.trim_end_matches('/').replace('/', "_");
-            Ok(l.trim_end_matches('/').replace('-', "_") + "__entrypoint")
-        }
-        None => Err(PathToEndpointError::NoWasm.into()),
-    }
+    Ok(wasm_store
+        .into_data()
+        .response
+        .ok_or(fastn_utils::WasmError::EndpointDidNotReturnResponse)?)
 }
 
 pub fn to_response(req: ft_sys_shared::Request) -> actix_web::HttpResponse {

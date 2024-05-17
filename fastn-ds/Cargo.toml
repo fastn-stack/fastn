@@ -9,6 +9,7 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
+fastn-utils.workspace = true
 tokio.workspace = true
 thiserror.workspace = true
 actix-web.workspace = true
