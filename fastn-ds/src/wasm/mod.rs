@@ -17,29 +17,12 @@ pub async fn process_http_request(
     let hostn_store = fastn_ds::wasm::Store::new(req, ud, wasm_pg_pools, db_url);
     let mut linker = wasmtime::Linker::new(module.engine());
     hostn_store.register_functions(&mut linker);
+    let wasm_store = wasmtime::Store::new(module.engine(), hostn_store);
+    let (wasm_store, r) = fastn_utils::handle(wasm_store, module, linker, path).await?;
 
-    let mut wasm_store = wasmtime::Store::new(module.engine(), hostn_store);
-
-    let instance = match linker.instantiate_async(&mut wasm_store, &module).await {
-        Ok(i) => i,
-        Err(e) => {
-            return Ok(ft_sys_shared::Request::server_error(format!(
-                "failed to instantiate wasm module: {e:?}"
-            )));
-        }
-    };
-
-    let wasm_store = match fastn_utils::apply_migration(instance, wasm_store).await {
-        Ok(((), store)) => store,
-        Err(e) => {
-            return Ok(ft_sys_shared::Request::server_error(format!(
-                "failed to apply migration: {e:?}"
-            )));
-        }
-    };
-
-    let (main, mut wasm_store) = fastn_utils::get_entrypoint(instance, wasm_store, path)?;
-    main.call_async(&mut wasm_store, ()).await?;
+    if let Some(r) = r {
+        return Ok(r);
+    }
 
     Ok(wasm_store
         .into_data()

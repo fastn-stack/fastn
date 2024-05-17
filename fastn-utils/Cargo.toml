@@ -11,3 +11,4 @@ homepage.workspace = true
 [dependencies]
 wasmtime.workspace = true
 thiserror.workspace = true
+ft-sys-shared = { workspace = true, features = ["rusqlite"] }

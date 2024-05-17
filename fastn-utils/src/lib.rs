@@ -1,3 +1,38 @@
+pub async fn handle<S: Send>(
+    mut wasm_store: wasmtime::Store<S>,
+    module: wasmtime::Module,
+    linker: wasmtime::Linker<S>,
+    path: String,
+) -> wasmtime::Result<(wasmtime::Store<S>, Option<ft_sys_shared::Request>)> {
+    let instance = match linker.instantiate_async(&mut wasm_store, &module).await {
+        Ok(i) => i,
+        Err(e) => {
+            return Ok((
+                wasm_store,
+                Some(ft_sys_shared::Request::server_error(format!(
+                    "failed to instantiate wasm module: {e:?}"
+                ))),
+            ));
+        }
+    };
+
+    let (wasm_store, r) = crate::apply_migration(instance, wasm_store).await;
+
+    if let Err(e) = r {
+        return Ok((
+            wasm_store,
+            Some(ft_sys_shared::Request::server_error(format!(
+                "failed to apply migration: {e:?}"
+            ))),
+        ));
+    };
+
+    let (main, mut wasm_store) = crate::get_entrypoint(instance, wasm_store, path)?;
+    main.call_async(&mut wasm_store, ()).await?;
+
+    Ok((wasm_store, None))
+}
+
 #[derive(Debug, thiserror::Error)]
 pub enum ApplyMigrationError {
     #[error("failed to get migration__entrypoint: {0}")]
@@ -9,21 +44,24 @@ pub enum ApplyMigrationError {
 pub async fn apply_migration<S: Send>(
     instance: wasmtime::Instance,
     mut store: wasmtime::Store<S>,
-) -> Result<((), wasmtime::Store<S>), ApplyMigrationError> {
+) -> (wasmtime::Store<S>, Result<(), ApplyMigrationError>) {
     let ep = match instance.get_typed_func::<(), i32>(&mut store, "migration__entrypoint") {
         Ok(v) => v,
         Err(e) => {
             println!("failed to get migration__entrypoint ({e}), proceeding without migration");
-            return Ok(((), store));
+            return (store, Ok(()));
         }
     };
 
-    let i = ep.call_async(&mut store, ()).await?;
+    let i = match ep.call_async(&mut store, ()).await {
+        Ok(v) => v,
+        Err(e) => return (store, Err(e.into())),
+    };
     if i != 0 {
-        return Err(ApplyMigrationError::MigrationFailed(i));
+        return (store, Err(ApplyMigrationError::MigrationFailed(i)));
     }
 
-    Ok(((), store))
+    (store, Ok(()))
 }
 
 pub fn get_entrypoint<S: Send>(

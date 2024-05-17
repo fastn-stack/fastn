@@ -1719,6 +1719,7 @@ dependencies = [
 name = "fastn-utils"
 version = "0.1.0"
 dependencies = [
+ "ft-sys-shared",
  "thiserror",
  "wasmtime",
 ]
