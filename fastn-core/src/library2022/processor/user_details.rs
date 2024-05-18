@@ -8,7 +8,7 @@ pub async fn process(
     if let Some(ud) = req_config.request.ud(&req_config.config.ds).await {
         let ud = UserDetails {
             is_logged_in: true,
-            username: ud.username,
+            username: ud.identity,
             name: ud.name,
             email: ud.email,
             verified_email: ud.verified_email,

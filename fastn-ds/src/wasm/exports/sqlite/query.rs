@@ -1,3 +1,5 @@
+use std::os::raw::c_int;
+
 pub async fn query(
     mut caller: wasmtime::Caller<'_, fastn_ds::wasm::Store>,
     _conn: i32,
@@ -86,16 +88,16 @@ impl fastn_ds::wasm::Store {
         };
 
         let conn = conn.lock().await;
-        println!("conn, sql: {}", q.sql.as_str());
+        println!("query1: {q:?}");
         let mut stmt = match conn.prepare(q.sql.as_str()) {
             Ok(v) => v,
             Err(e) => {
-                return Ok(Err(ft_sys_shared::DbError::UnableToSendCommand(
-                    e.to_string(),
-                )))
+                eprint!("err: {e:?}");
+                let e = rusqlite_to_diesel(e);
+                eprintln!("err: {e:?}");
+                return Ok(Err(e));
             }
         };
-        println!("stmt");
 
         let columns: Vec<String> = stmt
             .column_names()
@@ -107,16 +109,68 @@ impl fastn_ds::wasm::Store {
         let mut r = match stmt.query(rusqlite::params_from_iter(q.binds)) {
             Ok(v) => v,
             Err(e) => {
-                return Ok(Err(ft_sys_shared::DbError::UnableToSendCommand(
-                    e.to_string(),
-                )))
+                eprint!("err: {e:?}");
+                let e = rusqlite_to_diesel(e);
+                eprintln!("err: {e:?}");
+                return Ok(Err(e));
             }
         };
 
-        while let Ok(Some(row)) = r.next() {
-            rows.push(Row::from_sqlite(columns.len(), row));
+        loop {
+            match r.next() {
+                Ok(Some(row)) => {
+                    rows.push(Row::from_sqlite(columns.len(), row));
+                }
+                Ok(None) => break,
+                Err(e) => {
+                    eprint!("err: {e:?}");
+                    let e = rusqlite_to_diesel(e);
+                    eprintln!("err: {e:?}");
+                    return Ok(Err(e));
+                }
+            }
         }
+        println!("found result, {columns:?}, {rows:?}");
 
         Ok(Ok(Cursor { columns, rows }))
+    }
+}
+
+pub fn rusqlite_to_diesel(e: rusqlite::Error) -> ft_sys_shared::DbError {
+    match e {
+        rusqlite::Error::SqliteFailure(
+            libsqlite3_sys::Error {
+                extended_code,
+                code,
+            },
+            message,
+        ) => ft_sys_shared::DbError::DatabaseError {
+            kind: code_to_kind(extended_code),
+            message: message.unwrap_or_else(|| format!("{code:?}")),
+            details: None,
+            hint: None,
+            table_name: None,
+            column_name: None,
+            constraint_name: None,
+            statement_position: None,
+        },
+        e => ft_sys_shared::DbError::UnableToSendCommand(e.to_string()),
+    }
+}
+
+fn code_to_kind(code: c_int) -> ft_sys_shared::DatabaseErrorKind {
+    // borrowed from diesel/sqlite/last_error function
+    match code {
+        libsqlite3_sys::SQLITE_CONSTRAINT_UNIQUE | libsqlite3_sys::SQLITE_CONSTRAINT_PRIMARYKEY => {
+            ft_sys_shared::DatabaseErrorKind::UniqueViolation
+        }
+        libsqlite3_sys::SQLITE_CONSTRAINT_FOREIGNKEY => {
+            ft_sys_shared::DatabaseErrorKind::ForeignKeyViolation
+        }
+        libsqlite3_sys::SQLITE_CONSTRAINT_NOTNULL => {
+            ft_sys_shared::DatabaseErrorKind::NotNullViolation
+        }
+        libsqlite3_sys::SQLITE_CONSTRAINT_CHECK => ft_sys_shared::DatabaseErrorKind::CheckViolation,
+        _ => ft_sys_shared::DatabaseErrorKind::Unknown,
     }
 }

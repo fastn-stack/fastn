@@ -17,6 +17,7 @@ members = [
     "ftd-ast",
     "ftd-p1",
     "ftd-tc",
+    "t",
     # "fastn-wasm",
     # "fastn-runtime",
 ]
@@ -101,7 +102,8 @@ ftd-p1.path = "ftd-p1"
 ftd-tc.path = "ftd-tc"
 ftd-ast.path = "ftd-ast"
 fastn-js.path = "fastn-js"
-ft-sys-shared.version = "0.1.1-alpha.2"
+#ft-sys-shared = { version = "0.1.1-alpha.3", path = "../ft-sdk/ft-sys-shared" }
+ft-sys-shared = "0.1.1-alpha.3"
 futures = "0.3"
 futures-util = { version = "0.3", default-features = false, features = ["std"] }
 futures-core = "0.3"
@@ -148,6 +150,10 @@ quick-js = "0.4"
 [workspace.dependencies.fastn-observer]
 git = "https://github.com/fastn-stack/fastn-observer"
 rev = "5f64c7b"
+
+[workspace.dependencies.libsqlite3-sys]
+# this should be synced with whatever rusqlite uses
+version = "0.28.0"
 
 [workspace.dependencies.rusqlite]
 version = "0.31"

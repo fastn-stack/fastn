@@ -16,8 +16,24 @@ pub fn pg_to_shared(postgres_error: tokio_postgres::Error) -> ft_sys_shared::DbE
                 }
             });
 
+            let kind = match c.code() {
+                // code taken from diesel's PgResult::new()
+                UNIQUE_VIOLATION => ft_sys_shared::DatabaseErrorKind::UniqueViolation,
+                FOREIGN_KEY_VIOLATION => ft_sys_shared::DatabaseErrorKind::ForeignKeyViolation,
+                SERIALIZATION_FAILURE => ft_sys_shared::DatabaseErrorKind::SerializationFailure,
+                READ_ONLY_TRANSACTION => ft_sys_shared::DatabaseErrorKind::ReadOnlyTransaction,
+                NOT_NULL_VIOLATION => ft_sys_shared::DatabaseErrorKind::NotNullViolation,
+                CHECK_VIOLATION => ft_sys_shared::DatabaseErrorKind::CheckViolation,
+                CONNECTION_EXCEPTION
+                | CONNECTION_FAILURE
+                | SQLCLIENT_UNABLE_TO_ESTABLISH_SQLCONNECTION
+                | SQLSERVER_REJECTED_ESTABLISHMENT_OF_SQLCONNECTION => {
+                    ft_sys_shared::DatabaseErrorKind::ClosedConnection
+                }
+                _ => ft_sys_shared::DatabaseErrorKind::Unknown,
+            };
             ft_sys_shared::DbError::DatabaseError {
-                code: c.code().to_string(),
+                kind,
                 message: db_error.message().to_string(),
                 details: db_error.detail().map(|s| s.to_string()),
                 hint: db_error.hint().map(|s| s.to_string()),
@@ -29,3 +45,14 @@ pub fn pg_to_shared(postgres_error: tokio_postgres::Error) -> ft_sys_shared::DbE
         }
     }
 }
+
+const CONNECTION_EXCEPTION: &str = "08000";
+const CONNECTION_FAILURE: &str = "08006";
+const SQLCLIENT_UNABLE_TO_ESTABLISH_SQLCONNECTION: &str = "08001";
+const SQLSERVER_REJECTED_ESTABLISHMENT_OF_SQLCONNECTION: &str = "08004";
+const NOT_NULL_VIOLATION: &str = "23502";
+const FOREIGN_KEY_VIOLATION: &str = "23503";
+const UNIQUE_VIOLATION: &str = "23505";
+const CHECK_VIOLATION: &str = "23514";
+const READ_ONLY_TRANSACTION: &str = "25006";
+const SERIALIZATION_FAILURE: &str = "40001";

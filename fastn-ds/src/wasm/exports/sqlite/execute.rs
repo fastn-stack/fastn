@@ -1,3 +1,5 @@
+use crate::wasm::exports::sqlite::query::rusqlite_to_diesel;
+
 pub async fn execute(
     mut caller: wasmtime::Caller<'_, fastn_ds::wasm::Store>,
     ptr: i32,
@@ -18,15 +20,21 @@ impl fastn_ds::wasm::Store {
             conn
         } else {
             eprintln!("sqlite connection not found");
-            todo!()
+            return Ok(Err(ft_sys_shared::DbError::UnableToSendCommand(
+                "connection not found".to_string(),
+            )));
         };
 
         let conn = conn.lock().await;
+        println!("execute: {q:?}");
         match conn.execute(q.sql.as_str(), rusqlite::params_from_iter(q.binds)) {
             Ok(cursor) => Ok(Ok(cursor)),
-            Err(e) => Ok(Err(ft_sys_shared::DbError::UnableToSendCommand(
-                e.to_string(),
-            ))),
+            Err(e) => {
+                eprint!("err: {e:?}");
+                let e = rusqlite_to_diesel(e);
+                eprintln!("err: {e:?}");
+                Ok(Err(e))
+            }
         }
     }
 }

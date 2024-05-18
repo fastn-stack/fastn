@@ -1608,6 +1608,7 @@ dependencies = [
  "futures-util",
  "http 1.1.0",
  "ignore",
+ "libsqlite3-sys",
  "magic-crypt",
  "once_cell",
  "rand",
@@ -1797,9 +1798,9 @@ dependencies = [
 
 [[package]]
 name = "ft-sys-shared"
-version = "0.1.1-alpha.2"
+version = "0.1.1-alpha.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a4ffecae3c43df104ab8da81872dd39c6a5fd38e006770734de69b9c56417aba"
+checksum = "90b6afb4aa641a12e2415d6ce6c9351ece33aec22375e8630815c0f6a1ce97ee"
 dependencies = [
  "bytes",
  "chrono",
@@ -3947,6 +3948,13 @@ dependencies = [
  "thiserror",
  "walkdir",
  "yaml-rust",
+]
+
+[[package]]
+name = "t"
+version = "0.1.0"
+dependencies = [
+ "rusqlite",
 ]
 
 [[package]]

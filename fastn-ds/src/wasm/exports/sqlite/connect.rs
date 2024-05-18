@@ -14,7 +14,7 @@ impl fastn_ds::wasm::Store {
             self.db_url.as_str()
         } else {
             db_url
-        })?;
+        })?; // TODO: use rusqlite_to_diesel to convert error
 
         self.sqlite = Some(std::sync::Arc::new(async_lock::Mutex::new(db)));
         Ok(0)

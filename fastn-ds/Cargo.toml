@@ -21,6 +21,7 @@ http.workspace = true
 bytes.workspace = true
 camino.workspace = true
 chrono.workspace = true
+libsqlite3-sys.workspace = true
 futures-util.workspace = true
 magic-crypt.workspace = true
 async-trait.workspace = true

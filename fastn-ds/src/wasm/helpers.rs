@@ -39,7 +39,6 @@ pub fn get_json<T: serde::de::DeserializeOwned>(
     caller: &mut wasmtime::Caller<'_, fastn_ds::wasm::Store>,
 ) -> wasmtime::Result<T> {
     let bytes = get_bytes(ptr, len, caller)?;
-    println!("q: {}", String::from_utf8_lossy(&bytes));
     Ok(serde_json::from_slice(&bytes).unwrap())
 }
 
