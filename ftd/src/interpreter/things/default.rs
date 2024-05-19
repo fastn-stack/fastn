@@ -538,7 +538,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             ftd::interpreter::Thing::Function(ftd::interpreter::Function {
                 name: "ftd#string-field-with-default".to_string(),
                 return_kind: ftd::interpreter::KindData {
-                    kind: ftd::interpreter::Kind::void(),
+                    kind: ftd::interpreter::Kind::record("ftd#string-field"),
                     caption: false,
                     body: false,
                 },
@@ -550,7 +550,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                             caption: false,
                             body: false,
                         },
-                        mutable: true,
+                        mutable: false,
                         value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
@@ -562,7 +562,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                             caption: false,
                             body: false,
                         },
-                        mutable: true,
+                        mutable: false,
                         value: None,
                         access_modifier: Default::default(),
                         line_number: 0,

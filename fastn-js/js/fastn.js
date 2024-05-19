@@ -73,6 +73,10 @@ const fastn = (function (fastn) {
             this.set(val);
         }
 
+        closures() {
+            return this.#closures;
+        }
+
         get(key) {
             if (
                 !fastn_utils.isNull(key) &&
