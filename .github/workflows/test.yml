@@ -64,6 +64,11 @@ jobs:
       #          cargo pants
       - name: Run cargo test
         # cd fastn-core && fbt -f
+        # cargo test html_test_all -- --nocapture fix=true
+        # cargo test fastn_js_test_all -- --nocapture fix=true
+        # cargo test p1_test_all -- --nocapture fix=true
+        # cargo test interpreter_test_all -- --nocapture fix=true
+        # cargo test executor_test_all -- --nocapture fix=true
         id: test
         continue-on-error: true
         run: cargo test
