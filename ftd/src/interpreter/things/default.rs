@@ -556,7 +556,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         line_number: 0,
                     },
                     ftd::interpreter::Argument {
-                        name: "value".to_string(),
+                        name: "default".to_string(),
                         kind: ftd::interpreter::KindData {
                             kind: ftd::interpreter::Kind::string(),
                             caption: false,
