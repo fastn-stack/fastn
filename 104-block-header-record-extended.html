@@ -1973,6 +1973,12 @@ a.value = !a.value
 
 
 
+function ftd__string_field_with_default___main(name,default,args,data,id){
+return (ftd.string_field_with_default_js(name,default,args,data,id));
+}
+
+
+
 function ftd__increment___main(a,args,data,id){
 a.value = a.value+1
 }
@@ -2215,9 +2221,9 @@ window.ftd.utils.set_value_helper(data, "foo#bar:d:12", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#bar:d:12", "main");
 window.ftd.call_immutable_value_changes("foo#bar:d:12", "main");
+window.ftd.utils.node_change_call("main","12,3:main__text", data);
 window.ftd.utils.node_change_call("main","12,2:main__text", data);
 window.ftd.utils.node_change_call("main","12,1:main__text", data);
-window.ftd.utils.node_change_call("main","12,3:main__text", data);
 window.ftd.utils.node_change_call("main","12,3:main__display", data);
 };
 
@@ -2226,10 +2232,10 @@ window.ftd.utils.set_value_helper(data, "foo#bar:text-color:12", remaining, new_
 
 window.ftd.call_mutable_value_changes("foo#bar:text-color:12", "main");
 window.ftd.call_immutable_value_changes("foo#bar:text-color:12", "main");
-window.ftd.utils.node_change_call("main","12,1:main__color", data);
 window.ftd.utils.node_change_call("main","12,0:main__color", data);
-window.ftd.utils.node_change_call("main","12,2:main__color", data);
 window.ftd.utils.node_change_call("main","12,3:main__color", data);
+window.ftd.utils.node_change_call("main","12,1:main__color", data);
+window.ftd.utils.node_change_call("main","12,2:main__color", data);
 };
 
 window.set_value_main["foo#bar:text:12"] = function (data, new_value, remaining) {
@@ -2355,22 +2361,22 @@ window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-window.ftd.utils.node_change_call("main","12,0:main__color", data);
-window.ftd.utils.node_change_call("main","11:main__color", data);
+window.ftd.utils.node_change_call("main","4:main__color", data);
 window.ftd.utils.node_change_call("main","12,1:main__color", data);
 window.ftd.utils.node_change_call("main","12,2:main__color", data);
-window.ftd.utils.node_change_call("main","2:main__color", data);
-window.ftd.utils.node_change_call("main","1:main__color", data);
-window.ftd.utils.node_change_call("main","8:main__color", data);
-window.ftd.utils.node_change_call("main","10:main__color", data);
 window.ftd.utils.node_change_call("main","12,3:main__color", data);
-window.ftd.utils.node_change_call("main","0:main__color", data);
-window.ftd.utils.node_change_call("main","4:main__color", data);
-window.ftd.utils.node_change_call("main","5:main__color", data);
-window.ftd.utils.node_change_call("main","7:main__color", data);
-window.ftd.utils.node_change_call("main","9:main__color", data);
-window.ftd.utils.node_change_call("main","3:main__color", data);
+window.ftd.utils.node_change_call("main","10:main__color", data);
 window.ftd.utils.node_change_call("main","6:main__color", data);
+window.ftd.utils.node_change_call("main","5:main__color", data);
+window.ftd.utils.node_change_call("main","8:main__color", data);
+window.ftd.utils.node_change_call("main","11:main__color", data);
+window.ftd.utils.node_change_call("main","7:main__color", data);
+window.ftd.utils.node_change_call("main","12,0:main__color", data);
+window.ftd.utils.node_change_call("main","1:main__color", data);
+window.ftd.utils.node_change_call("main","2:main__color", data);
+window.ftd.utils.node_change_call("main","3:main__color", data);
+window.ftd.utils.node_change_call("main","9:main__color", data);
+window.ftd.utils.node_change_call("main","0:main__color", data);
 };
 
 window.set_value_main["ftd#device"] = function (data, new_value, remaining) {
@@ -2378,8 +2384,8 @@ window.ftd.utils.set_value_helper(data, "ftd#device", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#device", "main");
 window.ftd.call_immutable_value_changes("ftd#device", "main");
-window.ftd.utils.node_change_call("main","13:main__width", data);
 window.ftd.utils.node_change_call("main","13:main__padding", data);
+window.ftd.utils.node_change_call("main","13:main__width", data);
 };
 
 

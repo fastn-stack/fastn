@@ -1934,6 +1934,12 @@ a.value = !a.value
 
 
 
+function ftd__string_field_with_default___main(name,default,args,data,id){
+return (ftd.string_field_with_default_js(name,default,args,data,id));
+}
+
+
+
 function ftd__increment___main(a,args,data,id){
 a.value = a.value+1
 }
@@ -2033,8 +2039,8 @@ window.ftd.utils.set_value_helper(data, "foo#foo:mouse-hovered:0", remaining, ne
 
 window.ftd.call_mutable_value_changes("foo#foo:mouse-hovered:0", "main");
 window.ftd.call_immutable_value_changes("foo#foo:mouse-hovered:0", "main");
-window.ftd.utils.node_change_call("main","0,0:main__color", data);
 window.ftd.utils.node_change_call("main","0,1:main__text", data);
+window.ftd.utils.node_change_call("main","0,0:main__color", data);
 };
 
 window.set_value_main["foo#foo:name:0"] = function (data, new_value, remaining) {
