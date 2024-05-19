@@ -164,6 +164,14 @@ const ftd = (function () {
         );
     };
 
+    exports.string_field_with_default_js = function (name, default_value) {
+        let r = fastn.recordInstance();
+        r.set("name", name);
+        r.set("value", default_value);
+        r.set("error", null);
+        return r;
+    };
+
     exports.append = function (list, item) {
         list.push(item);
     };
@@ -190,7 +198,7 @@ const ftd = (function () {
         method = method.trim().toUpperCase();
         const init = {
             method,
-            headers: { "Content-Type": "application/json" },
+            headers: {"Content-Type": "application/json"},
         };
         if (headers && headers instanceof fastn.recordInstanceClass) {
             Object.assign(init.headers, headers.toObject());
@@ -488,7 +496,7 @@ const ftd = (function () {
             method: "POST",
             redirect: "error",
             // TODO: set credentials?
-            headers: { "Content-Type": "application/json" },
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify(data),
         };
 

@@ -534,6 +534,52 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             })
         ),
         (
+            "ftd#string-field-with-default".to_string(),
+            ftd::interpreter::Thing::Function(ftd::interpreter::Function {
+                name: "ftd#string-field-with-default".to_string(),
+                return_kind: ftd::interpreter::KindData {
+                    kind: ftd::interpreter::Kind::void(),
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter::Argument {
+                        name: "name".to_string(),
+                        kind: ftd::interpreter::KindData {
+                            kind: ftd::interpreter::Kind::string(),
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: true,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Argument {
+                        name: "value".to_string(),
+                        kind: ftd::interpreter::KindData {
+                            kind: ftd::interpreter::Kind::string(),
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: true,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter::things::function::Expression {
+                        expression: "ftd.string_field_with_default_js(name, default)".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                js: None,
+                line_number: 0,
+                external_implementation: false
+            })
+        ),
+        (
             "ftd#increment".to_string(),
             ftd::interpreter::Thing::Function(ftd::interpreter::Function {
                 name: "ftd#increment".to_string(),
