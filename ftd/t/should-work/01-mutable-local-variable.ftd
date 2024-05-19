@@ -1,0 +1,22 @@
+-- component page:
+
+-- person $page.p: John
+age: 50
+
+
+-- ftd.column:
+
+    -- ftd.text: $page.p.name
+    -- ftd.integer: $page.p.age
+
+-- end: ftd.column
+
+-- end: page
+
+
+
+
+-- record person:
+caption name:
+integer age:
+

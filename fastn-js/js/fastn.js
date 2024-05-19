@@ -5,6 +5,7 @@ const fastn = (function (fastn) {
         #property;
         #formula;
         #inherited;
+
         constructor(func, execute = true) {
             if (execute) {
                 this.#cached_value = func();
@@ -15,9 +16,11 @@ const fastn = (function (fastn) {
         get() {
             return this.#cached_value;
         }
+
         getFormula() {
             return this.#formula;
         }
+
         addNodeProperty(node, property, inherited) {
             this.#node = node;
             this.#property = property;
@@ -26,13 +29,16 @@ const fastn = (function (fastn) {
 
             return this;
         }
+
         update() {
             this.#cached_value = this.#formula();
             this.updateUi();
         }
+
         getNode() {
             return this.#node;
         }
+
         updateUi() {
             if (
                 !this.#node ||
@@ -56,6 +62,7 @@ const fastn = (function (fastn) {
         #old_closure;
         #closures;
         #closureInstance;
+
         constructor(val) {
             this.#value = null;
             this.#old_closure = null;
@@ -65,6 +72,7 @@ const fastn = (function (fastn) {
             );
             this.set(val);
         }
+
         get(key) {
             if (
                 !fastn_utils.isNull(key) &&
@@ -76,6 +84,7 @@ const fastn = (function (fastn) {
             }
             return this.#value;
         }
+
         setWithoutUpdate(value) {
             if (this.#old_closure) {
                 this.#value.removeClosure(this.#old_closure);
@@ -102,23 +111,28 @@ const fastn = (function (fastn) {
                 this.#old_closure = null;
             }
         }
+
         set(value) {
             this.setWithoutUpdate(value);
 
             this.#closureInstance.update();
         }
+
         // we have to unlink all nodes, else they will be kept in memory after the node is removed from DOM
         unlinkNode(node) {
             this.#closures = this.#closures.filter(
                 (closure) => closure.getNode() !== node,
             );
         }
+
         addClosure(closure) {
             this.#closures.push(closure);
         }
+
         removeClosure(closure) {
             this.#closures = this.#closures.filter((c) => c !== closure);
         }
+
         equalMutable(other) {
             if (!fastn_utils.deepEqual(this.get(), other.get())) {
                 return false;
@@ -128,6 +142,7 @@ const fastn = (function (fastn) {
 
             return thisClosures === otherClosures;
         }
+
         getClone() {
             return new Mutable(fastn_utils.clone(this.#value));
         }
@@ -138,6 +153,7 @@ const fastn = (function (fastn) {
         #cached_value;
         #closures;
         #closureInstance;
+
         constructor(targets, differentiator) {
             this.#differentiator = differentiator;
             this.#cached_value = this.#differentiator().get();
@@ -154,15 +170,19 @@ const fastn = (function (fastn) {
                 targets[idx].addClosure(this);
             }
         }
+
         addClosure(closure) {
             this.#closures.push(closure);
         }
+
         removeClosure(closure) {
             this.#closures = this.#closures.filter((c) => c !== closure);
         }
+
         update() {
             this.#cached_value = this.#differentiator().get();
         }
+
         get(key) {
             if (
                 !!key &&
@@ -174,6 +194,7 @@ const fastn = (function (fastn) {
             }
             return this.#cached_value;
         }
+
         set(value) {
             // Todo: Optimization removed. Reuse optimization later again
             /*if (fastn_utils.deepEqual(this.#cached_value, value)) {
@@ -187,6 +208,7 @@ const fastn = (function (fastn) {
         #list;
         #watchers;
         #closures;
+
         constructor(list) {
             this.#list = [];
             for (let idx in list) {
@@ -198,31 +220,38 @@ const fastn = (function (fastn) {
             this.#watchers = [];
             this.#closures = [];
         }
+
         addClosure(closure) {
             this.#closures.push(closure);
         }
+
         unlinkNode(node) {
             this.#closures = this.#closures.filter(
                 (closure) => closure.getNode() !== node,
             );
         }
+
         forLoop(root, dom_constructor) {
             let l = fastn_dom.forLoop(root, dom_constructor, this);
             this.#watchers.push(l);
             return l;
         }
+
         getList() {
             return this.#list;
         }
+
         getLength() {
             return this.#list.length;
         }
+
         get(idx) {
             if (fastn_utils.isNull(idx)) {
                 return this.getList();
             }
             return this.#list[idx];
         }
+
         set(index, value) {
             if (value === undefined) {
                 value = index;
@@ -249,6 +278,7 @@ const fastn = (function (fastn) {
 
             this.#closures.forEach((closure) => closure.update());
         }
+
         insertAt(index, value) {
             index = fastn_utils.getFlattenStaticValue(index);
             let mutable = fastn.wrapMutable(value);
@@ -266,9 +296,11 @@ const fastn = (function (fastn) {
             }
             this.#closures.forEach((closure) => closure.update());
         }
+
         push(value) {
             this.insertAt(this.#list.length, value);
         }
+
         deleteAt(index) {
             index = fastn_utils.getFlattenStaticValue(index);
             this.#list.splice(index, 1);
@@ -283,6 +315,7 @@ const fastn = (function (fastn) {
             }
             this.#closures.forEach((closure) => closure.update());
         }
+
         clearAll() {
             this.#list = [];
             for (let i in this.#watchers) {
@@ -290,9 +323,11 @@ const fastn = (function (fastn) {
             }
             this.#closures.forEach((closure) => closure.update());
         }
+
         pop() {
             this.deleteAt(this.#list.length - 1);
         }
+
         getClone() {
             let current_list = this.#list;
             let new_list = [];
@@ -355,6 +390,7 @@ const fastn = (function (fastn) {
     class RecordInstance {
         #fields;
         #closures;
+
         constructor(obj) {
             this.#fields = {};
             this.#closures = [];
@@ -368,9 +404,11 @@ const fastn = (function (fastn) {
                 }
             }
         }
+
         getAllFields() {
             return this.#fields;
         }
+
         getClonedFields() {
             let clonedFields = {};
             for (let key in this.#fields) {
@@ -387,17 +425,21 @@ const fastn = (function (fastn) {
             }
             return clonedFields;
         }
+
         addClosure(closure) {
             this.#closures.push(closure);
         }
+
         unlinkNode(node) {
             this.#closures = this.#closures.filter(
                 (closure) => closure.getNode() !== node,
             );
         }
+
         get(key) {
             return this.#fields[key];
         }
+
         set(key, value) {
             if (value === undefined) {
                 value = key;
@@ -417,10 +459,12 @@ const fastn = (function (fastn) {
             }
             this.#closures.forEach((closure) => closure.update());
         }
+
         setAndReturn(key, value) {
             this.set(key, value);
             return this;
         }
+
         replace(obj) {
             for (let key in this.#fields) {
                 if (!(key in obj.#fields)) {
@@ -434,6 +478,7 @@ const fastn = (function (fastn) {
             }
             this.#closures.forEach((closure) => closure.update());
         }
+
         toObject() {
             return Object.fromEntries(
                 Object.entries(this.#fields).map(([key, value]) => [
@@ -442,6 +487,7 @@ const fastn = (function (fastn) {
                 ]),
             );
         }
+
         getClone() {
             let current_fields = this.#fields;
             let cloned_fields = {};
@@ -459,6 +505,7 @@ const fastn = (function (fastn) {
     class Module {
         #name;
         #global;
+
         constructor(name, global) {
             this.#name = name;
             this.#global = global;

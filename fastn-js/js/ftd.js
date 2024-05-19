@@ -485,6 +485,9 @@ const ftd = (function () {
 
         for (let i = 0, len = args.length; i < len; i += 1) {
             let obj = args[i];
+            if (obj instanceof fastn.mutableClass) {
+                obj = obj.get();
+            }
             console.assert(obj instanceof fastn.recordInstanceClass);
             let name = obj.get("name").get();
             arg_map[name] = obj;
