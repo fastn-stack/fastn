@@ -63,6 +63,7 @@ jobs:
       #          cargo audit
       #          cargo pants
       - name: Run cargo test
+        # cd fastn-core && fbt -f
         id: test
         continue-on-error: true
         run: cargo test
