@@ -156,7 +156,7 @@ pub fn clear_sid(req: &fastn_core::http::Request) -> fastn_core::http::Response 
 }
 
 pub fn clear_sid2(req: &fastn_core::http::Request) -> fastn_core::http::Response {
-    // safari is ignoring cookie if we return a redirect, so we are returning a meta refresh
+    // safari is ignoring cookie if we return a redirect, so we are returning a meta-refresh
     // further we are not using .secure(true) here because then cookie is not working on
     // localhost
 
@@ -173,7 +173,7 @@ pub fn clear_sid2(req: &fastn_core::http::Request) -> fastn_core::http::Response
     actix_web::HttpResponse::build(actix_web::http::StatusCode::OK)
         .cookie(cookie)
         .append_header(("Content-Type", "text/html"))
-        .body(r#" <meta http-equiv="refresh" content="0; url=/" />"#)
+        .body(r#"<meta http-equiv="refresh" content="0; url=/" />"#)
 }
 
 #[tracing::instrument(skip_all)]
@@ -479,7 +479,7 @@ async fn handle_endpoints(
     let url = format!(
         "{}/{}",
         endpoint.endpoint.trim_end_matches('/'),
-        req.path()
+        req.full_path()
             .trim_start_matches(endpoint.mountpoint.trim_end_matches('/'))
             .trim_start_matches('/')
     );
