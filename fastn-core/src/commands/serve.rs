@@ -138,6 +138,19 @@ pub async fn serve(
     req: fastn_core::http::Request,
     only_js: bool,
 ) -> fastn_core::Result<fastn_core::http::Response> {
+    if req.path() == "/-/auth/logout/" {
+        return Ok(actix_web::HttpResponse::TemporaryRedirect()
+            .insert_header(("LOCATION", "/"))
+            .insert_header((
+                "SET-COOKIE",
+                format!(
+                    "{}=; Secure; HttpOnly; SameSite=Strict; Path=/; Max-Age=0",
+                    ft_sys_shared::SESSION_KEY
+                ),
+            ))
+            .finish());
+    }
+
     if let Some(endpoint_response) = handle_endpoints(config, &req).await {
         return endpoint_response;
     }
