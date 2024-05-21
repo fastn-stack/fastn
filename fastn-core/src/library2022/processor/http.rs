@@ -57,14 +57,19 @@ pub async fn process(
         }
     };
 
-    let (mut url, mut conf) =
-        fastn_core::config::utils::get_clean_url(&req_config.config, url.as_str()).map_err(
-            |e| ftd::interpreter::Error::ParseError {
-                message: format!("invalid url: {:?}", e),
-                doc_id: doc.name.to_string(),
-                line_number,
-            },
-        )?;
+    let (mut url, mut conf) = {
+        let (mut url, conf) =
+            fastn_core::config::utils::get_clean_url(&req_config.config, url.as_str()).map_err(
+                |e| ftd::interpreter::Error::ParseError {
+                    message: format!("invalid url: {:?}", e),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                },
+            )?;
+
+        url.set_query(Some(req_config.request.query_string()));
+        (url, conf)
+    };
 
     let mut body = vec![];
     for header in headers.0 {
