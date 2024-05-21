@@ -400,12 +400,6 @@ impl DocumentStore {
         let wasm_file = wasm_file.split_once(".wasm").unwrap().0;
         let module = self.get_wasm(format!("{wasm_file}.wasm").as_str()).await?;
 
-        let wasm_url = if req.query_string().is_empty() {
-            wasm_url
-        } else {
-            format!("{wasm_url}/?{}", req.query_string())
-        };
-
         Ok(fastn_ds::wasm::process_http_request(
             ft_sys_shared::Request {
                 uri: wasm_url,
