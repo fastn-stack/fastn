@@ -102,7 +102,6 @@ ftd-p1.path = "ftd-p1"
 ftd-tc.path = "ftd-tc"
 ftd-ast.path = "ftd-ast"
 fastn-js.path = "fastn-js"
-#ft-sys-shared = { version = "0.1.1-alpha.3", path = "../ft-sdk/ft-sys-shared" }
 ft-sys-shared = "0.1.1-alpha.4"
 futures = "0.3"
 futures-util = { version = "0.3", default-features = false, features = ["std"] }
