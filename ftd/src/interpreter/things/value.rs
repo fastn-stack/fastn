@@ -1439,7 +1439,7 @@ impl PropertyValueSource {
                 if name.contains('#') {
                     name.to_string()
                 } else {
-                    format!("{}#{}", doc.name, name)
+                    format!("{}#{}", doc.name.trim_end_matches('/'), name)
                 }
             } //TODO: Some different name for loop
         }
