@@ -42,6 +42,7 @@ const SPECIAL_CHARS: [char; 9] = [BACKSLASH, '$', '/', ':', '"', ',', '\'', ';',
 // TODO: Can improve the performance
 // Maybe I should use RegEx?
 
+#[allow(dead_code)]
 pub(crate) fn extract_arguments(query: &str) -> ftd::interpreter::Result<(String, Vec<String>)> {
     let chars: Vec<char> = query.chars().collect();
     let len = chars.len();
