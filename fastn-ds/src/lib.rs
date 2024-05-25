@@ -248,7 +248,7 @@ impl DocumentStore {
         &self,
         db_url: &str,
         query: &str,
-        params: Vec<fastn_utils::BindParam>,
+        params: Vec<ft_sys_shared::SqliteRawValue>,
     ) -> Result<Vec<Vec<serde_json::Value>>, fastn_utils::SqlError> {
         let conn = rusqlite::Connection::open_with_flags(
             db_url,
@@ -264,7 +264,7 @@ impl DocumentStore {
         &self,
         db_url: &str,
         query: &str,
-        params: Vec<fastn_utils::BindParam>,
+        params: Vec<ft_sys_shared::SqliteRawValue>,
     ) -> Result<usize, fastn_utils::SqlError> {
         let conn = rusqlite::Connection::open_with_flags(
             db_url,
@@ -366,8 +366,7 @@ impl DocumentStore {
         } else if path.path.is_dir() {
             tokio::fs::remove_dir_all(&path.path).await?
         } else if path.path.is_symlink() {
-            // TODO:
-            // It can be a directory or a file
+            todo!("symlinks are not handled yet")
         }
         Ok(())
     }

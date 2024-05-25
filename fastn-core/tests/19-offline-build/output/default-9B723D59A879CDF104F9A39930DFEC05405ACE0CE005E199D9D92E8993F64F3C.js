@@ -5235,6 +5235,7 @@ const ftd = (function () {
             method: "POST",
             redirect: "error",
             // TODO: set credentials?
+            credentials: "same-origin",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
         };

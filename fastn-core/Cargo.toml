@@ -30,6 +30,7 @@ dirs.workspace = true
 env_logger.workspace = true
 fastn-js.workspace = true
 fastn-ds.workspace = true
+fastn-utils.workspace = true
 fastn-observer.workspace = true
 fastn-package.workspace = true
 ftd.workspace = true

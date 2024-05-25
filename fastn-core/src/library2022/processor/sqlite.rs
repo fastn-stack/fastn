@@ -27,6 +27,7 @@ pub(crate) fn get_p1_data(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 pub async fn process(
     value: ftd_ast::VariableValue,
     kind: ftd::interpreter::Kind,
@@ -46,6 +47,7 @@ pub async fn process(
     // for now they wil be ordered
     // select * from users where
 
+    // config.config.ds.sql_query(query, headers, value.line_number()).await
     let query_response = execute_query(
         &sqlite_database_path,
         query,
@@ -105,7 +107,7 @@ fn resolve_variable_from_doc(
     var: &str,
     doc: &ftd::interpreter::TDoc,
     line_number: usize,
-) -> ftd::interpreter::Result<Box<dyn rusqlite::ToSql>> {
+) -> ftd::interpreter::Result<ft_sys_shared::SqliteRawValue> {
     let thing = match doc.get_thing(var, line_number) {
         Ok(ftd::interpreter::Thing::Variable(v)) => v.value.resolve(doc, line_number)?,
         Ok(v) => {
@@ -124,44 +126,51 @@ fn resolve_variable_from_doc(
         }
     };
 
-    let param_value: Box<dyn rusqlite::ToSql> = match thing {
-        ftd::interpreter::Value::String { text } => Box::new(text),
-        ftd::interpreter::Value::Integer { value } => Box::new(value as i32),
-        ftd::interpreter::Value::Decimal { value } => Box::new(value as f32),
-        ftd::interpreter::Value::Boolean { value } => Box::new(value as i32),
-        _ => unimplemented!(), // Handle other types as needed
-    };
-
-    Ok(param_value)
+    Ok(value_to_bind(thing))
 }
 
+fn value_to_bind(v: ftd::interpreter::Value) -> ft_sys_shared::SqliteRawValue {
+    match v {
+        ftd::interpreter::Value::String { text } => ft_sys_shared::SqliteRawValue::Text(text),
+        ftd::interpreter::Value::Integer { value } => ft_sys_shared::SqliteRawValue::Integer(value),
+        ftd::interpreter::Value::Decimal { value } => ft_sys_shared::SqliteRawValue::Real(value),
+        ftd::interpreter::Value::Optional { data, .. } => match data.as_ref() {
+            Some(v) => value_to_bind(v.to_owned()),
+            None => ft_sys_shared::SqliteRawValue::Null,
+        },
+        ftd::interpreter::Value::Boolean { value } => {
+            ft_sys_shared::SqliteRawValue::Integer(value as i64)
+        }
+        _ => unimplemented!(), // Handle other types as needed
+    }
+}
 fn resolve_variable_from_headers(
     var: &str,
     param_type: &str,
     doc: &ftd::interpreter::TDoc,
     headers: &ftd_ast::HeaderValues,
     line_number: usize,
-) -> ftd::interpreter::Result<Box<dyn rusqlite::ToSql>> {
+) -> ftd::interpreter::Result<ft_sys_shared::SqliteRawValue> {
     let header = match headers.optional_header_by_name(var, doc.name, line_number)? {
         Some(v) => v,
-        None => return Ok(Box::new(None::<Box<dyn rusqlite::ToSql>>)),
+        None => return Ok(ft_sys_shared::SqliteRawValue::Null),
     };
 
     if let ftd_ast::VariableValue::String { value, .. } = &header.value {
         if let Some(stripped) = value.strip_prefix('$') {
-            return Ok(Box::new(
-                resolve_variable_from_doc(stripped, doc, line_number).map(Some)?,
-            ));
+            return resolve_variable_from_doc(stripped, doc, line_number);
         }
     }
 
-    let param_value: Box<dyn rusqlite::ToSql> = match (param_type, &header.value) {
-        ("TEXT", ftd_ast::VariableValue::String { value, .. }) => Box::new(value.clone()),
+    let param_value = match (param_type, &header.value) {
+        ("TEXT", ftd_ast::VariableValue::String { value, .. }) => {
+            ft_sys_shared::SqliteRawValue::Text(value.clone())
+        }
         ("INTEGER", ftd_ast::VariableValue::String { value, .. }) => {
-            Box::new(value.parse::<i32>().unwrap())
+            ft_sys_shared::SqliteRawValue::Integer(value.parse::<i64>().unwrap())
         }
         ("REAL", ftd_ast::VariableValue::String { value, .. }) => {
-            Box::new(value.parse::<f32>().unwrap())
+            ft_sys_shared::SqliteRawValue::Real(value.parse::<f64>().unwrap())
         }
         _ => unimplemented!(), // Handle other types as needed
     };
@@ -175,10 +184,9 @@ fn resolve_param(
     doc: &ftd::interpreter::TDoc,
     headers: &ftd_ast::HeaderValues,
     line_number: usize,
-) -> ftd::interpreter::Result<Box<dyn rusqlite::ToSql>> {
+) -> ftd::interpreter::Result<ft_sys_shared::SqliteRawValue> {
     resolve_variable_from_headers(param_name, param_type, doc, headers, line_number)
         .or_else(|_| resolve_variable_from_doc(param_name, doc, line_number))
-        .map(|v| Box::new(v) as Box<dyn rusqlite::ToSql>)
 }
 
 #[derive(Debug, PartialEq)]
@@ -199,8 +207,8 @@ fn extract_named_parameters(
     doc: &ftd::interpreter::TDoc,
     headers: ftd_ast::HeaderValues,
     line_number: usize,
-) -> ftd::interpreter::Result<Vec<Box<dyn rusqlite::ToSql>>> {
-    let mut params = Vec::new();
+) -> ftd::interpreter::Result<Vec<ft_sys_shared::SqliteRawValue>> {
+    let mut params: Vec<ft_sys_shared::SqliteRawValue> = Vec::new();
     let mut param_name = String::new();
     let mut param_type = String::new();
     let mut state = State::OutsideParam;
@@ -263,10 +271,13 @@ fn extract_named_parameters(
             State::PushParam => {
                 state = State::OutsideParam;
 
-                let param_value =
-                    resolve_param(&param_name, &param_type, doc, &headers, line_number)?;
-
-                params.push(Box::new(param_value) as Box<dyn rusqlite::ToSql>);
+                params.push(resolve_param(
+                    &param_name,
+                    &param_type,
+                    doc,
+                    &headers,
+                    line_number,
+                )?);
 
                 param_name.clear();
                 param_type.clear();
@@ -283,8 +294,13 @@ fn extract_named_parameters(
 
     // Handle the last param if there was no trailing comma or space
     if [State::InsideParam, State::PushParam].contains(&state) && !param_name.is_empty() {
-        let param_value = resolve_param(&param_name, &param_type, doc, &headers, line_number)?;
-        params.push(Box::new(param_value) as Box<dyn rusqlite::ToSql>);
+        params.push(resolve_param(
+            &param_name,
+            &param_type,
+            doc,
+            &headers,
+            line_number,
+        )?);
     }
 
     Ok(params)

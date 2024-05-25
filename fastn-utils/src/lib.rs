@@ -117,26 +117,6 @@ pub enum SqlError {
     FoundBlob,
 }
 
-pub enum BindParam {
-    Text(String),
-    Integer(i32),
-    Float(f32),
-    Boolean(bool),
-    Null,
-}
-
-impl rusqlite::ToSql for BindParam {
-    fn to_sql(&self) -> rusqlite::Result<rusqlite::types::ToSqlOutput<'_>> {
-        Ok(match self {
-            BindParam::Text(text) => text.to_string().into(),
-            BindParam::Integer(value) => (*value).into(),
-            BindParam::Float(value) => (*value).into(),
-            BindParam::Boolean(value) => (*value as i32).into(),
-            BindParam::Null => (&rusqlite::types::Value::Null).into(),
-        })
-    }
-}
-
 pub fn rows_to_json(
     mut rows: rusqlite::Rows,
     count: usize,
