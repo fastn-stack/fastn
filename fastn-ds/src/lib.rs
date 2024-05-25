@@ -246,20 +246,32 @@ impl DocumentStore {
 
     pub fn sql_query(
         &self,
-        _db_url: &str,
-        _query: &str,
-        _binds: Vec<(String, fastn_utils::BindParam)>,
-    ) -> Result<ftd::interpreter::Value, fastn_utils::SqlError> {
-        todo!()
+        db_url: &str,
+        query: &str,
+        params: Vec<fastn_utils::BindParam>,
+    ) -> Result<Vec<Vec<serde_json::Value>>, fastn_utils::SqlError> {
+        let conn = rusqlite::Connection::open_with_flags(
+            db_url,
+            rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
+        )?;
+        let mut stmt = conn.prepare(query)?;
+        let count = stmt.column_count();
+        let rows = stmt.query(rusqlite::params_from_iter(params))?;
+        fastn_utils::rows_to_json(rows, count)
     }
 
     pub fn sql_execute(
         &self,
-        _db_url: &str,
-        _query: &str,
-        _binds: Vec<(String, fastn_utils::BindParam)>,
-    ) -> Result<ftd::interpreter::Value, fastn_utils::SqlError> {
-        todo!()
+        db_url: &str,
+        query: &str,
+        params: Vec<fastn_utils::BindParam>,
+    ) -> Result<usize, fastn_utils::SqlError> {
+        let conn = rusqlite::Connection::open_with_flags(
+            db_url,
+            rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
+        )?;
+        let mut stmt = conn.prepare(query)?;
+        Ok(stmt.execute(rusqlite::params_from_iter(params))?)
     }
 
     pub fn root(&self) -> fastn_ds::Path {

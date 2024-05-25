@@ -1599,7 +1599,6 @@ dependencies = [
  "dirs",
  "fastn-utils",
  "ft-sys-shared",
- "ftd 0.3.0",
  "futures-util",
  "http 1.1.0",
  "ignore",
@@ -1716,6 +1715,8 @@ name = "fastn-utils"
 version = "0.1.0"
 dependencies = [
  "ft-sys-shared",
+ "rusqlite",
+ "serde_json",
  "thiserror",
  "wasmtime",
 ]

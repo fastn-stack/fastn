@@ -1,3 +1,6 @@
+#![warn(unused_extern_crates)]
+#![deny(unused_crate_dependencies)]
+
 pub async fn handle<S: Send>(
     mut wasm_store: wasmtime::Store<S>,
     module: wasmtime::Module,
@@ -103,7 +106,16 @@ pub fn path_to_entrypoint(path: &str) -> wasmtime::Result<String> {
 }
 
 #[derive(thiserror::Error, Debug)]
-pub enum SqlError {}
+pub enum SqlError {
+    #[error("connection error {0}")]
+    Connection(#[from] rusqlite::Error),
+    #[error("column error {0}: {0}")]
+    Column(usize, rusqlite::Error),
+    #[error("row error {0}")]
+    Row(rusqlite::Error),
+    #[error("found blob")]
+    FoundBlob,
+}
 
 pub enum BindParam {
     Text(String),
@@ -111,4 +123,50 @@ pub enum BindParam {
     Float(f32),
     Boolean(bool),
     Null,
+}
+
+impl rusqlite::ToSql for BindParam {
+    fn to_sql(&self) -> rusqlite::Result<rusqlite::types::ToSqlOutput<'_>> {
+        Ok(match self {
+            BindParam::Text(text) => text.to_string().into(),
+            BindParam::Integer(value) => (*value).into(),
+            BindParam::Float(value) => (*value).into(),
+            BindParam::Boolean(value) => (*value as i32).into(),
+            BindParam::Null => (&rusqlite::types::Value::Null).into(),
+        })
+    }
+}
+
+pub fn rows_to_json(
+    mut rows: rusqlite::Rows,
+    count: usize,
+) -> Result<Vec<Vec<serde_json::Value>>, SqlError> {
+    let mut result: Vec<Vec<serde_json::Value>> = vec![];
+    loop {
+        match rows.next() {
+            Ok(None) => break,
+            Ok(Some(r)) => {
+                result.push(row_to_json(r, count)?);
+            }
+            Err(e) => return Err(SqlError::Row(e)),
+        }
+    }
+    Ok(result)
+}
+
+pub fn row_to_json(r: &rusqlite::Row, count: usize) -> Result<Vec<serde_json::Value>, SqlError> {
+    let mut row: Vec<serde_json::Value> = Vec::with_capacity(count);
+    for i in 0..count {
+        match r.get::<usize, rusqlite::types::Value>(i) {
+            Ok(rusqlite::types::Value::Null) => row.push(serde_json::Value::Null),
+            Ok(rusqlite::types::Value::Integer(i)) => row.push(serde_json::Value::Number(i.into())),
+            Ok(rusqlite::types::Value::Real(i)) => row.push(serde_json::Value::Number(
+                serde_json::Number::from_f64(i).unwrap(),
+            )),
+            Ok(rusqlite::types::Value::Text(i)) => row.push(serde_json::Value::String(i)),
+            Ok(rusqlite::types::Value::Blob(_)) => return Err(SqlError::FoundBlob),
+            Err(e) => return Err(SqlError::Column(i, e)),
+        }
+    }
+    Ok(row)
 }
