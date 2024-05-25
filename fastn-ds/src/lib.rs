@@ -246,18 +246,18 @@ impl DocumentStore {
 
     pub fn sql_query(
         &self,
-        db_url: &str,
-        query: &str,
-        binds: Vec<(String, fastn_utils::BindParam)>,
+        _db_url: &str,
+        _query: &str,
+        _binds: Vec<(String, fastn_utils::BindParam)>,
     ) -> Result<ftd::interpreter::Value, fastn_utils::SqlError> {
         todo!()
     }
 
     pub fn sql_execute(
         &self,
-        db_url: &str,
-        query: &str,
-        binds: Vec<(String, fastn_utils::BindParam)>,
+        _db_url: &str,
+        _query: &str,
+        _binds: Vec<(String, fastn_utils::BindParam)>,
     ) -> Result<ftd::interpreter::Value, fastn_utils::SqlError> {
         todo!()
     }
