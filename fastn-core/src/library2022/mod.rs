@@ -286,8 +286,8 @@ impl Library2022 {
             "fastn-apps" => processor::apps::process(value, kind, doc, self),
             "is-reader" => processor::user_group::is_reader(value, kind, doc, self).await,
             "sql" => processor::sql::process(value, kind, doc, self).await,
-            "package-query" => processor::package_query::process(value, kind, doc, self).await,
-            "pg" => processor::pg::process(value, kind, doc, self).await,
+            // "package-query" => processor::package_query::process(value, kind, doc, self).await,
+            // "pg" => processor::pg::process(value, kind, doc, self).await,
             "query" => processor::query::process(value, kind, doc, self).await,
             t => Err(ftd::interpreter::Error::ParseError {
                 doc_id: self.document_id.to_string(),

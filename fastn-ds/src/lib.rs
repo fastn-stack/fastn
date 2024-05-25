@@ -244,7 +244,7 @@ impl DocumentStore {
         }
     }
 
-    pub fn sql_query(
+    pub async fn sql_query(
         &self,
         db_url: &str,
         query: &str,

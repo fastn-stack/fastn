@@ -27,48 +27,6 @@ pub(crate) fn get_p1_data(
     }
 }
 
-#[allow(clippy::too_many_arguments)]
-pub async fn process(
-    value: ftd_ast::VariableValue,
-    kind: ftd::interpreter::Kind,
-    doc: &ftd::interpreter::TDoc<'_>,
-    req_config: &fastn_core::RequestConfig,
-    db_config: &fastn_core::library2022::processor::sql::DatabaseConfig,
-    headers: ftd_ast::HeaderValues,
-    query: &str,
-) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    let sqlite_database_path = req_config.config.ds.root().join(&db_config.db_url);
-
-    // need the query params
-    // question is they can be multiple
-    // so lets say start with passing attributes from ftd file
-    // db-<param-name1>: value
-    // db-<param-name2>: value
-    // for now they wil be ordered
-    // select * from users where
-
-    // config.config.ds.sql_query(query, headers, value.line_number()).await
-    let query_response = execute_query(
-        &sqlite_database_path,
-        query,
-        doc,
-        headers,
-        value.line_number(),
-    )
-    .await;
-
-    match query_response {
-        Ok(result) => result_to_value(Ok(result), kind, doc, &value, super::sql::STATUS_OK),
-        Err(e) => result_to_value(
-            Err(e.to_string()),
-            kind,
-            doc,
-            &value,
-            super::sql::STATUS_ERROR,
-        ),
-    }
-}
-
 pub(crate) fn result_to_value(
     result: Result<Vec<Vec<serde_json::Value>>, String>,
     kind: ftd::interpreter::Kind,
@@ -202,7 +160,7 @@ enum State {
     ParseError(String),
 }
 
-fn extract_named_parameters(
+pub fn extract_named_parameters(
     query: &str,
     doc: &ftd::interpreter::TDoc,
     headers: ftd_ast::HeaderValues,
@@ -304,111 +262,4 @@ fn extract_named_parameters(
     }
 
     Ok(params)
-}
-
-pub(crate) async fn execute_query(
-    database_path: &fastn_ds::Path,
-    query: &str,
-    doc: &ftd::interpreter::TDoc<'_>,
-    headers: ftd_ast::HeaderValues,
-    line_number: usize,
-) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
-    let doc_name = doc.name;
-
-    let conn = match rusqlite::Connection::open_with_flags(
-        database_path.to_string(),
-        rusqlite::OpenFlags::SQLITE_OPEN_READ_WRITE,
-    ) {
-        Ok(conn) => conn,
-        Err(e) => {
-            return ftd::interpreter::utils::e2(
-                format!("Failed to open `{}`: {:?}", database_path, e),
-                doc_name,
-                line_number,
-            );
-        }
-    };
-
-    let mut stmt = match conn.prepare(query) {
-        Ok(v) => v,
-        Err(e) => {
-            return ftd::interpreter::utils::e2(
-                format!("Failed to prepare query: {:?}", e),
-                doc_name,
-                line_number,
-            )
-        }
-    };
-
-    let count = stmt.column_count();
-
-    // let mut stmt = conn.prepare("SELECT * FROM test where name = :name")?;
-    // let mut rows = stmt.query(rusqlite::named_params! { ":name": "one" })?
-
-    // let mut stmt = conn.prepare("SELECT * FROM test where name = ?")?;
-    // let mut rows = stmt.query([name])?;
-    let params = extract_named_parameters(query, doc, headers, line_number)?;
-
-    let mut rows = match stmt.query(rusqlite::params_from_iter(params)) {
-        Ok(v) => v,
-        Err(e) => {
-            return ftd::interpreter::utils::e2(
-                format!("Failed to prepare query: {:?}", e),
-                doc_name,
-                line_number,
-            )
-        }
-    };
-
-    let mut result: Vec<Vec<serde_json::Value>> = vec![];
-    loop {
-        match rows.next() {
-            Ok(None) => break,
-            Ok(Some(r)) => {
-                result.push(row_to_json(r, count, doc_name, line_number)?);
-            }
-            Err(e) => {
-                return ftd::interpreter::utils::e2(
-                    format!("Failed to execute query: {:?}", e),
-                    doc_name,
-                    line_number,
-                )
-            }
-        }
-    }
-    Ok(result)
-}
-
-fn row_to_json(
-    r: &rusqlite::Row,
-    count: usize,
-    doc_name: &str,
-    line_number: usize,
-) -> ftd::interpreter::Result<Vec<serde_json::Value>> {
-    let mut row: Vec<serde_json::Value> = Vec::with_capacity(count);
-    for i in 0..count {
-        match r.get::<usize, rusqlite::types::Value>(i) {
-            Ok(rusqlite::types::Value::Null) => row.push(serde_json::Value::Null),
-            Ok(rusqlite::types::Value::Integer(i)) => row.push(serde_json::Value::Number(i.into())),
-            Ok(rusqlite::types::Value::Real(i)) => row.push(serde_json::Value::Number(
-                serde_json::Number::from_f64(i).unwrap(),
-            )),
-            Ok(rusqlite::types::Value::Text(i)) => row.push(serde_json::Value::String(i)),
-            Ok(rusqlite::types::Value::Blob(_)) => {
-                return ftd::interpreter::utils::e2(
-                    format!("Query returned blob for column: {}", i),
-                    doc_name,
-                    line_number,
-                );
-            }
-            Err(e) => {
-                return ftd::interpreter::utils::e2(
-                    format!("Failed to read response: {:?}", e),
-                    doc_name,
-                    line_number,
-                );
-            }
-        }
-    }
-    Ok(row)
 }
