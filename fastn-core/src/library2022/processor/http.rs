@@ -66,8 +66,9 @@ pub async fn process(
                     line_number,
                 },
             )?;
-
-        url.set_query(Some(req_config.request.query_string()));
+        if !req_config.request.query_string().is_empty() {
+            url.set_query(Some(req_config.request.query_string()));
+        }
         (url, conf)
     };
 
