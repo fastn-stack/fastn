@@ -15,8 +15,7 @@ pub(crate) fn get_p1_data(
                 None => {
                     return ftd::interpreter::utils::e2(
                         format!(
-                            "$processor$: `{}` query is not specified in the processor body",
-                            name
+                            "$processor$: `{name}` query is not specified in the processor body",
                         ),
                         doc_name,
                         value.line_number(),

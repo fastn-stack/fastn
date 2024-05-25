@@ -101,3 +101,14 @@ pub fn path_to_entrypoint(path: &str) -> wasmtime::Result<String> {
         None => Err(PathToEndpointError::NoWasm.into()),
     }
 }
+
+#[derive(thiserror::Error, Debug)]
+pub enum SqlError {}
+
+pub enum BindParam {
+    Text(String),
+    Integer(i32),
+    Float(f32),
+    Boolean(bool),
+    Null,
+}

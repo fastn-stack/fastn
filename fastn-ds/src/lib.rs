@@ -244,6 +244,24 @@ impl DocumentStore {
         }
     }
 
+    pub fn sql_query(
+        &self,
+        db_url: &str,
+        query: &str,
+        binds: Vec<(String, fastn_utils::BindParam)>,
+    ) -> Result<ftd::interpreter::Value, fastn_utils::SqlError> {
+        todo!()
+    }
+
+    pub fn sql_execute(
+        &self,
+        db_url: &str,
+        query: &str,
+        binds: Vec<(String, fastn_utils::BindParam)>,
+    ) -> Result<ftd::interpreter::Value, fastn_utils::SqlError> {
+        todo!()
+    }
+
     pub fn root(&self) -> fastn_ds::Path {
         self.root.clone()
     }

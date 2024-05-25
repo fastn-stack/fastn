@@ -1599,6 +1599,7 @@ dependencies = [
  "dirs",
  "fastn-utils",
  "ft-sys-shared",
+ "ftd 0.3.0",
  "futures-util",
  "http 1.1.0",
  "ignore",
