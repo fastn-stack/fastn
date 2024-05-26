@@ -35,7 +35,7 @@ def insert_data():
         # Create a cursor object to execute SQL queries
         cursor = connection.cursor()
         # Insert test data into the 'test' table
-        cursor.execute("INSERT INTO test (data) VALUES (%s);", ("Hello, World!",))
+        cursor.execute("INSERT INTO test (data) VALUES 'Hello, World!';")
 
         # Commit the changes
         connection.commit()
