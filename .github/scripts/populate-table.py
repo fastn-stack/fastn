@@ -7,16 +7,18 @@ def create_table():
 
     try:
         # Create a cursor object to execute SQL queries
-        with connection.cursor() as cursor:
-            # Execute a query to create the 'test' table if it doesn't exist
-            cursor.execute(
-                """
-                CREATE TABLE IF NOT EXISTS test (
-                    id SERIAL PRIMARY KEY,
-                    data VARCHAR(255) NOT NULL
-                );
-                """
-            )
+        cursor = connection.cursor()
+        # Execute a query to create the 'test' table if it doesn't exist
+        cursor.execute(
+            """
+            CREATE TABLE IF NOT EXISTS test (
+                id SERIAL PRIMARY KEY,
+                data VARCHAR(255) NOT NULL
+            );
+            """
+        )
+
+        cursor.close()
 
         # Commit the changes
         connection.commit()
@@ -31,9 +33,9 @@ def insert_data():
 
     try:
         # Create a cursor object to execute SQL queries
-        with connection.cursor() as cursor:
-            # Insert test data into the 'test' table
-            cursor.execute("INSERT INTO test (data) VALUES (%s);", ("Hello, World!",))
+        cursor = connection.cursor()
+        # Insert test data into the 'test' table
+        cursor.execute("INSERT INTO test (data) VALUES (%s);", ("Hello, World!",))
 
         # Commit the changes
         connection.commit()
