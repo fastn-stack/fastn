@@ -268,7 +268,7 @@ impl DocumentStore {
         fastn_utils::rows_to_json(rows, count)
     }
 
-    pub fn sql_execute(
+    pub async fn sql_execute(
         &self,
         db_url: &str,
         query: &str,

@@ -32,31 +32,26 @@ pub async fn process(
         value.line_number(),
     )?;
 
-    match if is_query {
-        config
-            .config
-            .ds
-            .sql_query(db.as_str(), query.as_str(), params)
-            .await
+    let ds = &config.config.ds;
+
+    let res = match if is_query {
+        ds.sql_query(db.as_str(), query.as_str(), params).await
     } else {
-        config
-            .config
-            .ds
-            .sql_execute(db.as_str(), query.as_str(), params)
+        ds.sql_execute(db.as_str(), query.as_str(), params).await
     } {
-        Ok(result) => result_to_value(Ok(result), kind, doc, &value, super::sql::STATUS_OK),
-        Err(e) => result_to_value(
-            Err(e.to_string()),
-            kind,
-            doc,
-            &value,
-            super::sql::STATUS_ERROR,
-        ),
-    }
+        Ok(v) => v,
+        Err(e) => {
+            return ftd::interpreter::utils::e2(
+                format!("Error executing query: {e:?}"),
+                doc.name,
+                value.line_number(),
+            )
+        }
+    };
+
+    result_to_value(res, kind, doc, &value)
 }
 
-pub const STATUS_OK: usize = 0;
-pub const STATUS_ERROR: usize = 1;
 const BACKSLASH: char = '\\';
 const SPECIAL_CHARS: [char; 9] = [BACKSLASH, '$', '/', ':', '"', ',', '\'', ';', ' '];
 
