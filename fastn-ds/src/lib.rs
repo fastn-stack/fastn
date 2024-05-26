@@ -273,7 +273,7 @@ impl DocumentStore {
         db_url: &str,
         query: &str,
         params: Vec<ft_sys_shared::SqliteRawValue>,
-    ) -> Result<usize, fastn_utils::SqlError> {
+    ) -> Result<Vec<Vec<serde_json::Value>>, fastn_utils::SqlError> {
         println!("db_url: {db_url}");
         println!("query: {query}");
 
@@ -282,7 +282,9 @@ impl DocumentStore {
             rusqlite::OpenFlags::SQLITE_OPEN_READ_WRITE,
         )?;
         let mut stmt = conn.prepare(query)?;
-        Ok(stmt.execute(rusqlite::params_from_iter(params))?)
+        Ok(vec![vec![stmt
+            .execute(rusqlite::params_from_iter(params))?
+            .into()]])
     }
 
     pub fn root(&self) -> fastn_ds::Path {

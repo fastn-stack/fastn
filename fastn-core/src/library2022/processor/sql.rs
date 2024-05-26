@@ -5,8 +5,13 @@ pub async fn process(
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::RequestConfig,
+    is_query: bool,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    let (headers, query) = super::sqlite::get_p1_data("sql", &value, doc.name)?;
+    let (headers, query) = super::sqlite::get_p1_data(
+        if is_query { "sql-query" } else { "sql-execute" },
+        &value,
+        doc.name,
+    )?;
     let db = match headers.get_optional_string_by_key("db$", doc.name, value.line_number())? {
         Some(db) => db,
         None => match config.config.ds.env("FASTN_DB_URL").await {
@@ -27,12 +32,18 @@ pub async fn process(
         value.line_number(),
     )?;
 
-    match config
-        .config
-        .ds
-        .sql_query(db.as_str(), query.as_str(), params)
-        .await
-    {
+    match if is_query {
+        config
+            .config
+            .ds
+            .sql_query(db.as_str(), query.as_str(), params)
+            .await
+    } else {
+        config
+            .config
+            .ds
+            .sql_execute(db.as_str(), query.as_str(), params)
+    } {
         Ok(result) => result_to_value(Ok(result), kind, doc, &value, super::sql::STATUS_OK),
         Err(e) => result_to_value(
             Err(e.to_string()),
