@@ -34,18 +34,20 @@ pub async fn process(
 
     let ds = &config.config.ds;
 
-    let res = if is_query {
+    let res = match if is_query {
         ds.sql_query(db.as_str(), query.as_str(), params).await
     } else {
         ds.sql_execute(db.as_str(), query.as_str(), params).await
-    }
-    .map_err(|e| {
-        ftd::interpreter::utils::e2(
-            format!("Error executing query: {e:?}"),
-            doc.name,
-            value.line_number(),
-        )
-    })?;
+    } {
+        Ok(v) => v,
+        Err(e) => {
+            return ftd::interpreter::utils::e2(
+                format!("Error executing query: {e:?}"),
+                doc.name,
+                value.line_number(),
+            )
+        }
+    };
 
     result_to_value(res, kind, doc, &value)
 }

@@ -244,11 +244,20 @@ impl DocumentStore {
         }
     }
 
+    fn rusqlite(
+        params: &[(String, ft_sys_shared::SqliteRawValue)],
+    ) -> Vec<(&str, &dyn rusqlite::types::ToSql)> {
+        params
+            .iter()
+            .map(|(k, v)| (k.as_str(), v as &dyn rusqlite::types::ToSql))
+            .collect::<Vec<(&str, &dyn rusqlite::types::ToSql)>>()
+    }
+
     pub async fn sql_query(
         &self,
         db_url: &str,
         query: &str,
-        params: Vec<ft_sys_shared::SqliteRawValue>,
+        params: Vec<(String, ft_sys_shared::SqliteRawValue)>,
     ) -> Result<Vec<Vec<serde_json::Value>>, fastn_utils::SqlError> {
         println!("db_url: {db_url}");
         println!("query: {query}");
@@ -263,8 +272,17 @@ impl DocumentStore {
             rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
         )?;
         let mut stmt = conn.prepare(query)?;
+
+        self.sql_query_(&mut stmt, &Self::rusqlite(&params)).await
+    }
+
+    async fn sql_query_(
+        &self,
+        stmt: &mut rusqlite::Statement<'_>,
+        params: &[(&str, &dyn rusqlite::types::ToSql)],
+    ) -> Result<Vec<Vec<serde_json::Value>>, fastn_utils::SqlError> {
         let count = stmt.column_count();
-        let rows = stmt.query(rusqlite::params_from_iter(params))?;
+        let rows = stmt.query(params)?;
         fastn_utils::rows_to_json(rows, count)
     }
 
@@ -272,7 +290,7 @@ impl DocumentStore {
         &self,
         db_url: &str,
         query: &str,
-        params: Vec<ft_sys_shared::SqliteRawValue>,
+        params: Vec<(String, ft_sys_shared::SqliteRawValue)>,
     ) -> Result<Vec<Vec<serde_json::Value>>, fastn_utils::SqlError> {
         println!("db_url: {db_url}");
         println!("query: {query}");
@@ -282,9 +300,15 @@ impl DocumentStore {
             rusqlite::OpenFlags::SQLITE_OPEN_READ_WRITE,
         )?;
         let mut stmt = conn.prepare(query)?;
-        Ok(vec![vec![stmt
-            .execute(rusqlite::params_from_iter(params))?
-            .into()]])
+        self.sql_execute_(&mut stmt, &Self::rusqlite(&params)).await
+    }
+
+    async fn sql_execute_(
+        &self,
+        stmt: &mut rusqlite::Statement<'_>,
+        params: &[(&str, &dyn rusqlite::types::ToSql)],
+    ) -> Result<Vec<Vec<serde_json::Value>>, fastn_utils::SqlError> {
+        Ok(vec![vec![stmt.execute(params)?.into()]])
     }
 
     pub fn root(&self) -> fastn_ds::Path {
