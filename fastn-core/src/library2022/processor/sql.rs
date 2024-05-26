@@ -7,9 +7,14 @@ pub async fn process(
     config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let (headers, query) = super::sqlite::get_p1_data("sql", &value, doc.name)?;
-    let db = headers
-        .get_optional_string_by_key("$db$", doc.name, value.line_number())?
-        .unwrap_or_else(|| "default".to_string());
+    let db = match headers.get_optional_string_by_key("$db$", doc.name, value.line_number())? {
+        Some(db) => db,
+        None => match db_from_env(&config.config.ds).await? {
+            Some(db) => db,
+            None => "default".to_string(),
+        },
+    };
+
     let params = crate::library2022::processor::sqlite::extract_named_parameters(
         query.as_str(),
         doc,
@@ -31,6 +36,22 @@ pub async fn process(
             &value,
             super::sql::STATUS_ERROR,
         ),
+    }
+}
+
+pub(crate) async fn db_from_env(
+    ds: &fastn_ds::DocumentStore,
+) -> ftd::interpreter::Result<Option<String>> {
+    let db_url = match ds.env("FASTN_DB_URL").await {
+        Ok(db_url) => db_url,
+        Err(_) => return Ok(None),
+    };
+
+    match db_url.strip_prefix("sqlite:///") {
+        Some(db) => Ok(Some(db.to_string())),
+        None => Err(ftd::interpreter::Error::OtherError(format!(
+            "Invalid DB URL: {db_url}"
+        ))),
     }
 }
 

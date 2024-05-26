@@ -11,20 +11,10 @@ jobs:
     name: Rust/JS Checks/Formatting
     runs-on: ubuntu-latest
     env:
-      FASTN_DB_URL: postgres://testuser:testpassword@localhost:5432/testdb
+      FASTN_DB_URL: sqlite:///test.sqlite
       DEBUG: true
       FASTN_ENABLE_AUTH: true
       FASTN_ENABLE_EMAIL: false
-    services:
-      postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_DB: testdb
-          POSTGRES_USER: testuser
-          POSTGRES_PASSWORD: testpassword
-        ports:
-          - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - name: Check out
         uses: actions/checkout@v3
