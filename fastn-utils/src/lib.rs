@@ -115,6 +115,8 @@ pub enum SqlError {
     Row(rusqlite::Error),
     #[error("found blob")]
     FoundBlob,
+    #[error("unknown db error")]
+    UnknownDB,
 }
 
 pub fn rows_to_json(
