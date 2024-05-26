@@ -29,6 +29,11 @@ jobs:
       #            target/
       #          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       #          restore-keys: ${{ runner.os }}-cargo-
+      - name: Run integration tests
+        id: integration-test
+        continue-on-error: true
+        run: |
+          bash .github/scripts/run-integration-tests.sh
       - name: Run cargo fmt
         id: fmt
         run: cargo fmt --all -- --check
@@ -62,11 +67,6 @@ jobs:
         id: test
         continue-on-error: true
         run: cargo test
-      - name: Run integration tests
-        id: integration-test
-        continue-on-error: true
-        run: |
-          bash .github/scripts/run-integration-tests.sh
       - name: Check if JS code is properly formatted
         # curl -fsSL https://dprint.dev/install.sh | sh
         # /Users/amitu/.dprint/bin/dprint fmt --config .github/dprint-ci.json

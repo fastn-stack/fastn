@@ -22,6 +22,8 @@ python "${FASTN_ROOT}/.github/scripts/test-server.py" &
 # Waiting for the server to start
 sleep 10
 
+ls
+
 echo "Running integration tests"
 cd "${FASTN_ROOT}/integration-tests" || exit 1
 fastn test --headless
