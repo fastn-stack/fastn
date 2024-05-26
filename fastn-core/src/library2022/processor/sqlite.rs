@@ -28,36 +28,26 @@ pub(crate) fn get_p1_data(
 }
 
 pub(crate) fn result_to_value(
-    result: Result<Vec<Vec<serde_json::Value>>, String>,
+    result: Vec<Vec<serde_json::Value>>,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     value: &ftd_ast::VariableValue,
-    status: usize,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    match result {
-        Ok(result) => {
-            if kind.is_list() {
-                doc.rows_to_value(result.as_slice(), &kind, value)
-            } else {
-                match result.len() {
-                    1 => doc.row_to_value(&result[0], &kind, value),
-                    0 if kind.is_integer() => Ok(ftd::interpreter::Value::Integer {
-                        value: status as i64,
-                    }),
-                    0 => ftd::interpreter::utils::e2(
-                        "Query returned no result, expected one row".to_string(),
-                        doc.name,
-                        value.line_number(),
-                    ),
-                    len => ftd::interpreter::utils::e2(
-                        format!("Query returned {} rows, expected one row", len),
-                        doc.name,
-                        value.line_number(),
-                    ),
-                }
-            }
+    if kind.is_list() {
+        doc.rows_to_value(result.as_slice(), &kind, value)
+    } else {
+        match result.len() {
+            1 => doc.row_to_value(&result[0], &kind, value),
+            0 if kind.is_optional() => Ok(ftd::interpreter::Value::Optional {
+                data: Box::new(None),
+                kind: ftd::interpreter::KindData::new(kind),
+            }),
+            len => ftd::interpreter::utils::e2(
+                format!("Query returned {} rows, expected one row", len),
+                doc.name,
+                value.line_number(),
+            ),
         }
-        Err(e) => Err(ftd::interpreter::Error::OtherError(e)),
     }
 }
 
