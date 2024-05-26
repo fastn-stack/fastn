@@ -1,8 +1,9 @@
-import psycopg2
+import sqlite3
 import os
 
+
 def create_table():
-    connection = psycopg2.connect(os.environ["FASTN_DB_URL"])
+    connection = sqlite3.connect(get_database_path(os.environ["FASTN_DB_URL"]))
 
     try:
         # Create a cursor object to execute SQL queries
@@ -26,7 +27,7 @@ def create_table():
 
 
 def insert_data():
-    connection = psycopg2.connect(os.environ["FASTN_DB_URL"])
+    connection = sqlite3.connect(get_database_path(os.environ["FASTN_DB_URL"]))
 
     try:
         # Create a cursor object to execute SQL queries
@@ -40,6 +41,14 @@ def insert_data():
     finally:
         # Close the database connection
         connection.close()
+
+
+# Function to strip 'sqlite:///' prefix if present
+def get_database_path(uri):
+    prefix = 'sqlite:///'
+    if uri.startswith(prefix):
+        return uri[len(prefix):]
+    return uri
 
 
 if __name__ == "__main__":
