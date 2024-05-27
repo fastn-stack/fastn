@@ -245,37 +245,27 @@ impl DocumentStore {
         }
     }
 
-    // pub async fn sql_prepare(
-    //     &self,
-    //     db_url: &str,
-    //     query: &str,
-    // ) -> Result<(Statement, Vec<(String, SqliteType)>), fastn_utils::SqlError> {
-    //     println!("db_url: {db_url}");
-    //     println!("query: {query}");
-    //
-    //     // 1. parse the query, some arguments we will get the query itself (some
-    //     //    types will be missing here)
-    // 
-    //     // 2. construct the statement, and get the types of arguments from db, some
-    //     //    types will be missing here as well)
-    //     // verify a. len of both vectors are same and b types returned by 1 are
-    //     // compatible with 2, and c. by combining the two vectors we have no Nones left
-    //     let db_url = match db_url.strip_prefix("sqlite:///") {
-    //         Some(db) => db.to_string(),
-    //         None => return Err(fastn_utils::SqlError::UnknownDB),
-    //     };
-    //
-    //     let conn = rusqlite::Connection::open_with_flags(
-    //         db_url,
-    //         rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
-    //     )?;
-    //
-    //     let mut stmt = conn.prepare(query)?;
-    //
-    //     Ok(Statement {
-    //         stmt, conn
-    //     }, stmt.columns())
-    // }
+    pub async fn sql_prepare<'a>(
+        &'a self,
+        query: &str,
+        conn: &'a rusqlite::Connection,
+    ) -> Result<(fastn_utils::sql::Statement, Vec<(String, SqliteType)>), fastn_utils::SqlError>
+    {
+        println!("query: {query}");
+
+        // 1. parse the query, some arguments we will get the query itself (some
+        //    types will be missing here)
+        let (query, args) =
+            fastn_utils::sql::extract_arguments(query, fastn_utils::sql::SQLITE_SUB).unwrap();
+
+        // 2. construct the statement, and get the types of arguments from db, some
+        //    types will be missing here as well)
+        // verify a. len of both vectors are same and b types returned by 1 are
+        // compatible with 2, and c. by combining the two vectors we have no Nones left
+        let mut stmt = conn.prepare(&query)?;
+
+        Ok((fastn_utils::sql::Statement { stmt }, vec![]))
+    }
 
     pub async fn sql_query(
         &self,
@@ -283,7 +273,6 @@ impl DocumentStore {
         query: &str,
         params: Vec<ft_sys_shared::SqliteRawValue>,
     ) -> Result<Vec<Vec<serde_json::Value>>, fastn_utils::SqlError> {
-
         let db_url = match db_url.strip_prefix("sqlite:///") {
             Some(db) => db.to_string(),
             None => return Err(fastn_utils::SqlError::UnknownDB),

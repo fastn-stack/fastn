@@ -1,7 +1,7 @@
 #![warn(unused_extern_crates)]
 #![deny(unused_crate_dependencies)]
 
-mod sql;
+pub mod sql;
 
 pub async fn handle<S: Send>(
     mut wasm_store: wasmtime::Store<S>,
