@@ -1,6 +1,8 @@
 #![warn(unused_extern_crates)]
 #![deny(unused_crate_dependencies)]
 
+mod sql;
+
 pub async fn handle<S: Send>(
     mut wasm_store: wasmtime::Store<S>,
     module: wasmtime::Module,
@@ -19,7 +21,7 @@ pub async fn handle<S: Send>(
         }
     };
 
-    let (wasm_store, r) = crate::apply_migration(instance, wasm_store).await;
+    let (wasm_store, r) = apply_migration(instance, wasm_store).await;
 
     if let Err(e) = r {
         return Ok((
@@ -30,7 +32,7 @@ pub async fn handle<S: Send>(
         ));
     };
 
-    let (main, mut wasm_store) = crate::get_entrypoint(instance, wasm_store, path)?;
+    let (main, mut wasm_store) = get_entrypoint(instance, wasm_store, path)?;
     main.call_async(&mut wasm_store, ()).await?;
 
     Ok((wasm_store, None))

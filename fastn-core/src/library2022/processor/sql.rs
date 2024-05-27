@@ -54,12 +54,20 @@ pub async fn process(
 
 const BACKSLASH: char = '\\';
 const SPECIAL_CHARS: [char; 9] = [BACKSLASH, '$', '/', ':', '"', ',', '\'', ';', ' '];
+const SQLITE_SUB: char = '?';
+const POSTGRES_SUB: char = '$';
 
-// TODO: Can improve the performance
-// Maybe I should use RegEx?
+#[derive(thiserror::Error, Debug)]
+pub enum QueryError {
+    #[error("Invalid query, quote left open")]
+    QuoteOpen,
+}
 
 #[allow(dead_code)]
-pub(crate) fn extract_arguments(query: &str) -> ftd::interpreter::Result<(String, Vec<String>)> {
+pub(crate) fn extract_arguments(
+    query: &str,
+    sub: char,
+) -> Result<(String, Vec<String>), QueryError> {
     let chars: Vec<char> = query.chars().collect();
     let len = chars.len();
     let mut i = 0;
@@ -113,11 +121,10 @@ pub(crate) fn extract_arguments(query: &str) -> ftd::interpreter::Result<(String
 
             if !arg.is_empty() {
                 if let Some(index) = args.iter().position(|x| x == &arg) {
-                    output_query += &format!("${}", index + 1);
+                    output_query += &format!("{sub}{}", index + 1);
                 } else {
                     args.push(arg.clone());
-                    let index = args.len();
-                    output_query += &format!("${}", index);
+                    output_query += &format!("{sub}{}", args.len());
                 }
             }
         } else {
@@ -132,8 +139,7 @@ pub(crate) fn extract_arguments(query: &str) -> ftd::interpreter::Result<(String
     }
 
     if quote_open {
-        // TODO: THROW SOME ERROR, A QUOTE WAS LEFT OPEN
-        println!("Quote Open");
+        return Err(QueryError::QuoteOpen);
     }
 
     Ok((output_query, args))
@@ -143,7 +149,14 @@ pub(crate) fn extract_arguments(query: &str) -> ftd::interpreter::Result<(String
 mod test {
     #[track_caller]
     fn e(i: &str, o: &str, a: Vec<&str>) {
-        let (query, arguments) = super::extract_arguments(i).unwrap();
+        let (query, arguments) = super::extract_arguments(i, super::POSTGRES_SUB).unwrap();
+        assert_eq!(query, o);
+        assert_eq!(arguments, a);
+    }
+
+    #[track_caller]
+    fn f(i: &str, o: &str, a: Vec<&str>) {
+        let (query, arguments) = super::extract_arguments(i, super::SQLITE_SUB).unwrap();
         assert_eq!(query, o);
         assert_eq!(arguments, a);
     }
@@ -195,6 +208,54 @@ mod test {
         e(
             r#"SELECT * FROM test where name = \"$name\" and full_name = $name"#,
             r#"SELECT * FROM test where name = \"$1\" and full_name = $1"#,
+            vec!["name"],
+        );
+
+        f("SELECT $val::FLOAT8;", "SELECT ?1::FLOAT8;", vec!["val"]);
+        f(
+            "SELECT * FROM test where name = $name;",
+            "SELECT * FROM test where name = ?1;",
+            vec!["name"],
+        );
+        f("hello", "hello", vec![]);
+        f(
+            "SELECT * FROM test where name = $name",
+            "SELECT * FROM test where name = ?1",
+            vec!["name"],
+        );
+        f(
+            "SELECT * FROM test where name = $name and full_name = $full_name",
+            "SELECT * FROM test where name = ?1 and full_name = ?2",
+            vec!["name", "full_name"],
+        );
+        f(
+            r"SELECT * FROM test where name = \$name and full_name = $full_name",
+            r"SELECT * FROM test where name = \$name and full_name = ?1",
+            vec!["full_name"],
+        );
+        f(
+            r"SELECT * FROM test where name = \\$name and full_name = $full_name",
+            r"SELECT * FROM test where name = \\?1 and full_name = ?2",
+            vec!["name", "full_name"],
+        );
+        f(
+            "SELECT * FROM test where name = $name and full_name = $name",
+            "SELECT * FROM test where name = ?1 and full_name = ?1",
+            vec!["name"],
+        );
+        f(
+            "SELECT * FROM test where name = \"$name\" and full_name = $name",
+            "SELECT * FROM test where name = \"$name\" and full_name = ?1",
+            vec!["name"],
+        );
+        f(
+            "SELECT * FROM test where name = \"'$name'\" and full_name = $name",
+            "SELECT * FROM test where name = \"'$name'\" and full_name = ?1",
+            vec!["name"],
+        );
+        f(
+            r#"SELECT * FROM test where name = \"$name\" and full_name = $name"#,
+            r#"SELECT * FROM test where name = \"?1\" and full_name = ?1"#,
             vec!["name"],
         );
     }
