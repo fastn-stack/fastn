@@ -155,8 +155,8 @@ pub fn extract_named_parameters(
     doc: &ftd::interpreter::TDoc,
     headers: ftd_ast::HeaderValues,
     line_number: usize,
-) -> ftd::interpreter::Result<Vec<(String, ft_sys_shared::SqliteRawValue)>> {
-    let mut params: Vec<(String, ft_sys_shared::SqliteRawValue)> = Vec::new();
+) -> ftd::interpreter::Result<(String, Vec<ft_sys_shared::SqliteRawValue>)> {
+    let mut params: Vec<ft_sys_shared::SqliteRawValue> = Vec::new();
     let mut param_name = String::new();
     let mut param_type = String::new();
     let mut state = State::OutsideParam;
@@ -220,10 +220,13 @@ pub fn extract_named_parameters(
                 state = State::OutsideParam;
 
                 // todo: handle empty param_name
-                params.push((
-                    param_name.clone(),
-                    resolve_param(&param_name, &param_type, doc, &headers, line_number)?,
-                ));
+                params.push(resolve_param(
+                    &param_name,
+                    &param_type,
+                    doc,
+                    &headers,
+                    line_number,
+                )?);
 
                 param_name.clear();
                 param_type.clear();
@@ -240,11 +243,14 @@ pub fn extract_named_parameters(
 
     // Handle the last param if there was no trailing comma or space
     if [State::InsideParam, State::PushParam].contains(&state) && !param_name.is_empty() {
-        params.push((
-            param_name.clone(),
-            resolve_param(&param_name, &param_type, doc, &headers, line_number)?,
-        ));
+        params.push(resolve_param(
+            &param_name,
+            &param_type,
+            doc,
+            &headers,
+            line_number,
+        )?);
     }
 
-    Ok(params)
+    Ok((query.to_string(), params))
 }

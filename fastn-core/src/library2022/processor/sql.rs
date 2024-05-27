@@ -25,7 +25,7 @@ pub async fn process(
         },
     };
 
-    let params = crate::library2022::processor::sqlite::extract_named_parameters(
+    let (query, params) = crate::library2022::processor::sqlite::extract_named_parameters(
         query.as_str(),
         doc,
         headers,
