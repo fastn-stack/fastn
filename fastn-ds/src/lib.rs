@@ -262,7 +262,12 @@ impl DocumentStore {
         //    types will be missing here as well)
         // verify a. len of both vectors are same and b types returned by 1 are
         // compatible with 2, and c. by combining the two vectors we have no Nones left
-        let mut stmt = conn.prepare(&query)?;
+        let stmt = conn.prepare(&query)?;
+
+        assert_eq!(args.len(), stmt.parameter_count());
+
+        // stmt.columns() give type of columns included in the result
+
 
         Ok((fastn_utils::sql::Statement { stmt }, vec![]))
     }

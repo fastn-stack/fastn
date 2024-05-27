@@ -16,6 +16,7 @@ pub struct Statement<'a> {
 
 #[allow(dead_code)]
 /// Extracts arguments from a query string and replaces them with placeholders
+/// Any sql type assertions (::TYPE) are removed
 /// The second pair is the list of arguments with their optional type annotations
 pub fn extract_arguments(
     query: &str,
