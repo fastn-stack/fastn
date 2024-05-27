@@ -54,8 +54,8 @@ pub async fn process(
 
 const BACKSLASH: char = '\\';
 const SPECIAL_CHARS: [char; 9] = [BACKSLASH, '$', '/', ':', '"', ',', '\'', ';', ' '];
-const SQLITE_SUB: char = '?';
-const POSTGRES_SUB: char = '$';
+pub const SQLITE_SUB: char = '?';
+pub const POSTGRES_SUB: char = '$';
 
 #[derive(thiserror::Error, Debug)]
 pub enum QueryError {
@@ -67,14 +67,14 @@ pub enum QueryError {
 pub(crate) fn extract_arguments(
     query: &str,
     sub: char,
-) -> Result<(String, Vec<String>), QueryError> {
+) -> Result<(String, Vec<(String, Option<String>)>), QueryError> {
     let chars: Vec<char> = query.chars().collect();
     let len = chars.len();
     let mut i = 0;
     let mut quote: Option<char> = None;
     let mut quote_open = false;
     let mut escaped = false;
-    let mut args: Vec<String> = Vec::new();
+    let mut args: Vec<(String, Option<String>)> = Vec::new();
     let mut output_query = String::new();
 
     while i < len {
@@ -120,10 +120,10 @@ pub(crate) fn extract_arguments(
             }
 
             if !arg.is_empty() {
-                if let Some(index) = args.iter().position(|x| x == &arg) {
+                if let Some(index) = args.iter().position(|(x, _)| x == &arg) {
                     output_query += &format!("{sub}{}", index + 1);
                 } else {
-                    args.push(arg.clone());
+                    args.push((arg.clone(), None));
                     output_query += &format!("{sub}{}", args.len());
                 }
             }
@@ -148,14 +148,14 @@ pub(crate) fn extract_arguments(
 #[cfg(test)]
 mod test {
     #[track_caller]
-    fn e(i: &str, o: &str, a: Vec<&str>) {
+    fn e(i: &str, o: &str, a: Vec<(&str, Option<String>)>) {
         let (query, arguments) = super::extract_arguments(i, super::POSTGRES_SUB).unwrap();
         assert_eq!(query, o);
         assert_eq!(arguments, a);
     }
 
     #[track_caller]
-    fn f(i: &str, o: &str, a: Vec<&str>) {
+    fn f(i: &str, o: &str, a: Vec<(&str, Option<String>)>) {
         let (query, arguments) = super::extract_arguments(i, super::SQLITE_SUB).unwrap();
         assert_eq!(query, o);
         assert_eq!(arguments, a);
@@ -163,11 +163,15 @@ mod test {
 
     #[test]
     fn extract_arguments() {
-        e("SELECT $val::FLOAT8;", "SELECT $1::FLOAT8;", vec!["val"]);
+        e(
+            "SELECT $val::FLOAT8;",
+            "SELECT $1::FLOAT8;",
+            vec![("val", Some("FLOAT8".to_string()))],
+        );
         e(
             "SELECT * FROM test where name = $name;",
             "SELECT * FROM test where name = $1;",
-            vec!["name"],
+            vec![("name", None)],
         );
         e("hello", "hello", vec![]);
         e(

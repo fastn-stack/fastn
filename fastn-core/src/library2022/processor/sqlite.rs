@@ -92,6 +92,7 @@ fn value_to_bind(v: ftd::interpreter::Value) -> ft_sys_shared::SqliteRawValue {
         _ => unimplemented!(), // Handle other types as needed
     }
 }
+
 fn resolve_variable_from_headers(
     var: &str,
     param_type: &str,
@@ -157,88 +158,17 @@ pub fn extract_named_parameters(
     line_number: usize,
 ) -> ftd::interpreter::Result<(String, Vec<ft_sys_shared::SqliteRawValue>)> {
     let mut params: Vec<ft_sys_shared::SqliteRawValue> = Vec::new();
-    let mut param_name = String::new();
-    let mut param_type = String::new();
-    let mut state = State::OutsideParam;
 
-    for c in query.chars() {
-        match state {
-            State::OutsideParam => {
-                if c == '$' {
-                    state = State::InsideParam;
-                    param_name.clear();
-                    param_type.clear();
-                } else if c == '"' {
-                    state = State::InsideStringLiteral;
-                }
-            }
-            State::InsideStringLiteral => {
-                if c == '"' {
-                    state = State::OutsideParam;
-                } else if c == '\\' {
-                    state = State::InsideEscapeSequence(0);
-                }
-            }
-            State::InsideEscapeSequence(escape_count) => {
-                if c == '\\' {
-                    state = State::InsideEscapeSequence(escape_count + 1);
-                } else {
-                    state = if escape_count % 2 == 0 {
-                        State::InsideStringLiteral
-                    } else {
-                        State::ConsumeEscapedChar
-                    };
-                }
-            }
-            State::ConsumeEscapedChar => {
-                state = State::InsideStringLiteral;
-            }
-            State::StartTypeHint => {
-                if c == ':' {
-                    state = State::InsideTypeHint;
-                } else {
-                    state = State::ParseError("Type hint must start with `::`".to_string());
-                }
-            }
-            State::InsideParam => {
-                if c == ':' {
-                    state = State::StartTypeHint;
-                } else if c.is_alphanumeric() {
-                    param_name.push(c);
-                } else if c == ',' || c == ';' || c.is_whitespace() && !param_name.is_empty() {
-                    state = State::PushParam;
-                }
-            }
-            State::InsideTypeHint => {
-                if c.is_alphanumeric() {
-                    param_type.push(c);
-                } else {
-                    state = State::PushParam;
-                }
-            }
-            State::PushParam => {
-                state = State::OutsideParam;
+    let (query, args) = super::sql::extract_arguments(query, super::sql::SQLITE_SUB)?;
 
-                // todo: handle empty param_name
-                params.push(resolve_param(
-                    &param_name,
-                    &param_type,
-                    doc,
-                    &headers,
-                    line_number,
-                )?);
-
-                param_name.clear();
-                param_type.clear();
-            }
-            State::ParseError(error) => {
-                return Err(ftd::interpreter::Error::ParseError {
-                    message: format!("Failed to parse SQL Query: {}", error),
-                    doc_id: doc.name.to_string(),
-                    line_number,
-                });
-            }
-        }
+    for param_name in args {
+        params.push(resolve_param(
+            &param_name,
+            &param_type,
+            doc,
+            &headers,
+            line_number,
+        )?);
     }
 
     // Handle the last param if there was no trailing comma or space
