@@ -157,30 +157,31 @@ pub fn extract_named_parameters(
     headers: ftd_ast::HeaderValues,
     line_number: usize,
 ) -> ftd::interpreter::Result<(String, Vec<ft_sys_shared::SqliteRawValue>)> {
-    let mut params: Vec<ft_sys_shared::SqliteRawValue> = Vec::new();
-
-    let (query, args) = super::sql::extract_arguments(query, super::sql::SQLITE_SUB)?;
-
-    for param_name in args {
-        params.push(resolve_param(
-            &param_name,
-            &param_type,
-            doc,
-            &headers,
-            line_number,
-        )?);
-    }
-
-    // Handle the last param if there was no trailing comma or space
-    if [State::InsideParam, State::PushParam].contains(&state) && !param_name.is_empty() {
-        params.push(resolve_param(
-            &param_name,
-            &param_type,
-            doc,
-            &headers,
-            line_number,
-        )?);
-    }
-
-    Ok((query.to_string(), params))
+    todo!()
+    // let mut params: Vec<ft_sys_shared::SqliteRawValue> = Vec::new();
+    //
+    // let (query, args) = super::sql::extract_arguments(query, super::sql::SQLITE_SUB)?;
+    //
+    // for param_name in args {
+    //     params.push(resolve_param(
+    //         &param_name,
+    //         &param_type,
+    //         doc,
+    //         &headers,
+    //         line_number,
+    //     )?);
+    // }
+    //
+    // // Handle the last param if there was no trailing comma or space
+    // if [State::InsideParam, State::PushParam].contains(&state) && !param_name.is_empty() {
+    //     params.push(resolve_param(
+    //         &param_name,
+    //         &param_type,
+    //         doc,
+    //         &headers,
+    //         line_number,
+    //     )?);
+    // }
+    //
+    // Ok((query.to_string(), params))
 }

@@ -107,23 +107,39 @@ pub(crate) fn extract_arguments(
 
         if chars[i] == '$' && !escaped && !quote_open {
             let mut arg = String::new();
+            let mut arg_type = None;
             i += 1;
 
-            while i < len {
-                if SPECIAL_CHARS.contains(&chars[i]) {
-                    i -= 1;
-                    break;
-                } else {
-                    arg.push(chars[i]);
+            // Collect the argument name
+            while i < len && chars[i].is_alphanumeric() {
+                arg.push(chars[i]);
+                i += 1;
+            }
+
+            // Check for type annotation "::TYPE"
+            if i < len && chars[i] == ':' && i + 1 < len && chars[i + 1] == ':' {
+                i += 2;
+                let mut type_annotation = String::new();
+
+                while i < len && (chars[i].is_alphanumeric() || chars[i] == '_') {
+                    type_annotation.push(chars[i]);
                     i += 1;
                 }
+
+                if !type_annotation.is_empty() {
+                    arg_type = Some(type_annotation);
+                }
+
+                i -= 1;
+            } else {
+                i -= 1;
             }
 
             if !arg.is_empty() {
                 if let Some(index) = args.iter().position(|(x, _)| x == &arg) {
                     output_query += &format!("{sub}{}", index + 1);
                 } else {
-                    args.push((arg.clone(), None));
+                    args.push((arg.clone(), arg_type));
                     output_query += &format!("{sub}{}", args.len());
                 }
             }
@@ -148,14 +164,14 @@ pub(crate) fn extract_arguments(
 #[cfg(test)]
 mod test {
     #[track_caller]
-    fn e(i: &str, o: &str, a: Vec<(&str, Option<String>)>) {
+    fn e(i: &str, o: &str, a: Vec<(String, Option<String>)>) {
         let (query, arguments) = super::extract_arguments(i, super::POSTGRES_SUB).unwrap();
         assert_eq!(query, o);
         assert_eq!(arguments, a);
     }
 
     #[track_caller]
-    fn f(i: &str, o: &str, a: Vec<(&str, Option<String>)>) {
+    fn f(i: &str, o: &str, a: Vec<(String, Option<String>)>) {
         let (query, arguments) = super::extract_arguments(i, super::SQLITE_SUB).unwrap();
         assert_eq!(query, o);
         assert_eq!(arguments, a);
@@ -165,106 +181,106 @@ mod test {
     fn extract_arguments() {
         e(
             "SELECT $val::FLOAT8;",
-            "SELECT $1::FLOAT8;",
-            vec![("val", Some("FLOAT8".to_string()))],
+            "SELECT $1;",
+            vec![("val".to_string(), Some("FLOAT8".to_string()))],
         );
         e(
             "SELECT * FROM test where name = $name;",
             "SELECT * FROM test where name = $1;",
-            vec![("name", None)],
+            vec![("name".to_string(), None)],
         );
         e("hello", "hello", vec![]);
         e(
             "SELECT * FROM test where name = $name",
             "SELECT * FROM test where name = $1",
-            vec!["name"],
+            vec![("name".to_string(), None)],
         );
         e(
             "SELECT * FROM test where name = $name and full_name = $full_name",
             "SELECT * FROM test where name = $1 and full_name = $2",
-            vec!["name", "full_name"],
+            vec![("name".to_string(), None), ("full_name".to_string(), None)],
         );
         e(
             r"SELECT * FROM test where name = \$name and full_name = $full_name",
             r"SELECT * FROM test where name = \$name and full_name = $1",
-            vec!["full_name"],
+            vec![("full_name".to_string(), None)],
         );
         e(
             r"SELECT * FROM test where name = \\$name and full_name = $full_name",
             r"SELECT * FROM test where name = \\$1 and full_name = $2",
-            vec!["name", "full_name"],
+            vec![("name".to_string(), None), ("full_name".to_string(), None)],
         );
         e(
             "SELECT * FROM test where name = $name and full_name = $name",
             "SELECT * FROM test where name = $1 and full_name = $1",
-            vec!["name"],
+            vec![("name".to_string(), None)],
         );
         e(
             "SELECT * FROM test where name = \"$name\" and full_name = $name",
             "SELECT * FROM test where name = \"$name\" and full_name = $1",
-            vec!["name"],
+            vec![("name".to_string(), None)],
         );
         e(
             "SELECT * FROM test where name = \"'$name'\" and full_name = $name",
             "SELECT * FROM test where name = \"'$name'\" and full_name = $1",
-            vec!["name"],
+            vec![("name".to_string(), None)],
         );
         e(
             r#"SELECT * FROM test where name = \"$name\" and full_name = $name"#,
             r#"SELECT * FROM test where name = \"$1\" and full_name = $1"#,
-            vec!["name"],
+            vec![("name".to_string(), None)],
         );
 
         f(
             "SELECT $val::FLOAT8;",
             "SELECT ?1;",
-            vec![("val", Some("FLOAT8".to_string()))],
+            vec![("val".to_string(), Some("FLOAT8".to_string()))],
         );
         f(
             "SELECT * FROM test where name = $name;",
             "SELECT * FROM test where name = ?1;",
-            vec![("name", None)],
+            vec![("name".to_string(), None)],
         );
         f("hello", "hello", vec![]);
         f(
             "SELECT * FROM test where name = $name::foo",
             "SELECT * FROM test where name = ?1",
-            vec![("name", Some("foo".to_string()))],
+            vec![("name".to_string(), Some("foo".to_string()))],
         );
         f(
             "SELECT * FROM test where name = $name and full_name = $full_name",
             "SELECT * FROM test where name = ?1 and full_name = ?2",
-            vec!["name", "full_name"],
+            vec![("name".to_string(), None), ("full_name".to_string(), None)],
         );
         f(
             r"SELECT * FROM test where name = \$name and full_name = $full_name",
             r"SELECT * FROM test where name = \$name and full_name = ?1",
-            vec!["full_name"],
+            vec![("full_name".to_string(), None)],
         );
         f(
             r"SELECT * FROM test where name = \\$name and full_name = $full_name",
             r"SELECT * FROM test where name = \\?1 and full_name = ?2",
-            vec!["name", "full_name"],
+            vec![("name".to_string(), None), ("full_name".to_string(), None)],
         );
         f(
             "SELECT * FROM test where name = $name and full_name = $name",
             "SELECT * FROM test where name = ?1 and full_name = ?1",
-            vec!["name"],
+            vec![("name".to_string(), None)],
         );
         f(
             "SELECT * FROM test where name = \"$name\" and full_name = $name",
             "SELECT * FROM test where name = \"$name\" and full_name = ?1",
-            vec!["name"],
+            vec![("name".to_string(), None)],
         );
         f(
             "SELECT * FROM test where name = \"'$name'\" and full_name = $name",
             "SELECT * FROM test where name = \"'$name'\" and full_name = ?1",
-            vec!["name"],
+            vec![("name".to_string(), None)],
         );
         f(
             r#"SELECT * FROM test where name = \"$name\" and full_name = $name"#,
             r#"SELECT * FROM test where name = \"?1\" and full_name = ?1"#,
-            vec!["name"],
+            vec![("name".to_string(), None)],
         );
     }
 }
