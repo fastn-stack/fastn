@@ -111,7 +111,7 @@ pub(crate) fn extract_arguments(
             i += 1;
 
             // Collect the argument name
-            while i < len && chars[i].is_alphanumeric() {
+            while i < len && (chars[i].is_alphanumeric() || chars[i] == '_') {
                 arg.push(chars[i]);
                 i += 1;
             }
