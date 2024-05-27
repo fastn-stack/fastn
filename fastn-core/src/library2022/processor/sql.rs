@@ -215,17 +215,21 @@ mod test {
             vec!["name"],
         );
 
-        f("SELECT $val::FLOAT8;", "SELECT ?1::FLOAT8;", vec!["val"]);
+        f(
+            "SELECT $val::FLOAT8;",
+            "SELECT ?1;",
+            vec![("val", Some("FLOAT8".to_string()))],
+        );
         f(
             "SELECT * FROM test where name = $name;",
             "SELECT * FROM test where name = ?1;",
-            vec!["name"],
+            vec![("name", None)],
         );
         f("hello", "hello", vec![]);
         f(
-            "SELECT * FROM test where name = $name",
+            "SELECT * FROM test where name = $name::foo",
             "SELECT * FROM test where name = ?1",
-            vec!["name"],
+            vec![("name", Some("foo".to_string()))],
         );
         f(
             "SELECT * FROM test where name = $name and full_name = $full_name",
