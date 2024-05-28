@@ -290,6 +290,26 @@ impl DocumentStore {
             .into()]])
     }
 
+    pub async fn sql_batch(
+        &self,
+        db_url: &str,
+        query: &str,
+    ) -> Result<Vec<Vec<serde_json::Value>>, fastn_utils::SqlError> {
+        let db_url = match db_url.strip_prefix("sqlite:///") {
+            Some(db) => db.to_string(),
+            None => return Err(fastn_utils::SqlError::UnknownDB),
+        };
+        let conn = rusqlite::Connection::open_with_flags(
+            db_url,
+            rusqlite::OpenFlags::SQLITE_OPEN_READ_WRITE,
+        )
+        .map_err(fastn_utils::SqlError::Connection)?;
+        Ok(vec![vec![conn
+            .execute_batch(query)
+            .map_err(fastn_utils::SqlError::Execute)?
+            .into()]])
+    }
+
     pub fn root(&self) -> fastn_ds::Path {
         self.root.clone()
     }

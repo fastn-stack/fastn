@@ -5,13 +5,9 @@ pub async fn process(
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::RequestConfig,
-    is_query: bool,
+    q_kind: &str,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    let (headers, query) = super::sqlite::get_p1_data(
-        if is_query { "sql-query" } else { "sql-execute" },
-        &value,
-        doc.name,
-    )?;
+    let (headers, query) = super::sqlite::get_p1_data(q_kind, &value, doc.name)?;
     let db = match headers.get_optional_string_by_key("db$", doc.name, value.line_number())? {
         Some(db) => db,
         None => match config.config.ds.env("FASTN_DB_URL").await {
@@ -32,12 +28,22 @@ pub async fn process(
         value.line_number(),
     )?;
 
+    if !params.is_empty() && q_kind == "sql-batch" {
+        return ftd::interpreter::utils::e2(
+            "Named parameters are not allowed in sql-batch queries",
+            doc.name,
+            value.line_number(),
+        );
+    }
+
     let ds = &config.config.ds;
 
-    let res = match if is_query {
+    let res = match if q_kind == "sql-query" {
         ds.sql_query(db.as_str(), query.as_str(), params).await
-    } else {
+    } else if q_kind == "sql-execute" {
         ds.sql_execute(db.as_str(), query.as_str(), params).await
+    } else {
+        ds.sql_batch(db.as_str(), query.as_str()).await
     } {
         Ok(v) => v,
         Err(e) => {
@@ -51,4 +57,3 @@ pub async fn process(
 
     result_to_value(res, kind, doc, &value)
 }
-
