@@ -59,17 +59,19 @@ pub async fn write_manifest_file(
 
     let zip_url = match zip_url {
         Some(zip_url) => zip_url,
-        None => match fastn_core::manifest::utils::get_zipball_url(config.package.name.clone()) {
-            Some(gh_zip_url) => gh_zip_url,
-            None => {
-                return Err(fastn_core::error::Error::UsageError {
-                    message: format!(
-                        "Could not find zip url for package \"{}\".",
-                        &config.package.name,
-                    ),
-                });
+        None => {
+            match fastn_core::manifest::utils::get_gh_zipball_url(config.package.name.clone()) {
+                Some(gh_zip_url) => gh_zip_url,
+                None => {
+                    return Err(fastn_core::error::Error::UsageError {
+                        message: format!(
+                            "Could not find zip url for package \"{}\".",
+                            &config.package.name,
+                        ),
+                    });
+                }
             }
-        },
+        }
     };
 
     let mut hasher = sha2::Sha256::new();
