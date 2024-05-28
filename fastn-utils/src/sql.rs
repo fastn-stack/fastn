@@ -1,5 +1,5 @@
 const BACKSLASH: char = '\\';
-const SPECIAL_CHARS: [char; 9] = [BACKSLASH, '$', '/', ':', '"', ',', '\'', ';', ' '];
+// const SPECIAL_CHARS: [char; 9] = [BACKSLASH, '$', '/', ':', '"', ',', '\'', ';', ' '];
 
 pub const SQLITE_SUB: char = '?';
 pub const POSTGRES_SUB: char = '$';
@@ -14,7 +14,7 @@ pub struct Statement<'a> {
     pub stmt: rusqlite::Statement<'a>,
 }
 
-#[allow(dead_code)]
+#[allow(clippy::type_complexity)]
 /// Extracts arguments from a query string and replaces them with placeholders
 /// Any sql type assertions (::TYPE) are removed
 /// The second pair is the list of arguments with their optional type annotations
