@@ -110,7 +110,11 @@ pub fn path_to_entrypoint(path: &str) -> wasmtime::Result<String> {
 #[derive(thiserror::Error, Debug)]
 pub enum SqlError {
     #[error("connection error {0}")]
-    Connection(#[from] rusqlite::Error),
+    Connection(rusqlite::Error),
+    #[error("Query error {0}")]
+    Query(rusqlite::Error),
+    #[error("Execute error {0}")]
+    Execute(rusqlite::Error),
     #[error("column error {0}: {0}")]
     Column(usize, rusqlite::Error),
     #[error("row error {0}")]

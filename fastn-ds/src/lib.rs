@@ -258,11 +258,14 @@ impl DocumentStore {
         let conn = rusqlite::Connection::open_with_flags(
             db_url,
             rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
-        )?;
-        let mut stmt = conn.prepare(query)?;
+        )
+        .map_err(fastn_utils::SqlError::Connection)?;
+        let mut stmt = conn.prepare(query).map_err(fastn_utils::SqlError::Query)?;
 
         let count = stmt.column_count();
-        let rows = stmt.query(rusqlite::params_from_iter(params))?;
+        let rows = stmt
+            .query(rusqlite::params_from_iter(params))
+            .map_err(fastn_utils::SqlError::Query)?;
         fastn_utils::rows_to_json(rows, count)
     }
 
@@ -279,10 +282,11 @@ impl DocumentStore {
         let conn = rusqlite::Connection::open_with_flags(
             db_url,
             rusqlite::OpenFlags::SQLITE_OPEN_READ_WRITE,
-        )?;
-        let mut stmt = conn.prepare(query)?;
-        Ok(vec![vec![stmt
-            .execute(rusqlite::params_from_iter(params))?
+        )
+        .map_err(fastn_utils::SqlError::Connection)?;
+        Ok(vec![vec![conn
+            .execute(query, rusqlite::params_from_iter(params))
+            .map_err(fastn_utils::SqlError::Execute)?
             .into()]])
     }
 
