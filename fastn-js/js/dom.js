@@ -61,7 +61,7 @@ fastn_dom.propertyMap = {
     "text-shadow": "tsh",
     cursor: "cur",
     display: "d",
-    "download": "dw",
+    download: "dw",
     "flex-wrap": "fw",
     "font-style": "fst",
     "font-weight": "fwt",
