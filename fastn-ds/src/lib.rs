@@ -272,6 +272,10 @@ impl DocumentStore {
         query: &str,
         params: Vec<ft_sys_shared::SqliteRawValue>,
     ) -> Result<Vec<Vec<serde_json::Value>>, fastn_utils::SqlError> {
+        let db_url = match db_url.strip_prefix("sqlite:///") {
+            Some(db) => db.to_string(),
+            None => return Err(fastn_utils::SqlError::UnknownDB),
+        };
         let conn = rusqlite::Connection::open_with_flags(
             db_url,
             rusqlite::OpenFlags::SQLITE_OPEN_READ_WRITE,
