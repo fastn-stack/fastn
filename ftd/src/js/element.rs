@@ -2213,6 +2213,7 @@ impl Rive {
 pub struct Common {
     pub id: Option<ftd::js::Value>,
     pub region: Option<ftd::js::Value>,
+    pub download: Option<ftd::js::Value>,
     pub link: Option<ftd::js::Value>,
     pub link_rel: Option<ftd::js::Value>,
     pub open_in_new_tab: Option<ftd::js::Value>,
@@ -2293,6 +2294,7 @@ impl Common {
     ) -> Common {
         Common {
             id: ftd::js::value::get_optional_js_value("id", properties, arguments),
+            download: ftd::js::value::get_optional_js_value("download", properties, arguments),
             css: ftd::js::value::get_optional_js_value("css", properties, arguments),
             js: ftd::js::value::get_optional_js_value("js", properties, arguments),
             region: ftd::js::value::get_optional_js_value("region", properties, arguments),
@@ -2519,6 +2521,16 @@ impl Common {
         if let Some(ref id) = self.id {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 id.to_set_property(fastn_js::PropertyKind::Id, doc, element_name, rdata),
+            ));
+        }
+        if let Some(ref download) = self.download {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                download.to_set_property(
+                    fastn_js::PropertyKind::Download,
+                    doc,
+                    element_name,
+                    rdata,
+                ),
             ));
         }
         if let Some(ref external_css) = self.css {

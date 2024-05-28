@@ -61,6 +61,7 @@ fastn_dom.propertyMap = {
     "text-shadow": "tsh",
     cursor: "cur",
     display: "d",
+    "download": "dw",
     "flex-wrap": "fw",
     "font-style": "fst",
     "font-weight": "fwt",
@@ -311,6 +312,7 @@ fastn_dom.PropertyKind = {
     Mask: 120,
     TextInputValue: 121,
     FetchPriority: 122,
+    Download: 124,
 };
 
 fastn_dom.Loading = {
@@ -2381,6 +2383,11 @@ class Node2 {
                     break;
             }
             this.updateTextInputValue();
+        } else if (kind === fastn_dom.PropertyKind.Download) {
+            if (fastn_utils.isNull(staticValue)) {
+                return;
+            }
+            this.attachAttribute("download", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Link) {
             // Changing node type to `a` for link
             // todo: needs fix for image links
