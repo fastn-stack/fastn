@@ -511,32 +511,10 @@ const ftd = (function () {
                 if (!res.ok) {
                     return new Error("[http_post]: Request failed: " + res);
                 }
-                // For zip downloads
-                const contentDisposition = res.headers.get('Content-Disposition');
-                if (contentDisposition && contentDisposition.includes('attachment')) {
-                    return res.blob().then(blob => ({
-                        filename: contentDisposition.split('filename=')[1].replace(/"/g, ''),
-                        blob: blob
-                    }));
-                }
                 return res.json();
             })
             .then((response) => {
                 console.log("[http]: Response OK", response);
-
-                // Creating link if blob exists for downloading
-                if (response && response.blob) {
-                    const url = window.URL.createObjectURL(response.blob);
-                    const a = document.createElement('a');
-                    a.style.display = 'none';
-                    a.href = url;
-                    a.download = response.filename;
-                    document.body.appendChild(a);
-                    a.click();
-                    window.URL.revokeObjectURL(url);
-                    return;
-                }
-
                 if (response.redirect) {
                     window.location.href = response.redirect;
                 } else if (!!response && !!response.reload) {
