@@ -55,9 +55,17 @@ pub fn trim_package_name(path: &str, package_name: &str) -> Option<String> {
 pub fn get_clean_url(
     config: &fastn_core::Config,
     url: &str,
-) -> fastn_core::Result<(url::Url, std::collections::HashMap<String, String>)> {
+) -> fastn_core::Result<(
+    url::Url,
+    Option<String>,
+    std::collections::HashMap<String, String>,
+)> {
     if url.starts_with("http") {
-        return Ok((url::Url::parse(url)?, std::collections::HashMap::new()));
+        return Ok((
+            url::Url::parse(url)?,
+            None,
+            std::collections::HashMap::new(),
+        ));
     }
 
     let url = if url.starts_with("/-/") || url.starts_with("-/") {
@@ -79,8 +87,10 @@ pub fn get_clean_url(
         }
 
         let mut end_point = None;
+        let mut mountpoint = None;
         for e in config.package.endpoints.iter() {
             if remaining_url.starts_with(e.mountpoint.as_str()) {
+                mountpoint = Some(e.mountpoint.to_string());
                 end_point = Some(e.endpoint.to_string());
                 break;
             }
@@ -95,6 +105,7 @@ pub fn get_clean_url(
 
         return Ok((
             url::Url::parse(format!("{}{}", end_point.unwrap(), remaining_url).as_str())?,
+            mountpoint,
             std::collections::HashMap::new(), // TODO:
         ));
     }
@@ -110,6 +121,7 @@ pub fn get_clean_url(
                 }
                 return Ok((
                     url::Url::parse(format!("{}{}", ep, remaining_url).as_str())?,
+                    Some(app.mount_point.to_string()),
                     app_conf,
                 ));
             }
@@ -127,6 +139,7 @@ pub fn get_clean_url(
         let full_url = format!("{}/{}", endpoint_url, relative_path);
         return Ok((
             url::Url::parse(&full_url)?,
+            Some(e.mountpoint.to_string()),
             std::collections::HashMap::new(),
         ));
     }

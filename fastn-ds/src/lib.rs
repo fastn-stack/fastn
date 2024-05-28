@@ -431,15 +431,23 @@ impl DocumentStore {
         &self,
         wasm_url: String,
         req: &T,
+        mountpoint: String,
     ) -> Result<ft_sys_shared::Request, HttpError>
     where
         T: RequestType,
     {
-        let headers: Vec<(String, Vec<u8>)> = req
-            .headers()
-            .iter()
-            .map(|(k, v)| (k.as_str().to_string(), v.as_bytes().to_vec()))
-            .collect();
+        let headers: Vec<(String, Vec<u8>)> = {
+            let mut headers: Vec<(String, Vec<u8>)> = req
+                .headers()
+                .iter()
+                .map(|(k, v)| (k.as_str().to_string(), v.as_bytes().to_vec()))
+                .collect();
+            headers.push((
+                fastn_utils::FASTN_MOUNTPOINT.to_string(),
+                mountpoint.into_bytes(),
+            ));
+            headers
+        };
 
         let wasm_file = wasm_url.strip_prefix("wasm+proxy://").unwrap();
         let wasm_file = wasm_file.split_once(".wasm").unwrap().0;

@@ -57,8 +57,8 @@ pub async fn process(
         }
     };
 
-    let (mut url, mut conf) = {
-        let (mut url, conf) =
+    let (mut url, mountpoint, mut conf) = {
+        let (mut url, mountpoint, conf) =
             fastn_core::config::utils::get_clean_url(&req_config.config, url.as_str()).map_err(
                 |e| ftd::interpreter::Error::ParseError {
                     message: format!("invalid url: {:?}", e),
@@ -69,7 +69,7 @@ pub async fn process(
         if !req_config.request.query_string().is_empty() {
             url.set_query(Some(req_config.request.query_string()));
         }
-        (url, conf)
+        (url, mountpoint, conf)
     };
 
     let mut body = vec![];
@@ -124,10 +124,13 @@ pub async fn process(
     }
 
     let resp = if url.scheme() == "wasm+proxy" {
+        let mountpoint = mountpoint.ok_or(ftd::interpreter::Error::OtherError(
+            "Mountpoint not found!".to_string(),
+        ))?;
         match req_config
             .config
             .ds
-            .handle_wasm(url.to_string(), &req_config.request)
+            .handle_wasm(url.to_string(), &req_config.request, mountpoint)
             .await
         {
             Ok(r) => {
