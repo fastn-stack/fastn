@@ -154,3 +154,5 @@ pub fn row_to_json(r: &rusqlite::Row, count: usize) -> Result<Vec<serde_json::Va
     }
     Ok(row)
 }
+
+pub const FASTN_MOUNTPOINT: &str = "x-fastn-mountpoint";
