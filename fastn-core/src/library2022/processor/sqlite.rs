@@ -15,8 +15,7 @@ pub(crate) fn get_p1_data(
                 None => {
                     return ftd::interpreter::utils::e2(
                         format!(
-                            "$processor$: `{}` query is not specified in the processor body",
-                            name
+                            "$processor$: `{name}` query is not specified in the processor body",
                         ),
                         doc_name,
                         value.line_number(),
@@ -25,46 +24,6 @@ pub(crate) fn get_p1_data(
             },
         )),
         Err(e) => Err(e.into()),
-    }
-}
-
-pub async fn process(
-    value: ftd_ast::VariableValue,
-    kind: ftd::interpreter::Kind,
-    doc: &ftd::interpreter::TDoc<'_>,
-    req_config: &fastn_core::RequestConfig,
-    db_config: &fastn_core::library2022::processor::sql::DatabaseConfig,
-    headers: ftd_ast::HeaderValues,
-    query: &str,
-) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    let sqlite_database_path = req_config.config.ds.root().join(&db_config.db_url);
-
-    // need the query params
-    // question is they can be multiple
-    // so lets say start with passing attributes from ftd file
-    // db-<param-name1>: value
-    // db-<param-name2>: value
-    // for now they wil be ordered
-    // select * from users where
-
-    let query_response = execute_query(
-        &sqlite_database_path,
-        query,
-        doc,
-        headers,
-        value.line_number(),
-    )
-    .await;
-
-    match query_response {
-        Ok(result) => result_to_value(Ok(result), kind, doc, &value, super::sql::STATUS_OK),
-        Err(e) => result_to_value(
-            Err(e.to_string()),
-            kind,
-            doc,
-            &value,
-            super::sql::STATUS_ERROR,
-        ),
     }
 }
 
@@ -106,7 +65,7 @@ fn resolve_variable_from_doc(
     var: &str,
     doc: &ftd::interpreter::TDoc,
     line_number: usize,
-) -> ftd::interpreter::Result<Box<dyn rusqlite::ToSql>> {
+) -> ftd::interpreter::Result<ft_sys_shared::SqliteRawValue> {
     let thing = match doc.get_thing(var, line_number) {
         Ok(ftd::interpreter::Thing::Variable(v)) => v.value.resolve(doc, line_number)?,
         Ok(v) => {
@@ -125,44 +84,51 @@ fn resolve_variable_from_doc(
         }
     };
 
-    let param_value: Box<dyn rusqlite::ToSql> = match thing {
-        ftd::interpreter::Value::String { text } => Box::new(text),
-        ftd::interpreter::Value::Integer { value } => Box::new(value as i32),
-        ftd::interpreter::Value::Decimal { value } => Box::new(value as f32),
-        ftd::interpreter::Value::Boolean { value } => Box::new(value as i32),
-        _ => unimplemented!(), // Handle other types as needed
-    };
-
-    Ok(param_value)
+    Ok(value_to_bind(thing))
 }
 
+fn value_to_bind(v: ftd::interpreter::Value) -> ft_sys_shared::SqliteRawValue {
+    match v {
+        ftd::interpreter::Value::String { text } => ft_sys_shared::SqliteRawValue::Text(text),
+        ftd::interpreter::Value::Integer { value } => ft_sys_shared::SqliteRawValue::Integer(value),
+        ftd::interpreter::Value::Decimal { value } => ft_sys_shared::SqliteRawValue::Real(value),
+        ftd::interpreter::Value::Optional { data, .. } => match data.as_ref() {
+            Some(v) => value_to_bind(v.to_owned()),
+            None => ft_sys_shared::SqliteRawValue::Null,
+        },
+        ftd::interpreter::Value::Boolean { value } => {
+            ft_sys_shared::SqliteRawValue::Integer(value as i64)
+        }
+        _ => unimplemented!(), // Handle other types as needed
+    }
+}
 fn resolve_variable_from_headers(
     var: &str,
     param_type: &str,
     doc: &ftd::interpreter::TDoc,
     headers: &ftd_ast::HeaderValues,
     line_number: usize,
-) -> ftd::interpreter::Result<Box<dyn rusqlite::ToSql>> {
+) -> ftd::interpreter::Result<ft_sys_shared::SqliteRawValue> {
     let header = match headers.optional_header_by_name(var, doc.name, line_number)? {
         Some(v) => v,
-        None => return Ok(Box::new(None::<Box<dyn rusqlite::ToSql>>)),
+        None => return Ok(ft_sys_shared::SqliteRawValue::Null),
     };
 
     if let ftd_ast::VariableValue::String { value, .. } = &header.value {
         if let Some(stripped) = value.strip_prefix('$') {
-            return Ok(Box::new(
-                resolve_variable_from_doc(stripped, doc, line_number).map(Some)?,
-            ));
+            return resolve_variable_from_doc(stripped, doc, line_number);
         }
     }
 
-    let param_value: Box<dyn rusqlite::ToSql> = match (param_type, &header.value) {
-        ("TEXT", ftd_ast::VariableValue::String { value, .. }) => Box::new(value.clone()),
+    let param_value = match (param_type, &header.value) {
+        ("TEXT", ftd_ast::VariableValue::String { value, .. }) => {
+            ft_sys_shared::SqliteRawValue::Text(value.clone())
+        }
         ("INTEGER", ftd_ast::VariableValue::String { value, .. }) => {
-            Box::new(value.parse::<i32>().unwrap())
+            ft_sys_shared::SqliteRawValue::Integer(value.parse::<i64>().unwrap())
         }
         ("REAL", ftd_ast::VariableValue::String { value, .. }) => {
-            Box::new(value.parse::<f32>().unwrap())
+            ft_sys_shared::SqliteRawValue::Real(value.parse::<f64>().unwrap())
         }
         _ => unimplemented!(), // Handle other types as needed
     };
@@ -176,10 +142,9 @@ fn resolve_param(
     doc: &ftd::interpreter::TDoc,
     headers: &ftd_ast::HeaderValues,
     line_number: usize,
-) -> ftd::interpreter::Result<Box<dyn rusqlite::ToSql>> {
+) -> ftd::interpreter::Result<ft_sys_shared::SqliteRawValue> {
     resolve_variable_from_headers(param_name, param_type, doc, headers, line_number)
         .or_else(|_| resolve_variable_from_doc(param_name, doc, line_number))
-        .map(|v| Box::new(v) as Box<dyn rusqlite::ToSql>)
 }
 
 #[derive(Debug, PartialEq)]
@@ -195,13 +160,13 @@ enum State {
     ParseError(String),
 }
 
-fn extract_named_parameters(
+pub fn extract_named_parameters(
     query: &str,
     doc: &ftd::interpreter::TDoc,
     headers: ftd_ast::HeaderValues,
     line_number: usize,
-) -> ftd::interpreter::Result<Vec<Box<dyn rusqlite::ToSql>>> {
-    let mut params = Vec::new();
+) -> ftd::interpreter::Result<Vec<ft_sys_shared::SqliteRawValue>> {
+    let mut params: Vec<ft_sys_shared::SqliteRawValue> = Vec::new();
     let mut param_name = String::new();
     let mut param_type = String::new();
     let mut state = State::OutsideParam;
@@ -264,10 +229,13 @@ fn extract_named_parameters(
             State::PushParam => {
                 state = State::OutsideParam;
 
-                let param_value =
-                    resolve_param(&param_name, &param_type, doc, &headers, line_number)?;
-
-                params.push(Box::new(param_value) as Box<dyn rusqlite::ToSql>);
+                params.push(resolve_param(
+                    &param_name,
+                    &param_type,
+                    doc,
+                    &headers,
+                    line_number,
+                )?);
 
                 param_name.clear();
                 param_type.clear();
@@ -284,116 +252,14 @@ fn extract_named_parameters(
 
     // Handle the last param if there was no trailing comma or space
     if [State::InsideParam, State::PushParam].contains(&state) && !param_name.is_empty() {
-        let param_value = resolve_param(&param_name, &param_type, doc, &headers, line_number)?;
-        params.push(Box::new(param_value) as Box<dyn rusqlite::ToSql>);
+        params.push(resolve_param(
+            &param_name,
+            &param_type,
+            doc,
+            &headers,
+            line_number,
+        )?);
     }
 
     Ok(params)
-}
-
-pub(crate) async fn execute_query(
-    database_path: &fastn_ds::Path,
-    query: &str,
-    doc: &ftd::interpreter::TDoc<'_>,
-    headers: ftd_ast::HeaderValues,
-    line_number: usize,
-) -> ftd::interpreter::Result<Vec<Vec<serde_json::Value>>> {
-    let doc_name = doc.name;
-
-    let conn = match rusqlite::Connection::open_with_flags(
-        database_path.to_string(),
-        rusqlite::OpenFlags::SQLITE_OPEN_READ_WRITE,
-    ) {
-        Ok(conn) => conn,
-        Err(e) => {
-            return ftd::interpreter::utils::e2(
-                format!("Failed to open `{}`: {:?}", database_path, e),
-                doc_name,
-                line_number,
-            );
-        }
-    };
-
-    let mut stmt = match conn.prepare(query) {
-        Ok(v) => v,
-        Err(e) => {
-            return ftd::interpreter::utils::e2(
-                format!("Failed to prepare query: {:?}", e),
-                doc_name,
-                line_number,
-            )
-        }
-    };
-
-    let count = stmt.column_count();
-
-    // let mut stmt = conn.prepare("SELECT * FROM test where name = :name")?;
-    // let mut rows = stmt.query(rusqlite::named_params! { ":name": "one" })?
-
-    // let mut stmt = conn.prepare("SELECT * FROM test where name = ?")?;
-    // let mut rows = stmt.query([name])?;
-    let params = extract_named_parameters(query, doc, headers, line_number)?;
-
-    let mut rows = match stmt.query(rusqlite::params_from_iter(params)) {
-        Ok(v) => v,
-        Err(e) => {
-            return ftd::interpreter::utils::e2(
-                format!("Failed to prepare query: {:?}", e),
-                doc_name,
-                line_number,
-            )
-        }
-    };
-
-    let mut result: Vec<Vec<serde_json::Value>> = vec![];
-    loop {
-        match rows.next() {
-            Ok(None) => break,
-            Ok(Some(r)) => {
-                result.push(row_to_json(r, count, doc_name, line_number)?);
-            }
-            Err(e) => {
-                return ftd::interpreter::utils::e2(
-                    format!("Failed to execute query: {:?}", e),
-                    doc_name,
-                    line_number,
-                )
-            }
-        }
-    }
-    Ok(result)
-}
-
-fn row_to_json(
-    r: &rusqlite::Row,
-    count: usize,
-    doc_name: &str,
-    line_number: usize,
-) -> ftd::interpreter::Result<Vec<serde_json::Value>> {
-    let mut row: Vec<serde_json::Value> = Vec::with_capacity(count);
-    for i in 0..count {
-        match r.get::<usize, rusqlite::types::Value>(i) {
-            Ok(rusqlite::types::Value::Null) => row.push(serde_json::Value::Null),
-            Ok(rusqlite::types::Value::Integer(i)) => row.push(serde_json::Value::Number(i.into())),
-            Ok(rusqlite::types::Value::Real(i)) => row.push(serde_json::Value::Number(
-                serde_json::Number::from_f64(i).unwrap(),
-            )),
-            Ok(rusqlite::types::Value::Text(i)) => row.push(serde_json::Value::String(i)),
-            Ok(rusqlite::types::Value::Blob(_)) => {
-                return ftd::interpreter::utils::e2(
-                    format!("Query returned blob for column: {}", i),
-                    doc_name,
-                    line_number,
-                );
-            }
-            Err(e) => {
-                return ftd::interpreter::utils::e2(
-                    format!("Failed to read response: {:?}", e),
-                    doc_name,
-                    line_number,
-                );
-            }
-        }
-    }
-    Ok(row)
 }

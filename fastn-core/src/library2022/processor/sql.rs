@@ -1,35 +1,4 @@
-#[derive(Debug)]
-pub struct DatabaseConfig {
-    pub db_url: String,
-    pub db_type: String,
-}
-
-impl DatabaseConfig {
-    pub fn new(db_url: String, db_type: String) -> DatabaseConfig {
-        DatabaseConfig { db_url, db_type }
-    }
-}
-
-pub(crate) async fn get_db_config(
-    ds: &fastn_ds::DocumentStore,
-) -> ftd::interpreter::Result<DatabaseConfig> {
-    let db_url = ds
-        .env("FASTN_DB_URL")
-        .await
-        .map_err(|_| ftd::interpreter::Error::OtherError("FASTN_DB_URL is not set".to_string()))?;
-
-    if let Some(db_url) = db_url.strip_prefix("sqlite:///") {
-        return Ok(DatabaseConfig::new(
-            db_url.to_string(),
-            "sqlite".to_string(),
-        ));
-    }
-
-    let url = url::Url::parse(&db_url)
-        .map_err(|_| ftd::interpreter::Error::OtherError("Invalid DB URL".to_string()))?;
-
-    Ok(DatabaseConfig::new(db_url, url.scheme().to_string()))
-}
+use crate::library2022::processor::sqlite::result_to_value;
 
 pub async fn process(
     value: ftd_ast::VariableValue,
@@ -38,46 +7,30 @@ pub async fn process(
     config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let (headers, query) = super::sqlite::get_p1_data("sql", &value, doc.name)?;
+    let db = headers
+        .get_optional_string_by_key("$db$", doc.name, value.line_number())?
+        .unwrap_or_else(|| "default".to_string());
+    let params = crate::library2022::processor::sqlite::extract_named_parameters(
+        query.as_str(),
+        doc,
+        headers,
+        value.line_number(),
+    )?;
 
-    let db_config = match headers.get_optional_string_by_key("db", doc.name, value.line_number())? {
-        Some(url) => match fastn_core::google_sheets::extract_google_sheets_id(url.as_str()) {
-            Some(google_sheet_id) => {
-                let db_url =
-                    fastn_core::google_sheets::generate_google_sheet_url(google_sheet_id.as_str());
-                DatabaseConfig::new(db_url, "google_sheets".to_string())
-            }
-            None => DatabaseConfig::new(url, "sqlite".to_string()),
-        },
-        None => fastn_core::library2022::processor::sql::get_db_config(&config.config.ds).await?,
-    };
-
-    let db_type = db_config.db_type.as_str();
-
-    match db_type {
-        "postgres" => {
-            Ok(fastn_core::library2022::processor::pg::process(value, kind, doc, config).await?)
-        }
-        "sqlite" => Ok(fastn_core::library2022::processor::sqlite::process(
-            value,
+    match config
+        .config
+        .ds
+        .sql_query(db.as_str(), query.as_str(), params)
+        .await
+    {
+        Ok(result) => result_to_value(Ok(result), kind, doc, &value, super::sql::STATUS_OK),
+        Err(e) => result_to_value(
+            Err(e.to_string()),
             kind,
             doc,
-            config,
-            &db_config,
-            headers,
-            query.as_str(),
-        )
-        .await?),
-        "google_sheets" => Ok(fastn_core::library2022::processor::google_sheets::process(
-            &config.config.ds,
-            value,
-            kind,
-            doc,
-            &db_config,
-            headers,
-            query.as_str(),
-        )
-        .await?),
-        _ => unimplemented!("Database currently not supported."),
+            &value,
+            super::sql::STATUS_ERROR,
+        ),
     }
 }
 

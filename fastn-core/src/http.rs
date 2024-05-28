@@ -514,22 +514,6 @@ pub async fn http_get_with_cookie(
     Ok((Ok(res.body().clone()), resp_cookies))
 }
 
-pub(crate) async fn http_get_str(
-    ds: &fastn_ds::DocumentStore,
-    url: &str,
-) -> fastn_core::Result<String> {
-    let url_f = format!("{:?}", url);
-    match http_get(ds, url).await {
-        Ok(bytes) => String::from_utf8(bytes.into()).map_err(|e| fastn_core::Error::UsageError {
-            message: format!(
-                "Cannot convert the response to string: URL: {:?}, ERROR: {}",
-                url_f, e
-            ),
-        }),
-        Err(e) => Err(e),
-    }
-}
-
 pub(crate) fn get_available_port(
     port: Option<u16>,
     bind_address: &str,

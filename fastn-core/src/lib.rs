@@ -25,7 +25,7 @@ mod translation;
 mod version;
 // mod wasm;
 pub mod catch_panic;
-pub(crate) mod google_sheets;
+// pub(crate) mod google_sheets;
 mod library2022;
 
 pub(crate) use auto_import::AutoImport;

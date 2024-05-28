@@ -244,6 +244,36 @@ impl DocumentStore {
         }
     }
 
+    pub async fn sql_query(
+        &self,
+        db_url: &str,
+        query: &str,
+        params: Vec<ft_sys_shared::SqliteRawValue>,
+    ) -> Result<Vec<Vec<serde_json::Value>>, fastn_utils::SqlError> {
+        let conn = rusqlite::Connection::open_with_flags(
+            db_url,
+            rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
+        )?;
+        let mut stmt = conn.prepare(query)?;
+        let count = stmt.column_count();
+        let rows = stmt.query(rusqlite::params_from_iter(params))?;
+        fastn_utils::rows_to_json(rows, count)
+    }
+
+    pub fn sql_execute(
+        &self,
+        db_url: &str,
+        query: &str,
+        params: Vec<ft_sys_shared::SqliteRawValue>,
+    ) -> Result<usize, fastn_utils::SqlError> {
+        let conn = rusqlite::Connection::open_with_flags(
+            db_url,
+            rusqlite::OpenFlags::SQLITE_OPEN_READ_WRITE,
+        )?;
+        let mut stmt = conn.prepare(query)?;
+        Ok(stmt.execute(rusqlite::params_from_iter(params))?)
+    }
+
     pub fn root(&self) -> fastn_ds::Path {
         self.root.clone()
     }
@@ -336,8 +366,7 @@ impl DocumentStore {
         } else if path.path.is_dir() {
             tokio::fs::remove_dir_all(&path.path).await?
         } else if path.path.is_symlink() {
-            // TODO:
-            // It can be a directory or a file
+            todo!("symlinks are not handled yet")
         }
         Ok(())
     }

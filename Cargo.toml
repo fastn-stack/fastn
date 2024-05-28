@@ -134,7 +134,7 @@ scc = "2"
 url = "2"
 walkdir = "2"
 smallvec = "1"
-wasmtime = "20"
+wasmtime = "21"
 zip = "1"
 prettify-js = "0.1.0"
 indexmap = { version = "2", features = ["serde"] }

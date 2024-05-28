@@ -12,3 +12,5 @@ homepage.workspace = true
 wasmtime.workspace = true
 thiserror.workspace = true
 ft-sys-shared = { workspace = true, features = ["rusqlite"] }
+rusqlite.workspace = true
+serde_json.workspace = true
