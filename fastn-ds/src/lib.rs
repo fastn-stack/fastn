@@ -10,7 +10,6 @@ mod utils;
 pub mod wasm;
 
 pub use create_pool::create_pool;
-use ft_sys_shared::SqliteType;
 
 #[derive(Debug, Clone)]
 pub struct DocumentStore {
@@ -245,33 +244,6 @@ impl DocumentStore {
         }
     }
 
-    pub async fn sql_prepare<'a>(
-        &'a self,
-        query: &str,
-        conn: &'a rusqlite::Connection,
-    ) -> Result<(fastn_utils::sql::Statement, Vec<(String, SqliteType)>), fastn_utils::SqlError>
-    {
-        println!("query: {query}");
-
-        // 1. parse the query, some arguments we will get the query itself (some
-        //    types will be missing here)
-        let (query, args) =
-            fastn_utils::sql::extract_arguments(query, fastn_utils::sql::SQLITE_SUB).unwrap();
-
-        // 2. construct the statement, and get the types of arguments from db, some
-        //    types will be missing here as well)
-        // verify a. len of both vectors are same and b types returned by 1 are
-        // compatible with 2, and c. by combining the two vectors we have no Nones left
-        let stmt = conn.prepare(&query)?;
-
-        assert_eq!(args.len(), stmt.parameter_count());
-
-        // stmt.columns() give type of columns included in the result
-
-
-        Ok((fastn_utils::sql::Statement { stmt }, vec![]))
-    }
-
     pub async fn sql_query(
         &self,
         db_url: &str,
@@ -287,7 +259,6 @@ impl DocumentStore {
             db_url,
             rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
         )?;
-
         let mut stmt = conn.prepare(query)?;
 
         let count = stmt.column_count();
@@ -301,9 +272,6 @@ impl DocumentStore {
         query: &str,
         params: Vec<ft_sys_shared::SqliteRawValue>,
     ) -> Result<Vec<Vec<serde_json::Value>>, fastn_utils::SqlError> {
-        println!("db_url: {db_url}");
-        println!("query: {query}");
-
         let conn = rusqlite::Connection::open_with_flags(
             db_url,
             rusqlite::OpenFlags::SQLITE_OPEN_READ_WRITE,

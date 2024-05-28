@@ -95,7 +95,6 @@ fn value_to_bind(v: ftd::interpreter::Value) -> ft_sys_shared::SqliteRawValue {
 
 fn resolve_variable_from_headers(
     var: &str,
-    param_type: &str,
     doc: &ftd::interpreter::TDoc,
     headers: &ftd_ast::HeaderValues,
     line_number: usize,
@@ -111,44 +110,33 @@ fn resolve_variable_from_headers(
         }
     }
 
-    let param_value = match (param_type, &header.value) {
-        ("TEXT", ftd_ast::VariableValue::String { value, .. }) => {
+    Ok(header_value_to_bind(&header.value))
+}
+
+fn header_value_to_bind(v: &ftd_ast::VariableValue) -> ft_sys_shared::SqliteRawValue {
+    match v {
+        ftd_ast::VariableValue::String { value, .. } => {
             ft_sys_shared::SqliteRawValue::Text(value.clone())
         }
-        ("INTEGER", ftd_ast::VariableValue::String { value, .. }) => {
-            ft_sys_shared::SqliteRawValue::Integer(value.parse::<i64>().unwrap())
+        ftd_ast::VariableValue::Constant { value, .. } => {
+            ft_sys_shared::SqliteRawValue::Text(value.clone())
         }
-        ("REAL", ftd_ast::VariableValue::String { value, .. }) => {
-            ft_sys_shared::SqliteRawValue::Real(value.parse::<f64>().unwrap())
-        }
+        ftd_ast::VariableValue::Optional { value, .. } => match value.as_ref() {
+            Some(v) => header_value_to_bind(v),
+            None => ft_sys_shared::SqliteRawValue::Null,
+        },
         _ => unimplemented!(), // Handle other types as needed
-    };
-
-    Ok(param_value)
+    }
 }
 
 fn resolve_param(
     param_name: &str,
-    param_type: &str,
     doc: &ftd::interpreter::TDoc,
     headers: &ftd_ast::HeaderValues,
     line_number: usize,
 ) -> ftd::interpreter::Result<ft_sys_shared::SqliteRawValue> {
-    resolve_variable_from_headers(param_name, param_type, doc, headers, line_number)
+    resolve_variable_from_headers(param_name, doc, headers, line_number)
         .or_else(|_| resolve_variable_from_doc(param_name, doc, line_number))
-}
-
-#[derive(Debug, PartialEq)]
-enum State {
-    OutsideParam,
-    InsideParam,
-    InsideStringLiteral,
-    InsideEscapeSequence(usize),
-    ConsumeEscapedChar,
-    StartTypeHint,
-    InsideTypeHint,
-    PushParam,
-    ParseError(String),
 }
 
 pub fn extract_named_parameters(
@@ -157,31 +145,23 @@ pub fn extract_named_parameters(
     headers: ftd_ast::HeaderValues,
     line_number: usize,
 ) -> ftd::interpreter::Result<(String, Vec<ft_sys_shared::SqliteRawValue>)> {
-    todo!()
-    // let mut params: Vec<ft_sys_shared::SqliteRawValue> = Vec::new();
-    //
-    // let (query, args) = super::sql::extract_arguments(query, super::sql::SQLITE_SUB)?;
-    //
-    // for param_name in args {
-    //     params.push(resolve_param(
-    //         &param_name,
-    //         &param_type,
-    //         doc,
-    //         &headers,
-    //         line_number,
-    //     )?);
-    // }
-    //
-    // // Handle the last param if there was no trailing comma or space
-    // if [State::InsideParam, State::PushParam].contains(&state) && !param_name.is_empty() {
-    //     params.push(resolve_param(
-    //         &param_name,
-    //         &param_type,
-    //         doc,
-    //         &headers,
-    //         line_number,
-    //     )?);
-    // }
-    //
-    // Ok((query.to_string(), params))
+    let mut params: Vec<ft_sys_shared::SqliteRawValue> = Vec::new();
+
+    let (query, args) =
+        match fastn_utils::sql::extract_arguments(query, fastn_utils::sql::SQLITE_SUB) {
+            Ok(v) => v,
+            Err(e) => {
+                return ftd::interpreter::utils::e2(
+                    format!("Error parsing query: {e:?}"),
+                    doc.name,
+                    line_number,
+                )
+            }
+        };
+
+    for (param_name, _) in args {
+        params.push(resolve_param(&param_name, doc, &headers, line_number)?);
+    }
+
+    Ok((query, params))
 }
