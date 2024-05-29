@@ -1113,3 +1113,7 @@ pub async fn secret_key(ds: &fastn_ds::DocumentStore) -> String {
         }
     }
 }
+
+pub fn fifthtry_site_zip_url(site_slug: &str) -> String {
+    format!("https://fifthtry.com/ft2/api/site/download?site-slug={site_slug}",)
+}

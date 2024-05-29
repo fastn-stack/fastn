@@ -26,10 +26,7 @@ pub(crate) fn get_zipball_url(package_name: String) -> Option<String> {
 
     // For fifthtry.site packages
     if let Some(site_slug) = package_name.strip_suffix(".fifthtry.site") {
-        let url = format!(
-            "https://fifthtry.com/ft2/api/site/download?site-slug={}",
-            site_slug
-        );
+        let url = fastn_core::utils::fifthtry_site_zip_url(site_slug);
 
         return Some(url);
     }

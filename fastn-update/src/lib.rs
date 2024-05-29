@@ -268,7 +268,7 @@ async fn update_fifthtry_site_dependency(
 
     let site_slug = package_name.trim_end_matches(".fifthtry.site");
     let dependency_path = &packages_root.join(&package_name);
-    let site_zip_url = site_zip_url(site_slug);
+    let site_zip_url = fastn_core::utils::fifthtry_site_zip_url(site_slug);
 
     let manifest = download_unpack_zip_and_get_manifest(
         dependency_path.clone(),
@@ -350,10 +350,6 @@ async fn download_unpack_zip_and_get_manifest(
 
 fn is_fifthtry_site_package(package_name: &str) -> bool {
     package_name.ends_with(".fifthtry.site")
-}
-
-fn site_zip_url(site_slug: &str) -> String {
-    format!("https://fifthtry.com/ft2/api/site/download?site-slug={site_slug}",)
 }
 
 async fn write_archive_content(
