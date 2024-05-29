@@ -94,18 +94,16 @@ impl std::error::Error for CheckError {}
 pub enum UpdateError {
     #[error("Manifest error: {0}")]
     Manifest(#[from] ManifestError),
-
     #[error("Archive error: {0}")]
     Archive(#[from] ArchiveError),
-
     #[error("Dependency error: {0}")]
     Dependency(#[from] DependencyError),
-
     #[error("Check error: {0}")]
     Check(#[from] CheckError),
-
     #[error("Config error: {0}")]
     Config(#[from] fastn_core::config_temp::Error),
+    #[error("Invalid package {0}")]
+    InvalidPackage(String),
 }
 
 async fn update_dependencies(
@@ -193,6 +191,12 @@ async fn update_github_dependency(
     let package_name = dep_package.name.clone();
     let dependency_path = &packages_root.join(&package_name);
 
+    if is_fifthtry_site_package(package_name.as_str()) {
+        return Err(fastn_update::UpdateError::InvalidPackage(format!(
+            "{package_name} is a fifthtry site."
+        )));
+    }
+
     pb.set_message(format!("Resolving {}/manifest.json", &package_name));
     let (manifest, manifest_bytes) = utils::get_manifest(ds, &package_name).await?;
 
@@ -255,6 +259,13 @@ async fn update_fifthtry_site_dependency(
 ) -> Result<(), fastn_update::UpdateError> {
     let dep_package = &dependency.package;
     let package_name = dep_package.name.clone();
+
+    if !is_fifthtry_site_package(package_name.as_str()) {
+        return Err(fastn_update::UpdateError::InvalidPackage(format!(
+            "{package_name} is not a fifthtry site."
+        )));
+    }
+
     let site_slug = package_name.trim_end_matches(".fifthtry.site");
     let dependency_path = &packages_root.join(&package_name);
     let site_zip_url = site_zip_url(site_slug);
@@ -282,6 +293,9 @@ async fn download_unpack_zip_and_get_manifest(
     pb: &indicatif::ProgressBar,
     check: bool,
 ) -> Result<fastn_core::Manifest, fastn_update::UpdateError> {
+    use sha2::digest::FixedOutput;
+    use sha2::Digest;
+
     let mut files: std::collections::BTreeMap<String, fastn_core::manifest::File> =
         Default::default();
     let mut archive = utils::download_archive(ds, zip_url.to_string())
@@ -290,6 +304,7 @@ async fn download_unpack_zip_and_get_manifest(
             package: package_name,
         })?;
 
+    let mut hasher = sha2::Sha256::new();
     for i in 0..archive.len() {
         let mut entry = archive.by_index(i).context(ArchiveEntryReadSnafu {
             package: package_name,
@@ -318,7 +333,7 @@ async fn download_unpack_zip_and_get_manifest(
             };
             let output_path = &dependency_path.join(path_without_prefix);
             write_archive_content(ds, output_path, &buffer, package_name, check).await?;
-
+            hasher.update(&buffer);
             // Creating file entry for manifest using archive files
             files.insert(
                 file_name.clone(),
@@ -328,8 +343,8 @@ async fn download_unpack_zip_and_get_manifest(
         }
     }
 
-    // todo: Update checksum
-    let manifest = fastn_core::Manifest::new(files, zip_url.to_string(), "".to_string());
+    let checksum = format!("{:X}", hasher.finalize_fixed());
+    let manifest = fastn_core::Manifest::new(files, zip_url.to_string(), checksum);
     Ok(manifest)
 }
 
@@ -338,10 +353,7 @@ fn is_fifthtry_site_package(package_name: &str) -> bool {
 }
 
 fn site_zip_url(site_slug: &str) -> String {
-    format!(
-        "https://fifthtry.com/ft2/api/site/download?site-slug={}",
-        site_slug
-    )
+    format!("https://fifthtry.com/ft2/api/site/download?site-slug={site_slug}",)
 }
 
 async fn write_archive_content(
