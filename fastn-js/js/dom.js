@@ -61,6 +61,7 @@ fastn_dom.propertyMap = {
     "text-shadow": "tsh",
     cursor: "cur",
     display: "d",
+    download: "dw",
     "flex-wrap": "fw",
     "font-style": "fst",
     "font-weight": "fwt",
@@ -286,31 +287,32 @@ fastn_dom.PropertyKind = {
         MetaOGImage: 97,
         MetaTwitterImage: 98,
         MetaThemeColor: 99,
-        MetaFacebookDomainVerification: 123,
+        MetaFacebookDomainVerification: 100,
     },
-    Shadow: 100,
-    CodeTheme: 101,
-    CodeLanguage: 102,
-    CodeShowLineNumber: 103,
-    Css: 104,
-    Js: 105,
-    LinkRel: 106,
-    InputMaxLength: 107,
-    Favicon: 108,
-    Fit: 109,
-    VideoSrc: 110,
-    Autoplay: 111,
-    Poster: 112,
-    LoopVideo: 113,
-    Controls: 114,
-    Muted: 115,
-    LinkColor: 116,
-    TextShadow: 117,
-    Selectable: 118,
-    BackdropFilter: 119,
-    Mask: 120,
-    TextInputValue: 121,
-    FetchPriority: 122,
+    Shadow: 101,
+    CodeTheme: 102,
+    CodeLanguage: 103,
+    CodeShowLineNumber: 104,
+    Css: 105,
+    Js: 106,
+    LinkRel: 107,
+    InputMaxLength: 108,
+    Favicon: 109,
+    Fit: 110,
+    VideoSrc: 111,
+    Autoplay: 112,
+    Poster: 113,
+    LoopVideo: 114,
+    Controls: 115,
+    Muted: 116,
+    LinkColor: 117,
+    TextShadow: 118,
+    Selectable: 119,
+    BackdropFilter: 120,
+    Mask: 121,
+    TextInputValue: 122,
+    FetchPriority: 123,
+    Download: 124,
 };
 
 fastn_dom.Loading = {
@@ -2381,6 +2383,11 @@ class Node2 {
                     break;
             }
             this.updateTextInputValue();
+        } else if (kind === fastn_dom.PropertyKind.Download) {
+            if (fastn_utils.isNull(staticValue)) {
+                return;
+            }
+            this.attachAttribute("download", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Link) {
             // Changing node type to `a` for link
             // todo: needs fix for image links

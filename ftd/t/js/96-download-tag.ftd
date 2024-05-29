@@ -1,0 +1,14 @@
+-- ftd.column:
+spacing.fixed.px: 10
+
+-- ftd.text: Download image (with download filename specified)
+link: https://www.example.com/sample-image.jpg
+download: image.png
+padding.px: 10
+
+-- ftd.text: Download image
+link: https://www.example.com/sample-image.jpg
+download: *$ftd.empty
+padding.px: 10
+
+-- end: ftd.column
