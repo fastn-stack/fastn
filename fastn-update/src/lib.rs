@@ -229,11 +229,12 @@ async fn update_github_dependency(
     } else {
         pb.set_message(format!("Downloading {} archive", &package_name));
 
-        download_and_unpack_zip(
+        download_unpack_zip_and_get_manifest(
+            dependency_path.clone(),
+            manifest.zip_url.as_str(),
             ds,
-            &packages_root.join(&package_name),
-            &manifest,
-            &package_name,
+            package_name.as_str(),
+            Some(&manifest),
             pb,
             check,
         )
@@ -275,6 +276,7 @@ async fn update_fifthtry_site_dependency(
         site_zip_url.as_str(),
         ds,
         package_name.as_str(),
+        None,
         pb,
         check,
     )
@@ -290,14 +292,18 @@ async fn download_unpack_zip_and_get_manifest(
     zip_url: &str,
     ds: &fastn_ds::DocumentStore,
     package_name: &str,
+    manifest: Option<&fastn_core::Manifest>,
     pb: &indicatif::ProgressBar,
     check: bool,
 ) -> Result<fastn_core::Manifest, fastn_update::UpdateError> {
     use sha2::digest::FixedOutput;
     use sha2::Digest;
 
-    let mut files: std::collections::BTreeMap<String, fastn_core::manifest::File> =
-        Default::default();
+    let mut files: std::collections::BTreeMap<String, fastn_core::manifest::File> = match manifest {
+        Some(manifest) => manifest.files.clone(),
+        None => Default::default(),
+    };
+
     let mut archive = utils::download_archive(ds, zip_url.to_string())
         .await
         .context(DownloadArchiveSnafu {
@@ -333,18 +339,31 @@ async fn download_unpack_zip_and_get_manifest(
             };
             let output_path = &dependency_path.join(path_without_prefix);
             write_archive_content(ds, output_path, &buffer, package_name, check).await?;
-            hasher.update(&buffer);
-            // Creating file entry for manifest using archive files
-            files.insert(
-                file_name.clone(),
-                fastn_core::manifest::File::new(file_name, file_hash, file_size),
-            );
+            if manifest.is_some() {
+                if !files.contains_key(path_without_prefix) {
+                    continue;
+                }
+            } else {
+                hasher.update(&buffer);
+                // Creating file entry for manifest using archive files
+                files.insert(
+                    file_name.clone(),
+                    fastn_core::manifest::File::new(file_name, file_hash, file_size),
+                );
+            }
             pb.tick();
         }
     }
 
-    let checksum = format!("{:X}", hasher.finalize_fixed());
-    let manifest = fastn_core::Manifest::new(files, zip_url.to_string(), checksum);
+    let manifest = match manifest {
+        Some(manifest) => manifest.clone(),
+        None => {
+            let checksum = format!("{:X}", hasher.finalize_fixed());
+            let manifest = fastn_core::Manifest::new(files, zip_url.to_string(), checksum);
+            manifest
+        }
+    };
+
     Ok(manifest)
 }
 
@@ -372,52 +391,6 @@ async fn write_archive_content(
         .context(WriteArchiveContentSnafu {
             package: package_name,
         })?)
-}
-
-async fn download_and_unpack_zip(
-    ds: &fastn_ds::DocumentStore,
-    dependency_path: &fastn_ds::Path,
-    manifest: &fastn_core::Manifest,
-    package_name: &str,
-    pb: &indicatif::ProgressBar,
-    check: bool,
-) -> Result<(), UpdateError> {
-    let mut archive = utils::download_archive(ds, manifest.zip_url.clone())
-        .await
-        .context(DownloadArchiveSnafu {
-            package: package_name,
-        })?;
-
-    for i in 0..archive.len() {
-        let mut entry = archive.by_index(i).context(ArchiveEntryReadSnafu {
-            package: package_name,
-        })?;
-
-        if entry.is_file() {
-            let mut buffer = Vec::new();
-            std::io::Read::read_to_end(&mut entry, &mut buffer).context(ReadArchiveSnafu {
-                package: package_name,
-            })?;
-            let path = entry.enclosed_name().context(ArchiveEntryPathSnafu {
-                package: package_name,
-                name: entry.name(),
-            })?;
-            let path_string = path.to_string_lossy().into_owned();
-            let path_normalized = path_string.replace('\\', "/");
-            let path_without_prefix = match path_normalized.split_once('/') {
-                Some((_, path)) => path,
-                None => &path_normalized,
-            };
-            if !manifest.files.contains_key(path_without_prefix) {
-                continue;
-            }
-            let output_path = &dependency_path.join(path_without_prefix);
-            write_archive_content(ds, output_path, &buffer, package_name, check).await?;
-            pb.tick();
-        }
-    }
-
-    Ok(())
 }
 
 #[tracing::instrument(skip_all)]
