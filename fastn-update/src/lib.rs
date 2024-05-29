@@ -131,56 +131,29 @@ async fn update_dependencies(
             let package_name = dep_package.name.clone();
             let dependency_path = &packages_root.join(&package_name);
 
-            pb.set_message(format!("Resolving {}/manifest.json", &package_name));
-
-            let (manifest, manifest_bytes) = utils::get_manifest(ds, &package_name).await?;
-
-            let manifest_path = dependency_path.join(fastn_core::manifest::MANIFEST_FILE);
-
-            // Download the archive if:
-            // 1. The package does not yet exist
-            // 2. The checksums of the downloaded package manifest
-            //    and the existing manifest does not match
-            let should_download_archive = if !ds.exists(dependency_path).await {
-                true
-            } else {
-                let existing_manifest_bytes =
-                    ds.read_content(&manifest_path)
-                        .await
-                        .context(ReadManifestSnafu {
-                            package: package_name.clone(),
-                        })?;
-                let existing_manifest: fastn_core::Manifest =
-                    utils::read_manifest(&existing_manifest_bytes, &package_name)?;
-
-                existing_manifest.checksum.ne(manifest.checksum.as_str())
-            };
-
-            if !should_download_archive {
-                pb.set_message(format!(
-                    "Skipping download for package \"{}\" as it already exists.",
-                    &package_name
-                ));
-            } else {
-                pb.set_message(format!("Downloading {} archive", &package_name));
-
-                download_and_unpack_zip(
+            if is_fifthtry_site_package(package_name.as_str()) {
+                update_fifthtry_site_dependency(
+                    &dependency,
                     ds,
-                    &packages_root.join(&package_name),
-                    &manifest,
-                    &package_name,
+                    packages_root.clone(),
                     pb,
+                    &mut updated_packages,
+                    &mut all_packages,
                     check,
                 )
                 .await?;
-
-                write_archive_content(ds, &manifest_path, &manifest_bytes, &package_name, check)
-                    .await?;
-
-                updated_packages += 1;
+            } else {
+                update_github_dependency(
+                    &dependency,
+                    ds,
+                    packages_root.clone(),
+                    pb,
+                    &mut updated_packages,
+                    &mut all_packages,
+                    check,
+                )
+                .await?;
             }
-
-            all_packages.push((package_name.to_string(), manifest));
 
             if package_name.eq(&fastn_core::FASTN_UI_INTERFACE) {
                 resolved.insert(package_name.to_string());
@@ -205,6 +178,170 @@ async fn update_dependencies(
     .await?;
 
     Ok(updated_packages)
+}
+
+async fn update_github_dependency(
+    dependency: &fastn_core::package::dependency::Dependency,
+    ds: &fastn_ds::DocumentStore,
+    packages_root: fastn_ds::Path,
+    pb: &indicatif::ProgressBar,
+    updated_packages: &mut usize,
+    all_packages: &mut Vec<(String, fastn_core::Manifest)>,
+    check: bool,
+) -> Result<(), fastn_update::UpdateError> {
+    let dep_package = &dependency.package;
+    let package_name = dep_package.name.clone();
+    let dependency_path = &packages_root.join(&package_name);
+
+    pb.set_message(format!("Resolving {}/manifest.json", &package_name));
+    let (manifest, manifest_bytes) = utils::get_manifest(ds, &package_name).await?;
+
+    let manifest_path = dependency_path.join(fastn_core::manifest::MANIFEST_FILE);
+
+    // Download the archive if:
+    // 1. The package does not yet exist
+    // 2. The checksums of the downloaded package manifest
+    //    and the existing manifest does not match
+    let should_download_archive = if !ds.exists(dependency_path).await {
+        true
+    } else {
+        let existing_manifest_bytes =
+            ds.read_content(&manifest_path)
+                .await
+                .context(ReadManifestSnafu {
+                    package: package_name.clone(),
+                })?;
+        let existing_manifest: fastn_core::Manifest =
+            utils::read_manifest(&existing_manifest_bytes, &package_name)?;
+
+        existing_manifest.checksum.ne(manifest.checksum.as_str())
+    };
+
+    if !should_download_archive {
+        pb.set_message(format!(
+            "Skipping download for package \"{}\" as it already exists.",
+            &package_name
+        ));
+    } else {
+        pb.set_message(format!("Downloading {} archive", &package_name));
+
+        download_and_unpack_zip(
+            ds,
+            &packages_root.join(&package_name),
+            &manifest,
+            &package_name,
+            pb,
+            check,
+        )
+        .await?;
+
+        write_archive_content(ds, &manifest_path, &manifest_bytes, &package_name, check).await?;
+
+        *updated_packages += 1;
+    }
+
+    all_packages.push((package_name.to_string(), manifest));
+    Ok(())
+}
+
+async fn update_fifthtry_site_dependency(
+    dependency: &fastn_core::package::dependency::Dependency,
+    ds: &fastn_ds::DocumentStore,
+    packages_root: fastn_ds::Path,
+    pb: &indicatif::ProgressBar,
+    updated_packages: &mut usize,
+    all_packages: &mut Vec<(String, fastn_core::Manifest)>,
+    check: bool,
+) -> Result<(), fastn_update::UpdateError> {
+    let dep_package = &dependency.package;
+    let package_name = dep_package.name.clone();
+    let site_slug = package_name.trim_end_matches(".fifthtry.site");
+    let dependency_path = &packages_root.join(&package_name);
+    let site_zip_url = site_zip_url(site_slug);
+
+    let manifest = download_unpack_zip_and_get_manifest(
+        dependency_path.clone(),
+        site_zip_url.as_str(),
+        ds,
+        package_name.as_str(),
+        pb,
+        check,
+    )
+    .await?;
+
+    all_packages.push((package_name.to_string(), manifest));
+    *updated_packages += 1;
+    Ok(())
+}
+
+async fn download_unpack_zip_and_get_manifest(
+    dependency_path: fastn_ds::Path,
+    zip_url: &str,
+    ds: &fastn_ds::DocumentStore,
+    package_name: &str,
+    pb: &indicatif::ProgressBar,
+    check: bool,
+) -> Result<fastn_core::Manifest, fastn_update::UpdateError> {
+    let mut files: std::collections::BTreeMap<String, fastn_core::manifest::File> =
+        Default::default();
+    let mut archive = utils::download_archive(ds, zip_url.to_string())
+        .await
+        .context(DownloadArchiveSnafu {
+            package: package_name,
+        })?;
+
+    for i in 0..archive.len() {
+        let mut entry = archive.by_index(i).context(ArchiveEntryReadSnafu {
+            package: package_name,
+        })?;
+
+        if entry.is_file() {
+            let mut buffer = Vec::new();
+            std::io::Read::read_to_end(&mut entry, &mut buffer).context(ReadArchiveSnafu {
+                package: package_name,
+            })?;
+
+            let path = entry.enclosed_name().context(ArchiveEntryPathSnafu {
+                package: package_name,
+                name: entry.name(),
+            })?;
+            let path_string = path.to_string_lossy().into_owned();
+            let path_normalized = path_string.replace('\\', "/");
+
+            let file_name = path_normalized.clone();
+            let file_hash = fastn_core::utils::generate_hash(buffer.clone());
+            let file_size = buffer.len();
+
+            let path_without_prefix = match path_normalized.split_once('/') {
+                Some((_, path)) => path,
+                None => &path_normalized,
+            };
+            let output_path = &dependency_path.join(path_without_prefix);
+            write_archive_content(ds, output_path, &buffer, package_name, check).await?;
+
+            // Creating file entry for manifest using archive files
+            files.insert(
+                file_name.clone(),
+                fastn_core::manifest::File::new(file_name, file_hash, file_size),
+            );
+            pb.tick();
+        }
+    }
+
+    // todo: Update checksum
+    let manifest = fastn_core::Manifest::new(files, zip_url.to_string(), "".to_string());
+    Ok(manifest)
+}
+
+fn is_fifthtry_site_package(package_name: &str) -> bool {
+    package_name.ends_with(".fifthtry.site")
+}
+
+fn site_zip_url(site_slug: &str) -> String {
+    format!(
+        "https://fifthtry.com/ft2/api/site/download?site-slug={}",
+        site_slug
+    )
 }
 
 async fn write_archive_content(
