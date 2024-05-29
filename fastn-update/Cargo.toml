@@ -21,3 +21,4 @@ thiserror.workspace = true
 snafu.workspace = true
 tracing.workspace = true
 colored.workspace = true
+sha2.workspace = true
