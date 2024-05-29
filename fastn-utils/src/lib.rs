@@ -1,6 +1,8 @@
 #![warn(unused_extern_crates)]
 #![deny(unused_crate_dependencies)]
 
+pub mod sql;
+
 pub async fn handle<S: Send>(
     mut wasm_store: wasmtime::Store<S>,
     module: wasmtime::Module,
@@ -19,7 +21,7 @@ pub async fn handle<S: Send>(
         }
     };
 
-    let (wasm_store, r) = crate::apply_migration(instance, wasm_store).await;
+    let (wasm_store, r) = apply_migration(instance, wasm_store).await;
 
     if let Err(e) = r {
         return Ok((
@@ -30,7 +32,7 @@ pub async fn handle<S: Send>(
         ));
     };
 
-    let (main, mut wasm_store) = crate::get_entrypoint(instance, wasm_store, path)?;
+    let (main, mut wasm_store) = get_entrypoint(instance, wasm_store, path)?;
     main.call_async(&mut wasm_store, ()).await?;
 
     Ok((wasm_store, None))
@@ -108,13 +110,19 @@ pub fn path_to_entrypoint(path: &str) -> wasmtime::Result<String> {
 #[derive(thiserror::Error, Debug)]
 pub enum SqlError {
     #[error("connection error {0}")]
-    Connection(#[from] rusqlite::Error),
+    Connection(rusqlite::Error),
+    #[error("Query error {0}")]
+    Query(rusqlite::Error),
+    #[error("Execute error {0}")]
+    Execute(rusqlite::Error),
     #[error("column error {0}: {0}")]
     Column(usize, rusqlite::Error),
     #[error("row error {0}")]
     Row(rusqlite::Error),
     #[error("found blob")]
     FoundBlob,
+    #[error("unknown db error")]
+    UnknownDB,
 }
 
 pub fn rows_to_json(
@@ -150,3 +158,5 @@ pub fn row_to_json(r: &rusqlite::Row, count: usize) -> Result<Vec<serde_json::Va
     }
     Ok(row)
 }
+
+pub const FASTN_MOUNTPOINT: &str = "x-fastn-mountpoint";

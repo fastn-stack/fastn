@@ -250,28 +250,68 @@ impl DocumentStore {
         query: &str,
         params: Vec<ft_sys_shared::SqliteRawValue>,
     ) -> Result<Vec<Vec<serde_json::Value>>, fastn_utils::SqlError> {
+        let db_url = match db_url.strip_prefix("sqlite:///") {
+            Some(db) => db.to_string(),
+            None => return Err(fastn_utils::SqlError::UnknownDB),
+        };
+
         let conn = rusqlite::Connection::open_with_flags(
             db_url,
             rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
-        )?;
-        let mut stmt = conn.prepare(query)?;
+        )
+        .map_err(fastn_utils::SqlError::Connection)?;
+        let mut stmt = conn.prepare(query).map_err(fastn_utils::SqlError::Query)?;
+
         let count = stmt.column_count();
-        let rows = stmt.query(rusqlite::params_from_iter(params))?;
+        let rows = stmt
+            .query(rusqlite::params_from_iter(params))
+            .map_err(fastn_utils::SqlError::Query)?;
         fastn_utils::rows_to_json(rows, count)
     }
 
-    pub fn sql_execute(
+    pub async fn sql_execute(
         &self,
         db_url: &str,
         query: &str,
         params: Vec<ft_sys_shared::SqliteRawValue>,
-    ) -> Result<usize, fastn_utils::SqlError> {
+    ) -> Result<Vec<Vec<serde_json::Value>>, fastn_utils::SqlError> {
+        let db_url = match db_url.strip_prefix("sqlite:///") {
+            Some(db) => db.to_string(),
+            None => return Err(fastn_utils::SqlError::UnknownDB),
+        };
         let conn = rusqlite::Connection::open_with_flags(
             db_url,
             rusqlite::OpenFlags::SQLITE_OPEN_READ_WRITE,
-        )?;
-        let mut stmt = conn.prepare(query)?;
-        Ok(stmt.execute(rusqlite::params_from_iter(params))?)
+        )
+        .map_err(fastn_utils::SqlError::Connection)?;
+        Ok(vec![vec![conn
+            .execute(query, rusqlite::params_from_iter(params))
+            .map_err(fastn_utils::SqlError::Execute)?
+            .into()]])
+    }
+
+    pub async fn sql_batch(
+        &self,
+        db_url: &str,
+        query: &str,
+    ) -> Result<Vec<Vec<serde_json::Value>>, fastn_utils::SqlError> {
+        let db_url = match db_url.strip_prefix("sqlite:///") {
+            Some(db) => db.to_string(),
+            None => return Err(fastn_utils::SqlError::UnknownDB),
+        };
+        let conn = rusqlite::Connection::open_with_flags(
+            db_url,
+            rusqlite::OpenFlags::SQLITE_OPEN_READ_WRITE,
+        )
+        .map_err(fastn_utils::SqlError::Connection)?;
+
+        conn.execute_batch(query)
+            .map_err(fastn_utils::SqlError::Execute)?;
+
+        // we are sending 1 as processor has to return some value, this means this
+        // processor can only be used against integer type, and returned integer is
+        // always 1.
+        Ok(vec![vec![1.into()]])
     }
 
     pub fn root(&self) -> fastn_ds::Path {
@@ -415,15 +455,23 @@ impl DocumentStore {
         &self,
         wasm_url: String,
         req: &T,
+        mountpoint: String,
     ) -> Result<ft_sys_shared::Request, HttpError>
     where
         T: RequestType,
     {
-        let headers: Vec<(String, Vec<u8>)> = req
-            .headers()
-            .iter()
-            .map(|(k, v)| (k.as_str().to_string(), v.as_bytes().to_vec()))
-            .collect();
+        let headers: Vec<(String, Vec<u8>)> = {
+            let mut headers: Vec<(String, Vec<u8>)> = req
+                .headers()
+                .iter()
+                .map(|(k, v)| (k.as_str().to_string(), v.as_bytes().to_vec()))
+                .collect();
+            headers.push((
+                fastn_utils::FASTN_MOUNTPOINT.to_string(),
+                mountpoint.into_bytes(),
+            ));
+            headers
+        };
 
         let wasm_file = wasm_url.strip_prefix("wasm+proxy://").unwrap();
         let wasm_file = wasm_file.split_once(".wasm").unwrap().0;
