@@ -18,7 +18,7 @@
     </style>
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __g-3"><a data-id="4" download="image.png" href="https://via.placeholder.com/150" class="__p-4">Download image (with name specified)</a><a data-id="5" download href="https://via.placeholder.com/150" class="__p-5">Download image</a></div></div></body><style id="styles">
+<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_column __g-3"><a data-id="4" download="image.png" href="https://www.example.com/sample-image.jpg" class="__p-4">Download image (with download filename specified)</a><a data-id="5" download href="https://www.example.com/sample-image.jpg" class="__p-5">Download image</a></div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
 	.__g-3 { gap: 10px; }
@@ -35,17 +35,17 @@
     parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
-      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Download image (with name specified)", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Download image (with download filename specified)", inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Download, "image.png", inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Link, "https://via.placeholder.com/150", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Link, "https://www.example.com/sample-image.jpg", inherited);
     },
     function (root, inherited) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, "Download image", inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Download, fastn_utils.clone(ftd.empty), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Padding, fastn_dom.Length.Px(10), inherited);
-      rooti0.setProperty(fastn_dom.PropertyKind.Link, "https://via.placeholder.com/150", inherited);
+      rooti0.setProperty(fastn_dom.PropertyKind.Link, "https://www.example.com/sample-image.jpg", inherited);
     }
     ]), inherited);
   } finally {
