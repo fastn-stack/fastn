@@ -304,10 +304,14 @@ impl DocumentStore {
             rusqlite::OpenFlags::SQLITE_OPEN_READ_WRITE,
         )
         .map_err(fastn_utils::SqlError::Connection)?;
-        Ok(vec![vec![conn
-            .execute_batch(query)
-            .map_err(fastn_utils::SqlError::Execute)?
-            .into()]])
+
+        conn.execute_batch(query)
+            .map_err(fastn_utils::SqlError::Execute)?;
+
+        // we are sending 1 as processor has to return some value, this means this
+        // processor can only be used against integer type, and returned integer is
+        // always 1.
+        Ok(vec![vec![1.into()]])
     }
 
     pub fn root(&self) -> fastn_ds::Path {
