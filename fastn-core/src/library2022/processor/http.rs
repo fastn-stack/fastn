@@ -134,6 +134,25 @@ pub async fn process(
             .await
         {
             Ok(r) => {
+                match r.method.parse() {
+                    Ok(200) => (),
+                    Ok(code) => {
+                        req_config.processor_set_response = Some(r);
+                        return ftd::interpreter::utils::e2(
+                            format!("wasm code returned non 200 {code}"),
+                            doc.name,
+                            line_number,
+                        );
+                    }
+                    Err(e) => {
+                        return ftd::interpreter::utils::e2(
+                            format!("wasm code is not an integer {}: {e:?}", r.method.as_str()),
+                            doc.name,
+                            line_number,
+                        )
+                    }
+                };
+
                 let mut resp_cookies = vec![];
                 r.headers.into_iter().for_each(|(k, v)| {
                     if k.as_str().eq("set-cookie") {

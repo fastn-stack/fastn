@@ -280,12 +280,40 @@ pub async fn serve_helper(
         file_response
     };
 
+    if let Some(r) = req_config.processor_set_response.take() {
+        return shared_to_http(r);
+    }
+
     for cookie in req_config.processor_set_cookies {
         resp.headers_mut().append(
             actix_web::http::header::SET_COOKIE,
             actix_web::http::header::HeaderValue::from_str(cookie.as_str()).unwrap(),
         );
     }
+
+    Ok(resp)
+}
+
+fn shared_to_http(r: ft_sys_shared::Request) -> fastn_core::Result<fastn_core::http::Response> {
+    let status_code = match r.method.parse() {
+        Ok(v) => v,
+        Err(e) => {
+            return Err(fastn_core::Error::GenericError(format!(
+                "wasm code is not an integer {}: {e:?}",
+                r.method.as_str()
+            )));
+        }
+    };
+    let mut builder = actix_web::HttpResponse::build(status_code);
+    let mut resp = builder.status(r.method.parse().unwrap()).body(r.body);
+
+    for (k, v) in r.headers {
+        resp.headers_mut().insert(
+            k.parse().unwrap(),
+            actix_web::http::header::HeaderValue::from_bytes(v.as_slice()).unwrap(),
+        );
+    }
+
     Ok(resp)
 }
 

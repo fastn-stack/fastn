@@ -359,8 +359,7 @@ async fn download_unpack_zip_and_get_manifest(
         Some(manifest) => manifest.clone(),
         None => {
             let checksum = format!("{:X}", hasher.finalize_fixed());
-            let manifest = fastn_core::Manifest::new(files, zip_url.to_string(), checksum);
-            manifest
+            fastn_core::Manifest::new(files, zip_url.to_string(), checksum)
         }
     };
 

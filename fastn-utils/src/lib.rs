@@ -32,7 +32,22 @@ pub async fn handle<S: Send>(
         ));
     };
 
-    let (main, mut wasm_store) = get_entrypoint(instance, wasm_store, path)?;
+    let (mut wasm_store, main) = get_entrypoint(instance, wasm_store, path.as_str());
+
+    let main = match main {
+        Ok(v) => v,
+        Err(e) => {
+            return Ok((
+                wasm_store,
+                Some(ft_sys_shared::Request {
+                    uri: "server-error".to_string(),
+                    method: "404".to_string(),
+                    headers: vec![],
+                    body: format!("no endpoint found for {path}: {e:?}").into_bytes(),
+                }),
+            ));
+        }
+    };
     main.call_async(&mut wasm_store, ()).await?;
 
     Ok((wasm_store, None))
@@ -72,16 +87,24 @@ pub async fn apply_migration<S: Send>(
 pub fn get_entrypoint<S: Send>(
     instance: wasmtime::Instance,
     mut store: wasmtime::Store<S>,
-    path: String,
-) -> wasmtime::Result<(wasmtime::TypedFunc<(), ()>, wasmtime::Store<S>)> {
+    path: &str,
+) -> (
+    wasmtime::Store<S>,
+    wasmtime::Result<wasmtime::TypedFunc<(), ()>>,
+) {
     if let Ok(f) = instance.get_typed_func::<(), ()>(&mut store, "main_ft") {
-        return Ok((f, store));
+        return (store, Ok(f));
     }
-    let entrypoint = path_to_entrypoint(path.as_str())?;
+
+    let entrypoint = match path_to_entrypoint(path) {
+        Ok(v) => v,
+        Err(e) => return (store, Err(e)),
+    };
+
     println!("main_ft not found, trying {entrypoint}");
-    instance
-        .get_typed_func(&mut store, entrypoint.as_str())
-        .map(|v| (v, store))
+
+    let r = instance.get_typed_func(&mut store, entrypoint.as_str());
+    (store, r)
 }
 
 #[derive(Debug, thiserror::Error)]
