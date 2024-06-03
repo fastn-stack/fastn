@@ -10,4 +10,4 @@ homepage.workspace = true
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-tokio = { version = "1.27.0", features = ["full"] }
+tokio = { version = "1.38.0", features = ["full"] }
