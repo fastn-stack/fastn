@@ -337,8 +337,6 @@ async fn download_unpack_zip_and_get_manifest(
                 Some((_, path)) => path,
                 None => &path_normalized,
             };
-            let output_path = &dependency_path.join(path_without_prefix);
-            write_archive_content(ds, output_path, &buffer, package_name, check).await?;
             if manifest.is_some() {
                 if !files.contains_key(path_without_prefix) {
                     continue;
@@ -351,6 +349,8 @@ async fn download_unpack_zip_and_get_manifest(
                     fastn_core::manifest::File::new(file_name, file_hash, file_size),
                 );
             }
+            let output_path = &dependency_path.join(path_without_prefix);
+            write_archive_content(ds, output_path, &buffer, package_name, check).await?;
             pb.tick();
         }
     }
