@@ -14,15 +14,7 @@ pub async fn process(
     let (headers, query) = super::sqlite::get_p1_data(q_kind, &value, doc.name)?;
     let db = match headers.get_optional_string_by_key("db$", doc.name, value.line_number())? {
         Some(db) => db,
-        None => match config.config.ds.env("FASTN_DB_URL").await {
-            Ok(db_url) => db_url,
-            Err(_) => config
-                .config
-                .ds
-                .env("DATABASE_URL")
-                .await
-                .unwrap_or_else(|_| "fastn.sqlite".to_string()),
-        },
+        None => fastn_core::migrations::get_db_url(&config.config),
     };
 
     let (query, params) = crate::library2022::processor::sqlite::extract_named_parameters(

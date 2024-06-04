@@ -10455,6 +10455,39 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
     things.into_iter().collect()
 }
 
+pub fn default_migration_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
+    let test_things = vec![(
+        "fastn#migration".to_string(),
+        ftd::interpreter::Thing::Component(fastn_migration_function()),
+    )];
+    test_things.into_iter().collect()
+}
+
+pub fn fastn_migration_function() -> ftd::interpreter::ComponentDefinition {
+    ftd::interpreter::ComponentDefinition {
+        name: "fastn#migration".to_string(),
+        arguments: [vec![
+            ftd::interpreter::Argument::default(
+                "title",
+                ftd::interpreter::Kind::string()
+                    .into_kind_data()
+                    .caption()
+                    .into_optional(),
+            ),
+            ftd::interpreter::Argument::default(
+                "query",
+                ftd::interpreter::Kind::string().into_kind_data().body(),
+            ),
+        ]]
+        .concat()
+        .into_iter()
+        .collect(),
+        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        css: None,
+        line_number: 0,
+    }
+}
+
 pub fn default_test_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
     let test_things = vec![
         (
