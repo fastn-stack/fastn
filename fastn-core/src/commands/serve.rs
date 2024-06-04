@@ -512,9 +512,11 @@ async fn handle_migrations(
 
     fastn_core::migrations::migrate(&mut req_config, db.as_str()).await?;
 
-    Some(Ok(actix_web::HttpResponse::build(actix_web::http::StatusCode::OK)
-        .append_header(("Content-Type", "application/json"))
-        .body(serde_json::json!({"status": "success"}).to_string())))
+    Some(Ok(actix_web::HttpResponse::build(
+        actix_web::http::StatusCode::OK,
+    )
+    .append_header(("Content-Type", "application/json"))
+    .body(serde_json::json!({"status": "success"}).to_string())))
 }
 
 async fn handle_endpoints(
