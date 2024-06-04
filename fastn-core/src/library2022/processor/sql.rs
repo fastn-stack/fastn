@@ -10,7 +10,7 @@ pub async fn process(
     let (headers, query) = super::sqlite::get_p1_data(q_kind, &value, doc.name)?;
     let db = match headers.get_optional_string_by_key("db$", doc.name, value.line_number())? {
         Some(db) => db,
-        None => fastn_core::migrations::get_db_url(&config.config),
+        None => config.config.get_db_url(),
     };
 
     let (query, params) = crate::library2022::processor::sqlite::extract_named_parameters(
