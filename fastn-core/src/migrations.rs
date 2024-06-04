@@ -29,7 +29,7 @@ pub(crate) async fn migrate(
     }
 
     let migrations_to_apply =
-        find_migrations_to_apply(&available_migrations, &applied_migrations).await?;
+        find_migrations_to_apply(&available_migrations, &applied_migrations)?;
 
     let now = chrono::Utc::now();
     for migration in migrations_to_apply {
@@ -109,7 +109,7 @@ struct MigrationDataSQL {
     name: String,
 }
 
-async fn find_migrations_to_apply(
+fn find_migrations_to_apply(
     available_migrations: &[fastn_core::package::MigrationData],
     applied_migrations: &[MigrationDataSQL],
 ) -> Result<Vec<fastn_core::package::MigrationData>, MigrationError> {
