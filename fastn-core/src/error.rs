@@ -140,6 +140,9 @@ pub enum Error {
 
     #[error("SSRError: {:?}", _0)]
     SSRError(#[from] fastn_js::SSRError),
+
+    #[error("MigrationError: {0}")]
+    MigrationError(#[from] fastn_core::migrations::MigrationError),
 }
 
 impl From<std::convert::Infallible> for Error {

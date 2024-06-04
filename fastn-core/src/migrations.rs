@@ -1,4 +1,4 @@
-pub(super) const MIGRATION_TABLE: &str = r#"
+const MIGRATION_TABLE: &str = r#"
 
 CREATE TABLE IF NOT EXISTS
     fastn_migration
@@ -12,7 +12,39 @@ CREATE TABLE IF NOT EXISTS
 
 "#;
 
-pub(crate) async fn create_migration_table(
+pub(crate) async fn migrate(
+    req_config: &mut fastn_core::RequestConfig,
+) -> Result<(), MigrationError> {
+    let db = req_config.config.get_db_url().await;
+    create_migration_table(&req_config.config, db.as_str()).await?;
+
+    let available_migrations = req_config.config.package.migration.clone();
+    let applied_migrations = get_applied_migrations(&req_config.config, db.as_str()).await?;
+
+    if !has_new_migration(
+        applied_migrations.as_slice(),
+        available_migrations.as_slice(),
+    )? {
+        return Ok(());
+    }
+
+    let migrations_to_apply =
+        find_migrations_to_apply(&available_migrations, &applied_migrations).await?;
+
+    let now = chrono::Utc::now();
+    for migration in migrations_to_apply {
+        req_config
+            .config
+            .ds
+            .sql_batch(db.as_str(), migration.content.as_str())
+            .await?;
+        mark_migration_applied(&req_config.config, db.as_str(), &migration, &now).await?;
+    }
+
+    Ok(())
+}
+
+async fn create_migration_table(
     config: &fastn_core::Config,
     db: &str,
 ) -> Result<(), fastn_utils::SqlError> {
@@ -20,31 +52,33 @@ pub(crate) async fn create_migration_table(
     Ok(())
 }
 
-pub(crate) async fn migrate(
-    req_config: &mut fastn_core::RequestConfig,
-    db: &str,
-) -> Result<(), fastn_utils::SqlError> {
-    let migration_ftd = get_migrations_from_ftd(req_config).await;
-    let migration_sql = get_migration_from_sql(&req_config.config, db).await?;
+#[derive(thiserror::Error, Debug)]
+pub enum MigrationError {
+    #[error("Cannot delete applied migration")]
+    DeleteAppliedMigration,
+    #[error("Sql Error: {0}")]
+    SqlError(#[from] fastn_utils::SqlError),
+    #[error("The migration order has changed or its content has been altered")]
+    AppliedMigrationMismatch,
+}
 
-    let migrations_to_apply = find_migrations_to_apply(&migration_ftd, &migration_sql).await;
-
-    let now = chrono::Utc::now();
-    for migration in migrations_to_apply {
-        req_config
-            .config
-            .ds
-            .sql_batch(db, migration.content.as_str())
-            .await?;
-        mark_migration_applied(&req_config.config, db, &migration, &now)
+fn has_new_migration(
+    applied_migrations: &[MigrationDataSQL],
+    available_migrations: &[fastn_core::package::MigrationData],
+) -> Result<bool, MigrationError> {
+    if applied_migrations.len() > available_migrations.len() {
+        return Err(MigrationError::DeleteAppliedMigration);
+    } else if applied_migrations.len() < available_migrations.len() {
+        return Ok(true);
+    } else {
+        Ok(false)
     }
-    Ok(())
 }
 
 async fn mark_migration_applied(
     config: &fastn_core::Config,
     db: &str,
-    migration_data: &MigrationDataFTD,
+    migration_data: &fastn_core::package::MigrationData,
     now: &chrono::DateTime<chrono::Utc>,
 ) -> Result<(), fastn_utils::SqlError> {
     let now_in_nanosecond = now.timestamp_nanos_opt().unwrap();
@@ -69,91 +103,27 @@ async fn mark_migration_applied(
     Ok(())
 }
 
-struct MigrationDataFTD {
-    number: i64,
-    name: String,
-    content: String,
-}
-
-async fn get_migrations_from_ftd(
-    req_config: &mut fastn_core::RequestConfig,
-) -> Vec<MigrationDataFTD> {
-    let migration_ftd = req_config
-        .config
-        .package
-        .fs_fetch_by_file_name("migration.ftd", None, &req_config.config.ds)
-        .await?;
-    let migration_ftd_str = String::from_utf8(migration_ftd).unwrap();
-
-    let main_ftd_doc = fastn_core::doc::interpret_helper(
-        "migration",
-        migration_ftd_str.as_str(),
-        req_config,
-        "/",
-        false,
-        0,
-    )
-    .await?;
-    let mut migration_data = vec![];
-    let mut bag = main_ftd_doc.data.clone();
-    bag.extend(ftd::interpreter::default::default_migration_bag());
-
-    let doc = ftd::interpreter::TDoc::new(&main_ftd_doc.name, &main_ftd_doc.aliases, &bag);
-
-    for (idx, component) in main_ftd_doc.tree.iter().enumerate() {
-        if is_fastn_migration(component) {
-            let property_values =
-                component.get_interpreter_property_value_of_all_arguments(&doc)?;
-            let query = property_values
-                .get("query")
-                .unwrap()
-                .clone()
-                .resolve(&doc, component.line_number)
-                .unwrap()
-                .to_json_string(&doc, false)?
-                .unwrap();
-            let migration_name = fastn_core::utils::generate_hash(&query);
-            let migration_number = (idx + 1) as i64;
-            migration_data.push(MigrationDataFTD {
-                number: migration_number,
-                name: migration_name,
-                content: query,
-            });
-        } else {
-            unimplemented!(); // todo: throw error
-        }
-    }
-
-    migration_data
-}
-
-fn is_fastn_migration(component: &ftd::interpreter::Component) -> bool {
-    component.name.eq("fastn#migration") || component.name.eq("fastn.migration")
-}
-
+#[derive(Clone)]
 struct MigrationDataSQL {
     number: i64,
     name: String,
 }
 
 async fn find_migrations_to_apply(
-    migration_ftd: &[MigrationDataFTD],
-    migration_sql: &[MigrationDataSQL],
-) -> Vec<MigrationDataFTD> {
-    if migration_sql.len() > migration_ftd.len() {
-        unreachable!("Can't delete the applied migration") // todo: throw error
-    }
-
-    let migration_sql: std::collections::HashMap<i64, MigrationDataSQL> = migration_sql
+    available_migrations: &[fastn_core::package::MigrationData],
+    applied_migrations: &[MigrationDataSQL],
+) -> Result<Vec<fastn_core::package::MigrationData>, MigrationError> {
+    let applied_migrations: std::collections::HashMap<i64, MigrationDataSQL> = applied_migrations
         .into_iter()
-        .map(|val| (*val.number, val.clone()))
+        .map(|val| (val.number, val.clone()))
         .collect();
+
     let mut migrations_to_apply = vec![];
-    for m_ftd in migration_ftd {
-        match migration_sql.get(*m_ftd.number) {
+    for m_ftd in available_migrations {
+        match applied_migrations.get(&m_ftd.number) {
             Some(m_sql) => {
                 if m_sql.name.ne(&m_ftd.name) {
-                    unreachable!("Cannot change the content of migration") // todo: throw error
+                    return Err(MigrationError::AppliedMigrationMismatch);
                 }
             }
             None => {
@@ -161,10 +131,11 @@ async fn find_migrations_to_apply(
             }
         }
     }
-    migrations_to_apply
+
+    Ok(migrations_to_apply)
 }
 
-async fn get_migration_from_sql(
+async fn get_applied_migrations(
     config: &fastn_core::Config,
     db: &str,
 ) -> Result<Vec<MigrationDataSQL>, fastn_utils::SqlError> {
@@ -182,7 +153,8 @@ async fn get_migration_from_sql(
                         app_name='{}'
                 "#,
                 config.package.name
-            ),
+            )
+            .as_str(),
             vec![],
         )
         .await?;
