@@ -1128,6 +1128,17 @@ impl Config {
             self.package.to_owned()
         }
     }
+
+    pub(crate) async fn get_db_url(&self) -> String {
+        match self.ds.env("FASTN_DB_URL").await {
+            Ok(db_url) => db_url,
+            Err(_) => self
+                .ds
+                .env("DATABASE_URL")
+                .await
+                .unwrap_or_else(|_| "sqlite:///fastn.sqlite".to_string()),
+        }
+    }
 }
 
 #[cfg(feature = "use-config-json")]

@@ -507,7 +507,7 @@ async fn handle_migrations(
 
     let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
 
-    let db = fastn_core::migrations::get_db_url(config).await;
+    let db = config.get_db_url().await;
     fastn_core::migrations::create_migration_table(config, db.as_str()).await?;
 
     fastn_core::migrations::migrate(&mut req_config, db.as_str()).await?;

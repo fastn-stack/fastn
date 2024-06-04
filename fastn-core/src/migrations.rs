@@ -211,14 +211,3 @@ async fn get_migration_from_sql(
     }
     Ok(migration_details)
 }
-
-pub(crate) async fn get_db_url(config: &fastn_core::Config) -> String {
-    match config.ds.env("FASTN_DB_URL").await {
-        Ok(db_url) => db_url,
-        Err(_) => config
-            .ds
-            .env("DATABASE_URL")
-            .await
-            .unwrap_or_else(|_| "sqlite:///fastn.sqlite".to_string()),
-    }
-}
