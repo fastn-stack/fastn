@@ -8,9 +8,6 @@ repository.workspace = true
 homepage.workspace = true
 
 [features]
-default = ["quickjs"]
-deno-core = ["deno_core"]
-quickjs = ["rquickjs", "quick-js"]
 
 [dependencies]
 pretty.workspace = true
@@ -18,14 +15,13 @@ itertools.workspace = true
 indoc.workspace = true
 fastn-grammar.workspace = true
 prettify-js.workspace = true
-deno_core = { workspace = true, optional = true }
 thiserror.workspace = true
 
 [target.'cfg(not(windows))'.dependencies]
-quick-js = { workspace = true, optional = true }
+quick-js.workspace = true
 
 [target.'cfg(windows)'.dependencies]
-rquickjs = { workspace = true, optional = true }
+rquickjs.workspace = true
 
 [dev-dependencies]
 #indoc.workspace = true
