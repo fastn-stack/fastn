@@ -18,18 +18,11 @@ pub(crate) async fn migrate(
     let db = req_config.config.get_db_url().await;
     create_migration_table(&req_config.config, db.as_str()).await?;
 
-    let available_migrations = req_config.config.package.migration.clone();
-    let applied_migrations = get_applied_migrations(&req_config.config, db.as_str()).await?;
-
-    if !has_new_migration(
-        applied_migrations.as_slice(),
-        available_migrations.as_slice(),
-    )? {
+    if !has_new_migration(req_config, db.as_str()).await? {
         return Ok(());
     }
 
-    let migrations_to_apply =
-        find_migrations_to_apply(&available_migrations, &applied_migrations)?;
+    let migrations_to_apply = find_migrations_to_apply(req_config, db.as_str()).await?;
 
     let now = chrono::Utc::now();
     for migration in migrations_to_apply {
@@ -54,24 +47,60 @@ async fn create_migration_table(
 
 #[derive(thiserror::Error, Debug)]
 pub enum MigrationError {
-    #[error("Cannot delete applied migration")]
-    DeleteAppliedMigration,
     #[error("Sql Error: {0}")]
     SqlError(#[from] fastn_utils::SqlError),
+    #[error("Cannot delete applied migration")]
+    AppliedMigrationDeletion,
     #[error("The migration order has changed or its content has been altered")]
     AppliedMigrationMismatch,
 }
 
-fn has_new_migration(
-    applied_migrations: &[MigrationDataSQL],
-    available_migrations: &[fastn_core::package::MigrationData],
+async fn has_new_migration(
+    req_config: &fastn_core::RequestConfig,
+    db: &str,
 ) -> Result<bool, MigrationError> {
-    if applied_migrations.len() > available_migrations.len() {
-        return Err(MigrationError::DeleteAppliedMigration);
-    } else if applied_migrations.len() < available_migrations.len() {
-        return Ok(true);
-    } else {
-        Ok(false)
+    let last_available_migration = match req_config.config.package.migration.last() {
+        Some(last_available_migration) => last_available_migration,
+        None => return Ok(false),
+    };
+
+    let results = req_config
+        .config
+        .ds
+        .sql_query(
+            db,
+            format!(
+                r#"
+                    SELECT
+                        migration_number
+                    FROM
+                        fastn_migration
+                    WHERE
+                        app_name = '{}'
+                    ORDER BY migration_number DESC
+                    LIMIT 1;
+                "#,
+                req_config.config.package.name
+            )
+            .as_str(),
+            vec![],
+        )
+        .await?;
+
+    match results.len() {
+        0 => Ok(true),
+        1 => {
+            let last_applied_migration_number: i64 =
+                serde_json::from_value(results[0].get(0).unwrap().clone()).unwrap();
+            if last_available_migration.number > last_applied_migration_number {
+                Err(MigrationError::AppliedMigrationDeletion)
+            } else if last_available_migration.number < last_applied_migration_number {
+                Ok(true)
+            } else {
+                Ok(false)
+            }
+        }
+        _ => unreachable!(),
     }
 }
 
@@ -109,10 +138,13 @@ struct MigrationDataSQL {
     name: String,
 }
 
-fn find_migrations_to_apply(
-    available_migrations: &[fastn_core::package::MigrationData],
-    applied_migrations: &[MigrationDataSQL],
+async fn find_migrations_to_apply(
+    req_config: &fastn_core::RequestConfig,
+    db: &str,
 ) -> Result<Vec<fastn_core::package::MigrationData>, MigrationError> {
+    let available_migrations = req_config.config.package.migration.clone();
+    let applied_migrations = get_applied_migrations(&req_config.config, db).await?;
+
     let applied_migrations: std::collections::HashMap<i64, MigrationDataSQL> = applied_migrations
         .into_iter()
         .map(|val| (val.number, val.clone()))
