@@ -186,9 +186,7 @@ pub async fn serve(
         return Ok((clear_sid2(&req), false));
     }
 
-    if let Some(endpoint_response) = handle_migrations(config, &req).await {
-        return endpoint_response;
-    }
+    handle_migrations(config, &req).await?;
 
     if let Some(endpoint_response) = handle_endpoints(config, &req).await {
         return endpoint_response.map(|r| (r, false));
@@ -500,23 +498,10 @@ async fn handle_static_route(
 async fn handle_migrations(
     config: &fastn_core::Config,
     req: &fastn_core::http::Request,
-) -> Option<fastn_core::Result<fastn_core::http::Response>> {
-    if !req.path().eq("migration") {
-        return None;
-    }
-
+) -> fastn_core::Result<()> {
     let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
 
-    let db = config.get_db_url().await;
-    fastn_core::migrations::create_migration_table(config, db.as_str()).await?;
-
-    fastn_core::migrations::migrate(&mut req_config, db.as_str()).await?;
-
-    Some(Ok(actix_web::HttpResponse::build(
-        actix_web::http::StatusCode::OK,
-    )
-    .append_header(("Content-Type", "application/json"))
-    .body(serde_json::json!({"status": "success"}).to_string())))
+    Ok(fastn_core::migrations::migrate(&mut req_config).await?)
 }
 
 async fn handle_endpoints(

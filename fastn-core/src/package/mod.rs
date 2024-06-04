@@ -973,15 +973,16 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
             redirects: None,
             system: self.system,
             system_is_confidential: self.system_is_confidential,
+            migration: vec![],
         }
     }
 }
 
 #[derive(Debug, serde::Deserialize, Clone)]
 pub struct MigrationData {
-    number: i64,
-    name: String,
-    content: String,
+    pub number: i64,
+    pub name: String,
+    pub content: String,
 }
 
 impl MigrationData {
