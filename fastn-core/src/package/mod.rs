@@ -70,6 +70,9 @@ pub struct Package {
     pub system_is_confidential: Option<bool>,
 
     pub lang: Option<Lang>,
+
+    /// Migrations
+    pub migration: Vec<MigrationData>,
 }
 
 impl Package {
@@ -105,6 +108,7 @@ impl Package {
             redirects: None,
             system: None,
             system_is_confidential: None,
+            migration: vec![],
         }
     }
 
@@ -623,6 +627,13 @@ impl Package {
         // Todo: Add `package.files` and fix `fs_fetch_by_id` to check if file is present
         package.fonts = fastn_document.get("fastn#font")?;
         package.sitemap_temp = fastn_document.get("fastn#sitemap")?;
+
+        package.migration = fastn_document
+            .get::<Vec<String>>("fastn#migration")?
+            .into_iter()
+            .enumerate()
+            .map(|(number, content)| MigrationData::new(content, number))
+            .collect::<Vec<MigrationData>>();
         *self = package;
         Ok(())
     }
@@ -962,6 +973,24 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
             redirects: None,
             system: self.system,
             system_is_confidential: self.system_is_confidential,
+        }
+    }
+}
+
+#[derive(Debug, serde::Deserialize, Clone)]
+pub struct MigrationData {
+    number: i64,
+    name: String,
+    content: String,
+}
+
+impl MigrationData {
+    pub(crate) fn new(content: String, number: usize) -> MigrationData {
+        let name = fastn_core::utils::generate_hash(&content);
+        MigrationData {
+            number: number as i64,
+            name,
+            content,
         }
     }
 }
