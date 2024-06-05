@@ -45,7 +45,7 @@ async fn apply_migration(
     // Combine the user-provided migration content and the marking content to run in a
     // transaction.
     let migration_content = format!(
-        "{}\n\n{}",
+        "BEGIN;\n{}\n\n{}\nCOMMIT;",
         migration.content, mark_migration_applied_content
     );
 
