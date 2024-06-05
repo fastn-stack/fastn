@@ -13,6 +13,12 @@ CREATE TABLE IF NOT EXISTS
 "#;
 
 pub(crate) async fn migrate(config: &fastn_core::Config) -> Result<(), MigrationError> {
+    if !has_migrations(config) {
+        return Ok(());
+    }
+
+    check_migration_name_conflict(config)?;
+
     let db = config.get_db_url().await;
     create_migration_table(config, db.as_str()).await?;
 
@@ -22,15 +28,51 @@ pub(crate) async fn migrate(config: &fastn_core::Config) -> Result<(), Migration
 
     let migrations_to_apply = find_migrations_to_apply(config, db.as_str()).await?;
 
-    let now = chrono::Utc::now();
+    let now = chrono::Utc::now().timestamp_nanos_opt().unwrap();
     for migration in migrations_to_apply {
+        validate_migration(&migration)?;
+        let mark_migration_applied_content =
+            mark_migration_applied_content(&config, &migration, now);
+        let migration_content = format!(
+            "{}\n\n{}",
+            migration.content, mark_migration_applied_content
+        );
+
         config
             .ds
-            .sql_batch(db.as_str(), migration.content.as_str())
+            .sql_batch(db.as_str(), migration_content.as_str())
             .await?;
-        mark_migration_applied(&config, db.as_str(), &migration, &now).await?;
     }
 
+    Ok(())
+}
+
+fn validate_migration(
+    migration: &fastn_core::package::MigrationData,
+) -> Result<(), MigrationError> {
+    // Check for alphanumeric characters for migration name
+    let alphanumeric_regex = regex::Regex::new(r"^[a-zA-Z0-9_-]+$").unwrap();
+    if !alphanumeric_regex.is_match(&migration.name) {
+        return Err(MigrationError::InvalidMigrationName {
+            name: migration.name.to_string(),
+        });
+    }
+    Ok(())
+}
+
+fn has_migrations(config: &fastn_core::Config) -> bool {
+    !config.package.migrations.is_empty()
+}
+
+fn check_migration_name_conflict(config: &fastn_core::Config) -> Result<(), MigrationError> {
+    let mut migration_names = std::collections::HashSet::new();
+    for migration in config.package.migrations.iter() {
+        if !migration_names.insert(&migration.name) {
+            return Err(MigrationError::MigrationNameConflict {
+                name: migration.name.clone(),
+            });
+        }
+    }
     Ok(())
 }
 
@@ -50,10 +92,14 @@ pub enum MigrationError {
     AppliedMigrationDeletion,
     #[error("The migration order has changed or its content has been altered")]
     AppliedMigrationMismatch,
+    #[error("Multiple migrations found with the same name: {name}.")]
+    MigrationNameConflict { name: String },
+    #[error("`{name}` is invalid migration name. It must contain only alphanumeric characters, underscores, and hyphens.")]
+    InvalidMigrationName { name: String },
 }
 
 async fn has_new_migration(config: &fastn_core::Config, db: &str) -> Result<bool, MigrationError> {
-    let last_available_migration = match config.package.migration.last() {
+    let last_available_migration = match config.package.migrations.last() {
         Some(last_available_migration) => last_available_migration,
         None => return Ok(false),
     };
@@ -97,32 +143,21 @@ async fn has_new_migration(config: &fastn_core::Config, db: &str) -> Result<bool
     }
 }
 
-async fn mark_migration_applied(
+fn mark_migration_applied_content(
     config: &fastn_core::Config,
-    db: &str,
     migration_data: &fastn_core::package::MigrationData,
-    now: &chrono::DateTime<chrono::Utc>,
-) -> Result<(), fastn_utils::SqlError> {
-    let now_in_nanosecond = now.timestamp_nanos_opt().unwrap();
-    config
-        .ds
-        .sql_execute(
-            db,
-            format!(
-                r#"
-                    INSERT INTO
-                        fastn_migration
-                            (app_name, migration_number, migration_name, applied_on)
-                    VALUES
-                        ({}, {}, {}, {});
-                "#,
-                config.package.name, migration_data.number, migration_data.name, now_in_nanosecond
-            )
-            .as_str(),
-            vec![],
-        )
-        .await?;
-    Ok(())
+    now: i64,
+) -> String {
+    format!(
+        r#"
+            INSERT INTO
+                fastn_migration
+                    (app_name, migration_number, migration_name, applied_on)
+            VALUES
+                ('{}', {}, '{}', {});
+        "#,
+        config.package.name, migration_data.number, migration_data.name, now
+    )
 }
 
 #[derive(Clone)]
@@ -135,7 +170,7 @@ async fn find_migrations_to_apply(
     config: &fastn_core::Config,
     db: &str,
 ) -> Result<Vec<fastn_core::package::MigrationData>, MigrationError> {
-    let available_migrations = config.package.migration.clone();
+    let available_migrations = config.package.migrations.clone();
     let applied_migrations = get_applied_migrations(&config, db).await?;
 
     let applied_migrations: std::collections::HashMap<i64, MigrationDataSQL> = applied_migrations

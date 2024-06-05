@@ -72,7 +72,7 @@ pub struct Package {
     pub lang: Option<Lang>,
 
     /// Migrations
-    pub migration: Vec<MigrationData>,
+    pub migrations: Vec<MigrationData>,
 }
 
 impl Package {
@@ -108,7 +108,7 @@ impl Package {
             redirects: None,
             system: None,
             system_is_confidential: None,
-            migration: vec![],
+            migrations: vec![],
         }
     }
 
@@ -628,11 +628,11 @@ impl Package {
         package.fonts = fastn_document.get("fastn#font")?;
         package.sitemap_temp = fastn_document.get("fastn#sitemap")?;
 
-        package.migration = fastn_document
-            .get::<Vec<String>>("fastn#migration")?
+        package.migrations = fastn_document
+            .get::<Vec<MigrationDataTemp>>("fastn#migration")?
             .into_iter()
             .enumerate()
-            .map(|(number, content)| MigrationData::new(content, number))
+            .map(|(number, data)| data.into_migration(number as i64))
             .collect::<Vec<MigrationData>>();
         *self = package;
         Ok(())
@@ -725,6 +725,12 @@ impl Package {
         package.fonts = fastn_doc.get("fastn#font")?;
         package.sitemap_temp = fastn_doc.get("fastn#sitemap")?;
         package.dynamic_urls_temp = fastn_doc.get("fastn#dynamic-urls")?;
+        package.migrations = fastn_doc
+            .get::<Vec<MigrationDataTemp>>("fastn#migration")?
+            .into_iter()
+            .enumerate()
+            .map(|(number, data)| data.into_migration(number as i64))
+            .collect::<Vec<MigrationData>>();
 
         // validation logic TODO: It should be ordered
         fastn_core::utils::validate_base_url(&package)?;
@@ -973,7 +979,7 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
             redirects: None,
             system: self.system,
             system_is_confidential: self.system_is_confidential,
-            migration: vec![],
+            migrations: vec![],
         }
     }
 }
@@ -985,13 +991,18 @@ pub struct MigrationData {
     pub content: String,
 }
 
-impl MigrationData {
-    pub(crate) fn new(content: String, number: usize) -> MigrationData {
-        let name = fastn_core::utils::generate_hash(&content);
+#[derive(Debug, serde::Deserialize, Clone)]
+pub struct MigrationDataTemp {
+    pub name: String,
+    pub content: String,
+}
+
+impl MigrationDataTemp {
+    pub(crate) fn into_migration(self, number: i64) -> MigrationData {
         MigrationData {
-            number: number as i64,
-            name,
-            content,
+            number,
+            name: self.name,
+            content: self.content,
         }
     }
 }

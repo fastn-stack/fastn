@@ -68,7 +68,11 @@ optional string required-as:
 -- dependency-data list dependency:
 
 
--- string list migration:
+-- record migration-data:
+caption name:
+body content:
+
+-- migration-data list migration:
 
 
 -- record auto-import-data:
