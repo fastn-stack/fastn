@@ -12,26 +12,23 @@ CREATE TABLE IF NOT EXISTS
 
 "#;
 
-pub(crate) async fn migrate(
-    req_config: &mut fastn_core::RequestConfig,
-) -> Result<(), MigrationError> {
-    let db = req_config.config.get_db_url().await;
-    create_migration_table(&req_config.config, db.as_str()).await?;
+pub(crate) async fn migrate(config: &fastn_core::Config) -> Result<(), MigrationError> {
+    let db = config.get_db_url().await;
+    create_migration_table(config, db.as_str()).await?;
 
-    if !has_new_migration(req_config, db.as_str()).await? {
+    if !has_new_migration(config, db.as_str()).await? {
         return Ok(());
     }
 
-    let migrations_to_apply = find_migrations_to_apply(req_config, db.as_str()).await?;
+    let migrations_to_apply = find_migrations_to_apply(config, db.as_str()).await?;
 
     let now = chrono::Utc::now();
     for migration in migrations_to_apply {
-        req_config
-            .config
+        config
             .ds
             .sql_batch(db.as_str(), migration.content.as_str())
             .await?;
-        mark_migration_applied(&req_config.config, db.as_str(), &migration, &now).await?;
+        mark_migration_applied(&config, db.as_str(), &migration, &now).await?;
     }
 
     Ok(())
@@ -55,17 +52,13 @@ pub enum MigrationError {
     AppliedMigrationMismatch,
 }
 
-async fn has_new_migration(
-    req_config: &fastn_core::RequestConfig,
-    db: &str,
-) -> Result<bool, MigrationError> {
-    let last_available_migration = match req_config.config.package.migration.last() {
+async fn has_new_migration(config: &fastn_core::Config, db: &str) -> Result<bool, MigrationError> {
+    let last_available_migration = match config.package.migration.last() {
         Some(last_available_migration) => last_available_migration,
         None => return Ok(false),
     };
 
-    let results = req_config
-        .config
+    let results = config
         .ds
         .sql_query(
             db,
@@ -80,7 +73,7 @@ async fn has_new_migration(
                     ORDER BY migration_number DESC
                     LIMIT 1;
                 "#,
-                req_config.config.package.name
+                config.package.name
             )
             .as_str(),
             vec![],
@@ -139,11 +132,11 @@ struct MigrationDataSQL {
 }
 
 async fn find_migrations_to_apply(
-    req_config: &fastn_core::RequestConfig,
+    config: &fastn_core::Config,
     db: &str,
 ) -> Result<Vec<fastn_core::package::MigrationData>, MigrationError> {
-    let available_migrations = req_config.config.package.migration.clone();
-    let applied_migrations = get_applied_migrations(&req_config.config, db).await?;
+    let available_migrations = config.package.migration.clone();
+    let applied_migrations = get_applied_migrations(&config, db).await?;
 
     let applied_migrations: std::collections::HashMap<i64, MigrationDataSQL> = applied_migrations
         .into_iter()
