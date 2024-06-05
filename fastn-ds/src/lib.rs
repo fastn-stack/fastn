@@ -250,13 +250,9 @@ impl DocumentStore {
         query: &str,
         params: Vec<ft_sys_shared::SqliteRawValue>,
     ) -> Result<Vec<Vec<serde_json::Value>>, fastn_utils::SqlError> {
-        let db_url = match db_url.strip_prefix("sqlite:///") {
-            Some(db) => db.to_string(),
-            None => return Err(fastn_utils::SqlError::UnknownDB),
-        };
-
+        let db_path = initialize_sqlite_db(db_url).await?;
         let conn = rusqlite::Connection::open_with_flags(
-            db_url,
+            db_path,
             rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
         )
         .map_err(fastn_utils::SqlError::Connection)?;
@@ -275,12 +271,9 @@ impl DocumentStore {
         query: &str,
         params: Vec<ft_sys_shared::SqliteRawValue>,
     ) -> Result<Vec<Vec<serde_json::Value>>, fastn_utils::SqlError> {
-        let db_url = match db_url.strip_prefix("sqlite:///") {
-            Some(db) => db.to_string(),
-            None => return Err(fastn_utils::SqlError::UnknownDB),
-        };
+        let db_path = initialize_sqlite_db(db_url).await?;
         let conn = rusqlite::Connection::open_with_flags(
-            db_url,
+            db_path,
             rusqlite::OpenFlags::SQLITE_OPEN_READ_WRITE,
         )
         .map_err(fastn_utils::SqlError::Connection)?;
@@ -295,12 +288,9 @@ impl DocumentStore {
         db_url: &str,
         query: &str,
     ) -> Result<Vec<Vec<serde_json::Value>>, fastn_utils::SqlError> {
-        let db_url = match db_url.strip_prefix("sqlite:///") {
-            Some(db) => db.to_string(),
-            None => return Err(fastn_utils::SqlError::UnknownDB),
-        };
+        let db_path = initialize_sqlite_db(db_url).await?;
         let conn = rusqlite::Connection::open_with_flags(
-            db_url,
+            db_path,
             rusqlite::OpenFlags::SQLITE_OPEN_READ_WRITE,
         )
         .map_err(fastn_utils::SqlError::Connection)?;
@@ -584,6 +574,20 @@ impl DocumentStore {
 
         Ok(fastn_ds::reqwest_util::to_http_response(response).await?)
     }
+}
+
+async fn initialize_sqlite_db(db_url: &str) -> Result<String, fastn_utils::SqlError> {
+    let db_path = match db_url.strip_prefix("sqlite:///") {
+        Some(db) => db.to_string(),
+        None => return Err(fastn_utils::SqlError::UnknownDB),
+    };
+
+    // Create SQLite file if it doesn't exist
+    if !std::path::Path::new(&db_path).exists() {
+        tokio::fs::File::create(&db_path).await.unwrap();
+    }
+
+    Ok(db_path)
 }
 
 #[derive(thiserror::Error, PartialEq, Debug)]

@@ -620,11 +620,11 @@ impl Config {
 
         let mut package = package.clone();
 
-        package.migration = fastn_doc
-            .get::<Vec<String>>("fastn#migration")?
+        package.migrations = fastn_doc
+            .get::<Vec<fastn_core::package::MigrationDataTemp>>("fastn#migration")?
             .into_iter()
             .enumerate()
-            .map(|(number, content)| fastn_core::package::MigrationData::new(content, number))
+            .map(|(number, data)| data.into_migration(number as i64))
             .collect::<Vec<fastn_core::package::MigrationData>>();
 
         package.sitemap_temp = fastn_doc.get("fastn#sitemap")?;
