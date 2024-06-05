@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS
 "#;
 
 pub(crate) async fn migrate(config: &fastn_core::Config) -> Result<(), MigrationError> {
+    // If there are no migrations, exit early.
     if !has_migrations(config) {
         return Ok(());
     }
@@ -31,8 +32,12 @@ pub(crate) async fn migrate(config: &fastn_core::Config) -> Result<(), Migration
     let now = chrono::Utc::now().timestamp_nanos_opt().unwrap();
     for migration in migrations_to_apply {
         validate_migration(&migration)?;
+        // Create the SQL to mark the migration as applied.
         let mark_migration_applied_content =
             mark_migration_applied_content(&config, &migration, now);
+
+        // Combine the user-provided migration content and the marking content to run in a
+        // transaction.
         let migration_content = format!(
             "{}\n\n{}",
             migration.content, mark_migration_applied_content
