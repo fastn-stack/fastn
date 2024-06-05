@@ -186,7 +186,7 @@ pub async fn serve(
         return Ok(clear_sid2(&req));
     }
 
-    handle_migrations(config, &req).await?;
+    handle_migrations(config).await?;
 
     if let Some(endpoint_response) = handle_endpoints(config, &req).await {
         return endpoint_response;
@@ -491,13 +491,8 @@ async fn handle_static_route(
     }
 }
 
-async fn handle_migrations(
-    config: &fastn_core::Config,
-    req: &fastn_core::http::Request,
-) -> fastn_core::Result<()> {
-    let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
-
-    Ok(fastn_core::migrations::migrate(&mut req_config).await?)
+async fn handle_migrations(config: &fastn_core::Config) -> fastn_core::Result<()> {
+    Ok(fastn_core::migrations::migrate(config).await?)
 }
 
 async fn handle_endpoints(
