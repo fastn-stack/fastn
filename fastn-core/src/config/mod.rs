@@ -1035,6 +1035,8 @@ impl Config {
             package.to_owned(),
         );
 
+        fastn_core::migrations::migrate(&config).await?;
+
         Ok(config)
     }
 
