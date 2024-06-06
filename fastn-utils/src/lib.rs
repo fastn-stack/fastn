@@ -50,17 +50,10 @@ pub fn get_entrypoint<S: Send>(
     wasmtime::Store<S>,
     wasmtime::Result<wasmtime::TypedFunc<(), ()>>,
 ) {
-    if let Ok(f) = instance.get_typed_func::<(), ()>(&mut store, "main_ft") {
-        return (store, Ok(f));
-    }
-
     let entrypoint = match path_to_entrypoint(path) {
         Ok(v) => v,
         Err(e) => return (store, Err(e)),
     };
-
-    println!("main_ft not found, trying {entrypoint}");
-
     let r = instance.get_typed_func(&mut store, entrypoint.as_str());
     (store, r)
 }
