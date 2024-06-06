@@ -122,11 +122,11 @@ impl TestConfig {
     pub fn cmd(&self) -> std::process::Command {
         let mut cmd = if cfg!(target_os = "windows") {
             let mut c = std::process::Command::new("cmd");
-            c.args(&["/C", self.cmd.as_str()]);
+            c.args(["/C", self.cmd.as_str()]);
             c
         } else {
             let mut c = std::process::Command::new("sh");
-            c.args(&["-c", self.cmd.as_str()]);
+            c.args(["-c", self.cmd.as_str()]);
             c
         };
 

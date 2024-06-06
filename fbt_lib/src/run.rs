@@ -190,11 +190,11 @@ pub fn test_all(
                 if let Some(ref b) = config.build {
                     match if cfg!(target_os = "windows") {
                         let mut c = std::process::Command::new("cmd");
-                        c.args(&["/C", b.as_str()]);
+                        c.args(["/C", b.as_str()]);
                         c
                     } else {
                         let mut c = std::process::Command::new("sh");
-                        c.args(&["-c", b.as_str()]);
+                        c.args(["-c", b.as_str()]);
                         c
                     }
                     .output()
