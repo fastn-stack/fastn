@@ -628,12 +628,7 @@ impl Package {
         package.fonts = fastn_document.get("fastn#font")?;
         package.sitemap_temp = fastn_document.get("fastn#sitemap")?;
 
-        package.migrations = fastn_document
-            .get::<Vec<MigrationDataTemp>>("fastn#migration")?
-            .into_iter()
-            .enumerate()
-            .map(|(number, data)| data.into_migration(number as i64))
-            .collect::<Vec<MigrationData>>();
+        package.migrations = get_migration_data(&fastn_document)?;
         *self = package;
         Ok(())
     }
@@ -725,12 +720,7 @@ impl Package {
         package.fonts = fastn_doc.get("fastn#font")?;
         package.sitemap_temp = fastn_doc.get("fastn#sitemap")?;
         package.dynamic_urls_temp = fastn_doc.get("fastn#dynamic-urls")?;
-        package.migrations = fastn_doc
-            .get::<Vec<MigrationDataTemp>>("fastn#migration")?
-            .into_iter()
-            .enumerate()
-            .map(|(number, data)| data.into_migration(number as i64))
-            .collect::<Vec<MigrationData>>();
+        package.migrations = get_migration_data(&fastn_doc)?;
 
         // validation logic TODO: It should be ordered
         fastn_core::utils::validate_base_url(&package)?;
@@ -808,6 +798,19 @@ impl Package {
         self.selected_language = Some(language);
         Ok(())
     }
+}
+
+pub(crate) fn get_migration_data(
+    doc: &ftd::ftd2021::p2::Document,
+) -> fastn_core::Result<Vec<MigrationData>> {
+    let migration_data = doc.get::<Vec<MigrationDataTemp>>("fastn#migration")?;
+    let mut migrations = vec![];
+    let mut number = 0;
+    for migration in migration_data.into_iter().rev() {
+        migrations.push(migration.into_migration(number as i64));
+        number += 1;
+    }
+    Ok(migrations)
 }
 
 #[derive(Debug, Clone)]
