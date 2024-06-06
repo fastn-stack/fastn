@@ -617,12 +617,7 @@ impl Config {
 
         let mut package = package.clone();
 
-        package.migrations = fastn_doc
-            .get::<Vec<fastn_core::package::MigrationDataTemp>>("fastn#migration")?
-            .into_iter()
-            .enumerate()
-            .map(|(number, data)| data.into_migration(number as i64))
-            .collect::<Vec<fastn_core::package::MigrationData>>();
+        package.migrations = fastn_core::package::get_migration_data(&fastn_doc)?;
 
         package.sitemap_temp = fastn_doc.get("fastn#sitemap")?;
         package.dynamic_urls_temp = fastn_doc.get("fastn#dynamic-urls")?;
