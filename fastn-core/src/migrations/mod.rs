@@ -1,4 +1,4 @@
-mod migrations;
+mod fastn_migrations;
 
 pub(crate) async fn migrate(config: &fastn_core::Config) -> Result<(), MigrationError> {
     // If there are no migrations, exit early.
@@ -28,7 +28,7 @@ async fn migrate_app(config: &fastn_core::Config, now: i64) -> Result<(), Migrat
 async fn migrate_fastn(config: &fastn_core::Config, now: i64) -> Result<(), MigrationError> {
     migrate_(
         config,
-        migrations::fastn_migrations().as_slice(),
+        fastn_migrations::fastn_migrations().as_slice(),
         "fastn",
         now,
     )
@@ -61,9 +61,9 @@ async fn apply_migration(
     now: i64,
 ) -> Result<(), MigrationError> {
     let db = config.get_db_url().await;
-    validate_migration(&migration)?;
+    validate_migration(migration)?;
     // Create the SQL to mark the migration as applied.
-    let mark_migration_applied_content = mark_migration_applied_content(app_name, &migration, now);
+    let mark_migration_applied_content = mark_migration_applied_content(app_name, migration, now);
 
     // Combine the user-provided migration content and the marking content to run in a
     // transaction.
@@ -117,7 +117,7 @@ async fn create_migration_table(config: &fastn_core::Config) -> Result<(), fastn
 
     config
         .ds
-        .sql_batch(&db, migrations::MIGRATION_TABLE)
+        .sql_batch(&db, fastn_migrations::MIGRATION_TABLE)
         .await?;
     Ok(())
 }
@@ -152,7 +152,7 @@ async fn find_latest_applied_migration_number(
     match results.len() {
         0 => Ok(None),
         1 => Ok(Some(
-            serde_json::from_value::<i64>(results[0].get(0).unwrap().clone()).unwrap(),
+            serde_json::from_value::<i64>(results[0].first().unwrap().clone()).unwrap(),
         )), // Unwrap is okay here
         _ => unreachable!(),
     }

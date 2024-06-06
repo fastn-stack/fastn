@@ -720,7 +720,7 @@ impl Package {
         package.fonts = fastn_doc.get("fastn#font")?;
         package.sitemap_temp = fastn_doc.get("fastn#sitemap")?;
         package.dynamic_urls_temp = fastn_doc.get("fastn#dynamic-urls")?;
-        package.migrations = get_migration_data(&fastn_doc)?;
+        package.migrations = get_migration_data(fastn_doc)?;
 
         // validation logic TODO: It should be ordered
         fastn_core::utils::validate_base_url(&package)?;
@@ -805,10 +805,8 @@ pub(crate) fn get_migration_data(
 ) -> fastn_core::Result<Vec<MigrationData>> {
     let migration_data = doc.get::<Vec<MigrationDataTemp>>("fastn#migration")?;
     let mut migrations = vec![];
-    let mut number = 0;
-    for migration in migration_data.into_iter().rev() {
+    for (number, migration) in migration_data.into_iter().rev().enumerate() {
         migrations.push(migration.into_migration(number as i64));
-        number += 1;
     }
     Ok(migrations)
 }
