@@ -48,7 +48,7 @@ async fn migrate_(
 
     for migration in migrations {
         println!("Applying Migration for {app_name}: {}", migration.name);
-        apply_migration(config, &migration, now).await?;
+        apply_migration(config, app_name, &migration, now).await?;
     }
 
     Ok(())
@@ -56,13 +56,14 @@ async fn migrate_(
 
 async fn apply_migration(
     config: &fastn_core::Config,
+    app_name: &str,
     migration: &fastn_core::package::MigrationData,
     now: i64,
 ) -> Result<(), MigrationError> {
     let db = config.get_db_url().await;
     validate_migration(&migration)?;
     // Create the SQL to mark the migration as applied.
-    let mark_migration_applied_content = mark_migration_applied_content(&config, &migration, now);
+    let mark_migration_applied_content = mark_migration_applied_content(app_name, &migration, now);
 
     // Combine the user-provided migration content and the marking content to run in a
     // transaction.
@@ -158,7 +159,7 @@ async fn find_latest_applied_migration_number(
 }
 
 fn mark_migration_applied_content(
-    config: &fastn_core::Config,
+    app_name: &str,
     migration_data: &fastn_core::package::MigrationData,
     now: i64,
 ) -> String {
@@ -170,7 +171,7 @@ fn mark_migration_applied_content(
             VALUES
                 ('{}', {}, '{}', {});
         "#,
-        config.package.name, migration_data.number, migration_data.name, now
+        app_name, migration_data.number, migration_data.name, now
     )
 }
 #[derive(thiserror::Error, Debug)]
