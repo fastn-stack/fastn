@@ -61,6 +61,8 @@ pub struct RequestConfig {
     /// each string is the value of Set-Cookie header
     pub processor_set_cookies: Vec<String>,
     pub processor_set_response: Option<ft_sys_shared::Request>,
+    /// we use this to determine if the response is cacheable or not
+    pub response_is_cacheable: bool,
 }
 
 impl RequestConfig {
@@ -93,6 +95,7 @@ impl RequestConfig {
             module_package_map: Default::default(),
             processor_set_cookies: Default::default(),
             processor_set_response: None,
+            response_is_cacheable: true,
         }
     }
 

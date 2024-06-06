@@ -2,8 +2,10 @@ pub fn process(
     value: ftd_ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc,
-    req_config: &fastn_core::RequestConfig,
+    req_config: &mut fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+    req_config.response_is_cacheable = false;
+
     let (section_name, headers, body, line_number) = match value.get_record(doc.name) {
         Ok(val) => (
             val.0.to_owned(),
