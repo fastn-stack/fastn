@@ -1,16 +1,4 @@
-const MIGRATION_TABLE: &str = r#"
-
-CREATE TABLE IF NOT EXISTS
-    fastn_migration
-(
-    id               INTEGER PRIMARY KEY,
-    app_name         TEXT NOT NULL,
-    migration_number INTEGER NOT NULL UNIQUE,
-    migration_name   TEXT NOT NULL,
-    applied_on       INTEGER NOT NULL
-) STRICT;
-
-"#;
+mod migrations;
 
 pub(crate) async fn migrate(config: &fastn_core::Config) -> Result<(), MigrationError> {
     // If there are no migrations, exit early.
@@ -20,12 +8,46 @@ pub(crate) async fn migrate(config: &fastn_core::Config) -> Result<(), Migration
 
     create_migration_table(config).await?;
 
-    let latest_applied_migration_number = find_latest_applied_migration_number(config).await?;
-    let migrations = find_migrations_to_apply(config, latest_applied_migration_number)?;
-
     let now = chrono::Utc::now().timestamp_nanos_opt().unwrap();
+    migrate_fastn(config, now).await?;
+    migrate_app(config, now).await?;
+
+    Ok(())
+}
+
+async fn migrate_app(config: &fastn_core::Config, now: i64) -> Result<(), MigrationError> {
+    migrate_(
+        config,
+        config.package.migrations.as_slice(),
+        config.package.name.as_str(),
+        now,
+    )
+    .await
+}
+
+async fn migrate_fastn(config: &fastn_core::Config, now: i64) -> Result<(), MigrationError> {
+    migrate_(
+        config,
+        migrations::fastn_migrations().as_slice(),
+        "fastn",
+        now,
+    )
+    .await
+}
+
+async fn migrate_(
+    config: &fastn_core::Config,
+    available_migrations: &[fastn_core::package::MigrationData],
+    app_name: &str,
+    now: i64,
+) -> Result<(), MigrationError> {
+    let latest_applied_migration_number =
+        find_latest_applied_migration_number(config, app_name).await?;
+    let migrations =
+        find_migrations_to_apply(available_migrations, latest_applied_migration_number)?;
+
     for migration in migrations {
-        println!("Applying Migration: {}", migration.name);
+        println!("Applying Migration for {app_name}: {}", migration.name);
         apply_migration(config, &migration, now).await?;
     }
 
@@ -58,12 +80,12 @@ async fn apply_migration(
 }
 
 fn find_migrations_to_apply(
-    config: &fastn_core::Config,
+    available_migrations: &[fastn_core::package::MigrationData],
     after: Option<i64>,
 ) -> Result<Vec<fastn_core::package::MigrationData>, MigrationError> {
     let mut migrations = vec![];
 
-    for migration in config.package.migrations.iter() {
+    for migration in available_migrations.iter() {
         if Some(migration.number) > after {
             migrations.push(migration.clone())
         }
@@ -92,12 +114,16 @@ fn has_migrations(config: &fastn_core::Config) -> bool {
 async fn create_migration_table(config: &fastn_core::Config) -> Result<(), fastn_utils::SqlError> {
     let db = config.get_db_url().await;
 
-    config.ds.sql_batch(&db, MIGRATION_TABLE).await?;
+    config
+        .ds
+        .sql_batch(&db, migrations::MIGRATION_TABLE)
+        .await?;
     Ok(())
 }
 
 async fn find_latest_applied_migration_number(
     config: &fastn_core::Config,
+    app_name: &str,
 ) -> Result<Option<i64>, MigrationError> {
     let db = config.get_db_url().await;
 
@@ -112,11 +138,10 @@ async fn find_latest_applied_migration_number(
                     FROM
                         fastn_migration
                     WHERE
-                        app_name = '{}'
+                        app_name = '{app_name}'
                     ORDER BY migration_number DESC
                     LIMIT 1;
                 "#,
-                config.package.name
             )
             .as_str(),
             vec![],
