@@ -61,6 +61,8 @@ pub struct RequestConfig {
     /// each string is the value of Set-Cookie header
     pub processor_set_cookies: Vec<String>,
     pub processor_set_response: Option<ft_sys_shared::Request>,
+    /// we use this to determine if the response is cacheable or not
+    pub response_is_cacheable: bool,
 }
 
 impl RequestConfig {
@@ -93,6 +95,7 @@ impl RequestConfig {
             module_package_map: Default::default(),
             processor_set_cookies: Default::default(),
             processor_set_response: None,
+            response_is_cacheable: true,
         }
     }
 
@@ -617,6 +620,8 @@ impl Config {
 
         let mut package = package.clone();
 
+        package.migrations = fastn_core::package::get_migration_data(&fastn_doc)?;
+
         package.sitemap_temp = fastn_doc.get("fastn#sitemap")?;
         package.dynamic_urls_temp = fastn_doc.get("fastn#dynamic-urls")?;
 
@@ -1025,6 +1030,8 @@ impl Config {
             package.to_owned(),
         );
 
+        fastn_core::migrations::migrate(&config).await?;
+
         Ok(config)
     }
 
@@ -1116,6 +1123,17 @@ impl Config {
             package.to_owned()
         } else {
             self.package.to_owned()
+        }
+    }
+
+    pub(crate) async fn get_db_url(&self) -> String {
+        match self.ds.env("FASTN_DB_URL").await {
+            Ok(db_url) => db_url,
+            Err(_) => self
+                .ds
+                .env("DATABASE_URL")
+                .await
+                .unwrap_or_else(|_| "sqlite:///fastn.sqlite".to_string()),
         }
     }
 }

@@ -70,6 +70,9 @@ pub struct Package {
     pub system_is_confidential: Option<bool>,
 
     pub lang: Option<Lang>,
+
+    /// Migrations
+    pub migrations: Vec<MigrationData>,
 }
 
 impl Package {
@@ -105,6 +108,7 @@ impl Package {
             redirects: None,
             system: None,
             system_is_confidential: None,
+            migrations: vec![],
         }
     }
 
@@ -623,6 +627,8 @@ impl Package {
         // Todo: Add `package.files` and fix `fs_fetch_by_id` to check if file is present
         package.fonts = fastn_document.get("fastn#font")?;
         package.sitemap_temp = fastn_document.get("fastn#sitemap")?;
+
+        package.migrations = get_migration_data(&fastn_document)?;
         *self = package;
         Ok(())
     }
@@ -714,6 +720,7 @@ impl Package {
         package.fonts = fastn_doc.get("fastn#font")?;
         package.sitemap_temp = fastn_doc.get("fastn#sitemap")?;
         package.dynamic_urls_temp = fastn_doc.get("fastn#dynamic-urls")?;
+        package.migrations = get_migration_data(fastn_doc)?;
 
         // validation logic TODO: It should be ordered
         fastn_core::utils::validate_base_url(&package)?;
@@ -791,6 +798,17 @@ impl Package {
         self.selected_language = Some(language);
         Ok(())
     }
+}
+
+pub(crate) fn get_migration_data(
+    doc: &ftd::ftd2021::p2::Document,
+) -> fastn_core::Result<Vec<MigrationData>> {
+    let migration_data = doc.get::<Vec<MigrationDataTemp>>("fastn#migration")?;
+    let mut migrations = vec![];
+    for (number, migration) in migration_data.into_iter().rev().enumerate() {
+        migrations.push(migration.into_migration(number as i64));
+    }
+    Ok(migrations)
 }
 
 #[derive(Debug, Clone)]
@@ -962,6 +980,30 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
             redirects: None,
             system: self.system,
             system_is_confidential: self.system_is_confidential,
+            migrations: vec![],
+        }
+    }
+}
+
+#[derive(Debug, serde::Deserialize, Clone)]
+pub struct MigrationData {
+    pub number: i64,
+    pub name: String,
+    pub content: String,
+}
+
+#[derive(Debug, serde::Deserialize, Clone)]
+pub struct MigrationDataTemp {
+    pub name: String,
+    pub content: String,
+}
+
+impl MigrationDataTemp {
+    pub(crate) fn into_migration(self, number: i64) -> MigrationData {
+        MigrationData {
+            number,
+            name: self.name,
+            content: self.content,
         }
     }
 }

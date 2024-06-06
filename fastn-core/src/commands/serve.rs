@@ -181,46 +181,50 @@ pub async fn serve(
     config: &fastn_core::Config,
     req: fastn_core::http::Request,
     only_js: bool,
-) -> fastn_core::Result<fastn_core::http::Response> {
+) -> fastn_core::Result<(fastn_core::http::Response, bool)> {
     if req.path() == "/-/auth/logout/" {
-        return Ok(clear_sid2(&req));
+        return Ok((clear_sid2(&req), false));
     }
 
     if let Some(endpoint_response) = handle_endpoints(config, &req).await {
-        return endpoint_response;
+        return endpoint_response.map(|r| (r, false));
     }
 
     if let Some(app_response) = handle_apps(config, &req).await {
-        return app_response;
+        return app_response.map(|r| (r, false));
     }
 
     if let Some(default_response) = handle_default_route(&req, config.package.name.as_str()) {
-        return default_response;
+        return default_response.map(|r| (r, true));
     }
 
     let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse()?;
 
     if let Some(r) = handle_redirect(config, &path) {
-        return Ok(r);
+        return Ok((r, false));
     }
 
     if fastn_core::utils::is_static_path(req.path()) {
-        return handle_static_route(req.path(), config.package.name.as_str(), &config.ds).await;
+        return handle_static_route(req.path(), config.package.name.as_str(), &config.ds)
+            .await
+            .map(|r| (r, true));
     }
 
-    let req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
+    let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
 
-    serve_helper(req_config, only_js, path).await
+    serve_helper(&mut req_config, only_js, path)
+        .await
+        .map(|r| (r, req_config.response_is_cacheable))
 }
 
 #[tracing::instrument(skip_all)]
 pub async fn serve_helper(
-    mut req_config: fastn_core::RequestConfig,
+    req_config: &mut fastn_core::RequestConfig,
     only_js: bool,
     path: camino::Utf8PathBuf,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let mut resp = if req_config.request.path() == "/" {
-        serve_file(&mut req_config, &path.join("/"), only_js).await
+        serve_file(req_config, &path.join("/"), only_js).await
     } else {
         // url is present in config or not
         // If not present than proxy pass it
@@ -269,7 +273,7 @@ pub async fn serve_helper(
             }
         }
 
-        let file_response = serve_file(&mut req_config, path.as_path(), only_js).await;
+        let file_response = serve_file(req_config, path.as_path(), only_js).await;
 
         tracing::info!(
             "before executing proxy: file-status: {}, path: {}",
@@ -284,7 +288,7 @@ pub async fn serve_helper(
         return shared_to_http(r);
     }
 
-    for cookie in req_config.processor_set_cookies {
+    for cookie in &req_config.processor_set_cookies {
         resp.headers_mut().append(
             actix_web::http::header::SET_COOKIE,
             actix_web::http::header::HeaderValue::from_str(cookie.as_str()).unwrap(),
@@ -576,7 +580,7 @@ async fn actual_route(
     tracing::info!(method = req.method().as_str(), uri = req.path());
     let req = fastn_core::http::Request::from_actix(req, body);
 
-    serve(config, req, false).await
+    serve(config, req, false).await.map(|(r, _)| r)
 }
 
 #[tracing::instrument(skip_all)]

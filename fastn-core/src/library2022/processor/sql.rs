@@ -4,21 +4,17 @@ pub async fn process(
     value: ftd_ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
-    config: &fastn_core::RequestConfig,
+    config: &mut fastn_core::RequestConfig,
     q_kind: &str,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+    // we can in future do a more fine-grained analysis if the response
+    // is cacheable or not, say depending on HTTP Vary header, etc.
+    config.response_is_cacheable = false;
+
     let (headers, query) = super::sqlite::get_p1_data(q_kind, &value, doc.name)?;
     let db = match headers.get_optional_string_by_key("db$", doc.name, value.line_number())? {
         Some(db) => db,
-        None => match config.config.ds.env("FASTN_DB_URL").await {
-            Ok(db_url) => db_url,
-            Err(_) => config
-                .config
-                .ds
-                .env("DATABASE_URL")
-                .await
-                .unwrap_or_else(|_| "fastn.sqlite".to_string()),
-        },
+        None => config.config.get_db_url().await,
     };
 
     let (query, params) = crate::library2022::processor::sqlite::extract_named_parameters(
