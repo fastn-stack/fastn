@@ -4,6 +4,10 @@ pub async fn process(
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &mut fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+    // we can in future do a more fine-grained analysis if the response
+    // is cacheable or not, say depending on HTTP Vary header, etc.
+    req_config.response_is_cacheable = false;
+
     let (headers, line_number) = if let Ok(val) = value.get_record(doc.name) {
         (val.2.to_owned(), val.5.to_owned())
     } else {

@@ -3,8 +3,10 @@ pub fn process(
     value: ftd_ast::VariableValue,
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc,
-    req_config: &fastn_core::RequestConfig,
+    req_config: &mut fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+    req_config.response_is_cacheable = false;
+
     let mut data = req_config.request.query().clone();
 
     for (name, param_value) in dbg!(&req_config.named_parameters).iter() {
