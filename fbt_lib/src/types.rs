@@ -11,13 +11,13 @@ pub(crate) struct Config {
 }
 
 impl Config {
-    pub fn parse(s: &str, doc_id: &str) -> ftd::p1::Result<Config> {
-        let parsed = ftd::p1::parse(s, doc_id)?;
+    pub fn parse(s: &str, doc_id: &str) -> ftd::ftd2021::p1::Result<Config> {
+        let parsed = ftd::ftd2021::p1::parse(s, doc_id)?;
         let mut iter = parsed.iter();
         let mut c = match iter.next() {
             Some(p1) => {
                 if p1.name != "fbt" {
-                    return Err(ftd::p1::Error::ParseError {
+                    return Err(ftd::ftd2021::p1::Error::ParseError {
                         message: "first section's name is not 'fbt'".to_string(),
                         doc_id: doc_id.to_string(),
                         line_number: p1.line_number,
@@ -43,7 +43,7 @@ impl Config {
                 }
             }
             None => {
-                return Err(ftd::p1::Error::ParseError {
+                return Err(ftd::ftd2021::p1::Error::ParseError {
                     message: "no sections found".to_string(),
                     doc_id: doc_id.to_string(),
                     line_number: 0,
@@ -55,7 +55,7 @@ impl Config {
             match s.name.as_str() {
                 "env" => {
                     if c.env.is_some() {
-                        return Err(ftd::p1::Error::ParseError {
+                        return Err(ftd::ftd2021::p1::Error::ParseError {
                             message: "env provided more than once".to_string(),
                             doc_id: doc_id.to_string(),
                             line_number: s.line_number,
@@ -64,7 +64,7 @@ impl Config {
                     c.env = read_env(doc_id, &s.body)?;
                 }
                 _ => {
-                    return Err(ftd::p1::Error::ParseError {
+                    return Err(ftd::ftd2021::p1::Error::ParseError {
                         message: "unknown section".to_string(),
                         doc_id: doc_id.to_string(),
                         line_number: s.line_number,
@@ -80,7 +80,7 @@ impl Config {
 fn read_env(
     doc_id: &str,
     body: &Option<(usize, String)>,
-) -> ftd::p1::Result<Option<std::collections::HashMap<String, String>>> {
+) -> ftd::ftd2021::p1::Result<Option<std::collections::HashMap<String, String>>> {
     Ok(match body {
         Some((line_number, v)) => {
             let mut m = std::collections::HashMap::new();
@@ -91,7 +91,7 @@ fn read_env(
                         m.insert(k.to_string(), v.to_string());
                     }
                     _ => {
-                        return Err(ftd::p1::Error::ParseError {
+                        return Err(ftd::ftd2021::p1::Error::ParseError {
                             message: "invalid line in env".to_string(),
                             doc_id: doc_id.to_string(),
                             line_number: *line_number,
@@ -154,13 +154,13 @@ impl TestConfig {
         cmd
     }
 
-    pub fn parse(s: &str, doc_id: &str, config: &Config) -> ftd::p1::Result<Self> {
-        let parsed = ftd::p1::parse(s, doc_id)?;
+    pub fn parse(s: &str, doc_id: &str, config: &Config) -> ftd::ftd2021::p1::Result<Self> {
+        let parsed = ftd::ftd2021::p1::parse(s, doc_id)?;
         let mut iter = parsed.iter();
         let mut c = match iter.next() {
             Some(p1) => {
                 if p1.name != "fbt" {
-                    return Err(ftd::p1::Error::ParseError {
+                    return Err(ftd::ftd2021::p1::Error::ParseError {
                         message: "first section's name is not 'fbt'".to_string(),
                         doc_id: doc_id.to_string(),
                         line_number: p1.line_number,
@@ -175,7 +175,7 @@ impl TestConfig {
                     {
                         Some(v) => v,
                         None => {
-                            return Err(ftd::p1::Error::ParseError {
+                            return Err(ftd::ftd2021::p1::Error::ParseError {
                                 message: "cmd not found".to_string(),
                                 doc_id: doc_id.to_string(),
                                 line_number: p1.line_number,
@@ -205,7 +205,7 @@ impl TestConfig {
                 }
             }
             None => {
-                return Err(ftd::p1::Error::ParseError {
+                return Err(ftd::ftd2021::p1::Error::ParseError {
                     message: "no sections found".to_string(),
                     doc_id: doc_id.to_string(),
                     line_number: 0,
@@ -217,7 +217,7 @@ impl TestConfig {
             match s.name.as_str() {
                 "stdin" => {
                     if c.stdin.is_some() {
-                        return Err(ftd::p1::Error::ParseError {
+                        return Err(ftd::ftd2021::p1::Error::ParseError {
                             message: "stdin provided more than once".to_string(),
                             doc_id: doc_id.to_string(),
                             line_number: s.line_number,
@@ -227,7 +227,7 @@ impl TestConfig {
                 }
                 "stdout" => {
                     if c.stdout.is_some() {
-                        return Err(ftd::p1::Error::ParseError {
+                        return Err(ftd::ftd2021::p1::Error::ParseError {
                             message: "stdout provided more than once".to_string(),
                             doc_id: doc_id.to_string(),
                             line_number: s.line_number,
@@ -237,7 +237,7 @@ impl TestConfig {
                 }
                 "stderr" => {
                     if c.stderr.is_some() {
-                        return Err(ftd::p1::Error::ParseError {
+                        return Err(ftd::ftd2021::p1::Error::ParseError {
                             message: "stderr provided more than once".to_string(),
                             doc_id: doc_id.to_string(),
                             line_number: s.line_number,
@@ -257,7 +257,7 @@ impl TestConfig {
                     };
                 }
                 _ => {
-                    return Err(ftd::p1::Error::ParseError {
+                    return Err(ftd::ftd2021::p1::Error::ParseError {
                         message: "unknown section".to_string(),
                         doc_id: doc_id.to_string(),
                         line_number: s.line_number,
@@ -274,7 +274,7 @@ impl TestConfig {
 pub enum Error {
     TestsFolderMissing,
     CantReadConfig(std::io::Error),
-    InvalidConfig(ftd::p1::Error),
+    InvalidConfig(ftd::ftd2021::p1::Error),
     BuildFailedToLaunch(std::io::Error),
     BuildFailed(std::process::Output),
     TestsFolderNotReadable(std::io::Error),
@@ -348,7 +348,7 @@ pub enum Failure {
     },
     CmdFileMissing,
     CmdFileInvalid {
-        error: ftd::p1::Error,
+        error: ftd::ftd2021::p1::Error,
     },
     CantReadCmdFile {
         error: std::io::Error,
