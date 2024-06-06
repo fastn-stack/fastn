@@ -59,9 +59,10 @@ CREATE TABLE IF NOT EXISTS fastn_migration
 (
     id               INTEGER PRIMARY KEY,
     app_name         TEXT NOT NULL,
-    migration_number INTEGER NOT NULL UNIQUE,
+    migration_number INTEGER NOT NULL,
     migration_name   TEXT NOT NULL,
-    applied_on       INTEGER NOT NULL
+    applied_on       INTEGER NOT NULL,
+    UNIQUE (app_name, migration_number)
 ) STRICT;
 
 "#;
