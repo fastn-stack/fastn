@@ -17,6 +17,8 @@ members = [
     "ftd-ast",
     "ftd-p1",
     "ftd-tc",
+    "fbt",
+    "fbt_lib",
     "t",
     # "fastn-wasm",
     # "fastn-runtime",
@@ -94,6 +96,7 @@ fastn-package.path = "fastn-package"
 fastn-utils.path = "fastn-utils"
 fastn-runtime.path = "fastn-runtime"
 fastn-wasm.path = "fastn-wasm"
+fbt-lib.path = "fbt_lib"
 fastn-grammar.path = "fastn-grammar"
 fastn-expr.path = "fastn-expr"
 format_num = "0.1"
@@ -172,9 +175,6 @@ version = "1"
 default-features = false
 features = ["http1", "server"]
 
-[workspace.dependencies.fbt-lib]
-git = "https://github.com/FifthTry/fbt"
-rev = "ea0ee98"
 
 [workspace.dependencies.syntect]
 # We use syntect for syntax highlighting feature in ftd.code.
