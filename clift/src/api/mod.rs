@@ -18,8 +18,9 @@ pub struct ApiResponse<T> {
 
 pub fn endpoint(name: &str) -> String {
     if let Ok(url) = std::env::var("DEBUG_API_FIFTHTRY_COM") {
-        println!("using debug api, only use this for testing");
-        return format!("{}/ft2/api/{name}/", url);
+        let url = format!("{}/ft2/api/{name}/", url);
+        println!("using debug api, only use this for testing: {url}");
+        return url;
     }
-    format!("{}/ft2/api/{name}/", clift::api::ENDPOINT)
+    dbg!(format!("{}/ft2/api/{name}/", clift::api::ENDPOINT))
 }
