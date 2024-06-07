@@ -8,7 +8,10 @@ pub async fn process(
     match req_config
         .config
         .ds
-        .ud(req_config.request.cookie("fastn_sid"))
+        .ud(
+            req_config.config.get_db_url().await.as_str(),
+            req_config.request.cookie("fastn_sid"),
+        )
         .await
     {
         Ok(ud) => doc.from_json(&ud, &kind, &value),
