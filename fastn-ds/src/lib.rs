@@ -159,7 +159,6 @@ pub type HttpResponse = ::http::Response<bytes::Bytes>;
 
 #[async_trait::async_trait]
 pub trait RequestType {
-    async fn ud(&self, ds: &fastn_ds::DocumentStore) -> Option<ft_sys_shared::UserData>;
     fn headers(&self) -> &reqwest::header::HeaderMap;
     fn method(&self) -> &str;
     fn query_string(&self) -> &str;
@@ -544,7 +543,6 @@ impl DocumentStore {
                 headers,
                 body: req.body().to_vec(),
             },
-            req.ud(self).await,
             module,
             self.pg_pools.clone(),
             self.env("DATABASE_URL")
