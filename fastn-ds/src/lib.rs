@@ -104,6 +104,9 @@ pub enum ReadError {
 }
 
 #[derive(thiserror::Error, Debug)]
+pub enum UserDataError {}
+
+#[derive(thiserror::Error, Debug)]
 pub enum ReadStringError {
     #[error("read error {0}")]
     ReadError(#[from] ReadError),
@@ -439,6 +442,13 @@ impl DocumentStore {
 
     pub async fn env(&self, key: &str) -> Result<String, EnvironmentError> {
         std::env::var(key).map_err(|_| EnvironmentError::NotSet(key.to_string()))
+    }
+
+    pub async fn ud(
+        &self,
+        _sid: Option<String>,
+    ) -> Result<Option<ft_sys_shared::UserData>, UserDataError> {
+        todo!()
     }
 
     pub async fn handle_wasm<T>(
