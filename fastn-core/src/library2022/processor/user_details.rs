@@ -10,7 +10,7 @@ pub async fn process(
         .ds
         .ud(
             req_config.config.get_db_url().await.as_str(),
-            req_config.request.cookie("fastn_sid"),
+            req_config.request.cookie("fastn-sid"),
         )
         .await
     {

@@ -496,17 +496,17 @@ impl DocumentStore {
         };
 
         Ok(Some(ft_sys_shared::UserData {
-            id: serde_json::from_value(row.pop().unwrap())
-                .map_err(|e| UserDataError::SerdeError(sid.clone(), e))?,
-            identity: serde_json::from_value(row.pop().unwrap())
+            verified_email: serde_json::from_value::<i32>(row.pop().unwrap())
+                .map_err(|e| UserDataError::SerdeError(sid.clone(), e))?
+                > 0,
+            email: serde_json::from_value(row.pop().unwrap())
                 .map_err(|e| UserDataError::SerdeError(sid.clone(), e))?,
             name: serde_json::from_value(row.pop().unwrap())
                 .map_err(|e| UserDataError::SerdeError(sid.clone(), e))?,
-            email: serde_json::from_value(row.pop().unwrap())
+            identity: serde_json::from_value(row.pop().unwrap())
                 .map_err(|e| UserDataError::SerdeError(sid.clone(), e))?,
-            verified_email: serde_json::from_value::<i32>(row.pop().unwrap())
-                .map_err(|e| UserDataError::SerdeError(sid, e))?
-                > 0,
+            id: serde_json::from_value(row.pop().unwrap())
+                .map_err(|e| UserDataError::SerdeError(sid, e))?,
         }))
     }
 
