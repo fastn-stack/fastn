@@ -1,0 +1,8 @@
+-- ftd.string-field $title: title
+$value: *$ftd.empty
+
+-- ftd.text-input:
+placeholder: Enter title
+$on-input$: $ftd.set-string($a = $title.value, v = $VALUE)
+
+-- ftd.text: $title.value
