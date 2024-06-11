@@ -10509,15 +10509,21 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     ftd::interpreter::Field {
                         name: "value".to_string(),
                         kind: ftd::interpreter::Kind::integer().into_kind_data(),
-                        mutable: true,
-                        value: None,
+                        mutable: false,
+                        value: Some(ftd::interpreter::PropertyValue::Value {
+                            value: ftd::interpreter::Value::Integer {
+                                value: 0
+                            },
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
                         name: "error".to_string(),
                         kind: ftd::interpreter::Kind::string().into_optional().into_kind_data(),
-                        mutable: true,
+                        mutable: false,
                         value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
@@ -10542,15 +10548,21 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     ftd::interpreter::Field {
                         name: "value".to_string(),
                         kind: ftd::interpreter::Kind::decimal().into_kind_data(),
-                        mutable: true,
-                        value: None,
+                        mutable: false,
+                        value: Some(ftd::interpreter::PropertyValue::Value {
+                            value: ftd::interpreter::Value::Decimal {
+                                value: 0.0,
+                            },
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
                         name: "error".to_string(),
                         kind: ftd::interpreter::Kind::string().into_optional().into_kind_data(),
-                        mutable: true,
+                        mutable: false,
                         value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
@@ -10575,15 +10587,21 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     ftd::interpreter::Field {
                         name: "value".to_string(),
                         kind: ftd::interpreter::Kind::boolean().into_kind_data(),
-                        mutable: true,
-                        value: None,
+                        mutable: false,
+                        value: Some(ftd::interpreter::PropertyValue::Value {
+                            value: ftd::interpreter::Value::Boolean {
+                                value: false,
+                            },
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
                         name: "error".to_string(),
                         kind: ftd::interpreter::Kind::string().into_optional().into_kind_data(),
-                        mutable: true,
+                        mutable: false,
                         value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
@@ -10608,15 +10626,21 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     ftd::interpreter::Field {
                         name: "value".to_string(),
                         kind: ftd::interpreter::Kind::string().into_kind_data(),
-                        mutable: true,
-                        value: None,
+                        mutable: false,
+                        value: Some(ftd::interpreter::PropertyValue::Value {
+                            value: ftd::interpreter::Value::String {
+                                text: "".to_string(),
+                            },
+                            is_mutable: false,
+                            line_number: 0,
+                        }),
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
                     ftd::interpreter::Field {
                         name: "error".to_string(),
                         kind: ftd::interpreter::Kind::string().into_optional().into_kind_data(),
-                        mutable: true,
+                        mutable: false,
                         value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
