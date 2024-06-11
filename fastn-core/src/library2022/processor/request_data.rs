@@ -9,7 +9,7 @@ pub fn process(
 
     let mut data = req_config.request.query().clone();
 
-    for (name, param_value) in dbg!(&req_config.named_parameters).iter() {
+    for (name, param_value) in req_config.named_parameters.iter() {
         let json_value =
             param_value
                 .to_serde_value()
