@@ -126,6 +126,10 @@ impl PropertyValue {
         matches!(self, ftd::interpreter::PropertyValue::Value { .. })
     }
 
+    pub fn is_clone(&self) -> bool {
+        matches!(self, ftd::interpreter::PropertyValue::Clone { .. })
+    }
+
     pub fn into_property(
         &self,
         source: ftd::interpreter::PropertySource,
