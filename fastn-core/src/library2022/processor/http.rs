@@ -142,6 +142,8 @@ pub async fn process(
                     Ok(200) => (),
                     Ok(code) => {
                         req_config.processor_set_response = Some(r);
+                        // This error is to short-circuit it and be handled by
+                        // `fastn_core::commands::serve::shared_to_http`
                         return ftd::interpreter::utils::e2(
                             format!("wasm code returned non 200 {code}"),
                             doc.name,
