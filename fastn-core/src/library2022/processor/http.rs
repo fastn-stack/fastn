@@ -142,7 +142,7 @@ pub async fn process(
                     Ok(200) => (),
                     Ok(code) => {
                         req_config.processor_set_response = Some(r);
-                        // We return an error here, this error will not be shown to user,  but is created to to 
+                        // We return an error here, this error will not be shown to user,  but is created to to
                         // short-circuit further processing. the `.processor_set_response` will be handled by
                         // `fastn_core::commands::serve::shared_to_http`
                         return ftd::interpreter::utils::e2(
