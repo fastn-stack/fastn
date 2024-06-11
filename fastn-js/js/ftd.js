@@ -164,7 +164,7 @@ const ftd = (function () {
         );
     };
 
-    exports.string_field_with_default_js = function (name, default_value) {
+    exports.field_with_default_js = function (name, default_value) {
         let r = fastn.recordInstance();
         r.set("name", fastn_utils.getFlattenStaticValue(name));
         r.set("value", fastn_utils.getFlattenStaticValue(default_value));
@@ -198,7 +198,7 @@ const ftd = (function () {
         method = method.trim().toUpperCase();
         const init = {
             method,
-            headers: { "Content-Type": "application/json" },
+            headers: {"Content-Type": "application/json"},
         };
         if (headers && headers instanceof fastn.recordInstanceClass) {
             Object.assign(init.headers, headers.toObject());
@@ -500,7 +500,7 @@ const ftd = (function () {
             redirect: "error",
             // TODO: set credentials?
             credentials: "same-origin",
-            headers: { "Content-Type": "application/json" },
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify(data),
         };
 

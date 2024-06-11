@@ -534,6 +534,143 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             })
         ),
         (
+            "ftd#integer-field-with-default".to_string(),
+            ftd::interpreter::Thing::Function(ftd::interpreter::Function {
+                name: "ftd#integer-field-with-default".to_string(),
+                return_kind: ftd::interpreter::KindData {
+                    kind: ftd::interpreter::Kind::record("ftd#integer-field"),
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter::Argument {
+                        name: "name".to_string(),
+                        kind: ftd::interpreter::KindData {
+                            kind: ftd::interpreter::Kind::string(),
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Argument {
+                        name: "default".to_string(),
+                        kind: ftd::interpreter::KindData {
+                            kind: ftd::interpreter::Kind::integer(),
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter::things::function::Expression {
+                        expression: "ftd.field_with_default_js(name, default)".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                js: None,
+                line_number: 0,
+                external_implementation: false
+            })
+        ),
+        (
+            "ftd#decimal-field-with-default".to_string(),
+            ftd::interpreter::Thing::Function(ftd::interpreter::Function {
+                name: "ftd#decimal-field-with-default".to_string(),
+                return_kind: ftd::interpreter::KindData {
+                    kind: ftd::interpreter::Kind::record("ftd#decimal-field"),
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter::Argument {
+                        name: "name".to_string(),
+                        kind: ftd::interpreter::KindData {
+                            kind: ftd::interpreter::Kind::string(),
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Argument {
+                        name: "default".to_string(),
+                        kind: ftd::interpreter::KindData {
+                            kind: ftd::interpreter::Kind::decimal(),
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter::things::function::Expression {
+                        expression: "ftd.field_with_default_js(name, default)".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                js: None,
+                line_number: 0,
+                external_implementation: false
+            })
+        ),
+        (
+            "ftd#boolean-field-with-default".to_string(),
+            ftd::interpreter::Thing::Function(ftd::interpreter::Function {
+                name: "ftd#boolean-field-with-default".to_string(),
+                return_kind: ftd::interpreter::KindData {
+                    kind: ftd::interpreter::Kind::record("ftd#boolean-field"),
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    ftd::interpreter::Argument {
+                        name: "name".to_string(),
+                        kind: ftd::interpreter::KindData {
+                            kind: ftd::interpreter::Kind::string(),
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Argument {
+                        name: "default".to_string(),
+                        kind: ftd::interpreter::KindData {
+                            kind: ftd::interpreter::Kind::boolean(),
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    ftd::interpreter::things::function::Expression {
+                        expression: "ftd.field_with_default_js(name, default)".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                js: None,
+                line_number: 0,
+                external_implementation: false
+            })
+        ),        (
             "ftd#string-field-with-default".to_string(),
             ftd::interpreter::Thing::Function(ftd::interpreter::Function {
                 name: "ftd#string-field-with-default".to_string(),
@@ -570,7 +707,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 ],
                 expression: vec![
                     ftd::interpreter::things::function::Expression {
-                        expression: "ftd.string_field_with_default_js(name, default)".to_string(),
+                        expression: "ftd.field_with_default_js(name, default)".to_string(),
                         line_number: 0,
                     }
                 ],
@@ -10357,6 +10494,105 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
+            "ftd#integer-field".to_string(),
+            ftd::interpreter::Thing::Record(ftd::interpreter::Record {
+                name: "ftd#integer-field".to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ftd::interpreter::Field {
+                        name: "name".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data().caption(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "value".to_string(),
+                        kind: ftd::interpreter::Kind::integer().into_kind_data(),
+                        mutable: true,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "error".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_optional().into_kind_data(),
+                        mutable: true,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                ]).collect(),
+                line_number: 0,
+            }),
+        ),
+        (
+            "ftd#decimal-field".to_string(),
+            ftd::interpreter::Thing::Record(ftd::interpreter::Record {
+                name: "ftd#decimal-field".to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ftd::interpreter::Field {
+                        name: "name".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data().caption(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "value".to_string(),
+                        kind: ftd::interpreter::Kind::decimal().into_kind_data(),
+                        mutable: true,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "error".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_optional().into_kind_data(),
+                        mutable: true,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                ]).collect(),
+                line_number: 0,
+            }),
+        ),
+        (
+            "ftd#boolean-field".to_string(),
+            ftd::interpreter::Thing::Record(ftd::interpreter::Record {
+                name: "ftd#boolean-field".to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    ftd::interpreter::Field {
+                        name: "name".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_kind_data().caption(),
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "value".to_string(),
+                        kind: ftd::interpreter::Kind::boolean().into_kind_data(),
+                        mutable: true,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    ftd::interpreter::Field {
+                        name: "error".to_string(),
+                        kind: ftd::interpreter::Kind::string().into_optional().into_kind_data(),
+                        mutable: true,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                ]).collect(),
+                line_number: 0,
+            }),
+        ),
+        (
             "ftd#string-field".to_string(),
             ftd::interpreter::Thing::Record(ftd::interpreter::Record {
                 name: "ftd#string-field".to_string(),
@@ -10388,7 +10624,8 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                 ]).collect(),
                 line_number: 0,
             }),
-        ),        (
+        ),
+        (
             "ftd#http-method".to_string(),
             ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
                 name: "ftd#http-method".to_string(),
