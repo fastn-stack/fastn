@@ -716,6 +716,7 @@ fastn_dom.propertyMap = {
     "text-shadow": "tsh",
     cursor: "cur",
     display: "d",
+    download: "dw",
     "flex-wrap": "fw",
     "font-style": "fst",
     "font-weight": "fwt",
@@ -941,31 +942,32 @@ fastn_dom.PropertyKind = {
         MetaOGImage: 97,
         MetaTwitterImage: 98,
         MetaThemeColor: 99,
-        MetaFacebookDomainVerification: 123,
+        MetaFacebookDomainVerification: 100,
     },
-    Shadow: 100,
-    CodeTheme: 101,
-    CodeLanguage: 102,
-    CodeShowLineNumber: 103,
-    Css: 104,
-    Js: 105,
-    LinkRel: 106,
-    InputMaxLength: 107,
-    Favicon: 108,
-    Fit: 109,
-    VideoSrc: 110,
-    Autoplay: 111,
-    Poster: 112,
-    LoopVideo: 113,
-    Controls: 114,
-    Muted: 115,
-    LinkColor: 116,
-    TextShadow: 117,
-    Selectable: 118,
-    BackdropFilter: 119,
-    Mask: 120,
-    TextInputValue: 121,
-    FetchPriority: 122,
+    Shadow: 101,
+    CodeTheme: 102,
+    CodeLanguage: 103,
+    CodeShowLineNumber: 104,
+    Css: 105,
+    Js: 106,
+    LinkRel: 107,
+    InputMaxLength: 108,
+    Favicon: 109,
+    Fit: 110,
+    VideoSrc: 111,
+    Autoplay: 112,
+    Poster: 113,
+    LoopVideo: 114,
+    Controls: 115,
+    Muted: 116,
+    LinkColor: 117,
+    TextShadow: 118,
+    Selectable: 119,
+    BackdropFilter: 120,
+    Mask: 121,
+    TextInputValue: 122,
+    FetchPriority: 123,
+    Download: 124,
 };
 
 fastn_dom.Loading = {
@@ -3036,6 +3038,11 @@ class Node2 {
                     break;
             }
             this.updateTextInputValue();
+        } else if (kind === fastn_dom.PropertyKind.Download) {
+            if (fastn_utils.isNull(staticValue)) {
+                return;
+            }
+            this.attachAttribute("download", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Link) {
             // Changing node type to `a` for link
             // todo: needs fix for image links
@@ -4900,7 +4907,7 @@ const ftd = (function () {
         );
     };
 
-    exports.string_field_with_default_js = function (name, default_value) {
+    exports.field_with_default_js = function (name, default_value) {
         let r = fastn.recordInstance();
         r.set("name", fastn_utils.getFlattenStaticValue(name));
         r.set("value", fastn_utils.getFlattenStaticValue(default_value));
@@ -5542,7 +5549,7 @@ window.ftd = ftd;
 
 ftd.toggle = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "amitu";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5557,20 +5564,53 @@ ftd.toggle = function (args) {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
 }
-ftd.string_field_with_default = function (args) {
+ftd.integer_field_with_default = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "amitu";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
-    return (ftd.string_field_with_default_js(__args__.name, __args__.default));
+    return (ftd.field_with_default_js(__args__.name, __args__.default));
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+ftd.decimal_field_with_default = function (args) {
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "amitu";
+  try {
+    let __args__ = fastn_utils.getArgs({
+    }, args);
+    return (ftd.field_with_default_js(__args__.name, __args__.default));
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+ftd.boolean_field_with_default = function (args) {
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "amitu";
+  try {
+    let __args__ = fastn_utils.getArgs({
+    }, args);
+    return (ftd.field_with_default_js(__args__.name, __args__.default));
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
+ftd.string_field_with_default = function (args) {
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "amitu";
+  try {
+    let __args__ = fastn_utils.getArgs({
+    }, args);
+    return (ftd.field_with_default_js(__args__.name, __args__.default));
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }
 }
 ftd.increment = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "amitu";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5587,7 +5627,7 @@ ftd.increment = function (args) {
 }
 ftd.increment_by = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "amitu";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5604,7 +5644,7 @@ ftd.increment_by = function (args) {
 }
 ftd.decrement = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "amitu";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5621,7 +5661,7 @@ ftd.decrement = function (args) {
 }
 ftd.decrement_by = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "amitu";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5638,7 +5678,7 @@ ftd.decrement_by = function (args) {
 }
 ftd.enable_light_mode = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "amitu";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5649,7 +5689,7 @@ ftd.enable_light_mode = function (args) {
 }
 ftd.enable_dark_mode = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "amitu";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5660,7 +5700,7 @@ ftd.enable_dark_mode = function (args) {
 }
 ftd.enable_system_mode = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "amitu";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5671,7 +5711,7 @@ ftd.enable_system_mode = function (args) {
 }
 ftd.set_bool = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "amitu";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5688,7 +5728,7 @@ ftd.set_bool = function (args) {
 }
 ftd.set_boolean = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "amitu";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5705,7 +5745,7 @@ ftd.set_boolean = function (args) {
 }
 ftd.set_string = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "amitu";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5722,7 +5762,7 @@ ftd.set_string = function (args) {
 }
 ftd.set_integer = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "amitu";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
