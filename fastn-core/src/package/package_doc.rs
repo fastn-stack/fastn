@@ -325,17 +325,6 @@ impl FTDResult {
     }
 }
 
-impl From<FTDResult> for fastn_core::http::Response {
-    fn from(val: FTDResult) -> Self {
-        match val {
-            FTDResult::Html(body) => {
-                fastn_core::http::ok_with_content_type(body, mime_guess::mime::TEXT_HTML_UTF_8)
-            }
-            FTDResult::Redirect { url, code } => fastn_core::http::redirect_with_code(url, code),
-        }
-    }
-}
-
 #[tracing::instrument(skip_all)]
 pub async fn read_ftd(
     config: &mut fastn_core::RequestConfig,

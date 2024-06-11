@@ -99,7 +99,22 @@ async fn serve_file(
     )
     .await
     {
-        Ok(r) => r.into(),
+        Ok(val) => match val {
+            fastn_core::package::package_doc::FTDResult::Html(body) => {
+                fastn_core::http::ok_with_content_type(body, mime_guess::mime::TEXT_HTML_UTF_8)
+            }
+            fastn_core::package::package_doc::FTDResult::Redirect { url, code } => {
+                if Some(mime_guess::mime::APPLICATION_JSON) == config.request.content_type() {
+                    fastn_core::http::ok_with_content_type(
+                        // intentionally using `.unwrap()` as this should never fail
+                        serde_json::to_vec(&serde_json::json!({ "redirect": url })).unwrap(),
+                        mime_guess::mime::APPLICATION_JSON,
+                    )
+                } else {
+                    fastn_core::http::redirect_with_code(url, code)
+                }
+            }
+        },
         Err(e) => {
             tracing::error!(
                 msg = "fastn-Error",
