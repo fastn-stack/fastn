@@ -46,10 +46,6 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
     // use colored::Colorize;
     use fastn_core::utils::ValueOf;
 
-    if matches.subcommand_name().is_none() {
-        return Ok(());
-    }
-
     #[cfg(feature = "fifthtry")]
     if matches.subcommand_matches("upload").is_some() {
         clift::upload(matches).await;
@@ -67,7 +63,15 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return fastn_update::update(&ds, check).await;
     }
 
-    if let Some(serve) = matches.subcommand_matches("serve") {
+    let def = Default::default();
+
+    if let Some(serve) = matches.subcommand_matches("serve").or_else(|| {
+        if matches.subcommand_name().is_none() {
+            Some(&def)
+        } else {
+            None
+        }
+    }) {
         let port = serve.value_of_("port").map(|p| match p.parse::<u16>() {
             Ok(v) => v,
             Err(_) => {
@@ -82,6 +86,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         let inline_js = serve.values_of_("js");
         let external_css = serve.values_of_("external-css");
         let inline_css = serve.values_of_("css");
+
         let offline = serve.get_flag("offline");
 
         if cfg!(feature = "use-config-json") && !offline {
@@ -254,7 +259,7 @@ fn app(version: &'static str) -> clap::Command {
     clap::Command::new("fastn: Full-stack Web Development Made Easy")
         .version(version)
         .arg(clap::arg!(-c --"check-for-updates" "Check for updates"))
-        .arg_required_else_help(true)
+        .arg_required_else_help(false)
         .arg(clap::arg!(verbose: -v "Sets the level of verbosity"))
         .arg(clap::arg!(--test "Runs the command in test mode").hide(true))
         .arg(clap::arg!(--trace "Activate tracing").hide(true))
