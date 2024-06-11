@@ -1106,26 +1106,29 @@ impl Document {
         })
     }
 
-    pub fn get_redirect(&self) -> ftd::interpreter::Result<Option<(String, i32)>> {
-        let components = self.get_instructions("ftd#redirect");
+    fn get_redirect_with_code(&self, kind: &str) -> ftd::interpreter::Result<Option<String>> {
+        let permanent_redirects = self.get_instructions(kind);
 
-        for v in &components {
-            let url = v
-                .get_interpreter_value_of_argument("url", &self.tdoc())?
-                .and_then(|v| v.string(self.name.as_str(), 0).ok());
-            let code = v
-                .get_interpreter_value_of_argument("code", &self.tdoc())?
-                .and_then(|v| v.integer(self.name.as_str(), 0).ok());
+        for v in &permanent_redirects {
+            let url = match v.get_interpreter_value_of_argument("url", &self.tdoc())? {
+                // .and_then(|v| v.string(self.name.as_str(), 0).ok());
+                Some(v) => v.string(self.name.as_str(), 0)?,
+                None => {
+                    return ftd::interpreter::utils::e2(
+                        "url not found in redirect",
+                        self.name.as_str(),
+                        0,
+                    )
+                }
+            };
 
             if v.condition.is_none() {
-                return Ok(url.and_then(|url| code.map(|code| (url, code as i32))));
+                return Ok(Some(url));
             }
 
             if let Some(expr) = &v.condition.as_ref() {
                 match expr.eval(&self.tdoc()) {
-                    Ok(b) if b => {
-                        return Ok(url.and_then(|url| code.map(|code| (url, code as i32))))
-                    }
+                    Ok(b) if b => return Ok(Some(url)),
                     Err(e) => return Err(e),
                     _ => {}
                 }
@@ -1133,6 +1136,15 @@ impl Document {
         }
 
         Ok(None)
+    }
+
+    pub fn get_redirect(&self) -> ftd::interpreter::Result<Option<(String, u16)>> {
+        match self.get_redirect_with_code("ftd#permanent-redirect")? {
+            Some(v) => Ok(Some((v, 308))),
+            None => self
+                .get_redirect_with_code("ftd#redirect")
+                .map(|v| v.map(|v| (v, 307))),
+        }
     }
 
     pub fn get<T: serde::de::DeserializeOwned>(&self, key: &str) -> ftd::interpreter::Result<T> {

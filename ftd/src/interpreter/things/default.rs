@@ -4025,24 +4025,30 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            "ftd#redirect".to_string(),
+            "ftd#permanent-redirect".to_string(),
             ftd::interpreter::Thing::Component(ftd::interpreter::ComponentDefinition {
-                name: "ftd#redirect".to_string(),
+                name: "ftd#permanent-redirect".to_string(),
                 arguments: vec![
                     ftd::interpreter::Argument::default(
                     "url",
                     ftd::interpreter::Kind::string()
                         .into_kind_data().caption_or_body(),
                     ),
-                    ftd::interpreter::Argument::default_with_value(
-                        "code",
-                        ftd::interpreter::Kind::integer()
-                            .into_kind_data(),
-                        ftd::interpreter::PropertyValue::Value {
-                            value: ftd::interpreter::Value::Integer { value: 308 },
-                            is_mutable: false,
-                            line_number: 0,
-                        }
+                ],
+                definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+                css: None,
+                line_number: 0,
+            }),
+        ),
+        (
+            "ftd#temporary-redirect".to_string(),
+            ftd::interpreter::Thing::Component(ftd::interpreter::ComponentDefinition {
+                name: "ftd#temporary-redirect".to_string(),
+                arguments: vec![
+                    ftd::interpreter::Argument::default(
+                        "url",
+                        ftd::interpreter::Kind::string()
+                            .into_kind_data().caption_or_body(),
                     ),
                 ],
                 definition: ftd::interpreter::Component::from_name("ftd.kernel"),

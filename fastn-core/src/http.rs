@@ -71,7 +71,7 @@ pub fn permanent_redirect(url: String) -> fastn_core::http::Response {
     redirect_with_code(url, 308)
 }
 
-pub fn redirect_with_code(url: String, code: i32) -> fastn_core::http::Response {
+pub fn redirect_with_code(url: String, code: u16) -> fastn_core::http::Response {
     match code {
         301 => actix_web::HttpResponse::MovedPermanently(),
         302 => actix_web::HttpResponse::Found(),

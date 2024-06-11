@@ -305,7 +305,7 @@ pub(crate) fn file_id_to_names(id: &str) -> Vec<String> {
 
 pub enum FTDResult {
     Html(Vec<u8>),
-    Redirect { url: String, code: i32 },
+    Redirect { url: String, code: u16 },
 }
 
 impl FTDResult {
