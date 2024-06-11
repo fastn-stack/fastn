@@ -10438,62 +10438,6 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            "ftd#http-options".to_string(),
-            ftd::interpreter::Thing::Record(ftd::interpreter::Record {
-                name: "ftd#http-options".to_string(),
-                fields: std::iter::IntoIterator::into_iter([
-                    ftd::interpreter::Field {
-                        name: "method".to_string(),
-                        kind: ftd::interpreter::Kind::or_type("ftd#http-method")
-                            .into_kind_data(),
-                        mutable: false,
-                        value: Some(
-                            ftd::interpreter::PropertyValue::Value {
-                                value: ftd::interpreter::Value::OrType {
-                                    name: "ftd#http-method".to_string(),
-                                    variant: "ftd#http-method.GET".to_string(),
-                                    full_variant: "ftd#http-method.GET".to_string(),
-                                    value: Box::new(ftd::interpreter::Value::new_string("GET")
-                                        .into_property_value(false, 0))
-                                }
-
-                                , is_mutable: false, line_number: 0 }
-                        ),
-                        access_modifier: Default::default(),
-                        line_number: 0,
-                    },
-                    ftd::interpreter::Field {
-                        name: "redirect".to_string(),
-                        kind: ftd::interpreter::Kind::or_type("ftd#http-redirect").into_kind_data(),
-                        mutable: false,
-                        value: Some(
-                            ftd::interpreter::PropertyValue::Value {
-                                value: ftd::interpreter::Value::OrType {
-                                    name: "ftd#http-redirect".to_string(),
-                                    variant: "ftd#http-redirect.manual".to_string(),
-                                    full_variant: "ftd#http-redirect.manual".to_string(),
-                                    value: Box::new(ftd::interpreter::Value::new_string("follow")
-                                        .into_property_value(false, 0))
-                                }
-
-                                , is_mutable: false, line_number: 0 }
-                        ),
-                        access_modifier: Default::default(),
-                        line_number: 0,
-                    },
-                    ftd::interpreter::Field {
-                        name: "fastn-module".to_string(),
-                        kind: ftd::interpreter::Kind::string().into_kind_data(),
-                        mutable: false,
-                        value: None,
-                        access_modifier: Default::default(),
-                        line_number: 0,
-                    },
-                ]).collect(),
-                line_number: 0,
-            }),
-        ),
-        (
             "ftd#integer-field".to_string(),
             ftd::interpreter::Thing::Record(ftd::interpreter::Record {
                 name: "ftd#integer-field".to_string(),
