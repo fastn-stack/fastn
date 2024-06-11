@@ -1422,14 +1422,20 @@ impl<'a> TDoc<'a> {
                             line_number: *line_number,
                             is_static: !mutable,
                         }),
-                        Some(ftd::interpreter::PropertyValue::Reference { name, .. })
-                        | Some(ftd::interpreter::PropertyValue::Clone { name, .. }) => {
+                        property_value @ Some(ftd::interpreter::PropertyValue::Reference {
+                            name,
+                            ..
+                        })
+                        | property_value @ Some(ftd::interpreter::PropertyValue::Clone {
+                            name,
+                            ..
+                        }) => {
                             let name = ftd_p1::AccessModifier::remove_modifiers(name);
                             let (initial_thing, name) = try_ok_state!(
                                 doc.search_initial_thing(name.as_str(), line_number)?
                             );
 
-                            if let Some(remaining) = name {
+                            let mut thing = if let Some(remaining) = name {
                                 try_ok_state!(search_thing_(
                                     doc,
                                     line_number,
@@ -1438,7 +1444,18 @@ impl<'a> TDoc<'a> {
                                 )?)
                             } else {
                                 initial_thing
+                            };
+
+                            if property_value.unwrap().is_clone() {
+                                if let Ok(mut variable) =
+                                    thing.clone().variable(doc.name, thing.line_number())
+                                {
+                                    variable.mutable = mutable;
+                                    thing = ftd::interpreter::Thing::Variable(variable);
+                                }
                             }
+
+                            thing
                         }
                         _ => thing,
                     }
