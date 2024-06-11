@@ -1,5 +1,3 @@
-use actix_web::cookie::time::Duration;
-
 #[tracing::instrument(skip_all)]
 fn handle_redirect(
     config: &fastn_core::Config,
@@ -156,7 +154,7 @@ pub fn clear_sid(req: &fastn_core::http::Request) -> fastn_core::http::Response 
             None => req.connection_info.host().to_string(),
         })
         .path("/")
-        .max_age(Duration::seconds(34560000))
+        .max_age(actix_web::cookie::time::Duration::seconds(34560000))
         .secure(true)
         .same_site(actix_web::cookie::SameSite::Strict)
         .finish();
@@ -181,7 +179,7 @@ pub fn clear_sid2(req: &fastn_core::http::Request) -> fastn_core::http::Response
             None => req.connection_info.host().to_string(),
         })
         .path("/")
-        .max_age(Duration::seconds(0))
+        .max_age(actix_web::cookie::time::Duration::seconds(0))
         .same_site(actix_web::cookie::SameSite::Strict)
         .finish();
 
