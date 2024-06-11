@@ -1937,8 +1937,26 @@ a.value = !a.value
 
 
 
+function ftd__integer_field_with_default___main(name,default,args,data,id){
+return (ftd.field_with_default_js(name,default,args,data,id));
+}
+
+
+
+function ftd__decimal_field_with_default___main(name,default,args,data,id){
+return (ftd.field_with_default_js(name,default,args,data,id));
+}
+
+
+
+function ftd__boolean_field_with_default___main(name,default,args,data,id){
+return (ftd.field_with_default_js(name,default,args,data,id));
+}
+
+
+
 function ftd__string_field_with_default___main(name,default,args,data,id){
-return (ftd.string_field_with_default_js(name,default,args,data,id));
+return (ftd.field_with_default_js(name,default,args,data,id));
 }
 
 
@@ -2079,9 +2097,9 @@ window.ftd.utils.set_value_helper(data, "foo#yellow", remaining, new_value);
 window.ftd.call_mutable_value_changes("foo#yellow", "main");
 window.ftd.call_immutable_value_changes("foo#yellow", "main");
 window.ftd.utils.node_change_call("main","0:main__background-size", data);
-window.ftd.utils.node_change_call("main","0:main__background-position", data);
-window.ftd.utils.node_change_call("main","0:main__background-image", data);
 window.ftd.utils.node_change_call("main","0:main__background-color", data);
+window.ftd.utils.node_change_call("main","0:main__background-image", data);
+window.ftd.utils.node_change_call("main","0:main__background-position", data);
 window.ftd.utils.node_change_call("main","0:main__background-repeat", data);
 };
 
@@ -2090,11 +2108,11 @@ window.ftd.utils.set_value_helper(data, "ftd#dark-mode", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#dark-mode", "main");
 window.ftd.call_immutable_value_changes("ftd#dark-mode", "main");
-window.ftd.utils.node_change_call("main","0:main__background-position", data);
-window.ftd.utils.node_change_call("main","0:main__background-size", data);
 window.ftd.utils.node_change_call("main","0:main__background-image", data);
-window.ftd.utils.node_change_call("main","0:main__background-repeat", data);
 window.ftd.utils.node_change_call("main","0:main__background-color", data);
+window.ftd.utils.node_change_call("main","0:main__background-position", data);
+window.ftd.utils.node_change_call("main","0:main__background-repeat", data);
+window.ftd.utils.node_change_call("main","0:main__background-size", data);
 };
 
 

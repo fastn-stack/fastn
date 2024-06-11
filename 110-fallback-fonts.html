@@ -1961,8 +1961,26 @@ a.value = !a.value
 
 
 
+function ftd__integer_field_with_default___main(name,default,args,data,id){
+return (ftd.field_with_default_js(name,default,args,data,id));
+}
+
+
+
+function ftd__decimal_field_with_default___main(name,default,args,data,id){
+return (ftd.field_with_default_js(name,default,args,data,id));
+}
+
+
+
+function ftd__boolean_field_with_default___main(name,default,args,data,id){
+return (ftd.field_with_default_js(name,default,args,data,id));
+}
+
+
+
 function ftd__string_field_with_default___main(name,default,args,data,id){
-return (ftd.string_field_with_default_js(name,default,args,data,id));
+return (ftd.field_with_default_js(name,default,args,data,id));
 }
 
 
@@ -2148,12 +2166,12 @@ window.ftd.utils.set_value_helper(data, "foo#flag", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#flag", "main");
 window.ftd.call_immutable_value_changes("foo#flag", "main");
-window.ftd.utils.node_change_call("main","1:main__font-weight", data);
-window.ftd.utils.node_change_call("main","1:main__letter-spacing", data);
 window.ftd.utils.node_change_call("main","1:main__line-height", data);
-window.ftd.utils.node_change_call("main","1:main__font-family", data);
-window.ftd.utils.node_change_call("main","0:main__text", data);
 window.ftd.utils.node_change_call("main","1:main__font-size", data);
+window.ftd.utils.node_change_call("main","0:main__text", data);
+window.ftd.utils.node_change_call("main","1:main__font-family", data);
+window.ftd.utils.node_change_call("main","1:main__letter-spacing", data);
+window.ftd.utils.node_change_call("main","1:main__font-weight", data);
 };
 
 window.set_value_main["ftd#device"] = function (data, new_value, remaining) {
@@ -2161,8 +2179,8 @@ window.ftd.utils.set_value_helper(data, "ftd#device", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("ftd#device", "main");
 window.ftd.call_immutable_value_changes("ftd#device", "main");
-window.ftd.utils.node_change_call("main","1:main__font-family", data);
 window.ftd.utils.node_change_call("main","1:main__font-weight", data);
+window.ftd.utils.node_change_call("main","1:main__font-family", data);
 window.ftd.utils.node_change_call("main","1:main__letter-spacing", data);
 window.ftd.utils.node_change_call("main","1:main__line-height", data);
 window.ftd.utils.node_change_call("main","1:main__font-size", data);

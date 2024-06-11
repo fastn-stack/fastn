@@ -1933,8 +1933,26 @@ a.value = !a.value
 
 
 
+function ftd__integer_field_with_default___main(name,default,args,data,id){
+return (ftd.field_with_default_js(name,default,args,data,id));
+}
+
+
+
+function ftd__decimal_field_with_default___main(name,default,args,data,id){
+return (ftd.field_with_default_js(name,default,args,data,id));
+}
+
+
+
+function ftd__boolean_field_with_default___main(name,default,args,data,id){
+return (ftd.field_with_default_js(name,default,args,data,id));
+}
+
+
+
 function ftd__string_field_with_default___main(name,default,args,data,id){
-return (ftd.string_field_with_default_js(name,default,args,data,id));
+return (ftd.field_with_default_js(name,default,args,data,id));
 }
 
 
@@ -2039,8 +2057,8 @@ window.ftd.utils.set_value_helper(data, "foo#num", remaining, new_value);
 
 window.ftd.call_mutable_value_changes("foo#num", "main");
 window.ftd.call_immutable_value_changes("foo#num", "main");
-window.ftd.utils.node_change_call("main","2,0:main__padding", data);
 window.ftd.utils.node_change_call("main","2,1:main__padding", data);
+window.ftd.utils.node_change_call("main","2,0:main__padding", data);
 };
 
 
