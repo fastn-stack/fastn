@@ -2057,6 +2057,17 @@ impl<'a> TDoc<'a> {
                                 line_number,
                             })?
                     }
+                    serde_json::Value::Number(n) => match n.as_i64() {
+                        Some(0) => false,
+                        Some(1) => true,
+                        _ => {
+                            return Err(ftd::interpreter::Error::ParseError {
+                                message: format!("Can't parse to decimal, found: {json}"),
+                                doc_id: self.name.to_string(),
+                                line_number,
+                            })
+                        }
+                    },
                     serde_json::Value::Object(o) => {
                         return self.handle_object(kind, o, default_value, record_name, line_number)
                     }
