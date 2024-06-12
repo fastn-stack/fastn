@@ -5,16 +5,6 @@
       "checksum": "C08736376A2C9A13DFB62EDFFF1ED7D14294B96208DB383D11DE8703586FF17C",
       "size": 727
     },
-    "hello.py": {
-      "name": "hello.py",
-      "checksum": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
-      "size": 0
-    },
-    "hello/world/test.py": {
-      "name": "hello/world/test.py",
-      "checksum": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
-      "size": 0
-    },
     "index": {
       "name": "index",
       "checksum": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
