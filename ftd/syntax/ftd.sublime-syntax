@@ -6,33 +6,35 @@ file_extensions:
 scope: source.ftd
 contexts:
   main:
-    - match: "\/--\\s.*?:"
+    - match: ^--\s+
+      push: section_line
+      scope: comment
+    - match: "^(.*?)(:)( *)(.*)((;;)( *)(<hl>))( *)$"
       captures:
-        1: punctuation.definition.section.start.ftd
-      push:
-        - meta_scope: comment.block.ftd
-        - match: "(--$|^$)"
-          pop: true
-    - match: "\\\\--\\s.*?:"
+        1: storage.type.function
+        2: comment
+        4: constant.character
+        0: keyword.declaration
+    - match: "^(.*?)(:)( *)(.*)$"
       captures:
-        1: punctuation.definition.section.start.ftd
-    - match: "(--\\s*)(\\w+.*):"
+        1: storage.type.function
+        2: comment
+        4: constant.character
+    - match: "^(.*)((;;)( *)(<hl>))( *)$"
       captures:
-        1: punctuation.definition.section.start.ftd
-        2: entity.name.function
-    - match: "(--\\s*)(end:)\\s*((?:\\w+[\\-\\.\\w]*)+)"
+        1: comment
+        0: keyword.declaration
+  section_line:
+    - meta_scope: comment
+    - match: $
+      pop: true
+    - match: "(.*?)(:)( *)(.*)((;;)( *)(<hl>))( *)$"
       captures:
-        1: punctuation.definition.section.end.ftd
-        2: entity.name.function
-    - match: "^\\b(.*?)(?=\\s*:\\s)"
+        1: entity.name.class
+        2: comment
+        4: string
+        0: keyword.declaration
+    - match: "(.*?)(:)( *)(.*)$"
       captures:
-        1: entity.name.tag.ftd
-    - match: "^(?:^|\\s)(\\$.*?\\$)(?=\\s*:\\s)"
-      captures:
-        1: keyword.operator
-    - match: "#(?:[0-9a-fA-F]{3}){1,2}\\b|rgba?\\([\\s\\d.,]+\\)|hsla?\\([\\s\\d.%]+\\)"
-      captures:
-        1: support.type
-    - match: "(?<!\\\\);;.*"
-      captures:
-        0: comment.line.semicolon.ftd
+        1: entity.name.class
+        4: string
