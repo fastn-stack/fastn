@@ -1,5 +1,5 @@
 -- ftd.string-field $title: title
-$value: *$ftd.empty
+value: *$ftd.empty
 
 -- ftd.text-input:
 placeholder: Enter title
