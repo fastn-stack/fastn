@@ -333,10 +333,21 @@ async fn download_unpack_zip_and_get_manifest(
             let file_hash = fastn_core::utils::generate_hash(buffer.clone());
             let file_size = buffer.len();
 
-            let path_without_prefix = match path_normalized.split_once('/') {
-                Some((_, path)) => path,
-                None => &path_normalized,
+            // For package like `fifthtry.github.io/package-doc`, github zip is a folder called
+            // `package-doc-<commit-id>` which contains all files, so path for `FASTN.ftd` becomes
+            // `package-doc-<commit-id>/FASTN.ftd` while fifthtry package zip doesn't have any
+            // such folder, so path becomes `FASTN.ftd`
+            let path_without_prefix = if manifest.is_some() {
+                // For github
+                match path_normalized.split_once('/') {
+                    Some((_, path)) => path,
+                    None => &path_normalized,
+                }
+            } else {
+                // For fifthtry packages
+                &path_normalized
             };
+
             if manifest.is_some() {
                 if !files.contains_key(path_without_prefix) {
                     continue;
