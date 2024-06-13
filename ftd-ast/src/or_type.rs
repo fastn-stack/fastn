@@ -67,7 +67,8 @@ impl ftd_ast::Field {
             section.line_number,
         )?;
 
-        let value = ftd_ast::VariableValue::from_p1_with_modifier(section, doc_id, &kind)?.inner();
+        let value =
+            ftd_ast::VariableValue::from_p1_with_modifier(section, doc_id, &kind, false)?.inner();
 
         Ok(ftd_ast::Field::new(
             section.name.trim_start_matches(ftd_ast::utils::REFERENCE),

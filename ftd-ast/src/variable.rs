@@ -60,10 +60,13 @@ impl VariableDefinition {
             doc_id,
             section.line_number,
         )?;
-
-        let value = ftd_ast::VariableValue::from_p1_with_modifier(section, doc_id, &kind)?;
-
         let processor = Processor::from_headers(&section.headers, doc_id)?;
+        let value = ftd_ast::VariableValue::from_p1_with_modifier(
+            section,
+            doc_id,
+            &kind,
+            processor.is_some(),
+        )?;
 
         let flags = ftd_ast::VariableFlags::from_headers(&section.headers, doc_id);
 

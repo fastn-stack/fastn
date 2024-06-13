@@ -554,9 +554,10 @@ impl VariableValue {
         section: &ftd_p1::Section,
         doc_id: &str,
         kind: &ftd_ast::VariableKind,
+        has_processor: bool,
     ) -> ftd_ast::Result<VariableValue> {
         let value = VariableValue::from_p1(section, doc_id)?;
-        value.into_modifier(doc_id, section.line_number, kind)
+        value.into_modifier(doc_id, section.name.as_str(), kind, has_processor)
     }
 
     pub(crate) fn from_header_with_modifier(
@@ -565,14 +566,15 @@ impl VariableValue {
         kind: &ftd_ast::VariableKind,
     ) -> ftd_ast::Result<VariableValue> {
         let value = VariableValue::from_p1_header(header, doc_id)?;
-        value.into_modifier(doc_id, header.get_line_number(), kind)
+        value.into_modifier(doc_id, header.get_key().as_str(), kind, false)
     }
 
     pub(crate) fn into_modifier(
         self,
         doc_id: &str,
-        line_number: usize,
+        section_name: &str,
         kind: &ftd_ast::VariableKind,
+        has_processor: bool,
     ) -> ftd_ast::Result<VariableValue> {
         match &kind.modifier {
             Some(modifier) if modifier.is_list() => {
@@ -588,17 +590,31 @@ impl VariableValue {
                 } else if let VariableValue::String {
                     ref value,
                     ref condition,
+                    ref line_number,
                     ..
                 } = self
                 {
                     if value.starts_with('$') && !value.contains(',') {
                         Ok(self)
+                    } else if has_processor {
+                        Ok(VariableValue::Record {
+                            name: section_name.to_string(),
+                            caption: Box::new(None),
+                            headers: HeaderValues(vec![]),
+                            body: Some(BodyValue {
+                                value: value.to_string(),
+                                line_number: *line_number,
+                            }),
+                            values: vec![],
+                            line_number: self.line_number(),
+                            condition: None,
+                        })
                     } else {
                         Ok(VariableValue::from_string_bracket_list(
                             value,
                             kind.kind.clone(),
                             ftd_ast::ValueSource::Default,
-                            line_number,
+                            self.line_number(),
                             condition.clone(),
                         ))
                     }
@@ -606,7 +622,7 @@ impl VariableValue {
                     ftd_ast::parse_error(
                         format!("Expected List found: `{:?}`", self),
                         doc_id,
-                        line_number,
+                        self.line_number(),
                     )
                 }
             }
