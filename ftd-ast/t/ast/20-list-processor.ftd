@@ -1,0 +1,6 @@
+-- person list people:
+$processor$: sql-processor
+
+SELECT * FROM people;
+
+

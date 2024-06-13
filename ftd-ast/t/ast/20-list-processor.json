@@ -1,0 +1,31 @@
+[
+  {
+    "VariableDefinition": {
+      "name": "people",
+      "kind": {
+        "modifier": "List",
+        "kind": "person"
+      },
+      "mutable": false,
+      "value": {
+        "Record": {
+          "name": "people",
+          "caption": null,
+          "headers": [],
+          "body": {
+            "value": "SELECT * FROM people;",
+            "line-number": 4
+          },
+          "values": [],
+          "line_number": 4,
+          "condition": null
+        }
+      },
+      "processor": "sql-processor",
+      "flags": {
+        "always_include": null
+      },
+      "line_number": 1
+    }
+  }
+]

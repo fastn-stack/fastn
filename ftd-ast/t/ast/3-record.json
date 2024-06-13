@@ -25,7 +25,8 @@
             "string-value": {
               "value": "40",
               "line-number": 3,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "line_number": 3,

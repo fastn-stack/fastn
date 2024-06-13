@@ -14,7 +14,8 @@
             "string-value": {
               "value": "true",
               "line-number": 3,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "line_number": 3,
@@ -31,7 +32,8 @@
             "string-value": {
               "value": "This is description of display component",
               "line-number": 7,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "line_number": 7,
@@ -53,7 +55,8 @@
                     "string-value": {
                       "value": "Varanasi",
                       "line-number": 11,
-                      "source": "Default"
+                      "source": "Default",
+                      "condition": null
                     }
                   }
                 },
@@ -63,7 +66,8 @@
                     "string-value": {
                       "value": "Prayagraj",
                       "line-number": 12,
-                      "source": "Default"
+                      "source": "Default",
+                      "condition": null
                     }
                   }
                 },
@@ -73,12 +77,14 @@
                     "string-value": {
                       "value": "Bengaluru",
                       "line-number": 13,
-                      "source": "Default"
+                      "source": "Default",
+                      "condition": null
                     }
                   }
                 }
               ],
-              "line_number": 13
+              "line_number": 13,
+              "condition": null
             }
           },
           "line_number": 13,
@@ -86,6 +92,7 @@
         }
       ],
       "definition": {
+        "id": null,
         "name": "ftd.column",
         "properties": [],
         "iteration": null,
@@ -93,6 +100,7 @@
         "events": [],
         "children": [
           {
+            "id": null,
             "name": "ftd.text",
             "properties": [
               {
@@ -100,7 +108,8 @@
                   "string-value": {
                     "value": "$obj",
                     "line-number": 19,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": "Caption",
@@ -120,6 +129,7 @@
             "line-number": 19
           },
           {
+            "id": null,
             "name": "ftd.text",
             "properties": [
               {
@@ -127,7 +137,8 @@
                   "string-value": {
                     "value": "red",
                     "line-number": 24,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -144,7 +155,8 @@
                   "string-value": {
                     "value": "$description",
                     "line-number": 22,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": "Caption",

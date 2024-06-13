@@ -11,7 +11,8 @@
         "string-value": {
           "value": "a",
           "line-number": 1,
-          "source": "Default"
+          "source": "Default",
+          "condition": null
         }
       },
       "processor": null,
@@ -38,7 +39,8 @@
                 "string-value": {
                   "value": "a",
                   "line-number": 3,
-                  "source": "Default"
+                  "source": "Default",
+                  "condition": null
                 }
               }
             },
@@ -48,7 +50,8 @@
                 "string-value": {
                   "value": "b",
                   "line-number": 3,
-                  "source": "Default"
+                  "source": "Default",
+                  "condition": null
                 }
               }
             },
@@ -58,12 +61,14 @@
                 "string-value": {
                   "value": "c",
                   "line-number": 3,
-                  "source": "Default"
+                  "source": "Default",
+                  "condition": null
                 }
               }
             }
           ],
-          "line_number": 3
+          "line_number": 3,
+          "condition": null
         }
       },
       "processor": null,
@@ -90,7 +95,8 @@
                 "string-value": {
                   "value": "$s1",
                   "line-number": 5,
-                  "source": "Default"
+                  "source": "Default",
+                  "condition": null
                 }
               }
             },
@@ -100,7 +106,8 @@
                 "string-value": {
                   "value": "b",
                   "line-number": 5,
-                  "source": "Default"
+                  "source": "Default",
+                  "condition": null
                 }
               }
             },
@@ -110,7 +117,8 @@
                 "string-value": {
                   "value": "c",
                   "line-number": 5,
-                  "source": "Default"
+                  "source": "Default",
+                  "condition": null
                 }
               }
             },
@@ -120,12 +128,14 @@
                 "string-value": {
                   "value": "d",
                   "line-number": 5,
-                  "source": "Default"
+                  "source": "Default",
+                  "condition": null
                 }
               }
             }
           ],
-          "line_number": 5
+          "line_number": 5,
+          "condition": null
         }
       },
       "processor": null,
@@ -147,7 +157,8 @@
         "string-value": {
           "value": "$s2",
           "line-number": 7,
-          "source": "Default"
+          "source": "Default",
+          "condition": null
         }
       },
       "processor": null,
@@ -174,7 +185,8 @@
                 "string-value": {
                   "value": "a",
                   "line-number": 9,
-                  "source": "Default"
+                  "source": "Default",
+                  "condition": null
                 }
               }
             },
@@ -184,7 +196,8 @@
                 "string-value": {
                   "value": "b",
                   "line-number": 9,
-                  "source": "Default"
+                  "source": "Default",
+                  "condition": null
                 }
               }
             },
@@ -194,12 +207,14 @@
                 "string-value": {
                   "value": "$s1",
                   "line-number": 9,
-                  "source": "Default"
+                  "source": "Default",
+                  "condition": null
                 }
               }
             }
           ],
-          "line_number": 9
+          "line_number": 9,
+          "condition": null
         }
       },
       "processor": null,
