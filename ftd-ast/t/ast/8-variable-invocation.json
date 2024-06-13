@@ -11,7 +11,8 @@
         "string-value": {
           "value": "true",
           "line-number": 1,
-          "source": "Default"
+          "source": "Default",
+          "condition": null
         }
       },
       "processor": null,
@@ -28,7 +29,8 @@
         "string-value": {
           "value": "40",
           "line-number": 3,
-          "source": "Default"
+          "source": "Default",
+          "condition": null
         }
       },
       "condition": null,
@@ -43,7 +45,8 @@
         "string-value": {
           "value": "50",
           "line-number": 5,
-          "source": "Default"
+          "source": "Default",
+          "condition": null
         }
       },
       "condition": {

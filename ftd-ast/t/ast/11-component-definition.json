@@ -16,6 +16,7 @@
         }
       ],
       "definition": {
+        "id": null,
         "name": "ftd.text",
         "properties": [
           {
@@ -23,7 +24,8 @@
               "string-value": {
                 "value": "$name",
                 "line-number": 7,
-                "source": "Body"
+                "source": "Body",
+                "condition": null
               }
             },
             "source": "Body",

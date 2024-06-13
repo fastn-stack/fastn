@@ -54,7 +54,8 @@
                         "string-value": {
                           "value": "Arpita",
                           "line-number": 8,
-                          "source": "Default"
+                          "source": "Default",
+                          "condition": null
                         }
                       },
                       "line-number": 8,
@@ -68,7 +69,8 @@
                         "string-value": {
                           "value": "10",
                           "line-number": 9,
-                          "source": "Default"
+                          "source": "Default",
+                          "condition": null
                         }
                       },
                       "line-number": 9,
@@ -78,12 +80,14 @@
                   ],
                   "body": null,
                   "values": [],
-                  "line_number": 7
+                  "line_number": 7,
+                  "condition": null
                 }
               }
             }
           ],
-          "line_number": 5
+          "line_number": 5,
+          "condition": null
         }
       },
       "processor": null,
@@ -113,7 +117,8 @@
                         "string-value": {
                           "value": "Ayushi",
                           "line-number": 17,
-                          "source": "Default"
+                          "source": "Default",
+                          "condition": null
                         }
                       },
                       "line-number": 17,
@@ -127,7 +132,8 @@
                         "string-value": {
                           "value": "9",
                           "line-number": 18,
-                          "source": "Default"
+                          "source": "Default",
+                          "condition": null
                         }
                       },
                       "line-number": 18,
@@ -137,12 +143,14 @@
                   ],
                   "body": null,
                   "values": [],
-                  "line_number": 16
+                  "line_number": 16,
+                  "condition": null
                 }
               }
             }
           ],
-          "line_number": 14
+          "line_number": 14,
+          "condition": null
         }
       },
       "condition": null,

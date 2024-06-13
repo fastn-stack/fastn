@@ -55,7 +55,8 @@
       "value": {
         "Optional": {
           "value": null,
-          "line_number": 8
+          "line_number": 8,
+          "condition": null
         }
       },
       "processor": "pr.sitemap",
@@ -77,7 +78,8 @@
         "string-value": {
           "value": "false",
           "line-number": 13,
-          "source": "Default"
+          "source": "Default",
+          "condition": null
         }
       },
       "processor": null,
@@ -99,7 +101,8 @@
         "string-value": {
           "value": "false",
           "line-number": 16,
-          "source": "Default"
+          "source": "Default",
+          "condition": null
         }
       },
       "processor": null,
@@ -120,7 +123,8 @@
       "value": {
         "Optional": {
           "value": null,
-          "line_number": 18
+          "line_number": 18,
+          "condition": null
         }
       },
       "processor": "sitemap",
@@ -141,7 +145,8 @@
       "value": {
         "Optional": {
           "value": null,
-          "line_number": 21
+          "line_number": 21,
+          "condition": null
         }
       },
       "processor": null,
@@ -173,7 +178,8 @@
                     "string-value": {
                       "value": "$assets.files.images.site-icon.svg.dark",
                       "line-number": 24,
-                      "source": "Default"
+                      "source": "Default",
+                      "condition": null
                     }
                   },
                   "line-number": 24,
@@ -187,7 +193,8 @@
                     "string-value": {
                       "value": "$assets.files.images.site-icon.svg.light",
                       "line-number": 25,
-                      "source": "Default"
+                      "source": "Default",
+                      "condition": null
                     }
                   },
                   "line-number": 25,
@@ -197,10 +204,12 @@
               ],
               "body": null,
               "values": [],
-              "line_number": 23
+              "line_number": 23,
+              "condition": null
             }
           },
-          "line_number": 23
+          "line_number": 23,
+          "condition": null
         }
       },
       "processor": null,
@@ -222,7 +231,8 @@
         "string-value": {
           "value": "/",
           "line-number": 27,
-          "source": "Default"
+          "source": "Default",
+          "condition": null
         }
       },
       "processor": null,
@@ -244,7 +254,8 @@
         "string-value": {
           "value": "false",
           "line-number": 33,
-          "source": "Default"
+          "source": "Default",
+          "condition": null
         }
       },
       "processor": null,
@@ -269,7 +280,8 @@
             "string-value": {
               "value": "Understood",
               "line-number": 40,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "headers": [
@@ -280,7 +292,8 @@
                 "string-value": {
                   "value": "$what-are-lesson-understood = true",
                   "line-number": 41,
-                  "source": "Default"
+                  "source": "Default",
+                  "condition": null
                 }
               },
               "line-number": 41,
@@ -294,7 +307,8 @@
                 "string-value": {
                   "value": "$what-are-lesson-understood",
                   "line-number": 43,
-                  "source": "Default"
+                  "source": "Default",
+                  "condition": null
                 }
               },
               "line-number": 43,
@@ -304,7 +318,8 @@
           ],
           "body": null,
           "values": [],
-          "line_number": 40
+          "line_number": 40,
+          "condition": null
         }
       },
       "processor": null,
@@ -326,7 +341,8 @@
         "string-value": {
           "value": "false",
           "line-number": 50,
-          "source": "Default"
+          "source": "Default",
+          "condition": null
         }
       },
       "processor": null,
@@ -341,6 +357,7 @@
       "name": "what-are-chapter-button",
       "arguments": [],
       "definition": {
+        "id": null,
         "name": "ftd.column",
         "properties": [],
         "iteration": null,
@@ -348,6 +365,7 @@
         "events": [],
         "children": [
           {
+            "id": null,
             "name": "understood",
             "properties": [
               {
@@ -355,7 +373,8 @@
                   "string-value": {
                     "value": "$what-are-chapter-completed",
                     "line-number": 70,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -372,7 +391,8 @@
                   "string-value": {
                     "value": "Done",
                     "line-number": 67,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": "Caption",
@@ -411,7 +431,8 @@
         "string-value": {
           "value": "$what-are-chapter-completed",
           "line-number": 81,
-          "source": "Default"
+          "source": "Default",
+          "condition": null
         }
       },
       "processor": null,
@@ -433,7 +454,8 @@
         "string-value": {
           "value": "false",
           "line-number": 87,
-          "source": "Default"
+          "source": "Default",
+          "condition": null
         }
       },
       "processor": null,
@@ -448,6 +470,7 @@
       "name": "what-are-task-button",
       "arguments": [],
       "definition": {
+        "id": null,
         "name": "ftd.column",
         "properties": [],
         "iteration": null,
@@ -455,6 +478,7 @@
         "events": [],
         "children": [
           {
+            "id": null,
             "name": "understood",
             "properties": [
               {
@@ -462,7 +486,8 @@
                   "string-value": {
                     "value": "$what-are-task-completed",
                     "line-number": 101,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -479,7 +504,8 @@
                   "string-value": {
                     "value": "Done",
                     "line-number": 98,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": "Caption",
@@ -508,6 +534,7 @@
   },
   {
     "component-invocation": {
+      "id": null,
       "name": "chapter",
       "properties": [
         {
@@ -515,7 +542,8 @@
             "string-value": {
               "value": "true",
               "line-number": 113,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "source": {
@@ -532,7 +560,8 @@
             "string-value": {
               "value": "$what-are-chapter-completed",
               "line-number": 114,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "source": {
@@ -549,7 +578,8 @@
             "string-value": {
               "value": "Using",
               "line-number": 112,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "source": "Caption",
@@ -561,7 +591,8 @@
             "string-value": {
               "value": "How to use?\n\nAdd below depedencies into your `pr.ftd` file",
               "line-number": 119,
-              "source": "Body"
+              "source": "Body",
+              "condition": null
             }
           },
           "source": "Body",
@@ -578,6 +609,7 @@
   },
   {
     "component-invocation": {
+      "id": null,
       "name": "ftd.column",
       "properties": [
         {
@@ -585,7 +617,8 @@
             "string-value": {
               "value": "-44",
               "line-number": 121,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "source": {
@@ -642,7 +675,8 @@
             "string-value": {
               "value": "$sitemap.toc",
               "line-number": 135,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "line_number": 135,
@@ -659,7 +693,8 @@
             "string-value": {
               "value": "$sitemap.sections",
               "line-number": 136,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "line_number": 136,
@@ -676,7 +711,8 @@
             "string-value": {
               "value": "$sitemap.subsections",
               "line-number": 137,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "line_number": 137,
@@ -693,7 +729,8 @@
             "string-value": {
               "value": "$sitemap.current-section",
               "line-number": 138,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "line_number": 138,
@@ -710,7 +747,8 @@
             "string-value": {
               "value": "$sitemap.current-subsection",
               "line-number": 139,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "line_number": 139,
@@ -727,7 +765,8 @@
             "string-value": {
               "value": "$sitemap.current-page",
               "line-number": 140,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "line_number": 140,
@@ -744,7 +783,8 @@
             "string-value": {
               "value": "true",
               "line-number": 141,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "line_number": 141,
@@ -772,7 +812,8 @@
             "string-value": {
               "value": "false",
               "line-number": 143,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "line_number": 143,
@@ -804,12 +845,14 @@
                   "value": {
                     "Optional": {
                       "value": null,
-                      "line_number": 148
+                      "line_number": 148,
+                      "condition": null
                     }
                   }
                 }
               ],
-              "line_number": 148
+              "line_number": 148,
+              "condition": null
             }
           },
           "line_number": 148,
@@ -817,6 +860,7 @@
         }
       ],
       "definition": {
+        "id": null,
         "name": "ftd.column",
         "properties": [
           {
@@ -824,7 +868,8 @@
               "string-value": {
                 "value": "fill-container",
                 "line-number": 153,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -841,7 +886,8 @@
               "string-value": {
                 "value": "$inherited.colors.background.base",
                 "line-number": 155,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -859,6 +905,7 @@
         "events": [],
         "children": [
           {
+            "id": null,
             "name": "chapter-desktop",
             "properties": [
               {
@@ -866,7 +913,8 @@
                   "string-value": {
                     "value": "$chapter.button",
                     "line-number": 162,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -883,7 +931,8 @@
                   "string-value": {
                     "value": "$chapter.body",
                     "line-number": 163,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -900,7 +949,8 @@
                   "string-value": {
                     "value": "$chapter.status",
                     "line-number": 164,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -917,7 +967,8 @@
                   "string-value": {
                     "value": "$chapter.toc",
                     "line-number": 165,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -934,7 +985,8 @@
                   "string-value": {
                     "value": "$chapter.sections",
                     "line-number": 166,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -951,7 +1003,8 @@
                   "string-value": {
                     "value": "$chapter.current-section",
                     "line-number": 167,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -968,7 +1021,8 @@
                   "string-value": {
                     "value": "$chapter.current-subsection",
                     "line-number": 168,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -985,7 +1039,8 @@
                   "string-value": {
                     "value": "$chapter.current-page",
                     "line-number": 169,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -1002,7 +1057,8 @@
                   "string-value": {
                     "value": "$chapter.sub-sections",
                     "line-number": 170,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -1019,7 +1075,8 @@
                   "string-value": {
                     "value": "$chapter.sidebar",
                     "line-number": 171,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -1036,7 +1093,8 @@
                   "string-value": {
                     "value": "$chapter.show-chapter-button",
                     "line-number": 172,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -1053,7 +1111,8 @@
                   "string-value": {
                     "value": "$chapter.container",
                     "line-number": 173,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -1070,7 +1129,8 @@
                   "string-value": {
                     "value": "$chapter.title",
                     "line-number": 160,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": "Caption",
@@ -1130,7 +1190,8 @@
           "value": {
             "List": {
               "value": [],
-              "line_number": 187
+              "line_number": 187,
+              "condition": null
             }
           },
           "line_number": 187,
@@ -1146,7 +1207,8 @@
           "value": {
             "List": {
               "value": [],
-              "line_number": 188
+              "line_number": 188,
+              "condition": null
             }
           },
           "line_number": 188,
@@ -1162,7 +1224,8 @@
           "value": {
             "List": {
               "value": [],
-              "line_number": 189
+              "line_number": 189,
+              "condition": null
             }
           },
           "line_number": 189,
@@ -1222,7 +1285,8 @@
           "value": {
             "List": {
               "value": [],
-              "line_number": 194
+              "line_number": 194,
+              "condition": null
             }
           },
           "line_number": 194,
@@ -1250,7 +1314,8 @@
             "string-value": {
               "value": "false",
               "line-number": 196,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "line_number": 196,
@@ -1269,6 +1334,7 @@
         }
       ],
       "definition": {
+        "id": null,
         "name": "ftd.column",
         "properties": [
           {
@@ -1276,7 +1342,8 @@
               "string-value": {
                 "value": "fill-container",
                 "line-number": 200,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -1294,6 +1361,7 @@
         "events": [],
         "children": [
           {
+            "id": null,
             "name": "ftd.row",
             "properties": [
               {
@@ -1301,7 +1369,8 @@
                   "string-value": {
                     "value": "fill-container",
                     "line-number": 204,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -1318,7 +1387,8 @@
                   "string-value": {
                     "value": "48",
                     "line-number": 205,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -1336,6 +1406,7 @@
             "events": [],
             "children": [
               {
+                "id": null,
                 "name": "render-toc",
                 "properties": [
                   {
@@ -1343,7 +1414,8 @@
                       "string-value": {
                         "value": "$chapter-desktop.toc",
                         "line-number": 219,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -1360,7 +1432,8 @@
                       "string-value": {
                         "value": "$chapter-desktop.status",
                         "line-number": 220,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -1383,6 +1456,7 @@
                 "line-number": 217
               },
               {
+                "id": null,
                 "name": "ftd.column",
                 "properties": [
                   {
@@ -1390,7 +1464,8 @@
                       "string-value": {
                         "value": "fill-container",
                         "line-number": 223,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -1407,7 +1482,8 @@
                       "string-value": {
                         "value": "fill-container",
                         "line-number": 225,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -1424,7 +1500,8 @@
                       "string-value": {
                         "value": "400",
                         "line-number": 226,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -1441,7 +1518,8 @@
                       "string-value": {
                         "value": "100",
                         "line-number": 227,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -1459,6 +1537,7 @@
                 "events": [],
                 "children": [
                   {
+                    "id": null,
                     "name": "ftd.column",
                     "properties": [
                       {
@@ -1466,7 +1545,8 @@
                           "string-value": {
                             "value": "fill-container",
                             "line-number": 231,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -1483,7 +1563,8 @@
                           "string-value": {
                             "value": "16",
                             "line-number": 232,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -1501,6 +1582,7 @@
                     "events": [],
                     "children": [
                       {
+                        "id": null,
                         "name": "ds.h0",
                         "properties": [
                           {
@@ -1508,7 +1590,8 @@
                               "string-value": {
                                 "value": "$chapter-desktop.title",
                                 "line-number": 234,
-                                "source": "Default"
+                                "source": "Default",
+                                "condition": null
                               }
                             },
                             "source": "Caption",
@@ -1520,7 +1603,8 @@
                               "string-value": {
                                 "value": "$chapter-desktop.body",
                                 "line-number": 238,
-                                "source": "Body"
+                                "source": "Body",
+                                "condition": null
                               }
                             },
                             "source": "Body",
@@ -1538,6 +1622,7 @@
                         "line-number": 234
                       },
                       {
+                        "id": null,
                         "name": "ftd.column",
                         "properties": [
                           {
@@ -1545,7 +1630,8 @@
                               "string-value": {
                                 "value": "parent",
                                 "line-number": 241,
-                                "source": "Default"
+                                "source": "Default",
+                                "condition": null
                               }
                             },
                             "source": {
@@ -1562,7 +1648,8 @@
                               "string-value": {
                                 "value": "0",
                                 "line-number": 242,
-                                "source": "Default"
+                                "source": "Default",
+                                "condition": null
                               }
                             },
                             "source": {
@@ -1579,7 +1666,8 @@
                               "string-value": {
                                 "value": "24",
                                 "line-number": 243,
-                                "source": "Default"
+                                "source": "Default",
+                                "condition": null
                               }
                             },
                             "source": {
@@ -1596,7 +1684,8 @@
                               "string-value": {
                                 "value": "$inherited.colors.background.step-2",
                                 "line-number": 244,
-                                "source": "Default"
+                                "source": "Default",
+                                "condition": null
                               }
                             },
                             "source": {
@@ -1617,6 +1706,7 @@
                         "events": [],
                         "children": [
                           {
+                            "id": null,
                             "name": "ftd.text",
                             "properties": [
                               {
@@ -1624,7 +1714,8 @@
                                   "string-value": {
                                     "value": "white",
                                     "line-number": 247,
-                                    "source": "Default"
+                                    "source": "Default",
+                                    "condition": null
                                   }
                                 },
                                 "source": {
@@ -1641,7 +1732,8 @@
                                   "string-value": {
                                     "value": "todo",
                                     "line-number": 246,
-                                    "source": "Default"
+                                    "source": "Default",
+                                    "condition": null
                                   }
                                 },
                                 "source": "Caption",
@@ -1656,6 +1748,7 @@
                             "line-number": 246
                           },
                           {
+                            "id": null,
                             "name": "ftd.column",
                             "properties": [
                               {
@@ -1663,7 +1756,8 @@
                                   "string-value": {
                                     "value": "$chapter-desktop.button",
                                     "line-number": 250,
-                                    "source": "Default"
+                                    "source": "Default",
+                                    "condition": null
                                   }
                                 },
                                 "source": {
@@ -1686,6 +1780,7 @@
                         "line-number": 239
                       },
                       {
+                        "id": null,
                         "name": "ftd.column",
                         "properties": [
                           {
@@ -1693,7 +1788,8 @@
                               "string-value": {
                                 "value": "parent",
                                 "line-number": 259,
-                                "source": "Default"
+                                "source": "Default",
+                                "condition": null
                               }
                             },
                             "source": {
@@ -1710,7 +1806,8 @@
                               "string-value": {
                                 "value": "0",
                                 "line-number": 260,
-                                "source": "Default"
+                                "source": "Default",
+                                "condition": null
                               }
                             },
                             "source": {
@@ -1727,7 +1824,8 @@
                               "string-value": {
                                 "value": "100",
                                 "line-number": 261,
-                                "source": "Default"
+                                "source": "Default",
+                                "condition": null
                               }
                             },
                             "source": {
@@ -1744,7 +1842,8 @@
                               "string-value": {
                                 "value": "fill-container",
                                 "line-number": 263,
-                                "source": "Default"
+                                "source": "Default",
+                                "condition": null
                               }
                             },
                             "source": {
@@ -1761,7 +1860,8 @@
                               "string-value": {
                                 "value": "24",
                                 "line-number": 264,
-                                "source": "Default"
+                                "source": "Default",
+                                "condition": null
                               }
                             },
                             "source": {
@@ -1778,7 +1878,8 @@
                               "string-value": {
                                 "value": "24",
                                 "line-number": 265,
-                                "source": "Default"
+                                "source": "Default",
+                                "condition": null
                               }
                             },
                             "source": {
@@ -1795,7 +1896,8 @@
                               "string-value": {
                                 "value": "8",
                                 "line-number": 266,
-                                "source": "Default"
+                                "source": "Default",
+                                "condition": null
                               }
                             },
                             "source": {
@@ -1816,6 +1918,7 @@
                         "events": [],
                         "children": [
                           {
+                            "id": null,
                             "name": "ftd.column",
                             "properties": [
                               {
@@ -1823,7 +1926,8 @@
                                   "string-value": {
                                     "value": "center",
                                     "line-number": 270,
-                                    "source": "Default"
+                                    "source": "Default",
+                                    "condition": null
                                   }
                                 },
                                 "source": {
@@ -1840,7 +1944,8 @@
                                   "string-value": {
                                     "value": "200",
                                     "line-number": 271,
-                                    "source": "Default"
+                                    "source": "Default",
+                                    "condition": null
                                   }
                                 },
                                 "source": {
@@ -1857,7 +1962,8 @@
                                   "string-value": {
                                     "value": "200",
                                     "line-number": 272,
-                                    "source": "Default"
+                                    "source": "Default",
+                                    "condition": null
                                   }
                                 },
                                 "source": {
@@ -1875,6 +1981,7 @@
                             "events": [],
                             "children": [
                               {
+                                "id": null,
                                 "name": "ftd.text",
                                 "properties": [
                                   {
@@ -1882,7 +1989,8 @@
                                       "string-value": {
                                         "value": "$inherited.types.copy-large",
                                         "line-number": 275,
-                                        "source": "Default"
+                                        "source": "Default",
+                                        "condition": null
                                       }
                                     },
                                     "source": {
@@ -1899,7 +2007,8 @@
                                       "string-value": {
                                         "value": "$inherited.colors.text-strong",
                                         "line-number": 276,
-                                        "source": "Default"
+                                        "source": "Default",
+                                        "condition": null
                                       }
                                     },
                                     "source": {
@@ -1916,7 +2025,8 @@
                                       "string-value": {
                                         "value": "center",
                                         "line-number": 277,
-                                        "source": "Default"
+                                        "source": "Default",
+                                        "condition": null
                                       }
                                     },
                                     "source": {
@@ -1933,7 +2043,8 @@
                                       "string-value": {
                                         "value": "Congratulations! you have completed this chapter.",
                                         "line-number": 274,
-                                        "source": "Default"
+                                        "source": "Default",
+                                        "condition": null
                                       }
                                     },
                                     "source": "Caption",
@@ -1960,6 +2071,7 @@
                 "line-number": 222
               },
               {
+                "id": null,
                 "name": "ftd.column",
                 "properties": [
                   {
@@ -1967,7 +2079,8 @@
                       "string-value": {
                         "value": "450",
                         "line-number": 287,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -1984,7 +2097,8 @@
                       "string-value": {
                         "value": "0",
                         "line-number": 290,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -2001,7 +2115,8 @@
                       "string-value": {
                         "value": "48",
                         "line-number": 291,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -2018,7 +2133,8 @@
                       "string-value": {
                         "value": "100vh - 0px",
                         "line-number": 292,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -2035,7 +2151,8 @@
                       "string-value": {
                         "value": "$inherited.colors.background.overlay",
                         "line-number": 293,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -2052,7 +2169,8 @@
                       "string-value": {
                         "value": "auto",
                         "line-number": 294,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -2069,7 +2187,8 @@
                       "string-value": {
                         "value": "top-right",
                         "line-number": 295,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -2086,7 +2205,8 @@
                       "string-value": {
                         "value": "48",
                         "line-number": 296,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -2103,7 +2223,8 @@
                       "string-value": {
                         "value": "24",
                         "line-number": 297,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -2120,7 +2241,8 @@
                       "string-value": {
                         "value": "16",
                         "line-number": 298,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -2137,7 +2259,8 @@
                       "string-value": {
                         "value": "24",
                         "line-number": 299,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -2154,7 +2277,8 @@
                       "string-value": {
                         "value": "16",
                         "line-number": 300,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -2171,7 +2295,8 @@
                       "string-value": {
                         "value": "25",
                         "line-number": 301,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -2188,7 +2313,8 @@
                       "string-value": {
                         "value": "25",
                         "line-number": 302,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -2205,7 +2331,8 @@
                       "string-value": {
                         "value": "8",
                         "line-number": 303,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -2222,7 +2349,8 @@
                       "string-value": {
                         "value": "15",
                         "line-number": 304,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -2239,7 +2367,8 @@
                       "string-value": {
                         "value": "15",
                         "line-number": 305,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -2304,7 +2433,8 @@
           "value": {
             "List": {
               "value": [],
-              "line_number": 324
+              "line_number": 324,
+              "condition": null
             }
           },
           "line_number": 324,
@@ -2320,7 +2450,8 @@
           "value": {
             "List": {
               "value": [],
-              "line_number": 325
+              "line_number": 325,
+              "condition": null
             }
           },
           "line_number": 325,
@@ -2336,7 +2467,8 @@
           "value": {
             "List": {
               "value": [],
-              "line_number": 326
+              "line_number": 326,
+              "condition": null
             }
           },
           "line_number": 326,
@@ -2432,6 +2564,7 @@
         }
       ],
       "definition": {
+        "id": null,
         "name": "ftd.column",
         "properties": [
           {
@@ -2439,7 +2572,8 @@
               "string-value": {
                 "value": "fill-container",
                 "line-number": 337,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -2457,6 +2591,7 @@
         "events": [],
         "children": [
           {
+            "id": null,
             "name": "h.header",
             "properties": [
               {
@@ -2464,7 +2599,8 @@
                   "string-value": {
                     "value": "$chapter-mobile.sections",
                     "line-number": 340,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -2481,7 +2617,8 @@
                   "string-value": {
                     "value": "$chapter-mobile.sub-sections",
                     "line-number": 341,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -2498,7 +2635,8 @@
                   "string-value": {
                     "value": "$chapter-mobile.current-section",
                     "line-number": 342,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -2515,7 +2653,8 @@
                   "string-value": {
                     "value": "$chapter-mobile.current-subsection",
                     "line-number": 343,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -2532,7 +2671,8 @@
                   "string-value": {
                     "value": "$chapter-mobile.current-page",
                     "line-number": 344,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -2549,7 +2689,8 @@
                   "string-value": {
                     "value": "$chapter-mobile.site-logo",
                     "line-number": 345,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -2566,7 +2707,8 @@
                   "string-value": {
                     "value": "$chapter-mobile.site-url",
                     "line-number": 346,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -2583,7 +2725,8 @@
                   "string-value": {
                     "value": "$chapter-mobile.toc",
                     "line-number": 347,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -2600,7 +2743,8 @@
                   "string-value": {
                     "value": "$chapter-mobile.site-name",
                     "line-number": 348,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -2620,6 +2764,7 @@
             "line-number": 339
           },
           {
+            "id": null,
             "name": "ftd.column",
             "properties": [
               {
@@ -2627,7 +2772,8 @@
                   "string-value": {
                     "value": "parent",
                     "line-number": 352,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -2644,7 +2790,8 @@
                   "string-value": {
                     "value": "24",
                     "line-number": 353,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -2661,7 +2808,8 @@
                   "string-value": {
                     "value": "24",
                     "line-number": 354,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -2684,6 +2832,7 @@
             "line-number": 350
           },
           {
+            "id": null,
             "name": "ftd.column",
             "properties": [
               {
@@ -2691,7 +2840,8 @@
                   "string-value": {
                     "value": "page-wrap",
                     "line-number": 361,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -2708,7 +2858,8 @@
                   "string-value": {
                     "value": "fill-container",
                     "line-number": 362,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -2725,7 +2876,8 @@
                   "string-value": {
                     "value": "top",
                     "line-number": 363,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -2742,7 +2894,8 @@
                   "string-value": {
                     "value": "100vh",
                     "line-number": 364,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -2759,7 +2912,8 @@
                   "string-value": {
                     "value": "fill-container",
                     "line-number": 365,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -2776,7 +2930,8 @@
                   "string-value": {
                     "value": "20",
                     "line-number": 366,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -2793,7 +2948,8 @@
                   "string-value": {
                     "value": "20",
                     "line-number": 367,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -2810,7 +2966,8 @@
                   "string-value": {
                     "value": "84",
                     "line-number": 368,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -2828,6 +2985,7 @@
             "events": [],
             "children": [
               {
+                "id": null,
                 "name": "ftd.row",
                 "properties": [
                   {
@@ -2835,7 +2993,8 @@
                       "string-value": {
                         "value": "fill-container",
                         "line-number": 371,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -2853,6 +3012,7 @@
                 "events": [],
                 "children": [
                   {
+                    "id": null,
                     "name": "ds.h1",
                     "properties": [
                       {
@@ -2860,7 +3020,8 @@
                           "string-value": {
                             "value": "$chapter-mobile.title",
                             "line-number": 374,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": "Caption",
@@ -2878,6 +3039,7 @@
                     "line-number": 374
                   },
                   {
+                    "id": null,
                     "name": "ftd.column",
                     "properties": [
                       {
@@ -2885,7 +3047,8 @@
                           "string-value": {
                             "value": "center",
                             "line-number": 379,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -2902,7 +3065,8 @@
                           "string-value": {
                             "value": "8",
                             "line-number": 380,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -2923,6 +3087,7 @@
                     "events": [],
                     "children": [
                       {
+                        "id": null,
                         "name": "ftd.image",
                         "properties": [
                           {
@@ -2930,7 +3095,8 @@
                               "string-value": {
                                 "value": "$assets.files.images.info-icon.svg",
                                 "line-number": 383,
-                                "source": "Default"
+                                "source": "Default",
+                                "condition": null
                               }
                             },
                             "source": {
@@ -2947,7 +3113,8 @@
                               "string-value": {
                                 "value": "36",
                                 "line-number": 384,
-                                "source": "Default"
+                                "source": "Default",
+                                "condition": null
                               }
                             },
                             "source": {
@@ -2979,6 +3146,7 @@
                 "line-number": 370
               },
               {
+                "id": null,
                 "name": "ds.markdown",
                 "properties": [
                   {
@@ -2986,7 +3154,8 @@
                       "string-value": {
                         "value": "$chapter-mobile.body",
                         "line-number": 396,
-                        "source": "Body"
+                        "source": "Body",
+                        "condition": null
                       }
                     },
                     "source": "Body",
@@ -3007,6 +3176,7 @@
             "line-number": 360
           },
           {
+            "id": null,
             "name": "ftd.column",
             "properties": [
               {
@@ -3014,7 +3184,8 @@
                   "string-value": {
                     "value": "parent",
                     "line-number": 401,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -3031,7 +3202,8 @@
                   "string-value": {
                     "value": "0",
                     "line-number": 402,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -3048,7 +3220,8 @@
                   "string-value": {
                     "value": "0",
                     "line-number": 403,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -3065,7 +3238,8 @@
                   "string-value": {
                     "value": "0",
                     "line-number": 404,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -3082,7 +3256,8 @@
                   "string-value": {
                     "value": "0",
                     "line-number": 405,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -3099,7 +3274,8 @@
                   "string-value": {
                     "value": "$inherited.colors.background.overlay",
                     "line-number": 406,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -3116,7 +3292,8 @@
                   "string-value": {
                     "value": "1",
                     "line-number": 407,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -3133,7 +3310,8 @@
                   "string-value": {
                     "value": "fill-container",
                     "line-number": 408,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -3160,6 +3338,7 @@
             ],
             "children": [
               {
+                "id": null,
                 "name": "ftd.column",
                 "properties": [
                   {
@@ -3167,7 +3346,8 @@
                       "string-value": {
                         "value": "fill-container",
                         "line-number": 412,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -3185,6 +3365,7 @@
                 "events": [],
                 "children": [
                   {
+                    "id": null,
                     "name": "ftd.image",
                     "properties": [
                       {
@@ -3192,7 +3373,8 @@
                           "string-value": {
                             "value": "$assets.files.images.cross.svg",
                             "line-number": 415,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -3209,7 +3391,8 @@
                           "string-value": {
                             "value": "16",
                             "line-number": 416,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -3226,7 +3409,8 @@
                           "string-value": {
                             "value": "auto",
                             "line-number": 417,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -3243,7 +3427,8 @@
                           "string-value": {
                             "value": "30",
                             "line-number": 418,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -3260,7 +3445,8 @@
                           "string-value": {
                             "value": "16",
                             "line-number": 419,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -3292,6 +3478,7 @@
             "line-number": 399
           },
           {
+            "id": null,
             "name": "ftd.column",
             "properties": [
               {
@@ -3299,7 +3486,8 @@
                   "string-value": {
                     "value": "100% - 48px",
                     "line-number": 428,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -3316,7 +3504,8 @@
                   "string-value": {
                     "value": "100vh - 0px",
                     "line-number": 429,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -3333,7 +3522,8 @@
                   "string-value": {
                     "value": "auto",
                     "line-number": 430,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -3350,7 +3540,8 @@
                   "string-value": {
                     "value": "top-right",
                     "line-number": 431,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -3367,7 +3558,8 @@
                   "string-value": {
                     "value": "$pr.space.space-5",
                     "line-number": 432,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -3384,7 +3576,8 @@
                   "string-value": {
                     "value": "parent",
                     "line-number": 433,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -3401,7 +3594,8 @@
                   "string-value": {
                     "value": "0",
                     "line-number": 434,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -3418,7 +3612,8 @@
                   "string-value": {
                     "value": "0",
                     "line-number": 435,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -3435,7 +3630,8 @@
                   "string-value": {
                     "value": "$inherited.colors.background.step-1",
                     "line-number": 436,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -3456,6 +3652,7 @@
             "events": [],
             "children": [
               {
+                "id": null,
                 "name": "ftd.column",
                 "properties": [
                   {
@@ -3463,7 +3660,8 @@
                       "string-value": {
                         "value": "fill-container",
                         "line-number": 441,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -3480,7 +3678,8 @@
                       "string-value": {
                         "value": "24",
                         "line-number": 442,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -3497,7 +3696,8 @@
                       "string-value": {
                         "value": "24",
                         "line-number": 443,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -3540,7 +3740,8 @@
           "value": {
             "List": {
               "value": [],
-              "line_number": 457
+              "line_number": 457,
+              "condition": null
             }
           },
           "line_number": 457,
@@ -3559,6 +3760,7 @@
         }
       ],
       "definition": {
+        "id": null,
         "name": "ftd.column",
         "properties": [
           {
@@ -3566,7 +3768,8 @@
               "string-value": {
                 "value": "0",
                 "line-number": 462,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -3583,7 +3786,8 @@
               "string-value": {
                 "value": "24",
                 "line-number": 463,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -3600,7 +3804,8 @@
               "string-value": {
                 "value": "100vh - 0px",
                 "line-number": 464,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -3617,7 +3822,8 @@
               "string-value": {
                 "value": "auto",
                 "line-number": 465,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -3634,7 +3840,8 @@
               "string-value": {
                 "value": "650",
                 "line-number": 466,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -3651,7 +3858,8 @@
               "string-value": {
                 "value": "top-left",
                 "line-number": 467,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -3668,7 +3876,8 @@
               "string-value": {
                 "value": "$inherited.colors.background.overlay",
                 "line-number": 468,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -3685,7 +3894,8 @@
               "string-value": {
                 "value": "8",
                 "line-number": 469,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -3702,7 +3912,8 @@
               "string-value": {
                 "value": "24",
                 "line-number": 470,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -3719,7 +3930,8 @@
               "string-value": {
                 "value": "16",
                 "line-number": 471,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -3736,7 +3948,8 @@
               "string-value": {
                 "value": "16",
                 "line-number": 472,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -3753,7 +3966,8 @@
               "string-value": {
                 "value": "32",
                 "line-number": 473,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -3770,7 +3984,8 @@
               "string-value": {
                 "value": "25",
                 "line-number": 474,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -3787,7 +4002,8 @@
               "string-value": {
                 "value": "25",
                 "line-number": 475,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -3805,6 +4021,7 @@
         "events": [],
         "children": [
           {
+            "id": null,
             "name": "toc-instance",
             "properties": [
               {
@@ -3812,7 +4029,8 @@
                   "string-value": {
                     "value": "$obj",
                     "line-number": 479,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -3829,7 +4047,8 @@
                   "string-value": {
                     "value": "$render-toc.status",
                     "line-number": 480,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -3888,6 +4107,7 @@
         }
       ],
       "definition": {
+        "id": null,
         "name": "ftd.column",
         "properties": [],
         "iteration": null,
@@ -3895,6 +4115,7 @@
         "events": [],
         "children": [
           {
+            "id": null,
             "name": "ftd.row",
             "properties": [
               {
@@ -3902,7 +4123,8 @@
                   "string-value": {
                     "value": "fill-container",
                     "line-number": 503,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -3919,7 +4141,8 @@
                   "string-value": {
                     "value": "8",
                     "line-number": 504,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -3940,6 +4163,7 @@
             "events": [],
             "children": [
               {
+                "id": null,
                 "name": "ftd.image",
                 "properties": [
                   {
@@ -3947,7 +4171,8 @@
                       "string-value": {
                         "value": "$toc-instance.toc.font-icon",
                         "line-number": 508,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -3964,7 +4189,8 @@
                       "string-value": {
                         "value": "14",
                         "line-number": 509,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -3981,7 +4207,8 @@
                       "string-value": {
                         "value": "auto",
                         "line-number": 510,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4004,6 +4231,7 @@
                 "line-number": 506
               },
               {
+                "id": null,
                 "name": "ftd.text",
                 "properties": [
                   {
@@ -4011,7 +4239,8 @@
                       "string-value": {
                         "value": "$toc-instance.toc.url",
                         "line-number": 513,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4028,7 +4257,8 @@
                       "string-value": {
                         "value": "$toc-instance.toc.title",
                         "line-number": 514,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4045,7 +4275,8 @@
                       "string-value": {
                         "value": "$inherited.types.label-small",
                         "line-number": 515,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4062,7 +4293,8 @@
                       "string-value": {
                         "value": "hug-content",
                         "line-number": 516,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4079,7 +4311,8 @@
                       "string-value": {
                         "value": "16",
                         "line-number": 517,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4096,7 +4329,8 @@
                       "string-value": {
                         "value": "$inherited.colors.text",
                         "line-number": 518,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4113,7 +4347,8 @@
                       "string-value": {
                         "value": "$inherited.colors.cta-primary.base",
                         "line-number": 519,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4136,6 +4371,7 @@
             "line-number": 501
           },
           {
+            "id": null,
             "name": "ftd.row",
             "properties": [
               {
@@ -4143,7 +4379,8 @@
                   "string-value": {
                     "value": "fill-container",
                     "line-number": 525,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -4160,7 +4397,8 @@
                   "string-value": {
                     "value": "8",
                     "line-number": 526,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -4181,6 +4419,7 @@
             "events": [],
             "children": [
               {
+                "id": null,
                 "name": "ftd.image",
                 "properties": [
                   {
@@ -4188,7 +4427,8 @@
                       "string-value": {
                         "value": "$toc-instance.toc.font-icon",
                         "line-number": 530,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4205,7 +4445,8 @@
                       "string-value": {
                         "value": "14",
                         "line-number": 531,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4222,7 +4463,8 @@
                       "string-value": {
                         "value": "auto",
                         "line-number": 532,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4245,6 +4487,7 @@
                 "line-number": 528
               },
               {
+                "id": null,
                 "name": "ftd.text",
                 "properties": [
                   {
@@ -4252,7 +4495,8 @@
                       "string-value": {
                         "value": "$toc-instance.toc.title",
                         "line-number": 535,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4269,7 +4513,8 @@
                       "string-value": {
                         "value": "hug-content",
                         "line-number": 537,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4286,7 +4531,8 @@
                       "string-value": {
                         "value": "16",
                         "line-number": 538,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4303,7 +4549,8 @@
                       "string-value": {
                         "value": "$inherited.colors.text",
                         "line-number": 539,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4320,7 +4567,8 @@
                       "string-value": {
                         "value": "12",
                         "line-number": 540,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4337,7 +4585,8 @@
                       "string-value": {
                         "value": "$inherited.colors.cta-primary.base",
                         "line-number": 541,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4360,6 +4609,7 @@
             "line-number": 523
           },
           {
+            "id": null,
             "name": "ftd.column",
             "properties": [
               {
@@ -4367,7 +4617,8 @@
                   "string-value": {
                     "value": "12",
                     "line-number": 546,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -4385,6 +4636,7 @@
             "events": [],
             "children": [
               {
+                "id": null,
                 "name": "childrens",
                 "properties": [
                   {
@@ -4392,7 +4644,8 @@
                       "string-value": {
                         "value": "$obj",
                         "line-number": 551,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4446,6 +4699,7 @@
         }
       ],
       "definition": {
+        "id": null,
         "name": "ftd.column",
         "properties": [],
         "iteration": null,
@@ -4453,6 +4707,7 @@
         "events": [],
         "children": [
           {
+            "id": null,
             "name": "ftd.row",
             "properties": [
               {
@@ -4460,7 +4715,8 @@
                   "string-value": {
                     "value": "fill-container",
                     "line-number": 575,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -4477,7 +4733,8 @@
                   "string-value": {
                     "value": "8",
                     "line-number": 576,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -4498,6 +4755,7 @@
             "events": [],
             "children": [
               {
+                "id": null,
                 "name": "ftd.image",
                 "properties": [
                   {
@@ -4505,7 +4763,8 @@
                       "string-value": {
                         "value": "$childrens.toc.font-icon",
                         "line-number": 580,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4522,7 +4781,8 @@
                       "string-value": {
                         "value": "14",
                         "line-number": 581,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4539,7 +4799,8 @@
                       "string-value": {
                         "value": "auto",
                         "line-number": 582,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4562,6 +4823,7 @@
                 "line-number": 578
               },
               {
+                "id": null,
                 "name": "ftd.text",
                 "properties": [
                   {
@@ -4569,7 +4831,8 @@
                       "string-value": {
                         "value": "$childrens.toc.url",
                         "line-number": 585,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4586,7 +4849,8 @@
                       "string-value": {
                         "value": "$childrens.toc.title",
                         "line-number": 586,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4603,7 +4867,8 @@
                       "string-value": {
                         "value": "$inherited.types.label-small",
                         "line-number": 587,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4620,7 +4885,8 @@
                       "string-value": {
                         "value": "hug-content",
                         "line-number": 588,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4637,7 +4903,8 @@
                       "string-value": {
                         "value": "16",
                         "line-number": 589,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4654,7 +4921,8 @@
                       "string-value": {
                         "value": "$inherited.colors.text",
                         "line-number": 590,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4671,7 +4939,8 @@
                       "string-value": {
                         "value": "$inherited.colors.cta-primary.base",
                         "line-number": 591,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4694,6 +4963,7 @@
             "line-number": 573
           },
           {
+            "id": null,
             "name": "ftd.row",
             "properties": [
               {
@@ -4701,7 +4971,8 @@
                   "string-value": {
                     "value": "fill-container",
                     "line-number": 597,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -4718,7 +4989,8 @@
                   "string-value": {
                     "value": "8",
                     "line-number": 598,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -4739,6 +5011,7 @@
             "events": [],
             "children": [
               {
+                "id": null,
                 "name": "ftd.image",
                 "properties": [
                   {
@@ -4746,7 +5019,8 @@
                       "string-value": {
                         "value": "$childrens.toc.font-icon",
                         "line-number": 602,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4763,7 +5037,8 @@
                       "string-value": {
                         "value": "14",
                         "line-number": 603,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4780,7 +5055,8 @@
                       "string-value": {
                         "value": "fill-container",
                         "line-number": 604,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4803,6 +5079,7 @@
                 "line-number": 600
               },
               {
+                "id": null,
                 "name": "ftd.text",
                 "properties": [
                   {
@@ -4810,7 +5087,8 @@
                       "string-value": {
                         "value": "$childrens.toc.title",
                         "line-number": 607,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4827,7 +5105,8 @@
                       "string-value": {
                         "value": "hug-content",
                         "line-number": 609,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4844,7 +5123,8 @@
                       "string-value": {
                         "value": "16",
                         "line-number": 610,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4861,7 +5141,8 @@
                       "string-value": {
                         "value": "$inherited.colors.text",
                         "line-number": 611,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4878,7 +5159,8 @@
                       "string-value": {
                         "value": "$inherited.colors.cta-primary.base",
                         "line-number": 612,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -4901,6 +5183,7 @@
             "line-number": 595
           },
           {
+            "id": null,
             "name": "childrens",
             "properties": [
               {
@@ -4908,7 +5191,8 @@
                   "string-value": {
                     "value": "$obj",
                     "line-number": 619,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -4979,7 +5263,8 @@
             "string-value": {
               "value": "what-are-task-button:",
               "line-number": 635,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "line_number": 635,
@@ -4996,7 +5281,8 @@
             "string-value": {
               "value": "false",
               "line-number": 636,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "line_number": 636,
@@ -5015,6 +5301,7 @@
         }
       ],
       "definition": {
+        "id": null,
         "name": "ftd.column",
         "properties": [
           {
@@ -5022,7 +5309,8 @@
               "string-value": {
                 "value": "fill-container",
                 "line-number": 640,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -5039,7 +5327,8 @@
               "string-value": {
                 "value": "$pr.space.space-6",
                 "line-number": 641,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -5056,7 +5345,8 @@
               "string-value": {
                 "value": "$pr.space.space-6",
                 "line-number": 642,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -5073,7 +5363,8 @@
               "string-value": {
                 "value": "$pr.space.space-6",
                 "line-number": 643,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -5090,7 +5381,8 @@
               "string-value": {
                 "value": "$pr.space.space-6",
                 "line-number": 644,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -5107,7 +5399,8 @@
               "string-value": {
                 "value": "76",
                 "line-number": 645,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -5124,7 +5417,8 @@
               "string-value": {
                 "value": "6",
                 "line-number": 646,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -5141,7 +5435,8 @@
               "string-value": {
                 "value": "$inherited.colors.background.step-1",
                 "line-number": 647,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -5158,7 +5453,8 @@
               "string-value": {
                 "value": "$inherited.colors.cta-tertiary.base",
                 "line-number": 648,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -5176,6 +5472,7 @@
         "events": [],
         "children": [
           {
+            "id": null,
             "name": "ftd.column",
             "properties": [
               {
@@ -5183,7 +5480,8 @@
                   "string-value": {
                     "value": "parent",
                     "line-number": 651,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -5200,7 +5498,8 @@
                   "string-value": {
                     "value": "24",
                     "line-number": 652,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -5217,7 +5516,8 @@
                   "string-value": {
                     "value": "24",
                     "line-number": 653,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -5235,6 +5535,7 @@
             "events": [],
             "children": [
               {
+                "id": null,
                 "name": "button",
                 "properties": [],
                 "iteration": null,
@@ -5247,6 +5548,7 @@
             "line-number": 650
           },
           {
+            "id": null,
             "name": "ftd.column",
             "properties": [
               {
@@ -5254,7 +5556,8 @@
                   "string-value": {
                     "value": "fill-container",
                     "line-number": 661,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -5271,7 +5574,8 @@
                   "string-value": {
                     "value": "$task.task-wrap",
                     "line-number": 662,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -5289,6 +5593,7 @@
             "events": [],
             "children": [
               {
+                "id": null,
                 "name": "ftd.row",
                 "properties": [
                   {
@@ -5296,7 +5601,8 @@
                       "string-value": {
                         "value": "fill-container",
                         "line-number": 665,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -5313,7 +5619,8 @@
                       "string-value": {
                         "value": "$inherited.colors.text-strong",
                         "line-number": 667,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -5334,6 +5641,7 @@
                 "events": [],
                 "children": [
                   {
+                    "id": null,
                     "name": "ftd.image",
                     "properties": [
                       {
@@ -5341,7 +5649,8 @@
                           "string-value": {
                             "value": "$assets.files.images.task-icon.svg",
                             "line-number": 670,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -5358,7 +5667,8 @@
                           "string-value": {
                             "value": "32",
                             "line-number": 671,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -5375,7 +5685,8 @@
                           "string-value": {
                             "value": "auto",
                             "line-number": 672,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -5392,7 +5703,8 @@
                           "string-value": {
                             "value": "center",
                             "line-number": 673,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -5409,7 +5721,8 @@
                           "string-value": {
                             "value": "16",
                             "line-number": 674,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -5429,6 +5742,7 @@
                     "line-number": 669
                   },
                   {
+                    "id": null,
                     "name": "ftd.text",
                     "properties": [
                       {
@@ -5436,7 +5750,8 @@
                           "string-value": {
                             "value": "$inherited.types.heading-large",
                             "line-number": 677,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -5453,7 +5768,8 @@
                           "string-value": {
                             "value": "$inherited.colors.custom.three",
                             "line-number": 678,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -5470,7 +5786,8 @@
                           "string-value": {
                             "value": "$title",
                             "line-number": 676,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": "Caption",
@@ -5488,6 +5805,7 @@
                 "line-number": 664
               },
               {
+                "id": null,
                 "name": "ftd.text",
                 "properties": [
                   {
@@ -5495,7 +5813,8 @@
                       "string-value": {
                         "value": "$task.body",
                         "line-number": 683,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -5512,7 +5831,8 @@
                       "string-value": {
                         "value": "$inherited.types.copy-relaxed",
                         "line-number": 684,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -5529,7 +5849,8 @@
                       "string-value": {
                         "value": "$inherited.colors.text",
                         "line-number": 685,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -5546,7 +5867,8 @@
                       "string-value": {
                         "value": "24",
                         "line-number": 686,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -5563,7 +5885,8 @@
                       "string-value": {
                         "value": "24",
                         "line-number": 687,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -5629,7 +5952,8 @@
             "string-value": {
               "value": "what-are-lesson-button:",
               "line-number": 707,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "line_number": 707,
@@ -5646,7 +5970,8 @@
             "string-value": {
               "value": "false",
               "line-number": 708,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "line_number": 708,
@@ -5665,6 +5990,7 @@
         }
       ],
       "definition": {
+        "id": null,
         "name": "ftd.column",
         "properties": [
           {
@@ -5672,7 +5998,8 @@
               "string-value": {
                 "value": "fill-container",
                 "line-number": 712,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -5689,7 +6016,8 @@
               "string-value": {
                 "value": "$pr.space.space-6",
                 "line-number": 713,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -5706,7 +6034,8 @@
               "string-value": {
                 "value": "$pr.space.space-6",
                 "line-number": 714,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -5723,7 +6052,8 @@
               "string-value": {
                 "value": "$pr.space.space-6",
                 "line-number": 715,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -5740,7 +6070,8 @@
               "string-value": {
                 "value": "$pr.space.space-6",
                 "line-number": 716,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -5757,7 +6088,8 @@
               "string-value": {
                 "value": "76",
                 "line-number": 717,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -5774,7 +6106,8 @@
               "string-value": {
                 "value": "6",
                 "line-number": 718,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -5791,7 +6124,8 @@
               "string-value": {
                 "value": "$inherited.colors.background.step-1",
                 "line-number": 719,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -5808,7 +6142,8 @@
               "string-value": {
                 "value": "$inherited.colors.cta-tertiary.base",
                 "line-number": 720,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -5826,6 +6161,7 @@
         "events": [],
         "children": [
           {
+            "id": null,
             "name": "ftd.column",
             "properties": [
               {
@@ -5833,7 +6169,8 @@
                   "string-value": {
                     "value": "parent",
                     "line-number": 723,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -5850,7 +6187,8 @@
                   "string-value": {
                     "value": "24",
                     "line-number": 724,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -5867,7 +6205,8 @@
                   "string-value": {
                     "value": "24",
                     "line-number": 725,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -5885,6 +6224,7 @@
             "events": [],
             "children": [
               {
+                "id": null,
                 "name": "button",
                 "properties": [],
                 "iteration": null,
@@ -5897,6 +6237,7 @@
             "line-number": 722
           },
           {
+            "id": null,
             "name": "ftd.column",
             "properties": [
               {
@@ -5904,7 +6245,8 @@
                   "string-value": {
                     "value": "fill-container",
                     "line-number": 733,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -5921,7 +6263,8 @@
                   "string-value": {
                     "value": "lesson-wrap",
                     "line-number": 734,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -5939,6 +6282,7 @@
             "events": [],
             "children": [
               {
+                "id": null,
                 "name": "ftd.row",
                 "properties": [
                   {
@@ -5946,7 +6290,8 @@
                       "string-value": {
                         "value": "fill-container",
                         "line-number": 737,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -5963,7 +6308,8 @@
                       "string-value": {
                         "value": "$inherited.colors.text-strong",
                         "line-number": 739,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -5984,6 +6330,7 @@
                 "events": [],
                 "children": [
                   {
+                    "id": null,
                     "name": "ftd.image",
                     "properties": [
                       {
@@ -5991,7 +6338,8 @@
                           "string-value": {
                             "value": "$assets.files.images.task-icon.svg",
                             "line-number": 742,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -6008,7 +6356,8 @@
                           "string-value": {
                             "value": "32",
                             "line-number": 743,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -6025,7 +6374,8 @@
                           "string-value": {
                             "value": "auto",
                             "line-number": 744,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -6042,7 +6392,8 @@
                           "string-value": {
                             "value": "center",
                             "line-number": 745,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -6059,7 +6410,8 @@
                           "string-value": {
                             "value": "16",
                             "line-number": 746,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -6079,6 +6431,7 @@
                     "line-number": 741
                   },
                   {
+                    "id": null,
                     "name": "ftd.text",
                     "properties": [
                       {
@@ -6086,7 +6439,8 @@
                           "string-value": {
                             "value": "$inherited.types.heading-large",
                             "line-number": 749,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -6103,7 +6457,8 @@
                           "string-value": {
                             "value": "$inherited.colors.custom.three",
                             "line-number": 750,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -6120,7 +6475,8 @@
                           "string-value": {
                             "value": "$lesson.title",
                             "line-number": 748,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": "Caption",
@@ -6138,6 +6494,7 @@
                 "line-number": 736
               },
               {
+                "id": null,
                 "name": "ftd.text",
                 "properties": [
                   {
@@ -6145,7 +6502,8 @@
                       "string-value": {
                         "value": "$lesson.body",
                         "line-number": 755,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -6162,7 +6520,8 @@
                       "string-value": {
                         "value": "$inherited.types.copy-relaxed",
                         "line-number": 756,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -6179,7 +6538,8 @@
                       "string-value": {
                         "value": "$inherited.colors.text",
                         "line-number": 757,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -6196,7 +6556,8 @@
                       "string-value": {
                         "value": "24",
                         "line-number": 758,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -6213,7 +6574,8 @@
                       "string-value": {
                         "value": "24",
                         "line-number": 759,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -6292,6 +6654,7 @@
         }
       ],
       "definition": {
+        "id": null,
         "name": "ftd.text",
         "properties": [
           {
@@ -6299,7 +6662,8 @@
               "string-value": {
                 "value": "8",
                 "line-number": 788,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -6316,7 +6680,8 @@
               "string-value": {
                 "value": "16",
                 "line-number": 789,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -6333,7 +6698,8 @@
               "string-value": {
                 "value": "5",
                 "line-number": 790,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -6350,7 +6716,8 @@
               "string-value": {
                 "value": "$inherited.colors.cta-primary.hover",
                 "line-number": 791,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -6367,7 +6734,8 @@
               "string-value": {
                 "value": "$inherited.types.copy-large",
                 "line-number": 793,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -6384,7 +6752,8 @@
               "string-value": {
                 "value": "$inherited.colors.text-strong",
                 "line-number": 794,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -6401,7 +6770,8 @@
               "string-value": {
                 "value": "$inherited.colors.background.step-2",
                 "line-number": 795,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -6418,7 +6788,8 @@
               "string-value": {
                 "value": "$inherited.colors.background.step-2",
                 "line-number": 796,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -6435,7 +6806,8 @@
               "string-value": {
                 "value": "$inherited.colors.background.step-2",
                 "line-number": 797,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -6452,7 +6824,8 @@
               "string-value": {
                 "value": "$inherited.colors.text",
                 "line-number": 798,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -6469,7 +6842,8 @@
               "string-value": {
                 "value": "$inherited.colors.text",
                 "line-number": 799,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -6486,7 +6860,8 @@
               "string-value": {
                 "value": "$inherited.colors.text",
                 "line-number": 800,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -6503,7 +6878,8 @@
               "string-value": {
                 "value": "$understood.title",
                 "line-number": 787,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": "Caption",
@@ -6535,7 +6911,8 @@
           "value": {
             "List": {
               "value": [],
-              "line_number": 811
+              "line_number": 811,
+              "condition": null
             }
           },
           "line_number": 811,
@@ -6554,6 +6931,7 @@
         }
       ],
       "definition": {
+        "id": null,
         "name": "ftd.column",
         "properties": [],
         "iteration": null,
@@ -6561,6 +6939,7 @@
         "events": [],
         "children": [
           {
+            "id": null,
             "name": "toc-instance",
             "properties": [
               {
@@ -6568,7 +6947,8 @@
                   "string-value": {
                     "value": "$obj",
                     "line-number": 818,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -6585,7 +6965,8 @@
                   "string-value": {
                     "value": "$render-toc-mobile.status",
                     "line-number": 819,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -6621,6 +7002,7 @@
       "name": "window-popup",
       "arguments": [],
       "definition": {
+        "id": null,
         "name": "ftd.column",
         "properties": [
           {
@@ -6628,7 +7010,8 @@
               "string-value": {
                 "value": "window",
                 "line-number": 839,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -6645,7 +7028,8 @@
               "string-value": {
                 "value": "0",
                 "line-number": 840,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -6662,7 +7046,8 @@
               "string-value": {
                 "value": "0",
                 "line-number": 841,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -6679,7 +7064,8 @@
               "string-value": {
                 "value": "0",
                 "line-number": 842,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -6696,7 +7082,8 @@
               "string-value": {
                 "value": "0",
                 "line-number": 843,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -6713,7 +7100,8 @@
               "string-value": {
                 "value": "fill-container",
                 "line-number": 844,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -6730,7 +7118,8 @@
               "string-value": {
                 "value": "fill-container",
                 "line-number": 845,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -6747,7 +7136,8 @@
               "string-value": {
                 "value": "$inherited.colors.background.overlay",
                 "line-number": 846,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -6765,6 +7155,7 @@
         "events": [],
         "children": [
           {
+            "id": null,
             "name": "ftd.image",
             "properties": [
               {
@@ -6772,7 +7163,8 @@
                   "string-value": {
                     "value": "$assets.files.images.cross.svg",
                     "line-number": 850,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -6789,7 +7181,8 @@
                   "string-value": {
                     "value": "24",
                     "line-number": 851,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -6806,7 +7199,8 @@
                   "string-value": {
                     "value": "auto",
                     "line-number": 852,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -6823,7 +7217,8 @@
                   "string-value": {
                     "value": "window",
                     "line-number": 853,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -6840,7 +7235,8 @@
                   "string-value": {
                     "value": "16",
                     "line-number": 854,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -6857,7 +7253,8 @@
                   "string-value": {
                     "value": "20",
                     "line-number": 855,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -6874,7 +7271,8 @@
                   "string-value": {
                     "value": "$pop-up-status=false",
                     "line-number": 857,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -6900,6 +7298,7 @@
             "line-number": 849
           },
           {
+            "id": null,
             "name": "ftd.row",
             "properties": [
               {
@@ -6907,7 +7306,8 @@
                   "string-value": {
                     "value": "fill-container",
                     "line-number": 861,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -6924,7 +7324,8 @@
                   "string-value": {
                     "value": "fill-container",
                     "line-number": 862,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -6945,6 +7346,7 @@
             "events": [],
             "children": [
               {
+                "id": null,
                 "name": "ftd.column",
                 "properties": [
                   {
@@ -6952,7 +7354,8 @@
                       "string-value": {
                         "value": "fill-container",
                         "line-number": 865,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -6969,7 +7372,8 @@
                       "string-value": {
                         "value": "center",
                         "line-number": 866,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -6987,6 +7391,7 @@
                 "events": [],
                 "children": [
                   {
+                    "id": null,
                     "name": "ftd.column",
                     "properties": [
                       {
@@ -6994,7 +7399,8 @@
                           "string-value": {
                             "value": "$inherited.colors.background.base",
                             "line-number": 869,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -7011,7 +7417,8 @@
                           "string-value": {
                             "value": "614",
                             "line-number": 870,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -7028,7 +7435,8 @@
                           "string-value": {
                             "value": "1",
                             "line-number": 871,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -7045,7 +7453,8 @@
                           "string-value": {
                             "value": "35",
                             "line-number": 872,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -7062,7 +7471,8 @@
                           "string-value": {
                             "value": "32",
                             "line-number": 873,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -7079,7 +7489,8 @@
                           "string-value": {
                             "value": "3",
                             "line-number": 878,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -7096,7 +7507,8 @@
                           "string-value": {
                             "value": "8",
                             "line-number": 879,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -7113,7 +7525,8 @@
                           "string-value": {
                             "value": "$inherited.colors.warning.text",
                             "line-number": 880,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -7130,7 +7543,8 @@
                           "string-value": {
                             "value": "center",
                             "line-number": 881,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -7148,6 +7562,7 @@
                     "events": [],
                     "children": [
                       {
+                        "id": null,
                         "name": "ftd.text",
                         "properties": [
                           {
@@ -7155,7 +7570,8 @@
                               "string-value": {
                                 "value": "center",
                                 "line-number": 884,
-                                "source": "Default"
+                                "source": "Default",
+                                "condition": null
                               }
                             },
                             "source": {
@@ -7172,7 +7588,8 @@
                               "string-value": {
                                 "value": "$inherited.types.heading-medium",
                                 "line-number": 885,
-                                "source": "Default"
+                                "source": "Default",
+                                "condition": null
                               }
                             },
                             "source": {
@@ -7189,7 +7606,8 @@
                               "string-value": {
                                 "value": "$inherited.colors.text-strong",
                                 "line-number": 886,
-                                "source": "Default"
+                                "source": "Default",
+                                "condition": null
                               }
                             },
                             "source": {
@@ -7206,7 +7624,8 @@
                               "string-value": {
                                 "value": "fill-container",
                                 "line-number": 887,
-                                "source": "Default"
+                                "source": "Default",
+                                "condition": null
                               }
                             },
                             "source": {
@@ -7223,7 +7642,8 @@
                               "string-value": {
                                 "value": "90",
                                 "line-number": 888,
-                                "source": "Default"
+                                "source": "Default",
+                                "condition": null
                               }
                             },
                             "source": {
@@ -7240,7 +7660,8 @@
                               "string-value": {
                                 "value": "CONGRATULATIONS",
                                 "line-number": 883,
-                                "source": "Default"
+                                "source": "Default",
+                                "condition": null
                               }
                             },
                             "source": "Caption",
@@ -7264,6 +7685,7 @@
             "line-number": 859
           },
           {
+            "id": null,
             "name": "ftd.row",
             "properties": [
               {
@@ -7271,7 +7693,8 @@
                   "string-value": {
                     "value": "fill-container",
                     "line-number": 899,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -7288,7 +7711,8 @@
                   "string-value": {
                     "value": "fill",
                     "line-number": 900,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": {
@@ -7309,6 +7733,7 @@
             "events": [],
             "children": [
               {
+                "id": null,
                 "name": "ftd.column",
                 "properties": [
                   {
@@ -7316,7 +7741,8 @@
                       "string-value": {
                         "value": "fill-container",
                         "line-number": 903,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -7333,7 +7759,8 @@
                       "string-value": {
                         "value": "center",
                         "line-number": 904,
-                        "source": "Default"
+                        "source": "Default",
+                        "condition": null
                       }
                     },
                     "source": {
@@ -7351,6 +7778,7 @@
                 "events": [],
                 "children": [
                   {
+                    "id": null,
                     "name": "ftd.column",
                     "properties": [
                       {
@@ -7358,7 +7786,8 @@
                           "string-value": {
                             "value": "$inherited.colors.background.base",
                             "line-number": 907,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -7375,7 +7804,8 @@
                           "string-value": {
                             "value": "200",
                             "line-number": 908,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -7392,7 +7822,8 @@
                           "string-value": {
                             "value": "1",
                             "line-number": 909,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -7409,7 +7840,8 @@
                           "string-value": {
                             "value": "35",
                             "line-number": 910,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -7426,7 +7858,8 @@
                           "string-value": {
                             "value": "32",
                             "line-number": 911,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -7443,7 +7876,8 @@
                           "string-value": {
                             "value": "3",
                             "line-number": 916,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -7460,7 +7894,8 @@
                           "string-value": {
                             "value": "8",
                             "line-number": 917,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -7477,7 +7912,8 @@
                           "string-value": {
                             "value": "$inherited.colors.warning.text",
                             "line-number": 918,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -7494,7 +7930,8 @@
                           "string-value": {
                             "value": "center",
                             "line-number": 919,
-                            "source": "Default"
+                            "source": "Default",
+                            "condition": null
                           }
                         },
                         "source": {
@@ -7512,6 +7949,7 @@
                     "events": [],
                     "children": [
                       {
+                        "id": null,
                         "name": "ftd.column",
                         "properties": [
                           {
@@ -7519,7 +7957,8 @@
                               "string-value": {
                                 "value": "center",
                                 "line-number": 922,
-                                "source": "Default"
+                                "source": "Default",
+                                "condition": null
                               }
                             },
                             "source": {
@@ -7537,6 +7976,7 @@
                         "events": [],
                         "children": [
                           {
+                            "id": null,
                             "name": "ftd.text",
                             "properties": [
                               {
@@ -7544,7 +7984,8 @@
                                   "string-value": {
                                     "value": "center",
                                     "line-number": 925,
-                                    "source": "Default"
+                                    "source": "Default",
+                                    "condition": null
                                   }
                                 },
                                 "source": {
@@ -7561,7 +8002,8 @@
                                   "string-value": {
                                     "value": "$inherited.types.fine-print",
                                     "line-number": 926,
-                                    "source": "Default"
+                                    "source": "Default",
+                                    "condition": null
                                   }
                                 },
                                 "source": {
@@ -7578,7 +8020,8 @@
                                   "string-value": {
                                     "value": "$inherited.colors.text-strong",
                                     "line-number": 927,
-                                    "source": "Default"
+                                    "source": "Default",
+                                    "condition": null
                                   }
                                 },
                                 "source": {
@@ -7595,7 +8038,8 @@
                                   "string-value": {
                                     "value": "fill-container",
                                     "line-number": 928,
-                                    "source": "Default"
+                                    "source": "Default",
+                                    "condition": null
                                   }
                                 },
                                 "source": {
@@ -7612,7 +8056,8 @@
                                   "string-value": {
                                     "value": "90",
                                     "line-number": 929,
-                                    "source": "Default"
+                                    "source": "Default",
+                                    "condition": null
                                   }
                                 },
                                 "source": {
@@ -7629,7 +8074,8 @@
                                   "string-value": {
                                     "value": "CONGRATULATIONS",
                                     "line-number": 924,
-                                    "source": "Default"
+                                    "source": "Default",
+                                    "condition": null
                                   }
                                 },
                                 "source": "Caption",
@@ -7667,6 +8113,7 @@
       "name": "sidebar",
       "arguments": [],
       "definition": {
+        "id": null,
         "name": "ftd.column",
         "properties": [
           {
@@ -7674,7 +8121,8 @@
               "string-value": {
                 "value": "fill-container",
                 "line-number": 948,
-                "source": "Default"
+                "source": "Default",
+                "condition": null
               }
             },
             "source": {
@@ -7692,6 +8140,7 @@
         "events": [],
         "children": [
           {
+            "id": null,
             "name": "cbox.text-4",
             "properties": [
               {
@@ -7699,7 +8148,8 @@
                   "string-value": {
                     "value": "Need Help?",
                     "line-number": 951,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": "Caption",
@@ -7711,7 +8161,8 @@
                   "string-value": {
                     "value": "Please join our [Discord to ask any questions](https://discord.gg/d2MgKBybEQ)\nrelated to this workshop!\n\nOr just meet the others who are learning FTD like you :-)",
                     "line-number": 958,
-                    "source": "Body"
+                    "source": "Body",
+                    "condition": null
                   }
                 },
                 "source": "Body",
@@ -7726,6 +8177,7 @@
             "line-number": 951
           },
           {
+            "id": null,
             "name": "cbox.info",
             "properties": [
               {
@@ -7733,7 +8185,8 @@
                   "string-value": {
                     "value": "Github Repo",
                     "line-number": 959,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": "Caption",
@@ -7745,7 +8198,8 @@
                   "string-value": {
                     "value": "The code for this workshop can be found on Github:\n[ftd-lang/ftd-workshop](https://github.com/ftd-lang/ftd-workshop).",
                     "line-number": 964,
-                    "source": "Body"
+                    "source": "Body",
+                    "condition": null
                   }
                 },
                 "source": "Body",
@@ -7760,6 +8214,7 @@
             "line-number": 959
           },
           {
+            "id": null,
             "name": "cbox.text-4",
             "properties": [
               {
@@ -7767,7 +8222,8 @@
                   "string-value": {
                     "value": "Join The Next Session",
                     "line-number": 965,
-                    "source": "Default"
+                    "source": "Default",
+                    "condition": null
                   }
                 },
                 "source": "Caption",
@@ -7779,7 +8235,8 @@
                   "string-value": {
                     "value": "The next remote workshop would be happening on **4th Nov 2022**. [Learn more\nhere](https://fifthtry.com/events/).",
                     "line-number": 970,
-                    "source": "Body"
+                    "source": "Body",
+                    "condition": null
                   }
                 },
                 "source": "Body",

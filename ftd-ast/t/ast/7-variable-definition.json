@@ -25,7 +25,8 @@
             "string-value": {
               "value": "12",
               "line-number": 3,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "line_number": 3,
@@ -60,7 +61,8 @@
                         "string-value": {
                           "value": "Arpita",
                           "line-number": 8,
-                          "source": "Default"
+                          "source": "Default",
+                          "condition": null
                         }
                       },
                       "line-number": 8,
@@ -74,7 +76,8 @@
                         "string-value": {
                           "value": "10",
                           "line-number": 9,
-                          "source": "Default"
+                          "source": "Default",
+                          "condition": null
                         }
                       },
                       "line-number": 9,
@@ -84,12 +87,14 @@
                   ],
                   "body": null,
                   "values": [],
-                  "line_number": 7
+                  "line_number": 7,
+                  "condition": null
                 }
               }
             }
           ],
-          "line_number": 5
+          "line_number": 5,
+          "condition": null
         }
       },
       "processor": null,

@@ -11,7 +11,8 @@
         "string-value": {
           "value": "40",
           "line-number": 1,
-          "source": "Default"
+          "source": "Default",
+          "condition": null
         }
       },
       "processor": null,

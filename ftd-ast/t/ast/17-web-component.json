@@ -25,7 +25,8 @@
             "string-value": {
               "value": "0",
               "line-number": 3,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "line_number": 3,
@@ -53,7 +54,8 @@
             "string-value": {
               "value": ",",
               "line-number": 5,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "line_number": 5,
@@ -66,6 +68,7 @@
   },
   {
     "component-invocation": {
+      "id": null,
       "name": "word-count",
       "properties": [
         {
@@ -73,7 +76,8 @@
             "string-value": {
               "value": "0",
               "line-number": 11,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "source": {
@@ -90,7 +94,8 @@
             "string-value": {
               "value": "This is the body.",
               "line-number": 13,
-              "source": "Body"
+              "source": "Body",
+              "condition": null
             }
           },
           "source": "Body",

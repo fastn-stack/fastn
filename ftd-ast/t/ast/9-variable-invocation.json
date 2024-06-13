@@ -11,7 +11,8 @@
                 "string-value": {
                   "value": "10",
                   "line-number": 3,
-                  "source": "Default"
+                  "source": "Default",
+                  "condition": null
                 }
               }
             },
@@ -21,7 +22,8 @@
                 "string-value": {
                   "value": "20",
                   "line-number": 4,
-                  "source": "Default"
+                  "source": "Default",
+                  "condition": null
                 }
               }
             },
@@ -31,7 +33,8 @@
                 "string-value": {
                   "value": "30",
                   "line-number": 5,
-                  "source": "Default"
+                  "source": "Default",
+                  "condition": null
                 }
               }
             },
@@ -41,7 +44,8 @@
                 "string-value": {
                   "value": "40",
                   "line-number": 6,
-                  "source": "Default"
+                  "source": "Default",
+                  "condition": null
                 }
               }
             },
@@ -51,12 +55,14 @@
                 "string-value": {
                   "value": "50",
                   "line-number": 7,
-                  "source": "Default"
+                  "source": "Default",
+                  "condition": null
                 }
               }
             }
           ],
-          "line_number": 1
+          "line_number": 1,
+          "condition": null
         }
       },
       "condition": null,

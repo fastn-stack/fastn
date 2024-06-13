@@ -25,7 +25,8 @@
             "string-value": {
               "value": "This contains details for record `foo`.\nThis is default text for the field details.\nIt can be overridden by the variable of this type.",
               "line-number": 6,
-              "source": "Default"
+              "source": "Default",
+              "condition": null
             }
           },
           "line_number": 6,
