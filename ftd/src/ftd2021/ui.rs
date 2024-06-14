@@ -630,13 +630,7 @@ impl Element {
 
         let (open_id, external_children_container) =
             if open_id.is_some() && external_children_container.is_empty() {
-                (open_id, {
-                    if let Some(c) = children_container {
-                        c
-                    } else {
-                        vec![]
-                    }
-                })
+                (open_id, children_container.unwrap_or_default())
             } else {
                 (
                     external_open_id.clone(),

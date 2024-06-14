@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 #[derive(serde::Deserialize, Debug, Clone)]
 pub struct Track {
     pub filename: String,

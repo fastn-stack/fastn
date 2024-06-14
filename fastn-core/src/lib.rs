@@ -82,10 +82,10 @@ async fn original_package_status(config: &fastn_core::Config) -> fastn_core::Res
     Ok(if config.ds.exists(&path).await {
         config.ds.read_to_string(&path).await?
     } else {
-        let body_prefix = match config.package.generate_prefix_string(false) {
-            Some(bp) => bp,
-            None => String::new(),
-        };
+        let body_prefix = config
+            .package
+            .generate_prefix_string(false)
+            .unwrap_or_default();
         format!(
             "{}\n\n-- import: {}/original-status as pi\n\n-- pi.original-status-page:",
             body_prefix,
@@ -105,10 +105,10 @@ async fn translation_package_status(config: &fastn_core::Config) -> fastn_core::
     Ok(if config.ds.exists(&path).await {
         config.ds.read_to_string(&path).await?
     } else {
-        let body_prefix = match config.package.generate_prefix_string(false) {
-            Some(bp) => bp,
-            None => String::new(),
-        };
+        let body_prefix = config
+            .package
+            .generate_prefix_string(false)
+            .unwrap_or_default();
         format!(
             "{}\n\n-- import: {}/translation-status as pi\n\n-- pi.translation-status-page:",
             body_prefix,

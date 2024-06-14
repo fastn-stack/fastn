@@ -101,7 +101,7 @@ pub fn builtin_function(identifier: &str) -> Option<Function> {
         })),
         "min" => Some(Function::new(|argument| {
             let arguments = argument.as_tuple()?;
-            let mut min_int = IntType::max_value();
+            let mut min_int = IntType::MAX;
             let mut min_float = 1.0f64 / 0.0f64;
             debug_assert!(min_float.is_infinite());
 
@@ -123,7 +123,7 @@ pub fn builtin_function(identifier: &str) -> Option<Function> {
         })),
         "max" => Some(Function::new(|argument| {
             let arguments = argument.as_tuple()?;
-            let mut max_int = IntType::min_value();
+            let mut max_int = IntType::MIN;
             let mut max_float = -1.0f64 / 0.0f64;
             debug_assert!(max_float.is_infinite());
 
