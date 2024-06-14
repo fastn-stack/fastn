@@ -34,7 +34,6 @@ pub async fn interpret_helper(
     download_assets: bool,
     line_number: usize,
 ) -> ftd::interpreter::Result<ftd::interpreter::Document> {
-    tracing::info!(document = name);
     let doc = cached_parse(name, source, line_number)?;
     let mut s = ftd::interpreter::interpret_with_line_number(name, doc)?;
     lib.module_package_map.insert(
@@ -259,7 +258,6 @@ pub async fn resolve_foreign_variable2022(
     download_assets: bool,
     caller_module: &str,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    tracing::info!(doc = doc_name, var = variable);
     let package = lib.get_current_package(caller_module)?;
     if let Ok(value) = resolve_ftd_foreign_variable_2022(variable, doc_name) {
         return Ok(value);

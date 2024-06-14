@@ -566,7 +566,6 @@ impl Package {
         fastn_path: &fastn_ds::Path,
         ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<()> {
-        tracing::info!(path = fastn_path.to_string());
         let fastn_document = {
             let doc = ds.read_to_string(fastn_path).await?;
             let lib = fastn_core::FastnLibrary::default();
@@ -633,7 +632,7 @@ impl Package {
         Ok(())
     }
 
-    #[tracing::instrument(skip(self))]
+    #[tracing::instrument(skip(self, ds))]
     pub(crate) async fn get_and_resolve(
         &self,
         package_root: &fastn_ds::Path,

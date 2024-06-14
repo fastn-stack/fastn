@@ -1308,13 +1308,11 @@ impl Sitemap {
         for section in self.sections.iter() {
             let document = resolve_in_section(section, path);
             if document.is_some() {
-                tracing::info!(msg = "return: document found", path = path);
                 return document;
             }
         }
 
         tracing::info!(msg = "return: document not found", path = path);
-
         None
     }
 

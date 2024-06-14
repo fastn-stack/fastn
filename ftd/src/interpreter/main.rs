@@ -828,14 +828,11 @@ pub fn interpret(id: &str, source: &str) -> ftd::interpreter::Result<Interpreter
     interpret_with_line_number(id, doc)
 }
 
-#[tracing::instrument(skip_all)]
 pub fn interpret_with_line_number(
     id: &str,
     document: ParsedDocument,
 ) -> ftd::interpreter::Result<Interpreter> {
     use itertools::Itertools;
-
-    tracing::info!(msg = "ftd: interpreting", doc = id);
 
     let mut s = InterpreterState::new(id.to_string());
     s.parsed_libs.insert(id.to_string(), document);

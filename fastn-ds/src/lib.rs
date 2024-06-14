@@ -222,10 +222,7 @@ impl DocumentStore {
                 let module = match unsafe {
                     wasmtime::Module::from_trusted_file(&WASM_ENGINE, &wasmc_path.path)
                 } {
-                    Ok(m) => {
-                        tracing::info!("loaded wasmc file for {path}");
-                        m
-                    }
+                    Ok(m) => m,
                     Err(e) => {
                         tracing::info!("could not read {wasmc_path:?} file: {e:?}");
                         let source = self.read_content(&fastn_ds::Path::new(path)).await?;
@@ -554,7 +551,6 @@ impl DocumentStore {
             proxy_request.headers_mut().remove(header);
         }
 
-        tracing::info!("Request details");
         tracing::info!(
             url = ?proxy_request.url(),
             method = ?proxy_request.method(),
@@ -567,7 +563,6 @@ impl DocumentStore {
             .execute(proxy_request)
             .await?;
 
-        tracing::info!("Response details");
         tracing::info!(status = ?response.status(),headers = ?response.headers());
 
         Ok(fastn_ds::reqwest_util::to_http_response(response).await?)

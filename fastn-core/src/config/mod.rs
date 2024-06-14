@@ -126,12 +126,11 @@ impl RequestConfig {
 
     // -/kameri-app.herokuapp.com/
     // .packages/kameri-app.heroku.com/index.ftd
-    #[tracing::instrument(skip_all)]
+    #[tracing::instrument(skip(self))]
     pub async fn get_file_and_package_by_id(
         &mut self,
         path: &str,
     ) -> fastn_core::Result<fastn_core::File> {
-        tracing::info!(path = path);
         // This function will return file and package by given path
         // path can be mounted(mount-point) with other dependencies
         //

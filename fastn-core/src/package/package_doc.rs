@@ -5,7 +5,6 @@ impl fastn_core::Package {
         package_root: Option<&fastn_ds::Path>,
         ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<Vec<u8>> {
-        tracing::debug!(document = name);
         let package_root = self.package_root_with_default(package_root)?;
 
         let file_path = package_root.join(name.trim_start_matches('/'));
@@ -26,7 +25,6 @@ impl fastn_core::Package {
         &self,
         package_root: Option<&fastn_ds::Path>,
     ) -> fastn_core::Result<fastn_ds::Path> {
-        tracing::info!(package = self.name);
         if let Some(package_root) = package_root {
             Ok(package_root.to_owned())
         } else {
@@ -70,7 +68,7 @@ impl fastn_core::Package {
     }
 
     #[cfg(not(feature = "use-config-json"))]
-    #[tracing::instrument(skip(self))]
+    #[tracing::instrument(skip(self, ds))]
     pub(crate) async fn fs_fetch_by_id(
         &self,
         id: &str,
@@ -223,8 +221,6 @@ impl fastn_core::Package {
         config_package_name: &str,
         ds: &fastn_ds::DocumentStore,
     ) -> fastn_core::Result<(String, Vec<u8>)> {
-        tracing::info!(id = id);
-
         if config_package_name.eq(&self.name) {
             if fastn_core::file::is_static(id)? {
                 if let Ok(data) = self.fs_fetch_by_file_name(id, package_root, ds).await {

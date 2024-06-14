@@ -205,7 +205,6 @@ impl DynamicUrls {
         for section in self.sections.iter() {
             let (document, path_params, extra) = resolve_in_section(section, path)?;
             if document.is_some() {
-                tracing::info!(msg = "return: document found", path = path);
                 return Ok((document, path_params, extra));
             }
         }

@@ -358,7 +358,7 @@ pub(crate) fn url_regex() -> regex::Regex {
     ).unwrap()
 }
 
-#[tracing::instrument(skip_all)]
+#[tracing::instrument(skip(req_config, headers, body))]
 pub async fn http_post_with_cookie(
     req_config: &fastn_core::RequestConfig,
     url: &str,
@@ -366,7 +366,6 @@ pub async fn http_post_with_cookie(
     body: &str,
 ) -> fastn_core::Result<(fastn_core::Result<bytes::Bytes>, Vec<String>)> {
     pub use fastn_ds::RequestType;
-    tracing::info!(url = url);
 
     let cookies = req_config.request.cookies().clone();
     let mut req_headers = reqwest::header::HeaderMap::new();
@@ -415,7 +414,6 @@ pub async fn http_post_with_cookie(
             resp_cookies,
         ));
     }
-    tracing::info!(msg = "returning success", url = url);
     Ok((Ok(res.body().clone()), resp_cookies))
 }
 
@@ -430,7 +428,7 @@ pub async fn http_get(ds: &fastn_ds::DocumentStore, url: &str) -> fastn_core::Re
 static NOT_FOUND_CACHE: once_cell::sync::Lazy<antidote::RwLock<std::collections::HashSet<String>>> =
     once_cell::sync::Lazy::new(|| antidote::RwLock::new(Default::default()));
 
-#[tracing::instrument(skip_all)]
+#[tracing::instrument(skip(ds, req, headers))]
 pub async fn http_get_with_cookie(
     ds: &fastn_ds::DocumentStore,
     req: &fastn_core::http::Request,
@@ -448,7 +446,6 @@ pub async fn http_get_with_cookie(
         ));
     }
 
-    tracing::info!(url = url);
     let mut req_headers = reqwest::header::HeaderMap::new();
     for (key, value) in headers.iter() {
         req_headers.insert(
@@ -496,7 +493,6 @@ pub async fn http_get_with_cookie(
         ));
     }
 
-    tracing::info!(msg = "returning success", url = url);
     Ok((Ok(res.body().clone()), resp_cookies))
 }
 
