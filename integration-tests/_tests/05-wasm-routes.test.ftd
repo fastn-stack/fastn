@@ -1,0 +1,21 @@
+-- import: fastn
+
+-- fastn.test:
+
+-- fastn.get: wasm mounted route that start with the mountpoint prefix
+;; see FASTN.ftd
+url: /test/test-route/
+http-status: 200
+
+fastn.assert.eq(fastn.http_response["ok"], true);
+
+-- fastn.get: wasm mounted route that don't start with mountpoint prefix
+;; see FASTN.ftd
+url: /test/misc/
+http-status: 200
+
+fastn.assert.eq(fastn.http_response["ok"], true);
+
+-- fastn.get: wasm mount is correct but the route handler does not exist
+url: /test/no-handler-exists/
+http-status: 404

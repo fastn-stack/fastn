@@ -1,0 +1,6 @@
+# nightly required for the "field-extractors" feature of ft-sdk
+[toolchain]
+channel = "nightly-2024-04-26"
+components = [ "rustfmt", "clippy", "rust-src" ]
+targets = [ "wasm32-unknown-unknown" ]
+
