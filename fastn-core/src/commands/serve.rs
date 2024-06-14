@@ -525,8 +525,9 @@ async fn handle_endpoints(
         "{}/{}",
         endpoint.endpoint.trim_end_matches('/'),
         req.full_path()
-            .trim_start_matches(endpoint.mountpoint.trim_end_matches('/'))
-            .trim_start_matches('/')
+            .strip_prefix(endpoint.mountpoint.trim_end_matches('/'))
+            .map(|v| v.trim_start_matches('/'))
+            .expect("req.full_path() must start with endpoint.mountpoint")
     );
 
     if url.starts_with("wasm+proxy://") {
