@@ -7,7 +7,7 @@ pub use initiate_upload::{
     InitiateUploadResponse, PreSignedRequest,
 };
 
-pub const ENDPOINT: &str = "https://api.fifthtry.com";
+pub const ENDPOINT: &str = "https://www.fifthtry.com";
 
 #[derive(serde::Deserialize)]
 pub struct ApiResponse<T> {
@@ -17,10 +17,11 @@ pub struct ApiResponse<T> {
 }
 
 pub fn endpoint(name: &str) -> String {
-    if let Ok(url) = std::env::var("DEBUG_API_FIFTHTRY_COM") {
-        let url = format!("{}/ft2/api/{name}/", url);
-        println!("using debug api, only use this for testing: {url}");
-        return url;
-    }
-    dbg!(format!("{}/ft2/api/{name}/", clift::api::ENDPOINT))
+    format!(
+        "{prefix}/ft2/api/{name}/",
+        prefix = std::env::var("DEBUG_API_FIFTHTRY_COM")
+            .as_ref()
+            .map(|s| s.as_str())
+            .unwrap_or_else(|_| clift::api::ENDPOINT)
+    )
 }
