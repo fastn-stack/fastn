@@ -999,10 +999,6 @@ pub fn ignore_headers() -> Vec<&'static str> {
     vec!["host", "x-forwarded-ssl"]
 }
 
-pub(crate) fn is_ftd_path(path: &str) -> bool {
-    path.trim_matches('/').ends_with(".ftd")
-}
-
 pub(crate) fn is_static_path(path: &str) -> bool {
     assert!(path.starts_with('/'));
 
