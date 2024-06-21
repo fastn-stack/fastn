@@ -48,7 +48,7 @@
     let parenti0 = foo__test(parent, inherited, {
       name: "UI loop testing",
       uis: fastn.mutableList([function (root, inherited) {
-        fastn_utils.getter(global.foo__places).forLoop(root, function (root, item, index) {
+        global.foo__places.forLoop(root, function (root, item, index) {
           let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
           rooti0.setProperty(fastn_dom.PropertyKind.StringValue, item, inherited);
           rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
@@ -62,7 +62,7 @@
         });
       },
       function (root, inherited) {
-        fastn_utils.getter(global.foo__odds).forLoop(root, function (root, item, index) {
+        global.foo__odds.forLoop(root, function (root, item, index) {
           let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
           rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, item, inherited);
           rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
@@ -76,7 +76,7 @@
         });
       },
       function (root, inherited) {
-        fastn_utils.getter(global.foo__persons).forLoop(root, function (root, item, index) {
+        global.foo__persons.forLoop(root, function (root, item, index) {
           let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
           rooti0.setProperty(fastn_dom.PropertyKind.StringValue, item.get("name"), inherited);
           rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
@@ -90,7 +90,7 @@
         });
       },
       function (root, inherited) {
-        fastn_utils.getter(global.foo__persons).forLoop(root, function (root, item, index) {
+        global.foo__persons.forLoop(root, function (root, item, index) {
           let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Integer);
           rooti0.setProperty(fastn_dom.PropertyKind.IntegerValue, index, inherited);
           rooti0.setProperty(fastn_dom.PropertyKind.Color, function () {
@@ -132,7 +132,7 @@ let foo__test = function (parent, inherited, args) {
       }(), inherited);
     },
     function (root, inherited) {
-      fastn_utils.getter(__args__.uis).forLoop(root, function (root, item, index) {
+      __args__.uis.forLoop(root, function (root, item, index) {
         let rooti0 = fastn_utils.getStaticValue(item) (root, inherited);
         return rooti0;
       });

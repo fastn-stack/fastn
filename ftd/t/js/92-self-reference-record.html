@@ -41,7 +41,7 @@
     let parenti0 = foo__display_name(parent, inherited, {
       name: global.foo__arpita
     });
-    fastn_utils.getter(global.foo__names).forLoop(parent, function (root, item, index) {
+    global.foo__names.forLoop(parent, function (root, item, index) {
       let rooti0 = foo__display_name(root, inherited, {
         name: item
       });

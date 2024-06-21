@@ -28,7 +28,7 @@
   let __fastn_super_package_name__ = __fastn_package_name__;
   __fastn_package_name__ = "foo";
   try {
-    fastn_utils.getter(global.foo__weekdays).forLoop(parent, function (root, item, index) {
+    global.foo__weekdays.forLoop(parent, function (root, item, index) {
       return fastn_dom.conditionalDom(parent, [
         index
       ], function () {

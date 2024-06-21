@@ -200,6 +200,13 @@ const fastn = (function (fastn) {
             return this.#value;
         }
 
+        forLoop(root, dom_constructor) {
+            if (!this.#value instanceof MutableList) {
+                throw new Error("`forLoop` can only run for MutableList type object");
+            }
+            this.#value.forLoop(root, dom_constructor);
+        }
+
         setWithoutUpdate(value) {
             if (this.#old_closure) {
                 this.#value.removeClosure(this.#old_closure);
@@ -213,6 +220,11 @@ const fastn = (function (fastn) {
                 // The `this.#value.replace(value);` will replace the value of
                 // `orange-green` with `{light: red, dark: red}`
                 this.#value = value;
+            } else if (this.#value instanceof MutableList) {
+                if (value instanceof fastn.mutableClass) {
+                    value = value.get();
+                }
+                this.#value.set(value);
             } else {
                 this.#value = value;
             }
@@ -3798,12 +3810,34 @@ let fastn_utils = {
                 let fields = {};
                 for (let objKey in obj) {
                     fields[objKey] = fastn_utils.staticToMutables(obj[objKey]);
+                    if (fields[objKey] instanceof fastn.mutableClass) {
+                        fields[objKey] = fields[objKey].get();
+                    }
                 }
                 return fastn.recordInstance(fields);
             } else {
                 return fastn.mutable(obj);
             }
         } else {
+            return obj;
+        }
+    },
+    mutableToStaticValue(obj) {
+        if (obj instanceof fastn.mutableClass) {
+            return this.mutableToStaticValue(obj.get());
+        } else if (obj instanceof fastn.mutableListClass) {
+            let list = obj.getList();
+            return list.map((func) =>
+                this.mutableToStaticValue(func.item),
+            );
+        } else if (obj instanceof fastn.recordInstanceClass) {
+            let fields = obj.getAllFields();
+            return Object.fromEntries(
+                Object.entries(fields).map(([k,v]) =>
+                    [k, this.mutableToStaticValue(v)]
+                )
+            );
+        }  else {
             return obj;
         }
     },
@@ -5200,9 +5234,10 @@ const ftd = (function () {
         const value = global[name];
         if (isMutable(value)) {
             if (remaining) {
-                return value.get(remaining);
+                let obj = value.get(remaining);
+                return fastn_utils.mutableToStaticValue(obj);
             } else {
-                return value.get();
+                return fastn_utils.mutableToStaticValue(value);
             }
         } else {
             return value;
