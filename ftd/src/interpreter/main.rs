@@ -1104,9 +1104,9 @@ impl Document {
     }
 
     fn get_redirect_with_code(&self, kind: &str) -> ftd::interpreter::Result<Option<String>> {
-        let permanent_redirects = self.get_instructions(kind);
+        let redirects = self.get_instructions(kind);
 
-        for v in &permanent_redirects {
+        for v in &redirects {
             let url = match v.get_interpreter_value_of_argument("url", &self.tdoc())? {
                 // .and_then(|v| v.string(self.name.as_str(), 0).ok());
                 Some(v) => v.string(self.name.as_str(), 0)?,
@@ -1139,7 +1139,7 @@ impl Document {
         match self.get_redirect_with_code("ftd#permanent-redirect")? {
             Some(v) => Ok(Some((v, 308))),
             None => self
-                .get_redirect_with_code("ftd#redirect")
+                .get_redirect_with_code("ftd#temporary-redirect")
                 .map(|v| v.map(|v| (v, 307))),
         }
     }
