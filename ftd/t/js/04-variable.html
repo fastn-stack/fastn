@@ -73,14 +73,14 @@
         v: "Tom",
       }, parenti3);
     });
-    fastn_utils.getter(global.foo__names).forLoop(parent, function (root, item, index) {
+    global.foo__names.forLoop(parent, function (root, item, index) {
       let rooti0 = fastn_dom.createKernel(root, fastn_dom.ElementKind.Text);
       rooti0.setProperty(fastn_dom.PropertyKind.StringValue, item, inherited);
       return rooti0;
     });
     let parenti5 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
     parenti5.setProperty(fastn_dom.PropertyKind.StringValue, "End", inherited);
-    fastn_utils.getter(global.foo__names).forLoop(parent, function (root, item, index) {
+    global.foo__names.forLoop(parent, function (root, item, index) {
       return fastn_dom.conditionalDom(parent, [
         index
       ], function () {

@@ -372,7 +372,7 @@ let foo__ftd_world = function (parent, inherited, args)
       rooti0.setProperty(fastn_dom.PropertyKind.MinHeight, fastn_dom.Resizing.Fixed(fastn_dom.Length.Px(234)), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.Fixed(fastn_dom.Length.Px(10)), inherited);
       rooti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-        fastn_utils.getter(global.foo__todo_list).forLoop(root, function (root, item, index) {
+        global.foo__todo_list.forLoop(root, function (root, item, index) {
           let rooti0 = foo__ftd_todo_display(root, inherited, {
             item: item
           });

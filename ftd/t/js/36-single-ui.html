@@ -39,7 +39,7 @@
     let parenti3 = fastn_utils.getStaticValue(fastn_utils.getListItem(global.foo__uis.get(0))) (parent, inherited);
     let parenti4 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Text);
     parenti4.setProperty(fastn_dom.PropertyKind.StringValue, "===================", inherited);
-    fastn_utils.getter(global.foo__uis).forLoop(parent, function (root, item, index) {
+    global.foo__uis.forLoop(parent, function (root, item, index) {
       let rooti0 = fastn_utils.getStaticValue(item) (root, inherited);
       return rooti0;
     });

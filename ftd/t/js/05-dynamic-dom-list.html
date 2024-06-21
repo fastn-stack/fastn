@@ -47,7 +47,7 @@
         v: 1,
       }, parenti2);
     });
-    fastn_utils.getter(global.foo__counters).forLoop(parent, function (root, item, index) {
+    global.foo__counters.forLoop(parent, function (root, item, index) {
       return fastn_dom.conditionalDom(parent, [
         index,
         global.foo__value
