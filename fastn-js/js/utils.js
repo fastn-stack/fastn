@@ -140,6 +140,9 @@ let fastn_utils = {
                 let fields = {};
                 for (let objKey in obj) {
                     fields[objKey] = fastn_utils.staticToMutables(obj[objKey]);
+                    if (fields[objKey] instanceof fastn.mutableClass) {
+                        fields[objKey] = fields[objKey].get();
+                    }
                 }
                 return fastn.recordInstance(fields);
             } else {

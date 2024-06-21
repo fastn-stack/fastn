@@ -89,6 +89,13 @@ const fastn = (function (fastn) {
             return this.#value;
         }
 
+        forLoop(root, dom_constructor) {
+            if (!this.#value instanceof MutableList) {
+                throw new Error("`forLoop` can only run for MutableList type object");
+            }
+            this.#value.forLoop(root, dom_constructor);
+        }
+
         setWithoutUpdate(value) {
             if (this.#old_closure) {
                 this.#value.removeClosure(this.#old_closure);
@@ -102,6 +109,11 @@ const fastn = (function (fastn) {
                 // The `this.#value.replace(value);` will replace the value of
                 // `orange-green` with `{light: red, dark: red}`
                 this.#value = value;
+            } else if (this.#value instanceof MutableList) {
+                if (value instanceof fastn.mutableClass) {
+                    value = value.get();
+                }
+                this.#value.set(value);
             } else {
                 this.#value = value;
             }
