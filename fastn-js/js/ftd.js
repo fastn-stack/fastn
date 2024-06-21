@@ -457,9 +457,10 @@ const ftd = (function () {
         const value = global[name];
         if (isMutable(value)) {
             if (remaining) {
-                return value.get(remaining);
+                let obj = value.get(remaining);
+                return fastn_utils.mutableToStaticValue(obj);
             } else {
-                return value.get();
+                return fastn_utils.mutableToStaticValue(value);
             }
         } else {
             return value;

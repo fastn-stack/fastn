@@ -149,6 +149,25 @@ let fastn_utils = {
             return obj;
         }
     },
+    mutableToStaticValue(obj) {
+        if (obj instanceof fastn.mutableClass) {
+            return this.mutableToStaticValue(obj.get());
+        } else if (obj instanceof fastn.mutableListClass) {
+            let list = obj.getList();
+            return list.map((func) =>
+                this.mutableToStaticValue(func.item),
+            );
+        } else if (obj instanceof fastn.recordInstanceClass) {
+            let fields = obj.getAllFields();
+            return Object.fromEntries(
+                Object.entries(fields).map(([k,v]) =>
+                    [k, this.mutableToStaticValue(v)]
+                )
+            );
+        }  else {
+            return obj;
+        }
+    },
     flattenMutable(value) {
         if (!(value instanceof fastn.mutableClass)) return value;
 
