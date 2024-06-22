@@ -182,7 +182,7 @@ pub fn test_all(
 
     let test_folder = folder
         .map(|v| v.trim_end_matches('/').to_string())
-        .unwrap_or_else(|| "./tests".to_string());
+        .unwrap_or_else(|| "./fbt-tests".to_string());
     let config = match std::fs::read_to_string(format!("{}/fbt.p1", test_folder).as_str()) {
         Ok(v) => match crate::Config::parse(v.as_str(), format!("{}/fbt.p1", test_folder).as_str())
         {

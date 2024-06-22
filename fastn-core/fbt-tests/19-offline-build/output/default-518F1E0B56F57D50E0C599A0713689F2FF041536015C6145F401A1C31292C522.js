@@ -201,8 +201,10 @@ const fastn = (function (fastn) {
         }
 
         forLoop(root, dom_constructor) {
-            if (!this.#value instanceof MutableList) {
-                throw new Error("`forLoop` can only run for MutableList type object");
+            if ((!this.#value) instanceof MutableList) {
+                throw new Error(
+                    "`forLoop` can only run for MutableList type object",
+                );
             }
             this.#value.forLoop(root, dom_constructor);
         }
@@ -3827,17 +3829,16 @@ let fastn_utils = {
             return this.mutableToStaticValue(obj.get());
         } else if (obj instanceof fastn.mutableListClass) {
             let list = obj.getList();
-            return list.map((func) =>
-                this.mutableToStaticValue(func.item),
-            );
+            return list.map((func) => this.mutableToStaticValue(func.item));
         } else if (obj instanceof fastn.recordInstanceClass) {
             let fields = obj.getAllFields();
             return Object.fromEntries(
-                Object.entries(fields).map(([k,v]) =>
-                    [k, this.mutableToStaticValue(v)]
-                )
+                Object.entries(fields).map(([k, v]) => [
+                    k,
+                    this.mutableToStaticValue(v),
+                ]),
             );
-        }  else {
+        } else {
             return obj;
         }
     },
@@ -5584,7 +5585,7 @@ window.ftd = ftd;
 
 ftd.toggle = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "fastn_community_github_io_business_card_demo";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5601,7 +5602,7 @@ ftd.toggle = function (args) {
 }
 ftd.integer_field_with_default = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "fastn_community_github_io_business_card_demo";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5612,7 +5613,7 @@ ftd.integer_field_with_default = function (args) {
 }
 ftd.decimal_field_with_default = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "fastn_community_github_io_business_card_demo";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5623,7 +5624,7 @@ ftd.decimal_field_with_default = function (args) {
 }
 ftd.boolean_field_with_default = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "fastn_community_github_io_business_card_demo";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5634,7 +5635,7 @@ ftd.boolean_field_with_default = function (args) {
 }
 ftd.string_field_with_default = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "fastn_community_github_io_business_card_demo";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5645,7 +5646,7 @@ ftd.string_field_with_default = function (args) {
 }
 ftd.increment = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "fastn_community_github_io_business_card_demo";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5662,7 +5663,7 @@ ftd.increment = function (args) {
 }
 ftd.increment_by = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "fastn_community_github_io_business_card_demo";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5679,7 +5680,7 @@ ftd.increment_by = function (args) {
 }
 ftd.decrement = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "fastn_community_github_io_business_card_demo";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5696,7 +5697,7 @@ ftd.decrement = function (args) {
 }
 ftd.decrement_by = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "fastn_community_github_io_business_card_demo";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5713,7 +5714,7 @@ ftd.decrement_by = function (args) {
 }
 ftd.enable_light_mode = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "fastn_community_github_io_business_card_demo";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5724,7 +5725,7 @@ ftd.enable_light_mode = function (args) {
 }
 ftd.enable_dark_mode = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "fastn_community_github_io_business_card_demo";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5735,7 +5736,7 @@ ftd.enable_dark_mode = function (args) {
 }
 ftd.enable_system_mode = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "fastn_community_github_io_business_card_demo";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5746,7 +5747,7 @@ ftd.enable_system_mode = function (args) {
 }
 ftd.set_bool = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "fastn_community_github_io_business_card_demo";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5763,7 +5764,7 @@ ftd.set_bool = function (args) {
 }
 ftd.set_boolean = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "fastn_community_github_io_business_card_demo";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5780,7 +5781,7 @@ ftd.set_boolean = function (args) {
 }
 ftd.set_string = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "fastn_community_github_io_business_card_demo";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5797,7 +5798,7 @@ ftd.set_string = function (args) {
 }
 ftd.set_integer = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "www_amitu_com";
+  __fastn_package_name__ = "fastn_community_github_io_business_card_demo";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
