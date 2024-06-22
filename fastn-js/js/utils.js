@@ -157,17 +157,16 @@ let fastn_utils = {
             return this.mutableToStaticValue(obj.get());
         } else if (obj instanceof fastn.mutableListClass) {
             let list = obj.getList();
-            return list.map((func) =>
-                this.mutableToStaticValue(func.item),
-            );
+            return list.map((func) => this.mutableToStaticValue(func.item));
         } else if (obj instanceof fastn.recordInstanceClass) {
             let fields = obj.getAllFields();
             return Object.fromEntries(
-                Object.entries(fields).map(([k,v]) =>
-                    [k, this.mutableToStaticValue(v)]
-                )
+                Object.entries(fields).map(([k, v]) => [
+                    k,
+                    this.mutableToStaticValue(v),
+                ]),
             );
-        }  else {
+        } else {
             return obj;
         }
     },
