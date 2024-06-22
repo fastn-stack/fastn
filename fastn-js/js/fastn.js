@@ -90,8 +90,10 @@ const fastn = (function (fastn) {
         }
 
         forLoop(root, dom_constructor) {
-            if (!this.#value instanceof MutableList) {
-                throw new Error("`forLoop` can only run for MutableList type object");
+            if ((!this.#value) instanceof MutableList) {
+                throw new Error(
+                    "`forLoop` can only run for MutableList type object",
+                );
             }
             this.#value.forLoop(root, dom_constructor);
         }
