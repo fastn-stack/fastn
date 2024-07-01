@@ -66,7 +66,7 @@ strip = true
 # and create its own [dependencies.<name>] section. Also, document it with why are you not
 # using the latest dependency, and what is the plan to move to the latest version.
 
-accept-language = "2"
+accept-language = "3"
 actix-web = "4"
 actix-http = "3"
 antidote = "1"
@@ -83,7 +83,7 @@ camino = "1"
 clap = "4"
 colored = "2"
 css-color-parser = "0.1"
-diffy = "0.3"
+diffy = "0.4"
 dotenvy = "0.15"
 env_logger = "0.11"
 enum-iterator = "0.6"
@@ -112,7 +112,7 @@ futures-core = "0.3"
 ignore = "0.4"
 include_dir = "0.7"
 indoc = "2"
-itertools = "0.12"
+itertools = "0.13"
 http = "1"
 bytes = "1"
 log = "0.4"
@@ -137,8 +137,8 @@ scc = "2"
 url = "2"
 walkdir = "2"
 smallvec = "1"
-wasmtime = "21"
-zip = "1"
+wasmtime = "22"
+zip = "2"
 prettify-js = "0.1.0"
 indexmap = { version = "2", features = ["serde"] }
 chrono = { version = "0.4", features = ["serde"] }
@@ -159,7 +159,7 @@ version = "0.28.0"
 [workspace.dependencies.rusqlite]
 version = "0.31"
 features = [
-    # We are using bundled version of rusqlite, so we do not need sqlitelib, headers as a
+    # We are using the bundled version of rusqlite, so we do not need sqlitelib, headers as a
     # dependency. By default, if we do not bundle, our binary will link against system
     # provided sqlite, which would have been a good thing, if we used system sqlite, our
     # binary size would be smaller, compile time lesser, but unfortunately we can not assume
@@ -196,13 +196,13 @@ features = [
 
 [workspace.dependencies.comrak]
 # We use comrak for markup processing.
-version = "0.23"
+version = "0.24"
 # By default, comrak ships with support for syntax highlighting using syntext for "fenced
 # code blocks". We have disabled that by not using default features. We did that because
 # we already have a way to show code in ftd, ftd.code. Further, comark requires syntect 4.6,
 # and we are using 5, which means we have two sytnax highlighting libraries.
 #
-# Further, in future we have to manipulate the markup at AST level, instead of using the
+# Further, in future we'll have to manipulate the markup at AST level, instead of using the
 # to_string() interface. https://fpm.dev/journal/#markdown-styling. So in the meanwhile
 # we are disabling their conflicting syntect implementation.
 default-features = false
