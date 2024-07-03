@@ -33,7 +33,7 @@ pub async fn commit_upload(
     .await?;
 
     if !response.status().is_success() {
-        todo!()
+        todo!("response.text(): {:?}", response.text().await)
     }
 
     Ok(())

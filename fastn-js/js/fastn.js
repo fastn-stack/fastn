@@ -259,6 +259,12 @@ const fastn = (function (fastn) {
             return this.#list;
         }
 
+        contains(item) {
+            return this.#list.some(
+                obj => fastn_utils.getFlattenStaticValue(obj.item) === fastn_utils.getFlattenStaticValue(item)
+            );
+        }
+
         getLength() {
             return this.#list.length;
         }
