@@ -472,10 +472,10 @@ const fastn = (function (fastn) {
                 if (!(value instanceof RecordInstance)) {
                     value = new RecordInstance(value);
                 }
-
-                let fields = {};
                 for (let key in value.#fields) {
-                    this.#fields[key].set(value.#fields[key]);
+                    if (this.#fields[key]) {
+                        this.#fields[key].set(value.#fields[key]);
+                    }
                 }
             } else if (this.#fields[key] === undefined) {
                 this.#fields[key] = fastn.mutable(null);
@@ -496,8 +496,8 @@ const fastn = (function (fastn) {
                 if (!(key in obj.#fields)) {
                     throw new Error(
                         "RecordInstance.replace: key " +
-                            key +
-                            " not present in new object",
+                        key +
+                        " not present in new object",
                     );
                 }
                 this.#fields[key] = fastn.wrapMutable(obj.#fields[key]);
