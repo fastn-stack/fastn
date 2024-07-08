@@ -496,8 +496,8 @@ const fastn = (function (fastn) {
                 if (!(key in obj.#fields)) {
                     throw new Error(
                         "RecordInstance.replace: key " +
-                        key +
-                        " not present in new object",
+                            key +
+                            " not present in new object",
                     );
                 }
                 this.#fields[key] = fastn.wrapMutable(obj.#fields[key]);
