@@ -28,6 +28,7 @@ pub(crate) async fn resolve_snapshots(
 pub(crate) async fn get_latest_snapshots(
     ds: &fastn_ds::DocumentStore,
     path: &fastn_ds::Path,
+    session_id: &Option<String>,
 ) -> fastn_core::Result<std::collections::BTreeMap<String, u128>> {
     let latest_file_path = path.join(".history/.latest.ftd");
     if !ds.exists(&latest_file_path).await {
@@ -35,7 +36,7 @@ pub(crate) async fn get_latest_snapshots(
         return Ok(Default::default());
     }
 
-    let doc = ds.read_to_string(&latest_file_path).await?;
+    let doc = ds.read_to_string(&latest_file_path, session_id).await?;
     resolve_snapshots(&doc).await
 }
 

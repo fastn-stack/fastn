@@ -225,7 +225,7 @@ impl DocumentStore {
                     Ok(m) => m,
                     Err(e) => {
                         tracing::info!("could not read {wasmc_path:?} file: {e:?}");
-                        let source = self.read_content(&fastn_ds::Path::new(path)).await?;
+                        let source = self.read_content(&fastn_ds::Path::new(path), &None).await?;
                         wasmtime::Module::from_binary(&WASM_ENGINE, &source)?
                     }
                 };
@@ -308,7 +308,7 @@ impl DocumentStore {
         fastn_ds::Path { path: home() }
     }
 
-    pub async fn read_content(&self, path: &fastn_ds::Path) -> Result<Vec<u8>, ReadError> {
+    pub async fn read_content(&self, path: &fastn_ds::Path, _session_id: &Option<String>) -> Result<Vec<u8>, ReadError> {
         use tokio::io::AsyncReadExt;
 
         tracing::debug!("read_content {}", &path);
@@ -329,8 +329,8 @@ impl DocumentStore {
         Ok(contents)
     }
 
-    pub async fn read_to_string(&self, path: &fastn_ds::Path) -> Result<String, ReadStringError> {
-        self.read_content(path)
+    pub async fn read_to_string(&self, path: &fastn_ds::Path, session_id: &Option<String>) -> Result<String, ReadStringError> {
+        self.read_content(path, session_id)
             .await
             .map_err(ReadStringError::ReadError)
             .and_then(|v| {

@@ -558,22 +558,22 @@ pub fn get_external_css_html(external_js: &[String]) -> String {
     result
 }
 
-pub async fn get_inline_js_html(config: &fastn_core::Config, inline_js: &[String]) -> String {
+pub async fn get_inline_js_html(config: &fastn_core::Config, inline_js: &[String], session_id: &Option<String>) -> String {
     let mut result = "".to_string();
     for path in inline_js {
         let path = fastn_ds::Path::new(path);
-        if let Ok(content) = config.ds.read_to_string(&path).await {
+        if let Ok(content) = config.ds.read_to_string(&path, session_id).await {
             result = format!("{}<script>{}</script>", result, content);
         }
     }
     result
 }
 
-pub async fn get_inline_css_html(config: &fastn_core::Config, inline_js: &[String]) -> String {
+pub async fn get_inline_css_html(config: &fastn_core::Config, inline_js: &[String], session_id: &Option<String>) -> String {
     let mut result = "".to_string();
     for path in inline_js {
         let path = fastn_ds::Path::new(path);
-        if let Ok(content) = config.ds.read_to_string(&path).await {
+        if let Ok(content) = config.ds.read_to_string(&path, session_id).await {
             result = format!("{}<style>{}</style>", result, content);
         }
     }
@@ -586,11 +586,12 @@ async fn get_extra_js(
     inline_js: &[String],
     js: &str,
     rive_data: &str,
+    session_id: &Option<String>,
 ) -> String {
     format!(
         "{}{}{}{}",
         get_external_js_html(external_js),
-        get_inline_js_html(config, inline_js).await,
+        get_inline_js_html(config, inline_js, session_id).await,
         js,
         rive_data
     )
@@ -601,11 +602,12 @@ async fn get_extra_css(
     external_css: &[String],
     inline_css: &[String],
     css: &str,
+    session_id: &Option<String>,
 ) -> String {
     format!(
         "{}{}{}",
         get_external_css_html(external_css),
-        get_inline_css_html(config, inline_css).await,
+        get_inline_css_html(config, inline_css, session_id).await,
         css
     )
 }
@@ -618,6 +620,7 @@ pub async fn replace_markers_2022(
     main_id: &str,
     font_style: &str,
     base_url: &str,
+    session_id: &Option<String>,
 ) -> String {
     ftd::html::utils::trim_all_lines(
         s.replace(
@@ -660,6 +663,7 @@ pub async fn replace_markers_2022(
                 config.ftd_inline_js.as_slice(),
                 html_ui.js.as_str(),
                 html_ui.rive_data.as_str(),
+                session_id,
             )
             .await
             .as_str(),
@@ -671,6 +675,7 @@ pub async fn replace_markers_2022(
                 config.ftd_external_css.as_slice(),
                 config.ftd_inline_css.as_slice(),
                 html_ui.css.as_str(),
+                session_id,
             )
             .await
             .as_str(),
@@ -713,6 +718,7 @@ pub async fn replace_markers_2023(
     default_css: &str,
     base_url: &str,
     config: &fastn_core::Config,
+    session_id: &Option<String>,
 ) -> String {
     format!(
         include_str!("../../ftd/ftd-js.html"),
@@ -753,6 +759,7 @@ pub async fn replace_markers_2023(
             config.ftd_inline_js.as_slice(),
             "",
             "",
+            session_id,
         )
         .await
         .as_str(),
@@ -809,7 +816,7 @@ pub(crate) async fn copy(
     to: &fastn_ds::Path,
     ds: &fastn_ds::DocumentStore,
 ) -> fastn_core::Result<()> {
-    let content = ds.read_content(from).await?;
+    let content = ds.read_content(from, &None).await?;
     fastn_core::utils::update(to, content.as_slice(), ds).await
 }
 

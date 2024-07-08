@@ -4,7 +4,7 @@ pub async fn from_fastn_doc(
     ds: &fastn_ds::DocumentStore,
     fastn_path: &fastn_ds::Path,
 ) -> fastn_core::Result<fastn_core::Package> {
-    let doc = ds.read_to_string(fastn_path).await?;
+    let doc = ds.read_to_string(fastn_path, &None).await?;
     let lib = fastn_core::FastnLibrary::default();
     let fastn_doc = match fastn_core::doc::parse_ftd("fastn", doc.as_str(), &lib) {
         Ok(v) => Ok(v),
@@ -81,7 +81,7 @@ pub(crate) async fn resolve_dependency_package(
     let mut dep_package = dependency.package.clone();
     let fastn_path = dependency_path.join("FASTN.ftd");
     dep_package
-        .resolve(&fastn_path, ds)
+        .resolve(&fastn_path, ds, &None)
         .await
         .context(fastn_update::ResolveDependencySnafu {
             package: dependency.package.name.clone(),

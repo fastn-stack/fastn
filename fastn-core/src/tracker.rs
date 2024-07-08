@@ -16,6 +16,7 @@ pub(crate) async fn get_tracks(
     config: &fastn_core::Config,
     base_path: &fastn_ds::Path,
     path: &fastn_ds::Path,
+    session_id: &Option<String>,
 ) -> fastn_core::Result<std::collections::BTreeMap<String, Track>> {
     let mut tracks = std::collections::BTreeMap::new();
     if !config.ds.exists(path).await {
@@ -23,7 +24,7 @@ pub(crate) async fn get_tracks(
     }
 
     let lib = fastn_core::FastnLibrary::default();
-    let doc = config.ds.read_to_string(path).await?;
+    let doc = config.ds.read_to_string(path, session_id).await?;
     let b = match fastn_core::doc::parse_ftd(base_path.to_string().as_str(), doc.as_str(), &lib) {
         Ok(v) => v,
         Err(e) => {

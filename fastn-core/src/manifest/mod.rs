@@ -45,6 +45,7 @@ pub async fn write_manifest_file(
     config: &fastn_core::Config,
     build_dir: &fastn_ds::Path,
     zip_url: Option<String>,
+    session_id: &Option<String>,
 ) -> fastn_core::Result<()> {
     use sha2::digest::FixedOutput;
     use sha2::Digest;
@@ -76,13 +77,13 @@ pub async fn write_manifest_file(
     let mut files: std::collections::BTreeMap<String, fastn_core::manifest::File> =
         std::collections::BTreeMap::new();
 
-    for file in config.get_files(&config.package).await? {
+    for file in config.get_files(&config.package, session_id).await? {
         if file.get_id().eq(fastn_core::manifest::MANIFEST_FILE) {
             continue;
         }
 
         let name = file.get_id().to_string();
-        let content = &config.ds.read_content(&file.get_full_path()).await?;
+        let content = &config.ds.read_content(&file.get_full_path(), &session_id).await?;
         let hash = fastn_core::utils::generate_hash(content);
         let size = content.len();
 

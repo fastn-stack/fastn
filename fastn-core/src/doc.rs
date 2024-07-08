@@ -53,7 +53,7 @@ pub async fn interpret_helper(
                 caller_module,
             } => {
                 let (source, path, foreign_variable, foreign_function, ignore_line_numbers) =
-                    resolve_import_2022(lib, &mut st, module.as_str(), caller_module.as_str())
+                    resolve_import_2022(lib, &mut st, module.as_str(), caller_module.as_str(), &lib.session_id())
                         .await?;
                 lib.dependencies_during_render.push(path);
                 let doc = cached_parse(module.as_str(), source.as_str(), ignore_line_numbers)?;
@@ -117,6 +117,7 @@ pub async fn resolve_import_2022(
     _state: &mut ftd::interpreter::InterpreterState,
     module: &str,
     caller_module: &str,
+    session_id: &Option<String>
 ) -> ftd::interpreter::Result<(String, String, Vec<String>, Vec<String>, usize)> {
     let current_package = lib.get_current_package(caller_module)?;
     let source = if module.eq("fastn/time") {
@@ -201,7 +202,7 @@ pub async fn resolve_import_2022(
         }
     } else {
         let (content, path, ignore_line_numbers) =
-            lib.get_with_result(module, caller_module).await?;
+            lib.get_with_result(module, caller_module, session_id).await?;
         (
             content,
             path,
@@ -358,7 +359,7 @@ pub async fn resolve_foreign_variable2022(
                 {
                     let start = std::time::Instant::now();
                     let light = package
-                        .resolve_by_file_name(light_path.as_str(), None, &lib.config.ds)
+                        .resolve_by_file_name(light_path.as_str(), None, &lib.config.ds, &lib.session_id())
                         .await
                         .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
                             message: e.to_string(),
@@ -416,7 +417,7 @@ pub async fn resolve_foreign_variable2022(
                     {
                         dark_mode = dark.to_string();
                     } else if let Ok(dark) = package
-                        .resolve_by_file_name(dark_path.as_str(), None, &lib.config.ds)
+                        .resolve_by_file_name(dark_path.as_str(), None, &lib.config.ds, &lib.session_id())
                         .await
                     {
                         print!("Processing {}/{} ... ", package.name.as_str(), dark_path);
@@ -482,6 +483,7 @@ pub async fn resolve_foreign_variable2022(
                     download_assets,
                     package,
                     format!("{}.{}", file.replace('.', "/"), ext).as_str(),
+                    &lib.session_id(),
                 )
                 .await?;
                 Ok(ftd::interpreter::Value::String {
@@ -489,7 +491,7 @@ pub async fn resolve_foreign_variable2022(
                 })
             }
             None => {
-                download(lib, download_assets, package, files.as_str()).await?;
+                download(lib, download_assets, package, files.as_str(), &lib.session_id()).await?;
                 Ok(ftd::interpreter::Value::String {
                     text: format!("-/{}/{}", package.name, files),
                 })
@@ -503,6 +505,7 @@ async fn download(
     download_assets: bool,
     package: &fastn_core::Package,
     path: &str,
+    session_id: &Option<String>,
 ) -> ftd::ftd2021::p1::Result<()> {
     if download_assets
         && !lib
@@ -511,7 +514,7 @@ async fn download(
     {
         let start = std::time::Instant::now();
         let data = package
-            .resolve_by_file_name(path, None, &lib.config.ds)
+            .resolve_by_file_name(path, None, &lib.config.ds, session_id)
             .await
             .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
                 message: e.to_string(),
@@ -551,6 +554,7 @@ pub async fn resolve_foreign_variable2(
     lib: &mut fastn_core::Library2,
     base_url: &str,
     download_assets: bool,
+    session_id: &Option<String>
 ) -> ftd::ftd2021::p1::Result<ftd::Value> {
     lib.packages_under_process
         .truncate(state.document_stack.len());
@@ -562,7 +566,7 @@ pub async fn resolve_foreign_variable2(
     if let Some((package_name, files)) = variable.split_once("/assets#files.") {
         if package.name.eq(package_name) {
             if let Ok(value) =
-                get_assets_value(&package, files, lib, base_url, download_assets).await
+                get_assets_value(&package, files, lib, base_url, download_assets, session_id).await
             {
                 return Ok(value);
             }
@@ -570,7 +574,7 @@ pub async fn resolve_foreign_variable2(
         for (alias, package) in package.aliases() {
             if alias.eq(package_name) {
                 if let Ok(value) =
-                    get_assets_value(package, files, lib, base_url, download_assets).await
+                    get_assets_value(package, files, lib, base_url, download_assets, session_id).await
                 {
                     return Ok(value);
                 }
@@ -586,6 +590,7 @@ pub async fn resolve_foreign_variable2(
         lib: &mut fastn_core::Library2,
         base_url: &str,
         download_assets: bool, // true: in case of `fastn build`
+        session_id: &Option<String>
     ) -> ftd::ftd2021::p1::Result<ftd::Value> {
         lib.push_package_under_process(package)?;
         let base_url = base_url.trim_end_matches('/');
@@ -634,7 +639,7 @@ pub async fn resolve_foreign_variable2(
                 {
                     let start = std::time::Instant::now();
                     let light = package
-                        .resolve_by_file_name(light_path.as_str(), None, &lib.config.config.ds)
+                        .resolve_by_file_name(light_path.as_str(), None, &lib.config.config.ds, session_id)
                         .await
                         .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
                             message: e.to_string(),
@@ -698,7 +703,7 @@ pub async fn resolve_foreign_variable2(
                     {
                         dark_mode = dark.to_string();
                     } else if let Ok(dark) = package
-                        .resolve_by_file_name(dark_path.as_str(), None, &lib.config.config.ds)
+                        .resolve_by_file_name(dark_path.as_str(), None, &lib.config.config.ds, session_id)
                         .await
                     {
                         print!("Processing {}/{} ... ", package.name.as_str(), dark_path);

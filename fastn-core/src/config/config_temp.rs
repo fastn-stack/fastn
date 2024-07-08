@@ -49,10 +49,10 @@ impl ConfigTemp {
         Ok(())
     }
 
-    pub async fn read(ds: &fastn_ds::DocumentStore) -> Result<ConfigTemp, Error> {
+    pub async fn read(ds: &fastn_ds::DocumentStore, session_id: &Option<String>) -> Result<ConfigTemp, Error> {
         let dot_fastn = ds.root().join(".fastn");
         let config_json_path = dot_fastn.join("config.json");
-        let bytes = match ds.read_content(&config_json_path).await {
+        let bytes = match ds.read_content(&config_json_path, session_id).await {
             Ok(v) => v,
             Err(e) => {
                 if let fastn_ds::ReadError::NotFound(_) = e {
@@ -72,12 +72,13 @@ impl ConfigTemp {
         ds: &fastn_ds::DocumentStore,
         package: &mut fastn_core::Package,
         package_root: &fastn_ds::Path,
+        session_id: &Option<String>
     ) -> fastn_core::Result<scc::HashMap<String, fastn_core::Package>> {
         let all_packages = scc::HashMap::new();
 
         for (package_name, manifest) in &self.all_packages {
             let mut current_package = manifest
-                .to_package(package_root, package_name, ds, package)
+                .to_package(package_root, package_name, ds, package, session_id)
                 .await?;
             ConfigTemp::check_dependencies_provided(package, &mut current_package)?;
             fastn_ds::insert_or_update(&all_packages, package_name.clone(), current_package);

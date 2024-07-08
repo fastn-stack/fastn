@@ -210,7 +210,7 @@ async fn update_github_dependency(
         true
     } else {
         let existing_manifest_bytes =
-            ds.read_content(&manifest_path)
+            ds.read_content(&manifest_path, &None)
                 .await
                 .context(ReadManifestSnafu {
                     package: package_name.clone(),

@@ -7,7 +7,7 @@ pub async fn fmt(
     use itertools::Itertools;
 
     let documents = config
-        .get_files(&config.package)
+        .get_files(&config.package, &None)
         .await?
         .into_iter()
         .filter_map(|v| v.get_ftd_document())

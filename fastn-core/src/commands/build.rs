@@ -22,7 +22,7 @@ pub async fn build(
         let documents = get_documents_for_current_package(config).await?;
         let zip_url = zip_url.map_or_else(|| config.package.zip.clone(), |z| Some(z.to_string()));
 
-        fastn_core::manifest::write_manifest_file(config, &build_dir, zip_url).await?;
+        fastn_core::manifest::write_manifest_file(config, &build_dir, zip_url, &None).await?;
 
         match only_id {
             Some(id) => {
@@ -61,7 +61,7 @@ pub async fn build(
     }
 
     if !test {
-        config.download_fonts().await?;
+        config.download_fonts(&None).await?;
     }
 
     if check_build {
@@ -778,7 +778,7 @@ async fn get_documents_for_current_package(
 ) -> fastn_core::Result<std::collections::BTreeMap<String, fastn_core::File>> {
     let mut documents = std::collections::BTreeMap::from_iter(
         config
-            .get_files(&config.package)
+            .get_files(&config.package, &None)
             .await?
             .into_iter()
             .map(|v| (v.get_id().to_string(), v)),
@@ -795,7 +795,7 @@ async fn get_documents_for_current_package(
                     config.package.name.to_string()
                 };
                 let mut file =
-                    fastn_core::get_file(&config.ds, package_name, doc_path, &config.ds.root())
+                    fastn_core::get_file(&config.ds, package_name, doc_path, &config.ds.root(), &None)
                         .await?;
                 if let Some(ref url) = url {
                     let url = url.replace("/index.html", "");
@@ -846,7 +846,7 @@ async fn process_static(
 
         {
             // TODO: need to remove this once download_base_url is removed
-            let content = ds.read_content(&sa.base_path.join(sa.id.as_str())).await?;
+            let content = ds.read_content(&sa.base_path.join(sa.id.as_str()), &None).await?;
             ds.write_content(&base_path.join(".build").join(sa.id.as_str()), &content)
                 .await?;
         }

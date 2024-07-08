@@ -34,7 +34,10 @@ async fn serve_file(
         };
     }
 
-    let f = match config.get_file_and_package_by_id(path.as_str()).await {
+    let f = match config
+        .get_file_and_package_by_id(path.as_str(), &config.session_id())
+        .await
+    {
         Ok(f) => f,
         Err(e) => {
             tracing::error!(
@@ -100,25 +103,6 @@ async fn serve_file(
 
 fn guess_mime_type(path: &str) -> mime_guess::Mime {
     mime_guess::from_path(path).first_or_octet_stream()
-}
-
-#[tracing::instrument(skip_all)]
-async fn serve_fastn_file(config: &fastn_core::Config) -> fastn_core::http::Response {
-    let response = match config
-        .ds
-        .read_content(
-            &config
-                .get_root_for_package(&config.package)
-                .join("FASTN.ftd"),
-        )
-        .await
-    {
-        Ok(res) => res,
-        Err(e) => {
-            return fastn_core::not_found!("fastn-Error: path: FASTN.ftd error: {:?}", e);
-        }
-    };
-    fastn_core::http::ok_with_content_type(response, mime_guess::mime::APPLICATION_OCTET_STREAM)
 }
 
 pub fn clear_sid(req: &fastn_core::http::Request) -> fastn_core::http::Response {
@@ -191,13 +175,18 @@ pub async fn serve(
         return Ok((r, false));
     }
 
-    if fastn_core::utils::is_static_path(req.path()) {
-        return handle_static_route(req.path(), config.package.name.as_str(), &config.ds)
-            .await
-            .map(|r| (r, true));
-    }
-
     let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
+
+    if fastn_core::utils::is_static_path(req.path()) {
+        return handle_static_route(
+            req.path(),
+            config.package.name.as_str(),
+            &config.ds,
+            &req_config.session_id(),
+        )
+        .await
+        .map(|r| (r, true));
+    }
 
     serve_helper(&mut req_config, only_js, path)
         .await
@@ -385,11 +374,12 @@ async fn handle_static_route(
     path: &str,
     package_name: &str,
     ds: &fastn_ds::DocumentStore,
+    session_id: &Option<String>,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    return match handle_static_route_(path, package_name, ds).await {
+    return match handle_static_route_(path, package_name, ds, session_id).await {
         Ok(r) => Ok(r),
         Err(fastn_ds::ReadError::NotFound(_)) => {
-            handle_not_found_image(path, package_name, ds).await
+            handle_not_found_image(path, package_name, ds, session_id).await
         }
         Err(e) => Err(e.into()),
     };
@@ -398,9 +388,10 @@ async fn handle_static_route(
         path: &str,
         package_name: &str,
         ds: &fastn_ds::DocumentStore,
+        session_id: &Option<String>,
     ) -> Result<fastn_core::http::Response, fastn_ds::ReadError> {
         if path == "/favicon.ico" {
-            return favicon(ds).await;
+            return favicon(ds, session_id).await;
         }
 
         // the path can start with slash or -/. If later, it is a static file from our dependencies, so
@@ -413,19 +404,24 @@ async fn handle_static_route(
             None => path.to_string(),
         };
 
-        static_file(ds, path.strip_prefix('/').unwrap_or(path.as_str()))
-            .await
-            .map_err(Into::into)
+        static_file(
+            ds,
+            path.strip_prefix('/').unwrap_or(path.as_str()),
+            session_id,
+        )
+        .await
+        .map_err(Into::into)
     }
 
     async fn handle_not_found_image(
         path: &str,
         package_name: &str,
         ds: &fastn_ds::DocumentStore,
+        session_id: &Option<String>,
     ) -> fastn_core::Result<fastn_core::http::Response> {
         // todo: handle dark images using manifest
         if let Some(new_file_path) = generate_dark_image_path(path) {
-            return handle_static_route_(new_file_path.as_str(), package_name, ds)
+            return handle_static_route_(new_file_path.as_str(), package_name, ds, session_id)
                 .await
                 .or_else(|e| {
                     if let fastn_ds::ReadError::NotFound(e) = e {
@@ -459,11 +455,12 @@ async fn handle_static_route(
 
     async fn favicon(
         ds: &fastn_ds::DocumentStore,
+        session_id: &Option<String>,
     ) -> Result<fastn_core::http::Response, fastn_ds::ReadError> {
-        match static_file(ds, "favicon.ico").await {
+        match static_file(ds, "favicon.ico", session_id).await {
             Ok(r) => Ok(r),
             Err(fastn_ds::ReadError::NotFound(_)) => {
-                Ok(static_file(ds, "static/favicon.ico").await?)
+                Ok(static_file(ds, "static/favicon.ico", session_id).await?)
             }
             Err(e) => Err(e),
         }
@@ -473,10 +470,16 @@ async fn handle_static_route(
     async fn static_file(
         ds: &fastn_ds::DocumentStore,
         path: &str,
+        session_id: &Option<String>,
     ) -> Result<fastn_core::http::Response, fastn_ds::ReadError> {
-        ds.read_content(&fastn_ds::Path::new(path)).await.map(|r| {
-            fastn_core::http::ok_with_content_type(r, guess_mime_type(path.to_string().as_str()))
-        })
+        ds.read_content(&fastn_ds::Path::new(path), session_id)
+            .await
+            .map(|r| {
+                fastn_core::http::ok_with_content_type(
+                    r,
+                    guess_mime_type(path.to_string().as_str()),
+                )
+            })
     }
 }
 

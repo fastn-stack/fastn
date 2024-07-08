@@ -6,7 +6,7 @@ pub async fn query(
 ) -> fastn_core::Result<()> {
     let documents = std::collections::BTreeMap::from_iter(
         config
-            .get_files(&config.package)
+            .get_files(&config.package, &None)
             .await?
             .into_iter()
             .map(|v| (v.get_id().to_string(), v)),

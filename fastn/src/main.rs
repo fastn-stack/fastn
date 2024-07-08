@@ -88,7 +88,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             fastn_update::update(&ds, false).await?;
         }
 
-        let config = fastn_core::Config::read(ds, false)
+        let config = fastn_core::Config::read(ds, false, &None)
             .await?
             .add_edition(edition.map(ToString::to_string))?
             .add_external_js(external_js.clone())
@@ -111,7 +111,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             fastn_update::update(&ds, false).await?;
         }
 
-        let mut config = fastn_core::Config::read(ds, true).await?;
+        let mut config = fastn_core::Config::read(ds, true, &None).await?;
 
         config = config
             .add_edition(edition)?
@@ -149,7 +149,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             fastn_update::update(&ds, false).await?;
         }
 
-        let mut config = fastn_core::Config::read(ds, true).await?;
+        let mut config = fastn_core::Config::read(ds, true, &None).await?;
 
         config = config
             .add_edition(edition)?
@@ -170,7 +170,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         .await;
     }
 
-    let config = fastn_core::Config::read(ds, true).await?;
+    let config = fastn_core::Config::read(ds, true, &None).await?;
 
     if let Some(fmt) = matches.subcommand_matches("fmt") {
         return fastn_core::fmt(&config, fmt.value_of_("file"), fmt.get_flag("noidentation")).await;
