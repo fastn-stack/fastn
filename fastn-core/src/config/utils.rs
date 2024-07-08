@@ -6,12 +6,13 @@ pub(crate) async fn find_root_for_file(
     dir: &fastn_ds::Path,
     file_name: &str,
     ds: &fastn_ds::DocumentStore,
+    session_id: &Option<String>
 ) -> Option<fastn_ds::Path> {
-    if ds.exists(&dir.join(file_name)).await {
+    if ds.exists(&dir.join(file_name), session_id).await {
         Some(dir.clone())
     } else {
         if let Some(p) = dir.parent() {
-            return find_root_for_file(&p, file_name, ds).await;
+            return find_root_for_file(&p, file_name, ds, session_id).await;
         };
         None
     }

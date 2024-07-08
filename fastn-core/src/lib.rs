@@ -79,7 +79,7 @@ async fn original_package_status(config: &fastn_core::Config, session_id: &Optio
         .join("fastn")
         .join("translation")
         .join("original-status.ftd");
-    Ok(if config.ds.exists(&path).await {
+    Ok(if config.ds.exists(&path, session_id).await {
         config.ds.read_to_string(&path, session_id).await?
     } else {
         let body_prefix = config
@@ -102,7 +102,7 @@ async fn translation_package_status(config: &fastn_core::Config, session_id: &Op
         .join("fastn")
         .join("translation")
         .join("translation-status.ftd");
-    Ok(if config.ds.exists(&path).await {
+    Ok(if config.ds.exists(&path, session_id).await {
         config.ds.read_to_string(&path, session_id).await?
     } else {
         let body_prefix = config
@@ -125,7 +125,7 @@ async fn get_messages(
     Ok(match status {
         TranslatedDocument::Missing { .. } => {
             let path = config.ds.root().join("fastn/translation/missing.ftd");
-            if config.ds.exists(&path).await {
+            if config.ds.exists(&path, session_id).await {
                 config.ds.read_to_string(&path, session_id).await?
             } else {
                 include_str!("../ftd/translation/missing.ftd").to_string()
@@ -133,7 +133,7 @@ async fn get_messages(
         }
         TranslatedDocument::NeverMarked { .. } => {
             let path = config.ds.root().join("fastn/translation/never-marked.ftd");
-            if config.ds.exists(&path).await {
+            if config.ds.exists(&path, session_id).await {
                 config.ds.read_to_string(&path, session_id).await?
             } else {
                 include_str!("../ftd/translation/never-marked.ftd").to_string()
@@ -141,7 +141,7 @@ async fn get_messages(
         }
         TranslatedDocument::Outdated { .. } => {
             let path = config.ds.root().join("fastn/translation/out-of-date.ftd");
-            if config.ds.exists(&path).await {
+            if config.ds.exists(&path, session_id).await {
                 config.ds.read_to_string(&path, session_id).await?
             } else {
                 include_str!("../ftd/translation/out-of-date.ftd").to_string()
@@ -149,7 +149,7 @@ async fn get_messages(
         }
         TranslatedDocument::UptoDate { .. } => {
             let path = config.ds.root().join("fastn/translation/upto-date.ftd");
-            if config.ds.exists(&path).await {
+            if config.ds.exists(&path, session_id).await {
                 config.ds.read_to_string(&path, session_id).await?
             } else {
                 include_str!("../ftd/translation/upto-date.ftd").to_string()

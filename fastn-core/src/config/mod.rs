@@ -796,6 +796,7 @@ impl Config {
         root: &fastn_ds::Path,
         id: &str,
         ds: &fastn_ds::DocumentStore,
+        session_id: &Option<String>
     ) -> fastn_core::Result<String> {
         let mut id = id.to_string();
         let mut add_packages = "".to_string();
@@ -812,13 +813,13 @@ impl Config {
             .replace("index.html", "/");
         if id.eq("/") {
             if ds
-                .exists(&root.join(format!("{}index.ftd", add_packages)))
+                .exists(&root.join(format!("{}index.ftd", add_packages)), session_id)
                 .await
             {
                 return Ok(format!("{}index.ftd", add_packages));
             }
             if ds
-                .exists(&root.join(format!("{}README.md", add_packages)))
+                .exists(&root.join(format!("{}README.md", add_packages)), session_id)
                 .await
             {
                 return Ok(format!("{}README.md", add_packages));
@@ -829,25 +830,25 @@ impl Config {
         }
         id = id.trim_matches('/').to_string();
         if ds
-            .exists(&root.join(format!("{}{}.ftd", add_packages, id)))
+            .exists(&root.join(format!("{}{}.ftd", add_packages, id)), session_id)
             .await
         {
             return Ok(format!("{}{}.ftd", add_packages, id));
         }
         if ds
-            .exists(&root.join(format!("{}{}/index.ftd", add_packages, id)))
+            .exists(&root.join(format!("{}{}/index.ftd", add_packages, id)), session_id)
             .await
         {
             return Ok(format!("{}{}/index.ftd", add_packages, id));
         }
         if ds
-            .exists(&root.join(format!("{}{}.md", add_packages, id)))
+            .exists(&root.join(format!("{}{}.md", add_packages, id)), session_id)
             .await
         {
             return Ok(format!("{}{}.md", add_packages, id));
         }
         if ds
-            .exists(&root.join(format!("{}{}/README.md", add_packages, id)))
+            .exists(&root.join(format!("{}{}/README.md", add_packages, id)), session_id)
             .await
         {
             return Ok(format!("{}{}/README.md", add_packages, id));
@@ -863,11 +864,11 @@ impl Config {
         ds: &fastn_ds::DocumentStore,
         session_id: &Option<String>,
     ) -> fastn_core::Result<fastn_ds::Path> {
-        if let Some(fastn_ftd_root) = utils::find_root_for_file(directory, "FASTN.ftd", ds).await {
+        if let Some(fastn_ftd_root) = utils::find_root_for_file(directory, "FASTN.ftd", ds, session_id).await {
             return Ok(fastn_ftd_root);
         }
         let fastn_manifest_path =
-            match utils::find_root_for_file(directory, "fastn.manifest.ftd", ds).await {
+            match utils::find_root_for_file(directory, "fastn.manifest.ftd", ds, session_id).await {
                 Some(fastn_manifest_path) => fastn_manifest_path,
                 None => {
                     return Err(fastn_core::Error::UsageError {
@@ -900,7 +901,7 @@ impl Config {
                 accumulator.join(part)
             });
 
-        if ds.exists(&new_package_root.join("FASTN.ftd")).await {
+        if ds.exists(&new_package_root.join("FASTN.ftd"), session_id).await {
             Ok(new_package_root)
         } else {
             Err(fastn_core::Error::PackageError {

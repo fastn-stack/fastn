@@ -165,7 +165,7 @@ impl TranslatedDocument {
             }
             let translated_document = translated_documents.get(file.as_str()).unwrap();
             let track_path = fastn_core::utils::track_path(file.as_str(), &config.ds.root());
-            if !config.ds.exists(&track_path).await {
+            if !config.ds.exists(&track_path, session_id).await {
                 translation_status.insert(
                     file,
                     TranslatedDocument::NeverMarked {
@@ -230,12 +230,12 @@ pub(crate) async fn get_translation_status_counts(
         last_modified_on: None,
     };
     for (file, timestamp) in snapshots {
-        if !config.ds.exists(&path.join(file)).await {
+        if !config.ds.exists(&path.join(file), session_id).await {
             translation_status_count.missing += 1;
             continue;
         }
         let track_path = fastn_core::utils::track_path(file.as_str(), path);
-        if !config.ds.exists(&track_path).await {
+        if !config.ds.exists(&track_path, session_id).await {
             translation_status_count.never_marked += 1;
             continue;
         }

@@ -31,7 +31,7 @@ pub(crate) async fn get_latest_snapshots(
     session_id: &Option<String>,
 ) -> fastn_core::Result<std::collections::BTreeMap<String, u128>> {
     let latest_file_path = path.join(".history/.latest.ftd");
-    if !ds.exists(&latest_file_path).await {
+    if !ds.exists(&latest_file_path, session_id).await {
         // TODO: should we error out here?
         return Ok(Default::default());
     }

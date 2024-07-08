@@ -19,7 +19,7 @@ pub(crate) async fn get_tracks(
     session_id: &Option<String>,
 ) -> fastn_core::Result<std::collections::BTreeMap<String, Track>> {
     let mut tracks = std::collections::BTreeMap::new();
-    if !config.ds.exists(path).await {
+    if !config.ds.exists(path, session_id).await {
         return Ok(tracks);
     }
 

@@ -372,6 +372,7 @@ pub async fn resolve_foreign_variable2022(
                         light_path.as_str(),
                         light.as_slice(),
                         &lib.config.ds,
+                        &lib.session_id(),
                     )
                     .await
                     .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
@@ -426,6 +427,7 @@ pub async fn resolve_foreign_variable2022(
                             dark_path.as_str(),
                             dark.as_slice(),
                             &lib.config.ds,
+                            &lib.session_id(),
                         )
                         .await
                         .map_err(|e| {
@@ -527,6 +529,7 @@ async fn download(
             path,
             data.as_slice(),
             &lib.config.ds,
+            &lib.session_id(),
         )
         .await
         .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
@@ -656,6 +659,7 @@ pub async fn resolve_foreign_variable2(
                         light_path.as_str(),
                         light.as_slice(),
                         &lib.config.config.ds,
+                        &session_id,
                     )
                     .await
                     .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
@@ -716,6 +720,7 @@ pub async fn resolve_foreign_variable2(
                             dark_path.as_str(),
                             dark.as_slice(),
                             &lib.config.config.ds,
+                            session_id,
                         )
                         .await
                         .map_err(|e| {
