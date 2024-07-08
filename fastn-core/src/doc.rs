@@ -185,7 +185,7 @@ pub async fn resolve_import_2022(
             let mut path = "".to_string();
             for (alias, package) in current_package.aliases() {
                 if module.starts_with(alias) {
-                    lib.push_package_under_process(module, package).await?;
+                    lib.push_package_under_process(module, package, session_id).await?;
                     font_ftd = lib
                         .config
                         .all_packages
@@ -313,7 +313,7 @@ pub async fn resolve_foreign_variable2022(
         base_url: &str,
         download_assets: bool, // true: in case of `fastn build`
     ) -> ftd::ftd2021::p1::Result<ftd::interpreter::Value> {
-        lib.push_package_under_process(module, package).await?;
+        lib.push_package_under_process(module, package, &lib.session_id()).await?;
         let _base_url = base_url.trim_end_matches('/');
 
         // remove :type=module when used with js files
