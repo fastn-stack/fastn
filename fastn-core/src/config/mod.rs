@@ -711,7 +711,7 @@ impl Config {
     ) -> fastn_core::Result<(String, Vec<u8>)> {
         let (package_name, package) = self.find_package_by_id(id).await?;
 
-        let package = self.resolve_package(&package).await?;
+        let package = self.resolve_package(&package, session_id).await?;
         let mut id = id.to_string();
         let mut add_packages = "".to_string();
         if let Some(new_id) = id.strip_prefix("-/") {
@@ -1024,7 +1024,7 @@ impl Config {
             let apps_temp: Vec<fastn_core::package::app::AppTemp> = fastn_doc.get("fastn#app")?;
             let mut apps = vec![];
             for app in apps_temp.into_iter() {
-                apps.push(app.into_app(&config).await?);
+                apps.push(app.into_app(&config, session_id).await?);
             }
             apps
         };
@@ -1053,6 +1053,7 @@ impl Config {
     pub(crate) async fn resolve_package(
         &self,
         package: &fastn_core::Package,
+        _session_id: &Option<String>
     ) -> fastn_core::Result<fastn_core::Package> {
         match self.all_packages.get(&package.name) {
             Some(package) => Ok(package.get().clone()),
@@ -1066,6 +1067,7 @@ impl Config {
     pub(crate) async fn resolve_package(
         &self,
         package: &fastn_core::Package,
+        session_id: &Option<String>
     ) -> fastn_core::Result<fastn_core::Package> {
         if self.package.name.eq(package.name.as_str()) {
             return Ok(self.package.clone());
@@ -1076,7 +1078,7 @@ impl Config {
         }
 
         let mut package = package
-            .get_and_resolve(&self.get_root_for_package(package), &self.ds)
+            .get_and_resolve(&self.get_root_for_package(package), &self.ds, session_id)
             .await?;
 
         ConfigTemp::check_dependencies_provided(&self.package, &mut package)?;
@@ -1181,6 +1183,7 @@ async fn get_all_packages(
     package: &mut fastn_core::Package,
     _package_root: &fastn_ds::Path,
     _ds: &fastn_ds::DocumentStore,
+    _session_id: &Option<String>,
 ) -> fastn_core::Result<scc::HashMap<String, fastn_core::Package>> {
     let all_packages = scc::HashMap::new();
     fastn_ds::insert_or_update(&all_packages, package.name.to_string(), package.to_owned());

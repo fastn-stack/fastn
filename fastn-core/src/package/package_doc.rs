@@ -76,15 +76,16 @@ impl fastn_core::Package {
         id: &str,
         package_root: Option<&fastn_ds::Path>,
         ds: &fastn_ds::DocumentStore,
+        session_id: &Option<String>
     ) -> fastn_core::Result<(String, Vec<u8>)> {
         if fastn_core::file::is_static(id)? {
-            if let Ok(data) = self.fs_fetch_by_file_name(id, package_root, ds).await {
+            if let Ok(data) = self.fs_fetch_by_file_name(id, package_root, ds, session_id).await {
                 return Ok((id.to_string(), data));
             }
         } else {
             for name in file_id_to_names(id) {
                 if let Ok(data) = self
-                    .fs_fetch_by_file_name(name.as_str(), package_root, ds)
+                    .fs_fetch_by_file_name(name.as_str(), package_root, ds, session_id)
                     .await
                 {
                     return Ok((name, data));
