@@ -153,11 +153,13 @@ pub async fn serve(
     req: fastn_core::http::Request,
     only_js: bool,
 ) -> fastn_core::Result<(fastn_core::http::Response, bool)> {
+    let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
+
     if req.path() == "/-/auth/logout/" {
         return Ok((clear_sid2(&req), false));
     }
 
-    if let Some(endpoint_response) = handle_endpoints(config, &req).await {
+    if let Some(endpoint_response) = handle_endpoints(config, &req, &req_config.session_id()).await {
         return endpoint_response.map(|r| (r, false));
     }
 
@@ -174,8 +176,6 @@ pub async fn serve(
     if let Some(r) = handle_redirect(config, &path) {
         return Ok((r, false));
     }
-
-    let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
 
     if fastn_core::utils::is_static_path(req.path()) {
         return handle_static_route(
@@ -486,6 +486,7 @@ async fn handle_static_route(
 async fn handle_endpoints(
     config: &fastn_core::Config,
     req: &fastn_core::http::Request,
+    session_id: &Option<String>,
 ) -> Option<fastn_core::Result<fastn_core::http::Response>> {
     let matched_endpoint = config
         .package
@@ -510,7 +511,7 @@ async fn handle_endpoints(
     if url.starts_with("wasm+proxy://") {
         return match config
             .ds
-            .handle_wasm(url, req, endpoint.mountpoint.to_string())
+            .handle_wasm(url, req, endpoint.mountpoint.to_string(), session_id)
             .await
         {
             Ok(r) => Some(Ok(fastn_ds::wasm::to_response(r))),

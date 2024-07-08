@@ -212,7 +212,7 @@ impl DocumentStore {
     }
 
     #[tracing::instrument(skip(self))]
-    pub async fn get_wasm(&self, path: &str) -> Result<wasmtime::Module, WasmReadError> {
+    pub async fn get_wasm(&self, path: &str, _session_id: &Option<String>) -> Result<wasmtime::Module, WasmReadError> {
         // TODO: implement wasm module on disc caching, so modules load faster across
         //       cache purge
         match self.wasm_modules.get(path) {
@@ -442,6 +442,7 @@ impl DocumentStore {
         wasm_url: String,
         req: &T,
         mountpoint: String,
+        session_id: &Option<String>,
     ) -> Result<ft_sys_shared::Request, HttpError>
     where
         T: RequestType,
@@ -461,7 +462,7 @@ impl DocumentStore {
 
         let wasm_file = wasm_url.strip_prefix("wasm+proxy://").unwrap();
         let wasm_file = wasm_file.split_once(".wasm").unwrap().0;
-        let module = self.get_wasm(format!("{wasm_file}.wasm").as_str()).await?;
+        let module = self.get_wasm(format!("{wasm_file}.wasm").as_str(), session_id).await?;
 
         Ok(fastn_ds::wasm::process_http_request(
             ft_sys_shared::Request {
