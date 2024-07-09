@@ -172,7 +172,6 @@ pub enum CreatePoolError {
     EnvError(#[from] EnvironmentError),
     #[error("sql error {0}")]
     SqlError(#[from] fastn_utils::SqlError),
-
 }
 
 /// wasmc compiles path.wasm to path.wasmc
@@ -469,13 +468,12 @@ impl DocumentStore {
         let wasm_file = wasm_url.strip_prefix("wasm+proxy://").unwrap();
         let wasm_file = wasm_file.split_once(".wasm").unwrap().0;
         let module = self.get_wasm(format!("{wasm_file}.wasm").as_str()).await?;
-        let db_url = self.env("DATABASE_URL")
+        let db_url = self
+            .env("DATABASE_URL")
             .await
             .unwrap_or_else(|_| "sqlite:///fastn.sqlite".to_string());
 
         let db_path = initialize_sqlite_db(db_url.as_str()).await?;
-
-
 
         Ok(fastn_ds::wasm::process_http_request(
             ft_sys_shared::Request {
