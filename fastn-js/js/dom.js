@@ -313,6 +313,7 @@ fastn_dom.PropertyKind = {
     TextInputValue: 122,
     FetchPriority: 123,
     Download: 124,
+    SrcDoc: 125,
 };
 
 fastn_dom.Loading = {
@@ -2430,6 +2431,8 @@ class Node2 {
             this.attachAttribute("loading", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Src) {
             this.attachAttribute("src", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.SrcDoc) {
+            this.attachAttribute("srcdoc", staticValue);
         } else if (kind === fastn_dom.PropertyKind.ImageSrc) {
             this.attachImageSrcClosures(staticValue);
             ftd.dark_mode.addClosure(
