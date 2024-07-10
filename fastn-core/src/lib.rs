@@ -72,7 +72,10 @@ fn fastn_2022_js() -> &'static str {
 }
 
 #[allow(dead_code)]
-async fn original_package_status(config: &fastn_core::Config, session_id: &Option<String>) -> fastn_core::Result<String> {
+async fn original_package_status(
+    config: &fastn_core::Config,
+    session_id: &Option<String>,
+) -> fastn_core::Result<String> {
     let path = config
         .ds
         .root()
@@ -95,7 +98,10 @@ async fn original_package_status(config: &fastn_core::Config, session_id: &Optio
 }
 
 #[allow(dead_code)]
-async fn translation_package_status(config: &fastn_core::Config, session_id: &Option<String>) -> fastn_core::Result<String> {
+async fn translation_package_status(
+    config: &fastn_core::Config,
+    session_id: &Option<String>,
+) -> fastn_core::Result<String> {
     let path = config
         .ds
         .root()

@@ -49,7 +49,10 @@ impl ConfigTemp {
         Ok(())
     }
 
-    pub async fn read(ds: &fastn_ds::DocumentStore, session_id: &Option<String>) -> Result<ConfigTemp, Error> {
+    pub async fn read(
+        ds: &fastn_ds::DocumentStore,
+        session_id: &Option<String>,
+    ) -> Result<ConfigTemp, Error> {
         let dot_fastn = ds.root().join(".fastn");
         let config_json_path = dot_fastn.join("config.json");
         let bytes = match ds.read_content(&config_json_path, session_id).await {
@@ -72,7 +75,7 @@ impl ConfigTemp {
         ds: &fastn_ds::DocumentStore,
         package: &mut fastn_core::Package,
         package_root: &fastn_ds::Path,
-        session_id: &Option<String>
+        session_id: &Option<String>,
     ) -> fastn_core::Result<scc::HashMap<String, fastn_core::Package>> {
         let all_packages = scc::HashMap::new();
 

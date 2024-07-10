@@ -80,11 +80,10 @@ pub(crate) async fn resolve_dependency_package(
 ) -> Result<fastn_core::Package, fastn_update::DependencyError> {
     let mut dep_package = dependency.package.clone();
     let fastn_path = dependency_path.join("FASTN.ftd");
-    dep_package
-        .resolve(&fastn_path, ds, &None)
-        .await
-        .context(fastn_update::ResolveDependencySnafu {
+    dep_package.resolve(&fastn_path, ds, &None).await.context(
+        fastn_update::ResolveDependencySnafu {
             package: dependency.package.name.clone(),
-        })?;
+        },
+    )?;
     Ok(dep_package)
 }

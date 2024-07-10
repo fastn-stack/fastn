@@ -76,10 +76,13 @@ impl fastn_core::Package {
         id: &str,
         package_root: Option<&fastn_ds::Path>,
         ds: &fastn_ds::DocumentStore,
-        session_id: &Option<String>
+        session_id: &Option<String>,
     ) -> fastn_core::Result<(String, Vec<u8>)> {
         if fastn_core::file::is_static(id)? {
-            if let Ok(data) = self.fs_fetch_by_file_name(id, package_root, ds, session_id).await {
+            if let Ok(data) = self
+                .fs_fetch_by_file_name(id, package_root, ds, session_id)
+                .await
+            {
                 return Ok((id.to_string(), data));
             }
         } else {
@@ -229,7 +232,10 @@ impl fastn_core::Package {
     ) -> fastn_core::Result<(String, Vec<u8>)> {
         if config_package_name.eq(&self.name) {
             if fastn_core::file::is_static(id)? {
-                if let Ok(data) = self.fs_fetch_by_file_name(id, package_root, ds, session_id).await {
+                if let Ok(data) = self
+                    .fs_fetch_by_file_name(id, package_root, ds, session_id)
+                    .await
+                {
                     return Ok((id.to_string(), data));
                 }
 
@@ -261,7 +267,10 @@ impl fastn_core::Package {
                     }
                 };
 
-                if let Ok(data) = self.fs_fetch_by_file_name(&new_id, package_root, ds, session_id).await {
+                if let Ok(data) = self
+                    .fs_fetch_by_file_name(&new_id, package_root, ds, session_id)
+                    .await
+                {
                     return Ok((new_id.to_string(), data));
                 }
             } else {

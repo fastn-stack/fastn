@@ -471,8 +471,14 @@ pub fn id_to_path(id: &str) -> String {
 
 /// returns true if an existing file named "file_name"
 /// exists in the root package folder
-async fn is_file_in_root(root: &str, file_name: &str, ds: &fastn_ds::DocumentStore, session_id: &Option<String>) -> bool {
-    ds.exists(&fastn_ds::Path::new(root).join(file_name), session_id).await
+async fn is_file_in_root(
+    root: &str,
+    file_name: &str,
+    ds: &fastn_ds::DocumentStore,
+    session_id: &Option<String>,
+) -> bool {
+    ds.exists(&fastn_ds::Path::new(root).join(file_name), session_id)
+        .await
 }
 
 /// returns favicon html tag as string
@@ -483,7 +489,7 @@ async fn resolve_favicon(
     package_name: &str,
     favicon: &Option<String>,
     ds: &fastn_ds::DocumentStore,
-    session_id: &Option<String>
+    session_id: &Option<String>,
 ) -> Option<String> {
     /// returns html tag for using favicon.
     fn favicon_html(favicon_path: &str, content_type: &str) -> String {
@@ -521,18 +527,19 @@ async fn resolve_favicon(
 
                 // Just check if any favicon exists in the root package directory
                 // in the above mentioned priority order
-                let found_favicon_id = if is_file_in_root(root_path, "favicon.ico", ds, session_id).await {
-                    "favicon.ico"
-                } else if is_file_in_root(root_path, "favicon.svg", ds, session_id).await {
-                    "favicon.svg"
-                } else if is_file_in_root(root_path, "favicon.png", ds, session_id).await {
-                    "favicon.png"
-                } else if is_file_in_root(root_path, "favicon.jpg", ds, session_id).await {
-                    "favicon.jpg"
-                } else {
-                    // Not using any favicon
-                    return None;
-                };
+                let found_favicon_id =
+                    if is_file_in_root(root_path, "favicon.ico", ds, session_id).await {
+                        "favicon.ico"
+                    } else if is_file_in_root(root_path, "favicon.svg", ds, session_id).await {
+                        "favicon.svg"
+                    } else if is_file_in_root(root_path, "favicon.png", ds, session_id).await {
+                        "favicon.png"
+                    } else if is_file_in_root(root_path, "favicon.jpg", ds, session_id).await {
+                        "favicon.jpg"
+                    } else {
+                        // Not using any favicon
+                        return None;
+                    };
 
                 get_favicon_path_and_type(package_name, found_favicon_id)
             }
@@ -559,7 +566,11 @@ pub fn get_external_css_html(external_js: &[String]) -> String {
     result
 }
 
-pub async fn get_inline_js_html(config: &fastn_core::Config, inline_js: &[String], session_id: &Option<String>) -> String {
+pub async fn get_inline_js_html(
+    config: &fastn_core::Config,
+    inline_js: &[String],
+    session_id: &Option<String>,
+) -> String {
     let mut result = "".to_string();
     for path in inline_js {
         let path = fastn_ds::Path::new(path);
@@ -570,7 +581,11 @@ pub async fn get_inline_js_html(config: &fastn_core::Config, inline_js: &[String
     result
 }
 
-pub async fn get_inline_css_html(config: &fastn_core::Config, inline_js: &[String], session_id: &Option<String>) -> String {
+pub async fn get_inline_css_html(
+    config: &fastn_core::Config,
+    inline_js: &[String],
+    session_id: &Option<String>,
+) -> String {
     let mut result = "".to_string();
     for path in inline_js {
         let path = fastn_ds::Path::new(path);
@@ -780,7 +795,7 @@ pub(crate) async fn write(
     file_path: &str,
     data: &[u8],
     ds: &fastn_ds::DocumentStore,
-    session_id: &Option<String>
+    session_id: &Option<String>,
 ) -> fastn_core::Result<()> {
     if ds.exists(&root.join(file_path), session_id).await {
         return Ok(());

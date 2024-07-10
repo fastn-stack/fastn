@@ -76,7 +76,14 @@ impl TranslatedDocument {
                 translated_latest,
             } => {
                 // Gets the diff on original file between last_marked_on and original_latest timestamp
-                let diff = get_diff(config, original, last_marked_on, original_latest, session_id).await?;
+                let diff = get_diff(
+                    config,
+                    original,
+                    last_marked_on,
+                    original_latest,
+                    session_id,
+                )
+                .await?;
                 let translated_data = TranslationData {
                     diff: Some(diff),
                     last_marked_on: Some(*last_marked_on),
@@ -122,13 +129,19 @@ impl TranslatedDocument {
                 &config.original_path()?,
                 last_marked_on,
             );
-            let last_marked_on_data = config.ds.read_to_string(&last_marked_on_path, session_id).await?;
+            let last_marked_on_data = config
+                .ds
+                .read_to_string(&last_marked_on_path, session_id)
+                .await?;
             let original_latest_path = fastn_core::utils::history_path(
                 original.get_id(),
                 &config.original_path()?,
                 original_latest,
             );
-            let original_latest_data = config.ds.read_to_string(&original_latest_path, session_id).await?;
+            let original_latest_data = config
+                .ds
+                .read_to_string(&original_latest_path, session_id)
+                .await?;
 
             let patch = diffy::create_patch(&last_marked_on_data, &original_latest_data);
             Ok(patch.to_string().replace("---", "\\---"))
@@ -141,9 +154,12 @@ impl TranslatedDocument {
         translated_documents: std::collections::BTreeMap<String, fastn_core::File>,
         session_id: &Option<String>,
     ) -> fastn_core::Result<std::collections::BTreeMap<String, TranslatedDocument>> {
-        let original_snapshots =
-            fastn_core::snapshot::get_latest_snapshots(&config.ds, &config.original_path()?, session_id)
-                .await?;
+        let original_snapshots = fastn_core::snapshot::get_latest_snapshots(
+            &config.ds,
+            &config.original_path()?,
+            session_id,
+        )
+        .await?;
         let mut translation_status = std::collections::BTreeMap::new();
         for (file, timestamp) in original_snapshots {
             let original_document =
@@ -176,7 +192,8 @@ impl TranslatedDocument {
                 continue;
             }
             let tracks =
-                fastn_core::tracker::get_tracks(config, &config.ds.root(), &track_path, session_id).await?;
+                fastn_core::tracker::get_tracks(config, &config.ds.root(), &track_path, session_id)
+                    .await?;
             if let Some(fastn_core::Track {
                 last_merged_version: Some(last_merged_version),
                 self_timestamp,

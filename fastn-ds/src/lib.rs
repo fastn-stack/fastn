@@ -218,7 +218,11 @@ impl DocumentStore {
     }
 
     #[tracing::instrument(skip(self))]
-    pub async fn get_wasm(&self, path: &str, _session_id: &Option<String>) -> Result<wasmtime::Module, WasmReadError> {
+    pub async fn get_wasm(
+        &self,
+        path: &str,
+        _session_id: &Option<String>,
+    ) -> Result<wasmtime::Module, WasmReadError> {
         // TODO: implement wasm module on disc caching, so modules load faster across
         //       cache purge
         match self.wasm_modules.get(path) {
@@ -314,7 +318,11 @@ impl DocumentStore {
         fastn_ds::Path { path: home() }
     }
 
-    pub async fn read_content(&self, path: &fastn_ds::Path, _session_id: &Option<String>) -> Result<Vec<u8>, ReadError> {
+    pub async fn read_content(
+        &self,
+        path: &fastn_ds::Path,
+        _session_id: &Option<String>,
+    ) -> Result<Vec<u8>, ReadError> {
         use tokio::io::AsyncReadExt;
 
         tracing::debug!("read_content {}", &path);
@@ -335,7 +343,11 @@ impl DocumentStore {
         Ok(contents)
     }
 
-    pub async fn read_to_string(&self, path: &fastn_ds::Path, session_id: &Option<String>) -> Result<String, ReadStringError> {
+    pub async fn read_to_string(
+        &self,
+        path: &fastn_ds::Path,
+        session_id: &Option<String>,
+    ) -> Result<String, ReadStringError> {
         self.read_content(path, session_id)
             .await
             .map_err(ReadStringError::ReadError)
@@ -468,7 +480,9 @@ impl DocumentStore {
 
         let wasm_file = wasm_url.strip_prefix("wasm+proxy://").unwrap();
         let wasm_file = wasm_file.split_once(".wasm").unwrap().0;
-        let module = self.get_wasm(format!("{wasm_file}.wasm").as_str(), session_id).await?;
+        let module = self
+            .get_wasm(format!("{wasm_file}.wasm").as_str(), session_id)
+            .await?;
         let db_url = self
             .env("DATABASE_URL")
             .await

@@ -143,7 +143,9 @@ pub async fn paths_to_files(
                 let p = pkg.clone();
                 let ds = ds.clone();
                 let session_id = session_id.clone();
-                tokio::spawn(async move { fastn_core::get_file(&ds, p, &x, &base, &session_id).await })
+                tokio::spawn(
+                    async move { fastn_core::get_file(&ds, p, &x, &base, &session_id).await },
+                )
             })
             .collect::<Vec<tokio::task::JoinHandle<fastn_core::Result<fastn_core::File>>>>(),
     )

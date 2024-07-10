@@ -638,7 +638,7 @@ impl Package {
         &self,
         package_root: &fastn_ds::Path,
         ds: &fastn_ds::DocumentStore,
-        session_id: &Option<String>
+        session_id: &Option<String>,
     ) -> fastn_core::Result<fastn_core::Package> {
         let file_extract_path = package_root.join("FASTN.ftd");
         let mut package = self.clone();

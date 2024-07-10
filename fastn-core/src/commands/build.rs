@@ -794,9 +794,14 @@ async fn get_documents_for_current_package(
                 } else {
                     config.package.name.to_string()
                 };
-                let mut file =
-                    fastn_core::get_file(&config.ds, package_name, doc_path, &config.ds.root(), &None)
-                        .await?;
+                let mut file = fastn_core::get_file(
+                    &config.ds,
+                    package_name,
+                    doc_path,
+                    &config.ds.root(),
+                    &None,
+                )
+                .await?;
                 if let Some(ref url) = url {
                     let url = url.replace("/index.html", "");
                     let extension = if matches!(file, fastn_core::File::Markdown(_)) {
@@ -846,7 +851,9 @@ async fn process_static(
 
         {
             // TODO: need to remove this once download_base_url is removed
-            let content = ds.read_content(&sa.base_path.join(sa.id.as_str()), &None).await?;
+            let content = ds
+                .read_content(&sa.base_path.join(sa.id.as_str()), &None)
+                .await?;
             ds.write_content(&base_path.join(".build").join(sa.id.as_str()), &content)
                 .await?;
         }

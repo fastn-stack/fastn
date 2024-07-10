@@ -159,7 +159,8 @@ pub async fn serve(
         return Ok((clear_sid2(&req), false));
     }
 
-    if let Some(endpoint_response) = handle_endpoints(config, &req, &req_config.session_id()).await {
+    if let Some(endpoint_response) = handle_endpoints(config, &req, &req_config.session_id()).await
+    {
         return endpoint_response.map(|r| (r, false));
     }
 

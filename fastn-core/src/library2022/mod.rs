@@ -92,7 +92,9 @@ impl Library2022 {
         ) -> fastn_core::Result<(String, String, usize)> {
             let package = lib.get_current_package(current_processing_module)?;
             if name.starts_with(package.name.as_str()) {
-                if let Some((content, size)) = get_data_from_package(name, &package, lib, session_id).await? {
+                if let Some((content, size)) =
+                    get_data_from_package(name, &package, lib, session_id).await?
+                {
                     return Ok((content, name.to_string(), size));
                 }
             }
@@ -107,7 +109,8 @@ impl Library2022 {
             }
 
             for (alias, package) in package.aliases() {
-                lib.push_package_under_process(name, package, session_id).await?;
+                lib.push_package_under_process(name, package, session_id)
+                    .await?;
                 if name.starts_with(alias) {
                     let name = name.replacen(alias, &package.name, 1);
                     if let Some((content, size)) =
@@ -154,7 +157,8 @@ impl Library2022 {
             lib: &mut fastn_core::Library2022,
             session_id: &Option<String>,
         ) -> fastn_core::Result<Option<(String, usize)>> {
-            lib.push_package_under_process(name, package, session_id).await?;
+            lib.push_package_under_process(name, package, session_id)
+                .await?;
             let package = lib
                 .config
                 .find_package_else_default(package.name.as_str(), Some(package.to_owned()));
@@ -212,7 +216,7 @@ impl Library2022 {
         &mut self,
         module: &str,
         package: &fastn_core::Package,
-        session_id: &Option<String>
+        session_id: &Option<String>,
     ) -> ftd::ftd2021::p1::Result<()> {
         self.module_package_map.insert(
             module.trim_matches('/').to_string(),
@@ -222,13 +226,15 @@ impl Library2022 {
             return Ok(());
         }
 
-        let package = self.config.resolve_package(package, session_id).await.map_err(|e| {
-            ftd::ftd2021::p1::Error::ParseError {
+        let package = self
+            .config
+            .resolve_package(package, session_id)
+            .await
+            .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
                 message: format!("Cannot resolve the package: {}, Error: {}", package.name, e),
                 doc_id: self.document_id.to_string(),
                 line_number: 0,
-            }
-        })?;
+            })?;
 
         fastn_ds::insert_or_update(&self.config.all_packages, package.name.clone(), package);
 

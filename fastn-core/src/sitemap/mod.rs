@@ -553,7 +553,7 @@ impl Sitemap {
         package: &fastn_core::Package,
         config: &fastn_core::Config,
         resolve_sitemap: bool,
-        session_id: &Option<String>
+        session_id: &Option<String>,
     ) -> Result<Self, ParseError> {
         let mut parser = SitemapParser {
             state: ParsingState::WaitingForSection,
@@ -603,7 +603,14 @@ impl Sitemap {
         let package_root = config.get_root_for_package(package);
         let current_package_root = config.ds.root().to_owned();
         for section in self.sections.iter_mut() {
-            resolve_section(section, &package_root, &current_package_root, config, session_id).await?;
+            resolve_section(
+                section,
+                &package_root,
+                &current_package_root,
+                config,
+                session_id,
+            )
+            .await?;
         }
         return Ok(());
 
@@ -677,7 +684,14 @@ impl Sitemap {
             section.translation_file_location = translation_file_location;
 
             for subsection in section.subsections.iter_mut() {
-                resolve_subsection(subsection, package_root, current_package_root, config, session_id).await?;
+                resolve_subsection(
+                    subsection,
+                    package_root,
+                    current_package_root,
+                    config,
+                    session_id,
+                )
+                .await?;
             }
             Ok(())
         }
