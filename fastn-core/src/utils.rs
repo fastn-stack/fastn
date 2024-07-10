@@ -1002,6 +1002,11 @@ pub fn ignore_headers() -> Vec<&'static str> {
 pub(crate) fn is_static_path(path: &str) -> bool {
     assert!(path.starts_with('/'));
 
+    if path.starts_with("/ide/") {
+        // temporary hack
+        return false;
+    }
+
     match path
         .rsplit_once('/')
         .map(|(_, k)| k)
