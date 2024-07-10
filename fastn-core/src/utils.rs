@@ -727,6 +727,7 @@ pub fn get_fastn_package_data(package: &fastn_core::Package) -> String {
     )
 }
 
+#[allow(clippy::too_many_arguments)]
 pub async fn replace_markers_2023(
     js_script: &str,
     scripts: &str,

@@ -85,7 +85,7 @@ pub async fn write_manifest_file(
         let name = file.get_id().to_string();
         let content = &config
             .ds
-            .read_content(&file.get_full_path(), &session_id)
+            .read_content(&file.get_full_path(), session_id)
             .await?;
         let hash = fastn_core::utils::generate_hash(content);
         let size = content.len();

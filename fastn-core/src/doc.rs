@@ -691,7 +691,7 @@ pub async fn resolve_foreign_variable2(
                         light_path.as_str(),
                         light.as_slice(),
                         &lib.config.config.ds,
-                        &session_id,
+                        session_id,
                     )
                     .await
                     .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
