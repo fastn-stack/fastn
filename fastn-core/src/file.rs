@@ -132,6 +132,7 @@ pub async fn paths_to_files(
     package_name: &str,
     files: Vec<fastn_ds::Path>,
     base_path: &fastn_ds::Path,
+    session_id: &Option<String>,
 ) -> fastn_core::Result<Vec<fastn_core::File>> {
     let pkg = package_name.to_string();
     Ok(futures::future::join_all(
@@ -141,7 +142,10 @@ pub async fn paths_to_files(
                 let base = base_path.clone();
                 let p = pkg.clone();
                 let ds = ds.clone();
-                tokio::spawn(async move { fastn_core::get_file(&ds, p, &x, &base).await })
+                let session_id = session_id.clone();
+                tokio::spawn(
+                    async move { fastn_core::get_file(&ds, p, &x, &base, &session_id).await },
+                )
             })
             .collect::<Vec<tokio::task::JoinHandle<fastn_core::Result<fastn_core::File>>>>(),
     )
@@ -157,6 +161,7 @@ pub async fn get_file(
     package_name: String,
     doc_path: &fastn_ds::Path,
     base_path: &fastn_ds::Path,
+    session_id: &Option<String>,
 ) -> fastn_core::Result<File> {
     let base_path_str = base_path
         .to_string()
@@ -180,13 +185,13 @@ pub async fn get_file(
         Some((_, "ftd")) => File::Ftd(Document {
             package_name: package_name.to_string(),
             id: id.to_string(),
-            content: ds.read_to_string(doc_path).await?,
+            content: ds.read_to_string(doc_path, session_id).await?,
             parent_path: base_path.clone(),
         }),
         Some((_, "md")) => File::Markdown(Document {
             package_name: package_name.to_string(),
             id: id.to_string(),
-            content: ds.read_to_string(doc_path).await?,
+            content: ds.read_to_string(doc_path, session_id).await?,
             parent_path: base_path.clone(),
         }),
         Some((_, ext))
@@ -198,7 +203,7 @@ pub async fn get_file(
             File::Image(Static {
                 package_name: package_name.to_string(),
                 id: id.to_string(),
-                content: ds.read_content(doc_path).await?,
+                content: ds.read_content(doc_path, session_id).await?,
                 base_path: base_path.clone(),
             })
         }
@@ -206,14 +211,14 @@ pub async fn get_file(
             File::Code(Document {
                 package_name: package_name.to_string(),
                 id: id.to_string(),
-                content: ds.read_to_string(doc_path).await?,
+                content: ds.read_to_string(doc_path, session_id).await?,
                 parent_path: base_path.clone(),
             })
         }
         _ => File::Static(Static {
             package_name: package_name.to_string(),
             id: id.to_string(),
-            content: ds.read_content(doc_path).await?,
+            content: ds.read_content(doc_path, session_id).await?,
             base_path: base_path.clone(),
         }),
     })

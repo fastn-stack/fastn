@@ -115,7 +115,7 @@ pub async fn document_name<'a>(
 
     let file_path = req_config
         .config
-        .get_file_path(&doc_id)
+        .get_file_path(&doc_id, &req_config.session_id())
         .await
         .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
             message: e.to_string(),

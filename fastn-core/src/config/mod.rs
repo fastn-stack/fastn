@@ -130,6 +130,7 @@ impl RequestConfig {
     pub async fn get_file_and_package_by_id(
         &mut self,
         path: &str,
+        session_id: &Option<String>,
     ) -> fastn_core::Result<fastn_core::File> {
         // This function will return file and package by given path
         // path can be mounted(mount-point) with other dependencies
@@ -150,7 +151,10 @@ impl RequestConfig {
                     Some((new_path, package, remaining_path, _)) => {
                         // Update the sitemap of the package, if it does not contain the sitemap information
                         if package.name != self.config.package.name {
-                            package1 = self.config.update_sitemap(package).await?;
+                            package1 = self
+                                .config
+                                .update_sitemap(package, &self.session_id())
+                                .await?;
                             (new_path, &package1, remaining_path)
                         } else {
                             (new_path, package, remaining_path)
@@ -179,13 +183,17 @@ impl RequestConfig {
         let path = path_with_package_name.as_str();
 
         if let Some(id) = document {
-            let file_name = self.config.get_file_path_and_resolve(id.as_str()).await?;
+            let file_name = self
+                .config
+                .get_file_path_and_resolve(id.as_str(), session_id)
+                .await?;
             let package = self.config.find_package_by_id(id.as_str()).await?.1;
             let file = fastn_core::get_file(
                 &self.config.ds,
                 package.name.to_string(),
                 &self.config.ds.root().join(file_name),
                 &self.config.get_root_for_package(&package),
+                &self.session_id(),
             )
             .await?;
             self.current_document = Some(path.to_string());
@@ -195,7 +203,10 @@ impl RequestConfig {
         } else {
             // -/fifthtry.github.io/todos/add-todo/
             // -/fifthtry.github.io/doc-site/add-todo/
-            let file_name = self.config.get_file_path_and_resolve(path).await?;
+            let file_name = self
+                .config
+                .get_file_path_and_resolve(path, session_id)
+                .await?;
             // .packages/todos/add-todo.ftd
             // .packages/fifthtry.github.io/doc-site/add-todo.ftd
 
@@ -209,6 +220,7 @@ impl RequestConfig {
                     .root()
                     .join(file_name.trim_start_matches('/')),
                 &self.config.get_root_for_package(&package),
+                &self.session_id(),
             )
             .await?;
 
@@ -226,6 +238,18 @@ impl RequestConfig {
             self.current_document = Some(file.get_id().to_string());
             Ok(file)
         }
+    }
+
+    pub(crate) fn session_id(&self) -> Option<String> {
+        // why not `fastn-sid` cookie?
+        // Cookies are only available in browser context. It is easier to read session id (if
+        // available) from a custom HTTP header in situation like when we are rendering a document
+        // inside of an iframe.
+        self.request.headers().get("X-FASTN-ACTOR").map(|v| {
+            v.to_str()
+                .expect("X-FASTN-ACTOR is a valid ascii string (uuid)")
+                .to_string()
+        })
     }
 }
 
@@ -399,7 +423,10 @@ impl Config {
         };
     }
 
-    pub(crate) async fn download_fonts(&self) -> fastn_core::Result<()> {
+    pub(crate) async fn download_fonts(
+        &self,
+        session_id: &Option<String>,
+    ) -> fastn_core::Result<()> {
         use itertools::Itertools;
 
         let mut fonts = vec![];
@@ -421,7 +448,7 @@ impl Config {
                 }
                 let start = std::time::Instant::now();
                 print!("Processing {} ... ", url);
-                let content = self.get_file_and_resolve(url.as_str()).await?.1;
+                let content = self.get_file_and_resolve(url.as_str(), session_id).await?.1;
                 fastn_core::utils::update(
                     &self.build_dir().join(&url),
                     content.as_slice(),
@@ -518,11 +545,18 @@ impl Config {
     pub(crate) async fn get_files(
         &self,
         package: &fastn_core::Package,
+        session_id: &Option<String>,
     ) -> fastn_core::Result<Vec<fastn_core::File>> {
         let path = self.get_root_for_package(package);
         let all_files = self.get_all_file_paths(package).await?;
-        let mut documents =
-            fastn_core::paths_to_files(&self.ds, package.name.as_str(), all_files, &path).await?;
+        let mut documents = fastn_core::paths_to_files(
+            &self.ds,
+            package.name.as_str(),
+            all_files,
+            &path,
+            session_id,
+        )
+        .await?;
         documents.sort_by_key(|v| v.get_id().to_string());
 
         Ok(documents)
@@ -612,10 +646,11 @@ impl Config {
     pub async fn update_sitemap(
         &self,
         package: &fastn_core::Package,
+        session_id: &Option<String>,
     ) -> fastn_core::Result<fastn_core::Package> {
         let fastn_path = &self.packages_root.join(&package.name).join("FASTN.ftd");
 
-        let fastn_doc = utils::fastn_doc(&self.ds, fastn_path).await?;
+        let fastn_doc = utils::fastn_doc(&self.ds, fastn_path, session_id).await?;
 
         let mut package = package.clone();
 
@@ -631,6 +666,7 @@ impl Config {
                     &package,
                     self,
                     false,
+                    session_id,
                 )
                 .await?;
                 s.readers.clone_from(&sitemap_temp.readers);
@@ -654,7 +690,11 @@ impl Config {
         Ok(package)
     }
 
-    pub async fn get_file_path(&self, id: &str) -> fastn_core::Result<String> {
+    pub async fn get_file_path(
+        &self,
+        id: &str,
+        session_id: &Option<String>,
+    ) -> fastn_core::Result<String> {
         let (package_name, package) = self.find_package_by_id(id).await?;
         let mut id = id.to_string();
         let mut add_packages = "".to_string();
@@ -684,23 +724,28 @@ impl Config {
             "{}{}",
             add_packages,
             package
-                .resolve_by_id(id, None, self.package.name.as_str(), &self.ds)
+                .resolve_by_id(id, None, self.package.name.as_str(), &self.ds, session_id)
                 .await?
                 .0
         ))
     }
 
-    pub(crate) async fn get_file_path_and_resolve(&self, id: &str) -> fastn_core::Result<String> {
-        Ok(self.get_file_and_resolve(id).await?.0)
+    pub(crate) async fn get_file_path_and_resolve(
+        &self,
+        id: &str,
+        session_id: &Option<String>,
+    ) -> fastn_core::Result<String> {
+        Ok(self.get_file_and_resolve(id, session_id).await?.0)
     }
 
     pub(crate) async fn get_file_and_resolve(
         &self,
         id: &str,
+        session_id: &Option<String>,
     ) -> fastn_core::Result<(String, Vec<u8>)> {
         let (package_name, package) = self.find_package_by_id(id).await?;
 
-        let package = self.resolve_package(&package).await?;
+        let package = self.resolve_package(&package, session_id).await?;
         let mut id = id.to_string();
         let mut add_packages = "".to_string();
         if let Some(new_id) = id.strip_prefix("-/") {
@@ -726,7 +771,7 @@ impl Config {
         };
 
         let (file_name, content) = package
-            .resolve_by_id(id, None, self.package.name.as_str(), &self.ds)
+            .resolve_by_id(id, None, self.package.name.as_str(), &self.ds, session_id)
             .await?;
         Ok((format!("{}{}", add_packages, file_name), content))
     }
@@ -785,6 +830,7 @@ impl Config {
         root: &fastn_ds::Path,
         id: &str,
         ds: &fastn_ds::DocumentStore,
+        session_id: &Option<String>,
     ) -> fastn_core::Result<String> {
         let mut id = id.to_string();
         let mut add_packages = "".to_string();
@@ -801,13 +847,13 @@ impl Config {
             .replace("index.html", "/");
         if id.eq("/") {
             if ds
-                .exists(&root.join(format!("{}index.ftd", add_packages)))
+                .exists(&root.join(format!("{}index.ftd", add_packages)), session_id)
                 .await
             {
                 return Ok(format!("{}index.ftd", add_packages));
             }
             if ds
-                .exists(&root.join(format!("{}README.md", add_packages)))
+                .exists(&root.join(format!("{}README.md", add_packages)), session_id)
                 .await
             {
                 return Ok(format!("{}README.md", add_packages));
@@ -818,25 +864,34 @@ impl Config {
         }
         id = id.trim_matches('/').to_string();
         if ds
-            .exists(&root.join(format!("{}{}.ftd", add_packages, id)))
+            .exists(
+                &root.join(format!("{}{}.ftd", add_packages, id)),
+                session_id,
+            )
             .await
         {
             return Ok(format!("{}{}.ftd", add_packages, id));
         }
         if ds
-            .exists(&root.join(format!("{}{}/index.ftd", add_packages, id)))
+            .exists(
+                &root.join(format!("{}{}/index.ftd", add_packages, id)),
+                session_id,
+            )
             .await
         {
             return Ok(format!("{}{}/index.ftd", add_packages, id));
         }
         if ds
-            .exists(&root.join(format!("{}{}.md", add_packages, id)))
+            .exists(&root.join(format!("{}{}.md", add_packages, id)), session_id)
             .await
         {
             return Ok(format!("{}{}.md", add_packages, id));
         }
         if ds
-            .exists(&root.join(format!("{}{}/README.md", add_packages, id)))
+            .exists(
+                &root.join(format!("{}{}/README.md", add_packages, id)),
+                session_id,
+            )
             .await
         {
             return Ok(format!("{}{}/README.md", add_packages, id));
@@ -850,24 +905,32 @@ impl Config {
     async fn get_root_path(
         directory: &fastn_ds::Path,
         ds: &fastn_ds::DocumentStore,
+        session_id: &Option<String>,
     ) -> fastn_core::Result<fastn_ds::Path> {
-        if let Some(fastn_ftd_root) = utils::find_root_for_file(directory, "FASTN.ftd", ds).await {
+        if let Some(fastn_ftd_root) =
+            utils::find_root_for_file(directory, "FASTN.ftd", ds, session_id).await
+        {
             return Ok(fastn_ftd_root);
         }
-        let fastn_manifest_path =
-            match utils::find_root_for_file(directory, "fastn.manifest.ftd", ds).await {
-                Some(fastn_manifest_path) => fastn_manifest_path,
-                None => {
-                    return Err(fastn_core::Error::UsageError {
-                        message:
-                            "FASTN.ftd or fastn.manifest.ftd not found in any parent directory"
-                                .to_string(),
-                    });
-                }
-            };
+        let fastn_manifest_path = match utils::find_root_for_file(
+            directory,
+            "fastn.manifest.ftd",
+            ds,
+            session_id,
+        )
+        .await
+        {
+            Some(fastn_manifest_path) => fastn_manifest_path,
+            None => {
+                return Err(fastn_core::Error::UsageError {
+                    message: "FASTN.ftd or fastn.manifest.ftd not found in any parent directory"
+                        .to_string(),
+                });
+            }
+        };
 
         let doc = ds
-            .read_to_string(&fastn_manifest_path.join("fastn.manifest.ftd"))
+            .read_to_string(&fastn_manifest_path.join("fastn.manifest.ftd"), session_id)
             .await?;
         let lib = fastn_core::FastnLibrary::default();
         let fastn_manifest_processed =
@@ -888,7 +951,10 @@ impl Config {
                 accumulator.join(part)
             });
 
-        if ds.exists(&new_package_root.join("FASTN.ftd")).await {
+        if ds
+            .exists(&new_package_root.join("FASTN.ftd"), session_id)
+            .await
+        {
             Ok(new_package_root)
         } else {
             Err(fastn_core::Error::PackageError {
@@ -943,12 +1009,14 @@ impl Config {
     pub async fn read(
         ds: fastn_ds::DocumentStore,
         resolve_sitemap: bool,
+        session_id: &Option<String>,
     ) -> fastn_core::Result<fastn_core::Config> {
         let original_directory = fastn_ds::Path::new(std::env::current_dir()?.to_str().unwrap()); // todo: remove unwrap()
-        let fastn_doc = utils::fastn_doc(&ds, &fastn_ds::Path::new("FASTN.ftd")).await?;
+        let fastn_doc =
+            utils::fastn_doc(&ds, &fastn_ds::Path::new("FASTN.ftd"), session_id).await?;
         let mut package = fastn_core::Package::from_fastn_doc(&ds, &fastn_doc)?;
         let package_root = ds.root().join(".packages");
-        let all_packages = get_all_packages(&mut package, &package_root, &ds).await?;
+        let all_packages = get_all_packages(&mut package, &package_root, &ds, session_id).await?;
         let mut config = Config {
             package: package.clone(),
             packages_root: package_root.clone(),
@@ -982,6 +1050,7 @@ impl Config {
                         &package,
                         &config,
                         resolve_sitemap,
+                        session_id,
                     )
                     .await?;
                     s.readers.clone_from(&sitemap_temp.readers);
@@ -1009,7 +1078,7 @@ impl Config {
             let apps_temp: Vec<fastn_core::package::app::AppTemp> = fastn_doc.get("fastn#app")?;
             let mut apps = vec![];
             for app in apps_temp.into_iter() {
-                apps.push(app.into_app(&config).await?);
+                apps.push(app.into_app(&config, session_id).await?);
             }
             apps
         };
@@ -1038,6 +1107,7 @@ impl Config {
     pub(crate) async fn resolve_package(
         &self,
         package: &fastn_core::Package,
+        _session_id: &Option<String>,
     ) -> fastn_core::Result<fastn_core::Package> {
         match self.all_packages.get(&package.name) {
             Some(package) => Ok(package.get().clone()),
@@ -1051,6 +1121,7 @@ impl Config {
     pub(crate) async fn resolve_package(
         &self,
         package: &fastn_core::Package,
+        session_id: &Option<String>,
     ) -> fastn_core::Result<fastn_core::Package> {
         if self.package.name.eq(package.name.as_str()) {
             return Ok(self.package.clone());
@@ -1061,7 +1132,7 @@ impl Config {
         }
 
         let mut package = package
-            .get_and_resolve(&self.get_root_for_package(package), &self.ds)
+            .get_and_resolve(&self.get_root_for_package(package), &self.ds, session_id)
             .await?;
 
         ConfigTemp::check_dependencies_provided(&self.package, &mut package)?;
@@ -1086,11 +1157,15 @@ impl Config {
     pub(crate) async fn get_fastn_document(
         &self,
         package_name: &str,
+        session_id: &Option<String>,
     ) -> fastn_core::Result<ftd::ftd2021::p2::Document> {
         let package = fastn_core::Package::new(package_name);
         let root = self.get_root_for_package(&package);
         let package_fastn_path = root.join("FASTN.ftd");
-        let doc = self.ds.read_to_string(&package_fastn_path).await?;
+        let doc = self
+            .ds
+            .read_to_string(&package_fastn_path, session_id)
+            .await?;
         let lib = fastn_core::FastnLibrary::default();
         Ok(fastn_core::doc::parse_ftd("fastn", doc.as_str(), &lib)?)
     }
@@ -1142,12 +1217,13 @@ async fn get_all_packages(
     package: &mut fastn_core::Package,
     package_root: &fastn_ds::Path,
     ds: &fastn_ds::DocumentStore,
+    session_id: &Option<String>,
 ) -> fastn_core::Result<scc::HashMap<String, fastn_core::Package>> {
     let all_packages = scc::HashMap::new();
     fastn_ds::insert_or_update(&all_packages, package.name.to_string(), package.to_owned());
-    let config_temp = config_temp::ConfigTemp::read(ds).await?;
+    let config_temp = config_temp::ConfigTemp::read(ds, session_id).await?;
     let other = config_temp
-        .get_all_packages(ds, package, package_root)
+        .get_all_packages(ds, package, package_root, session_id)
         .await?;
     let mut entry = other.first_entry();
     while let Some(package) = entry {
@@ -1164,6 +1240,7 @@ async fn get_all_packages(
     package: &mut fastn_core::Package,
     _package_root: &fastn_ds::Path,
     _ds: &fastn_ds::DocumentStore,
+    _session_id: &Option<String>,
 ) -> fastn_core::Result<scc::HashMap<String, fastn_core::Package>> {
     let all_packages = scc::HashMap::new();
     fastn_ds::insert_or_update(&all_packages, package.name.to_string(), package.to_owned());

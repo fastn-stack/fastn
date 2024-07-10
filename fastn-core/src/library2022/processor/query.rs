@@ -20,7 +20,7 @@ pub async fn process(
         .unwrap_or_else(|| "ast".to_string());
 
     let file = req_config
-        .get_file_and_package_by_id(path.as_str())
+        .get_file_and_package_by_id(path.as_str(), &req_config.session_id())
         .await
         .map_err(|e| ftd::interpreter::Error::ParseError {
             message: format!("Cannot get path: {} {:?}", path.as_str(), e),

@@ -21,8 +21,9 @@ impl Library2022 {
         &mut self,
         name: &str,
         current_processing_module: &str,
+        session_id: &Option<String>,
     ) -> ftd_p1::Result<(String, String, usize)> {
-        match self.get(name, current_processing_module).await {
+        match self.get(name, current_processing_module, session_id).await {
             Ok(v) => Ok(v),
             Err(e) => ftd_p1::utils::parse_error(e.to_string(), "", 0),
         }
@@ -57,6 +58,7 @@ impl Library2022 {
         &mut self,
         name: &str,
         current_processing_module: &str,
+        session_id: &Option<String>,
     ) -> fastn_core::Result<(String, String, usize)> {
         if name == "fastn" {
             if self.config.test_command_running {
@@ -78,6 +80,7 @@ impl Library2022 {
             format!("{}/", name.trim_end_matches('/')).as_str(),
             self,
             current_processing_module,
+            session_id,
         )
         .await;
 
@@ -85,10 +88,13 @@ impl Library2022 {
             name: &str,
             lib: &mut fastn_core::Library2022,
             current_processing_module: &str,
+            session_id: &Option<String>,
         ) -> fastn_core::Result<(String, String, usize)> {
             let package = lib.get_current_package(current_processing_module)?;
             if name.starts_with(package.name.as_str()) {
-                if let Some((content, size)) = get_data_from_package(name, &package, lib).await? {
+                if let Some((content, size)) =
+                    get_data_from_package(name, &package, lib, session_id).await?
+                {
                     return Ok((content, name.to_string(), size));
                 }
             }
@@ -96,18 +102,19 @@ impl Library2022 {
             if package.name.ends_with(name.trim_end_matches('/')) {
                 let package_index = format!("{}/", package.name.as_str());
                 if let Some((content, size)) =
-                    get_data_from_package(package_index.as_str(), &package, lib).await?
+                    get_data_from_package(package_index.as_str(), &package, lib, session_id).await?
                 {
                     return Ok((content, format!("{package_index}index.ftd"), size));
                 }
             }
 
             for (alias, package) in package.aliases() {
-                lib.push_package_under_process(name, package).await?;
+                lib.push_package_under_process(name, package, session_id)
+                    .await?;
                 if name.starts_with(alias) {
                     let name = name.replacen(alias, &package.name, 1);
                     if let Some((content, size)) =
-                        get_data_from_package(name.as_str(), package, lib).await?
+                        get_data_from_package(name.as_str(), package, lib, session_id).await?
                     {
                         return Ok((content, name.to_string(), size));
                     }
@@ -148,8 +155,10 @@ impl Library2022 {
             name: &str,
             package: &fastn_core::Package,
             lib: &mut fastn_core::Library2022,
+            session_id: &Option<String>,
         ) -> fastn_core::Result<Option<(String, usize)>> {
-            lib.push_package_under_process(name, package).await?;
+            lib.push_package_under_process(name, package, session_id)
+                .await?;
             let package = lib
                 .config
                 .find_package_else_default(package.name.as_str(), Some(package.to_owned()));
@@ -165,6 +174,7 @@ impl Library2022 {
                     None,
                     lib.config.package.name.as_str(),
                     &lib.config.ds,
+                    session_id,
                 )
                 .await?;
             if !file_path.ends_with(".ftd") {
@@ -184,6 +194,7 @@ impl Library2022 {
         &mut self,
         module: &str,
         package: &fastn_core::Package,
+        _session_id: &Option<String>,
     ) -> ftd::ftd2021::p1::Result<()> {
         self.module_package_map.insert(
             module.trim_matches('/').to_string(),
@@ -205,6 +216,7 @@ impl Library2022 {
         &mut self,
         module: &str,
         package: &fastn_core::Package,
+        session_id: &Option<String>,
     ) -> ftd::ftd2021::p1::Result<()> {
         self.module_package_map.insert(
             module.trim_matches('/').to_string(),
@@ -214,13 +226,15 @@ impl Library2022 {
             return Ok(());
         }
 
-        let package = self.config.resolve_package(package).await.map_err(|e| {
-            ftd::ftd2021::p1::Error::ParseError {
+        let package = self
+            .config
+            .resolve_package(package, session_id)
+            .await
+            .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
                 message: format!("Cannot resolve the package: {}, Error: {}", package.name, e),
                 doc_id: self.document_id.to_string(),
                 line_number: 0,
-            }
-        })?;
+            })?;
 
         fastn_ds::insert_or_update(&self.config.all_packages, package.name.clone(), package);
 

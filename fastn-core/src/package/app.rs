@@ -73,11 +73,16 @@ impl AppTemp {
         Ok(hm)
     }
 
-    pub async fn into_app(self, config: &fastn_core::Config) -> fastn_core::Result<App> {
+    pub async fn into_app(
+        self,
+        config: &fastn_core::Config,
+        session_id: &Option<String>,
+    ) -> fastn_core::Result<App> {
         let package = config
-            .resolve_package(&fastn_core::Package::new(
-                self.package.trim().trim_matches('/'),
-            ))
+            .resolve_package(
+                &fastn_core::Package::new(self.package.trim().trim_matches('/')),
+                session_id,
+            )
             .await?;
 
         Ok(App {

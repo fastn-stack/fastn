@@ -206,11 +206,11 @@ async fn update_github_dependency(
     // 1. The package does not yet exist
     // 2. The checksums of the downloaded package manifest
     //    and the existing manifest does not match
-    let should_download_archive = if !ds.exists(dependency_path).await {
+    let should_download_archive = if !ds.exists(dependency_path, &None).await {
         true
     } else {
         let existing_manifest_bytes =
-            ds.read_content(&manifest_path)
+            ds.read_content(&manifest_path, &None)
                 .await
                 .context(ReadManifestSnafu {
                     package: package_name.clone(),

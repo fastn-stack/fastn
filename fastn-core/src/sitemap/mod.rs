@@ -553,6 +553,7 @@ impl Sitemap {
         package: &fastn_core::Package,
         config: &fastn_core::Config,
         resolve_sitemap: bool,
+        session_id: &Option<String>,
     ) -> Result<Self, ParseError> {
         let mut parser = SitemapParser {
             state: ParsingState::WaitingForSection,
@@ -582,7 +583,7 @@ impl Sitemap {
 
         if resolve_sitemap {
             sitemap
-                .resolve(package, config)
+                .resolve(package, config, session_id)
                 .await
                 .map_err(|e| ParseError::InvalidTOCItem {
                     doc_id: package.name.to_string(),
@@ -597,11 +598,19 @@ impl Sitemap {
         &mut self,
         package: &fastn_core::Package,
         config: &fastn_core::Config,
+        session_id: &Option<String>,
     ) -> fastn_core::Result<()> {
         let package_root = config.get_root_for_package(package);
         let current_package_root = config.ds.root().to_owned();
         for section in self.sections.iter_mut() {
-            resolve_section(section, &package_root, &current_package_root, config).await?;
+            resolve_section(
+                section,
+                &package_root,
+                &current_package_root,
+                config,
+                session_id,
+            )
+            .await?;
         }
         return Ok(());
 
@@ -610,6 +619,7 @@ impl Sitemap {
             package_root: &fastn_ds::Path,
             current_package_root: &fastn_ds::Path,
             config: &fastn_core::Config,
+            session_id: &Option<String>,
         ) -> fastn_core::Result<()> {
             let (file_location, translation_file_location) = if let Ok(file_name) = config
                 .get_file_path_and_resolve(
@@ -617,6 +627,7 @@ impl Sitemap {
                         .document
                         .clone()
                         .unwrap_or_else(|| section.get_file_id()),
+                    session_id,
                 )
                 .await
             {
@@ -633,7 +644,8 @@ impl Sitemap {
                 match fastn_core::Config::get_file_name(
                     current_package_root,
                     section.get_file_id().as_str(),
-                    &config.ds
+                    &config.ds,
+                    session_id,
                 ).await {
                     Ok(name) => {
                         if current_package_root.eq(package_root) {
@@ -651,7 +663,8 @@ impl Sitemap {
                                 fastn_core::Config::get_file_name(
                                     package_root,
                                     section.get_file_id().as_str(),
-                                    &config.ds
+                                    &config.ds,
+                                    session_id,
                                 ).await
                                     .map_err(|e| {
                                         fastn_core::Error::UsageError {
@@ -671,7 +684,14 @@ impl Sitemap {
             section.translation_file_location = translation_file_location;
 
             for subsection in section.subsections.iter_mut() {
-                resolve_subsection(subsection, package_root, current_package_root, config).await?;
+                resolve_subsection(
+                    subsection,
+                    package_root,
+                    current_package_root,
+                    config,
+                    session_id,
+                )
+                .await?;
             }
             Ok(())
         }
@@ -681,6 +701,7 @@ impl Sitemap {
             package_root: &fastn_ds::Path,
             current_package_root: &fastn_ds::Path,
             config: &fastn_core::Config,
+            session_id: &Option<String>,
         ) -> fastn_core::Result<()> {
             if let Some(ref id) = subsection.get_file_id() {
                 let (file_location, translation_file_location) = if let Ok(file_name) = config
@@ -689,6 +710,7 @@ impl Sitemap {
                             .document
                             .clone()
                             .unwrap_or_else(|| id.to_string()),
+                        session_id,
                     )
                     .await
                 {
@@ -699,7 +721,7 @@ impl Sitemap {
                 } else if crate::http::url_regex().find(id.as_str()).is_some() {
                     (None, None)
                 } else {
-                    match fastn_core::Config::get_file_name(current_package_root, id.as_str(), &config.ds).await {
+                    match fastn_core::Config::get_file_name(current_package_root, id.as_str(), &config.ds, session_id).await {
                         Ok(name) => {
                             if current_package_root.eq(package_root) {
                                 (Some(current_package_root.join(name)), None)
@@ -712,7 +734,7 @@ impl Sitemap {
                         }
                         Err(_) => (
                             Some(package_root.join(
-                                fastn_core::Config::get_file_name(package_root, id.as_str(),&config.ds).await.map_err(
+                                fastn_core::Config::get_file_name(package_root, id.as_str(),&config.ds, session_id).await.map_err(
                                     |e| fastn_core::Error::UsageError {
                                         message: format!(
                                             "`{}` not found, fix fastn.sitemap in FASTN.ftd. Error: {:?}",
@@ -730,7 +752,7 @@ impl Sitemap {
             }
 
             for toc in subsection.toc.iter_mut() {
-                resolve_toc(toc, package_root, current_package_root, config).await?;
+                resolve_toc(toc, package_root, current_package_root, config, session_id).await?;
             }
             Ok(())
         }
@@ -741,10 +763,12 @@ impl Sitemap {
             package_root: &fastn_ds::Path,
             current_package_root: &fastn_ds::Path,
             config: &fastn_core::Config,
+            session_id: &Option<String>,
         ) -> fastn_core::Result<()> {
             let (file_location, translation_file_location) = if let Ok(file_name) = config
                 .get_file_path_and_resolve(
                     &toc.document.clone().unwrap_or_else(|| toc.get_file_id()),
+                    session_id,
                 )
                 .await
             {
@@ -759,7 +783,7 @@ impl Sitemap {
             {
                 (None, None)
             } else {
-                match fastn_core::Config::get_file_name(current_package_root, toc.get_file_id().as_str(), &config.ds).await {
+                match fastn_core::Config::get_file_name(current_package_root, toc.get_file_id().as_str(), &config.ds, session_id).await {
                     Ok(name) => {
                         if current_package_root.eq(package_root) {
                             (Some(current_package_root.join(name)), None)
@@ -776,7 +800,8 @@ impl Sitemap {
                                 fastn_core::Config::get_file_name(
                                     package_root,
                                     toc.get_file_id().as_str(),
-                                    &config.ds
+                                    &config.ds,
+                                    session_id,
                                 ).await
                                     .map_err(|e| {
                                         fastn_core::Error::UsageError {
@@ -796,7 +821,7 @@ impl Sitemap {
             toc.translation_file_location = translation_file_location;
 
             for toc in toc.children.iter_mut() {
-                resolve_toc(toc, package_root, current_package_root, config).await?;
+                resolve_toc(toc, package_root, current_package_root, config, session_id).await?;
             }
             Ok(())
         }

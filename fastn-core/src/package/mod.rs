@@ -565,9 +565,10 @@ impl Package {
         &mut self,
         fastn_path: &fastn_ds::Path,
         ds: &fastn_ds::DocumentStore,
+        session_id: &Option<String>,
     ) -> fastn_core::Result<()> {
         let fastn_document = {
-            let doc = ds.read_to_string(fastn_path).await?;
+            let doc = ds.read_to_string(fastn_path, session_id).await?;
             let lib = fastn_core::FastnLibrary::default();
             match fastn_core::doc::parse_ftd("fastn", doc.as_str(), &lib) {
                 Ok(v) => v,
@@ -637,10 +638,11 @@ impl Package {
         &self,
         package_root: &fastn_ds::Path,
         ds: &fastn_ds::DocumentStore,
+        session_id: &Option<String>,
     ) -> fastn_core::Result<fastn_core::Package> {
         let file_extract_path = package_root.join("FASTN.ftd");
         let mut package = self.clone();
-        package.resolve(&file_extract_path, ds).await?;
+        package.resolve(&file_extract_path, ds, session_id).await?;
         Ok(package)
     }
 

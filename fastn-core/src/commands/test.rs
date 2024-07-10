@@ -99,7 +99,8 @@ impl fastn_core::Config {
         let path = self.get_root_for_package(package);
         let all_files = self.get_all_fixture_file_paths().await?;
         let documents =
-            fastn_core::paths_to_files(&self.ds, package.name.as_str(), all_files, &path).await?;
+            fastn_core::paths_to_files(&self.ds, package.name.as_str(), all_files, &path, &None)
+                .await?;
         let mut fixtures = documents
             .into_iter()
             .filter_map(|file| match file {
@@ -138,7 +139,8 @@ impl fastn_core::Config {
         let path = self.get_root_for_package(package);
         let all_files = self.get_all_test_file_paths().await?;
         let documents =
-            fastn_core::paths_to_files(&self.ds, package.name.as_str(), all_files, &path).await?;
+            fastn_core::paths_to_files(&self.ds, package.name.as_str(), all_files, &path, &None)
+                .await?;
         let mut tests = documents
             .into_iter()
             .filter_map(|file| match file {

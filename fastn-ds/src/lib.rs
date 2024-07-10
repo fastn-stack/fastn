@@ -218,7 +218,11 @@ impl DocumentStore {
     }
 
     #[tracing::instrument(skip(self))]
-    pub async fn get_wasm(&self, path: &str) -> Result<wasmtime::Module, WasmReadError> {
+    pub async fn get_wasm(
+        &self,
+        path: &str,
+        _session_id: &Option<String>,
+    ) -> Result<wasmtime::Module, WasmReadError> {
         // TODO: implement wasm module on disc caching, so modules load faster across
         //       cache purge
         match self.wasm_modules.get(path) {
@@ -231,7 +235,7 @@ impl DocumentStore {
                     Ok(m) => m,
                     Err(e) => {
                         tracing::info!("could not read {wasmc_path:?} file: {e:?}");
-                        let source = self.read_content(&fastn_ds::Path::new(path)).await?;
+                        let source = self.read_content(&fastn_ds::Path::new(path), &None).await?;
                         wasmtime::Module::from_binary(&WASM_ENGINE, &source)?
                     }
                 };
@@ -314,7 +318,11 @@ impl DocumentStore {
         fastn_ds::Path { path: home() }
     }
 
-    pub async fn read_content(&self, path: &fastn_ds::Path) -> Result<Vec<u8>, ReadError> {
+    pub async fn read_content(
+        &self,
+        path: &fastn_ds::Path,
+        _session_id: &Option<String>,
+    ) -> Result<Vec<u8>, ReadError> {
         use tokio::io::AsyncReadExt;
 
         tracing::debug!("read_content {}", &path);
@@ -335,8 +343,12 @@ impl DocumentStore {
         Ok(contents)
     }
 
-    pub async fn read_to_string(&self, path: &fastn_ds::Path) -> Result<String, ReadStringError> {
-        self.read_content(path)
+    pub async fn read_to_string(
+        &self,
+        path: &fastn_ds::Path,
+        session_id: &Option<String>,
+    ) -> Result<String, ReadStringError> {
+        self.read_content(path, session_id)
             .await
             .map_err(ReadStringError::ReadError)
             .and_then(|v| {
@@ -426,7 +438,7 @@ impl DocumentStore {
             .collect::<Vec<fastn_ds::Path>>()
     }
 
-    pub async fn exists(&self, path: &fastn_ds::Path) -> bool {
+    pub async fn exists(&self, path: &fastn_ds::Path, _session_id: &Option<String>) -> bool {
         path.path.exists()
     }
 
@@ -448,6 +460,7 @@ impl DocumentStore {
         wasm_url: String,
         req: &T,
         mountpoint: String,
+        session_id: &Option<String>,
     ) -> Result<ft_sys_shared::Request, HttpError>
     where
         T: RequestType,
@@ -467,7 +480,9 @@ impl DocumentStore {
 
         let wasm_file = wasm_url.strip_prefix("wasm+proxy://").unwrap();
         let wasm_file = wasm_file.split_once(".wasm").unwrap().0;
-        let module = self.get_wasm(format!("{wasm_file}.wasm").as_str()).await?;
+        let module = self
+            .get_wasm(format!("{wasm_file}.wasm").as_str(), session_id)
+            .await?;
         let db_url = self
             .env("DATABASE_URL")
             .await

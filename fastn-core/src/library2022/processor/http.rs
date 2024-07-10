@@ -134,7 +134,12 @@ pub async fn process(
         match req_config
             .config
             .ds
-            .handle_wasm(url.to_string(), &req_config.request, mountpoint)
+            .handle_wasm(
+                url.to_string(),
+                &req_config.request,
+                mountpoint,
+                &req_config.session_id(),
+            )
             .await
         {
             Ok(r) => {

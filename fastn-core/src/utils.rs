@@ -471,8 +471,14 @@ pub fn id_to_path(id: &str) -> String {
 
 /// returns true if an existing file named "file_name"
 /// exists in the root package folder
-async fn is_file_in_root(root: &str, file_name: &str, ds: &fastn_ds::DocumentStore) -> bool {
-    ds.exists(&fastn_ds::Path::new(root).join(file_name)).await
+async fn is_file_in_root(
+    root: &str,
+    file_name: &str,
+    ds: &fastn_ds::DocumentStore,
+    session_id: &Option<String>,
+) -> bool {
+    ds.exists(&fastn_ds::Path::new(root).join(file_name), session_id)
+        .await
 }
 
 /// returns favicon html tag as string
@@ -483,6 +489,7 @@ async fn resolve_favicon(
     package_name: &str,
     favicon: &Option<String>,
     ds: &fastn_ds::DocumentStore,
+    session_id: &Option<String>,
 ) -> Option<String> {
     /// returns html tag for using favicon.
     fn favicon_html(favicon_path: &str, content_type: &str) -> String {
@@ -520,18 +527,19 @@ async fn resolve_favicon(
 
                 // Just check if any favicon exists in the root package directory
                 // in the above mentioned priority order
-                let found_favicon_id = if is_file_in_root(root_path, "favicon.ico", ds).await {
-                    "favicon.ico"
-                } else if is_file_in_root(root_path, "favicon.svg", ds).await {
-                    "favicon.svg"
-                } else if is_file_in_root(root_path, "favicon.png", ds).await {
-                    "favicon.png"
-                } else if is_file_in_root(root_path, "favicon.jpg", ds).await {
-                    "favicon.jpg"
-                } else {
-                    // Not using any favicon
-                    return None;
-                };
+                let found_favicon_id =
+                    if is_file_in_root(root_path, "favicon.ico", ds, session_id).await {
+                        "favicon.ico"
+                    } else if is_file_in_root(root_path, "favicon.svg", ds, session_id).await {
+                        "favicon.svg"
+                    } else if is_file_in_root(root_path, "favicon.png", ds, session_id).await {
+                        "favicon.png"
+                    } else if is_file_in_root(root_path, "favicon.jpg", ds, session_id).await {
+                        "favicon.jpg"
+                    } else {
+                        // Not using any favicon
+                        return None;
+                    };
 
                 get_favicon_path_and_type(package_name, found_favicon_id)
             }
@@ -558,22 +566,30 @@ pub fn get_external_css_html(external_js: &[String]) -> String {
     result
 }
 
-pub async fn get_inline_js_html(config: &fastn_core::Config, inline_js: &[String]) -> String {
+pub async fn get_inline_js_html(
+    config: &fastn_core::Config,
+    inline_js: &[String],
+    session_id: &Option<String>,
+) -> String {
     let mut result = "".to_string();
     for path in inline_js {
         let path = fastn_ds::Path::new(path);
-        if let Ok(content) = config.ds.read_to_string(&path).await {
+        if let Ok(content) = config.ds.read_to_string(&path, session_id).await {
             result = format!("{}<script>{}</script>", result, content);
         }
     }
     result
 }
 
-pub async fn get_inline_css_html(config: &fastn_core::Config, inline_js: &[String]) -> String {
+pub async fn get_inline_css_html(
+    config: &fastn_core::Config,
+    inline_js: &[String],
+    session_id: &Option<String>,
+) -> String {
     let mut result = "".to_string();
     for path in inline_js {
         let path = fastn_ds::Path::new(path);
-        if let Ok(content) = config.ds.read_to_string(&path).await {
+        if let Ok(content) = config.ds.read_to_string(&path, session_id).await {
             result = format!("{}<style>{}</style>", result, content);
         }
     }
@@ -586,11 +602,12 @@ async fn get_extra_js(
     inline_js: &[String],
     js: &str,
     rive_data: &str,
+    session_id: &Option<String>,
 ) -> String {
     format!(
         "{}{}{}{}",
         get_external_js_html(external_js),
-        get_inline_js_html(config, inline_js).await,
+        get_inline_js_html(config, inline_js, session_id).await,
         js,
         rive_data
     )
@@ -601,11 +618,12 @@ async fn get_extra_css(
     external_css: &[String],
     inline_css: &[String],
     css: &str,
+    session_id: &Option<String>,
 ) -> String {
     format!(
         "{}{}{}",
         get_external_css_html(external_css),
-        get_inline_css_html(config, inline_css).await,
+        get_inline_css_html(config, inline_css, session_id).await,
         css
     )
 }
@@ -618,6 +636,7 @@ pub async fn replace_markers_2022(
     main_id: &str,
     font_style: &str,
     base_url: &str,
+    session_id: &Option<String>,
 ) -> String {
     ftd::html::utils::trim_all_lines(
         s.replace(
@@ -640,6 +659,7 @@ pub async fn replace_markers_2022(
                 config.package.name.as_str(),
                 &config.package.favicon,
                 &config.ds,
+                session_id,
             )
             .await
             .unwrap_or_default()
@@ -660,6 +680,7 @@ pub async fn replace_markers_2022(
                 config.ftd_inline_js.as_slice(),
                 html_ui.js.as_str(),
                 html_ui.rive_data.as_str(),
+                session_id,
             )
             .await
             .as_str(),
@@ -671,6 +692,7 @@ pub async fn replace_markers_2022(
                 config.ftd_external_css.as_slice(),
                 config.ftd_inline_css.as_slice(),
                 html_ui.css.as_str(),
+                session_id,
             )
             .await
             .as_str(),
@@ -705,6 +727,7 @@ pub fn get_fastn_package_data(package: &fastn_core::Package) -> String {
     )
 }
 
+#[allow(clippy::too_many_arguments)]
 pub async fn replace_markers_2023(
     js_script: &str,
     scripts: &str,
@@ -713,6 +736,7 @@ pub async fn replace_markers_2023(
     default_css: &str,
     base_url: &str,
     config: &fastn_core::Config,
+    session_id: &Option<String>,
 ) -> String {
     format!(
         include_str!("../../ftd/ftd-js.html"),
@@ -727,6 +751,7 @@ pub async fn replace_markers_2023(
             config.package.name.as_str(),
             &config.package.favicon,
             &config.ds,
+            session_id,
         )
         .await
         .unwrap_or_default()
@@ -753,6 +778,7 @@ pub async fn replace_markers_2023(
             config.ftd_inline_js.as_slice(),
             "",
             "",
+            session_id,
         )
         .await
         .as_str(),
@@ -770,8 +796,9 @@ pub(crate) async fn write(
     file_path: &str,
     data: &[u8],
     ds: &fastn_ds::DocumentStore,
+    session_id: &Option<String>,
 ) -> fastn_core::Result<()> {
-    if ds.exists(&root.join(file_path)).await {
+    if ds.exists(&root.join(file_path), session_id).await {
         return Ok(());
     }
     update1(root, file_path, data, ds).await
@@ -809,7 +836,7 @@ pub(crate) async fn copy(
     to: &fastn_ds::Path,
     ds: &fastn_ds::DocumentStore,
 ) -> fastn_core::Result<()> {
-    let content = ds.read_content(from).await?;
+    let content = ds.read_content(from, &None).await?;
     fastn_core::utils::update(to, content.as_slice(), ds).await
 }
 

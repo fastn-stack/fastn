@@ -1,7 +1,10 @@
-pub async fn translation_status(config: &fastn_core::Config) -> fastn_core::Result<()> {
+pub async fn translation_status(
+    config: &fastn_core::Config,
+    session_id: &Option<String>,
+) -> fastn_core::Result<()> {
     // it can be original package or translation
     if config.is_translation_package() {
-        translation_package_status(config).await?;
+        translation_package_status(config, session_id).await?;
     } else if !config.package.translations.is_empty() {
         original_package_status(config).await?;
     } else {
@@ -14,11 +17,18 @@ pub async fn translation_status(config: &fastn_core::Config) -> fastn_core::Resu
     Ok(())
 }
 
-async fn translation_package_status(config: &fastn_core::Config) -> fastn_core::Result<()> {
-    let original_snapshots =
-        fastn_core::snapshot::get_latest_snapshots(&config.ds, &config.original_path()?).await?;
+async fn translation_package_status(
+    config: &fastn_core::Config,
+    session_id: &Option<String>,
+) -> fastn_core::Result<()> {
+    let original_snapshots = fastn_core::snapshot::get_latest_snapshots(
+        &config.ds,
+        &config.original_path()?,
+        session_id,
+    )
+    .await?;
     let translation_status =
-        get_translation_status(config, &original_snapshots, &config.ds.root()).await?;
+        get_translation_status(config, &original_snapshots, &config.ds.root(), session_id).await?;
     print_translation_status(&translation_status);
     Ok(())
 }
@@ -37,19 +47,20 @@ pub(crate) async fn get_translation_status(
     config: &fastn_core::Config,
     snapshots: &std::collections::BTreeMap<String, u128>,
     path: &fastn_ds::Path,
+    session_id: &Option<String>,
 ) -> fastn_core::Result<std::collections::BTreeMap<String, TranslationStatus>> {
     let mut translation_status = std::collections::BTreeMap::new();
     for (file, timestamp) in snapshots {
-        if !config.ds.exists(&path.join(file)).await {
+        if !config.ds.exists(&path.join(file), session_id).await {
             translation_status.insert(file.clone(), TranslationStatus::Missing);
             continue;
         }
         let track_path = fastn_core::utils::track_path(file.as_str(), path);
-        if !config.ds.exists(&track_path).await {
+        if !config.ds.exists(&track_path, session_id).await {
             translation_status.insert(file.clone(), TranslationStatus::NeverMarked);
             continue;
         }
-        let tracks = fastn_core::tracker::get_tracks(config, path, &track_path).await?;
+        let tracks = fastn_core::tracker::get_tracks(config, path, &track_path, session_id).await?;
         if let Some(fastn_core::Track {
             last_merged_version: Some(last_merged_version),
             ..
