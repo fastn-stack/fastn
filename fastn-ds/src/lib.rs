@@ -143,6 +143,8 @@ pub enum HttpError {
     EnvironmentError(#[from] EnvironmentError),
     #[error("create pool error {0}")]
     CreatePoolError(#[from] CreatePoolError),
+    #[error("sql error {0}")]
+    SqlError(#[from] fastn_utils::SqlError),
 }
 
 pub type HttpResponse = ::http::Response<bytes::Bytes>;
@@ -168,6 +170,8 @@ pub enum CreatePoolError {
     PoolError(#[from] deadpool_postgres::CreatePoolError),
     #[error("env error {0}")]
     EnvError(#[from] EnvironmentError),
+    #[error("sql error {0}")]
+    SqlError(#[from] fastn_utils::SqlError),
 }
 
 /// wasmc compiles path.wasm to path.wasmc
@@ -186,16 +190,18 @@ impl DocumentStore {
             Err(_) => self
                 .env("DATABASE_URL")
                 .await
-                .unwrap_or_else(|_| "fastn.sqlite".to_string()),
+                .unwrap_or_else(|_| "sqlite:///fastn.sqlite".to_string()),
         };
 
-        if let Some(p) = self.pg_pools.get(db_url.as_str()) {
+        let db_path = initialize_sqlite_db(&db_url).await?;
+
+        if let Some(p) = self.pg_pools.get(db_path.as_str()) {
             return Ok(p.get().clone());
         }
 
-        let pool = fastn_ds::create_pool(db_url.as_str()).await?;
+        let pool = fastn_ds::create_pool(db_path.as_str()).await?;
 
-        fastn_ds::insert_or_update(&self.pg_pools, db_url.to_string(), pool.clone());
+        fastn_ds::insert_or_update(&self.pg_pools, db_path.to_string(), pool.clone());
 
         Ok(pool)
     }
@@ -463,6 +469,12 @@ impl DocumentStore {
         let wasm_file = wasm_url.strip_prefix("wasm+proxy://").unwrap();
         let wasm_file = wasm_file.split_once(".wasm").unwrap().0;
         let module = self.get_wasm(format!("{wasm_file}.wasm").as_str(), session_id).await?;
+        let db_url = self
+            .env("DATABASE_URL")
+            .await
+            .unwrap_or_else(|_| "sqlite:///fastn.sqlite".to_string());
+
+        let db_path = initialize_sqlite_db(db_url.as_str()).await?;
 
         Ok(fastn_ds::wasm::process_http_request(
             ft_sys_shared::Request {
@@ -473,9 +485,7 @@ impl DocumentStore {
             },
             module,
             self.pg_pools.clone(),
-            self.env("DATABASE_URL")
-                .await
-                .unwrap_or_else(|_| "fastn.sqlite".to_string()),
+            db_path,
         )
         .await?)
     }

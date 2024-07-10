@@ -471,7 +471,7 @@ impl Iframe {
         if let Some(ref srcdoc) = self.srcdoc {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 srcdoc.to_set_property(
-                    fastn_js::PropertyKind::Src,
+                    fastn_js::PropertyKind::SrcDoc,
                     doc,
                     kernel.name.as_str(),
                     rdata,

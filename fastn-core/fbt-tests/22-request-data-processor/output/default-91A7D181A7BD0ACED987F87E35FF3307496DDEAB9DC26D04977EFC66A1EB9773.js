@@ -583,10 +583,10 @@ const fastn = (function (fastn) {
                 if (!(value instanceof RecordInstance)) {
                     value = new RecordInstance(value);
                 }
-
-                let fields = {};
                 for (let key in value.#fields) {
-                    this.#fields[key].set(value.#fields[key]);
+                    if (this.#fields[key]) {
+                        this.#fields[key].set(value.#fields[key]);
+                    }
                 }
             } else if (this.#fields[key] === undefined) {
                 this.#fields[key] = fastn.mutable(null);
@@ -990,6 +990,7 @@ fastn_dom.PropertyKind = {
     TextInputValue: 122,
     FetchPriority: 123,
     Download: 124,
+    SrcDoc: 125,
 };
 
 fastn_dom.Loading = {
@@ -3107,6 +3108,8 @@ class Node2 {
             this.attachAttribute("loading", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Src) {
             this.attachAttribute("src", staticValue);
+        } else if (kind === fastn_dom.PropertyKind.SrcDoc) {
+            this.attachAttribute("srcdoc", staticValue);
         } else if (kind === fastn_dom.PropertyKind.ImageSrc) {
             this.attachImageSrcClosures(staticValue);
             ftd.dark_mode.addClosure(
