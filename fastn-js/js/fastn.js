@@ -294,6 +294,7 @@ const fastn = (function (fastn) {
                     this.#list.push(list[i]);
                 }
 
+                this.deleteEmptyWatchers();
                 for (let i in this.#watchers) {
                     this.#watchers[i].createAllNode();
                 }
@@ -303,6 +304,40 @@ const fastn = (function (fastn) {
             }
 
             this.#closures.forEach((closure) => closure.update());
+        }
+
+        // The watcher sometimes doesn't get deleted when the list is wrapped
+        // inside some ancestor DOM with if condition,
+        // so when if condition is unsatisfied the DOM gets deleted without removing
+        // the watcher from list as this list is not direct dependency of the if condition.
+        // Consider the case:
+        // -- ftd.column:
+        // if: { open }
+        //
+        // -- show-list: $item
+        // for: $item in $list
+        //
+        // -- end: ftd.column
+        //
+        // So when the if condition is satisfied the list adds the watcher for show-list
+        // but when the if condition is unsatisfied, the watcher doesn't get removed.
+        deleteEmptyWatchers() {
+            this.#watchers = this.#watchers.filter((w) => {
+                let to_delete = false;
+                if (!!w.getParent) {
+                    let parent = w.getParent();
+                    while (!!parent && !!parent.getParent) {
+                        parent = parent.getParent();
+                    }
+                    if (!parent) {
+                        to_delete = true;
+                    }
+                }
+                if (to_delete) {
+                    w.deleteAllNode();
+                }
+                return !to_delete;
+            });
         }
 
         insertAt(index, value) {
@@ -317,6 +352,7 @@ const fastn = (function (fastn) {
                 this.#list[i].index.set(i);
             }
 
+            this.deleteEmptyWatchers();
             for (let i in this.#watchers) {
                 this.#watchers[i].createNode(index);
             }
@@ -335,6 +371,7 @@ const fastn = (function (fastn) {
                 this.#list[i].index.set(i);
             }
 
+            this.deleteEmptyWatchers();
             for (let i in this.#watchers) {
                 let forLoop = this.#watchers[i];
                 forLoop.deleteNode(index);
@@ -344,6 +381,8 @@ const fastn = (function (fastn) {
 
         clearAll() {
             this.#list = [];
+
+            this.deleteEmptyWatchers();
             for (let i in this.#watchers) {
                 this.#watchers[i].deleteAllNode();
             }
@@ -496,8 +535,8 @@ const fastn = (function (fastn) {
                 if (!(key in obj.#fields)) {
                     throw new Error(
                         "RecordInstance.replace: key " +
-                            key +
-                            " not present in new object",
+                        key +
+                        " not present in new object",
                     );
                 }
                 this.#fields[key] = fastn.wrapMutable(obj.#fields[key]);
