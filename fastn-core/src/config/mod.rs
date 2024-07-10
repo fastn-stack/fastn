@@ -232,7 +232,15 @@ impl RequestConfig {
     }
 
     pub(crate) fn session_id(&self) -> Option<String> {
-        self.request.cookie(ft_sys_shared::SESSION_KEY)
+        // why not `fastn-sid` cookie?
+        // Cookies are only available in browser context. It is easier to read session id (if
+        // available) from a custom HTTP header in situation like when we are rendering a document
+        // inside of an iframe.
+        self.request.headers().get("X-FASTN-ACTOR").map(|v| {
+            v.to_str()
+                .expect("X-FASTN-ACTOR is a valid ascii string (uuid)")
+                .to_string()
+        })
     }
 }
 
