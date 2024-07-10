@@ -321,6 +321,16 @@ const fastn = (function (fastn) {
         //
         // So when the if condition is satisfied the list adds the watcher for show-list
         // but when the if condition is unsatisfied, the watcher doesn't get removed.
+        // though the DOM `show-list` gets deleted.
+        // This function removes all such watchers
+        // Without this function, the workaround would have been:
+        // -- ftd.column:
+        // if: { open }
+        //
+        // -- show-list: $item
+        // for: $item in *$list ;; clones the lists
+        //
+        // -- end: ftd.column
         deleteEmptyWatchers() {
             this.#watchers = this.#watchers.filter((w) => {
                 let to_delete = false;
@@ -535,8 +545,8 @@ const fastn = (function (fastn) {
                 if (!(key in obj.#fields)) {
                     throw new Error(
                         "RecordInstance.replace: key " +
-                        key +
-                        " not present in new object",
+                            key +
+                            " not present in new object",
                     );
                 }
                 this.#fields[key] = fastn.wrapMutable(obj.#fields[key]);
