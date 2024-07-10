@@ -405,6 +405,7 @@ const fastn = (function (fastn) {
                     this.#list.push(list[i]);
                 }
 
+                this.deleteEmptyWatchers();
                 for (let i in this.#watchers) {
                     this.#watchers[i].createAllNode();
                 }
@@ -414,6 +415,50 @@ const fastn = (function (fastn) {
             }
 
             this.#closures.forEach((closure) => closure.update());
+        }
+
+        // The watcher sometimes doesn't get deleted when the list is wrapped
+        // inside some ancestor DOM with if condition,
+        // so when if condition is unsatisfied the DOM gets deleted without removing
+        // the watcher from list as this list is not direct dependency of the if condition.
+        // Consider the case:
+        // -- ftd.column:
+        // if: { open }
+        //
+        // -- show-list: $item
+        // for: $item in $list
+        //
+        // -- end: ftd.column
+        //
+        // So when the if condition is satisfied the list adds the watcher for show-list
+        // but when the if condition is unsatisfied, the watcher doesn't get removed.
+        // though the DOM `show-list` gets deleted.
+        // This function removes all such watchers
+        // Without this function, the workaround would have been:
+        // -- ftd.column:
+        // if: { open }
+        //
+        // -- show-list: $item
+        // for: $item in *$list ;; clones the lists
+        //
+        // -- end: ftd.column
+        deleteEmptyWatchers() {
+            this.#watchers = this.#watchers.filter((w) => {
+                let to_delete = false;
+                if (!!w.getParent) {
+                    let parent = w.getParent();
+                    while (!!parent && !!parent.getParent) {
+                        parent = parent.getParent();
+                    }
+                    if (!parent) {
+                        to_delete = true;
+                    }
+                }
+                if (to_delete) {
+                    w.deleteAllNode();
+                }
+                return !to_delete;
+            });
         }
 
         insertAt(index, value) {
@@ -428,6 +473,7 @@ const fastn = (function (fastn) {
                 this.#list[i].index.set(i);
             }
 
+            this.deleteEmptyWatchers();
             for (let i in this.#watchers) {
                 this.#watchers[i].createNode(index);
             }
@@ -446,6 +492,7 @@ const fastn = (function (fastn) {
                 this.#list[i].index.set(i);
             }
 
+            this.deleteEmptyWatchers();
             for (let i in this.#watchers) {
                 let forLoop = this.#watchers[i];
                 forLoop.deleteNode(index);
@@ -455,6 +502,8 @@ const fastn = (function (fastn) {
 
         clearAll() {
             this.#list = [];
+
+            this.deleteEmptyWatchers();
             for (let i in this.#watchers) {
                 this.#watchers[i].deleteAllNode();
             }
@@ -5599,7 +5648,7 @@ window.ftd = ftd;
 
 ftd.toggle = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5616,7 +5665,7 @@ ftd.toggle = function (args) {
 }
 ftd.integer_field_with_default = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5627,7 +5676,7 @@ ftd.integer_field_with_default = function (args) {
 }
 ftd.decimal_field_with_default = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5638,7 +5687,7 @@ ftd.decimal_field_with_default = function (args) {
 }
 ftd.boolean_field_with_default = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5649,7 +5698,7 @@ ftd.boolean_field_with_default = function (args) {
 }
 ftd.string_field_with_default = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5660,7 +5709,7 @@ ftd.string_field_with_default = function (args) {
 }
 ftd.increment = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5677,7 +5726,7 @@ ftd.increment = function (args) {
 }
 ftd.increment_by = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5694,7 +5743,7 @@ ftd.increment_by = function (args) {
 }
 ftd.decrement = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5711,7 +5760,7 @@ ftd.decrement = function (args) {
 }
 ftd.decrement_by = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5728,7 +5777,7 @@ ftd.decrement_by = function (args) {
 }
 ftd.enable_light_mode = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5739,7 +5788,7 @@ ftd.enable_light_mode = function (args) {
 }
 ftd.enable_dark_mode = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5750,7 +5799,7 @@ ftd.enable_dark_mode = function (args) {
 }
 ftd.enable_system_mode = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5761,7 +5810,7 @@ ftd.enable_system_mode = function (args) {
 }
 ftd.set_bool = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5778,7 +5827,7 @@ ftd.set_bool = function (args) {
 }
 ftd.set_boolean = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5795,7 +5844,7 @@ ftd.set_boolean = function (args) {
 }
 ftd.set_string = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5812,7 +5861,7 @@ ftd.set_string = function (args) {
 }
 ftd.set_integer = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "amitu";
+  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
