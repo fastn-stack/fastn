@@ -5027,7 +5027,7 @@ const ftd = (function () {
     };
     exports.clear = exports.clear_all;
     exports.list_contains = function (list, item) {
-        list.contains(item);
+        return list.contains(item);
     };
     exports.set_list = function (list, value) {
         list.set(value);
