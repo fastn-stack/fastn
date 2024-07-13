@@ -323,7 +323,7 @@ let fastn_utils = {
     markdown_inline(i) {
         if (fastn_utils.isNull(i)) return;
         i = i.toString();
-        const { space_before, space_after } = fastn_utils.private.spaces(i);
+        const {space_before, space_after} = fastn_utils.private.spaces(i);
         const o = (() => {
             let g = fastn_utils.private.replace_last_occurrence(
                 marked.parse(i),
@@ -490,11 +490,13 @@ let fastn_utils = {
         return node.getNode().checked;
     },
     setFullHeight() {
+        return;
         if (!ssr) {
             document.body.style.height = `max(${document.documentElement.scrollHeight}px, 100%)`;
         }
     },
     resetFullHeight() {
+        return;
         if (!ssr) {
             document.body.style.height = `100%`;
         }
@@ -661,7 +663,7 @@ fastn_utils.private = {
             space_before = i + 1;
         }
         if (space_before === s.length) {
-            return { space_before, space_after: 0 };
+            return {space_before, space_after: 0};
         }
 
         let space_after = 0;
@@ -673,7 +675,7 @@ fastn_utils.private = {
             space_after = i + 1;
         }
 
-        return { space_before, space_after };
+        return {space_before, space_after};
     },
     /**
      * Helper function for `fastn_utils.markdown_inline` to replace the last
@@ -700,7 +702,7 @@ fastn_utils.private = {
      * @returns {string} - A string with 'n' spaces concatenated together.
      */
     repeated_space(n) {
-        return Array.from({ length: n }, () => " ").join("");
+        return Array.from({length: n}, () => " ").join("");
     },
     /**
      * Merges consecutive numbers in a comma-separated list into ranges.
