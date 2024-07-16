@@ -1,0 +1,18 @@
+<html lang="en">
+<body></body>
+<script type="module">
+    import * as preact from 'https://esm.sh/preact';
+    import * as hooks from 'https://esm.sh/preact/hooks';
+
+    const main = () => {
+        const [x, setX] = hooks.useState(0);
+
+        return preact.h('div', null,
+            preact.h('div', {onClick: () => setX(x + 1)}, "click me"),
+            preact.h('div', null, x),
+        );
+    }
+
+    preact.render(preact.h(main), document.body);
+</script>
+</html>

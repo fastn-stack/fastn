@@ -1,0 +1,6 @@
+-- integer $x: 0
+
+-- ftd.text: click me
+$on-click$: $ftd.increment($a=$x, $by=1)
+
+-- ftd.integer: $x
