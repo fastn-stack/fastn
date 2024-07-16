@@ -1,17 +1,21 @@
 ;; let's define some page level data
 -- integer $x: 10
-
+-- integer $y: 33
 
 
 
 -- counter: $x
 -- counter:
-;; $count if { x % 2 == 0}: $y
+$count if { x % 2 == 0}: $y
+$count: 0
 
 -- ftd.text: \$x
 
 -- ftd.integer: $x
 
+-- ftd.text: \$y
+
+-- ftd.integer: $y
 
 
 
