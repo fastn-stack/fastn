@@ -2558,11 +2558,11 @@ window.ftd.utils.set_value_helper(data, "foo#show-border:style:0", remaining, ne
 
 window.ftd.call_mutable_value_changes("foo#show-border:style:0", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:style:0", "main");
+window.ftd.utils.node_change_call("main","0:main__border-left-style", data);
 window.ftd.utils.node_change_call("main","0:main__border-style", data);
 window.ftd.utils.node_change_call("main","0:main__border-bottom-style", data);
-window.ftd.utils.node_change_call("main","0:main__border-right-style", data);
 window.ftd.utils.node_change_call("main","0:main__border-top-style", data);
-window.ftd.utils.node_change_call("main","0:main__border-left-style", data);
+window.ftd.utils.node_change_call("main","0:main__border-right-style", data);
 };
 
 window.set_value_main["foo#show-border:style:1"] = function (data, new_value, remaining) {
@@ -2570,11 +2570,11 @@ window.ftd.utils.set_value_helper(data, "foo#show-border:style:1", remaining, ne
 
 window.ftd.call_mutable_value_changes("foo#show-border:style:1", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:style:1", "main");
-window.ftd.utils.node_change_call("main","1:main__border-style", data);
 window.ftd.utils.node_change_call("main","1:main__border-right-style", data);
+window.ftd.utils.node_change_call("main","1:main__border-bottom-style", data);
+window.ftd.utils.node_change_call("main","1:main__border-style", data);
 window.ftd.utils.node_change_call("main","1:main__border-left-style", data);
 window.ftd.utils.node_change_call("main","1:main__border-top-style", data);
-window.ftd.utils.node_change_call("main","1:main__border-bottom-style", data);
 };
 
 window.set_value_main["foo#show-border:style:2"] = function (data, new_value, remaining) {
@@ -2582,11 +2582,11 @@ window.ftd.utils.set_value_helper(data, "foo#show-border:style:2", remaining, ne
 
 window.ftd.call_mutable_value_changes("foo#show-border:style:2", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:style:2", "main");
-window.ftd.utils.node_change_call("main","2:main__border-top-style", data);
-window.ftd.utils.node_change_call("main","2:main__border-right-style", data);
-window.ftd.utils.node_change_call("main","2:main__border-bottom-style", data);
-window.ftd.utils.node_change_call("main","2:main__border-style", data);
 window.ftd.utils.node_change_call("main","2:main__border-left-style", data);
+window.ftd.utils.node_change_call("main","2:main__border-right-style", data);
+window.ftd.utils.node_change_call("main","2:main__border-top-style", data);
+window.ftd.utils.node_change_call("main","2:main__border-style", data);
+window.ftd.utils.node_change_call("main","2:main__border-bottom-style", data);
 };
 
 window.set_value_main["foo#show-border:style:3"] = function (data, new_value, remaining) {
@@ -2595,10 +2595,10 @@ window.ftd.utils.set_value_helper(data, "foo#show-border:style:3", remaining, ne
 window.ftd.call_mutable_value_changes("foo#show-border:style:3", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:style:3", "main");
 window.ftd.utils.node_change_call("main","3:main__border-top-style", data);
-window.ftd.utils.node_change_call("main","3:main__border-left-style", data);
-window.ftd.utils.node_change_call("main","3:main__border-bottom-style", data);
 window.ftd.utils.node_change_call("main","3:main__border-style", data);
 window.ftd.utils.node_change_call("main","3:main__border-right-style", data);
+window.ftd.utils.node_change_call("main","3:main__border-bottom-style", data);
+window.ftd.utils.node_change_call("main","3:main__border-left-style", data);
 };
 
 window.set_value_main["foo#show-border:style:4"] = function (data, new_value, remaining) {
@@ -2606,11 +2606,11 @@ window.ftd.utils.set_value_helper(data, "foo#show-border:style:4", remaining, ne
 
 window.ftd.call_mutable_value_changes("foo#show-border:style:4", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:style:4", "main");
-window.ftd.utils.node_change_call("main","4:main__border-bottom-style", data);
 window.ftd.utils.node_change_call("main","4:main__border-left-style", data);
-window.ftd.utils.node_change_call("main","4:main__border-top-style", data);
 window.ftd.utils.node_change_call("main","4:main__border-style", data);
+window.ftd.utils.node_change_call("main","4:main__border-top-style", data);
 window.ftd.utils.node_change_call("main","4:main__border-right-style", data);
+window.ftd.utils.node_change_call("main","4:main__border-bottom-style", data);
 };
 
 window.set_value_main["foo#show-border:style:5"] = function (data, new_value, remaining) {
@@ -2618,10 +2618,10 @@ window.ftd.utils.set_value_helper(data, "foo#show-border:style:5", remaining, ne
 
 window.ftd.call_mutable_value_changes("foo#show-border:style:5", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:style:5", "main");
-window.ftd.utils.node_change_call("main","5:main__border-bottom-style", data);
 window.ftd.utils.node_change_call("main","5:main__border-right-style", data);
-window.ftd.utils.node_change_call("main","5:main__border-top-style", data);
+window.ftd.utils.node_change_call("main","5:main__border-bottom-style", data);
 window.ftd.utils.node_change_call("main","5:main__border-style", data);
+window.ftd.utils.node_change_call("main","5:main__border-top-style", data);
 window.ftd.utils.node_change_call("main","5:main__border-left-style", data);
 };
 
@@ -2630,10 +2630,10 @@ window.ftd.utils.set_value_helper(data, "foo#show-border:style:6", remaining, ne
 
 window.ftd.call_mutable_value_changes("foo#show-border:style:6", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:style:6", "main");
-window.ftd.utils.node_change_call("main","6:main__border-right-style", data);
 window.ftd.utils.node_change_call("main","6:main__border-bottom-style", data);
-window.ftd.utils.node_change_call("main","6:main__border-style", data);
+window.ftd.utils.node_change_call("main","6:main__border-right-style", data);
 window.ftd.utils.node_change_call("main","6:main__border-left-style", data);
+window.ftd.utils.node_change_call("main","6:main__border-style", data);
 window.ftd.utils.node_change_call("main","6:main__border-top-style", data);
 };
 
@@ -2698,11 +2698,11 @@ window.ftd.utils.set_value_helper(data, "foo#show-border:which:0", remaining, ne
 
 window.ftd.call_mutable_value_changes("foo#show-border:which:0", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:which:0", "main");
+window.ftd.utils.node_change_call("main","0:main__border-top-style", data);
+window.ftd.utils.node_change_call("main","0:main__border-bottom-style", data);
 window.ftd.utils.node_change_call("main","0,0:main__text", data);
 window.ftd.utils.node_change_call("main","0:main__border-left-style", data);
-window.ftd.utils.node_change_call("main","0:main__border-bottom-style", data);
 window.ftd.utils.node_change_call("main","0:main__border-style", data);
-window.ftd.utils.node_change_call("main","0:main__border-top-style", data);
 window.ftd.utils.node_change_call("main","0:main__border-right-style", data);
 };
 
@@ -2711,12 +2711,12 @@ window.ftd.utils.set_value_helper(data, "foo#show-border:which:1", remaining, ne
 
 window.ftd.call_mutable_value_changes("foo#show-border:which:1", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:which:1", "main");
-window.ftd.utils.node_change_call("main","1,0:main__text", data);
-window.ftd.utils.node_change_call("main","1:main__border-right-style", data);
 window.ftd.utils.node_change_call("main","1:main__border-left-style", data);
-window.ftd.utils.node_change_call("main","1:main__border-style", data);
 window.ftd.utils.node_change_call("main","1:main__border-top-style", data);
+window.ftd.utils.node_change_call("main","1:main__border-style", data);
+window.ftd.utils.node_change_call("main","1,0:main__text", data);
 window.ftd.utils.node_change_call("main","1:main__border-bottom-style", data);
+window.ftd.utils.node_change_call("main","1:main__border-right-style", data);
 };
 
 window.set_value_main["foo#show-border:which:2"] = function (data, new_value, remaining) {
@@ -2724,12 +2724,12 @@ window.ftd.utils.set_value_helper(data, "foo#show-border:which:2", remaining, ne
 
 window.ftd.call_mutable_value_changes("foo#show-border:which:2", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:which:2", "main");
-window.ftd.utils.node_change_call("main","2,0:main__text", data);
+window.ftd.utils.node_change_call("main","2:main__border-top-style", data);
+window.ftd.utils.node_change_call("main","2:main__border-style", data);
 window.ftd.utils.node_change_call("main","2:main__border-left-style", data);
 window.ftd.utils.node_change_call("main","2:main__border-right-style", data);
-window.ftd.utils.node_change_call("main","2:main__border-style", data);
 window.ftd.utils.node_change_call("main","2:main__border-bottom-style", data);
-window.ftd.utils.node_change_call("main","2:main__border-top-style", data);
+window.ftd.utils.node_change_call("main","2,0:main__text", data);
 };
 
 window.set_value_main["foo#show-border:which:3"] = function (data, new_value, remaining) {
@@ -2737,12 +2737,12 @@ window.ftd.utils.set_value_helper(data, "foo#show-border:which:3", remaining, ne
 
 window.ftd.call_mutable_value_changes("foo#show-border:which:3", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:which:3", "main");
+window.ftd.utils.node_change_call("main","3:main__border-style", data);
+window.ftd.utils.node_change_call("main","3:main__border-right-style", data);
+window.ftd.utils.node_change_call("main","3:main__border-bottom-style", data);
+window.ftd.utils.node_change_call("main","3,0:main__text", data);
 window.ftd.utils.node_change_call("main","3:main__border-left-style", data);
 window.ftd.utils.node_change_call("main","3:main__border-top-style", data);
-window.ftd.utils.node_change_call("main","3:main__border-right-style", data);
-window.ftd.utils.node_change_call("main","3,0:main__text", data);
-window.ftd.utils.node_change_call("main","3:main__border-bottom-style", data);
-window.ftd.utils.node_change_call("main","3:main__border-style", data);
 };
 
 window.set_value_main["foo#show-border:which:4"] = function (data, new_value, remaining) {
@@ -2750,12 +2750,12 @@ window.ftd.utils.set_value_helper(data, "foo#show-border:which:4", remaining, ne
 
 window.ftd.call_mutable_value_changes("foo#show-border:which:4", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:which:4", "main");
-window.ftd.utils.node_change_call("main","4,0:main__text", data);
-window.ftd.utils.node_change_call("main","4:main__border-left-style", data);
 window.ftd.utils.node_change_call("main","4:main__border-right-style", data);
-window.ftd.utils.node_change_call("main","4:main__border-top-style", data);
 window.ftd.utils.node_change_call("main","4:main__border-bottom-style", data);
 window.ftd.utils.node_change_call("main","4:main__border-style", data);
+window.ftd.utils.node_change_call("main","4:main__border-top-style", data);
+window.ftd.utils.node_change_call("main","4:main__border-left-style", data);
+window.ftd.utils.node_change_call("main","4,0:main__text", data);
 };
 
 window.set_value_main["foo#show-border:which:5"] = function (data, new_value, remaining) {
@@ -2763,11 +2763,11 @@ window.ftd.utils.set_value_helper(data, "foo#show-border:which:5", remaining, ne
 
 window.ftd.call_mutable_value_changes("foo#show-border:which:5", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:which:5", "main");
-window.ftd.utils.node_change_call("main","5:main__border-left-style", data);
-window.ftd.utils.node_change_call("main","5:main__border-top-style", data);
 window.ftd.utils.node_change_call("main","5,0:main__text", data);
-window.ftd.utils.node_change_call("main","5:main__border-bottom-style", data);
+window.ftd.utils.node_change_call("main","5:main__border-left-style", data);
 window.ftd.utils.node_change_call("main","5:main__border-right-style", data);
+window.ftd.utils.node_change_call("main","5:main__border-top-style", data);
+window.ftd.utils.node_change_call("main","5:main__border-bottom-style", data);
 window.ftd.utils.node_change_call("main","5:main__border-style", data);
 };
 
@@ -2776,12 +2776,12 @@ window.ftd.utils.set_value_helper(data, "foo#show-border:which:6", remaining, ne
 
 window.ftd.call_mutable_value_changes("foo#show-border:which:6", "main");
 window.ftd.call_immutable_value_changes("foo#show-border:which:6", "main");
-window.ftd.utils.node_change_call("main","6:main__border-top-style", data);
-window.ftd.utils.node_change_call("main","6,0:main__text", data);
-window.ftd.utils.node_change_call("main","6:main__border-bottom-style", data);
-window.ftd.utils.node_change_call("main","6:main__border-left-style", data);
 window.ftd.utils.node_change_call("main","6:main__border-right-style", data);
 window.ftd.utils.node_change_call("main","6:main__border-style", data);
+window.ftd.utils.node_change_call("main","6:main__border-top-style", data);
+window.ftd.utils.node_change_call("main","6:main__border-bottom-style", data);
+window.ftd.utils.node_change_call("main","6:main__border-left-style", data);
+window.ftd.utils.node_change_call("main","6,0:main__text", data);
 };
 
 
