@@ -1,16 +1,17 @@
 # fastn-preact
 
-This is an attempt to create a fastn renderer for preact.
+This is an attempt to create a fastn renderer using preact.
 
 - [x] basic "mutable" and binding (event handling, conditional attributes)
 - [x] component with mutable argument sent by caller
 - [x] js-interop: set-value/get-value
-- [ ] record global, component mutates single field
+- [x] record global, component mutates single field
 - [ ] list global, component mutates single item
 - [ ] list of record test
 - [ ] global formula
 - [ ] component level formula
 - [ ] server side rendering
+- [ ] processor
 
 ## Note On `useState` and Globals
 

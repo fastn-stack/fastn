@@ -1,0 +1,58 @@
+<html lang="en">
+<body></body>
+<script type="module">
+    import * as preact from 'https://esm.sh/preact';
+    import * as hooks from 'https://esm.sh/preact/hooks';
+
+    window.ftd = {}
+
+    window.ftd.globals = {}
+
+    window.ftd.set_value = (key, value) => {
+        window.ftd.globals[key][1](value);
+    }
+
+    window.ftd.get_value = (key) => {
+        return window.ftd.globals[key][0];
+    }
+
+    window.ftd.useGlobal = (key, value) => {
+        const state = hooks.useState(value);
+        window.ftd.globals[key] = state;
+        return state;
+    }
+
+    window.ftd.recordField = (record, field) => {
+        return [record[0][field], (value) => record[1]({...record[0], [field]: value})];
+    }
+
+    const counter = ({count}) => {
+        if (count == null) {
+            count = hooks.useState(0);
+        }
+        return preact.h('div', {
+                style: {
+                    display: "flex",
+                    gap: "10px",
+                    background: count[0] % 2 === 0 ? "yellow" : "white"
+                }
+            },
+            preact.h('div', {onClick: () => count[1](count[0] + 1)}, "+"),
+            preact.h('div', null, count[0]),
+            preact.h('div', {onClick: () => count[1](count[0] - 1)}, "-"),
+        );
+    }
+
+    const main = () => {
+        const d = ftd.useGlobal("preact-examples/04-record-field#d", {"x": 10, "y": 20});
+
+        return preact.h(
+            "div", null,
+            preact.h(counter, {count: ftd.recordField(d, "x")}),
+            preact.h(counter, {count: ftd.recordField(d, "y")}),
+        );
+    }
+
+    preact.render(preact.h(main), document.body);
+</script>
+</html>
