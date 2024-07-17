@@ -9,6 +9,7 @@ This is an attempt to create a fastn renderer using preact.
 - [x] list global, component mutates single item
 - [x] record with two mutations (on the same click handle we want to modify two
   fields to see if they are updated together)
+- [ ] nested record
 - [ ] list with two mutations
 - [ ] list of record test
 - [ ] global formula

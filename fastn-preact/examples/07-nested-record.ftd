@@ -1,0 +1,70 @@
+-- record data:
+integer x:
+integer y:
+
+-- record outer:
+data d1:
+data d2:
+
+
+-- outer $o:
+d1: *$d1
+d2: *$d2
+
+-- data d1:
+x: 10
+y: 20
+
+-- data d2:
+x: 33
+y: 44
+
+
+-- show-outer:
+$o: $o
+
+
+
+
+-- component show-outer:
+outer $o:
+
+-- ftd.column:
+
+    -- increment-both: o.d1
+    $a: $o.d1.x
+    $b: $o.d1.y
+
+    -- increment-both: o.d2
+    $a: $o.d2.x
+    $b: $o.d2.y
+
+-- end: ftd.column
+
+-- end: show-outer
+
+
+
+
+
+
+-- component increment-both:
+caption title:
+integer $a:
+integer $b:
+
+-- ftd.column:
+
+    -- ftd.text: $increment-both.title
+
+    -- ftd.integer: $increment-both.a
+    -- ftd.integer: $increment-both.b
+
+
+    -- ftd.text: increment-both
+    $on-click$: $ftd.increment($a=$increment-both.a, $by=1)
+    $on-click$: $ftd.increment($a=$increment-both.b, $by=1)
+
+-- end: ftd.column
+
+-- end: increment-both
