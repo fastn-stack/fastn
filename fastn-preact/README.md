@@ -6,7 +6,7 @@ This is an attempt to create a fastn renderer using preact.
 - [x] component with mutable argument sent by caller
 - [x] js-interop: set-value/get-value
 - [x] record global, component mutates single field
-- [ ] list global, component mutates single item
+- [x] list global, component mutates single item
 - [ ] record with two mutations (on the same click handle we want to modify two
   fields to see if they are updated together)
 - [ ] list of record test

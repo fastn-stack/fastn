@@ -1,0 +1,26 @@
+-- record data:
+integer x:
+integer y:
+
+-- data $d:
+x: 10
+y: 20
+
+
+-- ftd.integer: $d.x
+-- ftd.integer: $d.y
+
+-- increment-both:
+$a: $d.x
+$b: $d.y
+
+-- component increment-both:
+integer $a:
+integer $b:
+
+-- ftd.text: increment-both
+$on-click$: $ftd.increment($a=$increment-both.a, $by=1)
+$on-click$: $ftd.increment($a=$increment-both.b, $by=1)
+
+-- end: increment-both
+
