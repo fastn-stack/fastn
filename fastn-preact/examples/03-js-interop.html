@@ -12,6 +12,10 @@
         window.ftd.globals[key][1](value);
     }
 
+    window.ftd.get_value = (key) => {
+        return window.ftd.globals[key][0];
+    }
+
     window.ftd.useGlobal = (key, value) => {
         const state = hooks.useState(value);
         window.ftd.globals[key] = state;
@@ -36,7 +40,7 @@
     }
 
     const main = () => {
-        const x = ftd.useGlobal("preact-examples/03-set-value#x", 10);
+        const x = ftd.useGlobal("preact-examples/03-js-interop#x", 10);
 
         return preact.h(
             "div", null,

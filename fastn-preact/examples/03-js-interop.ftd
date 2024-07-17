@@ -22,4 +22,4 @@ background.solid if { counter.count % 2 == 0 }: yellow
 -- end: counter
 
 
-;; try this on console: ftd.set_value("preact-examples/03-set-value#x", 100)
+;; try this on console: ftd.set_value("preact-examples/03-js-interop#x", 100)
