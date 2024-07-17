@@ -2112,9 +2112,9 @@ set_data_value(data, "foo#code:description:2", value);
 }
 window.ftd.call_mutable_value_changes("foo#code:title:2", "main");
 window.ftd.call_immutable_value_changes("foo#code:title:2", "main");
-window.ftd.utils.node_change_call("main","2,2:main__text", data);
-window.ftd.utils.node_change_call("main","2,0:main__text", data);
 window.ftd.utils.node_change_call("main","2,1:main__text", data);
+window.ftd.utils.node_change_call("main","2,0:main__text", data);
+window.ftd.utils.node_change_call("main","2,2:main__text", data);
 };
 
 window.set_value_main["foo#flag"] = function (data, new_value, remaining) {
