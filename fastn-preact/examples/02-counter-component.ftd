@@ -7,6 +7,10 @@
 -- counter: $x
 -- counter:
 $count if { x % 2 == 0}: $y
+;; ths follow line is not needed, but due to a bug in fastn, we
+;; have to pass it. the expected behaviour was that since the `count`
+;; in the `counter` component has a default value, that value was used,
+;; but it is not being used. so we have to pass it explicitly.
 $count: 0
 
 -- ftd.text: \$x

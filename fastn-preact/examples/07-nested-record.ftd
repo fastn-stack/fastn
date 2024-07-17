@@ -68,3 +68,9 @@ integer $b:
 -- end: ftd.column
 
 -- end: increment-both
+
+
+;; this example is working. ftd.get_value("preact-examples/07-nested-record#o")
+;; returns the expected value, but ftd.set_value("preact-examples/07-nested-record#o",
+;; {d1: {x: 100, y: 200}, d2: {x: 300, y: 400}}) does not update the UI.
+;; this is a fastn implementation bug as of `fastn 0.4.75`
