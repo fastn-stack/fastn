@@ -1,0 +1,25 @@
+-- integer $x: 10
+
+-- counter: $x
+
+
+-- component counter:
+caption integer $count: 0
+
+-- ftd.row:
+background.solid if { counter.count % 2 == 0 }: yellow
+
+	-- ftd.text: ➕
+	$on-click$: $ftd.increment-by($a=$counter.count, v=1)
+
+	-- ftd.integer: $counter.count
+
+	-- ftd.text: ➖
+	$on-click$: $ftd.increment-by($a=$counter.count, v=-1)
+
+-- end: ftd.row
+
+-- end: counter
+
+
+;; try this on console: ftd.set_value("preact-examples/03-set-value#x", 100)

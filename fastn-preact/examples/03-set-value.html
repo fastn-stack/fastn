@@ -1,0 +1,51 @@
+<html lang="en">
+<body></body>
+<script type="module">
+    import * as preact from 'https://esm.sh/preact';
+    import * as hooks from 'https://esm.sh/preact/hooks';
+
+    window.ftd = {}
+
+    window.ftd.globals = {}
+
+    window.ftd.set_value = (key, value) => {
+        window.ftd.globals[key][1](value);
+    }
+
+    window.ftd.useGlobal = (key, value) => {
+        const state = hooks.useState(value);
+        window.ftd.globals[key] = state;
+        return state;
+    }
+
+    const counter = ({count}) => {
+        if (count == null) {
+            count = hooks.useState(0);
+        }
+        return preact.h('div', {
+                style: {
+                    display: "flex",
+                    gap: "10px",
+                    background: count[0] % 2 === 0 ? "yellow" : "white"
+                }
+            },
+            preact.h('div', {onClick: () => count[1](count[0] + 1)}, "+"),
+            preact.h('div', null, count[0]),
+            preact.h('div', {onClick: () => count[1](count[0] - 1)}, "-"),
+        );
+    }
+
+    const main = () => {
+        const x = ftd.useGlobal("preact-examples/03-set-value#x", 10);
+
+        return preact.h(
+            "div", null,
+            preact.h(counter, {count: x}),
+            preact.h("div", null, "$x"),
+            preact.h("div", null, x[0])
+        );
+    }
+
+    preact.render(preact.h(main), document.body);
+</script>
+</html>
