@@ -25,9 +25,8 @@ TODO: publish the examples on GitHub Pages.
 
 ### Rule: Each Example Builds On Previous
 
-When creating a new example, make sure to copy the HTML of previous step and improve
-them. If any new example modifies any existing function, the function should be
-back ported to previous examples.
+The code used in earlier example may differ from later example. We are building the
+features up slowly, and each example is a snapshot of the code at that point.
 
 ## Note On `useState` and Globals
 

@@ -23,4 +23,3 @@ $on-click$: $ftd.increment($a=$increment-both.a, $by=1)
 $on-click$: $ftd.increment($a=$increment-both.b, $by=1)
 
 -- end: increment-both
-

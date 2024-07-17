@@ -36,11 +36,3 @@ background.solid if { counter.count % 2 == 0 }: yellow
 -- end: ftd.row
 
 -- end: counter
-
-
-
-
-
-
-
-

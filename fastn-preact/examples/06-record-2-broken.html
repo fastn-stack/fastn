@@ -32,34 +32,27 @@
         return [list[0][idx], (value) => list[1](list[0].map((v, i) => i === idx ? value : v))];
     }
 
-    const counter = ({count}) => {
-        if (count == null) {
-            count = hooks.useState(0);
-        }
+    const increment_both = ({a, b}) => {
         return preact.h('div', {
-                style: {
-                    display: "flex",
-                    gap: "10px",
-                    background: count[0] % 2 === 0 ? "yellow" : "white"
-                }
-            },
-            preact.h('div', {onClick: () => count[1](count[0] + 1)}, "+"),
-            preact.h('div', null, count[0]),
-            preact.h('div', {onClick: () => count[1](count[0] - 1)}, "-"),
-        );
+            onClick: () => {
+                a[1](a[0] + 1);
+                b[1](b[0] + 1);
+            }
+        }, "increment-both")
     }
 
     const main = () => {
-        const d = ftd_internals.useGlobal("preact-examples/05-list#l", [10, 20]);
+        const d = ftd_internals.useGlobal("preact-examples/06-record-2#d", {"x": 10, "y": 20});
 
-        let items = [];
-        for (let i = 0; i < d[0].length; i++) {
-            items.push(preact.h(counter, {count: ftd_internals.listItem(d, i)}));
-        }
-
-        return preact.h(
-            "div", null, items,
-            preact.h('div', {onClick: () => d[1](d[0].concat(33))}, "add another")
+        return preact.h("div", null,
+            preact.h("div", null, "x: ", d[0].x),
+            preact.h("div", null, "y: ", d[0].y),
+            preact.h(
+                increment_both, {
+                    a: ftd_internals.recordField(d, "x"),
+                    b: ftd_internals.recordField(d, "y")
+                }
+            )
         );
     }
 
