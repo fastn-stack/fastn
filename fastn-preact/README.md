@@ -13,6 +13,19 @@ This is an attempt to create a fastn renderer using preact.
 - [ ] server side rendering
 - [ ] processor
 
+## Examples
+
+There is a `examples/` folder. You can run `fastn serve` from that folder to run
+it on a local server.
+
+TODO: publish the examples on GitHub Pages.
+
+### Rule: Each Example Builds On Previous
+
+When creating a new example, make sure to copy the HTML of previous step and improve
+them. If any new example modifies any existing function, the function should be
+back ported to previous examples.
+
 ## Note On `useState` and Globals
 
 We are using [preact's `useState`](https://preactjs.com/guide/v10/hooks/#usestate) as

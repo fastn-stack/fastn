@@ -1,0 +1,48 @@
+-- integer list $l:
+
+-- integer: 10
+-- integer: 20
+
+-- end: $l
+
+
+-- counter: $x
+for: x in $l
+
+
+-- ftd.text: add another
+$on-click$: $append($a=$l, v=33)
+
+
+
+
+-- void append(a, v):
+integer list $a:
+integer v:
+
+ftd.append(a, v);
+
+
+
+
+-- component counter:
+caption integer $count: 0
+
+-- ftd.row:
+background.solid if { counter.count % 2 == 0 }: yellow
+
+	-- ftd.text: ➕
+	$on-click$: $ftd.increment-by($a=$counter.count, v=1)
+
+	-- ftd.integer: $counter.count
+
+	-- ftd.text: ➖
+	$on-click$: $ftd.increment-by($a=$counter.count, v=-1)
+
+-- end: ftd.row
+
+-- end: counter
+
+
+;; console: ftd.get_value("preact-examples/04-record-field#d")
+;; console: ftd.set_value("preact-examples/04-record-field#d", {"x": 11, "y": 33})
