@@ -8,28 +8,89 @@
     window.ftd_internals = {}
 
     window.ftd_internals.globals = {}
+    window.ftd_internals.compound_globals = {}
 
     window.ftd.set_value = (key, value) => {
+        let compound = window.ftd_internals.compound_globals[key];
+        if (compound !== undefined) {
+            compound[1]({guid: compound[0].guid, value});
+            return;
+        }
         window.ftd_internals.globals[key][1](value);
     }
 
     window.ftd.get_value = (key) => {
+        let compound = window.ftd_internals.compound_globals[key];
+        if (compound !== undefined) {
+            return compound[0].value;
+        }
         return window.ftd_internals.globals[key][0];
     }
 
+    window.ftd_internals.generateGUID = () => {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
 
-    window.ftd_internals.useGlobal = (key, value) => {
+    window.ftd_internals.useCompound = (key, value) => {
+        const guid = window.ftd_internals.generateGUID();
+        return hooks.useState({guid, value});
+    }
+
+    // list, record, is compound
+    window.ftd_internals.useCompoundGlobal = (key, value) => {
+        const state = window.ftd_internals.useCompound(key, value);
+        window.ftd_internals.compound_globals[key] = state;
+        return state;
+    }
+
+    // integer, string, boolean, float, etc., is scalar
+    window.ftd_internals.useScalarGlobal = (key, value) => {
         const state = hooks.useState(value);
         window.ftd_internals.globals[key] = state;
         return state;
     }
 
-    window.ftd_internals.recordField = (record, field) => {
-        return [record[0][field], (value) => record[1]({...record[0], [field]: value})];
+    window.ftd_internals.recordField = (ctx, record, field) => {
+        return [
+            record[0].value[field], // do we have to look in ctx? no.
+            (value) => {
+                // the set function can be called for different field within the
+                // same event handle cycle. we use ctx to preserve state across them
+                // the record[0] is the same as was at the beginning of event handler.
+                // if we relied only on that, later change will ignore earlier changes.
+                // since the record[0] is only accessed when dom is getting constructed,
+                // and whatever is the last value returned during this event handle
+                // cycle will be returned by the useState hook, and global will get
+                // updated in the next update cycle, so we do not have to update the
+                // global right now (during the event handler phase).
+                let old_value = ctx[record[0].guid];
+                if (old_value === null) {
+                    old_value = record[0].value;
+                }
+                let new_value = {...old_value, [field]: value};
+                ctx[record[0].guid] = new_value;
+                // do we also have to update ftd_internals.compound_globals? no.
+                record[1]({guid: record[0].guid, value: new_value});
+            }
+        ];
     }
 
-    window.ftd_internals.listItem = (list, idx) => {
-        return [list[0][idx], (value) => list[1](list[0].map((v, i) => i === idx ? value : v))];
+    window.ftd_internals.listItem = (ctx, list, idx) => {
+        return [
+            list[0].value[idx],
+            (value) => {
+                let old_value = ctx[list[0].guid];
+                if (old_value === null) {
+                    old_value = list[0].value;
+                }
+                let new_value = old_value.map((v, i) => i === idx ? value : v);
+                ctx[list[0].guid] = new_value;
+                list[1]({guid: list[0].guid, value: new_value});
+            }
+        ];
     }
 
     const increment_both = ({a, b}) => {
@@ -42,15 +103,17 @@
     }
 
     const main = () => {
-        const d = ftd_internals.useGlobal("preact-examples/06-record-2#d", {"x": 10, "y": 20});
+        const ctx = {};
+
+        const d = ftd_internals.useCompoundGlobal("preact-examples/06-record-2#d", {"x": 10, "y": 20});
 
         return preact.h("div", null,
-            preact.h("div", null, "x: ", d[0].x),
-            preact.h("div", null, "y: ", d[0].y),
+            preact.h("div", null, "x: ", d[0].value.x),
+            preact.h("div", null, "y: ", d[0].value.y),
             preact.h(
                 increment_both, {
-                    a: ftd_internals.recordField(d, "x"),
-                    b: ftd_internals.recordField(d, "y")
+                    a: ftd_internals.recordField(ctx, d, "x"),
+                    b: ftd_internals.recordField(ctx, d, "y")
                 }
             )
         );
