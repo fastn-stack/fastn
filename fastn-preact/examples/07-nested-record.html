@@ -8,23 +8,13 @@
     window.ftd_internals = {}
 
     window.ftd_internals.globals = {}
-    window.ftd_internals.compound_globals = {}
 
     window.ftd.set_value = (key, value) => {
-        let compound = window.ftd_internals.compound_globals[key];
-        if (compound !== undefined) {
-            compound[1]({guid: compound[0].guid, value});
-            return;
-        }
-        window.ftd_internals.globals[key][1](value);
+        window.ftd_internals.globals[key].set(value);
     }
 
     window.ftd.get_value = (key) => {
-        let compound = window.ftd_internals.compound_globals[key];
-        if (compound !== undefined) {
-            return compound[0].value;
-        }
-        return window.ftd_internals.globals[key][0];
+        return window.ftd_internals.globals[key].get();
     }
 
     window.ftd_internals.generateGUID = () => {
@@ -34,54 +24,17 @@
         });
     }
 
-    window.ftd_internals.useCompound = (value) => {
-        const guid = window.ftd_internals.generateGUID();
-        return [hooks.useState({guid, value}), []];
-    }
-
-    // list, record, is compound
-    window.ftd_internals.useCompoundGlobal = (key, value) => {
-        const state = window.ftd_internals.useCompound(value);
-        window.ftd_internals.compound_globals[key] = state[0];
-        return state;
-    }
-
-    // integer, string, boolean, float, etc., is scalar
-    window.ftd_internals.useScalarGlobal = (key, value) => {
-        const state = hooks.useState(value);
-        window.ftd_internals.globals[key] = state;
-        return state;
-    }
-
-    window.ftd_internals.set_nested = (value, key, new_value) => {
-        let f = value;
-        for (let k in key) {
-            if (k === key[key.length - 1]) {
-                f[k] = new_value;
-            } else {
-                f = f[k];
-            }
-        }
-        return value;
-    }
-
     class FastnTik {
         #value
         #setter
         #guid
 
-        // constructor is private, do not call it directly, use `.global()` or `.local()`
-        constructor(value) {
+        constructor(value, global_key) {
             [this.#value, this.#setter] = hooks.useState(value);
             this.#guid = window.ftd_internals.generateGUID();
-        }
-
-        static global(key, value) {
-
-        }
-
-        static local(value) {
-
+            if (global_key !== undefined) {
+                window.ftd_internals.globals[global_key] = this;
+            }
         }
 
         get() {
@@ -91,27 +44,33 @@
             return this.#value;
         }
 
-        set(ctx, new_value) {
-            this.set_key(ctx, [], new_value)
+        set(new_value) {
+            this.set_key([], new_value)
         }
 
-        set_key(ctx, key, new_value) {
-            let m = ctx[this.#guid];
-
-            if (m === null) {
-                m = {
-                    tik: this,
-                    updates: [],
-                };
-                ctx[this.#guid] = m;
+        set_key(key, new_value) {
+            if (key.length === 0) {
+                this.#setter(new_value);
+                return;
             }
 
-            m.updates.push([key, new_value]);
+            let f = this.#value;
+            for (let k in key) {
+                if (k === key[key.length - 1]) {
+                    f[k] = new_value;
+                } else {
+                    f = f[k];
+                }
+            }
+            this.#setter(this.#value);
+
+            // earlier we had a ctx tracking based approach, where we also passed
+            // a ctx object. the ctx was created in the main().
 
             // this approach does not work, because main is not called on every
             // re-render. say if a node somewhere down the tree has a tik, and
-            // that tik changes, only that part of tree will be updated, so it
-            // will keep the wrong ctx.
+            // that tik changes, only that part of that tree will be updated, so
+            // it will keep the wrong ctx.
             //
             // there are many cases where we want to do many updates to state on
             // the same click handler. e.g., say on form submit we want to clear
@@ -141,11 +100,15 @@
             // of change I described earlier (list element change concurrent
             // with list change). but this is not a good idea, because the
             // ctx will not be re-created unless main is called again, which it
-            // wont be unless a global changes. so the ctx will keep growing,
+            // won't be unless a global changes. so the ctx will keep growing,
             // and we will have false positives.
         }
 
         index(idx) {
+            if (typeof idx !== "number" && typeof idx !== "string") {
+                console.log(idx);
+                throw new Error("idx must be a number or string");
+            }
             return new FastnTok(this, [idx], this.#value);
         }
     }
@@ -157,10 +120,12 @@
 
         constructor(tik, idx, parent) {
             if (!tik instanceof FastnTik) {
+                console.log(tik);
                 throw new Error("tik must be an instance of FastnTik");
             }
-            if (typeof idx !== "number" && typeof idx !== "string") {
-                throw new Error("idx must be a number or string");
+            if (!Array.isArray(idx)) {
+                console.log(idx);
+                throw new Error("idx must be an array");
             }
             this.#tik = tik;
             this.#idx = idx;
@@ -180,46 +145,6 @@
         }
     }
 
-    window.ftd_internals.nested = (ctx, [{guid, value}, key], idx) => {
-        return [
-            record[0].value[field], // do we have to look in ctx? no.
-            (value) => {
-                // the set function can be called for different field within the
-                // same event handle cycle. we use ctx to preserve state across them
-                // the record[0] is the same as was at the beginning of event handler.
-                // if we relied only on that, later change will ignore earlier changes.
-                // since the record[0] is only accessed when dom is getting constructed,
-                // and whatever is the last value returned during this event handle
-                // cycle will be returned by the useState hook, and global will get
-                // updated in the next update cycle, so we do not have to update the
-                // global right now (during the event handler phase).
-                let old_value = ctx[record[0].guid];
-                if (old_value === null) {
-                    old_value = record[0].value;
-                }
-                let new_value = {...old_value, [field]: value};
-                ctx[record[0].guid] = new_value;
-                // do we also have to update ftd_internals.compound_globals? no.
-                record[1]({guid: record[0].guid, value: new_value});
-            }
-        ];
-    }
-
-    window.ftd_internals.listItem = (ctx, list, idx) => {
-        return [
-            list[0].value[idx],
-            (value) => {
-                let old_value = ctx[list[0].guid];
-                if (old_value === null) {
-                    old_value = list[0].value;
-                }
-                let new_value = old_value.map((v, i) => i === idx ? value : v);
-                ctx[list[0].guid] = new_value;
-                list[1]({guid: list[0].guid, value: new_value});
-            }
-        ];
-    }
-
     window.ftd.render = (component) => {
         preact.render(preact.h(component), document.body);
     }
@@ -228,32 +153,41 @@
     ////////////////////////////  application code  ///////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////
 
-    const show_outer = (ctx, o) => {
-        return preact.h("div", null, preact.h(increment_both, {
-                a: ftd_internals.recordField(ctx, o, "x"),
-                b: ftd_internals.recordField(ctx, o, "y")
+    const show_outer = ({o}) => {
+        return preact.h("div", null,
+            preact.h(increment_both, {
+                a: o.index("d1").index("x"),
+                b: o.index("d1").index("y"),
+                title: "o.d1",
+            }),
+            preact.h(increment_both, {
+                a: o.index("d2").index("x"),
+                b: o.index("d2").index("y"),
+                title: "o.d2",
             })
         );
     }
 
-    const increment_both = ({a, b}) => {
-        return preact.h('div', {
-            onClick: () => {
-                a[1](a[0] + 1);
-                b[1](b[0] + 1);
-            }
-        }, "increment-both")
+    const increment_both = ({title, a, b}) => {
+        return preact.h("div", null, title,
+            preact.h('div', null, "a: ", a.get()),
+            preact.h('div', null, "b: ", b.get()),
+            preact.h('div', {
+                onClick: () => {
+                    a.set(a.get() + 1);
+                    b.set(b.get() + 1)
+                }
+            }, "increment-both")
+        );
     }
 
     const main = () => {
-        const ctx = {};
-
-        const o = ftd_internals.useCompoundGlobal(ctx, "preact-examples/07-nested-record#o", {
+        const o = new FastnTik({
             d1: {x: 10, y: 20},
-            d2: {x: 10, y: 20},
-        });
+            d2: {x: 33, y: 44},
+        }, "preact-examples/07-nested-record#o");
 
-        return preact.h(show_outer, {ctx, o});
+        return preact.h(show_outer, {o});
     }
 
     ftd.render(main);
