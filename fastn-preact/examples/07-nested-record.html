@@ -34,15 +34,15 @@
         });
     }
 
-    window.ftd_internals.useCompound = (key, value) => {
+    window.ftd_internals.useCompound = (value) => {
         const guid = window.ftd_internals.generateGUID();
-        return hooks.useState({guid, value});
+        return [hooks.useState({guid, value}), []];
     }
 
     // list, record, is compound
     window.ftd_internals.useCompoundGlobal = (key, value) => {
-        const state = window.ftd_internals.useCompound(key, value);
-        window.ftd_internals.compound_globals[key] = state;
+        const state = window.ftd_internals.useCompound(value);
+        window.ftd_internals.compound_globals[key] = state[0];
         return state;
     }
 
@@ -53,7 +53,134 @@
         return state;
     }
 
-    window.ftd_internals.recordField = (ctx, record, field) => {
+    window.ftd_internals.set_nested = (value, key, new_value) => {
+        let f = value;
+        for (let k in key) {
+            if (k === key[key.length - 1]) {
+                f[k] = new_value;
+            } else {
+                f = f[k];
+            }
+        }
+        return value;
+    }
+
+    class FastnTik {
+        #value
+        #setter
+        #guid
+
+        // constructor is private, do not call it directly, use `.global()` or `.local()`
+        constructor(value) {
+            [this.#value, this.#setter] = hooks.useState(value);
+            this.#guid = window.ftd_internals.generateGUID();
+        }
+
+        static global(key, value) {
+
+        }
+
+        static local(value) {
+
+        }
+
+        get() {
+            // we intentionally do not look in modifications as get is safe to return
+            // the value of a variable at the beginning of the rendering cycle. all
+            // mutations will be batched together and will be visible in the next cycle.
+            return this.#value;
+        }
+
+        set(ctx, new_value) {
+            this.set_key(ctx, [], new_value)
+        }
+
+        set_key(ctx, key, new_value) {
+            let m = ctx[this.#guid];
+
+            if (m === null) {
+                m = {
+                    tik: this,
+                    updates: [],
+                };
+                ctx[this.#guid] = m;
+            }
+
+            m.updates.push([key, new_value]);
+
+            // this approach does not work, because main is not called on every
+            // re-render. say if a node somewhere down the tree has a tik, and
+            // that tik changes, only that part of tree will be updated, so it
+            // will keep the wrong ctx.
+            //
+            // there are many cases where we want to do many updates to state on
+            // the same click handler. e.g., say on form submit we want to clear
+            // each field, and also add a new record to a list.
+            //
+            // why are we bothering with this ctx: consider in an update we did
+            // both these operations, update a list, and update a member of this
+            // list, by two independent operations (both $on-click$ on the same
+            // node).
+            //
+            // so these two operations are order-dependent, since we store keys,
+            // your intention was to update the n element of the last list, so
+            // update nth list element happened first, and then the list was
+            // replaced with a new list; we will see one outcome. but if the list
+            // was replaced first, and then we went and merrily tried to update
+            // the nth element, we will see a different outcome. the new list may
+            // not even have n elements. or the set operation you wanted to do
+            // on the nth element was to make its one field equal to another
+            // field. but since the old list is replaced, and the "another field"
+            // in the new list has a different value, the outcome will be wrong.
+            //
+            // now we do not have commit stage, where we can go and apply all
+            // the accumulated changes. so we have to apply them as we go.
+            //
+            // another thought I considered was to apply all the changes as they
+            // come and still keep ctx around, and issue a warning for the kind
+            // of change I described earlier (list element change concurrent
+            // with list change). but this is not a good idea, because the
+            // ctx will not be re-created unless main is called again, which it
+            // wont be unless a global changes. so the ctx will keep growing,
+            // and we will have false positives.
+        }
+
+        index(idx) {
+            return new FastnTok(this, [idx], this.#value);
+        }
+    }
+
+    class FastnTok {
+        #tik
+        #idx
+        #value
+
+        constructor(tik, idx, parent) {
+            if (!tik instanceof FastnTik) {
+                throw new Error("tik must be an instance of FastnTik");
+            }
+            if (typeof idx !== "number" && typeof idx !== "string") {
+                throw new Error("idx must be a number or string");
+            }
+            this.#tik = tik;
+            this.#idx = idx;
+            this.#value = parent[idx];
+        }
+
+        get() {
+            return this.#value
+        }
+
+        set(ctx, new_value) {
+            this.#tik.set_key(ctx, this.#idx, new_value);
+        }
+
+        index(idx) {
+            return new FastnTok(this.#tik, this.#idx.concat(idx), this.#value);
+        }
+    }
+
+    window.ftd_internals.nested = (ctx, [{guid, value}, key], idx) => {
         return [
             record[0].value[field], // do we have to look in ctx? no.
             (value) => {
@@ -93,6 +220,22 @@
         ];
     }
 
+    window.ftd.render = (component) => {
+        preact.render(preact.h(component), document.body);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////  application code  ///////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////
+
+    const show_outer = (ctx, o) => {
+        return preact.h("div", null, preact.h(increment_both, {
+                a: ftd_internals.recordField(ctx, o, "x"),
+                b: ftd_internals.recordField(ctx, o, "y")
+            })
+        );
+    }
+
     const increment_both = ({a, b}) => {
         return preact.h('div', {
             onClick: () => {
@@ -105,20 +248,14 @@
     const main = () => {
         const ctx = {};
 
-        const d = ftd_internals.useCompoundGlobal("preact-examples/06-record-2#d", {"x": 10, "y": 20});
+        const o = ftd_internals.useCompoundGlobal(ctx, "preact-examples/07-nested-record#o", {
+            d1: {x: 10, y: 20},
+            d2: {x: 10, y: 20},
+        });
 
-        return preact.h("div", null,
-            preact.h("div", null, "x: ", d[0].value.x),
-            preact.h("div", null, "y: ", d[0].value.y),
-            preact.h(
-                increment_both, {
-                    a: ftd_internals.recordField(ctx, d, "x"),
-                    b: ftd_internals.recordField(ctx, d, "y")
-                }
-            )
-        );
+        return preact.h(show_outer, {ctx, o});
     }
 
-    preact.render(preact.h(main), document.body);
+    ftd.render(main);
 </script>
 </html>
