@@ -40,19 +40,23 @@
         }
 
         set_key(key, new_value) {
+            console.log("FastnTik.set_key", this, key, new_value);
+
             if (key.length === 0) {
                 this.#setter(new_value);
                 return;
             }
 
             let f = this.#value;
-            for (let k in key) {
-                if (k === key[key.length - 1]) {
-                    f[k] = new_value;
-                } else {
-                    f = f[k];
-                }
+            let i = 0;
+            
+            for (; i < key.length - 1; i++) {
+                f = f[key[i]];
             }
+
+            f[key[i]] = new_value; // the last element
+
+            console.log("FastnTik.setter", this.#value);
             this.#setter(this.#value);
 
             // earlier we had a ctx tracking based approach, where we also passed
@@ -106,7 +110,6 @@
         #value
 
         constructor(tik, idx_so_far, idx, parent) {
-            console.log("FastnTok.constructor", tik, idx_so_far, idx, parent);
             if (!tik instanceof FastnTik) {
                 console.log(tik);
                 throw new Error("tik must be an instance of FastnTik");
@@ -128,8 +131,8 @@
             return this.#value;
         }
 
-        set(ctx, new_value) {
-            this.#tik.set_key(ctx, this.#idx, new_value);
+        set(new_value) {
+            this.#tik.set_key(this.#idx, new_value);
         }
 
         index(idx) {
