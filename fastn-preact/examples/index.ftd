@@ -9,4 +9,4 @@
 - [05-list.ftd](/05-list/) -> [05-list.html](/05-list.html)
 - [06-record-2.ftd](/06-record-2/) -> [broken.html](/06-record-2-broken.html), [fixed.html](/06-record-2-fixed.html)
 - [07-nested-record.ftd](/07-nested-record/) -> [07-nested-record.html](/07-nested-record.html)
-- [08-nested-list.ftd](/08-nested-list/) -> [08-nested-list.html](/08-nested-list.html)
+- [08-nested-list.ftd](/08-nested-list/) -> [08-nested-list.html](/08-nested-list.html), [with-fastn-data.html](/08-nested-list-with-fastn-data.html)

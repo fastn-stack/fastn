@@ -142,3 +142,7 @@ level + 1
 integer level:
 
 level + 10
+
+
+;; get the full json from `the_root` in 08-nested-list-with-fastn-data.html
+;; ftd.set_value("preact-examples/08-nested-list#root", <json>);
