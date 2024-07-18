@@ -151,7 +151,7 @@
     ////////////////////////////  application code  ///////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////
 
-    const root = {
+    const the_root = {
         name: "root",
         open: false,
         folders: [{
@@ -175,25 +175,35 @@
         ],
     }
 
+    const padding = (level) => {
+        return `${level + 10}px`;
+    }
+
     const show_folder = ({folder, level}) => {
-        const
-        return preact.h("div", null,
-            preact.h("div", {
-                onClick: () => {
-                    folder.open = !folder.open;
-                    window.ftd.set_value("preact-examples/08-nested-list#root", root);
+        if (!level) {
+            level = 0;
+        }
+
+        let open = folder.index("open");
+
+        return preact.h(
+            "div", {
+                style: {
+                    "padding-top": "2px",
+                    "padding-bottom": "2px",
+                    "padding-left": padding(level),
+                    gap: "2px",
                 }
-            }, folder.name),
-            folder.open ? preact.h("div", null,
-                folder.folders.map((f) => preact.h(show_folder, {folder: f})),
-                folder.files.map((f) => preact.h("div", null, f.name))
-            ) : null
+            },
+            preact.h("div", {style: {display: "flex", "flex-direction": "row", gap: "5px"}},
+                open.get() ? preact.h("div", null, "+") : preact.h("div", null, "/"),
+                preact.h("div", {onClick: () => open.set(!open.get())}, folder.get().name)),
         );
     }
 
     const main = () => {
-        const root = new FastnTik(root, "preact-examples/08-nested-list#root");
-        return preact.h(show_folder, {folder: root});
+        const root = new FastnTik(the_root, "preact-examples/08-nested-list#root");
+        return preact.h(show_folder, {folder: root, level: null});
     }
 
     ftd.render(main);

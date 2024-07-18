@@ -85,7 +85,6 @@ spacing.fixed.px: 2
         if: { !show-folder.f.open }
 
         -- ftd.text: $show-folder.f.name
-        color: black
         $on-click$: $ftd.toggle($a=$show-folder.f.open)
 
 	-- end: ftd.row
@@ -120,9 +119,7 @@ padding-vertical.px: 2
 background.solid if { show-file.f.open }: #f5f5f5
 
     -- ftd.text: `-`
-
 	-- ftd.text: $show-file.f.name
-	color: black
 
 -- end: ftd.row
 
