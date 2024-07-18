@@ -5,17 +5,14 @@ name: root
 full-name: root
 files: *$files
 folders: *$folders
-url: /
 open: false
 
 
 -- file list files:
 
 -- file: FASTN.ftd
-url: /foo/FASTN.ftd
 
 -- file: index.ftd
-url: /foo/index.ftd
 
 -- end: files
 
@@ -28,7 +25,6 @@ url: /foo/index.ftd
 
 -- folder: blog
 full-name: blog
-url: /foo/blog/
 files: *$blog-files
 folders: $blog-folders
 
@@ -36,13 +32,8 @@ folders: $blog-folders
 
 
 -- file list blog-files:
-
 -- file: index.ftd
-url: /foo/blog/index.ftd
-
 -- file: first-post.ftd
-url: /foo/blog/first-post.ftd
-
 -- end: blog-files
 
 
@@ -57,24 +48,18 @@ url: /foo/blog/first-post.ftd
 -- folder list blog-folders:
 
 -- folder: images
-url: /foo/blog/images/
 files: *$blog-images
 full-name: blog/images
 
 -- end: blog-folders
 
 -- file list blog-images:
-
 -- file: first-image.jpg
-url: /foo/blog/images/first-image.jpg
-
 -- end: blog-images
 
 
 -- record file:
 caption name:
-string full-name: $file.name
-string url:
 boolean open: false
 
 
@@ -83,8 +68,6 @@ boolean open: false
 
 -- record folder:
 caption name:
-string full-name:
-string url:
 folder list folders:
 file list files:
 boolean open: false
@@ -109,7 +92,6 @@ spacing.fixed.px: 2
         if: { !show-folder.f.open }
 
         -- ftd.text: $show-folder.f.name
-        ;; link: $show-folder.f.url
         color: black
         width.fixed.percent: 100
         $on-click$: $ftd.toggle($a=$show-folder.f.open)
@@ -150,7 +132,6 @@ background.solid if { show-file.f.open }: #f5f5f5
     -- ftd.text: `-`
 
 	-- ftd.text: $show-file.f.name
-	link: $show-file.f.url
 	color: black
 	width.fixed.percent: 100
 
