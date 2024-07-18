@@ -40,8 +40,6 @@
         }
 
         set_key(key, new_value) {
-            console.log("FastnTik.set_key", this, key, new_value);
-
             if (key.length === 0) {
                 this.#setter(new_value);
                 return;
@@ -49,15 +47,20 @@
 
             let f = this.#value;
             let i = 0;
-            
+
             for (; i < key.length - 1; i++) {
                 f = f[key[i]];
             }
 
             f[key[i]] = new_value; // the last element
 
-            console.log("FastnTik.setter", this.#value);
-            this.#setter(this.#value);
+            // if we do not clone the object, the setter doesn't trigger re-render.
+            if (!!structuredClone) {
+                this.#setter(structuredClone(this.#value));
+            } else {
+                this.#setter(JSON.parse(JSON.stringify(this.#value)));
+            }
+
 
             // earlier we had a ctx tracking based approach, where we also passed
             // a ctx object. the ctx was created in the main().
