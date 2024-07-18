@@ -9,6 +9,7 @@ open: false
 
 -- file list files:
 -- file: FASTN.ftd
+open: true
 -- file: index.ftd
 -- end: files
 
