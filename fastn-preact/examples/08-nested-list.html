@@ -129,6 +129,7 @@
         #idx
         #value
 
+        // consider this constructor private. only {tik,tok}.index() should be used.
         constructor(tik, idx_so_far, idx, parent) {
             if (!tik instanceof FastnTik) {
                 console.log(tik);
@@ -182,7 +183,7 @@
     }
 
     ///////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////  application code  ///////////////////////////////
+    //////////////////////////////  application code  /////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////
 
     const the_root = {
@@ -210,15 +211,9 @@
         ],
     }
 
-    const padding = (level) => {
-        return `${level + 10}px`;
-    }
+    const padding = (level) => `${level + 10}px`;
 
     const show_file = ({file, level}) => {
-        if (!level) {
-            level = 0;
-        }
-
         return preact.h(
             "div", {
                 style: {
@@ -234,10 +229,10 @@
     }
 
     const show_folder = ({folder, level}) => {
-        if (!level) {
-            level = 0;
-        }
-
+        // this is okay to do because level is not a mutable variable.
+        // all mutable variables should be created using Tik, and updated
+        // using the set method.
+        if (!level) level = 0;
         let open = folder.index("open");
 
         return preact.h(

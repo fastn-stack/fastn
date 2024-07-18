@@ -112,6 +112,7 @@
         #idx
         #value
 
+        // consider this constructor private. only {tik,tok}.index() should be used.
         constructor(tik, idx_so_far, idx, parent) {
             if (!tik instanceof FastnTik) {
                 console.log(tik);
