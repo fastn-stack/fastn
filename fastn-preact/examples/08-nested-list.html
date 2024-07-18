@@ -105,6 +105,23 @@
         index(idx) {
             return new FastnTok(this, [], idx, this.#value);
         }
+
+        map(fn) {
+            if (!Array.isArray(this.#value)) {
+                console.log(this.#value);
+                throw new Error("map called on a non list");
+            }
+
+            // create a tok for every member of the list and pass that tok to the
+            // function, and collect the results
+            let result = [];
+            let i = 0;
+            for (; i < this.#value.length; i++) {
+                result.push(fn(this.index(i)));
+            }
+
+            return result;
+        }
     }
 
     class FastnTok {
@@ -140,6 +157,23 @@
 
         index(idx) {
             return new FastnTok(this.#tik, this.#idx, idx, this.#value);
+        }
+
+        map(fn) {
+            if (!Array.isArray(this.#value)) {
+                console.log(this);
+                throw new Error("map called on a non list1");
+            }
+
+            // create a tok for every member of the list and pass that tok to the
+            // function, and collect the results
+            let result = [];
+            let i = 0;
+            for (; i < this.#value.length; i++) {
+                result.push(fn(this.index(i)));
+            }
+
+            return result;
         }
     }
 
@@ -195,9 +229,18 @@
                     gap: "2px",
                 }
             },
-            preact.h("div", {style: {display: "flex", "flex-direction": "row", gap: "5px"}},
+            preact.h(
+                "div", {style: {display: "flex", "flex-direction": "row", gap: "5px"}},
                 open.get() ? preact.h("div", null, "+") : preact.h("div", null, "/"),
-                preact.h("div", {onClick: () => open.set(!open.get())}, folder.get().name)),
+                preact.h("div",
+                    {
+                        onClick: () => open.set(!open.get()),
+                        style: {cursor: "pointer"}
+                    },
+                    folder.get().name
+                ),
+                folder.index("folders").map((f) => preact.h(show_folder, {folder: f, level: level + 1})),
+            ),
         );
     }
 
