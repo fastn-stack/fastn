@@ -17,21 +17,12 @@
         return window.ftd_internals.globals[key].get();
     }
 
-    window.ftd_internals.generateGUID = () => {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
-    }
-
     class FastnTik {
         #value
         #setter
-        #guid
 
         constructor(value, global_key) {
             [this.#value, this.#setter] = hooks.useState(value);
-            this.#guid = window.ftd_internals.generateGUID();
             if (global_key !== undefined) {
                 window.ftd_internals.globals[global_key] = this;
             }
@@ -105,11 +96,7 @@
         }
 
         index(idx) {
-            if (typeof idx !== "number" && typeof idx !== "string") {
-                console.log(idx);
-                throw new Error("idx must be a number or string");
-            }
-            return new FastnTok(this, [idx], this.#value);
+            return new FastnTok(this, [], idx, this.#value);
         }
     }
 
@@ -118,22 +105,27 @@
         #idx
         #value
 
-        constructor(tik, idx, parent) {
+        constructor(tik, idx_so_far, idx, parent) {
+            console.log("FastnTok.constructor", tik, idx_so_far, idx, parent);
             if (!tik instanceof FastnTik) {
                 console.log(tik);
                 throw new Error("tik must be an instance of FastnTik");
             }
-            if (!Array.isArray(idx)) {
+            if (!Array.isArray(idx_so_far)) {
                 console.log(idx);
                 throw new Error("idx must be an array");
             }
+            if (typeof idx !== "number" && typeof idx !== "string") {
+                console.log(idx);
+                throw new Error("idx must be a number or string");
+            }
             this.#tik = tik;
-            this.#idx = idx;
+            this.#idx = idx_so_far.concat(idx);
             this.#value = parent[idx];
         }
 
         get() {
-            return this.#value
+            return this.#value;
         }
 
         set(ctx, new_value) {
@@ -141,7 +133,7 @@
         }
 
         index(idx) {
-            return new FastnTok(this.#tik, this.#idx.concat(idx), this.#value);
+            return new FastnTok(this.#tik, this.#idx, idx, this.#value);
         }
     }
 
