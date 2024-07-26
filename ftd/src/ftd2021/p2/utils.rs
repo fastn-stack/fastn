@@ -125,18 +125,14 @@ pub fn boolean_and_ref(
                         }
                     };
 
-                    if let Some(ftd::ftd2021::p2::Boolean::IsNotNull { value }) = condition {
-                        match value {
+                    if let Some(ftd::ftd2021::p2::Boolean::IsNotNull {
+                        value:
                             ftd::PropertyValue::Reference { name, .. }
-                            | ftd::PropertyValue::Variable { name, .. } => {
-                                if name.eq(reference) {
-                                    return Ok((
-                                        false,
-                                        complete_reference(&Some(reference.to_owned())),
-                                    ));
-                                }
-                            }
-                            _ => {}
+                            | ftd::PropertyValue::Variable { name, .. },
+                    }) = condition
+                    {
+                        if name.eq(reference) {
+                            return Ok((false, complete_reference(&Some(reference.to_owned()))));
                         }
                     }
 
@@ -177,21 +173,20 @@ pub fn boolean_and_ref(
                     )
                 }
             };
-            if let Some(ftd::ftd2021::p2::Boolean::IsNotNull { value }) = condition {
-                match value {
+            if let Some(ftd::ftd2021::p2::Boolean::IsNotNull {
+                value:
                     ftd::PropertyValue::Reference { name, .. }
-                    | ftd::PropertyValue::Variable { name, .. } => {
-                        if name.eq({
-                            if let Some(reference) = reference.strip_prefix('@') {
-                                reference
-                            } else {
-                                reference
-                            }
-                        }) {
-                            return Ok((false, complete_reference(&Some(reference.to_owned()))));
-                        }
+                    | ftd::PropertyValue::Variable { name, .. },
+            }) = condition
+            {
+                if name.eq({
+                    if let Some(reference) = reference.strip_prefix('@') {
+                        reference
+                    } else {
+                        reference
                     }
-                    _ => {}
+                }) {
+                    return Ok((false, complete_reference(&Some(reference.to_owned()))));
                 }
             }
             ftd::ftd2021::p2::utils::e2(
@@ -245,18 +240,14 @@ pub fn integer_and_ref(
                         }
                     };
 
-                    if let Some(ftd::ftd2021::p2::Boolean::IsNotNull { value }) = condition {
-                        match value {
+                    if let Some(ftd::ftd2021::p2::Boolean::IsNotNull {
+                        value:
                             ftd::PropertyValue::Reference { name, .. }
-                            | ftd::PropertyValue::Variable { name, .. } => {
-                                if name.eq(reference) {
-                                    return Ok((
-                                        0,
-                                        complete_reference(&Some(reference.to_owned())),
-                                    ));
-                                }
-                            }
-                            _ => {}
+                            | ftd::PropertyValue::Variable { name, .. },
+                    }) = condition
+                    {
+                        if name.eq(reference) {
+                            return Ok((0, complete_reference(&Some(reference.to_owned()))));
                         }
                     }
 
@@ -297,21 +288,20 @@ pub fn integer_and_ref(
                     )
                 }
             };
-            if let Some(ftd::ftd2021::p2::Boolean::IsNotNull { value }) = condition {
-                match value {
+            if let Some(ftd::ftd2021::p2::Boolean::IsNotNull {
+                value:
                     ftd::PropertyValue::Reference { name, .. }
-                    | ftd::PropertyValue::Variable { name, .. } => {
-                        if name.eq({
-                            if let Some(reference) = reference.strip_prefix('@') {
-                                reference
-                            } else {
-                                reference
-                            }
-                        }) {
-                            return Ok((0, complete_reference(&Some(reference.to_owned()))));
-                        }
+                    | ftd::PropertyValue::Variable { name, .. },
+            }) = condition
+            {
+                if name.eq({
+                    if let Some(reference) = reference.strip_prefix('@') {
+                        reference
+                    } else {
+                        reference
                     }
-                    _ => {}
+                }) {
+                    return Ok((0, complete_reference(&Some(reference.to_owned()))));
                 }
             }
             ftd::ftd2021::p2::utils::e2(
@@ -365,18 +355,14 @@ pub fn decimal_and_ref(
                         }
                     };
 
-                    if let Some(ftd::ftd2021::p2::Boolean::IsNotNull { value }) = condition {
-                        match value {
+                    if let Some(ftd::ftd2021::p2::Boolean::IsNotNull {
+                        value:
                             ftd::PropertyValue::Reference { name, .. }
-                            | ftd::PropertyValue::Variable { name, .. } => {
-                                if name.eq(reference) {
-                                    return Ok((
-                                        0.0,
-                                        complete_reference(&Some(reference.to_owned())),
-                                    ));
-                                }
-                            }
-                            _ => {}
+                            | ftd::PropertyValue::Variable { name, .. },
+                    }) = condition
+                    {
+                        if name.eq(reference) {
+                            return Ok((0.0, complete_reference(&Some(reference.to_owned()))));
                         }
                     }
 
@@ -417,21 +403,20 @@ pub fn decimal_and_ref(
                     )
                 }
             };
-            if let Some(ftd::ftd2021::p2::Boolean::IsNotNull { value }) = condition {
-                match value {
+            if let Some(ftd::ftd2021::p2::Boolean::IsNotNull {
+                value:
                     ftd::PropertyValue::Reference { name, .. }
-                    | ftd::PropertyValue::Variable { name, .. } => {
-                        if name.eq({
-                            if let Some(reference) = reference.strip_prefix('@') {
-                                reference
-                            } else {
-                                reference
-                            }
-                        }) {
-                            return Ok((0.0, complete_reference(&Some(reference.to_owned()))));
-                        }
+                    | ftd::PropertyValue::Variable { name, .. },
+            }) = condition
+            {
+                if name.eq({
+                    if let Some(reference) = reference.strip_prefix('@') {
+                        reference
+                    } else {
+                        reference
                     }
-                    _ => {}
+                }) {
+                    return Ok((0.0, complete_reference(&Some(reference.to_owned()))));
                 }
             }
             ftd::ftd2021::p2::utils::e2(
@@ -491,19 +476,18 @@ pub fn string_and_source_and_ref(
                         }
                     };
 
-                    if let Some(ftd::ftd2021::p2::Boolean::IsNotNull { value }) = condition {
-                        match value {
+                    if let Some(ftd::ftd2021::p2::Boolean::IsNotNull {
+                        value:
                             ftd::PropertyValue::Reference { name, .. }
-                            | ftd::PropertyValue::Variable { name, .. } => {
-                                if name.eq(reference) {
-                                    return Ok((
-                                        "".to_string(),
-                                        source,
-                                        complete_reference(&Some(reference.to_owned())),
-                                    ));
-                                }
-                            }
-                            _ => {}
+                            | ftd::PropertyValue::Variable { name, .. },
+                    }) = condition
+                    {
+                        if name.eq(reference) {
+                            return Ok((
+                                "".to_string(),
+                                source,
+                                complete_reference(&Some(reference.to_owned())),
+                            ));
                         }
                     }
 
@@ -555,25 +539,24 @@ pub fn string_and_source_and_ref(
                     )
                 }
             };
-            if let Some(ftd::ftd2021::p2::Boolean::IsNotNull { value }) = condition {
-                match value {
+            if let Some(ftd::ftd2021::p2::Boolean::IsNotNull {
+                value:
                     ftd::PropertyValue::Reference { name, .. }
-                    | ftd::PropertyValue::Variable { name, .. } => {
-                        if name.eq({
-                            if let Some(reference) = reference.strip_prefix('@') {
-                                reference
-                            } else {
-                                reference
-                            }
-                        }) {
-                            return Ok((
-                                "".to_string(),
-                                source,
-                                complete_reference(&Some(reference.to_owned())),
-                            ));
-                        }
+                    | ftd::PropertyValue::Variable { name, .. },
+            }) = condition
+            {
+                if name.eq({
+                    if let Some(reference) = reference.strip_prefix('@') {
+                        reference
+                    } else {
+                        reference
                     }
-                    _ => {}
+                }) {
+                    return Ok((
+                        "".to_string(),
+                        source,
+                        complete_reference(&Some(reference.to_owned())),
+                    ));
                 }
             }
             ftd::ftd2021::p2::utils::e2(
@@ -643,18 +626,17 @@ pub fn record_and_ref(
                         }
                     };
 
-                    if let Some(ftd::ftd2021::p2::Boolean::IsNotNull { value }) = condition {
-                        match value {
+                    if let Some(ftd::ftd2021::p2::Boolean::IsNotNull {
+                        value:
                             ftd::PropertyValue::Reference { name, .. }
-                            | ftd::PropertyValue::Variable { name, .. } => {
-                                if name.eq(reference) {
-                                    return Ok((
-                                        Default::default(),
-                                        complete_reference(&Some(reference.to_owned())),
-                                    ));
-                                }
-                            }
-                            _ => {}
+                            | ftd::PropertyValue::Variable { name, .. },
+                    }) = condition
+                    {
+                        if name.eq(reference) {
+                            return Ok((
+                                Default::default(),
+                                complete_reference(&Some(reference.to_owned())),
+                            ));
                         }
                     }
 
@@ -698,24 +680,23 @@ pub fn record_and_ref(
                     )
                 }
             };
-            if let Some(ftd::ftd2021::p2::Boolean::IsNotNull { value }) = condition {
-                match value {
+            if let Some(ftd::ftd2021::p2::Boolean::IsNotNull {
+                value:
                     ftd::PropertyValue::Reference { name, .. }
-                    | ftd::PropertyValue::Variable { name, .. } => {
-                        if name.eq({
-                            if let Some(reference) = reference.strip_prefix('@') {
-                                reference
-                            } else {
-                                reference
-                            }
-                        }) {
-                            return Ok((
-                                Default::default(),
-                                complete_reference(&Some(reference.to_owned())),
-                            ));
-                        }
+                    | ftd::PropertyValue::Variable { name, .. },
+            }) = condition
+            {
+                if name.eq({
+                    if let Some(reference) = reference.strip_prefix('@') {
+                        reference
+                    } else {
+                        reference
                     }
-                    _ => {}
+                }) {
+                    return Ok((
+                        Default::default(),
+                        complete_reference(&Some(reference.to_owned())),
+                    ));
                 }
             }
             ftd::ftd2021::p2::utils::e2(

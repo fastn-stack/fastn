@@ -7,19 +7,19 @@
 /// - `id`: a String that represents the unique identifier of the interpreter.
 ///
 /// - `bag`: an `ftd::Map` of `ftd::interpreter::Thing`s that represents the bag of objects that
-/// the interpreter has access to.
+///   the interpreter has access to.
 ///
 /// - `to_process`: a ToProcess struct that contains information about the elements that still need
-/// to be processed by the interpreter.
+///   to be processed by the interpreter.
 ///
 /// - `pending_imports`: an `ftd::VecMap` of tuples containing a String and a usize that
-/// represents the pending imports for the interpreter.
+///   represents the pending imports for the interpreter.
 ///
 /// - `parsed_libs`: an `ftd::Map` of `ParsedDocument`s that represents the parsed libraries for the
-/// interpreter.
+///   interpreter.
 ///
 /// - `instructions`: a `Vec` of `ftd::interpreter::Component`s that represents the instructions
-/// that the interpreter has processed.
+///   that the interpreter has processed.
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct InterpreterState {
     pub id: String,

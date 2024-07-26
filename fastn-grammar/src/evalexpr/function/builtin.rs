@@ -1,6 +1,3 @@
-#[cfg(feature = "regex_support")]
-use regex::Regex;
-
 use fastn_grammar::evalexpr::{
     value::{FloatType, IntType},
     EvalexprError, Function, Value, ValueType,
@@ -161,37 +158,6 @@ pub fn builtin_function(identifier: &str) -> Option<Function> {
             }
         })),
         // String functions
-        #[cfg(feature = "regex_support")]
-        "str::regex_matches" => Some(Function::new(|argument| {
-            let arguments = argument.as_tuple()?;
-
-            let subject = arguments[0].as_string()?;
-            let re_str = arguments[1].as_string()?;
-            match Regex::new(&re_str) {
-                Ok(re) => Ok(Value::Boolean(re.is_match(&subject))),
-                Err(err) => Err(EvalexprError::invalid_regex(
-                    re_str.to_string(),
-                    format!("{}", err),
-                )),
-            }
-        })),
-        #[cfg(feature = "regex_support")]
-        "str::regex_replace" => Some(Function::new(|argument| {
-            let arguments = argument.as_tuple()?;
-
-            let subject = arguments[0].as_string()?;
-            let re_str = arguments[1].as_string()?;
-            let repl = arguments[2].as_string()?;
-            match Regex::new(&re_str) {
-                Ok(re) => Ok(Value::String(
-                    re.replace_all(&subject, repl.as_str()).to_string(),
-                )),
-                Err(err) => Err(EvalexprError::invalid_regex(
-                    re_str.to_string(),
-                    format!("{}", err),
-                )),
-            }
-        })),
         "str::to_lowercase" => Some(Function::new(|argument| {
             let subject = argument.as_string()?;
             Ok(Value::from(subject.to_lowercase()))
@@ -206,11 +172,6 @@ pub fn builtin_function(identifier: &str) -> Option<Function> {
         })),
         "str::from" => Some(Function::new(|argument| {
             Ok(Value::String(argument.to_string()))
-        })),
-        #[cfg(feature = "rand")]
-        "random" => Some(Function::new(|argument| {
-            argument.as_empty()?;
-            Ok(Value::Float(rand::random()))
         })),
         // Bitwise operators
         "bitand" => int_function!(bitand, 2),

@@ -10,7 +10,6 @@ use fastn_grammar::evalexpr::{token::PartialToken, value::value_type::ValueType}
 use fastn_grammar::evalexpr::{operator::Operator, value::Value};
 
 // Exclude error display code from test coverage, as the code does not make sense to test.
-#[cfg(not(tarpaulin_include))]
 mod display;
 
 /// Errors used in this crate.

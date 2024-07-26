@@ -12,7 +12,6 @@ use fastn_grammar::evalexpr::{
 use std::mem;
 
 // Exclude display module from coverage, as it prints not well-defined prefix notation.
-#[cfg(not(tarpaulin_include))]
 mod display;
 mod iter;
 

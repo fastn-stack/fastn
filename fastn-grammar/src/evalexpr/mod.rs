@@ -539,8 +539,6 @@ pub use fastn_grammar::evalexpr::{
 
 mod context;
 pub mod error;
-#[cfg(feature = "serde_support")]
-mod feature_serde;
 mod function;
 mod interface;
 mod operator;

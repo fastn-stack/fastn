@@ -1161,7 +1161,7 @@ impl Element {
                             } else {
                                 dependencies.insert(
                                     id.to_string(),
-                                    serde_json::to_value(&vec![json]).unwrap(),
+                                    serde_json::to_value(vec![json]).unwrap(),
                                 );
                             }
                         } else {
@@ -1199,7 +1199,7 @@ impl Element {
                                 } else {
                                     dependencies.insert(
                                         "$style$".to_string(),
-                                        serde_json::to_value(&vec![json]).unwrap(),
+                                        serde_json::to_value(vec![json]).unwrap(),
                                     );
                                 }
                             }
@@ -1558,7 +1558,7 @@ impl Element {
                 } else {
                     dependencies.insert(
                         "$value$".to_string(),
-                        serde_json::to_value(&vec![json]).unwrap(),
+                        serde_json::to_value(vec![json]).unwrap(),
                     );
                 }
             }

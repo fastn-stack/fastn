@@ -1234,12 +1234,12 @@ fn get_conditional_attributes(
         pv: &ftd::PropertyValue,
         value: &ftd::Value,
     ) -> bool {
-        let bool_name = if let ftd::ftd2021::p2::Boolean::IsNotNull { value } = condition {
-            match value {
-                ftd::PropertyValue::Reference { name, .. }
-                | ftd::PropertyValue::Variable { name, .. } => name,
-                _ => return false,
-            }
+        let bool_name = if let ftd::ftd2021::p2::Boolean::IsNotNull {
+            value:
+                ftd::PropertyValue::Reference { name, .. } | ftd::PropertyValue::Variable { name, .. },
+        } = condition
+        {
+            name
         } else {
             return false;
         };
@@ -1649,33 +1649,30 @@ impl Component {
                             | Ok(ftd::Value::None { kind })
                                 if matches!(kind, ftd::ftd2021::p2::Kind::UI { .. }) =>
                             {
-                                if let Some(ftd::ftd2021::p2::Boolean::IsNotNull { ref value }) =
-                                    child.condition
+                                if let Some(ftd::ftd2021::p2::Boolean::IsNotNull {
+                                    value:
+                                        ftd::PropertyValue::Reference { ref name, .. }
+                                        | ftd::PropertyValue::Variable { ref name, .. },
+                                }) = child.condition
                                 {
-                                    match value {
-                                        ftd::PropertyValue::Reference { name, .. }
-                                        | ftd::PropertyValue::Variable { name, .. } => {
-                                            if name.eq({
-                                                if let Some(reference) = c.0.strip_prefix('@') {
-                                                    reference
-                                                } else {
-                                                    c.0.as_str()
-                                                }
-                                            }) {
-                                                *child = ChildComponent {
-                                                    root: "ftd#null".to_string(),
-                                                    condition: None,
-                                                    properties: Default::default(),
-                                                    arguments: Default::default(),
-                                                    events: vec![],
-                                                    is_recursive: false,
-                                                    line_number,
-                                                    reference: None,
-                                                };
-                                                return Ok(());
-                                            }
+                                    if name.eq({
+                                        if let Some(reference) = c.0.strip_prefix('@') {
+                                            reference
+                                        } else {
+                                            c.0.as_str()
                                         }
-                                        _ => {}
+                                    }) {
+                                        *child = ChildComponent {
+                                            root: "ftd#null".to_string(),
+                                            condition: None,
+                                            properties: Default::default(),
+                                            arguments: Default::default(),
+                                            events: vec![],
+                                            is_recursive: false,
+                                            line_number,
+                                            reference: None,
+                                        };
+                                        return Ok(());
                                     }
                                 }
                             }
@@ -2684,7 +2681,7 @@ pub fn read_properties(
 ///
 /// # Caption/Body/Header_value conflicts
 /// - This happens if any argument accepts data from more than one way
-/// and the user doesn't pass this data in exactly one way
+///   and the user doesn't pass this data in exactly one way
 ///
 /// # Missing data checks
 /// - This happens if any (required) argument doesn't get the data from any way it takes

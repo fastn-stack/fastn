@@ -756,18 +756,6 @@ impl Document {
         Ok(serde_json::Value::Array(list))
     }
 
-    #[cfg(calls)]
-    fn object2_to_json(
-        &self,
-        fields: &ftd::Map<ftd::Value>,
-    ) -> ftd::ftd2021::p1::Result<serde_json::Value> {
-        let mut map = serde_json::Map::new();
-        for (k, v) in fields.iter() {
-            map.insert(k.to_string(), self.value_to_json(v)?);
-        }
-        Ok(serde_json::Value::Object(map))
-    }
-
     fn object_to_json(
         &self,
         variant: Option<&String>,

@@ -348,15 +348,11 @@ mod sub_command {
                 .action(clap::ArgAction::Append))
             .arg(clap::arg!(--"download-base-url" <URL> "If running without files locally, download needed files from here"))
             .arg(clap::arg!(--offline "Disables automatic package update checks to operate in offline mode"));
-        if cfg!(feature = "remote") {
-            serve
-        } else {
-            serve
+        serve
                 .arg(
                     clap::arg!(identities: --identities <IDENTITIES> "Http request identities, fastn allows these identities to access documents")
                         .hide(true) // this is only for testing purpose
                 )
-        }
     }
 }
 

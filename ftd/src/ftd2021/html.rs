@@ -1582,15 +1582,8 @@ impl ftd::Common {
         if self.open_in_new_tab {
             d.insert(s("target"), ftd::html::escape("_blank"));
         }
-        if let Some(ref link) = self.submit {
-            if cfg!(feature = "realm") {
-                d.insert(
-                    s("onclick"),
-                    format!("window.REALM_SUBMIT('{}');", ftd::html::escape(link)),
-                );
-            } else {
-                d.insert(s("onclick"), "this.submit()".to_string());
-            }
+        if self.submit.is_some() {
+            d.insert(s("onclick"), "this.submit()".to_string());
         }
         d
     }

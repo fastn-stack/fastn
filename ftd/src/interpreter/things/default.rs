@@ -13,7 +13,7 @@ pub fn default_aliases() -> ftd::Map<String> {
     .collect()
 }
 
-/**
+/*
 The `default_functions` function returns a map of string keys to Function values. These functions
 are built-in and available for use in the evaluation of an expression.
 
@@ -29,7 +29,7 @@ enable light mode in the application.
 4. `enable_system_mode` - This function takes no arguments and returns an empty value. It is used to
 enable system mode in the application, which means the application will use the system's default
 color scheme.
-**/
+*/
 pub fn default_functions() -> ftd::Map<fastn_grammar::evalexpr::Function> {
     use fastn_grammar::evalexpr::*;
 

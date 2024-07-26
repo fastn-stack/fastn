@@ -100,10 +100,8 @@ impl<'a> IterateVariablesContext<'a> for EmptyContext {
 ///
 /// This context is type-safe, meaning that an identifier that is assigned a value of some type once cannot be assigned a value of another type.
 #[derive(Clone, Debug, Default)]
-#[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 pub struct HashMapContext {
     variables: HashMap<String, Value>,
-    #[cfg_attr(feature = "serde_support", serde(skip))]
     functions: HashMap<String, Function>,
 }
 

@@ -27,8 +27,6 @@ mod parser;
 pub use parser::parse_doc;
 #[cfg(feature = "native-rendering")]
 pub mod taffy;
-#[cfg(feature = "terminal")]
-pub mod terminal;
 pub mod test_helper;
 #[cfg(feature = "native-rendering")]
 mod wasm;

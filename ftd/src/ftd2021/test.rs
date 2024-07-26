@@ -19048,52 +19048,6 @@ mod document {
     }
 
     #[test]
-    #[cfg(calls)]
-    #[ignore] // TODO: this is buggy
-    fn calls() {
-        #[derive(Debug, PartialEq, serde::Deserialize)]
-        struct PR {
-            number: i64,
-            title: String,
-        }
-
-        let bag = super::Document::from(
-            "foo/bar",
-            indoc::indoc!(
-                "
-                -- component pr:
-                $number: integer
-                $title: caption
-                component: ftd.text
-                text: ref $title
-
-                -- pr: some pr
-                number: 24
-
-                -- pr: some other pr
-                number: 224
-                "
-            ),
-            &ftd::ftd2021::p2::TestLibrary {},
-        )
-        .unwrap();
-
-        pretty_assertions::assert_eq!(
-            bag.instances::<PR>("pr").unwrap(),
-            vec![
-                PR {
-                    number: 24,
-                    title: s("some pr")
-                },
-                PR {
-                    number: 224,
-                    title: s("some other pr")
-                }
-            ]
-        )
-    }
-
-    #[test]
     fn instances() {
         #[derive(Debug, PartialEq, serde::Deserialize)]
         struct PR {
