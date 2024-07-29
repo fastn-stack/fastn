@@ -8,6 +8,8 @@ pub mod http;
 pub mod reqwest_util;
 mod utils;
 pub mod wasm;
+mod user_data;
+pub use user_data::UserDataError;
 
 pub use create_pool::create_pool;
 
