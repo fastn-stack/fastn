@@ -5,13 +5,16 @@ pub async fn process(
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    match req_config.config.ds.ud(
-        req_config.config.get_db_url().await.as_str(),
-        &req_config
-            .request
-            .cookie(fastn_core::http::SESSION_COOKIE_NAME),
-    )
-    .await
+    match req_config
+        .config
+        .ds
+        .ud(
+            req_config.config.get_db_url().await.as_str(),
+            &req_config
+                .request
+                .cookie(fastn_core::http::SESSION_COOKIE_NAME),
+        )
+        .await
     {
         Ok(ud) => doc.from_json(&ud, &kind, &value),
         Err(e) => ftd::interpreter::utils::e2(
