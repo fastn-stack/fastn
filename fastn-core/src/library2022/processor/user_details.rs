@@ -8,7 +8,9 @@ pub async fn process(
     match ud(
         &req_config.config.ds,
         req_config.config.get_db_url().await.as_str(),
-        req_config.request.cookie(fastn_core::http::SESSION_COOKIE_NAME),
+        req_config
+            .request
+            .cookie(fastn_core::http::SESSION_COOKIE_NAME),
     )
     .await
     {
