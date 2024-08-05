@@ -70,6 +70,7 @@ pre[class*=language-].fastn-theme-light {
     color: #07a;
 }
 
+.fastn-theme-light .token.inserted,
 .fastn-theme-light .token.section-caption {
     color: #1c7d4d;
 }
@@ -110,12 +111,13 @@ pre[class*=language-].fastn-theme-light {
     color: #8b3b3b;
 }
 
+.fastn-theme-light .token.coord,
 .fastn-theme-light .token.header-value {
     color: #36464e;
 }
 
 /* END ----------------------------------------------------------------- */
-
+.fastn-theme-light .token.unchanged,
 .fastn-theme-light .token.cdata,
 .fastn-theme-light .token.comment,
 .fastn-theme-light .token.doctype,
@@ -144,7 +146,6 @@ pre[class*=language-].fastn-theme-light {
 .fastn-theme-light .token.attr-name,
 .fastn-theme-light .token.builtin,
 .fastn-theme-light .token.char,
-.fastn-theme-light .token.inserted,
 .fastn-theme-light .token.selector,
 .fastn-theme-light .token.string {
 	color: #36464e

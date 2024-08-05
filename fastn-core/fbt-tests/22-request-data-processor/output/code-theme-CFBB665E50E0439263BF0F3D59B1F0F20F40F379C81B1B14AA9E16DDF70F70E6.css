@@ -60,10 +60,12 @@ pre[class*=language-].fastn-theme-dark {
     color: #d5d7e2;
 }
 
+
 .fastn-theme-dark .token.section-name {
     color: #6791e0;
 }
 
+.fastn-theme-dark .token.inserted-sign,
 .fastn-theme-dark .token.section-caption {
     color: #2fb170;
 }
@@ -96,6 +98,7 @@ pre[class*=language-].fastn-theme-dark {
     color: #54b59e;
 }
 
+.fastn-theme-dark .token.deleted-sign,
 .fastn-theme-dark .token.header-name {
     color: #c973d9;
 }
@@ -104,12 +107,14 @@ pre[class*=language-].fastn-theme-dark {
     color: #9871ff;
 }
 
+.fastn-theme-dark .token.coord,
 .fastn-theme-dark .token.header-value {
     color: #d5d7e2;
 }
 
 /* END ----------------------------------------------------------------- */
 
+.fastn-theme-dark .token.unchanged,
 .fastn-theme-dark .token.comment,
 .fastn-theme-dark .token.prolog,
 .fastn-theme-dark .token.doctype,

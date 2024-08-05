@@ -82,10 +82,11 @@ pub fn prism_js() -> String {
     let prism_sql = include_str!("../prism/prism-sql.js");
     let prism_bash = include_str!("../prism/prism-bash.js");
     let prism_javascript = include_str!("../prism/prism-javascript.js");
+    let prism_diff = include_str!("../prism/prism-diff.js");
 
     format!(
         "{prism}{prism_line_highlight}{prism_line_numbers}{prism_rust}{prism_json}{prism_python\
-        }{prism_markdown}{prism_sql}{prism_bash}{prism_javascript}"
+        }{prism_markdown}{prism_sql}{prism_bash}{prism_javascript}{prism_diff}"
     )
 }
 
