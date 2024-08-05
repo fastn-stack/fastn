@@ -1,6 +1,0 @@
--- import: fastn
-
--- fastn.package: fifthtry.github.io/amitu
-download-base-url: github.com/fifthtry/amitu/archive/refs/heads/main.zip
-
--- fastn.ignore: code/*

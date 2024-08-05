@@ -1,5 +1,0 @@
--- import: fastn
-
--- fastn.package: fastn-community.github.io/business-card-demo
-
--- fastn.dependency: fastn-community.github.io/business-card

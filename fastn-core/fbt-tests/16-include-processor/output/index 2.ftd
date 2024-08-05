@@ -1,7 +1,0 @@
--- import: fastn/processors as pr
-
--- string document-id:
-$processor$: pr.document-id
-
-
--- ftd.text: $document-id
