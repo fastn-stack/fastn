@@ -1,0 +1,172 @@
+/*
+Name:   Duotone Light
+Author: Simurai, adapted from DuoTone themes for Atom (http://simurai.com/projects/2016/01/01/duotone-themes)
+
+Conversion: Bram de Haan (http://atelierbram.github.io/Base2Tone-prism/output/prism/prism-base2tone-morning-light.css)
+Generated with Base16 Builder (https://github.com/base16-builder/base16-builder)
+*/
+
+code[class*="language-"].duotone-theme-light,
+pre[class*="language-"].duotone-theme-light {
+	font-family: Consolas, Menlo, Monaco, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", "Courier New", Courier, monospace;
+	font-size: 14px;
+	line-height: 1.375;
+	direction: ltr;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+	background: #faf8f5;
+	color: #728fcb;
+}
+
+pre > code[class*="language-"].duotone-theme-light {
+	font-size: 1em;
+}
+
+pre[class*="language-"].duotone-theme-light::-moz-selection, pre[class*="language-"].duotone-theme-light ::-moz-selection,
+code[class*="language-"].duotone-theme-light::-moz-selection, code[class*="language-"].duotone-theme-light ::-moz-selection {
+	text-shadow: none;
+	background: #faf8f5;
+}
+
+pre[class*="language-"].duotone-theme-light::selection, pre[class*="language-"].duotone-theme-light ::selection,
+code[class*="language-"].duotone-theme-light::selection, code[class*="language-"].duotone-theme-light ::selection {
+	text-shadow: none;
+	background: #faf8f5;
+}
+
+/* Code blocks */
+pre[class*="language-"].duotone-theme-light {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"].duotone-theme-light {
+	padding: .1em;
+	border-radius: .3em;
+}
+
+.duotone-theme-light .token.comment,
+.duotone-theme-light .token.prolog,
+.duotone-theme-light .token.doctype,
+.duotone-theme-light .token.cdata {
+	color: #b6ad9a;
+}
+
+.duotone-theme-light .token.punctuation {
+	color: #b6ad9a;
+}
+
+.duotone-theme-light .token.namespace {
+	opacity: .7;
+}
+
+.duotone-theme-light .token.tag,
+.duotone-theme-light .token.operator,
+.duotone-theme-light .token.number {
+	color: #063289;
+}
+
+.duotone-theme-light .token.property,
+.duotone-theme-light .token.function {
+	color: #b29762;
+}
+
+.duotone-theme-light .token.tag-id,
+.duotone-theme-light .token.selector,
+.duotone-theme-light .token.atrule-id {
+	color: #2d2006;
+}
+
+code.language-javascript,
+.duotone-theme-light .token.attr-name {
+	color: #896724;
+}
+
+code.language-css,
+code.language-scss,
+.duotone-theme-light .token.boolean,
+.duotone-theme-light .token.string,
+.duotone-theme-light .token.entity,
+.duotone-theme-light .token.url,
+.language-css .duotone-theme-light .token.string,
+.language-scss .duotone-theme-light .token.string,
+.style .duotone-theme-light .token.string,
+.duotone-theme-light .token.attr-value,
+.duotone-theme-light .token.keyword,
+.duotone-theme-light .token.control,
+.duotone-theme-light .token.directive,
+.duotone-theme-light .token.unit,
+.duotone-theme-light .token.statement,
+.duotone-theme-light .token.regex,
+.duotone-theme-light .token.atrule {
+	color: #728fcb;
+}
+
+.duotone-theme-light .token.placeholder,
+.duotone-theme-light .token.variable {
+	color: #93abdc;
+}
+
+.duotone-theme-light .token.deleted {
+	text-decoration: line-through;
+}
+
+.duotone-theme-light .token.inserted {
+	border-bottom: 1px dotted #2d2006;
+	text-decoration: none;
+}
+
+.duotone-theme-light .token.italic {
+	font-style: italic;
+}
+
+.duotone-theme-light .token.important,
+.duotone-theme-light .token.bold {
+	font-weight: bold;
+}
+
+.duotone-theme-light .token.important {
+	color: #896724;
+}
+
+.duotone-theme-light .token.entity {
+	cursor: help;
+}
+
+pre > code.highlight {
+	outline: .4em solid #896724;
+	outline-offset: .4em;
+}
+
+/* overrides color-values for the Line Numbers plugin
+ * http://prismjs.com/plugins/line-numbers/
+ */
+.line-numbers.line-numbers .line-numbers-rows {
+	border-right-color: #ece8de;
+}
+
+.line-numbers .line-numbers-rows > span:before {
+	color: #cdc4b1;
+}
+
+/* overrides color-values for the Line Highlight plugin
+ * http://prismjs.com/plugins/line-highlight/
+ */
+.line-highlight.line-highlight {
+	background: rgba(45, 32, 6, 0.2);
+	background: -webkit-linear-gradient(left, rgba(45, 32, 6, 0.2) 70%, rgba(45, 32, 6, 0));
+	background: linear-gradient(to right, rgba(45, 32, 6, 0.2) 70%, rgba(45, 32, 6, 0));
+}

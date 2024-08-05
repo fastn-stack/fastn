@@ -1,0 +1,122 @@
+/**
+ * Dracula Theme originally by Zeno Rocha [@zenorocha]
+ * https://draculatheme.com/
+ *
+ * Ported for PrismJS by Albert Vallverdu [@byverdu]
+ */
+
+code[class*="language-"].dracula-theme,
+pre[class*="language-"].dracula-theme {
+	color: #f8f8f2;
+	background: none;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"].dracula-theme {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+	border-radius: 0.3em;
+}
+
+:not(pre) > code[class*="language-"].dracula-theme,
+pre[class*="language-"].dracula-theme {
+	background: #282a36;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"].dracula-theme {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.dracula-theme .token.comment,
+.dracula-theme .token.prolog,
+.dracula-theme .token.doctype,
+.dracula-theme .token.cdata {
+	color: #6272a4;
+}
+
+.dracula-theme .token.punctuation {
+	color: #f8f8f2;
+}
+
+.namespace {
+	opacity: .7;
+}
+
+.dracula-theme .token.property,
+.dracula-theme .token.tag,
+.dracula-theme .token.constant,
+.dracula-theme .token.symbol,
+.dracula-theme .token.deleted {
+	color: #ff79c6;
+}
+
+.dracula-theme .token.boolean,
+.dracula-theme .token.number {
+	color: #bd93f9;
+}
+
+.dracula-theme .token.selector,
+.dracula-theme .token.attr-name,
+.dracula-theme .token.string,
+.dracula-theme .token.char,
+.dracula-theme .token.builtin,
+.dracula-theme .token.inserted {
+	color: #50fa7b;
+}
+
+.dracula-theme .token.operator,
+.dracula-theme .token.entity,
+.dracula-theme .token.url,
+.language-css .dracula-theme .token.string,
+.style .dracula-theme .token.string,
+.dracula-theme .token.variable {
+	color: #f8f8f2;
+}
+
+.dracula-theme .token.atrule,
+.dracula-theme .token.attr-value,
+.dracula-theme .token.function,
+.dracula-theme .token.class-name {
+	color: #f1fa8c;
+}
+
+.dracula-theme .token.keyword {
+	color: #8be9fd;
+}
+
+.dracula-theme .token.regex,
+.dracula-theme .token.important {
+	color: #ffb86c;
+}
+
+.dracula-theme .token.important,
+.dracula-theme .token.bold {
+	font-weight: bold;
+}
+
+.dracula-theme .token.italic {
+	font-style: italic;
+}
+
+.dracula-theme .token.entity {
+	cursor: help;
+}

@@ -1,0 +1,59 @@
+-- ftd.document: My title
+title if { !flag }: MY TITLE
+og-title if { !flag }: MY OG TITLE
+description: MY DESCRIPTION
+og-description if { !flag }: MY OG DESCRIPTION
+og-image: $image.light
+og-image if { !flag }: https://www.fifthtry.com/-/fifthtry.com/assets/images/logo-fifthtry.svg
+
+-- ftd.text: Click me and document title changes
+$on-click$: $ftd.toggle($a = $flag)
+
+-- ftd.text: hello
+
+-- ftd.text: Hello World
+region: h2
+role: $rtype
+
+
+-- ftd.text: hello_h1
+region: h1
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- ftd.text: hello_h0
+region: h3
+role: $dtype
+
+-- end: ftd.document
+
+
+
+
+
+-- ftd.type dtype:
+size.px: 40
+weight: 700
+font-family: cursive
+line-height.px: 65
+letter-spacing.px: 5
+
+-- ftd.type mtype:
+size.px: 20
+weight: 100
+font-family: fantasy
+line-height.px: 35
+letter-spacing.px: 3
+
+-- ftd.responsive-type rtype:
+desktop: $dtype
+mobile: $mtype
+
+
+-- boolean $flag: true
+
+
+
+-- ftd.image-src image:
+light: https://fastn.io/-/fastn.io/images/fastn.svg
+dark: https://fastn.io/-/fastn.io/images/fastn-dark.svg

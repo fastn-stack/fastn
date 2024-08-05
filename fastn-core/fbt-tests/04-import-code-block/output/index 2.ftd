@@ -1,0 +1,10 @@
+-- import: amitu/lib
+
+-- lib.block:
+
+-- ftd.text:
+
+Heading 1 content
+
+
+-- end: lib.block

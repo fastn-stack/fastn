@@ -1,0 +1,16 @@
+{
+  "files": {
+    "FASTN.ftd": {
+      "name": "FASTN.ftd",
+      "checksum": "8D4DC11CEB797682F5F42D9A78914F5DCE7D3507140E7512324853A5C7A9DF26",
+      "size": 159
+    },
+    "index.ftd": {
+      "name": "index.ftd",
+      "checksum": "183B5044A9F279E0528AF9F6350DEA569C6144508724BD65647202421008A0B7",
+      "size": 114
+    }
+  },
+  "zip_url": "https://codeload.github.com/fifthtry/amitu/zip/refs/heads/main",
+  "checksum": "244DAC4CE224EDDAB04EF29997ADFE563D76B826A7EAF2A858EE152309BC549B"
+}
