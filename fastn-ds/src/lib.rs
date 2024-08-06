@@ -6,8 +6,10 @@ extern crate self as fastn_ds;
 mod create_pool;
 pub mod http;
 pub mod reqwest_util;
+mod user_data;
 mod utils;
 pub mod wasm;
+pub use user_data::UserDataError;
 
 pub use create_pool::create_pool;
 
