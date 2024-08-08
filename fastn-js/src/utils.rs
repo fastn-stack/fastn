@@ -117,7 +117,7 @@ pub fn name_to_js_(s: &str) -> String {
         .replace(',', "$")
         .replace("\\\\", "/")
         .replace('\\', "/")
-        .replace(['/', '.'], "_")
+        .replace(['/', '.', '~'], "_")
 }
 
 pub fn trim_brackets(s: &str) -> String {

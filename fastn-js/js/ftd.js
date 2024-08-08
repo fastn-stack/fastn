@@ -394,7 +394,8 @@ const ftd = (function () {
             .replaceAll(",", "$")
             .replaceAll("\\", "/")
             .replaceAll("/", "_")
-            .replaceAll(".", "_");
+            .replaceAll(".", "_")
+            .replaceAll("~", "_");
     }
 
     function getDocNameAndRemaining(s) {
