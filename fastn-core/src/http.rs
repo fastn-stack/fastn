@@ -85,8 +85,8 @@ pub fn redirect_with_code(url: String, code: u16) -> fastn_core::http::Response 
             actix_web::HttpResponse::PermanentRedirect()
         }
     }
-        .insert_header(("LOCATION", url))
-        .finish()
+    .insert_header(("LOCATION", url))
+    .finish()
 }
 
 pub fn ok_with_content_type(
@@ -410,8 +410,6 @@ pub async fn http_post_with_cookie(
     pub use fastn_ds::RequestType;
 
     let cookies = req_config.request.cookies().clone();
-    println!("http_post_with_cookie url: {url}, package: {}, path: {}", req_config.config.package.name, req_config.request.path);
-
     let mut http_request = fastn_core::http::Request::default();
     http_request.set_method("post");
     http_request.set_cookies(&cookies);
