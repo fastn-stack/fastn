@@ -8,6 +8,8 @@ impl fastn_core::Package {
     ) -> fastn_core::Result<Vec<u8>> {
         let package_root = self.package_root_with_default(package_root)?;
 
+        println!("fs_fetch_by_file_name:: package_root: {:?}", package_root);
+
         let file_path = package_root.join(name.trim_start_matches('/'));
         // Issue 1: Need to remove / from the start of the name
         match ds.read_content(&file_path, session_id).await {
