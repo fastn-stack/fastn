@@ -29,6 +29,8 @@ impl fastn_core::Package {
         if let Some(package_root) = package_root {
             Ok(package_root.to_owned())
         } else {
+            println!("package_root_with_default:: self.fastn_path: {:?}", self.fastn_path);
+            println!("package_root_with_default:: self: {:?}", self);
             match self.fastn_path.as_ref() {
                 Some(path) if path.parent().is_some() => Ok(path.parent().unwrap()),
                 _ => {
