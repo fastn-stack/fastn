@@ -1,4 +1,6 @@
 pub const SESSION_COOKIE_NAME: &str = "fastn-sid";
+pub const X_FASTN_REQUEST_PATH: &str = "x-fastn-request-path";
+pub const X_FASTN_ROOT: &str = "x-fastn-root";
 
 #[macro_export]
 macro_rules! server_error {
@@ -267,6 +269,18 @@ impl Request {
         Ok(Some(serde_json::from_slice(&self.body)?))
     }
 
+    pub fn x_fastn_request_path(&self) -> Option<String> {
+        self.headers
+            .get(X_FASTN_REQUEST_PATH)
+            .and_then(|v| v.to_str().map(|v| v.to_string()).ok())
+    }
+
+    pub fn x_fastn_root(&self) -> Option<String> {
+        self.headers
+            .get(X_FASTN_ROOT)
+            .and_then(|v| v.to_str().map(|v| v.to_string()).ok())
+    }
+
     pub fn content_type(&self) -> Option<mime_guess::Mime> {
         self.headers
             .get(actix_web::http::header::CONTENT_TYPE.as_str())
@@ -325,6 +339,20 @@ impl Request {
         }
     }
 
+    pub fn set_x_fastn_request_path(&mut self, value: &str) {
+        self.headers.insert(
+            reqwest::header::HeaderName::from_bytes(X_FASTN_REQUEST_PATH.as_bytes()).unwrap(),
+            reqwest::header::HeaderValue::from_str(value).unwrap(),
+        );
+    }
+
+    pub fn set_x_fastn_root(&mut self, value: &str) {
+        self.headers.insert(
+            reqwest::header::HeaderName::from_bytes(X_FASTN_ROOT.as_bytes()).unwrap(),
+            reqwest::header::HeaderValue::from_str(value).unwrap(),
+        );
+    }
+
     pub fn set_method(&mut self, method: &str) {
         self.method = method.to_uppercase();
     }
@@ -368,20 +396,14 @@ pub async fn http_post_with_cookie(
     pub use fastn_ds::RequestType;
 
     let cookies = req_config.request.cookies().clone();
-    let mut req_headers = reqwest::header::HeaderMap::new();
-    for (key, value) in headers.iter() {
-        req_headers.insert(
-            reqwest::header::HeaderName::from_bytes(key.as_bytes()).unwrap(),
-            reqwest::header::HeaderValue::from_str(value.as_str()).unwrap(),
-        );
-    }
-
     let mut http_request = fastn_core::http::Request::default();
     http_request.set_method("post");
     http_request.set_cookies(&cookies);
     http_request.set_headers(headers);
     http_request.set_ip(req_config.request.ip.clone());
     http_request.set_body(actix_web::web::Bytes::copy_from_slice(body.as_bytes()));
+    http_request.set_x_fastn_request_path(req_config.request.path.as_str());
+    http_request.set_x_fastn_root(req_config.config.ds.root_str().as_str());
 
     let http_url = url::Url::parse(url).map_err(|e| fastn_core::Error::DSHttpError(e.into()))?;
     let res = req_config
@@ -446,18 +468,12 @@ pub async fn http_get_with_cookie(
         ));
     }
 
-    let mut req_headers = reqwest::header::HeaderMap::new();
-    for (key, value) in headers.iter() {
-        req_headers.insert(
-            reqwest::header::HeaderName::from_bytes(key.as_bytes()).unwrap(),
-            reqwest::header::HeaderValue::from_str(value.as_str()).unwrap(),
-        );
-    }
-
     let mut http_request = fastn_core::http::Request::default();
     http_request.set_method("get");
     http_request.set_cookies(req.cookies());
     http_request.set_headers(headers);
+    http_request.set_x_fastn_request_path(req.path.as_str());
+    http_request.set_x_fastn_root(ds.root_str().as_str());
     http_request.set_ip(req.ip.clone());
     let http_url = url::Url::parse(url).map_err(|e| fastn_core::Error::DSHttpError(e.into()))?;
     let res = ds

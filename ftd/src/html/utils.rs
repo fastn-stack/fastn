@@ -40,7 +40,7 @@ pub(crate) fn function_name_to_js_function(s: &str) -> String {
         .replace(',', "$")
         .replace("\\\\", "/")
         .replace('\\', "/")
-        .replace(['/', '.'], "_")
+        .replace(['/', '.', '~'], "_")
 }
 
 pub(crate) fn js_reference_name(s: &str) -> String {

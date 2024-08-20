@@ -320,6 +320,11 @@ impl DocumentStore {
         fastn_ds::Path { path: home() }
     }
 
+    /// This value is sent by http processor as the value to the request header `x-fastn-root`
+    pub fn root_str(&self) -> String {
+        self.root.path.as_str().to_string()
+    }
+
     pub async fn read_content(
         &self,
         path: &fastn_ds::Path,
