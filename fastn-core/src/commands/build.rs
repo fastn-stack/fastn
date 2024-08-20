@@ -1,4 +1,5 @@
 // #[tracing::instrument(skip(config))]
+#[allow(clippy::too_many_arguments)]
 pub async fn build(
     config: &fastn_core::Config,
     only_id: Option<&str>,
@@ -27,10 +28,27 @@ pub async fn build(
 
         match only_id {
             Some(id) => {
-                return handle_only_id(id, config, base_url, ignore_failed, test, documents, preview_session_id).await;
+                return handle_only_id(
+                    id,
+                    config,
+                    base_url,
+                    ignore_failed,
+                    test,
+                    documents,
+                    preview_session_id,
+                )
+                .await;
             }
             None => {
-                incremental_build(config, &documents, base_url, ignore_failed, test, preview_session_id).await?;
+                incremental_build(
+                    config,
+                    &documents,
+                    base_url,
+                    ignore_failed,
+                    test,
+                    preview_session_id,
+                )
+                .await?;
             }
         }
     }
@@ -467,7 +485,17 @@ async fn handle_only_id(
 ) -> fastn_core::Result<()> {
     for doc in documents.values() {
         if doc.get_id().eq(id) || doc.get_id_with_package().eq(id) {
-            return handle_file(doc, config, base_url, ignore_failed, test, false, None, preview_session_id).await;
+            return handle_file(
+                doc,
+                config,
+                base_url,
+                ignore_failed,
+                test,
+                false,
+                None,
+                preview_session_id,
+            )
+            .await;
         }
     }
 
@@ -478,6 +506,7 @@ async fn handle_only_id(
     )))
 }
 
+#[allow(clippy::too_many_arguments)]
 async fn handle_file(
     document: &fastn_core::File,
     config: &fastn_core::Config,
@@ -608,6 +637,7 @@ fn remove_extension(id: &str) -> String {
 }
 
 #[tracing::instrument(skip(document, config, cache))]
+#[allow(clippy::too_many_arguments)]
 async fn handle_file_(
     document: &fastn_core::File,
     config: &fastn_core::Config,
