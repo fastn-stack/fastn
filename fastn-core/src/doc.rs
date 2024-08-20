@@ -436,7 +436,7 @@ pub async fn resolve_foreign_variable2022(
                             dark_path.as_str(),
                             None,
                             &lib.config.ds,
-                            &lib.session_id(),
+                            &lib.preview_session_id(),
                         )
                         .await
                     {

@@ -35,7 +35,7 @@ async fn serve_file(
     }
 
     let f = match config
-        .get_file_and_package_by_id(path.as_str(), &config.session_id())
+        .get_file_and_package_by_id(path.as_str(), &config.preview_session_id())
         .await
     {
         Ok(f) => f,
@@ -159,7 +159,7 @@ pub async fn serve(
         return Ok((clear_sid2(&req), false));
     }
 
-    if let Some(endpoint_response) = handle_endpoints(config, &req, &req_config.session_id()).await
+    if let Some(endpoint_response) = handle_endpoints(config, &req, &req_config.preview_session_id()).await
     {
         return endpoint_response.map(|r| (r, false));
     }
@@ -183,7 +183,7 @@ pub async fn serve(
             req.path(),
             config.package.name.as_str(),
             &config.ds,
-            &req_config.session_id(),
+            &req_config.preview_session_id(),
         )
         .await
         .map(|r| (r, true));

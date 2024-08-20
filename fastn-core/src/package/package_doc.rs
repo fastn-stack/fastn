@@ -426,7 +426,7 @@ pub(crate) async fn read_ftd_2022(
         main.id_to_path().as_str(),
         font_style.as_str(),
         base_url,
-        &config.session_id(),
+        &config.preview_session_id(),
     )
     .await;
 
@@ -510,7 +510,7 @@ pub(crate) async fn read_ftd_2023(
             ftd::ftd_js_css(),
             base_url,
             c,
-            &config.session_id(),
+            &config.preview_session_id(),
         )
         .await
     };

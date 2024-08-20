@@ -138,7 +138,7 @@ pub async fn process(
                 url.to_string(),
                 &req_config.request,
                 mountpoint,
-                &req_config.session_id(),
+                &req_config.preview_session_id(),
             )
             .await
         {

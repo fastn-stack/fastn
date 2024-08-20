@@ -378,20 +378,6 @@ impl Request {
             None => true,
         }
     }
-
-    pub fn session_id(&self) -> Option<String> {
-        // Note: Besides checking `fastn-sid` cookie, we also check `X-FASTN-ACTOR` header because
-        // Cookies are only accessible in a browser context. It is easier to read the session ID (if
-        // available) from a custom HTTP header in scenarios such as rendering a document inside an iframe.
-        match self.headers().get("X-FASTN-ACTOR") {
-            Some(v) => Some(
-                v.to_str()
-                    .expect("X-FASTN-ACTOR is a valid ascii string (uuid)")
-                    .to_string(),
-            ),
-            None => self.cookie(fastn_core::http::SESSION_COOKIE_NAME),
-        }
-    }
 }
 
 pub(crate) fn url_regex() -> regex::Regex {
