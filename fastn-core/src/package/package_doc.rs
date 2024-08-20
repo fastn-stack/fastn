@@ -345,7 +345,16 @@ pub async fn read_ftd(
     test: bool,
     preview_session_id: &Option<String>,
 ) -> fastn_core::Result<FTDResult> {
-    read_ftd_(config, main, base_url, download_assets, test, false, preview_session_id).await
+    read_ftd_(
+        config,
+        main,
+        base_url,
+        download_assets,
+        test,
+        false,
+        preview_session_id,
+    )
+    .await
 }
 
 #[tracing::instrument(skip_all)]
@@ -361,10 +370,26 @@ pub(crate) async fn read_ftd_(
     tracing::info!(document = main.id);
     match config.config.ftd_edition {
         fastn_core::FTDEdition::FTD2022 => {
-            read_ftd_2022(config, main, base_url, download_assets, test, preview_session_id).await
+            read_ftd_2022(
+                config,
+                main,
+                base_url,
+                download_assets,
+                test,
+                preview_session_id,
+            )
+            .await
         }
         fastn_core::FTDEdition::FTD2023 => {
-            read_ftd_2023(config, main, base_url, download_assets, only_js, preview_session_id).await
+            read_ftd_2023(
+                config,
+                main,
+                base_url,
+                download_assets,
+                only_js,
+                preview_session_id,
+            )
+            .await
         }
     }
 }
@@ -534,7 +559,15 @@ pub(crate) async fn process_ftd(
     preview_session_id: &Option<String>,
 ) -> fastn_core::Result<FTDResult> {
     let build_dir = config.config.build_dir();
-    let response = read_ftd(config, main, base_url, build_static_files, test, preview_session_id).await?;
+    let response = read_ftd(
+        config,
+        main,
+        base_url,
+        build_static_files,
+        test,
+        preview_session_id,
+    )
+    .await?;
     fastn_core::utils::overwrite(&build_dir, file_path, &response.html(), &config.config.ds)
         .await?;
 

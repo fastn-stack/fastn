@@ -162,8 +162,7 @@ pub async fn serve(
         return Ok((clear_sid2(&req), false));
     }
 
-    if let Some(endpoint_response) = handle_endpoints(config, &req, preview_session_id).await
-    {
+    if let Some(endpoint_response) = handle_endpoints(config, &req, preview_session_id).await {
         return endpoint_response.map(|r| (r, false));
     }
 
@@ -186,7 +185,7 @@ pub async fn serve(
             req.path(),
             config.package.name.as_str(),
             &config.ds,
-            &preview_session_id,
+            preview_session_id,
         )
         .await
         .map(|r| (r, true));
@@ -254,7 +253,8 @@ pub async fn serve_helper(
             }
         }
 
-        let file_response = serve_file(req_config, path.as_path(), only_js, preview_session_id).await;
+        let file_response =
+            serve_file(req_config, path.as_path(), only_js, preview_session_id).await;
 
         tracing::info!(
             "before executing proxy: file-status: {}, path: {}",
@@ -578,7 +578,9 @@ async fn actual_route(
     tracing::info!(method = req.method().as_str(), uri = req.path());
     let req = fastn_core::http::Request::from_actix(req, body);
 
-    serve(config, req, false, preview_session_id).await.map(|(r, _)| r)
+    serve(config, req, false, preview_session_id)
+        .await
+        .map(|(r, _)| r)
 }
 
 #[tracing::instrument(skip_all)]
