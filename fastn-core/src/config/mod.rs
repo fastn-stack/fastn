@@ -240,8 +240,14 @@ impl RequestConfig {
         }
     }
 
+    // Authenticated user's session id
     pub(crate) fn session_id(&self) -> Option<String> {
-        self.request.session_id()
+        self.request.cookie(fastn_core::http::SESSION_COOKIE_NAME)
+    }
+
+    /// session id associated with a preview request. Should **not** be used for any other purpose.
+    pub(crate) fn preview_session_id(&self) -> Option<String> {
+        self.request.cookie("fastn-preview")
     }
 }
 
