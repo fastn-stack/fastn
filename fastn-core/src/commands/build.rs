@@ -7,6 +7,7 @@ pub async fn build(
     test: bool,
     check_build: bool,
     zip_url: Option<&str>,
+    preview_session_id: &Option<String>,
 ) -> fastn_core::Result<()> {
     let build_dir = config.ds.root().join(".build");
     // Default css and js
@@ -26,10 +27,10 @@ pub async fn build(
 
         match only_id {
             Some(id) => {
-                return handle_only_id(id, config, base_url, ignore_failed, test, documents).await;
+                return handle_only_id(id, config, base_url, ignore_failed, test, documents, preview_session_id).await;
             }
             None => {
-                incremental_build(config, &documents, base_url, ignore_failed, test).await?;
+                incremental_build(config, &documents, base_url, ignore_failed, test, preview_session_id).await?;
             }
         }
     }
@@ -212,6 +213,7 @@ async fn handle_dependency_file(
     test: bool,
     name_without_package_name: String,
     processed: &mut Vec<String>,
+    preview_session_id: &Option<String>,
 ) -> fastn_core::Result<()> {
     for document in documents.values() {
         if remove_extension(document.get_id()).eq(name_without_package_name.as_str())
@@ -230,6 +232,7 @@ async fn handle_dependency_file(
                 test,
                 true,
                 Some(cache),
+                preview_session_id,
             )
             .await?;
             processed.push(id);
@@ -298,6 +301,7 @@ async fn incremental_build(
     base_url: &str,
     ignore_failed: bool,
     test: bool,
+    preview_session_id: &Option<String>,
 ) -> fastn_core::Result<()> {
     // https://fastn.com/rfc/incremental-build/
     use itertools::Itertools;
@@ -322,6 +326,7 @@ async fn incremental_build(
                     test,
                     true,
                     Some(&mut c),
+                    preview_session_id,
                 )
                 .await?;
                 continue;
@@ -372,6 +377,7 @@ async fn incremental_build(
                         test,
                         unresolved_dependency.to_string(),
                         &mut processed,
+                        preview_session_id,
                     )
                     .await?;
 
@@ -404,6 +410,7 @@ async fn incremental_build(
                         test,
                         unresolved_dependency.to_string(),
                         &mut processed,
+                        preview_session_id,
                     )
                     .await?;
 
@@ -436,6 +443,7 @@ async fn incremental_build(
                 test,
                 true,
                 Some(&mut c),
+                preview_session_id,
             )
             .await?;
             processed.push(id);
@@ -455,10 +463,11 @@ async fn handle_only_id(
     ignore_failed: bool,
     test: bool,
     documents: std::collections::BTreeMap<String, fastn_core::File>,
+    preview_session_id: &Option<String>,
 ) -> fastn_core::Result<()> {
     for doc in documents.values() {
         if doc.get_id().eq(id) || doc.get_id_with_package().eq(id) {
-            return handle_file(doc, config, base_url, ignore_failed, test, false, None).await;
+            return handle_file(doc, config, base_url, ignore_failed, test, false, None, preview_session_id).await;
         }
     }
 
@@ -477,6 +486,7 @@ async fn handle_file(
     test: bool,
     build_static_files: bool,
     cache: Option<&mut cache::Cache>,
+    preview_session_id: &Option<String>,
 ) -> fastn_core::Result<()> {
     let start = std::time::Instant::now();
     print!("Processing {} ... ", document.get_id_with_package());
@@ -489,6 +499,7 @@ async fn handle_file(
         test,
         build_static_files,
         cache,
+        preview_session_id,
     )
     .await;
     if process_status.is_ok() {
@@ -605,6 +616,7 @@ async fn handle_file_(
     test: bool,
     build_static_files: bool,
     cache: Option<&mut cache::Cache>,
+    preview_session_id: &Option<String>,
 ) -> fastn_core::Result<()> {
     match document {
         fastn_core::File::Ftd(doc) => {
@@ -646,6 +658,7 @@ async fn handle_file_(
                     build_static_files,
                     test,
                     file_path.as_str(),
+                    preview_session_id,
                 )
                 .await
             };

@@ -18,6 +18,7 @@ async fn serve_file(
     config: &mut fastn_core::RequestConfig,
     path: &camino::Utf8Path,
     only_js: bool,
+    preview_session_id: &Option<String>,
 ) -> fastn_core::http::Response {
     if let Err(e) = config
         .config
@@ -35,7 +36,7 @@ async fn serve_file(
     }
 
     let f = match config
-        .get_file_and_package_by_id(path.as_str(), &config.preview_session_id())
+        .get_file_and_package_by_id(path.as_str(), preview_session_id)
         .await
     {
         Ok(f) => f,
@@ -71,6 +72,7 @@ async fn serve_file(
         false,
         false,
         only_js,
+        preview_session_id,
     )
     .await
     {
@@ -152,6 +154,7 @@ pub async fn serve(
     config: &fastn_core::Config,
     req: fastn_core::http::Request,
     only_js: bool,
+    preview_session_id: &Option<String>,
 ) -> fastn_core::Result<(fastn_core::http::Response, bool)> {
     let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
 
@@ -159,7 +162,7 @@ pub async fn serve(
         return Ok((clear_sid2(&req), false));
     }
 
-    if let Some(endpoint_response) = handle_endpoints(config, &req, &req_config.preview_session_id()).await
+    if let Some(endpoint_response) = handle_endpoints(config, &req, preview_session_id).await
     {
         return endpoint_response.map(|r| (r, false));
     }
@@ -183,13 +186,13 @@ pub async fn serve(
             req.path(),
             config.package.name.as_str(),
             &config.ds,
-            &req_config.preview_session_id(),
+            &preview_session_id,
         )
         .await
         .map(|r| (r, true));
     }
 
-    serve_helper(&mut req_config, only_js, path)
+    serve_helper(&mut req_config, only_js, path, preview_session_id)
         .await
         .map(|r| (r, req_config.response_is_cacheable))
 }
@@ -199,9 +202,10 @@ pub async fn serve_helper(
     req_config: &mut fastn_core::RequestConfig,
     only_js: bool,
     path: camino::Utf8PathBuf,
+    preview_session_id: &Option<String>,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     let mut resp = if req_config.request.path() == "/" {
-        serve_file(req_config, &path.join("/"), only_js).await
+        serve_file(req_config, &path.join("/"), only_js, preview_session_id).await
     } else {
         // url is present in config or not
         // If not present than proxy pass it
@@ -250,7 +254,7 @@ pub async fn serve_helper(
             }
         }
 
-        let file_response = serve_file(req_config, path.as_path(), only_js).await;
+        let file_response = serve_file(req_config, path.as_path(), only_js, preview_session_id).await;
 
         tracing::info!(
             "before executing proxy: file-status: {}, path: {}",
@@ -569,11 +573,12 @@ async fn actual_route(
     config: &fastn_core::Config,
     req: actix_web::HttpRequest,
     body: actix_web::web::Bytes,
+    preview_session_id: &Option<String>,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     tracing::info!(method = req.method().as_str(), uri = req.path());
     let req = fastn_core::http::Request::from_actix(req, body);
 
-    serve(config, req, false).await.map(|(r, _)| r)
+    serve(config, req, false, preview_session_id).await.map(|(r, _)| r)
 }
 
 #[tracing::instrument(skip_all)]
@@ -582,7 +587,7 @@ async fn route(
     body: actix_web::web::Bytes,
     config: actix_web::web::Data<std::sync::Arc<fastn_core::Config>>,
 ) -> fastn_core::Result<fastn_core::http::Response> {
-    actual_route(&config, req, body).await
+    actual_route(&config, req, body, &None).await
 }
 
 #[allow(clippy::too_many_arguments)]

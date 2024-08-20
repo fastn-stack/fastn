@@ -343,8 +343,9 @@ pub async fn read_ftd(
     base_url: &str,
     download_assets: bool,
     test: bool,
+    preview_session_id: &Option<String>,
 ) -> fastn_core::Result<FTDResult> {
-    read_ftd_(config, main, base_url, download_assets, test, false).await
+    read_ftd_(config, main, base_url, download_assets, test, false, preview_session_id).await
 }
 
 #[tracing::instrument(skip_all)]
@@ -355,14 +356,15 @@ pub(crate) async fn read_ftd_(
     download_assets: bool,
     test: bool,
     only_js: bool,
+    preview_session_id: &Option<String>,
 ) -> fastn_core::Result<FTDResult> {
     tracing::info!(document = main.id);
     match config.config.ftd_edition {
         fastn_core::FTDEdition::FTD2022 => {
-            read_ftd_2022(config, main, base_url, download_assets, test).await
+            read_ftd_2022(config, main, base_url, download_assets, test, preview_session_id).await
         }
         fastn_core::FTDEdition::FTD2023 => {
-            read_ftd_2023(config, main, base_url, download_assets, only_js).await
+            read_ftd_2023(config, main, base_url, download_assets, only_js, preview_session_id).await
         }
     }
 }
@@ -374,6 +376,7 @@ pub(crate) async fn read_ftd_2022(
     base_url: &str,
     download_assets: bool,
     test: bool,
+    preview_session_id: &Option<String>,
 ) -> fastn_core::Result<FTDResult> {
     let font_style = config.config.get_font_style();
     let c = &config.config.clone();
@@ -399,6 +402,7 @@ pub(crate) async fn read_ftd_2022(
         base_url,
         download_assets,
         line_number,
+        preview_session_id,
     )
     .await
     {
@@ -426,7 +430,7 @@ pub(crate) async fn read_ftd_2022(
         main.id_to_path().as_str(),
         font_style.as_str(),
         base_url,
-        &config.preview_session_id(),
+        preview_session_id,
     )
     .await;
 
@@ -441,6 +445,7 @@ pub(crate) async fn read_ftd_2023(
     base_url: &str,
     download_assets: bool,
     only_js: bool,
+    preview_session_id: &Option<String>,
 ) -> fastn_core::Result<FTDResult> {
     let package_name = config.config.package.name.to_string();
     let c = &config.config.clone();
@@ -466,6 +471,7 @@ pub(crate) async fn read_ftd_2023(
         base_url,
         download_assets,
         line_number,
+        preview_session_id,
     )
     .await
     {
@@ -510,7 +516,7 @@ pub(crate) async fn read_ftd_2023(
             ftd::ftd_js_css(),
             base_url,
             c,
-            &config.preview_session_id(),
+            preview_session_id,
         )
         .await
     };
@@ -525,9 +531,10 @@ pub(crate) async fn process_ftd(
     build_static_files: bool,
     test: bool,
     file_path: &str,
+    preview_session_id: &Option<String>,
 ) -> fastn_core::Result<FTDResult> {
     let build_dir = config.config.build_dir();
-    let response = read_ftd(config, main, base_url, build_static_files, test).await?;
+    let response = read_ftd(config, main, base_url, build_static_files, test, preview_session_id).await?;
     fastn_core::utils::overwrite(&build_dir, file_path, &response.html(), &config.config.ds)
         .await?;
 

@@ -190,6 +190,7 @@ async fn read_only_instructions(
         base_url,
         false,
         0,
+        &None,
     )
     .await?;
 
@@ -220,6 +221,7 @@ async fn read_ftd_test_file(
         base_url,
         false,
         0,
+        &None,
     )
     .await?;
 
@@ -499,7 +501,7 @@ async fn get_post_response_for_id(
     log_message!(test_parameters.verbose, "Request details");
     log_variable!(test_parameters.verbose, &request);
 
-    let response = fastn_core::commands::serve::serve(config, request, true)
+    let response = fastn_core::commands::serve::serve(config, request, true, &None)
         .await?
         .0;
     update_cookies(saved_cookies, &response);
@@ -715,7 +717,7 @@ async fn get_js_for_id(
     log_message!(test_parameters.verbose, "Request details");
     log_variable!(test_parameters.verbose, &request);
 
-    let response = fastn_core::commands::serve::serve(config, request, true)
+    let response = fastn_core::commands::serve::serve(config, request, true, &None)
         .await?
         .0;
     update_cookies(saved_cookies, &response);
