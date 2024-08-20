@@ -33,6 +33,7 @@ pub async fn interpret_helper(
     base_url: &str,
     download_assets: bool,
     line_number: usize,
+    preview_session_id: &Option<String>,
 ) -> ftd::interpreter::Result<ftd::interpreter::Document> {
     let doc = cached_parse(name, source, line_number)?;
     let mut s = ftd::interpreter::interpret_with_line_number(name, doc)?;
@@ -108,6 +109,7 @@ pub async fn interpret_helper(
                     base_url,
                     download_assets,
                     caller_module.as_str(),
+                    preview_session_id,
                 )
                 .await?;
                 s = state.continue_after_variable(module.as_str(), variable.as_str(), value)?;
@@ -266,6 +268,7 @@ pub async fn resolve_foreign_variable2022(
     base_url: &str,
     download_assets: bool,
     caller_module: &str,
+    preview_session_id: &Option<String>,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let package = lib.get_current_package(caller_module)?;
     if let Ok(value) = resolve_ftd_foreign_variable_2022(variable, doc_name) {
@@ -284,6 +287,7 @@ pub async fn resolve_foreign_variable2022(
                 lib,
                 base_url,
                 download_assets,
+                preview_session_id,
             )
             .await
             {
@@ -302,6 +306,7 @@ pub async fn resolve_foreign_variable2022(
                     lib,
                     base_url,
                     download_assets,
+                    preview_session_id,
                 )
                 .await
                 {
@@ -320,6 +325,7 @@ pub async fn resolve_foreign_variable2022(
         lib: &mut fastn_core::RequestConfig,
         base_url: &str,
         download_assets: bool, // true: in case of `fastn build`
+        preview_session_id: &Option<String>,
     ) -> ftd::ftd2021::p1::Result<ftd::interpreter::Value> {
         lib.push_package_under_process(module, package, &lib.session_id())
             .await?;
@@ -436,7 +442,7 @@ pub async fn resolve_foreign_variable2022(
                             dark_path.as_str(),
                             None,
                             &lib.config.ds,
-                            &lib.preview_session_id(),
+                            preview_session_id,
                         )
                         .await
                     {

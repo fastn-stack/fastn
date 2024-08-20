@@ -166,6 +166,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
             matches.get_flag("test"),
             build.get_flag("check-build"),
             zip_url,
+            &None,
         )
         .await;
     }

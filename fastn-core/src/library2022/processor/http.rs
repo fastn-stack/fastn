@@ -138,7 +138,9 @@ pub async fn process(
                 url.to_string(),
                 &req_config.request,
                 mountpoint,
-                &req_config.preview_session_id(),
+                // FIXME: we don't know how to handle unsaved wasm files. Maybe there is no way
+                // that an unsaved .wasm file can exist and this is fine.
+                &None,
             )
             .await
         {
