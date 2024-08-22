@@ -3,6 +3,7 @@ pub async fn process(
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &mut fastn_core::RequestConfig,
+    preview_session_id: &Option<String>,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     // TODO: document key should be optional
 
@@ -20,7 +21,7 @@ pub async fn process(
         .unwrap_or_else(|| "ast".to_string());
 
     let file = req_config
-        .get_file_and_package_by_id(path.as_str(), &req_config.session_id())
+        .get_file_and_package_by_id(path.as_str(), preview_session_id)
         .await
         .map_err(|e| ftd::interpreter::Error::ParseError {
             message: format!("Cannot get path: {} {:?}", path.as_str(), e),
