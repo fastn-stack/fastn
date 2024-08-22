@@ -106,6 +106,7 @@ pub async fn document_name<'a>(
     _kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'a>,
     req_config: &fastn_core::RequestConfig,
+    preview_session_id: &Option<String>,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let doc_id = req_config.doc_id().unwrap_or_else(|| {
         doc.name
@@ -115,7 +116,7 @@ pub async fn document_name<'a>(
 
     let file_path = req_config
         .config
-        .get_file_path(&doc_id, &req_config.session_id())
+        .get_file_path(&doc_id, preview_session_id)
         .await
         .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
             message: e.to_string(),

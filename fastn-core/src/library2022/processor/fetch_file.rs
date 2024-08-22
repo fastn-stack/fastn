@@ -3,6 +3,7 @@ pub async fn fetch_files(
     kind: ftd::interpreter::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &fastn_core::RequestConfig,
+    preview_session_id: &Option<String>,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     if !kind.is_string() {
         return ftd::interpreter::utils::e2(
@@ -27,10 +28,7 @@ pub async fn fetch_files(
         text: req_config
             .config
             .ds
-            .read_to_string(
-                &req_config.config.ds.root().join(path),
-                &req_config.session_id(),
-            )
+            .read_to_string(&req_config.config.ds.root().join(path), preview_session_id)
             .await
             .map_err(|v| ftd::interpreter::Error::ParseError {
                 message: v.to_string(),

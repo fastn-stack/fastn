@@ -130,7 +130,7 @@ impl RequestConfig {
     pub async fn get_file_and_package_by_id(
         &mut self,
         path: &str,
-        session_id: &Option<String>,
+        preview_session_id: &Option<String>,
     ) -> fastn_core::Result<fastn_core::File> {
         // This function will return file and package by given path
         // path can be mounted(mount-point) with other dependencies
@@ -153,7 +153,7 @@ impl RequestConfig {
                         if package.name != self.config.package.name {
                             package1 = self
                                 .config
-                                .update_sitemap(package, &self.session_id())
+                                .update_sitemap(package, preview_session_id)
                                 .await?;
                             (new_path, &package1, remaining_path)
                         } else {
@@ -185,7 +185,7 @@ impl RequestConfig {
         if let Some(id) = document {
             let file_name = self
                 .config
-                .get_file_path_and_resolve(id.as_str(), session_id)
+                .get_file_path_and_resolve(id.as_str(), preview_session_id)
                 .await?;
             let package = self.config.find_package_by_id(id.as_str()).await?.1;
             let file = fastn_core::get_file(
@@ -193,7 +193,7 @@ impl RequestConfig {
                 package.name.to_string(),
                 &self.config.ds.root().join(file_name),
                 &self.config.get_root_for_package(&package),
-                &self.session_id(),
+                preview_session_id,
             )
             .await?;
             self.current_document = Some(path.to_string());
@@ -205,7 +205,7 @@ impl RequestConfig {
             // -/fifthtry.github.io/doc-site/add-todo/
             let file_name = self
                 .config
-                .get_file_path_and_resolve(path, session_id)
+                .get_file_path_and_resolve(path, preview_session_id)
                 .await?;
             // .packages/todos/add-todo.ftd
             // .packages/fifthtry.github.io/doc-site/add-todo.ftd
@@ -220,7 +220,7 @@ impl RequestConfig {
                     .root()
                     .join(file_name.trim_start_matches('/')),
                 &self.config.get_root_for_package(&package),
-                &self.session_id(),
+                preview_session_id,
             )
             .await?;
 

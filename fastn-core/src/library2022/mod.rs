@@ -247,6 +247,7 @@ impl Library2022 {
         ast: ftd_ast::Ast,
         processor: String,
         doc: &'a mut ftd::interpreter::TDoc<'a>,
+        preview_session_id: &Option<String>,
     ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
         tracing::info!(
             msg = "stuck-on-processor",
@@ -294,8 +295,12 @@ impl Library2022 {
             "current-url" => processor::document::current_url(self),
             "document-full-id" => processor::document::document_full_id(value, kind, doc, self),
             "document-suffix" => processor::document::document_suffix(value, kind, doc, self),
-            "document-name" => processor::document::document_name(value, kind, doc, self).await,
-            "fetch-file" => processor::fetch_file::fetch_files(value, kind, doc, self).await,
+            "document-name" => {
+                processor::document::document_name(value, kind, doc, self, preview_session_id).await
+            }
+            "fetch-file" => {
+                processor::fetch_file::fetch_files(value, kind, doc, self, preview_session_id).await
+            }
             "user-details" => processor::user_details::process(value, kind, doc, self).await,
             "fastn-apps" => processor::apps::process(value, kind, doc, self),
             "is-reader" => processor::user_group::is_reader(value, kind, doc, self).await,
@@ -304,7 +309,7 @@ impl Library2022 {
             "sql-batch" => processor::sql::process(value, kind, doc, self, "sql-batch").await,
             // "package-query" => processor::package_query::process(value, kind, doc, self).await,
             // "pg" => processor::pg::process(value, kind, doc, self).await,
-            "query" => processor::query::process(value, kind, doc, self).await,
+            "query" => processor::query::process(value, kind, doc, self, preview_session_id).await,
             t => Err(ftd::interpreter::Error::ParseError {
                 doc_id: self.document_id.to_string(),
                 line_number,

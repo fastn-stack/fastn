@@ -59,7 +59,7 @@ pub async fn interpret_helper(
                         &mut st,
                         module.as_str(),
                         caller_module.as_str(),
-                        &lib.session_id(),
+                        preview_session_id,
                     )
                     .await?;
                 lib.dependencies_during_render.push(path);
@@ -92,6 +92,7 @@ pub async fn interpret_helper(
                         ast.clone(),
                         processor,
                         &mut state.tdoc(doc.as_str(), line_number)?,
+                        preview_session_id,
                     )
                     .await?;
                 s = state.continue_after_processor(value, ast)?;
@@ -327,7 +328,7 @@ pub async fn resolve_foreign_variable2022(
         download_assets: bool, // true: in case of `fastn build`
         preview_session_id: &Option<String>,
     ) -> ftd::ftd2021::p1::Result<ftd::interpreter::Value> {
-        lib.push_package_under_process(module, package, &lib.session_id())
+        lib.push_package_under_process(module, package, preview_session_id)
             .await?;
         let _base_url = base_url.trim_end_matches('/');
 
@@ -378,7 +379,7 @@ pub async fn resolve_foreign_variable2022(
                             light_path.as_str(),
                             None,
                             &lib.config.ds,
-                            &lib.session_id(),
+                            preview_session_id,
                         )
                         .await
                         .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
@@ -392,7 +393,7 @@ pub async fn resolve_foreign_variable2022(
                         light_path.as_str(),
                         light.as_slice(),
                         &lib.config.ds,
-                        &lib.session_id(),
+                        preview_session_id,
                     )
                     .await
                     .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
@@ -452,7 +453,7 @@ pub async fn resolve_foreign_variable2022(
                             dark_path.as_str(),
                             dark.as_slice(),
                             &lib.config.ds,
-                            &lib.session_id(),
+                            preview_session_id,
                         )
                         .await
                         .map_err(|e| {
@@ -510,7 +511,7 @@ pub async fn resolve_foreign_variable2022(
                     download_assets,
                     package,
                     format!("{}.{}", file.replace('.', "/"), ext).as_str(),
-                    &lib.session_id(),
+                    preview_session_id,
                 )
                 .await?;
                 Ok(ftd::interpreter::Value::String {
@@ -523,7 +524,7 @@ pub async fn resolve_foreign_variable2022(
                     download_assets,
                     package,
                     files.as_str(),
-                    &lib.session_id(),
+                    preview_session_id,
                 )
                 .await?;
                 Ok(ftd::interpreter::Value::String {
@@ -539,7 +540,7 @@ async fn download(
     download_assets: bool,
     package: &fastn_core::Package,
     path: &str,
-    session_id: &Option<String>,
+    preview_session_id: &Option<String>,
 ) -> ftd::ftd2021::p1::Result<()> {
     if download_assets
         && !lib
@@ -548,7 +549,7 @@ async fn download(
     {
         let start = std::time::Instant::now();
         let data = package
-            .resolve_by_file_name(path, None, &lib.config.ds, session_id)
+            .resolve_by_file_name(path, None, &lib.config.ds, preview_session_id)
             .await
             .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
                 message: e.to_string(),
@@ -561,7 +562,7 @@ async fn download(
             path,
             data.as_slice(),
             &lib.config.ds,
-            &lib.session_id(),
+            preview_session_id,
         )
         .await
         .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
