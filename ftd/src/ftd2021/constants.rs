@@ -48,7 +48,7 @@ pub mod identifier {
     /// will trim any normal, commented or
     /// escaped section/subsection identifier from the beginning
     pub fn trim_section_subsection_identifier(line: &str) -> &str {
-        line.trim_start_matches(|c| c == '/' || c == '\\' || c == '-' || c == ' ')
+        line.trim_start_matches(['/', '\\', '-', ' '])
     }
 }
 

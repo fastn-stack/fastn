@@ -243,7 +243,7 @@ mod interpreter {
     ) {
         // root => [doc_id]#[var_name]@[level]
         // root_parts = [ doc_id , var_name, level ]
-        let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
+        let root_parts: Vec<&str> = root.trim().split(['#', '@']).collect();
         let var_name = root_parts[1];
 
         let integer_thing = ftd::ftd2021::p2::Thing::Variable(ftd::Variable {
@@ -270,7 +270,7 @@ mod interpreter {
         kind: ftd::ftd2021::p2::Kind,
         bag: &mut ftd::Map<ftd::ftd2021::p2::Thing>,
     ) {
-        let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
+        let root_parts: Vec<&str> = root.trim().split(['#', '@']).collect();
         let var_name = root_parts[1];
 
         let value = ftd::Value::default_optional_value_from_kind(kind);
@@ -295,7 +295,7 @@ mod interpreter {
         kind: ftd::ftd2021::p2::Kind,
         bag: &mut ftd::Map<ftd::ftd2021::p2::Thing>,
     ) {
-        let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
+        let root_parts: Vec<&str> = root.trim().split(['#', '@']).collect();
         let var_name = root_parts[1];
 
         let value = ftd::Value::Optional {
@@ -327,7 +327,7 @@ mod interpreter {
         value: f64,
         bag: &mut ftd::Map<ftd::ftd2021::p2::Thing>,
     ) {
-        let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
+        let root_parts: Vec<&str> = root.trim().split(['#', '@']).collect();
         let var_name = root_parts[1];
 
         let decimal_thing = ftd::ftd2021::p2::Thing::Variable(ftd::Variable {
@@ -354,7 +354,7 @@ mod interpreter {
         source_type: &str,
         bag: &mut ftd::Map<ftd::ftd2021::p2::Thing>,
     ) {
-        let root_parts: Vec<&str> = root.trim().split(|ch| ch == '#' || ch == '@').collect();
+        let root_parts: Vec<&str> = root.trim().split(['#', '@']).collect();
         let var_name = root_parts[1];
 
         let string_thing = ftd::ftd2021::p2::Thing::Variable(ftd::Variable {

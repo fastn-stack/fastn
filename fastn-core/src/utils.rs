@@ -71,17 +71,11 @@ where
     let cache_file = get_cache_file(id)?;
     serde_json::from_str(
         std::fs::read_to_string(cache_file)
-            .map_err(|e| {
-                tracing::debug!("file read error: {}", e.to_string());
-                e
-            })
+            .inspect_err(|e| tracing::debug!("file read error: {}", e.to_string()))
             .ok()?
             .as_str(),
     )
-    .map_err(|e| {
-        tracing::debug!("not valid json: {}", e.to_string());
-        e
-    })
+    .inspect_err(|e| tracing::debug!("not valid json: {}", e.to_string()))
     .ok()
 }
 
