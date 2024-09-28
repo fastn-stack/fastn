@@ -57,10 +57,17 @@ async fn serve_file(
         }
     };
 
+    if let fastn_core::File::Code(doc) = f {
+        let path = doc.get_full_path().to_string();
+        let mime = mime_guess::from_path(path).first_or_text_plain();
+        return fastn_core::http::ok_with_content_type(doc.content.into_bytes(), mime);
+    }
+
     let main_document = match f {
         fastn_core::File::Ftd(main_document) => main_document,
         _ => {
             tracing::error!(msg = "unknown handler", path = path.as_str());
+            tracing::info!("file: {f:?}");
             return fastn_core::server_error!("unknown handler");
         }
     };

@@ -1,4 +1,4 @@
-/// `Sitemap` stores the sitemap for the fastn package defines in the FASTN.ftd
+/// `Sitemap` stores the sitemap for the fastn package defined in the FASTN.ftd
 ///
 /// ```ftd
 /// -- fastn.sitemap:
@@ -12,7 +12,7 @@
 ///
 /// In above example, the id starts with `#` becomes the section. Similarly the id
 /// starts with `##` becomes the subsection and then the id starts with `-` becomes
-/// the table od content (TOC).
+/// the table of content (TOC).
 pub mod dynamic_urls;
 pub mod section;
 pub mod toc;

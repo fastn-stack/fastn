@@ -350,6 +350,7 @@ impl DocumentStore {
         Ok(contents)
     }
 
+    #[tracing::instrument]
     pub async fn read_to_string(
         &self,
         path: &fastn_ds::Path,
