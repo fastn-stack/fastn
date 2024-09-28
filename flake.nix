@@ -28,7 +28,7 @@
             openssl.dev
             diesel-cli
             rust-analyzer-unwrapped
-          ];
+          ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Foundation ];
 
           shellHook = ''
             export PATH="$PATH:$HOME/.cargo/bin"
