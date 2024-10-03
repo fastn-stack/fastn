@@ -6,16 +6,10 @@ pub async fn process(
     doc: &ftd::interpreter::TDoc<'_>,
     config: &mut fastn_core::RequestConfig,
     q_kind: &str,
-    exec_query: bool,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     // we can in future do a more fine-grained analysis if the response
     // is cacheable or not, say depending on HTTP Vary header, etc.
     config.response_is_cacheable = false;
-
-    if !exec_query {
-        let res = Default::default();
-        return result_to_value(res, kind, doc, &value);
-    }
 
     let (headers, query) = super::sqlite::get_p1_data(q_kind, &value, doc.name)?;
     let db = match headers.get_optional_string_by_key("db$", doc.name, value.line_number())? {

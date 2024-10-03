@@ -304,42 +304,15 @@ impl Library2022 {
             "user-details" => processor::user_details::process(value, kind, doc, self).await,
             "fastn-apps" => processor::apps::process(value, kind, doc, self),
             "is-reader" => processor::user_group::is_reader(value, kind, doc, self).await,
-            // send empty result when the request is for IDE previews
-            // FIXME: If the user asking for preview has write access to this site then we should not
-            // block their request.
-            "sql-query" => {
-                processor::sql::process(
-                    value,
-                    kind,
-                    doc,
-                    self,
-                    "sql-query",
-                    preview_session_id.is_none(),
-                )
-                .await
+            "sql-query" | "sql-execute" | "sql-batch" if preview_session_id.is_some() => {
+                // send empty result when the request is for IDE previews
+                // FIXME: If the user asking for preview has write access to this site then we should not
+                // block their request.
+                processor::sqlite::result_to_value(Default::default(), kind, doc, &value)
             }
-            "sql-execute" => {
-                processor::sql::process(
-                    value,
-                    kind,
-                    doc,
-                    self,
-                    "sql-execute",
-                    preview_session_id.is_none(),
-                )
-                .await
-            }
-            "sql-batch" => {
-                processor::sql::process(
-                    value,
-                    kind,
-                    doc,
-                    self,
-                    "sql-batch",
-                    preview_session_id.is_none(),
-                )
-                .await
-            }
+            "sql-query" => processor::sql::process(value, kind, doc, self, "sql-query").await,
+            "sql-execute" => processor::sql::process(value, kind, doc, self, "sql-execute").await,
+            "sql-batch" => processor::sql::process(value, kind, doc, self, "sql-batch").await,
             // "package-query" => processor::package_query::process(value, kind, doc, self).await,
             // "pg" => processor::pg::process(value, kind, doc, self).await,
             "query" => processor::query::process(value, kind, doc, self, preview_session_id).await,
