@@ -14,7 +14,7 @@ pub async fn process(
 
     if !exec_query {
         let res = Default::default();
-        return result_to_value(res, kind, doc, &value)
+        return result_to_value(res, kind, doc, &value);
     }
 
     let (headers, query) = super::sqlite::get_p1_data(q_kind, &value, doc.name)?;
