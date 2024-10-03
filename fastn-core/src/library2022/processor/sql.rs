@@ -6,16 +6,13 @@ pub async fn process(
     doc: &ftd::interpreter::TDoc<'_>,
     config: &mut fastn_core::RequestConfig,
     q_kind: &str,
-    preview_session_id: &Option<String>,
+    exec_query: bool,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     // we can in future do a more fine-grained analysis if the response
     // is cacheable or not, say depending on HTTP Vary header, etc.
     config.response_is_cacheable = false;
 
-    if preview_session_id.is_some() {
-        // send empty result when the request is for IDE previews
-        // FIXME: If the user asking for preview has write access to this site then we should not
-        // block their request.
+    if !exec_query {
         let res = Default::default();
         return result_to_value(res, kind, doc, &value)
     }
