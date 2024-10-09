@@ -61,6 +61,10 @@ table {
     width: auto;
 }
 
+del {
+    text-decoration: line-through !important;
+}
+
 *, pre, div {
     padding: 0;
     margin: 0;

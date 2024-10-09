@@ -10,6 +10,8 @@ background.solid: $inherited.colors.background.step-1
 -- ftd.text: Hello
 background.solid: $bg-og
 
+-- ftd.text: This ~~sentence is grammatically wrong~~, correct it.
+
 -- ftd.color bg-og:
 light: yellow
 dark: green
