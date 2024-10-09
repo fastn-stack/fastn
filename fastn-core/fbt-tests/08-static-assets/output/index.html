@@ -84,6 +84,15 @@ table {
     width: auto;
 }
 
+/**
+This is needed since the global css makes `text-decoration: none`.
+To ensure that the del element's `text-decoration: line-through` is applied,
+we need to add `!important` to the rule
+**/
+del {
+    text-decoration: line-through !important;
+}
+
 *, pre, div {
     padding: 0;
     margin: 0;
