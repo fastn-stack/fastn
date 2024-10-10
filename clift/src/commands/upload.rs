@@ -1,14 +1,16 @@
 pub async fn upload_file(
     site_slug: &str,
     file: &str,
+    dry_run: bool,
 ) -> Result<(), crate::commands::upload::UploadError> {
     let current_dir = std::env::current_dir().map_err(|_| UploadError::CanNotReadCurrentDir)?;
     let file = clift::utils::path_to_content(&current_dir, &current_dir.join(file)).await?;
-    initiate_upload(
+    upload(
         &current_dir,
         clift::api::InitiateUploadRequest::File {
             site: site_slug.to_string(),
             file,
+            dry_run,
         },
     )
     .await
@@ -17,21 +19,23 @@ pub async fn upload_file(
 pub async fn upload_folder(
     site_slug: &str,
     folder: &str,
+    dry_run: bool,
 ) -> Result<(), crate::commands::upload::UploadError> {
     let current_dir = std::env::current_dir().map_err(|_| UploadError::CanNotReadCurrentDir)?;
     let files = clift::utils::get_local_files(&current_dir, folder).await?;
-    initiate_upload(
+    upload(
         &current_dir,
         clift::api::InitiateUploadRequest::Folder {
             site: site_slug.to_string(),
             files,
             folder: folder.to_string(),
+            dry_run,
         },
     )
     .await
 }
 
-pub async fn initiate_upload(
+pub async fn upload(
     current_dir: &std::path::Path,
     to_upload: clift::api::InitiateUploadRequest,
 ) -> Result<(), UploadError> {
@@ -39,7 +43,22 @@ pub async fn initiate_upload(
     println!("Initialing Upload....");
 
     let site_slug = to_upload.get_site();
+    let dry_run = to_upload.is_dry_run();
     let data = clift::api::initiate_upload(to_upload, &update_token).await?;
+
+    if dry_run {
+        for file in data.new_files.iter() {
+            println!("New File: {file}");
+        }
+        for file in data.updated_files.iter() {
+            println!("Updated File: {file}");
+        }
+        for file in data.deleted_files.iter() {
+            println!("Deleted File: {file}");
+        }
+        println!("Dry Run Done");
+        return Ok(());
+    }
 
     if let (Some(pre_signed_request), Some(tejar_file_id)) =
         (data.pre_signed_request.clone(), data.tejar_file_id)
@@ -89,6 +108,9 @@ async fn upload_(
         "Updated",
     )
     .await?;
+    for file in data.deleted_files.iter() {
+        println!("{file}.... Deleted");
+    }
 
     Ok(uploader.commit().await?)
 }
