@@ -14,7 +14,7 @@ pub fn attach_cmd(cmd: clap::Command) -> clap::Command {
             .arg(clap::arg!(<"site-slug"> "The site-slug of this site.").required(true))
             .arg(clap::arg!(--file <FILE> "Only upload a single file.").required(false))
             .arg(clap::arg!(--folder <FOLDER> "Only upload a single folder.").required(false))
-            .arg(clap::arg!(--dry-run "Do not actually upload anything.")),
+            .arg(clap::arg!(--"dry-run" "Do not actually upload anything.")),
     )
 }
 
