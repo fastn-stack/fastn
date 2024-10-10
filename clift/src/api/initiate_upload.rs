@@ -8,10 +8,12 @@ pub enum InitiateUploadRequest {
         site: String,
         files: Vec<ContentToUpload>,
         folder: String,
+        dry_run: bool,
     },
     File {
         site: String,
         file: ContentToUpload,
+        dry_run: bool,
     },
 }
 
@@ -22,12 +24,20 @@ impl InitiateUploadRequest {
             | InitiateUploadRequest::File { site, .. } => site.clone(),
         }
     }
+    pub fn is_dry_run(&self) -> bool {
+        match self {
+            InitiateUploadRequest::Folder { dry_run, .. }
+            | InitiateUploadRequest::File { dry_run, .. } => *dry_run,
+        }
+    }
 }
 
 #[derive(serde::Deserialize, Debug)]
 pub struct InitiateUploadResponse {
     pub new_files: Vec<String>,
     pub updated_files: Vec<String>,
+    #[serde(default)]
+    pub deleted_files: Vec<String>,
     pub upload_session_id: i64,
     pub tejar_file_id: Option<i64>,
     pub pre_signed_request: Option<PreSignedRequest>,
