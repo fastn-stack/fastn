@@ -4,14 +4,14 @@ pub struct Section<'a> {
     // this is the comment block we encountered before the section
     // pub pre_comment: Option<Sourced<&'a str>>,
     pub name: KindedName<'a>,
-    pub caption: Option<Sourced<HeaderValue<'a>>>,
+    pub caption: Option<HeaderValue<'a>>,
     pub headers: Vec<(KindedName<'a>, HeaderValue<'a>)>,
     pub body: Option<Sourced<HeaderValue<'a>>>,
     pub sub_sections: Vec<Section<'a>>,
 }
 
 pub struct KindedName<'a> {
-    pub kind: Sourced<Option<&'a str>>,
+    pub kind: Option<Sourced<&'a str>>,
     pub name: Sourced<&'a str>,
 }
 
