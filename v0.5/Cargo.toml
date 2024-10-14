@@ -1,0 +1,35 @@
+[workspace]
+members = [
+    "p1",
+]
+exclude = []
+resolver = "2"
+
+[workspace.package]
+authors = [
+    "Amit Upadhyay <upadhyay@gmail.com>",
+    "Arpita Jaiswal <arpita@fifthtry.com>",
+]
+edition = "2021"
+description = "fastn: Full-stack Web Development Made Easy"
+license = "AGPL-3"
+repository = "https://github.com/fastn-stack/fastn"
+homepage = "https://fastn.com"
+
+
+[workspace.dependencies]
+# Please do not specify a dependency more precisely than needed. If version "1" works, do
+# not specify "1.1.42". This reduces the number of total dependencies. For example, if you
+# specify 1.1.42 and someone else who only needed "1" also specified 1.1.37, we end up having
+# the same dependency getting compiled twice.
+#
+# In the future, we may discover that our code does not indeed work with "1", say it ony works
+# for 1.1 onwards, or 1.1.25 onwards, in which case use >= 1.1.25 etc. Saying our code
+# only works for 1.1.42 and not 1.1.41 nor 1.1.43 is really weird, and most likely wrong.
+#
+# If you are not using the latest version intentionally, please do not list it in this section
+# and create its own [dependencies.<name>] section. Also, document it with why are you not
+# using the latest dependency, and what is the plan to move to the latest version.
+
+
+fastn-p1.path = "p1"

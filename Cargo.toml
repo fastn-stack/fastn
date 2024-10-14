@@ -23,7 +23,7 @@ members = [
     # "fastn-wasm",
     # "fastn-runtime",
 ]
-exclude = ["fastn-runtime", "fastn-wasm", "integration-tests/wasm"]
+exclude = ["fastn-runtime", "fastn-wasm", "integration-tests/wasm", "v0.5"]
 resolver = "2"
 
 [workspace.package]
