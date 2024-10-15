@@ -1,41 +1,60 @@
 // #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize, Default)]
 // #[serde(default)]
+// ;;-
 pub struct Section<'a> {
-    // this is the comment block we encountered before the section
-    // pub pre_comment: Option<Sourced<&'a str>>,
     pub name: KindedName<'a>,
     pub caption: Option<HeaderValue<'a>>,
     pub headers: Vec<(KindedName<'a>, HeaderValue<'a>)>,
-    pub body: Option<Sourced<HeaderValue<'a>>>,
-    pub sub_sections: Vec<Section<'a>>,
+    pub body: Option<HeaderValue<'a>>,
+    pub sub_sections: Vec<Sourced<Section<'a>>>,
+}
+
+pub struct Kind<'a> {
+    kind: Sourced<&'a str>,
+    // only kinded section / header can have doc
+    doc: Option<Sourced<&'a str>>,
 }
 
 pub struct KindedName<'a> {
-    pub kind: Option<Sourced<&'a str>>,
+    pub kind: Option<Kind<'a>>,
     pub name: Sourced<&'a str>,
 }
 
 pub struct Sourced<T> {
+    /// position of this symbol from the beginning of the source file
     pub from: usize,
+    /// end of this symbol from the beginning of source file
     pub to: usize,
     pub is_commented: bool,
     pub value: T,
 }
 
-pub type HeaderValue<'a> = Vec<Sourced<StringOrSection<'a>>>;
+pub type HeaderValue<'a> = Sourced<Vec<StringOrSection<'a>>>;
 
 pub enum StringOrSection<'a> {
     // This is a `Cow<_>` because we will be escaping \{ and \} in the string, and also trimming
-    // de-indenting the string
-    String(std::borrow::Cow<'a, &'a str>),
+    // de-indenting the string, further string is cow because we remove comments, further we may
+    // de-indent the string
+    String(Sourced<std::borrow::Cow<'a, &'a str>>),
+    // from expression as well we will remove all the comments, so it has to be a cow
+    Expression(Sourced<std::borrow::Cow<'a, &'a str>>),
+    Section(Sourced<Section<'a>>),
+}
+
+pub enum Item<'a> {
     Section(Section<'a>),
+    Comment(&'a str),
+}
+
+pub struct ParseOutput<'a> {
+    module_doc: Option<Sourced<&'a str>>,
+    items: Vec<Sourced<Item<'a>>>,
+    /// length of each line in the source
+    line_lengths: Vec<u8>,
 }
 
 pub enum ParseError {}
 
-pub fn parse<'a>(
-    _doc_name: &str,
-    _source: &'a str,
-) -> Result<Vec<Sourced<Section<'a>>>, ParseError> {
+pub fn parse<'a>(_doc_name: &str, _source: &'a str) -> Result<ParseOutput<'a>, ParseError> {
     todo!()
 }
