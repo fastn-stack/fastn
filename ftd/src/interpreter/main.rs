@@ -30,6 +30,7 @@ pub struct InterpreterState {
     pub pending_imports: PendingImports,
     pub parsed_libs: ftd::Map<ParsedDocument>,
     pub instructions: Vec<ftd::interpreter::Component>,
+    pub in_process: Vec<(String, ftd_ast::Ast)>,
 }
 
 #[derive(Debug, Clone, Default, PartialEq)]
@@ -134,6 +135,26 @@ impl InterpreterState {
         }
     }
 
+
+    fn detect_cycle(&mut self, doc_name: &str, ast: &ftd_ast::Ast) -> ftd::interpreter::Result<()> {
+        self.in_process.push((doc_name.to_string(), ast.clone()));
+        let len = self.in_process.len();
+        for i in 2..=(len / 2) {
+            if self.in_process[len - i..] == self.in_process[len - 2 * i..len - i] {
+                let mut message = "start of cycle".to_string();
+                for j in len - i..len {
+                    message = format!("{message} => {}", self.in_process[j].1.name());
+                }
+                return Err(ftd::interpreter::Error::FoundCycle {
+                    message,
+                    line_number: ast.line_number(),
+                });
+            }
+        }
+        Ok(())
+    }
+
+
     pub fn continue_processing(mut self) -> ftd::interpreter::Result<Interpreter> {
         while let Some((doc_name, number_of_scan, ast, exports)) = self.get_next_ast() {
             if let Some(interpreter) = self.resolve_pending_imports::<ftd::interpreter::Thing>()? {
@@ -147,6 +168,8 @@ impl InterpreterState {
                     ftd::interpreter::StateWithThing::Continue => continue,
                 }
             }
+
+            self.detect_cycle(doc_name.as_str(), &ast)?;
 
             self.increase_scan_count();
             let parsed_document = self.parsed_libs.get(doc_name.as_str()).unwrap();

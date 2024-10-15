@@ -1,8 +1,23 @@
 use pretty_assertions::assert_eq;
 
 #[track_caller]
-fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
-    let mut i = ftd::parse_doc("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
+fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf, error_file_location: &std::path::PathBuf,) {
+    let mut i = match ftd::parse_doc("foo", s) {
+        Ok(i) => i,
+        Err(expected_error) => {
+            if fix {
+                let expected_error = expected_error.to_string();
+                std::fs::write(error_file_location, expected_error).unwrap();
+                if file_location.exists() {
+                    std::fs::remove_file(file_location).unwrap();
+                }
+                return;
+            }
+            else {
+                panic!("Expected error: {}", expected_error)
+            }
+        },
+    };
     for thing in ftd::interpreter::default::get_default_bag().keys() {
         i.data.swap_remove(thing);
     }
@@ -23,7 +38,7 @@ fn interpreter_test_all() {
     let cli_args: Vec<String> = std::env::args().collect();
     let fix = cli_args.iter().any(|v| v.eq("fix=true"));
     let path = cli_args.iter().find_map(|v| v.strip_prefix("path="));
-    for (files, json) in find_file_groups() {
+    for (files, json, error) in find_file_groups() {
         let t = if fix {
             "".to_string()
         } else {
@@ -36,12 +51,12 @@ fn interpreter_test_all() {
             }
             let s = std::fs::read_to_string(&f).unwrap();
             println!("{} {}", if fix { "fixing" } else { "testing" }, f.display());
-            p(&s, &t, fix, &json);
+            p(&s, &t, fix, &json, &error);
         }
     }
 }
 
-fn find_file_groups() -> Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> {
+fn find_file_groups() -> Vec<(Vec<std::path::PathBuf>, std::path::PathBuf, std::path::PathBuf,)> {
     let files = {
         let mut f =
             ftd_p1::utils::find_all_files_matching_extension_recursively("t/interpreter", "ftd");
@@ -49,13 +64,17 @@ fn find_file_groups() -> Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> {
         f
     };
 
-    let mut o: Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> = vec![];
+    let mut o: Vec<(
+        Vec<std::path::PathBuf>,
+        std::path::PathBuf,
+        std::path::PathBuf,
+    )> = vec![];
 
     for f in files {
-        let json = filename_with_second_last_extension_replaced_with_json(&f);
+        let (json, error) = filename_with_second_last_extension_replaced_with_json(&f);
         match o.last_mut() {
-            Some((v, j)) if j == &json => v.push(f),
-            _ => o.push((vec![f], json)),
+            Some((v, j, _)) if j == &json => v.push(f),
+            _ => o.push((vec![f], json, error)),
         }
     }
 
@@ -64,16 +83,17 @@ fn find_file_groups() -> Vec<(Vec<std::path::PathBuf>, std::path::PathBuf)> {
 
 fn filename_with_second_last_extension_replaced_with_json(
     path: &std::path::Path,
-) -> std::path::PathBuf {
+) -> (std::path::PathBuf, std::path::PathBuf) {
     let stem = path.file_stem().unwrap().to_str().unwrap();
 
-    path.with_file_name(format!(
+    (path.with_file_name(format!(
         "{}.json",
         match stem.split_once('.') {
             Some((b, _)) => b,
             None => stem,
         }
-    ))
+    )),
+    path.with_file_name(format!("{}.error", stem)),)
 }
 
 #[test]
