@@ -122,6 +122,7 @@ pub type Argument = ftd::interpreter::Field;
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Component {
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
     pub name: String,
     pub properties: Vec<Property>,

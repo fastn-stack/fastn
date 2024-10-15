@@ -52,6 +52,19 @@ impl Ast {
         }
     }
 
+
+    pub fn get_definition_name(&self) -> Option<String> {
+        match self {
+            Ast::ComponentDefinition(c) => Some(c.name.clone()),
+            Ast::FunctionDefinition(f) => Some(f.name.clone()),
+            Ast::VariableDefinition(v) => Some(v.name.clone()),
+            Ast::Record(r) => Some(r.name.clone()),
+            Ast::OrType(o) => Some(o.name.clone()),
+            Ast::WebComponentDefinition(w) => Some(w.name.clone()),
+            _ => None
+        }
+    }
+
     pub fn from_section(section: &ftd_p1::Section, doc_id: &str) -> ftd_ast::Result<Ast> {
         Ok(if ftd_ast::Import::is_import(section) {
             Ast::Import(ftd_ast::Import::from_p1(section, doc_id)?)
