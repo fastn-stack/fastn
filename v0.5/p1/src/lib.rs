@@ -4,48 +4,51 @@
 extern crate self as fastn_p1;
 
 mod parse;
+#[cfg(test)]
+mod sorted_json;
+#[cfg(test)]
+mod test;
+
 pub use parse::parse;
 
-#[derive(Debug, PartialEq, Clone, Default)]
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct Section<'a> {
     pub name: KindedName<'a>,
     pub caption: Option<HeaderValue<'a>>,
     pub headers: Vec<(KindedName<'a>, HeaderValue<'a>)>,
     pub body: Option<HeaderValue<'a>>,
     pub sub_sections: Vec<Sourced<Section<'a>>>,
+    pub is_function: bool,
 }
 
-#[derive(Debug, PartialEq, Clone, Default)]
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub enum Visibility {
-    // visible to everyone
+    /// visible to everyone
     #[default]
     Public,
-    // visible to current package only
+    /// visible to current package only
     Package,
-    // visible to current module only
+    /// visible to current module only
     Module,
-    // can only be accessed from inside the component etc
+    /// can only be accessed from inside the component etc
     Private,
 }
 
-#[derive(Debug, PartialEq, Clone, Default)]
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct Kind<'a> {
     // only kinded section / header can have doc
-    doc: Option<Sourced<&'a str>>,
-    visibility: Visibility,
-    kind: Sourced<&'a str>,
-    // // -- void foo(x, y):, x and y are args
-    // args: Option<Vec<Sourced<&'a str>>>,
-    is_function: bool,
+    pub doc: Option<Sourced<&'a str>>,
+    pub visibility: Visibility,
+    pub kind: Sourced<&'a str>,
 }
 
-#[derive(Debug, PartialEq, Clone, Default)]
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct KindedName<'a> {
     pub kind: Option<Kind<'a>>,
     pub name: Sourced<&'a str>,
 }
 
-#[derive(Debug, PartialEq, Clone, Default)]
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct Sourced<T> {
     /// position of this symbol from the beginning of the source file
     pub from: usize,
@@ -57,7 +60,7 @@ pub struct Sourced<T> {
 
 pub type HeaderValue<'a> = Sourced<Vec<StringOrSection<'a>>>;
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, serde::Serialize)]
 pub enum StringOrSection<'a> {
     // This is a `Cow<_>` because we will be escaping \{ and \} in the string, and also trimming
     // de-indenting the string, further string is cow because we remove comments, further we may
@@ -68,21 +71,21 @@ pub enum StringOrSection<'a> {
     Section(Sourced<Section<'a>>),
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Item<'a> {
     Section(Section<'a>),
     Comment(&'a str),
 }
 
-#[derive(Debug, PartialEq, Clone, Default)]
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct ParseOutput<'a> {
-    module_doc: Option<Sourced<&'a str>>,
-    items: Vec<Sourced<Item<'a>>>,
+    pub module_doc: Option<Sourced<&'a str>>,
+    pub items: Vec<Sourced<Item<'a>>>,
     /// length of each line in the source
-    line_lengths: Vec<u8>,
+    pub line_lengths: Vec<u8>,
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, serde::Serialize)]
 pub enum SingleError {
     // SectionNotFound,
     // MoreThanOneCaption,
@@ -92,8 +95,8 @@ pub enum SingleError {
 }
 
 // should we base this on https://docs.rs/ariadne/ or https://docs.rs/miette/?
-#[derive(Debug, PartialEq, Clone, Default)]
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct ParseError<'a> {
-    partial: ParseOutput<'a>,
-    errors: Vec<Sourced<SingleError>>,
+    pub partial: ParseOutput<'a>,
+    pub errors: Vec<Sourced<SingleError>>,
 }
