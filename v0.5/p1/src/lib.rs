@@ -53,8 +53,19 @@ pub struct ParseOutput<'a> {
     line_lengths: Vec<u8>,
 }
 
-pub enum ParseError {}
+pub enum SingleError {
+    // SectionNotFound,
+    // MoreThanOneCaption,
+    // ParseError,
+    // MoreThanOneHeader,
+    // HeaderNotFound,
+}
 
-pub fn parse<'a>(_doc_name: &str, _source: &'a str) -> Result<ParseOutput<'a>, ParseError> {
+pub struct ParseError<'a> {
+    partial: ParseOutput<'a>,
+    errors: Vec<Sourced<SingleError>>,
+}
+
+pub fn parse<'a>(_doc_name: &str, _source: &'a str) -> Result<ParseOutput<'a>, ParseError<'a>> {
     todo!()
 }
