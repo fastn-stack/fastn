@@ -9,10 +9,25 @@ pub struct Section<'a> {
     pub sub_sections: Vec<Sourced<Section<'a>>>,
 }
 
+pub enum Visibility {
+    // visible to everyone
+    Public,
+    // visible to current package only
+    Package,
+    // visible to current module only
+    Module,
+    // can only be accessed from inside the component etc
+    Private,
+}
+
 pub struct Kind<'a> {
-    kind: Sourced<&'a str>,
     // only kinded section / header can have doc
     doc: Option<Sourced<&'a str>>,
+    visibility: Visibility,
+    kind: Sourced<&'a str>,
+    // // -- void foo(x, y):, x and y are args
+    // args: Option<Vec<Sourced<&'a str>>>,
+    is_function: bool,
 }
 
 pub struct KindedName<'a> {
@@ -61,6 +76,7 @@ pub enum SingleError {
     // HeaderNotFound,
 }
 
+// should we base this on https://docs.rs/ariadne/ or https://docs.rs/miette/?
 pub struct ParseError<'a> {
     partial: ParseOutput<'a>,
     errors: Vec<Sourced<SingleError>>,
