@@ -1,6 +1,12 @@
-// #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize, Default)]
-// #[serde(default)]
-// ;;-
+#![allow(clippy::derive_partial_eq_without_eq, clippy::get_first)]
+#![deny(unused_crate_dependencies)]
+
+extern crate self as fastn_p1;
+
+mod parse;
+pub use parse::parse;
+
+#[derive(Debug, PartialEq, Clone, Default)]
 pub struct Section<'a> {
     pub name: KindedName<'a>,
     pub caption: Option<HeaderValue<'a>>,
@@ -9,8 +15,10 @@ pub struct Section<'a> {
     pub sub_sections: Vec<Sourced<Section<'a>>>,
 }
 
+#[derive(Debug, PartialEq, Clone, Default)]
 pub enum Visibility {
     // visible to everyone
+    #[default]
     Public,
     // visible to current package only
     Package,
@@ -20,6 +28,7 @@ pub enum Visibility {
     Private,
 }
 
+#[derive(Debug, PartialEq, Clone, Default)]
 pub struct Kind<'a> {
     // only kinded section / header can have doc
     doc: Option<Sourced<&'a str>>,
@@ -30,11 +39,13 @@ pub struct Kind<'a> {
     is_function: bool,
 }
 
+#[derive(Debug, PartialEq, Clone, Default)]
 pub struct KindedName<'a> {
     pub kind: Option<Kind<'a>>,
     pub name: Sourced<&'a str>,
 }
 
+#[derive(Debug, PartialEq, Clone, Default)]
 pub struct Sourced<T> {
     /// position of this symbol from the beginning of the source file
     pub from: usize,
@@ -46,6 +57,7 @@ pub struct Sourced<T> {
 
 pub type HeaderValue<'a> = Sourced<Vec<StringOrSection<'a>>>;
 
+#[derive(Debug, PartialEq, Clone)]
 pub enum StringOrSection<'a> {
     // This is a `Cow<_>` because we will be escaping \{ and \} in the string, and also trimming
     // de-indenting the string, further string is cow because we remove comments, further we may
@@ -56,11 +68,13 @@ pub enum StringOrSection<'a> {
     Section(Sourced<Section<'a>>),
 }
 
+#[derive(Debug, PartialEq, Clone)]
 pub enum Item<'a> {
     Section(Section<'a>),
     Comment(&'a str),
 }
 
+#[derive(Debug, PartialEq, Clone, Default)]
 pub struct ParseOutput<'a> {
     module_doc: Option<Sourced<&'a str>>,
     items: Vec<Sourced<Item<'a>>>,
@@ -68,6 +82,7 @@ pub struct ParseOutput<'a> {
     line_lengths: Vec<u8>,
 }
 
+#[derive(Debug, PartialEq, Clone)]
 pub enum SingleError {
     // SectionNotFound,
     // MoreThanOneCaption,
@@ -77,11 +92,8 @@ pub enum SingleError {
 }
 
 // should we base this on https://docs.rs/ariadne/ or https://docs.rs/miette/?
+#[derive(Debug, PartialEq, Clone, Default)]
 pub struct ParseError<'a> {
     partial: ParseOutput<'a>,
     errors: Vec<Sourced<SingleError>>,
-}
-
-pub fn parse<'a>(_doc_name: &str, _source: &'a str) -> Result<ParseOutput<'a>, ParseError<'a>> {
-    todo!()
 }
