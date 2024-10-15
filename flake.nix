@@ -16,7 +16,9 @@
           overlays = [ (import rust-overlay) ];
         };
 
-        toolchain = pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
+        toolchain = (pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml).override {
+          extensions = [ "rust-src" ];
+        };
       in
       rec {
         # nix develop

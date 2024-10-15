@@ -89,6 +89,7 @@ pub(crate) fn kind_eq(
         &Default::default(),
         doc,
         line_number,
+        None,
     )?);
     Ok(ftd::interpreter::StateWithThing::new_thing(
         kind_data.kind.is_same_as(kind),

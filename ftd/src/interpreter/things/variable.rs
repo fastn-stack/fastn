@@ -83,6 +83,7 @@ impl Variable {
             &Default::default(),
             doc,
             variable_definition.line_number,
+            Some(&variable_definition.name),
         )?);
 
         if let Some(processor) = variable_definition.processor {

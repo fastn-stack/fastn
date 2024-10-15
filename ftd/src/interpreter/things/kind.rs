@@ -411,7 +411,18 @@ impl KindData {
         known_kinds: &ftd::Map<ftd::interpreter::Kind>,
         doc: &mut ftd::interpreter::TDoc,
         line_number: usize,
+        for_name: Option<&str>,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<KindData>> {
+        if let Some(name) = for_name {
+            if name == var_kind.kind {
+                return Err(ftd::interpreter::Error::ParseError {
+                    message: "Self referencing is not allowed.".to_string(),
+                    doc_id: doc.name.to_string(),
+                    line_number,
+                });
+            }
+        }
+
         let mut ast_kind = ftd_p1::AccessModifier::remove_modifiers(var_kind.kind.as_str());
         // let mut ast_kind = var_kind.kind.clone();
         let (caption, body) = check_for_caption_and_body(&mut ast_kind);

@@ -88,6 +88,7 @@ impl Function {
             &Default::default(),
             doc,
             function.line_number,
+            Some(&function.name),
         )?);
 
         let expression = vec![Expression {

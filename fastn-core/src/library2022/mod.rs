@@ -342,6 +342,7 @@ fn get_processor_data(
             &Default::default(),
             doc,
             variable_definition.line_number,
+            None,
         )?
         .into_optional()
         .ok_or(ftd::interpreter::Error::ValueNotFound {

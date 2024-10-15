@@ -764,6 +764,7 @@ impl InterpreterState {
             &Default::default(),
             &mut doc,
             variable_definition.line_number,
+            None,
         )? {
             StateWithThing::Thing(t) => t,
             StateWithThing::State(s) => return Ok(s.into_interpreter(self)),

@@ -229,6 +229,7 @@ impl Field {
         ast_fields: Vec<ftd_ast::Field>,
         doc: &mut ftd::interpreter::TDoc,
         known_kinds: &ftd::Map<ftd::interpreter::Kind>,
+        for_name: &str,
     ) -> ftd::interpreter::Result<
         ftd::interpreter::StateWithThing<Vec<ftd::executor::FieldWithValue>>,
     > {
@@ -237,7 +238,8 @@ impl Field {
             fields_with_resolved_kinds.push(try_ok_state!(Field::from_ast_field_kind(
                 field,
                 doc,
-                known_kinds
+                known_kinds,
+                for_name,
             )?));
         }
         Ok(ftd::interpreter::StateWithThing::new_thing(
@@ -283,7 +285,7 @@ impl Field {
     }
 
     pub(crate) fn from_ast_fields(
-        name: &str,
+        for_name: &str,
         fields: Vec<ftd_ast::Field>,
         doc: &mut ftd::interpreter::TDoc,
         known_kinds: &ftd::Map<ftd::interpreter::Kind>,
@@ -292,12 +294,13 @@ impl Field {
         let partial_resolved_fields = try_ok_state!(Field::resolve_kinds_from_ast_fields(
             fields,
             doc,
-            known_kinds
+            known_kinds,
+            for_name,
         )?);
 
         // Once ast kinds are resolved, then try resolving ast values
         let resolved_fields =
-            Field::resolve_values_from_ast_fields(name, partial_resolved_fields, doc)?;
+            Field::resolve_values_from_ast_fields(for_name, partial_resolved_fields, doc)?;
 
         Ok(resolved_fields)
     }
@@ -326,6 +329,7 @@ impl Field {
             known_kinds,
             doc,
             field.line_number,
+            None,
         )?);
 
         let value = if let Some(value) = field.value {
@@ -355,6 +359,7 @@ impl Field {
         field: ftd_ast::Field,
         doc: &mut ftd::interpreter::TDoc,
         known_kinds: &ftd::Map<ftd::interpreter::Kind>,
+        for_name: &str,
     ) -> ftd::interpreter::Result<
         ftd::interpreter::StateWithThing<(Field, Option<ftd_ast::VariableValue>)>,
     > {
@@ -363,6 +368,7 @@ impl Field {
             known_kinds,
             doc,
             field.line_number,
+            Some(for_name),
         )?);
 
         Ok(ftd::interpreter::StateWithThing::new_thing((
