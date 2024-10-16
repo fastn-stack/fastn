@@ -1,0 +1,457 @@
+{
+  "data": {
+    "foo#family": {
+      "Variable": {
+        "name": "foo#family",
+        "kind": {
+          "kind": {
+            "Record": {
+              "name": "foo#tree"
+            }
+          },
+          "caption": false,
+          "body": false
+        },
+        "mutable": false,
+        "value": {
+          "Value": {
+            "value": {
+              "Record": {
+                "name": "foo#tree",
+                "fields": {
+                  "children": {
+                    "Value": {
+                      "value": {
+                        "List": {
+                          "data": [
+                            {
+                              "Value": {
+                                "value": {
+                                  "Record": {
+                                    "name": "foo#tree",
+                                    "fields": {
+                                      "children": {
+                                        "Value": {
+                                          "value": {
+                                            "List": {
+                                              "data": [],
+                                              "kind": {
+                                                "kind": {
+                                                  "Record": {
+                                                    "name": "foo#tree"
+                                                  }
+                                                },
+                                                "caption": false,
+                                                "body": false
+                                              }
+                                            }
+                                          },
+                                          "is_mutable": false,
+                                          "line_number": 8
+                                        }
+                                      },
+                                      "name": {
+                                        "Value": {
+                                          "value": {
+                                            "String": {
+                                              "text": "Bob"
+                                            }
+                                          },
+                                          "is_mutable": false,
+                                          "line_number": 8
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "is_mutable": false,
+                                "line_number": 8
+                              }
+                            },
+                            {
+                              "Value": {
+                                "value": {
+                                  "Record": {
+                                    "name": "foo#tree",
+                                    "fields": {
+                                      "children": {
+                                        "Value": {
+                                          "value": {
+                                            "List": {
+                                              "data": [],
+                                              "kind": {
+                                                "kind": {
+                                                  "Record": {
+                                                    "name": "foo#tree"
+                                                  }
+                                                },
+                                                "caption": false,
+                                                "body": false
+                                              }
+                                            }
+                                          },
+                                          "is_mutable": false,
+                                          "line_number": 9
+                                        }
+                                      },
+                                      "name": {
+                                        "Value": {
+                                          "value": {
+                                            "String": {
+                                              "text": "Charlie"
+                                            }
+                                          },
+                                          "is_mutable": false,
+                                          "line_number": 9
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "is_mutable": false,
+                                "line_number": 9
+                              }
+                            }
+                          ],
+                          "kind": {
+                            "kind": {
+                              "Record": {
+                                "name": "foo#tree"
+                              }
+                            },
+                            "caption": false,
+                            "body": false
+                          }
+                        }
+                      },
+                      "is_mutable": false,
+                      "line_number": 4
+                    }
+                  },
+                  "name": {
+                    "Value": {
+                      "value": {
+                        "String": {
+                          "text": "Alice"
+                        }
+                      },
+                      "is_mutable": false,
+                      "line_number": 4
+                    }
+                  }
+                }
+              }
+            },
+            "is_mutable": false,
+            "line_number": 4
+          }
+        },
+        "conditional_value": [],
+        "line_number": 4,
+        "is_static": true
+      }
+    },
+    "foo#print-tree": {
+      "Component": {
+        "name": "foo#print-tree",
+        "arguments": [
+          {
+            "name": "t",
+            "kind": {
+              "kind": {
+                "Record": {
+                  "name": "foo#tree"
+                }
+              },
+              "caption": true,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 24,
+            "access_modifier": "Public"
+          }
+        ],
+        "definition": {
+          "name": "ftd#column",
+          "properties": [
+            {
+              "value": {
+                "Value": {
+                  "value": {
+                    "List": {
+                      "data": [
+                        {
+                          "Value": {
+                            "value": {
+                              "UI": {
+                                "name": "ftd#text",
+                                "kind": {
+                                  "kind": {
+                                    "UI": {
+                                      "name": null,
+                                      "subsection_source": true,
+                                      "is_web_component": false
+                                    }
+                                  },
+                                  "caption": false,
+                                  "body": false
+                                },
+                                "component": {
+                                  "name": "ftd#text",
+                                  "properties": [
+                                    {
+                                      "value": {
+                                        "Reference": {
+                                          "name": "foo#print-tree.t.name",
+                                          "kind": {
+                                            "kind": "String",
+                                            "caption": true,
+                                            "body": true
+                                          },
+                                          "source": {
+                                            "Local": "print-tree"
+                                          },
+                                          "is_mutable": false,
+                                          "line_number": 28
+                                        }
+                                      },
+                                      "source": "Caption",
+                                      "condition": null,
+                                      "line_number": 28
+                                    }
+                                  ],
+                                  "iteration": null,
+                                  "condition": null,
+                                  "events": [],
+                                  "children": [],
+                                  "source": "Declaration",
+                                  "line_number": 28
+                                }
+                              }
+                            },
+                            "is_mutable": false,
+                            "line_number": 28
+                          }
+                        },
+                        {
+                          "Value": {
+                            "value": {
+                              "UI": {
+                                "name": "foo#print-tree",
+                                "kind": {
+                                  "kind": {
+                                    "UI": {
+                                      "name": null,
+                                      "subsection_source": true,
+                                      "is_web_component": false
+                                    }
+                                  },
+                                  "caption": false,
+                                  "body": false
+                                },
+                                "component": {
+                                  "name": "foo#print-tree",
+                                  "properties": [
+                                    {
+                                      "value": {
+                                        "Reference": {
+                                          "name": "foo#obj",
+                                          "kind": {
+                                            "kind": {
+                                              "Record": {
+                                                "name": "foo#tree"
+                                              }
+                                            },
+                                            "caption": true,
+                                            "body": false
+                                          },
+                                          "source": {
+                                            "Loop": "foo#obj"
+                                          },
+                                          "is_mutable": false,
+                                          "line_number": 30
+                                        }
+                                      },
+                                      "source": "Caption",
+                                      "condition": null,
+                                      "line_number": 30
+                                    }
+                                  ],
+                                  "iteration": {
+                                    "on": {
+                                      "Reference": {
+                                        "name": "foo#print-tree.t.children",
+                                        "kind": {
+                                          "kind": {
+                                            "List": {
+                                              "kind": {
+                                                "Record": {
+                                                  "name": "foo#tree"
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "caption": false,
+                                          "body": false
+                                        },
+                                        "source": {
+                                          "Local": "print-tree"
+                                        },
+                                        "is_mutable": false,
+                                        "line_number": 31
+                                      }
+                                    },
+                                    "alias": "foo#obj",
+                                    "loop_counter_alias": null,
+                                    "line_number": 31
+                                  },
+                                  "condition": null,
+                                  "events": [],
+                                  "children": [],
+                                  "source": "Declaration",
+                                  "line_number": 30
+                                }
+                              }
+                            },
+                            "is_mutable": false,
+                            "line_number": 30
+                          }
+                        }
+                      ],
+                      "kind": {
+                        "kind": {
+                          "UI": {
+                            "name": null,
+                            "subsection_source": true,
+                            "is_web_component": false
+                          }
+                        },
+                        "caption": false,
+                        "body": false
+                      }
+                    }
+                  },
+                  "is_mutable": false,
+                  "line_number": 28
+                }
+              },
+              "source": "Subsection",
+              "condition": null,
+              "line_number": 28
+            }
+          ],
+          "iteration": null,
+          "condition": null,
+          "events": [],
+          "children": [],
+          "source": "Declaration",
+          "line_number": 26
+        },
+        "css": null,
+        "line_number": 23
+      }
+    },
+    "foo#tree": {
+      "Record": {
+        "name": "foo#tree",
+        "fields": [
+          {
+            "name": "name",
+            "kind": {
+              "kind": "String",
+              "caption": true,
+              "body": false
+            },
+            "mutable": false,
+            "value": null,
+            "line_number": 18,
+            "access_modifier": "Public"
+          },
+          {
+            "name": "children",
+            "kind": {
+              "kind": {
+                "List": {
+                  "kind": {
+                    "Record": {
+                      "name": "foo#tree"
+                    }
+                  }
+                }
+              },
+              "caption": false,
+              "body": false
+            },
+            "mutable": false,
+            "value": {
+              "Value": {
+                "value": {
+                  "List": {
+                    "data": [],
+                    "kind": {
+                      "kind": {
+                        "Record": {
+                          "name": "foo#tree"
+                        }
+                      },
+                      "caption": false,
+                      "body": false
+                    }
+                  }
+                },
+                "is_mutable": false,
+                "line_number": 19
+              }
+            },
+            "line_number": 19,
+            "access_modifier": "Public"
+          }
+        ],
+        "line_number": 17
+      }
+    }
+  },
+  "name": "foo",
+  "tree": [
+    {
+      "name": "foo#print-tree",
+      "properties": [
+        {
+          "value": {
+            "Reference": {
+              "name": "foo#family",
+              "kind": {
+                "kind": {
+                  "Record": {
+                    "name": "foo#tree"
+                  }
+                },
+                "caption": true,
+                "body": false
+              },
+              "source": "Global",
+              "is_mutable": false,
+              "line_number": 1
+            }
+          },
+          "source": "Caption",
+          "condition": null,
+          "line_number": 1
+        }
+      ],
+      "iteration": null,
+      "condition": null,
+      "events": [],
+      "children": [],
+      "source": "Declaration",
+      "line_number": 1
+    }
+  ],
+  "aliases": {
+    "ftd": "ftd",
+    "inherited": "inherited"
+  },
+  "js": [],
+  "css": []
+}

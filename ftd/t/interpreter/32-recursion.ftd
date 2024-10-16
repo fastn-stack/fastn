@@ -1,0 +1,35 @@
+-- print-tree: $family
+
+
+-- tree family: Alice
+
+-- family.children:
+
+-- tree: Bob
+-- tree: Charlie
+
+-- end: family.children
+
+
+
+
+
+-- record tree:
+caption name:
+tree list children:
+
+
+
+-- component print-tree:
+caption tree t:
+
+-- ftd.column:
+
+-- ftd.text: $print-tree.t.name
+
+-- print-tree: $obj
+for: $obj in $print-tree.t.children
+
+-- end: ftd.column
+
+-- end: print-tree
