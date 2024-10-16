@@ -7,7 +7,7 @@ mod parse;
 #[cfg(test)]
 mod test;
 
-pub use parse::{parse_edit, Edit, Engine};
+pub use parse::parse_edit;
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct Section<'a> {
@@ -99,4 +99,30 @@ pub enum SingleError<'a> {
     // ParseError,
     // MoreThanOneHeader,
     // HeaderNotFound,
+}
+
+#[derive(Default)]
+pub struct ParserEngine {
+    pub doc_name: String,
+    pub edits: Vec<Edit>,
+}
+
+impl ParserEngine {
+    pub fn new(doc_name: String) -> Self {
+        Self {
+            doc_name,
+            edits: vec![],
+        }
+    }
+
+    pub fn add_edit(&mut self, from: usize, to: usize, text: String) -> &Edit {
+        self.edits.push(Edit { from, to, text });
+        self.edits.last().unwrap()
+    }
+}
+
+pub struct Edit {
+    pub from: usize,
+    pub to: usize,
+    pub text: String,
 }

@@ -19,7 +19,7 @@ fn test_all() {
 fn p1(file: impl AsRef<std::path::Path> + std::fmt::Debug, fix: bool) {
     let json = file.as_ref().with_extension("json");
     let s = std::fs::read_to_string(&file).unwrap();
-    let mut engine = fastn_p1::Engine::new("foo".to_string());
+    let mut engine = fastn_p1::ParserEngine::new("foo".to_string());
     let mut output = fastn_p1::ParseOutput::default();
     let edit = engine.add_edit(0, s.len(), s);
     fastn_p1::parse_edit(&mut output, edit);
