@@ -1,0 +1,1 @@
+Found Cycle: foo#issue:27 => foo#issue-body:146 => foo#issue:27 => foo#issue-body:146, line_number: 27
