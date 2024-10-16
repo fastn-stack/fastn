@@ -1,0 +1,17 @@
+-- print: Arpita
+
+-- component print:
+caption name:
+
+-- print-1: $print.name
+
+-- end: print
+
+
+
+-- component print-1:
+caption name:
+
+-- ftd.text: $print.name
+
+-- end: print-1

@@ -137,9 +137,17 @@ impl InterpreterState {
 
 
     fn detect_cycle(&mut self, doc_name: &str, ast: &ftd_ast::Ast) -> ftd::interpreter::Result<()> {
+        // Skip for ast which are invocations or imports
+        if ast.get_definition_name().is_none() {
+            return Ok(());
+        }
+
         self.in_process.push((doc_name.to_string(), ast.clone()));
+        self.remove_already_processed();
+
         let len = self.in_process.len();
         for i in 2..=(len / 2) {
+            // Check if the first half of the list is the same as the second half
             if self.in_process[len - i..] == self.in_process[len - 2 * i..len - i] {
                 let mut message = "start of cycle".to_string();
                 for j in len - i..len {
@@ -152,6 +160,12 @@ impl InterpreterState {
             }
         }
         Ok(())
+    }
+
+    /// Removes the processed AST, i.e. which are in bag, from the `in_process` field
+    fn remove_already_processed(&mut self) {
+        self.in_process
+            .retain(|(doc_name, ast)| !self.bag.contains_key(format!("{}#{}", doc_name, ast.name()).as_str()));
     }
 
 
