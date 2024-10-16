@@ -17,6 +17,7 @@ pub struct Section<'a> {
     pub body: Option<HeaderValue<'a>>,
     pub sub_sections: Vec<Sourced<Section<'a>>>,
     pub is_function: bool,
+    pub is_commented: bool,
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
@@ -24,6 +25,7 @@ pub struct Header<'a> {
     pub name: KindedName<'a>,
     pub condition: Option<Sourced<&'a str>>,
     pub value: HeaderValue<'a>,
+    pub is_commented: bool,
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
@@ -59,7 +61,6 @@ pub struct Sourced<T> {
     pub from: usize,
     /// end of this symbol from the beginning of source file
     pub to: usize,
-    pub is_commented: bool,
     pub value: T,
 }
 
