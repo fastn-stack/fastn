@@ -155,17 +155,17 @@ impl InterpreterState {
             return Ok(());
         }
 
-        // A component can appear multiple times in the `in-process` list due to its unprocessed
+        // A component can appear multiple times to be processed due to its unprocessed
         // dependencies. As we process the component, its dependencies are added to the `in-process`
-        // list. Once those dependencies are processed, the component is re-added to `in-process`
-        // to be processed again.
+        // list. Once those dependencies are processed, the component is re-appeared to be processed
+        // again.
         //
-        // However, we need to distinguish between cases where the component is in-process multiple
+        // However, we need to distinguish between cases where the component is `in-process` multiple
         // times due to unprocessed dependencies and cases where it may be stuck in an infinite loop
         // (e.g., a cyclic dependency).
         //
         // To handle this, we use `number_of_scan`, which tracks how many times a component has been
-        // re-processed. Every time a component is re-added to `in-process` because of unprocessed
+        // re-appeared to be processed. Every time a component is re-appeared because of unprocessed
         // dependencies, the `number_of_scan` is incremented. This allows us to differentiate
         // between normal re-processing and an infinite loop.
         if let Some((name, last_number_of_scan, _)) = self.in_process.last_mut() {
