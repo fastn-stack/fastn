@@ -52,7 +52,6 @@ impl Ast {
         }
     }
 
-
     pub fn get_definition_name(&self) -> Option<String> {
         match self {
             Ast::ComponentDefinition(c) => Some(c.name.clone()),
@@ -61,7 +60,7 @@ impl Ast {
             Ast::Record(r) => Some(r.name.clone()),
             Ast::OrType(o) => Some(o.name.clone()),
             Ast::WebComponentDefinition(w) => Some(w.name.clone()),
-            _ => None
+            _ => None,
         }
     }
 

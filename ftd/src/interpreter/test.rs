@@ -1,7 +1,13 @@
 use pretty_assertions::assert_eq;
 
 #[track_caller]
-fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf, error_file_location: &std::path::PathBuf,) {
+fn p(
+    s: &str,
+    t: &str,
+    fix: bool,
+    file_location: &std::path::PathBuf,
+    error_file_location: &std::path::PathBuf,
+) {
     let mut i = match ftd::parse_doc("foo", s) {
         Ok(i) => i,
         Err(expected_error) => {
@@ -12,11 +18,10 @@ fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf, error_file
                     std::fs::remove_file(file_location).unwrap();
                 }
                 return;
-            }
-            else {
+            } else {
                 panic!("Expected error: {}", expected_error)
             }
-        },
+        }
     };
     for thing in ftd::interpreter::default::get_default_bag().keys() {
         i.data.swap_remove(thing);
@@ -56,7 +61,11 @@ fn interpreter_test_all() {
     }
 }
 
-fn find_file_groups() -> Vec<(Vec<std::path::PathBuf>, std::path::PathBuf, std::path::PathBuf,)> {
+fn find_file_groups() -> Vec<(
+    Vec<std::path::PathBuf>,
+    std::path::PathBuf,
+    std::path::PathBuf,
+)> {
     let files = {
         let mut f =
             ftd_p1::utils::find_all_files_matching_extension_recursively("t/interpreter", "ftd");
@@ -86,14 +95,16 @@ fn filename_with_second_last_extension_replaced_with_json(
 ) -> (std::path::PathBuf, std::path::PathBuf) {
     let stem = path.file_stem().unwrap().to_str().unwrap();
 
-    (path.with_file_name(format!(
-        "{}.json",
-        match stem.split_once('.') {
-            Some((b, _)) => b,
-            None => stem,
-        }
-    )),
-    path.with_file_name(format!("{}.error", stem)),)
+    (
+        path.with_file_name(format!(
+            "{}.json",
+            match stem.split_once('.') {
+                Some((b, _)) => b,
+                None => stem,
+            }
+        )),
+        path.with_file_name(format!("{}.error", stem)),
+    )
 }
 
 #[test]
