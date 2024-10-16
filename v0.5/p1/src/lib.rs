@@ -92,7 +92,11 @@ impl ParserEngine {
     }
 
     pub fn add_edit(&mut self, from: usize, to: usize, text: String) -> &Edit {
-        self.edits.push(Edit { from, to, text });
+        self.edits.push(Edit {
+            from,
+            to,
+            text: text.chars().collect(),
+        });
         self.edits.last().unwrap()
     }
 }
@@ -100,5 +104,5 @@ impl ParserEngine {
 pub struct Edit {
     pub from: usize,
     pub to: usize,
-    pub text: String,
+    pub text: Vec<char>,
 }
