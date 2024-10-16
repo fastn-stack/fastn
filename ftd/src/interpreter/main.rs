@@ -184,13 +184,13 @@ impl InterpreterState {
     fn construct_cycle_error(&self, index: usize) -> ftd::interpreter::Error {
         let len = self.in_process.len();
         let mut message = if (len - 2 * index) >= 1  {
-            let (name,_, _) = &self.in_process[(len - 2 * index) - 1];
-            format!("{name} => ")
+            let (name,_, ast) = &self.in_process[(len - 2 * index) - 1];
+            format!("{name}:{} => ", ast.line_number())
         } else {
             "".to_string()
         };
         for j in len - 2 * index..len - index + 1 {
-            message = format!("{message}{}{}", self.in_process[j].0, if j == len - index { "" } else { " => " });
+            message = format!("{message}{}:{}{}", self.in_process[j].0, self.in_process[j].2.line_number(), if j == len - index { "" } else { " => " });
         }
         ftd::interpreter::Error::FoundCycle {
             message,
