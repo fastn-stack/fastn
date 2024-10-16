@@ -7,7 +7,7 @@ mod parse;
 #[cfg(test)]
 mod test;
 
-pub use parse::parse_edit;
+pub use parse::{Item, ParseOutput, SingleError};
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct Section<'a> {
@@ -74,31 +74,6 @@ pub enum StringOrSection<'a> {
     // from expression as well we will remove all the comments, so it has to be a cow
     Expression(Sourced<std::borrow::Cow<'a, &'a str>>),
     Section(Sourced<Section<'a>>),
-}
-
-#[derive(Debug, PartialEq, Clone, serde::Serialize)]
-pub enum Item<'a> {
-    Section(Section<'a>),
-    Error(Sourced<SingleError<'a>>),
-    Comment(&'a str),
-}
-
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
-pub struct ParseOutput<'a> {
-    pub doc_name: &'a str,
-    pub module_doc: Option<Sourced<&'a str>>,
-    pub items: Vec<Sourced<Item<'a>>>,
-    /// length of each line in the source
-    pub line_lengths: Vec<u8>,
-}
-
-#[derive(Debug, PartialEq, Clone, serde::Serialize)]
-pub enum SingleError<'a> {
-    SectionNotFound(Sourced<&'a str>),
-    // MoreThanOneCaption,
-    // ParseError,
-    // MoreThanOneHeader,
-    // HeaderNotFound,
 }
 
 #[derive(Default)]

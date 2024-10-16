@@ -22,7 +22,7 @@ fn p1(file: impl AsRef<std::path::Path> + std::fmt::Debug, fix: bool) {
     let mut engine = fastn_p1::ParserEngine::new("foo".to_string());
     let mut output = fastn_p1::ParseOutput::default();
     let edit = engine.add_edit(0, s.len(), s);
-    fastn_p1::parse_edit(&mut output, edit);
+    output.update(edit);
     let expected_json =
         fastn_p1::test::sorted_json::to_json(&serde_json::to_value(&output).unwrap());
     if fix {
