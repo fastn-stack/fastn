@@ -30,7 +30,7 @@ pub struct InterpreterState {
     pub pending_imports: PendingImports,
     pub parsed_libs: ftd::Map<ParsedDocument>,
     pub instructions: Vec<ftd::interpreter::Component>,
-    pub in_process: Vec<(String, ftd_ast::Ast)>,
+    pub in_process: Vec<(String, usize, ftd_ast::Ast)>,
 }
 
 #[derive(Debug, Clone, Default, PartialEq)]
@@ -136,36 +136,77 @@ impl InterpreterState {
     }
 
 
-    fn detect_cycle(&mut self, doc_name: &str, ast: &ftd_ast::Ast) -> ftd::interpreter::Result<()> {
-        // Skip for ast which are invocations or imports
-        if ast.get_definition_name().is_none() {
+    /// Detects cycles in the component processing sequence and raises an error if a cycle is found.
+    ///
+    /// This function checks for recursion or repeated invocations of the same component due to
+    /// unprocessed dependencies. It avoids processing the same component multiple times due to
+    /// infinite loops.
+    fn detect_cycle(&mut self, ast_full_name: &str, number_of_scan: usize, ast: &ftd_ast::Ast) -> ftd::interpreter::Result<()> {
+        // Remove already processed components from the in-process list
+        self.remove_already_processed();
+
+        // Skip processing for AST nodes that are invocations or imports, or if the component is
+        // already processed
+        if ast.get_definition_name().is_none() || self.bag.contains_key(ast_full_name) {
             return Ok(());
         }
 
-        self.in_process.push((doc_name.to_string(), ast.clone()));
-        self.remove_already_processed();
+        // The component is `in-process` multiple times because of all unprocessed dependencies that
+        // it has. So those dependencies are added to the `in-process` list and later removed using
+        // the `self.remove_already_processed()` function and then component is put `in_process`
+        // again.
+        // So, we need to check if the component is `in-process` multiple times due to unprocessed
+        // dependencies or due to infinite loop. This can be tracked by the `number_of_scan`. The
+        // `number_of_scan` is incremented every time the component is `in-process` due to
+        // unprocessed dependencies.
+        if let Some((name, last_number_of_scan,_)) = self.in_process.last_mut() {
+            if name == ast_full_name && number_of_scan == *last_number_of_scan + 1 {
+                *last_number_of_scan += 1;
+                return Ok(());
+            }
+        }
+
+        self.in_process.push((ast_full_name.to_string(), number_of_scan, ast.clone()));
 
         let len = self.in_process.len();
+
+        // Check for repeating patterns (indicative of a cycle) in the `in-process` list by comparing
+        // the last half of the list to the preceding half
         for i in 2..=(len / 2) {
-            // Check if the first half of the list is the same as the second half
             if self.in_process[len - i..] == self.in_process[len - 2 * i..len - i] {
-                let mut message = "start of cycle".to_string();
-                for j in len - i..len {
-                    message = format!("{message} => {}", self.in_process[j].1.name());
-                }
-                return Err(ftd::interpreter::Error::FoundCycle {
-                    message,
-                    line_number: ast.line_number(),
-                });
+                return Err(self.construct_cycle_error(i));
             }
         }
         Ok(())
     }
 
+    /// Construct an error message that shows the component names involved in the cycle.
+    fn construct_cycle_error(&self, index: usize) -> ftd::interpreter::Error {
+        let len = self.in_process.len();
+        let mut message = if (len - 2 * index) >= 1  {
+            let (name,_, _) = &self.in_process[(len - 2 * index) - 1];
+            format!("{name} => ")
+        } else {
+            "".to_string()
+        };
+        for j in len - 2 * index..len - index + 1 {
+            message = format!("{message}{}{}", self.in_process[j].0, if j == len - index { "" } else { " => " });
+        }
+        ftd::interpreter::Error::FoundCycle {
+            message,
+            line_number: self.in_process[len - 1].2.line_number(),
+        }
+    }
+
     /// Removes the processed AST, i.e. which are in bag, from the `in_process` field
     fn remove_already_processed(&mut self) {
-        self.in_process
-            .retain(|(doc_name, ast)| !self.bag.contains_key(format!("{}#{}", doc_name, ast.name()).as_str()));
+        while let Some((name, _,_)) = self.in_process.last() {
+            if self.bag.contains_key(name) {
+                self.in_process.pop();
+            } else {
+                break;
+            }
+        }
     }
 
 
@@ -183,8 +224,6 @@ impl InterpreterState {
                 }
             }
 
-            self.detect_cycle(doc_name.as_str(), &ast)?;
-
             self.increase_scan_count();
             let parsed_document = self.parsed_libs.get(doc_name.as_str()).unwrap();
             let name = parsed_document.name.to_string();
@@ -195,6 +234,9 @@ impl InterpreterState {
                 &parsed_document.name,
                 &parsed_document.doc_aliases,
             );
+
+
+            self.detect_cycle(ast_full_name.as_str(), number_of_scan,&ast)?;
             let is_in_bag = self.bag.contains_key(&ast_full_name);
 
             if is_in_bag {
@@ -348,6 +390,7 @@ impl InterpreterState {
                 }
             } else if ast.is_component_definition() {
                 if !is_in_bag {
+                    println!("component definition:: {}", ast.name());
                     if number_of_scan.eq(&1) {
                         ftd::interpreter::ComponentDefinition::scan_ast(ast, &mut doc)?;
                         continue;

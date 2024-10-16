@@ -1,1 +1,1 @@
-Found Cycle: start of cycle => print => print-1, line_number: 12
+Found Cycle: foo#print => foo#print-1 => foo#print, line_number: 12
