@@ -26,9 +26,12 @@ pub enum Item<'a> {
 
 #[derive(Debug, PartialEq, Clone, serde::Serialize)]
 pub enum SingleError<'a> {
-    // foo
-    SectionNotFound(&'a str),
-    UnwantedTextFound(&'a [usize]),
+    /// we found some text when we were not expecting, eg at the beginning of the file before
+    /// any section started, or inside a section that does not expect any text. this second part
+    /// I am not sure right now as we are planning ot convert all text to text nodes inside a
+    /// section. so by the end maybe this will only contain the first part.
+    UnwantedTextFound(fastn_p1::Sourced<&'a [char]>),
+    // SectionNotFound(&'a str),
     // MoreThanOneCaption,
     // ParseError,
     // MoreThanOneHeader,
