@@ -418,7 +418,6 @@ impl InterpreterState {
                 }
             } else if ast.is_component_definition() {
                 if !is_in_bag {
-                    println!("component definition:: {}", ast.name());
                     if number_of_scan.eq(&1) {
                         ftd::interpreter::ComponentDefinition::scan_ast(ast, &mut doc)?;
                         continue;
