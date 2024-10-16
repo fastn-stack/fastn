@@ -1,0 +1,26 @@
+-- print: Arpita
+
+-- component print:
+caption name:
+
+-- print-1: $print.name
+
+-- end: print
+
+
+
+-- component print-1:
+caption name:
+
+-- print-2: $print-1.name
+
+-- end: print-1
+
+
+
+-- component print-2:
+caption name:
+
+-- print: $print-2.name
+
+-- end: print-2
