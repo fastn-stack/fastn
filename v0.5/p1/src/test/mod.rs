@@ -1,3 +1,5 @@
+mod sorted_json;
+
 #[test]
 fn test_all() {
     // we are storing files in folder named `t` and not inside `tests`, because `cargo test`
@@ -14,12 +16,11 @@ fn test_all() {
     }
 }
 
-#[track_caller]
 fn p1(file: impl AsRef<std::path::Path> + std::fmt::Debug, fix: bool) {
     let json = file.as_ref().with_extension("json");
     let s = std::fs::read_to_string(&file).unwrap();
     let data = super::parse("foo", &s);
-    let expected_json = fastn_p1::sorted_json::to_json(&serde_json::to_value(&data).unwrap());
+    let expected_json = fastn_p1::test::sorted_json::to_json(&serde_json::to_value(&data).unwrap());
     if fix {
         println!("fixing {file:?}");
         std::fs::write(json, expected_json).unwrap();

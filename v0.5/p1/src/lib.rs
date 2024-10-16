@@ -5,8 +5,6 @@ extern crate self as fastn_p1;
 
 mod parse;
 #[cfg(test)]
-mod sorted_json;
-#[cfg(test)]
 mod test;
 
 pub use parse::parse;
@@ -15,10 +13,17 @@ pub use parse::parse;
 pub struct Section<'a> {
     pub name: KindedName<'a>,
     pub caption: Option<HeaderValue<'a>>,
-    pub headers: Vec<(KindedName<'a>, HeaderValue<'a>)>,
+    pub headers: Vec<Header<'a>>,
     pub body: Option<HeaderValue<'a>>,
     pub sub_sections: Vec<Sourced<Section<'a>>>,
     pub is_function: bool,
+}
+
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
+pub struct Header<'a> {
+    pub name: KindedName<'a>,
+    pub condition: Option<Sourced<&'a str>>,
+    pub value: HeaderValue<'a>,
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
