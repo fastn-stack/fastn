@@ -1,0 +1,184 @@
+-- card-container:
+
+-- issue: gap: 32px seen on H1, H2, H3 headings
+reported-on: 12 Jan 2023
+github-link: https://github.com/ftd-lang/ftd/blob/main/Cheatsheet.md
+
+-- issue.error-msg:
+
+`fpm.error no error message`
+
+`fpm.error no error message`
+
+`fpm.error no error message`
+
+
+-- end: card-container
+
+
+
+
+
+
+
+
+
+
+-- component issue:
+caption issue:
+optional string reported-on:
+optional string error-msg:
+optional string github-link:
+
+-- card:
+
+-- ftd.column:
+width: fill-container
+
+-- card-header:
+
+-- issue-body:
+issue: $issue.issue
+reported-on: $issue.reported-on
+error-msg: $issue.error-msg
+github-link: $issue.github-link
+
+-- end: ftd.column
+
+-- end: card
+
+-- end: issue
+
+
+-- component card:
+children card-wrap:
+
+-- ftd.column:
+width: fill-container
+background.solid: #000000
+spacing.fixed.px: 16
+padding-vertical.px: 24
+padding-horizontal.px: 24
+border-bottom-width.px: 1
+border-color: $inherited.colors.border-strong
+margin-bottom.px: 24
+children: $card.card-wrap
+
+-- end: ftd.column
+
+-- end: card
+
+
+
+
+
+
+
+
+
+
+-- component card-container:
+children card-child:
+
+-- ftd.column:
+width: fill-container
+background.solid: #333333
+
+-- ftd.column:
+width.fixed.px: 1160
+align-self: center
+children: $card-container.card-child
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: card-container
+
+;;card-toolkit
+
+
+
+
+
+
+
+
+-- component card-header:
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 28
+
+-- ftd.text: Issue Description
+role: $inherited.types.heading-small
+color: $inherited.colors.text
+
+-- ftd.text: Reported on
+role: $inherited.types.heading-small
+color: $inherited.colors.text
+white-space: nowrap
+
+-- ftd.text: Error Message
+role: $inherited.types.heading-small
+color: $inherited.colors.text
+
+-- ftd.text: GitHub Code Link
+role: $inherited.types.heading-small
+color: $inherited.colors.text
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: card-header
+
+
+
+
+
+
+
+
+-- component issue-body:
+string issue:
+optional string reported-on:
+optional string error-msg:
+optional string github-link:
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 28
+
+-- ftd.text: $issue-body.issue
+role: $inherited.types.copy-relaxed
+color: $inherited.colors.text
+
+-- ftd.text: $issue-body.reported-on
+if: { issue-body.reported-on != NULL }
+role: $inherited.types.copy-relaxed
+color: $inherited.colors.text
+white-space: nowrap
+
+-- ftd.text: $issue-body.error-msg
+if: { issue-body.error-msg != NULL }
+role: $inherited.types.copy-relaxed
+color: $inherited.colors.text
+
+-- ftd.text: $issue-body.github-link
+if: { issue-body.github-link != NULL }
+link: $issue.github-link
+role: $inherited.types.copy-relaxed
+color: $inherited.colors.text
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: issue-body
