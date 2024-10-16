@@ -111,7 +111,7 @@ pub enum Error {
     DSHttpError { message: String },
 
     #[error("Found Cycle: {message}, line_number: {line_number}")]
-    FoundCycle { message: String, line_number: usize},
+    FoundCycle { message: String, line_number: usize },
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
