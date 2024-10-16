@@ -7,7 +7,7 @@ mod parse;
 #[cfg(test)]
 mod test;
 
-pub use parse::parse;
+pub use parse::{parse_edit, Edit, Engine};
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct Section<'a> {
@@ -79,11 +79,13 @@ pub enum StringOrSection<'a> {
 #[derive(Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Item<'a> {
     Section(Section<'a>),
+    Error(Sourced<SingleError<'a>>),
     Comment(&'a str),
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct ParseOutput<'a> {
+    pub doc_name: &'a str,
     pub module_doc: Option<Sourced<&'a str>>,
     pub items: Vec<Sourced<Item<'a>>>,
     /// length of each line in the source
@@ -91,17 +93,10 @@ pub struct ParseOutput<'a> {
 }
 
 #[derive(Debug, PartialEq, Clone, serde::Serialize)]
-pub enum SingleError {
-    // SectionNotFound,
+pub enum SingleError<'a> {
+    SectionNotFound(Sourced<&'a str>),
     // MoreThanOneCaption,
     // ParseError,
     // MoreThanOneHeader,
     // HeaderNotFound,
-}
-
-// should we base this on https://docs.rs/ariadne/ or https://docs.rs/miette/?
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
-pub struct ParseError<'a> {
-    pub partial: ParseOutput<'a>,
-    pub errors: Vec<Sourced<SingleError>>,
 }
