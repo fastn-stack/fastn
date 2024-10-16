@@ -3,7 +3,8 @@ use pretty_assertions::assert_eq;
 #[track_caller]
 fn p(
     s: &str,
-    t: &str,
+    t: &Option<String>,
+    e: &Option<String>,
     fix: bool,
     file_location: &std::path::PathBuf,
     error_file_location: &std::path::PathBuf,
@@ -19,7 +20,26 @@ fn p(
                 }
                 return;
             } else {
-                panic!("Expected error: {}", expected_error)
+                if t.is_some() {
+                    panic!(
+                        "{:?} file not expected. found: {:?}",
+                        file_location, expected_error
+                    );
+                }
+                match e.as_ref() {
+                    Some(found_error) => {
+                        let expected_error = expected_error.to_string();
+                        assert_eq!(
+                            found_error, &expected_error,
+                            "Expected Error: {}",
+                            expected_error
+                        );
+                        return;
+                    }
+                    None => {
+                        panic!("{:?}", expected_error);
+                    }
+                }
             }
         }
     };
@@ -31,7 +51,7 @@ fn p(
         std::fs::write(file_location, expected_json).unwrap();
         return;
     }
-    let t: ftd::interpreter::Document = serde_json::from_str(t)
+    let t: ftd::interpreter::Document = serde_json::from_str(&t.clone().unwrap_or_default())
         .unwrap_or_else(|e| panic!("{:?} Expected JSON: {}", e, expected_json));
     assert_eq!(&t, &i, "Expected JSON: {}", expected_json)
 }
@@ -45,10 +65,17 @@ fn interpreter_test_all() {
     let path = cli_args.iter().find_map(|v| v.strip_prefix("path="));
     for (files, json, error) in find_file_groups() {
         let t = if fix {
-            "".to_string()
+            None
         } else {
-            std::fs::read_to_string(&json).unwrap()
+            std::fs::read_to_string(&json).ok()
         };
+
+        let e = if fix {
+            None
+        } else {
+            std::fs::read_to_string(&error).ok()
+        };
+
         for f in files {
             match path {
                 Some(path) if !f.to_str().unwrap().contains(path) => continue,
@@ -56,7 +83,7 @@ fn interpreter_test_all() {
             }
             let s = std::fs::read_to_string(&f).unwrap();
             println!("{} {}", if fix { "fixing" } else { "testing" }, f.display());
-            p(&s, &t, fix, &json, &error);
+            p(&s, &t, &e, fix, &json, &error);
         }
     }
 }
