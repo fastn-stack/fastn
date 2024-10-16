@@ -180,23 +180,38 @@ impl InterpreterState {
         Ok(())
     }
 
-    /// Construct an error message that shows the component names involved in the cycle.
-    fn construct_cycle_error(&self, index: usize) -> ftd::interpreter::Error {
-        let len = self.in_process.len();
-        let mut message = if (len - 2 * index) >= 1  {
-            let (name,_, ast) = &self.in_process[(len - 2 * index) - 1];
-            format!("{name}:{} => ", ast.line_number())
+    /// This function builds a descriptive error message, including the component names and their
+    /// line numbers, showing the cycle in the `in_process` list. The format will be:
+    /// `ComponentName:LineNumber => ComponentName:LineNumber => ...`
+    fn construct_cycle_error(&self, cycle_index: usize) -> ftd::interpreter::Error {
+        let process_length = self.in_process.len();
+
+        // Initialize the error message with the component before the cycle starts, if any
+        let mut message = if (process_length - 2 * cycle_index) >= 1 {
+            let (prev_name, _, prev_ast) = &self.in_process[(process_length - 2 * cycle_index) - 1];
+            format!("{prev_name}:{} => ", prev_ast.line_number()) // Include line number
         } else {
-            "".to_string()
+            String::new() // Start with an empty string if no component precedes the cycle
         };
-        for j in len - 2 * index..len - index + 1 {
-            message = format!("{message}{}:{}{}", self.in_process[j].0, self.in_process[j].2.line_number(), if j == len - index { "" } else { " => " });
+
+        // Construct the cycle message by iterating through the components in the cycle
+        for j in (process_length - 2 * cycle_index)..=(process_length - cycle_index) {
+            message = format!(
+                "{}{}:{}{}",
+                message, // Add previous components to the error message
+                self.in_process[j].0, // Component name
+                self.in_process[j].2.line_number(), // Line number
+                if j == process_length - cycle_index { "" } else { " => " } // Add arrow if not the last component
+            );
         }
+
+        // Return the error with the constructed cycle message and the line number of the last component in the cycle
         ftd::interpreter::Error::FoundCycle {
             message,
-            line_number: self.in_process[len - 1].2.line_number(),
+            line_number: self.in_process[process_length - 1].2.line_number(),
         }
     }
+
 
     /// Removes the processed AST, i.e. which are in bag, from the `in_process` field
     fn remove_already_processed(&mut self) {
