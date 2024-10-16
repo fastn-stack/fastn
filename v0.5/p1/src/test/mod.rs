@@ -19,13 +19,16 @@ fn test_all() {
 fn p1(file: impl AsRef<std::path::Path> + std::fmt::Debug, fix: bool) {
     let json = file.as_ref().with_extension("json");
     let s = std::fs::read_to_string(&file).unwrap();
+    let mut engine = fastn_p1::Engine::default();
+    engine.edits.push(s);
+    let s = engine.edits.last().unwrap();
     let mut output = fastn_p1::ParseOutput::default();
     let edit = fastn_p1::Edit {
         from: 0,
         to: s.len(),
         text: s,
     };
-    fastn_p1::parse_edit(&mut output, &edit);
+    fastn_p1::parse_edit(&mut output, edit);
     let expected_json =
         fastn_p1::test::sorted_json::to_json(&serde_json::to_value(&output).unwrap());
     if fix {
