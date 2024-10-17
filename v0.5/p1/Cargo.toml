@@ -11,7 +11,7 @@ homepage.workspace = true
 
 [dependencies]
 serde.workspace = true
-lyn.workspace = true
+# lyn.workspace = true
 
 [dev-dependencies]
 itertools.workspace = true

@@ -4,10 +4,9 @@
 extern crate self as fastn_p1;
 
 mod parse;
+pub mod parse_v1;
 #[cfg(test)]
 mod test;
-
-pub use parse::{Item, ParseOutput, SingleError};
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct Section<'a> {
@@ -105,4 +104,25 @@ pub struct Edit {
     pub from: usize,
     pub to: usize,
     pub text: Vec<char>,
+}
+
+#[derive(Debug, PartialEq, Clone, serde::Serialize)]
+pub enum Item<'a> {
+    Section(fastn_p1::Section<'a>),
+    Error(fastn_p1::Sourced<fastn_p1::SingleError<'a>>),
+    Comment(&'a str),
+}
+
+#[derive(Debug, PartialEq, Clone, serde::Serialize)]
+pub enum SingleError<'a> {
+    /// we found some text when we were not expecting, eg at the beginning of the file before
+    /// any section started, or inside a section that does not expect any text. this second part
+    /// I am not sure right now as we are planning ot convert all text to text nodes inside a
+    /// section. so by the end maybe this will only contain the first part.
+    UnwantedTextFound(fastn_p1::Sourced<&'a [char]>),
+    // SectionNotFound(&'a str),
+    // MoreThanOneCaption,
+    // ParseError,
+    // MoreThanOneHeader,
+    // HeaderNotFound,
 }
