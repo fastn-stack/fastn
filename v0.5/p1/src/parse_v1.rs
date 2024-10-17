@@ -1,11 +1,3 @@
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
-pub struct ParseOutput<'a> {
-    pub doc_name: &'a str,
-    pub module_doc: Option<fastn_p1::Sourced<std::borrow::Cow<'a, &'a str>>>,
-    pub items: Vec<fastn_p1::Sourced<fastn_p1::Item<'a>>>,
-    pub line_starts: Vec<usize>,
-}
-
 #[allow(dead_code)]
 enum CommentConsumed {
     Yes,
@@ -13,7 +5,7 @@ enum CommentConsumed {
     DocComment,
 }
 
-impl ParseOutput<'_> {
+impl fastn_p1::ParseOutput<'_> {
     fn register_new_line(&mut self, index: usize) {
         self.line_starts.push(index);
     }
@@ -158,7 +150,7 @@ impl ParseOutput<'_> {
     /// ```
     ///  let s = "-- foo:\n--bar:\n".to_string();
     ///  let mut engine = fastn_p1::ParserEngine::new("foo".to_string());
-    ///  let mut output = fastn_p1::parse_v1::ParseOutput::default();
+    ///  let mut output = fastn_p1::ParseOutput::default();
     ///  let edit = engine.add_edit(0, s.len(), s);
     ///  output.update(edit);
     /// ```
@@ -172,7 +164,7 @@ impl ParseOutput<'_> {
         let mut index: usize = match self.read_module_doc(e) {
             Some(index) => index,
             None => return,
-        };:
+        };
 
         let mut section = fastn_p1::Section::default();
         while let Some(end) = self.parse_section(&mut section, index, e) {

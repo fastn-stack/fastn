@@ -13,6 +13,7 @@ name = "fastn-p1"
 version = "0.1.0"
 dependencies = [
  "itertools",
+ "lyn",
  "serde",
  "serde_json",
 ]
@@ -31,6 +32,12 @@ name = "itoa"
 version = "1.0.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "49f1f14873335454500d59611f1cf4a4b0f786f9ac11f4312a78e4cf2566695b"
+
+[[package]]
+name = "lyn"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f08d9299a146aa1eb3c5451e6d9045708f232a43fd8d4436f69cf00fcb2a019c"
 
 [[package]]
 name = "memchr"

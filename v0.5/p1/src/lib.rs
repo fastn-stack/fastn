@@ -73,7 +73,7 @@ pub enum StringOrSection<'a> {
     String(Sourced<std::borrow::Cow<'a, &'a str>>),
     // from expression as well we will remove all the comments, so it has to be a cow
     Expression(Sourced<std::borrow::Cow<'a, &'a str>>),
-    Section(Sourced<Section<'a>>),
+    Section(Box<Sourced<Section<'a>>>),
 }
 
 #[derive(Default)]
@@ -104,6 +104,14 @@ pub struct Edit {
     pub from: usize,
     pub to: usize,
     pub text: Vec<char>,
+}
+
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
+pub struct ParseOutput<'a> {
+    pub doc_name: &'a str,
+    pub module_doc: Option<fastn_p1::Sourced<std::borrow::Cow<'a, &'a str>>>,
+    pub items: Vec<fastn_p1::Sourced<fastn_p1::Item<'a>>>,
+    pub line_starts: Vec<usize>,
 }
 
 #[derive(Debug, PartialEq, Clone, serde::Serialize)]
