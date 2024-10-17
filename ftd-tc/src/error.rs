@@ -8,7 +8,7 @@ pub enum Error {
         name: String,
         usage_document: ftd_tc::DocumentID,
         usage_line: usize,
-        found: ftd_tc::Qualified<ftd_tc::Type>,
+        found: Box<ftd_tc::Qualified<ftd_tc::Type>>,
     },
 }
 

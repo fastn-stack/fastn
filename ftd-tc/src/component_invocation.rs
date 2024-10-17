@@ -51,7 +51,7 @@ impl ftd_tc::State {
                     name: ci.inner.name.clone(),
                     usage_document: ci.document_id.clone(),
                     usage_line: ci.inner.line_number,
-                    found: t.to_owned(),
+                    found: Box::new(t.to_owned()),
                 });
                 Ok(None)
             }

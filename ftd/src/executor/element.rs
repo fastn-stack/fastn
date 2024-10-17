@@ -3,7 +3,7 @@ pub enum Element {
     Row(Row),
     Column(Column),
     Container(ContainerElement),
-    Document(Document),
+    Document(Box<Document>),
     Text(Text),
     Integer(Text),
     Boolean(Text),

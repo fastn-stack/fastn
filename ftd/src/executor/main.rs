@@ -945,14 +945,16 @@ impl ExecuteDoc<'_> {
                     );
                 }
 
-                ftd::executor::Element::Document(ftd::executor::element::document_from_properties(
-                    instruction.properties.as_slice(),
-                    component_definition.arguments.as_slice(),
-                    doc,
-                    instruction.line_number,
-                    vec![],
-                    inherited_variables,
-                )?)
+                ftd::executor::Element::Document(Box::new(
+                    ftd::executor::element::document_from_properties(
+                        instruction.properties.as_slice(),
+                        component_definition.arguments.as_slice(),
+                        doc,
+                        instruction.line_number,
+                        vec![],
+                        inherited_variables,
+                    )?,
+                ))
             }
             "ftd#image" => {
                 ftd::executor::Element::Image(ftd::executor::element::image_from_properties(

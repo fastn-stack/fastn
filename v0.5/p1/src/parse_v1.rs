@@ -172,7 +172,7 @@ impl ParseOutput<'_> {
         let mut index: usize = match self.read_module_doc(e) {
             Some(index) => index,
             None => return,
-        };
+        };:
 
         let mut section = fastn_p1::Section::default();
         while let Some(end) = self.parse_section(&mut section, index, e) {
