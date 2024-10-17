@@ -3,10 +3,8 @@ pub struct ParseOutput<'a> {
     pub doc_name: &'a str,
     pub module_doc: Option<fastn_p1::Sourced<std::borrow::Cow<'a, &'a str>>>,
     pub items: Vec<fastn_p1::Sourced<fastn_p1::Item<'a>>>,
-    /// index of the last new line character in the source. we need to count line lengths
-    last_new_line_at: usize,
     /// length of each line in the source
-    pub line_lengths: Vec<usize>,
+    pub line_starts: Vec<usize>, // or may be we will store line starts
 }
 
 #[derive(Debug, PartialEq, Clone, serde::Serialize)]
@@ -47,8 +45,7 @@ enum CommentConsumed {
 
 impl fastn_p1::ParseOutput<'_> {
     fn register_new_line(&mut self, index: usize) {
-        self.line_lengths.push(index - self.last_new_line_at);
-        self.last_new_line_at = index;
+        self.line_starts.push(index);
     }
 
     /// consume unwanted text till the next line
@@ -102,7 +99,10 @@ impl fastn_p1::ParseOutput<'_> {
     /// read the module doc, and update the self.module_doc.
     ///
     /// this function returns the index of beginning of first line after the module doc.
-    /// it enqueues all the comments before the module doc into the self.items.
+    /// it includes all the comments before the module doc into the `self.items` as comment items.
+    ///
+    /// if it does not find the module doc, say it found a section, it should return the index of
+    /// the first character of that section.
     ///
     /// it also includes all the errors found, e.g., if it found any line that does not
     /// start with a section, nor is a comment.
@@ -110,9 +110,11 @@ impl fastn_p1::ParseOutput<'_> {
     /// this function returns None if it found the end of the file.
     fn read_module_doc(&mut self, e: &fastn_p1::Edit) -> Option<usize> {
         // TODO(non-incremental): this function is supposed to be incremental, but we are not
+        let mut doc_comment_so_far = String::new();
         let mut index = 0;
         loop {
             if e.text.len() <= index {
+                // handle accumulated module doc so far (e.g., if we found some doc comment)
                 return None;
             }
 
@@ -133,7 +135,9 @@ impl fastn_p1::ParseOutput<'_> {
                         CommentConsumed::NotComment => {
                             // Not a comment, and not a section, so it is an error, eat everything
                             // till the next new line
-                            self.consume_unwanted_text_till_new_line(&mut index, e);
+                            if self.consume_unwanted_text_till_new_line(&mut index, e) {
+                                return None;
+                            }
                         }
                         CommentConsumed::DocComment => {
                             // we have found the first line of doc comment. we have to extract the
