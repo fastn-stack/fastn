@@ -1,10 +1,14 @@
-[
-  {
-    "type": "comment",
-    "source": {
-      "from": "1:0",
-      "to": "2:33",
-      "value": " This is comment\nThis is other line in comment"
+{
+  "doc_name": "01-comment",
+  "items": [
+    {
+      "from": 1,
+      "to": 53,
+      "value": {
+        "type": "comment",
+        "value": " This is comment\nThis is other line in comment"
+      }
     }
-  }
-]
+  ],
+  "line_starts": [1]
+}
