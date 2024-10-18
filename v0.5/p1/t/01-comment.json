@@ -1,0 +1,10 @@
+[
+  {
+    "type": "comment",
+    "source": {
+      "from": "1:0",
+      "to": "2:33",
+      "value": " This is comment\nThis is other line in comment"
+    }
+  }
+]
