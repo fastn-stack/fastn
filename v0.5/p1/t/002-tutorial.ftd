@@ -26,7 +26,7 @@ private list<string> a: [                      ;; we have entered f-script, so `
     $[b],                               ;; in f-script strings are quoted using `[]`
     $[c]
 }
-string foo: ${
+string foo: {
    this is a long string
 
    this is not `f-script mode yet` because foo is a string
@@ -53,7 +53,7 @@ private future<result<list<person>>> p7:
 -- foo:
 p: person { ;; we are automatically in `f-script` because `p` is not text
     x: 20,
-    y: [[a], [b]],
+    y: [$[a], $[b]],
     z: [true, false],
     a: [
         {
