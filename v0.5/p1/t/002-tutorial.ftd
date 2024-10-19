@@ -1,0 +1,101 @@
+;; this file contains examples of most constructs
+
+;;; this is doc-comment
+;;; which can span multiple lines
+;;;
+;;; it is used to describe the file
+;;; and its purpose ;; this is not comment, and is part of doc comment
+
+;; this is another comment - no more doc comments are allowed
+
+
+;;; we are going to use this below
+-- integer a: 20
+
+;;; this is comment for person record
+-- public record person:               ;; record is public, default is private
+;; if a record or component is public, all its fields are public, unless they are explicitly marked private
+;;; this is doc comment for x
+;;; it can span multiple lines
+integer x: 10                          ;; an integer with default value
+;;; y should be public as it does not have a default value, and no public person construct functions exist
+list<string> y:                        ;; a list of strings, no default value
+list<boolean> z: [true, false]         ;; a list of strings, with default value
+private list<string> a: [                      ;; we have entered f-script, so `[` is allowed
+    [a],
+    [b],                               ;; in f-script strings are quoted using `[]`
+    [c]
+}
+string foo: {
+   this is a long string
+
+   this is not `f-script mode yet` because foo is a string
+
+   ${a + 2}      ;; this is formatted string, whats inside `${}` if `f-script`, `a` is the global value
+
+   ${person.x + 20}  ;; this string uses the instance specific value of `x`, so default value itself is recomputed
+}
+
+-- public component foo:
+person p:
+list<person> ps:
+map<person> p2:
+map<list<person>> p3:
+result<person> p4:
+future<person> p5:
+future<result<person>> p6:
+private future<result<list<person>>> p7:
+
+-- ftd.text: ${ foo.p.x }   ;; foo.p.x is integer, but ${} converts things to string
+
+-- end: foo
+
+-- foo:
+p: person { ;; we are automatically in `f-script` because `p` is not text
+    x: 20,
+    y: [[a], [b]],
+    z: [true, false],
+    a: [
+        {
+            let a: string = [hello];  ;; for string type is needed as else we can't know if it is
+                         ;; an array with single variable called hello, or a string with literal hello
+            a            ;; this is also allowed, here the first element is going to be a string.
+        }, [
+            this is a long string
+
+            can span multiple para
+        ], [c]
+    ],
+    foo: [
+
+        this is a long string
+
+    this is not `f-script mode` because foo is a string
+
+    22 ;; still a string
+
+    30 ;; comments are not part of the string
+
+    ;; note that the string will be automatically de-indented, the line with the
+    ;; minimum indentation will be used as base and that much indentation will be
+    ;; removed from all lines.
+    ;;
+    ;; comments will not be used for base calculation
+
+    ]
+}
+ps: [] ;; empty list
+p2: {} ;; empty map
+p3: {
+    a: [],
+    b: [person{y: 20}]
+}
+;; ok is a variant of result enum, and ok takes a single anon value, so no name is needed
+p4: result.ok { person { y: 20 } }
+p5: future.pending ;; pending is future value, so no value is needed
+;; result.error is a variant of result enum, and error takes a single anon value
+p6: future.ready { result.error { [ some error message] } }
+
+;; integer, boolean, decimal, string, list, map, result, future are all built-in types and are always available
+;; without any import, you can not create your own types or component with those names. you can use #integer,
+;; #boolean etc though. also you can use integer, boolean etc as field names / variable names.
