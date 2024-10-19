@@ -3,10 +3,11 @@
 
 extern crate self as fastn_p1;
 
-mod parse;
+pub mod parse;
 pub mod parse_v1;
 #[cfg(test)]
 mod test;
+mod tokens;
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct Section<'a> {

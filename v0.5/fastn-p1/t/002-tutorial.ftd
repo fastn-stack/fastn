@@ -1,24 +1,24 @@
 ;; this file contains examples of most constructs
 
-;;; this is doc-comment
-;;; which can span multiple lines
-;;;
-;;; it is used to describe the file
-;;; and its purpose ;; this is not comment, and is part of doc comment
+;-; this is doc-comment
+;-; which can span multiple lines
+;-;
+;-; it is used to describe the file
+;-; and its purpose ;; this is not comment, and is part of doc comment
 
 ;; this is another comment - no more doc comments are allowed
 
 
-;;; we are going to use this below
+;-; we are going to use this below
 -- integer a: 20
 
-;;; this is comment for person record
+;-; this is comment for person record
 -- public record person:               ;; record is public, default is private
 ;; if a record or component is public, all its fields are public, unless they are explicitly marked private
-;;; this is doc comment for x
-;;; it can span multiple lines
+;-; this is doc comment for x
+;-; it can span multiple lines
 integer x: 10                          ;; an integer with default value
-;;; y should be public as it does not have a default value, and no public person construct functions exist
+;-; y should be public as it does not have a default value, and no public person construct functions exist
 list<string> y:                        ;; a list of strings, no default value
 list<boolean> z: [true, false]         ;; a list of strings, with default value
 private list<string> a: [                      ;; we have entered f-script, so `[` is allowed
@@ -71,7 +71,9 @@ p: person { ;; we are automatically in `f-script` because `p` is not text
 
     this is not `f-script mode` because foo is a string
 
-    22 ;; still a string
+    22.5 ;; still a string
+
+    11.e
 
     30 ;; comments are not part of the string
 

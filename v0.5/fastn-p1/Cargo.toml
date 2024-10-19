@@ -11,6 +11,7 @@ homepage.workspace = true
 
 [dependencies]
 serde.workspace = true
+logos.workspace = true
 
 [dev-dependencies]
 itertools.workspace = true
