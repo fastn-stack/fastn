@@ -22,11 +22,11 @@ integer x: 10                          ;; an integer with default value
 list<string> y:                        ;; a list of strings, no default value
 list<boolean> z: [true, false]         ;; a list of strings, with default value
 private list<string> a: [                      ;; we have entered f-script, so `[` is allowed
-    [a],
-    [b],                               ;; in f-script strings are quoted using `[]`
-    [c]
+    $[a],
+    $[b],                               ;; in f-script strings are quoted using `[]`
+    $[c]
 }
-string foo: {
+string foo: ${
    this is a long string
 
    this is not `f-script mode yet` because foo is a string
@@ -57,16 +57,15 @@ p: person { ;; we are automatically in `f-script` because `p` is not text
     z: [true, false],
     a: [
         {
-            let a: string = [hello];  ;; for string type is needed as else we can't know if it is
-                         ;; an array with single variable called hello, or a string with literal hello
-            a            ;; this is also allowed, here the first element is going to be a string.
-        }, [
+            let a = $[hello];
+            a
+        }, $[
             this is a long string
 
             can span multiple para
-        ], [c]
+        ], $[c]
     ],
-    foo: [
+    foo: $[
 
         this is a long string
 
@@ -94,7 +93,7 @@ p3: {
 p4: result.ok { person { y: 20 } }
 p5: future.pending ;; pending is future value, so no value is needed
 ;; result.error is a variant of result enum, and error takes a single anon value
-p6: future.ready { result.error { [ some error message] } }
+p6: future.ready { result.error { $[ some error message] } }
 
 ;; integer, boolean, decimal, string, list, map, result, future are all built-in types and are always available
 ;; without any import, you can not create your own types or component with those names. you can use #integer,
