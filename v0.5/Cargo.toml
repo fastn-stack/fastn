@@ -34,6 +34,8 @@ homepage = "https://fastn.com"
 
 fastn-p1.path = "fastn-p1"
 logos = "0.14"
+lalrpop = "0.22"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 itertools = "0.13"
+lalrpop-util = { version = "0.21.0", features = ["lexer", "unicode"] }

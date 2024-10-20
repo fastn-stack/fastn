@@ -9,6 +9,10 @@ pub mod parse_v1;
 mod test;
 mod tokens;
 
+use lalrpop_util::lalrpop_mod;
+
+lalrpop_mod!(grammar);
+
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct Section<'a> {
     pub name: KindedName<'a>,
