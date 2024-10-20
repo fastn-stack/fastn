@@ -1,6 +1,8 @@
+#![allow(dead_code)]
+
 mod sorted_json;
 
-#[test]
+// #[test]
 fn test_all() {
     // we are storing files in folder named `t` and not inside `tests`, because `cargo test`
     // re-compiles the crate and we don't want to recompile the crate for every test

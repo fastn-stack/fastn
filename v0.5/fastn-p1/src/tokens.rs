@@ -6,9 +6,6 @@ enum Token {
     #[token("$")]
     Dollar,
 
-    #[token("$$")]
-    DoubleDollar,
-
     #[token("${")]
     DollarCurly,
 
@@ -27,7 +24,7 @@ enum Token {
     #[token(")")]
     ParenClose,
 
-    #[token("()")]
+    #[regex(r"\([ \t]*\)")]
     FnMarker,
 
     #[token("+")]
@@ -125,6 +122,12 @@ enum Token {
 
     #[token(",")]
     Comma,
+}
+
+impl std::fmt::Display for Token {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        write!(f, "{:?}", self)
+    }
 }
 
 #[cfg(test)]
