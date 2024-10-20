@@ -1,4 +1,4 @@
-#[derive(logos::Logos, Debug, PartialEq)]
+#[derive(logos::Logos, Debug, PartialEq, Clone)]
 enum Token {
     #[token(":")]
     Colon,
@@ -133,6 +133,6 @@ mod test {
     fn test() {
         use logos::Logos;
         let source = include_str!("../t/002-tutorial.ftd");
-        assert_eq!(super::Token::lexer(source).spanned().count(), 1372);
+        assert_eq!(super::Token::lexer(source).spanned().clone().count(), 1372);
     }
 }
