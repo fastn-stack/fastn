@@ -1,16 +1,40 @@
 #[derive(logos::Logos, Debug, PartialEq, Clone)]
 enum Token {
+    #[token("\\;;")]
+    EscapedComment,
+
+    #[regex(r";;[^\n]*")]
+    Comment,
+
+    #[token("\\;-;")]
+    EscapedDocComment,
+
+    #[regex(r";-;[^\n]*")]
+    DocComment,
+
+    #[token("--")]
+    DashDash,
+
+    #[regex(r"[\w]+")]
+    Word,
+
+    #[regex("[\t ]+")]
+    Space,
+
+    #[regex(r"[ \t]*\n")]
+    EmptyLine,
+
+    #[regex(r"\([ \t]*\)")]
+    FnMarker,
+
     #[token(":")]
     Colon,
 
-    #[token("$")]
-    Dollar,
+    #[token("\\${")]
+    EscapedDollarCurly,
 
     #[token("${")]
     DollarCurly,
-
-    #[token("$${")]
-    DoubleDollarCurly,
 
     #[token("{")]
     Curly,
@@ -18,110 +42,23 @@ enum Token {
     #[token("}")]
     CurlyClose,
 
-    #[token("(")]
-    Paren,
-
-    #[token(")")]
-    ParenClose,
-
-    #[regex(r"\([ \t]*\)")]
-    FnMarker,
-
-    #[token("+")]
-    Plus,
-
-    #[token("-")]
-    Minus,
-
-    #[token("=")]
-    Assignment,
-
-    #[token("==")]
-    Equal,
-
-    #[token(">=")]
-    Gte,
-
-    #[token("<=")]
-    Lte,
-
-    #[token("!=")]
-    NotEqual,
-
-    #[token("!")]
-    Not,
-
-    #[token("*")]
-    Cross,
-
-    #[token("/")]
-    Slash,
-
-    #[token("as")]
-    As,
-
-    #[token("^")]
-    Caret,
-
     #[token("$[")]
     DollarSquare,
+
+    #[token("$$[")]
+    DoubleDollarSquare,
+
+    #[token("\\$[")]
+    EscapedDollarSquare,
+
+    #[token("\\$$[")]
+    EscapedDoubleDollarSquare,
 
     #[token("[")]
     Square,
 
     #[token("]")]
     SquareClose,
-
-    #[token("\n")]
-    NewLine,
-
-    #[regex("[\t ]+")]
-    Space,
-
-    #[regex("<")]
-    Angle,
-
-    #[regex(">")]
-    AngleClose,
-
-    #[token("--")]
-    DashDash,
-
-    #[token(";;")]
-    SemiSemi,
-
-    #[token(";-;")]
-    SemiDashSemi,
-
-    #[token("component")]
-    Component,
-
-    #[token("record")]
-    Record,
-
-    #[token("import")]
-    Import,
-
-    #[token("let")]
-    Let,
-
-    #[token("public")]
-    Public,
-
-    #[token("private")]
-    Private,
-
-    #[regex(r"-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?", priority = 3)]
-    Number,
-
-    #[regex(r"[\w]+")]
-    Word,
-
-    #[token(".")]
-    Period,
-
-    #[token(",")]
-    Comma,
 }
 
 impl std::fmt::Display for Token {
@@ -136,6 +73,9 @@ mod test {
     fn test() {
         use logos::Logos;
         let source = include_str!("../t/002-tutorial.ftd");
-        assert_eq!(super::Token::lexer(source).spanned().clone().count(), 1372);
+        assert_eq!(
+            dbg!(super::Token::lexer(source).spanned().collect::<Vec<_>>()).len(),
+            622
+        );
     }
 }
