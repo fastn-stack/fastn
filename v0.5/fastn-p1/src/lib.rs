@@ -3,18 +3,18 @@
 
 extern crate self as fastn_p1;
 
+mod lexer;
 pub mod parse_v1;
 pub mod parse_v2;
-mod parse_v3;
 mod section;
 #[cfg(test)]
 mod test;
-mod tokens;
+mod token;
 
 use lalrpop_util::lalrpop_mod;
 
-pub use parse_v3::Lexer;
-pub use tokens::{LexicalError, Token};
+pub use lexer::Lexer;
+pub use token::Token;
 
 lalrpop_mod!(grammar);
 

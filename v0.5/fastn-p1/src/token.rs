@@ -61,13 +61,6 @@ pub enum Token {
     SquareClose,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
-pub enum LexicalError {
-    // #[error("unexpected character")]
-    #[default]
-    UnexpectedCharacter,
-}
-
 impl std::fmt::Display for Token {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         write!(f, "{:?}", self)

@@ -1,4 +1,4 @@
-use fastn_p1::tokens::{Token, LexicalError};
+use fastn_p1::Token;
 use fastn_p1::Section;
 
 grammar<'input>(input: &'input str);
@@ -18,7 +18,7 @@ SectionName: () = {
 
 extern {
   type Location = usize;
-  type Error = LexicalError;
+  type Error = ();
 
   enum Token {
     "escaped-comment" => Token::EscapedComment,

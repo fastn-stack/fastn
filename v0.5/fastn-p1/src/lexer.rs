@@ -16,7 +16,7 @@ impl<'input> Lexer<'input> {
 }
 
 impl<'input> Iterator for Lexer<'input> {
-    type Item = Spanned<fastn_p1::Token, usize, fastn_p1::LexicalError>;
+    type Item = Spanned<fastn_p1::Token, usize, ()>;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.token_stream
