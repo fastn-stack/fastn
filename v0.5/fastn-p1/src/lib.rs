@@ -4,8 +4,9 @@
 extern crate self as fastn_p1;
 
 mod lexer;
-pub mod parse_v1;
+// pub mod parse_v1;
 pub mod parse_v2;
+mod parser_v3;
 mod section;
 #[cfg(test)]
 mod test;
@@ -111,8 +112,8 @@ pub struct Edit {
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
-pub struct ParseOutput<'a> {
-    pub doc_name: &'a str,
+pub struct ParseOutput {
+    pub doc_name: String,
     pub module_doc: Option<fastn_p1::Span>,
     pub items: Vec<fastn_p1::Spanned<fastn_p1::Item>>,
     pub line_starts: Vec<usize>,
