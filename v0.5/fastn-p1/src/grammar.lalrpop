@@ -4,7 +4,7 @@ use fastn_p1::Section;
 grammar<'input>(input: &'input str);
 
 pub Section: Section<'input> = {
-    "--" " "? <"word"> ":" => Section::with_name(<>)
+    "--" " "? <l: @L> "word" <r: @R> ":" => Section::with_name(l, r),
 };
 
 

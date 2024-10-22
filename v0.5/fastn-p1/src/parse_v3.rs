@@ -1,7 +1,7 @@
 pub type Spanned<Tok, Loc, Error> = Result<(Loc, Tok, Loc), Error>;
 
 pub struct Lexer<'input> {
-    token_stream: logos::SpannedIter<'input, fastn_p1::Sourced<fastn_p1::Token>>,
+    token_stream: logos::SpannedIter<'input, fastn_p1::Token>,
 }
 
 impl<'input> Lexer<'input> {
@@ -19,16 +19,8 @@ impl<'input> Iterator for Lexer<'input> {
     type Item = Spanned<fastn_p1::Token, usize, fastn_p1::LexicalError>;
 
     fn next(&mut self) -> Option<Self::Item> {
-        self.token_stream.next().map(|(token, span)| {
-            Ok((
-                span.start,
-                fastn_p1::Sourced {
-                    from: span.start,
-                    to: span.end,
-                    value: token.unwrap(),
-                },
-                span.end,
-            ))
-        })
+        self.token_stream
+            .next()
+            .map(|(token, span)| Ok((span.start, token.unwrap(), span.end)))
     }
 }
