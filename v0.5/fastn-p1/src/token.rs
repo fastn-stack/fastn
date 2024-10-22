@@ -3,14 +3,14 @@ pub enum Token {
     #[token("\\;;")]
     EscapedComment,
 
-    #[regex(r";;[^\n]*")]
-    Comment,
+    #[regex(r";;[^\n]*\n")]
+    CommentLine,
 
     #[token("\\;-;")]
     EscapedDocComment,
 
-    #[regex(r";-;[^\n]*")]
-    DocComment,
+    #[regex(r";-;[^\n]*\n")]
+    DocCommentLine,
 
     #[token("--")]
     DashDash,
@@ -75,7 +75,7 @@ mod test {
         let source = include_str!("../t/002-tutorial.ftd");
         assert_eq!(
             dbg!(super::Token::lexer(source).spanned().collect::<Vec<_>>()).len(),
-            622
+            585
         );
     }
 }

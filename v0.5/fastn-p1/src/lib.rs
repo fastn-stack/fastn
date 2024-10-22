@@ -123,7 +123,7 @@ pub struct ParseOutput {
 pub enum Item {
     Section(Box<fastn_p1::Section>),
     Error(fastn_p1::Spanned<fastn_p1::SingleError>),
-    Comment(Span),
+    Comment,
 }
 
 #[derive(Debug, PartialEq, Clone, serde::Serialize)]

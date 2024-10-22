@@ -22,9 +22,9 @@ extern {
 
   enum Token {
     "escaped-comment" => Token::EscapedComment,
-    "comment" => Token::Comment,
+    "comment-line" => Token::CommentLine,
     "escaped-doc-comment" => Token::EscapedDocComment,
-    "doc-comment" => Token::DocComment,
+    "doc-comment-line" => Token::DocCommentLine,
     "--" => Token::DashDash,
     "word" => Token::Word,
     " " => Token::Space,
