@@ -169,8 +169,8 @@ impl fastn_p1::ParseOutput<'_> {
         let mut section = fastn_p1::Section::default();
         while let Some(end) = self.parse_section(&mut section, start, e) {
             self.items.push(fastn_p1::Spanned {
-                range: std::ops::Range { start, end },
-                value: fastn_p1::Item::Section(section),
+                span: std::ops::Range { start, end },
+                value: fastn_p1::Item::Section(Box::new(section)),
             });
             start = end;
             section = fastn_p1::Section::default();

@@ -33,7 +33,7 @@ pub type Span = std::ops::Range<usize>;
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct Spanned<T> {
-    pub range: std::ops::Range<usize>,
+    pub span: Span,
     pub value: T,
 }
 
@@ -121,7 +121,7 @@ pub struct ParseOutput<'a> {
 
 #[derive(Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Item {
-    Section(fastn_p1::Section),
+    Section(Box<fastn_p1::Section>),
     Error(fastn_p1::Spanned<fastn_p1::SingleError>),
     Comment(Span),
 }

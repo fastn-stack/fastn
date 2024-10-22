@@ -3,7 +3,7 @@ use fastn_p1::Section;
 
 grammar<'input>(input: &'input str);
 
-pub Section: Section = {
+pub Section: Box<Section> = {
     "--" " "? <s: Spanned<SectionName>> <f: Spanned<"()">?> ":" => Section::with_name(s, f),
 };
 
