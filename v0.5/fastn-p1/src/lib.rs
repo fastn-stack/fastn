@@ -12,6 +12,9 @@ mod tokens;
 
 use lalrpop_util::lalrpop_mod;
 
+pub use parse_v3::Lexer;
+pub use tokens::{LexicalError, Token};
+
 lalrpop_mod!(grammar);
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
@@ -144,8 +147,8 @@ pub enum SingleError<'a> {
 #[test]
 fn grammar_test() {
     let input = "-- foo:";
-    let lexer = fastn_p1::parse_v3::Lexer::new(input);
-    let parser = grammar::SectionParser::new();
+    let lexer = fastn_p1::Lexer::new(input);
+    let parser = fastn_p1::grammar::SectionParser::new();
     let ast = parser.parse(input, lexer).unwrap();
     dbg!(ast);
     panic!();
