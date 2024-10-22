@@ -4,11 +4,11 @@ use fastn_p1::Section;
 grammar<'input>(input: &'input str);
 
 pub Section: Section = {
-    "--" " "? <s: Spanned<SectionName>> <f: "()"?> ":" => Section::with_name(s, f.is_some()),
+    "--" " "? <s: Spanned<SectionName>> <f: Spanned<"()">?> ":" => Section::with_name(s, f),
 };
 
-Spanned<T>: (usize, usize) = {
-    <l: @L> T <r: @R> => (l, r),
+Spanned<T>: fastn_p1::Span = {
+    <l: @L> T <r: @R> => std::ops::Range{ start: l, end: r },
 }
 
 SectionName: () = {

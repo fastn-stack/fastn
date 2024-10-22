@@ -25,7 +25,7 @@ pub struct Section {
     pub headers: Vec<Header>,
     pub body: Option<HeaderValue>,
     pub sub_sections: Vec<Spanned<Section>>,
-    pub is_function: bool,
+    pub function_marker: Option<Span>,
     pub is_commented: bool,
 }
 
