@@ -19,21 +19,29 @@ pub use tokens::{LexicalError, Token};
 lalrpop_mod!(grammar);
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
-pub struct Section<'a> {
-    pub name: KindedName<'a>,
-    pub caption: Option<HeaderValue<'a>>,
-    pub headers: Vec<Header<'a>>,
-    pub body: Option<HeaderValue<'a>>,
-    pub sub_sections: Vec<Sourced<Section<'a>>>,
+pub struct Section {
+    pub name: KindedName,
+    pub caption: Option<HeaderValue>,
+    pub headers: Vec<Header>,
+    pub body: Option<HeaderValue>,
+    pub sub_sections: Vec<Spanned<Section>>,
     pub is_function: bool,
     pub is_commented: bool,
 }
 
+pub type Span = std::ops::Range<usize>;
+
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
-pub struct Header<'a> {
-    pub name: KindedName<'a>,
-    pub condition: Option<Sourced<&'a str>>,
-    pub value: HeaderValue<'a>,
+pub struct Spanned<T> {
+    pub range: std::ops::Range<usize>,
+    pub value: T,
+}
+
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
+pub struct Header {
+    pub name: KindedName,
+    pub condition: Option<Span>,
+    pub value: HeaderValue,
     pub is_commented: bool,
 }
 
@@ -51,39 +59,26 @@ pub enum Visibility {
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
-pub struct Kind<'a> {
+pub struct Kind {
     // only kinded section / header can have doc
-    pub doc: Option<Sourced<&'a str>>,
-    pub visibility: Visibility,
-    pub kind: Sourced<&'a str>,
+    pub doc: Option<Span>,
+    pub visibility: Spanned<Visibility>,
+    pub kind: Span,
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
-pub struct KindedName<'a> {
-    pub kind: Option<Kind<'a>>,
-    pub name: Sourced<&'a str>,
+pub struct KindedName {
+    pub kind: Option<Kind>,
+    pub name: Span,
 }
 
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
-pub struct Sourced<T> {
-    /// position of this symbol from the beginning of the source file
-    pub from: usize,
-    /// end of this symbol from the beginning of source file
-    pub to: usize,
-    pub value: T,
-}
-
-pub type HeaderValue<'a> = Sourced<Vec<StringOrSection<'a>>>;
+pub type HeaderValue = Spanned<Vec<StringOrSection>>;
 
 #[derive(Debug, PartialEq, Clone, serde::Serialize)]
-pub enum StringOrSection<'a> {
-    // This is a `Cow<_>` because we will be escaping \{ and \} in the string, and also trimming
-    // de-indenting the string, further string is cow because we remove comments, further we may
-    // de-indent the string
-    String(Sourced<std::borrow::Cow<'a, &'a str>>),
-    // from expression as well we will remove all the comments, so it has to be a cow
-    Expression(Sourced<std::borrow::Cow<'a, &'a str>>),
-    Section(Box<Sourced<Section<'a>>>),
+pub enum StringOrSection {
+    String(Span),
+    Expression(Span),
+    Section(Box<Spanned<Section>>),
 }
 
 #[derive(Default)]
@@ -119,25 +114,25 @@ pub struct Edit {
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct ParseOutput<'a> {
     pub doc_name: &'a str,
-    pub module_doc: Option<fastn_p1::Sourced<std::borrow::Cow<'a, &'a str>>>,
-    pub items: Vec<fastn_p1::Sourced<fastn_p1::Item<'a>>>,
+    pub module_doc: Option<fastn_p1::Span>,
+    pub items: Vec<fastn_p1::Spanned<fastn_p1::Item>>,
     pub line_starts: Vec<usize>,
 }
 
 #[derive(Debug, PartialEq, Clone, serde::Serialize)]
-pub enum Item<'a> {
-    Section(fastn_p1::Section<'a>),
-    Error(fastn_p1::Sourced<fastn_p1::SingleError<'a>>),
-    Comment(&'a str),
+pub enum Item {
+    Section(fastn_p1::Section),
+    Error(fastn_p1::Spanned<fastn_p1::SingleError>),
+    Comment(Span),
 }
 
 #[derive(Debug, PartialEq, Clone, serde::Serialize)]
-pub enum SingleError<'a> {
+pub enum SingleError {
     /// we found some text when we were not expecting, eg at the beginning of the file before
     /// any section started, or inside a section that does not expect any text. this second part
     /// I am not sure right now as we are planning ot convert all text to text nodes inside a
     /// section. so by the end maybe this will only contain the first part.
-    UnwantedTextFound(fastn_p1::Sourced<&'a [char]>),
+    UnwantedTextFound(fastn_p1::Span),
     // SectionNotFound(&'a str),
     // MoreThanOneCaption,
     // ParseError,

@@ -161,19 +161,18 @@ impl fastn_p1::ParseOutput<'_> {
         // self.last_new_line_at = 0;
         // self.line_lengths = vec![];
 
-        let mut index: usize = match self.read_module_doc(e) {
+        let mut start: usize = match self.read_module_doc(e) {
             Some(index) => index,
             None => return,
         };
 
         let mut section = fastn_p1::Section::default();
-        while let Some(end) = self.parse_section(&mut section, index, e) {
-            self.items.push(fastn_p1::Sourced {
-                from: index,
-                to: end,
+        while let Some(end) = self.parse_section(&mut section, start, e) {
+            self.items.push(fastn_p1::Spanned {
+                range: std::ops::Range { start, end },
                 value: fastn_p1::Item::Section(section),
             });
-            index = end;
+            start = end;
             section = fastn_p1::Section::default();
         }
     }

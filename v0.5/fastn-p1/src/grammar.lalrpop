@@ -3,8 +3,8 @@ use fastn_p1::Section;
 
 grammar<'input>(input: &'input str);
 
-pub Section: Section<'input> = {
-    "--" " "? <s: Spanned<SectionName>> ":" => Section::with_name(s.0, s.1),
+pub Section: Section = {
+    "--" " "? <s: Spanned<SectionName>> ":" => Section::with_name(s),
 };
 
 Spanned<T>: (usize, usize) = {
