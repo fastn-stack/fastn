@@ -143,7 +143,7 @@ pub enum SingleError<'a> {
 
 #[test]
 fn grammar_test() {
-    let input = "--";
+    let input = "-- foo:";
     let lexer = fastn_p1::parse_v3::Lexer::new(input);
     let parser = grammar::SectionParser::new();
     let ast = parser.parse(input, lexer).unwrap();
