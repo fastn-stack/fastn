@@ -1,4 +1,4 @@
-#[derive(logos::Logos, Debug, PartialEq, Clone)]
+#[derive(logos::Logos, Debug, PartialEq, Clone, Copy)]
 pub enum Token {
     #[token("\\;;")]
     EscapedComment,
