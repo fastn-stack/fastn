@@ -4,7 +4,7 @@ use fastn_p1::Section;
 grammar<'input>(input: &'input str);
 
 pub Section: Section = {
-    "--" " "? <s: Spanned<SectionName>> ":" => Section::with_name(s),
+    "--" " "? <s: Spanned<SectionName>> <f: "()"?> ":" => Section::with_name(s, f.is_some()),
 };
 
 Spanned<T>: (usize, usize) = {
@@ -13,7 +13,7 @@ Spanned<T>: (usize, usize) = {
 
 SectionName: () = {
     "word",
-    "word" " " SectionName,
+    SectionName " " "word",
 }
 
 extern {
