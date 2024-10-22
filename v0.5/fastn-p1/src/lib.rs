@@ -13,7 +13,6 @@ mod token;
 
 use lalrpop_util::lalrpop_mod;
 
-pub use lexer::Lexer;
 pub use token::Token;
 
 lalrpop_mod!(grammar);
@@ -143,7 +142,7 @@ pub enum SingleError {
 #[test]
 fn grammar_test() {
     let input = "-- foo bar():";
-    let lexer = fastn_p1::Lexer::new(input);
+    let lexer = fastn_p1::lexer::Lexer::new(input);
     let parser = fastn_p1::grammar::SectionParser::new();
     let ast = parser.parse(input, lexer).unwrap();
     dbg!(ast);
