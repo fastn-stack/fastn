@@ -147,5 +147,4 @@ fn grammar_test() {
     let parser = fastn_p1::grammar::SectionParser::new();
     let ast = parser.parse(input, lexer).unwrap();
     dbg!(ast);
-    panic!();
 }
