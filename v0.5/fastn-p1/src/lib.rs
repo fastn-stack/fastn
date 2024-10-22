@@ -6,6 +6,7 @@ extern crate self as fastn_p1;
 pub mod parse_v1;
 pub mod parse_v2;
 mod parse_v3;
+mod section;
 #[cfg(test)]
 mod test;
 mod tokens;

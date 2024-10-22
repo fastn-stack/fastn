@@ -1,10 +1,10 @@
 use fastn_p1::tokens::{Token, LexicalError};
-use fastn_p1::parse_v3::Section;
+use fastn_p1::Section;
 
 grammar<'input>(input: &'input str);
 
-pub Section: Section = {
-    "--" " "? "word" ":" => Section::default()
+pub Section: Section<'input> = {
+    "--" " "? <"word"> ":" => Section::with_name(<>)
 };
 
 

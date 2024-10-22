@@ -1,11 +1,5 @@
 pub type Spanned<Tok, Loc, Error> = Result<(Loc, Tok, Loc), Error>;
 
-#[derive(Debug, PartialEq, Clone, Default)]
-pub struct Section {
-    pub name: String,
-    pub caption: Option<String>,
-}
-
 pub struct Lexer<'input> {
     token_stream: logos::SpannedIter<'input, fastn_p1::Token>,
 }
