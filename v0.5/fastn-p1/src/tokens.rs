@@ -1,5 +1,5 @@
 #[derive(logos::Logos, Debug, PartialEq, Clone)]
-enum Token {
+pub enum Token {
     #[token("\\;;")]
     EscapedComment,
 
@@ -59,6 +59,13 @@ enum Token {
 
     #[token("]")]
     SquareClose,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub enum LexicalError {
+    // #[error("unexpected character")]
+    #[default]
+    UnexpectedCharacter,
 }
 
 impl std::fmt::Display for Token {

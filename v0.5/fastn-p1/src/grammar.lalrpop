@@ -1,10 +1,37 @@
-use std::str::FromStr;
+use fastn_p1::tokens::{Token, LexicalError};
+use fastn_p1::parse_v3::Section;
 
-grammar;
+grammar<'input>(input: &'input str);
 
-pub Term: i32 = {
-    <n:Num> => n,
-    "(" <t:Term> ")" => t,
+pub Section: Section = {
+    "--" => Section::default()
 };
 
-Num: i32 = <s:r"[0-9]+"> => i32::from_str(s).unwrap();
+
+extern {
+  type Location = usize;
+  type Error = LexicalError;
+
+  enum Token {
+    "escaped-comment" => Token::EscapedComment,
+    "comment" => Token::Comment,
+    "escaped-doc-comment" => Token::EscapedDocComment,
+    "doc-comment" => Token::DocComment,
+    "--" => Token::DashDash,
+    "word" => Token::Word,
+    " " => Token::Space,
+    "\n" => Token::EmptyLine,
+    "()" => Token::FnMarker,
+    ":" => Token::Colon,
+    "escaped-dollar-curly" => Token::EscapedDollarCurly,
+    "${" => Token::DollarCurly,
+    "{" => Token::Curly,
+    "}" => Token::CurlyClose,
+    "$[" => Token::DollarSquare,
+    "$$[" => Token::DoubleDollarSquare,
+    "escaped-dollar-square" => Token::EscapedDollarSquare,
+    "escaped-double-dollar-square" => Token::EscapedDoubleDollarSquare,
+    "[" => Token::Square,
+    "]" => Token::SquareClose,
+  }
+}

@@ -3,8 +3,9 @@
 
 extern crate self as fastn_p1;
 
-pub mod parse;
 pub mod parse_v1;
+pub mod parse_v2;
+mod parse_v3;
 #[cfg(test)]
 mod test;
 mod tokens;
@@ -142,8 +143,10 @@ pub enum SingleError<'a> {
 
 #[test]
 fn grammar_test() {
-    assert!(grammar::TermParser::new().parse("22").is_ok());
-    assert!(grammar::TermParser::new().parse("(22)").is_ok());
-    assert!(grammar::TermParser::new().parse("((((22))))").is_ok());
-    assert!(grammar::TermParser::new().parse("((22)").is_err());
+    let input = "--";
+    let lexer = fastn_p1::parse_v3::Lexer::new(input);
+    let parser = grammar::SectionParser::new();
+    let ast = parser.parse(input, lexer).unwrap();
+    dbg!(ast);
+    panic!();
 }
