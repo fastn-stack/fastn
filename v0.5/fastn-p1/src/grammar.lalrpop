@@ -4,9 +4,13 @@ use fastn_p1::Section;
 grammar<'input>(input: &'input str);
 
 pub Section: Section<'input> = {
-    "--" " "? <l: @L> "word" <r: @R> ":" => Section::with_name(l, r),
+    "--" " "? <s: SectionName> ":" => Section::with_name(s.0, s.1),
 };
 
+SectionName: (usize, usize) = {
+    <l: @L> "word" <r: @R> => (l, r),
+    <l: @L> "word" " " SectionName <r: @R> => (l, r),
+}
 
 extern {
   type Location = usize;
