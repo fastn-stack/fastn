@@ -12,7 +12,7 @@ pub enum Token {
     #[regex(r";-;[^\n]*\n")]
     DocCommentLine,
 
-    #[token("--")]
+    #[regex("[ \t]*--[ \t]")]
     DashDash,
 
     #[regex(r"[\w]+")]

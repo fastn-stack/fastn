@@ -20,7 +20,9 @@ lalrpop_mod!(grammar);
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct Section {
+    pub dashdash: Span, // for syntax highlighting and formatting
     pub name: KindedName,
+    pub colon: Span, // for syntax highlighting and formatting
     pub caption: Option<HeaderValue>,
     pub headers: Vec<Header>,
     pub body: Option<HeaderValue>,
@@ -128,6 +130,9 @@ pub enum Item {
 
 #[derive(Debug, PartialEq, Clone, serde::Serialize)]
 pub enum SingleError {
+    /// doc comments should either come at the beginning of the file as a contiguous chunk
+    /// or right before a section or a header.
+    UnexpectedDocComment(fastn_p1::Span),
     /// we found some text when we were not expecting, eg at the beginning of the file before
     /// any section started, or inside a section that does not expect any text. this second part
     /// I am not sure right now as we are planning ot convert all text to text nodes inside a

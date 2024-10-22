@@ -58,7 +58,6 @@ impl Scanner {
         None
     }
 
-    // this uses fn extend_range(a: &mut fastn_p1::Span, b: fastn_p1::Span) to extend the spans
     pub fn take_consecutive(&mut self, token: fastn_p1::Token) -> Option<fastn_p1::Span> {
         let mut span = self.take(token)?;
         while let Some(s) = self.take(token) {
@@ -71,7 +70,7 @@ impl Scanner {
         &mut self,
         tokens: &[fastn_p1::Token],
     ) -> Option<(fastn_p1::Token, fastn_p1::Span)> {
-        if let Some((t, s)) = self.peek() {
+        if let Some((t, _)) = self.peek() {
             if tokens.contains(&t) {
                 return self.pop();
             }
@@ -79,14 +78,17 @@ impl Scanner {
         None
     }
 
-    // eats up all comment lines and empty lines
+    // eats up all the comments and empty lines till first non-comment, returns if we are done
     pub fn gobble(&mut self) -> bool {
-        let mut found = false;
-        while let Some(_) = self.one_of(&[fastn_p1::Token::CommentLine, fastn_p1::Token::EmptyLine])
+        // TODO: we can reduce the number of items here by using take_consecutive for comments
+        //       and newlines
+        while let Some((token, span)) =
+            self.one_of(&[fastn_p1::Token::CommentLine, fastn_p1::Token::EmptyLine])
         {
-            // TODO: we have to store comments here
-            found = true;
+            if token == fastn_p1::Token::CommentLine {
+                self.output.insert_comment(span);
+            }
         }
-        found
+        self.is_done()
     }
 }
