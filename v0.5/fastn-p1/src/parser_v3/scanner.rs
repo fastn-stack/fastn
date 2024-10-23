@@ -91,4 +91,10 @@ impl Scanner {
         }
         self.is_done()
     }
+
+    pub fn enqueue_errors(&mut self, errors: &mut Vec<fastn_p1::Spanned<fastn_p1::SingleError>>) {
+        self.output
+            .items
+            .extend(errors.drain(..).map(|v| v.map(fastn_p1::Item::Error)));
+    }
 }

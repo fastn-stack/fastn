@@ -39,6 +39,15 @@ pub struct Spanned<T> {
     pub value: T,
 }
 
+impl<T> Spanned<T> {
+    pub fn map<T2, F: FnOnce(T) -> T2>(self, f: F) -> Spanned<T2> {
+        Spanned {
+            span: self.span,
+            value: f(self.value),
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct Header {
     pub name: KindedName,
@@ -124,7 +133,7 @@ pub struct ParseOutput {
 #[derive(Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Item {
     Section(Box<fastn_p1::Section>),
-    Error(fastn_p1::Spanned<fastn_p1::SingleError>),
+    Error(fastn_p1::SingleError),
     Comment,
 }
 
@@ -132,12 +141,12 @@ pub enum Item {
 pub enum SingleError {
     /// doc comments should either come at the beginning of the file as a contiguous chunk
     /// or right before a section or a header.
-    UnexpectedDocComment(fastn_p1::Span),
+    UnexpectedDocComment,
     /// we found some text when we were not expecting, eg at the beginning of the file before
     /// any section started, or inside a section that does not expect any text. this second part
     /// I am not sure right now as we are planning ot convert all text to text nodes inside a
     /// section. so by the end maybe this will only contain the first part.
-    UnwantedTextFound(fastn_p1::Span),
+    UnwantedTextFound,
     // SectionNotFound(&'a str),
     // MoreThanOneCaption,
     // ParseError,

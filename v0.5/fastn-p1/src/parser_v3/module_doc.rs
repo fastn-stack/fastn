@@ -1,5 +1,8 @@
 // returns true if there is no more output left to process
-pub fn module_doc(scanner: &mut fastn_p1::parser_v3::scanner::Scanner) -> bool {
+pub fn module_doc(
+    scanner: &mut fastn_p1::parser_v3::scanner::Scanner,
+    _: &mut Vec<fastn_p1::Spanned<fastn_p1::SingleError>>,
+) -> bool {
     // first gobble up all the comments and empty lines
     scanner.gobble();
 
