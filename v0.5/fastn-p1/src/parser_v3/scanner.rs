@@ -87,9 +87,11 @@ impl Scanner {
     pub fn gobble(&mut self) -> bool {
         // TODO: we can reduce the number of items here by using take_consecutive for comments
         //       and newlines
-        while let Some((token, span)) =
-            self.one_of(&[fastn_p1::Token::CommentLine, fastn_p1::Token::EmptyLine])
-        {
+        while let Some((token, span)) = self.one_of(&[
+            fastn_p1::Token::CommentLine,
+            fastn_p1::Token::EmptyLine,
+            fastn_p1::Token::Space,
+        ]) {
             if token == fastn_p1::Token::CommentLine {
                 self.output.insert_comment(span);
             }

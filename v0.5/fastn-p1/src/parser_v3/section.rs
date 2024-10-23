@@ -16,7 +16,6 @@ pub fn section(
     scanner.gobble_comments(); // this is because consecutive, non-empty line comments are allowed
 
     // the very next lines must be a section_header
-
     let _section_header = match section_header(scanner, potential_errors) {
         Some(v) => v,
         None => {
@@ -127,12 +126,31 @@ fn kind(scanner: &mut fastn_p1::parser_v3::scanner::Scanner) -> Option<Kind> {
     })
 }
 
-fn angle_text(_scanner: &mut fastn_p1::parser_v3::scanner::Scanner) -> bool {
-    todo!()
+fn angle_text(scanner: &mut fastn_p1::parser_v3::scanner::Scanner) -> bool {
+    // this is the inside of an angle text. it must be a word
+    scanner.gobble();
+
+    if !scanner.take(fastn_p1::Token::Word).is_some() {
+        return false;
+    }
+
+    scanner.gobble();
+
+    // after the word we can find another `<`
+    #[allow(clippy::collapsible_if)] // because makes code a little be more readable
+    if scanner.take(fastn_p1::Token::Angle).is_some() {
+        // so we recurse
+        if !angle_text(scanner) {
+            return false;
+        }
+    }
+
+    // must end with `>`
+    scanner.take(fastn_p1::Token::AngleClose).is_some()
 }
 
 // this is error recovery for a section. if there is any error in the section, we skip till the
-// beginning of next section, or till the end of the file.
+// beginning of the next section, or till the end of the file.
 fn recover_from_error(
     scanner: &mut fastn_p1::parser_v3::scanner::Scanner,
     potential_errors: &mut Vec<fastn_p1::Spanned<fastn_p1::SingleError>>,
