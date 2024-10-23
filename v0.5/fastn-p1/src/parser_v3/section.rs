@@ -43,7 +43,7 @@ fn section_header(
     potential_errors: &mut Vec<fastn_p1::Spanned<fastn_p1::SingleError>>,
 ) -> Option<fastn_p1::Span> {
     // next must come `--`, if not we skip the line
-    let dashdash = match scanner.space_till(fastn_p1::Token::DashDash) {
+    let _dashdash = match scanner.space_till(fastn_p1::Token::DashDash) {
         Some(v) => v,
         None => {
             recover_from_error(scanner, potential_errors);
@@ -78,11 +78,23 @@ fn section_header(
 /// ```
 fn kinded_name(scanner: &mut fastn_p1::parser_v3::scanner::Scanner) -> Option<fastn_p1::Span> {
     // try to read kind
-    let _k = kind(scanner)?;
+    let mut k = kind(scanner)?;
     // try to read name
-    // if we find both kind and name, we return the span of both
-    // if name is not found, see if kind is "simple" (without `<>`s), if so, it is the name
-    todo!()
+    match scanner.space_till(fastn_p1::Token::Word) {
+        Some(v) => {
+            // if we find both kind and name, we return the span of both
+            fastn_p1::parser_v3::utils::extend_range(&mut k.span, v);
+            Some(k.span)
+        }
+        None => {
+            // if a name is not found, see if kind is "simple" (without `<>`s) if so, it is the name
+            if k.is_simple {
+                Some(k.span)
+            } else {
+                None
+            }
+        }
+    }
 }
 
 pub struct Kind {
