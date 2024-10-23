@@ -31,8 +31,8 @@ pub fn section(
 #[derive(Debug, Default)]
 struct SectionHeader {
     dashdash: fastn_p1::Span,
-    name: fastn_p1::Span,
-    function: fastn_p1::Span,
+    kinded_name: fastn_p1::Span,
+    function_marker: Option<fastn_p1::Span>,
     colon: fastn_p1::Span,
 }
 
@@ -40,9 +40,9 @@ struct SectionHeader {
 fn section_header(
     scanner: &mut fastn_p1::parser_v3::scanner::Scanner,
     potential_errors: &mut Vec<fastn_p1::Spanned<fastn_p1::SingleError>>,
-) -> Option<fastn_p1::Span> {
+) -> Option<SectionHeader> {
     // next must come `--`, if not we skip the line
-    let _dashdash = match scanner.space_till(fastn_p1::Token::DashDash) {
+    let dashdash = match scanner.space_till(fastn_p1::Token::DashDash) {
         Some(v) => v,
         None => {
             recover_from_error(scanner, potential_errors);
@@ -50,7 +50,7 @@ fn section_header(
         }
     };
 
-    let _kinded_name = match kinded_name(scanner) {
+    let kinded_name = match kinded_name(scanner) {
         Some(v) => v,
         None => {
             recover_from_error(scanner, potential_errors);
@@ -58,7 +58,22 @@ fn section_header(
         }
     };
 
-    None
+    let function_marker = scanner.space_till(fastn_p1::Token::FunctionMarker);
+
+    let colon = match scanner.space_till(fastn_p1::Token::Colon) {
+        Some(v) => v,
+        None => {
+            recover_from_error(scanner, potential_errors);
+            return None;
+        }
+    };
+
+    Some(SectionHeader {
+        dashdash,
+        kinded_name,
+        function_marker,
+        colon,
+    })
 }
 
 /// kinded name contains an optional kind and a name.

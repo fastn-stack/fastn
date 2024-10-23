@@ -25,7 +25,7 @@ pub enum Token {
     EmptyLine,
 
     #[regex(r"\([ \t]*\)")]
-    FnMarker,
+    FunctionMarker,
 
     #[token(":")]
     Colon,
