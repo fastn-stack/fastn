@@ -6,15 +6,18 @@ pub struct Scanner {
 }
 
 impl Scanner {
-    pub fn new(source: String) -> Scanner {
+    pub fn new(name: &str, source: &str) -> Scanner {
         use logos::Logos;
         Scanner {
-            tokens: fastn_p1::Token::lexer(&source)
+            tokens: fastn_p1::Token::lexer(source)
                 .spanned()
                 .map(|(r, span)| (r.unwrap(), span))
                 .collect(),
             index: 0,
-            output: fastn_p1::ParseOutput::default(),
+            output: fastn_p1::ParseOutput {
+                doc_name: name.to_string(),
+                ..Default::default()
+            },
         }
     }
 

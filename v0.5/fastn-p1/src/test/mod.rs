@@ -2,10 +2,10 @@
 
 mod sorted_json;
 
-// #[test]
+#[test]
 fn test_all() {
     // we are storing files in folder named `t` and not inside `tests`, because `cargo test`
-    // re-compiles the crate and we don't want to recompile the crate for every test
+    // re-compiles the crate, and we don't want to recompile the crate for every test
     let cli_args: Vec<String> = std::env::args().collect();
     let fix = cli_args.iter().any(|v| v.eq("fix=true"));
     match cli_args.iter().find_map(|v| v.strip_prefix("path=")) {
@@ -20,11 +20,8 @@ fn test_all() {
 
 fn p1(file: impl AsRef<std::path::Path> + std::fmt::Debug, fix: bool) {
     let json = file.as_ref().with_extension("json");
-    // let s = std::fs::read_to_string(&file).unwrap();
-    // let mut engine = fastn_p1::ParserEngine::new("foo".to_string());
-    let output = fastn_p1::ParseOutput::default();
-    // let edit = engine.add_edit(0, s.len(), s);
-    // output.update(edit);
+    let s = std::fs::read_to_string(&file).unwrap();
+    let output = fastn_p1::ParseOutput::new("foo", &s);
     let expected_json =
         fastn_p1::test::sorted_json::to_json(&serde_json::to_value(&output).unwrap());
     if fix {

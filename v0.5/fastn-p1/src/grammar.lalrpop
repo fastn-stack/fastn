@@ -29,7 +29,7 @@ extern {
     "word" => Token::Word,
     " " => Token::Space,
     "\n" => Token::EmptyLine,
-    "()" => Token::FnMarker,
+    "()" => Token::FunctionMarker,
     ":" => Token::Colon,
     "escaped-dollar-curly" => Token::EscapedDollarCurly,
     "${" => Token::DollarCurly,
