@@ -15,7 +15,7 @@ pub enum Token {
     #[regex("--")]
     DashDash,
 
-    #[regex(r"[\w]+")]
+    #[regex(r"[^\s]+", priority = 0)]
     Word,
 
     #[regex("[\t ]+")]
@@ -81,7 +81,7 @@ mod test {
         let source = include_str!("../t/002-tutorial.ftd");
         assert_eq!(
             dbg!(super::Token::lexer(source).spanned().collect::<Vec<_>>()).len(),
-            585
+            434
         );
     }
 }

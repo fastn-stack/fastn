@@ -21,6 +21,7 @@ fn test_all() {
 fn p1(file: impl AsRef<std::path::Path> + std::fmt::Debug, fix: bool) {
     let json = file.as_ref().with_extension("json");
     let s = std::fs::read_to_string(&file).unwrap();
+    println!("testing {file:?}");
     let output = fastn_p1::ParseOutput::new("foo", &s);
     let expected_json =
         fastn_p1::test::sorted_json::to_json(&serde_json::to_value(&output).unwrap());
