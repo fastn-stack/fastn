@@ -11,7 +11,7 @@ impl Scanner {
         Scanner {
             tokens: fastn_p1::Token::lexer(source)
                 .spanned()
-                .map(|(r, span)| (dbg!(r.unwrap()), span))
+                .map(|(r, span)| (dbg!((r, &source[span.clone()])).0.unwrap(), span))
                 .collect(),
             index: 0,
             output: fastn_p1::ParseOutput {

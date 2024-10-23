@@ -20,7 +20,11 @@ fn test_all() {
 
 fn p1(file: impl AsRef<std::path::Path> + std::fmt::Debug, fix: bool) {
     let json = file.as_ref().with_extension("json");
-    let s = std::fs::read_to_string(&file).unwrap();
+    let s = {
+        let mut s = std::fs::read_to_string(&file).unwrap();
+        s.push('\n');
+        s
+    };
     println!("testing {file:?}");
     let output = fastn_p1::ParseOutput::new("foo", &s);
     let expected_json =
@@ -32,7 +36,7 @@ fn p1(file: impl AsRef<std::path::Path> + std::fmt::Debug, fix: bool) {
     }
     println!("testing {file:?}");
     let t = std::fs::read_to_string(&json).unwrap();
-    assert_eq!(&t, &expected_json, "Expected JSON: {t}")
+    assert_eq!(&t, &expected_json, "Expected JSON: {expected_json}")
 }
 
 pub fn find_all_files_matching_extension_recursively(

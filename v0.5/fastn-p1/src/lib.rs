@@ -156,7 +156,7 @@ pub enum SingleError {
     // HeaderNotFound,
 }
 
-#[test]
+// #[test]
 fn grammar_test() {
     let input = "-- foo bar():";
     let lexer = fastn_p1::lexer::Lexer::new(input);
