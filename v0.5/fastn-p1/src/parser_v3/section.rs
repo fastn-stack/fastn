@@ -128,9 +128,21 @@ fn kind(scanner: &mut fastn_p1::parser_v3::scanner::Scanner) -> Option<Kind> {
 
 fn angle_text(scanner: &mut fastn_p1::parser_v3::scanner::Scanner) -> bool {
     // this is the inside of an angle text. it must be a word
+    let start = scanner.index() - 1; // for EmptyAngleText error
     scanner.gobble();
 
     if !scanner.take(fastn_p1::Token::Word).is_some() {
+        if scanner.take(fastn_p1::Token::AngleClose).is_some() {
+            scanner.add_error(
+                fastn_p1::SingleError::EmptyAngleText,
+                fastn_p1::Span {
+                    start,
+                    end: scanner.index(),
+                },
+            );
+            return true;
+        }
+
         return false;
     }
 
@@ -160,6 +172,6 @@ fn recover_from_error(
     //       as UnwantedTextFound error
 
     // errors.push(fastn_p1::SingleError::UnwantedTextFound());
-    scanner.enqueue_errors(potential_errors);
+    scanner.add_errors(potential_errors);
     false
 }

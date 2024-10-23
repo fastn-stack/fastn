@@ -147,6 +147,8 @@ pub enum SingleError {
     /// I am not sure right now as we are planning ot convert all text to text nodes inside a
     /// section. so by the end maybe this will only contain the first part.
     UnwantedTextFound,
+    /// we found something like `-- list<> foo:`, type is not specified
+    EmptyAngleText,
     // SectionNotFound(&'a str),
     // MoreThanOneCaption,
     // ParseError,
