@@ -12,7 +12,7 @@ pub enum Token {
     #[regex(r";-;[^\n]*\n")]
     DocCommentLine,
 
-    #[regex("[ \t]*--[ \t]")]
+    #[regex("--")]
     DashDash,
 
     #[regex(r"[\w]+")]
@@ -59,6 +59,12 @@ pub enum Token {
 
     #[token("]")]
     SquareClose,
+
+    #[token("<")]
+    Angle,
+
+    #[token(">")]
+    AngleClose,
 }
 
 impl std::fmt::Display for Token {

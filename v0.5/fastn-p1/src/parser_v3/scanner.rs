@@ -38,6 +38,11 @@ impl Scanner {
         self.tokens.get(self.index).map(|v| v.to_owned())
     }
 
+    pub fn space_till(&mut self, t: fastn_p1::Token) -> Option<fastn_p1::Span> {
+        self.take(fastn_p1::Token::Space)?;
+        self.take(t)
+    }
+
     pub fn pop(&mut self) -> Option<(fastn_p1::Token, fastn_p1::Span)> {
         match self.tokens.get(self.index) {
             Some(t) => {
@@ -88,6 +93,15 @@ impl Scanner {
             if token == fastn_p1::Token::CommentLine {
                 self.output.insert_comment(span);
             }
+        }
+        self.is_done()
+    }
+
+    // eats up all the comments till first non-comment, returns if we are done
+    pub fn gobble_comments(&mut self) -> bool {
+        // TODO: we can reduce the number of items here by using take_consecutive for comments
+        while let Some(span) = self.take(fastn_p1::Token::CommentLine) {
+            self.output.insert_comment(span);
         }
         self.is_done()
     }
