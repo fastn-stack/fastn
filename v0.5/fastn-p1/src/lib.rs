@@ -10,11 +10,11 @@ mod parser_v3;
 mod section;
 mod token;
 
-use lalrpop_util::lalrpop_mod;
+// use lalrpop_util::lalrpop_mod;
 
 pub use token::Token;
 
-lalrpop_mod!(grammar);
+// lalrpop_mod!(grammar);
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct Section {
@@ -157,13 +157,13 @@ pub enum SingleError {
 #[cfg(test)]
 mod test {
     // #[test]
-    fn grammar_test() {
-        let input = "-- foo bar():";
-        let lexer = fastn_p1::lexer::Lexer::new(input);
-        let parser = fastn_p1::grammar::SectionParser::new();
-        let ast = parser.parse(input, lexer).unwrap();
-        dbg!(ast);
-    }
+    // fn grammar_test() {
+    //     let input = "-- foo bar():";
+    //     let lexer = fastn_p1::lexer::Lexer::new(input);
+    //     let parser = fastn_p1::grammar::SectionParser::new();
+    //     let ast = parser.parse(input, lexer).unwrap();
+    //     dbg!(ast);
+    // }
 
     #[test]
     fn test_parse_output() {

@@ -12,13 +12,13 @@ homepage.workspace = true
 [dependencies]
 serde.workspace = true
 logos.workspace = true
-lalrpop-util.workspace = true
+#lalrpop-util.workspace = true
 
 [dev-dependencies]
-insta = { version = "1.38", features = ["yaml", "glob"] }
+insta.workspace = true
 
 [build-dependencies]
-lalrpop.workspace = true
+#lalrpop.workspace = true
 
 [profile.dev.package]
 insta.opt-level = 3
