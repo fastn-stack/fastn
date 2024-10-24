@@ -1,0 +1,25 @@
+---
+source: fastn-p1/src/lib.rs
+expression: "fastn_p1::ParseOutput::new(\"foo\", &s)"
+input_file: fastn-p1/t/002-few-comments.ftd
+---
+doc_name: foo
+module_doc: ~
+items:
+  - span:
+      start: 0
+      end: 25
+    value: Comment
+  - span:
+      start: 26
+      end: 52
+    value: Comment
+  - span:
+      start: 52
+      end: 81
+    value: Comment
+  - span:
+      start: 84
+      end: 162
+    value: Comment
+line_starts: []

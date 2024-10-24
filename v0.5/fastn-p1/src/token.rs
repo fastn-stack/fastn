@@ -78,7 +78,7 @@ mod test {
     #[test]
     fn test() {
         use logos::Logos;
-        let source = include_str!("../t/002-tutorial.ftd");
+        let source = include_str!("../t/000-tutorial.ftd");
         assert_eq!(
             dbg!(super::Token::lexer(source).spanned().collect::<Vec<_>>()).len(),
             434

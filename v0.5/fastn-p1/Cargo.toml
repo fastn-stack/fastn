@@ -15,8 +15,11 @@ logos.workspace = true
 lalrpop-util.workspace = true
 
 [dev-dependencies]
-itertools.workspace = true
-serde_json.workspace = true
+insta = { version = "1.38", features = ["yaml", "glob"] }
 
 [build-dependencies]
 lalrpop.workspace = true
+
+[profile.dev.package]
+insta.opt-level = 3
+similar.opt-level = 3

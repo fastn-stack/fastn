@@ -8,8 +8,6 @@ mod lexer;
 pub mod parse_v2;
 mod parser_v3;
 mod section;
-#[cfg(test)]
-mod test;
 mod token;
 
 use lalrpop_util::lalrpop_mod;
@@ -156,11 +154,26 @@ pub enum SingleError {
     // HeaderNotFound,
 }
 
-// #[test]
-fn grammar_test() {
-    let input = "-- foo bar():";
-    let lexer = fastn_p1::lexer::Lexer::new(input);
-    let parser = fastn_p1::grammar::SectionParser::new();
-    let ast = parser.parse(input, lexer).unwrap();
-    dbg!(ast);
+#[cfg(test)]
+mod test {
+    // #[test]
+    fn grammar_test() {
+        let input = "-- foo bar():";
+        let lexer = fastn_p1::lexer::Lexer::new(input);
+        let parser = fastn_p1::grammar::SectionParser::new();
+        let ast = parser.parse(input, lexer).unwrap();
+        dbg!(ast);
+    }
+
+    #[test]
+    fn test_parse_output() {
+        insta::glob!("..", "t/*.ftd", |path| {
+            let s = {
+                let mut s = std::fs::read_to_string(&path).unwrap();
+                s.push('\n');
+                s
+            };
+            insta::assert_yaml_snapshot!(fastn_p1::ParseOutput::new("foo", &s));
+        })
+    }
 }

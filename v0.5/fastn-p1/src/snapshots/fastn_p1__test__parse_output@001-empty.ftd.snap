@@ -1,0 +1,9 @@
+---
+source: fastn-p1/src/lib.rs
+expression: "fastn_p1::ParseOutput::new(\"foo\", &s)"
+input_file: fastn-p1/t/001-empty.ftd
+---
+doc_name: foo
+module_doc: ~
+items: []
+line_starts: []
