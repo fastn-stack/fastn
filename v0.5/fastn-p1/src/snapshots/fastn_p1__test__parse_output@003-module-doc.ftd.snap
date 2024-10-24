@@ -1,19 +1,10 @@
 ---
 source: fastn-p1/src/lib.rs
-expression: "fastn_p1::ParseOutput::new(\"foo\", &s)"
+expression: "fastn_p1::ParseOutput::new(\"foo\", &s).debug(&s)"
 input_file: fastn-p1/t/003-module-doc.ftd
 ---
 doc_name: foo
-module_doc:
-  start: 22
-  end: 77
 items:
-  - span:
-      start: 0
-      end: 21
-    value: Comment
-  - span:
-      start: 78
-      end: 99
-    value: Comment
-line_starts: []
+  - comment: ";; this is a comment\n"
+  - comment: ";; some more comment\n"
+module_doc: ";-; this is some module doc\n;-; multiline module docs!\n"

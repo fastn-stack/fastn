@@ -5,11 +5,11 @@ extern crate self as fastn_p1;
 
 mod lexer;
 // pub mod parse_v1;
+mod debug;
 pub mod parse_v2;
 mod parser_v3;
 mod section;
 mod token;
-
 // use lalrpop_util::lalrpop_mod;
 
 pub use token::Token;
@@ -167,13 +167,15 @@ mod test {
 
     #[test]
     fn test_parse_output() {
+        use fastn_p1::debug::JDebug;
+
         insta::glob!("..", "t/*.ftd", |path| {
             let s = {
-                let mut s = std::fs::read_to_string(&path).unwrap();
+                let mut s = std::fs::read_to_string(path).unwrap();
                 s.push('\n');
                 s
             };
-            insta::assert_yaml_snapshot!(fastn_p1::ParseOutput::new("foo", &s));
+            insta::assert_yaml_snapshot!(fastn_p1::ParseOutput::new("foo", &s).debug(&s));
         })
     }
 }

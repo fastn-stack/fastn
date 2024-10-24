@@ -1,24 +1,11 @@
 ---
 source: fastn-p1/src/lib.rs
-expression: "fastn_p1::ParseOutput::new(\"foo\", &s)"
+expression: "fastn_p1::ParseOutput::new(\"foo\", &s).debug(&s)"
 input_file: fastn-p1/t/000-tutorial.ftd
 ---
 doc_name: foo
-module_doc:
-  start: 51
-  end: 220
 items:
-  - span:
-      start: 0
-      end: 50
-    value: Comment
-  - span:
-      start: 221
-      end: 283
-    value: Comment
-  - span:
-      start: 285
-      end: 320
-    value:
-      Error: UnexpectedDocComment
-line_starts: []
+  - comment: ";; this file contains examples of most constructs\n"
+  - comment: ";; this is another comment - no more doc comments are allowed\n"
+  - unexpected_doc_comment: ";-; we are going to use this below\n"
+module_doc: ";-; this is doc-comment\n;-; which can span multiple lines\n;-;\n;-; it is used to describe the file\n;-; and its purpose ;; this is not comment, and is part of doc comment\n"

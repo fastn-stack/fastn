@@ -146,7 +146,7 @@ fn angle_text(scanner: &mut fastn_p1::parser_v3::scanner::Scanner) -> bool {
     let start = scanner.index() - 1; // for EmptyAngleText error
     scanner.gobble();
 
-    if !scanner.take(fastn_p1::Token::Word).is_some() {
+    if scanner.take(fastn_p1::Token::Word).is_none() {
         if scanner.take(fastn_p1::Token::AngleClose).is_some() {
             scanner.add_error(
                 fastn_p1::SingleError::EmptyAngleText,
