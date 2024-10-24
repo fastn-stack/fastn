@@ -1,0 +1,24 @@
+{
+  "doc_name": "foo",
+  "items": [
+    {
+      "span": {
+        "end": 21,
+        "start": 0
+      },
+      "value": "Comment"
+    },
+    {
+      "span": {
+        "end": 99,
+        "start": 78
+      },
+      "value": "Comment"
+    }
+  ],
+  "line_starts": [],
+  "module_doc": {
+    "end": 77,
+    "start": 22
+  }
+}
