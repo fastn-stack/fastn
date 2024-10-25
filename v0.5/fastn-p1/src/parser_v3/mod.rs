@@ -17,7 +17,7 @@ impl fastn_p1::ParseOutput {
         potential_errors.clear();
 
         let mut count = 0;
-        while section(&mut scanner, &mut potential_errors) && count < 1000 {
+        while section(&mut scanner, &mut potential_errors) && count < 100 {
             potential_errors.clear();
             count += 1;
         }

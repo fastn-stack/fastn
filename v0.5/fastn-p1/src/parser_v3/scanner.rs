@@ -55,8 +55,17 @@ impl Scanner {
 
     pub fn space_till(&mut self, t: fastn_p1::Token) -> Option<fastn_p1::Span> {
         self.bump();
-        self.take(fastn_p1::Token::Space);
-        self.take(t)
+        while let Some((token, span)) = self.peek() {
+            if token == t {
+                return Some(span);
+            }
+            if token == fastn_p1::Token::Space {
+                self.pop();
+            } else {
+                return None;
+            }
+        }
+        None
     }
 
     pub fn current_span(&self) -> fastn_p1::Span {

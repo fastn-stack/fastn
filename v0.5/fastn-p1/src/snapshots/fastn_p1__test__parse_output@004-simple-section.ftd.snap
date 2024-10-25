@@ -5,5 +5,5 @@ input_file: fastn-p1/t/004-simple-section.ftd
 ---
 doc_name: foo
 items:
-  - error: colon_not_found
+  - error: kinded_name_not_found
 module_doc: ~
