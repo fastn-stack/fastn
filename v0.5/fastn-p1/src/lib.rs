@@ -147,6 +147,10 @@ pub enum SingleError {
     UnwantedTextFound,
     /// we found something like `-- list<> foo:`, type is not specified
     EmptyAngleText,
+    /// we are looking for dash dash, but found something else
+    DashDashNotFound,
+    KindedNameNotFound,
+    ColonNotFound,
     // SectionNotFound(&'a str),
     // MoreThanOneCaption,
     // ParseError,

@@ -94,10 +94,13 @@ impl JDebug for fastn_p1::Spanned<fastn_p1::Item> {
     }
 }
 
-fn error(e: &fastn_p1::SingleError, s: &fastn_p1::Span, source: &str) -> serde_json::Value {
-    match e {
-        fastn_p1::SingleError::UnexpectedDocComment => span(s, "unexpected_doc_comment", source),
-        SingleError::UnwantedTextFound => span(s, "unwanted_text_found", source),
-        SingleError::EmptyAngleText => span(s, "empty_angle_text", source),
-    }
+fn error(e: &fastn_p1::SingleError, s: &fastn_p1::Span, _source: &str) -> serde_json::Value {
+    serde_json::json!({ "error": match e {
+        fastn_p1::SingleError::UnexpectedDocComment => "unexpected_doc_comment",
+        SingleError::UnwantedTextFound => "unwanted_text_found",
+        SingleError::EmptyAngleText => "empty_angle_text",
+        SingleError::ColonNotFound => "colon_not_found",
+        SingleError::DashDashNotFound => "dashdash_not_found",
+        SingleError::KindedNameNotFound => "kinded_name_not_found",
+    }})
 }

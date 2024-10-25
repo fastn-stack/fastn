@@ -5,25 +5,37 @@ pub fn section(
     scanner.gobble();
 
     // section can start with doc comment, let's fetch it
-    let doc_comment = scanner.take_consecutive(fastn_p1::Token::DocCommentLine);
-    if let Some(span) = doc_comment {
+    let doc_comment = dbg!(scanner.take_consecutive(fastn_p1::Token::DocCommentLine));
+    if let Some(span) = &doc_comment {
         potential_errors.push(fastn_p1::parser_v3::utils::spanned(
             fastn_p1::SingleError::UnexpectedDocComment,
-            span,
+            span.clone(),
         ));
     }
 
     scanner.gobble_comments(); // this is because consecutive, non-empty line comments are allowed
 
     // the very next lines must be a section_header
-    let _section_header = match section_header(scanner, potential_errors) {
-        Some(v) => v,
+    let section_header = match section_header(scanner, potential_errors) {
+        Some(v) => dbg!(v),
         None => {
             // we have to advance the cursor till the next line: only
             // EmptyLine, DocCommentLine and CommentLine contain newline, everything else
-            return recover_from_error(scanner, potential_errors);
+            println!("section_header not found");
+            return scanner.is_done();
         }
     };
+
+    scanner.output.items.push(fastn_p1::Spanned {
+        value: fastn_p1::Item::Section(Box::new(fastn_p1::Section {
+            name: section_header.kinded_name,
+            ..Default::default()
+        })),
+        span: fastn_p1::Span {
+            start: section_header.dashdash.start,
+            end: section_header.colon.end,
+        },
+    });
 
     scanner.is_done()
 }
@@ -31,7 +43,7 @@ pub fn section(
 #[derive(Debug, Default)]
 struct SectionHeader {
     dashdash: fastn_p1::Span,
-    kinded_name: fastn_p1::Span,
+    kinded_name: fastn_p1::KindedName,
     function_marker: Option<fastn_p1::Span>,
     colon: fastn_p1::Span,
 }
@@ -43,17 +55,27 @@ fn section_header(
 ) -> Option<SectionHeader> {
     // next must come `--`, if not we skip the line
     let dashdash = match scanner.space_till(fastn_p1::Token::DashDash) {
-        Some(v) => v,
+        Some(v) => dbg!(v),
         None => {
-            recover_from_error(scanner, potential_errors);
+            println!("dashdash not found");
+            recover_from_error(
+                scanner,
+                potential_errors,
+                scanner.current_spanned(fastn_p1::SingleError::DashDashNotFound),
+            );
             return None;
         }
     };
 
     let kinded_name = match kinded_name(scanner) {
-        Some(v) => v,
+        Some(v) => dbg!(v),
         None => {
-            recover_from_error(scanner, potential_errors);
+            println!("kinded_name not found");
+            recover_from_error(
+                scanner,
+                potential_errors,
+                scanner.current_spanned(fastn_p1::SingleError::KindedNameNotFound),
+            );
             return None;
         }
     };
@@ -61,9 +83,14 @@ fn section_header(
     let function_marker = scanner.space_till(fastn_p1::Token::FunctionMarker);
 
     let colon = match scanner.space_till(fastn_p1::Token::Colon) {
-        Some(v) => v,
+        Some(v) => dbg!(v),
         None => {
-            recover_from_error(scanner, potential_errors);
+            println!("colon not found");
+            recover_from_error(
+                scanner,
+                potential_errors,
+                scanner.current_spanned(fastn_p1::SingleError::ColonNotFound),
+            );
             return None;
         }
     };
@@ -90,20 +117,33 @@ fn section_header(
 ///    string
 /// > foo: []
 /// ```
-fn kinded_name(scanner: &mut fastn_p1::parser_v3::scanner::Scanner) -> Option<fastn_p1::Span> {
+fn kinded_name(
+    scanner: &mut fastn_p1::parser_v3::scanner::Scanner,
+) -> Option<fastn_p1::KindedName> {
     // try to read kind
     let mut k = kind(scanner)?;
     // try to read name
     match scanner.space_till(fastn_p1::Token::Word) {
         Some(v) => {
             // if we find both kind and name, we return the span of both
-            fastn_p1::parser_v3::utils::extend_range(&mut k.span, v);
-            Some(k.span)
+            Some(fastn_p1::KindedName {
+                kind: Some(fastn_p1::Kind {
+                    kind: k.span,
+                    ..Default::default()
+                }),
+                name: fastn_p1::Span {
+                    start: v.start,
+                    end: scanner.index(),
+                },
+            })
         }
         None => {
             // if a name is not found, see if kind is "simple" (without `<>`s) if so, it is the name
             if k.is_simple {
-                Some(k.span)
+                Some(fastn_p1::KindedName {
+                    kind: None,
+                    name: k.span,
+                })
             } else {
                 None
             }
@@ -181,6 +221,7 @@ fn angle_text(scanner: &mut fastn_p1::parser_v3::scanner::Scanner) -> bool {
 fn recover_from_error(
     scanner: &mut fastn_p1::parser_v3::scanner::Scanner,
     potential_errors: &mut Vec<fastn_p1::Spanned<fastn_p1::SingleError>>,
+    error: fastn_p1::Spanned<fastn_p1::SingleError>,
 ) -> bool {
     // TODO: we have to advance the cursor till the next line: only EmptyLine, DocCommentLine and
     //       CommentLine contain newline, everything else should be gobbled up as text, and added
@@ -188,5 +229,6 @@ fn recover_from_error(
 
     // errors.push(fastn_p1::SingleError::UnwantedTextFound());
     scanner.add_errors(potential_errors);
+    scanner.add_error(error.value, error.span);
     false
 }

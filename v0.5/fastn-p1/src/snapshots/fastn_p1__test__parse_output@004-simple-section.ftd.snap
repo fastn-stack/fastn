@@ -1,0 +1,9 @@
+---
+source: fastn-p1/src/lib.rs
+expression: "fastn_p1::ParseOutput::parse(\"foo\", &s).debug(&s)"
+input_file: fastn-p1/t/004-simple-section.ftd
+---
+doc_name: foo
+items:
+  - error: colon_not_found
+module_doc: ~

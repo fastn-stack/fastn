@@ -2,6 +2,7 @@ pub struct Scanner {
     // source: String,
     tokens: Vec<(fastn_p1::Token, fastn_p1::Span)>,
     index: usize,
+    ticks: std::cell::RefCell<usize>,
     pub output: fastn_p1::ParseOutput,
 }
 
@@ -11,42 +12,74 @@ impl Scanner {
         Scanner {
             tokens: fastn_p1::Token::lexer(source)
                 .spanned()
-                .map(|(r, span)| (dbg!((r, &source[span.clone()])).0.unwrap(), span))
+                .map(|(r, span)| (r.unwrap(), span))
                 .collect(),
             index: 0,
             output: fastn_p1::ParseOutput {
                 doc_name: name.to_string(),
                 ..Default::default()
             },
+            ticks: std::cell::RefCell::new(0),
         }
     }
 
+    pub fn bump(&self) {
+        *self.ticks.borrow_mut() += 1;
+        assert!(*self.ticks.borrow() < 100000, "Infinite loop detected");
+    }
+
     pub fn is_done(&self) -> bool {
+        self.bump();
         self.index >= self.tokens.len()
     }
 
     pub fn index(&self) -> usize {
+        self.bump();
         self.index
     }
 
     pub fn reset(&mut self, index: usize) {
+        self.bump();
         self.index = index;
     }
 
     pub fn next_is(&self, token: fastn_p1::Token) -> bool {
+        self.bump();
         self.peek().map(|(t, _)| t == token).unwrap_or(false)
     }
 
     pub fn peek(&self) -> Option<(fastn_p1::Token, fastn_p1::Span)> {
+        self.bump();
         self.tokens.get(self.index).map(|v| v.to_owned())
     }
 
     pub fn space_till(&mut self, t: fastn_p1::Token) -> Option<fastn_p1::Span> {
-        self.take(fastn_p1::Token::Space)?;
+        self.bump();
+        self.take(fastn_p1::Token::Space);
         self.take(t)
     }
 
+    pub fn current_span(&self) -> fastn_p1::Span {
+        self.bump();
+        fastn_p1::Span {
+            start: self.index,
+            end: self.index,
+        }
+    }
+
+    pub fn current_spanned<T>(&self, value: T) -> fastn_p1::Spanned<T> {
+        self.bump();
+        fastn_p1::Spanned {
+            span: fastn_p1::Span {
+                start: self.index,
+                end: self.index,
+            },
+            value,
+        }
+    }
+
     pub fn pop(&mut self) -> Option<(fastn_p1::Token, fastn_p1::Span)> {
+        self.bump();
         match self.tokens.get(self.index) {
             Some(t) => {
                 self.index += 1;
@@ -57,6 +90,7 @@ impl Scanner {
     }
 
     pub fn take(&mut self, token: fastn_p1::Token) -> Option<fastn_p1::Span> {
+        self.bump();
         if let Some((t, s)) = self.peek() {
             if t == token {
                 self.pop();
@@ -67,6 +101,7 @@ impl Scanner {
     }
 
     pub fn take_consecutive(&mut self, token: fastn_p1::Token) -> Option<fastn_p1::Span> {
+        self.bump();
         let mut span = self.take(token)?;
         while let Some(s) = self.take(token) {
             fastn_p1::parser_v3::utils::extend_range(&mut span, s);
@@ -78,6 +113,7 @@ impl Scanner {
         &mut self,
         tokens: &[fastn_p1::Token],
     ) -> Option<(fastn_p1::Token, fastn_p1::Span)> {
+        self.bump();
         if let Some((t, _)) = self.peek() {
             if tokens.contains(&t) {
                 return self.pop();
@@ -88,6 +124,7 @@ impl Scanner {
 
     // eats up all the comments and empty lines till first non-comment, returns if we are done
     pub fn gobble(&mut self) -> bool {
+        self.bump();
         // TODO: we can reduce the number of items here by using take_consecutive for comments
         //       and newlines
         while let Some((token, span)) = self.one_of(&[
@@ -104,6 +141,7 @@ impl Scanner {
 
     // eats up all the comments till first non-comment, returns if we are done
     pub fn gobble_comments(&mut self) -> bool {
+        self.bump();
         // TODO: we can reduce the number of items here by using take_consecutive for comments
         while let Some(span) = self.take(fastn_p1::Token::CommentLine) {
             self.output.insert_comment(span);
@@ -112,6 +150,7 @@ impl Scanner {
     }
 
     pub fn add_error(&mut self, error: fastn_p1::SingleError, span: fastn_p1::Span) {
+        self.bump();
         self.output.items.push(fastn_p1::parser_v3::utils::spanned(
             fastn_p1::Item::Error(error),
             span,
@@ -119,6 +158,7 @@ impl Scanner {
     }
 
     pub fn add_errors(&mut self, errors: &mut Vec<fastn_p1::Spanned<fastn_p1::SingleError>>) {
+        self.bump();
         self.output
             .items
             .extend(errors.drain(..).map(|v| v.map(fastn_p1::Item::Error)));
