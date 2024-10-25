@@ -1,0 +1,45 @@
+<Document> ::= <CommentOrEmptyLine>* <ModuleDoc>? (<Comment> | <EmptyLine> | <Section>)*;
+
+<ModuleDoc> ::= <DocComment>
+
+<DocComment> ::= <DocCommentLine>+
+<DocCommentLine> ::= ";-;" <AnyCharacterExceptNewline>* <Newline>
+<Comment> ::= <CommentLine>+
+<CommentLine> ::= ";;" <AnyCharacterExceptNewline>* <Newline>
+
+<CommentOrEmptyLine> ::= <Comment> | <EmptyLine>
+
+<Section> ::= <Space>? '--' <Space>? <KindedName> <Space>? '()'? <Space>? ':' <HeaderValue>
+
+<HeaderValue> ::= <AnyCharacterExceptNewline>* '\n'
+
+
+<KindedName> ::= <Kind>? <Name>
+
+<Name> ::= <Word>
+
+<Kind> ::= <Word> <Space>* ('<' <WhiteSpace>? <Kind> <WhiteSpace>?  '>')?
+
+<EscapedComment> ::= "\\;;"
+<EscapedDocComment> ::= "\\;-;"
+<DashDash> ::= "--"
+<Word> ::= <NonWhitespaceCharacter>+
+<FunctionMarker> ::= "(" <SpaceCharacter>* ")"
+<Colon> ::= ":"
+<EscapedDollarCurly> ::= "\\${"
+<DollarCurly> ::= "${"
+<Curly> ::= "{"
+<CurlyClose> ::= "}"
+<DollarSquare> ::= "$["
+<DoubleDollarSquare> ::= "$$["
+<EscapedDollarSquare> ::= "\\$["
+<EscapedDoubleDollarSquare> ::= "\\$$["
+
+<AnyCharacterExceptNewline> ::= 'a-zA-Z0-9'  // this is not real
+<NonWhitespaceCharacter>    ::= 'a-zA-Z0-9'  // this is not real
+
+<WhiteSpace> ::= (<Space> | <Newline>)+
+
+<Space> ::= <SpaceCharacter>+
+<EmptyLine> ::= <SpaceCharacter>* <Newline>
+<Newline> ::= '\n'

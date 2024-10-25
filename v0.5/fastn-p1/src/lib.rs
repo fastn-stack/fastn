@@ -175,7 +175,7 @@ mod test {
                 s.push('\n');
                 s
             };
-            insta::assert_yaml_snapshot!(fastn_p1::ParseOutput::new("foo", &s).debug(&s));
+            insta::assert_yaml_snapshot!(fastn_p1::ParseOutput::parse("foo", &s).debug(&s));
         })
     }
 }
