@@ -26,6 +26,8 @@ mod test {
 
     #[test]
     fn test_identifier() {
+        // identifiers can't start with a space
+        p(" foo", super::identifier, serde_json::json!(null), " foo");
         p("foo", super::identifier, serde_json::json!("foo"), "");
         p(
             "foo bar",
