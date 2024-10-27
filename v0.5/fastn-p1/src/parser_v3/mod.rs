@@ -11,13 +11,15 @@ impl fastn_p1::ParseOutput {
         let mut scanner = scanner::Scanner::new(name, source);
         let mut potential_errors: Vec<fastn_p1::Spanned<fastn_p1::SingleError>> = vec![];
 
-        if module_doc(&mut scanner, &mut potential_errors) {
-            return scanner.output;
-        }
+        println!("this");
+        module_doc(&mut scanner, &mut potential_errors);
         potential_errors.clear();
+        println!("that:{}", scanner.is_done());
 
         let mut count = 0;
-        while section(&mut scanner, &mut potential_errors) && count < 100 {
+        while !scanner.is_done() && count < 100 {
+            println!("here: {count}");
+            section(&mut scanner, &mut potential_errors);
             potential_errors.clear();
             count += 1;
         }

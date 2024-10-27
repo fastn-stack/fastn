@@ -1,6 +1,6 @@
 pub struct Scanner {
     // source: String,
-    tokens: Vec<(fastn_p1::Token, fastn_p1::Span)>,
+    pub tokens: Vec<(fastn_p1::Token, fastn_p1::Span)>,
     index: usize,
     ticks: std::cell::RefCell<usize>,
     pub output: fastn_p1::ParseOutput,
@@ -9,11 +9,12 @@ pub struct Scanner {
 impl Scanner {
     pub fn new(name: &str, source: &str) -> Scanner {
         use logos::Logos;
+        dbg!("yo", source);
         Scanner {
-            tokens: fastn_p1::Token::lexer(source)
+            tokens: dbg!(fastn_p1::Token::lexer(source)
                 .spanned()
                 .map(|(r, span)| (r.unwrap(), span))
-                .collect(),
+                .collect()),
             index: 0,
             output: fastn_p1::ParseOutput {
                 doc_name: name.to_string(),
@@ -66,6 +67,16 @@ impl Scanner {
             }
         }
         None
+    }
+
+    pub fn skip_till(&mut self, tokens: &[fastn_p1::Token]) {
+        self.bump();
+        while let Some((token, _)) = self.peek() {
+            if tokens.contains(&token) {
+                return;
+            }
+            self.pop();
+        }
     }
 
     pub fn current_span(&self) -> fastn_p1::Span {

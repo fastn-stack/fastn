@@ -1,5 +1,8 @@
 #[derive(logos::Logos, Debug, PartialEq, Clone, Copy)]
 pub enum Token {
+    #[token(":")]
+    Colon,
+
     #[token("\\;;")]
     EscapedComment,
 
@@ -15,7 +18,7 @@ pub enum Token {
     #[regex("--")]
     DashDash,
 
-    #[regex(r"[^\s]+", priority = 0)]
+    #[regex(r"[^\s^:]+", priority = 0)]
     Word,
 
     #[regex("[\t ]+")]
@@ -26,9 +29,6 @@ pub enum Token {
 
     #[regex(r"\([ \t]*\)")]
     FunctionMarker,
-
-    #[token(":")]
-    Colon,
 
     #[token("\\${")]
     EscapedDollarCurly,

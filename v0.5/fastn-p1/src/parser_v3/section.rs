@@ -1,7 +1,9 @@
 pub fn section(
     scanner: &mut fastn_p1::parser_v3::scanner::Scanner,
     potential_errors: &mut Vec<fastn_p1::Spanned<fastn_p1::SingleError>>,
-) -> bool {
+) {
+    println!("reading section");
+
     scanner.gobble();
 
     // section can start with doc comment, let's fetch it
@@ -15,6 +17,7 @@ pub fn section(
 
     scanner.gobble_comments(); // this is because consecutive, non-empty line comments are allowed
 
+    eprintln!("here");
     // the very next lines must be a section_header
     let section_header = match section_header(scanner, potential_errors) {
         Some(v) => dbg!(v),
@@ -22,7 +25,7 @@ pub fn section(
             // we have to advance the cursor till the next line: only
             // EmptyLine, DocCommentLine and CommentLine contain newline, everything else
             println!("section_header not found");
-            return scanner.is_done();
+            return;
         }
     };
 
@@ -36,8 +39,6 @@ pub fn section(
             end: section_header.colon.end,
         },
     });
-
-    scanner.is_done()
 }
 
 #[derive(Debug, Default)]
@@ -53,15 +54,20 @@ fn section_header(
     scanner: &mut fastn_p1::parser_v3::scanner::Scanner,
     potential_errors: &mut Vec<fastn_p1::Spanned<fastn_p1::SingleError>>,
 ) -> Option<SectionHeader> {
+    println!("reading section_header");
     // next must come `--`, if not we skip the line
     let dashdash = match scanner.space_till(fastn_p1::Token::DashDash) {
         Some(v) => dbg!(v),
         None => {
+            if scanner.is_done() {
+                recover_from_error(scanner, potential_errors, None);
+                return None;
+            }
             println!("dashdash not found");
             recover_from_error(
                 scanner,
                 potential_errors,
-                scanner.current_spanned(fastn_p1::SingleError::DashDashNotFound),
+                Some(scanner.current_spanned(fastn_p1::SingleError::DashDashNotFound)),
             );
             return None;
         }
@@ -74,7 +80,7 @@ fn section_header(
             recover_from_error(
                 scanner,
                 potential_errors,
-                scanner.current_spanned(fastn_p1::SingleError::KindedNameNotFound),
+                Some(scanner.current_spanned(fastn_p1::SingleError::KindedNameNotFound)),
             );
             return None;
         }
@@ -89,7 +95,7 @@ fn section_header(
             recover_from_error(
                 scanner,
                 potential_errors,
-                scanner.current_spanned(fastn_p1::SingleError::ColonNotFound),
+                Some(scanner.current_spanned(fastn_p1::SingleError::ColonNotFound)),
             );
             return None;
         }
@@ -120,8 +126,10 @@ fn section_header(
 fn kinded_name(
     scanner: &mut fastn_p1::parser_v3::scanner::Scanner,
 ) -> Option<fastn_p1::KindedName> {
+    println!("kinded_name");
     // try to read kind
     let mut k = kind(scanner)?;
+    println!("kind: {k:?}");
     // try to read name
     match scanner.space_till(fastn_p1::Token::Word) {
         Some(v) => {
@@ -151,6 +159,7 @@ fn kinded_name(
     }
 }
 
+#[derive(Debug)]
 pub struct Kind {
     span: fastn_p1::Span,
     is_simple: bool,
@@ -161,6 +170,7 @@ pub struct Kind {
 ///
 /// let's call the content inside `<>` as "angle text"
 fn kind(scanner: &mut fastn_p1::parser_v3::scanner::Scanner) -> Option<Kind> {
+    println!("kind");
     let word = scanner.space_till(fastn_p1::Token::Word)?;
     let mut is_simple = true;
 
@@ -182,6 +192,7 @@ fn kind(scanner: &mut fastn_p1::parser_v3::scanner::Scanner) -> Option<Kind> {
 }
 
 fn angle_text(scanner: &mut fastn_p1::parser_v3::scanner::Scanner) -> bool {
+    println!("angle_text");
     // this is the inside of an angle text. it must be a word
     let start = scanner.index() - 1; // for EmptyAngleText error
     scanner.gobble();
@@ -221,14 +232,18 @@ fn angle_text(scanner: &mut fastn_p1::parser_v3::scanner::Scanner) -> bool {
 fn recover_from_error(
     scanner: &mut fastn_p1::parser_v3::scanner::Scanner,
     potential_errors: &mut Vec<fastn_p1::Spanned<fastn_p1::SingleError>>,
-    error: fastn_p1::Spanned<fastn_p1::SingleError>,
-) -> bool {
+    error: Option<fastn_p1::Spanned<fastn_p1::SingleError>>,
+) {
+    println!("recover_from_error");
     // TODO: we have to advance the cursor till the next line: only EmptyLine, DocCommentLine and
     //       CommentLine contain newline, everything else should be gobbled up as text, and added
     //       as UnwantedTextFound error
 
     // errors.push(fastn_p1::SingleError::UnwantedTextFound());
     scanner.add_errors(potential_errors);
-    scanner.add_error(error.value, error.span);
-    false
+    if let Some(error) = error {
+        scanner.add_error(error.value, error.span);
+    }
+
+    scanner.skip_till(&[fastn_p1::Token::DashDash, fastn_p1::Token::DocCommentLine]);
 }
