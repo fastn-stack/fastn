@@ -3,30 +3,39 @@
 /// identifier starts with Unicode alphabet and can contain any alphanumeric Unicode character
 /// dash (`-`) and underscore (`_`) are also allowed
 ///
-/// identifiers can't be keywords of the language, e.g., `import`, `record`, `component`.
+/// TODO: identifiers can't be keywords of the language, e.g., `import`, `record`, `component`.
 /// but it can be built in types e.g., `integer` etc.
 fn identifier(scanner: &mut fastn_p1::parser_v4::Scanner) -> Option<fastn_p1::Identifier> {
-    scanner.identifier().map(Into::into)
+    let first = scanner.peek()?;
+    // the first character should be is_alphabetic or `_`
+    if !first.is_alphabetic() && first != '_' {
+        return None;
+    }
+
+    let start = scanner.index();
+    scanner.pop();
+
+    // later characters should be is_alphanumeric or `_` or `-`
+    while let Some(c) = scanner.peek() {
+        if !c.is_alphanumeric() && c != '_' && c != '-' {
+            break;
+        }
+        scanner.pop();
+    }
+
+    Some(fastn_p1::Identifier {
+        name: fastn_p1::Span {
+            start,
+            end: scanner.index(),
+        },
+    })
 }
 
 #[cfg(test)]
 mod test {
-    #[track_caller]
-    fn p<T: fastn_p1::debug::JDebug, F: FnOnce(&mut fastn_p1::parser_v4::Scanner) -> T>(
-        source: &str,
-        f: F,
-        debug: serde_json::Value,
-        remaining: &str,
-    ) {
-        let mut scanner = fastn_p1::parser_v4::Scanner::new(source);
-        let result = f(&mut scanner);
-        assert_eq!(result.debug(source), debug);
-        assert_eq!(scanner.remaining(), remaining);
-    }
-
     macro_rules! i {
         ($source:expr, $debug:tt, $remaining:expr) => {
-            p(
+            fastn_p1::parser_v4::p(
                 $source,
                 super::identifier,
                 serde_json::json!($debug),
@@ -36,7 +45,7 @@ mod test {
     }
 
     #[test]
-    fn test_identifier() {
+    fn identifier() {
         // identifiers can't start with a space
         i!(" foo", null, " foo");
         i!("foo", "foo", "");

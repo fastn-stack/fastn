@@ -96,6 +96,12 @@ impl JDebug for fastn_p1::Identifier {
     }
 }
 
+impl JDebug for fastn_p1::PackageName {
+    fn debug(&self, source: &str) -> serde_json::Value {
+        self.name.debug(source)
+    }
+}
+
 impl JDebug for fastn_p1::ModuleName {
     fn debug(&self, source: &str) -> serde_json::Value {
         serde_json::json! ({

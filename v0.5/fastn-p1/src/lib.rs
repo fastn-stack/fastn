@@ -11,6 +11,7 @@ mod parser_v3;
 mod parser_v4;
 mod section;
 mod token;
+mod utils;
 // use lalrpop_util::lalrpop_mod;
 
 pub use token::Token;
@@ -36,15 +37,6 @@ pub type Span = std::ops::Range<usize>;
 pub struct Spanned<T> {
     pub span: Span,
     pub value: T,
-}
-
-impl<T> Spanned<T> {
-    pub fn map<T2, F: FnOnce(T) -> T2>(self, f: F) -> Spanned<T2> {
-        Spanned {
-            span: self.span,
-            value: f(self.value),
-        }
-    }
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
@@ -73,15 +65,14 @@ pub struct Identifier {
     name: fastn_p1::Span,
 }
 
-impl From<fastn_p1::Span> for Identifier {
-    fn from(value: Span) -> Self {
-        Identifier { name: value }
-    }
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
+pub struct PackageName {
+    name: fastn_p1::Span,
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct ModuleName {
-    pub package: fastn_p1::Span,
+    pub package: PackageName,
     pub path: Vec<fastn_p1::Span>,
 }
 
@@ -91,15 +82,6 @@ pub struct QualifiedIdentifier {
     module: Option<ModuleName>,
     // the part comes after `#`
     terms: Vec<fastn_p1::Span>,
-}
-
-impl From<fastn_p1::Span> for QualifiedIdentifier {
-    fn from(value: Span) -> Self {
-        QualifiedIdentifier {
-            module: None,
-            terms: vec![value],
-        }
-    }
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
@@ -138,24 +120,6 @@ pub enum StringOrSection {
 pub struct ParserEngine {
     pub doc_name: String,
     pub edits: Vec<Edit>,
-}
-
-impl ParserEngine {
-    pub fn new(doc_name: String) -> Self {
-        Self {
-            doc_name,
-            edits: vec![],
-        }
-    }
-
-    pub fn add_edit(&mut self, from: usize, to: usize, text: String) -> &Edit {
-        self.edits.push(Edit {
-            from,
-            to,
-            text: text.chars().collect(),
-        });
-        self.edits.last().unwrap()
-    }
 }
 
 pub struct Edit {
