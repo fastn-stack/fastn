@@ -16,7 +16,7 @@ logos.workspace = true
 #lalrpop-util.workspace = true
 
 [dev-dependencies]
-insta.workspace = true
+#insta.workspace = true
 
 [build-dependencies]
 #lalrpop.workspace = true

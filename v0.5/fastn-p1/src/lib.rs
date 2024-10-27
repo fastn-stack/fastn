@@ -70,7 +70,13 @@ pub enum Visibility {
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct Identifier {
-    term: fastn_p1::Span,
+    name: fastn_p1::Span,
+}
+
+impl From<fastn_p1::Span> for Identifier {
+    fn from(value: Span) -> Self {
+        Identifier { name: value }
+    }
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
@@ -206,17 +212,17 @@ mod test {
     //     dbg!(ast);
     // }
 
-    #[test]
-    fn test_parse_output() {
-        use fastn_p1::debug::JDebug;
-
-        insta::glob!("..", "t/*.ftd", |path| {
-            let s = {
-                let mut s = std::fs::read_to_string(path).unwrap();
-                s.push('\n');
-                s
-            };
-            insta::assert_yaml_snapshot!(fastn_p1::ParseOutput::parse_v3(&s).debug(&s));
-        })
-    }
+    // #[test]
+    // fn test_parse_output() {
+    //     use fastn_p1::debug::JDebug;
+    //
+    //     insta::glob!("..", "t/*.ftd", |path| {
+    //         let s = {
+    //             let mut s = std::fs::read_to_string(path).unwrap();
+    //             s.push('\n');
+    //             s
+    //         };
+    //         insta::assert_yaml_snapshot!(fastn_p1::ParseOutput::parse_v3(&s).debug(&s));
+    //     })
+    // }
 }

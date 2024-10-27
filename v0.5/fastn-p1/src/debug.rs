@@ -1,4 +1,6 @@
-use crate::SingleError;
+pub trait JDebug {
+    fn debug(&self, source: &str) -> serde_json::Value;
+}
 
 fn span(s: &fastn_p1::Span, key: &str, source: &str) -> serde_json::Value {
     serde_json::json!({ key: (source[s.start..s.end]).to_string()})
@@ -42,10 +44,6 @@ impl JDebug for fastn_p1::Visibility {
     }
 }
 
-pub trait JDebug {
-    fn debug(&self, source: &str) -> serde_json::Value;
-}
-
 impl JDebug for fastn_p1::ParseOutput {
     fn debug(&self, source: &str) -> serde_json::Value {
         serde_json::json!({
@@ -82,12 +80,19 @@ impl JDebug for fastn_p1::Kind {
         })
     }
 }
+
 impl JDebug for fastn_p1::QualifiedIdentifier {
     fn debug(&self, source: &str) -> serde_json::Value {
         serde_json::json! ({
             "module": self.module.debug(source),
             "terms": self.terms.debug(source),
         })
+    }
+}
+
+impl JDebug for fastn_p1::Identifier {
+    fn debug(&self, source: &str) -> serde_json::Value {
+        self.name.debug(source)
     }
 }
 
@@ -113,10 +118,10 @@ impl JDebug for fastn_p1::Spanned<fastn_p1::Item> {
 fn error(e: &fastn_p1::SingleError, _s: &fastn_p1::Span, _source: &str) -> serde_json::Value {
     serde_json::json!({ "error": match e {
         fastn_p1::SingleError::UnexpectedDocComment => "unexpected_doc_comment",
-        SingleError::UnwantedTextFound => "unwanted_text_found",
-        SingleError::EmptyAngleText => "empty_angle_text",
-        SingleError::ColonNotFound => "colon_not_found",
-        SingleError::DashDashNotFound => "dashdash_not_found",
-        SingleError::KindedNameNotFound => "kinded_name_not_found",
+        fastn_p1::SingleError::UnwantedTextFound => "unwanted_text_found",
+        fastn_p1::SingleError::EmptyAngleText => "empty_angle_text",
+        fastn_p1::SingleError::ColonNotFound => "colon_not_found",
+        fastn_p1::SingleError::DashDashNotFound => "dashdash_not_found",
+        fastn_p1::SingleError::KindedNameNotFound => "kinded_name_not_found",
     }})
 }
