@@ -3,6 +3,7 @@ pub struct Scanner {
     pub tokens: Vec<char>,
     pub size: usize,
     index: usize,
+    s_index: usize,
     ticks: std::cell::RefCell<usize>,
     pub output: fastn_p1::ParseOutput,
 }
@@ -29,6 +30,8 @@ impl Scanner {
         if self.index < self.size {
             let c = self.tokens[self.index];
             self.index += 1;
+            // increment s_index by size of c
+            self.s_index += c.len_utf8();
             Some(c)
         } else {
             None
@@ -51,7 +54,7 @@ impl Scanner {
             return None;
         }
 
-        let start = self.index;
+        let start = self.s_index;
         self.pop();
 
         // later characters should be is_alphanumeric or `_` or `-`
@@ -64,7 +67,16 @@ impl Scanner {
 
         Some(fastn_p1::Span {
             start,
-            end: self.index,
+            end: self.s_index,
         })
+    }
+
+    #[cfg(test)]
+    pub fn remaining(&self) -> String {
+        let mut s = String::new();
+        for c in &self.tokens[self.index..] {
+            s.push(*c);
+        }
+        s
     }
 }
