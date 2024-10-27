@@ -90,19 +90,19 @@ impl Scanner {
         s
     }
 
-    pub fn one_of<'a>(&mut self, choices: &[&'a str]) -> Option<&'a str> {
-        // TODO: store source reference, so we can use string matches instead of allocating
-        //       potentially multiple vecs on every call to this function
-        for choice in choices {
-            let len = choice.chars().count();
-            if self.index + len > self.size {
-                continue;
+    pub fn one_of(&mut self, choices: &[&'static str]) -> Option<&'static str> {
+        'outer: for choice in choices {
+            // we are assuming this is ascii string
+            let mut count = 0;
+            for char in choice.chars() {
+                if char != self.tokens[self.index + count] {
+                    continue 'outer;
+                }
+                count += 1
             }
-            if choice.chars().collect::<Vec<_>>() == self.tokens[self.index..self.index + len] {
-                self.index += len;
-                self.s_index += choice.len();
-                return Some(choice);
-            }
+            self.index += count;
+            self.s_index = self.index;
+            return Some(choice);
         }
         None
     }

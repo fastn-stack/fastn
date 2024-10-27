@@ -45,3 +45,19 @@ impl fastn_p1::ParserEngine {
         self.edits.last().unwrap()
     }
 }
+
+impl fastn_p1::Kind {
+    pub fn attach_doc(&mut self, doc: fastn_p1::Span) {
+        if self.doc.is_some() {
+            panic!("doc already attached");
+        }
+        self.doc = Some(doc);
+    }
+
+    pub fn attach_visibility(&mut self, visibility: fastn_p1::Spanned<fastn_p1::Visibility>) {
+        if self.visibility.is_some() {
+            panic!("visibility already attached");
+        }
+        self.visibility = Some(visibility);
+    }
+}

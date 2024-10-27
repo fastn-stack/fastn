@@ -84,9 +84,11 @@ pub struct QualifiedIdentifier {
 pub struct Kind {
     // only kinded section / header can have doc
     pub doc: Option<Span>,
-    pub visibility: Spanned<Visibility>,
+    pub visibility: Option<Spanned<Visibility>>,
     pub name: QualifiedIdentifier,
-    pub args: Vec<Kind>,
+    // during parsing, we can encounter `foo<>`, which needs to be differentiated from `foo`
+    // therefore we are using `Option<Vec<>>` here
+    pub args: Option<Vec<Kind>>,
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
