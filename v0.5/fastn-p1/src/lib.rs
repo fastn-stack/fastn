@@ -3,18 +3,18 @@
 
 extern crate self as fastn_p1;
 
-mod lexer;
+// mod lexer;
 // pub mod parse_v1;
 mod debug;
 pub mod parse_v2;
-mod parser_v3;
+// mod parser_v3;
 mod parser_v4;
 mod section;
-mod token;
+// mod token;
 mod utils;
 // use lalrpop_util::lalrpop_mod;
 
-pub use token::Token;
+// pub use token::Token;
 
 // lalrpop_mod!(grammar);
 
@@ -23,6 +23,8 @@ pub struct Section {
     pub dashdash: Span, // for syntax highlighting and formatting
     pub name: KindedName,
     pub colon: Span, // for syntax highlighting and formatting
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(default)]
     pub caption: Option<HeaderValue>,
     pub headers: Vec<Header>,
     pub body: Option<HeaderValue>,
@@ -73,6 +75,8 @@ pub struct PackageName {
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct ModuleName {
     pub package: PackageName,
+    #[serde(default)]
+    #[serde(skip_serializing_if = "Vec::is_empty")]
     pub path: Vec<Identifier>,
 }
 
@@ -81,6 +85,8 @@ pub struct QualifiedIdentifier {
     // the part comes before `#`
     module: Option<ModuleName>,
     // the part comes after `#`
+    #[serde(default)]
+    #[serde(skip_serializing_if = "Vec::is_empty")]
     terms: Vec<Identifier>,
 }
 

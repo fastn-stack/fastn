@@ -12,15 +12,4 @@ homepage.workspace = true
 [dependencies]
 serde.workspace = true
 serde_json.workspace = true
-logos.workspace = true
-#lalrpop-util.workspace = true
 
-[dev-dependencies]
-#insta.workspace = true
-
-[build-dependencies]
-#lalrpop.workspace = true
-
-[profile.dev.package]
-insta.opt-level = 3
-similar.opt-level = 3

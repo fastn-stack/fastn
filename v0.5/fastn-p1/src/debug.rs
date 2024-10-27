@@ -46,6 +46,12 @@ impl JDebug for fastn_p1::Visibility {
 
 impl JDebug for fastn_p1::ParseOutput {
     fn debug(&self, source: &str) -> serde_json::Value {
+        if self.items.is_empty() {
+            return serde_json::json!({
+                "module_doc": self.module_doc.debug(source),
+            });
+        }
+
         serde_json::json!({
             "module_doc": self.module_doc.debug(source),
             "items": self.items.debug(source),
@@ -83,6 +89,12 @@ impl JDebug for fastn_p1::Kind {
 
 impl JDebug for fastn_p1::QualifiedIdentifier {
     fn debug(&self, source: &str) -> serde_json::Value {
+        if self.terms.is_empty() {
+            return serde_json::json! ({
+                "module": self.module.debug(source),
+            });
+        }
+
         serde_json::json! ({
             "module": self.module.debug(source),
             "terms": self.terms.debug(source),
@@ -104,6 +116,12 @@ impl JDebug for fastn_p1::PackageName {
 
 impl JDebug for fastn_p1::ModuleName {
     fn debug(&self, source: &str) -> serde_json::Value {
+        if self.path.is_empty() {
+            return serde_json::json! ({
+                "package": self.package.debug(source),
+            });
+        }
+
         serde_json::json! ({
             "package": self.package.debug(source),
             "path": self.path.debug(source),

@@ -18,6 +18,7 @@ impl Scanner {
         }
     }
 
+    #[allow(clippy::misnamed_getters)]
     pub fn index(&self) -> usize {
         self.s_index
     }

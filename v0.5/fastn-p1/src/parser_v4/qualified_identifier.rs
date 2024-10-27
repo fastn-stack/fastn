@@ -3,12 +3,18 @@ pub fn qualified_identifier(
     scanner: &mut fastn_p1::parser_v4::Scanner,
 ) -> Option<fastn_p1::QualifiedIdentifier> {
     let module = match fastn_p1::parser_v4::module_name(scanner) {
-        Some(m) => {
-            if !scanner.take('#') {
-                return None;
+        Some(module) => match scanner.peek() {
+            Some('#') => {
+                scanner.pop();
+                Some(module)
             }
-            Some(m)
-        }
+            _ => {
+                return Some(fastn_p1::QualifiedIdentifier {
+                    module: Some(module),
+                    terms: vec![],
+                })
+            }
+        },
         None => None,
     };
 
@@ -41,9 +47,8 @@ mod test {
 
     #[test]
     fn qualified_identifier() {
-        t!("foo", null, "");
-        // t!("foo.com/", null, "");
-        // t!("foo.com/ ", null, " ");
-        // t!("foo.com/asd", {"package":"foo.com", "path": ["asd"]}, "");
+        t!("foo", { "module": { "package": "foo"}}, "");
+        t!("foo.com#bar", { "module": { "package": "foo.com"}, "terms": ["bar"]}, "");
+        t!("foo.com#bar.baz", { "module": { "package": "foo.com"}, "terms": ["bar", "baz"]}, "");
     }
 }
