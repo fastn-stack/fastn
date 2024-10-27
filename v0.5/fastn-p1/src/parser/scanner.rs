@@ -92,9 +92,9 @@ impl Scanner {
 
     pub fn one_of(&mut self, choices: &[&'static str]) -> Option<&'static str> {
         'outer: for choice in choices {
-            // we are assuming this is ascii string
             let mut count = 0;
             for char in choice.chars() {
+                assert!(char.is_ascii()); // we are assuming this is ascii string
                 if char != self.tokens[self.index + count] {
                     continue 'outer;
                 }
