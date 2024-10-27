@@ -36,7 +36,7 @@ fn package_name(scanner: &mut fastn_p1::parser_v4::Scanner) -> Option<fastn_p1::
 
 #[cfg(test)]
 mod test {
-    macro_rules! i {
+    macro_rules! t {
         ($source:expr, $debug:tt, $remaining:expr) => {
             fastn_p1::parser_v4::p(
                 $source,
@@ -49,8 +49,8 @@ mod test {
 
     #[test]
     fn package_name() {
-        i!(" foo.com", null, " foo.com");
-        i!("foo.com", "foo.com", "");
-        i!("foo.com ", "foo.com", " ");
+        t!(" foo.com", null, " foo.com");
+        t!("foo.com", "foo.com", "");
+        t!("foo.com ", "foo.com", " ");
     }
 }

@@ -33,7 +33,7 @@ fn identifier(scanner: &mut fastn_p1::parser_v4::Scanner) -> Option<fastn_p1::Id
 
 #[cfg(test)]
 mod test {
-    macro_rules! i {
+    macro_rules! t {
         ($source:expr, $debug:tt, $remaining:expr) => {
             fastn_p1::parser_v4::p(
                 $source,
@@ -47,18 +47,18 @@ mod test {
     #[test]
     fn identifier() {
         // identifiers can't start with a space
-        i!(" foo", null, " foo");
-        i!("foo", "foo", "");
-        i!("foo bar", "foo", " bar");
-        i!("_foo bar", "_foo", " bar");
-        i!("_foo-bar", "_foo-bar", "");
-        i!("नम", "नम", "");
-        i!("_नम-जन ", "_नम-जन", " ");
-        i!("_नाम-जाने", "_नाम-जाने", "");
-        i!("_नाम-जाने ", "_नाम-जाने", " ");
+        t!(" foo", null, " foo");
+        t!("foo", "foo", "");
+        t!("foo bar", "foo", " bar");
+        t!("_foo bar", "_foo", " bar");
+        t!("_foo-bar", "_foo-bar", "");
+        t!("नम", "नम", "");
+        t!("_नम-जन ", "_नम-जन", " ");
+        t!("_नाम-जाने", "_नाम-जाने", "");
+        t!("_नाम-जाने ", "_नाम-जाने", " ");
         // emoji is not a valid identifier
-        i!("नम😦", "नम", "😦");
-        i!("नम 😦", "नम", " 😦");
-        i!("😦नम ", null, "😦नम ");
+        t!("नम😦", "नम", "😦");
+        t!("नम 😦", "नम", " 😦");
+        t!("😦नम ", null, "😦नम ");
     }
 }
