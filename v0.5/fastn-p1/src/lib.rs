@@ -73,7 +73,7 @@ pub struct PackageName {
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct ModuleName {
     pub package: PackageName,
-    pub path: Vec<fastn_p1::Span>,
+    pub path: Vec<Identifier>,
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
@@ -81,7 +81,7 @@ pub struct QualifiedIdentifier {
     // the part comes before `#`
     module: Option<ModuleName>,
     // the part comes after `#`
-    terms: Vec<fastn_p1::Span>,
+    terms: Vec<Identifier>,
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]

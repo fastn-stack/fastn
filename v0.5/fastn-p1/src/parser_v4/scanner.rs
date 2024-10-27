@@ -42,6 +42,15 @@ impl Scanner {
         }
     }
 
+    pub fn take(&mut self, t: char) -> bool {
+        if self.peek() == Some(t) {
+            self.pop();
+            true
+        } else {
+            false
+        }
+    }
+
     pub fn skip_spaces(&mut self) {
         while let Some(c) = self.peek() {
             if c == ' ' || c == '\t' {

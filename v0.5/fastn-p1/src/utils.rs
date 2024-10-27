@@ -19,8 +19,8 @@ impl From<fastn_p1::Span> for fastn_p1::PackageName {
     }
 }
 
-impl From<fastn_p1::Span> for fastn_p1::QualifiedIdentifier {
-    fn from(value: fastn_p1::Span) -> Self {
+impl From<fastn_p1::Identifier> for fastn_p1::QualifiedIdentifier {
+    fn from(value: fastn_p1::Identifier) -> Self {
         fastn_p1::QualifiedIdentifier {
             module: None,
             terms: vec![value],

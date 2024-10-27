@@ -10,7 +10,7 @@
 /// `.` is allowed in domain names.
 /// TODO: domain name can't begin or end with a `.`.
 /// TODO: `.` can't be repeated.
-fn package_name(scanner: &mut fastn_p1::parser_v4::Scanner) -> Option<fastn_p1::PackageName> {
+pub fn package_name(scanner: &mut fastn_p1::parser_v4::Scanner) -> Option<fastn_p1::PackageName> {
     let first = scanner.peek()?;
     if !first.is_alphabetic() {
         return None;

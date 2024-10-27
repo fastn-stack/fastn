@@ -138,7 +138,7 @@ fn kinded_name(
             // if we find both kind and name, we return the span of both
             Some(fastn_p1::KindedName {
                 kind: Some(fastn_p1::Kind {
-                    name: k.span.into(),
+                    name: fastn_p1::Identifier { name: k.span }.into(),
                     ..Default::default()
                 }),
                 name: fastn_p1::Span {

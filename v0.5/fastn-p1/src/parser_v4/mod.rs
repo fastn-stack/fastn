@@ -2,10 +2,14 @@
 
 mod angle_text;
 mod identifier;
+mod module_name;
 mod package_name;
 mod qualified_identifier;
 mod scanner;
 
+pub use identifier::identifier;
+pub use module_name::module_name;
+pub use package_name::package_name;
 use scanner::Scanner;
 
 impl fastn_p1::ParseOutput {
