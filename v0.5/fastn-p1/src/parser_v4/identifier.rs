@@ -52,12 +52,21 @@ mod test {
             serde_json::json!("_नम-जन"),
             " ",
         );
-        p("_नाम ", super::identifier, serde_json::json!("_नाम"), " ");
+        p(
+            "_नाम-जाने",
+            super::identifier,
+            serde_json::json!("_नाम-जाने"),
+            "",
+        );
         p(
             "_नाम-जाने ",
             super::identifier,
             serde_json::json!("_नाम-जाने"),
             " ",
         );
+        // emoji is not a valid identifier
+        p("नम😦", super::identifier, serde_json::json!("नम"), "😦");
+        p("नम 😦", super::identifier, serde_json::json!("नम"), " 😦");
+        p("😦नम ", super::identifier, serde_json::json!(null), "😦नम ");
     }
 }
