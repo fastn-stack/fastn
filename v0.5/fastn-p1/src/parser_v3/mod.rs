@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 mod module_doc;
 mod scanner;
 mod section;
@@ -7,8 +9,8 @@ use module_doc::module_doc;
 use section::section;
 
 impl fastn_p1::ParseOutput {
-    pub fn parse(name: &str, source: &str) -> fastn_p1::ParseOutput {
-        let mut scanner = scanner::Scanner::new(name, source);
+    pub fn parse_v3(source: &str) -> fastn_p1::ParseOutput {
+        let mut scanner = scanner::Scanner::new(source);
         let mut potential_errors: Vec<fastn_p1::Spanned<fastn_p1::SingleError>> = vec![];
 
         println!("this");

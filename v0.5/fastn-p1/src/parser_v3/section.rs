@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 pub fn section(
     scanner: &mut fastn_p1::parser_v3::scanner::Scanner,
     potential_errors: &mut Vec<fastn_p1::Spanned<fastn_p1::SingleError>>,
@@ -128,7 +130,7 @@ fn kinded_name(
 ) -> Option<fastn_p1::KindedName> {
     println!("kinded_name");
     // try to read kind
-    let mut k = kind(scanner)?;
+    let k = kind(scanner)?;
     println!("kind: {k:?}");
     // try to read name
     match scanner.space_till(fastn_p1::Token::Word) {
@@ -136,7 +138,7 @@ fn kinded_name(
             // if we find both kind and name, we return the span of both
             Some(fastn_p1::KindedName {
                 kind: Some(fastn_p1::Kind {
-                    kind: k.span,
+                    name: k.span.into(),
                     ..Default::default()
                 }),
                 name: fastn_p1::Span {
@@ -224,7 +226,7 @@ fn angle_text(scanner: &mut fastn_p1::parser_v3::scanner::Scanner) -> bool {
     }
 
     // must end with `>`
-    scanner.take(fastn_p1::Token::AngleClose).is_some()
+    scanner.space_till(fastn_p1::Token::AngleClose).is_some()
 }
 
 // this is error recovery for a section. if there is any error in the section, we skip till the

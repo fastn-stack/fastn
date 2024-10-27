@@ -81,7 +81,7 @@ mod test {
         let source = include_str!("../t/000-tutorial.ftd");
         assert_eq!(
             dbg!(super::Token::lexer(source).spanned().collect::<Vec<_>>()).len(),
-            434
+            469
         );
     }
 }

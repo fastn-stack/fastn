@@ -1,3 +1,4 @@
+#[derive(Default)]
 pub struct Scanner {
     // source: String,
     pub tokens: Vec<(fastn_p1::Token, fastn_p1::Span)>,
@@ -7,7 +8,7 @@ pub struct Scanner {
 }
 
 impl Scanner {
-    pub fn new(name: &str, source: &str) -> Scanner {
+    pub fn new(source: &str) -> Scanner {
         use logos::Logos;
         dbg!("yo", source);
         Scanner {
@@ -15,12 +16,7 @@ impl Scanner {
                 .spanned()
                 .map(|(r, span)| (r.unwrap(), span))
                 .collect()),
-            index: 0,
-            output: fastn_p1::ParseOutput {
-                doc_name: name.to_string(),
-                ..Default::default()
-            },
-            ticks: std::cell::RefCell::new(0),
+            ..Default::default()
         }
     }
 
@@ -54,10 +50,12 @@ impl Scanner {
         self.tokens.get(self.index).map(|v| v.to_owned())
     }
 
+    // eats up all the space till the token, returns the span of found token
     pub fn space_till(&mut self, t: fastn_p1::Token) -> Option<fastn_p1::Span> {
         self.bump();
         while let Some((token, span)) = self.peek() {
             if token == t {
+                self.pop();
                 return Some(span);
             }
             if token == fastn_p1::Token::Space {
@@ -79,6 +77,7 @@ impl Scanner {
         }
     }
 
+    #[allow(dead_code)]
     pub fn current_span(&self) -> fastn_p1::Span {
         self.bump();
         fastn_p1::Span {

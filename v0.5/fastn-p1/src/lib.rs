@@ -8,6 +8,7 @@ mod lexer;
 mod debug;
 pub mod parse_v2;
 mod parser_v3;
+mod parser_v4;
 mod section;
 mod token;
 // use lalrpop_util::lalrpop_mod;
@@ -63,8 +64,36 @@ pub enum Visibility {
     Package,
     /// visible to current module only
     Module,
-    /// can only be accessed from inside the component etc
+    /// can only be accessed from inside the component, etc.
     Private,
+}
+
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
+pub struct Identifier {
+    term: fastn_p1::Span,
+}
+
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
+pub struct ModuleName {
+    pub package: fastn_p1::Span,
+    pub path: Vec<fastn_p1::Span>,
+}
+
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
+pub struct QualifiedIdentifier {
+    // the part comes before `#`
+    module: Option<ModuleName>,
+    // the part comes after `#`
+    terms: Vec<fastn_p1::Span>,
+}
+
+impl From<fastn_p1::Span> for QualifiedIdentifier {
+    fn from(value: Span) -> Self {
+        QualifiedIdentifier {
+            module: None,
+            terms: vec![value],
+        }
+    }
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
@@ -72,7 +101,16 @@ pub struct Kind {
     // only kinded section / header can have doc
     pub doc: Option<Span>,
     pub visibility: Spanned<Visibility>,
-    pub kind: Span,
+    pub name: QualifiedIdentifier,
+    pub angle_text: Option<AngleText>,
+}
+
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
+pub struct AngleText {
+    pub start: usize,                    // position of <
+    pub identifier: QualifiedIdentifier, // the actual text
+    pub end: usize,                      // position of >
+    pub inner: Option<Box<AngleText>>,
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
@@ -122,7 +160,6 @@ pub struct Edit {
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct ParseOutput {
-    pub doc_name: String,
     pub module_doc: Option<fastn_p1::Span>,
     pub items: Vec<fastn_p1::Spanned<fastn_p1::Item>>,
     pub line_starts: Vec<usize>,
@@ -147,7 +184,7 @@ pub enum SingleError {
     UnwantedTextFound,
     /// we found something like `-- list<> foo:`, type is not specified
     EmptyAngleText,
-    /// we are looking for dash dash, but found something else
+    /// we are looking for dash-dash, but found something else
     DashDashNotFound,
     KindedNameNotFound,
     ColonNotFound,
@@ -179,7 +216,7 @@ mod test {
                 s.push('\n');
                 s
             };
-            insta::assert_yaml_snapshot!(fastn_p1::ParseOutput::parse("foo", &s).debug(&s));
+            insta::assert_yaml_snapshot!(fastn_p1::ParseOutput::parse_v3(&s).debug(&s));
         })
     }
 }

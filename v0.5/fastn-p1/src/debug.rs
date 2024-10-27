@@ -1,7 +1,7 @@
 use crate::SingleError;
 
 fn span(s: &fastn_p1::Span, key: &str, source: &str) -> serde_json::Value {
-    serde_json::json!({ key: (&source[s.start..s.end]).to_string()})
+    serde_json::json!({ key: (source[s.start..s.end]).to_string()})
 }
 
 impl JDebug for fastn_p1::Span {
@@ -49,7 +49,6 @@ pub trait JDebug {
 impl JDebug for fastn_p1::ParseOutput {
     fn debug(&self, source: &str) -> serde_json::Value {
         serde_json::json!({
-            "doc_name": self.doc_name,
             "module_doc": self.module_doc.debug(source),
             "items": self.items.debug(source),
             // ignoring line_starts for now
@@ -79,7 +78,24 @@ impl JDebug for fastn_p1::Kind {
         serde_json::json! ({
             "doc": self.doc.debug(source),
             "visibility": self.visibility.debug(source),
-            "kind": self.kind.debug(source),
+            "kind": self.name.debug(source),
+        })
+    }
+}
+impl JDebug for fastn_p1::QualifiedIdentifier {
+    fn debug(&self, source: &str) -> serde_json::Value {
+        serde_json::json! ({
+            "module": self.module.debug(source),
+            "terms": self.terms.debug(source),
+        })
+    }
+}
+
+impl JDebug for fastn_p1::ModuleName {
+    fn debug(&self, source: &str) -> serde_json::Value {
+        serde_json::json! ({
+            "package": self.package.debug(source),
+            "path": self.path.debug(source),
         })
     }
 }
@@ -94,7 +110,7 @@ impl JDebug for fastn_p1::Spanned<fastn_p1::Item> {
     }
 }
 
-fn error(e: &fastn_p1::SingleError, s: &fastn_p1::Span, _source: &str) -> serde_json::Value {
+fn error(e: &fastn_p1::SingleError, _s: &fastn_p1::Span, _source: &str) -> serde_json::Value {
     serde_json::json!({ "error": match e {
         fastn_p1::SingleError::UnexpectedDocComment => "unexpected_doc_comment",
         SingleError::UnwantedTextFound => "unwanted_text_found",
