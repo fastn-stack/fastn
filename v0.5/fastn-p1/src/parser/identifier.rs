@@ -5,7 +5,7 @@
 ///
 /// TODO: identifiers can't be keywords of the language, e.g., `import`, `record`, `component`.
 /// but it can be built in types e.g., `integer` etc.
-pub fn identifier(scanner: &mut fastn_p1::parser_v4::Scanner) -> Option<fastn_p1::Identifier> {
+pub fn identifier(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::Identifier> {
     let first = scanner.peek()?;
     // the first character should be is_alphabetic or `_`
     if !first.is_alphabetic() && first != '_' {
@@ -35,7 +35,7 @@ pub fn identifier(scanner: &mut fastn_p1::parser_v4::Scanner) -> Option<fastn_p1
 mod test {
     macro_rules! t {
         ($source:expr, $debug:tt, $remaining:expr) => {
-            fastn_p1::parser_v4::p(
+            fastn_p1::parser::p(
                 $source,
                 super::identifier,
                 serde_json::json!($debug),

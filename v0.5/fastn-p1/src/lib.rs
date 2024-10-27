@@ -3,20 +3,10 @@
 
 extern crate self as fastn_p1;
 
-// mod lexer;
-// pub mod parse_v1;
 mod debug;
-pub mod parse_v2;
-// mod parser_v3;
-mod parser_v4;
+mod parser;
 mod section;
-// mod token;
 mod utils;
-// use lalrpop_util::lalrpop_mod;
-
-// pub use token::Token;
-
-// lalrpop_mod!(grammar);
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct Section {
@@ -169,30 +159,4 @@ pub enum SingleError {
     // ParseError,
     // MoreThanOneHeader,
     // HeaderNotFound,
-}
-
-#[cfg(test)]
-mod test {
-    // #[test]
-    // fn grammar_test() {
-    //     let input = "-- foo bar():";
-    //     let lexer = fastn_p1::lexer::Lexer::new(input);
-    //     let parser = fastn_p1::grammar::SectionParser::new();
-    //     let ast = parser.parse(input, lexer).unwrap();
-    //     dbg!(ast);
-    // }
-
-    // #[test]
-    // fn test_parse_output() {
-    //     use fastn_p1::debug::JDebug;
-    //
-    //     insta::glob!("..", "t/*.ftd", |path| {
-    //         let s = {
-    //             let mut s = std::fs::read_to_string(path).unwrap();
-    //             s.push('\n');
-    //             s
-    //         };
-    //         insta::assert_yaml_snapshot!(fastn_p1::ParseOutput::parse_v3(&s).debug(&s));
-    //     })
-    // }
 }

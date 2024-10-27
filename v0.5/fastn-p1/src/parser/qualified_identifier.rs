@@ -1,8 +1,8 @@
 /// module name looks like <module-name>#<identifier>
 pub fn qualified_identifier(
-    scanner: &mut fastn_p1::parser_v4::Scanner,
+    scanner: &mut fastn_p1::parser::Scanner,
 ) -> Option<fastn_p1::QualifiedIdentifier> {
-    let module = match fastn_p1::parser_v4::module_name(scanner) {
+    let module = match fastn_p1::parser::module_name(scanner) {
         Some(module) => match scanner.peek() {
             Some('#') => {
                 scanner.pop();
@@ -20,7 +20,7 @@ pub fn qualified_identifier(
 
     let terms = {
         let mut terms = Vec::new();
-        while let Some(identifier) = fastn_p1::parser_v4::identifier(scanner) {
+        while let Some(identifier) = fastn_p1::parser::identifier(scanner) {
             terms.push(identifier);
             if !scanner.take('.') {
                 break;
@@ -36,7 +36,7 @@ pub fn qualified_identifier(
 mod test {
     macro_rules! t {
         ($source:expr, $debug:tt, $remaining:expr) => {
-            fastn_p1::parser_v4::p(
+            fastn_p1::parser::p(
                 $source,
                 super::qualified_identifier,
                 serde_json::json!($debug),

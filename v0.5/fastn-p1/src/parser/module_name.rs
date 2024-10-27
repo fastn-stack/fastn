@@ -1,6 +1,6 @@
 /// module name looks like <package-name>(/<identifier>)*/?)
-pub fn module_name(scanner: &mut fastn_p1::parser_v4::Scanner) -> Option<fastn_p1::ModuleName> {
-    let package = fastn_p1::parser_v4::package_name(scanner)?;
+pub fn module_name(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::ModuleName> {
+    let package = fastn_p1::parser::package_name(scanner)?;
     if !scanner.take('/') {
         return Some(fastn_p1::ModuleName {
             package,
@@ -10,7 +10,7 @@ pub fn module_name(scanner: &mut fastn_p1::parser_v4::Scanner) -> Option<fastn_p
 
     let path = {
         let mut path = Vec::new();
-        while let Some(identifier) = fastn_p1::parser_v4::identifier(scanner) {
+        while let Some(identifier) = fastn_p1::parser::identifier(scanner) {
             path.push(identifier);
             if !scanner.take('/') {
                 break;
@@ -30,7 +30,7 @@ pub fn module_name(scanner: &mut fastn_p1::parser_v4::Scanner) -> Option<fastn_p
 mod test {
     macro_rules! t {
         ($source:expr, $debug:tt, $remaining:expr) => {
-            fastn_p1::parser_v4::p(
+            fastn_p1::parser::p(
                 $source,
                 super::module_name,
                 serde_json::json!($debug),
