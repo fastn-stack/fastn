@@ -2,10 +2,12 @@
 
 mod angle_text;
 mod identifier;
+mod kind;
 mod module_name;
 mod package_name;
 mod qualified_identifier;
 mod scanner;
+mod visibility;
 
 pub use identifier::identifier;
 pub use module_name::module_name;

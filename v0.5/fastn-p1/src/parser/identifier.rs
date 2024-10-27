@@ -24,10 +24,7 @@ pub fn identifier(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::I
     }
 
     Some(fastn_p1::Identifier {
-        name: fastn_p1::Span {
-            start,
-            end: scanner.index(),
-        },
+        name: scanner.span(start),
     })
 }
 

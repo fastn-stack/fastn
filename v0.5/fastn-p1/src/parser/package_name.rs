@@ -27,10 +27,7 @@ pub fn package_name(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1:
     }
 
     Some(fastn_p1::PackageName {
-        name: fastn_p1::Span {
-            start,
-            end: scanner.index(),
-        },
+        name: scanner.span(start),
     })
 }
 

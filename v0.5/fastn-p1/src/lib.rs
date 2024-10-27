@@ -86,7 +86,7 @@ pub struct Kind {
     pub doc: Option<Span>,
     pub visibility: Spanned<Visibility>,
     pub name: QualifiedIdentifier,
-    pub angle_text: Option<AngleText>,
+    pub args: Vec<Kind>,
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]

@@ -1,4 +1,4 @@
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub struct Scanner {
     pub tokens: Vec<char>,
     pub size: usize,
@@ -6,6 +6,11 @@ pub struct Scanner {
     s_index: usize,
     ticks: std::cell::RefCell<usize>,
     pub output: fastn_p1::ParseOutput,
+}
+
+pub struct Index {
+    chars: usize,
+    bytes: usize,
 }
 
 impl Scanner {
@@ -18,9 +23,23 @@ impl Scanner {
         }
     }
 
-    #[allow(clippy::misnamed_getters)]
-    pub fn index(&self) -> usize {
-        self.s_index
+    pub fn span(&self, start: Index) -> fastn_p1::Span {
+        fastn_p1::Span {
+            start: start.bytes,
+            end: self.s_index,
+        }
+    }
+
+    pub fn index(&self) -> Index {
+        Index {
+            bytes: self.s_index,
+            chars: self.index,
+        }
+    }
+
+    pub fn reset(&mut self, index: Index) {
+        self.s_index = index.bytes;
+        self.index = index.chars;
     }
 
     pub fn peek(&self) -> Option<char> {
@@ -55,18 +74,36 @@ impl Scanner {
     pub fn skip_spaces(&mut self) {
         while let Some(c) = self.peek() {
             if c == ' ' || c == '\t' {
-                break;
+                self.pop();
+                continue;
             }
-            self.pop();
+            break;
         }
     }
 
-    #[cfg(test)]
+    // #[cfg(test)]
     pub fn remaining(&self) -> String {
         let mut s = String::new();
         for c in &self.tokens[self.index..] {
             s.push(*c);
         }
         s
+    }
+
+    pub fn one_of<'a>(&mut self, choices: &[&'a str]) -> Option<&'a str> {
+        // TODO: store source reference, so we can use string matches instead of allocating
+        //       potentially multiple vecs on every call to this function
+        for choice in choices {
+            let len = choice.chars().count();
+            if self.index + len > self.size {
+                continue;
+            }
+            if choice.chars().collect::<Vec<_>>() == self.tokens[self.index..self.index + len] {
+                self.index += len;
+                self.s_index += choice.len();
+                return Some(choice);
+            }
+        }
+        None
     }
 }
