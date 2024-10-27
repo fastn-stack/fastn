@@ -24,51 +24,32 @@ mod test {
         assert_eq!(scanner.remaining(), remaining);
     }
 
+    macro_rules! i {
+        ($source:expr, $debug:tt, $remaining:expr) => {
+            p(
+                $source,
+                super::identifier,
+                serde_json::json!($debug),
+                $remaining,
+            );
+        };
+    }
+
     #[test]
     fn test_identifier() {
         // identifiers can't start with a space
-        p(" foo", super::identifier, serde_json::json!(null), " foo");
-        p("foo", super::identifier, serde_json::json!("foo"), "");
-        p(
-            "foo bar",
-            super::identifier,
-            serde_json::json!("foo"),
-            " bar",
-        );
-        p(
-            "_foo bar",
-            super::identifier,
-            serde_json::json!("_foo"),
-            " bar",
-        );
-        p(
-            "_foo-bar",
-            super::identifier,
-            serde_json::json!("_foo-bar"),
-            "",
-        );
-        p("नम", super::identifier, serde_json::json!("नम"), "");
-        p(
-            "_नम-जन ",
-            super::identifier,
-            serde_json::json!("_नम-जन"),
-            " ",
-        );
-        p(
-            "_नाम-जाने",
-            super::identifier,
-            serde_json::json!("_नाम-जाने"),
-            "",
-        );
-        p(
-            "_नाम-जाने ",
-            super::identifier,
-            serde_json::json!("_नाम-जाने"),
-            " ",
-        );
+        i!(" foo", null, " foo");
+        i!("foo", "foo", "");
+        i!("foo bar", "foo", " bar");
+        i!("_foo bar", "_foo", " bar");
+        i!("_foo-bar", "_foo-bar", "");
+        i!("नम", "नम", "");
+        i!("_नम-जन ", "_नम-जन", " ");
+        i!("_नाम-जाने", "_नाम-जाने", "");
+        i!("_नाम-जाने ", "_नाम-जाने", " ");
         // emoji is not a valid identifier
-        p("नम😦", super::identifier, serde_json::json!("नम"), "😦");
-        p("नम 😦", super::identifier, serde_json::json!("नम"), " 😦");
-        p("😦नम ", super::identifier, serde_json::json!(null), "😦नम ");
+        i!("नम😦", "नम", "😦");
+        i!("नम 😦", "नम", " 😦");
+        i!("😦नम ", null, "😦नम ");
     }
 }
