@@ -134,18 +134,30 @@ impl Scanner {
 
     // returns the span from current position to the end of token
     pub fn token(&mut self, t: &'static str) -> Option<fastn_p1::Span> {
-        let mut count = 0;
-        for char in t.chars() {
+        // Get the length of the token to match
+        // t.chars().count(): Counts characters (Unicode scalar values).
+        let token_len = t.chars().count();
+
+        // Ensure that we have enough characters left in the source to match the token
+        if self.index + token_len > self.size {
+            return None;
+        }
+
+        for (index, char) in t.chars().enumerate() {
             assert!(char.is_ascii()); // we are assuming this is ascii string
-            if char != self.tokens[self.index + count] {
+            if char != self.tokens[self.index + index] {
                 return None;
             }
-            count += 1
         }
-        self.index += count;
-        self.s_index = self.index;
+
+        self.index += token_len;
+
+        // Advance by the byte length of the token string
+        // t.len(): Counts bytes.
+        self.s_index += t.len();
+
         Some(fastn_p1::Span {
-            start: self.s_index - count,
+            start: self.s_index - t.len(),
             end: self.s_index,
         })
     }
