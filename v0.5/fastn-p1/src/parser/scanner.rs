@@ -8,6 +8,7 @@ pub struct Scanner {
     pub output: fastn_p1::ParseOutput,
 }
 
+#[derive(Debug, PartialEq)]
 pub struct Index {
     chars: usize,
     bytes: usize,
@@ -53,17 +54,6 @@ impl Scanner {
         self.index += count;
     }
 
-    /// Creates a `Span` covering the next `count` characters and advances the scanner's position.
-    fn span_for_chars_with_advance(&mut self, count: usize) -> fastn_p1::Span {
-        let start = self.s_index;
-        self.increment_index_by(count);
-
-        fastn_p1::Span {
-            start,
-            end: self.s_index,
-        }
-    }
-
     pub fn reset(&mut self, index: Index) {
         self.s_index = index.bytes;
         self.index = index.chars;
@@ -107,18 +97,18 @@ impl Scanner {
     }
 
     pub fn read_till_char_or_end_of_line(&mut self, t: char) -> Option<fastn_p1::Span> {
-        let mut count = 0;
-        while let Some(c) = self.tokens.get(self.index + count) {
-            if *c == t || *c == '\n' {
+        let start = self.index();
+        while let Some(c) = self.peek() {
+            if c == t || c == '\n' {
                 break;
             }
-            count += 1;
+            self.pop();
         }
-        if count == 0 {
+        if start == self.index() {
             return None;
         }
 
-        Some(self.span_for_chars_with_advance(count))
+        Some(self.span(start))
     }
 
     #[cfg(test)]
@@ -156,16 +146,16 @@ impl Scanner {
 
     // returns the span from current position to the end of token
     pub fn token(&mut self, t: &'static str) -> Option<fastn_p1::Span> {
-        let mut count = 0;
+        let start = self.index();
         for char in t.chars() {
             assert!(char.is_ascii()); // we are assuming this is ascii string
-            if (self.index + count < self.size) && (char != self.tokens[self.index + count]) {
+            if self.peek() != Some(char) {
+                self.reset(start);
                 return None;
             }
-
-            count += 1;
+            self.pop();
         }
 
-        Some(self.span_for_chars_with_advance(count))
+        Some(self.span(start))
     }
 }
