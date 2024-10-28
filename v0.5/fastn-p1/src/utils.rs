@@ -60,6 +60,20 @@ impl fastn_p1::Kind {
         }
         self.visibility = Some(visibility);
     }
+
+    pub fn to_identifier(&self) -> Option<fastn_p1::Identifier> {
+        if self.args.is_some()
+            || self.doc.is_some()
+            || self.visibility.is_some()
+            || !self.name.terms.is_empty()
+            || self.name.module.is_some()
+            || self.name.terms.len() != 1
+        {
+            return None;
+        }
+
+        self.name.terms.get(0).cloned()
+    }
 }
 
 impl From<fastn_p1::QualifiedIdentifier> for fastn_p1::Kind {

@@ -5,7 +5,10 @@ impl fastn_p1::Section {
     ) -> Box<fastn_p1::Section> {
         Box::new(fastn_p1::Section {
             init: fastn_p1::SectionInit {
-                name: fastn_p1::KindedName { kind: None, name },
+                name: fastn_p1::KindedName {
+                    kind: None,
+                    name: name.into(),
+                },
                 ..Default::default()
             },
             function_marker,

@@ -2,6 +2,7 @@
 
 mod identifier;
 mod kind;
+mod kinded_name;
 mod module_name;
 mod package_name;
 mod qualified_identifier;
@@ -9,6 +10,7 @@ mod scanner;
 mod visibility;
 
 pub use identifier::identifier;
+pub use kind::kind;
 pub use module_name::module_name;
 pub use package_name::package_name;
 pub use qualified_identifier::qualified_identifier;

@@ -120,7 +120,7 @@ pub enum PResult<T> {
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct KindedName {
     pub kind: Option<Kind>,
-    pub name: Span,
+    pub name: Identifier,
 }
 
 pub type HeaderValue = Spanned<Vec<StringOrSection>>;
