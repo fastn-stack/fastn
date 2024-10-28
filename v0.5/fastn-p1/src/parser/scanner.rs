@@ -83,7 +83,7 @@ impl Scanner {
         }
     }
 
-    // #[cfg(test)]
+    #[cfg(test)]
     pub fn remaining(&self) -> String {
         let mut s = String::new();
         for c in &self.tokens[self.index..] {
@@ -93,6 +93,17 @@ impl Scanner {
     }
 
     pub fn one_of(&mut self, choices: &[&'static str]) -> Option<&'static str> {
+        #[allow(clippy::manual_find)]
+        // clippy wants us to use this:
+        //
+        // ```rs
+        // choices
+        //     .iter()
+        //     .find(|&choice| self.token(choice).is_some())
+        //     .copied();
+        // ```
+        //
+        // but this is clearer:
         for choice in choices {
             if self.token(choice).is_some() {
                 return Some(choice);
@@ -111,7 +122,7 @@ impl Scanner {
             }
             count += 1
         }
-        self.index = self.index + count;
+        self.index += count;
         self.s_index = self.index;
         Some(fastn_p1::Span {
             start: self.s_index - count,

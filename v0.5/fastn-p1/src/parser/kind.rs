@@ -17,7 +17,6 @@ pub fn kind(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::Kind> {
     scanner.skip_spaces();
 
     if !scanner.take('<') {
-        println!("here 2 {}", scanner.remaining());
         scanner.reset(index);
         return Some(qi.into());
     }

@@ -12,6 +12,7 @@ mod visibility;
 
 pub use identifier::identifier;
 pub use kind::kind;
+pub use kinded_name::kinded_name;
 pub use module_name::module_name;
 pub use package_name::package_name;
 pub use qualified_identifier::qualified_identifier;
