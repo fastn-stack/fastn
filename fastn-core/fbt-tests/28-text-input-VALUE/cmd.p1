@@ -1,0 +1,11 @@
+-- fbt:
+cmd: $FBT_CWD/../target/debug/fastn --test build
+output: .build
+
+-- stdout:
+
+No dependencies to update.
+Processing fastn-stack.github.io/text-input-test/manifest.json ... done in <omitted>
+Processing fastn-stack.github.io/text-input-test/ ... done in <omitted>
+Processing fastn-stack.github.io/text-input-test/actions/create-account/ ... done in <omitted>
+Processing fastn-stack.github.io/text-input-test/FASTN/ ... done in <omitted>
