@@ -1,4 +1,3 @@
-/// module name looks like <module-name>#<identifier>
 pub fn qualified_identifier(
     scanner: &mut fastn_p1::parser::Scanner,
 ) -> Option<fastn_p1::QualifiedIdentifier> {

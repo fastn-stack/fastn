@@ -1,6 +1,3 @@
-/// public | private | public<package> | public<module>
-///
-/// TODO: newline is allowed, e.g., public<\n module>
 pub fn visibility(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::Visibility> {
     match scanner.one_of(&["public", "private"]) {
         Some("public") => (),

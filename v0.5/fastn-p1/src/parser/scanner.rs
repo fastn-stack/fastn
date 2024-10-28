@@ -83,6 +83,26 @@ impl Scanner {
         }
     }
 
+    pub fn read_till_char_or_end_of_line(&mut self, t: char) -> Option<fastn_p1::Span> {
+        let mut count = 0;
+        while let Some(c) = self.tokens.get(self.index + count) {
+            if *c == t || *c == '\n' {
+                break;
+            }
+            count += 1;
+        }
+        if count == 0 {
+            return None;
+        }
+        let span = fastn_p1::Span {
+            start: self.s_index,
+            end: self.s_index + count,
+        };
+        self.index += count;
+        self.s_index += count;
+        Some(span)
+    }
+
     #[cfg(test)]
     pub fn remaining(&self) -> String {
         let mut s = String::new();

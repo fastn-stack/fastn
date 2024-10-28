@@ -121,6 +121,16 @@ impl JDebug for fastn_p1::QualifiedIdentifier {
     }
 }
 
+impl JDebug for fastn_p1::SES {
+    fn debug(&self, source: &str) -> serde_json::Value {
+        match self {
+            fastn_p1::SES::String(e) => e.debug(source),
+            fastn_p1::SES::Expression { content, .. } => content.debug(source),
+            fastn_p1::SES::Section(e) => e.debug(source),
+        }
+    }
+}
+
 impl JDebug for fastn_p1::Identifier {
     fn debug(&self, source: &str) -> serde_json::Value {
         self.name.debug(source)
