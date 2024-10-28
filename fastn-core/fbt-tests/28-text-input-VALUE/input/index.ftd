@@ -1,0 +1,7 @@
+-- import: fastn-stack.github.io/text-input-test/actions/create-account as ca
+
+-- ftd.text-input:
+placeholder: name
+$on-input$: $ftd.set-string($a = $ca.name, v = $VALUE)
+
+-- ftd.text: $ca.name
