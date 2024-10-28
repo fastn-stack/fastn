@@ -8,9 +8,16 @@ pub struct Scanner {
     pub output: fastn_p1::ParseOutput,
 }
 
+#[derive(Debug, PartialEq)]
 pub struct Index {
     chars: usize,
     bytes: usize,
+}
+
+impl Index {
+    pub fn new(chars: usize, bytes: usize) -> Self {
+        Self { chars, bytes }
+    }
 }
 
 impl Scanner {
