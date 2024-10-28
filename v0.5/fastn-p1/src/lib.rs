@@ -9,6 +9,7 @@ mod section;
 mod utils;
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
+#[serde(default)]
 pub struct Section {
     pub init: SectionInit,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -93,7 +94,7 @@ pub struct QualifiedIdentifier {
 
 // Note: doc and visibility technically do not belong to Kind, but we are keeping them here
 // because otherwise we will have to put them on KindedName.
-// KindedName is used lot more often (in headers, sections, etc.) than Kind, so it makes sense
+// KindedName is used a lot more often (in headers, sections, etc.) than Kind, so it makes sense
 // to KindedName smaller and Kind bigger.
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct Kind {
@@ -123,10 +124,10 @@ pub struct KindedName {
     pub name: Identifier,
 }
 
-pub type HeaderValue = Spanned<Vec<StringOrSection>>;
+pub type HeaderValue = Spanned<Vec<SES>>;
 
 #[derive(Debug, PartialEq, Clone, serde::Serialize)]
-pub enum StringOrSection {
+pub enum SES {
     String(Span),
     Expression(Span),
     Section(Box<Spanned<Section>>),
@@ -163,10 +164,10 @@ pub enum SingleError {
     /// doc comments should either come at the beginning of the file as a contiguous chunk
     /// or right before a section or a header.
     UnexpectedDocComment,
-    /// we found some text when we were not expecting, eg at the beginning of the file before
-    /// any section started, or inside a section that does not expect any text. this second part
-    /// I am not sure right now as we are planning ot convert all text to text nodes inside a
-    /// section. so by the end maybe this will only contain the first part.
+    /// we found some text when we were not expecting, e.g., at the beginning of the file before
+    /// any section started, or inside a section that does not expect any text. this second part,
+    /// I am not sure right now as we are planning to convert all text to text nodes inside a
+    /// section. so by the end, maybe this will only contain the first part.
     UnwantedTextFound,
     /// we found something like `-- list<> foo:`, type is not specified
     EmptyAngleText,

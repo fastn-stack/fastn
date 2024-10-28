@@ -8,6 +8,7 @@ mod package_name;
 mod qualified_identifier;
 mod scanner;
 mod section_init;
+mod ses;
 mod visibility;
 
 pub use identifier::identifier;
@@ -39,9 +40,11 @@ fn p<T: fastn_p1::debug::JDebug, F: FnOnce(&mut fastn_p1::parser::Scanner) -> T>
     assert_eq!(scanner.remaining(), remaining);
 }
 
+
 #[macro_export]
 macro_rules! tt {
     ($f:expr) => {
+        #[allow(unused_macros)]
         macro_rules! t {
             ($source:expr, $debug:tt, $remaining:expr) => {
                 fastn_p1::parser::p($source, $f, serde_json::json!($debug), $remaining);

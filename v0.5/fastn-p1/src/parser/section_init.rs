@@ -1,4 +1,4 @@
-/// example: `-- list<string> foo`
+/// example: `-- list<string> foo:`
 pub fn section_init(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::SectionInit> {
     scanner.skip_spaces();
     let dashdash = scanner.token("--")?;
@@ -23,5 +23,6 @@ mod test {
         t!("-- foo: ", {"name": {"name": "foo"}}, " ");
         t!("-- foo: hello", {"name": {"name": "foo"}}, " hello");
         t!("-- integer foo: hello", {"name": {"name": "foo", "kind": "integer"}}, " hello");
+        // t!("-- list<integer> foo:", {"name": {"name": "foo", "kind": "integer"}}, "");
     }
 }
