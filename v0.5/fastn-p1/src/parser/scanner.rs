@@ -39,6 +39,32 @@ impl Scanner {
         }
     }
 
+    /// Converts a given character count from the current index into the equivalent byte count.
+    fn char_count_to_byte_count(&self, char_count: usize) -> usize {
+        self.tokens[self.index..self.index + char_count]
+            .iter()
+            .map(|c| c.len_utf8()) // Get the byte length of each character
+            .sum() // Sum up the byte lengths
+    }
+
+    /// Advances the scanner's character and byte indices by a specified number of characters.
+    fn increment_index_by_count(&mut self, count: usize) {
+        self.s_index += self.char_count_to_byte_count(count);
+        self.index += count;
+    }
+
+    /// Creates a `Span` covering the next `count` characters and advances the scanner's position.
+    fn span_for_chars_with_advance(&mut self, count: usize) -> fastn_p1::Span {
+        let start = self.s_index;
+        self.increment_index_by_count(count);
+
+        let span = fastn_p1::Span {
+            start,
+            end: self.s_index,
+        };
+        span
+    }
+
     pub fn reset(&mut self, index: Index) {
         self.s_index = index.bytes;
         self.index = index.chars;
@@ -55,9 +81,7 @@ impl Scanner {
     pub fn pop(&mut self) -> Option<char> {
         if self.index < self.size {
             let c = self.tokens[self.index];
-            self.index += 1;
-            // increment s_index by size of c
-            self.s_index += c.len_utf8();
+            self.increment_index_by_count(1);
             Some(c)
         } else {
             None
@@ -94,13 +118,8 @@ impl Scanner {
         if count == 0 {
             return None;
         }
-        let span = fastn_p1::Span {
-            start: self.s_index,
-            end: self.s_index + count,
-        };
-        self.index += count;
-        self.s_index += count;
-        Some(span)
+
+        Some(self.span_for_chars_with_advance(count))
     }
 
     #[cfg(test)]
@@ -151,14 +170,6 @@ impl Scanner {
             }
         }
 
-        // increment both index and s_index by size of token, since token is ascii string so both
-        // are incremented by the token length
-        self.index += token_len;
-        self.s_index += token_len;
-
-        Some(fastn_p1::Span {
-            start: self.s_index - token_len,
-            end: self.s_index,
-        })
+        Some(self.span_for_chars_with_advance(token_len))
     }
 }
