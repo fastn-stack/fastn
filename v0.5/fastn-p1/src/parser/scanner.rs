@@ -93,19 +93,29 @@ impl Scanner {
     }
 
     pub fn one_of(&mut self, choices: &[&'static str]) -> Option<&'static str> {
-        'outer: for choice in choices {
-            let mut count = 0;
-            for char in choice.chars() {
-                assert!(char.is_ascii()); // we are assuming this is ascii string
-                if char != self.tokens[self.index + count] {
-                    continue 'outer;
-                }
-                count += 1
+        for choice in choices {
+            if self.token(choice).is_some() {
+                return Some(choice);
             }
-            self.index += count;
-            self.s_index = self.index;
-            return Some(choice);
         }
         None
+    }
+
+    // returns the span from current position to the end of token
+    pub fn token(&mut self, t: &'static str) -> Option<fastn_p1::Span> {
+        let mut count = 0;
+        for char in t.chars() {
+            assert!(char.is_ascii()); // we are assuming this is ascii string
+            if char != self.tokens[self.index + count] {
+                return None;
+            }
+            count += 1
+        }
+        self.index = self.index + count;
+        self.s_index = self.index;
+        Some(fastn_p1::Span {
+            start: self.s_index - count,
+            end: self.s_index,
+        })
     }
 }

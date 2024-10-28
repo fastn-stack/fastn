@@ -7,6 +7,7 @@ mod module_name;
 mod package_name;
 mod qualified_identifier;
 mod scanner;
+mod section_init;
 mod visibility;
 
 pub use identifier::identifier;

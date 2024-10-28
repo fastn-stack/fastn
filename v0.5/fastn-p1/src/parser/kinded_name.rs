@@ -1,9 +1,9 @@
 /// example: `list<string> foo` | `foo bar` | `bar`
 pub fn kinded_name(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::KindedName> {
-    let kind = dbg!(fastn_p1::parser::kind(scanner));
+    let kind = fastn_p1::parser::kind(scanner);
     scanner.skip_spaces();
 
-    let name = match dbg!(fastn_p1::parser::identifier(scanner)) {
+    let name = match fastn_p1::parser::identifier(scanner) {
         Some(v) => v,
         None => {
             return kind.and_then(Into::into);
@@ -28,6 +28,7 @@ mod test {
                     "name": {"module": {"package": "string"}}
                 }
             },
-            "");
+            ""
+        );
     }
 }
