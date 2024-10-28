@@ -5,19 +5,11 @@ pub fn identifier(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::I
         return None;
     }
 
-    let start = scanner.index();
-    scanner.pop();
-
     // later characters should be is_alphanumeric or `_` or `-`
-    while let Some(c) = scanner.peek() {
-        if !c.is_alphanumeric() && c != '_' && c != '-' {
-            break;
-        }
-        scanner.pop();
-    }
+    let span = scanner.eat_while(|c| c.is_alphabetic() || c == '_' || c == '-')?;
 
     Some(fastn_p1::Identifier {
-        name: scanner.span(start),
+        name: span,
     })
 }
 

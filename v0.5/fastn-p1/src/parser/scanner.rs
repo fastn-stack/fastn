@@ -26,12 +26,30 @@ impl Scanner {
         }
     }
 
-    pub fn span(&self, start: Index) -> fastn_p1::Span {
+    fn span(&self, start: Index) -> fastn_p1::Span {
         fastn_p1::Span {
             start: start.bytes,
             end: self.s_index,
         }
     }
+
+    pub fn eat_while<F: Fn(char) -> bool>(&mut self, f: F) -> Option<fastn_p1::Span> {
+        let start = self.index();
+        while let Some(c) = self.peek() {
+            if !f(c) {
+                break;
+            }
+            self.pop();
+        }
+
+        if self.index() == start {
+            return None;
+        }
+
+        Some(self.span(start))
+    }
+
+
 
     pub fn index(&self) -> Index {
         Index {
@@ -97,18 +115,7 @@ impl Scanner {
     }
 
     pub fn read_till_char_or_end_of_line(&mut self, t: char) -> Option<fastn_p1::Span> {
-        let start = self.index();
-        while let Some(c) = self.peek() {
-            if c == t || c == '\n' {
-                break;
-            }
-            self.pop();
-        }
-        if start == self.index() {
-            return None;
-        }
-
-        Some(self.span(start))
+        self.eat_while(|c| c != t && c != '\n')
     }
 
     #[cfg(test)]
