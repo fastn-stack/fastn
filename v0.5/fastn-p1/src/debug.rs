@@ -79,10 +79,12 @@ impl JDebug for fastn_p1::SectionInit {
 
 impl JDebug for fastn_p1::KindedName {
     fn debug(&self, source: &str) -> serde_json::Value {
-        serde_json::json! ({
-            "kind": self.kind.debug(source),
-            "name": self.name.debug(source),
-        })
+        let mut o = serde_json::Map::new();
+        if let Some(kind) = &self.kind {
+            o.insert("kind".into(), kind.debug(source));
+        }
+        o.insert("name".into(), self.name.debug(source));
+        serde_json::Value::Object(o)
     }
 }
 

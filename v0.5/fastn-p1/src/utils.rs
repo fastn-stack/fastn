@@ -28,6 +28,15 @@ impl From<fastn_p1::Identifier> for fastn_p1::QualifiedIdentifier {
     }
 }
 
+impl From<fastn_p1::Kind> for Option<fastn_p1::KindedName> {
+    fn from(value: fastn_p1::Kind) -> Self {
+        Some(fastn_p1::KindedName {
+            kind: None,
+            name: value.to_identifier()?,
+        })
+    }
+}
+
 impl fastn_p1::ParserEngine {
     pub fn new(doc_name: String) -> Self {
         Self {
@@ -66,13 +75,18 @@ impl fastn_p1::Kind {
             || self.doc.is_some()
             || self.visibility.is_some()
             || !self.name.terms.is_empty()
-            || self.name.module.is_some()
-            || self.name.terms.len() != 1
+            || self.name.module.is_none()
+            || !self.name.terms.is_empty()
         {
             return None;
         }
 
-        self.name.terms.get(0).cloned()
+        let m = self.name.module.as_ref()?;
+        if !m.path.is_empty() {
+            return None;
+        }
+
+        Some(m.package.name.clone().into())
     }
 }
 
