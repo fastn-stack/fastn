@@ -5,9 +5,7 @@ pub fn package_name(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1:
     }
 
     let span = scanner.eat_while(|c| c.is_alphanumeric() || c == '.')?;
-    Some(fastn_p1::PackageName {
-        name: span,
-    })
+    Some(fastn_p1::PackageName { name: span })
 }
 
 #[cfg(test)]

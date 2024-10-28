@@ -49,8 +49,6 @@ impl Scanner {
         Some(self.span(start))
     }
 
-
-
     pub fn index(&self) -> Index {
         Index {
             bytes: self.s_index,
