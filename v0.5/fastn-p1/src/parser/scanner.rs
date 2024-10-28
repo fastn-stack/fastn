@@ -48,7 +48,7 @@ impl Scanner {
     }
 
     /// Advances the scanner's character and byte indices by a specified number of characters.
-    fn increment_index_by_count(&mut self, count: usize) {
+    fn increment_index_by(&mut self, count: usize) {
         self.s_index += self.char_count_to_byte_count(count);
         self.index += count;
     }
@@ -56,13 +56,12 @@ impl Scanner {
     /// Creates a `Span` covering the next `count` characters and advances the scanner's position.
     fn span_for_chars_with_advance(&mut self, count: usize) -> fastn_p1::Span {
         let start = self.s_index;
-        self.increment_index_by_count(count);
+        self.increment_index_by(count);
 
-        let span = fastn_p1::Span {
+        fastn_p1::Span {
             start,
             end: self.s_index,
-        };
-        span
+        }
     }
 
     pub fn reset(&mut self, index: Index) {
@@ -81,7 +80,7 @@ impl Scanner {
     pub fn pop(&mut self) -> Option<char> {
         if self.index < self.size {
             let c = self.tokens[self.index];
-            self.increment_index_by_count(1);
+            self.increment_index_by(1);
             Some(c)
         } else {
             None
@@ -128,8 +127,7 @@ impl Scanner {
         let byte_remaining = self.tokens.iter().collect::<String>()[self.s_index..].to_string();
 
         assert_eq!(
-            char_remaining,
-            byte_remaining,
+            char_remaining, byte_remaining,
             "Character-based and byte-based remaining text do not match"
         );
 
@@ -158,21 +156,16 @@ impl Scanner {
 
     // returns the span from current position to the end of token
     pub fn token(&mut self, t: &'static str) -> Option<fastn_p1::Span> {
-        // Get the length of the token to match
-        let token_len = t.chars().count();
-
-        // Ensure that we have enough characters left in the source to match the token
-        if self.index + token_len > self.size {
-            return None;
-        }
-
-        for (index, char) in t.chars().enumerate() {
+        let mut count = 0;
+        for char in t.chars() {
             assert!(char.is_ascii()); // we are assuming this is ascii string
-            if char != self.tokens[self.index + index] {
+            if (self.index + count < self.size) && (char != self.tokens[self.index + count]) {
                 return None;
             }
+
+            count += 1;
         }
 
-        Some(self.span_for_chars_with_advance(token_len))
+        Some(self.span_for_chars_with_advance(count))
     }
 }
