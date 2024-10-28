@@ -22,6 +22,7 @@ pub struct Section {
     pub is_commented: bool,
 }
 
+/// example: `-- list<string> foo:`
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct SectionInit {
     pub dashdash: Span, // for syntax highlighting and formatting
@@ -51,6 +52,9 @@ pub struct Fuel {
     remaining: std::rc::Rc<std::cell::RefCell<usize>>,
 }
 
+/// public | private | public<package> | public<module>
+///
+/// TODO: newline is allowed, e.g., public<\n module>
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub enum Visibility {
     /// visible to everyone
@@ -64,16 +68,36 @@ pub enum Visibility {
     Private,
 }
 
+/// identifier is variable or component etc name
+///
+/// identifier starts with Unicode alphabet and can contain any alphanumeric Unicode character
+/// dash (`-`) and underscore (`_`) are also allowed
+///
+/// TODO: identifiers can't be keywords of the language, e.g., `import`, `record`, `component`.
+/// but it can be built in types e.g., `integer` etc.
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct Identifier {
     name: fastn_p1::Span,
 }
 
+/// package names for fastn as domain names.
+///
+/// domain names usually do not allow Unicode, and you have to use punycode.
+/// but we allow Unicode in package names.
+///
+/// TODO: domain name can contain hyphens.
+/// TODO: domain name can’t begin or end with a hyphen.
+/// underscore is not permitted in domain names.
+///
+/// `.` is allowed in domain names.
+/// TODO: domain name can't begin or end with a `.`.
+/// TODO: `.` can't be repeated.
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct PackageName {
     name: fastn_p1::Span,
 }
 
+/// module name looks like <package-name>(/<identifier>)*/?)
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct ModuleName {
     pub package: PackageName,
@@ -82,6 +106,7 @@ pub struct ModuleName {
     pub path: Vec<Identifier>,
 }
 
+/// module name looks like <module-name>#<identifier>
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct QualifiedIdentifier {
     // the part comes before `#`
@@ -96,6 +121,13 @@ pub struct QualifiedIdentifier {
 // because otherwise we will have to put them on KindedName.
 // KindedName is used a lot more often (in headers, sections, etc.) than Kind, so it makes sense
 // to KindedName smaller and Kind bigger.
+/// example: `list<string>` | `foo<a, b>` | `foo<bar<k>>` | `foo<a, b<asd>, c, d>` |
+/// `foo<a, b, c, d, e>`
+///
+/// // |foo<>|
+///
+/// note that this function is not responsible for parsing the visibility or doc-comments,
+/// it only parses the name and args
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct Kind {
     // only kinded section / header can have doc
@@ -118,19 +150,31 @@ pub enum PResult<T> {
     },
 }
 
+/// example: `list<string> foo` | `foo bar` | `bar`
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct KindedName {
     pub kind: Option<Kind>,
     pub name: Identifier,
 }
 
-pub type HeaderValue = Spanned<Vec<SES>>;
+pub type HeaderValue = Vec<SES>;
 
+/// example: `hello` | `hello ${world}` | `hello ${world} ${ -- foo: }` | `{ \n text text \n }`
+/// it can even have recursive structure, e.g., `hello ${ { \n text-text \n } }`.
+/// each recursion starts with `{` and ends with `}`.
+/// if the text inside { starts with `--` then the content is a section,
+/// and we should use `fastn_p1::parser::section()` parser to parse it.
+/// otherwise it is a text.
 #[derive(Debug, PartialEq, Clone, serde::Serialize)]
 pub enum SES {
     String(Span),
-    Expression(Span),
-    Section(Box<Spanned<Section>>),
+    /// the start and end are the positions of `{` and `}` respectively
+    Expression {
+        start: usize,
+        end: usize,
+        content: Vec<SES>,
+    },
+    Section(Box<Section>),
 }
 
 #[derive(Default)]

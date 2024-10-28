@@ -1,4 +1,3 @@
-/// example: `list<string> foo` | `foo bar` | `bar`
 pub fn kinded_name(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::KindedName> {
     let kind = fastn_p1::parser::kind(scanner);
     scanner.skip_spaces();

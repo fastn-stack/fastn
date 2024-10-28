@@ -1,4 +1,3 @@
-/// example: `-- list<string> foo:`
 pub fn section_init(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::SectionInit> {
     scanner.skip_spaces();
     let dashdash = scanner.token("--")?;

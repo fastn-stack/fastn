@@ -40,7 +40,6 @@ fn p<T: fastn_p1::debug::JDebug, F: FnOnce(&mut fastn_p1::parser::Scanner) -> T>
     assert_eq!(scanner.remaining(), remaining);
 }
 
-
 #[macro_export]
 macro_rules! tt {
     ($f:expr) => {

@@ -1,10 +1,3 @@
-/// identifier is variable or component etc name
-///
-/// identifier starts with Unicode alphabet and can contain any alphanumeric Unicode character
-/// dash (`-`) and underscore (`_`) are also allowed
-///
-/// TODO: identifiers can't be keywords of the language, e.g., `import`, `record`, `component`.
-/// but it can be built in types e.g., `integer` etc.
 pub fn identifier(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::Identifier> {
     let first = scanner.peek()?;
     // the first character should be is_alphabetic or `_`

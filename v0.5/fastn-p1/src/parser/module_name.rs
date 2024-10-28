@@ -1,4 +1,3 @@
-/// module name looks like <package-name>(/<identifier>)*/?)
 pub fn module_name(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::ModuleName> {
     let package = fastn_p1::parser::package_name(scanner)?;
     if !scanner.take('/') {

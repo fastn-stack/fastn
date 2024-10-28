@@ -1,15 +1,3 @@
-/// package names for fastn as domain names.
-///
-/// domain names usually do not allow Unicode, and you have to use punycode.
-/// but we allow Unicode in package names.
-///
-/// TODO: domain name can contain hyphens.
-/// TODO: domain name can’t begin or end with a hyphen.
-/// underscore is not permitted in domain names.
-///
-/// `.` is allowed in domain names.
-/// TODO: domain name can't begin or end with a `.`.
-/// TODO: `.` can't be repeated.
 pub fn package_name(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::PackageName> {
     let first = scanner.peek()?;
     if !first.is_alphabetic() {
