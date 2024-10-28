@@ -90,6 +90,10 @@ impl JDebug for fastn_p1::KindedName {
 
 impl JDebug for fastn_p1::Kind {
     fn debug(&self, source: &str) -> serde_json::Value {
+        if let Some(v) = self.to_identifier() {
+            return v.debug(source);
+        }
+
         let mut o = serde_json::Map::new();
         if let Some(doc) = &self.doc {
             o.insert("doc".into(), doc.debug(source));

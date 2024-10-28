@@ -20,15 +20,6 @@ mod test {
     #[test]
     fn kinded_name() {
         t!("string", {"name": "string"}, "");
-        t!(
-            "string foo",
-            {
-                "name": "foo",
-                "kind": {
-                    "name": {"module": {"package": "string"}}
-                }
-            },
-            ""
-        );
+        t!("string foo", {"name": "foo", "kind": "string"}, "");
     }
 }
