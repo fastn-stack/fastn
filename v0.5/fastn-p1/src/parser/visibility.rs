@@ -39,17 +39,7 @@ pub fn visibility(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::V
 
 #[cfg(test)]
 mod test {
-    macro_rules! t {
-        ($source:expr, $debug:tt, $remaining:expr) => {
-            println!("source: {}", $source);
-            fastn_p1::parser::p(
-                $source,
-                super::visibility,
-                serde_json::json!($debug),
-                $remaining,
-            );
-        };
-    }
+    fastn_p1::tt!(super::visibility);
 
     #[test]
     fn visibility() {

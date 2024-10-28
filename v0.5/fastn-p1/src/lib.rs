@@ -80,6 +80,10 @@ pub struct QualifiedIdentifier {
     terms: Vec<Identifier>,
 }
 
+// Note: doc and visibility technically do not belong to Kind, but we are keeping them here
+// because otherwise we will have to put them on KindedName.
+// KindedName is used lot more often (in headers, sections, etc.) than Kind, so it makes sense
+// to KindedName smaller and Kind bigger.
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct Kind {
     // only kinded section / header can have doc
@@ -89,14 +93,6 @@ pub struct Kind {
     // during parsing, we can encounter `foo<>`, which needs to be differentiated from `foo`
     // therefore we are using `Option<Vec<>>` here
     pub args: Option<Vec<Kind>>,
-}
-
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
-pub struct AngleText {
-    pub start: usize,                    // position of <
-    pub identifier: QualifiedIdentifier, // the actual text
-    pub end: usize,                      // position of >
-    pub inner: Option<Box<AngleText>>,
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]

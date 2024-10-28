@@ -1,6 +1,5 @@
 #![allow(dead_code)]
 
-mod angle_text;
 mod identifier;
 mod kind;
 mod module_name;
@@ -16,7 +15,7 @@ use scanner::Scanner;
 
 impl fastn_p1::ParseOutput {
     pub fn parse_v4(source: &str) -> fastn_p1::ParseOutput {
-        let _scanner = scanner::Scanner::new(source);
+        let _scanner = fastn_p1::parser::Scanner::new(source);
         todo!()
     }
 }
@@ -33,4 +32,15 @@ fn p<T: fastn_p1::debug::JDebug, F: FnOnce(&mut fastn_p1::parser::Scanner) -> T>
     let result = f(&mut scanner);
     assert_eq!(result.debug(source), debug);
     assert_eq!(scanner.remaining(), remaining);
+}
+
+#[macro_export]
+macro_rules! tt {
+    ($f:expr) => {
+        macro_rules! t {
+            ($source:expr, $debug:tt, $remaining:expr) => {
+                fastn_p1::parser::p($source, $f, serde_json::json!($debug), $remaining);
+            };
+        }
+    };
 }

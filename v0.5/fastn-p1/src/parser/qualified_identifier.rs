@@ -34,21 +34,22 @@ pub fn qualified_identifier(
 
 #[cfg(test)]
 mod test {
-    macro_rules! t {
-        ($source:expr, $debug:tt, $remaining:expr) => {
-            fastn_p1::parser::p(
-                $source,
-                super::qualified_identifier,
-                serde_json::json!($debug),
-                $remaining,
-            );
-        };
-    }
+    fastn_p1::tt!(super::qualified_identifier);
 
     #[test]
     fn qualified_identifier() {
         t!("foo", { "module": { "package": "foo"}}, "");
         t!("foo.com#bar", { "module": { "package": "foo.com"}, "terms": ["bar"]}, "");
         t!("foo.com#bar.baz", { "module": { "package": "foo.com"}, "terms": ["bar", "baz"]}, "");
+        t!(
+            "foo.com/yo#bar.baz",
+            {"module": { "package": "foo.com", "path": ["yo"]}, "terms": ["bar", "baz"]},
+            ""
+        );
+        t!(
+            "foo.com/yo/man#bar.baz",
+            {"module": { "package": "foo.com", "path": ["yo", "man"]}, "terms": ["bar", "baz"]},
+            ""
+        );
     }
 }

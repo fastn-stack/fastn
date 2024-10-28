@@ -30,16 +30,7 @@ pub fn identifier(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::I
 
 #[cfg(test)]
 mod test {
-    macro_rules! t {
-        ($source:expr, $debug:tt, $remaining:expr) => {
-            fastn_p1::parser::p(
-                $source,
-                super::identifier,
-                serde_json::json!($debug),
-                $remaining,
-            );
-        };
-    }
+    fastn_p1::tt!(super::identifier);
 
     #[test]
     fn identifier() {

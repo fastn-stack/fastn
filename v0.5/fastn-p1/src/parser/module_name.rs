@@ -28,16 +28,7 @@ pub fn module_name(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::
 
 #[cfg(test)]
 mod test {
-    macro_rules! t {
-        ($source:expr, $debug:tt, $remaining:expr) => {
-            fastn_p1::parser::p(
-                $source,
-                super::module_name,
-                serde_json::json!($debug),
-                $remaining,
-            );
-        };
-    }
+    fastn_p1::tt!(super::module_name);
 
     #[test]
     fn module_name() {
