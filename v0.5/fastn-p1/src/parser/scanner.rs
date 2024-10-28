@@ -15,6 +15,7 @@ pub struct Index {
 
 impl Scanner {
     pub fn new(source: &str) -> Scanner {
+        assert!(source.len() < 1000_000_000); // Cant parse > 1GB file
         let tokens: Vec<_> = source.chars().collect();
         Scanner {
             size: tokens.len(),

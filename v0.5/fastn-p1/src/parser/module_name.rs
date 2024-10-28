@@ -36,5 +36,7 @@ mod test {
         t!("foo.com/", null, "");
         t!("foo.com/ ", null, " ");
         t!("foo.com/asd", {"package":"foo.com", "path": ["asd"]}, "");
+        t!("foo.com/asd/asda", {"package":"foo.com", "path": ["asd", "asda"]}, "");
+        t!("foo.com/asd/asda/erere", {"package":"foo.com", "path": ["asd", "asda", "erere"]}, "");
     }
 }

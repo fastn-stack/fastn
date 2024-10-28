@@ -61,3 +61,12 @@ impl fastn_p1::Kind {
         self.visibility = Some(visibility);
     }
 }
+
+impl From<fastn_p1::QualifiedIdentifier> for fastn_p1::Kind {
+    fn from(name: fastn_p1::QualifiedIdentifier) -> Self {
+        fastn_p1::Kind {
+            name,
+            ..Default::default()
+        }
+    }
+}

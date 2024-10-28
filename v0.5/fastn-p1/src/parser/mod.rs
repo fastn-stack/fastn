@@ -11,6 +11,7 @@ mod visibility;
 pub use identifier::identifier;
 pub use module_name::module_name;
 pub use package_name::package_name;
+pub use qualified_identifier::qualified_identifier;
 use scanner::Scanner;
 
 impl fastn_p1::ParseOutput {

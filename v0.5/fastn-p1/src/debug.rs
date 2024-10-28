@@ -79,11 +79,15 @@ impl JDebug for fastn_p1::KindedName {
 
 impl JDebug for fastn_p1::Kind {
     fn debug(&self, source: &str) -> serde_json::Value {
-        serde_json::json! ({
-            "doc": self.doc.debug(source),
-            "visibility": self.visibility.debug(source),
-            "kind": self.name.debug(source),
-        })
+        let mut o = serde_json::Map::new();
+        if let Some(doc) = &self.doc {
+            o.insert("doc".into(), doc.debug(source));
+        }
+        if let Some(visibility) = &self.visibility {
+            o.insert("visibility".into(), visibility.debug(source));
+        }
+        o.insert("name".into(), self.name.debug(source));
+        serde_json::Value::Object(o)
     }
 }
 

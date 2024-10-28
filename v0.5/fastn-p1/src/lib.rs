@@ -95,6 +95,17 @@ pub struct Kind {
     pub args: Option<Vec<Kind>>,
 }
 
+pub enum PResult<T> {
+    NotFound,
+    Found(T),
+    Error(SingleError),
+    Errors(Vec<SingleError>),
+    FoundWithErrors {
+        partial: T,
+        errors: Vec<SingleError>,
+    },
+}
+
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct KindedName {
     pub kind: Option<Kind>,
