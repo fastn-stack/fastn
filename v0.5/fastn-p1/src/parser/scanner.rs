@@ -8,7 +8,6 @@ pub struct Scanner {
     pub output: fastn_p1::ParseOutput,
 }
 
-#[derive(Debug, PartialEq)]
 pub struct Index {
     chars: usize,
     bytes: usize,
