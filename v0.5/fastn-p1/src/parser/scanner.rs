@@ -119,6 +119,12 @@ impl Scanner {
         s
     }
 
+    #[cfg(test)]
+    pub fn s_remaining(&self) -> String {
+        let token: String = self.tokens.iter().collect();
+        token[self.s_index..].to_string()
+    }
+
     pub fn one_of(&mut self, choices: &[&'static str]) -> Option<&'static str> {
         #[allow(clippy::manual_find)]
         // clippy wants us to use this:

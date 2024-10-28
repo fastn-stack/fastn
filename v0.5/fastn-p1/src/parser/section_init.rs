@@ -22,7 +22,7 @@ mod test {
         t!("-- foo: ", {"name": {"name": "foo"}}, " ");
         t!("-- foo: hello", {"name": {"name": "foo"}}, " hello");
         t!("-- integer foo: hello", {"name": {"name": "foo", "kind": "integer"}}, " hello");
-        ti!("-- integer héllo: foo", {"name": {"name": "héllo", "kind": "integer"}}, " foo", 17, 18);
+        t!("-- integer héllo: foo", {"name": {"name": "héllo", "kind": "integer"}}, " foo");
         // t!("-- list<integer> foo:", {"name": {"name": "foo", "kind": "integer"}}, "");
     }
 }

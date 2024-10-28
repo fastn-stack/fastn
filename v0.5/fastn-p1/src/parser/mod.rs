@@ -33,15 +33,12 @@ fn p<T: fastn_p1::debug::JDebug, F: FnOnce(&mut fastn_p1::parser::Scanner) -> T>
     f: F,
     debug: serde_json::Value,
     remaining: &str,
-    index: Option<fastn_p1::parser::scanner::Index>,
 ) {
     let mut scanner = fastn_p1::parser::Scanner::new(source, Default::default());
     let result = f(&mut scanner);
     assert_eq!(result.debug(source), debug);
     assert_eq!(scanner.remaining(), remaining);
-    if let Some(index) = index {
-        assert_eq!(scanner.index(), index);
-    }
+    assert_eq!(scanner.s_remaining(), remaining);
 }
 
 #[macro_export]
@@ -50,15 +47,7 @@ macro_rules! tt {
         #[allow(unused_macros)]
         macro_rules! t {
             ($source:expr, $debug:tt, $remaining:expr) => {
-                fastn_p1::parser::p($source, $f, serde_json::json!($debug), $remaining, None);
-            };
-        }
-        /// test with index
-        #[allow(unused_macros)]
-        macro_rules! ti {
-            ($source:expr, $debug:tt, $remaining:expr, $chars:expr, $bytes:expr) => {
-                let index = fastn_p1::parser::scanner::Index::new($chars, $bytes);
-                fastn_p1::parser::p($source, $f, serde_json::json!($debug), $remaining, Some(index));
+                fastn_p1::parser::p($source, $f, serde_json::json!($debug), $remaining);
             };
         }
     };
