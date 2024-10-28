@@ -10,9 +10,7 @@ mod utils;
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 pub struct Section {
-    pub dashdash: Span, // for syntax highlighting and formatting
-    pub name: KindedName,
-    pub colon: Span, // for syntax highlighting and formatting
+    pub init: SectionInit,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
     pub caption: Option<HeaderValue>,
@@ -21,6 +19,13 @@ pub struct Section {
     pub sub_sections: Vec<Spanned<Section>>,
     pub function_marker: Option<Span>,
     pub is_commented: bool,
+}
+
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
+pub struct SectionInit {
+    pub dashdash: Span, // for syntax highlighting and formatting
+    pub name: KindedName,
+    pub colon: Span, // for syntax highlighting and formatting
 }
 
 pub type Span = std::ops::Range<usize>;
@@ -37,6 +42,12 @@ pub struct Header {
     pub condition: Option<Span>,
     pub value: HeaderValue,
     pub is_commented: bool,
+}
+
+#[derive(Default, Debug)]
+pub struct Fuel {
+    #[allow(dead_code)]
+    remaining: std::rc::Rc<std::cell::RefCell<usize>>,
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]

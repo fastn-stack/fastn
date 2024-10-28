@@ -16,7 +16,7 @@ use scanner::Scanner;
 
 impl fastn_p1::ParseOutput {
     pub fn parse_v4(source: &str) -> fastn_p1::ParseOutput {
-        let _scanner = fastn_p1::parser::Scanner::new(source);
+        let _scanner = fastn_p1::parser::Scanner::new(source, Default::default());
         todo!()
     }
 }
@@ -29,7 +29,7 @@ fn p<T: fastn_p1::debug::JDebug, F: FnOnce(&mut fastn_p1::parser::Scanner) -> T>
     debug: serde_json::Value,
     remaining: &str,
 ) {
-    let mut scanner = fastn_p1::parser::Scanner::new(source);
+    let mut scanner = fastn_p1::parser::Scanner::new(source, Default::default());
     let result = f(&mut scanner);
     assert_eq!(result.debug(source), debug);
     assert_eq!(scanner.remaining(), remaining);

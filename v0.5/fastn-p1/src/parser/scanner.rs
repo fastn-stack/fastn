@@ -4,7 +4,7 @@ pub struct Scanner {
     pub size: usize,
     index: usize,
     s_index: usize,
-    ticks: std::cell::RefCell<usize>,
+    fuel: fastn_p1::Fuel,
     pub output: fastn_p1::ParseOutput,
 }
 
@@ -14,12 +14,13 @@ pub struct Index {
 }
 
 impl Scanner {
-    pub fn new(source: &str) -> Scanner {
-        assert!(source.len() < 1000_000_000); // Cant parse > 1GB file
+    pub fn new(source: &str, fuel: fastn_p1::Fuel) -> Scanner {
+        assert!(source.len() < 10_000_000); // can't parse > 10MB file
         let tokens: Vec<_> = source.chars().collect();
         Scanner {
             size: tokens.len(),
             tokens,
+            fuel,
             ..Default::default()
         }
     }

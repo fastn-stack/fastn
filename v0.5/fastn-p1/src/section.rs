@@ -4,7 +4,10 @@ impl fastn_p1::Section {
         function_marker: Option<fastn_p1::Span>,
     ) -> Box<fastn_p1::Section> {
         Box::new(fastn_p1::Section {
-            name: fastn_p1::KindedName { kind: None, name },
+            init: fastn_p1::SectionInit {
+                name: fastn_p1::KindedName { kind: None, name },
+                ..Default::default()
+            },
             function_marker,
             ..Default::default()
         })

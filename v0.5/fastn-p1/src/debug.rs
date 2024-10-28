@@ -62,6 +62,15 @@ impl JDebug for fastn_p1::ParseOutput {
 
 impl JDebug for fastn_p1::Section {
     fn debug(&self, source: &str) -> serde_json::Value {
+        // todo: add headers etc (only if they are not null)
+        serde_json::json! ({
+            "init": self.init.debug(source),
+        })
+    }
+}
+
+impl JDebug for fastn_p1::SectionInit {
+    fn debug(&self, source: &str) -> serde_json::Value {
         serde_json::json! ({
             "name": self.name.debug(source)
         })
