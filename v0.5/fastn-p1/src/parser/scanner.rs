@@ -106,17 +106,13 @@ impl Scanner {
 
     #[cfg(test)]
     pub fn remaining(&self) -> String {
-        let mut s = String::new();
-        for c in &self.tokens[self.index..] {
-            s.push(*c);
-        }
-        s
+        self.tokens[self.index..].iter().collect()
     }
 
     #[cfg(test)]
     pub fn s_remaining(&self) -> String {
-        let token: String = self.tokens.iter().collect();
-        token[self.s_index..].to_string()
+        let input: String = self.tokens.iter().collect();
+        input[self.s_index..].to_string()
     }
 
     pub fn one_of(&mut self, choices: &[&'static str]) -> Option<&'static str> {
