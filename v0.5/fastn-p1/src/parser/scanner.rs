@@ -14,12 +14,6 @@ pub struct Index {
     bytes: usize,
 }
 
-impl Index {
-    pub fn new(chars: usize, bytes: usize) -> Self {
-        Self { chars, bytes }
-    }
-}
-
 impl Scanner {
     pub fn new(source: &str, fuel: fastn_p1::Fuel) -> Scanner {
         assert!(source.len() < 10_000_000); // can't parse > 10MB file
