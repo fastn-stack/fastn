@@ -764,7 +764,9 @@ impl InterpreterState {
                         caller_module: current_module.to_string(),
                     },
                 ));
-            } else if document.foreign_function.iter().any(|v| thing_name.eq(v)) {
+            } else if document.foreign_function.iter().any(|v| thing_name.eq(v))
+                || is_special_value(name, module)
+            {
             } else if module.ne(current_module)
                 && document
                     .re_exports
@@ -1413,4 +1415,8 @@ impl<T> StateWithThing<T> {
             ftd::interpreter::StateWithThing::Thing(t) => Some(t),
         }
     }
+}
+
+fn is_special_value(name: &str, module: &str) -> bool {
+    name.strip_prefix(module) == Some(&ftd::interpreter::FTD_SPECIAL_VALUE.replace("$", "#"))
 }
