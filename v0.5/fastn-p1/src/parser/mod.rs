@@ -38,7 +38,6 @@ fn p<T: fastn_p1::debug::JDebug, F: FnOnce(&mut fastn_p1::parser::Scanner) -> T>
     let result = f(&mut scanner);
     assert_eq!(result.debug(source), debug);
     assert_eq!(scanner.remaining(), remaining);
-    assert_eq!(scanner.s_remaining(), remaining);
 }
 
 #[macro_export]

@@ -124,13 +124,16 @@ impl Scanner {
 
     #[cfg(test)]
     pub fn remaining(&self) -> String {
-        self.tokens[self.index..].iter().collect()
-    }
+        let char_remaining = self.tokens[self.index..].iter().collect::<String>();
+        let byte_remaining = self.tokens.iter().collect::<String>()[self.s_index..].to_string();
 
-    #[cfg(test)]
-    pub fn s_remaining(&self) -> String {
-        let input: String = self.tokens.iter().collect();
-        input[self.s_index..].to_string()
+        assert_eq!(
+            char_remaining,
+            byte_remaining,
+            "Character-based and byte-based remaining text do not match"
+        );
+
+        char_remaining
     }
 
     pub fn one_of(&mut self, choices: &[&'static str]) -> Option<&'static str> {
