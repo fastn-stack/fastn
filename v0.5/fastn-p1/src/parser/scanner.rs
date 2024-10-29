@@ -1,35 +1,29 @@
-#[derive(Default, Debug)]
-pub struct Scanner {
-    pub tokens: Vec<char>,
-    pub size: usize,
-    index: usize,
-    s_index: usize,
+#[derive(Debug)]
+pub struct Scanner<'intput> {
+    input: &'intput str,
+    chars: std::iter::Peekable<std::str::CharIndices<'intput>>,
+    /// index is byte position in the input
+    pub index: usize,
     fuel: fastn_p1::Fuel,
     pub output: fastn_p1::ParseOutput,
 }
 
-#[derive(Debug, PartialEq)]
-pub struct Index {
-    chars: usize,
-    bytes: usize,
-}
-
-impl Scanner {
-    pub fn new(source: &str, fuel: fastn_p1::Fuel) -> Scanner {
-        assert!(source.len() < 10_000_000); // can't parse > 10MB file
-        let tokens: Vec<_> = source.chars().collect();
+impl Scanner<'_> {
+    pub fn new(input: &str, fuel: fastn_p1::Fuel) -> Scanner {
+        assert!(input.len() < 10_000_000); // can't parse > 10MB file
         Scanner {
-            size: tokens.len(),
-            tokens,
+            input,
+            chars: input.char_indices().peekable(),
             fuel,
-            ..Default::default()
+            index: 0,
+            output: fastn_p1::ParseOutput::default(),
         }
     }
 
-    fn span(&self, start: Index) -> fastn_p1::Span {
+    fn span(&self, start: usize) -> fastn_p1::Span {
         fastn_p1::Span {
-            start: start.bytes,
-            end: self.s_index,
+            start,
+            end: self.index,
         }
     }
 
@@ -49,48 +43,29 @@ impl Scanner {
         Some(self.span(start))
     }
 
-    pub fn index(&self) -> Index {
-        Index {
-            bytes: self.s_index,
-            chars: self.index,
+    pub fn index(&self) -> usize {
+        self.index
+    }
+
+    pub fn reset(&mut self, index: usize) {
+        assert!(index <= self.index);
+        if index == self.index {
+            return;
         }
-    }
-
-    /// Converts a given character count from the current index into the equivalent byte count.
-    fn char_count_to_byte_count(&self, char_count: usize) -> usize {
-        self.tokens[self.index..self.index + char_count]
-            .iter()
-            .map(|c| c.len_utf8()) // Get the byte length of each character
-            .sum() // Sum up the byte lengths
-    }
-
-    /// Advances the scanner's character and byte indices by a specified number of characters.
-    fn increment_index_by(&mut self, count: usize) {
-        self.s_index += self.char_count_to_byte_count(count);
-        self.index += count;
-    }
-
-    pub fn reset(&mut self, index: Index) {
-        self.s_index = index.bytes;
-        self.index = index.chars;
-    }
-
-    pub fn peek(&self) -> Option<char> {
-        if self.index < self.size {
-            Some(self.tokens[self.index])
-        } else {
-            None
+        while self.index > index {
+            self.pop();
         }
+        assert_eq!(self.index, index, "Index is not reset properly");
+    }
+
+    pub fn peek(&mut self) -> Option<char> {
+        self.chars.peek().map(|v| v.1)
     }
 
     pub fn pop(&mut self) -> Option<char> {
-        if self.index < self.size {
-            let c = self.tokens[self.index];
-            self.increment_index_by(1);
-            Some(c)
-        } else {
-            None
-        }
+        let (idx, c) = self.chars.next()?;
+        self.index = idx;
+        Some(c)
     }
 
     pub fn take(&mut self, t: char) -> bool {
@@ -117,16 +92,19 @@ impl Scanner {
     }
 
     #[cfg(test)]
-    pub fn remaining(&self) -> String {
-        let char_remaining = self.tokens[self.index..].iter().collect::<String>();
-        let byte_remaining = self.tokens.iter().collect::<String>()[self.s_index..].to_string();
+    pub fn remaining(&self) -> &str {
+        let char_remaining = self.chars.clone().map(|c| c.1).collect::<String>();
+        let str_remaining = &self.input[self.index..];
+
+        println!("char_remaining: {:?}", char_remaining);
+        println!("str_remaining: {:?}", str_remaining);
 
         assert_eq!(
-            char_remaining, byte_remaining,
+            char_remaining, str_remaining,
             "Character-based and byte-based remaining text do not match"
         );
 
-        char_remaining
+        str_remaining
     }
 
     pub fn one_of(&mut self, choices: &[&'static str]) -> Option<&'static str> {
