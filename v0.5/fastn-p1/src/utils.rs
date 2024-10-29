@@ -81,6 +81,10 @@ impl fastn_p1::Kind {
             return None;
         }
 
+        self.to_identifier_()
+    }
+
+    pub fn to_identifier_(&self) -> Option<fastn_p1::Identifier> {
         let m = self.name.module.as_ref()?;
         if !m.path.is_empty() {
             return None;

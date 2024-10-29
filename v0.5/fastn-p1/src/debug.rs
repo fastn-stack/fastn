@@ -101,7 +101,14 @@ impl JDebug for fastn_p1::Kind {
         if let Some(visibility) = &self.visibility {
             o.insert("visibility".into(), visibility.debug(source));
         }
-        o.insert("name".into(), self.name.debug(source));
+        if let Some(v) = self.to_identifier_() {
+            o.insert("name".into(), v.debug(source));
+        } else {
+            o.insert("name".into(), self.name.debug(source));
+        }
+        if let Some(args) = &self.args {
+            o.insert("args".into(), args.debug(source));
+        }
         serde_json::Value::Object(o)
     }
 }
