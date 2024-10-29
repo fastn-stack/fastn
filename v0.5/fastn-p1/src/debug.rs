@@ -149,9 +149,7 @@ impl JDebug for fastn_p1::PackageName {
 impl JDebug for fastn_p1::ModuleName {
     fn debug(&self, source: &str) -> serde_json::Value {
         if self.path.is_empty() {
-            return serde_json::json! ({
-                "package": self.package.debug(source),
-            });
+            return self.package.debug(source);
         }
 
         serde_json::json! ({
