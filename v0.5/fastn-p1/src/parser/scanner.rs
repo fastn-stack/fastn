@@ -66,7 +66,6 @@ impl<'input> Scanner<'input> {
 
     pub fn pop(&mut self) -> Option<char> {
         let (idx, c) = self.chars.next()?;
-        // self.index = idx;
         // Update the index by the byte length of the character
         self.index = idx + c.len_utf8();
         Some(c)
