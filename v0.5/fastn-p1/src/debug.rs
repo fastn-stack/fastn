@@ -6,19 +6,19 @@ fn span(s: &fastn_p1::Span, key: &str, source: &str) -> serde_json::Value {
     serde_json::json!({ key: (source[s.start..s.end]).to_string()})
 }
 
-impl JDebug for fastn_p1::Span {
+impl JDebug for fastn_p1::Span<'_> {
     fn debug(&self, source: &str) -> serde_json::Value {
         (&source[self.start..self.end]).into()
     }
 }
 
-impl<T: JDebug> JDebug for fastn_p1::Spanned<T> {
+impl<T: JDebug> JDebug for fastn_p1::Spanned<'_, T> {
     fn debug(&self, source: &str) -> serde_json::Value {
         self.value.debug(source)
     }
 }
 
-impl JDebug for fastn_p1::Spanned<()> {
+impl JDebug for fastn_p1::Spanned<'_, ()> {
     fn debug(&self, source: &str) -> serde_json::Value {
         span(&self.span, "spanned", source)
     }
@@ -44,7 +44,7 @@ impl JDebug for fastn_p1::Visibility {
     }
 }
 
-impl JDebug for fastn_p1::ParseOutput {
+impl JDebug for fastn_p1::ParseOutput<'_> {
     fn debug(&self, source: &str) -> serde_json::Value {
         if self.items.is_empty() {
             return serde_json::json!({
@@ -60,7 +60,7 @@ impl JDebug for fastn_p1::ParseOutput {
     }
 }
 
-impl JDebug for fastn_p1::Section {
+impl JDebug for fastn_p1::Section<'_> {
     fn debug(&self, source: &str) -> serde_json::Value {
         // todo: add headers etc (only if they are not null)
         serde_json::json! ({
@@ -69,7 +69,7 @@ impl JDebug for fastn_p1::Section {
     }
 }
 
-impl JDebug for fastn_p1::SectionInit {
+impl JDebug for fastn_p1::SectionInit<'_> {
     fn debug(&self, source: &str) -> serde_json::Value {
         serde_json::json! ({
             "name": self.name.debug(source)
@@ -77,7 +77,7 @@ impl JDebug for fastn_p1::SectionInit {
     }
 }
 
-impl JDebug for fastn_p1::KindedName {
+impl JDebug for fastn_p1::KindedName<'_> {
     fn debug(&self, source: &str) -> serde_json::Value {
         let mut o = serde_json::Map::new();
         if let Some(kind) = &self.kind {
@@ -88,7 +88,7 @@ impl JDebug for fastn_p1::KindedName {
     }
 }
 
-impl JDebug for fastn_p1::Kind {
+impl JDebug for fastn_p1::Kind<'_> {
     fn debug(&self, source: &str) -> serde_json::Value {
         if let Some(v) = self.to_identifier() {
             return v.debug(source);
@@ -106,7 +106,7 @@ impl JDebug for fastn_p1::Kind {
     }
 }
 
-impl JDebug for fastn_p1::QualifiedIdentifier {
+impl JDebug for fastn_p1::QualifiedIdentifier<'_> {
     fn debug(&self, source: &str) -> serde_json::Value {
         if self.terms.is_empty() {
             return serde_json::json! ({
@@ -121,7 +121,7 @@ impl JDebug for fastn_p1::QualifiedIdentifier {
     }
 }
 
-impl JDebug for fastn_p1::SES {
+impl JDebug for fastn_p1::SES<'_> {
     fn debug(&self, source: &str) -> serde_json::Value {
         match self {
             fastn_p1::SES::String(e) => e.debug(source),
@@ -131,19 +131,19 @@ impl JDebug for fastn_p1::SES {
     }
 }
 
-impl JDebug for fastn_p1::Identifier {
+impl JDebug for fastn_p1::Identifier<'_> {
     fn debug(&self, source: &str) -> serde_json::Value {
         self.name.debug(source)
     }
 }
 
-impl JDebug for fastn_p1::PackageName {
+impl JDebug for fastn_p1::PackageName<'_> {
     fn debug(&self, source: &str) -> serde_json::Value {
         self.name.debug(source)
     }
 }
 
-impl JDebug for fastn_p1::ModuleName {
+impl JDebug for fastn_p1::ModuleName<'_> {
     fn debug(&self, source: &str) -> serde_json::Value {
         if self.path.is_empty() {
             return serde_json::json! ({
@@ -158,7 +158,7 @@ impl JDebug for fastn_p1::ModuleName {
     }
 }
 
-impl JDebug for fastn_p1::Spanned<fastn_p1::Item> {
+impl JDebug for fastn_p1::Spanned<'_, fastn_p1::Item<'_>> {
     fn debug(&self, source: &str) -> serde_json::Value {
         match &self.value {
             fastn_p1::Item::Section(section) => section.debug(source),

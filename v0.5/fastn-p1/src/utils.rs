@@ -1,5 +1,5 @@
-impl<T> fastn_p1::Spanned<T> {
-    pub fn map<T2, F: FnOnce(T) -> T2>(self, f: F) -> fastn_p1::Spanned<T2> {
+impl<'input, T> fastn_p1::Spanned<'input, T> {
+    pub fn map<T2, F: FnOnce(T) -> T2>(self, f: F) -> fastn_p1::Spanned<'input, T2> {
         fastn_p1::Spanned {
             span: self.span,
             value: f(self.value),
@@ -7,19 +7,19 @@ impl<T> fastn_p1::Spanned<T> {
     }
 }
 
-impl From<fastn_p1::Span> for fastn_p1::Identifier {
+impl From<fastn_p1::Span<'_>> for fastn_p1::Identifier<'_> {
     fn from(value: fastn_p1::Span) -> Self {
         fastn_p1::Identifier { name: value }
     }
 }
 
-impl From<fastn_p1::Span> for fastn_p1::PackageName {
+impl From<fastn_p1::Span<'_>> for fastn_p1::PackageName<'_> {
     fn from(value: fastn_p1::Span) -> Self {
         fastn_p1::PackageName { name: value }
     }
 }
 
-impl From<fastn_p1::Identifier> for fastn_p1::QualifiedIdentifier {
+impl From<fastn_p1::Identifier<'_>> for fastn_p1::QualifiedIdentifier<'_> {
     fn from(value: fastn_p1::Identifier) -> Self {
         fastn_p1::QualifiedIdentifier {
             module: None,
@@ -28,7 +28,7 @@ impl From<fastn_p1::Identifier> for fastn_p1::QualifiedIdentifier {
     }
 }
 
-impl From<fastn_p1::Kind> for Option<fastn_p1::KindedName> {
+impl<'input> From<fastn_p1::Kind<'input>> for Option<fastn_p1::KindedName<'input>> {
     fn from(value: fastn_p1::Kind) -> Self {
         Some(fastn_p1::KindedName {
             kind: None,
@@ -55,7 +55,7 @@ impl fastn_p1::ParserEngine {
     }
 }
 
-impl fastn_p1::Kind {
+impl fastn_p1::Kind<'_> {
     pub fn attach_doc(&mut self, doc: fastn_p1::Span) {
         if self.doc.is_some() {
             panic!("doc already attached");
@@ -90,7 +90,7 @@ impl fastn_p1::Kind {
     }
 }
 
-impl From<fastn_p1::QualifiedIdentifier> for fastn_p1::Kind {
+impl<'input> From<fastn_p1::QualifiedIdentifier<'input>> for fastn_p1::Kind<'input> {
     fn from(name: fastn_p1::QualifiedIdentifier) -> Self {
         fastn_p1::Kind {
             name,

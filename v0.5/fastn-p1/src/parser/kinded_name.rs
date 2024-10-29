@@ -1,4 +1,6 @@
-pub fn kinded_name(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::KindedName> {
+pub fn kinded_name<'input>(
+    scanner: &'input mut fastn_p1::parser::Scanner<'input>,
+) -> Option<fastn_p1::KindedName<'input>> {
     let kind = fastn_p1::parser::kind(scanner);
     scanner.skip_spaces();
 

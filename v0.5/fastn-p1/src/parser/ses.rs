@@ -1,4 +1,6 @@
-pub fn ses(scanner: &mut fastn_p1::parser::Scanner) -> Option<Vec<fastn_p1::SES>> {
+pub fn ses<'input>(
+    scanner: &'input mut fastn_p1::parser::Scanner<'input>,
+) -> Option<Vec<fastn_p1::SES<'input>>> {
     let mut ses = Vec::new();
     while let Some(text) = scanner.take_till_char_or_end_of_line('{') {
         ses.push(fastn_p1::SES::String(text));

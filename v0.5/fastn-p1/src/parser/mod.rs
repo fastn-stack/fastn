@@ -19,7 +19,7 @@ pub use package_name::package_name;
 pub use qualified_identifier::qualified_identifier;
 use scanner::Scanner;
 
-impl fastn_p1::ParseOutput {
+impl fastn_p1::ParseOutput<'_> {
     pub fn parse_v4(source: &str) -> fastn_p1::ParseOutput {
         let _scanner = fastn_p1::parser::Scanner::new(source, Default::default());
         todo!()

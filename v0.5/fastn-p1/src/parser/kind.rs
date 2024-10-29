@@ -1,4 +1,6 @@
-pub fn kind(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::Kind> {
+pub fn kind<'input>(
+    scanner: &mut fastn_p1::parser::Scanner<'input>,
+) -> Option<fastn_p1::Kind<'input>> {
     let qi = match fastn_p1::parser::qualified_identifier(scanner) {
         Some(qi) => qi,
         None => return None,

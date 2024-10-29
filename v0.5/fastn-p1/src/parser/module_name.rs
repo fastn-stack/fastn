@@ -1,4 +1,6 @@
-pub fn module_name(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::ModuleName> {
+pub fn module_name<'input>(
+    scanner: &'input mut fastn_p1::parser::Scanner<'input>,
+) -> Option<fastn_p1::ModuleName<'input>> {
     let package = fastn_p1::parser::package_name(scanner)?;
     if !scanner.take('/') {
         return Some(fastn_p1::ModuleName {

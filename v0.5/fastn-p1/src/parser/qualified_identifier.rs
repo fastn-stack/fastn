@@ -1,6 +1,6 @@
-pub fn qualified_identifier(
-    scanner: &mut fastn_p1::parser::Scanner,
-) -> Option<fastn_p1::QualifiedIdentifier> {
+pub fn qualified_identifier<'input>(
+    scanner: &'input mut fastn_p1::parser::Scanner<'input>,
+) -> Option<fastn_p1::QualifiedIdentifier<'input>> {
     let module = match fastn_p1::parser::module_name(scanner) {
         Some(module) => match scanner.peek() {
             Some('#') => {

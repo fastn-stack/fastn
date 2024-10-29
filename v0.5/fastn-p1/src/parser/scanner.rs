@@ -5,7 +5,7 @@ pub struct Scanner<'input> {
     /// index is byte position in the input
     index: usize,
     fuel: fastn_p1::Fuel,
-    pub output: fastn_p1::ParseOutput,
+    pub output: fastn_p1::ParseOutput<'input>,
 }
 
 pub struct Index<'input> {
@@ -29,6 +29,7 @@ impl<'input> Scanner<'input> {
         fastn_p1::Span {
             start,
             end: self.index,
+            text: &self.input[start..self.index],
         }
     }
 

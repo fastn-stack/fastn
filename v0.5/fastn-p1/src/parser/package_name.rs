@@ -1,4 +1,6 @@
-pub fn package_name(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::PackageName> {
+pub fn package_name<'input>(
+    scanner: &'input mut fastn_p1::parser::Scanner<'input>,
+) -> Option<fastn_p1::PackageName<'input>> {
     let first = scanner.peek()?;
     if !first.is_alphabetic() {
         return None;

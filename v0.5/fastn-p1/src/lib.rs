@@ -7,42 +7,48 @@ mod debug;
 mod parser;
 mod section;
 mod utils;
+mod wiggins;
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 #[serde(default)]
-pub struct Section {
-    pub init: SectionInit,
+pub struct Section<'input> {
+    pub init: SectionInit<'input>,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub caption: Option<HeaderValue>,
-    pub headers: Vec<Header>,
-    pub body: Option<HeaderValue>,
-    pub sub_sections: Vec<Spanned<Section>>,
-    pub function_marker: Option<Span>,
+    pub caption: Option<HeaderValue<'input>>,
+    pub headers: Vec<Header<'input>>,
+    pub body: Option<HeaderValue<'input>>,
+    pub sub_sections: Vec<Spanned<'input, Section<'input>>>,
+    pub function_marker: Option<Span<'input>>,
     pub is_commented: bool,
 }
 
 /// example: `-- list<string> foo:`
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
-pub struct SectionInit {
-    pub dashdash: Span, // for syntax highlighting and formatting
-    pub name: KindedName,
-    pub colon: Span, // for syntax highlighting and formatting
+pub struct SectionInit<'input> {
+    pub dashdash: Span<'input>, // for syntax highlighting and formatting
+    pub name: KindedName<'input>,
+    pub colon: Span<'input>, // for syntax highlighting and formatting
 }
 
-pub type Span = std::ops::Range<usize>;
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
+pub struct Span<'input> {
+    pub start: usize,
+    pub end: usize,
+    pub text: &'input str,
+}
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
-pub struct Spanned<T> {
-    pub span: Span,
+pub struct Spanned<'input, T> {
+    pub span: Span<'input>,
     pub value: T,
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
-pub struct Header {
-    pub name: KindedName,
-    pub condition: Option<Span>,
-    pub value: HeaderValue,
+pub struct Header<'input> {
+    pub name: KindedName<'input>,
+    pub condition: Option<Span<'input>>,
+    pub value: HeaderValue<'input>,
     pub is_commented: bool,
 }
 
@@ -76,8 +82,8 @@ pub enum Visibility {
 /// TODO: identifiers can't be keywords of the language, e.g., `import`, `record`, `component`.
 /// but it can be built in types e.g., `integer` etc.
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
-pub struct Identifier {
-    name: fastn_p1::Span,
+pub struct Identifier<'input> {
+    name: fastn_p1::Span<'input>,
 }
 
 /// package names for fastn as domain names.
@@ -93,28 +99,28 @@ pub struct Identifier {
 /// TODO: domain name can't begin or end with a `.`.
 /// TODO: `.` can't be repeated.
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
-pub struct PackageName {
-    name: fastn_p1::Span,
+pub struct PackageName<'input> {
+    name: fastn_p1::Span<'input>,
 }
 
 /// module name looks like <package-name>(/<identifier>)*/?)
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
-pub struct ModuleName {
-    pub package: PackageName,
+pub struct ModuleName<'input> {
+    pub package: PackageName<'input>,
     #[serde(default)]
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub path: Vec<Identifier>,
+    pub path: Vec<Identifier<'input>>,
 }
 
 /// module name looks like <module-name>#<identifier>
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
-pub struct QualifiedIdentifier {
+pub struct QualifiedIdentifier<'input> {
     // the part comes before `#`
-    module: Option<ModuleName>,
+    module: Option<ModuleName<'input>>,
     // the part comes after `#`
     #[serde(default)]
     #[serde(skip_serializing_if = "Vec::is_empty")]
-    terms: Vec<Identifier>,
+    terms: Vec<Identifier<'input>>,
 }
 
 // Note: doc and visibility technically do not belong to Kind, but we are keeping them here
@@ -129,14 +135,14 @@ pub struct QualifiedIdentifier {
 /// note that this function is not responsible for parsing the visibility or doc-comments,
 /// it only parses the name and args
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
-pub struct Kind {
+pub struct Kind<'input> {
     // only kinded section / header can have doc
-    pub doc: Option<Span>,
-    pub visibility: Option<Spanned<Visibility>>,
-    pub name: QualifiedIdentifier,
+    pub doc: Option<Span<'input>>,
+    pub visibility: Option<Spanned<'input, Visibility>>,
+    pub name: QualifiedIdentifier<'input>,
     // during parsing, we can encounter `foo<>`, which needs to be differentiated from `foo`
     // therefore we are using `Option<Vec<>>` here
-    pub args: Option<Vec<Kind>>,
+    pub args: Option<Vec<Kind<'input>>>,
 }
 
 pub enum PResult<T> {
@@ -152,12 +158,12 @@ pub enum PResult<T> {
 
 /// example: `list<string> foo` | `foo bar` | `bar`
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
-pub struct KindedName {
-    pub kind: Option<Kind>,
-    pub name: Identifier,
+pub struct KindedName<'input> {
+    pub kind: Option<Kind<'input>>,
+    pub name: Identifier<'input>,
 }
 
-pub type HeaderValue = Vec<SES>;
+pub type HeaderValue<'input> = Vec<SES<'input>>;
 
 /// example: `hello` | `hello ${world}` | `hello ${world} ${ -- foo: }` | `{ \n text text \n }`
 /// it can even have recursive structure, e.g., `hello ${ { \n text-text \n } }`.
@@ -166,15 +172,15 @@ pub type HeaderValue = Vec<SES>;
 /// and we should use `fastn_p1::parser::section()` parser to parse it.
 /// otherwise it is a text.
 #[derive(Debug, PartialEq, Clone, serde::Serialize)]
-pub enum SES {
-    String(Span),
+pub enum SES<'input> {
+    String(Span<'input>),
     /// the start and end are the positions of `{` and `}` respectively
     Expression {
         start: usize,
         end: usize,
-        content: Vec<SES>,
+        content: Vec<SES<'input>>,
     },
-    Section(Box<Section>),
+    Section(Box<Section<'input>>),
 }
 
 #[derive(Default)]
@@ -190,15 +196,15 @@ pub struct Edit {
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
-pub struct ParseOutput {
-    pub module_doc: Option<fastn_p1::Span>,
-    pub items: Vec<fastn_p1::Spanned<fastn_p1::Item>>,
+pub struct ParseOutput<'input> {
+    pub module_doc: Option<fastn_p1::Span<'input>>,
+    pub items: Vec<fastn_p1::Spanned<'input, fastn_p1::Item<'input>>>,
     pub line_starts: Vec<usize>,
 }
 
 #[derive(Debug, PartialEq, Clone, serde::Serialize)]
-pub enum Item {
-    Section(Box<fastn_p1::Section>),
+pub enum Item<'input> {
+    Section(Box<fastn_p1::Section<'input>>),
     Error(fastn_p1::SingleError),
     Comment,
 }
