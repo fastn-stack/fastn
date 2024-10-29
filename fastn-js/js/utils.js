@@ -17,6 +17,8 @@ let fastn_utils = {
             attributes["allowfullscreen"] = "";
         } else if (kind === fastn_dom.ElementKind.Image) {
             node = "img";
+        } else if (kind === fastn_dom.ElementKind.Audio) {
+            node = "audio";
         } else if (kind === fastn_dom.ElementKind.Video) {
             node = "video";
         } else if (

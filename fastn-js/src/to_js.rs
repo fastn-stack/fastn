@@ -192,6 +192,7 @@ impl fastn_js::ElementKind {
             fastn_js::ElementKind::CheckBox => "fastn_dom.ElementKind.CheckBox".to_string(),
             fastn_js::ElementKind::TextInput => "fastn_dom.ElementKind.TextInput".to_string(),
             fastn_js::ElementKind::Rive => "fastn_dom.ElementKind.Rive".to_string(),
+            fastn_js::ElementKind::Audio => "fastn_dom.ElementKind.Audio".to_string(),
             fastn_js::ElementKind::Document => "fastn_dom.ElementKind.Document".to_string(),
             fastn_js::ElementKind::Code => "fastn_dom.ElementKind.Code".to_string(),
             fastn_js::ElementKind::WebComponent(web_component_name) => {

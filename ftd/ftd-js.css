@@ -47,7 +47,9 @@ table {
     border-spacing: 0;
 }*/
 
-*, :after, :before {
+
+/* Apply styles to all elements except audio */
+*:not(audio), *:not(audio)::after, *:not(audio)::before {
     /*box-sizing: inherit;*/
     box-sizing: border-box;
     text-decoration: none;
