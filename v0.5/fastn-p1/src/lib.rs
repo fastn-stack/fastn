@@ -3,6 +3,7 @@
 
 extern crate self as fastn_p1;
 
+#[cfg(test)]
 mod debug;
 mod parser;
 mod section;
