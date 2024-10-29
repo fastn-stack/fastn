@@ -213,6 +213,11 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             "ftd#image".to_string(),
             ftd::interpreter::Thing::Component(image_function()),
         ),
+
+        (
+            "ftd#audio".to_string(),
+            ftd::interpreter::Thing::Component(audio_function()),
+        ),
         (
             "ftd#video".to_string(),
             ftd::interpreter::Thing::Component(video_function()),
@@ -10944,6 +10949,51 @@ pub fn image_function() -> ftd::interpreter::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
+        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        css: None,
+        line_number: 0,
+    }
+}
+
+pub fn audio_function() -> ftd::interpreter::ComponentDefinition {
+    ftd::interpreter::ComponentDefinition {
+        name: "ftd#audio".to_string(),
+        arguments: [
+            common_arguments(),
+            vec![
+                ftd::interpreter::Argument::default(
+                    "src",
+                    ftd::interpreter::Kind::string().into_kind_data(),
+                ),
+                ftd::interpreter::Argument::default(
+                    "controls",
+                    ftd::interpreter::Kind::boolean()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter::Argument::default(
+                    "loop",
+                    ftd::interpreter::Kind::boolean()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter::Argument::default(
+                    "autoplay",
+                    ftd::interpreter::Kind::boolean()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+                ftd::interpreter::Argument::default(
+                    "muted",
+                    ftd::interpreter::Kind::boolean()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
+            ],
+        ]
+            .concat()
+            .into_iter()
+            .collect(),
         definition: ftd::interpreter::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,

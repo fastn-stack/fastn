@@ -36,6 +36,7 @@ pub enum ElementKind {
     CheckBox,
     TextInput,
     Rive,
+    Audio,
     Document,
     Code,
     WebComponent(String),

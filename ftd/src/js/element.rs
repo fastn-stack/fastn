@@ -12,6 +12,7 @@ pub enum Element {
     Row(Row),
     ContainerElement(ContainerElement),
     Image(Image),
+    Audio(Audio),
     Video(Video),
     Device(Device),
     CheckBox(CheckBox),
@@ -37,6 +38,7 @@ impl Element {
             "ftd#container" => Element::ContainerElement(ContainerElement::from(component)),
             "ftd#image" => Element::Image(Image::from(component)),
             "ftd#video" => Element::Video(Video::from(component)),
+            "ftd#audio" => Element::Audio(Audio::from(component)),
             "ftd#checkbox" => Element::CheckBox(CheckBox::from(component)),
             "ftd#text-input" => Element::TextInput(TextInput::from(component)),
             "ftd#iframe" => Element::Iframe(Iframe::from(component)),
@@ -107,6 +109,9 @@ impl Element {
             ),
             Element::Image(image) => {
                 image.to_component_statements(parent, index, doc, &mut rdata, should_return)
+            }
+            Element::Audio(audio) => {
+                audio.to_component_statements(parent, index, doc, &mut rdata, should_return)
             }
             Element::Video(video) => {
                 video.to_component_statements(parent, index, doc, &mut rdata, should_return)
@@ -737,6 +742,132 @@ impl Image {
 }
 
 #[derive(Debug)]
+pub struct Audio {
+    pub src: ftd::js::Value,
+    pub controls: Option<ftd::js::Value>,
+    pub loop_: Option<ftd::js::Value>,
+    pub muted: Option<ftd::js::Value>,
+    pub autoplay: Option<ftd::js::Value>,
+    pub common: Common,
+}
+
+impl Audio {
+    pub fn from(component: &ftd::interpreter::Component) -> Audio {
+        let component_definition = ftd::interpreter::default::get_default_bag()
+            .get("ftd#audio")
+            .unwrap()
+            .clone()
+            .component()
+            .unwrap();
+        Audio {
+            src: ftd::js::value::get_optional_js_value(
+                "src",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            )
+                .unwrap(),
+            autoplay: ftd::js::value::get_optional_js_value(
+                "autoplay",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            controls: ftd::js::value::get_optional_js_value(
+                "controls",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            loop_: ftd::js::value::get_optional_js_value(
+                "loop",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            muted: ftd::js::value::get_optional_js_value(
+                "muted",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            common: Common::from(
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+                component.events.as_slice(),
+            ),
+        }
+    }
+
+    pub fn to_component_statements(
+        &self,
+        parent: &str,
+        index: usize,
+        doc: &ftd::interpreter::TDoc,
+        rdata: &mut ftd::js::ResolverData,
+        should_return: bool,
+    ) -> Vec<fastn_js::ComponentStatement> {
+        let mut component_statements = vec![];
+        let kernel = create_element(fastn_js::ElementKind::Audio, parent, index, rdata);
+        component_statements.push(fastn_js::ComponentStatement::CreateKernel(kernel.clone()));
+        component_statements.push(fastn_js::ComponentStatement::SetProperty(
+            fastn_js::SetProperty {
+                kind: fastn_js::PropertyKind::Src,
+                value: self.src.to_set_property_value(doc, rdata),
+                element_name: kernel.name.to_string(),
+                inherited: rdata.inherited_variable_name.to_string(),
+            },
+        ));
+        if let Some(ref controls) = self.controls {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                controls.to_set_property(
+                    fastn_js::PropertyKind::Controls,
+                    doc,
+                    kernel.name.as_str(),
+                    rdata,
+                ),
+            ));
+        }
+        if let Some(ref autoplay) = self.autoplay {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                autoplay.to_set_property(
+                    fastn_js::PropertyKind::Autoplay,
+                    doc,
+                    kernel.name.as_str(),
+                    rdata,
+                ),
+            ));
+        }
+        if let Some(ref muted) = self.muted {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                muted.to_set_property(
+                    fastn_js::PropertyKind::Muted,
+                    doc,
+                    kernel.name.as_str(),
+                    rdata,
+                ),
+            ));
+        }
+        if let Some(ref loop_) = self.loop_ {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                loop_.to_set_property(
+                    fastn_js::PropertyKind::Loop,
+                    doc,
+                    kernel.name.as_str(),
+                    rdata,
+                ),
+            ));
+        }
+        component_statements.extend(self.common.to_set_properties(
+            kernel.name.as_str(),
+            doc,
+            rdata,
+        ));
+
+        if should_return {
+            component_statements.push(fastn_js::ComponentStatement::Return {
+                component_name: kernel.name,
+            });
+        }
+        component_statements
+    }
+}
+#[derive(Debug)]
 pub struct Video {
     pub src: ftd::js::Value,
     pub fit: Option<ftd::js::Value>,
@@ -863,7 +994,7 @@ impl Video {
         if let Some(ref loop_video) = self.loop_video {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 loop_video.to_set_property(
-                    fastn_js::PropertyKind::LoopVideo,
+                    fastn_js::PropertyKind::Loop,
                     doc,
                     kernel.name.as_str(),
                     rdata,
@@ -3244,6 +3375,7 @@ pub fn is_kernel(s: &str) -> bool {
         "ftd#iframe",
         "ftd#code",
         "ftd#image",
+        "ftd#audio",
         "ftd#video",
         "ftd#rive",
         "ftd#document",

@@ -909,6 +909,7 @@ fastn_dom.ElementKind = {
         return [17, [webcomponent, args]];
     },
     Video: 18,
+    Audio: 19,
 };
 
 fastn_dom.PropertyKind = {
@@ -1028,7 +1029,7 @@ fastn_dom.PropertyKind = {
     VideoSrc: 111,
     Autoplay: 112,
     Poster: 113,
-    LoopVideo: 114,
+    Loop: 114,
     Controls: 115,
     Muted: 116,
     LinkColor: 117,
@@ -3241,7 +3242,7 @@ class Node2 {
             } else {
                 this.removeAttribute("controls");
             }
-        } else if (kind === fastn_dom.PropertyKind.LoopVideo) {
+        } else if (kind === fastn_dom.PropertyKind.Loop) {
             if (staticValue) {
                 this.attachAttribute("loop", staticValue);
             } else {
@@ -3749,6 +3750,8 @@ let fastn_utils = {
             attributes["allowfullscreen"] = "";
         } else if (kind === fastn_dom.ElementKind.Image) {
             node = "img";
+        } else if (kind === fastn_dom.ElementKind.Audio) {
+            node = "audio";
         } else if (kind === fastn_dom.ElementKind.Video) {
             node = "video";
         } else if (
