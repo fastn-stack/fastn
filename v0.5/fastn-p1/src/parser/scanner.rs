@@ -33,7 +33,7 @@ impl Scanner {
         }
     }
 
-    pub fn eat_while<F: Fn(char) -> bool>(&mut self, f: F) -> Option<fastn_p1::Span> {
+    pub fn take_while<F: Fn(char) -> bool>(&mut self, f: F) -> Option<fastn_p1::Span> {
         let start = self.index();
         while let Some(c) = self.peek() {
             if !f(c) {
@@ -112,8 +112,8 @@ impl Scanner {
         }
     }
 
-    pub fn read_till_char_or_end_of_line(&mut self, t: char) -> Option<fastn_p1::Span> {
-        self.eat_while(|c| c != t && c != '\n')
+    pub fn take_till_char_or_end_of_line(&mut self, t: char) -> Option<fastn_p1::Span> {
+        self.take_while(|c| c != t && c != '\n')
     }
 
     #[cfg(test)]

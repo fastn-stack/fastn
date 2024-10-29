@@ -18,7 +18,7 @@ mod test {
 
     #[test]
     fn section_init() {
-        t!("-- foo:", {"name": {"name": "foo"}}, "");
+        t!("-- foo:", {"name": {"name": "foo"}});
         t!("-- foo: ", {"name": {"name": "foo"}}, " ");
         t!("-- foo: hello", {"name": {"name": "foo"}}, " hello");
         t!("-- integer foo: hello", {"name": {"name": "foo", "kind": "integer"}}, " hello");

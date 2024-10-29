@@ -24,7 +24,7 @@ mod test {
 
     #[test]
     fn kind() {
-        t!("string", "string", "");
+        t!("string", "string");
 
         // t!("list<string>", {"name": "list", "args": [{"name": "string"}]}, "");
         // t!("foo<a, b>", {"name": "foo", "args": [{"name": "a"},{"name": "b"}]}, "");

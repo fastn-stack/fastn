@@ -37,9 +37,9 @@ mod test {
 
     #[test]
     fn qualified_identifier() {
-        t!("foo", { "module": { "package": "foo"}}, "");
-        t!("foo.com#bar", { "module": { "package": "foo.com"}, "terms": ["bar"]}, "");
-        t!("foo.com#bar.baz", { "module": { "package": "foo.com"}, "terms": ["bar", "baz"]}, "");
+        t!("foo", { "module": { "package": "foo"}});
+        t!("foo.com#bar", { "module": { "package": "foo.com"}, "terms": ["bar"]});
+        t!("foo.com#bar.baz", { "module": { "package": "foo.com"}, "terms": ["bar", "baz"]});
         t!(
             "foo.com/yo#bar.baz",
             {"module": { "package": "foo.com", "path": ["yo"]}, "terms": ["bar", "baz"]},

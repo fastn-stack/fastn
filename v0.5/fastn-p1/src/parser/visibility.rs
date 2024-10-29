@@ -41,17 +41,17 @@ mod test {
 
     #[test]
     fn visibility() {
-        t!("public", "Public", "");
+        t!("public", "Public");
         t!("public ", "Public", " ");
-        t!("private", "Private", "");
+        t!("private", "Private");
         t!("private ", "Private", " ");
-        t!("public<package>", "Package", "");
+        t!("public<package>", "Package");
         t!("public <package> ", "Package", " ");
-        t!("public < package>", "Package", "");
+        t!("public < package>", "Package");
         t!("public< package > ", "Package", " ");
         t!("public<package >   \t", "Package", "   \t");
-        t!("public  <module>", "Module", "");
-        t!("public  <    module>", "Module", "");
+        t!("public  <module>", "Module");
+        t!("public  <    module>", "Module");
         t!("public\t<  \t  module\t> ", "Module", " ");
     }
 }

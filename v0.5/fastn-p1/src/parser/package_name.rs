@@ -4,7 +4,7 @@ pub fn package_name(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1:
         return None;
     }
 
-    let span = scanner.eat_while(|c| c.is_alphanumeric() || c == '.')?;
+    let span = scanner.take_while(|c| c.is_alphanumeric() || c == '.')?;
     Some(fastn_p1::PackageName { name: span })
 }
 
@@ -15,7 +15,7 @@ mod test {
     #[test]
     fn package_name() {
         t!(" foo.com", null, " foo.com");
-        t!("foo.com", "foo.com", "");
+        t!("foo.com", "foo.com");
         t!("foo.com ", "foo.com", " ");
     }
 }

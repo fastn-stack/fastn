@@ -6,7 +6,7 @@ pub fn identifier(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::I
     }
 
     // later characters should be is_alphanumeric or `_` or `-`
-    let span = scanner.eat_while(|c| c.is_alphabetic() || c == '_' || c == '-')?;
+    let span = scanner.take_while(|c| c.is_alphabetic() || c == '_' || c == '-')?;
 
     Some(fastn_p1::Identifier { name: span })
 }
@@ -19,13 +19,13 @@ mod test {
     fn identifier() {
         // identifiers can't start with a space
         t!(" foo", null, " foo");
-        t!("foo", "foo", "");
+        t!("foo", "foo");
         t!("foo bar", "foo", " bar");
         t!("_foo bar", "_foo", " bar");
-        t!("_foo-bar", "_foo-bar", "");
-        t!("नम", "नम", "");
+        t!("_foo-bar", "_foo-bar");
+        t!("नम", "नम");
         t!("_नम-जन ", "_नम-जन", " ");
-        t!("_नाम-जाने", "_नाम-जाने", "");
+        t!("_नाम-जाने", "_नाम-जाने");
         t!("_नाम-जाने ", "_नाम-जाने", " ");
         // emoji is not a valid identifier
         t!("नम😦", "नम", "😦");
