@@ -8,7 +8,12 @@ pub struct Scanner<'input> {
     pub output: fastn_p1::ParseOutput,
 }
 
-impl Scanner<'_> {
+pub struct Index<'input> {
+    index: usize,
+    chars: std::iter::Peekable<std::str::CharIndices<'input>>,
+}
+
+impl<'input> Scanner<'input> {
     pub fn new(input: &str, fuel: fastn_p1::Fuel) -> Scanner {
         assert!(input.len() < 10_000_000); // can't parse > 10MB file
         Scanner {
@@ -28,7 +33,7 @@ impl Scanner<'_> {
     }
 
     pub fn take_while<F: Fn(char) -> bool>(&mut self, f: F) -> Option<fastn_p1::Span> {
-        let start = self.index();
+        let start = self.index;
         while let Some(c) = self.peek() {
             if !f(c) {
                 break;
@@ -36,31 +41,23 @@ impl Scanner<'_> {
             self.pop();
         }
 
-        if self.index() == start {
+        if self.index == start {
             return None;
         }
 
         Some(self.span(start))
     }
 
-    pub fn index(&self) -> usize {
-        self.index
+    pub fn index(&self) -> Index<'input> {
+        Index {
+            index: self.index,
+            chars: self.chars.clone(),
+        }
     }
 
-    pub fn reset(&mut self, index: usize) {
-        assert!(index <= self.index);
-        if index == self.index {
-            return;
-        }
-
-        // Don't like this. This will result in double allocations and moving offset again to index
-        self.chars = self.input.char_indices().peekable();
-        self.index = 0;
-
-        while self.index < index {
-            self.pop();
-        }
-        assert_eq!(self.index, index, "Index is not reset properly");
+    pub fn reset(&mut self, index: Index<'input>) {
+        self.index = index.index;
+        self.chars = index.chars;
     }
 
     pub fn peek(&mut self) -> Option<char> {
@@ -143,6 +140,6 @@ impl Scanner<'_> {
             self.pop();
         }
 
-        Some(self.span(start))
+        Some(self.span(start.index))
     }
 }
