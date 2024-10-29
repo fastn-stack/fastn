@@ -8,6 +8,7 @@ pub struct Scanner {
     pub output: fastn_p1::ParseOutput,
 }
 
+#[derive(Debug, PartialEq)]
 pub struct Index {
     chars: usize,
     bytes: usize,
@@ -25,11 +26,27 @@ impl Scanner {
         }
     }
 
-    pub fn span(&self, start: Index) -> fastn_p1::Span {
+    fn span(&self, start: Index) -> fastn_p1::Span {
         fastn_p1::Span {
             start: start.bytes,
             end: self.s_index,
         }
+    }
+
+    pub fn eat_while<F: Fn(char) -> bool>(&mut self, f: F) -> Option<fastn_p1::Span> {
+        let start = self.index();
+        while let Some(c) = self.peek() {
+            if !f(c) {
+                break;
+            }
+            self.pop();
+        }
+
+        if self.index() == start {
+            return None;
+        }
+
+        Some(self.span(start))
     }
 
     pub fn index(&self) -> Index {
@@ -37,6 +54,20 @@ impl Scanner {
             bytes: self.s_index,
             chars: self.index,
         }
+    }
+
+    /// Converts a given character count from the current index into the equivalent byte count.
+    fn char_count_to_byte_count(&self, char_count: usize) -> usize {
+        self.tokens[self.index..self.index + char_count]
+            .iter()
+            .map(|c| c.len_utf8()) // Get the byte length of each character
+            .sum() // Sum up the byte lengths
+    }
+
+    /// Advances the scanner's character and byte indices by a specified number of characters.
+    fn increment_index_by(&mut self, count: usize) {
+        self.s_index += self.char_count_to_byte_count(count);
+        self.index += count;
     }
 
     pub fn reset(&mut self, index: Index) {
@@ -55,9 +86,7 @@ impl Scanner {
     pub fn pop(&mut self) -> Option<char> {
         if self.index < self.size {
             let c = self.tokens[self.index];
-            self.index += 1;
-            // increment s_index by size of c
-            self.s_index += c.len_utf8();
+            self.increment_index_by(1);
             Some(c)
         } else {
             None
@@ -84,32 +113,20 @@ impl Scanner {
     }
 
     pub fn read_till_char_or_end_of_line(&mut self, t: char) -> Option<fastn_p1::Span> {
-        let mut count = 0;
-        while let Some(c) = self.tokens.get(self.index + count) {
-            if *c == t || *c == '\n' {
-                break;
-            }
-            count += 1;
-        }
-        if count == 0 {
-            return None;
-        }
-        let span = fastn_p1::Span {
-            start: self.s_index,
-            end: self.s_index + count,
-        };
-        self.index += count;
-        self.s_index += count;
-        Some(span)
+        self.eat_while(|c| c != t && c != '\n')
     }
 
     #[cfg(test)]
     pub fn remaining(&self) -> String {
-        let mut s = String::new();
-        for c in &self.tokens[self.index..] {
-            s.push(*c);
-        }
-        s
+        let char_remaining = self.tokens[self.index..].iter().collect::<String>();
+        let byte_remaining = self.tokens.iter().collect::<String>()[self.s_index..].to_string();
+
+        assert_eq!(
+            char_remaining, byte_remaining,
+            "Character-based and byte-based remaining text do not match"
+        );
+
+        char_remaining
     }
 
     pub fn one_of(&mut self, choices: &[&'static str]) -> Option<&'static str> {
@@ -134,19 +151,16 @@ impl Scanner {
 
     // returns the span from current position to the end of token
     pub fn token(&mut self, t: &'static str) -> Option<fastn_p1::Span> {
-        let mut count = 0;
+        let start = self.index();
         for char in t.chars() {
             assert!(char.is_ascii()); // we are assuming this is ascii string
-            if char != self.tokens[self.index + count] {
+            if self.peek() != Some(char) {
+                self.reset(start);
                 return None;
             }
-            count += 1
+            self.pop();
         }
-        self.index += count;
-        self.s_index = self.index;
-        Some(fastn_p1::Span {
-            start: self.s_index - count,
-            end: self.s_index,
-        })
+
+        Some(self.span(start))
     }
 }

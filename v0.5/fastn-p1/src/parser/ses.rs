@@ -17,6 +17,7 @@ mod test {
     #[test]
     fn ses() {
         t!("hello", ["hello"], "");
+        t!("hèllo", ["hèllo"], "");
         // t!("hello ${world}", [{ "text": "hello $" }, /* expression containing "world" */], "");
     }
 }
