@@ -765,7 +765,7 @@ impl Audio {
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             )
-                .unwrap(),
+            .unwrap(),
             autoplay: ftd::js::value::get_optional_js_value(
                 "autoplay",
                 component.properties.as_slice(),

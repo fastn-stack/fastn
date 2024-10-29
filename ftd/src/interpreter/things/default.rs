@@ -10991,9 +10991,9 @@ pub fn audio_function() -> ftd::interpreter::ComponentDefinition {
                 ),
             ],
         ]
-            .concat()
-            .into_iter()
-            .collect(),
+        .concat()
+        .into_iter()
+        .collect(),
         definition: ftd::interpreter::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
