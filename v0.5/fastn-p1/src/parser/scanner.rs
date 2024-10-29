@@ -3,7 +3,7 @@ pub struct Scanner<'input> {
     input: &'input str,
     chars: std::iter::Peekable<std::str::CharIndices<'input>>,
     /// index is byte position in the input
-    pub index: usize,
+    index: usize,
     fuel: fastn_p1::Fuel,
     pub output: fastn_p1::ParseOutput,
 }
@@ -132,7 +132,6 @@ impl<'input> Scanner<'input> {
     pub fn token(&mut self, t: &'static str) -> Option<fastn_p1::Span> {
         let start = self.index();
         for char in t.chars() {
-            assert!(char.is_ascii()); // we are assuming this is ascii string
             if self.peek() != Some(char) {
                 self.reset(start);
                 return None;
