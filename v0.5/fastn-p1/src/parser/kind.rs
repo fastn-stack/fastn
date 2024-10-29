@@ -64,19 +64,19 @@ mod test {
     #[test]
     fn kind() {
         t!("string", "string");
-        t!("list<string>", {"name": {"module": "list"}, "args": ["string"]});
-        t!("foo<a, b>", {"name": {"module": "foo"}, "args": ["a", "b"]});
+        t!("list<string>", {"name": "list", "args": ["string"]});
+        t!("foo<a, b>", {"name": "foo", "args": ["a", "b"]});
         t!(
             "foo<bar<k>>",
-            {"name": {"module": "foo"}, "args": [{"name": {"module": "bar"}, "args": ["k"]}]}
+            {"name": "foo", "args": [{"name": "bar", "args": ["k"]}]}
         );
         t!(
             "foo<a, b<asd>, c, d>",
             {
-                "name": {"module": "foo"},
+                "name": "foo",
                 "args": [
                     "a",
-                    {"name": {"module": "b"}, "args": ["asd"]},
+                    {"name": "b", "args": ["asd"]},
                     "c",
                     "d"
                 ]
@@ -85,19 +85,19 @@ mod test {
         t!(
             "foo<a, b, c, d, e>",
             {
-                "name": {"module": "foo"},
+                "name": "foo",
                 "args": ["a","b","c","d","e"]
             }
         );
 
         t!(
             "foo<bar<k>> ",
-            {"name": {"module": "foo"}, "args": [{"name": {"module": "bar"}, "args": ["k"]}]},
+            {"name": "foo", "args": [{"name": "bar", "args": ["k"]}]},
             " "
         );
         t!(
             "foo<bar<k>>  moo",
-            {"name": {"module": "foo"}, "args": [{"name": {"module": "bar"}, "args": ["k"]}]},
+            {"name": "foo", "args": [{"name": "bar", "args": ["k"]}]},
             "  moo"
         );
     }

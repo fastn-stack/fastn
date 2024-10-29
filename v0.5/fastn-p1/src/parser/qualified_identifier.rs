@@ -37,8 +37,7 @@ mod test {
 
     #[test]
     fn qualified_identifier() {
-        t!("foo", {"module": "foo"});
-        // t!("foo", {"module": "foo"});
+        t!("foo", "foo");
         t!("foo.com#bar", { "module": "foo.com", "terms": ["bar"]});
         t!("foo.com#bar.baz", { "module": "foo.com", "terms": ["bar", "baz"]});
         t!(

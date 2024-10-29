@@ -112,9 +112,7 @@ impl JDebug for fastn_p1::Kind {
 impl JDebug for fastn_p1::QualifiedIdentifier {
     fn debug(&self, source: &str) -> serde_json::Value {
         if self.terms.is_empty() {
-            return serde_json::json! ({
-                "module": self.module.debug(source),
-            });
+            return self.module.debug(source);
         }
 
         serde_json::json! ({
