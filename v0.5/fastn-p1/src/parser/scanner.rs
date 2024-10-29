@@ -1,7 +1,7 @@
 #[derive(Debug)]
-pub struct Scanner<'intput> {
-    input: &'intput str,
-    chars: std::iter::Peekable<std::str::CharIndices<'intput>>,
+pub struct Scanner<'input> {
+    input: &'input str,
+    chars: std::iter::Peekable<std::str::CharIndices<'input>>,
     /// index is byte position in the input
     pub index: usize,
     fuel: fastn_p1::Fuel,
@@ -52,7 +52,12 @@ impl Scanner<'_> {
         if index == self.index {
             return;
         }
-        while self.index > index {
+
+        // Don't like this. This will result in double allocations and moving offset again to index
+        self.chars = self.input.char_indices().peekable();
+        self.index = 0;
+
+        while self.index < index {
             self.pop();
         }
         assert_eq!(self.index, index, "Index is not reset properly");
@@ -64,7 +69,9 @@ impl Scanner<'_> {
 
     pub fn pop(&mut self) -> Option<char> {
         let (idx, c) = self.chars.next()?;
-        self.index = idx;
+        // self.index = idx;
+        // Update the index by the byte length of the character
+        self.index = idx + c.len_utf8();
         Some(c)
     }
 
@@ -95,9 +102,6 @@ impl Scanner<'_> {
     pub fn remaining(&self) -> &str {
         let char_remaining = self.chars.clone().map(|c| c.1).collect::<String>();
         let str_remaining = &self.input[self.index..];
-
-        println!("char_remaining: {:?}", char_remaining);
-        println!("str_remaining: {:?}", str_remaining);
 
         assert_eq!(
             char_remaining, str_remaining,
