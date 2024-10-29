@@ -52,7 +52,7 @@ pub fn kind(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::Kind> {
     Some(fastn_p1::Kind {
         name: qi,
         args: Some(args),
-        doc: None, // Documentation not parsed here
+        doc: None,        // Documentation not parsed here
         visibility: None, // Visibility not parsed here
     })
 }
