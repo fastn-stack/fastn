@@ -74,14 +74,14 @@ fn inner_ender<T: SectionProxy>(
 ) -> Vec<T> {
     let mut stack = Vec::new();
     'outer: for mut section in sections {
-        match section.name(source).unwrap() {
+        match section.mark(source).unwrap() {
             Mark::Start(_name) => {
                 stack.push(section);
             }
             Mark::End(e_name) => {
                 let mut children = Vec::new();
                 while let Some(candidate) = stack.pop() {
-                    match candidate.name(source).unwrap() {
+                    match candidate.mark(source).unwrap() {
                         Mark::Start(name) => {
                             if name == e_name {
                                 section.add_children(children);
@@ -107,16 +107,16 @@ fn inner_ender<T: SectionProxy>(
     stack
 }
 
-pub enum Mark<'input> {
+enum Mark<'input> {
     Start(&'input str),
     End(&'input str),
 }
 
 /// we are using a proxy trait so we can write tests against a fake type, and then implement the
 /// trait for the real Section type
-pub trait SectionProxy: Sized {
+trait SectionProxy: Sized {
     /// returns the name of the section, and if it starts or ends the section
-    fn name<'input>(
+    fn mark<'input>(
         &'input self,
         source: &'input str,
     ) -> Result<Mark<'input>, fastn_p1::SingleError>;
@@ -125,7 +125,7 @@ pub trait SectionProxy: Sized {
 }
 
 impl SectionProxy for fastn_p1::Section {
-    fn name<'input>(
+    fn mark<'input>(
         &'input self,
         source: &'input str,
     ) -> Result<Mark<'input>, fastn_p1::SingleError> {
@@ -174,7 +174,7 @@ mod test {
     }
 
     impl super::SectionProxy for DummySection {
-        fn name<'input>(
+        fn mark<'input>(
             &'input self,
             _source: &'input str,
         ) -> Result<super::Mark<'input>, fastn_p1::SingleError> {
@@ -217,6 +217,7 @@ mod test {
     // foo containing bar and baz will look like this: foo [bar [], baz []]
     fn to_str(sections: &[DummySection]) -> String {
         fn to_str_(s: &mut String, sections: &[DummySection]) {
+            // we are using peekable iterator so we can check if we are at the end
             let mut iterator = sections.iter().peekable();
             while let Some(section) = iterator.next() {
                 s.push_str(&section.name);
