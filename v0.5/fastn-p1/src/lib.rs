@@ -82,6 +82,11 @@ pub enum Visibility {
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Identifier {
     name: fastn_p1::Span,
+}
+
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct AliasableIdentifier {
+    name: fastn_p1::Span,
     alias: Option<fastn_p1::Span>,
 }
 
@@ -109,7 +114,7 @@ pub struct PackageName {
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct ModuleName {
     pub package: PackageName,
-    pub name: Identifier,
+    pub name: AliasableIdentifier,
     pub path: Vec<Identifier>, // rest of the path
 }
 

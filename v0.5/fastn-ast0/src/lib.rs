@@ -3,12 +3,11 @@
 #![warn(clippy::used_underscore_binding)]
 
 mod import;
-pub use import::{Export, Exposing, Import, PossiblyAliasedIdentifier};
+pub use import::{Export, Exposing, Import};
 
 extern crate self as fastn_ast0;
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Ast0 {
-    #[serde(rename = "import")]
     Import(fastn_ast0::Import),
 }
