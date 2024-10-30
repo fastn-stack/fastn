@@ -8,7 +8,8 @@ fn span(s: &fastn_p1::Span, key: &str, source: &str) -> serde_json::Value {
 
 impl JDebug for fastn_p1::Span {
     fn debug(&self, source: &str) -> serde_json::Value {
-        (&source[self.start..self.end]).into()
+        let t = &source[self.start..self.end];
+        if t.is_empty() { "<empty>" } else { t }.into()
     }
 }
 

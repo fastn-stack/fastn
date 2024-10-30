@@ -28,7 +28,11 @@ pub fn qualified_identifier(
         terms
     };
 
-    Some(fastn_p1::QualifiedIdentifier { module, terms })
+    if module.is_none() && terms.is_empty() {
+        return None;
+    }
+
+    Some(fastn_p1::QualifiedIdentifier::new(module, terms))
 }
 
 #[cfg(test)]
@@ -50,5 +54,17 @@ mod test {
             {"module": { "package": "foo.com", "path": ["yo", "man"]}, "terms": ["bar", "baz"]},
             ""
         );
+        assert_eq!(
+            super::qualified_identifier(&mut fastn_p1::parser::Scanner::new(
+                " string",
+                Default::default()
+            ),),
+            None
+        );
+        f!(" foo");
+        f!(" string");
+        f!(" foo.com#bar");
+        f!(" foo.com/foo#bar");
+        f!(" foo.com/foo#bar.bar");
     }
 }

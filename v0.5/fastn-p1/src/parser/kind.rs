@@ -1,6 +1,7 @@
 pub fn kind(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::Kind> {
-    let qi = match fastn_p1::parser::qualified_identifier(scanner) {
-        Some(qi) => qi,
+    dbg!(scanner.remaining());
+    let qi = match dbg!(fastn_p1::parser::qualified_identifier(scanner)) {
+        Some(qi) => dbg!(qi),
         None => return None,
     };
 
@@ -24,13 +25,8 @@ pub fn kind(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::Kind> {
     let mut args = Vec::new();
 
     // Continue parsing arguments until `>` is reached
-    loop {
-        // Parse each argument as another `Kind`
-        if let Some(arg) = kind(scanner) {
-            args.push(arg);
-        } else {
-            break;
-        }
+    while let Some(arg) = kind(scanner) {
+        args.push(arg);
 
         scanner.skip_spaces();
 
@@ -67,11 +63,11 @@ mod test {
         t!("list<string>", {"name": "list", "args": ["string"]});
         t!("foo<a, b>", {"name": "foo", "args": ["a", "b"]});
         t!(
-            "foo<bar<k>>",
+            "foo<bar   <k >>",
             {"name": "foo", "args": [{"name": "bar", "args": ["k"]}]}
         );
         t!(
-            "foo<a, b<asd>, c, d>",
+            "foo \t <a, b< asd                 >, c, d>",
             {
                 "name": "foo",
                 "args": [
@@ -83,7 +79,7 @@ mod test {
             }
         );
         t!(
-            "foo<a, b, c, d, e>",
+            "foo<a        , b\t,\tc, d, e>",
             {
                 "name": "foo",
                 "args": ["a","b","c","d","e"]
@@ -91,7 +87,7 @@ mod test {
         );
 
         t!(
-            "foo<bar<k>> ",
+            "foo < bar<k>> ",
             {"name": "foo", "args": [{"name": "bar", "args": ["k"]}]},
             " "
         );
@@ -100,5 +96,16 @@ mod test {
             {"name": "foo", "args": [{"name": "bar", "args": ["k"]}]},
             "  moo"
         );
+        f!(" string");
+        // t!(
+        //     "foo<\n  bar \n <\n k>\n>  moo",
+        //     {"name": "foo", "args": [{"name": "bar", "args": ["k"]}]},
+        //     "  moo"
+        // );
+        // t!(
+        //     "foo<\n  ;; some comment\n bar \n ;; more comments \n<\n k>\n>  moo",
+        //     {"name": "foo", "args": [{"name": "bar", "args": ["k"]}]},
+        //     "  moo"
+        // );
     }
 }

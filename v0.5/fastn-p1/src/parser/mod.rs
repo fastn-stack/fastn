@@ -43,12 +43,19 @@ fn p<T: fastn_p1::debug::JDebug, F: FnOnce(&mut fastn_p1::parser::Scanner) -> T>
 #[macro_export]
 macro_rules! tt {
     ($f:expr) => {
+        #[allow(unused_macros)]
         macro_rules! t {
             ($source:expr, $debug:tt, $remaining:expr) => {
                 fastn_p1::parser::p($source, $f, serde_json::json!($debug), $remaining);
             };
             ($source:expr, $debug:tt) => {
                 fastn_p1::parser::p($source, $f, serde_json::json!($debug), "");
+            };
+        }
+        #[allow(unused_macros)]
+        macro_rules! f {
+            ($source:expr) => {
+                fastn_p1::parser::p($source, $f, serde_json::json!(null), $source);
             };
         }
     };

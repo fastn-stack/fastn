@@ -98,3 +98,10 @@ impl From<fastn_p1::QualifiedIdentifier> for fastn_p1::Kind {
         }
     }
 }
+
+impl fastn_p1::QualifiedIdentifier {
+    pub fn new(module: Option<fastn_p1::ModuleName>, terms: Vec<fastn_p1::Identifier>) -> Self {
+        assert!(module.is_some() || !terms.is_empty());
+        fastn_p1::QualifiedIdentifier { module, terms }
+    }
+}

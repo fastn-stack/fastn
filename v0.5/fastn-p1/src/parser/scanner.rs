@@ -94,7 +94,6 @@ impl<'input> Scanner<'input> {
         self.take_while(|c| c != t && c != '\n')
     }
 
-    #[cfg(test)]
     pub fn remaining(&self) -> &str {
         let char_remaining = self.chars.clone().map(|c| c.1).collect::<String>();
         let str_remaining = &self.input[self.index..];
