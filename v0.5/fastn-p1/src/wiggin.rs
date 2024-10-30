@@ -216,27 +216,27 @@ mod test {
 
     // foo containing bar and baz will look like this: foo [bar [], baz []]
     fn to_str(sections: &[DummySection]) -> String {
+        fn to_str_(s: &mut String, sections: &[DummySection]) {
+            let mut iterator = sections.iter().peekable();
+            while let Some(section) = iterator.next() {
+                s.push_str(&section.name);
+                if section.children.is_empty() {
+                    if iterator.peek().is_some() {
+                        s.push(' ');
+                    }
+                    continue;
+                }
+                s.push_str(" [");
+                if !section.children.is_empty() {
+                    to_str_(s, &section.children);
+                }
+                s.push(']');
+            }
+        }
+
         let mut s = String::new();
         to_str_(&mut s, sections);
         s
-    }
-
-    fn to_str_(s: &mut String, sections: &[DummySection]) {
-        let mut iterator = sections.iter().peekable();
-        while let Some(section) = iterator.next() {
-            s.push_str(&section.name);
-            if section.children.is_empty() {
-                if iterator.peek().is_some() {
-                    s.push_str(" ");
-                }
-                continue;
-            }
-            s.push_str(" [");
-            if !section.children.is_empty() {
-                to_str_(s, &section.children);
-            }
-            s.push_str("]");
-        }
     }
 
     #[track_caller]
@@ -247,7 +247,23 @@ mod test {
         assert_eq!(to_str(&sections), expected);
     }
 
-    fn f(source: &str) {}
+    fn f(source: &str, expected: &str, errors: Vec<fastn_p1::SingleError>) {
+        let mut o = fastn_p1::ParseOutput::default();
+        let sections = parse(source);
+        let sections = super::inner_ender(source, &mut o, sections);
+        assert_eq!(to_str(&sections), expected);
+
+        assert_eq!(
+            o.items,
+            errors
+                .into_iter()
+                .map(|e| fastn_p1::Spanned {
+                    span: Default::default(),
+                    value: fastn_p1::Item::Error(e),
+                })
+                .collect::<Vec<_>>()
+        );
+    }
 
     #[test]
     fn test_inner_ender() {
