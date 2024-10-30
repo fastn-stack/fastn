@@ -176,5 +176,7 @@ fn error(e: &fastn_p1::SingleError, _s: &fastn_p1::Span, _source: &str) -> serde
         fastn_p1::SingleError::ColonNotFound => "colon_not_found",
         fastn_p1::SingleError::DashDashNotFound => "dashdash_not_found",
         fastn_p1::SingleError::KindedNameNotFound => "kinded_name_not_found",
+        fastn_p1::SingleError::SectionNameNotFoundForEnd => "section_name_not_found_for_end",
+        fastn_p1::SingleError::EndContainsData => "end_contains_data",
     }})
 }

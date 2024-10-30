@@ -4,7 +4,9 @@ pub struct Scanner<'input> {
     chars: std::iter::Peekable<std::str::CharIndices<'input>>,
     /// index is byte position in the input
     index: usize,
+    #[expect(unused)]
     fuel: fastn_p1::Fuel,
+    #[expect(unused)]
     pub output: fastn_p1::ParseOutput,
 }
 

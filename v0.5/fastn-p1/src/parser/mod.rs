@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 mod identifier;
 mod kind;
 mod kinded_name;
@@ -17,7 +15,7 @@ pub use kinded_name::kinded_name;
 pub use module_name::module_name;
 pub use package_name::package_name;
 pub use qualified_identifier::qualified_identifier;
-use scanner::Scanner;
+pub use scanner::Scanner;
 
 impl fastn_p1::ParseOutput {
     pub fn parse_v4(source: &str) -> fastn_p1::ParseOutput {
