@@ -1,11 +1,48 @@
+#![allow(dead_code)]
+
 /// calls `inner_ender` for all the embedded section inside section in the
 /// list and then calls `ender` for the list itself
-#[expect(unused)]
-pub fn ender<T: SectionProxy>(
+pub fn ender(
+    source: &str,
+    o: &mut fastn_p1::ParseOutput,
+    sections: Vec<fastn_p1::Section>,
+) -> Vec<fastn_p1::Section> {
+    // recursive part
+    let sections = sections
+        .into_iter()
+        .map(|s| section_ender(source, o, s))
+        .collect();
+
+    // non recursive part
+    inner_ender(source, o, sections)
+}
+
+fn section_ender(
+    source: &str,
+    o: &mut fastn_p1::ParseOutput,
+    mut section: fastn_p1::Section,
+) -> fastn_p1::Section {
+    if let Some(caption) = section.caption {
+        section.caption = Some(header_value_ender(source, o, caption));
+    }
+
+    section.headers = section
+        .headers
+        .into_iter()
+        .map(|mut h| {
+            h.value = header_value_ender(source, o, h.value);
+            h
+        })
+        .collect();
+    section.children = ender(source, o, section.children);
+    section
+}
+
+fn header_value_ender(
     _source: &str,
     _o: &mut fastn_p1::ParseOutput,
-    _sections: Vec<T>,
-) -> Vec<T> {
+    _header: fastn_p1::HeaderValue,
+) -> fastn_p1::HeaderValue {
     todo!()
 }
 
@@ -13,8 +50,7 @@ pub fn ender<T: SectionProxy>(
 ///
 /// example:
 /// [{section: "foo"}, {section: "bar"}, "-- end: foo"] -> [{section: "foo", children: [{section: "bar"}]}]
-#[expect(unused)]
-pub fn inner_ender<T: SectionProxy>(
+fn inner_ender<T: SectionProxy>(
     _source: &str,
     _o: &mut fastn_p1::ParseOutput,
     _sections: Vec<T>,
