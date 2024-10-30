@@ -164,30 +164,95 @@ impl SectionProxy for fastn_p1::Section {
     }
 }
 
-#[allow(dead_code)] // #[expect(dead_code)] is not working
-struct DummySection {
-    name: String,
-    is_end: bool,
-    children: Vec<DummySection>,
-}
+#[cfg(test)]
+mod test {
+    #[allow(dead_code)] // #[expect(dead_code)] is not working
+    struct DummySection {
+        name: String,
+        is_end: bool,
+        children: Vec<DummySection>,
+    }
 
-impl SectionProxy for DummySection {
-    fn name<'input>(
-        &'input self,
-        _source: &'input str,
-    ) -> Result<Mark<'input>, fastn_p1::SingleError> {
-        if self.is_end {
-            Ok(Mark::End(&self.name))
-        } else {
-            Ok(Mark::Start(&self.name))
+    impl super::SectionProxy for DummySection {
+        fn name<'input>(
+            &'input self,
+            _source: &'input str,
+        ) -> Result<super::Mark<'input>, fastn_p1::SingleError> {
+            if self.is_end {
+                Ok(super::Mark::End(&self.name))
+            } else {
+                Ok(super::Mark::Start(&self.name))
+            }
+        }
+
+        fn add_children(&mut self, children: Vec<Self>) {
+            self.children = children;
+        }
+
+        fn span(&self) -> fastn_p1::Span {
+            Default::default()
         }
     }
 
-    fn add_children(&mut self, children: Vec<Self>) {
-        self.children = children;
+    // format: foo -> bar -> /foo (
+    fn parse(name: &str) -> Vec<DummySection> {
+        let mut sections = vec![];
+        let mut current = &mut sections;
+        for part in name.split(" -> ") {
+            let is_end = part.starts_with('/');
+            let name = if is_end { &part[1..] } else { part };
+            let section = DummySection {
+                name: name.to_string(),
+                is_end,
+                children: vec![],
+            };
+            current.push(section);
+            if !is_end {
+                current = &mut current.last_mut().unwrap().children;
+            }
+        }
+        sections
     }
 
-    fn span(&self) -> fastn_p1::Span {
-        Default::default()
+    // foo containing bar and baz will look like this: foo [bar [], baz []]
+    fn to_str(sections: &[DummySection]) -> String {
+        let mut s = String::new();
+        to_str_(&mut s, sections);
+        s
+    }
+
+    fn to_str_(s: &mut String, sections: &[DummySection]) {
+        let mut iterator = sections.iter().peekable();
+        while let Some(section) = iterator.next() {
+            s.push_str(&section.name);
+            if section.children.is_empty() {
+                if iterator.peek().is_some() {
+                    s.push_str(" ");
+                }
+                continue;
+            }
+            s.push_str(" [");
+            if !section.children.is_empty() {
+                to_str_(s, &section.children);
+            }
+            s.push_str("]");
+        }
+    }
+
+    #[track_caller]
+    fn t(source: &str, expected: &str) {
+        let mut o = fastn_p1::ParseOutput::default();
+        let sections = parse(source);
+        let sections = super::inner_ender(source, &mut o, sections);
+        assert_eq!(to_str(&sections), expected);
+    }
+
+    fn f(source: &str) {}
+
+    #[test]
+    fn test_inner_ender() {
+        t("foo -> bar -> baz -> /foo", "foo [bar, baz]");
+        t("foo -> bar -> baz -> /bar -> /foo", "foo [bar, baz]");
+        t("foo -> bar -> baz -> /bar -> /foo", "foo [bar [baz []]]");
     }
 }
