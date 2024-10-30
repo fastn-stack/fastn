@@ -1,9 +1,20 @@
+/// calls `inner_ender` for all the embedded section inside section in the
+/// list and then calls `ender` for the list itself
+#[expect(unused)]
+pub fn ender<T: SectionProxy>(
+    _source: &str,
+    _o: &mut fastn_p1::ParseOutput,
+    _sections: Vec<T>,
+) -> Vec<T> {
+    todo!()
+}
+
 /// converts a section list, with interleaved `-- end: <section-name>`, into a nested section list
 ///
 /// example:
 /// [{section: "foo"}, {section: "bar"}, "-- end: foo"] -> [{section: "foo", children: [{section: "bar"}]}]
 #[expect(unused)]
-pub fn ender<T: SectionProxy>(
+pub fn inner_ender<T: SectionProxy>(
     _source: &str,
     _o: &mut fastn_p1::ParseOutput,
     _sections: Vec<T>,
