@@ -5,7 +5,18 @@ pub fn package_name(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1:
     }
 
     let span = scanner.take_while(|c| c.is_alphanumeric() || c == '.')?;
-    Some(fastn_p1::PackageName { name: span })
+
+    let o_name = scanner.source(&span);
+    println!("o_name: {:?}", o_name);
+    let name = o_name.split_once('.').unwrap_or((o_name, "")).0;
+
+    Some(fastn_p1::PackageName {
+        alias: fastn_p1::Span {
+            start: span.start,
+            end: span.start + name.len(),
+        },
+        name: span,
+    })
 }
 
 #[cfg(test)]

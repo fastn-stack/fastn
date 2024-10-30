@@ -27,6 +27,10 @@ impl<'input> Scanner<'input> {
         }
     }
 
+    pub fn source(&self, span: &fastn_p1::Span) -> &'input str {
+        &self.input[span.start..span.end]
+    }
+
     fn span(&self, start: usize) -> fastn_p1::Span {
         fastn_p1::Span {
             start,

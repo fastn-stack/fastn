@@ -11,7 +11,7 @@ mod section;
 mod utils;
 mod wiggin;
 
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
 pub struct Section {
     pub init: SectionInit,
@@ -27,7 +27,7 @@ pub struct Section {
 }
 
 /// example: `-- list<string> foo:`
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct SectionInit {
     pub dashdash: Span, // for syntax highlighting and formatting
     pub name: KindedName,
@@ -36,13 +36,13 @@ pub struct SectionInit {
 
 pub type Span = std::ops::Range<usize>;
 
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Spanned<T> {
     pub span: Span,
     pub value: T,
 }
 
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Header {
     pub name: KindedName,
     pub condition: Option<Span>,
@@ -59,7 +59,7 @@ pub struct Fuel {
 /// public | private | public<package> | public<module>
 ///
 /// TODO: newline is allowed, e.g., public<\n module>
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub enum Visibility {
     /// visible to everyone
     #[default]
@@ -79,9 +79,10 @@ pub enum Visibility {
 ///
 /// TODO: identifiers can't be keywords of the language, e.g., `import`, `record`, `component`.
 /// but it can be built in types e.g., `integer` etc.
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Identifier {
     name: fastn_p1::Span,
+    alias: Option<fastn_p1::Span>,
 }
 
 /// package names for fastn as domain names.
@@ -96,28 +97,28 @@ pub struct Identifier {
 /// `.` is allowed in domain names.
 /// TODO: domain name can't begin or end with a `.`.
 /// TODO: `.` can't be repeated.
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct PackageName {
     name: fastn_p1::Span,
+    // for foo.com, the alias is `foo` (the first part before the first dot)
+    // TODO: unless it is `www`, then its the second part
+    alias: fastn_p1::Span,
 }
 
 /// module name looks like <package-name>(/<identifier>)*/?)
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct ModuleName {
     pub package: PackageName,
-    #[serde(default)]
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    pub path: Vec<Identifier>,
+    pub name: Identifier,
+    pub path: Vec<Identifier>, // rest of the path
 }
 
 /// module name looks like <module-name>#<identifier>
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct QualifiedIdentifier {
     // the part comes before `#`
     module: Option<ModuleName>,
     // the part comes after `#`
-    #[serde(default)]
-    #[serde(skip_serializing_if = "Vec::is_empty")]
     terms: Vec<Identifier>,
 }
 
@@ -132,7 +133,7 @@ pub struct QualifiedIdentifier {
 ///
 /// note that this function is not responsible for parsing the visibility or doc-comments,
 /// it only parses the name and args
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Kind {
     // only kinded section / header can have doc
     pub doc: Option<Span>,
@@ -155,7 +156,7 @@ pub enum PResult<T> {
 }
 
 /// example: `list<string> foo` | `foo bar` | `bar`
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct KindedName {
     pub kind: Option<Kind>,
     pub name: Identifier,
@@ -169,7 +170,7 @@ pub type HeaderValue = Vec<SES>;
 /// if the text inside { starts with `--` then the content is a section,
 /// and we should use `fastn_p1::parser::section()` parser to parse it.
 /// otherwise it is a text.
-#[derive(Debug, PartialEq, Clone, serde::Serialize)]
+#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub enum SES {
     String(Span),
     /// the start and end are the positions of `{` and `}` respectively
@@ -193,21 +194,21 @@ pub struct Edit {
     pub text: Vec<char>,
 }
 
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct ParseOutput {
     pub module_doc: Option<fastn_p1::Span>,
     pub items: Vec<fastn_p1::Spanned<fastn_p1::Item>>,
     pub line_starts: Vec<usize>,
 }
 
-#[derive(Debug, PartialEq, Clone, serde::Serialize)]
+#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub enum Item {
     Section(Box<fastn_p1::Section>),
     Error(fastn_p1::SingleError),
     Comment,
 }
 
-#[derive(Debug, PartialEq, Clone, serde::Serialize)]
+#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub enum SingleError {
     /// doc comments should either come at the beginning of the file as a contiguous chunk
     /// or right before a section or a header.
