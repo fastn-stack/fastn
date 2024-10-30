@@ -6,8 +6,8 @@ pub fn kind(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::Kind> {
     };
 
     // By scoping `index` here, it becomes eligible for garbage collection as soon
-    // as it’s no longer needed, reducing memory usage. This block performs a look-ahead
-    // to check for an optional `<>` part.
+    // as it’s no longer necessary, reducing memory usage.
+    // This block performs a look-ahead to check for an optional `<>` part.
     {
         let index = scanner.index();
         scanner.skip_spaces();
@@ -48,8 +48,8 @@ pub fn kind(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::Kind> {
     Some(fastn_p1::Kind {
         name: qi,
         args: Some(args),
-        doc: None,        // Documentation not parsed here
-        visibility: None, // Visibility not parsed here
+        doc: None,        // Documentation isn't parsed here
+        visibility: None, // Visibility isn't parsed here
     })
 }
 
