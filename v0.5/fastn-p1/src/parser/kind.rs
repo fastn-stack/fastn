@@ -1,7 +1,6 @@
 pub fn kind(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::Kind> {
-    dbg!(scanner.remaining());
-    let qi = match dbg!(fastn_p1::parser::qualified_identifier(scanner)) {
-        Some(qi) => dbg!(qi),
+    let qi = match fastn_p1::parser::qualified_identifier(scanner) {
+        Some(qi) => qi,
         None => return None,
     };
 
@@ -73,6 +72,26 @@ mod test {
                 "args": [
                     "a",
                     {"name": "b", "args": ["asd"]},
+                    "c",
+                    "d"
+                ]
+            }
+        );
+        t!(
+            "foo \t <a, b< asd<e, f<g>>                 >, c, d>",
+            {
+                "name": "foo",
+                "args": [
+                    "a",
+                    {"name": "b", "args": [
+                        {
+                            "name": "asd",
+                            "args": [
+                                "e",
+                                {"name": "f", "args": ["g"]}
+                        ]
+                        }
+                    ]},
                     "c",
                     "d"
                 ]
