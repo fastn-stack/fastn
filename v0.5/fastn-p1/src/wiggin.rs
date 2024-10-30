@@ -39,11 +39,26 @@ fn section_ender(
 }
 
 fn header_value_ender(
-    _source: &str,
-    _o: &mut fastn_p1::ParseOutput,
-    _header: fastn_p1::HeaderValue,
+    source: &str,
+    o: &mut fastn_p1::ParseOutput,
+    header: fastn_p1::HeaderValue,
 ) -> fastn_p1::HeaderValue {
-    todo!()
+    header
+        .into_iter()
+        .map(|ses| match ses {
+            fastn_p1::SES::String(span) => fastn_p1::SES::String(span),
+            fastn_p1::SES::Expression {
+                start,
+                end,
+                content,
+            } => fastn_p1::SES::Expression {
+                start,
+                end,
+                content: header_value_ender(source, o, content),
+            },
+            fastn_p1::SES::Section(sections) => fastn_p1::SES::Section(ender(source, o, sections)),
+        })
+        .collect()
 }
 
 /// converts a section list, with interleaved `-- end: <section-name>`, into a nested section list

@@ -176,9 +176,9 @@ pub enum SES {
     Expression {
         start: usize,
         end: usize,
-        content: Vec<SES>,
+        content: HeaderValue,
     },
-    Section(Box<Section>),
+    Section(Vec<Section>),
 }
 
 #[derive(Default)]
