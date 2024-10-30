@@ -25,7 +25,6 @@ fn section_ender(
     if let Some(caption) = section.caption {
         section.caption = Some(header_value_ender(source, o, caption));
     }
-
     section.headers = section
         .headers
         .into_iter()
@@ -69,23 +68,52 @@ fn header_value_ender(
 /// example:
 /// [{section: "foo"}, {section: "bar"}, "-- end: foo"] -> [{section: "foo", children: [{section: "bar"}]}]
 fn inner_ender<T: SectionProxy>(
-    _source: &str,
-    _o: &mut fastn_p1::ParseOutput,
-    _sections: Vec<T>,
+    source: &str,
+    o: &mut fastn_p1::ParseOutput,
+    sections: Vec<T>,
 ) -> Vec<T> {
-    todo!()
+    let mut stack = Vec::new();
+    'outer: for mut section in sections {
+        match section.name(source).unwrap() {
+            Mark::Start(_name) => {
+                stack.push(section);
+            }
+            Mark::End(e_name) => {
+                let mut children = Vec::new();
+                while let Some(candidate) = stack.pop() {
+                    match candidate.name(source).unwrap() {
+                        Mark::Start(name) => {
+                            if name == e_name {
+                                section.add_children(children);
+                                stack.push(section);
+                                continue 'outer;
+                            } else {
+                                children.push(candidate);
+                            }
+                        }
+                        Mark::End(_name) => unreachable!("we never put section end on the stack"),
+                    }
+                }
+                // we have run out of sections, and we have not found the section end, return
+                // error, put the children back on the stack
+                o.items.push(fastn_p1::Spanned {
+                    span: section.span(),
+                    value: fastn_p1::Item::Error(fastn_p1::SingleError::EndWithoutStart),
+                });
+                stack.extend(children.into_iter().rev());
+            }
+        }
+    }
+    stack
 }
 
 pub enum Mark<'input> {
-    #[expect(dead_code)]
     Start(&'input str),
-    #[expect(dead_code)]
     End(&'input str),
 }
 
 /// we are using a proxy trait so we can write tests against a fake type, and then implement the
 /// trait for the real Section type
-#[expect(unused)]
 pub trait SectionProxy: Sized {
     /// returns the name of the section, and if it starts or ends the section
     fn name<'input>(
@@ -93,6 +121,7 @@ pub trait SectionProxy: Sized {
         source: &'input str,
     ) -> Result<Mark<'input>, fastn_p1::SingleError>;
     fn add_children(&mut self, children: Vec<Self>);
+    fn span(&self) -> fastn_p1::Span;
 }
 
 impl SectionProxy for fastn_p1::Section {
@@ -129,6 +158,10 @@ impl SectionProxy for fastn_p1::Section {
     fn add_children(&mut self, children: Vec<Self>) {
         self.children = children;
     }
+
+    fn span(&self) -> fastn_p1::Span {
+        self.init.dashdash.clone()
+    }
 }
 
 #[allow(dead_code)] // #[expect(dead_code)] is not working
@@ -152,5 +185,9 @@ impl SectionProxy for DummySection {
 
     fn add_children(&mut self, children: Vec<Self>) {
         self.children = children;
+    }
+
+    fn span(&self) -> fastn_p1::Span {
+        Default::default()
     }
 }

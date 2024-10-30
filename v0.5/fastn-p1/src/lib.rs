@@ -225,6 +225,7 @@ pub enum SingleError {
     ColonNotFound,
     SectionNameNotFoundForEnd,
     EndContainsData,
+    EndWithoutStart,
     // SectionNotFound(&'a str),
     // MoreThanOneCaption,
     // ParseError,
