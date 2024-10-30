@@ -11,24 +11,25 @@ pub fn ender(
     todo!()
 }
 
-#[expect(unused)]
-trait Named {
-    /// returns the name of the section, and if it start or ends the section
-    fn name<'input>(
-        &self,
-        source: &'input str,
-    ) -> Result<(&'input str, bool), fastn_p1::SingleError>;
+enum Mark<'input> {
+    #[expect(dead_code)]
+    Start(&'input str),
+    #[expect(dead_code)]
+    End(&'input str),
 }
 
-impl Named for fastn_p1::Section {
-    fn name<'input>(
-        &self,
-        source: &'input str,
-    ) -> Result<(&'input str, bool), fastn_p1::SingleError> {
+#[expect(unused)]
+trait Extractor {
+    /// returns the name of the section, and if it start or ends the section
+    fn name<'input>(&self, source: &'input str) -> Result<Mark<'input>, fastn_p1::SingleError>;
+}
+
+impl Extractor for fastn_p1::Section {
+    fn name<'input>(&self, source: &'input str) -> Result<Mark<'input>, fastn_p1::SingleError> {
         let span = &self.init.name.name.name;
         let name = &source[span.start..span.end];
         if name != "end" {
-            return Ok((name, false));
+            return Ok(Mark::Start(name));
         }
 
         let caption = match self.caption.as_ref() {
@@ -48,6 +49,6 @@ impl Named for fastn_p1::Section {
             return Err(fastn_p1::SingleError::EndContainsData);
         }
 
-        Ok((v, true))
+        Ok(Mark::End(v))
     }
 }
