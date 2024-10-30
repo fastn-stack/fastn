@@ -9,7 +9,7 @@ mod debug;
 mod parser;
 mod section;
 mod utils;
-mod wiggins;
+mod wiggin;
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize)]
 #[serde(default)]
