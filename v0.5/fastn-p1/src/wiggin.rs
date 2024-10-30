@@ -3,29 +3,38 @@
 /// example:
 /// [{section: "foo"}, {section: "bar"}, "-- end: foo"] -> [{section: "foo", children: [{section: "bar"}]}]
 #[expect(unused)]
-pub fn ender(
+pub fn ender<T: SectionProxy>(
     _source: &str,
     _o: &mut fastn_p1::ParseOutput,
-    _sections: Vec<fastn_p1::Section>,
-) -> Vec<fastn_p1::Section> {
+    _sections: Vec<T>,
+) -> Vec<T> {
     todo!()
 }
 
-enum Mark<'input> {
+pub enum Mark<'input> {
     #[expect(dead_code)]
     Start(&'input str),
     #[expect(dead_code)]
     End(&'input str),
 }
 
+/// we are using a proxy trait so we can write tests against a fake type, and then implement the
+/// trait for the real Section type
 #[expect(unused)]
-trait Extractor {
-    /// returns the name of the section, and if it start or ends the section
-    fn name<'input>(&self, source: &'input str) -> Result<Mark<'input>, fastn_p1::SingleError>;
+pub trait SectionProxy: Sized {
+    /// returns the name of the section, and if it starts or ends the section
+    fn name<'input>(
+        &'input self,
+        source: &'input str,
+    ) -> Result<Mark<'input>, fastn_p1::SingleError>;
+    fn add_children(&mut self, children: Vec<Self>);
 }
 
-impl Extractor for fastn_p1::Section {
-    fn name<'input>(&self, source: &'input str) -> Result<Mark<'input>, fastn_p1::SingleError> {
+impl SectionProxy for fastn_p1::Section {
+    fn name<'input>(
+        &'input self,
+        source: &'input str,
+    ) -> Result<Mark<'input>, fastn_p1::SingleError> {
         let span = &self.init.name.name.name;
         let name = &source[span.start..span.end];
         if name != "end" {
@@ -50,5 +59,33 @@ impl Extractor for fastn_p1::Section {
         }
 
         Ok(Mark::End(v))
+    }
+
+    fn add_children(&mut self, children: Vec<Self>) {
+        self.children = children;
+    }
+}
+
+#[allow(dead_code)] // #[expect(dead_code)] is not working
+struct DummySection {
+    name: String,
+    is_end: bool,
+    children: Vec<DummySection>,
+}
+
+impl SectionProxy for DummySection {
+    fn name<'input>(
+        &'input self,
+        _source: &'input str,
+    ) -> Result<Mark<'input>, fastn_p1::SingleError> {
+        if self.is_end {
+            Ok(Mark::End(&self.name))
+        } else {
+            Ok(Mark::Start(&self.name))
+        }
+    }
+
+    fn add_children(&mut self, children: Vec<Self>) {
+        self.children = children;
     }
 }

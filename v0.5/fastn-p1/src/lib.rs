@@ -20,6 +20,7 @@ pub struct Section {
     pub caption: Option<HeaderValue>,
     pub headers: Vec<Header>,
     pub body: Option<HeaderValue>,
+    pub children: Vec<Section>, // TODO: this must be `Spanned<Section>`
     pub sub_sections: Vec<Spanned<Section>>,
     pub function_marker: Option<Span>,
     pub is_commented: bool,
