@@ -245,8 +245,10 @@ mod test {
         let sections = parse(source);
         let sections = super::inner_ender(source, &mut o, sections);
         assert_eq!(to_str(&sections), expected);
+        assert!(o.items.is_empty());
     }
 
+    #[track_caller]
     fn f(source: &str, expected: &str, errors: Vec<fastn_p1::SingleError>) {
         let mut o = fastn_p1::ParseOutput::default();
         let sections = parse(source);
@@ -268,7 +270,27 @@ mod test {
     #[test]
     fn test_inner_ender() {
         t("foo -> bar -> baz -> /foo", "foo [bar, baz]");
-        t("foo -> bar -> baz -> /bar -> /foo", "foo [bar, baz]");
-        t("foo -> bar -> baz -> /bar -> /foo", "foo [bar [baz []]]");
+        f(
+            "foo -> bar -> /baz",
+            "foo, bar", // we eat the `-- end` sections even if they don't match
+            vec![fastn_p1::SingleError::EndWithoutStart],
+        );
+        t("foo -> /foo", "foo");
+        t("foo -> /foo -> bar", "foo, bar");
+        t("bar -> foo -> /foo -> baz", "bar, foo, baz");
+        t("bar -> a -> /a -> foo -> /foo -> baz", "bar, a, foo, baz");
+        t(
+            "bar -> a -> b -> /a -> foo -> /foo -> baz",
+            "bar, a [b], foo, baz",
+        );
+        t("foo -> bar -> baz -> /bar -> /foo", "foo, [bar [baz]]");
+        t(
+            "foo -> bar -> baz -> a -> /bar -> /foo",
+            "foo, [bar [baz, a]]",
+        );
+        t(
+            "foo -> bar -> baz -> a -> /a -> /bar -> /foo",
+            "foo [bar [baz, a]]",
+        );
     }
 }
