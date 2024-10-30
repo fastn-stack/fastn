@@ -34,6 +34,9 @@ fn section_ender(
             h
         })
         .collect();
+    if let Some(body) = section.body {
+        section.body = Some(header_value_ender(source, o, body));
+    }
     section.children = ender(source, o, section.children);
     section
 }
