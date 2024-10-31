@@ -4,7 +4,7 @@
 /// list and then calls `ender` for the list itself
 pub fn ender(
     source: &str,
-    o: &mut fastn_p1::ParseOutput,
+    o: &mut fastn_p1::Document,
     sections: Vec<fastn_p1::Section>,
 ) -> Vec<fastn_p1::Section> {
     // recursive part
@@ -19,7 +19,7 @@ pub fn ender(
 
 fn section_ender(
     source: &str,
-    o: &mut fastn_p1::ParseOutput,
+    o: &mut fastn_p1::Document,
     mut section: fastn_p1::Section,
 ) -> fastn_p1::Section {
     if let Some(caption) = section.caption {
@@ -42,7 +42,7 @@ fn section_ender(
 
 fn header_value_ender(
     source: &str,
-    o: &mut fastn_p1::ParseOutput,
+    o: &mut fastn_p1::Document,
     header: fastn_p1::HeaderValue,
 ) -> fastn_p1::HeaderValue {
     header
@@ -69,7 +69,7 @@ fn header_value_ender(
 /// [{section: "foo"}, {section: "bar"}, "-- end: foo"] -> [{section: "foo", children: [{section: "bar"}]}]
 fn inner_ender<T: SectionProxy>(
     source: &str,
-    o: &mut fastn_p1::ParseOutput,
+    o: &mut fastn_p1::Document,
     sections: Vec<T>,
 ) -> Vec<T> {
     let mut stack = Vec::new();
@@ -242,7 +242,7 @@ mod test {
 
     #[track_caller]
     fn t(source: &str, expected: &str) {
-        let mut o = fastn_p1::ParseOutput::default();
+        let mut o = fastn_p1::Document::default();
         let sections = parse(source);
         let sections = super::inner_ender(source, &mut o, sections);
         assert_eq!(to_str(&sections), expected);
@@ -251,7 +251,7 @@ mod test {
 
     #[track_caller]
     fn f(source: &str, expected: &str, errors: Vec<fastn_p1::SingleError>) {
-        let mut o = fastn_p1::ParseOutput::default();
+        let mut o = fastn_p1::Document::default();
         let sections = parse(source);
         let sections = super::inner_ender(source, &mut o, sections);
         assert_eq!(to_str(&sections), expected);

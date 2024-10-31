@@ -90,6 +90,25 @@ pub struct AliasableIdentifier {
     alias: Option<fastn_p1::Span>,
 }
 
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct Import {
+    pub module: fastn_p1::ModuleName,
+    pub exports: Option<Export>,
+    pub exposing: Option<Exposing>,
+}
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub enum Export {
+    All,
+    Things(Vec<fastn_p1::AliasableIdentifier>),
+}
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub enum Exposing {
+    All,
+    Things(Vec<fastn_p1::AliasableIdentifier>),
+}
+
 /// package names for fastn as domain names.
 ///
 /// domain names usually do not allow Unicode, and you have to use punycode.
@@ -199,18 +218,15 @@ pub struct Edit {
     pub text: Vec<char>,
 }
 
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
-pub struct ParseOutput {
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct Document {
     pub module_doc: Option<fastn_p1::Span>,
-    pub items: Vec<fastn_p1::Spanned<fastn_p1::Item>>,
+    pub imports: Vec<fastn_p1::Import>,
+    pub definitions: std::collections::HashMap<fastn_p1::Identifier, fastn_p1::Section>,
+    pub content: Vec<fastn_p1::Section>,
+    pub errors: Vec<fastn_p1::SingleError>,
+    pub comments: Vec<fastn_p1::Span>,
     pub line_starts: Vec<usize>,
-}
-
-#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
-pub enum Item {
-    Section(Box<fastn_p1::Section>),
-    Error(fastn_p1::SingleError),
-    Comment,
 }
 
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]

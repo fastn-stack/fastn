@@ -45,7 +45,7 @@ impl JDebug for fastn_p1::Visibility {
     }
 }
 
-impl JDebug for fastn_p1::ParseOutput {
+impl JDebug for fastn_p1::Document {
     fn debug(&self, source: &str) -> serde_json::Value {
         if self.items.is_empty() {
             return serde_json::json!({
