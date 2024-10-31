@@ -8,10 +8,7 @@ pub fn identifier(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::I
     // later characters should be is_alphanumeric or `_` or `-`
     let span = scanner.take_while(|c| c.is_alphabetic() || c == '_' || c == '-')?;
 
-    Some(fastn_p1::Identifier {
-        name: span,
-        alias: None,
-    })
+    Some(fastn_p1::Identifier { name: span })
 }
 
 #[cfg(test)]

@@ -25,7 +25,7 @@ pub fn module_name(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::
 
     Some(fastn_p1::ModuleName {
         package,
-        name: path.pop().unwrap(),
+        name: path.pop().unwrap().into(),
         path,
     })
 }

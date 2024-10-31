@@ -1,5 +1,3 @@
-use serde_json::Value;
-
 pub trait JDebug {
     fn debug(&self, source: &str) -> serde_json::Value;
 }
@@ -34,11 +32,11 @@ impl<T: JDebug> JDebug for Vec<T> {
 }
 
 impl<T: JDebug> JDebug for std::collections::HashMap<fastn_p1::Identifier, T> {
-    fn debug(&self, source: &str) -> Value {
+    fn debug(&self, source: &str) -> serde_json::Value {
         let mut o = serde_json::Map::new();
         for (k, v) in self {
             o.insert(
-                (&source[k.name.start..k.name.end]).to_string(),
+                source[k.name.start..k.name.end].to_string(),
                 v.debug(source),
             );
         }
@@ -194,6 +192,45 @@ impl JDebug for fastn_p1::ModuleName {
             o.insert("path".into(), self.path.debug(source));
         }
         serde_json::Value::Object(o)
+    }
+}
+
+impl JDebug for fastn_p1::Import {
+    fn debug(&self, source: &str) -> serde_json::Value {
+        let mut o = serde_json::Map::new();
+        o.insert("module".into(), self.module.debug(source));
+        if self.exports.is_some() {
+            o.insert("exports".into(), self.exports.debug(source));
+        }
+        if self.exposing.is_some() {
+            o.insert("exposing".into(), self.exposing.debug(source));
+        }
+        serde_json::Value::Object(o)
+    }
+}
+
+impl JDebug for fastn_p1::Export {
+    fn debug(&self, source: &str) -> serde_json::Value {
+        match self {
+            fastn_p1::Export::All => "<all>".into(),
+            fastn_p1::Export::Things(t) => t.debug(source),
+        }
+    }
+}
+
+impl JDebug for fastn_p1::Definition {
+    fn debug(&self, source: &str) -> serde_json::Value {
+        match self {
+            fastn_p1::Definition::Component(c) => serde_json::json!({"component": c.debug(source)}),
+            fastn_p1::Definition::Variable(v) => serde_json::json!({"variable": v.debug(source)}),
+            fastn_p1::Definition::Function(v) => serde_json::json!({"function": v.debug(source)}),
+            fastn_p1::Definition::TypeAlias(v) => {
+                serde_json::json!({"type-alias": v.debug(source)})
+            }
+            fastn_p1::Definition::Record(v) => serde_json::json!({"record": v.debug(source)}),
+            fastn_p1::Definition::OrType(v) => serde_json::json!({"or-type": v.debug(source)}),
+            fastn_p1::Definition::Module(v) => serde_json::json!({"module": v.debug(source)}),
+        }
     }
 }
 

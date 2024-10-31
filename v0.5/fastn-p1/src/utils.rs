@@ -13,6 +13,24 @@ impl From<fastn_p1::Span> for fastn_p1::Identifier {
     }
 }
 
+impl From<fastn_p1::Span> for fastn_p1::AliasableIdentifier {
+    fn from(value: fastn_p1::Span) -> Self {
+        fastn_p1::AliasableIdentifier {
+            name: value,
+            alias: None,
+        }
+    }
+}
+
+impl From<fastn_p1::Identifier> for fastn_p1::AliasableIdentifier {
+    fn from(value: fastn_p1::Identifier) -> Self {
+        fastn_p1::AliasableIdentifier {
+            name: value.name,
+            alias: None,
+        }
+    }
+}
+
 impl From<fastn_p1::Identifier> for fastn_p1::QualifiedIdentifier {
     fn from(value: fastn_p1::Identifier) -> Self {
         fastn_p1::QualifiedIdentifier {
