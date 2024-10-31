@@ -1,3 +1,5 @@
+use serde_json::Value;
+
 pub trait JDebug {
     fn debug(&self, source: &str) -> serde_json::Value;
 }
@@ -31,6 +33,19 @@ impl<T: JDebug> JDebug for Vec<T> {
     }
 }
 
+impl<T: JDebug> JDebug for std::collections::HashMap<fastn_p1::Identifier, T> {
+    fn debug(&self, source: &str) -> Value {
+        let mut o = serde_json::Map::new();
+        for (k, v) in self {
+            o.insert(
+                (&source[k.name.start..k.name.end]).to_string(),
+                v.debug(source),
+            );
+        }
+        serde_json::Value::Object(o)
+    }
+}
+
 impl<T: JDebug> JDebug for Option<T> {
     fn debug(&self, source: &str) -> serde_json::Value {
         self.as_ref()
@@ -47,17 +62,30 @@ impl JDebug for fastn_p1::Visibility {
 
 impl JDebug for fastn_p1::Document {
     fn debug(&self, source: &str) -> serde_json::Value {
-        if self.items.is_empty() {
-            return serde_json::json!({
-                "module_doc": self.module_doc.debug(source),
-            });
+        let mut o = serde_json::Map::new();
+        if self.module_doc.is_some() {
+            // TODO: can we create a map with `&'static str` keys to avoid this to_string()?
+            o.insert("module-doc".to_string(), self.module_doc.debug(source));
         }
-
-        serde_json::json!({
-            "module_doc": self.module_doc.debug(source),
-            "items": self.items.debug(source),
-            // ignoring line_starts for now
-        })
+        if !self.content.is_empty() {
+            o.insert("content".to_string(), self.content.debug(source));
+        }
+        if !self.errors.is_empty() {
+            o.insert("errors".to_string(), self.errors.debug(source));
+        }
+        if !self.definitions.is_empty() {
+            o.insert("definitions".to_string(), self.definitions.debug(source));
+        }
+        if !self.comments.is_empty() {
+            o.insert("comments".to_string(), self.comments.debug(source));
+        }
+        if !self.imports.is_empty() {
+            o.insert("imports".to_string(), self.imports.debug(source));
+        }
+        if o.is_empty() {
+            return "<empty-document>".into();
+        }
+        serde_json::Value::Object(o)
     }
 }
 
@@ -148,6 +176,15 @@ impl JDebug for fastn_p1::PackageName {
     }
 }
 
+impl JDebug for fastn_p1::AliasableIdentifier {
+    fn debug(&self, source: &str) -> serde_json::Value {
+        serde_json::json! ({
+            "name": self.name.debug(source),
+            "alias": self.alias.debug(source),
+        })
+    }
+}
+
 impl JDebug for fastn_p1::ModuleName {
     fn debug(&self, source: &str) -> serde_json::Value {
         let mut o = serde_json::Map::new();
@@ -160,13 +197,9 @@ impl JDebug for fastn_p1::ModuleName {
     }
 }
 
-impl JDebug for fastn_p1::Spanned<fastn_p1::Item> {
+impl JDebug for fastn_p1::SingleError {
     fn debug(&self, source: &str) -> serde_json::Value {
-        match &self.value {
-            fastn_p1::Item::Section(section) => section.debug(source),
-            fastn_p1::Item::Error(e) => error(e, &self.span, source),
-            fastn_p1::Item::Comment => span(&self.span, "comment", source),
-        }
+        error(self, &Default::default(), source)
     }
 }
 

@@ -1,6 +1,5 @@
 [workspace]
 members = [
-    "fastn-ast0",
     "fastn-p1",
 ]
 exclude = []

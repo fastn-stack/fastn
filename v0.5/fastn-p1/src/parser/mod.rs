@@ -19,7 +19,7 @@ pub use qualified_identifier::qualified_identifier;
 pub use scanner::Scanner;
 
 impl fastn_p1::Document {
-    pub fn parse_v4(source: &str) -> fastn_p1::Document {
+    pub fn parse(source: &str) -> fastn_p1::Document {
         let _scanner = fastn_p1::parser::Scanner::new(source, Default::default());
         todo!()
     }

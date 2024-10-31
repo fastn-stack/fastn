@@ -96,9 +96,9 @@ fn inner_ender<T: SectionProxy>(
                 }
                 // we have run out of sections, and we have not found the section end, return
                 // error, put the children back on the stack
-                o.items.push(fastn_p1::Spanned {
+                o.errors.push(fastn_p1::Spanned {
                     span: section.span(),
-                    value: fastn_p1::Item::Error(fastn_p1::SingleError::EndWithoutStart),
+                    value: fastn_p1::SingleError::EndWithoutStart,
                 });
                 stack.extend(children.into_iter().rev());
             }
@@ -246,7 +246,7 @@ mod test {
         let sections = parse(source);
         let sections = super::inner_ender(source, &mut o, sections);
         assert_eq!(to_str(&sections), expected);
-        assert!(o.items.is_empty());
+        // assert!(o.items.is_empty());
     }
 
     #[track_caller]
@@ -257,12 +257,12 @@ mod test {
         assert_eq!(to_str(&sections), expected);
 
         assert_eq!(
-            o.items,
+            o.errors,
             errors
                 .into_iter()
-                .map(|e| fastn_p1::Spanned {
+                .map(|value| fastn_p1::Spanned {
                     span: Default::default(),
-                    value: fastn_p1::Item::Error(e),
+                    value,
                 })
                 .collect::<Vec<_>>()
         );

@@ -9,10 +9,7 @@ impl<T> fastn_p1::Spanned<T> {
 
 impl From<fastn_p1::Span> for fastn_p1::Identifier {
     fn from(value: fastn_p1::Span) -> Self {
-        fastn_p1::Identifier {
-            name: value,
-            alias: None,
-        }
+        fastn_p1::Identifier { name: value }
     }
 }
 

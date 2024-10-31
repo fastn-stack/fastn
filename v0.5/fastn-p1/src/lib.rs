@@ -26,6 +26,17 @@ pub struct Section {
     pub is_commented: bool,
 }
 
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub enum Definition {
+    Component(Section),
+    Variable(Section),
+    Function(Section),
+    TypeAlias(Section),
+    Record(Section),
+    OrType(Section),
+    Module(Section),
+}
+
 /// example: `-- list<string> foo:`
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct SectionInit {
@@ -79,7 +90,7 @@ pub enum Visibility {
 ///
 /// TODO: identifiers can't be keywords of the language, e.g., `import`, `record`, `component`.
 /// but it can be built in types e.g., `integer` etc.
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, Clone, Hash, Eq, Default, serde::Serialize, serde::Deserialize)]
 pub struct Identifier {
     name: fastn_p1::Span,
 }
@@ -222,9 +233,9 @@ pub struct Edit {
 pub struct Document {
     pub module_doc: Option<fastn_p1::Span>,
     pub imports: Vec<fastn_p1::Import>,
-    pub definitions: std::collections::HashMap<fastn_p1::Identifier, fastn_p1::Section>,
+    pub definitions: std::collections::HashMap<fastn_p1::Identifier, Definition>,
     pub content: Vec<fastn_p1::Section>,
-    pub errors: Vec<fastn_p1::SingleError>,
+    pub errors: Vec<Spanned<fastn_p1::SingleError>>,
     pub comments: Vec<fastn_p1::Span>,
     pub line_starts: Vec<usize>,
 }
