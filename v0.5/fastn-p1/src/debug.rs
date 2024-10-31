@@ -176,6 +176,10 @@ impl JDebug for fastn_p1::PackageName {
 
 impl JDebug for fastn_p1::AliasableIdentifier {
     fn debug(&self, source: &str) -> serde_json::Value {
+        if self.alias.is_none() {
+            return self.name.debug(source);
+        }
+
         serde_json::json! ({
             "name": self.name.debug(source),
             "alias": self.alias.debug(source),
@@ -185,6 +189,14 @@ impl JDebug for fastn_p1::AliasableIdentifier {
 
 impl JDebug for fastn_p1::ModuleName {
     fn debug(&self, source: &str) -> serde_json::Value {
+        if self.path.is_empty()
+            && self.name.alias.is_none()
+            && self.name.name == self.package.name
+            && self.name.name == self.package.alias
+        {
+            return self.name.name.debug(source);
+        }
+
         let mut o = serde_json::Map::new();
         o.insert("package".into(), self.package.debug(source));
         o.insert("name".into(), self.name.debug(source));
