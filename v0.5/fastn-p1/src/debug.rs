@@ -167,10 +167,12 @@ impl JDebug for fastn_p1::Identifier {
 
 impl JDebug for fastn_p1::PackageName {
     fn debug(&self, source: &str) -> serde_json::Value {
-        serde_json::json! ({
-            "alias": self.alias.debug(source),
-            "name": self.name.debug(source),
-        })
+        format!(
+            "{} as {}",
+            &source[self.name.start..self.name.end],
+            &source[self.alias.start..self.alias.end],
+        )
+        .into()
     }
 }
 
@@ -195,6 +197,18 @@ impl JDebug for fastn_p1::ModuleName {
             && self.name.name == self.package.alias
         {
             return self.name.name.debug(source);
+        }
+
+        if self.path.is_empty()
+            && self.name.name != self.package.name
+            && self.name.alias.is_none()
+            && self.package.name != self.package.alias
+        {
+            dbg!(self.path.is_empty());
+            dbg!(self.name.name == self.package.name);
+            dbg!(self.name.alias.is_none());
+            dbg!(self.package.name != self.package.alias);
+            return self.package.debug(source);
         }
 
         let mut o = serde_json::Map::new();

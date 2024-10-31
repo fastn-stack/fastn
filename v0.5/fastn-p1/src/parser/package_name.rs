@@ -7,7 +7,6 @@ pub fn package_name(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1:
     let span = scanner.take_while(|c| c.is_alphanumeric() || c == '.')?;
 
     let o_name = scanner.source(&span);
-    println!("o_name: {:?}", o_name);
     let name = o_name.split_once('.').unwrap_or((o_name, "")).0;
 
     Some(fastn_p1::PackageName {
@@ -26,7 +25,7 @@ mod test {
     #[test]
     fn package_name() {
         t!(" foo.com", null, " foo.com");
-        t!("foo.com", "foo.com");
-        t!("foo.com ", "foo.com", " ");
+        t!("foo.com", "foo.com as foo");
+        t!("foo.com ", "foo.com as foo", " ");
     }
 }
