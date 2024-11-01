@@ -1,5 +1,7 @@
 #![allow(dead_code)]
 
+use std::fmt::Debug;
+
 /// calls `inner_ender` for all the embedded section inside section in the
 /// list and then calls `ender` for the list itself
 pub fn ender(
@@ -90,10 +92,27 @@ fn inner_ender<T: SectionProxy>(
                                 stack.push(section);
                                 continue 'outer;
                             } else {
-                                children.push(candidate);
+                                children.insert(0, candidate);
                             }
                         }
-                        Mark::End(_name) => unreachable!("we never put section end on the stack"),
+                        Mark::End(_name) => {
+                            // There is two possibilities here
+                            // 1. name == e_name
+                            // This could happen when the child section has same name as the parent
+                            // -- foo:
+                            //    -- foo:
+                            //    -- end: foo
+                            // -- end: foo
+                            //
+                            // 2. name != e_name
+                            // This could happen when the child section has different name
+                            // -- foo:
+                            //    -- bar:
+                            //    -- end: bar
+                            // -- end: foo
+                            // In both cases we want to add the child section to the list
+                            children.insert(0, candidate);
+                        }
                     }
                 }
                 // we have run out of sections, and we have not found the section end, return
@@ -102,7 +121,7 @@ fn inner_ender<T: SectionProxy>(
                     span: section.span(),
                     value: fastn_lang::Error::EndWithoutStart,
                 });
-                stack.extend(children.into_iter().rev());
+                stack.extend(children.into_iter());
             }
         }
     }
@@ -116,7 +135,7 @@ enum Mark<'input> {
 
 /// we are using a proxy trait so we can write tests against a fake type, and then implement the
 /// trait for the real Section type
-trait SectionProxy: Sized {
+trait SectionProxy: Sized + Debug {
     /// returns the name of the section, and if it starts or ends the section
     fn mark<'input>(&'input self, source: &'input str) -> Result<Mark<'input>, fastn_lang::Error>;
     fn add_children(&mut self, children: Vec<Self>);
@@ -163,6 +182,7 @@ impl SectionProxy for fastn_lang::Section {
 #[cfg(test)]
 mod test {
     #[allow(dead_code)] // #[expect(dead_code)] is not working
+    #[derive(Debug)]
     struct DummySection {
         name: String,
         is_end: bool,
@@ -203,11 +223,8 @@ mod test {
                 children: vec![],
             };
             current.push(section);
-            if !is_end {
-                current = &mut current.last_mut().unwrap().children;
-            }
         }
-        sections
+        dbg!(sections)
     }
 
     // foo containing bar and baz will look like this: foo [bar [], baz []]
@@ -219,7 +236,7 @@ mod test {
                 s.push_str(&section.name);
                 if section.children.is_empty() {
                     if iterator.peek().is_some() {
-                        s.push(' ');
+                        s.push_str(", ");
                     }
                     continue;
                 }
@@ -228,6 +245,9 @@ mod test {
                     to_str_(s, &section.children);
                 }
                 s.push(']');
+                if iterator.peek().is_some() {
+                    s.push_str(", ");
+                }
             }
         }
 
@@ -280,14 +300,15 @@ mod test {
             "bar -> a -> b -> /a -> foo -> /foo -> baz",
             "bar, a [b], foo, baz",
         );
-        t("foo -> bar -> baz -> /bar -> /foo", "foo, [bar [baz]]");
+        t("foo -> bar -> baz -> /bar -> /foo", "foo [bar [baz]]");
         t(
             "foo -> bar -> baz -> a -> /bar -> /foo",
-            "foo, [bar [baz, a]]",
+            "foo [bar [baz, a]]",
         );
         t(
             "foo -> bar -> baz -> a -> /a -> /bar -> /foo",
             "foo [bar [baz, a]]",
         );
+        t("bar -> bar -> baz -> /bar -> /bar", "bar [bar [baz]]");
     }
 }
