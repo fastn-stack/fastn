@@ -13,12 +13,12 @@ pub use parser::Scanner;
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
 pub struct Section {
-    pub init: fastn_p1::SectionInit,
+    pub init: fastn_parser::SectionInit,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub caption: Option<fastn_p1::HeaderValue>,
+    pub caption: Option<fastn_parser::HeaderValue>,
     pub headers: Vec<Header>,
-    pub body: Option<fastn_p1::HeaderValue>,
+    pub body: Option<fastn_parser::HeaderValue>,
     pub children: Vec<Section>, // TODO: this must be `Spanned<Section>`
     pub sub_sections: Vec<Spanned<Section>>,
     pub function_marker: Option<Span>,
@@ -28,9 +28,9 @@ pub struct Section {
 /// example: `-- list<string> foo:`
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct SectionInit {
-    pub dashdash: fastn_p1::Span, // for syntax highlighting and formatting
-    pub name: fastn_p1::KindedName,
-    pub colon: fastn_p1::Span, // for syntax highlighting and formatting
+    pub dashdash: fastn_parser::Span, // for syntax highlighting and formatting
+    pub name: fastn_parser::KindedName,
+    pub colon: fastn_parser::Span, // for syntax highlighting and formatting
 }
 
 pub type Span = std::ops::Range<usize>;
@@ -43,9 +43,9 @@ pub struct Spanned<T> {
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Header {
-    pub name: fastn_p1::KindedName,
-    pub condition: Option<fastn_p1::Span>,
-    pub value: fastn_p1::HeaderValue,
+    pub name: fastn_parser::KindedName,
+    pub condition: Option<fastn_parser::Span>,
+    pub value: fastn_parser::HeaderValue,
     pub is_commented: bool,
 }
 
@@ -74,13 +74,13 @@ pub enum Visibility {
 /// but it can be built in types e.g., `integer` etc.
 #[derive(Debug, PartialEq, Clone, Hash, Eq, Default, serde::Serialize, serde::Deserialize)]
 pub struct Identifier {
-    pub name: fastn_p1::Span,
+    pub name: fastn_parser::Span,
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct AliasableIdentifier {
-    pub name: fastn_p1::Span,
-    pub alias: Option<fastn_p1::Span>,
+    pub name: fastn_parser::Span,
+    pub alias: Option<fastn_parser::Span>,
 }
 
 /// package names for fastn as domain names.
@@ -97,10 +97,10 @@ pub struct AliasableIdentifier {
 /// TODO: `.` can't be repeated.
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct PackageName {
-    pub name: fastn_p1::Span,
+    pub name: fastn_parser::Span,
     // for foo.com, the alias is `foo` (the first part before the first dot)
     // TODO: unless it is `www`, then its the second part
-    pub alias: fastn_p1::Span,
+    pub alias: fastn_parser::Span,
 }
 
 /// module name looks like <package-name>(/<identifier>)*/?)
@@ -155,7 +155,7 @@ pub type HeaderValue = Vec<SES>;
 /// it can even have recursive structure, e.g., `hello ${ { \n text-text \n } }`.
 /// each recursion starts with `{` and ends with `}`.
 /// if the text inside { starts with `--` then the content is a section,
-/// and we should use `fastn_p1::parser::section()` parser to parse it.
+/// and we should use `fastn_parser::parser::section()` parser to parse it.
 /// otherwise it is a text.
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub enum SES {

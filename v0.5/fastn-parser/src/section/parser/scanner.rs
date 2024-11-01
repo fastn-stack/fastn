@@ -5,9 +5,9 @@ pub struct Scanner<'input> {
     /// index is byte position in the input
     index: usize,
     #[expect(unused)]
-    fuel: fastn_p1::Fuel,
+    fuel: fastn_parser::Fuel,
     #[expect(unused)]
-    pub output: fastn_p1::unresolved::Document,
+    pub output: fastn_parser::unresolved::Document,
 }
 
 pub struct Index<'input> {
@@ -16,29 +16,29 @@ pub struct Index<'input> {
 }
 
 impl<'input> Scanner<'input> {
-    pub fn new(input: &str, fuel: fastn_p1::Fuel) -> Scanner {
+    pub fn new(input: &str, fuel: fastn_parser::Fuel) -> Scanner {
         assert!(input.len() < 10_000_000); // can't parse > 10MB file
         Scanner {
             input,
             chars: input.char_indices().peekable(),
             fuel,
             index: 0,
-            output: fastn_p1::unresolved::Document::default(),
+            output: fastn_parser::unresolved::Document::default(),
         }
     }
 
-    pub fn source(&self, span: &fastn_p1::Span) -> &'input str {
+    pub fn source(&self, span: &fastn_parser::Span) -> &'input str {
         &self.input[span.start..span.end]
     }
 
-    fn span(&self, start: usize) -> fastn_p1::Span {
-        fastn_p1::Span {
+    fn span(&self, start: usize) -> fastn_parser::Span {
+        fastn_parser::Span {
             start,
             end: self.index,
         }
     }
 
-    pub fn take_while<F: Fn(char) -> bool>(&mut self, f: F) -> Option<fastn_p1::Span> {
+    pub fn take_while<F: Fn(char) -> bool>(&mut self, f: F) -> Option<fastn_parser::Span> {
         let start = self.index;
         while let Some(c) = self.peek() {
             if !f(c) {
@@ -96,7 +96,7 @@ impl<'input> Scanner<'input> {
         }
     }
 
-    pub fn take_till_char_or_end_of_line(&mut self, t: char) -> Option<fastn_p1::Span> {
+    pub fn take_till_char_or_end_of_line(&mut self, t: char) -> Option<fastn_parser::Span> {
         self.take_while(|c| c != t && c != '\n')
     }
 
@@ -134,7 +134,7 @@ impl<'input> Scanner<'input> {
     }
 
     // returns the span from current position to the end of token
-    pub fn token(&mut self, t: &'static str) -> Option<fastn_p1::Span> {
+    pub fn token(&mut self, t: &'static str) -> Option<fastn_parser::Span> {
         let start = self.index();
         for char in t.chars() {
             if self.peek() != Some(char) {

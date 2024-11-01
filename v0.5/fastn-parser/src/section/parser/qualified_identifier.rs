@@ -1,14 +1,14 @@
 pub fn qualified_identifier(
-    scanner: &mut fastn_p1::section::Scanner,
-) -> Option<fastn_p1::QualifiedIdentifier> {
-    let module = match fastn_p1::section::module_name(scanner) {
+    scanner: &mut fastn_parser::section::Scanner,
+) -> Option<fastn_parser::QualifiedIdentifier> {
+    let module = match fastn_parser::section::module_name(scanner) {
         Some(module) => match scanner.peek() {
             Some('#') => {
                 scanner.pop();
                 Some(module)
             }
             _ => {
-                return Some(fastn_p1::QualifiedIdentifier {
+                return Some(fastn_parser::QualifiedIdentifier {
                     module: Some(module),
                     terms: vec![],
                 })
@@ -19,7 +19,7 @@ pub fn qualified_identifier(
 
     let terms = {
         let mut terms = Vec::new();
-        while let Some(identifier) = fastn_p1::section::identifier(scanner) {
+        while let Some(identifier) = fastn_parser::section::identifier(scanner) {
             terms.push(identifier);
             if !scanner.take('.') {
                 break;
@@ -32,12 +32,12 @@ pub fn qualified_identifier(
         return None;
     }
 
-    Some(fastn_p1::QualifiedIdentifier::new(module, terms))
+    Some(fastn_parser::QualifiedIdentifier::new(module, terms))
 }
 
 #[cfg(test)]
 mod test {
-    fastn_p1::tt!(super::qualified_identifier);
+    fastn_parser::tt!(super::qualified_identifier);
 
     #[test]
     fn qualified_identifier() {
@@ -55,7 +55,7 @@ mod test {
             ""
         );
         assert_eq!(
-            super::qualified_identifier(&mut fastn_p1::section::Scanner::new(
+            super::qualified_identifier(&mut fastn_parser::section::Scanner::new(
                 " string",
                 Default::default()
             ),),

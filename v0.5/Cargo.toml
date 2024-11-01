@@ -1,6 +1,6 @@
 [workspace]
 members = [
-    "fastn-p1",
+    "fastn-parser",
 ]
 exclude = []
 resolver = "2"

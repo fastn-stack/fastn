@@ -1,14 +1,11 @@
 ---
 source: fastn-p1/src/lib.rs
 assertion_line: 182
-expression: "fastn_p1::ParseOutput::parse(\"foo\", &s).debug(&s)"
-input_file: fastn-p1/t/000-tutorial.ftd
+expression: "fastn_parser::ParseOutput::parse(\"foo\", &s).debug(&s)"
+input_file: fastn-p1/t/004-simple-section.ftd
 ---
 doc_name: foo
 items:
-  - comment: ";; this file contains examples of most constructs\n"
-  - comment: ";; this is another comment - no more doc comments are allowed\n"
-  - error: unexpected_doc_comment
   - error: kinded_name_not_found
   - error: kinded_name_not_found
   - error: kinded_name_not_found
@@ -109,4 +106,4 @@ items:
   - error: kinded_name_not_found
   - error: kinded_name_not_found
   - error: kinded_name_not_found
-module_doc: ";-; this is doc-comment\n;-; which can span multiple lines\n;-;\n;-; it is used to describe the file\n;-; and its purpose ;; this is not comment, and is part of doc comment\n"
+module_doc: ~

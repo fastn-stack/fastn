@@ -1,11 +1,13 @@
-pub fn section_init(scanner: &mut fastn_p1::section::Scanner) -> Option<fastn_p1::SectionInit> {
+pub fn section_init(
+    scanner: &mut fastn_parser::section::Scanner,
+) -> Option<fastn_parser::SectionInit> {
     scanner.skip_spaces();
     let dashdash = scanner.token("--")?;
     scanner.skip_spaces();
-    let name = fastn_p1::section::kinded_name(scanner)?;
+    let name = fastn_parser::section::kinded_name(scanner)?;
     scanner.skip_spaces();
     let colon = scanner.token(":")?;
-    Some(fastn_p1::SectionInit {
+    Some(fastn_parser::SectionInit {
         dashdash,
         name,
         colon,
@@ -14,7 +16,7 @@ pub fn section_init(scanner: &mut fastn_p1::section::Scanner) -> Option<fastn_p1
 
 #[cfg(test)]
 mod test {
-    fastn_p1::tt!(super::section_init);
+    fastn_parser::tt!(super::section_init);
 
     #[test]
     fn section_init() {

@@ -1,5 +1,5 @@
-pub fn kind(scanner: &mut fastn_p1::section::Scanner) -> Option<fastn_p1::Kind> {
-    let qi = match fastn_p1::section::qualified_identifier(scanner) {
+pub fn kind(scanner: &mut fastn_parser::section::Scanner) -> Option<fastn_parser::Kind> {
+    let qi = match fastn_parser::section::qualified_identifier(scanner) {
         Some(qi) => qi,
         None => return None,
     };
@@ -44,7 +44,7 @@ pub fn kind(scanner: &mut fastn_p1::section::Scanner) -> Option<fastn_p1::Kind> 
     }
 
     // Return a `Kind` with the parsed `name` and `args`
-    Some(fastn_p1::Kind {
+    Some(fastn_parser::Kind {
         name: qi,
         args: Some(args),
         doc: None,        // Documentation isn't parsed here
@@ -54,7 +54,7 @@ pub fn kind(scanner: &mut fastn_p1::section::Scanner) -> Option<fastn_p1::Kind> 
 
 #[cfg(test)]
 mod test {
-    fastn_p1::tt!(super::kind);
+    fastn_parser::tt!(super::kind);
 
     #[test]
     fn kind() {

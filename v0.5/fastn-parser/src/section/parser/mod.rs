@@ -11,22 +11,22 @@ pub(super) mod visibility;
 
 pub use scanner::Scanner;
 
-impl fastn_p1::unresolved::Document {
-    pub fn parse(source: &str) -> fastn_p1::unresolved::Document {
-        let _scanner = fastn_p1::section::Scanner::new(source, Default::default());
+impl fastn_parser::unresolved::Document {
+    pub fn parse(source: &str) -> fastn_parser::unresolved::Document {
+        let _scanner = fastn_parser::section::Scanner::new(source, Default::default());
         todo!()
     }
 }
 
 #[cfg(test)]
 #[track_caller]
-fn p<T: fastn_p1::debug::JDebug, F: FnOnce(&mut fastn_p1::section::Scanner) -> T>(
+fn p<T: fastn_parser::debug::JDebug, F: FnOnce(&mut fastn_parser::section::Scanner) -> T>(
     source: &str,
     f: F,
     debug: serde_json::Value,
     remaining: &str,
 ) {
-    let mut scanner = fastn_p1::section::Scanner::new(source, Default::default());
+    let mut scanner = fastn_parser::section::Scanner::new(source, Default::default());
     let result = f(&mut scanner);
     assert_eq!(result.debug(source), debug);
     assert_eq!(scanner.remaining(), remaining);
@@ -38,16 +38,21 @@ macro_rules! tt {
         #[allow(unused_macros)]
         macro_rules! t {
             ($source:expr, $debug:tt, $remaining:expr) => {
-                fastn_p1::section::parser::p($source, $f, serde_json::json!($debug), $remaining);
+                fastn_parser::section::parser::p(
+                    $source,
+                    $f,
+                    serde_json::json!($debug),
+                    $remaining,
+                );
             };
             ($source:expr, $debug:tt) => {
-                fastn_p1::section::parser::p($source, $f, serde_json::json!($debug), "");
+                fastn_parser::section::parser::p($source, $f, serde_json::json!($debug), "");
             };
         }
         #[allow(unused_macros)]
         macro_rules! f {
             ($source:expr) => {
-                fastn_p1::section::parser::p($source, $f, serde_json::json!(null), $source);
+                fastn_parser::section::parser::p($source, $f, serde_json::json!(null), $source);
             };
         }
     };

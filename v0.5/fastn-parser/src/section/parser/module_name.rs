@@ -1,7 +1,9 @@
-pub fn module_name(scanner: &mut fastn_p1::section::Scanner) -> Option<fastn_p1::ModuleName> {
-    let package = fastn_p1::section::package_name(scanner)?;
+pub fn module_name(
+    scanner: &mut fastn_parser::section::Scanner,
+) -> Option<fastn_parser::ModuleName> {
+    let package = fastn_parser::section::package_name(scanner)?;
     if !scanner.take('/') {
-        return Some(fastn_p1::ModuleName {
+        return Some(fastn_parser::ModuleName {
             name: package.alias.clone().into(),
             package,
             path: vec![],
@@ -10,7 +12,7 @@ pub fn module_name(scanner: &mut fastn_p1::section::Scanner) -> Option<fastn_p1:
 
     let mut path = {
         let mut path = Vec::new();
-        while let Some(identifier) = fastn_p1::section::identifier(scanner) {
+        while let Some(identifier) = fastn_parser::section::identifier(scanner) {
             path.push(identifier);
             if !scanner.take('/') {
                 break;
@@ -23,7 +25,7 @@ pub fn module_name(scanner: &mut fastn_p1::section::Scanner) -> Option<fastn_p1:
         return None;
     }
 
-    Some(fastn_p1::ModuleName {
+    Some(fastn_parser::ModuleName {
         package,
         name: path.pop().unwrap().into(),
         path,
@@ -32,7 +34,7 @@ pub fn module_name(scanner: &mut fastn_p1::section::Scanner) -> Option<fastn_p1:
 
 #[cfg(test)]
 mod test {
-    fastn_p1::tt!(super::module_name);
+    fastn_parser::tt!(super::module_name);
 
     #[test]
     fn module_name() {
