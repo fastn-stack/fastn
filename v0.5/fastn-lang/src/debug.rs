@@ -199,10 +199,20 @@ impl JDebug for fastn_lang::ModuleName {
             return self.name.name.debug(source);
         }
 
+        dbg!(
+            &self.package.name.debug(source),
+            &self.name.name.debug(source)
+        );
+        dbg!(
+            &self.package.alias.debug(source),
+            &self.name.alias.debug(source)
+        );
+
         if self.path.is_empty()
             && self.name.name != self.package.name
             && self.name.alias.is_none()
             && self.package.name != self.package.alias
+            && self.name.name == self.package.alias
         {
             dbg!(self.path.is_empty());
             dbg!(self.name.name == self.package.name);

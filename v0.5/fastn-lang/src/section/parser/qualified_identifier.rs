@@ -46,12 +46,19 @@ mod test {
         t!("foo.com#bar.baz", { "module": "foo.com as foo", "terms": ["bar", "baz"]});
         t!(
             "foo.com/yo#bar.baz",
-            {"module": { "package": "foo.com", "path": ["yo"]}, "terms": ["bar", "baz"]},
+            {"module": { "package": "foo.com as foo", "name": "yo"}, "terms": ["bar", "baz"]},
             ""
         );
         t!(
             "foo.com/yo/man#bar.baz",
-            {"module": { "package": "foo.com", "path": ["yo", "man"]}, "terms": ["bar", "baz"]},
+            {
+                "module": {
+                    "package": "foo.com as foo",
+                    "name": "man",
+                    "path": ["yo"]
+                },
+                "terms": ["bar", "baz"]
+            },
             ""
         );
         assert_eq!(
