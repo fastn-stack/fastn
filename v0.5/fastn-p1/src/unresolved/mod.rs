@@ -1,5 +1,3 @@
-use crate::Spanned;
-
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub enum Definition {
     Component(fastn_p1::Section),
@@ -27,10 +25,10 @@ pub enum Export {
 #[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Document {
     pub module_doc: Option<fastn_p1::Span>,
-    pub imports: Vec<fastn_p1::Import>,
+    pub imports: Vec<fastn_p1::unresolved::Import>,
     pub definitions: std::collections::HashMap<fastn_p1::Identifier, Definition>,
     pub content: Vec<fastn_p1::Section>,
-    pub errors: Vec<Spanned<fastn_p1::SingleError>>,
+    pub errors: Vec<fastn_p1::Spanned<fastn_p1::SingleError>>,
     pub comments: Vec<fastn_p1::Span>,
     pub line_starts: Vec<usize>,
 }

@@ -6,11 +6,10 @@ extern crate self as fastn_p1;
 
 #[cfg(test)]
 mod debug;
-mod document;
 mod error;
 mod section;
+mod unresolved;
 
-pub use document::{Definition, Document, Export, Import};
 pub use error::SingleError;
 pub use section::{
     AliasableIdentifier, HeaderValue, Identifier, Kind, KindedName, ModuleName, PackageName,

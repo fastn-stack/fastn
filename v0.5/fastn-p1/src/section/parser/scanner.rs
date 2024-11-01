@@ -7,7 +7,7 @@ pub struct Scanner<'input> {
     #[expect(unused)]
     fuel: fastn_p1::Fuel,
     #[expect(unused)]
-    pub output: fastn_p1::Document,
+    pub output: fastn_p1::unresolved::Document,
 }
 
 pub struct Index<'input> {
@@ -23,7 +23,7 @@ impl<'input> Scanner<'input> {
             chars: input.char_indices().peekable(),
             fuel,
             index: 0,
-            output: fastn_p1::Document::default(),
+            output: fastn_p1::unresolved::Document::default(),
         }
     }
 

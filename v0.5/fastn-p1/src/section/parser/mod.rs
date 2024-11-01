@@ -11,8 +11,8 @@ pub(super) mod visibility;
 
 pub use scanner::Scanner;
 
-impl fastn_p1::Document {
-    pub fn parse(source: &str) -> fastn_p1::Document {
+impl fastn_p1::unresolved::Document {
+    pub fn parse(source: &str) -> fastn_p1::unresolved::Document {
         let _scanner = fastn_p1::section::Scanner::new(source, Default::default());
         todo!()
     }
