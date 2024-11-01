@@ -1,4 +1,6 @@
-pub fn package_name(scanner: &mut fastn_lang::section::Scanner) -> Option<fastn_lang::PackageName> {
+pub fn package_name(
+    scanner: &mut fastn_lang::Scanner<fastn_lang::section::Document>,
+) -> Option<fastn_lang::PackageName> {
     let first = scanner.peek()?;
     if !first.is_alphabetic() {
         return None;

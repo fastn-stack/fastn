@@ -1,4 +1,6 @@
-pub fn module_name(scanner: &mut fastn_lang::section::Scanner) -> Option<fastn_lang::ModuleName> {
+pub fn module_name(
+    scanner: &mut fastn_lang::Scanner<fastn_lang::section::Document>,
+) -> Option<fastn_lang::ModuleName> {
     let package = fastn_lang::section::package_name(scanner)?;
     if !scanner.take('/') {
         return Some(fastn_lang::ModuleName {

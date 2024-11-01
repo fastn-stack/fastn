@@ -139,7 +139,7 @@ impl fastn_lang::Section {
     }
 }
 
-impl fastn_lang::section::EC for fastn_lang::section::Document {
+impl fastn_lang::Scannable for fastn_lang::section::Document {
     fn add_error(&mut self, _span: Span, _message: Error) {
         todo!()
     }

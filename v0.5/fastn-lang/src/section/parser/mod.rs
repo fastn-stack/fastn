@@ -4,34 +4,38 @@ pub(super) mod kinded_name;
 pub(super) mod module_name;
 pub(super) mod package_name;
 pub(super) mod qualified_identifier;
-pub(super) mod scanner;
 pub(super) mod section_init;
 pub(super) mod ses;
 pub(super) mod visibility;
 
-pub use scanner::{Scanner, EC};
-
 impl fastn_lang::section::Document {
     pub fn parse(source: &str) -> fastn_lang::section::Document {
-        let _scanner = fastn_lang::section::Scanner::new(source, Default::default());
+        let _scanner = fastn_lang::Scanner::new(
+            source,
+            Default::default(),
+            fastn_lang::section::Document::default(),
+        );
         todo!()
     }
 }
 
 #[cfg(test)]
 #[track_caller]
-fn p<T: fastn_lang::debug::JDebug, F: FnOnce(&mut fastn_lang::section::Scanner) -> T>(
+fn p<
+    T: fastn_lang::debug::JDebug,
+    F: FnOnce(&mut fastn_lang::Scanner<fastn_lang::section::Document>) -> T,
+>(
     source: &str,
     f: F,
     debug: serde_json::Value,
     remaining: &str,
 ) {
-    let mut scanner = fastn_lang::section::Scanner::new(source, Default::default());
+    let mut scanner = fastn_lang::Scanner::new(
+        source,
+        Default::default(),
+        fastn_lang::section::Document::default(),
+    );
     let result = f(&mut scanner);
-
-    let x =
-        // this is a comment
-        { 1 + 2 };
     assert_eq!(result.debug(source), debug);
     assert_eq!(scanner.remaining(), remaining);
 }

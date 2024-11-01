@@ -1,4 +1,6 @@
-pub fn section_init(scanner: &mut fastn_lang::section::Scanner) -> Option<fastn_lang::SectionInit> {
+pub fn section_init(
+    scanner: &mut fastn_lang::Scanner<fastn_lang::section::Document>,
+) -> Option<fastn_lang::SectionInit> {
     scanner.skip_spaces();
     let dashdash = scanner.token("--")?;
     scanner.skip_spaces();

@@ -1,4 +1,6 @@
-pub fn identifier(scanner: &mut fastn_lang::section::Scanner) -> Option<fastn_lang::Identifier> {
+pub fn identifier(
+    scanner: &mut fastn_lang::Scanner<fastn_lang::section::Document>,
+) -> Option<fastn_lang::Identifier> {
     let first = scanner.peek()?;
     // the first character should be is_alphabetic or `_`
     if !first.is_alphabetic() && first != '_' {

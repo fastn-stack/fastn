@@ -8,7 +8,6 @@ pub use crate::section::parser::kinded_name::kinded_name;
 pub use crate::section::parser::module_name::module_name;
 pub use crate::section::parser::package_name::package_name;
 pub use crate::section::parser::qualified_identifier::qualified_identifier;
-pub use parser::{Scanner, EC};
 
 #[derive(Default, Debug)]
 pub struct Document {

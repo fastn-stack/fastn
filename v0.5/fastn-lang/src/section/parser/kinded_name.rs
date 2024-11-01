@@ -1,4 +1,6 @@
-pub fn kinded_name(scanner: &mut fastn_lang::section::Scanner) -> Option<fastn_lang::KindedName> {
+pub fn kinded_name(
+    scanner: &mut fastn_lang::Scanner<fastn_lang::section::Document>,
+) -> Option<fastn_lang::KindedName> {
     let kind = fastn_lang::section::kind(scanner);
     scanner.skip_spaces();
 

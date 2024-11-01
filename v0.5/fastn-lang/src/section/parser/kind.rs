@@ -1,4 +1,6 @@
-pub fn kind(scanner: &mut fastn_lang::section::Scanner) -> Option<fastn_lang::Kind> {
+pub fn kind(
+    scanner: &mut fastn_lang::Scanner<fastn_lang::section::Document>,
+) -> Option<fastn_lang::Kind> {
     let qi = match fastn_lang::section::qualified_identifier(scanner) {
         Some(qi) => qi,
         None => return None,

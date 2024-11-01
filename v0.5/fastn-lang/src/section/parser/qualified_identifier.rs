@@ -1,5 +1,5 @@
 pub fn qualified_identifier(
-    scanner: &mut fastn_lang::section::Scanner,
+    scanner: &mut fastn_lang::Scanner<fastn_lang::section::Document>,
 ) -> Option<fastn_lang::QualifiedIdentifier> {
     let module = match fastn_lang::section::module_name(scanner) {
         Some(module) => match scanner.peek() {
@@ -55,9 +55,10 @@ mod test {
             ""
         );
         assert_eq!(
-            super::qualified_identifier(&mut fastn_lang::section::Scanner::new(
+            super::qualified_identifier(&mut fastn_lang::Scanner::new(
                 " string",
-                Default::default()
+                Default::default(),
+                fastn_lang::section::Document::default()
             ),),
             None
         );
