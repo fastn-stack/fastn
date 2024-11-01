@@ -1,5 +1,10 @@
+pub trait Scannable {
+    fn add_error(&mut self, span: fastn_parser::Span, message: fastn_parser::Error);
+    fn add_comment(&mut self, span: fastn_parser::Span);
+}
+
 #[derive(Debug)]
-pub struct Scanner<'input> {
+pub struct Scanner<'input, T: Scannable> {
     input: &'input str,
     chars: std::iter::Peekable<std::str::CharIndices<'input>>,
     /// index is byte position in the input
@@ -7,7 +12,7 @@ pub struct Scanner<'input> {
     #[expect(unused)]
     fuel: fastn_parser::Fuel,
     #[expect(unused)]
-    pub output: fastn_parser::unresolved::Document,
+    pub output: T,
 }
 
 pub struct Index<'input> {
@@ -15,15 +20,15 @@ pub struct Index<'input> {
     chars: std::iter::Peekable<std::str::CharIndices<'input>>,
 }
 
-impl<'input> Scanner<'input> {
-    pub fn new(input: &str, fuel: fastn_parser::Fuel) -> Scanner {
+impl<'input, T: Scannable> Scanner<'input, T> {
+    pub fn new(input: &str, fuel: fastn_parser::Fuel, t: T) -> Scanner<T> {
         assert!(input.len() < 10_000_000); // can't parse > 10MB file
         Scanner {
             input,
             chars: input.char_indices().peekable(),
             fuel,
             index: 0,
-            output: fastn_parser::unresolved::Document::default(),
+            output: t,
         }
     }
 

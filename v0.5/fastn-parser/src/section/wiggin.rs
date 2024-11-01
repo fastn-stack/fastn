@@ -100,7 +100,7 @@ fn inner_ender<T: SectionProxy>(
                 // error, put the children back on the stack
                 o.errors.push(fastn_parser::Spanned {
                     span: section.span(),
-                    value: fastn_parser::SingleError::EndWithoutStart,
+                    value: fastn_parser::Error::EndWithoutStart,
                 });
                 stack.extend(children.into_iter().rev());
             }
@@ -118,10 +118,8 @@ enum Mark<'input> {
 /// trait for the real Section type
 trait SectionProxy: Sized {
     /// returns the name of the section, and if it starts or ends the section
-    fn mark<'input>(
-        &'input self,
-        source: &'input str,
-    ) -> Result<Mark<'input>, fastn_parser::SingleError>;
+    fn mark<'input>(&'input self, source: &'input str)
+        -> Result<Mark<'input>, fastn_parser::Error>;
     fn add_children(&mut self, children: Vec<Self>);
     fn span(&self) -> fastn_parser::Span;
 }
@@ -130,7 +128,7 @@ impl SectionProxy for fastn_parser::Section {
     fn mark<'input>(
         &'input self,
         source: &'input str,
-    ) -> Result<Mark<'input>, fastn_parser::SingleError> {
+    ) -> Result<Mark<'input>, fastn_parser::Error> {
         let span = &self.init.name.name.name;
         let name = &source[span.start..span.end];
         if name != "end" {
@@ -139,19 +137,19 @@ impl SectionProxy for fastn_parser::Section {
 
         let caption = match self.caption.as_ref() {
             Some(caption) => caption,
-            None => return Err(fastn_parser::SingleError::SectionNameNotFoundForEnd),
+            None => return Err(fastn_parser::Error::SectionNameNotFoundForEnd),
         };
 
         let v = match (caption.get(0), caption.len()) {
             (Some(fastn_parser::SES::String(span)), 1) => &source[span.start..span.end].trim(),
-            (Some(_), _) => return Err(fastn_parser::SingleError::EndContainsData),
-            (None, _) => return Err(fastn_parser::SingleError::SectionNameNotFoundForEnd),
+            (Some(_), _) => return Err(fastn_parser::Error::EndContainsData),
+            (None, _) => return Err(fastn_parser::Error::SectionNameNotFoundForEnd),
         };
 
         // if v is not a single word, we have a problem
         if v.contains(' ') || v.contains('\t') {
             // SES::String cannot contain new lines.
-            return Err(fastn_parser::SingleError::EndContainsData);
+            return Err(fastn_parser::Error::EndContainsData);
         }
 
         Ok(Mark::End(v))
@@ -179,7 +177,7 @@ mod test {
         fn mark<'input>(
             &'input self,
             _source: &'input str,
-        ) -> Result<super::Mark<'input>, fastn_parser::SingleError> {
+        ) -> Result<super::Mark<'input>, fastn_parser::Error> {
             if self.is_end {
                 Ok(super::Mark::End(&self.name))
             } else {
@@ -252,7 +250,7 @@ mod test {
     }
 
     #[track_caller]
-    fn f(source: &str, expected: &str, errors: Vec<fastn_parser::SingleError>) {
+    fn f(source: &str, expected: &str, errors: Vec<fastn_parser::Error>) {
         let mut o = fastn_parser::unresolved::Document::default();
         let sections = parse(source);
         let sections = super::inner_ender(source, &mut o, sections);
@@ -276,7 +274,7 @@ mod test {
         f(
             "foo -> bar -> /baz",
             "foo, bar", // we eat the `-- end` sections even if they don't match
-            vec![fastn_parser::SingleError::EndWithoutStart],
+            vec![fastn_parser::Error::EndWithoutStart],
         );
         t("foo -> /foo", "foo");
         t("foo -> /foo -> bar", "foo, bar");

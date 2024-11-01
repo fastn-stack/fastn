@@ -1,3 +1,5 @@
+use crate::{Error, Span};
+
 impl<T> fastn_parser::Spanned<T> {
     pub fn map<T2, F: FnOnce(T) -> T2>(self, f: F) -> fastn_parser::Spanned<T2> {
         fastn_parser::Spanned {
@@ -140,5 +142,15 @@ impl fastn_parser::Section {
             function_marker,
             ..Default::default()
         })
+    }
+}
+
+impl fastn_parser::section::EC for fastn_parser::section::Document {
+    fn add_error(&mut self, _span: Span, _message: Error) {
+        todo!()
+    }
+
+    fn add_comment(&mut self, _span: Span) {
+        todo!()
     }
 }

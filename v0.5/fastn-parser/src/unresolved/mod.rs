@@ -1,3 +1,16 @@
+mod parser;
+
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct Document {
+    pub module_doc: Option<fastn_parser::Span>,
+    pub imports: Vec<fastn_parser::unresolved::Import>,
+    pub definitions: std::collections::HashMap<fastn_parser::Identifier, Definition>,
+    pub content: Vec<fastn_parser::Section>,
+    pub errors: Vec<fastn_parser::Spanned<fastn_parser::Error>>,
+    pub comments: Vec<fastn_parser::Span>,
+    pub line_starts: Vec<usize>,
+}
+
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub enum Definition {
     Component(fastn_parser::Section),
@@ -20,15 +33,4 @@ pub struct Import {
 pub enum Export {
     All,
     Things(Vec<fastn_parser::AliasableIdentifier>),
-}
-
-#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
-pub struct Document {
-    pub module_doc: Option<fastn_parser::Span>,
-    pub imports: Vec<fastn_parser::unresolved::Import>,
-    pub definitions: std::collections::HashMap<fastn_parser::Identifier, Definition>,
-    pub content: Vec<fastn_parser::Section>,
-    pub errors: Vec<fastn_parser::Spanned<fastn_parser::SingleError>>,
-    pub comments: Vec<fastn_parser::Span>,
-    pub line_starts: Vec<usize>,
 }

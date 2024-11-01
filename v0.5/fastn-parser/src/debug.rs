@@ -272,26 +272,22 @@ impl JDebug for fastn_parser::unresolved::Definition {
     }
 }
 
-impl JDebug for fastn_parser::SingleError {
+impl JDebug for fastn_parser::Error {
     fn debug(&self, source: &str) -> serde_json::Value {
         error(self, &Default::default(), source)
     }
 }
 
-fn error(
-    e: &fastn_parser::SingleError,
-    _s: &fastn_parser::Span,
-    _source: &str,
-) -> serde_json::Value {
+fn error(e: &fastn_parser::Error, _s: &fastn_parser::Span, _source: &str) -> serde_json::Value {
     serde_json::json!({ "error": match e {
-        fastn_parser::SingleError::UnexpectedDocComment => "unexpected_doc_comment",
-        fastn_parser::SingleError::UnwantedTextFound => "unwanted_text_found",
-        fastn_parser::SingleError::EmptyAngleText => "empty_angle_text",
-        fastn_parser::SingleError::ColonNotFound => "colon_not_found",
-        fastn_parser::SingleError::DashDashNotFound => "dashdash_not_found",
-        fastn_parser::SingleError::KindedNameNotFound => "kinded_name_not_found",
-        fastn_parser::SingleError::SectionNameNotFoundForEnd => "section_name_not_found_for_end",
-        fastn_parser::SingleError::EndContainsData => "end_contains_data",
-        fastn_parser::SingleError::EndWithoutStart => "end_without_start",
+        fastn_parser::Error::UnexpectedDocComment => "unexpected_doc_comment",
+        fastn_parser::Error::UnwantedTextFound => "unwanted_text_found",
+        fastn_parser::Error::EmptyAngleText => "empty_angle_text",
+        fastn_parser::Error::ColonNotFound => "colon_not_found",
+        fastn_parser::Error::DashDashNotFound => "dashdash_not_found",
+        fastn_parser::Error::KindedNameNotFound => "kinded_name_not_found",
+        fastn_parser::Error::SectionNameNotFoundForEnd => "section_name_not_found_for_end",
+        fastn_parser::Error::EndContainsData => "end_contains_data",
+        fastn_parser::Error::EndWithoutStart => "end_without_start",
     }})
 }

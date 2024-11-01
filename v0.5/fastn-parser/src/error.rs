@@ -1,5 +1,5 @@
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
-pub enum SingleError {
+pub enum Error {
     /// doc comments should either come at the beginning of the file as a contiguous chunk
     /// or right before a section or a header.
     UnexpectedDocComment,

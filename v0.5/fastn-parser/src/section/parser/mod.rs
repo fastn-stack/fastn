@@ -9,10 +9,10 @@ pub(super) mod section_init;
 pub(super) mod ses;
 pub(super) mod visibility;
 
-pub use scanner::Scanner;
+pub use scanner::{Scanner, EC};
 
 impl fastn_parser::unresolved::Document {
-    pub fn parse(source: &str) -> fastn_parser::unresolved::Document {
+    pub fn parse(source: &str) -> fastn_parser::section::Document {
         let _scanner = fastn_parser::section::Scanner::new(source, Default::default());
         todo!()
     }
@@ -28,6 +28,10 @@ fn p<T: fastn_parser::debug::JDebug, F: FnOnce(&mut fastn_parser::section::Scann
 ) {
     let mut scanner = fastn_parser::section::Scanner::new(source, Default::default());
     let result = f(&mut scanner);
+
+    let x =
+        // this is a comment
+        { 1 + 2 };
     assert_eq!(result.debug(source), debug);
     assert_eq!(scanner.remaining(), remaining);
 }

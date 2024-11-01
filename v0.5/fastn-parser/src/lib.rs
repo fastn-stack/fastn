@@ -7,10 +7,12 @@ extern crate self as fastn_parser;
 #[cfg(test)]
 mod debug;
 mod error;
+mod scanner;
 mod section;
 mod unresolved;
 
-pub use error::SingleError;
+pub use error::Error;
+pub use scanner::{Scannable, Scanner};
 pub use section::{
     AliasableIdentifier, HeaderValue, Identifier, Kind, KindedName, ModuleName, PackageName,
     QualifiedIdentifier, Section, SectionInit, Span, Spanned, Visibility, SES,
@@ -25,12 +27,9 @@ pub struct Fuel {
 pub enum PResult<T> {
     NotFound,
     Found(T),
-    Error(SingleError),
-    Errors(Vec<SingleError>),
-    FoundWithErrors {
-        partial: T,
-        errors: Vec<SingleError>,
-    },
+    Error(Error),
+    Errors(Vec<Error>),
+    FoundWithErrors { partial: T, errors: Vec<Error> },
 }
 
 #[derive(Default)]
