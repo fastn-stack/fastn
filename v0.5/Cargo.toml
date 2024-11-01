@@ -1,6 +1,6 @@
 [workspace]
 members = [
-    "fastn-parser",
+    "fastn-lang",
 ]
 exclude = []
 resolver = "2"
@@ -32,11 +32,8 @@ homepage = "https://fastn.com"
 # using the latest dependency, and what is the plan to move to the latest version.
 
 
-fastn-parser.path = "fastn-parser"
-logos = "0.14"
-lalrpop = "0.22"
+fastn-lang = { path = "fastn-lang" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 itertools = "0.13"
-lalrpop-util = { version = "0.21.0", features = ["lexer", "unicode"] }
 insta = { version = "1.38", features = ["yaml", "glob"] }
