@@ -42,8 +42,8 @@ mod test {
     #[test]
     fn qualified_identifier() {
         t!("foo", "foo");
-        t!("foo.com#bar", { "module": "foo.com", "terms": ["bar"]});
-        t!("foo.com#bar.baz", { "module": "foo.com", "terms": ["bar", "baz"]});
+        t!("foo.com#bar", { "module": "foo.com as foo", "terms": ["bar"]});
+        t!("foo.com#bar.baz", { "module": "foo.com as foo", "terms": ["bar", "baz"]});
         t!(
             "foo.com/yo#bar.baz",
             {"module": { "package": "foo.com", "path": ["yo"]}, "terms": ["bar", "baz"]},
