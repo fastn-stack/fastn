@@ -3,7 +3,7 @@
 version = 3
 
 [[package]]
-name = "fastn-p1"
+name = "fastn-parser"
 version = "0.1.0"
 dependencies = [
  "serde",

@@ -32,7 +32,7 @@ homepage = "https://fastn.com"
 # using the latest dependency, and what is the plan to move to the latest version.
 
 
-fastn-p1.path = "fastn-p1"
+fastn-parser.path = "fastn-parser"
 logos = "0.14"
 lalrpop = "0.22"
 serde = { version = "1", features = ["derive"] }
