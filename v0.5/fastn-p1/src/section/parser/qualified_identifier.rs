@@ -1,7 +1,7 @@
 pub fn qualified_identifier(
-    scanner: &mut fastn_p1::parser::Scanner,
+    scanner: &mut fastn_p1::section::Scanner,
 ) -> Option<fastn_p1::QualifiedIdentifier> {
-    let module = match fastn_p1::parser::module_name(scanner) {
+    let module = match fastn_p1::section::module_name(scanner) {
         Some(module) => match scanner.peek() {
             Some('#') => {
                 scanner.pop();
@@ -19,7 +19,7 @@ pub fn qualified_identifier(
 
     let terms = {
         let mut terms = Vec::new();
-        while let Some(identifier) = fastn_p1::parser::identifier(scanner) {
+        while let Some(identifier) = fastn_p1::section::identifier(scanner) {
             terms.push(identifier);
             if !scanner.take('.') {
                 break;
@@ -55,7 +55,7 @@ mod test {
             ""
         );
         assert_eq!(
-            super::qualified_identifier(&mut fastn_p1::parser::Scanner::new(
+            super::qualified_identifier(&mut fastn_p1::section::Scanner::new(
                 " string",
                 Default::default()
             ),),

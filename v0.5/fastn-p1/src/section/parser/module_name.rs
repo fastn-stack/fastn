@@ -1,5 +1,5 @@
-pub fn module_name(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::ModuleName> {
-    let package = fastn_p1::parser::package_name(scanner)?;
+pub fn module_name(scanner: &mut fastn_p1::section::Scanner) -> Option<fastn_p1::ModuleName> {
+    let package = fastn_p1::section::package_name(scanner)?;
     if !scanner.take('/') {
         return Some(fastn_p1::ModuleName {
             name: package.alias.clone().into(),
@@ -10,7 +10,7 @@ pub fn module_name(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::
 
     let mut path = {
         let mut path = Vec::new();
-        while let Some(identifier) = fastn_p1::parser::identifier(scanner) {
+        while let Some(identifier) = fastn_p1::section::identifier(scanner) {
             path.push(identifier);
             if !scanner.take('/') {
                 break;

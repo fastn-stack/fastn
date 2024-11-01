@@ -1,5 +1,5 @@
-pub fn kind(scanner: &mut fastn_p1::parser::Scanner) -> Option<fastn_p1::Kind> {
-    let qi = match fastn_p1::parser::qualified_identifier(scanner) {
+pub fn kind(scanner: &mut fastn_p1::section::Scanner) -> Option<fastn_p1::Kind> {
+    let qi = match fastn_p1::section::qualified_identifier(scanner) {
         Some(qi) => qi,
         None => return None,
     };
