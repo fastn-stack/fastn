@@ -75,11 +75,13 @@ fn inner_ender<T: SectionProxy>(
     let mut stack = Vec::new();
     'outer: for mut section in sections {
         match section.mark(source).unwrap() {
+            // If the section is a start marker, push it onto the stack
             Mark::Start(_name) => {
                 stack.push(section);
             }
+            // If the section is an end marker, find the corresponding start marker in the stack
             Mark::End(e_name) => {
-                let mut children = Vec::new();
+                let mut children = Vec::new(); // Collect children for the matching section
                 while let Some(mut candidate) = stack.pop() {
                     match candidate.mark(source).unwrap() {
                         Mark::Start(name) => {
