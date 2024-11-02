@@ -102,7 +102,6 @@ fn inner_ender<T: SectionProxy>(
                             // ended.
                             if name == e_name && !candidate.has_ended() {
                                 candidate.add_children(children);
-                                candidate.end_section();
                                 stack.push(candidate);
                                 continue 'outer;
                             } else {
@@ -136,19 +135,6 @@ trait SectionProxy: Sized + std::fmt::Debug {
     /// returns the name of the section, and if it starts or ends the section
     fn mark<'input>(&'input self, source: &'input str) -> Result<Mark<'input>, fastn_lang::Error>;
     fn add_children(&mut self, children: Vec<Self>);
-
-    /// Marks the current section as ended.
-    ///
-    /// This function is triggered when an `end` marker (`-- end: <section-name>`) is found
-    /// in the source, corresponding to a previously opened section with the same name.
-    ///
-    /// # Example
-    /// For the input:
-    /// 1. -- bar:
-    /// 2. -- end: bar
-    /// When `2. -- end: bar` is encountered, this function will mark the corresponding
-    /// `bar` (`1. -- bar`) section as ended, indicating that no further children can be added.
-    fn end_section(&mut self);
 
     /// Checks if the current section is marked as ended.
     ///
@@ -195,10 +181,6 @@ impl SectionProxy for fastn_lang::Section {
         self.has_end = true;
     }
 
-    fn end_section(&mut self) {
-        self.has_end = true;
-    }
-
     fn has_ended(&self) -> bool {
         self.has_end
     }
@@ -239,9 +221,6 @@ mod test {
 
         fn add_children(&mut self, children: Vec<Self>) {
             self.children = children;
-        }
-
-        fn end_section(&mut self) {
             self.has_ended = true;
         }
 

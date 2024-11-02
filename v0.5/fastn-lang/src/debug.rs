@@ -286,5 +286,6 @@ fn error(e: &fastn_lang::Error, _s: &fastn_lang::Span, _source: &str) -> serde_j
         fastn_lang::Error::SectionNameNotFoundForEnd => "section_name_not_found_for_end",
         fastn_lang::Error::EndContainsData => "end_contains_data",
         fastn_lang::Error::EndWithoutStart => "end_without_start",
+        fastn_lang::Error::ImportCantHaveType => "import_cant_have_type",
     }})
 }
