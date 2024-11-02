@@ -98,8 +98,8 @@ fn inner_ender<T: SectionProxy>(
                             // `4. -- bar` and add them to the candidate. Though the `4. -- bar`
                             // section name is same as the end section name `bar`, but it is ended,
                             // so it will be considered as candidate, not potential parent. The
-                            // `1. -- bar` section will be considered as a potential parent as it's
-                            // not yet ended.
+                            // `1. -- bar` section will be considered as a parent as it's not yet
+                            // ended.
                             if name == e_name && !candidate.has_ended() {
                                 candidate.add_children(children);
                                 candidate.end_section();
