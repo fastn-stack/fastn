@@ -1,7 +1,3 @@
-#![allow(dead_code)]
-
-use std::fmt::Debug;
-
 /// calls `inner_ender` for all the embedded section inside section in the
 /// list and then calls `ender` for the list itself
 pub fn ender(
@@ -134,7 +130,7 @@ enum Mark<'input> {
 
 /// we are using a proxy trait so we can write tests against a fake type, and then implement the
 /// trait for the real Section type
-trait SectionProxy: Sized + Debug {
+trait SectionProxy: Sized + std::fmt::Debug {
     /// returns the name of the section, and if it starts or ends the section
     fn mark<'input>(&'input self, source: &'input str) -> Result<Mark<'input>, fastn_lang::Error>;
     fn add_children(&mut self, children: Vec<Self>);
@@ -193,14 +189,16 @@ impl SectionProxy for fastn_lang::Section {
 
     fn add_children(&mut self, children: Vec<Self>) {
         self.children = children;
+        // TODO: check this logic (even empty sections with end should have this set)
+        self.has_end = true;
     }
 
     fn end_section(&mut self) {
-        self.has_ended = true;
+        self.has_end = true;
     }
 
     fn has_ended(&self) -> bool {
-        self.has_ended
+        self.has_end
     }
 
     fn span(&self) -> fastn_lang::Span {

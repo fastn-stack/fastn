@@ -1,10 +1,11 @@
 pub fn import(
-    source: &str,
+    _source: &str,
     section: fastn_lang::section::Section,
-    document: &mut fastn_lang::unresolved::Document,
+    _document: &mut fastn_lang::unresolved::Document,
 ) -> Option<fastn_lang::unresolved::Import> {
-    if let Some(kind) = section.init.name.kind {
-        document.errors.push(fastn_lang::Error::ImportCantHaveType);
+    if let Some(_kind) = section.init.name.kind {
+        // document.errors.push(fastn_lang::Error::ImportCantHaveType);
+        todo!()
     }
     // section.name must be exactly import.
     // section.caption must be single text block, parsable as a module-name.

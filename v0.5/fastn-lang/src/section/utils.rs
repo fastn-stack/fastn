@@ -52,8 +52,9 @@ impl From<fastn_lang::section::Kind> for Option<fastn_lang::section::KindedName>
 }
 
 pub fn extend_span(span: &mut Option<fastn_lang::Span>, other: fastn_lang::Span) {
-    if let Some(s) = span {
-        s.extend(other);
+    if let Some(_s) = span {
+        // s.extend(other);
+        todo!()
     } else {
         *span = Some(other);
     }
@@ -71,14 +72,23 @@ pub fn extend_spanned<T>(span: &mut Option<fastn_lang::Span>, other: &fastn_lang
 
 impl fastn_lang::section::Kind {
     fn span(&self) -> fastn_lang::Span {
-        let mut span = self.doc.clone();
-        extend_spanned(&mut span, &self.visibility);
-
-        span.unwrap()
+        todo!()
+        // let mut span = self.doc.clone();
+        // extend_spanned(&mut span, &self.visibility);
+        //
+        // span.unwrap()
     }
 }
 
-impl fastn_lang::Section {}
+impl fastn_lang::Section {
+    pub fn full_name_with_kind<'input>(&self, source: &'input str) -> &'input str {
+        todo!()
+    }
+
+    pub fn kind_name<'input>(&self, source: &'input str) -> &'input str {
+        todo!()
+    }
+}
 
 impl fastn_lang::section::Kind {
     pub fn attach_doc(&mut self, doc: fastn_lang::Span) {

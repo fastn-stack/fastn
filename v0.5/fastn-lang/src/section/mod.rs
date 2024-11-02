@@ -29,7 +29,8 @@ pub struct Section {
     pub sub_sections: Vec<fastn_lang::Spanned<Section>>,
     pub function_marker: Option<fastn_lang::Span>,
     pub is_commented: bool,
-    pub has_ended: bool,
+    // if the user used `-- end: <section-name>` to end the section
+    pub has_end: bool,
 }
 
 /// example: `-- list<string> foo:`
