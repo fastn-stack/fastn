@@ -31,7 +31,7 @@ impl<T: JDebug> JDebug for Vec<T> {
     }
 }
 
-impl<T: JDebug> JDebug for std::collections::HashMap<fastn_lang::Identifier, T> {
+impl<T: JDebug> JDebug for std::collections::HashMap<fastn_lang::section::Identifier, T> {
     fn debug(&self, source: &str) -> serde_json::Value {
         let mut o = serde_json::Map::new();
         for (k, v) in self {
@@ -96,7 +96,7 @@ impl JDebug for fastn_lang::Section {
     }
 }
 
-impl JDebug for fastn_lang::SectionInit {
+impl JDebug for fastn_lang::section::SectionInit {
     fn debug(&self, source: &str) -> serde_json::Value {
         serde_json::json! ({
             "name": self.name.debug(source)
@@ -104,7 +104,7 @@ impl JDebug for fastn_lang::SectionInit {
     }
 }
 
-impl JDebug for fastn_lang::KindedName {
+impl JDebug for fastn_lang::section::KindedName {
     fn debug(&self, source: &str) -> serde_json::Value {
         let mut o = serde_json::Map::new();
         if let Some(kind) = &self.kind {
@@ -115,7 +115,7 @@ impl JDebug for fastn_lang::KindedName {
     }
 }
 
-impl JDebug for fastn_lang::Kind {
+impl JDebug for fastn_lang::section::Kind {
     fn debug(&self, source: &str) -> serde_json::Value {
         if let Some(v) = self.to_identifier() {
             return v.debug(source);
@@ -136,7 +136,7 @@ impl JDebug for fastn_lang::Kind {
     }
 }
 
-impl JDebug for fastn_lang::QualifiedIdentifier {
+impl JDebug for fastn_lang::section::QualifiedIdentifier {
     fn debug(&self, source: &str) -> serde_json::Value {
         if self.terms.is_empty() {
             return self.module.debug(source);
@@ -149,23 +149,23 @@ impl JDebug for fastn_lang::QualifiedIdentifier {
     }
 }
 
-impl JDebug for fastn_lang::SES {
+impl JDebug for fastn_lang::section::SES {
     fn debug(&self, source: &str) -> serde_json::Value {
         match self {
-            fastn_lang::SES::String(e) => e.debug(source),
-            fastn_lang::SES::Expression { content, .. } => content.debug(source),
-            fastn_lang::SES::Section(e) => e.debug(source),
+            fastn_lang::section::SES::String(e) => e.debug(source),
+            fastn_lang::section::SES::Expression { content, .. } => content.debug(source),
+            fastn_lang::section::SES::Section(e) => e.debug(source),
         }
     }
 }
 
-impl JDebug for fastn_lang::Identifier {
+impl JDebug for fastn_lang::section::Identifier {
     fn debug(&self, source: &str) -> serde_json::Value {
         self.name.debug(source)
     }
 }
 
-impl JDebug for fastn_lang::PackageName {
+impl JDebug for fastn_lang::section::PackageName {
     fn debug(&self, source: &str) -> serde_json::Value {
         format!(
             "{} as {}",
@@ -176,7 +176,7 @@ impl JDebug for fastn_lang::PackageName {
     }
 }
 
-impl JDebug for fastn_lang::AliasableIdentifier {
+impl JDebug for fastn_lang::section::AliasableIdentifier {
     fn debug(&self, source: &str) -> serde_json::Value {
         if self.alias.is_none() {
             return self.name.debug(source);
@@ -189,7 +189,7 @@ impl JDebug for fastn_lang::AliasableIdentifier {
     }
 }
 
-impl JDebug for fastn_lang::ModuleName {
+impl JDebug for fastn_lang::section::ModuleName {
     fn debug(&self, source: &str) -> serde_json::Value {
         if self.path.is_empty()
             && self.name.alias.is_none()

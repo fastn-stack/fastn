@@ -1,13 +1,13 @@
 pub fn section_init(
     scanner: &mut fastn_lang::Scanner<fastn_lang::section::Document>,
-) -> Option<fastn_lang::SectionInit> {
+) -> Option<fastn_lang::section::SectionInit> {
     scanner.skip_spaces();
     let dashdash = scanner.token("--")?;
     scanner.skip_spaces();
     let name = fastn_lang::section::kinded_name(scanner)?;
     scanner.skip_spaces();
     let colon = scanner.token(":")?;
-    Some(fastn_lang::SectionInit {
+    Some(fastn_lang::section::SectionInit {
         dashdash,
         name,
         colon,

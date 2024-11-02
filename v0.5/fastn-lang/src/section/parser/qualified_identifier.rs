@@ -1,6 +1,6 @@
 pub fn qualified_identifier(
     scanner: &mut fastn_lang::Scanner<fastn_lang::section::Document>,
-) -> Option<fastn_lang::QualifiedIdentifier> {
+) -> Option<fastn_lang::section::QualifiedIdentifier> {
     let module = match fastn_lang::section::module_name(scanner) {
         Some(module) => match scanner.peek() {
             Some('#') => {
@@ -8,7 +8,7 @@ pub fn qualified_identifier(
                 Some(module)
             }
             _ => {
-                return Some(fastn_lang::QualifiedIdentifier {
+                return Some(fastn_lang::section::QualifiedIdentifier {
                     module: Some(module),
                     terms: vec![],
                 })
@@ -32,7 +32,7 @@ pub fn qualified_identifier(
         return None;
     }
 
-    Some(fastn_lang::QualifiedIdentifier::new(module, terms))
+    Some(fastn_lang::section::QualifiedIdentifier::new(module, terms))
 }
 
 #[cfg(test)]

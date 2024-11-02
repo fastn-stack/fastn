@@ -1,6 +1,6 @@
 pub fn kinded_name(
     scanner: &mut fastn_lang::Scanner<fastn_lang::section::Document>,
-) -> Option<fastn_lang::KindedName> {
+) -> Option<fastn_lang::section::KindedName> {
     let kind = fastn_lang::section::kind(scanner);
     scanner.skip_spaces();
 
@@ -11,7 +11,7 @@ pub fn kinded_name(
         }
     };
 
-    Some(fastn_lang::KindedName { kind, name })
+    Some(fastn_lang::section::KindedName { kind, name })
 }
 
 #[cfg(test)]

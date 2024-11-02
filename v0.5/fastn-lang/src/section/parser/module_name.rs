@@ -1,9 +1,9 @@
 pub fn module_name(
     scanner: &mut fastn_lang::Scanner<fastn_lang::section::Document>,
-) -> Option<fastn_lang::ModuleName> {
+) -> Option<fastn_lang::section::ModuleName> {
     let package = fastn_lang::section::package_name(scanner)?;
     if !scanner.take('/') {
-        return Some(fastn_lang::ModuleName {
+        return Some(fastn_lang::section::ModuleName {
             name: package.alias.clone().into(),
             package,
             path: vec![],
@@ -25,7 +25,7 @@ pub fn module_name(
         return None;
     }
 
-    Some(fastn_lang::ModuleName {
+    Some(fastn_lang::section::ModuleName {
         package,
         name: path.pop().unwrap().into(),
         path,

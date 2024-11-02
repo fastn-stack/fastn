@@ -1,6 +1,6 @@
 pub fn package_name(
     scanner: &mut fastn_lang::Scanner<fastn_lang::section::Document>,
-) -> Option<fastn_lang::PackageName> {
+) -> Option<fastn_lang::section::PackageName> {
     let first = scanner.peek()?;
     if !first.is_alphabetic() {
         return None;
@@ -11,7 +11,7 @@ pub fn package_name(
     let o_name = scanner.source(&span);
     let name = o_name.split_once('.').unwrap_or((o_name, "")).0;
 
-    Some(fastn_lang::PackageName {
+    Some(fastn_lang::section::PackageName {
         alias: fastn_lang::Span {
             start: span.start,
             end: span.start + name.len(),

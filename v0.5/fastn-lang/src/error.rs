@@ -17,6 +17,7 @@ pub enum Error {
     SectionNameNotFoundForEnd,
     EndContainsData,
     EndWithoutStart,
+    ImportCantHaveType,
     // SectionNotFound(&'a str),
     // MoreThanOneCaption,
     // ParseError,

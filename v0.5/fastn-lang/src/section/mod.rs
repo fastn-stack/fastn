@@ -19,15 +19,15 @@ pub struct Document {
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
 pub struct Section {
-    pub init: fastn_lang::SectionInit,
+    pub init: fastn_lang::section::SectionInit,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub caption: Option<fastn_lang::HeaderValue>,
+    pub caption: Option<fastn_lang::section::HeaderValue>,
     pub headers: Vec<Header>,
-    pub body: Option<fastn_lang::HeaderValue>,
+    pub body: Option<fastn_lang::section::HeaderValue>,
     pub children: Vec<Section>, // TODO: this must be `Spanned<Section>`
-    pub sub_sections: Vec<Spanned<Section>>,
-    pub function_marker: Option<Span>,
+    pub sub_sections: Vec<fastn_lang::Spanned<Section>>,
+    pub function_marker: Option<fastn_lang::Span>,
     pub is_commented: bool,
     pub has_ended: bool,
 }
@@ -36,40 +36,16 @@ pub struct Section {
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct SectionInit {
     pub dashdash: fastn_lang::Span, // for syntax highlighting and formatting
-    pub name: fastn_lang::KindedName,
+    pub name: fastn_lang::section::KindedName,
     pub colon: fastn_lang::Span, // for syntax highlighting and formatting
-}
-
-pub type Span = std::ops::Range<usize>;
-
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
-pub struct Spanned<T> {
-    pub span: Span,
-    pub value: T,
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Header {
-    pub name: fastn_lang::KindedName,
+    pub name: fastn_lang::section::KindedName,
     pub condition: Option<fastn_lang::Span>,
-    pub value: fastn_lang::HeaderValue,
+    pub value: fastn_lang::section::HeaderValue,
     pub is_commented: bool,
-}
-
-/// public | private | public<package> | public<module>
-///
-/// TODO: newline is allowed, e.g., public<\n module>
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
-pub enum Visibility {
-    /// visible to everyone
-    #[default]
-    Public,
-    /// visible to current package only
-    Package,
-    /// visible to current module only
-    Module,
-    /// can only be accessed from inside the component, etc.
-    Private,
 }
 
 /// identifier is variable or component etc name
@@ -141,8 +117,8 @@ pub struct QualifiedIdentifier {
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Kind {
     // only kinded section / header can have doc
-    pub doc: Option<Span>,
-    pub visibility: Option<Spanned<Visibility>>,
+    pub doc: Option<fastn_lang::Span>,
+    pub visibility: Option<fastn_lang::Spanned<fastn_lang::Visibility>>,
     pub name: QualifiedIdentifier,
     // during parsing, we can encounter `foo<>`, which needs to be differentiated from `foo`
     // therefore we are using `Option<Vec<>>` here
@@ -166,7 +142,7 @@ pub type HeaderValue = Vec<SES>;
 /// otherwise it is a text.
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub enum SES {
-    String(Span),
+    String(fastn_lang::Span),
     /// the start and end are the positions of `{` and `}` respectively
     Expression {
         start: usize,
