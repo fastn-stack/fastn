@@ -46,18 +46,18 @@ fn header_value_ender(
     header
         .into_iter()
         .map(|ses| match ses {
-            fastn_lang::section::SES::String(span) => fastn_lang::section::SES::String(span),
-            fastn_lang::section::SES::Expression {
+            fastn_lang::section::Tes::Text(span) => fastn_lang::section::Tes::Text(span),
+            fastn_lang::section::Tes::Expression {
                 start,
                 end,
                 content,
-            } => fastn_lang::section::SES::Expression {
+            } => fastn_lang::section::Tes::Expression {
                 start,
                 end,
                 content: header_value_ender(source, o, content),
             },
-            fastn_lang::section::SES::Section(sections) => {
-                fastn_lang::section::SES::Section(ender(source, o, sections))
+            fastn_lang::section::Tes::Section(sections) => {
+                fastn_lang::section::Tes::Section(ender(source, o, sections))
             }
         })
         .collect()
@@ -73,7 +73,7 @@ fn inner_ender<T: SectionProxy>(
     sections: Vec<T>,
 ) -> Vec<T> {
     let mut stack = Vec::new();
-    'outer: for mut section in sections {
+    'outer: for section in sections {
         match section.mark(source).unwrap() {
             // If the section is a start marker, push it onto the stack
             Mark::Start(_name) => {
@@ -163,9 +163,7 @@ impl SectionProxy for fastn_lang::Section {
         };
 
         let v = match (caption.get(0), caption.len()) {
-            (Some(fastn_lang::section::SES::String(span)), 1) => {
-                &source[span.start..span.end].trim()
-            }
+            (Some(fastn_lang::section::Tes::Text(span)), 1) => &source[span.start..span.end].trim(),
             (Some(_), _) => return Err(fastn_lang::Error::EndContainsData),
             (None, _) => return Err(fastn_lang::Error::SectionNameNotFoundForEnd),
         };

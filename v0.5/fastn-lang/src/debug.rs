@@ -149,12 +149,12 @@ impl JDebug for fastn_lang::section::QualifiedIdentifier {
     }
 }
 
-impl JDebug for fastn_lang::section::SES {
+impl JDebug for fastn_lang::section::Tes {
     fn debug(&self, source: &str) -> serde_json::Value {
         match self {
-            fastn_lang::section::SES::String(e) => e.debug(source),
-            fastn_lang::section::SES::Expression { content, .. } => content.debug(source),
-            fastn_lang::section::SES::Section(e) => e.debug(source),
+            fastn_lang::section::Tes::Text(e) => e.debug(source),
+            fastn_lang::section::Tes::Expression { content, .. } => content.debug(source),
+            fastn_lang::section::Tes::Section(e) => e.debug(source),
         }
     }
 }

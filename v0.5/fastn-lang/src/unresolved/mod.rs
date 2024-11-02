@@ -1,4 +1,5 @@
 mod parser;
+mod utils;
 
 #[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Document {

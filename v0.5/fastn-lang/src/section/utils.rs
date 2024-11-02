@@ -1,5 +1,3 @@
-use crate::{Error, Span};
-
 impl<T> fastn_lang::Spanned<T> {
     pub fn map<T2, F: FnOnce(T) -> T2>(self, f: F) -> fastn_lang::Spanned<T2> {
         fastn_lang::Spanned {
@@ -81,12 +79,16 @@ impl fastn_lang::section::Kind {
 }
 
 impl fastn_lang::Section {
-    pub fn full_name_with_kind<'input>(&self, source: &'input str) -> &'input str {
+    pub fn full_name_with_kind<'input>(&self, _source: &'input str) -> &'input str {
         todo!()
     }
 
-    pub fn kind_name<'input>(&self, source: &'input str) -> &'input str {
+    pub fn kind_name<'input>(&self, _source: &'input str) -> &'input str {
         todo!()
+    }
+
+    pub fn name<'input>(&self, source: &'input str) -> &'input str {
+        &source[self.init.name.name.name.start..self.init.name.name.name.end]
     }
 }
 
@@ -164,11 +166,11 @@ impl fastn_lang::Section {
 }
 
 impl fastn_lang::Scannable for fastn_lang::section::Document {
-    fn add_error(&mut self, _span: Span, _message: Error) {
-        todo!()
+    fn add_error(&mut self, span: fastn_lang::Span, error: fastn_lang::Error) {
+        self.errors.push(fastn_lang::Spanned { span, value: error });
     }
 
-    fn add_comment(&mut self, _span: Span) {
-        todo!()
+    fn add_comment(&mut self, comment: fastn_lang::Span) {
+        self.comments.push(comment);
     }
 }

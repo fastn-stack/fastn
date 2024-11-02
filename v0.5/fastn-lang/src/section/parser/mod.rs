@@ -5,7 +5,7 @@ pub(super) mod module_name;
 pub(super) mod package_name;
 pub(super) mod qualified_identifier;
 pub(super) mod section_init;
-pub(super) mod ses;
+pub(super) mod tes;
 pub(super) mod visibility;
 
 impl fastn_lang::section::Document {

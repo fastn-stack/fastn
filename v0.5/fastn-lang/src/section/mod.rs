@@ -9,11 +9,13 @@ pub use crate::section::parser::module_name::module_name;
 pub use crate::section::parser::package_name::package_name;
 pub use crate::section::parser::qualified_identifier::qualified_identifier;
 
-#[derive(Default, Debug)]
+#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Document {
+    pub module_doc: Option<fastn_lang::Span>,
     pub sections: Vec<Section>,
-    pub errors: Vec<fastn_lang::Error>,
+    pub errors: Vec<fastn_lang::Spanned<fastn_lang::Error>>,
     pub comments: Vec<fastn_lang::Span>,
+    pub line_starts: Vec<usize>,
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
@@ -133,7 +135,7 @@ pub struct KindedName {
     pub name: Identifier,
 }
 
-pub type HeaderValue = Vec<SES>;
+pub type HeaderValue = Vec<Tes>;
 
 /// example: `hello` | `hello ${world}` | `hello ${world} ${ -- foo: }` | `{ \n text text \n }`
 /// it can even have recursive structure, e.g., `hello ${ { \n text-text \n } }`.
@@ -142,8 +144,8 @@ pub type HeaderValue = Vec<SES>;
 /// and we should use `fastn_lang::parser::section()` parser to parse it.
 /// otherwise it is a text.
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
-pub enum SES {
-    String(fastn_lang::Span),
+pub enum Tes {
+    Text(fastn_lang::Span),
     /// the start and end are the positions of `{` and `}` respectively
     Expression {
         start: usize,

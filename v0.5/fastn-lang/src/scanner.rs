@@ -11,7 +11,6 @@ pub struct Scanner<'input, T: Scannable> {
     index: usize,
     #[expect(unused)]
     fuel: fastn_lang::Fuel,
-    #[expect(unused)]
     pub output: T,
 }
 
