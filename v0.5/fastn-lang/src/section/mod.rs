@@ -14,6 +14,7 @@ pub struct Document {
     pub module_doc: Option<fastn_lang::Span>,
     pub sections: Vec<Section>,
     pub errors: Vec<fastn_lang::Spanned<fastn_lang::Error>>,
+    pub warnings: Vec<fastn_lang::Spanned<fastn_lang::Warning>>,
     pub comments: Vec<fastn_lang::Span>,
     pub line_starts: Vec<usize>,
 }

@@ -1,6 +1,8 @@
 mod parser;
 mod utils;
 
+pub use parser::parse;
+
 #[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Document {
     pub module_doc: Option<fastn_lang::Span>,
@@ -8,6 +10,7 @@ pub struct Document {
     pub definitions: std::collections::HashMap<fastn_lang::section::Identifier, Definition>,
     pub content: Vec<fastn_lang::Section>,
     pub errors: Vec<fastn_lang::Spanned<fastn_lang::Error>>,
+    pub warnings: Vec<fastn_lang::Spanned<fastn_lang::Warning>>,
     pub comments: Vec<fastn_lang::Span>,
     pub line_starts: Vec<usize>,
 }

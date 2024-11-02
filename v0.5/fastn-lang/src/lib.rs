@@ -12,9 +12,11 @@ mod resolved;
 mod scanner;
 mod section;
 mod unresolved;
+mod warning;
 
 pub use error::Error;
 pub use scanner::{Scannable, Scanner};
+pub use warning::Warning;
 // fastn_lang::Section is used in more than one place, so it is at the top level.
 pub use section::Section;
 
