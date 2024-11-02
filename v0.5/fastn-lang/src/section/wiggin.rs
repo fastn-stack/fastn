@@ -224,7 +224,7 @@ mod test {
             };
             current.push(section);
         }
-        dbg!(sections)
+        sections
     }
 
     // foo containing bar and baz will look like this: foo [bar [], baz []]
