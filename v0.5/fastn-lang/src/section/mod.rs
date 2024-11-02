@@ -29,6 +29,7 @@ pub struct Section {
     pub sub_sections: Vec<Spanned<Section>>,
     pub function_marker: Option<Span>,
     pub is_commented: bool,
+    pub has_ended: bool,
 }
 
 /// example: `-- list<string> foo:`

@@ -84,35 +84,34 @@ fn inner_ender<T: SectionProxy>(
             }
             Mark::End(e_name) => {
                 let mut children = Vec::new();
-                while let Some(candidate) = stack.pop() {
+                while let Some(mut candidate) = stack.pop() {
                     match candidate.mark(source).unwrap() {
                         Mark::Start(name) => {
-                            if name == e_name {
-                                section.add_children(children);
-                                stack.push(section);
+                            // If the candidate section name is the same as the end section name
+                            // and is not ended, add the children to the candidate.
+                            // Example:
+                            // 1. -- bar:
+                            // 2.   -- bar:
+                            // 3.   -- end: bar
+                            // 4.   -- foo:
+                            // 5.   -- end: foo
+                            // 6. -- end: bar
+                            // When we reach `6. -- end: bar`, we will pop `5. -- foo` and
+                            // `4. -- bar` and add them to the candidate. Though the `4. -- bar`
+                            // section name is same as the end section name `bar`, but it is ended,
+                            // so it will be considered as candidate, not potential parent. The
+                            // `1. -- bar` section will be considered as a potential parent as it's
+                            // not yet ended.
+                            if name == e_name && !candidate.has_ended() {
+                                candidate.add_children(children);
+                                candidate.end_section();
+                                stack.push(candidate);
                                 continue 'outer;
                             } else {
                                 children.insert(0, candidate);
                             }
                         }
-                        Mark::End(_name) => {
-                            // There is two possibilities here
-                            // 1. name == e_name
-                            // This could happen when the child section has same name as the parent
-                            // -- foo:
-                            //    -- foo:
-                            //    -- end: foo
-                            // -- end: foo
-                            //
-                            // 2. name != e_name
-                            // This could happen when the child section has different name
-                            // -- foo:
-                            //    -- bar:
-                            //    -- end: bar
-                            // -- end: foo
-                            // In both cases we want to add the child section to the list
-                            children.insert(0, candidate);
-                        }
+                        Mark::End(_name) => unreachable!("we never put section end on the stack"),
                     }
                 }
                 // we have run out of sections, and we have not found the section end, return
@@ -139,6 +138,26 @@ trait SectionProxy: Sized + Debug {
     /// returns the name of the section, and if it starts or ends the section
     fn mark<'input>(&'input self, source: &'input str) -> Result<Mark<'input>, fastn_lang::Error>;
     fn add_children(&mut self, children: Vec<Self>);
+
+    /// Marks the current section as ended.
+    ///
+    /// This function is triggered when an `end` marker (`-- end: <section-name>`) is found
+    /// in the source, corresponding to a previously opened section with the same name.
+    ///
+    /// # Example
+    /// For the input:
+    /// 1. -- bar:
+    /// 2. -- end: bar
+    /// When `2. -- end: bar` is encountered, this function will mark the corresponding
+    /// `bar` (`1. -- bar`) section as ended, indicating that no further children can be added.
+    fn end_section(&mut self);
+
+    /// Checks if the current section is marked as ended.
+    ///
+    /// # Returns
+    /// - `true` if the section has been closed by an end marker.
+    /// - `false` if the section is still open and can accept further nesting.
+    fn has_ended(&self) -> bool;
     fn span(&self) -> fastn_lang::Span;
 }
 
@@ -174,6 +193,14 @@ impl SectionProxy for fastn_lang::Section {
         self.children = children;
     }
 
+    fn end_section(&mut self) {
+        self.has_ended = true;
+    }
+
+    fn has_ended(&self) -> bool {
+        self.has_ended
+    }
+
     fn span(&self) -> fastn_lang::Span {
         self.init.dashdash.clone()
     }
@@ -185,7 +212,14 @@ mod test {
     #[derive(Debug)]
     struct DummySection {
         name: String,
-        is_end: bool,
+        // does the section have end mark like
+        // `/foo`
+        // where `/` marks end of the section `foo`
+        has_end_mark: bool,
+        // has the section ended like
+        // `foo -> /foo`
+        // where `foo` has ended by `/foo`
+        has_ended: bool,
         children: Vec<DummySection>,
     }
 
@@ -194,7 +228,7 @@ mod test {
             &'input self,
             _source: &'input str,
         ) -> Result<super::Mark<'input>, fastn_lang::Error> {
-            if self.is_end {
+            if self.has_end_mark {
                 Ok(super::Mark::End(&self.name))
             } else {
                 Ok(super::Mark::Start(&self.name))
@@ -203,6 +237,14 @@ mod test {
 
         fn add_children(&mut self, children: Vec<Self>) {
             self.children = children;
+        }
+
+        fn end_section(&mut self) {
+            self.has_ended = true;
+        }
+
+        fn has_ended(&self) -> bool {
+            self.has_ended
         }
 
         fn span(&self) -> fastn_lang::Span {
@@ -219,7 +261,8 @@ mod test {
             let name = if is_end { &part[1..] } else { part };
             let section = DummySection {
                 name: name.to_string(),
-                is_end,
+                has_end_mark: is_end,
+                has_ended: false,
                 children: vec![],
             };
             current.push(section);
