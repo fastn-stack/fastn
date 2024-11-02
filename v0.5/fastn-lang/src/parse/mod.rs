@@ -6,8 +6,8 @@ pub use parser::parse;
 #[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Document {
     pub module_doc: Option<fastn_lang::Span>,
-    pub imports: Vec<fastn_lang::unresolved::Import>,
-    pub definitions: std::collections::HashMap<fastn_lang::section::Identifier, Definition>,
+    pub imports: Vec<fastn_lang::parse::Import>,
+    pub definitions: std::collections::HashMap<fastn_lang::token::Identifier, Definition>,
     pub content: Vec<fastn_lang::Section>,
     pub errors: Vec<fastn_lang::Spanned<fastn_lang::Error>>,
     pub warnings: Vec<fastn_lang::Spanned<fastn_lang::Warning>>,
@@ -28,7 +28,7 @@ pub enum Definition {
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Import {
-    pub module: fastn_lang::section::ModuleName,
+    pub module: fastn_lang::token::ModuleName,
     pub exports: Option<Export>,
     pub exposing: Option<Export>,
 }
@@ -36,5 +36,5 @@ pub struct Import {
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Export {
     All,
-    Things(Vec<fastn_lang::section::AliasableIdentifier>),
+    Things(Vec<fastn_lang::token::AliasableIdentifier>),
 }

@@ -1,7 +1,7 @@
 pub(super) fn import(
     _source: &str,
-    section: fastn_lang::section::Section,
-    _document: &mut fastn_lang::unresolved::Document,
+    section: fastn_lang::token::Section,
+    _document: &mut fastn_lang::parse::Document,
 ) {
     if let Some(_kind) = section.init.name.kind {
         // document.errors.push(fastn_lang::Error::ImportCantHaveType);

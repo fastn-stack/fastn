@@ -8,12 +8,12 @@ pub(super) mod section_init;
 pub(super) mod tes;
 pub(super) mod visibility;
 
-impl fastn_lang::section::Document {
-    pub fn parse(source: &str) -> fastn_lang::section::Document {
+impl fastn_lang::token::Document {
+    pub fn parse(source: &str) -> fastn_lang::token::Document {
         let _scanner = fastn_lang::Scanner::new(
             source,
             Default::default(),
-            fastn_lang::section::Document::default(),
+            fastn_lang::token::Document::default(),
         );
         todo!()
     }
@@ -23,7 +23,7 @@ impl fastn_lang::section::Document {
 #[track_caller]
 fn p<
     T: fastn_lang::debug::JDebug,
-    F: FnOnce(&mut fastn_lang::Scanner<fastn_lang::section::Document>) -> T,
+    F: FnOnce(&mut fastn_lang::Scanner<fastn_lang::token::Document>) -> T,
 >(
     source: &str,
     f: F,
@@ -33,7 +33,7 @@ fn p<
     let mut scanner = fastn_lang::Scanner::new(
         source,
         Default::default(),
-        fastn_lang::section::Document::default(),
+        fastn_lang::token::Document::default(),
     );
     let result = f(&mut scanner);
     assert_eq!(result.debug(source), debug);
@@ -46,16 +46,16 @@ macro_rules! tt {
         #[allow(unused_macros)]
         macro_rules! t {
             ($source:expr, $debug:tt, $remaining:expr) => {
-                fastn_lang::section::parser::p($source, $f, serde_json::json!($debug), $remaining);
+                fastn_lang::token::parser::p($source, $f, serde_json::json!($debug), $remaining);
             };
             ($source:expr, $debug:tt) => {
-                fastn_lang::section::parser::p($source, $f, serde_json::json!($debug), "");
+                fastn_lang::token::parser::p($source, $f, serde_json::json!($debug), "");
             };
         }
         #[allow(unused_macros)]
         macro_rules! f {
             ($source:expr) => {
-                fastn_lang::section::parser::p($source, $f, serde_json::json!(null), $source);
+                fastn_lang::token::parser::p($source, $f, serde_json::json!(null), $source);
             };
         }
     };

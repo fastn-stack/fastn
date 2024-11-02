@@ -2,12 +2,12 @@ mod parser;
 mod utils;
 mod wiggin;
 
-pub use crate::section::parser::identifier::identifier;
-pub use crate::section::parser::kind::kind;
-pub use crate::section::parser::kinded_name::kinded_name;
-pub use crate::section::parser::module_name::module_name;
-pub use crate::section::parser::package_name::package_name;
-pub use crate::section::parser::qualified_identifier::qualified_identifier;
+pub use fastn_lang::token::parser::identifier::identifier;
+pub use fastn_lang::token::parser::kind::kind;
+pub use fastn_lang::token::parser::kinded_name::kinded_name;
+pub use fastn_lang::token::parser::module_name::module_name;
+pub use fastn_lang::token::parser::package_name::package_name;
+pub use fastn_lang::token::parser::qualified_identifier::qualified_identifier;
 
 #[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Document {
@@ -22,12 +22,12 @@ pub struct Document {
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
 pub struct Section {
-    pub init: fastn_lang::section::SectionInit,
+    pub init: fastn_lang::token::SectionInit,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub caption: Option<fastn_lang::section::HeaderValue>,
+    pub caption: Option<fastn_lang::token::HeaderValue>,
     pub headers: Vec<Header>,
-    pub body: Option<fastn_lang::section::HeaderValue>,
+    pub body: Option<fastn_lang::token::HeaderValue>,
     pub children: Vec<Section>, // TODO: this must be `Spanned<Section>`
     pub sub_sections: Vec<fastn_lang::Spanned<Section>>,
     pub function_marker: Option<fastn_lang::Span>,
@@ -40,15 +40,15 @@ pub struct Section {
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct SectionInit {
     pub dashdash: fastn_lang::Span, // for syntax highlighting and formatting
-    pub name: fastn_lang::section::KindedName,
+    pub name: fastn_lang::token::KindedName,
     pub colon: fastn_lang::Span, // for syntax highlighting and formatting
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Header {
-    pub name: fastn_lang::section::KindedName,
+    pub name: fastn_lang::token::KindedName,
     pub condition: Option<fastn_lang::Span>,
-    pub value: fastn_lang::section::HeaderValue,
+    pub value: fastn_lang::token::HeaderValue,
     pub is_commented: bool,
 }
 

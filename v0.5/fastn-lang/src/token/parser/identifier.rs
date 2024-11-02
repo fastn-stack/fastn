@@ -1,6 +1,6 @@
 pub fn identifier(
-    scanner: &mut fastn_lang::Scanner<fastn_lang::section::Document>,
-) -> Option<fastn_lang::section::Identifier> {
+    scanner: &mut fastn_lang::Scanner<fastn_lang::token::Document>,
+) -> Option<fastn_lang::token::Identifier> {
     let first = scanner.peek()?;
     // the first character should be is_alphabetic or `_`
     if !first.is_alphabetic() && first != '_' {
@@ -10,7 +10,7 @@ pub fn identifier(
     // later characters should be is_alphanumeric or `_` or `-`
     let span = scanner.take_while(|c| c.is_alphabetic() || c == '_' || c == '-')?;
 
-    Some(fastn_lang::section::Identifier { name: span })
+    Some(fastn_lang::token::Identifier { name: span })
 }
 
 #[cfg(test)]

@@ -2,7 +2,7 @@
 /// list and then calls `ender` for the list itself
 pub fn ender(
     source: &str,
-    o: &mut fastn_lang::unresolved::Document,
+    o: &mut fastn_lang::parse::Document,
     sections: Vec<fastn_lang::Section>,
 ) -> Vec<fastn_lang::Section> {
     // recursive part
@@ -17,7 +17,7 @@ pub fn ender(
 
 fn section_ender(
     source: &str,
-    o: &mut fastn_lang::unresolved::Document,
+    o: &mut fastn_lang::parse::Document,
     mut section: fastn_lang::Section,
 ) -> fastn_lang::Section {
     if let Some(caption) = section.caption {
@@ -40,24 +40,24 @@ fn section_ender(
 
 fn header_value_ender(
     source: &str,
-    o: &mut fastn_lang::unresolved::Document,
-    header: fastn_lang::section::HeaderValue,
-) -> fastn_lang::section::HeaderValue {
+    o: &mut fastn_lang::parse::Document,
+    header: fastn_lang::token::HeaderValue,
+) -> fastn_lang::token::HeaderValue {
     header
         .into_iter()
         .map(|ses| match ses {
-            fastn_lang::section::Tes::Text(span) => fastn_lang::section::Tes::Text(span),
-            fastn_lang::section::Tes::Expression {
+            fastn_lang::token::Tes::Text(span) => fastn_lang::token::Tes::Text(span),
+            fastn_lang::token::Tes::Expression {
                 start,
                 end,
                 content,
-            } => fastn_lang::section::Tes::Expression {
+            } => fastn_lang::token::Tes::Expression {
                 start,
                 end,
                 content: header_value_ender(source, o, content),
             },
-            fastn_lang::section::Tes::Section(sections) => {
-                fastn_lang::section::Tes::Section(ender(source, o, sections))
+            fastn_lang::token::Tes::Section(sections) => {
+                fastn_lang::token::Tes::Section(ender(source, o, sections))
             }
         })
         .collect()
@@ -69,7 +69,7 @@ fn header_value_ender(
 /// [{section: "foo"}, {section: "bar"}, "-- end: foo"] -> [{section: "foo", children: [{section: "bar"}]}]
 fn inner_ender<T: SectionProxy>(
     source: &str,
-    o: &mut fastn_lang::unresolved::Document,
+    o: &mut fastn_lang::parse::Document,
     sections: Vec<T>,
 ) -> Vec<T> {
     let mut stack = Vec::new();
@@ -163,7 +163,7 @@ impl SectionProxy for fastn_lang::Section {
         };
 
         let v = match (caption.get(0), caption.len()) {
-            (Some(fastn_lang::section::Tes::Text(span)), 1) => &source[span.start..span.end].trim(),
+            (Some(fastn_lang::token::Tes::Text(span)), 1) => &source[span.start..span.end].trim(),
             (Some(_), _) => return Err(fastn_lang::Error::EndContainsData),
             (None, _) => return Err(fastn_lang::Error::SectionNameNotFoundForEnd),
         };
@@ -287,7 +287,7 @@ mod test {
 
     #[track_caller]
     fn t(source: &str, expected: &str) {
-        let mut o = fastn_lang::unresolved::Document::default();
+        let mut o = fastn_lang::parse::Document::default();
         let sections = parse(source);
         let sections = super::inner_ender(source, &mut o, sections);
         assert_eq!(to_str(&sections), expected);
@@ -296,7 +296,7 @@ mod test {
 
     #[track_caller]
     fn f(source: &str, expected: &str, errors: Vec<fastn_lang::Error>) {
-        let mut o = fastn_lang::unresolved::Document::default();
+        let mut o = fastn_lang::parse::Document::default();
         let sections = parse(source);
         let sections = super::inner_ender(source, &mut o, sections);
         assert_eq!(to_str(&sections), expected);

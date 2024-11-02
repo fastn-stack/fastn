@@ -4,21 +4,21 @@
 
 extern crate self as fastn_lang;
 
+mod ast;
 mod compiler;
 #[cfg(test)]
 mod debug;
 mod error;
-mod resolved;
+mod parse;
 mod scanner;
-mod section;
-mod unresolved;
+mod token;
 mod warning;
 
 pub use error::Error;
 pub use scanner::{Scannable, Scanner};
 pub use warning::Warning;
 // fastn_lang::Section is used in more than one place, so it is at the top level.
-pub use section::Section;
+pub use token::Section;
 
 /// public | private | public<package> | public<module>
 ///

@@ -1,14 +1,14 @@
 pub fn qualified_identifier(
-    scanner: &mut fastn_lang::Scanner<fastn_lang::section::Document>,
-) -> Option<fastn_lang::section::QualifiedIdentifier> {
-    let module = match fastn_lang::section::module_name(scanner) {
+    scanner: &mut fastn_lang::Scanner<fastn_lang::token::Document>,
+) -> Option<fastn_lang::token::QualifiedIdentifier> {
+    let module = match fastn_lang::token::module_name(scanner) {
         Some(module) => match scanner.peek() {
             Some('#') => {
                 scanner.pop();
                 Some(module)
             }
             _ => {
-                return Some(fastn_lang::section::QualifiedIdentifier {
+                return Some(fastn_lang::token::QualifiedIdentifier {
                     module: Some(module),
                     terms: vec![],
                 })
@@ -19,7 +19,7 @@ pub fn qualified_identifier(
 
     let terms = {
         let mut terms = Vec::new();
-        while let Some(identifier) = fastn_lang::section::identifier(scanner) {
+        while let Some(identifier) = fastn_lang::token::identifier(scanner) {
             terms.push(identifier);
             if !scanner.take('.') {
                 break;
@@ -32,7 +32,7 @@ pub fn qualified_identifier(
         return None;
     }
 
-    Some(fastn_lang::section::QualifiedIdentifier::new(module, terms))
+    Some(fastn_lang::token::QualifiedIdentifier::new(module, terms))
 }
 
 #[cfg(test)]
@@ -65,7 +65,7 @@ mod test {
             super::qualified_identifier(&mut fastn_lang::Scanner::new(
                 " string",
                 Default::default(),
-                fastn_lang::section::Document::default()
+                fastn_lang::token::Document::default()
             ),),
             None
         );
