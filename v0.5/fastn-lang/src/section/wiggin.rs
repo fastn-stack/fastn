@@ -134,6 +134,10 @@ enum Mark<'input> {
 trait SectionProxy: Sized + std::fmt::Debug {
     /// returns the name of the section, and if it starts or ends the section
     fn mark<'input>(&'input self, source: &'input str) -> Result<Mark<'input>, fastn_lang::Error>;
+
+    /// Adds a list of children to the current section. It is typically called when the section
+    /// is finalized or ended, hence `self.has_ended` function, if called after this, should return
+    /// `true`.
     fn add_children(&mut self, children: Vec<Self>);
 
     /// Checks if the current section is marked as ended.
@@ -177,7 +181,10 @@ impl SectionProxy for fastn_lang::Section {
 
     fn add_children(&mut self, children: Vec<Self>) {
         self.children = children;
-        // TODO: check this logic (even empty sections with end should have this set)
+
+        // Since this function is called by `SectionProxy::inner_end` when end is encountered even
+        // when children is empty, we can safely assume `self.has_end` is set to true regardless of
+        // children being empty or not.
         self.has_end = true;
     }
 
@@ -334,5 +341,6 @@ mod test {
             "foo [bar [baz, a]]",
         );
         t("bar -> bar -> baz -> /bar -> /bar", "bar [bar [baz]]");
+        t("bar -> bar -> /bar -> /bar", "bar [bar]");
     }
 }
