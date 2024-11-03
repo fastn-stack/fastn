@@ -58,12 +58,14 @@ pub fn extend_span(span: &mut Option<fastn_section::Span>, other: fastn_section:
     }
 }
 
+#[allow(dead_code)]
 pub fn extend_o_span(span: &mut Option<fastn_section::Span>, other: Option<fastn_section::Span>) {
     if let Some(other) = other {
         extend_span(span, other);
     }
 }
 
+#[allow(dead_code)]
 pub fn extend_spanned<T>(
     span: &mut Option<fastn_section::Span>,
     other: &fastn_section::Spanned<T>,
@@ -72,6 +74,7 @@ pub fn extend_spanned<T>(
 }
 
 impl fastn_section::Kind {
+    #[allow(dead_code)]
     fn span(&self) -> fastn_section::Span {
         todo!()
         // let mut span = self.doc.clone();

@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 pub fn section_init(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Option<fastn_section::SectionInit> {

@@ -1,5 +1,6 @@
 mod read;
 
+#[allow(dead_code)]
 pub struct Config {
     ds: Box<dyn fastn_lang::DS>,
     sitemap: Sitemap,

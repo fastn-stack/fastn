@@ -1,5 +1,6 @@
 /// calls `inner_ender` for all the embedded section inside section in the
 /// list and then calls `ender` for the list itself
+#[allow(dead_code)]
 pub fn ender(
     source: &str,
     o: &mut fastn_section::Document,

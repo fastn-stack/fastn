@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 pub struct Compiler {
     unresolved:
         std::collections::HashMap<fastn_section::Identifier, fastn_lang::unresolved::Definition>,
@@ -11,11 +12,11 @@ enum CompilerState {
 }
 
 impl Compiler {
-    pub fn compile(_source: &str, _name: &str) -> CompilerState {
+    fn compile(_source: &str, _name: &str) -> CompilerState {
         todo!()
     }
 
-    pub fn continue_after_documents(
+    fn continue_after_documents(
         self,
         _source: &str,
         _documents: std::collections::HashMap<fastn_section::Span, &str>,

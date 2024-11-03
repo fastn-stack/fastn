@@ -1,5 +1,5 @@
 fn main() {
-    let ds =
+    let _ds =
     // read config here and pass to everyone?
     // do common build stuff here
     match fastn::commands::parse() {

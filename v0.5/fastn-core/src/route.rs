@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 // the router will depend on fastn-lang, but
 pub enum Route {
     NotFound,

@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 pub fn tes(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Option<Vec<fastn_section::Tes>> {
