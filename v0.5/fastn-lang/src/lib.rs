@@ -10,6 +10,16 @@ mod parse;
 
 pub use fastn_section::Result;
 
+pub struct UISpec {
+    pub title: String,
+    pub body: String,
+}
+
+pub enum Output {
+    UI(UISpec),
+    Data(serde_json::Value),
+}
+
 pub trait DS {
     async fn source(&mut self, document: &str) -> Result<String>;
     async fn parse(&mut self, qualified_identifier: &str) -> Result<fastn_lang::parse::Definition>;

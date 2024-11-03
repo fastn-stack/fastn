@@ -1,5 +1,5 @@
 [package]
-name = "fastn-router"
+name = "fastn-core"
 version = "0.1.0"
 authors.workspace = true
 edition.workspace = true
@@ -9,3 +9,4 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
+fastn-lang.workspace = true
