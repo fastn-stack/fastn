@@ -6,7 +6,10 @@ impl fastn_lang::DS for DS {
         todo!()
     }
 
-    async fn unresolved(&mut self, qualified_identifier: &str) -> fastn_lang::Result<fastn_lang::unresolved::Definition> {
+    async fn unresolved(
+        &mut self,
+        qualified_identifier: &str,
+    ) -> fastn_lang::Result<fastn_lang::unresolved::Definition> {
         todo!()
     }
 
