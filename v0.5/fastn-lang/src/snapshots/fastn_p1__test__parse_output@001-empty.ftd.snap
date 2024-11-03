@@ -1,8 +1,0 @@
----
-source: fastn-p1/src/lib.rs
-expression: "fastn_section::ParseOutput::new(\"foo\", &s).debug(&s)"
-input_file: fastn-p1/t/001-empty.ftd
----
-doc_name: foo
-items: []
-module_doc: ~

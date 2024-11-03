@@ -1,5 +1,5 @@
 [package]
-name = "fastn-lang"
+name = "fastn-static"
 version = "0.1.0"
 authors.workspace = true
 edition.workspace = true
@@ -8,11 +8,5 @@ license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 
-
 [dependencies]
-serde.workspace = true
-fastn-section.workspace = true
-
-[dev-dependencies]
-serde_json.workspace = true
-
+fastn-lang.workspace = true

@@ -7,42 +7,42 @@ impl<T> fastn_section::Spanned<T> {
     }
 }
 
-impl From<fastn_section::Span> for fastn_section::token::Identifier {
+impl From<fastn_section::Span> for fastn_section::Identifier {
     fn from(value: fastn_section::Span) -> Self {
-        fastn_section::token::Identifier { name: value }
+        fastn_section::Identifier { name: value }
     }
 }
 
-impl From<fastn_section::Span> for fastn_section::token::AliasableIdentifier {
+impl From<fastn_section::Span> for fastn_section::AliasableIdentifier {
     fn from(value: fastn_section::Span) -> Self {
-        fastn_section::token::AliasableIdentifier {
+        fastn_section::AliasableIdentifier {
             name: value,
             alias: None,
         }
     }
 }
 
-impl From<fastn_section::token::Identifier> for fastn_section::token::AliasableIdentifier {
-    fn from(value: fastn_section::token::Identifier) -> Self {
-        fastn_section::token::AliasableIdentifier {
+impl From<fastn_section::Identifier> for fastn_section::AliasableIdentifier {
+    fn from(value: fastn_section::Identifier) -> Self {
+        fastn_section::AliasableIdentifier {
             name: value.name,
             alias: None,
         }
     }
 }
 
-impl From<fastn_section::token::Identifier> for fastn_section::token::QualifiedIdentifier {
-    fn from(value: fastn_section::token::Identifier) -> Self {
-        fastn_section::token::QualifiedIdentifier {
+impl From<fastn_section::Identifier> for fastn_section::QualifiedIdentifier {
+    fn from(value: fastn_section::Identifier) -> Self {
+        fastn_section::QualifiedIdentifier {
             module: None,
             terms: vec![value],
         }
     }
 }
 
-impl From<fastn_section::token::Kind> for Option<fastn_section::token::KindedName> {
-    fn from(value: fastn_section::token::Kind) -> Self {
-        Some(fastn_section::token::KindedName {
+impl From<fastn_section::Kind> for Option<fastn_section::KindedName> {
+    fn from(value: fastn_section::Kind) -> Self {
+        Some(fastn_section::KindedName {
             kind: None,
             name: value.to_identifier()?,
         })
@@ -71,7 +71,7 @@ pub fn extend_spanned<T>(
     extend_span(span, other.span.clone());
 }
 
-impl fastn_section::token::Kind {
+impl fastn_section::Kind {
     fn span(&self) -> fastn_section::Span {
         todo!()
         // let mut span = self.doc.clone();
@@ -95,7 +95,7 @@ impl fastn_section::Section {
     }
 }
 
-impl fastn_section::token::Kind {
+impl fastn_section::Kind {
     pub fn attach_doc(&mut self, doc: fastn_section::Span) {
         if self.doc.is_some() {
             panic!("doc already attached");
@@ -113,7 +113,7 @@ impl fastn_section::token::Kind {
         self.visibility = Some(visibility);
     }
 
-    pub fn to_identifier(&self) -> Option<fastn_section::token::Identifier> {
+    pub fn to_identifier(&self) -> Option<fastn_section::Identifier> {
         if self.args.is_some()
             || self.doc.is_some()
             || self.visibility.is_some()
@@ -133,22 +133,22 @@ impl fastn_section::token::Kind {
     }
 }
 
-impl From<fastn_section::token::QualifiedIdentifier> for fastn_section::token::Kind {
-    fn from(name: fastn_section::token::QualifiedIdentifier) -> Self {
-        fastn_section::token::Kind {
+impl From<fastn_section::QualifiedIdentifier> for fastn_section::Kind {
+    fn from(name: fastn_section::QualifiedIdentifier) -> Self {
+        fastn_section::Kind {
             name,
             ..Default::default()
         }
     }
 }
 
-impl fastn_section::token::QualifiedIdentifier {
+impl fastn_section::QualifiedIdentifier {
     pub fn new(
-        module: Option<fastn_section::token::ModuleName>,
-        terms: Vec<fastn_section::token::Identifier>,
+        module: Option<fastn_section::ModuleName>,
+        terms: Vec<fastn_section::Identifier>,
     ) -> Self {
         assert!(module.is_some() || !terms.is_empty());
-        fastn_section::token::QualifiedIdentifier { module, terms }
+        fastn_section::QualifiedIdentifier { module, terms }
     }
 }
 
@@ -158,8 +158,8 @@ impl fastn_section::Section {
         function_marker: Option<fastn_section::Span>,
     ) -> Box<fastn_section::Section> {
         Box::new(fastn_section::Section {
-            init: fastn_section::token::SectionInit {
-                name: fastn_section::token::KindedName {
+            init: fastn_section::SectionInit {
+                name: fastn_section::KindedName {
                     kind: None,
                     name: name.into(),
                 },
@@ -171,7 +171,7 @@ impl fastn_section::Section {
     }
 }
 
-impl fastn_section::Scannable for fastn_section::token::Document {
+impl fastn_section::Scannable for fastn_section::Document {
     fn add_error(&mut self, span: fastn_section::Span, error: fastn_section::Error) {
         self.errors
             .push(fastn_section::Spanned { span, value: error });

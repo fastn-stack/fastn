@@ -9,3 +9,6 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
+fastn-lang.workspace = true
+fastn-static.workspace = true
+fastn-router.workspace = true

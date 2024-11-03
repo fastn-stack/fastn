@@ -6,18 +6,22 @@ extern crate self as fastn_lang;
 
 mod ast;
 mod compiler;
-#[cfg(test)]
-mod debug;
-mod error;
 mod parse;
-mod scanner;
-mod warning;
 
-pub use error::Error;
-pub use scanner::{Scannable, Scanner};
-pub use warning::Warning;
-// fastn_section::Section is used in more than one place, so it is at the top level.
-pub use fastn_section::Section;
+pub use fastn_section::Result;
+
+pub trait DS {
+    async fn source(&mut self, document: &str) -> Result<String>;
+    async fn parse(&mut self, qualified_identifier: &str) -> Result<fastn_lang::parse::Definition>;
+    async fn ast(&mut self, qualified_identifier: &str) -> Result<fastn_lang::ast::Definition>;
+    async fn add_ast(
+        &mut self,
+        qualified_identifier: &str,
+        ast: fastn_lang::ast::Definition,
+    ) -> Result<()>;
+    async fn parse_tree(&mut self, document: &str) -> Result<Vec<fastn_lang::parse::Definition>>;
+    async fn ast_tree(&mut self, document: &str) -> Result<Vec<fastn_lang::parse::Definition>>;
+}
 
 /// public | private | public<package> | public<module>
 ///

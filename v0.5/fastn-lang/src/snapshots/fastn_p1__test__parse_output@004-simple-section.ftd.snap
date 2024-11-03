@@ -1,9 +1,0 @@
----
-source: fastn-p1/src/lib.rs
-expression: "fastn_section::ParseOutput::parse(\"foo\", &s).debug(&s)"
-input_file: fastn-p1/t/004-simple-section.ftd
----
-doc_name: foo
-items:
-  - error: kinded_name_not_found
-module_doc: ~

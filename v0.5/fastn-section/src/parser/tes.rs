@@ -1,9 +1,9 @@
 pub fn tes(
-    scanner: &mut fastn_section::Scanner<fastn_section::token::Document>,
-) -> Option<Vec<fastn_section::token::Tes>> {
+    scanner: &mut fastn_section::Scanner<fastn_section::Document>,
+) -> Option<Vec<fastn_section::Tes>> {
     let mut ses = Vec::new();
     while let Some(text) = scanner.take_till_char_or_end_of_line('{') {
-        ses.push(fastn_section::token::Tes::Text(text));
+        ses.push(fastn_section::Tes::Text(text));
         if !scanner.take('{') {
             // we have reached the end of the scanner
             break;

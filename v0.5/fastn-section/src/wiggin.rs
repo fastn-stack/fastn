@@ -41,23 +41,23 @@ fn section_ender(
 fn header_value_ender(
     source: &str,
     o: &mut fastn_section::parse::Document,
-    header: fastn_section::token::HeaderValue,
-) -> fastn_section::token::HeaderValue {
+    header: fastn_section::HeaderValue,
+) -> fastn_section::HeaderValue {
     header
         .into_iter()
         .map(|ses| match ses {
-            fastn_section::token::Tes::Text(span) => fastn_section::token::Tes::Text(span),
-            fastn_section::token::Tes::Expression {
+            fastn_section::Tes::Text(span) => fastn_section::Tes::Text(span),
+            fastn_section::Tes::Expression {
                 start,
                 end,
                 content,
-            } => fastn_section::token::Tes::Expression {
+            } => fastn_section::Tes::Expression {
                 start,
                 end,
                 content: header_value_ender(source, o, content),
             },
-            fastn_section::token::Tes::Section(sections) => {
-                fastn_section::token::Tes::Section(ender(source, o, sections))
+            fastn_section::Tes::Section(sections) => {
+                fastn_section::Tes::Section(ender(source, o, sections))
             }
         })
         .collect()
@@ -169,9 +169,7 @@ impl SectionProxy for fastn_section::Section {
         };
 
         let v = match (caption.get(0), caption.len()) {
-            (Some(fastn_section::token::Tes::Text(span)), 1) => {
-                &source[span.start..span.end].trim()
-            }
+            (Some(fastn_section::Tes::Text(span)), 1) => &source[span.start..span.end].trim(),
             (Some(_), _) => return Err(fastn_section::Error::EndContainsData),
             (None, _) => return Err(fastn_section::Error::SectionNameNotFoundForEnd),
         };

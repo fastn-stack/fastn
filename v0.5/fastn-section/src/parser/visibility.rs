@@ -1,5 +1,5 @@
 pub fn visibility(
-    scanner: &mut fastn_section::Scanner<fastn_section::token::Document>,
+    scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Option<fastn_section::Visibility> {
     match scanner.one_of(&["public", "private"]) {
         Some("public") => (),

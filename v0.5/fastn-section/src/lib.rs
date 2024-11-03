@@ -4,6 +4,8 @@
 
 extern crate self as fastn_section;
 
+#[cfg(test)]
+mod debug;
 mod error;
 mod parser;
 mod scanner;
@@ -11,6 +13,8 @@ mod utils;
 mod warning;
 mod wiggin;
 
+#[cfg(test)]
+pub(crate) use debug::JDebug;
 pub use error::Error;
 pub use fastn_section::parser::identifier::identifier;
 pub use fastn_section::parser::kind::kind;
@@ -21,6 +25,7 @@ pub use fastn_section::parser::qualified_identifier::qualified_identifier;
 pub use fastn_section::warning::Warning;
 pub use scanner::{Scannable, Scanner};
 
+pub type Result<T> = std::result::Result<T, fastn_section::Error>;
 pub type Span = std::ops::Range<usize>;
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Spanned<T> {
@@ -41,12 +46,12 @@ pub struct Document {
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
 pub struct Section {
-    pub init: fastn_section::token::SectionInit,
+    pub init: fastn_section::SectionInit,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub caption: Option<fastn_section::token::HeaderValue>,
+    pub caption: Option<fastn_section::HeaderValue>,
     pub headers: Vec<Header>,
-    pub body: Option<fastn_section::token::HeaderValue>,
+    pub body: Option<fastn_section::HeaderValue>,
     pub children: Vec<Section>, // TODO: this must be `Spanned<Section>`
     pub sub_sections: Vec<fastn_section::Spanned<Section>>,
     pub function_marker: Option<fastn_section::Span>,
@@ -59,15 +64,15 @@ pub struct Section {
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct SectionInit {
     pub dashdash: fastn_section::Span, // for syntax highlighting and formatting
-    pub name: fastn_section::token::KindedName,
+    pub name: fastn_section::KindedName,
     pub colon: fastn_section::Span, // for syntax highlighting and formatting
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Header {
-    pub name: fastn_section::token::KindedName,
+    pub name: fastn_section::KindedName,
     pub condition: Option<fastn_section::Span>,
-    pub value: fastn_section::token::HeaderValue,
+    pub value: fastn_section::HeaderValue,
     pub is_commented: bool,
 }
 
