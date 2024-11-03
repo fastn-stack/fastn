@@ -4,9 +4,9 @@
 
 extern crate self as fastn_lang;
 
-mod ast;
 mod compiler;
-mod parse;
+pub mod resolved;
+pub mod unresolved;
 
 pub use fastn_section::Result;
 
@@ -22,15 +22,27 @@ pub enum Output {
 
 pub trait DS {
     async fn source(&mut self, document: &str) -> Result<String>;
-    async fn parse(&mut self, qualified_identifier: &str) -> Result<fastn_lang::parse::Definition>;
-    async fn ast(&mut self, qualified_identifier: &str) -> Result<fastn_lang::ast::Definition>;
-    async fn add_ast(
+    async fn unresolved(
         &mut self,
         qualified_identifier: &str,
-        ast: fastn_lang::ast::Definition,
+    ) -> Result<fastn_lang::unresolved::Definition>;
+    async fn resolved(
+        &mut self,
+        qualified_identifier: &str,
+    ) -> Result<fastn_lang::resolved::Definition>;
+    async fn add_resolved(
+        &mut self,
+        qualified_identifier: &str,
+        resolved: fastn_lang::resolved::Definition,
     ) -> Result<()>;
-    async fn parse_tree(&mut self, document: &str) -> Result<Vec<fastn_lang::parse::Definition>>;
-    async fn ast_tree(&mut self, document: &str) -> Result<Vec<fastn_lang::parse::Definition>>;
+    async fn unresolved_document(
+        &mut self,
+        document: &str,
+    ) -> Result<Vec<fastn_lang::unresolved::Document>>;
+    async fn resolved_document(
+        &mut self,
+        document: &str,
+    ) -> Result<Vec<fastn_lang::resolved::Document>>;
 }
 
 /// public | private | public<package> | public<module>

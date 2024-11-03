@@ -49,11 +49,11 @@ pub const INLINE_IF: &str = " if ";
 pub const IF: &str = "if";
 
 /**
- * Constructs a parse error Result of a specific type
+ * Constructs a unresolved error Result of a specific type
  *
  * # Parameters
  *
- * - `m` - a message to add to the parse error
+ * - `m` - a message to add to the unresolved error
  * - `doc_id` - a reference to a string representing the document id
  * - `line_number` - a usize representing the line number where the error occured
  *

@@ -288,14 +288,14 @@ impl Field {
         doc: &mut ftd::interpreter::TDoc,
         known_kinds: &ftd::Map<ftd::interpreter::Kind>,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<Field>>> {
-        // First resolve all kinds from ast fields
+        // First resolve all kinds from resolved fields
         let partial_resolved_fields = try_ok_state!(Field::resolve_kinds_from_ast_fields(
             fields,
             doc,
             known_kinds
         )?);
 
-        // Once ast kinds are resolved, then try resolving ast values
+        // Once resolved kinds are resolved, then try resolving resolved values
         let resolved_fields =
             Field::resolve_values_from_ast_fields(name, partial_resolved_fields, doc)?;
 

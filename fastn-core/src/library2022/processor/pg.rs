@@ -128,7 +128,7 @@ fn resolve_variable_from_headers(
             Ok(r) => Ok(r),
             Err(e) => ftd::interpreter::utils::e2(
                 format!(
-                    "failed to parse `{var}: {val}` into {into}: {e}",
+                    "failed to unresolved `{var}: {val}` into {into}: {e}",
                     e = e.to_string()
                 ),
                 doc_name,

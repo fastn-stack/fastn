@@ -126,7 +126,7 @@ pub async fn handle_wasm(
                     header_name.as_str().to_string(),
                     header_value
                         .to_str()
-                        .expect("Unable to parse header value")
+                        .expect("Unable to unresolved header value")
                         .to_string(),
                 ));
             });
@@ -147,17 +147,19 @@ pub async fn handle_wasm(
             method: req.method(),
             payload: body_str,
         };
-        fastn_core::time("WASM Guest function").it(match import.handlerequest(&mut store, request) {
-            Ok(data) => Ok(actix_web::HttpResponse::Ok()
-                .content_type(actix_web::http::header::ContentType::json())
-                .status(if data.success {
-                    actix_web::http::StatusCode::OK
-                } else {
-                    actix_web::http::StatusCode::BAD_REQUEST
-                })
-                .body(data.data)),
-            Err(err) => Err(WASMError::WasmFunctionInvoke(err.to_string())),
-        })
+        fastn_core::time("WASM Guest function").it(
+            match import.handlerequest(&mut store, request) {
+                Ok(data) => Ok(actix_web::HttpResponse::Ok()
+                    .content_type(actix_web::http::header::ContentType::json())
+                    .status(if data.success {
+                        actix_web::http::StatusCode::OK
+                    } else {
+                        actix_web::http::StatusCode::BAD_REQUEST
+                    })
+                    .body(data.data)),
+                Err(err) => Err(WASMError::WasmFunctionInvoke(err.to_string())),
+            },
+        )
     }
     fastn_core::time("WASM Execution: ").it(match inner(req, wasm_module, backend_headers).await {
         Ok(resp) => resp,

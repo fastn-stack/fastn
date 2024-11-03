@@ -358,9 +358,9 @@ fn partial_tokens_to_tokens(mut tokens: &[PartialToken]) -> EvalexprResult<Vec<T
                         Some(Token::Boolean(boolean))
                     } else {
                         // If there are two tokens following this one, check if the next one is
-                        // a plus or a minus. If so, then attempt to parse all three tokens as a
+                        // a plus or a minus. If so, then attempt to unresolved all three tokens as a
                         // scientific notation number of the form `<coefficient>e{+,-}<exponent>`,
-                        // for example [Literal("10e"), Minus, Literal("3")] => "1e-3".parse().
+                        // for example [Literal("10e"), Minus, Literal("3")] => "1e-3".unresolved().
                         match (second, third) {
                             (Some(second), Some(third))
                                 if second == PartialToken::Minus

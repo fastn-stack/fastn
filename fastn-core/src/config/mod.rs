@@ -517,7 +517,7 @@ impl Config {
             };
 
             if let Some((v, _)) = id.split_once('/') {
-                fastn_core::Version::parse(v)
+                fastn_core::Version::unresolved(v)
             } else {
                 Ok(fastn_core::Version::base())
             }
@@ -931,7 +931,7 @@ impl Config {
                 Ok(fastn_manifest_processed) => fastn_manifest_processed,
                 Err(e) => {
                     return Err(fastn_core::Error::PackageError {
-                        message: format!("failed to parse fastn.manifest.ftd: {:?}", &e),
+                        message: format!("failed to unresolved fastn.manifest.ftd: {:?}", &e),
                     });
                 }
             };

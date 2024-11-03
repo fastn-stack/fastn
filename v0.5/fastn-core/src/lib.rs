@@ -7,4 +7,4 @@ extern crate self as fastn_core;
 mod config;
 mod route;
 
-pub use config::Config;
+pub use config::{AutoImport, Config, DynamicRoute, Redirect, Sitemap};

@@ -21,7 +21,7 @@ pub struct Index<'input> {
 
 impl<'input, T: Scannable> Scanner<'input, T> {
     pub fn new(input: &str, fuel: fastn_section::Fuel, t: T) -> Scanner<T> {
-        assert!(input.len() < 10_000_000); // can't parse > 10MB file
+        assert!(input.len() < 10_000_000); // can't unresolved > 10MB file
         Scanner {
             input,
             chars: input.char_indices().peekable(),

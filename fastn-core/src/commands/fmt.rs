@@ -156,7 +156,7 @@ fn parsed_to_sections(input: &str) -> Vec<Section> {
             sections.push(section);
         } else {
             panic!(
-                "`{}`: can't parse",
+                "`{}`: can't unresolved",
                 input
                     .split_once('\n')
                     .map(|(v, _)| v.to_string())

@@ -1,3 +1,5 @@
+mod read;
+
 pub struct Config {
     ds: Box<dyn fastn_lang::DS>,
     sitemap: Sitemap,

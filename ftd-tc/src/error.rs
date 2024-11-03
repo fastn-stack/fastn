@@ -1,6 +1,6 @@
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
-    #[error("ast: {0}")]
+    #[error("resolved: {0}")]
     Ast(#[from] ftd_ast::Error),
 
     #[error("ftd-p1: {name}")]

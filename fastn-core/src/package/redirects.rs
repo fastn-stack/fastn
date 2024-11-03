@@ -30,7 +30,7 @@ impl UrlMappingsTemp {
         self.find_url_mappings(url_mappings_body)
     }
 
-    // todo: parse dynamic-urls in this later
+    // todo: unresolved dynamic-urls in this later
     /// Parses url mappings from fastn.url-mappings body
     ///
     /// and returns UrlMappings { redirects, endpoints }

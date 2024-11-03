@@ -133,7 +133,7 @@ pub enum WasmReadError {
 pub enum HttpError {
     #[error("http error {0}")]
     ReqwestError(#[from] reqwest::Error),
-    #[error("url parse error {0}")]
+    #[error("url unresolved error {0}")]
     URLParseError(#[from] url::ParseError),
     #[error("generic error {message}")]
     GenericError { message: String },

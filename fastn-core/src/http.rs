@@ -186,7 +186,7 @@ impl Request {
                 ) {
                     headers.insert(k, v.clone());
                 } else {
-                    tracing::warn!("failed to parse header: {key:?} {value:?}");
+                    tracing::warn!("failed to unresolved header: {key:?} {value:?}");
                 }
             }
             headers

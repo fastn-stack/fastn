@@ -10,7 +10,7 @@ pub(super) fn import(
     // section.name must be exactly import.
     // section.caption must be single text block, parsable as a module-name.
     //       module-name must be internally able to handle aliasing.
-    // only two headers allowed: exports and exposing, parse them.
+    // only two headers allowed: exports and exposing, unresolved them.
     // ensure there are no children or body.
     todo!()
 }

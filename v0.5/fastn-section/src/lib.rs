@@ -166,7 +166,7 @@ pub type HeaderValue = Vec<Tes>;
 /// it can even have recursive structure, e.g., `hello ${ { \n text-text \n } }`.
 /// each recursion starts with `{` and ends with `}`.
 /// if the text inside { starts with `--` then the content is a section,
-/// and we should use `fastn_section::parser::section()` parser to parse it.
+/// and we should use `fastn_section::parser::section()` parser to unresolved it.
 /// otherwise it is a text.
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub enum Tes {

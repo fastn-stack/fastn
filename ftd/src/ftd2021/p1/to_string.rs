@@ -106,7 +106,7 @@ mod test {
                     ),
                     "foo"
                 )
-                .expect("Cannot parse to section")
+                .expect("Cannot unresolved to section")
             )
         );
     }
@@ -136,7 +136,7 @@ mod test {
                     ),
                     "foo"
                 )
-                .expect("Cannot parse to section")
+                .expect("Cannot unresolved to section")
             )
         );
 
@@ -164,7 +164,7 @@ mod test {
                     ),
                     "foo"
                 )
-                .expect("Cannot parse to section")
+                .expect("Cannot unresolved to section")
             )
         );
     }

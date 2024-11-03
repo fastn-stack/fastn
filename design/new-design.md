@@ -151,7 +151,7 @@ pub struct Section {
 }
 
 pub enum AST {
-    // ftd::ast::Ast
+    // ftd::resolved::Ast
     #[serde(rename = "import")]
     Import(ftd::ast::Import),
     #[serde(rename = "record")]

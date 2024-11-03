@@ -5,3 +5,7 @@ pub enum Definition {
 
 pub struct Component {}
 pub struct Function {}
+
+pub struct Document {
+    pub definitions: Vec<Definition>,
+}

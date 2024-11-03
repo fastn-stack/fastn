@@ -1,5 +1,5 @@
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
-// #[serde(tag = "ast-type", content = "c")]
+// #[serde(tag = "resolved-type", content = "c")]
 pub enum Ast {
     #[serde(rename = "import")]
     Import(ftd_ast::Import),
