@@ -18,6 +18,7 @@ name = "fastn-core"
 version = "0.1.0"
 dependencies = [
  "fastn-lang",
+ "serde_json",
 ]
 
 [[package]]

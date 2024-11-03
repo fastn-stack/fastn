@@ -9,7 +9,7 @@ pub enum Route {
     Static(String),
 }
 
-pub fn route(config: &fastn_config::Config, path: &str, data: serde_json::Value) -> Route {
+pub fn route(_config: &fastn_core::Config, _path: &str, _data: serde_json::Value) -> Route {
     // parse the fastn_ftd_source, and extract
     todo!()
 }

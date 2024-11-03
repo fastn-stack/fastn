@@ -1,14 +1,5 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+#![allow(clippy::derive_partial_eq_without_eq, clippy::get_first)]
+#![deny(unused_crate_dependencies)]
+#![warn(clippy::used_underscore_binding)]
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+extern crate self as fastn_update;

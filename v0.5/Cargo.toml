@@ -5,6 +5,7 @@ members = [
     "fastn-lang",
     "fastn-section",
     "fastn-static",
+    "fastn-update",
 ]
 exclude = []
 resolver = "2"
@@ -40,6 +41,7 @@ fastn-lang = { path = "fastn-lang" }
 fastn-section = { path = "fastn-section" }
 fastn-static = { path = "fastn-static" }
 fastn-core = { path = "fastn-core" }
+fastn-update = { path = "fastn-update" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 itertools = "0.13"
