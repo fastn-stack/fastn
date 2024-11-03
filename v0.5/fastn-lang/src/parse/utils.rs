@@ -1,9 +1,9 @@
-impl fastn_lang::parse::Document {
+impl fastn_section::parse::Document {
     pub fn new(
-        document: fastn_lang::token::Document,
-    ) -> (fastn_lang::parse::Document, Vec<fastn_lang::Section>) {
+        document: fastn_section::token::Document,
+    ) -> (fastn_section::parse::Document, Vec<fastn_section::Section>) {
         (
-            fastn_lang::parse::Document {
+            fastn_section::parse::Document {
                 module_doc: document.module_doc,
                 imports: vec![],
                 definitions: Default::default(),

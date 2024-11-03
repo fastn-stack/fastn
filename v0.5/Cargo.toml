@@ -1,6 +1,9 @@
 [workspace]
 members = [
+    "fastn",
     "fastn-lang",
+    "fastn-router",
+    "fastn-section",
 ]
 exclude = []
 resolver = "2"

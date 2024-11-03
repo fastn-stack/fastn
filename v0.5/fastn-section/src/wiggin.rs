@@ -2,9 +2,9 @@
 /// list and then calls `ender` for the list itself
 pub fn ender(
     source: &str,
-    o: &mut fastn_lang::parse::Document,
-    sections: Vec<fastn_lang::Section>,
-) -> Vec<fastn_lang::Section> {
+    o: &mut fastn_section::parse::Document,
+    sections: Vec<fastn_section::Section>,
+) -> Vec<fastn_section::Section> {
     // recursive part
     let sections = sections
         .into_iter()
@@ -17,9 +17,9 @@ pub fn ender(
 
 fn section_ender(
     source: &str,
-    o: &mut fastn_lang::parse::Document,
-    mut section: fastn_lang::Section,
-) -> fastn_lang::Section {
+    o: &mut fastn_section::parse::Document,
+    mut section: fastn_section::Section,
+) -> fastn_section::Section {
     if let Some(caption) = section.caption {
         section.caption = Some(header_value_ender(source, o, caption));
     }
@@ -40,24 +40,24 @@ fn section_ender(
 
 fn header_value_ender(
     source: &str,
-    o: &mut fastn_lang::parse::Document,
-    header: fastn_lang::token::HeaderValue,
-) -> fastn_lang::token::HeaderValue {
+    o: &mut fastn_section::parse::Document,
+    header: fastn_section::token::HeaderValue,
+) -> fastn_section::token::HeaderValue {
     header
         .into_iter()
         .map(|ses| match ses {
-            fastn_lang::token::Tes::Text(span) => fastn_lang::token::Tes::Text(span),
-            fastn_lang::token::Tes::Expression {
+            fastn_section::token::Tes::Text(span) => fastn_section::token::Tes::Text(span),
+            fastn_section::token::Tes::Expression {
                 start,
                 end,
                 content,
-            } => fastn_lang::token::Tes::Expression {
+            } => fastn_section::token::Tes::Expression {
                 start,
                 end,
                 content: header_value_ender(source, o, content),
             },
-            fastn_lang::token::Tes::Section(sections) => {
-                fastn_lang::token::Tes::Section(ender(source, o, sections))
+            fastn_section::token::Tes::Section(sections) => {
+                fastn_section::token::Tes::Section(ender(source, o, sections))
             }
         })
         .collect()
@@ -69,7 +69,7 @@ fn header_value_ender(
 /// [{section: "foo"}, {section: "bar"}, "-- end: foo"] -> [{section: "foo", children: [{section: "bar"}]}]
 fn inner_ender<T: SectionProxy>(
     source: &str,
-    o: &mut fastn_lang::parse::Document,
+    o: &mut fastn_section::parse::Document,
     sections: Vec<T>,
 ) -> Vec<T> {
     let mut stack = Vec::new();
@@ -113,9 +113,9 @@ fn inner_ender<T: SectionProxy>(
                 }
                 // we have run out of sections, and we have not found the section end, return
                 // error, put the children back on the stack
-                o.errors.push(fastn_lang::Spanned {
+                o.errors.push(fastn_section::Spanned {
                     span: section.span(),
-                    value: fastn_lang::Error::EndWithoutStart,
+                    value: fastn_section::Error::EndWithoutStart,
                 });
                 stack.extend(children.into_iter());
             }
@@ -133,7 +133,10 @@ enum Mark<'input> {
 /// trait for the real Section type
 trait SectionProxy: Sized + std::fmt::Debug {
     /// returns the name of the section, and if it starts or ends the section
-    fn mark<'input>(&'input self, source: &'input str) -> Result<Mark<'input>, fastn_lang::Error>;
+    fn mark<'input>(
+        &'input self,
+        source: &'input str,
+    ) -> Result<Mark<'input>, fastn_section::Error>;
 
     /// Adds a list of children to the current section. It is typically called when the section
     /// is finalized or ended, hence `self.has_ended` function, if called after this, should return
@@ -146,11 +149,14 @@ trait SectionProxy: Sized + std::fmt::Debug {
     /// - `true` if the section has been closed by an end marker.
     /// - `false` if the section is still open and can accept further nesting.
     fn has_ended(&self) -> bool;
-    fn span(&self) -> fastn_lang::Span;
+    fn span(&self) -> fastn_section::Span;
 }
 
-impl SectionProxy for fastn_lang::Section {
-    fn mark<'input>(&'input self, source: &'input str) -> Result<Mark<'input>, fastn_lang::Error> {
+impl SectionProxy for fastn_section::Section {
+    fn mark<'input>(
+        &'input self,
+        source: &'input str,
+    ) -> Result<Mark<'input>, fastn_section::Error> {
         let span = &self.init.name.name.name;
         let name = &source[span.start..span.end];
         if name != "end" {
@@ -159,19 +165,21 @@ impl SectionProxy for fastn_lang::Section {
 
         let caption = match self.caption.as_ref() {
             Some(caption) => caption,
-            None => return Err(fastn_lang::Error::SectionNameNotFoundForEnd),
+            None => return Err(fastn_section::Error::SectionNameNotFoundForEnd),
         };
 
         let v = match (caption.get(0), caption.len()) {
-            (Some(fastn_lang::token::Tes::Text(span)), 1) => &source[span.start..span.end].trim(),
-            (Some(_), _) => return Err(fastn_lang::Error::EndContainsData),
-            (None, _) => return Err(fastn_lang::Error::SectionNameNotFoundForEnd),
+            (Some(fastn_section::token::Tes::Text(span)), 1) => {
+                &source[span.start..span.end].trim()
+            }
+            (Some(_), _) => return Err(fastn_section::Error::EndContainsData),
+            (None, _) => return Err(fastn_section::Error::SectionNameNotFoundForEnd),
         };
 
         // if v is not a single word, we have a problem
         if v.contains(' ') || v.contains('\t') {
             // SES::String cannot contain new lines.
-            return Err(fastn_lang::Error::EndContainsData);
+            return Err(fastn_section::Error::EndContainsData);
         }
 
         Ok(Mark::End(v))
@@ -190,7 +198,7 @@ impl SectionProxy for fastn_lang::Section {
         self.has_end
     }
 
-    fn span(&self) -> fastn_lang::Span {
+    fn span(&self) -> fastn_section::Span {
         self.init.dashdash.clone()
     }
 }
@@ -216,7 +224,7 @@ mod test {
         fn mark<'input>(
             &'input self,
             _source: &'input str,
-        ) -> Result<super::Mark<'input>, fastn_lang::Error> {
+        ) -> Result<super::Mark<'input>, fastn_section::Error> {
             if self.has_end_mark {
                 Ok(super::Mark::End(&self.name))
             } else {
@@ -233,7 +241,7 @@ mod test {
             self.has_ended
         }
 
-        fn span(&self) -> fastn_lang::Span {
+        fn span(&self) -> fastn_section::Span {
             Default::default()
         }
     }
@@ -287,7 +295,7 @@ mod test {
 
     #[track_caller]
     fn t(source: &str, expected: &str) {
-        let mut o = fastn_lang::parse::Document::default();
+        let mut o = fastn_section::parse::Document::default();
         let sections = parse(source);
         let sections = super::inner_ender(source, &mut o, sections);
         assert_eq!(to_str(&sections), expected);
@@ -295,8 +303,8 @@ mod test {
     }
 
     #[track_caller]
-    fn f(source: &str, expected: &str, errors: Vec<fastn_lang::Error>) {
-        let mut o = fastn_lang::parse::Document::default();
+    fn f(source: &str, expected: &str, errors: Vec<fastn_section::Error>) {
+        let mut o = fastn_section::parse::Document::default();
         let sections = parse(source);
         let sections = super::inner_ender(source, &mut o, sections);
         assert_eq!(to_str(&sections), expected);
@@ -305,7 +313,7 @@ mod test {
             o.errors,
             errors
                 .into_iter()
-                .map(|value| fastn_lang::Spanned {
+                .map(|value| fastn_section::Spanned {
                     span: Default::default(),
                     value,
                 })
@@ -319,7 +327,7 @@ mod test {
         f(
             "foo -> bar -> /baz",
             "foo, bar", // we eat the `-- end` sections even if they don't match
-            vec![fastn_lang::Error::EndWithoutStart],
+            vec![fastn_section::Error::EndWithoutStart],
         );
         t("foo -> /foo", "foo");
         t("foo -> /foo -> bar", "foo, bar");

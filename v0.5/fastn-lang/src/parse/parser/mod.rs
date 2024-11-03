@@ -1,8 +1,8 @@
 mod import;
 
-pub fn parse(source: &str) -> fastn_lang::parse::Document {
+pub fn parse(source: &str) -> fastn_section::parse::Document {
     let (mut document, sections) =
-        fastn_lang::parse::Document::new(fastn_lang::token::Document::parse(source));
+        fastn_section::parse::Document::new(fastn_section::token::Document::parse(source));
     // guess the section and call the appropriate parse method.
     for section in sections.into_iter() {
         let name = section.name(source).to_ascii_lowercase();

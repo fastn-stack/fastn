@@ -2,24 +2,24 @@ pub trait JDebug {
     fn debug(&self, source: &str) -> serde_json::Value;
 }
 
-fn span(s: &fastn_lang::Span, key: &str, source: &str) -> serde_json::Value {
+fn span(s: &fastn_section::Span, key: &str, source: &str) -> serde_json::Value {
     serde_json::json!({ key: (source[s.start..s.end]).to_string()})
 }
 
-impl JDebug for fastn_lang::Span {
+impl JDebug for fastn_section::Span {
     fn debug(&self, source: &str) -> serde_json::Value {
         let t = &source[self.start..self.end];
         if t.is_empty() { "<empty>" } else { t }.into()
     }
 }
 
-impl<T: JDebug> JDebug for fastn_lang::Spanned<T> {
+impl<T: JDebug> JDebug for fastn_section::Spanned<T> {
     fn debug(&self, source: &str) -> serde_json::Value {
         self.value.debug(source)
     }
 }
 
-impl JDebug for fastn_lang::Spanned<()> {
+impl JDebug for fastn_section::Spanned<()> {
     fn debug(&self, source: &str) -> serde_json::Value {
         span(&self.span, "spanned", source)
     }
@@ -31,7 +31,7 @@ impl<T: JDebug> JDebug for Vec<T> {
     }
 }
 
-impl<T: JDebug> JDebug for std::collections::HashMap<fastn_lang::token::Identifier, T> {
+impl<T: JDebug> JDebug for std::collections::HashMap<fastn_section::token::Identifier, T> {
     fn debug(&self, source: &str) -> serde_json::Value {
         let mut o = serde_json::Map::new();
         for (k, v) in self {
@@ -52,13 +52,13 @@ impl<T: JDebug> JDebug for Option<T> {
     }
 }
 
-impl JDebug for fastn_lang::Visibility {
+impl JDebug for fastn_section::Visibility {
     fn debug(&self, _source: &str) -> serde_json::Value {
         format!("{self:?}").into()
     }
 }
 
-impl JDebug for fastn_lang::parse::Document {
+impl JDebug for fastn_section::parse::Document {
     fn debug(&self, source: &str) -> serde_json::Value {
         let mut o = serde_json::Map::new();
         if self.module_doc.is_some() {
@@ -87,7 +87,7 @@ impl JDebug for fastn_lang::parse::Document {
     }
 }
 
-impl JDebug for fastn_lang::Section {
+impl JDebug for fastn_section::Section {
     fn debug(&self, source: &str) -> serde_json::Value {
         // todo: add headers etc (only if they are not null)
         serde_json::json! ({
@@ -96,7 +96,7 @@ impl JDebug for fastn_lang::Section {
     }
 }
 
-impl JDebug for fastn_lang::token::SectionInit {
+impl JDebug for fastn_section::token::SectionInit {
     fn debug(&self, source: &str) -> serde_json::Value {
         serde_json::json! ({
             "name": self.name.debug(source)
@@ -104,7 +104,7 @@ impl JDebug for fastn_lang::token::SectionInit {
     }
 }
 
-impl JDebug for fastn_lang::token::KindedName {
+impl JDebug for fastn_section::token::KindedName {
     fn debug(&self, source: &str) -> serde_json::Value {
         let mut o = serde_json::Map::new();
         if let Some(kind) = &self.kind {
@@ -115,7 +115,7 @@ impl JDebug for fastn_lang::token::KindedName {
     }
 }
 
-impl JDebug for fastn_lang::token::Kind {
+impl JDebug for fastn_section::token::Kind {
     fn debug(&self, source: &str) -> serde_json::Value {
         if let Some(v) = self.to_identifier() {
             return v.debug(source);
@@ -136,7 +136,7 @@ impl JDebug for fastn_lang::token::Kind {
     }
 }
 
-impl JDebug for fastn_lang::token::QualifiedIdentifier {
+impl JDebug for fastn_section::token::QualifiedIdentifier {
     fn debug(&self, source: &str) -> serde_json::Value {
         if self.terms.is_empty() {
             return self.module.debug(source);
@@ -149,23 +149,23 @@ impl JDebug for fastn_lang::token::QualifiedIdentifier {
     }
 }
 
-impl JDebug for fastn_lang::token::Tes {
+impl JDebug for fastn_section::token::Tes {
     fn debug(&self, source: &str) -> serde_json::Value {
         match self {
-            fastn_lang::token::Tes::Text(e) => e.debug(source),
-            fastn_lang::token::Tes::Expression { content, .. } => content.debug(source),
-            fastn_lang::token::Tes::Section(e) => e.debug(source),
+            fastn_section::token::Tes::Text(e) => e.debug(source),
+            fastn_section::token::Tes::Expression { content, .. } => content.debug(source),
+            fastn_section::token::Tes::Section(e) => e.debug(source),
         }
     }
 }
 
-impl JDebug for fastn_lang::token::Identifier {
+impl JDebug for fastn_section::token::Identifier {
     fn debug(&self, source: &str) -> serde_json::Value {
         self.name.debug(source)
     }
 }
 
-impl JDebug for fastn_lang::token::PackageName {
+impl JDebug for fastn_section::token::PackageName {
     fn debug(&self, source: &str) -> serde_json::Value {
         format!(
             "{} as {}",
@@ -176,7 +176,7 @@ impl JDebug for fastn_lang::token::PackageName {
     }
 }
 
-impl JDebug for fastn_lang::token::AliasableIdentifier {
+impl JDebug for fastn_section::token::AliasableIdentifier {
     fn debug(&self, source: &str) -> serde_json::Value {
         if self.alias.is_none() {
             return self.name.debug(source);
@@ -189,7 +189,7 @@ impl JDebug for fastn_lang::token::AliasableIdentifier {
     }
 }
 
-impl JDebug for fastn_lang::token::ModuleName {
+impl JDebug for fastn_section::token::ModuleName {
     fn debug(&self, source: &str) -> serde_json::Value {
         if self.path.is_empty()
             && self.name.alias.is_none()
@@ -218,7 +218,7 @@ impl JDebug for fastn_lang::token::ModuleName {
     }
 }
 
-impl JDebug for fastn_lang::parse::Import {
+impl JDebug for fastn_section::parse::Import {
     fn debug(&self, source: &str) -> serde_json::Value {
         let mut o = serde_json::Map::new();
         o.insert("module".into(), self.module.debug(source));
@@ -232,60 +232,60 @@ impl JDebug for fastn_lang::parse::Import {
     }
 }
 
-impl JDebug for fastn_lang::parse::Export {
+impl JDebug for fastn_section::parse::Export {
     fn debug(&self, source: &str) -> serde_json::Value {
         match self {
-            fastn_lang::parse::Export::All => "<all>".into(),
-            fastn_lang::parse::Export::Things(t) => t.debug(source),
+            fastn_section::parse::Export::All => "<all>".into(),
+            fastn_section::parse::Export::Things(t) => t.debug(source),
         }
     }
 }
 
-impl JDebug for fastn_lang::parse::Definition {
+impl JDebug for fastn_section::parse::Definition {
     fn debug(&self, source: &str) -> serde_json::Value {
         match self {
-            fastn_lang::parse::Definition::Component(c) => {
+            fastn_section::parse::Definition::Component(c) => {
                 serde_json::json!({"component": c.debug(source)})
             }
-            fastn_lang::parse::Definition::Variable(v) => {
+            fastn_section::parse::Definition::Variable(v) => {
                 serde_json::json!({"variable": v.debug(source)})
             }
-            fastn_lang::parse::Definition::Function(v) => {
+            fastn_section::parse::Definition::Function(v) => {
                 serde_json::json!({"function": v.debug(source)})
             }
-            fastn_lang::parse::Definition::TypeAlias(v) => {
+            fastn_section::parse::Definition::TypeAlias(v) => {
                 serde_json::json!({"type-alias": v.debug(source)})
             }
-            fastn_lang::parse::Definition::Record(v) => {
+            fastn_section::parse::Definition::Record(v) => {
                 serde_json::json!({"record": v.debug(source)})
             }
-            fastn_lang::parse::Definition::OrType(v) => {
+            fastn_section::parse::Definition::OrType(v) => {
                 serde_json::json!({"or-type": v.debug(source)})
             }
-            fastn_lang::parse::Definition::Module(v) => {
+            fastn_section::parse::Definition::Module(v) => {
                 serde_json::json!({"module": v.debug(source)})
             }
         }
     }
 }
 
-impl JDebug for fastn_lang::Error {
+impl JDebug for fastn_section::Error {
     fn debug(&self, source: &str) -> serde_json::Value {
         error(self, &Default::default(), source)
     }
 }
 
-fn error(e: &fastn_lang::Error, _s: &fastn_lang::Span, _source: &str) -> serde_json::Value {
+fn error(e: &fastn_section::Error, _s: &fastn_section::Span, _source: &str) -> serde_json::Value {
     serde_json::json!({ "error": match e {
-        fastn_lang::Error::UnexpectedDocComment => "unexpected_doc_comment",
-        fastn_lang::Error::UnwantedTextFound => "unwanted_text_found",
-        fastn_lang::Error::EmptyAngleText => "empty_angle_text",
-        fastn_lang::Error::ColonNotFound => "colon_not_found",
-        fastn_lang::Error::DashDashNotFound => "dashdash_not_found",
-        fastn_lang::Error::KindedNameNotFound => "kinded_name_not_found",
-        fastn_lang::Error::SectionNameNotFoundForEnd => "section_name_not_found_for_end",
-        fastn_lang::Error::EndContainsData => "end_contains_data",
-        fastn_lang::Error::EndWithoutStart => "end_without_start",
-        fastn_lang::Error::ImportCantHaveType => "import_cant_have_type",
+        fastn_section::Error::UnexpectedDocComment => "unexpected_doc_comment",
+        fastn_section::Error::UnwantedTextFound => "unwanted_text_found",
+        fastn_section::Error::EmptyAngleText => "empty_angle_text",
+        fastn_section::Error::ColonNotFound => "colon_not_found",
+        fastn_section::Error::DashDashNotFound => "dashdash_not_found",
+        fastn_section::Error::KindedNameNotFound => "kinded_name_not_found",
+        fastn_section::Error::SectionNameNotFoundForEnd => "section_name_not_found_for_end",
+        fastn_section::Error::EndContainsData => "end_contains_data",
+        fastn_section::Error::EndWithoutStart => "end_without_start",
+        fastn_section::Error::ImportCantHaveType => "import_cant_have_type",
     }})
 }

@@ -11,14 +11,13 @@ mod debug;
 mod error;
 mod parse;
 mod scanner;
-mod token;
 mod warning;
 
 pub use error::Error;
 pub use scanner::{Scannable, Scanner};
 pub use warning::Warning;
-// fastn_lang::Section is used in more than one place, so it is at the top level.
-pub use token::Section;
+// fastn_section::Section is used in more than one place, so it is at the top level.
+pub use fastn_section::Section;
 
 /// public | private | public<package> | public<module>
 ///
@@ -34,13 +33,6 @@ pub enum Visibility {
     Module,
     /// can only be accessed from inside the component, etc.
     Private,
-}
-
-pub type Span = std::ops::Range<usize>;
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
-pub struct Spanned<T> {
-    pub span: Span,
-    pub value: T,
 }
 
 #[derive(Default, Debug)]

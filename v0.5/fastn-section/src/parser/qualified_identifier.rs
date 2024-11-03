@@ -1,14 +1,14 @@
 pub fn qualified_identifier(
-    scanner: &mut fastn_lang::Scanner<fastn_lang::token::Document>,
-) -> Option<fastn_lang::token::QualifiedIdentifier> {
-    let module = match fastn_lang::token::module_name(scanner) {
+    scanner: &mut fastn_section::Scanner<fastn_section::token::Document>,
+) -> Option<fastn_section::token::QualifiedIdentifier> {
+    let module = match fastn_section::token::module_name(scanner) {
         Some(module) => match scanner.peek() {
             Some('#') => {
                 scanner.pop();
                 Some(module)
             }
             _ => {
-                return Some(fastn_lang::token::QualifiedIdentifier {
+                return Some(fastn_section::token::QualifiedIdentifier {
                     module: Some(module),
                     terms: vec![],
                 })
@@ -19,7 +19,7 @@ pub fn qualified_identifier(
 
     let terms = {
         let mut terms = Vec::new();
-        while let Some(identifier) = fastn_lang::token::identifier(scanner) {
+        while let Some(identifier) = fastn_section::token::identifier(scanner) {
             terms.push(identifier);
             if !scanner.take('.') {
                 break;
@@ -32,12 +32,14 @@ pub fn qualified_identifier(
         return None;
     }
 
-    Some(fastn_lang::token::QualifiedIdentifier::new(module, terms))
+    Some(fastn_section::token::QualifiedIdentifier::new(
+        module, terms,
+    ))
 }
 
 #[cfg(test)]
 mod test {
-    fastn_lang::tt!(super::qualified_identifier);
+    fastn_section::tt!(super::qualified_identifier);
 
     #[test]
     fn qualified_identifier() {
@@ -62,10 +64,10 @@ mod test {
             ""
         );
         assert_eq!(
-            super::qualified_identifier(&mut fastn_lang::Scanner::new(
+            super::qualified_identifier(&mut fastn_section::Scanner::new(
                 " string",
                 Default::default(),
-                fastn_lang::token::Document::default()
+                fastn_section::token::Document::default()
             ),),
             None
         );

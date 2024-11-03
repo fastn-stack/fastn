@@ -1,36 +1,55 @@
+#![allow(clippy::derive_partial_eq_without_eq, clippy::get_first)]
+#![deny(unused_crate_dependencies)]
+#![warn(clippy::used_underscore_binding)]
+
+extern crate self as fastn_section;
+
+mod error;
 mod parser;
+mod scanner;
 mod utils;
+mod warning;
 mod wiggin;
 
-pub use fastn_lang::token::parser::identifier::identifier;
-pub use fastn_lang::token::parser::kind::kind;
-pub use fastn_lang::token::parser::kinded_name::kinded_name;
-pub use fastn_lang::token::parser::module_name::module_name;
-pub use fastn_lang::token::parser::package_name::package_name;
-pub use fastn_lang::token::parser::qualified_identifier::qualified_identifier;
+pub use error::Error;
+pub use fastn_section::parser::identifier::identifier;
+pub use fastn_section::parser::kind::kind;
+pub use fastn_section::parser::kinded_name::kinded_name;
+pub use fastn_section::parser::module_name::module_name;
+pub use fastn_section::parser::package_name::package_name;
+pub use fastn_section::parser::qualified_identifier::qualified_identifier;
+pub use fastn_section::warning::Warning;
+pub use scanner::{Scannable, Scanner};
+
+pub type Span = std::ops::Range<usize>;
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct Spanned<T> {
+    pub span: Span,
+    pub value: T,
+}
 
 #[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Document {
-    pub module_doc: Option<fastn_lang::Span>,
+    pub module_doc: Option<fastn_section::Span>,
     pub sections: Vec<Section>,
-    pub errors: Vec<fastn_lang::Spanned<fastn_lang::Error>>,
-    pub warnings: Vec<fastn_lang::Spanned<fastn_lang::Warning>>,
-    pub comments: Vec<fastn_lang::Span>,
+    pub errors: Vec<fastn_section::Spanned<fastn_section::Error>>,
+    pub warnings: Vec<fastn_section::Spanned<fastn_section::Warning>>,
+    pub comments: Vec<fastn_section::Span>,
     pub line_starts: Vec<usize>,
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
 pub struct Section {
-    pub init: fastn_lang::token::SectionInit,
+    pub init: fastn_section::token::SectionInit,
     #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(default)]
-    pub caption: Option<fastn_lang::token::HeaderValue>,
+    pub caption: Option<fastn_section::token::HeaderValue>,
     pub headers: Vec<Header>,
-    pub body: Option<fastn_lang::token::HeaderValue>,
+    pub body: Option<fastn_section::token::HeaderValue>,
     pub children: Vec<Section>, // TODO: this must be `Spanned<Section>`
-    pub sub_sections: Vec<fastn_lang::Spanned<Section>>,
-    pub function_marker: Option<fastn_lang::Span>,
+    pub sub_sections: Vec<fastn_section::Spanned<Section>>,
+    pub function_marker: Option<fastn_section::Span>,
     pub is_commented: bool,
     // if the user used `-- end: <section-name>` to end the section
     pub has_end: bool,
@@ -39,16 +58,16 @@ pub struct Section {
 /// example: `-- list<string> foo:`
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct SectionInit {
-    pub dashdash: fastn_lang::Span, // for syntax highlighting and formatting
-    pub name: fastn_lang::token::KindedName,
-    pub colon: fastn_lang::Span, // for syntax highlighting and formatting
+    pub dashdash: fastn_section::Span, // for syntax highlighting and formatting
+    pub name: fastn_section::token::KindedName,
+    pub colon: fastn_section::Span, // for syntax highlighting and formatting
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Header {
-    pub name: fastn_lang::token::KindedName,
-    pub condition: Option<fastn_lang::Span>,
-    pub value: fastn_lang::token::HeaderValue,
+    pub name: fastn_section::token::KindedName,
+    pub condition: Option<fastn_section::Span>,
+    pub value: fastn_section::token::HeaderValue,
     pub is_commented: bool,
 }
 
@@ -61,13 +80,13 @@ pub struct Header {
 /// but it can be built in types e.g., `integer` etc.
 #[derive(Debug, PartialEq, Clone, Hash, Eq, Default, serde::Serialize, serde::Deserialize)]
 pub struct Identifier {
-    pub name: fastn_lang::Span,
+    pub name: fastn_section::Span,
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct AliasableIdentifier {
-    pub name: fastn_lang::Span,
-    pub alias: Option<fastn_lang::Span>,
+    pub name: fastn_section::Span,
+    pub alias: Option<fastn_section::Span>,
 }
 
 /// package names for fastn as domain names.
@@ -84,10 +103,10 @@ pub struct AliasableIdentifier {
 /// TODO: `.` can't be repeated.
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct PackageName {
-    pub name: fastn_lang::Span,
+    pub name: fastn_section::Span,
     // for foo.com, the alias is `foo` (the first part before the first dot)
     // TODO: unless it is `www`, then its the second part
-    pub alias: fastn_lang::Span,
+    pub alias: fastn_section::Span,
 }
 
 /// module name looks like <package-name>(/<identifier>)*/?)
@@ -121,8 +140,8 @@ pub struct QualifiedIdentifier {
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Kind {
     // only kinded section / header can have doc
-    pub doc: Option<fastn_lang::Span>,
-    pub visibility: Option<fastn_lang::Spanned<fastn_lang::Visibility>>,
+    pub doc: Option<fastn_section::Span>,
+    pub visibility: Option<fastn_section::Spanned<fastn_section::Visibility>>,
     pub name: QualifiedIdentifier,
     // during parsing, we can encounter `foo<>`, which needs to be differentiated from `foo`
     // therefore we are using `Option<Vec<>>` here
@@ -142,11 +161,11 @@ pub type HeaderValue = Vec<Tes>;
 /// it can even have recursive structure, e.g., `hello ${ { \n text-text \n } }`.
 /// each recursion starts with `{` and ends with `}`.
 /// if the text inside { starts with `--` then the content is a section,
-/// and we should use `fastn_lang::parser::section()` parser to parse it.
+/// and we should use `fastn_section::parser::section()` parser to parse it.
 /// otherwise it is a text.
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub enum Tes {
-    Text(fastn_lang::Span),
+    Text(fastn_section::Span),
     /// the start and end are the positions of `{` and `}` respectively
     Expression {
         start: usize,

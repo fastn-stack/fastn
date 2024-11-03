@@ -3,7 +3,23 @@
 version = 3
 
 [[package]]
+name = "fastn"
+version = "0.1.0"
+
+[[package]]
 name = "fastn-lang"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "fastn-router"
+version = "0.1.0"
+
+[[package]]
+name = "fastn-section"
 version = "0.1.0"
 dependencies = [
  "serde",

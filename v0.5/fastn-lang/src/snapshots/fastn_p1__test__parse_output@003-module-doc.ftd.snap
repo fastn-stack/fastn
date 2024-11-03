@@ -1,6 +1,6 @@
 ---
 source: fastn-p1/src/lib.rs
-expression: "fastn_lang::ParseOutput::parse(\"foo\", &s).debug(&s)"
+expression: "fastn_section::ParseOutput::parse(\"foo\", &s).debug(&s)"
 input_file: fastn-p1/t/003-module-doc.ftd
 ---
 doc_name: foo

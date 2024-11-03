@@ -1,6 +1,6 @@
 pub trait Scannable {
-    fn add_error(&mut self, span: fastn_lang::Span, message: fastn_lang::Error);
-    fn add_comment(&mut self, span: fastn_lang::Span);
+    fn add_error(&mut self, span: fastn_section::Span, message: fastn_section::Error);
+    fn add_comment(&mut self, span: fastn_section::Span);
 }
 
 #[derive(Debug)]
@@ -10,7 +10,7 @@ pub struct Scanner<'input, T: Scannable> {
     /// index is byte position in the input
     index: usize,
     #[expect(unused)]
-    fuel: fastn_lang::Fuel,
+    fuel: fastn_section::Fuel,
     pub output: T,
 }
 
@@ -20,7 +20,7 @@ pub struct Index<'input> {
 }
 
 impl<'input, T: Scannable> Scanner<'input, T> {
-    pub fn new(input: &str, fuel: fastn_lang::Fuel, t: T) -> Scanner<T> {
+    pub fn new(input: &str, fuel: fastn_section::Fuel, t: T) -> Scanner<T> {
         assert!(input.len() < 10_000_000); // can't parse > 10MB file
         Scanner {
             input,
@@ -31,18 +31,18 @@ impl<'input, T: Scannable> Scanner<'input, T> {
         }
     }
 
-    pub fn source(&self, span: &fastn_lang::Span) -> &'input str {
+    pub fn source(&self, span: &fastn_section::Span) -> &'input str {
         &self.input[span.start..span.end]
     }
 
-    fn span(&self, start: usize) -> fastn_lang::Span {
-        fastn_lang::Span {
+    fn span(&self, start: usize) -> fastn_section::Span {
+        fastn_section::Span {
             start,
             end: self.index,
         }
     }
 
-    pub fn take_while<F: Fn(char) -> bool>(&mut self, f: F) -> Option<fastn_lang::Span> {
+    pub fn take_while<F: Fn(char) -> bool>(&mut self, f: F) -> Option<fastn_section::Span> {
         let start = self.index;
         while let Some(c) = self.peek() {
             if !f(c) {
@@ -100,7 +100,7 @@ impl<'input, T: Scannable> Scanner<'input, T> {
         }
     }
 
-    pub fn take_till_char_or_end_of_line(&mut self, t: char) -> Option<fastn_lang::Span> {
+    pub fn take_till_char_or_end_of_line(&mut self, t: char) -> Option<fastn_section::Span> {
         self.take_while(|c| c != t && c != '\n')
     }
 
@@ -138,7 +138,7 @@ impl<'input, T: Scannable> Scanner<'input, T> {
     }
 
     // returns the span from current position to the end of token
-    pub fn token(&mut self, t: &'static str) -> Option<fastn_lang::Span> {
+    pub fn token(&mut self, t: &'static str) -> Option<fastn_section::Span> {
         let start = self.index();
         for char in t.chars() {
             if self.peek() != Some(char) {

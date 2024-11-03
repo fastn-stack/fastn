@@ -1,6 +1,6 @@
 ---
 source: fastn-p1/src/lib.rs
-expression: "fastn_lang::ParseOutput::new(\"foo\", &s).debug(&s)"
+expression: "fastn_section::ParseOutput::new(\"foo\", &s).debug(&s)"
 input_file: fastn-p1/t/002-few-comments.ftd
 ---
 doc_name: foo

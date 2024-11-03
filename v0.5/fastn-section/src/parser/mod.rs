@@ -8,12 +8,12 @@ pub(super) mod section_init;
 pub(super) mod tes;
 pub(super) mod visibility;
 
-impl fastn_lang::token::Document {
-    pub fn parse(source: &str) -> fastn_lang::token::Document {
-        let _scanner = fastn_lang::Scanner::new(
+impl fastn_section::token::Document {
+    pub fn parse(source: &str) -> fastn_section::token::Document {
+        let _scanner = fastn_section::Scanner::new(
             source,
             Default::default(),
-            fastn_lang::token::Document::default(),
+            fastn_section::token::Document::default(),
         );
         todo!()
     }
@@ -22,18 +22,18 @@ impl fastn_lang::token::Document {
 #[cfg(test)]
 #[track_caller]
 fn p<
-    T: fastn_lang::debug::JDebug,
-    F: FnOnce(&mut fastn_lang::Scanner<fastn_lang::token::Document>) -> T,
+    T: fastn_section::debug::JDebug,
+    F: FnOnce(&mut fastn_section::Scanner<fastn_section::token::Document>) -> T,
 >(
     source: &str,
     f: F,
     debug: serde_json::Value,
     remaining: &str,
 ) {
-    let mut scanner = fastn_lang::Scanner::new(
+    let mut scanner = fastn_section::Scanner::new(
         source,
         Default::default(),
-        fastn_lang::token::Document::default(),
+        fastn_section::token::Document::default(),
     );
     let result = f(&mut scanner);
     assert_eq!(result.debug(source), debug);
@@ -46,16 +46,16 @@ macro_rules! tt {
         #[allow(unused_macros)]
         macro_rules! t {
             ($source:expr, $debug:tt, $remaining:expr) => {
-                fastn_lang::token::parser::p($source, $f, serde_json::json!($debug), $remaining);
+                fastn_section::token::parser::p($source, $f, serde_json::json!($debug), $remaining);
             };
             ($source:expr, $debug:tt) => {
-                fastn_lang::token::parser::p($source, $f, serde_json::json!($debug), "");
+                fastn_section::token::parser::p($source, $f, serde_json::json!($debug), "");
             };
         }
         #[allow(unused_macros)]
         macro_rules! f {
             ($source:expr) => {
-                fastn_lang::token::parser::p($source, $f, serde_json::json!(null), $source);
+                fastn_section::token::parser::p($source, $f, serde_json::json!(null), $source);
             };
         }
     };
