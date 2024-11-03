@@ -3,11 +3,46 @@
 version = 3
 
 [[package]]
+name = "fastn"
+version = "0.1.0"
+dependencies = [
+ "fastn-core",
+ "fastn-lang",
+ "fastn-static",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "fastn-core"
+version = "0.1.0"
+dependencies = [
+ "fastn-lang",
+ "serde_json",
+]
+
+[[package]]
 name = "fastn-lang"
+version = "0.1.0"
+dependencies = [
+ "fastn-section",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "fastn-section"
 version = "0.1.0"
 dependencies = [
  "serde",
  "serde_json",
+]
+
+[[package]]
+name = "fastn-static"
+version = "0.1.0"
+dependencies = [
+ "fastn-lang",
 ]
 
 [[package]]

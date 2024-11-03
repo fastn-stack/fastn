@@ -4,21 +4,34 @@
 
 extern crate self as fastn_lang;
 
+mod ast;
 mod compiler;
-#[cfg(test)]
-mod debug;
-mod error;
-mod resolved;
-mod scanner;
-mod section;
-mod unresolved;
-mod warning;
+mod parse;
 
-pub use error::Error;
-pub use scanner::{Scannable, Scanner};
-pub use warning::Warning;
-// fastn_lang::Section is used in more than one place, so it is at the top level.
-pub use section::Section;
+pub use fastn_section::Result;
+
+pub struct UISpec {
+    pub title: String,
+    pub body: String,
+}
+
+pub enum Output {
+    UI(UISpec),
+    Data(serde_json::Value),
+}
+
+pub trait DS {
+    async fn source(&mut self, document: &str) -> Result<String>;
+    async fn parse(&mut self, qualified_identifier: &str) -> Result<fastn_lang::parse::Definition>;
+    async fn ast(&mut self, qualified_identifier: &str) -> Result<fastn_lang::ast::Definition>;
+    async fn add_ast(
+        &mut self,
+        qualified_identifier: &str,
+        ast: fastn_lang::ast::Definition,
+    ) -> Result<()>;
+    async fn parse_tree(&mut self, document: &str) -> Result<Vec<fastn_lang::parse::Definition>>;
+    async fn ast_tree(&mut self, document: &str) -> Result<Vec<fastn_lang::parse::Definition>>;
+}
 
 /// public | private | public<package> | public<module>
 ///
@@ -34,13 +47,6 @@ pub enum Visibility {
     Module,
     /// can only be accessed from inside the component, etc.
     Private,
-}
-
-pub type Span = std::ops::Range<usize>;
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
-pub struct Spanned<T> {
-    pub span: Span,
-    pub value: T,
 }
 
 #[derive(Default, Debug)]
