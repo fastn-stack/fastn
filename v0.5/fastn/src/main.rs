@@ -20,5 +20,5 @@ fn main() {
         Ok(fastn::commands::Cli::Upload { .. }) => {}
         Ok(fastn::commands::Cli::Clone(_)) => {}
         Err(_) => {}
-    }
+    };
 }

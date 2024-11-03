@@ -20,6 +20,7 @@ pub enum Output {
     Data(serde_json::Value),
 }
 
+#[async_trait::async_trait]
 pub trait DS {
     async fn source(&mut self, document: &str) -> Result<String>;
     async fn unresolved(
@@ -43,26 +44,4 @@ pub trait DS {
         &mut self,
         document: &str,
     ) -> Result<Vec<fastn_lang::resolved::Document>>;
-}
-
-/// public | private | public<package> | public<module>
-///
-/// TODO: newline is allowed, e.g., public<\n module>
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
-pub enum Visibility {
-    /// visible to everyone
-    #[default]
-    Public,
-    /// visible to current package only
-    Package,
-    /// visible to current module only
-    Module,
-    /// can only be accessed from inside the component, etc.
-    Private,
-}
-
-#[derive(Default, Debug)]
-pub struct Fuel {
-    #[allow(dead_code)]
-    remaining: std::rc::Rc<std::cell::RefCell<usize>>,
 }

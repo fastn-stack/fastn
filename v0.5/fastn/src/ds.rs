@@ -1,5 +1,6 @@
 pub struct DS {}
 
+#[async_trait::async_trait]
 impl fastn_lang::DS for DS {
     async fn source(&mut self, _document: &str) -> fastn_lang::Result<String> {
         todo!()
@@ -30,14 +31,14 @@ impl fastn_lang::DS for DS {
     async fn unresolved_document(
         &mut self,
         _document: &str,
-    ) -> fastn_lang::Result<Vec<fastn_lang::unresolved::Definition>> {
+    ) -> fastn_lang::Result<Vec<fastn_lang::unresolved::Document>> {
         todo!()
     }
 
     async fn resolved_document(
         &mut self,
         _document: &str,
-    ) -> fastn_lang::Result<Vec<fastn_lang::resolved::Definition>> {
+    ) -> fastn_lang::Result<Vec<fastn_lang::resolved::Document>> {
         todo!()
     }
 }

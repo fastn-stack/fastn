@@ -1,10 +1,8 @@
 pub struct Compiler {
-    unresolved: std::collections::HashMap<
-        fastn_section::token::Identifier,
-        fastn_section::parse::Definition,
-    >,
+    unresolved:
+        std::collections::HashMap<fastn_section::Identifier, fastn_lang::unresolved::Definition>,
     resolved:
-        std::collections::HashMap<fastn_section::token::Identifier, fastn_section::ast::Definition>,
+        std::collections::HashMap<fastn_section::Identifier, fastn_lang::resolved::Definition>,
 }
 
 enum CompilerState {

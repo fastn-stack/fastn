@@ -58,27 +58,18 @@ impl JDebug for fastn_section::Visibility {
     }
 }
 
-impl JDebug for fastn_section::parse::Document {
+impl JDebug for fastn_section::Document {
     fn debug(&self, source: &str) -> serde_json::Value {
         let mut o = serde_json::Map::new();
         if self.module_doc.is_some() {
             // TODO: can we create a map with `&'static str` keys to avoid this to_string()?
             o.insert("module-doc".to_string(), self.module_doc.debug(source));
         }
-        if !self.content.is_empty() {
-            o.insert("content".to_string(), self.content.debug(source));
-        }
         if !self.errors.is_empty() {
             o.insert("errors".to_string(), self.errors.debug(source));
         }
-        if !self.definitions.is_empty() {
-            o.insert("definitions".to_string(), self.definitions.debug(source));
-        }
         if !self.comments.is_empty() {
             o.insert("comments".to_string(), self.comments.debug(source));
-        }
-        if !self.imports.is_empty() {
-            o.insert("imports".to_string(), self.imports.debug(source));
         }
         if o.is_empty() {
             return "<empty-document>".into();
@@ -215,57 +206,6 @@ impl JDebug for fastn_section::ModuleName {
             o.insert("path".into(), self.path.debug(source));
         }
         serde_json::Value::Object(o)
-    }
-}
-
-impl JDebug for fastn_section::parse::Import {
-    fn debug(&self, source: &str) -> serde_json::Value {
-        let mut o = serde_json::Map::new();
-        o.insert("module".into(), self.module.debug(source));
-        if self.exports.is_some() {
-            o.insert("exports".into(), self.exports.debug(source));
-        }
-        if self.exposing.is_some() {
-            o.insert("exposing".into(), self.exposing.debug(source));
-        }
-        serde_json::Value::Object(o)
-    }
-}
-
-impl JDebug for fastn_section::parse::Export {
-    fn debug(&self, source: &str) -> serde_json::Value {
-        match self {
-            fastn_section::parse::Export::All => "<all>".into(),
-            fastn_section::parse::Export::Things(t) => t.debug(source),
-        }
-    }
-}
-
-impl JDebug for fastn_section::parse::Definition {
-    fn debug(&self, source: &str) -> serde_json::Value {
-        match self {
-            fastn_section::parse::Definition::Component(c) => {
-                serde_json::json!({"component": c.debug(source)})
-            }
-            fastn_section::parse::Definition::Variable(v) => {
-                serde_json::json!({"variable": v.debug(source)})
-            }
-            fastn_section::parse::Definition::Function(v) => {
-                serde_json::json!({"function": v.debug(source)})
-            }
-            fastn_section::parse::Definition::TypeAlias(v) => {
-                serde_json::json!({"type-alias": v.debug(source)})
-            }
-            fastn_section::parse::Definition::Record(v) => {
-                serde_json::json!({"record": v.debug(source)})
-            }
-            fastn_section::parse::Definition::OrType(v) => {
-                serde_json::json!({"or-type": v.debug(source)})
-            }
-            fastn_section::parse::Definition::Module(v) => {
-                serde_json::json!({"module": v.debug(source)})
-            }
-        }
     }
 }
 

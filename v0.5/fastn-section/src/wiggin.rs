@@ -2,7 +2,7 @@
 /// list and then calls `ender` for the list itself
 pub fn ender(
     source: &str,
-    o: &mut fastn_section::parse::Document,
+    o: &mut fastn_section::Document,
     sections: Vec<fastn_section::Section>,
 ) -> Vec<fastn_section::Section> {
     // recursive part
@@ -17,7 +17,7 @@ pub fn ender(
 
 fn section_ender(
     source: &str,
-    o: &mut fastn_section::parse::Document,
+    o: &mut fastn_section::Document,
     mut section: fastn_section::Section,
 ) -> fastn_section::Section {
     if let Some(caption) = section.caption {
@@ -40,7 +40,7 @@ fn section_ender(
 
 fn header_value_ender(
     source: &str,
-    o: &mut fastn_section::parse::Document,
+    o: &mut fastn_section::Document,
     header: fastn_section::HeaderValue,
 ) -> fastn_section::HeaderValue {
     header
@@ -69,7 +69,7 @@ fn header_value_ender(
 /// [{section: "foo"}, {section: "bar"}, "-- end: foo"] -> [{section: "foo", children: [{section: "bar"}]}]
 fn inner_ender<T: SectionProxy>(
     source: &str,
-    o: &mut fastn_section::parse::Document,
+    o: &mut fastn_section::Document,
     sections: Vec<T>,
 ) -> Vec<T> {
     let mut stack = Vec::new();
@@ -247,7 +247,7 @@ mod test {
     // format: foo -> bar -> /foo (
     fn parse(name: &str) -> Vec<DummySection> {
         let mut sections = vec![];
-        let mut current = &mut sections;
+        let current = &mut sections;
         for part in name.split(" -> ") {
             let is_end = part.starts_with('/');
             let name = if is_end { &part[1..] } else { part };
@@ -293,7 +293,7 @@ mod test {
 
     #[track_caller]
     fn t(source: &str, expected: &str) {
-        let mut o = fastn_section::parse::Document::default();
+        let mut o = fastn_section::Document::default();
         let sections = parse(source);
         let sections = super::inner_ender(source, &mut o, sections);
         assert_eq!(to_str(&sections), expected);
@@ -302,7 +302,7 @@ mod test {
 
     #[track_caller]
     fn f(source: &str, expected: &str, errors: Vec<fastn_section::Error>) {
-        let mut o = fastn_section::parse::Document::default();
+        let mut o = fastn_section::Document::default();
         let sections = parse(source);
         let sections = super::inner_ender(source, &mut o, sections);
         assert_eq!(to_str(&sections), expected);
