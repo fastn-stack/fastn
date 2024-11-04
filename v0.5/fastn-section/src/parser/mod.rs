@@ -4,6 +4,7 @@ pub(super) mod kinded_name;
 pub(super) mod module_name;
 pub(super) mod package_name;
 pub(super) mod qualified_identifier;
+mod section;
 pub(super) mod section_init;
 pub(super) mod tes;
 pub(super) mod visibility;

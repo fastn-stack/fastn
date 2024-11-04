@@ -81,17 +81,20 @@ impl JDebug for fastn_section::Document {
 impl JDebug for fastn_section::Section {
     fn debug(&self, source: &str) -> serde_json::Value {
         // todo: add headers etc (only if they are not null)
-        serde_json::json! ({
-            "init": self.init.debug(source),
-        })
+        let mut o = serde_json::Map::new();
+        o.insert("init".to_string(), self.init.debug(source));
+
+        if let Some(c) = &self.caption {
+            o.insert("caption".to_string(), c.debug(source));
+        }
+
+        serde_json::Value::Object(o)
     }
 }
 
 impl JDebug for fastn_section::SectionInit {
     fn debug(&self, source: &str) -> serde_json::Value {
-        serde_json::json! ({
-            "name": self.name.debug(source)
-        })
+        self.name.debug(source)
     }
 }
 

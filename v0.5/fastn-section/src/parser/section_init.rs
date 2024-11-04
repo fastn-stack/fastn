@@ -21,11 +21,11 @@ mod test {
 
     #[test]
     fn section_init() {
-        t!("-- foo:", {"name": {"name": "foo"}});
-        t!("-- foo: ", {"name": {"name": "foo"}}, " ");
-        t!("-- foo: hello", {"name": {"name": "foo"}}, " hello");
-        t!("-- integer foo: hello", {"name": {"name": "foo", "kind": "integer"}}, " hello");
-        t!("-- integer héllo: foo", {"name": {"name": "héllo", "kind": "integer"}}, " foo");
+        t!("-- foo:", {"name": "foo"});
+        t!("-- foo: ", {"name": "foo"}, " ");
+        t!("-- foo: hello", {"name": "foo"}, " hello");
+        t!("-- integer foo: hello", {"name": "foo", "kind": "integer"}, " hello");
+        t!("-- integer héllo: foo", {"name": "héllo", "kind": "integer"}, " foo");
         // t!("-- list<integer> foo:", {"name": {"name": "foo", "kind": "integer"}}, "");
     }
 }
