@@ -1,3 +1,5 @@
-pub fn serve(_config: fastn_core::Config, _input: fastn::commands::Serve) {
-    todo!()
+impl fastn::commands::Serve {
+    pub async fn run(self, _config: fastn_core::Config) {
+        todo!()
+    }
 }

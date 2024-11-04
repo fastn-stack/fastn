@@ -1,4 +1,7 @@
 #![allow(dead_code)]
+
+pub(crate) mod compile;
+
 pub struct Compiler {
     unresolved:
         std::collections::HashMap<fastn_section::Identifier, fastn_lang::unresolved::Definition>,

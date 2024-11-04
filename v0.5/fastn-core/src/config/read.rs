@@ -1,5 +1,6 @@
 impl fastn_core::Config {
-    pub fn read(ds: Box<dyn fastn_lang::DS>) -> Self {
+    pub async fn read(mut ds: Box<dyn fastn_lang::DS>) -> Self {
+        ds.source("src/config.toml").await.unwrap();
         fastn_core::Config {
             ds,
             sitemap: fastn_core::Sitemap {},

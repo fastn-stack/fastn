@@ -1,3 +1,5 @@
-pub fn render(_config: fastn_core::Config, _input: fastn::commands::Render) {
-    todo!()
+impl fastn::commands::Render {
+    pub async fn run(self, _config: fastn_core::Config) {
+        todo!()
+    }
 }

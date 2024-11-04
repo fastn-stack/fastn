@@ -47,3 +47,4 @@ serde_json = "1"
 itertools = "0.13"
 insta = { version = "1.38", features = ["yaml", "glob"] }
 async-trait = "0.1.83"
+tokio = { version = "1", features = ["full"] }

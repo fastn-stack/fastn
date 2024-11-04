@@ -1,10 +1,9 @@
+mod build;
 mod parse;
 mod render;
 mod serve;
 
 pub use parse::parse;
-pub use render::render;
-pub use serve::serve;
 
 // fastn <path> key=value
 // or echo {json} | fastn <path>
@@ -65,11 +64,15 @@ pub struct Serve {
     pub offline: bool,
 }
 
+pub struct Build {
+    pub offline: bool,
+    pub watch: bool,
+    pub strict: bool,
+}
+
 pub enum Cli {
     Render(Render),
-    Build {
-        offline: bool,
-    },
+    Build(Build),
     Serve(Serve),
     Static {
         build: bool,
@@ -78,8 +81,7 @@ pub enum Cli {
     Test {
         offline: bool,
     },
-    Fmt(Option<String>),  // which file to format
-    Lint(Option<String>), // which file to lint
+    Fmt(Option<String>), // which file to format
     Upload {
         build: bool,
         no_lint: bool,

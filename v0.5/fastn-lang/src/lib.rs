@@ -8,6 +8,7 @@ mod compiler;
 pub mod resolved;
 pub mod unresolved;
 
+pub use compiler::compile::compile;
 pub use fastn_section::Result;
 
 pub struct UISpec {
