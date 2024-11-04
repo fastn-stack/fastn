@@ -4,7 +4,7 @@ impl fastn_runtime::Dom {
     ) -> (wasmtime::Store<fastn_runtime::Dom>, wasmtime::Instance) {
         let engine = wasmtime::Engine::new(wasmtime::Config::new().async_support(false))
             .expect("cant create engine");
-        let module = wasmtime::Module::new(&engine, wat).expect("cant unresolved module");
+        let module = wasmtime::Module::new(&engine, wat).expect("cant parse module");
         let dom = fastn_runtime::Dom::new(0, 0);
 
         let mut linker = wasmtime::Linker::new(&engine);

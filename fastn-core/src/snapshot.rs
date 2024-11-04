@@ -14,7 +14,7 @@ pub(crate) async fn resolve_snapshots(
     let b = match fastn_core::doc::parse_ftd(".latest.ftd", content, &lib) {
         Ok(v) => v,
         Err(e) => {
-            eprintln!("failed to unresolved .latest.ftd: {:?}", &e);
+            eprintln!("failed to parse .latest.ftd: {:?}", &e);
             todo!();
         }
     };

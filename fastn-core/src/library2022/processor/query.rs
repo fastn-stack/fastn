@@ -18,7 +18,7 @@ pub async fn process(
 
     let stage = headers
         .get_optional_string_by_key("stage", doc.name, value.line_number())?
-        .unwrap_or_else(|| "resolved".to_string());
+        .unwrap_or_else(|| "ast".to_string());
 
     let file = req_config
         .get_file_and_package_by_id(path.as_str(), preview_session_id)

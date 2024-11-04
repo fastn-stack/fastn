@@ -18,7 +18,7 @@ pub fn process(
         doc.name,
     )
     .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
-        message: format!("Cannot unresolved body: {:?}", e),
+        message: format!("Cannot parse body: {:?}", e),
         doc_id: doc.name.to_string(),
         line_number,
     })?

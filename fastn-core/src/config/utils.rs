@@ -28,7 +28,7 @@ pub async fn fastn_doc(
     match fastn_core::doc::parse_ftd("fastn", doc.as_str(), &lib) {
         Ok(v) => Ok(v),
         Err(e) => Err(fastn_core::Error::PackageError {
-            message: format!("failed to unresolved FASTN.ftd 3: {:?}", &e),
+            message: format!("failed to parse FASTN.ftd 3: {:?}", &e),
         }),
     }
 }

@@ -248,7 +248,7 @@ impl Component {
                     Some(v) => v,
                     None => {
                         return Err(ftd::interpreter::Error::ParseError {
-                            message: "Could not unresolved keyword argument value as string."
+                            message: "Could not parse keyword argument value as string."
                                 .to_string(),
                             doc_id: doc.name.clone(),
                             line_number: value.line_number(),

@@ -1112,7 +1112,7 @@ impl<'a> TDoc<'a> {
 
         /*if doc_name.ne(self.name) {
             let current_doc_contains_thing = current_parsed_document
-                .resolved
+                .ast
                 .iter()
                 .filter(|v| {
                     !v.is_component()
@@ -1956,7 +1956,7 @@ impl<'a> TDoc<'a> {
         }
 
         ftd::interpreter::utils::e2(
-            format!("Can't unresolved to {kind:?}, found: {o:?}"),
+            format!("Can't parse to {kind:?}, found: {o:?}"),
             self.name,
             line_number,
         )
@@ -1979,7 +1979,7 @@ impl<'a> TDoc<'a> {
                     }
                     _ => {
                         return ftd::interpreter::utils::e2(
-                            format!("Can't unresolved to string, found: {json}"),
+                            format!("Can't parse to string, found: {json}"),
                             self.name,
                             line_number,
                         )
@@ -1991,7 +1991,7 @@ impl<'a> TDoc<'a> {
                     serde_json::Value::Number(n) => {
                         n.as_i64()
                             .ok_or_else(|| ftd::interpreter::Error::ParseError {
-                                message: format!("Can't unresolved to integer, found: {json}"),
+                                message: format!("Can't parse to integer, found: {json}"),
                                 doc_id: self.name.to_string(),
                                 line_number,
                             })?
@@ -1999,7 +1999,7 @@ impl<'a> TDoc<'a> {
                     serde_json::Value::String(s) => {
                         s.parse::<i64>()
                             .map_err(|_| ftd::interpreter::Error::ParseError {
-                                message: format!("Can't unresolved to integer, found: {json}"),
+                                message: format!("Can't parse to integer, found: {json}"),
                                 doc_id: self.name.to_string(),
                                 line_number,
                             })?
@@ -2009,7 +2009,7 @@ impl<'a> TDoc<'a> {
                     }
                     _ => {
                         return ftd::interpreter::utils::e2(
-                            format!("Can't unresolved to integer, found: {json}"),
+                            format!("Can't parse to integer, found: {json}"),
                             self.name,
                             line_number,
                         )
@@ -2021,7 +2021,7 @@ impl<'a> TDoc<'a> {
                     serde_json::Value::Number(n) => {
                         n.as_f64()
                             .ok_or_else(|| ftd::interpreter::Error::ParseError {
-                                message: format!("Can't unresolved to decimal, found: {json}"),
+                                message: format!("Can't parse to decimal, found: {json}"),
                                 doc_id: self.name.to_string(),
                                 line_number,
                             })?
@@ -2029,7 +2029,7 @@ impl<'a> TDoc<'a> {
                     serde_json::Value::String(s) => {
                         s.parse::<f64>()
                             .map_err(|_| ftd::interpreter::Error::ParseError {
-                                message: format!("Can't unresolved to decimal, found: {json}"),
+                                message: format!("Can't parse to decimal, found: {json}"),
                                 doc_id: self.name.to_string(),
                                 line_number,
                             })?
@@ -2039,7 +2039,7 @@ impl<'a> TDoc<'a> {
                     }
                     _ => {
                         return ftd::interpreter::utils::e2(
-                            format!("Can't unresolved to decimal, found: {}", json),
+                            format!("Can't parse to decimal, found: {}", json),
                             self.name,
                             line_number,
                         )
@@ -2052,7 +2052,7 @@ impl<'a> TDoc<'a> {
                     serde_json::Value::String(s) => {
                         s.parse::<bool>()
                             .map_err(|_| ftd::interpreter::Error::ParseError {
-                                message: format!("Can't unresolved to boolean, found: {}", json),
+                                message: format!("Can't parse to boolean, found: {}", json),
                                 doc_id: self.name.to_string(),
                                 line_number,
                             })?
@@ -2062,7 +2062,7 @@ impl<'a> TDoc<'a> {
                         Some(1) => true,
                         _ => {
                             return Err(ftd::interpreter::Error::ParseError {
-                                message: format!("Can't unresolved to decimal, found: {json}"),
+                                message: format!("Can't parse to decimal, found: {json}"),
                                 doc_id: self.name.to_string(),
                                 line_number,
                             })
@@ -2073,7 +2073,7 @@ impl<'a> TDoc<'a> {
                     }
                     _ => {
                         return ftd::interpreter::utils::e2(
-                            format!("Can't unresolved to boolean, found: {}", json),
+                            format!("Can't parse to boolean, found: {}", json),
                             self.name,
                             line_number,
                         )

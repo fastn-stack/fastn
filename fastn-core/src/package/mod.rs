@@ -578,7 +578,7 @@ impl Package {
                         path = fastn_path.to_string()
                     );
                     return Err(fastn_core::Error::PackageError {
-                        message: format!("failed to unresolved FASTN.ftd: {:?}", &e),
+                        message: format!("failed to parse FASTN.ftd: {:?}", &e),
                     });
                 }
             }

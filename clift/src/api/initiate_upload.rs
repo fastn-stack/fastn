@@ -65,7 +65,7 @@ pub enum InitiateUploadError {
     CantReadBodyDuringError(reqwest::Error),
     #[error("got error from api: {0}")]
     APIError(String),
-    #[error("cant unresolved json: {0}")]
+    #[error("cant parse json: {0}")]
     CantParseJson(#[from] serde_json::Error),
     #[error("got failure from ft: {0:?}")]
     GotFailure(std::collections::HashMap<String, String>),

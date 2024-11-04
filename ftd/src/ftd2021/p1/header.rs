@@ -70,7 +70,7 @@ impl Header {
                     Ok(v == "true")
                 } else {
                     Err(ftd::ftd2021::p1::Error::ParseError {
-                        message: "can't unresolved bool".to_string(),
+                        message: "can't parse bool".to_string(),
                         doc_id: doc_id.to_string(),
                         line_number: *l,
                     })

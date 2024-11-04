@@ -67,7 +67,7 @@ pub(crate) fn get_ftd_json(
 
     match stage {
         "p1" => get_p1_json(document),
-        "resolved" => get_ast_json(document),
+        "ast" => get_ast_json(document),
         _ => unimplemented!(),
     }
 }

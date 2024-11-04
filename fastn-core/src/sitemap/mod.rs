@@ -210,7 +210,7 @@ impl SitemapElement {
 
     // If url contains path parameters so it will set those parameters
     // /person/<string:username>/<integer:age>
-    // In that case it will unresolved and set parameters `username` and `age`
+    // In that case it will parse and set parameters `username` and `age`
     pub(crate) fn set_path_params(&mut self, url: &str) -> Result<(), ParseError> {
         let params = utils::parse_named_params(url)?;
 

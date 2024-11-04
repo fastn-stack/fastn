@@ -535,7 +535,7 @@ impl InterpreterState {
     /// InterpreterState instance it is called on. If the last element exists, it looks at the
     /// first element in the ast_list field of the last element. If the first element exists, the
     /// method returns a tuple containing the doc_name as a String, the `number_of_scan` as an
-    /// usize, and the resolved as a reference to an ftd_ast::AST. If either the last element of the
+    /// usize, and the ast as a reference to an ftd_ast::AST. If either the last element of the
     /// stack or the first element of the ast_list field do not exist, the method returns None.
     pub fn peek_stack(&self) -> Option<(String, usize, &ftd_ast::Ast)> {
         if let Some((doc_name, ast_list)) = self.to_process.stack.last() {
@@ -1077,7 +1077,7 @@ impl ParsedDocument {
 /// document field.
 ///
 /// StuckOnProcessor: The interpreter is currently stuck on processing an AST and is waiting on a
-/// processor to finish its execution. The state, resolved, module, and processor fields hold the
+/// processor to finish its execution. The state, ast, module, and processor fields hold the
 /// current state of the interpreter, the AST being processed, the name of the module containing
 /// the processor, and the name of the processor, respectively.
 ///

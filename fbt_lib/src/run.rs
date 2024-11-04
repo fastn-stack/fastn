@@ -24,7 +24,7 @@ pub fn main_with_filters(filters: &[String], to_fix: bool, folder: Option<String
             return Some(1);
         }
         Err(crate::Error::InvalidConfig(e)) => {
-            eprintln!("{}", format!("Cant unresolved config file: {:?}", e).red());
+            eprintln!("{}", format!("Cant parse config file: {:?}", e).red());
             return Some(1);
         }
         Err(crate::Error::BuildFailedToLaunch(e)) => {

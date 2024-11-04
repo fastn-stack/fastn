@@ -638,7 +638,7 @@ impl TDoc<'_> {
             ftd::ftd2021::p2::Kind::String { .. } => ftd::Value::String {
                 text: serde_json::from_value::<String>(json.to_owned()).map_err(|_| {
                     ftd::ftd2021::p1::Error::ParseError {
-                        message: format!("Can't unresolved to string, found: {}", json),
+                        message: format!("Can't parse to string, found: {}", json),
                         doc_id: self.name.to_string(),
                         line_number,
                     }
@@ -648,7 +648,7 @@ impl TDoc<'_> {
             ftd::ftd2021::p2::Kind::Integer { .. } => ftd::Value::Integer {
                 value: serde_json::from_value::<i64>(json.to_owned()).map_err(|_| {
                     ftd::ftd2021::p1::Error::ParseError {
-                        message: format!("Can't unresolved to integer, found: {}", json),
+                        message: format!("Can't parse to integer, found: {}", json),
                         doc_id: self.name.to_string(),
                         line_number,
                     }
@@ -657,7 +657,7 @@ impl TDoc<'_> {
             ftd::ftd2021::p2::Kind::Decimal { .. } => ftd::Value::Decimal {
                 value: serde_json::from_value::<f64>(json.to_owned()).map_err(|_| {
                     ftd::ftd2021::p1::Error::ParseError {
-                        message: format!("Can't unresolved to decimal, found: {}", json),
+                        message: format!("Can't parse to decimal, found: {}", json),
                         doc_id: self.name.to_string(),
                         line_number,
                     }
@@ -666,7 +666,7 @@ impl TDoc<'_> {
             ftd::ftd2021::p2::Kind::Boolean { .. } => ftd::Value::Boolean {
                 value: serde_json::from_value::<bool>(json.to_owned()).map_err(|_| {
                     ftd::ftd2021::p1::Error::ParseError {
-                        message: format!("Can't unresolved to boolean,found: {}", json),
+                        message: format!("Can't parse to boolean,found: {}", json),
                         doc_id: self.name.to_string(),
                         line_number,
                     }
@@ -854,7 +854,7 @@ impl TDoc<'_> {
             ftd::ftd2021::p2::Kind::String { .. } if row.first().is_some() => ftd::Value::String {
                 text: serde_json::from_value::<String>(row.first().unwrap().to_owned()).map_err(
                     |_| ftd::ftd2021::p1::Error::ParseError {
-                        message: format!("Can't unresolved to string, found: {:?}", row),
+                        message: format!("Can't parse to string, found: {:?}", row),
                         doc_id: self.name.to_string(),
                         line_number,
                     },
@@ -865,7 +865,7 @@ impl TDoc<'_> {
                 ftd::Value::Integer {
                     value: serde_json::from_value::<i64>(row.first().unwrap().to_owned()).map_err(
                         |_| ftd::ftd2021::p1::Error::ParseError {
-                            message: format!("Can't unresolved to integer, found: {:?}", row),
+                            message: format!("Can't parse to integer, found: {:?}", row),
                             doc_id: self.name.to_string(),
                             line_number,
                         },
@@ -876,7 +876,7 @@ impl TDoc<'_> {
                 ftd::Value::Decimal {
                     value: serde_json::from_value::<f64>(row.first().unwrap().to_owned()).map_err(
                         |_| ftd::ftd2021::p1::Error::ParseError {
-                            message: format!("Can't unresolved to decimal, found: {:?}", row),
+                            message: format!("Can't parse to decimal, found: {:?}", row),
                             doc_id: self.name.to_string(),
                             line_number,
                         },
@@ -887,7 +887,7 @@ impl TDoc<'_> {
                 ftd::Value::Boolean {
                     value: serde_json::from_value::<bool>(row.first().unwrap().to_owned())
                         .map_err(|_| ftd::ftd2021::p1::Error::ParseError {
-                            message: format!("Can't unresolved to boolean,found: {:?}", row),
+                            message: format!("Can't parse to boolean,found: {:?}", row),
                             doc_id: self.name.to_string(),
                             line_number,
                         })?,

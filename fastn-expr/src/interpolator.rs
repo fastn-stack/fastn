@@ -1,6 +1,6 @@
 #[derive(thiserror::Error, Debug)]
 pub enum InterpolationError {
-    #[error("Failed to unresolved interpolation: {0}")]
+    #[error("Failed to parse interpolation: {0}")]
     FailedToParse(#[from] fastn_expr::parser::ParseError),
     #[error("Failed to interpolate: {0}")]
     CantInterpolate(String),

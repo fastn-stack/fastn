@@ -19,7 +19,7 @@ pub enum FastnFTDError {
         #[from]
         source: FileAsStringError,
     },
-    #[error("Cant unresolved FASTN.ftd: {source}")]
+    #[error("Cant parse FASTN.ftd: {source}")]
     ParseFASTNFile {
         #[from]
         source: OldFastnParseError,

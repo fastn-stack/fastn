@@ -435,9 +435,9 @@ pub(crate) async fn read_ftd_2022(
     {
         Ok(v) => v,
         Err(e) => {
-            tracing::error!(msg = "failed to unresolved", doc = main.id.as_str());
+            tracing::error!(msg = "failed to parse", doc = main.id.as_str());
             return Err(fastn_core::Error::PackageError {
-                message: format!("failed to unresolved {:?}", &e),
+                message: format!("failed to parse {:?}", &e),
             });
         }
     };
@@ -504,9 +504,9 @@ pub(crate) async fn read_ftd_2023(
     {
         Ok(v) => v,
         Err(e) => {
-            tracing::error!(msg = "failed to unresolved", doc = main.id.as_str());
+            tracing::error!(msg = "failed to parse", doc = main.id.as_str());
             return Err(fastn_core::Error::PackageError {
-                message: format!("failed to unresolved {:?}", &e),
+                message: format!("failed to parse {:?}", &e),
             });
         }
     };

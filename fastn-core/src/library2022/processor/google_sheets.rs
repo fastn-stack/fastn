@@ -182,7 +182,7 @@ fn to_interpreter_value(
                     serde_json::Value::String(v) => v.to_string(),
                     _ => {
                         return ftd::interpreter::utils::e2(
-                            format!("Can't unresolved to string, found: {}", &val.v),
+                            format!("Can't parse to string, found: {}", &val.v),
                             doc.name,
                             line_number,
                         )
@@ -200,7 +200,7 @@ fn to_interpreter_value(
                     serde_json::Value::Number(n) => {
                         n.as_f64().map(|f| f as i64).ok_or_else(|| {
                             ftd::interpreter::Error::ParseError {
-                                message: format!("Can't unresolved to integer, found: {}", &val.v),
+                                message: format!("Can't parse to integer, found: {}", &val.v),
                                 doc_id: doc.name.to_string(),
                                 line_number,
                             }
@@ -209,14 +209,14 @@ fn to_interpreter_value(
                     serde_json::Value::String(s) => {
                         s.parse::<i64>()
                             .map_err(|_| ftd::interpreter::Error::ParseError {
-                                message: format!("Can't unresolved to integer, found: {}", &val.v),
+                                message: format!("Can't parse to integer, found: {}", &val.v),
                                 doc_id: doc.name.to_string(),
                                 line_number,
                             })?
                     }
                     _ => {
                         return Err(ftd::interpreter::Error::ParseError {
-                            message: format!("Can't unresolved to integer, found: {}", &val.v),
+                            message: format!("Can't parse to integer, found: {}", &val.v),
                             doc_id: doc.name.to_string(),
                             line_number,
                         })
@@ -224,7 +224,7 @@ fn to_interpreter_value(
                 },
                 t => {
                     return Err(ftd::interpreter::Error::ParseError {
-                        message: format!("Can't unresolved to integer, found: {t}"),
+                        message: format!("Can't parse to integer, found: {t}"),
                         doc_id: doc.name.to_string(),
                         line_number,
                     })
@@ -236,7 +236,7 @@ fn to_interpreter_value(
                 serde_json::Value::Number(n) => {
                     n.as_f64()
                         .ok_or_else(|| ftd::interpreter::Error::ParseError {
-                            message: format!("Can't unresolved to decimal, found: {}", &val.v),
+                            message: format!("Can't parse to decimal, found: {}", &val.v),
                             doc_id: doc.name.to_string(),
                             line_number,
                         })?
@@ -244,14 +244,14 @@ fn to_interpreter_value(
                 serde_json::Value::String(s) => {
                     s.parse::<f64>()
                         .map_err(|_| ftd::interpreter::Error::ParseError {
-                            message: format!("Can't unresolved to decimal, found: {}", &val.v),
+                            message: format!("Can't parse to decimal, found: {}", &val.v),
                             doc_id: doc.name.to_string(),
                             line_number,
                         })?
                 }
                 _ => {
                     return Err(ftd::interpreter::Error::ParseError {
-                        message: format!("Can't unresolved to decimal, found: {}", &val.v),
+                        message: format!("Can't parse to decimal, found: {}", &val.v),
                         doc_id: doc.name.to_string(),
                         line_number,
                     })
@@ -264,14 +264,14 @@ fn to_interpreter_value(
                 serde_json::Value::String(s) => {
                     s.parse::<bool>()
                         .map_err(|_| ftd::interpreter::Error::ParseError {
-                            message: format!("Can't unresolved to boolean, found: {}", &val.v),
+                            message: format!("Can't parse to boolean, found: {}", &val.v),
                             doc_id: doc.name.to_string(),
                             line_number,
                         })?
                 }
                 _ => {
                     return Err(ftd::interpreter::Error::ParseError {
-                        message: format!("Can't unresolved to boolean, found: {}", &val.v),
+                        message: format!("Can't parse to boolean, found: {}", &val.v),
                         doc_id: doc.name.to_string(),
                         line_number,
                     })
@@ -351,7 +351,7 @@ fn parse_json(
     match serde_json::from_str::<QueryResponse>(json) {
         Ok(response) => Ok(response),
         Err(e) => ftd::interpreter::utils::e2(
-            format!("Failed to unresolved query response: {:?}", e),
+            format!("Failed to parse query response: {:?}", e),
             doc_name,
             line_number,
         ),
@@ -541,7 +541,7 @@ pub(crate) fn parse_query(
             }
             State::ParseError(error) => {
                 return Err(ftd::interpreter::Error::ParseError {
-                    message: format!("Failed to unresolved SQL Query: {}", error),
+                    message: format!("Failed to parse SQL Query: {}", error),
                     doc_id: doc.name.to_string(),
                     line_number,
                 });

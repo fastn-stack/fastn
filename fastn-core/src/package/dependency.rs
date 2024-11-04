@@ -170,7 +170,7 @@ impl fastn_core::Package {
                         Ok(v) => v,
                         Err(e) => {
                             return Err(fastn_core::Error::PackageError {
-                                message: format!("failed to unresolved FASTN.ftd: {:?}", &e),
+                                message: format!("failed to parse FASTN.ftd: {:?}", &e),
                             });
                         }
                     };
@@ -267,7 +267,7 @@ impl fastn_core::Package {
                 }
                 Err(e) => {
                     return Err(fastn_core::Error::PackageError {
-                        message: format!("failed to unresolved fastn.manifest.ftd: {:?}", &e),
+                        message: format!("failed to parse fastn.manifest.ftd: {:?}", &e),
                     });
                 }
             }
@@ -387,7 +387,7 @@ impl fastn_core::Package {
                 }
                 Err(e) => {
                     return Err(fastn_core::Error::PackageError {
-                        message: format!("failed to unresolved fastn.manifest.ftd: {:?}", &e),
+                        message: format!("failed to parse fastn.manifest.ftd: {:?}", &e),
                     });
                 }
             }
@@ -449,7 +449,7 @@ impl fastn_core::Package {
                 Ok(v) => v,
                 Err(e) => {
                     return Err(fastn_core::Error::PackageError {
-                        message: format!("failed to unresolved FASTN.ftd 2: {:?}", &e),
+                        message: format!("failed to parse FASTN.ftd 2: {:?}", &e),
                     });
                 }
             }
@@ -568,7 +568,7 @@ impl fastn_core::Package {
                 Ok(v) => v,
                 Err(e) => {
                     return Err(fastn_core::Error::PackageError {
-                        message: format!("failed to unresolved FASTN.ftd 2: {:?}", &e),
+                        message: format!("failed to parse FASTN.ftd 2: {:?}", &e),
                     });
                 }
             }

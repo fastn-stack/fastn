@@ -28,7 +28,7 @@ pub(crate) async fn get_tracks(
     let b = match fastn_core::doc::parse_ftd(base_path.to_string().as_str(), doc.as_str(), &lib) {
         Ok(v) => v,
         Err(e) => {
-            eprintln!("failed to unresolved {}: {:?}", base_path, &e);
+            eprintln!("failed to parse {}: {:?}", base_path, &e);
             todo!();
         }
     };
