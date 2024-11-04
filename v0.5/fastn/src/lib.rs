@@ -2,10 +2,12 @@
 #![deny(unused_crate_dependencies)]
 #![warn(clippy::used_underscore_binding)]
 
+extern crate self as fastn;
+
 pub mod commands;
 mod ds;
 
-extern crate self as fastn;
+pub use ds::DS;
 
 pub enum Action {
     Read,

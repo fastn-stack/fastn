@@ -1,5 +1,12 @@
 pub struct DS {}
 
+#[expect(clippy::new_without_default)]
+impl DS {
+    pub fn new() -> DS {
+        DS {}
+    }
+}
+
 #[async_trait::async_trait]
 impl fastn_lang::DS for DS {
     async fn source(&mut self, _document: &str) -> fastn_lang::Result<String> {

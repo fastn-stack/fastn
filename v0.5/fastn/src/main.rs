@@ -1,5 +1,6 @@
 fn main() {
-    let _ds =
+    #[expect(unused_variables)]
+    let ds = fastn::DS::new();
     // read config here and pass to everyone?
     // do common build stuff here
     match fastn::commands::parse() {
