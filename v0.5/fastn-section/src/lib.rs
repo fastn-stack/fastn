@@ -22,6 +22,7 @@ pub use fastn_section::parser::kinded_name::kinded_name;
 pub use fastn_section::parser::module_name::module_name;
 pub use fastn_section::parser::package_name::package_name;
 pub use fastn_section::parser::qualified_identifier::qualified_identifier;
+pub use fastn_section::parser::section::section;
 pub use fastn_section::parser::section_init::section_init;
 pub use fastn_section::parser::tes::tes;
 pub use fastn_section::warning::Warning;

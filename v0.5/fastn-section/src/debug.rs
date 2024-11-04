@@ -71,6 +71,10 @@ impl JDebug for fastn_section::Document {
         if !self.comments.is_empty() {
             o.insert("comments".to_string(), self.comments.debug(source));
         }
+
+        if !self.sections.is_empty() {
+            o.insert("sections".to_string(), self.sections.debug(source));
+        }
         if o.is_empty() {
             return "<empty-document>".into();
         }

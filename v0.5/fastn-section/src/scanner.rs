@@ -100,6 +100,16 @@ impl<'input, T: Scannable> Scanner<'input, T> {
         }
     }
 
+    pub fn skip_new_lines(&mut self) {
+        while let Some(c) = self.peek() {
+            if c == '\n' {
+                self.pop();
+                continue;
+            }
+            break;
+        }
+    }
+
     pub fn take_till_char_or_end_of_line(&mut self, t: char) -> Option<fastn_section::Span> {
         self.take_while(|c| c != t && c != '\n')
     }
