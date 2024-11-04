@@ -1,25 +1,11 @@
 fn main() {
     let command = fastn::commands::parse();
-    #[expect(unused_variables)]
     let config = fastn_core::Config::read(Box::new(fastn::DS::new()));
     // read config here and pass to everyone?
     // do common build stuff here
     match command {
-        fastn::commands::Cli::Serve {
-            port,
-            watch,
-            build,
-            offline,
-        } => fastn::commands::serve(port, watch, build, offline),
-        fastn::commands::Cli::Render {
-            path,
-            key_values,
-            action,
-            output,
-            browse,
-            ui,
-            offline,
-        } => fastn::commands::render(path, key_values, action, output, browse, ui, offline),
+        fastn::commands::Cli::Serve(input) => fastn::commands::serve(config, input),
+        fastn::commands::Cli::Render(input) => fastn::commands::render(config, input),
         fastn::commands::Cli::Build { .. } => {}
         fastn::commands::Cli::Static { .. } => {}
         fastn::commands::Cli::Test { .. } => {}

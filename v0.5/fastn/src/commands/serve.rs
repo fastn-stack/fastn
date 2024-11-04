@@ -1,3 +1,3 @@
-pub fn serve(_port: Option<u16>, _watch: bool, _build: bool, _offline: bool) {
+pub fn serve(_config: fastn_core::Config, _input: fastn::commands::Serve) {
     todo!()
 }

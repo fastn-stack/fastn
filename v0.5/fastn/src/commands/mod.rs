@@ -47,26 +47,30 @@ pub enum UI {
     Browser,
 }
 
+pub struct Render {
+    pub path: String,
+    // how to handle stdin?
+    pub key_values: Vec<(String, serde_json::Value)>,
+    pub action: fastn::Action,
+    pub output: Option<fastn::OutputRequested>,
+    pub browse: bool,
+    pub ui: UI,
+    pub offline: bool,
+}
+
+pub struct Serve {
+    pub port: Option<u16>,
+    pub watch: bool,
+    pub build: bool,
+    pub offline: bool,
+}
+
 pub enum Cli {
-    Render {
-        path: String,
-        // how to handle stdin?
-        key_values: Vec<(String, serde_json::Value)>,
-        action: fastn::Action,
-        output: Option<fastn::OutputRequested>,
-        browse: bool,
-        ui: UI,
-        offline: bool,
-    },
+    Render(Render),
     Build {
         offline: bool,
     },
-    Serve {
-        port: Option<u16>,
-        watch: bool,
-        build: bool,
-        offline: bool,
-    },
+    Serve(Serve),
     Static {
         build: bool,
         offline: bool,
