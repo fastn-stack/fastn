@@ -37,7 +37,6 @@ pub use parse::parse;
 // fastn static [--build] (create static version of the site, issues warning if not all pages are static)
 // fastn test (test the current package)
 // fastn fmt
-// fastn lint
 // fastn upload [--build] [--no-lint] <fifthtry-site-slug> (upload the current package)
 // fastn clone <package-name>
 pub enum UI {
@@ -47,7 +46,7 @@ pub enum UI {
 }
 
 pub struct Render {
-    pub path: String,
+    pub path: String, // e.g., /foo/bar/, which maps to either foo/bar.ftd or foo/bar/index.ftd
     // how to handle stdin?
     pub key_values: Vec<(String, serde_json::Value)>,
     pub action: fastn::Action,

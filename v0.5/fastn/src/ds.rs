@@ -48,4 +48,16 @@ impl fastn_lang::DS for DS {
     ) -> fastn_lang::Result<Vec<fastn_lang::resolved::Document>> {
         todo!()
     }
+
+    async fn purge(&mut self, _document: &str) -> fastn_lang::Result<()> {
+        todo!()
+    }
+
+    async fn store_js(&mut self, _qualified_identifier: &str, _js: &str) -> fastn_lang::Result<()> {
+        todo!()
+    }
+
+    async fn document_js(&mut self, _document: &str) -> Option<String> {
+        todo!()
+    }
 }

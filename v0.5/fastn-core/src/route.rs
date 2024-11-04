@@ -10,7 +10,8 @@ pub enum Route {
     Static(String),
 }
 
-pub fn route(_config: &fastn_core::Config, _path: &str, _data: serde_json::Value) -> Route {
-    // unresolved the fastn_ftd_source, and extract
-    todo!()
+impl fastn_core::Config {
+    pub async fn resolve(&mut self, _path: &str) -> Route {
+        todo!()
+    }
 }

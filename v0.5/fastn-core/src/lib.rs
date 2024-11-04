@@ -8,3 +8,4 @@ mod config;
 mod route;
 
 pub use config::{AutoImport, Config, DynamicRoute, Redirect, Sitemap};
+pub use route::Route;

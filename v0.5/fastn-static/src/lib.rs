@@ -3,5 +3,3 @@
 #![warn(clippy::used_underscore_binding)]
 
 extern crate self as fastn_static;
-
-mod ds;

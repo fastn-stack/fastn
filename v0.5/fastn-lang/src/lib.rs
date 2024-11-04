@@ -34,7 +34,7 @@ pub trait DS {
     ) -> Result<fastn_lang::resolved::Definition>;
     async fn add_resolved(
         &mut self,
-        qualified_identifier: &str,
+        qualified_identifier: &str, // <package-name>@<version>/<document-name>#<symbol-name>
         resolved: fastn_lang::resolved::Definition,
     ) -> Result<()>;
     async fn unresolved_document(
@@ -45,4 +45,10 @@ pub trait DS {
         &mut self,
         document: &str,
     ) -> Result<Vec<fastn_lang::resolved::Document>>;
+    /// this removes all the JS, resolved and unresolved definitions of the document.
+    /// for every resolved symbol that depends on a symbol in this document, the resolved symbol
+    /// is also deleted, along with the JS for those files.
+    async fn purge(&mut self, document: &str) -> Result<()>;
+    async fn store_js(&mut self, qualified_identifier: &str, js: &str) -> Result<()>;
+    async fn document_js(&mut self, document: &str) -> Option<String>; // todo: can it return &str?
 }

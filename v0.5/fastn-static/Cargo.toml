@@ -9,5 +9,3 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
-fastn-lang.workspace = true
-async-trait.workspace = true

@@ -20,6 +20,10 @@ impl fastn::commands::Build {
     /// to determine if a file has changed since the last build. if a file has not changed, it is
     /// not re-compiled. this is done to speed up the build process.
     ///
+    /// `.fastn/build/hash.json` also stores dependencies of each file. if a file is not changed,
+    /// but one of its dependencies has changed, the file is re-compiled.
+    ///
+    ///
     /// `fastn build --watch` can run a file watcher and re-build the site on any change in the
     /// package.
     ///
