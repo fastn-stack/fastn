@@ -18,6 +18,7 @@ name = "fastn"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "fastn-core",
  "fastn-lang",
  "serde_json",
 ]

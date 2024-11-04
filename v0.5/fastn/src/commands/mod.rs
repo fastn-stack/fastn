@@ -1,7 +1,9 @@
 mod parse;
+mod render;
 mod serve;
 
 pub use parse::parse;
+pub use render::render;
 pub use serve::serve;
 
 // fastn <path> key=value
