@@ -1,5 +1,3 @@
-use fastn_lang::unresolved::Definition;
-
 pub struct DS {}
 
 #[expect(clippy::new_without_default)]
@@ -10,8 +8,11 @@ impl DS {
 }
 
 #[async_trait::async_trait]
-impl fastn_lang::DS for DS {
-    async fn unresolved(&mut self, _qualified_identifier: &str) -> fastn_lang::Result<Definition> {
+impl fastn_lang::DocumentStore for DS {
+    async fn unresolved(
+        &mut self,
+        _qualified_identifier: &str,
+    ) -> fastn_lang::Result<fastn_unresolved::Definition> {
         todo!()
     }
 
@@ -26,13 +27,6 @@ impl fastn_lang::DS for DS {
         &mut self,
         _qualified_identifier: usize,
     ) -> fastn_lang::Result<fastn_lang::resolved::Definition> {
-        todo!()
-    }
-
-    async fn save_resolved_definitions(
-        &mut self,
-        _definitions: Vec<fastn_lang::resolved::Definition>,
-    ) -> fastn_lang::Result<()> {
         todo!()
     }
 }

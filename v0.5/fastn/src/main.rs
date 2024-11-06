@@ -1,7 +1,7 @@
 #[tokio::main]
 async fn main() {
     let command = fastn::commands::parse();
-    let mut config = fastn_core::Config::read(vec![]).await.unwrap();
+    let mut config = fastn_core::Config::read(Default::default()).await.unwrap();
     // read config here and pass to everyone?
     // do common build stuff here
     match command {

@@ -8,7 +8,7 @@
 /// earlier we had strict mode here, but to simplify things, now we let the caller convert non-empty
 /// warnings from OK part as error, and discard the generated JS.
 pub async fn compile(
-    _ds: &mut Box<dyn fastn_lang::DS>,
+    _ds: &mut Box<dyn fastn_lang::DocumentStore>,
     _document: &fastn_section::Document,
 ) -> Result<(String, Vec<fastn_section::Warning>), Vec<fastn_section::Diagnostic>> {
     todo!()

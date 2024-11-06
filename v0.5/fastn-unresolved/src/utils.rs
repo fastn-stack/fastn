@@ -1,12 +1,9 @@
-impl fastn_lang::unresolved::Document {
+impl fastn_unresolved::Document {
     pub fn new(
         document: fastn_section::Document,
-    ) -> (
-        fastn_lang::unresolved::Document,
-        Vec<fastn_section::Section>,
-    ) {
+    ) -> (fastn_unresolved::Document, Vec<fastn_section::Section>) {
         (
-            fastn_lang::unresolved::Document {
+            fastn_unresolved::Document {
                 module_doc: document.module_doc,
                 imports: vec![],
                 definitions: Default::default(),

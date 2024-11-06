@@ -1,5 +1,5 @@
 impl fastn_core::Config {
-    pub async fn read(_fastn_ftd_sections: Vec<fastn_section::Section>) -> Result<Self, ReadError> {
+    pub async fn read(_fastn_ftd: fastn_section::Document) -> Result<Self, ReadError> {
         Ok(fastn_core::Config {
             sitemap: fastn_core::Sitemap {},
             auto_imports: vec![],
