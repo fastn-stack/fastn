@@ -28,7 +28,21 @@ pub use fastn_section::parser::tes::tes;
 pub use fastn_section::warning::Warning;
 pub use scanner::{Scannable, Scanner};
 
+pub enum Diagnostic {
+    Error(Error),
+    Warning(Warning),
+}
+
 pub type Result<T> = std::result::Result<T, fastn_section::Error>;
+/// TODO: span has to keep track of the document as well now.
+/// TODO: demote usize to u32.
+///
+/// the document would be document id as stored in sqlite documents table.
+///
+/// Note: instead of Range, we will use a custom struct, we can use a single 32bit data to store
+/// both start, and length. or we keep our life simple, we have can have sections that are really
+/// long, eg a long ftd file. lets assume this is the decision for v0.5. we can demote usize to u32
+/// as we do not expect individual documents to be larger than few GBs.
 pub type Span = std::ops::Range<usize>;
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Spanned<T> {
@@ -43,7 +57,7 @@ pub struct Document {
     pub errors: Vec<fastn_section::Spanned<fastn_section::Error>>,
     pub warnings: Vec<fastn_section::Spanned<fastn_section::Warning>>,
     pub comments: Vec<fastn_section::Span>,
-    pub line_starts: Vec<usize>,
+    pub line_starts: Vec<u32>,
 }
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]

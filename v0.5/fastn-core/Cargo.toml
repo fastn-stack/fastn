@@ -9,5 +9,5 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
-fastn-lang.workspace = true
+fastn-section.workspace = true
 serde_json.workspace = true

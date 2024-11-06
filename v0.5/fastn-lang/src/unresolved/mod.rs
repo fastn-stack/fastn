@@ -12,7 +12,7 @@ pub struct Document {
     pub errors: Vec<fastn_section::Spanned<fastn_section::Error>>,
     pub warnings: Vec<fastn_section::Spanned<fastn_section::Warning>>,
     pub comments: Vec<fastn_section::Span>,
-    pub line_starts: Vec<usize>,
+    pub line_starts: Vec<u32>,
 }
 
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]

@@ -52,6 +52,7 @@ pub struct Render {
     pub action: fastn::Action,
     pub output: Option<fastn::OutputRequested>,
     pub browse: bool,
+    pub strict: bool,
     pub ui: UI,
     pub offline: bool,
 }

@@ -9,5 +9,6 @@ pub fn parse() -> fastn::commands::Cli {
         browse: false,
         ui: fastn::commands::UI::Terminal,
         offline: false,
+        strict: false,
     })
 }
