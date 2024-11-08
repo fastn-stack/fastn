@@ -1608,6 +1608,9 @@ name = "fastn-type"
 version = "0.1.0"
 dependencies = [
  "fastn-grammar",
+ "fastn-js",
+ "indexmap",
+ "itertools 0.13.0",
  "serde",
  "serde_json",
 ]

@@ -12,3 +12,6 @@ homepage.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 fastn-grammar.workspace = true
+indexmap.workspace = true
+fastn-js.workspace = true
+itertools.workspace = true

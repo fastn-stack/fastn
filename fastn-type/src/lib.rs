@@ -1,55 +1,40 @@
 extern crate self as fastn_type;
 
-mod kind;
-pub use kind::{Kind, KindData};
-
-mod value;
-pub use value::{PropertyValue, PropertyValueSource, Value};
-
-mod function;
-pub use function::{Function, FunctionCall};
-
-mod component;
-pub use component::{
+mod thing;
+pub use thing::component::{
     Argument, Component, ComponentDefinition, ComponentSource, Event, EventName, Loop, Property,
     PropertySource,
 };
+pub use thing::default;
+pub use thing::expression::Expression;
+pub use thing::function::{Function, FunctionCall};
+pub use thing::kind::{Kind, KindData};
+pub use thing::module::ModuleThing;
+pub use thing::or_type::{OrType, OrTypeVariant};
+pub use thing::record::{AccessModifier, Field, Record};
+pub use thing::value::{PropertyValue, PropertyValueSource, Value};
+pub use thing::variable::{ConditionalValue, Variable};
+pub use thing::web_component::WebComponentDefinition;
+pub use thing::Thing;
 
-mod expression;
-pub use expression::Expression;
+mod tdoc;
+pub use tdoc::TDoc;
 
-mod module;
-pub use module::ModuleThing;
+mod data;
+pub use data::Data;
+mod js_ast;
+mod resolver;
+pub use resolver::ResolverData;
+mod ftd_to_js_variant;
+pub(crate) use ftd_to_js_variant::ftd_to_js_variant;
 
-mod record;
-pub use record::{AccessModifier, Field, Record};
-
-mod variable;
-pub use variable::{ConditionalValue, Variable};
-
-mod web_component;
-pub use web_component::WebComponentDefinition;
-
-mod or_type;
-pub use or_type::{OrType, OrTypeVariant};
+mod utils;
 
 pub type Map<T> = std::collections::BTreeMap<String, T>;
 
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
-pub enum Thing {
-    Record(fastn_type::Record),
-    OrType(fastn_type::OrType),
-    OrTypeWithVariant {
-        or_type: String,
-        variant: fastn_type::OrTypeVariant,
-    },
-    Variable(fastn_type::Variable),
-    Component(fastn_type::ComponentDefinition),
-    WebComponent(fastn_type::WebComponentDefinition),
-    Function(fastn_type::Function),
-    Export {
-        from: String,
-        to: String,
-        line_number: usize,
-    },
-}
+pub const FTD_SPECIAL_VALUE: &str = "$VALUE";
+pub const FTD_SPECIAL_CHECKED: &str = "$CHECKED";
+pub const FTD_INHERITED: &str = "inherited";
+pub const FTD_LOOP_COUNTER: &str = "LOOP.COUNTER";
+pub const CLONE: &str = "*$";
+pub const REFERENCE: &str = "$";
