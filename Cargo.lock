@@ -1607,6 +1607,7 @@ dependencies = [
 name = "fastn-type"
 version = "0.1.0"
 dependencies = [
+ "fastn-grammar",
  "serde",
  "serde_json",
 ]
