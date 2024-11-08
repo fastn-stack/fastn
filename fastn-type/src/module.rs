@@ -12,7 +12,6 @@ pub struct ComponentModuleThing {
     pub arguments: Vec<fastn_type::Argument>,
 }
 
-
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct VariableModuleThing {
     pub name: String,
