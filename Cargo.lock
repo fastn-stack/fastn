@@ -1604,6 +1604,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "fastn-type"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "fastn-update"
 version = "0.1.0"
 dependencies = [

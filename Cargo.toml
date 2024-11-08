@@ -20,6 +20,7 @@ members = [
     "fbt",
     "fbt_lib",
     "t",
+    "fastn-type",
     # "fastn-wasm",
     # "fastn-runtime",
 ]
@@ -90,6 +91,7 @@ enum-iterator = "0.6"
 enum-iterator-derive = "0.6"
 fastn-ds.path = "fastn-ds"
 fastn-update.path = "fastn-update"
+fastn-type.path = "fastn-type"
 fastn-core.path = "fastn-core"
 fastn-issues.path = "fastn-issues"
 fastn-package.path = "fastn-package"
