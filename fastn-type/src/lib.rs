@@ -11,7 +11,8 @@ pub use function::FunctionCall;
 
 mod component;
 pub use component::{
-    Argument, Component, ComponentSource, Event, EventName, Loop, Property, PropertySource,
+    Argument, Component, ComponentDefinition, ComponentSource, Event, EventName, Loop, Property,
+    PropertySource,
 };
 
 mod expression;
@@ -22,5 +23,11 @@ pub use module::ModuleThing;
 
 mod record;
 pub use record::{AccessModifier, Field, Record};
+
+mod variable;
+pub use variable::{ConditionalValue, Variable};
+
+mod web_component;
+pub use web_component::WebComponentDefinition;
 
 pub type Map<T> = std::collections::BTreeMap<String, T>;
