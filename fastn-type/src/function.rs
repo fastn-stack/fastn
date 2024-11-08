@@ -1,4 +1,21 @@
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct Function {
+    pub name: String,
+    pub return_kind: fastn_type::KindData,
+    pub arguments: Vec<fastn_type::Argument>,
+    pub expression: Vec<Expression>,
+    pub js: Option<fastn_type::PropertyValue>,
+    pub line_number: usize,
+    pub external_implementation: bool,
+}
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct Expression {
+    pub expression: String,
+    pub line_number: usize,
+}
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct FunctionCall {
     pub name: String,
     pub kind: fastn_type::KindData,

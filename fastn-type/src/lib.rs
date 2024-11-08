@@ -7,7 +7,7 @@ mod value;
 pub use value::{PropertyValue, PropertyValueSource, Value};
 
 mod function;
-pub use function::FunctionCall;
+pub use function::{Function, FunctionCall};
 
 mod component;
 pub use component::{
@@ -30,4 +30,26 @@ pub use variable::{ConditionalValue, Variable};
 mod web_component;
 pub use web_component::WebComponentDefinition;
 
+mod or_type;
+pub use or_type::{OrType, OrTypeVariant};
+
 pub type Map<T> = std::collections::BTreeMap<String, T>;
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub enum Thing {
+    Record(fastn_type::Record),
+    OrType(fastn_type::OrType),
+    OrTypeWithVariant {
+        or_type: String,
+        variant: fastn_type::OrTypeVariant,
+    },
+    Variable(fastn_type::Variable),
+    Component(fastn_type::ComponentDefinition),
+    WebComponent(fastn_type::WebComponentDefinition),
+    Function(fastn_type::Function),
+    Export {
+        from: String,
+        to: String,
+        line_number: usize,
+    },
+}
