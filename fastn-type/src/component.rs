@@ -1,4 +1,15 @@
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct ComponentDefinition {
+    pub name: String,
+    pub arguments: Vec<Argument>,
+    pub definition: Component,
+    pub css: Option<fastn_type::PropertyValue>,
+    pub line_number: usize,
+}
+
+pub type Argument = fastn_type::Field;
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Component {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,

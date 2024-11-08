@@ -74,6 +74,6 @@ pub enum Value {
     },
     Module {
         name: String,
-        // things: fastn_type::Map<fastn_type::ModuleThing>, Todo
+        things: fastn_type::Map<fastn_type::ModuleThing>,
     },
 }
