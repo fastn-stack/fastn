@@ -57,7 +57,15 @@ impl KindExt for fastn_type::Kind {
     }
 }
 
-pub(crate) trait PropertyValueExt {}
+pub(crate) trait PropertyValueExt {
+    fn to_html_string(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+        field: Option<String>,
+        id: &str,
+        string_needs_no_quotes: bool,
+    ) -> ftd::html::Result<Option<String>>;
+}
 
 impl PropertyValueExt for fastn_type::PropertyValue {
     fn to_html_string(
@@ -89,6 +97,124 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                 value, line_number, ..
             } => value.to_html_string(doc, *line_number, field, id, string_needs_no_quotes)?,
             _ => None,
+        })
+    }
+}
+
+pub(crate) trait ValueExt {
+    fn to_html_string(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+        line_number: usize,
+        field: Option<String>,
+        id: &str,
+        string_needs_no_quotes: bool,
+    ) -> ftd::html::Result<Option<String>>;
+}
+
+impl ValueExt for fastn_type::Value {
+    // string_needs_no_quotes: for class attribute the value should be red-block not "red-block"
+    fn to_html_string(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+        line_number: usize,
+        field: Option<String>,
+        id: &str,
+        string_needs_no_quotes: bool,
+    ) -> ftd::html::Result<Option<String>> {
+        Ok(match self {
+            fastn_type::Value::String { text } if !string_needs_no_quotes => {
+                Some(format!("\"{}\"", text))
+            }
+            fastn_type::Value::String { text } if string_needs_no_quotes => Some(text.to_string()),
+            fastn_type::Value::Integer { value } => Some(value.to_string()),
+            fastn_type::Value::Decimal { value } => Some(value.to_string()),
+            fastn_type::Value::Boolean { value } => Some(value.to_string()),
+            fastn_type::Value::List { data, .. } => {
+                let mut values = vec![];
+                for value in data {
+                    let v = if let Some(v) = value
+                        .clone()
+                        .resolve(doc, line_number)?
+                        .to_html_string(doc, value.line_number(), None, id, true)?
+                    {
+                        v
+                    } else {
+                        continue;
+                    };
+                    values.push(v);
+                }
+                Some(format!("{:?}", values.join(" ")))
+            }
+            fastn_type::Value::Record { fields, .. }
+                if field
+                    .as_ref()
+                    .map(|v| fields.contains_key(v))
+                    .unwrap_or(false) =>
+            {
+                fields.get(&field.unwrap()).unwrap().to_html_string(
+                    doc,
+                    None,
+                    id,
+                    string_needs_no_quotes,
+                )?
+            }
+            fastn_type::Value::OrType {
+                value,
+                variant,
+                full_variant,
+                name,
+                ..
+            } => {
+                let value = value.to_html_string(doc, field, id, string_needs_no_quotes)?;
+                match value {
+                    Some(value) if name.eq(ftd::interpreter::FTD_LENGTH) => {
+                        if let Ok(pattern) = ftd::executor::Length::set_pattern_from_variant_str(
+                            variant,
+                            doc.name,
+                            line_number,
+                        ) {
+                            Some(format!("`{}`.format(JSON.stringify({}))", pattern, value))
+                        } else {
+                            Some(value)
+                        }
+                    }
+                    Some(value)
+                        if name.eq(ftd::interpreter::FTD_RESIZING)
+                            && variant.ne(ftd::interpreter::FTD_RESIZING_FIXED) =>
+                    {
+                        if let Ok(pattern) = ftd::executor::Resizing::set_pattern_from_variant_str(
+                            variant,
+                            full_variant,
+                            doc.name,
+                            line_number,
+                        ) {
+                            Some(format!("`{}`.format(JSON.stringify({}))", pattern, value))
+                        } else {
+                            Some(value)
+                        }
+                    }
+                    Some(value) => Some(value),
+                    None => None,
+                }
+            }
+            fastn_type::Value::Record { fields, .. } => {
+                let mut values = vec![];
+                for (k, v) in fields {
+                    let value = if let Some(v) =
+                        v.to_html_string(doc, field.clone(), id, string_needs_no_quotes)?
+                    {
+                        v
+                    } else {
+                        "null".to_string()
+                    };
+                    values.push(format!("\"{}\": {}", k, value));
+                }
+
+                Some(format!("{{{}}}", values.join(", ")))
+            }
+            fastn_type::Value::Optional { data, .. } if data.is_none() => None,
+            t => unimplemented!("{:?}", t),
         })
     }
 }
