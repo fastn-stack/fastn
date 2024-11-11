@@ -14,6 +14,8 @@ impl Variable {
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
+        use ftd::interpreter::fastn_type_functions::KindDataExt;
+
         let variable_definition = ast.clone().get_variable_definition(doc.name)?;
         fastn_type::KindData::scan_ast_kind(
             variable_definition.kind,
@@ -76,6 +78,8 @@ impl Variable {
         number_of_scan: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Variable>>
     {
+        use ftd::interpreter::fastn_type_functions::KindDataExt;
+
         let variable_definition = ast.clone().get_variable_definition(doc.name)?;
         let name = doc.resolve_name(variable_definition.name.as_str());
         let kind = try_ok_state!(fastn_type::KindData::from_ast_kind(

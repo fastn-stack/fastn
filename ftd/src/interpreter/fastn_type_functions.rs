@@ -1,3 +1,28 @@
+pub(crate) trait KindExt {
+    fn list_type(
+        &self,
+        doc_name: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<fastn_type::Kind>;
+}
+
+impl KindExt for fastn_type::Kind {
+    fn list_type(
+        &self,
+        doc_name: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<fastn_type::Kind> {
+        match &self {
+            fastn_type::Kind::List { kind } => Ok(kind.as_ref().clone()),
+            t => ftd::interpreter::utils::e2(
+                format!("Expected List, found: `{:?}`", t),
+                doc_name,
+                line_number,
+            ),
+        }
+    }
+}
+
 pub(crate) trait KindDataExt {
     fn from_ast_kind(
         var_kind: ftd_ast::VariableKind,
