@@ -4,6 +4,7 @@
 #[macro_use]
 mod ftd_test_helpers;
 mod element;
+mod fastn_type_functions;
 mod resolver;
 mod utils;
 mod value;
@@ -89,7 +90,9 @@ pub struct JSAstData {
 }
 
 pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
+    use ftd::js::fastn_type_functions::PropertyValueExt;
     use itertools::Itertools;
+
     let doc = ftd::interpreter::TDoc::new(&document.name, &document.aliases, &document.data);
     // Check if document tree has rive. This is used to add rive script.
     let mut has_rive_components = false;
@@ -218,6 +221,8 @@ impl ftd::interpreter::Variable {
         prefix: Option<String>,
         has_rive_components: &mut bool,
     ) -> fastn_js::Ast {
+        use ftd::js::fastn_type_functions::PropertyValueExt;
+
         if let Ok(value) = self.value.value(doc.name, self.value.line_number()) {
             if self.kind.is_record() {
                 return fastn_js::Ast::RecordInstance(fastn_js::RecordInstance {
@@ -333,6 +338,7 @@ impl ftd::interpreter::Component {
         should_return: bool,
         has_rive_components: &mut bool,
     ) -> Vec<fastn_js::ComponentStatement> {
+        use ftd::js::fastn_type_functions::PropertyValueExt;
         use itertools::Itertools;
 
         let loop_alias = self.iteration.clone().map(|v| v.alias);

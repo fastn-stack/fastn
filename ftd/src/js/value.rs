@@ -42,6 +42,8 @@ impl Value {
         has_rive_components: &mut bool,
         should_return: bool,
     ) -> fastn_js::SetPropertyValue {
+        use ftd::js::fastn_type_functions::ValueExt;
+
         match self {
             Value::Data(value) => {
                 value.to_fastn_js_value(doc, rdata, has_rive_components, should_return)
@@ -133,6 +135,8 @@ fn properties_to_js_conditional_formula(
     properties: &[ftd::interpreter::Property],
     rdata: &ftd::js::ResolverData,
 ) -> fastn_js::Formula {
+    use ftd::js::fastn_type_functions::PropertyValueExt;
+
     let mut deps = vec![];
     let mut conditional_values = vec![];
     for property in properties {
@@ -158,6 +162,8 @@ fn properties_to_js_conditional_formula(
 
 impl ftd::interpreter::Expression {
     pub(crate) fn get_deps(&self, rdata: &ftd::js::ResolverData) -> Vec<String> {
+        use ftd::js::fastn_type_functions::PropertyValueExt;
+
         let mut deps = vec![];
         for property_value in self.references.values() {
             deps.extend(property_value.get_deps(rdata));
@@ -210,22 +216,10 @@ impl ftd::interpreter::Expression {
     }
 }
 
-impl fastn_type::PropertyValue {
-    pub(crate) fn get_deps(&self, rdata: &ftd::js::ResolverData) -> Vec<String> {
-        let mut deps = vec![];
-        if let Some(reference) = self.get_reference_or_clone() {
-            deps.push(ftd::js::utils::update_reference(reference, rdata));
-        } else if let Some(function) = self.get_function() {
-            for value in function.values.values() {
-                deps.extend(value.get_deps(rdata));
-            }
-        }
-        deps
-    }
-}
-
 impl ftd::interpreter::Argument {
     pub(crate) fn get_default_value(&self) -> Option<ftd::js::Value> {
+        use ftd::js::fastn_type_functions::PropertyValueExt;
+
         if let Some(ref value) = self.value {
             Some(value.to_value())
         } else if self.kind.is_list() {
@@ -301,198 +295,7 @@ pub(crate) fn get_js_value_with_default(
     ftd::js::value::get_optional_js_value(key, properties, arguments).unwrap_or(default)
 }
 
-impl fastn_type::PropertyValue {
-    pub(crate) fn to_fastn_js_value_with_none(
-        &self,
-        doc: &ftd::interpreter::TDoc,
-        has_rive_components: &mut bool,
-    ) -> fastn_js::SetPropertyValue {
-        self.to_fastn_js_value_with_ui(
-            doc,
-            &ftd::js::ResolverData::none(),
-            has_rive_components,
-            false,
-        )
-    }
-
-    pub(crate) fn to_fastn_js_value(
-        &self,
-        doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
-        should_return: bool,
-    ) -> fastn_js::SetPropertyValue {
-        self.to_fastn_js_value_with_ui(doc, rdata, &mut false, should_return)
-    }
-
-    pub(crate) fn to_fastn_js_value_with_ui(
-        &self,
-        doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
-        has_rive_components: &mut bool,
-        should_return: bool,
-    ) -> fastn_js::SetPropertyValue {
-        self.to_value().to_set_property_value_with_ui(
-            doc,
-            rdata,
-            has_rive_components,
-            should_return,
-        )
-    }
-
-    pub(crate) fn to_value(&self) -> ftd::js::Value {
-        match self {
-            fastn_type::PropertyValue::Value { ref value, .. } => {
-                ftd::js::Value::Data(value.to_owned())
-            }
-            fastn_type::PropertyValue::Reference { ref name, .. } => {
-                ftd::js::Value::Reference(ReferenceData {
-                    name: name.clone().to_string(),
-                    value: Some(self.clone()),
-                })
-            }
-            fastn_type::PropertyValue::FunctionCall(ref function_call) => {
-                ftd::js::Value::FunctionCall(function_call.to_owned())
-            }
-            fastn_type::PropertyValue::Clone { ref name, .. } => {
-                ftd::js::Value::Clone(name.to_owned())
-            }
-        }
-    }
-}
-
-impl fastn_type::Value {
-    pub(crate) fn to_fastn_js_value(
-        &self,
-        doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
-        has_rive_components: &mut bool,
-        should_return: bool,
-    ) -> fastn_js::SetPropertyValue {
-        use itertools::Itertools;
-
-        match self {
-            fastn_type::Value::Boolean { value } => {
-                fastn_js::SetPropertyValue::Value(fastn_js::Value::Boolean(*value))
-            }
-            fastn_type::Value::Optional { data, .. } => {
-                if let Some(data) = data.as_ref() {
-                    data.to_fastn_js_value(doc, rdata, has_rive_components, should_return)
-                } else {
-                    fastn_js::SetPropertyValue::Value(fastn_js::Value::Null)
-                }
-            }
-            fastn_type::Value::String { text } => {
-                fastn_js::SetPropertyValue::Value(fastn_js::Value::String(text.to_string()))
-            }
-            fastn_type::Value::Integer { value } => {
-                fastn_js::SetPropertyValue::Value(fastn_js::Value::Integer(*value))
-            }
-            fastn_type::Value::Decimal { value } => {
-                fastn_js::SetPropertyValue::Value(fastn_js::Value::Decimal(*value))
-            }
-            fastn_type::Value::OrType {
-                name,
-                value,
-                full_variant,
-                variant,
-            } => {
-                let (js_variant, has_value) = ftd_to_js_variant(
-                    name,
-                    variant,
-                    full_variant,
-                    value,
-                    doc.name,
-                    value.line_number(),
-                );
-                if has_value {
-                    return fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
-                        variant: js_variant,
-                        value: Some(Box::new(value.to_fastn_js_value(doc, rdata, should_return))),
-                    });
-                }
-                fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
-                    variant: js_variant,
-                    value: None,
-                })
-            }
-            fastn_type::Value::List { data, .. } => {
-                fastn_js::SetPropertyValue::Value(fastn_js::Value::List {
-                    value: data
-                        .iter()
-                        .map(|v| {
-                            v.to_fastn_js_value_with_ui(
-                                doc,
-                                rdata,
-                                has_rive_components,
-                                should_return,
-                            )
-                        })
-                        .collect_vec(),
-                })
-            }
-            fastn_type::Value::Record {
-                fields: record_fields,
-                name,
-            } => {
-                let record = doc.get_record(name, 0).unwrap();
-                let mut fields = vec![];
-                for field in record.fields {
-                    if let Some(value) = record_fields.get(field.name.as_str()) {
-                        fields.push((
-                            field.name.to_string(),
-                            value.to_fastn_js_value_with_ui(
-                                doc,
-                                &rdata
-                                    .clone_with_new_record_definition_name(&Some(name.to_string())),
-                                has_rive_components,
-                                false,
-                            ),
-                        ));
-                    } else {
-                        fields.push((
-                            field.name.to_string(),
-                            field
-                                .get_default_value()
-                                .unwrap()
-                                .to_set_property_value_with_ui(
-                                    doc,
-                                    &rdata.clone_with_new_record_definition_name(&Some(
-                                        name.to_string(),
-                                    )),
-                                    has_rive_components,
-                                    false,
-                                ),
-                        ));
-                    }
-                }
-                fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
-                    fields,
-                    other_references: vec![],
-                })
-            }
-            fastn_type::Value::UI { component, .. } => {
-                fastn_js::SetPropertyValue::Value(fastn_js::Value::UI {
-                    value: component.to_component_statements(
-                        fastn_js::FUNCTION_PARENT,
-                        0,
-                        doc,
-                        &rdata.clone_with_default_inherited_variable(),
-                        should_return,
-                        has_rive_components,
-                    ),
-                })
-            }
-            fastn_type::Value::Module { name, .. } => {
-                fastn_js::SetPropertyValue::Value(fastn_js::Value::Module {
-                    name: name.to_string(),
-                })
-            }
-            t => todo!("{:?}", t),
-        }
-    }
-}
-
-fn ftd_to_js_variant(
+pub(crate) fn ftd_to_js_variant(
     name: &str,
     variant: &str,
     full_variant: &str,

@@ -3286,6 +3286,8 @@ impl ftd::interpreter::Event {
         doc: &ftd::interpreter::TDoc,
         rdata: &ftd::js::ResolverData,
     ) -> Option<fastn_js::EventHandler> {
+        use ftd::js::fastn_type_functions::FunctionCallExt;
+
         self.name
             .to_js_event_name()
             .map(|event| fastn_js::EventHandler {
@@ -3293,43 +3295,6 @@ impl ftd::interpreter::Event {
                 action: self.action.to_js_function(doc, rdata),
                 element_name: element_name.to_string(),
             })
-    }
-}
-
-impl fastn_type::FunctionCall {
-    pub(crate) fn to_js_function(
-        &self,
-        doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
-    ) -> fastn_js::Function {
-        let mut parameters = vec![];
-        let mut name = self.name.to_string();
-        let mut function_name = fastn_js::FunctionData::Name(self.name.to_string());
-        if let Some((default_module, module_variable_name)) = &self.module_name {
-            function_name =
-                fastn_js::FunctionData::Definition(fastn_js::SetPropertyValue::Reference(
-                    ftd::js::utils::update_reference(name.as_str(), rdata),
-                ));
-            name = name.replace(
-                format!("{module_variable_name}.").as_str(),
-                format!("{default_module}#").as_str(),
-            );
-        }
-        let function = doc.get_function(name.as_str(), self.line_number).unwrap();
-        for argument in function.arguments {
-            if let Some(value) = self.values.get(argument.name.as_str()) {
-                parameters.push((
-                    argument.name.to_string(),
-                    value.to_value().to_set_property_value(doc, rdata),
-                ));
-            } else if argument.get_default_value().is_none() {
-                panic!("Argument value not found {:?}", argument)
-            }
-        }
-        fastn_js::Function {
-            name: Box::from(function_name),
-            parameters,
-        }
     }
 }
 

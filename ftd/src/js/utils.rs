@@ -204,6 +204,8 @@ pub(crate) fn function_call_to_js_formula(
     doc: &ftd::interpreter::TDoc,
     rdata: &ftd::js::ResolverData,
 ) -> fastn_js::Formula {
+    use ftd::js::fastn_type_functions::{FunctionCallExt, PropertyValueExt};
+
     let mut deps = vec![];
     for property_value in function_call.values.values() {
         deps.extend(property_value.get_deps(rdata));
