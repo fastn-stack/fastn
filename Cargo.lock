@@ -1457,6 +1457,7 @@ dependencies = [
  "fastn-js",
  "fastn-observer",
  "fastn-package",
+ "fastn-type",
  "fastn-utils",
  "fbt-lib",
  "ft-sys-shared",

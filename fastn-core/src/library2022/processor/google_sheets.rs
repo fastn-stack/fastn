@@ -40,13 +40,13 @@ pub(crate) struct QueryResponse {
 
 pub(crate) fn rows_to_value(
     doc: &ftd::interpreter::TDoc<'_>,
-    kind: &ftd::interpreter::Kind,
+    kind: &fastn_type::Kind,
     value: &ftd_ast::VariableValue,
     rows: &[DataRow],
     schema: &[DataColumn],
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     Ok(match kind {
-        ftd::interpreter::Kind::List { kind, .. } => {
+        fastn_type::Kind::List { kind, .. } => {
             let mut data = vec![];
             for row in rows.iter() {
                 data.push(
@@ -119,12 +119,12 @@ fn row_to_record(
 
 fn row_to_value(
     doc: &ftd::interpreter::TDoc<'_>,
-    kind: &ftd::interpreter::Kind,
+    kind: &fastn_type::Kind,
     value: &ftd_ast::VariableValue,
     row: &DataRow,
     schema: &[DataColumn],
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-    if let ftd::interpreter::Kind::Record { name } = kind {
+    if let fastn_type::Kind::Record { name } = kind {
         return row_to_record(doc, name, value, row, schema);
     }
 
@@ -149,7 +149,7 @@ fn row_to_value(
 
 fn to_interpreter_value(
     doc: &ftd::interpreter::TDoc<'_>,
-    kind: &ftd::interpreter::Kind,
+    kind: &fastn_type::Kind,
     column: &DataColumn,
     data_value: &Option<DataValue>,
     _default_value: Option<String>,
@@ -176,7 +176,7 @@ fn to_interpreter_value(
 
     Ok(match kind {
         // Available kinds: https://support.google.com/area120-tables/answer/9904372?hl=en
-        ftd::interpreter::Kind::String { .. } => ftd::interpreter::Value::String {
+        fastn_type::Kind::String { .. } => ftd::interpreter::Value::String {
             text: match column.r#type.as_str() {
                 "string" => match &val.v {
                     serde_json::Value::String(v) => v.to_string(),
@@ -194,7 +194,7 @@ fn to_interpreter_value(
                 },
             },
         },
-        ftd::interpreter::Kind::Integer => ftd::interpreter::Value::Integer {
+        fastn_type::Kind::Integer => ftd::interpreter::Value::Integer {
             value: match column.r#type.as_str() {
                 "number" => match &val.v {
                     serde_json::Value::Number(n) => {
@@ -231,7 +231,7 @@ fn to_interpreter_value(
                 }
             },
         },
-        ftd::interpreter::Kind::Decimal => ftd::interpreter::Value::Decimal {
+        fastn_type::Kind::Decimal => ftd::interpreter::Value::Decimal {
             value: match &val.v {
                 serde_json::Value::Number(n) => {
                     n.as_f64()
@@ -258,7 +258,7 @@ fn to_interpreter_value(
                 }
             },
         },
-        ftd::interpreter::Kind::Boolean => ftd::interpreter::Value::Boolean {
+        fastn_type::Kind::Boolean => ftd::interpreter::Value::Boolean {
             value: match &val.v {
                 serde_json::Value::Bool(n) => *n,
                 serde_json::Value::String(s) => {
@@ -278,7 +278,7 @@ fn to_interpreter_value(
                 }
             },
         },
-        ftd::interpreter::Kind::Optional { kind, .. } => {
+        fastn_type::Kind::Optional { kind, .. } => {
             let kind = kind.as_ref();
             match &val.v {
                 serde_json::Value::Null => ftd::interpreter::Value::Optional {
@@ -308,7 +308,7 @@ fn to_interpreter_value(
 
 fn result_to_value(
     query_response: QueryResponse,
-    kind: ftd::interpreter::Kind,
+    kind: fastn_type::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     value: &ftd_ast::VariableValue,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
@@ -574,7 +574,7 @@ pub(crate) fn parse_query(
 pub(crate) async fn process(
     ds: &fastn_ds::DocumentStore,
     value: ftd_ast::VariableValue,
-    kind: ftd::interpreter::Kind,
+    kind: fastn_type::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     db_config: &fastn_core::library2022::processor::sql::DatabaseConfig,
     headers: ftd_ast::HeaderValues,

@@ -2,7 +2,6 @@ pub(crate) mod component;
 pub mod default;
 pub mod expression;
 pub(crate) mod function;
-pub(crate) mod kind;
 pub(crate) mod or_type;
 pub(crate) mod record;
 pub(crate) mod value;

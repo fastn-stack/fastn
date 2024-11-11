@@ -1,6 +1,6 @@
 pub fn process_readers(
     _value: ftd_ast::VariableValue,
-    _kind: ftd::interpreter::Kind,
+    _kind: fastn_type::Kind,
     _doc: &ftd::interpreter::TDoc,
     _req_config: &fastn_core::RequestConfig,
     _document_id: &str,
@@ -14,7 +14,7 @@ pub fn process_readers(
 
 pub fn process_writers(
     _value: ftd_ast::VariableValue,
-    _kind: ftd::interpreter::Kind,
+    _kind: fastn_type::Kind,
     _doc: &ftd::interpreter::TDoc,
     _req_config: &fastn_core::RequestConfig,
     _document_id: &str,
@@ -36,7 +36,7 @@ pub fn current_url(
 
 pub fn document_id(
     _value: ftd_ast::VariableValue,
-    _kind: ftd::interpreter::Kind,
+    _kind: fastn_type::Kind,
     doc: &ftd::interpreter::TDoc,
     req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
@@ -65,7 +65,7 @@ pub fn document_id(
 
 pub fn document_full_id(
     _value: ftd_ast::VariableValue,
-    _kind: ftd::interpreter::Kind,
+    _kind: fastn_type::Kind,
     doc: &ftd::interpreter::TDoc,
     req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
@@ -76,7 +76,7 @@ pub fn document_full_id(
 
 pub fn document_suffix(
     _value: ftd_ast::VariableValue,
-    kind: ftd::interpreter::Kind,
+    kind: fastn_type::Kind,
     doc: &ftd::interpreter::TDoc,
     req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
@@ -93,7 +93,7 @@ pub fn document_suffix(
 
     Ok(ftd::interpreter::Value::Optional {
         data: Box::new(value),
-        kind: ftd::interpreter::KindData {
+        kind: fastn_type::KindData {
             kind,
             caption: false,
             body: false,
@@ -103,7 +103,7 @@ pub fn document_suffix(
 
 pub async fn document_name<'a>(
     value: ftd_ast::VariableValue,
-    _kind: ftd::interpreter::Kind,
+    _kind: fastn_type::Kind,
     doc: &ftd::interpreter::TDoc<'a>,
     req_config: &fastn_core::RequestConfig,
     preview_session_id: &Option<String>,

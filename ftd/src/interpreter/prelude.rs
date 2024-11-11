@@ -13,7 +13,6 @@ pub use ftd::interpreter::things::{
     default,
     expression::Expression,
     function::{Function, FunctionCall},
-    kind::{Kind, KindData},
     or_type::{OrType, OrTypeVariant},
     record::{Field, Record},
     value::{PropertyValue, PropertyValueSource, Value},

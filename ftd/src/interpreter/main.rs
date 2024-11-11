@@ -861,7 +861,7 @@ impl InterpreterState {
         value: ftd::interpreter::Value,
         ast: ftd_ast::Ast,
     ) -> ftd::interpreter::Result<Interpreter> {
-        use ftd::interpreter::fastn_type_functions::KindDataExt;
+        use ftd::interpreter::KindDataExt;
 
         let (id, _ast_to_process) = self.to_process.stack.last().unwrap(); //TODO: remove unwrap & throw error
         let parsed_document = self.parsed_libs.get(id).unwrap();

@@ -328,16 +328,13 @@ impl Library2022 {
 fn get_processor_data(
     ast: ftd_ast::Ast,
     doc: &mut ftd::interpreter::TDoc,
-) -> ftd::interpreter::Result<(
-    String,
-    String,
-    ftd_ast::VariableValue,
-    ftd::interpreter::Kind,
-)> {
+) -> ftd::interpreter::Result<(String, String, ftd_ast::VariableValue, fastn_type::Kind)> {
+    use ftd::interpreter::KindDataExt;
+
     let line_number = ast.line_number();
     let ast_name = ast.name();
     if let Ok(variable_definition) = ast.clone().get_variable_definition(doc.name) {
-        let kind = ftd::interpreter::KindData::from_ast_kind(
+        let kind = fastn_type::KindData::from_ast_kind(
             variable_definition.kind,
             &Default::default(),
             doc,

@@ -33,7 +33,7 @@ impl Function {
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
-        use ftd::interpreter::fastn_type_functions::KindDataExt;
+        use ftd::interpreter::KindDataExt;
 
         let function = ast.get_function(doc.name)?;
         ftd::interpreter::Argument::scan_ast_fields(function.arguments, doc, &Default::default())?;
@@ -53,7 +53,7 @@ impl Function {
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Function>>
     {
-        use ftd::interpreter::fastn_type_functions::KindDataExt;
+        use ftd::interpreter::KindDataExt;
 
         let function = ast.get_function(doc.name)?;
         let name = doc.resolve_name(function.name.as_str());

@@ -23,7 +23,7 @@ impl KindExt for fastn_type::Kind {
     }
 }
 
-pub(crate) trait KindDataExt {
+pub trait KindDataExt {
     fn from_ast_kind(
         var_kind: ftd_ast::VariableKind,
         known_kinds: &ftd::Map<fastn_type::Kind>,
