@@ -254,6 +254,8 @@ impl ImageSrc {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ImageSrc> {
+        use ftd::interpreter::PropertyValueExt;
+
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
             Some(fastn_type::Value::Record { name, fields })
@@ -281,6 +283,9 @@ impl ImageSrc {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ImageSrc> {
+        use ftd::executor::fastn_type_functions::PropertyValueExt as _;
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
+
         let light = {
             let value = values
                 .get("light")

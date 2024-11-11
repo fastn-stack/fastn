@@ -153,6 +153,201 @@ impl KindDataExt for fastn_type::KindData {
     }
 }
 
+pub(crate) trait PropertyValueExt {
+    fn resolve(
+        self,
+        doc: &ftd::interpreter::TDoc,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<fastn_type::Value>;
+
+    fn resolve_with_inherited(
+        self,
+        doc: &ftd::interpreter::TDoc,
+        line_number: usize,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    ) -> ftd::interpreter::Result<fastn_type::Value>;
+}
+impl PropertyValueExt for fastn_type::PropertyValue {
+    fn resolve(
+        self,
+        doc: &ftd::interpreter::TDoc,
+        line_number: usize, // Todo: Remove this line number instead use self.line_number()
+    ) -> ftd::interpreter::Result<fastn_type::Value> {
+        self.resolve_with_inherited(doc, line_number, &Default::default())
+    }
+
+    fn resolve_with_inherited(
+        self,
+        doc: &ftd::interpreter::TDoc,
+        line_number: usize,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    ) -> ftd::interpreter::Result<fastn_type::Value> {
+        match self {
+            fastn_type::PropertyValue::Value { value, .. } => Ok(value),
+            fastn_type::PropertyValue::Reference { name, kind, .. }
+            | fastn_type::PropertyValue::Clone { name, kind, .. } => {
+                doc.resolve_with_inherited(name.as_str(), &kind, line_number, inherited_variables)
+            }
+            fastn_type::PropertyValue::FunctionCall(fastn_type::FunctionCall {
+                name,
+                kind,
+                values,
+                line_number,
+                ..
+            }) => {
+                let function = doc.get_function(name.as_str(), line_number)?;
+                function.resolve(&kind, &values, doc, line_number)?.ok_or(
+                    ftd::interpreter::Error::ParseError {
+                        message: format!(
+                            "Expected return value of type {:?} for function {}",
+                            kind, name
+                        ),
+                        doc_id: doc.name.to_string(),
+                        line_number,
+                    },
+                )
+            }
+        }
+    }
+}
+
+pub(crate) trait ValueExt {
+    fn string(&self, doc_id: &str, line_number: usize) -> ftd::interpreter::Result<String>;
+
+    fn decimal(&self, doc_id: &str, line_number: usize) -> ftd::interpreter::Result<f64>;
+    fn integer(&self, doc_id: &str, line_number: usize) -> ftd::interpreter::Result<i64>;
+    fn bool(&self, doc_id: &str, line_number: usize) -> ftd::interpreter::Result<bool>;
+    fn optional_integer(
+        &self,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<Option<i64>>;
+    fn string_list(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<Vec<String>>;
+    fn get_or_type(
+        &self,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<(&String, &String, &fastn_type::PropertyValue)>;
+}
+
+impl ValueExt for fastn_type::Value {
+    fn string(&self, doc_id: &str, line_number: usize) -> ftd::interpreter::Result<String> {
+        match self {
+            ftd::interpreter::Value::String { text } => Ok(text.to_string()),
+            t => ftd::interpreter::utils::e2(
+                format!("Expected String, found: `{:?}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
+    fn decimal(&self, doc_id: &str, line_number: usize) -> ftd::interpreter::Result<f64> {
+        match self {
+            ftd::interpreter::Value::Decimal { value } => Ok(*value),
+            t => ftd::interpreter::utils::e2(
+                format!("Expected Decimal, found: `{:?}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
+    fn integer(&self, doc_id: &str, line_number: usize) -> ftd::interpreter::Result<i64> {
+        match self {
+            ftd::interpreter::Value::Integer { value } => Ok(*value),
+            t => ftd::interpreter::utils::e2(
+                format!("Expected Integer, found: `{:?}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
+    fn bool(&self, doc_id: &str, line_number: usize) -> ftd::interpreter::Result<bool> {
+        match self {
+            ftd::interpreter::Value::Boolean { value } => Ok(*value),
+            t => ftd::interpreter::utils::e2(
+                format!("Expected Boolean, found: `{:?}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
+    fn optional_integer(
+        &self,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<Option<i64>> {
+        match self {
+            ftd::interpreter::Value::Optional { data, kind } if kind.is_integer() => {
+                if let Some(data) = data.as_ref() {
+                    data.optional_integer(doc_id, line_number)
+                } else {
+                    Ok(None)
+                }
+            }
+            ftd::interpreter::Value::Integer { value } => Ok(Some(*value)),
+            t => ftd::interpreter::utils::e2(
+                format!("Expected Optional Integer, found: `{:?}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
+    fn string_list(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<Vec<String>> {
+        match self {
+            ftd::interpreter::Value::List { data, kind } if kind.is_string() => {
+                let mut values = vec![];
+                for item in data.iter() {
+                    let line_number = item.line_number();
+                    values.push(
+                        item.to_owned()
+                            .resolve(doc, line_number)?
+                            .string(doc.name, line_number)?,
+                    );
+                }
+                Ok(values)
+            }
+            ftd::interpreter::Value::String { text } => Ok(vec![text.to_string()]),
+            t => ftd::interpreter::utils::e2(
+                format!("Expected String list, found: `{:?}`", t),
+                doc.name,
+                line_number,
+            ),
+        }
+    }
+
+    fn get_or_type(
+        &self,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<(&String, &String, &fastn_type::PropertyValue)> {
+        match self {
+            Self::OrType {
+                name,
+                variant,
+                value,
+                ..
+            } => Ok((name, variant, value)),
+            t => ftd::interpreter::utils::e2(
+                format!("Expected or-type, found: `{:?}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+}
 pub fn check_for_caption_and_body(s: &mut String) -> (bool, bool) {
     use itertools::Itertools;
 

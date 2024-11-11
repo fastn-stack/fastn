@@ -130,18 +130,6 @@ impl PropertyValue {
         matches!(self, ftd::interpreter::PropertyValue::Clone { .. })
     }
 
-    pub fn into_property(
-        &self,
-        source: ftd::interpreter::PropertySource,
-    ) -> ftd::interpreter::Property {
-        ftd::interpreter::Property {
-            value: self.clone(),
-            source,
-            condition: None,
-            line_number: self.line_number(),
-        }
-    }
-
     pub(crate) fn value(
         &self,
         doc_id: &str,

@@ -105,4 +105,11 @@ impl Value {
             value: Box::new(value),
         }
     }
+
+    pub fn inner(&self) -> Option<Self> {
+        match self {
+            Value::Optional { data, .. } => data.as_ref().to_owned(),
+            t => Some(t.to_owned()),
+        }
+    }
 }

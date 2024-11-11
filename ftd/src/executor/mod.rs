@@ -5,6 +5,7 @@ mod test;
 pub mod code;
 mod dummy;
 mod element;
+mod fastn_type_functions;
 mod main;
 mod markup;
 mod rive;

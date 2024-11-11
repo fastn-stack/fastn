@@ -38,6 +38,8 @@ impl Length {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Length> {
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
+
         let binding = value.resolve(&doc.itdoc(), line_number)?;
         let value = binding.get_or_type(doc.name, line_number)?;
         let value = (value.1.to_owned(), value.2.to_owned());
@@ -49,6 +51,7 @@ impl Length {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Length>> {
+        use ftd::interpreter::PropertyValueExt;
         if let Some(value) = or_type_value {
             let binding = value.clone().resolve(&doc.itdoc(), line_number)?;
             if let fastn_type::Value::Optional { data, .. } = &binding {
@@ -66,6 +69,8 @@ impl Length {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Length> {
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
+
         match or_type_value.0.as_str() {
             ftd::interpreter::FTD_LENGTH_PERCENT => Ok(Length::Percent(
                 or_type_value
@@ -270,6 +275,8 @@ impl LengthPair {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<LengthPair> {
+        use ftd::interpreter::PropertyValueExt;
+
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
             Some(fastn_type::Value::Record { name, fields })
@@ -341,6 +348,8 @@ impl ResponsiveLength {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ResponsiveLength> {
+        use ftd::interpreter::PropertyValueExt;
+
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
             Some(fastn_type::Value::Record { name, fields })
@@ -449,6 +458,8 @@ impl BreakpointWidth {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<BreakpointWidth> {
+        use ftd::executor::fastn_type_functions::PropertyValueExt as _;
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
         let get_property_value = |field_name: &str| {
             values
                 .get(field_name)
@@ -743,6 +754,8 @@ impl Resizing {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
+
         match or_type_value.0.as_str() {
             t if t.starts_with(ftd::interpreter::FTD_RESIZING_FIXED) => {
                 let value = or_type_value.1.clone().resolve(&doc.itdoc(), line_number)?;
@@ -893,6 +906,8 @@ impl BackgroundImage {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::BackgroundImage> {
+        use ftd::interpreter::PropertyValueExt;
+
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
             Some(fastn_type::Value::Record { name, fields })
@@ -920,6 +935,8 @@ impl BackgroundImage {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::BackgroundImage> {
+        use ftd::executor::fastn_type_functions::PropertyValueExt;
+
         let get_property_value = |field_name: &str| {
             values
                 .get(field_name)
@@ -1022,6 +1039,8 @@ impl LinearGradientColor {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Vec<LinearGradientColor>> {
+        use ftd::interpreter::PropertyValueExt;
+
         let mut result = vec![];
         let value = value.resolve(&doc.itdoc(), line_number)?;
         match value.inner() {
@@ -1060,6 +1079,8 @@ impl LinearGradientColor {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<LinearGradientColor> {
+        use ftd::interpreter::PropertyValueExt;
+
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
             Some(fastn_type::Value::Record { name, fields })
@@ -1087,6 +1108,8 @@ impl LinearGradientColor {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<LinearGradientColor> {
+        use ftd::executor::fastn_type_functions::PropertyValueExt;
+
         let get_property_value = |field_name: &str| {
             values
                 .get(field_name)
@@ -1182,6 +1205,7 @@ impl LinearGradientDirection {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<LinearGradientDirection> {
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
         let binding = value.resolve(&doc.itdoc(), line_number)?;
         let value = binding.get_or_type(doc.name, line_number)?;
         let value = (value.1.to_owned(), value.2.to_owned());
@@ -1193,6 +1217,8 @@ impl LinearGradientDirection {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
+
         match or_type_value.0.as_str() {
             ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_LEFT => {
                 Ok(LinearGradientDirection::Left)
@@ -1276,6 +1302,7 @@ impl LinearGradient {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::LinearGradient> {
+        use ftd::interpreter::PropertyValueExt;
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
             Some(fastn_type::Value::Record { name, fields })
@@ -1303,6 +1330,7 @@ impl LinearGradient {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::LinearGradient> {
+        use ftd::executor::fastn_type_functions::PropertyValueExt;
         let get_property_value = |field_name: &str| {
             values
                 .get(field_name)
@@ -1527,6 +1555,8 @@ impl BackgroundRepeat {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<ftd::executor::BackgroundRepeat>> {
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
+
         let binding = value.resolve(&doc.itdoc(), line_number)?;
         if let fastn_type::Value::Optional { data, .. } = &binding {
             if data.is_none() {
@@ -1604,6 +1634,8 @@ impl BackgroundSize {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<ftd::executor::BackgroundSize>> {
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
+
         let binding = value.resolve(&doc.itdoc(), line_number)?;
         if let fastn_type::Value::Optional { data, .. } = &binding {
             if data.is_none() {
@@ -1677,6 +1709,8 @@ impl BackgroundPosition {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<ftd::executor::BackgroundPosition>> {
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
+
         let binding = value.resolve(&doc.itdoc(), line_number)?;
         if let fastn_type::Value::Optional { data, .. } = &binding {
             if data.is_none() {
@@ -1786,6 +1820,9 @@ impl Shadow {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::Shadow> {
+        use ftd::executor::fastn_type_functions::PropertyValueExt as _;
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
+
         let get_property_value = |field_name: &str| {
             values
                 .get(field_name)
@@ -1931,6 +1968,8 @@ impl Color {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Color> {
+        use ftd::interpreter::PropertyValueExt;
+
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
             Some(fastn_type::Value::Record { name, fields })
@@ -1958,6 +1997,9 @@ impl Color {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Color> {
+        use ftd::executor::fastn_type_functions::PropertyValueExt as _;
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
+
         let light = {
             let value = values
                 .get("light")
@@ -2740,6 +2782,8 @@ impl FontSize {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<FontSize>> {
+        use ftd::interpreter::PropertyValueExt;
+
         let value = value.resolve(&doc.itdoc(), line_number)?;
         match value.inner() {
             Some(fastn_type::Value::OrType {
@@ -2770,6 +2814,8 @@ impl FontSize {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
+
         match or_type_value.0.as_str() {
             ftd::interpreter::FTD_FONT_SIZE_PX => Ok(FontSize::Px(
                 or_type_value
@@ -2892,6 +2938,8 @@ impl Type {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Type> {
+        use ftd::interpreter::PropertyValueExt;
+
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
             Some(fastn_type::Value::Record { name, fields })
@@ -2919,6 +2967,8 @@ impl Type {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Type> {
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
+
         let size = {
             if let Some(value) = values.get("size") {
                 FontSize::from_optional_value(value.to_owned(), doc, line_number)?
@@ -3145,6 +3195,8 @@ impl Anchor {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
+
         match or_type_value.0.as_str() {
             ftd::interpreter::FTD_ANCHOR_WINDOW => Ok(Anchor::Window),
             ftd::interpreter::FTD_ANCHOR_PARENT => Ok(Anchor::Parent),
