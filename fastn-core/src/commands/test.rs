@@ -345,7 +345,7 @@ async fn get_instructions_from_test(
         if let Some(fixtures) = get_optional_value_list(FIXTURE_HEADER, &property_values, doc)? {
             let mut resolved_fixtures = vec![];
             for fixture in fixtures.iter() {
-                if let ftd::interpreter::Value::String { text } = fixture {
+                if let fastn_type::Value::String { text } = fixture {
                     resolved_fixtures.push(text.to_string());
                 }
             }
@@ -620,7 +620,7 @@ async fn execute_get_instruction(
     {
         let mut query_strings = vec![];
         for query in query_params.iter() {
-            if let ftd::interpreter::Value::Record { fields, .. } = query {
+            if let fastn_type::Value::Record { fields, .. } = query {
                 let resolved_key = fields
                     .get(QUERY_PARAMS_HEADER_KEY)
                     .unwrap()
@@ -827,7 +827,7 @@ fn get_value_ok(
     key: &str,
     property_values: &ftd::Map<ftd::interpreter::PropertyValue>,
     line_number: usize,
-) -> fastn_core::Result<ftd::interpreter::Value> {
+) -> fastn_core::Result<fastn_type::Value> {
     get_value(key, property_values).ok_or(fastn_core::Error::NotFound(format!(
         "Key '{}' not found, line number: {}",
         key, line_number
@@ -837,7 +837,7 @@ fn get_value_ok(
 fn get_value(
     key: &str,
     property_values: &ftd::Map<ftd::interpreter::PropertyValue>,
-) -> Option<ftd::interpreter::Value> {
+) -> Option<fastn_type::Value> {
     let property_value = property_values.get(key)?;
     match property_value {
         ftd::interpreter::PropertyValue::Value { value, .. } => Some(value.clone()),
@@ -848,7 +848,7 @@ fn get_value(
 fn get_optional_value(
     key: &str,
     property_values: &ftd::Map<ftd::interpreter::PropertyValue>,
-) -> Option<ftd::interpreter::Value> {
+) -> Option<fastn_type::Value> {
     if let Some(property_value) = property_values.get(key) {
         return match property_value {
             ftd::interpreter::PropertyValue::Value { value, .. } => Some(value.clone()),
@@ -862,7 +862,7 @@ fn get_optional_value_list(
     key: &str,
     property_values: &ftd::Map<ftd::interpreter::PropertyValue>,
     doc: &ftd::interpreter::TDoc<'_>,
-) -> ftd::interpreter::Result<Option<Vec<ftd::interpreter::Value>>> {
+) -> ftd::interpreter::Result<Option<Vec<fastn_type::Value>>> {
     let value = get_optional_value(key, property_values);
     if let Some(ref value) = value {
         return value.to_list(doc, false);

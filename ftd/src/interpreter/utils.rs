@@ -424,7 +424,7 @@ pub fn validate_record_value(
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::interpreter::Result<()> {
     if let ftd::interpreter::PropertyValue::Value { value, .. } = value {
-        if let Some(ftd::interpreter::Value::Record { fields, .. }) = value.ref_inner() {
+        if let Some(fastn_type::Value::Record { fields, .. }) = value.ref_inner() {
             validate_fields(fields.values().collect(), doc)?;
         }
     }
@@ -443,13 +443,13 @@ pub fn validate_record_value(
 
             if let ftd::interpreter::PropertyValue::Value { value, .. } = value {
                 match value.ref_inner() {
-                    Some(ftd::interpreter::Value::Record { fields, .. }) => {
+                    Some(fastn_type::Value::Record { fields, .. }) => {
                         validate_fields(fields.values().collect(), doc)?;
                     }
-                    Some(ftd::interpreter::Value::OrType { value, .. }) => {
+                    Some(fastn_type::Value::OrType { value, .. }) => {
                         validate_fields(vec![value], doc)?;
                     }
-                    Some(ftd::interpreter::Value::List { data, .. }) => {
+                    Some(fastn_type::Value::List { data, .. }) => {
                         validate_fields(data.iter().collect(), doc)?;
                     }
                     _ => {}
@@ -508,9 +508,9 @@ pub fn validate_property_value_for_mutable(
 
 pub(crate) fn get_value(
     doc: &ftd::interpreter::TDoc,
-    value: &ftd::interpreter::Value,
+    value: &fastn_type::Value,
 ) -> ftd::interpreter::Result<Option<serde_json::Value>> {
-    if let ftd::interpreter::Value::List { data, .. } = value {
+    if let fastn_type::Value::List { data, .. } = value {
         let mut list_data = vec![];
         for val in data.iter() {
             let value = match val {
@@ -535,13 +535,11 @@ pub(crate) fn get_value(
 
     Ok(match value {
         None => None,
-        Some(ftd::interpreter::Value::Boolean { value }) => serde_json::to_value(value).ok(),
-        Some(ftd::interpreter::Value::Integer { value }) => serde_json::to_value(value).ok(),
-        Some(ftd::interpreter::Value::String { text: value, .. }) => {
-            serde_json::to_value(value).ok()
-        }
-        Some(ftd::interpreter::Value::Decimal { value, .. }) => serde_json::to_value(value).ok(),
-        Some(ftd::interpreter::Value::Record { fields, .. }) => {
+        Some(fastn_type::Value::Boolean { value }) => serde_json::to_value(value).ok(),
+        Some(fastn_type::Value::Integer { value }) => serde_json::to_value(value).ok(),
+        Some(fastn_type::Value::String { text: value, .. }) => serde_json::to_value(value).ok(),
+        Some(fastn_type::Value::Decimal { value, .. }) => serde_json::to_value(value).ok(),
+        Some(fastn_type::Value::Record { fields, .. }) => {
             let mut value_fields = ftd::Map::new();
             for (k, v) in fields {
                 if let Some(value) = get_value(doc, &v.clone().resolve(doc, v.line_number())?)? {
@@ -550,7 +548,7 @@ pub(crate) fn get_value(
             }
             serde_json::to_value(value_fields).ok()
         }
-        Some(ftd::interpreter::Value::OrType {
+        Some(fastn_type::Value::OrType {
             value,
             variant,
             full_variant,
@@ -707,7 +705,7 @@ pub(crate) fn insert_module_thing(
         line_number,
         message: format!("{} not found in component arguments.", reference,),
     })?;
-    if let ftd::interpreter::Value::Module {
+    if let fastn_type::Value::Module {
         things,
         name: module_name,
     } = arg
@@ -826,7 +824,7 @@ pub(crate) fn validate_properties_and_set_default(
                 .unwrap()
                 .value(doc_id, line_number)?
             {
-                ftd::interpreter::Value::Module { name, things } => (name, things),
+                fastn_type::Value::Module { name, things } => (name, things),
                 t => {
                     return ftd::interpreter::utils::e2(
                         format!("Expected module, found: {:?}", t),
@@ -837,7 +835,7 @@ pub(crate) fn validate_properties_and_set_default(
             };
 
             if let ftd::interpreter::PropertyValue::Value {
-                value: ftd::interpreter::Value::Module { things, .. },
+                value: fastn_type::Value::Module { things, .. },
                 ..
             } = &mut property.value
             {

@@ -858,7 +858,7 @@ impl InterpreterState {
     #[tracing::instrument(skip_all)]
     pub fn continue_after_processor(
         mut self,
-        value: ftd::interpreter::Value,
+        value: fastn_type::Value,
         ast: ftd_ast::Ast,
     ) -> ftd::interpreter::Result<Interpreter> {
         use ftd::interpreter::KindDataExt;
@@ -908,7 +908,7 @@ impl InterpreterState {
         mut self,
         module: &str,
         variable: &str,
-        value: ftd::interpreter::Value,
+        value: fastn_type::Value,
     ) -> ftd::interpreter::Result<Interpreter> {
         let parsed_document = self.parsed_libs.get(module).unwrap();
         let name = parsed_document.name.to_string();
@@ -1297,25 +1297,20 @@ impl Document {
         }
     }
 
-    fn value_to_json(
-        &self,
-        v: &ftd::interpreter::Value,
-    ) -> ftd::interpreter::Result<serde_json::Value> {
+    fn value_to_json(&self, v: &fastn_type::Value) -> ftd::interpreter::Result<serde_json::Value> {
         let doc = self.tdoc();
         Ok(match v {
-            ftd::interpreter::Value::Integer { value } => {
+            fastn_type::Value::Integer { value } => {
                 serde_json::Value::Number(serde_json::Number::from(*value))
             }
-            ftd::interpreter::Value::Boolean { value } => serde_json::Value::Bool(*value),
-            ftd::interpreter::Value::Decimal { value } => {
+            fastn_type::Value::Boolean { value } => serde_json::Value::Bool(*value),
+            fastn_type::Value::Decimal { value } => {
                 serde_json::Value::Number(serde_json::Number::from_f64(*value).unwrap())
                 // TODO: remove unwrap
             }
-            ftd::interpreter::Value::String { text, .. } => {
-                serde_json::Value::String(text.to_owned())
-            }
-            ftd::interpreter::Value::Record { fields, .. } => self.object_to_json(fields)?,
-            ftd::interpreter::Value::OrType { variant, value, .. } => {
+            fastn_type::Value::String { text, .. } => serde_json::Value::String(text.to_owned()),
+            fastn_type::Value::Record { fields, .. } => self.object_to_json(fields)?,
+            fastn_type::Value::OrType { variant, value, .. } => {
                 let mut map = serde_json::Map::new();
                 map.insert(
                     "type".to_string(),
@@ -1327,13 +1322,13 @@ impl Document {
                 );
                 serde_json::Value::Object(map)
             }
-            ftd::interpreter::Value::List { data, .. } => self.list_to_json(
+            fastn_type::Value::List { data, .. } => self.list_to_json(
                 data.iter()
                     .filter_map(|v| v.clone().resolve(&doc, v.line_number()).ok())
-                    .collect::<Vec<ftd::interpreter::Value>>()
+                    .collect::<Vec<fastn_type::Value>>()
                     .as_slice(),
             )?,
-            ftd::interpreter::Value::Optional { data, .. } => match data.as_ref() {
+            fastn_type::Value::Optional { data, .. } => match data.as_ref() {
                 Some(v) => self.value_to_json(v)?,
                 None => serde_json::Value::Null,
             },
@@ -1349,7 +1344,7 @@ impl Document {
 
     fn list_to_json(
         &self,
-        data: &[ftd::interpreter::Value],
+        data: &[fastn_type::Value],
     ) -> ftd::interpreter::Result<serde_json::Value> {
         let mut list = vec![];
         for item in data.iter() {

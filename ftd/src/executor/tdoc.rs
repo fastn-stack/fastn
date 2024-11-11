@@ -137,7 +137,7 @@ impl TDoc<'_> {
 
         let name_in_component_definition = format!("{}.{}", component_name, argument.name);
         if argument.kind.is_module() {
-            if let ftd::interpreter::Value::Module { name, .. } = properties
+            if let fastn_type::Value::Module { name, .. } = properties
                 .first()
                 .unwrap()
                 .resolve(&self.itdoc(), &Default::default())?
@@ -169,7 +169,7 @@ impl TDoc<'_> {
         } else {
             (
                 ftd::interpreter::PropertyValue::Value {
-                    value: ftd::interpreter::Value::Optional {
+                    value: fastn_type::Value::Optional {
                         data: Box::new(None),
                         kind: argument.kind.to_owned(),
                     },

@@ -270,7 +270,7 @@ pub async fn resolve_foreign_variable2022(
     download_assets: bool,
     caller_module: &str,
     preview_session_id: &Option<String>,
-) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+) -> ftd::interpreter::Result<fastn_type::Value> {
     let package = lib.get_current_package(caller_module)?;
     if let Ok(value) = resolve_ftd_foreign_variable_2022(variable, doc_name) {
         return Ok(value);
@@ -327,7 +327,7 @@ pub async fn resolve_foreign_variable2022(
         base_url: &str,
         download_assets: bool, // true: in case of `fastn build`
         preview_session_id: &Option<String>,
-    ) -> ftd::ftd2021::p1::Result<ftd::interpreter::Value> {
+    ) -> ftd::ftd2021::p1::Result<fastn_type::Value> {
         lib.push_package_under_process(module, package, preview_session_id)
             .await?;
         let _base_url = base_url.trim_end_matches('/');
@@ -412,7 +412,7 @@ pub async fn resolve_foreign_variable2022(
                 }
 
                 if light {
-                    return Ok(ftd::interpreter::Value::String {
+                    return Ok(fastn_type::Value::String {
                         text: light_mode.trim_start_matches('/').to_string(),
                     });
                 }
@@ -477,18 +477,18 @@ pub async fn resolve_foreign_variable2022(
                 }
 
                 if dark {
-                    return Ok(ftd::interpreter::Value::String {
+                    return Ok(fastn_type::Value::String {
                         text: dark_mode.trim_start_matches('/').to_string(),
                     });
                 }
                 #[allow(deprecated)]
-                Ok(ftd::interpreter::Value::Record {
+                Ok(fastn_type::Value::Record {
                     name: "ftd#image-src".to_string(),
                     fields: std::array::IntoIter::new([
                         (
                             "light".to_string(),
                             ftd::interpreter::PropertyValue::Value {
-                                value: ftd::interpreter::Value::String { text: light_mode },
+                                value: fastn_type::Value::String { text: light_mode },
                                 is_mutable: false,
                                 line_number: 0,
                             },
@@ -496,7 +496,7 @@ pub async fn resolve_foreign_variable2022(
                         (
                             "dark".to_string(),
                             ftd::interpreter::PropertyValue::Value {
-                                value: ftd::interpreter::Value::String { text: dark_mode },
+                                value: fastn_type::Value::String { text: dark_mode },
                                 is_mutable: false,
                                 line_number: 0,
                             },
@@ -514,7 +514,7 @@ pub async fn resolve_foreign_variable2022(
                     preview_session_id,
                 )
                 .await?;
-                Ok(ftd::interpreter::Value::String {
+                Ok(fastn_type::Value::String {
                     text: format!("-/{}/{}.{}", package.name, file.replace('.', "/"), ext),
                 })
             }
@@ -527,7 +527,7 @@ pub async fn resolve_foreign_variable2022(
                     preview_session_id,
                 )
                 .await?;
-                Ok(ftd::interpreter::Value::String {
+                Ok(fastn_type::Value::String {
                     text: format!("-/{}/{}", package.name, files),
                 })
             }
@@ -891,9 +891,9 @@ fn resolve_ftd_foreign_variable(
 fn resolve_ftd_foreign_variable_2022(
     variable: &str,
     doc_name: &str,
-) -> ftd::ftd2021::p1::Result<ftd::interpreter::Value> {
+) -> ftd::ftd2021::p1::Result<fastn_type::Value> {
     match variable.strip_prefix("fastn/time#") {
-        Some("now-str") => Ok(ftd::interpreter::Value::String {
+        Some("now-str") => Ok(fastn_type::Value::String {
             text: std::str::from_utf8(
                 std::process::Command::new("date")
                     .output()

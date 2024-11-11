@@ -160,7 +160,7 @@ impl Field {
         &self,
         doc: &ftd::interpreter::TDoc,
         properties: &[ftd::interpreter::Property],
-    ) -> ftd::interpreter::Result<Option<ftd::interpreter::Value>> {
+    ) -> ftd::interpreter::Result<Option<fastn_type::Value>> {
         let property_value = self.get_default_interpreter_property_value(properties)?;
         if let Some(property_value) = property_value {
             return Ok(property_value.resolve(doc, 0).ok());

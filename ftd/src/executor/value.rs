@@ -34,7 +34,7 @@ pub(crate) fn get_value_from_properties_using_key_and_arguments(
     arguments: &[ftd::interpreter::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
-) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::interpreter::Value>>> {
+) -> ftd::executor::Result<ftd::executor::Value<Option<fastn_type::Value>>> {
     get_value_from_properties_using_key_and_arguments_dummy(
         key,
         component_name,
@@ -57,7 +57,7 @@ pub(crate) fn get_value_from_properties_using_key_and_arguments_dummy(
     line_number: usize,
     is_dummy: bool,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::interpreter::Value>>> {
+) -> ftd::executor::Result<ftd::executor::Value<Option<fastn_type::Value>>> {
     let argument =
         arguments
             .iter()
@@ -113,7 +113,7 @@ pub(crate) fn find_value_by_argument(
     line_number: usize,
     is_dummy: bool,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::interpreter::Value>>> {
+) -> ftd::executor::Result<ftd::executor::Value<Option<fastn_type::Value>>> {
     let properties = {
         let new_properties = ftd::interpreter::utils::find_properties_by_source(
             source,
@@ -163,9 +163,7 @@ pub(crate) fn find_value_by_argument(
                 }
             } else if p.condition.is_none() {
                 if let Some(v) = p.value.get_reference_or_clone() {
-                    value = Some(ftd::interpreter::Value::new_string(
-                        format!("{{{}}}", v).as_str(),
-                    ));
+                    value = Some(fastn_type::Value::new_string(format!("{{{}}}", v).as_str()));
                     line_number = Some(p.line_number);
                 }
             }
@@ -196,7 +194,7 @@ pub fn string_list(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::List { data, kind }) if kind.is_string() => {
+        Some(fastn_type::Value::List { data, kind }) if kind.is_string() => {
             let mut values = vec![];
             for d in data {
                 values.push(
@@ -242,7 +240,7 @@ pub fn string(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::String { text }) => Ok(ftd::executor::Value::new(
+        Some(fastn_type::Value::String { text }) => Ok(ftd::executor::Value::new(
             text,
             value.line_number,
             value.properties,
@@ -274,7 +272,7 @@ pub fn record(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::Record { name, fields }) if name.eq(rec_name) => Ok(
+        Some(fastn_type::Value::Record { name, fields }) if name.eq(rec_name) => Ok(
             ftd::executor::Value::new(fields, value.line_number, value.properties),
         ),
         t => ftd::executor::utils::parse_error(
@@ -306,7 +304,7 @@ pub fn i64(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::Integer { value: v }) => Ok(ftd::executor::Value::new(
+        Some(fastn_type::Value::Integer { value: v }) => Ok(ftd::executor::Value::new(
             v,
             value.line_number,
             value.properties,
@@ -337,7 +335,7 @@ pub fn f64(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::Decimal { value: v }) => Ok(ftd::executor::Value::new(
+        Some(fastn_type::Value::Decimal { value: v }) => Ok(ftd::executor::Value::new(
             v,
             value.line_number,
             value.properties,
@@ -368,7 +366,7 @@ pub fn bool(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::Boolean { value: v }) => Ok(ftd::executor::Value::new(
+        Some(fastn_type::Value::Boolean { value: v }) => Ok(ftd::executor::Value::new(
             v,
             value.line_number,
             value.properties,
@@ -400,7 +398,7 @@ pub fn bool_with_default(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::Boolean { value: b }) => Ok(ftd::executor::Value::new(
+        Some(fastn_type::Value::Boolean { value: b }) => Ok(ftd::executor::Value::new(
             b,
             value.line_number,
             value.properties,
@@ -440,7 +438,7 @@ pub fn optional_i64(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::Integer { value: v }) => Ok(ftd::executor::Value::new(
+        Some(fastn_type::Value::Integer { value: v }) => Ok(ftd::executor::Value::new(
             Some(v),
             value.line_number,
             value.properties,
@@ -477,7 +475,7 @@ pub fn string_with_default(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::String { text }) => Ok(ftd::executor::Value::new(
+        Some(fastn_type::Value::String { text }) => Ok(ftd::executor::Value::new(
             text,
             value.line_number,
             value.properties,
@@ -513,7 +511,7 @@ pub fn optional_string(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::String { text }) => Ok(ftd::executor::Value::new(
+        Some(fastn_type::Value::String { text }) => Ok(ftd::executor::Value::new(
             Some(text),
             value.line_number,
             value.properties,
@@ -554,7 +552,7 @@ pub fn dummy_optional_string(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::String { text }) => Ok(ftd::executor::Value::new(
+        Some(fastn_type::Value::String { text }) => Ok(ftd::executor::Value::new(
             Some(text),
             value.line_number,
             value.properties,
@@ -593,7 +591,7 @@ pub fn optional_bool(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::Boolean { value: v }) => Ok(ftd::executor::Value::new(
+        Some(fastn_type::Value::Boolean { value: v }) => Ok(ftd::executor::Value::new(
             Some(v),
             value.line_number,
             value.properties,
@@ -630,7 +628,7 @@ pub fn optional_f64(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::Decimal { value: v }) => Ok(ftd::executor::Value::new(
+        Some(fastn_type::Value::Decimal { value: v }) => Ok(ftd::executor::Value::new(
             Some(v),
             value.line_number,
             value.properties,
@@ -672,7 +670,7 @@ pub fn optional_record_inherited(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::Record { name, fields }) if name.eq(rec_name) => Ok(
+        Some(fastn_type::Value::Record { name, fields }) if name.eq(rec_name) => Ok(
             ftd::executor::Value::new(Some(fields), value.line_number, value.properties),
         ),
         None => Ok(ftd::executor::Value::new(
@@ -715,7 +713,7 @@ pub fn optional_or_type(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::OrType {
+        Some(fastn_type::Value::OrType {
             name,
             value: property_value,
             variant,
@@ -764,11 +762,11 @@ pub fn optional_or_type_list(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::List { data, kind }) if kind.is_or_type() => {
+        Some(fastn_type::Value::List { data, kind }) if kind.is_or_type() => {
             let mut values = vec![];
             for d in data {
                 let resolved_value = d.resolve(&doc.itdoc(), line_number)?;
-                if let ftd::interpreter::Value::OrType { variant, value, .. } = resolved_value {
+                if let fastn_type::Value::OrType { variant, value, .. } = resolved_value {
                     values.push((variant.clone(), *value));
                 }
             }

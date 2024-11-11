@@ -4,7 +4,7 @@ pub fn process_figma_tokens(
     value: ftd_ast::VariableValue,
     kind: fastn_type::Kind,
     doc: &mut ftd::interpreter::TDoc,
-) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+) -> ftd::interpreter::Result<fastn_type::Value> {
     let line_number = value.line_number();
     let mut variable_name: Option<String> = None;
 
@@ -46,7 +46,7 @@ pub fn process_figma_tokens_old(
     value: ftd_ast::VariableValue,
     kind: fastn_type::Kind,
     doc: &mut ftd::interpreter::TDoc,
-) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+) -> ftd::interpreter::Result<fastn_type::Value> {
     let line_number = value.line_number();
     let mut variable_name: Option<String> = None;
 
@@ -334,7 +334,7 @@ fn extract_light_dark_colors(
 
     let fields = match &v.value {
         ftd::interpreter::PropertyValue::Value {
-            value: ftd::interpreter::Value::Record { fields, .. },
+            value: fastn_type::Value::Record { fields, .. },
             ..
         } => fields,
         t => {
@@ -405,15 +405,15 @@ fn format_color_title(title: &str) -> String {
 
 fn extract_colors(
     color_name: String,
-    color_value: &ftd::interpreter::Value,
+    color_value: &fastn_type::Value,
     doc: &ftd::interpreter::TDoc,
     extracted_light_colors: &mut ftd::Map<VT>,
     extracted_dark_colors: &mut ftd::Map<VT>,
 ) -> ftd::interpreter::Result<()> {
-    if let ftd::interpreter::Value::Record { fields, .. } = color_value {
+    if let fastn_type::Value::Record { fields, .. } = color_value {
         if color_value.is_record("ftd#color") {
             if let Some(ftd::interpreter::PropertyValue::Value {
-                value: ftd::interpreter::Value::String { text: light_value },
+                value: fastn_type::Value::String { text: light_value },
                 ..
             }) = fields.get("light")
             {
@@ -426,7 +426,7 @@ fn extract_colors(
                 );
             }
             if let Some(ftd::interpreter::PropertyValue::Value {
-                value: ftd::interpreter::Value::String { text: dark_value },
+                value: fastn_type::Value::String { text: dark_value },
                 ..
             }) = fields.get("dark")
             {

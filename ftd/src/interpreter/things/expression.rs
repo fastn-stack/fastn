@@ -302,7 +302,7 @@ impl Expression {
             {
                 if format!("${}", ftd::interpreter::FTD_LOOP_COUNTER).eq(identifier) {
                     if let Some(ftd::interpreter::PropertyValue::Value {
-                        value: ftd::interpreter::Value::Integer { value },
+                        value: fastn_type::Value::Integer { value },
                         ..
                     }) = references.get(identifier)
                     {

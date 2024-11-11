@@ -132,12 +132,12 @@ impl ExecuteDoc<'_> {
 
         if let Some(ftd::interpreter::Thing::Variable(v)) = breakpoint_width_from_bag {
             v.value = ftd::interpreter::PropertyValue::Value {
-                value: ftd::interpreter::Value::Record {
+                value: fastn_type::Value::Record {
                     name: ftd::interpreter::FTD_BREAKPOINT_WIDTH_DATA.to_string(),
                     fields: std::iter::IntoIterator::into_iter([(
                         "mobile".to_string(),
                         ftd::interpreter::PropertyValue::Value {
-                            value: ftd::interpreter::Value::Integer {
+                            value: fastn_type::Value::Integer {
                                 value: breakpoint_width,
                             },
                             is_mutable: false,

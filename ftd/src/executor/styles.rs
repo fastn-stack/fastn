@@ -51,7 +51,7 @@ impl Length {
     ) -> ftd::executor::Result<Option<Length>> {
         if let Some(value) = or_type_value {
             let binding = value.clone().resolve(&doc.itdoc(), line_number)?;
-            if let ftd::interpreter::Value::Optional { data, .. } = &binding {
+            if let fastn_type::Value::Optional { data, .. } = &binding {
                 if data.is_none() {
                     return Ok(None);
                 }
@@ -272,7 +272,7 @@ impl LengthPair {
     ) -> ftd::executor::Result<LengthPair> {
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
-            Some(ftd::interpreter::Value::Record { name, fields })
+            Some(fastn_type::Value::Record { name, fields })
                 if name.eq(ftd::interpreter::FTD_LENGTH_PAIR)
                     || name.eq(ftd::interpreter::FTD_BACKGROUND_SIZE_LENGTH)
                     || name.eq(ftd::interpreter::FTD_BACKGROUND_POSITION_LENGTH) =>
@@ -343,7 +343,7 @@ impl ResponsiveLength {
     ) -> ftd::executor::Result<ResponsiveLength> {
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
-            Some(ftd::interpreter::Value::Record { name, fields })
+            Some(fastn_type::Value::Record { name, fields })
                 if name.eq(ftd::interpreter::FTD_RESPONSIVE_LENGTH) =>
             {
                 fields
@@ -895,7 +895,7 @@ impl BackgroundImage {
     ) -> ftd::executor::Result<ftd::executor::BackgroundImage> {
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
-            Some(ftd::interpreter::Value::Record { name, fields })
+            Some(fastn_type::Value::Record { name, fields })
                 if name.eq(ftd::interpreter::FTD_BG_IMAGE) =>
             {
                 fields
@@ -1025,7 +1025,7 @@ impl LinearGradientColor {
         let mut result = vec![];
         let value = value.resolve(&doc.itdoc(), line_number)?;
         match value.inner() {
-            Some(ftd::interpreter::Value::List { data, kind })
+            Some(fastn_type::Value::List { data, kind })
                 if kind
                     .kind
                     .get_name()
@@ -1062,7 +1062,7 @@ impl LinearGradientColor {
     ) -> ftd::executor::Result<LinearGradientColor> {
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
-            Some(ftd::interpreter::Value::Record { name, fields })
+            Some(fastn_type::Value::Record { name, fields })
                 if name.eq(ftd::interpreter::FTD_LINEAR_GRADIENT_COLOR) =>
             {
                 fields
@@ -1278,7 +1278,7 @@ impl LinearGradient {
     ) -> ftd::executor::Result<ftd::executor::LinearGradient> {
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
-            Some(ftd::interpreter::Value::Record { name, fields })
+            Some(fastn_type::Value::Record { name, fields })
                 if name.eq(ftd::interpreter::FTD_LINEAR_GRADIENT) =>
             {
                 fields
@@ -1528,7 +1528,7 @@ impl BackgroundRepeat {
         line_number: usize,
     ) -> ftd::executor::Result<Option<ftd::executor::BackgroundRepeat>> {
         let binding = value.resolve(&doc.itdoc(), line_number)?;
-        if let ftd::interpreter::Value::Optional { data, .. } = &binding {
+        if let fastn_type::Value::Optional { data, .. } = &binding {
             if data.is_none() {
                 return Ok(None);
             }
@@ -1605,7 +1605,7 @@ impl BackgroundSize {
         line_number: usize,
     ) -> ftd::executor::Result<Option<ftd::executor::BackgroundSize>> {
         let binding = value.resolve(&doc.itdoc(), line_number)?;
-        if let ftd::interpreter::Value::Optional { data, .. } = &binding {
+        if let fastn_type::Value::Optional { data, .. } = &binding {
             if data.is_none() {
                 return Ok(None);
             }
@@ -1678,7 +1678,7 @@ impl BackgroundPosition {
         line_number: usize,
     ) -> ftd::executor::Result<Option<ftd::executor::BackgroundPosition>> {
         let binding = value.resolve(&doc.itdoc(), line_number)?;
-        if let ftd::interpreter::Value::Optional { data, .. } = &binding {
+        if let fastn_type::Value::Optional { data, .. } = &binding {
             if data.is_none() {
                 return Ok(None);
             }
@@ -1933,7 +1933,7 @@ impl Color {
     ) -> ftd::executor::Result<Color> {
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
-            Some(ftd::interpreter::Value::Record { name, fields })
+            Some(fastn_type::Value::Record { name, fields })
                 if name.eq(ftd::interpreter::FTD_COLOR) =>
             {
                 fields
@@ -2742,7 +2742,7 @@ impl FontSize {
     ) -> ftd::executor::Result<Option<FontSize>> {
         let value = value.resolve(&doc.itdoc(), line_number)?;
         match value.inner() {
-            Some(ftd::interpreter::Value::OrType {
+            Some(fastn_type::Value::OrType {
                 name,
                 variant,
                 value,
@@ -2894,7 +2894,7 @@ impl Type {
     ) -> ftd::executor::Result<Type> {
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
-            Some(ftd::interpreter::Value::Record { name, fields })
+            Some(fastn_type::Value::Record { name, fields })
                 if name.eq(ftd::interpreter::FTD_TYPE) =>
             {
                 fields

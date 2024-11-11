@@ -338,7 +338,7 @@ impl ftd::interpreter::PropertyValue {
     }
 }
 
-impl ftd::interpreter::Value {
+impl fastn_type::Value {
     // string_needs_no_quotes: for class attribute the value should be red-block not "red-block"
     pub(crate) fn to_html_string(
         &self,
@@ -349,16 +349,14 @@ impl ftd::interpreter::Value {
         string_needs_no_quotes: bool,
     ) -> ftd::html::Result<Option<String>> {
         Ok(match self {
-            ftd::interpreter::Value::String { text } if !string_needs_no_quotes => {
+            fastn_type::Value::String { text } if !string_needs_no_quotes => {
                 Some(format!("\"{}\"", text))
             }
-            ftd::interpreter::Value::String { text } if string_needs_no_quotes => {
-                Some(text.to_string())
-            }
-            ftd::interpreter::Value::Integer { value } => Some(value.to_string()),
-            ftd::interpreter::Value::Decimal { value } => Some(value.to_string()),
-            ftd::interpreter::Value::Boolean { value } => Some(value.to_string()),
-            ftd::interpreter::Value::List { data, .. } => {
+            fastn_type::Value::String { text } if string_needs_no_quotes => Some(text.to_string()),
+            fastn_type::Value::Integer { value } => Some(value.to_string()),
+            fastn_type::Value::Decimal { value } => Some(value.to_string()),
+            fastn_type::Value::Boolean { value } => Some(value.to_string()),
+            fastn_type::Value::List { data, .. } => {
                 let mut values = vec![];
                 for value in data {
                     let v = if let Some(v) = value
@@ -374,7 +372,7 @@ impl ftd::interpreter::Value {
                 }
                 Some(format!("{:?}", values.join(" ")))
             }
-            ftd::interpreter::Value::Record { fields, .. }
+            fastn_type::Value::Record { fields, .. }
                 if field
                     .as_ref()
                     .map(|v| fields.contains_key(v))
@@ -387,7 +385,7 @@ impl ftd::interpreter::Value {
                     string_needs_no_quotes,
                 )?
             }
-            ftd::interpreter::Value::OrType {
+            fastn_type::Value::OrType {
                 value,
                 variant,
                 full_variant,
@@ -426,7 +424,7 @@ impl ftd::interpreter::Value {
                     None => None,
                 }
             }
-            ftd::interpreter::Value::Record { fields, .. } => {
+            fastn_type::Value::Record { fields, .. } => {
                 let mut values = vec![];
                 for (k, v) in fields {
                     let value = if let Some(v) =
@@ -441,7 +439,7 @@ impl ftd::interpreter::Value {
 
                 Some(format!("{{{}}}", values.join(", ")))
             }
-            ftd::interpreter::Value::Optional { data, .. } if data.is_none() => None,
+            fastn_type::Value::Optional { data, .. } if data.is_none() => None,
             t => unimplemented!("{:?}", t),
         })
     }

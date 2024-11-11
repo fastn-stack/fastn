@@ -65,13 +65,13 @@ impl ftd::html::Action {
         })
     }
 
-    fn from_value(value: &ftd::interpreter::Value) -> serde_json::Value {
+    fn from_value(value: &fastn_type::Value) -> serde_json::Value {
         match value {
-            ftd::interpreter::Value::String { text } => serde_json::json!(text),
-            ftd::interpreter::Value::Integer { value } => serde_json::json!(value),
-            ftd::interpreter::Value::Decimal { value } => serde_json::json!(value),
-            ftd::interpreter::Value::Boolean { value } => serde_json::json!(value),
-            ftd::interpreter::Value::Optional { data, .. } => {
+            fastn_type::Value::String { text } => serde_json::json!(text),
+            fastn_type::Value::Integer { value } => serde_json::json!(value),
+            fastn_type::Value::Decimal { value } => serde_json::json!(value),
+            fastn_type::Value::Boolean { value } => serde_json::json!(value),
+            fastn_type::Value::Optional { data, .. } => {
                 if let Some(data) = data.as_ref() {
                     ftd::html::Action::from_value(data)
                 } else {

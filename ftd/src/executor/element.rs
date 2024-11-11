@@ -256,7 +256,7 @@ impl ImageSrc {
     ) -> ftd::executor::Result<ImageSrc> {
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
-            Some(ftd::interpreter::Value::Record { name, fields })
+            Some(fastn_type::Value::Record { name, fields })
                 if name.eq(ftd::interpreter::FTD_IMAGE_SRC) =>
             {
                 fields

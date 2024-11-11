@@ -109,8 +109,8 @@ impl ComponentDefinition {
         ))
     }
 
-    pub fn to_value(&self, kind: &fastn_type::KindData) -> ftd::interpreter::Value {
-        ftd::interpreter::Value::UI {
+    pub fn to_value(&self, kind: &fastn_type::KindData) -> fastn_type::Value {
+        fastn_type::Value::UI {
             name: self.name.to_string(),
             kind: kind.to_owned(),
             component: self.definition.to_owned(),
@@ -160,7 +160,7 @@ impl Component {
         &self,
         argument_name: &str,
         doc: &ftd::interpreter::TDoc,
-    ) -> ftd::interpreter::Result<Option<ftd::interpreter::Value>> {
+    ) -> ftd::interpreter::Result<Option<fastn_type::Value>> {
         let component_definition = doc.get_component(self.name.as_str(), 0).unwrap();
         let argument = component_definition
             .arguments
@@ -206,15 +206,15 @@ impl Component {
         };
 
         let value = property.value.clone().resolve(doc, property.line_number)?;
-        if let ftd::interpreter::Value::UI { component, .. } = value {
+        if let fastn_type::Value::UI { component, .. } = value {
             return Ok(vec![component]);
         }
-        if let ftd::interpreter::Value::List { data, kind } = value {
+        if let fastn_type::Value::List { data, kind } = value {
             if kind.is_ui() {
                 let mut children = vec![];
                 for value in data {
                     let value = value.resolve(doc, property.line_number)?;
-                    if let ftd::interpreter::Value::UI { component, .. } = value {
+                    if let fastn_type::Value::UI { component, .. } = value {
                         children.push(component);
                     }
                 }
@@ -521,7 +521,7 @@ impl Component {
                                 .clone()
                                 .resolve(doc, line_number)?
                             {
-                                ftd::interpreter::Value::Module { name, things } => (name, things),
+                                fastn_type::Value::Module { name, things } => (name, things),
                                 t => {
                                     return ftd::interpreter::utils::e2(
                                         format!("Expected module, found: {:?}", t),
@@ -636,7 +636,7 @@ impl Property {
         &self,
         doc: &ftd::interpreter::TDoc,
         inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::interpreter::Result<Option<ftd::interpreter::Value>> {
+    ) -> ftd::interpreter::Result<Option<fastn_type::Value>> {
         Ok(match self.condition {
             Some(ref condition) if !condition.eval(doc)? => None,
             _ => Some(self.value.clone().resolve_with_inherited(
@@ -775,12 +775,12 @@ impl Property {
         };
 
         let value = ftd::interpreter::PropertyValue::Value {
-            value: ftd::interpreter::Value::List {
+            value: fastn_type::Value::List {
                 data: children
                     .into_iter()
                     .map(|v| ftd::interpreter::PropertyValue::Value {
                         line_number: v.line_number,
-                        value: ftd::interpreter::Value::UI {
+                        value: fastn_type::Value::UI {
                             name: v.name.to_string(),
                             kind: fastn_type::Kind::subsection_ui().into_kind_data(),
                             component: v,
@@ -912,7 +912,7 @@ impl Property {
         if let Some(kw_args) = kw_args {
             properties.push(ftd::interpreter::Property {
                 value: ftd::interpreter::PropertyValue::Value {
-                    value: ftd::interpreter::Value::KwArgs {
+                    value: fastn_type::Value::KwArgs {
                         arguments: std::collections::BTreeMap::from_iter(extra_arguments),
                     },
                     is_mutable: false,
@@ -1119,7 +1119,7 @@ fn get_extra_argument_property_value(
         return Ok(Some((
             name,
             ftd::interpreter::PropertyValue::Value {
-                value: ftd::interpreter::Value::new_string(&value),
+                value: fastn_type::Value::new_string(&value),
                 is_mutable: false,
                 line_number,
             },
@@ -1347,7 +1347,7 @@ fn get_module_name_and_thing(
                     .clone()
                     .resolve(doc, module_property.line_number)?
                 {
-                    ftd::interpreter::Value::Module { name, things } => return Ok((name, things)),
+                    fastn_type::Value::Module { name, things } => return Ok((name, things)),
                     t => {
                         return ftd::interpreter::utils::e2(
                             format!("Expected module, found: {:?}", t),
@@ -1365,7 +1365,7 @@ fn get_module_name_and_thing(
         // TODO: Remove unwrap()
         .unwrap()
     {
-        ftd::interpreter::Value::Module { name, things } => Ok((name, things)),
+        fastn_type::Value::Module { name, things } => Ok((name, things)),
         t => ftd::interpreter::utils::e2(
             format!("Expected module, found: {:?}", t),
             doc.name,
@@ -1489,7 +1489,7 @@ impl Loop {
     ) -> ftd::interpreter::Result<(Vec<ftd::interpreter::PropertyValue>, fastn_type::KindData)>
     {
         let value = self.on.clone().resolve(doc, self.line_number)?;
-        if let ftd::interpreter::Value::List { data, kind } = value {
+        if let fastn_type::Value::List { data, kind } = value {
             Ok((data, kind))
         } else {
             ftd::interpreter::utils::e2(

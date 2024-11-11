@@ -40,7 +40,7 @@ pub fn interpret_helper(
             } => {
                 let variable_definition = ast.clone().get_variable_definition(module.as_str())?;
                 let processor = variable_definition.processor.unwrap();
-                let value = ftd::interpreter::Value::String {
+                let value = fastn_type::Value::String {
                     text: variable_definition
                         .value
                         .caption()
@@ -57,7 +57,7 @@ pub fn interpret_helper(
                 ..
             } => {
                 if module.eq("test") {
-                    let value = ftd::interpreter::Value::String {
+                    let value = fastn_type::Value::String {
                         text: variable.to_uppercase().to_string(),
                     };
                     s = state.continue_after_variable(module.as_str(), variable.as_str(), value)?;

@@ -61,7 +61,7 @@ pub(crate) fn update_instruction_for_loop_element(
     let replace_property_value = std::iter::IntoIterator::into_iter([(
         doc.itdoc()
             .resolve_name(format!("{}#{}", doc_name, ftd::interpreter::FTD_LOOP_COUNTER).as_str()),
-        ftd::interpreter::Value::Integer {
+        fastn_type::Value::Integer {
             value: index_in_loop as i64,
         }
         .into_property_value(false, instruction.line_number),
@@ -342,7 +342,7 @@ fn update_local_variable_reference_in_property_value(
         ftd::interpreter::PropertyValue::Value { value, .. } => {
             let is_children = is_children || value.kind().inner_list().is_subsection_ui();
             return match value {
-                ftd::interpreter::Value::List { data, .. } => {
+                fastn_type::Value::List { data, .. } => {
                     for d in data.iter_mut() {
                         update_local_variable_reference_in_property_value(
                             d,
@@ -355,8 +355,8 @@ fn update_local_variable_reference_in_property_value(
                         );
                     }
                 }
-                ftd::interpreter::Value::Record { fields, .. }
-                | ftd::interpreter::Value::Object { values: fields } => {
+                fastn_type::Value::Record { fields, .. }
+                | fastn_type::Value::Object { values: fields } => {
                     for d in fields.values_mut() {
                         update_local_variable_reference_in_property_value(
                             d,
@@ -369,7 +369,7 @@ fn update_local_variable_reference_in_property_value(
                         );
                     }
                 }
-                ftd::interpreter::Value::UI {
+                fastn_type::Value::UI {
                     component, name, ..
                 } => {
                     if let Some(local_variable) = local_variable.iter().find_map(|(k, v)| {
@@ -391,7 +391,7 @@ fn update_local_variable_reference_in_property_value(
                         is_children,
                     )
                 }
-                ftd::interpreter::Value::OrType { value, .. } => {
+                fastn_type::Value::OrType { value, .. } => {
                     update_local_variable_reference_in_property_value(
                         value,
                         local_variable,

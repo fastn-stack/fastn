@@ -1,6 +1,6 @@
 #[derive(Debug)]
 pub enum Value {
-    Data(ftd::interpreter::Value),
+    Data(fastn_type::Value),
     Reference(ReferenceData),
     ConditionalFormula(Vec<ftd::interpreter::Property>),
     FunctionCall(ftd::interpreter::FunctionCall),
@@ -115,13 +115,13 @@ impl Value {
     }
 
     pub fn from_str_value(s: &str) -> Value {
-        Value::Data(ftd::interpreter::Value::String {
+        Value::Data(fastn_type::Value::String {
             text: s.to_string(),
         })
     }
 
     pub fn get_string_data(&self) -> Option<String> {
-        if let Value::Data(ftd::interpreter::Value::String { text }) = self {
+        if let Value::Data(fastn_type::Value::String { text }) = self {
             return Some(text.to_string());
         }
         None
@@ -229,12 +229,12 @@ impl ftd::interpreter::Argument {
         if let Some(ref value) = self.value {
             Some(value.to_value())
         } else if self.kind.is_list() {
-            Some(ftd::js::Value::Data(ftd::interpreter::Value::List {
+            Some(ftd::js::Value::Data(fastn_type::Value::List {
                 data: vec![],
                 kind: self.kind.clone(),
             }))
         } else if self.kind.is_optional() {
-            Some(ftd::js::Value::Data(ftd::interpreter::Value::Optional {
+            Some(ftd::js::Value::Data(fastn_type::Value::Optional {
                 data: Box::new(None),
                 kind: self.kind.clone(),
             }))
@@ -266,7 +266,7 @@ impl ftd::interpreter::Argument {
         );
 
         ftd::js::utils::get_js_value_from_properties(properties.as_slice()) /* .map(|v|
-                                                                            if let Some(ftd::interpreter::Value::Module {}) = self.value.and_then(|v| v.value_optional()) {
+                                                                            if let Some(fastn_type::Value::Module {}) = self.value.and_then(|v| v.value_optional()) {
 
                                                                              }*/
     }
@@ -360,7 +360,7 @@ impl ftd::interpreter::PropertyValue {
     }
 }
 
-impl ftd::interpreter::Value {
+impl fastn_type::Value {
     pub(crate) fn to_fastn_js_value(
         &self,
         doc: &ftd::interpreter::TDoc,
@@ -371,26 +371,26 @@ impl ftd::interpreter::Value {
         use itertools::Itertools;
 
         match self {
-            ftd::interpreter::Value::Boolean { value } => {
+            fastn_type::Value::Boolean { value } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::Boolean(*value))
             }
-            ftd::interpreter::Value::Optional { data, .. } => {
+            fastn_type::Value::Optional { data, .. } => {
                 if let Some(data) = data.as_ref() {
                     data.to_fastn_js_value(doc, rdata, has_rive_components, should_return)
                 } else {
                     fastn_js::SetPropertyValue::Value(fastn_js::Value::Null)
                 }
             }
-            ftd::interpreter::Value::String { text } => {
+            fastn_type::Value::String { text } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::String(text.to_string()))
             }
-            ftd::interpreter::Value::Integer { value } => {
+            fastn_type::Value::Integer { value } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::Integer(*value))
             }
-            ftd::interpreter::Value::Decimal { value } => {
+            fastn_type::Value::Decimal { value } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::Decimal(*value))
             }
-            ftd::interpreter::Value::OrType {
+            fastn_type::Value::OrType {
                 name,
                 value,
                 full_variant,
@@ -415,7 +415,7 @@ impl ftd::interpreter::Value {
                     value: None,
                 })
             }
-            ftd::interpreter::Value::List { data, .. } => {
+            fastn_type::Value::List { data, .. } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::List {
                     value: data
                         .iter()
@@ -430,7 +430,7 @@ impl ftd::interpreter::Value {
                         .collect_vec(),
                 })
             }
-            ftd::interpreter::Value::Record {
+            fastn_type::Value::Record {
                 fields: record_fields,
                 name,
             } => {
@@ -470,7 +470,7 @@ impl ftd::interpreter::Value {
                     other_references: vec![],
                 })
             }
-            ftd::interpreter::Value::UI { component, .. } => {
+            fastn_type::Value::UI { component, .. } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::UI {
                     value: component.to_component_statements(
                         fastn_js::FUNCTION_PARENT,
@@ -482,7 +482,7 @@ impl ftd::interpreter::Value {
                     ),
                 })
             }
-            ftd::interpreter::Value::Module { name, .. } => {
+            fastn_type::Value::Module { name, .. } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::Module {
                     name: name.to_string(),
                 })
@@ -652,10 +652,10 @@ fn ftd_to_js_variant(
         t => {
             if let Ok(value) = value.value(doc_id, line_number) {
                 return match value {
-                    ftd::interpreter::Value::Integer { value } => (value.to_string(), false),
-                    ftd::interpreter::Value::Decimal { value } => (value.to_string(), false),
-                    ftd::interpreter::Value::String { text } => (format!("\"{}\"", text), false),
-                    ftd::interpreter::Value::Boolean { value } => (value.to_string(), false),
+                    fastn_type::Value::Integer { value } => (value.to_string(), false),
+                    fastn_type::Value::Decimal { value } => (value.to_string(), false),
+                    fastn_type::Value::String { text } => (format!("\"{}\"", text), false),
+                    fastn_type::Value::Boolean { value } => (value.to_string(), false),
                     _ => todo!("{} {}", t, variant),
                 };
             }

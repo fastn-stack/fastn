@@ -4,7 +4,7 @@ pub fn process_typography_tokens(
     value: ftd_ast::VariableValue,
     kind: fastn_type::Kind,
     doc: &mut ftd::interpreter::TDoc,
-) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+) -> ftd::interpreter::Result<fastn_type::Value> {
     let line_number = value.line_number();
     let mut variable_name: Option<String> = None;
 
@@ -123,7 +123,7 @@ fn extract_types(
 
     let fields = match &v.value {
         ftd::interpreter::PropertyValue::Value {
-            value: ftd::interpreter::Value::Record { fields, .. },
+            value: fastn_type::Value::Record { fields, .. },
             ..
         } => fields,
         t => {
@@ -156,13 +156,13 @@ fn extract_types(
 
 fn extract_desktop_mobile_values(
     type_name: String,
-    responsive_value: &ftd::interpreter::Value,
+    responsive_value: &fastn_type::Value,
     doc: &ftd::interpreter::TDoc,
     desktop_types: &mut ftd::Map<TypeData>,
     mobile_types: &mut ftd::Map<TypeData>,
     line_number: usize,
 ) -> ftd::interpreter::Result<()> {
-    if let ftd::interpreter::Value::Record { fields, .. } = responsive_value {
+    if let fastn_type::Value::Record { fields, .. } = responsive_value {
         if responsive_value.is_record(ftd::interpreter::FTD_RESPONSIVE_TYPE) {
             if let Some(desktop_value) = fields.get("desktop") {
                 let resolved_desktop_value = desktop_value
@@ -205,12 +205,12 @@ fn extract_desktop_mobile_values(
 
 fn extract_type_data(
     type_name: String,
-    type_value: &ftd::interpreter::Value,
+    type_value: &fastn_type::Value,
     doc: &ftd::interpreter::TDoc,
     save_types: &mut ftd::Map<TypeData>,
     line_number: usize,
 ) -> ftd::interpreter::Result<()> {
-    if let ftd::interpreter::Value::Record { fields, .. } = type_value {
+    if let fastn_type::Value::Record { fields, .. } = type_value {
         if type_value.is_record(ftd::interpreter::FTD_TYPE) {
             let size_field = fields.get("size").cloned();
             let letter_spacing_field = fields.get("letter-spacing").cloned();
@@ -252,23 +252,23 @@ fn extract_type_data(
 fn extract_raw_data(property_value: Option<ftd::interpreter::PropertyValue>) -> Option<ValueType> {
     return match property_value.as_ref() {
         Some(ftd::interpreter::PropertyValue::Value { value, .. }) => match value {
-            ftd::interpreter::Value::String { text } => Some(ValueType {
+            fastn_type::Value::String { text } => Some(ValueType {
                 value: text.to_string(),
                 type_: "string".to_string(),
             }),
-            ftd::interpreter::Value::Integer { value, .. } => Some(ValueType {
+            fastn_type::Value::Integer { value, .. } => Some(ValueType {
                 value: value.to_string(),
                 type_: "integer".to_string(),
             }),
-            ftd::interpreter::Value::Decimal { value, .. } => Some(ValueType {
+            fastn_type::Value::Decimal { value, .. } => Some(ValueType {
                 value: value.to_string(),
                 type_: "decimal".to_string(),
             }),
-            ftd::interpreter::Value::Boolean { value, .. } => Some(ValueType {
+            fastn_type::Value::Boolean { value, .. } => Some(ValueType {
                 value: value.to_string(),
                 type_: "boolean".to_string(),
             }),
-            ftd::interpreter::Value::OrType {
+            fastn_type::Value::OrType {
                 value,
                 full_variant,
                 ..

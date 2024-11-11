@@ -111,7 +111,7 @@ impl Function {
         values: &ftd::Map<ftd::interpreter::PropertyValue>,
         doc: &ftd::interpreter::TDoc,
         line_number: usize,
-    ) -> ftd::interpreter::Result<Option<ftd::interpreter::Value>> {
+    ) -> ftd::interpreter::Result<Option<fastn_type::Value>> {
         use fastn_grammar::evalexpr::*;
 
         struct VariableContext {
@@ -183,7 +183,7 @@ impl Function {
         for (key, context) in context {
             match context.reference {
                 Some(reference) if context.mutable => {
-                    let value = ftd::interpreter::Value::from_evalexpr_value(
+                    let value = fastn_type::Value::from_evalexpr_value(
                         evalexpr_context.get_value(key.as_str()).unwrap().clone(),
                         &context.kind,
                         doc.name,
@@ -205,7 +205,7 @@ impl Function {
         }
 
         if !self.return_kind.is_void() {
-            return Ok(Some(ftd::interpreter::Value::from_evalexpr_value(
+            return Ok(Some(fastn_type::Value::from_evalexpr_value(
                 eval,
                 &self.return_kind.kind,
                 doc.name,
@@ -356,7 +356,7 @@ impl FunctionCall {
             source = source_;
             if argument.kind.is_module() {
                 if let Some(ftd::interpreter::PropertyValue::Value {
-                    value: ftd::interpreter::Value::Module { ref name, .. },
+                    value: fastn_type::Value::Module { ref name, .. },
                     ..
                 }) = argument.value
                 {
