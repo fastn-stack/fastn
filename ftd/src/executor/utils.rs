@@ -52,6 +52,8 @@ pub(crate) fn update_instruction_for_loop_element(
     local_container: &[usize],
     doc_name: &str,
 ) -> ftd::executor::Result<ftd::interpreter::Component> {
+    use ftd::interpreter::PropertyValueSourceExt;
+
     let mut instruction = instruction.clone();
     let reference_replace_pattern = fastn_type::PropertyValueSource::Loop(alias.to_string())
         .get_reference_name(alias, &doc.itdoc());

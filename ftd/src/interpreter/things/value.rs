@@ -1011,6 +1011,8 @@ impl PropertyValue {
     ) -> ftd::interpreter::Result<
         ftd::interpreter::StateWithThing<Option<ftd::interpreter::PropertyValue>>,
     > {
+        use ftd::interpreter::PropertyValueSourceExt;
+
         match value.string(doc.name) {
             Ok(expression)
                 if expression

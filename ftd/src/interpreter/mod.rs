@@ -42,7 +42,7 @@ pub mod utils;
 pub use prelude::*;
 
 pub use fastn_type_functions::KindDataExt;
-pub(crate) use fastn_type_functions::{PropertyValueExt, ValueExt};
+pub(crate) use fastn_type_functions::{PropertyValueExt, PropertyValueSourceExt, ValueExt};
 pub use tdoc::{BagOrState, TDoc};
 pub use things::expression;
 

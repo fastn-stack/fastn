@@ -34,10 +34,48 @@ impl PropertyValue {
         }
     }
 
+    pub fn is_mutable(&self) -> bool {
+        match self {
+            PropertyValue::Value { is_mutable, .. }
+            | PropertyValue::Reference { is_mutable, .. }
+            | PropertyValue::Clone { is_mutable, .. }
+            | PropertyValue::FunctionCall(fastn_type::FunctionCall { is_mutable, .. }) => {
+                *is_mutable
+            }
+        }
+    }
+
     pub fn get_reference_or_clone(&self) -> Option<&String> {
         match self {
             PropertyValue::Reference { name, .. } | PropertyValue::Clone { name, .. } => Some(name),
             _ => None,
+        }
+    }
+
+    pub fn reference_name(&self) -> Option<&String> {
+        match self {
+            PropertyValue::Reference { name, .. } => Some(name),
+            _ => None,
+        }
+    }
+
+    pub fn kind(&self) -> fastn_type::Kind {
+        match self {
+            PropertyValue::Value { value, .. } => value.kind(),
+            PropertyValue::Reference { kind, .. } => kind.kind.to_owned(),
+            PropertyValue::Clone { kind, .. } => kind.kind.to_owned(),
+            PropertyValue::FunctionCall(fastn_type::FunctionCall { kind, .. }) => {
+                kind.kind.to_owned()
+            }
+        }
+    }
+
+    pub fn set_reference_or_clone(&mut self, new_name: &str) {
+        match self {
+            PropertyValue::Reference { name, .. } | PropertyValue::Clone { name, .. } => {
+                *name = new_name.to_string();
+            }
+            _ => {}
         }
     }
 }
@@ -130,6 +168,38 @@ impl Value {
         match self {
             Value::Optional { data, .. } => data.as_ref().to_owned(),
             t => Some(t.to_owned()),
+        }
+    }
+
+    pub fn into_property_value(self, is_mutable: bool, line_number: usize) -> PropertyValue {
+        PropertyValue::Value {
+            value: self,
+            is_mutable,
+            line_number,
+        }
+    }
+
+    pub fn kind(&self) -> fastn_type::Kind {
+        match self {
+            Value::String { .. } => fastn_type::Kind::string(),
+            Value::Integer { .. } => fastn_type::Kind::integer(),
+            Value::Decimal { .. } => fastn_type::Kind::decimal(),
+            Value::Boolean { .. } => fastn_type::Kind::boolean(),
+            Value::Object { .. } => fastn_type::Kind::object(),
+            Value::Record { name, .. } => fastn_type::Kind::record(name),
+            Value::KwArgs { .. } => fastn_type::Kind::kwargs(),
+            Value::List { kind, .. } => kind.kind.clone().into_list(),
+            Value::Optional { kind, .. } => fastn_type::Kind::Optional {
+                kind: Box::new(kind.kind.clone()),
+            },
+            Value::UI { name, .. } => fastn_type::Kind::ui_with_name(name),
+            Value::OrType {
+                name,
+                variant,
+                full_variant,
+                ..
+            } => fastn_type::Kind::or_type_with_variant(name, variant, full_variant),
+            Value::Module { .. } => fastn_type::Kind::module(),
         }
     }
 }

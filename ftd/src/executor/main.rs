@@ -436,6 +436,8 @@ impl ExecuteDoc<'_> {
         instructions: &[ftd::interpreter::Component],
         doc: &mut ftd::executor::TDoc,
     ) -> ftd::executor::Result<Vec<ftd::executor::Element>> {
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
+
         let mut elements = vec![];
         let mut inherited_variables: ftd::VecMap<(String, Vec<usize>)> = Default::default();
         let mut instructions = ExecuteDoc::get_instructions_from_instructions(
