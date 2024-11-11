@@ -1711,6 +1711,8 @@ impl Value {
         doc_name: &str,
         line_number: usize,
     ) -> ftd::interpreter::Result<Value> {
+        use ftd::interpreter::fastn_type_functions::KindExt;
+
         Ok(match value {
             fastn_grammar::evalexpr::Value::String(text) if expected_kind.is_string() => {
                 Value::String { text }

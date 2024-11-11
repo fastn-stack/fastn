@@ -412,4 +412,28 @@ impl KindData {
             body: self.body,
         }
     }
+
+    pub fn inner_list(self) -> KindData {
+        let kind = match self.kind {
+            Kind::List { kind } => kind.as_ref().to_owned(),
+            t => t,
+        };
+        KindData {
+            kind,
+            caption: self.caption,
+            body: self.body,
+        }
+    }
+
+    pub fn inner(self) -> KindData {
+        let kind = match self.kind {
+            Kind::Optional { kind } => kind.as_ref().to_owned(),
+            t => t,
+        };
+        KindData {
+            kind,
+            caption: self.caption,
+            body: self.body,
+        }
+    }
 }
