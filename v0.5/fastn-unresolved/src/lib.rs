@@ -24,7 +24,7 @@ pub struct Document {
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub enum Definition {
     Component(fastn_section::Section),
-    Variable(fastn_section::Section),
+    Variable(Variable),
     Function(fastn_section::Section),
     TypeAlias(fastn_section::Section),
     Record(fastn_section::Section),
@@ -34,13 +34,66 @@ pub enum Definition {
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Import {
-    pub module: fastn_section::ModuleName,
+    pub package: PackageName,
+    pub module: ModuleName,
+    pub alias: Option<Identifier>,
     pub exports: Option<Export>,
     pub exposing: Option<Export>,
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct PackageName(pub String);
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct ModuleName(pub String);
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct Identifier(pub String);
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Export {
     All,
-    Things(Vec<fastn_section::AliasableIdentifier>),
+    Things(Vec<AliasableIdentifier>),
+}
+
+/// is this generic enough?
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct AliasableIdentifier {
+    pub alias: Option<Identifier>,
+    pub name: Identifier,
+}
+
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub struct SymbolName {
+    pub package: PackageName,
+    pub module: ModuleName,
+    /// can name contain dots? after we have `-- module foo:` feature it will, but now?
+    pub name: Identifier, // name comes after #
+}
+
+// -- integer x: 10
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub struct Variable {
+    pub name: SymbolName,
+    pub kind: Kind,
+    pub value: Vec<fastn_section::Tes>,
+}
+
+/// We can not have kinds of like Record(SymbolName), OrType(SymbolName), because they are not
+/// yet "resolved", eg `-- foo x:`, we do not know if `foo` is a record or an or-type.
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub enum Kind {
+    Integer,
+    Decimal,
+    String,
+    Boolean,
+    Option(Box<Kind>),
+    // TODO: Map(Kind, Kind),
+    List(Box<Kind>),
+    Caption(Box<Kind>),
+    Body(Box<Kind>),
+    CaptionOrBody(Box<Kind>),
+    // TODO: Future(Kind),
+    // TODO: Result(Kind, Kind),
+    Custom(SymbolName),
 }

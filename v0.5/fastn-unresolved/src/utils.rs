@@ -1,5 +1,5 @@
 impl fastn_unresolved::Document {
-    pub fn new(
+    pub(crate) fn new(
         document: fastn_section::Document,
     ) -> (fastn_unresolved::Document, Vec<fastn_section::Section>) {
         (
