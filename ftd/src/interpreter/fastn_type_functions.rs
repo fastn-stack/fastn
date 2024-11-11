@@ -244,6 +244,11 @@ pub(crate) trait PropertyValueExt {
         loop_object_name_and_kind: &Option<String>,
     ) -> ftd::interpreter::Result<bool>;
 
+    fn scan_ast_value(
+        value: ftd_ast::VariableValue,
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()>;
+
     fn from_string_with_argument(
         value: &str,
         doc: &mut ftd::interpreter::TDoc,
@@ -253,6 +258,16 @@ pub(crate) trait PropertyValueExt {
         definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::PropertyValue>>;
+
+    fn is_static(&self, doc: &ftd::interpreter::TDoc) -> bool;
+
+    fn value_mut(
+        &mut self,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<&mut fastn_type::Value>;
+
+    fn value_optional(&self) -> Option<&fastn_type::Value>;
 }
 impl PropertyValueExt for fastn_type::PropertyValue {
     fn resolve(
@@ -1410,6 +1425,13 @@ impl PropertyValueExt for fastn_type::PropertyValue {
         }
     }
 
+    fn scan_ast_value(
+        value: ftd_ast::VariableValue,
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()> {
+        fastn_type::PropertyValue::scan_ast_value_with_argument(value, doc, None, &None)
+    }
+
     fn from_string_with_argument(
         value: &str,
         doc: &mut ftd::interpreter::TDoc,
@@ -1434,6 +1456,49 @@ impl PropertyValueExt for fastn_type::PropertyValue {
             definition_name_with_arguments,
             loop_object_name_and_kind,
         )
+    }
+
+    fn is_static(&self, doc: &ftd::interpreter::TDoc) -> bool {
+        match self {
+            fastn_type::PropertyValue::Clone { .. } => true,
+            fastn_type::PropertyValue::Reference { is_mutable, .. } if *is_mutable => true,
+            fastn_type::PropertyValue::Reference {
+                name, line_number, ..
+            } => doc
+                .get_variable(name, *line_number)
+                .map(|v| v.is_static())
+                .unwrap_or(true),
+            fastn_type::PropertyValue::Value { value, .. } => value.is_static(doc),
+            fastn_type::PropertyValue::FunctionCall(f) => {
+                let mut is_static = true;
+                for d in f.values.values() {
+                    if !d.is_static(doc) {
+                        is_static = false;
+                        break;
+                    }
+                }
+                is_static
+            }
+        }
+    }
+
+    fn value_mut(
+        &mut self,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<&mut fastn_type::Value> {
+        match self {
+            fastn_type::PropertyValue::Value { value, .. } => Ok(value),
+            t => ftd::interpreter::utils::e2(
+                format!("Expected value found `{:?}`", t).as_str(),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
+    fn value_optional(&self) -> Option<&fastn_type::Value> {
+        self.value("", 0).ok()
     }
 }
 
@@ -1472,6 +1537,22 @@ pub(crate) trait ValueExt {
         doc_id: &str,
         line_number: usize,
     ) -> ftd::interpreter::Result<ftd::Map<fastn_type::PropertyValue>>;
+    fn into_evalexpr_value(
+        self,
+        doc: &ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<fastn_grammar::evalexpr::Value>;
+    fn to_evalexpr_value(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<fastn_grammar::evalexpr::Value>;
+    fn from_evalexpr_value(
+        value: fastn_grammar::evalexpr::Value,
+        expected_kind: &fastn_type::Kind,
+        doc_name: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<fastn_type::Value>;
+    fn is_static(&self, doc: &ftd::interpreter::TDoc) -> bool;
 }
 impl ValueExt for fastn_type::Value {
     fn string(&self, doc_id: &str, line_number: usize) -> ftd::interpreter::Result<String> {
@@ -1630,6 +1711,173 @@ impl ValueExt for fastn_type::Value {
                 doc_id,
                 line_number,
             ),
+        }
+    }
+
+    fn into_evalexpr_value(
+        self,
+        doc: &ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<fastn_grammar::evalexpr::Value> {
+        match self {
+            fastn_type::Value::String { text } => Ok(fastn_grammar::evalexpr::Value::String(text)),
+            fastn_type::Value::Integer { value } => Ok(fastn_grammar::evalexpr::Value::Int(value)),
+            fastn_type::Value::Decimal { value } => {
+                Ok(fastn_grammar::evalexpr::Value::Float(value))
+            }
+            fastn_type::Value::Boolean { value } => {
+                Ok(fastn_grammar::evalexpr::Value::Boolean(value))
+            }
+            fastn_type::Value::Optional { data, .. } => {
+                if let Some(data) = data.as_ref() {
+                    data.clone().into_evalexpr_value(doc)
+                } else {
+                    Ok(fastn_grammar::evalexpr::Value::Empty)
+                }
+            }
+            fastn_type::Value::OrType { value, .. } => {
+                let line_number = value.line_number();
+                value.resolve(doc, line_number)?.into_evalexpr_value(doc)
+            }
+            fastn_type::Value::Record { .. } => {
+                if let Ok(Some(value)) = ftd::interpreter::utils::get_value(doc, &self) {
+                    Ok(fastn_grammar::evalexpr::Value::String(value.to_string()))
+                } else {
+                    unimplemented!("{:?}", self)
+                }
+            }
+            fastn_type::Value::List { data, .. } => {
+                let mut values = vec![];
+                for item in data {
+                    let line_number = item.line_number();
+                    values.push(item.resolve(doc, line_number)?.into_evalexpr_value(doc)?);
+                }
+                Ok(fastn_grammar::evalexpr::Value::Tuple(values))
+            }
+            t => unimplemented!("{:?}", t),
+        }
+    }
+
+    fn to_evalexpr_value(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<fastn_grammar::evalexpr::Value> {
+        Ok(match self {
+            fastn_type::Value::String { text } => {
+                fastn_grammar::evalexpr::Value::String(text.to_string())
+            }
+            fastn_type::Value::Integer { value } => fastn_grammar::evalexpr::Value::Int(*value),
+            fastn_type::Value::Decimal { value } => fastn_grammar::evalexpr::Value::Float(*value),
+            fastn_type::Value::Boolean { value } => fastn_grammar::evalexpr::Value::Boolean(*value),
+            fastn_type::Value::List { data, .. } => {
+                let mut values = vec![];
+                for value in data {
+                    let v = value
+                        .clone()
+                        .resolve(doc, line_number)?
+                        .to_evalexpr_value(doc, value.line_number())?;
+                    values.push(v);
+                }
+                fastn_grammar::evalexpr::Value::Tuple(values)
+            }
+            fastn_type::Value::Optional { data, .. } => {
+                if let Some(data) = data.as_ref() {
+                    data.to_evalexpr_value(doc, line_number)?
+                } else {
+                    fastn_grammar::evalexpr::Value::Empty
+                }
+            }
+            t => unimplemented!("{:?}", t),
+        })
+    }
+
+    fn from_evalexpr_value(
+        value: fastn_grammar::evalexpr::Value,
+        expected_kind: &fastn_type::Kind,
+        doc_name: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<fastn_type::Value> {
+        use ftd::interpreter::fastn_type_functions::KindExt;
+
+        Ok(match value {
+            fastn_grammar::evalexpr::Value::String(text) if expected_kind.is_string() => {
+                fastn_type::Value::String { text }
+            }
+            fastn_grammar::evalexpr::Value::Float(value) if expected_kind.is_decimal() => {
+                fastn_type::Value::Decimal { value }
+            }
+            fastn_grammar::evalexpr::Value::Int(value) if expected_kind.is_integer() => {
+                fastn_type::Value::Integer { value }
+            }
+            fastn_grammar::evalexpr::Value::Boolean(value) if expected_kind.is_boolean() => {
+                fastn_type::Value::Boolean { value }
+            }
+            fastn_grammar::evalexpr::Value::Tuple(data) if expected_kind.is_list() => {
+                let mut values = vec![];
+                let val_kind = expected_kind.list_type(doc_name, line_number)?;
+                for val in data {
+                    values.push(fastn_type::PropertyValue::Value {
+                        value: fastn_type::Value::from_evalexpr_value(
+                            val,
+                            &val_kind,
+                            doc_name,
+                            line_number,
+                        )?,
+                        is_mutable: false,
+                        line_number,
+                    });
+                }
+                fastn_type::Value::List {
+                    data: values,
+                    kind: fastn_type::KindData::new(val_kind),
+                }
+            }
+            fastn_grammar::evalexpr::Value::Empty if expected_kind.is_optional() => {
+                fastn_type::Value::Optional {
+                    data: Box::new(None),
+                    kind: fastn_type::KindData::new(expected_kind.clone()),
+                }
+            }
+            t => {
+                return ftd::interpreter::utils::e2(
+                    format!("Expected kind: `{:?}`, found: `{:?}`", expected_kind, t),
+                    doc_name,
+                    line_number,
+                )
+            }
+        })
+    }
+
+    fn is_static(&self, doc: &ftd::interpreter::TDoc) -> bool {
+        match self {
+            fastn_type::Value::Optional { data, .. } if data.is_some() => {
+                data.clone().unwrap().is_static(doc)
+            }
+            fastn_type::Value::List { data, .. } => {
+                let mut is_static = true;
+                for d in data {
+                    if !d.is_static(doc) {
+                        is_static = false;
+                        break;
+                    }
+                }
+                is_static
+            }
+            fastn_type::Value::Record { fields, .. }
+            | fastn_type::Value::Object { values: fields, .. }
+            | fastn_type::Value::KwArgs {
+                arguments: fields, ..
+            } => {
+                let mut is_static = true;
+                for d in fields.values() {
+                    if !d.is_static(doc) {
+                        is_static = false;
+                        break;
+                    }
+                }
+                is_static
+            }
+            _ => true,
         }
     }
 }

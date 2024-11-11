@@ -54,6 +54,7 @@ impl Function {
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Function>>
     {
         use ftd::interpreter::KindDataExt;
+        use ftd::interpreter::PropertyValueExt;
 
         let function = ast.get_function(doc.name)?;
         let name = doc.resolve_name(function.name.as_str());
@@ -111,6 +112,7 @@ impl Function {
         line_number: usize,
     ) -> ftd::interpreter::Result<Option<fastn_type::Value>> {
         use fastn_grammar::evalexpr::*;
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
 
         struct VariableContext {
             value: fastn_grammar::evalexpr::Value,
@@ -281,6 +283,8 @@ impl FunctionCall {
         loop_object_name_and_kind: &Option<String>,
         line_number: usize,
     ) -> ftd::interpreter::Result<()> {
+        use ftd::interpreter::PropertyValueExt;
+
         let expression = value
             .trim_start_matches(ftd::interpreter::utils::REFERENCE)
             .to_string();
@@ -326,6 +330,8 @@ impl FunctionCall {
         line_number: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::FunctionCall>>
     {
+        use ftd::interpreter::{PropertyValueExt, PropertyValueSourceExt};
+
         let expression = value
             .trim_start_matches(ftd::interpreter::utils::REFERENCE)
             .to_string();

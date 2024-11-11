@@ -261,4 +261,18 @@ impl Value {
     pub fn is_or_type_variant(&self, or_variant: &str) -> bool {
         matches!(self, Self::OrType { variant, .. } if or_variant.eq(variant))
     }
+
+    pub fn ref_inner(&self) -> Option<&Self> {
+        match self {
+            Value::Optional { data, .. } => data.as_ref().as_ref(),
+            t => Some(t),
+        }
+    }
+
+    pub fn module_name_optional(&self) -> Option<String> {
+        match self {
+            fastn_type::Value::Module { name, .. } => Some(name.to_string()),
+            _ => None,
+        }
+    }
 }

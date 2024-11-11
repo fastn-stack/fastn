@@ -83,6 +83,8 @@ impl Expression {
         doc: &mut ftd::interpreter::TDoc,
         line_number: usize,
     ) -> ftd::interpreter::Result<()> {
+        use ftd::interpreter::PropertyValueExt;
+
         let variable_identifier_reads = get_variable_identifier_read(node);
         for variable in variable_identifier_reads {
             let full_variable_name =
@@ -107,6 +109,8 @@ impl Expression {
     ) -> ftd::interpreter::Result<
         ftd::interpreter::StateWithThing<ftd::Map<fastn_type::PropertyValue>>,
     > {
+        use ftd::interpreter::PropertyValueExt;
+
         let variable_identifier_reads = get_variable_identifier_read(node);
         let mut result: ftd::Map<fastn_type::PropertyValue> = Default::default();
         for variable in variable_identifier_reads {
@@ -185,6 +189,8 @@ impl Expression {
     }
 
     pub fn eval(&self, doc: &ftd::interpreter::TDoc) -> ftd::interpreter::Result<bool> {
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
+
         let mut values: ftd::Map<fastn_grammar::evalexpr::Value> = Default::default();
         for (key, property_value) in self.references.iter() {
             values.insert(
@@ -201,6 +207,8 @@ impl Expression {
     }
 
     pub fn is_static(&self, doc: &ftd::interpreter::TDoc) -> bool {
+        use ftd::interpreter::PropertyValueExt;
+
         for val in self.references.values() {
             if !val.is_static(doc) {
                 return false;

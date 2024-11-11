@@ -14,7 +14,7 @@ impl Variable {
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
-        use ftd::interpreter::KindDataExt;
+        use ftd::interpreter::{KindDataExt, PropertyValueExt};
 
         let variable_definition = ast.clone().get_variable_definition(doc.name)?;
         fastn_type::KindData::scan_ast_kind(
@@ -78,7 +78,7 @@ impl Variable {
         number_of_scan: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Variable>>
     {
-        use ftd::interpreter::KindDataExt;
+        use ftd::interpreter::{KindDataExt, PropertyValueExt};
 
         let variable_definition = ast.clone().get_variable_definition(doc.name)?;
         let name = doc.resolve_name(variable_definition.name.as_str());
@@ -191,6 +191,8 @@ impl Variable {
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
+        use ftd::interpreter::PropertyValueExt;
+
         let variable_definition = ast.get_variable_invocation(doc.name)?;
         fastn_type::PropertyValue::scan_ast_value(variable_definition.value, doc)
     }
@@ -200,6 +202,8 @@ impl Variable {
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Variable>>
     {
+        use ftd::interpreter::PropertyValueExt;
+
         let variable_definition = ast.get_variable_invocation(doc.name)?;
         let kind = try_ok_state!(doc.get_kind(
             variable_definition.name.as_str(),
@@ -222,6 +226,8 @@ impl Variable {
     }
 
     pub fn set_static(self, doc: &ftd::interpreter::TDoc) -> Self {
+        use ftd::interpreter::PropertyValueExt;
+
         let mut variable = self;
         if !variable.is_static {
             return variable;

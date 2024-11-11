@@ -221,7 +221,8 @@ impl ftd::interpreter::Variable {
         prefix: Option<String>,
         has_rive_components: &mut bool,
     ) -> fastn_js::Ast {
-        use ftd::js::fastn_type_functions::PropertyValueExt;
+        use ftd::interpreter::PropertyValueExt;
+        use ftd::js::fastn_type_functions::{PropertyValueExt as _, ValueExt as _};
 
         if let Ok(value) = self.value.value(doc.name, self.value.line_number()) {
             if self.kind.is_record() {

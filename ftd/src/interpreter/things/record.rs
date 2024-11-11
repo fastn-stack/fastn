@@ -161,6 +161,8 @@ impl Field {
         doc: &ftd::interpreter::TDoc,
         properties: &[ftd::interpreter::Property],
     ) -> ftd::interpreter::Result<Option<fastn_type::Value>> {
+        use ftd::interpreter::PropertyValueExt;
+
         let property_value = self.get_default_interpreter_property_value(properties)?;
         if let Some(property_value) = property_value {
             return Ok(property_value.resolve(doc, 0).ok());
@@ -250,6 +252,7 @@ impl Field {
         mut fields_with_resolved_kinds: Vec<(Field, Option<ftd_ast::VariableValue>)>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<Field>>> {
+        use ftd::interpreter::PropertyValueExt;
         use itertools::Itertools;
 
         let mut fields = fields_with_resolved_kinds
@@ -307,7 +310,7 @@ impl Field {
         doc: &mut ftd::interpreter::TDoc,
         known_kinds: &ftd::Map<fastn_type::Kind>,
     ) -> ftd::interpreter::Result<()> {
-        use ftd::interpreter::KindDataExt;
+        use ftd::interpreter::{KindDataExt, PropertyValueExt};
 
         fastn_type::KindData::scan_ast_kind(field.kind, known_kinds, doc, field.line_number)?;
 
@@ -323,7 +326,7 @@ impl Field {
         doc: &mut ftd::interpreter::TDoc,
         known_kinds: &ftd::Map<fastn_type::Kind>,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Field>> {
-        use ftd::interpreter::KindDataExt;
+        use ftd::interpreter::{KindDataExt, PropertyValueExt};
 
         let kind = try_ok_state!(fastn_type::KindData::from_ast_kind(
             field.kind,

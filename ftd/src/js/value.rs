@@ -453,6 +453,8 @@ pub(crate) fn ftd_to_js_variant(
             )
         }
         t => {
+            use ftd::interpreter::PropertyValueExt;
+
             if let Ok(value) = value.value(doc_id, line_number) {
                 return match value {
                     fastn_type::Value::Integer { value } => (value.to_string(), false),

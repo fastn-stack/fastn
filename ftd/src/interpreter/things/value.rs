@@ -46,6 +46,8 @@ impl PropertyValue {
     }
 
     pub(crate) fn is_static(&self, doc: &ftd::interpreter::TDoc) -> bool {
+        use ftd::interpreter::PropertyValueExt;
+
         match self {
             PropertyValue::Clone { .. } => true,
             PropertyValue::Reference { is_mutable, .. } if *is_mutable => true,

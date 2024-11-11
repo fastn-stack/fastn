@@ -185,6 +185,7 @@ fn is_ftd_thing(name: &str) -> bool {
 pub(crate) fn get_js_value_from_properties(
     properties: &[ftd::interpreter::Property],
 ) -> Option<ftd::js::Value> {
+    use ftd::js::fastn_type_functions::PropertyValueExt;
     if properties.is_empty() {
         return None;
     }
@@ -230,6 +231,8 @@ pub(crate) fn is_module_argument(
     component_arguments: &[ftd::interpreter::Argument],
     remaining: &str,
 ) -> Option<String> {
+    use ftd::interpreter::PropertyValueExt;
+
     let (module_name, component_name) = remaining.split_once('.')?;
     component_arguments.iter().find_map(|v| {
         if v.name.eq(module_name) && v.kind.is_module() {

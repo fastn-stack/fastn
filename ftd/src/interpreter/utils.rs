@@ -510,6 +510,8 @@ pub(crate) fn get_value(
     doc: &ftd::interpreter::TDoc,
     value: &fastn_type::Value,
 ) -> ftd::interpreter::Result<Option<serde_json::Value>> {
+    use ftd::interpreter::PropertyValueExt;
+
     if let fastn_type::Value::List { data, .. } = value {
         let mut list_data = vec![];
         for val in data.iter() {
@@ -694,6 +696,8 @@ pub(crate) fn insert_module_thing(
     line_number: usize,
     doc: &mut ftd::interpreter::TDoc,
 ) -> ftd::interpreter::Result<()> {
+    use ftd::interpreter::PropertyValueExt;
+
     let (component_name, arg) = get_mut_argument_for_reference(
         reference,
         doc.name,
@@ -788,6 +792,8 @@ pub(crate) fn validate_properties_and_set_default(
     doc_id: &str,
     line_number: usize,
 ) -> ftd::interpreter::Result<()> {
+    use ftd::interpreter::PropertyValueExt;
+
     let mut found_default = None;
     let expected_kind = &argument.kind.kind;
     for property in properties.iter_mut() {

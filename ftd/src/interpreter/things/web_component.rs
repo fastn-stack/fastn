@@ -40,6 +40,8 @@ impl WebComponentDefinition {
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<WebComponentDefinition>> {
+        use ftd::interpreter::PropertyValueExt;
+
         let web_component_definition = ast.get_web_component_definition(doc.name)?;
         let name = doc.resolve_name(web_component_definition.name.as_str());
 
