@@ -6,7 +6,6 @@ extern crate self as fastn_lang;
 
 mod compile;
 mod ds;
-pub mod resolved;
 
 pub use compile::compile;
 pub use ds::DocumentStore;

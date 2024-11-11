@@ -94,7 +94,6 @@ dependencies = [
  "async-trait",
  "fastn-section",
  "fastn-unresolved",
- "serde",
  "serde_json",
 ]
 

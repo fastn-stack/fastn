@@ -9,32 +9,12 @@ mod utils;
 
 pub use parser::parse;
 
-/// Document with imports is our first parser pass.
-///
-/// We parse a `Vec<fastn_section::Section>` into `DocumentWithImports`. In this `definitions` and
-/// `content` may refer to things like `foo.bar` where `foo` is an imported module.
-///
-/// We keep the names as `foo.bar` etc. We then have a `resolve_imports` phase, where we get a bunch
-/// of extra imports (these are the package level `-- fastn.auto-import` imports). We then resolve
-/// the imports, and get a `DocumentWithOutImports`.
 #[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
-pub struct DocumentWithImports {
+pub struct Document {
     pub module_doc: Option<fastn_section::Span>,
     pub imports: Vec<fastn_unresolved::Import>,
-    pub definitions: std::collections::HashMap<fastn_section::Identifier, Definition>,
-    pub content: Vec<fastn_section::Section>,
-    pub errors: Vec<fastn_section::Spanned<fastn_section::Error>>,
-    pub warnings: Vec<fastn_section::Spanned<fastn_section::Warning>>,
-    pub comments: Vec<fastn_section::Span>,
-    pub line_starts: Vec<u32>,
-}
-
-/// DocumentWithOutImports has names like `foo`, and `foo.bar` resolved into `full-path/of/foo#bar`.
-#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
-pub struct DocumentWithOutImports {
-    pub module_doc: Option<fastn_section::Span>,
-    pub definitions: std::collections::HashMap<fastn_section::Identifier, Definition>,
-    pub content: Vec<fastn_section::Section>,
+    pub definitions: Vec<Definition>,
+    pub content: Vec<ComponentInvocation>,
     pub errors: Vec<fastn_section::Spanned<fastn_section::Error>>,
     pub warnings: Vec<fastn_section::Spanned<fastn_section::Warning>>,
     pub comments: Vec<fastn_section::Span>,
@@ -42,14 +22,40 @@ pub struct DocumentWithOutImports {
 }
 
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-pub enum Definition {
-    Component(fastn_section::Section),
-    Variable(Variable),
-    Function(fastn_section::Section),
-    TypeAlias(fastn_section::Section),
-    Record(fastn_section::Section),
-    OrType(fastn_section::Section),
-    Module(fastn_section::Section),
+pub struct Definition {
+    pub doc: Option<fastn_section::Span>,
+    pub name: Identifier,
+    pub visibility: fastn_section::Visibility,
+    pub kind: Kind,
+    pub inner: InnerDefinition,
+}
+
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub enum InnerDefinition {
+    Component {
+        properties: Vec<Property>,
+        body: Vec<ComponentInvocation>,
+    },
+    Variable {
+        arguments: Vec<Argument>,
+        caption: Vec<fastn_section::Tes>,
+    },
+    Function {
+        properties: Vec<Property>,
+        return_type: Option<Kind>,
+        body: Vec<fastn_section::Tes>,
+    },
+    // -- type foo: person
+    // name: foo ;; we are updating / setting the default value
+    TypeAlias {
+        kind: Kind,
+        arguments: Vec<Argument>,
+    },
+    Record {
+        properties: Vec<Property>,
+    },
+    // TODO: OrType(fastn_section::Section),
+    // TODO: Module(fastn_section::Section),
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -59,6 +65,29 @@ pub struct Import {
     pub alias: Option<Identifier>,
     pub exports: Option<Export>,
     pub exposing: Option<Export>,
+}
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct ComponentInvocation {
+    pub name: Identifier,
+    pub caption: Vec<fastn_section::Tes>,
+    pub arguments: Vec<Argument>,
+    pub body: Vec<fastn_section::Tes>,
+    pub children: Vec<ComponentInvocation>,
+}
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct Argument {
+    pub name: Identifier,
+    pub value: Vec<fastn_section::Tes>,
+}
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct Property {
+    pub name: Identifier,
+    pub kind: Kind,
+    pub visibility: fastn_section::Visibility,
+    pub default: Option<fastn_section::Tes>,
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -83,7 +112,7 @@ pub struct AliasableIdentifier {
     pub name: Identifier,
 }
 
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct SymbolName {
     pub package: PackageName,
     pub module: ModuleName,
@@ -91,18 +120,9 @@ pub struct SymbolName {
     pub name: Identifier, // name comes after #
 }
 
-// -- integer x: 10
-// -- string x: hi, $y
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-pub struct Variable {
-    pub name: Identifier,
-    pub kind: Kind,
-    pub value: Vec<fastn_section::Tes>,
-}
-
 /// We cannot have kinds of like Record(SymbolName), OrType(SymbolName), because they are not
 /// yet "resolved", eg `-- foo x:`, we do not know if `foo` is a record or an or-type.
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 pub enum Kind {
     Integer,
     Decimal,

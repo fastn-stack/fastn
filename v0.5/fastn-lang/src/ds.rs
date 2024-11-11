@@ -24,15 +24,17 @@ pub trait DocumentStore {
     /// this takes the qualified name, and returns the resolved definition.
     ///
     /// we cannot always get symbols by id because the source contains symbol names.
+    /// TODO: fix type
     async fn resolved(
         &mut self,
         qualified_identifier: &str,
-    ) -> fastn_section::Result<fastn_lang::resolved::Definition>;
+    ) -> fastn_section::Result<fastn_unresolved::Definition>;
     /// each symbol also has an id, and when referring to symbols we use their ids
+    /// TODO: fix return type
     async fn resolved_by_id(
         &mut self,
         qualified_identifier: usize,
-    ) -> fastn_section::Result<fastn_lang::resolved::Definition>;
+    ) -> fastn_section::Result<fastn_unresolved::Definition>;
     // we are removing save_resolved_definitions too, because our compiler can simply return the
     // newly resolved definitions, there by making the trait even simpler.
     //
