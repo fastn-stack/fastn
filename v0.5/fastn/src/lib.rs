@@ -4,9 +4,9 @@
 extern crate self as fastn;
 
 pub mod commands;
-mod ds;
+mod symbols;
 
-pub use ds::DS;
+pub use symbols::Symbols;
 
 pub enum Action {
     Read,
