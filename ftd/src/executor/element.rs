@@ -388,6 +388,9 @@ impl RawImage {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<RawImage> {
+        use ftd::executor::fastn_type_functions::PropertyValueExt as _;
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
+
         let src = {
             let value = values.get("src").ok_or(ftd::executor::Error::ParseError {
                 message: "`src` field in ftd.raw-image-src not found".to_string(),

@@ -22,6 +22,26 @@ pub enum PropertyValue {
     FunctionCall(fastn_type::FunctionCall),
 }
 
+impl PropertyValue {
+    pub fn line_number(&self) -> usize {
+        match self {
+            PropertyValue::Value { line_number, .. }
+            | PropertyValue::Reference { line_number, .. }
+            | PropertyValue::Clone { line_number, .. }
+            | PropertyValue::FunctionCall(fastn_type::FunctionCall { line_number, .. }) => {
+                *line_number
+            }
+        }
+    }
+
+    pub fn get_reference_or_clone(&self) -> Option<&String> {
+        match self {
+            PropertyValue::Reference { name, .. } | PropertyValue::Clone { name, .. } => Some(name),
+            _ => None,
+        }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum PropertyValueSource {
     Global,

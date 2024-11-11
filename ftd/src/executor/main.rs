@@ -316,6 +316,8 @@ impl ExecuteDoc<'_> {
         instruction: &ftd::interpreter::Component,
         doc: &mut ftd::executor::TDoc,
     ) -> ftd::executor::Result<ftd::interpreter::Component> {
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
+
         if doc
             .itdoc()
             .get_component(instruction.name.as_str(), instruction.line_number)

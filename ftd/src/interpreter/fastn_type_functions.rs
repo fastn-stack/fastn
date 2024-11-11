@@ -232,6 +232,12 @@ pub(crate) trait ValueExt {
         doc_id: &str,
         line_number: usize,
     ) -> ftd::interpreter::Result<(&String, &String, &fastn_type::PropertyValue)>;
+
+    fn ui(
+        &self,
+        _doc_id: &str,
+        _line_number: usize,
+    ) -> ftd::interpreter::Result<ftd::interpreter::Component>;
 }
 
 impl ValueExt for fastn_type::Value {
@@ -346,6 +352,22 @@ impl ValueExt for fastn_type::Value {
                 line_number,
             ),
         }
+    }
+
+    fn ui(
+        &self,
+        _doc_id: &str,
+        _line_number: usize,
+    ) -> ftd::interpreter::Result<ftd::interpreter::Component> {
+        todo!()
+        // match self {
+        //     fastn_type::Value::UI { component, .. } => Ok(component.to_owned()),
+        //     t => ftd::interpreter::utils::e2(
+        //         format!("Expected UI, found: `{:?}`", t),
+        //         doc_id,
+        //         line_number,
+        //     ),
+        // }
     }
 }
 pub fn check_for_caption_and_body(s: &mut String) -> (bool, bool) {
