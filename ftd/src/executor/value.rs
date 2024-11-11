@@ -261,7 +261,7 @@ pub fn record(
     doc: &ftd::executor::TDoc,
     line_number: usize,
     rec_name: &str,
-) -> ftd::executor::Result<ftd::executor::Value<ftd::Map<ftd::interpreter::PropertyValue>>> {
+) -> ftd::executor::Result<ftd::executor::Value<ftd::Map<fastn_type::PropertyValue>>> {
     let value = get_value_from_properties_using_key_and_arguments(
         key,
         component_name,
@@ -656,8 +656,7 @@ pub fn optional_record_inherited(
     line_number: usize,
     rec_name: &str,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::Map<ftd::interpreter::PropertyValue>>>>
-{
+) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::Map<fastn_type::PropertyValue>>>> {
     let value = get_value_from_properties_using_key_and_arguments_dummy(
         key,
         component_name,
@@ -699,8 +698,7 @@ pub fn optional_or_type(
     line_number: usize,
     rec_name: &str,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-) -> ftd::executor::Result<ftd::executor::Value<Option<(String, ftd::interpreter::PropertyValue)>>>
-{
+) -> ftd::executor::Result<ftd::executor::Value<Option<(String, fastn_type::PropertyValue)>>> {
     let value = get_value_from_properties_using_key_and_arguments_dummy(
         key,
         component_name,
@@ -749,7 +747,7 @@ pub fn optional_or_type_list(
     line_number: usize,
     rec_name: &str,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-) -> ftd::executor::Result<ftd::executor::Value<Vec<(String, ftd::interpreter::PropertyValue)>>> {
+) -> ftd::executor::Result<ftd::executor::Value<Vec<(String, fastn_type::PropertyValue)>>> {
     let value = get_value_from_properties_using_key_and_arguments_dummy(
         key,
         component_name,

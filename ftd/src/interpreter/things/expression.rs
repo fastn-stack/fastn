@@ -1,14 +1,14 @@
 #[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Expression {
     pub expression: fastn_grammar::evalexpr::ExprNode,
-    pub references: ftd::Map<ftd::interpreter::PropertyValue>,
+    pub references: ftd::Map<fastn_type::PropertyValue>,
     pub line_number: usize,
 }
 
 impl Expression {
     pub fn new(
         expression: fastn_grammar::evalexpr::ExprNode,
-        references: ftd::Map<ftd::interpreter::PropertyValue>,
+        references: ftd::Map<fastn_type::PropertyValue>,
         line_number: usize,
     ) -> Expression {
         Expression {
@@ -87,7 +87,7 @@ impl Expression {
         for variable in variable_identifier_reads {
             let full_variable_name =
                 doc.resolve_reference_name(format!("${}", variable.value).as_str(), line_number)?;
-            ftd::interpreter::PropertyValue::scan_string_with_argument(
+            fastn_type::PropertyValue::scan_string_with_argument(
                 full_variable_name.as_str(),
                 doc,
                 line_number,
@@ -105,10 +105,10 @@ impl Expression {
         doc: &mut ftd::interpreter::TDoc,
         line_number: usize,
     ) -> ftd::interpreter::Result<
-        ftd::interpreter::StateWithThing<ftd::Map<ftd::interpreter::PropertyValue>>,
+        ftd::interpreter::StateWithThing<ftd::Map<fastn_type::PropertyValue>>,
     > {
         let variable_identifier_reads = get_variable_identifier_read(node);
-        let mut result: ftd::Map<ftd::interpreter::PropertyValue> = Default::default();
+        let mut result: ftd::Map<fastn_type::PropertyValue> = Default::default();
         for variable in variable_identifier_reads {
             let full_variable_name =
                 doc.resolve_reference_name(format!("${}", variable.value).as_str(), line_number)?;
@@ -118,7 +118,7 @@ impl Expression {
                 .map(|infer_from| result.get(&infer_from.value).unwrap())
             {
                 Some(infer_from_value) => {
-                    match ftd::interpreter::PropertyValue::from_string_with_argument(
+                    match fastn_type::PropertyValue::from_string_with_argument(
                         full_variable_name.as_str(),
                         doc,
                         None,
@@ -145,7 +145,7 @@ impl Expression {
                                 let full_variable_name =
                                     doc.resolve_reference_name(name.as_str(), line_number)?;
 
-                                ftd::interpreter::PropertyValue::from_string_with_argument(
+                                fastn_type::PropertyValue::from_string_with_argument(
                                     full_variable_name.as_str(),
                                     doc,
                                     None,
@@ -159,7 +159,7 @@ impl Expression {
                         }?,
                     }
                 }
-                None => ftd::interpreter::PropertyValue::from_string_with_argument(
+                None => fastn_type::PropertyValue::from_string_with_argument(
                     full_variable_name.as_str(),
                     doc,
                     None,
@@ -294,14 +294,14 @@ impl Expression {
 
         fn update_node_with_variable_reference_(
             expr: &fastn_grammar::evalexpr::ExprNode,
-            references: &ftd::Map<ftd::interpreter::PropertyValue>,
+            references: &ftd::Map<fastn_type::PropertyValue>,
         ) -> fastn_grammar::evalexpr::ExprNode {
             let mut operator = expr.operator().clone();
             if let fastn_grammar::evalexpr::Operator::VariableIdentifierRead { ref identifier } =
                 operator
             {
                 if format!("${}", ftd::interpreter::FTD_LOOP_COUNTER).eq(identifier) {
-                    if let Some(ftd::interpreter::PropertyValue::Value {
+                    if let Some(fastn_type::PropertyValue::Value {
                         value: fastn_type::Value::Integer { value },
                         ..
                     }) = references.get(identifier)
@@ -310,7 +310,7 @@ impl Expression {
                             identifier: value.to_string(),
                         }
                     }
-                } else if let Some(ftd::interpreter::PropertyValue::Reference { name, .. }) =
+                } else if let Some(fastn_type::PropertyValue::Reference { name, .. }) =
                     references.get(identifier)
                 {
                     operator = fastn_grammar::evalexpr::Operator::VariableIdentifierRead {

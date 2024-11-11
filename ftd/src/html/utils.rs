@@ -62,7 +62,7 @@ pub(crate) fn node_change_id(id: &str, attr: &str) -> String {
 pub(crate) fn get_formatted_dep_string_from_property_value(
     id: &str,
     doc: &ftd::interpreter::TDoc,
-    property_value: &ftd::interpreter::PropertyValue,
+    property_value: &fastn_type::PropertyValue,
     pattern_with_eval: &Option<(String, bool)>,
     field: Option<String>,
     string_needs_no_quotes: bool,
@@ -164,7 +164,7 @@ pub(crate) fn js_expression_from_list(
 }
 
 pub(crate) fn is_dark_mode_dependent(
-    value: &ftd::interpreter::PropertyValue,
+    value: &fastn_type::PropertyValue,
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::html::Result<bool> {
     let value = value.clone().resolve(doc, value.line_number())?;
@@ -174,7 +174,7 @@ pub(crate) fn is_dark_mode_dependent(
 }
 
 pub(crate) fn is_device_dependent(
-    value: &ftd::interpreter::PropertyValue,
+    value: &fastn_type::PropertyValue,
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::html::Result<bool> {
     let value = value.clone().resolve(doc, value.line_number())?;
@@ -197,7 +197,7 @@ pub(crate) fn is_device_dependent(
 }
 
 pub(crate) fn dependencies_from_property_value(
-    property_value: &ftd::interpreter::PropertyValue,
+    property_value: &fastn_type::PropertyValue,
     doc: &ftd::interpreter::TDoc,
 ) -> Vec<String> {
     use ftd::html::fastn_type_functions::KindExt;
@@ -277,7 +277,7 @@ pub(crate) fn dependencies_from_property_value(
 }
 
 fn dependencies_from_length_property_value(
-    property_value: &ftd::interpreter::PropertyValue,
+    property_value: &fastn_type::PropertyValue,
     doc: &ftd::interpreter::TDoc,
 ) -> Vec<String> {
     use ftd::html::fastn_type_functions::KindExt;
@@ -304,7 +304,7 @@ fn dependencies_from_length_property_value(
     }
 }
 
-impl ftd::interpreter::PropertyValue {
+impl fastn_type::PropertyValue {
     pub(crate) fn to_html_string(
         &self,
         doc: &ftd::interpreter::TDoc,
@@ -313,12 +313,12 @@ impl ftd::interpreter::PropertyValue {
         string_needs_no_quotes: bool,
     ) -> ftd::html::Result<Option<String>> {
         Ok(match self {
-            ftd::interpreter::PropertyValue::Reference { name, .. } => Some(format!(
+            fastn_type::PropertyValue::Reference { name, .. } => Some(format!(
                 "resolve_reference(\"{}\", data){}",
                 js_reference_name(name),
                 field.map(|v| format!(".{}", v)).unwrap_or_default()
             )),
-            ftd::interpreter::PropertyValue::FunctionCall(function_call) => {
+            fastn_type::PropertyValue::FunctionCall(function_call) => {
                 let action = serde_json::to_string(&ftd::html::Action::from_function_call(
                     function_call,
                     id,
@@ -330,7 +330,7 @@ impl ftd::interpreter::PropertyValue {
                     id, action
                 ))
             }
-            ftd::interpreter::PropertyValue::Value {
+            fastn_type::PropertyValue::Value {
                 value, line_number, ..
             } => value.to_html_string(doc, *line_number, field, id, string_needs_no_quotes)?,
             _ => None,

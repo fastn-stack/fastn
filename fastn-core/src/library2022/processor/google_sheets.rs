@@ -79,7 +79,7 @@ fn row_to_record(
 ) -> ftd::interpreter::Result<fastn_type::Value> {
     let rec = doc.get_record(name, value.line_number())?;
     let rec_fields = rec.fields;
-    let mut fields: ftd::Map<ftd::interpreter::PropertyValue> = Default::default();
+    let mut fields: ftd::Map<fastn_type::PropertyValue> = Default::default();
 
     for field in rec_fields.iter() {
         let idx = match schema

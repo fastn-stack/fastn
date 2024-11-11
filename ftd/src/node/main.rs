@@ -108,7 +108,7 @@ pub struct RawNodeData {
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct WebComponentData {
-    pub properties: ftd::Map<ftd::interpreter::PropertyValue>,
+    pub properties: ftd::Map<fastn_type::PropertyValue>,
 }
 
 pub type Event = ftd::executor::Event;

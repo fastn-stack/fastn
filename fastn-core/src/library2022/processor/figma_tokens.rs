@@ -333,7 +333,7 @@ fn extract_light_dark_colors(
     };
 
     let fields = match &v.value {
-        ftd::interpreter::PropertyValue::Value {
+        fastn_type::PropertyValue::Value {
             value: fastn_type::Value::Record { fields, .. },
             ..
         } => fields,
@@ -412,7 +412,7 @@ fn extract_colors(
 ) -> ftd::interpreter::Result<()> {
     if let fastn_type::Value::Record { fields, .. } = color_value {
         if color_value.is_record("ftd#color") {
-            if let Some(ftd::interpreter::PropertyValue::Value {
+            if let Some(fastn_type::PropertyValue::Value {
                 value: fastn_type::Value::String { text: light_value },
                 ..
             }) = fields.get("light")
@@ -425,7 +425,7 @@ fn extract_colors(
                     },
                 );
             }
-            if let Some(ftd::interpreter::PropertyValue::Value {
+            if let Some(fastn_type::PropertyValue::Value {
                 value: fastn_type::Value::String { text: dark_value },
                 ..
             }) = fields.get("dark")

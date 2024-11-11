@@ -10,7 +10,7 @@ pub enum Value {
 #[derive(Debug)]
 pub struct ReferenceData {
     pub name: String,
-    pub value: Option<ftd::interpreter::PropertyValue>,
+    pub value: Option<fastn_type::PropertyValue>,
 }
 
 impl Value {
@@ -173,7 +173,7 @@ impl ftd::interpreter::Expression {
 
         fn update_node_with_variable_reference_js_(
             expr: &fastn_grammar::evalexpr::ExprNode,
-            references: &ftd::Map<ftd::interpreter::PropertyValue>,
+            references: &ftd::Map<fastn_type::PropertyValue>,
             rdata: &ftd::js::ResolverData,
         ) -> fastn_grammar::evalexpr::ExprNode {
             let mut operator = expr.operator().clone();
@@ -190,7 +190,7 @@ impl ftd::interpreter::Expression {
                             identifier: "index".to_string(),
                         }
                     }
-                } else if let Some(ftd::interpreter::PropertyValue::Reference { name, .. }) =
+                } else if let Some(fastn_type::PropertyValue::Reference { name, .. }) =
                     references.get(identifier)
                 {
                     let name = ftd::js::utils::update_reference(name, rdata);
@@ -210,7 +210,7 @@ impl ftd::interpreter::Expression {
     }
 }
 
-impl ftd::interpreter::PropertyValue {
+impl fastn_type::PropertyValue {
     pub(crate) fn get_deps(&self, rdata: &ftd::js::ResolverData) -> Vec<String> {
         let mut deps = vec![];
         if let Some(reference) = self.get_reference_or_clone() {
@@ -301,7 +301,7 @@ pub(crate) fn get_js_value_with_default(
     ftd::js::value::get_optional_js_value(key, properties, arguments).unwrap_or(default)
 }
 
-impl ftd::interpreter::PropertyValue {
+impl fastn_type::PropertyValue {
     pub(crate) fn to_fastn_js_value_with_none(
         &self,
         doc: &ftd::interpreter::TDoc,
@@ -341,19 +341,19 @@ impl ftd::interpreter::PropertyValue {
 
     pub(crate) fn to_value(&self) -> ftd::js::Value {
         match self {
-            ftd::interpreter::PropertyValue::Value { ref value, .. } => {
+            fastn_type::PropertyValue::Value { ref value, .. } => {
                 ftd::js::Value::Data(value.to_owned())
             }
-            ftd::interpreter::PropertyValue::Reference { ref name, .. } => {
+            fastn_type::PropertyValue::Reference { ref name, .. } => {
                 ftd::js::Value::Reference(ReferenceData {
                     name: name.clone().to_string(),
                     value: Some(self.clone()),
                 })
             }
-            ftd::interpreter::PropertyValue::FunctionCall(ref function_call) => {
+            fastn_type::PropertyValue::FunctionCall(ref function_call) => {
                 ftd::js::Value::FunctionCall(function_call.to_owned())
             }
-            ftd::interpreter::PropertyValue::Clone { ref name, .. } => {
+            fastn_type::PropertyValue::Clone { ref name, .. } => {
                 ftd::js::Value::Clone(name.to_owned())
             }
         }
@@ -496,7 +496,7 @@ fn ftd_to_js_variant(
     name: &str,
     variant: &str,
     full_variant: &str,
-    value: &ftd::interpreter::PropertyValue,
+    value: &fastn_type::PropertyValue,
     doc_id: &str,
     line_number: usize,
 ) -> (String, bool) {

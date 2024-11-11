@@ -4,7 +4,7 @@ pub struct Function {
     pub return_kind: fastn_type::KindData,
     pub arguments: Vec<ftd::interpreter::Argument>,
     pub expression: Vec<Expression>,
-    pub js: Option<ftd::interpreter::PropertyValue>,
+    pub js: Option<fastn_type::PropertyValue>,
     pub line_number: usize,
     pub external_implementation: bool,
 }
@@ -15,7 +15,7 @@ impl Function {
         return_kind: fastn_type::KindData,
         arguments: Vec<ftd::interpreter::Argument>,
         expression: Vec<Expression>,
-        js: Option<ftd::interpreter::PropertyValue>,
+        js: Option<fastn_type::PropertyValue>,
         line_number: usize,
     ) -> Function {
         Function {
@@ -59,19 +59,17 @@ impl Function {
         let name = doc.resolve_name(function.name.as_str());
 
         let js = if let Some(ref js) = function.js {
-            Some(try_ok_state!(
-                ftd::interpreter::PropertyValue::from_ast_value(
-                    ftd_ast::VariableValue::String {
-                        value: js.to_string(),
-                        line_number: function.line_number(),
-                        source: ftd_ast::ValueSource::Default,
-                        condition: None
-                    },
-                    doc,
-                    false,
-                    Some(&fastn_type::Kind::string().into_list().into_kind_data()),
-                )?
-            ))
+            Some(try_ok_state!(fastn_type::PropertyValue::from_ast_value(
+                ftd_ast::VariableValue::String {
+                    value: js.to_string(),
+                    line_number: function.line_number(),
+                    source: ftd_ast::ValueSource::Default,
+                    condition: None
+                },
+                doc,
+                false,
+                Some(&fastn_type::Kind::string().into_list().into_kind_data()),
+            )?))
         } else {
             None
         };
@@ -108,7 +106,7 @@ impl Function {
     pub(crate) fn resolve(
         &self,
         _kind: &fastn_type::KindData,
-        values: &ftd::Map<ftd::interpreter::PropertyValue>,
+        values: &ftd::Map<fastn_type::PropertyValue>,
         doc: &ftd::interpreter::TDoc,
         line_number: usize,
     ) -> ftd::interpreter::Result<Option<fastn_type::Value>> {
@@ -192,7 +190,7 @@ impl Function {
                     // TODO: insert new value in doc.bag
                     let _variable = doc.set_value(
                         reference.as_str(),
-                        ftd::interpreter::PropertyValue::Value {
+                        fastn_type::PropertyValue::Value {
                             value,
                             is_mutable: true,
                             line_number,
@@ -230,7 +228,7 @@ impl Function {
 Todo: Convert Expression into
     #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
     pub enum Expression {
-        Value(ftd::interpreter::PropertyValue),
+        Value(fastn_type::PropertyValue),
         Operation(Operation),
     }
     #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -249,7 +247,7 @@ pub struct FunctionCall {
     pub kind: fastn_type::KindData,
     pub is_mutable: bool,
     pub line_number: usize,
-    pub values: ftd::Map<ftd::interpreter::PropertyValue>,
+    pub values: ftd::Map<fastn_type::PropertyValue>,
     pub order: Vec<String>,
     // (Default module, Argument name of module kind)
     pub module_name: Option<(String, String)>,
@@ -261,7 +259,7 @@ impl FunctionCall {
         kind: fastn_type::KindData,
         is_mutable: bool,
         line_number: usize,
-        values: ftd::Map<ftd::interpreter::PropertyValue>,
+        values: ftd::Map<fastn_type::PropertyValue>,
         order: Vec<String>,
         module_name: Option<(String, String)>,
     ) -> FunctionCall {
@@ -307,7 +305,7 @@ impl FunctionCall {
         }
 
         for (_, value) in properties.iter() {
-            ftd::interpreter::PropertyValue::scan_string_with_argument(
+            fastn_type::PropertyValue::scan_string_with_argument(
                 value,
                 doc,
                 line_number,
@@ -350,12 +348,12 @@ impl FunctionCall {
             )?;
 
         let mut module_name = None;
-        let mut source = ftd::interpreter::PropertyValueSource::Global;
+        let mut source = fastn_type::PropertyValueSource::Global;
         if let Some((ref argument, ref function, source_)) = initial_kind_with_remaining_and_source
         {
             source = source_;
             if argument.kind.is_module() {
-                if let Some(ftd::interpreter::PropertyValue::Value {
+                if let Some(fastn_type::PropertyValue::Value {
                     value: fastn_type::Value::Module { ref name, .. },
                     ..
                 }) = argument.value
@@ -393,7 +391,7 @@ impl FunctionCall {
 
         let function =
             try_ok_state!(doc.search_function(resolved_function_name.as_str(), line_number)?);
-        let mut values: ftd::Map<ftd::interpreter::PropertyValue> = Default::default();
+        let mut values: ftd::Map<fastn_type::PropertyValue> = Default::default();
         let mut order = vec![];
 
         for argument in function.arguments.iter() {
@@ -421,30 +419,26 @@ impl FunctionCall {
                         line_number,
                     );
                 }
-                try_ok_state!(
-                    ftd::interpreter::PropertyValue::from_ast_value_with_argument(
-                        ftd_ast::VariableValue::String {
-                            value: property,
-                            line_number,
-                            source: ftd_ast::ValueSource::Default,
-                            condition: None
-                        },
-                        doc,
-                        mutable,
-                        Some(&argument.kind),
-                        definition_name_with_arguments,
-                        loop_object_name_and_kind,
-                    )?
-                )
+                try_ok_state!(fastn_type::PropertyValue::from_ast_value_with_argument(
+                    ftd_ast::VariableValue::String {
+                        value: property,
+                        line_number,
+                        source: ftd_ast::ValueSource::Default,
+                        condition: None
+                    },
+                    doc,
+                    mutable,
+                    Some(&argument.kind),
+                    definition_name_with_arguments,
+                    loop_object_name_and_kind,
+                )?)
             } else {
                 match argument.value {
                     Some(ref value) => value.clone(),
-                    None if argument.kind.is_optional() => {
-                        ftd::interpreter::PropertyValue::new_none(
-                            argument.kind.clone(),
-                            argument.line_number,
-                        )
-                    }
+                    None if argument.kind.is_optional() => fastn_type::PropertyValue::new_none(
+                        argument.kind.clone(),
+                        argument.line_number,
+                    ),
                     _ => {
                         return ftd::interpreter::utils::e2(
                             format!(

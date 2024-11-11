@@ -122,7 +122,7 @@ fn extract_types(
     };
 
     let fields = match &v.value {
-        ftd::interpreter::PropertyValue::Value {
+        fastn_type::PropertyValue::Value {
             value: fastn_type::Value::Record { fields, .. },
             ..
         } => fields,
@@ -249,9 +249,9 @@ fn extract_type_data(
     Ok(())
 }
 
-fn extract_raw_data(property_value: Option<ftd::interpreter::PropertyValue>) -> Option<ValueType> {
+fn extract_raw_data(property_value: Option<fastn_type::PropertyValue>) -> Option<ValueType> {
     return match property_value.as_ref() {
-        Some(ftd::interpreter::PropertyValue::Value { value, .. }) => match value {
+        Some(fastn_type::PropertyValue::Value { value, .. }) => match value {
             fastn_type::Value::String { text } => Some(ValueType {
                 value: text.to_string(),
                 type_: "string".to_string(),
@@ -287,12 +287,12 @@ fn extract_raw_data(property_value: Option<ftd::interpreter::PropertyValue>) -> 
             }
             _ => None,
         },
-        Some(ftd::interpreter::PropertyValue::Reference { name, .. }) => Some(ValueType {
+        Some(fastn_type::PropertyValue::Reference { name, .. }) => Some(ValueType {
             value: name.to_string(),
             type_: "reference".to_string(),
         }),
-        Some(ftd::interpreter::PropertyValue::Clone { .. }) => None,
-        Some(ftd::interpreter::PropertyValue::FunctionCall { .. }) => None,
+        Some(fastn_type::PropertyValue::Clone { .. }) => None,
+        Some(fastn_type::PropertyValue::FunctionCall { .. }) => None,
         None => None,
     };
 }

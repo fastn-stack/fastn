@@ -285,7 +285,7 @@ pub fn get_component_argument_for_reference_and_remaining<'a>(
     Option<(
         &'a mut ftd::interpreter::Argument,
         Option<String>,
-        ftd::interpreter::PropertyValueSource,
+        fastn_type::PropertyValueSource,
     )>,
 > {
     let (component_name, arguments) =
@@ -309,7 +309,7 @@ pub fn get_component_argument_for_reference_and_remaining<'a>(
         Ok(Some((
             argument,
             p2,
-            ftd::interpreter::PropertyValueSource::Local(component_name.to_string()),
+            fastn_type::PropertyValueSource::Local(component_name.to_string()),
         )))
     } else {
         ftd::interpreter::utils::e2(
@@ -330,7 +330,7 @@ pub fn get_argument_for_reference_and_remaining(
     Option<(
         ftd::interpreter::Argument,
         Option<String>,
-        ftd::interpreter::PropertyValueSource,
+        fastn_type::PropertyValueSource,
     )>,
 > {
     if let Some((component_name, arguments)) = component_definition_name_with_arguments {
@@ -343,7 +343,7 @@ pub fn get_argument_for_reference_and_remaining(
                 Ok(Some((
                     argument.to_owned(),
                     p2,
-                    ftd::interpreter::PropertyValueSource::Local(component_name.to_string()),
+                    fastn_type::PropertyValueSource::Local(component_name.to_string()),
                 )))
             } else {
                 ftd::interpreter::utils::e2(
@@ -365,7 +365,7 @@ pub fn get_argument_for_reference_and_remaining(
             return Ok(Some((
                 loop_argument.to_owned(),
                 p2,
-                ftd::interpreter::PropertyValueSource::Loop(loop_name.to_string()),
+                fastn_type::PropertyValueSource::Loop(loop_name.to_string()),
             )));
         }
         if name.starts_with(format!("{}#{}", doc.name, ftd::interpreter::FTD_LOOP_COUNTER).as_str())
@@ -376,7 +376,7 @@ pub fn get_argument_for_reference_and_remaining(
                     fastn_type::Kind::integer().into_optional().into_kind_data(),
                 ),
                 None,
-                ftd::interpreter::PropertyValueSource::Loop(loop_name.to_string()),
+                fastn_type::PropertyValueSource::Loop(loop_name.to_string()),
             )));
         }
 
@@ -388,7 +388,7 @@ pub fn get_argument_for_reference_and_remaining(
                         fastn_type::Kind::integer().into_optional().into_kind_data(),
                     ),
                     None,
-                    ftd::interpreter::PropertyValueSource::Loop(loop_name.to_string()),
+                    fastn_type::PropertyValueSource::Loop(loop_name.to_string()),
                 )));
             }
         }
@@ -420,10 +420,10 @@ pub fn validate_variable(
 }
 
 pub fn validate_record_value(
-    value: &ftd::interpreter::PropertyValue,
+    value: &fastn_type::PropertyValue,
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::interpreter::Result<()> {
-    if let ftd::interpreter::PropertyValue::Value { value, .. } = value {
+    if let fastn_type::PropertyValue::Value { value, .. } = value {
         if let Some(fastn_type::Value::Record { fields, .. }) = value.ref_inner() {
             validate_fields(fields.values().collect(), doc)?;
         }
@@ -431,7 +431,7 @@ pub fn validate_record_value(
     return Ok(());
 
     fn validate_fields(
-        fields: Vec<&ftd::interpreter::PropertyValue>,
+        fields: Vec<&fastn_type::PropertyValue>,
         doc: &ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         for value in fields.iter() {
@@ -441,7 +441,7 @@ pub fn validate_record_value(
                 ), doc.name, value.line_number());
             }
 
-            if let ftd::interpreter::PropertyValue::Value { value, .. } = value {
+            if let fastn_type::PropertyValue::Value { value, .. } = value {
                 match value.ref_inner() {
                     Some(fastn_type::Value::Record { fields, .. }) => {
                         validate_fields(fields.values().collect(), doc)?;
@@ -461,7 +461,7 @@ pub fn validate_record_value(
 }
 
 pub fn validate_property_value_for_mutable(
-    value: &ftd::interpreter::PropertyValue,
+    value: &fastn_type::PropertyValue,
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::interpreter::Result<()> {
     if let Some(name) = value.reference_name() {
@@ -514,8 +514,8 @@ pub(crate) fn get_value(
         let mut list_data = vec![];
         for val in data.iter() {
             let value = match val {
-                ftd::interpreter::PropertyValue::Value { value, .. } => value.to_owned(),
-                ftd::interpreter::PropertyValue::Reference { name, kind, .. } => doc
+                fastn_type::PropertyValue::Value { value, .. } => value.to_owned(),
+                fastn_type::PropertyValue::Reference { name, kind, .. } => doc
                     .resolve_with_inherited(
                         name.as_str(),
                         kind,
@@ -834,7 +834,7 @@ pub(crate) fn validate_properties_and_set_default(
                 }
             };
 
-            if let ftd::interpreter::PropertyValue::Value {
+            if let fastn_type::PropertyValue::Value {
                 value: fastn_type::Value::Module { things, .. },
                 ..
             } = &mut property.value

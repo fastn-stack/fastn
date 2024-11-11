@@ -168,7 +168,7 @@ impl TDoc<'_> {
             (default.0, default.1, false)
         } else {
             (
-                ftd::interpreter::PropertyValue::Value {
+                fastn_type::PropertyValue::Value {
                     value: fastn_type::Value::Optional {
                         data: Box::new(None),
                         kind: argument.kind.to_owned(),
@@ -257,18 +257,15 @@ impl TDoc<'_> {
     }
 }
 
-fn get_self_reference(
-    default: &ftd::interpreter::PropertyValue,
-    component_name: &str,
-) -> Vec<String> {
+fn get_self_reference(default: &fastn_type::PropertyValue, component_name: &str) -> Vec<String> {
     match default {
-        ftd::interpreter::PropertyValue::Reference { name, .. }
-        | ftd::interpreter::PropertyValue::Clone { name, .. }
+        fastn_type::PropertyValue::Reference { name, .. }
+        | fastn_type::PropertyValue::Clone { name, .. }
             if name.starts_with(format!("{}.", component_name).as_str()) =>
         {
             vec![name.to_string()]
         }
-        ftd::interpreter::PropertyValue::FunctionCall(f) => {
+        fastn_type::PropertyValue::FunctionCall(f) => {
             let mut self_reference = vec![];
             for arguments in f.values.values() {
                 self_reference.extend(get_self_reference(arguments, component_name));
@@ -279,13 +276,13 @@ fn get_self_reference(
     }
 }
 
-fn set_reference_name(default: &mut ftd::interpreter::PropertyValue, values: &ftd::Map<String>) {
+fn set_reference_name(default: &mut fastn_type::PropertyValue, values: &ftd::Map<String>) {
     match default {
-        ftd::interpreter::PropertyValue::Reference { name, .. }
-        | ftd::interpreter::PropertyValue::Clone { name, .. } => {
+        fastn_type::PropertyValue::Reference { name, .. }
+        | fastn_type::PropertyValue::Clone { name, .. } => {
             *name = values.get(name).unwrap().to_string();
         }
-        ftd::interpreter::PropertyValue::FunctionCall(f) => {
+        fastn_type::PropertyValue::FunctionCall(f) => {
             for arguments in f.values.values_mut() {
                 set_reference_name(arguments, values);
             }

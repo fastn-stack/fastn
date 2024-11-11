@@ -22,7 +22,7 @@ impl Default for Length {
 
 impl Length {
     fn from_optional_values(
-        or_type_value: Option<(String, ftd::interpreter::PropertyValue)>,
+        or_type_value: Option<(String, fastn_type::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Length>> {
@@ -34,7 +34,7 @@ impl Length {
     }
 
     fn from_value(
-        value: ftd::interpreter::PropertyValue,
+        value: fastn_type::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Length> {
@@ -45,7 +45,7 @@ impl Length {
     }
 
     fn from_optional_value(
-        or_type_value: Option<ftd::interpreter::PropertyValue>,
+        or_type_value: Option<fastn_type::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Length>> {
@@ -62,7 +62,7 @@ impl Length {
     }
 
     fn from_values(
-        or_type_value: (String, ftd::interpreter::PropertyValue),
+        or_type_value: (String, fastn_type::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Length> {
@@ -266,7 +266,7 @@ pub struct LengthPair {
 
 impl LengthPair {
     fn from_value(
-        value: ftd::interpreter::PropertyValue,
+        value: fastn_type::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<LengthPair> {
@@ -295,7 +295,7 @@ impl LengthPair {
     }
 
     fn from_values(
-        values: ftd::Map<ftd::interpreter::PropertyValue>,
+        values: ftd::Map<fastn_type::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<LengthPair> {
@@ -337,7 +337,7 @@ pub struct ResponsiveLength {
 
 impl ResponsiveLength {
     fn from_value(
-        value: ftd::interpreter::PropertyValue,
+        value: fastn_type::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ResponsiveLength> {
@@ -364,7 +364,7 @@ impl ResponsiveLength {
     }
 
     fn from_values(
-        values: ftd::Map<ftd::interpreter::PropertyValue>,
+        values: ftd::Map<fastn_type::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ResponsiveLength> {
@@ -398,7 +398,7 @@ pub struct BreakpointWidth {
 
 impl BreakpointWidth {
     fn from_optional_values(
-        or_type_value: Option<ftd::Map<ftd::interpreter::PropertyValue>>,
+        or_type_value: Option<ftd::Map<fastn_type::PropertyValue>>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<ftd::executor::BreakpointWidth>> {
@@ -445,7 +445,7 @@ impl BreakpointWidth {
     }
 
     fn from_values(
-        values: ftd::Map<ftd::interpreter::PropertyValue>,
+        values: ftd::Map<fastn_type::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<BreakpointWidth> {
@@ -493,7 +493,7 @@ pub enum Alignment {
 
 impl Alignment {
     fn from_optional_values(
-        or_type_value: Option<(String, ftd::interpreter::PropertyValue)>,
+        or_type_value: Option<(String, fastn_type::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -505,7 +505,7 @@ impl Alignment {
     }
 
     fn from_values(
-        or_type_value: (String, ftd::interpreter::PropertyValue),
+        or_type_value: (String, fastn_type::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -727,7 +727,7 @@ pub enum Resizing {
 
 impl Resizing {
     fn from_optional_values(
-        or_type_value: Option<(String, ftd::interpreter::PropertyValue)>,
+        or_type_value: Option<(String, fastn_type::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -739,7 +739,7 @@ impl Resizing {
     }
 
     fn from_values(
-        or_type_value: (String, ftd::interpreter::PropertyValue),
+        or_type_value: (String, fastn_type::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -889,7 +889,7 @@ pub struct BackgroundImage {
 
 impl BackgroundImage {
     fn from_value(
-        value: ftd::interpreter::PropertyValue,
+        value: fastn_type::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::BackgroundImage> {
@@ -916,7 +916,7 @@ impl BackgroundImage {
     }
 
     fn from_values(
-        values: ftd::Map<ftd::interpreter::PropertyValue>,
+        values: ftd::Map<fastn_type::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::BackgroundImage> {
@@ -1018,7 +1018,7 @@ pub struct LinearGradientColor {
 
 impl LinearGradientColor {
     fn from_vec_values(
-        value: ftd::interpreter::PropertyValue,
+        value: fastn_type::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Vec<LinearGradientColor>> {
@@ -1056,7 +1056,7 @@ impl LinearGradientColor {
     }
 
     fn from_value(
-        value: ftd::interpreter::PropertyValue,
+        value: fastn_type::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<LinearGradientColor> {
@@ -1083,7 +1083,7 @@ impl LinearGradientColor {
     }
 
     fn from_values(
-        values: ftd::Map<ftd::interpreter::PropertyValue>,
+        values: ftd::Map<fastn_type::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<LinearGradientColor> {
@@ -1178,7 +1178,7 @@ pub enum LinearGradientDirection {
 
 impl LinearGradientDirection {
     fn from_value(
-        value: ftd::interpreter::PropertyValue,
+        value: fastn_type::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<LinearGradientDirection> {
@@ -1189,7 +1189,7 @@ impl LinearGradientDirection {
     }
 
     fn from_values(
-        or_type_value: (String, ftd::interpreter::PropertyValue),
+        or_type_value: (String, fastn_type::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -1272,7 +1272,7 @@ pub struct LinearGradient {
 
 impl LinearGradient {
     fn from_value(
-        value: ftd::interpreter::PropertyValue,
+        value: fastn_type::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::LinearGradient> {
@@ -1299,7 +1299,7 @@ impl LinearGradient {
     }
 
     fn from_values(
-        values: ftd::Map<ftd::interpreter::PropertyValue>,
+        values: ftd::Map<fastn_type::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::LinearGradient> {
@@ -1360,7 +1360,7 @@ pub enum Background {
 
 impl Background {
     fn from_optional_values(
-        or_type_value: Option<(String, ftd::interpreter::PropertyValue)>,
+        or_type_value: Option<(String, fastn_type::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -1376,7 +1376,7 @@ impl Background {
     }
 
     fn from_values(
-        or_type_value: (String, ftd::interpreter::PropertyValue),
+        or_type_value: (String, fastn_type::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -1523,7 +1523,7 @@ pub enum BackgroundRepeat {
 
 impl BackgroundRepeat {
     fn from_optional_value(
-        value: ftd::interpreter::PropertyValue,
+        value: fastn_type::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<ftd::executor::BackgroundRepeat>> {
@@ -1544,7 +1544,7 @@ impl BackgroundRepeat {
     }
 
     fn from_values(
-        or_type_value: (String, ftd::interpreter::PropertyValue),
+        or_type_value: (String, fastn_type::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::BackgroundRepeat> {
@@ -1600,7 +1600,7 @@ pub enum BackgroundSize {
 
 impl BackgroundSize {
     fn from_optional_value(
-        value: ftd::interpreter::PropertyValue,
+        value: fastn_type::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<ftd::executor::BackgroundSize>> {
@@ -1621,7 +1621,7 @@ impl BackgroundSize {
     }
 
     fn from_values(
-        or_type_value: (String, ftd::interpreter::PropertyValue),
+        or_type_value: (String, fastn_type::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::BackgroundSize> {
@@ -1673,7 +1673,7 @@ pub enum BackgroundPosition {
 
 impl BackgroundPosition {
     fn from_optional_value(
-        value: ftd::interpreter::PropertyValue,
+        value: fastn_type::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<ftd::executor::BackgroundPosition>> {
@@ -1694,7 +1694,7 @@ impl BackgroundPosition {
     }
 
     fn from_values(
-        or_type_value: (String, ftd::interpreter::PropertyValue),
+        or_type_value: (String, fastn_type::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::BackgroundPosition> {
@@ -1782,7 +1782,7 @@ pub struct Shadow {
 
 impl Shadow {
     fn from_values(
-        values: ftd::Map<ftd::interpreter::PropertyValue>,
+        values: ftd::Map<fastn_type::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::Shadow> {
@@ -1852,7 +1852,7 @@ impl Shadow {
     }
 
     fn from_optional_values(
-        or_type_value: Option<ftd::Map<ftd::interpreter::PropertyValue>>,
+        or_type_value: Option<ftd::Map<fastn_type::PropertyValue>>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<ftd::executor::Shadow>> {
@@ -1927,7 +1927,7 @@ pub struct Color {
 
 impl Color {
     fn from_value(
-        value: ftd::interpreter::PropertyValue,
+        value: fastn_type::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Color> {
@@ -1954,7 +1954,7 @@ impl Color {
     }
 
     fn from_values(
-        values: ftd::Map<ftd::interpreter::PropertyValue>,
+        values: ftd::Map<fastn_type::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Color> {
@@ -2003,7 +2003,7 @@ impl Color {
     }
 
     fn from_optional_values(
-        or_type_value: Option<ftd::Map<ftd::interpreter::PropertyValue>>,
+        or_type_value: Option<ftd::Map<fastn_type::PropertyValue>>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Color>> {
@@ -2150,7 +2150,7 @@ pub enum Spacing {
 
 impl Spacing {
     fn from_optional_values(
-        or_type_value: Option<(String, ftd::interpreter::PropertyValue)>,
+        or_type_value: Option<(String, fastn_type::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -2162,7 +2162,7 @@ impl Spacing {
     }
 
     fn from_values(
-        or_type_value: (String, ftd::interpreter::PropertyValue),
+        or_type_value: (String, fastn_type::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -2263,7 +2263,7 @@ pub enum AlignSelf {
 
 impl AlignSelf {
     fn from_optional_values(
-        or_type_value: Option<(String, ftd::interpreter::PropertyValue)>,
+        or_type_value: Option<(String, fastn_type::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -2275,7 +2275,7 @@ impl AlignSelf {
     }
 
     fn from_values(
-        or_type_value: (String, ftd::interpreter::PropertyValue),
+        or_type_value: (String, fastn_type::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -2337,7 +2337,7 @@ pub enum Overflow {
 
 impl Overflow {
     fn from_optional_values(
-        or_type_value: Option<(String, ftd::interpreter::PropertyValue)>,
+        or_type_value: Option<(String, fastn_type::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -2349,7 +2349,7 @@ impl Overflow {
     }
 
     fn from_values(
-        or_type_value: (String, ftd::interpreter::PropertyValue),
+        or_type_value: (String, fastn_type::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -2412,7 +2412,7 @@ pub enum Resize {
 
 impl Resize {
     fn from_optional_values(
-        or_type_value: Option<(String, ftd::interpreter::PropertyValue)>,
+        or_type_value: Option<(String, fastn_type::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -2424,7 +2424,7 @@ impl Resize {
     }
 
     fn from_values(
-        or_type_value: (String, ftd::interpreter::PropertyValue),
+        or_type_value: (String, fastn_type::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -2486,7 +2486,7 @@ pub enum TextAlign {
 
 impl TextAlign {
     fn from_optional_values(
-        or_type_value: Option<(String, ftd::interpreter::PropertyValue)>,
+        or_type_value: Option<(String, fastn_type::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -2498,7 +2498,7 @@ impl TextAlign {
     }
 
     fn from_values(
-        or_type_value: (String, ftd::interpreter::PropertyValue),
+        or_type_value: (String, fastn_type::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -2593,7 +2593,7 @@ pub enum Cursor {
 
 impl Cursor {
     fn from_optional_values(
-        or_type_value: Option<(String, ftd::interpreter::PropertyValue)>,
+        or_type_value: Option<(String, fastn_type::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -2605,7 +2605,7 @@ impl Cursor {
     }
 
     fn from_values(
-        or_type_value: (String, ftd::interpreter::PropertyValue),
+        or_type_value: (String, fastn_type::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -2736,7 +2736,7 @@ impl Default for FontSize {
 
 impl FontSize {
     fn from_optional_value(
-        value: ftd::interpreter::PropertyValue,
+        value: fastn_type::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<FontSize>> {
@@ -2766,7 +2766,7 @@ impl FontSize {
     }
 
     fn from_values(
-        or_type_value: (String, ftd::interpreter::PropertyValue),
+        or_type_value: (String, fastn_type::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -2888,7 +2888,7 @@ impl Type {
     }
 
     fn from_value(
-        value: ftd::interpreter::PropertyValue,
+        value: fastn_type::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Type> {
@@ -2915,7 +2915,7 @@ impl Type {
     }
 
     fn from_values(
-        values: ftd::Map<ftd::interpreter::PropertyValue>,
+        values: ftd::Map<fastn_type::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Type> {
@@ -2985,7 +2985,7 @@ pub struct ResponsiveType {
 
 impl ResponsiveType {
     fn from_values(
-        values: ftd::Map<ftd::interpreter::PropertyValue>,
+        values: ftd::Map<fastn_type::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ResponsiveType> {
@@ -3012,7 +3012,7 @@ impl ResponsiveType {
     }
 
     fn from_optional_values(
-        or_type_value: Option<ftd::Map<ftd::interpreter::PropertyValue>>,
+        or_type_value: Option<ftd::Map<fastn_type::PropertyValue>>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -3129,7 +3129,7 @@ pub enum Anchor {
 
 impl Anchor {
     fn from_optional_values(
-        or_type_value: Option<(String, ftd::interpreter::PropertyValue)>,
+        or_type_value: Option<(String, fastn_type::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -3141,7 +3141,7 @@ impl Anchor {
     }
 
     fn from_values(
-        or_type_value: (String, ftd::interpreter::PropertyValue),
+        or_type_value: (String, fastn_type::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -3216,7 +3216,7 @@ pub enum TextInputType {
 
 impl TextInputType {
     fn from_optional_values(
-        or_type_value: Option<(String, ftd::interpreter::PropertyValue)>,
+        or_type_value: Option<(String, fastn_type::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -3228,7 +3228,7 @@ impl TextInputType {
     }
 
     fn from_values(
-        or_type_value: (String, ftd::interpreter::PropertyValue),
+        or_type_value: (String, fastn_type::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -3308,7 +3308,7 @@ pub enum Region {
 
 impl Region {
     fn from_optional_values(
-        or_type_value: Option<(String, ftd::interpreter::PropertyValue)>,
+        or_type_value: Option<(String, fastn_type::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -3320,7 +3320,7 @@ impl Region {
     }
 
     fn from_values(
-        or_type_value: (String, ftd::interpreter::PropertyValue),
+        or_type_value: (String, fastn_type::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -3396,7 +3396,7 @@ pub enum WhiteSpace {
 
 impl WhiteSpace {
     fn from_optional_values(
-        or_type_value: Option<(String, ftd::interpreter::PropertyValue)>,
+        or_type_value: Option<(String, fastn_type::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -3408,7 +3408,7 @@ impl WhiteSpace {
     }
 
     fn from_values(
-        or_type_value: (String, ftd::interpreter::PropertyValue),
+        or_type_value: (String, fastn_type::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -3475,7 +3475,7 @@ pub enum Display {
 
 impl Display {
     fn from_optional_values(
-        or_type_value: Option<(String, ftd::interpreter::PropertyValue)>,
+        or_type_value: Option<(String, fastn_type::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<ftd::executor::Display>> {
@@ -3491,7 +3491,7 @@ impl Display {
     }
 
     fn from_values(
-        or_type_value: (String, ftd::interpreter::PropertyValue),
+        or_type_value: (String, fastn_type::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::Display> {
@@ -3638,7 +3638,7 @@ impl TextStyle {
     }
 
     fn from_optional_values(
-        or_type_value: Option<Vec<(String, ftd::interpreter::PropertyValue)>>,
+        or_type_value: Option<Vec<(String, fastn_type::PropertyValue)>>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -3650,7 +3650,7 @@ impl TextStyle {
     }
 
     fn from_values(
-        or_type_values: Vec<(String, ftd::interpreter::PropertyValue)>,
+        or_type_values: Vec<(String, fastn_type::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -3916,7 +3916,7 @@ pub enum TextTransform {
 
 impl TextTransform {
     fn from_optional_values(
-        or_type_value: Option<(String, ftd::interpreter::PropertyValue)>,
+        or_type_value: Option<(String, fastn_type::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -3928,7 +3928,7 @@ impl TextTransform {
     }
 
     fn from_values(
-        or_type_value: (String, ftd::interpreter::PropertyValue),
+        or_type_value: (String, fastn_type::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -4000,7 +4000,7 @@ pub enum BorderStyle {
 
 impl BorderStyle {
     fn from_optional_values(
-        or_type_value: Option<(String, ftd::interpreter::PropertyValue)>,
+        or_type_value: Option<(String, fastn_type::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -4011,7 +4011,7 @@ impl BorderStyle {
     }
 
     fn from_values(
-        or_type_value: (String, ftd::interpreter::PropertyValue),
+        or_type_value: (String, fastn_type::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -4084,7 +4084,7 @@ pub enum ImageFit {
 
 impl ImageFit {
     fn from_optional_values(
-        or_type_value: Option<(String, ftd::interpreter::PropertyValue)>,
+        or_type_value: Option<(String, fastn_type::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -4095,7 +4095,7 @@ impl ImageFit {
     }
 
     fn from_values(
-        or_type_value: (String, ftd::interpreter::PropertyValue),
+        or_type_value: (String, fastn_type::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -4162,7 +4162,7 @@ pub enum Loading {
 
 impl Loading {
     fn from_optional_values(
-        or_type_value: Option<(String, ftd::interpreter::PropertyValue)>,
+        or_type_value: Option<(String, fastn_type::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -4174,7 +4174,7 @@ impl Loading {
     }
 
     fn from_values(
-        or_type_value: (String, ftd::interpreter::PropertyValue),
+        or_type_value: (String, fastn_type::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {

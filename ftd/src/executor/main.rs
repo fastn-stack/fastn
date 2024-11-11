@@ -131,12 +131,12 @@ impl ExecuteDoc<'_> {
         let breakpoint_width_from_bag = bag.get_mut(ftd::interpreter::FTD_BREAKPOINT_WIDTH);
 
         if let Some(ftd::interpreter::Thing::Variable(v)) = breakpoint_width_from_bag {
-            v.value = ftd::interpreter::PropertyValue::Value {
+            v.value = fastn_type::PropertyValue::Value {
                 value: fastn_type::Value::Record {
                     name: ftd::interpreter::FTD_BREAKPOINT_WIDTH_DATA.to_string(),
                     fields: std::iter::IntoIterator::into_iter([(
                         "mobile".to_string(),
-                        ftd::interpreter::PropertyValue::Value {
+                        fastn_type::PropertyValue::Value {
                             value: fastn_type::Value::Integer {
                                 value: breakpoint_width,
                             },
@@ -231,16 +231,16 @@ impl ExecuteDoc<'_> {
             true,
         )?;
 
-        let mut properties: ftd::Map<ftd::interpreter::PropertyValue> = Default::default();
+        let mut properties: ftd::Map<fastn_type::PropertyValue> = Default::default();
 
         for argument in web_component_definition.arguments.as_slice() {
             let property_value = if let Some(local_variable) = local_variable_map
                 .get(format!("{}.{}", instruction.name, argument.name.as_str()).as_str())
             {
-                ftd::interpreter::PropertyValue::Reference {
+                fastn_type::PropertyValue::Reference {
                     name: local_variable.to_string(),
                     kind: argument.kind.to_owned(),
-                    source: ftd::interpreter::PropertyValueSource::Global,
+                    source: fastn_type::PropertyValueSource::Global,
                     is_mutable: argument.mutable,
                     line_number: instruction.line_number,
                 }
@@ -1087,10 +1087,10 @@ impl Device {
 
             condition.references.insert(
                 "ftd.device".to_string(),
-                ftd::interpreter::PropertyValue::Reference {
+                fastn_type::PropertyValue::Reference {
                     name: "ftd#device".to_string(),
                     kind: fastn_type::Kind::record("ftd#device-data").into_kind_data(),
-                    source: ftd::interpreter::PropertyValueSource::Global,
+                    source: fastn_type::PropertyValueSource::Global,
                     is_mutable: false,
                     line_number,
                 },
@@ -1104,10 +1104,10 @@ impl Device {
                 expression,
                 references: std::iter::IntoIterator::into_iter([(
                     "ftd.device".to_string(),
-                    ftd::interpreter::PropertyValue::Reference {
+                    fastn_type::PropertyValue::Reference {
                         name: "ftd#device".to_string(),
                         kind: fastn_type::Kind::record("ftd#device-data").into_kind_data(),
-                        source: ftd::interpreter::PropertyValueSource::Global,
+                        source: fastn_type::PropertyValueSource::Global,
                         is_mutable: false,
                         line_number,
                     },

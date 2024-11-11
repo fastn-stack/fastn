@@ -111,7 +111,7 @@ pub struct Field {
     pub name: String,
     pub kind: fastn_type::KindData,
     pub mutable: bool,
-    pub value: Option<ftd::interpreter::PropertyValue>,
+    pub value: Option<fastn_type::PropertyValue>,
     pub line_number: usize,
     pub access_modifier: ftd_p1::AccessModifier,
 }
@@ -121,7 +121,7 @@ impl Field {
         name: &str,
         kind: fastn_type::KindData,
         mutable: bool,
-        value: Option<ftd::interpreter::PropertyValue>,
+        value: Option<fastn_type::PropertyValue>,
         line_number: usize,
     ) -> Field {
         Field {
@@ -137,7 +137,7 @@ impl Field {
     pub(crate) fn get_default_interpreter_property_value(
         &self,
         properties: &[ftd::interpreter::Property],
-    ) -> ftd::interpreter::Result<Option<ftd::interpreter::PropertyValue>> {
+    ) -> ftd::interpreter::Result<Option<fastn_type::PropertyValue>> {
         let sources = self.to_sources();
         let properties = ftd::interpreter::utils::find_properties_by_source(
             sources.as_slice(),
@@ -202,7 +202,7 @@ impl Field {
     pub fn default_with_value(
         name: &str,
         kind: fastn_type::KindData,
-        value: ftd::interpreter::PropertyValue,
+        value: fastn_type::PropertyValue,
     ) -> Field {
         Field {
             name: name.to_string(),
@@ -259,7 +259,7 @@ impl Field {
         for (field, value) in fields_with_resolved_kinds.iter_mut() {
             let value = if let Some(value) = value {
                 Some(try_ok_state!(
-                    ftd::interpreter::PropertyValue::from_ast_value_with_argument(
+                    fastn_type::PropertyValue::from_ast_value_with_argument(
                         value.to_owned(),
                         doc,
                         field.mutable,
@@ -312,7 +312,7 @@ impl Field {
         fastn_type::KindData::scan_ast_kind(field.kind, known_kinds, doc, field.line_number)?;
 
         if let Some(value) = field.value {
-            ftd::interpreter::PropertyValue::scan_ast_value(value, doc)?;
+            fastn_type::PropertyValue::scan_ast_value(value, doc)?;
         }
 
         Ok(())
@@ -333,14 +333,12 @@ impl Field {
         )?);
 
         let value = if let Some(value) = field.value {
-            Some(try_ok_state!(
-                ftd::interpreter::PropertyValue::from_ast_value(
-                    value,
-                    doc,
-                    field.mutable,
-                    Some(&kind),
-                )?
-            ))
+            Some(try_ok_state!(fastn_type::PropertyValue::from_ast_value(
+                value,
+                doc,
+                field.mutable,
+                Some(&kind),
+            )?))
         } else {
             None
         };

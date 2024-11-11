@@ -990,7 +990,7 @@ fn dependency_map_from_condition(
 
 fn dependency_map_from_property_value(
     var_dependencies: &mut ftd::VecMap<String>,
-    property_value: &ftd::interpreter::PropertyValue,
+    property_value: &fastn_type::PropertyValue,
     node_change_id: &str,
     doc: &ftd::interpreter::TDoc,
 ) {
@@ -1001,14 +1001,14 @@ fn dependency_map_from_property_value(
 }
 
 fn is_static_expression(
-    property_value: &ftd::interpreter::PropertyValue,
+    property_value: &fastn_type::PropertyValue,
     condition: &Option<String>,
     doc: &ftd::interpreter::TDoc,
 ) -> bool {
     use ftd::html::fastn_type_functions::KindExt;
 
     if property_value.kind().is_ftd_length() {
-        if let ftd::interpreter::PropertyValue::Value {
+        if let fastn_type::PropertyValue::Value {
             value, line_number, ..
         } = property_value
         {
@@ -1023,13 +1023,13 @@ fn is_static_expression(
     }
 
     if property_value.kind().is_ftd_resizing() {
-        if let ftd::interpreter::PropertyValue::Value {
+        if let fastn_type::PropertyValue::Value {
             value, line_number, ..
         } = property_value
         {
             let property_value = value.get_or_type(doc.name, *line_number).unwrap().2;
             if property_value.kind().is_ftd_length() {
-                if let ftd::interpreter::PropertyValue::Value {
+                if let fastn_type::PropertyValue::Value {
                     value, line_number, ..
                 } = property_value
                 {
@@ -1046,7 +1046,7 @@ fn is_static_expression(
     }
 
     if property_value.kind().is_ftd_image_src() || property_value.kind().is_ftd_color() {
-        if let ftd::interpreter::PropertyValue::Value {
+        if let fastn_type::PropertyValue::Value {
             value, line_number, ..
         } = property_value
         {

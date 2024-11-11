@@ -1355,7 +1355,7 @@ impl Document {
 
     fn object_to_json(
         &self,
-        fields: &ftd::Map<ftd::interpreter::PropertyValue>,
+        fields: &ftd::Map<fastn_type::PropertyValue>,
     ) -> ftd::interpreter::Result<serde_json::Value> {
         let mut map = serde_json::Map::new();
         for (k, v) in fields.iter() {
@@ -1366,7 +1366,7 @@ impl Document {
 
     fn property_value_to_json(
         &self,
-        v: &ftd::interpreter::PropertyValue,
+        v: &fastn_type::PropertyValue,
     ) -> ftd::interpreter::Result<serde_json::Value> {
         self.value_to_json(&v.clone().resolve(&self.tdoc(), v.line_number())?)
     }

@@ -101,7 +101,7 @@ pub struct IterativeElement {
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct WebComponent {
     pub name: String,
-    pub properties: ftd::Map<ftd::interpreter::PropertyValue>,
+    pub properties: ftd::Map<fastn_type::PropertyValue>,
     pub device: Option<ftd::executor::Device>,
     pub line_number: usize,
 }
@@ -238,7 +238,7 @@ impl ImageSrc {
     }
 
     fn from_optional_values(
-        or_type_value: Option<ftd::Map<ftd::interpreter::PropertyValue>>,
+        or_type_value: Option<ftd::Map<fastn_type::PropertyValue>>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<ImageSrc>> {
@@ -250,7 +250,7 @@ impl ImageSrc {
     }
 
     pub(crate) fn from_value(
-        value: ftd::interpreter::PropertyValue,
+        value: fastn_type::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ImageSrc> {
@@ -277,7 +277,7 @@ impl ImageSrc {
     }
 
     fn from_values(
-        values: ftd::Map<ftd::interpreter::PropertyValue>,
+        values: ftd::Map<fastn_type::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ImageSrc> {
@@ -367,7 +367,7 @@ impl RawImage {
     }
 
     fn from_optional_values(
-        or_type_value: Option<ftd::Map<ftd::interpreter::PropertyValue>>,
+        or_type_value: Option<ftd::Map<fastn_type::PropertyValue>>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<RawImage>> {
@@ -379,7 +379,7 @@ impl RawImage {
     }
 
     fn from_values(
-        values: ftd::Map<ftd::interpreter::PropertyValue>,
+        values: ftd::Map<fastn_type::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<RawImage> {

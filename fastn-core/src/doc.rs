@@ -487,7 +487,7 @@ pub async fn resolve_foreign_variable2022(
                     fields: std::array::IntoIter::new([
                         (
                             "light".to_string(),
-                            ftd::interpreter::PropertyValue::Value {
+                            fastn_type::PropertyValue::Value {
                                 value: fastn_type::Value::String { text: light_mode },
                                 is_mutable: false,
                                 line_number: 0,
@@ -495,7 +495,7 @@ pub async fn resolve_foreign_variable2022(
                         ),
                         (
                             "dark".to_string(),
-                            ftd::interpreter::PropertyValue::Value {
+                            fastn_type::PropertyValue::Value {
                                 value: fastn_type::Value::String { text: dark_mode },
                                 is_mutable: false,
                                 line_number: 0,

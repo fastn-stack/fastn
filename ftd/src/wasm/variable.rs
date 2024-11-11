@@ -7,7 +7,7 @@ impl ftd::interpreter::Variable {
     // )
     pub fn global_expression(&self, idx: usize) -> fastn_wasm::Expression {
         let create = match &self.value {
-            ftd::interpreter::PropertyValue::Value { value, .. } => value.create(),
+            fastn_type::PropertyValue::Value { value, .. } => value.create(),
             _ => panic!("Not implemented: {:?}", self),
         };
 

@@ -42,14 +42,12 @@ impl ftd::html::Action {
     }
 
     fn from_property_value(
-        value: &ftd::interpreter::PropertyValue,
+        value: &fastn_type::PropertyValue,
         doc: &ftd::interpreter::TDoc,
     ) -> ftd::html::Result<serde_json::Value> {
         Ok(match value {
-            ftd::interpreter::PropertyValue::Value { value, .. } => {
-                ftd::html::Action::from_value(value)
-            }
-            ftd::interpreter::PropertyValue::Reference {
+            fastn_type::PropertyValue::Value { value, .. } => ftd::html::Action::from_value(value),
+            fastn_type::PropertyValue::Reference {
                 name, is_mutable, ..
             } => {
                 serde_json::json!({
@@ -57,11 +55,11 @@ impl ftd::html::Action {
                     "mutable": is_mutable
                 })
             }
-            t @ ftd::interpreter::PropertyValue::Clone { line_number, .. } => {
+            t @ fastn_type::PropertyValue::Clone { line_number, .. } => {
                 let value = t.clone().resolve(doc, *line_number)?;
                 ftd::html::Action::from_value(&value)
             }
-            ftd::interpreter::PropertyValue::FunctionCall(fnc) => unimplemented!("{:?}", fnc),
+            fastn_type::PropertyValue::FunctionCall(fnc) => unimplemented!("{:?}", fnc),
         })
     }
 

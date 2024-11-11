@@ -825,7 +825,7 @@ fn update_cookies(
 
 fn get_value_ok(
     key: &str,
-    property_values: &ftd::Map<ftd::interpreter::PropertyValue>,
+    property_values: &ftd::Map<fastn_type::PropertyValue>,
     line_number: usize,
 ) -> fastn_core::Result<fastn_type::Value> {
     get_value(key, property_values).ok_or(fastn_core::Error::NotFound(format!(
@@ -836,22 +836,22 @@ fn get_value_ok(
 
 fn get_value(
     key: &str,
-    property_values: &ftd::Map<ftd::interpreter::PropertyValue>,
+    property_values: &ftd::Map<fastn_type::PropertyValue>,
 ) -> Option<fastn_type::Value> {
     let property_value = property_values.get(key)?;
     match property_value {
-        ftd::interpreter::PropertyValue::Value { value, .. } => Some(value.clone()),
+        fastn_type::PropertyValue::Value { value, .. } => Some(value.clone()),
         _ => unimplemented!(),
     }
 }
 
 fn get_optional_value(
     key: &str,
-    property_values: &ftd::Map<ftd::interpreter::PropertyValue>,
+    property_values: &ftd::Map<fastn_type::PropertyValue>,
 ) -> Option<fastn_type::Value> {
     if let Some(property_value) = property_values.get(key) {
         return match property_value {
-            ftd::interpreter::PropertyValue::Value { value, .. } => Some(value.clone()),
+            fastn_type::PropertyValue::Value { value, .. } => Some(value.clone()),
             _ => unimplemented!(),
         };
     }
@@ -860,7 +860,7 @@ fn get_optional_value(
 
 fn get_optional_value_list(
     key: &str,
-    property_values: &ftd::Map<ftd::interpreter::PropertyValue>,
+    property_values: &ftd::Map<fastn_type::PropertyValue>,
     doc: &ftd::interpreter::TDoc<'_>,
 ) -> ftd::interpreter::Result<Option<Vec<fastn_type::Value>>> {
     let value = get_optional_value(key, property_values);
@@ -872,7 +872,7 @@ fn get_optional_value_list(
 
 fn get_optional_value_string(
     key: &str,
-    property_values: &ftd::Map<ftd::interpreter::PropertyValue>,
+    property_values: &ftd::Map<fastn_type::PropertyValue>,
     doc: &ftd::interpreter::TDoc<'_>,
 ) -> ftd::interpreter::Result<Option<String>> {
     let value = get_optional_value(key, property_values);
