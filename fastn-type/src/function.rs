@@ -9,3 +9,25 @@ pub struct FunctionCall {
     // (Default module, Argument name of module kind)
     pub module_name: Option<(String, String)>,
 }
+
+impl FunctionCall {
+    pub fn new(
+        name: &str,
+        kind: fastn_type::KindData,
+        is_mutable: bool,
+        line_number: usize,
+        values: fastn_type::Map<fastn_type::PropertyValue>,
+        order: Vec<String>,
+        module_name: Option<(String, String)>,
+    ) -> FunctionCall {
+        FunctionCall {
+            name: name.to_string(),
+            kind,
+            is_mutable,
+            line_number,
+            values,
+            order,
+            module_name,
+        }
+    }
+}

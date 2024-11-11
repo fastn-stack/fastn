@@ -441,6 +441,8 @@ fn update_inherited_reference_in_property_value(
     local_container: &[usize],
     doc: &mut ftd::executor::TDoc,
 ) {
+    use ftd::interpreter::PropertyValueExt;
+
     let values = if reference_or_clone.starts_with(ftd::interpreter::FTD_INHERITED) {
         let reference_or_clone = reference_or_clone
             .trim_start_matches(format!("{}.", ftd::interpreter::FTD_INHERITED).as_str());

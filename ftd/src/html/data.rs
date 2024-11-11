@@ -8,6 +8,8 @@ impl DataGenerator<'_> {
     }
 
     pub(crate) fn get_data(&self) -> ftd::html::Result<ftd::Map<serde_json::Value>> {
+        use ftd::interpreter::PropertyValueExt;
+
         let mut d: ftd::Map<serde_json::Value> = Default::default();
         for (k, v) in self.doc.bag().iter() {
             if let ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {

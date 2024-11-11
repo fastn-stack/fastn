@@ -45,6 +45,8 @@ impl ftd::html::Action {
         value: &fastn_type::PropertyValue,
         doc: &ftd::interpreter::TDoc,
     ) -> ftd::html::Result<serde_json::Value> {
+        use ftd::interpreter::PropertyValueExt;
+
         Ok(match value {
             fastn_type::PropertyValue::Value { value, .. } => ftd::html::Action::from_value(value),
             fastn_type::PropertyValue::Reference {

@@ -78,6 +78,24 @@ impl PropertyValue {
             _ => {}
         }
     }
+
+    pub fn is_value(&self) -> bool {
+        matches!(self, fastn_type::PropertyValue::Value { .. })
+    }
+
+    pub fn get_function(&self) -> Option<&fastn_type::FunctionCall> {
+        match self {
+            PropertyValue::FunctionCall(f) => Some(f),
+            _ => None,
+        }
+    }
+    pub fn new_none(kind: fastn_type::KindData, line_number: usize) -> fastn_type::PropertyValue {
+        fastn_type::PropertyValue::Value {
+            value: fastn_type::Value::new_none(kind),
+            is_mutable: false,
+            line_number,
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -85,6 +103,23 @@ pub enum PropertyValueSource {
     Global,
     Local(String),
     Loop(String),
+}
+
+impl PropertyValueSource {
+    pub fn is_global(&self) -> bool {
+        PropertyValueSource::Global.eq(self)
+    }
+
+    pub fn is_local(&self, name: &str) -> bool {
+        matches!(self, PropertyValueSource::Local(l_name) if l_name.eq(name))
+    }
+
+    pub fn get_name(&self) -> Option<String> {
+        match self {
+            PropertyValueSource::Local(s) | PropertyValueSource::Loop(s) => Some(s.to_owned()),
+            _ => None,
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -201,5 +236,13 @@ impl Value {
             } => fastn_type::Kind::or_type_with_variant(name, variant, full_variant),
             Value::Module { .. } => fastn_type::Kind::module(),
         }
+    }
+
+    pub fn is_record(&self, rec_name: &str) -> bool {
+        matches!(self, Self::Record { name, .. } if rec_name.eq(name))
+    }
+
+    pub fn is_or_type_variant(&self, or_variant: &str) -> bool {
+        matches!(self, Self::OrType { variant, .. } if or_variant.eq(variant))
     }
 }

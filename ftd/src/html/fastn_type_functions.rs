@@ -122,6 +122,9 @@ impl ValueExt for fastn_type::Value {
         id: &str,
         string_needs_no_quotes: bool,
     ) -> ftd::html::Result<Option<String>> {
+        use ftd::html::fastn_type_functions::PropertyValueExt as _;
+        use ftd::interpreter::PropertyValueExt;
+
         Ok(match self {
             fastn_type::Value::String { text } if !string_needs_no_quotes => {
                 Some(format!("\"{}\"", text))

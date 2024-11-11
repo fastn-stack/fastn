@@ -1006,6 +1006,7 @@ fn is_static_expression(
     doc: &ftd::interpreter::TDoc,
 ) -> bool {
     use ftd::html::fastn_type_functions::KindExt;
+    use ftd::interpreter::ValueExt;
 
     if property_value.kind().is_ftd_length() {
         if let fastn_type::PropertyValue::Value {

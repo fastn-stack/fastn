@@ -168,6 +168,8 @@ pub(crate) fn is_dark_mode_dependent(
     value: &fastn_type::PropertyValue,
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::html::Result<bool> {
+    use ftd::interpreter::PropertyValueExt;
+
     let value = value.clone().resolve(doc, value.line_number())?;
     Ok(value.is_record(ftd::interpreter::FTD_IMAGE_SRC)
         || value.is_record(ftd::interpreter::FTD_COLOR)
@@ -178,6 +180,8 @@ pub(crate) fn is_device_dependent(
     value: &fastn_type::PropertyValue,
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::html::Result<bool> {
+    use ftd::interpreter::{PropertyValueExt, ValueExt};
+
     let value = value.clone().resolve(doc, value.line_number())?;
     if value.is_record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
         || value.is_or_type_variant(ftd::interpreter::FTD_LENGTH_RESPONSIVE)
@@ -202,6 +206,7 @@ pub(crate) fn dependencies_from_property_value(
     doc: &ftd::interpreter::TDoc,
 ) -> Vec<String> {
     use ftd::html::fastn_type_functions::KindExt;
+    use ftd::interpreter::{PropertyValueExt, ValueExt};
 
     if let Some(ref_name) = property_value.reference_name() {
         vec![ref_name.to_string()]
@@ -282,6 +287,7 @@ fn dependencies_from_length_property_value(
     doc: &ftd::interpreter::TDoc,
 ) -> Vec<String> {
     use ftd::html::fastn_type_functions::KindExt;
+    use ftd::interpreter::{PropertyValueExt, ValueExt};
 
     if property_value.is_value() && property_value.kind().is_ftd_length() {
         let value = property_value

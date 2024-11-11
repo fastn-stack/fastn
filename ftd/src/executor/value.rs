@@ -182,6 +182,8 @@ pub fn string_list(
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<ftd::executor::Value<Vec<String>>> {
+    use ftd::interpreter::{PropertyValueExt, ValueExt};
+
     let value = get_value_from_properties_using_key_and_arguments_dummy(
         key,
         component_name,
@@ -748,6 +750,8 @@ pub fn optional_or_type_list(
     rec_name: &str,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<ftd::executor::Value<Vec<(String, fastn_type::PropertyValue)>>> {
+    use ftd::interpreter::PropertyValueExt;
+
     let value = get_value_from_properties_using_key_and_arguments_dummy(
         key,
         component_name,
