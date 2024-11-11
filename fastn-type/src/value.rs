@@ -83,17 +83,33 @@ impl PropertyValue {
         matches!(self, fastn_type::PropertyValue::Value { .. })
     }
 
+    pub fn is_clone(&self) -> bool {
+        matches!(self, fastn_type::PropertyValue::Clone { .. })
+    }
+
     pub fn get_function(&self) -> Option<&fastn_type::FunctionCall> {
         match self {
             PropertyValue::FunctionCall(f) => Some(f),
             _ => None,
         }
     }
+
     pub fn new_none(kind: fastn_type::KindData, line_number: usize) -> fastn_type::PropertyValue {
         fastn_type::PropertyValue::Value {
             value: fastn_type::Value::new_none(kind),
             is_mutable: false,
             line_number,
+        }
+    }
+
+    pub fn set_mutable(&mut self, mutable: bool) {
+        match self {
+            PropertyValue::Value { is_mutable, .. }
+            | PropertyValue::Reference { is_mutable, .. }
+            | PropertyValue::Clone { is_mutable, .. }
+            | PropertyValue::FunctionCall(fastn_type::FunctionCall { is_mutable, .. }) => {
+                *is_mutable = mutable;
+            }
         }
     }
 }

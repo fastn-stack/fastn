@@ -4,7 +4,7 @@
 #[macro_use]
 mod ftd_test_helpers;
 mod element;
-mod fastn_type_functions;
+pub(crate) mod fastn_type_functions;
 mod resolver;
 mod utils;
 mod value;

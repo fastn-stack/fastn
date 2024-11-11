@@ -214,6 +214,45 @@ pub(crate) trait PropertyValueExt {
         definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::PropertyValue>>;
+
+    fn scan_value_from_ast_value(
+        value: ftd_ast::VariableValue,
+        doc: &mut ftd::interpreter::TDoc,
+        definition_name_with_arguments: Option<(&str, &[String])>,
+        loop_object_name_and_kind: &Option<String>,
+    ) -> ftd::interpreter::Result<()>;
+
+    fn scan_ast_value_with_argument(
+        value: ftd_ast::VariableValue,
+        doc: &mut ftd::interpreter::TDoc,
+        definition_name_with_arguments: Option<(&str, &[String])>,
+        loop_object_name_and_kind: &Option<String>,
+    ) -> ftd::interpreter::Result<()>;
+
+    fn scan_string_with_argument(
+        value: &str,
+        doc: &mut ftd::interpreter::TDoc,
+        line_number: usize,
+        definition_name_with_arguments: Option<(&str, &[String])>,
+        loop_object_name_and_kind: &Option<String>,
+    ) -> ftd::interpreter::Result<()>;
+
+    fn scan_reference_from_ast_value(
+        value: ftd_ast::VariableValue,
+        doc: &mut ftd::interpreter::TDoc,
+        definition_name_with_arguments: Option<(&str, &[String])>,
+        loop_object_name_and_kind: &Option<String>,
+    ) -> ftd::interpreter::Result<bool>;
+
+    fn from_string_with_argument(
+        value: &str,
+        doc: &mut ftd::interpreter::TDoc,
+        expected_kind: Option<&fastn_type::KindData>,
+        mutable: bool,
+        line_number: usize,
+        definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::PropertyValue>>;
 }
 impl PropertyValueExt for fastn_type::PropertyValue {
     fn resolve(
@@ -1189,11 +1228,217 @@ impl PropertyValueExt for fastn_type::PropertyValue {
             },
         ))
     }
+
+    fn scan_value_from_ast_value(
+        value: ftd_ast::VariableValue,
+        doc: &mut ftd::interpreter::TDoc,
+        definition_name_with_arguments: Option<(&str, &[String])>,
+        loop_object_name_and_kind: &Option<String>,
+    ) -> ftd::interpreter::Result<()> {
+        match value {
+            ftd_ast::VariableValue::Optional { value, .. } if value.is_some() => {
+                fastn_type::PropertyValue::scan_ast_value_with_argument(
+                    value.unwrap(),
+                    doc,
+                    definition_name_with_arguments,
+                    loop_object_name_and_kind,
+                )?;
+            }
+            ftd_ast::VariableValue::List { value, .. } => {
+                for val in value {
+                    fastn_type::PropertyValue::scan_ast_value_with_argument(
+                        val.value,
+                        doc,
+                        definition_name_with_arguments,
+                        loop_object_name_and_kind,
+                    )?;
+                }
+            }
+            ftd_ast::VariableValue::Record {
+                caption,
+                headers,
+                body,
+                values,
+                ..
+            } => {
+                if let Some(caption) = caption.as_ref() {
+                    fastn_type::PropertyValue::scan_ast_value_with_argument(
+                        caption.to_owned(),
+                        doc,
+                        definition_name_with_arguments,
+                        loop_object_name_and_kind,
+                    )?;
+                }
+                for header in headers.0 {
+                    fastn_type::PropertyValue::scan_ast_value_with_argument(
+                        header.value,
+                        doc,
+                        definition_name_with_arguments,
+                        loop_object_name_and_kind,
+                    )?;
+                    if let Some(condition) = header.condition {
+                        ftd::interpreter::Expression::scan_ast_condition(
+                            ftd_ast::Condition::new(condition.as_str(), header.line_number),
+                            definition_name_with_arguments,
+                            loop_object_name_and_kind,
+                            doc,
+                        )?
+                    }
+                }
+                if let Some(body) = body {
+                    fastn_type::PropertyValue::scan_string_with_argument(
+                        body.value.as_str(),
+                        doc,
+                        body.line_number,
+                        definition_name_with_arguments,
+                        loop_object_name_and_kind,
+                    )?;
+                }
+
+                for val in values {
+                    fastn_type::PropertyValue::scan_ast_value_with_argument(
+                        val.value,
+                        doc,
+                        definition_name_with_arguments,
+                        loop_object_name_and_kind,
+                    )?;
+                }
+            }
+            _ => {}
+        }
+        Ok(())
+    }
+
+    fn scan_ast_value_with_argument(
+        value: ftd_ast::VariableValue,
+        doc: &mut ftd::interpreter::TDoc,
+        definition_name_with_arguments: Option<(&str, &[String])>,
+        loop_object_name_and_kind: &Option<String>,
+    ) -> ftd::interpreter::Result<()> {
+        if fastn_type::PropertyValue::scan_reference_from_ast_value(
+            value.clone(),
+            doc,
+            definition_name_with_arguments,
+            loop_object_name_and_kind,
+        )? {
+            Ok(())
+        } else {
+            fastn_type::PropertyValue::scan_value_from_ast_value(
+                value,
+                doc,
+                definition_name_with_arguments,
+                loop_object_name_and_kind,
+            )
+        }
+    }
+
+    fn scan_string_with_argument(
+        value: &str,
+        doc: &mut ftd::interpreter::TDoc,
+        line_number: usize,
+        definition_name_with_arguments: Option<(&str, &[String])>,
+        loop_object_name_and_kind: &Option<String>,
+    ) -> ftd::interpreter::Result<()> {
+        let value = ftd_ast::VariableValue::String {
+            value: value.to_string(),
+            line_number,
+            source: ftd_ast::ValueSource::Default,
+            condition: None,
+        };
+
+        fastn_type::PropertyValue::scan_ast_value_with_argument(
+            value,
+            doc,
+            definition_name_with_arguments,
+            loop_object_name_and_kind,
+        )
+    }
+
+    fn scan_reference_from_ast_value(
+        value: ftd_ast::VariableValue,
+        doc: &mut ftd::interpreter::TDoc,
+        definition_name_with_arguments: Option<(&str, &[String])>,
+        loop_object_name_and_kind: &Option<String>,
+    ) -> ftd::interpreter::Result<bool> {
+        match value.string(doc.name) {
+            Ok(expression)
+                if expression.starts_with(ftd::interpreter::utils::REFERENCE)
+                    && ftd::interpreter::utils::get_function_name(
+                        expression.trim_start_matches(ftd::interpreter::utils::REFERENCE),
+                        doc.name,
+                        value.line_number(),
+                    )
+                    .is_ok() =>
+            {
+                let expression = expression
+                    .trim_start_matches(ftd::interpreter::utils::REFERENCE)
+                    .to_string();
+
+                ftd::interpreter::FunctionCall::scan_string(
+                    expression.as_str(),
+                    doc,
+                    definition_name_with_arguments,
+                    loop_object_name_and_kind,
+                    value.line_number(),
+                )?;
+
+                Ok(true)
+            }
+            Ok(reference)
+                if reference.starts_with(ftd::interpreter::utils::CLONE)
+                    || reference.starts_with(ftd::interpreter::utils::REFERENCE) =>
+            {
+                let reference = reference
+                    .strip_prefix(ftd::interpreter::utils::REFERENCE)
+                    .or_else(|| reference.strip_prefix(ftd::interpreter::utils::CLONE))
+                    .map_or(reference.to_string(), ToString::to_string);
+
+                let initial_kind_with_remaining_and_source =
+                    ftd::interpreter::utils::is_argument_in_component_or_loop(
+                        reference.as_str(),
+                        doc,
+                        definition_name_with_arguments,
+                        loop_object_name_and_kind,
+                    );
+
+                if !initial_kind_with_remaining_and_source {
+                    doc.scan_thing(reference.as_str(), value.line_number())?;
+                }
+                Ok(true)
+            }
+            _ => Ok(false),
+        }
+    }
+
+    fn from_string_with_argument(
+        value: &str,
+        doc: &mut ftd::interpreter::TDoc,
+        expected_kind: Option<&fastn_type::KindData>,
+        mutable: bool,
+        line_number: usize,
+        definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
+        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::PropertyValue>> {
+        let value = ftd_ast::VariableValue::String {
+            value: value.to_string(),
+            line_number,
+            source: ftd_ast::ValueSource::Default,
+            condition: None,
+        };
+
+        fastn_type::PropertyValue::from_ast_value_with_argument(
+            value,
+            doc,
+            mutable,
+            expected_kind,
+            definition_name_with_arguments,
+            loop_object_name_and_kind,
+        )
+    }
 }
 
 pub(crate) trait ValueExt {
     fn string(&self, doc_id: &str, line_number: usize) -> ftd::interpreter::Result<String>;
-
     fn decimal(&self, doc_id: &str, line_number: usize) -> ftd::interpreter::Result<f64>;
     fn integer(&self, doc_id: &str, line_number: usize) -> ftd::interpreter::Result<i64>;
     fn bool(&self, doc_id: &str, line_number: usize) -> ftd::interpreter::Result<bool>;
@@ -1218,6 +1463,11 @@ pub(crate) trait ValueExt {
         _line_number: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::Component>;
     fn record_fields(
+        &self,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<ftd::Map<fastn_type::PropertyValue>>;
+    fn kwargs(
         &self,
         doc_id: &str,
         line_number: usize,
@@ -1367,6 +1617,21 @@ impl ValueExt for fastn_type::Value {
             ),
         }
     }
+
+    fn kwargs(
+        &self,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<ftd::Map<fastn_type::PropertyValue>> {
+        match self {
+            Self::KwArgs { arguments } => Ok(arguments.to_owned()),
+            t => ftd::interpreter::utils::e2(
+                format!("Expected kwargs, found: `{:?}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
 }
 
 pub(crate) trait PropertyValueSourceExt {
@@ -1401,6 +1666,14 @@ pub(crate) trait FunctionCallExt {
         loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         line_number: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::FunctionCall>>;
+
+    fn scan_string(
+        value: &str,
+        doc: &mut ftd::interpreter::TDoc,
+        definition_name_with_arguments: Option<(&str, &[String])>,
+        loop_object_name_and_kind: &Option<String>,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<()>;
 }
 
 impl FunctionCallExt for fastn_type::FunctionCall {
@@ -1554,6 +1827,49 @@ impl FunctionCallExt for fastn_type::FunctionCall {
                 module_name,
             ),
         ))
+    }
+
+    fn scan_string(
+        value: &str,
+        doc: &mut ftd::interpreter::TDoc,
+        definition_name_with_arguments: Option<(&str, &[String])>,
+        loop_object_name_and_kind: &Option<String>,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<()> {
+        let expression = value
+            .trim_start_matches(ftd::interpreter::utils::REFERENCE)
+            .to_string();
+
+        let (function_name, properties) =
+            ftd::interpreter::utils::get_function_name_and_properties(
+                expression.as_str(),
+                doc.name,
+                line_number,
+            )?;
+
+        let initial_kind_with_remaining_and_source =
+            ftd::interpreter::utils::is_argument_in_component_or_loop(
+                function_name.as_str(),
+                doc,
+                definition_name_with_arguments,
+                loop_object_name_and_kind,
+            );
+
+        if !initial_kind_with_remaining_and_source {
+            doc.scan_initial_thing(function_name.as_str(), line_number)?;
+        }
+
+        for (_, value) in properties.iter() {
+            fastn_type::PropertyValue::scan_string_with_argument(
+                value,
+                doc,
+                line_number,
+                definition_name_with_arguments,
+                loop_object_name_and_kind,
+            )?;
+        }
+
+        Ok(())
     }
 }
 

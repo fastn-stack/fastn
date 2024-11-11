@@ -240,6 +240,8 @@ impl InterpreterState {
     }
 
     pub fn continue_processing(mut self) -> ftd::interpreter::Result<Interpreter> {
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
+
         while let Some((doc_name, number_of_scan, ast, exports)) = self.get_next_ast() {
             if let Some(interpreter) = self.resolve_pending_imports::<ftd::interpreter::Thing>()? {
                 match interpreter {
@@ -1215,6 +1217,8 @@ impl Document {
     }
 
     fn get_redirect_with_code(&self, kind: &str) -> ftd::interpreter::Result<Option<String>> {
+        use ftd::interpreter::ValueExt;
+
         let redirects = self.get_instructions(kind);
 
         for v in &redirects {
@@ -1269,6 +1273,8 @@ impl Document {
     }
 
     pub fn json(&self, key: &str) -> ftd::interpreter::Result<serde_json::Value> {
+        use ftd::interpreter::PropertyValueExt;
+
         let key = self.name(key);
         let thing = match self.data.get(key.as_str()) {
             Some(v) => v,
@@ -1298,6 +1304,8 @@ impl Document {
     }
 
     fn value_to_json(&self, v: &fastn_type::Value) -> ftd::interpreter::Result<serde_json::Value> {
+        use ftd::interpreter::PropertyValueExt;
+
         let doc = self.tdoc();
         Ok(match v {
             fastn_type::Value::Integer { value } => {
@@ -1368,6 +1376,8 @@ impl Document {
         &self,
         v: &fastn_type::PropertyValue,
     ) -> ftd::interpreter::Result<serde_json::Value> {
+        use ftd::interpreter::PropertyValueExt;
+
         self.value_to_json(&v.clone().resolve(&self.tdoc(), v.line_number())?)
     }
 }

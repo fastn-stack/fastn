@@ -55,6 +55,8 @@ impl ComponentDefinition {
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ComponentDefinition>> {
+        use ftd::interpreter::PropertyValueExt;
+
         let component_definition = ast.get_component_definition(doc.name)?;
         let name = doc.resolve_name(component_definition.name.as_str());
 
@@ -197,6 +199,8 @@ impl Component {
         &self,
         doc: &ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<Vec<Component>> {
+        use ftd::interpreter::PropertyValueExt;
+
         let property = if let Some(property) = self.get_children_property() {
             property
         } else {
@@ -228,6 +232,9 @@ impl Component {
         doc: &ftd::interpreter::Document,
         kwargs_name: &str,
     ) -> ftd::interpreter::Result<ftd::Map<String>> {
+        use ftd::interpreter::ValueExt;
+        use ftd::js::fastn_type_functions::PropertyValueExt;
+
         let property = match self.get_interpreter_value_of_argument(kwargs_name, &doc.tdoc())? {
             Some(property) => property,
             None => {
@@ -477,6 +484,8 @@ impl Component {
         ast_children: &Vec<ftd_ast::ComponentInvocation>,
         line_number: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Option<Component>>> {
+        use ftd::interpreter::{PropertyValueExt, PropertyValueSourceExt};
+
         let name = doc.resolve_name(name);
 
         if definition_name_with_arguments.is_none()
@@ -635,6 +644,8 @@ impl Property {
         doc: &ftd::interpreter::TDoc,
         inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::interpreter::Result<Option<fastn_type::Value>> {
+        use ftd::interpreter::PropertyValueExt;
+
         Ok(match self.condition {
             Some(ref condition) if !condition.eval(doc)? => None,
             _ => Some(self.value.clone().resolve_with_inherited(
@@ -841,6 +852,8 @@ impl Property {
         loop_object_name_and_kind: &Option<String>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
+        use ftd::interpreter::PropertyValueExt;
+
         fastn_type::PropertyValue::scan_ast_value_with_argument(
             ast_property.value.to_owned(),
             doc,
@@ -953,6 +966,8 @@ impl Property {
         loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Property>> {
+        use ftd::interpreter::PropertyValueExt;
+
         let argument = try_ok_state!(Property::get_argument_for_property(
             &ast_property,
             component_name,
@@ -1296,6 +1311,8 @@ fn get_module_name_and_thing(
     definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
     component_argument: &ftd::interpreter::Argument,
 ) -> ftd::interpreter::Result<(String, ftd::Map<ftd::interpreter::ModuleThing>)> {
+    use ftd::interpreter::PropertyValueExt;
+
     let default_things = {
         let value = if let Some(ref value) = component_argument.value {
             value.clone().resolve(doc, module_property.line_number)?
@@ -1428,6 +1445,8 @@ impl Loop {
         definition_name_with_arguments: Option<(&str, &[String])>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
+        use ftd::interpreter::PropertyValueExt;
+
         fastn_type::PropertyValue::scan_string_with_argument(
             ast_loop.on.as_str(),
             doc,
@@ -1444,6 +1463,8 @@ impl Loop {
         definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Loop>> {
+        use ftd::interpreter::PropertyValueExt;
+
         let mut on = try_ok_state!(fastn_type::PropertyValue::from_string_with_argument(
             ast_loop.on.as_str(),
             doc,
@@ -1483,6 +1504,8 @@ impl Loop {
         &self,
         doc: &ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<(Vec<fastn_type::PropertyValue>, fastn_type::KindData)> {
+        use ftd::interpreter::PropertyValueExt;
+
         let value = self.on.clone().resolve(doc, self.line_number)?;
         if let fastn_type::Value::List { data, kind } = value {
             Ok((data, kind))
@@ -1510,6 +1533,8 @@ impl Event {
         loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Event>> {
+        use ftd::interpreter::FunctionCallExt;
+
         let action = try_ok_state!(fastn_type::FunctionCall::from_string(
             ast_event.action.as_str(),
             doc,
@@ -1593,6 +1618,8 @@ impl Event {
         loop_object_name_and_kind: &Option<String>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
+        use ftd::interpreter::FunctionCallExt;
+
         fastn_type::FunctionCall::scan_string(
             ast_event.action.as_str(),
             doc,

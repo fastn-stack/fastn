@@ -135,6 +135,7 @@ impl<'a> TDoc<'a> {
         line_number: usize,
         name: &'a str,
     ) -> ftd::interpreter::Result<fastn_type::Value> {
+        use ftd::interpreter::PropertyValueExt;
         // TODO: name can be a.b.c, and a and a.b are records with right fields
         match self.get_thing(name, line_number)? {
             ftd::interpreter::Thing::Variable(v) => v.value.resolve(self, line_number),
@@ -205,6 +206,8 @@ impl<'a> TDoc<'a> {
         line_number: usize,
         inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::interpreter::Result<fastn_type::Value> {
+        use ftd::interpreter::PropertyValueExt;
+
         let (value, _var_name, _var_line_number, remaining) = if let Ok(v) =
             self.get_initial_variable_with_inherited(name, line_number, inherited_variables)
         {
@@ -351,6 +354,8 @@ impl<'a> TDoc<'a> {
             line_number: usize,
         ) -> ftd::interpreter::Result<Option<(ftd::interpreter::Variable, Option<String>)>>
         {
+            use ftd::interpreter::PropertyValueExt;
+
             let mut variable = None;
             let mut remaining = name;
             let mut value = value.clone();
@@ -885,6 +890,7 @@ impl<'a> TDoc<'a> {
             name: &str,
             thing: &ftd::interpreter::Thing,
         ) -> ftd::interpreter::Result<ftd::interpreter::Thing> {
+            use ftd::interpreter::PropertyValueExt;
             use itertools::Itertools;
 
             let (v, remaining) = ftd::interpreter::utils::split_at(name, ".");
@@ -1324,6 +1330,8 @@ impl<'a> TDoc<'a> {
             thing: ftd::interpreter::Thing,
         ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Thing>>
         {
+            use ftd::interpreter::PropertyValueExt;
+
             let (v, remaining) = ftd::interpreter::utils::split_at(name, ".");
             let thing = match thing.clone() {
                 ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
