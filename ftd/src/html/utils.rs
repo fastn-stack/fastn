@@ -838,8 +838,7 @@ fn get_rive_event(
     id: &str,
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::html::Result<String> {
-    let mut events_map: ftd::VecMap<(&String, &ftd::interpreter::FunctionCall)> =
-        ftd::VecMap::new();
+    let mut events_map: ftd::VecMap<(&String, &fastn_type::FunctionCall)> = ftd::VecMap::new();
     for event in rive.events.iter() {
         let (event_name, input, action) = match &event.name {
             ftd::interpreter::EventName::RivePlay(timeline) => ("onPlay", timeline, &event.action),

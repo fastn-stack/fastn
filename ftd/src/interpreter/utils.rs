@@ -484,7 +484,7 @@ pub fn validate_property_value_for_mutable(
     return Ok(());
 
     fn validate_function_call(
-        function_call: &ftd::interpreter::FunctionCall,
+        function_call: &fastn_type::FunctionCall,
         doc: &ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         for (key, value) in function_call.values.iter() {

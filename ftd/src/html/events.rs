@@ -13,7 +13,7 @@ impl ftd::html::Action {
     }
 
     pub(crate) fn from_function_call(
-        function_call: &ftd::interpreter::FunctionCall,
+        function_call: &fastn_type::FunctionCall,
         id: &str,
         doc: &ftd::interpreter::TDoc,
     ) -> ftd::html::Result<ftd::html::Action> {
@@ -27,7 +27,7 @@ impl ftd::html::Action {
     }
 
     fn from_values(
-        function_call: &ftd::interpreter::FunctionCall,
+        function_call: &fastn_type::FunctionCall,
         doc: &ftd::interpreter::TDoc,
     ) -> ftd::html::Result<Vec<(String, serde_json::Value)>> {
         function_call

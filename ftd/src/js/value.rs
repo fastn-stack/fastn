@@ -3,7 +3,7 @@ pub enum Value {
     Data(fastn_type::Value),
     Reference(ReferenceData),
     ConditionalFormula(Vec<ftd::interpreter::Property>),
-    FunctionCall(ftd::interpreter::FunctionCall),
+    FunctionCall(fastn_type::FunctionCall),
     Clone(String),
 }
 

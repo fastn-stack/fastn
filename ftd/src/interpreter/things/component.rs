@@ -1499,7 +1499,7 @@ impl Loop {
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Event {
     pub name: ftd::interpreter::EventName,
-    pub action: ftd::interpreter::FunctionCall,
+    pub action: fastn_type::FunctionCall,
     pub line_number: usize,
 }
 
@@ -1510,7 +1510,7 @@ impl Event {
         loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Event>> {
-        let action = try_ok_state!(ftd::interpreter::FunctionCall::from_string(
+        let action = try_ok_state!(fastn_type::FunctionCall::from_string(
             ast_event.action.as_str(),
             doc,
             false,
@@ -1593,7 +1593,7 @@ impl Event {
         loop_object_name_and_kind: &Option<String>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
-        ftd::interpreter::FunctionCall::scan_string(
+        fastn_type::FunctionCall::scan_string(
             ast_event.action.as_str(),
             doc,
             definition_name_with_arguments,

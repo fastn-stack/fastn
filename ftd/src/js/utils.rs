@@ -31,8 +31,7 @@ pub(crate) fn get_rive_event(
     rdata: &ftd::js::ResolverData,
     element_name: &str,
 ) -> String {
-    let mut events_map: ftd::VecMap<(&String, &ftd::interpreter::FunctionCall)> =
-        ftd::VecMap::new();
+    let mut events_map: ftd::VecMap<(&String, &fastn_type::FunctionCall)> = ftd::VecMap::new();
     for event in events.iter() {
         let (event_name, input, action) = match &event.name {
             ftd::interpreter::EventName::RivePlay(timeline) => ("onPlay", timeline, &event.action),
@@ -201,7 +200,7 @@ pub(crate) fn get_js_value_from_properties(
 }
 
 pub(crate) fn function_call_to_js_formula(
-    function_call: &ftd::interpreter::FunctionCall,
+    function_call: &fastn_type::FunctionCall,
     doc: &ftd::interpreter::TDoc,
     rdata: &ftd::js::ResolverData,
 ) -> fastn_js::Formula {

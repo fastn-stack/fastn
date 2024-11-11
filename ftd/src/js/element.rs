@@ -3296,7 +3296,7 @@ impl ftd::interpreter::Event {
     }
 }
 
-impl ftd::interpreter::FunctionCall {
+impl fastn_type::FunctionCall {
     pub(crate) fn to_js_function(
         &self,
         doc: &ftd::interpreter::TDoc,

@@ -487,7 +487,7 @@ impl<'a> TDoc<'a> {
                         };
                         change_value(value, set, Some(remaining), doc, line_number)?;
                     }
-                    fastn_type::PropertyValue::FunctionCall(ftd::interpreter::FunctionCall {
+                    fastn_type::PropertyValue::FunctionCall(fastn_type::FunctionCall {
                         name,
                         kind,
                         is_mutable,
