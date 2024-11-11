@@ -6,6 +6,7 @@ mod data;
 mod dependencies;
 mod dummy_html;
 mod events;
+mod fastn_type_functions;
 mod functions;
 mod main;
 pub mod utils;

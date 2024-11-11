@@ -61,10 +61,7 @@ impl Value {
         } else {
             let mut properties = vec![];
             for property in exec_value.properties {
-                let pattern = property
-                    .value
-                    .kind()
-                    .pattern(doc_id)
+                let pattern = get_pattern_from_kind(&property.value.kind(), doc_id)
                     .or_else(|| pattern_with_eval.clone());
                 properties.push(PropertyWithPattern::new(property, pattern));
             }
@@ -86,25 +83,23 @@ impl Value {
     }
 }
 
-impl fastn_type::Kind {
-    fn pattern(&self, doc_id: &str) -> Option<(String, bool)> {
-        match self {
-            fastn_type::Kind::OrType { name, .. } if name.eq(ftd::interpreter::FTD_LENGTH) => None,
-            fastn_type::Kind::OrType {
-                name,
-                variant: Some(variant),
-                full_variant,
-            } if name.eq(ftd::interpreter::FTD_RESIZING) => {
-                ftd::executor::Resizing::get_pattern_from_variant_str(
-                    variant,
-                    full_variant.as_ref().unwrap_or(variant),
-                    doc_id,
-                    0,
-                )
-                .ok()
-                .map(|v| (v.0.to_string(), v.1))
-            }
-            _ => None,
+fn get_pattern_from_kind(kind: &fastn_type::Kind, doc_id: &str) -> Option<(String, bool)> {
+    match kind {
+        fastn_type::Kind::OrType { name, .. } if name.eq(ftd::interpreter::FTD_LENGTH) => None,
+        fastn_type::Kind::OrType {
+            name,
+            variant: Some(variant),
+            full_variant,
+        } if name.eq(ftd::interpreter::FTD_RESIZING) => {
+            ftd::executor::Resizing::get_pattern_from_variant_str(
+                variant,
+                full_variant.as_ref().unwrap_or(variant),
+                doc_id,
+                0,
+            )
+            .ok()
+            .map(|v| (v.0.to_string(), v.1))
         }
+        _ => None,
     }
 }

@@ -32,11 +32,13 @@ macro_rules! try_state {
 #[macro_use]
 mod test;
 mod constants;
+mod fastn_type_functions;
 mod main;
 pub mod prelude;
 mod tdoc;
 mod things;
 pub mod utils;
+
 pub use prelude::*;
 
 pub use tdoc::{BagOrState, TDoc};
