@@ -19,21 +19,21 @@ pub enum ModuleThing {
 impl ModuleThing {
     pub fn component(
         name: String,
-        kind: ftd::interpreter::KindData,
+        kind: fastn_type::KindData,
         arguments: Vec<ftd::interpreter::Argument>,
     ) -> Self {
         ModuleThing::Component(ComponentModuleThing::new(name, kind, arguments))
     }
 
-    pub fn variable(name: String, kind: ftd::interpreter::KindData) -> Self {
+    pub fn variable(name: String, kind: fastn_type::KindData) -> Self {
         ModuleThing::Variable(VariableModuleThing::new(name, kind))
     }
 
-    pub fn function(name: String, kind: ftd::interpreter::KindData) -> Self {
+    pub fn function(name: String, kind: fastn_type::KindData) -> Self {
         ModuleThing::Formula(FormulaModuleThing::new(name, kind))
     }
 
-    pub fn get_kind(&self) -> ftd::interpreter::KindData {
+    pub fn get_kind(&self) -> fastn_type::KindData {
         match self {
             ftd::interpreter::ModuleThing::Component(c) => c.kind.clone(),
             ftd::interpreter::ModuleThing::Variable(v) => v.kind.clone(),
@@ -52,11 +52,11 @@ impl ModuleThing {
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct VariableModuleThing {
     pub name: String,
-    pub kind: ftd::interpreter::KindData,
+    pub kind: fastn_type::KindData,
 }
 
 impl VariableModuleThing {
-    pub fn new(name: String, kind: ftd::interpreter::KindData) -> Self {
+    pub fn new(name: String, kind: fastn_type::KindData) -> Self {
         VariableModuleThing { name, kind }
     }
 }
@@ -64,11 +64,11 @@ impl VariableModuleThing {
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct FormulaModuleThing {
     pub name: String,
-    pub kind: ftd::interpreter::KindData,
+    pub kind: fastn_type::KindData,
 }
 
 impl FormulaModuleThing {
-    pub fn new(name: String, kind: ftd::interpreter::KindData) -> Self {
+    pub fn new(name: String, kind: fastn_type::KindData) -> Self {
         FormulaModuleThing { name, kind }
     }
 }
@@ -76,14 +76,14 @@ impl FormulaModuleThing {
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct ComponentModuleThing {
     pub name: String,
-    pub kind: ftd::interpreter::KindData,
+    pub kind: fastn_type::KindData,
     pub arguments: Vec<ftd::interpreter::Argument>,
 }
 
 impl ComponentModuleThing {
     pub fn new(
         name: String,
-        kind: ftd::interpreter::KindData,
+        kind: fastn_type::KindData,
         arguments: Vec<ftd::interpreter::Argument>,
     ) -> Self {
         ComponentModuleThing {

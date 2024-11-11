@@ -40,7 +40,7 @@ tracing.workspace = true
 fastn-js.workspace = true
 fastn-grammar.workspace = true
 indexmap.workspace = true
-
+fastn-type.workspace = true
 
 [dev-dependencies]
 diffy.workspace = true

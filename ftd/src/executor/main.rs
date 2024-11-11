@@ -1089,7 +1089,7 @@ impl Device {
                 "ftd.device".to_string(),
                 ftd::interpreter::PropertyValue::Reference {
                     name: "ftd#device".to_string(),
-                    kind: ftd::interpreter::Kind::record("ftd#device-data").into_kind_data(),
+                    kind: fastn_type::Kind::record("ftd#device-data").into_kind_data(),
                     source: ftd::interpreter::PropertyValueSource::Global,
                     is_mutable: false,
                     line_number,
@@ -1106,7 +1106,7 @@ impl Device {
                     "ftd.device".to_string(),
                     ftd::interpreter::PropertyValue::Reference {
                         name: "ftd#device".to_string(),
-                        kind: ftd::interpreter::Kind::record("ftd#device-data").into_kind_data(),
+                        kind: fastn_type::Kind::record("ftd#device-data").into_kind_data(),
                         source: ftd::interpreter::PropertyValueSource::Global,
                         is_mutable: false,
                         line_number,

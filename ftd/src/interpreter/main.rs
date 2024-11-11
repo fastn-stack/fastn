@@ -868,7 +868,7 @@ impl InterpreterState {
         let mut doc = ftd::interpreter::TDoc::new_state(&name, &aliases, &mut self);
         let variable_definition = ast.get_variable_definition(doc.name)?;
         let name = doc.resolve_name(variable_definition.name.as_str());
-        let kind = match ftd::interpreter::KindData::from_ast_kind(
+        let kind = match fastn_type::KindData::from_ast_kind(
             variable_definition.kind,
             &Default::default(),
             &mut doc,

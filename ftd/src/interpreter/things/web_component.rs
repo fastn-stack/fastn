@@ -52,7 +52,7 @@ impl WebComponentDefinition {
             },
             doc,
             false,
-            Some(&ftd::interpreter::Kind::string().into_kind_data()),
+            Some(&fastn_type::Kind::string().into_kind_data()),
         )?);
 
         let arguments = try_ok_state!(ftd::interpreter::Argument::from_ast_fields(

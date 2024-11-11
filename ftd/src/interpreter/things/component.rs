@@ -69,7 +69,7 @@ impl ComponentDefinition {
                     },
                     doc,
                     false,
-                    Some(&ftd::interpreter::Kind::string().into_kind_data()),
+                    Some(&fastn_type::Kind::string().into_kind_data()),
                 )?
             ))
         } else {
@@ -109,7 +109,7 @@ impl ComponentDefinition {
         ))
     }
 
-    pub fn to_value(&self, kind: &ftd::interpreter::KindData) -> ftd::interpreter::Value {
+    pub fn to_value(&self, kind: &fastn_type::KindData) -> ftd::interpreter::Value {
         ftd::interpreter::Value::UI {
             name: self.name.to_string(),
             kind: kind.to_owned(),
@@ -343,7 +343,7 @@ impl Component {
 
         // If the component is from `module` type argument
         ftd::interpreter::utils::insert_module_thing(
-            &ftd::interpreter::Kind::ui().into_kind_data(),
+            &fastn_type::Kind::ui().into_kind_data(),
             ast_component.name.as_str(),
             name.as_str(),
             definition_name_with_arguments,
@@ -782,13 +782,13 @@ impl Property {
                         line_number: v.line_number,
                         value: ftd::interpreter::Value::UI {
                             name: v.name.to_string(),
-                            kind: ftd::interpreter::Kind::subsection_ui().into_kind_data(),
+                            kind: fastn_type::Kind::subsection_ui().into_kind_data(),
                             component: v,
                         },
                         is_mutable: false,
                     })
                     .collect(),
-                kind: ftd::interpreter::Kind::subsection_ui().into_kind_data(),
+                kind: fastn_type::Kind::subsection_ui().into_kind_data(),
             },
             is_mutable: false,
             line_number,
@@ -1404,7 +1404,7 @@ impl Loop {
         let kind = self.loop_object_kind(doc.name)?;
         Ok(ftd::interpreter::Argument {
             name: self.alias.to_string(),
-            kind: ftd::interpreter::KindData::new(kind),
+            kind: fastn_type::KindData::new(kind),
             mutable: self.on.is_mutable(),
             value: Some(self.on.to_owned()),
             line_number: self.on.line_number(),
@@ -1415,10 +1415,10 @@ impl Loop {
     pub(crate) fn loop_object_kind(
         &self,
         doc_id: &str,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Kind> {
+    ) -> ftd::interpreter::Result<fastn_type::Kind> {
         let kind = self.on.kind();
         match kind {
-            ftd::interpreter::Kind::List { kind } => Ok(kind.as_ref().to_owned()),
+            fastn_type::Kind::List { kind } => Ok(kind.as_ref().to_owned()),
             t => ftd::interpreter::utils::e2(
                 format!("Expected list kind, found: {:?}", t),
                 doc_id,
@@ -1486,10 +1486,8 @@ impl Loop {
     pub fn children(
         &self,
         doc: &ftd::interpreter::TDoc,
-    ) -> ftd::interpreter::Result<(
-        Vec<ftd::interpreter::PropertyValue>,
-        ftd::interpreter::KindData,
-    )> {
+    ) -> ftd::interpreter::Result<(Vec<ftd::interpreter::PropertyValue>, fastn_type::KindData)>
+    {
         let value = self.on.clone().resolve(doc, self.line_number)?;
         if let ftd::interpreter::Value::List { data, kind } = value {
             Ok((data, kind))

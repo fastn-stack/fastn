@@ -79,12 +79,12 @@ where
 
 pub(crate) fn kind_eq(
     key: &str,
-    kind: &ftd::interpreter::Kind,
+    kind: &fastn_type::Kind,
     doc: &mut ftd::interpreter::TDoc,
     line_number: usize,
 ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<bool>> {
     let var_kind = ftd_ast::VariableKind::get_kind(key, doc.name, line_number)?;
-    let kind_data = try_ok_state!(ftd::interpreter::KindData::from_ast_kind(
+    let kind_data = try_ok_state!(fastn_type::KindData::from_ast_kind(
         var_kind,
         &Default::default(),
         doc,
@@ -371,9 +371,7 @@ pub fn get_argument_for_reference_and_remaining(
             return Ok(Some((
                 ftd::interpreter::Field::default(
                     ftd::interpreter::FTD_LOOP_COUNTER,
-                    ftd::interpreter::Kind::integer()
-                        .into_optional()
-                        .into_kind_data(),
+                    fastn_type::Kind::integer().into_optional().into_kind_data(),
                 ),
                 None,
                 ftd::interpreter::PropertyValueSource::Loop(loop_name.to_string()),
@@ -385,9 +383,7 @@ pub fn get_argument_for_reference_and_remaining(
                 return Ok(Some((
                     ftd::interpreter::Field::default(
                         loop_counter_alias,
-                        ftd::interpreter::Kind::integer()
-                            .into_optional()
-                            .into_kind_data(),
+                        fastn_type::Kind::integer().into_optional().into_kind_data(),
                     ),
                     None,
                     ftd::interpreter::PropertyValueSource::Loop(loop_name.to_string()),
@@ -691,7 +687,7 @@ pub(crate) fn find_inherited_variables(
 }
 
 pub(crate) fn insert_module_thing(
-    kind: &ftd::interpreter::KindData,
+    kind: &fastn_type::KindData,
     reference: &str,
     reference_full_name: &str,
     definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
@@ -744,7 +740,7 @@ pub(crate) fn insert_module_thing(
             {
                 let component_module_thing = ftd::interpreter::ModuleThing::component(
                     reference.to_string(),
-                    ftd::interpreter::Kind::ui_with_name(reference_full_name).into_kind_data(),
+                    fastn_type::Kind::ui_with_name(reference_full_name).into_kind_data(),
                     module_component_definition.arguments,
                 );
 
