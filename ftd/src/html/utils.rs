@@ -200,6 +200,8 @@ pub(crate) fn dependencies_from_property_value(
     property_value: &ftd::interpreter::PropertyValue,
     doc: &ftd::interpreter::TDoc,
 ) -> Vec<String> {
+    use ftd::html::fastn_type_functions::KindExt;
+
     if let Some(ref_name) = property_value.reference_name() {
         vec![ref_name.to_string()]
     } else if let Some(function_call) = property_value.get_function() {
@@ -278,6 +280,8 @@ fn dependencies_from_length_property_value(
     property_value: &ftd::interpreter::PropertyValue,
     doc: &ftd::interpreter::TDoc,
 ) -> Vec<String> {
+    use ftd::html::fastn_type_functions::KindExt;
+
     if property_value.is_value() && property_value.kind().is_ftd_length() {
         let value = property_value
             .value(doc.name, property_value.line_number())
