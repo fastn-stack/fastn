@@ -48,7 +48,7 @@ impl Value {
             }
             Value::Reference(data) => {
                 if let Some(value) = &data.value {
-                    if let ftd::interpreter::Kind::OrType {
+                    if let fastn_type::Kind::OrType {
                         name,
                         variant: Some(variant),
                         full_variant: Some(full_variant),

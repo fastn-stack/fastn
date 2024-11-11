@@ -86,15 +86,11 @@ impl Value {
     }
 }
 
-impl ftd::interpreter::Kind {
+impl fastn_type::Kind {
     fn pattern(&self, doc_id: &str) -> Option<(String, bool)> {
         match self {
-            ftd::interpreter::Kind::OrType { name, .. }
-                if name.eq(ftd::interpreter::FTD_LENGTH) =>
-            {
-                None
-            }
-            ftd::interpreter::Kind::OrType {
+            fastn_type::Kind::OrType { name, .. } if name.eq(ftd::interpreter::FTD_LENGTH) => None,
+            fastn_type::Kind::OrType {
                 name,
                 variant: Some(variant),
                 full_variant,

@@ -29,9 +29,9 @@ impl Record {
         let name = doc.resolve_name(record.name.as_str());
         let known_kinds = std::iter::IntoIterator::into_iter([(
             record.name.to_string(),
-            ftd::interpreter::Kind::record(name.as_str()),
+            fastn_type::Kind::record(name.as_str()),
         )])
-        .collect::<ftd::Map<ftd::interpreter::Kind>>();
+        .collect::<ftd::Map<fastn_type::Kind>>();
         Field::scan_ast_fields(record.fields, doc, &known_kinds)
     }
 
@@ -50,11 +50,11 @@ impl Record {
         let name = doc.resolve_name(record.name.as_str());
         let known_kinds = std::iter::IntoIterator::into_iter([(
             record.name.to_string(),
-            ftd::interpreter::Kind::Record {
+            fastn_type::Kind::Record {
                 name: name.to_string(),
             },
         )])
-        .collect::<ftd::Map<ftd::interpreter::Kind>>();
+        .collect::<ftd::Map<fastn_type::Kind>>();
         let fields = try_ok_state!(Field::from_ast_fields(
             record.name.as_str(),
             record.fields,
@@ -109,7 +109,7 @@ impl Record {
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Field {
     pub name: String,
-    pub kind: ftd::interpreter::KindData,
+    pub kind: fastn_type::KindData,
     pub mutable: bool,
     pub value: Option<ftd::interpreter::PropertyValue>,
     pub line_number: usize,
@@ -119,7 +119,7 @@ pub struct Field {
 impl Field {
     pub fn new(
         name: &str,
-        kind: ftd::interpreter::KindData,
+        kind: fastn_type::KindData,
         mutable: bool,
         value: Option<ftd::interpreter::PropertyValue>,
         line_number: usize,
@@ -188,7 +188,7 @@ impl Field {
         sources
     }
 
-    pub fn default(name: &str, kind: ftd::interpreter::KindData) -> Field {
+    pub fn default(name: &str, kind: fastn_type::KindData) -> Field {
         Field {
             name: name.to_string(),
             kind,
@@ -201,7 +201,7 @@ impl Field {
 
     pub fn default_with_value(
         name: &str,
-        kind: ftd::interpreter::KindData,
+        kind: fastn_type::KindData,
         value: ftd::interpreter::PropertyValue,
     ) -> Field {
         Field {
@@ -217,7 +217,7 @@ impl Field {
     pub(crate) fn scan_ast_fields(
         fields: Vec<ftd_ast::Field>,
         doc: &mut ftd::interpreter::TDoc,
-        known_kinds: &ftd::Map<ftd::interpreter::Kind>,
+        known_kinds: &ftd::Map<fastn_type::Kind>,
     ) -> ftd::interpreter::Result<()> {
         for field in fields {
             Field::scan_ast_field(field, doc, known_kinds)?;
@@ -228,7 +228,7 @@ impl Field {
     pub fn resolve_kinds_from_ast_fields(
         ast_fields: Vec<ftd_ast::Field>,
         doc: &mut ftd::interpreter::TDoc,
-        known_kinds: &ftd::Map<ftd::interpreter::Kind>,
+        known_kinds: &ftd::Map<fastn_type::Kind>,
     ) -> ftd::interpreter::Result<
         ftd::interpreter::StateWithThing<Vec<ftd::executor::FieldWithValue>>,
     > {
@@ -286,7 +286,7 @@ impl Field {
         name: &str,
         fields: Vec<ftd_ast::Field>,
         doc: &mut ftd::interpreter::TDoc,
-        known_kinds: &ftd::Map<ftd::interpreter::Kind>,
+        known_kinds: &ftd::Map<fastn_type::Kind>,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<Field>>> {
         // First resolve all kinds from ast fields
         let partial_resolved_fields = try_ok_state!(Field::resolve_kinds_from_ast_fields(
@@ -305,9 +305,9 @@ impl Field {
     pub(crate) fn scan_ast_field(
         field: ftd_ast::Field,
         doc: &mut ftd::interpreter::TDoc,
-        known_kinds: &ftd::Map<ftd::interpreter::Kind>,
+        known_kinds: &ftd::Map<fastn_type::Kind>,
     ) -> ftd::interpreter::Result<()> {
-        ftd::interpreter::KindData::scan_ast_kind(field.kind, known_kinds, doc, field.line_number)?;
+        fastn_type::KindData::scan_ast_kind(field.kind, known_kinds, doc, field.line_number)?;
 
         if let Some(value) = field.value {
             ftd::interpreter::PropertyValue::scan_ast_value(value, doc)?;
@@ -319,9 +319,9 @@ impl Field {
     pub(crate) fn from_ast_field(
         field: ftd_ast::Field,
         doc: &mut ftd::interpreter::TDoc,
-        known_kinds: &ftd::Map<ftd::interpreter::Kind>,
+        known_kinds: &ftd::Map<fastn_type::Kind>,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Field>> {
-        let kind = try_ok_state!(ftd::interpreter::KindData::from_ast_kind(
+        let kind = try_ok_state!(fastn_type::KindData::from_ast_kind(
             field.kind,
             known_kinds,
             doc,
@@ -354,11 +354,11 @@ impl Field {
     pub(crate) fn from_ast_field_kind(
         field: ftd_ast::Field,
         doc: &mut ftd::interpreter::TDoc,
-        known_kinds: &ftd::Map<ftd::interpreter::Kind>,
+        known_kinds: &ftd::Map<fastn_type::Kind>,
     ) -> ftd::interpreter::Result<
         ftd::interpreter::StateWithThing<(Field, Option<ftd_ast::VariableValue>)>,
     > {
-        let kind = try_ok_state!(ftd::interpreter::KindData::from_ast_kind(
+        let kind = try_ok_state!(fastn_type::KindData::from_ast_kind(
             field.kind,
             known_kinds,
             doc,
@@ -460,7 +460,7 @@ impl Field {
         line_number: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<()>> {
         match self.kind.kind.mut_inner() {
-            ftd::interpreter::Kind::OrType {
+            fastn_type::Kind::OrType {
                 name,
                 variant: v,
                 full_variant,

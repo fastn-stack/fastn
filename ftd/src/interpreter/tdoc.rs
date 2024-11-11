@@ -192,7 +192,7 @@ impl<'a> TDoc<'a> {
     pub(crate) fn resolve(
         &self,
         name: &str,
-        kind: &ftd::interpreter::KindData,
+        kind: &fastn_type::KindData,
         line_number: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
         self.resolve_with_inherited(name, kind, line_number, &Default::default())
@@ -201,7 +201,7 @@ impl<'a> TDoc<'a> {
     pub(crate) fn resolve_with_inherited(
         &self,
         name: &str,
-        kind: &ftd::interpreter::KindData,
+        kind: &fastn_type::KindData,
         line_number: usize,
         inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
@@ -546,7 +546,7 @@ impl<'a> TDoc<'a> {
     ) -> ftd::interpreter::Result<
         ftd::interpreter::StateWithThing<(
             ftd::interpreter::PropertyValueSource,
-            ftd::interpreter::KindData,
+            fastn_type::KindData,
             bool,
         )>,
     > {
@@ -575,7 +575,7 @@ impl<'a> TDoc<'a> {
 
                 let (initial_kind, mutable) = match initial_thing {
                     ftd::interpreter::Thing::Record(r) => (
-                        ftd::interpreter::Kind::record(r.name.as_str())
+                        fastn_type::Kind::record(r.name.as_str())
                             .into_kind_data()
                             .caption_or_body(),
                         false,
@@ -583,7 +583,7 @@ impl<'a> TDoc<'a> {
                     ftd::interpreter::Thing::OrType(o) => {
                         if let Some(remaining) = &remaining {
                             (
-                                ftd::interpreter::Kind::or_type_with_variant(
+                                fastn_type::Kind::or_type_with_variant(
                                     o.name.as_str(),
                                     remaining.as_str(),
                                     format!("{}.{}", &o.name, remaining).as_str(),
@@ -594,7 +594,7 @@ impl<'a> TDoc<'a> {
                             )
                         } else {
                             (
-                                ftd::interpreter::Kind::or_type(o.name.as_str())
+                                fastn_type::Kind::or_type(o.name.as_str())
                                     .into_kind_data()
                                     .caption_or_body(),
                                 false,
@@ -602,7 +602,7 @@ impl<'a> TDoc<'a> {
                         }
                     }
                     ftd::interpreter::Thing::OrTypeWithVariant { or_type, variant } => (
-                        ftd::interpreter::Kind::or_type_with_variant(
+                        fastn_type::Kind::or_type_with_variant(
                             or_type.as_str(),
                             variant.name().as_str(),
                             variant.name().as_str(),
@@ -613,13 +613,13 @@ impl<'a> TDoc<'a> {
                     ),
                     ftd::interpreter::Thing::Variable(v) => (v.kind, v.mutable),
                     ftd::interpreter::Thing::Component(c) => (
-                        ftd::interpreter::Kind::ui_with_name(c.name.as_str())
+                        fastn_type::Kind::ui_with_name(c.name.as_str())
                             .into_kind_data()
                             .caption_or_body(),
                         false,
                     ),
                     ftd::interpreter::Thing::WebComponent(c) => (
-                        ftd::interpreter::Kind::web_ui_with_name(c.name.as_str())
+                        fastn_type::Kind::web_ui_with_name(c.name.as_str())
                             .into_kind_data()
                             .caption_or_body(),
                         false,
@@ -662,15 +662,15 @@ impl<'a> TDoc<'a> {
         )));
 
         fn get_kind_(
-            kind: ftd::interpreter::Kind,
+            kind: fastn_type::Kind,
             name: &str,
             doc: &mut ftd::interpreter::TDoc,
             line_number: usize,
-        ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::KindData>>
+        ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::KindData>>
         {
             let (v, remaining) = ftd::interpreter::utils::split_at(name, ".");
             match kind {
-                ftd::interpreter::Kind::Record { name: rec_name } => {
+                fastn_type::Kind::Record { name: rec_name } => {
                     let record = try_ok_state!(doc.search_record(rec_name.as_str(), line_number)?);
                     let field_kind = record.get_field(&v, doc.name, line_number)?.kind.to_owned();
                     if let Some(remaining) = remaining {
@@ -679,16 +679,16 @@ impl<'a> TDoc<'a> {
                         Ok(ftd::interpreter::StateWithThing::new_thing(field_kind))
                     }
                 }
-                ftd::interpreter::Kind::List { kind } => {
+                fastn_type::Kind::List { kind } => {
                     if let Some(remaining) = remaining {
                         get_kind_(*kind, &remaining, doc, line_number)
                     } else {
                         Ok(ftd::interpreter::StateWithThing::new_thing(
-                            ftd::interpreter::KindData::new(*kind),
+                            fastn_type::KindData::new(*kind),
                         ))
                     }
                 }
-                ftd::interpreter::Kind::Optional { kind } => {
+                fastn_type::Kind::Optional { kind } => {
                     let state_with_thing = get_kind_(*kind, name, doc, line_number)?;
                     if let ftd::interpreter::StateWithThing::Thing(ref t) = state_with_thing {
                         Ok(ftd::interpreter::StateWithThing::new_thing(
@@ -698,8 +698,8 @@ impl<'a> TDoc<'a> {
                         Ok(state_with_thing)
                     }
                 }
-                ftd::interpreter::Kind::KwArgs => Ok(ftd::interpreter::StateWithThing::new_thing(
-                    ftd::interpreter::KindData::new(ftd::interpreter::Kind::String),
+                fastn_type::Kind::KwArgs => Ok(ftd::interpreter::StateWithThing::new_thing(
+                    fastn_type::KindData::new(fastn_type::Kind::String),
                 )),
                 t => ftd::interpreter::utils::e2(
                     format!("Expected Record field `{}`, found: `{:?}`", name, t),
@@ -714,8 +714,7 @@ impl<'a> TDoc<'a> {
         &mut self,
         name: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::KindData>>
-    {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::KindData>> {
         match self.get_kind_with_argument(name, line_number, &None, &None)? {
             ftd::interpreter::StateWithThing::State(s) => {
                 Ok(ftd::interpreter::StateWithThing::new_state(s))
@@ -969,7 +968,7 @@ impl<'a> TDoc<'a> {
                             is_mutable,
                         }) => ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
                             name,
-                            kind: ftd::interpreter::KindData {
+                            kind: fastn_type::KindData {
                                 kind: val.kind(),
                                 caption: false,
                                 body: false,
@@ -1407,7 +1406,7 @@ impl<'a> TDoc<'a> {
                             ..
                         }) => ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
                             name,
-                            kind: ftd::interpreter::KindData {
+                            kind: fastn_type::KindData {
                                 kind: val.kind(),
                                 caption: false,
                                 body: false,
@@ -1823,11 +1822,11 @@ impl<'a> TDoc<'a> {
     pub fn rows_to_value(
         &self,
         rows: &[Vec<serde_json::Value>],
-        kind: &ftd::interpreter::Kind,
+        kind: &fastn_type::Kind,
         value: &ftd_ast::VariableValue,
     ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
         Ok(match kind {
-            ftd::interpreter::Kind::List { kind, .. } => {
+            fastn_type::Kind::List { kind, .. } => {
                 let mut data = vec![];
                 for row in rows {
                     data.push(
@@ -1886,10 +1885,10 @@ impl<'a> TDoc<'a> {
     pub fn row_to_value(
         &self,
         row: &[serde_json::Value],
-        kind: &ftd::interpreter::Kind,
+        kind: &fastn_type::Kind,
         value: &ftd_ast::VariableValue,
     ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
-        if let ftd::interpreter::Kind::Record { name } = kind {
+        if let fastn_type::Kind::Record { name } = kind {
             return self.row_to_record(row, name, value);
         }
 
@@ -1913,7 +1912,7 @@ impl<'a> TDoc<'a> {
     pub fn from_json<T>(
         &self,
         json: &T,
-        kind: &ftd::interpreter::Kind,
+        kind: &fastn_type::Kind,
         value: &ftd_ast::VariableValue,
     ) -> ftd::interpreter::Result<ftd::interpreter::Value>
     where
@@ -1941,7 +1940,7 @@ impl<'a> TDoc<'a> {
 
     fn handle_object(
         &self,
-        kind: &ftd::interpreter::Kind,
+        kind: &fastn_type::Kind,
         o: &serde_json::Map<String, serde_json::Value>,
         default_value: Option<String>,
         record_name: Option<String>,
@@ -1964,14 +1963,14 @@ impl<'a> TDoc<'a> {
 
     fn as_json_(
         &self,
-        kind: &ftd::interpreter::Kind,
+        kind: &fastn_type::Kind,
         json: &serde_json::Value,
         default_value: Option<String>,
         record_name: Option<String>,
         line_number: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
         Ok(match kind {
-            ftd::interpreter::Kind::String { .. } => ftd::interpreter::Value::String {
+            fastn_type::Kind::String { .. } => ftd::interpreter::Value::String {
                 text: match json {
                     serde_json::Value::String(v) => v.to_string(),
                     serde_json::Value::Object(o) => {
@@ -1986,7 +1985,7 @@ impl<'a> TDoc<'a> {
                     }
                 },
             },
-            ftd::interpreter::Kind::Integer { .. } => ftd::interpreter::Value::Integer {
+            fastn_type::Kind::Integer { .. } => ftd::interpreter::Value::Integer {
                 value: match json {
                     serde_json::Value::Number(n) => {
                         n.as_i64()
@@ -2016,7 +2015,7 @@ impl<'a> TDoc<'a> {
                     }
                 },
             },
-            ftd::interpreter::Kind::Decimal { .. } => ftd::interpreter::Value::Decimal {
+            fastn_type::Kind::Decimal { .. } => ftd::interpreter::Value::Decimal {
                 value: match json {
                     serde_json::Value::Number(n) => {
                         n.as_f64()
@@ -2046,7 +2045,7 @@ impl<'a> TDoc<'a> {
                     }
                 },
             },
-            ftd::interpreter::Kind::Boolean { .. } => ftd::interpreter::Value::Boolean {
+            fastn_type::Kind::Boolean { .. } => ftd::interpreter::Value::Boolean {
                 value: match json {
                     serde_json::Value::Bool(n) => *n,
                     serde_json::Value::String(s) => {
@@ -2080,7 +2079,7 @@ impl<'a> TDoc<'a> {
                     }
                 },
             },
-            ftd::interpreter::Kind::Record { name, .. } => {
+            fastn_type::Kind::Record { name, .. } => {
                 let rec_fields = self.get_record(name, line_number)?.fields;
                 let mut fields: ftd::Map<ftd::interpreter::PropertyValue> = Default::default();
                 if let serde_json::Value::Object(o) = json {
@@ -2148,7 +2147,7 @@ impl<'a> TDoc<'a> {
                     fields,
                 }
             }
-            ftd::interpreter::Kind::List { kind, .. } => {
+            fastn_type::Kind::List { kind, .. } => {
                 let mut data: Vec<ftd::interpreter::PropertyValue> = vec![];
                 if let serde_json::Value::Array(list) = json {
                     for item in list {
@@ -2171,7 +2170,7 @@ impl<'a> TDoc<'a> {
                     kind: kind.to_owned().into_kind_data(),
                 }
             }
-            ftd::interpreter::Kind::Optional { kind, .. } => {
+            fastn_type::Kind::Optional { kind, .. } => {
                 let kind = kind.as_ref();
                 match json {
                     serde_json::Value::Null => ftd::interpreter::Value::Optional {

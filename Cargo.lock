@@ -1729,6 +1729,7 @@ dependencies = [
  "diffy",
  "fastn-grammar",
  "fastn-js",
+ "fastn-type",
  "format_num",
  "ftd-ast",
  "ftd-p1",

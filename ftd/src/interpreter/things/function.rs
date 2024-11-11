@@ -1,7 +1,7 @@
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Function {
     pub name: String,
-    pub return_kind: ftd::interpreter::KindData,
+    pub return_kind: fastn_type::KindData,
     pub arguments: Vec<ftd::interpreter::Argument>,
     pub expression: Vec<Expression>,
     pub js: Option<ftd::interpreter::PropertyValue>,
@@ -12,7 +12,7 @@ pub struct Function {
 impl Function {
     fn new(
         name: &str,
-        return_kind: ftd::interpreter::KindData,
+        return_kind: fastn_type::KindData,
         arguments: Vec<ftd::interpreter::Argument>,
         expression: Vec<Expression>,
         js: Option<ftd::interpreter::PropertyValue>,
@@ -36,7 +36,7 @@ impl Function {
         let function = ast.get_function(doc.name)?;
         ftd::interpreter::Argument::scan_ast_fields(function.arguments, doc, &Default::default())?;
 
-        ftd::interpreter::KindData::scan_ast_kind(
+        fastn_type::KindData::scan_ast_kind(
             function.kind,
             &Default::default(),
             doc,
@@ -65,11 +65,7 @@ impl Function {
                     },
                     doc,
                     false,
-                    Some(
-                        &ftd::interpreter::Kind::string()
-                            .into_list()
-                            .into_kind_data()
-                    ),
+                    Some(&fastn_type::Kind::string().into_list().into_kind_data()),
                 )?
             ))
         } else {
@@ -83,7 +79,7 @@ impl Function {
             &Default::default(),
         )?);
 
-        let kind = try_ok_state!(ftd::interpreter::KindData::from_ast_kind(
+        let kind = try_ok_state!(fastn_type::KindData::from_ast_kind(
             function.kind,
             &Default::default(),
             doc,
@@ -107,7 +103,7 @@ impl Function {
 
     pub(crate) fn resolve(
         &self,
-        _kind: &ftd::interpreter::KindData,
+        _kind: &fastn_type::KindData,
         values: &ftd::Map<ftd::interpreter::PropertyValue>,
         doc: &ftd::interpreter::TDoc,
         line_number: usize,
@@ -118,7 +114,7 @@ impl Function {
             value: fastn_grammar::evalexpr::Value,
             reference: Option<String>,
             mutable: bool,
-            kind: ftd::interpreter::Kind,
+            kind: fastn_type::Kind,
         }
 
         let mut context: ftd::Map<VariableContext> = Default::default();
@@ -246,7 +242,7 @@ pub struct Expression {
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct FunctionCall {
     pub name: String,
-    pub kind: ftd::interpreter::KindData,
+    pub kind: fastn_type::KindData,
     pub is_mutable: bool,
     pub line_number: usize,
     pub values: ftd::Map<ftd::interpreter::PropertyValue>,
@@ -258,7 +254,7 @@ pub struct FunctionCall {
 impl FunctionCall {
     pub fn new(
         name: &str,
-        kind: ftd::interpreter::KindData,
+        kind: fastn_type::KindData,
         is_mutable: bool,
         line_number: usize,
         values: ftd::Map<ftd::interpreter::PropertyValue>,

@@ -1,7 +1,7 @@
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Variable {
     pub name: String,
-    pub kind: ftd::interpreter::KindData,
+    pub kind: fastn_type::KindData,
     pub mutable: bool,
     pub value: ftd::interpreter::PropertyValue,
     pub conditional_value: Vec<ConditionalValue>,
@@ -15,7 +15,7 @@ impl Variable {
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         let variable_definition = ast.clone().get_variable_definition(doc.name)?;
-        ftd::interpreter::KindData::scan_ast_kind(
+        fastn_type::KindData::scan_ast_kind(
             variable_definition.kind,
             &Default::default(),
             doc,
@@ -78,7 +78,7 @@ impl Variable {
     {
         let variable_definition = ast.clone().get_variable_definition(doc.name)?;
         let name = doc.resolve_name(variable_definition.name.as_str());
-        let kind = try_ok_state!(ftd::interpreter::KindData::from_ast_kind(
+        let kind = try_ok_state!(fastn_type::KindData::from_ast_kind(
             variable_definition.kind,
             &Default::default(),
             doc,
