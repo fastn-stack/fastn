@@ -1,7 +1,7 @@
 pub fn process(
     variable_name: String,
     value: ftd_ast::VariableValue,
-    kind: ftd::interpreter::Kind,
+    kind: fastn_type::Kind,
     doc: &ftd::interpreter::TDoc,
     req_config: &mut fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {

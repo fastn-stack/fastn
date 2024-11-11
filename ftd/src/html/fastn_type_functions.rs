@@ -5,8 +5,6 @@ pub(crate) trait KindExt {
     fn is_ftd_background_color(&self) -> bool;
     fn is_ftd_length(&self) -> bool;
     fn is_ftd_image_src(&self) -> bool;
-    fn is_ftd_video_src(&self) -> bool;
-    fn is_ftd_video_poster(&self) -> bool;
     fn is_ftd_color(&self) -> bool;
     fn is_ftd_resizing(&self) -> bool;
     fn is_ftd_resizing_fixed(&self) -> bool;
@@ -41,16 +39,6 @@ impl KindExt for fastn_type::Kind {
     fn is_ftd_image_src(&self) -> bool {
         matches!(self, fastn_type::Kind::Record { name, .. } if name.eq
             (ftd::interpreter::FTD_IMAGE_SRC))
-    }
-
-    fn is_ftd_video_src(&self) -> bool {
-        matches!(self, fastn_type::Kind::Record { name, .. } if name.eq
-            (ftd::interpreter::FTD_VIDEO_SRC))
-    }
-
-    fn is_ftd_video_poster(&self) -> bool {
-        matches!(self, fastn_type::Kind::Record { name, .. } if name.eq
-            (ftd::interpreter::FTD_VIDEO_POSTER))
     }
 
     fn is_ftd_color(&self) -> bool {

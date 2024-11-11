@@ -2,7 +2,7 @@ use crate::library2022::processor::sqlite::result_to_value;
 
 pub async fn process(
     value: ftd_ast::VariableValue,
-    kind: ftd::interpreter::Kind,
+    kind: fastn_type::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     config: &mut fastn_core::RequestConfig,
     q_kind: &str,

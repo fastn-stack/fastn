@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 pub fn process_figma_tokens(
     value: ftd_ast::VariableValue,
-    kind: ftd::interpreter::Kind,
+    kind: fastn_type::Kind,
     doc: &mut ftd::interpreter::TDoc,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let line_number = value.line_number();
@@ -44,7 +44,7 @@ pub fn process_figma_tokens(
 
 pub fn process_figma_tokens_old(
     value: ftd_ast::VariableValue,
-    kind: ftd::interpreter::Kind,
+    kind: fastn_type::Kind,
     doc: &mut ftd::interpreter::TDoc,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let line_number = value.line_number();

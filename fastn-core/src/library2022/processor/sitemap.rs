@@ -1,6 +1,6 @@
 pub fn process(
     value: ftd_ast::VariableValue,
-    kind: ftd::interpreter::Kind,
+    kind: fastn_type::Kind,
     doc: &ftd::interpreter::TDoc,
     req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
@@ -30,7 +30,7 @@ pub fn process(
 
 pub fn full_sitemap_process(
     value: ftd_ast::VariableValue,
-    kind: ftd::interpreter::Kind,
+    kind: fastn_type::Kind,
     doc: &ftd::interpreter::TDoc,
     req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {

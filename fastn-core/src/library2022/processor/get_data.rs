@@ -1,6 +1,6 @@
 pub fn process(
     value: ftd_ast::VariableValue,
-    kind: ftd::interpreter::Kind,
+    kind: fastn_type::Kind,
     doc: &ftd::interpreter::TDoc,
     req_config: &mut fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
@@ -34,7 +34,7 @@ pub fn process(
 
     if let Some(data) = req_config.extra_data.get(key.as_str()) {
         return match kind {
-            ftd::interpreter::Kind::Integer => {
+            fastn_type::Kind::Integer => {
                 let value2 =
                     data.parse::<i64>()
                         .map_err(|e| ftd::interpreter::Error::ParseError {
@@ -44,7 +44,7 @@ pub fn process(
                         })?;
                 doc.from_json(&value2, &kind, &value)
             }
-            ftd::interpreter::Kind::Decimal { .. } => {
+            fastn_type::Kind::Decimal { .. } => {
                 let value2 =
                     data.parse::<f64>()
                         .map_err(|e| ftd::interpreter::Error::ParseError {
@@ -54,7 +54,7 @@ pub fn process(
                         })?;
                 doc.from_json(&value2, &kind, &value)
             }
-            ftd::interpreter::Kind::Boolean { .. } => {
+            fastn_type::Kind::Boolean { .. } => {
                 let value2 =
                     data.parse::<bool>()
                         .map_err(|e| ftd::interpreter::Error::ParseError {

@@ -29,7 +29,7 @@ pub(crate) fn get_p1_data(
 
 pub(crate) fn result_to_value(
     result: Vec<Vec<serde_json::Value>>,
-    kind: ftd::interpreter::Kind,
+    kind: fastn_type::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     value: &ftd_ast::VariableValue,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
@@ -40,7 +40,7 @@ pub(crate) fn result_to_value(
             1 => doc.row_to_value(&result[0], &kind, value),
             0 if kind.is_optional() => Ok(ftd::interpreter::Value::Optional {
                 data: Box::new(None),
-                kind: ftd::interpreter::KindData::new(kind),
+                kind: fastn_type::KindData::new(kind),
             }),
             len => ftd::interpreter::utils::e2(
                 format!("Query returned {} rows, expected one row", len),

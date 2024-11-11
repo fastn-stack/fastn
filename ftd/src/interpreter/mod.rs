@@ -41,6 +41,7 @@ pub mod utils;
 
 pub use prelude::*;
 
+pub use fastn_type_functions::KindDataExt;
 pub use tdoc::{BagOrState, TDoc};
 pub use things::expression;
 

@@ -1,6 +1,6 @@
 pub fn process(
     value: ftd_ast::VariableValue,
-    kind: ftd::interpreter::Kind,
+    kind: fastn_type::Kind,
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
     let (body, line_number) = if let Ok(body) = value.get_processor_body(doc.name) {

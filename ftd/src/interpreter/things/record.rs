@@ -307,7 +307,7 @@ impl Field {
         doc: &mut ftd::interpreter::TDoc,
         known_kinds: &ftd::Map<fastn_type::Kind>,
     ) -> ftd::interpreter::Result<()> {
-        use ftd::interpreter::fastn_type_functions::KindDataExt;
+        use ftd::interpreter::KindDataExt;
 
         fastn_type::KindData::scan_ast_kind(field.kind, known_kinds, doc, field.line_number)?;
 
@@ -323,7 +323,7 @@ impl Field {
         doc: &mut ftd::interpreter::TDoc,
         known_kinds: &ftd::Map<fastn_type::Kind>,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Field>> {
-        use ftd::interpreter::fastn_type_functions::KindDataExt;
+        use ftd::interpreter::KindDataExt;
 
         let kind = try_ok_state!(fastn_type::KindData::from_ast_kind(
             field.kind,
@@ -362,7 +362,7 @@ impl Field {
     ) -> ftd::interpreter::Result<
         ftd::interpreter::StateWithThing<(Field, Option<ftd_ast::VariableValue>)>,
     > {
-        use ftd::interpreter::fastn_type_functions::KindDataExt;
+        use ftd::interpreter::KindDataExt;
 
         let kind = try_ok_state!(fastn_type::KindData::from_ast_kind(
             field.kind,

@@ -1,6 +1,6 @@
 pub async fn process(
     value: ftd_ast::VariableValue,
-    kind: ftd::interpreter::Kind,
+    kind: fastn_type::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &mut fastn_core::RequestConfig,
     preview_session_id: &Option<String>,
