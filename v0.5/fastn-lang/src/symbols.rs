@@ -12,7 +12,7 @@ pub enum LookupResult {
     ///
     /// what if we store the dependencies it failed on, so when any of them changes, we can
     /// revalidate?
-    LastResolutionFailed,
+    LastResolutionFailed(Vec<fastn_section::Error>),
 }
 
 #[async_trait::async_trait]

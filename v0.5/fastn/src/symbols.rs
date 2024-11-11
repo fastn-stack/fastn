@@ -1,6 +1,10 @@
 #[derive(Debug, Default)]
 pub struct Symbols {
+    #[expect(unused)]
     resolved: std::collections::HashMap<String, fastn_unresolved::Definition>,
+    #[expect(unused)]
+    failed: std::collections::HashMap<String, Vec<fastn_section::Error>>,
+    #[expect(unused)]
     unresolved: std::collections::HashMap<String, fastn_unresolved::Definition>,
 }
 

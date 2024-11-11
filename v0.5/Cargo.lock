@@ -74,6 +74,7 @@ dependencies = [
  "async-trait",
  "fastn-core",
  "fastn-lang",
+ "fastn-section",
  "fastn-unresolved",
  "serde_json",
  "tokio",
