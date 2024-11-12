@@ -323,6 +323,7 @@ theme if { ftd.dark-mode }: fastn-theme.dark
 text: $rendered.input
 lang: ftd
 width: fill-container
+white-space: break-spaces
 role: $inherited.types.copy-regular
 color: $inherited.colors.text
 background.solid: $inherited.colors.background.code

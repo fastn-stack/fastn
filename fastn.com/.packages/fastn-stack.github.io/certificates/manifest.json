@@ -1,361 +1,361 @@
 {
-    "files": {
-        "assets/certificate/ipsum-logo.svg": {
-            "name": "assets/certificate/ipsum-logo.svg",
-            "checksum": "A227CF22E798ACFB2D01B6352FC22A28047444F028AF05440C6CE6F9499C0EDF",
-            "size": 15494
-        },
-        "assets/avatar/sayak.jpeg": {
-            "name": "assets/avatar/sayak.jpeg",
-            "checksum": "3AF4E0B57467B9C152536FFE5A9AF094E983B7880AF4F5AB1D020F98FF3D4F47",
-            "size": 132184
-        },
-        "assets/ipsum-logo-dark.svg": {
-            "name": "assets/ipsum-logo-dark.svg",
-            "checksum": "8290B3397C465FE1BB40B7CA280C976DF7DA3DABFC655B429805ABF33964FB5B",
-            "size": 16202
-        },
-        "assets/certificate/background-dark.svg": {
-            "name": "assets/certificate/background-dark.svg",
-            "checksum": "A85360B606F55E1A117421EE95A93E33E3A54F5BBFCC6513D855C4A216904CBE",
-            "size": 5688
-        },
-        "champions/jahanvi-raycha.ftd": {
-            "name": "champions/jahanvi-raycha.ftd",
-            "checksum": "733B4F48E637DBE58CAB0A16465CF87F24103C4FEBA75079144F50BC2AB6E307",
-            "size": 410
-        },
-        "assets/avatar/sree.png": {
-            "name": "assets/avatar/sree.png",
-            "checksum": "1DDD5E7DCAF6B1D0C9652CB71E6287CDD5508D39904117515372CEFD9C6E5920",
-            "size": 236380
-        },
-        "assets/certificate/background.svg": {
-            "name": "assets/certificate/background.svg",
-            "checksum": "F6BBB3E9261B31B6E3F2D3C2A04D644354F85FDE94D21774D744BB3E8EE9E3A1",
-            "size": 5688
-        },
-        "assets/cert-icon-hover.svg": {
-            "name": "assets/cert-icon-hover.svg",
-            "checksum": "A456383FAA2149312C269A782653243E254E04FC2A0C1E03D62DF610CAB31786",
-            "size": 2974
-        },
-        "champions/krish-gupta.ftd": {
-            "name": "champions/krish-gupta.ftd",
-            "checksum": "D18D707D41ECECD286AB9994E83BAF09AF900562B1CAEDB9E34DEE5B542D1A86",
-            "size": 459
-        },
-        "assets/certificate/fastn-badge-dark.svg": {
-            "name": "assets/certificate/fastn-badge-dark.svg",
-            "checksum": "70FA4F035EFF8A3D71920D6D9570B89B311A3DCF736CC5E59D78E0F8842E4DB4",
-            "size": 11356
-        },
-        "assets/certificate/background-3.svg": {
-            "name": "assets/certificate/background-3.svg",
-            "checksum": "BC2DF65BB0801C3BE9CE7C11199355B5030DB46F9FFC7FDDC2D9B3CF24AD7201",
-            "size": 41453
-        },
-        "assets/avatar/nishant.png": {
-            "name": "assets/avatar/nishant.png",
-            "checksum": "FBA49493DD040F6C0D7F3C762CF26BA3A4E1D0399AD4ED929F0C24A5AC76C456",
-            "size": 1610936
-        },
-        "assets/discord.svg": {
-            "name": "assets/discord.svg",
-            "checksum": "58CD7DE08D2942030172844CE03202C2EB6EFAF760AD0C6823ADD5E6135B0A7E",
-            "size": 1951
-        },
-        "FASTN/ds.ftd": {
-            "name": "FASTN/ds.ftd",
-            "checksum": "27EB6F8FCBF7B0F97960EBAC1CBD73F8A6B32919C5E80F44A4564F9F8CB21E9C",
-            "size": 2352
-        },
-        "assets/certificate/fastn-badge.svg": {
-            "name": "assets/certificate/fastn-badge.svg",
-            "checksum": "004E32CFFE57ECB1C28611B4F40E5725656F033EEAC77F21123C52A0F6CDDD01",
-            "size": 11484
-        },
-        "assets/avatar/krish.png": {
-            "name": "assets/avatar/krish.png",
-            "checksum": "220660C47A424516A7897777F384DB19C1F84D41F03B3EDDAC975B08BE0A6486",
-            "size": 945093
-        },
-        "champions/ajit-garg.ftd": {
-            "name": "champions/ajit-garg.ftd",
-            "checksum": "20AD5D0A35C1656CC3A49526BE6A3A3C39C325C0D6F24063975B9639CE1D1ED0",
-            "size": 377
-        },
-        "champions/index.ftd": {
-            "name": "champions/index.ftd",
-            "checksum": "FD00184D7F093F27E1BB2F3FF13B10A0BC3B3115AFF127623617BDD30E3B66B8",
-            "size": 938
-        },
-        "ambassadors/ajit-garg.ftd": {
-            "name": "ambassadors/ajit-garg.ftd",
-            "checksum": "C59C8B189242D631765DC30D3615612A91227BC3A9BBE734C8083FC2DCEC0853",
-            "size": 278
-        },
-        "assets/cert-icon-dark.svg": {
-            "name": "assets/cert-icon-dark.svg",
-            "checksum": "39D26BC505C5CD4A2538995F27CBE8FAC3AC37267ACACEEA2A119BBEEC106BB6",
-            "size": 2980
-        },
-        "assets/avatar/ayush-soni.jpg": {
-            "name": "assets/avatar/ayush-soni.jpg",
-            "checksum": "4FF7D5B04BBF3EA71073AAD5307A4FCA18C6BA91048897D036CDDAFCD57A6087",
-            "size": 187722
-        },
-        "assets/certificate/background-2.svg": {
-            "name": "assets/certificate/background-2.svg",
-            "checksum": "153ED3CF79ED2932B72CEF51104D64C73279D11EBE8E7BEB09D9EDDE0334BF38",
-            "size": 18875
-        },
-        "assets/certificate/fastn-badge-white-dark.svg": {
-            "name": "assets/certificate/fastn-badge-white-dark.svg",
-            "checksum": "1D43A0697ECDF3A3E5A9E76EFF01539EF4AC940928C5C7830834DF7EE12907A5",
-            "size": 11451
-        },
-        "assets/github.svg": {
-            "name": "assets/github.svg",
-            "checksum": "4385CDFDA4B72939197678B845CF15533E179914F4CC4E71FCF68640A98B010A",
-            "size": 2089
-        },
-        "assets/linkedin.svg": {
-            "name": "assets/linkedin.svg",
-            "checksum": "4C6A360D7B8E25FFBB3624A894A1320B04D6E2B80DEF05794C8B6A1D46C7009D",
-            "size": 1592
-        },
-        "assets/certificate/fastn-badge-white.svg": {
-            "name": "assets/certificate/fastn-badge-white.svg",
-            "checksum": "9D3626F3BFA1E309BA0A9827279CEF1E890311BEEA3920BB42643E8F49884430",
-            "size": 11453
-        },
-        "assets/linkedin-dark.svg": {
-            "name": "assets/linkedin-dark.svg",
-            "checksum": "ABF02591F07CC0EFDF63A99B19823A03E59B2E73B4C80F75CC91AC183601304A",
-            "size": 1592
-        },
-        "champions/ayush-soni.ftd": {
-            "name": "champions/ayush-soni.ftd",
-            "checksum": "7401715D569CD8B563D4CF82AF049C8170C5C3FC2502AA36D015A98399F803A8",
-            "size": 383
-        },
-        "ambassadors/govindaraman.ftd": {
-            "name": "ambassadors/govindaraman.ftd",
-            "checksum": "1EFD0E3C2D5D4F01ECA97CA7EC37EC85C9E90CEDD9228EEFF3D78C7AD28F16B0",
-            "size": 289
-        },
-        "champions/adarsh-gupta.ftd": {
-            "name": "champions/adarsh-gupta.ftd",
-            "checksum": "DA3BB51E04773B9AC4142A494CFC320D4FE9872C7C8715390EB68C08BD9D48BE",
-            "size": 463
-        },
-        "lib.ftd": {
-            "name": "lib.ftd",
-            "checksum": "A9D9CEC07E37ACCC1F733E5BAE79094149032FDE7AD98F3913FA31F6378FE436",
-            "size": 4083
-        },
-        "assets/certificate/download-dark.svg": {
-            "name": "assets/certificate/download-dark.svg",
-            "checksum": "D6F756207B780B679E1FF4957597FBBC843EBDE678761A9181F6E61DEB011769",
-            "size": 344
-        },
-        "ambassadors/ayush-soni.ftd": {
-            "name": "ambassadors/ayush-soni.ftd",
-            "checksum": "E6C9A2AFE14DA67F4825745133BC262F189751C5995629B06927FD009C27AFF7",
-            "size": 285
-        },
-        "assets/discord-dark.svg": {
-            "name": "assets/discord-dark.svg",
-            "checksum": "C37861DCB8B69809E02B9D6C49C83E7736524EEAC5D361D05285EEAE4EACCECD",
-            "size": 1951
-        },
-        "champions/sreejita-dutta.ftd": {
-            "name": "champions/sreejita-dutta.ftd",
-            "checksum": "B49679594397872D597CDF8308A5B6090B6C8A6838527C95670612959C5848BD",
-            "size": 464
-        },
-        "champions/rutuja-kapate.ftd": {
-            "name": "champions/rutuja-kapate.ftd",
-            "checksum": "8534801AA338DF53BE87B8F84F4BD7A03B0C130FDD7A705BDEB186ACF1CCA711",
-            "size": 472
-        },
-        "assets/avatar/atharva-pise.jpeg": {
-            "name": "assets/avatar/atharva-pise.jpeg",
-            "checksum": "760D6331AE16F03D6B7E959A876FF10257174BABD840C249AEE8887DC6C3E3D8",
-            "size": 8065
-        },
-        "_config.yml": {
-            "name": "_config.yml",
-            "checksum": "A42D91290C93B5F17412C3B346737EA1C796E5D287306758AFE8B20470119D80",
-            "size": 21
-        },
-        "assets/certificate/download-hover.svg": {
-            "name": "assets/certificate/download-hover.svg",
-            "checksum": "000AC59E001FF0BC322D4908F84C1E5E1C438AFBE3A1DA119C583E1B972D8444",
-            "size": 348
-        },
-        "ambassadors/index.ftd": {
-            "name": "ambassadors/index.ftd",
-            "checksum": "4E5788FD73258FAEAE32A23E705AB5711569E970968A43A803A44DE5F46AD4ED",
-            "size": 611
-        },
-        "assets/certificate/avatars/avatar-1.svg": {
-            "name": "assets/certificate/avatars/avatar-1.svg",
-            "checksum": "CC83ED6B18197A3A8C153452123BBBF16CA3F2E64FA8B619B17237423421595B",
-            "size": 83160
-        },
-        "champion.ftd": {
-            "name": "champion.ftd",
-            "checksum": "B48A79148D99900F33800B56484F594B5692B6C5CCA5E7AFDB45805D4EADE7F9",
-            "size": 7774
-        },
-        "ambassadors/krish-gupta.ftd": {
-            "name": "ambassadors/krish-gupta.ftd",
-            "checksum": "EBA95F57EF8DF2CFF3BF840D6C9DDD76D0F967D5001040361735A9D8CA41CE3C",
-            "size": 281
-        },
-        "assets/fastn.svg": {
-            "name": "assets/fastn.svg",
-            "checksum": "E5C26FBE6E539422FECB83E27FC34EAA4BC5514DBA0FE388B99DB7F45F4B4E5E",
-            "size": 4981
-        },
-        "index.ftd": {
-            "name": "index.ftd",
-            "checksum": "724409BF296DC3D4054FAA415F2EF634749199259590D2F0139D2017D18624DD",
-            "size": 2535
-        },
-        "assets/cert-icon.svg": {
-            "name": "assets/cert-icon.svg",
-            "checksum": "C52A80A06BE9815DD6C860D476FE425EBA0135D5F0B7DC0B809BF9736D8DCB1A",
-            "size": 2973
-        },
-        "ambassadors/nishant.ftd": {
-            "name": "ambassadors/nishant.ftd",
-            "checksum": "C1C1D4077D4B8B04B97C03C666263D2FF565547DC82F20CBC6B3991BD717FB70",
-            "size": 279
-        },
-        "champions/govindaraman.ftd": {
-            "name": "champions/govindaraman.ftd",
-            "checksum": "E5FD81D58FD5F348A87CEE03E5DCC6519596450D5B90B41E1473CED83D72F487",
-            "size": 424
-        },
-        "assets/github-hover.svg": {
-            "name": "assets/github-hover.svg",
-            "checksum": "8349AD532C07C4C9023815918F2C3408475590D5F3C96772EFF3E6A610C24275",
-            "size": 2089
-        },
-        "assets/avatar/ajit.jpg": {
-            "name": "assets/avatar/ajit.jpg",
-            "checksum": "EE1D93BA282031A45DFF1FE424E247205E4A253AEB4742897A827014F48917D5",
-            "size": 40897
-        },
-        "FASTN.ftd": {
-            "name": "FASTN.ftd",
-            "checksum": "AAC503F5DFDEE7813FB4ACB51C8359AD4D7F2ED42112B0A9481484CCC2F51F73",
-            "size": 697
-        },
-        "assets/github-dark.svg": {
-            "name": "assets/github-dark.svg",
-            "checksum": "F61B710B1C5A525BE3A318F50BF18B19CA25BE6C7D8FFB0AA80865A3D444F047",
-            "size": 2089
-        },
-        "champions/sayak-saha.ftd": {
-            "name": "champions/sayak-saha.ftd",
-            "checksum": "3B1C6A047630B52FE5E5B50CF84212EC5DC6DE2961BC47F13EE480E6286EEAAF",
-            "size": 400
-        },
-        "assets/certificate/download.svg": {
-            "name": "assets/certificate/download.svg",
-            "checksum": "911B6368A3506C9939E16AD3CE06BD36FDD82B6F3D3D0D05504D90C91FEB5425",
-            "size": 344
-        },
-        "assets/certificate/ipsum-logo-dark.svg": {
-            "name": "assets/certificate/ipsum-logo-dark.svg",
-            "checksum": "8290B3397C465FE1BB40B7CA280C976DF7DA3DABFC655B429805ABF33964FB5B",
-            "size": 16202
-        },
-        "assets/certificate/color-bar.svg": {
-            "name": "assets/certificate/color-bar.svg",
-            "checksum": "5EF8D446ADC26193D6A0ED855EEDFF87E211E33E65A46F30E066EB0E3FB1638B",
-            "size": 322
-        },
-        "assets/discord-hover-dark.svg": {
-            "name": "assets/discord-hover-dark.svg",
-            "checksum": "D172EC014EEC09569C94183599DE13E232BB1CB3DA3267F68A10B600E6AD6F72",
-            "size": 1932
-        },
-        "ambassadors/rutuja-kapate.ftd": {
-            "name": "ambassadors/rutuja-kapate.ftd",
-            "checksum": "EB62442431872021BEF0312BFE02A2C0B878EE65CF0FFE793A091DF241460795",
-            "size": 285
-        },
-        "assets/linkedin-hover.svg": {
-            "name": "assets/linkedin-hover.svg",
-            "checksum": "4FC7239BD645ADF3A81526F5ED630C6946DB1BC6C7E2A07505D4832E767A5452",
-            "size": 1592
-        },
-        "assets/avatar/jahanvi-raycha.jpg": {
-            "name": "assets/avatar/jahanvi-raycha.jpg",
-            "checksum": "342C65CC433DA5D97A9A45BD85239CA4B7CE8A49773B040BD77EF717B05AD5C9",
-            "size": 18200
-        },
-        "champions/atharva-pise.ftd": {
-            "name": "champions/atharva-pise.ftd",
-            "checksum": "BBB94B56CF28FC0019D9267177AF84CA3CEC4C08156567D49EA74FA905486BA8",
-            "size": 408
-        },
-        "favicon.svg": {
-            "name": "favicon.svg",
-            "checksum": "11B8FED5369762764C19DD8F8A07056FB63AB678916CA447E63DD9BCCEB21BCE",
-            "size": 5216
-        },
-        "README.md": {
-            "name": "README.md",
-            "checksum": "2C372A7AA51EFF6E5BE56E3D2D56DD55D63FBDF58A4D2E279392A02B55DDB960",
-            "size": 1416
-        },
-        "assets/ipsum-logo.svg": {
-            "name": "assets/ipsum-logo.svg",
-            "checksum": "A227CF22E798ACFB2D01B6352FC22A28047444F028AF05440C6CE6F9499C0EDF",
-            "size": 15494
-        },
-        "assets/avatar/adarsh-gupta.png": {
-            "name": "assets/avatar/adarsh-gupta.png",
-            "checksum": "1143634CD43C9ADD257059F31D8AC46DA0DB66D97442BBCB3E5AD3E4693F922A",
-            "size": 189283
-        },
-        "assets/certificate/background-2-dark.svg": {
-            "name": "assets/certificate/background-2-dark.svg",
-            "checksum": "6B56579105230C5B5EF38C509E4925BDD67F2F8117BC172A65457F33B33C785F",
-            "size": 18875
-        },
-        "assets/avatar/govindaraman.jpg": {
-            "name": "assets/avatar/govindaraman.jpg",
-            "checksum": "7C4C0714CDAE859E8C0F091A2DB78F26BDBB4639A089F421539075D2CD1A9DF1",
-            "size": 13394
-        },
-        "assets/avatar/rutuja.jpeg": {
-            "name": "assets/avatar/rutuja.jpeg",
-            "checksum": "8947D833617CEA41EF5AA7D05D24C9D912C8DB9310D06093CBC4CF48ADCE408D",
-            "size": 56256
-        },
-        "champions/shantnu-fartode.ftd": {
-            "name": "champions/shantnu-fartode.ftd",
-            "checksum": "2593FB39C32249CFB7205721CE0A03C1CDFD6013A64456149D574062A7C680AF",
-            "size": 489
-        },
-        "ambassador.ftd": {
-            "name": "ambassador.ftd",
-            "checksum": "74BA61EAAC45647278F4C6E71DAF62EC7C277017B600155D8A92A5465CA0472F",
-            "size": 7581
-        },
-        "assets/discord-hover.svg": {
-            "name": "assets/discord-hover.svg",
-            "checksum": "FAC3512D2BC0FA800D892F2B59C147CA45E8CD948140D893AB34090F6EED89FB",
-            "size": 1944
-        }
+  "files": {
+    "FASTN.ftd": {
+      "name": "FASTN.ftd",
+      "checksum": "AAC503F5DFDEE7813FB4ACB51C8359AD4D7F2ED42112B0A9481484CCC2F51F73",
+      "size": 697
     },
-    "zip_url": "https://github.com/fastn-stack/certificates/archive/6ed6812cc6c8dd1d0e2e7d189e019117f1ecf323.zip",
-    "checksum": "BB80AF630075AFD092F1E5302B8F1687115ECF3CB961D5AF7B8348AD48637C98"
+    "FASTN/ds.ftd": {
+      "name": "FASTN/ds.ftd",
+      "checksum": "27EB6F8FCBF7B0F97960EBAC1CBD73F8A6B32919C5E80F44A4564F9F8CB21E9C",
+      "size": 2352
+    },
+    "README.md": {
+      "name": "README.md",
+      "checksum": "2C372A7AA51EFF6E5BE56E3D2D56DD55D63FBDF58A4D2E279392A02B55DDB960",
+      "size": 1416
+    },
+    "_config.yml": {
+      "name": "_config.yml",
+      "checksum": "A42D91290C93B5F17412C3B346737EA1C796E5D287306758AFE8B20470119D80",
+      "size": 21
+    },
+    "ambassador.ftd": {
+      "name": "ambassador.ftd",
+      "checksum": "74BA61EAAC45647278F4C6E71DAF62EC7C277017B600155D8A92A5465CA0472F",
+      "size": 7581
+    },
+    "ambassadors/ajit-garg.ftd": {
+      "name": "ambassadors/ajit-garg.ftd",
+      "checksum": "C59C8B189242D631765DC30D3615612A91227BC3A9BBE734C8083FC2DCEC0853",
+      "size": 278
+    },
+    "ambassadors/ayush-soni.ftd": {
+      "name": "ambassadors/ayush-soni.ftd",
+      "checksum": "E6C9A2AFE14DA67F4825745133BC262F189751C5995629B06927FD009C27AFF7",
+      "size": 285
+    },
+    "ambassadors/govindaraman.ftd": {
+      "name": "ambassadors/govindaraman.ftd",
+      "checksum": "1EFD0E3C2D5D4F01ECA97CA7EC37EC85C9E90CEDD9228EEFF3D78C7AD28F16B0",
+      "size": 289
+    },
+    "ambassadors/index.ftd": {
+      "name": "ambassadors/index.ftd",
+      "checksum": "41E6DB49CD653BAF4F0E2278D3D68E57BFCCC82536BE38DF1391A70F51738760",
+      "size": 689
+    },
+    "ambassadors/krish-gupta.ftd": {
+      "name": "ambassadors/krish-gupta.ftd",
+      "checksum": "EBA95F57EF8DF2CFF3BF840D6C9DDD76D0F967D5001040361735A9D8CA41CE3C",
+      "size": 281
+    },
+    "ambassadors/nishant.ftd": {
+      "name": "ambassadors/nishant.ftd",
+      "checksum": "C1C1D4077D4B8B04B97C03C666263D2FF565547DC82F20CBC6B3991BD717FB70",
+      "size": 279
+    },
+    "ambassadors/rutuja-kapate.ftd": {
+      "name": "ambassadors/rutuja-kapate.ftd",
+      "checksum": "EB62442431872021BEF0312BFE02A2C0B878EE65CF0FFE793A091DF241460795",
+      "size": 285
+    },
+    "assets/avatar/adarsh-gupta.png": {
+      "name": "assets/avatar/adarsh-gupta.png",
+      "checksum": "1143634CD43C9ADD257059F31D8AC46DA0DB66D97442BBCB3E5AD3E4693F922A",
+      "size": 189283
+    },
+    "assets/avatar/ajit.jpg": {
+      "name": "assets/avatar/ajit.jpg",
+      "checksum": "EE1D93BA282031A45DFF1FE424E247205E4A253AEB4742897A827014F48917D5",
+      "size": 40897
+    },
+    "assets/avatar/atharva-pise.jpeg": {
+      "name": "assets/avatar/atharva-pise.jpeg",
+      "checksum": "760D6331AE16F03D6B7E959A876FF10257174BABD840C249AEE8887DC6C3E3D8",
+      "size": 8065
+    },
+    "assets/avatar/ayush-soni.jpg": {
+      "name": "assets/avatar/ayush-soni.jpg",
+      "checksum": "4FF7D5B04BBF3EA71073AAD5307A4FCA18C6BA91048897D036CDDAFCD57A6087",
+      "size": 187722
+    },
+    "assets/avatar/govindaraman.jpg": {
+      "name": "assets/avatar/govindaraman.jpg",
+      "checksum": "7C4C0714CDAE859E8C0F091A2DB78F26BDBB4639A089F421539075D2CD1A9DF1",
+      "size": 13394
+    },
+    "assets/avatar/jahanvi-raycha.jpg": {
+      "name": "assets/avatar/jahanvi-raycha.jpg",
+      "checksum": "342C65CC433DA5D97A9A45BD85239CA4B7CE8A49773B040BD77EF717B05AD5C9",
+      "size": 18200
+    },
+    "assets/avatar/krish.png": {
+      "name": "assets/avatar/krish.png",
+      "checksum": "220660C47A424516A7897777F384DB19C1F84D41F03B3EDDAC975B08BE0A6486",
+      "size": 945093
+    },
+    "assets/avatar/nishant.png": {
+      "name": "assets/avatar/nishant.png",
+      "checksum": "FBA49493DD040F6C0D7F3C762CF26BA3A4E1D0399AD4ED929F0C24A5AC76C456",
+      "size": 1610936
+    },
+    "assets/avatar/rutuja.jpeg": {
+      "name": "assets/avatar/rutuja.jpeg",
+      "checksum": "8947D833617CEA41EF5AA7D05D24C9D912C8DB9310D06093CBC4CF48ADCE408D",
+      "size": 56256
+    },
+    "assets/avatar/sayak.jpeg": {
+      "name": "assets/avatar/sayak.jpeg",
+      "checksum": "3AF4E0B57467B9C152536FFE5A9AF094E983B7880AF4F5AB1D020F98FF3D4F47",
+      "size": 132184
+    },
+    "assets/avatar/sree.png": {
+      "name": "assets/avatar/sree.png",
+      "checksum": "1DDD5E7DCAF6B1D0C9652CB71E6287CDD5508D39904117515372CEFD9C6E5920",
+      "size": 236380
+    },
+    "assets/cert-icon-dark.svg": {
+      "name": "assets/cert-icon-dark.svg",
+      "checksum": "39D26BC505C5CD4A2538995F27CBE8FAC3AC37267ACACEEA2A119BBEEC106BB6",
+      "size": 2980
+    },
+    "assets/cert-icon-hover.svg": {
+      "name": "assets/cert-icon-hover.svg",
+      "checksum": "A456383FAA2149312C269A782653243E254E04FC2A0C1E03D62DF610CAB31786",
+      "size": 2974
+    },
+    "assets/cert-icon.svg": {
+      "name": "assets/cert-icon.svg",
+      "checksum": "C52A80A06BE9815DD6C860D476FE425EBA0135D5F0B7DC0B809BF9736D8DCB1A",
+      "size": 2973
+    },
+    "assets/certificate/avatars/avatar-1.svg": {
+      "name": "assets/certificate/avatars/avatar-1.svg",
+      "checksum": "CC83ED6B18197A3A8C153452123BBBF16CA3F2E64FA8B619B17237423421595B",
+      "size": 83160
+    },
+    "assets/certificate/background-2-dark.svg": {
+      "name": "assets/certificate/background-2-dark.svg",
+      "checksum": "6B56579105230C5B5EF38C509E4925BDD67F2F8117BC172A65457F33B33C785F",
+      "size": 18875
+    },
+    "assets/certificate/background-2.svg": {
+      "name": "assets/certificate/background-2.svg",
+      "checksum": "153ED3CF79ED2932B72CEF51104D64C73279D11EBE8E7BEB09D9EDDE0334BF38",
+      "size": 18875
+    },
+    "assets/certificate/background-3.svg": {
+      "name": "assets/certificate/background-3.svg",
+      "checksum": "BC2DF65BB0801C3BE9CE7C11199355B5030DB46F9FFC7FDDC2D9B3CF24AD7201",
+      "size": 41453
+    },
+    "assets/certificate/background-dark.svg": {
+      "name": "assets/certificate/background-dark.svg",
+      "checksum": "A85360B606F55E1A117421EE95A93E33E3A54F5BBFCC6513D855C4A216904CBE",
+      "size": 5688
+    },
+    "assets/certificate/background.svg": {
+      "name": "assets/certificate/background.svg",
+      "checksum": "F6BBB3E9261B31B6E3F2D3C2A04D644354F85FDE94D21774D744BB3E8EE9E3A1",
+      "size": 5688
+    },
+    "assets/certificate/color-bar.svg": {
+      "name": "assets/certificate/color-bar.svg",
+      "checksum": "5EF8D446ADC26193D6A0ED855EEDFF87E211E33E65A46F30E066EB0E3FB1638B",
+      "size": 322
+    },
+    "assets/certificate/download-dark.svg": {
+      "name": "assets/certificate/download-dark.svg",
+      "checksum": "D6F756207B780B679E1FF4957597FBBC843EBDE678761A9181F6E61DEB011769",
+      "size": 344
+    },
+    "assets/certificate/download-hover.svg": {
+      "name": "assets/certificate/download-hover.svg",
+      "checksum": "000AC59E001FF0BC322D4908F84C1E5E1C438AFBE3A1DA119C583E1B972D8444",
+      "size": 348
+    },
+    "assets/certificate/download.svg": {
+      "name": "assets/certificate/download.svg",
+      "checksum": "911B6368A3506C9939E16AD3CE06BD36FDD82B6F3D3D0D05504D90C91FEB5425",
+      "size": 344
+    },
+    "assets/certificate/fastn-badge-dark.svg": {
+      "name": "assets/certificate/fastn-badge-dark.svg",
+      "checksum": "70FA4F035EFF8A3D71920D6D9570B89B311A3DCF736CC5E59D78E0F8842E4DB4",
+      "size": 11356
+    },
+    "assets/certificate/fastn-badge-white-dark.svg": {
+      "name": "assets/certificate/fastn-badge-white-dark.svg",
+      "checksum": "1D43A0697ECDF3A3E5A9E76EFF01539EF4AC940928C5C7830834DF7EE12907A5",
+      "size": 11451
+    },
+    "assets/certificate/fastn-badge-white.svg": {
+      "name": "assets/certificate/fastn-badge-white.svg",
+      "checksum": "9D3626F3BFA1E309BA0A9827279CEF1E890311BEEA3920BB42643E8F49884430",
+      "size": 11453
+    },
+    "assets/certificate/fastn-badge.svg": {
+      "name": "assets/certificate/fastn-badge.svg",
+      "checksum": "004E32CFFE57ECB1C28611B4F40E5725656F033EEAC77F21123C52A0F6CDDD01",
+      "size": 11484
+    },
+    "assets/certificate/ipsum-logo-dark.svg": {
+      "name": "assets/certificate/ipsum-logo-dark.svg",
+      "checksum": "8290B3397C465FE1BB40B7CA280C976DF7DA3DABFC655B429805ABF33964FB5B",
+      "size": 16202
+    },
+    "assets/certificate/ipsum-logo.svg": {
+      "name": "assets/certificate/ipsum-logo.svg",
+      "checksum": "A227CF22E798ACFB2D01B6352FC22A28047444F028AF05440C6CE6F9499C0EDF",
+      "size": 15494
+    },
+    "assets/discord-dark.svg": {
+      "name": "assets/discord-dark.svg",
+      "checksum": "C37861DCB8B69809E02B9D6C49C83E7736524EEAC5D361D05285EEAE4EACCECD",
+      "size": 1951
+    },
+    "assets/discord-hover-dark.svg": {
+      "name": "assets/discord-hover-dark.svg",
+      "checksum": "D172EC014EEC09569C94183599DE13E232BB1CB3DA3267F68A10B600E6AD6F72",
+      "size": 1932
+    },
+    "assets/discord-hover.svg": {
+      "name": "assets/discord-hover.svg",
+      "checksum": "FAC3512D2BC0FA800D892F2B59C147CA45E8CD948140D893AB34090F6EED89FB",
+      "size": 1944
+    },
+    "assets/discord.svg": {
+      "name": "assets/discord.svg",
+      "checksum": "58CD7DE08D2942030172844CE03202C2EB6EFAF760AD0C6823ADD5E6135B0A7E",
+      "size": 1951
+    },
+    "assets/fastn.svg": {
+      "name": "assets/fastn.svg",
+      "checksum": "E5C26FBE6E539422FECB83E27FC34EAA4BC5514DBA0FE388B99DB7F45F4B4E5E",
+      "size": 4981
+    },
+    "assets/github-dark.svg": {
+      "name": "assets/github-dark.svg",
+      "checksum": "F61B710B1C5A525BE3A318F50BF18B19CA25BE6C7D8FFB0AA80865A3D444F047",
+      "size": 2089
+    },
+    "assets/github-hover.svg": {
+      "name": "assets/github-hover.svg",
+      "checksum": "8349AD532C07C4C9023815918F2C3408475590D5F3C96772EFF3E6A610C24275",
+      "size": 2089
+    },
+    "assets/github.svg": {
+      "name": "assets/github.svg",
+      "checksum": "4385CDFDA4B72939197678B845CF15533E179914F4CC4E71FCF68640A98B010A",
+      "size": 2089
+    },
+    "assets/ipsum-logo-dark.svg": {
+      "name": "assets/ipsum-logo-dark.svg",
+      "checksum": "8290B3397C465FE1BB40B7CA280C976DF7DA3DABFC655B429805ABF33964FB5B",
+      "size": 16202
+    },
+    "assets/ipsum-logo.svg": {
+      "name": "assets/ipsum-logo.svg",
+      "checksum": "A227CF22E798ACFB2D01B6352FC22A28047444F028AF05440C6CE6F9499C0EDF",
+      "size": 15494
+    },
+    "assets/linkedin-dark.svg": {
+      "name": "assets/linkedin-dark.svg",
+      "checksum": "ABF02591F07CC0EFDF63A99B19823A03E59B2E73B4C80F75CC91AC183601304A",
+      "size": 1592
+    },
+    "assets/linkedin-hover.svg": {
+      "name": "assets/linkedin-hover.svg",
+      "checksum": "4FC7239BD645ADF3A81526F5ED630C6946DB1BC6C7E2A07505D4832E767A5452",
+      "size": 1592
+    },
+    "assets/linkedin.svg": {
+      "name": "assets/linkedin.svg",
+      "checksum": "4C6A360D7B8E25FFBB3624A894A1320B04D6E2B80DEF05794C8B6A1D46C7009D",
+      "size": 1592
+    },
+    "champion.ftd": {
+      "name": "champion.ftd",
+      "checksum": "B48A79148D99900F33800B56484F594B5692B6C5CCA5E7AFDB45805D4EADE7F9",
+      "size": 7774
+    },
+    "champions/adarsh-gupta.ftd": {
+      "name": "champions/adarsh-gupta.ftd",
+      "checksum": "DA3BB51E04773B9AC4142A494CFC320D4FE9872C7C8715390EB68C08BD9D48BE",
+      "size": 463
+    },
+    "champions/ajit-garg.ftd": {
+      "name": "champions/ajit-garg.ftd",
+      "checksum": "20AD5D0A35C1656CC3A49526BE6A3A3C39C325C0D6F24063975B9639CE1D1ED0",
+      "size": 377
+    },
+    "champions/atharva-pise.ftd": {
+      "name": "champions/atharva-pise.ftd",
+      "checksum": "BBB94B56CF28FC0019D9267177AF84CA3CEC4C08156567D49EA74FA905486BA8",
+      "size": 408
+    },
+    "champions/ayush-soni.ftd": {
+      "name": "champions/ayush-soni.ftd",
+      "checksum": "7401715D569CD8B563D4CF82AF049C8170C5C3FC2502AA36D015A98399F803A8",
+      "size": 383
+    },
+    "champions/govindaraman.ftd": {
+      "name": "champions/govindaraman.ftd",
+      "checksum": "E5FD81D58FD5F348A87CEE03E5DCC6519596450D5B90B41E1473CED83D72F487",
+      "size": 424
+    },
+    "champions/index.ftd": {
+      "name": "champions/index.ftd",
+      "checksum": "4375BD66825B89B92E6FDDF0ECEBBC87CD8BA3BF2D2BA39E9204CBCF426E861A",
+      "size": 1081
+    },
+    "champions/jahanvi-raycha.ftd": {
+      "name": "champions/jahanvi-raycha.ftd",
+      "checksum": "733B4F48E637DBE58CAB0A16465CF87F24103C4FEBA75079144F50BC2AB6E307",
+      "size": 410
+    },
+    "champions/krish-gupta.ftd": {
+      "name": "champions/krish-gupta.ftd",
+      "checksum": "D18D707D41ECECD286AB9994E83BAF09AF900562B1CAEDB9E34DEE5B542D1A86",
+      "size": 459
+    },
+    "champions/rutuja-kapate.ftd": {
+      "name": "champions/rutuja-kapate.ftd",
+      "checksum": "8534801AA338DF53BE87B8F84F4BD7A03B0C130FDD7A705BDEB186ACF1CCA711",
+      "size": 472
+    },
+    "champions/sayak-saha.ftd": {
+      "name": "champions/sayak-saha.ftd",
+      "checksum": "3B1C6A047630B52FE5E5B50CF84212EC5DC6DE2961BC47F13EE480E6286EEAAF",
+      "size": 400
+    },
+    "champions/shantnu-fartode.ftd": {
+      "name": "champions/shantnu-fartode.ftd",
+      "checksum": "2593FB39C32249CFB7205721CE0A03C1CDFD6013A64456149D574062A7C680AF",
+      "size": 489
+    },
+    "champions/sreejita-dutta.ftd": {
+      "name": "champions/sreejita-dutta.ftd",
+      "checksum": "B49679594397872D597CDF8308A5B6090B6C8A6838527C95670612959C5848BD",
+      "size": 464
+    },
+    "favicon.svg": {
+      "name": "favicon.svg",
+      "checksum": "11B8FED5369762764C19DD8F8A07056FB63AB678916CA447E63DD9BCCEB21BCE",
+      "size": 5216
+    },
+    "index.ftd": {
+      "name": "index.ftd",
+      "checksum": "724409BF296DC3D4054FAA415F2EF634749199259590D2F0139D2017D18624DD",
+      "size": 2535
+    },
+    "lib.ftd": {
+      "name": "lib.ftd",
+      "checksum": "A9D9CEC07E37ACCC1F733E5BAE79094149032FDE7AD98F3913FA31F6378FE436",
+      "size": 4083
+    }
+  },
+  "zip_url": "https://github.com/fastn-stack/certificates/archive/f24359c411f6e59d14e8ef67ab528c9ac2b244d4.zip",
+  "checksum": "50C7FD51C43C06CCA63F5AFB322BA057AAD745E986F4DE68C0F26D9BFA4FF421"
 }
