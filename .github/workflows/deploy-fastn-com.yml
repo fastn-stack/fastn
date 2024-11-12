@@ -16,6 +16,8 @@ jobs:
       - uses: actions/checkout@v4
       - run: source <(curl -fsSL https://fastn.com/install.sh)
       - run: |
+          # TODO: remove below line when https://github.com/FifthTry/dotcom/issues/361 is done
+          rm .gitignore # so that `fastn upload` uploads .packages/ too
           cd fastn.com
           echo "Using $(fastn --version) to upload fastn.com to FifthTry"
           fastn upload fastn >> $GITHUB_STEP_SUMMARY
