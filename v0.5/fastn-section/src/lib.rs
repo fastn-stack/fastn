@@ -43,7 +43,12 @@ pub type Result<T> = std::result::Result<T, fastn_section::Error>;
 /// both start, and length. or we keep our life simple, we have can have sections that are really
 /// long, eg a long ftd file. lets assume this is the decision for v0.5. we can demote usize to u32
 /// as we do not expect individual documents to be larger than few GBs.
-pub type Span = std::ops::Range<usize>;
+#[derive(Debug, PartialEq, Hash, Eq, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct Span {
+    pub start: usize,
+    pub end: usize,
+}
+
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Spanned<T> {
     pub span: Span,

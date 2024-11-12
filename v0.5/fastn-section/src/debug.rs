@@ -223,7 +223,7 @@ impl JDebug for fastn_section::Error {
 }
 
 fn error(e: &fastn_section::Error, _s: &fastn_section::Span, _source: &str) -> serde_json::Value {
-    serde_json::json!({ "error": match e {
+    let v = match e {
         fastn_section::Error::UnexpectedDocComment => "unexpected_doc_comment",
         fastn_section::Error::UnwantedTextFound => "unwanted_text_found",
         fastn_section::Error::EmptyAngleText => "empty_angle_text",
@@ -234,5 +234,11 @@ fn error(e: &fastn_section::Error, _s: &fastn_section::Span, _source: &str) -> s
         fastn_section::Error::EndContainsData => "end_contains_data",
         fastn_section::Error::EndWithoutStart => "end_without_start",
         fastn_section::Error::ImportCantHaveType => "import_cant_have_type",
-    }})
+        fastn_section::Error::ImportMustBeImport => "import_must_be_import",
+        fastn_section::Error::ImportMustHaveCaption => "import_must_have_caption",
+        fastn_section::Error::BodyNotAllowed => "body_not_allowed",
+        fastn_section::Error::ExtraArgumentFound => "extra_argument_found",
+    };
+
+    serde_json::json!({ "error": v})
 }
