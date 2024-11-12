@@ -74,3 +74,15 @@ pub(crate) fn assert_no_extra_headers(
 
     !found
 }
+
+impl From<&str> for fastn_unresolved::Identifier {
+    fn from(s: &str) -> fastn_unresolved::Identifier {
+        fastn_unresolved::Identifier(s.to_string())
+    }
+}
+
+impl fastn_unresolved::Identifier {
+    pub fn from_str(s: &str) -> fastn_unresolved::Identifier {
+        fastn_unresolved::Identifier(s.to_string())
+    }
+}

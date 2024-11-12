@@ -65,7 +65,7 @@ pub struct Import {
     pub package: PackageName,
     pub module: ModuleName,
     pub alias: Option<Identifier>,
-    pub exports: Option<Export>,
+    pub export: Option<Export>,
     pub exposing: Option<Export>,
 }
 

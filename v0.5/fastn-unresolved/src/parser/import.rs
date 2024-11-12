@@ -23,29 +23,13 @@ pub(super) fn import(
         // we will go ahead with this import statement parsing
     }
 
-    let caption = match section.caption_as_plain_string(source) {
-        Some(v) => v,
-        None => {
-            document.errors.push(
-                section
-                    .span()
-                    .wrap(fastn_section::Error::ImportMustHaveCaption),
-            );
-            return;
-        }
-    };
-
-    let mut i = match parse_module_name(caption, document) {
+    let i = match parse_import(&section, source, document) {
         Some(v) => v,
         None => {
             // error handling is job of parse_module_name().
             return;
         }
     };
-
-    // only two headers allowed: exports and exposing, unresolved them.
-    parse_export(source, &section, document, &mut i);
-    parse_exposing(source, &section, document, &mut i);
 
     // ensure there are no extra headers, children or body
     fastn_unresolved::utils::assert_no_body(&section, document);
@@ -59,10 +43,23 @@ pub(super) fn import(
     document.imports.push(i);
 }
 
-fn parse_module_name(
-    caption: &str,
-    _document: &mut fastn_unresolved::Document,
+fn parse_import(
+    section: &fastn_section::Section,
+    source: &str,
+    document: &mut fastn_unresolved::Document,
 ) -> Option<fastn_unresolved::Import> {
+    let caption = match section.caption_as_plain_string(source) {
+        Some(v) => v,
+        None => {
+            document.errors.push(
+                section
+                    .span()
+                    .wrap(fastn_section::Error::ImportMustHaveCaption),
+            );
+            return None;
+        }
+    };
+
     // section.caption must be single text block, parsable as a module-name.
     //       module-name must be internally able to handle aliasing.
     let (module, alias) = match caption.split_once(" as ") {
@@ -79,25 +76,34 @@ fn parse_module_name(
         package: fastn_unresolved::PackageName(package.to_string()),
         module: fastn_unresolved::ModuleName(module.to_string()),
         alias: alias.map(|v| fastn_unresolved::Identifier(v.to_string())),
-        exports: None,
-        exposing: None,
+        export: parse_field("export", source, section, document),
+        exposing: parse_field("exposing", source, section, document),
     })
 }
 
-fn parse_export(
-    _source: &str,
-    _section: &fastn_section::Section,
+fn parse_field(
+    field: &str,
+    source: &str,
+    section: &fastn_section::Section,
     _document: &mut fastn_unresolved::Document,
-    _import: &mut fastn_unresolved::Import,
-) {
+) -> Option<fastn_unresolved::Export> {
+    let header = match section.header_as_plain_string(field, source) {
+        Some(v) => v,
+        None => return None,
+    };
+
+    Some(fastn_unresolved::Export::Things(
+        header.split(",").map(aliasable).collect(),
+    ))
 }
 
-fn parse_exposing(
-    _source: &str,
-    _section: &fastn_section::Section,
-    _document: &mut fastn_unresolved::Document,
-    _import: &mut fastn_unresolved::Import,
-) {
+fn aliasable(s: &str) -> fastn_unresolved::AliasableIdentifier {
+    let (name, alias) = match s.split_once(" as ") {
+        Some((name, alias)) => (name.into(), Some(alias.into())),
+        None => (s.into(), None),
+    };
+
+    fastn_unresolved::AliasableIdentifier { name, alias }
 }
 
 #[cfg(test)]
@@ -131,6 +137,18 @@ mod tests {
         t!("-- import: foo as f", { "import": "foo=>f" });
         t!("-- import: foo as f\nexposing: x", { "import": "foo=>f", "exposing": ["x"] });
         t!("-- import: foo\nexposing: x", { "import": "foo", "exposing": ["x"] });
+        t!("-- import: foo\nexposing: x, y, z", { "import": "foo", "exposing": ["x", "y", "z"] });
         t!("-- import: foo as f\nexposing: x as y", { "import": "foo as f", "exposing": ["x=>y"] });
+        t!("-- import: foo as f\nexposing: x as y, z", { "import": "foo as f", "exposing": ["x=>y", "z"] });
+        t!("-- import: foo as f\nexport: x", { "import": "foo=>f", "export": ["x"] });
+        t!("-- import: foo\nexport: x", { "import": "foo", "export": ["x"] });
+        t!("-- import: foo\nexport: x, y, z", { "import": "foo", "export": ["x", "y", "z"] });
+        t!("-- import: foo as f\nexport: x as y", { "import": "foo as f", "export": ["x=>y"] });
+        t!("-- import: foo as f\nexport: x as y, z", { "import": "foo as f", "export": ["x=>y", "z"] });
+        t!("-- import: foo as f\nexport: x\nexposing: y", { "import": "foo=>f", "export": ["x"], "exposing": ["y"] });
+        t!("-- import: foo\nexport: x\nexposing: y", { "import": "foo", "export": ["x"], "exposing": ["y"] });
+        t!("-- import: foo\nexport: x, y, z\nexposing: y", { "import": "foo", "export": ["x", "y", "z"], "exposing": ["y"] });
+        t!("-- import: foo as f\nexport: x as y\nexposing: y", { "import": "foo as f", "export": ["x=>y"], "exposing": ["y"] });
+        t!("-- import: foo as f\nexport: x as y, z\nexposing: y", { "import": "foo as f", "export": ["x=>y", "z"], "exposing": ["y"] });
     }
 }

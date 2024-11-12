@@ -121,6 +121,17 @@ impl fastn_section::Section {
             .as_ref()
             .and_then(|c| c.as_plain_string(source))
     }
+
+    pub fn header_as_plain_string<'input>(
+        &self,
+        source: &'input str,
+        name: &str,
+    ) -> Option<&'input str> {
+        self.headers
+            .iter()
+            .find(|h| h.name(source) == name)
+            .and_then(|h| h.value.as_plain_string(source))
+    }
 }
 
 impl fastn_section::HeaderValue {
