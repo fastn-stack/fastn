@@ -14,6 +14,9 @@ impl fastn_section::Span {
             value,
         }
     }
+    pub fn str<'input>(&self, source: &'input str) -> &'input str {
+        &source[self.start..self.end]
+    }
 }
 
 impl From<fastn_section::Span> for fastn_section::Identifier {
@@ -110,7 +113,7 @@ impl fastn_section::Section {
     }
 
     pub fn name<'input>(&self, source: &'input str) -> &'input str {
-        &source[self.init.name.name.name.start..self.init.name.name.name.end]
+        self.init.name.name.name.str(source)
     }
 
     pub fn caption_as_plain_string<'input>(&self, source: &'input str) -> Option<&'input str> {
@@ -121,14 +124,21 @@ impl fastn_section::Section {
 }
 
 impl fastn_section::HeaderValue {
-    pub fn as_plain_string<'input>(&self, _source: &'input str) -> Option<&'input str> {
-        todo!()
+    pub fn as_plain_string<'input>(&self, source: &'input str) -> Option<&'input str> {
+        if self.0.len() != 1 {
+            return None;
+        }
+
+        match self.0.get(0) {
+            Some(fastn_section::Tes::Text(s)) => Some(s.str(source)),
+            _ => None,
+        }
     }
 }
 
 impl fastn_section::Header {
     pub fn name<'input>(&self, source: &'input str) -> &'input str {
-        &source[self.name.name.name.start..self.name.name.name.end]
+        self.name.name.name.str(source)
     }
 
     pub fn span(&self) -> fastn_section::Span {
