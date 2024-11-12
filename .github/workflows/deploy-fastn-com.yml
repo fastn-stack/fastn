@@ -17,5 +17,5 @@ jobs:
       - run: source <(curl -fsSL https://fastn.com/install.sh)
       - run: |
           cd fastn.com
-          echo "Using $(~/.fastn/bin/fastn --version) to upload fastn.com to FifthTry"
-          ~/.fastn/bin/fastn upload fastn >> $GITHUB_STEP_SUMMARY
+          echo "Using $(fastn --version) to upload fastn.com to FifthTry"
+          fastn upload fastn >> $GITHUB_STEP_SUMMARY
