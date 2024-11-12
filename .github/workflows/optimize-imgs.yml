@@ -24,7 +24,7 @@ jobs:
           compressOnly: true # don't make a commit!
       - name: Create New Pull Request If Needed
         if: steps.calibre.outputs.markdown != ''
-        uses: peter-evans/create-pull-request@v4
+        uses: peter-evans/create-pull-request@v7
         with:
           title: Compressed Images
           branch-suffix: timestamp
