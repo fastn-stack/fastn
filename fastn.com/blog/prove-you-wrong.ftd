@@ -1,0 +1,86 @@
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
+
+-- common.post-meta meta: `fastn` might prove you wrong in the best possible way
+published-on: August 03, 2023
+post-url: /blog/prove-you-wrong/
+author: $authors.nandini
+
+Sometimes, the best surprises come when we let go of our preconceived notions.
+
+It's easy to believe that programming is hard and to some extent, that
+perception is not entirely wrong.
+
+But imagine if creating your website is as simple as typing a few lines of text.
+Just like our
+[`business card`](https://fastn-community.github.io/business-card/how-to-use/)
+
+Every line you write translates into a meaningful piece of your
+creation. It feels a lot like writing in English, but with a simple markup.
+Within minutes, you'll have a website with a personalized card, made with the
+power of programming.
+
+Now, you might wonder, what if you've never coded before?
+
+What if you're unfamiliar with the technicalities?
+
+These concerns are not uncommon.
+
+Navigating a new programming language can raise doubts. The fear of dedicating
+time and effort to something that seems out of your grasp is a feeling many can
+relate to. We understand your hesitation.
+
+That’s why we are building [`fastn`](https://fastn.com/) for people like you -
+for those who've never encountered a line of code before, for those who fear
+programming, and for those looking for a more straightforward way to start.
+
+Syntax and technical jargon won't confound you here; you only need the
+willingness to try something new.
+
+
+-- ds.blog-page:
+meta: $meta
+
+-- ds.h1: Meet Mayur and Tushar
+
+Over 700 students and budding programmers recently joined us at the fastn
+Roadshow, where they built their first fastn-powered websites within a few hours
+of learning about fastn.
+
+`Mayur Kawale` is one of them. You can check out his recent work
+[`here`](https://mefisto04.github.io/fastn_portfoliomk/)
+
+-- ftd.iframe:
+src: https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7092163313823862785
+width: fill-container
+height.fixed.px: 1000
+
+-- ds.markdown:
+
+`Tushar` is another recent fastn enthusiast. He created a
+[`website`](https://tusharpamnani.github.io/fastn-site2/) and
+[`newsletter sign-up page`](https://tusharpamnani.github.io/fastn-newsletter/),
+using fastn.
+
+-- ftd.iframe:
+src: https://www.linkedin.com/embed/feed/update/urn:li:share:7091077165768687616
+width: fill-container
+height.fixed.px: 1080
+
+
+-- ds.markdown:
+
+These stories are just the beginning. Check out our
+[`Discord`](https://discord.com/invite/xs4FM8UZB5) #share-your-work thread for
+similar tales of accomplishments. You can also see more inspiring stories on
+LinkedIn and Twitter under the hashtags
+[`#fastn`](https://twitter.com/search?q=%23fastn&src=typed_query) and
+[`#fastnroadshow.`](https://www.linkedin.com/search/results/content/?keywords=%23fastnroadshow&origin=GLOBAL_SEARCH_HEADER&sid=s.4)
+
+So the next time you think coding is not for you, take the plunge and
+[`try fastn.`](https://fastn-community.github.io/business-card/)
+It might prove you wrong—in the best possible way!
+
+
+
+-- end: ds.blog-page

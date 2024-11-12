@@ -1,0 +1,209 @@
+-- import: fastn.com/assets
+
+-- ds.page: Let's Create A Repo
+
+Now that you have your Github account you are ready to rock! The first thing
+we are going to do is to create a new "repository" or "repo" for short. A
+repo is a collection of files you work together. Ideally you should have a repo
+for a bunch of related things, like maybe a repo for your person website, which
+we are going to create in this section. Or maybe a repo for a project you are
+doing in your school/at work.
+
+A repo can be public or private. A public repo is visible to everyone, so be
+careful about what you put there, do not put anything confidential there, no
+personal phone numbers or address, no credit card etc.
+
+So let's create our first repo.
+
+-- ds.h1: Meet `fastn-template`
+
+You are going to create your first repo from a template. We can create a empty
+repo as well, and start from scratch, but that is a little bit more work and
+covered in appendix.
+
+;; TODO: insert link to appendix
+
+We are going to use the official template created by `fastn` team for you:
+[`github.com/fastn-stack/fastn-template`](https://github.com/fastn-stack/fastn-template/).
+
+If you visit this page, this is how it looks like on Desktop:
+
+-- ds.image:
+src: $assets.files.images.fastn-template.png
+
+You will a green button with label "Use This Template", you have to click on it.
+
+It shows you two options:
+
+-- ds.image:
+src: $assets.files.images.use-this-template.png
+
+You have to click on the "Create a new repository" option in the dropdown.
+
+
+-- ds.h2: What If You Don't See The Button?
+
+If you go to the `fastn-template` page on Mobile browser, or if you are using
+Laptop/Desktop and browser window is not wide enough, Github hides the "Use This
+Template" button.
+
+-- ds.image:
+src: $assets.files.images.no-green-button.png
+
+If this happens you can click on the direct link to use the template:
+[`github.com/fastn-stack/fastn-template/generate`](https://github.com/fastn-stack/fastn-template/generate).
+Please do note that if you are not logged in and click on the link, Github shows
+page not found error.
+
+PS: If you work at Github or know someone there, please let them know this is
+quite sub-optimal behaviour, and is trivial to fix: do not hide the most
+important button for a page when there is not enough space.
+
+-- ds.h1: Create Your Repo
+
+Once you click on "Create a new repository" you will see something like this:
+
+-- ds.image:
+src: $assets.files.images.name-your-repo.png
+
+You have to select a name for your repo. In the image above you will see I have
+entered `hello`. The name of the repo is very important. If you select say
+`hello`, the "qualified name" of your repo becomes your `<username>/hello`, eg
+in my case the qualified name of repo would be `amitu/hello`, and the URL of
+your repository would be `github.com/<username>/<repo-name>`, so in my case the
+name would be `github.com/amitu/hello`. The name will appear in a few more
+places. It is usually a good practice to follow either kebab-case or CamelCase
+for naming your repo, and we recommend kebab-case. Which means if you are using
+more than one words in the name, keep each word lower cased, and separate the
+words by a single `-` (dash) character.
+
+You can leave the rest of the default values, and click on the
+big green "Create repository from template" button.
+
+Once you do that you will see something like this:
+
+-- ds.image:
+src: $assets.files.images.your-new-repo.png
+
+There you go! Your first `git` repository, containing a `fastn` package. Let's
+take a quick peek around at the files we have put in the template for you.
+
+-- ds.h1: The `FASTN.ftd` file
+
+One of the most important files is the `FASTN.ftd` file. As you notice the
+extension of the file is `.ftd`, it is a `ftd` file. `ftd` is a language at the
+center of `fastn`. Take a look at it maybe, but do not worry if it does not
+make much sense, we will go over the syntax and the content later on.
+
+Presence of `FASTN.ftd` indicates that this folder is a `fastn package`. Every
+`fastn` package has this file in it. This file is a high level "configuration"
+file for `fastn`, which tells
+
+-- ds.h1: `index.ftd` file
+
+`fastn` is a framework for building web pages and web apps. `fastn` tends to
+support conventions, over configurations, meaning for example in this case, the
+convention is to map the URL `/`, which is the root URL of your site to a file
+named `index.ftd`. This is a common enough convention, a lot of applications
+have a default file to map at the root, they are often `index.html`, or
+`index.php` etc.
+
+If `index.ftd` is found it will be "rendered" when someone visits the root URL
+of you site. Go ahead take a look at it's content.
+
+-- ds.h1: `.gitignore` file
+
+`.gitignore` file tells `git` what files to ignore. You do not want to store
+all the files in your repository. If you have extra files you will have to keep
+downloading them every time you download your repository. Also often the extra
+files will change and leave traces in the history of changes, making the changes
+appear noisy.
+
+You often ignore editor configuration files, here you will find `.idea`, which
+is for the editor we often use. You also ignore the operating system meta data
+files, eg `.DS_Store`, which Macos creates to store some Mac specific
+information, which you probably do not care too much.
+
+We also have two folders that are specific to `fastn`, `.packages` and `.build`
+ignored. `.packages` is where we download and store dependencies for you. If you
+review `FASTN.ftd` you will see we added a few dependencies, and they will be
+downloaded and stored. Similarly `.build` is a folder that `fastn` creates to
+store some information, that you do not have to store in version control.
+
+-- ds.h1: `.github` folder
+
+`.github` folder contains a few Github related files. Github is a very feature
+rich platform, and this folder can be used to configure many of those features.
+
+If you build a site you are going to "host" it on internet somewhere. We are
+going to discuss various hosting options in this book, and start off with using
+Github Pages as your hosting provider. In this template the files in `.github`
+folder assist you with hosting.
+
+-- ds.h1: Let's Talk About Commits
+
+So this is how your repo looked like right after it was created.
+
+-- ds.image: Right after creating the repo
+src: $assets.files.images.your-new-repo.png
+
+The repo changes a bit after you create, so if you have given it some time it
+should look more like this:
+
+-- ds.image: After a minute or two
+src: $assets.files.images.repo-is-ready.png
+
+You will notice a few key differences between the two states. You will see that
+instead of "initial commit" it says "✅ Ready to clone and code", next to each
+file listed. This message is called a "commit" message, and Github shows the
+latest commit message next to each file or folder where it was modified, along
+with when was it last modified. You will notice that two files, `.gitignore`
+and `doc-site-example.png` are still saying "initial commit", where as rest of
+them are showing the "✅ Ready to clone and code" message.
+
+All the files in the repo were created by by the "initial commit", and in the
+first screenshot you will notice that is shows only one commit, but in the next
+screenshot you will notice that there are two commits.
+
+-- ds.image: How to find commit count?
+src: $assets.files.images.commit-count.png
+
+This is a lot happening, so let's break it down a bit.
+
+When you created your repo from our template repo, `fastn-template`, a bunch of
+files were copied over, and added to your repository. In `git`, any change
+happens through what is called a commit, each commit can modify one or more
+files, add files, delete files etc, and each commit has a message.
+
+The way `git` works is you make changes, in one or more files in your repo, and
+when you are satisfied, you "commit" these changes, and while committing `git`
+asks for a "commit message" so you can describe what changes you have done.
+
+Commit messages are quite useful as you may be working with a team and others in
+a team may want to know what were you thinking when you made those changes. Or
+may be you are working alone, even then good commit messages are quite useful
+as you may come back to your repository after weeks and months and you may have
+forgotten what was going on.
+
+Let's take a look at the commits in our repo so far. You can click on the commit
+count and it takes you to the following page:
+
+;; Note to editor, the caption is a joke
+;; https://www.reddit.com/r/startrek/comments/9hzrqp/
+-- ds.image: There... are... ~four~ two commits!
+src: $assets.files.images.commits.png
+
+You can see the two commits, one made by me, the person who created the
+repository (actually Github made the commit when we created the repo from
+`fastn-template`). The second commit was made by `github-actions[bot]`.
+
+Who is this `github-actions[bot]`? Why is it making commits to your repo? And
+how can you make a commit? To learn all this you have to move to the next
+section!
+
+-- ds.h1: Next Step
+
+Congratulations for creating your first git repository that is hosted on Github.
+You can now move on to [hosting your website on Github Pages. ->](/book/gh-pages/)
+
+-- end: ds.page

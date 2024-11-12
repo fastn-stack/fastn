@@ -1,0 +1,140 @@
+-- import: fifthtry.github.io/admonitions as cbox
+
+-- ds.page: `ftd.mobile`
+
+The `ftd.mobile` is a component in the `fastn` language used to optimize the
+rendering of a web page for mobile devices. It is designed to work in
+conjunction with the [`ftd.desktop`](/desktop/) component, which optimizes
+rendering for desktop devices.
+
+It is container type component. Currently, it accepts only one child.
+
+-- cbox.info: mobile
+
+Make sure to close your `ftd.mobile` container using the `end` syntax. This is
+mandatory.
+
+`-- end: ftd.mobile`
+
+-- ds.h1: Usage
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.mobile:
+
+\;; << A child component >>
+
+\-- end: ftd.mobile
+
+-- ds.h2: Properties Optimization
+
+By using `ftd.mobile`, `fastn` takes up the variant of the properties that are
+specified for mobile devices only and ignore the corresponding variant for
+desktop devices. For instance, the properties like `role` has responsive type
+and also type like `ftd.length` has `responsive` variant.
+
+Checkout this example.
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.mobile: ;; <hl>
+
+\-- ftd.text: Hello from mobile
+role: $rtype ;; <hl>
+padding: $res ;; <hl>
+
+\-- end: ftd.mobile ;; <hl>
+
+
+
+\-- ftd.length.responsive res:
+mobile.percent: 40 ;; <hl>
+desktop.px: 70
+
+
+
+\-- ftd.responsive-type rtype:
+mobile: $dtype ;; <hl>
+desktop: $mtype
+
+\-- ftd.type dtype:
+size.px: 40
+weight: 900
+font-family: cursive
+line-height.px: 65
+letter-spacing.px: 5
+
+\-- ftd.type mtype:
+size.px: 20
+weight: 100
+font-family: fantasy
+line-height.px: 35
+letter-spacing.px: 3
+
+
+-- ds.markdown:
+
+Here, `fastn` will automatically pick the `mobile` variant for `role`, i.e.
+`mobile: $dtype`, and `padding`, i.e. `mobile.percent: 40`.
+
+It's worth noting that the above code can also be rewritten using the condition
+`ftd.device == "mobile"` on the `ftd.text` component. However, this approach is
+**Not Recommended** since it generates unoptimized code, resulting in slow and
+bulky rendered output with huge dependencies.
+
+Checkout the **Not Recommended** version of the code above:
+
+-- ds.code: Not Recommended
+lang: ftd
+
+\-- ftd.text: Hello from mobile
+if: { ftd.device == "mobile" }  ;; <hl>
+role: $rtype
+padding: $res
+
+
+-- ds.h2: Component Optimization
+
+Once a component is specified for the mobile device using `ftd.mobile`, It
+will continue to take up or accepts the mobile-specified components or generic
+components as descendants, ignoring the desktop-specified components
+declared using `ftd.desktop`. This reduces the size of the component tree.
+
+Checkout this example.
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.mobile: ;; <hl>
+\-- print-title: ;; <hl>
+\-- end: ftd.mobile ;; <hl>
+
+
+\-- component print-title:
+
+\-- ftd.column:
+
+\-- ftd.mobile: ;; <hl>
+\-- ftd.text: Hello from mobile ;; <hl>
+\-- end: ftd.mobile ;; <hl>
+
+\-- ftd.desktop:
+\-- ftd.text: Hello from desktop
+\-- end: ftd.desktop
+
+\-- end: ftd.column
+
+\-- end: print-title
+
+-- ds.markdown:
+
+Here, since we used `ftd.mobile`, so the `fastn` will ignore any `ftd.desktop`
+components that come after it.
+
+-- ds.h1: Attributes
+
+A mobile accepts the [container root attributes](ftd/container-root/).
+
+-- end: ds.page

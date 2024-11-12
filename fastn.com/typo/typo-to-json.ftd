@@ -1,0 +1,49 @@
+-- import: fastn/processors as pr
+-- import: fastn-community.github.io/virgil-typography as virgil-typo
+
+-- string virgil-typo-json:
+$processor$: pr.figma-typo-token
+variable: $virgil-typo.types
+name: virgil-typography
+
+-- ds.page: Export typography as json
+
+fastn supports exporting `ftd.type-data` variables as json. To export it as json
+you will need to use a processor named `figma-typo-token` to generate the
+equivalent json.
+
+-- ds.h1: Example
+
+Below mentioned example shows how to export `virgil-font-typography` as json.
+
+-- ds.rendered: Using `figma-typo-token` processor
+
+	-- ds.rendered.input:
+	
+	\-- import: fastn-community.github.io/doc-site as ds
+	\-- import: fastn-community.github.io/virgil-typography as virgil-typo
+	
+	\-- string virgil-typo-json:
+	$processor$: pr.figma-typo-token
+	variable: $virgil-typo.types
+	name: virgil-typography
+	
+	\-- ds.code: Virgil typography json
+	lang: json
+	
+	$virgil-typo-json
+	
+	-- ds.rendered.output:
+	
+		-- ds.code: Virgil typography json
+		lang: json
+		download: virgil-typography.json
+		max-height.fixed.px: 500
+		
+		$virgil-typo-json
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- end: ds.page

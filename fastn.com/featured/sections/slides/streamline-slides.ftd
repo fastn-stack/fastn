@@ -1,0 +1,47 @@
+-- import: fastn.com/u/ganesh-salunke
+-- import: fastn.com/u/priyanka-yadav
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Streamline Slides
+featured-link: /featured/sections/slides/
+category: Featured Slides / Presentations
+image: $fastn-assets.files.images.featured.sections.slides.streamline-slides.png
+owners: [$priyanka-yadav.info, $ganesh-salunke.info]
+license-url: https://github.com/FifthTry/streamline-slides/blob/main/LICENSE
+license: Creative Commons
+published-date: 10-Aug-2022
+cards: $slides
+github-url: https://github.com/FifthTry/streamline-slides
+demo-link: https://fifthtry.github.io/streamline-slides
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list slides:
+
+-- ft-ui.template: Crispy Presentation Theme
+template-url: /featured/sections/slides/crispy-presentation-theme/
+screenshot: $fastn-assets.files.images.featured.sections.slides.crispy-presentation-theme.png
+
+-- ft-ui.template: Giggle Presentation Template
+template-url: /featured/sections/slides/giggle-presentation-template/
+screenshot: $fastn-assets.files.images.featured.sections.slides.giggle-presentation-template.png
+
+-- ft-ui.template: Rotary Presentation Template
+template-url: /featured/sections/slides/rotary-presentation-template/
+screenshot: $fastn-assets.files.images.featured.sections.slides.rotary-presentation-template.png
+
+-- ft-ui.template: Simple Dark Slides
+template-url: /featured/sections/slides/simple-dark-slides/
+screenshot: $fastn-assets.files.images.featured.sections.slides.simple-dark-slides.png
+
+-- end: slides

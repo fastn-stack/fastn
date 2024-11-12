@@ -1,0 +1,39 @@
+-- import: fastn.com/u/yashveer-mehra
+-- import: fastn.com/u/priyanka-yadav
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Navy Nebula
+featured-link: /featured/blogs/
+category: Blogs
+image: $fastn-assets.files.images.featured.blog.navy-nebula.png
+owners: [$yashveer-mehra.info, $priyanka-yadav.info]
+license-url: https://github.com/fastn-community/navy-nebula/blob/main/LICENSE
+license: Creative Commons
+published-date: 24-Jul-2023
+cards: $blog-sites
+github-url: https://github.com/fastn-community/navy-nebula/
+demo-link: https://fastn-community.github.io/navy-nebula/
+
+
+
+
+
+-- ft-ui.template list blog-sites:
+
+-- ft-ui.template: Simple Site
+template-url: featured/blogs/doc-site/
+screenshot: $fastn-assets.files.images.featured.blog.doc-site-blog.png
+
+-- ft-ui.template: Midnight Rush
+template-url: featured/blogs/mr-blog/
+screenshot: $fastn-assets.files.images.featured.blog.midnight-rush-blog.jpg
+
+-- ft-ui.template: Misty Gray
+template-url: featured/blogs/mg-blog/
+screenshot: $fastn-assets.files.images.featured.blog.misty-gray.jpg
+
+-- ft-ui.template: Rocky
+template-url: featured/blogs/rocky/
+screenshot: $fastn-assets.files.images.featured.blog.rocky.png
+
+-- end: blog-sites

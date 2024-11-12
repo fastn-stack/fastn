@@ -1,0 +1,23 @@
+-- ds.page: `fastn` Color Scheme Packages
+
+If you are maintaining a website, it is a good idea to keep the color scheme
+(and typography for that matter) separate from your main code base, so you can
+easily change the colors of your site.
+
+[`fastn` packages](/package-manager/) are recommended to use `ftd.color-scheme`
+type variable instead of hardcoded colors. In your main package, you can then
+import one of the [color schemes](/featured/cs/) and change the colors.
+
+`fastn` packages are either "regular packages", regular packages come with [ftd
+components](/components/) but they do not specify any colors, they just use
+`ftd.color-scheme` type variable, and then there are "color-scheme packages",
+and these packages do not define any `ftd components`, but initialise the
+`ftd.color-scheme` type variables.
+
+`fastn` color scheme packages is a good way to distribute your color palettes.
+There is a [`color-doc` component](https://fifthtry.github.io/color-doc/) to
+document such color schemes. Currently, you can also use
+[`$processor$: figma-cs-token`](/typo-to-json/) to convert
+`ftd.color-scheme` type variable to figma token json.
+
+-- end: ds.page

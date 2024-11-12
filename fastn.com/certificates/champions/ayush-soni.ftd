@@ -1,0 +1,12 @@
+-- import: fastn-stack.github.io/certificates/champion
+
+-- ds.page: Champion Certification
+full-width: true
+
+-- champion.certificate-2: Ayush Soni
+date: 6th October 2023
+avatar: $fastn-assets.files.assets.avatar.ayush-soni.jpg
+github-link: https://github.com/ayushsoni1010
+linkedin-link: https://www.linkedin.com/in/ayushsoni1010/
+
+-- end: ds.page

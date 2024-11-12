@@ -1,0 +1,79 @@
+-- import: fifthtry.github.io/admonitions as cbox
+
+-- ds.page: `ftd.container`
+
+A `ftd.container` is a generalized container component where the user will be
+deciding how it should be behaving. So unlike other ftd containers like
+`ftd.row` and `ftd.column` which have some pre-defined behavior, the users will
+have the capability to control the behavior of this `ftd.container` which won't
+be imposing any pre-defined behavior.
+
+-- cbox.info: container
+
+Make sure to close your container using the `end` syntax. This is mandatory.
+
+`-- end: <container-name>`
+
+-- ds.h1: Usage
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.container:
+
+\;; << Child components >>
+
+\-- end: ftd.container
+
+-- ds.h1: Attributes
+
+Container accepts the [container root attributes](ftd/container-root/) as well
+all the [common attributes ](ftd/common/).
+
+-- ds.h1: Example
+
+-- ds.rendered: Sample code using `ftd.container`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.container:
+	color: $inherited.colors.text
+	
+	\-- ftd.text: Hello
+	display: inline
+	
+	\-- ftd.text: World
+	display: inline
+	color: $red-yellow
+	
+	\-- end: ftd.container
+	
+	-- ds.rendered.output:
+	
+		-- ftd.container:
+		color: $inherited.colors.text
+		
+			-- ftd.text: Hello
+			display: inline
+			
+			-- ftd.text: World
+			display: inline
+			color: $red-yellow
+			
+		-- end: ftd.container
+
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.markdown:
+
+In the above example, container is created which contains two text components.
+Two `ftd.text` components are displayed side by side since their display
+behavior is `inline`.
+
+-- end: ds.page
+
+-- ftd.color red-yellow:
+light: red
+dark: yellow

@@ -1,0 +1,15 @@
+-- ds.page: Guidelines to conduct fastn introductory event 🚧
+
+You can conduct an introductory event and spread words about fastn. Here are the
+guidelines of how to do it.
+
+-- ds.h1: What is fastn?
+
+`fastn` is a full-stack framework which helps to create web applications. fastn
+compiles `.ftd` files to HTML/CSS/JS which can be deployed on your server.
+
+-- ds.h2: Why fastn?
+
+- Easy to learn
+- Rich component library
+- Opinionated Design System

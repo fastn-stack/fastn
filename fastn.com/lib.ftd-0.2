@@ -1,0 +1,649 @@
+-- import: ds as ft
+-- import: fastn.dev/assets
+-- import: fastn-community.github.io/bling/assets as b-assets
+-- import: fastn-community.github.io/bling/chat
+
+
+-- chat.message-right.px amitu: $title
+caption or body title:
+avatar: $b-assets.files.amitu.jpg
+round-avatar: true
+
+-- chat.message-left.px ganesh: $title
+caption or body title:
+avatar: $b-assets.files.ganeshs.jpeg
+round-avatar: true
+
+
+
+
+
+
+
+
+
+
+-- component create-section:
+
+-- ftd.column:
+width: fill-container
+;;;;open: true
+;;append-at: content-container
+padding-vertical.px: 30
+
+-- ftd.column:
+if: {ftd.device != "mobile"}
+max-width.fixed.px: 1000
+width: fill-container
+align-self: center
+;;id: content-container
+
+-- end: ftd.column
+
+-- ftd.column:
+if: {ftd.device == "mobile"}
+width: fill-container
+align-self: center
+padding-horizontal.px if {ftd.device == "mobile"}: 20
+;;id:  content-container
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: create-section
+
+
+
+
+
+
+
+
+
+
+-- component hero:
+caption title:
+ftd.image-src image:
+
+-- ftd.column:
+;;open: true
+;;append-at: main-container
+
+-- hero-desktop: $hero.title
+if: {ftd.device != "mobile"}
+;;id: main-container
+image: $hero.image
+
+-- hero-mobile: $hero.title
+if: {ftd.device == "mobile"}
+;;id: main-container
+image: $hero.image
+
+-- end: ftd.column
+
+-- end: hero
+
+
+
+
+
+
+
+
+
+
+-- component hero-desktop:
+caption title:
+ftd.image-src image:
+
+-- ftd.column:
+width: fill-container
+background.solid: $inherited.colors.background.base
+/padding-horizontal.px: $ft.content-padding.px
+padding-vertical.px: 50
+spacing.fixed.px: 40
+;;open: true
+;;append-at: desktop.px-action-container
+
+-- ftd.row:
+width: fill-container
+
+-- ftd.text: $hero-desktop.title
+color: $inherited.colors.text
+width.fixed.percent: 75
+;;position: center
+role: $inherited.types.heading-large
+
+-- ftd.image:
+src: $hero-desktop.image
+width.fixed.percent: 15
+height: auto
+;;position: right.px
+
+-- end: ftd.row
+
+-- ftd.row:
+;;id: desktop.px-action-container
+spacing.fixed.px: 40
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: hero-desktop
+
+
+
+
+
+
+
+
+
+
+-- component hero-mobile:
+caption title:
+ftd.image-src image:
+
+-- ftd.column:
+width: fill-container
+background.solid: $inherited.colors.background.base
+padding-horizontal.px: 20
+padding-vertical.px: 50
+spacing.fixed.px: 30
+;;open: true
+;;append-at: mobile-action-container
+
+-- ftd.image:
+src: $hero-mobile.image
+width.fixed.percent: 50
+height: auto
+;;position: center
+
+-- ftd.text: $hero-mobile.title
+color: $inherited.colors.text
+padding-horizontal.px: 20
+;;position: center
+text-align: center
+role: $inherited.types.heading-large
+
+-- ftd.column:
+;;id: mobile-action-container
+;;position: center
+padding-top.px.px: 10
+spacing.fixed.px: 30
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: hero-mobile
+
+
+
+
+
+
+
+
+
+
+-- component action-button:
+caption title:
+string url:
+optional ftd.color color: $inherited.colors.text
+optional ftd.color background_solid: $inherited.colors.background.base
+
+-- ftd.text: $action-button.title
+link: $action-button.url
+background.solid: $action-button.background_solid
+if: { action-button.background_solid != NULL }
+color: $action-button.color
+if: { action-button.color != NULL }
+border-radius.px: 6
+padding-vertical.px: 15
+padding-horizontal.px: 40
+role: $inherited.types.label-big
+
+-- end: action-button
+
+
+
+
+
+
+
+
+
+
+-- component banner:
+caption title:
+
+-- ftd.text: $banner.title
+padding.px: 45
+text-align: center
+color: $inherited.colors.text
+background.solid: $inherited.colors.background.base
+width: fill-container
+role: $inherited.types.heading-large
+
+-- end: banner
+
+
+
+
+
+
+
+
+
+
+-- component feature-list:
+
+-- ftd.row:
+width: fill-container
+;;open: true
+;;append-at: main-container
+
+-- ftd.row:
+width: fill-container
+if: {ftd.device != "mobile"}
+padding-horizontal.px: $ft.content-padding
+spacing: space-between
+wrap: true
+padding-bottom.px.px: 60
+;;id: main-container
+
+-- end: ftd.row
+
+-- ftd.column:
+if: {ftd.device == "mobile"}
+width: fill-container
+padding-horizontal.px: 20
+spacing: space-around
+wrap: true
+padding-bottom.px.px: 40
+;;id: main-container
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: feature-list
+
+
+
+
+
+
+
+
+
+
+-- component feature:
+caption title:
+ftd.image-src image:
+body body:
+
+-- ftd.column:
+width.fixed.percent: 30
+width if {ftd.device == "mobile"}: fill-container
+spacing.fixed.px: 15
+padding-top.px.px: 60
+align-self: start
+
+-- ftd.image:
+src: $feature.image
+width.fixed.percent: 60
+align-self: center
+
+-- ftd.text: $feature.title
+width: fill-container
+text-align: center
+color if {$ftd.dark-mode}: $inherited.colors.text
+role: $inherited.types.label-big
+
+-- ftd.text:
+text: $feature.body
+width: fill-container
+role: $inherited.types.label-big
+text-align: center
+color if {$ftd.dark-mode}: $inherited.colors.text
+
+-- ftd.row:
+width: fill-container
+background.solid: $inherited.colors.background.base
+;;open: true
+;;append-at: main-container
+
+-- ftd.row:
+width: fill-container
+if: {ftd.device != "mobile"}
+padding-horizontal.px: $ft.content-padding.px
+spacing: space-between
+wrap: true
+padding-bottom.px.px: 60
+;;id: main-container
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- ftd.column:
+if: {ftd.device == "mobile"}
+width: fill-container
+padding-horizontal.px: 20
+spacing: space-around
+wrap: true
+padding-bottom.px.px: 40
+;;id: main-container
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: feature
+
+
+
+
+
+
+
+
+
+
+-- component testimony:
+caption title:
+ftd.image-src image:
+string designation:
+body body:
+
+-- ftd.column:
+width.fixed.percent: 30
+width if {ftd.device == "mobile"}: fill-container
+spacing.fixed.px: 15
+padding-top.px.px: 60
+
+-- ftd.image:
+src: $testimony.image
+width.fixed.percent: 30
+border-radius.px: 1000
+align-self: center
+
+-- ftd.text: $testimony.title
+width: fill-container
+text-align: center
+role: $inherited.types.label-big
+color: $inherited.colors.text
+
+-- ftd.text: 
+text: $testimony.designation
+width: fill-container
+role: $inherited.types.label-small
+text-align: center
+color: $inherited.colors.text
+
+-- ftd.text:
+text: $testimony.body
+width: fill-container
+role: $inherited.types.label-small
+text-align: center
+color: $inherited.colors.text
+
+-- end: ftd.column
+
+-- end: testimony
+
+
+
+
+
+
+
+
+
+
+-- component template-list:
+
+-- ftd.column:
+width: fill-container
+;;open: true
+;;append-at: main-container
+padding-top.px.px: 20
+
+-- ftd.row:
+width: fill-container
+align-self: center
+
+-- ftd.row:
+width: fill-container
+if: {ftd.device != "mobile"}
+spacing: space-between
+wrap: true
+padding-bottom.px.px: 60
+;;id: main-container
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- ftd.column:
+if: {ftd.device == "mobile"}
+width: fill-container
+padding-horizontal.px: 20
+spacing: space-between
+wrap: true
+padding-bottom.px.px: 40
+;;id: main-container
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: template-list
+
+
+
+
+
+
+
+
+
+
+-- component template:
+caption title:
+ftd.image-src image:
+optional string link: /
+boolean active:
+string cta-text:
+
+-- ftd.column:
+width.fixed.px: 400
+height.fixed.px: 225
+width if {ftd.device == "mobile"}: fill-container
+spacing.fixed.px: 15
+;;background-image: $template.image
+border-radius.px: 4
+border-width.px: 1
+border-color: $inherited.colors.text
+margin-bottom.px: 50
+
+-- ftd.text: $template.title
+role: $inherited.types.heading-large
+anchor: parent
+top.px: 5
+left.px: 0
+background.solid: $inherited.colors.background.base
+padding-horizontal.px: 20
+padding-vertical.px: 5
+min-width.fixed.px: 200
+color: $inherited.colors.text
+
+-- ftd.text: 
+text: $template.cta-text
+if: {$template.active}
+role: $inherited.types.label-big
+text-align: center
+link: $template.link
+anchor: parent
+bottom.px: 30
+right.px: 40
+color: $inherited.colors.text
+background.solid: $inherited.colors.background.base
+border-radius.px: 20
+padding-vertical.px: 5
+padding-horizontal.px: 20
+
+-- ftd.text: 
+text: $template.cta-text
+if: {!$template.active}
+text-align: center
+anchor: parent
+bottom.px: 30
+right.px: 40
+color: $inherited.colors.text
+background.solid: $inherited.colors.background.base
+border-radius.px: 20
+padding-vertical.px: 5
+padding-horizontal.px: 20
+role: $inherited.types.label-big
+
+-- end: ftd.column
+
+-- end: template
+
+
+
+
+
+
+
+
+
+
+-- component theme:
+caption title:
+ftd.image-src image:
+optional string link: /
+optional string live_preview:
+
+-- ftd.column:
+width.fixed.px: 400
+height.fixed.px: 225
+width if {ftd.device == "mobile"}: fill-container
+spacing.fixed.px: 15
+;;background-image: $theme.image
+border-radius.px: 4
+border-width.px: 1
+border-color: $inherited.colors.text
+margin-bottom.px: 50
+
+-- ftd.text: $theme.title
+anchor: parent
+top.px: 5
+left.px: 0
+background.solid: $inherited.colors.background.base
+padding-horizontal.px: 20
+padding-vertical.px: 5
+min-width.fixed.px: 200
+color: $inherited.colors.text
+role: $inherited.types.heading-large
+
+-- ftd.row:
+anchor: parent
+bottom.px: 30
+right.px: 40
+;;id: link-row
+
+-- end: ftd.row
+
+-- ftd.text: Live Preview
+if: {$theme.live_preview != NULL}
+text-align: center
+link: $theme.live_preview
+color: $inherited.colors.text
+background.solid: $inherited.colors.background.base
+border-radius.px: 20
+padding-vertical.px: 5
+padding-horizontal.px: 20
+margin-right.px: 5
+role: $inherited.types.label-big
+
+-- ftd.text: Create
+text-align: center
+link: $theme.link
+color: $inherited.colors.text
+background.solid: $inherited.colors.background.base
+border-radius.px: 20
+padding-vertical.px: 5
+padding-horizontal.px: 20
+role: $inherited.types.label-big
+
+-- end: ftd.column
+
+-- end: theme
+
+
+
+
+
+
+
+
+
+
+-- component bread-crumb:
+
+-- ftd.row:
+padding-vertical.px: 20
+;;;;open: true
+;;append-at: main-container
+
+-- ftd.row:
+spacing.fixed.px: 20
+;;id: main-container
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: bread-crumb
+
+
+
+
+
+
+
+
+
+
+-- component crumb:
+caption title:
+optional string link:
+
+-- ftd.row:
+spacing.fixed.px: 20
+
+-- ftd.text: $crumb.title
+if: {$crumb.link != NULL}
+link: $crumb.link
+color: $inherited.colors.text
+role: $inherited.types.label-big
+
+-- ftd.image:
+if: { $crumb.link != NULL}
+src: $assets.files.static.images.arrow.svg
+width: 16
+
+-- ftd.text: $crumb.title
+if: {$crumb.link == NULL}
+color: $inherited.colors.text
+role: $inherited.types.label-small
+
+-- end: ftd.row
+
+-- end: crumb

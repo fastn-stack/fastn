@@ -1,0 +1,55 @@
+-- import: fastn.com/utils
+
+-- ds.page: Same argument and attribute types
+
+It refers to the concept of ensuring that the input data being passed into a
+particular component or function is of the same data type as specified by
+the attribute or parameter of that component.
+
+When developing `ftd` components, it is crucial to utilize appropriate
+datatypes for each argument. For instance, if an argument is intended to
+accept a width value, it is advisable to use a datatype specifically designed
+to handle width values. This approach ensures that the component is more
+versatile and can be utilized in various contexts.
+
+-- utils.code-display: `consistent-data-types`: Use consistent datatypes for arguments and their corresponding attributes
+id: consistent-data-types
+
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- component bar:
+	integer text-width:
+	
+	\-- ftd.text: Hello
+	width.fixed.px: $bar.text-width
+	
+	\-- end: bar
+	
+	
+	
+	
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	
+	\-- component bar:
+	ftd.resizing text-width:
+	
+	\-- ftd.text: Hello
+	width: $bar.text-width
+	
+	\-- end: bar
+	
+	
+-- end: utils.code-display
+
+-- ds.markdown:
+
+If you see the `not recommended` section, the component `bar` accepts the
+argument `text-width` as integer and then it passes it to one of the variant,
+in this case `px`, of `ftd.resizing` type. This narrows down all the other
+possible values that can be accepted by `width`.
+
+-- end: ds.page

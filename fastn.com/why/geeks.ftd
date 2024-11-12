@@ -1,0 +1,1700 @@
+-- import: fastn.com/ftd as ftd-index
+-- import: fastn.com/assets
+
+-- ds.page: `fastn` for geeks
+
+Hello there! I am Amit Upadhyay, and I have built a programming language called
+`fastn`. The `fastn` language is designed for people who are new to programming,
+or people who do not know programming, a really simple programming language, to
+make programming accessible to everyone.
+
+-- ds.code:
+lang: ftd
+
+\-- import: amitu.com/lib
+
+
+\-- lib.amitu: Hello World! 😀
+
+\-- lib.amitu:
+
+you can also write multiline messages easily!
+
+no quotes. and **markdown** is *supported*.
+
+-- ds.markdown:
+
+Which produces:
+
+-- ftd-index.amitu: Hello World! 😀
+
+-- ftd-index.amitu:
+
+you can also write multiline messages easily!
+
+no quotes. and **markdown** is *supported*.
+
+-- ds.markdown:
+
+As you can see this is a language with really simple syntax. It almost looks
+like plain text, with some tiny amount of markup, and the `-- <something>:` etc.
+
+-- ds.h1: Minimal Syntax
+
+As you can see in the above example, the syntax to import a library, and the
+syntax to instantiate a component defined in the library is really the same.
+
+This is a very conscious decision, we want people to learn as little syntax, and
+keep the semantics as minimal as possible.
+
+If this was [`mdx`](https://mdxjs.com), it would have looked something like
+this:
+
+-- ds.code:
+lang: js
+
+import {amitu} from './lib.js'
+
+<amitu>Hello World! 😀</amitu>
+
+<amitu>
+
+  you can also write multiline messages easily!
+
+  no quotes. and **markdown** is *supported*.
+
+</amitu>
+
+
+-- ds.markdown:
+
+As you can see this is a lot of syntax. Notice the import syntax is rather
+cumbersome, especially for someone new to programming. And also notice how the
+syntax for creating a component vs importing the component is wildly different.
+
+And there lies the problem. Today we have to learn a lot to create a simple
+webpage. HTML, CSS and JavaScript at least, and then Markdown, and possibly JSX.
+
+This is if you chose to use `mdx`. The source of most web pages are written by
+developers and is much more complex than I have shown in these examples.
+
+Compare that with the [source
+code](https://github.com/fastn-community/acme-inc/blob/main/index.ftd) of `fastn`
+powered [`acme.fastn.com`](https://acme.fastn.com/) for example:
+
+-- ds.code: `index.ftd` of `acme.fastn.com`
+lang: ftd
+
+\-- ws.page:
+
+\-- ws.hero-with-image: We transform ideas into digital outcomes.
+cta-primary: Learn More
+cta-primary-link: #about
+image: $assets.files.assets.landing.png
+
+We are an award-winning strategic design company that provides consultancy
+services and help you create outstanding digital products.
+
+... rest of code omitted ...
+
+\-- end: ws.page
+
+-- ds.image:
+src: $assets.files.images.acme.png
+
+-- ds.markdown:
+
+As you see the code that is written matches really one on one with the UI that
+is produced.
+
+
+
+
+
+-- ds.h2: `caption` And `body`
+
+Let's look at how a component is defined in `fastn`. BTW this is another thing
+we have done, when using say `mdx`, the language to *use* a component is
+different from the syntax you use to *define* the component. Similarly if you
+are using [markdoc](https://markdoc.dev) by Stripe, if you want to [create your
+own "custom tag"](https://markdoc.dev/docs/tags#create-a-custom-tag), you have
+to jump to JavaScript world. But we will get to it later on, bottom line you can
+create components and use them in same file (if you want, we recommend putting
+component definitions in separate file of course), with the similar looking
+syntax.
+
+Let's see how a component is defined:
+
+-- ds.code:
+lang: ftd
+
+;; here we are using a component called foo
+\-- foo:
+
+;; this is the definition of the component
+\-- component foo:
+
+.. body omitted ..
+
+\-- end: foo
+
+-- ds.markdown:
+
+As you see you use very similar syntax for both using and creating components.
+
+So components are not too great if they do not take arguments or properties, so
+let's see how we do that:
+
+-- ds.code: our component has a title now!
+lang: ftd
+
+;; here we are using a component called foo
+\-- foo:
+title: hello ;; <hl>
+
+;; this is the definition of the component
+\-- component foo:
+string title: ;; <hl>
+
+.. body omitted ..
+
+\-- end: foo
+
+-- ds.markdown:
+
+`fastn` is strongly typed language, so you have to decide what is the type of
+variables. Here we have declared a variable `title` or type `string` (read about
+all the [built in types](http://fastn.com/built-in-types/) we support), which is
+a component variable, or component argument. We also see how it is passed.
+
+Now I do not quite like this. Instead of writing:
+
+-- ds.code:
+lang: ftd
+
+\-- foo:
+title: hello
+
+-- ds.markdown:
+
+What if we can write:
+
+-- ds.code:
+lang: ftd
+
+\-- foo: hello
+
+-- ds.markdown:
+
+One less line! So how do we do it? We call this location, the part that comes
+after `:` in the "section line" (section is what starts with `-- `), the
+`caption` of the section.
+
+-- ds.code:
+lang: ftd
+
+\-- component foo:
+caption title: ;; <hl>
+
+.. body omitted ..
+
+\-- end: foo
+
+-- ds.markdown:
+
+Yes, we have a type called [`caption`](https://fastn.com/built-in-types/#caption)
+(check out the [section grammar](/p1-grammar/) here). With that type both of
+the following are allowed:
+
+-- ds.code:
+lang: ftd
+
+\-- foo:
+title: hello
+
+\-- foo: hello
+
+-- ds.markdown:
+
+Of course you will probably prefer the later one. You can only have one argument
+of type `caption`, you should use it wisely, it should aid in the readability,
+it almost feels like the name of the section, so it should be used as such.
+
+Let me give you another example:
+
+-- ds.code:
+lang: ftd
+
+\-- record person:
+caption name:
+string location:
+optional body bio:
+
+-- ds.markdown:
+
+We are declaring a new [`record`](/record/), which is like a struct or a class,
+with three fields, `name`, which is a `caption`, `location`, which is a
+`string`, and `bio`, which is an `optional body`.
+
+Now let's create a variable of type `person`:
+
+-- ds.code:
+lang: ftd
+
+\-- person amitu: Amit Upadhyay
+location: Bangalore, India
+
+Amit is the founder and CEO of FifthTry.
+
+He loves to code, and is pursuing his childhood goal of
+becoming a professional starer of the trees.
+
+-- ds.markdown:
+
+We are creating a new variable named `amitu`. As you see `caption` and `body`
+types help in the readability and cleanliness of syntax.
+
+
+-- ds.h2: Context Dependent `end`
+
+Some component may have "children", they are declared with the type `children`:
+
+-- ds.code:
+lang: ftd
+
+\-- component bar:
+children c: ;; <hl>
+
+.. body omitted ..
+
+\-- end: bar
+
+-- ds.markdown:
+
+To call such a component we have to use an `end` statement as well:
+
+-- ds.code:
+lang: ftd
+
+\-- bar:
+
+\-- foo: hello
+
+this is the "body of foo"
+
+\-- end: bar
+
+
+
+-- ds.markdown:
+
+
+Since `bar` accepts `children`, `bar` needs an `end` statement clause. A
+component can accept both `body` and `children`.
+
+
+-- ds.code:
+lang: ftd
+
+\-- component page:
+optional body b:
+children c:
+
+.. body omitted ..
+
+\-- end: bar
+
+\-- page:
+
+this is the "body of page"
+
+\;; children of page
+\-- foo: hello
+
+this is the "body of foo"
+
+\-- end: page
+
+-- ds.markdown:
+
+We will usually have the definition of `page` in another file, so end user would
+write something like:
+
+-- ds.code:
+lang: ftd
+
+\-- import: lib
+exposing: pricing-page, pricing-card
+
+\-- pricing-page: Our Startup Offers Excellent Prices
+annual-discount: 10%
+
+Thousands of customers trust us for their daily image
+manipulation needs, you can join them by selecting one
+of the plans we offer.
+
+\-- pricing-plan: Free Plan
+price: 0
+
+You can use free plan forever, but there would be a
+water mark.
+
+\-- pricing-plan: Pro Plan
+price: 10
+
+Pro plan offers you a water mark free version.
+
+\-- end: pricing-page
+
+-- ds.markdown:
+
+We can even get rid of the `import` statement from top if you so like.
+
+-- ds.h2: Auto Imports
+
+If you look back at the `index.ftd` listed a bit above, you may be wondering
+where does `ws` come from? We have no import statements in the `index.ftd`
+after all.
+
+We have a feature called [`auto-import`](/auto-import/). Let's take a look at
+[`FASTN.ftd` for the `acme`
+project](https://github.com/fastn-community/acme-inc/blob/main/FASTN.ftd):
+
+-- ds.code: `FASTN.ftd`
+lang: ftd
+
+\-- import: fastn
+
+\-- fastn.package: acme.fastn.com
+favicon: /-/acme.fastn.com/favicon.ico
+
+\-- fastn.dependency: fastn-community.github.io/midnight-storm as theme
+
+.. other dependencies snipped ..
+
+\-- fastn.auto-import: acme.fastn.com/FASTN/ws ;; <hl>
+
+.. rest of file omitted ..
+
+-- ds.markdown:
+
+We are using `fastn.auto-import` to tell `fastn` that the module,
+`acme.fastn.com/FASTN/ws` is auto imported in all files (`fastn module` to be
+technically precise).
+
+Tiny feature to remove boilerplate that bit.
+
+-- ds.h2: Domain Drive Documentation
+
+One of the deficiencies of using markdown is over reliance on headings to
+structure the document. Everything is a blob of text, where heading levels
+function only as visual cues. There is no semantics to `h1`, `h2` etc, beyond
+`h1` is usually displayed larger than `h2`, or h2 is meant to be child of `h1`.
+
+We have given up on `#` to represent `h1`, `##` for `h2` and so on. We are
+markdown without `heading`, and we instead recommend the `-- h1:` syntax. Why?
+So people have to learn one less syntax, but more importantly that you start
+considering using more meaningful symbols when needed.
+
+Consider our [RFCs documents](/rfcs/), let's look at the source one of our RFCs:
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn.com/rfcs/lib
+
+\-- lib.rfc: RFC-4: Incremental Build
+id: 0004-incremental-build
+status: accepted
+
+In this RFC we propose persisting build metadata on every
+`fastn build`. This will enable as to only rebuild only
+the minimum number of files needed in the output directory,
+and will significantly cut down build time.
+
+
+\-- lib.motivation:
+
+Current we rebuild every document present in current package,
+and recreate entire `.build` folder. If we have cache metadata
+about the previous, we can do incremental build, and achieve
+much faster builds.
+
+
+\-- lib.detailed-design:
+
+We will create a new cache data, `build-cache.json`, which will
+contain the following information:
+
+.. rest of detailed design omitted ..
+
+\-- lib.teaching-notes:
+
+The feature itself requires no training as this is an internal
+optimisation.
+
+Configuring CI systems to preserve build cache across builds is
+required. We will be updating our fastn-template Github Action
+to include build caching. We will also have to write blog post
+on how to enable build caching on Vercel, and other hosting
+providers who give caching.
+
+
+\-- lib.unresolved-questions:
+
+There are no known unresolved questions right now.
+
+
+\-- end: lib.rfc
+
+-- ds.markdown:
+
+If you see a similar RFC in Rust, say [default private
+visibility](https://raw.githubusercontent.com/rust-lang/rfcs/master/text/0001-private-fields.md),
+
+-- ds.code:
+lang: md
+
+- Start Date: 2014-03-11
+- RFC PR: [rust-lang/rfcs#1](https://github.com/rust-lang/rfcs/pull/1)
+- Rust Issue: [rust-lang/rust#8122](https://github.com/rust-lang/rust/issues/8122)
+
+# Summary
+
+This is an RFC to make all struct fields private by default.
+This includes both tuple structs and structural structs.
+
+# Motivation
+
+Reasons for default private visibility..
+
+-- ds.markdown:
+
+Everything is a heading.
+
+It is rather hard to extract information out of markdown, you will have to write
+code to make sense of the headings, you will have to hope people are using the
+headings correctly etc.
+
+When using `fastn` you can create components eg `lib.motivation`, and you know
+that this must be the motivation.
+
+Further if you look at [rendered version of RFC](/rfc/incremental-build/) you
+will see it contains more text than what is written in the rfc source code, this
+is because `lib.rfc`
+
+-- ds.code:
+lang: ftd
+
+\-- lib.rfc: RFC-4: Incremental Build
+id: 0004-incremental-build
+status: accepted
+
+In this RFC we propose persisting build metadata on every
+`fastn build`. This will enable as to only rebuild only
+the minimum number of files needed in the output directory,
+and will significantly cut down build time.
+
+
+-- ds.markdown:
+
+Is not just a semantically clearer replacement for `#`, [`lib.rfc` is a
+component](https://github.com/fastn-stack/fastn.com/blob/main/rfcs/lib.ftd#L3-L52).
+
+This is how it looks when rendered:
+
+-- ds.image:
+src: $assets.files.images.rfc.png
+
+-- ds.markdown:
+
+Notice how the "This is a RFC document" note is not in the source listed above,
+it is added by the "component":
+
+-- ds.code:
+lang: ftd
+
+\-- component rfc:
+\;; the title of the RFC
+caption title:
+\;; each rfc should have a unique slug
+string id:
+\;; short summary of the RFC
+body short:
+\;; possible values: proposal, accepted, rejected and
+\;; open-questions. `open-questions` means RFC has been
+\;; reviewed, but some open questions have been found
+\;; and RFC has to be updated. Once RFC has been updated
+\;; it can go back to `proposal` state.
+string status: proposal
+children c:
+
+\-- ds.page: $rfc.title
+
+$rfc.short
+
+\-- note.note: This is a RFC document
+
+This document exists to describe a proposal for enhancing the
+`fastn` language. This is a Request For Comment. Please share
+your comments by posting them in the pull request for this RFC
+if this RFC is not merged yet. If the RFC is merged, you can
+post comment on our [official
+Discord](https://fastn.com/discord/), or open a [discussion on
+Github](https://github.com/orgs/fastn-stack/discussions).
+
+.. snip ..
+
+\-- ds.h2: Status
+
+$rfc.status
+
+
+
+\-- ftd.column:
+width: fill-container
+children: $rfc.c
+
+\-- end: ftd.column
+
+\-- end: ds.page
+
+\-- end: rfc
+
+
+-- ds.markdown:
+
+This allowed us to show the information in a better way than what markdown would
+have allowed. As you can see we have created a component and used other ready
+made components, eg `ds.page`, `ds.h2`, `note.note` etc.
+
+This is really powerful, and we believe non developers can learn to write such
+components with a short amount of training, and create really rich, domain
+driven documents. If you would have used most other tools it would have required
+intervention from developers. Using the same (and a really easy) language to
+author content and create components makes this possible for non developers to
+do it themselves.
+
+-- ds.h2: Indentation?
+
+One of the things we have tried to do is to make sure syntax is such that most
+of the documents do not require indentation. Programming is hard enough, but
+trying to program on an editor that is not designed for programming, an
+indentation aware editor, is almost complete torture.
+
+We are on a mission to make programming accessible to billions of people, and
+we see liberal use of indentation as a hurdle.
+
+A note: fastn language has two "modes", p-script and f-script, what you have
+seen so far is `p-script`, and `f-script` is used in function bodies. We have
+not seen user defined functions yet. Trivial `f-script` too you can write
+without indentation, but inside `if` blocks etc, indentation is un-avoidable,
+and is allowed, rather recommended.
+
+
+-- ds.h1: Variables, Mutability and Bindings
+
+So we have done some work on making the syntax easy on eyes. The other notable
+thing we are trying to do is making data flows managed by the compiler. Let's
+take an example:
+
+-- ds.code: `foo.ftd`
+lang: ftd
+
+\-- integer x: 10
+
+\-- ftd.integer: $x
+
+
+-- ds.markdown:
+
+In this example we have created a new variable `x` or type
+[`integer`](/built-in-types/#integer), with the value `10`. We have then used
+[`ftd.integer`](/integer/), a ["kernel component"](/kernel/), to display it's
+value in the document.
+
+The variable `x` is a module global variable. Module is a single `ftd` file.
+You can access this variable in current module using `$x` syntax. You can access
+this variable from other modules by importing this module and using
+`$<module-alias>.x` syntax.
+
+-- ds.h2: Variables Are Only "Created" If Accessed
+
+In most languages if you define a variable, it is always created. In `fastn` we
+do an analysis of the program and create a variable only when it is accessed
+somewhere by the UI.
+
+-- ds.h2: The "main" Module
+
+The `ftd.integer` is a UI component, and it is being created in module context.
+
+At any time one of the modules is being rendered, and that module is considered
+the "main module".
+
+If we are rendering `foo.ftd`, e.g. by accessing `/foo/` we do folder based
+routing (we also do [dynamic routing](/dynamic-urls/) and [custom
+routes](/custom-urls/) etc btw), the "module level UI" `ftd.integer` would be
+constructed, and since that is the only module level UI, that is only UI user
+will see on `/foo/`.
+
+If we import `foo` from another module, say `bar.ftd`, the `ftd.integer` being
+a module level UI would not be visible (we will not evaluate it at all), and
+`foo.x` may or may not be created, depending if module level UI of `bar` used
+`foo.x` or not.
+
+-- ds.code: `bar`
+lang: ftd
+
+\-- import: <package-name>/foo
+
+\-- ftd.text: hello world
+padding.px: $foo.x ;; <hl>
+
+-- ds.markdown:
+
+In this example we have used `foo.x` so `foo.x` would be constructed. If
+we comment out the highlighted line, `foo.x` would not be.
+
+Also since `foo` is not the "main module", the module level UI, `ftd.integer` in
+line number 3 of `foo.ftd` would also not be constructed.
+
+-- ds.h2: Mutable Variables
+
+All variables in `fastn` are "static" variables by default, they can not be
+changed.
+
+But a prelude on lifecycle of a page first.
+
+-- ds.h2: Lifecycle Of A Page
+
+`fastn` runs in either dynamic mode, where you run `fastn serve` on your server,
+or your laptop, which is usually what you will do during development, in this
+mode, every time a route is accessed, it will be rendered. We can also use
+`fastn` in static mode, we run `fastn build` and it generates a folder `.build`
+containing HTML/CSS/JS files you can deploy on any static hosting service.
+
+You are recommended to use static mode if your application allows as it is
+usually faster, requires lesser maintenance, is cheaper to host etc. But if
+you are [fetching dynamic data from external APIs](/http/), [database](/sql/)
+etc when rendering the page, you will want to host in dynamic mode.
+
+Anyways, coming back to lifecycle, in either mode, HTML/CSS/JS is prepared from
+`ftd` files, you can call it server side rendering, and handed over to browser,
+and once a page is loaded, event handlers are registered (they "hydration"
+phase), and then users can start interacting with the document, and those event
+handlers can modify variables.
+
+But they can not mutate a variable unless the variable is defined as mutable.
+
+-- ds.h2: Declaring a mutable variable
+
+-- ds.code:
+lang: ftd
+
+\;; non mutable variable
+\-- integer x: 10
+
+\;; mutable variable: $ prefix in declaration => mutable
+\-- integer $y: 20
+
+-- ds.markdown:
+
+So this is how you declare a mutable variable. We are quite skimpy about syntax,
+since we already introduced `$x`, overloading it's meaning in syntax declaration
+allowed us to not have to teach more syntax, just more semantics. Not sure if
+it's necessarily a good idea, but this is how we are thinking right now, use as
+little syntax to let you do as much as possible.
+
+-- ds.h2: `static` variables
+
+Now that just because you declare a variable as mutable does not mean it is
+actually going to get mutated during the life cycle of the page. A variable can
+currently only be mutated using event handlers attached to UI (soon we will
+support other event handlers like interval/time based, or browser resize/scroll
+etc, or maybe even web-socket/server-sent-events etc), so if you have no UI that
+mutates a mutable variable, effectively the variable is a `static variable`. So
+it's useful in thinking about variables in terms of `static` vs `dynamic`
+variables.
+
+-- ds.h2: Compiler Decides Based On Program
+
+Based on the program the compiler decides if a variable is static or not, and
+for dynamic variables the data about the variable is sent to browser as well.
+The data we send for a variable is the value of that variable, if the variable
+was static, we do not need it's value as the value would have been used in the
+server rendered HTML already. Along with value we also send the component
+definitions. Say a variable is a list, and for every element of the list a
+component is invoked, we have to send the definition of the component to browser
+only if the list is not static, for static list the HTML is sufficient.
+
+Please note that some of we are saying here is work in progress, this is more of
+how we want the language to be in `1.0`, and not necessarily how it is in
+`0.3.x`.
+
+-- ds.h2: Defining A Function
+
+To modify some variable we can use user defined functions, this is how you
+define a function:
+
+-- ds.code:
+lang: ftd
+
+\-- void incr(a,by):
+integer $a:
+integer by: 1
+
+a = a + by
+
+
+-- ds.markdown:
+
+We are defining a function `incr`, which is a `void` function, means it does
+not return anything. `void` functions only make sense for event handlers as we
+will see later.
+
+Our function takes two arguments, `a`, which is an integer, and is mutable, and
+`by`, which is also integer, and it has a default value of `1`, so `incr()` can
+be called by omitting the value of `by` as well.
+
+-- ds.h2: How Is A Variable Mutated And Used
+
+Enough theory, let's look at some usage:
+
+-- ds.code:
+lang: ftd
+
+\-- integer $x: 10
+
+\-- ftd.integer: $x
+role: $inherited.types.heading-medium
+$on-click$: $incr($a=$x)
+
+
+-- ds.markdown:
+
+This is what is produces:
+
+-- ftd.integer: $x
+role: $inherited.types.heading-medium
+$on-click$: $incr($a=$x)
+
+-- ds.markdown:
+
+Go on, click on the number above.
+
+A lot is happening in this example, so let's talk about a few of them.
+
+`x` is declared as mutable. We have also used `incr($a=$x)` when calling
+`incr()` to tell we are passing mutable reference to `$x`. If we wanted to pass
+non mutable `by` as well, say we had another module variable `-- integer by: 1`,
+we would have called `incr($a=$x, by=$by)`, without `$` before `by`.
+
+We are using `$on-click$` to register a callback to be executed when a click
+event happens on the corresponding UI. Since we attached a click handler we
+automatically change the `cursor` to `pointer`.
+
+-- ds.h2: Conditional Properties
+
+Let's change the color of `x` based on value of `x`.
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.integer: $x
+role: $inherited.types.heading-medium
+$on-click$: $incr($a=$x, by=3)
+color: red
+color if { x % 2 == 0 }: green
+
+-- ds.markdown:
+
+This is what is produces:
+
+-- ftd.integer: $x
+role: $inherited.types.heading-medium
+$on-click$: $incr($a=$x, by=3)
+color: red
+color if { x % 2 == 0 }: green
+
+
+-- ds.h2: Formulas
+
+We can also do:
+
+-- ds.code:
+lang: ftd
+
+\-- integer add(a,b):
+integer a:
+integer b:
+
+a + b
+
+\;; y is defined in terms of `x` and is a "formula"
+\-- integer y: $add(a=$x, b=1) ;; <hl>
+
+\-- ftd.integer: $x
+role: $inherited.types.heading-medium
+$on-click$: $incr($a=$x)
+color: orange
+color if { y % 2 == 0 }: purple
+
+
+-- ftd.integer: $x
+role: $inherited.types.heading-medium
+$on-click$: $incr($a=$x)
+color: orange
+color if { y % 2 == 0 }: purple
+
+-- ds.markdown:
+
+As you see, we have defined `y` based on `x`. Every time `x` changes, `y` is
+re-evaluated (effectively, compiler tries to figure out the minimum number of
+updates), and every bit of UI dependent on `y` is updated.
+
+-- ds.h2: Back To Compiler Analysis
+
+`fastn` is declarative in nature, and compiler figures out most things for you
+(at least it aspires to, we are in early stages, feel free to report bugs and
+join us in fixing them).
+
+If you try to mutate a non mutable variable, or a formula you get a compiler
+error. Otherwise the variable gets mutated and UI gets auto updated, doing
+the minimum (hopefully, wip, etc) amount of DOM modifications as possible.
+
+
+-- ds.h2: It's Only Variables
+
+It is not possible in `fastn` to query or access UI in any way. Document
+contains variables. Components also contains variables. You can mutate or read
+variables, but not UI. UI just exists and responds to data in variables.
+
+In future we will make data about the components hierarchy queryable, e.g. how
+many instances of component `foo` exists in current page, or in a given DOM tree
+branch etc. For now we are thinking about it, not yet sure if it is a good idea.
+
+-- ds.h2: Conditionals And Loops
+
+When invoking a component we can do it conditionally as well:
+
+-- ds.code:
+lang: ftd
+
+\-- boolean $show: false
+
+\-- ftd.text: hello
+if: { show }
+
+.. some other UI that toggles `show`
+
+-- ds.markdown:
+
+`fastn` will watch for when the condition gets changed, and when it changes the
+`ftd.text` node will added or removed from the DOM. Similarly if we have a list:
+
+-- ds.code:
+lang: ftd
+
+\-- person list $people:
+
+\-- person: Amit Upadhyay
+title: CEO
+
+\-- person: Arpita Jaiswal
+title: Senior Software Engineer
+
+\-- end: people
+
+-- ds.markdown:
+
+We can loop over this loop using:
+
+-- ds.code:
+lang: ftd
+
+\-- show-person: $p
+for: p in $people
+
+.. some UI that mutates $people
+
+-- ds.markdown:
+
+Here too we will auto update the DOM if `$people` changes, if an element is
+added or removed, it's corresponding DOM will be added or removed.
+
+
+-- ds.h2: Processors
+
+So, to recap, the initial value of variables comes from server, during server
+side rendering phase, and after page load mostly the variables are mutated for
+UI reasons. In the examples we have seen so far, the values of those variables
+were hard coded in the program, we can fetch those variables using functions
+as well, and those functions can internally call http requests or database
+queries.
+
+Processors are syntax sugar on top of function calls to make them look slightly
+better:
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn/processors
+
+\-- string username:
+$processor$: processors.request-data
+
+\-- repo list repos:
+$processor$: processors.pg ;; postgresql processor
+limit: 20
+
+SELECT
+    *
+FROM
+    repos
+WHERE
+    username = $username::TEXT
+LIMIT $limit::INTEGER;
+
+-- ds.markdown:
+
+Which looks slightly better than:
+
+-- ds.code:
+lang: ftd
+
+\-- string username: $fastn.request-data("username")
+\-- repo list repos: $fastn.pg(query="multi line query", limit=20, username=$username)
+
+-- ds.markdown:
+
+The above is not yet supported, we are going to provide these functions soon,
+currently only the `$processor$` form is supported.
+
+In fact in future we will make the later syntax slightly better by supporting
+`{}`:
+
+
+-- ds.code:
+lang: ftd
+
+\-- string username: $fastn.request-data("username")
+\-- repo list repos: {
+    fastn.pg(
+        "multi line query",
+        limit=20,
+        username=$username
+    )
+}
+
+-- ds.markdown:
+
+We will also allow you to remove the name of the first argument by allowing
+`caption` in function body. But processor syntax still wins.
+
+So that is processor, when it works it cleans up your code, that bit, else you
+can jump to the `f-script`, the "function mode", and write arbitrary code.
+
+The function mode is up for major overhaul in next release.
+
+-- ds.h1: A Note On Backward Compatibility
+
+`fastn` is built with long support in mind. We want to be the web native
+language for authoring content. For this to happen we have to make freeze on a
+minimal set.
+
+But changes are possible, so we are planning "edition" support to take care of
+that. In any "fastn package", you can pick an edition, or even on a per ftd
+module basis you can select the edition. Each new release of `fastn` will
+support all past editions, and modules of one edition can co-exist and user
+modules of other editions.
+
+This is on drawing board stage only, though we have created edition=2021,
+edition=2022 and edition=2023 so far. Till now we only supported edition on
+entire server level, (hopefully) in `fastn` 0.5 or 0.6 we will add edition
+support.
+
+-- ds.h1: Types
+
+`fastn` is built with strong type support. We have basic types like `integer`,
+`decimal`, `boolean`, `string`. We are going to add mode basic types like
+`ftd.datetime`, `ftd.timestamp` etc.
+
+We also have `record` syntax to create custom types as we saw above. We also
+have `or-type`, which is basically algebraic data type in other languages.
+
+-- ds.h2: `or-type`
+
+You create a new `or-type` like this:
+
+-- ds.code:
+lang: ftd
+
+
+\-- or-type lead:
+
+;; the first person is type, which refers to person
+;; record we created earlier
+\-- person person:
+
+;; here we are creating a record
+\-- record company:
+caption name:
+string contact:
+string fax:
+
+\-- end: lead
+
+
+-- ds.markdown:
+
+In this example we have a created a new type called `lead`, which can be either
+a `person`, a type we created in earlier example, or a `company`, here we
+are creating a new record, `lead.company`.
+
+You can create an instance of the `or-type` using:
+
+-- ds.code:
+lang: ftd
+
+\-- lead.person l: $amitu
+
+-- ds.markdown:
+
+We have created a new `lead`, called `l`, using the `person` clause of the
+`lead` `or-type`, and assigned the `$amitu` variable of type `person` we created
+earlier.
+
+You can also create the instance here:
+
+-- ds.code:
+lang: ftd
+
+\-- lead list leads:
+
+\-- lead.person: John Doe
+title: Senior Designer
+
+John loves to design.
+
+\-- lean.company: Acme, Inc.
+contact: Bugs Bunny
+fax: +1 (555) 12333123
+
+\-- end: leads
+
+-- ds.markdown:
+
+When creating an instance of the record you chose the "variant" you want to use.
+
+You can also have records with constants in them:
+
+-- ds.code:
+lang: ftd
+
+\-- or-type length:
+
+\-- integer px:
+
+\-- constant string fill-parent: Fill Parent
+
+\-- end: length
+
+-- ds.markdown:
+
+The `type` of the `constant`, `fill-parent` is `string`, and it's value is
+`Fill Parent`. The `type` and `value` for constant is under review right now,
+they kind of only help for documentation purpose. We may switch to
+`-- constant fill-parent:` in future.
+
+We can construct the a value of type `length` using:
+
+-- ds.code:
+lang: ftd
+
+\-- length.px l1: 20
+
+\-- length l2: fill-parent
+
+-- ds.markdown:
+
+Currently the `or-type`s can be only constructed in user code, and consumed by
+kernel components, but soon the following would be possible:
+
+-- ds.code:
+lang: ftd
+
+\-- match: l1
+;; by default match is exhaustive, but you can disable this, in this case
+;; for non px we will not show anything
+exhaustive: false
+
+\-- ftd.integer: $v
+case: length.px as $v
+
+\-- end: match
+
+-- ds.markdown:
+
+`case: default` as catch all for everything else is also being considered.
+
+-- ds.h2: `ftd.color`, `ftd.responsive-length` and `ftd.image-src`
+
+These types have special handling in `fastn`, as they support light/dark mode,
+or mobile/desktop responsive. Any kernel component which accepts properties of
+these kinds automatically switches their value in DOM based on dark mode
+preference or the device of the user.
+
+This way you do not have to litter your code with a bunch of `if` conditions and
+further `fastn` can convert them to CSS and avoid JS handling altogether.
+
+-- ds.h1: Design System
+
+One of the interesting (controversial?) thing `fastn` has done is trying to
+create a universal design system.
+
+-- ds.h2: Frontend Component Inter-operability Is Broken
+
+If you look at component designed in say React by one team, it is quite likely
+not compatible with component designed by another team, still using React. React
+is just an example, same is true for Angular, Svelte etc as well.
+
+One of the reasons components can not co-operate with each others is each
+component may be written with different set of NPM packages as a dependency,
+frontend ecosystem is quite fragmented, and this alone can cause many components
+to not be compatible with many other components out there.
+
+But beyond framework and dependency incompatibilities, there is another bigger
+problem, the design system incompatibilities. Even if two teams use exactly the
+same set of dependencies, they may chose to use different design systems,
+different class naming conventions, different CSS variable names and so on.
+
+-- ds.h2: Universal Design System
+
+`fastn` comes with a universal design system, in fact our hope is that it is so
+universal it can also be used in non `fastn` frontend code also, like you can
+import it in React, Angular etc as well.
+
+Standards are hard, but this is why we are trying to create a language level
+design system. This is definitely a compromise, maybe some design can not be
+represented using `fastn` design system, but by having a universal design system
+used by entire package ecosystem of `fastn` means any package created any team
+using `fastn` is compatible with any other package by any other team. And this
+may be a huge win as this allows a big ecosystem of packages to chose from.
+
+-- ds.h2: Elements Of `fastn` Design System
+
+`fastn` design system limits itself to only colors and typography. In future we
+plan to add `icons` as well. For colors and typography, we have types:
+
+-- ds.code:
+lang: ftd
+
+\-- record type-data:
+ftd.responsive-type heading-large:
+ftd.responsive-type heading-medium:
+ftd.responsive-type heading-small:
+ftd.responsive-type heading-hero:
+ftd.responsive-type heading-tiny:
+ftd.responsive-type copy-small:
+ftd.responsive-type copy-regular:
+ftd.responsive-type copy-large:
+ftd.responsive-type fine-print:
+ftd.responsive-type blockquote:
+ftd.responsive-type source-code:
+ftd.responsive-type button-small:
+ftd.responsive-type button-medium:
+ftd.responsive-type button-large:
+ftd.responsive-type link:
+ftd.responsive-type label-large:
+ftd.responsive-type label-small:
+
+-- ds.markdown:
+
+Here is our `ftd.type-data`, which contains `ftd.responsive-types`, which
+themselves are defined as:
+
+-- ds.code:
+lang: ftd
+
+\-- record responsive-type: ;; ftd.responsive-type
+caption ftd.type desktop:
+ftd.type mobile: $responsive-type.desktop
+
+\-- record type:  ;; ftd.type
+optional ftd.font-size size:
+optional ftd.font-size line-height:
+optional ftd.font-size letter-spacing:
+optional integer weight:
+optional string font-family:
+
+-- ds.markdown:
+
+`responsive-type` allows you to have `desktop` and `mobile` versions of
+`ftd.type`.
+
+So you can specify all the font related properties, e.g. `size`, `line-height`
+etc, and have two version of them, one for `mobile` and another for `desktop`,
+and when you are creating any component you use the variables that are part of
+`ftd.type-data`, as we saw in our earlier example:
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.integer: $x
+role: $inherited.types.heading-medium
+
+-- ds.markdown:
+
+We are using the `heading-medium` "role" for our `ftd.integer` type, and this
+is "plucked" from "inherited" properties. Inherited stuff are inherited from
+parent to child, a bit like CSS inheritance. At near the top level of your DOM
+tree you set the `ftd.type-data` for your application, or you can even do it for
+a branch in your UI tree, and you do not have to pass the property around, and
+everything just works. We also convert everything down to CSS, so there is
+runtime JS involved in all this.
+
+It might sound like a very round about way to re-implement CSS, but it gives you
+the best of CSS world, without having to worry about css classes, you can chose
+to use any property in any component, eg you can create a new `ftd.type` or even
+make the elements of `ftd.type` e.g. `size` be a "formula" on your variable and
+it all just works (it should, please report issues).
+
+Similarly we have colors:
+
+-- ds.code:
+lang: ftd
+
+\-- record color-scheme:
+ftd.background-colors background:
+ftd.color border:
+ftd.color border-strong:
+ftd.color text:
+ftd.color text-strong:
+ftd.color shadow:
+ftd.color scrim:
+ftd.cta-colors cta-primary:
+ftd.cta-colors cta-secondary:
+ftd.cta-colors cta-tertiary:
+ftd.cta-colors cta-danger:
+ftd.pst accent:
+ftd.btb error:
+ftd.btb success:
+ftd.btb info:
+ftd.btb warning:
+ftd.custom-colors custom:
+
+\-- record background-colors:
+ftd.color base:
+ftd.color step-1:
+ftd.color step-2:
+ftd.color overlay:
+ftd.color code:
+
+.. and so on ..
+
+-- ds.markdown:
+
+Which we can use like:
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.integer: $x
+role: $inherited.types.heading-medium
+color: $inherited.colors.text ;; <hl>
+
+-- ds.markdown:
+
+In `fastn` ecosystem, everyone is using these names, and people can distribute
+color schemes and typography data using color scheme and typography packages,
+which means you can add color scheme created by any team in your project by
+adding it as a dependency, and assigning it at the top level:
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn-community.github.io/dark-flame-cs
+\-- import: fifthtry.github.io/fastn-io-typography as ft-typography
+
+\;; the top level document is usually `ftd.document`
+
+\-- ftd.document:
+ftd.type-data types: $ft-typography.types
+ftd.color-scheme colors: $dark-flame-cs.main
+
+.. rest of your document ..
+
+\-- end: ftd.document
+
+-- ds.markdown:
+
+There you go, you have imported a color scheme.
+
+Since these schemes are standardised we are creating Figma support, so these
+color and typography data can be [imported in Figma](/figma/), and
+[re-exported back](/figma-to-fastn-cs/) to `fastn` files.
+
+-- ds.h2: Module Interfaces
+
+One goal we had since day one was to be able to completely change look and feel
+of a website by changing only a few lines of code. Let's see what I mean, look
+at this site powered by `fastn`, [`acme.fastn.com`](https://acme.fastn.com).
+And then someone sends this pull request:
+
+-- ds.image: [Code Changes Highlight](https://github.com/fastn-community/acme-inc/pull/9/files)
+src: $fastn-assets.files.images.blog.layout-fc.png
+width.fixed.percent: 95
+
+-- ds.image: [Before Changes](https://acme.fastn.com/)
+src: $fastn-assets.files.images.blog.old-layout.png
+width.fixed.percent: 95
+
+-- ds.image: [After Changes](https://acme-inc-git-design-change-fifthtry.vercel.app/)
+src: $fastn-assets.files.images.blog.new-layout.png
+width.fixed.percent: 95
+
+Go ahead, click on the dark mode floating button on the bottom right to switch
+modes to see how they look in light and dark mode. Look at how much the design
+has changed, the color schemes, the typography, and the design/layout of
+components themselves, with just three lines of code change.
+
+-- ds.h2: Module Interface
+
+The color and typography change happened because well they are using our
+universal design system. But how did the component layout etc change?
+
+This is achievable by CSS to some extent, but at one time [CSS Zen
+Garden](http://www.csszengarden.com) was a go to for people to learn to do this
+kind of drastic changes to websites by just modifying CSS.
+
+But that was a sort of not scalable. First of all not all design changes can
+be done by the CSS, without also modifying the HTML structure. But that is only
+visual, components in `fastn` come with event handling etc, are full blown
+components, what is in one design you wanted to some information as carousal and
+in another design using tabs? This is not possible with just CSS.
+
+We can do this by swapping our the component libraries. But while doing so how
+do we make sure that the authored content of your website does not change?
+
+We do this using a feature called "module interface". One of the types in `fastn`
+is a `module` type. A module represents a fastn document, the module interface
+for any module is the set of types, variables, functions and components defined
+in that module.
+
+-- ds.code:
+lang: ftd
+
+\-- import: package.that/is-interface as the-interface
+
+\-- component foo:
+module theme: the-interface
+
+\-- foo.theme.yo: this is yo
+
+`the-interface` defined a component called `yo` that
+we are calling.
+
+\-- end: foo
+
+-- ds.markdown:
+
+So say we have a `module`: `package.that/is-interface`, which contains some
+components, types, variables etc, say a component called `yo`. If we would have
+written our code like this:
+
+-- ds.code:
+lang: ftd
+
+\-- import: package.that/is-interface as the-interface
+
+\-- component foo:
+
+\-- the-interface.yo: this is yo
+
+`the-interface` defined a component called `yo` that
+we are calling.
+
+\-- end: foo
+
+-- ds.markdown:
+
+`foo` would have always used the `yo` defined in `the-interface`, but we want
+different packages to be called, so we define like how did, and with the
+original definition we can call `foo` like this, passing our own `module` that
+implements the interface `foo` is looking for:
+
+-- ds.code:
+lang: ftd
+
+\-- import: some-package/the-interface as implementer
+
+\-- foo:
+theme: implementer
+
+-- ds.markdown:
+
+Now we are using our implementer of the module interface, and passing the module
+itself as a parameter to `foo`. Now when `foo` calls `foo.theme.yo`, the
+`implementer.yo` gets called.
+
+If two modules implement same module interface, they are interchangeable. And
+this is the last trick to achieve the drastic design change without modifying
+anything else in the site.
+
+-- ds.h1: Dynamic Websites
+
+Everything we discussed so far makes `fastn` a decent alternative for static
+websites, your non tech team can easily update the website unlike if it was
+built with React etc, you do not have to worry about CMS or tweak things in
+WYSWYG editors like Webflow/Wix. If you use `fastn` you can use Github (or
+whatever you prefer) to collaborate with your team, use your favorite editor,
+use your favorite hosting provider, use CI, etc etc.
+
+But from day one we have wanted to make `fastn` a full stack application server.
+
+For static websites you run `fastn build` and it creates a folder `.build` with
+HTML/CSS/JS for your website that you can publish on static hosting providers
+like [Github Pages](/github/) or [Vercel](/vercel/).
+
+`fastn` also comes with `fastn serve`, which runs a web server, converting
+`.ftd` files to `HTML` on every HTTP request. `fastn serve` can be [deployed on
+say Heroku](/heroku/).
+
+This mode can unlock dynamic features of `fastn`. Let's go through some of them.
+
+-- ds.h1: Dynamic URLs
+
+`fastn` by default does folder based routing, the path of a `.ftd` file decides
+it's URL, eg `index.ftd` -> `/`, `a.ftd` -> `/a/`, `a/b.ftd` -> `/a/b/` and so
+on. But say if you are building your own Twitter, now X, you would want URLs
+like `https://twitter.com/amitu`, which follows the pattern
+`twitter.com/<username>` to all be handled by same logic.
+
+You can do something like this by using `fastn`'s [`dynamic-url`](/dynamic-urls/)
+feature.
+
+In your `FASTN.ftd` you add something like this:
+
+-- ds.code:
+lang: ftd
+
+\-- fastn.dynamic-urls:
+
+# User Profile Page
+  url: /<string:username>/
+  document: profile.ftd
+
+-- ds.markdown:
+
+With this any URL that matches the pattern `/<string:username>/`, eg `/amitu/`
+will be served by the `document`, which is `profile.ftd` in this example.
+
+So how do we get the `username` in the `profile.ftd`? We can use
+[`request-data`](/request-data/) ["processor"](/processor/-/backend/).
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- string username:
+$processor$: pr.request-data
+
+\-- ftd.text: $data.message
+
+-- ds.markdown:
+
+We read the `username` using the `processor`, the type of variable and name must
+match as specified in the `fastn.dynamic-urls` section shown above. You can also
+pass an optional default value for the variable.
+
+-- ds.h2: HTTP and SQL Processors
+
+We ship HTTP and SQL processors for postgresql and sqlite.
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- person people:
+$processor$: pr.pg
+
+SELECT * FROM users where username = $username::TEXT;
+
+-- ds.markdown:
+
+We have fetched the user data from `users` table using `pg` processor, which is
+used to query postgresql database.
+
+-- ds.h2: Redirects
+
+You can also return non 200 responses, like do a conditional redirect:
+
+-- ds.code:
+lang: ftd
+
+\;; let's say the person object we got has a `is-blocked`
+\;; field, these user's should not be shown
+\-- ftd.redirect: /
+if: { person.is-blocked }
+
+-- ds.h2: An Example
+
+The data you have fetched, you can pass to UI:
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- string username:
+$processor$: pr.request-data
+
+\-- person p:
+$processor$: pr.pg
+
+SELECT * FROM users where username = $username::TEXT;
+
+\;; let's say the person object we got has a `is-blocked`
+\;; field, these user's should not be shown
+\-- ftd.redirect: /
+if: { p.is-blocked }
+
+\-- show-person: $p
+
+\;; must match `users` table definition
+\-- record person:
+integer id:
+string username:
+string name:
+boolean is-blocked:
+optional string bio:
+
+\-- component show-person:
+person caption $p:
+
+.. body omitted ..
+
+\-- end: show-person
+
+-- ds.markdown:
+
+You can also create custom functions to do more data manipulation. We plan to
+make a rich standard library for helping you do a lot of things.
+
+You can checkout our [todo application built using
+`fastn`](https://github.com/fastn-community/todo-app).
+
+-- ds.h2: Upcoming WASM Support
+
+We are also working on WebAssembly support, which will allow you to write custom
+functions in any language that compiles to WebAssembly, and run your functions
+on both server side and client side (in the browser), compiler figuring out
+where it is needed.
+
+-- ds.h2: Reusable Backend Apps
+
+We have created universal design system so more and more UI component, color
+schemes, typography configurations can be shared between teams. We want to do
+the same for backend apps as well.
+
+Currently installing full stack apps is really hard, each app is written with
+its own frontend library, its own backend technology, it's own choice on
+database, it's own choice about the way databases are structured, authentication,
+permissions, access control etc is implemented.
+
+This means if you want to install 5 apps on your server, you have to fiddle with
+a lot of devops stuff, how is each app db going to be backed up? How are
+dependencies going to be kept up to date? How much RAM and CPU is needed? We have
+to worry about Docker and Kubernetes, or fiddle with plethora of choices made
+available to us by cloud providers.
+
+This is a setup where casually installing a app is almost beyond reach of most
+of humanity. Even developers are going to have hard time managing all this.
+
+This is where fastn's emphasis on standardising comes up. We are not only
+standardising user interface roles, but also that you should use Postgresql,
+that your tables should live in a separate schema for your application, you
+should rely on fastn to take care of authentication and basic access control,
+and so on.
+
+This standard is not yet ready, we are working on it, but if apps are written
+with such standards, do not have dependency beyond fastn and postgresql, they
+can be deployed completely by fastn.
+
+This may not be what you use to build the core of your next tech startup, but
+you can use all this to power your personal or even intranet applications for
+your company, society, educational institute etc. If you want a ready made todo
+app for your company, a payroll management app.
+
+
+-- ds.h1: Special Features For Website Creators
+
+Not only is `fastn` a great, or at least, hopes to be great framework for your
+frontend and backend, it's a great tool to build your next website. If you use
+Webflow or Wix to quickly build a website because current open source solutions
+require far too much development and devops expertise to install and run on your
+own server, you get started soon, and have some control over website, but you
+are forever bound by whatever the website builder you have picked. They can
+change their prices, go out of business, change the feature you rely on etc, and
+you are beholden to them. They may or may not provide all the site data that you
+expect, and you have to work with their proprietary technologies and APIs.
+
+`fastn` aims to help website creators simplify the development process to such
+an extent they can deploy their sites, install ready made themes and even
+fully functional apps on their own, as easily as one can install apps on their
+mobile phone.
+
+We have some features particularly for website creators, lets look at some of
+them.
+
+-- ds.h2: Sitemap
+
+
+-- ds.h2: Multiple Entries In Sitemap
+-- ds.h2: Redirects
+-- ds.h2: Document Meta Data
+
+- canonical url
+- favicon
+- social media data
+
+-- ds.h1: Not Just For Web Pages
+
+-- ds.h2: Documentation Use Case
+
+
+-- ds.h2: Greeting Cards
+
+- download as image feature
+
+-- ds.h2: Presentation
+
+-- ds.h2: Visualisation
+
+-- ds.h2: Font Handling
+
+-- ds.h2: Source Code Syntax Highlighting
+
+-- ds.h2: Distributing Images
+
+-- end: ds.page
+
+
+-- integer $x: 10
+-- integer y: $add(a=$x, b=1)
+
+
+-- void incr(a,by):
+integer $a:
+integer by: 1
+
+a = a + by
+
+
+-- integer add(a,b):
+integer a:
+integer b:
+
+a + b

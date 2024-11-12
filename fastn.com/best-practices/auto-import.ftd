@@ -1,0 +1,38 @@
+-- import: fastn-community.github.io/bling/note
+
+-- ds.page: Auto-import
+
+We `auto-import` the packages in the `FASTN.ftd` file.
+
+-- ds.code: Syntax
+lang: ftd
+
+\-- fastn.auto-import: <package-name>
+
+-- ds.h1: Usage of `auto-import`
+
+
+**Question:** When do we use `auto-import`?
+
+The answer is, when a component of a package or a package is used in almost all
+files of the project.
+
+**Question:** When do we not use `auto-import`?
+
+When a particular component is used just once or twice in a project, we do not
+`auto-import` instead we `import` it in the specific file/s where the component
+is required.
+
+**Question:** Why do we not `auto-import` all the components or packages?
+
+It downloads the complete package in our project making the size of the project
+unnecessarily big.
+
+
+-- note.note: `fastn` is intelligent
+
+If a package is not used in any `.ftd` file but it is `auto-imported` in the
+`FASTN.ftd` file, that package would not be downloaded.
+
+
+-- end: ds.page

@@ -1,0 +1,176 @@
+-- ds.page: Open the Terminal (Linux/MacOS) or Command prompt (Windows)
+
+A terminal is a text input and output environment. It is a program that acts as
+a wrapper and allows us to enter commands that the computer processes. Here we
+are going to discuss how to open terminal in different os.
+
+- [Open the Terminal (Linux)](open-terminal/#open-the-terminal-linux)
+- [Open the Terminal (MacOS)](open-terminal/#open-the-terminal-macos)
+- [Open Command prompt (Windows)](open-terminal/#open-the-command-prompt)
+
+-- ds.h1: Open the Terminal (Linux)
+
+On a Ubuntu 18.04 system you can find a launcher for the terminal by clicking on
+the Activities item at the top left of the screen, then typing the first few
+letters of “terminal”, “command”, “prompt” or “shell”.
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.open-terminal-ubuntu.png
+
+-- ds.markdown:
+
+If you can’t find a launcher, or if you just want a faster way to bring up the
+terminal, most Linux systems use the same default keyboard shortcut to start it:
+`Ctrl-Alt-T`.
+
+However you launch your terminal, you should end up with somewhat similar
+looking window probably with different look and feel depending on your Linux.
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.open-terminal-ubuntu-1.png
+
+
+-- ds.h1: Open the Terminal (MacOS)
+
+You can open terminal in MacOS in different ways. We can use spotlight search or
+from launchpad or from Applications Folder
+
+-- ds.h2: How to Open Terminal Using Spotlight Search
+
+Perhaps the easiest and quickest way to open Terminal is through Spotlight
+Search. To launch Spotlight, click the small magnifying glass icon in your menu
+bar (or press `Command+Space`).
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.open-terminal-macos.png
+
+-- ds.markdown:
+
+When the Spotlight Search bar pops up on your screen, type “terminal.app” and
+hit `Return`. Or you can click the `Terminal.app` icon that appears.
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.open-terminal-macos-1.png
+
+-- ds.markdown:
+
+Terminal will launch, and you’ll be ready to go.
+
+-- ds.h2: How to Open Terminal from Launchpad
+
+You can also open Terminal quickly from Launchpad. If you have Launchpad in your
+dock, click the `rocket ship` icon or press “F4” on your keyboard to launch it.
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.open-terminal-macos-2.png
+
+-- ds.markdown:
+
+When Launchpad opens, type “Terminal” and hit return. Or you can click the
+“Terminal” icon.
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.open-terminal-macos-3.png
+
+-- ds.markdown:
+
+The Terminal app will open.
+
+-- ds.h2: How to Open Terminal from Your Applications Folder
+
+If you’d prefer to go launch Terminal from the program icon in Finder, you’ll
+usually find it located in the `/Applications/Utilities` folder. This is its
+default location on fresh installations of macOS.
+
+To open Terminal from your `Applications` folder, click your desktop to bring
+Finder into focus. In the menu bar, click “Go” and select “Applications.”
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.open-terminal-macos-4.png
+
+-- ds.markdown:
+
+Your `Applications` folder will open. Scroll through until you find the
+“Utilities” folder. Double-click the “Utilities” folder to open it. Inside, you
+will find Terminal.
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.open-terminal-macos-5.png
+
+-- ds.markdown:
+
+Double-click the `Terminal.app` icon and the Terminal will open.
+
+
+-- ds.h1: Open the Command Prompt
+
+The `**Command Prompt**`, officially called the `Windows Command Processor` and
+often abbreviated to `CMD`, is the `command line interface` for Windows operating
+systems. A command line interface is a way of interacting with a computer directly
+using text commands.
+
+-- ds.h2: How to open Command Prompt from the Windows Start Menu
+
+First, click the Start Menu button in the lower-left corner to open the start
+menu.
+
+Scroll down to “Windows System” and click that to open a dropdown of different
+Windows programs. Then click “Command Prompt”:
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.cmd-prompt-start-menu.png
+
+
+-- ds.h2: How to open Command Prompt with the search bar
+
+One of the fastest ways to open Command Prompt is by using the search bar in the
+Windows Taskbar.
+
+Just type “cmd” into the search bar and click on “Command Prompt”:
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.search-cmd-prompt-1.png
+
+
+-- ds.h2: How to open Command Prompt from the Run program
+
+Windows 10 has another program called Run that lets you, well, run other programs.
+You can also do things like open folders and files, but that’s outside the scope
+of this tutorial.
+
+To open Run, you can open the Start Menu and find it under “Windows System”.
+You could also type “run” in the search box and find it that way.
+
+But the fastest way to open Run is with the shortcut **Windows Key + R**.
+
+Then, once the Run window is open, just type in “cmd” and press “OK” to open
+Command Prompt:
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.run-cmd.png
+
+
+-- ds.h2: How to Open Command Prompt in a Folder
+
+In many cases, you wish not to write the folder directory in command prompt rather
+open the command prompt in a folder with the path of a particular project or
+repository.
+
+First, open the folder.
+
+Click on the address bar
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.folder-address-bar.png
+
+-- ds.markdown:
+
+Make sure, it's highlighted, then write `**cmd**` and hit enter on keyboard.
+
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.cmd-with-folderpath.png
+
+
+
+-- end: ds.page

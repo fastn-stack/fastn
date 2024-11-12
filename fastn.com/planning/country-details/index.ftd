@@ -1,0 +1,106 @@
+-- ds.page: A hands-on guide to Dynamic UI using REST API
+
+
+This guide provides step-by-step instructions to deploy the `country-details`
+project. The deployment will be on Heroku using
+the fastn buildpack.
+
+We are going to create a project in `fastn` that will create a Dynamic UI to
+display the countries along with their Population, Region and Capital among
+other data.
+
+**VIDEO 0: Walkthrough, showcasing final UI**
+
+\;; Walkthrough video will come after we have created the entire project.
+
+
+
+-- ds.h1: Basics of http and Data modelling
+
+Before that, let's take another example where the json data will only have
+country-name and capital.
+
+**VIDEO 1: Basics of http and Data modelling though an example**
+- name-capital
+- concept narration + project output
+
+
+-- ds.code: Final Code
+
+\-- import: fastn/processors as pr
+
+\-- country-detail: $country
+for: $country in $countries
+
+\-- record country-data:
+string name:
+string capital:
+
+\-- country-data list countries:
+$processor$: pr.http
+url: https://famous-loincloth-ox.cyclic.app/
+
+\-- component country-detail:
+caption country-data country:
+
+\-- ftd.row:
+width.fixed.percent: 20
+
+\-- ftd.text: $country-detail.country.name
+role: $inherited.types.copy-regular
+style: bold
+width.fixed.percent: 50
+
+\-- ftd.text: $country-detail.country.capital
+role: $inherited.types.copy-regular
+
+\-- end: ftd.row
+
+
+\-- end: country-detail
+
+
+
+-- ds.h1: Building dynamic country list page
+
+**VIDEO 2: explanation of nested model system and fetching and displaying the
+  data that is needed for the index page that will have country list**
+
+- Create a `models.ftd` to do all the data modelling
+
+- Create `card.ftd` document that will have the UI component that will display
+  the countries and its data in form of a card.
+
+- In `index.ftd` we will do `http-processor` and call the UI component and
+apply `for` loop.
+
+
+
+-- ds.h1: Building country details page
+
+**VIDEO 3: focuses on country details page**
+
+- Firstly, we will move the header part in a separate document `header.ftd`
+inside the `components` folder
+
+- Create a `details.ftd` document that will define 2 string variables `cca2`
+and `url`.
+  - `cca2` string will store the value through the request-data processor
+  - the `url` string will use the function that appends value of `cca2` to the
+  base url.
+
+- Create `utility.ftd` to write the functions
+  - join function
+  - go-back function
+
+- Create `country-details` document under the `components` folder that will have
+  all the components required to display the data in the country details page
+
+
+
+-- ds.h1: Deploying on Heroku
+
+**VIDEO 4: HEROKU deployment**
+
+
+-- end: ds.page

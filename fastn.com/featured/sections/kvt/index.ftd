@@ -1,0 +1,22 @@
+-- import: fastn.com/featured as ft-ui
+
+
+-- ds.page:
+sidebar: false
+
+-- ft-ui.view-all: Key Value Tables
+templates: $kvt
+
+-- end: ds.page
+
+
+
+
+
+-- ft-ui.template list kvt:
+
+-- ft-ui.template: Key Value Table 1
+template-url: /featured/sections/kvt/kvt-1/
+screenshot: $fastn-assets.files.images.featured.sections.kvt-1.png
+
+-- end: kvt

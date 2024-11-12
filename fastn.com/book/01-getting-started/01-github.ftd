@@ -1,0 +1,335 @@
+-- import: fastn.com/assets
+
+-- ds.page: Hello, Github!
+
+Github is an online collaboration platform, where developers come together and
+write software. Github is not the only one, there is Gitlab, BitBucket and a
+few others. Or you can even run your own code collaboration platform, after all
+that's what software developers do, they are not bound by other companies to
+provide the solutions for their need, but can build our own. Among these, Github
+is kind of the most popular one, and there is no harm in learning, so even if you
+did not end up using Github, the same basic ideas will apply.
+
+There is one more reason to consider Github, a lot of open source development
+happens on Github. And Github profile of software developers act like their
+resume, some companies look at your Github work history while evaluating you
+during their recruitment process. While this is not free from controversy, after
+all your best work may not be public, so how can you be properly evaluated based
+on your public profile, it still makes sense to stack the odds in your favour,
+and learning in public is a very good way to learn for some.
+
+So Github, Github uses something called `git` underneath. `git` is the real
+brain, and Github is kind of on top of it. In fact the others I mentioned,
+Gitlab, BitBucket too support `git`, so as you see if you learn `git`, you can
+use any of these.
+
+So you have to learn both `git` and Github if you want to do programming. And
+we will, very gradually, over the course of this book.
+
+-- ds.h1: Why Don't People Write Code In Google Docs/Dropbox etc?
+
+A lot of early programmers ask this question. After all Google Docs, and Apple
+Notes, etc are great at collaboration. Of course Google Docs does not store
+program files, which are plain text files, but they have, a proprietary "rich
+text format", same with Apple Notes etc.
+
+But how about Dropbox, Google Cloud, iCloud etc? They let you store files,
+including plain text files, and sync them across different machines. Even
+support sharing folders with multiple users, so any number of people can work
+on the same set of files.
+
+Why do we need these more complex `git` and Github at all?
+
+It is all about conflicts. See if you share some files among people. Or even if
+you are the only one editing those files, but if you are editing those files
+from different devices, say you have a laptop and a desktop. Or since you are
+going to develop software, which is going to "get deployed on SERVER", you are
+going to have more than one device or more than user editing those files.Or even
+tabs! You may have opened the same file on multiple tabs or multiple
+applications on the same device! This is kind of unavoidable. And if there are
+going to be more than one devices or users, there is going to be conflicts.
+
+-- ds.h2: What Are Conflicts?
+
+So what is a conflict? Conflicts arises when the same file is edited by multiple
+people, or on multiple devices by the same person. Let's look at an example.
+Say at the beginning of the day, there was a file named `employees.ftd`, which
+looked like this:
+
+-- ds.code: content of `employees.ftd` at the beginning of the day
+lang: ftd
+
+\-- employee: John Smith
+salary: 2000
+
+\-- employee: Jane Doe
+salary: 3800
+
+-- ds.markdown:
+
+So this file keeps tracks of employees and their salaries. And let's assume that
+you are Jane Doe, and you went ahead and had a chat with your manager about a
+raise. You present an excellent case, you tell them you have just learnt `fastn`
+and `ftd` and are now more skilled, and are thus more valuable to the company,
+and manager decides to give you a raise of 7%. The manager downloads the
+latest version of `employees.ftd` and updates it with your new salary:
+
+-- ds.code: `employees.ftd` after manager gives a raise
+lang: ftd
+
+\-- employee: John Smith
+salary: 2000
+
+\-- employee: Jane Doe
+salary: 4066
+
+-- ds.markdown:
+
+Congratulations on the raise! But before the manager can finish uploading the
+updated file, something else happens!
+
+The CEO of your company has seen the quarterly numbers, and decided to give
+everyone in the company a 5% raise, so he downloads his `employees.ftd` before
+the manager has uploaded his updated version.
+
+-- ds.code: CEO also sees the `employees.ftd` that was at the beginning of the day
+lang: ftd
+
+\-- employee: John Smith
+salary: 2000
+
+\-- employee: Jane Doe
+salary: 3800
+
+
+-- ds.markdown:
+
+Gives everyone a 5% raise and makes it:
+
+-- ds.code: After the 5% raise
+lang: ftd
+
+\-- employee: John Smith
+salary: 2100
+
+\-- employee: Jane Doe
+salary: 3990
+
+-- ds.markdown:
+
+Now there are two new versions of the `employees.ftd`. For John there is no
+conflict, the manager does not want to do anything with the salary of John, and
+CEO want's to increase the salary. But in your case, Jane's case, manager want
+the salary to be 4066, but the CEO wants the salary to be 3990, what should be
+the new salary?
+
+Should it be 3990 as per the CEO because CEO has higher priority? But that will
+effectively lower Jane's salary from 4066, and had he known her new salary was
+raised, would he have lowered it, and made Jane's increment same as John?
+Especially if he learns that the manager thinks Jane deserves the increment?
+
+The point I am trying to make is this is a situation of conflict, and there is
+no simple answer here. Maybe the CEO's 5% increment should be applied on top of
+the 7% raise by manager as Jane deserves both? The software can not decide this.
+Ideally the manager, the CEO, maybe the HR, maybe including Jane should come
+together and decide what should be her new salary.
+
+This is real life. This happens more often than you think. Let's look at
+another example. Say you are organising an event, and are looking for guest
+speakers. Say so far you have found one speaker and at the beginning of the
+day, the speaker list file looks like this:
+
+-- ds.code: `speakers.ftd`
+lang: ftd
+
+\-- speaker: Abraham Lincoln
+
+-- ds.markdown:
+
+And Jack and Jane both go looking for new speakers, and Jack gets Mahatma Gandhi
+to speak, but he decides Gandhi should come after Lincoln after studying the
+demography of the audience, so he updates his `speakers.ftd`:
+
+-- ds.code: Jack's `speakers.ftd`
+lang: ftd
+
+\-- speaker: Abraham Lincoln
+\-- speaker: Mahatma Gandhi
+
+-- ds.markdown:
+
+In the meanwhile Jane has managed to convince Plato to speak as well, but she
+also decides Lincoln should go first based on careful considerations, and her
+file looks like this:
+
+-- ds.code: Jane's `speakers.ftd`
+lang: ftd
+
+\-- speaker: Abraham Lincoln
+\-- speaker: Plato
+
+-- ds.markdown:
+
+Now we again have a conflict! The order of the speaker matters. So when these
+changes should be combined, or "merged" as they say in programming world, should
+the final file look like:
+
+-- ds.code: Option one: Plato goes first
+lang: ftd
+
+\-- speaker: Abraham Lincoln
+\-- speaker: Plato
+\-- speaker: Mahatma Gandhi
+
+-- ds.markdown:
+
+or, should it look like this:
+
+-- ds.code: Option one: Gandhi goes first
+lang: ftd
+
+\-- speaker: Abraham Lincoln
+\-- speaker: Mahatma Gandhi
+\-- speaker: Plato
+
+-- ds.markdown:
+
+And there you go, conflict again! Such conflicts are everywhere.
+
+-- ds.image:
+src: $assets.files.images.thanos.png
+
+If conflicts was Thanos, he would have said: *Dread it. Run from it. Conflicts
+arrives all the same. I am inevitable*.
+
+
+
+-- ds.h2: How To Resolve Conflicts?
+
+At the most fundamental level one can take the position that there is basically
+two ways to resolve conflict, assume conflicts are irrelevant, let the software
+pick either of the two versions as the "winner", maybe the last write wins,
+maybe the longest change wins, maybe even there is a priority on the user, CEO
+wins over the manager etc. Any such heuristics can be picked and one can go on
+with life.
+
+If the stakes were low. This is what Google Docs and Dropbox/iCloud etc do. They
+use a heuristic, which one? Decided by their product team, and silently resolve
+the conflict. User is not informed about the conflict, and people go on their
+blissful ignorant merry life. Butterflies and rainbows everywhere, no conflict
+in sight. Life is good.
+
+But is it really? If Jane hears CEO decreased her raise from 4066 to 3990,
+*despite* company having a great last quarter, possibly because of the hard work
+put by Jane, she is obviously sounding like a go getter, trying new things and
+all, would she like it? Would the CEO like it that her top performer is
+disgruntled, and looking for job elsewhere, because some product manager in
+Google Docs team decided **last change wins**?
+
+How about the event they were organising, if they are really lucky, the order
+in which the speakers peak does not matter to the audience, but what if it
+mattered? Would the event organising team be happy about the face that some
+spreadsheet software decided what the order should be? Of course you can say if
+the decision was so important, the event planning team should have double
+checked! And they should have, but shouldn't the software warned them that there
+is a conflict instead of silently deciding the order in which speakers should
+speak?
+
+See, the thing is if Google Docs team used Google Docs (say they modified it
+to also store programming source files), to store Google Docs' source code, or
+if Dropbox team used Dropbox to manage their source code, both Google Docs and
+Dropbox products would be down all the time, or worse, would lose data, and do
+all sorts of bad stuff.
+
+Google Docs or Dropbox will never use Google Docs or Dropbox for storing source
+code. Because source code is important. It is a tragedy that CFOs use such
+products to store their highly sensitive data, they must be double and triple
+checking everything like a kid on suger rush, or must be losing their hair.
+
+We simply can not let software decide what to do in conflicts. Humans have to be
+brought in the loop, and they have to take a look at the history, the
+motivations of the two people making conflicting changes, and conflict has to be
+properly resolved, and the resolution has to be fed to the software for storage
+purpose etc.
+
+This is how software is written. This is also quite hard, the reason non
+software fear this hard step, is why you should read this book and learn to do
+things the right way.
+
+Let's take a look at what Github does when it detects a conflict:
+
+-- ds.image: How Conflict Should Be Resolved
+src: $assets.files.images.resolve-conflict.gif
+
+Source: [Resolve simple merge conflicts on GitHub](https://github.blog/2016-12-12-resolve-simple-merge-conflicts-on-github/)
+
+Notice again how they prominently show a warning:
+
+-- ds.image:
+src: $assets.files.images.conflict-warning.png
+
+It shows there is a conflict, the conflict does not get silently ignored. This
+warning force a human in the loop. A human has to click on the "Resolve
+conflicts" button, and look at the two possible versions, and decide what wins.
+
+This keeps code sane. Conflict forces us to think. They are sometimes quite
+nasty to resolve, but that is reality of life, and not a problem with the
+software. Not to say software always works, sometimes there are conflicts that
+software could have resolved but can not, that will happen. But then we
+programmers are paranoid people, and prefer to play it safe, and are okay to
+be warned when there is no real problem, if our only other choice was for all
+warning to go silent.
+
+-- ds.h1: `git` is a version control system
+
+Now that we have discussed the motivation of why we go through this slightly,
+and in practice it ends up not being a big problem as you will see, resolving
+conflict with right tools at hand, and some basic knowledge is easy most of the
+times.
+
+So if you like version control system, currently the most popular solution is
+`git`. `git` was built by Linus Torvalds, the same guy who created Linux! It's
+pretty cool, but has a learning curve. There used to be others, `cvs`,
+`Subversion`, `Mercurial`, but they are largely overshadowed by `git` today and
+a lot of software companies are using `git`. Github and Gitlab have even `git`
+in their name, the two most popular code hosting solutions today, so you can
+imagine the popularity and prominence of `git`.
+
+`git` is notorious in being hard to learn, but do not worry, we will learn only
+beginners part in this book, and whatever you need at that level we will explain
+here.
+
+-- ds.h1: Create A Github Account
+
+If you are finally convinced `git` and `Github` are worth giving a try, you can
+start with creating an account on Github if you do not already have one.
+
+Note: This book or `fastn`, or FifthTry, the company behind it are not in any
+way affiliated with Github. We use Github ourselves, and quite love it. Further
+we know these two best, and we have done work to make your life easier if you
+are using Github. If you want to use something else, please get on our [discord
+server](https://discord.gg/5CDm3jPhAR) and discuss your use case, and help us
+support other version control system and other code hosting platforms better.
+
+Creating account on Github should be very straightforward. Go to
+[`github.com`](https://github.com):
+
+-- ds.image:
+src: $assets.files.images.github.png
+width.fixed.px: 500
+
+And create your account. While you are creating an account on Github you have
+to pick a username, *do pick your username with care as you would be sharing it
+a lot with others*, companies you work in future etc. It should not be any more
+difficult to create an account on Github than most places you have created an
+account, Facebook, Gmail etc. When they ask you select "Continue with free",
+free is good enough most personal usage and the purpose of this book.
+
+If you are done with creating your account on Github you can move on to the next
+step and [create your first website. ->](/book/repo/)
+
+If you are facing any issue head over to our [Discord](https://discord.gg/a7eBUeutWD)
+server.
+
+
+-- end: ds.page

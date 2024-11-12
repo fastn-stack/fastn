@@ -1,0 +1,80 @@
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
+-- import: fastn.com/utils
+
+-- common.post-meta meta: Week 1 Contest - Quote
+published-on: August 25, 2023
+post-url: /quote-contest/
+author: $authors.harish
+
+Dive into the Week 1 Challenge and create your own quote component.
+
+-- ds.blog-page:
+meta: $meta
+
+-- ds.h1: Key Dates
+
+- **Start Date**: Monday, September 4th, 2023
+- **Submission Deadline**: Sunday, September 10th, 2023, 5:00 pm IST
+
+-- ds.h1: Resources
+
+To kickstart your journey, here are some helpful resources:
+
+- **Samples**: Explore our existing collection of quote component
+[here](https://fastn.com/featured/components/quotes/).
+
+- **User Manual**: A step-by-step guidance on building the quote component.
+[Access User Manual](https://fastn-community.github.io/bling/quote/)
+
+
+-- ds.h1: Ready to accept the challenge?
+
+Follow these simple steps:
+
+- Join the fastn [Discord Server](https://discord.gg/xs4FM8UZB5).
+
+- Navigate to the dedicated `week-1-challenge` channel.
+
+- Create a new thread in your name and introduce yourself.
+
+After completing the above steps you can begin your creation process. Once your
+quote component is complete, share the `page URL` and its corresponding
+`GitHub Repo URL` in your dedicated thread before the submission deadline.
+
+Note that only entries with both URLs provided will be considered as submitted.
+
+-- ds.h1: Contest Prize
+
+2 winner stands to win the prices for this challenge.
+
+- **Judge's Choice Winner**: Selected by our esteemed judge.
+
+- **Community's Favorite Winner**: Chosen through community voting.
+
+Both winners will earn an exciting prize package, including:
+
+- A `fastn` NFT
+
+- `fastn` swags and goodies
+
+- Winner certificate
+
+What's more? Your achievements will be showcased on our website and across our
+social media platforms.
+
+-- ds.h1: Judge
+
+Stay tuned for the announcement of our discerning judge.
+
+-- ds.h1: Winners Announcement
+
+The winners will be revealed in the subsequent week.
+
+
+Ready to build your quote component? Join the Challenge Now!
+
+
+
+
+-- end: ds.blog-page

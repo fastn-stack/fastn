@@ -1,0 +1,39 @@
+-- import: fastn.com/u/jay-kumar
+-- import: fastn.com/u/ganesh-salunke
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Dash Dash DS
+featured-link: /featured/blogs/
+category: Blogs
+image: $fastn-assets.files.images.featured.blog.rocky.png
+owners: [$jay-kumar.info, $ganesh-salunke.info]
+license-url: https://github.com/FifthTry/Rocky-Blog-Theme/blob/main/LICENSE
+license: Creative Commons
+published-date: 20-Jan-2022
+cards: $blog-sites
+github-url: https://github.com/FifthTry/Rocky-Blog-Theme/
+demo-link: https://fifthtry.github.io/Rocky-Blog-Theme/blog-index/
+
+
+
+
+
+-- ft-ui.template list blog-sites:
+
+-- ft-ui.template: Simple Site
+template-url: featured/blogs/doc-site/
+screenshot: $fastn-assets.files.images.featured.blog.doc-site-blog.png
+
+-- ft-ui.template: Midnight Rush
+template-url: featured/blogs/mr-blog/
+screenshot: $fastn-assets.files.images.featured.blog.midnight-rush-blog.jpg
+
+-- ft-ui.template: Misty Gray
+template-url: featured/blogs/mg-blog/
+screenshot: $fastn-assets.files.images.featured.blog.misty-gray.jpg
+
+-- ft-ui.template: Midnight Storm
+template-url: featured/blogs/ms-blog/
+screenshot: $fastn-assets.files.images.featured.blog.midnight-storm.jpg
+
+-- end: blog-sites

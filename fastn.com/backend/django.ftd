@@ -1,0 +1,71 @@
+-- import: fastn.com/assets
+-- import: fastn.com/ftd-host/processor
+
+-- ds.page: Using `fastn` With Django ..
+
+.. or other backends.
+
+If your backend is written in Python/Django, Ruby On Rails, Java, Go etc, you
+can use `fastn` to power the frontend of your application.
+
+-- ds.image:
+src: $assets.files.images.backend.django.png
+
+-- processor.static-vs-dynamic:
+
+-- ds.h1: `fastn` In The Front
+
+`fastn` is being designed to be in the front of you backend application. The
+request from users browser first reach `fastn`, and is then either handled by
+`fastn` itself, say if it was for a static file, or for a route implemented by
+the `fastn project`.
+
+-- ds.h2: Proxy Pass
+
+`fastn` acts as a proxy pass if you configure it like this:
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn
+
+\-- fastn.package: hello
+endpoint: https://127.0.0.1:8000
+
+-- ds.markdown:
+
+The `endpoint` tells you where the upstream server is. If `fastn` can not serve
+an incoming request based on the content of the `fastn` package, it will proxy
+the request to the provided `endpoint`.
+
+-- ds.h1: SQL
+
+If your fastn package needs some data, you can use the [SQL processor](/sql/) to
+fetch data directly from the database, and avoid writing some APIs.
+
+-- ds.h1: Calling Your APIs
+
+If your fastn package needs some data, direct SQL access does not work for you,
+you can use [HTTP processor to make HTTP request](/http/) to your backend, fetch
+data from your fastn document.
+
+This API call happens from server side, during the initial page generation.
+
+-- ds.h1: Calling APIs from Frontend
+
+If you want to call an API implemented in your backend, eg
+`https://127.0.0.1:8080/api/get-user` if you have configured the `endpoint`,
+to `https://127.0.0.1:8080/`, and your application is running on `example.com`,
+served by `fastn serve`, you can make an API request to `example.com/api/get-user`,
+and the request will go to `fastn` first, and `fastn` will forward the request
+to your backend, and return the response returned by backend to the browser.
+
+This also helps in local development, as if you run your frontend server on
+one port, and your API server on another server, the API urls etc has to include
+full path, and cross origin issues may happen depending on how things are setup.
+In most production environment the domain for frontend and API is the same, and
+we usually use Nginx or some other proxy server to route to different servers
+depending on PATH based rules. With `fastn` acting as router, Nginx like proxy
+is not needed when doing local development.
+
+-- end: ds.page

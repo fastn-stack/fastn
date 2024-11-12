@@ -1,0 +1,62 @@
+-- ds.page: Publish on GitHub Pages - `fastn` Hands-On Workshop
+
+Let's use a template and put the work on GitHub by publishing it on GitHub
+Pages.
+
+-- ds.h1: Sign Up or Sign In on GitHub
+
+`GitHub` is an online collaboration platform where we have put our
+`learning-template`.
+
+Once you Sign In on GitHub you will be able to add the template and
+use it to create your personalised business card.
+
+- It's simple to create an account. Just click [Sign Up](https://github.com/signup?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F&source=header-home)
+and follow the instructions.
+
+- If you have an existing account, simply [Sign In](https://github.com/login).
+
+
+-- ds.h1: Create a repository using the fastn template: learning-template
+
+We have created a basic `fastn-template` that will use to create a `fastn`
+repository
+
+-- ftd.text: Click to create a repository
+link: https://github.com/new?template_name=learning-template&template_owner=fastn-community
+open-in-new-tab: true
+role: $inherited.types.copy-regular
+margin-vertical.px: 6
+
+-- ds.h1: Edit the files and Save the changes
+
+- Open the `FASTN.ftd` file and edit it.
+
+- Copy the code from the local and paste it in the GitHub's `FASTN.ftd`
+
+- Save the changes
+
+- Do the same step for `index.ftd`
+
+-- ds.h1: Select the `gh-pages` to publish on GitHub pages
+
+- Go to the `Settings > Pages`
+
+- Select `gh-pages` from the dropdown
+
+- GitHub site will be generated, once the new workflow `Pages build and deployment` runs successfully.
+
+
+-- ds.h1: Adding the live site url in Github `About` section
+
+You can add your live site in Github `About` section in the first tab(Code tab).
+This gives you easy accessibility to your live site.
+
+Click on the setting icon in About section. Then select `Use your GitHub Pages
+website` checkbox. Now you can see your site url in `About` section.
+
+-- ds.h1: Visit the site
+
+- Click on the site url in the `About` section and you will see the output.
+
+-- end: ds.page

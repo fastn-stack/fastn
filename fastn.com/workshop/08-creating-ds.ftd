@@ -1,0 +1,29 @@
+-- ds.page: Creating `ds` file - `fastn` Hands-On Workshop
+
+As you can see to apply the color-scheme and typography or theme to all the
+pages, we need to import the same lines in each file and then apply the
+properties to the `ds.page` component.
+
+Instead we can create a special file `ds.ftd` and create a component `page`
+which will wrap doc-site's page component.
+
+All the imports will be added in the `ds.ftd` and all the properties are
+applied to the `ds.page`. This way we can use the parent `page` component
+that will apply the theme, color-scheme, typography across the website.
+This is also good for website maintainability.
+
+In future, if you opt to change the theme or cs or typo, you need to change in
+`ds.ftd` and it will apply to entire website.
+
+
+
+-- ds.h1: Create a `ds.ftd`
+
+-- ds.h1: Create a `page` component
+
+-- ds.h1: Wrap `ds.page` component of doc-site in the page component
+
+-- ds.h1: Auto-import the `ds.ftd` file in `FASTN.ftd`
+
+
+-- end: ds.page

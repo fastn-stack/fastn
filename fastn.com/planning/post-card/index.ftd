@@ -1,0 +1,254 @@
+-- ds.page: Postcard
+
+Video Title: Let's create a postcard using `fastn`
+
+Owner: Ajit
+
+Audience: Frontend developer, designer
+
+Goal: To help `fastn` users learn how to create a postcard.
+
+Assumption: Have already installed `fastn` and create a fastn package.
+Understanding of datatypes, components.
+
+
+-- ds.h1: Intro Clip
+
+**Screen**: Introduction slide
+
+**Script**
+
+Hey Guys, my name is Ajit and I am back with another video on `fastn`.
+Today we will learn how to create a postcard using `fastn language`.
+
+The postcard I will be creating looks like this:
+
+-- ds.image:
+src: $fastn-assets.files.planning.post-card.postcard.png
+
+
+
+-- ds.h2: **Project build-up**
+
+**Script:**
+
+Let's build this post-card now.
+
+Start with creating a `component`, let's give the component name as `post-card`.
+
+-- ds.code:
+lang:ftd
+
+\-- component post-card:
+
+\-- end: post-card
+
+
+-- ds.markdown:
+
+To this component, we will need some title, subtitle, description, a button and
+an image. So add the following porperties to this component.
+
+-- ds.code:
+lang:ftd
+
+caption title:
+optional string subtitle:
+optional body description:
+optional ftd.image-src image:
+optional string cta-link:
+optional string cta-text:
+
+
+-- ds.markdown:
+
+Title as a caption, subtitle as a string and description in body. Image and
+cta-link and cta-text for button.
+
+And we will need colors for text, background, border, for button. So we will
+add those properties too.
+
+-- ds.code:
+lang: ftd
+
+optional ftd.color text-color: $inherited.colors.text-strong
+optional ftd.color bg-color: $inherited.colors.background.base
+optional ftd.color border-color: $inherited.colors.border-strong
+optional ftd.color cta-bg-color: $inherited.colors.cta-primary.base
+optional ftd.color cta-border-color: $inherited.colors.cta-primary.border
+optional ftd.color cta-text-color: $inherited.colors.cta-primary.text
+
+
+-- ds.markdown:
+
+If you noticed the post card has all the text on left side and image on right
+side. So we will put them in row. And inside that row, the title, subtitle,
+description and button is in top to down manner so we will put them inside a
+column.
+
+
+-- ds.h3: Outermost row
+
+Now, in this component we will create a row, with following properties
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.row:
+
+\-- end: ftd.row
+
+-- ds.markdown:
+
+Apply the properties to this row.
+
+-- ds.code:
+lang: ftd
+
+width.fixed.px: 1050
+color: $inherited.colors.text
+border-width.px: 2
+border-color: $border
+background.solid: $post-card.bg-color
+height.fixed.px: 420
+
+
+-- ds.markdown:
+
+Now to this row we will add column for the texts in the title, subtitle,
+description and button.
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.column:
+
+\-- end: ftd.column
+
+
+-- ds.markdown:
+
+And put the three texts.
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: $post-card.title
+
+\-- ftd.text: $post-card.subtitle
+
+\-- ftd.text: $post-card.description
+
+
+-- ds.markdown:
+
+Let's give properties to this column and these texts as well add condition to
+the optional texts.
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.column:
+width.fixed.percent: 50
+padding-left.px: 100
+padding-right.px: 40
+color: $post-card.text-color
+
+\-- ftd.text: $post-card.title
+role: $inherited.types.heading-tiny
+margin-bottom.px: 35
+margin-top.px: 45
+
+\-- ftd.text: $post-card.subtitle
+if: { post-card.subtitle != NULL }
+role: $inherited.types.heading-medium
+style: bold
+margin-bottom.px: 10
+
+\-- ftd.text: $post-card.description
+if: { post-card.description != NULL }
+role: $inherited.types.copy-regular
+width.fixed.px: 350
+
+\-- end: ftd.column
+
+
+-- ds.markdown:
+
+The button has the text as well as the image. From left to right. So we will
+put it in row.
+
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.row:
+
+\-- ftd.text: $post-card.cta-text
+
+\-- ftd.image:
+src: $assets.files.images.white-arrow.svg
+
+\-- end: ftd.row
+
+
+-- ds.markdown:
+
+Give properties to them.
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.row:
+link: $post-card.cta-link
+color: $inherited.colors.cta-primary.text
+width.fixed.px: 200
+height.fixed.px: 50
+background.solid: $post-card.cta-bg-color
+border-width.px: 1
+border-color: $post-card.cta-border-color
+margin-top.px: 60
+
+\-- ftd.text: $post-card.cta-text
+if: { post-card.cta-text != NULL }
+role: $inherited.types.copy-small
+width.fixed.percent: 75
+padding-horizontal.px: 25
+padding-vertical.px: 15
+color: $post-card.cta-text-color
+
+\-- ftd.image:
+src: $assets.files.images.white-arrow.svg
+width.fixed.percent: 26
+padding.px: 19
+background.solid: #283543
+
+\-- end: ftd.row
+
+
+-- ds.markdown:
+
+After we end the column we will put the image
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.image:
+if: { post-card.image != NULL }
+src: $post-card.image
+height: fill-container
+
+
+
+-- ds.h2: Closing remarks
+
+There you go, we have created the postcard using the fastn language. I hope you
+have learnt with me and found this video easy to follow. If you like us, you
+can give us a ✨ on [GitHub](https://github.com/fastn-stack/fastn).
+
+Also, we would love to see your package which you will create following this
+video. You can share it on the "show-and-tell" channel of our discord server.
+Thank you guys.
+
+
+-- end: ds.page

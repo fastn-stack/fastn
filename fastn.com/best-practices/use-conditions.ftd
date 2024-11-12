@@ -1,0 +1,173 @@
+-- import: fastn.com/utils
+
+-- ds.page: How to use Conditions
+
+By following the best practices for writing conditional statements, developers
+can create code that is less error-prone and more efficient, making it easier
+for other developers to work with the code and reducing the likelihood of
+introducing bugs.
+
+Following are the best-practices on how to use conditions:
+
+
+-- utils.code-display: `default-for-mutually-exclusive`: Default Values for Mutually Exclusive Statements
+id: default-for-mutually-exclusive
+
+For the two mutually exclusive statements, only one condition is required.
+For the other statement, use default value.
+
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- ftd.text: Hello
+	color if { flag }: red
+	color if { !flag }: green
+	
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- ftd.text: Hello
+	color if { flag }: red
+	color: green
+	
+-- end: utils.code-display
+
+
+
+
+
+
+
+
+-- utils.code-display: `avoid-redundant-conditions`: Avoid redundancy with Conditions
+id: avoid-redundant-conditions
+
+Avoid Unnecessary Conditional Statements for `always true` or `always false`
+statements.
+
+A programming best practice where unnecessary conditional statements for
+expressions that are always true or always false are avoided as it only results
+in redundant code.
+
+
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- integer num: 1
+	
+	\-- ftd.integer: $num
+	if: { num == 1 }
+	
+	\-- ftd.text: World
+	if: { num == 2 }
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- integer num: 1
+	
+	\-- ftd.integer: $num
+	
+-- end: utils.code-display
+
+
+-- ds.markdown:
+
+In the above case, the variable `num` is immutable i.e. the value of num is
+fixed to 1, therefore, `if: { num == 1 }` is always `true` and `if: { num ==
+2 }` is always `false`.
+
+
+
+-- ds.h1: Conditions with respect to element and it's children
+
+-- utils.code-display: `different-conditions-for-element-children`: Avoiding same conditions on element and it's children
+id: different-conditions-for-element-children
+
+It is not recommended to create same conditions on element and it's children.
+This approach adds an unnecessary line of code and can make the `ftd` code more
+difficult to read and maintain.
+
+Instead, the recommended approach is to include the condition only on the
+element and then include any necessary child within that element.
+
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- ftd.column:
+	if: { flag } ;; <hl>
+	
+	\-- ftd.text: Hello
+	if: { flag } ;; <hl>
+	
+	\-- ftd.text: World
+	color if { flag }: green ;; <hl>
+	
+	\-- end: ftd.column
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- ftd.column:
+	if: { flag } ;; <hl>
+	
+	\-- ftd.text: Hello
+	
+	\-- ftd.text: World
+	color: green ;; <hl>
+	
+	\-- end: ftd.column
+	
+-- end: utils.code-display
+
+
+
+
+
+
+
+
+
+-- utils.code-display: `mutually-exclusive-conditions`: Avoiding mutually exclusive conditions on element and it's children
+id: mutually-exclusive-conditions
+
+
+To simplify the code and reduce the risk of errors, it is unnecessary to add
+mutually exclusive conditions to the children and their attributes in relation
+to the element. These conditions will never be true and only add complexity to
+the code.
+
+Instead, it is recommended to apply conditions only to the element
+itself, and omit applying conditions to its children. This approach makes the
+code easier to read and understand.
+
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- ftd.column:
+	if: { flag } ;; <hl>
+	
+	\-- ftd.text: Hello
+	if: { !flag } ;; <hl>
+	
+	\-- ftd.text: World
+	color if { !flag }: green ;; <hl>
+	
+	\-- end: ftd.column
+	
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- ftd.column:
+	if: { flag } ;; <hl>
+	
+	\-- ftd.text: World
+	
+	\-- end: ftd.column
+	
+-- end: utils.code-display
+
+
+-- end: ds.page

@@ -1,0 +1,19 @@
+-- ds.page: Getting Started
+
+To get started with `fastn`, you need to have two applications installed on your
+machine:
+
+- **`fastn`**: `fastn` is a platform that runs `fastn` language. It is available on a
+various platforms, Linux, Mac OS X and Windows. Visit the [`Install
+fastn`](install/) page to learn how to install `fastn` on your machine.
+
+- **A text Editor**: Since `fastn` language is a programming language, you'll need a text
+editor to write your code. We recommend using
+[SublimeText](https://www.sublimetext.com/3), a lightweight editor.
+
+Once you've finished installing these applications, you need to create a new
+[`fastn` package](create-fastn-package/) and start using [`fastn` language](ftd/). Read
+[Create `fastn` package](create-fastn-package/) page to learn how to create a
+`fastn` package.
+
+Checkout the [video course to learn fastn](/expander/).

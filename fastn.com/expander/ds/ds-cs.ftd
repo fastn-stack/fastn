@@ -1,0 +1,197 @@
+-- import: fastn/processors as pr
+-- import: fastn.com/expander/lib
+-- import: fastn-community.github.io/bling/note
+
+-- ds.page: color-scheme in doc-site
+
+-- ds.markdown:
+if: { !show-planning }
+
+In this video we will learn how to add or change color-scheme
+
+-- ds.youtube:
+if: { !show-planning }
+v: YNcKQuIN1QQ
+
+-- lib.video-audience: How to add a color-scheme
+if: { show-planning }
+owner: Ajit
+aud: Website Builders
+
+Learners will understand how to add or change a color-scheme in doc-site.
+
+
+-- ds.h1: Straight to the point
+if: { show-planning }
+
+1. Select a color-scheme
+2. Add the package in your fastn project
+3. Use the `colors` property in the component page
+
+
+-- ds.h1: Introduction
+if: { show-planning }
+
+Welcome to the video.
+
+Today we learn how to add or change the color-scheme in doc-site
+
+-- ds.image:
+if: { show-planning }
+src: $fastn-assets.files.expander.ds.img.cs-intro.png
+
+-- ds.markdown:
+if: { show-planning }
+
+A well-chosen color scheme is a powerful tool in website creation. It enhances
+the visual appeal, reinforces branding, improves readability and accessibility,
+engages users, promotes navigation, and creates a cohesive and meaningful user
+experience.
+
+-- ds.h1: Introduction
+if: { !show-planning }
+
+A color scheme in website creation refers to the selection and arrangement of
+colors used in a design. It is important because it enhances visual appeal,
+establishes branding, improves readability, guides user engagement and
+navigation, creates coherence, and has cultural and psychological significance.
+A well-chosen color scheme contributes to a visually appealing and cohesive
+website that resonates with users.
+
+The importance of a well-thought-out color scheme in website creation cannot be
+overstated as it significantly impacts the overall user experience and
+perception of the site.
+
+`color-scheme` is added through a property of page component of `doc-site`.
+
+-- ds.h1: Adding color-scheme
+$on-global-key[alt-p]$: $ftd.toggle($a = $show-planning)
+
+**Select/choose the color-scheme of your choice.**
+
+  You can create your own color-scheme or
+  you can select it from the [`featured page`](/featured/cs/).
+  Copy the package name.
+
+  *Note:* For explanation, we have selected
+  [`winter-cs`](https://fastn-community.github.io/winter-cs/)
+
+The two steps to adding a color-scheme are:
+
+- **Add the color-scheme in your project**
+
+-- ds.code: **A:** By adding the package as a dependency in `FASTN.ftd` document
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/winter-cs
+
+
+-- ds.code: **B:** And, import the package in the `my-ds` document
+lang: ftd
+
+\-- import: fastn-community.github.io/winter-cs
+
+-- ds.markdown:
+
+- **Use the `colors` property of the `ds.page` component**
+
+  In the previous video, we created a custom component page in the `my-ds`
+  document.
+
+  To highlight the benefit of this approach, there's no need to individually
+  add the color-scheme to each page.
+  Instead, by adding the color-scheme once and using `my-ds.page`, the
+  color-scheme will be applied to all pages that utilize `my-ds.page`.
+
+  And if one decides to go for another color-scheme, then changing it once in
+  my-ds document will reflect the new color-scheme across the website.
+
+-- ds.code: Using `colors` property
+lang: ftd
+download: my-ds.ftd
+
+\-- component page:
+optional caption title:
+optional body body:
+children wrapper:
+
+\-- ds.page: $page.title
+body: $page.body
+wrapper: $page.wrapper
+colors: $winter-cs.main		;; <hl>
+
+\;; content goes here
+
+\-- end: ds.page
+
+\-- end: page
+
+
+-- note.note: Note
+
+**Case A:** Some projects needs visibility i.e. instead of passing reference,
+  color-scheme should be visible and hence in such cases we pass the name of
+  the color-scheme as the value of `colors` property.
+
+**Case B:** But at times, you need to do things quickly by changing one line of
+  code. In such cases we give alias `as my-cs` after the package name when
+  adding it as the dependency. Then pass the reference by alias while importing
+  and also passing it as the value of the `colors` property.
+
+
+-- ds.h1: Change the color-scheme
+
+**Case A:** To change the color-scheme,
+
+- Select the color-scheme
+- Replace the package name of old color-scheme with new one dependency
+- Replace the package name of old color-scheme with new one
+- Use the new color-scheme name followed by `.main`
+
+**Case B:** To change the color-scheme,
+
+- Select the color-scheme
+- Replace the old color-scheme with new one as dependency
+
+-- ds.markdown:
+
+In summary, a well-chosen color scheme is a powerful tool in website creation.
+It enhances the visual appeal, reinforces branding, improves readability and
+accessibility, engages users, promotes navigation, and creates a cohesive and
+meaningful user experience.
+
+
+-- ds.h1: Closing Remarks
+if: { show-planning }
+
+Thank you guys, keep watching these videos to learn more about fastn. Checkout
+the `fastn` website.
+
+Support us by clicking on this link and give us a star ⭐ on GitHub and join
+our fastn community on Discord.
+
+
+-- ds.markdown:
+if: { !show-planning }
+
+Thank you guys, keep watching these videos to learn more about fastn.
+
+Support us by giving a star ⭐ on
+[GitHub](https://github.com/fastn-stack/fastn/) and join our fastn community
+on [Discord](/discord/).
+
+
+-- ds.h1: Final Video
+if: { show-planning }
+
+-- ds.youtube:
+if: { show-planning }
+v: YNcKQuIN1QQ
+
+
+-- end: ds.page
+
+
+-- boolean $show-planning: false
+$processor$: pr.get-data
+key: show-planning

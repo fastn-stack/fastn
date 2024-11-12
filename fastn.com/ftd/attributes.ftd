@@ -1,0 +1,384 @@
+-- import: fastn.com/ftd/utils as appendix
+
+-- ds.page: Attributes
+
+The attributes in `fastn` are classified into several different groups:
+
+- [Common attributes](/common-attributes/) - Attributes common to all kernel
+components.
+
+- [Text attributes](/text-attributes/) - Attributes common to all rendering
+components which are `ftd.text`, `ftd.integer`, `ftd.decimal` and `ftd.boolean`.
+
+- [Container attributes](/container-attributes/) - Attributes common to all
+flex container components which are `ftd.row` and `ftd.column`.
+
+- [Container Root attributes](/container-root-attributes/) - Attributes
+common to all container components.
+
+-- ds.h1: Index
+
+-- appendix.letter-stack:
+height.fixed.px if { ftd.device != "mobile" }: 1000
+height: fill-container
+contents-a: $letter-contents-a
+contents-b: $letter-contents-b
+contents-c: $letter-contents-c
+contents-d: $letter-contents-d
+contents-e: $letter-contents-e
+contents-f: $letter-contents-f
+contents-g: $letter-contents-g
+contents-h: $letter-contents-h
+contents-i: $letter-contents-i
+contents-j: $letter-contents-j
+contents-k: $letter-contents-k
+contents-l: $letter-contents-l
+contents-m: $letter-contents-m
+contents-n: $letter-contents-n
+contents-o: $letter-contents-o
+contents-p: $letter-contents-p
+contents-q: $letter-contents-q
+contents-r: $letter-contents-r
+contents-s: $letter-contents-s
+contents-t: $letter-contents-t
+contents-u: $letter-contents-u
+contents-v: $letter-contents-v
+contents-w: $letter-contents-w
+contents-x: $letter-contents-x
+contents-y: $letter-contents-y
+contents-z: $letter-contents-z
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+
+;; APPENDIX ------------------------------------------------------------
+
+-- appendix.letter-data list letter-contents-a:
+
+-- appendix.letter-data: anchor
+link: /common-attributes/#anchor
+
+-- appendix.letter-data: align-self
+link: /common-attributes/#align-self
+
+-- appendix.letter-data: align-content
+link: /container-attributes/#align-content
+
+-- end: letter-contents-a
+
+-- appendix.letter-data list letter-contents-b:
+
+-- appendix.letter-data: bottom
+link: /common-attributes/#bottom
+
+-- appendix.letter-data: background
+link: /common-attributes/#background
+
+-- appendix.letter-data: border-color
+link: /common-attributes/#border-color
+
+-- appendix.letter-data: border-left-color
+link: /common-attributes/#border-left-color
+
+-- appendix.letter-data: border-right-color
+link: /common-attributes/#border-right-color
+
+-- appendix.letter-data: border-top-color
+link: /common-attributes/#border-top-color
+
+-- appendix.letter-data: border-bottom-color
+link: /common-attributes/#border-bottom-color
+
+-- appendix.letter-data: border-style
+link: /common-attributes/#border-style
+
+-- appendix.letter-data: border-style-left
+link: /common-attributes/#border-style-left
+
+-- appendix.letter-data: border-style-right
+link: /common-attributes/#border-style-right
+
+-- appendix.letter-data: border-style-top
+link: /common-attributes/#border-style-top
+
+-- appendix.letter-data: border-style-bottom
+link: /common-attributes/#border-style-bottom
+
+-- appendix.letter-data: border-style-horizontal
+link: /common-attributes/#border-style-horizontal
+
+-- appendix.letter-data: border-style-vertical
+link: /common-attributes/#border-style-vertical
+
+-- appendix.letter-data: border-width
+link: /common-attributes/#border-width
+
+-- appendix.letter-data: border-left-width
+link: /common-attributes/#border-left-width
+
+-- appendix.letter-data: border-right-width
+link: /common-attributes/#border-right-width
+
+-- appendix.letter-data: border-top-width
+link: /common-attributes/#border-top-width
+
+-- appendix.letter-data: border-bottom-width
+link: /common-attributes/#border-bottom-width
+
+-- appendix.letter-data: border-radius
+link: /common-attributes/#border-radius
+
+-- appendix.letter-data: border-top-left-radius
+link: /common-attributes/#border-top-left-radius
+
+-- appendix.letter-data: border-top-right-radius
+link: /common-attributes/#border-top-right-radius
+
+-- appendix.letter-data: border-bottom-left-radius
+link: /common-attributes/#border-bottom-left-radius
+
+-- appendix.letter-data: border-bottom-right-radius
+link: /common-attributes/#border-bottom-right-radius
+
+-- end: letter-contents-b
+
+-- appendix.letter-data list letter-contents-c:
+
+-- appendix.letter-data: color
+link: /common-attributes/#color
+
+-- appendix.letter-data: colors
+link: /container-root-attributes/#colors
+
+-- appendix.letter-data: cursor
+link: /common-attributes/#cursor
+
+-- appendix.letter-data: classes
+link: /common-attributes/#classes
+
+-- appendix.letter-data: css
+link: /common-attributes/#css
+
+-- appendix.letter-data: children
+link: /container-root-attributes/#children
+
+-- end: letter-contents-c
+
+-- appendix.letter-data list letter-contents-d:
+
+-- appendix.letter-data: display
+link: /text-attributes/#display
+
+-- end: letter-contents-d
+
+-- appendix.letter-data list letter-contents-e:
+
+-- appendix.letter-data list letter-contents-f:
+
+-- appendix.letter-data list letter-contents-g:
+
+-- appendix.letter-data list letter-contents-h:
+
+-- appendix.letter-data: height
+link: /common-attributes/#height
+
+-- end: letter-contents-h
+
+-- appendix.letter-data list letter-contents-i:
+
+-- appendix.letter-data: id
+link: /common-attributes/#id
+
+-- end: letter-contents-i
+
+-- appendix.letter-data list letter-contents-j:
+
+-- appendix.letter-data: js
+link: /common-attributes/#js
+
+-- end: letter-contents-j
+
+-- appendix.letter-data list letter-contents-k:
+
+-- appendix.letter-data list letter-contents-l:
+
+-- appendix.letter-data: left
+link: /common-attributes/#left
+
+-- appendix.letter-data: link
+link: /common-attributes/#link
+
+-- end: letter-contents-l
+
+-- appendix.letter-data list letter-contents-m:
+
+-- appendix.letter-data: margin
+link: /common-attributes/#margin
+
+-- appendix.letter-data: margin-left
+link: /common-attributes/#margin-left
+
+-- appendix.letter-data: margin-right
+link: /common-attributes/#margin-right
+
+-- appendix.letter-data: margin-top
+link: /common-attributes/#margin-top
+
+-- appendix.letter-data: margin-bottom
+link: /common-attributes/#margin-bottom
+
+-- appendix.letter-data: margin-horizontal
+link: /common-attributes/#margin-horizontal
+
+-- appendix.letter-data: margin-vertical
+link: /common-attributes/#margin-vertical
+
+-- appendix.letter-data: max-width
+link: /common-attributes/#max-width
+
+-- appendix.letter-data: min-width
+link: /common-attributes/#min-width
+
+-- appendix.letter-data: max-height
+link: /common-attributes/#max-height
+
+-- appendix.letter-data: min-height
+link: /common-attributes/#min-height
+
+-- end: letter-contents-m
+
+-- appendix.letter-data list letter-contents-n:
+
+-- appendix.letter-data list letter-contents-o:
+
+-- appendix.letter-data: open-in-new-tab
+link: /common-attributes/#open-in-new-tab
+
+-- appendix.letter-data: overflow
+link: /common-attributes/#overflow
+
+-- appendix.letter-data: overflow-x
+link: /common-attributes/#overflow-x
+
+-- appendix.letter-data: overflow-y
+link: /common-attributes/#overflow-y
+
+-- appendix.letter-data: opacity
+link: /common-attributes/#opacity
+
+-- end: letter-contents-o
+
+-- appendix.letter-data list letter-contents-p:
+
+-- appendix.letter-data: padding
+link: /common-attributes/#padding
+
+-- appendix.letter-data: padding-left
+link: /common-attributes/#padding-left
+
+-- appendix.letter-data: padding-right
+link: /common-attributes/#padding-right
+
+-- appendix.letter-data: padding-top
+link: /common-attributes/#padding-top
+
+-- appendix.letter-data: padding-bottom
+link: /common-attributes/#padding-bottom
+
+-- appendix.letter-data: padding-horizontal
+link: /common-attributes/#padding-horizontal
+
+-- appendix.letter-data: padding-vertical
+link: /common-attributes/#padding-vertical
+
+-- end: letter-contents-p
+
+-- appendix.letter-data list letter-contents-q:
+
+-- appendix.letter-data list letter-contents-r:
+
+-- appendix.letter-data: right
+link: /common-attributes/#right
+
+-- appendix.letter-data: region
+link: /common-attributes/#region
+
+-- appendix.letter-data: role
+link: /common-attributes/#role
+
+-- appendix.letter-data: resize
+link: /common-attributes/#resize
+
+-- end: letter-contents-r
+
+-- appendix.letter-data list letter-contents-s:
+
+-- appendix.letter-data: shadow
+link: /common-attributes/#shadow
+
+-- appendix.letter-data: sticky
+link: /common-attributes/#sticky
+
+-- appendix.letter-data: spacing
+link: /container-attributes/#spacing
+
+-- appendix.letter-data: style
+link: /text-attributes/#style
+
+-- end: letter-contents-s
+
+-- appendix.letter-data list letter-contents-t:
+
+-- appendix.letter-data: types
+link: /container-root-attributes/#types
+
+-- appendix.letter-data: top
+link: /common-attributes/#top
+
+-- appendix.letter-data: text-transform
+link: /common-attributes/#text-transform
+
+-- appendix.letter-data: text-indent
+link: /text-attributes/#text-indent
+
+-- appendix.letter-data: text-align
+link: /text-attributes/#text-align
+
+-- end: letter-contents-t
+
+-- appendix.letter-data list letter-contents-u:
+
+-- appendix.letter-data list letter-contents-v:
+
+-- appendix.letter-data list letter-contents-w:
+
+-- appendix.letter-data: whitespace
+link: /common-attributes/#whitespace
+
+-- appendix.letter-data: width
+link: /common-attributes/#width
+
+-- appendix.letter-data: wrap
+link: /container-attributes/#wrap
+
+-- end: letter-contents-w
+
+-- appendix.letter-data list letter-contents-x:
+
+-- appendix.letter-data list letter-contents-y:
+
+-- appendix.letter-data list letter-contents-z:
+
+-- appendix.letter-data: z-index
+link: /common-attributes/#z-index
+
+-- end: letter-contents-z

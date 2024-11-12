@@ -1,0 +1,15 @@
+-- import: fastn.com/u/ganesh-salunke
+-- import: fastn.com/u/priyanka-yadav
+-- import: fastn.com/featured as ft-ui
+
+
+-- ds.featured-category: Header
+featured-link: /components/headers/
+category: Featured Components
+image: $fastn-assets.files.images.featured.components.header.jpg
+owners: [$ganesh-salunke.info, $priyanka-yadav.info]
+license-url: https://github.com/fastn-community/header/blob/main/LICENSE
+license: Creative Commons
+published-date: 21-Aug-2023
+github-url: https://github.com/fastn-community/header
+demo-link: https://fastn-community.github.io/header

@@ -1,0 +1,12 @@
+-- ds.page: Change color-scheme and typography - `fastn` Hands-On Workshop
+
+The `doc-site` has a default `color-scheme` and `typography`. Let's beautify
+our page by using some featured `color-scheme` and `typography`.
+
+
+-- ds.h1: Change the color scheme
+
+-- ds.h1: Change the typography
+
+
+-- end: ds.page

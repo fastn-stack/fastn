@@ -1,0 +1,321 @@
+-- ds.page: Variables
+
+`fastn` has support for [rich data modelling](/ftd/data-modelling/), and it supports
+declaring variables.
+
+A variable is a named storage that programs can manipulate.
+
+-- ds.code:
+lang: ftd
+
+\-- integer x: 20
+
+
+-- ds.markdown:
+
+Variables have `type`s.
+
+
+-- ds.h1: Types
+
+The data type is mandatory while declaring a variable in `fastn`.
+
+Type of a variable can be one of the [built-in types](ftd/built-in-types/),
+a [record](ftd/record/), or an [or-type](ftd/or-type/).
+
+
+-- ds.h1: Immutable
+
+By default, variables are immutable − read only in `fastn`. In other words, the
+variable's value cannot be changed once a value is bound to a variable name.
+
+-- ds.code:
+lang: ftd
+
+\-- integer x: 10
+
+\-- ftd.integer: $x
+$on-click$: $ftd.increment($a = $x)
+
+
+-- ds.markdown:
+
+The output will be as shown below:
+
+-- ds.code:
+lang: txt
+
+Cannot have mutable reference of immutable variable `x`
+
+-- ds.markdown:
+
+The error message indicates the cause of the error - Cannot have mutable
+reference of immutable variable `x`. This is one of the many ways `fastn` allows
+programmers to write code and takes advantage of the safety.
+
+-- ds.h1: Mutable
+
+Variables are immutable by default. Prefix the variable name with `$` to make it
+mutable. The value of a mutable variable can be changed.
+
+The syntax for declaring a mutable variable is as shown below −
+
+
+-- ds.code:
+lang: ftd
+
+\-- integer $x: 10
+
+\-- ftd.integer: $x
+$on-click$: $ftd.increment($a = $x)
+
+
+-- ds.markdown:
+
+The output will be as shown below:
+Click on `10`.
+
+-- ds.output:
+
+	-- ftd.integer: $x
+	$on-click$: $ftd.increment($a = $x)
+	color: $inherited.colors.text
+	
+-- end: ds.output
+
+
+-- ds.h1: Referring To Another Variable
+
+A variable can be defined as referring to another variable using `$` as a prefix
+of referenced variable, `$<referenced variable>`. This means if the referenced
+variable get changed the referer will change too.
+
+When you define a variable in `fastn`, you can make it refer to another variable
+by adding a `$` sign before the referenced variable's name, like `$<referenced
+variable>`. This basically means that if the referenced variable gets updated
+or changed, the referring variable will also change accordingly.
+
+For example, let's say you have an integer variable called `x` with a value of
+`10`, and you define another integer variable called `y` with `$x` as its value.
+Now, `y` is the referring variable and `x` is the referenced variable. So, if
+you update or change the value of `x`, the value of `y` will also change.
+
+-- ds.code:
+lang: ftd
+
+\-- integer $x: 10
+
+\-- integer y: $x
+
+\-- ftd.integer: $x
+
+\-- ftd.integer: $y
+
+\-- ftd.text: I change x
+$on-click$: $ftd.increment($a = $x)
+
+
+-- ds.markdown:
+
+Give it a try and click on "I change x" to see how `x` and `y` change together!
+
+-- ds.output:
+
+	-- ftd.row:
+	spacing.fixed.px: 10
+	color: $inherited.colors.text
+	
+		-- ftd.text: x:
+		-- ftd.integer: $x
+		
+	-- end: ftd.row
+
+	-- ftd.row:
+	spacing.fixed.px: 10
+	color: $inherited.colors.text
+	
+		-- ftd.text: y:
+		-- ftd.integer: $y
+		
+	-- end: ftd.row
+
+	-- ftd.text: I change x :)
+	$on-click$: $ftd.increment($a = $x)
+	color: $inherited.colors.text
+	
+-- end: ds.output
+
+
+-- ds.h1: Clone the value of a Variable
+
+A value of the variable can be cloned by de-referencing the variable reference.
+This means that cloning creates a duplicate value and if the cloned value
+changes, the object, that clones it, will not change.
+
+
+-- ds.code:
+lang: ftd
+
+\-- integer x: 10
+
+\-- integer y: *$x
+
+\-- ftd.text: I change x :)
+$on-click$: $ftd.increment($a = $x)
+
+
+-- ds.markdown:
+
+Here, if x changes, y doesn't changes.
+
+The output will be as shown below:
+Click on `I change x :)` to see the result.
+
+-- ds.output:
+
+	-- ftd.row:
+	spacing.fixed.px: 10
+	color: $inherited.colors.text
+	
+		-- ftd.text: x:
+		-- ftd.integer: $x
+		
+	-- end: ftd.row
+
+	-- ftd.row:
+	spacing.fixed.px: 10
+	color: $inherited.colors.text
+	
+		-- ftd.text: y:
+		-- ftd.integer: $z
+		
+	-- end: ftd.row
+
+	-- ftd.text: I change x :)
+	$on-click$: $ftd.increment($a = $x)
+	color: $inherited.colors.text
+	
+-- end: ds.output
+
+
+-- ds.h1: Updating a Variable
+
+Once a `mutable` variable has been defined it can be updated too.
+Any variable can be made `mutable` by prefixing it with `$`.
+
+Note: By default, `fastn variables` are `immutable` (can't be changed once
+initialized).
+
+-- ds.code:
+lang: ftd
+
+\-- integer $x: 10
+
+\-- $x: 20
+
+
+-- ds.markdown:
+
+The type of the variable can not be updated.
+
+
+-- ds.h1: `$processor$`: dynamic variables
+
+`fastn` documents are processed in the context of a "platform", and platform can
+provide access to dynamic variables.
+
+Say platform has provided a dynamic variable `os`, which is the operating system
+on which this document is getting rendered, you can use that like this:
+
+
+-- ds.code:
+lang: ftd
+
+\-- string name-of-os:
+$processor$: os
+
+
+-- ds.markdown:
+
+`type` is mandatory when using `$processor$`. Available processors would be
+documented as part of platform documentation.
+
+Processors can also look at data passed, so its possible to create a processor:
+
+
+-- ds.code:
+lang: ftd
+
+\-- string greeting: hello, world
+$processor$: uppercase
+
+
+-- ds.markdown:
+
+Say the platform has provided a processor `uppercase`, which takes the current
+value, `hello, world` and returns its upper case value. In this case the variable
+greeting will hold the value: `HELLO, WORLD`.
+
+
+-- ds.h1: Foreign variables
+
+Like `$processor$`, the platform provides foreign variables against a module.
+The `fastn` stuck itself to fetch value of foreign value, which is, then,
+provided by platform.
+
+The most common foreign variable is `assets`.
+
+-- ds.code:
+lang: ftd
+
+
+\-- import: module/assets
+
+\-- ftd.text: Check bar content
+link: $assets.files.some-folder.bar.ftd
+
+
+-- ds.markdown:
+
+The `files` field in `assets` variable gives url to files present in package.
+So, `$assets.files.some-folder.bar.ftd` returns url of
+`<path-to-package>/some-folder/bar.ftd` as value.
+
+It's not so for image file.
+
+-- ds.code:
+lang: ftd
+
+
+\-- import: module/assets
+
+\-- ftd.image:
+src: $assets.files.images.my-image.png
+
+-- ds.markdown:
+
+`$assets.files.images.my-image.png` gives url of
+`<path-to-package>/images/my-image.png` as value (for `light` field).
+
+If an image with the same name but with `-dark` suffix exists in the package,
+i.e. `<path-to-package>/images/my-image-dark.png`, then `dark` field gets the
+url of this file.
+
+Checkout [`src`](ftd/image/#src-ftd-image-src) property and
+[`ftd.image-src`](ftd/built-in-types/#ftd-image-src) type for more details.
+
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+-- integer $x: 10
+-- integer y: $x
+-- integer z: *$x

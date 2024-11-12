@@ -1,0 +1,85 @@
+-- import: fastn-community.github.io/bling/chat
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
+-- import: fastn.com/utils
+
+-- common.post-meta meta: Exploring the Search Feature in fastn.com
+published-on: September 01, 2023
+post-url: /blog/search/
+author: $authors.arpita
+
+With the vast amount of content available online, users can often find
+themselves lost in a sea of information. Without a search tool, finding what
+you're looking for can be a time-consuming and frustrating task.
+fastn.com recognizes this challenge and has implemented a search feature to
+help users discover content quickly and effortlessly. This is one of the most
+requested feature in fastn.com.
+
+In this blog post, we'll explore the ins and outs of this tool and show you how
+to make the most of it.
+
+
+-- ds.blog-page:
+meta: $meta
+
+-- ds.youtube:
+v: SIFIROeTu20
+
+-- ds.h1: Accessing the Search page
+
+-- ds.h2: The `fastn` Search Icon
+
+First and foremost, let's locate the star of the show – the `fastn` Search icon.
+It's positioned prominently on the website, often in the top right corner of
+the page. You can't miss it. Just look for the magnifying glass icon.
+[🔍](search/?next=/blog/search/)
+
+-- ds.h2: The '/' Shortcut
+
+Here's a nifty trick to save you some clicks: simply press the '/' key to open
+the `fastn` Search page. This keyboard shortcut is a good help for those who
+prefer efficiency. No need to reach for your mouse; just hit '/' and you're
+ready to start searching.
+
+-- ds.h1: Effortless Navigation and Relevant Search Result Selection
+
+-- ds.h2: Navigating Search Results
+
+Once you've initiated the search, you can move up and down the search results
+list quickly by using your keyboard's arrow keys (Arrow Up and Arrow Down keys)
+or `j` and `k` keys. You can use mouse pointer to achieve the same.
+
+-- ds.h2: Selecting a Result
+
+When you've found the search result that piques your interest, press the
+'Enter' key. This will take you to the selected search result page instantly.
+If you prefer using your mouse, clicking on a specific search result will also
+redirect you to the corresponding page.
+
+
+-- ds.h1: Returning to Previous Pages
+
+-- ds.h2: The 'Go Back' Icon and the 'Esc' Key
+
+`fastn.com` also makes it easy to backtrack. If you ever want to return to the
+previous page, simply look for the 'Go Back' button, represented by a
+`🔙 (Go Back)`. Clicking this button will do the trick.
+
+But wait, there's another handy keyboard shortcut – the 'Esc' key. Pressing
+'Esc' will take you back to  our previous browsing state, just like clicking the
+'Go Back' button.
+
+
+-- ds.h1: Conclusion
+
+In conclusion, fastn.com's search feature is a testament to the platform's
+commitment to user experience and efficiency. By incorporating keyboard
+shortcuts, intuitive navigation, and quick access options, Fastn.com ensures
+that users can easily find the content they seek. Whether you're a power user or
+a newcomer to the platform, fastn.com's search feature is designed to enhance
+your browsing experience and help you discover what matters most to you.
+
+***Happy searching!***
+
+
+-- end: ds.blog-page

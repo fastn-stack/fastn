@@ -1,0 +1,23 @@
+-- import: fastn.com/featured as ft-ui
+
+-- ds.page:
+sidebar: false
+
+-- ft-ui.view-all: Hero with Search
+templates: $hero-with-search
+
+-- end: ds.page
+
+
+
+
+
+
+
+-- ft-ui.template list hero-with-search:
+
+-- ft-ui.template: Hero with search - Design 1
+template-url: /hero-4/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-4.png
+
+-- end: hero-with-search

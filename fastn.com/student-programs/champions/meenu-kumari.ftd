@@ -1,0 +1,78 @@
+-- import: fastn.com/featured as ft-ui
+-- import: fastn-community.github.io/spectrum-ds/common
+-- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn.com/content-library as footer
+-- import: fastn-community.github.io/dark-flame-cs
+-- import: fifthtry.github.io/fastn-typography as typo
+
+
+
+
+-- ds.page:
+show-footer: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-name: NULL
+logo-height: 38
+logo-width: 120
+colors: $dark-flame-cs.main
+types: $typo.types
+github-icon: true
+github-url: https://github.com/muskan1verma
+full-width: true
+fluid-width: false
+max-width.fixed.px: 1340
+
+-- ds.page.footer:
+
+	-- footer.footer:
+	site-logo: $fastn-assets.files.images.fastn.svg
+	site-url: /
+	social-links: $footer.social-links
+	copyright: Copyright © 2023 - fastn.com
+	full-width: false
+	max-width.fixed.px: 1340
+	
+-- end: ds.page.footer
+
+-- ds.contributor: Meenu Kumari
+avatar: $fastn-assets.files.images.students-program.champions.meenu.jpg
+profile: Champion
+connect: $social-links
+
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- common.social-media list social-links:
+
+-- common.social-media:
+link: https://discord.gg/meenu#0317
+src: $fastn-assets.files.images.discord.svg
+hover-src: $fastn-assets.files.images.discord-hover.svg
+
+-- common.social-media:
+link: https://github.com/meenukumari28
+src: $fastn-assets.files.images.github-grey.svg
+hover-src: $fastn-assets.files.images.github-grey-hover.svg
+
+
+-- common.social-media:
+link: https://www.linkedin.com/in/meenu-kumari-3275501b8
+src: $fastn-assets.files.images.linkedin.svg
+hover-src: $fastn-assets.files.images.linkedin-hover.svg
+
+-- end: social-links

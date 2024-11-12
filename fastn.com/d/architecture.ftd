@@ -1,0 +1,9 @@
+-- ds.page: Architecture Of `fastn`
+
+`fastn` is composed a few important crates:
+
+- [`ftd`](/ftd-crate/)
+- [`fastn-core`](/fastn-core-crate/)
+- [`fastn`](/fastn-crate/)
+
+-- end: ds.page

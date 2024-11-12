@@ -1,0 +1,168 @@
+-- ds.page: Planning Overview
+
+We are using fastn.com for planning fastn related official course. You will find
+the scripts etc here.
+
+-- ds.h1: Upcoming Videos
+
+- Video series on doc-site
+  - [markdown primer](/markdown/) [[🗎Planning]](/markdown/-/planning/)
+  - [understanding sitemap](/understanding-sitemap/) [[🗎Planning]](/understanding-sitemap/-/planning/) - Introduction
+  - [SEO](/seo-meta/) [[🗎Planning]](/seo/-/planning/)
+  - [Publish a package](https://fastn-community.github.io/doc-site/getting-started/)
+  - [Using page component](/ds-page/) [[🗎Planning]](/ds-page/-/planning/)
+  - changing color-scheme [[🗎Planning]](/color-scheme/-/planning/)
+  - [changing typography](/typography/) [[🗎Planning]](/typography/-/planning/)
+  - Add favicon
+  - adding assets
+  - adding an image
+  - embedding youtube and iframe
+  - adding code-block
+  - adding right-sidebar
+  - adding footer
+
+
+
+- How to add color (in text, border, background)
+  - create color record type variable
+  - light and dark mode
+- How to create dark mode switcher
+- How to create color-scheme
+- How to customize fonts (or add font-style)
+  - create responsive-type variable (font)
+- Understanding caption (this is not a video title)
+- Understanding body (this is not a video title)
+- How to pass components to a container component
+  - Understanding of ftd.ui and children
+
+-- ds.h2: Abbreviations
+
+- R stands for Ready for the Videos
+- D stands for Development required
+- P stands for Preparation needed
+
+
+-- ds.h1: Common
+
+- R: why fastn (5 videos)
+- R: what is a fastn package?
+  - dependencies, auto import, sitemap, dynamic-urls, redirects, 404
+- R: fastn document, variables, etc
+- ✅ R: [creating a component](/expander/components/) (basics)
+- R: understanding colors
+- R: understanding fonts
+- R: github pages (templates, publishing, domain mapping? etc)
+- ✅ R: [installing fastn](/install/)
+- R: using `key-value` pair to show-hide content in a single doc
+- R: why we always use .px, what else can we do?
+
+-- ds.h1: Design A Fastn Compatible Site
+
+- R: what is a fastn package?
+- P: creating a font
+- R: creating a color scheme
+- ✅ R: [importing colors to figma](/figma/)
+- ✅ R: [exporting colors from figma](/figma-to-fastn-cs/)
+- D: importing typography to figma
+- D: exporting types from figma
+- R: rapid prototyping using fastn
+
+-- ds.h1: Frontend - Delivering Client Project
+
+- R: sales:
+  - easy to author without cms
+  - easy to change color and typography in one line
+  - easy to change entire site design using out module system
+- R: clean code checklist and guidelines
+- R: proper data modelling
+- Common UI:
+    - R: expand collapse tree
+    - R: dialog
+    - R: form
+    - R: tabs
+    - R: dropdown
+    - ✅ R: [button](/button-using-fastn/)   [[🗎Planning]](https://fastn.com/planning)
+    - R: post card
+- R: creating various page layouts
+    - ✅ R: [holy-grail](/holy-grail/)     [[🗎Planning]](/holy-grail/-/planning/)
+- ✅ R: [event handling](/expander/events/) (basic)
+- R: creating docs pages
+- D: using module system to create interchangable packages
+- D: translation crosslinks
+- ✅ R: [rive](/rive/)     [[🗎Planning]](/planning/rive/)
+- R: embedding youtube or iframes
+- R: add images in documents
+- R: mobile responsive site
+- R: using css for things fastn is lacking
+- R: integration with JS
+- R: How to use icon libraries like `react-icons` or `font-awesome` or any
+  external icon library in fastn
+
+
+
+-- ds.code:
+lang: txt
+
+- Getting Started: /expander/hello-world/
+  - Install `fastn`: /install/-/expander/
+    document: author/how-to/install.ftd
+    - On Windows: /windows/-/expander/
+      document: author/setup/windows.ftd
+    - On MacOS/Linux: /macos/-/expander/
+      document: author/setup/macos.ftd
+- Publish Your First Website: /expander/publish/
+- Creating A Component: /expander/
+  - Part 2. Basic UI: /expander/basic-ui/
+  - Part 3. Components: /expander/components/
+  - Part 4. Event Handling: /expander/events/
+  - Part 6. Polishing UI: /expander/polish/
+
+
+-- ds.h1: Basic Backend Features
+
+- R: api powered pages
+- R: sqlite, why and how
+- D: page view counter, likes, comments
+- D: subscription, walling content (only subscribers can see)
+
+-- ds.h1: Author
+
+- R: changing color scheme, typography of your site
+- R: deploying on vercel, github, ..
+- R: deploying on heroku, digital ocean
+- D: using supabase powered fastn packages
+- R: 404 pages
+- R: favicon
+- R: seo optimisation
+- R: redirects and short urls
+
+
+
+
+-- ds.h1: Apps
+
+- basic site
+- forms
+- subscription
+- docs (reviews, like, comment)
+- classroom
+
+
+
+
+
+-- ds.h1: Wasm Backends
+
+- rust to wasm
+- wasm routes
+- wasm auth
+- wasm processors and functions
+
+-- ds.h1: Author Portal
+
+- hostn
+- cr
+- translation
+- versioning
+
+-- end: ds.page

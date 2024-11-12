@@ -1,0 +1,44 @@
+-- import: fastn.com/u/saurabh-lohiya
+-- import: fastn.com/u/yashveer-mehra
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Hero Right Hug Search Label
+featured-link: /heros/
+category: Featured Hero Components
+image: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-search-label.jpg
+owners: [$yashveer-mehra.info, $saurabh-lohiya.info]
+license-url: https://github.com/saurabh-lohiya/hero
+license: Creative Commons
+published-date: 31-Aug-2023
+cards: $heros
+github-url: https://github.com/saurabh-lohiya/hero
+demo-link: https://saurabh-lohiya.github.io/hero/docs/hero-right-hug-search-label/
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list heros:
+
+-- ft-ui.template: Hero Right Hug Expanded...
+template-url: /hero-right-hug-expanded-search/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-expanded-search.jpg
+
+-- ft-ui.template: Hero Right Hug Expanded
+template-url: /hero-right-hug-expanded/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-expanded.jpg
+
+-- ft-ui.template: Hero Right Hug Large
+template-url: /hero-right-hug-large/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-large.jpg
+
+-- ft-ui.template: Hero Right Hug Search
+template-url: /hero-right-hug-search/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-search.jpg
+
+-- end: heros

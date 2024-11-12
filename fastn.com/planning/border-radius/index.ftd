@@ -1,0 +1,133 @@
+-- ds.page: Rounded corners using `border-radius`
+
+Video Title: How to add rounded corners
+
+Owner: Ajit
+
+Audience: Common
+
+Goal: Make it easy to learn adding `border-radius` property
+
+-- ds.h1: Intro Clip
+
+Today we learn how to add the property `border-radius` in `fastn`
+
+
+-- ds.h1: On Text
+
+We have a text here inside the container component column. `border-width` and
+`border-color` and `padding` is already applied to this text.
+
+To give a `border-radius` we need to write `border-radius.px` followed by a
+colon and give a pixel value.
+
+-- ds.rendered: border-radius on text
+
+	-- ds.rendered.input:
+	
+	\-- ftd.text: Hello
+	border-width.px: 2
+	border-color: red
+	border-radius.px: 10 	 ;; <hl>
+	
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: Hello World
+		border-width.px: 2
+		border-color: red
+		border-radius.px: 10
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+-- ds.h1: On container
+
+Similarly, you can add border-radius to any container component.
+We do the same thing. And it looks like this.
+
+-- ds.rendered: border-radius on container
+
+	-- ds.rendered.input:
+	
+	\-- ftd.row:
+	width: fill-container
+	border-width.px: 2
+	border-color: red
+	spacing.fixed.px: 10
+	padding.px: 10
+	align-content: center
+	border-radius.px: 10 	 ;; <hl>
+	
+	\-- ftd.text: Hello
+	
+	\-- ftd.text: World
+	
+	
+	\-- end: ftd.row
+	
+	-- ds.rendered.output:
+	
+		-- ftd.row:
+		width: fill-container
+		border-width.px: 2
+		border-color: blue
+		spacing.fixed.px: 10
+		padding.px: 10
+		align-content: center
+		border-radius.px: 10
+		
+			-- ftd.text: Hello
+			
+			-- ftd.text: World
+			
+		-- end: ftd.row
+
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+-- ds.h1: On Image
+
+To the image, we do the same thing. And it looks like this.
+
+-- ds.rendered: border-radius on image
+
+	-- ds.rendered.input:
+	
+	\-- ftd.image:
+	width.fixed.px: 400
+	src: $fastn-assets.files.planning.border-radius.ocean.jpg
+	border-radius.px: 15 		;; <hl>
+	
+	
+	-- ds.rendered.output:
+	
+		-- ftd.image:
+		margin.px: 20
+		width.fixed.px: 400
+		src: $fastn-assets.files.planning.border-radius.ocean.jpg
+		border-radius.px: 15
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+-- ds.h1: Closing Remarks
+
+Thank you guys, keep watching these videos to learn more about fastn.
+Support us by giving a star on GitHub and connect our fastn community on
+Discord.
+
+
+-- ds.h1: Final Video
+
+-- ds.youtube:
+v: 6naTh8u_uOM
+
+-- end: ds.page

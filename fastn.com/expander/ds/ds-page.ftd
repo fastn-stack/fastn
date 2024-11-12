@@ -1,0 +1,275 @@
+-- import: fastn/processors as pr
+-- import: fastn.com/expander/lib
+
+-- ds.page: Creating a page
+
+-- ds.markdown:
+if: { !show-planning }
+
+In this video we will learn how to create a page.
+
+-- ds.youtube:
+if: { !show-planning }
+v: IlW4M1WWc6w
+
+-- lib.video-audience: How to create a page
+if: { show-planning }
+owner: Ajit
+aud: Website Builders
+
+To explain what all can be done using page component.
+
+-- ds.h1: Intro Slide
+if: { show-planning }
+
+Welcome!! My name is Ajit
+
+In this video we learn how to create a webpage in fastn using doc-site
+
+-- ds.image:
+if: { show-planning }
+src: $fastn-assets.files.expander.ds.img.page-intro.png
+
+-- ds.h1: Introduction
+
+We have this component in `doc-site`.
+
+-- ds.code: Page component
+lang: ftd
+
+\-- ds.page:
+
+\;; content goes here
+
+\-- end: ds.page
+
+-- ds.markdown:
+
+To use the component you have to add the package to your project.
+
+To add the `doc-site` package to your project:
+
+**A:** Add it as a dependency in `FASTN.ftd` document.
+
+-- ds.code: Add as dependency
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/doc-site
+
+-- ds.markdown:
+
+**B:**  Then, import the `doc-site` package in your documents like `index.ftd`
+
+-- ds.code: Importing doc-site
+lang: ftd
+
+\-- import: fastn-community.github.io/doc-site as ds
+
+-- ds.markdown:
+if: { show-planning }
+
+And we have given a shorter alias to this package `as ds`.
+
+
+
+-- ds.h1: Creating a standalone page
+$on-global-key[alt-p]$: $ftd.toggle($a = $show-planning)
+
+With this container component `page`, you can effortlessly construct web pages
+by seamlessly integrating various components within this single container.
+
+
+-- ds.code: Page
+lang: ftd
+
+\-- ds.page: You meet me first because I am ~in~ en'titled 🤴
+site-name: Ajit
+site-logo: $assets.files.images.logo.svg
+logo-width: 50
+site-url: https://fastn.com/
+
+
+Hello, I am the first paragraph in the body area 🖐.
+
+And I am the second paragraph 🙆‍♂️ in the body area of the page component.
+
+At vero eos et accusamus et iusto odio
+dignissimos ducimus qui blanditiis molestias excepturi sint occaecati
+cupiditate non provident.
+
+
+\-- ds.h1: I'm the tallest in my family 🦕
+
+This is heading level 1 optional body content.
+
+\-- ds.h2: Damn! I just missed by few pixels 🐪
+
+This is heading level 2 optional body content.
+
+\-- ds.h3: I get bullied by the above two 🙄
+
+This is heading level 3 optional body content.
+
+\-- ds.markdown:
+
+I don't brag about myself but I am the convenient one 😎.
+
+
+\-- end: ds.page
+
+-- ds.markdown:
+
+We will learn how to add and change color schemes and typography in the
+upcoming videos.
+
+Let's view it in the browser. Since we are giving a `site-logo` that has a file
+from this package, let's first import assets.
+
+
+This is how the page looks with default color-scheme and typography. We have
+the
+site logo and site name at the top left along with the site-url which you can
+see at the bottom-left, when I hover the mouse pointer on logo.
+
+We have the entitled title, along with other data.
+
+-- ds.h3: Benefits
+if: { show-planning }
+
+The component `page` has various benefits:
+
+From harmonizing *color schemes*, *site logo* and *name* to selecting
+compelling typography, you can effortlessly infuse your website with a unified
+and professional look.
+
+`Page` has some properties that easily add meta-data and hence unlock the
+potential of SEO optimization and boost your website's visibility and ranking.
+There is a separate video dedicated to the same, you can find the link in
+the description.
+
+-- ds.markdown:
+if: { !show-planning }
+
+From harmonizing *color schemes*, *site logo* and *name* to selecting
+compelling typography, you can effortlessly infuse your website with a unified
+and professional look.
+
+`Page` has some properties that easily add meta-data and hence unlocks the
+potential of SEO optimization and boost your website's visibility and ranking.
+
+To know about this, checkout
+[How to add meta-data for website optimization](/seo-meta/).
+
+
+
+-- ds.h1: Customized Page Component
+
+Now imagine, you have a dozen of such documents in your package.
+
+On top of it, imagine displaying your distinctive site logo and site name
+across the website, creating a unified visual identity that resonates with
+your brand. It would be a tedious job applying the same properties to all the
+documents.
+
+Also, in the future, if you add new properties or change one or more values of
+the properties, then you would need to manually update it on all the pages.
+
+To maintain the consistency and make it easy to update throughout the website
+with a single change, we can create a custom page component.
+
+To do the same, we will move the component definition in a separate document,
+let's call it `my-ds.ftd`.
+
+And create our custom component:
+
+-- ds.code: my-ds
+lang: ftd
+
+\-- import: fastn-community.github.io/doc-site as ds
+\-- import: ds-page/assets
+
+\-- component page:
+optional caption title:
+optional body body:
+children wrapper:
+
+\-- ds.page: $page.title
+body: $page.body
+site-name: Ajit
+site-logo: $assets.files.images.logo.svg
+logo-width: 50
+site-url: https://fastn.com/
+wrapper: $page.wrapper
+
+\-- end: ds.page
+
+\-- end: page
+
+-- ds.markdown:
+
+The `ds.page` component is wrapped inside this component page.
+
+So now in `index.ftd` document we can remove these properties and instead use
+the custom page of my-ds document i.e. `my-ds.page`
+
+We are still making use of header and markdown components of `doc-site`, so we
+will import `doc-site` here. But, we are not importing assets here anymore so
+we can remove it. I have already used it in my-ds.
+
+-- ds.markdown:
+
+Any changes in the values of the properties can be done here, sparing us the
+  need to apply them individually to each and every page.
+
+Now as we know we are going to use `my-ds` in almost all of the documents,
+therefore we can auto-import it.
+
+
+-- ds.code: my-ds
+lang: ftd
+
+\-- fastn.auto-import: <package-name>/my-ds as my-ds
+
+
+-- ds.markdown:
+
+Now we can use the component in the my-ds document without worrying about
+missing out on any property.
+
+
+
+
+-- ds.h1: Closing Remarks
+if: { show-planning }
+
+Thank you guys, keep watching these videos to learn more about fastn. Checkout
+the `fastn` website.
+
+Support us by clicking on this link and give us a star ⭐ on GitHub and join
+our fastn community on Discord.
+
+
+-- ds.markdown:
+if: { !show-planning }
+
+Thank you guys, keep watching these videos to learn more about fastn.
+
+Support us by giving a star ⭐ on
+[GitHub](https://github.com/fastn-stack/fastn/) and join our fastn community
+on [Discord](/discord/).
+
+
+-- ds.h1: Final Video
+if: { show-planning }
+
+-- ds.youtube:
+if: { show-planning }
+v: IlW4M1WWc6w
+
+
+-- end: ds.page
+
+
+-- boolean $show-planning: false
+$processor$: pr.get-data
+key: show-planning

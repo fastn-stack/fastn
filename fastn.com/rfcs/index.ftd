@@ -1,0 +1,24 @@
+-- ds.page: `fastn` RFC
+
+The RFC Process is described in [0001-rfc-process](/rfc/rfc-process/).
+
+Accepted RFCs are listed on this page. WIP RFCs, and RFCs awaiting initial
+comments can be [found on Github](https://github.com/fastn-stack/fastn.com/pulls?q=is%3Apr+is%3Aopen+label%3Arfc).
+
+-- ds.h1: Under Development
+
+- [0003-variable-interpolation](/rfc/variable-interpolation/)
+- [0004-incremental-build](/rfc/incremental-build/)
+
+-- ds.h1: Accepted RFCs
+
+Work on these have not yet being prioritised.
+
+- [0002-fastn-update](/rfc/fastn-update/)
+
+
+-- ds.h1: Done RFCs
+
+- [0001-rfc-process](/rfc/rfc-process/)
+
+-- end: ds.page
