@@ -1,5 +1,5 @@
 # https://github.com/calibreapp/image-actions
-name: Compress Images
+name: Optimize Images
 on:
   push:
     branches:

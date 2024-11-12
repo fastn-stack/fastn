@@ -7,7 +7,7 @@ on:
   pull_request:
     branches: [ main ]
 jobs:
-  everything:
+  tests-and-formatting:
     name: Rust/JS Checks/Formatting
     runs-on: ubuntu-latest
     env:
