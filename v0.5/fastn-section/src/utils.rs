@@ -127,9 +127,10 @@ impl fastn_section::Section {
         source: &'input str,
         name: &str,
     ) -> Option<&'input str> {
+        dbg!(self);
         self.headers
             .iter()
-            .find(|h| h.name(source) == name)
+            .find(|h| dbg!(h.name(source)) == dbg!(name))
             .and_then(|h| h.value.as_plain_string(source))
     }
 }

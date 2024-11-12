@@ -81,8 +81,10 @@ impl From<&str> for fastn_unresolved::Identifier {
     }
 }
 
-impl fastn_unresolved::Identifier {
-    pub fn from_str(s: &str) -> fastn_unresolved::Identifier {
-        fastn_unresolved::Identifier(s.to_string())
+impl std::str::FromStr for fastn_unresolved::Identifier {
+    type Err = ();
+
+    fn from_str(s: &str) -> Result<fastn_unresolved::Identifier, ()> {
+        Ok(fastn_unresolved::Identifier(s.to_string()))
     }
 }

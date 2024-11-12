@@ -1,4 +1,3 @@
-#[allow(dead_code)]
 pub fn header_value(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Option<fastn_section::HeaderValue> {

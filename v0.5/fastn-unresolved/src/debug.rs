@@ -17,13 +17,16 @@ impl fastn_section::JDebug for fastn_unresolved::Import {
             .into(),
         );
 
+        dbg!(&self);
+
         if let Some(ref v) = self.export {
-            o.insert("exports".into(), v.debug(source));
+            o.insert("export".into(), v.debug(source));
         }
 
         if let Some(ref v) = self.exposing {
             o.insert("exposing".into(), v.debug(source));
         }
+
         serde_json::Value::Object(o)
     }
 }

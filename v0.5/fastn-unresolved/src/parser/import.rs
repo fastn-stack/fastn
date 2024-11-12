@@ -89,7 +89,7 @@ fn parse_field(
 ) -> Option<fastn_unresolved::Export> {
     let header = match section.header_as_plain_string(field, source) {
         Some(v) => v,
-        None => return None,
+        None => return dbg!(None),
     };
 
     Some(fastn_unresolved::Export::Things(
@@ -110,6 +110,7 @@ fn aliasable(s: &str) -> fastn_unresolved::AliasableIdentifier {
 mod tests {
     #[track_caller]
     fn t1(source: &str, expected: serde_json::Value) {
+        println!("--------- testing -----------\n{source}\n--------- source ------------");
         use fastn_section::JDebug;
 
         let (mut document, sections) =
