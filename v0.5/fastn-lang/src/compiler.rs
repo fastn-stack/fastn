@@ -8,10 +8,11 @@
 /// earlier we had strict mode here, but to simplify things, now we let the caller convert non-empty
 /// warnings from OK part as error, and discard the generated JS.
 pub async fn compile(
-    _symbols: &mut Box<dyn fastn_lang::SymbolStore>,
+    _symbols: &mut Box<dyn fastn_lang::SymbolStore<'_>>,
     document_id: &str,
     source: &str,
-) -> Result<fastn_lang::compiler::Output, Error> {
+    _auto_imports: &[fastn_section::AutoImport],
+) -> Result<fastn_lang::compiler::Output, fastn_lang::compiler::Error> {
     // this guy will maintain symbols that failed to resolve, along with their dependencies, or maybe
     // just the one dependency that failed?
     let _d = fastn_unresolved::parse(document_id, source);

@@ -9,8 +9,11 @@ pub struct Symbols {
 }
 
 #[async_trait::async_trait]
-impl fastn_lang::SymbolStore for Symbols {
-    async fn lookup(&mut self, _qualified_identifier: &str) -> fastn_lang::LookupResult {
+impl<'input> fastn_lang::SymbolStore<'input> for Symbols {
+    async fn lookup(
+        &'input mut self,
+        _qualified_identifier: &str,
+    ) -> fastn_lang::LookupResult<'input> {
         todo!()
     }
 }

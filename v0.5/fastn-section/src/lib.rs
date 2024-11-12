@@ -60,6 +60,10 @@ pub struct Document {
     pub line_starts: Vec<u32>,
 }
 
+// this type is not really needed here, but adding here because fastn-section is our lowest
+// level crate
+pub struct AutoImport {}
+
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
 pub struct Section {

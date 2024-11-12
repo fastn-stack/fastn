@@ -1,6 +1,11 @@
-pub enum LookupResult {
-    Unresolved(fastn_unresolved::Definition),
-    Resolved(fastn_unresolved::Definition),
+pub enum LookupResult<'input> {
+    /// the unresolved symbol and the file source it was resolved from
+    ///
+    /// the resolved and unresolved symbols contain spans so we need source to translate them to
+    /// names
+    Unresolved(&'input fastn_unresolved::Definition, &'input str),
+    /// the resolved symbol and the file source it was resolved from
+    Resolved(&'input fastn_unresolved::Definition, &'input str),
     NotFound,
     /// if the resolution failed, we need not try to resolve it again, unless dependencies change.
     ///
@@ -16,6 +21,6 @@ pub enum LookupResult {
 }
 
 #[async_trait::async_trait]
-pub trait SymbolStore {
-    async fn lookup(&mut self, qualified_identifier: &str) -> LookupResult;
+pub trait SymbolStore<'input> {
+    async fn lookup(&'input mut self, qualified_identifier: &str) -> LookupResult<'input>;
 }
