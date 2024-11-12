@@ -116,6 +116,7 @@ version = "0.1.0"
 dependencies = [
  "fastn-section",
  "serde",
+ "serde_json",
 ]
 
 [[package]]
