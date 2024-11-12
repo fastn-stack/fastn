@@ -1,6 +1,0 @@
--- ftd.text markdown-page:
-caption file-name:
-optional body content:
-if: $content is not null
-
-$content

@@ -15,7 +15,7 @@ weight: 700
 font-family: $manrope-assets.fonts.Manrope
 
 -- ftd.type heading-hero-desktop:
-line-height.px: 84
+line-height.px: 70
 size.px: 56
 letter-spacing.px: 0
 font-family: $manrope-assets.fonts.Manrope
@@ -457,7 +457,7 @@ padding-vertical.px: 24
 
 
 -- heading-box: \$inherited.types.heading-hero
-line-height: 84
+line-height: 70
 size: 56
 weight: 700
 headingtitle: $display-type.types.heading-hero

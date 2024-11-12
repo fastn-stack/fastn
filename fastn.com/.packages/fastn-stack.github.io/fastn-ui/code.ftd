@@ -1,8 +1,0 @@
--- ftd.code code-page:
-caption file-name:
-optional body content:
-string lang:
-lang: $lang
-if: $content is not null
-
-$content
