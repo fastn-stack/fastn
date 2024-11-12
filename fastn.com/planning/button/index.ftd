@@ -199,7 +199,7 @@ caption title:
 optional string link:
 ftd.color text-color: $inherited.colors.text-strong
 ftd.color bg-color: $inherited.colors.background.base				;; <hl>
-ftd.color border-color: $inherited.colors.border-strong			;; <hl>
+ftd.color border-color: $inherited.colors.border-strong			    ;; <hl>
 
 
 -- ds.code:

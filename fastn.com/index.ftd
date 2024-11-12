@@ -1,4 +1,5 @@
 -- import: fastn.com/content-library as lib
+-- import: fastn-community.github.io/banner
 
 ;; Create rich user interfaces, integrate with
 ;; Domain specific language for writing content and creating rich user interfaces,
@@ -14,6 +15,18 @@ document-description: Design, develop, and deploy stunning websites and web apps
 document-image: https://fastn.com/-/fastn.com/images/fastn-dot-com-og-image.jpg
 full-width: true
 sidebar: false
+
+-- ds.page.banner:
+
+    -- banner.cta-banner:
+	cta-text: show your support!
+	cta-link: https://github.com/fastn-stack/fastn
+	bgcolor: $inherited.colors.cta-primary.base
+	
+    Enjoying `fastn`? Please consider giving us a star ⭐️ on
+    GitHub to
+
+-- end: ds.page.banner
 
 -- ds.page.fluid-wrap:
 
@@ -80,9 +93,14 @@ sidebar: false
 
 	-- end: lib.feature-card
 
-	-- lib.learn-fastn: Learn full-stack web development using fastn in a week
+	/-- lib.learn-fastn: Learn full-stack web development using fastn in a week
 	cta-primary-text: Learn Now
 	cta-primary-link: /learn/
+	image: $fastn-assets.files.images.landing.crash-course.svg
+
+    -- lib.learn-fastn: Support us by becoming a stargazer! 🚀
+    cta-primary-text: Click here
+	cta-primary-link: https://github.com/fastn-stack/fastn/
 	image: $fastn-assets.files.images.landing.crash-course.svg
 	
 	-- lib.feature-card: Anyone in your team can contribute to or modify the website

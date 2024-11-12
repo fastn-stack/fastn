@@ -2,17 +2,6 @@
 -- import: fastn/processors as pr
 -- import: fastn.com/ftd-host/processor
 
--- record person:
-integer id:
-string name:
-string department:
-
--- person list people:
-$processor$: pr.package-query
-db: db.sqlite
-
-SELECT * FROM user;
-
 
 -- ds.page: Querying SQLite Using `fastn`
 
@@ -114,7 +103,7 @@ for: $p in $people
 Which will look something like this:
 
 
--- show-person: $p
+\-- show-person: $p
 for: $p in $people
 
 -- end: ds.page

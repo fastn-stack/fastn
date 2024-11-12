@@ -1,5 +1,6 @@
 -- import: fastn
 
+
 -- fastn.package: fastn.com
 favicon: /-/fastn.com/images/favicon.svg
 zip: https://codeload.github.com/fastn-stack/fastn/zip/refs/heads/main
@@ -105,6 +106,7 @@ skip: true
       document: backend/redirects.ftd
     - URL: /clean-urls/
       document: expander/sitemap-document.ftd
+
 
 
 ## Learn: /learn/
