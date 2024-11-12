@@ -13,8 +13,6 @@ mod utils;
 mod warning;
 mod wiggin;
 
-#[cfg(test)]
-pub(crate) use debug::JDebug;
 pub use error::Error;
 pub use fastn_section::parser::identifier::identifier;
 pub use fastn_section::parser::kind::kind;
@@ -27,6 +25,10 @@ pub use fastn_section::parser::section_init::section_init;
 pub use fastn_section::parser::tes::tes;
 pub use fastn_section::warning::Warning;
 pub use scanner::{Scannable, Scanner};
+
+pub trait JDebug {
+    fn debug(&self, source: &str) -> serde_json::Value;
+}
 
 pub enum Diagnostic {
     Error(Error),

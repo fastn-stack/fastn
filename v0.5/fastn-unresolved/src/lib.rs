@@ -4,6 +4,8 @@
 
 extern crate self as fastn_unresolved;
 
+#[cfg(test)]
+mod debug;
 mod parser;
 mod utils;
 
