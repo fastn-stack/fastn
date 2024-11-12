@@ -17,7 +17,7 @@ jobs:
       FASTN_ENABLE_EMAIL: false
     steps:
       - name: Check out
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       #      - name: Set up cargo cache
       #        uses: actions/cache@v3 # there is also https://github.com/Swatinem/rust-cache
       #        continue-on-error: false
