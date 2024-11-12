@@ -1,0 +1,793 @@
+-- import: fastn
+-- import: fifthtry.github.io/typography as tf
+-- import: fifthtry.github.io/package-doc/doc as pd
+-- import: fifthtry.github.io/package-doc/forest-theme as ft
+-- import: fifthtry.github.io/package-doc/code-block as cb
+-- import: fifthtry.github.io/roboto-font/assets as roboto
+-- import: fifthtry.github.io/package-doc/footer
+
+-- $ftd.font-copy: $roboto.fonts.Roboto
+-- $ftd.font-code: $roboto.fonts.Roboto
+-- $ftd.font-display: $roboto.fonts.Roboto
+
+-- ft.page:
+show-footer: true
+site-name: Admonitions
+
+-- ft.page.footer:
+
+-- footer.fastn-footer:
+
+-- end: ft.page.footer
+
+-- pd.package: Admonitions
+name: fifthtry.github.io/admonitions
+
+The admonitions package(fifthtry.github.io/admonitions). Use `FTD` custom
+admonitions styles for your web pages.
+
+How to use?
+
+-- cb.code: Add this to your FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: fifthtry.github.io/admonitions as cbox
+
+\-- fastn.auto-import: cbox
+
+-- pd.component: `cbox.note` Basic usage example
+name: `-- cbox.note:`
+
+Use below code snippet to use this admonitions component as cbox.
+
+-- cb.code: How to use
+lang: ftd
+
+\-- cbox.note: Noteworthy Heading
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+\-- end: cbox.note
+
+-- tf.h3: Output of above example:
+
+-- note: Noteworthy Heading
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+-- end: note
+
+-- pd.component: `cbox.warning` Basic usage example
+name: `-- cbox.warning:`
+
+Use below code snippet to use this admonitions component as cbox.
+
+-- cb.code: How to use
+lang: ftd
+
+\-- cbox.warning: Warning Heading
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+\-- end: cbox.warning
+
+-- tf.h3: Output of above example:
+
+-- warning: Warning Heading
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+-- end: warning
+
+-- pd.component: `cbox.tip` Basic usage example
+name: `-- cbox.tip:`
+
+Use below code snippet to use this admonitions component as cbox.
+
+-- cb.code: How to use
+lang: ftd
+
+\-- cbox.tip: Tip Heading
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+\-- end: cbox.tip
+
+-- tf.h3: Output of above example:
+
+-- tip: Tip Heading
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+-- end: tip
+
+-- pd.component: `cbox.danger` Basic usage example
+name: `-- cbox.danger:`
+
+Use below code snippet to use this admonitions component as cbox.
+
+-- cb.code: How to use
+lang: ftd
+
+\-- cbox.danger: Danger Heading
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+\-- end: cbox.danger
+
+-- tf.h3: Output of above example:
+
+-- danger: Danger Heading
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+-- end: danger
+
+-- pd.component: `cbox.info` Basic usage example
+name: `-- cbox.info:`
+
+Use below code snippet to use this admonitions component as cbox.
+
+-- cb.code: How to use
+lang: ftd
+
+\-- cbox.info: Info Heading
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+\-- end: cbox.info
+
+-- tf.h3: Output of above example:
+
+-- info: Info Heading
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+-- end: info
+
+-- pd.component: `cbox.tip` with emoji example
+name: `-- cbox.tip:`
+
+Use below code snippet to use this admonitions component as cbox.
+
+-- cb.code: How to use
+lang: ftd
+
+\-- cbox.tip: Security Warning
+emoji: ⚙️
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+\-- end: cbox.tip
+
+-- tf.h3: Output of above example:
+
+-- tip: Security Warning
+emoji: ⚙️
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+-- end: tip
+
+-- pd.component: `cbox.text-1` Basic usage example
+name: `-- cbox.text-1:`
+
+Use below code snippet to use this admonitions component as cbox.
+
+-- cb.code: How to use
+lang: ftd
+
+\-- cbox.text-1: Textworthy Heading
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+\-- end: cbox.text-1
+
+-- tf.h3: Output of above example:
+
+-- text-1: Textworthy Heading
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+-- end: text-1
+
+-- pd.component: `cbox.text-2` Basic usage example
+name: `-- cbox.text-2:`
+
+Use below code snippet to use this admonitions component as cbox.
+
+-- cb.code: How to use
+lang: ftd
+
+\-- cbox.text-2: Textworthy Heading
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+\-- end: cbox.text-2
+
+-- tf.h3: Output of above example:
+
+-- text-2: Textworthy Heading
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+-- end: text-2
+
+-- pd.component: `cbox.text-3` Basic usage example
+name: `-- cbox.text-3:`
+
+Use below code snippet to use this admonitions component as cbox.
+
+-- cb.code: How to use
+lang: ftd
+
+\-- cbox.text-3: Textworthy Heading
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+\-- end: cbox.text-3
+
+-- tf.h3: Output of above example:
+
+-- text-3: Textworthy Heading
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+-- end: text-3
+
+-- pd.component: `cbox.text-4` Basic usage example
+name: `-- cbox.text-4:`
+
+Use below code snippet to use this admonitions component as cbox.
+
+-- cb.code: How to use
+lang: ftd
+
+\-- cbox.text-4: Textworthy Heading
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+\-- end: cbox.text-4
+
+-- tf.h3: Output of above example:
+
+-- text-4: Textworthy Heading
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+-- end: text-4
+
+-- pd.component: `cbox.info` Basic usage example
+name: `-- cbox.info:`
+
+Use below code snippet to use this admonitions component as cbox.
+
+-- cb.rendered:
+
+-- cb.rendered.input:
+
+\-- cbox.info-tip: 
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+-- cb.rendered.output:
+
+-- info-tip-1: 
+
+You can use meta query parameter with any of the READ API path if you wish to
+disable the metadata of the header.
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+-- end: ft.page
+
+
+
+
+
+
+
+
+
+
+-- component note:
+caption title:
+optional body body:
+optional string emoji: 🗒️
+children container:
+
+-- cbox:
+emoji: $note.emoji
+title: $note.title
+body: $note.body
+title-color: $inherited.colors.info.text
+text-color: $inherited.colors.info.text
+background-solid: $inherited.colors.info.base
+wrapper: $note.container
+
+-- end: note
+
+
+
+
+
+
+
+
+
+
+-- component warning:
+caption title:
+optional body body:
+optional string emoji: ⚠️
+children container:
+
+-- cbox:
+emoji: $warning.emoji
+title: $warning.title
+body: $warning.body
+title-color: $inherited.colors.warning.text
+text-color: $inherited.colors.warning.text
+background-solid: $inherited.colors.warning.base
+wrapper: $warning.container
+
+-- end: warning
+
+
+
+
+
+
+
+
+
+
+-- component tip:
+caption title:
+optional body body:
+optional string emoji: 💡
+children container:
+
+-- cbox:
+emoji: $tip.emoji
+title: $tip.title
+body: $tip.body
+title-color: $inherited.colors.success.text
+text-color: $inherited.colors.success.text
+background-solid: $inherited.colors.success.base
+wrapper: $tip.container
+
+-- end: tip
+
+
+
+
+
+
+
+
+
+
+-- component danger:
+caption title:
+optional body body:
+optional string emoji: ☢️
+children container:
+
+-- cbox:
+emoji: $danger.emoji
+title: $danger.title
+body: $danger.body
+title-color: $inherited.colors.error.text
+text-color: $inherited.colors.error.text
+background-solid: $inherited.colors.error.base
+wrapper: $danger.container
+
+-- end: danger
+
+
+
+
+
+
+
+
+
+
+-- component info:
+caption title:
+optional body body:
+optional string emoji: ℹ️
+children container:
+
+-- cbox:
+emoji: $info.emoji
+title: $info.title
+body: $info.body
+title-color: $inherited.colors.info.text
+text-color: $inherited.colors.info.text
+wrapper: $info.container
+
+-- end: info
+
+
+
+
+
+
+
+
+
+
+-- component cbox:
+caption title:
+optional body body:
+ftd.color title-color: $inherited.colors.info.text
+ftd.color text-color: $inherited.colors.info.text
+ftd.color background-solid: $inherited.colors.info.base
+optional string emoji:
+children wrapper:
+
+-- ftd.column:
+color: $cbox.title-color
+background.solid: $cbox.background-solid
+padding-horizontal.px: 16
+padding-vertical.px: 16
+padding-right.px: 36
+border-radius.px: 4
+width if { ftd.device != "mobile" }: auto
+width: fill-container
+min-width.fixed.percent: 50
+margin-top.px: 16
+margin-bottom.px: 16
+
+-- ftd.row:
+
+-- emoji: $cbox.emoji
+
+-- ftd.text: $cbox.title
+role: $inherited.types.copy-regular
+color: $cbox.title-color
+margin-left.px: 8
+style: bold
+
+-- end: ftd.row
+
+-- ftd.text:
+if: { cbox.body != NULL }
+role: $inherited.types.copy-regular
+color: $cbox.text-color
+padding-top.px: 8
+
+$cbox.body
+
+-- ftd.column:
+width: fill-container
+children: $cbox.wrapper
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: cbox
+
+
+
+
+
+
+
+
+
+
+-- component emoji:
+optional caption title:
+
+-- ftd.text: $emoji.title
+role: $inherited.types.copy-regular
+style: bold
+
+-- end: emoji
+
+
+
+
+
+
+
+
+
+
+-- component text-1:
+optional caption caption:
+body body:
+
+-- ftd.column:
+width: fill-container
+margin-vertical.px: 16
+
+-- ftd.text:
+if: { text-1.caption != NULL }
+text: $text-1.caption
+role: $inherited.types.copy-regular
+color: $inherited.colors.text.light
+width: fill-container
+background.solid: $inherited.colors.custom.three
+padding-vertical.px: 10
+padding-horizontal.px: 20
+border-top-left-radius.px: 8
+border-top-right-radius.px: 8
+
+-- ftd.text:
+width: fill-container
+role: $inherited.types.copy-regular
+color: $inherited.colors.background.base.dark
+padding-vertical.px: 10
+padding-horizontal.px: 20
+background.solid: $inherited.colors.info.base.light
+border-top-left-radius.px if { text-1.caption == NULL }: 4
+border-top-right-radius.px if { text-1.caption == NULL }: 4
+border-bottom-left-radius.px: 8
+border-bottom-right-radius.px: 8
+overflow-x: auto
+
+$text-1.body
+
+-- end: ftd.column
+
+-- end: text-1
+
+
+
+
+
+
+
+
+
+
+-- component text-2:
+optional caption caption:
+body body:
+
+-- ftd.column:
+margin-vertical.px: 16
+
+-- ftd.text:
+if: { text-2.caption != NULL }
+text: $text-2.caption
+role: $inherited.types.copy-regular
+color: $inherited.colors.cta-primary.text
+width: fill-container
+background.solid: $inherited.colors.cta-primary.hover
+padding-vertical.px: 10
+padding-horizontal.px: 20
+border-top-left-radius.px: 8
+border-top-right-radius.px: 8
+
+-- ftd.text:
+width: fill-container
+role: $inherited.types.copy-regular
+color: $inherited.colors.text.dark
+padding-vertical.px: 10
+padding-horizontal.px: 20
+background.solid: $inherited.colors.background.step-1
+border-top-left-radius.px if { text-2.caption == NULL }: 4
+border-top-right-radius.px if { text-2.caption == NULL }: 4
+border-bottom-left-radius.px: 8
+border-bottom-right-radius.px: 8
+overflow-x: auto
+
+$text-2.body
+
+-- end: ftd.column
+
+-- end: text-2
+
+
+
+
+
+
+
+
+
+
+-- component text-3:
+optional caption caption:
+body body:
+
+-- ftd.column:
+width: fill-container
+margin-vertical.px: 16
+
+-- ftd.text:
+if: { text-3.caption !=NULL }
+text: $text-3.caption
+role: $inherited.types.copy-regular
+color: $inherited.colors.background.step-1.dark
+width: fill-container
+background.solid: $inherited.colors.custom.two.dark
+padding-vertical.px: 10
+padding-horizontal.px: 20
+border-top-left-radius.px: 8
+border-top-right-radius.px: 8
+
+-- ftd.text:
+width: fill-container
+role: $inherited.types.copy-regular
+color: $inherited.colors.text.dark
+padding-vertical.px: 10
+padding-horizontal.px: 20
+background.solid: $inherited.colors.warning.base
+border-top-left-radius.px if { text-3.caption == NULL }: 4
+border-top-right-radius.px if { text-3.caption == NULL }: 4
+border-bottom-left-radius.px: 8
+border-bottom-right-radius.px: 8
+overflow-x: auto
+
+$text-3.body
+
+-- end: ftd.column
+
+-- end: text-3
+
+
+
+
+
+
+
+
+
+
+-- component text-4:
+optional caption caption:
+body body:
+
+-- ftd.column:
+width: fill-container
+margin-vertical.px: 16
+
+-- ftd.text:
+if: { text-4.caption != NULL }
+text: $text-4.caption
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+width: fill-container
+background.solid: $inherited.colors.background.step-2
+padding-vertical.px: 10
+padding-horizontal.px: 20
+border-top-left-radius.px: 8
+border-top-right-radius.px: 8
+
+-- ftd.text:
+width: fill-container
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+padding-vertical.px: 10
+padding-horizontal.px: 20
+background.solid: $inherited.colors.background.step-1
+border-top-left-radius.px if { text-4.caption == NULL }: 4
+border-top-right-radius.px if { text-4.caption == NULL }: 4
+border-bottom-left-radius.px: 8
+border-bottom-right-radius.px: 8
+overflow-x: auto
+
+$text-4.body
+
+-- end: ftd.column
+
+-- end: text-4
+
+
+
+
+
+
+
+
+
+
+-- component info-tip:
+body body:
+boolean $mouse-in: false
+
+-- ftd.column:
+width: fill-container
+border-width.px: 1
+border-color: $inherited.colors.info.border
+border-left-width.px: 5
+align-content: left
+padding.px: 10
+background.solid: $inherited.colors.custom.three.light
+
+-- ftd.column:
+anchor: parent
+left.px: 10
+top.px: 10
+
+-- ftd.text: INFO
+role: $inherited.types.fine-print
+color: $inherited.colors.text-strong.dark
+padding-vertical.px: 3
+padding-horizontal.px: 5
+background.solid: $inherited.colors.info.text
+
+-- end: ftd.column
+
+-- ftd.text:
+role: $inherited.types.fine-print
+color: $inherited.colors.text.light
+
+$info-tip.body
+
+-- end: ftd.column
+
+-- end: info-tip
+
+
+
+
+
+
+
+
+
+
+-- component info-tip-1:
+body body:
+boolean $mouse-in: false
+
+-- ftd.column:
+width: fill-container
+border-width.px: 1
+border-color: $inherited.colors.info.border
+border-left-width.px: 5
+align-content: left
+padding.px: 10
+background.solid: $inherited.colors.background.base
+
+-- ftd.row:
+
+-- ftd.text: INFO
+role: $inherited.types.fine-print
+color: $inherited.colors.text-strong.dark
+padding-vertical.px: 3
+padding-horizontal.px: 5
+background.solid: $inherited.colors.info.text
+
+-- ftd.text:
+role: $inherited.types.fine-print
+color: $inherited.colors.text.light
+
+$info-tip-1.body
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: info-tip-1

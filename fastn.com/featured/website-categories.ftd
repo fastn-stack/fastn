@@ -1,0 +1,190 @@
+-- import: fastn.com/featured as ft-ui
+
+
+
+
+
+
+-- ds.page:
+sidebar: false
+
+-- ft-ui.grid-view: Documentation Sites
+templates: $doc-sites
+more-link-text: View more
+more-link: /featured/doc-sites/
+
+-- ft-ui.grid-view: SPA / Landing Pages
+templates: $landing-pages
+more-link-text: View more
+more-link: /featured/landing-pages/
+
+-- ft-ui.grid-view: Blogs
+templates: $blog-sites
+more-link-text: View more
+more-link: /featured/blog-templates/
+
+-- ft-ui.grid-view: Portfolio / Personal Sites
+templates: $portfolios
+more-link-text: View more
+more-link: /featured/portfolios/
+
+-- ft-ui.grid-view: Resumes
+templates: $resumes
+more-link-text: View more
+more-link: /featured/resumes/
+
+-- ft-ui.grid-view: Workshop Pages
+templates: $workshops
+more-link-text: View more
+more-link: /featured/workshops/
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list doc-sites:
+
+-- ft-ui.template: Midnight Rush
+template-url: featured/ds/mr-ds/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
+
+-- ft-ui.template: Midnight Storm
+template-url: featured/ds/midnight-storm/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
+
+-- ft-ui.template: Misty Gray
+template-url: featured/ds/misty-gray/
+screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
+
+-- end: doc-sites
+
+
+
+
+
+-- ft-ui.template list landing-pages:
+
+-- ft-ui.template: Midnight Storm
+template-url: featured/landing/midnight-storm-landing/
+screenshot: $fastn-assets.files.images.featured.landing.ms-landing-demo.png
+
+-- ft-ui.template: Midnight Rush
+template-url: featured/landing/mr-landing/
+screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
+
+-- ft-ui.template: Misty Gray
+template-url: featured/landing/misty-gray-landing/
+screenshot: $fastn-assets.files.images.featured.landing.misty-gray-landing.png
+
+-- end: landing-pages
+
+
+
+
+-- ft-ui.template list blog-sites:
+
+-- ft-ui.template: Midnight Rush
+template-url: featured/blogs/mr-blog/
+screenshot: $fastn-assets.files.images.featured.blog.midnight-rush-blog.jpg
+
+-- ft-ui.template: Midnight Storm
+template-url: featured/blogs/ms-blog/
+screenshot: $fastn-assets.files.images.featured.blog.midnight-storm.jpg
+
+-- ft-ui.template: Misty Gray
+template-url: featured/blogs/mg-blog/
+screenshot: $fastn-assets.files.images.featured.blog.misty-gray.jpg
+
+-- end: blog-sites
+
+
+
+
+
+-- ft-ui.template list resumes:
+
+-- ft-ui.template: Caffeine
+template-url: featured/resumes/caffiene/
+screenshot: $fastn-assets.files.images.featured.resumes.caffiene.png
+
+-- ft-ui.template: Resume 1
+template-url: featured/resumes/resume-1/
+screenshot: $fastn-assets.files.images.featured.resumes.resume-1.png
+
+-- ft-ui.template: Resume 10
+template-url: featured/resumes/resume-10/
+screenshot: $fastn-assets.files.images.featured.resumes.resume-10.png
+
+-- end: resumes
+
+
+
+
+
+-- ft-ui.template list workshops:
+
+-- ft-ui.template: Workshop 1
+template-url: featured/workshops/workshop-1/
+screenshot: $fastn-assets.files.images.featured.workshops.workshop-1.png
+
+-- end: workshops
+
+
+
+
+
+
+-- ft-ui.template list portfolios:
+
+-- ft-ui.template: Texty PS
+template-url: featured/portfolios/texty-ps/
+screenshot: $fastn-assets.files.images.featured.portfolios.texty-ps.png
+
+-- ft-ui.template: Johny PS
+template-url: featured/portfolios/johny-ps/
+screenshot: $fastn-assets.files.images.featured.portfolios.johny-ps.png
+
+-- ft-ui.template: Portfolio
+template-url: featured/portfolios/portfolio/
+screenshot: $fastn-assets.files.images.featured.portfolios.portfolio.png
+
+-- end: portfolios
+
+
+
+
+
+-- ft-ui.template list resumes:
+
+-- ft-ui.template: Caffeine
+template-url: featured/resumes/caffiene/
+screenshot: $fastn-assets.files.images.featured.resumes.caffiene.png
+
+-- ft-ui.template: Resume 1
+template-url: featured/resumes/resume-1/
+screenshot: $fastn-assets.files.images.featured.resumes.resume-1.png
+
+-- end: resumes
+
+
+
+
+
+-- ft-ui.template list workshops:
+
+-- ft-ui.template: Workshop 1
+template-url: featured/workshops/workshop-1/
+screenshot: $fastn-assets.files.images.featured.workshops.workshop-1.png
+
+-- ft-ui.template: Event 1
+template-url: featured/workshops/event-1/
+screenshot: $fastn-assets.files.images.featured.workshops.event-1.png
+
+-- end: workshops

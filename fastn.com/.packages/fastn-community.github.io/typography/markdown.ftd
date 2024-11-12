@@ -1,0 +1,88 @@
+-- import: fastn-community.github.io/typography as tf
+-- import: fastn-community.github.io/code-block as cb
+-- import: fastn-community.github.io/site-doc
+-- import: fastn-community.github.io/bling/collapse
+
+
+
+
+
+-- site-doc.doc-home: Typography
+github-url: https://github.com/fastn-community/typography
+show-tabs: false
+site-title: Typography
+
+-- site-doc.component-doc: `markdown`
+package-link: fastn-community.github.io/typography
+github-link: https://github.com/fastn-community/typography
+package-name: fastn-community.github.io/typography
+info: ` markdown` markdown is used to add body size content to your fastn pages.
+
+The `typography` package is already included inside 
+[doc-site](https://fastn-community.github.io/doc-site/). If you are using 
+[doc-site](https://fastn-community.github.io/doc-site/) then don't add 
+typography as [fastn](https://fastn.com/) dependency.
+
+-- site-doc.header: How to use
+
+Add below code to your FASTN.ftd and Import `typography` into your `.ftd` file
+
+-- cb.code:
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/typography
+
+-- site-doc.markdown:
+
+Import `typography` into your `.ftd` file
+
+-- cb.code: 
+lang: ftd
+
+\-- import: fastn-community.github.io/typography as tf
+
+-- site-doc.markdown:
+
+Add `markdown` component into your `.ftd` file
+
+-- cb.code: 
+lang: ftd
+
+\-- tf.markdown:
+
+This is markdown text. You can add [link](https://fastn.com) and
+add **bold**, *italic* etc styles to markdown text.
+
+-- site-doc.header: Example
+
+-- site-doc.output:
+
+-- tf.markdown:
+
+This is markdown text. You can add [link](https://fastn.com) and
+**bold**, *italic* etc styles to markdown text.
+
+-- end: site-doc.output
+
+-- site-doc.header: Properties:
+
+Markdown has only body property as its default. 
+
+-- site-doc.component-property: `body`  
+type: body (`required`)
+
+Body property is used to add body content of markdown component. Markdown
+body is using common font-size, line-height and font-weight.
+
+-- collapse.collapse: `body` - click here to see  details
+
+🔶 Body text uses fastn default `$inherited.types.copy-regular` type.
+
+- desktop: `font-size: 16, line-height: 24, letter-spacing: 0, weight: 400`
+- mobile: `font-size: 16, line-height: 24, letter-spacing: 0, weight: 400`
+
+-- end: collapse.collapse
+
+-- end: site-doc.component-doc
+
+-- end: site-doc.doc-home

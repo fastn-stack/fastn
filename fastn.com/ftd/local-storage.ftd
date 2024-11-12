@@ -1,0 +1,157 @@
+-- string $name: World
+
+-- ds.page: Local Storage
+
+`ftd.local_storage` simplifies the process of working with Local Storage in your `fastn` projects.
+
+It functions as a wrapper around the browser's Local Storage API, facilitating the storage and retrieval of data in the client-side storage of your users' web browsers.
+
+`ftd.local_storage` also provides namespacing for local storage, which prevents naming collisions when multiple packages in your project are using local storage.
+
+-- ds.h1: Saving Data in Local Storage
+
+To store data, use ftd.local_storage.set(key, value). It securely saves data in your browser's Local Storage for later use.
+
+The 'value' can be of any 'fastn' [data type](/built-in-types/), including 'fastn' ['records'](ftd/record/).
+
+-- ds.rendered: Usage
+
+	-- ds.rendered.input:
+	
+	\-- ftd.text: Save name
+	color: $inherited.colors.text-strong
+	$on-click$: save-data()
+	
+	\-- void save-data():
+	
+	ftd.local_storage.set("name", "Universe")
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: Save name
+		color: $inherited.colors.text-strong
+		$on-click$: save-data()
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+-- ds.h1: Retrieving Data from Local Storage
+
+Access stored information with ftd.local_storage.get(key). It's a simple way to get your data back from Local Storage.
+
+-- ds.rendered: Usage
+
+	-- ds.rendered.input:
+	
+	\-- string $name: World
+	
+	\-- ftd.text: $name
+	color: $inherited.colors.text
+	
+	\-- ftd.text: Get name
+	color: $inherited.colors.text-strong
+	$on-click$: get-data($a = $name)
+	
+	\-- void get-data(a):
+	string $a:
+	
+	name = ftd.local_storage.get("name", "Universe");
+	__args__.a.set(name || "Empty");
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: $name
+		color: $inherited.colors.text
+		
+		-- ftd.text: Get name
+		color: $inherited.colors.text-strong
+		$on-click$: get-data($a = $name)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+-- ds.h1: Deleting Data from Local Storage
+
+Remove specific data entries using ftd.local_storage.delete(key). This function makes cleaning up data in Local Storage easy.
+
+In the example below, when you click on the 'Get name' button, if the name has not been deleted yet and was previously set using the `ftd.local_storage.set(k, v)` method, it will display that name.
+
+Now, if you click on the 'Delete name' button and then click on the 'Get name' button again, this time it will display 'Empty' because the data was deleted.
+
+-- ds.rendered: Usage
+
+	-- ds.rendered.input:
+	
+	\-- string $name: World
+	
+	\-- ftd.text: $name
+	color: $inherited.colors.text
+	
+	\-- ftd.text: Get name
+	color: $inherited.colors.text-strong
+	$on-click$: get-data($a = $name)
+	
+	\-- ftd.text: Delete name
+	color: $inherited.colors.text-strong
+	$on-click$: $delete-data()
+	
+	\-- void get-data(a):
+	string $a:
+	
+	name = ftd.local_storage.get("name", "Universe");
+	__args__.a.set(name || "Empty");
+	
+	\-- void delete-data(a):
+	string $a:
+	
+	ftd.local_storage.delete("name")
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: $name
+		color: $inherited.colors.text
+		
+		-- ftd.text: Get name
+		color: $inherited.colors.text-strong
+		$on-click$: get-data($a = $name)
+		
+		-- ftd.text: Delete name
+		color: $inherited.colors.text-strong
+		$on-click$: $delete-data()
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- end: ds.page
+
+
+
+
+
+-- void save-data():
+
+ftd.local_storage.set("name", "Universe")
+
+-- void get-data(a):
+string $a:
+
+name = ftd.local_storage.get("name", "Universe");
+__args__.a.set(name || "Empty");
+
+-- void delete-data():
+
+ftd.local_storage.delete("name")

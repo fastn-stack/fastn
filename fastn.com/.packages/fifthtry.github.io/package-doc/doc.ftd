@@ -1,0 +1,346 @@
+-- import: fastn
+-- import: fifthtry.github.io/package-doc/typography as tf
+-- import: fifthtry.github.io/package-doc/assets
+-- import: fifthtry.github.io/package-doc/code-block as cb
+;;-- ftd.boolean: $ftd.dark-mode
+
+
+
+
+
+-- ftd.column:
+height: hug-content
+width: fill-container
+background.solid: $inherited.colors.background.step-1
+padding-horizontal.px: 24
+padding-vertical.px: 24
+
+-- hidden-code: Hidden-Code
+
+Hello
+
+-- output: Output
+
+Output
+
+-- attribute: Attribute
+name: fifthtry.github.io/doc
+
+Attribute body
+
+-- component: Component
+name: fifthtry.github.io/doc
+
+Component body.
+
+-- package: Package
+name: fifthtry.github.io/doc
+
+Package body.
+
+-- end: ftd.column
+
+
+
+
+
+
+
+
+
+
+-- component hidden-code:
+caption title:
+optional body body:
+boolean $open-block: false
+
+-- ftd.column:
+spacing.fixed.px: 10
+$on-click$: $ftd.toggle($a = $hidden-code.open-block)
+width: fill-container
+border-left-width.px: 5
+border-color: $inherited.colors.border
+padding.px: 10
+
+-- ftd.text: $hidden-code.title
+role: $inherited.types.copy-large
+color: $inherited.colors.text
+
+-- ftd.text: Show code
+if: { !$hidden-code.open-block }
+role: $inherited.types.fine-print
+color: $inherited.colors.text-strong
+
+-- ftd.text: Hide code
+if: { $hidden-code.open-block }
+role: $inherited.types.fine-print
+color: $inherited.colors.text-strong
+
+-- ftd.column:
+if: { $hidden-code.open-block }
+width: fill-container
+$on-click$: $ftd.toggle($a = $hidden-code.open-block)
+
+-- cb.code:
+lang: ftd
+
+$hidden-code.body
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: hidden-code
+
+
+
+
+
+
+
+
+
+
+-- component output:
+caption caption:
+optional body body:
+optional ftd.image-src reference:
+boolean reference-open: false
+
+-- ftd.column:
+width: fill-container
+;;open: true
+;;append-at: output-container
+padding-left.px: 20
+border-left-width.px: 5
+border-color: $inherited.colors.border
+margin-top.px: 30
+margin-bottom.px: 20
+padding-bottom.px: 10
+
+-- tf.h2-text: $output.caption
+
+-- cb.code:
+lang: ftd
+
+\-- ftd.text: Output
+color: $inherited.colors.text
+background.solid: $inherited.colors.background.base
+padding-vertical.px: 10
+padding-horizontal.px: 20
+border-top-left-radius.px: 2
+border-top-right-radius.px: 2
+role: $inherited.types.copy-large
+$on-click$: $ftd.toggle($a = $output.reference-open)
+
+
+-- ftd.column:
+width: fill-container
+background.solid: $inherited.colors.background.base
+border-radius.px: 2
+border-width.px: 1
+border-color: $inherited.colors.border
+
+-- ftd.image:
+if: { $output.reference-open }
+src: $output.reference
+if: { $output.reference != NULL }
+width: fill-container
+padding-bottom.px: 20
+padding-vertical.px: 30
+padding-horizontal.px: 20
+margin-bottom.px: 10
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: output
+
+
+
+
+
+
+
+
+
+
+-- component attribute:
+caption title:
+string name:
+body body:
+
+-- ftd.column:
+width: fill-container
+
+-- tf.h3: $attribute.title
+
+-- kv: Attribute Name
+value: $attribute.name
+
+-- tf.markdown:
+
+$attribute.body
+
+-- end: ftd.column
+
+-- end: attribute
+
+
+
+
+
+
+
+
+
+
+-- component component:
+caption title:
+string name:
+body body:
+
+-- ftd.column:
+width: fill-container
+
+-- tf.h2-text: $component.title
+
+-- kv: Component Name
+value: $component.name
+
+-- tf.markdown:
+
+$component.body
+
+-- end: ftd.column
+
+-- end: component
+
+
+
+
+
+
+
+
+
+
+-- component package:
+caption title:
+string name:
+optional body body:
+
+-- ftd.column:
+width: fill-container
+color: $inherited.colors.text
+spacing.fixed.px: 20
+;;open: true
+
+/-- ftd.row:
+anchor: window
+right.px: 50
+bottom.px: 100
+padding.px: 10
+background.solid: $inherited.colors.background.base
+border-width.px: 1
+border-color: $inherited.colors.border
+border-radius.px: 4
+;;z-index: 99999999999999
+
+/-- toggle:
+
+/-- end: ftd.row
+
+-- ftd.column:
+
+-- ftd.image:
+src: $assets.files.static.ftd-logo.png
+margin-right.px: 28
+height.fixed.px: 64
+
+-- tf.h1: $package.title
+
+-- kv: Package Name
+value: $package.name
+
+-- tf.markdown:
+
+$package.body
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: package
+
+
+
+
+
+
+
+
+
+
+-- component kv:
+caption title:
+string value:
+
+-- ftd.row:
+padding.px: 10
+border-width.px: 1
+border-color: $inherited.colors.border
+spacing.fixed.px: 7
+width: fill-container
+background.solid: $inherited.colors.background.base
+border-radius.px: 4
+margin-bottom.px: 15
+
+-- ftd.text: $kv.title
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+
+-- ftd.text: $kv.value
+color: $inherited.colors.text
+role: $inherited.types.copy-regular
+
+-- end: ftd.row
+
+-- end: kv
+
+
+
+
+
+
+
+
+
+
+-- component toggle:
+
+-- ftd.row:
+
+-- ftd.image:
+if: { !$ftd.dark-mode }
+src: $assets.files.static.switch-mode-icon.svg
+height.fixed.px: 18
+;;$on-click$: message-host enable-dark-mode
+align-self: center
+
+-- ftd.image:
+if: { $ftd.dark-mode }
+src: $assets.files.static.switch-mode-icon-dark.svg
+height.fixed.px: 18
+;;$on-click$: message-host enable-light-mode
+align-self: center
+
+-- end: ftd.row
+
+-- end: toggle
+
+/-- void toggle(a):
+boolean a:
+
+a = !a

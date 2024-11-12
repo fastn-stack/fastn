@@ -1,0 +1,26 @@
+-- import: fastn.com/featured as ft-ui
+
+
+-- ds.page:
+sidebar: false
+
+-- ft-ui.grid-view: Footers
+templates: $footers
+
+-- end: ds.page
+
+
+
+
+
+-- ft-ui.template list footers:
+
+-- ft-ui.template: Footers
+template-url: /featured/components/footers/footer/
+screenshot: $fastn-assets.files.images.featured.components.footer.png
+
+-- ft-ui.template: Footer - 3
+template-url: /featured/components/footers/footer-3/
+screenshot: $fastn-assets.files.images.featured.components.footer-3.png
+
+-- end: footers

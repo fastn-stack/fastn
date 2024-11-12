@@ -1,0 +1,302 @@
+-- import: fastn.com/assets
+
+-- ds.page: `ftd.image`
+
+`ftd.image` is the kernel element used to render images in `ftd`.
+
+-- ds.rendered: Usage
+
+	-- ds.rendered.input:
+	
+	\-- import: fastn.com/assets
+	
+	\-- ftd.image:
+	src: $assets.files.images.cs.show-cs-1.jpg
+	
+	-- ds.rendered.output:
+	
+		-- ftd.image:
+		src: $assets.files.images.cs.show-cs-1.jpg
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+-- ds.h1: Attributes
+
+`ftd.image` accepts the below attributes as well all the [common
+attributes](ftd/common/).
+
+-- ds.h2: `src`
+
+Type: [`ftd.image-src`](ftd/built-in-types/#ftd-image-src)
+
+Required: True
+
+The `src` attribute specifies the path to the image to display. This is the only
+required attribute. `src` stores image URLs for both light and dark mode.
+
+-- ds.h3: Example Using `ftd.image-src` Variable
+
+Consider the following example:
+
+-- ds.code: Two images using `ftd.image-src` type variable
+lang: ftd
+
+\-- ftd.image-src my-images:
+light: https://fastn.com/-/fastn.com/images/cs/show-cs-1.jpg
+dark: https://fastn.com/-/fastn.com/images/cs/show-cs-1-dark.jpg
+
+\-- ftd.image:
+src: $my-images
+width.fixed.px: 200
+height.fixed.px: 115
+
+-- ds.output: Output: Two images using `ftd.image-src` type variable
+
+	-- ftd.image:
+	src: $my-images
+	width.fixed.px: 200
+	height.fixed.px: 115
+	
+-- end: ds.output
+
+-- ds.markdown:
+
+Switch your color mode (light/dark) using the floating toolbar icon on the
+bottom right and see the image changing.
+
+In this example, the image URL
+`https://fastn.com/-/fastn.com/images/cs/show-cs-1.jpg` is used in the light
+mode, and `https://fastn.com/-/fastn.com/images/cs/show-cs-1-dark.jpg` is used in
+dark mode.
+
+It is also possible to use `ftd.image-src` with only one field. For example:
+
+-- ds.code: One image using `ftd.image-src` type variable
+lang: ftd
+
+\-- ftd.image-src just-light:
+light: https://fastn.com/-/fastn.com/images/cs/show-cs-1.jpg
+
+\;; or
+
+\-- ftd.image-src just-light: https://fastn.com/-/fastn.com/images/cs/show-cs-1.jpg
+
+\-- ftd.image:
+src: $just-light
+width.fixed.px: 200
+height.fixed.px: 115
+
+
+-- ds.output: Output: One image using `ftd.image-src` type variable
+
+	-- ftd.image:
+	src: $just-light
+	width.fixed.px: 200
+	height.fixed.px: 115
+	
+-- end: ds.output
+
+-- ds.markdown:
+
+In this case, the same image URL
+https://fastn.com/-/fastn.com/images/cs/show-cs-1.jpg is returned in both light
+and dark modes.
+
+-- ds.h3: Example Using assets Foreign Variable
+
+Instead of passing the image URL directly, it is possible to use the `assets`
+foreign variable to access files present in a package.
+
+Check [foreign variable in Variable page](ftd/variables/#foreign-variables) to
+know more.
+
+To use the `assets` variable, import the package as shown below:
+
+-- ds.code: Image using assets
+lang: ftd
+
+\-- import: fastn.com/assets
+
+-- ds.markdown:
+
+Then, use the `files` field of `assets` variable to access files present in the
+package. For example:
+
+-- ds.code: Image using assets
+lang: ftd
+
+\-- import: fastn.com/assets
+
+\-- ftd.image:
+src: $assets.files.images.cs.show-cs-1.jpg
+width.fixed.px: 200
+height.fixed.px: 115
+
+-- ds.markdown:
+
+The output will look same as above.
+
+-- ds.output: Output: Image using assets
+
+	-- ftd.image:
+	src: $assets.files.images.cs.show-cs-1.jpg
+	width.fixed.px: 200
+	height.fixed.px: 115
+	
+-- end: ds.output
+
+-- ds.markdown:
+
+In this example, the `src` attribute of `ftd.image` component will be set to the
+URL of `show-cs-1.jpg` file present in the `images/cs` folder of the `fastn.com`
+package. i.e. URL of `<path-to-package>/images/cs/show-cs-1.jpg`.
+
+Now, you must be wondering how does it get two different value of image for
+light mode and dark mode.
+
+When using an `assets` variable, if an image with the same name but with
+`-dark` suffix exists in the package, it will be used for the
+`dark` field. For example, if `show-cs-1-dark.svg` file exists in the `images/cs`
+folder, it will be used for the `dark` field, while `show-cs-1.svg` will be used
+for the light field.
+
+
+
+
+
+
+
+
+-- ds.h2: `alt`
+
+Type: `optional` [`string`](ftd/built-in-types/#string)
+
+Required: False
+
+The `alt` attribute specifies alternate [text description of the
+image](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#alt).
+
+-- ds.rendered: Sample code using `alt`
+
+	-- ds.rendered.input:
+	
+	\-- import: fastn.com/assets
+	
+	\-- ftd.image: foo.jpg
+	alt: Image can't be displayed ;; <hl>
+	color: $inherited.colors.text
+	padding.px: 10
+	
+	-- ds.rendered.output:
+	
+		-- ftd.image: foo.jpg
+		alt: Image can't be displayed
+		color: $inherited.colors.text
+		padding.px: 10
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+-- ds.h2: `fit`
+
+Type: `optional` `string`
+
+Required: False
+
+The `fit` property determines how a `ftd.image` element should be adjusted to match its container size. It is similar to the [`object-fit`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) CSS property.
+
+This property offers various options for the content to adapt to the container, such as "maintaining the aspect ratio" or "expanding to occupy the available space fully.".
+
+-- ds.rendered: Sample code using `fit`
+
+	-- ds.rendered.input:
+	
+	\-- import: fastn.com/assets
+	
+	\-- ftd.image: $assets.files.images.cs.show-cs-1.jpg
+	fit: cover ;; <hl>
+	width.fixed.px: 400
+	height.fixed.px: 300
+	color: $inherited.colors.text
+	padding.px: 10
+	
+	-- ds.rendered.output:
+	
+		-- ftd.image: $assets.files.images.cs.show-cs-1.jpg
+		fit: cover
+		width.fixed.px: 400
+		height.fixed.px: 300
+		color: $inherited.colors.text
+		padding.px: 10
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+-- ds.h2: `fetch-priority`
+
+Type: `optional` [`ftd.fetch-priority`](ftd/built-in-types/#ftd-fetch-priority)
+
+Required: False
+
+The `fetch-priority` property signals high or low priority for crucial `ftd.image` elements,
+optimizing early user experience.
+
+-- ds.rendered: Sample code using `fetch-priority`
+
+	-- ds.rendered.input:
+	
+	\-- import: fastn.com/assets
+	
+	\-- ftd.image: $assets.files.images.cs.show-cs-1.jpg
+	fetch-priority: high ;; <hl>
+	width.fixed.px: 400
+	height.fixed.px: 300
+	color: $inherited.colors.text
+	padding.px: 10
+	
+	-- ds.rendered.output:
+	
+		-- ftd.image: $assets.files.images.cs.show-cs-1.jpg
+		fetch-priority: high
+		width.fixed.px: 400
+		height.fixed.px: 300
+		color: $inherited.colors.text
+		padding.px: 10
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- end: ds.page
+
+
+
+
+
+
+
+-- ftd.image-src my-images:
+light: https://fastn.com/-/fastn.com/images/cs/show-cs-1.jpg
+dark: https://fastn.com/-/fastn.com/images/cs/show-cs-1-dark.jpg
+
+
+
+-- ftd.image-src just-light: https://fastn.com/-/fastn.com/images/cs/show-cs-1.jpg

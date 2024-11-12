@@ -1,0 +1,121 @@
+-- import: fastn.com/utils
+
+-- ds.page: Brand Guidelines
+full-width: true
+sidebar: false
+
+-- ds.h1: Logo Mark
+
+The core logo consists of the wordmark in horizontal format. The core logo is
+the standard logo orientation to be used across all marketing materials, when
+the application or surrounding elements are ideal for the width of its
+proportions.
+
+-- ds.image:
+src: $fastn-assets.files.images.brand-guidelines.fastn.svg
+
+-- ds.h1: Safe space
+
+This area should be kept free of any visual elements, including text, graphics,
+borders, patterns, and other logos. Ensuring proper clear space between the
+logo and surrounding elements preserves the visual integrity of our brand.
+
+-- ds.image:
+src: $fastn-assets.files.images.brand-guidelines.fastn-space.svg
+
+-- ds.h1: Incorrect Usage
+
+This area should be kept free of any visual elements, including text, graphics,
+borders, patterns, and other logos. Ensuring proper clear space between the
+logo and surrounding elements preserves the visual integrity of our brand.
+
+-- ds.image:
+src: $fastn-assets.files.images.brand-guidelines.fastn-frame.svg
+
+-- ds.h2: Points:
+
+1.Do not apply a stroke to the logo
+
+2.Do not recolor any part of the logo
+
+3.Do not apply drop shadow or effects to the logo
+
+4.Do not rotate the logo in any way
+
+5.Do not distort the logo in any way
+
+6.Do not use the logo as a framing device for imagery
+
+-- ds.h1: Fastn logos and brand assets
+
+PNG downloads have a transparent background, JPGs will have a white background.
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 24
+wrap: true
+padding-vertical.px: 24
+align-content: center
+
+	-- utils.logo-card:
+	logo: $fastn-assets.files.images.brand-guidelines.logo-dark.svg
+	id: logo-card-1
+	link: https://fastn.com/images/brand-guidelines/logo-dark-img.svg
+	
+	-- utils.logo-card:
+	logo: $fastn-assets.files.images.brand-guidelines.logo-light.svg
+	id: logo-card-2
+	link: https://fastn.com/images/brand-guidelines/logo-light-img.svg
+	
+	-- utils.logo-card:
+	logo: $fastn-assets.files.images.brand-guidelines.logo-without-bg.svg
+	id: logo-card-3
+	link: https://fastn.com/images/brand-guidelines/logo-without-bg-img.svg
+	
+	-- utils.logo-card:
+	logo: $fastn-assets.files.images.brand-guidelines.logo-without-bg-white.svg
+	id: logo-card-4
+	link: https://fastn.com/images/brand-guidelines/logo-without-bg-white-img.svg
+	
+-- end: ftd.row
+
+-- ds.h1: Color
+
+Black and orange are used in all branded materials. The remaining colours in the
+primary palette are used for accents and reinforcing elements, such as graphics
+and illustrations.
+
+-- ds.image:
+src: $fastn-assets.files.images.brand-guidelines.fastn-color.svg
+
+-- ds.h1: Color usage
+
+Digital colours refer to colours that will be used for digital properties. For
+example, this webpage uses color defined by HEX codes. If you're working with
+any digital asset, you can input either the HEX or RGB color codes, as detailed
+in the primary palette. Some digital use cases include, digital ads, digital
+billboards, video and animation, Canva.
+
+- HEX: HEX codes are based on the hexadecimal system in computing. HEX and RGB
+codes provide the same information, but in different formats. The HEX code
+includes a hashtag followed by six characters. Example: #FC6D26
+
+- RGB: RGB is an acronym for Red, Green, and Blue. All digital colors are
+generated using percentages of these three colors. As mentioned, RGB is
+interchangeable with HEX. Example: rgb(255, 255, 255)
+
+-- ds.h1: Typography
+
+Manrope is the default typeface for all fastn materials. It is an open source
+modern sans-serif font family.
+
+Refer to the guidelines below when working with typography:
+
+- Alternate between different sizes and weights to establish layout hierarchy.
+- Keep the font size consistent within each block of copy.
+- Left-align all copy. Never force-justify, center-align, or right-align typography, unless the written language dictates otherwise.
+- Default to sentence case unless working with a tagline/headline or different tiers of information.
+- No ALL-CAPS please.
+- Keep text solid-filled and refrain from adding strokes to outline the type.
+
+-- end: ds.page

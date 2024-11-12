@@ -1,0 +1,92 @@
+-- import: fastn.com/utils
+
+-- ds.page: Use `inherited types`
+
+Using `inherited` types for colors and roles allows for greater flexibility in
+using different color schemes and typography.
+
+-- utils.code-display: `inherited-colors`: Prefer using `inherited.colors` to give colors
+id: inherited-colors
+
+`inherited.colors` are part of `fastn` design system. If you use custom /
+hardcoded colors then switching color schemes will not affect your component,
+and website maintainers using your component will have a great experience.
+
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- ftd.column:
+	background.solid: white
+	
+	\-- colms:
+	$color-value: #b4ccba
+	
+	\-- ftd.text: Campaign Summary
+	color: #7D8180
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- ftd.column:
+	background.solid: $inherited.colors.background.base
+	
+	\-- colms:
+	$color-value: $inherited.colors.custom.one
+	
+	\-- ftd.text: Campaign Summary
+	color: $inherited.colors.text
+	
+-- end: utils.code-display
+
+
+
+
+-- utils.code-display: `role-inheritance`: Prefer using `inherited.types` to give a role
+id: role-inheritance
+
+Specific values for `typography` requires additional code for responsive
+design.
+
+Meanwhile,`role-inheritance` allows for flexibility in using different
+typography, while maintaining consistency across the design system.
+
+
+
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- ftd.type dtype:
+	size.px: 40
+	weight: 900
+	font-family: cursive
+	line-height.px: 65
+	letter-spacing.px: 5
+	
+	\-- ftd.type mtype:
+	size.px: 20
+	weight: 100
+	font-family: fantasy
+	line-height.px: 35
+	letter-spacing.px: 3
+	
+	\-- ftd.responsive-type rtype:
+	desktop: $dtype
+	mobile: $mtype
+	
+	\-- ftd.text: Hello World
+	role: $rtype
+	
+	
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- ftd.text: Hello World
+	role: $inherited.types.copy-regular
+	
+	
+-- end: utils.code-display
+
+
+
+-- end: ds.page

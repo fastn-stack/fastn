@@ -1,0 +1,37 @@
+-- import: fastn.com/featured as ft-ui
+
+
+-- ds.page:
+sidebar: false
+
+-- ft-ui.view-all: Blue Color Scheme
+templates: $blue-scheme
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+-- ft-ui.template list blue-scheme:
+
+-- ft-ui.template: Blog Template CS
+template-url: /cs/blog-template-cs/
+screenshot: $fastn-assets.files.images.featured.cs.blog-template-cs.png
+
+-- ft-ui.template: Blue Heal CS
+template-url: /cs/blue-heal-cs/
+screenshot: $fastn-assets.files.images.featured.cs.blue-heal-cs.png
+
+-- ft-ui.template: Midnight Rush CS
+template-url: /cs/midnight-rush-cs/
+screenshot: $fastn-assets.files.images.featured.cs.midnight-rush-cs.png
+
+-- ft-ui.template: Winter CS
+template-url: /cs/winter-cs/
+screenshot: $fastn-assets.files.images.featured.cs.winter-cs.png
+
+-- end: blue-scheme

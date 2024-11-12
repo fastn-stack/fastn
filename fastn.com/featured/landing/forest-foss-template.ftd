@@ -1,0 +1,44 @@
+-- import: fastn.com/u/arpita-jaiswal
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Forest FOSS Template
+featured-link: /featured/landing-pages/
+category: Landing Pages
+image: $fastn-assets.files.images.featured.landing.forest-foss-template.png
+owners: [$arpita-jaiswal.info]
+license-url: https://github.com/FifthTry/Forest-FOSS-Template/blob/main/LICENSE
+license: Creative Commons
+published-date: 30-Dec-2021
+cards: $landing
+github-url: https://github.com/FifthTry/Forest-FOSS-Template
+demo-link: https://fifthtry.github.io/Forest-FOSS-Template/
+
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list landing:
+
+-- ft-ui.template: Midnight Storm
+template-url: featured/landing/midnight-storm-landing/
+screenshot: $fastn-assets.files.images.featured.landing.ms-landing-demo.png
+
+-- ft-ui.template: Misty Gray
+template-url: featured/landing/misty-gray-landing/
+screenshot: $fastn-assets.files.images.featured.landing.misty-gray-landing.png
+
+-- ft-ui.template: Midnight Rush
+template-url: featured/landing/mr-landing/
+screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
+
+-- ft-ui.template: Studious Couscous
+template-url: featured/landing/studious-couscous/
+screenshot: $fastn-assets.files.images.featured.landing.studious-couscous.png
+
+-- end: landing

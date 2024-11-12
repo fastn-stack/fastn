@@ -1,0 +1,111 @@
+-- import: fastn.com/planning/creators-series as c
+
+-- ds.page: Rive Video Planning
+
+Video Title: Why And How You Should Use Rive Videos In Your Fastn Site
+
+Owner: Arpita
+
+Audience: Website Creator
+
+Goal: Convince them to use Rive for his next website (and show off that `fastn`
+supports it, it is easy etc)
+
+Assumption: Don't know about Rive
+
+
+-- c.intro:
+
+-- ds.h1: Intro Clip
+
+Screen: Slide 2 on screen
+
+Today we are going to talk about how we can use animations to make your website
+more interesting.
+
+-- ds.h1: Rive Screen
+
+Screen
+
+Rive website in browser. Hover over the main button and the cta button in the
+header.
+
+Script
+
+Consider this website, they have added these animations, wouldn't you
+want something like this for your website?
+
+
+-- ds.h1: Interactive Animation
+
+Screen: https://rive.app/community/405-6776-rating-animation/
+
+Script
+
+Why Rive? Why can't we just use Gifs? The answer is interaction! Rive can be
+used to create interactive animations!
+
+So what is Rive?
+
+-- ds.h1: Rive - The Modern Day Flash
+
+Screen: https://rive.app/runtimes
+
+Rive can be considered modern day Flash. But much better. It is already
+supported by all the browsers out there, no need to install any plugins.
+Further it is open source, so you can do a lot with Rive. And finally Rive
+works on native mobile apps as well, so if you have both a site and native app,
+the same animation works everywhere.
+
+-- ds.h1: Rive Is Animation Editor
+
+Screen: https://rive.app/editor
+
+Script
+
+Rive is design tool, you can use Rive's application to build any kind of
+animation easily. Rive follows a Figma like model so designers who are using
+any modern design tools will be very comfortable in Rive.
+
+-- ds.h1: Rive Community
+
+Screen: https://rive.app/community/
+
+Script
+
+The best thing about Rive is the Rive community, a huge collection of ready made
+component available that you can use today, for free, without even learning to
+use any tool.
+
+As you see many of these animations are creative commons licensed. Or you can
+contact the animator, and ask them to customise the animation for your need.
+
+-- ds.h1: Rive and `fastn`
+
+Screen: https://fastn.com/rive/
+
+Rive can with `fastn` with easy! You add a few lines of code and animation is
+working!
+
+You will have to add the riv file to your fasnt package, and we take care of the
+rest.
+
+-- ds.h1: Interactive Animations
+
+Screen: https://fastn.com/rive/#functions
+
+We can easily make animations respond to events.
+
+-- ds.h1: Tip: Do It In Moderation
+
+Don't over-do it. Show some example of over-doing it.
+
+-- ds.h1: Done
+
+There you go, go ahead and use Rive to make your website awesome. If you have
+built something, or want to see what others are building, checkout our
+"show-and-tell" channel on Discord.
+
+-- c.outro:
+
+-- end: ds.page

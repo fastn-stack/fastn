@@ -1,0 +1,45 @@
+-- import: fastn.com/u/ganesh-salunke
+-- import: fastn.com/u/meenu-kumari
+-- import: fastn.com/u/priyanka-yadav
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Bling Components
+featured-link: /featured/components/
+category: Font Typography
+image: $fastn-assets.files.images.featured.components.bling.jpg
+owners: [$priyanka-yadav.info, $ganesh-salunke.info, $meenu-kumari.info]
+license-url: https://github.com/fastn-community/bling/blob/main/LICENSE
+license: Creative Commons
+published-date: 21-Aug-2023
+cards: $components
+github-url: https://github.com/fastn-community/bling
+demo-link: https://fastn-community.github.io/bling
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list components:
+
+-- ft-ui.template: Gradient Business Card
+template-url: featured/components/business-cards/gradient-card/
+screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-front.jpg
+
+-- ft-ui.template: Modal Cover
+template-url: featured/components/modals/modal-cover/
+screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
+
+-- ft-ui.template: Pattern Business Card
+template-url: featured/components/business-cards/pattern-card/
+screenshot: $fastn-assets.files.images.featured.business-cards.pattern-business-card-front.jpg
+
+-- ft-ui.template: Sunset Business Card
+template-url: featured/components/business-cards/sunset-card/
+screenshot: $fastn-assets.files.images.featured.business-cards.sunset-business-card-front.jpg
+
+-- end: components

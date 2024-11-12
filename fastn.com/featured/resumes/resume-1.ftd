@@ -1,0 +1,36 @@
+-- import: fastn.com/u/priyanka-yadav
+-- import: fastn.com/u/yashveer-mehra
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Resume 1
+featured-link: /featured/resumes/
+category: Featured Resumes
+image: $fastn-assets.files.images.featured.resumes.resume-1.png
+owners: [$priyanka-yadav.info, $yashveer-mehra.info]
+license-url: https://github.com/priyanka9634/resume-1/blob/main/LICENSE
+license: Creative Commons
+published-date: 26-Jul-2022
+cards: $resumes
+github-url: https://github.com/priyanka9634/resume-1
+demo-link: https://priyanka9634.github.io/resume-1/
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list resumes:
+
+-- ft-ui.template: Caffeine
+template-url: featured/resumes/caffiene/
+screenshot: $fastn-assets.files.images.featured.resumes.caffiene.png
+
+-- ft-ui.template: Resume 10
+template-url: featured/resumes/resume-10/
+screenshot: $fastn-assets.files.images.featured.resumes.resume-10.png
+
+-- end: resumes

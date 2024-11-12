@@ -1,0 +1,198 @@
+-- import: fastn.com/assets
+
+-- ds.page: Introduction
+
+Welcome to *The Book Of `fastn` and `ftd`*, an introductory book about `fastn`
+and `ftd`. `fastn` is software stack that helps you create web-applications and
+build websites with ease.
+
+Learning a programming language from scratch, and building full stack web
+applications or websites, deploying them is not an easy task. Programming is
+almost exclusively done by people who are pursuing a career in programming or
+aspiring to. Within tech companies and tech teams you will find most non
+developers can not program at all.
+
+Programming is considered hard, and is hard if you are using current state of
+art technologies. The programming languages are not designed for ease of
+learning. They are not even designed for building UI or web applications. To
+build a full stack application, that is easy to maintain, is months or years of
+learning.
+
+`fastn` and `ftd` aim to make it easy. They are designed so a person with zero
+prior programming experience can create and deploy their first website or
+web-application within a few hours of learning, and yet remain maintainable for
+a large web project.
+
+`fastn` and `ftd` for the next billion programmers. We believe ability to
+program, to build an application that helps you improve your life, should not be
+limited to software professionals, and software companies, but for people at
+large.
+
+Consider spreadsheet applications, they are used by the masses. The formula
+language in spreadsheet applications are easy to learn, you improve your life
+by learning just how to sum things.
+
+-- ds.image:
+src: $assets.files.images.spreadsheet.png
+
+In just a min, you can learn this, and your life is improved. Once you learn
+the formula language, you can keep learning incrementally to keep improving
+your life.
+
+`fastn` and `ftd` let's you do the same, learn a very little, and start getting
+small benefits, and learn more to get larger benefits. Compare that with the
+experience with Python, one of the fastest growing languages, which is considered
+easy today. The hello world program in Python is easy but unfortunately does not
+let you benefit your life must. Or rather, you can benefit a little bit, but as
+soon as you want to move to a little bit more, say want to show a UI, you have
+to suddenly learn a lot more. The learning from `print("hello world")` to
+`import django` and "just use React or jQuery" is not an easy journey and most
+people fail to cross it unless they have decided to devote serious efforts in
+programming.
+
+-- ds.h1: Who `fastn` and `ftd` are for?
+
+`fastn` and `ftd` are ideal for many people for a variety of reasons. Let's look
+at few of the most important groups.
+
+-- ds.h2: 🚧 `fastn` And `ftd` Are Under Active Development! 🚧
+
+Before you proceed please keep in mind that both the technology, and this book
+are in active development. Some teams are using `fastn`, `ftd` in production,
+but it is not ready for prime time.
+
+We recommend you use `fastn` and this book for learning purpose only, and wait
+for a more stable release from us before using it in production. If you want to
+still brave through, which we hope some of you do, please read this book and use
+our `fastn` and let us know your feedback.
+
+Check out how to get involved in [our community](/community/).
+
+-- ds.h2: Marketing Teams Without Developers
+
+Marketing teams need to put out web pages for specific marketing campaign, and
+landing pages for different use cases. Marketing teams can adopt `fastn` and
+use ready made UI component libraries available in `fastn` to quickly create
+pages without added developers to the loop.
+
+-- ds.h2: Developers
+
+Backend developers can use `fastn` and `ftd` to build user interfaces for their
+dashboards, APIs etc. They can use `fastn` for their blogs, resume, knowledge
+bases etc.
+
+-- ds.h2: Designers
+
+Designers can use `fastn` color system described in TODOth chapter, and import
+`fastn` color scheme and font pairing packages to quickly change the look and
+feel of their designs.
+
+Designers can also publish their own color and font packages to help the
+community.
+
+Designers also need to prototype their designs, and use prototyping tools.
+Instead if they convert their designs to `ftd`, they get browser ready UI they
+they can deploy on static hosting providers. For a lot of purposes these `ftd`
+prototypes can go in production as is. Prototypes done by `ftd` also are a lot
+more powerful, one can easily make API calls, add animations, add functional
+components written by the community.
+
+-- ds.h2: Data Analytics Teams
+
+Data analytics professions often rely on Notebook applications to share their
+data visualisations and data stories. `fastn` is a good alternative to build
+their stories into more flexible designs, use from open source component
+libraries, color schemes and typography work done by designers.
+
+The Notebook applications output is not full blown functional websites, but
+with a little bit of effort the data teams can create web apps with
+authentication, access control, dark mode support, clean URLs, etc.
+
+-- ds.h2: Startups
+
+Startups, like marketing teams have to create a landing page, pricing page,
+knowledge base pages, documentation pages and so on. Startups can easily adopt
+and customise ready made designs made available by increasing community of
+`ftd` developers and designers.
+
+Startups can chose to use `fastn` and `ftd` for their main product user
+interface as well.
+
+-- ds.h2: Open Source Developers
+
+Most open source project needs a website, documentation pages, blog etc.
+`fastn` and `ftd` can be used to build such user interfaces as `fastn`, `ftd`
+are easier to learn, are content focused.
+
+-- ds.h2: Non Software Professionals Up-skilling
+
+A lot of people can benefit by learning how to make quick web pages and mini
+web apps. If you do data munging in Excel, you can easily convert them to `fastn`,
+use our increasing component libraries to quickly create web pages and apps
+based on that Excel data.
+
+Programming allows one to express ideas that are hard to do in drag and drop
+softwares. Open source means one can do that at home without having to buy
+expensive software if they are out of job.
+
+-- ds.h2: Students
+
+Students should lean rudimentary programming to be able to setup web pages and
+basic web apps for themselves, their projects, their schools, friends, families,
+communities and so on.
+
+Getting started with and making full stack websites and web apps is really easy
+with `fastn` and `ftd`, a good alternative for students.
+
+-- ds.h1: Who This Book Is For?
+
+This book assumes you have very little to no programming experience. The book
+assumes you are comfortable with computers in general, downloading things from
+internet, installing software, editing files etc.
+
+One of the inspiration for this book is my niece, as 12 year old, she wants to
+learn what I do. To follow along with this book you will need access to a
+Windows, Mac or a Linux machine. You can either use a Desktop or a Laptop.
+
+-- ds.h1: How To Use This Book
+
+One advice that I got early in my life and has stuck with me is to not learn
+things alone. Find a friend, maybe your better half, maybe a kid or parent, and
+learn together, having someone you can discuss things with, who is at your level
+and figuring things out together has really helped me, and may be it will you
+too. If you do not know of someone in real life, maybe find someone on [our
+Discord channel: #book-club](https://discord.gg/5CDm3jPhAR) where others are
+learning `fastn` and `ftd` and following along this very book.
+
+In general, this book assumes that you’re reading it in sequence from front to
+back. Later chapters build on concepts in earlier chapters, and earlier chapters
+might not delve into details on a particular topic but will revisit the topic
+in a later chapter.
+
+You’ll find two kinds of chapters in this book: concept chapters and project
+chapters. In concept chapters, you’ll learn about an aspect of `fastn`, `ftd`
+and even programming in general. In project chapters, we’ll build small programs
+together, applying what you’ve learned so far.
+
+Chapter 1 explains how to install `fastn`, how to write a "hello world" program,
+how to publish it on the web. Chapter 2 is a hands-on introduction to writing
+a program in `fastn`, having you build a UI that responds to some events. Here
+we cover concepts at a high level, and later chapters will provide additional
+detail. If you want to get your hands dirty right away, Chapter 2 is the place
+for that. Chapter 3 covers data modelling in `ftd`, how to think in data and
+how to model them properly. Chapter 4 covers how to build user interfaces.
+
+Chapter 5 takes teaches you about how to think about website and web app
+designs. It introduces our style system, and takes you through various
+customisations you want to do. It also tells you how to use existing design
+resources to kick start your project.
+
+Chapter 6 teaches you how to integrate with HTTP APIs. How you can load during
+page load, or based on user events. It takes you through form handling, error
+handling etc use cases.
+
+There is no wrong way to read this book: if you want to skip ahead, go for it!
+You might have to jump back to earlier chapters if you experience any
+confusion. But do whatever works for you.
+
+-- end: ds.page

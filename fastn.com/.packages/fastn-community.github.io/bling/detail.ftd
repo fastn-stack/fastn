@@ -1,0 +1,100 @@
+
+-- component detail:
+caption title:
+optional string info-right:
+boolean $is-open: false
+optional body body:
+optional ftd.image-src image:
+integer width: 20
+boolean $show-image: false
+children container:
+
+-- ftd.column:
+spacing.fixed.px: 8
+max-width.fixed.px: 800
+padding.px: 12
+width: fill-container
+width if { $detail.info-right != NULL }: fill-container
+margin-bottom.px: 20
+color: $inherited.colors.text
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 8
+
+-- ftd.row:
+width: fill-container
+align-self: start
+
+-- ftd.image:
+if: { detail.image != NULL }
+src: $detail.image 
+width.fixed.px: $detail.width
+height: auto
+margin-right.px: 12
+
+-- ftd.column:
+if: { detail.image == NULL }
+$on-click$: $ftd.toggle($a = $detail.is-open)
+
+-- ftd.text: &#x25B6;
+if: { !detail.is-open }
+padding-top.px: 2
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+width.fixed.px: 20
+
+-- ftd.text: &#x25BC;
+if: { detail.is-open }
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+width.fixed.px: 20
+
+-- end: ftd.column
+
+-- ftd.text: $detail.title
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+
+-- end: ftd.row
+
+-- ftd.row:
+width: hug-content
+align-self: end
+
+-- ftd.text: $detail.info-right
+if: { $detail.info-right != NULL }
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+white-space: nowrap
+align-self: end
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- ftd.column:
+width: fill-container
+if: { $detail.is-open }
+border-width.px: 1
+border-color: $inherited.colors.border
+background.solid: $inherited.colors.background.step-1
+padding.px: 12
+border-radius.px: 4
+
+-- ftd.text: $detail.body
+if: { $detail.body != NULL }
+role: $inherited.types.label-large
+color: $inherited.colors.text
+
+-- ftd.column:
+children: $detail.container
+width: fill-container
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: detail

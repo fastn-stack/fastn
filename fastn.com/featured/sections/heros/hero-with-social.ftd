@@ -1,0 +1,23 @@
+-- import: fastn.com/featured as ft-ui
+
+-- ds.page:
+sidebar: false
+
+-- ft-ui.view-all: Hero with social icons
+templates: $hero-with-social
+
+-- end: ds.page
+
+
+
+
+
+
+
+-- ft-ui.template list hero-with-social:
+
+-- ft-ui.template: Hero with social - Design 1
+template-url: /hero-with-social/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-6.png
+
+-- end: hero-with-social

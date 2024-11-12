@@ -1,0 +1,285 @@
+-- import: fastn-community.github.io/poppins-font/assets as poppins-font-assets
+-- import: fifthtry.github.io/package-doc/doc as pd
+-- import: fifthtry.github.io/package-doc/forest-theme as ds
+-- import: fifthtry.github.io/package-doc/footer
+
+;; ⚠️fastn-builders::⚠️ before using this file please find and replace Poppins
+;; with font name you have given inside 
+;; `fastn-community.github.io/poppins-font/FASTN.ftd file
+
+
+
+
+
+
+-- ds.page: 
+show-footer: true
+site-name: `poppins-font`
+
+-- ds.page.footer:
+
+-- footer.fastn-footer:
+
+-- end: ds.page.footer
+
+-- pd.package: FTD poppins-font package
+name: fastn-community.github.io/poppins-font
+
+This FTD font `poppins-font` package is for your ftd web projects. To Use this
+poppins-font inside `FTD` project follow below instructions.
+
+-- ds.h3: How to use poppins-font?
+
+-- ds.code: Add this to your FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/poppins-font
+
+-- ds.markdown: 
+
+After adding poppins-font dependency inside your `FASTN.ftd` file, You need to
+add poppins-font assets and import it inside your `.ftd` files where you are
+using this font for your custom font types. 
+
+To include poppins-font into your `ftd` file follow below instructions.
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn-community.github.io/poppins-font/assets as poppins-font-assets
+
+
+-- ds.h3: How to create a custom poppins-font type? 
+
+-- ds.markdown: 
+
+We don't recommend creating custom types. We recommend to use 
+our [poppins-font-typography](https://fastn-community.github.io/poppins-font-typography)
+
+If you're using [poppins-font-typography](https://fastn-community.github.io/poppins-font-typography) 
+and still your designer has introduced new font size which are not included or 
+part of our [poppins-font-typography](https://fastn-community.github.io/poppins-font-typography) 
+then only define custom types. 
+
+We hope you shouldn't need to define a custom type.
+
+Below is an example of creating a custom `ftd.type` using poppins-font.
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- ftd.type poppins-font-size-12-desktop:
+size.px: 12
+weight: 400
+font-family: $poppins-font-assets.fonts.Poppins
+
+
+\-- ftd.type poppins-font-size-12-mobile:
+size.px: 12
+weight: 400
+font-family: $poppins-font-assets.fonts.Poppins
+
+\-- ftd.responsive-type poppins-font-size-12-400:
+desktop: $poppins-font-size-12-desktop
+mobile: $poppins-font-size-12-mobile
+
+\-- ftd.text: 
+role: $poppins-font-size-12-400
+color: $inherited.colors.text-strong
+
+`font-size: 12px, font-weight: 400` 
+
+👉 The quick brown fox jumps over the lazy dog 
+
+-- ds.rendered.output:
+
+-- ftd.text: 
+role: $poppins-font-size-12-400
+color: $inherited.colors.text-strong
+
+`font-size: 12px, font-weight: 400` 
+
+👉 The quick brown fox jumps over the lazy dog 
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+-- ftd.type poppins-font-size-12-desktop:
+size.px: 12
+weight: 400
+font-family: $poppins-font-assets.fonts.Poppins
+
+
+-- ftd.type poppins-font-size-12-mobile:
+size.px: 12
+weight: 400
+font-family: $poppins-font-assets.fonts.Poppins
+
+-- ftd.responsive-type poppins-font-size-12-400:
+desktop: $poppins-font-size-12-desktop
+mobile: $poppins-font-size-12-mobile
+
+
+
+
+
+-- ftd.type poppins-font-size-12-500-desktop:
+size.px: 12
+weight: 500
+font-family: $poppins-font-assets.fonts.Poppins
+
+
+-- ftd.type poppins-font-size-12-500-mobile:
+size.px: 12
+weight: 500
+font-family: $poppins-font-assets.fonts.Poppins
+
+-- ftd.responsive-type poppins-font-size-12-500:
+desktop: $poppins-font-size-12-500-desktop
+mobile: $poppins-font-size-12-500-mobile
+
+
+
+
+
+-- ftd.type poppins-font-size-12-800-desktop:
+size.px: 12
+weight: 800
+font-family: $poppins-font-assets.fonts.Poppins
+
+
+-- ftd.type poppins-font-size-12-800-mobile:
+size.px: 12
+weight: 800
+font-family: $poppins-font-assets.fonts.Poppins
+
+-- ftd.responsive-type poppins-font-size-12-800:
+desktop: $poppins-font-size-12-800-desktop
+mobile: $poppins-font-size-12-800-mobile
+
+
+
+
+
+-- ftd.type poppins-font-size-18-desktop:
+size.px: 18
+weight: 400
+font-family: $poppins-font-assets.fonts.Poppins
+
+
+-- ftd.type poppins-font-size-18-mobile:
+size.px: 18
+weight: 400
+font-family: $poppins-font-assets.fonts.Poppins
+
+-- ftd.responsive-type poppins-font-size-18-400:
+desktop: $poppins-font-size-18-desktop
+mobile: $poppins-font-size-18-mobile
+
+
+
+
+
+-- ftd.type poppins-font-size-18-500-desktop:
+size.px: 18
+weight: 500
+font-family: $poppins-font-assets.fonts.Poppins
+
+
+-- ftd.type poppins-font-size-18-500-mobile:
+size.px: 18
+weight: 500
+font-family: $poppins-font-assets.fonts.Poppins
+
+-- ftd.responsive-type poppins-font-size-18-500:
+desktop: $poppins-font-size-18-500-desktop
+mobile: $poppins-font-size-18-500-mobile
+
+
+
+
+
+-- ftd.type poppins-font-size-18-800-desktop:
+size.px: 18
+weight: 800
+font-family: $poppins-font-assets.fonts.Poppins
+
+
+-- ftd.type poppins-font-size-18-800-mobile:
+size.px: 18
+weight: 800
+font-family: $poppins-font-assets.fonts.Poppins
+
+-- ftd.responsive-type poppins-font-size-18-800:
+desktop: $poppins-font-size-18-800-desktop
+mobile: $poppins-font-size-18-800-mobile
+
+
+
+
+
+-- ftd.type poppins-font-size-48-desktop:
+size.px: 48
+weight: 400
+font-family: $poppins-font-assets.fonts.Poppins
+
+
+-- ftd.type poppins-font-size-48-mobile:
+size.px: 48
+weight: 400
+font-family: $poppins-font-assets.fonts.Poppins
+
+-- ftd.responsive-type poppins-font-size-48-400:
+desktop: $poppins-font-size-48-desktop
+mobile: $poppins-font-size-48-mobile
+
+
+
+
+
+-- ftd.type poppins-font-size-48-500-desktop:
+size.px: 48
+weight: 500
+font-family: $poppins-font-assets.fonts.Poppins
+
+
+-- ftd.type poppins-font-size-48-500-mobile:
+size.px: 48
+weight: 500
+font-family: $poppins-font-assets.fonts.Poppins
+
+-- ftd.responsive-type poppins-font-size-48-500:
+desktop: $poppins-font-size-48-500-desktop
+mobile: $poppins-font-size-48-500-mobile
+
+
+
+
+
+-- ftd.type poppins-font-size-48-800-desktop:
+size.px: 48
+weight: 800
+font-family: $poppins-font-assets.fonts.Poppins
+
+
+-- ftd.type poppins-font-size-48-800-mobile:
+size.px: 48
+weight: 800
+font-family: $poppins-font-assets.fonts.Poppins
+
+-- ftd.responsive-type poppins-font-size-48-800:
+desktop: $poppins-font-size-48-800-desktop
+mobile: $poppins-font-size-48-800-mobile

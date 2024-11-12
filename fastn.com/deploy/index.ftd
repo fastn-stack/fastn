@@ -1,0 +1,67 @@
+-- ds.page: Static Vs Dynamic
+
+`fastn` can be deployed in two main modes, static and dynamic.
+
+-- ds.h1: Static Mode
+
+To use static mode you run `fastn build` command, and this command creates a
+folder named `.build` in the `fastn` package root folder (which is the folder
+that contains `FASTN.ftd` file). This folder contains HTML, CSS, JS, and image
+files. This folder can be deployed on any static web server.
+
+Static mode is a great idea for a lot of content heavy, and infrequently
+changing sites.
+
+-- ds.h2: Static Hosting Is Cheaper
+
+A lot of static hosting providers provide free hosting for static content.
+Static host means no dynamic computation, and so it is quite cheap to host.
+
+You can checkout our guide on [Github Pages](/github-pages/) and
+[Vercel](/vercel/), two of the popular options available to you. Both offer free
+plans.
+
+-- ds.h2: Static Hosting Is Harder To Hack
+
+If you are using static hosting, lesser software is running on the server, and
+therefore it is harder to hack. Wordpress is a common alternative to build
+content heavy websites, and Wordpress is often hacked by bad players.
+
+-- ds.h2: Static Sites Are Faster
+
+Since static sites are rendered HTML, so the server can directly serve the HTML
+files, making it much faster to serve.
+
+-- ds.h1: Dynamic Mode
+
+Static mode is great, but sometimes you want dynamic features. Maybe you want
+to have authentication on your site. Or maybe you want to collect information
+from the visitors or show them up to date information.
+
+To deploy your `fastn` website in dynamic mode you have to deploy the `fastn`
+binary itself. `fastn` can run on Linux, Windows and Mac so you have a lot of
+choices for where to deploy it.
+
+-- ds.h1: Next
+
+- **Get Started with fastn**:
+  We provide a [step-by-step guide](https://fastn.com/quick-build/) to help you
+  build your first fastn-powered website. You can also
+  [install fastn](/install/) and learn to [build UI Components](/expander/)
+  using fastn.
+
+- **Web Designing**:
+  Check out our [design features](/design/) to see how we can enhance your web
+  design.
+
+
+- **Docs**:
+  Our [docs](/ftd/data-modelling/) is the go-to resource for mastering fastn.
+  It provides valuable resources from in-depth explanations to best practices.
+
+
+- **Frontend**:
+  fastn is a versatile and user-friendly solution for all your
+  [frontend development](/frontend/) needs.
+
+-- end: ds.page

@@ -1,0 +1,106 @@
+-- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn-community.github.io/spectrum-ds/common
+-- import: fastn.com/content-library as footer
+-- import: fastn-community.github.io/dark-flame-cs
+-- import: fifthtry.github.io/fastn-typography as typo
+-- import: fastn.com/featured as ft-ui
+-- import: fastn.com/assets
+
+
+
+
+
+
+-- ds.page:
+show-footer: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-name: NULL
+logo-height: 38
+logo-width: 120
+colors: $dark-flame-cs.main
+types: $typo.types
+github-icon: true
+github-url: https://github.com/fastn-stack/fastn
+full-width: true
+distribution-bar: true
+full-width-bar: true
+fluid-width: false
+max-width.fixed.px: 1340
+show-layout-bar: true
+
+-- ds.page.footer:
+
+	-- footer.footer:
+	site-logo: $fastn-assets.files.images.fastn.svg
+	site-url: /
+	social-links: $footer.social-links
+	copyright: Copyright © 2023 - fastn.com
+	full-width: false
+	max-width.fixed.px: 1340
+	
+-- end: ds.page.footer
+
+-- ds.page.abstract-bar:
+
+	-- ds.distributors: Workshop 1
+	owners: $owner-fastn
+	license-url: https://github.com/FifthTry/workshop-page/blob/main/LICENSE
+	license: Creative Commons
+	published-date: 12-Jan-2023
+	
+-- end: ds.page.abstract-bar
+
+-- ds.page.full-width-wrap:
+
+	-- ft-ui.grid-view: Featured Workshop Themes
+	templates: $websites
+	more-link-text: View more
+	more-link: /featured/workshops/
+	show-large: true
+	
+-- end: ds.page.full-width-wrap
+
+-- ds.preview-card:
+image: $fastn-assets.files.images.featured.workshops.workshop-1.png
+cta-url: https://fifthtry.github.io/workshop-page/
+cta-text: Demo
+github-url: https://github.com/FifthTry/workshop-page/
+cta-2-url: https://fifthtry.github.io/workshop-page/ws-chapter/
+cta-2-text: User Manual
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list websites:
+
+-- ft-ui.template: Event 1
+template-url: featured/workshops/event-1/
+screenshot: $fastn-assets.files.images.featured.workshops.event-1.png
+
+-- end: websites
+
+
+
+
+
+-- common.owner list owner-fastn:
+
+-- common.owner: Ganesh Salunke
+profile: featured/contributors/developers/ganesh-salunke/
+avatar: $fastn-assets.files.images.u.ganeshs.jpg
+role: Developer
+
+-- common.owner: Priyanka Yadav
+profile: featured/contributors/developers/priyanka-yadav/
+avatar: $fastn-assets.files.images.u.priyanka.jpg
+role: Developer
+
+-- end: owner-fastn

@@ -1,0 +1,592 @@
+-- import: fastn-community.github.io/bling/quote
+-- import: fastn.com/ftd as ftd-index
+-- import: fastn-community.github.io/bling/chat
+-- import: fastn-community.github.io/bling/assets
+
+-- ds.page: Building Frontend With `fastn`
+
+fastn is a versatile and user-friendly solution for all your frontend
+development requirements. Whether you're a seasoned developer or just
+starting, here's why you should consider fastn:
+
+-- ds.h1: Easy Content Authoring
+
+With fastn, you can express your ideas and bring them to a compilation with ease.
+Its user-friendly interface and minimal syntax allow even those with no prior
+programming experience to grasp its functionalities swiftly.
+
+Take a look at this simple example:
+
+-- ds.rendered:
+
+	-- ds.rendered.input:
+	
+	\-- ftd.text: Hello World!
+	
+	-- ds.rendered.output:
+	
+		-- ds.markdown:
+		
+		Hello World!
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.markdown:
+
+fastn is a DSL (Domain Specific Language) for authoring long for text, and have
+access to rich collection of [ready-made components](/featured/).
+
+Here is an example:
+
+-- ds.rendered:
+
+	-- ds.rendered.input:
+	
+	\-- amitu: Hello World! 😀
+	
+	\-- amitu:
+	
+	Writing single or multiline text is easy in fastn!
+	
+	No quotes required.
+	
+	
+	-- ds.rendered.output:
+	
+		-- amitu: Hello World! 😀
+		
+		-- amitu:
+		
+		Writing single or multiline text is easy in fastn!
+		
+		No quotes required.
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+-- ds.markdown:
+
+These are not built-in components of fastn, but are using
+[open source component libraries](/featured/) built with fastn. Click here to
+view the
+[chat component](https://fastn-community.github.io/bling/chat/).
+
+Example of a little more complex component:
+
+-- ds.rendered:
+
+	-- ds.rendered.input:
+	
+	\-- import: fastn-community.github.io/bling/quote
+	
+	\-- quote.rustic: Nandhini, Content Writer
+	
+	With fastn, I have complete control from my writing desk to the live webpage.
+	
+	-- ds.rendered.output:
+	
+		-- quote.rustic: Nandhini, Content Writer
+		
+		With fastn, I have complete control from my writing desk to the live webpage.
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.markdown:
+
+Click here to view the [quote component](https://fastn-community.github.io/bling/quote/).
+
+Check out our rich library of readymade components including
+[doc sites](https://fastn.com/featured/ds/doc-site/),
+[landing pages](https://fastn.com/featured/landing/midnight-storm-landing/),
+[blog pages](https://fastn.com/featured/blogs/mr-blog/),
+[resumes](https://fastn.com/featured/resumes/caffiene/), and more.
+
+-- ds.h2: Unified Language
+
+The language used to author content and build components in fastn is the same.
+This means you can start by using [readymade components](https://fastn.com/featured/)
+and gradually transition to [creating your own](/expander/), making the learning
+process smoother. fastn comes with basic building blocks like text, images and
+containers using which other UI can be constructed.
+
+
+
+-- ds.h2: Markdown Support
+
+fastn excels in content authoring, making it an ideal choice for content-driven
+websites. Unlike other frameworks like [React](/react/), which might require using
+separate languages like MDX for content, fastn allows you to use a
+simplified markdown-like language, making content creation straightforward.
+
+Take the below example for instance:
+
+-- ds.rendered:
+
+	-- ds.rendered.input:
+	
+	\-- import: fastn-community.github.io/doc-site as ds
+	\-- ds.markdown:
+	
+	Lorem `ipsum dolor` sit amet, consectetur adipiscing elit, sed do eiusmod
+	tempor incididunt
+	
+	**Bold Text** dolor sit amet, *Italic text* elit, sed do eiusmod tempor
+	incididunt.
+	
+	Lorem ipsum [fastn](https://fastn.com/) amet, consectetur adipiscing
+	elit, sed do eiusmod tempor incididunt.
+	
+	Bullet list:
+	
+	- List item 1
+	- List item 2
+	- List item 3
+	  - Sub List item 1
+	  - Sub List item 2
+	  - Sub List item 3
+	
+	Ordered list:
+	
+	1. List item
+	2. List item
+	3. List item
+	   1. Sub List Item
+	   2. Sub List Item
+	   3. Sub List Item
+	
+	~The world is flat.~
+	
+	-- ds.rendered.output:
+	
+		-- ds.markdown:
+		
+		Lorem `ipsum dolor` sit amet, consectetur adipiscing elit, sed do eiusmod
+		tempor incididunt
+		
+		**Bold Text** dolor sit amet, *Italic text* elit, sed do eiusmod tempor
+		incididunt.
+		
+		Lorem ipsum [fastn](https://fastn.com/) amet, consectetur adipiscing
+		elit, sed do eiusmod tempor incididunt.
+		
+		Bullet list:
+		
+		- List item 1
+		- List item 2
+		- List item 3
+		  - Sub List item 1
+		  - Sub List item 2
+		  - Sub List item 3
+		
+		Ordered list:
+		
+		1. List item
+		2. List item
+		3. List item
+		   1. Sub List Item
+		   2. Sub List Item
+		   3. Sub List Item
+		
+		~The world is flat.~
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.h2: Semantic Content
+
+With fastn, your content becomes more semantic. Instead of just
+headings and paragraphs, you work with named components that have rich types.
+This ensures better structure and maintainability of your content.
+
+For example, if you want to talk about your team, in markdown you will say:
+
+-- ds.code:
+lang: md
+
+# Team
+
+## Jack Smith
+
+Jack is our lead designer. He joined us on 20th Feb 2022. He loves to cook and
+swim, and is often found walking his husky.
+
+![Jack Smith's Mugshot](/images/team/jack.jpg)
+
+-- ds.markdown:
+
+Whereas in fastn you say:
+
+-- ds.code:
+lang: ftd
+
+\-- lib.team:
+
+\-- lib.member: Jack Smith
+joined-on: 20th Feb 2022
+title: Lead Designer
+mugshot: $assets.files.team.jack.jpg
+
+Jack loves to cook and swim, and is often found walking his husky.
+
+\-- end: lib.team
+
+-- ds.markdown:
+
+The information content is captured in fields. The fields have types, so there
+is no invalid data. There is a separation of markup from content, as in this
+case of markdown the image will always come after the paragraph, but in the
+case of fastn, the image can be placed anywhere, decided by the `lib.member`
+component.
+
+-- ds.h2: Integrated Design System
+
+fastn comes with integrated design system. Instead of specifying font sizes
+or colors, you specify typography and color roles to UI elements. The roles
+are well defined, so within the fastn ecosystem they are well known, and a
+lot of [color scheme](https://fastn.com/featured/cs/) and
+[typography](https://fastn.com/featured/fonts/) packages available,
+which you can install and change the entire typography or color scheme
+in a few lines of code.
+
+Learn more about [fastn design system](/design-system/).
+
+-- ds.h1:  More Powerful than Markdown, Simpler than HTML
+
+With just a few lines of code, you can create a visually appealing and
+impactful document. It is a language that is easy to read and understand.
+It is not verbose like HTML, and not simplistic like Markdown.
+
+fastn can be compared with Markdown, but with fastn, you can define variables,
+perform event handling, abstract out logic into custom components etc.
+
+-- ds.h2: Declare Variables
+
+In fastn, you can create variables with specific types. fastn is a
+strongly-typed language, so the type of each [variable](/variables/) must be
+declared.
+
+Here's an example of how you can define a boolean type variable:
+
+-- ds.code: Defining Variable
+lang: ftd
+
+\-- boolean flag: true
+
+-- ds.markdown:
+
+In this code, we're creating a variable named `flag` of `boolean` type. The
+variable is defined as immutable, meaning its value cannot be altered. If you
+want to define a mutable variable, simply add a `$` symbol before the variable
+name.
+
+Consider this example which has a mutable variable declaration `flag`.
+
+-- ds.code: Defining Variable
+lang: ftd
+
+\-- boolean $flag: true
+
+
+
+-- ds.h2: Perform Event handling
+
+fastn makes it easy to add events to your element.
+
+fastn includes many default functions that are commonly used, like the
+`toggle` function which can be used to create simple event handling.
+
+You can also create your [own function](https://fastn.com/functions/) or
+use [built-in function](https://fastn.com/built-in-functions/).
+
+Here's an example of a built-in function:
+
+-- ds.rendered:
+
+	-- ds.rendered.input:
+	
+	\-- boolean $show: true
+	
+	\-- ftd.text: Enter mouse cursor over me
+	$on-mouse-enter$: $ftd.set-bool($a = $show, v = true)
+	$on-mouse-leave$: $ftd.set-bool($a = $show, v = false)
+	
+	\-- ftd.text: Hide and Seek
+	if: { show }
+	
+	-- ds.rendered.output:
+	
+		-- on-mouse-leave-event:
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+-- ds.h2: Create Custom Components
+
+In fastn, you can create custom components to abstract out logic and improve
+code organization. For example:
+
+-- ds.code: `ftd.text` kernel component
+lang: ftd
+
+\-- toggle-text: fastn is cool!
+
+
+\-- component toggle-text:
+boolean $current: false
+caption title:
+
+\-- ftd.text: $toggle-text.title
+align-self: center
+color if { toggle-text.current }: $inherited.colors.cta-primary.disabled
+color: $inherited.colors.cta-primary.text
+role: $inherited.types.heading-tiny
+background.solid: $inherited.colors.cta-primary.base
+padding.px: 20
+border-radius.px: 5
+$on-click$: $ftd.toggle($a = $toggle-text.current)
+
+\-- end: toggle-text
+
+
+
+-- ds.output:
+
+	-- ftd-index.toggle-text: fastn is cool!
+	
+-- end: ds.output
+
+-- ds.markdown:
+
+Here we have created a new component called `toggle-text`, and then instantiated
+it instead. This way you can create custom component library and use them in your
+writing without "polluting" the prose with noise.
+
+
+-- ds.h2: Import
+
+fastn allows you to separate component and variable definitions into different
+modules, and then use them in any module by using the `import` keyword. This
+helps to logically organize your code and avoid complexity, leading to cleaner
+and easier to understand code.
+
+Consider the below example:
+
+-- ds.code: `fastn` Hello World!
+lang: ftd
+
+\-- import: lib
+
+\-- lib.h1: Hello World
+
+-- ds.markdown:
+
+The code above shows a fastn document that imports a library named "`lib`" and
+has a level 1 heading of "Hello World".
+
+-- ds.h2: Data Driven
+
+The data in the fastn files can be trivially extracted, converted to JSON,
+whereas in case of markdown you have to write fragile parser to extract the
+data locked in markdown text blobs.
+
+-- ds.code: Rust Code To Extract Data
+lang: rs
+
+#[derive(serde::Deserialize)]
+struct Member {
+    name: String,
+    #[rename("joined-on")]
+    joined_on: String,
+    title: Option<String>,
+    mugshot: Option<String>,
+    bio: String,
+}
+
+let doc = fastn::Document::from("some/id", source)?;
+let members: Vec<Member> = doc.invocations("lib.member")?;
+
+-- ds.markdown:
+
+Soon we will support json conversion on fastn CLI as well, `fastn json-dump
+team.ftd --invocations=lib.member` will return:
+
+-- ds.code: json returned by `fastn json-dump`
+lang: json
+
+[
+    {
+        "name": "Jack Smith",
+        "joined-on": "20th Feb 2022",
+        "title": "Lead Designer",
+        "mugshot": "/team/jack.jpg",
+        "bio": "Jack loves to cook and swim, and is often found walking his husky."
+    }
+]
+
+
+-- ds.h2: Data Modelling
+
+fastn language is also a good first class data language. You can define and use
+records:
+
+-- ds.code: Data Modelling in `fastn`
+lang: ftd
+
+\-- record person:
+caption name:
+string location:
+optional body bio:
+
+-- ds.markdown:
+
+Each field has a type. `caption` is an alias for `string`, and tells fastn
+that the value can come in the "caption" position, after the `:` of
+the "section line", eg: lines that start with `--`. If a field is optional, it
+must be marked as such.
+
+-- ds.code: Creating a variable
+lang: ftd
+
+\-- person amitu: Amit Upadhyay
+location: Bangalore, India
+
+Amit is the founder and CEO of FifthTry.
+
+He loves to code, and is pursuing his childhood goal of
+becoming a professional starer of the trees.
+
+-- ds.markdown:
+
+Here we have defined a variable `amitu`. You can also define a list:
+
+-- ds.code: Creating a list
+lang: ftd
+
+\-- person list employees:
+
+\-- person: Sourabh Garg
+location: Ranchi, India
+
+\-- person: Arpita Jaiswal
+location: Lucknow, India
+
+Arpita is the primary author of `fastn` language.
+
+\-- end: employees
+
+-- ds.markdown:
+
+fastn provides a way to create a component that can render records and loop
+through lists to display all members of the list:
+
+-- ds.code: Looping over a list
+lang: ftd
+
+\-- render-person:
+person: $p
+$loop$: $employees as $p
+
+-- ds.markdown:
+
+This way we can have clean separation of data from presentation. The data
+defined in fastn documents can be easily read from say Rust:
+
+-- ds.code: Reading Data from `.ftd` files
+lang: rs
+
+#[derive(serde::Deserialize)]
+struct Employee {
+    name: String,
+    location: String,
+    bio: Option<String>
+}
+
+let doc = ftd::p2::Document::from("some/id", source, lib)?;
+let amitu: Employee = doc.get("amitu")?;
+let employees: Vec<Employee> = doc.get("employees")?;
+
+
+
+-- ds.markdown:
+
+As mentioned earlier, fastn language is a first-class data language that
+provides a better alternative to sharing data through CSV or JSON files.
+Unlike CSV/JSON, in fastn, data is type-checked, and it offers a proper
+presentation of the data with the option to define components that can render
+the data and can be viewed in a browser. Furthermore, fastn language can
+also serve as a language for configuration purposes.
+
+-- ds.h1: Next
+
+- **Get Started with fastn**:
+  We provide a [step-by-step guide](https://fastn.com/quick-build/) to help you
+  build your first fastn-powered website. You can also
+  [install fastn](/install/) and learn to [build UI Components](/expander/)
+  using fastn.
+
+
+- **Docs**:
+  Our [docs](/ftd/data-modelling/) is the go-to resource for mastering fastn.
+  It provides valuable resources from in-depth explanations to best practices.
+
+
+- **Backend**:
+  fastn also supports a bunch of [backend features](/backend/) that helps you
+  create dynamic websites.
+
+
+- **Web Designing**:
+  Check out our [design features](/design/) to see how we can enhance your web
+  design.
+
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component on-mouse-leave-event:
+boolean $show: false
+
+-- ftd.column:
+color: $inherited.colors.text
+
+	-- ftd.text: Enter mouse cursor over me
+	$on-mouse-enter$: $ftd.set-bool($a = $on-mouse-leave-event.show, v = true)
+	$on-mouse-leave$: $ftd.set-bool($a = $on-mouse-leave-event.show, v = false)
+	
+	-- ftd.text: Hide and Seek
+	if: { on-mouse-leave-event.show }
+	
+-- end: ftd.column
+
+-- end: on-mouse-leave-event
+
+
+
+-- component amitu:
+caption or body message:
+
+-- chat.message-left: $amitu.message
+
+-- end: chat.message-left
+
+-- end: amitu

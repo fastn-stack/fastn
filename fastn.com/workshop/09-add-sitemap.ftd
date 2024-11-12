@@ -1,0 +1,10 @@
+-- ds.page: Add sitemap - `fastn` Hands-On Workshop
+
+We can also use `ftd.sitemap` to navigate between pages.
+
+-- ds.h1: Add `ftd.sitemap`
+
+-- ds.h1: Create 2 sections
+
+
+-- end: ds.page

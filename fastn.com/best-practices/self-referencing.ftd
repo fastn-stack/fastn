@@ -1,0 +1,34 @@
+-- import: fastn.com/utils
+
+-- ds.page: Self-referencing guideline
+
+-- utils.code-display:
+title: `self-ref-validity`: Preventing duplicate self-referencing properties
+id: self-ref-validity
+
+While assigning values to self-referencing properties, avoid assigning the same
+value to both the self-referencing property and the referred property.
+
+For example: [`ftd.color`](/built-in-types/#ftd-color)
+
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- ftd.color my-color:
+	light: blue
+	dark: blue
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- ftd.color my-color:
+	light: blue
+	
+	\;; or
+	
+	\-- ftd.color my-color: blue
+	
+-- end: utils.code-display
+
+
+-- end: ds.page

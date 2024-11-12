@@ -1,0 +1,564 @@
+-- ds.page: Passing data through headers
+
+In fastn, we use headers to pass data to component, variables etc. There are
+several different ways to pass data through headers for various argument types.
+
+-- ds.h1: Inline headers
+
+For simple (or caption only) arguments types, you can pass data through inline
+headers as key value pairs.
+
+-- rendered-with-definition: For simple/caption only arguments
+
+	-- rendered-with-definition.raw-input:
+	
+	\-- foo-1: This is title
+	title-color: $inherited.colors.text-strong
+	
+	-- rendered-with-definition.code:
+	
+		-- foo-1: This is title
+		title-color: $inherited.colors.text-strong
+		
+	-- end: rendered-with-definition.code
+
+	-- rendered-with-definition.definition:
+	
+	\-- component foo-1:
+	caption title:
+	ftd.color title-color:
+	
+	\-- ftd.text: $foo-1.title
+	color: $foo-1.title-color
+	
+	\-- end: foo-1
+	
+-- end: rendered-with-definition
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h1: Section headers
+
+For list type arguments, we use section headers to pass data to it.
+
+-- rendered-with-definition: For list type arguments
+
+	-- rendered-with-definition.raw-input:
+	
+	\-- foo-2: This is title
+	
+	\-- foo-2.inner:
+	
+	\-- ftd.row:
+	width: fill-container
+	background.solid: yellow
+	
+	\-- ftd.text: This is some inner text
+	color: red
+	
+	\-- end: ftd.row
+	
+	\-- end: foo-2.inner
+	
+	-- rendered-with-definition.code:
+	
+		-- foo-2: This is title
+		
+		-- foo-2.inner:
+		
+			-- ftd.row:
+			width: fill-container
+			background.solid: yellow
+			
+				-- ftd.text: This is some inner text
+				color: red
+				
+			-- end: ftd.row
+
+		-- end: foo-2.inner
+
+	-- end: rendered-with-definition.code
+
+	-- rendered-with-definition.definition:
+	
+	\-- component foo-2:
+	caption title:
+	ftd.ui list inner:
+	
+	\-- ftd.column:
+	width: fill-container
+	
+	\-- ftd.text: $foo-2.title
+	role: $inherited.types.heading-medium
+	color: $inherited.colors.text
+	
+	\-- ftd.column:
+	width: fill-container
+	children: $foo-2.inner
+	
+	\-- end: ftd.column
+	
+	\-- end: ftd.column
+	
+	\-- end: foo-2
+	
+-- end: rendered-with-definition
+
+
+
+
+
+
+
+
+
+-- ds.h1: Block headers
+
+For record type arguments, we use block headers to pass data. Passing
+record field data can be done through its inline headers or by passing it
+individually through record field syntax.
+
+-- rendered-with-definition: For record type arguments (for kernel components)
+
+	-- rendered-with-definition.raw-input:
+	
+	\-- ftd.text: First Text
+	margin-vertical.px: 10
+	
+	\-- ftd.text.color:
+	light: red
+	dark: yellow
+	
+	;; ----------------------------
+	
+	\-- ftd.text: Second Text
+	margin-vertical.px: 10
+	
+	\-- ftd.text.color: red
+	dark: yellow
+	
+	;; ----------------------------
+	
+	\-- ftd.text: Third Text
+	margin-vertical.px: 10
+	
+	\-- ftd.text.color: red
+	\-- ftd.text.color.dark: yellow
+	
+	;; ----------------------------
+	
+	\-- ftd.text: Fourth Text
+	margin-vertical.px: 10
+	
+	\-- ftd.text.color.light: red
+	\-- ftd.text.color.dark: yellow
+	
+	
+	-- rendered-with-definition.code:
+	
+		-- ftd.text: First Text
+		margin-vertical.px: 10
+		
+		-- ftd.text.color:
+		light: red
+		dark: yellow
+		
+		;; ----------------------------
+		-- ftd.text: Second Text
+		margin-vertical.px: 10
+		
+		-- ftd.text.color: red
+		dark: yellow
+		
+		;; ----------------------------
+		-- ftd.text: Third Text
+		margin-vertical.px: 10
+		
+		-- ftd.text.color: red
+		-- ftd.text.color.dark: yellow
+		
+		;; ----------------------------
+		-- ftd.text: Fourth Text
+		margin-vertical.px: 10
+		
+		-- ftd.text.color.light: red
+		-- ftd.text.color.dark: yellow
+		
+	-- end: rendered-with-definition.code
+
+-- end: rendered-with-definition
+
+
+
+
+
+
+
+-- rendered-with-definition: For record-type arguments ( user-defined components )
+
+	-- rendered-with-definition.raw-input:
+	
+	\-- foo: Text 1 from component
+	
+	\-- foo.text-color: $c
+	
+	;; ----------------------------
+	
+	\-- foo: Text 2 from component
+	
+	\-- foo.text-color:
+	light: red
+	dark: yellow
+	
+	;; ----------------------------
+	
+	\-- foo: Text 3 from component
+	
+	\-- foo.text-color: red
+	dark: yellow
+	
+	;; ----------------------------
+	
+	\-- foo: Text 4 from component
+	
+	\-- foo.text-color: red
+	\-- foo.text-color.dark: yellow
+	
+	;; ----------------------------
+	
+	\-- foo: Text 5 from component
+	
+	\-- foo.text-color.light: red
+	\-- foo.text-color.dark: yellow
+	
+	;; ----------------------------
+	
+	\-- foo: Text 6 from component
+	
+	\-- foo.text-color.light: red
+	\-- foo.text-color.dark: $d-color
+	
+	-- rendered-with-definition.code:
+	
+		-- foo: Text 1 from component
+		
+		-- foo.text-color: $c
+		
+		;; ----------------------------
+		-- foo: Text 2 from component
+		
+		-- foo.text-color:
+		light: red
+		dark: yellow
+		
+		;; ----------------------------
+		-- foo: Text 3 from component
+		
+		-- foo.text-color: red
+		dark: yellow
+		
+		;; ----------------------------
+		-- foo: Text 4 from component
+		
+		-- foo.text-color: red
+		-- foo.text-color.dark: yellow
+		
+		;; ----------------------------
+		-- foo: Text 5 from component
+		
+		-- foo.text-color.light: red
+		-- foo.text-color.dark: yellow
+		
+		;; ----------------------------
+		-- foo: Text 6 from component
+		
+		-- foo.text-color.light: red
+		-- foo.text-color.dark: $d-color
+		
+	-- end: rendered-with-definition.code
+
+	-- rendered-with-definition.definition:
+	
+	\-- ftd.color c: red
+	dark: yellow
+	
+	\-- string d-color: green
+	
+	\-- component foo:
+	caption text:
+	ftd.color text-color:
+	
+	\-- ftd.text: $foo.text
+	color: $foo.text-color
+	margin-vertical.px: 10
+	
+	\-- end: foo
+	
+-- end: rendered-with-definition
+
+
+
+
+
+
+
+
+
+
+-- rendered-with-definition: More complex record type arguments (user-defined component)
+
+	-- rendered-with-definition.raw-input:
+	
+	\-- bar:
+	
+	\-- bar.text:
+	
+	Hello this is some text
+	
+	\-- bar.d: Rithik
+	
+	\-- bar.d.description:
+	
+	This is some description
+	
+	\-- bar.d.age: 23
+	
+	\-- bar.text-color: red
+	dark: yellow
+	
+	-- rendered-with-definition.code:
+	
+		-- bar:
+		
+		-- bar.text:
+		
+		Hello this is some text
+		
+		-- bar.d: Rithik
+		
+		-- bar.d.description:
+		
+		This is some description
+		
+		-- bar.d.age: 23
+		
+		-- bar.text-color: red
+		dark: yellow
+		
+	-- end: rendered-with-definition.code
+
+	-- rendered-with-definition.definition:
+	
+	\-- component bar:
+	data d:
+	string text: abc
+	ftd.color text-color: black
+	
+	\-- ftd.column:
+	width: fill-container
+	
+	\-- ftd.text: $bar.text
+	color: $bar.text-color
+	
+	\-- ftd.text: $bar.d.name
+	color: $bar.text-color
+	
+	\-- ftd.text: $bar.d.description
+	color: $bar.text-color
+	
+	\-- ftd.integer: $bar.d.age
+	if: { bar.d.age != NULL }
+	color: $bar.text-color
+	
+	\-- end: ftd.column
+	
+	\-- end: bar
+	
+	\-- record data:
+	caption name:
+	body description:
+	optional integer age:
+	
+-- end: rendered-with-definition
+
+-- end: ds.page
+
+
+;; ----------------------------
+;;          VARIABLES
+;; ----------------------------
+
+-- ftd.color c: red
+dark: yellow
+
+-- string d-color: green
+
+-- ftd.responsive-length rl:
+desktop.percent: 60
+mobile.px: 40
+
+
+
+;; ----------------------------
+;;     COMPONENT DEFINITION
+;; ----------------------------
+-- component rendered-with-definition:
+caption title:
+body raw-input:
+optional string definition:
+string definition-title: Definitions used
+string rendered-title: Sample usage
+string lang: ftd
+children code:
+private boolean $show-definition: false
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 10
+
+	-- ds.h2: $rendered-with-definition.title
+	
+	-- ds.rendered: $rendered-with-definition.rendered-title
+	input: $rendered-with-definition.raw-input
+	output: $rendered-with-definition.code
+	
+	-- ftd.row:
+	if: { rendered-with-definition.definition != NULL }
+	width: fill-container
+	background.solid: $inherited.colors.background.step-1
+	spacing: space-between
+	padding.px: 10
+	align-content: center
+	$on-click$: $ftd.toggle($a = $rendered-with-definition.show-definition)
+	
+		-- ftd.text: $rendered-with-definition.definition-title
+		color: $inherited.colors.text
+		role: $inherited.types.heading-tiny
+		align-self: start
+		
+		/-- ftd.boolean: $rendered-with-definition.show-definition
+		color: $inherited.colors.text
+		
+		-- ftd.image: $fastn-assets.files.images.up-arrow.svg
+		if: { rendered-with-definition.show-definition }
+		align-self: end
+		width.fixed.px: 15
+		margin-bottom.px: 5
+		
+		-- ftd.image: $fastn-assets.files.images.down-arrow.svg
+		if: { !rendered-with-definition.show-definition }
+		align-self: end
+		width.fixed.px: 15
+		margin-bottom.px: 5
+		
+	-- end: ftd.row
+
+	;; Definition (if any)
+	-- ds.code:
+	if: { rendered-with-definition.definition != NULL && rendered-with-definition.show-definition }
+	lang: $rendered-with-definition.lang
+	body: $rendered-with-definition.definition
+	
+-- end: ftd.column
+
+-- end: rendered-with-definition
+
+
+-- component foo:
+caption text:
+ftd.color text-color:
+
+-- ftd.text: $foo.text
+color: $foo.text-color
+margin-vertical.px: 10
+
+-- end: foo
+
+
+
+
+
+-- component foo-1:
+caption title:
+ftd.color title-color:
+
+-- ftd.text: $foo-1.title
+color: $foo-1.title-color
+
+-- end: foo-1
+
+
+
+
+
+
+
+
+-- component foo-2:
+caption title:
+ftd.ui list inner:
+
+-- ftd.column:
+width: fill-container
+
+	-- ftd.text: $foo-2.title
+	role: $inherited.types.heading-medium
+	color: $inherited.colors.text
+	
+	-- ftd.column:
+	width: fill-container
+	children: $foo-2.inner
+	
+	-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: foo-2
+
+
+
+
+
+
+
+
+-- component bar:
+data d:
+string text: abc
+ftd.color text-color: black
+
+-- ftd.column:
+width: fill-container
+
+	-- ftd.text: $bar.text
+	color: $bar.text-color
+	
+	-- ftd.text: $bar.d.name
+	color: $bar.text-color
+	
+	-- ftd.text: $bar.d.description
+	color: $bar.text-color
+	
+	-- ftd.integer: $bar.d.age
+	if: { bar.d.age != NULL }
+	color: $bar.text-color
+	
+-- end: ftd.column
+
+-- end: bar
+
+
+
+
+-- record data:
+caption name:
+body description:
+optional integer age:

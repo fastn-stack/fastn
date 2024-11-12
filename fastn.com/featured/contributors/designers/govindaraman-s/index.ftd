@@ -1,0 +1,141 @@
+-- import: fastn.com/featured as ft-ui
+-- import: fastn-community.github.io/spectrum-ds/common
+-- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn.com/content-library as footer
+-- import: fastn-community.github.io/dark-flame-cs
+-- import: fifthtry.github.io/fastn-typography as typo
+
+
+
+
+-- ds.page:
+show-footer: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-name: NULL
+logo-height: 38
+logo-width: 120
+colors: $dark-flame-cs.main
+types: $typo.types
+github-icon: true
+github-url: https://github.com/muskan1verma
+full-width: true
+fluid-width: false
+max-width.fixed.px: 1340
+
+-- ds.page.footer:
+
+	-- footer.footer:
+	site-logo: $fastn-assets.files.images.fastn.svg
+	site-url: /
+	social-links: $footer.social-links
+	copyright: Copyright © 2023 - fastn.com
+	full-width: false
+	max-width.fixed.px: 1340
+	
+-- end: ds.page.footer
+-- ftd.column:
+width: fill-container
+align-content: center
+
+	-- profile: Govindaraman S
+	
+	-- ft-ui.grid-view: Hero Components
+	templates: $components
+	show-large: true
+	
+	
+-- end: ftd.column
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+-- component profile:
+caption title:
+optional string link:
+
+-- ftd.column:
+
+	-- ftd.column:
+	align-content: center
+	link: $profile.link
+	
+		-- ds.contributor: $profile.title
+		avatar: $fastn-assets.files.images.u.govindaraman-s.jpg
+		profile: Designer
+		owners: $owner-govind
+		connect: $social-links
+		
+	-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: profile
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list components:
+
+-- ft-ui.template: Hero Bottom Hug
+template-url: /hero-bottom-hug/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-bottom-hug.png
+
+-- ft-ui.template: Hero Bottom Hug Search
+template-url: /hero-bottom-hug-search/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-bottom-hug-search.png
+
+-- ft-ui.template: Hero Left Hug Expanded Search
+template-url: /hero-left-hug-expanded-search/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-left-hug-expanded-search.jpg
+
+-- ft-ui.template: Hero Left Hug Expanded
+template-url: /hero-left-hug-expanded/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-left-hug-expanded.jpg
+
+-- ft-ui.template: Hero Right Hug Expanded Search
+template-url: /hero-right-hug-expanded-search/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-expanded-search.jpg
+
+-- end: components
+
+
+
+
+-- common.owner list owner-govind:
+
+-- common.owner: Govindaraman S
+profile: featured/contributors/designers/govindaraman-s/
+role: Designer
+
+-- end: owner-govind
+
+
+
+
+
+-- common.social-media list social-links:
+
+-- common.social-media:
+link: https://github.com/Sarvom
+src: $fastn-assets.files.images.github-grey.svg
+hover-src: $fastn-assets.files.images.github-grey-hover.svg
+
+-- common.social-media:
+link: https://www.linkedin.com/in/govindaraman-s/
+src: $fastn-assets.files.images.linkedin.svg
+hover-src: $fastn-assets.files.images.linkedin-hover.svg
+
+-- end: social-links

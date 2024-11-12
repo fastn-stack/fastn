@@ -1,0 +1,94 @@
+-- import: fastn-community.github.io/spectrum-ds/common
+-- import: fastn.com/featured as ft-ui
+
+
+-- ds.user-info: Ganesh Salunke
+avatar: $fastn-assets.files.images.u.ganeshs.jpg
+social-links: $social-links
+profile: Developer
+
+-- ds.user-info.works:
+
+	-- ft-ui.grid-view: Documentation Sites
+	templates: $doc-sites
+	show-large: true
+	
+	-- ft-ui.grid-view: Color Schemes
+	templates: $schemes
+	show-large: true
+	
+-- end: ds.user-info.works
+
+-- end: ds.user-info
+
+
+
+
+
+
+
+
+
+
+-- common.owner info: Ganesh Salunke
+profile: /u/ganesh-salunke/
+avatar: $fastn-assets.files.images.u.ganeshs.jpg
+role: Developer
+
+
+
+
+
+-- common.social-media list social-links:
+
+-- common.social-media:
+link: https://discord.gg/ganeshsalunke#1534
+src: $fastn-assets.files.images.discord.svg
+hover-src: $fastn-assets.files.images.discord-hover.svg
+
+-- common.social-media:
+link: https://github.com/gsalunke
+src: $fastn-assets.files.images.github-grey.svg
+hover-src: $fastn-assets.files.images.github-grey-hover.svg
+
+-- common.social-media:
+link: https://twitter.com/GaneshS05739912
+src: $fastn-assets.files.images.twitter.svg
+hover-src: $fastn-assets.files.images.twitter-hover.svg
+
+-- common.social-media:
+link: https://www.linkedin.com/in/ganesh-s-891174ab/
+src: $fastn-assets.files.images.linkedin.svg
+hover-src: $fastn-assets.files.images.linkedin-hover.svg
+
+-- end: social-links
+
+
+
+
+-- ft-ui.template list doc-sites:
+
+-- ft-ui.template: Simple Site
+template-url: featured/ds/doc-site/
+screenshot: $fastn-assets.files.images.featured.doc-site.jpg
+
+-- ft-ui.template: Blue Sapphire Template
+template-url: featured/ds/blue-sapphire-template/
+screenshot: $fastn-assets.files.images.featured.doc-sites.blue-sapphire-template.png
+wip: true
+
+-- ft-ui.template: Forest Template
+template-url: featured/ds/forest-template/
+screenshot: $fastn-assets.files.images.featured.doc-sites.forest-template.png
+wip: true
+
+-- end: doc-sites
+
+
+-- ft-ui.template list schemes:
+
+-- ft-ui.template: Saturated Sunset CS
+template-url: featured/cs/saturated-sunset-cs/
+screenshot: $fastn-assets.files.images.featured.cs.saturated-sunset-cs.png
+
+-- end: schemes

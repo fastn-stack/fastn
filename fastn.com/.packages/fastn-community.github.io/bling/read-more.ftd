@@ -1,0 +1,140 @@
+
+-- site-doc.doc-home: Read More
+site-title: Bling
+show-tabs: false
+github-url: https://github.com/fastn-community/bling
+current-package: fastn-community.github.io/bling
+
+A "Read More" link is a user interface element commonly used in web content to
+provide a way for users to access additional or extended content beyond an
+initial excerpt or summary. It is typically used when the content is truncated
+to a certain length to save space or provide a preview, and users can click
+the "Read More" link to expand or view the full content.
+
+-- site-doc.header: Examples
+
+-- site-doc.output:
+colors: $ftd.default-colors
+types: $ftd.default-types
+
+-- read-more: Read more: 
+link: read-more/
+
+Default position is `right`
+
+-- read-more: Read more: 
+link: read-more/
+position: center
+
+Center position of `read-more`
+
+-- read-more: Read more: 
+link: read-more/
+position: left
+
+Left position of `read-more`
+
+-- end: site-doc.output
+
+-- site-doc.header: How to use
+
+-- cb.code: Add `bling` dependency into your FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/bling
+
+-- cb.code: import `read-more` inside your `.ftd` file
+lang: ftd
+
+\-- import: fastn-community.github.io/bling/read-more
+
+-- cb.code: sample usage of `-- read-more` component
+lang: ftd
+
+\-- read-more.read-more: Read more: 
+link: read-more/
+
+Default position is `right`
+
+\-- read-more.read-more: Read more: 
+link: read-more/
+position: center
+
+Center position of `read-more`
+
+\-- read-more.read-more: Read more: 
+link: read-more/
+position: left
+
+Left position of `read-more`
+
+-- site-doc.header: Properties:
+
+Below are details of all properties of `read-more` component.
+
+-- site-doc.component-property: `title`
+type: Caption (`required`)
+
+It's used to add title which is clickable.
+
+-- site-doc.component-property: `body`
+type: Body (`optional`)
+
+It's used to add body content to read-more component.
+
+-- site-doc.component-property: `link`
+type: String (`required`)
+
+It's used to add link to read-more component.
+
+-- site-doc.component-property: `position`
+type: String (`optional`, default: `right`)
+
+It's used to move read-more component position. You can use `start`, `center` or
+`right` to change its position respectively.
+
+-- end: site-doc.doc-home
+
+
+
+
+
+
+
+
+
+
+-- component read-more:
+caption title:
+optional body body:
+string link: /
+optional string position: right
+boolean $hover: false
+
+-- ftd.row:
+border-color: $inherited.colors.success.border
+border-color if { read-more.hover }: $inherited.colors.border
+border-bottom-width.px: 1
+spacing.fixed.px: 8
+align-self if { read-more.position == "right" }: end
+align-self if { read-more.position == "center" }: center
+align-self if { read-more.position == "start" }: start
+link: $read-more.link
+margin-vertical.px: 24
+color: $inherited.colors.success.text
+color if { read-more.hover }: $inherited.colors.text
+role: $inherited.types.button-medium
+$on-mouse-enter$: $ftd.set-bool($a = $read-more.hover, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $read-more.hover, v = false)
+
+-- ftd.text: $read-more.title
+
+-- ftd.text:
+if: { read-more.body != NULL }
+role: $inherited.types.copy-small
+
+$read-more.body
+
+-- end: ftd.row
+
+-- end: read-more

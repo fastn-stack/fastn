@@ -1,0 +1,257 @@
+-- import: fifthtry.github.io/admonitions as cbox
+-- import: fastn/processors as pr
+
+-- ds.page: Basic UI
+
+In this video, I will first show you how to utilize the `fastn packages` that
+are there for use. Then, we will continue our learning and understand what are
+`Properties` and how to use them. Later, we will use `container components`and
+start creating the layout of our Expander project.
+
+-- ds.youtube:
+if: { source == "default" }
+v: N5pkzy-pgCI
+
+
+-- ds.youtube:
+if: { source == "build" }
+v: eRSgpMqTduQ
+
+
+
+-- ds.h1: Featured Components - How to use?
+
+This Crash Course is for everyone, for the one's who want to learn how to
+create a components like the one we are going to create in this Crash Course.
+And we also respect the choice of those wanting to know **how to use** the
+`Featured Components` directly and rather focus on building their websites or
+blog-posts or create exciting UIs.
+
+
+
+-- ds.markdown:
+
+If you check the [`featured page`](https://fastn.com/featured) you will come
+across some amazing components. We are going to use few of them to show. For
+our convenience I am going to use these components in a new file `demo.ftd` and
+leave `index.ftd` file as it is, so that we can continue our learning there.
+
+As we did earlier, we will add a new file in our project. I have saved the file
+as `demo.ftd`. Now, I will apply some of the `featured components`.
+
+Here is the list of packages I have used:
+
+-- cbox.text-4: **doc-site**
+
+ fifthtry.github.io/doc-site
+
+
+-- cbox.text-4: **admonitions**
+
+  fifthtry.github.io/admonitions
+
+
+-- cbox.text-4:  **color-scheme**
+
+fastn-community.github.io/winter-cs
+
+
+-- ds.markdown:
+
+You can include any such component of your own. For example, I will include the
+box component I created earlier.
+
+
+-- cbox.text-4: **expander**
+
+fastn-community.github.io/expander
+
+
+
+-- ds.markdown:
+
+Using a component is easier than making a sandwich. It can be done in two steps:
+
+- Add the package as a dependency in `FASTN.ftd`
+
+-- ds.code: In FASTN.ftd file
+lang: ftd
+
+\-- fastn.dependency: <package-name>
+
+
+-- ds.markdown:
+
+- Import the package in your file. Here, I am importing it in `demo.ftd`
+
+-- ds.code: In .ftd file
+lang: ftd
+
+\-- import: <package-name>
+
+
+-- ds.markdown:
+
+In the `package-name`, anything that is after the `/` is a default alias. But
+sometimes, the alias can be a long one, and if you want to use a component of
+that package, you will have to use the long name. Instead, you can give a new
+and shorter alias using `as` command.
+
+For example:
+
+-- ds.code: New alias for `doc-site`
+lang: ftd
+
+\-- import:fifthtry.github.io/doc-site as ds
+
+-- ds.markdown:
+
+Using the default alias or a new alias, you can use the `components` of the
+packages you have imported. These simple steps need to be done everytime you
+want to use a new package in your project.
+
+For example:
+
+For `doc-site` package, we have used following components:
+
+- page
+- h1
+
+For `admonitions` package, we have used `info` component.
+
+
+-- cbox.info: Note
+
+With just two steps, just like we did earlier, we can use any `fastn package`
+in our project.
+
+
+-- ds.h1: Let's keep learning
+if: { source == "default" }
+
+Let's continue our learning in the `index.ftd` file and build our project
+step-by-step.
+
+Following is the list of the `properties` we will apply to the `container
+components`.
+
+
+-- ds.h2: Properties
+if: { source == "default" }
+
+-- ds.code: Root ftd.column
+if: { source == "default" }
+lang: ftd
+
+\-- ftd.column:
+padding.px: 50
+background.solid: #eee
+width: fill-container
+height: fill-container
+align-content: top-center
+
+-- ds.code: Child ftd.column
+if: { source == "default" }
+lang: ftd
+
+\-- ftd.column:
+border-width.px: 4
+spacing.fixed.px: 10
+width: fill-container
+
+
+-- ds.code: ftd.row for Header
+if: { source == "default" }
+lang: ftd
+
+\-- ftd.row:
+width: fill-container
+spacing: space-between
+border-bottom-width.px: 1
+padding.px: 10
+
+
+-- ds.h3: UI design of webpage
+if: { source == "default" }
+
+
+-- ds.image:
+if: { source == "default" }
+src: $fastn-assets.files.images.expander.box-ui-design.png
+width: fill-container
+
+
+
+-- ds.h3: Container Components
+if: { source == "default" }
+
+Column (top to bottom):
+
+
+-- ds.image:
+if: { source == "default" }
+src: $fastn-assets.files.images.expander.column.png
+width: fill-container
+
+
+-- ds.code: Column Syntax
+if: { source == "default" }
+lang: ftd
+
+\-- ftd.column:
+
+\;; content of column goes here
+
+\-- end: ftd.column
+
+-- ds.markdown:
+if: { source == "default" }
+
+`ftd.column` documentation: [read more](/column/)
+
+-- ds.markdown:
+if: { source == "default" }
+
+Row (left to right):
+
+-- ds.image:
+if: { source == "default" }
+src: $fastn-assets.files.images.expander.row.png
+width: fill-container
+
+-- ds.code: Row Syntax
+if: { source == "default" }
+lang: ftd
+
+\-- ftd.row:
+
+\;; content of row goes here
+
+\-- end: ftd.row
+
+-- ds.markdown:
+if: { source == "default" }
+
+`ftd.row` documentation: [read more](/row/)
+
+
+
+-- ds.markdown:
+if: { source == "default" }
+
+Continue with the [part 3 now](/expander/components/).
+
+
+-- ds.markdown:
+if: { source == "build" }
+
+Continue with the [part 3 now](/expander/publish/-/build/).
+
+
+-- end: ds.page
+
+
+
+-- string source: default
+$processor$: pr.get-data
+key: source

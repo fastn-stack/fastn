@@ -1,0 +1,68 @@
+-- import: fastn-stack.github.io/fastn-js/assets as js-assets
+
+-- string $result: None
+
+-- string $formatted-string: None
+
+-- string $current-json: None
+
+-- void typo-to-ftd(json,store_at,formatted_string):
+string json:
+string $store_at:
+string $formatted_string:
+js: [ $js-assets.files.typo.js ]
+
+value = typo_to_ftd(json);
+store_at = value[0];
+formatted_string = value[1];
+
+-- component json-exporter:
+
+-- ftd.column:
+background.solid: black
+width: fill-container
+height: fill-container
+spacing.fixed.px: 20
+padding.px: 20
+
+-- ftd.row:
+spacing.fixed.px: 15
+align-content: center
+
+-- ftd.text-input:
+placeholder: Enter typography json
+multiline: true
+padding-right.px: 10
+width.fixed.px: 500
+height.fixed.px: 200
+$on-input$: $ftd.set-string($a = $current-json, v = $VALUE)
+
+-- ftd.text: Generate FTD code
+role: $inherited.types.heading-small
+color: $inherited.colors.text-strong
+width.fixed.px: 200
+$on-click$: $typo-to-ftd(json = $current-json, $store_at = $result, $formatted_string = $formatted-string)
+
+-- end: ftd.row
+
+-- ds.code: Typography FTD code
+if: { result != "None" }
+lang: ftd
+body: $formatted-string
+text: $result
+download: types.ftd
+max-height.fixed.px: 400
+
+-- end: ftd.column
+
+-- end: json-exporter
+
+-- json-exporter:
+
+-- ftd.color code-bg-light:
+light: #2b303b
+dark: #18181b
+
+-- ftd.color code-bg-dark:
+light: #18181b
+dark: #2b303b

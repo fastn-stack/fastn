@@ -1,0 +1,30 @@
+-- import: fastn.com/featured as ft-ui
+
+
+-- ds.page:
+sidebar: false
+
+-- ft-ui.grid-view: Portfolio / Personal Sites
+templates: $portfolios
+
+-- end: ds.page
+
+
+
+
+
+-- ft-ui.template list portfolios:
+
+-- ft-ui.template: Texty PS
+template-url: featured/portfolios/texty-ps/
+screenshot: $fastn-assets.files.images.featured.portfolios.texty-ps.png
+
+-- ft-ui.template: Johny PS
+template-url: featured/portfolios/johny-ps/
+screenshot: $fastn-assets.files.images.featured.portfolios.johny-ps.png
+
+-- ft-ui.template: Portfolio
+template-url: featured/portfolios/portfolio/
+screenshot: $fastn-assets.files.images.featured.portfolios.portfolio.png
+
+-- end: portfolios

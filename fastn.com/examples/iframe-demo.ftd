@@ -1,0 +1,13 @@
+
+
+-- ds.page:
+sidebar: false
+
+-- ds.h1: This is how output will be seen
+
+-- ds.iframe:
+src: /featured/
+width.fixed.px: 600
+
+
+-- end: ds.page

@@ -1,0 +1,203 @@
+-- import: fifthtry.github.io/admonitions as cbox
+
+-- ds.page: `ftd.checkbox`
+
+A `ftd.checkbox` is a [kernel component](/ftd/kernel/) that is used to select
+one or more options from a set of choices.
+
+-- ds.h1: Usage
+
+-- ds.rendered: Sample usage
+
+	-- ds.rendered.input:
+	
+	\-- ftd.row:
+	spacing.fixed.px: 5
+	color: $inherited.colors.text
+	align-content: center
+	
+	\-- ftd.checkbox:
+	
+	\-- ftd.text: FifthTry
+	
+	\-- end: ftd.row
+	
+	-- ds.rendered.output:
+	
+		-- ftd.row:
+		spacing.fixed.px: 5
+		color: $inherited.colors.text
+		align-content: center
+		
+			-- ftd.checkbox:
+			
+			-- ftd.text: FifthTry
+			
+		-- end: ftd.row
+
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+-- ds.markdown:
+
+There is a special variable `$CHECKED` which can be used to access the current
+checked state of `ftd.checkbox`.
+
+-- ds.rendered: Sample usage
+
+	-- ds.rendered.input:
+	
+	\-- boolean $is-checked: false
+	
+	\-- ftd.row:
+	spacing.fixed.px: 5
+	color: $inherited.colors.text
+	align-content: center
+	
+	\-- ftd.checkbox:
+	checked: $is-checked
+	$on-click$: $ftd.set-bool($a = $is-checked, v = $CHECKED)
+	
+	\-- ftd.text: The checkbox is checked
+	if: { is-checked }
+	
+	\-- ftd.text: The checkbox is not checked
+	if: { !is-checked }
+	
+	\-- end: ftd.row
+	
+	-- ds.rendered.output:
+	
+		-- example-2:
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+-- ds.h1: Attributes
+
+`ftd.checkbox` accepts the below attributes along with the [common
+attributes](ftd/common/).
+
+-- ds.h2: `checked: optional boolean`
+
+The `checked` attribute is an optional boolean that indicates whether this
+checkbox is checked by default (when the page loads). This specifies that
+a checkbox component should be pre-selected (checked) when the page loads.
+
+-- ds.rendered: `checked`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.row:
+	spacing.fixed.px: 5
+	align-content: center
+	color: $inherited.colors.text
+	
+	\-- ftd.checkbox:
+	checked: true
+	
+	\-- ftd.text: This checkbox is checked when page loads
+	
+	\-- end: ftd.row
+	
+	-- ds.rendered.output:
+	
+		-- ftd.row:
+		spacing.fixed.px: 5
+		align-content: center
+		color: $inherited.colors.text
+		
+			-- ftd.checkbox:
+			checked: true
+			
+			-- ftd.text: This checkbox is checked when page loads
+			
+		-- end: ftd.row
+
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+-- ds.h2: `enabled: optional boolean`
+
+The `enabled` attribute sets or returns whether a checkbox should be enabled, or
+not.
+
+If the `enabled` is set to false, the checkbox component is unusable and
+un-clickable. Disabled elements are usually rendered in gray by default in
+browsers.
+
+-- ds.rendered: `checked`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.row:
+	spacing.fixed.px: 5
+	align-content: center
+	color: $inherited.colors.text
+	
+	\-- ftd.checkbox:
+	enabled: false
+	checked: true
+	
+	\-- ftd.text: This checkbox is disabled and is checked
+	
+	\-- end: ftd.row
+	
+	-- ds.rendered.output:
+	
+		-- ftd.row:
+		spacing.fixed.px: 5
+		align-content: center
+		color: $inherited.colors.text
+		
+			-- ftd.checkbox:
+			enabled: false
+			checked: true
+			
+			-- ftd.text: This checkbox is disabled and is checked
+			
+		-- end: ftd.row
+
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+-- component example-2:
+boolean $is-checked: false
+
+-- ftd.row:
+spacing.fixed.px: 5
+color: $inherited.colors.text
+align-content: center
+
+	-- ftd.checkbox:
+	checked: $example-2.is-checked
+	$on-click$: $ftd.set-bool($a = $example-2.is-checked, v = $CHECKED)
+	
+	-- ftd.text: The checkbox is checked
+	if: { example-2.is-checked }
+	
+	-- ftd.text: The checkbox is not checked
+	if: { !example-2.is-checked }
+	
+-- end: ftd.row
+
+-- end: example-2

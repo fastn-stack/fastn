@@ -1,0 +1,510 @@
+-- import: fastn-community.github.io/banner/assets
+-- import: fifthtry.github.io/package-doc/doc as pd
+
+-- ft.page:
+show-banner: true
+
+-- ft.page.banner:
+
+-- banner: 
+
+⭐️ If you like fastn, give it a star on 
+[GitHub](https://github.com/fastn-stack/fastn/) and follow us on 
+[Twitter](https://twitter.com/FifthTryHQ)
+
+-- end: ft.page.banner
+
+-- ft.page.body:
+
+-- pd.package: Banner components
+name: fastn-community.github.io/banner
+
+Banners are an important element of website design and can be used to enhance
+the user experience, increase engagement, and drive conversions.
+
+🌟 Ex.g. Look at the top of this page.
+
+A banner is typically a horizontal bar that appears at the very top of a
+webpage, often referred to as a "top banner" or "header banner". 
+
+It usually contains important information or calls to action that are designed
+to catch the user's attention and encourage them to take action.
+
+`fifthtry.github.io/banner` library contains various `banner` components that
+can be used on your pages for showing notifications or info. 
+
+To use banner on your `FTD` web pages, add below `fastn` dependency into
+`FASTN.ftd` file:
+
+-- ft.code:
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/banner
+\-- fastn.auto-import: fastn-community.github.io/banner
+
+-- tf.markdown:
+
+Once you add above lines into your `fastn` package, add `banner` into your
+`.ftd` files:
+
+-- cb.rendered:
+
+-- cb.rendered.input:
+
+\-- banner.banner:
+
+⭐️ If you like fastn, give it a star on [GitHub]
+(https://github.com/fastn-stack/fastn/) and follow us on [Twitter]
+(https://twitter.com/FifthTryHQ)
+
+-- cb.rendered.output:
+
+-- banner: 
+
+⭐️ If you like fastn, give it a star on 
+[GitHub](https://github.com/fastn-stack/fastn/) and follow us on 
+[Twitter](https://twitter.com/FifthTryHQ)
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+-- end: ft.page
+
+
+
+
+
+
+
+
+
+
+-- component banner:
+body body:
+boolean $hide: false
+boolean $mousein: false
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.desktop:
+
+-- banner-desktop:
+body: $banner.body
+$hide: $banner.hide
+$mousein: $banner.mousein
+
+-- end: ftd.desktop
+
+
+-- ftd.mobile:
+
+-- banner-mobile:
+body: $banner.body
+$hide: $banner.hide
+$mousein: $banner.mousein
+
+-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: banner
+
+
+
+
+
+
+
+
+
+
+-- component banner-desktop:
+body body:
+boolean $hide:
+boolean $mousein:
+
+-- ftd.column:
+if: { !banner-desktop.hide }
+width: fill-container
+padding.px: 10
+background.solid: $inherited.colors.background.code
+align-content: center
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: 1024
+
+-- ftd.row:
+spacing.fixed.px: 32
+align-self: center
+
+-- ftd.text:
+role: $inherited.types.button-medium
+color: $inherited.colors.cta-primary.base
+text-align: center
+align-self: center
+
+$banner-desktop.body
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- ftd.column:
+anchor: parent
+right.px: 24
+top.px: 10
+z-index: 9999
+align-self: center
+
+-- ftd.image:
+src: $assets.files.static.cross.svg.dark
+width.fixed.px: 24
+height.fixed.px: 24
+$on-click$: $ftd.set-bool($a = $banner-desktop.hide, v = true)
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: banner-desktop
+
+
+
+
+
+
+
+
+
+
+-- component banner-mobile:
+body body:
+boolean $hide:
+boolean $mousein:
+
+-- ftd.column:
+if: { !banner-mobile.hide }
+width: fill-container
+padding-horizontal.px: 48
+background.solid: $inherited.colors.background.code
+align-content: center
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: 1024
+
+-- ftd.row:
+spacing.fixed.px: 32
+align-self: center
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.cta-primary.base
+text-align: center
+align-self: center
+
+$banner-mobile.body
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- ftd.column:
+anchor: parent
+right.px: 12
+top.percent: 50
+z-index: 9999
+align-self: center
+margin-top.px: -12
+
+-- ftd.image:
+src: $assets.files.static.cross.svg.dark
+width.fixed.px: 24
+height.fixed.px: 24
+$on-click$: $ftd.set-bool($a = $banner-mobile.hide, v = true)
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: banner-mobile
+
+
+
+
+
+
+
+
+
+
+-- component cta-banner:
+optional body body:
+string cta-text: 
+string cta-link: 
+boolean $hide: false
+boolean $mousein: false
+ftd.color bgcolor: $inherited.colors.scrim
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.desktop:
+
+-- cta-banner-desktop:
+body: $cta-banner.body
+cta-text: $cta-banner.cta-text
+cta-link: $cta-banner.cta-link
+$hide: $cta-banner.hide
+$mousein: $cta-banner.mousein
+bgcolor: $cta-banner.bgcolor
+
+-- end: ftd.desktop
+
+-- ftd.mobile:
+
+-- cta-banner-mobile:
+body: $cta-banner.body
+cta-text: $cta-banner.cta-text
+cta-link: $cta-banner.cta-link
+$hide: $cta-banner.hide
+$mousein: $cta-banner.mousein
+bgcolor: $cta-banner.bgcolor
+
+-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: cta-banner
+
+
+
+
+
+
+
+
+
+
+-- component cta-banner-desktop:
+optional body body:
+string cta-text: 
+string cta-link: 
+boolean $hide: false
+boolean $mousein: false
+ftd.color bgcolor: $inherited.colors.scrim
+
+-- ftd.column:
+if: { !cta-banner-desktop.hide }
+width: fill-container
+padding.px: 10
+background.solid: $cta-banner-desktop.bgcolor
+align-content: center
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: 1024
+
+-- ftd.row:
+spacing.fixed.px: 10
+align-self: center
+
+-- ftd.text:
+if: { cta-banner-desktop.body != NULL }
+role: $inherited.types.button-medium
+color: $inherited.colors.text-strong.dark
+text-align: center
+align-self: center
+
+$cta-banner-desktop.body
+
+-- ftd.text: $cta-banner-desktop.cta-text
+role: $inherited.types.button-medium
+color: $inherited.colors.text-strong.dark
+color if { $cta-banner-desktop.mousein }: $inherited.colors.text-strong.dark
+border-bottom-width.px: 1
+border-color if { $cta-banner-desktop.mousein }: $inherited.colors.custom.three
+link: $cta-banner-desktop.cta-link
+white-space: nowrap
+$on-mouse-enter$: $ftd.set-bool($a = $cta-banner-desktop.mousein, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $cta-banner-desktop.mousein, v = false)
+align-self: center
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- ftd.column:
+anchor: parent
+right.px: 24
+top.px: 10
+z-index: 9999
+align-self: center
+
+-- ftd.image:
+src: $assets.files.static.cross.svg.dark
+width.fixed.px: 24
+height.fixed.px: 24
+$on-click$: $ftd.set-bool($a = $cta-banner-desktop.hide, v = true)
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: cta-banner-desktop
+
+
+
+
+
+
+
+
+
+
+-- component cta-banner-mobile:
+optional body body:
+string cta-text: 
+string cta-link: 
+boolean $hide: false
+boolean $mousein: false
+ftd.color bgcolor: $inherited.colors.scrim
+
+-- ftd.column:
+if: { !cta-banner-mobile.hide }
+width: fill-container
+padding-horizontal.px: 48
+padding-vertical.px: 16
+background.solid: $cta-banner-mobile.bgcolor
+align-content: center
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: 1024
+
+-- ftd.column:
+spacing.fixed.px: 10
+align-self: center
+
+-- ftd.text:
+if: { cta-banner-mobile.body != NULL }
+role: $inherited.types.button-small
+color: $inherited.colors.text-strong.dark
+text-align: center
+align-self: center
+
+$cta-banner-mobile.body
+
+-- ftd.text: $cta-banner-mobile.cta-text
+role: $inherited.types.button-small
+color: $inherited.colors.text-strong.dark
+color if { $cta-banner-mobile.mousein }: $inherited.colors.text-strong.dark
+border-bottom-width.px: 1
+border-color if { $cta-banner-mobile.mousein }: $inherited.colors.custom.three
+link: $cta-banner-mobile.cta-link
+white-space: nowrap
+$on-mouse-enter$: $ftd.set-bool($a = $cta-banner-mobile.mousein, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $cta-banner-mobile.mousein, v = false)
+align-self: center
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+anchor: parent
+right.px: 12
+top.percent: 50
+z-index: 9999
+align-self: center
+margin-top.px: -12
+
+-- ftd.image:
+src: $assets.files.static.cross.svg.dark
+width.fixed.px: 24
+height.fixed.px: 24
+$on-click$: $ftd.set-bool($a = $cta-banner-mobile.hide, v = true)
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: cta-banner-mobile
+
+
+
+
+
+
+
+
+
+
+-- component floating-banner:
+body body:
+string link: 
+boolean $hide: false
+boolean $mousein: false
+boolean $btn-mousein: false
+
+-- ftd.column:
+if: { !floating-banner.hide }
+anchor: window
+bottom.em: 2
+align-self: center
+
+-- ftd.column:
+align-self: center
+
+-- ftd.row:
+
+-- ftd.row:
+background.solid: $inherited.colors.custom.seven
+background.solid if { floating-banner.mousein }: $inherited.colors.custom.three
+$on-mouse-enter$: $ftd.set-bool($a = $floating-banner.mousein, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $floating-banner.mousein, v = false)
+link: $floating-banner.link
+align-content: center
+padding-horizontal.px: 16
+padding-right.px: 4
+padding-vertical.px: 8
+border-top-left-radius.px: 4
+border-bottom-left-radius.px: 4
+
+-- ftd.text:
+role: $inherited.types.button-medium
+color: $inherited.colors.text-strong.dark
+
+$floating-banner.body
+
+-- end: ftd.row
+
+-- ftd.row:
+background.solid: $inherited.colors.custom.seven
+background.solid if { floating-banner.mousein }: $inherited.colors.custom.three
+$on-mouse-enter$: $ftd.set-bool($a = $floating-banner.btn-mousein, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $floating-banner.btn-mousein, v = false)
+padding-horizontal.px: 8
+padding-vertical.px: 8
+align-self: center 
+border-top-right-radius.px: 4
+border-bottom-right-radius.px: 4
+
+-- ftd.image:
+src: $assets.files.static.cross.svg.dark
+width.fixed.px: 22
+height.fixed.px: 21
+$on-click$: $ftd.set-bool($a = $floating-banner.hide, v = true)
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: floating-banner

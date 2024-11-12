@@ -1,0 +1,39 @@
+-- import: fastn.com/u/priyanka-yadav
+-- import: fastn.com/u/meenu-kumari
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Blog Components
+featured-link: /featured/blogs/
+category: Blogs
+image: $fastn-assets.files.images.featured.blog.blog-components.png
+owners: [$priyanka-yadav.info, $meenu-kumari.info]
+license-url: https://github.com/FifthTry/blog-components/blob/main/LICENSE
+license: Creative Commons
+published-date: 15-May-2022
+cards: $blog-sites
+github-url: https://github.com/FifthTry/blog-components
+demo-link: https://fifthtry.github.io/blog-components/
+
+
+
+
+
+-- ft-ui.template list blog-sites:
+
+-- ft-ui.template: Simple Site Blog
+template-url: featured/blogs/doc-site/
+screenshot: $fastn-assets.files.images.featured.blog.doc-site-blog.png
+
+-- ft-ui.template: Midnight Rush
+template-url: featured/blogs/mr-blog/
+screenshot: $fastn-assets.files.images.featured.blog.midnight-rush-blog.jpg
+
+-- ft-ui.template: Misty Gray
+template-url: featured/blogs/mg-blog/
+screenshot: $fastn-assets.files.images.featured.blog.misty-gray.jpg
+
+-- ft-ui.template: Rocky
+template-url: featured/blogs/rocky/
+screenshot: $fastn-assets.files.images.featured.blog.rocky.png
+
+-- end: blog-sites

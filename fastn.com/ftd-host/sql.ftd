@@ -1,0 +1,316 @@
+-- import: fastn.com/ftd-host/processor
+-- import: fastn.com/ftd/built-in-variables as v
+
+-- ds.page: Querying a SQL Database
+
+The `sql` processor allows you to execute SQL queries against a database. it supports the following databases:
+
+- [PostgreSQL](/sql/#postgresql)
+- [SQLite](/sql/#sqlite)
+- [Google Sheets](/sql/#google-sheets)
+
+
+-- processor.static-vs-dynamic:
+
+
+-- ds.h1: Telling fastn about your database
+
+-- ds.markdown:
+
+To connect to your database and determine the type of database you are using, fastn reads an environment variable called `FASTN_DB_URL`, which contains the connection string for your database.
+You can define this variable in a `.env` file at the root of your folder, or you can define it directly in your shell environment.
+If the platform where you are hosting this website supports setting environment variables, you can declare this variable there as well.
+
+
+
+-- ds.h1: Querying your database
+
+If `.env` file is properly setup you can start querying your database
+using the `sql` processor.
+
+-- ds.code: querying database and storing result in a list
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- person list people:
+$processor$: pr.sql
+
+SELECT * FROM users;
+
+-- ds.markdown:
+
+For this to work you have to also create a record with same data as the result
+of your SQL query. In this query you are using `SELECT *`, which will fetch all
+three columns, `id`, `name` and `department`, so your record will look something
+like this:
+
+-- ds.code: a record corresponding to your query result
+lang: ftd
+
+\-- record person:
+integer id:
+string name:
+string department:
+
+
+-- ds.markdown:
+
+Note that the type columns in query result must match the type of fields in the
+`record`. The order of fields of `record` must also match the order of columns in
+the query result.
+
+Also note that since the result of this query can be multiple rows (or one or
+none), we have to read the result in a `person list`, so all data can be stored
+in corresponding list.
+
+-- ds.markdown:
+
+Now that you have data in a variable, you can pass it to some component to view
+it using the [`for`](/list/#using-loop) loop:
+
+
+-- ds.code: show data in page
+lang: ftd
+
+\-- show-person: $p
+for: $p in $people
+
+
+-- ds.markdown:
+
+Which will look something like this:
+
+
+-- show-person: $p
+for: $p in $people
+
+
+
+
+
+-- ds.h1: Passing Named Parameters in Your Query
+
+The `sql` processor allows you to pass named parameters in your queries.
+You can pass a named parameter by defining it as a header/property of the section where the query is executed.
+To access the named parameter in your query, use the following syntax:
+
+-- ds.code: Syntax for Named Parameters
+lang: sql
+
+\$<PARAM_NAME>::<PARAM_TYPE>
+
+-- ds.markdown:
+
+In this syntax, the name following the `$` symbol represents the parameter's name,
+and you can specify its type by appending `::<PARAM_TYPE>` to indicate the desired data type.
+
+You can find the list of the data types that are currently supported by fastn:
+- [Supported PostgreSQL Data Types](/sql/#supported-postgresql-data-types)
+- [Supported SQLite Data Types](/sql/#supported-sqlite-data-types)
+
+-- ds.markdown:
+
+Let's illustrate this with an example. Suppose you want to fetch a user from the `users` table by their `id`:
+
+-- ds.code: Retrieving User Data by User ID
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- person jack:
+$processor$: pr.sql
+id: 1
+
+SELECT * FROM users WHERE id = $id::INTEGER;
+
+\-- show-person: $jack
+
+-- ds.markdown:
+
+The result will look something like this:
+
+-- show-person: $people.0
+
+-- ds.h2: Taking input from other processors
+
+-- ds.markdown:
+
+This approach also enables you to pass a value obtained from any other processor as an input for your SQL queries. For instance, you can utilize the [`request-data`](/request-data) processor and [Dynamic URLs](/dynamic-urls/) to dynamically create user profile pages, similar to Twitter and other social networks.
+
+-- ds.code: Retrieving User Data by Username
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- string username:
+$processor$: pr.request-data
+
+\-- user user-data:
+$processor$: pr.sql
+username: $username
+
+SELECT * FROM users WHERE username = $username::STRING;
+
+\-- user-profile: $user-data
+
+-- ds.markdown:
+
+Now, whenever a visitor accesses your dynamic page, such as `/user/<username>`,
+fastn will retrieve the username from the URL using the `request-data` processor and pass it to your SQL query as a named parameter.
+This allows you to retrieve the data of the user whose username matches the passed value.
+
+
+
+
+-- ds.h1: PostgreSQL
+
+-- ds.code: PostgreSQL Connection Setup
+lang: bash
+
+FASTN_DB_URL=postgres://{user}:{password}@{hostname}:{port}/{database-name}
+
+-- ds.h2: Supported PostgreSQL Data Types
+
+-- ds.markdown:
+
+The following PostgreSQL Data Types are currently supported by the `sql` processor:
+
+- `TEXT`
+- `VARCHAR`
+- `INT4`
+- `INT8`
+- `FLOAT4`
+- `FLOAT8`
+- `BOOL`
+
+
+
+-- ds.h1: SQLite
+
+-- ds.code: SQLite Connection Setup
+lang: bash
+
+FASTN_DB_URL=sqlite:///db.sqlite
+
+-- ds.h2: Supported SQLite Data Types
+
+-- ds.markdown:
+
+The following SQLite Data Types are currently supported by the `sql` processor:
+
+- `TEXT`
+- `INTEGER`
+- `REAL`
+
+
+
+
+-- ds.h1: Google Sheets
+
+fastn allows you to query your Google Sheet like a SQL database. You just have to pass the link to your Google Sheet as `db` and `sheet` (optional, the name of the sheet you want to query) as arguments to the `sql` processor, and then you can query your Google Sheet by writing queries in the [Google Visualization API Query Language](https://developers.google.com/chart/interactive/docs/querylanguage/).
+
+-- ds.code: Google Sheets Connection Setup/Example
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- person list people:
+\$processor$: pr.sql
+\db: {{ YOUR GOOGLE SHEET URL }}
+\sheet: {{ NAME OF THE SHEET YOU WANT TO QUERY }}
+
+\;; Your Query
+SELECT * WHERE A = "John Doe"
+
+-- ds.h2: Supported Google Sheets Data Types
+
+-- ds.markdown:
+
+The following Google Sheets Data Types are currently supported by the `sql` processor:
+
+- `STRING`
+- `INTEGER`
+- `DECIMAL`
+- `BOOLEAN`
+
+-- ds.h2: Using `LABEL` Clause to Rename Header Names to Match Record Key
+
+It is possible that some header names in your Google Sheet contain spaces, or you want to use a different name in the model record for the result you retrieve using the `sql` processor. In that case, you can use the `LABEL` clause to rename that header/column in the retrieved response.
+
+For example, if you have a sheet with the following columns - `Full Name`, `Phone`, and `Blood Group`, since you will have to create a record for mapping the results of the `sql` processor, and record property names cannot contain spaces, you will have to use a property name that does not contain spaces. You can do this by setting your own label for that column by specifying it with the `LABEL` clause.
+
+-- ds.code: Using `LABEL` to rename headers "Full Name", "Phone" and "Blood Group" to match record keys
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- record donor:
+string full-name:
+string phone:
+string blood-group:
+
+\-- donor list donors:
+$processor$: pr.sql
+db: GOOGLE_SHEET_URL
+sheet: Blood Donors
+
+SELECT A, B, C LABEL A "full-name", B "phone", C "blood-group"
+
+\-- donor-card: $d
+for: $d in $donors
+
+
+
+-- ds.h1: Live Demos
+
+1. [`todo-app`](https://github.com/fastn-community/todo-app)
+    - A simple "todo-app" that utilizes the sql processor.
+2. [`fastn-google-sheets-demo`](https://github.com/fastn-community/fastn-google-sheets-demo)
+    - A demo hackathon website that showcases the Google Sheets Query support in the `sql` processor.
+
+
+
+-- end: ds.page
+
+
+
+
+-- record person:
+integer id:
+string name:
+string department:
+
+-- person list people:
+
+-- person:
+id: 101
+name: jack
+department: design
+
+-- person:
+id: 102
+name: jill
+department: engineering
+
+-- end: people
+
+
+
+-- component show-person:
+caption person p:
+
+-- ftd.column:
+spacing.fixed.px: 10
+
+	-- ds.h2: Person
+	
+	-- v.label-text: Name
+	value: $show-person.p.name
+	
+	-- v.label-text: Department
+	value: $show-person.p.department
+	
+-- end: ftd.column
+
+-- end: show-person

@@ -1,0 +1,39 @@
+-- import: fastn.com/rfcs/lib
+
+-- lib.rfc: RFC: Dependency Versioning
+id: dependency-versioning
+status: rfc-not-ready
+
+This RFC proses dependency versioning feature. It describes how packages are
+stored centrally, how they are published, how the versions can be specified, and
+how should the fastn cli manage various dependency version related concerns.
+
+
+-- lib.motivation:
+
+`fastn` allows authors to depend on fastn packages published by others as part
+of website they are creating. Currently we do not have dependency versioning.
+Also currently we download a dependency from the package authors domain
+directly, this was done because we do not have central repository that stores
+all published packages, like is the case in other ecosystems like NPM, PyPI,
+Crates.rs etc.
+
+Not having a central repository has some advantages, it can not go down, no one
+has to bear the cost of maintaining and running it. If it gets compromised it
+can potentially disrupt a lot of people. No one has to create account, and team
+eventually as future packages would be managed by more than a single individual,
+or would be owned by organisations instead of individuals.
+
+But as demonstrated by [Left-pad incident](https://en.wikipedia.org/wiki/Npm#Left-pad_incident),
+letting popular packages in complete control of individuals has ecosystem risks
+as well. Individuals do not have to be hostile, they can lose their domain, or
+mis-configure or lose account at their hosting provider, leading to eco system
+outage.
+
+Further more, we are proposing.
+
+-- end: lib.motivation
+
+
+
+-- end: lib.rfc

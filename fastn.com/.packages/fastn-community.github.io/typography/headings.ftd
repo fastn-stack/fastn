@@ -1,0 +1,155 @@
+-- import: fastn-community.github.io/typography as tf
+-- import: fastn-community.github.io/code-block as cb
+-- import: fastn-community.github.io/site-doc
+-- import: fastn-community.github.io/bling
+-- import: fastn-community.github.io/bling/collapse
+
+
+
+
+
+
+-- site-doc.doc-home: Typography
+github-url: https://github.com/fastn-community/typography
+site-title: Typography
+show-tabs: false
+
+-- site-doc.component-doc: `headings`
+package-link: fastn-community.github.io/typography
+github-link: https://github.com/fastn-community/typography
+package-name: fastn-community.github.io/typography
+info: `typography` contains various heading like `h0`, `h1`, `h2`, `h3`, `h4` & `markdown`.
+
+The `typography` package is already included inside 
+[doc-site](https://fastn-community.github.io/doc-site/). If you are using 
+[doc-site](https://fastn-community.github.io/doc-site/) then don't add 
+typography as [fastn](https://fastn.com/) dependency.
+
+-- site-doc.header: How to use
+
+Add below code to your FASTN.ftd
+
+-- cb.code:
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/typography
+
+-- site-doc.markdown:
+
+Import `typography` into your `.ftd` file
+
+-- cb.code: 
+lang: ftd
+
+\-- import: fastn-community.github.io/typography as tf
+
+-- site-doc.markdown:
+
+Add `typography` components into your `.ftd` file
+
+-- cb.code: 
+lang: ftd
+max-height.fixed.px: 300
+
+\-- tf.h0: This is heading hero
+
+Heading also has optional body property.
+
+\-- tf.h1: This is heading large
+
+Heading also has optional body property.
+
+\-- tf.h2: This is heading medium
+
+Heading also has optional body property.
+
+\-- tf.h3: This is heading small
+
+Heading also has optional body property.
+
+\-- tf.h4: This is heading tiny
+
+Heading also has optional body property.
+
+-- site-doc.header: Examples
+
+-- site-doc.output:
+
+-- tf.h0: This is heading hero
+
+Heading also has optional body property.
+
+-- tf.h1: This is heading large
+
+Heading also has optional body property.
+
+-- tf.h2: This is heading medium
+
+Heading also has optional body property.
+
+-- tf.h3: This is heading small
+
+Heading also has optional body property.
+
+-- tf.h4: This is heading tiny
+
+Heading also has optional body property.
+
+-- end: site-doc.output
+
+
+-- site-doc.header: Properties:
+
+Below are details of all properties of heading components. Each heading
+component has title and body as common properties.
+
+-- site-doc.component-property: `title` 
+type: caption (`required`)
+
+`title` Title property of each heading is a default property. Below are title
+font size, line-height and font-weight of each heading.
+
+-- collapse.collapse: `h0, h1, h2...titles`  - click here to see details
+
+🔶 h0: its `role` is \$inherited.types.heading-hero
+- desktop: `font-size: 52, line-height: 60, letter-spacing: 0, weight: 700`
+- mobile: `font-size: 52, line-height: 60, letter-spacing: 0, weight: 700`
+- border-bottom: 1px solid \$inherited.colors.border(as per color scheme you use)
+
+🔶 h1: its `role` is \$inherited.types.heading-large
+- desktop: `font-size: 40, line-height: 48, letter-spacing: 0, weight: 700`
+- mobile: `font-size: 40, line-height: 48, letter-spacing: 0, weight: 700`
+- border-bottom: 1px solid \$inherited.colors.border(as per color scheme you use)
+
+🔶 h2: its `role` is \$inherited.types.heading-medium
+- desktop: `font-size: 32, line-height: 44, letter-spacing: 0, weight: 600`
+- mobile: `font-size: 32, line-height: 44, letter-spacing: 0, weight: 600`
+
+🔶 h3: its `role` is \$inherited.types.heading-small
+- desktop: `font-size: 24, line-height: 36, letter-spacing: 0, weight: 500`
+- mobile: `font-size: 24, line-height: 36, letter-spacing: 0, weight: 500`
+
+🔶 h4: its `role` is \$inherited.types.heading-tiny
+- desktop: `font-size: 18, line-height: 26, letter-spacing: 0, weight: 500`
+- mobile: `font-size: 18, line-height: 26, letter-spacing: 0, weight: 500`
+
+-- end: collapse.collapse
+
+-- site-doc.component-property: `body` 
+type: body (`optional`)
+
+Body property is used to add body content to heading components. Each heading
+body is using common font-size, line-height and font-weight.
+
+-- collapse.collapse: `body` - click here to see  details
+
+🔶 Body text uses fastn default `$inherited.types.copy-regular` type.
+
+- desktop: `font-size: 16, line-height: 24, letter-spacing: 0, weight: 400`
+- mobile: `font-size: 16, line-height: 24, letter-spacing: 0, weight: 400`
+
+-- end: collapse.collapse
+
+-- end: site-doc.component-doc
+
+-- end: site-doc.doc-home

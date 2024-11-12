@@ -1,0 +1,81 @@
+-- import: fastn.com/assets
+
+-- ds.page: An Editor For Programmers
+
+So you have `fastn`, and you are eager to start writing some `ftd` code. But
+before that let's setup a decent programming editor. Programs are written in
+"plain text" files. Editing plain text files is usually done best with special
+text editors. We have many to chose from, old timers use ViM or Emacs. Then
+there are VSCode and Jetbrains family of editors. These editors not only are
+quite good at editing text files, they also come with a plethora of features,
+like file browser that lets you easily see all the files in your "project",
+tools like Find and Replace to quickly find things across your files, and do
+mass replace, which can be handy if you change your mind about name of something
+for example.
+
+Some of these editors also come with programming language specific tools, which
+let you perform operations related to specific tasks in that language etc. Some
+of these are also called "Programming IDEs", integrated development
+environments.
+
+This can be a lot if you are getting started. We recommend an editor called
+[SublimeText](https://www.sublimetext.com/3). This is how it looks like on
+my machine:
+
+-- ds.image:
+src: $assets.files.images.sublime.png
+
+
+Notice how you can see the content of the file being edited, the name of the
+file is `editor.ftd`. You can also see a bunch of tabs, other files like
+`install.ftd`, `terminal.ftd` and `FASTN.ftd` are also open as tabs. Further
+notice the left hand side containing all the files and folders present in the
+"package" I am editing.
+
+If you look carefully you will find a green vertical line, and a few dots,
+these are giving some information about the version control status of the files.
+You can ignore them for now.
+
+-- ds.h1: Syntax Highlighting
+
+One particular thing you would notice is that some of the text are colored,
+e.g. in the first line, you see the word `import` is in orange color, and the
+text after the `:` is in green color. These coloring, or "highlights", are
+based on rules of the language, in this case we are editing a `ftd` file, so
+the highlight is based on `ftd`. They are also called "syntax highlighting",
+as they let you see different parts of "syntax" clearly.
+
+The same text without syntax highlighting looks like this:
+
+-- ds.image:
+src: $assets.files.images.sublime-without-highlighting.png
+
+A tad boring if you ask me. Syntax highlighting is completely optional, you can
+write code without highlighting at all, but they help. Especially more advanced
+highlighting performed by some editors show wrong lines using special
+highlighting, e.g.:
+
+-- ds.image: Error Highlighting In CLion
+src: $assets.files.images.error-highlights.png
+
+As you can see there are a lot of tiny red colored "squiggly lines", informing
+the editor that something is wrong. This is `CLion`, an editor from the
+`JetBrains` family of editors.
+
+We do not yet have this level of error reporting support for `ftd`/`fastn`, but
+we are working on it.
+
+-- ds.h1: Syntax Highlighting Support For `ftd` in SublimeText
+
+SublimeText comes with syntax highlighting support for some languages, but not
+for `ftd` yet. We have written [a guide to enable syntax highlighting in
+SublimeText](/sublime/-/book/).
+
+-- ds.h1: Next Step
+
+Once you are done, we can move on to creating our [hello world
+program](/book/hello-world/).
+
+
+
+-- end: ds.page

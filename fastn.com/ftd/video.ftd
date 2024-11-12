@@ -1,0 +1,342 @@
+-- import: fastn.com/assets
+
+-- ds.page: `ftd.video`
+
+`ftd.video` is the kernel element used to embed video content in `ftd`.
+
+-- ds.rendered: Usage
+
+	-- ds.rendered.input:
+	
+	\-- ftd.video:
+	src: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+	controls: true
+	width.fixed.px: 400
+	height.fixed.px: 300
+	fit: contain
+	
+	-- ds.rendered.output:
+	
+		-- ftd.video:
+		src: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+		width.fixed.px: 400
+		height.fixed.px: 300
+		fit: contain
+		controls: true
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+-- ds.h1: Attributes
+
+`ftd.video` accepts the below attributes as well all the [common
+attributes](ftd/common/).
+
+-- ds.h2: `src`
+
+Required: True
+
+The `src` attribute specifies the path to the video to embed. This is the only
+required attribute. `src` stores video URLs for both light and dark mode.
+
+-- ds.code: Video
+lang: ftd
+
+\-- ftd.video:
+src: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4 ;; <hl>
+controls: true
+width.fixed.px: 400
+height.fixed.px: 300
+fit: contain
+
+-- ds.output: Output: Video
+
+	-- ftd.video:
+	src: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+	width.fixed.px: 400
+	height.fixed.px: 300
+	controls: true
+	fit: contain
+	
+-- end: ds.output
+
+-- ds.code: Video using assets
+lang: ftd
+
+\-- import: fastn.com/assets
+
+-- ds.markdown:
+
+Then, use the `files` field of `assets` variable to access files present in the
+package. For example:
+
+-- ds.code: Video using assets
+lang: ftd
+
+\-- import: fastn.com/assets
+
+\-- ftd.video:
+src: $assets.files.videos.bunny.mp4 ;; <hl>
+controls: true
+width.fixed.px: 400
+height.fixed.px: 300
+fit: contain
+
+-- ds.markdown:
+
+The output will look same as above.
+
+
+
+
+
+
+-- ds.h2: `controls`
+
+Type: `optional` [`boolean`](ftd/built-in-types/#boolean)
+
+Required: False
+
+If this attribute value is set to `true`, the browser will offer controls to allow the user to control video playback, including volume, seeking, and pause/resume playback.
+If this attribute value is set to `true`, the browser will offer controls to allow the user to control video playback, including volume, seeking, and pause/resume playback.
+
+In the first example below, the controls attribute has been set to true, which is why the controls are being shown. However, in the second example below, the controls attribute has been set to false, which is why the controls are not being shown on that video.
+In the first example below, the controls attribute has been set to true, which is why the controls are being shown. However, in the second example below, the controls attribute has been set to false, which is why the controls are not being shown on that video.
+
+-- ds.rendered: Sample code using `controls`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+	controls: true ;; <hl>
+	width.fixed.px: 400
+	height.fixed.px: 300
+	fit: contain
+	
+	\-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+	controls: false ;; <hl>
+	muted: true
+	autoplay: true
+	width.fixed.px: 400
+	height.fixed.px: 300
+	fit: contain
+	
+	-- ds.rendered.output:
+	
+		-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+		controls: true
+		width.fixed.px: 400
+		height.fixed.px: 300
+		fit: contain
+		
+		-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+		controls: false
+		muted: true
+		autoplay: true
+		width.fixed.px: 400
+		height.fixed.px: 300
+		fit: contain
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+-- ds.h2: `muted`
+
+Type: `optional` [`boolean`](ftd/built-in-types/#boolean)
+
+Required: False
+
+A Boolean attribute that indicates the default setting of the audio contained in the video. If set to `true`, the audio will be initially silenced.
+A Boolean attribute that indicates the default setting of the audio contained in the video. If set to `true`, the audio will be initially silenced.
+
+-- ds.rendered: Sample code using `muted`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+	muted: true ;; <hl>
+	controls: true
+	autoplay: true
+	width.fixed.px: 400
+	height.fixed.px: 300
+	fit: contain
+	
+	-- ds.rendered.output:
+	
+		-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+		muted: true
+		controls: true
+		autoplay: true
+		width.fixed.px: 400
+		height.fixed.px: 300
+		fit: contain
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+-- ds.h2: `autoplay`
+
+Type: `optional` [`boolean`](ftd/built-in-types/#boolean)
+
+Required: False
+
+A Boolean attribute; if set to `true`, the video automatically begins to play back as soon as it can do so without stopping to finish loading the data.
+A Boolean attribute; if set to `true`, the video automatically begins to play back as soon as it can do so without stopping to finish loading the data.
+
+-- ds.markdown:
+
+**Note:** The autoplay option is only respected by the browser if the video is muted.
+
+-- ds.rendered: Sample code using `autoplay`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+	autoplay: true ;; <hl>
+	muted: true
+	width.fixed.px: 400
+	height.fixed.px: 300
+	fit: contain
+	
+	-- ds.rendered.output:
+	
+		-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+		muted: true
+		autoplay: true
+		width.fixed.px: 400
+		height.fixed.px: 300
+		fit: contain
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+-- ds.h2: `loop`
+
+Type: `optional` [`boolean`](ftd/built-in-types/#boolean)
+
+Required: False
+
+A Boolean attribute; if set to `true`, the video will play in a loop.
+
+-- ds.rendered: Sample code using `loop`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+	loop: true ;; <hl>
+	autoplay: true
+	muted: true
+	width.fixed.px: 400
+	height.fixed.px: 300
+	fit: contain
+	
+	-- ds.rendered.output:
+	
+		-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+		loop: true
+		muted: true
+		autoplay: true
+		width.fixed.px: 400
+		height.fixed.px: 300
+		fit: contain
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+-- ds.h2: `poster`
+
+Type: `optional` [`string`](ftd/built-in-types/#string)
+
+Required: False
+
+A URL for an image to be shown while the video is downloading. If this attribute isn't specified, nothing is displayed until the first frame is available, then the first frame is shown as the poster frame.
+
+-- ds.rendered: Sample code using `poster`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+	poster: https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg ;; <hl>
+	controls: true
+	width.fixed.px: 400
+	height.fixed.px: 300
+	fit: contain
+	
+	-- ds.rendered.output:
+	
+		-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+		poster: https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg
+		controls: true
+		width.fixed.px: 400
+		height.fixed.px: 300
+		fit: contain
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+-- ds.h2: `fit`
+
+Type: `optional` `string`
+
+Required: False
+
+The `fit` property determines how a `ftd.video` element should be adjusted to match its container size. It is similar to the [`object-fit`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) CSS property.
+
+This property offers various options for the content to adapt to the container, such as "maintaining the aspect ratio" or "expanding to occupy the available space fully."
+
+-- ds.rendered: Sample code using `fit`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+	poster: https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg ;; <hl>
+	controls: true
+	width.fixed.px: 400
+	height.fixed.px: 300
+	fit: contain ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.video: https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+		poster: https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg
+		controls: true
+		width.fixed.px: 400
+		height.fixed.px: 300
+		fit: contain
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- end: ds.page

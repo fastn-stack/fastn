@@ -1,0 +1,37 @@
+-- import: fastn.com/u/yashveer-mehra
+-- import: fastn.com/u/ganesh-salunke
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Blog Template 1 CS
+featured-link: /cs/blue-shades/
+category: Color Schemes
+image: $fastn-assets.files.images.featured.cs.blog-template-1-cs.png
+owners: [$yashveer-mehra.info, $ganesh-salunke.info]
+license-url: https://github.com/fastn-community/blog-template-1-cs/blob/main/LICENSE
+license: Creative Commons
+published-date: 01-Aug-2023
+cards: $similar-schemes
+github-url: https://github.com/fastn-community/blog-template-1-cs
+demo-link: https://fastn-community.github.io/blog-template-1-cs/
+
+
+
+-- ft-ui.template list similar-schemes:
+
+-- ft-ui.template: Blue Heal CS
+template-url: /cs/blue-heal-cs/
+screenshot: $fastn-assets.files.images.featured.cs.blue-heal-cs.png
+
+-- ft-ui.template: Dark Flame CS
+template-url: /cs/dark-flame-cs/
+screenshot: $fastn-assets.files.images.featured.cs.dark-flame-cs.png
+
+-- ft-ui.template: Navy Nebula CS
+template-url: /cs/navy-nebula-cs/
+screenshot: $fastn-assets.files.images.featured.cs.navy-nebula-cs.png
+
+-- ft-ui.template: Forest CS
+template-url: /cs/forest-cs/
+screenshot: $fastn-assets.files.images.featured.cs.forest-cs.png
+
+-- end: similar-schemes

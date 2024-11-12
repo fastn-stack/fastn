@@ -1,0 +1,17 @@
+<svg width="40" height="40" viewBox="0 0 24 24" fill="none"
+     xmlns="http://www.w3.org/2000/svg"
+style="width: 1em;
+    height: 1em;
+    display: inline-block;
+    line-height: 1em;
+    flex-shrink: 0;
+    color: currentcolor;
+    opacity: 1;
+    transform: rotate(-180deg);
+    transition: transform 0.2s ease 0s;
+    transform-origin: center center;
+    font-size: 1.25em;
+    vertical-align: middle;"
+>
+    <path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"></path>
+</svg>

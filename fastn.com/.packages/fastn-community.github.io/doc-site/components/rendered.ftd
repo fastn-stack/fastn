@@ -1,0 +1,97 @@
+-- import: fastn-community.github.io/doc-site/components
+
+-- ds.page: rendered
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+sidebar: true
+
+-- ds.page.right-sidebar:
+
+-- components.sidebar-index:
+
+-- end: ds.page.right-sidebar
+
+-- ds.page.body:
+
+In this section, we will learn more about `-- ds.rendered` component and its
+usage.
+
+`ds.rendered` component is used to demonstrate the code snippet and its output.
+If you want to show a fastn code snippet with its output to your users then you
+should use `-- ds.rendered` component.
+
+-- ds.h2: Example:
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- ds.rendered:
+
+\-- ds.rendered.input:
+
+\-- cb.code:
+lang: java
+
+if (condition) {
+    // code block
+    statement1;
+    statement2;
+    // ...
+}
+
+\-- ds.rendered.output:
+
+\-- cb.code:
+lang: java
+
+if (condition) {
+    // code block
+    statement1;
+    statement2;
+    // ...
+}
+
+\-- end: ds.rendered.output
+
+\-- end: ds.rendered
+
+-- ds.rendered.output:
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- cb.code:
+lang: java
+
+if (condition) {
+    // code block
+    statement1;
+    statement2;
+    // ...
+}
+
+-- ds.rendered.output:
+
+-- cb.code:
+lang: java
+
+if (condition) {
+    // code block
+    statement1;
+    statement2;
+    // ...
+}
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.markdown:
+
+`-- ds.rendered` component is built using code-block package.
+ To learn more about code-block usage and its properties - [Click here](https://fastn-community.github.io/code-block/docs/rendered/).
+
+-- end: ds.page

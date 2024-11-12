@@ -1,0 +1,82 @@
+-- import: fastn
+-- import: fifthtry.github.io/package-doc/assets
+-- import: fifthtry.github.io/package-doc/doc as pd
+-- import: fifthtry.github.io/package-doc/code-block as cb
+-- import: fifthtry.github.io/package-doc/forest-theme as ft
+-- import: fifthtry.github.io/package-doc/footer
+
+-- ft.page: Package for documentation
+show-footer: true
+site-name: Package Doc
+
+-- ft.page.footer:
+
+-- footer.fastn-footer:
+
+-- end: ft.page.footer
+
+-- pd.package: Package Docs
+name: fifthtry.github.io/package-doc
+
+This package can be used for documenting other packages.
+
+
+-- cb.code: Add this to your FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: fifthtry.github.io/package-doc
+
+
+-- cb.code: Then use the component:
+lang: ftd
+
+\-- import: fifthtry.github.io/package-doc as pd
+
+\-- pd.package: Package Docs
+name: fifthtry.github.io/package-doc
+
+
+
+
+
+
+
+
+
+-- pd.component: Package Page
+name: fifthtry.github.io/package-doc/pd.package
+
+Package documentation page should be powered by `package` component.
+
+This should be the first element in the page.
+
+
+-- pd.attribute: Title Of The Package
+name: : Package Title
+
+
+This is the title of the package being documented. This should be human readable
+name. This should be put in the caption.
+
+-- cb.code: How to specify component title
+lang: ftd
+
+\-- pd.package: Title Of The Package
+
+
+
+-- pd.attribute: Name Of The Package
+name: : Package Name
+
+The name of the package. This is the name that people use when importing the
+package:
+
+-- cb.code: How to specify component title
+lang: ftd
+
+\-- pd.package: Title Of The Component
+name: fifthtry.github.io/package-doc
+
+
+
+-- end: ft.page

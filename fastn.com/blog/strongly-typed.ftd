@@ -1,0 +1,239 @@
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
+-- import: fastn.com/utils
+-- import: fastn.com/assets
+
+
+-- common.post-meta meta: Memory, Mutability and Reactivity
+published-on: October 25, 2023
+post-url: /blog/strongly-typed/
+author: $authors.nandini
+
+In the realm of programming languages, there exist two prominent categories:
+**Static and Dynamic**. Dynamic languages gained popularity in the 1990s with the
+rise of Python, Ruby, PHP, and JavaScript. However, there has been a shift back
+to static languages since around 2010.
+
+The catalyst for this shift? Some of the once-dominant dynamic languages have
+adopted static type-checkers. JavaScript introduced **TypeScript**, a statically
+typed language, and **Rust**, another strongly typed language, became the most
+beloved among developers over the last eight years.
+
+
+-- ds.blog-page:
+meta: $meta
+
+-- ds.image: Source and Credit: [Presentation by Richard Feldman at GOTO Copenhagen 2022](https://www.youtube.com/watch?v=Tml94je2edk&t=664s)
+src: $fastn-assets.files.images.blog.graph.png
+
+-- ds.h1: Why the return to static languages?
+
+Well, one of the compelling advantages is that static languages offers
+rapid feedback, a streamlined syntax, IDE features, minimal runtime overhead,
+and early error detection. They make a developer's life easier and more
+efficient while providing robust support. Learn more about the resurgence of
+static typing in this video by
+[Richard Feldman at GOTO 2022](https://www.youtube.com/watch?v=Tml94je2edk&t=664s).
+
+**`fastn is a strongly typed language`** that not only harnesses the well-known
+advantages of static languages but also endeavors to address the three pivotal
+programming paradigms: **memory management, mutability, and reactivity.**
+
+-- ds.image:
+src: $fastn-assets.files.images.blog.paradigms.png
+width.fixed.px: 500
+
+-- ds.h1: Memory Management: The Housecleaning Analogy
+
+Imagine if, after drinking a glass of water, you meticulously placed your glass
+in the right spot, maintaining a clean house. This analogy resembles manual
+memory management, where developers are responsible for explicitly allocating
+and deallocating memory for data and objects.
+
+This means allocating memory when creating data structures or objects and
+releasing it when no longer needed. C and C++ involve manual memory management.
+While this approach provides ultimate control, it can be **labor-intensive**,
+taking up more developer time.
+
+To combat this, languages like **Java and JavaScript introduced garbage
+collectors**, akin to a scheduled cleaning crew for memory management. But in
+this case, your house is dirty until the crew comes and picks up the garbage.
+This leads to inefficiencies and **memory bloat.**
+
+-- ds.h2: `fastn` and Rust: Tidying Memory for Efficiency
+
+-- ftd.video: $fastn-assets.files.videos.memory-analogy.mp4
+muted: true
+autoplay: true
+loop: true
+width.fixed.px: 550
+height.fixed.px: 350
+fit: contain
+align-self: center
+
+-- ds.markdown:
+
+Rust employs memory management, similar to a robotic cleaner that tidies up your
+table every five minutes. This approach ensures your house is **“always clean”**,
+as the memory is managed meticulously. `fastn` follows a similar approach to Rust,
+allowing developers to **control memory allocation and deallocation, reducing the
+overhead associated with garbage collection** and yielding predictable, efficient
+memory usage.
+
+-- ds.h1: Mutability Control
+
+Java and many other languages offer mutable data structures by default, allowing
+values to change at will. While this flexibility can be powerful, it can also
+lead to unexpected bugs.
+
+Simply put, think of an Excel spreadsheet where cell C1 denotes an employee's
+date of birth (DOB), and C2 their salary. If you decide to grant a 10% raise in
+salary, you wouldn't want the values in C1 to budge.
+
+By assigning C1 as immutable and C2 as mutable, your data remains accurate
+without needless errors. Future salary calculations become a breeze. This kind
+of **mutability control is feasible with `fastn`**.
+
+-- ds.h2: Type Safety with fastn
+
+In fastn, all variables are **static** by default, which means they cannot be
+changed once assigned. However, you have the option to declare a variable as
+mutable by using the `$` prefix in the declaration. This approach allows
+developers to explicitly specify which variables can be modified during the
+application's lifecycle.
+
+-- ds.code:
+lang: ftd
+
+\;; non mutable variable
+\-- integer x: 10
+
+\;; mutable variable: $ prefix in declaration => mutable
+\-- integer $y: 20
+
+-- ds.markdown:
+
+By being a strongly typed language, fastn allows developers to specify which
+values can change and which should remain constant, similar to locking the DOB
+column in Excel. You get a high level of type safety, which helps prevent
+type-related errors. This means that variables and data are checked for their
+types, reducing the risk of unintended type conversions or data inconsistency.
+
+
+;; In conclusion, with fastn, you get explicit control over the mutability of data.
+;; You can choose to make data structures mutable or immutable, allowing for
+;; fine-grained control over data changes.
+
+;; This can lead to more predictable and robust code, ensuring smoother code
+;; maintenance while eliminating unnecessary bugs.
+-- ds.h1: Reactivity
+
+Reactivity is the cornerstone of dynamic web applications. In web development,
+reactivity ensures that when input data changes, all the properties of the user
+interface automatically adapt.
+
+It's like the Excel scenario where the age and
+seniority of employees depend on their DOB. Assume an employee’s age and
+seniority change every year based on his/her DOB (here, age and seniority are
+dynamic values and DOB is the input value)
+
+;; -- ds.h2: Svelte’s attempt to enhance Reactivity
+
+;; Svelte introduces a compile-time approach to reactivity. Instead of handling
+;; reactivity at runtime, Svelte compiles the code into highly optimized JavaScript
+;; during the build process. Svelte also promotes a declarative approach to
+;; building user interfaces. When the data changes, Svelte automatically generates
+;; the necessary code to update the UI accordingly.
+
+;; We argue with Swelt that reactivity can be solved by the compile-time approach.
+;; Svelte's approach although effective for certain types of web applications might
+;; not be the best fit for all projects. It is particularly well-suited for
+;; single-page applications and component-based UIs, but it may provide different
+;; benefits for complex applications.
+
+;; Furthermore, in situations where fine-grained control over execution is
+;; required, declarative programming might not provide the level of control
+;; that imperative programming does.
+-- ds.h2: fastn's Answer to Reactivity
+
+;; fastn bridges this gap by allowing developers to specify precisely how and
+;; when updates should occur in response to data changes, making it suitable for
+;; scenarios where custom reactivity control is required.
+
+fastn's approach to reactivity involves distinguishing between static and
+dynamic variables. Here's how:
+
+-- ds.h3: Predictable Reactivity
+
+By default, `fastn` treats variables as **static**, meaning
+they cannot be changed.  A variable can only be mutated using event handlers
+attached to UI. i.e., **if you have no UI that mutates a mutable variable,
+then the variable is a static variable.**
+
+As a result, the developer has better control over when and how
+variables are modified, which leads to more predictable reactivity.
+This predictability is essential for ensuring that UI components update
+appropriately in response to data changes.
+
+-- ds.h3: Declarative Approach
+
+`fastn` is **declarative** in nature, meaning that developers
+specify the desired state of the user interface rather than writing explicit
+instructions on how to update it. This simplifies the management of reactivity,
+as developers don't need to write extensive code to update the UI when data
+changes. Instead, the **UI responds automatically based on the changes in the
+variables.**
+
+-- ds.h3: Error Prevention
+
+When trying to modify a non-mutable variable or a formula,
+the `fastn` compiler generates an error. This safety mechanism prevents unintended
+or erroneous changes to variables, enhancing the stability and reliability of
+the application. It helps in avoiding common reactivity-related bugs that can
+occur in dynamic languages.
+
+-- ds.h3: Data-Driven UI
+
+fastn limits direct access to the UI. In `fastn`, it is not possible to
+query or access UI in any way. You can mutate or read variables but not UI.
+UI just exits and responds to data in variables. This approach promotes a structured
+and controlled way of handling reactivity.
+
+;; -- ds.code:
+;; lang: ftd
+
+;; \-- counter: 10
+
+;; \-- component counter:
+;; caption integer $count:
+
+;; \-- ftd.row:
+;; border-width.px: 2
+;; padding.px: 20
+;; spacing.fixed.px: 20
+;; background.solid if { counter.count % 2 == 0 }: yellow
+;; border-radius.px: 5
+
+;; \-- ftd.text: +
+;; $on-click$: $ftd.increment-by($a=counter.count, v=1)
+
+;; \-- ftd.integer: $counter.count
+
+;; \-- ftd.text: -
+;; $on-click$: $ftd.increment-by($a=$counter.count, v=-1)
+
+;; \-- end: ftd.row
+
+;; \-- end: counter
+
+
+-- ds.h1: Conclusion
+
+In a nutshell, fastn stands as a strong advocate for the revival of static
+languages. With features catering to memory management, mutability control,
+and reactivity, it's a valuable asset in the toolkit of web developers who seek
+efficient and precise solutions for modern and dynamic web applications.
+
+
+
+-- end: ds.blog-page

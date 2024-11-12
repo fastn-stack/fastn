@@ -1,0 +1,68 @@
+-- ds.page: Quick Build with fastn
+
+Ready for your first fastn-powered website? Look no further.
+This guide will teach you how to quickly create a stunning website with
+minimal effort.
+
+
+-- ds.h1: Step 1: Browse Professionally Designed Templates
+
+Start by browsing our collection of professionally designed templates on our
+[Featured Page](/featured/). We offer a wide variety of templates to suit
+different needs and styles. Take your time to explore and find the one that
+resonates with your vision.
+
+-- ds.h1: Step 2: Choose Your Template and Access the User Manual
+
+Once you've found a template that fits your project, click on it to access the
+User Manual. The User Manual provides detailed instructions on how to use the
+template effectively. It covers everything from customizing the template to
+modifying content.
+
+-- ds.h1: Step 3: Customize Your Template
+
+Follow the User Manual's guidance to customize the template to your liking.
+You can easily change the structure, style, and graphics to align with your
+brand or vision. fastn's user-friendly syntax makes this process a breeze,
+even if you're new to programming.
+
+-- ds.h1: Step 4: Deploy Your Website
+
+After you've fine-tuned your website, it's time to share it with the world.
+Visit our [Deployment Page](/github-pages/)
+to learn more about the deployment process. You'll find step-by-step
+instructions on how to deploy and host your website instantly.
+
+-- ds.h1: Next Steps
+
+If you are a complete beginner to programming, explore our
+[fastn basics page](/markdown/-/frontend/). Go through all the sections to
+accelerate your fastn journey.
+
+You can also [install fastn](/install/) and learn to [build UI Components](/expander/)
+using fastn.
+
+Check out all our [Learning Resources](/learn/) to master fastn.
+
+-- ds.h1: Keep Exploring
+
+- **Frontend**:
+  fastn is a versatile and user-friendly solution for all your
+  [frontend development](/frontend/) needs.
+
+- **Docs**:
+  Our [docs](/ftd/data-modelling/) is the go-to resource for mastering fastn.
+  It provides valuable resources from in-depth explanations to best practices.
+
+- **Backend**:
+  fastn also supports a bunch of [backend features](/backend/) that helps you
+  create dynamic websites.
+
+- **Web Designing**:
+  Check out our [design features](/design/) to see how we can enhance your web
+  design.
+
+
+
+
+-- end: ds.page

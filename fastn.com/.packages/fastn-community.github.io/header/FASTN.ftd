@@ -1,0 +1,19 @@
+-- import: fastn
+
+-- fastn.package: fastn-community.github.io/header
+
+-- fastn.dependency: fastn-community.github.io/site-doc
+-- fastn.dependency: fifthtry.github.io/product-switcher 
+-- fastn.dependency: fastn-community.github.io/code-block
+
+
+
+-- fastn.sitemap:
+
+# Home: index.html
+
+## Sub-Section Link: docs/examples/
+- Header Overview: index.html
+- Documentation: /docs/
+- Examples: /docs/examples/
+- Contribute: contribute/

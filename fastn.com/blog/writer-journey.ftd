@@ -1,0 +1,140 @@
+-- import: fastn-community.github.io/bling/collapse
+-- import: fastn-community.github.io/bling/modal-cover
+-- import: fastn-community.github.io/bling/quote
+
+-- boolean $show-modal: false
+
+-- import: fastn-community.github.io/bling/chat
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
+
+-- common.post-meta meta: A Content Writer’s Journey with fastn
+published-on: August 10, 2023
+post-url: /blog/writer-journey/
+author: $authors.nandini
+
+The thought of programming usually remains miles away from a writer's realm.
+After all, why would a writer delve into lines of code when words are our forte?
+But imagine a world where the two realms converge. A corner where I, as a
+content writer, can seamlessly wield both skills. This newfound ability has not
+only transformed my approach to work but has also sparked a journey that is
+reshaping my creative landscape.
+
+-- ds.blog-page:
+meta: $meta
+
+-- ds.h1: A Personal Journey
+
+This story began on a regular Wednesday evening. I had my freshly crafted blog
+content nestled within my Notion workspace. The task at hand: to take this
+content and bring it to life on fastn.com. Skepticism lingered – could I truly
+navigate the technical intricacies? Would the process consume an exorbitant
+amount of time, clashing with my existing to-dos?
+Enter [`Ajit`](https://www.fifthtry.com/team) (Devrel) from the fastn Team. He
+provided me with a concise list of links, including installing fastn, GitHub,
+and a Texteditor (Sublime).
+
+In about 30 to 40 minutes, I transitioned from decoding these tools to
+completing the tasks he had outlined. That was the heavy lifting of the two-day
+journey. The next day, a few quick calls with Ajit along with some videos he had
+already created accelerated the learning curve. The process took shape,
+converting the content from Notion into fastn language. By 12:40 on Friday, I
+had created my first GitHub pull request, marking a significant accomplishment.
+
+Later that day, I eagerly added a new component to my blog post – an opportunity
+I didn't have with Notion. After witnessing my work live on fastn.com, I knew
+those two days were well-invested.
+
+And as I stood on the threshold of
+[`my debut fastn page`](https://fastn.com/blog/intimidation-of-programming/),
+little did I know that a transformation was awaiting…
+
+-- ds.h1: The Synergy Between Writing and Programming
+
+How often have we, as content writers, wished for something that allowed us to
+build our creations exactly as we envisioned? fastn bridged that gap, bringing
+together two seemingly distinct skills working together - harmonizing content
+creation and execution.
+
+Next time I have an idea to publish, I no longer have to pass it off to the tech
+team, hoping they'll interpret my vision correctly.
+
+
+-- ds.h1: Complete Control from my Writing Desk to the Live Webpage
+
+As content writers, we're no strangers to the urge to perfect our work. We
+meticulously edit and tweak, aiming to enhance our creation until it resonates
+just right. Yet, the power to make those tweaks post-publication has
+traditionally eluded us. And often we are unable to modify a single line without
+triggering a chain reaction of developer involvement. fastn changed that. Now, I
+can make those last-minute changes to content, without relying on external help.
+
+-- quote.rustic: Nandhini, Content Writer
+
+It's liberating to control the outcome as the creator. I can swiftly bring
+changes to life without delay or intermediaries.
+
+-- ds.h1: The Unspoken Communication Struggle
+
+Ever tried to convey your creative vision to another person and felt the words
+fall short? We've all been there. This video might trigger a familiar struggle.
+
+-- ds.youtube:
+v: tAxY8D1TRTo
+
+-- ds.markdown:
+
+fastn transforms this scenario. Instead of lengthy instructions, I turn my
+vision into reality directly. No more exhaustive explanations – just direct
+creation.
+
+-- ds.h1: Why Fastn?
+
+You might wonder – why not resort to platforms like WordPress, Wix, or Webflow?
+They are tried-and-true, but they come with a price tag.
+
+fastn eliminates the financial burden. It offers the power of creation without
+cost. But what I most love is how easy it is to learn. And unlike other
+platforms, fastn ensures a clean separation of content and presentation. This
+means you can tweak designs without compromising brand guidelines or involving
+developers.
+
+
+-- ds.h1: Final Words
+
+The ability to unite writing and programming within a single platform adds a new
+dimension. And while this transformation might not find its way onto my resume
+just yet, it was undoubtedly a skill worth exploring.
+
+In the gaps between my creations, I realize this newfound skill helps me craft
+beyond words. It's a productive diversion, a puzzle I solve during breaks, and
+a momentum-builder when my main task hits a roadblock. `fastn` is becoming an
+integral part of my creative toolbox, altering not just the way I work but the
+very essence of how I create.
+
+Thank you for reading!
+
+-- collapse.collapse: **P.S.**
+
+My journey is just beginning. Stay tuned for more – I have plans for my website
+and helping others build theirs using fastn.
+
+-- collapse.collapse: **Ready to bring your words to life?**
+
+Embark on your fastn journey today. [`Start here.`](https://fastn.com/create-website-planning/)
+Happy content writing and coding!
+
+-- ds.markdown:
+
+If you are new here, here's a fastn fun-fact!
+-- modal-cover.button: Click to Open
+$on-click$: $ftd.toggle($a = $show-modal)
+disable-link: true
+
+-- modal-cover.modal-cover: fastn fun-fact
+$open: $show-modal
+
+**`If you can type, you can code!`**
+
+
+-- end: ds.blog-page

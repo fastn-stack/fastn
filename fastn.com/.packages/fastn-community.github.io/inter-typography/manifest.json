@@ -1,0 +1,31 @@
+{
+    "files": {
+        "fastn-typography.ftd": {
+            "name": "fastn-typography.ftd",
+            "checksum": "1E4C2DEBFAF8C35A5EBED6226723314B256C86EDC2A0B5B5351AAA0373D10931",
+            "size": 8877
+        },
+        "FASTN.ftd": {
+            "name": "FASTN.ftd",
+            "checksum": "7962BC19387123388D9EE826C19B2A845168A6CF307681081552E632CC214DF6",
+            "size": 343
+        },
+        "README.md": {
+            "name": "README.md",
+            "checksum": "7F22D09D1F7120AEF6A65F4DE989BC56589CBB46292965C2BF73BEE5621B337C",
+            "size": 1142
+        },
+        "LICENSE.md": {
+            "name": "LICENSE.md",
+            "checksum": "A95364C3842F2C439BD629F65E304A2850239B443596467254EE96E71CA213DD",
+            "size": 1498
+        },
+        "index.ftd": {
+            "name": "index.ftd",
+            "checksum": "2AE9C1A36C87CF396CFF2B0AE269B20A2A430257BB3F93C904F5A3A42FAFB27D",
+            "size": 12014
+        }
+    },
+    "zip_url": "https://github.com/fastn-community/inter-typography/archive/94975725e4cc2c4bf0c610fc06b56a486b167328.zip",
+    "checksum": "00711913EAC2482471D5E30B7E252A6C8600A169322D82F90B3009BDE7B76572"
+}

@@ -1,0 +1,117 @@
+-- ds.page: Glossary
+
+A `fastn` Glossary
+
+
+-- ds.h2: document
+
+The [file](glossary/#file) with extension that are compiled using FASTN.
+Currently, there are two such extensions `.md` and `.ftd`.
+
+
+-- ds.h2: document-name
+
+The unique identifier of a [document](glossary/#document). See more
+[`document-name`](processors/document-name/) processors.
+
+
+
+-- ds.h2: document-full-id
+
+The `document-full-id` is same as the [`document-id`](glossary/#document-id).
+Though, in some case, it could be alias to `document-id` with a
+[`document-suffix`](glossary/#document-suffix) added after special character
+`/-/`. In case, when `document-suffix` is not present, `document-full-id` and
+`document-id` are same.
+
+For a document `foo.ftd`, the `document-id` is `/foo/` but `document-full-id`
+could be `/foo/-/x/` where `/x/` is the `document-suffix`. Both `/foo/` and
+`/foo/-/x/` points to `foo.ftd`, probably with different
+[`document-metadata`](glossary/#document-metadata).
+
+See more [`document-full-id`](processors/document-full-id/) processors.
+
+
+
+-- ds.h2: document-id
+
+The `document-id` is the url of the document interface returns the location from
+where the compiled version of document can be accessed.
+
+For a document `foo.ftd`, the `document-id` is `/foo/`
+See more [`document-id`](processors/document-id/) processors.
+
+
+
+
+-- ds.h2: document-metadata
+
+The `document-metadata` is the key-value pair data provided to
+[`document-full-id`](glossary/#document-full-id) in the
+[sitemap](glossary/#sitemap).
+
+See more [`get-data`](processors/get-data/) processor.
+
+/-- ds.code: `document-metadata` in sitemap
+lang: ftd
+
+# Foo title: /foo/
+  name: Arpita
+
+/-- ds.markdown:
+
+Here, `/foo/` is both `document-full-id` and [`document-id`](glossary/#document-id).
+`name: Arpita` is `document-metadata` where `name` is key and `Arpita` is value.
+`foo.ftd` is the [`document-name`](glossary/#document-name). This
+document, `foo.ftd`, can access the `document-metadata` using `get-data`
+processor.
+
+
+
+-- ds.h2: document-suffix
+
+The `document-suffix` is the special read-only property in
+[`document-full-id`](glossary/#document-full-id) which is added after special
+character `/-/`.
+
+For `/foo/-/x/` as `document-full-id`, /x/ is `document-suffix`.
+
+This can accessed using [`document-suffix`](processors/document-suffix/)
+processor.
+
+See also [sitemap](sitemap/).
+
+
+
+-- ds.h2: fastn project
+
+The unit folder that contains `FASTN.ftd` and any number of folders or files of
+any extension.
+
+
+-- ds.h2: file
+
+The unit of storage in `fastn`. It is uniquely identified by the
+[filename](glossary/#filename).
+
+
+-- ds.h2: filename
+
+The unique identifier of an [file](glossary/#file).
+
+
+
+-- ds.h2: module
+
+The [document](glossary/#document) which can be imported in other documents.
+These can only be with extension `.ftd`.
+
+
+
+-- ds.h2: sitemap
+
+A sitemap is a data-structure where information is provided about the files on
+site. A sitemap tells which pages are important in site, and placed in proper
+structure. See also [sitemap](sitemap/).
+
+-- end: ds.page

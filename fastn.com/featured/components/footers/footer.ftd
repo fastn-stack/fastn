@@ -1,0 +1,32 @@
+-- import: fastn.com/u/ganesh-salunke
+-- import: fastn.com/featured as ft-ui
+
+
+-- ds.featured-category: Footer
+featured-link: /components/footers/
+category: Featured Components
+image: $fastn-assets.files.images.featured.components.footer.png
+owners: [$ganesh-salunke.info]
+license-url: https://github.com/fastn-community/footer/blob/main/LICENSE
+license: Creative Commons
+published-date: 23-June-2023
+cards: $footers
+github-url: https://github.com/fastn-community/footer
+demo-link: https://fastn-community.github.io/footer/docs/sitemap-footer/
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list footers:
+
+-- ft-ui.template: Footer - 3
+template-url: /featured/components/footers/footer-3/
+screenshot: $fastn-assets.files.images.featured.components.footer-3.png
+
+-- end: footers

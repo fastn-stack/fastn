@@ -1,0 +1,127 @@
+-- import: fastn.com/ftd/built-in-variables as v
+-- import: fastn/processors as pr
+-- import: fastn.com/ftd-host/processor
+-- import: fastn.com/backend/env-vars
+-- import: fifthtry.github.io/admonitions as cbox
+
+-- ds.page: GitHub User Details using the `user-details` processor
+
+Let's look at how we can access basic user details of a user authenticated
+using GitHub.
+
+-- experimental-warning:
+-- processor.static-vs-dynamic:
+
+-- ds.markdown:
+
+We can use `user-details` processor to get information about the
+authenticated user. First, we need some data structures:
+
+-- ds.code: Types required by `user-details`
+lang: ftd
+
+\-- record status:
+boolean is-logged-in:
+optional user-details user:
+
+\-- record user-details:
+string name:
+string login:
+integer id:
+
+-- ds.markdown:
+
+- `status` contains information about the user and a status representing
+  their login state.
+
+- `user-details` is the actual information that we get from GitHub. As of
+  now, you can only get the `login`(GitHub username), name, id (internal
+  GitHub user id).
+
+-- ds.h2: Using the `user-details` processor
+
+With the above data-structures defined, we can use them with the `user-details`
+processor:
+
+-- ds.code: `user-details` processor usage
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- status auth:
+$processor$: pr.user-details
+
+-- ds.markdown:
+
+- The `auth` variable can now be used to access user details, below is a simple
+  example:
+
+-- ds.code: Example use in a webpage
+lang: ftd
+
+\-- ftd.column:
+
+\-- ftd.row:
+if: { auth.is-logged-in == false }
+
+\-- ftd.text: You're not logged in! Can't give you the details.
+
+\-- end: ftd.row
+
+\-- ftd.row:
+if: { auth.is-logged-in }
+\-- ftd.text: User id:
+margin-right.px: 4
+
+\-- ftd.integer: $auth.user.id
+\-- end: ftd.row
+
+\-- ftd.row:
+if: { auth.is-logged-in }
+
+\-- ftd.text: $auth.user.name
+
+\-- end: ftd.row
+
+\-- end: ftd.column
+
+-- ds.markdown:
+
+- We show a message when the user is not logged in (`auth.is-logged-in == false`).
+  You can also put a link for your users to login using GitHub:
+
+-- ds.code: Alternate text
+lang: ftd
+
+\-- ftd.text: You're not logged in! [Login with GitHub](/-/auth/login/)
+
+-- ds.h2: Setup GitHub Authentication with fastn
+
+- When configuring the [GitHub OAuth
+  app](https://github.com/settings/developers), ensure that the callback URL is
+  set to `yourdomain.com/-/auth/github/` (substitute "yourdomain.com" with your
+  specific URL).
+
+- Configure the following environment variables to let fastn know about your
+  GitHub OAuth app:
+
+-- env-vars.fastn-auth-variables:
+
+-- ds.markdown:
+
+After setting these variables, you can direct users to `/-/auth/login/` for
+GitHub login and `/-/auth/logout/` for logout.
+
+-- end: ds.page
+
+;; COMPONENTS
+
+-- component experimental-warning:
+
+-- cbox.warning: Experimental feature
+
+This feature is not ready for use in production.
+
+-- end: cbox.warning
+
+-- end: experimental-warning

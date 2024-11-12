@@ -1,0 +1,860 @@
+-- import: fastn.com/ftd as ftd-index
+-- import: fastn-community.github.io/bling/quote
+-- import: fastn-community.github.io/bling/modal-cover
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component very-easy-syntax:
+boolean $show-modal: false
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.em: 0.8
+max-width.fixed.px: 980
+
+	-- ds.h1: Anyone can learn in a day 
+	
+	`fastn` simplifies programming making it accessible to everyone.
+	Developers, designers, and non-programmers alike can easily learn `fastn` to build
+	stunning web projects.
+	
+	Its **user-friendly interface and minimal syntax** allow even those with no
+	prior programming experience to grasp its functionalities swiftly.
+	
+	Take the below examples for instance.
+	
+	-- ds.h2: Example 1
+	
+	-- ds.h3: Input
+	
+	-- ds.code:
+	lang: ftd
+	
+	\-- chat-female-avatar: Hello World! 😀
+	
+	\-- chat-female-avatar:
+	
+	I'm Nandhini, a freelance content writer.
+	
+	\-- chat-female-avatar:
+	
+	Fun fact: I also built this entire page with fastn! 🚀
+	It's that easy!
+	
+	-- ds.h3: Output
+	
+	-- ftd-index.chat-female-avatar: Hello World! 😀
+	
+	-- ftd-index.chat-female-avatar:
+	
+	I'm Nandhini, a freelance content writer.
+	
+	-- ftd-index.chat-female-avatar:
+	
+	Fun fact: I built this entire page with fastn! 🚀
+	
+	It's that easy!
+	
+	-- ds.h2: Example 2
+	
+	-- ds.h3: Input
+	
+	-- ds.code:
+	lang: ftd
+	
+	\-- quote.rustic: Nandhini
+	
+	It's liberating to control the outcome as the creator. I can swiftly bring
+	changes to life without delay or intermediaries.
+	
+	-- ds.h3: Output
+	
+	-- quote.rustic: Nandhini
+	
+	It's liberating to control the outcome as the creator. I can swiftly bring
+	changes to life without delay or intermediaries.
+	
+	-- ds.h2: Example 3
+	
+	-- ds.h3: Input
+	
+	-- ds.code:
+	lang: ftd
+	
+	\-- boolean $show-modal: false
+	
+	\-- modal-cover.button: Click to Open
+	$on-click$: $ftd.toggle($a = $show-modal)
+	disable-link: true
+	
+	\-- modal-cover.modal-cover: fastn fun-fact
+	$open: $show-modal
+	
+	**`If you can type, you can code!`**
+	
+	-- ds.h3: Output
+	
+	-- modal-cover.button: Click to Open
+	$on-click$: $ftd.toggle($a = $very-easy-syntax.show-modal)
+	disable-link: true
+	
+	-- modal-cover.modal-cover: fastn fun-fact
+	$open: $very-easy-syntax.show-modal
+	
+	**`If you can type, you can code!`**
+	
+	-- ds.markdown:
+	
+	As evident, the language is effortlessly comprehensible to everyone. This
+	fosters smooth collaboration among developers, designers, and content creators,
+	ultimately boosting the efficiency of the entire project.
+	
+-- end: ftd.column
+
+-- end: very-easy-syntax
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component readymade-components:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.em: 0.8
+max-width.fixed.px: 980
+
+	-- ds.h1: Rich collection of ready-made components
+	
+	fastn's versatility accommodates a wide range of projects, from landing pages to
+	complex web applications, giving startups the agility they need to adapt and
+	evolve.
+	
+	You can choose from numerous components that suit your needs.
+	There are [doc-sites](https://fastn.com/featured/doc-sites/),
+	[blogs](https://fastn.com/featured/blog-templates/),
+	[landing pages](https://fastn.com/featured/landing-pages/)
+	to individual component library like [bling](https://fastn-community.github.io/bling/),
+	[hero sections](https://fastn.com/featured/sections/heros/), and more.
+	
+	The best part? All components in the ecosystem adhere to a unified design
+	system. This ensures that `every component blends seamlessly with others`,
+	creating a `cohesive look and feel` across your entire site.
+	
+	-- ds.h2: Create your own custom component
+	
+	From buttons that seamlessly blend with your design to interactive elements that
+	engage users, `fastn` makes component creation intuitive and efficient.
+	
+	-- ds.code: Creating a custom component
+	lang: ftd
+	
+	\-- toggle-text: fastn is cool!
+	
+	
+	\-- component toggle-text:
+	boolean $current: false
+	caption title:
+	
+	\-- ftd.text: $toggle-text.title
+	align-self: center
+	color if { toggle-text.current }: $inherited.colors.cta-primary.disabled
+	color: $inherited.colors.cta-primary.text
+	role: $inherited.types.heading-tiny
+	background.solid: $inherited.colors.cta-primary.base
+	padding.px: 20
+	border-radius.px: 5
+	$on-click$: $ftd.toggle($a = $toggle-text.current)
+	
+	\-- end: toggle-text
+	
+	
+	
+	-- ds.output:
+	
+		-- ftd-index.toggle-text: fastn is cool!
+		
+	-- end: ds.output
+
+
+	-- ds.h2: Content Components
+	
+	In fastn, you can `create custom content components` for recurring information.
+	This ensures a consistent user experience throughout your website while saving
+	your time.
+	
+	-- ds.h2: Functional Components
+	
+	fastn's dynamic features lets you create engaging user experiences that capture
+	and retain customer interest.
+	
+	-- ds.h3: Event Handling Made Simple
+	
+	We've got a range of built-in events in fastn. Handle clicks, mouse actions,
+	and more. fastn’s event handling capabilities can be used to create fully
+	functional frontend applications.
+	
+	
+	-- ds.rendered:
+	
+	-- ds.rendered.input:
+	
+	\-- boolean $show: false
+	
+	\-- ftd.text: Enter mouse cursor over me
+	$on-mouse-enter$: $ftd.set-bool($a = $show, v = true)
+	$on-mouse-leave$: $ftd.set-bool($a = $show, v = false)
+	
+	\-- ftd.text: Hide and Seek
+	if: { show }
+	
+	-- ds.rendered.output:
+	
+		-- on-mouse-leave-event:
+		
+	-- end: ds.rendered.output
+
+
+
+
+	-- ds.h3: Built-in Rive
+	
+	Elevate your website's visual appeal with built-in Rive animations. `Easily embed
+	animations` into your fastn documents for engaging user experiences.
+	
+	
+	-- ds.rendered:
+	
+		-- ds.rendered.input:
+		
+		\-- string $idle: Unknown Idle State
+		
+		\-- ftd.text: $idle
+		
+		\-- ftd.rive:
+		id: vehicle
+		src: https://cdn.rive.app/animations/vehicles.riv
+		autoplay: false
+		artboard: Jeep
+		$on-rive-play[idle]$: $ftd.set-string($a = $idle, v = Playing Idle)
+		$on-rive-pause[idle]$: $ftd.set-string($a = $idle, v = Pausing Idle)
+		
+		
+		\-- ftd.text: Idle/Run
+		$on-click$: $ftd.toggle-play-rive(rive = vehicle, input = idle)
+		
+		-- ds.rendered.output:
+		
+			-- on-rive-play-pause-event:
+			
+		-- end: ds.rendered.output
+
+	-- end: ds.rendered
+
+
+	-- ds.h2: Open source Advantage
+	
+	Our [design community portal](https://fastn.com/featured/) serves as a
+	hub for designers and frontend developers to submit their fastn packages for end
+	users to discover and use.
+	
+	Currently we have a community of 3000+ developers and designers on our
+	[Discord Channel](https://discord.gg/xs4FM8UZB5) with active participants
+	contributing to fastn.
+	
+	-- ds.image: Our Discord Server
+	src: $fastn-assets.files.compare.discord-3k.png
+	width.fixed.percent: 95
+
+-- end: ftd.column
+
+-- end: readymade-components
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component webflow-vs-fastn-readymade-components:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.em: 0.8
+max-width.fixed.px: 980
+
+	-- ds.h1: Rich collection of ready-made components
+	
+	fastn's versatility accommodates a wide range of projects, from landing pages to
+	complex web applications, giving startups the agility they need to adapt and
+	evolve.
+	
+	You can choose from numerous components that suit your needs.
+	There are [doc-sites](https://fastn.com/featured/doc-sites/),
+	[blogs](https://fastn.com/featured/blog-templates/),
+	[landing pages](https://fastn.com/featured/landing-pages/)
+	to individual component library like [bling](https://fastn-community.github.io/bling/),
+	[hero sections](https://fastn.com/featured/sections/heros/), and more.
+	
+	The best part? All components in the ecosystem adhere to a unified design
+	system. This ensures that every component blends seamlessly with others,
+	creating a cohesive look and feel across your entire site.
+	
+	-- ds.h2: Content Components
+	
+	In fastn, you can create custom content components for recurring information.
+	This ensures a consistent user experience throughout your website while saving
+	your time.
+	
+	-- ds.h2: Open source Advantage
+	
+	While Webflow offers templates and pre-designed elements, they are limited to
+	their developers.
+	
+	Whereas our [design community portal](https://fastn.com/featured/) serves as a
+	hub for designers and frontend developers to submit their fastn packages for end
+	users to discover and use.
+	
+	Currently we have a community of 3000+ developers and designers on our
+	[Discord Channel](https://discord.gg/xs4FM8UZB5) with active participants
+	contributing to fastn.
+	
+	-- ds.image: Our Discord Server
+	src: $fastn-assets.files.compare.discord-3k.png
+	width.fixed.percent: 95
+	
+	
+	
+-- end: ftd.column
+
+-- end: webflow-vs-fastn-readymade-components
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component fullstack-framework:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.em: 0.8
+max-width.fixed.px: 980
+
+	-- ds.h1: Full stack framework
+	
+	Along with [building frontends](https://fastn.com/frontend/), `fastn` can be
+	used for building `data driven websites and dashboards`.
+	
+	-- ds.h2: Seamless API Integration
+	
+	You can interact with backend APIs, and use the API responses to
+	- Create dynamic web pages,
+	- Display and render the response data
+	- Conditional Rendering, etc.
+	
+	Checkout the [http processor](https://fastn.com/http/) to know more.
+	
+	-- ds.code: fetching data from API
+	lang: ftd
+	
+	\-- import: fastn/processors as pr
+	
+	\-- result r:
+	$processor$: pr.http
+	url: https://api.github.com/search/repositories
+	sort: stars
+	order: desc
+	q: language:python
+	
+	-- ds.h2: Effortless SQL Interaction
+	
+	Query data from SQLite databases to create dynamic websites.
+	Our [package query processor](https://fastn.com/package-query/) makes it a
+	breeze.
+	
+	-- ds.code: Working With SQL Is Breeze
+	lang: ftd
+	
+	\-- import: fastn/processors as pr
+	
+	\-- people:
+	$processor$: pr.package-query
+	db: db.sqlite
+	
+	SELECT * FROM user;
+	
+	
+	\-- show-person: $p
+	for: $p in $people
+	
+	
+-- end: ftd.column
+
+-- end: fullstack-framework
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component design-system:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.em: 0.8
+max-width.fixed.px: 980
+
+	-- ds.h1: Opinionated Design System
+	
+	`fastn` comes with integrated design system. We've many pre-made design choices
+	so you can build your website quickly.
+	
+	-- ds.h2: Unified Color and Typography
+	
+	A lot of [color scheme](/featured/cs/) and
+	[typography](featured/fonts-typography/) packages are available, which you can
+	import and `change the entire typography or color scheme in a few lines of code`.
+	
+	You can manage color palettes and typography centrally to save time and ensure
+	consistent usage across your website.
+	
+	-- ds.image: fastn Colour Schemes
+	src: $fastn-assets.files.compare.cs.png
+	width.fixed.percent: 95
+	
+	-- ds.image: fastn Typography
+	src: $fastn-assets.files.compare.ty.png
+	width.fixed.percent: 95
+	
+	
+	-- ds.h2: Seamless Figma Integration
+	
+	Integrate Figma tokens with **`fastn`**'s color scheme or create your own scheme
+	from Figma JSON.
+	
+	-- ds.image: Using Figma tokens with fastn colour scheme
+	src: $fastn-assets.files.images.figma.b1.select-forest-cs.png
+	width: fill-container
+	
+	-- ds.h2: Responsive Ready
+	
+	All fastn templates and components are responsive by default. Your creations automatically
+	adapt to the perfect size, whether your users are on mobile or desktop devices.
+	
+	
+-- end: ftd.column
+
+-- end: design-system
+
+
+
+
+
+
+
+
+
+
+
+-- component seo:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.em: 0.8
+max-width.fixed.px: 980
+
+	-- ds.h1: Search Engine Optimization
+	
+	-- ds.h2: Custom and Clean URLs
+	
+	fastn allows you to `map documents to any URL you like`, allowing you to make all
+	your URLs clean, and folders organised! You can also create dynamic URLs in
+	fastn.
+	
+	
+	-- ds.h2: Optimized Meta Information
+	
+	Easily manage meta tags and descriptions with fastn. You can fine-tune
+	how your web pages appear in search engine results and increase your site's
+	discoverability. You can also add OG-Image to your page and control the
+	preview of your page link when shared across social platforms.
+	
+	
+	-- ds.code: Adding meta title, description and image
+	lang: ftd
+	copy: false
+	
+	\-- ds.page: This is page title
+	document-title: Welcome!
+	document-description: Learn how to do SEO! document-image: https://gargajit.github.io/optimization/images/seo-meta.png ;; <hl>
+	
+	
+	-- ds.h2: URL Redirection
+	
+	Effortlessly create URL redirections to improve navigation and link consistency,
+	ensuring that your users always find the right content, even when URLs change.
+	
+	
+	-- ds.code: URL Redirection: `FASTN.ftd` example that uses `fastn.redirects`
+	lang: ftd
+	copy: false
+	
+	\-- import: fastn
+	
+	\-- fastn.package: redirect-example
+	
+	\-- fastn.redirects: ;; <hl>
+	
+	/ftd/kernel/: /kernel/
+	/discord/: https://discord.gg/eNXVBMa4xt
+	
+	
+-- end: ftd.column
+
+-- end: seo
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component visualize-with-vercel:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.em: 0.8
+max-width.fixed.px: 980
+
+	-- ds.h1: Visualize with Vercel
+	
+	Preview and test your website's appearance and functionality before deployment.
+	
+	-- ds.image: Preview your page before deployment
+	src: $fastn-assets.files.compare.vercel.png
+	width.fixed.percent: 95
+	
+-- end: ftd.column
+
+-- end: visualize-with-vercel
+
+
+
+
+
+
+
+
+
+
+
+
+-- component fastn-best-choice-for-startup:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.em: 0.8
+max-width.fixed.px: 980
+
+	-- ds.h1: Why fastn is the best choice for your startup
+	
+	-- ds.h2: Stability Guarantee
+	
+	React, JavaScript often undergo rapid changes which leads to constant
+	relearning and updates. fastn's stability guarantees a consistent development
+	environment, saving startups from the constant disruptions of rapidly
+	changing technologies.
+	
+	-- ds.h2: Architectural Decisions Made for you
+	
+	With fastn, architectural decisions are simplified. We've pre-made many design
+	choices for you, from color schemes to typography roles, allowing you to focus
+	on building your project.
+	
+	-- ds.h2: Ecosystem Compatibility
+	
+	Unlike traditional languages that often lock you into specific ecosystems, fastn
+	is versatile and works well with various backend technologies and frameworks.
+	
+	
+	-- ds.h2: Cost-Efficiency
+	
+	fastn enables novice developers to make meaningful contributions. Cut costs by
+	utilizing a technology that's easy to learn, helping your startup achieve more
+	with less.
+	
+	With fastn's easy learning curve, you can save on hiring costs by enabling
+	developers of varying levels to efficiently create and manage your web presence.
+	
+-- end: ftd.column
+
+-- end: fastn-best-choice-for-startup
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component webflow-vs-fastn-best-choice-for-startup:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.em: 0.8
+max-width.fixed.px: 980
+
+	-- ds.h1: Why fastn is the best choice for your startup
+	
+	-- ds.h2: Full Control
+	
+	Relying heavily on a single platform can introduce risks, especially if that
+	platform undergoes changes or disruptions.Websites built on Wix, Webflow, etc. are tightly
+	linked to the platform. Users who later wish to migrate their sites to other
+	platforms or hosting services might encounter compatibility issues and data
+	transfer challenges.
+	
+	`With fastn, you retain full control and ownership.` Your content and audience
+	always belongs to you. fastn being open-source, ensures your content lives
+	forever.
+	
+	-- ds.h2: Cost of Ownership
+	
+	Webflow's pricing model could become costly as users add more features or their
+	business scales. Over time, the cumulative costs might not be feasible for
+	startups or small businesses with limited budgets.
+	
+	fastn is free forever.
+	
+	-- ds.h2: Self-hosting
+	
+	Self-hosting reduces dependency on third-party platforms and hosting services.
+	This not only lowers costs associated with subscription fees but also minimizes
+	the risk of service disruptions or policy changes by external providers.
+	
+	fastn's allows you to deploy your website on your server. The freedom to
+	self-host provides control, customization, privacy, scalability,
+	and reduced reliance on external platforms.
+	
+	
+-- end: ftd.column
+
+-- end: webflow-vs-fastn-best-choice-for-startup
+
+
+
+
+
+
+
+
+
+
+
+
+-- component webflow-vs-fastn-separation-of-content-and-design:
+
+-- ds.h1: Separation of content and design
+
+In Webflow, making changes to the content can inadvertently disrupt the
+design layout. This can result in constant adjustments and compromises,
+making the maintenance process cumbersome.
+
+In fastn, you can effortlessly modify the content without impacting the design.
+
+-- end: webflow-vs-fastn-separation-of-content-and-design
+
+
+
+
+
+
+
+
+
+
+-- component github-integration:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.em: 0.8
+max-width.fixed.px: 980
+
+	-- ds.h1: GitHub Integration
+	
+	fastn's version control is made possible through its integration with GitHub.
+	Online website builders like Webflow, Wix, and Framer often lack version control
+	features. (Webflow offers review product only in Enterprise Edition)
+	
+	Without version control, users might find themselves in a predicament
+	if they accidentally delete or overwrite a crucial information in their
+	website.
+	
+	-- ds.h2: Easy Collaboration
+	
+	fastn's integration with GitHub streamlines teamwork by enabling multiple
+	contributors to work simultaneously on different branches, making collaboration
+	smooth and efficient.
+	
+	-- ds.image: Multiple Contributors Can Work Simultaneously
+	src: $fastn-assets.files.compare.multiple-users.png
+	width.fixed.percent: 95
+	
+	-- ds.h2: Reverting Changes
+	
+	When errors or undesirable changes occur, you can revert to a previous working
+	version quickly.
+	
+	-- ds.h2: Review and Approval
+	
+	The integration with GitHub facilitates a streamlined review process. Users can
+	create pull requests, allowing designated reviewers to assess the proposed
+	changes.
+	
+	-- ds.image: Reviewers can catch errors, recommend improvements, and suggest optimizations
+	src: $fastn-assets.files.compare.reviewer.png
+	width.fixed.percent: 95
+	
+	-- ds.h2: Merge in one-go
+	
+	With a single click, users can merge the changes into the live website, thanks
+	to GitHub integration in fastn.
+	
+-- end: ftd.column
+
+-- end: github-integration
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component on-mouse-leave-event:
+boolean $show: false
+
+-- ftd.column:
+color: $inherited.colors.text
+
+	-- ftd.text: Enter mouse cursor over me
+	$on-mouse-enter$: $ftd.set-bool($a = $on-mouse-leave-event.show, v = true)
+	$on-mouse-leave$: $ftd.set-bool($a = $on-mouse-leave-event.show, v = false)
+	
+	-- ftd.text: Hide and Seek
+	if: { on-mouse-leave-event.show }
+	
+-- end: ftd.column
+
+-- end: on-mouse-leave-event
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component on-rive-play-pause-event:
+string $idle: Unknown Idle State
+
+-- ftd.column:
+width: fill-container
+color: $inherited.colors.text
+
+	-- ftd.text: $on-rive-play-pause-event.idle
+	
+	-- ftd.rive:
+	id: jeep-play
+	src: https://cdn.rive.app/animations/vehicles.riv
+	autoplay: false
+	artboard: Jeep
+	$on-rive-play[idle]$: $ftd.set-string($a = $on-rive-play-pause-event.idle, v = Playing Idle)
+	$on-rive-pause[idle]$: $ftd.set-string($a = $on-rive-play-pause-event.idle, v = Pausing Idle)
+	
+	-- ftd.text: Idle/Run
+	$on-click$: $ftd.toggle-play-rive(rive = jeep-play, input = idle)
+	
+-- end: ftd.column
+
+-- end: on-rive-play-pause-event

@@ -1,0 +1,228 @@
+-- import: fastn-community.github.io/doc-site/assets
+-- import: fastn-community.github.io/banner
+-- import: fastn-community.github.io/doc-site/components
+
+
+
+
+-- ds.page: Adding Banner
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+show-banner: true
+sidebar: true
+
+-- ds.page.right-sidebar:
+
+-- components.sidebar-index:
+
+-- end: ds.page.right-sidebar
+
+-- ds.page.banner:
+
+-- banner.banner:
+
+If you like fastn, give it a ⭐️ star on [GitHub.](https://github.com/fastn-stack/fastn/) 
+Also, follow us on [Twitter](https://twitter.com/FifthTryHQ), 
+[Linkedin](https://www.linkedin.com/company/fastn-stack/),
+[Instagram](https://www.instagram.com/fastn_stack/)
+
+-- end: ds.page.banner
+
+-- ds.page.body:
+
+Banners are an important element of website design and can be used to enhance
+the user experience, increase engagement, and drive conversions.
+
+🌟 Ex.g. Look at the top of this page.
+
+To learn more about banner
+component - [Click here](https://fastn-community.github.io/banner/).
+
+A [banner](https://fastn-community.github.io/banner/) is typically a horizontal 
+bar that appears at the very top of a webpage, often referred to as a "top banner" 
+or "header banner". 
+
+It usually contains important information or calls to action that are designed
+to catch the user's attention and encourage them to take action.
+
+-- ds.h2: How to enable banner on a page?
+
+If you want to add `ds.page.banner` inside your page then refer below
+code snippet.
+
+-- ds.code: Add banner dependency into your FASTN.ftd file
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/banner
+
+-- ds.code: Scroll down to view full code, click on download icon to download this code
+lang: ftd
+max-height.fixed.px: 300
+download: page.ftd
+
+\-- import: fastn-community.github.io/banner
+
+\-- ds.page:
+show-banner: true
+
+\-- ds.page.banner:
+
+\-- banner.banner:
+
+If you like fastn, give it a ⭐️ star on [GitHub.](https://github.com/fastn-stack/fastn/) 
+Also, follow us on [Twitter](https://twitter.com/FifthTryHQ), 
+[Linkedin](https://www.linkedin.com/company/fastn-stack/),
+[Instagram](https://www.instagram.com/fastn_stack/)
+
+\-- end: ds.page.banner
+
+\-- ds.page.body:
+
+This is body content of your page.
+
+\-- end: ds.page
+
+-- ds.markdown:
+
+Click on the download icon of the above code-block. `page.ftd` file will be
+downloaded.
+
+Then deploy or run `fastn serve` on your localhost. Access your localhost in the
+browser and open `http://127.0.0.1:8000/page/` url, you will see page with a
+banner as seen on top of this page.
+
+-- ds.h2: How to enable banner on all pages?
+
+If you want to show [banner](https://fastn-community.github.io/banner/) on all 
+pages and the content of your banner is same on all pages then, we recommend 
+modifying `FASTN/ds.ftd` global module that helps you to keep all your global 
+properties and configurations in one `.ftd` file.
+
+-- ds.code: Add banner dependency into your FASTN.ftd file
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/banner
+
+
+-- ds.h3: How to modify `FASTN/ds.ftd` module of `doc-site`?
+
+You can modify a `FASTN/ds.ftd` module which is already added inside your
+`fastn` package.
+
+Let's learn how to modify `FASTN/ds.ftd` module:
+
+- Edit `FASTN/ds.ftd` module and enable `show-banner: true`
+
+- Then remove `ftd.ui list banner:` property from `page` component and add
+`-- ftd.ui list page.banner` and its content inside your `FASTN/ds.ftd`
+file below `-- end: page.footer` as shown in below code snippet.
+
+-- ds.code: Scroll down to view full code, click on download icon to download this code
+lang: ftd
+max-height.fixed.px: 300
+download: ds.ftd
+
+\-- import: fastn-community.github.io/banner
+\-- import: fastn-community.github.io/footer
+\-- import: fastn-community.github.io/doc-site/common
+\-- import: fastn-community.github.io/roboto-typography as typo
+\-- import: fastn-community.github.io/doc-site
+export: author-bio,code,compact-text,featured-post,h0,h1,h2,h3,iframe,image,image-first,image-in-between,link,link-group,markdown,not-found-1,not-found-2,output,post,posts,rendered,tip,without-image,youtube
+
+\-- component page:
+children wrapper:
+optional caption title:
+optional body body:
+boolean sidebar: true
+optional string document-title:
+optional string document-description:
+optional ftd.raw-image-src document-image:
+optional string site-name: Doc Site
+optional ftd.image-src site-logo:
+boolean github-icon: true
+optional string github-url: https://github.com/fastn-community/doc-site/
+boolean full-width: false
+ftd.type-data types: $typo.types
+ftd.color-scheme colors: $ftd.default-colors
+integer logo-width: $common.logo-width
+integer logo-height: $common.logo-height
+boolean show-footer: true
+boolean show-banner: true
+ftd.ui list banner:
+fastn.app-ui apps: $common.apps
+boolean login-button: $common.login-button
+string site-url: $common.site-url
+
+\-- ftd.ui list page.footer:
+
+\-- footer.fastn-footer:
+copyright: Copyright © 2023 - [FifthTry](https://www.fifthtry.com/)
+site-logo: $common.fastn-logo
+powered-by-text: Powered by
+powered-by-link: https://fastn.com/
+
+\-- end: page.footer
+
+\-- ftd.ui list page.banner:
+
+\-- banner.banner:
+
+If you like fastn, give it a ⭐️ star on [GitHub.](https://github.com/fastn-stack/fastn/) 
+Also, follow us on [Twitter](https://twitter.com/FifthTryHQ), 
+[Linkedin](https://www.linkedin.com/company/fastn-stack/),
+[Instagram](https://www.instagram.com/fastn_stack/)
+
+\-- end: page.banner
+
+\-- doc-site.page: $page.title
+site-logo: $page.site-logo
+body: $page.body
+colors: $page.colors
+sidebar: $page.sidebar
+full-width: $page.full-width
+types: $page.types
+show-banner: $page.show-banner
+show-footer: $page.show-footer
+site-name: $page.site-name
+logo-height: $page.logo-height
+logo-width: $page.logo-width
+github-icon: $page.github-icon
+github-url: $page.github-url
+right-sidebar: $page.right-sidebar
+footer: $page.footer
+banner: $page.banner
+document-title: $page.document-title
+document-description: $page.document-description
+document-image: $page.document-image
+apps: $page.apps
+login-button: $page.login-button
+site-url: $page.site-url
+
+\-- ftd.column:
+spacing.fixed.em: 0.8
+width: fill-container
+children: $page.wrapper
+
+\-- end: ftd.column
+
+\-- end: doc-site.page
+
+\-- end: page
+
+-- ds.markdown:
+
+Click on the download icon of the above code-block. `ds.ftd` file will be
+downloaded.
+
+Replace `FASTN/ds.ftd` file with this downloaded file inside your `fastn`
+project.
+
+Then deploy or run `fastn serve` on your localhost. Access your localhost in the
+browser e.g.`http://127.0.0.1:8000/` you will see all your pages with a
+banner on top of every page.
+
+To learn more about banner
+component - [Click here](https://fastn-community.github.io/banner/).
+
+-- end: ds.page

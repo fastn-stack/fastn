@@ -1,0 +1,827 @@
+-- boolean show-grid: true
+-- boolean show-list: false
+
+
+
+
+-- ds.page:
+sidebar: false
+
+-- grid-view: Documentation Sites
+if: { show-grid }
+templates: $doc-sites
+more-link-text: View all
+more-link: /featured/doc-sites/
+
+-- grid-view: Landing Pages
+if: { show-grid }
+templates: $landing-pages
+more-link-text: View all
+more-link: /featured/landing-pages/
+
+-- grid-view: Blog Templates
+if: { show-grid }
+templates: $blog-sites
+more-link-text: View all
+more-link: /featured/blogs/
+
+-- grid-view: Portfolio / Personal Sites
+templates: $portfolios
+more-link-text: View all
+more-link: /featured/portfolios/
+
+-- grid-view: Resumes
+if: { show-grid }
+templates: $resumes
+more-link-text: View all
+more-link: /featured/resumes/
+
+-- grid-view: Section Library
+if: { show-grid }
+templates: $sections
+more-link-text: View all
+more-link: /featured/sections/
+
+-- grid-view: Component Libraries
+if: { show-grid }
+templates: $bling
+more-link-text: View all
+more-link: /featured/components/
+
+-- grid-view: Color Schemes
+if: { show-grid }
+templates: $schemes
+more-link-text: View all
+more-link: /featured/cs/
+
+-- grid-view: Font Typographies
+if: { show-grid }
+templates: $fonts
+more-link-text: View all
+more-link: /featured/fonts/
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+-- component grid-view:
+optional caption title:
+template list templates:
+optional string more-link:
+optional string more-link-text:
+boolean $hover: false
+optional body body:
+boolean push-top: false
+boolean show-four: false
+boolean show-large: false
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px if { ftd.device == "mobile" }: 24
+margin-top.px if { grid-view.push-top }: -90
+max-width.fixed.px if { !grid-view.show-large } : 980
+max-width.fixed.px if { grid-view.show-large } : 1340
+
+	-- ftd.row:
+	width: fill-container
+	align-content: center
+	margin-top.px if { ftd.device == "mobile" }: 24
+	spacing: space-between
+	
+		-- ftd.desktop:
+		
+			-- ftd.text: $grid-view.title
+			if: { grid-view.title != NULL }
+			role: $inherited.types.heading-medium
+			color: $inherited.colors.accent.primary
+			
+		-- end: ftd.desktop
+
+		-- ftd.mobile:
+		
+			-- ftd.text: $grid-view.title
+			if: { grid-view.title != NULL }
+			role: $inherited.types.copy-large
+			color: $inherited.colors.text
+			width: fill-container
+			align-self: center
+			
+		-- end: ftd.mobile
+
+		-- ftd.row:
+		if: { grid-view.more-link-text != NULL}
+		align-content: center
+		spacing.fixed.px: 6
+		link: $grid-view.more-link
+		
+			-- ftd.text: $grid-view.more-link-text
+			role: $inherited.types.button-medium
+			color: $inherited.colors.text-strong
+			$on-mouse-enter$: $ftd.set-bool($a=$grid-view.hover, v = true)
+			$on-mouse-leave$: $ftd.set-bool($a=$grid-view.hover, v = false)
+			white-space: nowrap
+			border-bottom-width.px: 1
+			border-color: $inherited.colors.background.step-1
+			border-color if { grid-view.hover }: $inherited.colors.cta-primary.base
+			color if { grid-view.hover }: $inherited.colors.cta-primary.base
+			
+			-- ftd.image:
+			src: $fastn-assets.files.images.featured.arrow.svg
+			width: auto
+			
+		-- end: ftd.row
+
+	-- end: ftd.row
+
+	-- ftd.text:
+	if: { grid-view.body != NULL }
+	role: $inherited.types.copy-regular
+	color: $inherited.colors.text
+	margin-top.px: 16
+	margin-bottom.px if { ftd.device == "mobile" }: 24
+	
+	$grid-view.body
+	
+	-- ftd.desktop:
+	
+		-- ftd.row:
+		width: fill-container
+		spacing.fixed.px: 32
+		overflow-x: auto
+		margin-vertical.px: 40
+		
+			-- grid-of-items: $obj.title
+			$loop$: $grid-view.templates as $obj
+			template-url: $obj.template-url
+			licence-url: $obj.licence-url
+			github-url: $obj.github-url
+			screenshot: $obj.screenshot
+			body: $obj.body
+			is-last: $obj.is-last
+			wip: $obj.wip
+			two-fold: $obj.two-fold
+			show-large: $grid-view.show-large
+			
+		-- end: ftd.row
+
+	-- end: ftd.desktop
+
+	-- ftd.mobile:
+	
+		-- ftd.column:
+		width: fill-container
+		spacing.fixed.px: 32
+		
+			-- grid-of-items: $obj.title
+			$loop$: $grid-view.templates as $obj
+			template-url: $obj.template-url
+			licence-url: $obj.licence-url
+			github-url: $obj.github-url
+			screenshot: $obj.screenshot
+			body: $obj.body
+			is-last: $obj.is-last
+			wip: $obj.wip
+			two-fold: $obj.two-fold
+			
+		-- end: ftd.column
+
+	-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: grid-view
+
+
+
+
+
+
+
+
+
+
+-- component view-all:
+optional caption title:
+template list templates:
+optional body body:
+boolean $hover: false
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px if { ftd.device == "mobile" }: 24
+
+	-- ftd.row:
+	width: fill-container
+	align-content: center
+	margin-top.px if { ftd.device == "mobile" }: 24
+	
+		-- ftd.desktop:
+		
+			-- ftd.text: $view-all.title
+			if: { view-all.title != NULL }
+			role: $inherited.types.heading-medium
+			color: $inherited.colors.accent.primary
+			width: fill-container
+			
+		-- end: ftd.desktop
+
+		-- ftd.mobile:
+		
+			-- ftd.text: $view-all.title
+			if: { view-all.title != NULL }
+			role: $inherited.types.copy-large
+			color: $inherited.colors.text
+			width: fill-container
+			align-self: center
+			
+		-- end: ftd.mobile
+
+	-- end: ftd.row
+
+	-- ftd.text:
+	if: { view-all.body != NULL }
+	role: $inherited.types.copy-regular
+	color: $inherited.colors.text
+	margin-top.px: 16
+	margin-bottom.px if { ftd.device == "mobile" }: 24
+	
+	$view-all.body
+	
+	-- ftd.desktop:
+	
+		-- ftd.row:
+		width: fill-container
+		spacing.fixed.px: 32
+		wrap: true
+		margin-vertical.px: 40
+		
+			-- grid-of-items: $obj.title
+			$loop$: $view-all.templates as $obj
+			template-url: $obj.template-url
+			licence-url: $obj.licence-url
+			github-url: $obj.github-url
+			screenshot: $obj.screenshot
+			body: $obj.body
+			is-last: $obj.is-last
+			wip: $obj.wip
+			two-fold: $obj.two-fold
+			
+		-- end: ftd.row
+
+	-- end: ftd.desktop
+
+	-- ftd.mobile:
+	
+		-- ftd.column:
+		width: fill-container
+		spacing.fixed.px: 32
+		
+			-- grid-of-items: $obj.title
+			$loop$: $view-all.templates as $obj
+			template-url: $obj.template-url
+			licence-url: $obj.licence-url
+			github-url: $obj.github-url
+			screenshot: $obj.screenshot
+			body: $obj.body
+			is-last: $obj.is-last
+			wip: $obj.wip
+			two-fold: $obj.two-fold
+			
+		-- end: ftd.column
+
+	-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: view-all
+
+
+
+
+
+
+
+
+-- component grid-of-items:
+caption title:
+string template-url:
+optional string licence-url:
+string github-url:
+boolean is-last:
+boolean $github-hover: false
+boolean $mit-hover: false
+optional body body:
+optional ftd.image-src screenshot:
+boolean wip: false
+boolean two-fold: false
+boolean $mouse-in: false
+boolean show-large: false
+
+-- ftd.column:
+width if { ftd.device == "mobile" }: fill-container
+spacing.fixed.px: 16
+min-width.fixed.px: 302
+width.fixed.px: 302
+classes if { grid-of-items.two-fold }: two-folded
+$on-mouse-enter$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $grid-of-items.mouse-in, v = false)
+height.fixed.px if { !grid-of-items.two-fold }: 224
+height.fixed.px if { grid-of-items.two-fold }: 520
+align-content: center
+border-color: $inherited.colors.border
+border-width.px: 1
+border-radius.px: 8
+overflow: hidden
+link: $grid-of-items.template-url
+
+	-- ftd.desktop:
+	
+		-- ftd.row:
+		width: fill-container
+		spacing.fixed.px: 12
+		padding.px: 20
+		anchor: parent
+		bottom.px: 0
+		bottom.px if { !grid-of-items.mouse-in }: -64
+		left.px: 0
+		z-index: 999
+		background.solid: #222222cc
+		border-bottom-left-radius.px: 8
+		border-bottom-right-radius.px: 8
+		align-content: center
+		
+		
+			-- ftd.text: $grid-of-items.title
+			role: $inherited.types.label-large
+			color: #FFFFFF
+			width: fill-container
+			
+			-- ftd.image:
+			src: $fastn-assets.files.images.featured.arrow-right.svg
+			width.fixed.px: 22
+			
+		-- end: ftd.row
+
+	-- end: ftd.desktop
+
+	-- ftd.mobile:
+	
+		-- ftd.row:
+		width: fill-container
+		spacing.fixed.px: 12
+		padding.px: 20
+		anchor: parent
+		bottom.px: 0
+		left.px: 0
+		z-index: 999
+		background.solid: #222222cc
+		border-bottom-left-radius.px: 8
+		border-bottom-right-radius.px: 8
+		classes: mouse-over
+		align-content: center
+		
+			-- ftd.text: $grid-of-items.title
+			role: $inherited.types.label-large
+			color: #FFFFFF
+			width: fill-container
+			
+			-- ftd.image:
+			src: $fastn-assets.files.images.featured.arrow-right.svg
+			width.fixed.px: 22
+			
+		-- end: ftd.row
+
+	-- end: ftd.mobile
+
+	-- ftd.column:
+	width: fill-container
+	align-content: center
+	
+		-- ftd.column:
+		if: { grid-of-items.wip }
+		width.fixed.px: 190
+		height.fixed.px: 166
+		anchor: parent
+		background.solid: $overlay-bg
+		overflow: hidden
+		align-content: center
+		z-index: 99
+		
+			-- ftd.column:
+			width: fill-container
+			align-content: center
+			spacing.fixed.px: 16
+			
+				-- ftd.image:
+				src: $fastn-assets.files.images.featured.lock-icon.svg
+				width.fixed.px: 48
+				height.fixed.px: 48
+				
+				-- ftd.text: Coming Soon
+				role: $inherited.types.button-medium
+				color: #d9d9d9
+				
+			-- end: ftd.column
+
+		-- end: ftd.column
+
+		-- ftd.image:
+		if: { $grid-of-items.screenshot != NULL }
+		src: $grid-of-items.screenshot
+		$on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
+		$on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
+		fit: contain
+		width: fill-container
+		height.fixed.px: 224
+		
+		/-- ftd.image:
+		if: { $grid-of-items.screenshot != NULL }
+		src: $grid-of-items.screenshot
+		$on-mouse-enter$: $ftd.set-bool($a=$grid-of-items.github-hover, v = true)
+		$on-mouse-leave$: $ftd.set-bool($a=$grid-of-items.github-hover, v = false)
+		fit: cover
+		width.fixed.px: 324
+		height.fixed.px: 224
+		
+	-- end: ftd.column
+
+	-- ftd.row:
+	align-content: right
+	spacing.fixed.px: 12
+	padding-top.px: 8
+	anchor: parent
+	right.px: 16
+	top.px: 0
+	z-index: 999999
+	
+		-- ftd.row:
+		
+			-- ftd.column:
+			if: { grid-of-items.github-url != NULL  }
+			link: $grid-of-items.github-url
+			
+				-- ftd.image:
+				src: $fastn-assets.files.images.icon-github.svg
+				width.fixed.px: 16
+				height.fixed.px: 16
+				align-self: center
+				margin-right.px: 8
+				
+			-- end: ftd.column
+
+			-- ftd.column:
+			if: { grid-of-items.licence-url != NULL  }
+			link: $grid-of-items.licence-url
+			
+				-- ftd.image:
+				src: $fastn-assets.files.images.mit-icon.svg
+				width.fixed.px: 16
+				height.fixed.px: 16
+				align-self: center
+				
+			-- end: ftd.column
+
+		-- end: ftd.row
+
+	-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: grid-of-items
+
+
+
+
+
+
+
+
+
+
+-- record template:
+caption title:
+string template-url:
+optional ftd.image-src screenshot:
+optional string licence-url:
+optional string github-url:
+optional body body:
+boolean is-last: false
+boolean wip: false
+boolean two-fold: false
+
+-- template list doc-sites:
+
+-- template: Doc-site
+template-url: featured/ds/doc-site/
+screenshot: $fastn-assets.files.images.featured.doc-sites.doc-site.jpg
+
+-- template: Midnight Rush
+template-url: featured/ds/mr-ds/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
+
+-- template: Midnight Storm
+template-url: featured/ds/midnight-storm/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
+
+-- end: doc-sites
+
+
+
+
+
+-- template list landing-pages:
+
+-- template: Midnight Storm
+template-url: featured/landing/midnight-storm-landing/
+screenshot: $fastn-assets.files.images.featured.landing.ms-landing-demo.png
+
+-- template: Midnight Rush
+template-url: featured/landing/mr-landing/
+screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
+
+-- template: Misty Gray
+template-url: featured/landing/misty-gray-landing/
+screenshot: $fastn-assets.files.images.featured.landing.misty-gray-landing.png
+
+-- end: landing-pages
+
+
+
+
+-- template list blog-sites:
+
+-- template: Midnight Rush
+template-url: featured/blogs/mr-blog/
+screenshot: $fastn-assets.files.images.featured.blog.midnight-rush-blog.jpg
+
+-- template: Midnight Storm
+template-url: featured/blogs/ms-blog/
+screenshot: $fastn-assets.files.images.featured.blog.midnight-storm.jpg
+
+-- template: Misty Gray
+template-url: featured/blogs/mg-blog/
+screenshot: $fastn-assets.files.images.featured.blog.misty-gray.jpg
+
+-- end: blog-sites
+
+
+
+
+
+-- template list resumes:
+
+-- template: Caffeine
+template-url: featured/resumes/caffiene/
+screenshot: $fastn-assets.files.images.featured.resumes.caffiene.png
+
+-- template: Resume 1
+template-url: featured/resumes/resume-1/
+screenshot: $fastn-assets.files.images.featured.resumes.resume-1.png
+
+-- template: Resume 10
+template-url: featured/resumes/resume-10/
+screenshot: $fastn-assets.files.images.featured.resumes.resume-10.png
+
+-- end: resumes
+
+
+
+-- template list portfolios:
+
+-- template: Texty PS
+template-url: featured/portfolios/texty-ps/
+screenshot: $fastn-assets.files.images.featured.portfolios.texty-ps.png
+
+-- template: Johny PS
+template-url: featured/portfolios/johny-ps/
+screenshot: $fastn-assets.files.images.featured.portfolios.johny-ps.png
+
+-- template: Portfolio
+template-url: featured/portfolios/portfolio/
+screenshot: $fastn-assets.files.images.featured.portfolios.portfolio.png
+
+-- end: portfolios
+
+
+
+
+-- template list workshops:
+
+-- template: Workshop 1
+template-url: featured/workshops/workshop-1/
+screenshot: $fastn-assets.files.images.featured.workshops.workshop-1.png
+
+-- end: workshops
+
+
+
+
+
+
+
+
+
+-- template list schemes:
+
+-- template: Saturated Sunset CS
+template-url: /cs/saturated-sunset-cs/
+screenshot: $fastn-assets.files.images.featured.cs.saturated-sunset-cs.png
+
+-- template: Midnight Rush CS
+template-url: /cs/midnight-rush-cs/
+screenshot: $fastn-assets.files.images.featured.cs.midnight-rush-cs.png
+
+-- template: Blog Template 1 CS
+template-url: /cs/blog-template-1-cs/
+screenshot: $fastn-assets.files.images.featured.cs.blog-template-1-cs.png
+
+-- end: schemes
+
+
+
+
+
+
+
+
+
+
+-- template list bling:
+
+-- template: Business Cards
+template-url: /featured/components/business-cards/
+screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-front.jpg
+
+-- template: Modal Cover
+template-url: featured/components/modals/modal-cover/
+screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
+
+-- template: Header / Navbars
+template-url: https://fastn-community.github.io/header/
+screenshot: $fastn-assets.files.images.featured.components.header.jpg
+
+Code blocks are typically defined by using specific syntax or indentation rules,
+depending on the programming language.
+
+
+-- end: bling
+
+
+
+
+
+
+
+
+
+
+-- template list fonts:
+
+-- template: Inter Typography
+template-url: /fonts/inter/
+screenshot: $fastn-assets.files.images.featured.font.inter-font.jpg
+
+-- template: Opensans Typography
+template-url: /fonts/opensans/
+screenshot: $fastn-assets.files.images.featured.font.opensans-font.jpg
+
+-- template: Roboto Typography
+template-url: /fonts/roboto/
+screenshot: $fastn-assets.files.images.featured.font.roboto-font.jpg
+
+-- end: fonts
+
+
+
+-- template list sections:
+
+-- template: Giggle Presentation Template
+template-url: /featured/sections/slides/giggle-presentation-template/
+screenshot: $fastn-assets.files.images.featured.sections.slides.giggle-presentation-template.png
+
+-- template: Hero Right Hug Expanded
+template-url: /hero-right-hug-expanded/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-expanded.jpg
+
+-- template: Image Gallery IG
+template-url: /featured/sections/cards/image-gallery-ig/
+screenshot: $fastn-assets.files.images.featured.sections.image-gallery-ig.png
+
+-- end: sections
+
+
+
+
+
+
+
+
+
+-- component font-package:
+caption name:
+string github:
+string google:
+string site:
+
+-- ftd.column:
+padding.px: 20
+border-width.px: 2
+border-radius.px: 5
+border-color: $inherited.colors.border
+margin-bottom.px: 20
+spacing.fixed.px: 10
+
+	-- ftd.text: $font-package.name
+	role: $inherited.types.copy-large
+	color: $inherited.colors.text-strong
+	
+	-- kv: Google:
+	value: $font-package.google
+	
+	-- kv: Github:
+	value: $font-package.github
+	
+	-- kv: Site:
+	value: $font-package.site
+	
+-- end: ftd.column
+
+-- end: font-package
+
+
+
+
+
+
+
+
+
+
+-- component kv:
+caption key:
+body value:
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 5
+
+	-- ftd.text: $kv.key
+	role: $inherited.types.copy-small
+	color: $inherited.colors.text
+	
+	-- ftd.text: $kv.value
+	role: $inherited.types.copy-small
+	color: $inherited.colors.text-strong
+	
+-- end: ftd.row
+
+-- end: kv
+
+
+
+
+
+
+
+
+
+
+-- component fonts:
+
+-- ftd.column:
+width: fill-container
+
+	-- ftd.row:
+	width: fill-container
+	spacing.fixed.px: 34
+	
+		-- font-package: Inter
+		google: https://fonts.google.com/specimen/Inter
+		site: https://fifthtry.github.io/inter/
+		github: https://github.com/FifthTry/inter
+		
+		-- font-package: Roboto
+		google: https://fonts.google.com/specimen/Roboto
+		site: https://fifthtry.github.io/roboto/
+		github: https://github.com/FifthTry/roboto
+		
+	-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: fonts
+
+
+
+
+
+-- ftd.color overlay-bg:
+light: #00000066
+dark:  #00000066

@@ -1,0 +1,47 @@
+-- ds.page: `ftd` host feature
+
+`fastn` serves as a platform for `ftd`, enabling it to return its value when it
+gets stuck at a certain state. This grants `fastn` some power over `ftd`,
+allowing it to provide awesome features.
+
+Some of the interesting features are:
+
+- [import](.ftd-host/#import)
+- [processors/foreign functions](/ftd-host/#processor)
+- [foreign variables](/ftd-host/#foreign-variables)
+
+
+-- ds.h1: Import
+
+You can import any module from the current `fastn` package or its dependencies.
+
+`fastn` also comes with a special document [`fastn`](/fastn-vars/) that can be
+imported by any document, which contains helpful variables.
+
+For more information, please visit [import](/import/).
+
+
+
+
+
+-- ds.h1: `$processor$`
+
+`fastn` comes with several built-in `ftd` `$processor$`s.
+
+For more information, please visit [processor](/processor/).
+
+
+
+
+
+-- ds.h1: Foreign Variables
+
+`fastn` defines some special variables for a package. One such variable is
+`assets`. You can import the package's assets and use its variables.
+
+
+For more information, please visit [foreign variables](foreign-variable).
+
+
+
+-- end: ds.page

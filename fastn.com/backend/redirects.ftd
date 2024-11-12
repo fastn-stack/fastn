@@ -1,0 +1,41 @@
+-- ds.page: Setting Up Redirects
+
+With `fastn` you can set up redirects for you site. This can be used to create
+short urls e.g. `<your-domain>/t` to redirect to your twitter handle, e.g.
+`https://twitter.com/<your-twitter-handle>` etc, or you can use it to fix
+broken URLs in case you change your mind about some URL.
+
+This can be done by using `fastn.redirects` in your `FASTN.ftd` file.
+
+-- ds.code: `FASTN.ftd` example that uses `fastn.redirects`
+lang: ftd
+
+\-- import: fastn
+\-- fastn.package: redirect-example
+
+\-- fastn.redirects: ;; <hl>
+
+/ftd/kernel/ -> /kernel/
+/discord/ -> https://discord.gg/eNXVBMq4xt
+
+-- ds.markdown:
+
+The links which needs to be redirected somewhere has to be listed down in the
+body section of `fastn.redirects` as `key-value` tuples in the format
+`<FROM> -> <TO>`.
+
+In the above example, the url `/ftd/kernel/` will be redirected to `/kernel/`.
+Similarly, visiting `/discord/` will redirect to the official `fastn` discord
+server [https://discord.gg/eNXVBMq4xt](https://discord.gg/eNXVBMq4xt).
+
+-- ds.h2: **Deprecation warning**
+
+`<FROM>: <TO>` old syntax will be deprecated soon, so we recommend the usage of
+the latest redirect syntax `<FROM> -> <TO>`.
+
+-- ds.h1: Dynamic Redirect
+
+You can also conditionally redirect from any web page, check out
+[`ftd.redirect`](/ftd/redirect/).
+
+-- end: ds.page

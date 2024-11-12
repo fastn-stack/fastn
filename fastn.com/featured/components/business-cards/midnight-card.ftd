@@ -1,0 +1,13 @@
+-- import: fastn.com/u/yashveer-mehra
+-- import: fastn.com/u/ganesh-salunke
+
+
+
+-- ds.featured-business: Midnight Business Card
+image: $fastn-assets.files.images.featured.business-cards.midnight-business-card-front.jpg
+owners: [$yashveer-mehra.info, $ganesh-salunke.info]
+license-url: https://github.com/fastn-community/midnight-business-card/
+license: Creative Commons
+published-date: 03-Aug-2023
+github-url: https://github.com/fastn-community/midnight-business-card
+demo-link: https://fastn-community.github.io/midnight-business-card/

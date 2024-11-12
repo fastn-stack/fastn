@@ -1,0 +1,32 @@
+-- import: fifthtry.github.io/doc-site as ds
+-- import: fifthtry.github.io/doc-site/assets
+
+
+
+
+
+
+-- ds.author-meta ganesh: Ganesh S Salunke
+profile: Sr. Manager Frontend
+bio-url:  blog-authors/ganeshs/
+image: $assets.files.static.authors.ganeshs.jpg
+company: FifthTry Pvt. Ltd.
+
+I have 15+ years of expirence in Frontend technologies. Working as Sr. Manager 
+Frontend at FifthTry Private Ltd. a Banglore based start-up company.
+
+
+Currently working full time with FifthTry and building FTD components, packages
+day and night.
+
+
+
+
+
+-- ds.page: 
+
+
+-- ds.author-bio: 
+author: $ganesh
+
+-- end: ds.page

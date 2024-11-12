@@ -1,0 +1,93 @@
+
+-- site-doc.doc-home: Sidenote
+site-title: Bling
+show-tabs: false
+github-url: https://github.com/fastn-community/bling
+current-package: fastn-community.github.io/bling
+
+A "sidenote component" is a UI component used to display additional or
+supplementary information related to the main content within a user interface.
+
+-- site-doc.header: Example
+
+-- site-doc.output:
+colors: $ftd.default-colors
+types: $ftd.default-types
+
+-- sidenote:
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+nostrud exercitation ullamco laboris nisi ut
+
+-- end: site-doc.output
+
+-- site-doc.header: How to use
+
+-- cb.code: Add `bling` dependency into your FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/bling
+
+-- cb.code: import `sidenote` inside your `.ftd` file
+lang: ftd
+
+\-- import: fastn-community.github.io/bling/sidenote
+
+-- cb.code: sample usage of `-- sidenote` component
+lang: ftd
+
+\-- sidenote.sidenote:
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+nostrud exercitation ullamco laboris nisi ut
+
+-- site-doc.header: Properties:
+
+Below are details of all properties of `sidenote` component.
+
+-- site-doc.component-property: `body`
+type: Body (`required`)
+
+It's used to add body content to read-more component.
+
+-- end: site-doc.doc-home
+
+
+
+
+
+
+
+
+
+
+-- component sidenote:
+optional body body: 
+
+-- ftd.column:
+padding-vertical.px: 16
+padding-horizontal.px: 32
+border-color: $inherited.colors.border-strong
+border-width.px: 1
+background.solid: $inherited.colors.background.step-2
+border-radius.px: 8
+max-width.fixed.px: 800
+width: auto
+align-self: center
+
+-- ftd.text: Sidenote:
+role: $inherited.types.copy-small
+color: $inherited.colors.text-strong
+
+-- ftd.text:
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+text-align: justify
+
+$sidenote.body
+
+-- end: ftd.column
+
+-- end: sidenote

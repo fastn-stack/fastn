@@ -1,0 +1,292 @@
+-- import: fastn-community.github.io/site-doc
+-- import: fastn-community.github.io/code-block as cb
+
+
+
+
+-- site-doc.doc-home: Typography
+github-url: https://github.com/fastn-community/typography
+license-url: https://github.com/fastn-community/typography/blob/main/LICENSE
+current-package: fastn-community.github.io/typography
+show-tabs: false
+site-title: Typography
+
+-- site-doc.output:
+
+-- h0: This is heading hero
+
+Heading also has optional body property.
+
+-- h1: This is heading large
+
+Heading also has optional body property.
+
+-- h2: This is heading medium
+
+Heading also has optional body property.
+
+-- h3: This is heading small
+
+Heading also has optional body property.
+
+-- h4: This is heading tiny
+
+Heading also has optional body property.
+
+-- markdown:
+
+This is markdown text. You can add [link](https://fastn.com) and
+add **bold**, *italic* etc styles to markdown text.
+
+-- end: site-doc.output
+
+-- site-doc.header: What is a Typography
+
+Font typography involves adjusting various typographical elements such as font
+size, line spacing, letter spacing, and kerning to ensure that the text is easy
+to read and visually appealing. 
+
+-- site-doc.header: How to use `typography`
+
+To use `typography` add below lines into your FASTN.ftd file:
+
+To learn more about typography 
+[click here](https://fastn-community.github.io/typography/headings/).
+
+-- cb.code:
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/typography
+
+-- end: site-doc.doc-home
+
+
+
+
+
+
+
+
+
+
+-- component h0:
+caption title:
+optional body body:
+children inner:
+optional string id:
+
+-- ftd.column:
+width: fill-container
+id if { $h0.id != NULL }: $h0.id
+
+-- ftd.text: $h0.title
+role: $inherited.types.heading-hero
+color: $inherited.colors.text-strong
+margin-bottom.rem: 0.5
+width: fill-container
+border-bottom-width.px: 1
+border-color: $inherited.colors.border
+region: h1
+
+-- markdown:
+if: { h0.body != NULL }
+body: $h0.body
+
+-- ftd.column:
+children: $h0.inner
+width: fill-container
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: h0
+
+
+
+
+
+
+
+
+
+
+
+-- component h1:
+caption title:
+optional body body:
+children inner:
+optional string id:
+
+-- ftd.column:
+id if { $h1.id != NULL }: $h1.id
+width: fill-container
+
+-- ftd.text: $h1.title
+role: $inherited.types.heading-large
+color: $inherited.colors.text-strong
+margin-bottom.rem: 0.5
+width: fill-container
+border-bottom-width.px: 1
+border-color: $inherited.colors.border
+padding-top.em: 0.5
+region: h1
+
+-- markdown:
+if: { h1.body != NULL }
+body: $h1.body
+
+-- ftd.column:
+children: $h1.inner
+width: fill-container
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: h1
+
+
+
+
+
+
+
+
+
+
+-- component h2:
+caption title:
+optional body body:
+children inner:
+optional string id:
+
+-- ftd.column:
+id if { $h2.id != NULL }: $h2.id
+width: fill-container
+
+-- ftd.text: $h2.title
+role: $inherited.types.heading-medium
+color: $inherited.colors.text-strong
+margin-bottom.rem: 0.5
+width: fill-container
+padding-top.em: 0.3
+region: h2
+
+-- markdown:
+if: { h2.body != NULL }
+body: $h2.body
+
+-- ftd.column:
+children: $h2.inner
+width: fill-container
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: h2
+
+
+
+
+
+
+
+
+
+
+-- component h3:
+caption title:
+optional body body:
+children inner:
+optional string id:
+
+-- ftd.column:
+id if { $h3.id != NULL }: $h3.id
+width: fill-container
+
+-- ftd.text: $h3.title
+role: $inherited.types.heading-small
+color: $inherited.colors.text-strong
+margin-bottom.rem: 0.5
+width: fill-container
+padding-top.em: 0.17
+region: h3
+
+-- markdown:
+if: { h3.body != NULL }
+body: $h3.body
+
+-- ftd.column:
+children: $h3.inner
+width: fill-container
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: h3
+
+
+
+
+
+
+
+
+
+
+-- component h4:
+caption title:
+optional body body:
+children inner:
+optional string id:
+
+-- ftd.column:
+id if { $h4.id != NULL }: $h4.id
+width: fill-container
+
+-- ftd.text: $h4.title
+role: $inherited.types.heading-tiny
+color: $inherited.colors.text-strong
+margin-bottom.rem: 0.5
+width: fill-container
+padding-top.em: 0.08
+region: h4
+
+-- markdown:
+if: { h4.body != NULL }
+body: $h4.body
+
+-- ftd.column:
+children: $h4.inner
+width: fill-container
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: h4
+
+
+
+
+
+
+
+
+
+
+-- component markdown:
+caption or body body:
+optional string id:
+
+-- ftd.text: 
+text: $markdown.body
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+width: fill-container
+id: $markdown.id
+
+-- end: markdown

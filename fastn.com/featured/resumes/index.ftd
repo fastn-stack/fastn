@@ -1,0 +1,30 @@
+-- import: fastn.com/featured as ft-ui
+
+
+-- ds.page:
+sidebar: false
+
+-- ft-ui.view-all: Resumes
+templates: $resumes
+
+-- end: ds.page
+
+
+
+
+
+-- ft-ui.template list resumes:
+
+-- ft-ui.template: Caffeine
+template-url: featured/resumes/caffiene/
+screenshot: $fastn-assets.files.images.featured.resumes.caffiene.png
+
+-- ft-ui.template: Resume 1
+template-url: featured/resumes/resume-1/
+screenshot: $fastn-assets.files.images.featured.resumes.resume-1.png
+
+-- ft-ui.template: Resume 10
+template-url: featured/resumes/resume-10/
+screenshot: $fastn-assets.files.images.featured.resumes.resume-10.png
+
+-- end: resumes

@@ -1,0 +1,101 @@
+-- import: fastn.com/ftd-host/processor
+
+
+-- ds.page: Fetching Data Using `http`
+
+This processor is used to initialise some `fastn` variable with content of JSON
+fetched from HTTP.
+
+-- processor.static-vs-dynamic:
+
+-- ds.markdown:
+
+Consider this data type:
+
+-- ds.code:
+lang: ftd
+
+\-- record repo:
+string full_name:
+string description:
+string html_url:
+integer stargazers_count:
+integer watchers_count:
+
+\-- record result:
+integer total_count: 0
+repo list items:
+
+
+-- ds.markdown:
+
+We have two records: `repo`, and `result`. We also have a variable of type `result`.
+
+Lets initialise this variable with result of fetching the top repositories from
+Github:
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- result r:
+$processor$: pr.http
+url: https://api.github.com/search/repositories
+sort: stars
+order: desc
+q: language:rust
+
+-- ds.h2: `url: string`
+
+This is the URL where we would be fetching the JSON from. It is mandatory.
+
+
+-- ds.h2: `method: optional string`
+
+This is the method of the http request. It's an optional field with `get` as
+default value. Currently only two methods are supported: `get` and `post`
+
+
+-- ds.h2: Key: Value pairs
+
+Each key value pair is passed added to the URL as query params, if http
+request method is `get`. Otherwise, the pair is passed as the request body.
+
+-- ds.code:
+lang: ftd
+
+\-- string amit-bio:
+
+I am Amit.
+
+\-- person amit:
+$processor$: pr.http
+method: post
+name: "Amit"
+age: 33
+bio: $amit-bio
+
+-- ds.markdown:
+
+For `post` method, the above code would convert into the following request body:
+
+-- ds.code:
+lang: json
+
+{
+    "name": "Amit",
+    "age": 33,
+    "bio": "I am Amit."
+}
+
+-- ds.markdown:
+
+Currently, there is no way to specify the type of the body parameters, so you
+need to use `"` to pass the value as a string type, or you can define any
+variable and pass it as a reference since the type of the variable is known.
+
+The response of the JSON must match with type of the variable where we are storing
+the result, here it is `r` of type record `result` defined above.
+
+-- end: ds.page

@@ -1,0 +1,45 @@
+-- import: fastn.com/u/meenu-kumari
+-- import: fastn.com/u/muskan-verma
+-- import: fastn.com/u/ganesh-salunke
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Midnight Storm CS
+featured-link: /cs/green-shades/
+category: Color Schemes
+image: $fastn-assets.files.images.featured.cs.midnight-storm-cs.png
+owners: [$meenu-kumari.info, $ganesh-salunke.info, $muskan-verma.info]
+license-url: https://github.com/fastn-community/midnight-storm-cs/blob/main/LICENSE
+license: Creative Commons
+published-date: 19-Jul-2023
+cards: $similar-schemes
+github-url: https://github.com/fastn-community/midnight-storm-cs
+demo-link: https://fastn-community.github.io/midnight-storm-cs/
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list similar-schemes:
+
+-- ft-ui.template: Dark Flame CS
+template-url: /cs/dark-flame-cs/
+screenshot: $fastn-assets.files.images.featured.cs.dark-flame-cs.png
+
+-- ft-ui.template: Navy Nebula CS
+template-url: /cs/navy-nebula-cs/
+screenshot: $fastn-assets.files.images.featured.cs.navy-nebula-cs.png
+
+-- ft-ui.template: Forest CS
+template-url: /cs/forest-cs/
+screenshot: $fastn-assets.files.images.featured.cs.forest-cs.png
+
+-- ft-ui.template: Pretty CS
+template-url: /cs/pretty-cs/
+screenshot: $fastn-assets.files.images.featured.cs.pretty-cs.png
+
+-- end: similar-schemes

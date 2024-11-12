@@ -1,0 +1,204 @@
+-- import: fastn.com/cs/sample-codes/create-cs as sample-code
+
+-- ds.page: How to create your own fastn color-scheme
+
+Here, we will see how we can create our own fastn color scheme
+(without using figma). It comprises of certain steps which we
+can see below.
+
+-- ds.h1: Create your color scheme repository
+
+To create your own color scheme repository, we will use the fastn
+[color-scheme-template](https://github.com/fastn-stack/color-scheme-template)
+repository. To create a repository from this template
+repository, we will follow certain steps as mentioned below.
+
+-- ds.h2: Navigate to the template repository
+
+First, we need to navigate to the fastn
+[color-scheme-template](https://github.com/fastn-stack/color-scheme-template)
+repository. After doing this, we will see a page like this
+
+-- tutorial-image: $fastn-assets.files.images.cs.how-to-create-cs.1.png
+
+-- ds.h2: Click on the `Use this template` button
+
+After clicking on the `Use this template button`, we will see some dropdown options.
+From there, click on the `Create a new repository` option.
+
+-- tutorial-image: $fastn-assets.files.images.cs.how-to-create-cs.2.png
+
+-- ds.h2: Fill in your repository details
+
+After clicking on the `Use this template` button, we will see a page like this.
+
+-- tutorial-image: $fastn-assets.files.images.cs.how-to-create-cs.3.png
+
+-- ds.markdown:
+
+Here we will fill our repository details for our color-scheme repository.
+For example, something like this
+
+-- tutorial-image: $fastn-assets.files.images.cs.how-to-create-cs.4.png
+
+-- ds.markdown:
+
+After filling all the details, click on the `Create repository` button.
+Once you do this, we will need to wait a bit for the repository to be
+created. After you have successfully created your repository, you will see
+something like this.
+
+-- tutorial-image: $fastn-assets.files.images.cs.how-to-create-cs.5.png
+
+-- ds.h1: Let's modify the colors
+
+All the colors details of this newly color-scheme repository are located inside
+the `colors.ftd` file.
+
+-- tutorial-image: $fastn-assets.files.images.cs.how-to-create-cs.6.png
+
+-- ds.markdown:
+
+This file holds the colors of this color-scheme repository
+so modifying this file will change this color-scheme repository. This `colors.ftd`
+file will look something like this at first. You will see a lot of
+pre-defined default colors which are provided by fastn.
+
+-- ds.code: Initial pre-defined colors
+lang: ftd
+max-height.fixed.px: 300
+download: colors.ftd
+copy: true
+
+$sample-code.initial-colors-code
+
+-- ds.markdown:
+
+Ideally, we should change all the colors inside `colors.ftd` file based on
+our requirements of our custom color-scheme. But for demonstration purpose,
+we will modify only text color for now. Let's say we change the text color
+to `#FFFF00` (yellow) for dark mode.
+
+To edit this file, click on the edit button
+which you can find at the top-right of this page.
+
+-- tutorial-image: $fastn-assets.files.images.cs.how-to-create-cs.8.png
+
+-- ds.markdown:
+
+After clicking on the edit button, we can make changes to this `colors.ftd` file.
+Navigate to the text color variable and change its dark mode color
+to `#FFFF00` (yellow). After doing that commit the changes.
+
+-- tutorial-image: $fastn-assets.files.images.cs.how-to-create-cs.9.png
+
+-- ds.h1: Configure index.ftd
+
+Before we start using our colors, we need to configure some details
+defined inside `index.ftd`. Initially, the `index.ftd` will look like this.
+
+-- ds.code: Initial index.ftd
+lang: ftd
+max-height.fixed.px: 300
+download: colors.ftd
+copy: true
+
+$sample-code.initial-index-code
+
+-- ds.markdown:
+
+By default, `index.ftd` will render the default fastn color scheme. So we
+need to modify it to show our colors (defined inside colors.ftd)
+from this repository. To do that, we will modify few lines which you can
+easily find out from the pre-commented lines.
+
+-- tutorial-image: $fastn-assets.files.images.cs.how-to-create-cs.11.png
+
+-- ds.markdown:
+
+To modify this file, you will first need to click on the edit button which you can find
+on the top-right. After clicking on the edit button, you can edit this file
+
+-- tutorial-image: $fastn-assets.files.images.cs.how-to-create-cs.12.png
+
+-- ds.markdown:
+
+After modifying `index.ftd`, we will see the contents like this.
+
+-- tutorial-image: $fastn-assets.files.images.cs.how-to-create-cs.13.png
+
+-- ds.h1: Let's make our repository live
+
+After going through all the above steps, all you need to do is deploy this
+repository using `Github Pages`. To do this, go to `Settings -> Pages`.
+You will see this page as shown below.
+
+-- tutorial-image: $fastn-assets.files.images.cs.how-to-create-cs.14.png
+
+-- ds.markdown:
+
+Under `Build and Deployment -> Branch`. Select `gh-pages` and hit Save.
+Doing this, will start the deployment process. We can check the deployment
+process under `Actions` tab. We just have to wait till the
+`pages build and deployment` workflow is finished.
+
+-- tutorial-image: $fastn-assets.files.images.cs.how-to-create-cs.15.png
+
+-- tutorial-image: $fastn-assets.files.images.cs.how-to-create-cs.16.png
+
+-- ds.h2: Setup your website in the About section
+
+After doing this, we will set the deployed URL in the About section of this
+repository like this. First, click on the About section icon as shown below.
+
+-- tutorial-image: $fastn-assets.files.images.cs.how-to-create-cs.17.png
+
+-- ds.markdown:
+
+After doing that, we will see this window. From here, select the checkbox
+which says `Use your Github pages website`.
+
+-- tutorial-image: $fastn-assets.files.images.cs.how-to-create-cs.18.png
+
+-- ds.markdown:
+
+Then hit on `Save changes` button to save your website which will be shown in
+the About section.
+
+-- tutorial-image: $fastn-assets.files.images.cs.how-to-create-cs.19.png
+
+-- ds.h1: See live preview of your color-scheme
+
+In the about section, we can now see the live URL where we can visualize
+all the different colors of our newly created color-scheme. We can see that
+the text color is yellow in dark mode for this color-scheme we just created.
+
+-- tutorial-image: $fastn-assets.files.images.cs.how-to-create-cs.20.png
+
+-- ds.markdown:
+
+And that's how we create our own fastn color-schemes.
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+
+
+;; ---------------------- PAGE RELATED COMPONENTS ---------------------------
+
+-- component tutorial-image:
+caption ftd.image-src src:
+
+-- ftd.image: $tutorial-image.src
+height.fixed.px: 400
+margin-vertical.px: 10
+
+-- end: tutorial-image

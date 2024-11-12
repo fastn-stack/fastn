@@ -1,0 +1,134 @@
+-- ds.page: Reading JSON Using `fastn`
+
+`get-data` processor is used to get data from a JSON files in the package.
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- string foo:
+$processor$: pr.get-data ;; <hl>
+file: foo.json
+
+-- ds.markdown:
+
+This will read the key `foo` from `foo.json` and store it in the variable named
+`foo`.
+
+-- ds.h1: Key
+
+By default, the name of the variable or list where the data is being store is
+used as the key. You can overwrite the key using `key` attribute:
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- string foo:
+$processor$: pr.get-data
+key: some-other-key-instead-of-foo
+file: foo.json
+
+
+-- ds.h1: Default Value
+
+If the data is not found, we use the body as default value if body is available.
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- string foo:
+$processor$: pr.get-data
+
+"hello world"
+
+-- ds.markdown:
+
+The body must be valid json, compatible with the data type on which we are
+using the `get-data` processor.
+
+
+
+-- ds.h1: Default Value in Caption For Primitive Types
+
+For [primitive types](/built-in-types#primitive-types) like `integer`,
+`boolean`, `string` etc, the default value can also be provided in the caption.
+E.g.
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- string foo: hello world
+$processor$: pr.get-data
+
+
+-- ds.markdown:
+
+Providing both `body` and `caption` when using `get-data` is an error.
+
+-- ds.h1: Tutorial
+
+We will be reading the data from JSON file and injecting the value to the caller
+of the processor (caller could be variable or component).
+
+-- ds.h2: Creating `index.ftd`
+
+We need to make two files i.e. one file should be `index.ftd` and another
+file should be `foo.json`
+
+-- ds.code: `index.ftd`
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- record person:
+caption name:
+integer age:
+string gender:
+
+\-- person arpita:
+$processor$: pr.get-data ;; <hl>
+file: foo.json           ;; <hl>
+
+\-- ftd.text: $foo.name
+\-- ftd.text: $foo.age
+\-- ftd.text: $foo.gender
+
+-- ds.markdown:
+
+NOTE: `file` must point to a valid `json` file with extension `.json`.
+
+-- ds.h2: Creating `foo.json`
+
+-- ds.code:
+lang: json
+
+{
+  "name": "arpita",
+  "age": 15,
+  "gender": "female"
+}
+
+
+
+-- ds.h2: Running
+
+Run `fastn serve` and view `127.0.0.1:8000` (use whatever port reported by
+`fastn serve`), and you should see something like this:
+
+
+-- ds.code:
+lang: txt
+
+arpita
+15
+female
+
+
+-- end: ds.page

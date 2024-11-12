@@ -1,0 +1,436 @@
+{
+  "files": {
+    "FASTN.ftd": {
+      "name": "FASTN.ftd",
+      "checksum": "5877B09983089718CC94456AE77282A0FE84DA1C521D336988AF4163C1265680",
+      "size": 373
+    },
+    "LICENSE": {
+      "name": "LICENSE",
+      "checksum": "5B8B83357C092AC57F28508D18CAB65E4965AAA3BA61226DE038719E022638C1",
+      "size": 1516
+    },
+    "README.md": {
+      "name": "README.md",
+      "checksum": "41980A04139C185F7885751E20718F70853B243051E154B353F9A25BFE926B89",
+      "size": 733
+    },
+    "colors.ftd": {
+      "name": "colors.ftd",
+      "checksum": "48A843ED872EC8CEAA370B8CB1D175BA9E437BB34975220BE03DD56842F2A3E7",
+      "size": 6543
+    },
+    "components.ftd": {
+      "name": "components.ftd",
+      "checksum": "057CCE307005AE777069BA1EE63431E6DB6ACEDD8FF6F03B04C31ECC95930C24",
+      "size": 29792
+    },
+    "cs-types.ftd": {
+      "name": "cs-types.ftd",
+      "checksum": "E1311F287CC8CBA803424716EB95A16F7D60817D6E28045B7CC2A191B8AD204A",
+      "size": 5737
+    },
+    "index.ftd": {
+      "name": "index.ftd",
+      "checksum": "6078F2A5D6EB177071102794CC61EBBF74A8AF9EFFFD25A8D865A29D4D0F5D6A",
+      "size": 54079
+    },
+    "static/author-icon.svg": {
+      "name": "static/author-icon.svg",
+      "checksum": "022EE00A4418F3A2D78331BE17ED1A9AF182BDD132B1C3AF77C71FB22405164C",
+      "size": 574
+    },
+    "static/avatar-dark.svg": {
+      "name": "static/avatar-dark.svg",
+      "checksum": "28D02BE20AA3EE53C62292A7A6E8CDD1591A0A3C077E5BB3DF4AAB9959980140",
+      "size": 399
+    },
+    "static/avatar.svg": {
+      "name": "static/avatar.svg",
+      "checksum": "28D02BE20AA3EE53C62292A7A6E8CDD1591A0A3C077E5BB3DF4AAB9959980140",
+      "size": 399
+    },
+    "static/ball-dark.svg": {
+      "name": "static/ball-dark.svg",
+      "checksum": "87B0335FD3095494F6355DC33D01FB617159AEE6EB2DAD9DE6D23B74362A3F74",
+      "size": 1979
+    },
+    "static/ball.svg": {
+      "name": "static/ball.svg",
+      "checksum": "87B0335FD3095494F6355DC33D01FB617159AEE6EB2DAD9DE6D23B74362A3F74",
+      "size": 1979
+    },
+    "static/bsd-license-icon.svg": {
+      "name": "static/bsd-license-icon.svg",
+      "checksum": "37620B7B8D59CC99E28E89D7D5D7D7C8CB63EFF3B93BB57F7E11141D43BBD097",
+      "size": 1218
+    },
+    "static/calender-dark.svg": {
+      "name": "static/calender-dark.svg",
+      "checksum": "F7588733C5539D4529CD55FB7E7556B4EC2B5ECA725AAD9023A238E7BB47FFD4",
+      "size": 491
+    },
+    "static/calender.svg": {
+      "name": "static/calender.svg",
+      "checksum": "F7588733C5539D4529CD55FB7E7556B4EC2B5ECA725AAD9023A238E7BB47FFD4",
+      "size": 491
+    },
+    "static/code-outline-icon.svg": {
+      "name": "static/code-outline-icon.svg",
+      "checksum": "997E659F2336536E74559F06DBC381821E8AA83E9EC9267F95EF01BBD61E6205",
+      "size": 772
+    },
+    "static/comment-dark.svg": {
+      "name": "static/comment-dark.svg",
+      "checksum": "615D2EE3BDA8566FD734ADDFF9A1BB4DA7009EEF33F7457BF3BF734902665FA1",
+      "size": 566
+    },
+    "static/comment.svg": {
+      "name": "static/comment.svg",
+      "checksum": "615D2EE3BDA8566FD734ADDFF9A1BB4DA7009EEF33F7457BF3BF734902665FA1",
+      "size": 566
+    },
+    "static/copy-dark.svg": {
+      "name": "static/copy-dark.svg",
+      "checksum": "E29572BC1687F0D1D7BE831A367EF85C0326726A58004BD00F5C9C20877DA2D6",
+      "size": 1767
+    },
+    "static/copy-hover-dark.svg": {
+      "name": "static/copy-hover-dark.svg",
+      "checksum": "F5EDC961FA806BFF6BC13B508B8414EE1CB2CB8490F9DD14290DB4A4EBF3CCAD",
+      "size": 1767
+    },
+    "static/copy-hover.svg": {
+      "name": "static/copy-hover.svg",
+      "checksum": "DD791A63E284ACD26306854B963E49808B40CEE9B4611F6708E15F44FB20BBE1",
+      "size": 1767
+    },
+    "static/copy.svg": {
+      "name": "static/copy.svg",
+      "checksum": "E29572BC1687F0D1D7BE831A367EF85C0326726A58004BD00F5C9C20877DA2D6",
+      "size": 1767
+    },
+    "static/dark-icon-dark.svg": {
+      "name": "static/dark-icon-dark.svg",
+      "checksum": "FE2B859D9321BA7DF33E9E34702DD5F96A8BA0E5E97D25F0D629415F2BCD5EA7",
+      "size": 641
+    },
+    "static/dark-icon.svg": {
+      "name": "static/dark-icon.svg",
+      "checksum": "FE2B859D9321BA7DF33E9E34702DD5F96A8BA0E5E97D25F0D629415F2BCD5EA7",
+      "size": 641
+    },
+    "static/discord-icon.svg": {
+      "name": "static/discord-icon.svg",
+      "checksum": "02AF24DE0D342A20BB81D3FF85E29B6A30E21F0F88869ABFCAAD0FF164D0F4E8",
+      "size": 2515
+    },
+    "static/dms-day-dark.svg": {
+      "name": "static/dms-day-dark.svg",
+      "checksum": "EF98A4B7F23A9C328FC7407713E4911502E2B786861B3325D40681A90260C6A6",
+      "size": 1389
+    },
+    "static/dms-day.svg": {
+      "name": "static/dms-day.svg",
+      "checksum": "EF98A4B7F23A9C328FC7407713E4911502E2B786861B3325D40681A90260C6A6",
+      "size": 1389
+    },
+    "static/dms-night-dark.svg": {
+      "name": "static/dms-night-dark.svg",
+      "checksum": "5972B00E3C2FB6C21D413845BEB9F006A9B807473CA31FC107ECA0CEC2A368C9",
+      "size": 879
+    },
+    "static/dms-night.svg": {
+      "name": "static/dms-night.svg",
+      "checksum": "5972B00E3C2FB6C21D413845BEB9F006A9B807473CA31FC107ECA0CEC2A368C9",
+      "size": 879
+    },
+    "static/dms-system-dark.svg": {
+      "name": "static/dms-system-dark.svg",
+      "checksum": "0353AFAAFF7D434198D155A744433713688548113FA64E9150A20215C1B5298F",
+      "size": 796
+    },
+    "static/dms-system.svg": {
+      "name": "static/dms-system.svg",
+      "checksum": "0353AFAAFF7D434198D155A744433713688548113FA64E9150A20215C1B5298F",
+      "size": 796
+    },
+    "static/dot-dark.svg": {
+      "name": "static/dot-dark.svg",
+      "checksum": "B57B64434F424CF364A1498AEC3D80E2D99C4EE2073192C26A6D3CF7D4039F49",
+      "size": 789
+    },
+    "static/dot.svg": {
+      "name": "static/dot.svg",
+      "checksum": "B57B64434F424CF364A1498AEC3D80E2D99C4EE2073192C26A6D3CF7D4039F49",
+      "size": 789
+    },
+    "static/down-dark.svg": {
+      "name": "static/down-dark.svg",
+      "checksum": "426CE75C4A61E9CA6C3B196023C5EED9CE98ACF3BCDD30B581251A97FB3FB970",
+      "size": 319
+    },
+    "static/down.svg": {
+      "name": "static/down.svg",
+      "checksum": "426CE75C4A61E9CA6C3B196023C5EED9CE98ACF3BCDD30B581251A97FB3FB970",
+      "size": 319
+    },
+    "static/facebook-dark.svg": {
+      "name": "static/facebook-dark.svg",
+      "checksum": "CE34AB2AE8645C8283CC39E19AB71944359A9F07101F031745957E58D190ADB4",
+      "size": 586
+    },
+    "static/facebook.svg": {
+      "name": "static/facebook.svg",
+      "checksum": "CE34AB2AE8645C8283CC39E19AB71944359A9F07101F031745957E58D190ADB4",
+      "size": 586
+    },
+    "static/fastn-logo.svg": {
+      "name": "static/fastn-logo.svg",
+      "checksum": "22B700AEFCA7EDBC65EBF80740F0F901424CBC8DE5D078059D42AAB03D2572BD",
+      "size": 80423
+    },
+    "static/figma-dark.svg": {
+      "name": "static/figma-dark.svg",
+      "checksum": "CCAECFC06640CEC260CD64EE008744704EE9E08CF239CA6F9C69AA3462E226B8",
+      "size": 1229
+    },
+    "static/figma.svg": {
+      "name": "static/figma.svg",
+      "checksum": "CCAECFC06640CEC260CD64EE008744704EE9E08CF239CA6F9C69AA3462E226B8",
+      "size": 1229
+    },
+    "static/google-dark.svg": {
+      "name": "static/google-dark.svg",
+      "checksum": "3355BC87B164F224D7DDAB3AAE102B1427E7E25D81726C11EC4ACA49EF563C6B",
+      "size": 1240
+    },
+    "static/google.svg": {
+      "name": "static/google.svg",
+      "checksum": "3355BC87B164F224D7DDAB3AAE102B1427E7E25D81726C11EC4ACA49EF563C6B",
+      "size": 1240
+    },
+    "static/heart-dark.svg": {
+      "name": "static/heart-dark.svg",
+      "checksum": "96552A0ED13F657F8F178AB7DD39E5656D40AB87962DB03637D79FE69DD4C70E",
+      "size": 491
+    },
+    "static/heart.svg": {
+      "name": "static/heart.svg",
+      "checksum": "96552A0ED13F657F8F178AB7DD39E5656D40AB87962DB03637D79FE69DD4C70E",
+      "size": 491
+    },
+    "static/history-dark.svg": {
+      "name": "static/history-dark.svg",
+      "checksum": "C5FCDFBBAB08179202CDE753012BC82D6947E90AD5BF9D771248106DF3F4473A",
+      "size": 1942
+    },
+    "static/history.svg": {
+      "name": "static/history.svg",
+      "checksum": "C5FCDFBBAB08179202CDE753012BC82D6947E90AD5BF9D771248106DF3F4473A",
+      "size": 1942
+    },
+    "static/home-dark.svg": {
+      "name": "static/home-dark.svg",
+      "checksum": "63F7E3A94726F2D88B0C23833F301BCFD2F9F1649BD3338997FA5F31CE5B93C8",
+      "size": 801
+    },
+    "static/home.svg": {
+      "name": "static/home.svg",
+      "checksum": "63F7E3A94726F2D88B0C23833F301BCFD2F9F1649BD3338997FA5F31CE5B93C8",
+      "size": 801
+    },
+    "static/image-placeholder-dark.png": {
+      "name": "static/image-placeholder-dark.png",
+      "checksum": "F8CEDD499315902E0CF4B516B65C9426C3F8B680183B57B86CAD5F309B2BF981",
+      "size": 5203
+    },
+    "static/image-placeholder.png": {
+      "name": "static/image-placeholder.png",
+      "checksum": "F8CEDD499315902E0CF4B516B65C9426C3F8B680183B57B86CAD5F309B2BF981",
+      "size": 5203
+    },
+    "static/image.svg": {
+      "name": "static/image.svg",
+      "checksum": "3F3ACA7E9FE32496901D790C30157C2984476961E46B2680B8F8457CCCB9512E",
+      "size": 5888792
+    },
+    "static/img.svg": {
+      "name": "static/img.svg",
+      "checksum": "F30BFB3E2D31FF32C05EBC2AA9039B9874BC1C97CD6760415DB156CB8474B5DC",
+      "size": 1192119
+    },
+    "static/left-dark.svg": {
+      "name": "static/left-dark.svg",
+      "checksum": "56E978BB2E73C385E4F56C16702DE02BCE428D1FF6E4B79D625A8DA662CC0626",
+      "size": 306
+    },
+    "static/left.svg": {
+      "name": "static/left.svg",
+      "checksum": "56E978BB2E73C385E4F56C16702DE02BCE428D1FF6E4B79D625A8DA662CC0626",
+      "size": 306
+    },
+    "static/light-icon-dark.svg": {
+      "name": "static/light-icon-dark.svg",
+      "checksum": "51B9E1589EFA2096E42CF5146B99754DAA75554007E65D8C98229BF283A419EC",
+      "size": 1281
+    },
+    "static/light-icon.svg": {
+      "name": "static/light-icon.svg",
+      "checksum": "51B9E1589EFA2096E42CF5146B99754DAA75554007E65D8C98229BF283A419EC",
+      "size": 1281
+    },
+    "static/like-dark.svg": {
+      "name": "static/like-dark.svg",
+      "checksum": "0867ED8947F1C0C3CDB94F14FEACA109C0864EE3F2B8B5EDD05DA52EF35DE4D7",
+      "size": 691
+    },
+    "static/like.svg": {
+      "name": "static/like.svg",
+      "checksum": "0867ED8947F1C0C3CDB94F14FEACA109C0864EE3F2B8B5EDD05DA52EF35DE4D7",
+      "size": 691
+    },
+    "static/link-icon-dark.svg": {
+      "name": "static/link-icon-dark.svg",
+      "checksum": "A70F92AA340A098879133B4A070A62F6C37572C26F77A5E37AAC5C6542A9A2B2",
+      "size": 1534
+    },
+    "static/link-icon.svg": {
+      "name": "static/link-icon.svg",
+      "checksum": "A70F92AA340A098879133B4A070A62F6C37572C26F77A5E37AAC5C6542A9A2B2",
+      "size": 1534
+    },
+    "static/menu.svg": {
+      "name": "static/menu.svg",
+      "checksum": "D5616F0774B8DCCB86ECF34B4B8C224B6A361363648A56CA1D191CC5249D0406",
+      "size": 174
+    },
+    "static/more.svg": {
+      "name": "static/more.svg",
+      "checksum": "7BEA941B3095A66502A136976122CE349B9D6045E56BAF7972264075BF475AEE",
+      "size": 350
+    },
+    "static/msg-dark.svg": {
+      "name": "static/msg-dark.svg",
+      "checksum": "941724351022D631AA6C5FD7B02DB6F64CFA19898C8890F266948702C75C75CE",
+      "size": 3122
+    },
+    "static/msg.svg": {
+      "name": "static/msg.svg",
+      "checksum": "941724351022D631AA6C5FD7B02DB6F64CFA19898C8890F266948702C75C75CE",
+      "size": 3122
+    },
+    "static/old-copy-dark.svg": {
+      "name": "static/old-copy-dark.svg",
+      "checksum": "DBBFD0F0E590CC4DDF95D6CEF537B4E3E8B2D338AFCF3759B21757026243D189",
+      "size": 1767
+    },
+    "static/plus-dark.svg": {
+      "name": "static/plus-dark.svg",
+      "checksum": "4A9C1CC2CB09EF1E2B54234F075ECE1DC92D8203FDB0C4C47F640B342C87BA46",
+      "size": 407
+    },
+    "static/plus.svg": {
+      "name": "static/plus.svg",
+      "checksum": "4A9C1CC2CB09EF1E2B54234F075ECE1DC92D8203FDB0C4C47F640B342C87BA46",
+      "size": 407
+    },
+    "static/pocket-dark.svg": {
+      "name": "static/pocket-dark.svg",
+      "checksum": "A093E4ECD2FB7F44F50CF12447D1DD8F165057A9BE3B7C2CD31471551A9D04A2",
+      "size": 3955
+    },
+    "static/pocket.svg": {
+      "name": "static/pocket.svg",
+      "checksum": "A093E4ECD2FB7F44F50CF12447D1DD8F165057A9BE3B7C2CD31471551A9D04A2",
+      "size": 3955
+    },
+    "static/point-dark.svg": {
+      "name": "static/point-dark.svg",
+      "checksum": "6255AD1100810BE49A648220966E2DC8368372D4AB9E4DC66B413FEE4726AC78",
+      "size": 150
+    },
+    "static/point.svg": {
+      "name": "static/point.svg",
+      "checksum": "6255AD1100810BE49A648220966E2DC8368372D4AB9E4DC66B413FEE4726AC78",
+      "size": 150
+    },
+    "static/right-dark.svg": {
+      "name": "static/right-dark.svg",
+      "checksum": "5F79F914478251034AABC2AC63F37C807D77F85CAE151FDF5904AF693CD593F6",
+      "size": 229
+    },
+    "static/right.svg": {
+      "name": "static/right.svg",
+      "checksum": "5F79F914478251034AABC2AC63F37C807D77F85CAE151FDF5904AF693CD593F6",
+      "size": 229
+    },
+    "static/saved-dark.svg": {
+      "name": "static/saved-dark.svg",
+      "checksum": "FBD3BD3028D9DD6D3DC454CB5EF04E4DDDA334B57647C6013654BCC4CB73395F",
+      "size": 1240
+    },
+    "static/saved.svg": {
+      "name": "static/saved.svg",
+      "checksum": "FBD3BD3028D9DD6D3DC454CB5EF04E4DDDA334B57647C6013654BCC4CB73395F",
+      "size": 1240
+    },
+    "static/search-dark.svg": {
+      "name": "static/search-dark.svg",
+      "checksum": "58E17815CDCFBF74E2F1C7C0DDC5528A07656B5281520A1BF036478E943CFD84",
+      "size": 697
+    },
+    "static/search.svg": {
+      "name": "static/search.svg",
+      "checksum": "761C9F158B1795D8FFA63B68BBFA37BA66E5AEAF44149EC6796B5EF4890D6B9B",
+      "size": 697
+    },
+    "static/service-dark.svg": {
+      "name": "static/service-dark.svg",
+      "checksum": "8EB79296A16641010010FD51EADB2C7B925DCB95FB3A70AB228D1C285E318627",
+      "size": 763
+    },
+    "static/service.svg": {
+      "name": "static/service.svg",
+      "checksum": "8EB79296A16641010010FD51EADB2C7B925DCB95FB3A70AB228D1C285E318627",
+      "size": 763
+    },
+    "static/share.svg": {
+      "name": "static/share.svg",
+      "checksum": "1B389C359790FB4AD9AE8C33536A82055ECCD18199208AAF59F00D342DC77B3C",
+      "size": 1153
+    },
+    "static/tick-dark.svg": {
+      "name": "static/tick-dark.svg",
+      "checksum": "7848603B03C4D4E31FB3AF88CA726DE3134D626263E8192AFB5139BD56482313",
+      "size": 241
+    },
+    "static/tick-icon-dark.svg": {
+      "name": "static/tick-icon-dark.svg",
+      "checksum": "A4D18E8A4EBA18F571C8AFAB3C9894EFCFB966119D53476FFD4E941866C39263",
+      "size": 174
+    },
+    "static/tick-icon.svg": {
+      "name": "static/tick-icon.svg",
+      "checksum": "A4D18E8A4EBA18F571C8AFAB3C9894EFCFB966119D53476FFD4E941866C39263",
+      "size": 174
+    },
+    "static/tick.svg": {
+      "name": "static/tick.svg",
+      "checksum": "7848603B03C4D4E31FB3AF88CA726DE3134D626263E8192AFB5139BD56482313",
+      "size": 241
+    },
+    "static/up-dark.svg": {
+      "name": "static/up-dark.svg",
+      "checksum": "DDFAD8DC8CFB5F8C21C72FF9FF834C2C2BBAFB5236F9F2E9024951C6ECEE1780",
+      "size": 314
+    },
+    "static/up.svg": {
+      "name": "static/up.svg",
+      "checksum": "DDFAD8DC8CFB5F8C21C72FF9FF834C2C2BBAFB5236F9F2E9024951C6ECEE1780",
+      "size": 314
+    }
+  },
+  "zip_url": "https://github.com/fastn-community/color-doc/archive/a2af94652b84361d61fbf850a5d2607cfb62e8f6.zip",
+  "checksum": "EFF6CC3D5323579E368034E811095CEEB8BC509E59B4CAD6C420FB374D0EA2FA"
+}

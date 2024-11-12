@@ -1,0 +1,105 @@
+-- import: fastn
+
+-- fastn.package: fastn-community.github.io/doc-site
+favicon: https://fastn-community.github.io/doc-site/-/fastn-community.github.io/doc-site/favicon.ico
+
+-- fastn.dependency: fastn-community.github.io/code-block
+-- fastn.dependency: fastn-community.github.io/typography
+-- fastn.dependency: fastn-community.github.io/roboto-typography
+-- fastn.dependency: fastn-community.github.io/app-switcher
+-- fastn.dependency: fastn-community.github.io/header
+-- fastn.dependency: fastn-community.github.io/banner
+-- fastn.dependency: fastn-community.github.io/bling
+-- fastn.dependency: fastn-community.github.io/footer
+-- fastn.dependency: fastn-community.github.io/dark-mode-switcher
+-- fastn.dependency: fastn-community.github.io/optimization
+-- fastn.dependency: fastn-community.github.io/dark-flame-cs
+/-- fastn.dependency: fastn.com
+
+-- fastn.auto-import: fastn
+-- fastn.auto-import: fastn-community.github.io/doc-site/assets
+-- fastn.auto-import: fastn-community.github.io/code-block as cb
+-- fastn.auto-import: fastn-community.github.io/header as h
+-- fastn.auto-import: fastn-community.github.io/typography as tf
+-- fastn.auto-import: fastn-community.github.io/doc-site/FASTN/ds
+-- fastn.auto-import: fastn-community.github.io/doc-site/common
+
+
+
+
+
+-- fastn.sitemap:
+
+# Home: /index.html
+
+- Overview: index.html
+- How to use: /how-to/
+- Getting Started: /getting-started/
+- Configuring your site: /domain-setup/
+- Adding Favicon: /favicon/
+- Adding Logo & Sitename: /logo/
+- Changing Color Scheme: /cs/
+- Changing Typography: /types/
+- Adding Banner: /banner/
+- Doc-Site Components: /components/
+  - author-bio: /components/author-bio/
+  skip: true
+  - code: /components/code/
+  skip: true
+  - compact-text: /components/compact-text/
+  skip: true
+  - featured-post: /components/featured-post/
+  skip: true
+  - h0, h1, h2, h3: /components/headers/
+  skip: true
+  - iframe: /components/iframe/
+  skip: true
+  - image: /components/image/
+  skip: true
+  - image-first: /components/image-first/
+  skip: true
+  - image-in-between: /components/image-in-between/
+  skip: true
+  - link & link-group: /components/link/
+  skip: true
+  - markdown: /components/markdown/
+  skip: true
+  - not-found-1: /components/404-1/
+  skip: true
+  - not-found-2: /components/404-2/
+  skip: true
+  - output: /components/output/
+  skip: true
+  - page: /components/page/
+  skip: true
+  - post: /components/post/
+  skip: true
+  - post-card: /components/post-card/
+  skip: true
+  - posts: /components/posts/
+  skip: true
+  - rendered: /components/rendered/
+  skip: true
+  - tip: /components/tip/
+  skip: true
+  - without-image: /components/without-image/
+  skip: true
+  - youtube: /components/youtube/
+  skip: true
+
+- Understanding Sitemap: /sitemap/
+- Adding Right Sidebar: /right-sidebar/
+- Updating Footer: /footer/
+- SEO: /seo/
+
+- Blog: /blog-articles/category-1/sample-post-2/
+  - Post List: /post-list/
+  - Sample Post: /blog-articles/category-1/sample-post-2/
+  - Sample Author Bio: /blog-authors/john-doe/
+  - A day in city of dreams: blog-articles/category-1/sample-post-1/
+  skip: true
+  - What are front-end...: blog-articles/category-2/sample-post-3/
+  skip: true
+  - What rust gives us?: blog-articles/category-2/sample-post-4/
+
+- Contribute: /contribute/

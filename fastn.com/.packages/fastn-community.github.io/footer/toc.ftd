@@ -1,0 +1,40 @@
+-- import: fastn/processors as pr
+
+-- pr.toc-item list items: 
+$processor$: pr.toc
+
+- Section 1: basic-footer/
+  - Sub-section 1: /
+    - Label 1: index.html
+    - Label 2: index.html
+    - Label 3: index.html
+    - Label 4: index.html
+    - Label 5: index.html
+- Section 2: social-footer/
+  - Sub-section 2: /
+    - Label 1: index.html
+    - Label 2: index.html
+    - Label 3: index.html
+    - Label 4: index.html
+    - Label 5: index.html
+- Section 3: social-sideline-footer/
+  - Sub-section 3: /
+    - Label 1: index.html
+    - Label 2: index.html
+    - Label 3: index.html
+    - Label 4: index.html
+    - Label 5: index.html
+- Section 4: basic-footer/
+  - Sub-section 4:
+    - Label 1: index.html
+    - Label 2: index.html
+    - Label 3: index.html
+    - Label 4: index.html
+    - Label 5: index.html
+- Section 5: basic-footer/
+  - Sub-section 5:
+    - Label 1: index.html
+    - Label 2: index.html
+    - Label 3: index.html
+    - Label 4: index.html
+    - Label 5: index.html

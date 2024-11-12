@@ -1,0 +1,321 @@
+-- import: fastn.com/assets
+
+-- ds.page: `fastn-package` crate overview and motivation
+
+`fastn-package` is responsible for providing access to any fastn package content
+to `fastn-serve`, `fastn-build` etc.
+
+The specs for the crate are in the spec document.
+
+-- ds.h1: In Memory Data
+
+We want `fastn` to be fast, and it is hard to do it if IO operations are
+scattered all over the code. So we are going to create an in memory
+representation of the fastn package, including dependencies, and ensure most
+operations use the in memory structures instead of doing file IO.
+
+-- ds.h2: How We Store The Data?
+
+We are using `sqlite` for storing the data in memory. The tables are described
+below. We will also use a HashMap to store the ParsedData corresponding to each
+`fastn` file.
+
+The in-memory representation should not store the content of non `fastn` files,
+eg image files, as ideally images should be only read when we are serving the
+request or when we are copying the file during `fastn build`.
+
+`.ftd` files are special as they may be read more than once, say if a file is a
+dependency of many files in the package. So all `fastn` files are kept in p1
+parsed state in memory. Our p1 parser is faster than the full interpreter. So
+we only do the p1 level parsing for all `fastn` file, at startup once.
+
+-- ds.h2: `fastn build`
+
+All the files of the package are going to be read at least one during the build.
+Reading the entire package content can be used to guarantee that we read things
+at most once.
+
+-- ds.h2: `fastn serve`
+
+Reading all files when `fastn serve` starts instead of on demand seems wasteful,
+but if it is fast enough it may be acceptable to wait for a second or so during
+startup, if we get much faster page loads after.
+
+`fastn` comes with `fastn save` APIs and `fastn sync` APIs, and when we have our
+own built in editor as part of `fastn serve`, it will use `fastn save` APIs. If
+we deploy `fastn` on server we are going to use `fastn sync` APIs. If the APIs
+are the only way to modify files, then fastn is always aware of file changes
+and it can keep updating it's in-memory representation.
+
+-- ds.h2: File Watcher
+
+On local machines, files may change under the hood after `fastn serve` has
+started, this is because it is your local laptop, and you may use local Editor
+or other programs to modify any file. For this reason if we want to keep in
+memory version of fastn package content we have to implement a file watcher as
+well.
+
+For simplicity we will reconstruct the entire in memory structure when we detect
+any file change in the first design.
+
+-- ds.h1: Package Layout
+
+The most important information for a package is it's `FASTN.ftd` file. The main
+package can contain any number of other files. The dependencies are stored in
+`.packages` folder.
+
+-- ds.h2: Package List File
+
+For every package we have a concept of a list file. The list file contains list
+of all files in that package.
+
+The list file includes the file name, the hash of the file content.
+
+-- ds.h2: `.packages`
+
+For each package we download the package
+
+-- ds.h2: How Are Download Packages Stored?
+
+We store the package list file in `.packages/<package-folder>/LIST`. On every
+build the file is created. If the package is served via a fastn serve, then
+fastn serve has an API to get the LIST file.
+
+-- ds.h2: `.package` files are only updated by `fastn update`
+
+One of the goals is to ensure we do not do needless IO and confine all IO to
+well known methods. One place where we did IO was to download the package on
+demand. We are now going to download the dependencies explicitly.
+
+`fastn update` will also scan every module in the package, and find all the
+modules in dependencies that are imported by our package. `fastn update` will
+then download those files, and scan their dependencies and modules for more
+imports, and download them all.
+
+-- ds.h2: The RWLock
+
+We will use a RWLock to keep a single instance of in memory package data.
+
+-- ds.h2: Auto update on file change
+
+When fastn package is getting constructed at the program start, or when file
+watcher detects any change in the file system and updates the in memory data
+structure, it takes a write lock on the rwlock, so all reads will block till
+in memory data structure is constructed.
+
+If during update we detect a new dependency, the write lock will be held while
+we download the dependency as well. If the download fails due to network error
+we re-try the download when the document has imported the failed module.
+
+-- ds.h2: Invalid Modules
+
+When we are constructing the in memory data structure, and find a invalid ftd
+file we store the error in the in memory data, so we do not re-parse the same
+file again and get the same error.
+
+
+-- ds.h1: SQLite as the in-memory representation
+
+Instead of creating a struct or some such datastructure, we can store the in
+memory representation in a global in-memory SQLite db. We can put the SQLite db
+handle behind a RWLock to ensure we do not do writes while reads are happening
+or we can rely on the SQLite to do the read-write lock stuff using transactions.
+
+Transactions are generally the right way to do this, but we may do the RWLock in
+the beginning to keep things simple. Executing transactions is tricky, nested
+calls to functions creating transaction can be problem, and every function has
+to know if they have transaction or not. Same concern applies for locks, but at
+least Rust compiler takes care of ensuring we are not facing many of lock
+related issues due to ownership model.
+
+-- ds.h2: Tables
+
+These tables are described as Django models for documentation purpose only. We
+do not have to worry about migration as we recreated the database all the time.
+
+-- ds.h2: Package Table
+
+-- ds.code:
+lang: py
+
+class MainPackage():
+    # the name of the package
+    name = models.TextField()
+
+-- ds.h2: Dependency Table
+
+-- ds.code:
+lang: py
+
+class Dependency():  # DAG with single source
+    # name of the package that is a dependency
+    name = models.TextField()
+    # what package depended on this.
+    # for main package the name would be "main-package"
+    depended_by = models.TextField()
+
+-- ds.h2: Document Table
+
+This table contains information about all `fastn` files across all packages.
+
+-- ds.code:
+lang: py
+
+class Document():
+    # the name by which we import this document
+    name = models.TextField(primary_key=True)
+    # the name of the package this is part of
+    package = models.TextField()
+
+
+-- ds.h2: Auto Imports
+
+-- ds.code:
+lang: py
+
+class AutoImport():
+    document = models.ForeignKey(Document)
+    # if alias is not specified, we compute the alias using the standard rules
+    alias = models.TextField()
+    # alias specified by the user, if specified, it will be used instead
+    alias_specified = models.TextField(null=True)
+
+
+-- ds.h2: File Table
+
+All files are stored in this table. Files are discovered from on-disc as well
+as from Dependency list packages.
+
+-- ds.code:
+lang: py
+
+class File():
+    # the name of the file. We store relative path of file with
+    # respect to package name. main package is stored with the
+    # "main-package" name.
+    name = models.TextField(primary_key=True)
+    # the name of the package this is part of
+    package = models.TextField()
+    on_disc = models.BooleanField()
+
+-- ds.h2: URL
+
+All the URLs that our server can serve. This is computed by analysing sitemap,
+content of main package, and dynamic urls, and content of markdown section of
+each `fastn` file.
+
+-- ds.code:
+lang: py
+
+class URL():
+    path = models.TextField()
+    # we do not serve html files present in the current package as
+    # text/html text/html is reserved for `fastn` files. html files get
+    # 404. for non `fastn` file mostly this will contain images, maybe
+    # PDF, font files etc. We also do not serve JS/CSS files.
+    document = models.ForeignKey(Document)
+    kind = models.TextField(
+        choices=[
+            "current-package",
+            "dependency-package",
+            "current-package-static",
+            "dependency-package-static",
+        ]
+    )
+    content_type = models.TextField()
+    # if we have to redirect to some other url, this should be set
+    redirect = models.TextField(null=True)
+    # for every URL we add we add a canonical url, which can be
+    # itself, or something else
+    canonical = models.TextField()
+
+-- ds.markdown:
+
+`content_type`, `redirect` and `canonical` can be over-ridden by the document
+during the interpreter phase.
+
+We need not compute all dynamic URLs for `fastn serve` use case. We compute the
+static URLs, and store dynamic patterns, and compute dynamic URLs on demand. For
+`fastn build` we need all the dynamic URLs we can discover from the package as
+we have to generate static HTML for each of them.
+
+So this table will contain fewer entries till `discover-dynamic-urls` method is
+called.
+
+-- ds.h3: Discovered URLs during `fastn serve`
+
+We may not get all files by static analysis, as some URLs maybe constructed
+dynamically and we may still be able to serve them. When a document is rendered
+such new URLs are discovered, and they are not stored in `URL table` for
+consistency as otherwise this table will have different content based on if
+the some path has been requested or not.
+
+-- ds.h3: Discovered URLs during `fastn build`
+
+When we are creating static site, the discovered URLs are note stored in this
+table, but is stored in some in-memory structure in build process.
+
+
+-- ds.h2: Sitemap table
+
+-- ds.code:
+lang: py
+
+class Section():
+    name = models.TextField() # contains markdown
+    url = models.TextField()
+    document = models.TextField(null=True)
+    skip = models.BooleanField(default=False)
+    kv = models.JSONField(default={})
+
+class SubSection():
+    section = models.ForeignKey(Section)
+    # name can be empty if no sub-section was specified.
+    name = models.TextField() # contains markdown
+    url = models.TextField()
+    document = models.TextField(null=True)
+    skip = models.BooleanField(default=False)
+    kv = models.JSONField(default={})
+
+# how best to represent tree?
+class Toc():
+    sub_section = models.ForeignKey(SubSection)
+    name = models.TextField() # contains markdown
+    url = models.TextField()
+    document = models.TextField(null=True)
+    skip = models.BooleanField(default=False)
+    kv = models.JSONField(default={})
+
+-- ds.h2: Dynamic URls Table
+
+-- ds.code:
+lang: py
+
+class DynamicURL():
+    name = models.TextField(null=True)
+    pattern = models.TextField()
+    document = models.TextField()
+
+-- ds.h1: How Would Incremental Compilation Work
+
+For `fastn build` to do incremental compilation we need the snapshot of the last
+build. We will store a build-snapshot.sqlite file after successful `fastn
+build`.
+
+-- ds.h1: How Would Hot Reload Work
+
+If one of the pages is open in local (or workspace) environment, and any of the
+files that are a dependency of that page is modified, we want to modify that
+page. Eventually we may do patch based reload, where we will send precise
+information from server to browser about what has changed. For now we will do a
+document.reload().
+
+To do this we need to know what all pages are currently loaded in any browser
+tab and for each of those pages the dependency tree. We can store the dependency
+tree for all URLs in the in memory, but that would be a lot of computation, we
+can keep the page dependency list in the generated page itself, and pass this
+information to browser based poller, who will pass this information back to the
+server.
+
+
+-- end: ds.page

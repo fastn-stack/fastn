@@ -1,0 +1,97 @@
+-- import: fastn.com/rfcs/lib
+
+-- lib.rfc: RFC-3: Variable Interpolation In Strings
+id: 0003-variable-interpolation
+status: accepted
+
+In this RFC we propose variable interpolation in strings, which can it easier to
+show data in UI.
+
+
+
+-- lib.motivation:
+
+Say we want to show "Hello, Jack", where `Jack` is stored in a variable, `$name`,
+currently we have to either write a function to concatenate `Hello, ` and `$name`
+to form the string, or place two `ftd.text` nodes, wrapped in a `ftd.row`.
+Neither is very nice. So we are proposing variable interpolation, which allows
+easy generation of such strings with data embedded in it.
+
+-- end: lib.motivation
+
+
+
+-- lib.detailed-design:
+
+	-- ds.h2: Allow `$var` access in Strings
+	
+	Any string can now refer to any variable using the `$<var-name>` syntax, so e.g.,
+	we can write `Hello, $name`, and it will expand into `Hello, Jack` is `$name` is
+	`Jack`.
+	
+	We already support this if the entire string content was just `$<var-name>`, we
+	initialise string to it.
+	
+	
+	-- ds.h2: Interpolation Creates Formula
+	
+	In `fastn` language, formula re-evaluates it's value whenever the underlying
+	variable changes. This means if the variable used in any string interpolation
+	changes, the string will automatically change as well.
+	
+	-- ds.h2: `$ curly` syntax
+	
+	We can also do: `The total is \$${ count * price }.`
+	
+	-- ds.h2: Multi line $ curly
+	
+	-- ds.code:
+	lang: ftd
+	
+	\-- ftd.text: The total is ${
+	    count * price
+	}
+	
+	-- ds.h2: Escaping interpolation
+	
+	Sometimes we want to show literally `Hello, $name`, in this case the author can
+	write `Hello, \$name`, escape the special handling by putting a `\` in front of
+	`$`.
+	
+	We already do this if the string only contains `$<var-name>`: `$<var-name>`
+	
+	
+-- end: lib.detailed-design
+
+
+
+
+-- lib.alternatives:
+
+This was the most logical proposal given we already support `$<var-name>` for a
+string. The behaviour described here generalises this.
+
+-- end: lib.alternatives
+
+
+
+
+-- lib.teaching-notes:
+
+It should be relatively easy to teach. A lot of people intuitively write that
+and get surprised that it already doesn't work.
+
+-- end: lib.teaching-notes
+
+
+
+
+-- lib.unresolved-questions:
+
+None we are aware of.
+
+-- end: lib.unresolved-questions
+
+
+
+-- end: lib.rfc

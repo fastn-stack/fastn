@@ -1,0 +1,18 @@
+-- import: fastn
+
+-- fastn.package: fastn-community.github.io/dark-mode-switcher
+
+
+-- fastn.dependency: fastn-community.github.io/code-block
+-- fastn.dependency: fastn-community.github.io/site-doc
+
+
+
+-- fastn.sitemap:
+
+# Home: index.html
+
+- Documentation: /docs/
+
+# GitHub
+  url: https://github.com/fastn-community/dark-mode-switcher

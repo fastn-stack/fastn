@@ -1,0 +1,31 @@
+-- ds.page: `fastn` for Website Builders
+
+`fastn` language is a programming language designed for ease of content
+authoring.
+
+
+
+-- ds.code: `fastn` source code of the page you are reading
+
+\-- ds.page: `fastn` for Website Builders
+
+`fastn` language is a programming language designed for ease of content
+authoring.
+
+\-- ds.markdown:
+
+`fastn` is a good alternative for content websites like blogs,
+knowledge bases, portfolio websites, project and marketing websites etc.
+It is cheap, fast, and requires little maintenance.
+
+\-- end: ds.page
+
+
+-- ds.markdown:
+
+`fastn` is a good alternative for content websites like blogs, knowledge bases,
+portfolio websites, project and marketing websites etc. It is cheap, fast, and
+requires little maintenance.
+
+
+-- end: ds.page

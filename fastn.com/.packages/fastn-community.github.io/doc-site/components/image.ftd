@@ -1,0 +1,170 @@
+-- import: fastn-community.github.io/doc-site/components
+
+-- ds.page: image
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+sidebar: true
+
+-- ds.page.right-sidebar:
+
+-- components.sidebar-index:
+
+-- end: ds.page.right-sidebar
+
+-- ds.page.body:
+
+`ds.image` can be used to add images inside your fastn pages.
+
+-- ds.h2: How to add image?
+
+To add an image inside your `page` component just use `ds.image` as shown below:
+
+-- ds.code:
+lang: ftd
+
+\-- ds.image: Add image caption here
+link: <add link>
+src: <add image path here>
+alignment: center
+width: fill-container
+
+-- ds.rendered: Example 1:
+
+-- ds.rendered.input:
+
+\-- ds.image: This is image caption
+link: https://fastn.com
+src: $assets.files.static.image-placeholder.jpg
+
+This is addition body content for above image. At vero eos et accusamus et 
+iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum 
+deleniti atque corrupti quos dolores.
+
+-- ds.rendered.output:
+
+-- ds.image: This is image caption
+link: https://fastn.com
+src: $assets.files.static.image-placeholder.jpg
+
+This is addition body content for above image. At vero eos et accusamus et 
+iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum 
+deleniti atque corrupti quos dolores.
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.rendered: Example 2:
+
+-- ds.rendered.input:
+
+\-- ds.image: Image width 300 pixels
+link: https://fastn.com
+src: $assets.files.static.image-placeholder.jpg
+width.fixed.px: 300
+
+This is addition body content for above image. At vero eos et accusamus et 
+iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum 
+deleniti atque corrupti quos dolores.
+
+-- ds.rendered.output:
+
+-- ds.image: Image width 300 pixels
+link: https://fastn.com
+src: $assets.files.static.image-placeholder.jpg
+width.fixed.px: 300
+
+This is addition body content for above image. At vero eos et accusamus et 
+iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum 
+deleniti atque corrupti quos dolores.
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.rendered: Example 3:
+
+-- ds.rendered.input:
+
+\-- ds.image: Image width 300 pixels and right aligned 
+link: https://fastn.com
+src: $assets.files.static.image-placeholder.jpg
+width.fixed.px: 300
+alignment: right
+
+This is addition body content for above image. At vero eos et accusamus et 
+iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum 
+deleniti atque corrupti quos dolores.
+
+-- ds.rendered.output:
+
+-- ds.image: Image width 300 pixels and right aligned 
+link: https://fastn.com
+src: $assets.files.static.image-placeholder.jpg
+width.fixed.px: 300
+alignment: right
+
+This is addition body content for above image. At vero eos et accusamus et 
+iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum 
+deleniti atque corrupti quos dolores.
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.rendered: Example 4:
+
+-- ds.rendered.input:
+
+\-- ds.image: Image width 300 pixels and left aligned 
+link: https://fastn.com
+src: $assets.files.static.image-placeholder.jpg
+width.fixed.px: 300
+alignment: left
+
+This is addition body content for above image. At vero eos et accusamus et 
+iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum 
+deleniti atque corrupti quos dolores.
+
+-- ds.rendered.output:
+
+-- ds.image: Image width 300 pixels and left aligned 
+link: https://fastn.com
+src: $assets.files.static.image-placeholder.jpg
+width.fixed.px: 300
+alignment: left
+
+This is addition body content for above image. At vero eos et accusamus et 
+iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum 
+deleniti atque corrupti quos dolores.
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.h2: How to link image from `fastn` assets?
+
+Let's say you have created a folder name `<static>` into your fastn project. And
+you added a image `sample.jpg` inside it. 
+
+-- ds.code:
+lang: ftd
+
+\-- ds.image:
+src: $assets.files.static.sample.jpg
+
+-- ds.markdown:
+
+- In above code snippet `$assets.files` refers to your `fastn` project root
+  folder.
+
+- `.static` refers to your `<static>` folder you created inside your `fastn`
+  project.
+
+- `.sample.jpg` is the image inside `<static>` folder.
+
+You can add as many image assets into your `fastn` project you wish to and
+refers them as we seen above.
+
+-- end: ds.page

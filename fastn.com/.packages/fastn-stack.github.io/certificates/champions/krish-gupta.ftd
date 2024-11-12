@@ -1,0 +1,17 @@
+-- import: fastn-stack.github.io/certificates/champion
+
+-- ds.page: Champion Certification
+
+-- ftd.column:
+width: fill-container
+
+-- champion.certificate-2: Krish Gupta
+date: 6th October 2023
+avatar: $assets.files.assets.avatar.krish.png
+discord-link: https://discord.com/channels/793929082483769345/1159832754897297479
+github-link: https://github.com/xkrishguptaa
+linkedin-link: https://www.linkedin.com/in/xkrishguptaa/
+
+-- end: ftd.column
+
+-- end: ds.page

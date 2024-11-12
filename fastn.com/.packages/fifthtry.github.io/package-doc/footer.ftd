@@ -1,0 +1,62 @@
+-- import: fastn/processors as pr
+-- import: fifthtry.github.io/package-doc/powered-by
+
+
+-- fastn-footer:
+
+
+
+
+
+
+
+
+
+
+-- component fastn-footer:
+optional string copyright: Copyright © 2023 - [FifthTry](https://www.fifthtry.com/)
+optional ftd.color backgroundcolor: $inherited.colors.background.step-1
+ftd.color text-color: $inherited.colors.text
+ftd.color active-text-color: $inherited.colors.text-strong
+integer logo-height: 32
+
+-- ftd.column:
+width: fill-container
+align-self: center
+align-content: center
+background.solid: $fastn-footer.backgroundcolor
+
+-- ftd.row:
+width: fill-container
+border-top-width.px: 1
+border-color: $inherited.colors.border
+padding-vertical.px: 20
+padding-horizontal.px: 20
+align-content: center
+
+-- ftd.row:
+width: fill-container
+
+-- ftd.text: 
+if: {fastn-footer.copyright != NULL}
+text: $fastn-footer.copyright
+color: $inherited.colors.text
+text-align: center
+role: $inherited.types.copy-small
+white-space: nowrap
+
+-- end: ftd.row
+
+-- ftd.row:
+align-self: end
+
+-- powered-by.powered-by:
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+
+-- end: ftd.column
+
+-- end: fastn-footer

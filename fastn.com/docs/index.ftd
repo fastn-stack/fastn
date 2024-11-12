@@ -1,0 +1,56 @@
+-- ds.page: `fastn` Docs
+
+Everything you need to know about `fastn` and `ftd`.
+
+-- ds.h1: First Steps
+
+Are you new to `fastn`, `ftd` or to programming? This is the place to start!
+
+- **From Scratch**: [Overview](/overview/) | [Get Started](/setup/)
+- **Tutorial**: Part 1 - Using And Creating Components
+  | Part 2 - Functions and Event Handling
+  | Part 3 - Data Modelling
+  | Part 4 - Work With HTTP APIs
+  | Part 5 - Style Guide
+  | Part 6 - Deploying
+- **Course**: [Overview Of The Course](/expander/)
+  | [Part 1 - Hello World](/expander/hello-world/)
+  | [Part 2 - Basic UI](/expander/basic-ui/)
+  | [Part 3 - Components](/expander/components/)
+  | [Part 4 - Event Handling](/expander/events/)
+  | [Part 5 - Publishing A Package](/expander/publish/)
+  | [Part 6 - Polishing UI](/expander/polish/)
+
+-- ds.h1: Getting Help
+
+Having trouble? We’d like to help!
+
+- Try the FAQ* – it’s got answers to many common questions.
+- Looking for specific information? Try the Glossary*,  or the detailed
+  table of contents*.
+- Not found anything? See FAQ: Getting Help* for information on getting support
+  and asking questions to the community.
+- Report bugs with `fastn` or `ftd` in our [issue
+  tracker](https://github.com/fastn-stack/fastn/issues).
+- Join our [Discord](https://discord.gg/bucrdvptYd) channel and share your
+  thoughts, suggestion, question etc.
+
+-- ds.h1: How the documentation is organized
+
+Django has a lot of documentation. A high-level overview of how it’s organized
+will help you know where to look for certain things:
+
+- Tutorials* take you by the hand through a series of steps to create a web
+  application. Start here if you’re new to `fastn` or web application
+  development. Also look at the [First steps](/docs/#first-steps).
+- Topic guides discuss key topics and concepts at a fairly high level and
+  provide useful background information and explanation.
+- Reference guides contain technical reference for APIs and other aspects of
+  Django’s machinery. They describe how it works and how to use it but assume
+  that you have a basic understanding of key concepts.
+- How-to guides are recipes. They guide you through the steps involved in
+  addressing key problems and use-cases. They are more advanced than tutorials
+  and assume some knowledge of how Django works.
+
+
+-- end: ds.page

@@ -1,0 +1,22 @@
+-- import: fastn.com/featured as ft-ui
+
+-- ds.page:
+full-width: true
+sidebar: false
+
+-- ft-ui.view-all: Quotes with images
+templates: $author-avatar-quotes
+
+-- end: ds.page
+
+
+
+
+
+-- ft-ui.template list author-avatar-quotes:
+
+-- ft-ui.template: Charcoal
+template-url: /quotes/charcoal/
+screenshot: $fastn-assets.files.images.featured.components.quotes.quotes-with-images.demo-1.png
+
+-- end: author-avatar-quotes

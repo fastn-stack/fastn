@@ -1,0 +1,160 @@
+-- ds.page: Why Use `fastn` for Your Next Front-end?
+
+Instead of React/Angular or JavaScript, you can use `fastn` as the frontend of
+your next webapp or website.
+
+-- ds.h1: Easy To Learn
+
+`fastn` is designed to be easy to learn for people who have very little to no
+prior frontend development experience. Backend developers, designers can easily
+learn it for building their web projects.
+
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn-community.github.io/bling/quote
+
+\-- quote.charcoal: Amit Upadhyay
+label: Creator of `fastn`
+avatar: $fastn-assets.files.images.amitu.jpg
+logo: $fastn-assets.files.images.logo-fifthtry.svg
+
+The web has lost some of the exuberance from the
+early 2000s, and it makes me a little sad.
+
+-- ds.markdown:
+
+The language to author content and the language to build the components is the
+same and one can gradually learn `fastn` by first only using ready made
+components, and then slowly learning to build components.
+
+-- ds.code:
+lang: ftd
+
+\-- component toggle-text:
+boolean $current: false
+caption title:
+
+\-- ftd.text: $toggle-text.title
+align-self: center
+text-align: center
+color if { toggle-text.current }: #D42D42
+color: $inherited.colors.cta-primary.text
+background.solid: $inherited.colors.cta-primary.base
+$on-click$: $ftd.toggle($a = $toggle-text.current)
+border-radius.px: 5
+
+\-- end: toggle-text
+
+
+-- ds.h1: Easy To Author - Great For Content Sites
+
+`fastn` is optimised for people to author web content using the same language
+in which the reusable web components are built. If you are using React etc, you
+would want to use `mdx` for this. The `mdx` is a mix of, very easy to author
+markdown,
+
+-- ds.h2: Semantic Content
+
+Markdown has concepts like headings and paragraphs. Everything in markdown is
+just headings of different levels. There is no semantic to headings. With `ftd`
+you use components by name, with rich type system etc, eg if you want to
+talk about your team, in markdown you will say:
+
+-- ds.code:
+lang: md
+
+# Team
+
+## Jack Smith
+
+Jack is our lead designer. He joined us on 20th Feb 2022. He loves to cook and
+swim, and is often found walking his husky.
+
+![Jack Smith's Mugshot](/images/team/jack.jpg)
+
+-- ds.markdown:
+
+Where as with `fastn` you say something like.
+
+-- ds.code:
+lang: ftd
+
+\-- lib.team:
+
+\-- lib.member: Jack Smith
+joined-on: 20th Feb 2022
+title: Lead Designer
+mugshot: $assets.files.team.jack.jpg
+
+Jack loves to cook and swim, and is often found walking his husky.
+
+\-- end: lib.team
+
+-- ds.markdown:
+
+The information content is captured in fields. The fields have types, so there
+is no invalid data. There is a separation of markup from content, as in this
+case of markdown the image will always come after the paragraph, but in the
+case of `fastn`, the image can be placed anywhere, decided by the `lib.member`
+component.
+
+-- ds.h2: Data Driven
+
+The data in the `fastn` files can be trivially extracted, converted to JSON,
+whereas in case of markdown you have to write fragile parser to extract the
+data locked in markdown text blobs.
+
+-- ds.code: Rust Code To Extract Data
+lang: rs
+
+#[derive(serde::Deserialize)]
+struct Member {
+    name: String,
+    #[rename("joined-on")]
+    joined_on: String,
+    title: Option<String>,
+    mugshot: Option<String>,
+    bio: String,
+}
+
+let doc = fastn::Document::from("some/id", source)?;
+let members: Vec<Member> = doc.invocations("lib.member")?;
+
+-- ds.markdown:
+
+Soon we will support json conversion on `fastn` CLI as well, `fastn json-dump
+team.ftd --invocations=lib.member` will return:
+
+-- ds.code: json returned by `fastn json-dump`
+lang: json
+
+[
+    {
+        "name": "Jack Smith",
+        "joined-on": "20th Feb 2022",
+        "title": "Lead Designer",
+        "mugshot": "/team/jack.jpg",
+        "bio": "Jack loves to cook and swim, and is often found walking his husky."
+    }
+]
+
+
+-- ds.h1: Good Design System
+
+`fastn` comes with integrated design system. Instead of specifying font sizes or
+colors, you specify typography and color roles to UI elements. The roles are
+well defined, so within the `fastn` ecosystem they are well known, and a lot of
+color scheme and typography packages available, which you can install and you
+can then change entire typography or color scheme in a few lines of change.
+
+Learn more about [fastn design system](/design-system/).
+
+-- ds.h1: Responsive
+
+`fastn` has built in support for responsive, every where you specify a length,
+you can specify a "responsive length", and fastn will automatically use the
+right length based on mobile or desktop devices.
+
+-- end: ds.page

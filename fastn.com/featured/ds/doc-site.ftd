@@ -1,0 +1,43 @@
+-- import: fastn.com/u/ganesh-salunke
+-- import: fastn.com/u/muskan-verma
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Simple Site
+featured-link: /featured/doc-sites/
+category: Documentation Sites
+image: $fastn-assets.files.images.featured.doc-sites.doc-site.jpg
+owners: [$ganesh-salunke.info, $muskan-verma.info]
+license-url: https://github.com/fastn-community/doc-site/blob/main/LICENSE
+license: Creative Commons
+published-date: 24-May-2023
+cards: $doc-sites
+github-url: https://github.com/fastn-stack/fastn-template/
+demo-link: https://fastn-community.github.io/doc-site/
+
+
+
+
+
+
+
+
+-- ft-ui.template list doc-sites:
+
+-- ft-ui.template: Midnight Rush
+template-url: featured/ds/mr-ds/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
+
+-- ft-ui.template: Midnight Storm
+template-url: featured/ds/midnight-storm/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
+
+-- ft-ui.template: Misty Gray
+template-url: featured/ds/misty-gray/
+screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
+
+-- ft-ui.template: Dash Dash DS
+template-url: featured/ds/dash-dash-ds/
+screenshot: $fastn-assets.files.images.featured.doc-sites.dash-dash-ds.png
+wip: true
+
+-- end: doc-sites

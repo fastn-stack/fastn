@@ -1,0 +1,197 @@
+/-- ftd.text:
+
+## Events: /events/webdev-with-ftd/
+   document: webdev-with-ftd.ftd
+
+- Overview: /features/
+- Package Manager: /package-manager/
+  document: features/package-manager.ftd
+- Static Site Generator: /static/
+  document: features/static.ftd
+- `fastn` Server: /server/
+  document: features/server.ftd
+- Color Scheme: /cs/
+  document: features/cs.ftd
+- Sitemap: /sitemap/
+  document: features/sitemap.ftd
+
+
+
+- The `fastn` Language: /lang/
+  document: /ftd/index.ftd
+- Why?:
+  - `fastn` is Easy To Learn: /easy/
+    document: why/easy.ftd
+    skip: true
+  - Optimised For Content Focused Sites: /content-focused/
+    document: why/content.ftd
+    skip: true
+  - Stable Architecture: /stable/
+    document: why/stable.ftd
+    skip: true
+  - Design System: /why/design/
+    skip: true
+  - FullStack Apps: /fullstack/
+    skip: true
+    document: why/fullstack.ftd
+  - Why Use `fastn` for Your Next Frontend?: /frontend/why/-/learn/
+- Install `fastn`: /install/
+  document: author/how-to/install.ftd
+  - On MacOS/Linux: /macos/
+    document: author/setup/macos.ftd
+  - On Windows: /windows/
+    document: author/setup/windows.ftd
+  - Open terminal: /open-terminal/
+    document: author/how-to/open-terminal.ftd
+    skip: true
+- Syntax Highlighting For SublimeText: /sublime/
+  document: author/how-to/sublime.ftd
+- Syntax Highlighting For Visual Studio Code: /vscode/
+  document: author/how-to/vscode.ftd
+;;- `fastn` Community: /community/
+- Docs: /docs/
+
+
+
+
+# Create Website: /create-website/
+  document: author/how-to/install.ftd
+  source: build
+
+## Create Website: /create-website/
+  document: author/how-to/install.ftd
+
+- Install: /install/-/build/
+  document: author/how-to/install.ftd
+  - On Windows: /build-windows/-/expander/
+    document: author/setup/windows.ftd
+  - On MacOS/Linux: /build-macos/-/expander/
+    document: author/setup/macos.ftd
+- Hello World: /expander/hello-world/-/build/
+- Basic UI: /expander/basic-ui/-/build/
+- Publish a package: /expander/publish/-/build/
+- Create clean URLs:
+- Create rounded border: /rounded-border/-/build/
+  document: /expander/border-radius.ftd
+- Using images in documents: /using-images/-/build/
+  document: /expander/imagemodule/index.ftd
+- Add meta-data: /seo-meta/
+  document: /expander/ds/meta-data.ftd
+- Markdown in doc-site: /markdown/
+  document: /expander/ds/markdown.ftd
+- Adding color scheme: /color-scheme/
+  document: /expander/ds/ds-cs.ftd
+- Using page component: /ds-page/
+  document: /expander/ds/ds-page.ftd
+  skip: true
+- Redirects:
+
+
+
+
+## Learn: /frontend/learn/
+  document: /expander/index.ftd
+
+- Expander Crash Course: /expander/
+    - Install `fastn`: /install/-/expander/
+      document: author/how-to/install.ftd
+      - On Windows: /windows/-/expander/
+        document: author/setup/windows.ftd
+      - On MacOS/Linux: /macos/-/expander/
+        document: author/setup/macos.ftd
+- Button with shadow: /button/
+  document: /expander/button.ftd
+- Create rounded border: /rounded-border/
+  document: /expander/border-radius.ftd
+- Create holy-grail layout: /holy-grail/
+  document: /expander/layout/index.ftd
+- Understanding sitemap: /understanding-sitemap/
+  document: /expander/ds/understanding-sitemap.ftd
+- Create clean URLs: /clean-urls/
+  document: /expander/sitemap-document.ftd
+- Using images in documents: /using-images/
+  document: /expander/imagemodule/index.ftd
+- Add meta data: /seo-meta/-/frontend/
+  document: /expander/ds/meta-data.ftd
+- Adding typography: /typography/-/frontend/
+  document: /expander/ds/ds-typography.ftd
+- Adding color scheme: /color-scheme/-/frontend/
+  document: /expander/ds/ds-cs.ftd
+- Using `ds.page` component: /ds-page/-/frontend/
+  document: /expander/ds/ds-page.ftd
+  skip: true
+
+
+
+
+
+  - Learn: /backend/learn/
+  document: /backend/country-details/index.ftd
+
+- Country Details: /country-details/
+  document: /backend/country-details/index.ftd
+  - Basic of `http`, `data modelling`: /country-details/basics/
+    document: /backend/country-details/http-data-modelling.ftd
+  - Building dynamic country list page: /country-list/
+    document: /backend/country-details/dynamic-country-list-page.ftd
+
+
+
+
+## Book 🚧: /book/
+
+- The Book Of `fastn`: /book/
+- `i` Foreword 🚧: /book/foreword/
+  document: book/1-foreword.ftd
+- `ii` Preface: /book/preface/
+  document: book/2-preface.ftd
+- `iii` Introduction: /book/intro/
+  document: book/3-intro.ftd
+- **1.** Getting Started 🚧: /book/getting-started/
+  document: book/01-getting-started/00-getting-started.ftd
+  - `1.1` Hello, Github!: /book/github/
+    document: book/01-getting-started/01-github.ftd
+  - `1.2` Let's Create A Repo: /book/repo/
+    document: book/01-getting-started/02-repo.ftd
+  - `1.3` Publish Your Site: /book/gh-pages/
+    document: book/01-getting-started/03-gh-pages.ftd
+  - `1.4` Online Editor: /book/codespaces/
+    document: book/01-getting-started/04-codespaces.ftd
+  - `1.5` Edit Your Site 🚧: /book/first-edit/
+    document: book/01-getting-started/05-first-edit.ftd
+- **2.** Modules  🚧: /book/modules/
+  document: book/02-modules/01-intro.ftd
+- Appendix: /book/appendix/
+  - **a** HTTP 🚧: /book/http/
+    document: book/appendix/a-http.ftd
+  - **b** URL 🚧: /book/url/
+    document: book/appendix/b-url.ftd
+  - **c** Terminal: /book/terminal/
+    document: book/appendix/c-terminal.ftd
+    - Open Terminal: /open-terminal/-/book/
+      document: author/how-to/open-terminal.ftd
+      skip: true
+  - **d** Common Commands 🚧: /cmds/
+    document: book/appendix/d-common-commands.ftd
+  - **e** Install `fastn`: /book/install/
+    document: book/appendix/e-install.ftd
+    - Install On Windows: /windows/-/book/
+      document: author/setup/windows.ftd
+      skip: true
+  - **f** A Programming Editor: /book/editor/
+    document: book/appendix/f-editor.ftd
+    - SublimeText Syntax Highlighting 🚧: /sublime/-/book/
+      document: author/how-to/sublime.ftd
+      skip: true
+  - **g** Hosting 🚧: /book/hosting/
+    document: book/appendix/g-hosting.ftd
+
+
+- Overview 🚧: /frontend/
+  skip: true
+- Why Use `fastn` for Your Next Frontend?: /frontend/why/
+- Design System 🚧: /design-system/
+  document: frontend/design-system.ftd
+  skip: true
+- Getting Started: /setup/
+  document: ftd/setup.ftd

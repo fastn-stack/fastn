@@ -1,0 +1,175 @@
+-- import: fifthtry.github.io/button
+-- import: fastn-community.github.io/bling/modal-cover
+
+-- boolean $toggle-event: false
+
+-- site-doc.doc-home: Secondary Button
+license-url: https://github.com/FifthTry/button/blob/main/LICENSE
+current-package: fifthtry.github.io/button
+show-tabs: false
+site-title: Button
+github-url: https://github.com/FifthTry/button
+
+
+
+-- site-doc.header: Demo
+
+-- site-doc.output:
+colors: $ftd.default-colors
+
+-- ftd.row:
+width: fill-container
+spacing: space-between
+
+-- button.button: Extra Large Button
+role: secondary
+extra-large: true
+link: secondary/
+
+-- button.button: Large Button
+role: secondary
+large: true
+link: secondary/
+
+-- button.button: Medium Button
+role: secondary
+medium: true
+link: secondary/
+
+-- button.button: Small Button
+role: secondary
+small: true
+link: secondary/
+
+-- end: ftd.row
+
+-- end: site-doc.output
+
+-- site-doc.header: How to use
+
+To use button components on your [fastn](https://fastn.com/) web project, add
+below into `FASTN.ftd` file:
+
+-- cb.code:
+lang: ftd
+
+\-- fastn.dependency: fifthtry.github.io/button
+
+-- site-doc.markdown:
+
+Now import `button` inside your `.ftd` file
+
+-- cb.code:
+lang: ftd
+
+\-- import: fifthtry.github.io/button
+
+-- site-doc.markdown:
+
+Use `button.button` inside your `.ftd` files
+
+-- cb.rendered:
+
+-- cb.rendered.input:
+
+\-- button.button: SECONDARY
+role: secondary
+large: true
+link: index.html
+
+-- cb.rendered.output:
+
+-- site-doc.output:
+colors: $ftd.default-colors
+
+-- button.button: SECONDARY
+role: secondary
+large: true
+link: secondary/
+
+-- end: site-doc.output
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+-- site-doc.header: Properties:
+
+Below are details of all properties of `button` component.
+
+-- site-doc.component-property: `title`
+type: Caption (`required`)
+
+It's used to title to the `button` component.
+
+-- site-doc.component-property: `role`
+type: String (`required`)
+
+It's used to add role to `button` component. Use role as `primary` `secondary`
+or `tertiary` as per your need.
+
+-- site-doc.component-property: `large`
+type: Boolean (`required`)
+
+If you want use `large` button then add this property value as `true`. Use
+`extra-large`, `medium` or `small` and add its value as `true` as per your
+need.
+
+-- site-doc.component-property: `link`
+type: String (`optional`)
+
+It's used to add link to button component. If you are not using `link` property
+then, you can add `$on-click$` event incase you want to add `on-click`
+function.
+
+Below example shows how on-click event works.
+
+-- cb.rendered:
+
+-- cb.rendered.input:
+
+\-- boolean $toggle-event: false
+
+\-- button.button: Show modal
+role: secondary
+large: true
+$on-click$: $ftd.toggle($a = $toggle-event)
+
+\-- modal-cover.modal-cover: Sign Up!
+$open: $toggle-event
+show-form: true
+placeholder: Your email address here
+cta-text: Continue
+footer: What is it? [Terms and conditions](modal-cover/)
+
+25% Off On Your First Purchase* Enter code WELCOME at checkout
+Discover new apps, things to do & more great news added daily!
+
+-- cb.rendered.output:
+
+-- site-doc.output:
+colors: $ftd.default-colors
+
+-- button.button: Show modal
+role: secondary
+large: true
+$on-click$: $ftd.toggle($a = $toggle-event)
+
+-- modal-cover.modal-cover: Sign Up!
+$open: $toggle-event
+show-form: true
+placeholder: Your email address here
+cta-text: Continue
+cta-link: secondary/
+footer: What is it? [Terms and conditions](modal-cover/)
+
+25% Off On Your First Purchase* Enter code WELCOME at checkout
+Discover new apps, things to do & more great news added daily!
+
+-- end: site-doc.output
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+-- end: site-doc.doc-home

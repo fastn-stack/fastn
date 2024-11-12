@@ -1,0 +1,225 @@
+-- import: fastn-stack.github.io/ftd-web-component-example/assets
+-- import: fifthtry.github.io/doc-site-typography as typo
+
+-- optional string $task: 
+
+-- todo-item list $todo_list:
+
+-- end: $todo_list
+
+
+-- demo:
+
+
+
+-- component demo:
+boolean show-link: true
+
+-- ftd.column:
+width: fill-container
+padding.px if { ftd.device != "mobile" }: 40
+padding.px: 20
+spacing.fixed.px: 40
+
+-- header:
+show-link: $demo.show-link
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 40
+wrap if { ftd.device == "mobile" }: true
+
+-- ftd.column:
+width.fixed.percent: 50
+width if { ftd.device == "mobile" }: fill-container
+
+-- todo-list-display:
+name: $task
+$todo_list: $todo_list
+
+-- end: ftd.column
+
+
+
+-- ftd-world:
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: demo
+
+
+
+-- web-component todo-list-display:
+string name:
+todo-item list $todo_list:
+js: $assets.files.todo.js
+
+
+
+
+-- record todo-item:
+caption name:
+boolean done:
+string status:
+optional body description:
+
+
+
+
+-- component ftd-todo-display:
+todo-item item:
+
+-- ftd.row:
+width: fill-container
+spacing: space-between
+background.solid: #b8dbfb
+padding-horizontal.px: 5
+
+-- ftd.text: $ftd-todo-display.item.name
+role: $typo.types.button-large
+
+-- ftd.text: $ftd-todo-display.item.status
+role: $typo.types.button-large
+color: blue
+align-self: center
+
+-- end: ftd.row
+
+-- end: ftd-todo-display
+
+
+
+
+
+
+
+
+-- component ftd-world:
+
+-- ftd.column:
+width.fixed.percent: 50
+width if { ftd.device == "mobile" }: fill-container
+padding.px: 20
+background.solid: #dae6f0
+spacing.fixed.px: 10
+padding-bottom.px: 20
+
+-- ftd.text: FTD World
+role if { ftd.device != "mobile"}: $typo.types.heading-medium
+role: $typo.types.heading-small
+
+-- ftd.column:
+min-height.fixed.px: 234
+background.solid: white
+padding.px: 20
+width: fill-container
+spacing.fixed.px: 10
+
+-- ftd-todo-display:
+item: $obj
+$loop$: $todo_list as $obj
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd-world
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component demo-link:
+
+-- ftd.row:
+align-content: center
+spacing.fixed.px: 5
+align-self: center
+role: $inherited.types.copy-regular
+
+-- ftd.text: Checkout out our
+
+-- ftd.text: blog post to learn more
+link: https://fastn.io/blog/web-components/
+
+-- end: ftd.row
+
+-- end: demo-link
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component header:
+boolean show-link: false
+boolean $mouse-in: false
+optional string $input-value:
+
+-- ftd.column:
+padding.px: 20
+width: fill-container
+background.solid: #dae6f0
+align-content: center
+
+-- ftd.text: Web Component Demo
+role: $typo.types.copy-large
+text-align: center
+
+-- ftd.row:
+margin-vertical.px: 40
+spacing.fixed.px: 10
+align-content: center
+wrap if { ftd.device == "mobile" }: true
+
+-- ftd.text: Task:
+role: $typo.types.button-large
+
+-- ftd.text-input:
+placeholder: Your task here...
+type: url
+height.fixed.px: 30
+width.fixed.px: 213
+padding.px: 10
+border-width.px: 2
+role: $inherited.types.copy-regular
+value: $task
+$on-input$: $ftd.set-string($a = $header.input-value, v = $VALUE)
+
+
+-- ftd.text: Create
+background.solid: #B6CDE1
+padding-vertical.px: 6
+padding-horizontal.px: 10
+border-radius.px: 5
+background.solid if { header.mouse-in }: #92B4D2
+$on-click$: $ftd.set-string($a = $task, v = $header.input-value)
+$on-mouse-enter$: $ftd.set-bool($a = $header.mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $header.mouse-in, v = false)
+
+-- end: ftd.row
+
+-- demo-link:
+if: { header.show-link }
+
+-- end: ftd.column
+
+
+-- end: header

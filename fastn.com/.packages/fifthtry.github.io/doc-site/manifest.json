@@ -1,0 +1,506 @@
+{
+    "files": {
+        "static/avatar.svg": {
+            "name": "static/avatar.svg",
+            "checksum": "FD66FA9C988EB98FFBE901C1DB26396493FA57DDDCDCF06D2E4BF9EEB72BC2BF",
+            "size": 805
+        },
+        "static/up-arrow-dark.svg": {
+            "name": "static/up-arrow-dark.svg",
+            "checksum": "DC4323DCC9ED03438A21EC3C13A177AA57E0266A27FA1298A733A4BC817738F8",
+            "size": 342
+        },
+        "static/docs/about-settings-website-url.png": {
+            "name": "static/docs/about-settings-website-url.png",
+            "checksum": "A1BA3D3297464E6E84BFBBBFB7EBC56B3620B3990A71B90B2B91E81ACDDAF6EE",
+            "size": 509356
+        },
+        "blog-articles/category-2/sample-post-3.ftd": {
+            "name": "blog-articles/category-2/sample-post-3.ftd",
+            "checksum": "E1F0FC7F31660524ADD465718DF240407C6E7B1E5C0F44549853DA7C0F35EA0A",
+            "size": 3202
+        },
+        "404-pages/not-found-2.ftd": {
+            "name": "404-pages/not-found-2.ftd",
+            "checksum": "53F2E7A001BE1B3B38BF025B993DA7ADC21319D49E827E500076E1D32641DA17",
+            "size": 216
+        },
+        "static/brand-logo.svg": {
+            "name": "static/brand-logo.svg",
+            "checksum": "38CC38B23F9E62D4360599A37C1499ED25F56F7635EB2DD85D07FBBE92FCC2FD",
+            "size": 10515
+        },
+        "static/header/site-logo.png": {
+            "name": "static/header/site-logo.png",
+            "checksum": "D3D8A3C99985D2F234E694704808A20113C429E848DC07BFE6FA7ED316B0CC79",
+            "size": 2091
+        },
+        "static/close.svg": {
+            "name": "static/close.svg",
+            "checksum": "DFB63E3C20B81C45BEA10E74C3B6847E68121691667868F06CAB393CD498769A",
+            "size": 475
+        },
+        "blog-articles/category-2/sample-post-4.ftd": {
+            "name": "blog-articles/category-2/sample-post-4.ftd",
+            "checksum": "4FA79F067A4CC1414520A447C89874DBD0823B93ECCD72CE71F332FA2607D4D0",
+            "size": 3125
+        },
+        "static/ganeshs.jpeg": {
+            "name": "static/ganeshs.jpeg",
+            "checksum": "8965B656BFAB50F7493EC6BDFDEC94C71AFDBC63910FA71A8ABE5FD5883FCF45",
+            "size": 28687
+        },
+        "static/forest-theme/ftd-logo-mobile-dark.png": {
+            "name": "static/forest-theme/ftd-logo-mobile-dark.png",
+            "checksum": "CF0AF8C5A727DB3C4D584F86842417A2662DC2F4E59172533FD80815F21B9774",
+            "size": 2234
+        },
+        "static/translation-icons/35x26/translations-missing.png": {
+            "name": "static/translation-icons/35x26/translations-missing.png",
+            "checksum": "EB787CB885D62A7A843147E390D6BCB70DEEF807CD6D809F371559F33A573D08",
+            "size": 1038
+        },
+        "static/translation-icons/35x26/translations-time.png": {
+            "name": "static/translation-icons/35x26/translations-time.png",
+            "checksum": "A090C82CB4419C7CE8A40921B8DCC64FE394656897445B128C990A0CD0AF19A5",
+            "size": 1183
+        },
+        "static/translation-icons/35x26/translations-info.png": {
+            "name": "static/translation-icons/35x26/translations-info.png",
+            "checksum": "FD11F09E86AC2FD56199207DE560DDCA503C0DB779F6759E1478A02A95C65372",
+            "size": 1159
+        },
+        "static/docs/create-new-repository.png": {
+            "name": "static/docs/create-new-repository.png",
+            "checksum": "A3F00B2E102490D5C00129E1E8BF48109AD659EF88B3D35FEFF392B6738D46D3",
+            "size": 101208
+        },
+        "static/translation-icons/large/translations-success.png": {
+            "name": "static/translation-icons/large/translations-success.png",
+            "checksum": "0A9BF0475F717C3B164269E076F82199A3704FB34ED35F2CF37DE7C178AFF26A",
+            "size": 1007
+        },
+        "static/translation-icons/translations-success.png": {
+            "name": "static/translation-icons/translations-success.png",
+            "checksum": "133406049C56B7AEB782FAF3C32F04683ECF946349D864E9D8A6FAFD99D38F41",
+            "size": 467
+        },
+        "static/info-icon.svg": {
+            "name": "static/info-icon.svg",
+            "checksum": "236FA3E9F63ECACBDB8521D447D4579E1E0D25CEEED94DD620EFD6754AE1F665",
+            "size": 2048
+        },
+        "static/up-arrow.svg": {
+            "name": "static/up-arrow.svg",
+            "checksum": "3FAD53EC8EC276FC50D94330B87D911C75E51C608871F93633AC1E156B0A8696",
+            "size": 342
+        },
+        "static/docs/index-ftd-updated-with-homepage-post.png": {
+            "name": "static/docs/index-ftd-updated-with-homepage-post.png",
+            "checksum": "B9604947F35F200594617262FECA9DDBA744F377D2498370AE3A90AECD6C8FE7",
+            "size": 779769
+        },
+        "modal/loader.ftd": {
+            "name": "modal/loader.ftd",
+            "checksum": "E5431A7128E0655716D878903F78759F67D448BCAAA53D8785DF7090D6AABB4B",
+            "size": 634
+        },
+        "static/docs/example-ftd-website-repository.png": {
+            "name": "static/docs/example-ftd-website-repository.png",
+            "checksum": "38271EA15B72CAE80DB8249620855FB6376006E9AF4308D4180DF31CE631259B",
+            "size": 170385
+        },
+        "docs/index.ftd": {
+            "name": "docs/index.ftd",
+            "checksum": "802EEDBFC0D4FE3A62F077574BEB08E7FAF40EBA85FCD795823683793EB9D79D",
+            "size": 15161
+        },
+        "static/docs/action-tab-pages-build-and-deployment.png": {
+            "name": "static/docs/action-tab-pages-build-and-deployment.png",
+            "checksum": "5C2A39DD0678B9E6FAD9B9B950790AA046356CDBAA2BAA6039C4B03D38479CA7",
+            "size": 124341
+        },
+        "static/docs/sidenote-from-bling-library.png": {
+            "name": "static/docs/sidenote-from-bling-library.png",
+            "checksum": "F6BBC0594FF54DEE2B92E7D2F178F5F1CFF67AC6495EB0D1201349C707345F77",
+            "size": 142588
+        },
+        "static/header/hamburger-dark.svg": {
+            "name": "static/header/hamburger-dark.svg",
+            "checksum": "5ACE4B96CE32DF599A487BB0CC823C41E6C8DC255CE27745F48A6F4ED096E170",
+            "size": 610
+        },
+        "modal/index.ftd": {
+            "name": "modal/index.ftd",
+            "checksum": "3FD95C42BD8E8F6B56DD5DAA70FC469640F73AB06A743E8C1FEB27BEC8FD0668",
+            "size": 2220
+        },
+        "static/docs/adding-config-ftd-into-FASTN-folder.png": {
+            "name": "static/docs/adding-config-ftd-into-FASTN-folder.png",
+            "checksum": "6CB7CA4B5235750BB219D94A2B6424F74D97F5799AEA11AA46072D31F8C332FB",
+            "size": 219273
+        },
+        "blog-authors/amitu.ftd": {
+            "name": "blog-authors/amitu.ftd",
+            "checksum": "004A93A1C3EB747C2BA1A318EE5FBF1260A1ACD3AD79D9AE30FE16DA8551AB31",
+            "size": 492
+        },
+        "featured-posts.ftd": {
+            "name": "featured-posts.ftd",
+            "checksum": "A66A4BF20107AF80B6FC41C8C3FCC504BE011D5F33B4E03E0DBDF8703506D6FE",
+            "size": 637
+        },
+        "static/close-dark.svg": {
+            "name": "static/close-dark.svg",
+            "checksum": "4CB79DC337B0B88F2E27AB53733CC37A3C96402F981D05A8420E80E4E000DA98",
+            "size": 468
+        },
+        "static/open.svg": {
+            "name": "static/open.svg",
+            "checksum": "BFDB9C378B656B280A6CF4292E9CD064227E6BA8E37CD6E7518FBB5A58A3E6D4",
+            "size": 503
+        },
+        "404.ftd": {
+            "name": "404.ftd",
+            "checksum": "CD1D36E85552AAE56B4BC6598D427DC98380229D7EBF510AE176CE952DFBAC6C",
+            "size": 216
+        },
+        "floater.ftd": {
+            "name": "floater.ftd",
+            "checksum": "0E3737EA9E24980E8C375420F9E12435D7DA5D9564EA8E42A104B461BCFD5FAD",
+            "size": 1012
+        },
+        "index.ftd": {
+            "name": "index.ftd",
+            "checksum": "E3B86EFD8D98ED216769749B27FE2D0C42CC8B84C9303E72285EB21B63F3875A",
+            "size": 43571
+        },
+        "static/docs/create-new-ftd-file-into-ftd-repository.png": {
+            "name": "static/docs/create-new-ftd-file-into-ftd-repository.png",
+            "checksum": "62A972BDCA01E4A6D57F28BBCE04A56BCE3FA7A7FB4B6D0B060A6111CA770A78",
+            "size": 864363
+        },
+        "static/docs/settings-pages-website-live.png": {
+            "name": "static/docs/settings-pages-website-live.png",
+            "checksum": "17F174F33E2C3F3E6B6AE898317E7932138674E9AA39229622CA24008D5A913E",
+            "size": 432305
+        },
+        "docs/right-sidebar.ftd": {
+            "name": "docs/right-sidebar.ftd",
+            "checksum": "4FC27557B585C55D6FDD5A06A4CDEBDDDFB69AB5335966AFDC57C4E250B411FE",
+            "size": 982
+        },
+        "static/docs/referring-config-ftd-into-FASTN-ftd-file.png": {
+            "name": "static/docs/referring-config-ftd-into-FASTN-ftd-file.png",
+            "checksum": "03D0FDDC9BA06556CAA2F6C4F94B22076A33B1546B2D9797797DDFC1A3B1A659",
+            "size": 260470
+        },
+        "static/docs/editing-index-ftd-with-homepage-content.png": {
+            "name": "static/docs/editing-index-ftd-with-homepage-content.png",
+            "checksum": "243E39365BA7D782AA410633E3441041157AC010DB4877E8253D8AFF3E62B84F",
+            "size": 310780
+        },
+        "FASTN/config.ftd": {
+            "name": "FASTN/config.ftd",
+            "checksum": "8496F67D2EC90993B3B5F04235B5B70807304EDF5FFEDDFF57B5A2C82AD220BC",
+            "size": 17
+        },
+        "docs/blog.ftd": {
+            "name": "docs/blog.ftd",
+            "checksum": "DF7FF088F38534D22F57796E8D541CCBD497F3C4FF097CB40DBF199C33D118F6",
+            "size": 7541
+        },
+        "static/authors/amitu.jpg": {
+            "name": "static/authors/amitu.jpg",
+            "checksum": "AD320C765CD06C2C1140E5C03B264EEDA1CB4F06C432F4130DB901E6E0ED2F10",
+            "size": 10479
+        },
+        "static/down-arrow-dark.svg": {
+            "name": "static/down-arrow-dark.svg",
+            "checksum": "B0C0154B501B9E64F47182C21B5A8B399134FDDE57504ADEA845D436A2AEEFC4",
+            "size": 345
+        },
+        "static/header/cross-dark.svg": {
+            "name": "static/header/cross-dark.svg",
+            "checksum": "6205EDE0EC3407E3B9B491652C7701CA250976D25692818545100D3F70DD13C0",
+            "size": 678
+        },
+        "static/translation-icons/35x26/translations-success.png": {
+            "name": "static/translation-icons/35x26/translations-success.png",
+            "checksum": "43018ED5F4D1CE4CA8017AEA2CFD3972F607ADC4D469EBF106BD128F19933B6F",
+            "size": 977
+        },
+        "blog-articles/category-1/index.ftd": {
+            "name": "blog-articles/category-1/index.ftd",
+            "checksum": "10D9B45538AEE8DC7721B4C9E4B0424126E0C9405716AA007AD671195322FD8D",
+            "size": 552
+        },
+        "static/dark-mode-active-dark.png": {
+            "name": "static/dark-mode-active-dark.png",
+            "checksum": "FE2D80F52324E97E3E892A5ADD966DDCFE35645A948F2F10656D299026343D18",
+            "size": 722
+        },
+        "static/docs/settings-pages-branch-gh-pages.png": {
+            "name": "static/docs/settings-pages-branch-gh-pages.png",
+            "checksum": "CF5A8F32F12ABC82EF1DE9EA2CD48DB225770E9C334C887F16054A9CFD22EFFB",
+            "size": 439234
+        },
+        "static/docs/doc-site-example.png": {
+            "name": "static/docs/doc-site-example.png",
+            "checksum": "611E21D16829D0FACDB5D2C21ABA2ADF95BF7359DAFA16FCE1351F0AC0E5C44B",
+            "size": 90059
+        },
+        "static/translation-icons/translations-time.png": {
+            "name": "static/translation-icons/translations-time.png",
+            "checksum": "FBAF5315D4E4ECEDCE5E9648660CC9F7ADFCE02A81E59765B4AEE3817E416867",
+            "size": 493
+        },
+        "blog-articles/category-2/index.ftd": {
+            "name": "blog-articles/category-2/index.ftd",
+            "checksum": "1535C84FF77E9F1351CD8B5D15BAEABAE834CD3BF24C2683F23CB17DBE8ADBBF",
+            "size": 562
+        },
+        "static/authors/abrar-k.jpg": {
+            "name": "static/authors/abrar-k.jpg",
+            "checksum": "6B492949618EE5DC7D6C9D2F99CE09DDA726B79CD3BC1F57D2803F446BE1168B",
+            "size": 22014
+        },
+        "static/cross.svg": {
+            "name": "static/cross.svg",
+            "checksum": "35F75CD08D92DD5CF26B1B6DF728AC8F79A3433E2643501B354AE34B8114D0AE",
+            "size": 1489
+        },
+        "static/docs/updating-fastn-ftd-with-sitemap-feature.png": {
+            "name": "static/docs/updating-fastn-ftd-with-sitemap-feature.png",
+            "checksum": "8AA19AE498C0D47EB86F2A6862BB7D00CC7B9863651CF339FB2B0426B83DB0AE",
+            "size": 265577
+        },
+        "static/light-mode-active-dark.png": {
+            "name": "static/light-mode-active-dark.png",
+            "checksum": "347CDD85FC67F923933709759E1DF89003AC83F98E3057C84B3D21365F46D72A",
+            "size": 718
+        },
+        "static/amitu.jpg": {
+            "name": "static/amitu.jpg",
+            "checksum": "AD320C765CD06C2C1140E5C03B264EEDA1CB4F06C432F4130DB901E6E0ED2F10",
+            "size": 10479
+        },
+        "image.ftd": {
+            "name": "image.ftd",
+            "checksum": "7D69F3E18522A000482FEA94258D068A403CEAF7F58369D5000FBA2AA4655116",
+            "size": 346
+        },
+        "static/translation-icons/translations-info.png": {
+            "name": "static/translation-icons/translations-info.png",
+            "checksum": "E6EE47345A6EC44957E5A0E05D6687363D3D361852AE315EB9088C2E6767FD5D",
+            "size": 524
+        },
+        "static/header/hamburger.svg": {
+            "name": "static/header/hamburger.svg",
+            "checksum": "0CAA6A2712D240592A0F0159FF53402F8EBE0498586CFB511718F65EB6115F61",
+            "size": 610
+        },
+        "static/docs/first-blog-post-ftd-file.png": {
+            "name": "static/docs/first-blog-post-ftd-file.png",
+            "checksum": "F06F7B3A12408F85B5E99639ADB0476C74C2503196C1F7AB190D1F7BAA22D22E",
+            "size": 297994
+        },
+        "static/docs/going-public-live-about-settings.png": {
+            "name": "static/docs/going-public-live-about-settings.png",
+            "checksum": "BD2C7A48C936C14E7BB4CD90877835E8F84F3EE78F424CC8A29ABEC17AF9B1F1",
+            "size": 76442
+        },
+        "static/translation-icons/large/translations-info.png": {
+            "name": "static/translation-icons/large/translations-info.png",
+            "checksum": "30C7986DE60478FBC1F29F48A8200B87D119F95A6F58600CDDD8EB171EF88D78",
+            "size": 1313
+        },
+        "static/avatar.png": {
+            "name": "static/avatar.png",
+            "checksum": "2FB32C30CB4BBD1FF86C5891E153171A13982C08BB78E6D3D15C2872DD111C9D",
+            "size": 22515
+        },
+        "static/icon-github.svg": {
+            "name": "static/icon-github.svg",
+            "checksum": "F29B04C9A3F0234A0FD9C5CC78A3983F44A269CB886690CEB36E87D5D0CBAF49",
+            "size": 938
+        },
+        "static/translation-icons/large/translations-title-default-dark.png": {
+            "name": "static/translation-icons/large/translations-title-default-dark.png",
+            "checksum": "C4C55D733974F3A2C3535AEAB77BF487D4E7AF4C69F8AD06672D76EACC5100C5",
+            "size": 869
+        },
+        "static/down-arrow.svg": {
+            "name": "static/down-arrow.svg",
+            "checksum": "A04270E890C3BB2A9182EB31FEDA50637D643FE71D0D3D636EE0D34C107548C0",
+            "size": 345
+        },
+        "static/translation-icons/translations-default.png": {
+            "name": "static/translation-icons/translations-default.png",
+            "checksum": "F42904D6FAAA986B77605ED84F516C0396C6F05B174A9AA198360CAB328A6FB5",
+            "size": 1386
+        },
+        "static/translation-icons/large/translations-title-default.png": {
+            "name": "static/translation-icons/large/translations-title-default.png",
+            "checksum": "F42904D6FAAA986B77605ED84F516C0396C6F05B174A9AA198360CAB328A6FB5",
+            "size": 1386
+        },
+        "static/authors/arpita.jpg": {
+            "name": "static/authors/arpita.jpg",
+            "checksum": "A36F742F839BDDB5C1D08DE90905D749EEC01136D1723447A49699947BB14030",
+            "size": 15966
+        },
+        "static/docs/fastn-sitemap-feature-output-homepage.png": {
+            "name": "static/docs/fastn-sitemap-feature-output-homepage.png",
+            "checksum": "47A9B81EDFD32C3D2B4A291A6D81DF6D142C3A1411F3B1DE7BA775223BD6C152",
+            "size": 811382
+        },
+        "blog-authors/ganesh.ftd": {
+            "name": "blog-authors/ganesh.ftd",
+            "checksum": "091EA978D98C30E6806CD43226E4461AD10CB225B798A087E9992E0EDAE7BC57",
+            "size": 596
+        },
+        "static/open-dark.svg": {
+            "name": "static/open-dark.svg",
+            "checksum": "9F91424ADA11B784FEF3EB633BE6429387436755F9AF67A3984CF6CC8EC471A7",
+            "size": 496
+        },
+        "static/forest-theme/ftd-logo-desktop.png": {
+            "name": "static/forest-theme/ftd-logo-desktop.png",
+            "checksum": "6FF195A5A6C5E2D5D6569DA18195FABA4C41384E9F0A443660F0CDA352CCAD5A",
+            "size": 3356
+        },
+        "static/forest-theme/ftd-logo-mobile.png": {
+            "name": "static/forest-theme/ftd-logo-mobile.png",
+            "checksum": "CF0AF8C5A727DB3C4D584F86842417A2662DC2F4E59172533FD80815F21B9774",
+            "size": 2234
+        },
+        "static/picture1.jpeg": {
+            "name": "static/picture1.jpeg",
+            "checksum": "D6A0D4A47E569E9C4B79D8FB3FE857D961A869ECF2F9D9C65A121404425A2372",
+            "size": 68158
+        },
+        "static/primary-favorites.svg": {
+            "name": "static/primary-favorites.svg",
+            "checksum": "534A033A50ED6E7FCD7C41B7C7DF6BF6A390AC98762CA028D58A13E9E91D043A",
+            "size": 2894
+        },
+        "LICENSE": {
+            "name": "LICENSE",
+            "checksum": "5B8B83357C092AC57F28508D18CAB65E4965AAA3BA61226DE038719E022638C1",
+            "size": 1516
+        },
+        "static/cross-dark.svg": {
+            "name": "static/cross-dark.svg",
+            "checksum": "030E3E7DBA0BD039E86E78A1DA968F24EA0811FB1C4CAD3481E18947A3F7A1D4",
+            "size": 1483
+        },
+        "static/forest-theme/ftd-logo-desktop-dark.png": {
+            "name": "static/forest-theme/ftd-logo-desktop-dark.png",
+            "checksum": "6FF195A5A6C5E2D5D6569DA18195FABA4C41384E9F0A443660F0CDA352CCAD5A",
+            "size": 3356
+        },
+        "static/header/cross.svg": {
+            "name": "static/header/cross.svg",
+            "checksum": "DE0A2D4C3651335FFF978C12B1FD286ECDB86D59FFC6EC06A40066009A9D29C0",
+            "size": 678
+        },
+        "static/translation-icons/large/translations-missing.png": {
+            "name": "static/translation-icons/large/translations-missing.png",
+            "checksum": "8651C8E64C57350E3BFF2ABEC4D25253BD648ED45D126D4B82265DAA9C0C3393",
+            "size": 1040
+        },
+        "blog-articles/category-1/sample-post-2.ftd": {
+            "name": "blog-articles/category-1/sample-post-2.ftd",
+            "checksum": "7849795D0B39D9B5FC589BE15CD698F910598A0444629684CCDBF462916AFC95",
+            "size": 3202
+        },
+        "FASTN.ftd": {
+            "name": "FASTN.ftd",
+            "checksum": "E63E61271A8B6B49CFFABC815348041AC56FBA9C1FFB63EEEAA70D9FA610BE90",
+            "size": 2261
+        },
+        "blog-authors/abrar.ftd": {
+            "name": "blog-authors/abrar.ftd",
+            "checksum": "9BEB0A11BD498D33C14BD9DA2A9E246E16CED7BFDB9CD2611084E47C2E325004",
+            "size": 580
+        },
+        "static/docs/site-name-and-first-blog-post.png": {
+            "name": "static/docs/site-name-and-first-blog-post.png",
+            "checksum": "71559EEA1A8248549E8B9E5AC54ED468E067D1841AC7377CE89009A54DEC5CBE",
+            "size": 708764
+        },
+        "static/docs/action-tab-initial-commit-ticked.png": {
+            "name": "static/docs/action-tab-initial-commit-ticked.png",
+            "checksum": "EC7BA9AFD779E9A4824F912FECEB67582F26D2D9718171FA126D9C4F97AEAAEA",
+            "size": 101548
+        },
+        "blog-articles/category-1/sample-post-1.ftd": {
+            "name": "blog-articles/category-1/sample-post-1.ftd",
+            "checksum": "7D987D93EDB5BE91D457409F3D3286C92413DD8104DBA57187350EB1266A890A",
+            "size": 3184
+        },
+        "static/avatar.jpg": {
+            "name": "static/avatar.jpg",
+            "checksum": "102223C134FE5085D4B1922A5B70F3FA24BB08BEE33282B23E7E814DC0C20A55",
+            "size": 12729
+        },
+        "static/image-placeholder.png": {
+            "name": "static/image-placeholder.png",
+            "checksum": "F8CEDD499315902E0CF4B516B65C9426C3F8B680183B57B86CAD5F309B2BF981",
+            "size": 5203
+        },
+        "_config.yml": {
+            "name": "_config.yml",
+            "checksum": "A42D91290C93B5F17412C3B346737EA1C796E5D287306758AFE8B20470119D80",
+            "size": 21
+        },
+        "static/docs/about-gone-live-with-url.png": {
+            "name": "static/docs/about-gone-live-with-url.png",
+            "checksum": "D8A46BB80D7BAC17EDBA378CC101D8A782B70BAFECF0266C9E52C5E61D766C05",
+            "size": 254685
+        },
+        "blog-authors/arpita.ftd": {
+            "name": "blog-authors/arpita.ftd",
+            "checksum": "7F571F4ED74F08DD807EE5AD4BBDC9C03EC0FA7070637EE42847DC0863946734",
+            "size": 540
+        },
+        "static/Information_example_page_300px.jpg": {
+            "name": "static/Information_example_page_300px.jpg",
+            "checksum": "D55CDC88CA6381F26F0BD9059D614E0410A7BDDF97B0BB904EC9D679749D7312",
+            "size": 34180
+        },
+        "static/authors/ganeshs.jpg": {
+            "name": "static/authors/ganeshs.jpg",
+            "checksum": "8965B656BFAB50F7493EC6BDFDEC94C71AFDBC63910FA71A8ABE5FD5883FCF45",
+            "size": 28687
+        },
+        "static/editor-icon.svg": {
+            "name": "static/editor-icon.svg",
+            "checksum": "AE8CCE7B1D9EEBE7590EF2A519453CB2059C94E230393D6E1074E0D17F605C51",
+            "size": 2934
+        },
+        "static/system-mode-active-dark.png": {
+            "name": "static/system-mode-active-dark.png",
+            "checksum": "E4472336A0DA55B7F25F9D80B16FDBC0A32D59E4A2C35EA016BA01F872311710",
+            "size": 423
+        },
+        "static/translation-icons/large/translations-time.png": {
+            "name": "static/translation-icons/large/translations-time.png",
+            "checksum": "48000A0FF762A10F75832C3528C9D6917EB9629EFB3AA8BA997C31B6B9B2DA91",
+            "size": 1238
+        },
+        "404-pages/index.ftd": {
+            "name": "404-pages/index.ftd",
+            "checksum": "E0948544CC9DABC8ACC28CDBA08A97784F81EC289736A757BCC5F3C80AEED309",
+            "size": 216
+        },
+        "static/translation-icons/translations-missing.png": {
+            "name": "static/translation-icons/translations-missing.png",
+            "checksum": "B16660A9B0235966521CBBB4D86DB117C46425FD3310E1D79EDA058EF9309878",
+            "size": 479
+        }
+    },
+    "zip_url": "https://github.com/FifthTry/doc-site/archive/cd6d6354d369b7b443c5140ec475ec735a98d6b6.zip",
+    "checksum": "E5F49E825817C877D97808FAC6E516AB863D3CA21D0686E5A8A283D5201CDFB5"
+}

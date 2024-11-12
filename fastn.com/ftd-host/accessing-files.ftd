@@ -1,0 +1,91 @@
+-- ds.page: How to access files
+
+The [`assets`](/assets/) module contains a foreign variable named `files` that
+holds references to the package's files. You can use this variable to get the
+full path or URL of a file.
+
+Suppose if you want to get the full path of `folder-1/folder-2/foo.ftd` present
+in dependency package named `other-package`. You need to write the following
+code:
+
+-- ds.code:
+lang: ftd
+
+\-- import: other-package/assets 	;; <hl>
+
+\-- ftd.text: Link to foo.ftd
+link: $assets.files.folder-1.folder-2.foo.ftd  ;; <hl>
+
+-- ds.markdown:
+
+The `$assets.files.folder-1.folder-2.foo.ftd` reference will return a string
+with a value like ``-/other-package/folder-1/folder-2/foo.ftd`.
+
+For images, the `assets` reference returns a `ftd.image-src` value that includes
+values for both light and dark modes.
+
+-- ds.h2: Accessing Image Files
+
+;; TODO: add link to `ftd.image-src`
+You can define images for both light and dark modes, and the `assets` reference
+returns a `ftd.image-src` type for them.
+
+-- ds.h3: A Single Image for Both Light and Dark Mode
+
+To use a single image for both light and dark modes, add the image (e.g.,
+`logo.png`) anywhere in your package (e.g., inside `static` directory), and
+use the following code to access it:
+
+-- ds.code:
+lang: ftd
+
+\-- import: <package-name>/assets
+
+\-- ftd.image:
+src: $assets.files.static.logo.png
+
+-- ds.markdown:
+
+The above code will render the image. The return type of `assets.files.static.logo.png`
+is `ftd.image-src` with a value like this:
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.image-src assets.files.static.logo.png:
+light: -/<package-name>/static/logo.png
+dark: -/<package-name>/static/logo.png
+
+-- ds.h3: Different images for light and dark mode.
+
+If you want a different images for both light and dark mode, then add an image,
+say `logo.png` (for light mode) and `logo-dark.png` (for dark mode),  somewhere
+in your package, say inside `static` folder.
+
+If you want to use different images for light and dark modes, add the images
+(e.g., `logo.png` for light mode and `logo-dark.png` for dark mode) anywhere in
+your package (e.g., inside `static` directory), and use the following code to
+access them:
+
+
+-- ds.code:
+lang: ftd
+
+\-- import: <package-name>/assets
+
+\-- ftd.image:
+src: $assets.files.static.logo.png
+
+-- ds.markdown:
+
+The above code will render the image. The return type of `assets.files.static.logo.png`
+is `ftd.image-src` with a value like this:
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.image-src assets.files.static.logo.png:
+light: -/<package-name>/static/logo.png
+dark: -/<package-name>/static/logo-dark.png
+
+-- end: ds.page

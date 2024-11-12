@@ -1,0 +1,16 @@
+-- import: fastn
+
+-- fastn.package: ftd-lang.github.io/fastn-ui
+zip: https://codeload.github.com/fastn-stack/fastn-ui/zip/refs/heads/main
+
+-- fastn.dependency: fastn-community.github.io/roboto-mono
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,470 @@
+-- import: fifthtry.github.io/admonitions as cbox
+
+-- ds.page: `ftd.text-input`
+
+`ftd.text-input` is used to create interactive controls for web-based forms in
+order to accept text type data from the user; a wide variety of types of input
+data and control widgets are available. There is a special variable `$VALUE`
+which can be used to access the current value of `ftd.text-input`.
+
+-- ds.h1: Usage
+
+-- ds.code:
+lang: ftd
+
+\-- string $current-value: Nothing typed yet
+
+\-- ftd.text-input:
+placeholder: Type any text ...
+padding-horizontal.px: 16
+padding-vertical.px: 8
+width.fixed.px: 200
+border-width.px: 1
+border-color: $inherited.colors.border
+border-radius.px: 4
+$on-input$: $ftd.set-string($a = $current-value, v = $VALUE)
+
+\-- ftd.text: $current-value
+color: coral
+padding.px: 10
+
+-- ds.output:
+
+	-- ftd.text-input:
+	placeholder: Type any text ...
+	padding-horizontal.px: 16
+	padding-vertical.px: 8
+	width.fixed.px: 200
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	border-radius.px: 4
+	$on-input$: $ftd.set-string($a = $current-value, v = $VALUE)
+	
+	-- ftd.text: $current-value
+	color: coral
+	padding.px: 10
+	
+-- end: ds.output
+
+
+-- ds.h1: Attributes
+
+`ftd.text-input` accepts the below attributes along with the
+[common attributes](ftd/common/).
+
+/-- cbox.info: `value` or `default-value`
+
+Either use `value` or `default-value`, using both is not allowed.
+
+
+-- ds.h2: `placeholder: optional string`
+
+The `placeholder` attribute is a string that provides a brief hint to the user
+as to what kind of information is expected in the field.
+
+It accepts a string value and is optional.
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text-input:
+placeholder: Type any text ...
+
+
+-- ds.output:
+
+	-- ftd.text-input:
+	placeholder: Type any text ...
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	
+-- end: ds.output
+
+
+-- ds.h2: `value: optional string`
+
+The `value` attribute is a string that contains the current value of the text
+entered into the text field.
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text-input:
+value: I love ftd
+
+
+-- ds.output:
+
+	-- ftd.text-input:
+	value: I love ftd
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	
+-- end: ds.output
+
+
+-- ds.h2: `default-value: optional string`
+
+The `default-value` attribute sets or returns the default value of a text field.
+
+The difference between `value` attribute and `defaultValue` attribute is the
+latter retains the original default value specified while the `value` attribute
+value changes based on the user input in the input field.
+
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text-input:
+default-value: I love ftd
+
+
+-- ds.output:
+
+	-- ftd.text-input:
+	default-value: I love ftd
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	
+-- end: ds.output
+
+
+-- ds.h2: `multiline: bool`
+
+The default value of this attribute is false.
+
+The `multiline` attribute with `false` value defines a single-line text field.
+
+The `multiline` attribute with `true` value defines a multi-line text input
+control.
+
+
+
+-- ds.code: `multiline: false`
+lang: ftd
+
+\-- ftd.text-input:
+multiline: false
+
+
+-- ds.output: Output: `multiline: false`
+
+	-- ftd.text-input:
+	multiline: false
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	
+-- end: ds.output
+
+
+-- ds.code: `multiline: true`
+lang: ftd
+
+\-- ftd.text-input:
+multiline: true
+
+
+-- ds.output: Output: `multiline: true`
+
+	-- ftd.text-input:
+	multiline: true
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	
+-- end: ds.output
+
+
+-- ds.h2: `enabled: optional boolean`
+
+The `enabled` attribute, when set false, makes the element not mutable and
+un-focusable. By default, the value is true
+
+
+-- ds.code: `enabled: false`
+lang: ftd
+
+\-- ftd.text-input:
+enabled: false
+value: Hello
+
+
+-- ds.output: Output: `enabled: false`
+
+	-- ftd.text-input:
+	enabled: false
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	value: Hello
+	color: $inherited.colors.text
+	
+-- end: ds.output
+
+
+-- ds.code: `enabled: true`
+lang: ftd
+
+\-- ftd.text-input:
+enabled: true
+value: Hello
+
+
+-- ds.output: Output: `enabled: true`
+
+	-- ftd.text-input:
+	enabled: true
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	value: Hello
+	
+-- end: ds.output
+
+-- ds.h2: `max-length: optional integer`
+
+This attribute will define the maximum length of characters that user is allowed
+to type inside `ftd.text-input`. It accepts integer value and is optional.
+
+-- ds.code: `max-length: optional integer`
+lang: ftd
+
+\-- ftd.text-input:
+placeholder: Max 10 characters
+type: text
+max-length: 10
+
+-- ds.output: Output: `max-length` is set to 10 characters
+
+	-- ftd.text-input:
+	placeholder: Max 10 characters
+	type: text
+	max-length: 10
+	
+-- end: ds.output
+
+-- ds.h2: `type: optional ftd.text-input-type`
+
+This attribute is used to give input type within `ftd.text-input`. It accepts
+the [`ftd.text-input-type`](ftd/built-in-types/#ftd-text-input-type) type value
+and is optional. It has default value as `text`.
+
+
+-- ds.code: `type: text`
+lang: ftd
+
+\-- ftd.text-input:
+value: Hello
+type: text
+
+
+-- ds.output: Output: `type: text`
+
+	-- ftd.text-input:
+	enabled: true
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	value: Hello
+	type: text
+	
+-- end: ds.output
+
+
+-- ds.code: `type: email`
+lang: ftd
+
+\-- ftd.text-input:
+value: Hello@abc.com
+type: email
+
+
+-- ds.output: Output: `type: email`
+
+	-- ftd.text-input:
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	value: Hello@abc.com
+	type: email
+	
+-- end: ds.output
+
+
+-- ds.code: `type: password`
+lang: ftd
+
+\-- ftd.text-input:
+value: Hello
+type: password
+
+
+-- ds.output: Output: `type: password`
+
+	-- ftd.text-input:
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	value: Hello
+	type: password
+	
+-- end: ds.output
+
+
+-- ds.code: `type: url`
+lang: ftd
+
+\-- ftd.text-input:
+value: https://fastn.com
+type: url
+
+
+-- ds.output: Output: `type: url`
+
+	-- ftd.text-input:
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	value: https://fastn.com
+	type: url
+	
+-- end: ds.output
+
+
+
+-- ds.code: `type: datetime`
+lang: ftd
+
+\-- ftd.text-input:
+type: datetime
+
+
+-- ds.output: Output: `type: datetime`
+
+	-- ftd.text-input:
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	type: datetime
+	
+-- end: ds.output
+
+
+
+
+
+-- ds.code: `type: date`
+lang: ftd
+
+\-- ftd.text-input:
+type: date
+
+
+-- ds.output: Output: `type: date`
+
+	-- ftd.text-input:
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	type: date
+	
+-- end: ds.output
+
+
+
+
+-- ds.code: `type: time`
+lang: ftd
+
+\-- ftd.text-input:
+type: time
+
+
+-- ds.output: Output: `type: time`
+
+	-- ftd.text-input:
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	type: time
+	
+-- end: ds.output
+
+
+
+
+-- ds.code: `type: month`
+lang: ftd
+
+\-- ftd.text-input:
+type: month
+
+
+-- ds.output: Output: `type: month`
+
+	-- ftd.text-input:
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	type: month
+	
+-- end: ds.output
+
+
+
+
+
+-- ds.code: `type: week`
+lang: ftd
+
+\-- ftd.text-input:
+type: week
+
+
+-- ds.output: Output: `type: week`
+
+	-- ftd.text-input:
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	type: week
+	
+-- end: ds.output
+
+
+
+
+-- ds.code: `type: color`
+lang: ftd
+
+\-- ftd.text-input:
+type: color
+width.fixed.px: 40
+height.fixed.px: 40
+
+
+-- ds.output: Output: `type: color`
+
+	-- ftd.text-input:
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	type: color
+	width.fixed.px: 40
+	height.fixed.px: 40
+	
+-- end: ds.output
+
+
+
+
+-- ds.code: `type: file`
+lang: ftd
+
+\-- ftd.text-input:
+type: file
+
+
+-- ds.output: Output: `type: file`
+
+	-- ftd.text-input:
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	type: file
+	
+-- end: ds.output
+
+
+
+
+-- end: ds.page
+
+
+-- string $current-value: Nothing typed yet

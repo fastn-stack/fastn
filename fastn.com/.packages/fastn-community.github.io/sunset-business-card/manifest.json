@@ -1,0 +1,51 @@
+{
+    "files": {
+        "components/front.ftd": {
+            "name": "components/front.ftd",
+            "checksum": "755D483A5615185CD25CCAC4E8805D808F3816286572CE083FE1913F2498AF0B",
+            "size": 1061
+        },
+        "favicon.ico": {
+            "name": "favicon.ico",
+            "checksum": "65056A1D6C6AAE6E3DC4626E29F4BD4B628B17A8E9CC1D3A5E8FE9F6743F306B",
+            "size": 15406
+        },
+        "FASTN.ftd": {
+            "name": "FASTN.ftd",
+            "checksum": "F6846801A4356AFCFC102F245EB09B10F7D8C0A9E5A0EFA4E2E7493E388156E1",
+            "size": 384
+        },
+        "_config.yml": {
+            "name": "_config.yml",
+            "checksum": "A42D91290C93B5F17412C3B346737EA1C796E5D287306758AFE8B20470119D80",
+            "size": 21
+        },
+        "index.ftd": {
+            "name": "index.ftd",
+            "checksum": "49E5F5E9280050C3FF96ACF0BC284CA46219CF002B9C2155E9EC6DBD276CB730",
+            "size": 1690
+        },
+        "components/back.ftd": {
+            "name": "components/back.ftd",
+            "checksum": "43B0D899E7DC00E0262DE07CE766375223ACFC41538AB204A8D8EE997082FC97",
+            "size": 748
+        },
+        "assets/bg-back.svg": {
+            "name": "assets/bg-back.svg",
+            "checksum": "DC2118472BDF8AE19BF9B088DAD7B06A7D902C507EC70B0AE4A916D8949D2D8D",
+            "size": 4965
+        },
+        "how-to-use.ftd": {
+            "name": "how-to-use.ftd",
+            "checksum": "151656A40C97197649FA82FAB01A3AEB58812C5300301524CC61D31F4C115A37",
+            "size": 448
+        },
+        "README.md": {
+            "name": "README.md",
+            "checksum": "20C3FEA73C53DD8439884730D7B95DDE2CF06D40DB313991CA6D01FB69DB16C0",
+            "size": 2190
+        }
+    },
+    "zip_url": "https://github.com/fastn-community/sunset-business-card/archive/684db15f3dd5b6e83c8e2cff97f19e0866398ddc.zip",
+    "checksum": "061B24B3BC64E46C4B403C8436E4DE4B8467D90CC086F1F6D1A58646762E1DC4"
+}

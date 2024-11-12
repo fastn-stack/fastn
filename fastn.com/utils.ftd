@@ -1,0 +1,878 @@
+-- import: fastn-stack.github.io/fastn-js/utils as js-utils
+
+-- ds.page:
+
+-- switcher:
+s: $c
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+
+-- switches list c:
+
+-- switches: me
+-- switches.elements:
+
+	-- ds.h1: Me component
+	
+	-- ds.h1: Me component 2
+	
+-- end: switches.elements
+
+
+-- switches: me22
+-- switches.elements:
+
+	-- ds.h1: Me component22
+	
+	-- ds.h1: Me component22 2
+	
+-- end: switches.elements
+
+-- end: c
+
+
+
+
+
+
+-- record switches:
+caption name:
+ftd.ui list elements:
+
+
+
+
+
+
+
+
+
+
+
+-- component switcher:
+switches list s:
+integer $is-active: 0
+
+-- ftd.column:
+spacing.fixed.px: 32
+width: fill-container
+
+	-- ftd.column:
+	width: fill-container
+	spacing.fixed.px: 10
+	
+		-- switches-title: $obj.name
+		index: $LOOP.COUNTER
+		$is-active: $switcher.is-active
+		$loop$: $switcher.s as $obj
+		
+	-- end: ftd.column
+
+	-- box:
+	if: { switcher.is-active == $LOOP.COUNTER }
+	child: $obj.elements
+	$loop$: $switcher.s as $obj
+	
+-- end: ftd.column
+
+-- end: switcher
+
+
+
+
+
+
+
+
+
+
+
+-- component switches-title:
+caption title:
+integer index:
+integer $is-active:
+
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 10
+$on-click$: $ftd.set-integer($a = $switches-title.is-active, v = $switches-title.index)
+
+	-- ftd.image:
+	width.fixed.px: 24
+	src: $fastn-assets.files.images.box.svg
+	src if { switches-title.is-active == switches-title.index }: $fastn-assets.files.images.tick.svg
+	
+	-- ftd.text: $switches-title.title
+	color if { switches-title.is-active == switches-title.index }: $inherited.colors.cta-primary.base
+	color: $inherited.colors.text
+	role: $inherited.types.copy-regular
+	
+-- end: ftd.row
+
+-- end: switches-title
+
+
+
+
+
+
+
+
+
+
+-- component box:
+ftd.ui list child:
+
+-- ftd.column:
+children: $box.child
+
+-- end: box
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component compact-text:
+caption title:
+optional body body:
+children inner:
+
+-- ftd.column:
+width: fill-container
+padding-top.px: 14
+padding-bottom.px: 16
+border-bottom-width.px: 1
+border-color: $inherited.colors.border
+
+	-- ftd.text: $compact-text.title
+	role: $inherited.types.heading-small
+	color: $inherited.colors.text-strong
+	padding-bottom.px: 16
+	padding-top.px: 8
+	region: h4
+	
+	-- ftd.column:
+	width: fill-container
+	;; margin-bottom.px if { compact-text.body != NULL }: -26
+	
+		-- ftd.text:
+		if: { compact-text.body != NULL }
+		text: $compact-text.body
+		role: $inherited.types.fine-print
+		color: $inherited.colors.text
+		
+		-- ftd.text.classes:
+		
+			-- string: markdown
+			
+		-- end: ftd.text.classes
+
+		-- ftd.column:
+		children: $compact-text.inner
+		width: fill-container
+		
+		-- end: ftd.column
+
+	-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: compact-text
+
+
+
+
+
+
+
+
+
+
+;; code-display color-scheme
+
+-- ftd.color cd-bg-color:
+dark: #2b2b2b
+light: #f7f3f1
+
+
+-- ftd.color tippy-bg-color:
+dark: #1f3c4e
+light: #e0e0e0
+
+
+
+
+
+
+
+
+
+
+-- component code-display:
+optional caption title:
+optional body body:
+children compare-wrap:
+optional string id:
+boolean show-vertical: false
+
+-- ftd.column:
+width: fill-container
+id: $code-display.id
+background.solid: $cd-bg-color
+border-radius.px:10
+margin-bottom.px: 40
+
+
+	-- ftd.column:
+	width: fill-container
+	padding-horizontal.px: 14
+	padding-vertical.px: 12
+	
+	
+	
+		-- ftd.row:
+		spacing.fixed.px: 16
+		align-content: center
+		
+			-- ftd.column:
+			width.fixed.px: 8
+			height.fixed.px: 8
+			background.solid: $inherited.colors.custom.one
+			
+			-- end: ftd.column
+
+			-- ftd.text: $code-display.title
+			role: $inherited.types.copy-regular
+			color: $inherited.colors.text
+			width.fixed.percent if { ftd.device == "mobile" }: 80
+			
+			
+		-- end: ftd.row
+
+	-- end: ftd.column
+
+	-- ftd.column:
+	width: fill-container
+	spacing.fixed.px: 32
+	padding-horizontal.px: 24
+	padding-vertical.px: 24
+	
+	
+		-- ftd.text:
+		if: { code-display.body != NULL }
+		role: $inherited.types.copy-small
+		color: $inherited.colors.text
+		
+		$code-display.body
+		
+		-- ftd.row:
+		if: { !code-display.show-vertical }
+		width: fill-container
+		spacing.fixed.px: 50
+		children: $code-display.compare-wrap
+		
+		-- end: ftd.row
+
+		-- ftd.column:
+		if: { code-display.show-vertical }
+		width: fill-container
+		spacing.fixed.px: 10
+		children: $code-display.compare-wrap
+		
+		-- end: ftd.column
+
+	-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: code-display
+
+
+
+
+
+
+
+
+
+
+-- component tippy:
+optional caption title:
+optional body body:
+children tippy-wrap:
+
+-- ftd.column:
+border-color: $inherited.colors.border
+background.solid: $tippy-bg-color
+padding.px: 16
+border-radius.px: 4
+border-width.px: 1
+width: fill-container
+margin-top.px: 8
+margin-bottom.px: 32
+
+
+
+
+	-- ftd.text: $tippy.title
+	if: { tippy.title != NULL }
+	color: $inherited.colors.text-strong
+	role: $inherited.types.heading-small
+	width: fill-container
+	margin-bottom.px: 24
+	
+	
+	-- ds.markdown:
+	body: $tippy.body
+	
+	
+	
+	-- ftd.column:
+	children: $tippy.tippy-wrap
+	width: fill-container
+	
+	-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: tippy
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component install:
+caption title:
+optional body subtitle:
+string cta-text:
+string cta-link:
+string code-lang:
+string code:
+
+-- ftd.column:
+width: fill-container
+padding-vertical.em: 2
+padding-horizontal.em: 1
+background.solid if { ftd.device == "desktop" }: $inherited.colors.background.step-2
+margin-top.px: 30
+
+	-- ftd.column:
+	background.image if { ftd.device == "desktop" }: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/why-fastn/background.svg
+	width: fill-container
+	align-content: center
+	
+		-- ftd.column:
+		width: fill-container
+		max-width.fixed.px: $width
+		align-content: center
+		
+			-- ftd.text: $install.title
+			role if { ftd.device == "desktop" }: $inherited.types.heading-medium
+			role: $inherited.types.heading-large
+			color: $inherited.colors.text-strong
+			text-align: center
+			
+			-- ftd.text: $install.subtitle
+			if: { install.subtitle != NULL }
+			role: $inherited.types.copy-large
+			color: $inherited.colors.text
+			margin-bottom.em if { ftd.device == "desktop" }: 4
+			margin-bottom.em: 1.5
+			text-align: center
+			
+			-- ftd.column:
+			width.fixed.percent if { ftd.device == "desktop" }: 55
+			width if { ftd.device == "mobile" }: fill-container
+			align-content: center
+			role: $inherited.types.copy-large
+			
+				-- ds.code:
+				lang: $install.code-lang
+				
+				$install.code
+				
+			-- end: ftd.column
+
+			-- ftd.text: $install.cta-text
+			link: $install.cta-link
+			background.solid: $inherited.colors.cta-primary.base
+			color: $inherited.colors.cta-primary.text
+			border-radius.em: 0.375
+			padding-vertical.em: 1
+			padding-horizontal.em: 2
+			margin-top.em: 2
+			role: $inherited.types.button-medium
+			
+		-- end: ftd.column
+
+	-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: install
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component two-column-layout-desktop:
+caption title:
+body subtitle:
+children ui-data:
+ftd.ui list right-side-ui:
+
+-- ftd.column:
+width: fill-container
+padding.em: 3
+background.solid: $inherited.colors.background.step-1
+
+	-- ftd.column:
+	width: fill-container
+	max-width.fixed.px: $width
+	align-self: center
+	
+		-- ftd.image:
+		src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
+		width.fixed.em: 4
+		height.fixed.em: 4
+		margin-bottom.em: 1
+		
+		-- ftd.row:
+		width: fill-container
+		spacing.fixed.em: 2
+		role: $inherited.types.copy-regular
+		color: $inherited.colors.text
+		
+			-- ftd.column:
+			width: fill-container
+			
+				-- ftd.text: $two-column-layout-desktop.title
+				role: $inherited.types.heading-medium
+				color: $inherited.colors.text-strong
+				padding-bottom.em: 0.5
+				
+				-- ftd.text: $two-column-layout-desktop.subtitle
+				margin-bottom.em: 1.5
+				
+				-- ftd.column:
+				width: fill-container
+				children: $two-column-layout-desktop.ui-data
+				
+				-- end: ftd.column
+
+			-- end: ftd.column
+
+			-- ftd.column:
+			width: fill-container
+			spacing.fixed.em: 1.5
+			children: $two-column-layout-desktop.right-side-ui
+			
+			-- end: ftd.column
+
+		-- end: ftd.row
+
+	-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: two-column-layout-desktop
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component two-column-layout-mobile:
+caption title:
+body subtitle:
+children ui-data:
+ftd.ui list right-side-ui:
+
+-- ftd.column:
+width: fill-container
+padding-top.em: 2
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+	-- ftd.image:
+	src: https://fifthtry.github.io/fastn-ui/-/fifthtry.github.io/fastn-ui/static/benefits/benefits-icon-1.svg
+	width.fixed.em: 4
+	height.fixed.em: 4
+	margin-bottom.em: 1
+	
+	-- ftd.text: $two-column-layout-mobile.title
+	role: $inherited.types.heading-medium
+	color: $inherited.colors.text-strong
+	padding-bottom.em: 0.5
+	text-align : center
+	
+	-- ftd.text: $two-column-layout-mobile.subtitle
+	margin-bottom.em: 1.5
+	
+	-- ftd.column:
+	width: fill-container
+	children: $two-column-layout-mobile.ui-data
+	
+	-- end: ftd.column
+
+	-- ftd.column:
+	width: fill-container
+	spacing.fixed.em: 1.5
+	children: $two-column-layout-mobile.right-side-ui
+	margin-top.em: 2
+	
+	-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: two-column-layout-mobile
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component summary-cards:
+caption title:
+string number:
+string subtitle:
+body description:
+children cards:
+optional ftd.background bg-color:
+string list color-css:
+string list title-css:
+
+-- ftd.column:
+width: fill-container
+align-content: center
+padding-horizontal.em if { ftd.device == "desktop" }: 3
+padding-vertical.em: 3
+color: $inherited.colors.text-strong
+background if { ftd.device == "desktop" }: $summary-cards.bg-color
+
+	-- ftd.column:
+	width: fill-container
+	max-width.fixed.px: $width
+	align-content: center
+	spacing.fixed.em: 0.5
+	
+		-- ftd.text: $summary-cards.number
+		height.fixed.em: 2
+		width.fixed.em: 2
+		border-radius.percent: 50
+		padding-top.em: 0.3
+		text-align: center
+		role: $inherited.types.heading-medium
+		color: white
+		classes: $summary-cards.color-css
+		
+		-- ftd.text.css:
+		
+			-- string: $fastn-assets.files.design.css
+			
+		-- end: ftd.text.css
+
+		-- ftd.text: $summary-cards.title
+		role: $inherited.types.heading-large
+		classes: $summary-cards.title-css
+		
+		-- ftd.text: $summary-cards.subtitle
+		role: $inherited.types.heading-large
+		text-align: center
+		
+		-- ftd.text: $summary-cards.description
+		role: $inherited.types.copy-regular
+		color: $inherited.colors.text
+		text-align: center
+		
+		-- ftd.row:
+		width: fill-container
+		wrap: true
+		spacing.fixed.em: 2
+		padding-top.em: 2
+		children: $summary-cards.cards
+		
+		-- end: ftd.row
+
+	-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: summary-cards
+
+
+
+
+
+
+
+
+
+
+-- component logo-card:
+optional ftd.image-src logo:
+optional string id: logo-card
+optional string link:
+boolean $mouse-enter: false
+optional ftd.image-src logo:
+
+-- ftd.column:
+width if { ftd.device == "mobile" }: fill-container
+
+	-- ftd.column:
+	width if { ftd.device == "mobile" }: fill-container
+	width.fixed.px: 316
+	padding-bottom.px: 12
+	border-width.px: 1
+	border-radius.px: 8
+	border-color: $inherited.colors.border-strong
+	
+		-- ftd.column:
+		width: fill-container
+		id: $logo-card.id
+		
+			-- ftd.column:
+			width: fill-container
+			height: fill-container
+			
+				-- ftd.image:
+				src: $logo-card.logo
+				border-radius.px: 8
+				
+			-- end: ftd.column
+
+		-- end: ftd.column
+
+		-- ftd.row:
+		width: fill-container
+		align-content: center
+		align-self: center
+		border-top-width.px: 1
+		border-color: $inherited.colors.border-strong
+		padding-top.px: 18
+		
+			-- ftd.row:
+			width.fixed.px: 250
+			spacing: space-between
+			
+				-- file-format: PNG
+				$boolean: $logo-card.mouse-enter
+				element-id: $logo-card.id
+				file-name: fastn-logo.png
+				
+				-- ftd.row:
+				height.fixed.px: 24
+				border-right-width.px: 1
+				border-color: $inherited.colors.border-strong
+				
+				-- end: ftd.row
+
+				-- file-format: JPG
+				$boolean: $logo-card.mouse-enter
+				element-id: $logo-card.id
+				file-name: fastn-logo.jpg
+				
+				-- ftd.row:
+				height.fixed.px: 24
+				border-right-width.px: 1
+				border-color: $inherited.colors.border-strong
+				
+				-- end: ftd.row
+
+				-- file-format: SVG
+				$boolean: $logo-card.mouse-enter
+				element-id: $logo-card.id
+				link: $logo-card.link
+				file-name: fastn-logo.svg
+				open: true
+				
+			-- end: ftd.row
+		-- end: ftd.row
+
+	-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: logo-card
+
+
+
+
+
+
+
+
+
+
+-- component file-format:
+caption title:
+boolean $boolean: false
+string element-id: file-format
+string file-name:
+boolean $mouse-enter: false
+optional string link:
+optional boolean open: false
+
+-- ftd.row:
+spacing.fixed.px: 12
+
+	-- ftd.image:
+	if: { file-format.title != "SVG" }
+	src: $fastn-assets.files.images.download.svg
+	src if { file-format.mouse-enter }: $fastn-assets.files.images.download-hover.svg
+	width.fixed.px: 16
+	$on-click$: $js-utils.download-as-image(element_id = $file-format.element-id, filename = $file-format.file-name)
+	$on-mouse-enter$: $ftd.set-bool($a = $file-format.mouse-enter, v = true)
+	$on-mouse-leave$: $ftd.set-bool($a = $file-format.mouse-enter, v = false)
+	
+	-- ftd.image:
+	if: { file-format.title == "SVG" }
+	src: $fastn-assets.files.images.download.svg
+	src if { file-format.mouse-enter }: $fastn-assets.files.images.download-hover.svg
+	width.fixed.px: 16
+	$on-click$: $js-utils.download-as-svg(element_id = $file-format.element-id, filename = $file-format.file-name)
+	$on-mouse-enter$: $ftd.set-bool($a = $file-format.mouse-enter, v = true)
+	$on-mouse-leave$: $ftd.set-bool($a = $file-format.mouse-enter, v = false)
+	open-in-new-tab: true
+	
+	-- ftd.text: $file-format.title
+	color: $inherited.colors.text-strong
+	role: $inherited.types.copy-small
+	
+-- end: ftd.row
+
+-- end: file-format
+
+
+
+
+
+
+
+
+
+
+-- component before-after:
+optional caption title:
+ftd.image-src before-image:
+ftd.image-src after-image:
+optional string before-caption:
+optional string after-caption:
+optional ftd.resizing width:
+optional ftd.resizing height:
+boolean $show: false
+
+-- ftd.column:
+color: $inherited.colors.text
+$on-mouse-enter$: $ftd.set-bool($a = $before-after.show, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $before-after.show, v = false)
+
+	-- ftd.column:
+	if: { !before-after.show }
+	width: fill-container
+	
+		-- ftd.text: $before-after.title
+		if: { before-after.title != NULL}
+		role: $inherited.types.heading-small
+		color: white
+		if: { !before-after.show }
+		anchor: parent
+		top.percent: 50
+		align-self: center
+		background.solid: rgba(0, 0, 0, 0.63)
+		padding-vertical.px: 8
+		padding-horizontal.px: 16
+		border-radius.px: 4
+		
+		-- ds.image: $before-after.before-caption
+		src: $before-after.before-image
+		width: $before-after.width
+		height: $before-after.height
+		
+	-- end: ftd.column
+
+	-- ds.image: $before-after.after-caption
+	src: $before-after.after-image
+	width: $before-after.width
+	height: $before-after.height
+	if: { before-after.show }
+	
+-- end: ftd.column
+
+-- end: before-after
+
+
+
+
+
+
+
+
+
+-- integer width: 1220

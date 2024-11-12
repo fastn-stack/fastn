@@ -1,0 +1,306 @@
+-- ds.page: Text Attributes
+
+These attributes are available to `ftd.text`, `ftd.integer`,
+`ftd.decimal` and `ftd.boolean` components.
+
+-- ds.h1: `style: ftd.text-style list`
+id: style
+
+This `style` attribute can be used to add inline styles on the rendered content.
+It accepts a list of [`ftd.text-style`](ftd/built-in-types/#ftd-text-style)
+values and is optional.
+
+-- ds.rendered: Sample code using `style`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.text: These are stylized values
+	style: italic, regular ;; <hl>
+	color: $inherited.colors.text-strong
+	
+	\-- ftd.integer: 1234
+	style: bold ;; <hl>
+	color: $inherited.colors.text-strong
+	
+	\-- ftd.decimal: 3.142
+	style: underline, italic ;; <hl>
+	color: $inherited.colors.text-strong
+	
+	\-- ftd.boolean: true
+	style: heavy ;; <hl>
+	color: $inherited.colors.text-strong
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: These are stylized values
+		style: italic, regular
+		color: $inherited.colors.text-strong
+		
+		-- ftd.integer: 1234
+		style: bold
+		color: $inherited.colors.text-strong
+		
+		-- ftd.decimal: 3.142
+		style: underline, italic
+		color: $inherited.colors.text-strong
+		
+		-- ftd.boolean: true
+		style: heavy
+		color: $inherited.colors.text-strong
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.h1: `text-align: optional ftd.text-align`
+id: text-align
+
+This attribute is used to align the rendered content. It accepts the
+[`ftd.text-align`](ftd/built-in-types/#ftd-text-align) type value and is
+optional.
+
+-- ds.rendered: Sample code using `text-align`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.row:
+	spacing.fixed.px: 10
+	
+	\-- ftd.text:
+	text-align: center ;; <hl>
+	border-width.px: 1
+	border-radius.px: 3
+	padding.px: 5
+	width.fixed.percent: 30
+	color: $inherited.colors.text-strong
+	
+	this is **text-align: center** text. a bit longer text so you can see what's going on.
+	
+	\-- ftd.text:
+	text-align: start ;; <hl>
+	border-width.px: 1
+	border-radius.px: 3
+	padding.px: 5
+	width.fixed.percent: 30
+	color: $inherited.colors.text-strong
+	
+	this is **text-align: start** text. a bit longer text so you can see what's
+	going on.
+	
+	\-- ftd.text:
+	text-align: end ;; <hl>
+	border-width.px: 1
+	border-radius.px: 3
+	padding.px: 5
+	width.fixed.percent: 30
+	color: $inherited.colors.text-strong
+	
+	this is **text-align: end** text. a bit longer text so you can see what's going
+	on.
+	
+	\-- ftd.text:
+	text-align: justify ;; <hl>
+	border-width.px: 1
+	border-radius.px: 3
+	padding.px: 5
+	width.fixed.percent: 30
+	color: $inherited.colors.text-strong
+	
+	this is **text-align: justify** text. a bit longer text so you can see what's going on.
+	
+	\-- end: ftd.row
+	
+	-- ds.rendered.output:
+	
+		-- ftd.row:
+		spacing.fixed.px: 10
+		
+			-- ftd.text:
+			text-align: center
+			border-width.px: 1
+			border-radius.px: 3
+			padding.px: 5
+			width.fixed.percent: 30
+			color: $inherited.colors.text-strong
+			
+			this is **text-align: center** text. a bit longer text so you can see what's going on.
+			
+			-- ftd.text:
+			text-align: start
+			border-width.px: 1
+			border-radius.px: 3
+			padding.px: 5
+			width.fixed.percent: 30
+			color: $inherited.colors.text-strong
+			
+			this is **text-align: start** text. a bit longer text so you can see what's
+			going on.
+			
+			-- ftd.text:
+			text-align: end
+			border-width.px: 1
+			border-radius.px: 3
+			padding.px: 5
+			width.fixed.percent: 30
+			color: $inherited.colors.text-strong
+			
+			this is **text-align: end** text. a bit longer text so you can see what's going
+			on.
+			
+			-- ftd.text:
+			text-align: justify
+			border-width.px: 1
+			border-radius.px: 3
+			padding.px: 5
+			width.fixed.percent: 30
+			color: $inherited.colors.text-strong
+			
+			this is **text-align: justify** text. a bit longer text so you can see what's going on.
+			
+		-- end: ftd.row
+
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+-- ds.h1: `text-indent: optional ftd.length`
+id: text-indent
+
+This attribute can be used to specify the indentation of the
+first line in the rendered text. It accepts a
+[`ftd.length`](ftd/built-in-types/#ftd-length) value and is optional.
+
+-- ds.rendered: Sample code using `text-indent`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.text:
+	text-indent.px: 30 ;; <hl>
+	color: $inherited.colors.text-strong
+	
+	This is some indented text.
+	
+	It only applies spacing at the beginning of the first line.
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text:
+		text-indent.px: 30
+		color: $inherited.colors.text-strong
+		
+		This is some indented text.
+		
+		It only applies spacing at the beginning of the first line.
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.h2: `display: optional ftd.display`
+id: display
+
+This `display` attribute sets the display behaviour of an element.
+It accepts value of type [`ftd.display`](ftd/built-in-types/#ftd-display)
+and is optional.
+
+`Note`: This attribute can only be used within [`ftd.container`](ftd/container)
+and won't work from within any other `fastn` containers like
+[`ftd.row`](ftd/row) and [`ftd.column`](ftd/column).
+
+-- ds.rendered: Sample code using `display`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.container:
+	color: $inherited.colors.text
+	
+	\-- ftd.text:
+	display: block ;; <hl>
+	border-color: $yellow-red
+	border-width.px: 2
+	
+	This is a block element.
+	It takes up the full width available and creates a new line after it.
+	
+	\-- ftd.text:
+	display: inline ;; <hl>
+	border-color: $yellow-red
+	border-width.px: 2
+	
+	This is an inline element.
+	It flows with the text and does not create a new line.
+	
+	\-- ftd.text: This is another inline text
+	display: inline ;; <hl>
+	border-color: $yellow-red
+	border-width.px: 2
+	
+	\-- ftd.text:
+	display: inline-block ;; <hl>
+	border-color: $yellow-red
+	border-width.px: 2
+	
+	This is an inline-block element.
+	It takes up only the necessary width required by its content
+	and allows other elements to appear on the same line.
+	
+	\-- ftd.text: This is another inline-block text
+	display: inline-block ;; <hl>
+	border-color: $yellow-red
+	border-width.px: 2
+	
+	\-- end: ftd.container
+	
+	-- ds.rendered.output:
+	
+		-- ftd.container:
+		color: $inherited.colors.text
+		
+			-- ftd.text:
+			display: block
+			border-color: $yellow-red
+			border-width.px: 2
+			
+			This is a block element.
+			It takes up the full width available and creates a new line after it.
+			
+			-- ftd.text:
+			display: inline
+			border-color: $yellow-red
+			border-width.px: 2
+			
+			This is an inline element.
+			It flows with the text and does not create a new line.
+			
+			-- ftd.text: This is another inline text
+			display: inline
+			border-color: $yellow-red
+			border-width.px: 2
+			
+			-- ftd.text:
+			display: inline-block
+			border-color: $yellow-red
+			border-width.px: 2
+			
+			This is an inline-block element.
+			It takes up only the necessary width required by its content
+			and allows other elements to appear on the same line.
+			
+			-- ftd.text: This is another inline-block text
+			display: inline-block
+			border-color: $yellow-red
+			border-width.px: 2
+			
+		-- end: ftd.container
+
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- end: ds.page
+
+
+-- ftd.color yellow-red:
+light: yellow
+dark: red

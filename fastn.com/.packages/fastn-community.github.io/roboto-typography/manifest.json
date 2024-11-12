@@ -1,0 +1,31 @@
+{
+    "files": {
+        "FASTN.ftd": {
+            "name": "FASTN.ftd",
+            "checksum": "0616337BE94782BDAB43CB19F9C41E9DA02696EA986CEFF5520185AEB3F6A837",
+            "size": 345
+        },
+        "LICENSE.md": {
+            "name": "LICENSE.md",
+            "checksum": "A95364C3842F2C439BD629F65E304A2850239B443596467254EE96E71CA213DD",
+            "size": 1498
+        },
+        "index.ftd": {
+            "name": "index.ftd",
+            "checksum": "82083862387A9095ABF2FD3EDF87F3DBE6B15BFE11B681CE80FC8BBE2BCD8D14",
+            "size": 12899
+        },
+        "fastn-typography.ftd": {
+            "name": "fastn-typography.ftd",
+            "checksum": "0F52FDC77B85BCF0A18FCDA204B38BFE99777C074B1707D2516994028C6C503A",
+            "size": 8883
+        },
+        "README.md": {
+            "name": "README.md",
+            "checksum": "5346ED922DF88B838FA4A34778E0DD5F18F8FA060B3AFEE6B85D3FC8A840C899",
+            "size": 1043
+        }
+    },
+    "zip_url": "https://github.com/fastn-community/roboto-typography/archive/ceaf2df9d3dcf98dc41b720cbdd99beef8ca046c.zip",
+    "checksum": "EA76A192F1C6DB76E329089D7D16F56C6C55AD3D1DC277EEC3112B2DC95EC0B7"
+}

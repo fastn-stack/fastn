@@ -1,0 +1,66 @@
+-- import: fastn.com/featured as ft-ui
+
+
+-- ds.page:
+sidebar: false
+
+-- ft-ui.view-all: Simple Quotes
+templates: $simple-quotes
+
+-- end: ds.page
+
+
+
+
+
+-- ft-ui.template list simple-quotes:
+
+-- ft-ui.template: Chalice
+template-url: /quotes/chalice/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-1.png
+
+-- ft-ui.template: Rustic
+template-url: /quotes/rustic/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-2.png
+
+-- ft-ui.template: Echo
+template-url: /quotes/echo/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-3.png
+
+-- ft-ui.template: Onyx
+template-url: /quotes/onyx/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-4.png
+
+-- ft-ui.template: Marengo
+template-url: /quotes/marengo/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-5.png
+
+-- ft-ui.template: Chrome
+template-url: /quotes/chrome/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-6.png
+
+-- ft-ui.template: Dorian
+template-url: /quotes/dorian/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-7.png
+
+-- ft-ui.template: Marengo Hug
+template-url: /quotes/marengo-hug/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-8.png
+
+-- ft-ui.template: Matte
+template-url: /quotes/matte/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-9.png
+
+-- ft-ui.template: Scorpion
+template-url: /quotes/scorpion/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-10.png
+
+-- ft-ui.template: Silver
+template-url: /quotes/silver/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-11.png
+
+-- ft-ui.template: Storm Cloud
+template-url: /quotes/storm-cloud/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-12.png
+
+-- end: simple-quotes
