@@ -60,12 +60,28 @@ pub(super) fn import(
 }
 
 fn parse_module_name(
-    _source: &str,
+    caption: &str,
     _document: &mut fastn_unresolved::Document,
 ) -> Option<fastn_unresolved::Import> {
     // section.caption must be single text block, parsable as a module-name.
     //       module-name must be internally able to handle aliasing.
-    todo!()
+    let (module, alias) = match caption.split_once(" as ") {
+        Some((module, alias)) => (module, Some(alias)),
+        None => (caption, None),
+    };
+
+    let (package, module) = match module.split_once("/") {
+        Some((package, module)) => (package, module),
+        None => ("", module),
+    };
+
+    Some(fastn_unresolved::Import {
+        package: fastn_unresolved::PackageName(package.to_string()),
+        module: fastn_unresolved::ModuleName(module.to_string()),
+        alias: alias.map(|v| fastn_unresolved::Identifier(v.to_string())),
+        exports: None,
+        exposing: None,
+    })
 }
 
 fn parse_export(
@@ -74,7 +90,6 @@ fn parse_export(
     _document: &mut fastn_unresolved::Document,
     _import: &mut fastn_unresolved::Import,
 ) {
-    todo!()
 }
 
 fn parse_exposing(
@@ -83,13 +98,14 @@ fn parse_exposing(
     _document: &mut fastn_unresolved::Document,
     _import: &mut fastn_unresolved::Import,
 ) {
-    todo!()
 }
 
 #[cfg(test)]
 mod tests {
     #[track_caller]
     fn t1(source: &str, expected: serde_json::Value) {
+        use fastn_section::JDebug;
+
         let (mut document, sections) =
             fastn_unresolved::Document::new(fastn_section::Document::parse(source));
 
@@ -99,7 +115,7 @@ mod tests {
         };
 
         super::import(source, section, &mut document);
-        assert_eq!(serde_json::to_value(document.imports).unwrap(), expected);
+        assert_eq!(document.imports.get(0).unwrap().debug(source), expected);
     }
 
     macro_rules! t {
