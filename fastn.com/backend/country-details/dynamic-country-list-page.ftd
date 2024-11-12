@@ -1,0 +1,254 @@
+-- ds.page: Building dynamic country list page 🚧
+
+In this video we will request the JSON data using `http processor` and store it
+in `fastn` records. Later in the video, we will create a country list page that
+will display the list of countries in form of cards that will display country's
+flag and country's `common` name and also display values of `population`,
+`region` and `capital`.
+
+
+-- ds.youtube:
+v: lUdLNCEKZts
+
+
+-- ds.markdown:
+
+We will build the dynamic country list page in three parts:
+
+1. We will declare all the `records` in one document
+2. In other document, we will create a `card` component that will contain the
+  data.
+3. In `index.ftd`, we will make use of `http processor` to request the data
+  and store in a list and display the data by calling the component.
+
+-- ftd.image: $fastn-assets.files.images.backend.three-stages.jpg
+width: fill-container
+
+-- ds.h1: Part 1 - Data Modelling
+
+The JSON data is structured in a way, that some properties are nested within
+another property.
+
+-- ftd.image:
+src: $fastn-assets.files.images.backend.pretty-json.png
+max-width: fill-container
+
+-- ds.markdown:
+
+So we will create a `records` and some of them will be nested within another
+record.
+
+Create a new document, let's say `models.ftd` and declare all the `records`
+within it.
+
+-- ds.code:
+
+\-- record country:
+country-name name:
+integer population:
+string region:
+string list capital:
+country-flag flags:
+
+The record `country` has a property `name` which has a type that itself is a
+`record`.
+
+Property `population` is an integer while `region` and `capital` are of string
+type. Also, some countries have more than one capital hence we will create the
+list of `capital`.
+
+`flags` property also has a `record` datatype.
+
+Let's declare the `country-name` and `country-flag` records too.
+
+-- ds.code:
+
+\-- record country-name:
+optional string common:
+string official:
+
+
+-- ds.code:
+
+\-- record country-flag:
+caption svg:
+
+-- ds.markdown:
+
+So we are done with the data-modelling part.
+
+-- ds.h1: Part 2 - UI component
+
+We will create a component let's say, `country-card`. This component will
+display the data that will be requested from the JSON data, and displayed in
+form of country cards.
+
+We can apply various `fastn` properties to create a good UI like we can add
+default and on-hover `shadow` to the cards.
+
+-- ds.code:
+
+\-- import: backend/models
+
+\-- component country-card:
+caption models.country country:
+optional ftd.shadow shadow:
+boolean $is-hovered: false
+
+\-- ftd.column:
+width.fixed.px: 260
+height.fixed.px: 375
+overflow: auto
+border-radius.rem: 0.5
+margin.rem: 2
+cursor: pointer
+border-width.px: 1
+border-color: #dedede
+shadow: $default-card-shadow
+shadow if { country-card.is-hovered }: $hovered-card-shadow
+$on-mouse-enter$: $ftd.set-bool( $a = $country-card.is-hovered, v = true )
+$on-mouse-leave$: $ftd.set-bool( $a = $country-card.is-hovered, v = false )
+
+\-- ftd.image:
+src: $country-card.country.flags.svg
+width: fill-container
+height.fixed.percent: 50
+
+\-- ftd.column:
+padding.rem: 1
+spacing.fixed.rem: 0.5
+width: fill-container
+border-color: #dedede
+height: hug-content
+border-top-width.px: 1
+
+\-- ftd.text: $country-card.country.name.common
+style: bold
+role: $inherited.types.copy-regular
+
+\-- ftd.row:
+spacing.fixed.rem: 1
+
+\-- ftd.column:
+spacing.fixed.rem: 0.5
+
+\-- ftd.text: Population:
+role: $inherited.types.label-large
+style: semi-bold
+
+\-- ftd.text: Region:
+role: $inherited.types.label-large
+style: semi-bold
+
+\-- ftd.text: Capital:
+if: { len(country-card.country.capital) > 0 }
+style: semi-bold
+role: $inherited.types.label-large
+
+\-- end: ftd.column
+
+\-- ftd.column:
+spacing.fixed.rem: 0.5
+
+\-- ftd.integer: $country-card.country.population
+role: $inherited.types.label-large
+
+\-- ftd.text: $country-card.country.region
+role: $inherited.types.label-large
+
+\-- ftd.text: $capital-name
+style: bold
+role: $inherited.types.label-large
+for: $capital-name, $index in $country-card.country.capital
+
+\-- end: ftd.column
+
+\-- end: ftd.row
+
+\-- end: ftd.column
+
+\-- end: ftd.column
+
+\-- end: country-card
+
+
+\-- ftd.shadow default-card-shadow:
+color: #efefef
+blur.px: 5
+spread.rem: 0.2
+
+\-- ftd.shadow hovered-card-shadow:
+color: #d5e3db
+blur.px: 5
+spread.rem: 0.2
+
+
+-- ds.h1: Part 3 - Display the country list page
+
+Everything is ready. Let's assemble everything. We will request the JSON data
+and display the data in the card using the component in the `index.ftd`
+document.
+
+We will need the two documents and processors so import the `processors` and the
+two documents.
+
+-- ds.code:
+
+\-- import: fastn/processors as pr
+\-- import: backend/models
+\-- import: backend/components/card
+
+
+-- ds.markdown:
+
+We will create a list of `countries` and the datatype will be `record country`
+that we created in `models` document.
+
+-- ds.code:
+
+\-- models.country list countries:
+$processor$: pr.http
+url: https://restcountries.com/v3.1/all
+
+
+-- ds.markdown:
+
+Now we will call the component `country-card` from `card` document and we will
+wrap it inside the row container component.
+
+-- ds.code:
+
+\-- ftd.row:
+wrap: true
+spacing: space-around
+padding.rem: 2
+border-radius.rem: 1
+
+\-- card.country-card: $country
+for: $country in $countries
+
+\-- end: ftd.row
+
+-- ftd.image: $fastn-assets.files.images.backend.country-list-output.png
+width: fill-container
+
+
+-- ds.markdown:
+
+There you go, the country list page is ready and you can see all the country
+details are displayed in form of a card.
+
+
+-- ds.h1: Join Us
+
+Join us on Discord, and share your package which you will create following this
+video. You can share it on the discord's `show-and-tell` channel.
+
+Thank you guys, keep watching these videos to learn more about fastn. Checkout
+the `fastn` website.
+
+Support us by clicking on this link and give us a star ⭐ on GitHub and join
+our fastn community on Discord.
+
+
+-- end: ds.page

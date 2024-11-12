@@ -1,0 +1,111 @@
+{
+    "files": {
+        "static/header/hamburger-dark.svg": {
+            "name": "static/header/hamburger-dark.svg",
+            "checksum": "5ACE4B96CE32DF599A487BB0CC823C41E6C8DC255CE27745F48A6F4ED096E170",
+            "size": 610
+        },
+        "README.md": {
+            "name": "README.md",
+            "checksum": "BD5216B11C3AA2DEF097DD1D5DB4397CE16E9276C8046F9AD4CD3F9932AE81FB",
+            "size": 367
+        },
+        "LICENSE": {
+            "name": "LICENSE",
+            "checksum": "61B96B6BF183983862D39452862BE96EF5E8B2AAB2B60BF7D7F2E65861B6D2DE",
+            "size": 1318
+        },
+        "docs/header-with-sections.ftd": {
+            "name": "docs/header-with-sections.ftd",
+            "checksum": "0EC43CABFB10FB200C4902677A79DD815E55A1C6D1CB6932AB7D6AD78E2031C0",
+            "size": 3105
+        },
+        "docs/index.ftd": {
+            "name": "docs/index.ftd",
+            "checksum": "59E70A8BB73C70DE8007E74BB9DF2D555FC4EA1BE431387A897E89AF0E7D8C4D",
+            "size": 2181
+        },
+        "static/header/cross.svg": {
+            "name": "static/header/cross.svg",
+            "checksum": "DE0A2D4C3651335FFF978C12B1FD286ECDB86D59FFC6EC06A40066009A9D29C0",
+            "size": 678
+        },
+        "static/icon-github.svg": {
+            "name": "static/icon-github.svg",
+            "checksum": "F29B04C9A3F0234A0FD9C5CC78A3983F44A269CB886690CEB36E87D5D0CBAF49",
+            "size": 938
+        },
+        "docs/header-with-logo.ftd": {
+            "name": "docs/header-with-logo.ftd",
+            "checksum": "B5DF1036D432AB49627D2E71F028784D1443BBB9818DF3AFF7A13FD2F29C8216",
+            "size": 2385
+        },
+        "FASTN.ftd": {
+            "name": "FASTN.ftd",
+            "checksum": "A2682FD6C5719388F8A79BA98DD3CBB34AC81BFF63780FDAC2281941B575955F",
+            "size": 633
+        },
+        "docs/header-with-login.ftd": {
+            "name": "docs/header-with-login.ftd",
+            "checksum": "1ADADF17AA369985C28854907F26CFEEB20139DBED3B8591455F43537A3F3B69",
+            "size": 3779
+        },
+        "docs/header-with-logo-site-name.ftd": {
+            "name": "docs/header-with-logo-site-name.ftd",
+            "checksum": "9EB78E30573DDD5D250E3B685F33675E7F3BFCC7FB04118CD9AA099FC7D1BFFD",
+            "size": 2593
+        },
+        "docs/header-with-ps.ftd": {
+            "name": "docs/header-with-ps.ftd",
+            "checksum": "0763040DC95DCC4D92F58F243448F9F7FEE3A80184062FF00C879D1F7AD9F9EC",
+            "size": 2731
+        },
+        "index.ftd": {
+            "name": "index.ftd",
+            "checksum": "414B2C417588EC903EC0D7B451F80E4A3E82C6E8A818101D7F9A710233FFA45E",
+            "size": 26449
+        },
+        "static/down-arrow.svg": {
+            "name": "static/down-arrow.svg",
+            "checksum": "A04270E890C3BB2A9182EB31FEDA50637D643FE71D0D3D636EE0D34C107548C0",
+            "size": 345
+        },
+        "static/header/header-black-1200.png": {
+            "name": "static/header/header-black-1200.png",
+            "checksum": "9A119F39EBF88590C729FCA69EBBD6D10E95B77168BFBD3E1E56A085B7CFAA1F",
+            "size": 8509
+        },
+        "static/up-arrow.svg": {
+            "name": "static/up-arrow.svg",
+            "checksum": "3FAD53EC8EC276FC50D94330B87D911C75E51C608871F93633AC1E156B0A8696",
+            "size": 342
+        },
+        "static/header/hamburger.svg": {
+            "name": "static/header/hamburger.svg",
+            "checksum": "0CAA6A2712D240592A0F0159FF53402F8EBE0498586CFB511718F65EB6115F61",
+            "size": 610
+        },
+        "static/down-arrow-dark.svg": {
+            "name": "static/down-arrow-dark.svg",
+            "checksum": "B0C0154B501B9E64F47182C21B5A8B399134FDDE57504ADEA845D436A2AEEFC4",
+            "size": 345
+        },
+        "static/up-arrow-dark.svg": {
+            "name": "static/up-arrow-dark.svg",
+            "checksum": "DC4323DCC9ED03438A21EC3C13A177AA57E0266A27FA1298A733A4BC817738F8",
+            "size": 342
+        },
+        "static/header/header-1200.png": {
+            "name": "static/header/header-1200.png",
+            "checksum": "F2341D001218326068DA3BFB618FFFE0C79006CBC865442900930BB62FAB35F3",
+            "size": 12535
+        },
+        "static/header/cross-dark.svg": {
+            "name": "static/header/cross-dark.svg",
+            "checksum": "6205EDE0EC3407E3B9B491652C7701CA250976D25692818545100D3F70DD13C0",
+            "size": 678
+        }
+    },
+    "zip_url": "https://github.com/FifthTry/header/archive/8d1de9988585b24142c490b9522580d44de8a17c.zip",
+    "checksum": "112DDDA3F0F4EE0157B143C0A9B6ED862AA3A55641949BC012F2C2245B9B2D4D"
+}

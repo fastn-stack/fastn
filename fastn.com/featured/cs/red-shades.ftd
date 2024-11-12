@@ -1,0 +1,29 @@
+-- import: fastn.com/featured as ft-ui
+
+
+-- ds.page:
+sidebar: false
+
+-- ft-ui.view-all: Red Color Scheme
+templates: $red-scheme
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+-- ft-ui.template list red-scheme:
+
+-- ft-ui.template: Saturated Sunset CS
+template-url: /cs/saturated-sunset-cs/
+screenshot: $fastn-assets.files.images.featured.cs.saturated-sunset-cs.png
+
+-- ft-ui.template: Pink Tree CS
+template-url: /cs/pink-tree-cs/
+screenshot: $fastn-assets.files.images.featured.cs.pink-tree-cs.png
+
+-- end: red-scheme

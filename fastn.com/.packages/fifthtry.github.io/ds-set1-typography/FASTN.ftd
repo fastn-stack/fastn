@@ -1,0 +1,12 @@
+-- import: fastn
+
+-- fastn.package: fifthtry.github.io/ds-set1-typography
+
+-- fastn.dependency: fifthtry.github.io/doc-site as ds
+
+-- fastn.auto-import: ds
+
+-- fastn.dependency: fifthtry.github.io/inter-font
+
+
+

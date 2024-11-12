@@ -1,0 +1,147 @@
+-- ds.page: `ftd.iframe`
+
+`ftd.iframe` is a kernel element used to embed any other HTML document
+within your current document.
+
+-- ds.h1: Usage
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.iframe:
+src: <some url>
+
+-- ds.h1: Attributes
+
+`ftd.iframe` accepts the below mentioned attributes as well
+all the [common attributes ](ftd/common/).
+
+`Note`: For `ftd.iframe`, you either need to provide `src` or `srcdoc`
+or `youtube`.
+
+-- ds.h2: `src: optional string`
+
+This attribute specifies the URL of the page
+which needs to be embedded within your iframe element.
+It takes value of type [`string`](ftd/built-in-types/#string) and is optional.
+
+
+-- ds.rendered: Sample code using `src`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.iframe:
+	src: https://www.example.com
+	
+	-- ds.rendered.output:
+	
+		-- ftd.iframe:
+		src: https://www.example.com
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+-- ds.h2: `srcdoc: optional body`
+
+This attribute specifies any html content which needs to be included within
+your iframe element.
+
+-- ds.rendered: Sample code using `srcdoc`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.iframe:
+	border-width.px: 4
+	border-color: $red-yellow
+	padding.px: 20
+	
+	<p style='color: coral;'>This text is coral.</p> ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.iframe:
+		border-width.px: 4
+		border-color: $red-yellow
+		padding.px: 20
+		
+		<p style='color: coral;'>This text is coral</p>
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+-- ds.h2: `youtube: optional string`
+
+This attribute will embed any youtube video in your iframe element.
+It takes value of type [`string`](ftd/built-in-types/#string) and is optional.
+
+-- ds.rendered: Sample code using `youtube`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.iframe:
+	youtube: 10MHfy3b3c8 ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.iframe:
+		youtube: 10MHfy3b3c8
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+-- ds.h2: `loading: optional ftd.loading`
+
+This attribute specifies how the content inside iframe needs to be loaded.
+It takes value of type [`ftd.loading`](ftd/built-in-types/#ftd-loading)
+and is optional.
+
+-- ds.rendered: Sample code using `loading`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.iframe:
+	youtube: 10MHfy3b3c8 ;; <hl>
+	loading: lazy
+	
+	-- ds.rendered.output:
+	
+		-- ftd.iframe:
+		youtube: 10MHfy3b3c8
+		loading: lazy
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- end: ds.page
+
+
+
+-- ftd.color red-yellow:
+light: red
+dark: yellow

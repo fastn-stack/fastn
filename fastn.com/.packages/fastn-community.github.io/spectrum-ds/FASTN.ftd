@@ -1,0 +1,27 @@
+-- import: fastn
+
+-- fastn.package: fastn-community.github.io/spectrum-ds
+-- fastn.dependency: fastn-community.github.io/opensans-font 
+-- fastn.dependency: fastn-community.github.io/inter-typography
+
+-- fastn.dependency: fastn-community.github.io/header
+-- fastn.dependency: fastn-community.github.io/typography
+-- fastn.dependency: fastn-community.github.io/footer
+-- fastn.dependency: fastn-community.github.io/dark-mode-switcher
+
+-- fastn.auto-import: fastn
+-- fastn.auto-import: fastn-community.github.io/header as h
+-- fastn.auto-import: fastn-community.github.io/typography as tf
+-- fastn.auto-import: fastn-community.github.io/spectrum-ds/FASTN/config as my-ds
+
+-- fastn.sitemap:
+
+# Home: /index.html
+
+- Overview: index.html
+
+- Featured: /featured/
+
+- Template listing: /template-listing/
+
+- Featured listing page: /featured-listing-page/

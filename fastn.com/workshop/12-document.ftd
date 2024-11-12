@@ -1,0 +1,10 @@
+-- ds.page: Clean URL using document feature - `fastn` Hands-On Workshop
+
+`ftd.sitemap` has a `document` feature which contains the path of the document
+hence you can clean the URL by customizing it.
+
+-- ds.h1: Use `document` feature
+
+-- ds.h1: Clean the URL
+
+-- end: ds.page

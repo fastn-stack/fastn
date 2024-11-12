@@ -1,0 +1,38 @@
+-- import: fastn.com/u/ganesh-salunke
+-- import: fastn.com/u/priyanka-yadav
+-- import: fastn.com/u/meenu-kumari
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Caffiene
+featured-link: /featured/resumes/
+category: Featured Resumes
+image: $fastn-assets.files.images.featured.resumes.caffiene.png
+owners: [$ganesh-salunke.info, $priyanka-yadav.info, $meenu-kumari.info]
+license-url: https://github.com/FifthTry/caffeine-resume/blob/main/LICENSE
+license: Creative Commons
+published-date: 26-Jul-2022
+cards: $resumes
+github-url: https://github.com/FifthTry/caffeine-resume
+demo-link: https://fifthtry.github.io/caffeine-resume/
+
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list resumes:
+
+-- ft-ui.template: Resume 1
+template-url: featured/resumes/resume-1/
+screenshot: $fastn-assets.files.images.featured.resumes.resume-1.png
+
+-- ft-ui.template: Resume 10
+template-url: featured/resumes/resume-10/
+screenshot: $fastn-assets.files.images.featured.resumes.resume-10.png
+
+-- end: resumes

@@ -1,0 +1,3098 @@
+-- import: fifthtry.github.io/admonitions as cbox
+
+-- ds.page: Built-in Types
+
+
+`fastn` comes with some built-in types. These can be used to define properties
+of components or fields of [`record`](ftd/record/) and
+[`or-type`](ftd/or-type/).
+These types can be categorized into two main groups: **Primitive** and
+**Derived**.
+
+
+- **Primitive**: The primitive types are the building blocks for creating more
+  complex types. e.g. `string`, `boolean`, `integer` etc
+
+- **Derived**: The derived types can be constructed using primitive types or
+  other derived types. e.g. `ftd.color`, `ftd.image-src` etc.
+
+
+-- ds.h1: Contents
+
+
+- [Primitive Types](/built-in-types#primitive-types)
+  - [`boolean`](/built-in-types#boolean)
+  - [`integer`](/built-in-types#integer)
+  - [`decimal`](/built-in-types#decimal)
+  - [`string`](/built-in-types#string)
+  - [`caption`](/built-in-types#caption)
+  - [`body`](/built-in-types#body)
+  - [`caption or body`](/built-in-types#caption-or-body)
+  - [`ftd.ui`](/built-in-types#ftd-ui)
+  - [`children`](/built-in-types#children)
+- [Derived Types](/built-in-types#derived-types)
+  - [`ftd.align-self`](/built-in-types#ftd-align-self)
+  - [`ftd.align`](/built-in-types#ftd-align)
+  - [`ftd.anchor`](/built-in-types#ftd-anchor)
+  - [`ftd.linear-gradient`](/built-in-types#ftd-linear-gradient)
+  - [`ftd.linear-gradient-color`](/built-in-types#ftd-linear-gradient-color)
+  - [`ftd.breakpoint-width-data`](/built-in-types#ftd-breakpoint-width-data)
+  - [`ftd.linear-gradient-directions`](/built-in-types#ftd-linear-gradient-directions)
+  - [`ftd.background-image`](/built-in-types#ftd-background-image)
+  - [`ftd.background-position`](/built-in-types#ftd-background-position)
+  - [`ftd.background-repeat`](/built-in-types#ftd-background-repeat)
+  - [`ftd.background-size`](/built-in-types#ftd-background-size)
+  - [`ftd.background`](/built-in-types#ftd-background)
+  - [`ftd.border-style`](/built-in-types#ftd-border-style)
+  - [`ftd.color`](/built-in-types#ftd-color)
+  - [`ftd.display`](/built-in-types#ftd-display)
+  - [`ftd.color-scheme`](/built-in-types#ftd-color-scheme)
+  - [`ftd.cursor`](/built-in-types#ftd-cursor)
+  - [`ftd.image-src`](/built-in-types#ftd-image-src)
+  - [`ftd.length`](/built-in-types#ftd-length)
+  - [`ftd.length-pair`](/built-in-types#ftd-length-pair)
+  - [`ftd.loading`](/built-in-types#ftd-loading)
+  - [`ftd.overflow`](/built-in-types#ftd-overflow)
+  - [`ftd.region`](/built-in-types#ftd-region)
+  - [`ftd.resize`](/built-in-types#ftd-resize)
+  - [`ftd.resizing`](/built-in-types#ftd-resizing)
+  - [`ftd.responsive-type`](/built-in-types#ftd-responsive-type)
+  - [`ftd.shadow`](/built-in-types#ftd-shadow)
+  - [`ftd.mask`](/built-in-types#ftd-mask)
+  - [`ftd.spacing`](/built-in-types#ftd-spacing)
+  - [`ftd.text-align`](/built-in-types#ftd-text-align)
+  - [`ftd.text-input-type`](/built-in-types#ftd-text-input-type)
+  - [`ftd.text-style`](/built-in-types#ftd-text-style)
+  - [`ftd.text-transform`](/built-in-types#ftd-text-transform)
+  - [`ftd.type`](/built-in-types#ftd-type)
+  - [`ftd.white-space`](/built-in-types#ftd-white-space)
+  - [`ftd.type-data`](/built-in-types#ftd-type-data)
+  - [`ftd.fetch-priority`](/built-in-types#ftd-fetch-priority)
+
+
+
+
+-- ds.h1: Primitive Types
+
+Primitive types are basic building blocks that can be used to construct more
+complex types like [`record`](ftd/record/) and [`or-type`](ftd/or-type/). These
+types include:
+
+
+
+-- ds.h2: `boolean`
+
+This type is used to represent boolean values `true` and `false`.
+
+-- ds.code:
+lang: ftd
+
+\-- boolean is-monday: true
+
+-- ds.h2: `integer`
+
+This is integer type, can be positive or negative.
+
+-- ds.code:
+lang: ftd
+
+\-- integer number-of-days-in-a-week: 7
+
+
+-- ds.h2: `decimal`
+
+This type is used to represent decimal numbers.
+
+-- ds.code:
+lang: ftd
+
+\-- decimal pi: 3.14159
+
+
+-- ds.h2: `string`
+
+This is unicode string.
+
+-- ds.code:
+lang: ftd
+
+\-- string message: hello world!
+
+-- ds.code: a multi-line string
+lang: ftd
+
+\-- string message:
+
+this is a multiline string.
+
+can have any number of lines.
+
+or long paragraph, if you have a long paragraph to write. it can
+contain unicode characters in any भाषा, or emojis, 💁👌🎍😍.
+
+-- ds.h2: `caption`
+
+`caption` is a special type, it is an alias for `string`, but can not be used
+when declaring a [variable](ftd/variables/).
+
+This type is used for [`record`](ftd/record/), [`or-type`](ftd/or-type/). and
+`component` arguments.
+
+If a `record` or `or-type` field, or `component` argument is defined as `caption`,
+it can be passed in the "caption" location in [`ftd::p1`
+"section"](ftd/p1-grammar/#section-caption).
+
+-- ds.code: record with caption
+lang: ftd
+
+\-- record person:
+caption name:
+
+\-- person amitu: Amit Upadhyay
+
+\-- person shobhit:
+name: Shobhit Sharma
+
+-- ds.markdown:
+
+If something is specified as `caption`, it can come in the "caption" location, eg
+in case of `amitu` var, or it can come as an explicit key, as in the declaration
+of `shobhit` variable.
+
+-- cbox.info: Passing other types in `caption` area
+
+By default `caption` is alias for `string` but if you want to pass
+types other than `string` you can do the following:
+
+	-- ds.code: record with caption as integer
+	lang: ftd
+	
+	\-- record marks:
+	caption integer number:
+	
+-- end: cbox.info
+
+
+-- ds.h2: `body`
+
+`body` is a special type, it is an alias for `string`, but can not be used when
+declaring a variable.
+
+This type is used for `record`, `or-type` and `component` arguments.
+
+If a `record` or `or-type` field, or `component` argument is defined as `body`,
+it can be passed in the "body" location in [`ftd::p1`
+"section"](ftd/p1-grammar/#section-body).
+
+-- ds.code: record with body
+lang: ftd
+
+\-- record person:
+name: caption
+bio: body
+
+\-- person amitu: Amit Upadhyay
+
+this is single
+
+or multi-line bio of Amit.
+
+\-- person shobhit:
+name: Shobhit Sharma
+bio: or we can put things in "header"
+
+-- ds.markdown:
+
+If something is specified as `body`, it can come in the "body" location, eg in
+case of `amitu` var, or it can come as an explicit key, as in the declaration of
+`shobhit` variable.
+
+
+
+-- cbox.info: Passing other types in `body` area
+
+By default `body` is alias for `string` but if you want to pass
+types other than `string` you can do the following:
+
+	-- ds.code: record with body as integer
+	lang: ftd
+	
+	\-- record marks:
+	body integer number:
+	
+-- end: cbox.info
+
+-- ds.h2: `caption or body`
+
+`caption or body` is a special type, it is an alias for `string`, but can not be
+used when declaring a variable.
+
+This type is used for `record`, `or-type` and `component` arguments.
+
+If a `record` or `or-type` field, or `component` argument is defined as `caption
+or body`, it can be passed in either the "caption" or "body" location in
+[`ftd::p1` "section"](ftd/p1-grammar/#section-caption).
+
+-- ds.code: record with caption or body
+lang: ftd
+
+\-- record person:
+caption or body name:
+
+\-- person amitu: Amit Upadhyay
+
+\-- person shobhit:
+name: Shobhit Sharma
+
+\-- person abrar:
+
+Abrar Khan
+
+-- ds.markdown:
+
+If something is specified as `caption or body`, it can come in the "caption"
+location, eg in case of `amitu` var, or it can come as an explicit key, as in
+the declaration of `shobhit` variable, or in "body" location, eg for `abrar`.
+
+
+-- cbox.info: Passing other types in `caption or body` area
+
+By default `caption or body` is alias for `string` but if you want to pass
+types other than `string` you can do the following:
+
+	-- ds.code: record with body as integer
+	lang: ftd
+	
+	\-- record marks:
+	caption or body integer number:
+	
+-- end: cbox.info
+
+
+-- ds.h2: `ftd.ui`
+
+`ftd.ui` is a data type in the `fastn` language that represents a user
+interface component.
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.ui list uis:
+\-- ftd.text: Hello
+\-- end: uis
+
+\-- uis.0:
+
+-- ds.markdown:
+
+In this example, we create a list of UI components called `uis`, which contains
+a single component of type `ftd.text` with text property value as `Hello`.
+
+`-- uis.0:` will display the first item in the `uis` list,
+
+-- ds.output:
+	-- uis.0:
+-- end: ds.output
+
+
+-- ds.h2: `ftd.color-scheme`
+
+`ftd.color-scheme` can be passed to `ftd.document`, `ftd.row` or `ftd.column`
+components, and is inherited by children. Anywhere you can use
+`$inherited.colors` variable of type `ftd.color-scheme` to access colors.
+
+Checkout [using color-schemes](/use-cs/) to learn more about how to use colors
+properly.
+
+-- ds.code: `ftd.color-scheme`
+lang: ftd
+
+\-- record color-scheme:
+ftd.background-colors background:
+ftd.color border:
+ftd.color border-strong:
+ftd.color text:
+ftd.color text-strong:
+ftd.color shadow:
+ftd.color scrim:
+ftd.cta-colors cta-primary:
+ftd.cta-colors cta-secondary:
+ftd.cta-colors cta-tertiary:
+ftd.cta-colors cta-danger:
+ftd.pst accent:
+ftd.btb error:
+ftd.btb success:
+ftd.btb info:
+ftd.btb warning:
+ftd.custom-colors custom:
+
+-- ds.code: `ftd.background-colors`
+lang: ftd
+
+\-- record background-colors:
+ftd.color base:
+ftd.color step-1:
+ftd.color step-2:
+ftd.color overlay:
+ftd.color code:
+
+-- ds.code: `ftd.cta-colors`
+lang: ftd
+
+\-- record cta-colors:
+ftd.color base:
+ftd.color hover:
+ftd.color pressed:
+ftd.color disabled:
+ftd.color focused:
+ftd.color border:
+ftd.color text:
+
+-- ds.code: `ftd.pst`
+lang: ftd
+
+\-- record pst:
+ftd.color primary:
+ftd.color secondary:
+ftd.color tertiary:
+
+-- ds.code: `ftd.btb`
+lang: ftd
+
+\-- record btb:
+ftd.color base:
+ftd.color text:
+ftd.color border:
+
+-- ds.code: `ftd.custom`
+lang: ftd
+
+\-- record custom:
+ftd.color one:
+ftd.color two:
+ftd.color three:
+ftd.color four:
+ftd.color five:
+ftd.color six:
+ftd.color seven:
+ftd.color eight:
+ftd.color nine:
+ftd.color ten:
+
+-- ds.h2: `children`
+
+`children` is a special type, it is an alias for `ftd.ui list`, but can not be
+used when declaring a variable.
+
+This type is used for `record`, `or-type` and `component` arguments.
+
+If a `record` or `or-type` field, or `component` argument is defined as
+`children`, it can be passed in "subsection" location in [`ftd::p1`
+"section"](ftd/p1-grammar/#sub-section).
+
+
+-- ds.code:
+lang: ftd
+
+\;; First `foo` invocation
+\-- foo:
+\-- ftd.text: I love `ftd`!
+\-- end: foo
+
+
+\;; Second `foo` invocation
+\-- foo:
+
+\-- foo.foo-uis:
+\-- ftd.text: I love `ftd`!
+\-- end: foo.foo-uis
+
+\-- end: foo
+
+\;; Third `foo` invocation
+\-- foo:
+foo-uis: $uis
+
+
+\;; `foo` declaration
+\-- component foo:
+children foo-uis:
+
+\-- ftd.column:
+background.solid: yellow
+children: $foo.foo-uis
+
+\-- end: ftd.column
+
+\-- end: foo
+
+
+-- ds.markdown:
+
+If argument is specified as `children`, it can come in the “subsection”
+location, eg in case of first `foo` component invocation, or it can come as an
+explicit key, as in the second and third `foo` component invocation.
+
+
+-- ds.h1: Derived Types
+
+
+Derived types are more complex and are built using primitive types or other
+derived types. Derived types comes in two types: [`record`](ftd/record/) and
+[`or-type`](ftd/or-type/).
+
+
+
+-- ds.h2: `ftd.linear-gradient`
+
+`ftd.linear-gradient` is a record. It accepts two values as fields: `direction`
+of type [`ftd.linear-gradient-directions`](/built-in-types#ftd-linear-gradient-directions)
+and `colors` as list of `string` type.
+
+-- ds.code: `ftd.linear-gradient`
+lang: ftd
+
+\-- record linear-gradient:
+ftd.linear-gradient-directions direction: bottom
+ftd.linear-gradient-color list colors:
+
+-- ds.markdown:
+
+- `direction`: This field defines the direction of gradient line. It takes
+value of type [`ftd.linear-gradient-directions`](/built-in-types#ftd-linear-gradient-directions)
+and is optional. By default, it takes `bottom`.
+
+- `colors`: This field takes a list of
+[`ftd.linear-gradient-color`](/built-in-types#ftd-linear-gradient-color)
+which defines the colors used in the gradient.
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.breakpoint-width-data`
+
+`ftd.breakpoint-width-data` is a record. It accepts one value as caption which
+is mobile breakpoint width.
+
+-- ds.code: `ftd.breakpoint-width-data`
+lang: ftd
+
+\-- record breakpoint-width-data:
+caption integer mobile:
+
+-- ds.markdown:
+
+- `mobile`: This field defines the mobile breakpoint width under which the
+device would be considered mobile otherwise desktop.
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.linear-gradient-color`
+
+`ftd.linear-gradient-color` is a record. It accepts several values as fields
+as mentioned below.
+
+-- ds.code: `ftd.linear-gradient-color`
+lang: ftd
+
+\-- record linear-gradient-color:
+caption ftd.color color:
+optional ftd.length start:
+optional ftd.length end:
+optional ftd.length stop-position:
+
+-- ds.markdown:
+
+- `color`: This field takes the color value of type
+[`ftd.color`](/built-in-types#ftd-color) and is of caption type.
+
+- `start`: This field defines start position of the color and takes value
+of type [`ftd.length`](/built-in-types#ftd-length) and is optional.
+
+- `end`: This field defines the color end position and takes value
+of type [`ftd.length`](/built-in-types#ftd-length) and is optional.
+
+- `stop-position`: This field defines the color stop position from where the
+gradient mid occurs and takes value of type
+[`ftd.length`](/built-in-types#ftd-length) and is optional.
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.linear-gradient-directions`
+
+`ftd.linear-gradient-directions` is an or-type. It can be angle, turn or any
+directional constant as shown below.
+
+-- ds.code: `ftd.linear-gradient-directions`
+lang: ftd
+
+\-- or-type linear-gradient-directions:
+
+\-- ftd.decimal angle:
+\-- ftd.decimal turn:
+\-- constant string left: left
+\-- constant string right: right
+\-- constant string top: top
+\-- constant string bottom: bottom
+\-- constant string top-left: top-left
+\-- constant string top-right: top-right
+\-- constant string bottom-left: bottom-left
+\-- constant string bottom-right: bottom-right
+
+\-- end: linear-gradient-directions
+
+-- ds.markdown:
+
+As shown above, the `ftd.linear-gradient-directions` has following variants:
+
+- `angle`: This value will set the gradient direction to the specified angle.
+It takes value of type `ftd.decimal`.
+
+- `turn`: This value sets the gradient direction by turning the gradient line
+to the value specified. It takes value of type `ftd.decimal`.
+
+- `left`: This value sets the gradient direction to left.
+
+- `right`: This value sets the gradient direction to right.
+
+- `top`: This value sets the gradient direction to top.
+
+- `bottom`: This value sets the gradient direction to bottom.
+
+- `top-left`: This value sets the gradient direction to top-left.
+
+- `bottom-left`: This value sets the gradient direction to bottom-left.
+
+- `top-right`: This value sets the gradient direction to top-right.
+
+- `top-left`: This value sets the gradient direction to top-left.
+
+
+
+-- ds.h2: `ftd.background`
+
+`ftd.background` is an `or-type`. It accepts either solid color of type
+`ftd.color` or an image of type `ftd.background-image`.
+
+-- ds.code: `ftd.background`
+lang: ftd
+
+\-- or-type background:
+
+\-- ftd.color solid:
+\-- ftd.background-image image:
+\-- ftd.linear-gradient linear-gradient:
+
+\-- end: background
+
+-- ds.markdown:
+
+As shown above, the `ftd.background` has following variants:
+
+- `solid`: This value will set the specified solid color as the background.
+It takes value of type `ftd.color`.
+
+- `image`: This value will set the specified image as the background image
+It takes value of type `ftd.background-image`.
+
+- `linear-gradient`: This value will set the specified linear gradient as the
+background. It takes value of type `ftd.linear-gradient`.
+
+
+
+
+
+-- ds.h2: `ftd.background-image`
+
+It is record type with the following fields.
+
+-- ds.code: `ftd.background-image` record
+lang: ftd
+
+\-- record background-image:
+caption ftd.image-src src:
+optional ftd.background-repeat repeat:
+optional ftd.background-position position:
+optional ftd.background-size size:
+
+-- ds.markdown:
+
+- `src`: This field of `ftd.background-image` stores the source of image to be displayed in
+both light and dark modes.
+
+- `repeat`: This field specifies whether the image needs to be repeated or not.
+It takes `ftd.background-repeat` value and is optional. By default, the background
+image will be repeated in both directions.
+
+- `size`: This field specifies the size of the background image which will be displayed.
+It takes `ftd.background-size` value and is optional.
+
+- `position`: This field specifies the position of the background image. It takes
+`ftd.background-position` value and is optional. By default, the background image
+will be shown at the top-left position.
+
+
+
+
+
+
+-- ds.h2: `ftd.background-repeat`
+
+The `ftd.background-repeat` property is used to specify how background
+images are repeated. It is an `or-type` which is used with
+`ftd.background-image` and is optional under it.
+
+-- ds.code: `ftd.background-repeat`
+lang: ftd
+
+\-- or-type background-repeat:
+
+\-- constant string repeat: repeat
+\-- constant string repeat-x: repeat-x
+\-- constant string repeat-y: repeat-y
+\-- constant string no-repeat: no-repeat
+\-- constant string space: space
+\-- constant string round: round
+
+\-- end: background-repeat
+
+-- ds.markdown:
+
+As shown above, the `ftd.background-repeat` has following variants:
+
+- `repeat`: This value will make the background image repeat as much as possible in both
+directions to cover the whole container area. The last image will be clipped
+if it doesn't fit as per container dimensions.
+
+- `repeat-x`: This value will show similar behaviour as `repeat` except the fact that
+the images will be repeated only in x-direction (horizontal direction) and the
+last image will be clipped if it doesnt fit within the container area.
+
+- `repeat-y`: This value will show similar behaviour as `repeat` except the fact that
+the images will be repeated only in y-direction (vertical direction) and the last image will be clipped if
+it doesnt fit within the container area.
+
+- `no-repeat`: This value will make the image not repeat itself in any direction
+and hence container area might not get entirely covered in case if the container
+area is larger than the image itself.
+
+- `space`: This value will make the image repeat itself in both directions just like
+`repeat` except the fact that the last images wont be clipped and whitespace will be
+evenly distributed between the images. The only case where clipping will happen when
+there is not enough space for a single image.
+
+- `round`: This value will make the background image repeat itself
+and then are either squished or stretched to fill up the container space
+leaving no gaps.
+
+
+
+
+
+
+
+-- ds.h2: `ftd.background-position`
+
+The `ftd.background-position` property is used to specify the
+positioning of the background image. It is an `or-type` which is used with
+`ftd.background-image` and is optional under it.
+
+-- ds.code: `ftd.background-position`
+lang: ftd
+
+\-- or-type background-position:
+
+\-- constant string left: left
+\-- constant string center: center
+\-- constant string bottom: bottom
+\-- constant string left-top: left-top
+\-- constant string left-center: left-center
+\-- constant string left-bottom: left-bottom
+\-- constant string center-top: center-top
+\-- constant string center-center: center-center
+\-- constant string center-bottom: center-bottom
+\-- constant string right-top: right-top
+\-- constant string right-center: right-center
+\-- constant string right-bottom: right-bottom
+
+\-- anonymous record length:
+
+\-- ftd.length x:
+\-- ftd.length y:
+
+\-- end: length
+
+\-- end: background-position
+
+-- ds.markdown:
+
+As shown above, the `ftd.background-position` has following variants:
+
+- `left`- Positions the image to the left of the container.
+- `center`- Positions the image to the center of the container.
+- `right`- Positions the image to the right of the container.
+- `left-top` - Positions the image to the left in horizontal direction
+and top along the vertical direction of the container.
+- `left-center` - Positions the image to the left in horizontal direction
+and center along the vertical direction of the container.
+- `left-bottom` - Positions the image to the left in horizontal direction
+and bottom along the vertical direction of the container.
+- `center-top` - Positions the image to the center in horizontal direction
+and top along the vertical direction of the container.
+- `center-center` - Positions the image to the center in horizontal direction
+and center along the vertical direction of the container.
+- `center-bottom` - Positions the image to the center in horizontal direction
+and bottom along the vertical direction of the container.
+- `right-top` - Positions the image to the right in horizontal direction
+and top along the vertical direction of the container.
+- `right-center` - Positions the image to the right in horizontal direction
+and center along the vertical direction of the container.
+- `right-bottom` - Positions the image to the right in horizontal direction
+and bottom along the vertical direction of the container.
+- `length` - This anonymous record value will set the position value
+based on the specified x and y values.
+
+
+
+
+
+
+-- ds.h2: `ftd.background-size`
+
+The `ftd.background-size` property is used to specify the
+dimensions of the background image. It is an `or-type` which is used with
+`ftd.background-image` and is optional under it.
+
+-- ds.code: `ftd.background-size`
+lang: ftd
+
+\-- or-type background-size:
+
+\-- constant string auto: auto
+\-- constant string cover: cover
+\-- constant string contain: contain
+
+\-- anonymous record length:
+
+\-- ftd.length x:
+\-- ftd.length y:
+
+\-- end: length
+
+\-- end: background-size
+
+-- ds.markdown:
+
+As shown above, the `ftd.background-size` has following variants:
+
+- `auto`: This value will scale the background image
+in the corresponding directions while maintaining the intrinsic proportions
+of the specified image.
+
+- `cover`: This value will scale the image to the smallest possible size
+to fill the container area leaving no empty space while preserving its ratio.
+Image will be cropped for either direction if the container dimensions differ
+from the image dimensions.
+
+- `contain`: This value will scale the background image as large as possible
+within its container area without cropping or stretching the image.
+
+- `length`: This anonymous record value will set the dimensions of the
+background image based on the specified x and y values.
+
+
+
+
+
+
+-- ds.h2: `ftd.fetch-priority`
+
+The `ftd.fetch-priority` property is used to specify the priority of the image.
+
+-- ds.code: `ftd.fetch-priority`
+lang: ftd
+
+\-- or-type fetch-priority:
+
+\-- constant string high: high
+\-- constant string low: low
+
+\-- end: fetch-priority
+
+-- ds.markdown:
+
+As shown above, the `ftd.fetch-priority` has following variants
+
+- `high`: Fetch the image at a high priority relative to other images.
+
+- `low`: Fetch the image at a low priority relative to other images.
+
+
+
+
+
+
+-- ds.h2: `ftd.color`
+
+It is record type with the following fields.
+
+-- ds.code: `ftd.color` record (ftd.ftd)
+lang: ftd
+
+\-- record color:
+caption light:
+string dark: $color.light
+
+-- ds.markdown:
+
+The `light` field of `ftd.color` stores the color to be displayed in
+light mode, while the `dark` field stores the color to be displayed in dark
+mode. If the `dark` field is not provided, the `light` field's value is used as
+a default.
+
+-- ds.h3: Example Usage
+
+Consider the following example:
+
+-- ds.code: Two colors
+lang: ftd
+
+\-- ftd.color red-orange:
+light: red
+dark: orange
+
+-- ds.markdown:
+
+This would return `red` color in light mode and `orange` color in dark mode.
+
+It is also possible to use `ftd.color` with only one field. For example:
+
+-- ds.code: One color
+lang: ftd
+
+\-- ftd.color just-red:
+light: red
+
+\;; or
+
+\-- ftd.color just-red: red
+
+-- ds.markdown:
+
+This would return `red` color in both light mode and dark mode.
+
+-- ds.h3: Using `ftd.color` in component property
+
+Lets look at example of using `ftd.color` type variable.
+
+-- ds.code: Two colors
+lang: ftd
+
+\-- ftd.color red-orange:
+light: red
+dark: orange
+
+\-- ftd.text: Switch your color mode (light/dark)
+color: $red-orange
+
+
+-- ds.markdown:
+
+In this example, the `ftd.text` component will display color of text specified
+in `red-orange` variable, based on the current color mode.
+
+The output will look like this. Switch your color mode (light/dark) to see the
+wonder!
+
+-- ds.output:
+
+	-- ftd.text: Switch your device mode (light/dark)
+	color: $red-orange
+	
+-- end: ds.output
+
+
+
+-- ds.h3: Supported Color Formats
+
+The value of `light` and `dark` can be any string supported by [CSS3 Color
+spec](https://www.w3.org/TR/css-color-3/).
+
+Along with CSS3 colors we also support 8 digit RGBA format (eg `#RRGGBBAA`) from
+[CSS Color Module Level 4](https://www.w3.org/TR/css-color-4/).
+
+
+
+
+
+
+
+-- ds.h2: `ftd.image-src`
+
+`ftd.image-src` is a record type used to store image URLs for both light and
+dark mode. This record is a type for the [`src`](ftd/image/#src-ftd-image-src)
+property of [`ftd.image`](ftd/image/) component.
+
+The record structure of `ftd.image-src` is as follows:
+
+-- ds.code: `ftd.image-src` record (ftd.ftd)
+lang: ftd
+
+\-- record image-src:
+caption light:
+string dark: $image-src.light
+
+
+-- ds.markdown:
+
+The `light` field of `ftd.image-src` stores the image URL to be displayed in
+light mode, while the `dark` field stores the image URL to be displayed in dark
+mode. If the `dark` field is not provided, the `light` field's value is used as
+a default.
+
+-- ds.h3: Example Usage
+
+Consider the following example:
+
+-- ds.code: Two images
+lang: ftd
+
+\-- ftd.image-src my-images:
+light: https://fastn.com/-/fastn.com/images/fastn.svg
+dark: https://fastn.com/-/fastn.com/images/fastn-dark.svg
+
+-- ds.markdown:
+
+In this example, the image URL `https://fastn.com/-/fastn.com/images/fastn.svg` is
+returned in light mode, while `https://fastn.com/-/fastn.com/images/fastn-dark.svg`
+is returned in dark mode.
+
+It is also possible to use `ftd.image-src` with only one field. For example:
+
+-- ds.code: One image
+lang: ftd
+
+\-- ftd.image-src just-light:
+light: https://fastn.com/-/fastn.com/images/fastn.svg
+
+\;; or
+
+\-- ftd.image-src just-light: https://fastn.com/-/fastn.com/images/fastn.svg
+
+-- ds.markdown:
+
+In this case, the same image URL `https://fastn.com/-/fastn.com/images/fastn.svg`
+is returned in both light and dark modes.
+
+
+
+-- ds.h3: Supported image formats
+
+The HTML standard doesn't list what image formats to support, so
+[user agents](https://developer.mozilla.org/en-US/docs/Glossary/User_agent) may
+support different formats.
+
+To get the comprehensive information about image formats and their web browser
+support, check the [Image file type and format
+guide](https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.resizing`
+
+The `ftd.resizing` property is used to control the dimensions of an element. It
+is an `or-type`. The `ftd.resizing` property is commonly used for component
+properties such as `width`, `height`, `min-width`, `max-width`, `min-height` and
+`max-height`.
+
+-- ds.code: `ftd.resizing`
+lang: ftd
+
+\-- or-type resizing:
+
+\-- constant string fill-container: fill-container
+\-- constant string hug-content: hug-content
+\-- constant string auto: auto
+\-- ftd.length fixed:
+
+\-- end: resizing
+
+-- ds.markdown:
+
+As shown above, the `ftd.resizing` has following variants:
+
+- `fixed`: The `fixed` variant of `ftd.resizing` is used to give a fixed
+  [length](/built-in-types/#ftd-length) to an element. For example,
+  `width.fixed.px: 100` sets the width of an element to be 100 pixels. This
+  variant is useful when a specific size is required for an element, regardless
+  of the size of its parent or contents.
+
+- `hug-content`:  The `hug-content` variant of `ftd.resizing` is used to
+  dynamically resize the container element to be as small as possible while
+  still surrounding its contents. This variant is useful when you want the size
+  of the container element to match the size of its contents.
+
+- `fill-container`: The `fill-container` variant of `ftd.resizing` is used to
+  stretch the element to the width and/or height of its parent element. This
+  variant is useful when you want an element to fill the entire space of its
+  parent container.
+
+- `auto`:  The `auto` variant of `ftd.resizing` allows the browser to calculate
+  and select a width for the specified element. This variant is useful when you
+  want the element to size itself automatically based on its contents or other
+  factors.
+
+
+-- ds.h3: Example Usage of `ftd.resizing`
+
+-- ds.code: Example Usage of `ftd.resizing`
+lang: ftd
+
+\-- ftd.text: Hello
+width: fill-container
+height: auto
+max-width.fixed.px: 300
+min-width: hug-content
+
+
+-- ds.markdown:
+
+In the above example, the `ftd.text` component has a `width` stretches to the
+width of its parent container, a `height` calculated and set by browser
+automatically based on its contents or other factors, `max-width` sets to be 300
+pixels and `min-width` dynamically resizes to be as small as possible while
+still surrounding its contents.
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.length`
+
+The `ftd.length` type is used for passing UI dimensions and is an `or-type`,
+meaning it can take on different variants.
+
+
+-- ds.code: `ftd.length`
+lang: ftd
+
+\-- or-type length:
+
+\-- integer px:
+\-- decimal percent:
+\-- string calc:
+\-- integer vh:
+\-- integer vw:
+\-- integer vmin:
+\-- integer vmax:
+\-- decimal dvh:
+\-- decimal lvh:
+\-- decimal svh:
+\-- decimal em:
+\-- decimal rem:
+\-- ftd.responsive-length responsive:
+
+\-- end: length
+
+\-- record responsive-length:
+ftd.length desktop:
+ftd.length mobile: $responsive-length.desktop
+
+-- ds.markdown:
+
+As shown above, the `ftd.length` has following variants:
+
+- `px`: This variant gives an integer value followed by the px unit of space.
+For example, `padding.px: 100` sets the padding to be 100 pixels.
+
+- `percent`: This variant gives an integer value followed by the % unit of space.
+For example, `width.fixed.percent: 50` sets the width to be 50% of the parent
+element's width.
+
+- `calc`: This variant takes a single expression as its parameter, and its
+result is used as the value. For example, `padding.calc: 100% - 80px` sets the
+padding to be the result of the expression `100% - 80px`.
+
+- `vh`: This variant sets the value relative to 1% of the height of the viewport.
+For example, `height.fixed.vh: 50` sets the height to be 50% of the viewport's
+height.
+
+- `vw`: This variant sets the value relative to 1% of the width of the viewport.
+For example, `width.fixed.vw: 25` sets the width to be 25% of the viewport's
+width.
+
+- `vmin`: This variant sets the value relative to the smaller dimension between the width and height of the viewport.
+For example, width.fixed.vmin: 25 sets the width to be 25% of the smaller dimension.
+
+- `vmax`: This variant sets the value relative to the larger dimension between the width and height of the viewport.
+For example, width.fixed.vmax: 25 sets the width to be 25% of the larger dimension.
+
+- `dvh`:  This variant sets the value relative to the dynamic viewport height , when the area of "web content" get changed.
+For example, width.fixed.dvh: 25 sets the height to be 25% of the dynmaically changing viewport height.
+
+- `lvh`:  This variant sets the value relative to the large viewport height.
+For example, width.fixed.lvh: 25 sets the height to be 25% of the larger viewport height.
+
+- `svh`:  This variant sets the value relative to the large viewport height.
+For example, width.fixed.svh: 25 sets the height to be 25% of the smaller viewport height.
+
+- `em`: This variant sets the value relative to the size of the parent
+element, in the case of typographical properties like `font-size`, and the font
+size of the element itself, in the case of other properties like width.
+
+- `rem`: This variant sets the value relative to the size of the root
+element.
+
+
+Besides these, there is a special variant named `responsive`.This variant is of
+record type named `ftd.responsive-length`. It helps to give different length for
+different devices (mobile/desktop). It has two fields, `desktop` and `mobile`,
+which are `ftd.length` types. The `desktop` field specifies the value of the
+length on desktop devices, while the `mobile` field specifies the value on
+mobile devices.
+
+[Learn more about these length units based on viewport on MDN](https://developer.mozimlla.org/en-US/docs/Web/CSS/length#relative_length_units_based_on_viewport).
+
+For example,
+
+-- ds.code: `responsive`
+lang: ftd
+
+\-- ftd.responsive-length p:
+desktop.px: 20
+mobile.percent: 10
+
+\-- ftd.text: Hello
+padding.responsive: $p
+background.solid: $inherited.colors.background.step-1
+color: $inherited.colors.text
+border-width.px: 1
+border-color: $inherited.colors.border
+
+-- ds.output:
+
+	-- ftd.text: Hello
+	padding.responsive: $p
+	background.solid: $inherited.colors.background.step-1
+	color: $inherited.colors.text
+	border-width.px: 1
+	border-color: $inherited.colors.border
+	
+-- end: ds.output
+
+
+-- ds.markdown:
+
+The above code sets the padding to be 20 pixels on desktop devices and 10
+percent on mobile devices.
+
+Note that the `calc` variant can be used with any of the other variants to
+perform calculations on the values.
+
+-- ds.h3: Example Usage of `ftd.length`
+
+-- ds.code: Example Usage of `ftd.length`
+lang: ftd
+
+\-- ftd.text: Hello
+width.fixed.percent: 50
+height.fixed.px: 300
+margin.rem: 2
+padding.calc: 100% - 80px
+
+-- ds.markdown:
+
+In the above example, the `ftd.text` component has a width of 50% of its parent
+element's width, a fixed height of 300 pixels, a margin of 2 times the font size
+of the root element, and a padding calculated using the expression 100% - 80px.
+
+
+
+
+
+
+
+-- ds.h2: `ftd.length-pair`
+
+`ftd.length-pair` is used to store two lengths, `.x` and `.y`, usually used
+for representing screen coordinates.
+
+-- ds.code:
+lang: ftd
+
+\-- record length-pair:
+ftd.length x:
+ftd.length y:
+
+
+
+
+-- ds.h2: `ftd.type`
+
+`ftd.type` is a `record`. It is not a direct type for any component property, but
+it has a derived type [`ftd.responsive-type`](/built-in-types#ftd-responsive-type)
+which is a type `role`, a common property for component. It specifies the
+typography of the element.
+
+-- ds.code: `type` record (ftd.ftd)
+lang: ftd
+
+\-- record type:
+optional ftd.font-size size:
+optional ftd.font-size line-height:
+optional ftd.font-size letter-spacing:
+optional integer weight:
+optional string font-family:
+
+-- ds.markdown:
+
+It defines the line-height, size, weight, font-family and letter-spacing.
+
+-- ds.h3: `line-height`
+
+The `line-height` field sets the height of a line box. It's commonly
+used to set the distance between lines of text.
+
+-- ds.h3: `size`
+
+The `size` field sets the size of the font.
+
+-- ds.h3: `weight`
+
+The `weight` property sets the weight (or boldness) of the font. The
+weights available depend on the `font-family` that is currently set.
+
+-- ds.h3: `font-family`
+
+The `font-family` property specifies a font family name and/or generic family
+name for the selected element.
+
+-- ds.h3: `letter-spacing`
+
+The `letter-spacing` sets the horizontal spacing behavior between text
+characters. This value is added to the natural spacing between characters
+while rendering the text. Positive values of letter-spacing causes
+characters to spread farther apart, while negative values of letter-spacing
+bring characters closer together.
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.type dtype:
+size.px: 40
+weight: 700
+font-family: cursive
+line-height.px: 65
+letter-spacing.px: 5
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.responsive-type`
+
+`ftd.responsive-type` is a record. It is a type for `role` property, a common
+property for component. It specifies the responsive typography of an element
+using fields for `desktop` and `mobile`, which are of type
+[`ftd.type`](/built-in-types#ftd-type).
+
+
+-- ds.code: `ftd.responsive-type`
+lang: ftd
+
+\-- record responsive-type:
+caption ftd.type desktop:
+ftd.type mobile: $responsive-type.desktop
+
+
+-- ds.markdown:
+
+As shown above, the `ftd.responsive-type` has following fields:
+
+- `desktop`: An optional `ftd.type` field that specifies the typography of the
+  element on desktop screens.
+- `mobile`: An optional `ftd.type` field that specifies the typography of the
+  element on mobile screens. If this field is not specified, the `desktop` value
+  will be used as the default for mobile screens.
+
+
+
+-- ds.h3: Example Usage
+
+Lets understand this with an example.
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.type desktop-type:
+size.px: 40
+weight: 900
+font-family: cursive
+line-height.px: 65
+letter-spacing.px: 5
+
+\-- ftd.type mobile-type:
+size.px: 20
+weight: 100
+font-family: fantasy
+line-height.px: 35
+letter-spacing.px: 3
+
+\-- ftd.responsive-type responsive-typography:
+desktop: $desktop-type
+mobile: $mobile-type
+
+\-- ftd.text: Hello World
+role: $responsive-typography
+
+
+
+-- ds.markdown:
+
+In this example, we define two `ftd.type` type variables, `desktop-type` and
+`mobile-type`, which specify the typography for desktop and mobile screens
+respectively. We then define an `ftd.responsive-type` type variable
+`responsive-typography`, which specifies the responsive typography for the
+element. Finally, we set the `role` property of an `ftd.text` component to
+`responsive-typography`.
+
+When the device is switched between desktop and mobile views, the font size,
+font weight, font family, line height, and letter spacing of the text changes
+based on the specified values for the current device.
+
+Check the below output in different devices.
+
+-- ds.output:
+
+	-- ftd.text: Hello World
+	role: $rtype
+	color: $inherited.colors.text
+	
+-- end: ds.output
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.align-self`
+
+`ftd.align-self` is an `or-type`. It is a type for `align-self` property, a
+common property for component. It specifies the alignment of an element within
+its container in the block direction, i.e., the direction perpendicular to the
+main axis.
+
+-- ds.code: `ftd.align-self`
+lang: ftd
+
+\-- or-type align-self:
+
+\-- constant string start: start
+\-- constant string center: center
+\-- constant string end: end
+
+\-- end: align-self
+
+-- ds.markdown:
+
+As shown above, the `ftd.align-self` has following variants:
+
+- `start`: The element is positioned at the beginning of the container
+- `center`: The element is positioned at the center of the container
+- `end`: The element is positioned at the end of the container
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.align`
+
+`ftd.align` is an `or-type`. It is a type for the `align-content` property, a
+property for container-type components. It specifies the alignment of items in
+the container component along both the horizontal and vertical axes.
+
+
+-- ds.code: `ftd.align`
+lang: ftd
+
+\-- or-type align:
+
+\-- constant string top-left: top-left
+\-- constant string top-center: top-center
+\-- constant string top-right: top-right
+\-- constant string right: right
+\-- constant string left: left
+\-- constant string center: center
+\-- constant string bottom-left: bottom-left
+\-- constant string bottom-center: bottom-center
+\-- constant string bottom-right: bottom-right
+
+\-- end: align
+
+
+-- ds.markdown:
+
+As shown above, the `ftd.align` has following variants:
+
+- `top-left`: Aligns items to the top-left corner of the container.
+- `top-center`: Aligns items to the top-center of the container.
+- `top-right`: Aligns items to the top-right corner of the container.
+- `right`: Aligns items to the right side of the container.
+- `left`: Aligns items to the left side of the container.
+- `center`: Centers items both horizontally and vertically within the container.
+- `bottom-left`: Aligns items to the bottom-left corner of the container.
+- `bottom-center`: Aligns items to the bottom-center of the container.
+- `bottom-right`: Aligns items to the bottom-right corner of the container.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.text-align`
+
+`ftd.text-align` is an `or-type`. It is a type for
+[`text-align`](ftd/text/#text-align-optional-ftd-text-align) property, a
+common property for component. It specifies the horizontal alignment of text
+within an element.
+
+
+-- ds.code: `ftd.text-align`
+lang: ftd
+
+\-- or-type text-align:
+
+\-- constant string start: start
+\-- constant string center: center
+\-- constant string end: end
+\-- constant string justify: justify
+
+\-- end: text-align
+
+
+-- ds.markdown:
+
+As shown above, the `ftd.text-align` has following variants:
+
+- `start`: aligns text to the left edge of the element, which is the default
+  value.
+- `center`: centers text horizontally within the element.
+- `end`: aligns text to the right edge of the element.
+- `justify`: aligns text to both the left and right edges of the element,
+  creating additional space between words as necessary to fill the available
+  width.
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.spacing`
+
+`ftd.spacing` is an `or-type` that is used for the `spacing` property, a common
+property for container components. It determines the distribution of space
+between and around the container's items when they don't use all available space
+on the main-axis.
+
+
+-- ds.code: `ftd.spacing`
+lang: ftd
+
+\-- or-type spacing:
+
+\-- ftd.length fixed:
+\-- constant string space-between: space-between
+\-- constant string space-around: space-around
+\-- constant string space-evenly: space-evenly
+
+\-- end: spacing
+
+
+-- ds.markdown:
+
+As shown above, the `ftd.spacing` has following variants:
+
+
+- `fixed`: A fixed distance between each item, specified in a specific unit of
+  measurement, as given by [`ftd.length`](/built-in-types#ftd-length) such
+  as pixels, ems etc.
+
+- `space-between`: The space between items is evenly distributed. The first item
+  is at the start of the container and the last item is at the end of the
+  container, with any remaining space distributed equally between the items.
+
+- `space-around`: The space is distributed evenly around each item, with half
+  the space on either side of the item. This means that the space between the
+  first and last items and the container edges is half the space between the
+  items.
+
+- `space-evenly`: The space is distributed evenly between and around each item,
+  including the space between the first and last items and the container edges.
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.anchor`
+
+`ftd.anchor` is an `or-type`. It is a type for `anchor` property, a
+common property for component. It specifies the positioning of the element
+relative to its parent, ancestor, or the window.
+
+
+-- ds.code: `ftd.anchor`
+lang: ftd
+
+\-- or-type anchor:
+
+\-- constant string parent: absolute
+\-- constant string window: fixed
+\-- string id:
+
+\-- end: anchor
+
+
+-- ds.markdown:
+
+As shown above, the `ftd.anchor` has following variants:
+
+- `parent`: This specifies that the element is positioned relative to its
+  parent container.
+- `window`: This specifies that the element is positioned relative to the
+  browser window, and will not move even if the page is scrolled.
+- `id`: This specifies that the element is positioned relative to another
+ ancestor element with the given id.
+
+
+When using `anchor` property, component should also include an `offset`
+properties, like `top` or `bottom` and `left` or `right` which specifies the
+offset of the element from the anchor element. If not given, it takes the
+default offset as `top.px: 0` and `left.px: 0`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.resize`
+
+`ftd.resize` is an `or-type`. It is a type for `resize` property, a
+common property for component. It specifies whether an element is resizable and
+in which directions.
+
+
+-- ds.code: `ftd.resize`
+lang: ftd
+
+\-- or-type resize:
+
+\-- constant string both: both
+\-- constant string horizontal: horizontal
+\-- constant string vertical: vertical
+
+\-- end: resize
+
+
+-- ds.markdown:
+
+As shown above, the `ftd.resize` has following variants:
+
+- `both`: The element can be resized both horizontally and vertically.
+- `horizontal`: The element can only be resized horizontally.
+- `vertical`: The element can only be resized vertically.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.overflow`
+
+`ftd.overflow` is an `or-type`. It is a type for `overflow` property, a
+common property for component. It specifies whether to clip the content or to
+add scrollbars when the content of an element is too big to fit in the specified
+area.
+
+
+-- ds.code: `ftd.overflow`
+lang: ftd
+
+\-- or-type overflow:
+
+\-- constant string scroll: scroll
+\-- constant string visible: visible
+\-- constant string hidden: hidden
+\-- constant string auto: auto
+
+\-- end: overflow
+
+
+-- ds.markdown:
+
+
+As shown above, the `ftd.overflow` has following variants:
+
+- `visible` - Default. The overflow is not clipped. The content renders
+  outside the element's box
+- `hidden` - The overflow is clipped, and the rest of the content will be
+  invisible
+- `scroll` - The overflow is clipped, and a scrollbar is added to see the rest
+  of the content
+- `auto` - Similar to scroll, but it adds scrollbars only when necessary
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.cursor`
+
+`ftd.cursor` is an `or-type`. It is a type for `cursor` property, a
+common property for component. It specifies the mouse cursor to be displayed
+when pointing over an element.
+
+-- ds.code: `ftd.cursor`
+lang: ftd
+
+\-- or-type cursor:
+
+\-- constant string default: default
+\-- constant string none: none
+\-- constant string context-menu: context-menu
+\-- constant string help: help
+\-- constant string pointer: pointer
+\-- constant string progress: progress
+\-- constant string wait: wait
+\-- constant string cell: cell
+\-- constant string crosshair: crosshair
+\-- constant string text: text
+\-- constant string vertical-text: vertical-text
+\-- constant string alias: alias
+\-- constant string copy: copy
+\-- constant string move: move
+\-- constant string no-drop: no-drop
+\-- constant string not-allowed: not-allowed
+\-- constant string grab: grab
+\-- constant string grabbing: grabbing
+\-- constant string e-resize: e-resize
+\-- constant string n-resize: n-resize
+\-- constant string ne-resize: ne-resize
+\-- constant string nw-resize: nw-resize
+\-- constant string s-resize: s-resize
+\-- constant string se-resize: se-resize
+\-- constant string sw-resize: sw-resize
+\-- constant string w-resize: w-resize
+\-- constant string ew-resize: ew-resize
+\-- constant string ns-resize: ns-resize
+\-- constant string nesw-resize: nesw-resize
+\-- constant string nwse-resize: nwse-resize
+\-- constant string col-resize: col-resize
+\-- constant string row-resize: row-resize
+\-- constant string all-scroll: all-scroll
+\-- constant string zoom-in: zoom-in
+\-- constant string zoom-out: zoom-out
+
+\-- end: cursor
+
+
+-- ds.markdown:
+
+As shown above, the `ftd.cursor` has following variants:
+
+- `alias`: The cursor indicates an alias of something is to be created
+- `all-scroll`:The cursor indicates that something can be scrolled in any
+direction
+- `auto`: Default. The browser sets a cursor
+- `cell`: The cursor indicates that a cell (or set of cells) may be selected
+- `col-resize`: The cursor indicates that the column can be resized horizontally
+- `context-menu`: The cursor indicates that a context-menu is available
+- `copy`: The cursor indicates something is to be copied
+- `crosshair`: The cursor render as a crosshair
+- `default`: The default cursor
+- `e-resize`: The cursor indicates that an edge of a box is to be moved right
+(east)
+- `ew-resize`: Indicates a bidirectional resize cursor
+- `grab`: The cursor indicates that something can be grabbed
+- `grabbing`: The cursor indicates that something can be grabbed
+- `help`: The cursor indicates that help is available
+- `move`: The cursor indicates something is to be moved
+- `n-resize`: The cursor indicates that an edge of a box is to be moved up
+(north)
+- `ne-resize`: The cursor indicates that an edge of a box is to be moved up and
+right (north/east)
+- `nesw-resize`: Indicates a bidirectional resize cursor
+- `ns-resize`: Indicates a bidirectional resize cursor
+- `nw-resize`: The cursor indicates that an edge of a box is to be moved up and
+left (north/west)
+- `nwse-resize`: Indicates a bidirectional resize cursor
+- `no-drop`: The cursor indicates that the dragged item cannot be dropped here
+- `none`: No cursor is rendered for the element
+- `not-allowed`: The cursor indicates that the requested action will not be
+executed
+- `pointer`: The cursor is a pointer and indicates a link
+- `progress`: The cursor indicates that the program is busy (in progress)
+- `row-resize`: The cursor indicates that the row can be resized vertically
+- `s-resize`: The cursor indicates that an edge of a box is to be moved down
+(south)
+- `se-resize`: The cursor indicates that an edge of a box is to be moved down
+and right (south/east)
+- `sw-resize`: The cursor indicates that an edge of a box is to be moved down
+and left (south/west)
+- `text`: The cursor indicates text that may be selected
+- `vertical-text`: The cursor indicates vertical-text that may be selected
+- `w-resize`: The cursor indicates that an edge of a box is to be moved left
+(west)
+- `wait`: The cursor indicates that the program is busy
+- `zoom-in`: The cursor indicates that something can be zoomed in
+- `zoom-out`: The cursor indicates that something can be zoomed out
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.display`
+
+`ftd.display` is an `or-type`. It is a type for `display` property under
+text-attributes. It specifies the display behaviour of an element.
+
+-- ds.code: `ftd.display`
+lang: ftd
+
+\-- or-type display:
+
+\-- constant string block: block
+\-- constant string inline: inline
+\-- constant string inline-block: inline-block
+
+\-- end: display
+
+
+-- ds.markdown:
+
+As shown above, the `ftd.display` has following variants:
+
+- `block`: This value creates a rectangular box that takes up the full width
+available within its parent container and creates a new line after it.
+
+- `inline`: This value causes an element to flow with the text,
+allowing it to appear alongside other inline elements.
+It does not create a new line after it, and the width and height of the
+element are determined by its content.
+
+- `inline-block`: This value combines the features of both block and
+inline displays. It creates a rectangular box that takes up only the
+necessary width required by its content, but also allows for other
+elements to appear on the same line.
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.region`
+
+`ftd.region` is an `or-type`. It is a type for `region` property, a property for
+text component. This property is used to specify the level of section headings
+in a document. It also generate slug and set it as the id for text component.
+
+
+-- ds.code: `ftd.region`
+lang: ftd
+
+\-- or-type region:
+
+\-- constant string h1: h1
+\-- constant string h2: h2
+\-- constant string h3: h3
+\-- constant string h4: h4
+\-- constant string h5: h5
+\-- constant string h6: h6
+
+\-- end: region
+
+-- ds.markdown:
+
+As shown above, the `ftd.region` type includes six possible constant string
+values: `h1`, `h2`, `h3`, `h4`, `h5`, and `h6`. Each of these values represents
+a different level of section heading, with `h1` being the highest level and `h6`
+being the lowest.
+
+By using appropriate `ftd.region` variant, structured and semantically
+meaningful documents or webpages can be created. The generated slugs ensure that
+each section heading has an ID that can be used for linking or navigating
+within the document or webpage.
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.white-space`
+
+`ftd.white-space` is an `or-type`. It is a type for `white-space` property, a
+common property for component. It specifies how white-space inside an element
+is handled.
+
+
+-- ds.code: `ftd.white-space`
+lang: ftd
+
+\-- or-type white-space:
+
+\-- constant string normal: normal
+\-- constant string nowrap: nowrap
+\-- constant string pre: pre
+\-- constant string pre-wrap: pre-wrap
+\-- constant string pre-line: pre-line
+\-- constant string break-spaces: break-spaces
+
+\-- end: white-space
+
+
+-- ds.markdown:
+
+As shown above, the `ftd.white-space` has following variants:
+
+- `normal`: This value is the default behavior. Sequences of whitespace will
+collapse into a single whitespace. Text will wrap when necessary, and on line
+breaks.
+
+- `nowrap`: Sequences of whitespace will collapse into a single whitespace. Text
+will never wrap to the next line. The text continues on the same line until a
+line break or new line is encountered.
+
+- `pre`: This value preserves whitespace characters. Text will only wrap on line
+breaks.
+
+- `pre-line`: Sequences of whitespace will collapse into a single whitespace.
+Text will wrap when necessary, and on line breaks.
+
+- `pre-wrap`: This value preserves whitespace characters. Text will wrap when
+necessary, and on line breaks.
+
+
+By using these values, you can control how white-space characters are treated
+inside an element, allowing for more precise control over the layout and
+formatting of text content. For example, using `pre` or `pre-wrap` can be useful
+when displaying code snippets or other text that requires precise formatting,
+while `normal` or `pre-line` may be more appropriate for regular paragraphs or
+text blocks.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.type-data`
+
+`ftd.type-data` is a `record` type used to define typography data. It allows
+developers and designers to establish consistent and visually appealing
+typography styles throughout an application or website.
+
+
+-- ds.code: `ftd.type-data`
+lang: ftd
+
+\-- record type-data:
+ftd.responsive-type heading-large:
+ftd.responsive-type heading-medium:
+ftd.responsive-type heading-small:
+ftd.responsive-type heading-hero:
+ftd.responsive-type heading-tiny:
+ftd.responsive-type copy-small:
+ftd.responsive-type copy-regular:
+ftd.responsive-type copy-large:
+ftd.responsive-type fine-print:
+ftd.responsive-type blockquote:
+ftd.responsive-type source-code:
+ftd.responsive-type button-small:
+ftd.responsive-type button-medium:
+ftd.responsive-type button-large:
+ftd.responsive-type link:
+ftd.responsive-type label-large:
+ftd.responsive-type label-small:
+
+
+-- ds.markdown:
+
+As shown above, the `ftd.type-data` has following fields:
+
+-- ds.h3: `heading-large`:
+
+Represents a type of typography for large headings. It is typically used to
+display prominent and visually impactful headings in a document or user
+interface.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 50px
+- line-height: 65px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 36px
+- line-height: 54px
+- font-weight: 400
+
+
+
+-- ds.h3: `heading-medium`:
+
+Represents a type of typography for medium-sized headings.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 38px
+- line-height: 57px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 26px
+- line-height: 40px
+- font-weight: 400
+
+
+-- ds.h3: `heading-small`:
+
+Represents a type of typography for small headings.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 24px
+- line-height: 31px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 22px
+- line-height: 29px
+- font-weight: 400
+
+
+-- ds.h3: `heading-hero`:
+
+Represents a type of typography for tiny headings. It is typically used for very
+small and subtle headings or captions.
+
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 80px
+- line-height: 104px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 48px
+- line-height: 64px
+- font-weight: 400
+
+
+-- ds.h3: `heading-tiny`:
+
+Represents a type of typography for tiny headings. It is typically used for very
+small and subtle headings or captions.
+
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 20px
+- line-height: 26px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 18px
+- line-height: 24px
+- font-weight: 400
+
+
+
+
+-- ds.h3: `copy-small`:
+
+Represents a type of typography for small-sized body copy or text blocks. It is
+typically used for displaying concise paragraphs, descriptions, or other textual
+content.
+
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 14px
+- line-height: 24px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 12px
+- line-height: 16px
+- font-weight: 400
+
+
+-- ds.h3: `copy-regular`:
+
+Represents a type of typography for regular-sized body copy or text blocks. It
+is typically used for displaying standard paragraphs, descriptions, or other
+textual content.
+
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 18px
+- line-height: 30px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 16px
+- line-height: 24px
+- font-weight: 400
+
+
+
+-- ds.h3: `copy-large`:
+
+Represents a type of typography for large-sized body copy or text blocks. It is
+typically used for displaying important or emphasized paragraphs, descriptions,
+or other textual content.
+
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 22px
+- line-height: 34px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 18px
+- line-height: 28px
+- font-weight: 400
+
+
+-- ds.h3: `fine-print`:
+
+Represents a type of typography for fine print or small-sized text. It is
+typically used for displaying legal disclaimers, copyright information, or other
+supplementary text that requires smaller font size and reduced emphasis.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 12px
+- line-height: 16px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 12px
+- line-height: 16px
+- font-weight: 400
+
+
+-- ds.h3: `blockquote`:
+
+Represents a type of typography for blockquote text, which is a quoted section
+of text often used to highlight and emphasize external content or significant
+statements.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 16px
+- line-height: 21px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 16px
+- line-height: 21px
+- font-weight: 400
+
+
+-- ds.h3: `source-code`:
+
+Represents a type of typography for displaying source code or programming code
+snippets. It is typically used to present code examples, syntax highlighting,
+and improve code readability.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 18px
+- line-height: 30px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 16px
+- line-height: 21px
+- font-weight: 400
+
+
+-- ds.h3: `button-small`:
+
+Represents a type of typography for small-sized buttons. It is typically used
+for displaying buttons with compact dimensions, such as in navigation bars, form
+elements, or areas with limited space.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 14px
+- line-height: 19px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 14px
+- line-height: 19px
+- font-weight: 400
+
+-- ds.h3: `button-medium`:
+
+Represents a type of typography for medium-sized buttons. It is typically used
+for displaying buttons with a balanced size, suitable for various interactive
+elements and user interface components.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 16px
+- line-height: 21px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 16px
+- line-height: 21px
+- font-weight: 400
+
+-- ds.h3: `button-large`:
+
+Represents a type of typography for large-sized buttons. It is typically used
+for displaying buttons with a prominent and impactful design, suitable for
+important calls to action or primary interaction points.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 18px
+- line-height: 24px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 18px
+- line-height: 24px
+- font-weight: 400
+
+-- ds.h3: `button-large`:
+
+Represents a type of typography for large-sized buttons. It is typically used
+for displaying buttons with a prominent and impactful design, suitable for
+important calls to action or primary interaction points.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 18px
+- line-height: 24px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 18px
+- line-height: 24px
+- font-weight: 400
+
+-- ds.h3: `link`:
+
+Represents a type of typography for hyperlinks or clickable text. It is
+typically used for styling text that serves as a link to other web pages or
+resources.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 14px
+- line-height: 19px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 14px
+- line-height: 19px
+- font-weight: 400
+
+
+-- ds.h3: `label-large`:
+
+Represents a type of typography for large-sized labels. It is typically used for
+displaying labels or tags that require a larger size and visual prominence.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 14px
+- line-height: 19px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 14px
+- line-height: 19px
+- font-weight: 400
+
+-- ds.h3: `label-small`:
+
+Represents a type of typography for small-sized labels. It is typically used for
+displaying compact labels or tags that require a smaller size and subtle
+presentation.
+
+**Desktop**
+
+- font-family: sans-serif
+- font-size: 12px
+- line-height: 16px
+- font-weight: 400
+
+**Mobile**
+
+- font-family: sans-serif
+- font-size: 12px
+- line-height: 16px
+- font-weight: 400
+
+
+-- ds.h2: `ftd.text-transform`
+
+
+`ftd.text-transform` is an `or-type` that represents the different values for
+the `text-transform` property, which is a common property for components. This
+property specifies how to transform the capitalization of an element's text. It
+can be used to make text appear in all-uppercase or all-lowercase, or with each
+word capitalized.
+
+
+-- ds.code: `ftd.text-transform`
+lang: ftd
+
+\-- or-type text-transform:
+
+\-- constant string none: none
+\-- constant string capitalize: capitalize
+\-- constant string uppercase: uppercase
+\-- constant string lowercase: lowercase
+\-- constant string initial: initial
+\-- constant string inherit: inherit
+
+\-- end: text-transform
+
+
+-- ds.markdown:
+
+As shown above, the `ftd.text-transform` has following variants:
+
+
+- `none`: No capitalization. The text renders as it is. This is default
+- `capitalize`: Transforms the first character of each word to uppercase
+- `uppercase`: Transforms all characters to uppercase
+- `lowercase`: Transforms all characters to lowercase
+- `initial`: Sets this property to its default value.
+- `inherit`: Inherits this property from its parent element.
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.border-style`
+
+`ftd.border-style` is an `or-type` that defines the style of an element's four
+borders. It is a type for the `border-style` property, which is a common
+property used to set the style of an component's border.
+
+
+
+-- ds.code: `ftd.border-style`
+lang: ftd
+
+\-- or-type border-style:
+
+\-- constant string dotted: dotted
+\-- constant string dashed: dashed
+\-- constant string solid: solid
+\-- constant string double: double
+\-- constant string groove: groove
+\-- constant string ridge: ridge
+\-- constant string inset: inset
+\-- constant string outset: outset
+
+\-- end: border-style
+
+
+-- ds.markdown:
+
+As shown above, the `ftd.border-style` has following variants:
+
+- `dotted`: Specifies a dotted border. The border is a series of dots.
+
+- `dashed`: Specifies a dashed border. The border is made up of a series of dashes.
+
+- `solid`: Specifies a solid border. This is the default value.
+
+- `double`: Specifies a double border. The border is a double line, consisting
+  of two parallel lines.
+
+- `groove`: Specifies a 3D grooved border. The effect depends on the
+  border-color value. The border looks like it is carved into the page, with a
+  3D effect.
+
+- `ridge`: Specifies a 3D ridged border. The effect depends on the border-color
+  value. The border looks like it is popping out of the page, with a 3D effect.
+
+- `inset`: Specifies a 3D inset border. The effect depends on the border-color
+  value. The border looks like it is embedded in the page, with a 3D effect.
+
+- `outset`: Specifies a 3D outset border. The effect depends on the border-color
+  value. The border looks like it is coming out of the page, with a 3D effect.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.loading`
+
+`ftd.loading` is an or-type. This is the type for `loading` property of
+`ftd.iframe` component. It is a strategy to identify whether resources are
+blocking and load these immediately or non-blocking (non-critical) and load
+these only when needed.
+
+-- ds.code: `ftd.loading`
+lang: ftd
+
+\-- or-type loading:
+
+\-- constant string lazy: lazy
+\-- constant string eager: eager
+
+\-- end: loading
+
+
+-- ds.markdown:
+
+It has two variants `lazy` and `eager`.
+
+- `eager`: Loads an element immediately
+- `lazy`: Defer loading of element until some conditions are met
+
+
+
+
+
+
+-- ds.h2: `ftd.text-input-type`
+
+`ftd.text-input-type` is an `or-type`. The 'type' property of `ftd.text-input`
+component accepts the `optional` of this type. It has various variant which
+defines information field type.
+
+-- ds.code: `ftd.text-input-type`
+lang: ftd
+
+\-- or-type text-input-type:
+
+\-- constant string text: text
+\-- constant string email: email
+\-- constant string password: password
+\-- constant string url: url
+
+\-- end: text-input-type
+
+-- ds.markdown:
+
+As you can see above the `ftd.text-input-type` has following variants:
+
+- **text**: The default value. A single-line text field. Line-breaks are
+automatically removed from the input value.
+
+- **email**: A field for editing an email address. Looks like a `text` input,
+but has validation parameters and relevant keyboard in supporting browsers and
+devices with dynamic keyboards.
+
+- **password**: A single-line text field whose value is obscured. Will alert
+user if site is not secure.
+
+- **url**: A field for entering a URL. Looks like a `text` input, but has
+validation parameters and relevant keyboard in supporting browsers and devices
+with dynamic keyboards.
+
+
+
+
+
+
+
+-- ds.h2: `ftd.text-style`
+
+`ftd.text-style` is an `or-type`. The `style` under text attributes
+accepts the `optional list` of this type. It allows various constant values which
+defines the specific inline style.
+
+-- ds.code: `ftd.text-style`
+lang: ftd
+
+\-- or-type text-style:
+
+\-- constant string underline: underline
+\-- constant string strike: strike
+\-- constant string italic: italic
+\-- constant string heavy: heavy
+\-- constant string extra-bold: extra-bold
+\-- constant string semi-bold: semi-bold
+\-- constant string bold: bold
+\-- constant string regular: regular
+\-- constant string medium: medium
+\-- constant string light: light
+\-- constant string extra-light: extra-light
+\-- constant string hairline: hairline
+
+\-- end: text-style
+
+-- ds.markdown:
+
+As you can see above the `ftd.text-style` has following variants:
+
+**Text Decoration**
+- `underline`: This value will set the text to have a decorative line beneath it.
+- `strike`: This value will set the text to have a decorative line going through its middle.
+
+**Font Style**
+- `italic`: This value will make your text italic.
+
+**Font Weights**
+- `heavy`: This value will set the font weight to 900.
+- `extra-bold`: This value will set the font weight to 800.
+- `bold`: This value will set the font weight to 700.
+- `semi-bold`: This value will set the font weight to 600.
+- `medium`: This value will set the font weight to 500.
+- `regular`: This value will set the font weight to 400.
+- `light`: This value will set the font weight to 300.
+- `extra-light`: This value will set the font weight to 200.
+- `hairline`: This value will set the font weight to 100.
+
+
+
+
+
+-- ds.h2: `ftd.shadow`
+
+It is record type with the following fields.
+
+-- ds.code: `ftd.shadow` record
+lang: ftd
+
+\-- record shadow:
+ftd.color color:
+ftd.length x-offset: 0
+ftd.length y-offset: 0
+ftd.length blur: 0
+ftd.length spread: 0
+boolean inset: false
+
+-- ds.markdown:
+
+- `color`: This field of `ftd.shadow` stores the color of the shadow to be displayed in
+both light and dark modes.
+
+- `x-offset`: It is one of the shadow property. It is length value to set the shadow offset.
+`shadow-offset-x` specifies the horizontal distance. Negative values place the
+shadow to the left of the element. By default, this will be set to 0px if not specified.
+
+- `y-offset`: It is one of the shadow property. It is length value to set the shadow offset.
+`shadow-offset-y` specifies the vertical distance. Negative values place the
+shadow above the element. By default, this will be set to 0px if not specified.
+
+- `blur`: It adds blur in shadow. The larger the value of `shadow-blur`, the bigger
+the blur, so the shadow becomes bigger and lighter. Negative values are
+not allowed. By default, this will be set to 0px if not specified.
+
+- `spread`: It specifies the size of shadow. Positive values will cause the shadow to
+expand and grow bigger, negative values will cause the shadow to shrink. By default, this will
+be set to 0px if not specified.
+
+- `inset`: This field will make the shadow inset (if provided true). By default, outset
+shadow will be used if this value is not specified or is given false.
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.mask`
+
+It is or-type type with the following fields.
+
+-- ds.code: `ftd.mask` or-type
+lang: ftd
+
+\-- or-type mask:
+
+\-- ftd.mask-image image:
+
+\-- ftd.mask-multi multi:
+
+\-- end: mask
+
+-- ds.markdown:
+
+- `image`: This value will set the mask image and/or the linear gradient.
+It takes value of type `ftd.mask-image` which is of record type.
+- `multi`: This value will allow you to set multiple properties such as `image`, `size`, `position`, etc. at once.
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.mask-image`
+
+It is record type with the following fields.
+
+-- ds.code: `ftd.mask-image` record
+lang: ftd
+
+\-- record mask-image:
+caption ftd.image-src src:
+optional ftd.linear-gradient linear-gradient:
+optional ftd.color color:
+
+-- ds.markdown:
+
+- `src`: This field of `ftd.mask-image` stores the source of mask image in
+both light and dark modes.
+
+- `linear-gradient`: This value will set a linear gradient as mask image. It takes value of type `ftd.linear-gradient`.
+
+- `color`: This field specifies the color for the mask image. It takes `ftd.color` value and is optional.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: `ftd.mask-multi`
+
+It is record type with the following fields.
+
+-- ds.code: `ftd.mask-multi` record
+lang: ftd
+
+\-- record mask-multi:
+ftd.mask-image image:
+optional ftd.mask-size size:
+optional ftd.mask-size size-x:
+optional ftd.mask-size size-y:
+optional ftd.mask-repeat repeat:
+optional ftd.mask-position position:
+
+
+
+-- ds.markdown:
+
+- `image`: This field of type `ftd.mask-image` sets the mask image to be used.
+
+- `size`: This field of type `ftd.mask-size` will set the size of the mask image.
+
+- `size-x`: This field of type `ftd.mask-size` will set the horizontal length of the mask image.
+
+- `size-y`: This field of type `ftd.mask-size` will set the vertical length of the mask image.
+
+- `repeat`: This field of type `ftd.mask-repeat` specifies how background images are repeated.
+
+- `position`: This field of type `ftd.mask-position` sets the position of the mask image.
+
+
+
+
+
+
+-- ds.h2: `ftd.mask-repeat`
+
+The `ftd.mask-repeat` property is used to specify how mask
+images are repeated. It is an `or-type` which is used with
+`ftd.mask-multi` and is optional under it.
+
+-- ds.code: `ftd.mask-repeat`
+lang: ftd
+
+\-- or-type mask-repeat:
+
+\-- constant string repeat: repeat
+\-- constant string repeat-x: repeat-x
+\-- constant string repeat-y: repeat-y
+\-- constant string no-repeat: no-repeat
+\-- constant string space: space
+\-- constant string round: round
+
+\-- end: mask-repeat
+
+-- ds.markdown:
+
+As shown above, the `ftd.mask-repeat` has following variants:
+
+- `repeat`: This value will make the mask image repeat as much as possible in both
+directions to cover the whole container area. The last image will be clipped
+if it doesn't fit as per container dimensions.
+
+- `repeat-x`: This value will show similar behaviour as `repeat` except the fact that
+the images will be repeated only in x-direction (horizontal direction) and the
+last image will be clipped if it doesnt fit within the container area.
+
+- `repeat-y`: This value will show similar behaviour as `repeat` except the fact that
+the images will be repeated only in y-direction (vertical direction) and the last image will be clipped if
+it doesnt fit within the container area.
+
+- `no-repeat`: This value will make the image not repeat itself in any direction
+and hence container area might not get entirely covered in case if the container
+area is larger than the image itself.
+
+- `space`: This value will make the image repeat itself in both directions just like
+`repeat` except the fact that the last images wont be clipped and whitespace will be
+evenly distributed between the images. The only case where clipping will happen when
+there is not enough space for a single image.
+
+- `round`: This value will make the background image repeat itself
+and then are either squished or stretched to fill up the container space
+leaving no gaps.
+
+
+
+
+
+
+
+-- ds.h2: `ftd.mask-position`
+
+The `ftd.mask-position` property is used to specify the
+positioning of the mask image. It is an `or-type` which is used with
+`ftd.mask-multi` and is optional under it.
+
+-- ds.code: `ftd.mask-position`
+lang: ftd
+
+\-- or-type mask-position:
+
+\-- constant string left: left
+\-- constant string center: center
+\-- constant string bottom: bottom
+\-- constant string left-top: left-top
+\-- constant string left-center: left-center
+\-- constant string left-bottom: left-bottom
+\-- constant string center-top: center-top
+\-- constant string center-center: center-center
+\-- constant string center-bottom: center-bottom
+\-- constant string right-top: right-top
+\-- constant string right-center: right-center
+\-- constant string right-bottom: right-bottom
+
+\-- anonymous record length:
+
+\-- ftd.length x:
+\-- ftd.length y:
+
+\-- end: length
+
+\-- end: mask-position
+
+-- ds.markdown:
+
+As shown above, the `ftd.mask-position` has following variants:
+
+- `left`- Positions the image to the left of the container.
+- `center`- Positions the image to the center of the container.
+- `right`- Positions the image to the right of the container.
+- `left-top` - Positions the image to the left in horizontal direction
+and top along the vertical direction of the container.
+- `left-center` - Positions the image to the left in horizontal direction
+and center along the vertical direction of the container.
+- `left-bottom` - Positions the image to the left in horizontal direction
+and bottom along the vertical direction of the container.
+- `center-top` - Positions the image to the center in horizontal direction
+and top along the vertical direction of the container.
+- `center-center` - Positions the image to the center in horizontal direction
+and center along the vertical direction of the container.
+- `center-bottom` - Positions the image to the center in horizontal direction
+and bottom along the vertical direction of the container.
+- `right-top` - Positions the image to the right in horizontal direction
+and top along the vertical direction of the container.
+- `right-center` - Positions the image to the right in horizontal direction
+and center along the vertical direction of the container.
+- `right-bottom` - Positions the image to the right in horizontal direction
+and bottom along the vertical direction of the container.
+- `length` - This anonymous record value will set the position value
+based on the specified x and y values.
+
+
+
+
+
+
+-- ds.h2: `ftd.mask-size`
+
+The `ftd.mask-size` property is used to specify the
+dimensions of the mask image. It is an `or-type` which is used with
+`ftd.mask-multi` and is optional under it.
+
+-- ds.code: `ftd.mask-size`
+lang: ftd
+
+\-- or-type mask-size:
+
+\-- constant string auto: auto
+\-- constant string cover: cover
+\-- constant string contain: contain
+
+\-- anonymous record length:
+
+\-- ftd.length x:
+\-- ftd.length y:
+
+\-- end: length
+
+\-- end: mask-size
+
+-- ds.markdown:
+
+As shown above, the `ftd.mask-size` has following variants:
+
+- `auto`: This value will scale the mask image
+in the corresponding directions while maintaining the intrinsic proportions
+of the specified image.
+
+- `cover`: This value will scale the image to the smallest possible size
+to fill the container area leaving no empty space while preserving its ratio.
+Image will be cropped for either direction if the container dimensions differ
+from the image dimensions.
+
+- `contain`: This value will scale the mask image as large as possible
+within its container area without cropping or stretching the image.
+
+- `length`: This anonymous record value will set the dimensions of the
+background image based on the specified x and y values.
+
+
+
+
+
+
+
+
+
+/-- ds.h2: `ftd.type`
+
+It defines the typography of the font.
+
+It is record type with the following fields.
+
+/-- ds.code: `ftd.type` record (ftd.ftd)
+lang: ftd
+
+\-- record type:
+string font:
+ftd.font-size desktop:
+ftd.font-size mobile:
+ftd.font-size xl:
+integer weight:
+optional string style:
+
+
+/-- ds.markdown:
+
+It defines the:
+
+- `font`: A prioritized list of one or more font family
+  names and/or generic family names for the selected element.
+- `desktop`, `mobile` and `xl`: These are of `ftd.font-size` type. These
+  are responsive. So only one of these will be applicable depending on device.
+- `weight`: The weight (or boldness) of the font.
+- `style`: The appearance of decorative lines on text or styling of font. It is
+  an optional field. It takes the following values: `italic`, `underline` and
+  `strike`. More than one of these values can be using space separation.
+  Example: `style: italic underline`
+
+
+/-- ds.code:
+lang: ftd
+
+\-- ftd.font-size desktop-fs:
+line-height: 30
+size: 24
+letter-spacing: 0
+
+\-- ftd.font-size mobile-fs:
+line-height: 20
+size: 16
+letter-spacing: 0
+
+\-- ftd.font-size xl-fs:
+line-height: 50
+size: 46
+letter-spacing: 0
+
+\-- ftd.type font-type:
+font: serif
+desktop: $desktop-fs
+mobile: $mobile-fs
+xl: $xl-fs
+weight: 400
+style: italic
+
+
+/-- ds.h2: `length`
+
+`length` is a type that is used for passing UI dimensions. It has one of the
+
+`length` accepts following set of string:
+
+- `fill`: This gives 100% space
+- `auto`: This gives auto space (read more about it in `auto` css property value)
+- `calc <some-value>`: It takes a single expression as its parameter, with the
+   expression's result used as the value. Example: `width: calc 100% - 80px`
+- `fit-content`: the element will use the available space, but never more than max-content.
+   Example: `width: fit-content`
+- `portion <integer>`: It specifies how much the item will grow relative to the
+   rest of the items inside the same container.
+- `percent <integer>`: This gives <integer>% space
+- `vh <integer>`: Relative to 1% of the height of the viewport
+- `vw <integer>`: Relative to 1% of the width of the viewport
+- `vmin <integer>`: Sets the value relative to the smaller dimension between the width and height of the viewport.
+- `vmax <integer>`: Sets the value relative to the larger dimension between the width and height of the viewport.
+- `dvh <decimal>`:  Sets the value relative to the dynamic changing viewport.
+- `lvh <decimal>`:  Sets the value relative to the large view port height.
+- `svh <decimal>`:  Sets the value relative to the small view port height.
+- `<integer>`: Gives <integer>px unit space.
+
+;; Todo: Add all types from cheatsheet
+-- end: ds.page
+
+
+-- ftd.color red-orange:
+light: red
+dark: orange
+
+-- ftd.responsive-length p:
+desktop.px: 20
+mobile.percent: 10
+
+
+-- ftd.type dtype:
+size.px: 40
+weight: 900
+font-family: cursive
+line-height.px: 65
+letter-spacing.px: 5
+
+-- ftd.type mtype:
+size.px: 20
+weight: 100
+font-family: fantasy
+line-height.px: 35
+letter-spacing.px: 3
+
+-- ftd.responsive-type rtype:
+desktop: $dtype
+mobile: $mtype
+
+
+-- ftd.ui list uis:
+-- ftd.text: Hello
+-- end: uis
+
+
+-- component foo:
+children uis:
+
+-- ftd.column:
+background.solid: yellow
+children: $foo.uis
+-- end: ftd.column
+
+-- end: foo

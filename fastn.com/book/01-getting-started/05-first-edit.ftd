@@ -1,0 +1,166 @@
+-- import: fastn.com/assets
+
+-- ds.page: Edit Your Site 🚧
+
+So you have a [Github account](/book/github/), [a repo](/book/repo/), which
+you [published on Github Pages](/book/gh-pages/). You also learnt [how to
+launch Codespaces, install `fastn` on it, and run your site there](/book/codespaces/).
+
+In this section you will modify your site a little bit, preview the changes, and
+once satisfied, create a "commit", and "push" your change back to your
+repository. You will then verify that the [Github Actions we mentioned
+earlier](/book/gh-pages/#github-actions) pick your commit, and publish your
+updated website.
+
+-- ds.h1: Edit Your Site
+
+This is how your codespace looked like at the end of the last section:
+
+-- ds.image:
+src: $assets.files.book.images.preview-in-editor.png
+
+The `index.ftd` file is open in the left editor pane, and the preview of your
+site is open in the "Simple Browser" on the right. The most important thing to
+note is that the `index.ftd` file is the source code of what you see on the
+right, in the preview browser, which is your website. If you want to modify
+your website, you have to modify `index.ftd` (and possibly other files).
+
+In this section we would not yet go into details of the content of `index.ftd`,
+but do give it a read, and try to find correspondence between what you see in
+`index.ftd` file and what you see in the preview. For example in the line number
+5 we have:
+
+-- ds.code: line number 5 of `index.ftd`
+lang: ftd
+
+\-- ds.page: Welcome to your [FASTN site](https://fastn.com/)
+
+-- ds.markdown:
+
+Which is the big text in the preview.
+
+Let's edit that line and make it read:
+
+-- ds.code: edited line number 5 of `index.ftd`
+lang: ftd
+
+\-- ds.page: Yo, hello there!
+
+-- ds.markdown:
+
+Once you edit the file, you have to reload the preview browser:
+
+-- ds.image: The third box is for reload
+src: $assets.files.book.images.reload.png
+
+Once you reload, the message will change:
+
+-- ds.image: The site is changed
+src: $assets.files.book.images.updated.png
+
+There you go.
+
+-- ds.h1: All That For A Line Of Change?
+
+Before we proceed let's take a pause and review. A lot of people ask why is all
+this necessary? All we did was change the text of the heading. Could we not
+have changed the heading by clicking on it? If you use Google Docs, Notion,
+Word, Figma, Wix etc you must be used to just clicking on what you want to edit
+and editing it.
+
+While that can be done, ask yourself some questions, like should it be a single
+click or a double click? While you are editing the title can you also change
+the color? Do you get color picker? While you are editing, do you press Enter
+to accept the change or Escape key? Who decides all these? What if you do not
+like the decisions done by that team?
+
+Programming let's us build the user interfaces where people can click and edit.
+If we do not learn programming we would be consumers of others who know
+programming. We will have to pay the price they ask.
+
+Programming itself can be made easier, and at the most fundamental this is what
+`ftd` and `fastn` are about, making programming easy for everyone. But
+programming is unavoidable. The more our lives become digital, the more
+software we need.
+
+So yes, the change was small, but you did it. You used all the tools, and in the
+manner professional programmers do it, and it was not that hard. You will learn
+to make bigger changes.
+
+
+-- ds.h1: Let's Review Our Changes
+
+So you have edited the line number 5 of the file `index.ftd`. Or maybe you went
+on your own and made more changes in `index.ftd`. Or maybe you edited other
+files as well. Your repository is small, it is just starting, but it will
+become bigger with time. So how do we see the changes?
+
+Also the changes you have done are so far only in your codespace. If you go look
+at your repository, eg `github.com/<username>/<repo-name>`, you will see that
+there are still only two commits, and `index.ftd` is still showing the old
+message.
+
+So you have made changes in a copy of your original repository content. How to
+send these changes back to the repository?
+
+The first question is what have you modified? You can rely on your memory, "oh I
+just modified 1 line in `index.ftd`", but memory is sometimes unreliable. Also
+you may have done some accidental changes without realising. We have a better
+way.
+
+Let's open another terminal session by clicking on the `+` button in the
+terminal and run `git status` to see the status of our project as per `git`.
+
+-- ds.image: `git status` in a new terminal
+src: $assets.files.book.images.git-status.gif
+
+As you see it shows one file modified, `index.ftd`. If you had accidentally
+modified other files it would have shown them.
+
+-- ds.image: output of `git status` and `git diff`
+src: $assets.files.book.images.git-status-and-diff.png
+
+As you see, `git` is pretty good at keeping track of changes. `git status` tells
+you about the files that have been edited, added, deleted etc, and `git diff`
+shows the actual change in those files.
+
+The output of `git diff` tells you which files is edited, shows the "deleted"
+line in `red`, and also with a `-` prefix, so if you see clearly the red line
+has three `-`s in the beginning, two of them from our file, and one extra `-`
+to indicate that line is gone. It also shows added line in `green`, and with a
+`+` in the beginning, so the green line is `+-- ds.page: Yo, hello there`.
+
+Instead of terminal you can also use [`vscode`'s built in version control user
+interface](https://code.visualstudio.com/docs/sourcecontrol/overview).
+
+-- ds.image: Viewing Changes Using Diff Viewer
+src: $assets.files.book.images.diff-viewer.gif
+
+The UI is good to learn and helps you at times, we recommend familiarising
+yourself with terminal equivalents as well. `git` command on the terminal is
+more powerful, it let's you do lot more than the UI like this let's you do.
+Also the UI like this may not always be available, maybe you are not using
+`vscode`, maybe you are trying to debug things on a server. `git` will work in
+a lot more places so it helps to learn it.
+
+-- ds.h1: Committing The Changes
+
+So you have modified one line in one file so far. You have previewed the change
+in the preview browser and are happy with the output. You have also reviewed
+the changes using `git diff` to satisfy yourself that you have not accidentally
+made some other change, and the change looks good to you.
+
+Your changes are still on your codespace and no one can see those changes yet.
+If you lose access to the codespace you will lose these changes. To preserve
+the change we have to do two things, create a commit containing your changes
+and then push the commit to your repository.
+
+What is a commit? A `git` repository is built on top of commits. `commits` is
+the core concept of `git`. `commit`s contain changes. A commit can contain
+information about one or more changes. You have some changes so far, one change
+to be precise. You can convert this change into a commit using `git commit`
+command.
+
+We are going to do that next. Let's run `git commit -am
+
+-- end: ds.page

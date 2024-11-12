@@ -1,0 +1,149 @@
+-- import: fastn.com/featured as ft-ui
+-- import: fastn-community.github.io/spectrum-ds/common
+-- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn.com/content-library as footer
+-- import: fastn-community.github.io/dark-flame-cs
+-- import: fifthtry.github.io/fastn-typography as typo
+
+
+
+
+-- ds.page:
+show-footer: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-name: NULL
+logo-height: 38
+logo-width: 120
+colors: $dark-flame-cs.main
+types: $typo.types
+github-icon: true
+github-url: https://github.com/muskan1verma
+full-width: true
+fluid-width: false
+max-width.fixed.px: 1340
+
+-- ds.page.footer:
+
+	-- footer.footer:
+	site-logo: $fastn-assets.files.images.fastn.svg
+	site-url: /
+	social-links: $footer.social-links
+	copyright: Copyright © 2023 - fastn.com
+	full-width: false
+	max-width.fixed.px: 1340
+	
+-- end: ds.page.footer
+-- ftd.column:
+width: fill-container
+align-content: center
+
+	-- profile: Saurabh Lohiya
+	
+-- end: ftd.column
+
+-- ft-ui.grid-view: Documentation Sites
+templates: $doc-sites
+show-large: true
+
+-- ft-ui.grid-view: Color Schemes
+templates: $schemes
+show-large: true
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+-- component profile:
+caption title:
+optional string link:
+
+-- ftd.column:
+
+	-- ftd.column:
+	align-content: center
+	link: $profile.link
+	
+		-- ds.contributor: $profile.title
+		avatar: $fastn-assets.files.images.u.saurabh-lohiya.jpg
+		profile: Developer
+		owners: $owner-saurabh
+		connect: $social-links
+		
+	-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: profile
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list doc-sites:
+
+-- ft-ui.template: Misty Gray
+template-url: featured/ds/misty-gray/
+screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
+
+-- end: doc-sites
+
+
+-- ft-ui.template list schemes:
+
+-- ft-ui.template: Misty Gray CS
+template-url: featured/cs/misty-gray-cs/
+screenshot: $fastn-assets.files.images.featured.cs.misty-gray-cs.png
+
+-- end: schemes
+
+
+
+
+-- common.owner list owner-saurabh:
+
+-- common.owner: Saurabh Lohiya
+profile: featured/contributors/developers/saurabh-lohiya/
+avatar: $fastn-assets.files.images.u.saurabh-lohiya.jpg
+role: Developer
+
+-- end: owner-saurabh
+
+
+
+
+
+-- common.social-media list social-links:
+
+-- common.social-media:
+link: https://discord.gg/saurabh-lohiya#9200
+src: $fastn-assets.files.images.discord.svg
+hover-src: $fastn-assets.files.images.discord-hover.svg
+
+-- common.social-media:
+link: https://github.com/saurabh-lohiya
+src: $fastn-assets.files.images.github-grey.svg
+hover-src: $fastn-assets.files.images.github-grey-hover.svg
+
+/-- common.social-media:
+link: https://twitter.com/priyanka9634
+src: $fastn-assets.files.images.twitter.svg
+hover-src: $fastn-assets.files.images.twitter-hover.svg
+
+-- common.social-media:
+link: https://www.linkedin.com/in/saurabh-lohiya/
+src: $fastn-assets.files.images.linkedin.svg
+hover-src: $fastn-assets.files.images.linkedin-hover.svg
+
+-- end: social-links

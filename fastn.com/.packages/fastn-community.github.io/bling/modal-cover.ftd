@@ -1,0 +1,287 @@
+
+-- boolean $show-modal: false
+
+
+
+-- site-doc.doc-home: Modal Cover
+site-title: Bling
+github-url: https://github.com/fastn-community/bling
+current-package: fastn-community.github.io/bling
+
+A modal is a user interface element that is displayed as a temporary or
+secondary window on top of the main content of a web page. It is designed to
+capture the user's attention and typically requires an action from the user
+before they can continue interacting with the rest of the page.
+
+-- site-doc.header: Example
+
+-- site-doc.output:
+colors: $ftd.default-colors
+types: $ftd.default-types
+
+-- button: Click to open Modal Cover
+$on-click$: $ftd.toggle($a = $show-modal)
+disable-link: true
+
+-- modal-cover: Sign Up!
+$open: $show-modal
+show-form: true
+placeholder: Your email address here
+cta-text: Continue
+cta-link: modal-cover/
+footer: What is it? [Terms and conditions](modal-cover/)
+
+25% Off On Your First Purchase* Enter code WELCOME at checkout
+Discover new apps, things to do & more great news added daily!
+
+-- end: site-doc.output
+
+-- site-doc.header: How to use
+
+-- cb.code: Add `bling` dependency into your FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/bling
+
+-- cb.code: import modal-cover inside your `.ftd` file
+lang: ftd
+
+\-- import: fastn-community.github.io/bling/modal-cover
+
+\-- boolean $show-modal: false
+
+-- cb.code: Copy paste below code inside your `.ftd` file
+lang: ftd
+
+\-- modal-cover.button: Click to open Modal Cover
+$on-click$: $ftd.toggle($a = $show-modal)
+disable-link: true
+
+\-- modal-cover.modal-cover: Sign Up!
+$open: $show-modal
+show-form: true
+placeholder: Your email address here
+cta-text: Continue
+footer: What is it? [Terms and conditions](modal-cover/)
+
+25% Off On Your First Purchase* Enter code WELCOME at checkout
+Discover new apps, things to do & more great news added daily!
+
+-- site-doc.header: Properties: modal-cover
+
+Below are details of all properties of `modal-cover` component.
+
+-- site-doc.component-property: `title`
+type: Caption (`required`)
+
+It's used to add title to modal-cover. In above example `Sign Up!` is the title
+used for `modal-cover`.
+
+-- site-doc.component-property: `modal-body`
+type: Body (`required`)
+
+It's used to add body content to modal-cover. If body content is not added then
+it won't be seen.
+
+-- site-doc.component-property: `$open`
+type: Boolean (`optional`, default: `false`)
+
+`true` shows `modal-cover` `false` hides it.
+
+-- site-doc.component-property: `show-form`
+type: Boolean (`optional`, default: `false`)
+
+Set it to `true` which shows form input with button inside modal-cover. `false`
+hides form input and button.
+
+-- site-doc.component-property: `placeholder`
+type: String (`optional`, default: `Your email address here`)
+
+If you want to change input placeholder text change its value with value you
+would like to show inside input as a placeholder text.
+
+-- site-doc.component-property: `cta-text`
+type: String (`required`, default: `Continue`)
+
+Its used to change value of `Button` title. 
+
+-- site-doc.component-property: `cta-link`
+type: String (`required`)
+
+Its used to add link to form `Button`.
+
+-- site-doc.component-property: `footer`
+type: String (`optional`)
+
+Using `footer` property you can add additional info to `modal-cover` which acts
+like footer.
+
+-- site-doc.header: Properties: button
+
+Below are details of all properties of `modal-cover.button` component.
+
+`$on-click$: $ftd.toggle($a = $show-modal)` `$ftd.toggle` is a in-built fastn
+function. which requires a `boolean` `$show-modal` to show or hide modal-cover.
+
+
+-- site-doc.component-property: `$show-modal`
+type: Boolean (`required`, default: `false`)
+
+Required for `button` component to show and hide modal-cover.
+
+-- site-doc.component-property: `title`
+type: Caption (`required`)
+
+It's used to add title to button.
+
+-- site-doc.component-property: `disable-link`
+type: Boolean (`required`, default: `false`)
+
+It's used to enable/disable link property of button.
+
+-- end: site-doc.doc-home
+
+
+
+
+
+
+
+
+
+
+-- component modal-cover:
+caption title:
+optional body modal-body:
+boolean transparent: false
+boolean show-form: false
+string placeholder: Your email address here
+string cta-text: Continue
+string cta-link: modal-cover/
+string trigger: Click here to open modal cover
+optional string footer:
+boolean $open: false
+boolean $mouse-in: false
+boolean $show-title: false
+
+-- ftd.column:
+if: { modal-cover.open }
+width: fill-container
+anchor: window
+background.solid: $inherited.colors.background.base
+height: fill-container
+z-index: 99999
+align-content: center
+top.px: 0
+bottom.px: 0
+left.px: 0
+right.px: 0
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: 600
+align-content: center
+;;background.solid: $inherited.colors.background.base
+padding.rem: 1
+id: modal-wrap
+spacing.fixed.rem: 1
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+
+-- ftd.row:
+width: fill-container
+align-content: center
+padding-vertical.rem: 1
+$on-mouse-enter$: $ftd.set-bool($a = $modal-cover.show-title, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $modal-cover.show-title, v = false)
+
+-- ftd.text: $modal-cover.title
+role: $inherited.types.heading-small
+width: fill-container
+style: bold
+
+-- ftd.image:
+src: $assets.files.static.cross.svg
+width.fixed.px: 24
+height.fixed.px: 24
+$on-click$: $ftd.toggle($a = $modal-cover.open)
+
+-- ftd.text: Close
+if: { modal-cover.show-title }
+$on-click$: $ftd.toggle($a = $modal-cover.open)
+
+-- end: ftd.row
+
+-- ftd.text:
+if: { modal-cover.modal-body != NULL }
+
+$modal-cover.modal-body
+
+-- ftd.row:
+if: { modal-cover.show-form }
+width: fill-container
+padding-vertical.rem: 1
+align-content: center
+spacing.fixed.rem: 1
+
+-- ftd.text-input:
+placeholder: $modal-cover.placeholder
+background.solid: $inherited.colors.background.base
+padding-vertical.rem: 0.5
+padding-horizontal.rem: 1
+border-radius.px: 9
+border-width.px: 1
+border-color: $inherited.colors.border
+width: fill-container
+role: $inherited.types.button-medium
+color: $inherited.colors.text-strong
+
+-- button: $modal-cover.cta-text
+link: $modal-cover.cta-link
+
+-- end: ftd.row
+
+-- ftd.text:
+if: { modal-cover.footer != NULL }
+width: fill-container
+role: $inherited.types.fine-print
+margin-top.rem: 2
+
+$modal-cover.footer
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: modal-cover 
+
+
+
+
+
+
+
+
+
+
+-- component button:
+caption title:
+ftd.color base: $inherited.colors.cta-primary.hover
+ftd.color hover: $inherited.colors.cta-primary.base
+boolean $mouse-in: false
+string link: /
+boolean disable-link: false
+
+-- ftd.text: $button.title
+role: $inherited.types.button-medium
+background.solid: $button.base
+background.solid if { button.mouse-in }: $button.hover
+color: $inherited.colors.cta-primary.text
+border-radius.px: 9
+padding-vertical.rem: 0.5
+padding-horizontal.rem: 1
+link if { !button.disable-link }: $button.link
+$on-mouse-enter$: $ftd.set-bool($a = $button.mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $button.mouse-in, v = false)
+
+-- end: button

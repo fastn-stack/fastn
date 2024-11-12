@@ -1,0 +1,19 @@
+-- import: fastn.com/assets
+
+-- ds.page: `fastn` Server
+
+`fastn` can act as an HTTP server as well. Using `fastn` server is an
+alternative to using [`fastn` static site generator](/static/). If you want
+your webpages to be dynamic, regenerated on every request, you will have to
+deploy `fastn` binary on a server.
+
+If you created your `fastn` package using the
+[fastn-template](https://github.com/fastn-stack/fastn-template) repository then
+you will see a button in README to deploy your package on Heroku.
+
+-- ds.image:
+src: $assets.files.images.heroku-button.png
+
+You should be able to deploy it on heroku by clicking on the button.
+
+-- end: ds.page

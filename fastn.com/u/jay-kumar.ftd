@@ -1,0 +1,57 @@
+-- import: fastn-community.github.io/spectrum-ds/common
+-- import: fastn.com/featured as ft-ui
+
+-- ds.user-info: Jay Kumar
+social-links: $social-links
+profile: Designer
+
+-- ds.user-info.works:
+
+	-- ft-ui.grid-view: Documentation Sites
+	templates: $doc-sites
+	show-large: true
+	
+-- end: ds.user-info.works
+
+-- end: ds.user-info
+
+
+
+
+
+
+
+
+
+
+-- common.owner info: Jay Kumar
+profile: /u/jay-kumar/
+role: Designer
+
+
+
+
+
+
+-- common.social-media list social-links:
+
+-- common.social-media:
+link: https://www.linkedin.com/in/jay-kumar-78188897/
+src: $fastn-assets.files.images.linkedin.svg
+hover-src: $fastn-assets.files.images.linkedin-hover.svg
+
+-- end: social-links
+
+
+
+
+
+
+-- ft-ui.template list doc-sites:
+
+-- ft-ui.template: Dash Dash DS
+template-url: featured/ds/dash-dash-ds/
+screenshot: $fastn-assets.files.images.featured.doc-sites.dash-dash-ds.png
+wip: true
+
+-- end: doc-sites

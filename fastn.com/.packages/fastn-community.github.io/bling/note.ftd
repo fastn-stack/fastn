@@ -1,0 +1,124 @@
+
+-- site-doc.doc-home: Note
+site-title: Bling
+show-tabs: false
+github-url: https://github.com/fastn-community/bling
+current-package: fastn-community.github.io/bling
+
+A "note component" typically refers to a UI component used to display a note or
+a small piece of information within a user interface. It is commonly used in
+applications, websites, or documentation systems to present brief explanations,
+tips, warnings, or other important information to users.
+
+-- site-doc.header: Example
+
+-- site-doc.output:
+colors: $ftd.default-colors
+types: $ftd.default-types
+
+-- note: This is your Title
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+nostrud exercitation ullamco laboris nisi ut.
+
+-- end: site-doc.output
+
+-- site-doc.header: How to use
+
+-- cb.code: Add `bling` dependency into your FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/bling
+
+
+-- cb.code: import `note` inside your `.ftd` file
+lang: ftd
+
+\-- import: fastn-community.github.io/bling/note
+
+
+-- cb.code: sample usage of `-- note` component
+lang: ftd
+
+\-- note.note: This is your Title
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+nostrud exercitation ullamco laboris nisi ut.
+
+-- site-doc.header: Properties:
+
+Below are details of all properties of `badge` component.
+
+-- site-doc.component-property: `title`
+type: Caption (`required`)
+
+It's used to add title to `note` component.
+
+-- site-doc.component-property: `body`
+type: Body (`optional`)
+
+It's used to add body content to `note` component.
+
+-- site-doc.component-property: `emoji`
+type: Body (`optional`)
+
+It's used to add emoji icon to `note` component.
+
+-- end: site-doc.doc-home
+
+
+
+
+
+
+
+
+
+
+-- component note:
+caption title:
+optional body body:
+optional string emoji: 📝
+
+-- ftd.row:
+padding-vertical.px: 12
+padding-horizontal.px: 12
+background.solid: transparent
+border-color: $inherited.colors.cta-primary.border
+border-width.px: 1
+spacing.fixed.px: 16
+width: auto
+border-radius.px: 6
+max-width.fixed.px: 800
+align-self: center
+
+-- ftd.column:
+
+-- ftd.text: $note.emoji
+if: { note.emoji != NULL }
+role: $inherited.types.heading-medium
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 8
+
+-- ftd.text: $note.title
+role: $inherited.types.button-medium
+color: $inherited.colors.text
+
+-- ftd.text:
+if: { note.body != NULL }
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+
+$note.body
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: note

@@ -1,0 +1,68 @@
+-- import: fifthtry.github.io/admonitions as cbox
+
+-- ds.page: Add quote - `fastn` Workshop
+
+In the [first part](/workshop/hello-world/) we learnt how to display the text in
+our local server.
+
+-- cbox.info: Take a note
+
+Before we start with the second step. Make sure to close the server created for
+`01-hello-world` then restart the new server for `02-add-quote`.
+
+- Close the server by using `Ctrl + c`
+- Change the directory to `02-add-quote` path
+- Run `fastn serve --edition=2023` command
+
+**Note:** Make sure to check the port of the new server for `02-add-quote`. If
+  it is same as previous, just refresh the browser else copy the new URL with
+  different port and run in the browser.
+
+
+-- ds.h1: Second part
+
+In the second part, we will learn how to add a
+[`quote`](https://fastn-community.github.io/bling/quote/) component that is
+[featured](/featured/) in our official website.
+
+`Quote` is a component of `bling` dependency package.
+
+In `fastn`, when we want to use a component of a different package, we have to
+do two steps:
+
+- Add the package as **dependency** in `FASTN.ftd`
+- `import` the package in the `.ftd` file where you want to utilize the
+  component
+
+-- ds.h2: Add the dependency
+
+Here we are adding a dependency of package `fastn-community.github.io/bling`
+
+Uncomment the line where the package is added as dependency in the
+[`FASTN.ftd`](https://github.com/fastn-stack/workshop/blob/main/02-add-quote/FASTN.ftd) file
+
+-- ftd.image:
+src: $fastn-assets.files.images.workshop.02-FASTN.png
+width: fill-container
+
+-- ds.h2: Import the package
+
+In the `index.ftd` document we import the `quote` component from bling package.
+
+Uncomment the following lines in the [`index.ftd`](https://github.com/fastn-stack/workshop/blob/main/02-add-quote/index.ftd) file:
+
+- Uncomment the [import line](https://github.com/fastn-stack/workshop/blob/main/a-website/02-add-quote/index.ftd#L4).
+
+- Uncomment the lines where the [component `quote-chalice`](https://github.com/fastn-stack/workshop/blob/main/a-website/02-add-quote/index.ftd#L12) has been called.
+
+-- ftd.image:
+src: $fastn-assets.files.images.workshop.02-index.png
+width: fill-container
+
+-- ds.markdown:
+
+Now, save the file and refresh the browser.
+
+Go to the [third step](/workshop/add-doc-site/).
+
+-- end: ds.page

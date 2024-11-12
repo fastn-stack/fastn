@@ -1,0 +1,176 @@
+-- import: fifthtry.github.io/package-doc/doc as pd
+-- import: fifthtry.github.io/package-doc/typography as tf
+-- import: fifthtry.github.io/inter-font/assets as inter-assets
+-- import: fastn
+
+
+
+
+
+-- ftd.type inter-demo:
+size.px: 22
+weight: 400
+font-family: $inter-assets.fonts.Inter
+line-height.px: 36
+letter-spacing.px: 0
+
+
+
+-- ftd.type inter-demo-heading:
+size.px: 48
+weight: 400
+font-family: $inter-assets.fonts.Inter
+line-height.px: 56
+letter-spacing.px: 0
+
+-- ftd.responsive-type small-heading:
+desktop: $inter-demo
+mobile: $inter-demo
+
+-- ftd.responsive-type large-heading:
+desktop: $inter-demo-heading
+mobile: $inter-demo-heading
+
+
+
+-- ftd.column:
+width: fill-container
+padding-horizontal.px: 50
+padding-horizontal.px if {ftd.device == "mobile"}: 20
+background.solid: $inherited.colors.background.base
+
+
+-- pd.package: Inter - fastn font
+name: fifthtry.github.io/inter
+
+This component consist of Inter font with all it's styles from Thin-100 to Black-900.
+
+
+-- pd.component: Inter - fastn font
+name: https://github.com/FifthTry/inter
+
+This component consist of Inter font with all it's styles from Thin-100 to Black-900.
+
+
+
+-- pd.hidden-code: How to use
+
+include fifthtry.github.io/inter package into FASTN.ftd file
+
+\-- fastn.dependency: fifthtry.github.io/inter/assets as inter
+
+\-- fastn.auto-import: inter
+
+Inside your .ftd file to change for any specific token use:
+
+\-- fastn.type.headline-small.font: $inter.fonts.Inter
+
+\-- ftd.text:
+role: $fastn.type.headline-small
+
+
+-- tf.h2: `inter-font` hairline 18px:
+
+-- ftd.text: Todos os seres humanos nascem livres e iguais em dignidade.  
+role: $small-heading
+color: $inherited.colors.text-strong
+margin-bottom.px: 24
+;; style: hairline
+
+-- tf.h2: `inter-font` extra-light 18px:
+
+-- ftd.text: Todos os seres humanos nascem livres e iguais em dignidade.  
+role: $small-heading
+color: $inherited.colors.text-strong
+margin-bottom.px: 24
+;; style: extra-light
+
+-- tf.h2: `inter-font` light 18px:
+
+-- ftd.text: Todos os seres humanos nascem livres e iguais em dignidade.  
+role: $small-heading
+color: $inherited.colors.text-strong
+margin-bottom.px: 24
+;; style: light
+
+-- tf.h2: `inter-font` regular 18px:
+
+-- ftd.text: Todos os seres humanos nascem livres e iguais em dignidade.  
+role: $small-heading
+color: $inherited.colors.text-strong
+margin-bottom.px: 24
+;; style: regular
+
+-- tf.h2: `inter-font` regular strike through 18px:
+
+-- ftd.text: Todos os seres humanos nascem livres e iguais em dignidade.
+role: $small-heading
+color: $inherited.colors.text-strong
+margin-bottom.px: 24
+;; style: regular strike
+
+-- tf.h2: `inter-font` regular underline 18px:
+
+-- ftd.text: Todos os seres humanos nascem livres e iguais em dignidade.
+role: $small-heading
+color: $inherited.colors.text-strong
+margin-bottom.px: 24
+;; style: regular underline
+
+-- tf.h2: `inter-font` regular italic 18px:
+
+-- ftd.text: Todos os seres humanos nascem livres e iguais em dignidade.
+role: $small-heading
+color: $inherited.colors.text-strong
+margin-bottom.px: 24
+;; style: regular italic
+
+-- tf.h2: `inter-font` medium 18px:
+
+-- ftd.text: Todos os seres humanos nascem livres e iguais em dignidade.
+role: $small-heading
+color: $inherited.colors.text-strong
+margin-bottom.px: 24
+;; style: medium
+
+-- tf.h2: `inter-font` semi-bold 18px:
+
+-- ftd.text: Todos os seres humanos nascem livres e iguais em dignidade.
+role: $small-heading
+color: $inherited.colors.text-strong
+margin-bottom.px: 24
+;; style: semi-bold
+
+-- tf.h2: `inter-font` bold 18px:
+
+-- ftd.text: Todos os seres humanos nascem livres e iguais em dignidade.
+role: $small-heading
+color: $inherited.colors.text-strong
+margin-bottom.px: 24
+;; style: bold
+
+-- tf.h2: `inter-font` extra-bold 18px:
+
+-- ftd.text: Todos os seres humanos nascem livres e iguais em dignidade.
+role: $small-heading
+color: $inherited.colors.text-strong
+margin-bottom.px: 24
+;; style: extra-bold
+
+-- tf.h2: `inter-font` heavy 18px:
+
+-- ftd.text: Todos os seres humanos nascem livres e iguais em dignidade.
+role: $small-heading
+color: $inherited.colors.text-strong
+margin-bottom.px: 24
+;; style: heavy
+
+-- tf.h2: `inter-font` heading regular 48px:
+
+-- ftd.text: Todos os seres humanos nascem livres e iguais em dignidade.
+role: $large-heading
+color: $inherited.colors.text-strong
+margin-bottom.px: 40
+;; style: regular
+
+-- end: ftd.column

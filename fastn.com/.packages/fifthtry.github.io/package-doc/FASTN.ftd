@@ -1,0 +1,26 @@
+-- import: fastn
+
+-- fastn.package: fifthtry.github.io/package-doc
+
+
+-- fastn.dependency: fifthtry.github.io/app-switcher
+-- fastn.dependency: fifthtry.github.io/doc-site-typography as typo
+-- fastn.dependency: fifthtry.github.io/dark-mode-switcher
+
+/-- fastn.app: Todos for Family
+mount-point: /todos/
+package: kameri-app.herokuapp.com
+end-point: https://kameri-service.herokuapp.com
+readers: fastn-fans
+/config: db_url=$ENV.DB_URL
+/config: name=FifthTry members
+
+
+
+
+-- fastn.sitemap:
+
+# Home: index.html
+
+# GitHub
+  url: https://github.com/FifthTry/package-doc

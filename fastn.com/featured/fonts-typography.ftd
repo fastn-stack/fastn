@@ -1,0 +1,131 @@
+-- import: fastn.com/featured as ft-ui
+
+-- ds.page:
+sidebar: false
+
+-- ft-ui.view-all: Font Typographies
+templates: $fonts-typography
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list fonts-typography:
+
+-- ft-ui.template: Arya Typography
+template-url: https://fastn-community.github.io/arya-typography/
+licence-url: https://github.com/fastn-community/arya-typography/blob/main/LICENSE
+github-url: https://github.com/fastn-community/arya-typography
+screenshot: $fastn-assets.files.images.featured.font.arya-font.jpg
+
+`arya-font` typography is available and can be used inside `fastn` web
+packages.
+
+-- ft-ui.template: Blaka Typography
+template-url: https://fastn-community.github.io/blaka-typography/
+licence-url: https://github.com/fastn-community/blaka-typography/blob/main/LICENSE
+github-url: https://github.com/fastn-community/blaka-typography
+screenshot: $fastn-assets.files.images.featured.font.blaka-font.jpg
+
+`blaka-font` typography is available and can be used inside `fastn` web
+packages.
+
+-- ft-ui.template: Inter Typography
+template-url: https://fastn-community.github.io/inter-typography/
+licence-url: https://github.com/fastn-community/inter-typography/blob/main/LICENSE
+github-url: https://github.com/fastn-community/inter-typography
+screenshot: $fastn-assets.files.images.featured.font.inter-font.jpg
+
+`inter-font` typography is available and can be used inside `fastn` web
+packages.
+
+-- ft-ui.template: Karma Typography
+template-url: https://fastn-community.github.io/karma-typography/
+licence-url: https://github.com/fastn-community/karma-typography/blob/main/LICENSE
+github-url: https://github.com/fastn-community/karma-typography
+screenshot: $fastn-assets.files.images.featured.font.karma-font.jpg
+
+`karma-font` typography is available and can be used inside `fastn` web
+packages.
+
+-- ft-ui.template: Khand Typography
+template-url: https://fastn-community.github.io/khand-typography/
+licence-url: https://github.com/fastn-community/khand-typography/blob/main/LICENSE
+github-url: https://github.com/fastn-community/khand-typography
+screenshot: $fastn-assets.files.images.featured.font.khand-font.jpg
+
+`khand-font` typography is available and can be used inside `fastn` web
+packages.
+
+-- ft-ui.template: Lato Typography
+template-url: https://fastn-community.github.io/lato-typography/
+licence-url: https://github.com/fastn-community/lato-typography/blob/main/LICENSE
+github-url: https://github.com/fastn-community/lato-typography
+screenshot: $fastn-assets.files.images.featured.font.lato-font.jpg
+
+`lato-font` typography is available and can be used inside `fastn` web
+packages.
+
+-- ft-ui.template: Lobster Typography
+template-url: https://fastn-community.github.io/lobster-typography/
+licence-url: https://github.com/fastn-community/lobster-typography/blob/main/LICENSE
+github-url: https://github.com/fastn-community/lobster-typography
+screenshot: $fastn-assets.files.images.featured.font.lobster-font.jpg
+
+`lobster-font` typography is available and can be used inside `fastn` web
+packages.
+
+-- ft-ui.template: Opensans Typography
+template-url: https://fastn-community.github.io/opensans-typography/
+licence-url: https://github.com/fastn-community/opensans-typography/blob/main/LICENSE
+github-url: https://github.com/fastn-community/opensans-typography
+screenshot: $fastn-assets.files.images.featured.font.opensans-font.jpg
+
+`opensans-font` typography is available and can be used inside `fastn` web
+packages.
+
+
+-- ft-ui.template: Pragati Narrow Typography
+template-url: https://fastn-community.github.io/pragati-narrow-typography/
+licence-url: https://github.com/fastn-community/pragati-narrow-typography/blob/main/LICENSE
+github-url: https://github.com/fastn-community/pragati-narrow-typography
+screenshot: $fastn-assets.files.images.featured.font.pragati-narrow-font.jpg
+
+`pragati-narrow-font` typography is available and can be used inside `fastn` web
+packages.
+
+-- ft-ui.template: Roboto Typography
+template-url: https://fastn-community.github.io/roboto-typography/
+licence-url: https://github.com/fastn-community/roboto-typography/blob/main/LICENSE
+github-url: https://github.com/fastn-community/roboto-typography
+screenshot: $fastn-assets.files.images.featured.font.roboto-font.jpg
+
+`roboto-font` typography is available and can be used inside `fastn` web
+packages.
+
+-- ft-ui.template: Roboto Mono Typography
+template-url: https://fastn-community.github.io/roboto-mono-typography/
+licence-url: https://github.com/fastn-community/roboto-mono-typography/blob/main/LICENSE
+github-url: https://github.com/fastn-community/roboto-mono-typography
+screenshot: $fastn-assets.files.images.featured.font.roboto-mono-font.jpg
+
+`roboto-mono-font` typography is available and can be used inside `fastn` web
+packages.
+
+-- ft-ui.template: Tiro Typography
+template-url: https://fastn-community.github.io/tiro-typography/
+licence-url: https://github.com/fastn-community/tiro-typography/blob/main/LICENSE
+github-url: https://github.com/fastn-community/tiro-typography
+screenshot: $fastn-assets.files.images.featured.font.tiro-font.jpg
+
+`tiro-font` typography is available and can be used inside `fastn` web
+packages.
+
+-- end: fonts-typography

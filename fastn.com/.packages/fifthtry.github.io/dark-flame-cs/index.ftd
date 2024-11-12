@@ -1,0 +1,1667 @@
+-- import: fastn
+-- import: fastn/processors as pr
+-- import: fifthtry.github.io/dark-flame-cs/assets
+-- import: fifthtry.github.io/dark-flame-cs/colors
+-- import: fastn-community.github.io/color-doc/components as cp
+-- import: fastn-community.github.io/inter-typography as typo
+
+-- string figma-json:
+$processor$: pr.figma-cs-token
+variable: $main
+name: dark-flame-cs
+
+-- end: figma-json
+
+
+-- ftd.color-scheme colors-data: $main
+
+
+
+-- package: THEME
+name: dark-flame-cs
+logo: $assets.files.static.fastn-logo.svg
+subtitle: Adding warmth and energy to your designs with the `dark-flame-cs` Color Scheme
+colors: $colors-data
+
+
+-- cp.components-pallete:
+
+-- cp.component-wrap-left:
+
+-- cp.row-spacing-48:
+
+-- cp.plus-button:
+
+-- cp.avatar:
+
+-- cp.label: Label
+
+-- end: cp.row-spacing-48
+
+-- cp.row-spacing-40:
+
+-- cp.button-base-dark: Button
+
+-- cp.button-base-light: Button
+
+-- end: cp.row-spacing-40
+
+-- cp.app-bar: Page Title
+img1: $assets.files.static.menu.svg
+img2: $assets.files.static.share.svg
+img3: $assets.files.static.search.svg
+img4: $assets.files.static.more.svg
+
+-- cp.pagination:
+num1: 1
+num2: 2
+num3: 3
+numN: 9
+
+-- cp.text-input:
+
+-- cp.label-input:
+
+-- cp.warning-button: Restricted
+
+-- cp.row-spacing-26:
+
+-- cp.primary-button: Accepted
+
+-- cp.secondary-button: In-progress
+
+-- end: cp.row-spacing-26
+
+-- cp.card:
+image: $assets.files.static.img.svg
+likes: 2,729 Like
+comments: 273 Comment
+avatar: $assets.files.static.image.svg
+name: Patrica AVA
+post: UI Designer
+
+Mauris ullamcorper tortor sed purus interdum, fermentum efficitur est dictu.
+
+-- end: cp.component-wrap-left
+
+-- cp.component-wrap-middle:
+
+-- cp.hero: We transform ideas into digital outcomes.
+
+We are an award-winning strategic design company that provides consultancy
+services and help you create outstanding digital products.
+
+
+-- cp.news-block:
+
+-- cp.card:
+image: $assets.files.static.img.svg
+likes: 2,729 Like
+comments: 273 Comment
+avatar: $assets.files.static.image.svg
+name: Patrica AVA
+post: UI Designer
+
+Mauris ullamcorper tortor sed purus interdum, fermentum efficitur est dictu.
+
+
+-- cp.card:
+image: $assets.files.static.img.svg
+likes: 2,729 Like
+comments: 273 Comment
+avatar: $assets.files.static.image.svg
+name: Patrica AVA
+post: UI Designer
+
+Mauris ullamcorper tortor sed purus interdum, fermentum efficitur est dictu.
+
+
+-- cp.card:
+image: $assets.files.static.img.svg
+likes: 2,729 Like
+comments: 273 Comment
+avatar: $assets.files.static.image.svg
+name: Patrica AVA
+post: UI Designer
+
+Mauris ullamcorper tortor sed purus interdum, fermentum efficitur est dictu.
+
+-- end: cp.news-block
+
+-- cp.sitemap-footer:
+copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+
+-- end: cp.component-wrap-middle
+
+-- cp.component-wrap-right:
+
+-- cp.sidenav:
+
+-- end: cp.component-wrap-right
+
+-- end: cp.components-pallete
+
+-- color-scheme:
+tagline: Adding warmth and energy to your designs with the `dark-flame-cs` Color Scheme
+
+-- color-scheme.rightbar:
+
+-- title-with-link: Developed Using
+icon: $assets.files.static.code-outline-icon.svg
+link-text: fastn
+link: https://fastn.com/
+
+-- title-with-link: Github Link
+icon: $assets.files.static.link-icon.svg
+link-text: github.com/FifthTry/color-doc
+link: https://github.com/FifthTry/color-doc
+
+-- title-with-link: License Information
+icon: $assets.files.static.bsd-license-icon.svg
+link-text: BSD 3-Clause License
+link: https://github.com/FifthTry/color-doc/blob/main/LICENSE
+
+-- title-with-link: Author Information
+icon: $assets.files.static.author-icon.svg
+link-text: Contributors
+link: https://github.com/FifthTry/color-doc/graphs/contributors
+
+-- title-with-link: Discord Channel
+icon: $assets.files.static.discord-icon.svg
+link-text: discord.gg/bucrdvptYd
+link: https://discord.gg/bucrdvptYd
+
+-- title-with-link: How to use this colour palette
+icon: $assets.files.static.link-icon.svg
+link-text: How to use?
+link: #how-to-use-cs
+
+-- title-with-link: How to modify a colour palette
+icon: $assets.files.static.link-icon.svg
+link-text: fastn.com/modify-cs
+link: https://fastn.com/modify-cs/
+
+-- title-with-link: How to create a colour palette
+icon: $assets.files.static.link-icon.svg
+link-text: fastn.com/figma-to-fastn-cs
+link: https://fastn.com/figma-to-fastn-cs/
+
+-- end: color-scheme.rightbar
+
+-- color-scheme.body:
+
+The Dark Flame color scheme is a modern and bold package that
+offers a balanced combination of black and orange tones.
+In dark mode, it creates a mysterious yet fiery look, while in light mode,
+it conveys a warm and inviting feel. This package is perfect for various
+projects, including websites, applications, and branding, and can help
+you create captivating and engaging designs.
+
+-- cb.code: Figma tokens json
+lang: json
+max-height.fixed.px: 300
+
+$figma-json
+
+-- end: color-scheme
+
+-- how-to-use-cs: How to use this colour scheme
+link: #how-to-use-cs
+
+The importance of colour in a website’s overall look and feel is well known. The
+right colour scheme can evoke emotions, create visual interest, and direct a
+user’s attention to specific elements on a page. That’s why the ftd colour
+scheme framework provides an easy and powerful way to define colour schemes and
+apply them to your website.
+
+To start, you can choose from existing colour scheme packages or create your own
+custom colour scheme. To apply a colour scheme package on top of your package,
+you’ll need to import it into one of the module.
+
+For example, let’s say you’re using the page component from `doc-site` package
+and want to apply the dark-flame-cs scheme package on top of it.
+You first create a new module, let’s say my-ds.ftd. Then you import dark-flame-cs
+package module and then create a new component called page
+there.
+
+Here’s what your my-ds.ftd module and FASTN.ftd import would look like:
+
+-- cb.code: Add `dark-flame-cs` as dependency into FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: dark-flame-cs
+
+-- cb.code: my-ds.ftd module
+lang: ftd
+download: my-ds.ftd
+
+\-- import: fifthtry.github.io/dark-flame-cs as my-cs
+\-- import: fifthtry.github.io/doc-site as ds
+
+\-- component page:
+children wrapper:
+optional body body:
+
+\-- ds.page:
+title: $page.title
+body: $page.body
+wrapper: $page.wrapper
+colors: $my-cs.main
+
+\-- end: page
+
+
+-- markdown:
+
+After creating my-ds.page component, use this in rest of the module of your
+package instead of ds.page.
+
+Once you have imported the colour scheme package and created a new component
+my-ds.page, you can use it throughout your website instead of the ds.page
+component.
+
+With just a few lines of code, you can dramatically change the look and feel of
+your website using the ftd colour scheme.
+
+-- end: how-to-use-cs
+
+-- color-pallete: Standalone colors
+pallete: $standalone
+
+-- color-pallete: Background Colors
+pallete: $background-colors
+
+-- color-pallete: CTA Primary Colors
+pallete: $cta-primary-colors
+
+-- color-pallete: CTA Secondary Colors
+pallete: $cta-secondary-colors
+
+-- color-pallete: CTA Tertiary Colors
+pallete: $cta-tertiary-colors
+
+-- color-pallete: CTA Danger Colors
+pallete: $cta-danger-colors
+
+-- color-pallete: Error Colors
+pallete: $error-colors
+
+-- color-pallete: Success Colors
+pallete: $success-colors
+
+-- color-pallete: Warning Colors
+pallete: $warning-colors
+
+-- color-pallete: Info Colors
+pallete: $info-colors
+
+-- color-pallete: Accent Colors
+pallete: $accent-colors
+
+-- color-pallete: Custom Colors
+pallete: $custom-colors
+
+-- body-with-links:
+github-text: github.com/fastn-stack/fastn
+github-url: https://github.com/fastn-stack/fastn
+discord-text: discord.gg/bucrdvptYd
+discord-url: https://discord.gg/bucrdvptYd
+tutorials-text: fastn.com/expander/hello-world/-/build/
+tutorials-url: https://fastn.com/expander/hello-world/-/build/
+
+We are trying to create the language for human beings and we do not believe it
+would be possible without your support. We would love to hear from you.
+
+
+-- end: package
+
+
+
+
+
+
+
+
+
+
+
+
+-- component color-scheme:
+optional string figma-json:
+optional ftd.image-src logo:
+caption title: Saturated Sunset CS
+optional string tagline:
+optional body body:
+children cs-wrap:
+ftd.ui list rightbar:
+
+-- ftd.column:
+width: fill-container
+align-content: center
+padding-top.px: 60
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.desktop:
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 34
+
+-- ftd.column:
+width.fixed.percent: 70
+spacing.fixed.px: 24
+
+-- ftd.text: $color-scheme.tagline
+if: { color-scheme.tagline != NULL }
+role: $inherited.types.heading-tiny
+color: #212738
+style: bold
+
+-- ftd.text:
+if: { color-scheme.body != NULL}
+role: $inherited.types.copy-regular
+color: #212738
+
+$color-scheme.body
+
+-- ftd.column:
+width: fill-container
+children: $color-scheme.cs-wrap
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+width.fixed.percent: 30
+border-left-width.px: 1
+border-color: $inherited.colors.border
+padding-horizontal.px: 34
+
+-- column-right:
+childrens: $color-scheme.rightbar
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.desktop
+
+
+-- ftd.mobile:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 34
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 24
+
+-- ftd.text: $color-scheme.tagline
+if: { color-scheme.tagline != NULL }
+role: $inherited.types.heading-tiny
+color: #212738
+style: bold
+
+-- ftd.text:
+if: { color-scheme.body != NULL}
+role: $inherited.types.copy-regular
+color: #212738
+
+$color-scheme.body
+
+-- ftd.column:
+width: fill-container
+children: $color-scheme.cs-wrap
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+
+-- column-right:
+childrens: $color-scheme.rightbar
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: color-scheme
+
+
+
+
+
+
+
+
+
+
+-- component column-right:
+ftd.ui list childrens:
+
+-- ftd.column:
+width: fill-container
+children: $column-right.childrens
+spacing.fixed.px: 28
+
+-- end: ftd.column
+
+-- end: column-right
+
+
+
+
+
+
+
+
+
+
+-- component title-with-link:
+caption title:
+optional ftd.image-src icon:
+optional string link-text:
+optional string link:
+boolean $mouseover: false
+
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 6
+
+-- ftd.text: $title-with-link.title
+color: #212738
+role: $inherited.types.button-small
+style: bold
+
+-- ftd.row:
+align-content: center
+spacing.fixed.px: 9
+link: $title-with-link.link
+color: $inherited.colors.info.text
+$on-mouse-enter$: $ftd.set-bool($a = $title-with-link.mouseover, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $title-with-link.mouseover, v = false)
+
+-- ftd.image:
+if: { title-with-link.icon != NULL }
+src: $title-with-link.icon
+
+-- ftd.text: $title-with-link.link-text
+if: { title-with-link.link-text != NULL }
+role: $inherited.types.button-small
+color: #006EB3
+style: bold
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: title-with-link
+
+
+
+
+
+
+
+
+
+
+-- component markdown:
+body body:
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: #212738
+classes: markdown
+
+$markdown.body
+
+-- end: markdown
+
+
+
+
+
+
+
+
+
+
+-- component package:
+caption title:
+optional string name:
+optional ftd.image-src logo:
+children package-wrap:
+optional string subtitle:
+ftd.color-scheme colors: $ftd.default-colors
+ftd.type-data types: $typo.types
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.column:
+width: fill-container
+background.solid: rgba(250,235,215,1)
+padding-vertical.px if { ftd.device == "desktop" }: 34
+padding-vertical.px if { ftd.device == "mobile" }: 18
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: 1440
+padding-horizontal.px if { ftd.device == "desktop" }: 70
+padding-horizontal.px if { ftd.device == "mobile" }: 18
+
+-- ftd.row:
+width: fill-container
+align-content: center
+
+-- ftd.row:
+width: fill-container
+
+-- ftd.image:
+if: { package.logo != NULL }
+src: $package.logo
+width.fixed.px: 76
+height.fixed.px: 76
+
+-- end: ftd.row
+
+-- ftd.column:
+spacing.fixed.px: 15
+
+-- ftd.text: $package.title
+color: #212738
+role: $inherited.types.heading-small
+style: bold
+
+-- ftd.text: $package.name
+color: #212738
+role: $inherited.types.button-large
+white-space: nowrap
+style: bold
+text-transform: uppercase
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: 1440
+padding-horizontal.px if { ftd.device == "desktop" }: 70
+padding-vertical.px if { ftd.device == "desktop" }: 60
+padding-horizontal.px: 18
+padding-vertical.px: 18
+background.solid: #FFFFFF
+
+-- ftd.text: $package.subtitle
+role: $inherited.types.heading-small
+color: #212738
+style: bold
+
+-- ftd.column:
+width: fill-container
+children: $package.package-wrap
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- cp.dms:
+
+
+-- end: ftd.column
+
+-- end: package
+
+
+
+
+
+
+
+
+
+
+-- component color-pallete:
+caption title:
+colors list pallete:
+
+-- ftd.column:
+width: fill-container
+margin-top.px: 60
+
+-- ftd.text: $color-pallete.title
+role: $inherited.types.heading-tiny
+color: #212738
+margin-bottom.px: 26
+style: bold
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 40
+wrap: true
+
+-- color-block: $obj.title
+$loop$: $color-pallete.pallete as $obj
+dark: $obj.dark
+light: $obj.light
+bgcolor: $obj.bgcolor
+body: $obj.body
+border-dark: $obj.border-dark
+border-light: $obj.border-light
+border: $obj.border
+text-dark: $obj.text-dark
+text-light: $obj.text-light
+text: $obj.text
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: color-pallete
+
+
+
+
+
+
+
+
+
+
+-- component color-block:
+caption title:
+string dark:
+string light:
+ftd.color bgcolor:
+optional body body:
+optional string border-dark:
+optional string border-light:
+optional ftd.color border:
+optional string text-dark:
+optional string text-light:
+optional ftd.color text:
+
+-- ftd.row:
+min-width.fixed.px if { ftd.device == "desktop" }: 400
+max-width.fixed.px if { ftd.device == "desktop" }: 400
+width if { ftd.device == "mobile" }: fill-container
+margin-top.px: 40
+
+-- ftd.column:
+width: fill-container
+padding-horizontal.px: 12
+padding-vertical.px: 15
+border-width.px: 1
+border-color: #EEEEEE
+border-radius.px: 6
+
+-- ftd.row:
+spacing.fixed.px: 15
+
+-- ftd.column:
+width.fixed.px: 145
+height.fixed.px: 100
+
+-- ftd.column:
+if: { color-block.border == NULL }
+width: fill-container
+height: fill-container
+border-radius.px: 6
+margin-top.px: -44
+background.solid: $color-block.bgcolor
+border-width.px: 1
+border-color: #A0A0A0
+
+-- ftd.column:
+width: fill-container
+anchor: parent
+bottom.px: 0
+border-bottom-left-radius.px: 6
+border-bottom-right-radius.px: 6
+padding-horizontal.px: 10
+background.solid: rgba(0,0,0,.1)
+padding-vertical.px: 8
+
+-- ftd.text: $color-block.dark
+if: { ftd.dark-mode }
+role: $inherited.types.fine-print
+color: #FFFFFF
+text-transform: uppercase
+style: bold
+
+-- ftd.text: $color-block.light
+if: { !ftd.dark-mode }
+role: $inherited.types.fine-print
+color: #FFFFFF
+text-transform: uppercase
+style: bold
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+if: { color-block.border != NULL }
+width: fill-container
+height: fill-container
+border-radius.px: 6
+margin-top.px: -44
+border-width.px: 1
+border-color: #A0A0A0
+background.solid: $color-block.bgcolor
+
+-- ftd.column:
+width: fill-container
+height.fixed.px: 33
+background.solid: $color-block.border
+
+-- ftd.column:
+width: fill-container
+anchor: parent
+bottom.px: 0
+border-bottom-left-radius.px: 6
+border-bottom-right-radius.px: 6
+padding-horizontal.px: 10
+background.solid: rgba(0,0,0,.1)
+padding-vertical.px: 8
+
+-- ftd.text: $color-block.border-dark
+if: { ftd.dark-mode }
+role: $inherited.types.fine-print
+color: #FFFFFF
+text-transform: uppercase
+style: bold
+
+-- ftd.text: $color-block.border-light
+if: { !ftd.dark-mode }
+role: $inherited.types.fine-print
+color: #FFFFFF
+text-transform: uppercase
+style: bold
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+height.fixed.px: 33
+background.solid: $color-block.text
+
+-- ftd.column:
+width: fill-container
+anchor: parent
+bottom.px: 0
+border-bottom-left-radius.px: 6
+border-bottom-right-radius.px: 6
+padding-horizontal.px: 10
+background.solid: rgba(0,0,0,.1)
+padding-vertical.px: 8
+
+-- ftd.text: $color-block.text-dark
+if: { ftd.dark-mode }
+role: $inherited.types.fine-print
+color: #FFFFFF
+text-transform: uppercase
+style: bold
+
+-- ftd.text: $color-block.text-light
+if: { !ftd.dark-mode }
+role: $inherited.types.fine-print
+color: #FFFFFF
+text-transform: uppercase
+style: bold
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+anchor: parent
+bottom.px: 0
+border-bottom-left-radius.px: 6
+border-bottom-right-radius.px: 6
+padding-horizontal.px: 10
+background.solid: rgba(0,0,0,.1)
+padding-vertical.px: 8
+
+-- ftd.text: $color-block.dark
+if: { ftd.dark-mode }
+role: $inherited.types.fine-print
+color: #FFFFFF
+text-transform: uppercase
+style: bold
+
+-- ftd.text: $color-block.light
+if: { !ftd.dark-mode }
+role: $inherited.types.fine-print
+color: #FFFFFF
+text-transform: uppercase
+style: bold
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 5
+
+-- ftd.text: $color-block.title
+role: $inherited.types.copy-small
+color: #212738
+
+-- ftd.text:
+role: $inherited.types.copy-small
+color: #707070
+
+$color-block.body
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: color-block
+
+
+
+
+
+
+
+
+
+
+-- component body-with-links:
+string github-text:
+string discord-text:
+string tutorials-text:
+string github-url:
+string discord-url:
+string tutorials-url:
+body body:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 24
+margin-top.px: 60
+margin-bottom.px if { ftd.device == "mobile" }: 40
+
+-- ftd.text: Get in touch!
+role: $inherited.types.heading-small
+style: bold
+color: #212738
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: #212738
+
+$body-with-links.body
+
+-- ftd.row:
+width: fill-container
+role: $inherited.types.copy-regular
+color: #212738
+spacing.fixed.px: 8
+
+-- ftd.text: GitHub:
+
+-- ftd.text: $body-with-links.github-text
+link: $body-with-links.github-url
+
+-- end: ftd.row
+
+-- ftd.row:
+width: fill-container
+role: $inherited.types.copy-regular
+color: #212738
+spacing.fixed.px: 8
+
+-- ftd.text: Discord:
+
+-- ftd.text: $body-with-links.discord-text
+link: $body-with-links.discord-url
+
+-- end: ftd.row
+
+-- ftd.row:
+width: fill-container
+role: $inherited.types.copy-regular
+color: #212738
+spacing.fixed.px: 8
+
+-- ftd.text: Tutorials:
+
+-- ftd.text: $body-with-links.tutorials-text
+link: $body-with-links.tutorials-url
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: body-with-links
+
+
+
+
+
+
+
+
+
+
+-- component how-to-use-cs:
+caption title:
+string link:
+body body:
+children childs:
+
+-- ftd.column:
+width: fill-container
+margin-top.px: 60
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 10
+
+-- ftd.text: $how-to-use-cs.title
+role: $inherited.types.heading-tiny
+color: #212738
+style: bold
+region: h3
+id: how-to-use-cs
+margin-bottom.px: 24
+
+-- ftd.image:
+src: $assets.files.static.link-icon.svg
+link: $how-to-use-cs.link
+
+-- end: ftd.row
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: #212738
+margin-bottom.px: 20
+
+$how-to-use-cs.body
+
+-- ftd.column:
+width: fill-container
+children: $how-to-use-cs.childs
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: how-to-use-cs
+
+
+
+
+
+
+
+
+
+
+-- ftd.color-scheme main:
+background: $colors.background-
+border: $colors.border-
+border-strong: $colors.border-strong-
+text: $colors.text-
+text-strong: $colors.text-strong-
+shadow: $colors.shadow-
+scrim: $colors.scrim-
+cta-primary: $colors.cta-primary-
+cta-secondary: $colors.cta-secondary-
+cta-tertiary: $colors.cta-tertiary-
+cta-danger: $colors.cta-danger-
+accent: $colors.accent-
+error: $colors.error-btb-
+success: $colors.success-btb-
+info: $colors.info-btb-
+warning: $colors.warning-btb-
+custom: $colors.custom-
+
+
+
+
+
+
+
+
+
+
+-- record colors:
+caption title:
+string dark:
+string light:
+ftd.color bgcolor:
+optional body body:
+optional string border-dark:
+optional string border-light:
+optional ftd.color border:
+optional string text-dark:
+optional string text-light:
+optional ftd.color text:
+
+
+-- colors list standalone:
+
+-- colors: \$inherited.colors.border
+dark: $colors-data.border.dark
+light: $colors-data.border.light
+bgcolor: $colors-data.border
+
+We use this color for border color.
+
+-- colors: \$inherited.colors.border-strong
+dark: $colors-data.border-strong.dark
+light: $colors-data.border-strong.light
+bgcolor: $colors-data.border-strong
+
+We use this color for strong border color.
+
+-- colors: \$inherited.colors.text
+dark: $colors-data.text.dark
+light: $colors-data.text.light
+bgcolor: $colors-data.text
+
+We use this color for text.
+
+-- colors: \$inherited.colors.text-strong
+dark: $colors-data.text-strong.dark
+light: $colors-data.text-strong.light
+bgcolor: $colors-data.text-strong
+
+We use this color for strong text.
+
+-- colors: \$inherited.colors.shadow
+dark: $colors-data.shadow.dark
+light: $colors-data.shadow.light
+bgcolor: $colors-data.shadow
+
+We use this color for shadow.
+
+-- colors: \$inherited.colors.scrim
+dark: $colors-data.scrim.dark
+light: $colors-data.scrim.light
+bgcolor: $colors-data.scrim
+
+We use this color for scrim.
+
+-- end: standalone
+
+
+
+
+-- colors list background-colors:
+
+-- colors: \$inherited.colors.background.base
+dark: $colors-data.background.base.dark
+light: $colors-data.background.base.light
+bgcolor: $colors-data.background.base
+
+We use this color for base background.
+
+-- colors: \$inherited.colors.background.step-1
+dark: $colors-data.background.step-1.dark
+light: $colors-data.background.step-1.light
+bgcolor: $colors-data.background.step-1
+
+We use this color for background step-1 such as sidebar etc.
+
+-- colors: \$inherited.colors.background.step-2
+dark: $colors-data.background.step-2.dark
+light: $colors-data.background.step-2.light
+bgcolor: $colors-data.background.step-2
+
+We use this color as background step-2 such as for background card etc.
+
+-- colors: \$inherited.colors.background.code
+dark: $colors-data.background.code.dark
+light: $colors-data.background.code.light
+bgcolor: $colors-data.background.code
+
+We use this color for background code.
+
+-- colors: \$inherited.colors.background.overlay
+dark: $colors-data.background.overlay.dark
+light: $colors-data.background.overlay.light
+bgcolor: $colors-data.background.overlay
+
+We use this color for background overlay.
+
+-- end: background-colors
+
+
+
+
+
+-- colors list cta-primary-colors:
+
+-- colors: \$inherited.colors.cta-primary.base
+dark: $colors-data.cta-primary.base.dark
+light: $colors-data.cta-primary.base.light
+bgcolor: $colors-data.cta-primary.base
+
+We use this color as primary main button background color.
+
+-- colors: \$inherited.colors.cta-primary.hover
+dark: $colors-data.cta-primary.hover.dark
+light: $colors-data.cta-primary.hover.light
+bgcolor: $colors-data.cta-primary.hover
+
+We use this color as primary main button hover background color.
+
+-- colors: \$inherited.colors.cta-primary.disabled
+dark: $colors-data.cta-primary.disabled.dark
+light: $colors-data.cta-primary.disabled.light
+bgcolor: $colors-data.cta-primary.disabled
+
+We use this color as primary main button disabled background color.
+
+-- colors: \$inherited.colors.cta-primary.pressed
+dark: $colors-data.cta-primary.pressed.dark
+light: $colors-data.cta-primary.pressed.light
+bgcolor: $colors-data.cta-primary.pressed
+
+We use this color as primary main button pressed background color.
+
+-- colors: \$inherited.colors.cta-primary.focused
+dark: $colors-data.cta-primary.focused.dark
+light: $colors-data.cta-primary.focused.light
+bgcolor: $colors-data.cta-primary.focused
+
+We use this color as primary main button focus background color.
+
+-- colors: \$inherited.colors.cta-primary.border
+dark: $colors-data.cta-primary.border.dark
+light: $colors-data.cta-primary.border.light
+bgcolor: $colors-data.cta-primary.border
+
+We use this color as primary main button border color.
+
+-- colors: \$inherited.colors.cta-primary.text
+dark: $colors-data.cta-primary.text.dark
+light: $colors-data.cta-primary.text.light
+bgcolor: $colors-data.cta-primary.text
+
+We use this color as primary main button text color.
+
+-- end: cta-primary-colors
+
+
+
+
+
+-- colors list cta-secondary-colors:
+
+-- colors: \$inherited.colors.cta-secondary.base
+dark: $colors-data.cta-secondary.base.dark
+light: $colors-data.cta-secondary.base.light
+bgcolor: $colors-data.cta-secondary.base
+
+We use this color as secondary main button background color.
+
+-- colors: \$inherited.colors.cta-secondary.hover
+dark: $colors-data.cta-secondary.hover.dark
+light: $colors-data.cta-secondary.hover.light
+bgcolor: $colors-data.cta-secondary.hover
+
+We use this color as secondary main button hover background color.
+
+-- colors: \$inherited.colors.cta-secondary.disabled
+dark: $colors-data.cta-secondary.disabled.dark
+light: $colors-data.cta-secondary.disabled.light
+bgcolor: $colors-data.cta-secondary.disabled
+
+We use this color as secondary main button disabled background color.
+
+-- colors: \$inherited.colors.cta-secondary.pressed
+dark: $colors-data.cta-secondary.pressed.dark
+light: $colors-data.cta-secondary.pressed.light
+bgcolor: $colors-data.cta-secondary.pressed
+
+We use this color as secondary main button pressed background color.
+
+-- colors: \$inherited.colors.cta-secondary.focused
+dark: $colors-data.cta-secondary.focused.dark
+light: $colors-data.cta-secondary.focused.light
+bgcolor: $colors-data.cta-secondary.focused
+
+We use this color as secondary main button focus background color.
+
+-- colors: \$inherited.colors.cta-secondary.border
+dark: $colors-data.cta-secondary.border.dark
+light: $colors-data.cta-secondary.border.light
+bgcolor: $colors-data.cta-secondary.border
+
+We use this color as secondary main button border color.
+
+-- colors: \$inherited.colors.cta-secondary.text
+dark: $colors-data.cta-secondary.text.dark
+light: $colors-data.cta-secondary.text.light
+bgcolor: $colors-data.cta-secondary.text
+
+We use this color as secondary main button text color.
+
+-- end: cta-secondary-colors
+
+
+
+
+
+-- colors list cta-tertiary-colors:
+
+-- colors: \$inherited.colors.cta-tertiary.base
+dark: $colors-data.cta-tertiary.base.dark
+light: $colors-data.cta-tertiary.base.light
+bgcolor: $colors-data.cta-tertiary.base
+
+We use this color as tertiary main button background color.
+
+-- colors: \$inherited.colors.cta-tertiary.hover
+dark: $colors-data.cta-tertiary.hover.dark
+light: $colors-data.cta-tertiary.hover.light
+bgcolor: $colors-data.cta-tertiary.hover
+
+We use this color as tertiary main button hover background color.
+
+-- colors: \$inherited.colors.cta-tertiary.disabled
+dark: $colors-data.cta-tertiary.disabled.dark
+light: $colors-data.cta-tertiary.disabled.light
+bgcolor: $colors-data.cta-tertiary.disabled
+
+We use this color as tertiary main button disabled background color.
+
+-- colors: \$inherited.colors.cta-tertiary.pressed
+dark: $colors-data.cta-tertiary.pressed.dark
+light: $colors-data.cta-tertiary.pressed.light
+bgcolor: $colors-data.cta-tertiary.pressed
+
+We use this color as tertiary main button pressed background color.
+
+-- colors: \$inherited.colors.cta-tertiary.focused
+dark: $colors-data.cta-tertiary.focused.dark
+light: $colors-data.cta-tertiary.focused.light
+bgcolor: $colors-data.cta-tertiary.focused
+
+We use this color as tertiary main button focus background color.
+
+-- colors: \$inherited.colors.cta-tertiary.border
+dark: $colors-data.cta-tertiary.border.dark
+light: $colors-data.cta-tertiary.border.light
+bgcolor: $colors-data.cta-tertiary.border
+
+We use this color as tertiary main button border color.
+
+-- colors: \$inherited.colors.cta-tertiary.text
+dark: $colors-data.cta-tertiary.text.dark
+light: $colors-data.cta-tertiary.text.light
+bgcolor: $colors-data.cta-tertiary.text
+
+We use this color as tertiary main button text color.
+
+-- end: cta-tertiary-colors
+
+
+
+
+
+-- colors list cta-danger-colors:
+
+-- colors: \$inherited.colors.cta-danger.base
+dark: $colors-data.cta-danger.base.dark
+light: $colors-data.cta-danger.base.light
+bgcolor: $colors-data.cta-danger.base
+
+We use this color as warning main button background color.
+
+-- colors: \$inherited.colors.cta-danger.hover
+dark: $colors-data.cta-danger.hover.dark
+light: $colors-data.cta-danger.hover.light
+bgcolor: $colors-data.cta-danger.hover
+
+We use this color as warning main button hover background color.
+
+-- colors: \$inherited.colors.cta-danger.disabled
+dark: $colors-data.cta-danger.disabled.dark
+light: $colors-data.cta-danger.disabled.light
+bgcolor: $colors-data.cta-danger.disabled
+
+We use this color as warning main button disabled background color.
+
+-- colors: \$inherited.colors.cta-danger.pressed
+dark: $colors-data.cta-danger.pressed.dark
+light: $colors-data.cta-danger.pressed.light
+bgcolor: $colors-data.cta-danger.pressed
+
+We use this color as warning main button pressed background color.
+
+-- colors: \$inherited.colors.cta-danger.focused
+dark: $colors-data.cta-danger.focused.dark
+light: $colors-data.cta-danger.focused.light
+bgcolor: $colors-data.cta-danger.focused
+
+We use this color as warning main button focus background color.
+
+-- colors: \$inherited.colors.cta-danger.border
+dark: $colors-data.cta-danger.border.dark
+light: $colors-data.cta-danger.border.light
+bgcolor: $colors-data.cta-danger.border
+
+We use this color as warning main button border color.
+
+-- colors: \$inherited.colors.cta-danger.text
+dark: $colors-data.cta-danger.text.dark
+light: $colors-data.cta-danger.text.light
+bgcolor: $colors-data.cta-danger.text
+
+We use this color as warning main button text color.
+
+-- end: cta-danger-colors
+
+
+
+
+
+-- colors list error-colors:
+
+-- colors: \$inherited.colors.error.base
+dark: $colors-data.error.base.dark
+light: $colors-data.error.base.light
+bgcolor: $colors-data.error.base
+
+We use this color as base error color.
+
+-- colors: \$inherited.colors.error.btb
+dark: $colors-data.error.base.dark
+light: $colors-data.error.base.light
+bgcolor: $colors-data.error.base
+border-dark: $colors-data.error.border.dark
+border-light: $colors-data.error.border.light
+border: $colors-data.error.border
+text-dark: $colors-data.error.border.dark
+text-light: $colors-data.error.border.light
+text: $colors-data.error.border
+
+Error button with border, text and background of the color shown from top to
+bottom in this color box.
+
+-- colors: \$inherited.colors.error.text
+dark: $colors-data.error.text.dark
+light: $colors-data.error.text.light
+bgcolor: $colors-data.error.text
+
+We use this color as error text color.
+
+-- colors: \$inherited.colors.error.border
+dark: $colors-data.error.border.dark
+light: $colors-data.error.border.light
+bgcolor: $colors-data.error.border
+
+We use this color as error border color.
+
+-- end: error-colors
+
+
+
+
+
+-- colors list success-colors:
+
+-- colors: \$inherited.colors.success.base
+dark: $colors-data.success.base.dark
+light: $colors-data.success.base.light
+bgcolor: $colors-data.success.base
+
+We use this color as base success color.
+
+-- colors: \$inherited.colors.success.btb
+dark: $colors-data.success.base.dark
+light: $colors-data.success.base.light
+bgcolor: $colors-data.success.base
+border-dark: $colors-data.success.border.dark
+border-light: $colors-data.success.border.light
+border: $colors-data.success.border
+text-dark: $colors-data.success.border.dark
+text-light: $colors-data.success.border.light
+text: $colors-data.success.border
+
+Success button with border, text and background of the color shown from top to
+bottom in this color box.
+
+-- colors: \$inherited.colors.success.text
+dark: $colors-data.success.text.dark
+light: $colors-data.success.text.light
+bgcolor: $colors-data.success.text
+
+We use this color as success text color.
+
+-- colors: \$inherited.colors.success.border
+dark: $colors-data.success.border.dark
+light: $colors-data.success.border.light
+bgcolor: $colors-data.success.border
+
+We use this color as success border color.
+
+-- end: success-colors
+
+
+
+
+
+-- colors list warning-colors:
+
+-- colors: \$inherited.colors.warning.base
+dark: $colors-data.warning.base.dark
+light: $colors-data.warning.base.light
+bgcolor: $colors-data.warning.base
+
+We use this color as base warning color.
+
+-- colors: \$inherited.colors.warning.btb
+dark: $colors-data.warning.base.dark
+light: $colors-data.warning.base.light
+bgcolor: $colors-data.warning.base
+border-dark: $colors-data.warning.border.dark
+border-light: $colors-data.warning.border.light
+border: $colors-data.warning.border
+text-dark: $colors-data.warning.border.dark
+text-light: $colors-data.warning.border.light
+text: $colors-data.warning.border
+
+Warning button with border, text and background of the color shown from top to
+bottom in this color box.
+
+-- colors: \$inherited.colors.warning.text
+dark: $colors-data.warning.text.dark
+light: $colors-data.warning.text.light
+bgcolor: $colors-data.warning.text
+
+We use this color as warning text color.
+
+-- colors: \$inherited.colors.warning.border
+dark: $colors-data.warning.border.dark
+light: $colors-data.warning.border.light
+bgcolor: $colors-data.warning.border
+
+We use this color as warning border color.
+
+-- end: warning-colors
+
+
+
+
+-- colors list info-colors:
+
+-- colors: \$inherited.colors.info.base
+dark: $colors-data.info.base.dark
+light: $colors-data.info.base.light
+bgcolor: $colors-data.info.base
+
+We use this color as base info color.
+
+-- colors: \$inherited.colors.info.btb
+dark: $colors-data.info.base.dark
+light: $colors-data.info.base.light
+bgcolor: $colors-data.info.base
+border-dark: $colors-data.info.border.dark
+border-light: $colors-data.info.border.light
+border: $colors-data.info.border
+text-dark: $colors-data.info.border.dark
+text-light: $colors-data.info.border.light
+text: $colors-data.info.border
+
+Info button with border, text and background of the color shown from top to
+bottom in this color box.
+
+-- colors: \$inherited.colors.info.text
+dark: $colors-data.info.text.dark
+light: $colors-data.info.text.light
+bgcolor: $colors-data.info.text
+
+We use this color as info text color.
+
+-- colors: \$inherited.colors.info.border
+dark: $colors-data.info.border.dark
+light: $colors-data.info.border.light
+bgcolor: $colors-data.info.border
+
+We use this color as info border color.
+
+-- end: info-colors
+
+
+
+
+
+-- colors list accent-colors:
+
+-- colors: \$inherited.colors.accent.primary
+dark: $colors-data.accent.primary.dark
+light: $colors-data.accent.primary.light
+bgcolor: $colors-data.accent.primary
+
+We use this color as primary accent color.
+
+-- colors: \$inherited.colors.accent.secondary
+dark: $colors-data.accent.secondary.dark
+light: $colors-data.accent.secondary.light
+bgcolor: $colors-data.accent.secondary
+
+We use this color as secondary accent color.
+
+-- colors: \$inherited.colors.accent.tertiary
+dark: $colors-data.accent.tertiary.dark
+light: $colors-data.accent.tertiary.light
+bgcolor: $colors-data.accent.tertiary
+
+We use this color as tertiary accent color.
+
+-- end: accent-colors
+
+
+
+
+
+-- colors list custom-colors:
+
+-- colors: \$inherited.colors.custom.one
+dark: $colors-data.custom.one.dark
+light: $colors-data.custom.one.light
+bgcolor: $colors-data.custom.one
+
+We use this color for custom one.
+
+-- colors: \$inherited.colors.custom.two
+dark: $colors-data.custom.two.dark
+light: $colors-data.custom.two.light
+bgcolor: $colors-data.custom.two
+
+We use this color for custom two.
+
+-- colors: \$inherited.colors.custom.three
+dark: $colors-data.custom.three.dark
+light: $colors-data.custom.three.light
+bgcolor: $colors-data.custom.three
+
+We use this color for custom three.
+
+-- colors: \$inherited.colors.custom.four
+dark: $colors-data.custom.four.dark
+light: $colors-data.custom.four.light
+bgcolor: $colors-data.custom.four
+
+We use this color for custom four.
+
+-- colors: \$inherited.colors.custom.five
+dark: $colors-data.custom.five.dark
+light: $colors-data.custom.five.light
+bgcolor: $colors-data.custom.five
+
+We use this color for custom five.
+
+-- colors: \$inherited.colors.custom.six
+dark: $colors-data.custom.six.dark
+light: $colors-data.custom.six.light
+bgcolor: $colors-data.custom.six
+
+We use this color for custom six.
+
+-- colors: \$inherited.colors.custom.seven
+dark: $colors-data.custom.seven.dark
+light: $colors-data.custom.seven.light
+bgcolor: $colors-data.custom.seven
+
+We use this color for custom seven.
+
+-- colors: \$inherited.colors.custom.eight
+dark: $colors-data.custom.eight.dark
+light: $colors-data.custom.eight.light
+bgcolor: $colors-data.custom.eight
+
+We use this color for custom eight.
+
+-- colors: \$inherited.colors.custom.nine
+dark: $colors-data.custom.nine.dark
+light: $colors-data.custom.nine.light
+bgcolor: $colors-data.custom.nine
+
+We use this color for custom nine.
+
+-- colors: \$inherited.colors.custom.ten
+dark: $colors-data.custom.ten.dark
+light: $colors-data.custom.ten.light
+bgcolor: $colors-data.custom.ten
+
+We use this color for custom ten.
+
+-- end: custom-colors

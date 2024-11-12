@@ -1,0 +1,134 @@
+-- ds.page: Custom Components
+
+-- ds.youtube:
+v: G9Q6-bZyGwc
+
+
+-- ds.h1: What's the need of a Component?
+
+`Custom Components` let's the user to turn their creativity into action.
+`Components` help users to build exciting features for their projects including
+styles, features, color-schemes, templates, typography etc.
+
+
+`Components` give scalability, efficiency as well as consistency to the design.
+Once created can be used and reused as many times throughout the project as
+well as can be used by others when published on GitHub.
+
+
+In our `Expander project`, we have used the `component` and named it as `box`.
+We moved our column code block that represents the box which we created in the
+last part and re-used the `component` three times.
+
+Documentation: [read more](https://fastn.com/components/)
+
+-- ds.h1: How to create a Component?
+
+-- ds.code: Syntax for creating a component
+lang: ftd
+
+\-- component <component-name>:
+
+\;; content of component goes here
+
+\-- end: <component-name>
+
+-- ds.h1: How to call/refer the component?
+
+`Component box` is created outside the root column, that represents the box.
+Then, inside the root column we refer it.
+
+
+-- ds.code: Syntax for refering the component
+lang: ftd
+
+\-- <component-name>:
+
+-- ds.h1: How to give different content to each box?
+
+To make Header and Body content user-dependent, we need to pass two arguments
+to the **component** we created.
+
+-- ds.code: Arguments
+lang: ftd
+
+\-- component <component-name>:
+caption <caption name>: <default value if any>
+body <body name>: <default value if any>
+
+\-- end: <component-name>
+
+-- ds.markdown:
+
+Now we can pass the arguments names for caption and body to Header and Body
+respectively.
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: $box.<caption name>
+
+\-- ftd.text: $box.<body name>
+
+
+-- ds.h3: Ways to pass the Header and Body content:
+
+For simplicity, I am assuming that **\<component-name\>** is **box**.
+
+-- ds.markdown:
+
+- **First Way**
+
+-- ds.code:
+lang: ftd
+
+\-- box: Header is in caption area
+
+Body is in body area
+
+-- ds.markdown:
+
+- **Second Way**
+
+-- ds.code:
+lang: ftd
+
+\-- box:
+title: Header using title keyword
+
+Body is in body area
+
+-- ds.markdown:
+
+- **Third Way**
+
+-- ds.code:
+lang: ftd
+
+\-- box:
+
+\-- box.title:
+
+Header is in first child: box.title.
+
+This is used to write multiline header
+
+\-- box.body:
+
+Body is in second child: box.body.
+
+-- ds.markdown:
+
+- **Fourth Way:** As an empty to take default values, if defined in arguments.
+
+-- ds.code:
+lang: ftd
+
+\-- box:
+
+
+-- ds.markdown:
+
+Continue with the [part 4 now](/expander/events/).
+
+-- end: ds.page

@@ -1,0 +1,43 @@
+-- import: fastn.com/u/ganesh-salunke
+-- import: fastn.com/u/priyanka-yadav
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Key Value Table 1
+featured-link: /featured/sections/cards/
+category: Featured Cards
+image: $fastn-assets.files.images.featured.sections.kvt-1.png
+owners: [$priyanka-yadav.info, $ganesh-salunke.info]
+license-url: https://github.com/FifthTry/key-value-table/blob/main/LICENSE
+license: Creative Commons
+published-date: 25-Aug-2022
+cards: $cards
+github-url: hhttps://github.com/FifthTry/key-value-table
+demo-link: https://fifthtry.github.io/key-value-table
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list cards:
+
+-- ft-ui.template: Card - 1
+template-url: /featured/sections/cards/card-1/
+screenshot: $fastn-assets.files.images.featured.sections.card-1.png
+
+-- ft-ui.template: Image Card - 1
+template-url: /featured/sections/cards/image-card-1/
+screenshot: $fastn-assets.files.images.featured.sections.image-card-1.png
+
+-- ft-ui.template: Image Card
+template-url: /featured/sections/cards/image-card-1/
+screenshot: $fastn-assets.files.images.featured.sections.image-card-1.png
+
+-- ft-ui.template: Image Gallery IG
+template-url: /featured/sections/cards/image-gallery-ig/
+screenshot: $fastn-assets.files.images.featured.sections.image-gallery-ig.png
+
+-- end: cards

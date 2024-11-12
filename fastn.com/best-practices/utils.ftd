@@ -1,0 +1,468 @@
+-- ds.page:
+
+This page will contain some components which would be useful probably.
+
+
+-- letter-stack:
+height.fixed.px: 800
+contents-a: $letter-contents-a
+contents-c: $letter-contents-c
+contents-d: $letter-contents-d
+contents-f: $letter-contents-f
+contents-i: $letter-contents-i
+contents-o: $letter-contents-o
+contents-p: $letter-contents-p
+contents-s: $letter-contents-s
+contents-v: $letter-contents-v
+
+
+-- end: ds.page
+
+-- ftd.color hover-c: coral
+
+
+-- integer letter-list-length(a):
+letter-data list a:
+
+len(a)
+
+
+
+
+-- record letter-data:
+caption name:
+optional string link:
+
+
+
+-- record letter-category:
+caption title:
+optional string link:
+letter-data list sub-categories:
+
+
+
+
+
+
+
+
+
+
+-- component letter:
+caption letter-name:
+optional string link:
+ftd.color hover-color: $hover-c
+boolean $is-hovered: false
+
+-- ftd.text: $letter.letter-name
+link if { letter.link != NULL }: $letter.link
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+color if { letter.is-hovered }: $letter.hover-color
+cursor if { letter.is-hovered }: pointer
+$on-mouse-enter$: $ftd.set-bool($a = $letter.is-hovered, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $letter.is-hovered, v = false)
+
+-- end: letter
+
+
+
+
+
+
+
+
+
+-- component letter-category-display:
+ftd.resizing width: fill-container
+caption letter-title:
+letter-data list letter-items:
+optional string title-link:
+
+-- ftd.column:
+/if: { len(letter-category-display.letter-items) != 0 }
+width: $letter-category-display.width
+spacing.fixed.px: 10
+
+
+	-- ftd.text: $letter-category-display.letter-title
+	color: $inherited.colors.text
+	role: $inherited.types.heading-medium
+	link: $letter-category-display.title-link
+	
+	-- ftd.column:
+	spacing.fixed.px: 5
+	wrap: true
+	
+		-- letter: $item.name
+		$loop$: $letter-category-display.letter-items as $item
+		link: $item.link
+		
+	-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: letter-category-display
+
+
+
+
+
+
+
+
+
+
+
+-- component letter-stack:
+optional caption title:
+optional ftd.resizing height:
+letter-category list contents-a: $letter-contents-a
+letter-category list contents-c: $letter-contents-c
+letter-category list contents-d: $letter-contents-d
+letter-category list contents-f: $letter-contents-f
+letter-category list contents-i: $letter-contents-i
+letter-category list contents-o: $letter-contents-o
+letter-category list contents-p: $letter-contents-p
+letter-category list contents-s: $letter-contents-s
+letter-category list contents-v: $letter-contents-v
+
+
+-- ftd.column:
+wrap: true
+width: fill-container
+height: $letter-stack.height
+spacing.fixed.px: 10
+
+	-- letter-category-display: $obj.title
+	$loop$: $letter-stack.contents-a as $obj
+	width.fixed.percent: 45
+	title-link: $obj.link
+	letter-items: $obj.sub-categories
+	
+	-- letter-category-display: $obj.title
+	$loop$: $letter-stack.contents-c as $obj
+	width.fixed.percent: 45
+	title-link: $obj.link
+	letter-items: $obj.sub-categories
+	
+	-- letter-category-display: $obj.title
+	$loop$: $letter-stack.contents-d as $obj
+	width.fixed.percent: 45
+	title-link: $obj.link
+	letter-items: $obj.sub-categories
+	
+	-- letter-category-display: $obj.title
+	$loop$: $letter-stack.contents-f as $obj
+	width.fixed.percent: 45
+	title-link: $obj.link
+	letter-items: $obj.sub-categories
+	
+	-- letter-category-display: $obj.title
+	$loop$: $letter-stack.contents-i as $obj
+	width.fixed.percent: 45
+	title-link: $obj.link
+	letter-items: $obj.sub-categories
+	
+	-- letter-category-display: $obj.title
+	$loop$: $letter-stack.contents-o as $obj
+	width.fixed.percent: 45
+	title-link: $obj.link
+	letter-items: $obj.sub-categories
+	
+	-- letter-category-display: $obj.title
+	$loop$: $letter-stack.contents-p as $obj
+	width.fixed.percent: 45
+	title-link: $obj.link
+	letter-items: $obj.sub-categories
+	
+	-- letter-category-display: $obj.title
+	$loop$: $letter-stack.contents-s as $obj
+	width.fixed.percent: 45
+	title-link: $obj.link
+	letter-items: $obj.sub-categories
+	
+	-- letter-category-display: $obj.title
+	$loop$: $letter-stack.contents-v as $obj
+	width.fixed.percent: 45
+	title-link: $obj.link
+	letter-items: $obj.sub-categories
+	
+-- end: ftd.column
+
+-- end: letter-stack
+
+
+;; --------------------------------------------------
+-- letter-category list letter-contents-a:
+
+-- letter-category: Auto Import
+link: /auto-import/
+sub-categories: $sub-categories-1
+
+-- end: letter-contents-a
+
+
+-- letter-data list sub-categories-1:
+
+
+-- end: sub-categories-1
+;; --------------------------------------------------
+
+
+
+;; --------------------------------------------------
+-- letter-category list letter-contents-c:
+
+-- letter-category: Commenting
+link: /commenting-guidelines/
+sub-categories: $sub-categories-2
+
+-- letter-category: Conditions
+link: /how-to-use-conditions/
+sub-categories: $sub-categories-3
+
+
+-- letter-category: Container
+link: /container-guidelines/
+sub-categories: $sub-categories-4
+
+-- end: letter-contents-c
+
+
+
+
+-- letter-data list sub-categories-2:
+
+-- letter-data: Avoid code comments
+link: /commenting-guidelines#no-code-comments
+
+-- letter-data: One line space between two sections
+link: /commenting-guidelines#no-code-comments#comment-spacing
+
+-- end: sub-categories-2
+
+
+-- letter-data list sub-categories-3:
+
+-- letter-data: Default Values for Mutually Exclusive Statements
+link: /how-to-use-conditions#default-for-mutually-exclusive
+
+-- letter-data: Avoid redundancy with Conditions
+link: /how-to-use-conditions#avoid-redundant-conditions
+
+-- letter-data: Avoiding same conditions on element and it’s children
+link: /how-to-use-conditions#different-conditions-for-element-children
+
+-- letter-data: Avoiding mutually exclusive conditions on element and it’s children
+link: /how-to-use-conditions#mutually-exclusive-conditions
+
+-- end: sub-categories-3
+
+
+
+-- letter-data list sub-categories-4:
+
+-- letter-data: Using conditional attributes to avoid duplicating similar components
+link: /container-guidelines#conditional-attributes-removes-component-duplication
+
+-- letter-data: Avoid using container components with single or no child
+link: /container-guidelines#minimize-container-components
+
+-- end: sub-categories-4
+;; --------------------------------------------------
+
+
+
+;; --------------------------------------------------
+-- letter-category list letter-contents-d:
+
+-- letter-category: Device
+link: /commenting-guidelines/
+sub-categories: $sub-categories-5
+
+-- end: letter-contents-d
+
+
+
+-- letter-data list sub-categories-5:
+
+-- letter-data: Don’t use device condition to show or hide the component
+link: /device-guidelines#dont-use-device-condition
+
+-- end: sub-categories-5
+;; --------------------------------------------------
+
+
+
+;; --------------------------------------------------
+-- letter-category list letter-contents-f:
+
+-- letter-category: Formatting
+link: /formatting/
+sub-categories: $sub-categories-6
+
+-- letter-category: Fscript
+link: /fscript-guidelines/
+sub-categories: $sub-categories-7
+
+
+-- end: letter-contents-f
+
+
+
+-- letter-data list sub-categories-6:
+
+-- letter-data: 80 character in text editor
+link: /formatting#80-char
+
+-- letter-data: Consistent markdown list indentation while wrapping
+link: /formatting#list-indentation
+
+-- letter-data: One line space between two sections
+link: /formatting#section-gap
+
+-- end: sub-categories-6
+
+
+-- letter-data list sub-categories-7:
+
+-- letter-data: Dollar not recommended in FScript
+link: /fscript-guidelines#no-dollar-in-fscript
+
+-- end: sub-categories-7
+
+;; --------------------------------------------------
+
+
+
+;; --------------------------------------------------
+-- letter-category list letter-contents-i:
+
+-- letter-category: Use inherited types
+link: /inherited-guidelines/
+sub-categories: $sub-categories-8
+
+-- end: letter-contents-i
+
+
+
+-- letter-data list sub-categories-8:
+
+-- letter-data: Prefer using inherited.colors to give colors
+link: /inherited-guidelines#inherited-colors
+
+-- letter-data: Prefer using inherited.types to give a role
+link: /inherited-guidelines#role-inheritance
+
+
+-- end: sub-categories-8
+;; --------------------------------------------------
+
+
+
+;; --------------------------------------------------
+-- letter-category list letter-contents-o:
+
+-- letter-category: Optional Arguments
+link: /optional-argument-guidelines/
+sub-categories: $sub-categories-9
+
+-- end: letter-contents-o
+
+
+
+-- letter-data list sub-categories-9:
+
+-- letter-data: Optional Arguments must have !NULL condition
+link: /optional-argument-guidelines#not-null-opt-arg
+
+-- end: sub-categories-9
+;; --------------------------------------------------
+
+
+;; --------------------------------------------------
+-- letter-category list letter-contents-p:
+
+-- letter-category: Property related
+link: /property-guidelines/
+sub-categories: $sub-categories-10
+
+-- end: letter-contents-p
+
+
+
+-- letter-data list sub-categories-10:
+
+-- letter-data: Use horizontal property
+link: /property-guidelines#horizontal-not-left-right
+
+-- letter-data:  Use vertical property
+link: /property-guidelines#vertical-not-top-bottom
+
+-- letter-data: Applying properties to container with consistent child values
+link: /property-guidelines#optimize-container-props
+
+-- letter-data: Aligning items within the container
+link: /property-guidelines#alignment-in-container
+
+-- letter-data: Propagating Child Properties to Parent Containers
+link: /property-guidelines#parent-propagation
+
+-- end: sub-categories-10
+
+;; --------------------------------------------------
+
+
+;; --------------------------------------------------
+-- letter-category list letter-contents-s:
+
+-- letter-category: Same argument & attribute types
+link: /same-argument-attribute-type/
+sub-categories: $sub-categories-11
+
+-- letter-category: Self referencing
+link: /self-referencing-guidelines/
+sub-categories: $sub-categories-12
+
+
+-- end: letter-contents-s
+
+
+-- letter-data list sub-categories-11:
+
+-- letter-data: Use consistent datatypes for arguments and their corresponding attributes
+link: /same-argument-attribute-type#consistent-data-types
+
+-- end: sub-categories-11
+
+
+
+-- letter-data list sub-categories-12:
+
+-- letter-data: Preventing duplicate self-referencing properties
+link: /self-referencing-guidelines#self-ref-validity
+
+-- end: sub-categories-12
+;; --------------------------------------------------
+
+
+;; --------------------------------------------------
+-- letter-category list letter-contents-v:
+
+-- letter-category: Variable and it’s Types
+link: /variable-type-guidelines/
+sub-categories: $sub-categories-13
+
+-- end: letter-contents-v
+
+
+
+-- letter-data list sub-categories-13:
+
+-- letter-data: Use Singular Variable Names for Plural Types
+link: /variable-type-guidelines#singular-plural-naming
+
+-- end: sub-categories-13
+;; --------------------------------------------------

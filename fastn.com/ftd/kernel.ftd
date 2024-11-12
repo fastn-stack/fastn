@@ -1,0 +1,47 @@
+-- import: fifthtry.github.io/admonitions as cbox
+
+-- ds.page: Kernel Components
+
+`fastn` comes with a few `kernel` components, these components are the building
+blocks for building all other components.
+
+-- cbox.info: import
+
+`fastn` supports `import`ing one document from another, and the imported
+documents act as a namespace.
+
+-- ds.markdown:
+
+All `kernel` components are defined in a `virtual document`, named `ftd`, and
+every `.ftd` file implicitly imports ftd:
+
+-- ds.code: hello world using `ftd.text`
+lang: ftd
+
+\-- import: ftd
+
+\-- ftd.text: hello world
+
+-- ds.markdown:
+
+The `import` line is not needed as it's automatically imported. This line
+defines namespace `ftd`, so all `kernel` components are referred as `ftd.text`
+and so on.
+
+We are then using a component named [`ftd.text`](ftd/text/) to render
+the text "hello world" in the UI.
+
+-- ds.h1: List of `kernel` components
+
+- [`ftd.column`](ftd/column/)
+- [`ftd.row`](ftd/row/)
+- [`ftd.text`](ftd/text/)
+- [`ftd.image`](ftd/image/)
+- [`ftd.iframe`](ftd/iframe/)
+- [`ftd.integer`](ftd/integer/)
+- [`ftd.decimal`](ftd/decimal/)
+- [`ftd.boolean`](ftd/boolean/)
+- [`ftd.code`](ftd/code/)
+
+
+-- end: ds.page

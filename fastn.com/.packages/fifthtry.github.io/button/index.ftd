@@ -1,0 +1,861 @@
+
+-- site-doc.doc-home: Button
+license-url: https://github.com/FifthTry/button/blob/main/LICENSE
+current-package: fifthtry.github.io/button
+show-tabs: false
+site-title: Button
+github-url: https://github.com/FifthTry/button
+
+-- site-doc.output:
+colors: $ftd.default-colors
+
+-- site-doc.header: Demo
+
+-- button-table:
+large: true
+
+-- button-table:
+extra-large: true
+
+-- button-table:
+medium: true
+
+-- button-table:
+small: true
+
+-- button-table-large-disabled:
+
+
+-- end: site-doc.output
+
+
+-- site-doc.header: How to use button
+
+To use button components on your [fastn](https://fastn.com/) web project, add
+below into `FASTN.ftd` file:
+
+-- cb.code:
+lang: ftd
+
+\-- fastn.dependency: fifthtry.github.io/button
+
+-- site-doc.markdown:
+
+Now import `button` inside your `.ftd` file
+
+-- cb.code:
+lang: ftd
+
+\-- import: fifthtry.github.io/button
+
+-- site-doc.markdown:
+
+Use `button.button` inside your `.ftd` files
+
+-- cb.rendered:
+
+-- cb.rendered.input:
+
+\-- button.button: PRIMARY
+role: primary
+large: true
+link: index.html
+
+-- cb.rendered.output:
+
+-- site-doc.output:
+colors: $ftd.default-colors
+
+-- button: PRIMARY
+role: primary
+large: true
+link: index.html
+
+-- end: site-doc.output
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+-- end: site-doc.doc-home
+
+
+
+
+
+
+
+
+
+
+-- component button:
+caption title:
+string role:
+boolean disabled: false
+boolean icon-left: false
+boolean icon-right: false
+boolean extra-large: false
+boolean large: false
+boolean medium: false
+boolean small: false
+integer radius: 4
+;; optional ftd.ui icon: -- TODO FTD 0.3
+optional string link:
+
+-- ftd.row:
+cursor if { !$button.disabled }: pointer
+link if { !$button.disabled }: $button.link
+
+-- button-type:
+role: $button.role
+title: $button.title
+disabled: $button.disabled
+icon-left: $button.icon-left
+icon-right: $button.icon-right
+extra-large: $button.extra-large
+large: $button.large
+medium: $button.medium
+small: $button.small
+radius: $button.radius
+
+/-- ftd.column: -- TODO FTD 0.3
+scale: 1.3
+move-down: 3
+
+/-- icon: -- TODO FTD 0.3
+if: $icon is not null
+
+-- end: ftd.row
+
+-- end: button
+
+
+
+
+
+
+
+
+
+
+-- component button-type:
+string role:
+caption title:
+boolean primary: false
+boolean secondary: false
+boolean tertiary: false
+boolean disabled: false
+boolean icon-left: false
+boolean icon-right: false
+boolean extra-large: false
+boolean large: false
+boolean medium: false
+boolean small: true
+optional integer radius:
+children container: 
+boolean $mouse-in: false
+
+-- ftd.row:
+
+-- ftd.row:
+if: { button-type.role == "primary" }
+color if { !button-type.disabled }: $inherited.colors.cta-primary.text
+color if { button-type.disabled }: $inherited.colors.text
+
+-- ftd.row:
+if: { !button-type.disabled }
+$on-mouse-enter$: $ftd.set-bool($a = $button-type.mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $button-type.mouse-in, v = false)
+background.solid if { $button-type.mouse-in }: $inherited.colors.cta-primary.hover
+background.solid: $inherited.colors.cta-primary.base
+padding-vertical.px if { button-type.extra-large }: 10
+padding-horizontal.px if { button-type.extra-large }: 20
+padding-vertical.px if { button-type.large }: 8
+padding-horizontal.px if { button-type.large }: 16
+padding-vertical.px if { button-type.medium }: 6
+padding-horizontal.px if { button-type.medium }: 16
+padding-vertical.px if { button-type.small }: 4
+padding-horizontal.px if { button-type.small }: 8
+border-radius.px: $button-type.radius
+
+-- button-display:
+title: $button-type.title
+primary: $button-type.primary
+disabled: $button-type.disabled
+icon-left: $button-type.icon-left
+icon-right: $button-type.icon-right
+extra-large: $button-type.extra-large
+large: $button-type.large
+medium: $button-type.medium
+small: $button-type.small
+
+-- end: ftd.row
+
+-- ftd.row:
+if: { button-type.disabled }
+background.solid: $inherited.colors.cta-primary.disabled
+padding-vertical.px if { button-type.extra-large }: 10
+padding-horizontal.px if { button-type.extra-large }: 20
+padding-vertical.px if { button-type.large }: 8
+padding-horizontal.px if { button-type.large }: 16
+padding-vertical.px if { button-type.medium }: 6
+padding-horizontal.px if { button-type.medium }: 16
+padding-vertical.px if { button-type.small }: 4
+padding-horizontal.px if { button-type.small }: 8
+border-radius.px: $button-type.radius
+
+-- button-display:
+title: $button-type.title
+primary: $button-type.primary
+disabled: $button-type.disabled
+icon-left: $button-type.icon-left
+icon-right: $button-type.icon-right
+extra-large: $button-type.extra-large
+large: $button-type.large
+medium: $button-type.medium
+small: $button-type.small
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- ftd.row:
+if: { button-type.role == "secondary" }
+color if { !$button-type.disabled }: $inherited.colors.cta-secondary.text
+color if { button-type.disabled }: $inherited.colors.text
+
+-- ftd.row:
+if: { !button-type.disabled }
+$on-mouse-enter$: $ftd.set-bool($a = $button-type.mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $button-type.mouse-in, v = false)
+background.solid if { $button-type.mouse-in }: $inherited.colors.cta-secondary.hover
+background.solid: $inherited.colors.cta-secondary.base
+padding-vertical.px if { button-type.extra-large }: 10
+padding-horizontal.px if { button-type.extra-large }: 20
+padding-vertical.px if { button-type.large }: 8
+padding-horizontal.px if { button-type.large }: 16
+padding-vertical.px if { button-type.medium }: 6
+padding-horizontal.px if { button-type.medium }: 16
+padding-vertical.px if { button-type.small }: 4
+padding-horizontal.px if { button-type.small }: 8
+border-radius.px: $button-type.radius
+
+-- button-display:
+title: $button-type.title
+secondary: $button-type.secondary
+disabled: $button-type.disabled
+icon-left: $button-type.icon-left
+icon-right: $button-type.icon-right
+extra-large: $button-type.extra-large
+large: $button-type.large
+medium: $button-type.medium
+small: $button-type.small
+
+-- end: ftd.row
+
+-- ftd.row:
+if: { button-type.disabled }
+background.solid: $inherited.colors.cta-secondary.disabled
+padding-vertical.px if { button-type.extra-large }: 10
+padding-horizontal.px if { button-type.extra-large }: 20
+padding-vertical.px if { button-type.large }: 8
+padding-horizontal.px if { button-type.large }: 16
+padding-vertical.px if { button-type.medium }: 6
+padding-horizontal.px if { button-type.medium }: 16
+padding-vertical.px if { button-type.small }: 4
+padding-horizontal.px if { button-type.small }: 8
+border-radius.px: $button-type.radius
+
+-- button-display:
+title: $button-type.title
+primary: $button-type.secondary
+disabled: $button-type.disabled
+icon-left: $button-type.icon-left
+icon-right: $button-type.icon-right
+extra-large: $button-type.extra-large
+large: $button-type.large
+medium: $button-type.medium
+small: $button-type.small
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- ftd.row:
+if: { button-type.role == "tertiary" }
+color if { !button-type.disabled }: $inherited.colors.cta-tertiary.text
+color if { button-type.disabled }: $inherited.colors.text
+
+-- ftd.row:
+if: { !button-type.disabled }
+$on-mouse-enter$: $ftd.set-bool($a = $button-type.mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $button-type.mouse-in, v = false)
+background.solid if { $button-type.mouse-in }: $inherited.colors.cta-tertiary.hover
+background.solid: $inherited.colors.cta-tertiary.base
+padding-vertical.px if { button-type.extra-large }: 10
+padding-horizontal.px if { button-type.extra-large }: 20
+padding-vertical.px if { button-type.large }: 8
+padding-horizontal.px if { button-type.large }: 16
+padding-vertical.px if { button-type.medium }: 6
+padding-horizontal.px if { button-type.medium }: 16
+padding-vertical.px if { button-type.small }: 4
+padding-horizontal.px if { button-type.small }: 8
+border-radius.px: $button-type.radius
+
+-- button-display:
+title: $button-type.title
+tertiary: $button-type.tertiary
+disabled: $button-type.disabled
+icon-left: $button-type.icon-left
+icon-right: $button-type.icon-right
+extra-large: $button-type.extra-large
+large: $button-type.large
+medium: $button-type.medium
+small: $button-type.small
+
+-- end: ftd.row
+
+-- ftd.row:
+if: { button-type.disabled }
+background.solid: $inherited.colors.cta-tertiary.disabled
+padding-vertical.px if { button-type.extra-large }: 10
+padding-horizontal.px if { button-type.extra-large }: 20
+padding-vertical.px if { button-type.large }: 8
+padding-horizontal.px if { button-type.large }: 16
+padding-vertical.px if { button-type.medium }: 6
+padding-horizontal.px if { button-type.medium }: 16
+padding-vertical.px if { button-type.small }: 4
+padding-horizontal.px if { button-type.small }: 8
+border-radius.px: $button-type.radius
+
+-- button-display:
+title: $button-type.title
+tertiary: $button-type.tertiary
+disabled: $button-type.disabled
+icon-left: $button-type.icon-left
+icon-right: $button-type.icon-right
+extra-large: $button-type.extra-large
+large: $button-type.large
+medium: $button-type.medium
+small: $button-type.small
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: button-type
+
+
+
+
+
+
+
+
+
+
+-- component button-display:
+caption title:
+boolean primary: false
+boolean secondary: false
+boolean tertiary: false
+boolean disabled: false
+boolean icon-left: false
+boolean icon-right: false
+boolean extra-large: false
+boolean large: true
+boolean medium: true
+boolean small: true
+optional integer radius:
+children container:
+
+-- ftd.row:
+width: fill-container
+height: fill-container
+
+-- ftd.row:
+if: { button-display.extra-large }
+spacing.fixed.px: 16
+
+-- ftd.column:
+
+-- ftd.column:
+if: { button-display.icon-left }
+children: $button-display.container
+
+-- end: ftd.column
+
+-- ftd.text: $button-display.title
+role: $inherited.types.copy-large
+style: semi-bold
+white-space: nowrap
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- ftd.column:
+if: { button-display.icon-right }
+children: $button-display.container
+
+-- end: ftd.column
+
+-- ftd.row:
+if: { button-display.large }
+spacing.fixed.px: 8
+
+-- ftd.column:
+
+-- ftd.column:
+if: { button-display.icon-left }
+children: $button-display.container
+
+-- end: ftd.column
+
+-- ftd.text: $button-display.title
+role: $inherited.types.button-large
+white-space: nowrap
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- ftd.column:
+if: { button-display.icon-right }
+children: $button-display.container
+
+-- end: ftd.column
+
+-- ftd.row:
+if: { button-display.medium }
+spacing.fixed.px: 8
+
+-- ftd.column:
+
+-- ftd.column:
+if: { button-display.icon-left }
+children: $button-display.container
+
+-- end: ftd.column
+
+-- ftd.text: $button-display.title
+role: $inherited.types.button-medium
+white-space: nowrap
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- ftd.column:
+if: { button-display.icon-right }
+children: $button-display.container
+
+-- end: ftd.column
+
+-- ftd.row:
+if: { button-display.small }
+spacing.fixed.px: 4
+
+-- ftd.column:
+
+-- ftd.column:
+if: { button-display.icon-left }
+children: $button-display.container
+
+-- end: ftd.column
+
+-- ftd.text: $button-display.title
+role: $inherited.types.button-small
+white-space: nowrap
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- ftd.column:
+if: { button-display.icon-right }
+children: $button-display.container
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: button-display
+
+
+
+
+
+
+
+
+
+
+-- component button-table:
+boolean large: false
+boolean extra-large: false
+boolean medium: false
+boolean small: false
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 20
+margin-bottom.px: 30
+
+-- ftd.column:
+width: fill-container
+
+-- button: PRIMARY
+if: { button-table.large }
+role: primary
+large: $button-table.large
+link: index.html
+
+-- button: PRIMARY
+if: { button-table.extra-large }
+role: primary
+extra-large: $button-table.extra-large
+link: index.html
+
+-- button: PRIMARY
+if: { button-table.medium }
+role: primary
+medium: $button-table.medium
+link: index.html
+
+-- button: PRIMARY
+if: { button-table.small }
+role: primary
+small: $button-table.small
+link: index.html
+
+-- ftd.column:
+width: fill-container
+margin-top.px: 16
+
+-- cb.code:
+if: { button-table.large }
+lang: ftd
+
+\-- button.button: PRIMARY
+role: primary
+large: true
+link: index.html
+
+-- cb.code:
+if: { button-table.extra-large }
+lang: ftd
+
+\-- button.button: PRIMARY
+role: primary
+extra-large: true
+link: index.html
+
+-- cb.code:
+if: { button-table.medium }
+lang: ftd
+
+\-- button.button: PRIMARY
+role: primary
+medium: true
+link: index.html
+
+-- cb.code:
+if: { button-table.small }
+lang: ftd
+
+\-- button.button: PRIMARY
+role: primary
+small: true
+link: index.html
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+
+-- button: SECONDARY
+if: { button-table.large }
+role: secondary
+large: $button-table.large
+link: index.html
+
+-- button: SECONDARY
+if: { button-table.extra-large }
+role: secondary
+extra-large: $button-table.extra-large
+link: index.html
+
+-- button: SECONDARY
+if: { button-table.medium }
+role: secondary
+medium: $button-table.medium
+link: index.html
+
+-- button: SECONDARY
+if: { button-table.small }
+role: secondary
+small: $button-table.small
+link: index.html
+
+-- ftd.column:
+width: fill-container
+margin-top.px: 16
+
+-- cb.code:
+if: { button-table.large }
+lang: ftd
+
+\-- button.button: SECONDARY
+role: secondary
+large: true
+link: index.html
+
+-- cb.code:
+if: { button-table.extra-large }
+lang: ftd
+
+\-- button.button: SECONDARY
+role: secondary
+extra-large: true
+link: index.html
+
+-- cb.code:
+if: { button-table.medium }
+lang: ftd
+
+\-- button.button: SECONDARY
+role: secondary
+medium: true
+link: index.html
+
+-- cb.code:
+if: { button-table.small }
+lang: ftd
+
+\-- button.button: SECONDARY
+role: secondary
+small: true
+link: index.html
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+
+-- button: TERTIARY
+if: { button-table.large }
+role: tertiary
+large: $button-table.large
+link: index.html
+
+-- button: TERTIARY
+if: { button-table.extra-large }
+role: tertiary
+extra-large: $button-table.extra-large
+link: index.html
+
+-- button: TERTIARY
+if: { button-table.medium }
+role: tertiary
+medium: $button-table.medium
+link: index.html
+
+-- button: TERTIARY
+if: { button-table.small }
+role: tertiary
+small: $button-table.small
+link: index.html
+
+-- ftd.column:
+width: fill-container
+margin-top.px: 16
+
+-- cb.code:
+if: { button-table.large }
+lang: ftd
+
+\-- button.button: TERTIARY
+role: tertiary
+large: true
+link: index.html
+
+-- cb.code:
+if: { button-table.extra-large }
+lang: ftd
+
+\-- button.button: TERTIARY
+role: tertiary
+extra-large: true
+link: index.html
+
+-- cb.code:
+if: { button-table.medium }
+lang: ftd
+
+\-- button.button: TERTIARY
+role: tertiary
+medium: true
+link: index.html
+
+-- cb.code:
+if: { button-table.small }
+lang: ftd
+
+\-- button.button: TERTIARY
+role: tertiary
+small: true
+link: index.html
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: button-table
+
+
+
+
+
+
+
+
+
+
+-- component button-table-large-disabled:
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 20
+margin-bottom.px: 30
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.column:
+width: fill-container
+margin-bottom.px: 20
+
+-- title-text: Large Button disabled without icon:
+
+-- end: ftd.column
+
+-- button: BUTTON
+role: primary
+large: true
+disabled: true
+
+-- ftd.column:
+width: fill-container
+margin-top.px: 20
+
+-- cb.code:
+lang: ftd
+
+\-- button.button: BUTTON
+role: primary
+large: true
+disabled: true
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.column:
+width: fill-container
+margin-bottom.px: 20
+
+-- title-text: Large Button disabled without icon:
+
+-- end: ftd.column
+
+-- button: BUTTON
+role: secondary
+large: true
+disabled: true
+;; icon-left: true -- TODO FTD 0.3
+;; icon: icon.info: -- TODO FTD 0.3
+
+-- ftd.column:
+width: fill-container
+margin-top.px: 20
+
+-- cb.code:
+lang: ftd
+
+\-- button.button: BUTTON
+role: secondary
+large: true
+disabled: true
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.column:
+width: fill-container
+margin-bottom.px: 20
+
+-- title-text: Large Button disabled without icon:
+
+-- end: ftd.column
+
+-- button: BUTTON
+role: tertiary
+large: true
+disabled: true
+;; icon-left: true -- TODO FTD 0.3
+;; icon: icon.info: -- TODO FTD 0.3
+
+-- ftd.column:
+width: fill-container
+margin-top.px: 20
+
+-- cb.code:
+lang: ftd
+
+\-- button.button: BUTTON
+role: tertiary
+large: true
+disabled: true
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: button-table-large-disabled
+
+
+
+
+
+
+
+
+
+
+-- component title-text:
+caption title:
+
+-- ftd.text:
+text: $title-text.title
+role: $inherited.types.label-large
+color: $inherited.colors.text
+
+-- end: title-text

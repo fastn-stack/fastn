@@ -1,0 +1,127 @@
+-- import: fastn.com/utils
+
+-- ds.page: Import the packages
+
+Importing packages in a project is essential for utilizing external code
+functionalities and libraries.
+
+-- ds.h1: Benefits of importing packages/documents at the top of code
+
+-- utils.code-display:
+title: `import-at-top`: Import lines goes at the top of the document
+id: import-at-top
+
+We `import` the external packages at the start of the `.ftd` file and there
+should be no space between two imports.
+
+Adding import statements at the top of a code document helps other programmers
+understand the code's dependencies and requirements. It allows quick
+identification of necessary modules and libraries. Moreover, this practice
+prevents naming conflicts and improves code clarity, organization, and
+maintainability.
+
+It is a common convention that helps improve the clarity, organization, and
+maintainability of the code.
+
+
+	-- ds.code: Not Recommended
+	lang: ftd
+	
+	\-- import: <package-1>  ;; <hl>
+	
+	\-- ds.page: title
+	
+	page content goes here
+	
+	\;; before component
+	\-- import: <package-2>  ;; <hl>
+	
+	package-2 component usage
+	
+	more content
+	
+	\-- import: <package-n>  ;; <hl>
+	
+	more content
+	
+	\-- end: ds.page
+	
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- import: <package-1>  ;; <hl>
+	\-- import: <package-2>  ;; <hl>
+	...
+	\-- import: <package-n>  ;; <hl>
+	
+	\-- ds.page: title
+	
+	page content goes here
+	
+	\-- end: ds.page
+	
+	
+-- end: utils.code-display
+
+
+-- ds.h1: Advantages of exporting components over wrapping them
+
+-- utils.code-display:
+title: `using-export`: Use export for wrapper component definitions during Import
+id: `using-export`
+
+When we create component definitions which only refer to different component
+defined in another package. In such cases, where the component definition is
+just a wrapper definition of a component defined in another package, then using
+export feature while importing that package is recommended.
+
+It reduces line of codes and readability.
+
+**Sample Scenario:**
+
+For documentations we use `doc-site` package. In this package we refer the
+components like **markdown, h0, h1, h2 and h3** from another package
+called `typography` package. One way is to create components in the `doc-site`
+and refer to these components in `typography` package.
+
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- import: fastn-community.github.io/typography as tf
+	
+	\;; code goes here
+	
+	\-- component markdown:
+	caption or body body:
+	
+	\-- tf.markdown:
+	
+	$markdown.body
+	
+	\-- end: markdown
+	
+	
+	
+	
+	\-- component h1:
+	caption title:
+	optional body body:
+	optional string id:
+	
+	\-- tf.h1: $h1.title
+	id: $h1.id
+	
+	$h1.body
+	
+	\-- end: h1
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- import: fastn-community.github.io/typography as tf
+	export: markdown, h1		;; <hl>
+	
+-- end: utils.code-display
+
+-- end: ds.page

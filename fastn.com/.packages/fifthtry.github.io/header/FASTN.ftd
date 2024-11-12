@@ -1,0 +1,25 @@
+-- import: fastn
+
+-- fastn.package: fifthtry.github.io/header
+
+-- fastn.dependency: fastn-community.github.io/site-doc
+-- fastn.dependency: fifthtry.github.io/product-switcher 
+-- fastn.dependency: fifthtry.github.io/code-block
+
+
+
+-- fastn.sitemap:
+
+# Home: index.html
+
+## Sub-Sections: /docs/
+
+- Basic Header: /docs/
+- Header with Logo: /docs/header-with-logo/
+- Header with Logo & Sitename: /docs/header-with-logo-site-name/
+- Header - Product Switcher: /docs/header-with-ps/
+- Header with Sub-Sections: /docs/header-with-sections/
+- Header with Login: /docs/header-with-login/
+
+# Github
+  url: https://github.com/FifthTry/header/

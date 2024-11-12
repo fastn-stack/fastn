@@ -1,0 +1,492 @@
+-- ds.page: Events in `ftd`
+
+The change in the state of an object is known as an Event. In `fastn`, there are
+various events which represents that some activity is performed by the user. A
+function reacts over these events and allow the execution. This process of
+reacting over the events is called Event Handling.
+
+We can create [our own function](/functions/) or use [`built-in
+function`](/built-in-functions/).
+
+Here is the list of the events present in `fastn`
+
+-- ds.h1: `on-click`
+
+The `on-click` event can be used to call a function when the user clicks on the
+element.
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- boolean $show: true
+
+\-- ftd.text: Click me!
+$on-click$: $ftd.toggle($a = $show)
+
+\-- ftd.text: Hide and Seek
+if: { show }
+
+-- ds.rendered.output:
+
+	-- on-click-event:
+	
+-- end: ds.rendered.output
+
+
+
+
+
+
+
+
+
+-- ds.h1: `on-click-outside`
+
+The `on-click-outside` event can be used to call a function when the user
+clicked outside the element
+
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- boolean $show: false
+
+\-- ftd.text: Click me and click outside then
+$on-click$: $ftd.set-bool($a = $show, v = true)
+$on-click-outside$: $ftd.set-bool($a = $show, v = false)
+
+\-- ftd.text: Hide and Seek
+if: { show }
+
+-- ds.rendered.output:
+
+	-- on-click-outside-event:
+	
+-- end: ds.rendered.output
+
+
+
+
+
+
+
+-- ds.h1: `on-mouse-enter`
+
+The `on-mouse-enter` event can be used to call a function when the mouse cursor
+enters the element.
+
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- boolean $show: true
+
+\-- ftd.text: Enter mouse cursor over me
+$on-mouse-enter$: $ftd.toggle($a = $show)
+
+\-- ftd.text: Hide and Seek
+if: { show }
+
+-- ds.rendered.output:
+
+	-- on-mouse-enter-event:
+	
+-- end: ds.rendered.output
+
+
+
+
+
+
+
+-- ds.h1: `on-mouse-leave`
+
+The `on-mouse-leave` event can be used to call a function when the mouse cursor
+leaves the element.
+
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- boolean $show: true
+
+\-- ftd.text: Enter mouse cursor over me
+$on-mouse-enter$: $ftd.set-bool($a = $show, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $show, v = false)
+
+\-- ftd.text: Hide and Seek
+if: { show }
+
+-- ds.rendered.output:
+
+	-- on-mouse-leave-event:
+	
+-- end: ds.rendered.output
+
+
+
+
+
+
+-- ds.h1: `on-input`
+
+The `on-input` event can be used to call a function when the user inputs
+something into the element.
+
+In the below example we have also used a special variable `VALUE` which is
+available for `ftd.text-input` component. This gives the value typed by user on
+this element.
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- string $txt: Fifthtry
+
+\-- ftd.text: $txt
+
+\-- ftd.text-input:
+placeholder: Type any text ...
+type: text
+width.fixed.px: 400
+border-width.px: 2
+$on-input$: $ftd.set-string($a = $txt, v = $VALUE)
+
+-- ds.rendered.output:
+
+	-- on-input-event:
+	
+-- end: ds.rendered.output
+
+
+
+
+
+
+
+
+-- ds.h1: `on-change`
+
+The `on-change` event can be used to call a function when the value of the
+element changes and focus is moved out of the element.
+
+In the below example we have also used a special variable `VALUE` which is
+available for `ftd.text-input` component. This gives the value typed by user on
+this element.
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- string $txt: Fifthtry
+
+\-- ftd.text: $txt
+
+\-- ftd.text-input:
+placeholder: Type any text ...
+type: text
+width.fixed.px: 400
+border-width.px: 2
+$on-change$: $ftd.set-string($a = $txt, v = $VALUE)
+
+-- ds.rendered.output:
+
+	-- on-change-event:
+	
+-- end: ds.rendered.output
+
+
+
+
+
+
+
+
+
+-- ds.h1: `on-blur`
+
+The `on-blur` event can be used to call a function when an element loses focus.
+
+
+-- ds.h1: `on-focus`
+
+The `on-focus` event can be used to call a function when an element receives
+focus.
+
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- boolean $flag: false
+
+\-- ftd.text-input:
+placeholder: Type any text ...
+type: text
+width.fixed.px: 400
+border-width.px: 2
+background.solid if { flag }: $inherited.colors.background.step-1
+background.solid: $inherited.colors.background.step-2
+$on-focus$: $ftd.set-bool($a = $flag, v = true) ;; <hl>
+$on-blur$: $ftd.set-bool($a = $flag, v = false) ;; <hl>
+
+-- ds.rendered.output:
+
+	-- on-focus-blur-event:
+	
+-- end: ds.rendered.output
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h1: `on-global-key[<hyphen-seperated-keys>]`
+
+The `on-global-key` event can be used to call a function when gives keys are
+pressed simultaneously. For instance, `on-global-key[ctrl-a-s]` triggers the
+event when keys `ctrl`, `a` and `s` are pressed simultaneously.
+
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- boolean $flag: true
+
+\-- ftd.text: Press ctrl, a and s simultaneously
+color: purple
+color if { flag }: green
+$on-global-key[ctrl-a-s]$: $ftd.toggle($a = $flag)
+
+-- ds.rendered.output:
+
+	-- on-global-key-event:
+	
+-- end: ds.rendered.output
+
+
+
+
+-- ds.h1: `on-global-key-seq[<hyphen-seperated-keys>]`
+
+The `on-global-key` event can be used to call a function when gives keys are
+pressed sequentially i.e. one after another. For instance,
+`on-global-key-seq[ctrl-ctrl-ctrl]` triggers the event when keys `ctrl`, `ctrl`
+and `ctrl` are pressed sequentially.
+
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- boolean $flag: true
+
+\-- ftd.text: Press ctrl, ctrl and ctrl sequentially
+color: purple
+color if { flag }: green
+$on-global-key-seq[ctrl-ctrl-ctrl]$: $ftd.toggle($a = $flag)
+
+-- ds.rendered.output:
+
+	-- on-global-key-seq-event:
+	
+-- end: ds.rendered.output
+
+
+
+
+
+-- end: ds.page
+
+
+
+
+
+
+
+-- component on-global-key-event:
+boolean $show: true
+
+-- ftd.text: Press ctrl, a and s simultaneously
+color: purple
+color if { on-global-key-event.show }: green
+$on-global-key[ctrl-a-s]$: $ftd.toggle($a = $on-global-key-event.show)
+
+-- end: on-global-key-event
+
+
+
+-- component on-global-key-seq-event:
+boolean $show: true
+
+-- ftd.text: Press ctrl, ctrl and ctrl simultaneously
+color: purple
+color if { on-global-key-seq-event.show }: green
+$on-global-key-seq[ctrl-ctrl-ctrl]$: $ftd.toggle($a = $on-global-key-seq-event.show)
+
+-- end: on-global-key-seq-event
+
+
+
+
+
+-- component on-click-event:
+boolean $show: true
+
+-- ftd.column:
+color: $inherited.colors.text
+
+	-- ftd.text: Click me!
+	$on-click$: $ftd.toggle($a = $on-click-event.show)
+	
+	-- ftd.text: Hide and Seek
+	if: { on-click-event.show }
+	
+-- end: ftd.column
+
+-- end: on-click-event
+
+
+
+
+
+
+
+-- component on-click-outside-event:
+boolean $show: false
+
+-- ftd.column:
+color: $inherited.colors.text
+
+	-- ftd.text: Click me and click outside then
+	$on-click$: $ftd.set-bool($a = $on-click-outside-event.show, v = true)
+	$on-click-outside$: $ftd.set-bool($a = $on-click-outside-event.show, v = false)
+	
+	-- ftd.text: Hide and Seek
+	if: { on-click-outside-event.show }
+	
+-- end: ftd.column
+
+-- end: on-click-outside-event
+
+
+
+
+
+
+
+-- component on-mouse-enter-event:
+boolean $show: true
+
+-- ftd.column:
+color: $inherited.colors.text
+
+	-- ftd.text: Enter mouse cursor over me
+	$on-mouse-enter$: $ftd.toggle($a = $on-mouse-enter-event.show)
+	
+	-- ftd.text: Hide and Seek
+	if: { on-mouse-enter-event.show }
+	
+-- end: ftd.column
+
+-- end: on-mouse-enter-event
+
+
+
+
+
+
+
+-- component on-mouse-leave-event:
+boolean $show: false
+
+-- ftd.column:
+color: $inherited.colors.text
+
+	-- ftd.text: Enter mouse cursor over me
+	$on-mouse-enter$: $ftd.set-bool($a = $on-mouse-leave-event.show, v = true)
+	$on-mouse-leave$: $ftd.set-bool($a = $on-mouse-leave-event.show, v = false)
+	
+	-- ftd.text: Hide and Seek
+	if: { on-mouse-leave-event.show }
+	
+-- end: ftd.column
+
+-- end: on-mouse-leave-event
+
+
+
+
+
+
+-- component on-input-event:
+string $txt: Fifthtry
+
+-- ftd.column:
+color: $inherited.colors.text
+
+	-- ftd.text: $on-input-event.txt
+	
+	-- ftd.text-input:
+	placeholder: Type any text ...
+	type: text
+	width.fixed.px: 400
+	border-width.px: 2
+	$on-input$: $ftd.set-string($a = $on-input-event.txt, v = $VALUE)
+	
+-- end: ftd.column
+
+-- end: on-input-event
+
+
+
+
+
+-- component on-change-event:
+string $txt: Fifthtry
+
+-- ftd.column:
+color: $inherited.colors.text
+
+	-- ftd.text: $on-change-event.txt
+	
+	-- ftd.text-input:
+	placeholder: Type any text ...
+	type: text
+	width.fixed.px: 400
+	border-width.px: 2
+	$on-change$: $ftd.set-string($a = $on-change-event.txt, v = $VALUE)
+	
+-- end: ftd.column
+
+-- end: on-change-event
+
+
+
+-- component on-focus-blur-event:
+boolean $flag: false
+
+-- ftd.text-input:
+color: $inherited.colors.text
+placeholder: Type any text ...
+type: text
+width.fixed.px: 400
+border-width.px: 2
+background.solid if { on-focus-blur-event.flag }: $inherited.colors.background.step-1
+background.solid: $inherited.colors.background.step-2
+$on-focus$: $ftd.set-bool($a = $on-focus-blur-event.flag, v = true)
+$on-blur$: $ftd.set-bool($a = $on-focus-blur-event.flag, v = false)
+
+-- end: on-focus-blur-event

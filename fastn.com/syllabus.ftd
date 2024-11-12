@@ -1,0 +1,32 @@
+-- ds.page: `fastn` Syllabus
+
+-- ds.h1: `UI Basics`
+
+Chapter 1 explains how to install `fastn`, how to write a "hello world" program,
+how to publish it on the web. Chapter 2 is a hands-on introduction to writing
+a program in `fastn`, having you build a UI that responds to some events. Here
+we cover concepts at a high level, and later chapters will provide additional
+detail.
+
+- /install/
+  - /install/windows/
+  - /install/
+
+
+If you want to get your hands dirty right away, Chapter 2 is the place
+for that.
+
+
+Chapter 3 covers data modelling in `ftd`, how to think in data and
+how to model them properly. Chapter 4 covers how to build user interfaces.
+
+Chapter 5 takes teaches you about how to think about website and web app
+designs. It introduces our style system, and takes you through various
+customisations you want to do. It also tells you how to use existing design
+resources to kick start your project.
+
+Chapter 6 teaches you how to integrate with HTTP APIs. How you can load during
+page load, or based on user events. It takes you through form handling, error
+handling etc use cases.
+
+-- end: ds.page

@@ -1,0 +1,148 @@
+;; let's define some page level data
+-- integer $x: 10
+-- integer $y: 23
+
+
+-- integer list $counters:
+
+-- integer: 1
+-- integer: $x
+-- integer: $y
+-- integer: 42
+
+-- end: $counters
+
+-- integer sum: $add(a=$x, b=$y)
+
+
+
+
+
+
+-- ftd.column:
+spacing.fixed.px: 20
+padding.px: 20
+
+-- ftd.text: fastn demo
+role: $inherited.types.heading-hero
+
+-- ftd.text: Try it!
+role: $inherited.types.copy-regular
+background.solid: $inherited.colors.cta-primary.base
+color: $inherited.colors.cta-primary.text
+border-color: $inherited.colors.cta-primary.border
+border-width.px: 1
+padding-vertical.px: 5
+padding-horizontal.px: 10
+link: /r/counter/
+
+-- ftd.text:
+
+Source: [demo.ftd](https://github.com/fastn-stack/fastn.com/blob/main/demo.ftd)
+
+[Tutorial](/tutorials/basic/).
+
+-- counter: $c
+for: $c, $i in $counters
+index: $i
+
+-- ftd.text: \$x
+
+-- ftd.integer: $x
+
+
+
+-- ftd.text: counter $x
+
+-- counter: $x
+
+-- ftd.text: counter $y
+
+-- counter: $y
+
+-- ftd.text: counter *$x
+-- counter: *$x
+
+-- ftd.text: add counter
+$on-click$: $add-counter($c=$counters)
+
+-- ftd.integer: $sum
+;; -- ftd.integer: $the-sum(c=$counters)
+
+-- end: ftd.column
+
+
+
+
+
+
+
+
+-- component counter:
+caption integer $count:
+optional integer index:
+integer d: $double(a=$counter.count)
+
+-- ftd.row:
+border-width.px: 2
+padding.px: 20
+spacing.fixed.px: 20
+background.solid if { counter.count % 2 == 0 }: yellow
+border-radius.px: 5
+
+	-- ftd.text: ➕
+	$on-click$: $ftd.increment-by($a=$counter.count, v=1)
+	
+	-- ftd.integer: $counter.count
+	
+	-- ftd.integer: $counter.d
+	
+	-- ftd.text: ➖
+	$on-click$: $ftd.increment-by($a=$counter.count, v=-1)
+	
+	-- ftd.text: delete
+	if: { counter.index != NULL }
+	$on-click$: $delete-counter($c=$counters, index=$counter.index)
+	color: red
+	
+-- end: ftd.row
+
+-- end: counter
+
+
+
+
+
+
+
+
+-- integer add(a, b):
+integer a:
+integer b:
+
+a + b
+
+
+
+
+-- void add-counter(c):
+integer list $c:
+
+;; https://fastn.com/built-in-functions/
+ftd.append(c, 223)
+
+
+
+-- integer double(a):
+integer a:
+
+a * 2
+
+
+
+
+-- void delete-counter(c,index):
+integer list $c:
+integer index:
+
+ftd.delete_at(c, index)

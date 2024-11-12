@@ -1,0 +1,102 @@
+-- import: fastn.com/assets
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
+
+-- common.post-meta meta: Witty-Hacks!
+published-on: April 07, 2023
+post-url: /wittyhacks/
+author: $authors.amitu
+post-image: $assets.files.images.wittyhacks.jpeg
+
+So we, at FifthTry, are Silver sponsors of [WittyHacks
+2023](https://wittyhacks.in). Super excited, first hackathon where people are
+using `fastn` to build websites and webapps!
+
+
+-- ds.blog-page:
+meta: $meta
+
+-- ds.image:
+src: $assets.files.images.wittyhacks.jpeg
+
+-- ds.h1: Notes For The Participants
+
+Hello! First of all let me thank you for considering `fastn` for your next web
+project. This is a new language, and documentation etc are sparse, but we are
+here to help!
+
+-- ds.h2: Why should you consider `fastn`?
+
+We believe `fastn`, or maybe something like `fastn` is the future of
+programming. Learning to program is hard for people, and we have designed
+`fastn` to be easy to learn. So much so that if you know `markdown` you already
+kind of know `fastn`. Further, no "web content native" language exists today
+for authoring content for web. Markdown is there, but it is quite limited.
+`mdx` is putting HTML back in `markdown`, when `markdown` was created with
+explicit position that basically writing HTML sucks.
+
+Currently `fastn` is good for authoring static website, you can create
+component libraries or use the ones we have already created like
+[doc-site](https://fifthtry.github.io/doc-site/) or
+[bling](https://fastn-community.github.io/bling/). The component libraries you create
+can be open sourced and added to [featured](/featured/) so people who can not
+create their own UI component can use yours to create their websites.
+
+`fastn` has also rudimentary support for writing [backend stuff](/backend/), so
+you can start packaging some dynamic websites and web components also.
+
+
+-- ds.h2: How to Learn `fastn`?
+
+The quickest way is to follow the [short video course we have created:
+expander](https://fastn.com/expander/), it takes you through the basics.
+
+Then checkout the [frontend](/frontend/) and [backend](/backend/) sections of
+our documentation.
+
+-- ds.h2: We are here to help!
+
+Team from FifthTry, people who have created `fastn`, would be available to help
+you answer any questions etc on
+[#fastn-fifthtry](https://discord.gg/8sBw9DhewP) channel on `wittyhacks` Discord, and on
+[#fastn](https://discord.gg/a7eBUeutWD) channel on `fastn-stack`'s Discord Server.
+
+Further we would be doing office hours at 11AM and a few more times on
+Saturday, so you can get on a quick call with `fastn` developers and FifthTry
+founder to get your questions answered.
+
+
+-- ds.h1: Participants
+
+-- wittyhacker: Sample Entry
+
+This entry is by the people of kick ass sample team. We used `fastn` for so and
+so.
+
+
+
+-- end: ds.blog-page
+
+
+
+
+
+
+
+
+
+
+
+-- component wittyhacker:
+caption team-name:
+body about:
+
+-- ftd.column:
+
+	-- ds.h2: $wittyhacker.team-name
+	
+	$wittyhacker.about
+	
+-- end: ftd.column
+
+-- end: wittyhacker

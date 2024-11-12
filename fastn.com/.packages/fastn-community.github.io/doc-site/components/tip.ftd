@@ -1,0 +1,50 @@
+-- import: fastn-community.github.io/doc-site/components
+
+-- ds.page: tip
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+sidebar: true
+
+-- ds.page.right-sidebar:
+
+-- components.sidebar-index:
+
+-- end: ds.page.right-sidebar
+
+-- ds.page.body:
+
+In this section, we will learn more about `ds.tip` component and its usage.
+
+-- ds.h2: Example:
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- cb.code:
+lang: java
+
+\-- ds.tip: This is tip title
+
+This is tip body content. You can also add any markdown inside this body
+content.
+
+-- ds.rendered.output:
+
+-- ds.tip: This is tip title
+
+This is tip body content. You can also add any markdown inside this body
+content.
+
+-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.h3: Properties of `ds.tip` component
+
+- **title** - `type: caption` It’s used to add title to `ds.tip` component. 
+**💡 Tip:** is part of default title.
+- **body** - `type: body` It’s used to add body content to `ds.tip` component.
+
+-- end: ds.page

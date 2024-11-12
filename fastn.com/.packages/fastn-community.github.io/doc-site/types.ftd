@@ -1,0 +1,86 @@
+-- import: fastn-community.github.io/doc-site/components
+
+
+
+
+
+-- ds.page: Changing Typography
+sidebar: true
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+
+-- ds.page.right-sidebar:
+
+-- components.sidebar-index:
+
+-- end: ds.page.right-sidebar
+
+-- ds.page.body:
+
+Typography in the context of our `doc-site refers to the style, arrangement, and
+presentation of text on doc-site pages. It involves selecting and combining fonts,
+determining font sizes, line spacing, and other typographic elements to enhance
+readability, convey information effectively, and create a visually appealing
+design.
+
+`doc-site` uses `fastn` [Roboto Font Typography](https://fastn-community.github.io/roboto-typography/). 
+If you wish to update it, choose a typography from our 
+[fastn-community](https://fastn.com/featured/fonts-typography/) typographies.
+
+-- ds.h2: How to add a typography?
+
+To add typography to your fastn web sites. Edit your `FASTN.ftd` file and add
+typography dependency into it.
+
+In the below example, we are using [Inter Typography](https://fastn-community.github.io/inter-typography/)
+typography.
+
+Add typography dependency into your `FASTN.ftd` file as shown in below
+example:
+
+-- ds.code:
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/inter-typography
+
+-- ds.markdown:
+
+Now modify `FASTN/ds.ftd` module which is already added inside your `fastn`
+package.
+
+Import `inter-typography` dependency into `FASTN/ds.ftd`
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn-community.github.io/inter-typography
+
+-- ds.markdown:
+
+Change `-- component page` `typography` property `ftd.type-data typography:
+$roboto-typography.types` with `ftd.type-data typography: $inter-typography.types`
+
+replace this line of `FASTN/ds.ftd` file:
+
+-- ds.code: 
+lang: ftd
+
+\-- ftd.type-data typography: $roboto-typography.types
+
+-- ds.markdown:
+
+ with:
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.type-data typography: $inter-typography.types
+
+-- ds.markdown:
+
+Deploy or run `fastn serve` on your localhost. Access your localhost in the
+browser e.g.`http://127.0.0.1:8000/` you will see page typography is changed
+with [inter-typography](https://fastn-community.github.io/inter-typography/)
+
+-- end: ds.page

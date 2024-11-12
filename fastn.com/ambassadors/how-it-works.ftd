@@ -1,0 +1,40 @@
+-- import: fastn-community.github.io/spectrum-ds/common
+-- import: fastn-community.github.io/footer
+-- import: fastn-community.github.io/dark-flame-cs
+-- import: fifthtry.github.io/fastn-typography as typo
+-- import: fastn.com/ambassadors as lib2
+
+
+-- ds.page:
+show-footer: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-name: NULL
+logo-height: 38
+logo-width: 120
+colors: $dark-flame-cs.main
+types: $typo.types
+github-icon: true
+github-url: https://github.com/fastn-stack/fastn
+full-width: true
+sidebar: false
+
+
+-- lib2.article: How it Works
+image: $fastn-assets.files.images.ambassadors.unsplash-2.jpg
+
+Lorem ipsum dolor sit amet consectetur. Molestie massa pretium adipiscing magna
+at. Amet varius ante fringilla egestas eu. Purus tristique rhoncus in mauris.
+Quam eget nulla euismod purus viverra phasellus. Massa orci curabitur arcu nibh
+viverra nibh. At blandit sagittis et sollicitudin. Ornare ullamcorper mollis
+congue feugiat in vitae adipiscing aenean. Nunc sapien sapien rutrum magnis at
+aliquam eget tincidunt suspendisse. Turpis turpis et tincidunt justo maecenas
+egestas porta. Varius fusce vivamus velit egestas fames viverra risus urna
+tellus. Sagittis pellentesque vulputate egestas enim sollicitudin. Lobortis
+pretium elementum nisi non mauris proin placerat vitae.
+
+
+	-- ds.h3: this is title 3
+	
+-- end: lib2.article
+
+-- end: ds.page

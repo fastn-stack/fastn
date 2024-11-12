@@ -1,0 +1,112 @@
+-- import: fastn-community.github.io/dark-mode-switcher/assets
+-- import: fastn-community.github.io/site-doc
+-- import: fastn-community.github.io/code-block as cb
+
+
+
+
+
+-- site-doc.doc-home: Dark Mode Switcher
+github-url: https://github.com/fifthtry/dark-mode-switcher
+color-scheme: \$ftd.default-colors
+typography: \$ftd.default-types
+current-package: fifthtry.github.io/product-switcher
+show-tabs: false
+site-title: Dark Mode Switcher
+
+-- site-doc.header: What is a Dark Mode Switcher?
+
+A dark mode switcher is a user interface element that allows users to switch
+between light and dark color schemes in a software application or website. Dark
+mode, also known as night mode, is a design trend that involves using a darker
+color palette for the user interface, typically with white text on a dark
+background. Dark mode is often used in low-light conditions to reduce eye
+strain and improve readability.
+
+A dark mode switcher is typically displayed as a button or toggle switch that
+users can click or tap to switch between light and dark modes. Some
+applications and websites may also provide an automatic dark mode option that
+switches the color scheme based on the time of day or ambient light levels.
+
+-- site-doc.header: How to install fastn?
+
+Please, [click here](https://fastn.io/install/) to read fastn installation
+documentation.
+
+
+-- site-doc.header: How to use `dark-mode-switcher`?
+
+To use `dark-mode-switcher` add below lines into your FASTN.ftd file:
+
+To learn more about dark-mode-switcher [click here](/docs/).
+
+-- cb.code:
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/dark-mode-switcher
+
+-- end: site-doc.doc-home
+
+
+
+
+
+
+
+
+
+
+-- component dark-mode-switcher-float:
+
+-- ftd.row:
+anchor: window
+right.px: 50
+right.px if { ftd.device == "mobile" }: 25
+bottom.px: 90
+bottom.px if { ftd.device == "mobile" }: 25
+padding.px: 10
+background.solid: $inherited.colors.background.base
+border-width.px: 1
+border-color: $inherited.colors.border
+border-radius.px: 4
+z-index: 99999999999999
+
+-- ftd.row:
+if: { ftd.follow-system-dark-mode }
+$on-click$: $ftd.enable-light-mode()
+
+-- ftd.image:
+src: $assets.files.static.system-mode-active.png
+height.fixed.px: 19
+align-self: center
+width.fixed.px: 19
+
+-- end: ftd.row
+
+-- ftd.row:
+if: { !ftd.dark-mode && !ftd.follow-system-dark-mode }
+$on-click$: $ftd.enable-dark-mode()
+
+-- ftd.image:
+src: $assets.files.static.light-mode-active.png
+height.fixed.px: 19
+align-self: center
+width.fixed.px: 19
+
+-- end: ftd.row
+
+-- ftd.row:
+if: { ftd.dark-mode && !ftd.follow-system-dark-mode }
+$on-click$: $ftd.enable-system-mode()
+
+-- ftd.image:
+src: $assets.files.static.dark-mode-active-dark.png
+height.fixed.px: 19
+align-self: center
+width.fixed.px: 19
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: dark-mode-switcher-float

@@ -1,0 +1,64 @@
+-- ds.page: Clean URLs using Custom URLs
+
+`fastn` allows your to map documents to any URL you like, let's take a look at
+why and how.
+
+-- ds.h1: Problem
+
+`fastn` by default creates the URL based on the file path of a document, eg `/`
+corresponds to `index.ftd` and `/docs/` looks for both `docs.ftd` and
+`docs/index.ftd`.
+
+This ties URLs with folder hierarchy.
+
+-- ds.h3: SEO Angle
+
+This can cause some issues with organisation, as SEO and clean URL people want
+URLs to not have meaningless information, like your folder hierarchy.
+
+-- ds.h3: Short URLs
+
+URLs are good, for example for `fastn.com`, we have a processor called
+[http processor](/http/) and we often want to link to it using `fastn.com/http/`
+which is short and easily memorable. But the document we store is in
+`ftd-host/http.ftd` based on our organisations guidelines.
+
+-- ds.h3: Folder Organization
+
+But you do not want to put all the documents on the top level, as without folder
+hierarchy it becomes hard to navigate.
+
+-- ds.h1: `document` attribute in `fastn.sitemap`
+
+`fastn` is configured using a file called `FASTN.ftd`, where you can define a
+[sitemap of your site](/sitemap/).
+
+Normally your sitemap may look like this.
+
+-- ds.code: letting `fastn` guess the document based on `url`
+lang: ftd
+
+\-- fastn.sitemap:
+
+- Home: /
+- Docs: /docs/
+
+-- ds.markdown:
+
+Auto guess can be overriden using the `document` attribute:
+
+-- ds.code: using `document` to specify document location
+lang: ftd
+
+\-- fastn.sitemap:
+
+- Home: /
+- Docs: /docs/
+  document: documentation.ftd  ;; <hl>
+
+-- ds.markdown:
+
+There you go, make all your URLs clean, and folders organised! Do checkout the
+[dynamic URLs guide](/dynamic-urls/) to learn how to make URLs dynamic.
+
+-- end: ds.page

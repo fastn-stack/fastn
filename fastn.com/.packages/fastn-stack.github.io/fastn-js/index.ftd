@@ -1,0 +1,41 @@
+-- import: fastn-stack.github.io/fastn-js/assets
+
+
+
+-- ds.page: Fastn JS library
+
+This repo contains all useful js scripts which the users can use on their FTD pages
+as per their requirement.
+
+-- ds.code: Add this dependency in your FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: fifthtry.github.io/fastn-js
+
+-- ds.h1: Use any JS module by importing it
+
+-- ds.code: Import your js module
+lang: ftd
+
+\-- import: fifthtry.github.io/fastn-js/assets as js-assets
+
+-- ds.h1: Use your JS function
+
+You can use your JS function inside any FTD function by
+attaching your JS module to it.
+
+Let's say you have a `str.js` module containing `append(a,b)` function
+which returns the appended string after combining string a and b.
+If you want to use it, you can do it in the following way.
+
+-- ds.code:
+lang: ftd
+
+\-- string append-strings(a,b):
+string a:
+string b:
+js: $js-assets.files.str.js
+
+append(a,b)
+
+-- end: ds.page

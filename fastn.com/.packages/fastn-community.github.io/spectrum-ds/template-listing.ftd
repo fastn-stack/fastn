@@ -1,0 +1,27 @@
+-- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn-community.github.io/spectrum-ds/assets
+-- import: fastn-community.github.io/spectrum-ds/common
+
+
+
+
+
+-- my-ds.page: Featured components
+
+-- my-ds.page.body:
+
+We have designed and developed below components using `fastn`. 
+
+These components can be used inside your personal web sites or organizational static 
+web sites developed using `fastn` package.
+
+-- ds.grid-view: Font Typographies:
+if: { common.show-grid }
+templates: $common.fonts
+more-link-text: View all 
+more-link: /featured/fonts-typography/
+
+We have converted few Google Fonts to fastn typography packages, which are ready
+to use as our fastn default inherited-types for your fastn web projects.
+
+-- end: my-ds.page

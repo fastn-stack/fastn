@@ -1,0 +1,76 @@
+-- import: fastn.com/featured as ft-ui
+-- import: fastn-community.github.io/spectrum-ds/common
+-- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn.com/content-library as footer
+-- import: fastn-community.github.io/dark-flame-cs
+-- import: fifthtry.github.io/fastn-typography as typo
+-- import: fastn.com/featured/contributors/developers/shaheen-senpai
+-- import: fastn.com/featured/contributors/developers/saurabh-lohiya
+-- import: fastn.com/featured/contributors/developers/priyanka-yadav
+-- import: fastn.com/featured/contributors/developers/meenu-kumari
+-- import: fastn.com/featured/contributors/developers/saurabh-garg
+-- import: fastn.com/featured/contributors/developers/arpita-jaiswal
+-- import: fastn.com/featured/contributors/developers/ganesh-salunke
+
+
+-- ds.page:
+show-footer: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-name: NULL
+logo-height: 38
+logo-width: 120
+colors: $dark-flame-cs.main
+types: $typo.types
+github-icon: true
+github-url: https://github.com/muskan1verma
+full-width: true
+fluid-width: false
+max-width.fixed.px: 1340
+
+-- ds.page.footer:
+
+	-- footer.footer:
+	site-logo: $fastn-assets.files.images.fastn.svg
+	site-url: /
+	social-links: $footer.social-links
+	copyright: Copyright © 2023 - fastn.com
+	full-width: false
+	max-width.fixed.px: 1340
+	
+-- end: ds.page.footer
+-- ftd.column:
+width: fill-container
+margin-vertical.px: 48
+
+	-- ftd.row:
+	width: fill-container
+	align-content: center
+	spacing.fixed.px: 64
+	wrap: true
+	
+		-- shaheen-senpai.profile: Shaheen Senpai
+		link: /u/shaheen-senpai/
+		
+		-- saurabh-lohiya.profile: Saurabh Lohiya
+		link: /u/saurabh-lohiya/
+		
+		-- priyanka-yadav.profile: Priyanka Yadav
+		link: /u/priyanka-yadav/
+		
+		-- meenu-kumari.profile: Meenu Kumari
+		link: /u/meenu-kumari/
+		
+		-- saurabh-garg.profile: Saurabh Garg
+		link: /u/saurabh-garg/
+		
+		-- arpita-jaiswal.profile: Arpita Jaiswal
+		link: /u/arpita-jaiswal/
+		
+		-- ganesh-salunke.profile: Ganesh Salunke
+		link: /u/ganesh-salunke/
+		
+	-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ds.page

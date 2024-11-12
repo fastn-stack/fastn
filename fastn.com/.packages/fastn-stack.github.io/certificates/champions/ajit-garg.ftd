@@ -1,0 +1,16 @@
+-- import: fastn-stack.github.io/certificates/champion
+
+-- ds.page: Champion Certification
+
+-- ftd.column:
+width: fill-container
+
+-- champion.certificate-2: Ajit Garg
+date: 6th October 2023
+avatar: $assets.files.assets.avatar.ajit.jpg
+linkedin-link: https://www.linkedin.com/in/ajit-garg-319167190/
+github-link: https://github.com/gargajit
+
+-- end: ftd.column
+
+-- end: ds.page

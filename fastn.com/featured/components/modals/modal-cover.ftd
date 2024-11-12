@@ -1,0 +1,32 @@
+-- import: fastn.com/u/ganesh-salunke
+-- import: fastn.com/featured as ft-ui
+
+
+-- ds.featured-category: Modal Cover
+featured-link: /components/modals/
+category: Featured Components
+image: $fastn-assets.files.images.featured.components.modal-cover.png
+owners: [$ganesh-salunke.info]
+license-url: https://github.com/Trizwit/FastnUI/
+license: Creative Commons
+published-date: 17-June-2023
+cards: $dialogs
+github-url: https://github.com/Trizwit/FastnUI/
+demo-link: https://fastnui.trizwit.com/UI-Components/Modal/
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list dialogs:
+
+-- ft-ui.template: Modal 1
+template-url: featured/components/modals/modal-1/
+screenshot: $fastn-assets.files.images.featured.components.modal-1.png
+
+-- end: dialogs

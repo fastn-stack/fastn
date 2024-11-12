@@ -1,0 +1,268 @@
+-- import: fastn-community.github.io/doc-site/components
+
+
+
+
+-- ds.page: Updating Footer
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+sidebar: true
+
+-- ds.page.right-sidebar:
+
+-- components.sidebar-index:
+
+-- end: ds.page.right-sidebar
+
+-- ds.page.body:
+
+`page` component has a `show-footer` boolean type property. You can add different
+footers using the `show-footer: true` property.
+
+We have created a few footer components for you. Please, [visit our footer
+package](https://fastn-community.github.io/footer/), you can choose the footer of
+your choice from there. 
+
+In the `FASTN/ds.ftd`, we are using `fastn-footer` from the [footer
+package](https://fastn-community.github.io/footer/basic-footer/).
+
+-- ds.h2: How to enable footer on all pages?
+
+If you want to show footer on all pages and the content of your footer is same
+on all pages then, we recommend modifying `FASTN/ds.ftd` global module that
+helps you to keep all your global properties and configurations in one `.ftd`
+file.
+
+-- ds.h3: How to modify `FASTN/ds.ftd` module of `doc-site`?
+
+You can modify a `FASTN/ds.ftd` module which is already added inside your
+`fastn` package.
+
+Let's understand `FASTN/ds.ftd` module:
+
+-- ds.code: Scroll down to view full code, click on download icon to download this code
+lang: ftd
+max-height.fixed.px: 300
+download: ds.ftd
+
+\-- import: fastn-community.github.io/footer
+\-- import: fastn-community.github.io/doc-site/common
+\-- import: fastn-community.github.io/roboto-typography as typo
+\-- import: fastn-community.github.io/doc-site
+export: author-bio,code,compact-text,featured-post,h0,h1,h2,h3,iframe,image,image-first,image-in-between,link,link-group,markdown,not-found-1,not-found-2,output,post,posts,rendered,tip,without-image,youtube
+
+\-- component page:
+children wrapper:
+optional caption title:
+optional body body:
+boolean sidebar: true
+optional string document-title:
+optional string document-description:
+optional ftd.raw-image-src document-image:
+optional string site-name: Doc Site
+optional ftd.image-src site-logo:
+boolean github-icon: true
+optional string github-url: https://github.com/fastn-community/doc-site/
+boolean full-width: false
+ftd.type-data types: $typo.types
+ftd.color-scheme colors: $ftd.default-colors
+integer logo-width: $common.logo-width
+integer logo-height: $common.logo-height
+boolean show-footer: true
+boolean show-banner: true
+ftd.ui list banner:
+fastn.app-ui apps: $common.apps
+boolean login-button: $common.login-button
+string site-url: $common.site-url
+
+\-- ftd.ui list page.footer:
+
+\-- footer.fastn-footer:
+copyright: Copyright © 2023 - [FifthTry](https://www.fifthtry.com/)
+site-logo: $common.fastn-logo
+powered-by-text: Powered by
+powered-by-link: https://fastn.com/
+
+\-- end: page.footer
+
+\-- ftd.ui list page.right-sidebar:
+
+\-- ds.h3: Heading in sidebar
+
+You can call any component inside sidebar
+
+\-- ds.compact-text: Quick links:
+
+- [Install `fastn`](install/)
+- [Create `fastn` package](create-fastn-package/)
+- [Expander Crash Course](expander/)
+
+\-- ds.compact-text: Join us:
+
+We welcome you to join our [Discord](https://discord.gg/a7eBUeutWD) community today.
+
+We are trying to create a language for human beings and we do not 
+believe it would be possible without your support. We would love to hear from you.
+
+\-- end: page.right-sidebar
+
+\-- doc-site.page: $page.title
+site-logo: $page.site-logo
+body: $page.body
+colors: $page.colors
+sidebar: $page.sidebar
+full-width: $page.full-width
+types: $page.types
+show-banner: $page.show-banner
+show-footer: $page.show-footer
+site-name: $page.site-name
+logo-height: $page.logo-height
+logo-width: $page.logo-width
+github-icon: $page.github-icon
+github-url: $page.github-url
+right-sidebar: $page.right-sidebar
+footer: $page.footer
+banner: $page.banner
+document-title: $page.document-title
+document-description: $page.document-description
+document-image: $page.document-image
+apps: $page.apps
+login-button: $page.login-button
+site-url: $page.site-url
+
+\-- ftd.column:
+spacing.fixed.em: 0.8
+width: fill-container
+children: $page.wrapper
+
+\-- end: ftd.column
+
+\-- end: doc-site.page
+
+\-- end: page
+
+-- ds.markdown:
+
+If you want to change above `FASTN/ds.ftd` module footer `fastn-footer` with
+[social footer](https://fastn-community.github.io/footer/docs/social-footer/) 
+then download below code snippet, and update your footer copyright message, 
+social urls with your social links.
+
+Then deploy or run `fastn serve` on your localhost. Access your localhost in the
+browser e.g.`http://127.0.0.1:8000/` you will see all your pages with a
+`social-footer`.
+
+To
+read social-footer documentation - [Click here](https://fastn-community.github.io/footer/docs/social-footer/).
+
+-- ds.code: Scroll down to view full code, click on download icon to download this code
+lang: ftd
+max-height.fixed.px: 300
+download: ds.ftd
+
+\-- import: fastn-community.github.io/footer
+\-- import: fastn-community.github.io/doc-site/common
+\-- import: fastn-community.github.io/roboto-typography as typo
+\-- import: fastn-community.github.io/doc-site
+export: author-bio,code,compact-text,featured-post,h0,h1,h2,h3,iframe,image,image-first,image-in-between,link,link-group,markdown,not-found-1,not-found-2,output,post,posts,rendered,tip,without-image,youtube
+
+\-- component page:
+children wrapper:
+optional caption title:
+optional body body:
+boolean sidebar: true
+optional string document-title:
+optional string document-description:
+optional ftd.raw-image-src document-image:
+optional string site-name: Doc Site
+optional ftd.image-src site-logo:
+boolean github-icon: true
+optional string github-url: https://github.com/fastn-community/doc-site/
+boolean full-width: false
+ftd.type-data types: $typo.types
+ftd.color-scheme colors: $ftd.default-colors
+integer logo-width: $common.logo-width
+integer logo-height: $common.logo-height
+boolean show-footer: true
+boolean show-banner: true
+ftd.ui list banner:
+fastn.app-ui apps: $common.apps
+boolean login-button: $common.login-button
+string site-url: $common.site-url
+
+\-- ftd.ui list page.footer:
+
+\-- footer.social-footer:
+footer-links: $footer.sitemap.sections
+copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+twitter-logo: $assets.files.assets.twitter.svg
+twitter-url: https://twitter.com/FifthTryHQ
+facebook-logo: $assets.files.assets.facebook.svg
+facebook-url: index.html
+discord-logo: $assets.files.assets.discord.svg
+discord-url: https://discord.gg/bucrdvptYd
+instagram-logo: $assets.files.assets.instagram.svg
+instagram-url: index.html
+telegram-logo: $assets.files.assets.telegram.svg
+telegram-url: index.html
+
+\-- end: page.footer
+
+\-- ftd.ui list page.right-sidebar:
+
+\-- ds.h3: Heading in sidebar
+
+You can call any component inside sidebar
+
+\-- ds.compact-text: Quick links:
+
+- [Install `fastn`](install/)
+- [Create `fastn` package](create-fastn-package/)
+- [Expander Crash Course](expander/)
+
+\-- ds.compact-text: Join us:
+
+We welcome you to join our [Discord](https://discord.gg/a7eBUeutWD) community today.
+
+We are trying to create a language for human beings and we do not 
+believe it would be possible without your support. We would love to hear from you.
+
+\-- end: page.right-sidebar
+
+\-- doc-site.page: $page.title
+site-logo: $page.site-logo
+body: $page.body
+colors: $page.colors
+sidebar: $page.sidebar
+full-width: $page.full-width
+types: $page.types
+show-banner: $page.show-banner
+show-footer: $page.show-footer
+site-name: $page.site-name
+logo-height: $page.logo-height
+logo-width: $page.logo-width
+github-icon: $page.github-icon
+github-url: $page.github-url
+right-sidebar: $page.right-sidebar
+footer: $page.footer
+banner: $page.banner
+document-title: $page.document-title
+document-description: $page.document-description
+document-image: $page.document-image
+apps: $page.apps
+login-button: $page.login-button
+site-url: $page.site-url
+
+\-- ftd.column:
+spacing.fixed.em: 0.8
+width: fill-container
+children: $page.wrapper
+
+\-- end: ftd.column
+
+\-- end: doc-site.page
+
+\-- end: page
+
+-- end: ds.page

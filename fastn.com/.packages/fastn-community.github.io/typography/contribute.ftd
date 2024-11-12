@@ -1,0 +1,47 @@
+-- import: fastn
+-- import: fastn-community.github.io/header/assets
+-- import: fastn-community.github.io/site-doc
+
+
+-- site-doc.doc-home: Contribute to typography
+license-url: https://github.com/fastn-community/typography/blob/main/LICENSE
+current-package: fastn-community.github.io/typography
+show-tabs: false
+site-title: Typography
+github-url: https://github.com/fastn-community/typography/
+
+`typography` is an [open source](https://opensource.guide/) fastn typography
+component. It's built using [fastn](https://github.com/fastn-stack/fastn).
+
+`typography` is part of [fastn-community](https://github.com/fastn-community/) and
+built one contribution at a time by community members just like you. You can
+contribute for `typography` in many forms beyond just writing code, from reporting
+an issue or suggesting a new feature to improving documentation or providing
+feedback on proposed changes.
+
+-- site-doc.header: Code of Conduct
+
+fastn has adopted a [Code of Conduct](https://github.com/fastn-stack/.github/blob/main/CODE_OF_CONDUCT.md) 
+that we expect participants to adhere to. 
+
+-- site-doc.header: Get Involved
+
+- How do I? – [Github Discussion -> Q&A](https://github.com/fastn-community/typography/discussions/categories/q-a)
+- I got this error, why? – [Github Discussion -> Q&A](https://github.com/fastn-community/typography/discussions/categories/q-a)
+- I got this error and I’m sure it’s a bug – [file an issue](https://github.com/fastn-community/typography/issues)!
+- I have an idea/request – [Github Discussion -> Ideas & RFCs](https://github.com/fastn-community/typography/discussions/categories/ideas-rfcs)!
+- Why do you? – [Github Discussion](https://github.com/fastn-community/typography/discussions)
+- When will you? – [Github Discussion](https://github.com/fastn-community/typography/discussions)
+- You’re awesome – aw shucks! ([Give us a star](https://github.com/fastn-community/typography)!, and come hang out with us on [Discord](https://discord.gg/a7eBUeutWD))
+- You Like Reddit? Join us at [/r/fastn](https://reddit.com/r/fastn)!
+- You want to meet up with other fastn enthusiasts? Join our [meetup group](https://www.meetup.com/fastn-io/).
+- Follow us on Twitter: [@fastn_stack](https://twitter.com/fastn_stack)
+
+-- site-doc.header: Join our Discord Channel
+
+- [🎉 | #start-here](https://discord.gg/6JD7BRUjTe)
+- [💼 | #Share-your-work](https://discord.gg/Um6KX3VYnh)
+- [💡 | #ideas-and-feedback](https://discord.gg/7hwRSsxJUt)
+
+
+-- end: site-doc.doc-home

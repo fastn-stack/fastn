@@ -1,0 +1,67 @@
+-- import: fastn-community.github.io/doc-site/components
+-- import: fastn-community.github.io/doc-site/blog-articles/category-1/sample-post-2 
+
+-- ds.page: post-card
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+sidebar: true
+
+-- ds.page.right-sidebar:
+
+-- components.sidebar-index:
+
+-- end: ds.page.right-sidebar
+
+-- ds.page.body:
+
+`ds.post-card` can be used to show blog/article meta as a post-card.
+
+-- ds.h2: Example:
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- common.post-meta post-data: Quo praesentium sapiente vel soluta assumenda et
+tag: Lorem ipsum
+author: $author.john-doe
+published-on: May 18, 6 min
+post-image: $assets.files.static.image-placeholder.jpg
+post-url: blog-articles/category-1/sample-post-2 
+
+\-- ds.post-card:
+post-data: $post-data
+
+-- ds.rendered.output:
+
+-- ds.post-card:
+post-data: $sample-post-2.meta
+
+-- end: ds.rendered.output
+
+
+-- end: ds.rendered
+
+-- ds.code:
+lang: ftd
+
+\-- ds.post-card:
+post-data: $post-data
+
+-- ds.h3: Properties of `post-card` component
+
+- **post-data** - `type: record` use `common.post-meta` record to create
+    featured post of your blog post as shown in below code snippet. 
+
+-- ds.code:
+lang: ftd
+
+\-- common.post-meta post-data: Quo praesentium sapiente vel soluta assumenda et
+tag: Lorem ipsum
+author: $author.john-doe
+published-on: May 18, 6 min
+post-image: $assets.files.static.image-placeholder.jpg
+post-url: blog-articles/category-1/sample-post-2 
+
+-- end: ds.page

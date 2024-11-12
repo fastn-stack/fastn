@@ -1,0 +1,31 @@
+{
+    "files": {
+        "FASTN.ftd": {
+            "name": "FASTN.ftd",
+            "checksum": "0B57F0B2749868B46F1454B3F5F77FEC39222C5B55028B95964C9B36A7F2AAF8",
+            "size": 351
+        },
+        "LICENSE.md": {
+            "name": "LICENSE.md",
+            "checksum": "A95364C3842F2C439BD629F65E304A2850239B443596467254EE96E71CA213DD",
+            "size": 1498
+        },
+        "index.ftd": {
+            "name": "index.ftd",
+            "checksum": "8B937B79F5941E8C7DE729D90342B5BEFA35E52806D2EB8139582EFD99A17B99",
+            "size": 13119
+        },
+        "README.md": {
+            "name": "README.md",
+            "checksum": "7D36CFDB438F8655D27B52EB959017E30A3E2640961EAA8072EEC4F5094A157F",
+            "size": 1319
+        },
+        "fastn-typography.ftd": {
+            "name": "fastn-typography.ftd",
+            "checksum": "F4412188DDEC9A573623029B5ECD1F454AC5D628DECF2B3773DE7D555C443AD3",
+            "size": 8905
+        }
+    },
+    "zip_url": "https://github.com/fastn-community/opensans-typography/archive/1753b88faa2d8ad1cc4597c059d5b5916a45d045.zip",
+    "checksum": "5310FA026DF5E3FCF40DB4B18C74CE0B78A4FD831752B7F6A1AA734108FBC3F1"
+}

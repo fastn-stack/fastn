@@ -1,0 +1,22 @@
+-- import: fastn.com/assets
+
+-- ds.page: Deploying On Heroku
+
+To deploy `fastn` on Heroku you can use our official
+[fastn-stack/heroku-buildpack](https://github.com/fastn-stack/heroku-buildpack):
+
+-- ds.code:
+lang: sh
+
+heroku config:add BUILDPACK_URL=https://github.com/fastn-stack/heroku-buildpack.git
+
+-- ds.markdown:
+
+You will have to launch `fastn` from your Procfile:
+
+-- ds.code:
+lang: Procfile
+
+web: fastn serve --port $PORT --bind 0.0.0.0
+
+-- end: ds.page

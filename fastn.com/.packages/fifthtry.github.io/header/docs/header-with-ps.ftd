@@ -1,0 +1,107 @@
+-- import: fastn-community.github.io/site-doc
+-- import: fastn-community.github.io/site-doc
+-- import: fifthtry.github.io/header
+-- import: fifthtry.github.io/product-switcher as ps
+-- import: fifthtry.github.io/code-block as cb
+
+
+
+
+-- site-doc.doc-home: Header with Product Switcher
+github-url: https://github.com/FifthTry/header/
+color-scheme: \$ftd.default-colors
+typography: \$ftd.default-types
+current-package: fifthtry.github.io/header
+show-tabs: true
+site-title: Header
+
+-- site-doc.output:
+
+-- header.header:
+sections: $header.sitemap.sections
+site-url: $header.site-url
+site-name: $header.site-name
+products: $ps.example-product
+
+-- end: site-doc.output
+
+-- site-doc.component-doc: `header`
+package-link: https://fifthtry.github.io/header
+github-link: https://github.com/FifthTry/header
+package-name: fifthtry.github.io/header
+info: `-- header` can be used as header on your fastn web projects.
+
+The `header` component is already included inside
+[`doc-site`](fifthtry.github.io/doc-site). If you are using `doc-site` then 
+don't add header as fastn dependency.
+
+
+-- site-doc.header: How to use?
+
+-- cb.code: Add `header` dependency into your FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: fifthtry.github.io/header
+
+-- cb.code: Import `header` into your `.ftd` file
+lang: ftd
+
+\-- import: fifthtry.github.io/header
+\-- import: fifthtry.github.io/product-switcher as ps
+
+\-- header.header:
+sections: $header.sitemap.sections
+site-url: $header.site-url
+site-name: $header.site-name
+products: $ps.example-product
+
+-- site-doc.header: Properties:
+
+Below are details of all properties of this component.
+
+-- site-doc.component-property: `sections`
+
+It's used to show `fastn.sitemap` sections.
+
+-- site-doc.component-property: `site-url`
+
+It’s used to add a site link to your site homepage.
+
+-- site-doc.component-property: `site-name`
+
+It’s used to add a site name to `header` component.
+
+-- site-doc.component-property: `products`
+
+Its used to pass `products` record list to `header` component. `products`
+property will be passed to `product-switcher` which is imported by default
+inside `header` component `FASTN.ftd`.
+
+
+-- site-doc.header: Properties at a glance:
+
+Below table shows all properties and its default types of this component.
+
+-- site-doc.property-header:
+
+-- site-doc.table-of-property: `sections`
+type: List of Records (`fastn.sitemap` - sections)
+default: Default
+
+-- site-doc.table-of-property: `site-url`
+type: String
+default: Default
+
+-- site-doc.table-of-property: `site-name`
+type: String
+default: Optional
+
+-- site-doc.table-of-property: `products`
+type: List of Records(`$ps.product-data`)
+default: Optional
+
+-- end: site-doc.property-header
+
+-- end: site-doc.component-doc
+
+-- end: site-doc.doc-home

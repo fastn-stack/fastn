@@ -1,0 +1,13 @@
+-- import: fastn.com/u/yashveer-mehra
+-- import: fastn.com/u/ganesh-salunke
+
+
+
+-- ds.featured-business: Sunset Business Card
+image: $fastn-assets.files.images.featured.business-cards.sunset-business-card-front.jpg
+owners: [$yashveer-mehra.info, $ganesh-salunke.info]
+license-url: https://github.com/fastn-community/sunset-business-card
+license: Creative Commons
+published-date: 23-June-2023
+github-url: https://github.com/fastn-community/sunset-business-card
+demo-link: https://fastn-community.github.io/sunset-business-card

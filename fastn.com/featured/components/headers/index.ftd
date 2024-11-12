@@ -1,0 +1,22 @@
+-- import: fastn.com/featured as ft-ui
+
+
+-- ds.page:
+sidebar: false
+
+-- ft-ui.grid-view: Header / Navbar
+templates: $headers
+
+-- end: ds.page
+
+
+
+
+
+-- ft-ui.template list headers:
+
+-- ft-ui.template: Header
+template-url: /featured/components/headers/header/
+screenshot: $fastn-assets.files.images.featured.components.header.jpg
+
+-- end: headers

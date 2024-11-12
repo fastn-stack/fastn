@@ -1,0 +1,252 @@
+-- import: fastn-community.github.io/bling/quote
+-- import: fastn.com/assets
+
+-- ds.page: Publish Your Site
+
+Let's recap your progress so far. You have created your Github account, and you
+have created your first repository. The repository contains a `fastn` powered
+website, but you have not yet see how it looks like when "rendered". And you do
+not yet have the URL of your website.
+
+In this section we will use Github Pages to host your website.
+
+
+-- ds.h1: What Is Hosting?
+
+A website or a web-application is a software application, which runs on some
+hardware. Like you install an app on your iPhone or Android, or you install
+software on your Laptop or Desktop. When you visit `fastn.com/book/`, your
+browser is contacting a software running somewhere. In general during the
+course of the book we will evaluate different options for hosting. For now to
+get started we are going to talk about a special kind of hosting, called static
+hosting.
+
+-- ds.h2: What Is Static Hosting?
+
+You can kind of classify most websites as static or dynamic. Static sites are
+static, means they do not change.
+
+-- quote.marengo: Definition of `static`
+
+lacking in movement, action, or change, especially in an undesirable or
+uninteresting way. "demand has grown in what was a fairly static market"
+
+-- ds.markdown:
+
+Static does not mean never changing, but "slow changing". Say you are creating a
+blog, or maybe a portfolio or resume site, or maybe you have a hair saloon and
+you want to put out information about your offerings and rates etc, these
+information do not change often.
+
+But if you are expecting visitors of your site to take actions, like post
+comments, create their own articles, or upload images, etc, then you are not
+slow changing, and are dynamic.
+
+Deciding static vs dynamic is not always easy. Thank fully `fastn` does not
+force you to chose if you are static or dynamic, you can change your mind after
+the fact, and just switch your hosting from static to dynamic hosting
+provider.
+
+-- ds.h2: Why Bother With Static Vs Dynamic?
+
+If a site is static it is much simpler to manage, the hosting is much cheaper,
+often free. Static sites are harder to hack. Requires lower maintenance. It is
+a trade-off.
+
+Dynamic sites are more "feature-ful" but also more work, more money etc. Dynamic
+sites need to serve static media like images, but they also have to run a
+"application", written in some language like Java, Python, PHP, JavaScript etc.
+Further dynamic sites need access to some form of database, and one has to chose
+one, and then manage them. Managing a database is quite some work.
+
+Dynamic sites also have to worry about the load, serving static content requires
+lot less CPU, RAM etc, so if your site gets a lot of traffic static content
+fares much better than the dynamic stuff, your web application and database
+will have to be able to handle the load. Further sites on internet are almost
+constantly under attack, due to simplicity static sites, they are harder to
+attack than dynamic sites.
+
+For the purpose of this chapter we are going to go ahead with a static website,
+you will learn about how to move from static hosting provider to dynamic
+hosting provider in later parts of this book.
+
+;; TODO: update reference to dynamic hosting parts.
+-- ds.h2: What Exactly Is Static Hosting?
+
+In technical terms, static hosting means HTML/CSS/JS/images. If you can code up
+your site using only these three technologies, then the hosting provider only
+has to manage HTML/CSS/JS/image files. When you are using `fastn` for your
+site, `fastn` can generate a folder containing these HTML/CSS/JS/image files,
+that you can upload to one of static hosting providers.
+
+You see, the web browser you are using only understand these technologies:
+HTML/CSS/JS/images. The dynamic websites generate these HTML etc, and the
+generated files could be different for each user, or different for same user at
+different times. This is the dynamic part. But if your site is static, the HTML
+etc that you are serving to everyone is not changing till you update your site,
+you have to generate these basic files, HTML/CSS etc and just upload it.
+
+-- ds.h2: Which Static Hosting Provider?
+
+You can do your own hosting. You can get an IP address from your internet
+provider, and assign it to the laptop or desktop, or even your mobile phone,
+and run a static web server on it, and let your visitors access it. Of course
+this would be more work, you will have to ensure power and internet does not
+go, as else your site will be down and your visitors will have a bad time.
+
+A lot of people hosting their own servers, and there are internet communities
+for that. People do that for learning, doing everything yourself is a great
+learning experience, and this book will cover enough that you can do this as
+well, but that will not be the focus of the book. Some people also host their
+own servers for cost reason, after all this is the cheapest solution out there,
+if you go beyond some load thresholds. It is more work, but cheaper.
+
+If you are not interested in self hosting, then you have a few options. We are
+going to take a look at Github Pages, a static hosting solution we recommend.
+But there are many out there. Google Cloud, Amazon Web Services, Microsoft
+Azure, all provide a solution for hosting your static websites.
+
+-- ds.h2: Why Are We Recommending Github Pages?
+
+We are not affiliated with Github or Microsoft in anyway. We are promoting them
+because it is the best experience we personally had. They are creating an
+integrated whole. As you saw in previous section we are using Github for
+hosting our website's `git` repository. Github's `git` hosting works very well
+will Github Pages as you will see. Further Github comes with integrated editor,
+which we will take a close look in next section. Also Github Pages is FREE. No
+credit card required.
+
+So all in all, for learning purpose they are a great starting point. But in no
+way your learning going to be limited to Github offerings. During the course of
+the book you will learn more and will be able to make decisions most suitable
+for your use case.
+
+-- ds.h1: Github Actions
+
+In the previous section we created a repo and observed that we had two commits,
+and the second commit was made by `github-actions[bot]`.
+
+-- ds.image: Your repo with two commits
+src: $assets.files.images.commits.png
+
+Github has a feature called "Github Actions". You will see a tab in the middle
+of the navigation section. If you go to the action screen you will see something
+like this:
+
+-- ds.image: Github Actions
+src: $assets.files.images.rename-action.png
+
+You will see one action has run so far (it is labelled "1 workflow run"). So
+we have repo, and repo has commits, and now we have actions. We have also seen
+that one action has run so far. Why did it run? What did it do? Since we are
+investigating why `github-actions[bot]` made the commit, and there is a feature
+called Github Actions, I guess we can connect the dots, and speculate may be
+the action run, and created the commit. And that is exactly what happened.
+
+You see Github Actions are piece of code that runs everytime something
+interesting happens. The code that runs are called "workflows". On the left you
+will see a bunch of Workflows, "Deploy Site" is the most interesting one.
+
+"Deploy Site" has already run, and it created the second commit. We have
+configured "Deploy Site" to run every time any commit is created, and since a
+commit is created when you make a change, this means "Deploy Site" workflow is
+executed every time you make any changes. You make any changes, and Deploy Site
+runs, and it deploys your website.
+
+Where have we done all this you ask? The workflow and the configuration sit in
+your repository, checkout the `.github` folder in your repo:
+
+-- ds.image: `.github` folder contains action stuff
+src: $assets.files.book.images.github-folder.png
+
+
+-- ds.h1: Deploy Site
+
+For now we are not going to tell you how to configure anything there, what we is
+the content of those files, for now what is sufficient for you to learn is
+that “deploy site” gets called whenever a commit happens.
+
+So what does deploy site do? It does a lot. This workflow first gets a machine
+for you from the GitHub’s pool of machine. Then it installs an operating system
+on it. It then installs `fastn` on that machine. It also gets a copy of your
+repository. It then "builds your site". And finally it "deploys your site on
+Github Pages".
+
+How to get a machine for you, we will not concern ourselves with, this is the
+magic cloud providers have created for us. How to install operating system is
+also handled by them. When it comes to getting a copy of your repository, there
+are many ways, you can download a zip, "clone" it using `git` which we will
+cover later. Installing `fastn` is also quite easy, we have an installation
+script you can use, or you can download the `fastn` executable from our
+downloads page, and soon we will upload `fastn` to your operating systems App
+Stores etc, so you can install it like any other software you use.
+And "building the website", which is converting your `.ftd` files to `.html` etc
+is done by `fastn` as we will show later. We are just giving a high level
+picture in this section, for now let Github Action will do all this for you.
+
+Let's talk about the last step, "deploying your site on Github Pages". This step
+requires a little bit of configuration that you have to do, and Github Action
+will take care of the rest.
+
+-- ds.h2: Enabling Github Pages For Your Repository
+
+You have tell Github to start using Github Pages for your repository. You do
+that by going to "Settings" tab of your repository, and click on "Pages" on the
+left hand side.
+
+-- ds.image: Visit Pages Settings Page To Active Github Pages For Your Repo
+src: $assets.files.book.images.pages-settings.png
+
+You will see two dropdowns, leave the first one as is, and change the branch
+dropdown to `gh-pages`.
+
+-- ds.image: Source: Deploy from a branch, Branch: gh-pages
+src: $assets.files.book.images.pages-settings-dropdown.png
+
+Hit "Save" and you are done. If you head over to Actions tab again, you will see
+a new action "pages build and deployment" running.
+
+-- ds.image:
+src: $assets.files.book.images.pages-deployment-action.png
+
+You know it is running because of the brownish dot. The earlier action has green
+tick mark and is in done state. So you have two actions to deploy your site,
+one action "builds your site", meaning it creates a bunch of HTML/CSS files.
+What I did not mention so far is this action stores the generates HTML/CSS
+files in a "git branch" called `gh-pages`.
+
+What is a branch? We will touch upon this later in the book, for the most part
+unless you are collaborating with others, and unless you want to follow git
+best practices, you can ignore the git branch stuff, just that the files you
+are editing are stored in a branch named `main`, and Github Pages expects
+generated HTML files in a branch named `gh-pages`. We will touch upon the best
+practice in an appendix, for the purpose of this book you can ignore that best
+practice for now and live as if there is only one branch called `main`.
+
+In a minute or so the "pages build and deployment" action would be done, and if
+you head back to Settings -> Pages, you will see the following:
+
+-- ds.image:
+src: $assets.files.book.images.pages-settings-done.png
+
+Congratulations! Your website is published. If you click on the "Visit site"
+shown above you will see something like this:
+
+-- ds.image: Checkout Your First Site!
+src: $assets.files.book.images.first-site.png
+
+
+The URL of your site would be different, the way Github Pages generates the URL
+of your site is: `https://<username>.github.io/<repo-name>/`. In my case the
+`<username>` is `amitu`, and the `<repo-name>` is `hello`, the URL of my site
+is[`https://amitu.github.io/hello/`](https://amitu.github.io/hello/).
+
+Note down your URL, share it us on our [discord channel: `Web Developers` ->
+`#book-club`](https://discord.gg/5CDm3jPhAR)!
+
+-- ds.h1: Next Step
+
+On your site it mentions my name! It's time we checkout our code in an
+[online editor. ->](/book/codespaces/)
+
+-- end: ds.page

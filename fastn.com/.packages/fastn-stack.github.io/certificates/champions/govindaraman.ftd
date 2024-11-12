@@ -1,0 +1,16 @@
+-- import: fastn-stack.github.io/certificates/champion
+
+-- ds.page: Champion Certification
+
+-- ftd.column:
+width: fill-container
+
+-- champion.certificate-2: Govindaraman
+date: 6th October 2023
+avatar: $assets.files.assets.avatar.govindaraman.jpg
+discord-link: https://discord.com/channels/793929082483769345/1159833885169954908
+linkedin-link: https://www.linkedin.com/in/govindaraman-s/
+
+-- end: ftd.column
+
+-- end: ds.page

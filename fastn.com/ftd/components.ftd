@@ -1,0 +1,1232 @@
+-- import: fifthtry.github.io/admonitions as cbox
+
+-- ds.page: `component`
+
+A `component` in `ftd` is similar to "react component". Components are
+independent and reusable bits of code. `component`s have "arguments", these are
+the data that must be passed to them, and using `component`s we construct the
+user interface.
+
+-- ds.h1: Create Your First Component
+
+New components are defined using the `component` keyword followed by component
+name:
+
+-- ds.code: Creating a component named `heading`
+lang: ftd
+
+\-- component heading:
+
+\-- ftd.text: My Heading
+color: red
+
+\-- end: heading
+
+-- ds.markdown:
+
+Here, we have defined a new component `heading`. This component is using
+[`ftd.text`](ftd/text/), a kernel component, as a definition. We have created a
+custom-component which shows given text in `red` color.
+
+
+-- ds.h2: Kernel Components
+
+So, how is `ftd.text` implemented? `ftd` comes with some "kernel components",
+these are the lowest level components that every other component uses directly
+or indirectly.
+
+Read about our [kernel components guide](ftd/kernel/) to learn about
+these components.
+
+
+-- ds.h1: Rendering a Component
+
+Till now, we have created a component called `heading`. Now to invoke or render
+this component in your `ftd` application, we can do the following:
+
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- heading:
+
+-- ds.rendered.output:
+
+	-- heading: My Heading
+	
+-- end: ds.rendered.output
+
+
+-- ds.markdown:
+
+Currently, `My Heading` is fixed text displayed by `heading` component. We can
+make it customisable by using attributes.
+
+
+-- ds.h2: Rendering a Component Conditionally
+
+We can render a component conditionally. This can be achieved using an `if`
+keyword.
+
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- integer num: 10
+
+\-- heading:
+if: { num <= 10 }
+
+-- ds.rendered.output:
+
+	-- heading: My Heading
+	
+-- end: ds.rendered.output
+
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- integer num: 10
+
+\-- heading:
+if: { num > 10 }
+
+\-- ftd.text: Heading not shown!!
+
+-- ds.rendered.output:
+
+	-- heading: My Heading
+	if: { false }
+	
+	-- ftd.text: Heading not shown!!
+	color: $inherited.colors.text
+	
+-- end: ds.rendered.output
+
+
+
+-- ds.h1: Component Arguments
+
+Component "arguments" refer to the inputs that are passed into a component when
+it is called or invoked. These arguments provide the component with the
+necessary data that is helpful to configure or customize the component's
+behavior or appearance.
+
+Component arguments are like function arguments, and you send them into the
+component as attributes.
+
+The arguments in `ftd` components creates variables for each component
+invocation. These variables have local scope. This means that these variables
+can be accessed only inside the component definition in which they are declared.
+
+
+-- ds.h2: Defining Component Arguments
+
+Component arguments starts with argument type follow by argument name, in our
+component we can define one such argument, `title`.
+
+The type of our `title` argument is [`string`](ftd/built-in-types/#string).
+
+-- ds.code: Using the `title` argument in the component
+lang: ftd
+
+\-- component heading:
+string title: ;; <hl>
+
+\-- ftd.text: $heading.title
+color: red
+
+\-- end: heading
+
+
+-- ds.h2: Adding Attributes to Component
+
+When the component is used in another component or in the main application, the
+`title` can be passed in as an attribute of the component:
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- heading:
+title: I love `ftd`!
+
+-- ds.rendered.output:
+
+	-- heading:
+	title: I love `ftd`!
+	
+-- end: ds.rendered.output
+
+
+-- ds.h2: Using Specially Typed Arguments
+
+We can use special types like [`caption`](ftd/built-in-types/#caption),
+[`body`](ftd/built-in-types/#body) or [`caption or
+body`](ftd/built-in-types/#caption-or-body) that give us flexibility to pass
+attributes in different location of [`ftd::p1`
+"section"](ftd/p1-grammar/#section-caption).
+
+Let's use `caption or body` type using which we can pass attributes in either
+`caption` or `body` area.
+
+
+-- ds.code: `caption or body` type for `title` argument
+lang: ftd
+
+\-- component heading:
+caption or body title:
+
+\-- ftd.text: $heading.title
+color: red
+
+\-- end: heading
+
+
+-- ds.h3: Passing Attribute in Caption
+
+Passing attribute in caption area makes the component more concise and readable.
+It also make it clear what the component represents and what its purpose is.
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- heading: I am in caption area.
+
+-- ds.rendered.output:
+
+	-- heading: I am in caption area.
+	
+-- end: ds.rendered.output
+
+
+-- ds.h3: Passing Attribute in Body
+
+Passing attributes in the body area can help make it more readable by providing
+a way to break up complex or lengthy inputs into more manageable chunks of text.
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- heading:
+
+I am in body area.
+
+Since I am long description, it's better to pass it here. Isn't it?
+
+-- ds.rendered.output:
+
+	-- heading:
+	
+	I am in body area.
+	
+	Since I am long description, it's better to pass it here. Isn't it?
+	
+-- end: ds.rendered.output
+
+
+-- cbox.info: Special types
+
+By default `caption` or `body` is alias for `string` but if you want to pass
+types other than `string` you can do the following:
+
+	-- ftd.column:
+	padding-vertical.px: 20
+	width: fill-container
+	
+		-- ds.rendered:
+		copy: true
+		
+		-- ds.rendered.input:
+		
+		\-- component show-number:
+		caption integer number:
+		
+		\-- ftd.integer: $show-number.number
+		
+		\-- end: show-number
+		
+		\-- show-number: 45
+		
+		-- ds.rendered.output:
+		
+			-- show-number: 45
+			
+		-- end: ds.rendered.output
+
+	-- end: ftd.column
+
+-- end: cbox.info
+
+
+-- ds.h2: Arguments with Default Values
+
+An argument can be defined with a default value:
+
+
+-- ds.code:
+lang: ftd
+
+\-- component heading:
+caption or body title:
+ftd.color text-color: red
+
+\-- ftd.text: $heading.title
+color: $heading.text-color
+
+\-- end: heading
+
+
+-- ds.markdown:
+
+If no argument is provided, the component instance adopts the default value of
+`text-color` defined by the `heading`. On the other hand, if an argument is
+provided, it supersedes the default value.
+
+
+-- ds.rendered: `heading` with default `text-color`
+copy: true
+
+-- ds.rendered.input:
+
+\--  heading: hello
+
+-- ds.rendered.output:
+
+	--  heading: hello
+	
+-- end: ds.rendered.output
+
+
+-- ds.rendered: `heading` with `text-color` value as `green`
+copy: true
+
+-- ds.rendered.input:
+
+\-- heading: this is nice
+text-color: green
+
+-- ds.rendered.output:
+
+	-- heading: this is nice
+	text-color: green
+	
+-- end: ds.rendered.output
+
+
+-- ds.h3: Global Variable Reference As Default Value
+
+We can pass global variable reference as a default value:
+
+
+-- ds.code: Passing global variable reference `ftd-title`
+lang: ftd
+
+\-- string ftd-title: I love `ftd`!
+
+\-- component heading:
+caption or body title: $ftd-title
+ftd.color text-color: red
+
+\-- ftd.text: $heading.title
+color: $heading.text-color
+
+\-- end: heading
+
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- heading:
+
+-- ds.rendered.output:
+
+	-- heading:
+	
+-- end: ds.rendered.output
+
+
+
+-- ds.h3: Other Argument Reference As Default Value
+
+We can pass other argument reference as a default value:
+
+
+-- ds.code:
+lang: ftd
+
+\-- component heading-with-detail:
+caption title:
+body detail: $heading-with-detail.title
+
+\-- ftd.column:
+spacing.fixed.px: 20
+color: $inherited.colors.text
+
+\-- ftd.text: $heading-with-detail.title
+role: $inherited.types.heading-small
+
+\-- ftd.text: $heading-with-detail.detail
+role: $inherited.types.label-small
+
+\-- end: ftd.column
+
+\-- end: heading-with-detail
+
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- heading-with-detail: Title same as detail
+
+-- ds.rendered.output:
+
+	-- heading-with-detail: Title same as detail
+	
+-- end: ds.rendered.output
+
+
+
+-- ds.h2: Conditional Attributes
+
+Sometimes we want to set an attribute based on a condition.
+
+-- ds.rendered: True Condition Expression
+copy: true
+
+-- ds.rendered.input:
+
+\-- integer num: 10
+
+\-- heading:
+title if { num <= 10 }: `num` is less than equal to 10
+title: Default Title
+
+-- ds.rendered.output:
+
+	-- heading:
+	title if { num <= 10 }: `num` is less than equal to 10
+	title: Default Title
+	
+-- end: ds.rendered.output
+
+
+
+-- ds.rendered: False Condition Expression
+copy: true
+
+-- ds.rendered.input:
+
+\-- heading:
+title if { num > 10 }: `num` is less than equal to 10
+title: Default Title
+
+-- ds.rendered.output:
+
+	-- heading:
+	title if { num > 10 }: `num` is less than equal to 10
+	title: Default Title
+	
+-- end: ds.rendered.output
+
+
+-- ds.h1: Creating Container Component
+
+`ftd` provides some container type kernel component like
+[`ftd.row`](ftd/row/) and [`ftd.column`](ftd/column/). The container component
+accepts the components as an attribute.
+
+
+-- ds.h2: Using `ftd.ui list` type
+
+We can define such arguments using [`ftd.ui list`](ftd/built-in-types/#ftd-ui)
+type.
+
+-- ds.code:
+lang: ftd
+
+\-- component show-ui:
+caption title:
+ftd.ui list uis: ;; <hl>
+
+\-- ftd.column:
+spacing.fixed.px: 10
+color: $inherited.colors.text
+
+\-- ftd.text: $show-ui.title
+
+\-- ftd.column:
+children: $show-ui.uis ;; <hl>
+border-width.px: 1
+padding.px: 10
+border-color: $inherited.colors.border
+
+\-- end: ftd.column
+
+\-- end: ftd.column
+
+\-- end: show-ui
+
+
+-- ds.markdown:
+
+Here, we have defined an argument `uis` of type `ftd.ui list`. We have also pass
+this to [`children`](ftd/container/#children) attribute of `ftd.column`.
+
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- show-ui: My UIs
+
+\-- show-ui.uis:
+
+\-- ftd.text: My First UI
+\-- heading: Using Heading Too
+
+\-- end: show-ui.uis
+
+-- ds.rendered.output:
+
+	-- show-ui: My UIs
+	
+	-- show-ui.uis:
+	
+		-- ftd.text: My First UI
+		-- heading: Using Heading Too
+		
+	-- end: show-ui.uis
+
+-- end: ds.rendered.output
+
+
+-- ds.h2: Using `children` type
+
+The [`children`](ftd/built-in-types/#children) type allows us to pass components
+in subsection location.
+
+
+-- ds.code:
+lang: ftd
+
+\-- component show-ui:
+caption title:
+children uis: ;; <hl>
+
+\-- ftd.column:
+spacing.fixed.px: 10
+color: $inherited.colors.text
+
+\-- ftd.text: $show-ui.title
+
+\-- ftd.column:
+children: $show-ui.uis
+border-width.px: 1
+padding.px: 10
+border-color: $inherited.colors.border
+
+\-- end: ftd.column
+
+\-- end: ftd.column
+
+\-- end: show-ui
+
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- show-ui: My UIs
+
+\-- ftd.text: My First UI
+\-- heading: Using Heading Too
+
+\-- end: show-ui
+
+-- ds.rendered.output:
+
+	-- show-ui: My UIs
+	
+	-- show-ui.uis:
+	
+		-- ftd.text: My First UI
+		-- heading: Using Heading Too
+		
+	-- end: show-ui.uis
+
+-- end: ds.rendered.output
+
+
+-- ds.h1: Mutable Component Arguments
+
+In `ftd`, we can define a component argument as mutable by using the `$` prefix
+before its name. A mutable argument can be modified within the component and can
+take mutable variables as input, which can be modified outside the component's
+scope too. Any changes made to a mutable argument will be reflected in the
+component's output.
+
+Consider the following code snippet:
+
+-- ds.code:
+lang: ftd
+
+\-- component toggle-ui:
+caption title:
+body description:
+boolean $open: true
+
+\-- ftd.column:
+
+\-- ftd.text: $toggle-ui.title
+
+\-- ftd.text: $toggle-ui.description
+if: { toggle-ui.open }
+
+\-- end: ftd.column
+
+\-- end: toggle-ui
+
+-- ds.markdown:
+
+In the above example, the `$open` argument is mutable, which means it can be
+modified both within and outside the `toggle-ui` component. Any changes made to
+the `$open` argument will be immediately reflected in the component's output.
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- toggle-ui: My Title
+$open: false
+
+My Description
+
+-- ds.rendered.output:
+
+	-- toggle-ui-: My Title
+	$open: false
+	
+	My Description
+	
+-- end: ds.rendered.output
+
+
+-- ds.rendered:
+copy: true
+
+-- ds.rendered.input:
+
+\-- toggle-ui: My Title
+
+My Description
+
+-- ds.rendered.output:
+
+	-- toggle-ui-: My Title
+	
+	My Description
+	
+-- end: ds.rendered.output
+
+
+
+
+
+
+-- ds.h2: Passing Mutable Variable to Mutable Argument
+
+Consider the following code snippet:
+
+-- ds.code:
+lang: ftd
+
+\-- boolean $global-open: true
+
+\-- ftd.text: I change global-open
+$on-click$: $ftd.toggle($a = $global-open)
+
+\-- toggle-ui: My Title
+$open: $global-open
+
+My Description
+
+
+-- ds.markdown:
+
+We have added an `$on-click$` [event](ftd/event/) here and used `ftd` built-in
+function `ftd.toggle`. The function toggles the boolean value whenever event
+occurs.
+
+We have passed mutable reference of `global-open` to `open` attribute. So the
+change in `global-open` value changes the `open` attribute too.
+
+
+
+-- ds.output: Click on the `I change global-open` and see the effect.
+
+	-- ftd.text: I change global-open
+	$on-click$: $ftd.toggle($a = $global-open)
+	color: $inherited.colors.text-strong
+	
+	-- toggle-ui-: My Title
+	$open: $global-open
+	
+	My Description
+	
+	
+-- end: ds.output
+
+
+
+
+
+
+
+-- ds.h1: Events in Component
+
+We have created `toggle-ui` component, now lets add event to this.
+
+-- ds.code:
+lang: ftd
+
+\-- component toggle-ui:
+caption title:
+body description:
+boolean $open: true
+
+\-- ftd.column:
+$on-click$: $ftd.toggle($a = $toggle-ui.open)
+
+\-- ftd.text: $toggle-ui.title
+
+\-- ftd.text: $toggle-ui.description
+if: { toggle-ui.open }
+
+\-- end: ftd.column
+
+\-- end: toggle-ui
+
+
+-- ds.markdown:
+
+We have added an `$on-click$` event and `ftd.toggle` action in `ftd.column`
+component and pass `toggle-ui.open` argument.
+
+
+-- ds.rendered: Click on the rendered component below and see the effect.
+copy: true
+
+-- ds.rendered.input:
+
+\-- toggle-ui: Click me!
+
+My Description
+
+-- ds.rendered.output:
+
+	-- toggle-ui: Click me!
+	
+	My Description
+	
+-- end: ds.rendered.output
+
+
+
+
+
+-- end: ds.page
+
+
+
+/-- ds.page: `component`
+
+A `component` in `ftd` is similar to "react component". Components are
+independent and reusable bits of code. `component`s have  "arguments", these are
+the data that must be passed to them, and using `component`s we construct the
+user interface.
+
+
+-- ds.h1: Defining A Component
+
+New components are defined using the `component` keyword:
+
+
+-- ds.code:
+lang: ftd
+
+\-- component heading:
+string title:
+
+\-- ftd.text: $heading.title
+color: red
+
+\-- end: heading
+
+
+-- ds.markdown:
+
+Here, we have defined a new component `heading`. This component is using
+`ftd.text`, a kernel component, as a definition. We have created a
+custom-component which shows given text in `red` color.
+
+
+
+
+-- ds.h2: Component Arguments
+
+Component "arguments" starts with argument type follow by argument name, in our
+component we have one such argument, `title`.
+
+The type of our `title` argument is [`string`](ftd/built-in-types/#string).
+
+The arguments in `ftd` components creates variables for each component
+invocation. These variables have local scope. This means that these variables
+can be accessed only inside the component definition in which they are declared.
+
+
+-- ds.h2: Component Invocation
+
+Till now, we have created a component called `heading`. Now to invoke or render
+this component in your `ftd` application, we can do the following:
+
+
+-- ds.code:
+lang: ftd
+
+\-- heading: I love FTD!!
+
+-- ds.markdown:
+
+The output looks like this:
+
+-- ds.output: `heading` invocation
+
+	-- heading: I love FTD!!
+	
+-- end: ds.output
+
+
+
+-- ds.h3: Arguments with Default Values
+
+An argument can be defined with a default value:
+
+
+-- ds.code:
+lang: ftd
+
+\-- component foo:
+caption name:
+ftd.color text-color: red
+
+\-- ftd.text: $foo.name
+color: $foo.text-color
+
+\-- end: foo
+
+
+;; uses default value of text-color
+\-- foo: hello
+
+\-- foo: this is nice
+text-color: green
+
+
+-- ds.markdown:
+
+Since `foo` defines `text-color` with a default value, it is used in the first
+instance, and in second we overwrite the default value with `green`.
+
+-- ds.output: `foo` with default `text-color`
+
+	--  foo: hello
+	
+-- end: ds.output
+
+
+-- ds.output: `foo` with `text-color` value as `green`
+
+	-- foo: this is nice
+	text-color: green
+	
+-- end: ds.output
+
+
+-- ds.h2: Component Arguments for event handling
+
+The arguments in `ftd` components can be used for handling events.
+
+
+-- ds.code:
+lang: ftd
+
+\-- component foo-with-event:
+caption name:
+boolean $open: true
+
+\-- ftd.text: $foo-with-event.name
+if: { foo-with-event.open }
+$on-click$: $ftd.toggle($a = $foo-with-event.open)
+
+\-- end: foo-with-event
+
+
+-- ds.markdown:
+
+This will create an `open` variable with local scope. We are using `if` to only
+show the component if `open` is `true`, which will be the case by default as we
+have given default value as `true` to `open` declaration.
+
+We have also set `click` event handler with an action `$ftd.toggle($a =
+$foo-with-event.open)`, so the effect would be if someone clicks on the message,
+it will go away.
+
+
+-- ds.output: `foo` with `text-color` value as `green`
+
+	-- foo-with-event: I'll hide if you click me!
+	
+-- end: ds.output
+
+
+-- ds.h2: Using Container Components
+
+Some components have children. `ftd` comes with two kernel container components,
+[`ftd.row`](ftd/row/) and [`ftd.column`](ftd/column/).
+
+
+-- ds.code:
+lang: ftd
+
+\-- component label:
+caption name:
+body value:
+
+\-- ftd.row:
+spacing.fixed.px: 5
+
+\-- ftd.text: $label.name
+
+\-- ftd.text: $label.value
+
+\-- end: ftd.row
+
+\-- end: label
+
+
+
+-- ds.markdown:
+
+Here we are trying to create a "label" component, which has two arguments,
+`name` and `value`.
+
+The `label` component is an `ftd.row` and has two `ftd.text` children.
+`ftd.row` shows its children in a single row.
+
+Note that the two `ftd.text` are sub-sections of the `ftd.row` section (review
+[ftd.p1 grammar](ftd/p1-grammar/)).
+
+We have passed the component arguments `name` and `value` to first and second
+`ftd.text` respectively.
+
+A container component can use other container components and create an hierarchy
+of such components.
+
+
+-- ds.h1: Using Components
+
+Say we want to use our heading and label components:
+
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.column:
+spacing.px: 20
+border-width.px: 1
+border-radius.px: 5
+padding.px: 10
+
+\-- heading: hello there! This is my heading
+
+\-- label: Name
+value: Amit Upadhyay
+
+\-- label: Location
+value: Bangalore, India
+
+\-- end: ftd.column
+
+
+-- ds.markdown:
+
+Here we have created one heading and two labels.
+
+We have placed the `heading` and `label`s inside an `ftd.column` to put some
+spacing between them.
+
+This is how it looks like:
+
+
+
+-- ds.output: `heading` and `label` in `ftd.column`
+
+	-- ftd.column:
+	spacing.fixed.px: 20
+	border-width.px: 1
+	border-radius.px: 5
+	border-color: $inherited.colors.border
+	padding.px: 20
+	
+		-- heading: hello there! This is my heading
+		
+		-- label: Name:
+		value: Amit Upadhyay
+		
+		-- label: Location:
+		value: Bangalore, India
+		
+	-- end: ftd.column
+
+-- end: ds.output
+
+
+
+
+
+-- ds.h1: Conditional Components
+
+`ftd` supports a `if` to decide if the component should be visible or not, based
+on the arguments, or global variables.
+
+
+-- ds.code:
+lang: ftd
+
+\-- boolean dark-mode: true
+
+\-- ftd.text: we are in dark mode
+if: { ftd.dark-mode }
+
+\-- ftd.text: we are in light mode
+if: { !ftd.dark-mode }
+
+
+-- ds.output: Conditional component
+
+	-- ftd.text: we are in dark mode
+	color: $inherited.colors.text
+	if: { ftd.dark-mode }
+	
+	-- ftd.text: we are in light mode
+	color: $inherited.colors.text
+	if: { !ftd.dark-mode }
+	
+-- end: ds.output
+
+
+-- ds.markdown:
+
+We have inserted two `ftd.text` components, but only one of them would be visible,
+based on the value of the `dark-mode` variable.
+
+Read more about it in [conditional components guide](ftd/if/).
+
+
+-- end: ds.page
+
+
+
+
+
+-- string ftd-title: I love `ftd`!
+
+
+
+
+-- component heading:
+caption or body title: $ftd-title
+ftd.color text-color: red
+
+-- ftd.text: $heading.title
+color: $heading.text-color
+
+-- end: heading
+
+
+
+
+
+
+
+
+-- component label:
+caption name:
+body value:
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 5
+color: $inherited.colors.text
+
+	-- ftd.text: $label.name
+	
+	-- ftd.text: $label.value
+	
+-- end: ftd.row
+
+-- end: label
+
+
+
+
+
+
+
+
+-- component foo:
+caption name:
+ftd.color text-color: red
+
+-- ftd.text: $foo.name
+color: $foo.text-color
+
+-- end: foo
+
+
+
+
+
+
+
+
+
+-- component foo-with-event:
+caption name:
+boolean $open: true
+
+-- ftd.text: $foo-with-event.name
+if: { foo-with-event.open }
+$on-click$: $ftd.toggle($a = $foo-with-event.open)
+color: $inherited.colors.text
+
+-- end: foo-with-event
+
+
+
+-- component show-number:
+caption integer number:
+
+-- ftd.integer: $show-number.number
+
+-- end: show-number
+
+
+
+-- component heading-with-detail:
+caption title:
+body detail: $heading-with-detail.title
+
+-- ftd.column:
+spacing.fixed.px: 20
+color: $inherited.colors.text
+
+	-- ftd.text: $heading-with-detail.title
+	role: $inherited.types.heading-small
+	
+	-- ftd.text: $heading-with-detail.detail
+	role: $inherited.types.label-small
+	
+-- end: ftd.column
+
+-- end: heading-with-detail
+
+
+
+-- integer num: 10
+
+
+
+-- component show-ui:
+caption title:
+children uis:
+
+-- ftd.column:
+spacing.fixed.px: 10
+color: $inherited.colors.text
+
+	-- ftd.text: $show-ui.title
+	
+	-- ftd.column:
+	children: $show-ui.uis
+	border-width.px: 1
+	padding.px: 10
+	border-color: $inherited.colors.border
+	
+	-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: show-ui
+
+
+
+-- component toggle-ui:
+caption title:
+body description:
+boolean $open: true
+
+-- ftd.column:
+color: $inherited.colors.text
+$on-click$: $ftd.toggle($a = $toggle-ui.open)
+
+	-- ftd.text: $toggle-ui.title
+	
+	-- ftd.text: $toggle-ui.description
+	if: { toggle-ui.open }
+	
+-- end: ftd.column
+
+-- end: toggle-ui
+
+
+
+-- boolean $global-open: true
+
+
+-- component toggle-ui-:
+caption title:
+body description:
+boolean $open: true
+
+-- ftd.column:
+color: $inherited.colors.text
+
+	-- ftd.text: $toggle-ui-.title
+	
+	-- ftd.text: $toggle-ui-.description
+	if: { toggle-ui-.open }
+	
+-- end: ftd.column
+
+-- end: toggle-ui-

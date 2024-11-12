@@ -1,0 +1,22 @@
+-- import: fastn
+
+-- fastn.package: fastn-community.github.io/code-block
+
+-- fastn.dependency: fastn-community.github.io/site-doc
+-- fastn.dependency: fastn-stack.github.io/fastn-js
+
+
+
+
+-- fastn.sitemap:
+
+# Home: index.html
+
+- Overview: index.html
+- Documentation: /docs/
+
+- Examples: /docs/code/
+  - Code Block: /docs/code/
+  - Rendered Code Block: /docs/rendered/
+
+- Contribute: contribute/

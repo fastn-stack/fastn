@@ -1,0 +1,101 @@
+{
+    "files": {
+        "static/fastn-logo.svg": {
+            "name": "static/fastn-logo.svg",
+            "checksum": "22B700AEFCA7EDBC65EBF80740F0F901424CBC8DE5D078059D42AAB03D2572BD",
+            "size": 80423
+        },
+        "static/link-icon.svg": {
+            "name": "static/link-icon.svg",
+            "checksum": "A70F92AA340A098879133B4A070A62F6C37572C26F77A5E37AAC5C6542A9A2B2",
+            "size": 1534
+        },
+        "static/image.svg": {
+            "name": "static/image.svg",
+            "checksum": "3F3ACA7E9FE32496901D790C30157C2984476961E46B2680B8F8457CCCB9512E",
+            "size": 5888792
+        },
+        "static/share.svg": {
+            "name": "static/share.svg",
+            "checksum": "1B389C359790FB4AD9AE8C33536A82055ECCD18199208AAF59F00D342DC77B3C",
+            "size": 1153
+        },
+        "static/discord-icon.svg": {
+            "name": "static/discord-icon.svg",
+            "checksum": "02AF24DE0D342A20BB81D3FF85E29B6A30E21F0F88869ABFCAAD0FF164D0F4E8",
+            "size": 2515
+        },
+        "index.ftd": {
+            "name": "index.ftd",
+            "checksum": "0D18AAD03A06165CB72A6C7699703F2E070977F7913889BE7435F1F324AFFD3F",
+            "size": 36296
+        },
+        "dark-flame.png": {
+            "name": "dark-flame.png",
+            "checksum": "3218FEE054F30BBC9E8C8FBE323DE223309311413F63A9AC8A4FD27F3D437B0E",
+            "size": 323362
+        },
+        "README.md": {
+            "name": "README.md",
+            "checksum": "621E0F3BF42A6636C4A9F18B6FD52AABDE2136CA61D81EC2393A80E48920A86F",
+            "size": 1635
+        },
+        "static/author-icon.svg": {
+            "name": "static/author-icon.svg",
+            "checksum": "022EE00A4418F3A2D78331BE17ED1A9AF182BDD132B1C3AF77C71FB22405164C",
+            "size": 574
+        },
+        "colors.ftd": {
+            "name": "colors.ftd",
+            "checksum": "F7B43ACEAC762C4FD5717C4E6C9434F2DEFE26AAE6AF924F703CB1372B042608",
+            "size": 6551
+        },
+        "static/img.svg": {
+            "name": "static/img.svg",
+            "checksum": "F30BFB3E2D31FF32C05EBC2AA9039B9874BC1C97CD6760415DB156CB8474B5DC",
+            "size": 1192119
+        },
+        "static/more.svg": {
+            "name": "static/more.svg",
+            "checksum": "7BEA941B3095A66502A136976122CE349B9D6045E56BAF7972264075BF475AEE",
+            "size": 350
+        },
+        "static/search.svg": {
+            "name": "static/search.svg",
+            "checksum": "58E17815CDCFBF74E2F1C7C0DDC5528A07656B5281520A1BF036478E943CFD84",
+            "size": 697
+        },
+        "static/bsd-license-icon.svg": {
+            "name": "static/bsd-license-icon.svg",
+            "checksum": "37620B7B8D59CC99E28E89D7D5D7D7C8CB63EFF3B93BB57F7E11141D43BBD097",
+            "size": 1218
+        },
+        "FASTN.ftd": {
+            "name": "FASTN.ftd",
+            "checksum": "29DDDD2DAFC2ADBD4618ED37ED7D5E79848CFE38ACDAE15FAC81C45D90497DA4",
+            "size": 585
+        },
+        "static/code-outline-icon.svg": {
+            "name": "static/code-outline-icon.svg",
+            "checksum": "997E659F2336536E74559F06DBC381821E8AA83E9EC9267F95EF01BBD61E6205",
+            "size": 772
+        },
+        "LICENSE": {
+            "name": "LICENSE",
+            "checksum": "F1FCBB1DD828CA07899A8C64AAE32CAF6C7E65919B5F7FB528637D31096214C9",
+            "size": 1495
+        },
+        "static/menu.svg": {
+            "name": "static/menu.svg",
+            "checksum": "D5616F0774B8DCCB86ECF34B4B8C224B6A361363648A56CA1D191CC5249D0406",
+            "size": 174
+        },
+        "dark-flame-dark.png": {
+            "name": "dark-flame-dark.png",
+            "checksum": "C2825327ACCFFA1D29C6049299B8C4AF3EAF68E2631002E93299B72352D8DDD1",
+            "size": 415491
+        }
+    },
+    "zip_url": "https://github.com/FifthTry/dark-flame-cs/archive/b327dcd2a98d918e5b24a852da63a116386c5795.zip",
+    "checksum": "3BACD74A7390901D7186476F4D091265D43C75CC3285F5D47BE94F3BE5DA5CFC"
+}

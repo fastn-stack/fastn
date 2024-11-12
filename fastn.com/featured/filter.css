@@ -1,0 +1,38 @@
+.filter-1px {
+  filter: blur(1px);
+}
+
+.filter-2px {
+  filter: blur(2px);
+}
+
+
+
+
+
+.wrapper {
+  margin-top: 60px;
+  margin-bottom: 60px;
+  overflow-x: auto;
+  width: 320px;
+}
+
+.wrapper-4 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(220px, 1fr));
+  grid-auto-flow: dense;
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
+
+.wrapper .two-folded {
+  grid-column-end: span 2;
+  grid-row-end: span 2;
+}
+
+.mouse-over {
+  -webkit-transition: all 0.2s linear;
+  -moz-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+}

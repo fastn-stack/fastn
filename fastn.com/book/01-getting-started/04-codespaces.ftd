@@ -1,0 +1,222 @@
+-- import: fastn.com/assets
+-- import: fastn.com/book
+
+-- ds.page: Github's Online Editor
+
+Now that we have a template website ready, we want to edit it. To edit things we
+have to do three things: get the code stored in our repository, install `fastn`
+and build our site using `fastn`.
+
+First question we have to ask is where do we do all this?
+
+-- ds.h1: Online Editor vs Local Development
+
+When working with programming languages, which `ftd` is after all, or to do web
+development in general, most people install programming language toolchain, and
+some editor on their laptops. We can also do it completely online, without
+installing anything on your machine/laptop etc. We at `fastn` support both, and
+recommend you learn both as there are advantages to both working on your laptop
+and working in online editor.
+
+-- ds.image:
+src: $assets.files.book.images.codespaces.png
+
+Online editors are relatively new. We are going to use the one by Github, called
+[Github Codespaces](https://github.com/features/codespaces). The product is
+free for first 60hrs of usage per month, which is good enough for learning
+purpose. In case you start reaching these limits we highly recommend you start
+considering the local development, which is completely free, and further if you
+are using it so much that means you are ready to move to the next level.
+
+If you are not interested in using Github Codespaces, or if you want to jump
+ahead, you can refer [appendix c - how to use terminal on your
+machine](/book/terminal/), [appendix e - how to install `fastn` on your
+machine](/book/install/) and [appendix f - setting up a basic code
+editor](/book/editor/).
+
+One significant advantage of using Github Codespaces is uniformity. Codespaces
+gives you a Linux machine to do development, you may be using Windows, or Mac,
+or even a different flavour of Linux. The Linux you get from Codespaces is a
+common base. Codespaces also gives you a known editor, on your machine you have
+so many choices of editor, but here you have one. The benefit of this is it is
+lot easier to seek out help, or collaborate with people, as everyone would be
+familiar with this environment, the command line snippets we give in this book
+for example, screenshots in this book would all be based on Codespaces.
+
+
+-- ds.h1: "Launching" Codespaces
+
+If you are ready we can start by launching our codespace. You should see a green
+button, "Code", if you click on it this pane opens.
+
+-- ds.image: Codespaces Launcher
+src: $assets.files.book.images.launching-codespaces.png
+
+In the pane you will see two tabs, "Local" and "Codespaces", make
+sure "Codespaces" is selected, and then click on the big green "Create
+codespace on main" button.
+
+-- ds.h1: What Is Codespace Really?
+
+Before we begin let's try to develop some mental model or intuition for a
+codespace. Codespace is a linux machine. It is actually a virtual machine, but
+you can ignore this detail. Imagine when you hit that button Github has
+allocated one machine from their pool of machines to you. This is why this
+feature is paid feature. They are giving you a machine with RAM, CPU and
+hard disk.
+
+When the machine starts up, Github installs an operating system for you. The
+operating system contains a programming editor, a version of
+[`vscode`](https://code.visualstudio.com) if you are curious. They also install
+`git`, since your code is stored in a "git repository", and we will be using
+`git` a lot in this book. And they finally "clone" your git repository to that
+machine. In the context of `git`, `clone` is a fancy word for download.
+
+Once this machine is ready you can start interacting with it in the browser,
+which we will see later. The important thing is if you close your browser, the
+machine will keep running for a short while, and then go in a "standby" mode.
+In this mode all changes you do are kept, and you can restart your codespace
+from the standby mode, and start using again. Remember, one codespace is equal
+to one machine. You can create as many codespaces as you want. Even for the
+same repository. If you create more than one codespace for the same repository
+you will have to remember on which codespace, or machine you did what change.
+
+One important bit to note about codespaces is that *only the person who started
+the codespace has access to it*.
+
+In general it is not a great idea to keep stuff in codespaces for long periods
+of time. The way to work with codespaces is to start a codespace, get your code
+there, modify the code to your satisfaction, and then "push" or store your code
+back in the repository. All your changes should move to your repository, which
+should be your source of truth about all changes. Even changes that you are not
+fully satisfied with, changes that are work in progress can be stored in the
+repository in what is called "branches" which we will read about later, but
+your goal should be to not keep stuff in codespaces and keep "pushing" things
+to your repo, and then you can delete the codespace if you want.
+
+Why delete? So it does not accumulate cruft. If you keep everything important in
+the repository you can start again within seconds, but if you keep stuff on
+some machine it will start to become "source of truth" for somethings, "oh this
+file in repo, this is not the latest version, the latest version is in that
+codespace that only I have access to". What if you have more than one code
+spaces? What if you also sometimes download and edit content on your laptop?
+Where is the latest version of the file? Imagine you are working with 5 people,
+everyone has their codespace and laptops, it starts to become a mess very soon.
+Keeping repository as the single shared source of truth is a good practice that
+this book advocates.
+
+-- ds.h2: Back to Launching Your Codespace
+
+If you clicked on the big green "Create codespace on main" button in the
+previous step, you should see something like this:
+
+-- ds.image: Your New Codespace
+src: $assets.files.book.images.new-codespace.png
+
+Wonderful! What you see is a programming editor, [`vscode`](https://code.visualstudio.com)
+running in your browser. You can see the files in your repository on the left
+sidebar, labelled "EXPLORER", There is also a linux machine running for you,
+and you see a "TERMINAL" connected to it.
+
+-- book.stuck:
+
+-- ds.markdown:
+
+You can click on the files in the EXPLORER to browse the content of those
+files.
+
+-- ds.image:
+src: $assets.files.book.images.index-in-codespace.png
+
+-- ds.h1: Install `fastn` in Codespace
+
+Note: We have intentionally not configured codespace to auto install `fastn` for
+you so you manually carry out the installation step, and gain confidence that
+installing `fastn` is quite easy and you can do it on other machines.
+
+To install `fastn` you have to run the following command:
+
+-- ds.code:
+lang: ftd
+
+curl -fsSL https://fastn.com/install.sh | bash
+
+-- ds.markdown:
+
+Copy the content of the previous box, there is a tiny copy icon that shows up
+when you mouse over the box, click on it, and it copies the command to clipboard,
+or you can type out the command.
+
+You have to paste or type the command in the TERMINAL, and press ENTER or
+`return` key as shown below:
+
+-- ds.image: installing `fastn`
+src: $assets.files.book.images.install-in-codespace.png
+
+There you go! `fastn` is installed and ready to use. You can verify this by
+running `fastn` in TERMINAL.
+
+
+-- ds.image: Verifying `fastn`
+src: $assets.files.book.images.verifying-fastn.png
+
+And `fastn` is running ready in your codespace.
+
+-- ds.h1: Running `fastn`
+
+Now that `fastn` is installed, we have to run it. We are going to run the `fastn
+serve` command to run your website inside codespace.
+
+-- ds.image:
+src: $assets.files.book.images.fastn-serve.png
+
+Now your website is running on your codespace.
+
+-- ds.h1: Viewing Your Site
+
+To open it in browser you can click on the green "Open in browser" button. Since
+the pop goes away you can also do this manually. Switch to the PORTS tab next
+to TERMINAL, right click on the single row displayed there, and select "Open in
+browser".
+
+-- ds.image:
+src: $assets.files.book.images.open-in-browser.png
+
+This will open your site in another tab in your browser.
+
+
+-- ds.image:
+src: $assets.files.book.images.your-site-on-codespace.png
+
+This site only you can view! And is there only for previewing your website while
+you are working on it. How to actually save it publish it so others can see is
+covered in the next section.
+
+Before you go there is another way to preview your website, some people prefer
+doing it this way. If from the PORTS -> Right Click On The Row if you select
+"Preview in editor" option:
+
+-- ds.image:
+src: $assets.files.book.images.preview-in-editor-action.png
+
+You will see something like following:
+
+
+-- ds.image:
+src: $assets.files.book.images.preview-in-editor.png
+
+This allows you to view your site and the source code of your site in a
+side-by-side manner, and sometimes it is useful. You are going to need both
+ways to preview your site so get comfortable with it.
+
+-- ds.h1: Summary
+
+What you did in this section is quite a bit. You used a feature by Github to
+launch a machine in cloud for you. You connected with this machine and saw your
+repository content is already there. You then installed `fastn`, and run a
+website on that cloud machine. And finally you previewed the website in the
+browser. Congratulations, you are making good progress.
+
+You are going to [edit your website next ->](/book/first-edit/).
+
+-- end: ds.page

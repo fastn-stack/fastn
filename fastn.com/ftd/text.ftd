@@ -1,0 +1,147 @@
+-- ds.page: `ftd.text`
+
+`ftd.text` is a [kernel component](/ftd/kernel/) used to render text in an
+`fastn` document.
+
+
+-- ds.h1: Usage
+
+To use `ftd.text`, simply add it to your `fastn` document with your desired text
+to display.
+
+-- ds.rendered: Sample usage
+
+	-- ds.rendered.input:
+	
+	\-- ftd.text: hello world
+	color: $inherited.colors.text
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: hello world
+		color: $inherited.colors.text
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.h1: Attributes
+
+`ftd.text` accepts the below attributes as well all the
+[common](ftd/common/) and [text](ftd/text-attributes/) attributes.
+
+-- ds.h2: `text: caption or body`
+
+This attribute is used to pass text to `ftd.text`. You can pass any string
+value. It is a required attribute.
+
+You have three ways to pass text value to the `ftd.text` component.
+
+There are three ways to pass text to `ftd.text` as `caption`, as a `text`
+`header`, or as multi-line text in the `body`.
+
+-- ds.rendered: text as `caption`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.text: `fastn` example ;; <hl>
+	color: $inherited.colors.text-strong
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: `fastn` example
+		color: $inherited.colors.text-strong
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.rendered: text as `header`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.text:
+	text: This is an example of how to use ftd.text. ;; <hl>
+	color: $inherited.colors.text-strong
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text:
+		text: This is an example of how to use ftd.text.
+		color: $inherited.colors.text-strong
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+-- ds.rendered: text as `body`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.text:
+	color: $inherited.colors.text-strong
+	
+	This is a bigger text. ;; <hl>
+	\;; <hl>
+	This can span multiple lines. ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text:
+		color: $inherited.colors.text-strong
+		
+		This is a bigger text.
+		
+		This can span multiple lines.
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+-- ds.h2: `line-clamp: optional integer`
+
+The `line-clamp` attribute truncates text at a specific number of lines. It
+accepts an integer value and is optional.
+
+-- ds.rendered: Sample code using `line-clamp`
+
+	-- ds.rendered.input:
+	
+	\-- ds.code: `line-clamp`
+	lang: ftd
+	
+	\-- ftd.text:
+	border-width.px: 1
+	padding.px: 5
+	width.fixed.px: 100
+	line-clamp: 3 ;; <hl>
+	
+	Writing long text can often feel like a tedious and daunting task, especially
+	when faced with a blank page and a blinking cursor. It can be easy to feel
+	overwhelmed by the thought of having to fill page after page with coherent
+	thoughts and ideas. However, there are many reasons why writing long text can
+	be a valuable and rewarding experience.
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text:
+		border-width.px: 1
+		padding.px: 5
+		line-clamp: 3
+		color: $inherited.colors.text-strong
+		
+		Writing long text can often feel like a tedious and daunting task, especially
+		when faced with a blank page and a blinking cursor. It can be easy to feel
+		overwhelmed by the thought of having to fill page after page with coherent
+		thoughts and ideas. However, there are many reasons why writing long text can be
+		a valuable and rewarding experience.
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+-- end: ds.page

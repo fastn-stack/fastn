@@ -1,0 +1,123 @@
+-- ds.page: `ftd.decimal`
+
+`ftd.decimal` is a component used to render a decimal value in an `ftd`
+document.
+
+-- ds.h1: Usage
+
+To use `ftd.decimal`, simply add it to your `ftd` document with your desired
+decimal value to display.
+
+-- ds.rendered: Sample Usage
+
+	-- ds.rendered.input:
+	
+	\-- ftd.decimal: 10.01
+	color: $inherited.colors.text
+	
+	-- ds.rendered.output:
+	
+		-- ftd.decimal: 10.01
+		color: $inherited.colors.text
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.h1: Attributes
+
+`ftd.decimal` accepts the below attributes as well all the
+[common](ftd/common/) and [text](ftd/text-attributes/) attributes.
+
+
+-- ds.h2: `value: caption or body decimal`
+
+This is the value to show. It is a required field.
+
+There are three ways to pass integer to `ftd.decimal`: as `caption`, as a
+`value` `header`, or as `body`.
+
+-- ds.rendered: value as `caption`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.decimal: 10000.9999 ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.decimal: 10000.9999
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+-- ds.rendered: value as `header`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.decimal:
+	value: 1234.9999 ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.decimal:
+		value: 1234.9999
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+-- ds.rendered: value as `body`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.decimal:
+	
+	3.142 ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.decimal:
+		
+		3.142
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+-- ds.h2: `format: optional string`
+
+This attribute can be used to pass a format string to render decimal values
+in different formats. You can find documentation of formatting strings
+[here](https://docs.rs/format_num/0.1.0/format_num/).
+
+-- ds.rendered: Sample code using `format` to render decimal as percent
+
+	-- ds.rendered.input:
+	
+	\-- ftd.decimal:
+	value: 0.94623
+	format: .0% ;; <hl>
+	color: $inherited.colors.text-strong
+	
+	
+	-- ds.rendered.output:
+	
+		-- ftd.decimal:
+		value: 0.94623
+		format: .0%
+		color: $inherited.colors.text-strong
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+-- end: ds.page

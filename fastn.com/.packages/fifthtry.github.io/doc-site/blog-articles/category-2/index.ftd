@@ -1,0 +1,24 @@
+-- import: fifthtry.github.io/doc-site/assets
+-- import: fifthtry.github.io/doc-site as ds
+-- import: fifthtry.github.io/doc-site/blog-articles/category-2/sample-post-3
+-- import: fifthtry.github.io/doc-site/blog-articles/category-2/sample-post-4 
+
+
+
+-- ds.page: Category title - Technology & Learning
+
+Write some information of this category here. Change the title according to the
+category of your blog.
+
+-- ds.posts:
+
+-- ds.featured-post:
+post-data: $sample-post-3.meta
+
+
+-- ds.without-image:
+post-data: $sample-post-4.meta
+
+-- end: ds.posts
+
+-- end: ds.page

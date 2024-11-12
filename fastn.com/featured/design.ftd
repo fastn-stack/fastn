@@ -1,0 +1,61 @@
+-- import: fastn.com/featured as ft-ui
+
+
+-- ds.page:
+sidebar: false
+
+-- ft-ui.grid-view: Color Schemes
+templates: $schemes
+more-link-text: View all
+more-link: /featured/cs/
+
+-- ft-ui.grid-view: Font Typographies
+templates: $fonts
+more-link-text: View all
+more-link: /featured/fonts/
+
+-- end: ds.page
+
+
+
+
+-- ft-ui.template list schemes:
+
+-- ft-ui.template: Saturated Sunset CS
+template-url: /cs/saturated-sunset-cs/
+screenshot: $fastn-assets.files.images.featured.cs.saturated-sunset-cs.png
+
+-- ft-ui.template: Midnight Rush CS
+template-url: /cs/midnight-rush-cs/
+screenshot: $fastn-assets.files.images.featured.cs.midnight-rush-cs.png
+
+-- ft-ui.template: Blog Template 1 CS
+template-url: /cs/blog-template-1-cs/
+screenshot: $fastn-assets.files.images.featured.cs.blog-template-1-cs.png
+
+-- end: schemes
+
+
+
+
+
+
+-- ft-ui.template list fonts:
+
+-- ft-ui.template: Inter Typography
+template-url: /fonts/inter/
+screenshot: $fastn-assets.files.images.featured.font.inter-font.jpg
+
+-- ft-ui.template: Opensans Typography
+template-url: /fonts/opensans/
+screenshot: $fastn-assets.files.images.featured.font.opensans-font.jpg
+
+-- ft-ui.template: Roboto Typography
+template-url: /fonts/roboto/
+screenshot: $fastn-assets.files.images.featured.font.roboto-font.jpg
+
+-- ft-ui.template: Lato Typography
+template-url: /fonts/lato/
+screenshot: $fastn-assets.files.images.featured.font.lato-font.jpg
+
+-- end: fonts

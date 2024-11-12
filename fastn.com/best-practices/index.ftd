@@ -1,0 +1,52 @@
+-- import: fastn.com/best-practices/utils as appendix
+
+-- ds.page: `fastn` Code Best Practices
+
+The FifthTry team follows standard coding `best practices`. These `best
+practices` are important for several reasons:
+
+- **Readability**: Standard `best practices` help to ensure that `code is
+    consistent` and `easy to read`. This can make it `easier for other
+    developers to understand and modify the code`.
+
+- **Maintainability**: Consistent coding practices can make it `easier to
+    maintain and update code over time`. When everyone on a team follows the
+    same `best practices`, it becomes `easier to collaborate` and ensure that
+    changes are made in a consistent manner.
+
+- **Efficiency**: These `best practices` can help to `reduce the amount of time
+    it takes to write and debug code`. When developers know exactly how to
+    format code and where to put certain elements, they can write code more
+    quickly and with fewer errors.
+
+- **Portability**: Following standard `best practices` can make it `easier to
+    port code from one platform to another`. When code is written in a
+    consistent manner, it is more likely to work across different operating
+    systems and environments.
+
+- **Compliance**: Standard coding `best practices` can help ensure that code
+    complies with industry standards and best practices. This can be important
+    for security, performance, and other critical concerns.
+
+
+-- ds.h1: Index
+
+-- appendix.letter-stack:
+height.fixed.px if { ftd.device != "mobile" }: 1000
+;;height: fill-container
+
+
+/-- appendix.letter-stack:
+height.fixed.px: 800
+contents-a: $letter-contents-a
+contents-c: $letter-contents-c
+contents-d: $letter-contents-d
+contents-f: $letter-contents-f
+contents-i: $letter-contents-i
+contents-o: $letter-contents-o
+contents-p: $letter-contents-p
+contents-s: $letter-contents-s
+contents-v: $letter-contents-v
+
+
+-- end: ds.page

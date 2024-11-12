@@ -1,0 +1,340 @@
+-- import: fastn-community.github.io/inter-font/assets as inter-assets
+
+-- ftd.type heading-hero-types:
+line-height.px: 26
+size.px: 20
+letter-spacing.px: 0
+weight: 700
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.responsive-type heading-hero: $heading-hero-types
+
+
+
+
+
+-- ftd.type heading-large-mobile:
+size.px: 36
+line-height.px: 54
+weight: 700
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.type heading-large-desktop:
+size.px: 50
+line-height.px: 65
+weight: 700
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.responsive-type heading-large:
+desktop: $heading-large-desktop
+mobile: $heading-large-mobile
+
+
+
+
+
+-- ftd.type heading-medium-mobile:
+size.px: 26
+line-height.px: 40
+weight: 700
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.type heading-medium-desktop:
+size.px: 38
+line-height.px: 57
+weight: 700
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.responsive-type heading-medium:
+desktop: $heading-medium-desktop
+mobile: $heading-medium-mobile
+
+
+
+
+
+-- ftd.type heading-small-mobile:
+size.px: 22
+line-height.px: 29
+weight: 700
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.type heading-small-desktop:
+line-height.px: 31
+size.px: 24
+weight: 700
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.responsive-type heading-small:
+desktop: $heading-small-desktop
+mobile: $heading-small-mobile
+
+
+
+
+
+
+-- ftd.type heading-tiny-mobile:
+size.px: 18
+line-height.px: 24
+weight: 700
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.type heading-tiny-desktop:
+size.px: 20
+line-height.px: 26
+weight: 700
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.responsive-type heading-tiny:
+desktop: $heading-tiny-desktop
+mobile: $heading-tiny-mobile
+
+
+
+
+
+-- ftd.type copy-large-mobile:
+size.px: 18
+line-height.px: 28
+weight: 400
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.type copy-large-desktop:
+size.px: 22
+line-height.px: 34
+weight: 400
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.responsive-type copy-large:
+desktop: $copy-large-desktop
+mobile: $copy-large-mobile
+
+
+
+
+
+-- ftd.type copy-regular-type:
+line-height.px: 19
+size.px: 11
+letter-spacing.px: 0
+weight: 400
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.responsive-type copy-regular: $copy-regular-type
+
+
+
+
+
+-- ftd.type copy-small-mobile:
+line-height.px: 7
+size.px: 5
+letter-spacing.px: 0
+weight: 400
+font-family: $inter-assets.fonts.Inter
+
+
+-- ftd.type copy-small-desktop:
+line-height.px: 16
+size.px: 8
+letter-spacing.px: 0
+weight: 400
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.responsive-type copy-small:
+desktop: $copy-small-desktop
+mobile: $copy-small-mobile
+
+
+
+
+
+-- ftd.type fine-print-mobile:
+size.px: 12
+line-height.px: 16
+weight: 400
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.type fine-print-desktop:
+size.px: 12
+line-height.px: 16
+weight: 400
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.responsive-type fine-print:
+desktop: $fine-print-desktop
+mobile: $fine-print-mobile
+
+
+
+
+
+-- ftd.type blockquote-mobile:
+size.px: 16
+line-height.px: 21
+weight: 400
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.type blockquote-desktop:
+size.px: 16
+line-height.px: 21
+weight: 400
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.responsive-type blockquote:
+desktop: $blockquote-desktop
+mobile: $blockquote-mobile
+
+
+
+
+
+-- ftd.type source-code-mobile:
+size.px: 16
+line-height.px: 21
+weight: 600
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.type source-code-desktop:
+size.px: 18
+line-height.px: 30
+weight: 600
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.responsive-type source-code:
+desktop: $source-code-desktop
+mobile: $source-code-mobile
+
+
+
+
+
+-- ftd.type label-large-type:
+line-height.px: 20
+size.px: 16
+letter-spacing.px: 0
+weight: 400
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.responsive-type label-large: $label-large-type
+
+
+
+
+
+-- ftd.type label-small-mobile:
+line-height.px: 6
+size.px: 4
+letter-spacing.px: 0
+weight: 400
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.type label-small-desktop:
+line-height.px: 16
+size.px: 12
+letter-spacing.px: 0
+weight: 400
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.responsive-type label-small:
+desktop: $label-small-desktop
+mobile: $label-small-mobile
+
+
+
+
+
+-- ftd.type button-large-mobile:
+line-height.px: 24
+size.px: 18
+letter-spacing.px: 0
+weight: 700
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.type button-large-desktop:
+line-height.px: 24
+size.px: 18
+letter-spacing.px: 0
+weight: 700
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.responsive-type button-large:
+desktop: $button-large-desktop
+mobile: $button-large-mobile
+
+
+
+
+
+-- ftd.type button-medium-type:
+line-height.px: 24
+size.px: 18
+letter-spacing.px: 0
+weight: 400
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.responsive-type button-medium: $button-medium-type
+
+
+
+
+
+-- ftd.type button-small-mobile:
+size.px: 14
+line-height.px: 19
+weight: 700
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.type button-small-desktop:
+size.px: 14
+line-height.px: 19
+weight: 700
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.responsive-type button-small:
+desktop: $button-small-desktop
+mobile: $button-small-mobile
+
+
+
+
+
+-- ftd.type link-mobile:
+size.px: 14
+line-height.px: 19
+weight: 700
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.type link-desktop:
+size.px: 14
+line-height.px: 19
+weight: 700
+font-family: $inter-assets.fonts.Inter
+
+-- ftd.responsive-type link:
+desktop: $link-desktop
+mobile: $link-mobile
+
+
+
+
+
+-- ftd.type-data types:
+heading-hero: $heading-hero
+heading-large: $heading-large
+heading-medium: $heading-medium
+heading-small: $heading-small
+heading-tiny: $heading-tiny
+copy-large: $copy-large
+copy-regular: $copy-regular
+copy-small: $copy-small
+fine-print: $fine-print
+blockquote: $blockquote
+source-code: $source-code
+label-large: $label-large
+label-small: $label-small
+button-large: $button-large
+button-medium: $button-medium
+button-small: $button-small
+link: $link

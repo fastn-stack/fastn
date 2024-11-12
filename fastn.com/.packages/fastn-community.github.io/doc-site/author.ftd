@@ -1,0 +1,51 @@
+-- import: fastn-community.github.io/doc-site/common
+
+
+
+
+
+-- ds.page: Adding Author Details
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+
+In this section, we will learn about adding author details.
+
+As a blog author, you can add your details using our author feature. 
+
+Let's understand how to add author details.
+
+-- ds.code: Example how to add author meta
+lang: ftd
+
+\-- import: fastn-community.github.io/doc-site/common
+
+\-- common.author-meta amitu: Amit Upadhyay
+profile: CEO
+bio-url: blog-authors/amitu/
+image: $assets.files.static.authors.amitu.jpg
+company: FifthTry Pvt. Ltd.
+
+Founder and CEO of FifthTry Private Limited. FifthTry is backed by Y Combinators. 
+A Bangalore-based start-up with having development center at 91Springboard, JP Nagar,
+Bangalore.
+
+-- ds.h3: Let's understand the above code snippet:
+
+Like in [doc-site](https://fastn-community.github.io/doc-site/blog-authors/amitu/) 
+we have added the `blog-authors` folder. Here you can create a `<your-name>.ftd` 
+file. e.g. `amitu.ftd` file.
+
+✨ `-- common.author-meta amitu: Amit Upadhyay`: in this FTD component author
+name as a title. You can change `Amit Upadhyay` with your name.
+
+✨ `profile:` helps add author designation
+
+✨ `bio-url:` add author FTD file and folder details.
+
+✨ `image:` author image 
+
+✨ `company:` author company details
+
+✨ You can add the author bio as a body at the last of the above code snippet.
+
+-- end: ds.page

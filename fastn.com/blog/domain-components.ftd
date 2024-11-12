@@ -1,0 +1,237 @@
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
+-- import: fastn.com/content-library as cl
+
+-- common.post-meta meta: Create domain-driven documentation for structured data and versatility
+published-on: November 24, 2023
+post-url: /blog/domain-components/
+author: $authors.nandini
+
+Are you someone who often grapples with the repetition of content?
+Struggling to maintain a consistent design across various pages or
+sections on websites? Or perhaps you're tired of copy-pasting content
+and the inconsistencies in design that follow?
+
+Let's dive into a relatable scenario: Imagine you want to showcase
+customer testimonials on your website. Each testimonial needs a name, title, image,
+and quote, neatly arranged within the page layout, adhering to the
+page's color scheme and typography.
+
+-- ds.blog-page:
+meta: $meta
+
+-- ds.markdown:
+
+One way to create such testimonials is by first creating a record for all the necessary values of a
+testimonial, such as the name, designation, quote, and image.
+
+-- ds.code:
+lang: ftd
+
+\-- record testimonial-data: ;; <hl>
+caption title:
+body body:
+string designation:
+ftd.image-src src:
+
+\-- testimonial-data list testimonials: ;; <hl>
+
+\-- testimonial-data: Nancy Bayers
+designation: Co-Founder
+src: $fastn-assets.files.images.blog.testimonial-1.jpeg
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint
+
+\-- testimonial-data: Daniya Jacob
+designation: Co-Founder
+src: $fastn-assets.files.images.blog.testimonial-2.jpeg
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint
+
+\-- end: testimonials ;; <hl>
+
+
+-- ds.markdown:
+
+Following that, you'd define the testimonial and individual testimonial card components,
+which will look like:
+
+-- ds.code:
+lang: ftd
+
+\-- component testimonials: ;; <hl>
+optional caption title:
+optional body body:
+testimonial list testimonials:
+
+[...]
+
+\-- display-testimonial-card: $obj.title ;; <hl>
+$loop$: $testimonials.testimonials as $obj
+designation: $obj.designation
+src: $obj.src
+
+\$obj.body
+
+[...]
+
+\-- end: testimonials ;; <hl>
+
+\-- component display-testimonial-card: ;; <hl>
+caption title:
+string designation:
+body body:
+ftd.image-src src:
+
+[...]
+
+\-- end: display-testimonial-card ;; <hl>
+
+-- ds.markdown:
+
+Now imagine you want to use this testimonial component in all your marketing pages.
+Duplicating the entire code becomes tedious because modifying one value turns into an
+avalanche of updates across all the pages. And the biggest challenge here lies in
+maintaining consistency across these testimonials.
+
+-- ds.h1: The Solution: Domain driven documentation in fastn
+
+With components created at domain level, you are keeping all the attributes
+of that content component neatly packed together in one place.
+
+For instance, you can create the above testimonial component within a separate file in your project.
+Then, whenever you need the testimonial component, you simply invoke it on the required page.
+Below is how you invoke the testimonial component.
+
+
+-- ds.code:
+lang: ftd
+
+\-- testimonials:
+testimonials: $testimonials
+
+-- cl.testimonials: Testimonials
+testimonials: $cl.testimonials-list
+
+Hear from our customers
+
+-- ds.markdown:
+
+This approach ensures that each testimonial instance retains a consistent layout and content format,
+eliminating the hassle of managing individual testimonial sections across multiple pages.
+
+When updating the testimonial content, you can focus solely on adjusting the information without
+affecting the design. Furthermore, if you decide to modify the design, making changes at the
+component level will seamlessly propagate across all instances.
+
+For instance, if you wish to enlarge the image size from 120 to 160 pixels, you can
+easily achieve this by making a simple adjustment in the code.
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.image:
+src: $display-testimonial-card.src
+width.fixed.px: 160 ;; <hl>
+height.fixed.px: 160 ;; <hl>
+
+;; -- ds.image:
+;; src: $fastn-assets.files.images.blog.image-enlarge.png
+;; width.fixed.px: 600
+
+
+-- cl.testimonials-n: Testimonials
+testimonials-n: $cl.test-list
+
+Hear from our customers
+
+;; -- ds.image:
+;; src: $fastn-assets.files.images.blog.big-profile.png
+-- ds.markdown:
+
+**Want to add a new testimonial? Just extend the code:**
+
+-- ds.code:
+lang: ftd
+
+\-- testimonial-data: Nancy Bayers
+designation: Co-Founder
+src: $fastn-assets.files.images.blog.testimonial-1.jpeg
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint
+
+\-- testimonial: Daniya Jacob
+designation: Co-Founder
+src: $fastn-assets.files.images.blog.testimonial-2.jpeg
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint
+
+\-- testimonial: Kavya Dominic ;; <hl>
+designation: Owner
+src: $fastn-assets.files.images.blog.testimonial-3.jpeg
+
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+molestiae quas vel sint
+
+\-- end: testimonials
+
+
+-- cl.test-n: Testimonials
+test-n: $cl.test-lists
+
+Hear from our customers
+
+
+;; -- ds.image:
+;; src: $fastn-assets.files.images.blog.new-testimonial.png
+
+
+-- ds.h1: Benefits of Domain Components
+
+-- ds.h2: Structured Data
+
+Each domain component contains structured data pertinent to its specific domain.
+This organized approach ensures that essential details (name, position, quotes, etc.)
+are consistently maintained for every instance of that component.
+
+-- ds.h2: Separation of Content and Presentation
+
+Creating domain components separates content from their visual presentation.
+This bifurcation allows for autonomous updates or modifications to either the
+content or the design without impacting the other, facilitating design evolution
+while preserving data integrity.
+
+-- ds.h2: Versatile Data Utilization
+
+The structured data within these components can be readily transformed into other
+formats like JSON. This versatility allows for easy extraction and utilization of
+the data for various purposes beyond the immediate rendering on a web page.
+
+With fastn's domain components, you can easily streamline content creation and maintain
+design coherence. Embrace fastn to master the art of website creation!
+
+In addition to domain-driven documentation, another valuable technique for swift webpage
+creation is
+[creating a `content-library.ftd` for storing all recurring content components](/blog/content-library/).
+
+
+
+-- ds.h3: Related Links
+
+Master [web development](https://fastn.com/learn/) with fastn
+
+Read other [blogs](https://fastn.com/blog/)
+
+Read [docs](https://fastn.com/ftd/data-modelling/)
+
+
+
+
+
+
+
+-- end: ds.blog-page

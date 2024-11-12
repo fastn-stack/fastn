@@ -1,0 +1,84 @@
+-- import: fastn-community.github.io/doc-site/components
+
+
+
+
+
+-- ds.page: Changing Color Scheme
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+sidebar: true
+
+-- ds.page.right-sidebar:
+
+-- components.sidebar-index:
+
+-- end: ds.page.right-sidebar
+
+-- ds.page.body:
+
+Color scheme plays a crucial role in shaping the website's overall aesthetic,
+user experience, and branding. It helps convey the website's personality, evoke
+emotions, and guide users' attention to important elements.
+
+`doc-site` uses `fastn` default color scheme. If you wish to update the color
+scheme, choose a color scheme from our 
+[fastn-community](https://fastn.com/featured/cs/) color schemes.
+
+-- ds.h2: How to add a color scheme?
+
+To add color scheme to your fastn web sites. Edit your `FASTN.ftd` file and add
+color scheme dependency into it.
+
+In the below example, we are using [dark-flame-cs](https://fastn-community.github.io/dark-flame-cs/)
+color scheme.
+
+Add color scheme dependency into your `FASTN.ftd` file as shown in below
+example:
+
+-- ds.code:
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/dark-flame-cs
+
+-- ds.markdown:
+
+Now modify `FASTN/ds.ftd` module which is already added inside your `fastn`
+package.
+
+Import `dark-flame-cs` dependency into `FASTN/ds.ftd`
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn-community.github.io/dark-flame-cs
+
+-- ds.markdown:
+
+Change `-- component page` `colors` property `ftd.color-scheme colors:
+$ftd.default-colors` with `ftd.color-scheme colors: $dark-flame-cs.main`
+
+replace this line of `FASTN/ds.ftd` file:
+
+-- ds.code: 
+lang: ftd
+
+\-- ftd.color-scheme color-scheme: $ftd.default-colors
+
+-- ds.markdown:
+
+ with:
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.color-scheme color-scheme: $dark-flame-cs.main
+
+-- ds.markdown:
+
+Deploy or run `fastn serve` on your localhost. Access your localhost in the
+browser e.g.`http://127.0.0.1:8000/` you will see page colors with
+[Dark Flame CS](https://fastn-community.github.io/dark-flame-cs/)
+
+-- end: ds.page

@@ -1,0 +1,161 @@
+-- import: fastn-community.github.io/saturated-sunset-cs as cs
+-- import: fastn-community.github.io/virgil-typography as typo
+
+-- ds.page: Container Root Attributes
+
+These attributes are available to all `container` components in ftd.
+
+
+
+
+-- ds.h1: `children: ftd.ui list`
+id: children
+
+This property is used to provide child elements for `container`.
+It takes value as a list of `ftd.ui` components.
+
+-- ds.rendered: Sample code using `children`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.ui list child-components:
+	
+	\-- ftd.text: This is first child text
+	\-- ftd.text: This is another child text
+	
+	\-- end: child-components
+	
+	\-- ftd.column:
+	color: $inherited.colors.text
+	children: $child-components
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- ftd.column:
+		color: $inherited.colors.text
+		children: $child-components
+		
+		-- end: ftd.column
+
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+-- ds.h1: `colors: optional ftd.color-scheme`
+id: colors
+
+This property will allow users to specify any color scheme for any
+container which can be used on any of its child components. It takes value of
+type `ftd.color-scheme` and is optional.
+
+-- ds.rendered: Sample code using `colors`
+
+	-- ds.rendered.input:
+	
+	\-- import: fastn-community.github.io/saturated-sunset-cs as cs
+	
+	\-- ftd.column:
+	colors: $cs.main
+	spacing.fixed.px: 10
+	
+	\-- ftd.text: Hello World
+	color: $inherited.colors.background.step-2
+	
+	\-- ftd.text: We have used forest cs here
+	color: $inherited.colors.background.step-2
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- ftd.column:
+		colors: $cs.main
+		spacing.fixed.px: 10
+		
+			-- ftd.text: Hello World
+			color: $inherited.colors.background.step-2
+			
+			-- ftd.text: We have used forest cs here
+			color: $inherited.colors.background.step-2
+			
+		-- end: ftd.column
+
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+-- ds.h1: `types: optional ftd.type-data`
+id: types
+
+This property will allow users to specify any typography scheme which can be
+used on any of its child components. It takes value of type `ftd.type-data`
+and is optional.
+
+-- ds.rendered: Sample code using `types`
+
+	-- ds.rendered.input:
+	
+	\-- import: fastn-community.github.io/virgil-typography as typo
+	
+	\-- ftd.column:
+	types: $typo.types
+	spacing.fixed.px: 10
+	
+	\-- ftd.text: Hello World
+	role: $inherited.types.heading-medium
+	color: $inherited.colors.text
+	
+	\-- ftd.text: We have used virgil typography here
+	role: $inherited.types.heading-medium
+	color: $inherited.colors.text
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- ftd.column:
+		types: $typo.types
+		spacing.fixed.px: 10
+		
+			-- ftd.text: Hello World
+			role: $inherited.types.heading-medium
+			color: $inherited.colors.text
+			
+			-- ftd.text: We have used virgil typography here
+			role: $inherited.types.heading-medium
+			color: $inherited.colors.text
+			
+		-- end: ftd.column
+
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- end: ds.page
+
+
+
+
+
+
+-- ftd.ui list child-components:
+
+-- ftd.text: This is first child text
+-- ftd.text: This is another child text
+
+-- end: child-components

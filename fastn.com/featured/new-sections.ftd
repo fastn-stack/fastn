@@ -1,0 +1,90 @@
+-- import: fastn.com/featured as ft-ui
+
+-- ds.page:
+full-width: true
+sidebar: false
+
+-- ft-ui.grid-view: Heros
+templates: $heros
+
+-- ft-ui.grid-view: Logos
+templates: $logos
+
+-- ft-ui.grid-view: Testimonials
+templates: $testimonials
+
+-- ft-ui.grid-view: Features
+templates: $features
+
+-- ft-ui.grid-view: Faqs
+templates: $faqs
+
+
+-- end: ds.page
+
+
+
+-- ft-ui.template list heros:
+
+-- ft-ui.template: Midnight-rush-hero
+template-url: https://fastn-community.github.io/midnight-rush-hero/
+screenshot: $fastn-assets.files.images.featured.new-sections.midnight-rush.jpg
+
+-- ft-ui.template: Midnight-storm-hero
+template-url: https://fastn-community.github.io/midnight-storm-hero/
+screenshot: $fastn-assets.files.images.featured.new-sections.midnight-storm.jpg
+
+-- end: heros
+
+
+-- ft-ui.template list logos:
+
+-- ft-ui.template: Midnight-rush-logo
+template-url: https://fastn-community.github.io/midnight-rush-logo/
+screenshot: $fastn-assets.files.images.featured.new-sections.midnight-rush-logo.png
+
+-- ft-ui.template: Midnight-storm-logo
+template-url: https://fastn-community.github.io/midnight-storm-logo/
+screenshot: $fastn-assets.files.images.featured.new-sections.midnight-storm-logo.png
+
+-- end: logos
+
+
+
+-- ft-ui.template list testimonials:
+
+-- ft-ui.template: Midnight-rush-testimonial
+template-url: https://fastn-community.github.io/midnight-rush-testimonial/
+screenshot: $fastn-assets.files.images.featured.new-sections.midnight-rush-testimonial.png
+
+-- ft-ui.template: Midnight-storm-testimonial
+template-url: https://fastn-community.github.io/midnight-storm-testimonial/
+screenshot: $fastn-assets.files.images.featured.new-sections.midnight-storm-testimonial.png
+
+-- end: testimonials
+
+
+-- ft-ui.template list features:
+
+-- ft-ui.template: Midnight-rush-features
+template-url: https://fastn-community.github.io/midnight-rush-features/
+screenshot: $fastn-assets.files.images.featured.new-sections.midnight-rush-features.png
+
+-- ft-ui.template: Midnight-storm-features
+template-url: https://fastn-community.github.io/midnight-storm-features/
+screenshot: $fastn-assets.files.images.featured.new-sections.midnight-storm-features.png
+
+-- end: features
+
+
+-- ft-ui.template list faqs:
+
+-- ft-ui.template: Midnight-rush-faqs
+template-url: https://fastn-community.github.io/midnight-rush-faqs/
+screenshot: $fastn-assets.files.images.featured.new-sections.midnight-rush-faqs.png
+
+-- ft-ui.template: Midnight-storm-faqs
+template-url: https://fastn-community.github.io/midnight-storm-faqs/
+screenshot: $fastn-assets.files.images.featured.new-sections.midnight-storm-faqs.png
+
+-- end: faqs

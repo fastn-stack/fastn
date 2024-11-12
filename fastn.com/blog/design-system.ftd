@@ -1,0 +1,511 @@
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
+-- import: fastn.com/content-library as cl
+-- import: fastn-community.github.io/bling/sidenote
+
+
+
+-- common.post-meta meta: Tutorial: Build a fastn-Powered Website Using the Design System Package
+published-on: January 9, 2024
+post-url: /blog/design-system/
+author: $authors.nandini
+
+In this blog, we'll explore the process of creating a web page using fastn's 
+[**`design system package`**](https://github.com/fastn-community/design-system). 
+Whether you're new to fastn or a beginner in web 
+development, this package offers an excellent starting point to build modern 
+websites. 
+
+It takes care of color schemes, typography, and design elements like section layouts,
+buttons, links, headers, and footers, freeing you from the complexities of individual 
+element design. 
+
+You can also customize these design elements to match your brand's identity. 
+
+I recommend starting with the instructional video below to kickstart your journey.
+
+-- ds.blog-page:
+meta: $meta
+
+-- ds.youtube:
+v: https://www.youtube.com/embed/qX0K1pWsyuw?si=WgyAJN4P_ZUiFXnY
+
+-- ds.h1: Familiarize Yourself with the Design System Package
+
+Begin by thoroughly examining the individual files within the [**design system package**](https://github.com/fastn-community/design-system)
+package. These files consists an array of design elements, including [section 
+layouts](https://github.com/fastn-community/design-system/tree/main/layout), 
+[spacing](https://github.com/fastn-community/design-system/blob/main/spaces.ftd), 
+and [typography](https://github.com/fastn-community/design-system/blob/main/typography.ftd). 
+
+Take your time to explore each file to understand the package's capabilities.
+
+-- ds.h1: Initial Setup
+
+Here are a few prerequisites to initiate your first 
+fastn-powered website:
+
+- [Install fastn](https://fastn.com/install/) on your system.
+- [Install a Text Editor](https://fastn.com/editor/) in your system.
+
+-- ds.h1: Setting Up Your Project Folder
+
+For the purpose of this tutorial, we'll recreate the 
+[talknotes.io](https://talknotes.io/) website. 
+
+Create a folder named **talknotes-demo** on your local machine. Open this 
+folder using your preferred text editor. 
+
+-- sidenote.sidenote:
+
+When saving a folder, file or graphics, remember to use lower-cased file names, 
+and use hyphens instead of space.
+
+- Example 1: When saving folders, `My Website` is incorrect, instead use `my-website`
+- Example 2: When saving `.ftd` files, `Blog 1.ftd` is incorrect, instead use `blog-1.ftd`
+- Example 3: When saving graphics, `Profile Picture.png` is incorrect, instead use `profile-picture.png`.
+
+-- ds.h2: File Creation
+
+-- ds.h3: FASTN.ftd
+
+In your text editor, right click on the folder and click on `New File` and save 
+the file as `FASTN.ftd` and insert the code provided below.
+
+-- ds.code: FASTN.ftd
+lang: ftd
+
+\-- import: fastn
+
+\-- fastn.package: talknotes-demo
+
+\-- fastn.dependency: fastn-community.github.io/design-system
+
+-- ds.h3: index.ftd
+
+Now, again right click on the folder and click on `New File` and save it as 
+`index.ftd` and add the code below.
+
+-- ds.code: index.ftd
+lang: ftd
+
+\-- import: fastn-community.github.io/design-system as ds
+
+-- ds.h3: Designing the Page Structure
+
+Use [`ds.page`](https://github.com/fastn-community/design-system/blob/main/layout/page.ftd) 
+to establish the page's structure in your `index.ftd`. 
+
+Inside this, you can organize all the content intended for the page. Let's 
+use `ds.heading-hero` to add a heading to this page. Now you can open the 
+terminal and run the command `fastn serve`. 
+
+Once executed, the terminal command will display the output of your webpage. 
+Observe the presence of the heading along with the pre-assigned **page width** 
+and the functionality of the **dark and light mode switcher.**
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn-community.github.io/design-system as ds
+
+\-- ds.page: ;; <hl>
+
+\-- ds.heading-hero: talknotes-demo
+
+\-- end: ds.page ;; <hl>
+
+-- ds.image: Output
+src: $fastn-assets.files.images.blog.heading-tn.png
+
+-- ds.h1: Quick Tutorial
+
+-- ds.h2: Breakdown of key layout structures
+
+[**`ds.section-row`**](https://github.com/fastn-community/design-system/blob/main/layout/section-row.ftd) 
+is used to structure elements horizontally adjacent to 
+each other within a single section or component of a website. 
+
+Use [**`ds.row`**](https://github.com/fastn-community/design-system/blob/main/layout/row.ftd) 
+for organizing elements side by side, providing a 
+layout within that specific section or component.
+
+Likewise, for vertical structuring, use [**`ds.section-column`**](https://github.com/fastn-community/design-system/blob/main/layout/section-column.ftd)
+to arrange elements on top of each other within a single section or component 
+of a website.  For elements inside the section to follow a similar vertical 
+arrangement, opt for [**`ds.column`**](https://github.com/fastn-community/design-system/blob/main/layout/column.ftd)
+
+It's important to note that a component or section in your website can have only 
+one of either a `ds.section-row` and `ds.section-column`.
+
+However, within these designated sections, you can have multiple instances of 
+`ds.row` or `ds.column` to structure elements side by side or one on top of 
+the other, respectively. 
+
+-- ds.h2: Utilizing Spaces in the Design System Package
+
+Spaces within the design system package offer flexibility in managing layout 
+and structure. There are three primary types of spaces to consider:
+
+-- ds.h3: 1. Inset
+
+This defines the space between an element's border and its content, akin 
+to padding in web or graphic design. There are various insets available, 
+including:
+
+- **`inset-square`**: Equal values in both horizontal and vertical directions.
+- **`inset-wide`**: Greater horizontal padding than vertical padding.
+- **`inset-tall`**: Higher vertical padding than horizontal padding.
+
+**The syntax for using inset is:**
+
+-- ds.code:
+lang: ftd
+
+inset: $ds.spaces.inset-(type).(value)
+
+-- ds.code: Example
+lang: ftd
+
+inset: $ds.spaces.inset-square.large
+inset: $ds.spaces.inset-wide.small-zero
+inset: $ds.spaces.inset-tall.zero-medium
+
+-- ds.markdown:
+
+[Learn about different inset values](https://github.com/fastn-community/design-system/blob/main/spaces.ftd)
+
+-- ds.h3: 2. Margin
+
+This represents the space around an element's border. Both horizontal and 
+vertical gaps are applicable and can take values like 
+- extra-extra-small
+- extra-small
+- small
+- medium
+- large
+- extra-large
+- extra-extra-large
+- space-between
+- zero
+
+**The syntax for margin is:**
+
+-- ds.code:
+lang: ftd
+
+margin: $ds.spaces.(horizontal-gap or vertical-gap).(value)
+
+-- ds.code: Example
+lang: ftd
+
+margin: $ds.spaces.horizontal-gap.extra-large
+margin: $ds.spaces.vertical-gap.small
+
+-- ds.h3: 3. Spacing
+
+This defines the space between elements within a container. Similar to margin, 
+it takes the values for both horizontal and vertical gaps.
+    
+**The syntax for spacing is:**
+
+-- ds.code:
+lang: ftd
+
+spacing: $ds.spaces.(horizontal-gap or vertical-gap).(value)
+
+-- ds.code:
+lang: ftd
+
+spacing: $ds.spaces.vertical-gap.space-between
+spacing: $ds.spaces.horizontal-gap.extra-extra-large
+
+-- ds.markdown:
+
+By understanding and utilizing these space types, you can precisely control the 
+layout and arrangement of elements on your website.
+
+-- ds.h1: The header component
+
+Take a look at the elements of the [talknotes.io](https://talknotes.io/) website header. The header 
+consists of a logo, header links, and buttons, that are structured adjacent to 
+each other. Hence, we will be using `ds.section-row` to create the header component.
+
+-- ds.image: Header Section
+src: $fastn-assets.files.images.blog.header-drawing.png
+
+-- ds.code: Header Component
+lang: ftd
+
+\-- component header:
+
+\-- ds.section-row: ;; <hl>
+flush: full
+inset: $ds.spaces.inset-wide.large
+outer-background.solid: $ds.colors.background.step-2
+spacing: $ds.spaces.horizontal-gap.space-between
+margin: $ds.spaces.vertical-gap.extra-large
+
+\-- ftd.image: ;; <hl>
+src: https://talknotes.io/_ipx/w_150&q_80/images/brand/logo-color.svg
+width.fixed.percent: 10
+
+\-- ds.row: ;; <hl>
+spacing: $ds.spaces.horizontal-gap.extra-large
+width: fill-container
+
+\-- ds.header-link: Try It ;; <hl>
+link: /
+
+\-- ds.header-link: How it works
+link: /
+
+\-- ds.header-link: Usecases
+link: /
+
+\-- ds.header-link: Pricing
+link: /
+
+\-- ds.header-link: FAQ
+link: /
+
+\-- end: ds.row
+
+\-- ds.row: ;; <hl>
+width: hug-content
+
+\-- ds.info-button: Login ;; <hl>
+link: /
+
+\-- ds.phosphor-icon-button: Get Talknotes + ;; <hl>
+icon: arrow-right
+link: /
+
+\-- end: ds.row
+
+\-- end: ds.section-row
+
+
+\-- end: header
+
+-- ds.markdown:
+
+Once the header component is completed, call it within the `ds.page` to 
+add it into your webpage. 
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn-community.github.io/design-system as ds
+
+\-- ds.page: 
+
+\-- header: ;; <hl>
+
+\-- end: ds.page
+
+-- ds.image: Output
+src: $fastn-assets.files.images.blog.header-tn.png
+
+-- sidenote.sidenote:
+
+Experiment with different attributes like [flush](https://github.com/fastn-community/design-system/blob/main/layout/page.ftd), 
+[inset, margin, and spacing](https://github.com/fastn-community/design-system/blob/main/spaces.ftd) to 
+comprehend their impact on `ds.section-row`, `ds.section-column` and 
+[`ds.container`](https://github.com/fastn-community/design-system/blob/main/layout/container.ftd)
+This will deepen your understanding of these attributes and their values. 
+
+You can also experiment with [borders](https://github.com/fastn-community/design-system/blob/main/borders.ftd), width,
+[radius](https://github.com/fastn-community/design-system/blob/main/radius.ftd), alignment, background color, and other 
+attributes.
+
+-- ds.h1: The Hero Component
+
+-- ds.image:
+src: $fastn-assets.files.images.blog.hero-drawing.png
+
+-- ds.markdown:
+
+- Use `ds.section-row:` to define the foundation of your hero section.
+- Inside the `ds.section-row:`, use `ds.column:` to vertically stack the elements like 
+badges, titles, descriptions, buttons, and icons.
+- Close the `ds.column:` and add your hero image using `ftd.image:`
+- For the 5-star rating, use phosphor icons. Since Phosphor Icons aren't native 
+to the package, you need to import them for your project. To do that, add the below code in your `FASTN.ftd`
+
+-- ds.code:
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/svg-icons
+
+-- ds.markdown:
+
+And, add the below code in your `index.ftd`
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn-community.github.io/svg-icons/phosphor
+
+-- ds.markdown:
+
+- For the badge design, use `ds.container:` to create the outer box. Customize 
+the container with background colors, insets, border-radius, etc. Within the 
+container, use `ds.row:` and `ds.column:` to structure elements accordingly.
+
+-- ds.code: Hero Component
+lang: ftd
+
+\-- component hero:
+
+\-- ds.section-row: ;; <hl>
+spacing: $ds.spaces.horizontal-gap.extra-extra-large
+inset: $ds.spaces.inset-tall.zero-medium
+
+\-- ds.column:
+spacing: $ds.spaces.vertical-gap.medium
+align-content: left
+
+\-- ds.container: ;; <hl>
+inset: $ds.spaces.inset-square.small
+width.fixed.percent: 50
+background.solid: $ds.colors.background.step-2
+radius: $ds.radius.medium
+
+\-- ds.row:
+
+\-- ftd.image: 
+src: assets/medal.png
+width.fixed.px: 32
+
+\-- ds.column:
+spacing: $ds.spaces.vertical-gap.zero
+align-content: left
+
+\-- ds.fine-print:
+align: left
+
+PRODUCT HUNT
+
+\-- ds.copy-regular:
+color: $inherited.colors.text-strong
+align: left
+
+#1 Product of the year
+
+\-- end: ds.column
+
+\-- end: ds.row
+
+\-- end: ds.container
+
+\-- ds.heading-large: Turn messy thoughts into actionable notes. Fast. ;; <hl>
+
+\-- ds.heading-small: The #1 AI. voice voicenote app ;; <hl>
+
+\-- ds.copy-large:  ;; <hl>
+
+Turn hours of note taking into minutes. Just record a voicenote, and let the AI transcribe, clean up and structure it for you.
+
+\-- ds.phosphor-icon-button: Get Talknotes + ;; <hl>
+icon: arrow-right
+link: /
+width: full
+
+\-- ds.row:
+align-content: left
+
+\-- ds.copy-small: ;; <hl>
+
+Trusted by +3000 happy users
+
+\-- ds.row: ;; <hl>
+spacing: $ds.spaces.horizontal-gap.zero
+width: hug-content
+
+\-- phosphor.fill: star ;; <hl>
+size: 18
+
+\-- phosphor.fill: star
+size: 18
+
+\-- phosphor.fill: star
+size: 18
+
+\-- phosphor.fill: star
+size: 18
+
+\-- phosphor.fill: star
+size: 18
+
+\-- end: ds.row
+
+\-- end: ds.row
+
+\-- end: ds.column
+
+\-- ftd.image: ;; <hl>
+src: assets/hero.png
+width.fixed.percent: 40
+border-radius.px: 15
+shadow: $s
+
+\-- end: ds.section-row
+
+\-- end: hero
+
+\-- ftd.shadow s: ;; <hl>
+color: #d0d0d0
+blur.px: 8
+spread.px: 4
+
+-- ds.markdown:
+
+Once the hero component is completed, call it within the `ds.page` to 
+add it into your webpage. 
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn-community.github.io/design-system as ds
+
+\-- ds.page: 
+
+\-- header:
+
+\-- hero: ;; <hl>
+
+\-- end: ds.page
+
+-- ds.image: Output
+src: $fastn-assets.files.images.blog.hero-tn.png
+
+-- ds.h1: Conclusion
+
+Now, I went ahead and recreated all the sections from the talknotes.io website. 
+Reference the [talknotes.io project repository](https://github.com/nandhinidevie/talknotes-practise) 
+for further guidance.
+
+Feel free to share your progress and projects on the `#share-your-work` thread on [our Discord channel](https://discord.gg/fastn-stack-793929082483769345) 
+
+I hope this tutorial helps you to create stunning websites using the [**`design system package`**](https://github.com/fastn-community/design-system).
+
+Go to [Part-2 of the tutorial.](/design-system-part-2/)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- end: ds.blog-page
+
+

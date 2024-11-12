@@ -1,0 +1,57 @@
+-- ds.page: Preface
+
+This is my second attempt at writing a book. [8 years ago, I started writing
+Python For Developers](https://www.reddit.com/r/Python/comments/3bqt1h/writing_book_on_python_python_for_developers_1st/).
+I managed to write 200 or so pages, and got some decent feedback from Reddit.
+I also managed to get 6000 or so subscribers on the mailing list for the book.
+It was a book to teach backend development, and it was rather laborious, it went
+in a great detail about a lot of small things, as it was trying to bridge the
+gap of beginners and seasoned Python developers.
+
+I also wrote a very [detailed blog post on
+Dojo](https://web.archive.org/web/20150111183720/http://www.dojomonk.com/2013/05/dojo-for-jquery-developers.html),
+a frontend framework, and it too went in a rather great detail going from the
+absolute beginning to hopefully the kind of code a well versed programmer would
+write.
+
+I did not finish either of them. Not just because work kept me busy, but also
+because I kind of stopped using both of those technologies. For backend first
+I switched from Python to `golang` and eventually to Rust. For frontend I went
+from Dojo to many JavaScript frameworks, and eventually to Elm.
+
+But while Rust and Elm are much closer to my dream experience for programming,
+neither are really good for beginners. Not if you are starting from scratch, if
+you have no programming experience. My dream was, not just a book to teach
+programming from scratch, but also, and unlike many books targeted towards
+beginners, to bring people to where I am after years of experience. A book that
+not only I give to beginners, but someone who will work with me on my next
+project.
+
+I love building stuff. You can call me a maker. Some of those stuff has become
+startups, but my real interest in building stuff. Not to be used by millions,
+but by me. And I am looking for collaborators. I want to make stuff with like
+minded people. A lot of my ideas are software stuff. May the projects would be
+hobby, or maybe they would be for the next company I am hiring for.
+
+I was trying to write those books so it can become a baseline for me to
+collaborate with people. For us to work together we have to use similar tools
+and approach problems similarly. So I thought I will write a book on backend,
+and maybe one on frontend, and if you liked those stuff we can work together.
+
+So here is my next attempt at that. This time I am not writing a book on Python
+and Dojo, which would be technologies I would reject and move on to others. This
+would also not be about Rust and Elm which I moved on to. I feel they do not do
+the job either. This is a book on `ftd` a language I designed after learning
+from them, after why I feel they lack, why they are not really very accessible
+to new comers, why they are hard to master, to learn how to do the right thing
+without having years of experience.
+
+I built `ftd` to be easy. And yet to be able to the backbone of next startup I
+build. A language and a framework which cuts everything out that I feel make
+things hard for someone who is new to programming. And also a language and
+framework that takes care of the best practices from day one, so we can build
+progressional applications productively. A language that will be used by the
+next billion programmers.
+
+
+-- end: ds.page

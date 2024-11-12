@@ -1,0 +1,75 @@
+-- ds.page: Backend And `fastn`
+
+Along with [building frontends](/frontend/) `fastn` can be used for
+building dynamic websites as well. With features already built and planned
+`fastn` aspires to be a full stack framework.
+
+-- ds.h1: Integration With Existing Backend
+
+If a backend APIs are already available, you can interact with them, and include
+the API responses and create dynamic web pages. Checkout the [http
+processor](/http/) about how to do this.
+
+`fastn` also has support for `endpoint` definitions, which allows frontend code
+to communicate with existing APIs without worrying about cross origin policies
+and exposing a unified domain. Read about it in the [endpoint
+guide](/endpoint/).
+
+-- ds.h1: Dynamic URLs
+
+`fastn` by default generates URLs of your webpages based on the file path, but
+you can define dynamic URLs to create beautiful URLs independent of file
+organisation, or to create documents that is served when any URLs matching some
+pattern is accessed.
+
+Read more about it in our [Dynamic URLs Guide](/dynamic-urls/).
+
+-- ds.h1: HTTP Request Data
+
+When rendering any `fastn document` you can use `request data processor` to
+extract request data like URL, query parameter etc, and use it with your APIs
+or queries.
+
+Read more about [Request Data Processor](/request-data/).
+
+-- ds.h1: SQLite Data
+
+`fastn` can be used to query data from sqlite database to generate dynamic
+websites.
+
+Read more about our [package query processor](/package-query/).
+
+-- ds.h1: Reading JSON
+
+`fastn` can also read data in JSON files that are part of your package to help
+you create data visualisation websites.
+
+Read more about [reading JSON](/get-data/).
+
+
+-- ds.h1: Next
+
+- **Get Started with fastn**:
+  We provide a [step-by-step guide](https://fastn.com/quick-build/) to help you
+  build your first fastn-powered website. You can also
+  [install fastn](/install/) and learn to [build UI Components](/expander/)
+  using fastn.
+
+
+- **Frontend**:
+  fastn is a versatile and user-friendly solution for all your
+  [frontend development](/frontend/) needs.
+
+
+- **Docs**:
+  Our [docs](/ftd/data-modelling/) is the go-to resource for mastering fastn.
+  It provides valuable resources from in-depth explanations to best practices.
+
+
+- **Web Designing**:
+  Check out our [design features](/design/) to see how we can enhance your web
+  design.
+
+
+
+-- end: ds.page

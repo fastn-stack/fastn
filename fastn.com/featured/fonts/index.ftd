@@ -1,0 +1,71 @@
+-- import: fastn.com/featured as ft-ui
+
+
+-- ds.page:
+sidebar: false
+
+-- ft-ui.view-all: Font Typographies
+templates: $fonts
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list fonts:
+
+-- ft-ui.template: Arya Typography
+template-url: /fonts/arya/
+screenshot: $fastn-assets.files.images.featured.font.arya-font.jpg
+
+-- ft-ui.template: Blaka Typography
+template-url: /fonts/blaka/
+screenshot: $fastn-assets.files.images.featured.font.blaka-font.jpg
+
+-- ft-ui.template: Karma Typography
+template-url: /fonts/karma/
+screenshot: $fastn-assets.files.images.featured.font.karma-font.jpg
+
+-- ft-ui.template: Khand Typography
+template-url: /fonts/khand/
+screenshot: $fastn-assets.files.images.featured.font.khand-font.jpg
+
+-- ft-ui.template: Inter Typography
+template-url: /fonts/inter/
+screenshot: $fastn-assets.files.images.featured.font.inter-font.jpg
+
+-- ft-ui.template: Lato Typography
+template-url: /fonts/lato/
+screenshot: $fastn-assets.files.images.featured.font.lato-font.jpg
+
+-- ft-ui.template: Lobster Typography
+template-url: /fonts/lobster/
+screenshot: $fastn-assets.files.images.featured.font.lobster-font.jpg
+
+-- ft-ui.template: Opensans Typography
+template-url: /fonts/opensans/
+screenshot: $fastn-assets.files.images.featured.font.opensans-font.jpg
+
+-- ft-ui.template: Pragati Narrow Typography
+template-url: /fonts/pragati-narrow/
+screenshot: $fastn-assets.files.images.featured.font.pragati-narrow-font.jpg
+
+-- ft-ui.template: Roboto Typography
+template-url: /fonts/roboto/
+screenshot: $fastn-assets.files.images.featured.font.roboto-font.jpg
+
+-- ft-ui.template: Roboto Mono Typography
+template-url: /fonts/roboto-mono/
+screenshot: $fastn-assets.files.images.featured.font.roboto-mono-font.jpg
+
+-- ft-ui.template: Tiro Typography
+template-url: /fonts/tiro/
+screenshot: $fastn-assets.files.images.featured.font.tiro-font.jpg
+
+-- end: fonts

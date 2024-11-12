@@ -1,0 +1,91 @@
+{
+    "files": {
+        "colors.ftd": {
+            "name": "colors.ftd",
+            "checksum": "8245F336C5131D267F922EE804F158A780716F21B8214FEC628D77BA052EA822",
+            "size": 6563
+        },
+        "static/code-outline-icon.svg": {
+            "name": "static/code-outline-icon.svg",
+            "checksum": "997E659F2336536E74559F06DBC381821E8AA83E9EC9267F95EF01BBD61E6205",
+            "size": 772
+        },
+        "static/author-icon.svg": {
+            "name": "static/author-icon.svg",
+            "checksum": "022EE00A4418F3A2D78331BE17ED1A9AF182BDD132B1C3AF77C71FB22405164C",
+            "size": 574
+        },
+        "FASTN.ftd": {
+            "name": "FASTN.ftd",
+            "checksum": "B38C654EB75E5B618DB9195D4E5C294A289720C49AB85FC33283659B9973EA0D",
+            "size": 551
+        },
+        "static/bsd-license-icon.svg": {
+            "name": "static/bsd-license-icon.svg",
+            "checksum": "37620B7B8D59CC99E28E89D7D5D7D7C8CB63EFF3B93BB57F7E11141D43BBD097",
+            "size": 1218
+        },
+        "static/menu.svg": {
+            "name": "static/menu.svg",
+            "checksum": "D5616F0774B8DCCB86ECF34B4B8C224B6A361363648A56CA1D191CC5249D0406",
+            "size": 174
+        },
+        "index.ftd": {
+            "name": "index.ftd",
+            "checksum": "33FC2816B9F32FACAEB7787A50584ED98189140941ADB3455EDE430334DB82E4",
+            "size": 26998
+        },
+        "static/img.svg": {
+            "name": "static/img.svg",
+            "checksum": "F30BFB3E2D31FF32C05EBC2AA9039B9874BC1C97CD6760415DB156CB8474B5DC",
+            "size": 1192119
+        },
+        "static/fastn-logo.svg": {
+            "name": "static/fastn-logo.svg",
+            "checksum": "22B700AEFCA7EDBC65EBF80740F0F901424CBC8DE5D078059D42AAB03D2572BD",
+            "size": 80423
+        },
+        "static/discord-icon.svg": {
+            "name": "static/discord-icon.svg",
+            "checksum": "02AF24DE0D342A20BB81D3FF85E29B6A30E21F0F88869ABFCAAD0FF164D0F4E8",
+            "size": 2515
+        },
+        "README.md": {
+            "name": "README.md",
+            "checksum": "41980A04139C185F7885751E20718F70853B243051E154B353F9A25BFE926B89",
+            "size": 733
+        },
+        "static/link-icon.svg": {
+            "name": "static/link-icon.svg",
+            "checksum": "A70F92AA340A098879133B4A070A62F6C37572C26F77A5E37AAC5C6542A9A2B2",
+            "size": 1534
+        },
+        "static/search.svg": {
+            "name": "static/search.svg",
+            "checksum": "58E17815CDCFBF74E2F1C7C0DDC5528A07656B5281520A1BF036478E943CFD84",
+            "size": 697
+        },
+        "static/share.svg": {
+            "name": "static/share.svg",
+            "checksum": "1B389C359790FB4AD9AE8C33536A82055ECCD18199208AAF59F00D342DC77B3C",
+            "size": 1153
+        },
+        "static/image.svg": {
+            "name": "static/image.svg",
+            "checksum": "3F3ACA7E9FE32496901D790C30157C2984476961E46B2680B8F8457CCCB9512E",
+            "size": 5888792
+        },
+        "LICENSE": {
+            "name": "LICENSE",
+            "checksum": "5B8B83357C092AC57F28508D18CAB65E4965AAA3BA61226DE038719E022638C1",
+            "size": 1516
+        },
+        "static/more.svg": {
+            "name": "static/more.svg",
+            "checksum": "7BEA941B3095A66502A136976122CE349B9D6045E56BAF7972264075BF475AEE",
+            "size": 350
+        }
+    },
+    "zip_url": "https://github.com/fastn-community/winter-cs/archive/0a966c8b9d59c6189df5c2dc19d073faa2a47227.zip",
+    "checksum": "F4DA753C10CE7CB2356A12E54082F7F919F70AD743E044A90759CF2ADCFF9B1B"
+}

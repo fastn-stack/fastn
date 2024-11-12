@@ -1,0 +1,68 @@
+-- ds.page: Event Handing
+
+-- ds.youtube:
+v: 8f44sUZRSSA
+
+
+-- ds.h3: How to create on-click event handling?
+
+-- ds.markdown:
+
+- Create a [mutable](/variables/#mutable) `boolean variable` inside the
+component.
+
+-- ds.code: Boolean variable
+lang: ftd
+
+boolean $<boolean-variable>: true
+
+-- ds.markdown:
+
+- Give `if condition` to the Body part.
+
+-- ds.code: if-condition
+lang: ftd
+
+if: { box.<boolean-variable> }
+
+-- ds.markdown:
+
+- Inside the Header row, we create the event for `on-click`.
+
+-- ds.code: on-click event
+lang: ftd
+
+\$on-click$: $toggle($<function-argument> = $box.<boolean-variable>)
+
+
+-- ds.markdown:
+
+- Define the `toggle function` after component.
+
+-- ds.code: on-click event
+lang: ftd
+
+\-- void toggle(<function-argument>):
+boolean $function-argument:
+
+<function-argument> = !<function-argument>;
+
+
+-- ds.markdown:
+
+Here We Go!!! We have made the Expander Project from scratch.
+
+-- ds.markdown:
+
+Don't want to rewrite this but want to reuse it in your next project?
+
+Or, You want to share it with others?
+
+In Part 5, you will learn how to publish it as a package on GitHub.
+
+
+-- ds.markdown:
+
+Continue with the [part 5 now](/expander/publish/).
+
+-- end: ds.page

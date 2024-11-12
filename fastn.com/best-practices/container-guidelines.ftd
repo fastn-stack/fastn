@@ -1,0 +1,92 @@
+-- import: fastn.com/utils
+
+-- ds.page: Container Component guidelines
+
+-- utils.code-display: `conditional-attributes-removes-component-duplication`: Using conditional attributes to avoid duplicating similar components
+id: conditional-attributes-removes-component-duplication
+
+ It's a good practice to avoid duplicating similar components with minor
+ variations. Instead, you can use conditional attributes to modify the behavior
+ or appearance of a component based on certain conditions.
+
+
+
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- ftd.decimal: $rent1
+	if: { !is-price }	;; <hl>
+	
+	\-- ftd.decimal: $rent2
+	if: { is-price } ;; <hl>
+	
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- ftd.decimal:
+	value if { is-price }: $rent2	;; <hl>
+	value: $rent1
+	
+-- end: utils.code-display
+
+
+
+
+
+
+-- utils.code-display: `minimize-container-components`: Avoid using container components with single or no child
+id: minimize-container-components
+
+
+This guideline advises against using container components when there is only
+one or no child, as it can lead to unnecessary abstraction and complexity
+in the code. Instead, it's recommended to remove the parent container which
+results in simpler and more readable code.
+
+
+
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\;; -------- Example 1 --------
+	
+	\-- ftd.column:
+	
+	\-- ftd.text: Hello World
+	
+	\-- end: ftd.column
+	
+	
+	\;; -------- Example 2 --------
+	
+	\-- ftd.column:
+	color: $inherited.colors.text
+	margin.px: 10
+	
+	\-- ftd.text: Hello World
+	
+	\-- end: ftd.column
+	
+	
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\;; -------- Example 1 --------
+	
+	\-- ftd.text: Hello World
+	
+	
+	\;; -------- Example 2 --------
+	
+	\-- ftd.text: Hello World
+	color: $inherited.colors.text
+	margin.px: 10
+	
+-- end: utils.code-display
+
+
+
+
+-- end: ds.page

@@ -1,0 +1,56 @@
+-- ds.page: How to use color scheme package?
+
+The importance of color in a website's overall look and feel is well known. The
+right color scheme can evoke emotions, create visual interest, and direct a
+user's attention to specific elements on a page. That's why the `fastn` color
+scheme framework provides an easy and powerful way to define color schemes and
+apply them to your website.
+
+To start, you can choose from existing [color scheme packages](featured/cs/) or
+create your own custom color scheme. To apply a color scheme package on top of
+your package, you'll need to import it into one of the module.
+
+
+For example, let's say you're using the `page` component from
+[`doc-site`](https://fastn-community.github.io/doc-site/) package and want to
+apply the [`forest-cs`](https://fastn-community.github.io/forest-cs) color scheme
+package on top of it. You first create a new module, let's say `my-ds.ftd`. Then
+you import `forest-cs` package module and then create a new component called
+`page` there.
+
+Here's what your `my-ds.ftd` module would look like:
+
+-- ds.code: `my-ds.ftd`
+lang: ftd
+
+\-- import: fastn-community.github.io/forest-cs
+\-- import: fastn-community.github.io/doc-site as ds
+
+\-- component page:
+children wrapper:
+optional caption title:
+optional body body:
+
+\-- ds.page:
+title: $page.title
+body: $page.body
+wrapper: $page.wrapper
+colors: $forest-cs.main
+
+\-- end: page
+
+
+-- ds.markdown:
+
+After creating `my-ds.page` component, use this in rest of the module of your
+package instead of `ds.page`.
+
+Once you have imported the color scheme package and created a new component
+`my-ds.page`, you can use it throughout your website instead of the `ds.page`
+component.
+
+With just a few lines of code, you can dramatically change the look and feel of
+your website using the `fastn` color scheme framework.
+
+
+-- end: ds.page

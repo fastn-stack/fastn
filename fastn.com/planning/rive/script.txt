@@ -1,0 +1,72 @@
+Pre Intro
+
+
+
+
+In this video I am going to show how you can use Rive
+to add animations to your website.
+
+
+Intro
+
+Hey hey! It's Amit here. Welcome. If its your first time and you want to build
+your own websites and web applications, and have passion to make and share
+things, make sure you hit the subscribe button, and click the bell notification
+so you don't miss a thing.
+
+Hello and welcome to `fastn` videos series.
+My name is Amit, I am the creator of `fastn`.
+`fastn` helps you create websites with ease.
+
+In today's video we are going to talk about Rive.
+
+What is Rive?
+
+Rive lets you create animations. Interactive animations.
+
+
+Rive is like modern day Flash. But Better.
+
+Its built on top of JS so it is already supported by every device out there.
+
+And it supports mobile applications. You get native speed animations on iOS,
+Android etc.
+
+And all these run-times are open source.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+And there you go!
+
+Creating and adding animations to your website has never been easier.
+
+Looking forward to see what you build with these awesome technologies.
+
+

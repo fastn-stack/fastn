@@ -1,0 +1,54 @@
+-- component video-audience:
+caption title:
+string owner:
+string aud:
+body goal:
+
+-- ftd.column:
+spacing.fixed.em: 0.5
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+	-- ftd.row:
+	spacing.fixed.em: 0.25
+	
+		-- ftd.text: Video Title:
+		style: bold
+		
+		-- ftd.text: $video-audience.title
+		
+	-- end: ftd.row
+
+	-- ftd.row:
+	spacing.fixed.em: 0.25
+	
+		-- ftd.text: Owner:
+		style: bold
+		
+		-- ftd.text: $video-audience.owner
+		
+	-- end: ftd.row
+
+	-- ftd.row:
+	spacing.fixed.em: 0.25
+	
+		-- ftd.text: Audience:
+		style: bold
+		
+		-- ftd.text: $video-audience.aud
+		
+	-- end: ftd.row
+
+	-- ftd.row:
+	spacing.fixed.em: 0.25
+	
+		-- ftd.text: Goal:
+		style: bold
+		
+		-- ftd.text: $video-audience.goal
+		
+	-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: video-audience

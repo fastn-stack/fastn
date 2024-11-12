@@ -1,0 +1,12 @@
+-- ds.page: Create a new page - `fastn` Workshop
+
+In the seventh part of the Workshop, we will create a new file and then link the
+`index.ftd` and the newly created files with each other by hyperlinking each
+other.
+
+-- ds.h1: Add a new file
+
+-- ds.h1: Link the two files
+
+
+-- end: ds.page

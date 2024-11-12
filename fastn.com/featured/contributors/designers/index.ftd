@@ -1,0 +1,64 @@
+-- import: fastn.com/featured as ft-ui
+-- import: fastn-community.github.io/spectrum-ds/common
+-- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn.com/content-library as footer
+-- import: fastn-community.github.io/dark-flame-cs
+-- import: fifthtry.github.io/fastn-typography as typo
+-- import: fastn.com/featured/contributors/designers/muskan-verma
+-- import: fastn.com/featured/contributors/designers/yashveer-mehra
+-- import: fastn.com/featured/contributors/designers/jay-kumar
+-- import: fastn.com/featured/contributors/designers/govindaraman-s
+
+
+-- ds.page:
+show-footer: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-name: NULL
+logo-height: 38
+logo-width: 120
+colors: $dark-flame-cs.main
+types: $typo.types
+github-icon: true
+github-url: https://github.com/muskan1verma
+full-width: true
+fluid-width: false
+max-width.fixed.px: 1340
+
+-- ds.page.footer:
+
+	-- footer.footer:
+	site-logo: $fastn-assets.files.images.fastn.svg
+	site-url: /
+	social-links: $footer.social-links
+	copyright: Copyright © 2023 - fastn.com
+	full-width: false
+	max-width.fixed.px: 1340
+	
+-- end: ds.page.footer
+-- ftd.column:
+width: fill-container
+margin-vertical.px: 48
+
+	-- ftd.row:
+	width: fill-container
+	align-content: center
+	spacing.fixed.px: 64
+	wrap: true
+	
+		-- muskan-verma.profile: Muskan Verma
+		link: /u/muskan-verma/
+		
+		-- yashveer-mehra.profile: Yashveer Mehra
+		link: /u/yashveer-mehra/
+		
+		-- jay-kumar.profile: Jay Kumar
+		link: /u/jay-kumar/
+		
+		-- govindaraman-s.profile: Govindraman S
+		link: /u/govindaraman-s/
+		
+	-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ds.page

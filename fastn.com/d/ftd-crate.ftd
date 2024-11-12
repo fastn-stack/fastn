@@ -1,0 +1,147 @@
+-- ds.page: `ftd` crate
+
+`ftd` is the crate that implements the language.
+
+-- ds.h1: Location
+
+`ftd` crate lives in a folder named `ftd` in
+[`fastn-stack/fastn`](https://github.com/fastn-stack/fastn) repo.
+
+-- ds.h1: How It Works
+
+You can check out `ftd_v2_interpret_helper()` in [`main.rs`](https://github.com/fastn-stack/fastn/blob/main/ftd/src/main.rs)
+to see how this crate is used as a standalone project.
+
+-- ds.h2: The "interpreter loop"
+
+One design requirement for `ftd` is to not perform IO operations. This is done
+so `ftd` and (soon) `fastn-core` can be used in a variety of ways, like using
+`ftd` binding from Python, Node, Ruby, Java etc. To do this `ftd` interpreter
+acts as a state machine, yielding to the caller every time `ftd` can not make
+progress because it needs any IO operation, and lets the "host" perform the
+IO operation, and whenever the result is ready, the host calls "continue" on
+the interpreter state machine.
+
+You create the state machine by calling:
+
+-- ftd.code:
+lang: rs
+
+let mut interpreter_state = ftd::interpreter::interpret(name, source)?;
+
+-- ds.markdown:
+
+`ftd::interpreter::interpret()` returns a `ftd::interpreter::Interpreter` on
+success:
+
+-- ds.code: `ftd::interpreter::Interpreter`
+lang: rs
+
+pub enum Interpreter {
+    StuckOnImport {
+        module: String,
+        state: InterpreterState,
+        caller_module: String,
+    },
+    Done {
+        document: Document,
+    },
+    StuckOnProcessor {
+        state: InterpreterState,
+        ast: ftd::ast::AST,
+        module: String,
+        processor: String,
+        caller_module: String,
+    },
+    StuckOnForeignVariable {
+        state: InterpreterState,
+        module: String,
+        variable: String,
+        caller_module: String,
+    },
+}
+
+-- ds.markdown:
+
+If the `ftd` document did not have any IO operations (no [imports](/import/), no
+[processors](/processor/), no [foreign variables](/foreign-variable/)), then
+the first call itself will return `Interpreter::Done`, else the interpreter is
+"stuck" on one of those.
+
+The "host", which is currently `fastn-core`, has to help `ftd` by doing the
+actual operation, in case of `StuckOnImport`, they have to resolve the import
+path, and return the document's content by calling,
+`Interpreter::continue_after_import()`, and passing it `ParsedDocument`, which
+we will look later in this document.
+
+The document that is being imported may have `foreign variables` and `foreign
+functions`, it is the job of the `fastn host` to manage these, and inform
+`fastn` that the document contains these, so `fastn` can type check things, and
+yield control back to host when the foreign variables or functions are
+evaluated. The list of foreign variables and functions are also passed to
+`Interpreter::continue_after_import()`.
+
+-- ds.h2: `StuckOnProcessor`
+
+The idea of processor is to take the current `section`, you will read about them
+in the P1 Parser below, and return a `Value`.
+
+-- ds.h1: Variables, Things And Bag
+
+When the interpreter starts, it creates a `bag`
+(`ftd::interpreter::InterpreterState::bag` field), of type
+`ftd::Map<ftd::interpreter::Thing>`. `ftd::Map<T>` is an alias to
+`std::collections::BTreeMap<String, T>`;
+
+
+-- ds.code: `ftd::interpreter::Thing`
+lang: rs
+
+pub enum Thing {
+    Record(ftd::interpreter::Record),
+    OrType(ftd::interpreter::OrType),
+    OrTypeWithVariant {
+        or_type: String,
+        variant: ftd::interpreter::OrTypeVariant,
+    },
+    Variable(ftd::interpreter::Variable),
+    Component(ftd::interpreter::ComponentDefinition),
+    WebComponent(ftd::interpreter::WebComponentDefinition),
+    Function(ftd::interpreter::Function),
+}
+
+-- ds.markdown:
+
+Everything that the fastn interpreter has been able to parse successfully is
+added to the `bag`. The key in the bag is the full name of the module, and then
+name of the thing, with `#` as the concatenation character.
+
+-- ds.h1: Types In FTD
+
+
+
+-- ds.h1: P1 Parser
+
+When a string containing `fastn` code is first encountered, we use the
+`ftd::p1::parse()` function to parse it to `ftd::p1::Section` struct:
+
+-- ds.code: `ftd::p1::Section`
+lang: rs
+
+pub struct Section {
+    pub name: String,
+    pub kind: Option<String>,
+    pub caption: Option<ftd::p1::Header>,
+    pub headers: ftd::p1::Headers,
+    pub body: Option<Body>,
+    pub sub_sections: Vec<Section>,
+    pub is_commented: bool,
+    pub line_number: usize,
+    pub block_body: bool,
+}
+
+-- ds.markdown:
+
+Read: The [`ftd-p1` grammar](/p1-grammar/).
+
+-- end: ds.page

@@ -1,0 +1,16 @@
+-- ds.page: `assets`: A Special Module
+
+The `fastn` package has a special module called `assets` importing which
+provides access to the variable referring to files and fonts defined in the
+package.
+
+The file referring variables are [foreign variables](foreign-variable) while
+fonts are simple variables.
+
+Using `assets` we can:
+
+- [Access files (including images)](/accessing-files/)
+
+- [Access font variables](/accessing-fonts/)
+
+-- end: ds.page

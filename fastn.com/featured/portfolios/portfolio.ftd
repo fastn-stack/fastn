@@ -1,0 +1,36 @@
+-- import: fastn.com/u/yashveer-mehra
+-- import: fastn.com/u/saurabh-lohiya
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Portfolio
+featured-link: /featured/portfolios/
+category: Featured Portfolio / Personal Sites
+image: $fastn-assets.files.images.featured.portfolios.portfolio.png
+owners: [$yashveer-mehra.info, $saurabh-lohiya.info]
+license-url: https://github.com/fastn-community/saurabh-portfolio
+license: Creative Commons
+published-date: 09-Aug-2023
+cards: $text-ps
+github-url: https://github.com/fastn-community/saurabh-portfolio
+demo-link: https://fastn-community.github.io/saurabh-portfolio/
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list text-ps:
+
+-- ft-ui.template: Texty PS
+template-url: featured/portfolios/texty-ps/
+screenshot: $fastn-assets.files.images.featured.portfolios.texty-ps.png
+
+-- ft-ui.template: Johny PS
+template-url: featured/portfolios/johny-ps/
+screenshot: $fastn-assets.files.images.featured.portfolios.johny-ps.png
+
+-- end: text-ps

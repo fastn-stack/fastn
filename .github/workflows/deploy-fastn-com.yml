@@ -1,0 +1,21 @@
+name: Deploy fastn.com
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+permissions:
+  id-token: write   # This is required for requesting the JWT
+  contents: read    # This is required for actions/checkout
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: source <(curl -fsSL https://fastn.com/install.sh)
+      - run: |
+          cd fastn.com
+          echo "Using $(~/.fastn/bin/fastn --version) to upload fastn.com to FifthTry"
+          ~/.fastn/bin/fastn upload fastn >> $GITHUB_STEP_SUMMARY

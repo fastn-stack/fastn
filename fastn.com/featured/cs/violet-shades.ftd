@@ -1,0 +1,37 @@
+-- import: fastn.com/featured as ft-ui
+
+
+-- ds.page:
+sidebar: false
+
+-- ft-ui.view-all: Violet Color Scheme
+templates: $violet-scheme
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+-- ft-ui.template list violet-scheme:
+
+/-- ft-ui.template: Yellow Lily CS
+template-url: /cs/yellow-lily-cs/
+screenshot: $fastn-assets.files.images.featured.cs.yellow-lily-cs.png
+
+/-- ft-ui.template: Blue Wave CS
+template-url: /cs/
+screenshot: $fastn-assets.files.images.featured.cs.blue-wave-cs.png
+
+-- ft-ui.template: Little Blue CS
+template-url: /cs/little-blue-cs/
+screenshot: $fastn-assets.files.images.featured.cs.little-blue-cs.png
+
+-- ft-ui.template: Blog Template 1 CS
+template-url: /cs/blog-template-1-cs/
+screenshot: $fastn-assets.files.images.featured.cs.blog-template-1-cs.png
+
+-- end: violet-scheme

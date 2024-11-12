@@ -1,0 +1,2685 @@
+
+-- site-doc.doc-home: Quotes
+site-title: Bling
+show-tabs: false
+github-url: https://github.com/fastn-community/bling
+current-package: fastn-community.github.io/bling
+
+The quote component is to draw attention to a specific statement, passage, or
+text by presenting it in a visually distinct and often stylized manner. The
+quote component includes the actual text of the quote or excerpt.
+
+The quote component also includes information about the source or author of the
+quote.
+
+-- site-doc.header: How to use
+
+-- cb.code: Add `bling` dependency into your FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/bling
+
+-- cb.code: Impot `quote` inside your `ftd` file
+lang: ftd
+
+\-- import: fastn-community.github.io/bling/quote
+
+
+-- site-doc.header: Examples
+
+As shown above, once you import `quote` inside your `ftd` file, add below
+component(s) inside it. 
+
+There are total 18 example quote components, you can use as per your design
+need.
+
+-- site-doc.output: 
+colors: $ftd.default-colors
+types: $ftd.default-types
+
+
+-- cb.rendered: Example 1: `-- quote.chalice`
+
+-- cb.rendered.input:
+
+\-- quote.chalice: Nelson Mandela
+
+The greatest glory in living lies not in never falling, but in rising every time
+we fall.
+
+-- cb.rendered.output:
+
+-- chalice: Nelson Mandela
+
+The greatest glory in living lies not in never falling, but in rising every time
+we fall.
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered 
+
+-- cb.rendered: Example 2: `-- quote.charcoal`
+
+-- cb.rendered.input:
+
+\-- quote.charcoal: Amit Upadhyay
+label: CEO
+avatar: $assets.files.static.amitu.jpg
+logo: $assets.files.static.fifthtry.svg
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+incididunt ut labore et dolore magna aliqua..
+
+-- cb.rendered.output:
+
+-- ftd.column:
+id: charcoal
+-- end: ftd.column
+
+-- charcoal: Amit Upadhyay
+label: CEO
+avatar: $assets.files.static.amitu.jpg
+logo: $assets.files.static.fifthtry.svg
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+incididunt ut labore et dolore magna aliqua..
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered 
+
+-- cb.rendered: Example 3: `-- quote.chrome`
+
+-- cb.rendered.input:
+
+\-- quote.chrome: Swami Vivekananda
+
+Take up one idea. Make that one idea your life; dream of it; think of it; live
+ on that idea. Let the brain, the body, muscles, nerves, every part of your
+ body be full of that idea, and just leave every other idea alone. This is the
+ way to success, and this is the way great spiritual giants are produced.
+
+-- cb.rendered.output:
+
+-- chrome: Swami Vivekananda
+
+Take up one idea. Make that one idea your life; dream of it; think of it; live
+ on that idea. Let the brain, the body, muscles, nerves, every part of your
+ body be full of that idea, and just leave every other idea alone. This is the
+ way to success, and this is the way great spiritual giants are produced.
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered 
+
+-- cb.rendered: Example 4: `-- quote.dorian`
+
+-- cb.rendered.input:
+
+\-- quote.dorian: Swami Vivekananda
+
+“You have to grow from the inside out. None can teach you, none can make you
+ spiritual. There is no other teacher but your own soul.”
+
+-- cb.rendered.output:
+
+-- site-doc.output:
+
+-- dorian: Swami Vivekananda
+
+“You have to grow from the inside out. None can teach you, none can make you
+ spiritual. There is no other teacher but your own soul.”
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered 
+
+-- cb.rendered: Example 5: `-- quote.echo`
+
+-- cb.rendered.input:
+
+\-- quote.echo: Swami Vivekananda
+
+Take up one idea. Make that one idea your life; dream of it; think of it; live
+ on that idea. Let the brain, the body, muscles, nerves, every part of your
+ body be full of that idea, and just leave every other idea alone. This is the
+ way to success, and this is the way great spiritual giants are produced.
+
+-- cb.rendered.output:
+
+-- echo: Swami Vivekananda
+
+Take up one idea. Make that one idea your life; dream of it; think of it; live
+ on that idea. Let the brain, the body, muscles, nerves, every part of your
+ body be full of that idea, and just leave every other idea alone. This is the
+ way to success, and this is the way great spiritual giants are produced.
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered 
+
+-- cb.rendered: Example 6: `-- quote.electric`
+
+-- cb.rendered.input:
+
+\-- quote.electric: Socrates
+
+“If you don't get what you want, you suffer; if you get what you don't want, you
+ suffer; even when you get exactly what you want, you still suffer because you
+ can't hold on to it forever. Your mind is your predicament. It wants to be
+ free of change. Free of pain, free of the obligations of life and death. But
+ change is law and no amount of pretending will alter that reality.”
+
+-- cb.rendered.output:
+
+-- ftd.column:
+id: electric
+-- end: ftd.column
+
+-- electric: Socrates
+
+“If you don't get what you want, you suffer; if you get what you don't want, you
+ suffer; even when you get exactly what you want, you still suffer because you
+ can't hold on to it forever. Your mind is your predicament. It wants to be
+ free of change. Free of pain, free of the obligations of life and death. But
+ change is law and no amount of pretending will alter that reality.”
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered
+
+-- cb.rendered: Example 7: `-- quote.marengo`
+
+-- cb.rendered.input:
+
+\-- quote.marengo: Steve Jobs
+
+Your time is limited, so don't waste it living someone else's life. Don't be
+trapped by dogma – which is living with the results of other people's
+thinking.
+
+-- cb.rendered.output:
+
+-- marengo: Steve Jobs
+
+Your time is limited, so don't waste it living someone else's life. Don't be
+trapped by dogma – which is living with the results of other people's
+thinking.
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered 
+
+-- cb.rendered: Example 8: `-- quote.marengo-hug`
+
+-- cb.rendered.input:
+
+\-- quote.marengo-hug: Oprah Winfrey
+
+If you look at what you have in life, you'll always have more. If you look at
+what you don't have in life, you'll never have enough.
+
+-- cb.rendered.output:
+
+-- marengo-hug: Oprah Winfrey
+
+If you look at what you have in life, you'll always have more. If you look at
+what you don't have in life, you'll never have enough.
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered 
+
+-- cb.rendered: Example 9: `-- quote.matte`
+
+-- cb.rendered.input:
+
+\-- quote.matte: Swami Vivekananda
+
+Take up one idea. Make that one idea your life; dream of it; think of it; live
+ on that idea. Let the brain, the body, muscles, nerves, every part of your
+ body be full of that idea, and just leave every other idea alone. This is the
+ way to success, and this is the way great spiritual giants are produced.
+
+-- cb.rendered.output:
+
+-- matte: Swami Vivekananda
+
+Take up one idea. Make that one idea your life; dream of it; think of it; live
+ on that idea. Let the brain, the body, muscles, nerves, every part of your
+ body be full of that idea, and just leave every other idea alone. This is the
+ way to success, and this is the way great spiritual giants are produced.
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered 
+
+-- cb.rendered: Example 10: `-- quote.onyx`
+
+-- cb.rendered.input:
+
+\-- quote.onyx: Barack Obama
+
+The real test is not whether you avoid this failure, because you won't. It's
+whether you let it harden or shame you into inaction, or whether you learn from
+it; whether you choose to persevere.
+
+-- cb.rendered.output:
+
+-- onyx: Barack Obama
+
+The real test is not whether you avoid this failure, because you won't. It's
+whether you let it harden or shame you into inaction, or whether you learn from
+it; whether you choose to persevere.
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered 
+
+-- cb.rendered: Example 11: `-- quote.rustic`
+
+-- cb.rendered.input:
+
+\-- quote.rustic: Dr. APJ Abdul Kalam
+
+All of us do not have equal talent. But, all of us have an equal opportunity to
+develop our talents.
+
+-- cb.rendered.output:
+
+-- rustic: Dr. APJ Abdul Kalam
+
+All of us do not have equal talent. But, all of us have an equal opportunity to
+develop our talents.
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered 
+
+-- cb.rendered: Example 12: `-- quote.scorpion`
+
+-- cb.rendered.input:
+
+\-- quote.scorpion: Eleanor Roosevelt
+label: U.S.A.
+
+The future belongs to those who believe in the beauty of their dreams.
+
+-- cb.rendered.output:
+
+-- ftd.column:
+id: scorpion
+-- end: ftd.column
+
+-- scorpion: Eleanor Roosevelt
+label: U.S.A.
+
+The future belongs to those who believe in the beauty of their dreams.
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered 
+
+-- cb.rendered: Example 13: `-- quote.silver`
+
+-- cb.rendered.input:
+
+\-- quote.silver: Helen Keller
+
+Life is either a daring adventure or nothing at all.
+
+-- cb.rendered.output:
+
+-- silver: Helen Keller
+
+Life is either a daring adventure or nothing at all.
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered 
+
+-- cb.rendered: Example 14: `-- quote.storm-cloud`
+
+-- cb.rendered.input:
+
+\-- quote.storm-cloud: M.K. Gandhi
+
+A man is but a product of his thoughts. What he thinks he becomes.
+
+-- cb.rendered.output:
+
+-- storm-cloud: M.K. Gandhi
+
+A man is but a product of his thoughts. What he thinks he becomes.
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered 
+
+-- cb.rendered: Example 15: `-- quote.background-image`
+
+-- cb.rendered.input:
+
+\-- quote.background-image: Lucius Annaeus Seneca
+quote-background: https://e0.pxfuel.com/wallpapers/491/601/desktop-wallpaper-ultra-original-and-background-it-ultra.jpg
+text-color: #FFF
+
+As long as you live, keep learning how to live.
+
+-- cb.rendered.output:
+
+-- ftd.column:
+id: background-image
+-- end: ftd.column
+
+-- background-image: Lucius Annaeus Seneca
+quote-background: https://e0.pxfuel.com/wallpapers/491/601/desktop-wallpaper-ultra-original-and-background-it-ultra.jpg
+text-color: #FFF
+
+As long as you live, keep learning how to live.
+
+-- end: cb.rendered.output
+
+-- end: cb.rendered 
+
+-- site-doc.header: Common Properties:
+
+Below are details of all common properties of quote components.
+
+-- site-doc.component-property: `title`
+type: Caption (`optional`)
+
+It's used to add title to all quote components shown in above examples.
+
+-- site-doc.component-property: `body`
+type: Body (`required`)
+
+It's used to add body content to all quote components shown in above examples.
+
+-- site-doc.header: Additional Properties:
+
+Below are details of additional properties of quote components.
+
+-- site-doc.component-property: `avatar`
+type: ftd.image-src (`optional`)
+
+It's used to add image in below quote components.
+
+[charcoal](quote/#charcoal), [antique](quote/#antique), [bubble](quote/#bubble),
+[electric](quote/#electric)
+
+-- site-doc.component-property: `label`
+type: String (`optional`)
+
+It's used to add author profile/designation details inside below quote
+components.
+
+[charcoal](quote/#charcoal) and [scorpion](quote/#scorpion)
+
+-- site-doc.component-property: `logo`
+type: ftd.image-src (`optional`)
+
+It's used to add author company logo inside below quote components.
+
+[charcoal](quote/#charcoal)
+
+-- site-doc.component-property: `quote-background`
+type: ftd.image-src (`mandatory`)
+
+It's used to add background image inside below quote components.
+
+[background-image](quote/#background-image)
+
+-- site-doc.component-property: `text-color`
+type: String (`mandatory`)
+
+It's used to customize text color inside below quote components.
+
+[background-image](quote/#background-image)
+
+-- end: site-doc.doc-home
+
+
+
+
+
+
+
+
+
+
+-- component charcoal:
+optional caption title:
+optional ftd.image-src quote-icon: $assets.files.static.quotes.svg
+optional body body:
+optional ftd.image-src avatar:
+optional ftd.image-src logo:
+optional string label:
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.desktop:
+
+-- quote-desktop: $charcoal.title
+quote-icon: $charcoal.quote-icon
+body: $charcoal.body
+avatar: $charcoal.avatar
+logo: $charcoal.logo
+label: $charcoal.label
+
+-- end: ftd.desktop
+
+-- ftd.mobile:
+
+-- quote-mobile: $charcoal.title
+body: $charcoal.body
+avatar: $charcoal.avatar
+logo: $charcoal.logo
+label: $charcoal.label
+
+-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: charcoal
+
+
+
+
+
+
+
+
+
+
+-- component quote-desktop:
+optional caption title:
+optional ftd.image-src quote-icon: $assets.files.static.quotes.svg
+optional body body: 
+optional ftd.image-src avatar:
+optional ftd.image-src logo:
+optional string label:
+
+-- ftd.column:
+width: fill-container
+padding-vertical.px: 64
+margin-top.px: 24
+margin-bottom.px: 24
+
+-- ftd.row:
+max-width.fixed.px: 1000
+spacing.fixed.px: 80
+align-self: center
+width: fill-container
+
+-- ftd.image:
+src: $quote-desktop.quote-icon
+width: auto
+height.fixed.px: 72
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: 850
+
+-- ftd.text:
+role: $inherited.types.heading-large
+color:$inherited.colors.text
+
+$quote-desktop.body
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- ftd.row:
+width: fill-container
+margin-top.px: 24
+align-self: center
+max-width.fixed.px: 700
+
+-- ftd.image:
+src: $quote-desktop.avatar
+width: auto
+height.fixed.px: 60
+border-radius.px: 100
+margin-right.px: 20
+
+-- ftd.image:
+src: $quote-desktop.logo
+width: auto
+height.fixed.px: 44
+padding-top.px: 16
+margin-right.px: 48
+
+-- ftd.column: 
+width: fill-container
+
+-- ftd.text: $quote-desktop.title
+role: $inherited.types.heading-small
+color: $inherited.colors.text
+
+-- ftd.text: $quote-desktop.label
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: quote-desktop
+
+
+
+
+
+
+
+
+
+
+-- component quote-mobile:
+optional caption title:
+optional ftd.image-src quote-icon: $assets.files.static.quotes.svg
+optional body body: 
+optional ftd.image-src avatar:
+optional ftd.image-src logo:
+optional string label:
+
+-- ftd.column:
+width: fill-container
+padding-vertical.px: 32
+padding-horizontal.px: 16
+margin-top.px: 24
+margin-bottom.px: 24
+
+-- ftd.image:
+src: $quote-mobile.quote-icon
+width: auto
+height.fixed.px: 42
+align-self: center
+margin-bottom.px: 24
+
+-- ftd.text:
+width: auto
+role: $inherited.types.heading-small
+color: $inherited.colors.text
+margin-bottom.px: 24
+text-align: center
+
+$quote-mobile.body
+
+-- ftd.row:
+spacing.fixed.px: 16
+align-self: center
+margin-bottom.px: 16
+
+-- ftd.image:
+src: $quote-mobile.avatar
+width: auto
+height.fixed.px: 42
+align-self: center
+border-radius.px: 100
+
+-- ftd.image:
+src: $quote-mobile.logo
+width: auto
+height.fixed.px: 24
+align-self: center
+
+-- end: ftd.row
+
+-- ftd.column: 
+spacing.fixed.px: 8
+align-self: center
+
+-- ftd.text: $quote-mobile.title
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+
+-- ftd.text: $quote-mobile.label
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+align-self: center
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: quote-mobile
+
+
+
+
+
+
+
+
+
+
+-- component marengo:
+optional caption title:
+body body:
+
+-- ftd.column:
+width: fill-container
+margin-top.px: 24
+margin-bottom.px: 24
+
+-- ftd.desktop:
+
+-- quote-1-desktop: $marengo.title
+body: $marengo.body
+
+-- end: ftd.desktop
+
+-- ftd.mobile:
+
+-- quote-1-mobile: $marengo.title
+body: $marengo.body
+
+-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: marengo
+
+
+
+
+
+
+
+
+
+
+-- component quote-1-desktop:
+body body:
+optional caption title:
+
+-- ftd.column:
+width: fill-container
+margin-top.px: 20
+margin-bottom.px: 24
+max-width.fixed.px: 1056
+border-top-left-radius.px: 20
+border-bottom-right-radius.px: 20
+
+-- ftd.row:
+width: fill-container
+border-right-width.px: 4
+padding-left.px: 40
+padding-top.px: 24
+padding-bottom.px: 24
+padding-right.px: 24
+border-color: $inherited.colors.cta-primary.border
+border-top-right-radius.px: 20
+border-bottom-right-radius.px: 20
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: 
+text: $quote-1-desktop.body
+color: $inherited.colors.text
+role: $inherited.types.copy-regular
+
+-- ftd.row:
+align-self: end
+spacing.fixed.px: 8
+margin-top.px: 16
+
+-- ftd.text: ~
+align-self: center
+color: $inherited.colors.text
+role: $inherited.types.copy-small
+
+-- ftd.text: $quote-1-desktop.title
+align-self: center
+color: $inherited.colors.text
+role: $inherited.types.fine-print
+white-space: nowrap
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: quote-1-desktop
+
+
+
+
+
+
+
+
+
+
+-- component quote-1-mobile:
+optional caption title:
+body body:
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: 1056
+border-bottom-right-radius.px: 20
+border-top-left-radius.px: 20
+
+-- ftd.row:
+width: fill-container
+border-right-width.px: 4
+padding-left.px: 24
+padding-top.px: 16
+padding-right.px: 16
+padding-bottom.px: 16
+border-color: $inherited.colors.cta-primary.border
+border-top-right-radius.px: 20
+border-bottom-right-radius.px: 20
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 24
+
+-- ftd.text: 
+color: $inherited.colors.text
+role: $inherited.types.copy-small
+
+$quote-1-mobile.body
+
+-- ftd.row:
+align-self: end
+spacing.fixed.px: 8
+
+-- ftd.text: ~
+color: $inherited.colors.text
+role: $inherited.types.copy-small
+
+-- ftd.text: $quote-1-mobile.title
+align-self: end
+color: $inherited.colors.text
+role: $inherited.types.fine-print
+white-space: nowrap
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: quote-1-mobile
+
+
+
+
+
+
+
+
+
+
+-- component marengo-hug:
+optional caption title:
+body body:
+
+-- ftd.column:
+width: fill-container
+margin-top.px: 24
+margin-bottom.px: 24
+
+-- ftd.desktop:
+
+-- quote-2-desktop: $marengo-hug.title
+body: $marengo-hug.body
+
+-- end: ftd.desktop
+
+-- ftd.mobile:
+
+-- quote-2-mobile: $marengo-hug.title
+body: $marengo-hug.body
+
+-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: marengo-hug
+
+
+
+
+
+
+
+
+
+
+-- component quote-2-desktop:
+body body:
+optional caption title:
+
+-- ftd.column:
+width: fill-container
+margin-top.px: 20
+margin-bottom.px: 24
+max-width.fixed.px: 2056
+
+-- ftd.row:
+width: fill-container
+border-left-width.px: 4
+border-right-width.px: 4
+padding-left.px: 40
+padding-top.px: 24
+padding-bottom.px: 24
+padding-right.px: 24
+border-color: $inherited.colors.cta-secondary.border
+border-radius.px: 20
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 24
+
+-- ftd.text: 
+color: $inherited.colors.text
+role: $inherited.types.copy-regular
+style: italic
+text-align: end
+
+$quote-2-desktop.body
+
+-- ftd.row:
+align-self: end
+spacing.fixed.px: 8
+
+-- ftd.text: ~
+align-self: center
+color: $inherited.colors.text
+role: $inherited.types.copy-small
+
+-- ftd.text: $quote-2-desktop.title
+align-self: center
+color: $inherited.colors.text
+role: $inherited.types.fine-print
+white-space: nowrap
+style: italic
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: quote-2-desktop
+
+
+
+
+
+
+
+
+
+
+-- component quote-2-mobile:
+optional caption title:
+body body:
+
+-- ftd.column:
+width: fill-container
+max-width.fixed.px: 2056
+border-top-right-radius.px: 20
+border-bottom-left-radius.px: 20
+
+-- ftd.row:
+width: fill-container
+border-left-width.px: 4
+border-right-width.px: 4
+padding-left.px: 24
+padding-top.px: 16
+padding-bottom.px: 16
+padding-right.px: 16
+border-color: $inherited.colors.cta-secondary.border
+border-radius.px: 20
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 24
+
+-- ftd.text:
+color: $inherited.colors.text
+role: $inherited.types.copy-small
+style: italic
+text-align: end
+
+$quote-2-mobile.body
+
+-- ftd.row:
+align-self: end
+spacing.fixed.px: 8
+
+-- ftd.text: ~
+color: $inherited.colors.text
+role: $inherited.types.copy-small
+
+-- ftd.text: $quote-2-mobile.title
+align-self: end
+color: $inherited.colors.text
+role: $inherited.types.fine-print
+white-space: nowrap
+style: italic
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: quote-2-mobile
+
+
+
+
+
+
+
+
+
+
+-- component scorpion:
+optional caption title:
+optional string label:
+body body:
+
+-- ftd.column:
+width: fill-container
+margin-top.px: 24
+margin-bottom.px: 24
+
+-- quotes:
+body: $scorpion.body
+
+-- ftd.column:
+margin-left.px: 45
+spacing.fixed.px: 8
+anchor: parent
+bottom.px: -34
+left.px: 20
+left.px if { ftd.device == "mobile" }: 45
+
+-- ftd.text: $scorpion.title
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+
+-- ftd.text:
+text: $scorpion.label
+color: $inherited.colors.text
+role: $inherited.types.copy-small
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: scorpion
+
+
+
+
+
+
+
+
+
+
+-- component quotes:
+body body:
+
+-- ftd.row:
+width: fill-container
+
+-- ftd.desktop:
+
+-- quotes-desktop:
+body: $quotes.body
+
+-- end: ftd.desktop
+
+-- ftd.mobile:
+
+-- quotes-mobile:
+body: $quotes.body
+
+-- end: ftd.mobile
+
+-- end: ftd.row
+
+-- end: quotes
+
+
+
+
+
+
+
+
+
+
+-- component quotes-desktop:
+body body:
+
+-- ftd.row:
+padding-horizontal.px: 20
+padding-vertical.px: 20
+border-width.px: 3
+border-color: $inherited.colors.border
+border-radius.px: 20
+max-width.fixed.px: 620
+margin-top.px: 24
+margin-bottom.px: 24
+margin-right.px: 24
+
+-- ftd.row:
+anchor: parent
+width.fixed.px: 50
+height.fixed.px: 3
+left.px: 50
+bottom.px: -3
+z-index: 200
+background.solid: $inherited.colors.background.base
+
+-- end: ftd.row
+
+-- ftd.row:
+anchor: parent
+width.fixed.px: 60
+height.fixed.px: 60
+border-right-width.px: 3
+border-radius.px: 50
+border-top-right-radius.px: 6
+border-bottom-right-radius.px: 6
+border-bottom-left-radius.px: -30
+border-top-left-radius.px: -30
+border-color: $inherited.colors.border
+left.px: -8
+bottom.px: -60
+z-index: 200
+
+-- end: ftd.row
+
+-- ftd.text:
+color: $inherited.colors.text
+role: $inherited.types.heading-large
+
+$quotes-desktop.body
+
+-- end: ftd.row
+
+-- end: quotes-desktop
+
+
+
+
+
+
+
+
+
+
+-- component quotes-mobile:
+body body:
+
+-- ftd.row:
+padding-horizontal.px: 20
+padding-vertical.px: 20
+border-width.px: 3
+border-color: $inherited.colors.border
+border-radius.px: 20
+width: fill-container
+margin-top.px: 24
+margin-bottom.px: 24
+margin-right.px: 24
+margin-left.px: 24
+
+-- ftd.row:
+anchor: parent
+width.fixed.px: 40
+border-width.px: 4
+border-color: $inherited.colors.background.base
+left.px: 50
+bottom.px: -4
+z-index: 200
+
+-- end: ftd.row
+
+-- ftd.row:
+anchor: parent
+width.fixed.px: 60
+height.fixed.px: 60
+border-right-width.px: 3
+border-top-right-radius.px: 6
+border-bottom-right-radius.px: 6
+border-bottom-left-radius.px: -30
+border-top-left-radius.px: -30
+border-radius.px: 50
+border-color: $inherited.colors.border
+left.px: -8
+bottom.px: -60
+z-index: 200
+
+-- end: ftd.row
+
+-- ftd.text:
+color: $inherited.colors.text
+role: $inherited.types.heading-medium
+
+$quotes-mobile.body
+
+-- end: ftd.row
+
+-- end: quotes-mobile
+
+
+
+
+
+
+
+
+
+
+-- component chalice:
+optional caption title:
+body body:
+
+-- ftd.column:
+padding-horizontal.px: 24
+width: fill-container
+padding-vertical.px: 32
+align-self: center
+max-width.fixed.px: 600
+margin-top.px: 24
+margin-bottom.px: 24
+
+-- ftd.row:
+width.fixed.px: 84
+height.fixed.px: 84
+width.fixed.px if { ftd.device == "mobile" }: 44
+height.fixed.px if { ftd.device == "mobile" }: 44
+anchor: parent
+top.px: 10
+top.px if { ftd.device == "mobile" }: 34
+left.px: -50
+left.px if { ftd.device == "mobile" }: 34
+z-index: 0
+
+-- ftd.image:
+src: $assets.files.static.quotes.svg
+width: fill-container
+height: fill-container
+
+-- end: ftd.row
+
+-- ftd.column:
+z-index: 1
+padding-left.px: 16
+
+-- ftd.text: $chalice.title
+color: $inherited.colors.text
+role: $inherited.types.copy-small
+align-self: center
+margin-bottom.px: 8
+
+-- ftd.text:
+width: fill-container
+text: $chalice.body
+color: $inherited.colors.text-strong
+role: $inherited.types.copy-large
+z-index: 200
+text-align: center
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: chalice
+
+
+
+
+
+
+
+
+
+
+-- component onyx:
+optional caption title:
+body body:
+optional ftd.image-src quote-logo: $assets.files.static.left-quote-circle.svg
+
+-- ftd.row:
+background.solid: $inherited.colors.background.step-1
+padding-vertical.px: 16
+border-left-width.px: 5
+padding-right.px: 16
+border-color: $inherited.colors.text
+spacing.fixed.px: 16
+margin-top.px: 16
+margin-bottom.px: 16
+width: fill-container
+color: $inherited.colors.text
+
+-- ftd.image:
+src: $onyx.quote-logo
+width: auto
+height.fixed.px: 32
+padding-left.px: 16
+
+-- ftd.column:
+width: fill-container
+align-self: center
+spacing.fixed.px: 12
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+
+$onyx.body
+
+-- ftd.row:
+
+-- ftd.text: ~
+role: $inherited.types.copy-small
+margin-right.px: 8
+
+-- ftd.text: $onyx.title
+role: $inherited.types.copy-small
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: onyx
+
+
+
+
+
+
+
+
+
+
+-- component silver:
+optional caption title:
+body body:
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.desktop:
+
+-- quote-6-desktop: $silver.title
+body: $silver.body
+
+-- end: ftd.desktop
+
+-- ftd.mobile:
+
+-- quote-6-mobile: $silver.title
+body: $silver.body
+
+-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: silver
+
+
+
+
+
+
+
+
+
+
+-- component quote-6-desktop:
+optional caption title:
+body body:
+ftd.image-src logo: $assets.files.static.quote.svg
+
+-- ftd.column:
+padding-vertical.px: 32
+padding-horizontal.px: 32
+width: fill-container
+max-width.fixed.px: 800
+align-self: center
+margin-top.px: 24
+margin-bottom.px: 24
+
+-- ftd.column:
+border-top-width.px: 2
+border-color: $inherited.colors.text
+anchor: parent
+top.px: 38
+left.px: 148
+width.fixed.percent: 60
+align-self: center
+
+-- end: ftd.column
+
+-- ftd.column:
+border-bottom-width.px: 2
+border-color: $inherited.colors.text
+anchor: parent
+right.px: 146
+bottom.px: 38
+width.fixed.percent: 60
+
+-- end: ftd.column
+
+-- ftd.column:
+align-self: center
+width.fixed.percent: 60
+padding-vertical.px: 32
+max-height.fixed.px: 400
+
+-- ftd.text: 
+role: $inherited.types.copy-large
+color: $inherited.colors.text
+
+$quote-6-desktop.body
+
+-- ftd.row:
+align-self: center
+spacing.fixed.px: 8
+
+-- ftd.text: ~
+role: $inherited.types.copy-regular
+
+-- ftd.text: $quote-6-desktop.title
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- end: ftd.row
+
+-- ftd.image:
+anchor: parent
+src: $quote-6-desktop.logo
+right.px: 10
+bottom.px: -32
+height.fixed.px: 62
+width.fixed.px: 62
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: quote-6-desktop
+
+
+
+
+
+
+
+
+
+
+-- component quote-6-mobile:
+optional caption title:
+body body:
+ftd.image-src logo: $assets.files.static.quote.svg
+
+-- ftd.column:
+padding-vertical.px: 16
+padding-horizontal.px: 16
+;; gradient-direction: top.px to bottom.px - TODO FTD 0.3
+;; gradient-colors: grey, black - TODO FTD 0.3
+width: fill-container
+max-width.fixed.px: 800
+align-self: center
+margin-top.px: 20
+margin-bottom.px: 24
+
+-- ftd.column:
+border-top-width.px: 1
+border-color: $inherited.colors.text
+anchor: parent
+top.px: 18
+left.px: 44
+width.fixed.percent: 80
+align-self: center
+
+-- end: ftd.column
+
+-- ftd.column:
+border-bottom-width.px: 1
+border-color: $inherited.colors.text
+anchor: parent
+right.px: 44
+bottom.px: 18
+width.fixed.percent: 80
+
+-- end: ftd.column
+
+-- ftd.column:
+align-self: center
+width.fixed.percent: 80
+padding-vertical.px: 16
+
+-- ftd.text:
+role: $inherited.types.heading-small
+color: $inherited.colors.text
+
+$quote-6-mobile.body
+
+-- ftd.text: $quote-6-mobile.title
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+padding-top.px: 20
+
+-- ftd.image:
+anchor: parent
+src: $quote-6-mobile.logo
+right.px: 10
+bottom.px: -12
+height.fixed.px: 32
+width.fixed.px: 32
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: quote-6-mobile
+
+
+
+
+
+
+
+
+
+
+-- component storm-cloud:
+optional caption title:
+body body:
+
+-- ftd.column:
+border-width.px: 12
+border-color: $inherited.colors.border
+padding-vertical.px: 16
+padding-horizontal.px: 16
+width: fill-container
+max-width.fixed.px: 320
+margin-top.px: 24
+margin-bottom.px: 24
+align-self: center
+border-bottom-right-radius.px: 54
+color: $inherited.colors.text
+
+-- ftd.column:
+z-index: 300
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+margin-top.px: 16
+margin-bottom.px: 16
+text-align: center
+align-self: center
+
+$storm-cloud.body
+
+-- ftd.row:
+padding-left.px: 12
+align-self: end
+
+-- ftd.text: ~
+role: $inherited.types.copy-small
+margin-right.px: 8
+
+-- ftd.text: $storm-cloud.title
+role: $inherited.types.copy-small
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: storm-cloud
+
+
+
+
+
+
+
+
+
+
+-- component vampire:
+optional caption title:
+ftd.image-src left-logo: $assets.files.static.left-quote.svg
+ftd.image-src right-logo: $assets.files.static.right-quote-sign.svg
+body body:
+
+-- ftd.row:
+width: auto
+width if { ftd.device == "mobile" }: fill-container
+min-width.fixed.percent: 50
+margin-top.px: 24
+margin-bottom.px: 24
+align-self: center
+color: $inherited.colors.text
+
+-- ftd.image:
+src: $vampire.left-logo
+height.fixed.px: 120
+width.fixed.px: 24
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.row:
+width: fill-container
+min-height.fixed.px: 84
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+padding-horizontal.px: 32
+margin-top.px: 16
+margin-bottom.px: 16
+width: fill-container
+text-align: center
+
+$vampire.body
+
+-- end: ftd.row
+
+-- ftd.text: $vampire.title
+align-self: end
+role: $inherited.types.copy-small
+padding-horizontal.px: 16
+
+-- end: ftd.column
+
+-- ftd.image:
+src: $vampire.right-logo
+height.fixed.px: 120
+width.fixed.px: 24
+
+-- end: ftd.row
+
+-- end: vampire
+
+
+
+
+
+
+
+
+
+
+-- component rustic:
+optional caption title:
+body body: 
+ftd.image-src left-logo: $assets.files.static.left-quote.svg
+ftd.image-src right-logo: $assets.files.static.right-quote-sign-flip.svg
+
+-- ftd.column:
+margin-top.px: 24
+margin-bottom.px: 24
+align-self: center
+width: fill-container
+
+-- ftd.image:
+src: $rustic.left-logo
+height.fixed.px: 69
+width.fixed.px: 69
+anchor: parent
+top.px: -12
+left.px if { ftd.device == "mobile" }: 0
+left.px: 0
+z-index: 0
+
+-- ftd.column:
+align-self: center
+padding-vertical.px: 8
+padding-horizontal.px: 8
+max-width.fixed.percent if { ftd.device == "desktop" }: 90
+z-index: 1
+
+-- ftd.text:
+color: $inherited.colors.text
+role: $inherited.types.heading-small
+padding-horizontal.px: 32
+margin-top.px: 16
+margin-bottom.px: 16
+text-align: center
+margin-left.px if { ftd.device == "mobile" }: 32
+margin-right.px if { ftd.device == "mobile" }: 32
+
+$rustic.body
+
+-- ftd.text: $rustic.title
+align-self: center
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+padding-horizontal.px: 32
+
+-- end: ftd.column
+
+-- ftd.image:
+src: $rustic.right-logo
+height.fixed.px: 69
+width.fixed.px: 69
+anchor: parent
+right.px: 0
+bottom.px: 0
+
+-- end: ftd.column
+
+-- end: rustic
+
+
+
+
+
+
+
+
+
+
+-- component echo:
+optional caption title:
+ftd.image-src logo: $assets.files.static.right-quote-sign.svg
+body body:
+
+-- ftd.column:
+width: fill-container
+margin-top.px: 24
+margin-bottom.px: 24
+max-width.fixed.px: 960
+
+-- ftd.row:
+width: fill-container
+border-left-width.px: 8
+padding-left.px: 52
+border-color: $inherited.colors.border
+
+-- ftd.column:
+padding-vertical.px: 12
+
+-- ftd.desktop:
+
+-- ftd.text:
+color: $inherited.colors.text
+role: $inherited.types.copy-regular
+
+$echo.body
+
+-- end: ftd.desktop
+
+
+-- ftd.mobile:
+
+-- ftd.text:
+color: $inherited.colors.text
+role: $inherited.types.copy-regular
+text-align: justify
+text: $echo.body
+
+-- end: ftd.mobile
+
+-- ftd.text: $echo.title
+color: $inherited.colors.text
+role: $inherited.types.copy-small
+margin-top.px: 12
+
+-- end: ftd.column
+
+-- ftd.row:
+anchor: parent
+padding-vertical.px: 16
+top.px: 36
+top.px if { ftd.device == "mobile" }: 64
+left.px: 8
+
+-- ftd.image:
+src: $echo.logo
+width.fixed.px: 32
+height: auto
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: echo
+
+
+
+
+
+
+
+
+
+
+-- component window:
+optional caption title:
+body body:
+
+-- ftd.column:
+border-width.px: 1
+border-color: $inherited.colors.border
+padding-vertical.px: 32
+padding-horizontal.px: 32
+width: auto
+width if { ftd.device == "mobile" }: fill-container
+min-width.fixed.percent: 60
+align-self: center
+margin-top.px: 24
+margin-bottom.px: 24
+
+-- ftd.text: $window.title
+if: { window.title != NULL }
+anchor: parent
+background.solid: $inherited.colors.background.base
+top.px: -16
+text-align: center
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+white-space: nowrap
+padding-horizontal.px: 24
+
+-- ftd.text:
+role: $inherited.types.copy-large
+color: $inherited.colors.text
+style: italic
+padding-top.px: 8
+margin-top.px: 24
+margin-bottom.px: 24
+align-self: center
+text-align: center
+
+$window.body
+
+-- ftd.row:
+width.fixed.px: 30
+height.fixed.px: 30
+anchor: parent
+border-top-width.px: 2
+border-top-right-radius.px: 100
+border-bottom-right-radius.px: 100
+border-top-left-radius.px: 100
+border-bottom-left-radius.px: 100
+border-color: $inherited.colors.text
+background.solid: $inherited.colors.background.base
+left.px: -16
+top.px: -11
+z-index: 200
+
+-- end: ftd.row
+
+-- ftd.row:
+width.fixed.px: 30
+height.fixed.px: 30
+anchor: parent
+border-left-width.px: 2
+border-top-right-radius.px: 100
+border-bottom-right-radius.px: 100
+border-top-left-radius.px: 100
+border-bottom-left-radius.px: 100
+border-color: $inherited.colors.text
+background.solid: $inherited.colors.background.base
+left.px: -16
+bottom.px: -11
+z-index: 200
+
+-- end: ftd.row
+
+-- ftd.row:
+width.fixed.px: 30
+height.fixed.px: 30
+anchor: parent
+border-right-width.px: 2
+border-top-right-radius.px: 100
+border-bottom-right-radius.px: 100
+border-top-left-radius.px: 100
+border-bottom-left-radius.px: 100
+border-color: $inherited.colors.text
+background.solid: $inherited.colors.background.base
+right.px: -16
+top.px: -11
+z-index: 200
+
+-- end: ftd.row
+
+-- ftd.row:
+width.fixed.px: 30
+height.fixed.px: 30
+anchor: parent
+border-bottom-width.px: 2
+border-top-right-radius.px: 100
+border-bottom-right-radius.px: 100
+border-top-left-radius.px: 100
+border-bottom-left-radius.px: 100
+border-color: $inherited.colors.text
+background.solid: $inherited.colors.background.base
+right.px: -16
+bottom.px: -11
+z-index: 200
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: window
+
+
+
+
+
+
+
+
+
+
+-- component matte:
+optional caption title:
+body body:
+
+-- ftd.column:
+width: auto
+width if { ftd.device == "mobile" }: fill-container
+align-self: center
+border-style: double
+border-bottom-width.px: 3
+border-top-width.px: 3
+border-color: $inherited.colors.text
+margin-top.px: 24
+margin-bottom.px: 24
+border-bottom-right-radius.px: 20
+border-top-left-radius.px: 20
+padding.px: 16
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+$matte.body
+
+-- ftd.row:
+align-self: end
+padding-top.px: 16
+
+-- ftd.text: ~
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+margin-right.px: 4
+
+-- ftd.text: $matte.title
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: matte
+
+
+
+
+
+
+
+
+
+
+-- component antique:
+ftd.background-image avatar: $assets.files.static.antique.jpg
+optional caption title:
+body body:
+
+-- ftd.row:
+width: auto
+width if { ftd.device == "mobile" }: fill-container
+min-width.fixed.percent: 50
+margin-top.px: 24
+margin-bottom.px: 24
+align-self: center
+
+-- ftd.column:
+anchor: parent
+background.solid: $image-color
+top.px: 0
+left.px: 0
+width.fixed.px: 100
+height: fill-container
+z-index: -1
+
+-- end: ftd.column
+
+-- ftd.column:
+background.image: $antique.avatar
+width.fixed.px: 90
+height: fill-container
+anchor: parent
+top.px: 0
+left.px: 0
+border-top-left-radius.px: 4
+border-bottom-left-radius.px: 4
+z-index: 0
+
+-- end: ftd.column
+
+-- ftd.column:
+margin-left.px: 90
+padding-top.px: 16
+padding-horizontal.px: 16
+background.solid: $inherited.colors.background.step-2
+spacing.fixed.px: 8
+max-width.fixed.percent if { ftd.device != "mobile" }: 30
+width if { ftd.device == "mobile" }: fill-container
+border-top-right-radius.px: 4
+border-bottom-right-radius.px: 4
+
+-- ftd.text:
+role: $inherited.types.heading-small
+color: $inherited.colors.text
+
+$antique.body
+
+-- ftd.row:
+spacing.fixed.px: 8
+margin-top.px: 42
+padding-bottom.px: 16
+
+-- ftd.text: ~
+role: $inherited.types.copy-large
+color: $inherited.colors.text
+
+-- ftd.text: $antique.title
+role: $inherited.types.copy-large
+color: $inherited.colors.text
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: antique
+
+
+
+
+
+
+
+
+
+
+-- component bubble:
+ftd.image-src avatar: $assets.files.static.socrates.png
+optional caption title:
+body body:
+
+-- ftd.row:
+width: fill-container
+
+-- ftd.desktop:
+
+-- quote-14-desktop: $bubble.title
+body: $bubble.body
+
+-- end: ftd.desktop
+
+-- ftd.mobile:
+
+-- quote-14-mobile: $bubble.title
+body: $bubble.body
+
+-- end: ftd.mobile
+
+-- end: ftd.row
+
+-- end: bubble
+
+
+
+
+
+
+
+
+
+
+-- component quote-14-desktop:
+ftd.background-image avatar: $assets.files.static.quotes-bg.jpeg
+optional caption title:
+body body:
+
+-- ftd.row:
+width: auto
+width if { ftd.device == "mobile" }: fill-container
+min-width.fixed.percent: 50
+margin-top.px: 24
+margin-bottom.px: 24
+background.image: $quote-14-desktop.avatar
+padding-vertical.px: 40
+padding-horizontal.px: 40
+align-self: center
+border-top-left-radius.px: 20
+border-bottom-right-radius.px: 20
+
+-- ftd.column:
+spacing.fixed.px: 8
+background.solid: $inherited.colors.background.step-2
+align-self: center
+padding-vertical.px: 40
+padding-horizontal.px: 40
+border-top-right-radius.px: 20
+border-bottom-left-radius.px: 20
+
+-- ftd.text:
+role: $inherited.types.heading-small
+color: $inherited.colors.text
+text-align: justify
+
+$quote-14-desktop.body
+
+-- ftd.row:
+spacing.fixed.px: 8
+margin-top.px: 24
+
+-- ftd.text: ~
+role: $inherited.types.copy-large
+color: $inherited.colors.text
+
+-- ftd.text: $quote-14-desktop.title
+role: $inherited.types.copy-large
+color: $inherited.colors.text
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: quote-14-desktop
+
+
+
+
+
+
+
+
+
+
+-- component quote-14-mobile:
+ftd.background-image avatar: $assets.files.static.quotes-bg.jpeg
+optional caption title:
+body body:
+
+-- ftd.row:
+width: auto
+width if { ftd.device == "mobile" }: fill-container
+min-width.fixed.percent: 50
+margin-top.px: 12
+margin-bottom.px: 12
+background.image: $quote-14-mobile.avatar
+padding-vertical.px: 12
+padding-horizontal.px: 12
+align-self: center
+
+-- ftd.column:
+spacing.fixed.px: 8
+background.solid: $inherited.colors.background.base
+align-self: center
+padding-vertical.px: 12
+padding-horizontal.px: 12
+
+-- ftd.text:
+role: $inherited.types.copy-large
+color: $inherited.colors.text
+text-align: justify
+
+$quote-14-mobile.body
+
+-- ftd.row:
+spacing.fixed.px: 8
+margin-top.px: 24
+
+-- ftd.text: ~
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+
+-- ftd.text: $quote-14-mobile.title
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: quote-14-mobile
+
+
+
+
+
+
+
+
+
+
+-- component electric:
+ftd.image-src avatar: $assets.files.static.socrates.png
+optional caption title:
+body body:
+
+-- ftd.row:
+width: auto
+width if { ftd.device == "mobile" }: fill-container
+min-width.fixed.percent: 50
+margin-top.px: 24
+margin-bottom.px: 24
+align-self: center
+
+-- ftd.column:
+anchor: parent
+background.solid: $image-color
+top.px: 0
+left.px: 0
+width.fixed.px: 90
+height: fill-container
+
+-- end: ftd.column
+
+-- ftd.column:
+width.fixed.px: 100
+height: fill-container
+anchor: parent
+top.px: 0
+left.px: 0
+
+-- ftd.image:
+src: $electric.avatar
+width: fill-container
+height: fill-container
+
+-- end: ftd.column
+
+-- ftd.column:
+margin-left.px: 90
+padding-top.px: 16
+padding-horizontal.px: 24
+background.solid: $inherited.colors.background.step-2
+border-radius.px: 4
+spacing.fixed.px: 8
+width: fill-container
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+$electric.body
+
+-- ftd.row:
+spacing.fixed.px: 8
+margin-top.px: 12
+padding-bottom.px: 16
+
+-- ftd.text: ~
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- ftd.text: $electric.title
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: electric
+
+
+
+
+
+
+
+
+
+
+-- component chrome:
+optional caption title:
+body body:
+ftd.image-src quote-icon: $assets.files.static.quotes.svg
+
+-- ftd.column:
+background.solid: $inherited.colors.background.step-2
+border-radius.px: 16
+border-width.px: 1
+padding-vertical.px: 16
+padding-horizontal.px: 16
+width: auto
+width if { ftd.device == "mobile" }: fill-container
+align-self: center
+margin-top.px: 24
+margin-bottom.px: 24
+
+-- ftd.image:
+src: $chrome.quote-icon
+width.fixed.px: 32
+height: auto
+anchor: parent
+z-index: 0
+
+-- ftd.text: 
+padding-bottom.px: 16
+color: $inherited.colors.text
+role: $inherited.types.copy-regular
+border-bottom-width.px: 1
+border-color: $inherited.colors.text
+z-index: 1
+padding-left.px: 42
+
+$chrome.body
+
+-- ftd.text: $chrome.title
+margin-top.px: 16
+color: $inherited.colors.text
+role: $inherited.types.copy-small
+
+-- end: ftd.column
+
+-- end: chrome
+
+
+
+
+
+
+
+
+
+
+
+-- component dorian:
+optional caption title:
+body body:
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.desktop:
+
+-- dorian-desktop: $dorian.title
+body: $dorian.body
+
+-- end: ftd.desktop
+
+-- ftd.mobile:
+
+-- dorian-mobile: $dorian.title
+body: $dorian.body
+
+-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: dorian
+
+
+
+
+
+
+
+
+
+
+-- component dorian-desktop:
+optional caption title:
+body body:
+
+-- ftd.column:
+width: auto
+align-self: center
+margin-top.px: 24
+margin-bottom.px: 24
+
+-- ftd.row:
+width.fixed.px: 0
+height.fixed.px: 0
+border-top-width.px: 30
+border-left-width.px: 30
+border-right-width.px: 30
+border-top-color: $inherited.colors.background.step-2
+border-bottom-color: $inherited.colors.background.step-1
+border-left-color: $inherited.colors.background.step-1
+border-right-color: $inherited.colors.background.step-1
+anchor: parent
+left.px: 58
+bottom.px: 43
+z-index: 0
+
+-- end: ftd.row
+
+-- ftd.text: 
+padding-bottom.px: 16
+color: $inherited.colors.text
+role: $inherited.types.copy-regular
+background.solid: $inherited.colors.background.step-2
+padding-vertical.px: 16
+padding-horizontal.px: 16
+border-top-right-radius.px: 8
+border-top-left-radius.px: 8
+z-index: 10
+
+$dorian-desktop.body
+
+-- ftd.text: $dorian-desktop.title
+color: $inherited.colors.text
+role: $inherited.types.copy-small
+background.solid: $inherited.colors.background.step-1
+padding-vertical.px: 16
+padding-horizontal.px: 16
+width: fill-container
+border-bottom-right-radius.px: 8
+border-bottom-left-radius.px: 8
+
+-- end: ftd.column
+
+-- end: dorian-desktop
+
+
+
+
+
+
+
+
+
+
+-- component dorian-mobile:
+optional caption title:
+body body:
+
+-- ftd.column:
+width: fill-container
+align-self: center
+margin-top.px: 24
+margin-bottom.px: 24
+
+-- ftd.row:
+width.fixed.px: 0
+height.fixed.px: 0
+border-top-width.px: 30
+border-left-width.px: 30
+border-right-width.px: 30
+border-top-color: $inherited.colors.background.step-2
+border-bottom-color: $inherited.colors.background.step-2
+border-left-color: $inherited.colors.background.step-1
+border-right-color: $inherited.colors.background.step-1
+anchor: parent
+left.px: 15
+bottom.px: 45
+z-index: 0
+
+-- end: ftd.row
+
+-- ftd.text: 
+padding-bottom.px: 24
+color: $inherited.colors.text
+role: $inherited.types.heading-small
+background.solid: $inherited.colors.background.step-2
+padding-vertical.px: 24
+padding-horizontal.px: 24
+border-top-right-radius.px: 8
+border-top-left-radius.px: 8
+z-index: 10
+
+$dorian-mobile.body
+
+-- ftd.text: $dorian-mobile.title
+color: $inherited.colors.text
+role: $inherited.types.fine-print
+background.solid: $inherited.colors.background.step-1
+padding-vertical.px: 24
+padding-horizontal.px: 24
+width: fill-container
+border-bottom-right-radius.px: 8
+border-bottom-left-radius.px: 8
+
+-- end: ftd.column
+
+-- end: dorian-mobile
+
+
+
+
+
+
+
+
+
+
+-- component background-image:
+optional caption title:
+body body:
+ftd.image-src quote-background:
+string text-color:
+
+-- ftd.column:
+width: fill-container
+background.image: $background-image.quote-background
+color: $background-image.text-color
+
+
+-- ftd.desktop:
+
+-- quote-7-desktop: $background-image.title
+body: $background-image.body
+
+-- end: ftd.desktop
+
+-- ftd.mobile:
+
+-- quote-7-mobile: $background-image.title
+body: $background-image.body
+
+-- end: ftd.mobile
+
+-- end: ftd.column
+
+-- end: background-image
+
+
+
+
+
+
+
+
+
+-- component quote-7-desktop:
+optional caption title:
+body body:
+ftd.image-src logo: $assets.files.static.quote.svg
+
+-- ftd.column:
+padding.px: 32
+width: fill-container
+max-width.fixed.px: 800
+align-self: center
+margin-vertical.px: 24
+
+-- ftd.column:
+border-top-width.px: 2
+border-color: $inherited.colors.text
+anchor: parent
+top.px: 38
+left.px: 148
+width.fixed.percent: 60
+align-self: center
+
+-- end: ftd.column
+
+-- ftd.column:
+border-bottom-width.px: 2
+border-color: $inherited.colors.text
+anchor: parent
+right.px: 146
+bottom.px: 38
+width.fixed.percent: 60
+
+-- end: ftd.column
+
+-- ftd.column:
+align-self: center
+width.fixed.percent: 60
+padding-vertical.px: 32
+max-height.fixed.px: 400
+
+-- ftd.text: 
+role: $inherited.types.copy-large
+
+
+$quote-7-desktop.body
+
+-- ftd.row:
+align-self: center
+spacing.fixed.px: 8
+
+-- ftd.text: ~
+
+-- ftd.text: $quote-7-desktop.title
+
+-- end: ftd.row
+
+-- ftd.image:
+anchor: parent
+src: $quote-7-desktop.logo
+right.px: 10
+bottom.px: -32
+height.fixed.px: 62
+width.fixed.px: 62
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: quote-7-desktop
+
+
+
+
+
+
+
+
+
+
+-- component quote-7-mobile:
+optional caption title:
+body body:
+ftd.image-src logo: $assets.files.static.quote.svg
+
+-- ftd.column:
+padding.px: 16
+;; gradient-direction: top.px to bottom.px - TODO FTD 0.3
+;; gradient-colors: grey, black - TODO FTD 0.3
+width: fill-container
+max-width.fixed.px: 800
+align-self: center
+margin-top.px: 20
+margin-bottom.px: 24
+
+-- ftd.column:
+border-top-width.px: 1
+border-color: $inherited.colors.text
+anchor: parent
+top.px: 18
+left.px: 44
+width.fixed.percent: 80
+align-self: center
+
+-- end: ftd.column
+
+-- ftd.column:
+border-bottom-width.px: 1
+border-color: $inherited.colors.text
+anchor: parent
+right.px: 44
+bottom.px: 18
+width.fixed.percent: 80
+
+-- end: ftd.column
+
+-- ftd.column:
+align-self: center
+width.fixed.percent: 80
+padding-vertical.px: 16
+
+-- ftd.text:
+role: $inherited.types.heading-small
+
+
+$quote-7-mobile.body
+
+-- ftd.text: $quote-7-mobile.title
+role: $inherited.types.copy-regular
+padding-top.px: 20
+
+-- ftd.image:
+anchor: parent
+src: $quote-7-mobile.logo
+right.px: 10
+bottom.px: -12
+height.fixed.px: 32
+width.fixed.px: 32
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: quote-7-mobile
+
+
+
+
+
+
+
+
+
+-- ftd.color image-color:
+light: rgba(192,192,192,0.3)
+dark: rgba(192,192,192,0.3)

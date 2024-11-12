@@ -1,0 +1,257 @@
+-- ds.page: Doc-Site Components
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+
+Components are like Lego blocks for building websites. They are pre-designed 
+building blocks that serve specific purposes or display specific content, 
+allowing you to easily create a complete webpage by combining and customizing 
+them.
+
+
+-- ds.h1: Index
+
+We have listed all doc-site components below, click on a component name to
+learn more about it.
+
+-- ds.letter-stack:
+height.fixed.px if { ftd.device != "mobile" }: 1000
+height: fill-container
+contents-a: $letter-contents-a
+contents-c: $letter-contents-c
+contents-f: $letter-contents-f
+contents-h: $letter-contents-h
+contents-i: $letter-contents-i
+contents-l: $letter-contents-l
+contents-m: $letter-contents-m
+contents-n: $letter-contents-n
+contents-o: $letter-contents-o
+contents-p: $letter-contents-p
+contents-r: $letter-contents-r
+contents-t: $letter-contents-t
+contents-w: $letter-contents-w
+contents-y: $letter-contents-y
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+;; APPENDIX ------------------------------------------------------------
+
+-- ds.letter-data list letter-contents-a:
+
+-- ds.letter-data: author-bio
+link: components/author-bio/
+
+-- end: letter-contents-a
+
+-- ds.letter-data list letter-contents-c:
+
+-- ds.letter-data: code
+link: components/code/
+
+-- ds.letter-data: compact-text
+link: components/compact-text/
+
+-- end: letter-contents-c
+
+-- ds.letter-data list letter-contents-f:
+
+-- ds.letter-data: featured-post
+link: components/featured-post/
+
+-- end: letter-contents-f
+
+-- ds.letter-data list letter-contents-h:
+
+-- ds.letter-data: h0, h1, h2, h3
+link: components/headers/
+
+-- end: letter-contents-h
+
+-- ds.letter-data list letter-contents-i:
+
+-- ds.letter-data: iframe
+link: components/iframe/
+
+-- ds.letter-data: image
+link: components/image/
+
+-- ds.letter-data: image-first
+link: components/image-first/
+
+-- ds.letter-data: image-in-between
+link: components/image-in-between/
+
+-- end: letter-contents-i
+
+-- ds.letter-data list letter-contents-l:
+
+-- ds.letter-data: link & link-group
+link: components/link/
+
+-- end: letter-contents-l
+
+-- ds.letter-data list letter-contents-m:
+
+-- ds.letter-data: markdown
+link: components/markdown/
+
+-- end: letter-contents-m
+
+-- ds.letter-data list letter-contents-n:
+
+-- ds.letter-data: not-found-1
+link: components/404-1/
+-- ds.letter-data: not-found-2
+link: components/404-2/
+
+-- end: letter-contents-n
+
+-- ds.letter-data list letter-contents-o:
+
+-- ds.letter-data: output
+link: components/output/
+
+-- end: letter-contents-o
+
+-- ds.letter-data list letter-contents-p:
+
+-- ds.letter-data: page
+link: components/page/
+
+-- ds.letter-data: post
+link: components/post/
+
+-- ds.letter-data: post-card
+link: components/post-card/
+
+-- ds.letter-data: posts
+link: components/posts/
+
+-- end: letter-contents-p
+
+-- ds.letter-data list letter-contents-r:
+
+-- ds.letter-data: rendered
+link: components/rendered/
+
+-- end: letter-contents-r
+
+-- ds.letter-data list letter-contents-t:
+
+-- ds.letter-data: tip
+link: components/tip/
+
+-- end: letter-contents-t
+
+-- ds.letter-data list letter-contents-w:
+
+-- ds.letter-data: without-image
+link: components/without-image/
+
+-- end: letter-contents-w
+
+-- ds.letter-data list letter-contents-y:
+
+-- ds.letter-data: youtube
+link: components/youtube/
+
+-- end: letter-contents-y
+
+
+
+
+
+
+
+
+
+
+-- component sidebar-index:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 16
+
+-- ds.h3: Index
+
+-- ds.link: 🏠 Doc-Site Components
+cta: components/
+
+-- ds.link: ☞ author-bio
+cta: components/author-bio/
+
+-- ds.link: ☞ code
+cta: components/code/
+
+-- ds.link: ☞ compact-text
+cta: components/compact-text/
+
+-- ds.link: ☞ featured-post
+cta: components/featured-post/
+
+-- ds.link: ☞ h0, h1, h2, h3
+cta: components/headers/
+
+-- ds.link: ☞ iframe
+cta: components/iframe/
+
+-- ds.link: ☞ image
+cta: components/image/
+
+-- ds.link: ☞ image-first
+cta: components/image-first/
+
+-- ds.link: ☞ image-in-between
+cta: components/image-in-between/
+
+-- ds.link: ☞ link & link-group
+cta: components/link/
+
+-- ds.link: ☞ markdown
+cta: components/markdown/
+
+-- ds.link: ☞ not-found-1
+cta: components/404-1/
+
+-- ds.link: ☞ not-found-2
+cta: components/404-2/
+
+-- ds.link: ☞ output
+cta: components/output/
+
+-- ds.link: ☞ page
+cta: components/page/
+
+-- ds.link: ☞ post
+cta: components/post/
+
+-- ds.link: ☞ post-card
+cta: components/post-card/
+
+-- ds.link: ☞ posts
+cta: components/posts/
+
+-- ds.link: ☞ rendered
+cta: components/rendered/
+
+-- ds.link: ☞ tip
+cta: components/tip/
+
+-- ds.link: ☞ without-image
+cta: components/without-image/
+
+-- ds.link: ☞ youtube
+cta: components/youtube/
+
+-- end: ftd.column
+
+-- end: sidebar-index

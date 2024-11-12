@@ -1,0 +1,27 @@
+-- import: fastn-community.github.io/doc-site/common
+
+-- common.author-meta john-doe: John Doe
+profile: UX Designer
+bio-url: blog-authors/john-doe/
+image: $assets.files.static.avatar.jpg
+company: Company name
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod 
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim 
+veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea 
+commodo consequat. Duis aute irure dolor in reprehenderit in voluptate 
+velit esse.
+
+
+
+
+
+-- ds.page: 
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+
+-- ds.author-bio: 
+author: $john-doe
+
+-- end: ds.page

@@ -1,0 +1,162 @@
+-- import: fastn
+
+-- ds.page: `import`
+
+In `fastn`, one module/component can access code from another component by
+importing it. To import a module, use the following syntax:
+
+
+-- ds.code: use of import
+lang: ftd
+
+\-- import: <module-name>
+
+-- ds.markdown:
+
+You can do following imports:
+
+- [Import `fastn`](import/#import-fastn)
+- [Import module from current package](import/#import-module-from-current-package)
+- [Import module from dependency package](import/#import-module-from-dependency-package)
+- [Import special modules](import/#import-special-modules)
+
+`fastn` also provides a way to define
+[import alias](import/#understanding-alias).
+
+
+-- ds.h1: Import `fastn`
+
+`fastn` provides a special module called `fastn`, which gives you access to
+useful package-related variables. You must have noticed that `FASTN.ftd` imports
+this module. To import the `fastn` module in your code, use the following
+syntax:
+
+-- ds.code: import `fastn`
+lang: ftd
+
+\-- import: fastn
+
+-- ds.markdown:
+
+The special variables provided by this module are:
+
+- document-name: Returns a string representing the current [document's
+name](glossary/#document-name).
+- package-name: Returns `string` representing the package name.
+- home-url: Returns `string` representing the package's website address.
+
+
+
+-- ds.h1: Import module from current package
+
+Suppose you have a module called `bar.ftd` in your `fastn` package, named
+`my-package`, and you want to import it in another module called `foo.ftd`. To
+import the `bar` module in your `foo` module, use the following syntax:
+
+
+-- ds.code: In `foo.ftd`
+lang: ftd
+
+\-- import: my-package/bar
+
+
+-- ds.h1: Import module from dependency package
+
+Suppose you want to import the `bar` module from a dependency package called
+`other-package` in `foo` module of your current package, `my-package`. To import
+the bar module in your foo module, use the following syntax:
+
+-- ds.code: In `foo.ftd`
+lang: ftd
+
+\-- import: other-package/bar
+
+
+
+
+-- ds.h1: Import special modules
+
+The`fastn` package has a special module, `assets` importing which you get access
+to its variables. These variables contains the reference to the files or fonts
+defined in the package.
+
+-- ds.code: Import assets
+lang: ftd
+
+\-- import: my-package/assets
+
+-- ds.markdown:
+
+The file referring variables are [foreign variables](foreign-variable), while,
+fonts are simple variable.
+
+For more information, please visit [assets](assets).
+
+
+
+-- ds.h1: Understanding Alias
+
+In `fastn`, an alias is an alternative name that can be used to refer to an
+imported module. Aliases can be helpful in making the code more concise and
+readable.
+
+-- ds.h2: Defining Alias
+
+To define an alias in `fastn`, we can use the **`as`** keyword when importing a
+module.
+For example, to create an alias `mn` for a module called `module-name`, we can
+write:
+
+-- ds.code:
+lang: ftd
+
+\-- import: module-name as mn
+
+-- ds.markdown:
+
+This allows us to refer to the imported module as `mn` instead of `module-name`.
+
+-- ds.h2: `fastn` defined alias
+
+`fastn` also defines aliases by itself, when we import a module *without*
+specifying an alias using the `as` keyword. In this case, the word after the
+last slash in the module path becomes the alias. For example:
+
+-- ds.code:
+lang: ftd
+
+\-- import: some/path/to/module
+
+-- ds.markdown:
+
+In this case, the alias would be `module`.
+
+-- ds.h2: Advantages of Aliases
+
+Aliases can be helpful in several ways:
+
+- **Abbreviation**: Aliases can be used to create shorter or more concise names
+for
+commonly used or long entities.
+
+- **Code readability**: Aliases can make code more readable and understandable
+by giving names to modules that more clearly convey their purpose or meaning.
+
+- **Refactoring**: When refactoring code, like changing the dependencies or
+imported modules. Aliases can be used to keep the original names in use while
+the code is being updated to use the new names, so the code continues to work
+while changes are being made.
+
+- **Reducing name collisions**: Aliases can help avoid naming collisions when
+importing multiple modules with similar or identical names.
+
+- **Compatibility**: Aliases can be used to maintain compatibility with legacy
+code or other systems that refer to entities by different names. This can make
+it easier to integrate with external packages or modules that use different
+naming conventions.
+
+Overall, aliases can help improve the clarity, readability, and maintainability
+of code, while also making it more efficient to write and easier to integrate
+with other systems.
+
+-- end: ds.page

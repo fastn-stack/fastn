@@ -1,0 +1,61 @@
+-- import: fastn.com/ftd-host/processor
+-- ds.page: `ftd.redirect`: Dynamic Redirect
+
+In any document you can use `ftd.redirect` to ignore the document and return a
+HTTP Redirect response.
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.redirect: /
+
+-- ds.h1: Redirect To A Dynamic URL
+
+You can fetch the URL to redirect using any variable as well, this can be used
+with [processors](/processor/-/backend/).
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\;; get query parameter next
+\-- string next:
+$processor$: pr.request-data
+
+\-- ftd.redirect: $next
+
+-- processor.static-vs-dynamic:
+
+-- ds.h1: Status Code
+
+By default `ftd.redirect` returns HTTP response with `308 Permanent Redirect`
+code. You can overwrite it by passing a `code` value:
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.redirect: /
+code: 301
+
+-- ds.markdown:
+
+This will send `301 Moved Permanently` response. Possible status codes are:
+
+-- ds.markdown:
+
+| Code | Name               | Temporary Or Permanent | Usage Notes |
+|------|--------------------|------------------------|-------------|
+| 301  | Moved Permanently  | Permanent              | Prefer 308  |
+| 302  | Found              | Temporary              | Prefer 307  |
+| 303  | See Other          | Temporary              | Prefer 307  |
+| 307  | Temporary Redirect | Temporary              |             |
+| 308  | Permanent Redirect | Permanent              |             |
+
+-- ds.markdown:
+
+We do not yet support `300 - Multiple Choices` or `305 - Use Proxy` because we
+have not found a use case for them.
+
+
+-- end: ds.page

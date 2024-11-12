@@ -1,0 +1,355 @@
+-- import: fastn.com/events as event
+-- import: fastn.com/assets
+-- import: fastn-community.github.io/bling/chat
+-- import: fastn.com/content-library as cl
+
+-- common.host webwiz: Webwiz with `fastn`
+
+-- common.venue venue:
+name: Online
+link: https://lu.ma/ftdwebmace
+
+
+-- ds.page:
+full-width: true
+sidebar: false
+
+
+-- event.event: `fastn` Gold Sponsor - HackOdisha 3.0
+banner-src: $assets.files.images.events.hack-odisha-banner.jpg
+start-day: Saturday
+end-day: Sunday
+start-month: Sep
+end-month: Sep
+start-date: 9th, 2023
+end-date: 10th, 2023
+share-link: https://hackodisha3.devfolio.co/
+host: $webwiz
+venue: $venue
+share-button-text: Register Now
+
+**HackOdisha 3.0**, a student-run hackathon that aims to bring creatives and
+developers together to solve some of the most pressing problems faced by
+communities all over the world. This 36-hour-long event will bring together
+technocrats from across countries. 🌐💻
+
+HackOdisha 3.0, powered by the innovative spirit of `fastn`, `poised to inspire
+and redefine the boundaries of technological innovation. Join us as we embark
+on this journey to solve real-world problems and shape the future of
+technology. 🚀🏆 #hackodisha3
+
+-- end: event.event
+
+-- ftd.column:
+padding-horizontal.px: 80
+spacing.fixed.px: 18
+
+
+	-- ds.h3: `fastn` is the Gold Sponsor
+	
+	/-- ftd.image:
+	src: $assets.files.images.events.fastn-as-sponsor.png
+	width.fixed.percent: 60
+	border-radius.px: 15
+	margin-bottom.px: 10
+	border-width.px: 1
+	
+	-- ds.markdown:
+	
+	[`fastn`](https://fastn.com) being the modern and innovative full-stack
+	framework has tied up with the `HackOdisha` team and opted for the
+	`Gold` category sponsorship.
+	
+	Here are the following perks:
+	
+	- Logo on Website + Devfolio (including external links)
+	- Special Discord channel on our server
+	- Workshop + Dedicated email for the Workshop
+	- fastn Track
+	- Post about the Product on Instagram
+	- Logo on Certificate
+	- Judgment for the fastn Track winners
+	- Logos on Certificates
+	- Sponsor mention in opening and closing Ceremonies
+	
+	
+	
+	
+	-- ds.h3: `fastn` track: [Bringing next billion humans Online](https://hackodisha3.devfolio.co/prizes?partner=fastn)
+	
+	Our mission is simple: Empower the next billion individuals with full website
+	ownership and customization rights. Whether you're a small-scale business
+	owner, budding entrepreneur, freelancer, artist, or government entity, `fastn`
+	is here to enhance your digital presence.
+	
+	We've curated the `Bringing the Next Billion Humans Online` track, dedicated to
+	expanding the digital footprint of an ever-growing online community.
+	
+	The following graph shows internet users in India are growing rapidly:
+	
+	-- ftd.image:
+	src: $assets.files.images.events.number-of-internet-users-in-India.png
+	width.fixed.percent: 50
+	border-radius.px: 15
+	margin-vertical.px: 10
+	align-self: center
+	
+	
+	-- ftd.row:
+	width: fill-container
+	spacing.fixed.px: 24
+	
+		-- ds.h3: `fastn` Tutorial - 1 hour Workshop
+		
+		Webwiz generously provided us with a prime 1-hour slot for an online workshop on
+		September 6th, from 8:00 PM to 9:00 PM. This was an excellent opportunity to
+		introduce `fastn` to the upcoming hackathon participants. Topics covered during
+		the workshop included:
+		
+		Topics that were covered in the meeting:
+		
+		- Introduction of `fastn`
+		- What makes `fastn` cool?
+		- Why choose `fastn`?
+		- Showcase of the Case Study: acme-inc
+		- Walkthrough of fastn.com
+		- Student Programs
+		- Discord Server
+		
+		
+		-- ftd.image:
+		src: $assets.files.images.events.tutorial-session.png
+		border-radius.px: 15
+		width.fixed.percent: 40
+		border-width.px: 1
+		margin-vertical.px: 10
+		align-self: center
+		
+	-- end: ftd.row
+
+	-- ds.markdown:
+	
+	You can find the entire workshop here:
+	
+	-- ds.youtube:
+	v: qoi6J_PZ86M
+	width.fixed.percent: 60
+	
+	-- ds.markdown:
+	
+	The response we received from this workshop was truly exceptional. In addition
+	to this, the organizing team has shared a significant milestone with us through
+	the following message:
+	
+	-- ftd.column:
+	margin-top.px: 15
+	width: fill-container
+	border-width.px: 2
+	padding-top.px: 15
+	padding-horizontal.px: 10
+	border-color: $inherited.colors.border-strong
+	border-radius.px: 10
+	
+	
+		-- chat.message-left: Hey...
+		username: Anushrey
+		time: 21.07
+		
+		My team just notified me that your session was one of the highest live viewed
+		session in Hackodisha...
+		
+		-- chat.message-right: That's amazing
+		username: Ajit
+		;; avatar: $assets.files.images.blog.ajit.jpg
+		time: 21.40
+		
+		
+	-- end: ftd.column
+
+
+	-- ds.h3: Submissions and Winners
+	
+	There were 23 submissions for the sponsored track as informed by the organizers.
+	After going through the submissions and demos of the projects, we selected the
+	two teams that have integrated `fastn` in their projects.
+	
+	The winners of the
+	[`fastn Track`](https://hackodisha3.devfolio.co/prizes?partner=fastn) are:
+	
+	-- winner-card: 🥇 First
+	team: DevWave
+	project: Blood Compass
+	project-link: https://devfolio.co/projects/blood-compass-3d3b
+	
+	- DevWave showcased an incredibly innovative idea that captured our imagination.
+	- They harnessed the power of `fastn` themes to craft a stunning landing page,
+	  complete with displaying images and call-to-action buttons.
+	- Their **About Us** page was thoughtfully detailed, enhancing user
+	  understanding.
+	- Seamless integration of API calls and data presentation demonstrated their
+	  technical prowess.
+	- Furthermore, DevWave was highly engaged on
+	  [Discord](https://discord.com/channels/793929082483769345/1149005505562415114),
+	  actively seeking answers and fostering collaboration.
+	
+	-- winner-card: 🥈 Second
+	team: The Nerds and Freaks
+	project: EZMED
+	project-link: https://devfolio.co/projects/ezmed-cb1e
+	
+	The Nerds and Freaks impressed us with their utilization of `fastn`, creating
+	an impressive landing page.
+	
+	
+	
+-- end: ftd.column
+
+
+
+
+/-- event.row-container: Subscribe now
+mobile-spacing: 40
+desktop-spacing: 90
+switch-to-column: false
+padding-vertical: 80
+title-medium: true
+
+/-- event.social-card: DISCORD
+link: https://discord.gg/a7eBUeutWD
+icon: $assets.files.images.discord.svg
+
+/-- event.social-card: TWITTER
+link: https://twitter.com/FifthTryHQ
+icon: $assets.files.images.twitter.svg
+
+/-- event.social-card: LINKEDIN
+link: https://www.linkedin.com/company/69613898/
+icon: $assets.files.images.linkedin.svg
+
+/-- end: event.row-container
+
+-- end: ds.page
+
+
+-- component winner-card:
+caption title:
+optional string team:
+optional string project:
+optional body body:
+optional string project-link:
+
+-- ftd.column:
+border-radius.px: 5
+border-width.px: 2
+padding.px: 8
+spacing.fixed.rem: 1
+border-color: $inherited.colors.border
+background.solid: $inherited.colors.background.step-1
+width.fixed.percent: 80
+
+	-- ftd.text: $winner-card.title
+	role: $inherited.types.heading-medium
+	color: $inherited.colors.text-strong
+	
+	
+	-- ftd.row:
+	if: { $winner-card.project != NULL }
+	spacing.fixed.px: 5
+	
+		-- ftd.text: Project:
+		role: $inherited.types.copy-regular
+		color: $inherited.colors.text-strong
+		style: semi-bold
+		
+		-- ftd.text: $winner-card.project
+		role: $inherited.types.copy-regular
+		color: $inherited.colors.text
+		style: semi-bold
+		link: $winner-card.project-link
+		open-in-new-tab: true
+		
+	-- end: ftd.row
+
+	-- ftd.row:
+	if: { $winner-card.team != NULL }
+	spacing.fixed.px: 5
+	
+		-- ftd.text: Team:
+		role: $inherited.types.copy-regular
+		color: $inherited.colors.text-strong
+		style: bold
+		
+		-- ftd.text: $winner-card.team
+		role: $inherited.types.copy-regular
+		color: $inherited.colors.text
+		style: bold
+		
+	-- end: ftd.row
+
+	-- ftd.text: Reasons for Winning:
+	if: { $winner-card.body != NULL }
+	color: $inherited.colors.text-strong
+	role: $inherited.types.copy-regular
+	style: semi-bold
+	
+	-- ftd.text: $winner-card.body
+	if: { $winner-card.body != NULL }
+	color: $inherited.colors.text-strong
+	role: $inherited.types.copy-regular
+	
+-- end: ftd.column
+
+-- end: winner-card
+
+
+-- component event-details:
+optional string event-date:
+optional string mode:
+optional string host:
+optional string cta-text:
+optional string cta-link:
+
+-- ftd.column:
+width: fill-container
+padding.px: 32
+border-radius.px:5
+spacing.fixed.px: 12
+
+	-- image-with-text: $event-details.host
+	image: $assets.files.images.events.host.svg
+	
+	-- image-with-text: $event-details.mode
+	image: $assets.files.images.events.venue.svg
+	
+	-- image-with-text: $event-details.event-date
+	image: $assets.files.images.events.clock.svg
+	
+	-- image-with-text: $event-details.cta-text
+	image: $assets.files.images.events.share.svg
+	link: $event-details.cta-link
+	
+	
+	
+-- end: ftd.column
+
+-- end: event-details
+
+
+-- component image-with-text:
+optional caption title:
+ftd.image-src image:
+optional string link:
+
+-- ftd.row:
+if: { image-with-text.title != NULL }
+width: fill-container
+spacing: space-between
+link if { image-with-text.link != NULL }: $image-with-text.link
+
+	-- ftd.image: $image-with-text.image
+	
+	-- ftd.text: $image-with-text.title
+	
+-- end: ftd.row
+
+-- end: image-with-text

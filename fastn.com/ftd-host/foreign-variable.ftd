@@ -1,0 +1,16 @@
+-- ds.page: Understanding foreign variables
+
+`ftd` gives a way for its platform, `fastn`, to define some variables known as
+`foreign variables`. These variables, then, can be used in the
+`ftd` code whose value is provided by the platform. This gives `fastn`
+power over `ftd` to define its own variables.
+
+`fastn` has one such foreign variables called `assets`. Each `fastn` package has
+a special module, [assets](import/#import-special-modules), importing which you
+get access to its variables. These variables contains the reference to the files
+or fonts defined in the package.
+
+The file referring variables are foreign variables, while, fonts are simple
+variable.
+
+For more information, please visit [assets](assets).

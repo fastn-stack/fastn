@@ -1,0 +1,111 @@
+-- import: fifthtry.github.io/package-doc/doc as pd
+-- import: fifthtry.github.io/package-doc/forest-theme as ds
+-- import: fastn-community.github.io/inter-font/custom
+-- import: fifthtry.github.io/package-doc/footer
+
+
+
+
+-- ds.page: 
+show-footer: true
+site-name: `inter-font`
+
+-- ds.page.footer:
+
+-- footer.fastn-footer:
+
+-- end: ds.page.footer
+
+-- pd.package: inter-font package
+name: fastn-community.github.io/inter-font
+
+This FTD font `inter-font` can be used for your ftd web projects. 
+
+To Use this inter-font inside `FTD` project visit [inter-font-typography](https://fastn-community.github.io/inter-font-typography).
+
+-- ds.h3: inter-font various sizes
+
+-- ftd.text: 
+role: $custom.inter-font-size-12-400
+color: $inherited.colors.text-strong
+
+`font-size: 12px, font-weight: 400` 
+
+👉 The quick brown fox jumps over the lazy dog 
+
+
+-- ftd.text: 
+role: $custom.inter-font-size-12-800
+color: $inherited.colors.text-strong
+
+`font-size: 12px, font-weight: 500` 
+
+👉 The quick brown fox jumps over the lazy dog 
+
+-- ftd.text: 
+role: $custom.inter-font-size-12-800
+color: $inherited.colors.text-strong
+
+`font-size: 12px, font-weight: 800` 
+
+👉 The quick brown fox jumps over the lazy dog 
+
+
+-- ftd.text: 
+role: $custom.inter-font-size-18-400
+color: $inherited.colors.text-strong
+
+`font-size: 18px, font-weight: 400` 
+
+👉 The quick brown fox jumps over the lazy dog 
+
+-- ftd.text: 
+role: $custom.inter-font-size-18-500
+color: $inherited.colors.text-strong
+
+`font-size: 18px, font-weight: 500` 
+
+👉 The quick brown fox jumps over the lazy dog 
+
+-- ftd.text: 
+role: $custom.inter-font-size-18-800
+color: $inherited.colors.text-strong
+
+`font-size: 18px, font-weight: 800` 
+
+👉 The quick brown fox jumps over the lazy dog 
+
+-- ftd.text: 
+role: $custom.inter-font-size-48-400
+color: $inherited.colors.text-strong
+
+`font-size: 48px, font-weight: 400` 
+
+👉 The quick brown fox jumps over the lazy dog 
+
+-- ftd.text: 
+role: $custom.inter-font-size-48-500
+color: $inherited.colors.text-strong
+
+`font-size: 48px, font-weight: 500` 
+
+👉 The quick brown fox jumps over the lazy dog 
+
+-- ftd.text:
+role: $custom.inter-font-size-48-800
+color: $inherited.colors.text-strong
+
+`font-size: 48px, font-weight: 800` 
+
+👉 The quick brown fox jumps over the lazy dog 
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+

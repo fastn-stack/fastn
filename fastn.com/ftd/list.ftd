@@ -1,0 +1,398 @@
+/-- ft-core.concept:
+
+-- ds.page: `list`
+
+In `fastn`, the `list` keyword can be used to create an array or list of values.
+The `list` keyword is followed by the data type of the values that the list
+will contain.
+
+-- ds.h1: Declaring a `list`
+
+To declare a new list variable, you can use the following syntax:
+
+-- ds.code: Declaring a `list`
+lang: ftd
+
+\-- <data-type> list <list-name>:
+
+\-- <value>
+\-- <value>
+\-- <value>
+\-- ...
+
+\-- end: <list-name>
+
+-- ds.markdown:
+
+Also make sure to use the end syntax `-- end: <list-name>` to mark
+the end of the list during initialization.
+
+For example, to create a list of strings called `weekdays`, you would use the
+following syntax:
+
+-- ds.code: a list of string
+lang: ftd
+
+\-- string list weekdays:
+
+\-- string: Sunday
+\-- string: Monday
+\-- string: Tuesday
+\-- string: Wednesday
+\-- string: Thursday
+\-- string: Friday
+\-- string: Saturday
+
+\-- end: weekdays
+
+-- ds.markdown:
+
+This creates a new variable called `weekdays`, which is a list of `string`s. The
+list is initialized with seven strings representing the days of the week.
+
+By default, lists in `fastn` are immutable, which means that their contents
+cannot be changed after they are initialized. However, you can make a list
+mutable by prefixing it with a `$` symbol, like this:
+
+-- ds.code: Mutable Variable
+lang: ftd
+
+\-- string list $weekdays:
+\-- end: $weekdays
+
+-- ds.markdown:
+
+Let's checkout the list declaration for the more complex type data like record.
+
+-- ds.code: Record list
+lang: ftd
+
+\-- record person:
+caption name:
+body bio:
+
+\-- person list people:
+
+\-- person: Amit Upadhyay
+
+Amit is CEO of FifthTry.
+
+\-- person: Shobhit Sharma
+
+Shobhit is a developer at FifthTry.
+
+\-- end: people
+
+-- ds.markdown:
+
+Here we have created a `list` of `person` objects, called it `people`, and
+created two `person` objects and inserted them the `people` list.
+
+
+-- ds.h1: `ftd.ui` type as a list
+
+You can use [`ftd.ui list`](ftd/built-in-types/#ftd-ui) type or
+[`children`](ftd/built-in-types/#children) type to pass a UI component in a
+list.
+
+-- ds.code: Using `ftd.ui list` type
+lang: ftd
+
+\-- ftd.ui list uis:
+
+\-- ftd.text: Hello World!
+color: $inherited.colors.text-strong
+
+\-- ftd.text: I love `fastn`.
+color: $inherited.colors.text-strong
+
+\-- end: uis
+
+
+
+
+-- ds.code: Using `children` type
+lang: ftd
+
+\-- foo:
+
+\-- ftd.text: Hello World!
+color: $inherited.colors.text-strong
+
+\-- ftd.text: I love `fastn`.
+color: $inherited.colors.text-strong
+
+\-- end: foo
+
+\-- component foo:
+children uis:
+
+... some code here
+
+\-- end: foo
+
+
+
+-- ds.h1: Accessing list items
+
+Once you have created a list, you can access its elements using indexing or
+looping.
+
+Once you have created a list, you can access its items using their index. In
+`fastn`, indexing starts at 0. Or you can use
+
+
+-- ds.h2: Using `loop`
+
+You can also access the elements of a list [using a loop](/loop/). In `fastn`, you can use
+the `$loop$` keyword to iterate over a list. Here's an example:
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: $obj
+$loop$: $weekdays as $obj
+
+
+-- ds.output:
+
+	-- ftd.text: $obj
+	$loop$: $weekdays as $obj
+	color: $inherited.colors.text
+	
+-- end: ds.output
+
+-- ds.markdown:
+
+This code will output each element of the `weekdays` list on a separate line.
+Similarly, To iterate over a `uis` list, you would use the following syntax:
+
+-- ds.code:
+lang: ftd
+
+\-- obj:
+$loop$: $uis as $obj
+
+-- ds.output:
+
+	-- obj:
+	$loop$: $uis as $obj
+	
+-- end: ds.output
+
+
+-- ds.h2: Using index
+
+You can access an element of a list by its index. In `fastn`, list indexing is
+zero-based, which means the first element of a list has an index of 0, the
+second element has an index of 1, and so on. You can use the `.` operator to
+access an element of a list by its index.
+
+For example, to access the first item in the `weekdays` list, you would use the
+following syntax:
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.text: $weekdays.0
+color: $inherited.colors.text-strong
+
+-- ds.output:
+
+	-- ftd.text: $weekdays.0
+	color: $inherited.colors.text-strong
+	
+-- end: ds.output
+
+-- ds.markdown:
+
+Similarly, To access the first component in the `uis` list, you would use the
+following syntax:
+
+-- ds.code:
+lang: ftd
+
+\-- uis.0:
+
+-- ds.output:
+
+	-- uis.0:
+	
+-- end: ds.output
+
+
+-- ds.h1: `$processor$`
+
+A list can be created using platform provided processors:
+
+-- ds.code: Using `$processor$`
+lang: ftd
+
+\-- string list foo:
+$processor$: some-list
+
+-- ds.markdown:
+
+Here the value of the list will be provided by the `some-list` processor.
+
+If we already have a list we can insert values to it using `$processor$` as
+well:
+
+-- ds.code:
+lang: ftd
+
+\-- string list $foo:
+\-- end: $foo
+
+\-- $foo:
+$processor$: some-list
+
+-- end: ds.page
+
+;; Todo:
+
+/-- ds.page: `list`
+
+-- ds.markdown:
+
+`list` keyword can be used to create a list or an array in `fastn`.
+
+-- ds.h1: Declaring a `list`
+
+-- ds.code: a list of integer
+lang: ftd
+
+\-- integer list primes:
+
+-- ds.markdown:
+
+Here we have declared a new variable called `primes`, which is a `list` of
+`integer`s. When the list is created it is empty.
+
+`Note`: By default, lists are `immutable`. The user can make the list `mutable`
+by prefixing it with `$` like this `-- integer list $primes:`
+
+-- ds.h1: Initializing values to a list
+
+We can add elements to the list during initialization
+by mentioning the `list-type` like this:
+
+`-- <list-type>: <value>`.
+
+`Note`: Also make sure to use the end syntax `-- end: <list-name>` to mark
+the end of the list during initialization.
+
+-- ds.code:
+lang: ftd
+
+\-- integer list primes:
+
+\-- integer: 1
+\-- integer: 3
+\-- integer: 5
+\-- integer: 7
+\-- integer: 11
+
+\-- end: primes
+
+-- ds.markdown:
+
+We have inserted 5 `integers` to our `list` named `primes`.
+
+-- ds.code:
+lang: ftd
+
+\-- record person:
+caption name:
+body bio:
+
+\-- person list people:
+
+\-- person: Amit Upadhyay
+
+Amit is CEO of FifthTry.
+
+\-- person: Shobhit Sharma
+
+Shobhit is a developer at FifthTry.
+
+\-- end: people
+
+-- ds.markdown:
+
+Here we have created a `list` of `person` objects, called it `people`, and
+created two `person` objects and inserted them the `people` list.
+
+-- ds.h1: `$processor$`
+
+A list can be created using platform provided processors:
+
+-- ds.code:
+lang: ftd
+
+\-- string list foo:
+$processor$: some-list
+
+-- ds.markdown:
+
+Here the value of the list will be provided by the `some-list` processor.
+
+If we already have a list we can insert values to it using `$processor$` as well:
+
+-- ds.code:
+lang: ftd
+
+\-- string list foo:
+
+\-- foo:
+$processor$: some-list
+
+-- ds.h1: Reading A `list` from Rust
+
+You can use the `.get()` method to read a `list`:
+
+-- ds.code:
+lang: rs
+
+#[derive(serde::Deserialize)]
+struct Person {
+    name: String,
+    bio: String,
+}
+
+let doc = ftd::p2::Document::from("some/id", source, lib)?;
+let people: Vec<Person> = doc.get("people")?;
+
+-- ds.markdown:
+
+You can read more details of reading `.ftd` files
+[`Reading .ftd Files`](/reading-data/) guide.
+
+
+-- end: ds.page
+
+
+
+-- string list weekdays:
+
+-- string: Sunday
+-- string: Monday
+-- string: Tuesday
+-- string: Wednesday
+-- string: Thursday
+-- string: Friday
+-- string: Saturday
+
+-- end: weekdays
+
+
+
+-- ftd.ui list uis:
+
+-- ftd.text: Hello World!
+color: $inherited.colors.text-strong
+
+-- ftd.text: I love `fastn`.
+color: $inherited.colors.text-strong
+
+-- end: uis

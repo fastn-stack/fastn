@@ -1,0 +1,351 @@
+
+-- site-doc.doc-home: Chat & messages
+site-title: Bling
+show-tabs: false
+github-url: https://github.com/fastn-community/bling
+current-package: fastn-community.github.io/bling
+
+The chat message component is a UI component designed to display individual
+messages within a chat or messaging interface. It is commonly used in
+applications or websites that involve real-time communication, such as
+messaging platforms, chatbots, or customer support systems.
+
+-- site-doc.header: Example
+
+-- site-doc.output:
+
+-- ftd.column:
+width.fixed.px if { ftd.device != "mobile" }: 380
+width: fill-container
+padding.px if { ftd.device != "mobile" }: 24
+padding.px if { ftd.device == "mobile" }: 16
+
+-- message-left: Hey Buddy!
+username: John Doe
+time: 12.36 pm
+
+uis nostrud exercitation ullaril mco labil oris nisi ut aliquip ex ea commo
+dorli consequa duis aute irure dolor lorii
+
+-- cb.code: Below is code:
+lang: ftd
+
+\-- message-left: Hi! 
+username: John Doe
+time: 12.36 pm
+
+\-- ftd.text: Hi!
+
+-- end: message-left
+
+-- message-right: Yo!
+time: 12.36 pm
+
+-- tf.markdown:
+
+in voluptate velit esse cillum dolor er eu fugiat nulla pariatur. Excepte urla
+sint occaecat cupidatat nor proident,
+
+-- cb.code: Code Block in chat?
+lang: ftd
+
+\-- ftd.text: Yo! 
+
+-- ftd.text: Sed ut perspiciatis unde omnis isa te natus error sit volupta tem.
+color: $inherited.colors.text
+role: $inherited.types.label-large
+
+-- end: message-right
+
+-- message-left: 🤘
+username: John Doe
+time: 12.37 pm
+
+-- message-right: 👍👍
+time: 12.37 pm
+
+-- message-left: Lorem ipsum dolor sit amet,
+username: John Doe
+time: 12.37 pm
+
+-- message-right: sed do eiusmod tempor ut
+time: 12.38 pm
+
+-- message-left: Lorem ipsum
+username: John Doe
+time: 12.40 pm
+
+-- message-right: sed do eiusmod
+time: 12.41 pm
+
+-- end: ftd.column
+
+-- end: site-doc.output
+
+-- site-doc.header: How to use
+
+-- cb.code: Add `bling` dependency into your FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/bling
+
+-- cb.code: import `chat` inside your `.ftd` file
+lang: ftd
+
+\-- import: fastn-community.github.io/bling/chat
+
+-- cb.code: sample usage of `-- message-left` & `-- message-right`
+lang: ftd
+
+\-- message-left: Hi! 
+username: John Doe
+time: 12.36 pm
+
+\-- message-right: Hey! how are you doing? 
+time: 12.36 pm
+
+-- site-doc.header: Properties:
+
+Below are details of all properties of `triangular` component.
+
+-- site-doc.component-property: `title`
+type: Caption (`optional`)
+
+It's used to add title as a message to the `message-left`  and `message-right`
+components.
+
+-- site-doc.component-property: `avatar`
+type: ftd.image-src (`optional`)
+
+It's used to add user image to the `message-left` and `message-right`
+components.
+
+-- site-doc.component-property: `round-avatar`
+type: Boolean (`optional`, default: `true`)
+
+If `round-avatar` property set as `false` then user image will be seen as
+square. By default it will be seen as rounded image.
+
+-- end: site-doc.doc-home
+
+
+
+
+
+
+
+
+
+
+-- component message-left:
+optional caption title:
+optional body body:
+optional string username:
+optional string time:
+optional ftd.image-src avatar: $assets.files.static.avatar.svg
+boolean round-avatar: true
+children container:
+
+-- ftd.column:
+margin-bottom.px: 24
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.row:
+width: fill-container
+
+-- ftd.image:
+src: $message-left.avatar
+width.fixed.px: 32
+height: auto
+margin-right.px: 20
+border-radius.px if { !message-left.round-avatar }: 32
+
+-- ftd.image:
+src: $assets.files.static.left-pointer.svg
+width.fixed.px: 32
+height.fixed.px: 32
+anchor: parent
+left.px: 38
+z-index: 0
+top.px: 4
+
+-- ftd.column:
+border-width.px: 1
+border-color: $inherited.colors.cta-secondary.border
+background.solid: $inherited.colors.background.step-1
+padding-vertical.px: 12
+padding-horizontal.px: 22
+border-radius.px: 10
+width: fill-container
+z-index: 1
+spacing.fixed.px: 12
+
+-- ftd.text: $message-left.username
+if: { message-left.username != NULL }
+color: $inherited.colors.text
+role: $inherited.types.fine-print
+width: fill-container
+text-align: start
+
+-- ftd.text: $message-left.title
+if: { message-left.title != NULL }
+color: $inherited.colors.text
+role: $inherited.types.copy-small
+width: fill-container
+text-align: start
+
+-- ftd.text:
+if: { message-left.body != NULL }
+color: $inherited.colors.text
+role: $inherited.types.copy-small
+width: fill-container
+text-align: start
+
+$message-left.body
+
+-- ftd.column:
+padding-bottom.px if { message-left.time != NULL }: 16
+children: $message-left.container
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+anchor: parent
+bottom.px: 8
+right.px: 8
+
+-- ftd.text: $message-left.time
+if: { message-left.time != NULL }
+color: $inherited.colors.text
+role: $inherited.types.fine-print
+width: fill-container
+text-align: end
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: message-left
+
+
+
+
+
+
+
+
+
+
+-- component message-right:
+optional caption title:
+optional body body:
+optional string username:
+optional string time:
+optional ftd.image-src avatar: $assets.files.static.avatar.svg
+boolean round-avatar: true
+children container:
+
+-- ftd.column:
+margin-bottom.px: 24
+align-content: right
+width: fill-container
+
+-- ftd.column:
+
+-- ftd.row:
+width: fill-container
+
+-- ftd.column:
+border-width.px: 1
+border-color: $inherited.colors.cta-secondary.border
+background.solid: $inherited.colors.background.step-1
+padding-horizontal.px: 22
+padding-vertical.px if { message-right.username != NULL }: 12
+padding-vertical.px if { message-right.username == NULL }: 4
+border-radius.px: 10
+z-index: 1
+margin-top.px: 6
+spacing.fixed.px: 12
+
+-- ftd.row:
+width: fill-container
+align-content: right
+
+-- ftd.text: $message-right.username
+if: { message-right.username != NULL }
+color: $inherited.colors.text
+role: $inherited.types.fine-print
+
+-- end: ftd.row
+
+-- ftd.text: $message-right.title
+if: { message-right.title != NULL }
+color: $inherited.colors.text
+role: $inherited.types.copy-small
+width: fill-container
+text-align: end
+
+-- ftd.text:
+if: { message-right.body != NULL }
+color: $inherited.colors.text
+role: $inherited.types.copy-small
+width: fill-container
+text-align: end
+
+$message-right.body
+
+-- ftd.column:
+padding-bottom.px if { message-right.time != NULL }: 24
+children: $message-right.container
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+anchor: parent
+bottom.px: 8
+right.px: 8
+
+-- ftd.text: $message-right.time
+if: { message-right.time != NULL }
+color: $inherited.colors.text
+role: $inherited.types.fine-print
+width: fill-container
+text-align: end
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.image:
+src: $assets.files.static.right-pointer.svg
+width.fixed.px: 32
+height.fixed.px: 32
+anchor: parent
+right.px: 38
+z-index: 0
+top.px: 4
+
+-- ftd.image:
+src: $message-right.avatar
+width.fixed.px: 32
+height: auto
+margin-left.px: 20
+border-radius.px if { !$message-right.round-avatar }: 32
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: message-right

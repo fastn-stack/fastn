@@ -1,0 +1,1016 @@
+-- component player:
+member member:
+
+-- ftd.row:
+width: fill-container
+height: hug-content
+border-radius.px: 15
+border-width.px: 2
+margin-vertical.px: 8
+/margin-horizontal.px: 20
+
+
+
+	-- ftd.image:
+	src: $player.member.avatar
+	align-self: start
+	padding.px: 3
+	width.fixed.px: 180
+	height.fixed.px: 180
+	border-radius.px: 15
+	
+	
+	
+	-- ftd.column:
+	width: fill-container
+	
+		-- ftd.text: $player.member.name
+		role: $inherited.types.copy-regular
+		color: $inherited.colors.text
+		;; padding.px: 10
+		align-self: start
+		style: bold
+		
+		-- ftd.text: $player.member.story
+		role: $inherited.types.copy-regular
+		color: $inherited.colors.text
+		padding.px: 10
+		align-self: center
+		
+	-- end: ftd.column
+
+-- end: ftd.row
+
+
+-- end: player
+
+/-- ftd.color bg-color:
+light: #eab676
+dark: #393939
+
+
+
+-- component meet-the-team:
+caption title: Meet the Team
+boolean $show: true
+children players:
+
+-- ftd.column:
+width: fill-container
+
+	-- ftd.row:
+	width: fill-container
+	spacing: space-between
+	$on-click$: $ftd.toggle($a = $meet-the-team.show)
+	background.solid: $inherited.colors.background.step-1
+	
+	
+		-- ftd.text: $meet-the-team.title
+		role: $inherited.types.heading-medium
+		color: $inherited.colors.text
+		padding.px: 5
+		
+		
+		-- ftd.image:
+		if: { meet-the-team.show }
+		width.fixed.px: 35
+		src: $fastn-assets.files.images.blog.uparrow.png
+		align-self: center
+		padding-horizontal.px: 5
+		
+		
+		-- ftd.image:
+		if: { !meet-the-team.show }
+		width.fixed.px: 35
+		src: $fastn-assets.files.images.blog.downarrow.png
+		align-self: center
+		padding-horizontal.px: 5
+		
+		
+	-- end: ftd.row
+
+
+
+	-- ftd.column:
+	if: { meet-the-team.show }
+	width: fill-container
+	children: $meet-the-team.players
+	
+	
+	-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: meet-the-team
+
+
+
+
+
+
+
+
+
+
+-- component tab-component:
+integer $active-tab-no: 0
+tab list tabs: $project-tabs
+
+
+-- ftd.column:
+width: fill-container
+
+
+	-- ftd.row:
+	width: fill-container
+	spacing: space-between
+	
+	
+		-- tab-ui:
+		$loop$: $tab-component.tabs as $a
+		a: $a
+		idx: $LOOP.COUNTER
+		$active-tab-no: $tab-component.active-tab-no
+		
+	-- end: ftd.row
+
+
+
+
+
+
+	-- single-ui:
+	if: { $tab-component.active-tab-no == $LOOP.COUNTER }
+	$loop$: $tab-component.tabs as $a
+	ui: $a.tab-content
+	
+	
+	
+-- end: ftd.column
+
+-- end: tab-component
+
+
+
+
+
+
+-- component tab-ui:
+tab a:
+integer idx:
+integer $active-tab-no:
+boolean $is-hover: false
+
+-- ftd.text: $tab-ui.a.title
+color: $inherited.colors.cta-primary.text
+$on-click$: $ftd.set-integer( $a = $tab-ui.active-tab-no, v = $tab-ui.idx )
+border-width.px: 2
+border-color if { $tab-ui.active-tab-no == $tab-ui.idx } : $inherited.colors.cta-primary.border
+background.solid if { $tab-ui.active-tab-no == $tab-ui.idx } : $inherited.colors.cta-danger.base
+padding.px: 10
+border-radius.px: 25
+shadow if { tab-ui.is-hover }: $s
+$on-mouse-enter$: $ftd.set-bool($a = $tab-ui.is-hover, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $tab-ui.is-hover, v = false)
+
+
+-- end: tab-ui
+
+
+
+-- ftd.shadow s:
+color: $shadow-color
+x-offset.px: 1
+y-offset.px: 1
+blur.px: 50
+spread.px: 7
+
+
+
+-- ftd.color shadow-color:
+light: #e8bfb9
+dark: #E4B0AC
+
+
+
+
+
+-- component single-ui:
+ftd.ui ui:
+
+-- ftd.column:
+width: fill-container
+
+	-- single-ui.ui:
+	
+-- end: ftd.column
+
+-- end: single-ui
+
+
+
+
+
+
+
+
+
+
+-- component box:
+caption title: Default Header
+body body: Default Body
+boolean $open: false
+boolean $over: false
+ftd.color textcolor: $inherited.colors.text
+ftd.color bordercolor: $inherited.colors.warning.border
+ftd.color hovercolor: $inherited.colors.cta-danger.base
+ftd.color bg-color: $inherited.colors.background.base
+children wrapper:
+
+
+
+
+;; column for box
+-- ftd.column:
+border-width.px: 3
+spacing.fixed.px: 10
+width: fill-container
+border-color: $box.bordercolor
+color: $box.textcolor
+background.solid: $box.bg-color
+border-radius.px: 5
+
+
+
+	;; header Row
+	-- ftd.row:
+	width: fill-container
+	spacing: space-between
+	border-bottom-width.px if { box.open }: 2
+	padding.px: 10
+	color: $box.textcolor
+	background.solid: $box.bg-color
+	border-color: $box.bordercolor
+	background.solid if { box.over }: $box.hovercolor
+	$on-click$: $toggle($value = $box.open)
+	$on-mouse-enter$: $ftd.set-bool($a = $box.over, v = true)
+	$on-mouse-leave$: $ftd.set-bool($a = $box.over, v = false)
+	
+	
+	
+	
+		-- ftd.text: $box.title
+		
+		-- ftd.image:
+		src: $fastn-assets.files.images.blog.downarrow.png
+		width.fixed.px: 20
+		if: { !box.open }
+		
+		
+		-- ftd.image:
+		src: $fastn-assets.files.images.blog.uparrow.png
+		width.fixed.px: 20
+		if: { box.open }
+		
+	-- end: ftd.row
+	;; header row ends
+
+
+	-- ftd.text: $box.body
+	padding.px: 10
+	height: hug-content
+	if: { box.open }
+	
+	
+	-- ftd.column:
+	if: { box.open }
+	width: fill-container
+	padding.px: 10
+	children: $box.wrapper
+	
+	-- end: ftd.column
+
+-- end: ftd.column
+;; box column ends
+
+-- end: box
+
+
+-- void toggle(value):
+boolean $value:
+
+
+value = !value;
+
+
+
+
+
+
+
+-- string add-prefix(prefix,value):
+string prefix:
+string value:
+
+prefix + ": " + value
+
+
+;; string = [a-z]*
+;; or-type = list["pending", "working", "completed"]
+
+
+
+/-- or-type status-value:
+
+/-- pending:
+/-- in-progress:
+/-- completed:
+
+/-- end: status-value
+
+
+
+
+-- component card-pair:
+member m1:
+member m2:
+integer num: 0
+
+-- ftd.row:
+width: fill-container
+spacing: space-between
+margin.px: 20
+
+	-- project-card:
+	width.fixed.percent: 40
+	member: $card-pair.m1
+	num: $card-pair.num
+	
+	-- project-card:
+	width.fixed.percent: 40
+	member: $card-pair.m2
+	num: $card-pair.num
+	
+-- end: ftd.row
+
+-- end: card-pair
+
+
+
+
+
+
+
+
+-- component single-card:
+member m:
+integer num: 0
+
+-- ftd.row:
+width: fill-container
+spacing: space-around
+margin.px: 20
+
+	-- project-card:
+	width.fixed.percent: 40
+	member: $single-card.m
+	num: $single-card.num
+	
+-- end: ftd.row
+
+-- end: single-card
+
+
+
+
+
+-- component project-card:
+member member:
+integer num: 0
+ftd.resizing width: fill-container
+
+-- ftd.column:
+width: $project-card.width
+
+
+
+	-- ftd.row:
+	width: fill-container
+	spacing: space-between
+	color: $inherited.colors.custom.three
+	
+		-- ftd.text: $project-card.member.name
+		align-self: start
+		
+		-- ftd.text: $add-prefix(prefix = Status, value = $proj.status)
+		if: { project-card.num == LOOP.COUNTER }
+		$loop$: $project-card.member.projects as $proj
+		
+	-- end: ftd.row
+
+	-- inner-proj-card: $proj.title
+	if: { project-card.num == LOOP.COUNTER }
+	$loop$: $project-card.member.projects as $proj
+	project-url: $proj.project-url
+	
+	$proj.desc
+	
+-- end: ftd.column
+
+-- end: project-card
+
+
+
+
+
+
+-- component inner-proj-card:
+caption title:
+optional string project-url:
+body description:
+boolean $title-hover: false
+
+-- ftd.column:
+width: fill-container
+color: $inherited.colors.text
+border-width.px: 2
+padding.px: 5
+border-radius.px: 5
+border-color: $inherited.colors.background.step-2
+background.solid: $inherited.colors.background.step-1
+
+	-- ftd.text: $inner-proj-card.title
+	role: $inherited.types.heading-medium
+	align-self: center
+	color: $inherited.colors.text
+	link: $inner-proj-card.project-url
+	style if { inner-proj-card.title-hover }: underline
+	$on-mouse-enter$: $ftd.set-bool($a = $inner-proj-card.title-hover, v = true)
+	$on-mouse-leave$: $ftd.set-bool($a = $inner-proj-card.title-hover, v = false)
+	
+	
+	-- ftd.text: $inner-proj-card.description
+	role: $inherited.types.copy-regular
+	text-align: start
+	align-self: center
+	border-top-width.px: 1
+	
+-- end: ftd.column
+
+-- end: inner-proj-card
+
+
+
+;; ftd-ui list --------------------------------------
+
+-- ftd.ui list contents:
+
+
+;; Projects tab content
+-- ftd.column:
+;; width: fill-container
+;; spacing.fixed.px: 10
+
+	-- ds.h1: Project number - 1
+	
+	-- card-pair:
+	m1: $glenn
+	m2: $hadrian
+	
+	-- single-card:
+	m: $mark
+	
+	-- card-pair:
+	m1: $nicole
+	m2: $zyle
+	
+-- end: ftd.column
+
+
+
+;; Submissions tab content
+
+-- ftd.column:
+width: fill-container
+
+	-- ds.h1: Submissions 🚧
+	
+	-- ftd.text: Glenn's submission
+	
+	-- ftd.text: Hadrian's submission
+	
+	-- ftd.text: Mark's submission
+	
+	-- ftd.text: Nicole's submission
+	
+	-- ftd.text: Zyle's submission
+	
+	
+-- end: ftd.column
+
+
+
+;; FAQs tab content
+
+
+-- ftd.column:
+width: fill-container
+
+	-- ds.h1: FAQ section
+	
+	-- box: What is Hello World?
+	
+	`Hello, World` is a simple program that is often used to introduce beginners
+	to programming. The program simply displays the message "Hello, World!" on the
+	screen or console.
+	
+	
+		-- ds.rendered: `Hello Word`
+		
+			-- ds.rendered.input:
+			
+			\-- ftd.text: Hello World
+			color: $inherited.colors.text
+			
+			-- ds.rendered.output:
+			
+				-- ftd.text: Hello World
+				color: $inherited.colors.text
+				
+			-- end: ds.rendered.output
+
+		-- end: ds.rendered
+
+
+	-- end: box
+
+-- end: ftd.column
+
+
+
+
+
+
+
+;; Master Nomenclature
+
+-- ftd.column:
+
+	-- ds.h1: Component Nomenclatures
+	
+	In the first activity, the team has created their own component for expander
+	box along with event handling.
+	
+	Finishing that exercise followed with their own blog posts using the `doc-site`
+	package has given all of us the confidence that they are ready to create some
+	really exciting UIs for blog site.
+	
+	This naturally becomes their next assignment to create various components
+	one-by-one that will be applied as they wish in their blog site templates.
+	
+	We came up with the idea to help them with a definite set of reference
+	`component names`, their `properties` as well as `records` that they can use to
+	create a uniformity in the structure so that when they finally create the main
+	component, let's say `home-page` and `blog-page`, we will have 5 different sets
+	of same components and records. The benefit of this structure is, by changing
+	the name to the corresponding set, the blog-page or home-page can have totally
+	different UI without breaking the content or page UI, as everything else is
+	same.
+	
+	The structure of component name, it's properties as well as records are as
+	follows:
+	
+	-- ds.h2: Structure of `components`
+	
+	Following is the list of components that the team uses along with their
+	properties:
+	
+	
+	-- ds.code: Home Page
+	lang: ftd
+	
+	\-- component home-page:
+	optional header-data header:
+	optional article-data top-article:
+	article-collection articles:
+	optional article-collection popular-articles:
+	ftd.ui list uis:
+	ftd.ui list footer:
+	ftd.type-data types: <default>
+	ftd.color-scheme colors: <default>
+	
+	
+	
+	
+	-- ds.code: Blog Page
+	lang: ftd
+	
+	\-- component blog-page:
+	caption title:
+	optional body description:
+	children uis:
+	optional header-data header:
+	optional ftd.ui list right-sidebar:
+	ftd.ui list footer:
+	article-data data:
+	ftd.type-data types: <default>
+	ftd.color-scheme colors: <default>
+	
+	
+	
+	-- ds.code: Post Card
+	lang: ftd
+	
+	\-- component post-card-1:
+	caption title:
+	optional string subtitle:
+	optional body description:
+	optional graphic-data graphic:
+	optional string cta-link:
+	optional string cta-text:
+	
+	
+	
+	
+	
+	-- ds.code: Markdown
+	lang: ftd
+	
+	\-- component markdown:
+	body text:
+	
+	
+	
+	
+	
+	-- ds.code: Header - h1
+	lang: ftd
+	
+	\-- component h1:
+	caption title:
+	optional body text:
+	
+	
+	
+	
+	-- ds.code: Header - h2
+	lang: ftd
+	
+	\-- component h2:
+	caption title:
+	optional body text:
+	
+	
+	
+	
+	-- ds.code: Header - h3
+	lang: ftd
+	
+	\-- component h3:
+	caption title:
+	optional body text:
+	
+	
+	
+	
+	-- ds.code: Code
+	lang: ftd
+	
+	\-- component code:
+	string lang:
+	optional caption title:
+	body text:
+	
+	
+	
+	
+	
+	-- ds.code: Footer TOC
+	lang: ftd
+	
+	\-- component footer-toc:
+	caption title:
+	optional body description:
+	optional graphic-data image:
+	pr.toc-item list toc:
+	
+	
+	
+	
+	-- ds.code: Footer inline
+	lang: ftd
+	
+	\-- component footer-inline:
+	caption title:
+	optional string link:
+	
+	
+	
+	
+	
+	-- ds.h2: Structure of `records`
+	
+	Following is the list of records that the team uses along with their
+	properties:
+	
+	
+	-- ds.code: Header Data
+	lang: ftd
+	
+	\-- record header-data:
+	optional string title:
+	optional ftd.image-src logo:
+	optional ftd.image-src bg-image:
+	optional graphic-data graphic:
+	optional string subtitle:
+	optional string link:
+	
+	
+	
+	
+	-- ds.code: Graphic Data
+	lang: ftd
+	
+	\-- record graphic-data:
+	optional caption ftd.image-src image:
+	optional string youtube:
+	optional string link:
+	ftd.ui list uis:
+	
+	
+	
+	-- ds.code: Article Data
+	lang: ftd
+	
+	\-- record article-data:
+	caption title:
+	optional body description:
+	optional graphic-data graphic:
+	string date:
+	author-data author:
+	string cta-link:
+	optional string cta-text:
+	
+	
+	
+	-- ds.code: Article Collection
+	lang: ftd
+	
+	\-- record article-collection:
+	optional caption title:
+	optional body description:
+	article-data list articles:
+	
+	
+	
+	
+	-- ds.code: Author Data
+	lang: ftd
+	
+	\-- record author-data:
+	caption name:
+	optional body bio:
+	optional graphic-data avatar:
+	key-value-data list key-value:
+	
+	
+	
+	
+	-- ds.code: Key-Value data
+	lang: ftd
+	
+	\-- record key-value-data:
+	caption key:
+	body value:
+	
+	
+	
+	
+	
+	-- ds.h2: Color Scheme
+	
+	The team is free to use
+	[sailing-shark-cs repo](https://github.com/FifthTry/sailing-shark-cs)
+	and use it as template and create their own color schemes by changing the
+	values inside `colors.ftd`.
+	
+	The variables that are defined in the `colors.ftd` are of record types as
+	shown [here](/built-in-types/#ftd-color-scheme).
+	
+	
+	
+	-- ds.h2: Reference blog examples
+	
+	For this activity, we have chosen to focus on the `software development` genre
+	of blog sites, with the aim of providing developers with a wide range of
+	options for starting their own blogs.
+	
+	Our goal is to create templates for other genres as well, in order to offer a
+	similar level of choice and support for bloggers across different fields.
+	
+	
+	To create our master contract we went through some blog sites that are listed
+	in the site of [wearedevelopers](https://www.wearedevelopers.com/).
+	
+	
+	-- ds.h3: **Blog Site Examples**
+	
+	
+	1. [https://www.joshwcomeau.com/](https://www.joshwcomeau.com/)
+	2. [https://web.dev/blog/ ](https://web.dev/blog/)
+	3. [https://css-tricks.com/](https://css-tricks.com/)
+	4. [https://www.smashingmagazine.com/](https://www.smashingmagazine.com/)
+	5. [https://netflixtechblog.com/](https://netflixtechblog.com/)
+	
+	
+	
+-- end: ftd.column
+
+-- end: contents
+
+
+
+
+
+
+;; tab list ------------------------------------------
+
+-- tab list project-tabs:
+
+-- tab: Projects
+tab-content: $contents.0
+
+-- tab: Submissions
+tab-content: $contents.1
+
+-- tab: FAQs
+tab-content: $contents.2
+
+-- tab: Master Nomenclature
+tab-content: $contents.3
+
+-- end: project-tabs
+
+
+
+
+
+;; records -------------------------------------------
+
+
+
+
+
+-- record tab:
+caption title:
+ftd.ui tab-content:
+
+
+
+
+-- record member:
+caption name:
+body story:
+project list projects:
+ftd.image-src avatar:
+
+
+-- record project:
+caption title:
+body desc:
+optional ftd.image-src project-img:
+optional string project-url:
+optional string submission-url:
+string status: Pending
+
+
+
+
+;; project list -------------------------------------
+
+
+-- project list glenn-projects:
+
+-- project: Expander
+project-url: https://fastn.com/expander
+
+- Go through the Expander Course
+- Recreate the component
+- Create a good-looking UI
+- Submit the URL in your Discord thread
+
+-- end: glenn-projects
+
+
+-- project list hadrian-projects:
+
+-- project: Expander
+project-url: https://fastn.com/expander
+
+- Go through the Expander Course
+- Recreate the component
+- Create a good-looking UI
+- Submit the URL in your Discord thread
+
+
+-- end: hadrian-projects
+
+
+
+-- project list nicole-projects:
+
+-- project: Expander
+project-url: https://fastn.com/expander
+
+- Go through the Expander Course
+- Recreate the component
+- Create a good-looking UI
+- Submit the URL in your Discord thread
+
+
+-- end: nicole-projects
+
+
+
+-- project list mark-projects:
+
+-- project: Expander
+project-url: https://fastn.com/expander
+
+- Go through the Expander Course
+- Recreate the component
+- Create a good-looking UI
+- Submit the URL in your Discord thread
+
+
+-- end: mark-projects
+
+
+
+-- project list zyle-projects:
+
+-- project: Expander
+project-url: https://fastn.com/expander
+
+- Go through the Expander Course
+- Recreate the component
+- Create a good-looking UI
+- Submit the URL in your Discord thread
+
+
+-- end: zyle-projects
+
+
+;; members ------------------------------------------
+
+-- member glenn: Glenn
+projects: $glenn-projects
+avatar: $fastn-assets.files.images.blog.glenn.jpg
+
+Kamusta? I'm a passionate artist and web designer. I love to integrate my
+drawings into UI/UX designs. I also code website front-ends that hopefully
+brings joy and amusement to people around me.
+
+
+-- member hadrian: Hadrian
+projects: $nicole-projects
+avatar: $fastn-assets.files.images.blog.hadrian.jpg
+
+I am a diligent and trustworthy student studying BSIT from Polytechnic
+University of the Philippines Santo.tomas. I keep good track of time and am
+always eager to pick up new abilities. I have an excellent sense of humor,
+friendly, helpful, and respectful. I am friendly and diplomatic, and I have
+good listening skills when trying to solve issues.
+
+
+-- member mark: Mark
+projects: $mark-projects
+avatar: $fastn-assets.files.images.blog.mark.jpg
+
+Hello, my name is Mark, and at the time of this writing, I am a fourth-year IT
+student with a strong proficiency in both backend and frontend tools,
+particularly in PHP programming. Because of my passion for game development and
+my eagerness to explore new technological possibilities, I am poised to make a
+valuable contribution to any project or team I work with.
+
+
+-- member nicole: Nicole
+projects: $nicole-projects
+avatar: $fastn-assets.files.images.blog.nicole.jpg
+
+Magandang araw!
+
+I am Nicole Alcala, a passionate Web Developer based in the Philippines. As a
+detail-oriented individual, I am always striving for excellence in my work. I
+am driven by my dreams and constantly working towards turning them into
+reality.
+
+
+-- member zyle: Zyle
+projects: $zyle-projects
+avatar: $fastn-assets.files.images.blog.zyle.jpg
+
+Hi there! My name is Zyle Allhen Manzanero, an aspiring web developer based in
+the Philippines. I'm eager to learn new things, more so about fastn and
+hopefully learn a lot from it. I always thrive for the improvement of both my
+personality and technical skills.

@@ -1,0 +1,42 @@
+-- ds.page: Syntax Highlighting In Sublime Text 3
+
+SublimeText does not come with built in syntax highlighting support for `ftd`,
+but we can install it ourselves.
+
+-- ds.h2: Steps
+
+Follow the following steps:
+
+- Download the file [ftd.sublime-syntax](https://github.com/fastn-stack/fastn/blob/main/ftd/syntax/ftd.sublime-syntax)
+- Open Sublime Text Editor
+- Select `Browse Packages...` from the Menu bar
+
+-- ds.h3: For Windows
+
+- Go to `Preferences > Browse Packages...`
+
+-- ftd.image:
+src: $fastn-assets.files.images.sublime.windows-sublime-syntax.png
+height.fixed.px: 400
+align-self: center
+border-radius.px: 3
+border-width.px: 1
+
+
+-- ds.h3: For Mac
+
+- Go to `Sublime Text > Settings... > Browse Packages...`
+
+-- ftd.image:
+src: $fastn-assets.files.images.sublime.mac-sublime-syntax.png
+height.fixed.px: 400
+align-self: center
+border-radius.px: 3
+border-width.px: 1
+
+-- ds.markdown:
+
+- Paste the downloaded file (`ftd.sublime-syntax`) inside your `Users` folder
+- Restart Sublime Text Editor.
+
+-- end: ds.page

@@ -1,0 +1,56 @@
+-- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn-community.github.io/spectrum-ds/common
+-- import: fastn-community.github.io/spectrum-ds/assets
+
+
+
+
+
+
+-- my-ds.page: Featured Components
+site-name: NULL
+distribution-bar: true
+
+-- my-ds.page.layout-bar:
+
+-- ds.layout: 
+cta-url: https://github.com/fastn-community/spectrum-ds
+previous-url: /
+
+-- end: my-ds.page.layout-bar
+
+-- my-ds.page.abstract-bar:
+
+-- ds.distributors: 
+owners: $common.owners
+license-url: /
+license: Creative Commons
+published-date:  28-April-2023
+used-by: 512 +
+likes: 750 Likes
+connect: $common.social-links
+
+-- end: my-ds.page.abstract-bar
+
+-- my-ds.page.body:
+
+Amet minim mollit non deserunt ullamco est sit 
+aliqua dolor do amet sint. Velit officia 
+consequat duis enim velit mollit.
+Exercitation veniam consequat sunt nostrud amet.
+
+-- ds.preview-card:
+image: $assets.files.static.background.svg
+cta-url:/
+
+-- ds.grid-view: Documentation Sites:
+if: { common.show-grid }
+templates: $common.doc-sites
+
+Amet minim mollit non deserunt ullamco est sit 
+aliqua dolor do amet sint. Velit officia 
+consequat duis enim velit mollit.
+Exercitation veniam consequat sunt nostrud amet.
+
+-- end: my-ds.page
+

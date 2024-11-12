@@ -1,0 +1,67 @@
+-- import: fifthtry.github.io/admonitions as cbox
+
+-- ds.page: `ftd.column`
+
+A column is a container component that stacks a list of children vertically.
+
+-- cbox.info: column
+
+Make sure to close your column container using the `end` syntax. This is
+mandatory.
+
+`-- end: <container-name>`
+
+-- ds.h1: Usage
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.column:
+
+\;; <Child components>
+
+\-- end: ftd.column
+
+-- ds.h1: Attributes
+
+`ftd.column` accepts the [container root
+attributes](ftd/container-root-attributes/), [container
+attributes](ftd/container-attributes/) as well all the [common
+attributes](ftd/common/).
+
+-- ds.h1: Example
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.column:
+spacing.fixed.px: 20
+
+\-- ftd.text: Hello
+
+\-- ftd.text: World
+
+\-- end: ftd.column
+
+-- ds.markdown:
+
+In this example, a column container is created with a fixed spacing of 20 pixels
+between the child components. Two `ftd.text` components are then placed within
+the row, which will be vertically stacked with the specified spacing.
+
+-- ds.output:
+
+	-- ftd.column:
+	spacing.fixed.px: 20
+	color: $inherited.colors.text
+	
+		-- ftd.text: Hello
+		
+		-- ftd.text: World
+		
+	-- end: ftd.column
+
+
+-- end: ds.output
+
+-- end: ds.page

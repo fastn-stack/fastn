@@ -1,0 +1,8 @@
+-- import: fastn
+
+-- fastn.package: fastn-community.github.io/optimization
+
+-- fastn.dependency: fastn-community.github.io/doc-site as ds
+-- fastn.dependency: fifthtry.github.io/dark-flame-cs
+
+-- fastn.auto-import: ds

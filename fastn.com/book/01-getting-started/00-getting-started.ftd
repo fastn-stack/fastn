@@ -1,0 +1,17 @@
+-- ds.page: Getting Started 🚧
+
+Welcome to your journey to programming! In this chapter I will explains how to
+install `fastn`, how to write a "hello world" program, how to publish it on
+the web.
+
+While we are learning programming from scratch, we would be learning best
+practices from day one. Which means from day one we will use terminal, we will
+use proper programming editor, and we will store our source code in a version
+control system and finally we will deploy the hello world program on the web for
+others to view.
+
+-- ds.h1: Next Step
+
+Let's start with looking at [what is Github? ->](/book/github/)
+
+-- end: ds.page

@@ -1,0 +1,54 @@
+-- import: fastn.com/utils
+
+-- ds.page: Commenting guidelines
+
+-- utils.code-display: `no-code-comments`: Avoid code comments
+id: no-code-comments
+
+Instead of adding comment marker on such line of codes which are outdated or
+not used we should remove them from the code document.
+
+This approach can help improve code readability, reduce the risk of errors
+caused by outdated or misleading comments, and make it easier for developers
+to maintain and update the code in the future.
+
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- ftd.text: Hello World!
+	\;; color: red
+	color: $inherited.colors.text
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- ftd.text: Hello World!
+	color: $inherited.colors.text
+	
+	
+-- end: utils.code-display
+
+
+-- utils.code-display: `comment-spacing`: One character space after `;; `
+id: comment-spacing
+
+This practice helps to improve code readability. When writing comments using
+the `;;` syntax in code, one should leave one character space between `;;` and
+the comment text.
+
+
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\;;this is the comment line
+	
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\;; this is the comment line
+	
+	
+-- end: utils.code-display
+
+-- end: ds.page

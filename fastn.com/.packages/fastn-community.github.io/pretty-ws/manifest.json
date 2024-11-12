@@ -1,0 +1,206 @@
+{
+    "files": {
+        "assets/tweak.svg": {
+            "name": "assets/tweak.svg",
+            "checksum": "005339F70015EB93C6AAE3D122C347212ABF9BC5F43D4E374C7C34673DB66F31",
+            "size": 3114
+        },
+        "assets/dashboard.png": {
+            "name": "assets/dashboard.png",
+            "checksum": "65CEFB1294AB93422C8FA1E650E1E744F44DC779DFD2668644FA8100CB3C110A",
+            "size": 19184
+        },
+        "assets/google.svg": {
+            "name": "assets/google.svg",
+            "checksum": "08177338E0783BDB7CB2FD5A65B58C3E35B6E54637E0B158DDD3BA4C3D8A2056",
+            "size": 1217
+        },
+        "assets/dbl-qoutes.svg": {
+            "name": "assets/dbl-qoutes.svg",
+            "checksum": "29FB062D96E00B38B73ED78C526DF5917BD9AE1B5BAADF57B3247AC3C09507C6",
+            "size": 2670
+        },
+        "assets/patrica.png": {
+            "name": "assets/patrica.png",
+            "checksum": "12F2CCB61216AAF2D4D0BCA456D40B03753EE4CADD22A4DCB6AC650771E24C94",
+            "size": 4501
+        },
+        "assets/resecrub-dark.svg": {
+            "name": "assets/resecrub-dark.svg",
+            "checksum": "67EDCE862A5D448EB557BE2666C6DC57092FCFEBAB084A92F62AEC5F41FACEFC",
+            "size": 15943
+        },
+        "assets/cash_control.png": {
+            "name": "assets/cash_control.png",
+            "checksum": "85EC6764B35359570977B3EF33A9F363003CF0FB5398D3E76A2D60A552A61DCE",
+            "size": 137038
+        },
+        "assets/down.svg": {
+            "name": "assets/down.svg",
+            "checksum": "F6677B6C34480ED7E3F1915D9C945F1733DC71503A954333BE39EDAE1892C037",
+            "size": 512
+        },
+        "assets/ball.svg": {
+            "name": "assets/ball.svg",
+            "checksum": "5435C1310C2E4946E84F801D2ABDB3DFEA3A8D1449FDB03F76BC72F0F2588B12",
+            "size": 1812
+        },
+        "assets/smart_dashboard-dark.png": {
+            "name": "assets/smart_dashboard-dark.png",
+            "checksum": "6C69955763E2F5DA93ACBE62769565ACDDFE5023FB7BC7D07A52B022FE7ED76C",
+            "size": 176285
+        },
+        "assets/symtric-dark.svg": {
+            "name": "assets/symtric-dark.svg",
+            "checksum": "C221E0304AC54151AD08028503B391B39649846B9E863B214F362DDECD0AEE39",
+            "size": 3038
+        },
+        "FASTN.ftd": {
+            "name": "FASTN.ftd",
+            "checksum": "3551ADB9CE66AB3735533CD95065D5E521E6C1694F56C58133A0142575FDA8D5",
+            "size": 256
+        },
+        "assets/heart-icon.svg": {
+            "name": "assets/heart-icon.svg",
+            "checksum": "3DD6AC2619449CD0D27147D69636571298356DF27E8E0278BD2AE716F9E099F6",
+            "size": 656
+        },
+        "assets/wishelp-dark.svg": {
+            "name": "assets/wishelp-dark.svg",
+            "checksum": "424B447624AB28EED37379DFB619859C1FB9A429489A2C974CAD260C0FD11534",
+            "size": 9696
+        },
+        "assets/cash_control-dark.png": {
+            "name": "assets/cash_control-dark.png",
+            "checksum": "FCFEC3E2D3898142BE1C2D1C5CD5324FF68FF39F9562A54C156BE4C0DF5E273D",
+            "size": 137119
+        },
+        "assets/arrow.svg": {
+            "name": "assets/arrow.svg",
+            "checksum": "98A3087F2C87F31F87B1061401C2A107CB7F7FAF5CDB6B7050C08D5E23B929F9",
+            "size": 884
+        },
+        "_config.yml": {
+            "name": "_config.yml",
+            "checksum": "A42D91290C93B5F17412C3B346737EA1C796E5D287306758AFE8B20470119D80",
+            "size": 21
+        },
+        "assets/okay.svg": {
+            "name": "assets/okay.svg",
+            "checksum": "7B56E613078C2F7DD46EE9B8BFB940EEEAB347A22A31D9F1C1D0BCAC20E216D5",
+            "size": 469
+        },
+        "assets/invoicing.png": {
+            "name": "assets/invoicing.png",
+            "checksum": "02BF77339AECEBE48D7DF7063A86E5B3560B651229593F07EB621791BC5775EF",
+            "size": 189044
+        },
+        "assets/resecrub.svg": {
+            "name": "assets/resecrub.svg",
+            "checksum": "A4158098FE47D6D11F1FA74D9B342681683C460E1EC383AE3F8783EF10A7A19D",
+            "size": 15960
+        },
+        "assets/shopping_cart-icon.svg": {
+            "name": "assets/shopping_cart-icon.svg",
+            "checksum": "2E95CE6074DE54AE5F1F245BD474569D9ABDFCA87B26832B5B1679A45DB80265",
+            "size": 716
+        },
+        "assets/smart_dashboard.png": {
+            "name": "assets/smart_dashboard.png",
+            "checksum": "F0733E4226B9E55AA3D6D18B49D16186B5624C72E5E0CD41B6D51D023ACAEFD4",
+            "size": 161028
+        },
+        "assets/welytics.svg": {
+            "name": "assets/welytics.svg",
+            "checksum": "E108E646138C2156F2F990D9C621E6EEA23D8400CBEF992BA1957424BC820EA9",
+            "size": 2844
+        },
+        "assets/figma.svg": {
+            "name": "assets/figma.svg",
+            "checksum": "DACC61DEA12ADDB47D4CE8FD03EF0E2A77326C0A06D24F1D1CDC7F7CCF980828",
+            "size": 1087
+        },
+        "assets/secure.svg": {
+            "name": "assets/secure.svg",
+            "checksum": "120308FED68185D26F3A625A72636E9C035A7DA63D9604C37CE82B7C4B731014",
+            "size": 478
+        },
+        "assets/wishelp.svg": {
+            "name": "assets/wishelp.svg",
+            "checksum": "BCE89E9601C78EC685C223779373B8E2D707CBA6B352AB0B0128152780E8F2A0",
+            "size": 9710
+        },
+        "assets/arrows.png": {
+            "name": "assets/arrows.png",
+            "checksum": "5CB4BE418D158D67FD2A273C0A951E221B63D531F860A28D139D61D21DC79A04",
+            "size": 899
+        },
+        "assets/symtric.svg": {
+            "name": "assets/symtric.svg",
+            "checksum": "1BB10F6F728C8300BB2631B078E38CE98065D40AD331EC49474B6DB97B344F08",
+            "size": 3052
+        },
+        "assets/search-icon.svg": {
+            "name": "assets/search-icon.svg",
+            "checksum": "6BCEEAF46BBDBCAA3F4D978672FC331444D59CC5E18DFFF28B2190F8AED14352",
+            "size": 691
+        },
+        "assets/history.svg": {
+            "name": "assets/history.svg",
+            "checksum": "45063DB81A6F8642F53AE7EB28B173E1C9EF33B158699D61000FD1874DB41AA3",
+            "size": 150914
+        },
+        "assets/meta.svg": {
+            "name": "assets/meta.svg",
+            "checksum": "808014EF01AC9AAA13D11AC75911E7A2D1A865B8E789A018556ED7040E4305BA",
+            "size": 1011
+        },
+        "assets/savings.png": {
+            "name": "assets/savings.png",
+            "checksum": "3AD0B539790BB0A9487A5E189FEB0C43E83AF6DC6F060D7F05556F3A7BFC4E32",
+            "size": 27398
+        },
+        "assets/notifications-icon.svg": {
+            "name": "assets/notifications-icon.svg",
+            "checksum": "C56B24F0E53D0B98BAAEECF0EAF6748DF89F45DCDF5F23E23BB06B764827708C",
+            "size": 455
+        },
+        "index.ftd": {
+            "name": "index.ftd",
+            "checksum": "D4DAFBAF5D73E349BC9D0C3892D1651EE3241A8EE3B23D290485FBDC60D37E85",
+            "size": 8726
+        },
+        "README.md": {
+            "name": "README.md",
+            "checksum": "451C920C308F91AB2B7AFABC204557645B8E86F4360208DFFC2C650177B2B3B7",
+            "size": 1334
+        },
+        "assets/jiggle.svg": {
+            "name": "assets/jiggle.svg",
+            "checksum": "E6F2319D1B283EE93660AC3F96130B307B1EB31E09FC50DD02F0CA3463B000D3",
+            "size": 7601
+        },
+        "assets/welytics-dark.svg": {
+            "name": "assets/welytics-dark.svg",
+            "checksum": "50760635605AF739D9C9F8699F96A241659DE31C9140561616CB5BD890860D3F",
+            "size": 2830
+        },
+        "lib.ftd": {
+            "name": "lib.ftd",
+            "checksum": "F995A6F1652272240BE1DE17325C9C076F42B83771DEB23BB0B7A4F6A924D707",
+            "size": 28172
+        },
+        "assets/jiggle-dark.svg": {
+            "name": "assets/jiggle-dark.svg",
+            "checksum": "79202BE1404280187E841C655A8E608316879D039201B19E7B4D1FE26A698EB9",
+            "size": 7635
+        },
+        "assets/right-arrow-icon.svg": {
+            "name": "assets/right-arrow-icon.svg",
+            "checksum": "B5C5467C49D254ACA047B38AA214F4CF3A7CABA68C2019D29D5829B2C5ECF118",
+            "size": 214
+        }
+    },
+    "zip_url": "https://github.com/fastn-community/pretty-ws/archive/0908d624c3b8513abea6da84d013cf2521c7a0bd.zip",
+    "checksum": "EE74553126BF88C1D25BF05DCB5477B45832C765DC8766859415EFEC0C4033B3"
+}

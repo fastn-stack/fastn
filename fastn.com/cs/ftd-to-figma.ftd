@@ -1,0 +1,244 @@
+-- import: fastn/processors as pr
+-- import: fastn-community.github.io/forest-cs as forest-cs
+-- import: fastn-community.github.io/saturated-sunset-cs as sunset-cs
+
+-- string forest-figma:
+$processor$: pr.figma-cs-token
+variable: $forest-cs.main
+name: forest-cs
+
+
+-- string sunset-figma:
+$processor$: pr.figma-cs-token
+variable: $sunset-cs.main
+name: sunset-cs
+
+-- ds.page: How to use Figma Tokens with fastn color schemes
+
+-- ds.youtube:
+v: 77axdv6ZdO4
+
+-- ds.h1: Install figma token
+
+If you already have this
+[`Token Studio for figma` (Figma Tokens)](https://www.figma.com/community/plugin/843461159747178978/Tokens-Studio-for-Figma-(Figma-Tokens))
+plugin installed, then awesome. If not, then visit the above link.
+
+-- ds.h1: Create a new figma document
+
+From your figma account, create a new design file by clicking
+on the `New design file` button as shown below.
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b1.create-new-design-file.png
+width: fill-container
+
+-- ds.h1: Open Figma Tokens plugin
+
+Select quick actions from menu to open `Token Studio for figma`
+(Figma Tokens) plugin as shown below.
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b1.quick-actions.png
+width: fill-container
+
+-- ds.markdown:
+
+After clicking on quick actions, search for `Token Studio for figma`
+and launch that plugin by clicking on it.
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b1.select-token-studio.png
+width: fill-container
+
+-- ds.h1: Create a new empty file inside figma plugin
+
+Once you have launched the plugin, create a new empty file
+by clicking on its button as shown below
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b1.select-new-empty-file.png
+width: fill-container
+
+-- ds.h1: Save the forest theme json
+
+Download and save the below json code by clicking at the download
+icon in the code-block below.
+
+`Note:` You can also get this json from its
+[color documentation](https://fastn-community.github.io/forest-cs/)
+
+-- ds.code: forest-cs
+lang: json
+max-height.fixed.px: 300
+download: forest-cs.json
+
+$forest-figma
+
+-- ds.h1: Load `forest-cs.json` inside figma plugin
+
+To load `forest-cs.json` which we just created,
+
+Step 1: Under `Tools` -> Click on `Load from file/folder or Preset`
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b1.select-load-button.png
+width: fill-container
+
+-- ds.markdown:
+
+Step 2: Go under `File` Tab
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b1.select-file.png
+width: fill-container
+
+-- ds.markdown:
+
+Step 3: Click on `Choose File` button
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b1.select-choose-file.png
+width: fill-container
+
+-- ds.markdown:
+
+Step 4: Find and select `forest-cs.json` from the file picker
+and click on open button.
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b1.select-forest-cs.png
+width: fill-container
+
+-- ds.markdown:
+
+After opening `forest-cs.json`, check the `forest-cs-light` checkbox
+as shown below for making the light color scheme as the current
+active color scheme.
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b1.select-forest-cs-light.png
+width: fill-container
+
+-- ds.h1: Create a new rectangle
+
+To do this first select rectangle shape from top menu.
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b1.select-rectangle-shape.png
+width: fill-container
+
+-- ds.markdown:
+
+After selecting it, drag the cursor and create your rectangle.
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b1.create-rectangle.png
+width: fill-container
+
+-- ds.markdown:
+
+Now select this rectangle
+and change its color to `Background Colors -> base` as shown below
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b1.select-rectangle-color.png
+width: fill-container
+
+-- ds.h1: Create a new text-block
+
+First, select the Text option from the top menu.
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b1.select-text-option.png
+width: fill-container
+
+-- ds.markdown:
+
+After selecting it, drag the cursor inside the rectangle
+and create a text-block. Add some text to it,
+let's say `Hello There`
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b1.hello-text-block.png
+width: fill-container
+
+-- ds.markdown:
+
+As you might see, the text is barely visible inside the rectangle.
+So now, select the text-block and change its color to
+`Standalone Colors -> text` as shown below.
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b1.select-text-block-color.png
+width: fill-container
+
+-- ds.h1: Test your design in dark mode
+
+Toggle the `forest-cs-dark` checkbox to change the design with dark color scheme
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b1.forest-toggle-cs.png
+width: fill-container
+
+-- ds.h1: Lets try another color scheme
+
+Let's use `sunset-cs` now. Download this below json code as a new json file
+named `sunset-cs.json` by clicking at the download button.
+
+`Note:` You can also get this json from its
+[color documentation](https://fastn-community.github.io/saturated-sunset-cs/)
+
+-- ds.code: Sunset-cs
+lang: json
+max-height.fixed.px: 300
+download: sunset-cs.json
+
+$sunset-figma
+
+-- ds.h1: Load `sunset-cs.json` in figma
+
+Just like we loaded `forest-cs.json`, similarly load `sunset-cs.json`
+into the figma plugin.
+
+Click on `Load` -> Select `File` Tab ->
+Click on `Choose File` -> Open `sunset.cs.json`
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b1.open-sunset-cs.png
+width: fill-container
+
+-- ds.markdown:
+
+After loading `sunset-cs.json`, check the `sunset-cs-light` checkbox as shown below
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b1.select-sunset-cs-light.png
+width: fill-container
+
+-- ds.markdown:
+
+To see the design in dark color scheme, toggle `sunset-cs-dark` checkbox.
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b1.sunset-toggle-cs.png
+width: fill-container
+
+-- ds.markdown:
+
+Congratulations you have successfully completed this tutorial.
+
+-- ds.h1: Learn More
+
+- [About how to create your own fastn color-scheme from figma](/figma-to-fastn-cs/)
+
+-- ds.h1: More Awesome fastn color-schemes
+
+Check out these fastn color-schemes which you can use right away
+
+- [Dark flame CS](https://fastn-community.github.io/dark-flame-cs/)
+- [Forest CS](https://fastn-community.github.io/forest-cs/)
+- [Saturated sunset CS](https://fastn-community.github.io/saturated-sunset-cs/)
+- [Winter CS](https://fastn-community.github.io/winter-cs/)
+
+-- end: ds.page

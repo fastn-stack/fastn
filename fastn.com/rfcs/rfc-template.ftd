@@ -1,0 +1,55 @@
+-- import: fastn.com/rfcs/lib
+
+-- lib.rfc: RFC: <the rfc title>
+id: <unique-rfc-id>
+status: proposal
+
+Write a brief summary of the RFC here.
+
+
+
+-- lib.motivation:
+
+Write the motivation of your rfc here.
+
+-- end: lib.motivation
+
+
+
+-- lib.detailed-design:
+
+Describe your proposal in detail.
+
+-- end: lib.detailed-design
+
+
+
+
+-- lib.alternatives:
+
+Did you consider any alternatives to what you propose in detailed-design, if so
+mention them here, along with discussion on why you consider the proposal better.
+
+-- end: lib.alternatives
+
+
+
+
+-- lib.teaching-notes:
+
+How hard would it be to teach this feature?
+
+-- end: lib.teaching-notes
+
+
+
+
+-- lib.unresolved-questions:
+
+List unresolved questions here.
+
+-- end: lib.unresolved-questions
+
+
+
+-- end: lib.rfc

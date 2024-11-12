@@ -1,0 +1,40 @@
+-- import: fastn.com/utils
+
+-- ds.page: FScript guidelines
+
+These guidelines should be followed while writing any FScript code.
+
+-- ds.h1: Dollar in FScript
+
+`$` for referencing inside FScript is not recommended
+
+-- ds.h2: Why is this bad?
+
+Using `$` for referencing inside FScript might increase readability issues if
+used extensively.
+
+-- utils.code-display: `no-dollar-in-fscript`: Dollar not recommended in FScript
+id: no-dollar-in-fscript
+
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- integer num: 1
+	
+	\-- ftd.text: Number is 1
+	if: { $num == 1 }	;; <hl>
+	
+	
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- integer num: 1
+	
+	\-- ftd.text: Number is 1
+	if: { num == 1 }	;; <hl>
+	
+-- end: utils.code-display
+
+
+-- end: ds.page

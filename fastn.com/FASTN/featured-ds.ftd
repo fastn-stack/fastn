@@ -1,0 +1,184 @@
+-- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn-community.github.io/spectrum-ds/common
+-- import: fastn.com/featured as ft-ui
+-- import: fastn-community.github.io/dark-flame-cs
+-- import: fifthtry.github.io/fastn-typography as typo
+-- import: fastn.com/content-library as footer
+-- import: fastn.com/featured/components/business-cards
+
+
+
+
+
+
+
+
+-- component featured-business:
+caption title:
+ftd.image-src image:
+common.owner list owners:
+string license-url:
+string license:
+string published-date:
+string github-url:
+string demo-link:
+
+-- featured-category: $featured-business.title
+featured-link: /featured/components/business-cards/
+category: Featured Business Cards
+image: $featured-business.image
+owners: $featured-business.owners
+license-url: $featured-business.license-url
+license: $featured-business.license
+published-date: $featured-business.published-date
+cards: $business-cards.cards
+github-url: $featured-business.github-url
+demo-link: $featured-business.demo-link
+
+
+-- end: featured-business
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component featured-category:
+caption title:
+string featured-link:
+string category:
+ftd.image-src image:
+common.owner list owners:
+string license-url:
+string license:
+string published-date:
+ft-ui.template list cards:
+string github-url:
+string demo-link:
+
+
+-- ds.page:
+show-footer: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-name: NULL
+logo-height: 38
+logo-width: 120
+colors: $dark-flame-cs.main
+types: $typo.types
+github-icon: true
+github-url: https://github.com/fastn-stack/fastn
+full-width: true
+show-layout-bar: true
+distribution-bar: true
+full-width-bar: true
+fluid-width: false
+max-width.fixed.px: 1340
+
+	-- ds.page.footer:
+	
+		-- footer.footer:
+		site-logo: $fastn-assets.files.images.fastn.svg
+		site-url: /
+		social-links: $footer.social-links
+		copyright: Copyright © 2023 - fastn.com
+		full-width: false
+		max-width.fixed.px: 1340
+		
+	-- end: ds.page.footer
+
+	-- ds.page.abstract-bar:
+	
+		-- ds.distributors: $featured-category.title
+		owners: $featured-category.owners
+		license-url: $featured-category.license-url
+		license: $featured-category.license
+		published-date: $featured-category.published-date
+		
+	-- end: ds.page.abstract-bar
+
+	-- ds.page.full-width-wrap:
+	
+		-- ft-ui.grid-view: $featured-category.category
+		templates: $featured-category.cards
+		more-link-text: View more
+		more-link: $featured-category.featured-link
+		show-large: true
+		
+	-- end: ds.page.full-width-wrap
+
+	-- ds.preview-card:
+	image: $featured-category.image
+	cta-url: $featured-category.demo-link
+	cta-text: Demo
+	github-url: $featured-category.github-url
+	
+-- end: ds.page
+
+-- end: featured-category
+
+
+
+
+
+
+-- component user-info:
+caption title:
+optional ftd.image-src avatar:
+common.social-media list social-links:
+string profile:
+ftd.ui list works:
+
+-- ds.page:
+show-footer: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-name: NULL
+logo-height: 38
+logo-width: 120
+colors: $dark-flame-cs.main
+types: $typo.types
+github-icon: true
+github-url: https://github.com/muskan1verma
+full-width: true
+fluid-width: false
+max-width.fixed.px: 1340
+
+	-- ds.page.footer:
+	
+		-- footer.footer:
+		site-logo: $fastn-assets.files.images.fastn.svg
+		site-url: /
+		social-links: $footer.social-links
+		copyright: Copyright © 2023 - fastn.com
+		full-width: false
+		max-width.fixed.px: 1340
+		
+	-- end: ds.page.footer
+
+	-- ftd.column:
+	width: fill-container
+	align-content: center
+	
+		-- ds.contributor: $user-info.title
+		avatar: $user-info.avatar
+		profile: $user-info.profile
+		connect: $user-info.social-links
+		
+	-- end: ftd.column
+
+	-- ftd.column:
+	width: fill-container
+	children: $user-info.works
+	
+	-- end: ftd.column
+
+-- end: ds.page
+
+-- end: user-info

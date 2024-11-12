@@ -1,0 +1,81 @@
+-- import: fastn
+-- import: fastn-community.github.io/footer
+-- import: fastn-community.github.io/roboto-typography as typo
+-- import: fastn-community.github.io/dark-flame-cs as cs
+-- import: doc-site/common
+-- import: doc-site
+export: markdown,h0,h1,h2,h3,code,rendered,output,image,iframe,youtube,compact-text,post,posts,featured-post,image-first,image-in-between,without-image,author-bio,tip,not-found-1,not-found-2,link,link-group
+
+-- common.site-logo site-logo: https://fastn.com/-/fastn.com/images/fastn-dark.svg
+
+-- component page:
+children wrapper:
+optional caption title:
+optional body body:
+boolean sidebar: false
+optional string document-title:
+optional string document-description:
+optional ftd.raw-image-src document-image:
+optional string site-name: Certificates
+optional ftd.image-src site-logo: $site-logo
+boolean github-icon: false
+optional string github-url: 
+boolean full-width: true
+ftd.type-data typography: $typo.types
+ftd.color-scheme color-scheme: $cs.main
+integer logo-width: 100
+integer logo-height: $common.logo-height
+boolean show-footer: false
+boolean show-banner: true
+ftd.ui list right-sidebar:
+ftd.ui list banner:
+fastn.app-ui apps: $common.apps
+boolean login-button: $common.login-button
+string site-url: $common.site-url
+optional ftd.raw-image-src favicon:
+
+-- ftd.ui list page.footer:
+
+-- footer.fastn-footer:
+copyright: Copyright © 2023 - fastn-stack.github.io/certificates
+site-logo: $common.fastn-logo
+powered-by-text: Powered by
+powered-by-link: https://fastn.com/
+
+-- end: page.footer
+
+-- doc-site.page: $page.title
+site-logo: $page.site-logo
+body: $page.body
+colors: $page.color-scheme
+sidebar: $page.sidebar
+full-width: $page.full-width
+types: $page.typography
+show-banner: $page.show-banner
+show-footer: $page.show-footer
+site-name: $page.site-name
+logo-height: $page.logo-height
+logo-width: $page.logo-width
+github-icon: $page.github-icon
+github-url: $page.github-url
+right-sidebar: $page.right-sidebar
+footer: $page.footer
+banner: $page.banner
+document-title: $page.document-title
+document-description: $page.document-description
+document-image: $page.document-image
+apps: $page.apps
+login-button: $page.login-button
+site-url: $page.site-url
+favicon: $page.favicon
+
+-- ftd.column:
+spacing.fixed.em: 0.8
+width: fill-container
+children: $page.wrapper
+
+-- end: ftd.column
+
+-- end: doc-site.page
+
+-- end: page

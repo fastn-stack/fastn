@@ -1,0 +1,360 @@
+-- ds.page: How to make page responsive
+
+In ftd, we can make responsive pages using conditional expressions and
+event-handling. A responsive page ensures that the user experience
+is optimized, regardless of the device being used to access the page.
+This includes making sure that the page is easy to read and navigate,
+images and media are appropriately sized and scaled, and interactive
+elements are accessible and usable.
+
+-- ds.h1: Using conditions
+
+To make your page responsive,
+we can use `if` conditional expressions on component as well on the component
+attributes.
+
+
+
+
+
+
+-- ds.h2: Control visibility of a component using if conditions
+
+Using if conditions on component lets you control when the component
+needs to be visible and under which conditions.
+
+-- ds.rendered: Sample code using `if` condition on component
+
+	-- ds.rendered.input:
+	
+	\-- ftd.column:
+	width: fill-container
+	color: $inherited.colors.text
+	
+	\-- ftd.text: This text will only show on mobile
+	if: { ftd.device == "mobile" } ;; <hl>
+	
+	\-- ftd.text: This text will only show on desktop
+	if: { ftd.device != "mobile" } ;; <hl>
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- if-component-sample:
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+-- ds.h2: Control attribute values using if conditions
+
+We can control attribute values of a component using
+conditional if expressions.
+
+-- ds.rendered: Sample code to show conditional attributes
+
+	-- ds.rendered.input:
+	
+	\-- ftd.text: This text will be visible on desktop.
+	text if { ftd.device == "mobile" }: This text will be visible on mobile. ;; <hl>
+	color: $inherited.colors.text
+	border-color if { ftd.device != "mobile" }: green ;; <hl>
+	border-color if { ftd.device == "mobile" }: coral ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- if-attribute-sample:
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+-- ds.h1: Using responsive types
+
+In ftd, there are several attributes which support responsive type such as
+`ftd.responsive-length` which can be used with any attribute of type `ftd
+.length`.
+
+-- ds.rendered: Sample code using `ftd.responsive-length`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.responsive-length responsive-padding-length:  ;; <hl>
+	desktop.px: 15  ;; <hl>
+	mobile.px: 5  ;; <hl>
+	
+	\-- ftd.column:
+	color: $inherited.colors.text
+	width: fill-container
+	
+	\-- ftd.text: This text has responsive padding for desktop and mobile
+	padding.responsive: $responsive-padding-length ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	\-- ftd.text: This is another piece of text having same responsive padding
+	padding.responsive: $responsive-padding-length ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- responsive-length-sample:
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h1: Using event handling
+
+We can use event-handling to control how and when components are displayed.
+
+-- ds.h2: Control visibility of a component using event-handling
+
+Using event-handling on component lets you control when the component
+needs to be visible and under which conditions.
+
+-- ds.rendered: Sample code using event-handling to control component visibility
+
+	-- ds.rendered.input:
+	
+	\-- integer $component-number: 1
+	
+	\-- ftd.column:
+	width: fill-container
+	color: $inherited.colors.text
+	
+	\-- ftd.text: This is coral component, click to show blue component
+	if: { component-number == 1 } ;; <hl>
+	border-color: coral
+	border-width.px: 2
+	padding.px: 10
+	$on-click$: $ftd.set-integer($a = $component-number, v = 2) ;; <hl>
+	
+	\-- ftd.text: This is blue component, click to show coral component
+	if: { component-number == 2 } ;; <hl>
+	border-color: deepskyblue
+	border-width.px: 2
+	padding.px: 10
+	$on-click$: $ftd.set-integer($a = $component-number, v = 1) ;; <hl>
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- event-handling-visibility-sample:
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h2: Control attribute values using event-handling
+
+We can use event-handling with conditional expressions to control the behaviour
+of components.
+
+-- ds.rendered: Sample code using event-handling to control attribute values
+
+	-- ds.rendered.input:
+	
+	\-- boolean $is-hovered: false
+	
+	\-- ftd.shadow hover-shadow:
+	color: $yellow-red
+	x-offset.px: 10
+	y-offset.px: 10
+	blur.px: 1
+	
+	\-- ftd.text: A quick brown fox jumps over the lazy dog
+	color: $inherited.colors.text
+	padding.px: 10
+	shadow if { is-hovered }: $hover-shadow ;; <hl>
+	$on-mouse-enter$: $ftd.set-bool($a = $is-hovered, v = true) ;; <hl>
+	$on-mouse-leave$: $ftd.set-bool($a = $is-hovered, v = false) ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- event-handling-attribute-sample:
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+-- end: ds.page
+
+-- ftd.responsive-length responsive-padding-length:
+desktop.px: 15
+mobile.px: 5
+
+-- integer $component-number: 1
+
+-- boolean $is-hovered: false
+
+-- ftd.shadow hover-shadow:
+color: coral
+x-offset.px: 10
+y-offset.px: 5
+blur.px: 1
+
+-- ftd.color yellow-red:
+light: yellow
+dark: red
+
+-- ftd.color red-yellow:
+light: red
+dark: yellow
+
+-- component if-component-sample:
+
+-- ftd.column:
+width: fill-container
+color: $inherited.colors.text
+
+	-- ftd.text: This text will only show on mobile
+	if: { ftd.device == "mobile" }
+	
+	-- ftd.text: This text will only show on desktop
+	if: { ftd.device != "mobile" }
+	
+-- end: ftd.column
+
+-- end: if-component-sample
+
+
+
+
+
+
+
+
+-- component if-attribute-sample:
+
+-- ftd.text: This text will be visible on desktop.
+text if { ftd.device == "mobile" }: This text will be visible on mobile.
+color: $inherited.colors.text
+border-color if { ftd.device != "mobile" }: green
+border-color if { ftd.device == "mobile" }: coral
+border-width.px: 2
+padding.px: 10
+
+-- end: if-attribute-sample
+
+
+
+
+
+
+
+
+-- component event-handling-visibility-sample:
+
+-- ftd.column:
+width: fill-container
+color: $inherited.colors.text
+
+	-- ftd.text: This is coral component, click to show blue component
+	if: { component-number == 1 }
+	border-color: coral
+	border-width.px: 2
+	padding.px: 10
+	$on-click$: $ftd.set-integer($a = $component-number, v = 2)
+	
+	-- ftd.text: This is blue component, click to show coral component
+	if: { component-number == 2 }
+	border-color: deepskyblue
+	border-width.px: 2
+	padding.px: 10
+	$on-click$: $ftd.set-integer($a = $component-number, v = 1)
+	
+-- end: ftd.column
+
+
+-- end: event-handling-visibility-sample
+
+
+
+
+
+
+
+
+
+
+
+-- component event-handling-attribute-sample:
+
+-- ftd.text: A quick brown fox jumps over the lazy dog
+color: $inherited.colors.text
+padding.px: 10
+shadow if { is-hovered }: $hover-shadow
+$on-mouse-enter$: $ftd.set-bool($a = $is-hovered, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $is-hovered, v = false)
+
+-- end: event-handling-attribute-sample
+
+
+
+
+
+
+
+
+
+-- component responsive-length-sample:
+
+-- ftd.column:
+color: $inherited.colors.text
+width: fill-container
+
+	-- ftd.text: This text has responsive padding for desktop and mobile
+	padding.responsive: $responsive-padding-length
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	-- ftd.text: This is another piece of text having same responsive padding
+	padding.responsive: $responsive-padding-length
+	border-color: $red-yellow
+	border-width.px: 2
+	
+-- end: ftd.column
+
+-- end: responsive-length-sample
