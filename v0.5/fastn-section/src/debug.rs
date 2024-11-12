@@ -87,7 +87,7 @@ impl fastn_section::JDebug for fastn_section::Section {
         o.insert("init".to_string(), self.init.debug(source));
 
         if let Some(c) = &self.caption {
-            o.insert("caption".to_string(), c.debug(source));
+            o.insert("caption".to_string(), c.0.debug(source));
         }
 
         serde_json::Value::Object(o)
@@ -142,6 +142,12 @@ impl fastn_section::JDebug for fastn_section::QualifiedIdentifier {
             "module": self.module.debug(source),
             "terms": self.terms.debug(source),
         })
+    }
+}
+
+impl fastn_section::JDebug for fastn_section::HeaderValue {
+    fn debug(&self, source: &str) -> serde_json::Value {
+        self.0.debug(source)
     }
 }
 

@@ -4,7 +4,7 @@ pub fn section(
     let section_init = fastn_section::section_init(scanner)?;
 
     scanner.skip_spaces();
-    let caption = fastn_section::tes(scanner);
+    let caption = fastn_section::header_value(scanner);
 
     // TODO: implement headers, body, children, sub-sections
     Some(fastn_section::Section {

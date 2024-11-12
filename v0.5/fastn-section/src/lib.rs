@@ -14,6 +14,7 @@ mod warning;
 mod wiggin;
 
 pub use error::Error;
+pub use fastn_section::parser::header_value::header_value;
 pub use fastn_section::parser::identifier::identifier;
 pub use fastn_section::parser::kind::kind;
 pub use fastn_section::parser::kinded_name::kinded_name;
@@ -22,7 +23,6 @@ pub use fastn_section::parser::package_name::package_name;
 pub use fastn_section::parser::qualified_identifier::qualified_identifier;
 pub use fastn_section::parser::section::section;
 pub use fastn_section::parser::section_init::section_init;
-pub use fastn_section::parser::tes::tes;
 pub use fastn_section::warning::Warning;
 pub use scanner::{Scannable, Scanner};
 
@@ -188,7 +188,8 @@ pub struct KindedName {
     pub name: Identifier,
 }
 
-pub type HeaderValue = Vec<Tes>;
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct HeaderValue(pub Vec<Tes>);
 
 /// example: `hello` | `hello ${world}` | `hello ${world} ${ -- foo: }` | `{ \n text text \n }`
 /// it can even have recursive structure, e.g., `hello ${ { \n text-text \n } }`.

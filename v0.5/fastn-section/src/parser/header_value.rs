@@ -1,7 +1,7 @@
 #[allow(dead_code)]
-pub fn tes(
+pub fn header_value(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
-) -> Option<Vec<fastn_section::Tes>> {
+) -> Option<fastn_section::HeaderValue> {
     let mut ses = Vec::new();
     while let Some(text) = scanner.take_till_char_or_end_of_line('{') {
         ses.push(fastn_section::Tes::Text(text));
@@ -10,12 +10,12 @@ pub fn tes(
             break;
         }
     }
-    Some(ses)
+    Some(fastn_section::HeaderValue(ses))
 }
 
 #[cfg(test)]
 mod test {
-    fastn_section::tt!(super::tes);
+    fastn_section::tt!(super::header_value);
 
     #[test]
     fn tes() {

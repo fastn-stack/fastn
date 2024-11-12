@@ -113,7 +113,15 @@ impl fastn_section::Section {
         &source[self.init.name.name.name.start..self.init.name.name.name.end]
     }
 
-    pub fn caption_as_plain_string<'input>(&self, _source: &'input str) -> Option<&'input str> {
+    pub fn caption_as_plain_string<'input>(&self, source: &'input str) -> Option<&'input str> {
+        self.caption
+            .as_ref()
+            .and_then(|c| c.as_plain_string(source))
+    }
+}
+
+impl fastn_section::HeaderValue {
+    pub fn as_plain_string<'input>(&self, _source: &'input str) -> Option<&'input str> {
         todo!()
     }
 }

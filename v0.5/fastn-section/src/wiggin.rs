@@ -44,24 +44,27 @@ fn header_value_ender(
     o: &mut fastn_section::Document,
     header: fastn_section::HeaderValue,
 ) -> fastn_section::HeaderValue {
-    header
-        .into_iter()
-        .map(|ses| match ses {
-            fastn_section::Tes::Text(span) => fastn_section::Tes::Text(span),
-            fastn_section::Tes::Expression {
-                start,
-                end,
-                content,
-            } => fastn_section::Tes::Expression {
-                start,
-                end,
-                content: header_value_ender(source, o, content),
-            },
-            fastn_section::Tes::Section(sections) => {
-                fastn_section::Tes::Section(ender(source, o, sections))
-            }
-        })
-        .collect()
+    fastn_section::HeaderValue(
+        header
+            .0
+            .into_iter()
+            .map(|ses| match ses {
+                fastn_section::Tes::Text(span) => fastn_section::Tes::Text(span),
+                fastn_section::Tes::Expression {
+                    start,
+                    end,
+                    content,
+                } => fastn_section::Tes::Expression {
+                    start,
+                    end,
+                    content: header_value_ender(source, o, content),
+                },
+                fastn_section::Tes::Section(sections) => {
+                    fastn_section::Tes::Section(ender(source, o, sections))
+                }
+            })
+            .collect(),
+    )
 }
 
 /// converts a section list, with interleaved `-- end: <section-name>`, into a nested section list
@@ -169,7 +172,7 @@ impl SectionProxy for fastn_section::Section {
             None => return Err(fastn_section::Error::SectionNameNotFoundForEnd),
         };
 
-        let v = match (caption.get(0), caption.len()) {
+        let v = match (caption.0.get(0), caption.0.len()) {
             (Some(fastn_section::Tes::Text(span)), 1) => &source[span.start..span.end].trim(),
             (Some(_), _) => return Err(fastn_section::Error::EndContainsData),
             (None, _) => return Err(fastn_section::Error::SectionNameNotFoundForEnd),
