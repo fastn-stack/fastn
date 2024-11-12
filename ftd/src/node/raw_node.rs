@@ -29,8 +29,8 @@ impl RawNode {
 
 /*pub struct HelperNode {
     pub name: String,
-    pub properties: Vec<(String, ftd::interpreter::Property)>,
-    pub iteration: Option<ftd::interpreter::Loop>,
+    pub properties: Vec<(String, fastn_type::Property)>,
+    pub iteration: Option<fastn_type::Loop>,
     pub node: ftd::node::Node,
 }*/
 

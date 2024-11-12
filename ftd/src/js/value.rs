@@ -2,7 +2,7 @@
 pub enum Value {
     Data(fastn_type::Value),
     Reference(ReferenceData),
-    ConditionalFormula(Vec<ftd::interpreter::Property>),
+    ConditionalFormula(Vec<fastn_type::Property>),
     FunctionCall(fastn_type::FunctionCall),
     Clone(String),
 }
@@ -132,7 +132,7 @@ impl Value {
 
 fn properties_to_js_conditional_formula(
     doc: &ftd::interpreter::TDoc,
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
     rdata: &ftd::js::ResolverData,
 ) -> fastn_js::Formula {
     use ftd::js::fastn_type_functions::PropertyValueExt;
@@ -236,7 +236,7 @@ impl ftd::interpreter::Argument {
             None
         }
     }
-    pub(crate) fn get_value(&self, properties: &[ftd::interpreter::Property]) -> ftd::js::Value {
+    pub(crate) fn get_value(&self, properties: &[fastn_type::Property]) -> ftd::js::Value {
         if let Some(value) = self.get_optional_value(properties) {
             value
         } else if let Some(value) = self.get_default_value() {
@@ -248,7 +248,7 @@ impl ftd::interpreter::Argument {
 
     pub(crate) fn get_optional_value(
         &self,
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         // doc_name: &str,
         // line_number: usize
     ) -> Option<ftd::js::Value> {
@@ -268,7 +268,7 @@ impl ftd::interpreter::Argument {
 
 pub(crate) fn get_optional_js_value(
     key: &str,
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
     arguments: &[ftd::interpreter::Argument],
 ) -> Option<ftd::js::Value> {
     let argument = arguments.iter().find(|v| v.name.eq(key)).unwrap();
@@ -277,7 +277,7 @@ pub(crate) fn get_optional_js_value(
 
 pub(crate) fn get_optional_js_value_with_default(
     key: &str,
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
     arguments: &[ftd::interpreter::Argument],
 ) -> Option<ftd::js::Value> {
     let argument = arguments.iter().find(|v| v.name.eq(key)).unwrap();
@@ -288,7 +288,7 @@ pub(crate) fn get_optional_js_value_with_default(
 
 pub(crate) fn get_js_value_with_default(
     key: &str,
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
     arguments: &[ftd::interpreter::Argument],
     default: ftd::js::Value,
 ) -> ftd::js::Value {

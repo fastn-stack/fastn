@@ -761,12 +761,12 @@ pub(crate) fn insert_module_thing(
 }
 
 pub(crate) fn find_properties_by_source(
-    sources: &[ftd::interpreter::PropertySource],
-    properties: &[ftd::interpreter::Property],
+    sources: &[fastn_type::PropertySource],
+    properties: &[fastn_type::Property],
     doc_name: &str,
     argument: &ftd::interpreter::Argument,
     line_number: usize,
-) -> ftd::interpreter::Result<Vec<ftd::interpreter::Property>> {
+) -> ftd::interpreter::Result<Vec<fastn_type::Property>> {
     let mut properties = find_properties_by_source_without_default(sources, properties);
     validate_properties_and_set_default(&mut properties, argument, doc_name, line_number)?;
 
@@ -774,9 +774,9 @@ pub(crate) fn find_properties_by_source(
 }
 
 pub(crate) fn find_properties_by_source_without_default(
-    sources: &[ftd::interpreter::PropertySource],
-    properties: &[ftd::interpreter::Property],
-) -> Vec<ftd::interpreter::Property> {
+    sources: &[fastn_type::PropertySource],
+    properties: &[fastn_type::Property],
+) -> Vec<fastn_type::Property> {
     use itertools::Itertools;
 
     properties
@@ -787,7 +787,7 @@ pub(crate) fn find_properties_by_source_without_default(
 }
 
 pub(crate) fn validate_properties_and_set_default(
-    properties: &mut Vec<ftd::interpreter::Property>,
+    properties: &mut Vec<fastn_type::Property>,
     argument: &ftd::interpreter::Argument,
     doc_id: &str,
     line_number: usize,
@@ -851,9 +851,9 @@ pub(crate) fn validate_properties_and_set_default(
     }
     if found_default.is_none() {
         if let Some(ref default_value) = argument.value {
-            properties.push(ftd::interpreter::Property {
+            properties.push(fastn_type::Property {
                 value: default_value.to_owned(),
-                source: ftd::interpreter::PropertySource::Default,
+                source: fastn_type::PropertySource::Default,
                 condition: None,
                 line_number: argument.line_number,
             });
@@ -897,8 +897,8 @@ pub(crate) fn insert_export_thing(
 }
 
 pub fn get_children_properties_from_properties(
-    properties: &[ftd::interpreter::Property],
-) -> Vec<ftd::interpreter::Property> {
+    properties: &[fastn_type::Property],
+) -> Vec<fastn_type::Property> {
     use itertools::Itertools;
 
     properties

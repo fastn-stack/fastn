@@ -467,7 +467,7 @@ pub(crate) fn get_new_number(keys: &Vec<String>, name: &str) -> usize {
 
 pub(crate) fn to_properties_string(
     id: &str,
-    properties: &[(String, ftd::interpreter::Property)],
+    properties: &[(String, fastn_type::Property)],
     doc: &ftd::interpreter::TDoc,
     node: &str,
 ) -> Option<String> {
@@ -707,11 +707,9 @@ fn get_rive_event(
     let mut events_map: ftd::VecMap<(&String, &fastn_type::FunctionCall)> = ftd::VecMap::new();
     for event in rive.events.iter() {
         let (event_name, input, action) = match &event.name {
-            ftd::interpreter::EventName::RivePlay(timeline) => ("onPlay", timeline, &event.action),
-            ftd::interpreter::EventName::RivePause(timeline) => {
-                ("onPause", timeline, &event.action)
-            }
-            ftd::interpreter::EventName::RiveStateChange(state) => {
+            fastn_type::EventName::RivePlay(timeline) => ("onPlay", timeline, &event.action),
+            fastn_type::EventName::RivePause(timeline) => ("onPause", timeline, &event.action),
+            fastn_type::EventName::RiveStateChange(state) => {
                 ("onStateChange", state, &event.action)
             }
             _ => continue,

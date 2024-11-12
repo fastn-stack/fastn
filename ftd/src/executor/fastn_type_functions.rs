@@ -1,14 +1,10 @@
 pub(crate) trait PropertyValueExt {
-    fn into_property(&self, source: ftd::interpreter::PropertySource)
-        -> ftd::interpreter::Property;
+    fn into_property(&self, source: fastn_type::PropertySource) -> fastn_type::Property;
 }
 
 impl PropertyValueExt for fastn_type::PropertyValue {
-    fn into_property(
-        &self,
-        source: ftd::interpreter::PropertySource,
-    ) -> ftd::interpreter::Property {
-        ftd::interpreter::Property {
+    fn into_property(&self, source: fastn_type::PropertySource) -> fastn_type::Property {
+        fastn_type::Property {
             value: self.clone(),
             source,
             condition: None,

@@ -179,7 +179,7 @@ pub enum Value {
     UI {
         name: String,
         kind: fastn_type::KindData,
-        // component: fastn_type::Component,
+        component: fastn_type::Component,
     },
     Module {
         name: String,

@@ -2,14 +2,14 @@
 pub struct Value<T> {
     pub value: T,
     pub line_number: Option<usize>,
-    pub properties: Vec<ftd::interpreter::Property>,
+    pub properties: Vec<fastn_type::Property>,
 }
 
 impl<T> Value<T> {
     pub fn new(
         value: T,
         line_number: Option<usize>,
-        properties: Vec<ftd::interpreter::Property>,
+        properties: Vec<fastn_type::Property>,
     ) -> Value<T> {
         Value {
             value,
@@ -30,7 +30,7 @@ impl<T> Value<T> {
 pub(crate) fn get_value_from_properties_using_key_and_arguments(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
     arguments: &[ftd::interpreter::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
@@ -51,7 +51,7 @@ pub(crate) fn get_value_from_properties_using_key_and_arguments(
 pub(crate) fn get_value_from_properties_using_key_and_arguments_dummy(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
     arguments: &[ftd::interpreter::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
@@ -105,8 +105,8 @@ pub(crate) fn get_value_from_properties_using_key_and_arguments_dummy(
 #[allow(clippy::too_many_arguments)]
 pub(crate) fn find_value_by_argument(
     component_name: &str,
-    source: &[ftd::interpreter::PropertySource],
-    properties: &[ftd::interpreter::Property],
+    source: &[fastn_type::PropertySource],
+    properties: &[fastn_type::Property],
     doc: &ftd::executor::TDoc,
     target_argument: &ftd::interpreter::Argument,
     arguments: &[ftd::interpreter::Argument],
@@ -176,7 +176,7 @@ pub(crate) fn find_value_by_argument(
 pub fn string_list(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
     arguments: &[ftd::interpreter::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
@@ -227,7 +227,7 @@ pub fn string_list(
 pub fn string(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
     arguments: &[ftd::interpreter::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
@@ -258,7 +258,7 @@ pub fn string(
 pub fn record(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
     arguments: &[ftd::interpreter::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
@@ -291,7 +291,7 @@ pub fn record(
 pub fn i64(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
     arguments: &[ftd::interpreter::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
@@ -322,7 +322,7 @@ pub fn i64(
 pub fn f64(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
     arguments: &[ftd::interpreter::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
@@ -353,7 +353,7 @@ pub fn f64(
 pub fn bool(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
     arguments: &[ftd::interpreter::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
@@ -384,7 +384,7 @@ pub fn bool(
 pub fn bool_with_default(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
     arguments: &[ftd::interpreter::Argument],
     default: bool,
     doc: &ftd::executor::TDoc,
@@ -422,7 +422,7 @@ pub fn bool_with_default(
 pub fn optional_i64(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
     arguments: &[ftd::interpreter::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
@@ -461,7 +461,7 @@ pub fn optional_i64(
 pub fn string_with_default(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
     arguments: &[ftd::interpreter::Argument],
     default: &str,
     doc: &ftd::executor::TDoc,
@@ -498,7 +498,7 @@ pub fn string_with_default(
 pub fn optional_string(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
     arguments: &[ftd::interpreter::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
@@ -535,7 +535,7 @@ pub fn optional_string(
 pub fn dummy_optional_string(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
     arguments: &[ftd::interpreter::Argument],
     doc: &ftd::executor::TDoc,
     is_dummy: bool,
@@ -575,7 +575,7 @@ pub fn dummy_optional_string(
 pub fn optional_bool(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
     arguments: &[ftd::interpreter::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
@@ -615,7 +615,7 @@ pub fn optional_bool(
 pub fn optional_f64(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
     arguments: &[ftd::interpreter::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
@@ -652,7 +652,7 @@ pub fn optional_f64(
 pub fn optional_record_inherited(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
     arguments: &[ftd::interpreter::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
@@ -694,7 +694,7 @@ pub fn optional_record_inherited(
 pub fn optional_or_type(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
     arguments: &[ftd::interpreter::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
@@ -743,7 +743,7 @@ pub fn optional_or_type(
 pub fn optional_or_type_list(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
     arguments: &[ftd::interpreter::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,

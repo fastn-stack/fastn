@@ -148,7 +148,7 @@ impl Length {
     }
 
     pub(crate) fn optional_length(
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         arguments: &[ftd::interpreter::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
@@ -423,7 +423,7 @@ impl BreakpointWidth {
     }
 
     pub(crate) fn optional_breakpoint_width(
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         arguments: &[ftd::interpreter::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
@@ -481,7 +481,7 @@ impl BreakpointWidth {
                 .integer(doc.name, line_number)?,
             Some(line_number),
             vec![get_property_value("mobile")?
-                .into_property(ftd::interpreter::PropertySource::header("mobile"))],
+                .into_property(fastn_type::PropertySource::header("mobile"))],
         );
 
         Ok(BreakpointWidth { mobile })
@@ -540,7 +540,7 @@ impl Alignment {
 
     #[allow(dead_code)]
     pub(crate) fn optional_alignment(
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         arguments: &[ftd::interpreter::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
@@ -778,7 +778,7 @@ impl Resizing {
     }
 
     pub(crate) fn optional_resizing(
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         arguments: &[ftd::interpreter::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
@@ -954,8 +954,9 @@ impl BackgroundImage {
                 line_number,
             )?,
             Some(line_number),
-            vec![get_property_value("src")?
-                .into_property(ftd::interpreter::PropertySource::header("src"))],
+            vec![
+                get_property_value("src")?.into_property(fastn_type::PropertySource::header("src"))
+            ],
         );
 
         let repeat = ftd::executor::Value::new(
@@ -966,7 +967,7 @@ impl BackgroundImage {
             )?,
             Some(line_number),
             vec![get_property_value("repeat")?
-                .into_property(ftd::interpreter::PropertySource::header("repeat"))],
+                .into_property(fastn_type::PropertySource::header("repeat"))],
         );
 
         let size = ftd::executor::Value::new(
@@ -977,7 +978,7 @@ impl BackgroundImage {
             )?,
             Some(line_number),
             vec![get_property_value("size")?
-                .into_property(ftd::interpreter::PropertySource::header("size"))],
+                .into_property(fastn_type::PropertySource::header("size"))],
         );
 
         let position = ftd::executor::Value::new(
@@ -988,7 +989,7 @@ impl BackgroundImage {
             )?,
             Some(line_number),
             vec![get_property_value("position")?
-                .into_property(ftd::interpreter::PropertySource::header("position"))],
+                .into_property(fastn_type::PropertySource::header("position"))],
         );
 
         Ok(ftd::executor::BackgroundImage {
@@ -1137,7 +1138,7 @@ impl LinearGradientColor {
             )?,
             Some(line_number),
             vec![get_property_value("start")?
-                .into_property(ftd::interpreter::PropertySource::header("start"))],
+                .into_property(fastn_type::PropertySource::header("start"))],
         );
 
         let end = ftd::executor::Value::new(
@@ -1147,8 +1148,9 @@ impl LinearGradientColor {
                 line_number,
             )?,
             Some(line_number),
-            vec![get_property_value("end")?
-                .into_property(ftd::interpreter::PropertySource::header("end"))],
+            vec![
+                get_property_value("end")?.into_property(fastn_type::PropertySource::header("end"))
+            ],
         );
 
         let stop_position = ftd::executor::Value::new(
@@ -1159,7 +1161,7 @@ impl LinearGradientColor {
             )?,
             Some(line_number),
             vec![get_property_value("stop-position")?
-                .into_property(ftd::interpreter::PropertySource::header("stop-position"))],
+                .into_property(fastn_type::PropertySource::header("stop-position"))],
         );
 
         Ok(ftd::executor::LinearGradientColor {
@@ -1349,7 +1351,7 @@ impl LinearGradient {
             )?,
             Some(line_number),
             vec![get_property_value("direction")?
-                .into_property(ftd::interpreter::PropertySource::header("direction"))],
+                .into_property(fastn_type::PropertySource::header("direction"))],
         );
 
         let colors = ftd::executor::Value::new(
@@ -1360,7 +1362,7 @@ impl LinearGradient {
             )?,
             Some(line_number),
             vec![get_property_value("colors")?
-                .into_property(ftd::interpreter::PropertySource::header("colors"))],
+                .into_property(fastn_type::PropertySource::header("colors"))],
         );
 
         Ok(ftd::executor::LinearGradient { direction, colors })
@@ -1429,7 +1431,7 @@ impl Background {
     }
 
     pub(crate) fn optional_background(
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         arguments: &[ftd::interpreter::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
@@ -1837,35 +1839,35 @@ impl Shadow {
             Length::from_value(get_property_value("x-offset")?.clone(), doc, line_number)?,
             Some(line_number),
             vec![get_property_value("x-offset")?
-                .into_property(ftd::interpreter::PropertySource::header("x-offset"))],
+                .into_property(fastn_type::PropertySource::header("x-offset"))],
         );
 
         let y_offset = ftd::executor::Value::new(
             Length::from_value(get_property_value("y-offset")?.clone(), doc, line_number)?,
             Some(line_number),
             vec![get_property_value("y-offset")?
-                .into_property(ftd::interpreter::PropertySource::header("y-offset"))],
+                .into_property(fastn_type::PropertySource::header("y-offset"))],
         );
 
         let blur = ftd::executor::Value::new(
             Length::from_value(get_property_value("blur")?.clone(), doc, line_number)?,
             Some(line_number),
             vec![get_property_value("blur")?
-                .into_property(ftd::interpreter::PropertySource::header("blur"))],
+                .into_property(fastn_type::PropertySource::header("blur"))],
         );
 
         let spread = ftd::executor::Value::new(
             Length::from_value(get_property_value("spread")?.clone(), doc, line_number)?,
             Some(line_number),
             vec![get_property_value("spread")?
-                .into_property(ftd::interpreter::PropertySource::header("spread"))],
+                .into_property(fastn_type::PropertySource::header("spread"))],
         );
 
         let color = ftd::executor::Value::new(
             Color::from_value(get_property_value("color")?.clone(), doc, line_number)?,
             Some(line_number),
             vec![get_property_value("color")?
-                .into_property(ftd::interpreter::PropertySource::header("color"))],
+                .into_property(fastn_type::PropertySource::header("color"))],
         );
 
         let inset = ftd::executor::Value::new(
@@ -1875,7 +1877,7 @@ impl Shadow {
                 .bool(doc.name, line_number)?,
             Some(line_number),
             vec![get_property_value("inset")?
-                .into_property(ftd::interpreter::PropertySource::header("inset"))],
+                .into_property(fastn_type::PropertySource::header("inset"))],
         );
 
         Ok(ftd::executor::Shadow {
@@ -1905,7 +1907,7 @@ impl Shadow {
     }
 
     pub(crate) fn optional_shadow(
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         arguments: &[ftd::interpreter::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
@@ -2018,7 +2020,7 @@ impl Color {
                     line_number,
                 )?,
                 Some(line_number),
-                vec![value.into_property(ftd::interpreter::PropertySource::header("light"))],
+                vec![value.into_property(fastn_type::PropertySource::header("light"))],
             )
         };
 
@@ -2034,7 +2036,7 @@ impl Color {
                         line_number,
                     )?,
                     Some(line_number),
-                    vec![value.into_property(ftd::interpreter::PropertySource::header("dark"))],
+                    vec![value.into_property(fastn_type::PropertySource::header("dark"))],
                 )
             } else {
                 light.clone()
@@ -2057,7 +2059,7 @@ impl Color {
     }
 
     pub(crate) fn optional_color(
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         arguments: &[ftd::interpreter::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
@@ -2226,7 +2228,7 @@ impl Spacing {
     }
 
     pub(crate) fn optional_spacing_mode(
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         arguments: &[ftd::interpreter::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
@@ -2334,7 +2336,7 @@ impl AlignSelf {
     }
 
     pub(crate) fn optional_align_self(
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         arguments: &[ftd::interpreter::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
@@ -2409,7 +2411,7 @@ impl Overflow {
     }
 
     pub(crate) fn optional_overflow(
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         arguments: &[ftd::interpreter::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
@@ -2483,7 +2485,7 @@ impl Resize {
     }
 
     pub(crate) fn optional_resize(
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         arguments: &[ftd::interpreter::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
@@ -2558,7 +2560,7 @@ impl TextAlign {
     }
 
     pub(crate) fn optional_text_align(
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         arguments: &[ftd::interpreter::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
@@ -2696,7 +2698,7 @@ impl Cursor {
     }
 
     pub(crate) fn optional_cursor(
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         arguments: &[ftd::interpreter::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
@@ -3074,7 +3076,7 @@ impl ResponsiveType {
     }
 
     pub(crate) fn optional_responsive_type(
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         arguments: &[ftd::interpreter::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
@@ -3216,7 +3218,7 @@ impl Anchor {
     }
 
     pub(crate) fn optional_anchor(
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         arguments: &[ftd::interpreter::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
@@ -3305,7 +3307,7 @@ impl TextInputType {
     }
 
     pub(crate) fn optional_text_input_type(
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         arguments: &[ftd::interpreter::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
@@ -3392,7 +3394,7 @@ impl Region {
     }
 
     pub(crate) fn optional_region(
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         arguments: &[ftd::interpreter::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
@@ -3480,7 +3482,7 @@ impl WhiteSpace {
     }
 
     pub(crate) fn optional_whitespace(
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         arguments: &[ftd::interpreter::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
@@ -3560,7 +3562,7 @@ impl Display {
     }
 
     pub(crate) fn optional_display(
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         arguments: &[ftd::interpreter::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
@@ -3832,7 +3834,7 @@ impl TextStyle {
     }
 
     pub(crate) fn optional_text_style(
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         arguments: &[ftd::interpreter::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
@@ -4000,7 +4002,7 @@ impl TextTransform {
     }
 
     pub(crate) fn optional_text_transform(
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         arguments: &[ftd::interpreter::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
@@ -4085,7 +4087,7 @@ impl BorderStyle {
     }
 
     pub(crate) fn optional_border_style(
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         arguments: &[ftd::interpreter::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
@@ -4166,7 +4168,7 @@ impl ImageFit {
     }
 
     pub(crate) fn optional_image_fit(
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         arguments: &[ftd::interpreter::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
@@ -4245,7 +4247,7 @@ impl Loading {
     }
 
     pub(crate) fn loading_with_default(
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         arguments: &[ftd::interpreter::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,

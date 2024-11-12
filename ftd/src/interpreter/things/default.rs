@@ -4177,7 +4177,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         .into_kind_data().caption_or_body(),
                     ),
                 ],
-                definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+                definition: fastn_type::Component::from_name("ftd.kernel"),
                 css: None,
                 line_number: 0,
             }),
@@ -4193,7 +4193,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                             .into_kind_data().caption_or_body(),
                     ),
                 ],
-                definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+                definition: fastn_type::Component::from_name("ftd.kernel"),
                 css: None,
                 line_number: 0,
             }),
@@ -10698,7 +10698,7 @@ pub fn fastn_migration_function() -> ftd::interpreter::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        definition: fastn_type::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -10791,7 +10791,7 @@ pub fn fastn_get_function() -> ftd::interpreter::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        definition: fastn_type::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -10834,7 +10834,7 @@ pub fn fastn_post_function() -> ftd::interpreter::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        definition: fastn_type::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -10847,7 +10847,7 @@ pub fn fastn_redirect_function() -> ftd::interpreter::ComponentDefinition {
             "http-redirect",
             fastn_type::Kind::string().into_kind_data().caption(),
         )],
-        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        definition: fastn_type::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -10872,7 +10872,7 @@ pub fn fastn_test_function() -> ftd::interpreter::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        definition: fastn_type::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -10919,7 +10919,7 @@ pub fn image_function() -> ftd::interpreter::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        definition: fastn_type::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -10956,7 +10956,7 @@ pub fn audio_function() -> ftd::interpreter::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        definition: fastn_type::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11007,7 +11007,7 @@ pub fn video_function() -> ftd::interpreter::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        definition: fastn_type::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11043,7 +11043,7 @@ pub fn boolean_function() -> ftd::interpreter::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        definition: fastn_type::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11068,7 +11068,7 @@ pub fn checkbox_function() -> ftd::interpreter::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        definition: fastn_type::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11116,7 +11116,7 @@ pub fn text_input_function() -> ftd::interpreter::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        definition: fastn_type::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11152,7 +11152,7 @@ pub fn integer_function() -> ftd::interpreter::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        definition: fastn_type::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11184,7 +11184,7 @@ pub fn decimal_function() -> ftd::interpreter::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        definition: fastn_type::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11206,7 +11206,7 @@ pub fn markup_function() -> ftd::interpreter::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        definition: fastn_type::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11223,7 +11223,7 @@ pub fn row_function() -> ftd::interpreter::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        definition: fastn_type::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11281,7 +11281,7 @@ pub fn rive_function() -> ftd::interpreter::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        definition: fastn_type::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11303,7 +11303,7 @@ pub fn container_function() -> ftd::interpreter::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        definition: fastn_type::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11313,7 +11313,7 @@ pub fn desktop_function() -> ftd::interpreter::ComponentDefinition {
     ftd::interpreter::ComponentDefinition {
         name: "ftd#desktop".to_string(),
         arguments: [container_root_arguments()].concat().into_iter().collect(),
-        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        definition: fastn_type::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11323,7 +11323,7 @@ pub fn mobile_function() -> ftd::interpreter::ComponentDefinition {
     ftd::interpreter::ComponentDefinition {
         name: "ftd#mobile".to_string(),
         arguments: [container_root_arguments()].concat().into_iter().collect(),
-        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        definition: fastn_type::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11362,7 +11362,7 @@ pub fn code_function() -> ftd::interpreter::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        definition: fastn_type::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11403,7 +11403,7 @@ pub fn iframe_function() -> ftd::interpreter::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        definition: fastn_type::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11420,7 +11420,7 @@ pub fn column_function() -> ftd::interpreter::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        definition: fastn_type::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11563,7 +11563,7 @@ pub fn document_function() -> ftd::interpreter::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: ftd::interpreter::Component::from_name("ftd.kernel"),
+        definition: fastn_type::Component::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -12090,7 +12090,7 @@ fn text_arguments() -> Vec<ftd::interpreter::Argument> {
     ftd::interpreter::ComponentDefinition {
         name: "ftd.kernel".to_string(),
         arguments: vec![],
-        definition: ftd::interpreter::Component {
+        definition: fastn_type::Component {
             name: "ftd.kernel".to_string(),
             properties: vec![],
             iteration: Box::new(None),

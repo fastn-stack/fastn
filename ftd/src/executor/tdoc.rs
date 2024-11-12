@@ -89,7 +89,7 @@ impl TDoc<'_> {
     pub(crate) fn insert_local_variables(
         &mut self,
         component_name: &str,
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         arguments: &[ftd::interpreter::Argument],
         container: &[usize],
         line_number: usize,
@@ -118,7 +118,7 @@ impl TDoc<'_> {
     pub(crate) fn insert_local_variable(
         &mut self,
         component_name: &str,
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         argument: &ftd::interpreter::Argument,
         container: &[usize],
         line_number: usize,

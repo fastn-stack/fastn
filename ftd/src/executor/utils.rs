@@ -18,11 +18,11 @@ pub(crate) fn get_string_container(local_container: &[usize]) -> String {
 }
 
 pub(crate) fn create_dummy_instruction_for_loop_element(
-    instruction: &ftd::interpreter::Component,
+    instruction: &fastn_type::Component,
     doc: &mut ftd::executor::TDoc,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     local_container: &[usize],
-) -> ftd::executor::Result<ftd::interpreter::Component> {
+) -> ftd::executor::Result<fastn_type::Component> {
     let mut instruction = instruction.clone();
     /*let reference_replace_pattern = fastn_type::PropertyValueSource::Loop(alias.to_string())
         .get_reference_name(alias, &doc.itdoc());
@@ -43,7 +43,7 @@ pub(crate) fn create_dummy_instruction_for_loop_element(
 
 #[allow(clippy::too_many_arguments)]
 pub(crate) fn update_instruction_for_loop_element(
-    instruction: &ftd::interpreter::Component,
+    instruction: &fastn_type::Component,
     doc: &mut ftd::executor::TDoc,
     index_in_loop: usize,
     alias: &str,
@@ -51,7 +51,7 @@ pub(crate) fn update_instruction_for_loop_element(
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     local_container: &[usize],
     doc_name: &str,
-) -> ftd::executor::Result<ftd::interpreter::Component> {
+) -> ftd::executor::Result<fastn_type::Component> {
     use ftd::interpreter::PropertyValueSourceExt;
 
     let mut instruction = instruction.clone();
@@ -83,7 +83,7 @@ pub(crate) fn update_instruction_for_loop_element(
 }
 
 pub(crate) fn update_condition_in_component(
-    component: &mut ftd::interpreter::Component,
+    component: &mut fastn_type::Component,
     outer_condition: ftd::interpreter::Expression,
 ) {
     if let Some(condition) = component.condition.as_mut() {
@@ -113,8 +113,8 @@ pub(crate) fn update_condition_in_component(
 }
 
 pub(crate) fn update_events_in_component(
-    component: &mut ftd::interpreter::Component,
-    outer_event: Vec<ftd::interpreter::Event>,
+    component: &mut fastn_type::Component,
+    outer_event: Vec<fastn_type::Event>,
 ) {
     component.events.extend(outer_event);
 }
@@ -132,7 +132,7 @@ pub(crate) fn insert_local_variables(
 }
 
 pub(crate) fn update_inherited_reference_in_instruction(
-    component_definition: &mut ftd::interpreter::Component,
+    component_definition: &mut fastn_type::Component,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     local_container: &[usize],
     doc: &mut ftd::executor::TDoc,
@@ -148,7 +148,7 @@ pub(crate) fn update_inherited_reference_in_instruction(
 }
 
 pub(crate) fn update_local_variable_references_in_component(
-    component: &mut ftd::interpreter::Component,
+    component: &mut fastn_type::Component,
     local_variable_map: &ftd::Map<String>,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     replace_property_value: &ftd::Map<fastn_type::PropertyValue>,
@@ -167,7 +167,7 @@ pub(crate) fn update_local_variable_references_in_component(
 }
 
 pub(crate) fn update_local_variable_references_in_component_(
-    component: &mut ftd::interpreter::Component,
+    component: &mut fastn_type::Component,
     local_variable_map: &ftd::Map<String>,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     replace_property_value: &ftd::Map<fastn_type::PropertyValue>,
@@ -237,7 +237,7 @@ pub(crate) fn update_local_variable_references_in_component_(
         );
     }
 
-    if let Some(ftd::interpreter::Loop { on, .. }) = component.iteration.as_mut() {
+    if let Some(fastn_type::Loop { on, .. }) = component.iteration.as_mut() {
         update_local_variable_reference_in_property_value(
             on,
             local_variable_map,
@@ -263,7 +263,7 @@ pub(crate) fn update_local_variable_references_in_component_(
 }
 
 fn update_local_variable_reference_in_property(
-    property: &mut ftd::interpreter::Property,
+    property: &mut fastn_type::Property,
     local_variable: &ftd::Map<String>,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     replace_property_value: &ftd::Map<fastn_type::PropertyValue>,
@@ -589,13 +589,13 @@ pub(crate) fn replace_last_occurrence(s: &str, old_word: &str, new_word: &str) -
 }
 
 pub(crate) fn get_evaluated_property(
-    target_property: &ftd::interpreter::Property,
-    properties: &[ftd::interpreter::Property],
+    target_property: &fastn_type::Property,
+    properties: &[fastn_type::Property],
     arguments: &[ftd::interpreter::Argument],
     component_name: &str,
     doc_name: &str,
     line_number: usize,
-) -> ftd::executor::Result<Option<ftd::interpreter::Property>> {
+) -> ftd::executor::Result<Option<fastn_type::Property>> {
     let key = if let Some(key) = target_property.get_local_argument(component_name) {
         key
     } else {

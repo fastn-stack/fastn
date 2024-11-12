@@ -8,14 +8,14 @@ pub enum PropertyValue {
     Reference {
         name: String,
         kind: fastn_type::KindData,
-        source: ftd::interpreter::PropertyValueSource,
+        source: fastn_type::PropertyValueSource,
         is_mutable: bool,
         line_number: usize,
     },
     Clone {
         name: String,
         kind: fastn_type::KindData,
-        source: ftd::interpreter::PropertyValueSource,
+        source: fastn_type::PropertyValueSource,
         is_mutable: bool,
         line_number: usize,
     },
@@ -97,12 +97,12 @@ impl PropertyValue {
         inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
         match self {
-            ftd::interpreter::PropertyValue::Value { value, .. } => Ok(value),
-            ftd::interpreter::PropertyValue::Reference { name, kind, .. }
-            | ftd::interpreter::PropertyValue::Clone { name, kind, .. } => {
+            fastn_type::PropertyValue::Value { value, .. } => Ok(value),
+            fastn_type::PropertyValue::Reference { name, kind, .. }
+            | fastn_type::PropertyValue::Clone { name, kind, .. } => {
                 doc.resolve_with_inherited(name.as_str(), &kind, line_number, inherited_variables)
             }
-            ftd::interpreter::PropertyValue::FunctionCall(ftd::interpreter::FunctionCall {
+            fastn_type::PropertyValue::FunctionCall(ftd::interpreter::FunctionCall {
                 name,
                 kind,
                 values,
@@ -125,11 +125,11 @@ impl PropertyValue {
     }
 
     pub fn is_value(&self) -> bool {
-        matches!(self, ftd::interpreter::PropertyValue::Value { .. })
+        matches!(self, fastn_type::PropertyValue::Value { .. })
     }
 
     pub fn is_clone(&self) -> bool {
-        matches!(self, ftd::interpreter::PropertyValue::Clone { .. })
+        matches!(self, fastn_type::PropertyValue::Clone { .. })
     }
 
     pub(crate) fn value(
@@ -138,7 +138,7 @@ impl PropertyValue {
         line_number: usize,
     ) -> ftd::interpreter::Result<&ftd::interpreter::Value> {
         match self {
-            ftd::interpreter::PropertyValue::Value { value, .. } => Ok(value),
+            fastn_type::PropertyValue::Value { value, .. } => Ok(value),
             t => ftd::interpreter::utils::e2(
                 format!("Expected value found `{:?}`", t).as_str(),
                 doc_id,
@@ -153,7 +153,7 @@ impl PropertyValue {
         line_number: usize,
     ) -> ftd::interpreter::Result<&mut ftd::interpreter::Value> {
         match self {
-            ftd::interpreter::PropertyValue::Value { value, .. } => Ok(value),
+            fastn_type::PropertyValue::Value { value, .. } => Ok(value),
             t => ftd::interpreter::utils::e2(
                 format!("Expected value found `{:?}`", t).as_str(),
                 doc_id,
@@ -210,7 +210,7 @@ impl PropertyValue {
             condition: None,
         };
 
-        ftd::interpreter::PropertyValue::scan_ast_value_with_argument(
+        fastn_type::PropertyValue::scan_ast_value_with_argument(
             value,
             doc,
             definition_name_with_arguments,
@@ -226,8 +226,7 @@ impl PropertyValue {
         line_number: usize,
         definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::PropertyValue>>
-    {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::PropertyValue>> {
         let value = ftd_ast::VariableValue::String {
             value: value.to_string(),
             line_number,
@@ -235,7 +234,7 @@ impl PropertyValue {
             condition: None,
         };
 
-        ftd::interpreter::PropertyValue::from_ast_value_with_argument(
+        fastn_type::PropertyValue::from_ast_value_with_argument(
             value,
             doc,
             mutable,
@@ -336,8 +335,7 @@ impl PropertyValue {
         doc: &mut ftd::interpreter::TDoc,
         mutable: bool,
         expected_kind: Option<&fastn_type::KindData>,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::PropertyValue>>
-    {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::PropertyValue>> {
         PropertyValue::from_ast_value_with_argument(
             value,
             doc,
@@ -355,8 +353,7 @@ impl PropertyValue {
         expected_kind: Option<&fastn_type::KindData>,
         definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::PropertyValue>>
-    {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::PropertyValue>> {
         if let Some(reference) = try_ok_state!(PropertyValue::reference_from_ast_value(
             value.clone(),
             doc,
@@ -384,12 +381,11 @@ impl PropertyValue {
         doc: &mut ftd::interpreter::TDoc,
         definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::PropertyValue>>
-    {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::PropertyValue>> {
         let line_number = value.line_number();
 
         if key.eq("ftd.ui") {
-            return ftd::interpreter::PropertyValue::from_ast_value_with_argument(
+            return fastn_type::PropertyValue::from_ast_value_with_argument(
                 value,
                 doc,
                 false,
@@ -400,14 +396,14 @@ impl PropertyValue {
         }
         let ast_component =
             ftd_ast::ComponentInvocation::from_variable_value(key, value, doc.name)?;
-        let component = try_ok_state!(ftd::interpreter::Component::from_ast_component(
+        let component = try_ok_state!(fastn_type::Component::from_ast_component(
             ast_component,
             definition_name_with_arguments,
             doc,
         )?);
 
         Ok(ftd::interpreter::StateWithThing::new_thing(
-            ftd::interpreter::PropertyValue::Value {
+            fastn_type::PropertyValue::Value {
                 value: ftd::interpreter::Value::UI {
                     name: component.name.to_string(),
                     kind: fastn_type::Kind::ui().into_kind_data(),
@@ -427,8 +423,7 @@ impl PropertyValue {
         _expected_kind: &fastn_type::KindData,
         definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::PropertyValue>>
-    {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::PropertyValue>> {
         if !(value.is_record() || value.is_string()) {
             return ftd::interpreter::utils::e2(
                 format!("`{:?}` value is npt supported yet", value),
@@ -529,7 +524,7 @@ impl PropertyValue {
             if headers.is_none() && field.value.is_some() {
                 let value = field.value.as_ref().unwrap();
                 match value {
-                    ftd::interpreter::PropertyValue::Reference {
+                    fastn_type::PropertyValue::Reference {
                         name: refernence,
                         source,
                         ..
@@ -705,8 +700,7 @@ impl PropertyValue {
         expected_kind: Option<&fastn_type::KindData>,
         definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::PropertyValue>>
-    {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::PropertyValue>> {
         let expected_kind = expected_kind.ok_or(ftd::interpreter::Error::ParseError {
             message: "Need expected kind".to_string(),
             doc_id: doc.name.to_string(),
@@ -732,9 +726,8 @@ impl PropertyValue {
                 ftd::interpreter::Argument,
                 Option<String>,
             )>,
-        ) -> ftd::interpreter::Result<
-            ftd::interpreter::StateWithThing<ftd::interpreter::PropertyValue>,
-        > {
+        ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::PropertyValue>>
+        {
             Ok(match &expected_kind.kind.clone() {
                 fastn_type::Kind::Optional { kind } => {
                     let kind = kind.clone().into_kind_data();
@@ -744,7 +737,7 @@ impl PropertyValue {
                             value: ref ivalue, ..
                         } => match ivalue.as_ref() {
                             None => ftd::interpreter::StateWithThing::new_thing(
-                                ftd::interpreter::PropertyValue::Value {
+                                fastn_type::PropertyValue::Value {
                                     value: ftd::interpreter::Value::Optional {
                                         data: Box::new(None),
                                         kind,
@@ -868,7 +861,7 @@ impl PropertyValue {
                 }
                 fastn_type::Kind::Record { name } if value.is_record() || value.is_string() => {
                     let record = try_ok_state!(doc.search_record(name, value.line_number())?);
-                    ftd::interpreter::PropertyValue::from_record(
+                    fastn_type::PropertyValue::from_record(
                         &record,
                         value,
                         doc,
@@ -899,7 +892,7 @@ impl PropertyValue {
                             })?;
                         let value = match &variant {
                     ftd::interpreter::OrTypeVariant::Constant(c) => return ftd::interpreter::utils::e2(format!("Cannot pass constant variant as property, variant: `{}`. Help: Pass variant as value instead", c.name), doc.name, c.line_number),
-                    ftd::interpreter::OrTypeVariant::AnonymousRecord(record) => try_ok_state!(ftd::interpreter::PropertyValue::from_record(
+                    ftd::interpreter::OrTypeVariant::AnonymousRecord(record) => try_ok_state!(fastn_type::PropertyValue::from_record(
                         record,
                         value,
                         doc,
@@ -922,7 +915,7 @@ impl PropertyValue {
                         };
 
                         try_ok_state!(
-                            ftd::interpreter::PropertyValue::from_ast_value_with_argument(
+                            fastn_type::PropertyValue::from_ast_value_with_argument(
                                 value,
                                 doc,
                                 is_mutable,
@@ -1010,9 +1003,8 @@ impl PropertyValue {
         expected_kind: Option<&fastn_type::KindData>,
         definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
         loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
-    ) -> ftd::interpreter::Result<
-        ftd::interpreter::StateWithThing<Option<ftd::interpreter::PropertyValue>>,
-    > {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Option<fastn_type::PropertyValue>>>
+    {
         use ftd::interpreter::PropertyValueSourceExt;
 
         match value.string(doc.name) {
@@ -1071,7 +1063,7 @@ impl PropertyValue {
                         let kind = get_kind(expected_kind, &found_kind);
 
                         return Ok(ftd::interpreter::StateWithThing::new_thing(Some(
-                            ftd::interpreter::PropertyValue::Reference {
+                            fastn_type::PropertyValue::Reference {
                                 name: reference,
                                 kind: kind.to_owned(),
                                 source: PropertyValueSource::Global,
@@ -1083,7 +1075,7 @@ impl PropertyValue {
                 }
                 if let Some(kind) = expected_kind {
                     Ok(ftd::interpreter::StateWithThing::new_thing(Some(
-                        ftd::interpreter::PropertyValue::Reference {
+                        fastn_type::PropertyValue::Reference {
                             name: expression.trim_start_matches('$').to_string(),
                             kind: kind.to_owned(),
                             source: PropertyValueSource::Global,
@@ -1097,7 +1089,7 @@ impl PropertyValue {
             }
             Ok(expression) if expression.eq(ftd::interpreter::FTD_SPECIAL_VALUE) => {
                 Ok(ftd::interpreter::StateWithThing::new_thing(Some(
-                    ftd::interpreter::PropertyValue::Reference {
+                    fastn_type::PropertyValue::Reference {
                         name: "VALUE".to_string(),
                         kind: fastn_type::Kind::string().into_optional().into_kind_data(),
                         source: PropertyValueSource::Global,
@@ -1108,7 +1100,7 @@ impl PropertyValue {
             }
             Ok(expression) if expression.eq(ftd::interpreter::FTD_SPECIAL_CHECKED) => {
                 Ok(ftd::interpreter::StateWithThing::new_thing(Some(
-                    ftd::interpreter::PropertyValue::Reference {
+                    fastn_type::PropertyValue::Reference {
                         name: "CHECKED".to_string(),
                         kind: fastn_type::Kind::boolean().into_optional().into_kind_data(),
                         source: PropertyValueSource::Global,
@@ -1188,7 +1180,7 @@ impl PropertyValue {
                 }
 
                 Ok(ftd::interpreter::StateWithThing::new_thing(Some(
-                    ftd::interpreter::PropertyValue::FunctionCall(function_call),
+                    fastn_type::PropertyValue::FunctionCall(function_call),
                 )))
             }
             Ok(reference) if reference.starts_with(ftd::interpreter::utils::CLONE) => {
@@ -1386,8 +1378,8 @@ impl PropertyValue {
     pub(crate) fn new_none(
         kind: fastn_type::KindData,
         line_number: usize,
-    ) -> ftd::interpreter::PropertyValue {
-        ftd::interpreter::PropertyValue::Value {
+    ) -> fastn_type::PropertyValue {
+        fastn_type::PropertyValue::Value {
             value: ftd::interpreter::Value::new_none(kind),
             is_mutable: false,
             line_number,
@@ -1477,7 +1469,7 @@ pub enum Value {
     UI {
         name: String,
         kind: fastn_type::KindData,
-        component: ftd::interpreter::Component,
+        component: fastn_type::Component,
     },
     Module {
         name: String,
@@ -1554,7 +1546,7 @@ impl Value {
         &self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<(&String, &String, &ftd::interpreter::PropertyValue)> {
+    ) -> ftd::interpreter::Result<(&String, &String, &fastn_type::PropertyValue)> {
         match self {
             Self::OrType {
                 name,
@@ -1574,7 +1566,7 @@ impl Value {
         &self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<&ftd::Map<ftd::interpreter::PropertyValue>> {
+    ) -> ftd::interpreter::Result<&ftd::Map<fastn_type::PropertyValue>> {
         match self {
             Self::KwArgs { arguments } => Ok(arguments),
             t => ftd::interpreter::utils::e2(
@@ -1722,7 +1714,7 @@ impl Value {
                 let mut values = vec![];
                 let val_kind = expected_kind.list_type(doc_name, line_number)?;
                 for val in data {
-                    values.push(ftd::interpreter::PropertyValue::Value {
+                    values.push(fastn_type::PropertyValue::Value {
                         value: Value::from_evalexpr_value(val, &val_kind, doc_name, line_number)?,
                         is_mutable: false,
                         line_number,
@@ -1766,7 +1758,7 @@ impl Value {
         name: &str,
         variant: &str,
         full_variant: &str,
-        value: ftd::interpreter::PropertyValue,
+        value: fastn_type::PropertyValue,
     ) -> ftd::interpreter::Value {
         ftd::interpreter::Value::OrType {
             name: name.to_string(),
@@ -1865,7 +1857,7 @@ impl Value {
         &self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Component> {
+    ) -> ftd::interpreter::Result<fastn_type::Component> {
         match self {
             ftd::interpreter::Value::UI { component, .. } => Ok(component.to_owned()),
             t => ftd::interpreter::utils::e2(

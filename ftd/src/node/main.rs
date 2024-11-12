@@ -102,8 +102,8 @@ impl ftd::executor::HTMLData {
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct RawNodeData {
-    pub properties: Vec<(String, ftd::interpreter::Property)>,
-    pub iteration: Option<ftd::interpreter::Loop>,
+    pub properties: Vec<(String, fastn_type::Property)>,
+    pub iteration: Option<fastn_type::Loop>,
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]

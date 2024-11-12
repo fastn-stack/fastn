@@ -136,7 +136,7 @@ impl Field {
 
     pub(crate) fn get_default_interpreter_property_value(
         &self,
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
     ) -> ftd::interpreter::Result<Option<fastn_type::PropertyValue>> {
         let sources = self.to_sources();
         let properties = ftd::interpreter::utils::find_properties_by_source(
@@ -159,7 +159,7 @@ impl Field {
     pub(crate) fn get_default_interpreter_value(
         &self,
         doc: &ftd::interpreter::TDoc,
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
     ) -> ftd::interpreter::Result<Option<fastn_type::Value>> {
         use ftd::interpreter::PropertyValueExt;
 
@@ -170,21 +170,21 @@ impl Field {
         Ok(None)
     }
 
-    pub fn to_sources(&self) -> Vec<ftd::interpreter::PropertySource> {
-        let mut sources = vec![ftd::interpreter::PropertySource::Header {
+    pub fn to_sources(&self) -> Vec<fastn_type::PropertySource> {
+        let mut sources = vec![fastn_type::PropertySource::Header {
             name: self.name.to_string(),
             mutable: self.mutable,
         }];
         if self.is_caption() {
-            sources.push(ftd::interpreter::PropertySource::Caption);
+            sources.push(fastn_type::PropertySource::Caption);
         }
 
         if self.is_body() {
-            sources.push(ftd::interpreter::PropertySource::Body);
+            sources.push(fastn_type::PropertySource::Body);
         }
 
         if self.is_subsection_ui() {
-            sources.push(ftd::interpreter::PropertySource::Subsection);
+            sources.push(fastn_type::PropertySource::Subsection);
         }
 
         sources

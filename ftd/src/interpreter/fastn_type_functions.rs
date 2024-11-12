@@ -1526,7 +1526,7 @@ pub(crate) trait ValueExt {
         &self,
         _doc_id: &str,
         _line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Component>;
+    ) -> ftd::interpreter::Result<fastn_type::Component>;
     fn record_fields(
         &self,
         doc_id: &str,
@@ -1672,7 +1672,7 @@ impl ValueExt for fastn_type::Value {
         &self,
         _doc_id: &str,
         _line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Component> {
+    ) -> ftd::interpreter::Result<fastn_type::Component> {
         todo!()
         // match self {
         //     fastn_type::Value::UI { component, .. } => Ok(component.to_owned()),

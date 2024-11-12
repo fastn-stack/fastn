@@ -177,7 +177,7 @@ impl fastn_core::Config {
 async fn read_only_instructions(
     ftd_document: fastn_core::Document,
     config: &fastn_core::Config,
-) -> fastn_core::Result<Vec<ftd::interpreter::Component>> {
+) -> fastn_core::Result<Vec<fastn_type::Component>> {
     let req = fastn_core::http::Request::default();
     let base_url = "/";
     let mut req_config =
@@ -252,10 +252,10 @@ async fn read_ftd_test_file(
 // This will give all overall set of instructions for a test file
 // including instructions from fixture and other test instructions
 async fn get_all_instructions(
-    instructions: &[ftd::interpreter::Component],
+    instructions: &[fastn_type::Component],
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
-) -> fastn_core::Result<Vec<ftd::interpreter::Component>> {
+) -> fastn_core::Result<Vec<fastn_type::Component>> {
     let mut fixture_and_test_instructions = vec![];
     let mut rest_instructions = vec![];
     let mut included_fixtures: std::collections::HashSet<String> = std::collections::HashSet::new();
@@ -305,7 +305,7 @@ async fn get_all_instructions(
 }
 
 async fn execute_instruction(
-    instruction: &ftd::interpreter::Component,
+    instruction: &fastn_type::Component,
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
     saved_cookies: &mut std::collections::HashMap<String, String>,
@@ -330,11 +330,11 @@ async fn execute_instruction(
 }
 
 async fn get_instructions_from_test(
-    instruction: &ftd::interpreter::Component,
+    instruction: &fastn_type::Component,
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
     included_fixtures: &mut std::collections::HashSet<String>,
-) -> fastn_core::Result<Vec<ftd::interpreter::Component>> {
+) -> fastn_core::Result<Vec<fastn_type::Component>> {
     let property_values = instruction.get_interpreter_property_value_of_all_arguments(doc)?;
 
     if let Some(title) = get_optional_value_string(TEST_TITLE_HEADER, &property_values, doc)? {
@@ -365,7 +365,7 @@ async fn get_fixture_instructions(
     config: &fastn_core::Config,
     fixtures: Vec<String>,
     included_fixtures: &mut std::collections::HashSet<String>,
-) -> fastn_core::Result<Vec<ftd::interpreter::Component>> {
+) -> fastn_core::Result<Vec<fastn_type::Component>> {
     let mut fixture_instructions = vec![];
 
     for fixture_file_name in fixtures.iter() {
@@ -383,7 +383,7 @@ async fn get_fixture_instructions(
 async fn read_fixture_instructions(
     config: &fastn_core::Config,
     fixture_file_name: &str,
-) -> fastn_core::Result<Vec<ftd::interpreter::Component>> {
+) -> fastn_core::Result<Vec<fastn_type::Component>> {
     let fixture_files = config.get_fixture_files().await?;
     let current_fixture_file = fixture_files.iter().find(|d| {
         d.id.trim_start_matches(format!("{}/{}/", TEST_FOLDER, FIXTURE_FOLDER).as_str())
@@ -402,7 +402,7 @@ async fn read_fixture_instructions(
 }
 
 async fn execute_post_instruction(
-    instruction: &ftd::interpreter::Component,
+    instruction: &fastn_type::Component,
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
     saved_cookies: &mut std::collections::HashMap<String, String>,
@@ -593,7 +593,7 @@ async fn get_post_response_for_id(
 }
 
 async fn execute_get_instruction(
-    instruction: &ftd::interpreter::Component,
+    instruction: &fastn_type::Component,
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
     saved_cookies: &mut std::collections::HashMap<String, String>,
@@ -1050,7 +1050,7 @@ fn fastn_test_data(
 }
 
 async fn execute_redirect_instruction(
-    instruction: &ftd::interpreter::Component,
+    instruction: &fastn_type::Component,
     doc: &ftd::interpreter::TDoc<'_>,
     config: &fastn_core::Config,
     saved_cookies: &mut std::collections::HashMap<String, String>,

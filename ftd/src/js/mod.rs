@@ -311,7 +311,7 @@ impl ftd::interpreter::ComponentDefinition {
 }
 
 pub fn from_tree(
-    tree: &[ftd::interpreter::Component],
+    tree: &[fastn_type::Component],
     doc: &ftd::interpreter::TDoc,
     has_rive_components: &mut bool,
 ) -> fastn_js::Ast {
@@ -329,7 +329,7 @@ pub fn from_tree(
     fastn_js::component0(fastn_js::MAIN_FUNCTION, statements)
 }
 
-impl ftd::interpreter::Component {
+impl fastn_type::Component {
     pub fn to_component_statements(
         &self,
         parent: &str,

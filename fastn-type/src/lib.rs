@@ -11,4 +11,7 @@ pub use value::{PropertyValue, PropertyValueSource, Value};
 mod kind;
 pub use kind::{Kind, KindData};
 
+mod component;
+pub use component::{Component, ComponentSource, Event, EventName, Loop, Property, PropertySource};
+
 pub type Map<T> = std::collections::BTreeMap<String, T>;

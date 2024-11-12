@@ -128,25 +128,25 @@ impl ftd::html::main::HtmlGenerator<'_> {
     }
 }
 
-fn to_event_name(event_name: &ftd::interpreter::EventName) -> String {
+fn to_event_name(event_name: &fastn_type::EventName) -> String {
     match event_name {
-        ftd::interpreter::EventName::Click => "onclick".to_string(),
-        ftd::interpreter::EventName::MouseLeave => "onmouseleave".to_string(),
-        ftd::interpreter::EventName::MouseEnter => "onmouseenter".to_string(),
-        ftd::interpreter::EventName::ClickOutside => "onclickoutside".to_string(),
-        ftd::interpreter::EventName::GlobalKey(keys) => format!("onglobalkey[{}]", keys.join("-")),
-        ftd::interpreter::EventName::GlobalKeySeq(keys) => {
+        fastn_type::EventName::Click => "onclick".to_string(),
+        fastn_type::EventName::MouseLeave => "onmouseleave".to_string(),
+        fastn_type::EventName::MouseEnter => "onmouseenter".to_string(),
+        fastn_type::EventName::ClickOutside => "onclickoutside".to_string(),
+        fastn_type::EventName::GlobalKey(keys) => format!("onglobalkey[{}]", keys.join("-")),
+        fastn_type::EventName::GlobalKeySeq(keys) => {
             format!("onglobalkeyseq[{}]", keys.join("-"))
         }
-        ftd::interpreter::EventName::Input => "oninput".to_string(),
-        ftd::interpreter::EventName::Change => "onchange".to_string(),
-        ftd::interpreter::EventName::Blur => "onblur".to_string(),
-        ftd::interpreter::EventName::Focus => "onfocus".to_string(),
-        ftd::interpreter::EventName::RivePlay(timeline) => format!("onriveplay[{}]", timeline),
-        ftd::interpreter::EventName::RiveStateChange(state_change) => {
+        fastn_type::EventName::Input => "oninput".to_string(),
+        fastn_type::EventName::Change => "onchange".to_string(),
+        fastn_type::EventName::Blur => "onblur".to_string(),
+        fastn_type::EventName::Focus => "onfocus".to_string(),
+        fastn_type::EventName::RivePlay(timeline) => format!("onriveplay[{}]", timeline),
+        fastn_type::EventName::RiveStateChange(state_change) => {
             format!("onrivestatechange[{}]", state_change)
         }
-        ftd::interpreter::EventName::RivePause(timeline) => {
+        fastn_type::EventName::RivePause(timeline) => {
             format!("onrivepause[{}]", timeline)
         }
     }

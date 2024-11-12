@@ -187,11 +187,11 @@ impl Component {
     }
 
     // Todo: Remove this function after removing 0.3
-    pub fn get_children_property(&self) -> Option<ftd::interpreter::Property> {
+    pub fn get_children_property(&self) -> Option<fastn_type::Property> {
         self.get_children_properties().first().map(|v| v.to_owned())
     }
 
-    pub fn get_children_properties(&self) -> Vec<ftd::interpreter::Property> {
+    pub fn get_children_properties(&self) -> Vec<fastn_type::Property> {
         ftd::interpreter::utils::get_children_properties_from_properties(&self.properties)
     }
 
@@ -273,7 +273,7 @@ impl Component {
     }
 
     pub(crate) fn is_variable(&self) -> bool {
-        self.source.eq(&ftd::interpreter::ComponentSource::Variable)
+        self.source.eq(&fastn_type::ComponentSource::Variable)
     }
 
     pub(crate) fn scan_ast(
@@ -569,7 +569,7 @@ impl Component {
                         condition: Box::new(condition.to_owned()),
                         events: events.to_vec(),
                         children: vec![],
-                        source: ftd::interpreter::ComponentSource::Variable,
+                        source: fastn_type::ComponentSource::Variable,
                         line_number,
                     },
                 )));
@@ -633,7 +633,7 @@ impl From<ftd_ast::PropertySource> for PropertySource {
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Property {
     pub value: fastn_type::PropertyValue,
-    pub source: ftd::interpreter::PropertySource,
+    pub source: fastn_type::PropertySource,
     pub condition: Option<ftd::interpreter::Expression>,
     pub line_number: usize,
 }
@@ -806,7 +806,7 @@ impl Property {
         Ok(ftd::interpreter::StateWithThing::new_thing(Some(
             Property {
                 value,
-                source: ftd::interpreter::PropertySource::Subsection,
+                source: fastn_type::PropertySource::Subsection,
                 condition: None,
                 line_number,
             },
@@ -921,7 +921,7 @@ impl Property {
         }
 
         if let Some(kw_args) = kw_args {
-            properties.push(ftd::interpreter::Property {
+            properties.push(fastn_type::Property {
                 value: fastn_type::PropertyValue::Value {
                     value: fastn_type::Value::KwArgs {
                         arguments: std::collections::BTreeMap::from_iter(extra_arguments),
@@ -929,7 +929,7 @@ impl Property {
                     is_mutable: false,
                     line_number: kw_args.line_number,
                 },
-                source: ftd::interpreter::PropertySource::Header {
+                source: fastn_type::PropertySource::Header {
                     name: kw_args.name.clone(),
                     mutable: false,
                 },
@@ -1010,7 +1010,7 @@ impl Property {
 
         let source = {
             let mut source = ast_property.source.into();
-            if let ftd::interpreter::PropertySource::Header { name, .. } = &mut source {
+            if let fastn_type::PropertySource::Header { name, .. } = &mut source {
                 *name = argument.name;
             }
             source
@@ -1142,7 +1142,7 @@ fn get_extra_argument_property_value(
 
 fn check_if_property_is_provided_for_required_argument(
     component_arguments: &[ftd::interpreter::Field],
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
     component_name: &str,
     line_number: usize,
     doc_id: &str,
@@ -1171,7 +1171,7 @@ fn check_if_property_is_provided_for_required_argument(
 
 fn search_things_for_module(
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
     doc: &mut ftd::interpreter::TDoc,
     arguments: &[ftd::interpreter::Argument],
     definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
@@ -1306,7 +1306,7 @@ fn search_things_for_module(
 }
 
 fn get_module_name_and_thing(
-    module_property: &ftd::interpreter::Property,
+    module_property: &fastn_type::Property,
     doc: &mut ftd::interpreter::TDoc,
     definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
     component_argument: &ftd::interpreter::Argument,
@@ -1521,7 +1521,7 @@ impl Loop {
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Event {
-    pub name: ftd::interpreter::EventName,
+    pub name: fastn_type::EventName,
     pub action: fastn_type::FunctionCall,
     pub line_number: usize,
 }
@@ -1564,7 +1564,7 @@ impl Event {
             )?;
         }
 
-        let event_name = ftd::interpreter::EventName::from_string(
+        let event_name = fastn_type::EventName::from_string(
             ast_event.name.as_str(),
             doc.name,
             ast_event.line_number,
@@ -1654,7 +1654,7 @@ impl EventName {
         e: &str,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::EventName> {
+    ) -> ftd::interpreter::Result<fastn_type::EventName> {
         use itertools::Itertools;
 
         match e {
