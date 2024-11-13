@@ -1,7 +1,7 @@
-use ftd::interpreter::ComponentExt;
 use ftd::interpreter::expression::ExpressionExt;
 use ftd::interpreter::things::component::ComponentDefinitionExt;
 use ftd::interpreter::things::record::RecordExt;
+use ftd::interpreter::ComponentExt;
 use ftd::interpreter::FunctionExt;
 
 /// The `InterpreterState` struct is a representation of the state of an interpreter. It contains

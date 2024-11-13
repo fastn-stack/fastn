@@ -202,4 +202,3 @@ pub(crate) fn is_caption(s: &str) -> bool {
 pub fn is_body(s: &str) -> bool {
     s.eq("body")
 }
-
