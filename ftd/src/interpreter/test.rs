@@ -1,3 +1,4 @@
+use ftd::interpreter::ComponentExt;
 use pretty_assertions::assert_eq;
 
 #[track_caller]
