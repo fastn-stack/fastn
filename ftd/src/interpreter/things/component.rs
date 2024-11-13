@@ -3,13 +3,6 @@ use ftd::interpreter::things::function::FunctionCallExt;
 use ftd::interpreter::things::record::FieldExt;
 
 pub trait ComponentDefinitionExt {
-    fn new(
-        name: &str,
-        arguments: Vec<fastn_type::Argument>,
-        definition: fastn_type::Component,
-        css: Option<fastn_type::PropertyValue>,
-        line_number: usize,
-    ) -> fastn_type::ComponentDefinition;
     fn scan_ast(
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
@@ -22,22 +15,6 @@ pub trait ComponentDefinitionExt {
 }
 
 impl ComponentDefinitionExt for fastn_type::ComponentDefinition {
-    fn new(
-        name: &str,
-        arguments: Vec<fastn_type::Argument>,
-        definition: fastn_type::Component,
-        css: Option<fastn_type::PropertyValue>,
-        line_number: usize,
-    ) -> fastn_type::ComponentDefinition {
-        fastn_type::ComponentDefinition {
-            name: name.to_string(),
-            arguments,
-            definition,
-            css,
-            line_number,
-        }
-    }
-
     fn scan_ast(
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
@@ -1019,8 +996,8 @@ pub trait ComponentExt {
         condition: &Option<fastn_type::Expression>,
         loop_object_name_and_kind: &Option<(String, fastn_type::Argument, Option<String>)>,
         events: &[fastn_type::Event],
-        ast_properties: &Vec<ftd_ast::Property>,
-        ast_children: &Vec<ftd_ast::ComponentInvocation>,
+        ast_properties: &[ftd_ast::Property],
+        ast_children: &[ftd_ast::ComponentInvocation],
         line_number: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Option<fastn_type::Component>>>;
 }
@@ -1352,8 +1329,8 @@ impl ComponentExt for fastn_type::Component {
         condition: &Option<fastn_type::Expression>,
         loop_object_name_and_kind: &Option<(String, fastn_type::Argument, Option<String>)>,
         events: &[fastn_type::Event],
-        ast_properties: &Vec<ftd_ast::Property>,
-        ast_children: &Vec<ftd_ast::ComponentInvocation>,
+        ast_properties: &[ftd_ast::Property],
+        ast_children: &[ftd_ast::ComponentInvocation],
         line_number: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Option<fastn_type::Component>>>
     {
@@ -1455,12 +1432,6 @@ impl ComponentExt for fastn_type::Component {
 }
 
 pub trait LoopExt {
-    fn new(
-        on: fastn_type::PropertyValue,
-        alias: &str,
-        loop_counter_alias: Option<String>,
-        line_number: usize,
-    ) -> fastn_type::Loop;
     fn from_ast_loop(
         ast_loop: ftd_ast::Loop,
         definition_name_with_arguments: &mut Option<(&str, &mut [fastn_type::Argument])>,
@@ -1483,19 +1454,6 @@ pub trait LoopExt {
 }
 
 impl LoopExt for fastn_type::Loop {
-    fn new(
-        on: fastn_type::PropertyValue,
-        alias: &str,
-        loop_counter_alias: Option<String>,
-        line_number: usize,
-    ) -> fastn_type::Loop {
-        fastn_type::Loop {
-            on,
-            alias: alias.to_string(),
-            line_number,
-            loop_counter_alias,
-        }
-    }
     fn from_ast_loop(
         ast_loop: ftd_ast::Loop,
         definition_name_with_arguments: &mut Option<(&str, &mut [fastn_type::Argument])>,

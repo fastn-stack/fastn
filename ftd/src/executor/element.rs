@@ -302,7 +302,7 @@ impl ImageSrc {
                     .resolve(&doc.itdoc(), line_number)?
                     .string(doc.name, line_number)?,
                 Some(line_number),
-                vec![value.into_property(fastn_type::PropertySource::header("light"))],
+                vec![value.to_property(fastn_type::PropertySource::header("light"))],
             )
         };
 
@@ -314,7 +314,7 @@ impl ImageSrc {
                         .resolve(&doc.itdoc(), line_number)?
                         .string(doc.name, line_number)?,
                     Some(line_number),
-                    vec![value.into_property(fastn_type::PropertySource::header("dark"))],
+                    vec![value.to_property(fastn_type::PropertySource::header("dark"))],
                 )
             } else {
                 light.clone()
@@ -405,7 +405,7 @@ impl RawImage {
                     .resolve(&doc.itdoc(), line_number)?
                     .string(doc.name, line_number)?,
                 Some(line_number),
-                vec![value.into_property(fastn_type::PropertySource::header("src"))],
+                vec![value.to_property(fastn_type::PropertySource::header("src"))],
             )
         };
 

@@ -36,6 +36,22 @@ pub struct Loop {
     pub line_number: usize,
 }
 
+impl Loop {
+    pub fn new(
+        on: fastn_type::PropertyValue,
+        alias: &str,
+        loop_counter_alias: Option<String>,
+        line_number: usize,
+    ) -> fastn_type::Loop {
+        fastn_type::Loop {
+            on,
+            alias: alias.to_string(),
+            line_number,
+            loop_counter_alias,
+        }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Default, serde::Deserialize, serde::Serialize)]
 pub enum ComponentSource {
     #[default]
@@ -115,6 +131,24 @@ pub struct ComponentDefinition {
     pub definition: fastn_type::Component,
     pub css: Option<fastn_type::PropertyValue>,
     pub line_number: usize,
+}
+
+impl fastn_type::ComponentDefinition {
+    pub fn new(
+        name: &str,
+        arguments: Vec<fastn_type::Argument>,
+        definition: fastn_type::Component,
+        css: Option<fastn_type::PropertyValue>,
+        line_number: usize,
+    ) -> fastn_type::ComponentDefinition {
+        fastn_type::ComponentDefinition {
+            name: name.to_string(),
+            arguments,
+            definition,
+            css,
+            line_number,
+        }
+    }
 }
 
 pub type Argument = fastn_type::Field;

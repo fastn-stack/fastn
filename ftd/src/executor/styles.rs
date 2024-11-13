@@ -482,7 +482,7 @@ impl BreakpointWidth {
                 .integer(doc.name, line_number)?,
             Some(line_number),
             vec![get_property_value("mobile")?
-                .into_property(fastn_type::PropertySource::header("mobile"))],
+                .to_property(fastn_type::PropertySource::header("mobile"))],
         );
 
         Ok(BreakpointWidth { mobile })
@@ -955,9 +955,7 @@ impl BackgroundImage {
                 line_number,
             )?,
             Some(line_number),
-            vec![
-                get_property_value("src")?.into_property(fastn_type::PropertySource::header("src"))
-            ],
+            vec![get_property_value("src")?.to_property(fastn_type::PropertySource::header("src"))],
         );
 
         let repeat = ftd::executor::Value::new(
@@ -968,7 +966,7 @@ impl BackgroundImage {
             )?,
             Some(line_number),
             vec![get_property_value("repeat")?
-                .into_property(fastn_type::PropertySource::header("repeat"))],
+                .to_property(fastn_type::PropertySource::header("repeat"))],
         );
 
         let size = ftd::executor::Value::new(
@@ -978,8 +976,9 @@ impl BackgroundImage {
                 line_number,
             )?,
             Some(line_number),
-            vec![get_property_value("size")?
-                .into_property(fastn_type::PropertySource::header("size"))],
+            vec![
+                get_property_value("size")?.to_property(fastn_type::PropertySource::header("size"))
+            ],
         );
 
         let position = ftd::executor::Value::new(
@@ -990,7 +989,7 @@ impl BackgroundImage {
             )?,
             Some(line_number),
             vec![get_property_value("position")?
-                .into_property(fastn_type::PropertySource::header("position"))],
+                .to_property(fastn_type::PropertySource::header("position"))],
         );
 
         Ok(ftd::executor::BackgroundImage {
@@ -1139,7 +1138,7 @@ impl LinearGradientColor {
             )?,
             Some(line_number),
             vec![get_property_value("start")?
-                .into_property(fastn_type::PropertySource::header("start"))],
+                .to_property(fastn_type::PropertySource::header("start"))],
         );
 
         let end = ftd::executor::Value::new(
@@ -1149,9 +1148,7 @@ impl LinearGradientColor {
                 line_number,
             )?,
             Some(line_number),
-            vec![
-                get_property_value("end")?.into_property(fastn_type::PropertySource::header("end"))
-            ],
+            vec![get_property_value("end")?.to_property(fastn_type::PropertySource::header("end"))],
         );
 
         let stop_position = ftd::executor::Value::new(
@@ -1162,7 +1159,7 @@ impl LinearGradientColor {
             )?,
             Some(line_number),
             vec![get_property_value("stop-position")?
-                .into_property(fastn_type::PropertySource::header("stop-position"))],
+                .to_property(fastn_type::PropertySource::header("stop-position"))],
         );
 
         Ok(ftd::executor::LinearGradientColor {
@@ -1353,7 +1350,7 @@ impl LinearGradient {
             )?,
             Some(line_number),
             vec![get_property_value("direction")?
-                .into_property(fastn_type::PropertySource::header("direction"))],
+                .to_property(fastn_type::PropertySource::header("direction"))],
         );
 
         let colors = ftd::executor::Value::new(
@@ -1364,7 +1361,7 @@ impl LinearGradient {
             )?,
             Some(line_number),
             vec![get_property_value("colors")?
-                .into_property(fastn_type::PropertySource::header("colors"))],
+                .to_property(fastn_type::PropertySource::header("colors"))],
         );
 
         Ok(ftd::executor::LinearGradient { direction, colors })
@@ -1841,35 +1838,36 @@ impl Shadow {
             Length::from_value(get_property_value("x-offset")?.clone(), doc, line_number)?,
             Some(line_number),
             vec![get_property_value("x-offset")?
-                .into_property(fastn_type::PropertySource::header("x-offset"))],
+                .to_property(fastn_type::PropertySource::header("x-offset"))],
         );
 
         let y_offset = ftd::executor::Value::new(
             Length::from_value(get_property_value("y-offset")?.clone(), doc, line_number)?,
             Some(line_number),
             vec![get_property_value("y-offset")?
-                .into_property(fastn_type::PropertySource::header("y-offset"))],
+                .to_property(fastn_type::PropertySource::header("y-offset"))],
         );
 
         let blur = ftd::executor::Value::new(
             Length::from_value(get_property_value("blur")?.clone(), doc, line_number)?,
             Some(line_number),
-            vec![get_property_value("blur")?
-                .into_property(fastn_type::PropertySource::header("blur"))],
+            vec![
+                get_property_value("blur")?.to_property(fastn_type::PropertySource::header("blur"))
+            ],
         );
 
         let spread = ftd::executor::Value::new(
             Length::from_value(get_property_value("spread")?.clone(), doc, line_number)?,
             Some(line_number),
             vec![get_property_value("spread")?
-                .into_property(fastn_type::PropertySource::header("spread"))],
+                .to_property(fastn_type::PropertySource::header("spread"))],
         );
 
         let color = ftd::executor::Value::new(
             Color::from_value(get_property_value("color")?.clone(), doc, line_number)?,
             Some(line_number),
             vec![get_property_value("color")?
-                .into_property(fastn_type::PropertySource::header("color"))],
+                .to_property(fastn_type::PropertySource::header("color"))],
         );
 
         let inset = ftd::executor::Value::new(
@@ -1879,7 +1877,7 @@ impl Shadow {
                 .bool(doc.name, line_number)?,
             Some(line_number),
             vec![get_property_value("inset")?
-                .into_property(fastn_type::PropertySource::header("inset"))],
+                .to_property(fastn_type::PropertySource::header("inset"))],
         );
 
         Ok(ftd::executor::Shadow {
@@ -2022,7 +2020,7 @@ impl Color {
                     line_number,
                 )?,
                 Some(line_number),
-                vec![value.into_property(fastn_type::PropertySource::header("light"))],
+                vec![value.to_property(fastn_type::PropertySource::header("light"))],
             )
         };
 
@@ -2038,7 +2036,7 @@ impl Color {
                         line_number,
                     )?,
                     Some(line_number),
-                    vec![value.into_property(fastn_type::PropertySource::header("dark"))],
+                    vec![value.to_property(fastn_type::PropertySource::header("dark"))],
                 )
             } else {
                 light.clone()
