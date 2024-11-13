@@ -1,29 +1,20 @@
 use ftd::interpreter::FieldExt;
 
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct WebComponentDefinition {
-    pub name: String,
-    pub arguments: Vec<fastn_type::Argument>,
-    pub js: fastn_type::PropertyValue,
-    pub line_number: usize,
+pub trait WebComponentDefinitionExt {
+    fn scan_ast(
+        ast: ftd_ast::Ast,
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()>;
+    fn from_ast(
+        ast: ftd_ast::Ast,
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<
+        ftd::interpreter::StateWithThing<fastn_type::WebComponentDefinition>,
+    >;
 }
 
-impl WebComponentDefinition {
-    pub(crate) fn new(
-        name: &str,
-        arguments: Vec<fastn_type::Argument>,
-        js: fastn_type::PropertyValue,
-        line_number: usize,
-    ) -> WebComponentDefinition {
-        WebComponentDefinition {
-            name: name.to_string(),
-            arguments,
-            js,
-            line_number,
-        }
-    }
-
-    pub(crate) fn scan_ast(
+impl WebComponentDefinitionExt for fastn_type::WebComponentDefinition {
+    fn scan_ast(
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
@@ -38,10 +29,12 @@ impl WebComponentDefinition {
         Ok(())
     }
 
-    pub(crate) fn from_ast(
+    fn from_ast(
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<WebComponentDefinition>> {
+    ) -> ftd::interpreter::Result<
+        ftd::interpreter::StateWithThing<fastn_type::WebComponentDefinition>,
+    > {
         use ftd::interpreter::PropertyValueExt;
 
         let web_component_definition = ast.get_web_component_definition(doc.name)?;
@@ -67,7 +60,7 @@ impl WebComponentDefinition {
         )?);
 
         Ok(ftd::interpreter::StateWithThing::new_thing(
-            WebComponentDefinition::new(
+            fastn_type::WebComponentDefinition::new(
                 name.as_str(),
                 arguments,
                 js,

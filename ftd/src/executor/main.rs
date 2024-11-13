@@ -221,7 +221,7 @@ impl ExecuteDoc<'_> {
         instruction: &fastn_type::Component,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
-        web_component_definition: ftd::interpreter::WebComponentDefinition,
+        web_component_definition: fastn_type::WebComponentDefinition,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
         device: Option<ftd::executor::Device>,
     ) -> ftd::executor::Result<ftd::executor::Element> {

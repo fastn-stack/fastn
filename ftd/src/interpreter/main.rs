@@ -1,6 +1,7 @@
 use ftd::interpreter::expression::ExpressionExt;
 use ftd::interpreter::things::component::ComponentDefinitionExt;
 use ftd::interpreter::things::record::RecordExt;
+use ftd::interpreter::things::web_component::WebComponentDefinitionExt;
 use ftd::interpreter::FunctionExt;
 use ftd::interpreter::{ComponentExt, VariableExt};
 
@@ -463,10 +464,10 @@ impl InterpreterState {
             } else if ast.is_web_component_definition() {
                 if !is_in_bag {
                     if number_of_scan.eq(&1) {
-                        ftd::interpreter::WebComponentDefinition::scan_ast(ast, &mut doc)?;
+                        fastn_type::WebComponentDefinition::scan_ast(ast, &mut doc)?;
                         continue;
                     } else {
-                        match ftd::interpreter::WebComponentDefinition::from_ast(ast, &mut doc)? {
+                        match fastn_type::WebComponentDefinition::from_ast(ast, &mut doc)? {
                             ftd::interpreter::StateWithThing::State(s) => {
                                 return Ok(s.into_interpreter(self))
                             }

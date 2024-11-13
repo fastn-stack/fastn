@@ -349,8 +349,13 @@ pub fn from_tree(
     fastn_js::component0(fastn_js::MAIN_FUNCTION, statements)
 }
 
-impl ftd::interpreter::WebComponentDefinition {
-    pub fn to_ast(&self, doc: &ftd::interpreter::TDoc) -> fastn_js::Ast {
+
+pub trait WebComponentDefinitionExt {
+    fn to_ast(&self, doc: &ftd::interpreter::TDoc) -> fastn_js::Ast;
+}
+
+impl WebComponentDefinitionExt for  fastn_type::WebComponentDefinition {
+    fn to_ast(&self, doc: &ftd::interpreter::TDoc) -> fastn_js::Ast {
         use itertools::Itertools;
 
         let kernel = fastn_js::Kernel::from_component(

@@ -19,7 +19,7 @@ pub enum Thing {
     },
     Variable(fastn_type::Variable),
     Component(fastn_type::ComponentDefinition),
-    WebComponent(ftd::interpreter::WebComponentDefinition),
+    WebComponent(fastn_type::WebComponentDefinition),
     Function(fastn_type::Function),
     Export {
         from: String,

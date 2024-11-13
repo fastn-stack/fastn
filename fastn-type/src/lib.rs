@@ -29,4 +29,7 @@ pub use module_thing::ModuleThing;
 mod variable;
 pub use variable::{ConditionalValue, Variable};
 
+mod web_component;
+pub use web_component::WebComponentDefinition;
+
 pub type Map<T> = std::collections::BTreeMap<String, T>;

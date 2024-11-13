@@ -751,7 +751,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::WebComponentDefinition> {
+    ) -> ftd::interpreter::Result<fastn_type::WebComponentDefinition> {
         match self.get_thing(name, line_number)? {
             ftd::interpreter::Thing::WebComponent(c) => Ok(c),
             t => self.err(
@@ -793,7 +793,7 @@ impl<'a> TDoc<'a> {
         name: &str,
         line_number: usize,
     ) -> ftd::interpreter::Result<
-        ftd::interpreter::StateWithThing<ftd::interpreter::WebComponentDefinition>,
+        ftd::interpreter::StateWithThing<fastn_type::WebComponentDefinition>,
     > {
         match self.search_thing(name, line_number)? {
             ftd::interpreter::StateWithThing::State(s) => {

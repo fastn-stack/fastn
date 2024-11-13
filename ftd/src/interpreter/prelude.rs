@@ -8,6 +8,5 @@ pub use ftd::interpreter::main::{
 pub use ftd::interpreter::things::{
     default,
     or_type::{OrType, OrTypeVariant},
-    web_component::WebComponentDefinition,
     Thing,
 };
