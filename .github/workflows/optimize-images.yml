@@ -5,10 +5,10 @@ on:
     branches:
       - main
     paths:
-      - '**.jpg'
-      - '**.jpeg'
-      - '**.png'
-      - '**.webp'
+      - 'fastn.com/**.jpg'
+      - 'fastn.com/**.jpeg'
+      - 'fastn.com/**.png'
+      - 'fastn.com/**.webp'
 jobs:
   build:
     name: calibreapp/image-actions
