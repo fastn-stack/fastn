@@ -13,7 +13,7 @@ impl ftd::html::Action {
     }
 
     pub(crate) fn from_function_call(
-        function_call: &ftd::interpreter::FunctionCall,
+        function_call: &fastn_type::FunctionCall,
         id: &str,
         doc: &ftd::interpreter::TDoc,
     ) -> ftd::html::Result<ftd::html::Action> {
@@ -27,7 +27,7 @@ impl ftd::html::Action {
     }
 
     fn from_values(
-        function_call: &ftd::interpreter::FunctionCall,
+        function_call: &fastn_type::FunctionCall,
         doc: &ftd::interpreter::TDoc,
     ) -> ftd::html::Result<Vec<(String, serde_json::Value)>> {
         function_call
@@ -42,14 +42,14 @@ impl ftd::html::Action {
     }
 
     fn from_property_value(
-        value: &ftd::interpreter::PropertyValue,
+        value: &fastn_type::PropertyValue,
         doc: &ftd::interpreter::TDoc,
     ) -> ftd::html::Result<serde_json::Value> {
+        use ftd::interpreter::PropertyValueExt;
+
         Ok(match value {
-            ftd::interpreter::PropertyValue::Value { value, .. } => {
-                ftd::html::Action::from_value(value)
-            }
-            ftd::interpreter::PropertyValue::Reference {
+            fastn_type::PropertyValue::Value { value, .. } => ftd::html::Action::from_value(value),
+            fastn_type::PropertyValue::Reference {
                 name, is_mutable, ..
             } => {
                 serde_json::json!({
@@ -57,21 +57,21 @@ impl ftd::html::Action {
                     "mutable": is_mutable
                 })
             }
-            t @ ftd::interpreter::PropertyValue::Clone { line_number, .. } => {
+            t @ fastn_type::PropertyValue::Clone { line_number, .. } => {
                 let value = t.clone().resolve(doc, *line_number)?;
                 ftd::html::Action::from_value(&value)
             }
-            ftd::interpreter::PropertyValue::FunctionCall(fnc) => unimplemented!("{:?}", fnc),
+            fastn_type::PropertyValue::FunctionCall(fnc) => unimplemented!("{:?}", fnc),
         })
     }
 
-    fn from_value(value: &ftd::interpreter::Value) -> serde_json::Value {
+    fn from_value(value: &fastn_type::Value) -> serde_json::Value {
         match value {
-            ftd::interpreter::Value::String { text } => serde_json::json!(text),
-            ftd::interpreter::Value::Integer { value } => serde_json::json!(value),
-            ftd::interpreter::Value::Decimal { value } => serde_json::json!(value),
-            ftd::interpreter::Value::Boolean { value } => serde_json::json!(value),
-            ftd::interpreter::Value::Optional { data, .. } => {
+            fastn_type::Value::String { text } => serde_json::json!(text),
+            fastn_type::Value::Integer { value } => serde_json::json!(value),
+            fastn_type::Value::Decimal { value } => serde_json::json!(value),
+            fastn_type::Value::Boolean { value } => serde_json::json!(value),
+            fastn_type::Value::Optional { data, .. } => {
                 if let Some(data) = data.as_ref() {
                     ftd::html::Action::from_value(data)
                 } else {
@@ -128,25 +128,25 @@ impl ftd::html::main::HtmlGenerator<'_> {
     }
 }
 
-fn to_event_name(event_name: &ftd::interpreter::EventName) -> String {
+fn to_event_name(event_name: &fastn_type::EventName) -> String {
     match event_name {
-        ftd::interpreter::EventName::Click => "onclick".to_string(),
-        ftd::interpreter::EventName::MouseLeave => "onmouseleave".to_string(),
-        ftd::interpreter::EventName::MouseEnter => "onmouseenter".to_string(),
-        ftd::interpreter::EventName::ClickOutside => "onclickoutside".to_string(),
-        ftd::interpreter::EventName::GlobalKey(keys) => format!("onglobalkey[{}]", keys.join("-")),
-        ftd::interpreter::EventName::GlobalKeySeq(keys) => {
+        fastn_type::EventName::Click => "onclick".to_string(),
+        fastn_type::EventName::MouseLeave => "onmouseleave".to_string(),
+        fastn_type::EventName::MouseEnter => "onmouseenter".to_string(),
+        fastn_type::EventName::ClickOutside => "onclickoutside".to_string(),
+        fastn_type::EventName::GlobalKey(keys) => format!("onglobalkey[{}]", keys.join("-")),
+        fastn_type::EventName::GlobalKeySeq(keys) => {
             format!("onglobalkeyseq[{}]", keys.join("-"))
         }
-        ftd::interpreter::EventName::Input => "oninput".to_string(),
-        ftd::interpreter::EventName::Change => "onchange".to_string(),
-        ftd::interpreter::EventName::Blur => "onblur".to_string(),
-        ftd::interpreter::EventName::Focus => "onfocus".to_string(),
-        ftd::interpreter::EventName::RivePlay(timeline) => format!("onriveplay[{}]", timeline),
-        ftd::interpreter::EventName::RiveStateChange(state_change) => {
+        fastn_type::EventName::Input => "oninput".to_string(),
+        fastn_type::EventName::Change => "onchange".to_string(),
+        fastn_type::EventName::Blur => "onblur".to_string(),
+        fastn_type::EventName::Focus => "onfocus".to_string(),
+        fastn_type::EventName::RivePlay(timeline) => format!("onriveplay[{}]", timeline),
+        fastn_type::EventName::RiveStateChange(state_change) => {
             format!("onrivestatechange[{}]", state_change)
         }
-        ftd::interpreter::EventName::RivePause(timeline) => {
+        fastn_type::EventName::RivePause(timeline) => {
             format!("onrivepause[{}]", timeline)
         }
     }

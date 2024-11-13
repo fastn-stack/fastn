@@ -1,3 +1,11 @@
+use ftd::interpreter::expression::ExpressionExt;
+use ftd::interpreter::things::component::ComponentDefinitionExt;
+use ftd::interpreter::things::or_type::OrTypeExt;
+use ftd::interpreter::things::record::RecordExt;
+use ftd::interpreter::things::web_component::WebComponentDefinitionExt;
+use ftd::interpreter::FunctionExt;
+use ftd::interpreter::{ComponentExt, VariableExt};
+
 /// The `InterpreterState` struct is a representation of the state of an interpreter. It contains
 /// information about the interpreter's current state and its progress through the code being
 /// interpreted.
@@ -18,7 +26,7 @@
 /// - `parsed_libs`: an `ftd::Map` of `ParsedDocument`s that represents the parsed libraries for the
 ///   interpreter.
 ///
-/// - `instructions`: a `Vec` of `ftd::interpreter::Component`s that represents the instructions
+/// - `instructions`: a `Vec` of `fastn_type::Component`s that represents the instructions
 ///   that the interpreter has processed.
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct InterpreterState {
@@ -29,7 +37,7 @@ pub struct InterpreterState {
     pub to_process: ToProcess,
     pub pending_imports: PendingImports,
     pub parsed_libs: ftd::Map<ParsedDocument>,
-    pub instructions: Vec<ftd::interpreter::Component>,
+    pub instructions: Vec<fastn_type::Component>,
     pub in_process: Vec<(String, usize, ftd_ast::Ast)>,
 }
 
@@ -240,6 +248,8 @@ impl InterpreterState {
     }
 
     pub fn continue_processing(mut self) -> ftd::interpreter::Result<Interpreter> {
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
+
         while let Some((doc_name, number_of_scan, ast, exports)) = self.get_next_ast() {
             if let Some(interpreter) = self.resolve_pending_imports::<ftd::interpreter::Thing>()? {
                 match interpreter {
@@ -283,10 +293,10 @@ impl InterpreterState {
             if ast.is_record() {
                 if !is_in_bag {
                     if number_of_scan.eq(&1) {
-                        ftd::interpreter::Record::scan_ast(ast, &mut doc)?;
+                        fastn_type::Record::scan_ast(ast, &mut doc)?;
                         continue;
                     } else {
-                        match ftd::interpreter::Record::from_ast(ast, &mut doc)? {
+                        match fastn_type::Record::from_ast(ast, &mut doc)? {
                             ftd::interpreter::StateWithThing::State(s) => {
                                 return Ok(s.into_interpreter(self))
                             }
@@ -310,10 +320,10 @@ impl InterpreterState {
             } else if ast.is_or_type() {
                 if !is_in_bag {
                     if number_of_scan.eq(&1) {
-                        ftd::interpreter::OrType::scan_ast(ast, &mut doc)?;
+                        fastn_type::OrType::scan_ast(ast, &mut doc)?;
                         continue;
                     } else {
-                        match ftd::interpreter::OrType::from_ast(ast, &mut doc)? {
+                        match fastn_type::OrType::from_ast(ast, &mut doc)? {
                             ftd::interpreter::StateWithThing::State(s) => {
                                 return Ok(s.into_interpreter(self))
                             }
@@ -337,10 +347,10 @@ impl InterpreterState {
             } else if ast.is_function() {
                 if !is_in_bag {
                     if number_of_scan.eq(&1) {
-                        ftd::interpreter::Function::scan_ast(ast, &mut doc)?;
+                        fastn_type::Function::scan_ast(ast, &mut doc)?;
                         continue;
                     } else {
-                        match ftd::interpreter::Function::from_ast(ast, &mut doc)? {
+                        match fastn_type::Function::from_ast(ast, &mut doc)? {
                             ftd::interpreter::StateWithThing::State(s) => {
                                 return Ok(s.into_interpreter(self))
                             }
@@ -374,10 +384,10 @@ impl InterpreterState {
             } else if ast.is_variable_definition() {
                 if !is_in_bag {
                     if number_of_scan.eq(&1) {
-                        ftd::interpreter::Variable::scan_ast(ast, &mut doc)?;
+                        fastn_type::Variable::scan_ast(ast, &mut doc)?;
                         continue;
                     } else {
-                        match ftd::interpreter::Variable::from_ast(ast, &mut doc, number_of_scan)? {
+                        match fastn_type::Variable::from_ast(ast, &mut doc, number_of_scan)? {
                             ftd::interpreter::StateWithThing::State(s) => {
                                 return Ok(s.into_interpreter(self))
                             }
@@ -400,10 +410,10 @@ impl InterpreterState {
                 }
             } else if ast.is_variable_invocation() {
                 if number_of_scan.eq(&1) {
-                    ftd::interpreter::Variable::scan_update_from_ast(ast, &mut doc)?;
+                    fastn_type::Variable::scan_update_from_ast(ast, &mut doc)?;
                     continue;
                 } else {
-                    match ftd::interpreter::Variable::update_from_ast(ast, &mut doc)? {
+                    match fastn_type::Variable::update_from_ast(ast, &mut doc)? {
                         ftd::interpreter::StateWithThing::State(s) => {
                             return Ok(s.into_interpreter(self))
                         }
@@ -419,10 +429,10 @@ impl InterpreterState {
             } else if ast.is_component_definition() {
                 if !is_in_bag {
                     if number_of_scan.eq(&1) {
-                        ftd::interpreter::ComponentDefinition::scan_ast(ast, &mut doc)?;
+                        fastn_type::ComponentDefinition::scan_ast(ast, &mut doc)?;
                         continue;
                     } else {
-                        match ftd::interpreter::ComponentDefinition::from_ast(ast, &mut doc)? {
+                        match fastn_type::ComponentDefinition::from_ast(ast, &mut doc)? {
                             ftd::interpreter::StateWithThing::State(s) => {
                                 return Ok(s.into_interpreter(self))
                             }
@@ -455,10 +465,10 @@ impl InterpreterState {
             } else if ast.is_web_component_definition() {
                 if !is_in_bag {
                     if number_of_scan.eq(&1) {
-                        ftd::interpreter::WebComponentDefinition::scan_ast(ast, &mut doc)?;
+                        fastn_type::WebComponentDefinition::scan_ast(ast, &mut doc)?;
                         continue;
                     } else {
-                        match ftd::interpreter::WebComponentDefinition::from_ast(ast, &mut doc)? {
+                        match fastn_type::WebComponentDefinition::from_ast(ast, &mut doc)? {
                             ftd::interpreter::StateWithThing::State(s) => {
                                 return Ok(s.into_interpreter(self))
                             }
@@ -487,10 +497,10 @@ impl InterpreterState {
                 }
             } else if ast.is_component() {
                 if number_of_scan.eq(&1) {
-                    ftd::interpreter::Component::scan_ast(ast, &mut doc)?;
+                    fastn_type::Component::scan_ast(ast, &mut doc)?;
                     continue;
                 } else {
-                    match ftd::interpreter::Component::from_ast(ast, &mut doc)? {
+                    match fastn_type::Component::from_ast(ast, &mut doc)? {
                         ftd::interpreter::StateWithThing::State(s) => {
                             return Ok(s.into_interpreter(self))
                         }
@@ -858,7 +868,7 @@ impl InterpreterState {
     #[tracing::instrument(skip_all)]
     pub fn continue_after_processor(
         mut self,
-        value: ftd::interpreter::Value,
+        value: fastn_type::Value,
         ast: ftd_ast::Ast,
     ) -> ftd::interpreter::Result<Interpreter> {
         use ftd::interpreter::KindDataExt;
@@ -884,7 +894,7 @@ impl InterpreterState {
         let value =
             value.into_property_value(variable_definition.mutable, variable_definition.line_number);
 
-        let variable = ftd::interpreter::Variable {
+        let variable = fastn_type::Variable {
             name,
             kind,
             mutable: variable_definition.mutable,
@@ -908,14 +918,14 @@ impl InterpreterState {
         mut self,
         module: &str,
         variable: &str,
-        value: ftd::interpreter::Value,
+        value: fastn_type::Value,
     ) -> ftd::interpreter::Result<Interpreter> {
         let parsed_document = self.parsed_libs.get(module).unwrap();
         let name = parsed_document.name.to_string();
         let aliases = parsed_document.doc_aliases.clone();
         let doc = ftd::interpreter::TDoc::new_state(&name, &aliases, &mut self);
         let var_name = doc.resolve_name(variable);
-        let variable = ftd::interpreter::Variable {
+        let variable = fastn_type::Variable {
             name: var_name,
             kind: value.kind().into_kind_data(),
             mutable: false,
@@ -1175,7 +1185,7 @@ impl InterpreterWithoutState {
 pub struct Document {
     pub data: indexmap::IndexMap<String, ftd::interpreter::Thing>,
     pub name: String,
-    pub tree: Vec<ftd::interpreter::Component>,
+    pub tree: Vec<fastn_type::Component>,
     pub aliases: ftd::Map<String>,
     pub js: std::collections::HashSet<String>,
     pub css: std::collections::HashSet<String>,
@@ -1189,7 +1199,7 @@ impl Document {
             bag: ftd::interpreter::BagOrState::Bag(&self.data),
         }
     }
-    pub fn get_instructions(&self, component_name: &str) -> Vec<ftd::interpreter::Component> {
+    pub fn get_instructions(&self, component_name: &str) -> Vec<fastn_type::Component> {
         use itertools::Itertools;
 
         self.tree
@@ -1204,7 +1214,7 @@ impl Document {
             .collect_vec()
     }
 
-    pub fn get_component_by_id(&self, component_id: &str) -> Option<&ftd::interpreter::Component> {
+    pub fn get_component_by_id(&self, component_id: &str) -> Option<&fastn_type::Component> {
         self.tree.iter().find(|v| {
             if let Some(id) = &v.id {
                 return id.eq(component_id);
@@ -1215,6 +1225,8 @@ impl Document {
     }
 
     fn get_redirect_with_code(&self, kind: &str) -> ftd::interpreter::Result<Option<String>> {
+        use ftd::interpreter::ValueExt;
+
         let redirects = self.get_instructions(kind);
 
         for v in &redirects {
@@ -1269,6 +1281,8 @@ impl Document {
     }
 
     pub fn json(&self, key: &str) -> ftd::interpreter::Result<serde_json::Value> {
+        use ftd::interpreter::PropertyValueExt;
+
         let key = self.name(key);
         let thing = match self.data.get(key.as_str()) {
             Some(v) => v,
@@ -1297,25 +1311,22 @@ impl Document {
         }
     }
 
-    fn value_to_json(
-        &self,
-        v: &ftd::interpreter::Value,
-    ) -> ftd::interpreter::Result<serde_json::Value> {
+    fn value_to_json(&self, v: &fastn_type::Value) -> ftd::interpreter::Result<serde_json::Value> {
+        use ftd::interpreter::PropertyValueExt;
+
         let doc = self.tdoc();
         Ok(match v {
-            ftd::interpreter::Value::Integer { value } => {
+            fastn_type::Value::Integer { value } => {
                 serde_json::Value::Number(serde_json::Number::from(*value))
             }
-            ftd::interpreter::Value::Boolean { value } => serde_json::Value::Bool(*value),
-            ftd::interpreter::Value::Decimal { value } => {
+            fastn_type::Value::Boolean { value } => serde_json::Value::Bool(*value),
+            fastn_type::Value::Decimal { value } => {
                 serde_json::Value::Number(serde_json::Number::from_f64(*value).unwrap())
                 // TODO: remove unwrap
             }
-            ftd::interpreter::Value::String { text, .. } => {
-                serde_json::Value::String(text.to_owned())
-            }
-            ftd::interpreter::Value::Record { fields, .. } => self.object_to_json(fields)?,
-            ftd::interpreter::Value::OrType { variant, value, .. } => {
+            fastn_type::Value::String { text, .. } => serde_json::Value::String(text.to_owned()),
+            fastn_type::Value::Record { fields, .. } => self.object_to_json(fields)?,
+            fastn_type::Value::OrType { variant, value, .. } => {
                 let mut map = serde_json::Map::new();
                 map.insert(
                     "type".to_string(),
@@ -1327,13 +1338,13 @@ impl Document {
                 );
                 serde_json::Value::Object(map)
             }
-            ftd::interpreter::Value::List { data, .. } => self.list_to_json(
+            fastn_type::Value::List { data, .. } => self.list_to_json(
                 data.iter()
                     .filter_map(|v| v.clone().resolve(&doc, v.line_number()).ok())
-                    .collect::<Vec<ftd::interpreter::Value>>()
+                    .collect::<Vec<fastn_type::Value>>()
                     .as_slice(),
             )?,
-            ftd::interpreter::Value::Optional { data, .. } => match data.as_ref() {
+            fastn_type::Value::Optional { data, .. } => match data.as_ref() {
                 Some(v) => self.value_to_json(v)?,
                 None => serde_json::Value::Null,
             },
@@ -1349,7 +1360,7 @@ impl Document {
 
     fn list_to_json(
         &self,
-        data: &[ftd::interpreter::Value],
+        data: &[fastn_type::Value],
     ) -> ftd::interpreter::Result<serde_json::Value> {
         let mut list = vec![];
         for item in data.iter() {
@@ -1360,7 +1371,7 @@ impl Document {
 
     fn object_to_json(
         &self,
-        fields: &ftd::Map<ftd::interpreter::PropertyValue>,
+        fields: &ftd::Map<fastn_type::PropertyValue>,
     ) -> ftd::interpreter::Result<serde_json::Value> {
         let mut map = serde_json::Map::new();
         for (k, v) in fields.iter() {
@@ -1371,8 +1382,10 @@ impl Document {
 
     fn property_value_to_json(
         &self,
-        v: &ftd::interpreter::PropertyValue,
+        v: &fastn_type::PropertyValue,
     ) -> ftd::interpreter::Result<serde_json::Value> {
+        use ftd::interpreter::PropertyValueExt;
+
         self.value_to_json(&v.clone().resolve(&self.tdoc(), v.line_number())?)
     }
 }

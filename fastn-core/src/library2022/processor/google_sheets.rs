@@ -44,7 +44,7 @@ pub(crate) fn rows_to_value(
     value: &ftd_ast::VariableValue,
     rows: &[DataRow],
     schema: &[DataColumn],
-) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+) -> ftd::interpreter::Result<fastn_type::Value> {
     Ok(match kind {
         fastn_type::Kind::List { kind, .. } => {
             let mut data = vec![];
@@ -55,7 +55,7 @@ pub(crate) fn rows_to_value(
                 );
             }
 
-            ftd::interpreter::Value::List {
+            fastn_type::Value::List {
                 data,
                 kind: kind.to_owned().into_kind_data(),
             }
@@ -76,10 +76,10 @@ fn row_to_record(
     value: &ftd_ast::VariableValue,
     row: &DataRow,
     schema: &[DataColumn],
-) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+) -> ftd::interpreter::Result<fastn_type::Value> {
     let rec = doc.get_record(name, value.line_number())?;
     let rec_fields = rec.fields;
-    let mut fields: ftd::Map<ftd::interpreter::PropertyValue> = Default::default();
+    let mut fields: ftd::Map<fastn_type::PropertyValue> = Default::default();
 
     for field in rec_fields.iter() {
         let idx = match schema
@@ -111,7 +111,7 @@ fn row_to_record(
         );
     }
 
-    Ok(ftd::interpreter::Value::Record {
+    Ok(fastn_type::Value::Record {
         name: name.to_string(),
         fields,
     })
@@ -123,7 +123,7 @@ fn row_to_value(
     value: &ftd_ast::VariableValue,
     row: &DataRow,
     schema: &[DataColumn],
-) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+) -> ftd::interpreter::Result<fastn_type::Value> {
     if let fastn_type::Kind::Record { name } = kind {
         return row_to_record(doc, name, value, row, schema);
     }
@@ -155,7 +155,7 @@ fn to_interpreter_value(
     _default_value: Option<String>,
     _record_name: Option<String>,
     line_number: usize,
-) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+) -> ftd::interpreter::Result<fastn_type::Value> {
     let val = match data_value {
         Some(v) => v,
         None => {
@@ -176,7 +176,7 @@ fn to_interpreter_value(
 
     Ok(match kind {
         // Available kinds: https://support.google.com/area120-tables/answer/9904372?hl=en
-        fastn_type::Kind::String { .. } => ftd::interpreter::Value::String {
+        fastn_type::Kind::String { .. } => fastn_type::Value::String {
             text: match column.r#type.as_str() {
                 "string" => match &val.v {
                     serde_json::Value::String(v) => v.to_string(),
@@ -194,7 +194,7 @@ fn to_interpreter_value(
                 },
             },
         },
-        fastn_type::Kind::Integer => ftd::interpreter::Value::Integer {
+        fastn_type::Kind::Integer => fastn_type::Value::Integer {
             value: match column.r#type.as_str() {
                 "number" => match &val.v {
                     serde_json::Value::Number(n) => {
@@ -231,7 +231,7 @@ fn to_interpreter_value(
                 }
             },
         },
-        fastn_type::Kind::Decimal => ftd::interpreter::Value::Decimal {
+        fastn_type::Kind::Decimal => fastn_type::Value::Decimal {
             value: match &val.v {
                 serde_json::Value::Number(n) => {
                     n.as_f64()
@@ -258,7 +258,7 @@ fn to_interpreter_value(
                 }
             },
         },
-        fastn_type::Kind::Boolean => ftd::interpreter::Value::Boolean {
+        fastn_type::Kind::Boolean => fastn_type::Value::Boolean {
             value: match &val.v {
                 serde_json::Value::Bool(n) => *n,
                 serde_json::Value::String(s) => {
@@ -281,7 +281,7 @@ fn to_interpreter_value(
         fastn_type::Kind::Optional { kind, .. } => {
             let kind = kind.as_ref();
             match &val.v {
-                serde_json::Value::Null => ftd::interpreter::Value::Optional {
+                serde_json::Value::Null => fastn_type::Value::Optional {
                     kind: kind.clone().into_kind_data(),
                     data: Box::new(None),
                 },
@@ -311,7 +311,7 @@ fn result_to_value(
     kind: fastn_type::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     value: &ftd_ast::VariableValue,
-) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+) -> ftd::interpreter::Result<fastn_type::Value> {
     if kind.is_list() {
         rows_to_value(
             doc,
@@ -387,10 +387,10 @@ fn resolve_variable_from_doc(
     };
 
     let param_value: String = match thing {
-        ftd::interpreter::Value::String { text } => escape_string_value(text.as_str()),
-        ftd::interpreter::Value::Integer { value } => value.to_string(),
-        ftd::interpreter::Value::Decimal { value } => value.to_string(),
-        ftd::interpreter::Value::Boolean { value } => value.to_string(),
+        fastn_type::Value::String { text } => escape_string_value(text.as_str()),
+        fastn_type::Value::Integer { value } => value.to_string(),
+        fastn_type::Value::Decimal { value } => value.to_string(),
+        fastn_type::Value::Boolean { value } => value.to_string(),
         v => {
             return ftd::interpreter::utils::e2(
                 format!("kind {:?} is not supported yet.", v),
@@ -579,7 +579,7 @@ pub(crate) async fn process(
     db_config: &fastn_core::library2022::processor::sql::DatabaseConfig,
     headers: ftd_ast::HeaderValues,
     query: &str,
-) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+) -> ftd::interpreter::Result<fastn_type::Value> {
     let query = parse_query(query, doc, &headers, value.line_number())?;
     let sheet = &headers.get_optional_string_by_key("sheet", doc.name, value.line_number())?;
     let request_url =

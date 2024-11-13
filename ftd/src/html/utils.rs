@@ -1,3 +1,5 @@
+use ftd::interpreter::expression::ExpressionExt;
+
 pub fn trim_all_lines(s: &str) -> String {
     use itertools::Itertools;
 
@@ -62,11 +64,12 @@ pub(crate) fn node_change_id(id: &str, attr: &str) -> String {
 pub(crate) fn get_formatted_dep_string_from_property_value(
     id: &str,
     doc: &ftd::interpreter::TDoc,
-    property_value: &ftd::interpreter::PropertyValue,
+    property_value: &fastn_type::PropertyValue,
     pattern_with_eval: &Option<(String, bool)>,
     field: Option<String>,
     string_needs_no_quotes: bool,
 ) -> ftd::html::Result<Option<String>> {
+    use ftd::html::fastn_type_functions::PropertyValueExt;
     /*let field = match field {
         None if property_value.kind().is_ftd_length()
             || property_value.kind().is_ftd_resizing_fixed() =>
@@ -97,12 +100,12 @@ pub(crate) fn get_formatted_dep_string_from_property_value(
     }))
 }
 
-pub(crate) fn get_condition_string(condition: &ftd::interpreter::Expression) -> String {
+pub(crate) fn get_condition_string(condition: &fastn_type::Expression) -> String {
     get_condition_string_(condition, true)
 }
 
 pub(crate) fn get_condition_string_(
-    condition: &ftd::interpreter::Expression,
+    condition: &fastn_type::Expression,
     extra_args: bool,
 ) -> String {
     let node = condition.update_node_with_variable_reference();
@@ -164,9 +167,11 @@ pub(crate) fn js_expression_from_list(
 }
 
 pub(crate) fn is_dark_mode_dependent(
-    value: &ftd::interpreter::PropertyValue,
+    value: &fastn_type::PropertyValue,
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::html::Result<bool> {
+    use ftd::interpreter::PropertyValueExt;
+
     let value = value.clone().resolve(doc, value.line_number())?;
     Ok(value.is_record(ftd::interpreter::FTD_IMAGE_SRC)
         || value.is_record(ftd::interpreter::FTD_COLOR)
@@ -174,9 +179,11 @@ pub(crate) fn is_dark_mode_dependent(
 }
 
 pub(crate) fn is_device_dependent(
-    value: &ftd::interpreter::PropertyValue,
+    value: &fastn_type::PropertyValue,
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::html::Result<bool> {
+    use ftd::interpreter::{PropertyValueExt, ValueExt};
+
     let value = value.clone().resolve(doc, value.line_number())?;
     if value.is_record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
         || value.is_or_type_variant(ftd::interpreter::FTD_LENGTH_RESPONSIVE)
@@ -197,10 +204,11 @@ pub(crate) fn is_device_dependent(
 }
 
 pub(crate) fn dependencies_from_property_value(
-    property_value: &ftd::interpreter::PropertyValue,
+    property_value: &fastn_type::PropertyValue,
     doc: &ftd::interpreter::TDoc,
 ) -> Vec<String> {
     use ftd::html::fastn_type_functions::KindExt;
+    use ftd::interpreter::{PropertyValueExt, ValueExt};
 
     if let Some(ref_name) = property_value.reference_name() {
         vec![ref_name.to_string()]
@@ -277,10 +285,11 @@ pub(crate) fn dependencies_from_property_value(
 }
 
 fn dependencies_from_length_property_value(
-    property_value: &ftd::interpreter::PropertyValue,
+    property_value: &fastn_type::PropertyValue,
     doc: &ftd::interpreter::TDoc,
 ) -> Vec<String> {
     use ftd::html::fastn_type_functions::KindExt;
+    use ftd::interpreter::{PropertyValueExt, ValueExt};
 
     if property_value.is_value() && property_value.kind().is_ftd_length() {
         let value = property_value
@@ -301,149 +310,6 @@ fn dependencies_from_length_property_value(
         }
     } else {
         vec![]
-    }
-}
-
-impl ftd::interpreter::PropertyValue {
-    pub(crate) fn to_html_string(
-        &self,
-        doc: &ftd::interpreter::TDoc,
-        field: Option<String>,
-        id: &str,
-        string_needs_no_quotes: bool,
-    ) -> ftd::html::Result<Option<String>> {
-        Ok(match self {
-            ftd::interpreter::PropertyValue::Reference { name, .. } => Some(format!(
-                "resolve_reference(\"{}\", data){}",
-                js_reference_name(name),
-                field.map(|v| format!(".{}", v)).unwrap_or_default()
-            )),
-            ftd::interpreter::PropertyValue::FunctionCall(function_call) => {
-                let action = serde_json::to_string(&ftd::html::Action::from_function_call(
-                    function_call,
-                    id,
-                    doc,
-                )?)
-                .unwrap();
-                Some(format!(
-                    "window.ftd.handle_function(event, '{}', '{}', this)",
-                    id, action
-                ))
-            }
-            ftd::interpreter::PropertyValue::Value {
-                value, line_number, ..
-            } => value.to_html_string(doc, *line_number, field, id, string_needs_no_quotes)?,
-            _ => None,
-        })
-    }
-}
-
-impl ftd::interpreter::Value {
-    // string_needs_no_quotes: for class attribute the value should be red-block not "red-block"
-    pub(crate) fn to_html_string(
-        &self,
-        doc: &ftd::interpreter::TDoc,
-        line_number: usize,
-        field: Option<String>,
-        id: &str,
-        string_needs_no_quotes: bool,
-    ) -> ftd::html::Result<Option<String>> {
-        Ok(match self {
-            ftd::interpreter::Value::String { text } if !string_needs_no_quotes => {
-                Some(format!("\"{}\"", text))
-            }
-            ftd::interpreter::Value::String { text } if string_needs_no_quotes => {
-                Some(text.to_string())
-            }
-            ftd::interpreter::Value::Integer { value } => Some(value.to_string()),
-            ftd::interpreter::Value::Decimal { value } => Some(value.to_string()),
-            ftd::interpreter::Value::Boolean { value } => Some(value.to_string()),
-            ftd::interpreter::Value::List { data, .. } => {
-                let mut values = vec![];
-                for value in data {
-                    let v = if let Some(v) = value
-                        .clone()
-                        .resolve(doc, line_number)?
-                        .to_html_string(doc, value.line_number(), None, id, true)?
-                    {
-                        v
-                    } else {
-                        continue;
-                    };
-                    values.push(v);
-                }
-                Some(format!("{:?}", values.join(" ")))
-            }
-            ftd::interpreter::Value::Record { fields, .. }
-                if field
-                    .as_ref()
-                    .map(|v| fields.contains_key(v))
-                    .unwrap_or(false) =>
-            {
-                fields.get(&field.unwrap()).unwrap().to_html_string(
-                    doc,
-                    None,
-                    id,
-                    string_needs_no_quotes,
-                )?
-            }
-            ftd::interpreter::Value::OrType {
-                value,
-                variant,
-                full_variant,
-                name,
-                ..
-            } => {
-                let value = value.to_html_string(doc, field, id, string_needs_no_quotes)?;
-                match value {
-                    Some(value) if name.eq(ftd::interpreter::FTD_LENGTH) => {
-                        if let Ok(pattern) = ftd::executor::Length::set_pattern_from_variant_str(
-                            variant,
-                            doc.name,
-                            line_number,
-                        ) {
-                            Some(format!("`{}`.format(JSON.stringify({}))", pattern, value))
-                        } else {
-                            Some(value)
-                        }
-                    }
-                    Some(value)
-                        if name.eq(ftd::interpreter::FTD_RESIZING)
-                            && variant.ne(ftd::interpreter::FTD_RESIZING_FIXED) =>
-                    {
-                        if let Ok(pattern) = ftd::executor::Resizing::set_pattern_from_variant_str(
-                            variant,
-                            full_variant,
-                            doc.name,
-                            line_number,
-                        ) {
-                            Some(format!("`{}`.format(JSON.stringify({}))", pattern, value))
-                        } else {
-                            Some(value)
-                        }
-                    }
-                    Some(value) => Some(value),
-                    None => None,
-                }
-            }
-            ftd::interpreter::Value::Record { fields, .. } => {
-                let mut values = vec![];
-                for (k, v) in fields {
-                    let value = if let Some(v) =
-                        v.to_html_string(doc, field.clone(), id, string_needs_no_quotes)?
-                    {
-                        v
-                    } else {
-                        "null".to_string()
-                    };
-                    values.push(format!("\"{}\": {}", k, value));
-                }
-
-                Some(format!("{{{}}}", values.join(", ")))
-            }
-            ftd::interpreter::Value::Optional { data, .. } if data.is_none() => None,
-            t => unimplemented!("{:?}", t),
-        })
     }
 }
 
@@ -603,7 +469,7 @@ pub(crate) fn get_new_number(keys: &Vec<String>, name: &str) -> usize {
 
 pub(crate) fn to_properties_string(
     id: &str,
-    properties: &[(String, ftd::interpreter::Property)],
+    properties: &[(String, fastn_type::Property)],
     doc: &ftd::interpreter::TDoc,
     node: &str,
 ) -> Option<String> {
@@ -646,7 +512,7 @@ pub(crate) fn to_properties_string(
 
 pub(crate) fn to_argument_string(
     id: &str,
-    arguments: &[ftd::interpreter::Argument],
+    arguments: &[fastn_type::Argument],
     doc: &ftd::interpreter::TDoc,
     node: &str,
 ) -> Option<String> {
@@ -840,15 +706,12 @@ fn get_rive_event(
     id: &str,
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::html::Result<String> {
-    let mut events_map: ftd::VecMap<(&String, &ftd::interpreter::FunctionCall)> =
-        ftd::VecMap::new();
+    let mut events_map: ftd::VecMap<(&String, &fastn_type::FunctionCall)> = ftd::VecMap::new();
     for event in rive.events.iter() {
         let (event_name, input, action) = match &event.name {
-            ftd::interpreter::EventName::RivePlay(timeline) => ("onPlay", timeline, &event.action),
-            ftd::interpreter::EventName::RivePause(timeline) => {
-                ("onPause", timeline, &event.action)
-            }
-            ftd::interpreter::EventName::RiveStateChange(state) => {
+            fastn_type::EventName::RivePlay(timeline) => ("onPlay", timeline, &event.action),
+            fastn_type::EventName::RivePause(timeline) => ("onPause", timeline, &event.action),
+            fastn_type::EventName::RiveStateChange(state) => {
                 ("onStateChange", state, &event.action)
             }
             _ => continue,

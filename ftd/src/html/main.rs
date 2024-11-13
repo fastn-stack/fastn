@@ -110,9 +110,9 @@ impl HtmlUI {
 pub(crate) struct RawHtmlGenerator {
     pub name: String,
     pub html: String,
-    pub properties: Vec<(String, ftd::interpreter::Property)>,
+    pub properties: Vec<(String, fastn_type::Property)>,
     pub properties_string: Option<String>,
-    pub iteration: Option<ftd::interpreter::Loop>,
+    pub iteration: Option<fastn_type::Loop>,
     pub helper_html: ftd::Map<RawHtmlGenerator>,
     pub children: Vec<RawHtmlGenerator>,
 }

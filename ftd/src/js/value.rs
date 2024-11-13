@@ -1,16 +1,16 @@
 #[derive(Debug)]
 pub enum Value {
-    Data(ftd::interpreter::Value),
+    Data(fastn_type::Value),
     Reference(ReferenceData),
-    ConditionalFormula(Vec<ftd::interpreter::Property>),
-    FunctionCall(ftd::interpreter::FunctionCall),
+    ConditionalFormula(Vec<fastn_type::Property>),
+    FunctionCall(fastn_type::FunctionCall),
     Clone(String),
 }
 
 #[derive(Debug)]
 pub struct ReferenceData {
     pub name: String,
-    pub value: Option<ftd::interpreter::PropertyValue>,
+    pub value: Option<fastn_type::PropertyValue>,
 }
 
 impl Value {
@@ -42,6 +42,8 @@ impl Value {
         has_rive_components: &mut bool,
         should_return: bool,
     ) -> fastn_js::SetPropertyValue {
+        use ftd::js::fastn_type_functions::ValueExt;
+
         match self {
             Value::Data(value) => {
                 value.to_fastn_js_value(doc, rdata, has_rive_components, should_return)
@@ -115,13 +117,13 @@ impl Value {
     }
 
     pub fn from_str_value(s: &str) -> Value {
-        Value::Data(ftd::interpreter::Value::String {
+        Value::Data(fastn_type::Value::String {
             text: s.to_string(),
         })
     }
 
     pub fn get_string_data(&self) -> Option<String> {
-        if let Value::Data(ftd::interpreter::Value::String { text }) = self {
+        if let Value::Data(fastn_type::Value::String { text }) = self {
             return Some(text.to_string());
         }
         None
@@ -130,9 +132,11 @@ impl Value {
 
 fn properties_to_js_conditional_formula(
     doc: &ftd::interpreter::TDoc,
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
     rdata: &ftd::js::ResolverData,
 ) -> fastn_js::Formula {
+    use ftd::js::fastn_type_functions::PropertyValueExt;
+
     let mut deps = vec![];
     let mut conditional_values = vec![];
     for property in properties {
@@ -156,8 +160,18 @@ fn properties_to_js_conditional_formula(
     }
 }
 
-impl ftd::interpreter::Expression {
-    pub(crate) fn get_deps(&self, rdata: &ftd::js::ResolverData) -> Vec<String> {
+pub(crate) trait ExpressionExt {
+    fn get_deps(&self, rdata: &ftd::js::ResolverData) -> Vec<String>;
+    fn update_node_with_variable_reference_js(
+        &self,
+        rdata: &ftd::js::ResolverData,
+    ) -> fastn_grammar::evalexpr::ExprNode;
+}
+
+impl ExpressionExt for fastn_type::Expression {
+    fn get_deps(&self, rdata: &ftd::js::ResolverData) -> Vec<String> {
+        use ftd::js::fastn_type_functions::PropertyValueExt;
+
         let mut deps = vec![];
         for property_value in self.references.values() {
             deps.extend(property_value.get_deps(rdata));
@@ -165,7 +179,7 @@ impl ftd::interpreter::Expression {
         deps
     }
 
-    pub fn update_node_with_variable_reference_js(
+    fn update_node_with_variable_reference_js(
         &self,
         rdata: &ftd::js::ResolverData,
     ) -> fastn_grammar::evalexpr::ExprNode {
@@ -173,7 +187,7 @@ impl ftd::interpreter::Expression {
 
         fn update_node_with_variable_reference_js_(
             expr: &fastn_grammar::evalexpr::ExprNode,
-            references: &ftd::Map<ftd::interpreter::PropertyValue>,
+            references: &ftd::Map<fastn_type::PropertyValue>,
             rdata: &ftd::js::ResolverData,
         ) -> fastn_grammar::evalexpr::ExprNode {
             let mut operator = expr.operator().clone();
@@ -190,7 +204,7 @@ impl ftd::interpreter::Expression {
                             identifier: "index".to_string(),
                         }
                     }
-                } else if let Some(ftd::interpreter::PropertyValue::Reference { name, .. }) =
+                } else if let Some(fastn_type::PropertyValue::Reference { name, .. }) =
                     references.get(identifier)
                 {
                     let name = ftd::js::utils::update_reference(name, rdata);
@@ -210,31 +224,30 @@ impl ftd::interpreter::Expression {
     }
 }
 
-impl ftd::interpreter::PropertyValue {
-    pub(crate) fn get_deps(&self, rdata: &ftd::js::ResolverData) -> Vec<String> {
-        let mut deps = vec![];
-        if let Some(reference) = self.get_reference_or_clone() {
-            deps.push(ftd::js::utils::update_reference(reference, rdata));
-        } else if let Some(function) = self.get_function() {
-            for value in function.values.values() {
-                deps.extend(value.get_deps(rdata));
-            }
-        }
-        deps
-    }
+pub(crate) trait ArgumentExt {
+    fn get_default_value(&self) -> Option<ftd::js::Value>;
+    fn get_value(&self, properties: &[fastn_type::Property]) -> ftd::js::Value;
+    fn get_optional_value(
+        &self,
+        properties: &[fastn_type::Property],
+        // doc_name: &str,
+        // line_number: usize
+    ) -> Option<ftd::js::Value>;
 }
 
-impl ftd::interpreter::Argument {
-    pub(crate) fn get_default_value(&self) -> Option<ftd::js::Value> {
+impl ArgumentExt for fastn_type::Argument {
+    fn get_default_value(&self) -> Option<ftd::js::Value> {
+        use ftd::js::fastn_type_functions::PropertyValueExt;
+
         if let Some(ref value) = self.value {
             Some(value.to_value())
         } else if self.kind.is_list() {
-            Some(ftd::js::Value::Data(ftd::interpreter::Value::List {
+            Some(ftd::js::Value::Data(fastn_type::Value::List {
                 data: vec![],
                 kind: self.kind.clone(),
             }))
         } else if self.kind.is_optional() {
-            Some(ftd::js::Value::Data(ftd::interpreter::Value::Optional {
+            Some(ftd::js::Value::Data(fastn_type::Value::Optional {
                 data: Box::new(None),
                 kind: self.kind.clone(),
             }))
@@ -242,7 +255,7 @@ impl ftd::interpreter::Argument {
             None
         }
     }
-    pub(crate) fn get_value(&self, properties: &[ftd::interpreter::Property]) -> ftd::js::Value {
+    fn get_value(&self, properties: &[fastn_type::Property]) -> ftd::js::Value {
         if let Some(value) = self.get_optional_value(properties) {
             value
         } else if let Some(value) = self.get_default_value() {
@@ -252,9 +265,9 @@ impl ftd::interpreter::Argument {
         }
     }
 
-    pub(crate) fn get_optional_value(
+    fn get_optional_value(
         &self,
-        properties: &[ftd::interpreter::Property],
+        properties: &[fastn_type::Property],
         // doc_name: &str,
         // line_number: usize
     ) -> Option<ftd::js::Value> {
@@ -266,7 +279,7 @@ impl ftd::interpreter::Argument {
         );
 
         ftd::js::utils::get_js_value_from_properties(properties.as_slice()) /* .map(|v|
-                                                                            if let Some(ftd::interpreter::Value::Module {}) = self.value.and_then(|v| v.value_optional()) {
+                                                                            if let Some(fastn_type::Value::Module {}) = self.value.and_then(|v| v.value_optional()) {
 
                                                                              }*/
     }
@@ -274,8 +287,8 @@ impl ftd::interpreter::Argument {
 
 pub(crate) fn get_optional_js_value(
     key: &str,
-    properties: &[ftd::interpreter::Property],
-    arguments: &[ftd::interpreter::Argument],
+    properties: &[fastn_type::Property],
+    arguments: &[fastn_type::Argument],
 ) -> Option<ftd::js::Value> {
     let argument = arguments.iter().find(|v| v.name.eq(key)).unwrap();
     argument.get_optional_value(properties)
@@ -283,8 +296,8 @@ pub(crate) fn get_optional_js_value(
 
 pub(crate) fn get_optional_js_value_with_default(
     key: &str,
-    properties: &[ftd::interpreter::Property],
-    arguments: &[ftd::interpreter::Argument],
+    properties: &[fastn_type::Property],
+    arguments: &[fastn_type::Argument],
 ) -> Option<ftd::js::Value> {
     let argument = arguments.iter().find(|v| v.name.eq(key)).unwrap();
     argument
@@ -294,209 +307,18 @@ pub(crate) fn get_optional_js_value_with_default(
 
 pub(crate) fn get_js_value_with_default(
     key: &str,
-    properties: &[ftd::interpreter::Property],
-    arguments: &[ftd::interpreter::Argument],
+    properties: &[fastn_type::Property],
+    arguments: &[fastn_type::Argument],
     default: ftd::js::Value,
 ) -> ftd::js::Value {
     ftd::js::value::get_optional_js_value(key, properties, arguments).unwrap_or(default)
 }
 
-impl ftd::interpreter::PropertyValue {
-    pub(crate) fn to_fastn_js_value_with_none(
-        &self,
-        doc: &ftd::interpreter::TDoc,
-        has_rive_components: &mut bool,
-    ) -> fastn_js::SetPropertyValue {
-        self.to_fastn_js_value_with_ui(
-            doc,
-            &ftd::js::ResolverData::none(),
-            has_rive_components,
-            false,
-        )
-    }
-
-    pub(crate) fn to_fastn_js_value(
-        &self,
-        doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
-        should_return: bool,
-    ) -> fastn_js::SetPropertyValue {
-        self.to_fastn_js_value_with_ui(doc, rdata, &mut false, should_return)
-    }
-
-    pub(crate) fn to_fastn_js_value_with_ui(
-        &self,
-        doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
-        has_rive_components: &mut bool,
-        should_return: bool,
-    ) -> fastn_js::SetPropertyValue {
-        self.to_value().to_set_property_value_with_ui(
-            doc,
-            rdata,
-            has_rive_components,
-            should_return,
-        )
-    }
-
-    pub(crate) fn to_value(&self) -> ftd::js::Value {
-        match self {
-            ftd::interpreter::PropertyValue::Value { ref value, .. } => {
-                ftd::js::Value::Data(value.to_owned())
-            }
-            ftd::interpreter::PropertyValue::Reference { ref name, .. } => {
-                ftd::js::Value::Reference(ReferenceData {
-                    name: name.clone().to_string(),
-                    value: Some(self.clone()),
-                })
-            }
-            ftd::interpreter::PropertyValue::FunctionCall(ref function_call) => {
-                ftd::js::Value::FunctionCall(function_call.to_owned())
-            }
-            ftd::interpreter::PropertyValue::Clone { ref name, .. } => {
-                ftd::js::Value::Clone(name.to_owned())
-            }
-        }
-    }
-}
-
-impl ftd::interpreter::Value {
-    pub(crate) fn to_fastn_js_value(
-        &self,
-        doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
-        has_rive_components: &mut bool,
-        should_return: bool,
-    ) -> fastn_js::SetPropertyValue {
-        use itertools::Itertools;
-
-        match self {
-            ftd::interpreter::Value::Boolean { value } => {
-                fastn_js::SetPropertyValue::Value(fastn_js::Value::Boolean(*value))
-            }
-            ftd::interpreter::Value::Optional { data, .. } => {
-                if let Some(data) = data.as_ref() {
-                    data.to_fastn_js_value(doc, rdata, has_rive_components, should_return)
-                } else {
-                    fastn_js::SetPropertyValue::Value(fastn_js::Value::Null)
-                }
-            }
-            ftd::interpreter::Value::String { text } => {
-                fastn_js::SetPropertyValue::Value(fastn_js::Value::String(text.to_string()))
-            }
-            ftd::interpreter::Value::Integer { value } => {
-                fastn_js::SetPropertyValue::Value(fastn_js::Value::Integer(*value))
-            }
-            ftd::interpreter::Value::Decimal { value } => {
-                fastn_js::SetPropertyValue::Value(fastn_js::Value::Decimal(*value))
-            }
-            ftd::interpreter::Value::OrType {
-                name,
-                value,
-                full_variant,
-                variant,
-            } => {
-                let (js_variant, has_value) = ftd_to_js_variant(
-                    name,
-                    variant,
-                    full_variant,
-                    value,
-                    doc.name,
-                    value.line_number(),
-                );
-                if has_value {
-                    return fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
-                        variant: js_variant,
-                        value: Some(Box::new(value.to_fastn_js_value(doc, rdata, should_return))),
-                    });
-                }
-                fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {
-                    variant: js_variant,
-                    value: None,
-                })
-            }
-            ftd::interpreter::Value::List { data, .. } => {
-                fastn_js::SetPropertyValue::Value(fastn_js::Value::List {
-                    value: data
-                        .iter()
-                        .map(|v| {
-                            v.to_fastn_js_value_with_ui(
-                                doc,
-                                rdata,
-                                has_rive_components,
-                                should_return,
-                            )
-                        })
-                        .collect_vec(),
-                })
-            }
-            ftd::interpreter::Value::Record {
-                fields: record_fields,
-                name,
-            } => {
-                let record = doc.get_record(name, 0).unwrap();
-                let mut fields = vec![];
-                for field in record.fields {
-                    if let Some(value) = record_fields.get(field.name.as_str()) {
-                        fields.push((
-                            field.name.to_string(),
-                            value.to_fastn_js_value_with_ui(
-                                doc,
-                                &rdata
-                                    .clone_with_new_record_definition_name(&Some(name.to_string())),
-                                has_rive_components,
-                                false,
-                            ),
-                        ));
-                    } else {
-                        fields.push((
-                            field.name.to_string(),
-                            field
-                                .get_default_value()
-                                .unwrap()
-                                .to_set_property_value_with_ui(
-                                    doc,
-                                    &rdata.clone_with_new_record_definition_name(&Some(
-                                        name.to_string(),
-                                    )),
-                                    has_rive_components,
-                                    false,
-                                ),
-                        ));
-                    }
-                }
-                fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
-                    fields,
-                    other_references: vec![],
-                })
-            }
-            ftd::interpreter::Value::UI { component, .. } => {
-                fastn_js::SetPropertyValue::Value(fastn_js::Value::UI {
-                    value: component.to_component_statements(
-                        fastn_js::FUNCTION_PARENT,
-                        0,
-                        doc,
-                        &rdata.clone_with_default_inherited_variable(),
-                        should_return,
-                        has_rive_components,
-                    ),
-                })
-            }
-            ftd::interpreter::Value::Module { name, .. } => {
-                fastn_js::SetPropertyValue::Value(fastn_js::Value::Module {
-                    name: name.to_string(),
-                })
-            }
-            t => todo!("{:?}", t),
-        }
-    }
-}
-
-fn ftd_to_js_variant(
+pub(crate) fn ftd_to_js_variant(
     name: &str,
     variant: &str,
     full_variant: &str,
-    value: &ftd::interpreter::PropertyValue,
+    value: &fastn_type::PropertyValue,
     doc_id: &str,
     line_number: usize,
 ) -> (String, bool) {
@@ -650,12 +472,14 @@ fn ftd_to_js_variant(
             )
         }
         t => {
+            use ftd::interpreter::PropertyValueExt;
+
             if let Ok(value) = value.value(doc_id, line_number) {
                 return match value {
-                    ftd::interpreter::Value::Integer { value } => (value.to_string(), false),
-                    ftd::interpreter::Value::Decimal { value } => (value.to_string(), false),
-                    ftd::interpreter::Value::String { text } => (format!("\"{}\"", text), false),
-                    ftd::interpreter::Value::Boolean { value } => (value.to_string(), false),
+                    fastn_type::Value::Integer { value } => (value.to_string(), false),
+                    fastn_type::Value::Decimal { value } => (value.to_string(), false),
+                    fastn_type::Value::String { text } => (format!("\"{}\"", text), false),
+                    fastn_type::Value::Boolean { value } => (value.to_string(), false),
                     _ => todo!("{} {}", t, variant),
                 };
             }

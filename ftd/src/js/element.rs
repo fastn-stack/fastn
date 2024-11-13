@@ -25,7 +25,7 @@ pub enum Element {
 
 impl Element {
     pub fn from_interpreter_component(
-        component: &ftd::interpreter::Component,
+        component: &fastn_type::Component,
         doc: &ftd::interpreter::TDoc,
     ) -> Element {
         match component.name.as_str() {
@@ -151,7 +151,7 @@ pub struct CheckBox {
 }
 
 impl CheckBox {
-    pub fn from(component: &ftd::interpreter::Component) -> CheckBox {
+    pub fn from(component: &fastn_type::Component) -> CheckBox {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#checkbox")
             .unwrap()
@@ -238,7 +238,7 @@ pub struct TextInput {
 }
 
 impl TextInput {
-    pub fn from(component: &ftd::interpreter::Component) -> TextInput {
+    pub fn from(component: &fastn_type::Component) -> TextInput {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#text-input")
             .unwrap()
@@ -397,7 +397,7 @@ pub struct Iframe {
 }
 
 impl Iframe {
-    pub fn from(component: &ftd::interpreter::Component) -> Iframe {
+    pub fn from(component: &fastn_type::Component) -> Iframe {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#iframe")
             .unwrap()
@@ -515,7 +515,7 @@ pub struct Code {
 }
 
 impl Code {
-    pub fn from(component: &ftd::interpreter::Component, _doc: &ftd::interpreter::TDoc) -> Code {
+    pub fn from(component: &fastn_type::Component, _doc: &ftd::interpreter::TDoc) -> Code {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#code")
             .unwrap()
@@ -640,7 +640,7 @@ pub struct Image {
 }
 
 impl Image {
-    pub fn from(component: &ftd::interpreter::Component) -> Image {
+    pub fn from(component: &fastn_type::Component) -> Image {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#image")
             .unwrap()
@@ -752,7 +752,7 @@ pub struct Audio {
 }
 
 impl Audio {
-    pub fn from(component: &ftd::interpreter::Component) -> Audio {
+    pub fn from(component: &fastn_type::Component) -> Audio {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#audio")
             .unwrap()
@@ -880,7 +880,7 @@ pub struct Video {
 }
 
 impl Video {
-    pub fn from(component: &ftd::interpreter::Component) -> Video {
+    pub fn from(component: &fastn_type::Component) -> Video {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#video")
             .unwrap()
@@ -1099,8 +1099,8 @@ pub struct ContainerProperties {
 
 impl ContainerProperties {
     pub fn from(
-        properties: &[ftd::interpreter::Property],
-        arguments: &[ftd::interpreter::Argument],
+        properties: &[fastn_type::Property],
+        arguments: &[fastn_type::Argument],
     ) -> ContainerProperties {
         ContainerProperties {
             spacing: ftd::js::value::get_optional_js_value("spacing", properties, arguments),
@@ -1168,8 +1168,8 @@ pub struct Container {
 
 impl Container {
     pub fn from(
-        properties: &[ftd::interpreter::Property],
-        arguments: &[ftd::interpreter::Argument],
+        properties: &[fastn_type::Property],
+        arguments: &[fastn_type::Argument],
     ) -> Container {
         Container {
             children: ftd::js::utils::get_js_value_from_properties(
@@ -1240,8 +1240,8 @@ pub struct Row {
 
 impl InheritedProperties {
     pub fn from(
-        properties: &[ftd::interpreter::Property],
-        arguments: &[ftd::interpreter::Argument],
+        properties: &[fastn_type::Property],
+        arguments: &[fastn_type::Argument],
     ) -> InheritedProperties {
         InheritedProperties {
             colors: ftd::js::value::get_optional_js_value("colors", properties, arguments),
@@ -1287,7 +1287,7 @@ impl InheritedProperties {
 }
 
 impl Text {
-    pub fn from(component: &ftd::interpreter::Component) -> Text {
+    pub fn from(component: &fastn_type::Component) -> Text {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#text")
             .unwrap()
@@ -1351,7 +1351,7 @@ impl Text {
 }
 
 impl Integer {
-    pub fn from(component: &ftd::interpreter::Component) -> Integer {
+    pub fn from(component: &fastn_type::Component) -> Integer {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#integer")
             .unwrap()
@@ -1416,7 +1416,7 @@ impl Integer {
 }
 
 impl Decimal {
-    pub fn from(component: &ftd::interpreter::Component) -> Decimal {
+    pub fn from(component: &fastn_type::Component) -> Decimal {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#decimal")
             .unwrap()
@@ -1481,7 +1481,7 @@ impl Decimal {
 }
 
 impl Boolean {
-    pub fn from(component: &ftd::interpreter::Component) -> Boolean {
+    pub fn from(component: &fastn_type::Component) -> Boolean {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#boolean")
             .unwrap()
@@ -1546,7 +1546,7 @@ impl Boolean {
 }
 
 impl Document {
-    pub fn from(component: &ftd::interpreter::Component) -> Document {
+    pub fn from(component: &fastn_type::Component) -> Document {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#document")
             .unwrap()
@@ -1618,8 +1618,8 @@ impl Document {
 
 impl DocumentMeta {
     pub fn from(
-        properties: &[ftd::interpreter::Property],
-        arguments: &[ftd::interpreter::Argument],
+        properties: &[fastn_type::Property],
+        arguments: &[fastn_type::Argument],
     ) -> DocumentMeta {
         DocumentMeta {
             favicon: ftd::js::value::get_optional_js_value("favicon", properties, arguments),
@@ -1823,7 +1823,7 @@ impl DocumentMeta {
 }
 
 impl Column {
-    pub fn from(component: &ftd::interpreter::Component) -> Column {
+    pub fn from(component: &fastn_type::Component) -> Column {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#column")
             .unwrap()
@@ -1889,7 +1889,7 @@ impl Column {
 }
 
 impl Row {
-    pub fn from(component: &ftd::interpreter::Component) -> Row {
+    pub fn from(component: &fastn_type::Component) -> Row {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#row")
             .unwrap()
@@ -1955,7 +1955,7 @@ impl Row {
 }
 
 impl ContainerElement {
-    pub fn from(component: &ftd::interpreter::Component) -> ContainerElement {
+    pub fn from(component: &fastn_type::Component) -> ContainerElement {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#container")
             .unwrap()
@@ -2023,7 +2023,7 @@ pub struct Device {
 }
 
 impl Device {
-    pub fn from(component: &ftd::interpreter::Component, device: &str) -> Device {
+    pub fn from(component: &fastn_type::Component, device: &str) -> Device {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get(device)
             .unwrap()
@@ -2098,8 +2098,8 @@ pub struct TextCommon {
 
 impl TextCommon {
     pub fn from(
-        properties: &[ftd::interpreter::Property],
-        arguments: &[ftd::interpreter::Argument],
+        properties: &[fastn_type::Property],
+        arguments: &[fastn_type::Argument],
     ) -> TextCommon {
         TextCommon {
             text_transform: ftd::js::value::get_optional_js_value(
@@ -2208,7 +2208,7 @@ pub struct Rive {
 }
 
 impl Rive {
-    pub fn from(component: &ftd::interpreter::Component) -> Rive {
+    pub fn from(component: &fastn_type::Component) -> Rive {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#rive")
             .unwrap()
@@ -2412,16 +2412,16 @@ pub struct Common {
     pub shadow: Option<ftd::js::Value>,
     pub css: Option<ftd::js::Value>,
     pub js: Option<ftd::js::Value>,
-    pub events: Vec<ftd::interpreter::Event>,
+    pub events: Vec<fastn_type::Event>,
     pub selectable: Option<ftd::js::Value>,
     pub mask: Option<ftd::js::Value>,
 }
 
 impl Common {
     pub fn from(
-        properties: &[ftd::interpreter::Property],
-        arguments: &[ftd::interpreter::Argument],
-        events: &[ftd::interpreter::Event],
+        properties: &[fastn_type::Property],
+        arguments: &[fastn_type::Argument],
+        events: &[fastn_type::Event],
     ) -> Common {
         Common {
             id: ftd::js::value::get_optional_js_value("id", properties, arguments),
@@ -2642,6 +2642,8 @@ impl Common {
         doc: &ftd::interpreter::TDoc,
         rdata: &ftd::js::ResolverData,
     ) -> Vec<fastn_js::ComponentStatement> {
+        use ftd::js::fastn_type_functions::EventExt;
+
         let mut component_statements = vec![];
         for event in self.events.iter() {
             if let Some(event_handler) = event.to_event_handler_js(element_name, doc, rdata) {
@@ -3276,86 +3278,6 @@ impl Common {
             ));
         }
         component_statements
-    }
-}
-
-impl ftd::interpreter::Event {
-    pub(crate) fn to_event_handler_js(
-        &self,
-        element_name: &str,
-        doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
-    ) -> Option<fastn_js::EventHandler> {
-        self.name
-            .to_js_event_name()
-            .map(|event| fastn_js::EventHandler {
-                event,
-                action: self.action.to_js_function(doc, rdata),
-                element_name: element_name.to_string(),
-            })
-    }
-}
-
-impl ftd::interpreter::FunctionCall {
-    pub(crate) fn to_js_function(
-        &self,
-        doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
-    ) -> fastn_js::Function {
-        let mut parameters = vec![];
-        let mut name = self.name.to_string();
-        let mut function_name = fastn_js::FunctionData::Name(self.name.to_string());
-        if let Some((default_module, module_variable_name)) = &self.module_name {
-            function_name =
-                fastn_js::FunctionData::Definition(fastn_js::SetPropertyValue::Reference(
-                    ftd::js::utils::update_reference(name.as_str(), rdata),
-                ));
-            name = name.replace(
-                format!("{module_variable_name}.").as_str(),
-                format!("{default_module}#").as_str(),
-            );
-        }
-        let function = doc.get_function(name.as_str(), self.line_number).unwrap();
-        for argument in function.arguments {
-            if let Some(value) = self.values.get(argument.name.as_str()) {
-                parameters.push((
-                    argument.name.to_string(),
-                    value.to_value().to_set_property_value(doc, rdata),
-                ));
-            } else if argument.get_default_value().is_none() {
-                panic!("Argument value not found {:?}", argument)
-            }
-        }
-        fastn_js::Function {
-            name: Box::from(function_name),
-            parameters,
-        }
-    }
-}
-
-impl ftd::interpreter::EventName {
-    fn to_js_event_name(&self) -> Option<fastn_js::Event> {
-        use itertools::Itertools;
-
-        match self {
-            ftd::interpreter::EventName::Click => Some(fastn_js::Event::Click),
-            ftd::interpreter::EventName::MouseEnter => Some(fastn_js::Event::MouseEnter),
-            ftd::interpreter::EventName::MouseLeave => Some(fastn_js::Event::MouseLeave),
-            ftd::interpreter::EventName::ClickOutside => Some(fastn_js::Event::ClickOutside),
-            ftd::interpreter::EventName::GlobalKey(gk) => Some(fastn_js::Event::GlobalKey(
-                gk.iter().map(|v| ftd::js::utils::to_key(v)).collect_vec(),
-            )),
-            ftd::interpreter::EventName::GlobalKeySeq(gk) => Some(fastn_js::Event::GlobalKeySeq(
-                gk.iter().map(|v| ftd::js::utils::to_key(v)).collect_vec(),
-            )),
-            ftd::interpreter::EventName::Input => Some(fastn_js::Event::Input),
-            ftd::interpreter::EventName::Change => Some(fastn_js::Event::Change),
-            ftd::interpreter::EventName::Blur => Some(fastn_js::Event::Blur),
-            ftd::interpreter::EventName::Focus => Some(fastn_js::Event::Focus),
-            ftd::interpreter::EventName::RivePlay(_)
-            | ftd::interpreter::EventName::RivePause(_)
-            | ftd::interpreter::EventName::RiveStateChange(_) => None,
-        }
     }
 }
 

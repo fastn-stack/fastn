@@ -21,7 +21,7 @@ impl DummyElement {
     }
 
     pub(crate) fn from_instruction(
-        instruction: ftd::interpreter::Component,
+        instruction: fastn_type::Component,
         doc: &mut ftd::executor::TDoc,
         dummy_reference: String,
         local_container: &[usize],
@@ -51,12 +51,14 @@ impl DummyElement {
     }
 
     pub(crate) fn from_instruction_to_element(
-        mut instruction: ftd::interpreter::Component,
+        mut instruction: fastn_type::Component,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
         found_elements: &mut std::collections::HashSet<String>,
     ) -> ftd::executor::Result<ftd::executor::Element> {
+        use ftd::executor::fastn_type_functions::ComponentExt;
+
         if let Some(iteration) = instruction.iteration.take() {
             return Ok(ftd::executor::Element::IterativeElement(
                 ftd::executor::IterativeElement {
@@ -150,14 +152,14 @@ impl DummyElement {
 
 #[derive(serde::Deserialize, Clone, Debug, PartialEq, serde::Serialize)]
 pub struct ElementConstructor {
-    pub arguments: Vec<ftd::interpreter::Argument>,
+    pub arguments: Vec<fastn_type::Argument>,
     pub element: ftd::executor::Element,
     pub name: String,
 }
 
 impl ElementConstructor {
     pub(crate) fn new(
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         element: ftd::executor::Element,
         name: &str,
     ) -> ElementConstructor {

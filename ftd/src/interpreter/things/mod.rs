@@ -2,6 +2,7 @@ pub(crate) mod component;
 pub mod default;
 pub mod expression;
 pub(crate) mod function;
+pub(crate) mod kind;
 pub(crate) mod or_type;
 pub(crate) mod record;
 pub(crate) mod value;
@@ -9,102 +10,17 @@ pub(crate) mod variable;
 pub(crate) mod web_component;
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
-pub enum ModuleThing {
-    Component(ComponentModuleThing),
-    Variable(VariableModuleThing),
-    Formula(FormulaModuleThing),
-}
-
-impl ModuleThing {
-    pub fn component(
-        name: String,
-        kind: fastn_type::KindData,
-        arguments: Vec<ftd::interpreter::Argument>,
-    ) -> Self {
-        ModuleThing::Component(ComponentModuleThing::new(name, kind, arguments))
-    }
-
-    pub fn variable(name: String, kind: fastn_type::KindData) -> Self {
-        ModuleThing::Variable(VariableModuleThing::new(name, kind))
-    }
-
-    pub fn function(name: String, kind: fastn_type::KindData) -> Self {
-        ModuleThing::Formula(FormulaModuleThing::new(name, kind))
-    }
-
-    pub fn get_kind(&self) -> fastn_type::KindData {
-        match self {
-            ftd::interpreter::ModuleThing::Component(c) => c.kind.clone(),
-            ftd::interpreter::ModuleThing::Variable(v) => v.kind.clone(),
-            ftd::interpreter::ModuleThing::Formula(f) => f.kind.clone(),
-        }
-    }
-
-    pub fn get_name(&self) -> String {
-        match self {
-            ftd::interpreter::ModuleThing::Component(c) => c.name.clone(),
-            ftd::interpreter::ModuleThing::Variable(v) => v.name.clone(),
-            ftd::interpreter::ModuleThing::Formula(f) => f.name.clone(),
-        }
-    }
-}
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct VariableModuleThing {
-    pub name: String,
-    pub kind: fastn_type::KindData,
-}
-
-impl VariableModuleThing {
-    pub fn new(name: String, kind: fastn_type::KindData) -> Self {
-        VariableModuleThing { name, kind }
-    }
-}
-
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct FormulaModuleThing {
-    pub name: String,
-    pub kind: fastn_type::KindData,
-}
-
-impl FormulaModuleThing {
-    pub fn new(name: String, kind: fastn_type::KindData) -> Self {
-        FormulaModuleThing { name, kind }
-    }
-}
-
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct ComponentModuleThing {
-    pub name: String,
-    pub kind: fastn_type::KindData,
-    pub arguments: Vec<ftd::interpreter::Argument>,
-}
-
-impl ComponentModuleThing {
-    pub fn new(
-        name: String,
-        kind: fastn_type::KindData,
-        arguments: Vec<ftd::interpreter::Argument>,
-    ) -> Self {
-        ComponentModuleThing {
-            name,
-            kind,
-            arguments,
-        }
-    }
-}
-
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Thing {
-    Record(ftd::interpreter::Record),
-    OrType(ftd::interpreter::OrType),
+    Record(fastn_type::Record),
+    OrType(fastn_type::OrType),
     OrTypeWithVariant {
         or_type: String,
-        variant: ftd::interpreter::OrTypeVariant,
+        variant: fastn_type::OrTypeVariant,
     },
-    Variable(ftd::interpreter::Variable),
-    Component(ftd::interpreter::ComponentDefinition),
-    WebComponent(ftd::interpreter::WebComponentDefinition),
-    Function(ftd::interpreter::Function),
+    Variable(fastn_type::Variable),
+    Component(fastn_type::ComponentDefinition),
+    WebComponent(fastn_type::WebComponentDefinition),
+    Function(fastn_type::Function),
     Export {
         from: String,
         to: String,
@@ -143,7 +59,7 @@ impl Thing {
         self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Variable> {
+    ) -> ftd::interpreter::Result<fastn_type::Variable> {
         match self {
             ftd::interpreter::Thing::Variable(v) => Ok(v),
             t => ftd::interpreter::utils::e2(
@@ -158,7 +74,7 @@ impl Thing {
         self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Record> {
+    ) -> ftd::interpreter::Result<fastn_type::Record> {
         match self {
             ftd::interpreter::Thing::Record(v) => Ok(v),
             t => ftd::interpreter::utils::e2(
@@ -173,7 +89,7 @@ impl Thing {
         self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Function> {
+    ) -> ftd::interpreter::Result<fastn_type::Function> {
         match self {
             ftd::interpreter::Thing::Function(v) => Ok(v),
             t => ftd::interpreter::utils::e2(
@@ -184,7 +100,7 @@ impl Thing {
         }
     }
 
-    pub(crate) fn component(self) -> Option<ftd::interpreter::ComponentDefinition> {
+    pub(crate) fn component(self) -> Option<fastn_type::ComponentDefinition> {
         match self {
             ftd::interpreter::Thing::Component(v) => Some(v),
             _ => None,

@@ -248,7 +248,7 @@ impl Library2022 {
         processor: String,
         doc: &'a mut ftd::interpreter::TDoc<'a>,
         preview_session_id: &Option<String>,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+    ) -> ftd::interpreter::Result<fastn_type::Value> {
         tracing::info!(
             msg = "stuck-on-processor",
             doc = doc.name,

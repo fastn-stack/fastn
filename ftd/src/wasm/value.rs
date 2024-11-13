@@ -1,7 +1,7 @@
-impl ftd::interpreter::Value {
+impl fastn_type::Value {
     pub fn create(&self) -> fastn_wasm::Expression {
         match self {
-            ftd::interpreter::Value::String { text } => {
+            fastn_type::Value::String { text } => {
                 let data = text.into_bytes();
 
                 fastn_wasm::Expression::Call {

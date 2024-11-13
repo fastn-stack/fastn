@@ -5,5 +5,5 @@ pub struct RiveData {
     pub state_machine: Vec<String>,
     pub artboard: Option<String>,
     pub autoplay: bool,
-    pub events: Vec<ftd::interpreter::Event>,
+    pub events: Vec<fastn_type::Event>,
 }

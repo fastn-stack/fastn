@@ -3,7 +3,7 @@ pub fn process(
     kind: fastn_type::Kind,
     doc: &ftd::interpreter::TDoc,
     req_config: &mut fastn_core::RequestConfig,
-) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+) -> ftd::interpreter::Result<fastn_type::Value> {
     req_config.response_is_cacheable = false;
 
     let (section_name, headers, body, line_number) = match value.get_record(doc.name) {

@@ -5,6 +5,7 @@ mod test;
 pub mod code;
 mod dummy;
 mod element;
+mod fastn_type_functions;
 mod main;
 mod markup;
 mod rive;
@@ -14,7 +15,7 @@ pub(crate) mod utils;
 pub mod value;
 mod youtube_id;
 
-pub type FieldWithValue = (ftd::interpreter::Field, Option<ftd_ast::VariableValue>);
+pub type FieldWithValue = (fastn_type::Field, Option<ftd_ast::VariableValue>);
 
 pub use dummy::{DummyElement, ElementConstructor};
 pub use element::{

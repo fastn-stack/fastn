@@ -50,7 +50,7 @@ impl VariableDependencyGenerator<'_> {
 
         fn dependencies_from_property_value(
             result: &mut ftd::VecMap<String>,
-            value: &ftd::interpreter::PropertyValue,
+            value: &fastn_type::PropertyValue,
             name: &str,
             doc: &ftd::interpreter::TDoc,
         ) {

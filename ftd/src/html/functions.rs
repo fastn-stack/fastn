@@ -21,7 +21,7 @@ impl FunctionGenerator {
         Ok(vector.join("\n\n"))
     }
 
-    pub fn get_function(&self, function: ftd::interpreter::Function) -> ftd::html::Result<String> {
+    pub fn get_function(&self, function: fastn_type::Function) -> ftd::html::Result<String> {
         use itertools::Itertools;
 
         /*let node = dbg!(fastn_grammar::evalexpr::build_operator_tree(

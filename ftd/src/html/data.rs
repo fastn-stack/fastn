@@ -1,3 +1,5 @@
+use ftd::interpreter::expression::ExpressionExt;
+
 pub struct DataGenerator<'a> {
     pub doc: &'a ftd::interpreter::TDoc<'a>,
 }
@@ -8,9 +10,11 @@ impl DataGenerator<'_> {
     }
 
     pub(crate) fn get_data(&self) -> ftd::html::Result<ftd::Map<serde_json::Value>> {
+        use ftd::interpreter::PropertyValueExt;
+
         let mut d: ftd::Map<serde_json::Value> = Default::default();
         for (k, v) in self.doc.bag().iter() {
-            if let ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+            if let ftd::interpreter::Thing::Variable(fastn_type::Variable {
                 value,
                 mutable,
                 line_number,

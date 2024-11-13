@@ -4,7 +4,7 @@ pub async fn process(
     kind: fastn_type::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &fastn_core::RequestConfig,
-) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+) -> ftd::interpreter::Result<fastn_type::Value> {
     match req_config
         .config
         .ds

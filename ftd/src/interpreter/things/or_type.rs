@@ -1,102 +1,71 @@
-#[derive(Debug, Default, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct OrType {
-    pub name: String,
-    pub variants: Vec<OrTypeVariant>,
-    pub line_number: usize,
+use ftd::interpreter::things::record::RecordExt;
+use ftd::interpreter::FieldExt;
+
+pub trait OrTypeExt {
+    fn scan_ast(
+        ast: ftd_ast::Ast,
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()>;
+    fn from_ast(
+        ast: ftd_ast::Ast,
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::OrType>>;
 }
 
-impl OrType {
-    fn new(
-        name: &str,
-        variants: Vec<ftd::interpreter::OrTypeVariant>,
-        line_number: usize,
-    ) -> OrType {
-        OrType {
-            name: name.to_string(),
-            variants,
-            line_number,
-        }
-    }
-
-    pub fn or_type_name(name: &str) -> String {
-        if name.starts_with("ftd") {
-            return name.to_string();
-        }
-        if let Some((_, last)) = name.rsplit_once('#') {
-            return last.to_string();
-        }
-        name.to_string()
-    }
-
-    pub(crate) fn scan_ast(
+impl OrTypeExt for fastn_type::OrType {
+    fn scan_ast(
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         let or_type = ast.get_or_type(doc.name)?;
         for mut variant in or_type.variants {
             variant.set_name(format!("{}.{}", or_type.name, variant.name()).as_str());
-            ftd::interpreter::OrTypeVariant::scan_ast(variant, doc)?;
+            fastn_type::OrTypeVariant::scan_ast(variant, doc)?;
         }
         Ok(())
     }
 
-    pub(crate) fn from_ast(
+    fn from_ast(
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<OrType>> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::OrType>> {
         let or_type = ast.get_or_type(doc.name)?;
         let name = doc.resolve_name(or_type.name.as_str());
         let line_number = or_type.line_number();
         let mut variants = vec![];
         for mut variant in or_type.variants {
             variant.set_name(format!("{}.{}", or_type.name, variant.name()).as_str());
-            variants.push(try_ok_state!(ftd::interpreter::OrTypeVariant::from_ast(
+            variants.push(try_ok_state!(fastn_type::OrTypeVariant::from_ast(
                 variant, doc
             )?))
         }
-        Ok(ftd::interpreter::StateWithThing::new_thing(OrType::new(
-            name.as_str(),
-            variants,
-            line_number,
-        )))
+        Ok(ftd::interpreter::StateWithThing::new_thing(
+            fastn_type::OrType::new(name.as_str(), variants, line_number),
+        ))
     }
 }
 
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
-pub enum OrTypeVariant {
-    AnonymousRecord(ftd::interpreter::Record),
-    Regular(ftd::interpreter::Field),
-    Constant(ftd::interpreter::Field),
+pub trait OrTypeVariantExt {
+    fn ok_constant(&self, doc_id: &str) -> ftd::interpreter::Result<&fastn_type::Field>;
+    fn scan_ast(
+        ast_variant: ftd_ast::OrTypeVariant,
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()>;
+    fn from_ast(
+        ast_variant: ftd_ast::OrTypeVariant,
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::OrTypeVariant>>;
+    fn to_thing(
+        &self,
+        doc_name: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<ftd::interpreter::Thing>;
 }
 
-impl OrTypeVariant {
-    pub fn new_record(record: ftd::interpreter::Record) -> OrTypeVariant {
-        OrTypeVariant::AnonymousRecord(record)
-    }
-
-    pub fn new_constant(variant: ftd::interpreter::Field) -> OrTypeVariant {
-        OrTypeVariant::Constant(variant)
-    }
-
-    pub fn new_regular(variant: ftd::interpreter::Field) -> OrTypeVariant {
-        OrTypeVariant::Regular(variant)
-    }
-
-    pub fn is_constant(&self) -> bool {
-        matches!(self, ftd::interpreter::OrTypeVariant::Constant(_))
-    }
-
-    pub fn name(&self) -> String {
+impl OrTypeVariantExt for fastn_type::OrTypeVariant {
+    fn ok_constant(&self, doc_id: &str) -> ftd::interpreter::Result<&fastn_type::Field> {
         match self {
-            OrTypeVariant::AnonymousRecord(ar) => ar.name.to_string(),
-            OrTypeVariant::Regular(r) => r.name.to_string(),
-            OrTypeVariant::Constant(c) => c.name.to_string(),
-        }
-    }
-
-    pub fn ok_constant(&self, doc_id: &str) -> ftd::interpreter::Result<&ftd::interpreter::Field> {
-        match self {
-            ftd::interpreter::OrTypeVariant::Constant(c) => Ok(c),
+            fastn_type::OrTypeVariant::Constant(c) => Ok(c),
             t => ftd::interpreter::utils::e2(
                 format!("Expected constant, found: {:?}", t),
                 doc_id,
@@ -105,80 +74,64 @@ impl OrTypeVariant {
         }
     }
 
-    pub fn line_number(&self) -> usize {
-        match self {
-            OrTypeVariant::AnonymousRecord(ar) => ar.line_number,
-            OrTypeVariant::Regular(r) => r.line_number,
-            OrTypeVariant::Constant(c) => c.line_number,
-        }
-    }
-
-    pub fn scan_ast(
+    fn scan_ast(
         ast_variant: ftd_ast::OrTypeVariant,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         match ast_variant {
             ftd_ast::OrTypeVariant::AnonymousRecord(record) => {
-                ftd::interpreter::Record::scan_record(record, doc)
+                fastn_type::Record::scan_record(record, doc)
             }
             ftd_ast::OrTypeVariant::Regular(variant) => {
-                ftd::interpreter::Field::scan_ast_field(variant, doc, &Default::default())
+                fastn_type::Field::scan_ast_field(variant, doc, &Default::default())
             }
             ftd_ast::OrTypeVariant::Constant(variant) => {
-                ftd::interpreter::Field::scan_ast_field(variant, doc, &Default::default())
+                fastn_type::Field::scan_ast_field(variant, doc, &Default::default())
             }
         }
     }
 
-    pub fn from_ast(
+    fn from_ast(
         ast_variant: ftd_ast::OrTypeVariant,
         doc: &mut ftd::interpreter::TDoc,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<OrTypeVariant>> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::OrTypeVariant>> {
         match ast_variant {
-            ftd_ast::OrTypeVariant::AnonymousRecord(record) => {
-                Ok(ftd::interpreter::StateWithThing::new_thing(
-                    ftd::interpreter::OrTypeVariant::new_record(try_ok_state!(
-                        ftd::interpreter::Record::from_record(record, doc)?
-                    )),
-                ))
-            }
+            ftd_ast::OrTypeVariant::AnonymousRecord(record) => Ok(
+                ftd::interpreter::StateWithThing::new_thing(fastn_type::OrTypeVariant::new_record(
+                    try_ok_state!(fastn_type::Record::from_record(record, doc)?),
+                )),
+            ),
             ftd_ast::OrTypeVariant::Regular(variant) => {
                 Ok(ftd::interpreter::StateWithThing::new_thing(
-                    ftd::interpreter::OrTypeVariant::new_regular(try_ok_state!(
-                        ftd::interpreter::Field::from_ast_field(variant, doc, &Default::default())?
+                    fastn_type::OrTypeVariant::new_regular(try_ok_state!(
+                        fastn_type::Field::from_ast_field(variant, doc, &Default::default())?
                     )),
                 ))
             }
             ftd_ast::OrTypeVariant::Constant(variant) => {
-                let variant = try_ok_state!(ftd::interpreter::Field::from_ast_field(
+                let variant = try_ok_state!(fastn_type::Field::from_ast_field(
                     variant,
                     doc,
                     &Default::default()
                 )?);
                 validate_constant_variant(&variant, doc)?;
                 Ok(ftd::interpreter::StateWithThing::new_thing(
-                    ftd::interpreter::OrTypeVariant::new_constant(variant),
+                    fastn_type::OrTypeVariant::new_constant(variant),
                 ))
             }
         }
     }
 
-    pub fn fields(&self) -> Vec<&ftd::interpreter::Field> {
-        match self {
-            OrTypeVariant::AnonymousRecord(r) => r.fields.iter().collect(),
-            OrTypeVariant::Regular(r) => vec![r],
-            OrTypeVariant::Constant(c) => vec![c],
-        }
-    }
-
-    pub fn to_thing(
+    fn to_thing(
         &self,
         doc_name: &str,
         line_number: usize,
     ) -> ftd::interpreter::Result<ftd::interpreter::Thing> {
         match self {
-            OrTypeVariant::AnonymousRecord(r) => Ok(ftd::interpreter::Thing::Record(r.clone())),
-            OrTypeVariant::Constant(_) | OrTypeVariant::Regular(_) => {
+            fastn_type::OrTypeVariant::AnonymousRecord(r) => {
+                Ok(ftd::interpreter::Thing::Record(r.clone()))
+            }
+            fastn_type::OrTypeVariant::Constant(_) | fastn_type::OrTypeVariant::Regular(_) => {
                 Err(ftd::interpreter::Error::ParseError {
                     message: format!("Can't convert the or-type-variant to thing `{self:?}`"),
                     doc_id: doc_name.to_string(),
@@ -190,7 +143,7 @@ impl OrTypeVariant {
 }
 
 fn validate_constant_variant(
-    variant: &ftd::interpreter::Field,
+    variant: &fastn_type::Field,
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::interpreter::Result<()> {
     if variant.value.is_none()

@@ -1,11 +1,10 @@
-pub(crate) trait KindExt {
+pub trait KindExt {
     fn list_type(
         &self,
         doc_name: &str,
         line_number: usize,
     ) -> ftd::interpreter::Result<fastn_type::Kind>;
 }
-
 impl KindExt for fastn_type::Kind {
     fn list_type(
         &self,
@@ -39,7 +38,6 @@ pub trait KindDataExt {
         line_number: usize,
     ) -> ftd::interpreter::Result<()>;
 }
-
 impl KindDataExt for fastn_type::KindData {
     fn scan_ast_kind(
         var_kind: ftd_ast::VariableKind,

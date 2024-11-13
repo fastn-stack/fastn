@@ -2,14 +2,14 @@
 pub struct Value<T> {
     pub value: T,
     pub line_number: Option<usize>,
-    pub properties: Vec<ftd::interpreter::Property>,
+    pub properties: Vec<fastn_type::Property>,
 }
 
 impl<T> Value<T> {
     pub fn new(
         value: T,
         line_number: Option<usize>,
-        properties: Vec<ftd::interpreter::Property>,
+        properties: Vec<fastn_type::Property>,
     ) -> Value<T> {
         Value {
             value,
@@ -30,11 +30,11 @@ impl<T> Value<T> {
 pub(crate) fn get_value_from_properties_using_key_and_arguments(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
-    arguments: &[ftd::interpreter::Argument],
+    properties: &[fastn_type::Property],
+    arguments: &[fastn_type::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
-) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::interpreter::Value>>> {
+) -> ftd::executor::Result<ftd::executor::Value<Option<fastn_type::Value>>> {
     get_value_from_properties_using_key_and_arguments_dummy(
         key,
         component_name,
@@ -51,13 +51,13 @@ pub(crate) fn get_value_from_properties_using_key_and_arguments(
 pub(crate) fn get_value_from_properties_using_key_and_arguments_dummy(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
-    arguments: &[ftd::interpreter::Argument],
+    properties: &[fastn_type::Property],
+    arguments: &[fastn_type::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
     is_dummy: bool,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::interpreter::Value>>> {
+) -> ftd::executor::Result<ftd::executor::Value<Option<fastn_type::Value>>> {
     let argument =
         arguments
             .iter()
@@ -105,15 +105,17 @@ pub(crate) fn get_value_from_properties_using_key_and_arguments_dummy(
 #[allow(clippy::too_many_arguments)]
 pub(crate) fn find_value_by_argument(
     component_name: &str,
-    source: &[ftd::interpreter::PropertySource],
-    properties: &[ftd::interpreter::Property],
+    source: &[fastn_type::PropertySource],
+    properties: &[fastn_type::Property],
     doc: &ftd::executor::TDoc,
-    target_argument: &ftd::interpreter::Argument,
-    arguments: &[ftd::interpreter::Argument],
+    target_argument: &fastn_type::Argument,
+    arguments: &[fastn_type::Argument],
     line_number: usize,
     is_dummy: bool,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::interpreter::Value>>> {
+) -> ftd::executor::Result<ftd::executor::Value<Option<fastn_type::Value>>> {
+    use ftd::interpreter::PropertyExt;
+
     let properties = {
         let new_properties = ftd::interpreter::utils::find_properties_by_source(
             source,
@@ -163,9 +165,7 @@ pub(crate) fn find_value_by_argument(
                 }
             } else if p.condition.is_none() {
                 if let Some(v) = p.value.get_reference_or_clone() {
-                    value = Some(ftd::interpreter::Value::new_string(
-                        format!("{{{}}}", v).as_str(),
-                    ));
+                    value = Some(fastn_type::Value::new_string(format!("{{{}}}", v).as_str()));
                     line_number = Some(p.line_number);
                 }
             }
@@ -178,12 +178,14 @@ pub(crate) fn find_value_by_argument(
 pub fn string_list(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
-    arguments: &[ftd::interpreter::Argument],
+    properties: &[fastn_type::Property],
+    arguments: &[fastn_type::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<ftd::executor::Value<Vec<String>>> {
+    use ftd::interpreter::{PropertyValueExt, ValueExt};
+
     let value = get_value_from_properties_using_key_and_arguments_dummy(
         key,
         component_name,
@@ -196,7 +198,7 @@ pub fn string_list(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::List { data, kind }) if kind.is_string() => {
+        Some(fastn_type::Value::List { data, kind }) if kind.is_string() => {
             let mut values = vec![];
             for d in data {
                 values.push(
@@ -227,8 +229,8 @@ pub fn string_list(
 pub fn string(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
-    arguments: &[ftd::interpreter::Argument],
+    properties: &[fastn_type::Property],
+    arguments: &[fastn_type::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
 ) -> ftd::executor::Result<ftd::executor::Value<String>> {
@@ -242,7 +244,7 @@ pub fn string(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::String { text }) => Ok(ftd::executor::Value::new(
+        Some(fastn_type::Value::String { text }) => Ok(ftd::executor::Value::new(
             text,
             value.line_number,
             value.properties,
@@ -258,12 +260,12 @@ pub fn string(
 pub fn record(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
-    arguments: &[ftd::interpreter::Argument],
+    properties: &[fastn_type::Property],
+    arguments: &[fastn_type::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
     rec_name: &str,
-) -> ftd::executor::Result<ftd::executor::Value<ftd::Map<ftd::interpreter::PropertyValue>>> {
+) -> ftd::executor::Result<ftd::executor::Value<ftd::Map<fastn_type::PropertyValue>>> {
     let value = get_value_from_properties_using_key_and_arguments(
         key,
         component_name,
@@ -274,7 +276,7 @@ pub fn record(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::Record { name, fields }) if name.eq(rec_name) => Ok(
+        Some(fastn_type::Value::Record { name, fields }) if name.eq(rec_name) => Ok(
             ftd::executor::Value::new(fields, value.line_number, value.properties),
         ),
         t => ftd::executor::utils::parse_error(
@@ -291,8 +293,8 @@ pub fn record(
 pub fn i64(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
-    arguments: &[ftd::interpreter::Argument],
+    properties: &[fastn_type::Property],
+    arguments: &[fastn_type::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
 ) -> ftd::executor::Result<ftd::executor::Value<i64>> {
@@ -306,7 +308,7 @@ pub fn i64(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::Integer { value: v }) => Ok(ftd::executor::Value::new(
+        Some(fastn_type::Value::Integer { value: v }) => Ok(ftd::executor::Value::new(
             v,
             value.line_number,
             value.properties,
@@ -322,8 +324,8 @@ pub fn i64(
 pub fn f64(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
-    arguments: &[ftd::interpreter::Argument],
+    properties: &[fastn_type::Property],
+    arguments: &[fastn_type::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
 ) -> ftd::executor::Result<ftd::executor::Value<f64>> {
@@ -337,7 +339,7 @@ pub fn f64(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::Decimal { value: v }) => Ok(ftd::executor::Value::new(
+        Some(fastn_type::Value::Decimal { value: v }) => Ok(ftd::executor::Value::new(
             v,
             value.line_number,
             value.properties,
@@ -353,8 +355,8 @@ pub fn f64(
 pub fn bool(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
-    arguments: &[ftd::interpreter::Argument],
+    properties: &[fastn_type::Property],
+    arguments: &[fastn_type::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
 ) -> ftd::executor::Result<ftd::executor::Value<bool>> {
@@ -368,7 +370,7 @@ pub fn bool(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::Boolean { value: v }) => Ok(ftd::executor::Value::new(
+        Some(fastn_type::Value::Boolean { value: v }) => Ok(ftd::executor::Value::new(
             v,
             value.line_number,
             value.properties,
@@ -384,8 +386,8 @@ pub fn bool(
 pub fn bool_with_default(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
-    arguments: &[ftd::interpreter::Argument],
+    properties: &[fastn_type::Property],
+    arguments: &[fastn_type::Argument],
     default: bool,
     doc: &ftd::executor::TDoc,
     line_number: usize,
@@ -400,7 +402,7 @@ pub fn bool_with_default(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::Boolean { value: b }) => Ok(ftd::executor::Value::new(
+        Some(fastn_type::Value::Boolean { value: b }) => Ok(ftd::executor::Value::new(
             b,
             value.line_number,
             value.properties,
@@ -422,8 +424,8 @@ pub fn bool_with_default(
 pub fn optional_i64(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
-    arguments: &[ftd::interpreter::Argument],
+    properties: &[fastn_type::Property],
+    arguments: &[fastn_type::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
@@ -440,7 +442,7 @@ pub fn optional_i64(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::Integer { value: v }) => Ok(ftd::executor::Value::new(
+        Some(fastn_type::Value::Integer { value: v }) => Ok(ftd::executor::Value::new(
             Some(v),
             value.line_number,
             value.properties,
@@ -461,8 +463,8 @@ pub fn optional_i64(
 pub fn string_with_default(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
-    arguments: &[ftd::interpreter::Argument],
+    properties: &[fastn_type::Property],
+    arguments: &[fastn_type::Argument],
     default: &str,
     doc: &ftd::executor::TDoc,
     line_number: usize,
@@ -477,7 +479,7 @@ pub fn string_with_default(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::String { text }) => Ok(ftd::executor::Value::new(
+        Some(fastn_type::Value::String { text }) => Ok(ftd::executor::Value::new(
             text,
             value.line_number,
             value.properties,
@@ -498,8 +500,8 @@ pub fn string_with_default(
 pub fn optional_string(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
-    arguments: &[ftd::interpreter::Argument],
+    properties: &[fastn_type::Property],
+    arguments: &[fastn_type::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
 ) -> ftd::executor::Result<ftd::executor::Value<Option<String>>> {
@@ -513,7 +515,7 @@ pub fn optional_string(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::String { text }) => Ok(ftd::executor::Value::new(
+        Some(fastn_type::Value::String { text }) => Ok(ftd::executor::Value::new(
             Some(text),
             value.line_number,
             value.properties,
@@ -535,8 +537,8 @@ pub fn optional_string(
 pub fn dummy_optional_string(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
-    arguments: &[ftd::interpreter::Argument],
+    properties: &[fastn_type::Property],
+    arguments: &[fastn_type::Argument],
     doc: &ftd::executor::TDoc,
     is_dummy: bool,
     line_number: usize,
@@ -554,7 +556,7 @@ pub fn dummy_optional_string(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::String { text }) => Ok(ftd::executor::Value::new(
+        Some(fastn_type::Value::String { text }) => Ok(ftd::executor::Value::new(
             Some(text),
             value.line_number,
             value.properties,
@@ -575,8 +577,8 @@ pub fn dummy_optional_string(
 pub fn optional_bool(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
-    arguments: &[ftd::interpreter::Argument],
+    properties: &[fastn_type::Property],
+    arguments: &[fastn_type::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
@@ -593,7 +595,7 @@ pub fn optional_bool(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::Boolean { value: v }) => Ok(ftd::executor::Value::new(
+        Some(fastn_type::Value::Boolean { value: v }) => Ok(ftd::executor::Value::new(
             Some(v),
             value.line_number,
             value.properties,
@@ -615,8 +617,8 @@ pub fn optional_bool(
 pub fn optional_f64(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
-    arguments: &[ftd::interpreter::Argument],
+    properties: &[fastn_type::Property],
+    arguments: &[fastn_type::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
 ) -> ftd::executor::Result<ftd::executor::Value<Option<f64>>> {
@@ -630,7 +632,7 @@ pub fn optional_f64(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::Decimal { value: v }) => Ok(ftd::executor::Value::new(
+        Some(fastn_type::Value::Decimal { value: v }) => Ok(ftd::executor::Value::new(
             Some(v),
             value.line_number,
             value.properties,
@@ -652,14 +654,13 @@ pub fn optional_f64(
 pub fn optional_record_inherited(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
-    arguments: &[ftd::interpreter::Argument],
+    properties: &[fastn_type::Property],
+    arguments: &[fastn_type::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
     rec_name: &str,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::Map<ftd::interpreter::PropertyValue>>>>
-{
+) -> ftd::executor::Result<ftd::executor::Value<Option<ftd::Map<fastn_type::PropertyValue>>>> {
     let value = get_value_from_properties_using_key_and_arguments_dummy(
         key,
         component_name,
@@ -672,7 +673,7 @@ pub fn optional_record_inherited(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::Record { name, fields }) if name.eq(rec_name) => Ok(
+        Some(fastn_type::Value::Record { name, fields }) if name.eq(rec_name) => Ok(
             ftd::executor::Value::new(Some(fields), value.line_number, value.properties),
         ),
         None => Ok(ftd::executor::Value::new(
@@ -695,14 +696,13 @@ pub fn optional_record_inherited(
 pub fn optional_or_type(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
-    arguments: &[ftd::interpreter::Argument],
+    properties: &[fastn_type::Property],
+    arguments: &[fastn_type::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
     rec_name: &str,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-) -> ftd::executor::Result<ftd::executor::Value<Option<(String, ftd::interpreter::PropertyValue)>>>
-{
+) -> ftd::executor::Result<ftd::executor::Value<Option<(String, fastn_type::PropertyValue)>>> {
     let value = get_value_from_properties_using_key_and_arguments_dummy(
         key,
         component_name,
@@ -715,7 +715,7 @@ pub fn optional_or_type(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::OrType {
+        Some(fastn_type::Value::OrType {
             name,
             value: property_value,
             variant,
@@ -745,13 +745,15 @@ pub fn optional_or_type(
 pub fn optional_or_type_list(
     key: &str,
     component_name: &str,
-    properties: &[ftd::interpreter::Property],
-    arguments: &[ftd::interpreter::Argument],
+    properties: &[fastn_type::Property],
+    arguments: &[fastn_type::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
     rec_name: &str,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-) -> ftd::executor::Result<ftd::executor::Value<Vec<(String, ftd::interpreter::PropertyValue)>>> {
+) -> ftd::executor::Result<ftd::executor::Value<Vec<(String, fastn_type::PropertyValue)>>> {
+    use ftd::interpreter::PropertyValueExt;
+
     let value = get_value_from_properties_using_key_and_arguments_dummy(
         key,
         component_name,
@@ -764,11 +766,11 @@ pub fn optional_or_type_list(
     )?;
 
     match value.value.and_then(|v| v.inner()) {
-        Some(ftd::interpreter::Value::List { data, kind }) if kind.is_or_type() => {
+        Some(fastn_type::Value::List { data, kind }) if kind.is_or_type() => {
             let mut values = vec![];
             for d in data {
                 let resolved_value = d.resolve(&doc.itdoc(), line_number)?;
-                if let ftd::interpreter::Value::OrType { variant, value, .. } = resolved_value {
+                if let fastn_type::Value::OrType { variant, value, .. } = resolved_value {
                     values.push((variant.clone(), *value));
                 }
             }

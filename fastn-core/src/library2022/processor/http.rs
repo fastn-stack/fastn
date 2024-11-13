@@ -1,9 +1,11 @@
+use ftd::interpreter::{PropertyValueExt, ValueExt};
+
 pub async fn process(
     value: ftd_ast::VariableValue,
     kind: fastn_type::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &mut fastn_core::RequestConfig,
-) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+) -> ftd::interpreter::Result<fastn_type::Value> {
     // we can in future do a more fine-grained analysis if the response
     // is cacheable or not, say depending on HTTP Vary header, etc.
     req_config.response_is_cacheable = false;

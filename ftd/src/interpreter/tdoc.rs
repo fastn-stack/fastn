@@ -1,3 +1,9 @@
+use ftd::interpreter::expression::ExpressionExt;
+use ftd::interpreter::things::component::ComponentDefinitionExt;
+use ftd::interpreter::things::or_type::OrTypeVariantExt;
+use ftd::interpreter::things::record::RecordExt;
+use ftd::interpreter::FunctionExt;
+
 #[derive(Debug, PartialEq)]
 pub struct TDoc<'a> {
     pub name: &'a str,
@@ -62,7 +68,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Record> {
+    ) -> ftd::interpreter::Result<fastn_type::Record> {
         match self.get_thing(name, line_number)? {
             ftd::interpreter::Thing::Record(r) => Ok(r),
             t => self.err(
@@ -78,7 +84,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::OrType> {
+    ) -> ftd::interpreter::Result<fastn_type::OrType> {
         match self.get_thing(name, line_number)? {
             ftd::interpreter::Thing::OrType(ot) => Ok(ot),
             t => self.err(
@@ -94,7 +100,7 @@ impl<'a> TDoc<'a> {
         &mut self,
         name: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Record>> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::Record>> {
         match self.search_thing(name, line_number)? {
             ftd::interpreter::StateWithThing::State(s) => {
                 Ok(ftd::interpreter::StateWithThing::new_state(s))
@@ -118,7 +124,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Variable> {
+    ) -> ftd::interpreter::Result<fastn_type::Variable> {
         match self.get_thing(name, line_number)? {
             ftd::interpreter::Thing::Variable(r) => Ok(r),
             t => self.err(
@@ -134,7 +140,8 @@ impl<'a> TDoc<'a> {
         &'a self,
         line_number: usize,
         name: &'a str,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+    ) -> ftd::interpreter::Result<fastn_type::Value> {
+        use ftd::interpreter::PropertyValueExt;
         // TODO: name can be a.b.c, and a and a.b are records with right fields
         match self.get_thing(name, line_number)? {
             ftd::interpreter::Thing::Variable(v) => v.value.resolve(self, line_number),
@@ -146,8 +153,7 @@ impl<'a> TDoc<'a> {
         &mut self,
         name: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Variable>>
-    {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::Variable>> {
         match self.search_thing(name, line_number)? {
             ftd::interpreter::StateWithThing::State(s) => {
                 Ok(ftd::interpreter::StateWithThing::new_state(s))
@@ -194,7 +200,7 @@ impl<'a> TDoc<'a> {
         name: &str,
         kind: &fastn_type::KindData,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+    ) -> ftd::interpreter::Result<fastn_type::Value> {
         self.resolve_with_inherited(name, kind, line_number, &Default::default())
     }
 
@@ -204,7 +210,9 @@ impl<'a> TDoc<'a> {
         kind: &fastn_type::KindData,
         line_number: usize,
         inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+    ) -> ftd::interpreter::Result<fastn_type::Value> {
+        use ftd::interpreter::PropertyValueExt;
+
         let (value, _var_name, _var_line_number, remaining) = if let Ok(v) =
             self.get_initial_variable_with_inherited(name, line_number, inherited_variables)
         {
@@ -218,7 +226,7 @@ impl<'a> TDoc<'a> {
             (value, v.0.name, v.0.line_number, v.1)
         } else if let Ok(v) = self.get_component(name, line_number) {
             (
-                ftd::interpreter::PropertyValue::Value {
+                fastn_type::PropertyValue::Value {
                     value: v.to_value(kind),
                     is_mutable: false,
                     line_number: v.line_number,
@@ -248,14 +256,14 @@ impl<'a> TDoc<'a> {
 
         fn resolve_(
             name: &str,
-            value: &ftd::interpreter::Value,
+            value: &fastn_type::Value,
             line_number: usize,
             doc: &ftd::interpreter::TDoc,
             inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-        ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+        ) -> ftd::interpreter::Result<fastn_type::Value> {
             let (p1, p2) = ftd::interpreter::utils::split_at(name, ".");
             match value {
-                ftd::interpreter::Value::Record {
+                fastn_type::Value::Record {
                     name: rec_name,
                     fields,
                 } => {
@@ -279,7 +287,7 @@ impl<'a> TDoc<'a> {
                     }
                     Ok(field)
                 }
-                ftd::interpreter::Value::List { data, kind } => {
+                fastn_type::Value::List { data, kind } => {
                     let p1 = p1.parse::<usize>()?;
                     let value = data
                         .get(p1)
@@ -316,9 +324,9 @@ impl<'a> TDoc<'a> {
     pub fn set_value(
         &'a self,
         name: &'a str,
-        value: ftd::interpreter::PropertyValue,
+        value: fastn_type::PropertyValue,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Variable> {
+    ) -> ftd::interpreter::Result<fastn_type::Variable> {
         let (mut variable, mut remaining) = self.get_initial_variable(name, line_number)?;
 
         if !variable.mutable {
@@ -345,12 +353,13 @@ impl<'a> TDoc<'a> {
         return Ok(variable.clone());
 
         fn find_variable_reference(
-            value: &ftd::interpreter::PropertyValue,
+            value: &fastn_type::PropertyValue,
             name: Option<String>,
             doc: &ftd::interpreter::TDoc,
             line_number: usize,
-        ) -> ftd::interpreter::Result<Option<(ftd::interpreter::Variable, Option<String>)>>
-        {
+        ) -> ftd::interpreter::Result<Option<(fastn_type::Variable, Option<String>)>> {
+            use ftd::interpreter::PropertyValueExt;
+
             let mut variable = None;
             let mut remaining = name;
             let mut value = value.clone();
@@ -368,7 +377,7 @@ impl<'a> TDoc<'a> {
                 };
             }
 
-            if let ftd::interpreter::PropertyValue::Clone { .. } = value {
+            if let fastn_type::PropertyValue::Clone { .. } = value {
                 return Ok(variable.map(|v| (v, remaining)));
             }
 
@@ -386,7 +395,7 @@ impl<'a> TDoc<'a> {
                 )?;
 
                 match value {
-                    ftd::interpreter::Value::Record {
+                    fastn_type::Value::Record {
                         name: rec_name,
                         fields,
                     } => {
@@ -425,8 +434,8 @@ impl<'a> TDoc<'a> {
         }
 
         fn set_value_(
-            variable: &mut ftd::interpreter::Variable,
-            value: ftd::interpreter::PropertyValue,
+            variable: &mut fastn_type::Variable,
+            value: fastn_type::PropertyValue,
             remaining: Option<String>,
             doc: &ftd::interpreter::TDoc,
             line_number: usize,
@@ -436,8 +445,8 @@ impl<'a> TDoc<'a> {
         }
 
         fn change_value(
-            value: &mut ftd::interpreter::PropertyValue,
-            set: ftd::interpreter::PropertyValue,
+            value: &mut fastn_type::PropertyValue,
+            set: fastn_type::PropertyValue,
             remaining: Option<String>,
             doc: &ftd::interpreter::TDoc,
             line_number: usize,
@@ -445,8 +454,8 @@ impl<'a> TDoc<'a> {
             if let Some(remaining) = remaining {
                 let (p1, p2) = ftd::interpreter::utils::split_at(remaining.as_str(), ".");
                 match value {
-                    ftd::interpreter::PropertyValue::Value { value, .. } => match value {
-                        ftd::interpreter::Value::Record { name, fields } => {
+                    fastn_type::PropertyValue::Value { value, .. } => match value {
+                        fastn_type::Value::Record { name, fields } => {
                             let field = fields.get_mut(p1.as_str()).ok_or(
                                 ftd::interpreter::Error::ParseError {
                                     message: format!(
@@ -467,35 +476,33 @@ impl<'a> TDoc<'a> {
                             )
                         }
                     },
-                    ftd::interpreter::PropertyValue::Reference {
+                    fastn_type::PropertyValue::Reference {
                         name,
                         kind,
                         is_mutable,
                         ..
                     }
-                    | ftd::interpreter::PropertyValue::Clone {
+                    | fastn_type::PropertyValue::Clone {
                         name,
                         kind,
                         is_mutable,
                         ..
                     } => {
                         let resolved_value = doc.resolve(name, kind, line_number)?;
-                        *value = ftd::interpreter::PropertyValue::Value {
+                        *value = fastn_type::PropertyValue::Value {
                             value: resolved_value,
                             line_number,
                             is_mutable: *is_mutable,
                         };
                         change_value(value, set, Some(remaining), doc, line_number)?;
                     }
-                    ftd::interpreter::PropertyValue::FunctionCall(
-                        ftd::interpreter::FunctionCall {
-                            name,
-                            kind,
-                            is_mutable,
-                            values,
-                            ..
-                        },
-                    ) => {
+                    fastn_type::PropertyValue::FunctionCall(fastn_type::FunctionCall {
+                        name,
+                        kind,
+                        is_mutable,
+                        values,
+                        ..
+                    }) => {
                         let function = doc.get_function(name, line_number)?;
                         let resolved_value = function
                             .resolve(kind, values, doc, line_number)?
@@ -507,7 +514,7 @@ impl<'a> TDoc<'a> {
                                 doc_id: doc.name.to_string(),
                                 line_number,
                             })?;
-                        *value = ftd::interpreter::PropertyValue::Value {
+                        *value = fastn_type::PropertyValue::Value {
                             value: resolved_value,
                             line_number,
                             is_mutable: *is_mutable,
@@ -538,14 +545,11 @@ impl<'a> TDoc<'a> {
         &mut self,
         name: &str,
         line_number: usize,
-        component_definition_name_with_arguments: &Option<(
-            &str,
-            &mut [ftd::interpreter::Argument],
-        )>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
+        component_definition_name_with_arguments: &Option<(&str, &mut [fastn_type::Argument])>,
+        loop_object_name_and_kind: &Option<(String, fastn_type::Argument, Option<String>)>,
     ) -> ftd::interpreter::Result<
         ftd::interpreter::StateWithThing<(
-            ftd::interpreter::PropertyValueSource,
+            fastn_type::PropertyValueSource,
             fastn_type::KindData,
             bool,
         )>,
@@ -631,7 +635,7 @@ impl<'a> TDoc<'a> {
                 (
                     initial_kind,
                     remaining,
-                    ftd::interpreter::PropertyValueSource::Global,
+                    fastn_type::PropertyValueSource::Global,
                     mutable,
                 )
             };
@@ -732,7 +736,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::ComponentDefinition> {
+    ) -> ftd::interpreter::Result<fastn_type::ComponentDefinition> {
         match self.get_thing(name, line_number)? {
             ftd::interpreter::Thing::Component(c) => Ok(c),
             t => self.err(
@@ -748,7 +752,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::WebComponentDefinition> {
+    ) -> ftd::interpreter::Result<fastn_type::WebComponentDefinition> {
         match self.get_thing(name, line_number)? {
             ftd::interpreter::Thing::WebComponent(c) => Ok(c),
             t => self.err(
@@ -764,9 +768,8 @@ impl<'a> TDoc<'a> {
         &mut self,
         name: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<
-        ftd::interpreter::StateWithThing<ftd::interpreter::ComponentDefinition>,
-    > {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::ComponentDefinition>>
+    {
         match self.search_thing(name, line_number)? {
             ftd::interpreter::StateWithThing::State(s) => {
                 Ok(ftd::interpreter::StateWithThing::new_state(s))
@@ -791,7 +794,7 @@ impl<'a> TDoc<'a> {
         name: &str,
         line_number: usize,
     ) -> ftd::interpreter::Result<
-        ftd::interpreter::StateWithThing<ftd::interpreter::WebComponentDefinition>,
+        ftd::interpreter::StateWithThing<fastn_type::WebComponentDefinition>,
     > {
         match self.search_thing(name, line_number)? {
             ftd::interpreter::StateWithThing::State(s) => {
@@ -816,7 +819,7 @@ impl<'a> TDoc<'a> {
         &mut self,
         name: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::OrType>> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::OrType>> {
         match self.search_thing(name, line_number)? {
             ftd::interpreter::StateWithThing::State(s) => {
                 Ok(ftd::interpreter::StateWithThing::new_state(s))
@@ -841,7 +844,7 @@ impl<'a> TDoc<'a> {
         name: &str,
         line_number: usize,
     ) -> ftd::interpreter::Result<
-        ftd::interpreter::StateWithThing<(String, ftd::interpreter::OrTypeVariant)>,
+        ftd::interpreter::StateWithThing<(String, fastn_type::OrTypeVariant)>,
     > {
         match self.search_thing(name, line_number)? {
             ftd::interpreter::StateWithThing::State(s) => {
@@ -887,11 +890,12 @@ impl<'a> TDoc<'a> {
             name: &str,
             thing: &ftd::interpreter::Thing,
         ) -> ftd::interpreter::Result<ftd::interpreter::Thing> {
+            use ftd::interpreter::PropertyValueExt;
             use itertools::Itertools;
 
             let (v, remaining) = ftd::interpreter::utils::split_at(name, ".");
             let thing = match thing.clone() {
-                ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+                ftd::interpreter::Thing::Variable(fastn_type::Variable {
                     name,
                     value,
                     mutable,
@@ -899,14 +903,14 @@ impl<'a> TDoc<'a> {
                 }) => {
                     let value_kind = value.kind();
                     let fields = match value.resolve(doc, line_number)?.inner() {
-                        Some(ftd::interpreter::Value::Record { fields, .. }) => fields,
-                        Some(ftd::interpreter::Value::Object { values }) => values,
-                        Some(ftd::interpreter::Value::KwArgs { arguments }) => arguments,
-                        Some(ftd::interpreter::Value::List { data, .. }) => data
+                        Some(fastn_type::Value::Record { fields, .. }) => fields,
+                        Some(fastn_type::Value::Object { values }) => values,
+                        Some(fastn_type::Value::KwArgs { arguments }) => arguments,
+                        Some(fastn_type::Value::List { data, .. }) => data
                             .into_iter()
                             .enumerate()
                             .map(|(index, v)| (index.to_string(), v))
-                            .collect::<ftd::Map<ftd::interpreter::PropertyValue>>(),
+                            .collect::<ftd::Map<fastn_type::PropertyValue>>(),
                         None => {
                             let kind_name = match value_kind.get_record_name() {
                                 Some(name) => name,
@@ -937,23 +941,22 @@ impl<'a> TDoc<'a> {
                                     );
                                 }
                             };
-                            let thing =
-                                ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
-                                    name,
-                                    kind: kind.to_owned(),
-                                    mutable,
-                                    value: ftd::interpreter::PropertyValue::Value {
-                                        value: ftd::interpreter::Value::Optional {
-                                            data: Box::new(None),
-                                            kind,
-                                        },
-                                        is_mutable: mutable,
-                                        line_number,
+                            let thing = ftd::interpreter::Thing::Variable(fastn_type::Variable {
+                                name,
+                                kind: kind.to_owned(),
+                                mutable,
+                                value: fastn_type::PropertyValue::Value {
+                                    value: fastn_type::Value::Optional {
+                                        data: Box::new(None),
+                                        kind,
                                     },
-                                    conditional_value: vec![],
+                                    is_mutable: mutable,
                                     line_number,
-                                    is_static: !mutable,
-                                });
+                                },
+                                conditional_value: vec![],
+                                line_number,
+                                is_static: !mutable,
+                            });
                             if let Some(remaining) = remaining {
                                 return get_thing_(doc, line_number, &remaining, &thing);
                             }
@@ -962,11 +965,11 @@ impl<'a> TDoc<'a> {
                         _ => return doc.err("not an record", thing, "get_thing", line_number),
                     };
                     match fields.get(&v) {
-                        Some(ftd::interpreter::PropertyValue::Value {
+                        Some(fastn_type::PropertyValue::Value {
                             value: val,
                             line_number,
                             is_mutable,
-                        }) => ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+                        }) => ftd::interpreter::Thing::Variable(fastn_type::Variable {
                             name,
                             kind: fastn_type::KindData {
                                 kind: val.kind(),
@@ -974,7 +977,7 @@ impl<'a> TDoc<'a> {
                                 body: false,
                             },
                             mutable: false,
-                            value: ftd::interpreter::PropertyValue::Value {
+                            value: fastn_type::PropertyValue::Value {
                                 value: val.to_owned(),
                                 line_number: *line_number,
                                 is_mutable: *is_mutable,
@@ -983,8 +986,8 @@ impl<'a> TDoc<'a> {
                             line_number: *line_number,
                             is_static: !mutable,
                         }),
-                        Some(ftd::interpreter::PropertyValue::Reference { name, .. })
-                        | Some(ftd::interpreter::PropertyValue::Clone { name, .. }) => {
+                        Some(fastn_type::PropertyValue::Reference { name, .. })
+                        | Some(fastn_type::PropertyValue::Clone { name, .. }) => {
                             let (initial_thing, name) = doc.get_initial_thing(name, line_number)?;
                             if let Some(remaining) = name {
                                 get_thing_(doc, line_number, remaining.as_str(), &initial_thing)?
@@ -995,11 +998,7 @@ impl<'a> TDoc<'a> {
                         _ => thing.clone(),
                     }
                 }
-                ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
-                    name,
-                    variants,
-                    ..
-                }) => {
+                ftd::interpreter::Thing::OrType(fastn_type::OrType { name, variants, .. }) => {
                     let variant = variants
                         .iter()
                         .find_or_first(|variant| variant.name().eq(&format!("{name}.{v}")))
@@ -1025,7 +1024,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Function> {
+    ) -> ftd::interpreter::Result<fastn_type::Function> {
         let initial_thing = self.get_initial_thing(name, line_number)?.0;
         initial_thing.function(self.name, line_number)
     }
@@ -1034,8 +1033,7 @@ impl<'a> TDoc<'a> {
         &mut self,
         name: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Function>>
-    {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::Function>> {
         let name = ftd_p1::AccessModifier::remove_modifiers(name);
         let initial_thing = try_ok_state!(self.search_initial_thing(name.as_str(), line_number)?).0;
         Ok(ftd::interpreter::StateWithThing::new_thing(
@@ -1047,7 +1045,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<(ftd::interpreter::Variable, Option<String>)> {
+    ) -> ftd::interpreter::Result<(fastn_type::Variable, Option<String>)> {
         self.get_initial_variable_with_inherited(name, line_number, &Default::default())
     }
 
@@ -1056,7 +1054,7 @@ impl<'a> TDoc<'a> {
         name: &'a str,
         line_number: usize,
         inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::interpreter::Result<(ftd::interpreter::Variable, Option<String>)> {
+    ) -> ftd::interpreter::Result<(fastn_type::Variable, Option<String>)> {
         let (initial_thing, remaining) =
             self.get_initial_thing_with_inherited(name, line_number, inherited_variables)?;
         Ok((initial_thing.variable(self.name, line_number)?, remaining))
@@ -1326,9 +1324,11 @@ impl<'a> TDoc<'a> {
             thing: ftd::interpreter::Thing,
         ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Thing>>
         {
+            use ftd::interpreter::PropertyValueExt;
+
             let (v, remaining) = ftd::interpreter::utils::split_at(name, ".");
             let thing = match thing.clone() {
-                ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+                ftd::interpreter::Thing::Variable(fastn_type::Variable {
                     name,
                     value,
                     mutable,
@@ -1336,14 +1336,14 @@ impl<'a> TDoc<'a> {
                 }) => {
                     let value_kind = value.kind();
                     let fields = match value.resolve(doc, line_number)?.inner() {
-                        Some(ftd::interpreter::Value::Record { fields, .. }) => fields,
-                        Some(ftd::interpreter::Value::Object { values }) => values,
-                        Some(ftd::interpreter::Value::KwArgs { arguments }) => arguments,
-                        Some(ftd::interpreter::Value::List { data, .. }) => data
+                        Some(fastn_type::Value::Record { fields, .. }) => fields,
+                        Some(fastn_type::Value::Object { values }) => values,
+                        Some(fastn_type::Value::KwArgs { arguments }) => arguments,
+                        Some(fastn_type::Value::List { data, .. }) => data
                             .into_iter()
                             .enumerate()
                             .map(|(index, v)| (index.to_string(), v))
-                            .collect::<ftd::Map<ftd::interpreter::PropertyValue>>(),
+                            .collect::<ftd::Map<fastn_type::PropertyValue>>(),
                         None => {
                             let kind_name = match value_kind.get_record_name() {
                                 Some(name) => name,
@@ -1375,23 +1375,22 @@ impl<'a> TDoc<'a> {
                                     );
                                 }
                             };
-                            let thing =
-                                ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
-                                    name,
-                                    kind: kind.to_owned(),
-                                    mutable,
-                                    value: ftd::interpreter::PropertyValue::Value {
-                                        value: ftd::interpreter::Value::Optional {
-                                            data: Box::new(None),
-                                            kind,
-                                        },
-                                        is_mutable: mutable,
-                                        line_number,
+                            let thing = ftd::interpreter::Thing::Variable(fastn_type::Variable {
+                                name,
+                                kind: kind.to_owned(),
+                                mutable,
+                                value: fastn_type::PropertyValue::Value {
+                                    value: fastn_type::Value::Optional {
+                                        data: Box::new(None),
+                                        kind,
                                     },
-                                    conditional_value: vec![],
+                                    is_mutable: mutable,
                                     line_number,
-                                    is_static: !mutable,
-                                });
+                                },
+                                conditional_value: vec![],
+                                line_number,
+                                is_static: !mutable,
+                            });
                             if let Some(remaining) = remaining {
                                 return search_thing_(doc, line_number, &remaining, thing);
                             }
@@ -1400,11 +1399,11 @@ impl<'a> TDoc<'a> {
                         _ => return doc.err("not an record", thing, "search_thing_", line_number),
                     };
                     match fields.get(&v) {
-                        Some(ftd::interpreter::PropertyValue::Value {
+                        Some(fastn_type::PropertyValue::Value {
                             value: val,
                             line_number,
                             ..
-                        }) => ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+                        }) => ftd::interpreter::Thing::Variable(fastn_type::Variable {
                             name,
                             kind: fastn_type::KindData {
                                 kind: val.kind(),
@@ -1412,7 +1411,7 @@ impl<'a> TDoc<'a> {
                                 body: false,
                             },
                             mutable,
-                            value: ftd::interpreter::PropertyValue::Value {
+                            value: fastn_type::PropertyValue::Value {
                                 value: val.to_owned(),
                                 line_number: *line_number,
                                 is_mutable: mutable,
@@ -1421,14 +1420,10 @@ impl<'a> TDoc<'a> {
                             line_number: *line_number,
                             is_static: !mutable,
                         }),
-                        property_value @ Some(ftd::interpreter::PropertyValue::Reference {
-                            name,
-                            ..
+                        property_value @ Some(fastn_type::PropertyValue::Reference {
+                            name, ..
                         })
-                        | property_value @ Some(ftd::interpreter::PropertyValue::Clone {
-                            name,
-                            ..
-                        }) => {
+                        | property_value @ Some(fastn_type::PropertyValue::Clone { name, .. }) => {
                             let name = ftd_p1::AccessModifier::remove_modifiers(name);
                             let (initial_thing, name) = try_ok_state!(
                                 doc.search_initial_thing(name.as_str(), line_number)?
@@ -1459,12 +1454,8 @@ impl<'a> TDoc<'a> {
                         _ => thing,
                     }
                 }
-                ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
-                    name,
-                    variants,
-                    ..
-                }) => {
-                    let or_type_name = ftd::interpreter::OrType::or_type_name(name.as_str());
+                ftd::interpreter::Thing::OrType(fastn_type::OrType { name, variants, .. }) => {
+                    let or_type_name = fastn_type::OrType::or_type_name(name.as_str());
                     if let Some(thing) = variants.into_iter().find(|or_type_variant| {
                         let variant_name = or_type_variant.name();
                         variant_name
@@ -1824,7 +1815,7 @@ impl<'a> TDoc<'a> {
         rows: &[Vec<serde_json::Value>],
         kind: &fastn_type::Kind,
         value: &ftd_ast::VariableValue,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+    ) -> ftd::interpreter::Result<fastn_type::Value> {
         Ok(match kind {
             fastn_type::Kind::List { kind, .. } => {
                 let mut data = vec![];
@@ -1835,7 +1826,7 @@ impl<'a> TDoc<'a> {
                     );
                 }
 
-                ftd::interpreter::Value::List {
+                fastn_type::Value::List {
                     data,
                     kind: kind.to_owned().into_kind_data(),
                 }
@@ -1854,10 +1845,10 @@ impl<'a> TDoc<'a> {
         row: &[serde_json::Value],
         name: &str,
         value: &ftd_ast::VariableValue,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+    ) -> ftd::interpreter::Result<fastn_type::Value> {
         let rec = self.get_record(name, value.line_number())?;
         let rec_fields = rec.fields;
-        let mut fields: ftd::Map<ftd::interpreter::PropertyValue> = Default::default();
+        let mut fields: ftd::Map<fastn_type::PropertyValue> = Default::default();
         for (idx, key) in rec_fields.iter().enumerate() {
             let val = match row.get(idx) {
                 Some(v) => v,
@@ -1876,7 +1867,7 @@ impl<'a> TDoc<'a> {
             );
         }
 
-        Ok(ftd::interpreter::Value::Record {
+        Ok(fastn_type::Value::Record {
             name: name.to_string(),
             fields,
         })
@@ -1887,7 +1878,7 @@ impl<'a> TDoc<'a> {
         row: &[serde_json::Value],
         kind: &fastn_type::Kind,
         value: &ftd_ast::VariableValue,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+    ) -> ftd::interpreter::Result<fastn_type::Value> {
         if let fastn_type::Kind::Record { name } = kind {
             return self.row_to_record(row, name, value);
         }
@@ -1914,7 +1905,7 @@ impl<'a> TDoc<'a> {
         json: &T,
         kind: &fastn_type::Kind,
         value: &ftd_ast::VariableValue,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Value>
+    ) -> ftd::interpreter::Result<fastn_type::Value>
     where
         T: serde::Serialize + std::fmt::Debug,
     {
@@ -1945,7 +1936,7 @@ impl<'a> TDoc<'a> {
         default_value: Option<String>,
         record_name: Option<String>,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+    ) -> ftd::interpreter::Result<fastn_type::Value> {
         if let Some(name) = record_name {
             if let Some(v) = o.get(name.as_str()) {
                 return self.as_json_(kind, v, default_value, None, line_number);
@@ -1968,9 +1959,9 @@ impl<'a> TDoc<'a> {
         default_value: Option<String>,
         record_name: Option<String>,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+    ) -> ftd::interpreter::Result<fastn_type::Value> {
         Ok(match kind {
-            fastn_type::Kind::String { .. } => ftd::interpreter::Value::String {
+            fastn_type::Kind::String { .. } => fastn_type::Value::String {
                 text: match json {
                     serde_json::Value::String(v) => v.to_string(),
                     serde_json::Value::Object(o) => {
@@ -1985,7 +1976,7 @@ impl<'a> TDoc<'a> {
                     }
                 },
             },
-            fastn_type::Kind::Integer { .. } => ftd::interpreter::Value::Integer {
+            fastn_type::Kind::Integer { .. } => fastn_type::Value::Integer {
                 value: match json {
                     serde_json::Value::Number(n) => {
                         n.as_i64()
@@ -2015,7 +2006,7 @@ impl<'a> TDoc<'a> {
                     }
                 },
             },
-            fastn_type::Kind::Decimal { .. } => ftd::interpreter::Value::Decimal {
+            fastn_type::Kind::Decimal { .. } => fastn_type::Value::Decimal {
                 value: match json {
                     serde_json::Value::Number(n) => {
                         n.as_f64()
@@ -2045,7 +2036,7 @@ impl<'a> TDoc<'a> {
                     }
                 },
             },
-            fastn_type::Kind::Boolean { .. } => ftd::interpreter::Value::Boolean {
+            fastn_type::Kind::Boolean { .. } => fastn_type::Value::Boolean {
                 value: match json {
                     serde_json::Value::Bool(n) => *n,
                     serde_json::Value::String(s) => {
@@ -2081,7 +2072,7 @@ impl<'a> TDoc<'a> {
             },
             fastn_type::Kind::Record { name, .. } => {
                 let rec_fields = self.get_record(name, line_number)?.fields;
-                let mut fields: ftd::Map<ftd::interpreter::PropertyValue> = Default::default();
+                let mut fields: ftd::Map<fastn_type::PropertyValue> = Default::default();
                 if let serde_json::Value::Object(o) = json {
                     for field in rec_fields {
                         let val = match o.get(&field.name) {
@@ -2098,7 +2089,7 @@ impl<'a> TDoc<'a> {
                         };
                         fields.insert(
                             field.name,
-                            ftd::interpreter::PropertyValue::Value {
+                            fastn_type::PropertyValue::Value {
                                 value: self.as_json_(
                                     &field.kind.kind,
                                     &val,
@@ -2119,8 +2110,8 @@ impl<'a> TDoc<'a> {
                     if let Some(field) = rec_fields.into_iter().find(|field| field.kind.caption) {
                         fields.insert(
                             field.name,
-                            ftd::interpreter::PropertyValue::Value {
-                                value: ftd::interpreter::Value::String {
+                            fastn_type::PropertyValue::Value {
+                                value: fastn_type::Value::String {
                                     text: s.to_string(),
                                 },
                                 is_mutable: false,
@@ -2142,16 +2133,16 @@ impl<'a> TDoc<'a> {
                         line_number,
                     );
                 }
-                ftd::interpreter::Value::Record {
+                fastn_type::Value::Record {
                     name: name.to_string(),
                     fields,
                 }
             }
             fastn_type::Kind::List { kind, .. } => {
-                let mut data: Vec<ftd::interpreter::PropertyValue> = vec![];
+                let mut data: Vec<fastn_type::PropertyValue> = vec![];
                 if let serde_json::Value::Array(list) = json {
                     for item in list {
-                        data.push(ftd::interpreter::PropertyValue::Value {
+                        data.push(fastn_type::PropertyValue::Value {
                             value: self.as_json_(kind, item, None, None, line_number)?,
                             is_mutable: false,
                             line_number,
@@ -2165,7 +2156,7 @@ impl<'a> TDoc<'a> {
                         line_number,
                     );
                 }
-                ftd::interpreter::Value::List {
+                fastn_type::Value::List {
                     data,
                     kind: kind.to_owned().into_kind_data(),
                 }
@@ -2173,7 +2164,7 @@ impl<'a> TDoc<'a> {
             fastn_type::Kind::Optional { kind, .. } => {
                 let kind = kind.as_ref();
                 match json {
-                    serde_json::Value::Null => ftd::interpreter::Value::Optional {
+                    serde_json::Value::Null => fastn_type::Value::Optional {
                         kind: kind.clone().into_kind_data(),
                         data: Box::new(None),
                     },
@@ -2183,7 +2174,7 @@ impl<'a> TDoc<'a> {
                             .map(|v| !o.contains_key(v))
                             .unwrap_or_default() =>
                     {
-                        return Ok(ftd::interpreter::Value::Optional {
+                        return Ok(fastn_type::Value::Optional {
                             kind: kind.clone().into_kind_data(),
                             data: Box::new(None),
                         });

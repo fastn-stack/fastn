@@ -1,3 +1,5 @@
+use ftd::js::value::ArgumentExt;
+
 #[allow(dead_code)]
 pub fn trim_all_lines(s: &str) -> String {
     use itertools::Itertools;
@@ -26,20 +28,17 @@ pub fn get_css_html(external_css: &[String]) -> String {
 }
 
 pub(crate) fn get_rive_event(
-    events: &[ftd::interpreter::Event],
+    events: &[fastn_type::Event],
     doc: &ftd::interpreter::TDoc,
     rdata: &ftd::js::ResolverData,
     element_name: &str,
 ) -> String {
-    let mut events_map: ftd::VecMap<(&String, &ftd::interpreter::FunctionCall)> =
-        ftd::VecMap::new();
+    let mut events_map: ftd::VecMap<(&String, &fastn_type::FunctionCall)> = ftd::VecMap::new();
     for event in events.iter() {
         let (event_name, input, action) = match &event.name {
-            ftd::interpreter::EventName::RivePlay(timeline) => ("onPlay", timeline, &event.action),
-            ftd::interpreter::EventName::RivePause(timeline) => {
-                ("onPause", timeline, &event.action)
-            }
-            ftd::interpreter::EventName::RiveStateChange(state) => {
+            fastn_type::EventName::RivePlay(timeline) => ("onPlay", timeline, &event.action),
+            fastn_type::EventName::RivePause(timeline) => ("onPause", timeline, &event.action),
+            fastn_type::EventName::RiveStateChange(state) => {
                 ("onStateChange", state, &event.action)
             }
             _ => continue,
@@ -184,8 +183,9 @@ fn is_ftd_thing(name: &str) -> bool {
 }
 
 pub(crate) fn get_js_value_from_properties(
-    properties: &[ftd::interpreter::Property],
+    properties: &[fastn_type::Property],
 ) -> Option<ftd::js::Value> {
+    use ftd::js::fastn_type_functions::PropertyValueExt;
     if properties.is_empty() {
         return None;
     }
@@ -201,10 +201,12 @@ pub(crate) fn get_js_value_from_properties(
 }
 
 pub(crate) fn function_call_to_js_formula(
-    function_call: &ftd::interpreter::FunctionCall,
+    function_call: &fastn_type::FunctionCall,
     doc: &ftd::interpreter::TDoc,
     rdata: &ftd::js::ResolverData,
 ) -> fastn_js::Formula {
+    use ftd::js::fastn_type_functions::{FunctionCallExt, PropertyValueExt};
+
     let mut deps = vec![];
     for property_value in function_call.values.values() {
         deps.extend(property_value.get_deps(rdata));
@@ -217,7 +219,7 @@ pub(crate) fn function_call_to_js_formula(
 }
 
 pub(crate) fn is_ui_argument(
-    component_arguments: &[ftd::interpreter::Argument],
+    component_arguments: &[fastn_type::Argument],
     remaining: &str,
 ) -> bool {
     component_arguments
@@ -226,9 +228,11 @@ pub(crate) fn is_ui_argument(
 }
 
 pub(crate) fn is_module_argument(
-    component_arguments: &[ftd::interpreter::Argument],
+    component_arguments: &[fastn_type::Argument],
     remaining: &str,
 ) -> Option<String> {
+    use ftd::interpreter::PropertyValueExt;
+
     let (module_name, component_name) = remaining.split_once('.')?;
     component_arguments.iter().find_map(|v| {
         if v.name.eq(module_name) && v.kind.is_module() {
@@ -268,7 +272,7 @@ pub(crate) fn get_set_property_values_for_provided_component_properties(
     doc: &ftd::interpreter::TDoc,
     rdata: &ftd::js::ResolverData,
     component_name: &str,
-    component_properties: &[ftd::interpreter::Property],
+    component_properties: &[fastn_type::Property],
     line_number: usize,
     has_rive_components: &mut bool,
 ) -> Option<Vec<(String, fastn_js::SetPropertyValue, bool)>> {

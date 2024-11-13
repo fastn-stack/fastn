@@ -3,7 +3,7 @@ pub async fn process(
     kind: fastn_type::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &mut fastn_core::RequestConfig,
-) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+) -> ftd::interpreter::Result<fastn_type::Value> {
     // req_config.current_language() is the two letter language code for current request
     // should be deserialized into `optional string`.
     doc.from_json(&req_config.current_language(), &kind, &value)

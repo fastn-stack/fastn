@@ -247,12 +247,9 @@ pub fn is_argument_in_component_or_loop(
 pub fn get_mut_argument_for_reference<'a>(
     name: &str,
     doc_name: &str,
-    component_definition_name_with_arguments: &'a mut Option<(
-        &str,
-        &mut [ftd::interpreter::Argument],
-    )>,
+    component_definition_name_with_arguments: &'a mut Option<(&str, &mut [fastn_type::Argument])>,
     line_number: usize,
-) -> ftd::interpreter::Result<Option<(String, &'a mut ftd::interpreter::Argument)>> {
+) -> ftd::interpreter::Result<Option<(String, &'a mut fastn_type::Argument)>> {
     if let Some((component_name, arguments)) = component_definition_name_with_arguments {
         if let Some(referenced_argument) = name
             .strip_prefix(format!("{}.", component_name).as_str())
@@ -276,16 +273,13 @@ pub fn get_mut_argument_for_reference<'a>(
 pub fn get_component_argument_for_reference_and_remaining<'a>(
     name: &str,
     doc_name: &str,
-    component_definition_name_with_arguments: &'a mut Option<(
-        &str,
-        &mut [ftd::interpreter::Argument],
-    )>,
+    component_definition_name_with_arguments: &'a mut Option<(&str, &mut [fastn_type::Argument])>,
     line_number: usize,
 ) -> ftd::interpreter::Result<
     Option<(
-        &'a mut ftd::interpreter::Argument,
+        &'a mut fastn_type::Argument,
         Option<String>,
-        ftd::interpreter::PropertyValueSource,
+        fastn_type::PropertyValueSource,
     )>,
 > {
     let (component_name, arguments) =
@@ -309,7 +303,7 @@ pub fn get_component_argument_for_reference_and_remaining<'a>(
         Ok(Some((
             argument,
             p2,
-            ftd::interpreter::PropertyValueSource::Local(component_name.to_string()),
+            fastn_type::PropertyValueSource::Local(component_name.to_string()),
         )))
     } else {
         ftd::interpreter::utils::e2(
@@ -323,14 +317,14 @@ pub fn get_component_argument_for_reference_and_remaining<'a>(
 pub fn get_argument_for_reference_and_remaining(
     name: &str,
     doc: &ftd::interpreter::TDoc,
-    component_definition_name_with_arguments: &Option<(&str, &mut [ftd::interpreter::Argument])>,
-    loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
+    component_definition_name_with_arguments: &Option<(&str, &mut [fastn_type::Argument])>,
+    loop_object_name_and_kind: &Option<(String, fastn_type::Argument, Option<String>)>,
     line_number: usize,
 ) -> ftd::interpreter::Result<
     Option<(
-        ftd::interpreter::Argument,
+        fastn_type::Argument,
         Option<String>,
-        ftd::interpreter::PropertyValueSource,
+        fastn_type::PropertyValueSource,
     )>,
 > {
     if let Some((component_name, arguments)) = component_definition_name_with_arguments {
@@ -343,7 +337,7 @@ pub fn get_argument_for_reference_and_remaining(
                 Ok(Some((
                     argument.to_owned(),
                     p2,
-                    ftd::interpreter::PropertyValueSource::Local(component_name.to_string()),
+                    fastn_type::PropertyValueSource::Local(component_name.to_string()),
                 )))
             } else {
                 ftd::interpreter::utils::e2(
@@ -365,30 +359,30 @@ pub fn get_argument_for_reference_and_remaining(
             return Ok(Some((
                 loop_argument.to_owned(),
                 p2,
-                ftd::interpreter::PropertyValueSource::Loop(loop_name.to_string()),
+                fastn_type::PropertyValueSource::Loop(loop_name.to_string()),
             )));
         }
         if name.starts_with(format!("{}#{}", doc.name, ftd::interpreter::FTD_LOOP_COUNTER).as_str())
         {
             return Ok(Some((
-                ftd::interpreter::Field::default(
+                fastn_type::Field::default(
                     ftd::interpreter::FTD_LOOP_COUNTER,
                     fastn_type::Kind::integer().into_optional().into_kind_data(),
                 ),
                 None,
-                ftd::interpreter::PropertyValueSource::Loop(loop_name.to_string()),
+                fastn_type::PropertyValueSource::Loop(loop_name.to_string()),
             )));
         }
 
         if let Some(loop_counter_alias) = loop_counter_alias {
             if name.starts_with(loop_counter_alias.as_str()) {
                 return Ok(Some((
-                    ftd::interpreter::Field::default(
+                    fastn_type::Field::default(
                         loop_counter_alias,
                         fastn_type::Kind::integer().into_optional().into_kind_data(),
                     ),
                     None,
-                    ftd::interpreter::PropertyValueSource::Loop(loop_name.to_string()),
+                    fastn_type::PropertyValueSource::Loop(loop_name.to_string()),
                 )));
             }
         }
@@ -398,7 +392,7 @@ pub fn get_argument_for_reference_and_remaining(
 }
 
 pub fn validate_variable(
-    variable: &ftd::interpreter::Variable,
+    variable: &fastn_type::Variable,
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::interpreter::Result<()> {
     if !variable.mutable {
@@ -420,18 +414,18 @@ pub fn validate_variable(
 }
 
 pub fn validate_record_value(
-    value: &ftd::interpreter::PropertyValue,
+    value: &fastn_type::PropertyValue,
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::interpreter::Result<()> {
-    if let ftd::interpreter::PropertyValue::Value { value, .. } = value {
-        if let Some(ftd::interpreter::Value::Record { fields, .. }) = value.ref_inner() {
+    if let fastn_type::PropertyValue::Value { value, .. } = value {
+        if let Some(fastn_type::Value::Record { fields, .. }) = value.ref_inner() {
             validate_fields(fields.values().collect(), doc)?;
         }
     }
     return Ok(());
 
     fn validate_fields(
-        fields: Vec<&ftd::interpreter::PropertyValue>,
+        fields: Vec<&fastn_type::PropertyValue>,
         doc: &ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         for value in fields.iter() {
@@ -441,15 +435,15 @@ pub fn validate_record_value(
                 ), doc.name, value.line_number());
             }
 
-            if let ftd::interpreter::PropertyValue::Value { value, .. } = value {
+            if let fastn_type::PropertyValue::Value { value, .. } = value {
                 match value.ref_inner() {
-                    Some(ftd::interpreter::Value::Record { fields, .. }) => {
+                    Some(fastn_type::Value::Record { fields, .. }) => {
                         validate_fields(fields.values().collect(), doc)?;
                     }
-                    Some(ftd::interpreter::Value::OrType { value, .. }) => {
+                    Some(fastn_type::Value::OrType { value, .. }) => {
                         validate_fields(vec![value], doc)?;
                     }
-                    Some(ftd::interpreter::Value::List { data, .. }) => {
+                    Some(fastn_type::Value::List { data, .. }) => {
                         validate_fields(data.iter().collect(), doc)?;
                     }
                     _ => {}
@@ -461,7 +455,7 @@ pub fn validate_record_value(
 }
 
 pub fn validate_property_value_for_mutable(
-    value: &ftd::interpreter::PropertyValue,
+    value: &fastn_type::PropertyValue,
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::interpreter::Result<()> {
     if let Some(name) = value.reference_name() {
@@ -484,7 +478,7 @@ pub fn validate_property_value_for_mutable(
     return Ok(());
 
     fn validate_function_call(
-        function_call: &ftd::interpreter::FunctionCall,
+        function_call: &fastn_type::FunctionCall,
         doc: &ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         for (key, value) in function_call.values.iter() {
@@ -508,14 +502,16 @@ pub fn validate_property_value_for_mutable(
 
 pub(crate) fn get_value(
     doc: &ftd::interpreter::TDoc,
-    value: &ftd::interpreter::Value,
+    value: &fastn_type::Value,
 ) -> ftd::interpreter::Result<Option<serde_json::Value>> {
-    if let ftd::interpreter::Value::List { data, .. } = value {
+    use ftd::interpreter::PropertyValueExt;
+
+    if let fastn_type::Value::List { data, .. } = value {
         let mut list_data = vec![];
         for val in data.iter() {
             let value = match val {
-                ftd::interpreter::PropertyValue::Value { value, .. } => value.to_owned(),
-                ftd::interpreter::PropertyValue::Reference { name, kind, .. } => doc
+                fastn_type::PropertyValue::Value { value, .. } => value.to_owned(),
+                fastn_type::PropertyValue::Reference { name, kind, .. } => doc
                     .resolve_with_inherited(
                         name.as_str(),
                         kind,
@@ -535,13 +531,11 @@ pub(crate) fn get_value(
 
     Ok(match value {
         None => None,
-        Some(ftd::interpreter::Value::Boolean { value }) => serde_json::to_value(value).ok(),
-        Some(ftd::interpreter::Value::Integer { value }) => serde_json::to_value(value).ok(),
-        Some(ftd::interpreter::Value::String { text: value, .. }) => {
-            serde_json::to_value(value).ok()
-        }
-        Some(ftd::interpreter::Value::Decimal { value, .. }) => serde_json::to_value(value).ok(),
-        Some(ftd::interpreter::Value::Record { fields, .. }) => {
+        Some(fastn_type::Value::Boolean { value }) => serde_json::to_value(value).ok(),
+        Some(fastn_type::Value::Integer { value }) => serde_json::to_value(value).ok(),
+        Some(fastn_type::Value::String { text: value, .. }) => serde_json::to_value(value).ok(),
+        Some(fastn_type::Value::Decimal { value, .. }) => serde_json::to_value(value).ok(),
+        Some(fastn_type::Value::Record { fields, .. }) => {
             let mut value_fields = ftd::Map::new();
             for (k, v) in fields {
                 if let Some(value) = get_value(doc, &v.clone().resolve(doc, v.line_number())?)? {
@@ -550,7 +544,7 @@ pub(crate) fn get_value(
             }
             serde_json::to_value(value_fields).ok()
         }
-        Some(ftd::interpreter::Value::OrType {
+        Some(fastn_type::Value::OrType {
             value,
             variant,
             full_variant,
@@ -692,10 +686,12 @@ pub(crate) fn insert_module_thing(
     kind: &fastn_type::KindData,
     reference: &str,
     reference_full_name: &str,
-    definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
+    definition_name_with_arguments: &mut Option<(&str, &mut [fastn_type::Argument])>,
     line_number: usize,
     doc: &mut ftd::interpreter::TDoc,
 ) -> ftd::interpreter::Result<()> {
+    use ftd::interpreter::PropertyValueExt;
+
     let (component_name, arg) = get_mut_argument_for_reference(
         reference,
         doc.name,
@@ -707,7 +703,7 @@ pub(crate) fn insert_module_thing(
         line_number,
         message: format!("{} not found in component arguments.", reference,),
     })?;
-    if let ftd::interpreter::Value::Module {
+    if let fastn_type::Value::Module {
         things,
         name: module_name,
     } = arg
@@ -732,7 +728,7 @@ pub(crate) fn insert_module_thing(
             if let Ok(function_definition) =
                 doc.get_function(module_component_name.as_str(), line_number)
             {
-                let function_module_thing = ftd::interpreter::ModuleThing::function(
+                let function_module_thing = fastn_type::ModuleThing::function(
                     reference.to_string(),
                     function_definition.return_kind.clone(),
                 );
@@ -740,7 +736,7 @@ pub(crate) fn insert_module_thing(
             } else if let Ok(module_component_definition) =
                 doc.get_component(module_component_name.as_str(), 0)
             {
-                let component_module_thing = ftd::interpreter::ModuleThing::component(
+                let component_module_thing = fastn_type::ModuleThing::component(
                     reference.to_string(),
                     fastn_type::Kind::ui_with_name(reference_full_name).into_kind_data(),
                     module_component_definition.arguments,
@@ -749,7 +745,7 @@ pub(crate) fn insert_module_thing(
                 things.insert(reference.to_string(), component_module_thing);
             } else {
                 let variable_module_thing =
-                    ftd::interpreter::ModuleThing::variable(reference.to_string(), kind.clone());
+                    fastn_type::ModuleThing::variable(reference.to_string(), kind.clone());
                 things.insert(reference.to_string(), variable_module_thing);
             }
         }
@@ -759,12 +755,12 @@ pub(crate) fn insert_module_thing(
 }
 
 pub(crate) fn find_properties_by_source(
-    sources: &[ftd::interpreter::PropertySource],
-    properties: &[ftd::interpreter::Property],
+    sources: &[fastn_type::PropertySource],
+    properties: &[fastn_type::Property],
     doc_name: &str,
-    argument: &ftd::interpreter::Argument,
+    argument: &fastn_type::Argument,
     line_number: usize,
-) -> ftd::interpreter::Result<Vec<ftd::interpreter::Property>> {
+) -> ftd::interpreter::Result<Vec<fastn_type::Property>> {
     let mut properties = find_properties_by_source_without_default(sources, properties);
     validate_properties_and_set_default(&mut properties, argument, doc_name, line_number)?;
 
@@ -772,9 +768,9 @@ pub(crate) fn find_properties_by_source(
 }
 
 pub(crate) fn find_properties_by_source_without_default(
-    sources: &[ftd::interpreter::PropertySource],
-    properties: &[ftd::interpreter::Property],
-) -> Vec<ftd::interpreter::Property> {
+    sources: &[fastn_type::PropertySource],
+    properties: &[fastn_type::Property],
+) -> Vec<fastn_type::Property> {
     use itertools::Itertools;
 
     properties
@@ -785,11 +781,13 @@ pub(crate) fn find_properties_by_source_without_default(
 }
 
 pub(crate) fn validate_properties_and_set_default(
-    properties: &mut Vec<ftd::interpreter::Property>,
-    argument: &ftd::interpreter::Argument,
+    properties: &mut Vec<fastn_type::Property>,
+    argument: &fastn_type::Argument,
     doc_id: &str,
     line_number: usize,
 ) -> ftd::interpreter::Result<()> {
+    use ftd::interpreter::PropertyValueExt;
+
     let mut found_default = None;
     let expected_kind = &argument.kind.kind;
     for property in properties.iter_mut() {
@@ -826,7 +824,7 @@ pub(crate) fn validate_properties_and_set_default(
                 .unwrap()
                 .value(doc_id, line_number)?
             {
-                ftd::interpreter::Value::Module { name, things } => (name, things),
+                fastn_type::Value::Module { name, things } => (name, things),
                 t => {
                     return ftd::interpreter::utils::e2(
                         format!("Expected module, found: {:?}", t),
@@ -836,8 +834,8 @@ pub(crate) fn validate_properties_and_set_default(
                 }
             };
 
-            if let ftd::interpreter::PropertyValue::Value {
-                value: ftd::interpreter::Value::Module { things, .. },
+            if let fastn_type::PropertyValue::Value {
+                value: fastn_type::Value::Module { things, .. },
                 ..
             } = &mut property.value
             {
@@ -847,9 +845,9 @@ pub(crate) fn validate_properties_and_set_default(
     }
     if found_default.is_none() {
         if let Some(ref default_value) = argument.value {
-            properties.push(ftd::interpreter::Property {
+            properties.push(fastn_type::Property {
                 value: default_value.to_owned(),
-                source: ftd::interpreter::PropertySource::Default,
+                source: fastn_type::PropertySource::Default,
                 condition: None,
                 line_number: argument.line_number,
             });
@@ -893,8 +891,8 @@ pub(crate) fn insert_export_thing(
 }
 
 pub fn get_children_properties_from_properties(
-    properties: &[ftd::interpreter::Property],
-) -> Vec<ftd::interpreter::Property> {
+    properties: &[fastn_type::Property],
+) -> Vec<fastn_type::Property> {
     use itertools::Itertools;
 
     properties

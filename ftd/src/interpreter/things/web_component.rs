@@ -1,33 +1,26 @@
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct WebComponentDefinition {
-    pub name: String,
-    pub arguments: Vec<ftd::interpreter::Argument>,
-    pub js: ftd::interpreter::PropertyValue,
-    pub line_number: usize,
+use ftd::interpreter::FieldExt;
+
+pub trait WebComponentDefinitionExt {
+    fn scan_ast(
+        ast: ftd_ast::Ast,
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()>;
+    fn from_ast(
+        ast: ftd_ast::Ast,
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<
+        ftd::interpreter::StateWithThing<fastn_type::WebComponentDefinition>,
+    >;
 }
 
-impl WebComponentDefinition {
-    pub(crate) fn new(
-        name: &str,
-        arguments: Vec<ftd::interpreter::Argument>,
-        js: ftd::interpreter::PropertyValue,
-        line_number: usize,
-    ) -> WebComponentDefinition {
-        WebComponentDefinition {
-            name: name.to_string(),
-            arguments,
-            js,
-            line_number,
-        }
-    }
-
-    pub(crate) fn scan_ast(
+impl WebComponentDefinitionExt for fastn_type::WebComponentDefinition {
+    fn scan_ast(
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         let web_component_definition = ast.get_web_component_definition(doc.name)?;
 
-        ftd::interpreter::Argument::scan_ast_fields(
+        fastn_type::Argument::scan_ast_fields(
             web_component_definition.arguments,
             doc,
             &Default::default(),
@@ -36,14 +29,18 @@ impl WebComponentDefinition {
         Ok(())
     }
 
-    pub(crate) fn from_ast(
+    fn from_ast(
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<WebComponentDefinition>> {
+    ) -> ftd::interpreter::Result<
+        ftd::interpreter::StateWithThing<fastn_type::WebComponentDefinition>,
+    > {
+        use ftd::interpreter::PropertyValueExt;
+
         let web_component_definition = ast.get_web_component_definition(doc.name)?;
         let name = doc.resolve_name(web_component_definition.name.as_str());
 
-        let js = try_ok_state!(ftd::interpreter::PropertyValue::from_ast_value(
+        let js = try_ok_state!(fastn_type::PropertyValue::from_ast_value(
             ftd_ast::VariableValue::String {
                 line_number: web_component_definition.line_number(),
                 value: web_component_definition.js,
@@ -55,7 +52,7 @@ impl WebComponentDefinition {
             Some(&fastn_type::Kind::string().into_kind_data()),
         )?);
 
-        let arguments = try_ok_state!(ftd::interpreter::Argument::from_ast_fields(
+        let arguments = try_ok_state!(fastn_type::Argument::from_ast_fields(
             web_component_definition.name.as_str(),
             web_component_definition.arguments,
             doc,
@@ -63,7 +60,7 @@ impl WebComponentDefinition {
         )?);
 
         Ok(ftd::interpreter::StateWithThing::new_thing(
-            WebComponentDefinition::new(
+            fastn_type::WebComponentDefinition::new(
                 name.as_str(),
                 arguments,
                 js,

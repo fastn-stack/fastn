@@ -8,13 +8,13 @@ pub struct Value {
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct PropertyWithPattern {
-    pub property: ftd::interpreter::Property,
+    pub property: fastn_type::Property,
     pub pattern_with_eval: Option<(String, bool)>,
 }
 
 impl PropertyWithPattern {
     fn new(
-        property: ftd::interpreter::Property,
+        property: fastn_type::Property,
         pattern_with_eval: Option<(String, bool)>,
     ) -> PropertyWithPattern {
         PropertyWithPattern {

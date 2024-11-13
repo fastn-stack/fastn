@@ -170,7 +170,7 @@ pub enum AST {
 pub struct Document {
     pub data: indexmap::IndexMap<String, ftd::interpreter::Thing>,
     pub name: String,
-    pub tree: Vec<ftd::interpreter::Component>,
+    pub tree: Vec<fastn_type::Component>,
     pub aliases: ftd::Map<String>,
     pub js: std::collections::HashSet<String>,
     pub css: std::collections::HashSet<String>,
@@ -264,7 +264,7 @@ pub struct InterpreterState {
     pub to_process: ToProcess,
     pub pending_imports: PendingImports,
     pub parsed_libs: ftd::Map<ParsedDocument>,
-    pub instructions: Vec<ftd::interpreter::Component>,
+    pub instructions: Vec<fastn_type::Component>,
 }
 
 pub enum Interpreter {
@@ -294,7 +294,7 @@ pub enum Interpreter {
 pub struct Document {
     pub data: indexmap::IndexMap<String, ftd::interpreter::Thing>,
     pub name: String,
-    pub tree: Vec<ftd::interpreter::Component>,
+    pub tree: Vec<fastn_type::Component>,
     pub aliases: ftd::Map<String>,
     pub js: std::collections::HashSet<String>,
     pub css: std::collections::HashSet<String>,
@@ -305,7 +305,7 @@ pub struct Component {
     pub name: String,
     pub properties: Vec<Property>,
     pub iteration: Box<Option<Loop>>,
-    pub condition: Box<Option<ftd::interpreter::Expression>>,
+    pub condition: Box<Option<fastn_type::Expression>>,
     pub events: Vec<Event>,
     pub children: Vec<Component>,
     pub source: ComponentSource,

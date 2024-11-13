@@ -3,7 +3,7 @@ pub fn process(
     _kind: fastn_type::Kind,
     _doc: &ftd::interpreter::TDoc,
     _req_config: &fastn_core::RequestConfig,
-) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+) -> ftd::interpreter::Result<fastn_type::Value> {
     Err(ftd::interpreter::Error::OtherError(
         "user-groups is not implemented in this version. Switch to an older  \
             version."
@@ -17,7 +17,7 @@ pub fn process_by_id(
     _kind: fastn_type::Kind,
     _doc: &ftd::interpreter::TDoc,
     _req_config: &fastn_core::RequestConfig,
-) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+) -> ftd::interpreter::Result<fastn_type::Value> {
     Err(ftd::interpreter::Error::OtherError(
         "user-group-by-id is not implemented in this version. Switch to an \
             older version."
@@ -32,7 +32,7 @@ pub async fn get_identities(
     _kind: fastn_type::Kind,
     _doc: &ftd::interpreter::TDoc<'_>,
     _req_config: &fastn_core::RequestConfig,
-) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+) -> ftd::interpreter::Result<fastn_type::Value> {
     Err(ftd::interpreter::Error::OtherError(
         "get-identities is not implemented in this version. Switch to an \
             older version."
@@ -46,7 +46,7 @@ pub async fn is_reader<'a>(
     _kind: fastn_type::Kind,
     _doc: &ftd::interpreter::TDoc<'a>,
     _req_config: &fastn_core::RequestConfig,
-) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+) -> ftd::interpreter::Result<fastn_type::Value> {
     Err(ftd::interpreter::Error::OtherError(
         "is-reader is not implemented in this version. Switch to an older \
             version."

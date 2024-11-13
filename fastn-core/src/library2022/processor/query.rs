@@ -4,7 +4,7 @@ pub async fn process(
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &mut fastn_core::RequestConfig,
     preview_session_id: &Option<String>,
-) -> ftd::interpreter::Result<ftd::interpreter::Value> {
+) -> ftd::interpreter::Result<fastn_type::Value> {
     // TODO: document key should be optional
 
     let headers = match value.get_record(doc.name) {
