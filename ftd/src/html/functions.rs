@@ -1,3 +1,5 @@
+use ftd::interpreter::ThingExt;
+
 pub struct FunctionGenerator {
     id: String,
 }

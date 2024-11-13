@@ -2,7 +2,7 @@ use ftd::interpreter::expression::ExpressionExt;
 use ftd::interpreter::things::component::ComponentDefinitionExt;
 use ftd::interpreter::things::or_type::OrTypeVariantExt;
 use ftd::interpreter::things::record::RecordExt;
-use ftd::interpreter::FunctionExt;
+use ftd::interpreter::{FunctionExt, ThingExt};
 
 #[derive(Debug, PartialEq)]
 pub struct TDoc<'a> {

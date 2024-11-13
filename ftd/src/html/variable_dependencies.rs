@@ -1,3 +1,5 @@
+use ftd::interpreter::ThingExt;
+
 pub struct VariableDependencyGenerator<'a> {
     pub id: &'a str,
     pub doc: &'a ftd::interpreter::TDoc<'a>,

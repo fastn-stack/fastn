@@ -9,53 +9,28 @@ pub(crate) mod value;
 pub(crate) mod variable;
 pub(crate) mod web_component;
 
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
-pub enum Thing {
-    Record(fastn_type::Record),
-    OrType(fastn_type::OrType),
-    OrTypeWithVariant {
-        or_type: String,
-        variant: fastn_type::OrTypeVariant,
-    },
-    Variable(fastn_type::Variable),
-    Component(fastn_type::ComponentDefinition),
-    WebComponent(fastn_type::WebComponentDefinition),
-    Function(fastn_type::Function),
-    Export {
-        from: String,
-        to: String,
+pub type Thing = fastn_type::Thing;
+
+pub trait ThingExt {
+    fn variable(
+        self,
+        doc_id: &str,
         line_number: usize,
-    },
+    ) -> ftd::interpreter::Result<fastn_type::Variable>;
+    fn record(
+        self,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<fastn_type::Record>;
+    fn function(
+        self,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<fastn_type::Function>;
 }
 
-impl Thing {
-    pub(crate) fn name(&self) -> String {
-        match self {
-            ftd::interpreter::Thing::Record(r) => r.name.clone(),
-            ftd::interpreter::Thing::OrType(o) => o.name.clone(),
-            ftd::interpreter::Thing::OrTypeWithVariant { or_type, .. } => or_type.clone(),
-            ftd::interpreter::Thing::Variable(v) => v.name.to_string(),
-            ftd::interpreter::Thing::Component(c) => c.name.to_string(),
-            ftd::interpreter::Thing::Function(f) => f.name.to_string(),
-            ftd::interpreter::Thing::WebComponent(w) => w.name.to_string(),
-            ftd::interpreter::Thing::Export { to, .. } => to.to_string(),
-        }
-    }
-
-    pub fn line_number(&self) -> usize {
-        match self {
-            Thing::Record(r) => r.line_number,
-            Thing::Variable(v) => v.line_number,
-            Thing::Component(c) => c.line_number,
-            Thing::Function(f) => f.line_number,
-            Thing::OrType(o) => o.line_number,
-            Thing::OrTypeWithVariant { variant, .. } => variant.line_number(),
-            Thing::WebComponent(w) => w.line_number,
-            Thing::Export { line_number, .. } => *line_number,
-        }
-    }
-
-    pub fn variable(
+impl ThingExt for Thing {
+    fn variable(
         self,
         doc_id: &str,
         line_number: usize,
@@ -70,7 +45,7 @@ impl Thing {
         }
     }
 
-    pub(crate) fn record(
+    fn record(
         self,
         doc_id: &str,
         line_number: usize,
@@ -85,7 +60,7 @@ impl Thing {
         }
     }
 
-    pub(crate) fn function(
+    fn function(
         self,
         doc_id: &str,
         line_number: usize,
@@ -97,13 +72,6 @@ impl Thing {
                 doc_id,
                 line_number,
             ),
-        }
-    }
-
-    pub(crate) fn component(self) -> Option<fastn_type::ComponentDefinition> {
-        match self {
-            ftd::interpreter::Thing::Component(v) => Some(v),
-            _ => None,
         }
     }
 }
