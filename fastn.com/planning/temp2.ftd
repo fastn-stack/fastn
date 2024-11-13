@@ -1,0 +1,73 @@
+-- ds.page: Temporary file
+
+-- ds.h1: How to create a Business Card
+
+
+A business card is a small card that typically contains an individual's or a
+company's contact information, such as their name, job title, company name,
+address, phone number, email address, and website.
+
+You can quickly create a business card using `fastn`. `fastn` also helps you to
+create so and so...
+
+Checkout the embedded video to know quickly about fastn.
+
+
+ ;; this is a hero component that can have an iframe for video or a button
+to redirect on a new tab where one can understand the fastn
+
+
+;; eg: https://www.marq.com/pages/learn/how-to-make-business-cards-in-microsoft-word
+
+
+-- ds.h1: Template Preview
+
+;; this will have the image of the final output.
+
+
+;; source code
+
+
+-- ds.h1: How to create
+
+Pre-requisites:
+
+- Install fastn
+- Download any text editor such as Sublime Text
+- Setup a GitHub account
+
+-- ds.h2: Install fastn
+
+You download the fastn executable. To download it Click here.
+
+;; or we can make a collapsed optional tab for Mac/Linux and Windows
+-- ds.h2: Download text editor
+
+share the process
+
+
+-- ds.h1: Let's create
+
+**Step wise**
+
+1. Use this template
+
+2. Clone the repository
+
+3. Open through text editor
+
+4. In index.ftd, define the component layout
+
+5. Uncomment the component definitions
+
+6. Make other changes
+
+7. Execute locally
+
+8. Push the changes
+
+9. Ready!
+
+
+
+-- end: ds.page

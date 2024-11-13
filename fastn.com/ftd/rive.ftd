@@ -1,0 +1,126 @@
+-- import: fastn.com/assets
+
+-- ds.page: `ftd.rive` - Rive Animations
+
+`ftd.rive` is a [kernel component](/ftd/kernel/) used to render [Rive
+animation](https://rive.app) in a `fastn` document.
+
+-- ds.youtube:
+v: cZI2dVTIOHM
+
+-- ds.rendered: Hello Rive!
+
+	-- ds.rendered.input:
+	
+	\-- import: fastn.com/assets
+	
+	\-- ftd.rive:
+	id: panda
+	background.solid: #aaa
+	src: $assets.files.rive.panda.riv
+	width.fixed.px: 400
+	
+	-- ds.rendered.output:
+	
+		-- ftd.rive:
+		id: panda
+		background.solid: #aaa
+		src: $assets.files.rive.panda.riv
+		width.fixed.px: 400
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.markdown:
+
+`ftd.rive` accepts all the [common attributes](/common-attributes/), and the
+ones listed below.
+
+-- ds.h1: `id`
+
+Type: **Required** `string`
+
+The unique `id` used to identify this rive object. This `id` is used in
+communication with the [Rive state
+machine](https://help.rive.app/editor/state-machine).
+
+-- ds.h1: `src`
+
+Type: **Required** `string`
+
+This is URL of riv file to load. It is recommended you store the riv file as
+part of your `fastn` package and use the auto generated `assets` module to refer
+to them.
+
+-- ds.h1: `state-machine`
+
+Type: `string list`
+
+It accepts the name or list of names of [Rive state
+machines](https://help.rive.app/editor/state-machine) to load.
+
+
+-- ds.h1: `autoplay`
+
+Type: `boolean`
+default: `true`
+
+If set `true`, the animation will automatically start playing when loaded.
+
+
+-- ds.h1: `artboard`
+
+Type: `optional string`
+
+It accepts the name of the [rive
+artboard](https://help.rive.app/editor/fundamentals/artboards) to use.
+
+
+-- ds.h1: Rive functions
+
+`fastn` language has various rive related [built-in
+functions](/built-in-rive-functions/). These functions help to interact
+with rive on various events.
+
+-- ds.youtube:
+v: H6PH8-fuCNs
+
+
+-- ds.rendered: Sample code
+
+	-- ds.rendered.input:
+	
+	\-- ftd.rive:
+	id: fastn
+	src: $fastn-assets.files.assets.fastn.riv
+	width.fixed.px: 440
+	state-machine: Together
+	$on-mouse-enter$: $ftd.set-rive-boolean(rive = fastn, input = play, value = true)
+	$on-mouse-leave$: $ftd.set-rive-boolean(rive = fastn, input = play, value = false)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.rive:
+		id: fastn
+		src: $fastn-assets.files.assets.fastn.riv
+		width.fixed.px: 600
+		state-machine: Together
+		$on-mouse-enter$: $ftd.set-rive-boolean(rive = fastn, input = play, value = true)
+		$on-mouse-leave$: $ftd.set-rive-boolean(rive = fastn, input = play, value = false)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+-- ds.h1: Rive Events
+
+`fastn` language has various rive related [events](/rive-events/).
+These events can be attached to rive component. They fire the callback when any
+event occurs in rive component.
+
+
+
+-- end: ds.page

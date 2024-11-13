@@ -1,0 +1,1022 @@
+-- import: fastn
+-- import: fastn/processors as pr
+-- import: fastn-community.github.io/dark-flame-cs/assets
+-- import: fastn-community.github.io/dark-flame-cs/colors
+-- import: fastn-community.github.io/color-doc/components as cp
+-- import: fastn-community.github.io/inter-typography as typo
+
+-- string figma-json:
+$processor$: pr.figma-cs-token
+;; **** replace below $ftd.default-colors with $main and remove this line ****
+variable: $main
+name: default-colors
+
+-- end: figma-json
+
+;; **** replace below $ftd.default-colors with $main and remove this line ****
+-- ftd.color-scheme colors-data: $main
+
+
+
+-- cd.package: THEME
+name: `dark-flame-cs`
+logo: $assets.files.static.fastn-logo.svg
+subtitle: dark-flame-cs: color scheme
+colors: $colors-data
+types: $typo.types
+document-title: Black Orange-themed Colour Scheme for Web Design | fastn Dark Flame CS
+document-description: Discover the Dark Flame Colour Scheme by fastn, featuring beautiful shades of Black Orange for both dark and light modes.
+document-image: https://fastn.com/-/fastn.com/images/featured/cs/dark-flame-cs-dark.png
+
+-- cp.components-pallete:
+
+-- cp.component-wrap-left:
+
+-- cp.row-spacing-48:
+
+-- cp.plus-button:
+
+-- cp.avatar:
+
+-- cp.label: Label
+
+-- end: cp.row-spacing-48
+
+-- cp.row-spacing-40:
+
+-- cp.button-base-dark: Button
+
+-- cp.button-base-light: Button
+
+-- end: cp.row-spacing-40
+
+-- cp.app-bar: Page Title
+img1: $assets.files.static.menu.svg
+img2: $assets.files.static.share.svg
+img3: $assets.files.static.search.svg
+img4: $assets.files.static.more.svg
+
+-- cp.pagination:
+num1: 1
+num2: 2
+num3: 3
+numN: 9
+
+-- cp.text-input:
+
+-- cp.label-input:
+
+-- cp.warning-button: Restricted
+
+-- cp.row-spacing-26:
+
+-- cp.primary-button: Accepted
+
+-- cp.secondary-button: In-progress
+
+-- end: cp.row-spacing-26
+
+-- cp.card:
+image: $assets.files.static.img.svg
+likes: 2,729 Like
+comments: 273 Comment
+avatar: $assets.files.static.image.svg
+name: Patrica AVA
+post: UI Designer
+
+Mauris ullamcorper tortor sed purus interdum, fermentum efficitur est dictu.
+
+-- end: cp.component-wrap-left
+
+-- cp.component-wrap-middle:
+
+-- cp.hero: We transform ideas into digital outcomes.
+
+We are an award-winning strategic design company that provides consultancy
+services and help you create outstanding digital products.
+
+
+-- cp.news-block:
+
+-- cp.card:
+image: $assets.files.static.img.svg
+likes: 2,729 Like
+comments: 273 Comment
+avatar: $assets.files.static.image.svg
+name: Patrica AVA
+post: UI Designer
+
+Mauris ullamcorper tortor sed purus interdum, fermentum efficitur est dictu.
+
+
+-- cp.card:
+image: $assets.files.static.img.svg
+likes: 2,729 Like
+comments: 273 Comment
+avatar: $assets.files.static.image.svg
+name: Patrica AVA
+post: UI Designer
+
+Mauris ullamcorper tortor sed purus interdum, fermentum efficitur est dictu.
+
+
+-- cp.card:
+image: $assets.files.static.img.svg
+likes: 2,729 Like
+comments: 273 Comment
+avatar: $assets.files.static.image.svg
+name: Patrica AVA
+post: UI Designer
+
+Mauris ullamcorper tortor sed purus interdum, fermentum efficitur est dictu.
+
+-- end: cp.news-block
+
+-- cp.sitemap-footer:
+copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+
+-- end: cp.component-wrap-middle
+
+-- cp.component-wrap-right:
+
+-- cp.sidenav:
+
+-- end: cp.component-wrap-right
+
+-- end: cp.components-pallete
+
+-- cd.color-scheme: 
+tagline: Adding warmth and energy to your designs with the `dark-flame-cs` color scheme
+
+-- cd.color-scheme.rightbar:
+
+-- cd.title-with-link: Developed Using
+icon: $assets.files.static.code-outline-icon.svg
+link-text: fastn
+link: https://fastn.com/
+
+-- cd.title-with-link: Github Link
+icon: $assets.files.static.link-icon.svg
+link-text: github.com/fastn-community/dark-flame-cs
+link: https://github.com/fastn-community/dark-flame-cs
+
+-- cd.title-with-link: License Information
+icon: $assets.files.static.bsd-license-icon.svg
+link-text: BSD 3-Clause License
+link: https://github.com/fastn-community/dark-flame-cs/blob/main/LICENSE
+
+-- cd.title-with-link: Author Information
+icon: $assets.files.static.author-icon.svg
+link-text: Contributors
+link: https://github.com/fastn-community/dark-flame-cs/graphs/contributors
+
+-- cd.title-with-link: Discord Channel 
+icon: $assets.files.static.discord-icon.svg
+link-text: discord.gg/bucrdvptYd
+link: https://discord.gg/bucrdvptYd
+
+-- cd.title-with-link: How to use this colour palette
+icon: $assets.files.static.link-icon.svg
+link-text: How to use?
+link: #how-to-use-cs
+
+-- cd.title-with-link: How to modify a colour palette
+icon: $assets.files.static.link-icon.svg
+link-text: fastn.com/modify-cs
+link: https://fastn.com/modify-cs/
+
+-- cd.title-with-link: How to create a colour palette
+icon: $assets.files.static.link-icon.svg
+link-text: fastn.com/figma-to-fastn-cs
+link: https://fastn.com/figma-to-fastn-cs/
+
+-- end: cd.color-scheme.rightbar
+
+-- cd.color-scheme.body:
+
+The colours we use in our designs can have a significant impact on the mood and
+feelings they inspire. The perfect colour palette may take your design to the
+next level, whether you're creating a website, app, or anything else. The
+`dark-flame-cs` colour scheme is ideal for designs that aim to portray strength,
+warmth, and growth.
+
+-- cb.code: Figma tokens json
+lang: json
+download: dark-flame-cs.json
+max-height.fixed.px: 300
+
+$figma-json
+
+-- end: cd.color-scheme
+
+-- cd.how-to-use-cs: How to use this colour scheme 
+link: #how-to-use-cs
+
+The importance of colour in a website’s overall look and feel is well known. The
+right colour scheme can evoke emotions, create visual interest, and direct a
+user’s attention to specific elements on a page. That’s why the ftd colour
+scheme framework provides an easy and powerful way to define colour schemes and
+apply them to your website. 
+
+To start, you can choose from [existing colour scheme packages](https://fastn.com/featured/cs/) 
+or create your own
+[custom colour scheme](https://fastn.com/figma-to-fastn-cs/). To apply a colour 
+cheme package on top of your package,
+you’ll need to import it into `FASTN.ftd`. 
+
+**Option 1:** for documentation templates like [doc-site](https://fastn-community.github.io/doc-site/types/) 
+
+For example, let’s say you’re using the page component from `doc-site` package
+and want to apply the `dark-flame-cs` scheme package on top of it.
+
+To add color scheme to your [fastn](https://fastn.com/) 
+[doc-site](https://fastn-community.github.io/doc-site/cs/). Edit your `FASTN.ftd` file and add
+color scheme dependency into it.
+
+In the below example, we are using `dark-flame-cs` color scheme.
+
+Add color scheme dependency into your `FASTN.ftd` file as shown in below
+example:
+
+-- cb.code:
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/dark-flame-cs
+
+-- cd.markdown:
+
+Now modify `FASTN/ds.ftd` module which is already added inside your `fastn`
+package.
+
+Import `dark-flame-cs` dependency into `FASTN/ds.ftd`
+
+-- cb.code:
+lang: ftd
+
+\-- import: fastn-community.github.io/dark-flame-cs
+
+-- cd.markdown:
+
+Change `-- component page` `colors` property `ftd.color-scheme colors:
+$ftd.default-colors` with `ftd.color-scheme colors: $dark-flame-cs.main`
+
+replace this line of `FASTN/ds.ftd` file:
+
+-- cb.code: 
+lang: ftd
+
+\-- ftd.color-scheme color-scheme: $ftd.default-colors
+
+-- cd.markdown:
+
+ with:
+
+-- cb.code:
+lang: ftd
+
+\-- ftd.color-scheme color-scheme: $dark-flame-cs.main
+
+
+-- cd.markdown:
+
+With just a few lines of code, you can dramatically change the look and feel of
+your website using the ftd colour scheme.
+
+-- ftd.column:
+width: fill-container
+border-top-width.px: 1
+border-color: $inherited.colors.border
+margin-top.px: 24
+padding-bottom.px: 24
+
+-- end: ftd.column
+
+-- cd.markdown: 
+
+**Option 2:** for custom [fastn](https://fastn.com/) projects
+
+Add color scheme dependency into your `FASTN.ftd` file as shown in below
+example:
+
+-- cb.code:
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/dark-flame-cs
+
+-- cd.markdown:
+
+Now modify `ftd` file and import `dark-flame-cs` into `ftd` file
+
+-- cb.code:
+lang: ftd
+
+\-- import: fastn-community.github.io/dark-flame-cs
+
+
+-- cd.markdown:
+
+Now add `$dark-flame-cs.main` to your component, as shown in below example:
+
+Copy below code snippet inside your `ftd` file, then deploy and test
+
+-- cb.code: 
+lang: ftd
+
+\-- example: This is example of colors used from `dark-flame-cs`
+
+\-- component example:
+caption title:
+ftd.color-scheme color-scheme: $dark-flame-cs.main
+
+\-- ftd.text: $example.title
+role: $inherited.types.heading-hero
+color: $inherited.colors.text
+
+\-- end: example
+
+-- cd.markdown:
+
+Enjoy the look and feel of your website using `dark-flame-cs` colour scheme.
+
+-- end: cd.how-to-use-cs
+
+-- cd.color-pallete: Standalone Colors
+pallete: $standalone
+
+-- cd.color-pallete: Background Colors
+pallete: $background-colors
+
+-- cd.color-pallete: CTA Primary Colors
+pallete: $cta-primary-colors
+
+-- cd.color-pallete: CTA Secondary Colors
+pallete: $cta-secondary-colors
+
+-- cd.color-pallete: CTA Tertiary Colors
+pallete: $cta-tertiary-colors
+
+-- cd.color-pallete: CTA Danger Colors
+pallete: $cta-danger-colors
+
+-- cd.color-pallete: Error Colors
+pallete: $error-colors
+
+-- cd.color-pallete: Success Colors
+pallete: $success-colors
+
+-- cd.color-pallete: Warning Colors
+pallete: $warning-colors
+
+-- cd.color-pallete: Info Colors
+pallete: $info-colors
+
+-- cd.color-pallete: Accent Colors
+pallete: $accent-colors
+
+-- cd.color-pallete: Custom Colors
+pallete: $custom-colors
+
+-- cd.body-with-links:
+github-text: github.com/fastn-stack/fastn
+github-url: https://github.com/fastn-stack/fastn
+discord-text: discord.gg/bucrdvptYd
+discord-url: https://discord.gg/bucrdvptYd
+tutorials-text: fastn.com/expander/hello-world/-/build/
+tutorials-url: https://fastn.com/expander/hello-world/-/build/
+
+We are trying to create the language for human beings and we do not believe it
+would be possible without your support. We would love to hear from you.
+
+
+-- end: cd.package
+
+
+
+
+
+
+
+
+
+
+-- ftd.color-scheme main:
+background: $colors.background-
+border: $colors.border-
+border-strong: $colors.border-strong-
+text: $colors.text-
+text-strong: $colors.text-strong-
+shadow: $colors.shadow-
+scrim: $colors.scrim-
+cta-primary: $colors.cta-primary-
+cta-secondary: $colors.cta-secondary-
+cta-tertiary: $colors.cta-tertiary-
+cta-danger: $colors.cta-danger-
+accent: $colors.accent-
+error: $colors.error-btb-
+success: $colors.success-btb-
+info: $colors.info-btb-
+warning: $colors.warning-btb-
+custom: $colors.custom-
+
+
+
+
+
+
+
+
+
+
+-- cd.colors list standalone:
+
+-- cd.colors: \$inherited.colors.border
+dark: $colors-data.border.dark
+light: $colors-data.border.light
+bgcolor: $colors-data.border
+
+We use this color for border color.
+
+-- cd.colors: \$inherited.colors.border-strong
+dark: $colors-data.border-strong.dark
+light: $colors-data.border-strong.light
+bgcolor: $colors-data.border-strong
+
+We use this color for strong border color.
+
+-- cd.colors: \$inherited.colors.text
+dark: $colors-data.text.dark
+light: $colors-data.text.light
+bgcolor: $colors-data.text
+
+We use this color for text.
+
+-- cd.colors: \$inherited.colors.text-strong
+dark: $colors-data.text-strong.dark
+light: $colors-data.text-strong.light
+bgcolor: $colors-data.text-strong
+
+We use this color for strong text.
+
+-- cd.colors: \$inherited.colors.shadow
+dark: $colors-data.shadow.dark
+light: $colors-data.shadow.light
+bgcolor: $colors-data.shadow
+
+We use this color for shadow.
+
+-- cd.colors: \$inherited.colors.scrim
+dark: $colors-data.scrim.dark
+light: $colors-data.scrim.light
+bgcolor: $colors-data.scrim
+
+We use this color for scrim.
+
+-- end: standalone
+
+
+
+
+-- cd.colors list background-colors:
+
+-- cd.colors: \$inherited.colors.background.base
+dark: $colors-data.background.base.dark
+light: $colors-data.background.base.light
+bgcolor: $colors-data.background.base
+
+We use this color for base background.
+
+-- cd.colors: \$inherited.colors.background.step-1
+dark: $colors-data.background.step-1.dark
+light: $colors-data.background.step-1.light
+bgcolor: $colors-data.background.step-1
+
+We use this color for background step-1 such as sidebar etc.
+
+-- cd.colors: \$inherited.colors.background.step-2
+dark: $colors-data.background.step-2.dark
+light: $colors-data.background.step-2.light
+bgcolor: $colors-data.background.step-2
+
+We use this color as background step-2 such as for background card etc.
+
+-- cd.colors: \$inherited.colors.background.code
+dark: $colors-data.background.code.dark
+light: $colors-data.background.code.light
+bgcolor: $colors-data.background.code
+
+We use this color for background code.
+
+-- cd.colors: \$inherited.colors.background.overlay
+dark: $colors-data.background.overlay.dark
+light: $colors-data.background.overlay.light
+bgcolor: $colors-data.background.overlay
+
+We use this color for background overlay.
+
+-- end: background-colors
+
+
+
+
+
+-- cd.colors list cta-primary-colors:
+
+-- cd.colors: \$inherited.colors.cta-primary.base
+dark: $colors-data.cta-primary.base.dark
+light: $colors-data.cta-primary.base.light
+bgcolor: $colors-data.cta-primary.base
+
+We use this color as primary main button background color.
+
+-- cd.colors: \$inherited.colors.cta-primary.hover
+dark: $colors-data.cta-primary.hover.dark
+light: $colors-data.cta-primary.hover.light
+bgcolor: $colors-data.cta-primary.hover
+
+We use this color as primary main button hover background color.
+
+-- cd.colors: \$inherited.colors.cta-primary.disabled
+dark: $colors-data.cta-primary.disabled.dark
+light: $colors-data.cta-primary.disabled.light
+bgcolor: $colors-data.cta-primary.disabled
+
+We use this color as primary main button disabled background color.
+
+-- cd.colors: \$inherited.colors.cta-primary.pressed
+dark: $colors-data.cta-primary.pressed.dark
+light: $colors-data.cta-primary.pressed.light
+bgcolor: $colors-data.cta-primary.pressed
+
+We use this color as primary main button pressed background color.
+
+-- cd.colors: \$inherited.colors.cta-primary.focused
+dark: $colors-data.cta-primary.focused.dark
+light: $colors-data.cta-primary.focused.light
+bgcolor: $colors-data.cta-primary.focused
+
+We use this color as primary main button focus background color.
+
+-- cd.colors: \$inherited.colors.cta-primary.border
+dark: $colors-data.cta-primary.border.dark
+light: $colors-data.cta-primary.border.light
+bgcolor: $colors-data.cta-primary.border
+
+We use this color as primary main button border color.
+
+-- cd.colors: \$inherited.colors.cta-primary.text
+dark: $colors-data.cta-primary.text.dark
+light: $colors-data.cta-primary.text.light
+bgcolor: $colors-data.cta-primary.text
+
+We use this color as primary main button text color.
+
+-- end: cta-primary-colors
+
+
+
+
+
+-- cd.colors list cta-secondary-colors:
+
+-- cd.colors: \$inherited.colors.cta-secondary.base
+dark: $colors-data.cta-secondary.base.dark
+light: $colors-data.cta-secondary.base.light
+bgcolor: $colors-data.cta-secondary.base
+
+We use this color as secondary main button background color.
+
+-- cd.colors: \$inherited.colors.cta-secondary.hover
+dark: $colors-data.cta-secondary.hover.dark
+light: $colors-data.cta-secondary.hover.light
+bgcolor: $colors-data.cta-secondary.hover
+
+We use this color as secondary main button hover background color.
+
+-- cd.colors: \$inherited.colors.cta-secondary.disabled
+dark: $colors-data.cta-secondary.disabled.dark
+light: $colors-data.cta-secondary.disabled.light
+bgcolor: $colors-data.cta-secondary.disabled
+
+We use this color as secondary main button disabled background color.
+
+-- cd.colors: \$inherited.colors.cta-secondary.pressed
+dark: $colors-data.cta-secondary.pressed.dark
+light: $colors-data.cta-secondary.pressed.light
+bgcolor: $colors-data.cta-secondary.pressed
+
+We use this color as secondary main button pressed background color.
+
+-- cd.colors: \$inherited.colors.cta-secondary.focused
+dark: $colors-data.cta-secondary.focused.dark
+light: $colors-data.cta-secondary.focused.light
+bgcolor: $colors-data.cta-secondary.focused
+
+We use this color as secondary main button focus background color.
+
+-- cd.colors: \$inherited.colors.cta-secondary.border
+dark: $colors-data.cta-secondary.border.dark
+light: $colors-data.cta-secondary.border.light
+bgcolor: $colors-data.cta-secondary.border
+
+We use this color as secondary main button border color.
+
+-- cd.colors: \$inherited.colors.cta-secondary.text
+dark: $colors-data.cta-secondary.text.dark
+light: $colors-data.cta-secondary.text.light
+bgcolor: $colors-data.cta-secondary.text
+
+We use this color as secondary main button text color.
+
+-- end: cta-secondary-colors
+
+
+
+
+
+-- cd.colors list cta-tertiary-colors:
+
+-- cd.colors: \$inherited.colors.cta-tertiary.base
+dark: $colors-data.cta-tertiary.base.dark
+light: $colors-data.cta-tertiary.base.light
+bgcolor: $colors-data.cta-tertiary.base
+
+We use this color as tertiary main button background color.
+
+-- cd.colors: \$inherited.colors.cta-tertiary.hover
+dark: $colors-data.cta-tertiary.hover.dark
+light: $colors-data.cta-tertiary.hover.light
+bgcolor: $colors-data.cta-tertiary.hover
+
+We use this color as tertiary main button hover background color.
+
+-- cd.colors: \$inherited.colors.cta-tertiary.disabled
+dark: $colors-data.cta-tertiary.disabled.dark
+light: $colors-data.cta-tertiary.disabled.light
+bgcolor: $colors-data.cta-tertiary.disabled
+
+We use this color as tertiary main button disabled background color.
+
+-- cd.colors: \$inherited.colors.cta-tertiary.pressed
+dark: $colors-data.cta-tertiary.pressed.dark
+light: $colors-data.cta-tertiary.pressed.light
+bgcolor: $colors-data.cta-tertiary.pressed
+
+We use this color as tertiary main button pressed background color.
+
+-- cd.colors: \$inherited.colors.cta-tertiary.focused
+dark: $colors-data.cta-tertiary.focused.dark
+light: $colors-data.cta-tertiary.focused.light
+bgcolor: $colors-data.cta-tertiary.focused
+
+We use this color as tertiary main button focus background color.
+
+-- cd.colors: \$inherited.colors.cta-tertiary.border
+dark: $colors-data.cta-tertiary.border.dark
+light: $colors-data.cta-tertiary.border.light
+bgcolor: $colors-data.cta-tertiary.border
+
+We use this color as tertiary main button border color.
+
+-- cd.colors: \$inherited.colors.cta-tertiary.text
+dark: $colors-data.cta-tertiary.text.dark
+light: $colors-data.cta-tertiary.text.light
+bgcolor: $colors-data.cta-tertiary.text
+
+We use this color as tertiary main button text color.
+
+-- end: cta-tertiary-colors
+
+
+
+
+
+-- cd.colors list cta-danger-colors:
+
+-- cd.colors: \$inherited.colors.cta-danger.base
+dark: $colors-data.cta-danger.base.dark
+light: $colors-data.cta-danger.base.light
+bgcolor: $colors-data.cta-danger.base
+
+We use this color as warning main button background color.
+
+-- cd.colors: \$inherited.colors.cta-danger.hover
+dark: $colors-data.cta-danger.hover.dark
+light: $colors-data.cta-danger.hover.light
+bgcolor: $colors-data.cta-danger.hover
+
+We use this color as warning main button hover background color.
+
+-- cd.colors: \$inherited.colors.cta-danger.disabled
+dark: $colors-data.cta-danger.disabled.dark
+light: $colors-data.cta-danger.disabled.light
+bgcolor: $colors-data.cta-danger.disabled
+
+We use this color as warning main button disabled background color.
+
+-- cd.colors: \$inherited.colors.cta-danger.pressed
+dark: $colors-data.cta-danger.pressed.dark
+light: $colors-data.cta-danger.pressed.light
+bgcolor: $colors-data.cta-danger.pressed
+
+We use this color as warning main button pressed background color.
+
+-- cd.colors: \$inherited.colors.cta-danger.focused
+dark: $colors-data.cta-danger.focused.dark
+light: $colors-data.cta-danger.focused.light
+bgcolor: $colors-data.cta-danger.focused
+
+We use this color as warning main button focus background color.
+
+-- cd.colors: \$inherited.colors.cta-danger.border
+dark: $colors-data.cta-danger.border.dark
+light: $colors-data.cta-danger.border.light
+bgcolor: $colors-data.cta-danger.border
+
+We use this color as warning main button border color.
+
+-- cd.colors: \$inherited.colors.cta-danger.text
+dark: $colors-data.cta-danger.text.dark
+light: $colors-data.cta-danger.text.light
+bgcolor: $colors-data.cta-danger.text
+
+We use this color as warning main button text color.
+
+-- end: cta-danger-colors
+
+
+
+
+
+-- cd.colors list error-colors:
+
+-- cd.colors: \$inherited.colors.error.base
+dark: $colors-data.error.base.dark
+light: $colors-data.error.base.light
+bgcolor: $colors-data.error.base
+
+We use this color as base error color.
+
+-- cd.colors: \$inherited.colors.error.btb
+dark: $colors-data.error.base.dark
+light: $colors-data.error.base.light
+bgcolor: $colors-data.error.base
+border-dark: $colors-data.error.border.dark
+border-light: $colors-data.error.border.light
+border: $colors-data.error.border
+text-dark: $colors-data.error.border.dark
+text-light: $colors-data.error.border.light
+text: $colors-data.error.border
+
+Error button with border, text and background of the color shown from top to
+bottom in this color box.
+
+-- cd.colors: \$inherited.colors.error.text
+dark: $colors-data.error.text.dark
+light: $colors-data.error.text.light
+bgcolor: $colors-data.error.text
+
+We use this color as error text color.
+
+-- cd.colors: \$inherited.colors.error.border
+dark: $colors-data.error.border.dark
+light: $colors-data.error.border.light
+bgcolor: $colors-data.error.border
+
+We use this color as error border color.
+
+-- end: error-colors
+
+
+
+
+
+-- cd.colors list success-colors:
+
+-- cd.colors: \$inherited.colors.success.base
+dark: $colors-data.success.base.dark
+light: $colors-data.success.base.light
+bgcolor: $colors-data.success.base
+
+We use this color as base success color.
+
+-- cd.colors: \$inherited.colors.success.btb
+dark: $colors-data.success.base.dark
+light: $colors-data.success.base.light
+bgcolor: $colors-data.success.base
+border-dark: $colors-data.success.border.dark
+border-light: $colors-data.success.border.light
+border: $colors-data.success.border
+text-dark: $colors-data.success.border.dark
+text-light: $colors-data.success.border.light
+text: $colors-data.success.border
+
+Success button with border, text and background of the color shown from top to
+bottom in this color box.
+
+-- cd.colors: \$inherited.colors.success.text
+dark: $colors-data.success.text.dark
+light: $colors-data.success.text.light
+bgcolor: $colors-data.success.text
+
+We use this color as success text color.
+
+-- cd.colors: \$inherited.colors.success.border
+dark: $colors-data.success.border.dark
+light: $colors-data.success.border.light
+bgcolor: $colors-data.success.border
+
+We use this color as success border color.
+
+-- end: success-colors
+
+
+
+
+
+-- cd.colors list warning-colors:
+
+-- cd.colors: \$inherited.colors.warning.base
+dark: $colors-data.warning.base.dark
+light: $colors-data.warning.base.light
+bgcolor: $colors-data.warning.base
+
+We use this color as base warning color.
+
+-- cd.colors: \$inherited.colors.warning.btb
+dark: $colors-data.warning.base.dark
+light: $colors-data.warning.base.light
+bgcolor: $colors-data.warning.base
+border-dark: $colors-data.warning.border.dark
+border-light: $colors-data.warning.border.light
+border: $colors-data.warning.border
+text-dark: $colors-data.warning.border.dark
+text-light: $colors-data.warning.border.light
+text: $colors-data.warning.border
+
+Warning button with border, text and background of the color shown from top to
+bottom in this color box.
+
+-- cd.colors: \$inherited.colors.warning.text
+dark: $colors-data.warning.text.dark
+light: $colors-data.warning.text.light
+bgcolor: $colors-data.warning.text
+
+We use this color as warning text color.
+
+-- cd.colors: \$inherited.colors.warning.border
+dark: $colors-data.warning.border.dark
+light: $colors-data.warning.border.light
+bgcolor: $colors-data.warning.border
+
+We use this color as warning border color.
+
+-- end: warning-colors
+
+
+
+
+-- cd.colors list info-colors:
+
+-- cd.colors: \$inherited.colors.info.base
+dark: $colors-data.info.base.dark
+light: $colors-data.info.base.light
+bgcolor: $colors-data.info.base
+
+We use this color as base info color.
+
+-- cd.colors: \$inherited.colors.info.btb
+dark: $colors-data.info.base.dark
+light: $colors-data.info.base.light
+bgcolor: $colors-data.info.base
+border-dark: $colors-data.info.border.dark
+border-light: $colors-data.info.border.light
+border: $colors-data.info.border
+text-dark: $colors-data.info.border.dark
+text-light: $colors-data.info.border.light
+text: $colors-data.info.border
+
+Info button with border, text and background of the color shown from top to
+bottom in this color box.
+
+-- cd.colors: \$inherited.colors.info.text
+dark: $colors-data.info.text.dark
+light: $colors-data.info.text.light
+bgcolor: $colors-data.info.text
+
+We use this color as info text color.
+
+-- cd.colors: \$inherited.colors.info.border
+dark: $colors-data.info.border.dark
+light: $colors-data.info.border.light
+bgcolor: $colors-data.info.border
+
+We use this color as info border color.
+
+-- end: info-colors
+
+
+
+
+
+-- cd.colors list accent-colors:
+
+-- cd.colors: \$inherited.colors.accent.primary
+dark: $colors-data.accent.primary.dark
+light: $colors-data.accent.primary.light
+bgcolor: $colors-data.accent.primary
+
+We use this color as primary accent color.
+
+-- cd.colors: \$inherited.colors.accent.secondary
+dark: $colors-data.accent.secondary.dark
+light: $colors-data.accent.secondary.light
+bgcolor: $colors-data.accent.secondary
+
+We use this color as secondary accent color.
+
+-- cd.colors: \$inherited.colors.accent.tertiary
+dark: $colors-data.accent.tertiary.dark
+light: $colors-data.accent.tertiary.light
+bgcolor: $colors-data.accent.tertiary
+
+We use this color as tertiary accent color.
+
+-- end: accent-colors
+
+
+
+
+
+-- cd.colors list custom-colors:
+
+-- cd.colors: \$inherited.colors.custom.one
+dark: $colors-data.custom.one.dark
+light: $colors-data.custom.one.light
+bgcolor: $colors-data.custom.one
+
+We use this color for custom one.
+
+-- cd.colors: \$inherited.colors.custom.two
+dark: $colors-data.custom.two.dark
+light: $colors-data.custom.two.light
+bgcolor: $colors-data.custom.two
+
+We use this color for custom two.
+
+-- cd.colors: \$inherited.colors.custom.three
+dark: $colors-data.custom.three.dark
+light: $colors-data.custom.three.light
+bgcolor: $colors-data.custom.three
+
+We use this color for custom three.
+
+-- cd.colors: \$inherited.colors.custom.four
+dark: $colors-data.custom.four.dark
+light: $colors-data.custom.four.light
+bgcolor: $colors-data.custom.four
+
+We use this color for custom four.
+
+-- cd.colors: \$inherited.colors.custom.five
+dark: $colors-data.custom.five.dark
+light: $colors-data.custom.five.light
+bgcolor: $colors-data.custom.five
+
+We use this color for custom five.
+
+-- cd.colors: \$inherited.colors.custom.six
+dark: $colors-data.custom.six.dark
+light: $colors-data.custom.six.light
+bgcolor: $colors-data.custom.six
+
+We use this color for custom six.
+
+-- cd.colors: \$inherited.colors.custom.seven
+dark: $colors-data.custom.seven.dark
+light: $colors-data.custom.seven.light
+bgcolor: $colors-data.custom.seven
+
+We use this color for custom seven.
+
+-- cd.colors: \$inherited.colors.custom.eight
+dark: $colors-data.custom.eight.dark
+light: $colors-data.custom.eight.light
+bgcolor: $colors-data.custom.eight
+
+We use this color for custom eight.
+
+-- cd.colors: \$inherited.colors.custom.nine
+dark: $colors-data.custom.nine.dark
+light: $colors-data.custom.nine.light
+bgcolor: $colors-data.custom.nine
+
+We use this color for custom nine.
+
+-- cd.colors: \$inherited.colors.custom.ten
+dark: $colors-data.custom.ten.dark
+light: $colors-data.custom.ten.light
+bgcolor: $colors-data.custom.ten
+
+We use this color for custom ten.
+
+-- end: custom-colors

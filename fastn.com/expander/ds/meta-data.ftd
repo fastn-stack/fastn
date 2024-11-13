@@ -1,0 +1,310 @@
+-- import: fastn/processors as pr
+-- import: fastn.com/expander/lib
+
+-- ds.page:
+
+-- show-md:
+
+-- end: ds.page
+
+-- component show-md:
+
+-- ftd.column:
+spacing.fixed.em: 0.8
+width: fill-container
+
+
+	-- ds.h0: Add meta-data to `doc-site`
+	
+	/-- ds.page: Add meta-data to `doc-site`
+	
+	-- ds.markdown:
+	if: { !show-planning }
+	
+	In this video we will see how to implement SEO features to improve a website's
+	visibility.
+	
+	-- lib.video-audience: How to add meta-data for better website optimization
+	if: { show-planning }
+	owner: Ajit
+	aud: Website Builders
+	
+	Helps learners to optimize their websites
+	
+	
+	
+	-- ds.youtube:
+	if: { !show-planning }
+	v: 72N7f9on8iw
+	
+	
+	-- ds.h1: Introduction
+	if: { show-planning }
+	
+	Welcome!! My name is Ajit
+	
+	In this video, we will see how to implement SEO features to improve a website's
+	visibility.
+	
+	Before that, we will briefly learn,
+	- what is SEO
+	- why it's important for website creators
+	- along with its benefits, and
+	- how to use it to optimize your website
+	
+	-- ds.h1: What is SEO
+	
+	`SEO` is the practice of improving a website's visibility and ranking in search
+	engine results pages.
+	
+	It involves optimizing various aspects of a website to make it more appealing
+	to search engines and users.
+	
+	-- ds.h1: Benefits of SEO
+	if: { show-planning }
+	
+	1. SEO helps improve your website’s visibility, hence leading to higher
+	organic i.e. non-paid traffic from search engines.
+	
+	2. SEO involves optimizing website elements that enhance user experience, such
+	as page speed, mobile-friendliness, and easy navigation
+	
+	3. Higher search engine rankings instill confidence and trust in users
+	
+	4. SEO is a long-term strategy that yields sustainable results without
+	requiring continuous investment in paid advertising.
+	
+	-- ds.h1: Benefits of SEO
+	if: { !show-planning }
+	
+	SEO encompasses a range of techniques that helps in the following ways:
+	
+	- **Increased organic traffic**: SEO helps improve your website's visibility,
+	    leading to higher organic traffic from search engines.
+	
+	- **Better user experience**: SEO involves optimizing website elements that
+	    enhance user experience, such as page speed, mobile-friendliness, and easy
+	    navigation.
+	
+	- **Enhanced credibility and trust**: Higher search engine rankings instill
+	    confidence and trust in users, as they often perceive top-ranked websites
+	    as more reputable.
+	
+	- **Cost-effective**: SEO is a long-term strategy that yields sustainable
+	    results without requiring continuous investment in paid advertising.
+	
+	-- ds.markdown:
+	if: { show-planning }
+	
+	To read about SEO in detail, you can check out the blog. The URL is shared in
+	description
+	
+	
+	-- ds.h1: SEO through the `page` component of `doc-site`
+	$on-global-key[alt-p]$: $ftd.toggle($a = $show-planning)
+	
+	We can do SEO in the `doc-site`, by giving some properties to the `page`
+	component.
+	
+	The three properties are:
+	
+	- document-title
+	- document-description
+	- document-image
+	
+	-- ds.h2: How to customize document title
+	
+	Before we modify the document title by using the first property, we will see
+	that by default, the `page` component's title, becomes the document title.
+	
+	-- ds.markdown:
+	if: { show-planning }
+	
+	So the title of the component page is this.
+	
+	-- ds.markdown:
+	
+	So in the browser, the document title will be the same.
+	
+	-- ds.markdown:
+	if: { show-planning }
+	
+	As you can see, the document title is by default is same as the title of the
+	page component.
+	
+	If we inspect, the `header` of the `html` code, we can see the title by
+	default takes the page title.
+	
+	
+	
+	
+	-- ds.code: document title same as page title
+	lang: ftd
+	
+	\-- ds.page: This is page title
+	
+	-- ftd.image:
+	src: $fastn-assets.files.expander.ds.img.basic-title.png
+	border-width.px: 2
+	width: fill-container
+	border-color: $inherited.colors.border
+	
+	-- ds.markdown:
+	
+	When we add the `document-title` property, the page title can have custom
+	title, which is better for SEO.
+	
+	The custom title given in this property is added as the meta-data into the
+	tags `og-title` and `twitter-title` as well as the `<title>` tag.
+	
+	-- ds.code: custom document title
+	lang: ftd
+	
+	\-- ds.page: This is page title
+	document-title: Welcome!	 		;; <hl>
+	
+	
+	-- ds.markdown:
+	
+	**Output:**
+	
+	-- ftd.image:
+	src: $fastn-assets.files.expander.ds.img.customized-title.png
+	border-width.px: 2
+	width: fill-container
+	border-color: $inherited.colors.border
+	
+	-- ds.markdown:
+	
+	And if you notice, there is no meta-data for description or image.
+	
+	-- ds.h2: How to add page description
+	
+	Therefore, `title` is one way to do SEO. Now we will add the second property
+	`document-description` and give a short and eye-catching description then this
+	description will be added as meta-data in the tags called `og-description` as
+	well `twitter-description`, and in the `description` tag.
+	
+	-- ds.markdown:
+	if: { show-planning }
+	
+	Let's verify the same by refreshing the browser.
+	
+	
+	-- ds.code: to give a social media description
+	lang: ftd
+	
+	\-- ds.page: This is page title
+	document-title: Welcome!
+	document-description: Learn how to do SEO!	 		;;<hl>
+	
+	-- ds.markdown:
+	
+	**Output:**
+	
+	-- ftd.image:
+	src: $fastn-assets.files.expander.ds.img.description.png
+	border-width.px: 2
+	width: fill-container
+	border-color: $inherited.colors.border
+	
+	
+	-- ds.h2: How to add page document-image
+	
+	Similarly, we can give a specific image that we want the users to see when
+	the URL is shared on social media platforms.
+	
+	For the same, in the `page` component of the doc-site, we add another property
+	called `document-image`.
+	
+	The image provided to this property will be added as the meta-data.
+	
+	You can give any link of an image.
+	
+	Or, if you want to add the image which is in your package, then in that case,
+	give the `https://<package-name>/path to the image with extension`.
+	
+	So it goes like this:
+	
+	-- ds.code: to give a social media image
+	lang: ftd
+	
+	\-- ds.page: This is page title
+	document-title: Welcome!
+	document-description: Learn how to do SEO!
+	document-image: https://gargajit.github.io/optimization/images/seo-meta.png 			;;<hl>
+	
+	
+	-- ds.markdown:
+	
+	**Output:**
+	
+	-- ftd.image:
+	src: $fastn-assets.files.expander.ds.img.og-image.png
+	border-width.px: 2
+	width: fill-container
+	border-color: $inherited.colors.border
+	
+	
+	-- ds.markdown:
+	
+	Now, if we publish this package and share the URL on social media it will take
+	the custom title, description, and image.
+	
+	
+	-- ds.h3: Example
+	
+	-- ds.markdown:
+	
+	**Discord**:
+	
+	-- ftd.image:
+	src: $fastn-assets.files.expander.ds.img.seo-post.png
+	border-width.px: 2
+	border-radius.px: 10
+	width: fill-container
+	border-color: $inherited.colors.border
+	
+	
+	-- ds.markdown:
+	
+	This way we have used the SEO technique and managed to make the URL noticeable
+	and meaningful and will also improve the ranking in the search results.
+	
+	-- ds.h1: Closing Remarks
+	if: { show-planning }
+	
+	Thank you guys, keep watching these videos to learn more about fastn. Checkout
+	the `fastn` website.
+	
+	Support us by clicking on this link and give us a star ⭐ on GitHub and join
+	our fastn community on Discord.
+	
+	
+	-- ds.markdown:
+	if: { !show-planning }
+	
+	Thank you guys, keep watching these videos to learn more about fastn.
+	
+	Support us by giving a star ⭐ on
+	[GitHub](https://github.com/fastn-stack/fastn/) and join our fastn community
+	on [Discord](/discord/).
+	
+	
+	-- ds.h1: Final Video
+	if: { show-planning }
+	
+	-- ds.youtube:
+	if: { show-planning }
+	v: 72N7f9on8iw
+	
+	/-- end: ds.page
+	
+-- end: ftd.column
+
+-- end: show-md
+
+
+-- boolean $show-planning: false
+$processor$: pr.get-data
+key: show-planning

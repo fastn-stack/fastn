@@ -1,0 +1,121 @@
+{
+  "files": {
+    "FASTN.ftd": {
+      "name": "FASTN.ftd",
+      "checksum": "F344BF9DE275D63840A73D53969DEC0E66B2E9BA11A67CB28362841F765D79B0",
+      "size": 312
+    },
+    "LICENSE": {
+      "name": "LICENSE",
+      "checksum": "5B8B83357C092AC57F28508D18CAB65E4965AAA3BA61226DE038719E022638C1",
+      "size": 1516
+    },
+    "README.md": {
+      "name": "README.md",
+      "checksum": "91EA481D1F0AF1A6C1455E3DE5C6DF06F46E6A4AA80B34FDD9155D32BB5D0AB2",
+      "size": 21
+    },
+    "docs.ftd": {
+      "name": "docs.ftd",
+      "checksum": "0BEC9480903C32A9F2CF2CE30356FA161DE45C2720FD32446B077321AF56AC00",
+      "size": 1381
+    },
+    "index.ftd": {
+      "name": "index.ftd",
+      "checksum": "6573DCDEB793F734CBFE2C46107936518C391B931F7ECD7207C7AADF767E0C44",
+      "size": 2749
+    },
+    "static/dark-mode-active-dark.png": {
+      "name": "static/dark-mode-active-dark.png",
+      "checksum": "FE2D80F52324E97E3E892A5ADD966DDCFE35645A948F2F10656D299026343D18",
+      "size": 722
+    },
+    "static/dark-mode-active.png": {
+      "name": "static/dark-mode-active.png",
+      "checksum": "FE2D80F52324E97E3E892A5ADD966DDCFE35645A948F2F10656D299026343D18",
+      "size": 722
+    },
+    "static/dark-mode-default-dark.png": {
+      "name": "static/dark-mode-default-dark.png",
+      "checksum": "6D849B59731312D4E54065A67510E561B42AD54394C0DE4390BC71E481D042C0",
+      "size": 640
+    },
+    "static/dark-mode-default.png": {
+      "name": "static/dark-mode-default.png",
+      "checksum": "6D849B59731312D4E54065A67510E561B42AD54394C0DE4390BC71E481D042C0",
+      "size": 640
+    },
+    "static/dms-dark-dark.png": {
+      "name": "static/dms-dark-dark.png",
+      "checksum": "443E6EA796207E5483B2792958C8D04D2305CF340256D8A802966A0DB352720F",
+      "size": 8222
+    },
+    "static/dms-dark.png": {
+      "name": "static/dms-dark.png",
+      "checksum": "443E6EA796207E5483B2792958C8D04D2305CF340256D8A802966A0DB352720F",
+      "size": 8222
+    },
+    "static/icon-polygon-down-dark.png": {
+      "name": "static/icon-polygon-down-dark.png",
+      "checksum": "388AD15A52273F4B4CD705A1EF678B2533138FB80F8E9EE7CDABCB5ED291A102",
+      "size": 210
+    },
+    "static/icon-polygon-down.png": {
+      "name": "static/icon-polygon-down.png",
+      "checksum": "388AD15A52273F4B4CD705A1EF678B2533138FB80F8E9EE7CDABCB5ED291A102",
+      "size": 210
+    },
+    "static/icon-polygon-up-dark.png": {
+      "name": "static/icon-polygon-up-dark.png",
+      "checksum": "41FEE1D9CF8F1FF0467C7AE2BDCAEFCD34386B266E4116DB90311FBE4FC7D06B",
+      "size": 231
+    },
+    "static/icon-polygon-up.png": {
+      "name": "static/icon-polygon-up.png",
+      "checksum": "41FEE1D9CF8F1FF0467C7AE2BDCAEFCD34386B266E4116DB90311FBE4FC7D06B",
+      "size": 231
+    },
+    "static/light-mode-active-dark.png": {
+      "name": "static/light-mode-active-dark.png",
+      "checksum": "347CDD85FC67F923933709759E1DF89003AC83F98E3057C84B3D21365F46D72A",
+      "size": 718
+    },
+    "static/light-mode-active.png": {
+      "name": "static/light-mode-active.png",
+      "checksum": "347CDD85FC67F923933709759E1DF89003AC83F98E3057C84B3D21365F46D72A",
+      "size": 718
+    },
+    "static/light-mode-detault-dark.png": {
+      "name": "static/light-mode-detault-dark.png",
+      "checksum": "E0F1E317B0B0E729F4BA719A4D6B5E48083D431719ED0108E3702B44CC53C2A2",
+      "size": 673
+    },
+    "static/light-mode-detault.png": {
+      "name": "static/light-mode-detault.png",
+      "checksum": "E0F1E317B0B0E729F4BA719A4D6B5E48083D431719ED0108E3702B44CC53C2A2",
+      "size": 673
+    },
+    "static/system-mode-active-dark.png": {
+      "name": "static/system-mode-active-dark.png",
+      "checksum": "E4472336A0DA55B7F25F9D80B16FDBC0A32D59E4A2C35EA016BA01F872311710",
+      "size": 423
+    },
+    "static/system-mode-active.png": {
+      "name": "static/system-mode-active.png",
+      "checksum": "E4472336A0DA55B7F25F9D80B16FDBC0A32D59E4A2C35EA016BA01F872311710",
+      "size": 423
+    },
+    "static/system-mode-default-dark.png": {
+      "name": "static/system-mode-default-dark.png",
+      "checksum": "3DF9BDCAB7D243F547E1687B624700F7B79BD7CBB9CD5349E7F284C018CB574A",
+      "size": 402
+    },
+    "static/system-mode-default.png": {
+      "name": "static/system-mode-default.png",
+      "checksum": "3DF9BDCAB7D243F547E1687B624700F7B79BD7CBB9CD5349E7F284C018CB574A",
+      "size": 402
+    }
+  },
+  "zip_url": "https://github.com/FifthTry/dark-mode-switcher/archive/83de1bedb92106035f01d8a7cff346f958193b49.zip",
+  "checksum": "36CA2F201DC43C209D063480A23325B5C8C3E0BB897CCA67B6A9C38A16E8B9B5"
+}

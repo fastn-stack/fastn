@@ -1,0 +1,123 @@
+-- import: fastn-community.github.io/spectrum-ds/common
+-- import: fastn.com/featured as ft-ui
+
+-- ds.user-info: Muskan Verma
+avatar: $fastn-assets.files.images.u.muskan-verma.jpg
+social-links: $social-links
+profile: Designer
+
+-- ds.user-info.works:
+
+	-- ft-ui.grid-view: Documentation Sites
+	templates: $doc-sites
+	show-large: true
+	
+	-- ft-ui.grid-view: Color Schemes
+	templates: $schemes
+	show-large: true
+	
+-- end: ds.user-info.works
+
+-- end: ds.user-info
+
+
+
+
+
+
+
+
+
+
+-- common.owner info: Muskan Verma
+profile: /u/muskan-verma/
+avatar: $fastn-assets.files.images.u.muskan-verma.jpg
+role: Designer
+
+
+
+
+
+-- common.social-media list social-links:
+
+-- common.social-media:
+link: https://discord.gg/Muskaan#9098
+src: $fastn-assets.files.images.discord.svg
+hover-src: $fastn-assets.files.images.discord-hover.svg
+
+/-- common.social-media:
+link: https://twitter.com/fastn_stack
+src: $fastn-assets.files.images.github-grey.svg
+hover-src: $fastn-assets.files.images.github-grey-hover.svg
+
+/-- common.social-media:
+link: https://twitter.com/fastn_stack
+src: $fastn-assets.files.images.twitter.svg
+hover-src: $fastn-assets.files.images.twitter-hover.svg
+
+-- common.social-media:
+link: https://www.linkedin.com/in/muskaan-verma-6aba71179/
+src: $fastn-assets.files.images.linkedin.svg
+hover-src: $fastn-assets.files.images.linkedin-hover.svg
+
+-- end: social-links
+
+
+
+
+-- ft-ui.template list doc-sites:
+
+-- ft-ui.template: Simple Site
+template-url: featured/ds/doc-site/
+screenshot: $fastn-assets.files.images.featured.doc-site.jpg
+
+-- ft-ui.template: Midnight Rush
+template-url: featured/ds/mr-ds/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
+
+-- ft-ui.template: Midnight Storm
+template-url: featured/ds/midnight-storm/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
+
+-- ft-ui.template: Misty Gray
+template-url: featured/ds/misty-gray/
+screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
+
+-- end: doc-sites
+
+
+-- ft-ui.template list schemes:
+
+-- ft-ui.template: Blog Template CS
+template-url: featured/cs/blog-template-cs/
+screenshot: $fastn-assets.files.images.featured.cs.blog-template-cs.png
+
+-- ft-ui.template: Blue Heal CS
+template-url: featured/cs/blue-heal-cs/
+screenshot: $fastn-assets.files.images.featured.cs.blue-heal-cs.png
+
+-- ft-ui.template: Dark Flame CS
+template-url: featured/cs/dark-flame-cs/
+screenshot: $fastn-assets.files.images.featured.cs.dark-flame-cs.png
+
+-- ft-ui.template: Midnight Storm CS
+template-url: featured/cs/midnight-storm-cs/
+screenshot: $fastn-assets.files.images.featured.cs.midnight-storm-cs.png
+
+-- ft-ui.template: Misty Gray CS
+template-url: featured/cs/misty-gray-cs/
+screenshot: $fastn-assets.files.images.featured.cs.misty-gray-cs.png
+
+-- ft-ui.template: Navy Nebula CS
+template-url: featured/cs/navy-nebula-cs/
+screenshot: $fastn-assets.files.images.featured.cs.navy-nebula-cs.png
+
+-- ft-ui.template: Pretty CS
+template-url: featured/cs/pretty-cs/
+screenshot: $fastn-assets.files.images.featured.cs.pretty-cs.png
+
+-- ft-ui.template: Saturated Sunset CS
+template-url: featured/cs/saturated-sunset-cs/
+screenshot: $fastn-assets.files.images.featured.cs.saturated-sunset-cs.png
+
+-- end: schemes

@@ -1,0 +1,74 @@
+-- import: fastn
+-- import: fifthtry.github.io/typography as tf
+-- import: fifthtry.github.io/package-doc/doc as pd
+-- import: fifthtry.github.io/package-doc/code-block as cb
+-- import: fifthtry.github.io/admonitions as cbox
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 20
+padding-horizontal.px: 20
+padding-vertical.px: 20
+background.solid: $inherited.colors.background.base
+
+-- ftd.column:
+width.fixed.px: 770
+spacing.fixed.px: 20
+align-self: center
+
+-- cbox.note: Noteworthy Heading
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+-- cbox.warning: Caution Heading
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+-- cbox.tip: Tip Heading
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+-- cbox.danger: Danger Heading
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+-- cbox.info: Info Heading
+
+Of all the things possible, this is what you came up with? I am disappointed in
+your lack of ingenuity.
+
+-- cbox.tip: Security Warning
+emoji: ⚙️
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+your lack of ingenui
+
+-- cbox.tip: Security Warning
+emoji: 🔑
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
+
+-- cb.code: Example code:
+lang: ftd
+
+\-- cbox.danger: You can nest stuff too!
+emoji: ⚡
+
+-- cbox.danger: You can nest stuff too!
+emoji: ⚡
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+
+-- tf.h3: This is heading
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+nostrud exercitation
+
+-- end: ftd.column
+
+-- end: ftd.column

@@ -1,0 +1,68 @@
+-- import: fastn.com/featured as ft-ui
+
+-- ds.page:
+sidebar: false
+
+-- ft-ui.grid-view: Simple Quotes
+templates: $simple-quotes
+more-link-text: View more
+more-link: /quotes/simple/
+
+-- ft-ui.grid-view: Quotes with author icon
+templates: $author-icon-quotes
+more-link-text: View more
+more-link: /quotes/quotes-with-author/
+
+-- ft-ui.grid-view: Quotes with images
+templates: $quotes-with-images
+more-link-text: View more
+more-link: /quotes/quotes-with-images/
+
+-- end: ds.page
+
+
+
+
+
+-- ft-ui.template list simple-quotes:
+
+-- ft-ui.template: Marengo
+template-url: /quotes/marengo/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-5.png
+
+-- ft-ui.template: Chrome
+template-url: /quotes/chrome/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-6.png
+
+-- ft-ui.template: Dorian
+template-url: /quotes/dorian/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-7.png
+
+-- end: simple-quotes
+
+
+
+
+
+
+-- ft-ui.template list author-icon-quotes:
+
+-- ft-ui.template: Charcoal
+template-url: /quotes/charcoal/
+screenshot: $fastn-assets.files.images.featured.components.quotes.author-icon-quotes.demo-1.png
+
+
+-- end: author-icon-quotes
+
+
+
+
+
+
+-- ft-ui.template list quotes-with-images:
+
+-- ft-ui.template: Electric
+template-url: /quotes/electric/
+screenshot: $fastn-assets.files.images.featured.components.quotes.quotes-with-images.demo-1.png
+
+-- end: quotes-with-images

@@ -1,0 +1,40 @@
+-- import: fastn.com/utils
+
+-- ds.page: Device component best practices
+
+-- utils.code-display: `dont-use-device-condition`: Don't use device condition to show or hide the component
+id: dont-use-device-condition
+
+It is strongly advised to utilize the [`ftd.desktop`](/desktop/) and
+[`ftd.mobile`](/mobile/) components in order to display components on desktop
+and mobile devices, respectively. This is because `fastn` performs optimization
+techniques, including decreasing the size of the created component tree,
+generating optimized code that renders quickly, and reducing the component's
+dependencies.
+
+Additionally, it handles the variant of properties, such as
+`ftd.responsive-type` and `ftd.length.responsive`, that are specified for the
+corresponding devices.
+
+
+
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	\-- desktop-page:
+	if: { ftd.device == "desktop" } ;; <hl>
+	
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	\-- ftd.desktop:
+	
+	\-- desktop-page:
+	
+	\-- end: ftd.desktop
+	
+-- end: utils.code-display
+
+
+-- end: ds.page

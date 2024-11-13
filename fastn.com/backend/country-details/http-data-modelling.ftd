@@ -1,0 +1,307 @@
+-- import: fifthtry.github.io/admonitions as cbox
+
+-- ds.page: Basics of `http` processor and `data modelling` 🚧
+
+-- ds.youtube:
+v: FWiDPlq85VA
+
+-- ds.markdown:
+
+In this part, we will delve into concepts like `http` processor and `data
+modelling` using a simple example.
+
+We have created an array of records for group of countries. Each record has two
+key attributes: **name** and **capital**, in the form of JSON data.
+
+-- ds.markdown: The JSON data looks like this:
+
+-- ds.code:
+lang: json
+copy: false
+
+[
+  {
+    "name": "India",
+    "capital": "New Delhi"
+  },
+  {
+    "name": "Sri Lanka",
+    "capital": "Sri Jayawardenepura Kotte"
+  },
+  {
+    "name": "Nepal",
+    "capital": "Kathmandu"
+  },
+  {
+    "name": "Bangladesh",
+    "capital": "Dhaka"
+  },
+  {
+    "name": "Indonesia",
+    "capital": "Jakarta"
+  },
+  {
+    "name": "Maldives",
+    "capital": "Malé"
+  }
+]
+
+-- ftd.text: Click to see the JSON data in browser
+link: https://famous-loincloth-ox.cyclic.app/
+open-in-new-tab: true
+
+-- ds.markdown:
+
+We will call this data through `http processor`, save the data as a `record` by
+using `for loop` and display it in a tabular form.
+
+-- ds.image:
+src: $fastn-assets.files.images.backend.sketch.svg
+
+By the end of this part, you will have gained insights into how using `fastn`,
+REST APIs can seamlessly connect the backend with the frontend.
+
+The first step is to create a `fastn package`.
+
+-- cbox.info: What is `fastn` package?
+
+`fastn` package is a folder that requires at least two files
+
+- FASTN.ftd
+- index.ftd
+
+-- ds.h2: http processor
+
+`http` processor does the network communication using REST API and fetches data
+from the external site in a different domain.
+
+The syntax of using `http` processor is as follows:
+
+-- ds.code:
+
+\-- import: fastn/processors as pr  ;; <hl>
+
+\-- record r:
+\$processor$: pr.http   ;; <hl>
+
+
+-- ds.h2: Data modelling: `record`
+
+For this example, we will use `record` feature of `fastn`'s. `record` can be
+used to create a user defined data type.
+
+Here we are creating a new record called `country-data`.
+
+-- ds.code: Declaring the `country-record`
+
+\-- record country-data:
+string name:
+string capital:
+
+-- ds.h2: Start building
+
+Let's implement the theory and build the project.
+
+-- ds.h3: **Step 1:** Import `fastn/processors`
+
+Copy the import line and paste it at the top of the `index.ftd` document
+
+-- ds.code: Import Processors
+
+\-- import: fastn/processors as pr
+
+
+-- ds.h3: **Step 2:** Declare a `record`
+
+Before a record can be used it must be declared.
+
+
+-- ds.code: Declaring `country-data` record
+
+\-- record country-data:
+string name:
+string capital:
+
+
+-- ds.h3: **Step 3:** Create a list
+
+Since the JSON data has a list of countries and their respective capitals,
+therefore, we will create a list and use the `country-data` record as the type.
+
+-- ds.code: `countries` is a `list` of `country-data`
+
+\-- country-data list countries:
+
+
+-- ds.markdown:
+
+`$processor$: pr.http` will initialise `countries` with the data returned
+by the `url`.
+
+-- ds.code:
+
+\-- country-data list countries:
+$processor$: pr.http
+url: https://famous-loincloth-ox.cyclic.app/
+
+
+
+
+
+-- ds.h3: **Step 4:** Data is ready, lets show it in the UI
+
+Now that we have download the data from the `url` and stored it in `countries`,
+we want to show it to user. To do that let's create a component called
+`country-detail`.
+
+
+-- ds.code: Create component `country-detail`
+
+\-- component country-detail:
+
+
+\-- end: country-detail
+
+
+-- ds.markdown:
+
+This component will have a property `country`. We will mark it as `caption` to
+make easy for users of this component.
+
+-- ds.code:
+
+\-- component country-detail:
+caption country-data country:  ;; <hl>
+
+\-- end: country-detail
+
+-- ds.markdown:
+
+Let's show the country name.
+
+-- ds.code:
+
+\-- component country-detail:
+caption country-data country:
+
+\-- ftd.text: $country-detail.country.name  ;; <hl>
+
+\-- end: country-detail
+
+
+
+
+-- ds.markdown:
+
+Till now, we have just defined the component but to display the list of country
+names we need call the component. Therefore, after closing the component we
+can call the component and use a `for` loop.
+
+
+-- ds.code:
+
+\-- country-detail: $country
+for: $country in $countries
+
+-- ds.markdown:
+
+Now wrap the two texts for country name and capital in `row` container
+
+-- ds.code:
+
+\-- ftd.row:
+width.fixed.percent: 20
+
+\-- ftd.text: $country-detail.country.name
+
+\-- ftd.text: $country-detail.country.capital
+
+\-- end: ftd.row
+
+-- ds.markdown:
+
+So you have successfully fetched and displayed the values of JSON data from the
+external website using the `http` processor and one of the data modelling type,
+`record`.
+
+-- ds.h3: Improved UI
+
+You can use various `fastn` properties to improve the UI to display the data,
+let's say in the form of a table.
+
+-- ds.code: properties added
+
+\-- import: fastn/processors as pr
+
+\-- ftd.column:
+width: fill-container
+padding.px: 40
+align-content: center
+
+\-- ftd.row:
+width.fixed.percent: 30
+
+\-- ftd.text: Country
+role: $inherited.types.copy-regular
+style: bold
+border-bottom-width.px: 1
+width.fixed.percent: 40
+border-width.px: 1
+border-style-horizontal: dashed
+padding-left.px: 10
+background.solid: $inherited.colors.background.base
+
+\-- ftd.text: Capital
+role: $inherited.types.copy-regular
+style: bold
+padding-left.px: 10
+border-bottom-width.px: 1
+width.fixed.percent: 40
+border-width.px: 1
+border-style-horizontal: dashed
+background.solid: $inherited.colors.background.base
+
+\-- end: ftd.row
+
+
+\-- country-detail: $country
+for: $country in $countries
+
+\-- end: ftd.column
+
+\-- record country-data:
+string name:
+string capital:
+
+\-- country-data list countries:
+$processor$: pr.http
+url: https://famous-loincloth-ox.cyclic.app/
+
+\-- component country-detail:
+caption country-data country:
+
+
+\-- ftd.row:
+width.fixed.percent: 30
+
+\-- ftd.text: $country-detail.country.name
+role: $inherited.types.copy-regular
+width.fixed.percent: 40
+border-width.px: 1
+border-style-horizontal: dashed
+padding-left.px: 10
+
+\-- ftd.text: $country-detail.country.capital
+role: $inherited.types.copy-regular
+padding-left.px: 10
+width.fixed.percent: 40
+border-width.px: 1
+border-style-horizontal: dashed
+
+\-- end: ftd.row
+
+\-- end: country-detail
+
+
+
+-- end: ds.page

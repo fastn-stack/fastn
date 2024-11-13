@@ -1,0 +1,264 @@
+-- ds.page: Functions
+
+`fastn` supports functions which users can create to execute their own logic
+in their `fastn` documents. It also provides various
+[`built-in-functions`](/built-in-functions/)
+which users can use anywhere in their `fastn` document.
+
+
+-- ds.h1: How to create functions?
+
+To create a function, you need to follow the function declaration syntax which
+is as follows:
+
+-- ds.code: Function Declaration syntax
+lang: ftd
+
+\-- <return-type> <function-name>(<arg-1-name>, <arg-2-name>, ...):
+<arg-1-type> <arg-1-name>: <optional-default-value>
+<arg-2-type> <arg-2-name>: <optional-default-value>
+...
+
+<function-body>
+
+-- ds.markdown:
+
+Using the above declaration syntax, a simple `add()` function
+is defined below which takes two integer as arguments
+and returns the added value.
+
+-- ds.code: Sample `add()` function
+lang: ftd
+
+\-- integer add(a, b):
+integer a:
+integer b:
+
+a + b
+
+-- ds.h1: How to use your functions ?
+
+Once functions have been defined, you can use these functions by invoking it
+by using `$`.
+
+-- ds.rendered: Sample code using add() function
+
+	-- ds.rendered.input:
+	
+	\-- integer add(a, b):
+	integer a:
+	integer b:
+	
+	a + b
+	
+	\-- ftd.column:
+	spacing.fixed.px: 10
+	color: $inherited.colors.text
+	
+	\-- ftd.text: Adding 35 and 83
+	
+	\-- ftd.integer: $add(a=35, b=83) ;; <hl>
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- add-function-sample:
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+
+-- ds.h1: Some frequently used functions
+
+Below mentioned are some of the most frequently used functions which can be
+created as per the requirement and are not part of `fastn`.
+
+-- ds.h2: Clamp
+
+Clamp functions are used to limit your given value between certain range.
+
+-- ds.h3: Regular Clamp
+
+This function will clamp the value between 0 and `max`.
+
+Value will range from `[0,max]` given `max > 0`.
+
+-- ds.rendered: Sample code using `regular-clamp()`
+
+	-- ds.rendered.input:
+	
+	\-- integer $num: 0
+	
+	\-- display-integer: $num
+	$on-click$: $regular-clamp($a = $num, by = 1, max = 6)  ;; <hl>
+	
+	\-- void regular-clamp(a,by,max): ;; <hl>
+	integer $a: ;; <hl>
+	integer by: ;; <hl>
+	integer max: ;; <hl>
+	\;; <hl>
+	a = (a + by) % (max + 1) ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- regular-clamp-sample:
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h3: Clamp with min and max
+
+This function will clamp the value between `min` and `max`.
+
+Value will range from `[min,max]` given `max > min`.
+
+-- ds.rendered: Sample code using `clamp_with_limits()`
+
+	-- ds.rendered.input:
+	
+	\-- integer $n: 1
+	
+	\-- display-integer: $n
+	$on-click$: $clamp_with_limits($a = $n, by = 1, min = 1, max = 6) ;; <hl>
+	
+	\-- void clamp_with_limits(a,by,min,max):  ;; <hl>
+	integer $a:  ;; <hl>
+	integer by: 1  ;; <hl>
+	integer min: 0  ;; <hl>
+	integer max: 5  ;; <hl>
+	\;; <hl>
+	a = (((a - min) + by) % (max + 1 - min)) + min  ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- clamp-with-limits-sample:
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+-- end: ds.page
+
+
+-- integer $num: 0
+
+-- integer $n: 1
+
+
+-- integer add(a,b):
+integer a:
+integer b:
+
+a + b
+
+
+
+-- void regular-clamp(a,by,max):
+integer $a:
+integer by:
+integer max:
+
+a = (a + by) % (max + 1)
+
+
+
+
+-- void clamp_with_limits(a,by,min,max):
+integer $a:
+integer by: 1
+integer min: 0
+integer max: 5
+
+a = (((a - min) + by) % (max + 1 - min)) + min
+
+
+-- ftd.color red-yellow:
+light: red
+dark: yellow
+
+-- component display-integer:
+caption integer value:
+
+-- ftd.integer: $display-integer.value
+color: $inherited.colors.text
+border-color: $red-yellow
+border-width.px: 2
+padding.px: 10
+
+-- end: display-integer
+
+
+
+
+
+
+-- component add-function-sample:
+
+-- ftd.column:
+spacing.fixed.px: 10
+color: $inherited.colors.text
+
+	-- ftd.text: Adding 35 and 83
+	
+	-- ftd.integer: $add(a=35, b=83)
+	
+-- end: ftd.column
+
+-- end: add-function-sample
+
+
+
+
+
+
+
+
+-- component regular-clamp-sample:
+
+-- display-integer: $num
+$on-click$: $regular-clamp($a = $num, by = 1, max = 6)
+
+-- end: regular-clamp-sample
+
+
+
+
+
+
+
+
+
+-- component clamp-with-limits-sample:
+
+-- display-integer: $n
+$on-click$: $clamp_with_limits($a = $n, by = 1, min = 1, max = 6)
+
+-- end: clamp-with-limits-sample

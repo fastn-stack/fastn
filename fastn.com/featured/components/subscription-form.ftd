@@ -1,0 +1,90 @@
+-- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn-community.github.io/spectrum-ds/common
+-- import: fastn.com/content-library as footer
+-- import: fastn-community.github.io/dark-flame-cs
+-- import: fifthtry.github.io/fastn-typography as typo
+-- import: fastn.com/featured as ft-ui
+-- import: fastn.com/assets
+
+
+-- boolean show-grid: true
+-- boolean show-list: false
+
+
+
+
+-- ds.page:
+show-footer: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-name: NULL
+logo-height: 38
+logo-width: 120
+colors: $dark-flame-cs.main
+types: $typo.types
+github-icon: true
+github-url: https://github.com/fastn-stack/fastn
+full-width: true
+distribution-bar: true
+full-width-bar: true
+fluid-width: false
+max-width.fixed.px: 1340
+
+-- ds.page.footer:
+
+	-- footer.footer:
+	site-logo: $fastn-assets.files.images.fastn.svg
+	site-url: /
+	social-links: $footer.social-links
+	copyright: Copyright © 2023 - fastn.com
+	full-width: false
+	max-width.fixed.px: 1340
+	
+-- end: ds.page.footer
+-- ds.page.layout-bar:
+
+	-- ds.layout: Subscription Form
+	previous-url: featured/components-library/
+	github-url: https://github.com/FifthTry/subscription-app
+	
+-- end: ds.page.layout-bar
+
+
+-- ds.preview-card:
+image: $fastn-assets.files.images.featured.components.subscription-form.png
+cta-url: https://fifthtry.github.io/subscription-app/
+cta-text: Demo
+width.fixed.px if { ftd.device == "desktop" }: 400
+
+-- ft-ui.grid-view: Featured from Components Library
+if: { show-grid }
+templates: $components
+more-link-text: View more
+more-link: /featured/components/
+
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list components:
+
+-- ft-ui.template: Gradient Business Card
+template-url: featured/components/business-cards/gradient-card/
+screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-front.jpg
+
+-- ft-ui.template: Modal Cover
+template-url: featured/components/modals/modal-cover/
+screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
+
+-- ft-ui.template: Pattern Business Card
+template-url: featured/components/business-cards/pattern-card/
+screenshot: $fastn-assets.files.images.featured.business-cards.pattern-business-card-front.jpg
+
+-- end: components

@@ -1,0 +1,147 @@
+-- ds.page: How to create `font` package
+
+Follow below instructions:
+
+-- ds.h2: Prerequisites:
+
+- Install Python
+
+- Also, if you do not have pip installed, follow the reference URL to install:
+  https://packaging.python.org/en/latest/tutorials/installing-packages/
+
+-- ds.h2: Steps:
+
+- Clone [google-font-to-fastn](https://github.com/FifthTry/google-font-to-fastn) repository into your local machine.
+
+-- ds.image:
+src: $fastn-assets.files.images.create-font.google-font-to-fastn-repo.png
+
+-- ds.markdown:
+
+- Open the cloned repo through a text editor (eg Sublime Text)
+
+- Explore the Google fonts and choose the font you want to create in fastn
+  (eg: lato)
+
+-- ds.image:
+src: $fastn-assets.files.images.create-font.google-font-lato.png
+
+-- ds.markdown:
+
+- Select all the styles of the font that you want to have in your font package.
+
+-- ds.image:
+src: $fastn-assets.files.images.create-font.selected-lato-styles.png
+
+-- ds.markdown:
+
+- Copy the URL, as given in below image example.
+
+-- ds.image:
+src: $fastn-assets.files.images.create-font.copy-lato-url.png
+alignment: left
+
+-- ds.markdown:
+
+- Paste the URL in the new tab and copy the content of the entire page.
+
+-- ds.image:
+src: $fastn-assets.files.images.create-font.display-content.png
+
+-- ds.markdown:
+
+- In the cloned google-font-to-fastn repo, open the font.txt file and replace
+  the content of this file with the copied content
+
+-- ds.image:
+src: $fastn-assets.files.images.create-font.font-txt.png
+
+-- ds.markdown:
+
+- Use the [font-template](https://github.com/fastn-stack/font-template) to create the font repository
+
+-- ds.image:
+src: $fastn-assets.files.images.create-font.font-template.png
+
+-- ds.tip:
+
+Naming convention: Use the google-font name (eg: Lato) and append it
+with -font. (eg: lato-font, make sure the name is in lowercase)
+
+-- ds.markdown:
+
+- Copy the the font repository package name from the FASTN.ftd file
+
+-- ds.image:
+src: $fastn-assets.files.images.create-font.package-name-in-FASTN.png
+
+-- ds.markdown:
+
+- In the cloned google-font-to-fastn repo, open the read_google_font.py file
+
+- Search for package_name variable and change the value with your font
+  repository package name. Also, search for repo variable and change the value
+  with the alias name (eg: lato-font)
+
+- Open the terminal and navigate to the directory of the cloned
+  google-font-to-fastn repo
+
+- Run the python request command.
+
+-- ds.code:
+lang: python
+
+python3 -m pip install requests
+
+-- ds.tip:
+
+If the python version is above 3 then this command will work, else you can
+use python -m pip install requests
+
+-- ds.markdown:
+
+Once the installation is successful, run the read_google_font.py script:
+
+-- ds.code:
+lang: python
+
+python3 read_google_font.py
+
+-- ds.markdown:
+
+- (This script will generate FASTN.ftd and static folder in the google-font-to-fastn repository)
+
+- Open the FASTN.ftd file and copy the all --fastn.font sections.
+
+-- ds.image:
+src: $fastn-assets.files.images.create-font.copy-fastn-font.png
+
+-- ds.markdown:
+
+- Now, open the FASTN.ftd of the font repository you created using the
+  font-template
+
+- Paste the copied --fastn.font sections there and Commit the changes
+
+- Now, open the custom.ftd file and replace with the selected font name
+  (eg: Lato)
+
+- Copy the static folder that was created in the google-font-to-fastn repository
+  when you executed the command and paste it in your repository
+
+- You have successfully created your custom font
+
+- Go to Settings>Pages and select gh-pages from the Build  and deployment
+  section.
+
+-- ds.image:
+src: $fastn-assets.files.images.create-font.lato-gf-pages.png
+
+-- ds.markdown:
+
+- This will generate your live URL once the workflow Page Build and Deployment
+  executes successfully.
+
+- Open the URL and you will see the output.
+
+-- end: ds.page

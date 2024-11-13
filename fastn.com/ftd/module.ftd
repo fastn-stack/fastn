@@ -1,0 +1,91 @@
+-- ds.page: Module
+
+`fastn` allows users to effortlessly design and create `module-based` components.
+With this functionality, users can easily create components that
+rely on external module components for their definitions. This module feature
+offers enhanced flexibility and convenience, enabling users to craft
+dynamic and interconnected components easily.
+
+-- ds.h1: Syntax for module
+
+In order to incorporate a `module` within a component,
+there are a few steps to follow.
+
+- Firstly, during the component definition, you need to specify a module
+argument. This allows the component to interact with the desired module.
+- Once inside the component definition, you can access the components or
+variables from the module by using their respective variable names.
+This grants you the ability to leverage the functionality and data
+provided by the module.
+
+-- ds.h3: Note
+
+When defining the module argument during the
+component definition, it's necessary to assign a `default module` value.
+This default value ensures that the component can still operate smoothly
+even if a specific module is not explicitly provided.
+
+-- ds.code: Format for using module
+
+\-- component module-component:
+module m: <some module>
+
+\;; Accessing module's component
+\-- module-component.m.<component-name>:
+...
+...
+
+\;; Accessing module's variable
+\-- some-component: $module-component.m.<variable-name>
+
+\-- end: module-component
+
+-- ds.h1: Sample usage
+
+Below is a sample code where a module-based page component is defined named
+`mod-page` which uses page component of the module. This `mod-page` component has
+a module argument `ds` which is used to access module components/variables. By
+default, this module `ds` has value `set-1` which refers to the
+`fastn-community.github.io/set-1-ds` package.
+
+
+-- ds.code: Using module
+
+\-- import: fastn-community.github.io/set-1-ds as set-1
+\-- import: fastn-community.github.io/set-2-ds as set-2
+
+\;; Using module-based page which uses set-1 components
+\-- mod-page: Set-1 ds
+\;; Change module by passing it through header
+/ds: set-2
+
+\-- ftd.text: This is page content
+color: $inherited.colors.text
+
+\-- end: mod-page
+
+
+\;; Module based page component (default module ds = set-1)
+\-- component mod-page:
+module ds: set-1
+caption title:
+string document-title: fastn set-1-ds Template. Build Your Own Website with Ease
+string document-description: Simple, easy-to-use set-1-ds template
+string document-image: https://fastn-community.github.io/set-1-ds/-/fastn-community.github.io/set-1-ds/static/set-1-ds-og-image.jpg
+string github-url: https://github.com/fastn-community/set-1-ds/
+children ui:
+
+\-- mod-page.ds.page: $mod-page.title
+document-title: $mod-page.document-title
+document-description: $mod-page.document-description
+document-image: $mod-page.document-image
+site-name: NULL
+github-url: $mod-page.github-url
+github-icon: true
+wrapper: $mod-page.ui
+
+\-- end: mod-page
+
+
+
+-- end: ds.page

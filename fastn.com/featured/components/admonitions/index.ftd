@@ -1,0 +1,45 @@
+-- import: fastn.com/u/ganesh-salunke
+-- import: fastn.com/u/meenu-kumari
+-- import: fastn.com/u/priyanka-yadav
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Admonitions
+featured-link: /featured/components/
+category: Font Typography
+image: $fastn-assets.files.images.featured.components.admonitions.png
+owners: [$priyanka-yadav.info, $ganesh-salunke.info, $meenu-kumari.info]
+license-url: https://github.com/FifthTry/admonitions/blob/main/LICENSE
+license: Creative Commons
+published-date: 01-Nov-2022
+cards: $components
+github-url: https://github.com/FifthTry/admonitions
+demo-link: https://fifthtry.github.io/admonitions
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list components:
+
+-- ft-ui.template: Gradient Business Card
+template-url: featured/components/business-cards/gradient-card/
+screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-front.jpg
+
+-- ft-ui.template: Modal Cover
+template-url: featured/components/modals/modal-cover/
+screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
+
+-- ft-ui.template: Pattern Business Card
+template-url: featured/components/business-cards/pattern-card/
+screenshot: $fastn-assets.files.images.featured.business-cards.pattern-business-card-front.jpg
+
+-- ft-ui.template: Modal 1
+template-url: featured/components/modals/modal-1/
+screenshot: $fastn-assets.files.images.featured.components.modal-1.png
+
+-- end: components

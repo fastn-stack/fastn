@@ -1,0 +1,73 @@
+-- import: fastn.com/featured as ft-ui
+
+-- ds.page:
+sidebar: false
+
+-- ft-ui.view-all: Documentation Sites
+templates: $doc-sites
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list doc-sites:
+
+-- ft-ui.template: Simple Site
+template-url: featured/ds/doc-site/
+screenshot: $fastn-assets.files.images.featured.doc-site.jpg
+
+-- ft-ui.template: Midnight Rush
+template-url: featured/ds/mr-ds/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
+
+-- ft-ui.template: Midnight Storm
+template-url: featured/ds/midnight-storm/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
+
+-- ft-ui.template: Misty Gray
+template-url: featured/ds/misty-gray/
+screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
+
+-- ft-ui.template: Dash Dash DS
+template-url: featured/ds/dash-dash-ds/
+screenshot: $fastn-assets.files.images.featured.doc-sites.dash-dash-ds.png
+wip: true
+
+-- ft-ui.template: API DS
+template-url: featured/ds/api-ds/
+screenshot: $fastn-assets.files.images.featured.doc-sites.api-ds.png
+wip: true
+
+-- ft-ui.template: Framework DS
+template-url: featured/ds/framework/
+screenshot: $fastn-assets.files.images.featured.doc-sites.ds-framework.png
+wip: true
+
+-- ft-ui.template: Blue Sapphire Template
+template-url: featured/ds/blue-sapphire-template/
+screenshot: $fastn-assets.files.images.featured.doc-sites.blue-sapphire-template.png
+wip: true
+
+-- ft-ui.template: Forest Template
+template-url: featured/ds/forest-template/
+screenshot: $fastn-assets.files.images.featured.doc-sites.forest-template.png
+wip: true
+
+-- ft-ui.template: Docusaurus Theme
+template-url: featured/ds/docusaurus-theme/
+screenshot: $fastn-assets.files.images.featured.doc-sites.docusaurus-theme.png
+wip: true
+
+-- ft-ui.template: Spider Book DS
+template-url: featured/ds/spider-book-ds/
+screenshot: $fastn-assets.files.images.featured.doc-sites.spider-book-ds.png
+wip: true
+
+-- end: doc-sites

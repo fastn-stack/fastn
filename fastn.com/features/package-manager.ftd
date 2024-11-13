@@ -1,0 +1,78 @@
+-- ds.page: `fastn`: Package Manager
+
+`ftd` is a ["programming language for prose"](/ftd/), and `fastn` is
+the package manager for `ftd`.
+
+-- ds.h1: FASTN.ftd
+
+To create a "fastn package", create a `FASTN.ftd` file in any folder. This marks
+a folder as `fastn` package:
+
+-- ds.code: `FASTN.ftd` marks a folder as `fastn` package
+lang: ftd
+
+\-- import: fastn
+
+\-- fastn.package: fastn.com
+download-base-url: https://raw.githubusercontent.com/fastn-stack/fastn.com/main
+
+-- ds.markdown:
+
+We have created a package named `fastn.com`. Packages in `fastn` are named after
+the domain where they would be published. **Every FASTN package is a website.**
+
+
+
+
+-- ds.h1: Dependencies
+
+`fastn` support package dependencies. To add a dependency, simply add this to
+the `FASTN.ftd` file:
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn
+
+\-- fastn.package: fastn.com
+download-base-url: https://raw.githubusercontent.com/fastn-stack/fastn.com/main
+
+\-- fastn.dependency: fifthtry.github.io/doc-site as ds
+
+-- ds.markdown:
+
+Here `fastn.com` has a dependency on
+[`fifthtry.github.io/doc-site`](https://fifthtry.github.io/doc-site).
+
+We have also used "alias" feature to bind the name of this dependency to `ds`,
+so `.ftd` files can write `-- import: ds` instead of having to use the full path,
+e.g. `-- import: fifthtry.github.io/doc-site`.
+
+
+
+-- ds.h1: Distributed Package Manager
+
+Unlike other package managers like pypi, npm and crates, there is no central
+package repository in `fastn`. Since every `fastn` package is a website, that
+website acts as the package repository.
+
+What this means is when `fastn` sees `fifthtry.github.io/doc-site` as a
+dependency, it fetches the content of `fifthtry.github.io/doc-site/FASTN.ftd`
+file which acts as the meta data for the package, and the meta data includes the
+URL from where the package contents can be downloaded.
+
+
+In our examples we use Github's raw content to fetch the required files from
+module. `fastn` appends the required file name after the value of
+`download-base-url`. Let's suppose if the dependency import requires fetching
+the `index.ftd` module of `fifthtry.github.io/doc-site` package and
+`fifthtry.github.io/doc-site/FASTN.ftd` contains
+`https://raw.githubusercontent.com/fifthtry/doc-site/main` as the value for
+`download-base-url`, then `fastn` tries to fetch it using
+`https://raw.githubusercontent.com/fifthtry/doc-site/main/index.ftd` http
+request.
+
+If you are not using `Github`, you can store the entire package in some other
+location and send the prefix of the url from which the modules can be served.
+
+-- end: ds.page

@@ -1,0 +1,55 @@
+-- ds.page: Javascript in `fastn` function
+
+Here is an example of how you can integrate JavaScript in `fastn` functions.
+
+Suppose we have a JavaScript function `show_alert` defined in `functions.js`
+as follows:
+
+-- ds.code: `functions.js`
+lang: js
+
+function show_alert(a) {
+    alert(a);
+}
+
+-- ds.markdown:
+
+Now, let's say we want to call this function when a user clicks a text in an
+`fastn` component. Here's how we can achieve this in `index.ftd`:
+
+-- ds.code: `index.ftd`
+lang: ftd
+
+\-- ftd.text: Click here to print name in alert!
+$on-click$: $call-js-fn(a = FifthTry Alert)
+
+\-- void call-js-fn(a):
+string a:
+js: functions.js ;; <hl>
+
+show_alert(a) ;; <hl>
+
+
+-- ds.markdown:
+
+In the above example, when the user clicks the text component, the `call-js-fn`
+function is called, passing the `FifthTry` value to the argument `a`. This
+function, then, references `functions.js` by using the `js` attribute and calls
+the `show_alert` function.
+
+-- ds.output:
+
+	-- ftd.text: Click here to print name in alert!
+	color: $inherited.colors.text
+	$on-click$: $call-js-fn(a = FifthTry Alert)
+	
+-- end: ds.output
+
+-- end: ds.page
+
+
+-- void call-js-fn(a):
+string a:
+js: [$fastn-assets.files.functions.js]
+
+show_alert(a)

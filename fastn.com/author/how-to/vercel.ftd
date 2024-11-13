@@ -1,0 +1,64 @@
+-- import: fifthtry.github.io/admonitions as cbox
+
+-- ds.page: Publishing Static Site On Vercel
+
+Vercel is an incredibly easy to use tool which helps you build and ship your
+websites with an easy to use interface.
+
+-- cbox.warning: You Lose Many Dynamic Features In Static Modes
+
+`fastn` comes with a lot of dynamic features, which are only available when you
+are using [FifthTry Hosting](https://www.fifthtry.com/)
+
+-- ds.h1: Deploying existing `fastn` projects to Vercel
+id: deploy-existing-project
+
+- Add `vercel.json` to the root of your project (right where your FASTN.ftd lives) with the following contents:
+
+-- ds.code: vercel.json
+lang: json
+
+{
+    "framework": null,
+    "buildCommand": "fastn build --base=/",
+    "outputDirectory": ".build",
+    "installCommand": "curl -fsSL https://fastn.com/install.sh | sh"
+}
+
+
+-- ds.markdown:
+
+- Create a [new Vercel deployment](https://vercel.com/new/) and import your project repository.
+
+-- ds.h1: Creating a new `fastn` project and deploy it on Vercel
+
+We recommend using our template repository
+[fastn-template](https://github.com/fastn-stack/fastn-template/) to create a
+new `fastn` project.
+
+- Creating your own repository
+
+Open the [fastn-template](https://github.com/fastn-stack/fastn-template/)
+repository in your browser and click on the `Use this template` button
+
+-- ds.image: Step I: Use the template repository to initialize your repository
+src: $fastn-assets.files.images.setup.github-use-this-template.png
+width: fill-container
+
+- Follow the instruction to create a new Github repository from this template.
+
+- Wait for the Github Action to finish running. This Action renames package
+  name in `FASTN.ftd` to match with your repository name and your Github
+  username.
+
+- We'll be opting for a different deployment method instead of [using GitHub
+  Pages](/github-pages/). Feel free to delete the `.github` folder to eliminate
+  these GitHub Actions from your repository.
+
+- Now [create a new Vercel deployment](https://vercel.com/new/) by importing
+  this repository.
+
+If you have created a `fastn` project from scratch using `fastn create-package
+<your-package-name>`. [Follow the instructions above to add a vercel.json file](#deploy-existing-project).
+
+-- end: ds.page

@@ -1,0 +1,306 @@
+-- import: fastn-community.github.io/app-switcher/assets
+-- import: fastn
+-- import: fastn/processors
+-- import: fastn-community.github.io/site-doc
+-- import: fastn-community.github.io/code-block as cb
+
+-- fastn.app-ui apps:
+$processor$: processors.fastn-apps
+
+
+
+
+
+-- site-doc.doc-home: App Switcher
+github-url: https://github.com/fastn-community/app-switcher
+color-scheme: \$ftd.default-colors
+typography: \$ftd.default-types
+current-package: fastn-community.github.io/app-switcher
+show-tabs: false
+site-title: App Switcher
+
+-- site-doc.header: What is a app switcher?
+
+The app-switcher is a useful tool for multitasking, as it allows users to
+quickly switch between different apps without having to close and reopen them.
+This can be particularly helpful when working on a project that requires
+multiple applications in a web browser.
+
+Fastn app-switcher component opens by pressing `shift` key two times.
+
+-- site-doc.header: How to install fastn?
+
+Please, [click here](https://fastn.io/install/) to read fastn installation
+documentation.
+
+
+-- site-doc.header: How to use `app-switcher`?
+
+To use `app-switcher` add below lines into your FASTN.ftd file:
+
+To learn more about app-switcher 
+[click here](https://fastn-community.github.io/app-switcher/docs/).
+
+-- cb.code:
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/app-switcher
+
+-- end: site-doc.doc-home
+
+
+
+
+
+
+
+
+
+
+-- component app-switcher:
+fastn.app-ui apps:
+boolean $is-open: false
+integer $current-app: 1
+
+-- ftd.column:
+width: fill-container
+height: fill-container
+
+-- ftd.desktop:
+
+-- ftd.column:
+if: { app-switcher.is-open }
+width: fill-container
+height: fill-container
+align-content: center
+if: { !ftd.is_empty(apps.items) }
+anchor: window
+z-index: 999999
+left.px: 0
+top.px: 0
+
+-- ftd.column:
+width: fill-container
+height: fill-container
+
+-- ftd.column:
+if: { app-switcher.is-open }
+width: fill-container
+height: fill-container
+align-content: center
+background.solid: $inherited.colors.background.overlay
+
+-- ftd.column:
+min-width.fixed.px: 544
+max-width.fixed.px: 544
+if: { app-switcher.is-open }
+width: fill-container
+border-radius.px: 6
+padding-top.px: 56
+background.solid: $inherited.colors.background.step-1
+padding-bottom.px: 56
+$on-global-key-seq[shift-shift]$: $ftd.set-bool($a = $app-switcher.is-open, v = true)
+$on-global-key[esc]$: $ftd.set-bool($a = $app-switcher.is-open, v = false)
+
+-- ftd.column:
+anchor: parent
+top.px: -14
+right.px: -14
+border-radius.px: 100
+padding-vertical.px: 4
+padding-horizontal.px: 4
+background.solid: $inherited.colors.background.step-2
+
+-- ftd.image:
+src: $assets.files.images.cross.svg
+width.fixed.px: 24
+height.fixed.px: 24
+$on-click$: $ftd.toggle($a=$app-switcher.is-open)
+
+-- end: ftd.column
+
+-- ftd.column:
+max-height.fixed.px: 500
+overflow-y: auto
+width: fill-container
+
+-- ftd.row:
+wrap: true
+spacing.fixed.px: 32
+align-self: center
+align-content: center
+
+-- myapp: 
+index: $obj.index
+item: $obj.item
+$loop$: $app-switcher.apps.items as $obj
+$current-app: $app-switcher.current-app
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.desktop
+
+-- ftd.mobile:
+
+-- ftd.row:
+align-content: center
+width: fill-container
+height: fill-container
+
+-- ftd.image:
+src: $assets.files.images.app-switcher-mobile.svg
+anchor: window
+left.px: 14
+bottom.px: 20
+width.fixed.px: 24
+height.fixed.px: 24
+z-index: 9999999
+$on-click$: $ftd.toggle($a=$app-switcher.is-open)
+
+-- ftd.column:
+if: { app-switcher.is-open }
+width: fill-container
+height: fill-container
+align-content: center
+background.solid: $inherited.colors.background.overlay
+anchor: window
+left.px: 0
+top.px: 0
+
+-- ftd.column:
+width: fill-container
+background.solid: $inherited.colors.background.step-1
+padding-vertical.px: 56
+padding-left.px: 24
+border-radius.px: 8
+z-index: 9999
+
+-- ftd.column:
+anchor: parent
+top.px: 4
+right.px: 4
+border-radius.px: 100
+padding-vertical.px: 4
+padding-horizontal.px: 4
+background.solid: $inherited.colors.background.step-2
+
+-- ftd.image:
+src: $assets.files.images.cross.svg
+width.fixed.px: 12
+height.fixed.px: 12
+$on-click$: $ftd.toggle($a=$app-switcher.is-open)
+
+-- end: ftd.column
+
+-- ftd.column:
+width: fill-container
+align-self: center
+overflow-y: auto
+max-height.fixed.px: 442
+
+-- ftd.row:
+align-content: center
+wrap: true
+
+-- myapp: 
+index: $obj.index
+item: $obj.item
+$loop$: $app-switcher.apps.items as $obj
+$current-app: $app-switcher.current-app
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: ftd.mobile
+-- end: ftd.column
+
+-- end: app-switcher
+
+
+
+
+
+
+
+
+
+
+-- component myapp:
+integer index:
+fastn.app-ui-item item:
+boolean $is-active: false
+integer $current-app: 
+
+-- ftd.column:
+margin-bottom.px: 32
+max-width.fixed.px: 90
+min-width.fixed.px: 90
+overflow-x: auto
+margin-right.px if { ftd.device == "mobile" }: 28
+spacing.fixed.px: 12
+height.fixed.px: 140 
+$on-mouse-enter$: $ftd.set-bool($a = $myapp.is-active, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $myapp.is-active, v = false)
+border-radius.px: 6
+
+-- ftd.column:
+width.fixed.px: 90
+height.fixed.px: 90
+background.solid: $inherited.colors.background.step-1
+background.solid if { myapp.current-app == myapp.index }: $inherited.colors.cta-tertiary.base
+background.solid if { myapp.is-active }: $inherited.colors.cta-tertiary.base
+border-radius.px: 6
+
+-- ftd.image:
+if: { myapp.item.icon != NULL }
+src: $myapp.item.icon
+link: $myapp.item.url
+width: fill-container
+height: auto
+anchor: parent
+align-self: center
+padding-horizontal.px: 4
+padding-vertical.px: 4
+border-radius.px: 8
+
+-- ftd.image:
+if: { myapp.item.icon == NULL }
+src: $assets.files.images.FTD.svg
+width: fill-container
+height: auto
+anchor: parent
+align-self: center
+padding-horizontal.px: 4
+padding-vertical.px: 4
+border-radius.px: 8
+
+-- end: ftd.column
+
+-- ftd.text: $myapp.item.name
+role: $inherited.types.fine-print
+color: $inherited.colors.text-strong
+text-align: center
+width: fill-container
+padding-bottom.px: 4
+
+
+-- end: ftd.column
+
+-- end: myapp

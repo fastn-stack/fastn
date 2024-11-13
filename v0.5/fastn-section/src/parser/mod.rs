@@ -1,3 +1,4 @@
+pub(super) mod header_value;
 pub(super) mod identifier;
 pub(super) mod kind;
 pub(super) mod kinded_name;
@@ -6,7 +7,6 @@ pub(super) mod package_name;
 pub(super) mod qualified_identifier;
 pub(super) mod section;
 pub(super) mod section_init;
-pub(super) mod tes;
 pub(super) mod visibility;
 
 impl fastn_section::Document {

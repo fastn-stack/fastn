@@ -13,9 +13,8 @@ mod utils;
 mod warning;
 mod wiggin;
 
-#[cfg(test)]
-pub(crate) use debug::JDebug;
 pub use error::Error;
+pub use fastn_section::parser::header_value::header_value;
 pub use fastn_section::parser::identifier::identifier;
 pub use fastn_section::parser::kind::kind;
 pub use fastn_section::parser::kinded_name::kinded_name;
@@ -24,9 +23,12 @@ pub use fastn_section::parser::package_name::package_name;
 pub use fastn_section::parser::qualified_identifier::qualified_identifier;
 pub use fastn_section::parser::section::section;
 pub use fastn_section::parser::section_init::section_init;
-pub use fastn_section::parser::tes::tes;
 pub use fastn_section::warning::Warning;
 pub use scanner::{Scannable, Scanner};
+
+pub trait JDebug {
+    fn debug(&self, source: &str) -> serde_json::Value;
+}
 
 pub enum Diagnostic {
     Error(Error),
@@ -43,7 +45,12 @@ pub type Result<T> = std::result::Result<T, fastn_section::Error>;
 /// both start, and length. or we keep our life simple, we have can have sections that are really
 /// long, eg a long ftd file. lets assume this is the decision for v0.5. we can demote usize to u32
 /// as we do not expect individual documents to be larger than few GBs.
-pub type Span = std::ops::Range<usize>;
+#[derive(Debug, PartialEq, Hash, Eq, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct Span {
+    pub start: usize,
+    pub end: usize,
+}
+
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 pub struct Spanned<T> {
     pub span: Span,
@@ -59,6 +66,10 @@ pub struct Document {
     pub comments: Vec<fastn_section::Span>,
     pub line_starts: Vec<u32>,
 }
+
+// this type is not really needed here, but adding here because fastn-section is our lowest
+// level crate
+pub struct AutoImport {}
 
 #[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -177,7 +188,8 @@ pub struct KindedName {
     pub name: Identifier,
 }
 
-pub type HeaderValue = Vec<Tes>;
+#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
+pub struct HeaderValue(pub Vec<Tes>);
 
 /// example: `hello` | `hello ${world}` | `hello ${world} ${ -- foo: }` | `{ \n text text \n }`
 /// it can even have recursive structure, e.g., `hello ${ { \n text-text \n } }`.

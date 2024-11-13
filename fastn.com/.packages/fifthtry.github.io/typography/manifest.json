@@ -1,0 +1,26 @@
+{
+    "files": {
+        "LICENSE": {
+            "name": "LICENSE",
+            "checksum": "5B8B83357C092AC57F28508D18CAB65E4965AAA3BA61226DE038719E022638C1",
+            "size": 1516
+        },
+        "FASTN.ftd": {
+            "name": "FASTN.ftd",
+            "checksum": "15F3B0C101B529DC570053307B67C32692C021E5F838BA9A506A8011C76D2E80",
+            "size": 161
+        },
+        "README.md": {
+            "name": "README.md",
+            "checksum": "8B091D31E5DE34242C1CE8F79D4E68CE9D078BB9B9EAEC069C8968B565F6C02D",
+            "size": 125
+        },
+        "index.ftd": {
+            "name": "index.ftd",
+            "checksum": "67B333C7D510382431817FDB3CE47E1E312387FB2595BE4CC9E24703DFAE76C8",
+            "size": 7396
+        }
+    },
+    "zip_url": "https://github.com/FifthTry/typography/archive/a7af3eda1850ee6a196a603938e1076b12718efe.zip",
+    "checksum": "07FDC871B36B190C5037C8E22C772C3DFD8673372363DCDD8A0F3A34260D923C"
+}

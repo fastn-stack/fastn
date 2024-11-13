@@ -1,0 +1,339 @@
+-- ds.page: Documentation Systems
+
+While content creation, till now, we were trying to make use of one video and
+one document with an idea that it takes a flow that gives user a feel of a
+`tutorial`, by also covers a problem statement hence also acts as a `how-to
+guide` and at times can also be used as a `reference`.
+
+We all agree that this setup was maybe necessary when we had less contents for
+users in the beginning and our aim was to produce quantity in form of
+documents and videos.
+
+With the user base growing, and with decent number of contents we have, we
+want to move to the next phase where more standards are in place and there is
+a definite classification is in place.
+
+In meetings, we had decided on to create a structure, a playlist and
+classification that segregates the contents in 3 or 4 types.
+
+I had reached to my collegues and tried to understand the classification based
+on which we must structure our content. With their support via discussions and
+references ([source](https://documentation.divio.com/)), we are planning to
+make the effectiveness of the content through these classifications:
+
+1. Learn
+2. How-to Guides
+3. Reference
+4. Discussions
+
+-- ftd.row:
+wrap: true
+width: fill-container
+
+	-- segment: Learning path
+	b-right.px: 2
+	b-bottom.px: 2
+	subtitle: Learning Oriented
+	
+	-- segment: How-To
+	b-left.px: 2
+	b-bottom.px: 2
+	subtitle: Problem Oriented
+	
+	-- segment: Explanation
+	b-right.px: 2
+	b-top.px: 2
+	subtitle: Understanding Oriented
+	
+	-- segment: Reference/Developer Docs
+	b-left.px: 2
+	b-top.px: 2
+	subtitle: Information Oriented
+	
+-- end: ftd.row
+
+-- ds.h1: Classifications
+
+Most of the documentations fail to achieve the output a company or a project
+like to have, when the documentation fails to make the distinction based on
+the above classifications. So let's see in brief what they are:
+
+-- ds.h2: Learning Paths
+
+These are the lessons that take the learner by the hand through a series of
+steps to complete a project. The paths will have tutorial content.
+
+In a tutorial you are the teacher and you know what the problems are. You
+know the things that need to be done and the learner doesn't. You decide for
+the learner.
+
+Tutorials are learning oriented. It will turn a learner into a user of our
+product.
+
+Tutorials need regular and detailed testing to make sure that they still work.
+
+-- ds.h3: What makes good tutorial
+
+- allow users learning by doing (practical)
+- building up from the simplest ones at the start to more complex ones
+- ensure the user sees results immediately (sense of achievement)
+- make your tutorial repeatable
+- focus on concrete steps, not abstract concepts (controlling the temptation to
+  introduce abstraction)
+- don’t explain anything the learner doesn’t need to know in order to complete
+  the tutorial
+- no distractions by focusing only on the steps the user needs to take
+
+
+
+-- ds.h2: How-to Guides
+
+Guides that take the reader through the steps required to solve a common
+problem.
+
+The learner has become a user now. A user now has enough knowledge that can
+ask some meaningful questions and you give the solution.
+
+You can assume that the user already knows how to do basic things and use
+basic tools.
+
+It has steps required to solve a real-world problem.
+
+-- ds.h3: What makes good How-to guide
+
+- it must contain a list of steps, that need to be followed in order
+- must focus on achieving a practical goal
+- solves a particular problem statement
+- should not explain things. If explanations are important, link to them
+- allows a room for little flexibility
+- practical usability is more valuable than completeness
+- the title of a how-to document should tell the user exactly what it does
+
+
+
+-- ds.h2: Reference
+
+The techincal descriptions of the machinery and how to operate it. Hence,
+reference material is information-oriented.
+
+They are to the point documents. By all means technical reference can contain
+examples to illustrate usage, but it should **not** attempt to explain basic
+concepts, or how to achieve common tasks.
+
+-- ds.h3: What makes good Reference documentation
+
+- structure the documentation around the code
+- in reference guides, structure, tone, format must all be consistent eg:
+  Dictionary
+- the only job of technical reference is to describe, as clearly and completely
+  as possible
+- these descriptions must be accurate and kept up-to-date
+
+
+
+-- ds.h2: Explanation/Discussions
+
+They clarify and illuminate a particular topic.
+They are understanding-oriented.
+
+A topic isn’t defined by a specific task you want to achieve, like a how-to
+guide, or what you want the user to learn, like a tutorial. It’s not defined
+by a piece of the machinery, like reference material. It’s defined by what
+you think is a reasonable area to try to cover at one time, so the division
+of topics for discussion can sometimes be a little arbitrary.
+
+-- ds.h3: What makes good Discussion doc
+
+- give context for eg: why things are so - design decisions, historical reasons,
+  technical constraints.
+- it helps in explaining the *Why* part
+- multiple examples and alternative approaches are allowed here
+- it’s not the place of an explanation to instruct the user in how to do
+  something. Nor should it provide technical description.
+
+
+-- ds.h1: Summary
+
+- `Tutorials` and `Discussions` are the most useful when we are studying
+- `Tutorials` and `How-tos` provide practical steps
+- `How-tos` and `References` are the most useful when we are coding
+- `References` and `Discussions` provide theortical understanding.
+
+
+
+
+-- ds.h1: List of videos/topics we have covered
+
+- [Expander](/expander/)
+  - Hello World
+  - Basic UI
+  - Components
+  - Event handling
+
+- button with shadow
+- create rounded border
+- holy-grail layout
+- sitemap basic
+- create URLs
+- How to use images in documents
+- Add meta-data to doc-site
+- How to use Markdown
+
+
+-- ds.markdown:
+
+We have to classify them and make tweaks in the documents in a way it does
+justice to the 4 classifications.
+
+
+-- ds.h1: Cleaning Expander
+
+The first thing Harish and I took is Expander.
+
+Expander as a unit can be a tutorial.
+
+-- ds.h3: Part 1 - Hello World
+
+It talks about
+
+- small introduction to fastn
+- explains what is fastn package
+
+-- ds.h3: Part 2 - Basic UI
+
+The concepts it covers are as follows:
+
+- CSS properties like:
+  - padding.px
+  - border-width.px
+  - background-solid
+  - width as fill-container
+  - height as fill-container
+  - align content
+
+- Container components
+  - ftd.column
+  - ftd.row
+
+-- ds.h3: Part 3 - Components
+
+This part covers basics of Components along with `How-tos` associated with it.
+The documentation link is added to this part.
+
+Input: I think this part can be used in the How-tos
+
+-- ds.h3: Part 4 - Event Handling
+
+It also can be a How-to document but it is more of a how to create events for
+the expander project.
+
+Does not explain Event Handling as a concept.
+
+-- ds.h3: Part 5 - Publish
+
+There are two videos for How to Publish a package. This one is expander
+specific details.
+
+The other one was tailored to make it look generic by taking expander as an
+example.
+
+
+-- ds.h3: Part 6 - Polish
+
+Again, Expander specific polishing.
+
+No concept level teaching.
+
+
+
+-- ds.h1: Cleaning standalone documents
+
+We have concept level and specific UI related separate videos. Let's try to
+classify each.
+
+-- ds.h3: button with shadow
+
+This can be classified as a `How-To`.
+
+UI specific doc, that has used the following concepts:
+
+- components
+- various properties
+- records
+- event handling
+
+-- ds.h3: Create rounded border
+
+This can be classified as a `How-To`.
+
+
+-- ds.h3: Create holy-grail layout
+
+This is a `tutorial`.
+
+-- ds.h3: Understanding Sitemap
+
+This is a `tutorial`.
+
+-- ds.h3: Create clean URLs
+
+This is a `How-To`.
+
+-- ds.h3: Using Images in documents
+
+Video can be a `How to` but document can be a `tutorial`
+
+-- ds.h3: Add meta-data
+
+This is a `How-To`.
+
+-- ds.h3: markdown in doc-site
+
+This is a `tutorial`.
+
+-- end: ds.page
+
+
+-- component segment:
+caption title:
+optional string subtitle:
+optional body body:
+optional ftd.length b-left:
+optional ftd.length b-bottom:
+optional ftd.length b-right:
+optional ftd.length b-top:
+
+
+-- ftd.column:
+width.fixed.percent: 50
+height.fixed.px: 180
+border-left-width: $segment.b-left
+border-right-width: $segment.b-right
+border-top-width: $segment.b-top
+border-bottom-width: $segment.b-bottom
+align-content: center
+border-color: $segment-b-color
+
+	-- ftd.text: $segment.title
+	role: $inherited.types.heading-medium
+	color: $inherited.colors.text
+	
+	-- ftd.text: $segment.subtitle
+	if: { segment.subtitle != NULL }
+	role: $inherited.types.heading-small
+	color: $inherited.colors.text
+	
+	-- ftd.text: $segment.body
+	if: { segment.body != NULL }
+	role: $inherited.types.copy-regular
+	color: $inherited.colors.text
+	
+-- end: ftd.column
+
+
+-- end: segment
+
+
+-- ftd.color segment-b-color:
+light: #c1c1c1
+dark: #434547

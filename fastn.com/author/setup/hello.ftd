@@ -1,0 +1,15 @@
+-- component toggle-text:
+boolean $current: false
+caption title:
+
+-- ftd.text: $toggle-text.title
+align-self: center
+text-align: center
+color if { toggle-text.current }: #D42D42
+color: $inherited.colors.cta-primary.text
+background.solid: $inherited.colors.cta-primary.base
+$on-click$: $ftd.toggle($a = $toggle-text.current)
+
+-- end: toggle-text
+
+-- toggle-text: `fastn` is cool!

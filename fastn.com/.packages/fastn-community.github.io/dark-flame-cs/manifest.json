@@ -1,0 +1,91 @@
+{
+  "files": {
+    "FASTN.ftd": {
+      "name": "FASTN.ftd",
+      "checksum": "B78C39EAC00433B71AC5879460D8975F72C02BEDC1BED48A69ABB72596C2DF99",
+      "size": 541
+    },
+    "LICENSE": {
+      "name": "LICENSE",
+      "checksum": "5B8B83357C092AC57F28508D18CAB65E4965AAA3BA61226DE038719E022638C1",
+      "size": 1516
+    },
+    "README.md": {
+      "name": "README.md",
+      "checksum": "41980A04139C185F7885751E20718F70853B243051E154B353F9A25BFE926B89",
+      "size": 733
+    },
+    "colors.ftd": {
+      "name": "colors.ftd",
+      "checksum": "F25AFE605396BA9D406CDD2ED6177AD01D15A0AB50DF94CBC67DD92E2BEA006A",
+      "size": 6555
+    },
+    "index.ftd": {
+      "name": "index.ftd",
+      "checksum": "1443C0D6E135321E8F6A3A9E206F55B3B87CD39069DB58C6C6E7D362F43FA34A",
+      "size": 27161
+    },
+    "static/author-icon.svg": {
+      "name": "static/author-icon.svg",
+      "checksum": "022EE00A4418F3A2D78331BE17ED1A9AF182BDD132B1C3AF77C71FB22405164C",
+      "size": 574
+    },
+    "static/bsd-license-icon.svg": {
+      "name": "static/bsd-license-icon.svg",
+      "checksum": "37620B7B8D59CC99E28E89D7D5D7D7C8CB63EFF3B93BB57F7E11141D43BBD097",
+      "size": 1218
+    },
+    "static/code-outline-icon.svg": {
+      "name": "static/code-outline-icon.svg",
+      "checksum": "997E659F2336536E74559F06DBC381821E8AA83E9EC9267F95EF01BBD61E6205",
+      "size": 772
+    },
+    "static/discord-icon.svg": {
+      "name": "static/discord-icon.svg",
+      "checksum": "02AF24DE0D342A20BB81D3FF85E29B6A30E21F0F88869ABFCAAD0FF164D0F4E8",
+      "size": 2515
+    },
+    "static/fastn-logo.svg": {
+      "name": "static/fastn-logo.svg",
+      "checksum": "22B700AEFCA7EDBC65EBF80740F0F901424CBC8DE5D078059D42AAB03D2572BD",
+      "size": 80423
+    },
+    "static/image.svg": {
+      "name": "static/image.svg",
+      "checksum": "3F3ACA7E9FE32496901D790C30157C2984476961E46B2680B8F8457CCCB9512E",
+      "size": 5888792
+    },
+    "static/img.svg": {
+      "name": "static/img.svg",
+      "checksum": "F30BFB3E2D31FF32C05EBC2AA9039B9874BC1C97CD6760415DB156CB8474B5DC",
+      "size": 1192119
+    },
+    "static/link-icon.svg": {
+      "name": "static/link-icon.svg",
+      "checksum": "A70F92AA340A098879133B4A070A62F6C37572C26F77A5E37AAC5C6542A9A2B2",
+      "size": 1534
+    },
+    "static/menu.svg": {
+      "name": "static/menu.svg",
+      "checksum": "D5616F0774B8DCCB86ECF34B4B8C224B6A361363648A56CA1D191CC5249D0406",
+      "size": 174
+    },
+    "static/more.svg": {
+      "name": "static/more.svg",
+      "checksum": "7BEA941B3095A66502A136976122CE349B9D6045E56BAF7972264075BF475AEE",
+      "size": 350
+    },
+    "static/search.svg": {
+      "name": "static/search.svg",
+      "checksum": "58E17815CDCFBF74E2F1C7C0DDC5528A07656B5281520A1BF036478E943CFD84",
+      "size": 697
+    },
+    "static/share.svg": {
+      "name": "static/share.svg",
+      "checksum": "1B389C359790FB4AD9AE8C33536A82055ECCD18199208AAF59F00D342DC77B3C",
+      "size": 1153
+    }
+  },
+  "zip_url": "https://github.com/fastn-community/dark-flame-cs/archive/f4b8197d5c02ef123468cb0f63baeb21617aa0d7.zip",
+  "checksum": "00D27B12E33DDEF9CC663C850B2A1F19AE8C48817AA070630FA819AF3D541909"
+}

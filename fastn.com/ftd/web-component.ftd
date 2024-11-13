@@ -1,0 +1,345 @@
+-- ds.page: Web Component
+
+The `fastn` allows for the integration of custom web components created using
+JavaScript (or other languages that compile to JavaScript).
+
+Like [`component`](/ftd/component/), `web-component`s are independent and
+reusable bits of code and they have arguments.
+
+
+-- ds.h1: Create Your Web Component
+
+A `web-component` in `fastn` can be created using `web-component` keyword.
+Here's an example of how to integrate a web component created using the standard
+Web Components API.
+
+
+-- ds.code: `web-component.js`
+lang: js
+
+class HelloWorld extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
+  connectedCallback() {
+    const shadow = this.shadowRoot;
+    const div = document.createElement('div');
+    div.classList.add('hello-world');
+    div.textContent = 'Hello World!';
+    div.style.color = 'orange';
+    div.style.borderWidth = '1px';
+    div.style.borderColor = 'yellow';
+    div.style.borderStyle = 'dashed';
+    div.style.padding = '10px';
+    shadow.appendChild(div);
+  }
+}
+
+customElements.define('hello-world', HelloWorld);
+
+
+-- ds.code: `index.ftd`
+lang: ftd
+
+\;; component call
+\-- hello-world:
+
+\;; Create a web component
+\-- web-component hello-world:
+js: web-component.js
+
+\-- end: hello-world
+
+
+-- ds.markdown:
+
+In above code we have created a web component `hello-world` in
+`web-component.js`. Then, we've included the web component in `fastn` using
+the `web-component` , and used it in the `fastn` component tree using the
+hello-world element. used it in `index.ftd`.
+
+-- ds.output:
+
+	-- hello-world:
+	
+-- end: ds.output
+
+
+
+-- ds.h1: Data Across JS and `fastn` Worlds
+
+
+When working with web components, it is possible to share the data between the
+JS and `fastn` worlds, which can be managed and updated efficiently, reflecting
+the changes in both worlds.
+
+`fastn` provides a function `component_data` which exposes data arguments,
+passed from `fastn` world, and it's access methods. There are three access
+methods provided by `fastn`, against an argument:
+
+- `get`: To get the value of the variable in `fastn`. This method is present for
+  both mutable and immutable variables.
+- `set`: To set the value of the variable in `fastn`. The value set using this
+  method will reflect it's changes in `fastn` world. This method is present for
+  mutable variables only.
+- `on-change`: To listen for any change in variable value in `fastn` world. This
+  method is present for both mutable and immutable variables.
+
+
+Let's look at these in more detail.
+
+-- ds.h1: A Web Component With Argument
+
+Lets create a web component that takes an argument.
+
+
+-- ds.code: `index.ftd`
+lang: ftd
+
+\-- web-component num-to-words:
+caption integer num: ;; <hl>
+js: web-component.js
+
+-- ds.code: `web-component.js`
+lang: js
+
+class NumToWords extends HTMLElement {
+    constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
+    }
+
+    connectedCallback() {
+        // `window.ftd.component_data` exposes the data
+        // arguments passed from `ftd` world.
+        let data = window.ftd.component_data(this);
+
+        // `get()` method gives the value of the argument
+        // passed.
+        let num = data.num.get();
+
+        const shadow = this.shadowRoot;
+        const div = document.createElement('div');
+        div.textContent = numberToWords(num);
+        div.style.color = 'orange';
+        div.style.borderWidth = '1px';
+        div.style.borderColor = 'yellow';
+        div.style.borderStyle = 'dashed';
+        div.style.padding = '10px';
+        shadow.appendChild(div);
+    }
+}
+
+customElements.define('num-to-words', NumToWords);
+
+
+function numberToWords(num) {
+// some code here
+}
+
+
+-- ds.markdown:
+
+Now lets call this component and pass a data.
+
+-- ds.rendered:
+
+-- ds.rendered.input:
+
+\-- num-to-words: 19
+
+-- ds.output:
+
+	-- num-to-words: 19
+	
+-- end: ds.output
+
+
+-- ds.markdown:
+
+We have seen how data can be passed from `fastn` and consumed by `js`.
+
+
+-- ds.h1: Working with mutable data
+
+Now let's mutate the data and correspondingly change the output from `js`
+world.
+
+-- ds.code: `index.ftd`
+lang: ftd
+
+\-- integer $num: 0
+
+\-- ftd.integer: $num
+
+\-- ftd.text: I increment the `num`
+$on-click$: $ftd.increment($a = $num)
+
+\-- num-to-words: $num
+
+
+-- ds.code:
+lang: js
+
+class NumToWords extends HTMLElement {
+    constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
+    }
+
+    connectedCallback() {
+        let data = window.ftd.component_data(this);
+        let num = data.num.get();
+
+        const shadow = this.shadowRoot;
+        const div = document.createElement('div');
+        div.textContent = numberToWords(num);
+        div.style.color = 'orange';
+        div.style.borderWidth = '1px';
+        div.style.borderColor = 'yellow';
+        div.style.borderStyle = 'dashed';
+        div.style.padding = '10px';
+
+        // `on_change()` method listen to any changes done
+        // against the argument value in ftd.
+        data.num.on_change(function () { ;; <hl>
+            const changed_value = data.num.get();  ;; <hl>
+            div.textContent = numberToWords(changed_value);  ;; <hl>
+        }) ;; <hl>
+
+        shadow.appendChild(div);
+    }
+}
+
+-- ds.markdown:
+
+In above example, we have added a mutable variable `num`, whose value can be
+changed by an event in `fastn`. This changes is then listen using `on-change`
+function which do the necessary changes in `js` world.
+
+-- ds.output:
+
+	-- ftd.integer: $num
+	color: $inherited.colors.text-strong
+	
+	-- ftd.text: I increment the `num`
+	$on-click$: $ftd.increment($a = $num)
+	color: $inherited.colors.text
+	
+	-- num-to-words: $num
+	
+-- end: ds.output
+
+
+-- ds.markdown:
+
+Now let mutate the data from `js` world too.
+
+-- ds.code: `web-component.js`
+lang: js
+
+class NumToWords extends HTMLElement {
+    constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
+    }
+
+    connectedCallback() {
+        let data = window.ftd.component_data(this);
+        let num = data.num.get();
+
+        const shadow = this.shadowRoot;
+        const div = document.createElement('div');
+        div.textContent = numberToWords(num);
+        div.style.color = 'orange';
+        div.style.borderWidth = '1px';
+        div.style.borderColor = 'yellow';
+        div.style.borderStyle = 'dashed';
+        div.style.cursor = 'pointer';
+        div.style.padding = '10px';
+
+        div.onclick = function (_) { ;; <hl>
+            let current_num = data.num.get(); ;; <hl>
+            current_num -= 1; ;; <hl>
+            div.textContent = numberToWords(current_num); ;; <hl>
+            data.num.set(current_num); ;; <hl>
+        } ;; <hl>
+
+        data.num.on_change(function () {
+            const changed_value = data.num.get();
+            div.textContent = numberToWords(changed_value);
+        });
+
+        shadow.appendChild(div);
+    }
+}
+
+
+-- ds.code: `index.ftd`
+lang: ftd
+
+\-- num-to-words:
+$num: $num
+
+\-- web-component num-to-words:
+caption integer $num: ;; <hl>
+js: web-component.js
+
+
+-- ds.markdown:
+
+In the above code as you can see that we are passing the mutable reference of
+`num` variable to the web-component `num-to-words` which then decrements by it.
+
+
+
+-- ds.output:
+
+	-- ftd.integer: $num-1
+	color: $inherited.colors.text-strong
+	
+	-- ftd.text: I increment the `num`
+	$on-click$: $ftd.increment($a = $num-1)
+	color: $inherited.colors.text
+	
+	-- mut-num-to-words:
+	$num: $num-1
+	
+-- end: ds.output
+
+
+
+
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+
+
+-- integer $num: 0
+
+
+-- integer $num-1: 0
+
+
+-- web-component hello-world:
+js: web-component.js
+
+
+
+-- web-component num-to-words:
+caption integer num:
+js: web-component.js
+
+
+-- web-component mut-num-to-words:
+caption integer $num:
+js: web-component.js

@@ -74,6 +74,7 @@ dependencies = [
  "async-trait",
  "fastn-core",
  "fastn-lang",
+ "fastn-section",
  "fastn-unresolved",
  "serde_json",
  "tokio",
@@ -115,6 +116,7 @@ version = "0.1.0"
 dependencies = [
  "fastn-section",
  "serde",
+ "serde_json",
 ]
 
 [[package]]

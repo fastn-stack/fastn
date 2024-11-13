@@ -1,0 +1,145 @@
+-- import: fastn-community.github.io/footer
+
+
+
+
+-- site-doc.doc-home: Documentation - Social Footer
+site-title: Footer
+show-tabs: false
+github-url: https://github.com/fastn-community/footer
+
+-- site-doc.component-doc: `footer`
+package-link: https://fastn-community.github.io/footer
+package-name: fastn-community.github.io/footer
+info: The `--footer` option serves as a convenient way to add a footer to your [fastn](https://fastn.com/) web projects.
+
+- **Footer Links:** The primary navigation, referred to as sections in
+    fastn.sitemap, is displayed as a horizontal list of links positioned on the
+    right side of the logo.
+
+
+-- site-doc.header: How to use
+
+-- cb.code: Add `footer` dependency into your FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/footer
+
+-- cb.code: `-- social-footer`
+lang: ftd
+
+\-- import: fastn-community.github.io/footer
+
+\-- footer.social-footer:
+footer-links: $footer.sitemap.sections
+copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+twitter-logo: $assets.files.assets.twitter.svg
+twitter-url: https://twitter.com/FifthTryHQ
+facebook-logo: $assets.files.assets.facebook.svg
+facebook-url: index.html
+discord-logo: $assets.files.assets.discord.svg
+discord-url: https://discord.gg/bucrdvptYd
+instagram-logo: $assets.files.assets.instagram.svg
+instagram-url: index.html
+telegram-logo: $assets.files.assets.telegram.svg
+telegram-url: index.html
+
+-- site-doc.header: Example 
+
+-- site-doc.output:
+colors: $ftd.default-colors
+types: $ftd.default-types
+
+-- footer.social-footer:
+footer-links: $footer.sitemap.sections
+copyright: Copyright © 2023 - [FifthTry.com](https://www.fifthtry.com/)
+twitter-logo: $assets.files.assets.twitter.svg
+twitter-url: https://twitter.com/FifthTryHQ
+facebook-logo: $assets.files.assets.facebook.svg
+facebook-url: index.html
+discord-logo: $assets.files.assets.discord.svg
+discord-url: https://discord.gg/bucrdvptYd
+instagram-logo: $assets.files.assets.instagram.svg
+instagram-url: index.html
+telegram-logo: $assets.files.assets.telegram.svg
+telegram-url: index.html
+
+-- end: site-doc.output
+
+-- site-doc.header: Properties:
+
+Below are details of all properties of `social-footer`.
+
+-- site-doc.component-property: `footer-links`
+type: Sections list (`required`)
+
+It's used to show `fastn.sitemap` sections.
+
+-- site-doc.component-property: `copyright`
+type: String (`optional`)
+
+It's used show copyright information of your project.
+
+-- site-doc.component-property: `twitter-logo`
+type: ftd.image-src (`optional`)
+
+It's used show twitter logo. You can change twitter logo with the logo of your
+choice. The size of logo is 32 pixels width and 32 pixels height on desktop and
+24 pixels width and 24px height on mobile devices.
+
+-- site-doc.component-property: `twitter-url`
+type: ftd.image-src (`optional`)
+
+It's used to add your twitter account / handle link.
+
+-- site-doc.component-property: `facebook-logo`
+type: ftd.image-src (`optional`)
+
+It's used show facebook logo. You can change facebook logo with the logo of your
+choice. The size of logo is 32 pixels width and 32 pixels height on desktop and
+24 pixels width and 24px height on mobile devices.
+
+-- site-doc.component-property: `facebook-url`
+type: ftd.image-src (`optional`)
+
+It's used to add your facebook account / handle link.
+
+-- site-doc.component-property: `discord-logo`
+type: ftd.image-src (`optional`)
+
+It's used show discord logo. You can change discord logo with the logo of your
+choice. The size of logo is 32 pixels width and 32 pixels height on desktop and
+24 pixels width and 24px height on mobile devices.
+
+-- site-doc.component-property: `discord-url`
+type: ftd.image-src (`optional`)
+
+It's used to add your discord server link.
+
+-- site-doc.component-property: `instagram-logo`
+type: ftd.image-src (`optional`)
+
+It's used show instagram logo. You can change instagram logo with the logo of
+your choice. The size of logo is 32 pixels width and 32 pixels height on
+desktop and 24 pixels width and 24px height on mobile devices.
+
+-- site-doc.component-property: `instagram-url`
+type: ftd.image-src (`optional`)
+
+It's used to add your instagram account / handle link.
+
+-- site-doc.component-property: `telegram-logo`
+type: ftd.image-src (`optional`)
+
+It's used show telegram logo. You can change telegram logo with the logo of
+your choice. The size of logo is 32 pixels width and 32 pixels height on
+desktop and 24 pixels width and 24px height on mobile devices.
+
+-- site-doc.component-property: `telegram-url`
+type: ftd.image-src (`optional`)
+
+It's used to add your telegram account / handle link.
+
+-- end: site-doc.component-doc
+
+-- end: site-doc.doc-home

@@ -1,0 +1,275 @@
+-- import: fastn-community.github.io/bling/chat
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
+-- import: fastn.com/utils
+-- import: fastn.com/content-library as lib
+
+-- common.post-meta meta: ACME Inc Case Study
+published-on: August 23, 2023 at 12:26 am
+post-url: /acme/
+author: $authors.nandini
+
+
+Imagine ACME Inc., a growing startup, as the protagonist of our case study.
+Here, we aim to resonate with the common challenges startups often face in
+finding the optimal solution for their web development needs. Through ACME's
+journey, we illuminate how fastn takes on these challenges through practical
+use cases.
+
+-- ds.blog-page:
+meta: $meta
+
+-- ds.h1: The React Phase
+
+In their quest to establish their official website, ACME initially chose React to build
+their website. However, they found themselves facing protracted development
+timelines.
+
+Here's why: ACME, like many growing startups, was a team fueled by fresh
+perspectives and included newcomers in their domain. Therefore React's JSX
+syntax and the **need for in-depth JavaScript knowledge** posed a significant
+challenge for these newcomers.
+
+React, while powerful, primarily focused on the frontend,
+necessitating ACME in search of additional tools and languages for a
+complete solution.
+
+The **absence of native Markdown support** in React complicated content integration,
+while the **lack of an integrated design system** forced ACME to lean on
+third-party libraries and delve into custom styling solutions. Even simple
+features like dark mode implementation often entailed wrestling with
+intricate custom CSS.
+
+
+These challenges culminated in **project delays**, underscoring the rigid pace of
+their development cycle. A substantial portion of these delays resulted from
+an over-reliance on developers.
+
+
+-- ds.h1: The Webflow Interlude
+
+In search of efficiency, ACME turned to Webflow, enticed by its reputation for
+rapid setup. While content management became a breeze, design and functionality
+aspirations were consistently hampered,  leading to constant battles to align
+either their design or content with Webflow’s rigid framework. For instance,
+**content edits in Webflow could disrupt design layouts**, requiring multiple
+template and page adjustments, increasing the risk of inconsistencies.
+
+Webflow's focus on visual web design, although beneficial, sometimes
+**constrained full-stack control and customization options**. Furthermore,
+hosting on Webflow's platform meant potential **dependency on the platform's
+policies and pricing**.
+
+
+-- ds.h1: Building the ACME Website with fastn
+
+Fueled by a desire for a more practical solution, ACME decided to give `fastn` a
+chance. Their journey began with a `30-minute training session` for the
+entire ACME team on how to build and manage a fastn-powered website.
+
+The spotlight then fell on Pooja, ACME’s UX designer, who possessed a deep
+understanding of the brand and its target audience, took up the task to build
+the ACME website.
+
+She explored fastn's [featured page](https://fastn.com/featured/) and selected
+the [midnight storm](https://fastn.com/featured/landing/midnight-storm-landing/)
+landing page template. Following the steps in the
+[User Manual](https://fastn-community.github.io/midnight-storm/index.html),
+she created a new [GitHub repository](https://github.com/fastn-community/acme-inc)
+by clicking on `Use this template` button on GitHub.
+This [guide](https://fastn.com/github-pages/) facilitated the process further.
+
+As you can see in the image below, within the
+[fastn.ftd](https://github.com/fastn-community/acme-inc/blob/main/FASTN.ftd)
+file, the requisite dependencies like color scheme and typography are already
+added. This **eliminates the need to specify font sizes and colors** for individual
+UI elements and ensures a **consistent look and feel** across the website.
+
+This also streamlines future changes, as all it requires is modifying a few
+lines of code to add the new
+[color scheme](https://fastn.com/color-scheme/) and
+[typography](https://fastn.com/typography/).
+
+-- ds.image: [ACME's fastn.ftd file](https://github.com/fastn-community/acme-inc/blob/main/FASTN.ftd)
+src: $fastn-assets.files.images.blog.fastn-ftd.png
+width.fixed.percent: 95
+
+-- ds.markdown:
+
+She then added a [sitemap](/understanding-sitemap/-/build/)
+and created [custom and clean URLs](/clean-urls/) for
+enhanced user experience.
+
+-- ds.image: [Adding Sitemap in the fastn.ftd file](https://github.com/fastn-community/acme-inc/blob/main/FASTN.ftd)
+src: $fastn-assets.files.images.blog.sitemap.png
+width.fixed.percent: 50
+
+-- ds.markdown:
+
+Simultaneously, Priyanka from the content team proceeded to populate the ACME
+website with content. The **native [Markdown support](https://fastn.com/markdown/-/frontend/)
+transformed content into code effortlessly**.
+
+Compare the following source code versus live page to appreciate how
+fastn's **user-friendly and minimal syntax** enables individuals with no prior
+programming experience to code effortlessly.
+
+Homepage: [Code](https://github.com/fastn-community/acme-inc/blob/main/index.ftd) vs [Live Page](https://acme.fastn.com/)
+
+Services Page: [Code](https://github.com/fastn-community/acme-inc/blob/main/services.ftd) vs [Live Page](https://acme.fastn.com/services/)
+
+About Us Page: [Code](https://github.com/fastn-community/acme-inc/blob/main/team.ftd) vs [Live Page](https://acme.fastn.com/team/)
+
+Pricing Page: [Code](https://github.com/fastn-community/acme-inc/blob/main/pricing.ftd) vs [Live Page](https://acme.fastn.com/pricing/)
+
+Blog Page: [Code](https://github.com/fastn-community/acme-inc/blob/main/blog.ftd) vs [Live Page](https://acme.fastn.com/blog/)
+
+
+ACME's transition to fastn allowed **every team member to contribute to the website**
+without solely relying on the developers.
+
+Here are few scenarios that highlights how each team member implemented a change.
+
+
+-- ds.h2: Price Updates
+
+The Business Team's insights from a recent meeting have prompted to modify the
+Pricing Plan values to enhance conversions. As a result, Harish, the Product
+Manager, decided to bring down the price of the startup and Enterprise Plan.
+
+By editing the `pricing.ftd` and updating the existing prices with the new
+figures, he swiftly implemented the change. As the pricing plan is a
+**component-based design**, he only needed to adjust the relevant values.
+
+-- ds.image: [Code Changes Highlight](https://github.com/fastn-community/acme-inc/pull/5/files)
+src: $fastn-assets.files.images.blog.price-fc.png
+width.fixed.percent: 95
+
+-- ds.image: [Before Changes](https://acme.fastn.com/pricing/)
+src: $fastn-assets.files.images.blog.old-price.png
+width.fixed.percent: 95
+
+-- ds.image: [After Changes](https://acme-inc-git-updating-pricing-page-fifthtry.vercel.app/pricing/)
+src: $fastn-assets.files.images.blog.new-price.png
+width.fixed.percent: 95
+
+
+-- ds.h2: Adding a New Team Member
+
+-- ftd.column:
+width.fixed.px if { ftd.device != "mobile" }: 500
+width: fill-container
+padding.px if { ftd.device != "mobile" }: 24
+padding.px if { ftd.device == "mobile" }: 16
+align-content: center
+align-self: center
+
+	-- chat.message-left: Hey Team, please welcome Ayush Soni, our newly joined VP of Product.
+	avatar: $fastn-assets.files.images.blog.nandy.jpg
+	username: Nandhini Dive
+	time: 12.37 pm
+	
+	
+	-- chat.message-left: Hi, guys. Excited to be part of ACME Inc!!!
+	avatar: $fastn-assets.files.images.blog.ayush-soni.jpg
+	username: Ayush Soni
+	time: 12.38 pm
+	
+	-- chat.message-right: Welcome to the ACME team, Ayush.
+	avatar: $fastn-assets.files.images.blog.meenu.jpg
+	time: 12.38 pm
+	
+	-- chat.message-left: Hey Meenu, add Ayush Soni to our team's page.
+	avatar: $fastn-assets.files.images.blog.nandy.jpg
+	username: Nandhini Dive
+	time: 12.38 pm
+	
+	-- chat.message-right: Done. Here is the link: https://acme-inc-git-adding-team-member-fifthtry.vercel.app/team/
+	avatar: $fastn-assets.files.images.blog.meenu.jpg
+	time: 12.43 pm
+	
+-- end: ftd.column
+
+-- ds.markdown:
+
+Meenu, ACME's HR Lead, leveraged fastn’s **component-based design** for the
+teams page. She added the new team member Ayush Soni's details by simply
+using the team member component.
+
+-- ds.image: [Code Changes Highlight](https://github.com/fastn-community/acme-inc/pull/4/files)
+src: $fastn-assets.files.images.blog.team-fc.png
+width.fixed.percent: 95
+
+-- ds.image: [Before Changes](https://acme.fastn.com/team/)
+src: $fastn-assets.files.images.blog.old-team.png
+width.fixed.percent: 95
+
+-- ds.image: [After Changes](https://acme-inc-git-adding-team-member-fifthtry.vercel.app/team/)
+src: $fastn-assets.files.images.blog.new-team.png
+width.fixed.percent: 95
+
+
+-- ds.h2: A Rapid Diwali Offer Page Creation
+
+Rithik, the Marketing guy, seized the festive spirit. With fastn, he promptly
+created a Diwali offer landing page, complete with an image, title,
+and call-to-action.
+
+-- ds.image: [Code Changes Highlight](https://github.com/fastn-community/acme-inc/pull/11/files)
+src: $fastn-assets.files.images.blog.offer-fc.png
+width.fixed.percent: 95
+
+-- ds.image: [New Offer Page](https://acme-inc-git-new-landing-page-fifthtry.vercel.app/offers/)
+src: $fastn-assets.files.images.blog.offer.png
+width.fixed.percent: 95
+
+-- ds.h2: URL Redirection
+
+Mayuri, the SEO expert, identified a URL redirection for enhanced SEO
+impact. Leveraging fastn, she introduced the redirection from
+`/launching-color-support/` to `/color-support/`.
+
+-- ds.image: [Code Changes Highlight](https://github.com/fastn-community/acme-inc/pull/8/files)
+src: $fastn-assets.files.images.blog.redirect-fc.png
+width.fixed.percent: 95
+
+-- ds.h2: Revamping ACME's Look in a Blink
+
+Ganesh, the Design Head, decided to give a fresh look for ACME's website.
+He revamped the website with a **single line of code**.
+
+By removing the `midnight storm` and introducing the `midnight rush` package as a
+fastn dependency in the `fastn.ftd` file, he updated the layout, colour scheme,
+and typography of the website.
+
+
+-- ds.image: [Code Changes Highlight](https://github.com/fastn-community/acme-inc/pull/9/files)
+src: $fastn-assets.files.images.blog.layout-fc.png
+width.fixed.percent: 95
+
+-- ds.image: [Before Changes](https://acme.fastn.com/)
+src: $fastn-assets.files.images.blog.old-layout.png
+width.fixed.percent: 95
+
+-- ds.image: [After Changes](https://acme-inc-git-design-change-fifthtry.vercel.app/)
+src: $fastn-assets.files.images.blog.new-layout.png
+width.fixed.percent: 95
+
+-- ds.h1: What did ACME gain?
+
+Since all components in the fastn ecosystem adhere to a **unified design system**,
+this eliminated the need for extensive design deliberations and quick
+development cycle.
+
+The integration of fastn's **built-in dark mode and responsive design**
+improved user accessibility effortlessly. The most significant
+advantage was that **modifying content no longer disrupted design**, enabling swift
+website development.
+
+Furthermore, ACME could now [deploy](https://fastn.com/deploy/) their website
+on their server, securing control, privacy, scalability, and **reduced reliance on
+external platforms**.
+
+-- lib.get-started:
+
+-- end: ds.blog-page

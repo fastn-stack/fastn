@@ -1,0 +1,103 @@
+-- import: fifthtry.github.io/fastn-typography as fastn-typo
+-- import: fastn-stack.github.io/fastn-js/assets as js-assets
+-- import: fastn-stack.github.io/fastn-js/typo-exporter as t
+-- import: fastn/processors as pr
+
+-- optional string $code:
+-- optional string $formatted-code:
+
+-- string fastn-typo-json:
+$processor$: pr.figma-typo-token
+variable: $fastn-typo.types
+name: fastn-typography
+
+-- void typo-to-ftd(json,store_at,formatted_string):
+string json:
+string $store_at:
+string $formatted_string:
+js: [$js-assets.files.typo.js]
+
+value = typo_to_ftd(json);
+store_at = value[0];
+formatted_string = value[1];
+
+-- ds.page: Typography json to `fastn`
+
+`fastn` allows you to generate typography code from its equivalent json. To
+generate `fastn` code, you will need to include `typo.js` from `fastn-js` repo
+and use its `typo_to_ftd(json)` JS function.
+
+This function `typo_to_ftd(json)` takes json string as input and returns
+two strings - `fastn` source code, styled `fastn` code.
+
+-- ds.h1: Example
+
+Below mentioned code shows how we can generate equivalent `fastn` code for
+`fastn-io-typography` from its json.
+
+-- ds.rendered: Using `typo_to_ftd(json)` to generate `fastn` code
+
+	-- ds.rendered.input:
+	
+	\-- import: fastn-stack.github.io/fastn-js/assets as js-assets
+	\-- import: fastn-community.github.io/doc-site as ds
+	\-- import: fifthtry.github.io/fastn-typography as fastn-typo
+	
+	\-- optional string $code:
+	\-- optional string $formatted-code:
+	
+	\-- string fastn-typo-json:
+	$processor$: pr.figma-typo-token
+	variable: $forest-cs.main
+	name: fastn-typography
+	
+	\-- void typo-to-ftd(json,store_at,formatted_string):
+	string json:
+	string $store_at:
+	string $formatted_string:
+	js: [$js-assets.files.typo.js]
+	
+	value = typo_to_ftd(json);
+	store_at = value[0];
+	formatted_string = value[1];
+	
+	\-- ftd.text: Generate `fastn` code
+	$on-click$: $typo-to-ftd(json = $fastn-typo-json, $store_at = $code, $formatted_string = $formatted-code)
+	color: $inherited.colors.text
+	role: $inherited.types.copy-regular
+	border-width.px: 2
+	padding.px: 5
+	
+	\-- ds.code:
+	if: { code != NULL }
+	body: $formatted-code
+	text: $code
+	max-height.fixed.px: 300
+	
+	-- ds.rendered.output:
+	
+		-- ftd.text: Generate `fastn` code
+		$on-click$: $typo-to-ftd(json = $fastn-typo-json, $store_at = $code, $formatted_string = $formatted-code)
+		color: $inherited.colors.text
+		role: $inherited.types.copy-regular
+		border-width.px: 2
+		padding.px: 5
+		
+		-- ds.code:
+		if: { code != NULL }
+		body: $formatted-code
+		text: $code
+		max-height.fixed.px: 300
+		download: types.ftd
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.h1: Exporter
+
+Paste any typography json below and generate its `fastn` equivalent code.
+
+-- t.json-exporter:
+
+-- end: ds.page

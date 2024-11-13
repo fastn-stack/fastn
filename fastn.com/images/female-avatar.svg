@@ -1,0 +1,19 @@
+<svg width="629" height="540" viewBox="0 0 629 540" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="314.5" cy="270" rx="314.5" ry="270" fill="url(#paint0_radial_0_1)"/>
+    <ellipse cx="382.5" cy="320.5" rx="37.5" ry="33.5" fill="black"/>
+    <rect x="284" y="287" width="61" height="86" fill="#E6CAB9"/>
+    <ellipse cx="319.5" cy="177" rx="160.5" ry="143" fill="black"/>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M316 329.5C354.5 329.5 444 245.603 444 178.5C429.265 194.527 388.871 166.318 351.422 140.165C316.436 115.732 284.02 93.095 277.5 110C266.7 138 213.333 167.333 188 178.5C188 245.603 277.5 329.5 316 329.5Z" fill="#F1D3C0"/>
+    <path d="M316 57C245.308 57 188 111.397 188 178.5C213.333 167.333 266.7 138 277.5 110C284.02 93.095 316.436 115.732 351.422 140.165C388.871 166.318 429.265 194.527 444 178.5C444 111.397 386.692 57 316 57Z" fill="black"/>
+    <path d="M520 449.5C520 502.243 428.442 498.5 315.5 498.5C202.558 498.5 111 502.243 111 449.5C111 396.757 202.558 354 315.5 354C428.442 354 520 396.757 520 449.5Z" fill="#E5CAB9"/>
+    <path d="M429.5 373C374.5 432 269 435 205 373C178.5 373 178.5 373 161 391L161 391C191 417.4 205 492 205 492L321.5 505L429.5 492C429.5 454.5 442.653 425.554 469 391C440.5 373 460 384 429.5 373Z" fill="#E4498A"/>
+    <ellipse cx="382.5" cy="369.5" rx="37.5" ry="33.5" fill="black"/>
+    <path d="M415 414.5C415 433.002 377.5 437 377.5 465.5C377.5 486.211 340 433.002 340 414.5C340 395.998 356.789 381 377.5 381C398.211 381 415 395.998 415 414.5Z" fill="black"/>
+    <defs>
+        <radialGradient id="paint0_radial_0_1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(326 -3.45552e-05) rotate(91.1124) scale(566.607 659.992)">
+            <stop stop-color="#CACACA"/>
+            <stop offset="0.568268" stop-color="#CACACA" stop-opacity="0"/>
+            <stop offset="1" stop-color="#F5F5F5"/>
+        </radialGradient>
+    </defs>
+</svg>

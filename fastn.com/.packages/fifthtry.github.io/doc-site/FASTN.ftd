@@ -1,0 +1,76 @@
+-- import: fastn
+
+-- fastn.package: fifthtry.github.io/doc-site
+favicon: fifthtry.github.io/doc-site/assets/static/favicon.ico
+
+-- fastn.dependency: fifthtry.github.io/code-block
+-- fastn.dependency: fifthtry.github.io/typography
+-- fastn.dependency: fifthtry.github.io/doc-site-typography as typo
+-- fastn.dependency: fifthtry.github.io/app-switcher
+-- fastn.dependency: fifthtry.github.io/header
+-- fastn.dependency: fifthtry.github.io/dark-mode-switcher
+
+
+
+-- fastn.auto-import: fastn
+
+-- fastn.auto-import: fifthtry.github.io/code-block as cb
+-- fastn.auto-import: fifthtry.github.io/header as h
+-- fastn.auto-import: fifthtry.github.io/typography as tf
+exposing: h0, h1, h2, h3, markdown
+
+
+/-- fastn.app: Todos for Family
+mount-point: /todos/
+package: kameri-app.herokuapp.com
+end-point: https://kameri-service.herokuapp.com
+readers: fastn-fans
+/config: db_url=$ENV.DB_URL
+/config: name=FifthTry members
+
+-- fastn.sitemap:
+
+# Home: /index.html
+
+
+- Using doc-site for FTD web projects: /docs/
+icon: -/fifthtry.github.io/doc-site/static/primary-favorites.svg
+
+- How to use blog: /docs/blog/
+icon: -/fifthtry.github.io/doc-site/static/primary-favorites.svg
+
+- Right-sidebar example: /docs/right-sidebar/
+icon: -/fifthtry.github.io/doc-site/static/primary-favorites.svg
+
+- 404 `ds.not-found-1`: 404/
+icon: -/fifthtry.github.io/doc-site/static/primary-favorites.svg
+
+;; - 404 `ds.not-found-2`: 404/not-found-2/
+;; icon: -/fifthtry.github.io/doc-site/static/primary-favorites.svg
+
+# Blog: /featured-posts/
+
+## Posts: featured-posts/
+
+- News & Culture: /blog-articles/category-1/
+
+  - A day in a city of dreams: /blog-articles/category-1/sample-post-1/
+  - Understanding process of start-up funding: /blog-articles/category-1/sample-post-2/
+
+- Technology & Learning: /blog-articles/category-2/
+
+  - What are front-end technologies we have?: /blog-articles/category-2/sample-post-3/
+  - What rust gives us?: /blog-articles/category-2/sample-post-4/
+
+## Authors: blog-authors/amitu/
+
+- Amit Upadhyay: /blog-authors/amitu/
+- Abrar Khan: /blog-authors/abrar/
+- Arpita Jaiswal: /blog-authors/arpita/
+- Ganesh S Salunke: /blog-authors/ganesh/
+
+# GitHub
+url: https://github.com/FifthTry/doc-site/
+
+# Use this template
+url: https://github.com/fastn-stack/fastn-template/

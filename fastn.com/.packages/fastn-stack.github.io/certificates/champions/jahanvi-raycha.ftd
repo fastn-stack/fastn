@@ -1,0 +1,16 @@
+-- import: fastn-stack.github.io/certificates/champion
+
+-- ds.page: Champion Certification
+
+-- ftd.column:
+width: fill-container
+
+-- champion.certificate-2: Jahanvi Raycha
+date: 6th October 2023
+avatar: $assets.files.assets.avatar.jahanvi-raycha.jpg
+discord-link: https://discord.com/channels/793929082483769345/1159809695129813063
+github-link: https://github.com/jahanvir
+
+-- end: ftd.column
+
+-- end: ds.page

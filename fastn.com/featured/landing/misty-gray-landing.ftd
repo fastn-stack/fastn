@@ -1,0 +1,45 @@
+-- import: fastn.com/u/saurabh-lohiya
+-- import: fastn.com/u/muskan-verma
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Misty Gray
+featured-link: /featured/landing-pages/
+category: Landing Pages
+image: $fastn-assets.files.images.featured.landing.misty-gray-landing.png
+owners: [$muskan-verma.info, $saurabh-lohiya.info]
+license-url: https://github.com/fastn-community/misty-gray/blob/main/LICENSE
+license: Creative Commons
+published-date: 20-June-2023
+cards: $landing
+github-url: https://github.com/fastn-community/misty-gray
+demo-link: https://fastn-community.github.io/misty-gray/landing/
+
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list landing:
+
+-- ft-ui.template: Midnight Storm
+template-url: featured/landing/midnight-storm-landing/
+screenshot: $fastn-assets.files.images.featured.landing.ms-landing-demo.png
+
+-- ft-ui.template: Midnight Rush
+template-url: featured/landing/mr-landing/
+screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
+
+-- ft-ui.template: CT Landing Page
+template-url: featured/landing-pages/
+screenshot: $fastn-assets.files.images.featured.landing.ct-landing-page.png
+
+-- ft-ui.template: Studious Couscous
+template-url: featured/landing/studious-couscous/
+screenshot: $fastn-assets.files.images.featured.landing.studious-couscous.png
+
+-- end: landing

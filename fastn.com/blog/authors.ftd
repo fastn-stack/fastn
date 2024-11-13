@@ -1,0 +1,71 @@
+-- import: fastn-community.github.io/doc-site/common
+
+-- common.author-meta nandini: Nandhini Devi
+profile: Digital Marketer and Copywriter
+bio-url: https://github.com/nandhinidevie
+image: $fastn-assets.files.images.blog.nandy.jpg
+company: Freelance, FifthTry
+
+If Kermit thought it's not easy being green, he hasn't met me yet.
+
+
+-- common.author-meta arpita: Arpita Jaiswal
+profile: Senior Software Developer
+bio-url: https://github.com/Arpita-Jaiswal
+image: $fastn-assets.files.images.blog.arpita.jpg
+company: FifthTry
+
+I am building `fastn`.
+
+
+
+-- common.author-meta ajit: Ajit Garg
+profile: DevRel
+bio-url: https://github.com/gargajit
+image: $fastn-assets.files.images.blog.ajit.jpg
+company: FifthTry
+
+Working in FifthTry.
+
+-- common.author-meta rithik: Rithik Seth
+profile: Software Developer
+bio-url: https://github.com/heulitig
+image: $fastn-assets.files.images.students-program.champions.rithik.jpg
+company: FifthTry
+
+Working in FifthTry.
+
+
+-- common.author-meta amitu: Amit Upadhyay
+profile: CEO
+bio-url: https://github.com/amitu
+image: $fastn-assets.files.images.blog.amitu.jpg
+company: FifthTry
+
+Building fastn.com
+
+
+-- common.author-meta harish: Harish Shankaran
+profile: Marketing Consultant
+bio-url: https://github.com/hsfastn
+image: $fastn-assets.files.images.blog.harish.png
+company: FifthTry
+
+I am Harish. On most days, I have a sunny disposition, a sense of humor (I am
+told I can be punny! :P) & a genuine interest to know/build cool things. I am a
+father to a 5 year old, so I am constantly upgrading my patience & listening
+skills. I consciously foster creativity and add new skill-sets / tools to my
+arsenal.
+
+I am bullish on Web 3.0. What excites me the most is how current successful Web
+2.0 products would metamorphosize & leverage the anonymized, decentralized web.
+I am currently building platforms that would allow me to utilize my
+understanding of businesses, industries & product to its full potential!
+
+-- common.author-meta siddhant: Siddhant Kumar
+profile: Software Developer
+bio-url: https://github.com/siddhantk232
+image: $fastn-assets.files.images.blog.siddhant.jpg
+company: Contributor
+
+Engineer | Computer Science Student | NixOS enjoyer :wq

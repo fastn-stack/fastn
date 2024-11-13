@@ -1,0 +1,56 @@
+{
+  "files": {
+    "FASTN.ftd": {
+      "name": "FASTN.ftd",
+      "checksum": "534F4D97023C1DE1281168E848C8C19439F9260023790259A9DD0F13D5E31200",
+      "size": 1195
+    },
+    "LICENSE": {
+      "name": "LICENSE",
+      "checksum": "5B8B83357C092AC57F28508D18CAB65E4965AAA3BA61226DE038719E022638C1",
+      "size": 1516
+    },
+    "README.md": {
+      "name": "README.md",
+      "checksum": "9C481C6518E151058FD4EC4FF962CA20735CA60447D82992F9D8F9214914880C",
+      "size": 1091
+    },
+    "docs.ftd": {
+      "name": "docs.ftd",
+      "checksum": "A595F1A54A853C58182847CA559C78991A7E92D483A679D19750EA35AB313022",
+      "size": 3177
+    },
+    "images/FPM.svg": {
+      "name": "images/FPM.svg",
+      "checksum": "5A84F16B1B39D55E37BA547B6EA2DBB6D62C48A4D4B40FE4EE0599B3B9E8DEE7",
+      "size": 3895
+    },
+    "images/FTD.svg": {
+      "name": "images/FTD.svg",
+      "checksum": "E1AF84F956375D4D61AC238C6B4B393B947F4FE245736BECF80843F7C9313511",
+      "size": 3798
+    },
+    "images/Fifthtry.svg": {
+      "name": "images/Fifthtry.svg",
+      "checksum": "D35F99848896239279A7C8F20522880C650626D8BE1785DE5B0B3CD7D87CCA03",
+      "size": 10581
+    },
+    "images/app-switcher-mobile.svg": {
+      "name": "images/app-switcher-mobile.svg",
+      "checksum": "0E80A211F7B95221F83B95AF52BED4EFA7835173DE2040FE807A10475DF189C3",
+      "size": 252
+    },
+    "images/cross.svg": {
+      "name": "images/cross.svg",
+      "checksum": "2C312823EEAB39775C496367DC2723B096B32EEC47FF53F2790A6E79705A9029",
+      "size": 678
+    },
+    "index.ftd": {
+      "name": "index.ftd",
+      "checksum": "34EB7E04ECED572D1CB20C32710A3DCA87EAF6C75D33DB14548910EAA7567CA4",
+      "size": 6015
+    }
+  },
+  "zip_url": "https://github.com/fastn-community/app-switcher/archive/c6ffa08fbc80ed51e9ef95345ce2628bedce57c9.zip",
+  "checksum": "B7D573393AEF8C8D889108DD03D278CE3A2186950930CEB5DFE2C1DAC60CA158"
+}

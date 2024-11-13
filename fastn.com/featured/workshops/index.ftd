@@ -1,0 +1,26 @@
+-- import: fastn.com/featured as ft-ui
+
+
+-- ds.page:
+sidebar: false
+
+-- ft-ui.view-all: Workshop Pages
+templates: $workshops
+
+-- end: ds.page
+
+
+
+
+
+-- ft-ui.template list workshops:
+
+-- ft-ui.template: Workshop 1
+template-url: featured/workshops/workshop-1/
+screenshot: $fastn-assets.files.images.featured.workshops.workshop-1.png
+
+-- ft-ui.template: Event 1
+template-url: featured/workshops/event-1/
+screenshot: $fastn-assets.files.images.featured.workshops.event-1.png
+
+-- end: workshops

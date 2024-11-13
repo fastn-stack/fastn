@@ -1,0 +1,822 @@
+-- ds.page:
+
+This page will contain some components which would be useful probably.
+
+-- letter-bar:
+link-a: #something
+
+-- letter-stack:
+height.fixed.px: 800
+contents-a: $letter-contents-a
+contents-b: $letter-contents-b
+contents-c: $letter-contents-c
+contents-d: $letter-contents-d
+contents-e: $letter-contents-e
+contents-f: $letter-contents-f
+contents-g: $letter-contents-g
+contents-h: $letter-contents-h
+contents-i: $letter-contents-i
+contents-j: $letter-contents-j
+contents-k: $letter-contents-k
+contents-l: $letter-contents-l
+contents-m: $letter-contents-m
+contents-n: $letter-contents-n
+contents-o: $letter-contents-o
+contents-p: $letter-contents-p
+contents-q: $letter-contents-q
+contents-r: $letter-contents-r
+contents-s: $letter-contents-s
+contents-t: $letter-contents-t
+contents-u: $letter-contents-u
+contents-v: $letter-contents-v
+contents-w: $letter-contents-w
+contents-x: $letter-contents-x
+contents-y: $letter-contents-y
+contents-z: $letter-contents-z
+
+-- end: ds.page
+
+-- ftd.color hover-c: coral
+
+
+-- integer letter-list-length(a):
+letter-data list a:
+
+len(a)
+
+-- letter-data list lst:
+
+-- record letter-data:
+caption name:
+optional string link:
+
+
+
+
+
+
+-- component letter:
+caption letter-name:
+optional string link:
+ftd.color hover-color: $hover-c
+boolean $is-hovered: false
+
+-- ftd.text: $letter.letter-name
+link if { letter.link != NULL }: $letter.link
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+color if { letter.is-hovered }: $letter.hover-color
+/style if { letter.is-hovered }: bold, underline
+cursor if { letter.is-hovered }: pointer
+$on-mouse-enter$: $ftd.set-bool($a = $letter.is-hovered, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $letter.is-hovered, v = false)
+
+-- end: letter
+
+
+
+
+-- component letter-bar:
+optional string link-a:
+optional string link-b:
+optional string link-c:
+optional string link-d:
+optional string link-e:
+optional string link-f:
+optional string link-g:
+optional string link-h:
+optional string link-i:
+optional string link-j:
+optional string link-k:
+optional string link-l:
+optional string link-m:
+optional string link-n:
+optional string link-o:
+optional string link-p:
+optional string link-q:
+optional string link-r:
+optional string link-s:
+optional string link-t:
+optional string link-u:
+optional string link-v:
+optional string link-w:
+optional string link-x:
+optional string link-y:
+optional string link-z:
+
+
+-- ftd.row:
+width: fill-container
+color: $inherited.colors.text
+spacing: space-between
+wrap: true
+
+	-- letter: A
+	link: $letter-bar.link-a
+	
+	-- letter: B
+	link: $letter-bar.link-b
+	
+	-- letter: C
+	link: $letter-bar.link-c
+	
+	-- letter: D
+	link: $letter-bar.link-d
+	
+	-- letter: E
+	link: $letter-bar.link-e
+	
+	-- letter: F
+	link: $letter-bar.link-f
+	
+	-- letter: G
+	link: $letter-bar.link-g
+	
+	-- letter: H
+	link: $letter-bar.link-h
+	
+	-- letter: I
+	link: $letter-bar.link-i
+	
+	-- letter: J
+	link: $letter-bar.link-j
+	
+	-- letter: K
+	link: $letter-bar.link-k
+	
+	-- letter: L
+	link: $letter-bar.link-l
+	
+	-- letter: M
+	link: $letter-bar.link-m
+	
+	-- letter: N
+	link: $letter-bar.link-n
+	
+	-- letter: O
+	link: $letter-bar.link-o
+	
+	-- letter: P
+	link: $letter-bar.link-p
+	
+	-- letter: Q
+	link: $letter-bar.link-q
+	
+	-- letter: R
+	link: $letter-bar.link-r
+	
+	-- letter: S
+	link: $letter-bar.link-s
+	
+	-- letter: T
+	link: $letter-bar.link-t
+	
+	-- letter: U
+	link: $letter-bar.link-u
+	
+	-- letter: V
+	link: $letter-bar.link-v
+	
+	-- letter: W
+	link: $letter-bar.link-w
+	
+	-- letter: X
+	link: $letter-bar.link-x
+	
+	-- letter: Y
+	link: $letter-bar.link-y
+	
+	-- letter: Z
+	link: $letter-bar.link-z
+	
+-- end: ftd.row
+
+-- end: letter-bar
+
+
+
+
+
+
+
+
+
+
+
+-- component letter-category:
+ftd.resizing width: fill-container
+caption letter-name:
+letter-data list letter-items:
+
+-- ftd.column:
+if: { len(letter-category.letter-items) != 0 }
+width: $letter-category.width
+spacing.fixed.px: 10
+wrap: true
+
+	-- ftd.text: $letter-category.letter-name
+	color: $inherited.colors.text
+	role: $inherited.types.heading-large
+	
+	-- ftd.column:
+	spacing.fixed.px: 5
+	wrap: true
+	
+		-- letter: $item.name
+		$loop$: $letter-category.letter-items as $item
+		link: $item.link
+		
+	-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: letter-category
+
+
+
+
+
+
+
+
+
+
+
+-- component letter-stack:
+optional caption title:
+optional ftd.resizing height:
+letter-data list contents-a: []
+letter-data list contents-b: []
+letter-data list contents-c: []
+letter-data list contents-d: []
+letter-data list contents-e: []
+letter-data list contents-f: []
+letter-data list contents-g: []
+letter-data list contents-h: []
+letter-data list contents-i: []
+letter-data list contents-j: []
+letter-data list contents-k: []
+letter-data list contents-l: []
+letter-data list contents-m: []
+letter-data list contents-n: []
+letter-data list contents-o: []
+letter-data list contents-p: []
+letter-data list contents-q: []
+letter-data list contents-r: []
+letter-data list contents-s: []
+letter-data list contents-t: []
+letter-data list contents-u: []
+letter-data list contents-v: []
+letter-data list contents-w: []
+letter-data list contents-x: []
+letter-data list contents-y: []
+letter-data list contents-z: []
+
+-- ftd.column:
+wrap: true
+width: fill-container
+height: $letter-stack.height
+spacing.fixed.px: 23
+
+	-- letter-category: A
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-a
+	
+	-- letter-category: B
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-b
+	
+	-- letter-category: C
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-c
+	
+	-- letter-category: D
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-d
+	
+	-- letter-category: E
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-e
+	
+	-- letter-category: F
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-f
+	
+	-- letter-category: G
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-g
+	
+	-- letter-category: H
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-h
+	
+	-- letter-category: I
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-i
+	
+	-- letter-category: J
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-j
+	
+	-- letter-category: K
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-k
+	
+	-- letter-category: L
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-l
+	
+	-- letter-category: M
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-m
+	
+	-- letter-category: N
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-n
+	
+	-- letter-category: O
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-o
+	
+	-- letter-category: P
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-p
+	
+	-- letter-category: Q
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-q
+	
+	-- letter-category: R
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-r
+	
+	-- letter-category: S
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-s
+	
+	-- letter-category: T
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-t
+	
+	-- letter-category: U
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-u
+	
+	-- letter-category: V
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-v
+	
+	-- letter-category: W
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-w
+	
+	-- letter-category: X
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-x
+	
+	-- letter-category: Y
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-y
+	
+	-- letter-category: Z
+	width.fixed.percent if { ftd.device != "mobile" }: 20
+	width: fill-container
+	letter-items: $letter-stack.contents-z
+	
+-- end: ftd.column
+
+-- end: letter-stack
+
+
+
+
+
+-- letter-data list letter-contents-a:
+
+-- letter-data: anchor
+link: /anchor/
+
+-- letter-data: align-self
+link: /align-self/
+
+-- end: letter-contents-a
+
+
+
+
+
+
+
+
+-- letter-data list letter-contents-b:
+
+-- letter-data: bottom
+link: /bottom/
+
+-- letter-data: background
+link: /background/
+
+-- letter-data: border-color
+link: /border-color/
+
+-- letter-data: border-left-color
+link: /border-left-color/
+
+-- letter-data: border-right-color
+link: /border-right-color/
+
+-- letter-data: border-top-color
+link: /border-top-color/
+
+-- letter-data: border-bottom-color
+link: /border-bottom-color/
+
+-- letter-data: border-style
+link: /border-style/
+
+-- letter-data: border-style-left
+link: /border-style-left/
+
+-- letter-data: border-style-right
+link: /border-style-right/
+
+-- letter-data: border-style-top
+link: /border-style-top/
+
+-- letter-data: border-style-bottom
+link: /border-style-bottom/
+
+-- letter-data: border-style-horizontal
+link: /border-style-horizontal/
+
+-- letter-data: border-style-vertical
+link: /border-style-vertical/
+
+-- letter-data: border-width
+link: /border-width/
+
+-- letter-data: border-left-width
+link: /border-left-width/
+
+-- letter-data: border-right-width
+link: /border-right-width/
+
+-- letter-data: border-top-width
+link: /border-top-width/
+
+-- letter-data: border-bottom-width
+link: /border-bottom-width/
+
+-- letter-data: border-radius
+link: /border-radius/
+
+-- letter-data: border-top-left-radius
+link: /border-top-left-radius/
+
+-- letter-data: border-top-right-radius
+link: /border-top-right-radius/
+
+-- letter-data: border-bottom-left-radius
+link: /border-bottom-left-radius/
+
+-- letter-data: border-bottom-right-radius
+link: /border-bottom-right-radius/
+
+-- end: letter-contents-b
+
+
+
+
+
+
+
+
+-- letter-data list letter-contents-c:
+
+-- letter-data: color
+link: /color/
+
+-- letter-data: cursor
+link: /cursor/
+
+-- letter-data: classes
+link: /classes/
+
+-- letter-data: css
+link: /css/
+
+-- letter-data: css-list
+link: /css-list/
+
+-- end: letter-contents-c
+
+
+
+-- letter-data list letter-contents-d:
+
+
+
+
+
+-- letter-data list letter-contents-e:
+
+
+
+-- letter-data list letter-contents-f:
+
+
+
+
+-- letter-data list letter-contents-g:
+
+
+
+
+
+-- letter-data list letter-contents-h:
+
+-- letter-data: height
+link: /height/
+
+-- end: letter-contents-h
+
+
+
+
+
+-- letter-data list letter-contents-i:
+
+-- letter-data: id
+link: /id/
+
+-- end: letter-contents-i
+
+
+
+
+-- letter-data list letter-contents-j:
+
+-- letter-data: js
+link: /js/
+
+-- letter-data: js-list
+link: /js-list/
+
+-- end: letter-contents-j
+
+
+
+
+-- letter-data list letter-contents-k:
+
+
+
+
+-- letter-data list letter-contents-l:
+
+-- letter-data: left
+link: /left/
+
+-- letter-data: link
+link: /link/
+
+-- end: letter-contents-l
+
+
+
+-- letter-data list letter-contents-m:
+
+-- letter-data: margin
+link: /margin/
+
+-- letter-data: margin-left
+link: /margin-left/
+
+-- letter-data: margin-right
+link: /margin-right/
+
+-- letter-data: margin-top
+link: /margin-top/
+
+-- letter-data: margin-bottom
+link: /margin-bottom/
+
+-- letter-data: margin-horizontal
+link: /margin-horizontal/
+
+-- letter-data: margin-vertical
+link: /margin-vertical/
+
+-- letter-data: max-width
+link: /max-width/
+
+-- letter-data: min-width
+link: /min-width/
+
+-- letter-data: max-height
+link: /max-height/
+
+-- letter-data: min-height
+link: /min-height/
+
+-- end: letter-contents-m
+
+
+
+
+-- letter-data list letter-contents-n:
+
+
+
+
+-- letter-data list letter-contents-o:
+
+-- letter-data: open-in-new-tab
+link: /open-in-new-tab/
+
+-- letter-data: overflow
+link: /overflow/
+
+-- letter-data: overflow-x
+link: /overflow-x/
+
+-- letter-data: overflow-y
+link: /overflow-y/
+
+-- end: letter-contents-o
+
+
+
+
+
+-- letter-data list letter-contents-p:
+
+-- letter-data: padding
+link: /padding/
+
+-- letter-data: padding-left
+link: /padding-left/
+
+-- letter-data: padding-right
+link: /padding-right/
+
+-- letter-data: padding-top
+link: /padding-top/
+
+-- letter-data: padding-bottom
+link: /padding-bottom/
+
+-- letter-data: padding-horizontal
+link: /padding-horizontal/
+
+-- letter-data: padding-vertical
+link: /padding-vertical/
+
+-- end: letter-contents-p
+
+
+
+
+
+-- letter-data list letter-contents-q:
+
+
+
+
+
+
+-- letter-data list letter-contents-r:
+
+
+-- letter-data: right
+link: /right/
+
+-- letter-data: region
+link: /region/
+
+-- letter-data: role
+link: /role/
+
+-- letter-data: resize
+link: /resize/
+
+-- end: letter-contents-r
+
+
+
+
+
+
+-- letter-data list letter-contents-s:
+
+-- letter-data: shadow
+link: /shadow/
+
+-- letter-data: sticky
+link: /shadow/
+
+-- end: letter-contents-s
+
+
+
+
+
+
+-- letter-data list letter-contents-t:
+
+-- letter-data: top
+link: /top/
+
+-- letter-data: text-transform
+link: /text-transform/
+
+-- end: letter-contents-t
+
+
+
+
+
+
+-- letter-data list letter-contents-u:
+
+
+
+
+
+
+-- letter-data list letter-contents-v:
+
+
+
+
+
+
+
+-- letter-data list letter-contents-w:
+
+-- letter-data: whitespace
+link: /whitespace/
+
+-- letter-data: width
+link: /width/
+
+-- end: letter-contents-w
+
+
+
+
+
+
+
+
+-- letter-data list letter-contents-x:
+
+
+
+
+
+
+
+
+
+-- letter-data list letter-contents-y:
+
+
+
+
+
+
+
+
+
+-- letter-data list letter-contents-z:
+
+-- letter-data: z-index
+link: /z-index/
+
+-- end: letter-contents-z

@@ -1,0 +1,106 @@
+-- ds.page: Features of `fastn`
+
+Here are some enhanced features of [`fastn`](/) that makes it a good to have
+tool:
+
+- [Supports ftd](/ftd/)
+- [`ftd` package manager](/package-manager/)
+- [Static site generator](/static/)
+- [`fastn` Server](/server/)
+- [Customizable color schemes](/cs/)
+- [Sitemap](/sitemap/)
+- `fastn` for Distributing Static Assets
+
+
+-- ds.h1: Supports `fastn` language
+
+[`fastn` language](/ftd/) is a language to create web pages or documents for
+publishing on the web. `fastn` takes markdown, and adds features to create full
+page layouts, lets you create reusable `fastn components`, and has first class
+support for data modelling, so the `fastn` document can be used as an data
+exchange format as well(as a replacement of JSON/CSV etc).
+
+[Learn more about `ftd`](/ftd/).
+
+
+-- ds.h1: `fastn`: Package Manager
+
+`fastn` is the package manager for `fastn` language, which defines a package
+format for packaging `.ftd` files. `fastn` packages can depend on other `fastn`
+packages, and `fastn` can install all the dependencies of a package.
+
+[Learn more](/package-manager/).
+
+
+-- ds.h1: `fastn`: Static Site Generator
+
+`fastn` can also convert `.ftd` files to static HTML files, so you can use it as
+a static site generator, and publish `.ftd` files on
+[Github Pages](/github-pages/), [Vercel](/vercel/), S3 etc static site hosting
+sites.
+
+[Learn more about `fastn` as static site generator](/static/).
+
+
+-- ds.h1: `fastn` Server
+
+`fastn` can function as an HTTP server, providing opportunities for dynamic
+features.
+
+[Learn more about `fastn` server](/server/).
+
+
+
+-- ds.h1: Customizable color schemes
+
+You can create a `fastn` package that defines a color scheme. In your main
+package, you can then import one of the [color schemes](/featured/cs/) and use
+or modify the colors as needed.
+
+[Learn more about customizable color schemes](/cs/).
+
+
+-- ds.h1: Sitemap
+
+You can organize and navigate your pages effectively by defining your package in
+the form of a sitemap.
+
+[Learn more about Sitemap](/sitemap/).
+
+
+-- ds.h1: `fastn` for Distributing Static Assets
+
+`fastn` can be used for distributing images, and fonts as packages.
+
+
+
+/-- ds.h1: Features
+
+- Web Server(fastn serve)
+- `fastn` CLI
+  - static site generator
+  - fastn serve
+- FTD
+  - Packages and Dependencies
+    - VCS
+    - Translation
+    - Inter package dependencies
+    - etc...
+- Sitemap
+  - Sections, subsections, toc, and theirs headers
+- Dynamic Urls
+  - Sections, subsections, toc, and theirs headers
+- Processors
+  - http, sitemap and all
+- HTTP Proxy
+- Auth
+  - User Groups and Identities
+  - readers and writers
+- Apps
+- Wasm Hosting
+- Sync and all
+- Editor
+- Database and Cache
+- Logs(Observer)
+
+-- end: ds.page

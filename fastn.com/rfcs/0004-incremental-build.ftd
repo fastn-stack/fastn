@@ -1,0 +1,113 @@
+-- import: fastn.com/rfcs/lib
+
+-- lib.rfc: RFC-4: Incremental Build
+id: 0004-incremental-build
+status: accepted
+
+In this RFC we propose persisting build metadata on every `fastn build`. This
+will enable as to only rebuild only the minimum number of files needed in the
+output directory, and will significantly cut down build time.
+
+
+
+-- lib.motivation:
+
+Current we rebuild every document present in current package, and recreate
+entire `.build` folder. If we have cache metadata about the previous, we can do
+incremental build, and achieve much faster builds.
+
+-- end: lib.motivation
+
+
+
+-- lib.detailed-design:
+
+We will create a new cache data, `build-cache.json`, which will contain the
+following information:
+
+	-- ds.code:
+	lang: ftd
+	
+	\-- record build-cache:
+	string fastn-version:     ;; we do not use cache created by different versions
+	document list documents:
+	file list assets:
+	file list fonts:
+	
+	\-- record file:
+	string path:               ;; path of the file
+	string checksum:           ;; sha-256 of the source file
+	
+	\-- record document:
+	file file:
+	string html-checksum:
+	string list dependencies:  ;; path of files that were directly by this document
+	
+	-- ds.markdown:
+	
+	Every time `fastn build` runs, it will load the existing `build-cache.json`,
+	and scan the current folder, `.packages` and `.build` folders. From these we
+	can compute what all files must exist in the final `.build` folder, and which
+	ever is missing from `.build` folder, or have wrong `checksum` we will overwrite
+	those files.
+	
+	-- ds.h2: Configurable Build/Cache Folders
+	
+	We will allow environment variables `FASTN_BUILD_DIR` and `FASTN_CACHE_DIR` to
+	overwrite where we store the build and cache files. By default if
+	`FASTN_BUILD_DIR` is missing we will continue to use `.build` folder and if
+	`FASTN_CACHE_DIR` is missing we will use OS specific cache directory.
+	
+	
+-- end: lib.detailed-design
+
+
+
+
+-- lib.alternatives:
+
+	-- ds.h2: Rejected: `fastn build --ignore-cache`
+	
+	We can also allow this command which will ignore cache and rebuild everything.
+	
+	We rejected this because this is clearly a bug in fastn, and never a feature
+	that end users would want. We can instead give `fastn clean` which will delete
+	`.build` folder, the entire cache folder and so on.
+	
+	-- ds.h2: Remote Caching
+	
+	Since this feature requires us to preserve cache across `fastn build`, and on
+	CI systems it will require CI provider specific steps, we can offer a free
+	remote build cache service, simplifying this step.
+	
+	This was rejected because we will have to cache both the `build-cache.json` and
+	the content of the `.build` folder, later being much bigger.
+	
+-- end: lib.alternatives
+
+
+
+
+-- lib.teaching-notes:
+
+The feature itself requires no training as this is an internal optimisation.
+
+Configuring CI systems to preserve build cache across builds is required. We
+will be updating our fastn-template Github Action to include build caching. We
+will also have to write blog post on how to enable build caching on Vercel, and
+other hosting providers who give caching.
+
+-- end: lib.teaching-notes
+
+
+
+
+-- lib.unresolved-questions:
+
+List unresolved questions here.
+
+-- end: lib.unresolved-questions
+
+
+
+-- end: lib.rfc

@@ -11,6 +11,7 @@ homepage.workspace = true
 
 [dependencies]
 serde_json.workspace = true
+# serde.workspace = true
 fastn-section.workspace = true
 fastn-unresolved.workspace = true
 async-trait.workspace = true

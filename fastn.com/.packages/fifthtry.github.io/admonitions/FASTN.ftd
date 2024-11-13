@@ -1,0 +1,14 @@
+-- import: fastn
+
+-- fastn.package: fifthtry.github.io/admonitions
+
+-- fastn.dependency: fifthtry.github.io/package-doc as pd
+-- fastn.dependency: fifthtry.github.io/typography as tf
+-- fastn.dependency: fifthtry.github.io/roboto-font
+
+-- fastn.sitemap:
+
+# Home: index.html
+
+# GitHub
+  url: https://github.com/FifthTry/admonitions

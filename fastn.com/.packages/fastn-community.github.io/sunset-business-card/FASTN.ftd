@@ -1,0 +1,16 @@
+-- import: fastn
+
+-- fastn.package: fastn-community.github.io/sunset-business-card
+favicon: /-/fastn-community.github.io/sunset-business-card/favicon.ico
+
+-- fastn.dependency: fastn-community.github.io/business-card
+
+-- fastn.auto-import: fastn-community.github.io/sunset-business-card/assets
+
+
+-- fastn.sitemap:
+
+# Home: index.html
+
+- Overview: index.html
+- How to use: /how-to-use/

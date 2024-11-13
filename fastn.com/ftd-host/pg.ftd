@@ -1,0 +1,168 @@
+-- import: fastn.com/ftd/built-in-variables as v
+-- import: fastn/processors as pr
+-- import: fastn.com/ftd-host/processor
+-- import: fastn.com/backend/env-vars
+
+
+-- ds.page: Querying PostgreSQL Using `fastn`
+
+
+Note: This document is about querying PostgreSQL Database. You can also [query
+SQLite using `fastn`](/sqlite/).
+
+`pg` processor allows you to execute SQL queries against a PostgreSQL database.
+
+-- processor.deprecated-sql-procesor:
+
+-- processor.static-vs-dynamic:
+
+-- ds.markdown:
+
+Say you have an PostgreSQL database with a table like this:
+
+-- ds.code: creating table
+lang: sql
+
+CREATE TABLE users (
+    id SERIAL,
+    name TEXT,
+    department TEXT
+);
+
+-- ds.markdown:
+
+And you have initialised it like this:
+
+-- ds.code: inserting data
+lang: sql
+
+INSERT INTO "users" (name, department) VALUES ('jack', 'design');
+INSERT INTO "users" (name, department) VALUES ('jill', 'engineering');
+
+
+-- ds.h1: Telling `fastn` about your database
+
+Before we make any queries we have to inform `fastn` about your PostgreSQL
+database credentials.
+
+-- ds.code:
+lang: sh
+
+export FASTN_PG_URL=postgres://username:password@db-host/db-name
+
+-- ds.markdown:
+
+The `FASTN_PG_URL` must contain a valid [connection
+string](https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNSTRING).
+
+
+-- ds.h1: Querying Data
+
+If `.env` file is properly setup you can fetch data from the SQLite database
+using `pg` processor:
+
+-- ds.code: querying database and storing result in a list
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- person list people:
+$processor$: pr.pg
+
+SELECT * FROM users;
+
+-- ds.markdown:
+
+For this to work you have to also create a record with same data as the result
+of your SQL query. In this query you are using `SELECT *`, which will fetch all
+three columns, `id`, `name` and `department`, so your record will look something
+like this:
+
+-- ds.code: a record corresponding to your query result
+lang: ftd
+
+\-- record person:
+integer id:
+string name:
+string department:
+
+
+-- ds.markdown:
+
+Note that the type columns in query result must match the type of fields in the
+record. The order of fields of record must also match the order of columns in
+the query result.
+
+Also note that since the result of this query can be multiple rows (or one or
+none), we have to read the result in a `person list`, so all data can be stored
+in corresponding list.
+
+-- ds.markdown:
+
+Now that you have data in a variable, you can pass it to some component to view
+it using the [`$loop$`](/list/#using-loop):
+
+
+-- ds.code: show data in page
+lang: ftd
+
+\-- show-person: $p
+for: $p in $people
+
+
+-- ds.markdown:
+
+Which will look something like this:
+
+
+-- show-person: $p
+for: $p in $people
+
+
+-- ds.h1: Environment Variables
+
+-- env-vars.fastn-pg-variables:
+
+-- end: ds.page
+
+
+
+
+-- record person:
+integer id:
+string name:
+string department:
+
+-- person list people:
+
+-- person:
+id: 1
+name: jack
+department: design
+
+-- person:
+id: 2
+name: jill
+department: engineering
+
+-- end: people
+
+
+
+-- component show-person:
+caption person p:
+
+-- ftd.column:
+spacing.fixed.px: 10
+
+	-- ds.h2: Person
+	
+	-- v.label-text: Name
+	value: $show-person.p.name
+	
+	-- v.label-text: Department
+	value: $show-person.p.department
+	
+-- end: ftd.column
+
+-- end: show-person

@@ -1,0 +1,157 @@
+-- import: fifthtry.github.io/admonitions as cbox
+
+
+-- ds.page: Install `fastn` on Mac/Linux
+
+For MacOS/Linux machine, there are three ways to install `fastn`.
+
+1. [`fastn` through `pre-built binary`](macos/#fastn-through-pre-built-binary)
+ (Recommended)
+2. [`fastn` from `source`](macos/#fastn-from-source)
+
+
+-- cbox.info: Our Recommendation
+
+We recommend you to install `fastn` through `pre-built binary`.
+
+This is the preferred method as it only requires downloading the binary and
+installing it on your local system.
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.macos-fastn-installation.gif
+
+
+-- ds.markdown:
+
+`fastn` is written using `rust` language, if you are familiar with it and want
+to use `fastn` for your project or for experimentation, you can do it by
+building the `source`.
+
+Based on your choice of installation, you can select one of the following
+options:
+
+-- ds.h1: `fastn` through `pre-built binary`
+
+For MacOS, we have an installer script. You just need to follow the video or
+follow the steps given below.
+
+-- ds.youtube:
+v: cWdivkyoOTA
+
+-- ds.h3: First Step: Copy the Installer Script
+
+Copy the following command:
+
+-- ds.code: Installer Script
+lang: sh
+
+source <(curl -fsSL https://fastn.com/install.sh)
+
+-- cbox.info: Installing specific version of fastn
+
+If you want to install any specific version of fastn besides the latest one,
+you can use the version flag when installing using the above command.
+
+-- ds.code: Installer Script (for installing specific fastn version)
+lang: sh
+
+# Let's say you want to install fastn version 0.3.45
+source <(curl -fsSL https://fastn.com/install.sh) --version=0.3.45
+
+-- ds.h3: Second Step: Open the Terminal
+
+You can find Terminal on the Dock or you can search for Terminal using Spotlight
+Search. Shortcut to open Spotlight Search, press cmd + spacebar buttons, on your
+keyboard.
+
+-- ds.h3: Third Step: Run the Installer Script
+
+Paste the command and hit enter. When prompted, enter your System Password that
+you use to open your machine and enter.
+
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.latest-binary-macos.png
+width: fill-container
+
+
+-- ds.markdown:
+
+Once the script runs 100%, installation of `fastn` is complete.
+
+
+To verify, open terminal and execute the command, `fastn`.
+
+
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.fastn-terminal-macos.png
+width: fill-container
+
+-- ds.markdown:
+
+
+If you see the Help text of the fastn command, it confirms that FASTN is
+successfully installed.
+
+
+-- cbox.tip: Tip
+
+New to the concept of `terminal` and want to read about it?
+
+Checkout the [Terminal documentation](https://fastn.com/open-terminal/).
+
+-- end: cbox.tip
+
+
+
+
+
+
+
+-- ds.h1: `fastn` from `source`
+
+`fastn` is written using rust language, if you are familiar with it and want to
+use `fastn` for your project or for experimentation, you can do it by building
+the source.
+
+`fastn` is open source project. You can clone the `fastn` github repository:
+
+
+-- ds.code:
+lang: sh
+
+git clone git@github.com:fastn-stack/fastn.git
+
+
+-- ds.markdown:
+
+`fastn` is implemented using Rust, using 2021 edition, so minimum supported Rust
+version (MSRV) is 1.65.0.
+
+
+-- ds.code:
+lang: sh
+
+cd fastn
+cargo test
+cargo build
+
+-- ds.h2: Linux Dependencies
+
+When building from source you will have to install SSL and SQLite dev packages:
+
+
+-- ds.code:
+lang: sh
+
+sudo apt-get install libsqlite3-dev libssl-dev
+
+-- ds.markdown:
+
+Once you have installed the `fastn` you can start using FTD.
+
+Happy building.
+
+
+-- end: ds.page

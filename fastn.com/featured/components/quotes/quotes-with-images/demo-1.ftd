@@ -1,0 +1,45 @@
+-- import: fastn.com/u/ganesh-salunke
+-- import: fastn.com/u/priyanka-yadav
+-- import: fastn.com/featured as ft-ui
+
+
+-- ds.featured-category: Electric
+featured-link: /featured/quotes/
+category: Featured Components
+image: $fastn-assets.files.images.featured.components.quotes.quotes-with-images.demo-1.png
+owners: [$ganesh-salunke.info, $priyanka-yadav.info]
+license-url: https://github.com/fastn-community/bling/blob/main/LICENSE
+license: Creative Commons
+published-date: 17-June-2022
+cards: $quotes
+github-url: https://github.com/fastn-community/bling/
+demo-link: https://fastn-community.github.io/bling/quote/
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list quotes:
+
+-- ft-ui.template: Charcoal
+template-url: /featured/components/quotes/author-icon-quotes/demo-1/
+screenshot: $fastn-assets.files.images.featured.components.quotes.author-icon-quotes.demo-1.png
+
+-- ft-ui.template: Marengo
+template-url: /quotes/marengo/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-5.png
+
+-- ft-ui.template: Chrome
+template-url: /quotes/chrome/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-6.png
+
+-- ft-ui.template: Dorian
+template-url: /quotes/dorian/
+screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-7.png
+
+-- end: quotes

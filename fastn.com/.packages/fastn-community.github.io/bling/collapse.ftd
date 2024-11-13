@@ -1,0 +1,178 @@
+-- site-doc.doc-home: Collapse
+site-title: Bling
+show-tabs: false
+github-url: https://github.com/fastn-community/bling
+current-package: fastn-community.github.io/bling
+
+The collapse component typically consists of a header and a collapsible body.
+The header serves as a clickable element, such as a button or a title, that
+triggers the collapse functionality. 
+
+-- site-doc.header: Example
+
+-- site-doc.output:
+colors: $ftd.default-colors
+types: $ftd.default-types
+
+-- collapse: Lorem ipsum dolor
+info-right: Dolor sit amet
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+nostrud exercitation ullamco laboris nisi ut
+
+-- end: site-doc.output
+
+-- site-doc.header: How to use
+
+-- cb.code: Add `bling` dependency into your FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/bling
+
+-- cb.code: sample usage of `-- collapse` component
+lang: ftd
+
+\-- import: fastn-community.github.io/bling/collapse
+
+\-- collapse.collapse: Lorem ipsum dolor
+info-right: Some info at right side
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+nostrud exercitation ullamco laboris nisi ut
+
+
+-- site-doc.header: Properties:
+
+Below are details of all properties of `collapse` component.
+
+-- site-doc.component-property: `title`
+type: Caption (`required`)
+
+It's used to add title which is clickable.
+
+-- site-doc.component-property: `info-right`
+type: String (`optional`)
+
+It's used to show some info/text to the right corner of the title of collapse.
+
+-- site-doc.component-property: `$is-open`
+type: Boolean (`optional`, default: `false`)
+
+It's used to show body content of collapse, default value is `false` if you set
+it to `true` then body content will be visible.
+
+-- site-doc.component-property: `remove-gap`
+type: Boolean (`optional`, default: `false`)
+
+It's used to remove bottom margin between two collapse components, default value
+is `false` if you set it to `true` then bottom margin of collapse will be
+removed.
+
+-- site-doc.component-property: `body`
+type: Body (`optional`)
+
+It's used to add body content to collapse component.
+
+-- end: site-doc.doc-home
+
+
+
+
+
+
+
+
+
+
+-- component collapse:
+caption title:
+optional string info-right:
+boolean $is-open: false
+optional body body:
+children container:
+boolean remove-gap: false
+
+-- ftd.column:
+width: fill-container
+width if { $collapse.info-right != NULL }: fill-container
+margin-bottom.px if { !collapse.remove-gap }: 20
+color: $inherited.colors.text
+border-color: $inherited.colors.border
+border-width.px: 1
+border-radius.px: 6
+
+-- ftd.row:
+width: fill-container
+spacing.fixed.px: 28
+spacing.fixed.px if { ftd.device == "mobile" }: 12
+$on-click$: $ftd.toggle($a = $collapse.is-open)
+padding.px: 8
+wrap if { ftd.device == "mobile" }: true
+
+-- ftd.row:
+width: fill-container
+align-self: start
+
+-- ftd.image:
+if: { !collapse.is-open }
+src: $assets.files.static.right-arrow.svg
+align-self: center
+width.fixed.px: 12
+margin-right.px: 16
+
+-- ftd.image:
+if: { collapse.is-open }
+src: $assets.files.static.down-arrow.svg
+align-self: center
+width.fixed.px: 12
+margin-right.px: 16
+
+-- ftd.text: $collapse.title
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+
+-- end: ftd.row
+
+-- ftd.row:
+if: { $collapse.info-right != NULL }
+width: hug-content
+align-self: center
+margin-left.px if { ftd.device == "mobile" }: 28
+
+-- ftd.text: $collapse.info-right
+role: $inherited.types.copy-small
+color: $inherited.colors.text
+white-space: nowrap
+align-self: end
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- ftd.column:
+width: fill-container
+if: { $collapse.is-open }
+border-top-width.px: 1
+border-color: $inherited.colors.border
+padding.px: 12
+border-bottom-left-radius.px: 6
+border-bottom-right-radius.px: 6
+
+-- ftd.text: $collapse.body
+if: { $collapse.body != NULL }
+role: $inherited.types.label-large
+color: $inherited.colors.text
+
+-- ftd.column:
+children: $collapse.container
+width: fill-container
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: collapse

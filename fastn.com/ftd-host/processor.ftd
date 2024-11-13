@@ -1,0 +1,91 @@
+-- import: fifthtry.github.io/admonitions as cbox
+-- import: fastn-community.github.io/bling/read-more
+
+-- ds.page: `processor` In `fastn`
+
+`ftd` gives a way for its platform, `fastn`, to define some functions known as
+`processors`. These functions, then, can be used in the `ftd`, and their
+execution is handled by the platform.
+
+At present, `fastn` contains the following processors:
+
+- [HTTP Processor](/http/)
+- [Request Data Processor](/request-data/)
+- [Get Data Processor](/get-data/)
+- [SQLite Processor](/package-query/)
+
+All processors are defined in a module `fastn/processor` which must be imported
+to use any of these processors.
+
+-- static-vs-dynamic:
+
+-- ds.h1: `$processor$`
+
+A processor is used when declaring a variable. The processor is in control of
+the variable if `$processor$` key is used.
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- person list people:
+$processor$: pr.package-query
+db: db.sqlite
+
+SELECT * FROM user;
+
+-- ds.markdown:
+
+As you see `$processor$` key was used when defining the variable called
+`people`. Once `$processor$` is used, the rest of the section is in determined
+bu the specific processor used. Like in this case the processor
+`pr.package-query` expects a key named `db`, which refers to the database file,
+and the body of the section is the SQL query to execute against the database.
+
+A processor must be used on a variable or a list with matching type as the
+output of the processor. In this case we are using `SELECT * FROM user;` so the
+columns of the `user` table must match the fields of the record `person`. Extra
+data will be ignored, but all required data must be passed for processor to
+work correctly.
+
+The details of what the processor returns is documented as part of each
+processors documentation.
+
+-- ds.h1: Planned: Custom Processors
+
+`fastn` is planning to use [wasmtime](https://wasmtime.dev) to let anyone write
+their own custom processors, which will allow much more functionalities.
+
+-- end: ds.page
+
+-- component static-vs-dynamic:
+
+-- cbox.warning: Static Vs Dynamic
+
+This feature works better with dynamic hosting. If you are using `fastn` in
+[static site mode](/deploy/), then how the page looked when `fastn build` was
+called will be shown to everyone. But if you are using [dynamic
+mode](/deploy/) then this page would be regenerated on every page load.
+
+	-- read-more.read-more: Learn More
+	link: /deploy/
+	
+	Deploying `fastn` Sites
+	
+-- end: cbox.warning
+
+-- end: static-vs-dynamic
+
+
+
+
+-- component deprecated-sql-procesor:
+
+-- cbox.warning: Deprecated
+
+This processor has been deprecated in favor of [`sql`](/sql/) processor, starting from version **0.3.81**.
+
+-- end: cbox.warning
+
+-- end: deprecated-sql-procesor

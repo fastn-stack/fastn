@@ -1,0 +1,12 @@
+-- import: fastn
+
+-- fastn.package: fastn-stack.github.io/ftd-web-component-example
+download-base-url: https://raw.githubusercontent.com/fastn-stack/ftd-web-component-example/main
+
+-- fastn.dependency: fifthtry.github.io/doc-site as ds
+-- fastn.dependency: fifthtry.github.io/doc-site-typography
+-- fastn.dependency: fifthtry.github.io/dark-flame-cs as cs
+
+
+-- fastn.auto-import: ds
+-- fastn.auto-import: cs

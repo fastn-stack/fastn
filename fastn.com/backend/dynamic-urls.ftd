@@ -1,0 +1,63 @@
+-- import: fastn.com/ftd-host/processor
+
+-- ds.page: Dynamic URLs Guide
+
+`fastn` can be used for creating dynamic websites. By default `fastn` maps the
+URL's path to file system to decide which `ftd` document to serve. This
+behaviour can be changed as described in [custom URLs guide](/custom-urls/). In
+this guide we will see how we can map any URL matching a given pattern to a
+`ftd` document.
+
+-- processor.static-vs-dynamic:
+
+-- ds.markdown:
+
+Dynamic URLs are specified in `FASTN.ftd` file under the `fastn.dynamic-urls`
+section:
+
+-- ds.code:
+lang: ftd
+
+\-- fastn.dynamic-urls:
+
+# User Profile Page
+  url: /<string:username>/
+  document: profile.ftd
+
+-- ds.markdown:
+
+In the above snippet we are saying any URL that matches the pattern
+`/<string:username>/` will be served by the document `profile.ftd`. When this
+url matches, the matching value of the `string` is stored as `username` and
+can be extracted using [request-data processor](/request-data/).
+
+-- ds.code:
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- record r-data:
+string username: ;; <hl>
+
+\-- r-data data:
+$processor$: pr.request-data ;; <hl>
+
+\-- ds.markdown: $data.message
+
+-- ds.h1: Valid Types
+
+Following types are supported:
+
+-- ds.h3: `string`
+
+This matches any string other than `/`.
+
+-- ds.h3: `integer`
+
+This matches any valid integer.
+
+-- ds.h3: `decimal`
+
+This matches any decimal number.
+
+-- end: ds.page

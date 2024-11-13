@@ -1,0 +1,247 @@
+-- import: fastn-community.github.io/bling/quote
+-- import: fastn.com/ftd as ftd-index
+
+-- ds.page: `fastn` - Full-stack Web Development Made Easy
+
+;; Audience: People considering using it for their team.
+
+`fastn` is a web-framework, a content management system, and an integrated
+development environment for its language. `fastn` is a webserver, and compiles
+`.ftd` files to HTML/CSS/JS, and can be deployed on your server, or on `fastn
+cloud` by FifthTry.
+
+`fastn` uses its programming language for building user interfaces and content
+centric websites. `fastn` language is easy to learn, especially for non
+programmers, but does not compromise on what you can build with it.
+
+;; See also: [fastn for Website Builders](/cms/) | [ftd as first Programming
+;; Language](/first/).
+
+
+The quickest way to quickly learn about `fastn` is by watching our short
+[video course: Expander](/expander/), it takes you through the basics.
+
+Then checkout the [frontend](/frontend/) and [backend](/backend/) sections of
+our documentation.
+
+
+-- ds.h1: `fastn` language: Programming Language For The Next Billion Programmers
+
+`fastn` language is designed with minimal and uniform syntax, and at first
+glance does not even look like a programming language.
+
+-- ds.code: No quotes for string, multi-line strings are easy
+lang: ftd
+
+\-- amitu: Hello World! 😀
+
+\-- amitu:
+
+you can also write multiline messages easily!
+
+no quotes. and **markdown** is *supported*.
+
+
+-- ds.markdown:
+
+We have called a "function" named "amitu" with "Hello World! 😀" as input, yet
+it does not feel technical.
+
+This is what it produces:
+
+
+-- ftd-index.amitu: Hello World! 😀
+
+-- ftd-index.amitu:
+
+you can also write multiline messages easily!
+
+no quotes. and **markdown** is *supported*.
+
+-- ds.markdown:
+
+Learn more about [`fastn` Programming Language](/ftd/).
+
+
+-- ds.h1: There are a lot of ready made `fastn` components available today
+
+-- ds.code: Ready made components can be imported and used.
+lang: ftd
+
+
+\-- import: fastn-community.github.io/bling/quote
+
+\-- quote.charcoal: Amit Upadhyay
+label: Creator of `fastn`
+avatar: $fastn-assets.files.images.amitu.jpg
+logo: $fastn-assets.files.images.logo-fifthtry.svg
+
+The web has lost some of the exuberance from the
+early 2000s, and it makes me a little sad.
+
+
+-- quote.charcoal: Amit Upadhyay
+label: Creator of `fastn`
+avatar: $fastn-assets.files.images.amitu.jpg
+logo: $fastn-assets.files.images.logo-fifthtry.svg
+
+The web has lost some of the exuberance from the
+early 2000s, and it makes me a little sad.
+
+-- ds.h1: Or you can create your own components
+
+-- ds.code: Creating a custom component
+lang: ftd
+
+\-- component toggle-text:
+boolean $current: false
+caption title:
+
+\-- ftd.text: $toggle-text.title
+align-self: center
+text-align: center
+color if { toggle-text.current }: $inherited.colors.cta-primary.disabled
+color: $inherited.colors.cta-primary.text
+background.solid: $inherited.colors.cta-primary.base
+$on-click$: $ftd.toggle($a = $toggle-text.current)
+border-radius.px: 5
+
+\-- end: toggle-text
+
+\-- toggle-text: `fastn` is cool!
+
+
+-- ds.output:
+
+	-- ftd-index.toggle-text: `fastn` is cool!
+	
+-- end: ds.output
+
+-- ds.markdown:
+
+`fastn`'s event handling capabilities can be used for form validation, ajax
+requests etc, to create fully functional frontend applications.
+
+/-- ds.h1: You Use `fastn` To Work With `ftd`
+
+We ship pre built binaries for Linux, Mac and Windows.
+
+/-- ds.code:
+lang: sh
+copy: false
+
+curl -fsSL https://fastn.com/install.sh | bash
+
+/-- ds.image:
+width: fill-container
+src: $fastn-assets.files.images.fastn.png
+
+-- ds.h1: Integrated Web Development Experience
+
+`fastn` come with package management, web server, opinionated design
+system, dark mode and responsive by default.
+
+If you are getting started with frontend development, `fastn` framework takes
+care of a lot of things for you, and all you have to focus on is your product.
+
+We are working towards our own hosted web based IDE, version controlled code
+hosting and collaboration platform so you and your team gets a one stop solution
+for building websites.
+
+
+-- ds.h1: `fastn` for Static Sites
+
+`fastn` websites can be compiled into static html, js, css etc, and can be
+deployed on any static hosting providers eg [Github
+Pages](/github-pages/),
+[Vercel](/vercel/) etc.
+
+-- ds.code: `fastn` source code of the page you are reading
+lang: ftd
+
+\-- import: fastn-community.github.io/doc-site as ds
+
+\-- ds.page: Overview of `fastn` and its language
+
+`fastn` has its programming language which is used for building user interfaces
+and content centric websites. `fastn` language is easy to learn, especially for
+non programmers, but does not compromise on what you can build with it.
+
+-- ds.markdown:
+
+`fastn` is a good alternative for content websites like blogs, knowledge bases,
+portfolio websites, project and marketing websites etc. It is cheap, fast, and
+requires little maintenance.
+
+-- ds.image:
+width: fill-container
+src: $fastn-assets.files.images.github-pages.png
+
+
+-- ds.h1: Data Driven Website
+
+-- ds.code: fetching data from API
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- result r:
+$processor$: pr.http
+url: https://api.github.com/search/repositories
+sort: stars
+order: desc
+q: language:python
+
+-- ds.code: Working With SQL Is Breeze
+lang: ftd
+
+\-- import: fastn/processors as pr
+
+\-- people:
+$processor$: pr.package-query
+db: db.sqlite
+
+SELECT * FROM user;
+
+
+\-- show-person: $p
+for: $p in $people
+
+-- ds.markdown:
+
+`fastn` can be used to create data driven website, dashboards.
+
+-- ds.code: Dynamic URLs
+lang: ftd
+
+\-- fastn.dynamic-urls:
+
+# Profile Page
+url: /<string:username>/
+document: profile.ftd
+
+-- ds.markdown:
+
+`fastn` can be used for creating a lot of web application backends as well.
+
+-- ds.h1: Upcoming WASM Support
+
+We are working on `wasm` support so developers can extend `fastn's` standard
+libraries and offer access to more backend functionalities.
+
+-- ds.image:
+width: fill-container
+src: $fastn-assets.files.images.wasm.png
+
+-- ds.h1: Hosting Dynamic Sites
+
+For dynamic sites you can deploy `fastn` cli on the platform of your choice. We
+ship ready made Docker containers that you can add to your infrastructure.
+
+-- ds.h1: `fastn` Cloud
+
+We also offer our own hosting solution for your static and dynamic sites. Using
+`fastn` Cloud frees you from devops needs, and you get a fully integrated,
+managed hosting solution, that a non programmers can use with ease.
+
+-- end: ds.page

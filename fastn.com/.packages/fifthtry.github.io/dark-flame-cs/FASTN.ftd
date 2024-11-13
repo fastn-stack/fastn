@@ -1,0 +1,16 @@
+-- import: fastn
+
+-- fastn.package: fifthtry.github.io/dark-flame-cs
+
+-- fastn.dependency: fifthtry.github.io/code-block
+-- fastn.dependency: fastn-community.github.io/inter-typography
+-- fastn.dependency: fastn-community.github.io/color-doc
+-- fastn.dependency: fifthtry.github.io/dark-mode-switcher
+
+
+-- fastn.auto-import: fastn
+-- fastn.auto-import: fifthtry.github.io/color-doc/FASTN/config
+-- fastn.auto-import: fifthtry.github.io/code-block as cb
+-- fastn.auto-import: fastn-community.github.io/color-doc as cd
+-- fastn.auto-import: fifthtry.github.io/dark-mode-switcher as dms
+

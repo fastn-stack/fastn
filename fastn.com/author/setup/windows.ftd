@@ -1,0 +1,189 @@
+-- import: fifthtry.github.io/admonitions as cbox
+
+-- ds.page: Install `fastn` on Windows
+
+
+For Windows machine, there are three ways to install `fastn`.
+
+1. [`fastn` using `installer`](windows/#fastn-using-installer) (Recommended)
+2. [`fastn` through `pre-built binary`](windows/#fastn-through-pre-built-binary)
+4. [`fastn` from `source`](windows/#fastn-from-source)
+
+
+-- cbox.info: Our Recommendation
+
+On Windows, we recommend you to install `fastn` through fastn installer:
+
+To install `fastn_setup.exe`, on your browser, use the URL:
+[fastn.com/setup.exe](/setup.exe)
+
+This is the preferred method as it only requires downloading the setup and
+installing it on your local system.
+
+-- ds.image:
+src: $fastn-assets.files.images.setup.windows-setup-process.gif
+
+-- ds.markdown:
+
+`fastn` is written using `rust` language, if you are familiar with it and want
+to use `fastn` for your project or for experimentation, you can do it by
+building the `source`.
+
+Based on your machine and your choice of installation, you can select one of the
+following options:
+
+-- ds.h1: `fastn` using `installer`
+
+-- ds.youtube:
+v: hCnDjhSPJLg
+
+-- ds.markdown:
+
+- Download the setup named [`fastn_setup.exe`](/setup.exe)
+
+- Run the setup and follow the installation steps
+
+- Once the setup is complete, you will have `fastn` installed in your system
+
+To verify, open command prompt and execute the command, `fastn`
+
+-- ftd.image:
+src: $fastn-assets.files.images.setup.fastn-terminal-windows.png
+width: fill-container
+border-radius.px: 8
+border-width.px: 2
+shadow: $s
+margin-bottom.px: 30
+
+
+-- ds.markdown:
+
+If you see the Help text of the fastn command, it confirms that `fastn` is
+successfully installed.
+
+-- ds.h1: `fastn` through `pre-built binary`
+
+
+-- ds.youtube:
+v: lw-qVPCJgZs
+
+-- ds.markdown:
+
+- Download the executable from the [Releases](https://github.com/fastn-stack/fastn/releases) page
+
+- Click on latest release
+
+- Get the latest executable file for windows in the releases page, under Assets
+
+- Once downloaded, select `Keep` option and ignore the warning
+
+- Create a folder named `FASTN` (UpperCase) in your C drive
+
+- Paste the downloaded executable and rename it as `fastn` (not `fastn.exe`)
+
+- Go to Settings and search Environment Variable
+
+- In the System Settings box, click Environment Variable
+
+- Double click on Path
+
+- Click on New button
+
+- Set a Path for FASTN in your machine's Environment Variable
+
+-- ds.code: New Path
+lang: ftd
+
+C:\FASTN
+
+-- ds.markdown:
+
+- Click `OK` to close all pop-ups.
+
+-- ds.markdown:
+
+Installation of `fastn` is complete.
+
+To verify, open a fresh command prompt window and execute the command, `fastn`
+
+-- ftd.image:
+src: $fastn-assets.files.images.setup.fastn-terminal-windows.png
+width: fill-container
+border-radius.px: 8
+border-width.px: 2
+shadow: $s
+margin-bottom.px: 30
+
+-- ds.markdown:
+
+If you see the Help text of the fastn command, it confirms that `fastn` is
+successfully installed.
+
+-- ds.h2: Common errors to avoid
+
+- While renaming the file name make sure to write `fastn` and not `fastn.exe`
+- Check that your machine has the latest version of `fastn`
+- Make sure to start a fresh session of command prompt, to verify the
+  installation
+
+-- cbox.tip: Tip
+
+New to the concept of `command prompt` and want to read about it?
+
+Checkout the [Command Prompt documentation](https://fastn.com/open-terminal/).
+
+-- end: cbox.tip
+
+
+
+
+-- ds.h1: `fastn` from `source`
+
+`fastn` is written using rust language, if you are familiar with it and want to
+use `fastn` for your project or for experimentation, you can do it by building
+the source.
+
+`fastn` is open source project. You can clone the `fastn` github repository:
+
+
+-- ds.code:
+lang: sh
+
+git clone https://github.com/fastn-stack/fastn.git
+
+
+-- ds.markdown:
+
+`fastn` is implemented using Rust, using 2021 edition, so minimum supported Rust
+version (MSRV) is 1.65.0.
+
+
+-- ds.code:
+lang: sh
+
+cd fastn
+cargo test
+cargo build
+
+
+-- ds.markdown:
+
+Once you have installed the `fastn` you can start using FTD.
+
+Happy building.
+
+
+-- end: ds.page
+
+
+
+-- ftd.color shadow-color:
+light: #707070
+dark: #1b1a1a
+
+-- ftd.shadow s:
+color: $shadow-color
+x-offset.px: 0
+y-offset.px: 20
+blur.px: 40
+spread.px: 2

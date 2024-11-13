@@ -1,0 +1,26 @@
+{
+    "files": {
+        "doc-site-example.png": {
+            "name": "doc-site-example.png",
+            "checksum": "611E21D16829D0FACDB5D2C21ABA2ADF95BF7359DAFA16FCE1351F0AC0E5C44B",
+            "size": 90059
+        },
+        "index.ftd": {
+            "name": "index.ftd",
+            "checksum": "2EF37FFF3DD96FB995AC51D1FCCDA426895EC37C246A67D081F2187A350E39A8",
+            "size": 16148
+        },
+        "README.md": {
+            "name": "README.md",
+            "checksum": "D6236FFABCC592E74F7ED63A824C987461EEBD6A317CFB1D766378AF1084A7B6",
+            "size": 1336
+        },
+        "FASTN.ftd": {
+            "name": "FASTN.ftd",
+            "checksum": "1EA9E1EBA5C692C8B8BB5B68CF1D97B7512F83BE173997CE64F3778A8353183A",
+            "size": 211
+        }
+    },
+    "zip_url": "https://github.com/FifthTry/ds-set1-typography/archive/248336f4f81c04f1ca82df31188e49f04c89488a.zip",
+    "checksum": "697DE47D16FAE8E07EA587D9180CDB670E56320B7EFD21A14007B44A791C5132"
+}

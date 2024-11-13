@@ -1,0 +1,319 @@
+
+-- site-doc.doc-home: Badge
+site-title: Bling
+github-url: https://github.com/fastn-community/bling
+current-package: fastn-community.github.io/bling
+
+Badges often take the form of small shapes, such as circles, squares, or
+rectangles, and they can contain text, numbers, or icons. They are commonly
+used to convey information such as new messages, notifications, unread counts,
+user roles or statuses, ratings, achievements, or labels.
+
+-- site-doc.header: Examples
+
+-- site-doc.output:
+colors: $ftd.default-colors
+types: $ftd.default-types
+
+-- all-badges:
+
+-- end: site-doc.output
+
+-- site-doc.header: How to use
+
+-- cb.code: Add `bling` dependency into your FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/bling
+
+-- cb.code: import `badge` inside your `.ftd` file
+lang: ftd
+
+\-- import: fastn-community.github.io/bling/badge
+
+-- cb.code: All badges: copy any one of these badges you like to use
+lang: ftd
+
+
+\-- badge.badge: Light
+light: true
+
+\-- badge.badge: Dark
+dark: true
+
+\-- badge.badge: Primary
+primary: true
+
+\-- badge.badge: Secondary
+secondary: true
+
+\-- badge.badge: Info
+info: true
+
+\-- badge.badge: Warning
+warning: true
+
+\-- badge.badge: Success
+success: true
+
+\-- badge.badge: Danger
+danger: true
+
+-- site-doc.header: Properties:
+
+Below are details of all properties of `badge` component.
+
+-- site-doc.component-property: `title`
+type: Caption (`required`)
+
+It's used to add text inside badge.
+
+-- site-doc.component-property: `light`
+type: Boolean (`optional`, default: `false`)
+
+If you want to show badge with light background.
+
+-- site-doc.component-property: `dark`
+type: Boolean (`optional`, default: `false`)
+
+If you want to show badge with dark background.
+
+-- site-doc.component-property: `primary`
+type: Boolean (`optional`, default: `false`)
+
+If you want to show badge with primary background.
+
+-- site-doc.component-property: `secondary`
+type: Boolean (`optional`, default: `false`)
+
+If you want to show badge with secondary background.
+
+-- site-doc.component-property: `info`
+type: Boolean (`optional`, default: `false`)
+
+If you want to show badge with info background.
+
+-- site-doc.component-property: `success`
+type: Boolean (`optional`, default: `false`)
+
+If you want to show badge with success background.
+
+-- site-doc.component-property: `danger`
+type: Boolean (`optional`, default: `false`)
+
+If you want to show badge with danger background.
+
+-- site-doc.component-property: `warning`
+type: Boolean (`optional`, default: `false`)
+
+If you want to show badge with warning background.
+
+
+-- end: site-doc.doc-home
+
+
+
+
+
+
+
+
+
+
+-- component badge:
+caption title:
+boolean light: false
+boolean dark: false
+boolean primary: false
+boolean secondary: false
+boolean success: false
+boolean danger: false
+boolean warning: false
+boolean info: false
+
+-- ftd.text: $badge.title
+role: $inherited.types.fine-print
+color: $inherited.colors.background.base
+color if { $badge.dark }: $inherited.colors.text-strong
+color if { $badge.primary }: $inherited.colors.text-strong
+color if { $badge.secondary }: $inherited.colors.text-strong
+color if { $badge.danger }: $inherited.colors.text-strong
+color if { $badge.info }: $inherited.colors.text-strong
+color if { $badge.warning }: $inherited.colors.text-strong
+color if { $badge.success }: $inherited.colors.text-strong
+background.solid if { $badge.light }: $inherited.colors.text
+background.solid if { $badge.dark }: $inherited.colors.background.step-2
+background.solid if { $badge.primary }: $inherited.colors.cta-primary.base
+background.solid if { $badge.secondary }: $inherited.colors.cta-secondary.base
+background.solid if { $badge.success }: $inherited.colors.success.base
+background.solid if { $badge.danger }: $inherited.colors.error.base
+background.solid if { $badge.warning }: $inherited.colors.warning.base
+background.solid if { $badge.info }: $inherited.colors.info.base
+padding-vertical.px: 6
+padding-horizontal.px: 12
+border-radius.px: 6
+white-space: nowrap
+align-self: center
+margin-horizontal.px: 8
+
+-- end: badge
+
+
+
+
+
+
+
+
+
+
+-- component all-badges:
+
+-- ftd.column:
+width: fill-container
+margin-bottom.px: 24
+
+-- ftd.column:
+if: { ftd.device == "mobile" }
+width: fill-container
+
+-- ftd.column:
+width: fill-container
+overflow-x: auto
+
+-- ftd.row:
+width: fill-container
+margin-left.px: -16
+
+-- badge: Light
+light: true
+
+-- badge: Dark
+dark: true
+
+-- badge: Primary
+primary: true
+
+-- badge: Secondary
+secondary: true
+
+-- badge: Info
+info: true
+
+-- badge: Warning
+warning: true
+
+-- badge: Success
+success: true
+
+-- badge: Danger
+danger: true
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.column:
+if: { ftd.device != "mobile" }
+width: fill-container
+
+-- ftd.row:
+width: fill-container
+margin-left.px: -16
+
+-- badge: Light
+light: true
+
+-- badge: Dark
+dark: true
+
+-- badge: Primary
+primary: true
+
+-- badge: Secondary
+secondary: true
+
+-- badge: Info
+info: true
+
+-- badge: Warning
+warning: true
+
+-- badge: Success
+success: true
+
+-- badge: Danger
+danger: true
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: all-badges
+
+
+
+
+
+
+
+
+
+
+-- component badge-output:
+optional body body:
+boolean light: true
+boolean dark: false
+boolean primary: false
+boolean secondary: false
+boolean success: false
+boolean danger: false
+boolean warning: false
+boolean info: false
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.row:
+
+-- badge: Light 
+if: { $badge-output.light }
+light: true
+
+-- badge: Dark 
+if: { $badge-output.dark }
+dark: true
+
+-- badge: Primary
+if: { $badge-output.primary }
+primary: true
+
+-- badge: Secondary
+if: { $badge-output.secondary }
+secondary: true
+
+-- badge: Success
+if: { $badge-output.success }
+success: true
+
+-- badge: Danger
+if: { $badge-output.danger }
+danger: true
+
+-- badge: Warning
+if: { $badge-output.warning }
+warning: true
+
+-- badge: Info
+if: { $badge-output.info }
+info: true
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: badge-output

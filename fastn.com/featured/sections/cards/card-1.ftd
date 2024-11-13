@@ -1,0 +1,36 @@
+-- import: fastn.com/u/ganesh-salunke
+-- import: fastn.com/u/priyanka-yadav
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Person Cards
+featured-link: /featured/sections/cards/
+category: Featured Cards
+image: $fastn-assets.files.images.featured.sections.card-1.png
+owners: [$priyanka-yadav.info, $ganesh-salunke.info]
+license-url: https://github.com/FifthTry/cards/blob/main/LICENSE
+license: Creative Commons
+published-date: 14-Dec-2022
+cards: $cards
+github-url: https://github.com/FifthTry/cards
+demo-link: https://fifthtry.github.io/cards/person/
+
+
+
+
+
+
+-- ft-ui.template list cards:
+
+-- ft-ui.template: Image Card
+template-url: /featured/sections/cards/image-card-1/
+screenshot: $fastn-assets.files.images.featured.sections.image-card-1.png
+
+-- ft-ui.template: Image Gallery IG
+template-url: /featured/sections/cards/image-gallery-ig/
+screenshot: $fastn-assets.files.images.featured.sections.image-gallery-ig.png
+
+-- ft-ui.template: Imagen IG
+template-url: /featured/sections/cards/imagen-ig/
+screenshot: $fastn-assets.files.images.featured.sections.imagen-ig.png
+
+-- end: cards

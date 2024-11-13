@@ -1,0 +1,55 @@
+
+
+
+
+
+
+
+
+
+-- component back:
+caption company-name:
+ftd.image-src logo:
+optional string company-slogan:
+
+-- ftd.column:
+width: fill-container
+height: fill-container
+align-content: bottom-left
+background.image: $bg-image
+
+-- ftd.column:
+background.solid: #FFFFFF
+padding.px: 44
+align-content: center
+role: $inherited.types.copy-small
+
+-- ftd.image: $back.logo
+max-width.fixed.px: 250
+
+-- ftd.text: $back.company-name
+margin-top.px: 8
+
+-- ftd.text: $back.company-slogan
+if: { back.company-slogan != NULL }
+margin-top.px: 16
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: back
+
+
+
+
+
+
+
+
+-- ftd.background-image bg-image:
+src: $assets.files.assets.bg-back.svg
+repeat: no-repeat
+position: center
+
+

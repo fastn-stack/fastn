@@ -1,0 +1,878 @@
+-- ds.page: `ftd.code`
+
+`ftd.code` is a component used to render the code component in an `ftd`
+document.
+
+-- ds.rendered: Sample Usage
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py
+	
+	print("hello world")
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		
+		print("hello world")
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.h1: Attributes
+
+The `ftd.code` component accepts the below attributes along with the
+[common attributes](ftd/common/).
+
+
+-- ds.h2: `text: caption or body`
+
+This is the text or code to show. It accepts the value both in [caption
+or body](ftd/built-in-types/#caption-or-body) besides in header.
+
+-- ds.rendered: Sample code using `text`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py
+	text: print("hello world") ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		text: print("hello world")
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+-- ds.h2: `lang: optional string`
+
+The `lang` property defines the language of the code. It is an
+optional field. In case if the value is not provided, this
+will take `txt` as default value.
+
+-- ds.rendered: Sample code using `lang`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py ;; <hl>
+	
+	value = "hello world"
+	print(value)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		
+		value = "hello world"
+		print(value)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+-- ds.h2: `theme: optional string`
+
+The `theme` property defines the theme for the code block.
+It is an optional field with default value `fastn-theme.dark`.
+
+`Note`: Use your desired `background color` based on your theme when using
+any fastn code themes since these fastn themes doesn't define any background
+color by itself.
+
+The available themes are:
+
+**fastn Themes**
+- fastn-theme.dark
+- fastn-theme.light
+
+
+-- ds.rendered: Sample code using `fastn-theme.dark` theme
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py
+	theme: fastn-theme.dark ;; <hl>
+	background.solid: black
+	
+	value = "hello world"
+	print(value)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		theme: fastn-theme.dark
+		background.solid: black
+		
+		value = "hello world"
+		print(value)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+-- ds.rendered: Sample code using `fastn-theme.light` theme
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py
+	theme: fastn-theme.light ;; <hl>
+	background.solid: white
+	
+	value = "hello world"
+	print(value)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		theme: fastn-theme.light
+		background.solid: white
+		
+		value = "hello world"
+		print(value)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+-- ds.markdown:
+
+**Other Themes**
+- Material Theme Light
+- Material Theme Dark
+- GruvBox Theme Light
+- GruvBox Theme Dark
+- ColDark Theme Light
+- ColDark Theme Dark
+- Duotone Theme Light
+- Duotone Theme Dark
+- Duotone Theme Earth
+- Duotone Theme Forest
+- Duotone Theme Sea
+- Duotone Theme Space
+- One Theme Light
+- One Theme Dark
+- VS Theme Light
+- VS Theme Dark
+- Dracula Theme
+- Coy Theme
+- LaserWave Theme
+- ZTouch Theme
+- NightOwl Theme
+
+
+-- ds.rendered: Sample code using `material-theme.light` theme
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py
+	theme: material-theme.light ;; <hl>
+	background.solid: white
+	
+	value = "hello world"
+	print(value)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		theme: material-theme.light
+		background.solid: white
+		
+		value = "hello world"
+		print(value)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+-- ds.rendered: Sample code using `material-theme.dark` theme
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py
+	theme: material-theme.dark ;; <hl>
+	background.solid: white
+	
+	value = "hello world"
+	print(value)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		theme: material-theme.dark
+		background.solid: white
+		
+		value = "hello world"
+		print(value)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+-- ds.rendered: Sample code using `gruvbox-theme.light` theme
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py
+	theme: gruvbox-theme.light ;; <hl>
+	background.solid: white
+	
+	value = "hello world"
+	print(value)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		theme: gruvbox-theme.light
+		background.solid: white
+		
+		value = "hello world"
+		print(value)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+-- ds.rendered: Sample code using `gruvbox-theme.dark` theme
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py
+	theme: gruvbox-theme.dark ;; <hl>
+	background.solid: white
+	
+	value = "hello world"
+	print(value)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		theme: gruvbox-theme.dark
+		background.solid: white
+		
+		value = "hello world"
+		print(value)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+-- ds.rendered: Sample code using `coldark-theme.light` theme
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py
+	theme: coldark-theme.light ;; <hl>
+	background.solid: white
+	
+	value = "hello world"
+	print(value)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		theme: coldark-theme.light
+		background.solid: white
+		
+		value = "hello world"
+		print(value)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+-- ds.rendered: Sample code using `coldark-theme.dark` theme
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py
+	theme: coldark-theme.dark ;; <hl>
+	background.solid: white
+	
+	value = "hello world"
+	print(value)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		theme: coldark-theme.dark
+		background.solid: white
+		
+		value = "hello world"
+		print(value)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+-- ds.rendered: Sample code using `duotone-theme.light` theme
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py
+	theme: duotone-theme.light ;; <hl>
+	background.solid: white
+	
+	value = "hello world"
+	print(value)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		theme: duotone-theme.light
+		background.solid: white
+		
+		value = "hello world"
+		print(value)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+-- ds.rendered: Sample code using `duotone-theme.dark` theme
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py
+	theme: duotone-theme.dark ;; <hl>
+	background.solid: white
+	
+	value = "hello world"
+	print(value)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		theme: duotone-theme.dark
+		background.solid: white
+		
+		value = "hello world"
+		print(value)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+
+-- ds.rendered: Sample code using `duotone-theme.earth` theme
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py
+	theme: duotone-theme.earth ;; <hl>
+	background.solid: white
+	
+	value = "hello world"
+	print(value)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		theme: duotone-theme.earth
+		background.solid: white
+		
+		value = "hello world"
+		print(value)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+-- ds.rendered: Sample code using `duotone-theme.forest` theme
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py
+	theme: duotone-theme.forest ;; <hl>
+	background.solid: white
+	
+	value = "hello world"
+	print(value)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		theme: duotone-theme.forest
+		background.solid: white
+		
+		value = "hello world"
+		print(value)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+-- ds.rendered: Sample code using `duotone-theme.sea` theme
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py
+	theme: duotone-theme.sea ;; <hl>
+	background.solid: white
+	
+	value = "hello world"
+	print(value)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		theme: duotone-theme.sea
+		background.solid: white
+		
+		value = "hello world"
+		print(value)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+
+
+-- ds.rendered: Sample code using `duotone-theme.space` theme
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py
+	theme: duotone-theme.space ;; <hl>
+	background.solid: white
+	
+	value = "hello world"
+	print(value)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		theme: duotone-theme.space
+		background.solid: white
+		
+		value = "hello world"
+		print(value)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+
+
+-- ds.rendered: Sample code using `one-theme.light` theme
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py
+	theme: one-theme.light ;; <hl>
+	background.solid: white
+	
+	value = "hello world"
+	print(value)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		theme: one-theme.light
+		background.solid: white
+		
+		value = "hello world"
+		print(value)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+-- ds.rendered: Sample code using `one-theme.dark` theme
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py
+	theme: one-theme.dark ;; <hl>
+	background.solid: white
+	
+	value = "hello world"
+	print(value)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		theme: one-theme.dark
+		background.solid: white
+		
+		value = "hello world"
+		print(value)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+
+-- ds.rendered: Sample code using `vs-theme.light` theme
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py
+	theme: vs-theme.light ;; <hl>
+	background.solid: white
+	
+	value = "hello world"
+	print(value)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		theme: vs-theme.light
+		background.solid: white
+		
+		value = "hello world"
+		print(value)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+
+-- ds.rendered: Sample code using `vs-theme.dark` theme
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py
+	theme: vs-theme.dark ;; <hl>
+	background.solid: white
+	
+	value = "hello world"
+	print(value)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		theme: vs-theme.dark
+		background.solid: white
+		
+		value = "hello world"
+		print(value)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+-- ds.rendered: Sample code using `dracula-theme` theme
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py
+	theme: dracula-theme ;; <hl>
+	background.solid: white
+	
+	value = "hello world"
+	print(value)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		theme: dracula-theme
+		background.solid: white
+		
+		value = "hello world"
+		print(value)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+-- ds.rendered: Sample code using `coy-theme` theme
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py
+	theme: coy-theme ;; <hl>
+	background.solid: white
+	
+	value = "hello world"
+	print(value)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		theme: coy-theme
+		background.solid: white
+		
+		value = "hello world"
+		print(value)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+-- ds.rendered: Sample code using `laserwave-theme` theme
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py
+	theme: laserwave-theme ;; <hl>
+	background.solid: white
+	
+	value = "hello world"
+	print(value)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		theme: laserwave-theme
+		background.solid: white
+		
+		value = "hello world"
+		print(value)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+-- ds.rendered: Sample code using `ztouch-theme` theme
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py
+	theme: ztouch-theme ;; <hl>
+	background.solid: white
+	
+	value = "hello world"
+	print(value)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		theme: ztouch-theme
+		background.solid: white
+		
+		value = "hello world"
+		print(value)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+-- ds.rendered: Sample code using `nightowl-theme` theme
+
+	-- ds.rendered.input:
+	
+	\-- ftd.code:
+	lang: py
+	theme: nightowl-theme ;; <hl>
+	background.solid: white
+	
+	value = "hello world"
+	print(value)
+	
+	-- ds.rendered.output:
+	
+		-- ftd.code:
+		lang: py
+		theme: nightowl-theme
+		background.solid: white
+		
+		value = "hello world"
+		print(value)
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+
+-- end: ds.page

@@ -1,0 +1,170 @@
+-- import: fastn-stack.github.io/ftd-web-component-example
+-- import: fastn-community.github.io/bling/quote
+-- import: fastn.com/blog/authors
+-- import: fastn-community.github.io/doc-site/common
+
+-- common.post-meta meta: Ahoy, Web Components!
+published-on: February 25, 2023
+post-url: /web-components/
+author: $authors.amitu
+
+`ftd` is a great language to build UI components in. `fastn` is easy to learn
+and author. `fastn` has a design system, dark mode support. `fastn` websites are
+fast as we do server side rendering etc. And we are just getting started, lot
+more is yet to come.
+
+And yet JS ecosystem is *huge*. There are far too many ready made components
+available that we do not want to miss out on them when using `fastn-stack`.
+
+Today we are pleased to announce support for web components!
+
+
+
+-- ds.blog-page:
+meta: $meta
+
+-- quote.window: [MDN: Web Component](https://developer.mozilla.org/en-US/docs/Web/Web_Components)
+
+Web Components is a suite of different technologies allowing you to create
+reusable custom elements — with their functionality encapsulated away from the
+rest of your code — and utilize them in your web apps.
+
+-- ds.markdown:
+
+Let's take a look at a demo we have created:
+
+-- ftd-web-component-example.demo:
+show-link: false
+
+-- ds.h1: So how to use it?
+
+First let's take a moment to appreciate how neatly this demo itself was embedded
+in this blog post. All I had to do was a line of dependency in `FASTN.ftd`:
+
+-- ds.code: Dependency in `FASTN.ftd`
+lang: ftd
+
+\-- fastn.dependency: fastn-stack.github.io/ftd-web-component-example
+
+-- ds.markdown:
+
+And the following two lines to get the demo:
+
+-- ds.code: the blog post page
+lang: ftd
+
+\-- import: fastn-stack.github.io/ftd-web-component-example
+
+;; where I want to place the demo
+
+\-- ftd-web-component-example.demo:
+
+-- ds.markdown:
+
+It's kind of complex example, we need a JS dependency for the demo, and it gets
+neatly download and injected in the right place. And only if I use the component,
+if I comment out the `-- ftd-web-component-example.demo:` line, the JS would no
+longer be needed and would be gone from dependency.
+
+-- ds.h2: Creating A Web Component
+
+First job is to create the web component itself that you want to use. There is
+plenty of resource on internet to teach you how to do it, checkout the official
+[React web component guide](https://reactjs.org/docs/web-components.html).
+
+We will start with the [MDN tutorial](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements).
+
+-- ds.code:
+lang: js
+
+class WordCount extends HTMLParagraphElement {
+  constructor() {
+    super(); // Always call super first in constructor
+
+    // Element functionality written in here
+  }
+}
+
+customElements.define("word-count", WordCount, { extends: "p" });
+
+-- ds.markdown:
+
+Creating a web-component is this easy. If you want to use it from `ftd` you have
+to declare it in a `ftd` file:
+
+-- ds.code: declaring a web-component in ftd
+lang: ftd
+
+\-- web-component word-count:
+js: [$assets.files.word-count.js]
+
+-- ds.markdown:
+
+What this does is tell `ftd` about existence of the web-component. Further it
+tells `ftd` in what JS file is the `web-component` is defined. We have used
+[`fastn`'s' assets feature](/assets/) to refer to the JS file.
+
+To use this web-component you can just call `-- word-count:` somewhere and `ftd`
+will do the right thing, JS will get auto included, and web component will get
+rendered.
+
+-- ds.h1: Data Across JS and `ftd` Worlds
+
+A web-component that takes no parameters is not very useful. You would want to
+pass data to web-component. You would also want to possibly mutate the data from
+the web-component or JS world, and want fastn world to see the mutations. You
+may also want to continue to mutate the data in fastn world after web component
+have been rendered, and have web-component respond to those changes.
+
+All this are possible, the way to think about it is that data that you want to
+share between the two worlds is "managed" / "owned" by fastn, and from your JS
+you use `fastn` APIs to mutate the fastn owned data.
+
+Let's take a look at the web component of this demo:
+
+-- ds.code:
+lang: ftd
+
+\-- web-component todo-list-display:
+string name:
+todo-item list $todo_list:
+js: [$assets.files.todo.js]
+
+-- ds.markdown:
+
+Here we have an argument named `name`, whose type is `string`, and the next
+argument is `todo_list` of type `todo-item list`.
+
+As you see `todo_list` is defined as `$todo_list`, this means `todo_list` is
+a mutable variable. `name` on the other hand is immutable. So `ftd` creates a
+mutable list and an immutable string for the two and passes these to JS.
+
+JS world can get a handle to this data using:
+
+-- ds.code:
+lang: js
+
+class Todo extends HTMLElement {
+    constructor() {
+        super(); // Always call super first in constructor
+
+        // get access to arguments passed to this component
+        let data = window.ftd.component_data(this);
+
+        // ...
+    }
+}
+
+-- ds.markdown:
+
+Now you have access to component data, and you can now use `data.<var>.get
+()`, `.set()` functions to manage data from the JS world. You can listen for
+changes in data on `fastn` side by using `.on_change(function(){ \* some code
+here *\ })`. Checkout the full [source code of our demo]
+(https://github.com/fastn-stack/ftd-web-component-example/blob/main/todo.js)
+for more detailed usage.
+
+Go ahead and give it a shot, and come over to [Discord](https://discord.gg/a7eBUeutWD)
+in case you face any issues, we would love to hear from you!
+
+-- end: ds.blog-page

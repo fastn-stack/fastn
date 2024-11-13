@@ -1,0 +1,147 @@
+-- import: fastn-community.github.io/site-doc
+-- import: fastn-community.github.io/site-doc
+-- import: fastn-community.github.io/header
+-- import: fastn-community.github.io/code-block as cb
+
+
+
+
+-- site-doc.doc-home: Documentation
+site-title: Header
+show-tabs: false
+github-url: https://github.com/fastn-community/header/
+
+-- site-doc.component-doc: `header`
+package-link: https://fastn-community.github.io/header
+package-name: fastn-community.github.io/header
+info: `-- header` can be used as header on your [fastn](https://fastn.com/) web projects.
+
+
+- **Logo:** Your [fastn](https://fastn.com/) website logo is placed in the
+    top-left corner of the header. Clicking on the logo leads back to the
+    homepage.
+- **Site Navigation:** Primary navigation which called as sections in
+  `fastn.sitemap`, presented as a horizontal list of links placed in the right
+  side of the logo.
+- **Breadcrumb:** is a navigational aid that helps users understand their current
+  location within a website's hierarchical structure. Is placed below logo.
+- **Sub-sections:** Secondary navigation which called as sub-sections in
+  `fastn.sitemap` is placed at the right side of breadcrumb.
+
+**Note:** The `header` component is already included inside
+[`doc-site`](fifthtry.github.io/doc-site). If you are using `doc-site` then 
+don't add header as [fastn](https://fastn.com/) dependency.
+
+
+-- site-doc.header: How to use
+
+-- cb.code: Add `header` dependency into your FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/header
+
+-- cb.code: Import `header` into your `.ftd` file
+lang: ftd
+
+\-- import: fastn-community.github.io/header
+
+\-- header.header:
+sections: $header.sitemap.sections
+site-url: /docs/
+site-name: Basic Header
+
+-- site-doc.header: Properties:
+
+Below are details of all properties of this component.
+
+-- site-doc.component-property: `sections`
+type: sections list (`required`)
+
+It's used to show [`fastn.sitemap`](https://fastn.com/understanding-sitemap/) 
+sections.
+
+-- site-doc.component-property: `sub-sections`
+type: sub-sections list (`optional`)
+
+It's used to show [`fastn.sitemap`](https://fastn.com/understanding-sitemap/)
+ sub-sections.
+
+-- site-doc.component-property: `current-section`
+type: current-section title (`optional`)
+
+It's used to show [`fastn.sitemap`](https://fastn.com/understanding-sitemap/)
+ current-section title.
+
+-- site-doc.component-property: `current-subsection`
+type: current-subsection title (`optional`)
+
+It's used to show [`fastn.sitemap`](https://fastn.com/understanding-sitemap/)
+ current-subsection title.
+
+-- site-doc.component-property: `current-page`
+type: current-page title (`optional`)
+
+It's used to show [`fastn.sitemap`](https://fastn.com/understanding-sitemap/)
+ current-page title.
+
+-- site-doc.component-property: `current-page`
+type: current-page title (`optional`)
+
+It's used to show [`fastn.sitemap`](https://fastn.com/understanding-sitemap/)
+ current-page title.
+
+-- site-doc.component-property: `site-url`
+type: String (`optional`)
+
+It’s used to add a site link to your site homepage.
+
+-- site-doc.component-property: `site-name`
+type: String (`optional`)
+
+It’s used to add a site name to `header` component.
+
+-- site-doc.component-property: `products`
+type: List of Records(`optional`)
+
+Its used to pass `products` record list to `header` component. `products`
+property will be passed to `product-switcher` which is imported by default
+inside `header` component `FASTN.ftd`.
+
+-- site-doc.component-property: `login-button`
+type: Boolean (`optional`)
+
+It’s used to enable login button in `header` component.
+
+-- site-doc.component-property: `login-btn-txt`
+type: String ('optional')
+
+It’s used to specify login button text in `header` component.
+
+-- site-doc.component-property: `login-btn-url`
+type: String ('optional')
+
+It’s used to specify login button url in `header` component.
+
+-- site-doc.component-property: `github-icon`
+type: Boolean `default: false`
+
+It’s used to specify enable GitHub icon button in `header` component.
+
+-- site-doc.component-property: `github-url`
+type: String ('optional')
+
+It’s used to specify `github-icon` link in `header` component.
+
+-- site-doc.component-property: `search`
+type: Boolean ('optional')
+
+It’s used to enable search button in `header` component.
+
+-- site-doc.component-property: `search-url`
+type: String ('optional')
+
+It’s used to specify search button link in `header` component.
+
+-- end: site-doc.component-doc
+
+-- end: site-doc.doc-home

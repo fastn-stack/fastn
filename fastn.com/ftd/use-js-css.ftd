@@ -1,0 +1,19 @@
+-- ds.page: Interoperability with JS/CSS
+
+`fastn` provides support for JavaScript integration in various places.
+Besides JS, fastn also supports the use of CSS from [external CSS](/external-css/)
+files. Through these ways we can incorporate JavaScript/CSS in `fastn`:
+
+- [**JS in function**](/js-in-function/): A JavaScript function can be called
+  within a function
+
+- [**Web component**](/web-component/): A custom web component, created using JavaScript (or other
+    languages too, that compiles to JS) can be incorporated into `fastn`
+    documentation.
+
+- [External CSS](/external-css/): fastn allows the use of external CSS for styling
+  fastn components.
+
+This gives you flexibility of using JS/CSS in `fastn` module.
+
+-- end: ds.page

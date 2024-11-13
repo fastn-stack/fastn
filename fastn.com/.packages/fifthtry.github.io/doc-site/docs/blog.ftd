@@ -1,0 +1,213 @@
+-- import: fifthtry.github.io/doc-site as ds
+-- import: fifthtry.github.io/doc-site/assets
+
+
+
+
+-- ds.page: How to use blog
+
+
+We at FifthTry promote [FTD](https://ftd.dev/) to write your blogs. Considering this we have
+designed blog inside `dod-site`. 
+
+By following our simple blog documentation you can create you own. We have 
+developed featured article list, blog article & authors bio pages. Lets 
+understand how to use them.
+
+Make sure you have done [these steps](https://fastn.dev/author/create-on-github/) 
+and created your [FTD](https://ftd.dev/) website repository on GitHub.
+
+-- ds.h1: Adding author details
+
+As a blog author bloggers can add their details. Using our author feature you
+can add your details as author.
+
+Lets understand how to add author details.
+
+
+-- ds.code: Example how to add author details
+lang: ftd
+
+\-- ds.author-meta abrar: Abrar Khan
+profile: Sr. Software Developer
+bio-url: blog-authors/abrar/
+image: $assets.files.static.authors.abrar-k.jpg
+company: FifthTry Pvt. Ltd.
+
+Completed my masters from National Institute of Technology. Working as
+Sr. Software Developer at FifthTry Private Ltd. a Banglore based start-up company.
+
+Currently working full time with FifthTry and building FTD and FASTN day and night.
+
+
+-- ds.h3: Let's understand above code snippet:
+
+In `doc-site` we have added `blog-authors` folder. Here you can create your name
+FTD file. e.g. `abrar.ftd` file. You can also add more authors incase you are 
+creating a blog with multiple authors or a blog for your company where multiple
+authors can write posts for your company blog.
+
+Delete default files from `blog-authors` or rename default files with your name.
+Above code snippet is same code from `abrar.ftd` file. 
+
+✨ `-- ds.author-meta abrar: Abrar Khan` : in this FTD component author name as
+a title. You can change `Abrar Khan` with your name.
+
+✨ `profile:` helps add author desination in above case e.g. "Sr. Software Developer"
+
+✨ `bio-url:` add author FTD file and folder details.
+
+✨ `image:` author image 
+
+✨ `company:` author company details
+
+✨ At the last of above code snippet you can add author bio. 
+
+
+
+
+
+-- ds.h1: Writing a post 
+
+Writing a post/article you can add your post meta and post details. Below code 
+snippet shows how to write post meta and create your post. [see sample post](blog-articles/category-1/sample-post-1/)
+
+
+-- ds.code: Example of how to create blog post 
+lang: ftd
+
+\-- import: fifthtry.github.io/doc-site as ds
+\-- import: fifthtry.github.io/doc-site/assets
+\-- import: fifthtry.github.io/doc-site/blog-authors/abrar as author
+
+\-- ds.post-meta meta: A day in a city of dreams
+published-on: July 22, 2014 at 10:02 pm
+post-image: $assets.files.static.image-placeholder.png
+post-url: blog-articles/category-1/sample-post-1/
+author: $author.abrar
+
+Sed ut perspiciatis unde omnis iste natus error sit voluptatem 
+accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore 
+
+
+-- ds.h3: Let's understand above code snippet:
+
+✨ `-- import: fifthtry.github.io/doc-site as ds` : imports doc-site and all its
+components into your `FTD` page. 
+
+✨ `-- import: fifthtry.github.io/doc-site/assets` : helps to import assets from 
+`doc-site`. For ex. this assets import helps you to add images into your `FTD` 
+pages.
+
+✨ `-- import: fifthtry.github.io/doc-site/blog-authors/abrar as author` : imports
+author meta data. You can add author details into `blog-authors/`. 
+
+In above example we have added `abrar` which links to `abrar.ftd` file from 
+`blog-authors/` folder.
+
+✨ `-- ds.post-meta meta` : helps you to add details of your blog post. 
+
+✨ Using `published-on` attribute you can add your post timestamp. 
+
+✨ FTD uses a specific format to add image assets you see in above `post-image` 
+attribute. `$assets.files.static.image-placeholder.png` in this `$assets.files.`
+is default.
+
+FTD format to add a asset. `static` is a folder name, which you can see in your
+`doc-site` folder structure. `image-placeholder.png` image file name, in this 
+case we have added `png` format image. 
+
+You can add any image format in it. e.g. `image-placeholder.jpg` or 
+`image-placeholder.jpeg` or `image-placeholder.gif` etc.
+
+✨ `post-url` attribute will help you to add your `post.ftd` file. In this case 
+`/blog-articles/category-1/sample-post-1/` is this path of our sample post FTD
+file `sample-post-1.ftd` which is stored inside `/blog-articles/` is folder and
+`category-1` is a category folder. You can rename it with your desired name.
+
+✨ `author` attribute helps to add author details. `$author.abrar` in this `$author`
+is imported via `-- import: fifthtry.github.io/doc-site/blog-authors/abrar as author`
+line into your blog post. `abrar` is a `abrar.ftd` file which contains author 
+details.
+
+✨ At the last of above code snippet you can add few lines from your post. This is 
+called as body of the post in FTD. These lines will be added as featured text 
+inside `featured-post` page.
+
+
+
+
+
+-- ds.h1: Creating featured posts page
+
+Its very common to display a list of top/latest posts as a blog home page. Our
+`doc-site` blog feature helps you to create your favorite blog posts list home 
+page.
+
+Its very simple to create your top/latest featured posts using `-- ds.posts` which
+can be added insite `-- ds.page`.
+
+Let's understand how to create it.
+
+
+-- ds.code: Example of how to use `-- ds.posts`
+lang: ftd
+
+\-- import: fifthtry.github.io/doc-site as ds
+\-- import: fifthtry.github.io/doc-site/blog-articles/category-1/sample-post-1
+\-- import: fifthtry.github.io/doc-site/blog-articles/category-1/sample-post-2 
+\-- import: fifthtry.github.io/doc-site/blog-articles/category-2/sample-post-3 
+\-- import: fifthtry.github.io/doc-site/blog-articles/category-2/sample-post-4
+
+\-- ds.page:
+
+\--- ds.posts:
+
+\--- ds.featured-post:
+post-data: $sample-post-1.meta
+
+\--- ds.image-first:
+post-data: $sample-post-2.meta
+
+\--- ds.image-in-between:
+post-data: $sample-post-3.meta
+
+\--- ds.without-image:
+post-data: $sample-post-4.meta
+
+
+
+-- ds.h3: Let's understand above code snippet:
+
+`-- import: fifthtry.github.io/doc-site as ds` : imports doc-site and all its
+components into your `featured-post.ftd` page. 
+
+`\-- import: fifthtry.github.io/doc-site/blog-articles/category-1/sample-post-1` 
+: imports `sample-post-1` and its all details from `/blog-articles/category-1/` 
+folder. You can add more posts imports into `featured-post.ftd` like shown in 
+above code snippet.
+
+{ds.yellowmarker: e.g. -- ds.page, --- ds.posts} and all components mentioned in 
+above components.
+
+`--- ds.posts:` : This line imports `ds.posts` component which helps to create
+featured list page ui. 
+
+`--- ds.featured-post:` : This line imports `ds.featured-post` component which 
+comes with featured post UI. [see our blog page](featured-posts/)
+
+`--- ds.image-first:` : `ds.image-first` component shows your post image at the 
+top then shows title of the post and other post details. [see our blog page](featured-posts/)
+
+`--- ds.image-in-between:` : `ds.image-in-between` component shows your post 
+image after title and post metadata then shows other post details. [see our blog page](featured-posts/)
+
+`--- ds.without-image:` : `ds.without-image` component shows your post without
+image incase your post not contains featured image. It shows only title and post
+metadata then shows other post details. [see our blog page](featured-posts/)
+
+Category pages are similar to featured-posts page. You can add category related
+details into body part of `-- ds.page` page.
+
+
+-- end: ds.page

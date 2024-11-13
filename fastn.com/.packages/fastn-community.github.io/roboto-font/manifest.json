@@ -1,0 +1,451 @@
+{
+  "files": {
+    "FASTN.ftd": {
+      "name": "FASTN.ftd",
+      "checksum": "CA7DA0A2674C15DCB1FD043A33D1A72415B0BF09ED33CD93EA7C012391AA6F0B",
+      "size": 19188
+    },
+    "LICENSE": {
+      "name": "LICENSE",
+      "checksum": "43070E2D4E532684DE521B885F385D0841030EFA2B1A20BAFB76133A5E1379C1",
+      "size": 11356
+    },
+    "README.md": {
+      "name": "README.md",
+      "checksum": "F9A214873A4D0B794FE702279EBBC0B3C4204F53FBBDD5EA61B314341C2CF96F",
+      "size": 1013
+    },
+    "custom.ftd": {
+      "name": "custom.ftd",
+      "checksum": "FA73FAEB1F5942211754667101BD054DFEAEAAA80E1D3AD5AFC47E35266F09B5",
+      "size": 5325
+    },
+    "index.ftd": {
+      "name": "index.ftd",
+      "checksum": "80D38CC9E3FB9632B4F3F2F74EDF736131482B3814616735F7E0B3EF978478C3",
+      "size": 2233
+    },
+    "static/Roboto-100-italic-cyrillic-ext.woff2": {
+      "name": "static/Roboto-100-italic-cyrillic-ext.woff2",
+      "checksum": "688528A5CC480B0F3805F9A125E30BD7CBAADCF7F3E809B12DA8E9DDDD0C908F",
+      "size": 11740
+    },
+    "static/Roboto-100-italic-cyrillic.woff2": {
+      "name": "static/Roboto-100-italic-cyrillic.woff2",
+      "checksum": "189E92C97D66EC57A767EFA658BC0D6FE5A7C28B639DBB3E32351F65CB644197",
+      "size": 7140
+    },
+    "static/Roboto-100-italic-greek-ext.woff2": {
+      "name": "static/Roboto-100-italic-greek-ext.woff2",
+      "checksum": "A25AB85FB269D816608F6502D56A944AC70AF661FE65B51286E2CFA1226D5A8A",
+      "size": 784
+    },
+    "static/Roboto-100-italic-greek.woff2": {
+      "name": "static/Roboto-100-italic-greek.woff2",
+      "checksum": "3C17104103CEC422612F59896A53B67484828A454B5115B5D33190C4D9ABC8B4",
+      "size": 5476
+    },
+    "static/Roboto-100-italic-latin-ext.woff2": {
+      "name": "static/Roboto-100-italic-latin-ext.woff2",
+      "checksum": "B246E5C884A8CB135BA2A1EA230F7991D9A7E3021AFCE2188178AE851407EAF9",
+      "size": 8564
+    },
+    "static/Roboto-100-italic-latin.woff2": {
+      "name": "static/Roboto-100-italic-latin.woff2",
+      "checksum": "4897A9DF551E8265A989F645381187859DE938F324EF45D98D59B5D0FA23556E",
+      "size": 12408
+    },
+    "static/Roboto-100-italic-vietnamese.woff2": {
+      "name": "static/Roboto-100-italic-vietnamese.woff2",
+      "checksum": "478EF048E4A006E95BB6FCECEC20B3DEC6CDF68F3E228EAC892DCE6367E19302",
+      "size": 3776
+    },
+    "static/Roboto-100-normal-cyrillic-ext.woff2": {
+      "name": "static/Roboto-100-normal-cyrillic-ext.woff2",
+      "checksum": "9A763DAB6423CC0C865AEF0C62A50BD68DD3733AD0607AE107B2B20554B4E984",
+      "size": 10172
+    },
+    "static/Roboto-100-normal-cyrillic.woff2": {
+      "name": "static/Roboto-100-normal-cyrillic.woff2",
+      "checksum": "24F135490FB97908096BFE6356922B964E60396B0113578A3C7FBF64C8D56E56",
+      "size": 6348
+    },
+    "static/Roboto-100-normal-greek-ext.woff2": {
+      "name": "static/Roboto-100-normal-greek-ext.woff2",
+      "checksum": "55798314F9AE74A34980EB7ADF52CDEAC69A7F29D6A649D016A7104BDFF54E46",
+      "size": 752
+    },
+    "static/Roboto-100-normal-greek.woff2": {
+      "name": "static/Roboto-100-normal-greek.woff2",
+      "checksum": "7D12CB8BA81E23A1A95D1920AE36B72DD2BD9D3A94CCB75A92ECE5689E1974F4",
+      "size": 4916
+    },
+    "static/Roboto-100-normal-latin-ext.woff2": {
+      "name": "static/Roboto-100-normal-latin-ext.woff2",
+      "checksum": "3CB5FF8EB1FB914CE2EB7F416365E2B581B7FA3FACE2013254FA2CFE192FAC88",
+      "size": 7704
+    },
+    "static/Roboto-100-normal-latin.woff2": {
+      "name": "static/Roboto-100-normal-latin.woff2",
+      "checksum": "FDEDAFEDFE259042A21491E2A52DBB091F1F7821D5925AB23E02D58E3E0BA9B5",
+      "size": 10984
+    },
+    "static/Roboto-100-normal-vietnamese.woff2": {
+      "name": "static/Roboto-100-normal-vietnamese.woff2",
+      "checksum": "11BF28B8297AFD30FAEA516D5FEE75D0992E24888C19D45A6EA7744E460AFB90",
+      "size": 3424
+    },
+    "static/Roboto-300-italic-cyrillic-ext.woff2": {
+      "name": "static/Roboto-300-italic-cyrillic-ext.woff2",
+      "checksum": "ACF9B3DD9D3A6F9B0E7FF45F9F21DA64447AAB6C22D88A567ACDFF43A52D788F",
+      "size": 12124
+    },
+    "static/Roboto-300-italic-cyrillic.woff2": {
+      "name": "static/Roboto-300-italic-cyrillic.woff2",
+      "checksum": "D77016C02B4E07A3C080154AF5DED921FA59B64DE3FA57CF22C16FB0941A5511",
+      "size": 7360
+    },
+    "static/Roboto-300-italic-greek-ext.woff2": {
+      "name": "static/Roboto-300-italic-greek-ext.woff2",
+      "checksum": "057D5399E141D40B4FD5E5DEC778ADF9FF215EB959C56F286C8ACB57A511BE80",
+      "size": 788
+    },
+    "static/Roboto-300-italic-greek.woff2": {
+      "name": "static/Roboto-300-italic-greek.woff2",
+      "checksum": "E36D5117F87900319E17CE7B924C3B186BFCB88B76EB08357DF25354115397F4",
+      "size": 5548
+    },
+    "static/Roboto-300-italic-latin-ext.woff2": {
+      "name": "static/Roboto-300-italic-latin-ext.woff2",
+      "checksum": "807C429ED0739885F8B6A84B43E5247CD4130A1613B027AE57C330C50E868E29",
+      "size": 8888
+    },
+    "static/Roboto-300-italic-latin.woff2": {
+      "name": "static/Roboto-300-italic-latin.woff2",
+      "checksum": "090625522E49AD90E9DB9EC649E3DA9107FE04E007EC8FE7DCD3674CC415E7CE",
+      "size": 12800
+    },
+    "static/Roboto-300-italic-vietnamese.woff2": {
+      "name": "static/Roboto-300-italic-vietnamese.woff2",
+      "checksum": "3A7C392EABE068AA99713C935371295011C3073CD65617C5FC38E32482CA1856",
+      "size": 3920
+    },
+    "static/Roboto-300-normal-cyrillic-ext.woff2": {
+      "name": "static/Roboto-300-normal-cyrillic-ext.woff2",
+      "checksum": "4C9B1F194BEAB4FA292A673D42B8218816722D1DA88F0913C6B70C54F5BEF40B",
+      "size": 10392
+    },
+    "static/Roboto-300-normal-cyrillic.woff2": {
+      "name": "static/Roboto-300-normal-cyrillic.woff2",
+      "checksum": "91EFF626ADEFA3580198492CCD5259A3F363AC70644209193D95AE1DCBAA82BE",
+      "size": 6512
+    },
+    "static/Roboto-300-normal-greek-ext.woff2": {
+      "name": "static/Roboto-300-normal-greek-ext.woff2",
+      "checksum": "CFF27EB045346079E8E3631605ACF4F9418672469811964D7CB3949C805909F6",
+      "size": 752
+    },
+    "static/Roboto-300-normal-greek.woff2": {
+      "name": "static/Roboto-300-normal-greek.woff2",
+      "checksum": "A024BAC613301023DA25132FE157DA518600CC84B5F95FEC0F28B94D3DB10D9A",
+      "size": 4920
+    },
+    "static/Roboto-300-normal-latin-ext.woff2": {
+      "name": "static/Roboto-300-normal-latin-ext.woff2",
+      "checksum": "076637ABE5192AEC7B640FD5E3A10A4061FD69D7067FB59B509C32B0D140009A",
+      "size": 7836
+    },
+    "static/Roboto-300-normal-latin.woff2": {
+      "name": "static/Roboto-300-normal-latin.woff2",
+      "checksum": "4B276A3DF6DCDCD6C00183988721DDAC6786EF8FFBC664E87E8C34DAC70CA199",
+      "size": 11132
+    },
+    "static/Roboto-300-normal-vietnamese.woff2": {
+      "name": "static/Roboto-300-normal-vietnamese.woff2",
+      "checksum": "7168F621B6D2CA5E0854ACD0DE081713AC4B3EBB87DD659A3A33580C57E3C20B",
+      "size": 3496
+    },
+    "static/Roboto-400-italic-cyrillic-ext.woff2": {
+      "name": "static/Roboto-400-italic-cyrillic-ext.woff2",
+      "checksum": "2AF0F7924B4E69C7790F61D2B69C821FA82229207FEAB26D60CA3F3C803F5CC2",
+      "size": 12080
+    },
+    "static/Roboto-400-italic-cyrillic.woff2": {
+      "name": "static/Roboto-400-italic-cyrillic.woff2",
+      "checksum": "47686571EFD8E0D50045013F070A8D3B5EDD85CAE81F31A1667C275668C91989",
+      "size": 7280
+    },
+    "static/Roboto-400-italic-greek-ext.woff2": {
+      "name": "static/Roboto-400-italic-greek-ext.woff2",
+      "checksum": "1C629634F41290E77C3B4F8C3617FFA60062E9A0298519547A460E5C28D6D427",
+      "size": 796
+    },
+    "static/Roboto-400-italic-greek.woff2": {
+      "name": "static/Roboto-400-italic-greek.woff2",
+      "checksum": "F3930E915F4B6D74E535D9346E34A8BA9FFFEAC0918A5550741B2F07F495F92F",
+      "size": 5568
+    },
+    "static/Roboto-400-italic-latin-ext.woff2": {
+      "name": "static/Roboto-400-italic-latin-ext.woff2",
+      "checksum": "C10E53F50CFE4F3B46AF22ACFAAD7A36FD5533E960CC26E42A92038203A062A6",
+      "size": 8772
+    },
+    "static/Roboto-400-italic-latin.woff2": {
+      "name": "static/Roboto-400-italic-latin.woff2",
+      "checksum": "D4AD6488B98DC54A19FAFD8A6E462938D13787E6B3B0F21516013C41BB7A8017",
+      "size": 12676
+    },
+    "static/Roboto-400-italic-vietnamese.woff2": {
+      "name": "static/Roboto-400-italic-vietnamese.woff2",
+      "checksum": "F9E7382E2FD99AC13ADBD142FD367AC22C843A11AD1441540EEC31D310D336CF",
+      "size": 3872
+    },
+    "static/Roboto-400-normal-cyrillic-ext.woff2": {
+      "name": "static/Roboto-400-normal-cyrillic-ext.woff2",
+      "checksum": "B707923D87C6C01B360172C0278696217B88052D28381658410B9D066B1D3604",
+      "size": 10332
+    },
+    "static/Roboto-400-normal-cyrillic.woff2": {
+      "name": "static/Roboto-400-normal-cyrillic.woff2",
+      "checksum": "25A6495E7B5E321F5BE6E651A33C2E80A22DC16EC16C5CF55A9C61FF3A8476C9",
+      "size": 6416
+    },
+    "static/Roboto-400-normal-greek-ext.woff2": {
+      "name": "static/Roboto-400-normal-greek-ext.woff2",
+      "checksum": "0BF05CB5C0D95A3154FEF1A4D4B6A8E84E25CF522CB989FB8C95A2991012389C",
+      "size": 748
+    },
+    "static/Roboto-400-normal-greek.woff2": {
+      "name": "static/Roboto-400-normal-greek.woff2",
+      "checksum": "6C46F1701D9AA3673BBCDDB2ADB107F4D0782A1F94FC33C38638441A19FF4B9B",
+      "size": 4824
+    },
+    "static/Roboto-400-normal-latin-ext.woff2": {
+      "name": "static/Roboto-400-normal-latin-ext.woff2",
+      "checksum": "0D36E77C4A6A1683F72D450876BCD72E692CF63104237A085091B5C69AB9675E",
+      "size": 7700
+    },
+    "static/Roboto-400-normal-latin.woff2": {
+      "name": "static/Roboto-400-normal-latin.woff2",
+      "checksum": "A986C26C40FEBDFAC5074B57A925FE2D7B901E75B7BCAD4A19A5CBE3987B51BF",
+      "size": 11032
+    },
+    "static/Roboto-400-normal-vietnamese.woff2": {
+      "name": "static/Roboto-400-normal-vietnamese.woff2",
+      "checksum": "C3922AE70F49AE2FE18817005584B1A429E561354FBC6CF02CE8ED55E5DFFE1D",
+      "size": 3480
+    },
+    "static/Roboto-500-italic-cyrillic-ext.woff2": {
+      "name": "static/Roboto-500-italic-cyrillic-ext.woff2",
+      "checksum": "5068112FEC3D79AFEA831F0D68486F93620C8C76CF21FAFD49AF6DBFC1C74527",
+      "size": 11940
+    },
+    "static/Roboto-500-italic-cyrillic.woff2": {
+      "name": "static/Roboto-500-italic-cyrillic.woff2",
+      "checksum": "533710B01FF930300762884905E6E98BE59E1F54EE73313A254CBFF43CC38366",
+      "size": 7480
+    },
+    "static/Roboto-500-italic-greek-ext.woff2": {
+      "name": "static/Roboto-500-italic-greek-ext.woff2",
+      "checksum": "34DAF35B589BFD0B48D5BC0CE40CED9BB15CD9C473D0994F7EB02278E8DEB7AF",
+      "size": 800
+    },
+    "static/Roboto-500-italic-greek.woff2": {
+      "name": "static/Roboto-500-italic-greek.woff2",
+      "checksum": "5F78CBB4F1E0E100281CC51E495A2357A68784DFC55D7FD6C592FC1BCC1308B4",
+      "size": 5436
+    },
+    "static/Roboto-500-italic-latin-ext.woff2": {
+      "name": "static/Roboto-500-italic-latin-ext.woff2",
+      "checksum": "29907E0B58FEB741A297E6148618E8019E57EDB6DF13080D53F3762200009A6F",
+      "size": 8800
+    },
+    "static/Roboto-500-italic-latin.woff2": {
+      "name": "static/Roboto-500-italic-latin.woff2",
+      "checksum": "2AEFA3491DB641FB26A0B8F8116701B70B5B8F3D710E145E89185D039ADD3C2B",
+      "size": 12768
+    },
+    "static/Roboto-500-italic-vietnamese.woff2": {
+      "name": "static/Roboto-500-italic-vietnamese.woff2",
+      "checksum": "33CE0779B10E0423BE8BFE8702BBD029EC66E8EA9963A8BE494DB9868068D2AB",
+      "size": 3900
+    },
+    "static/Roboto-500-normal-cyrillic-ext.woff2": {
+      "name": "static/Roboto-500-normal-cyrillic-ext.woff2",
+      "checksum": "B6753D06C5C5DAE8D26771274D1E597099663208336EF67F0CE405541D6C43FE",
+      "size": 10324
+    },
+    "static/Roboto-500-normal-cyrillic.woff2": {
+      "name": "static/Roboto-500-normal-cyrillic.woff2",
+      "checksum": "D0B51E1FE6164098BE587FB2819B6EF439318CB90E42C4841FA8DBB0E87DB7DF",
+      "size": 6656
+    },
+    "static/Roboto-500-normal-greek-ext.woff2": {
+      "name": "static/Roboto-500-normal-greek-ext.woff2",
+      "checksum": "F70AB8F5509B4397F94D483077E813C47FA5F7F39A50DE80CD8D17142A1C7D8F",
+      "size": 772
+    },
+    "static/Roboto-500-normal-greek.woff2": {
+      "name": "static/Roboto-500-normal-greek.woff2",
+      "checksum": "A60456FC2D5420EE800A1DF14E27CD10795C4422E64C62FA964EB6094D4EAABC",
+      "size": 4852
+    },
+    "static/Roboto-500-normal-latin-ext.woff2": {
+      "name": "static/Roboto-500-normal-latin-ext.woff2",
+      "checksum": "477DCD24132C5317983786710DDC749F25B653D13ACB7904C9C0F34282AC7E59",
+      "size": 7696
+    },
+    "static/Roboto-500-normal-latin.woff2": {
+      "name": "static/Roboto-500-normal-latin.woff2",
+      "checksum": "ECCC582A306D1166ABF3880B2BFCDB1ED98DF81CCE0EDE7B8B7F85DD9D4EC6B2",
+      "size": 11048
+    },
+    "static/Roboto-500-normal-vietnamese.woff2": {
+      "name": "static/Roboto-500-normal-vietnamese.woff2",
+      "checksum": "07D5EB713FEA5E78A2E9DF5D807A40ED5D9364331D3F774357F9BDE56DE61CDA",
+      "size": 3460
+    },
+    "static/Roboto-700-italic-cyrillic-ext.woff2": {
+      "name": "static/Roboto-700-italic-cyrillic-ext.woff2",
+      "checksum": "2720C7B034B976C4A336B75856A1E1EE2FEA0D5CCD5F53987C1032598BCAB37A",
+      "size": 11900
+    },
+    "static/Roboto-700-italic-cyrillic.woff2": {
+      "name": "static/Roboto-700-italic-cyrillic.woff2",
+      "checksum": "F7824159A04022B53F7061B0B8877D9960D49FF4B20A140FB491929FDAB2317B",
+      "size": 7456
+    },
+    "static/Roboto-700-italic-greek-ext.woff2": {
+      "name": "static/Roboto-700-italic-greek-ext.woff2",
+      "checksum": "F3680C5F6F560516F88432F6B4C8CDC605246AD42081F968B7C69A915A0623DE",
+      "size": 816
+    },
+    "static/Roboto-700-italic-greek.woff2": {
+      "name": "static/Roboto-700-italic-greek.woff2",
+      "checksum": "81C0FA01D25FDBABBFFB637826E5EA0EC6B44E74B137A85263655BA4594DF404",
+      "size": 5412
+    },
+    "static/Roboto-700-italic-latin-ext.woff2": {
+      "name": "static/Roboto-700-italic-latin-ext.woff2",
+      "checksum": "63DB78E2CE1ADD9CAD6E9828C6E69208FB5D12931306476F0F8022E4FD49343C",
+      "size": 8732
+    },
+    "static/Roboto-700-italic-latin.woff2": {
+      "name": "static/Roboto-700-italic-latin.woff2",
+      "checksum": "48E96A4EB6FB94DF5258338DD5013DD3C00529E22AAEB018F9301B8D683772B5",
+      "size": 12712
+    },
+    "static/Roboto-700-italic-vietnamese.woff2": {
+      "name": "static/Roboto-700-italic-vietnamese.woff2",
+      "checksum": "A5E77B70F7309CA1A97F9B47E50F2692C8768040A4CC80DC3E9D5BBF7CDAA8BC",
+      "size": 3880
+    },
+    "static/Roboto-700-normal-cyrillic-ext.woff2": {
+      "name": "static/Roboto-700-normal-cyrillic-ext.woff2",
+      "checksum": "BEAEF462ABC64887222A611EB83B0AD0A09BF834B01090D497EEA51240B54243",
+      "size": 10236
+    },
+    "static/Roboto-700-normal-cyrillic.woff2": {
+      "name": "static/Roboto-700-normal-cyrillic.woff2",
+      "checksum": "2215F108A6492448958EFCBA6F338A0C236B741AE041284B90A0566420C6C223",
+      "size": 6600
+    },
+    "static/Roboto-700-normal-greek-ext.woff2": {
+      "name": "static/Roboto-700-normal-greek-ext.woff2",
+      "checksum": "6954C36D7980F48DA7EBB40A1A72252709D8B37985F24BF9529B425AED61FD37",
+      "size": 736
+    },
+    "static/Roboto-700-normal-greek.woff2": {
+      "name": "static/Roboto-700-normal-greek.woff2",
+      "checksum": "F24646B393A31EB34A23F2FE2BE1CB697864CA6832A8F35234A91CBF5683B92F",
+      "size": 4772
+    },
+    "static/Roboto-700-normal-latin-ext.woff2": {
+      "name": "static/Roboto-700-normal-latin-ext.woff2",
+      "checksum": "64B7B9CFEE6CA36A3F629105134993DC09C4CB6A7CE4F611484D9F7FED4DFB51",
+      "size": 7656
+    },
+    "static/Roboto-700-normal-latin.woff2": {
+      "name": "static/Roboto-700-normal-latin.woff2",
+      "checksum": "D6621200328C67A58E7F049FC077058611D49A8B0462ACECDD1F25EF0B20A831",
+      "size": 11048
+    },
+    "static/Roboto-700-normal-vietnamese.woff2": {
+      "name": "static/Roboto-700-normal-vietnamese.woff2",
+      "checksum": "1CC6A725DC903E1F14C5516EE78B4D1FF70B6763BE4875E53357CAEA5B32BE3A",
+      "size": 3468
+    },
+    "static/Roboto-900-italic-cyrillic-ext.woff2": {
+      "name": "static/Roboto-900-italic-cyrillic-ext.woff2",
+      "checksum": "7D15D8BB10E51B2C0662BA8CF039513EF1E496E2EC251BA2CEFED5E2FFE1776B",
+      "size": 11940
+    },
+    "static/Roboto-900-italic-cyrillic.woff2": {
+      "name": "static/Roboto-900-italic-cyrillic.woff2",
+      "checksum": "B3B9820E6F7BC9774DD7E9DCB9AAC8113868CAA71C1A7D09671E33D17242ADF9",
+      "size": 7496
+    },
+    "static/Roboto-900-italic-greek-ext.woff2": {
+      "name": "static/Roboto-900-italic-greek-ext.woff2",
+      "checksum": "224BA93D9CD226D4EEB3256F1BAF713C5631A589C96F4C96E67C7295B3ED6574",
+      "size": 812
+    },
+    "static/Roboto-900-italic-greek.woff2": {
+      "name": "static/Roboto-900-italic-greek.woff2",
+      "checksum": "C0F1BB2037CF180DCA17EC50EE704C9D613AF1631B780D2D9E3554948105D2D8",
+      "size": 5420
+    },
+    "static/Roboto-900-italic-latin-ext.woff2": {
+      "name": "static/Roboto-900-italic-latin-ext.woff2",
+      "checksum": "50F9AEADC487BBB9B63AD4B4E589A57FB2BB3E1693EB83663ADC9A1D4B34EB9D",
+      "size": 8712
+    },
+    "static/Roboto-900-italic-latin.woff2": {
+      "name": "static/Roboto-900-italic-latin.woff2",
+      "checksum": "03ABD37680B7F0C73745739CAFA4C8C68462D0485048B47987A64B9819274B05",
+      "size": 12628
+    },
+    "static/Roboto-900-italic-vietnamese.woff2": {
+      "name": "static/Roboto-900-italic-vietnamese.woff2",
+      "checksum": "899B85E76A282046ED3D90B501EC320B8A8D20DAD317A0C265A324CCCDD19612",
+      "size": 3868
+    },
+    "static/Roboto-900-normal-cyrillic-ext.woff2": {
+      "name": "static/Roboto-900-normal-cyrillic-ext.woff2",
+      "checksum": "1E2FAC9344ED056A00EEECB192B66A47512644234B6AAC01BE9F2A0EB96945FC",
+      "size": 10216
+    },
+    "static/Roboto-900-normal-cyrillic.woff2": {
+      "name": "static/Roboto-900-normal-cyrillic.woff2",
+      "checksum": "33FCF9BE26D12E8C936B094C85079215BD7932D869A3535F215BCFAC728D9B01",
+      "size": 6632
+    },
+    "static/Roboto-900-normal-greek-ext.woff2": {
+      "name": "static/Roboto-900-normal-greek-ext.woff2",
+      "checksum": "7E8757751AD00E320B4B34AA5D3F231FE5BDB3260D82A5CD5E5A169F4D6090DB",
+      "size": 768
+    },
+    "static/Roboto-900-normal-greek.woff2": {
+      "name": "static/Roboto-900-normal-greek.woff2",
+      "checksum": "E2E64ADC82C22D6D51A3209DB3F69B0A7798BC9CA875112FA23467245CC34214",
+      "size": 4808
+    },
+    "static/Roboto-900-normal-latin-ext.woff2": {
+      "name": "static/Roboto-900-normal-latin-ext.woff2",
+      "checksum": "92ECA12D24F680D94110303C8453EEF11D6570FE5156FA5A1D1F9260DE9CF389",
+      "size": 7636
+    },
+    "static/Roboto-900-normal-latin.woff2": {
+      "name": "static/Roboto-900-normal-latin.woff2",
+      "checksum": "2A7E3288E65B4E6CD096129BBC9373F20D32966EC01764CB6296ADC9FB80B76B",
+      "size": 10980
+    },
+    "static/Roboto-900-normal-vietnamese.woff2": {
+      "name": "static/Roboto-900-normal-vietnamese.woff2",
+      "checksum": "82DF1D55B9A4F577A211E2D30FAC5B33EEC2895C83F6C931547BD3D48992DF38",
+      "size": 3420
+    }
+  },
+  "zip_url": "https://github.com/fastn-community/roboto-font/archive/dbfc8b8ed5eeffe20b0f1e56b4be9ef78f978579.zip",
+  "checksum": "D474BDA21B1B1AEB29A9025BD87F80E5A28B42E1BA00A6D916C0064FA5CB0AE4"
+}

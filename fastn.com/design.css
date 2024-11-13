@@ -1,0 +1,31 @@
+
+.fastn {
+    background-image: linear-gradient(271.68deg, #EE756A 25%, #756AEE 50%);
+}
+
+.color-1 {
+    background-image: linear-gradient(70deg,#6b63f6,#b563f6);
+}
+
+.color-2 {
+    background-image: linear-gradient(75deg,#b563f6, #f663ee);
+}
+
+.color-3 {
+    background-image: linear-gradient(75deg,#f55d55, #f6b563);
+}
+
+.color-4 {
+    background-image: linear-gradient(75deg,#2dafad, #63f666);
+}
+
+
+.text-color {
+    color: transparent;
+    -webkit-background-clip: text;
+}
+
+
+.text-align-center {
+    text-align: center;
+}

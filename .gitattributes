@@ -3,3 +3,6 @@
 # Refer: https://github.com/github/linguist/blob/master/docs/overrides.md
 
 *.html linguist-generated
+default-*.js linguist-generated
+default-*.css linguist-generated
+manifest.json linguist-generated

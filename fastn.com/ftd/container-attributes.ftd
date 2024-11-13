@@ -1,0 +1,214 @@
+-- ds.page: Container Attributes
+
+These attributes are available to `ftd.row` and `ftd.column` container
+components in ftd.
+
+
+-- ds.h1: `wrap: optional boolean`
+id: wrap
+
+This property is used to wrap flex elements. If the elements are not flex, this
+will have no effect.
+
+-- ds.rendered: Sample code using `wrap`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.row:
+	width.fixed.px: 100
+	spacing.fixed.px: 10
+	border-color: $red-yellow
+	border-width.px: 2
+	color: $inherited.colors.text
+	wrap: true ;; <hl>
+	
+	\-- ftd.text: One
+	
+	\-- ftd.text: Two
+	
+	\-- ftd.text: Three
+	
+	\-- ftd.text: Four
+	
+	\-- ftd.text: Five
+	
+	\-- ftd.text: Six
+	
+	\-- end: ftd.row
+	
+	-- ds.rendered.output:
+	
+		-- wrap-sample:
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+-- ds.h1: `align-content: optional ftd.align`
+id: align-content
+
+This property defines how elements are aligned
+inside a flex container like `ftd.row`, `ftd.column`. It takes value of type
+[`ftd.align`](ftd/built-in-types/#ftd-align) and is optional.
+
+-- ds.rendered: Sample code using `align-content`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.column:
+	width.fixed.px: 300
+	align-content: top-center ;; <hl>
+	color: $inherited.colors.text
+	border-color: $red-yellow
+	border-width.px: 2
+	
+	\-- ftd.text: One
+	
+	\-- ftd.text: Two
+	
+	\-- ftd.text: Three
+	
+	\-- end: ftd.column
+	
+	-- ds.rendered.output:
+	
+		-- align-content-sample:
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+
+
+
+
+
+
+
+
+-- ds.h1: `spacing: optional ftd.spacing`
+id: spacing
+
+This property defines the spacing between and around the container elements.
+It takes value of type [`ftd.spacing`](ftd/built-in-types/#ftd-spacing)
+and is optional.
+
+-- ds.rendered: Sample code using `spacing`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.row:
+	spacing: space-evenly ;; <hl>
+	border-color: $red-yellow
+	border-width.px: 2
+	color: $inherited.colors.text
+	width: fill-container
+	
+	\-- ftd.text: One
+	
+	\-- ftd.text: Two
+	
+	\-- ftd.text: Three
+	
+	\-- end: ftd.row
+	
+	-- ds.rendered.output:
+	
+		-- spacing-sample:
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+-- end: ds.page
+
+
+-- component wrap-sample:
+
+-- ftd.row:
+width.fixed.px: 100
+spacing.fixed.px: 10
+color: $inherited.colors.text
+border-color: $red-yellow
+border-width.px: 2
+wrap: true
+
+	-- ftd.text: One
+	
+	-- ftd.text: Two
+	
+	-- ftd.text: Three
+	
+	-- ftd.text: Four
+	
+	-- ftd.text: Five
+	
+	-- ftd.text: Six
+	
+-- end: ftd.row
+
+-- end: wrap-sample
+
+
+
+
+
+
+-- component align-content-sample:
+
+-- ftd.column:
+width.fixed.px: 300
+align-content: top-center
+color: $inherited.colors.text
+border-color: $red-yellow
+border-width.px: 2
+
+	-- ftd.text: One
+	
+	-- ftd.text: Two
+	
+	-- ftd.text: Three
+	
+-- end: ftd.column
+
+-- end: align-content-sample
+
+
+
+
+
+
+
+
+-- component spacing-sample:
+
+-- ftd.row:
+spacing: space-evenly
+border-color: $red-yellow
+border-width.px: 2
+color: $inherited.colors.text
+width: fill-container
+
+	-- ftd.text: One
+	
+	-- ftd.text: Two
+	
+	-- ftd.text: Three
+	
+-- end: ftd.row
+
+-- end: spacing-sample
+
+
+
+
+-- ftd.color red-yellow:
+light: red
+dark: yellow

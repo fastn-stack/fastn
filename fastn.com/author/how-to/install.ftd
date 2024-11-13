@@ -1,0 +1,89 @@
+-- import: fifthtry.github.io/admonitions as cbox
+
+-- ds.page: Install `fastn`
+
+Before you can use `fastn` you'll need to get it installed.
+
+`fastn` is compatible with various operating systems, including Windows, MacOS,
+and Linux. Based on your machine and your choice of installation, you can
+select one of the following options:
+
+-- ds.h1:  For MacOS/Linux
+
+-- cbox.info: Recommended
+
+We recommend installing `fastn` using the installer script. You can do this by
+running the below command in your terminal. This is the preferred method.
+
+-- ds.code: Installer Script
+lang: sh
+
+source <(curl -fsSL https://fastn.com/install.sh)
+
+
+-- ds.markdown:
+
+1. [`fastn` through `pre-built binary`](macos/#fastn-through-pre-built-binary)
+ (Recommended)
+2. [`fastn` from `source`](macos/#fastn-from-source)
+
+
+-- ds.h1:  For Windows
+
+-- cbox.info: For Windows (Recommended)
+
+We recommend you to install `fastn` through fastn installer:
+[fastn.com/setup.exe](https://fastn.com/setup.exe). This is the preferred method
+as it only requires downloading the setup and installing it on your local system.
+
+
+-- end: cbox.info
+
+
+-- ds.markdown:
+
+1. [`fastn` using `installer`](windows/#fastn-using-installer) (Recommended)
+2. [`fastn` through `pre-built binary`](windows/#fastn-through-pre-built-binary)
+3. [`fastn` from `source`](windows/#fastn-from-source)
+
+
+-- ds.h1:  For Nix/NixOS
+
+The [`fastn-stack/fastn`](https://github.com/fastn-stack/fastn) is a Nix flake that you can use in various ways:
+
+-- ds.markdown:
+
+- Directly run `fastn` without installing:
+
+-- ds.code: Run
+lang: sh
+
+nix run github:fastn-stack/fastn
+
+-- ds.markdown:
+
+- Add it as an input in your Nix flake:
+
+-- ds.code: Flake usage
+lang: nix
+
+{
+  description = "A very basic flake";
+
+  inputs.fastn.url = "github:fastn-stack/fastn";
+
+  outputs = { self, nixpkgs, fastn }:
+  let
+    system = "x86_64-linux";
+    pkgs = import nixpkgs { inherit system; };
+  in
+  {
+    devShells.${system}.default = pkgs.mkShell {
+        name = "my-fastn-shell";
+        buildInputs = [ fastn.defaultPackage.${system} ];
+      };
+  };
+}
+
+
+-- end: ds.page

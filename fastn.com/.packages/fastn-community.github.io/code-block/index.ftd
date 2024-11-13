@@ -1,0 +1,391 @@
+-- import: fastn
+-- import: fastn-community.github.io/code-block/assets
+-- import: fastn-community.github.io/site-doc
+-- import: fastn-stack.github.io/fastn-js/assets as js-assets
+
+
+
+
+-- site-doc.doc-home: Code-Block
+license-url: https://github.com/fastn-community/code-block/blob/main/LICENSE
+current-package: fastn-community.github.io/code-block
+show-tabs: false
+site-title: Code Block
+github-url: https://github.com/fastn-community/code-block
+
+-- site-doc.output:
+
+-- code:
+lang: ftd
+download: sample.ftd
+
+\-- ftd.text: Hello World
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- end: site-doc.output
+
+-- site-doc.header: What is a Code Block?
+
+A code block is a piece of source code that demonstrates how to use a
+particular feature, function, or library in a programming language. Code
+block are used to illustrate the syntax and usage of specific programming
+constructs and are often included in documentation, tutorials, and online
+forums to help developers understand how to use a particular piece of code.
+
+
+-- site-doc.header: How to use `code-block`?
+
+To use `code-block` add below lines into your FASTN.ftd document:
+
+To learn more about code-block [click here](docs/).
+
+-- code:
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/code-block
+
+-- end: site-doc.doc-home
+
+
+
+
+
+
+-- void download-text(filename,text):
+string filename:
+string text:
+js: $js-assets.files.download.js
+
+download_text(filename, text)
+
+
+
+
+
+
+
+
+
+
+
+
+-- component code:
+optional caption caption:
+optional string download:
+body body:
+string text: $code.body
+string lang: ftd
+boolean copy: true
+string $copy-text: null
+boolean $copy-mouse-in: false
+boolean $download-mouse-in: false
+boolean $mouse-in: false
+optional ftd.resizing max-height:
+optional ftd.resizing max-width:
+string clean-code: $ftd.clean-code(a = $code.text, lang = $code.lang)
+boolean line-numbers: false
+
+-- ftd.column:
+padding-bottom.px: 12
+padding-top.px: 12
+width: fill-container
+$on-mouse-enter$: $ftd.set-bool($a = $code.mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $code.mouse-in, v = false)
+cursor: default
+overflow-y: auto
+
+-- ftd.row:
+if: { code.caption != NULL || code.download != NULL || code.copy }
+width: fill-container
+background.solid: $inherited.colors.background.step-1
+padding-top.px if { code.caption != NULL }: 10
+padding-bottom.px if { code.caption != NULL }: 10
+padding-left.px if { code.caption != NULL }: 20
+padding-right.px if { code.caption != NULL }: 20
+border-top-left-radius.px: 4
+border-top-right-radius.px: 4
+max-width.fixed.px if { code.max-width != NULL }: $code.max-width
+
+-- ftd.text: $code.caption
+if: { code.caption != NULL }
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+align-self: start
+width: fill-container
+
+-- ftd.row:
+if: { code.copy }
+spacing.fixed.px: 10
+align-content: right
+align-self: end
+$on-mouse-leave$: $ftd.set-string($a = $code.copy-text, v = null)
+anchor: parent
+top.px: 12
+right.px: 20
+right.px if { code.download != NULL }: 56
+
+-- ftd.image:
+if: { code.copy-text == "null" && code.mouse-in }
+src: $assets.files.static.copy.svg
+src if { code.copy-mouse-in }: $assets.files.static.copy-hover.svg
+$on-mouse-enter$: $ftd.set-bool($a = $code.copy-mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $code.copy-mouse-in, v = false)
+$on-click$: $ftd.copy-to-clipboard(a = $code.clean-code)
+$on-click$: $ftd.set-string($a = $code.copy-text, v = Copied!)
+width.fixed.px: 18
+
+-- ftd.image:
+if: { code.copy-text != "null" }
+src: $assets.files.static.tick.svg
+width.fixed.px: 18
+
+-- ftd.text: $code.copy-text
+if: { code.copy-text != "null" }
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- end: ftd.row
+
+-- ftd.image:
+if: { code.download != NULL && code.mouse-in }
+src: $assets.files.static.download.svg
+src if { code.download-mouse-in }: $assets.files.static.download-hover.svg
+width.fixed.px: 20
+height.fixed.px: 20
+align-self: end
+anchor: parent
+top.px: 12
+right.px: 20
+$on-mouse-enter$: $ftd.set-bool($a = $code.download-mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $code.download-mouse-in, v = false)
+$on-click$: $download-text(filename = $code.download, text = $code.clean-code)
+
+-- end: ftd.row
+
+-- ftd.code:
+theme: fastn-theme.light
+theme if { ftd.dark-mode }: fastn-theme.dark
+text: $code.body
+lang: $code.lang
+width: fill-container
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+background.solid: $inherited.colors.background.code
+border-top-left-radius.px if { code.caption == NULL }: 4
+border-top-right-radius.px if { code.caption == NULL }: 4
+border-bottom-left-radius.px if { code.caption == NULL }: 4
+border-bottom-right-radius.px if { code.caption == NULL }: 4
+overflow-x: auto
+overflow-y: auto
+max-height if { code.max-height != NULL }: $code.max-height
+max-width if { code.max-width != NULL }: $code.max-width
+padding-bottom.px: 24
+show-line-number if { code.line-numbers }: true
+
+-- ftd.column:
+if: { code.lang != NULL }
+anchor: parent
+right.px: 12
+bottom.px: 12
+z-index: 999
+padding.px: 6
+border-bottom-right-radius.px: 4
+
+-- ftd.row:
+spacing.fixed.px: 16
+
+-- ftd.text: $code.download
+if: { code.download != NULL }
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+
+-- ftd.row:
+spacing.fixed.px: 4
+
+-- ftd.text: Lang:
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+
+-- ftd.text: $code.lang
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: code
+
+
+
+
+
+
+
+
+
+
+-- component rendered:
+optional string download:
+optional caption title:
+body input:
+boolean copy: true
+string $copy-text: null
+boolean $copy-mouse-in: false
+boolean $download-mouse-in: false
+boolean $mouse-in: false
+optional ftd.resizing max-height:
+optional ftd.resizing max-width:
+children output:
+string clean-code: $ftd.clean-code(a = $rendered.input, lang = ftd)
+boolean line-numbers: false
+
+-- ftd.column:
+width: fill-container
+padding-bottom.em: 0.8
+
+-- ftd.text: $rendered.title
+if: { rendered.title != NULL }
+role: $inherited.types.heading-tiny
+color: $inherited.colors.text-strong
+margin-bottom.em: 0.2
+
+-- ftd.text: Input
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+width: fill-container
+border-color: $inherited.colors.border
+border-bottom-width.px: 1
+padding-bottom.px: 8
+
+-- ftd.column:
+width: fill-container
+$on-mouse-enter$: $ftd.set-bool($a = $rendered.mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $rendered.mouse-in, v = false)
+cursor: default
+overflow-y: auto
+
+-- ftd.row:
+if: { rendered.copy }
+spacing.fixed.px: 10
+align-content: right
+align-self: end
+$on-mouse-leave$: $ftd.set-string($a = $rendered.copy-text, v = null)
+anchor: parent
+top.px: 12
+right.px: 20
+right.px if { rendered.download != NULL }: 56
+
+-- ftd.image:
+if: { rendered.copy-text == "null" && rendered.mouse-in }
+src: $assets.files.static.copy.svg
+src if { rendered.copy-mouse-in }: $assets.files.static.copy-hover.svg
+$on-mouse-enter$: $ftd.set-bool($a = $rendered.copy-mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $rendered.copy-mouse-in, v = false)
+$on-click$: $ftd.copy-to-clipboard(a = $rendered.clean-code)
+$on-click$: $ftd.set-string($a = $rendered.copy-text, v = Copied!)
+width.fixed.px: 18
+
+-- ftd.image:
+if: { rendered.copy-text != "null" }
+src: $assets.files.static.tick.svg
+width.fixed.px: 18
+
+-- ftd.text: $rendered.copy-text
+if: { rendered.copy-text != "null" }
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+
+-- end: ftd.row
+
+-- ftd.image:
+if: { rendered.download != NULL && rendered.mouse-in }
+src: $assets.files.static.download.svg
+src if { rendered.download-mouse-in }: $assets.files.static.download-hover.svg
+width.fixed.px: 20
+height.fixed.px: 20
+align-self: end
+anchor: parent
+top.px: 12
+right.px: 20
+$on-mouse-enter$: $ftd.set-bool($a = $rendered.download-mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $rendered.download-mouse-in, v = false)
+$on-click$: $download-text(filename = $rendered.download, text = $rendered.clean-code)
+
+-- ftd.code:
+theme: fastn-theme.light
+theme if { ftd.dark-mode }: fastn-theme.dark
+text: $rendered.input
+lang: ftd
+width: fill-container
+white-space: break-spaces
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+background.solid: $inherited.colors.background.code
+border-bottom-left-radius.px: 4
+border-bottom-right-radius.px: 4
+overflow-x: auto
+overflow-y: auto
+max-height if { rendered.max-height != NULL }: $rendered.max-height
+max-width if { rendered.max-width != NULL }: $rendered.max-width
+padding-bottom.px: 24
+show-line-number if { rendered.line-numbers }: true
+
+-- ftd.column:
+anchor: parent
+right.px: 12
+bottom.px: 12
+z-index: 999
+padding.px: 6
+border-bottom-right-radius.px: 4
+
+-- ftd.row:
+spacing.fixed.px: 16
+
+-- ftd.text: $rendered.download
+if: { rendered.download != NULL }
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+
+-- ftd.row:
+spacing.fixed.px: 4
+
+-- ftd.text: Lang:
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+
+-- ftd.text: ftd
+role: $inherited.types.fine-print
+color: $inherited.colors.text
+
+-- end: ftd.row
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- ftd.text: Output
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+border-bottom-width.px: 1
+width: fill-container
+border-color: $inherited.colors.border
+margin-top.px: 8
+padding-bottom.px: 8
+
+-- ftd.column:
+width: fill-container
+children: $rendered.output
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: rendered

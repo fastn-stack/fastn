@@ -1,0 +1,102 @@
+-- ds.page: `ftd.boolean`
+
+`ftd.boolean` is a component used to render a boolean value in an `ftd`
+document.
+
+-- ds.h1: Usage
+
+To use `ftd.boolean`, simply add it to your `ftd` document with your desired
+boolean value to display.
+
+-- ds.rendered: Sample Usage
+
+	-- ds.rendered.input:
+	
+	\-- ftd.boolean: true
+	color: $inherited.colors.text
+	
+	-- ds.rendered.output:
+	
+		-- ftd.boolean: true
+		color: $inherited.colors.text
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+-- ds.h1: Attributes
+
+`ftd.boolean` accepts the below attributes as well all the
+[common](ftd/common/) and [text](ftd/text-attributes/) attributes.
+
+
+-- ds.h2: `value: caption or body boolean`
+
+This is the value to show. It is a required field.
+
+There are three ways to pass integer to `ftd.boolean`: as `caption`, as a
+`value` `header`, or as `body`.
+
+-- ds.rendered: value as `caption`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.boolean: false ;; <hl>
+	color: $inherited.colors.text-strong
+	
+	-- ds.rendered.output:
+	
+		-- ftd.boolean: false
+		color: $inherited.colors.text-strong
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+-- ds.rendered: value as `header`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.boolean:
+	value: false ;; <hl>
+	color: $inherited.colors.text-strong
+	
+	-- ds.rendered.output:
+	
+		-- ftd.boolean:
+		value: false
+		color: $inherited.colors.text-strong
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+-- ds.rendered: value as `body`
+
+	-- ds.rendered.input:
+	
+	\-- ftd.boolean:
+	color: $inherited.colors.text-strong
+	
+	false ;; <hl>
+	
+	-- ds.rendered.output:
+	
+		-- ftd.boolean:
+		color: $inherited.colors.text-strong
+		
+		false
+		
+	-- end: ds.rendered.output
+
+-- end: ds.rendered
+
+
+
+-- end: ds.page

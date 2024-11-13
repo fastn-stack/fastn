@@ -1,0 +1,122 @@
+-- import: fastn-community.github.io/doc-site/components
+
+
+
+
+
+-- ds.page: Adding Site logo & Site name
+document-title: fastn Doc-Site Template. Build Your Own Website with Ease
+document-description: Simple, easy-to-use doc-site template to build your own documentation website, personal website, or blog. Change colours and typography effortlessly.
+document-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
+sidebar: true
+
+-- ds.page.right-sidebar:
+
+-- components.sidebar-index:
+
+-- end: ds.page.right-sidebar
+
+-- ds.h2: `site-logo` and `site-name` logic
+
+`doc-site` has the provision of adding `site-logo` and `site-name`.
+
+Below is the logic for adding a logo and site name:
+
+- if you add `site-logo: <your-logo-image-file-path>`
+  properties to the `-- ds.page` component then it shows the logo only.
+- if you add the `site-name: Your Site Name` property to the `-- ds.page`
+  component then shows `site-name` only.
+- if you add both site-logo and site-name into your `ds.page` component then it
+  shows both.
+
+Modify `FASTN/ds.ftd` module `site-name` & `site-logo` properties value with
+your site name and logo image asset.
+
+-- ds.code: Scroll down to view full code, click on download icon to download this code
+lang: ftd
+max-height.fixed.px: 300
+download: ds.ftd
+
+\-- import: fastn-community.github.io/footer
+\-- import: fastn-community.github.io/doc-site/common
+\-- import: fastn-community.github.io/roboto-typography as typo
+\-- import: fastn-community.github.io/doc-site
+export: author-bio,code,compact-text,featured-post,h0,h1,h2,h3,iframe,image,image-first,image-in-between,link,link-group,markdown,not-found-1,not-found-2,output,post,posts,rendered,tip,without-image,youtube
+
+\-- component page:
+children wrapper:
+optional caption title:
+optional body body:
+boolean sidebar: false
+optional string document-title:
+optional string document-description:
+optional ftd.raw-image-src document-image:
+optional string site-name: Your site name
+optional ftd.image-src site-logo: $asset.files.assets.logo-image.png
+boolean github-icon: true
+optional string github-url: https://github.com/fastn-community/doc-site/
+boolean full-width: false
+ftd.type-data types: $typo.types
+ftd.color-scheme colors: $ftd.default-colors
+integer logo-width: $common.logo-width
+integer logo-height: $common.logo-height
+boolean show-footer: true
+boolean show-banner: false
+ftd.ui list right-sidebar:
+ftd.ui list banner:
+fastn.app-ui apps: $common.apps
+boolean login-button: $common.login-button
+string site-url: $common.site-url
+
+\-- ftd.ui list page.footer:
+
+\-- footer.fastn-footer:
+copyright: Copyright © 2023 - [FifthTry](https://www.fifthtry.com/)
+site-logo: $common.fastn-logo
+powered-by-text: Powered by
+powered-by-link: https://fastn.com/
+
+\-- end: page.footer
+
+\-- doc-site.page: $page.title
+site-logo: $page.site-logo
+body: $page.body
+colors: $page.colors
+sidebar: $page.sidebar
+full-width: $page.full-width
+types: $page.types
+show-banner: $page.show-banner
+show-footer: $page.show-footer
+site-name: $page.site-name
+logo-height: $page.logo-height
+logo-width: $page.logo-width
+github-icon: $page.github-icon
+github-url: $page.github-url
+right-sidebar: $page.right-sidebar
+footer: $page.footer
+banner: $page.banner
+document-title: $page.document-title
+document-description: $page.document-description
+document-image: $page.document-image
+apps: $page.apps
+login-button: $page.login-button
+site-url: $page.site-url
+
+\-- ftd.column:
+spacing.fixed.em: 0.8
+width: fill-container
+children: $page.wrapper
+
+\-- end: ftd.column
+
+\-- end: doc-site.page
+
+\-- end: page
+
+-- ds.markdown:
+
+Change `site-name` and `site-logo` as per your need. Then deploy or run `fastn
+serve` on your localhost. Access your localhost in the browser
+e.g.`http://127.0.0.1:8000/`.
+
+-- end: ds.page

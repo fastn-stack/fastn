@@ -1,0 +1,45 @@
+-- import: fastn.com/u/ganesh-salunke
+-- import: fastn.com/u/meenu-kumari
+-- import: fastn.com/u/priyanka-yadav
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Buttons
+featured-link: /featured/components/
+category: Featured Components
+image: $fastn-assets.files.images.featured.components.button-1.png
+owners: [$priyanka-yadav.info, $ganesh-salunke.info, $meenu-kumari.info]
+license-url: https://github.com/fastn-community/button/blob/main/LICENSE
+license: Creative Commons
+published-date: 02-Aug-2023
+cards: $components
+github-url: https://github.com/fastn-community/button
+demo-link: https://fastn-community.github.io/button
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list components:
+
+-- ft-ui.template: Bling
+template-url: /featured/components/bling/
+screenshot: $fastn-assets.files.images.featured.components.bling.jpg
+
+-- ft-ui.template: Modal Cover
+template-url: featured/components/modals/modal-cover/
+screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
+
+-- ft-ui.template: Pattern Business Card
+template-url: featured/components/business-cards/pattern-card/
+screenshot: $fastn-assets.files.images.featured.business-cards.pattern-business-card-front.jpg
+
+-- ft-ui.template: Sunset Business Card
+template-url: featured/components/business-cards/sunset-card/
+screenshot: $fastn-assets.files.images.featured.business-cards.sunset-business-card-front.jpg
+
+-- end: components

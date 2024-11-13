@@ -1,0 +1,87 @@
+-- import: fifthtry.github.io/admonitions as cbox
+
+
+-- ds.page: Fast-track your journey to being a full-stack dev with `fastn`!
+
+`fastn` is a comprehensive new-age web development platform. It has been built
+specifically to make workflows across design, development & deployment simple
+and consistent.
+
+Note: we are revamping this site, [the old version is
+here](https://fpm-45o5tfuxc-fifthtry.vercel.app/).
+
+`fastn` is powered by three important elements - an indigenous design system, a
+curated list of UI components / templates and a powerful tailor-made programming
+language - [`ftd`](/ftd/).
+
+[`ftd`](/ftd/) is a language designed for creating web pages and documents for
+publishing on the web. It starts with the simplicity of Markdown, but takes it
+to the next level by adding features to create full page layouts, reusable `"ftd
+components"`, and first-class support for data modeling. This makes `ftd` a
+replacement for traditional data exchange format like JSON, CSV etc.
+
+Here are some key [features of `fastn`](/features/) that makes it a good-to-have
+tool:
+
+- [Supports ftd](/ftd/)
+- [`ftd` package manager](/package-manager/)
+- [Static site generator](/static/)
+- [`fastn` Server](/server/)
+- [Customizable color schemes](/cs/)
+- [Sitemap](/sitemap/)
+- `fastn` for Distributing Static Assets
+
+
+
+-- cbox.warning: `fastn` Performance
+
+Currently, `fastn` generates pages of size `~1MB`. We are working on
+improving this.
+
+
+
+-- ds.h1: How to install `fastn`?
+
+Installing `fastn` is easy and can be done on multiple operating systems.
+Check out the ["How to Install"](/install/) section for more
+information. Additionally, an editor is required to use `fastn`, and we
+recommend using [Sublime Text](https://www.sublimetext.com/3).
+
+
+
+
+
+/-- ds.h1: Learning Resource
+
+We are writing three manuals to help you learn `fastn`:
+
+- [Author Manual](/author/), if you want to use `fastn` as a end user, to power
+  your next blog, book, portfolio site, product landing page etc.
+- [Builder Manual](/themes/), if you want to create `fastn packages` that other
+  people can use.
+
+
+
+
+-- ds.h1: Development
+
+Checkout what we are planning and what we are working on in
+[github discussions](https://github.com/ftd-lang/fastn/discussions).
+
+You can also check `ftd` related discussion
+[here](https://github.com/ftd-lang/ftd/discussions).
+
+Github: [github.com/FifthTry/fastn](https://github.com/FifthTry/fastn)
+
+Discord: [#fastn on FifthTry](https://discord.gg/a7eBUeutWD)
+
+Q&A: [Questions and Answer](https://github.com/ftd-lang/ftd/discussions/categories/q-a)
+
+License: BSD
+
+We are trying to create the language for human beings and we do not believe it
+would be possible without your support. We would love to hear from you.
+
+
+
+-- end: ds.page

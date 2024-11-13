@@ -1,0 +1,55 @@
+-- ds.page: How to access fonts
+
+The [`assets`](/assets/) module contains a variable named `fonts` that holds
+references to the fonts defined in a package.
+
+You can either [create your own font package](create-font-package/) or add the
+font package dependency in your current package or define fonts in your
+current package itself.
+
+Lets say we are using font package `fifthtry.github.io/roboto-font`
+([repo](https://github.com/FifthTry/roboto-font)) as dependency and lets use it
+in our module.
+
+Let's assume that we are using the font package `fifthtry.github.io/roboto-font`
+([repo](https://github.com/FifthTry/roboto-font)) as a dependency and we want to
+use it in our module. We can import the `assets` module of `roboto-font` package
+to access its fonts.
+
+-- ds.code:
+
+\-- import: fifthtry.github.io/roboto-font/assets  ;; <hl>
+
+\-- ftd.type dtype:
+size.px: 40
+weight: 900
+font-family: $assets.fonts.Roboto  		;; <hl>
+line-height.px: 65
+letter-spacing.px: 5
+
+\-- ftd.text: Hello World
+role: $dtype
+
+-- ds.markdown:
+
+In [`FASTN.ftd`](https://github.com/FifthTry/roboto-font/blob/main/FASTN.ftd)
+module for `fifthtry.github.io/roboto-font` package, you can see that the fonts
+are defined like this:
+
+-- ds.code:
+lang: ftd
+
+\-- fastn.font: Roboto
+style: italic
+weight: 100
+woff2: -/fifthtry.github.io/roboto-font/static/Roboto-100-italic-cyrillic-ext.woff2
+unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F
+
+<more fonts>
+
+-- ds.markdown:
+
+We have accessed these fonts using `fonts` variable which contains reference to
+`Roboto` (`$assets.fonts.Roboto`).
+
+-- end: ds.page

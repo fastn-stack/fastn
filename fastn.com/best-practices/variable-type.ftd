@@ -1,0 +1,31 @@
+-- import: fastn.com/utils
+
+-- ds.page: Variable and it's Types
+
+Following are the guidelines that helps to improve the quality of the code with
+respect to `Variables` and it's `Types`.
+
+-- utils.code-display: `singular-plural-naming`: Use Singular Variable Names for Plural Types
+id: singular-plural-naming
+
+When the `type` of the variable is in plural noun, then the variable should
+also be in plural and we should avoid using singular noun for `variable name`.
+
+
+
+	-- ds.code: Not recommended
+	lang: ftd
+	
+	children child:
+	
+	
+	
+	-- ds.code: Recommended
+	lang: ftd
+	
+	children ui-list:
+	
+-- end: utils.code-display
+
+
+-- end: ds.page

@@ -1,0 +1,65 @@
+-- ds.page: Modules In `fastn`
+
+When we are creating systems or products, we try to meet the needs of a wide
+range of users of our systems or products.
+
+Say we are designing a kitchen for a small family apartment. Different people
+have different expectations from the kitchen. There are many kind of
+refrigerators and microwaves and dishwashers available to people. So if the
+builder of the house created a kitchen along with the fridge and dishwasher,
+many families may like the rest of kitchen but may not like the fridge or the
+dishwasher.
+
+So it is better to design the kitchen in such a way that the residents can
+use their own fridge. The builder of the house should leave out space for the
+fridge, keep electrical wiring, and ventilation etc, so fridge gets the space,
+electricity, air circulation etc.
+
+But for this to work the fridge also has to meet some guidelines. Someone
+designing a kitchen for a small family apartment can not give so much
+flexibility that someone can fit industrial sized walk in cold storage in it
+for example. The fridges that are designed to be used in kitchen of small family
+residential apartments should all have some common characteristics as well.
+
+This way of designing is called modular designs. We find examples of modular
+design everywhere. The airport carry on compartment storage are modularly
+designed for carry on bags that are designed for those storage, they all have
+dimensions that fit the airport compartment. Electrical sockets are modular to
+fit electrical plugs. Books are designed to fit in bookshelf, and bookshelf are
+designed for books. Lego blocks are modular.
+
+Each modular design has a `module specification`, and two counter parts, `module
+provider` and the `module consumer`. In the case of the kitchen and fridge, the
+`module specification`, like the height, width, depth, max weight of the fridge,
+the power rating of power outlet, the voltage, the alternating current frequency,
+the amount of air circulation (which limits how much heat can the fridge produce
+during operation, without heating up the kitchen itself, because that is how
+fridge works, it keeps the content cool by transferring the heat from inside to
+the outside, and in the process producing some excess heat, determined by the
+carnot cycle efficiency of the compressor in the fridge). Then we have `module
+providers` like various manufacturers who sell fridges like LG, Samsung, etc. And
+the `module consumer` is the kitchen which is being designed.
+
+Once a specification is created, both producer and consumer of the module must
+follow the specification, so if specification says fridge must have a maximum
+height of 3M, the builder of small family apartment (the consumer) must ensure
+there is at least 3M of height left else the people living in the house will not
+be able to bring in their fridge, which may be 3M tall. And similarly the
+electrical appliances company must ensure the fridge has a maximum height of 3M,
+else the fridge you buy in the store will not fit in the kitchen.
+
+-- ds.h1: Note Of Caution
+
+When designing systems, it is possible to make this too modular. How modular a
+system is should be decided carefully. A system that is too modular has too many
+specifications, and ensuring all module providers and consumers are following
+the specifications is work, and if specifications are not properly followed,
+things break down, things that were meant to work together do not actually work
+together. This can lead to loss, you purchased a fridge thinking it will fit in
+your modular kitchen, but on delivery you find out it is not fitting.
+
+We have one more thing to worry about, if things are modular,
+
+
+
+-- end: ds.page

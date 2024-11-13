@@ -1,0 +1,27 @@
+-- import: fastn-stack.github.io/certificates
+exposing: cert-label
+
+-- ds.page: fastn Ambassadors
+
+Below are the candidates who have been awarded the title of fastn Ambassador after
+completion of Ambassador programme.
+
+-- certificates.cert-label: Rutuja Kapate
+cert-link: ambassadors/rutuja-kapate/
+
+-- certificates.cert-label: Krish Gupta
+cert-link: ambassadors/krish-gupta/
+
+-- certificates.cert-label: Ajit garg
+cert-link: ambassadors/ajit-garg/
+
+-- certificates.cert-label: Ayush Soni
+cert-link: ambassadors/ayush-soni/
+
+-- certificates.cert-label: Nishant
+cert-link: ambassadors/nishant/
+
+-- certificates.cert-label: Govindaraman
+cert-link: ambassadors/govindaraman/
+
+-- end: ds.page

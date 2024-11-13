@@ -1,0 +1,49 @@
+-- import: fastn.com/u/ganesh-salunke
+-- import: fastn.com/u/priyanka-yadav
+-- import: fastn.com/u/arpita-jaiswal
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Framework DS
+featured-link: /featured/doc-sites/
+category: Documentation Sites
+image: $fastn-assets.files.images.featured.doc-sites.ds-framework.png
+owners: [$arpita-jaiswal.info, $priyanka-yadav.info, $ganesh-salunke.info]
+license-url: https://github.com/FifthTry/df/blob/main/LICENSE
+license: Creative Commons
+published-date: 27-April-2022
+cards: $doc-sites
+github-url: https://github.com/FifthTry/df
+demo-link: https://fifthtry.github.io/df/
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- ft-ui.template list doc-sites:
+
+-- ft-ui.template: Simple Site
+template-url: featured/ds/doc-site/
+screenshot: $fastn-assets.files.images.featured.doc-site.jpg
+
+-- ft-ui.template: Midnight Rush
+template-url: featured/ds/mr-ds/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
+
+-- ft-ui.template: Midnight Storm
+template-url: featured/ds/midnight-storm/
+screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
+
+-- ft-ui.template: Misty Gray
+template-url: featured/ds/misty-gray/
+screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
+
+
+-- end: doc-sites

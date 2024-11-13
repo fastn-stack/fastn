@@ -1,0 +1,464 @@
+-- import: fastn
+-- import: fifthtry.github.io/package-doc/doc as pd
+-- import: fifthtry.github.io/package-doc/forest-theme as ft
+
+
+
+
+
+-- ftd.column:
+width: fill-container
+padding-horizontal.px: 50
+padding-horizontal.px if { ftd.device == "mobile" }: 20
+padding-bottom.px: 200
+padding-top.px: 24
+background.solid: $inherited.colors.background.base
+
+-- pd.package: Typography
+name: fifthtry.github.io/typography
+
+This component can be used to add heading. It has various heading namely h0, h1,
+h2, h3 and h4. Somewhat similar to heading tag in html. The variation of the 
+numbers (0, 1 and 2) directly relates to the relevance that the content has in 
+the interface. The lower the number, more prominence, and the importance it will 
+have. So it helps creating the hierarchy of information.
+
+-- ft.code: Add this to your FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: fifthtry.github.io/typography as tf
+
+\-- fastn.auto-import: tf
+
+-- pd.component: `h0`
+name: `-- tf.h0:`
+
+This is used to add the most prominent heading i.e. the Heading Hero.
+It expects a title in caption, optional string type data in body and
+afterwards add any number of components.
+
+-- pd.hidden-code: How to use
+
+\-- tf.h0: Title of the Heading Hero
+
+<Body text here> // This is optional
+
+\-- <other-components>: you can add any component also in the body of this
+    component.
+
+
+
+-- pd.component: `h1`
+name: `-- tf.h1:`
+
+This is used to add the most prominent heading i.e. the Heading level 1.
+It expects a title in caption, optional string type data in body and
+afterwards add any number of components.
+
+-- pd.hidden-code: How to use
+
+\-- tf.h1: Title of the Heading Level 1
+
+<Body text here> // This is optional
+
+\-- <other-components>: you can add any component also in the body of this
+    component.
+
+
+
+-- pd.component: `h2`
+name: `-- tf.h2:`
+
+This is used to add the most prominent heading i.e. the Heading level 2.
+It expects a title in caption, optional string type data in body and
+afterwards add any number of components.
+
+-- pd.hidden-code: How to use
+
+\-- tf.h1: Title of the Heading Level 2
+
+<Body text here> // This is optional
+
+\-- <other-components>: you can add any component also in the body of this
+    component.
+
+
+-- pd.component: `h3`
+name: `-- tf.h3:`
+
+This is used to add the most prominent heading i.e. the Heading level 3.
+It expects a title in caption, optional string type data in body and
+afterwards add any number of components.
+
+-- pd.hidden-code: How to use
+
+\-- tf.h1: Title of the Heading Level 3
+
+<Body text here> // This is optional
+
+\-- <other-components>: you can add any component also in the body of this
+    component.
+
+
+
+
+-- pd.component: `h4`
+name: `-- tf.h4:`
+
+This is used to add the most prominent heading i.e. the Heading level 4.
+It expects a title in caption, optional string type data in body and
+afterwards add any number of components.
+
+-- pd.hidden-code: How to use
+
+\-- tf.h4: Title of the Heading Level 4
+
+<Body text here> // This is optional
+
+\-- <other-components>: you can add any component also in the body of this
+    component.
+
+
+
+-- pd.component: `markdown`
+name: `-- tf.markdown:`
+
+This is used to add string type data in body text, you can add as many
+paragraphs using this component.
+
+-- pd.hidden-code: How to use
+
+\-- tf.markdown: 
+
+<Body text here> // This is optional
+
+\-- <other-components>: you can add any component also in the body of this
+    component.
+
+
+
+-- h1: Output of all above components:
+
+Below are examples of above components, how they will be rendered on your
+browser.
+
+
+-- h0: Title of the Heading Hero
+
+`<Body text here>` // This is optional
+
+-- end: h0
+
+-- h1: Title of the Heading Level 1
+
+`<Body text here>` // This is optional
+
+-- end: h1
+
+-- h2: Title of the Heading Level 2
+
+`<Body text here>` // This is optional
+
+-- end: h2
+
+-- h3: Title of the Heading Level 3
+
+`<Body text here>` // This is optional
+
+-- end: h3
+
+
+-- h4: Title of the Heading Level 4
+
+`<Body text here>` // This is optional
+
+-- end: h4
+
+-- markdown: 
+
+`<Body text here>` // This is a `markdown component body area.
+
+-- end: ftd.column
+
+
+
+
+
+
+
+
+
+
+-- component h0:
+caption title:
+optional body body:
+children inner:
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: $h0.title
+role: $inherited.types.heading-hero
+color: $inherited.colors.text-strong
+margin-bottom.rem: 0.5
+width: fill-container
+border-bottom-width.px: 1
+border-color: $inherited.colors.border
+region: h1
+
+-- markdown:
+if: { h0.body != NULL }
+body: $h0.body
+
+-- ftd.column:
+children: $h0.inner
+width: fill-container
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: h0
+
+
+
+
+
+
+
+
+
+
+-- component h1:
+caption title:
+optional body body:
+children inner:
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: $h1.title
+role: $inherited.types.heading-large
+color: $inherited.colors.text-strong
+margin-bottom.rem: 0.5
+width: fill-container
+border-bottom-width.px: 1
+border-color: $inherited.colors.border
+padding-top.em: 0.5
+region: h1
+
+-- markdown:
+if: { h1.body != NULL }
+body: $h1.body
+
+-- ftd.column:
+children: $h1.inner
+width: fill-container
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: h1
+
+
+
+
+
+
+
+
+
+
+-- component h2:
+caption title:
+optional body body:
+children inner:
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: $h2.title
+role: $inherited.types.heading-medium
+color: $inherited.colors.text-strong
+margin-bottom.rem: 0.5
+width: fill-container
+padding-top.em: 0.3
+region: h2
+
+-- markdown:
+if: { h2.body != NULL }
+body: $h2.body
+
+-- ftd.column:
+children: $h2.inner
+width: fill-container
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: h2
+
+
+
+
+
+
+
+
+
+
+-- component h3:
+caption title:
+optional body body:
+children inner:
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: $h3.title
+role: $inherited.types.heading-small
+color: $inherited.colors.text-strong
+margin-bottom.rem: 0.5
+width: fill-container
+padding-top.em: 0.17
+region: h3
+
+-- markdown:
+if: { h3.body != NULL }
+body: $h3.body
+
+-- ftd.column:
+children: $h3.inner
+width: fill-container
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: h3
+
+
+
+
+
+
+
+
+
+
+-- component h4:
+caption title:
+optional body body:
+children inner:
+
+-- ftd.column:
+width: fill-container
+
+-- ftd.text: $h4.title
+role: $inherited.types.heading-tiny
+color: $inherited.colors.text-strong
+margin-bottom.rem: 0.5
+width: fill-container
+padding-top.em: 0.08
+region: h4
+
+-- markdown:
+if: { h4.body != NULL }
+body: $h4.body
+
+-- ftd.column:
+children: $h4.inner
+width: fill-container
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: h4
+
+
+
+
+
+
+
+
+
+
+-- component markdown:
+body body:
+optional boolean collapsed:
+optional caption title:
+optional boolean two_columns:
+
+-- ftd.text: 
+text: $markdown.body
+role: $inherited.types.copy-regular
+color: $inherited.colors.text
+classes: markdown
+
+-- end: markdown
+
+
+
+
+
+
+
+
+
+
+-- component key-value:
+caption key:
+optional string value:
+string default:
+
+-- ftd.row:
+margin-bottom.px: 10
+spacing.fixed.px: 2
+
+-- ftd.text: $key-value.key
+
+-- ftd.text: $key-value.value
+if: {$key-value.value != NULL}
+
+-- ftd.text: $key-value.default
+if: {$key-value.value = NULL}
+
+-- end: ftd.row
+
+-- end: key-value
+
+
+
+
+
+
+
+
+
+
+-- component h2-text:
+caption title:
+optional body body:
+
+-- ftd.column:
+width: fill-container
+margin-top.px: 0
+margin-bottom.px: 16
+;;boolean open: true -- TODO FTD 0.3
+
+-- ftd.text:
+text: $h2-text.title
+role: $inherited.types.heading-small
+color: $inherited.colors.text
+margin-bottom.rem: 0.5
+width: fill-container
+padding-top.em: 0.3
+region: h2
+
+-- end: ftd.column
+
+-- end: h2-text

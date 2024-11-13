@@ -4,13 +4,12 @@
 
 extern crate self as fastn_lang;
 
-mod compile;
-mod ds;
-pub mod resolved;
+mod compiler;
+mod symbols;
 
-pub use compile::compile;
-pub use ds::DocumentStore;
+pub use compiler::compile;
 pub use fastn_section::Result;
+pub use symbols::{LookupResult, SymbolStore};
 
 pub struct UISpec {
     pub title: String,

@@ -1,0 +1,7 @@
+-- import: fifthtry.github.io/product-switcher as ps
+
+-- $ps.current-product: 1
+
+
+-- ps.switcher: 
+products: $ps.example-product

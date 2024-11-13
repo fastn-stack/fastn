@@ -1,0 +1,104 @@
+-- ds.page: Built-in Variables
+
+`fastn` comes with some built-in variables, they are documented here.
+
+-- ds.h1: Contents
+
+- [ftd.dark-mode](/built-in-variables#ftd-dark-mode)
+- [ftd.system-dark-mode](/built-in-variables#ftd-system-dark-mode)
+- [ftd.follow-system-dark-mode](/built-in-variables#ftd-follow-system-dark-mode)
+- [ftd.device](/built-in-variables#ftd-device)
+- [ftd.mobile-breakpoint](/built-in-variables#ftd-mobile-breakpoint)
+
+-- variable: `ftd.dark-mode`
+type: `boolean`
+
+`ftd.dark-mode` tells you if the UI should show dark or light mode. To change
+the system preference use the built in functions.
+
+-- variable: `ftd.system-dark-mode`
+type: `boolean`
+
+This variable tells if the system prefers dark or light mode. `ftd.dark-mode`
+may not be equal to `ftd.system-dark-mode` if `ftd.follow-system-dark-mode` is
+`false`.
+
+-- variable: `ftd.follow-system-dark-mode`
+type: `boolean`
+
+This variable tells if the user prefers the UI to follow system dark mode
+preferences of if the user prefers to set this value.
+
+-- variable: `ftd.device`
+type: `string`
+
+This value is either `mobile` or `desktop`. `ftd.device` is automatically
+updated when the browser resizes and device width crosses
+`ftd.mobile-breakpoint` and `ftd.desktop-breakpoint` thresholds.
+
+-- variable: `ftd.mobile-breakpoint`
+type: `integer`
+default: 768
+
+`ftd.mobile-breakpoint` is the width in pixels below which `fastn` assumes that
+the device is a mobile device, and sets `ftd.device` to `mobile`.
+
+
+
+-- end: ds.page
+
+
+
+
+
+
+
+-- component variable:
+caption name:
+string type:
+optional string default:
+body about:
+
+-- ftd.column:
+spacing.fixed.px: 10
+
+	-- ds.h1: $variable.name
+	
+	-- label-text: Type
+	value: $variable.type
+	
+	-- label-text: Default Value
+	value: $variable.default
+	if: { variable.default != NULL }
+	
+	-- ds.markdown:
+	
+	$variable.about
+	
+-- end: ftd.column
+
+-- end: variable
+
+
+
+
+
+
+-- component label-text:
+caption name:
+string value:
+
+-- ftd.row:
+spacing.fixed.px: 10
+
+	-- ds.markdown:
+	
+	$label-text.name
+	
+	-- ds.markdown:
+	
+	$label-text.value
+	
+-- end: ftd.row
+
+-- end: label-text

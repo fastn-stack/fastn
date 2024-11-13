@@ -1,0 +1,1106 @@
+-- import: fastn
+
+
+-- fastn.package: fastn.com
+favicon: /-/fastn.com/images/favicon.svg
+zip: https://codeload.github.com/fastn-stack/fastn/zip/refs/heads/main
+
+-- fastn.dependency: fastn-community.github.io/bling
+-- fastn.dependency: fastn-community.github.io/dark-flame-cs
+-- fastn.dependency: fastn-community.github.io/doc-site
+-- fastn.dependency: fastn-community.github.io/forest-cs
+-- fastn.dependency: fastn-community.github.io/saturated-sunset-cs
+-- fastn.dependency: fastn-community.github.io/winter-cs
+-- fastn.dependency: fastn-community.github.io/footer
+-- fastn.dependency: fastn-community.github.io/spectrum-ds
+-- fastn.dependency: fastn-community.github.io/pattern-business-card
+-- fastn.dependency: fifthtry.github.io/admonitions
+-- fastn.dependency: fastn-community.github.io/banner
+-- fastn.dependency: fifthtry.github.io/button
+-- fastn.dependency: fifthtry.github.io/common
+-- fastn.dependency: fifthtry.github.io/fastn-typography
+-- fastn.dependency: fastn-community.github.io/virgil-typography
+-- fastn.dependency: fifthtry.github.io/dark-mode-switcher
+-- fastn.dependency: fastn-stack.github.io/media
+-- fastn.dependency: fastn-stack.github.io/fastn-js
+-- fastn.dependency: fastn-stack.github.io/ftd-web-component-example
+-- fastn.dependency: fastn-community.github.io/expander
+-- fastn.dependency: fastn-stack.github.io/certificates
+
+-- fastn.auto-import: fastn.com/FASTN/ds
+-- fastn.auto-import: fastn.com/assets as fastn-assets
+-- fastn.auto-import: fifthtry.github.io/common as common
+
+
+-- fastn.sitemap:
+
+# Examples: /examples/
+  skip: true
+
+# Explore: /frontend/
+
+## Features: /frontend/
+
+- Frontend: /frontend/
+- Full-stack: /backend/
+- Deploy: /deploy/
+- Design: /design/
+  document: features/design.ftd
+- Community: /community/
+  document: features/community.ftd
+- `fastn` for Geeks: /geeks/
+  document: why/geeks.ftd
+
+## Compare: /react/
+  document: compare/react.ftd
+- fastn vs React: /react/
+  document: compare/react.ftd
+- fastn vs Webflow: /webflow/
+  document: compare/webflow.ftd
+
+## Case study: /acme/
+  document: blog/acme.ftd
+
+- Acme: /acme/
+  document: blog/acme.ftd
+- To-do: /todo/
+  document: case-study/todo.ftd
+- Country: /backend/learn/
+  document: /backend/country-details/index.ftd
+  - Basic of `http`, `data modelling`: /country-details/basics/
+    document: backend/country-details/http-data-modelling.ftd
+  - Building dynamic country list page: /country-list/
+    document: backend/country-details/dynamic-country-list-page.ftd
+
+## QR Codes: /qr-codes/
+skip: true
+
+
+# Learn: /learn/
+  document: /workshop/learn.ftd
+
+## Create Website: /quick-build/
+  document: get-started/browse-pick.ftd
+- Quick Build: /quick-build/
+  document: get-started/browse-pick.ftd
+- fastn basics: /markdown/-/frontend/
+  document: expander/ds/markdown.ftd
+  - Markdown: /markdown/-/frontend/
+    document: expander/ds/markdown.ftd
+  - Change Color Scheme: /color-scheme/
+    document: expander/ds/ds-cs.ftd
+  - Change Typography: /typography/
+    document: expander/ds/ds-typography.ftd
+  - Using images in documents: /using-images/
+    document: /expander/imagemodule/index.ftd
+  - Change Theme: /theme/
+    document: get-started/theme.ftd
+    skip: true
+  - Sitemap: /understanding-sitemap/-/build/
+    document: expander/ds/understanding-sitemap.ftd
+  - SEO: /seo-meta/
+    document: expander/ds/meta-data.ftd
+    - Meta Data: /seo-meta/
+      document: expander/ds/meta-data.ftd
+    - Redirects: /redirects/
+      document: backend/redirects.ftd
+    - URL: /clean-urls/
+      document: expander/sitemap-document.ftd
+
+
+
+## Learn: /learn/
+  document: /workshop/learn.ftd
+- Learning Resources: /learn/
+  document: /workshop/learn.ftd
+- Setup: /install/
+  document: author/how-to/install.ftd
+  - Install fastn: /install/
+  document: author/how-to/install.ftd
+  - On MacOS/Linux: /macos/
+    document: author/setup/macos.ftd
+    description: Install on MacOS/Linux
+  - On Windows: /windows/
+    document: author/setup/windows.ftd
+    description: Install on Windows
+  - Uninstall fastn: /uninstall/
+    document: author/setup/uninstall.ftd
+    decription: Uninstall fastn
+  - Install GitHub: /github/
+    document: /get-started/github.ftd
+    skip: true
+  - Install Text Editor: /editor/
+    document: /get-started/editor.ftd
+    - Syntax Highlighting Sublime: /sublime/
+      document: author/how-to/sublime.ftd
+    - Syntax Highlighting VS Code: /vscode/
+      document: author/how-to/vscode.ftd
+- Expander Crash Course: /expander/
+  - Part 1. Hello World: /expander/hello-world/
+  - Part 2. Basic UI: /expander/basic-ui/
+  - Part 3. Components: /expander/components/
+  - Part 4. Event Handling: /expander/events/
+  - Part 5. Publish a package: /expander/publish/
+  - Part 6. Polishing UI: /expander/polish/
+- Create button with shadow: /button/
+  document: /expander/button.ftd
+- Create rounded border: /rounded-border/
+  document: /expander/border-radius.ftd
+- Create holy-grail layout: /holy-grail/
+  document: /expander/layout/index.ftd
+
+
+## Sections: /sections/
+  document: featured/new-sections.ftd
+  skip: true
+
+## Featured Components: /featured/
+   document: get-started/learn.ftd
+- Designers: /featured/contributors/designers/
+  skip: true
+  - Muskan Verma: /featured/contributors/designers/muskan-verma/
+    skip: true
+  - Jay Kumar: /featured/contributors/designers/jay-kumar/
+    skip: true
+  - Govindaraman S: /featured/contributors/designers/govindaraman-s/
+    skip: true
+  - Yashveer Mehra: /featured/contributors/designers/yashveer-mehra/
+    skip: true
+- Developers: /featured/contributors/developers/
+  skip: true
+  - Arpita Jaiswal: /featured/contributors/developers/arpita-jaiswal/
+    skip: true
+  - Meenu Kumari: /featured/contributors/developers/meenu-kumari/
+    skip: true
+  - Priyanka Yadav: /featured/contributors/developers/priyanka-yadav/
+    skip: true
+  - Saurabh Lohiya: /featured/contributors/developers/saurabh-lohiya/
+    skip: true
+  - Saurabh Garg: /featured/contributors/developers/saurabh-garg/
+    skip: true
+  - Shaheen Senpai: /featured/contributors/developers/shaheen-senpai/
+    skip: true
+- Website Categories: /featured/website-categories/
+  - Documentation Sites: /featured/doc-sites/
+    - Simple Site: /featured/ds/doc-site/
+      skip: true
+    - Midnight Rush: /featured/ds/mr-ds/
+      skip: true
+    - Midnight Storm: /featured/ds/midnight-storm/
+      skip: true
+    - Misty Gray: /featured/ds/misty-gray/
+      skip: true
+    - Dash Dash DS: /featured/ds/dash-dash-ds/
+      skip: true
+    - API DS: /featured/ds/api-ds/
+      skip: true
+    - Spider Book DS: /featured/ds/spider-book-ds/
+      skip: true
+    - Framework DS: /featured/ds/framework/
+      skip: true
+    - Blue Sapphire Template: /featured/ds/blue-sapphire-template/
+      skip: true
+    - Forest Template DS: /featured/ds/forest-template/
+      skip: true
+    - Docusaurus Theme: /featured/ds/docusaurus-theme/
+      skip: true
+  - Landing Pages: /featured/landing-pages/
+    - Midnight Rush: /featured/landing/mr-landing/
+      skip: true
+    - Midnight Storm: /featured/landing/midnight-storm-landing/
+      skip: true
+    - Misty Gray: /featured/landing/misty-gray-landing/
+      skip: true
+    - CT Landing Page: /featured/landing/ct-landing/
+      skip: true
+    - Docusaurus Theme: /featured/landing/docusaurus-theme/
+      skip: true
+    - Forest FOSS Template: /featured/landing/forest-foss-template/
+      skip: true
+    - Studious Couscous: /featured/landing/studious-couscous/
+      skip: true
+  - Blogs: /featured/blogs/
+  document: /featured/blog-templates.ftd
+    - Simple Site: /featured/blogs/doc-site/
+      skip: true
+    - Midnight Rush: /featured/blogs/mr-blog/
+      skip: true
+    - Midnight Storm: /featured/blogs/ms-blog/
+      skip: true
+    - Misty Gray: /featured/blogs/mg-blog/
+      skip: true
+    - Pink Tree: /featured/blogs/pink-tree/
+      skip: true
+    - Yellow Lily: /featured/blogs/yellow-lily/
+      skip: true
+    - Blue Wave: /featured/blogs/blue-wave/
+      skip: true
+    - Navy Nebula: /featured/blogs/navy-nebula/
+      skip: true
+    - Blog Template 1: /featured/blogs/blog-template-1/
+      skip: true
+    - Galaxia: /featured/blogs/galaxia/
+      skip: true
+    - Little Blue: /featured/blogs/little-blue/
+      skip: true
+    - Dash Dash DS: /featured/blogs/dash-dash-ds/
+      skip: true
+    - Simple Blog: /featured/blogs/simple-blog/
+      skip: true
+    - Rocky: /featured/blogs/rocky/
+      skip: true
+    - Blog Components: /featured/blogs/blog-components/
+      skip: true
+  - Portfolios / Personal Sites: /featured/portfolios/
+    - Texty PS: /featured/portfolios/texty-ps/
+      skip: true
+    - Johny PS: /featured/portfolios/johny-ps/
+      skip: true
+    - Portfolio: /featured/portfolios/portfolio/
+      skip: true
+  - Resumes: /featured/resumes/
+    - Caffiene: /featured/resumes/caffiene/
+      skip: true
+    - Resume 1: /featured/resumes/resume-1/
+      skip: true
+    - Resume 10: /featured/resumes/resume-10/
+      skip: true
+- Section Library: /featured/sections/
+  - Cards: /featured/sections/cards/
+    - Card 1: /featured/sections/cards/card-1/
+      skip: true
+    - Image Card 1: /featured/sections/cards/image-card-1/
+      skip: true
+    - Image Gallery IG: /featured/sections/cards/image-gallery-ig/
+      skip: true
+    - Imagen IG: /featured/sections/cards/imagen-ig/
+      skip: true
+  - Hero Components: /heros/
+    document: /featured/sections/heros/index.ftd
+    - Hero Right Hug Expanded Search: /hero-right-hug-expanded-search/
+      skip: true
+      document: /featured/sections/heros/hero-right-hug-expanded-search.ftd
+    - Hero Right Hug Expanded: /hero-right-hug-expanded/
+      skip: true
+      document: /featured/sections/heros/hero-right-hug-expanded.ftd
+    - Hero Right Hug Large: /hero-right-hug-large/
+      skip: true
+      document: /featured/sections/heros/hero-right-hug-large.ftd
+    - Hero Right Hug Search Label: /hero-right-hug-search-label/
+      skip: true
+      document: /featured/sections/heros/hero-right-hug-search-label.ftd
+    - Hero Right Hug Search: /hero-right-hug-search/
+      skip: true
+      document: /featured/sections/heros/hero-right-hug-search.ftd
+    - Hero Right Hug: /hero-right-hug/
+      skip: true
+      document: /featured/sections/heros/hero-right-hug.ftd
+    - Hero Bottom Hug: /hero-bottom-hug/
+      skip: true
+      document: /featured/sections/heros/hero-bottom-hug.ftd
+    - Hero Bottom Hug Search: /hero-bottom-hug-search/
+      skip: true
+      document: /featured/sections/heros/hero-bottom-hug-search.ftd
+    - Hero Left Hug Expanded Search: /hero-left-hug-expanded-search/
+      skip: true
+      document: /featured/sections/heros/hero-left-hug-expanded-search.ftd
+    - Hero Left Hug Expanded: /hero-left-hug-expanded/
+      skip: true
+      document: /featured/sections/heros/hero-left-hug-expanded.ftd
+    - Hero with social icons: /hero-with-social/
+      skip: true
+      document: /featured/sections/heros/hero-with-social.ftd
+  - Key Value Tables: /featured/sections/kvt/
+    - Key Value Table 1: /featured/sections/kvt/kvt-1/
+      skip: true
+  - Slides / Presentations: /featured/sections/slides/
+    - Crispy Presentation Theme: /featured/sections/slides/crispy-presentation-theme/
+      skip: true
+    - Giggle Presentation Template: /featured/sections/slides/giggle-presentation-template/
+      skip: true
+    - Simple Dark Slides: /featured/sections/slides/simple-dark-slides/
+      skip: true
+    - Simple Light Slides: /featured/sections/slides/simple-light-slides/
+      skip: true
+    - Streamline Slides: /featured/sections/slides/streamline-slides/
+      skip: true
+    - Rotary Presentation Template: /featured/sections/slides/rotary-presentation-template/
+      skip: true
+- Component Library: /featured/components/
+  - Admonitions: /featured/components/admonitions/
+    skip: true
+  - Bling Components: /featured/components/bling/
+  - Buttons: /featured/components/buttons/
+  - Business Cards: /featured/components/business-cards/
+    - Business Card: /featured/components/business-cards/card-1/
+      skip: true
+    - Gradient Business Card: /featured/components/business-cards/gradient-card/
+      skip: true
+    - Midnight Business Card: /featured/components/business-cards/midnight-card/
+      skip: true
+    - Pattern Business Card: /featured/components/business-cards/pattern-card/
+      skip: true
+    - Sunset Business Card: /featured/components/business-cards/sunset-card/
+      skip: true
+  - Language Switcher: /featured/components/language-switcher/
+    skip: true
+  - Subscription Form: /featured/components/subscription-form/
+    skip: true
+  - Code Block: /featured/components/code-block/
+    skip: true
+  - Header / Navbar: /featured/components/headers/
+    - Header: /featured/components/headers/header/
+      skip: true
+  - Footers: /featured/components/footers/
+    - Footer: /featured/components/footers/footer/
+      skip: true
+    - Footer 3: /featured/components/footers/footer-3/
+      skip: true
+  - Modal / Dialog: /featured/components/modals/
+    - Modal 1: /featured/components/modals/modal-1/
+      skip: true
+    - Modal Cover: /featured/components/modals/modal-cover/
+      skip: true
+  - Quotes: /featured/quotes/
+    document: featured/components/quotes/index.ftd
+    - Simple Quotes: /quotes/simple/
+      skip: true
+      document: featured/components/quotes/simple-quotes/
+      - Chalice: /quotes/chalice/
+        document: featured/components/quotes/simple-quotes/demo-1.ftd
+        skip: true
+      - Rustic: /quotes/rustic/
+        document: featured/components/quotes/simple-quotes/demo-2.ftd
+        skip: true
+      - Echo: /quotes/echo/
+        document: featured/components/quotes/simple-quotes/demo-3.ftd
+        skip: true
+      - Onyx: /quotes/onyx/
+        document: featured/components/quotes/simple-quotes/demo-4.ftd
+        skip: true
+      - Marengo: /quotes/marengo/
+        document: featured/components/quotes/simple-quotes/demo-5.ftd
+        skip: true
+      - Chrome: /quotes/chrome/
+        document: featured/components/quotes/simple-quotes/demo-6.ftd
+        skip: true
+      - Dorian: /quotes/dorian/
+        document: featured/components/quotes/simple-quotes/demo-7.ftd
+        skip: true
+      - Marengo Hug: /quotes/marengo-hug/
+        document: featured/components/quotes/simple-quotes/demo-8.ftd
+        skip: true
+      - Matte: /quotes/matte/
+        document: featured/components/quotes/simple-quotes/demo-9.ftd
+        skip: true
+      - Scorpion: /quotes/scorpion/
+        document: featured/components/quotes/simple-quotes/demo-10.ftd
+        skip: true
+      - Silver: /quotes/silver/
+        document: featured/components/quotes/simple-quotes/demo-11.ftd
+        skip: true
+      - Storm Cloud: /quotes/storm-cloud/
+        document: featured/components/quotes/simple-quotes/demo-12.ftd
+        skip: true
+    - Quotes with author icon: /quotes/quotes-with-author/
+      skip: true
+      document: featured/components/quotes/author-icon-quotes/index.ftd
+      - Charcoal: /quotes/charcoal/
+        document: featured/components/quotes/author-icon-quotes/demo-1.ftd
+        skip: true
+    - Quotes with images: /quotes/quotes-with-images/
+      skip: true
+      document: featured/components/quotes/quotes-with-images/index.ftd
+      - Electric: /quotes/electric/
+        document: featured/components/quotes/quotes-with-images/demo-1.ftd
+        skip: true
+- Design Elements: /featured/design/
+  - Color Schemes: /featured/cs/
+    - Shades Of Red: /cs/red-shades
+      skip: true
+      document: featured/cs/red-shades.ftd
+    - Shades Of Blue: /cs/blue-shades
+      skip: true
+      document: featured/cs/blue-shades.ftd
+    - Shades Of Green: /cs/green-shades
+      skip: true
+      document: featured/cs/green-shades.ftd
+    - Shades Of Orange: /cs/orange-shades
+      skip: true
+      document: featured/cs/orange-shades.ftd
+    - Shades Of Violet: /cs/violet-shades
+      skip: true
+      document: featured/cs/violet-shades.ftd
+    - Blog Template CS: /cs/blog-template-cs/
+      skip: true
+      document: featured/cs/blog-template-cs.ftd
+    - Blue Heal CS: /cs/blue-heal-cs/
+      skip: true
+      document: /featured/cs/blue-heal-cs/
+    - Midnight Rush CS: /cs/midnight-rush-cs/
+      skip: true
+      document: featured/cs/midnight-rush-cs.ftd
+    - Dark Flame CS: /cs/dark-flame-cs/
+      skip: true
+      document: featured/cs/dark-flame-cs.ftd
+    - Forest CS: /cs/forest-cs/
+      skip: true
+      document: featured/cs/forest-cs.ftd
+    - Midnight Storm CS: /cs/midnight-storm-cs/
+      skip: true
+      document: featured/cs/midnight-storm-cs.ftd
+    - Misty Gray CS: /cs/misty-gray-cs/
+      skip: true
+      document: featured/cs/misty-gray-cs.ftd
+    - Navy Nebula CS: /cs/navy-nebula-cs/
+      skip: true
+      document: featured/cs/navy-nebula-cs.ftd
+    - Pretty CS: /cs/pretty-cs/
+      skip: true
+      document: featured/cs/pretty-cs.ftd
+    - Saturated Sunset CS: /cs/saturated-sunset-cs/
+      skip: true
+      document: featured/cs/saturated-sunset-cs.ftd
+    - Pink Tree Cs: /cs/pink-tree-cs/
+      skip: true
+      document: featured/cs/pink-tree-cs.ftd
+    - Winter CS: /cs/winter-cs/
+      skip: true
+      document: featured/cs/winter-cs.ftd
+    - Little Blue CS: /cs/little-blue-cs/
+      skip: true
+      document: featured/cs/little-blue-cs.ftd
+    - Blog Template 1 CS: /cs/blog-template-1-cs/
+      skip: true
+      document: featured/cs/blog-template-1-cs.ftd
+  - Font Typographies: /featured/fonts/
+    - Arya Typography: /fonts/arya/
+      skip: true
+      document: featured/fonts/arya.ftd
+    - Blaka Typography: /fonts/blaka/
+      skip: true
+      document: featured/fonts/blaka.ftd
+    - Lobster Typography: /fonts/lobster/
+      skip: true
+      document: featured/fonts/lobster.ftd
+    - Opensans Typography: /fonts/opensans/
+      skip: true
+      document: featured/fonts/opensans.ftd
+    - Pragati Narrow Typography: /fonts/pragati-narrow/
+      skip: true
+      document: featured/fonts/pragati-narrow.ftd
+    - Roboto Mono Typography: /fonts/roboto-mono/
+      skip: true
+      document: featured/fonts/roboto-mono.ftd
+    - Roboto Typography: /fonts/roboto/
+      skip: true
+      document: featured/fonts/roboto.ftd
+    - Tiro Typography: /fonts/tiro/
+      skip: true
+      document: featured/fonts/tiro.ftd
+    - Inter Typography: /fonts/inter/
+      skip: true
+      document: featured/fonts/inter.ftd
+    - Karma Typography: /fonts/karma/
+      skip: true
+      document: featured/fonts/karma.ftd
+    - Khand Typography: /fonts/khand/
+      skip: true
+      document: featured/fonts/khand.ftd
+    - lato Typography: /fonts/lato/
+      skip: true
+      document: featured/fonts/lato.ftd
+
+# Docs: /ftd/data-modelling/
+
+## Frontend: /ftd/data-modelling/
+
+- Data Modelling: /ftd/data-modelling/
+  - Variables: /variables/
+    document: ftd/variables.ftd
+  - Built-in Types: /built-in-types/
+    document: ftd/built-in-types.ftd
+    description: boolean, integer, decimal, string, caption, body, caption or body, ftd.ui, children, ftd.align-self, ftd.align, ftd.anchor, ftd.linear-gradient, ftd.linear-gradient-color, ftd.breakpoint-width-data, ftd.linear-gradient-directions, ftd.background-image, ftd.background-position, ftd.background-repeat, ftd.background-size, ftd.background, ftd.border-style, ftd.color, ftd.display, ftd.color-scheme, ftd.cursor, ftd.image-src, ftd.length, ftd.length-pair, ftd.loading, ftd.overflow, ftd.region, ftd.resize, ftd.resizing, ftd.responsive-type, ftd.shadow, ftd.spacing, ftd.text-align, ftd.text-input-type, ftd.text-style, ftd.text-transform, ftd.type, ftd.white-space, ftd.type-data, ftd.fetch-priority
+  - `record`: /record/
+    document: ftd/record.ftd
+  - `or-type`: /or-type/
+    document: ftd/or-type.ftd
+  - `list`: /list/
+    document: ftd/list.ftd
+- Understanding Loops: /loop/
+  document: ftd/loop.ftd
+- `component`: /components/
+  document: ftd/components.ftd
+- Headers: /headers/
+  document: ftd/headers.ftd
+- Visibility: /visibility/
+  document: ftd/visibility.ftd
+- Module: /module/
+  document: ftd/module.ftd
+  skip: true
+- Commenting: /comments/
+  document: ftd/comments.ftd
+- Kernel Components: /kernel/
+  document: ftd/kernel.ftd
+  - `ftd.document` 🚧: /document/
+    document: ftd/document.ftd
+  - `ftd.row`: /row/
+    document: ftd/row.ftd
+  - `ftd.column`: /column/
+    document: ftd/column.ftd
+  - `ftd.container`: /container/
+    document: ftd/container.ftd
+  - `ftd.text`: /text/
+    document: ftd/text.ftd
+  - `ftd.image`: /image/
+    document: ftd/image.ftd
+  - `ftd.video`: /video/
+    document: ftd/video.ftd
+  - `ftd.rive` (animation): /rive/
+    document: ftd/rive.ftd
+    description: animation
+  - `ftd.iframe`: /iframe/
+    document: ftd/iframe.ftd
+  - `ftd.integer`: /integer/
+    document: ftd/integer.ftd
+  - `ftd.decimal`: /decimal/
+    document: ftd/decimal.ftd
+  - `ftd.boolean`: /boolean/
+    document: ftd/boolean.ftd
+  - `ftd.code`: /code/
+    document: ftd/code.ftd
+  - `ftd.text-input`: /text-input/
+    document: ftd/text-input.ftd
+  - `ftd.checkbox`: /checkbox/
+    document: ftd/checkbox.ftd
+  - `ftd.desktop`: /desktop/
+    document: ftd/desktop.ftd
+  - `ftd.mobile`: /mobile/
+    document: ftd/mobile.ftd
+- Attributes: /attributes/
+  document: ftd/attributes.ftd
+  - Common Attributes: /common-attributes/
+    document: ftd/common.ftd
+    description: id, padding, padding-vertical, padding-horizontal, padding-left, padding-right, padding-top, padding-bottom, margin, margin-vertical, margin-horizontal, margin-left, margin-right, margin-top, margin-bottom, align-self, color, width, min-width, max-width, height, min-height, max-height, background, border-width, border-left-width, border-right-width, border-top-width, border-bottom-width, border-radius, border-top-left-radius, border-top-right-radius, border-bottom-left-radius, border-bottom-right-radius, border-color, border-left-color, border-right-color, border-top-color, border-bottom-color, border-style, border-style-left, border-style-right, border-style-top, border-style-bottom, border-style-horizontal, border-style-vertical, overflow, overflow-x, overflow-y, cursor, region, link, open-in-new-tab, role, resize, sticky, shadow, anchor, opacity, whitespace, text-transform, classes, top, bottom, left, right, css, js, z-index, border-radius.px, border-top-left-radius.px, border-top-right-radius.px, border-bottom-left-radius.px, border-bottom-right-radius.px, width.fixed.px, min-width, max-width, height, min-height, max-height, overflow-x, overflow-y, cursor, region, border-width.px, border-top-width.px, border-bottom-width.px, border-left-width.px, border-right-width.px, submit, background-gradient, background-image, background-repeat, background-parallax, sticky, anchor, z-index, white-space, text-transform
+  - Text Attributes: /text-attributes/
+    document: ftd/text-attributes.ftd
+    description: style: (underline, strike, italic, heavy, extra-bold, semi-bold, bold, regular, medium, light, extra-light, hairline), text-align, text-indent
+  - Container Attributes: /container-attributes/
+    document: ftd/container-attributes.ftd
+    description: wrap, align-content, spacing
+  - Container Root Attributes: /container-root-attributes/
+    document: ftd/container-root-attributes.ftd
+    description: children, colors, types
+- `import`: /import/
+  document: ftd-host/import.ftd
+- Using export/exposing: /using-export-exposing/
+  document: ftd/export-exposing.ftd
+- Functions: /functions/
+  document: ftd/functions.ftd
+  description: clamp
+- Built-in Functions: /built-in-functions/
+  document: ftd/built-in-functions.ftd
+  description: len, length, ftd.append, ftd.insert_at, ftd.delete_at, ftd.clear, enable_dark_mode, enable_light_mode, enable_system_mode, copy-to-clipboard, toggle, increment, increment-by, set-bool, set-string, set-integer, is_empty, light mode, dark mode, system mode
+- Built-in Rive Functions: /built-in-rive-functions/
+  document: ftd/built-in-rive-functions.ftd
+  description: animation, ftd.toggle-play-rive, ftd.play-rive, ftd.pause-rive, ftd.fire-rive, ftd.set-rive-integer, ftd.toggle-rive-boolean, ftd.set-rive-boolean
+- Built-in Local Storage Functions: /local-storage/
+  document: ftd/local-storage.ftd
+  description: ftd.local_storage.set, ftd.local_storage.get, ftd.local_storage.delete
+- Built-in Variables: /built-in-variables/
+  document: ftd/built-in-variables.ftd
+  description: ftd.dark-mode, ftd.system-dark-mode, ftd.follow-system-dark-mode, ftd.device, ftd.mobile-breakpoint, light mode, dark mode, system mode
+- `ftd` Events: /events/
+  document: ftd/events.ftd
+  description: on-click, on-click-outside, on-mouse-enter, on-mouse-leave, on-input, on-change, on-blur, on-focus, on-global-key, on-global-key-seq
+- Rive Events: /rive-events/
+  document: ftd/rive-events.ftd
+  decription: animation, on-rive-play, on-rive-pause, on-rive-state-change
+- How to create color-scheme: /create-cs/
+  document: cs/create-cs.ftd
+- Use color scheme package: /use-cs/
+  document: cs/use-color-package.ftd
+- `processor`: /processor/
+  document: ftd-host/processor.ftd
+- `foreign variables`: /foreign-variable/
+  document: ftd-host/foreign-variable.ftd
+- `assets`: /assets/
+  document: ftd-host/assets.ftd
+- How to access files: /accessing-files/
+  document: ftd-host/accessing-files.ftd
+- How to access fonts: /accessing-fonts/
+  document: ftd-host/accessing-fonts.ftd
+- How to make page responsive: /making-responsive-pages/
+  document: frontend/make-page-responsive.ftd
+- Interoperability with JS/CSS: /use-js-css/
+  document: ftd/use-js-css.ftd
+  - JS in function: /js-in-function/
+    document: ftd/js-in-function.ftd
+  - Web Component: /web-component/
+    document: ftd/web-component.ftd
+  - Using External CSS: /external-css/
+    document: ftd/external-css.ftd
+- Create `fastn` package: /create-fastn-package/
+  document: author/how-to/create-fastn-package.ftd
+- Best Practices: /best-practices/
+  - Formatting: /formatting/
+    document: best-practices/formatting.ftd
+  - Import: /importing-packages/
+    document: best-practices/import.ftd
+  - Auto-import: /auto-import/
+    document: best-practices/auto-import.ftd
+  - Device: /device-guidelines/
+    document: best-practices/device.ftd
+  - Conditions: /how-to-use-conditions/
+    document: best-practices/use-conditions.ftd
+  - Container: /container-guidelines/
+    document: best-practices/container-guidelines.ftd
+  - Same argument & attribute types: /same-argument-attribute-type/
+    document: best-practices/same-argument-attribute-type.ftd
+  - FScript: /fscript-guidelines/
+    document: best-practices/fscript-guidelines.ftd
+  - Inherited Types: /inherited-guidelines/
+    document: best-practices/inherited-types.ftd
+  - Variable & it's Type: /variable-type-guidelines/
+    document: best-practices/variable-type.ftd
+  - Optional Arguments: /optional-argument-guidelines/
+    document: best-practices/optional-arg-not-null.ftd
+  - Commenting: /commenting-guidelines/
+    document: best-practices/commenting-guidelines.ftd
+  - Self referencing: /self-referencing-guidelines/
+    document: best-practices/self-referencing.ftd
+  - Property: /property-guidelines/
+    document: best-practices/property-guidelines.ftd
+
+## Fullstack: /dynamic-urls/
+  document: backend/dynamic-urls.ftd
+
+- Endpoint Guide 🚧: /endpoint/
+  document: backend/endpoint.ftd
+  skip: true
+- Dynamic URLs: /dynamic-urls/
+  document: backend/dynamic-urls.ftd
+- `processors`: /processor/-/backend/
+  document: ftd-host/processor.ftd
+  - Getting Request Data: /request-data/
+    document: ftd-host/request-data.ftd
+  - Fetching Data Using `http`: /http/
+    document: ftd-host/http.ftd
+  - Querying a SQL Database: /sql/
+    document: ftd-host/sql.ftd
+  - ⚠️ Querying PostgreSQL: /pg/
+    document: ftd-host/pg.ftd
+  - ⚠️ Querying SQLite: /sqlite/
+    document: ftd-host/package-query.ftd
+  - Reading JSON: /get-data/
+    document: ftd-host/get-data.ftd
+  - Github Auth: /auth/
+    document: ftd-host/auth.ftd
+- Custom URLs: /custom-urls/
+  document: backend/custom-urls.ftd
+- Redirects: /redirects/-/backend/
+  document: backend/redirects.ftd
+- Dynamic Redirect: /ftd/redirect/
+  document: backend/ftd-redirect.ftd
+- Using `fastn` With Django Or Other Backends: /django/
+  document: backend/django.ftd
+- Enviroment Variables: /env/
+  document: backend/env-vars.ftd
+
+## Deploy: /ft/
+  document: author/how-to/fifthtry-hosting.ftd
+
+- FifthTry Hosting: /ft/
+  document: author/how-to/fifthtry-hosting.ftd
+- Static Hosting:
+  - Github pages: /github-pages/
+    document: author/how-to/github-pages.ftd
+  - Vercel: /vercel/
+    document: author/how-to/vercel.ftd
+- Dynamic Hosting:
+  - Heroku: /heroku/
+    document: deploy/heroku.ftd
+
+## Design: /figma/
+  document: cs/ftd-to-figma.ftd
+
+- Use Figma Tokens with fastn color schemes: /figma/
+  document: cs/ftd-to-figma.ftd
+- Create your own fastn color scheme from Figma json: /figma-to-fastn-cs/
+  document: cs/figma-to-ftd.ftd
+- Modify color scheme package: /modify-cs/
+  document: cs/modify-cs.ftd
+- Create `font` package: /create-font-package/
+  document: author/how-to/create-font-package.ftd
+- Export typography as json: /typo-to-json/
+  document: typo/typo-to-json.ftd
+- Typography json to FTD: /typo-json-to-ftd/
+  document: typo/typo-json-to-ftd
+
+# Community: /champion-program/
+  document: student-programs/champion.ftd
+
+## Contributors: /contributors/
+;;document: /u/index.ftd
+document: /featured/contributors/developers/index.ftd
+skip: true
+
+- Ganesh Salunke: /u/ganesh-salunke/
+  skip: true
+- Muskan Verma: /u/muskan-verma/
+  skip: true
+- Jay Kumar: /u/jay-kumar/
+  skip: true
+- Govindaraman S: /u/govindaraman-s/
+  skip: true
+- Yashveer Mehra: /u/yashveer-mehra/
+  skip: true
+- Arpita Jaiswal: /u/arpita-jaiswal/
+  skip: true
+- Meenu Kumari: /u/meenu-kumari/
+  skip: true
+- Priyanka Yadav: /u/priyanka-yadav/
+  skip: true
+- Saurabh Lohiya: /u/saurabh-lohiya/
+  skip: true
+- Saurabh Garg: /u/saurabh-garg/
+  skip: true
+- Shaheen Senpai: /u/shaheen-senpai/
+  skip: true
+
+## Programs: /champion-program/
+  document: student-programs/champion.ftd
+
+- Student Ambassador Program: /ambassador/
+  document: student-programs/ambassador.ftd
+  skip: true
+- Champion Program: /champion-program/
+  document: student-programs/champion.ftd
+  - Champions: /champions/
+    document: student-programs/champions/all-champions.ftd
+    - Ajit Garg: /champions/ajit-garg/
+      document: student-programs/champions/ajit-garg.ftd
+      skip: true
+    - Ayush Soni: /champions/ayush-soni/
+      document: student-programs/champions/ayush-soni.ftd
+      skip: true
+    - Govindaraman S: /champions/govindaraman-s/
+      document: student-programs/champions/govindaraman.ftd
+      skip: true
+    - Arpita Jaiswal: /champions/arpita-jaiswal/
+      document: student-programs/champions/arpita-jaiswal.ftd
+      skip: true
+    - Rithik Seth: /champions/rithik-seth/
+      document: student-programs/champions/rithik-seth.ftd
+      skip: true
+    - Harsh Singh: /champions/harsh-singh/
+      document: student-programs/champions/harsh-singh.ftd
+      skip: true
+    - Ganesh Salunke: /champions/ganesh-salunke/
+      document: student-programs/champions/ganesh-salunke.ftd
+      skip: true
+    - Priyanka Yadav: /champions/priyanka-yadav/
+      document: student-programs/champions/priyanka-yadav.ftd
+      skip: true
+    - Meenu Kumari: /champions/meenu-kumari/
+      document: student-programs/champions/meenu-kumari.ftd
+      skip: true
+    - Saurabh lohia: /champions/saurabh-lohiya/
+      document: student-programs/champions/saurabh-lohiya.ftd
+      skip: true
+    - Jahanvi Raycha: /u/jahanvi/
+      skip: true
+      document: student-programs/champions/jahanvi-raycha.ftd
+
+
+- Ambassador Program: /ambassador-program/
+  document: student-programs/ambassador.ftd
+  - Ambassadors: /ambassadors/
+    document: student-programs/ambassadors/all-ambassadors.ftd
+    - Ayush Soni: /ambassadors/ayush-soni/
+      document: student-programs/ambassadors/ayush-soni.ftd
+      skip: true
+    - Ajit Garg: /ambassadors/ajit-garg/
+      document: student-programs/ambassadors/ajit-garg.ftd
+      skip: true
+    - Govindaraman S: /ambassadors/govindaraman-s/
+      document: student-programs/ambassadors/govindaraman.ftd
+      skip: true
+
+- `fastn` Leads Program: /lead-program/
+  document: student-programs/lead.ftd
+
+## Contest: /weekly-contest/
+  document: events/weekly-contest/index.ftd
+
+- Weekly Contest: /weekly-contest/
+  document: events/weekly-contest/index.ftd
+  - Quote contest : /quote-contest/
+    document: events/weekly-contest/week-1-quote.ftd
+
+## Events: /hackodisha/
+  document: events/hackodisha.ftd
+
+- Fastn Roadshow: /roadshow/
+  document: community/events/roadshow.ftd
+  skip: true
+
+  - Indore: /indore/
+    document: community/events/roadshows/indore.ftd
+  - Bhopal: /bhopal/
+    document: community/events/roadshows/bhopal.ftd
+  - Lucknow: /lucknow/
+    document: community/events/roadshows/lucknow.ftd
+  - Ujjain: /ujjain/
+    document: community/events/roadshows/ujjain.ftd
+  - Hyderabad: /hyderabad/
+    document: community/events/roadshows/hyderabad.ftd
+  - Ahmedabad: /ahmedabad/
+    document: community/events/roadshows/ahmedabad.ftd
+  - Jaipur: /jaipur/
+    document: community/events/roadshows/jaipur.ftd
+  - Mumbai: /mumbai/
+    document: community/events/roadshows/mumbai.ftd
+  - Nagpur: /nagpur/
+    document: community/events/roadshows/nagpur.ftd
+  - Delhi: /delhi/
+    document: community/events/roadshows/delhi.ftd
+  - Kolkata: /kolkata/
+    document: community/events/roadshows/kolkata.ftd
+  - Bangalore: /bangalore/
+    document: community/events/roadshows/bangalore.ftd
+
+## Workshop: /workshop/
+  skip: true
+
+- Hello World: /workshop/hello-world/
+  document: workshop/01-hello-world.ftd
+- Add quote: /workshop/add-quote/
+  document: workshop/02-add-quote.ftd
+- Add doc-site: /workshop/add-doc-site/
+  document: workshop/03-add-doc-site.ftd
+- Publish on Github Pages: /workshop/publish/
+  document: workshop/04-publish-on-github.ftd
+- Basics Of text: /workshop/basics-of-text/
+  document: workshop/05-basics-of-text.ftd
+- Add an image, youtube video: /workshop/add-image-and-video/
+  document: workshop/06-add-image-and-video.ftd
+- Create A New Page: /workshop/add-new-page/
+  document: workshop/07-create-new-page.ftd
+- Creating `ds.ftd`: /workshop/ds/
+  document: workshop/08-creating-ds.ftd
+  skip: true
+- Add sitemap: /workshop/add-sitemap/
+  document: workshop/09-add-sitemap.ftd
+  skip: true
+- Change theme: /workshop/change-theme/
+  document: workshop/10-change-theme.ftd
+  skip: true
+- Change color scheme, typography: /workshop/change-cs-and-typo/
+  document: workshop/11-change-cs-typo.ftd
+  skip: true
+- Clean the urls: /workshop/clean-url
+  document: workshop/12-document.ftd
+  skip: true
+- Use redirect: /workshop/use-redirect/
+  document: workshop/13-use-redirect.ftd
+  skip: true
+- SEO meta: /workshop/seo-meta/
+  document: workshop/14-seo-meta.ftd
+  skip: true
+- Add banner: /workshop/add-banner/
+  document: workshop/15-add-banner.ftd
+  skip: true
+- Add sidebar: /workshop/add-sidebar/
+  document: workshop/16-add-sidebar.ftd
+  skip: true
+- Portfolio page: /workshop/portfolio/
+  document: workshop/17-portfolio.ftd
+  skip: true
+
+
+# Blog: /blog/
+
+- Design System Package Tutorial (Part 2): /blog/design-system-part-2/
+  document: blog/design-system-part-2.ftd
+- Design System Package Tutorial (Part 1): /blog/design-system/
+  document: blog/design-system.ftd
+- Building Your Personal Website with fastn: /blog/personal-website-1/
+  document: blog/personal-website-1.ftd
+- Content Library: /blog/content-library/
+  document: blog/content-library.ftd
+- Memory, Mutability and Reactivity: /blog/strongly-typed/
+  document: blog/strongly-typed.ftd
+- Domain Components: /blog/domain-components/
+  document: blog/domain-components.ftd
+- Search Feature in fastn.com: /blog/search/
+- Quote contest: /quote-contest/
+  document: events/weekly-contest/week-1-quote.ftd
+;; - Tales from ACME Inc - Case Study: /acme/
+;;  document: blog/acme.ftd
+- A Content Writer’s Journey with fastn: /writer/
+  document: blog/writer-journey.ftd
+- fastn might prove you wrong: /prove/
+  document: blog/prove-you-wrong.ftd
+- The Intimidation of Programming: /intimidation/
+  document: blog/the-intimidation-of-programming.ftd
+- Optimize your website: /blog/seo-meta/
+  document: blog/meta-data-blog.ftd
+- trizwitlabs web event: /trizwitlabs/
+  document: blog/trizwitlabs.ftd
+- `fastn` goes to Philippines: /namaste-philippines/
+  document: blog/philippines.ftd
+- Witty Hacks!: /wittyhacks/
+  document: blog/wittyhacks.ftd
+- Ahoy, Web Components!: /web-components/
+  document: blog/web-components.ftd
+- Color Scheme: /colors/
+  document: blog/show-cs.ftd
+- Using Custom Breakpoints: /breakpoint/
+  document: blog/breakpoint.ftd
+
+
+# dev: /d/
+  skip: true
+
+- Overview: /d/
+- Maintenance: /d/m/
+- Next Edition: /d/next-edition/
+- RFCs: /rfcs/
+  - 1: The RFC Process
+    url: /rfc/rfc-process/
+    document: rfcs/0001-rfc-process.ftd
+  - 2: `fastn update`
+    url: /rfc/fastn-update/
+    document: rfcs/0002-fastn-update.ftd
+    skip: true
+  - 3: Variable Interpolation
+    url: /rfc/variable-interpolation/
+    document: rfcs/0003-variable-interpolation.ftd
+  - 4: Incremental Build
+    url: /rfc/incremental-build/
+    document: rfcs/0004-incremental-build.ftd
+- Architecture: /architecture/
+  document: d/architecture.ftd
+  - `ftd` crate 🚧: /ftd-crate/
+    document: d/ftd-crate.ftd
+  - `fastn-core` crate 🚧: /fastn-core-crate/
+    document: d/fastn-core-crate.ftd
+  - `fastn` crate 🚧: /fastn-crate/
+    document: d/fastn-crate.ftd
+  - `fastn-package` crate 🚧: /fastn-package/
+    document: d/fastn-package.ftd
+- `ftd p1` grammar: /p1-grammar/
+  document: ftd/p1-grammar.ftd
+
+# Content Planning: /planning/
+  skip: true
+  source: planning
+  show-planning: true
+
+- Overview: /planning/
+- dynamic UI planning: /dynamic-ui/-/planning/
+  document: planning/country-details/index.ftd
+  - Script 1: /dynamic-ui/-/planning/script1/
+    document: planning/country-details/script1.ftd
+  - Script 2: /dynamic-ui/-/planning/script2/
+    document: planning/country-details/script2.ftd
+  - Script 3: /dynamic-ui/-/planning/script3/
+    document: planning/country-details/script3.ftd
+- Page Nomenclature: /page-nomenclature/
+  document: planning/page-nomenclature.ftd
+- Create website planning: /create-website-planning/
+  document: users/index.ftd
+- Orientation video planning: /orientation-planning/
+  document: planning/orientation-planning-video.ftd
+- Documentation Systems: /documentation/
+  document: planning/documentation-systems.ftd
+- Adding color-scheme: /color-scheme/-/planning/
+  document: expander/ds/ds-cs.ftd
+- Adding typography: /typography/-/planning/
+  document: expander/ds/ds-typography.ftd
+- Using page component: /ds-page/-/planning/
+  document: expander/ds/ds-page.ftd
+- Markdown: /markdown/-/planning/
+  document: expander/ds/markdown.ftd
+- SEO: /seo-meta/-/planning/
+  document: expander/ds/meta-data.ftd
+- Understanding sitemap: /understanding-sitemap/-/planning/
+  document: expander/ds/understanding-sitemap.ftd
+- Using images in documents: /using-images/-/planning/
+  document: expander/imagemodule/index.ftd
+- Holy grail layout: /holy-grail/-/planning/
+  document: expander/layout/index.ftd
+- sitemap - document: /planning/sitemap-document/
+  document: planning/sitemap-features/document.ftd
+- border-radius video: /planning/border-radius/
+- Postcard Video: /planning/post-card/
+  skip: true
+- Button Video: /planning/button/
+- Rive Video: /planning/rive/
+- Developer Course: /planning/developer-course/
+
+-- fastn.url-mappings:
+
+/ftd/kernel/ -> /kernel/
+/ftd/list/ -> /list/
+/package-query/ -> /sql/
+/images-in-modules/ -> /using-images/
+/images-in-modules/-/planning/ -> /using-images/-/planning/
+/ftd/variables/ -> /variables/
+/ftd/built-in-types/ -> /built-in-types/
+/ftd/record/ -> /record/
+/ftd/or-type/ -> /or-type/
+/ftd/row/ -> /row/
+/ftd/column/ -> /column/
+/ftd/container/ -> /container/
+/ftd/text/ -> /text/
+/ftd/image/ -> /image/
+/ftd/iframe/ -> /iframe/
+/ftd/integer/ -> /integer/
+/ftd/decimal/ -> /decimal/
+/ftd/boolean/ -> /boolean/
+/ftd/text-input/ -> /text-input/
+/blog/web-components/ -> /web-components/
+/ftd/document/ -> /document/
+/website-optimization/ -> /blog/seo/
+/seo/ -> /seo-meta-data/
+/seo/-/planning -> /seo-meta-data/-/planning/
+/blog/seo/ -> /blog/seo-meta-data/
+/seo-meta-data/ -> /seo-meta/
+/seo-meta-data/-/planning/ -> /seo-meta/-/planning/
+/seo-meta-data/-/frontend/ -> /seo-meta/-/frontend/
+/blog/seo-meta-data/ -> /blog/seo-meta/
+/markdown-in-doc-site/-/planning/ -> /markdown/-/planning/
+/create-page/-/planning/ -> /ds-page/-/planning/
+/rfcs/rfc-process/ -> /rfc/rfc-process/
+/rfcs/fastn-update/ -> /rfc/fastn-update/
+/rfcs/variable-interpolation/ -> /rfc/variable-interpolation/
+/student-programs/champion-program/ -> /champion-program/
+/student-programs/ambassador-program/ -> /ambassador-program/
+/student-programs/champion-program/champions/ajit-garg/ -> /champions/ajit-garg/
+/student-programs/champion-program/champions/ayush-soni/ -> /champions/ayush-soni/
+/student-programs/ambassador-program/ambassadors/ayush-soni/ -> /ambassadors/ayush-soni/
+/ambassadors-program/ -> /ambassador-program/
+/champions-program/ -> /champion-program/
+/blog/writer-journey/ -> /writer/
+/blog/prove-you-wrong/ -> /prove/
+/blog/intimidation-of-programming/ -> /intimidation/
+/overview/ -> /home/
+/events/weekly-contest/ -> /weekly-contest/
+/setup.exe -> https://github.com/fastn-stack/fastn/releases/latest/download/fastn_setup.exe
+/clean-urls/-/build/ -> /clean-urls/
+/cet/ -> https://chat.whatsapp.com/Iiv1klM3c2G3e6eb8kCDhJ
+/aieee-vizag/ -> https://chat.whatsapp.com/HigWcqIijQj63xCNAWJmLS
+/github/ -> https://github.com/fastn-stack/
+/whatsapp/ -> https://www.whatsapp.com/channel/0029Va6XNHZ9WtCCkv3KvC0X/
+/twitter/ -> https://twitter.com/fastn_stack/
+/instagram/ -> https://www.instagram.com/fastn_stack/
+/discord/ -> https://discord.gg/eNXVBMq4xt
+/linkedin/ -> https://www.linkedin.com/company/fastn-stack/
+/r/counter/ -> https://replit.com/@ajit6/counter/
+/r/acme/ -> https://replit.com/@ayushipujaa/acme/
+/custom-url/ -> /custom-urls/
+/loops/ -> /loop/
+/use-js/ -> /use-js-css/
+/use-css/ -> /external-css/

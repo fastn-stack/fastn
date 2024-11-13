@@ -1,0 +1,370 @@
+-- import: fastn-stack.github.io/fastn-js/json-exporter as j
+-- import: fastn-community.github.io/forest-cs as forest-cs
+-- import: heulitig.github.io/figma-tokens-tutorial/assets as assets
+-- import: fastn/processors as pr
+
+-- string forest-figma:
+$processor$: pr.figma-cs-token
+variable: $forest-cs.main
+name: forest-cs
+
+
+-- ds.page: How to create your own `Fastn Color Scheme` from Figma json
+
+-- ds.youtube:
+v: znH1AEf6SMk
+
+-- ds.markdown:
+
+It happens quite often that we get a hold of some nice color-scheme
+package which we believe would look good on our pages
+but we don't want to use the same color-scheme as it is. Sometimes, we
+want to do some tweaks on top of that already good looking color-scheme and create
+our own super awesome color-scheme specific for our websites.
+
+In `ftd`, you can create your own color-scheme package from
+the exported fastn color-scheme json generated from figma.
+If you have come here, you might be already familiar
+with using fastn color-scheme json in Figma using `Token Studio for Figma` plugin.
+If not, then [visit this guide](https://fastn.com/figma).
+
+Let's say we want to modify forest-cs colors and create our own dark-forest-cs
+
+-- ds.h1: Install figma tokens plugin
+
+If you already have this
+[`Token Studio for figma` (Figma Tokens)](https://www.figma.com/community/plugin/843461159747178978/Tokens-Studio-for-Figma-(Figma-Tokens))
+plugin installed, then awesome. If not, then visit the above link.
+
+-- ds.h1: Open your Figma file
+
+You can use any of your existing figma file or create a new one as shown below.
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.0.png
+width: fill-container
+
+-- ds.markdown:
+
+In this tutorial, I will be using the same figma file which I used in this
+[tutorial guide](https://fastn.com/figma)
+
+-- ds.h1: Download forest-cs.json file
+
+Download the below json code as a new json file named `forest-cs.json`
+by clicking on the download icon in the code-block below.
+
+`Note:` You can also get this json from its
+[color documentation](https://fastn-community.github.io/forest-cs/)
+
+-- ds.code: forest-cs
+lang: json
+max-height.fixed.px: 350
+download: forest-cs.json
+
+$forest-figma
+
+-- ds.h1: Load forest-cs.json in figma plugin
+
+Once you have launched your figma tokens plugin,
+head to `Tools` -> `Load from File/Folder or Preset` as shown below
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.1.png
+width: fill-container
+
+-- ds.markdown:
+
+Then under `File` tab, click on `Choose File` option
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.2.png
+width: fill-container
+
+-- ds.markdown:
+
+It will show a File picker, open your `forest-cs.json` file
+which you saved as shown below.
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.3.png
+width: fill-container
+
+-- ds.markdown:
+
+Then tick the `forest-cs-light` checkbox to set the
+light color-scheme in your page.
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.4.png
+width: fill-container
+
+-- ds.h1: Check your component colors
+
+You will notice that the rectangle is using this color: `Background Colors -> base`
+inside your figma plugin once you select the rectangle as shown below.
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.6.png
+width: fill-container
+
+-- ds.markdown:
+
+And text is using this color: `Standalone Colors -> text`
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.7.png
+width: fill-container
+
+-- ds.h1: Let's modify some colors
+
+Guess what we don't like any of these two colors at all
+in this light color scheme.
+
+Let's say we want the `Background Colors -> base`
+to be some light green color (for eg. #90EE90)
+instead of the boring white :(
+
+To do this, right click on the current active color circle i.e
+`Background Colors -> base` and click on Edit token option
+as shown below
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.5.png
+width: fill-container
+
+-- ds.markdown:
+
+You will see this window once you hit Edit token option.
+On this window, edit the Color value to
+this #90EE90 (for light green color) then hit Save button
+as shown below.
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.8.png
+width: fill-container
+
+-- ds.markdown:
+
+Similarly, select the text-block and edit its color by right-clicking
+on its color circle i.e Standalone Colors -> text as shown below
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.9.png
+width: fill-container
+
+-- ds.markdown:
+
+Now change this color by changing its Color value
+to #0b5394 (for blue color) then hit Save button
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.10.png
+width: fill-container
+
+-- ds.markdown:
+
+This looks much better now :)
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.11.png
+width: fill-container
+
+-- ds.markdown:
+
+After doing such color modifications, you might want to save your color-scheme
+as a fastn color-scheme package. For this, we can convert this json generated
+from this color-scheme to `fastn` code which we can use in our fastn
+color-scheme package.
+
+-- ds.h1: Let's convert json to FTD
+
+To export your color-scheme as json, click on Export to File/Folder under Tools
+in your Figma Tokens plugin as shown below.
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.12.png
+width: fill-container
+
+-- ds.markdown:
+
+After doing that, copy the json from the preview section as shown below.
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.13.png
+width: fill-container
+
+-- ds.markdown:
+
+As you can see, this json is for light color-scheme. Similarly copy
+the dark color-scheme json from preview section and make one json
+after merging both jsons.
+
+-- ds.markdown:
+
+And paste this merged json in the text-box below.
+
+-- j.json-exporter:
+
+-- ds.markdown:
+
+You will see the generated `fastn` code. Copy this `fastn` code by clicking
+on the copy icon at the top of the code-block above.
+
+-- ds.h1: Go to the `color-scheme-template` github repository
+
+This repo is a template repo for fastn color-schemes, we will create
+our own color-scheme repo using this. To visit this repo,
+[click here](https://github.com/fastn-stack/color-scheme-template)
+
+To do that, click on the `Use this template` button then `Create a new repository`
+as shown below
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.22.png
+width: fill-container
+
+-- ds.markdown:
+
+Fill your repository details as shown below, then click on `Create repository`
+button.
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.23.png
+width: fill-container
+
+-- ds.markdown:
+
+Wait for a while, after that you will see your color-scheme repository
+created using this template like this:
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.24.png
+width: fill-container
+
+-- ds.markdown:
+
+But before you can use this repo, you need to do setup some things
+
+-- ds.h1: Modify the FASTN.ftd
+
+Change the fastn.package and download-base-url
+based on your repo name and username as shown below.
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.25.png
+width: fill-container
+
+-- ds.markdown:
+
+To edit this file, hit the edit icon as shown below
+and make your changes
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.26.png
+width: fill-container
+
+-- ds.markdown:
+
+Like this
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.27.png
+width: fill-container
+
+-- ds.markdown:
+
+When you are done updating the contents, scroll down and save changes
+by committing directly on the main branch as shown below.
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.28.png
+width: fill-container
+
+-- ds.h1: Modify index.ftd
+
+Just like we updated FASTN.ftd, update the import for the colors
+based on your username and repository name as shown below.
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.29.png
+width: fill-container
+
+-- ds.markdown:
+
+Like this
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.30.png
+width: fill-container
+
+-- ds.h1: Modify colors.ftd
+
+Go to your `colors.ftd` file in your repo and click on the edit button
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.35.png
+width: fill-container
+
+-- ds.markdown:
+
+Then Paste your copied `fastn` code.
+
+Scroll down and commit directly to the main branch by
+press on Commit changes button as shown below.
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.30.png
+width: fill-container
+
+-- ds.h1: Activate github pages
+
+Now to activate github pages (gh-pages) go to Settings as shown below
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.31.png
+width: fill-container
+
+-- ds.markdown:
+
+Go to Pages tab
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.32.png
+width: fill-container
+
+-- ds.markdown:
+
+Then select the Source to `Deploy from the branch` and select the branch to
+`gh-pages`, then hit Save as shown below.
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.33.png
+width: fill-container
+
+-- ds.h1: Preview your color-scheme in action
+
+Go to your (`<github-username>.github.io/<repo>`) page to see your color-scheme
+in action.
+
+In my case, my color-scheme will be deployed at
+`heulitig.github.io/my-color-scheme` as shown below
+
+-- ftd.image:
+src: $fastn-assets.files.images.figma.b2.final.png
+width: fill-container
+
+-- ds.markdown:
+
+Congratulations you have completed this tutorial.
+
+-- ds.h1: More Awesome fastn color-schemes
+
+Check out these fastn color-schemes which you can use right away
+
+- [Dark flame CS](https://fastn-community.github.io/dark-flame-cs/)
+- [Forest CS](https://fastn-community.github.io/forest-cs/)
+- [Saturated sunset CS](https://fastn-community.github.io/saturated-sunset-cs/)
+- [Winter CS](https://fastn-community.github.io/winter-cs/)
+
+-- end: ds.page

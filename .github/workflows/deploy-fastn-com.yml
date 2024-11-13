@@ -1,0 +1,26 @@
+name: Deploy fastn.com
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - 'fastn.com/**'
+      - '.github/workflows/deploy-fastn-com.yml'
+
+jobs:
+  env:
+    # https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions
+    FIFTHTRY_SITE_WRITE_TOKEN: ${{ secrets.FIFTHTRY_SITE_WRITE_TOKEN }}
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: source <(curl -fsSL https://fastn.com/install.sh)
+      - run: |
+          # TODO: remove below line when https://github.com/FifthTry/dotcom/issues/361 is done
+          rm .gitignore # so that `fastn upload` uploads .packages/ too
+          cd fastn.com
+          echo "Using $(fastn --version) to upload fastn.com to FifthTry"
+          # Requires FIFTHTRY_SITE_WRITE_TOKEN to be set
+          fastn upload fastn >> $GITHUB_STEP_SUMMARY

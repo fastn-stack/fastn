@@ -1,0 +1,198 @@
+-- import: fastn-community.github.io/bling/collapse
+
+-- site-doc.doc-home: Holder
+site-title: Bling
+show-tabs: false
+github-url: https://github.com/fastn-community/bling
+current-package: fastn-community.github.io/bling
+
+The triangle bubble holder web component provides an attractive and
+attention-grabbing way to present quotes or important text within a web page.
+It enhances the visual appeal and readability of the content while providing a
+clear visual indication of the quoted content.
+
+-- site-doc.header: Example
+
+-- site-doc.output:
+
+-- triangular: A Triangle Quote Component
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+nostrud exercitation ullamco laboris nisi ut
+
+-- cb.code:
+lang: java
+
+if (condition) {
+    // code block
+    statement1;
+    statement2;
+    // ...
+}
+
+-- end: triangular
+
+-- site-doc.header: How to use
+
+-- cb.code: Add `bling` dependency into your FASTN.ftd
+lang: ftd
+
+\-- fastn.dependency: fastn-community.github.io/bling
+
+-- cb.code: import `holder` inside your `.ftd` file
+lang: ftd
+
+\-- import: fastn-community.github.io/bling/holder
+
+-- cb.code: Add `-- triangular` holder inside your `.ftd` file 
+lang: ftd
+
+\-- holder.triangular: A Triangle Quote Component
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+nostrud exercitation ullamco laboris nisi ut
+
+\-- cb.code:
+lang: java
+
+if (condition) {
+    // code block
+    statement1;
+    statement2;
+    // ...
+}
+
+\-- collapse.collapse: Lorem ipsum dolor
+info-right: Dolor sit amet
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+nostrud exercitation ullamco laboris nisi ut
+
+\-- end: holder.triangular
+
+-- site-doc.header: Properties:
+
+Below are details of all properties of `triangular` component.
+
+-- site-doc.component-property: `title`
+type: Caption (`optional`)
+
+It's used to title to the `triangular` component.
+
+-- site-doc.component-property: `body`
+type: Body (`optional`)
+
+It's used to add body content to `triangular` component.
+
+-- site-doc.component-property: `make-odd`
+type: Boolean (`optional`, default: `false`)
+
+If you want to show multiple `triangular` component one after another add
+`make-odd` property value to `true` which will remove background colors and all
+`triangular` component with `make-odd` will be seen as a part of every
+triangular component. 
+
+Try adding multiple `triangular` components one after another and add this
+property value as `true` to odd positioned `triangular` component.
+
+-- end: site-doc.doc-home
+
+
+
+
+
+
+
+
+
+
+-- component triangular:
+optional caption title:
+optional body body:
+boolean make-odd: false
+children trangle-wrap:
+
+-- ftd.column:
+width: auto
+width if { ftd.device == "mobile" }: fill-container
+align-self: center
+margin-top.px if { !triangular.make-odd }: 24
+margin-bottom.px if { !triangular.make-odd }: 54
+background.solid: $inherited.colors.border
+background.solid if { triangular.make-odd }: $inherited.colors.background.base
+padding-top.px: 56
+padding-top.px if { triangular.make-odd }: 0
+padding-bottom.px: 32
+padding-bottom.px if { triangular.make-odd }: 0
+padding-horizontal.px: 24
+
+-- ftd.row:
+if: { !triangular.make-odd }
+width.fixed.px: 0
+height.fixed.px: 0
+border-top-width.px: 50
+border-left-width.px: 60
+border-right-width.px: 60
+border-top-width.px if { ftd.device == "mobile" }: 35
+border-left-width.px if { ftd.device == "mobile" }: 42
+border-right-width.px if { ftd.device == "mobile" }: 42
+border-top-color: $inherited.colors.background.step-1
+border-bottom-color: $inherited.colors.border
+border-left-color: $inherited.colors.border
+border-right-color: $inherited.colors.border
+anchor: parent
+left.px: 50
+top.px: 0
+z-index: 0
+
+-- end: ftd.row
+
+-- ftd.text: $triangular.title
+if: { triangular.title != NULL }
+padding-vertical.px: 16
+color: $inherited.colors.text
+role: $inherited.types.heading-medium
+width: fill-container
+
+-- ftd.text: 
+if: { triangular.body != NULL }
+color: $inherited.colors.text
+role: $inherited.types.copy-regular
+width: fill-container
+
+$triangular.body
+
+-- ftd.row:
+if: { !triangular.make-odd }
+width.fixed.px: 0
+height.fixed.px: 0
+border-top-width.px if { ftd.device != "mobile" }: 50
+border-left-width.px if { ftd.device != "mobile" }: 60
+border-right-width.px if { ftd.device != "mobile" }: 60
+border-top-width.px if { ftd.device == "mobile" }: 35
+border-left-width.px if { ftd.device == "mobile" }: 42
+border-right-width.px if { ftd.device == "mobile" }: 42
+border-top-color: $inherited.colors.border
+border-bottom-color: $inherited.colors.background.step-1
+border-left-color: $inherited.colors.background.step-1
+border-right-color: $inherited.colors.background.step-1
+anchor: parent
+right.px: 50
+bottom.px: -50
+bottom.px if { ftd.device == "mobile" }: -35
+z-index: 0
+
+-- end: ftd.row
+
+-- ftd.column:
+width: fill-container
+children: $triangular.trangle-wrap
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: triangular

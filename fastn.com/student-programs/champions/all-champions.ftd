@@ -1,0 +1,101 @@
+-- import: fastn-community.github.io/spectrum-ds as ds
+-- import: fastn-community.github.io/spectrum-ds/common
+-- import: fastn.com/content-library as footer
+-- import: fastn-community.github.io/dark-flame-cs
+-- import: fifthtry.github.io/fastn-typography as typo
+-- import: fastn.com/content-library as lib
+
+
+-- ds.page:
+show-footer: true
+site-logo: $fastn-assets.files.images.fastn.svg
+site-name: NULL
+logo-height: 38
+logo-width: 120
+colors: $dark-flame-cs.main
+types: $typo.types
+github-icon: true
+github-url: https://github.com/fastn-stack/fastn
+full-width: true
+fluid-width: false
+max-width.fixed.px: 1340
+
+-- ds.page.footer:
+
+	-- footer.footer:
+	site-logo: $fastn-assets.files.images.fastn.svg
+	site-url: /
+	social-links: $footer.social-links
+	copyright: Copyright © 2023 - fastn.com
+	full-width: false
+	max-width.fixed.px: 1340
+	
+-- end: ds.page.footer
+
+-- lib.team: Student Champions
+
+
+	-- lib.member: Ajit Garg
+	photo: $fastn-assets.files.images.students-program.champions.ajit.jpg
+	photo-grey: $fastn-assets.files.images.students-program.champions.ajit-greyscale.jpg
+	link: /champions/ajit-garg/
+	designation: DevRel
+	
+	-- lib.member: Ayush Soni
+	photo: $fastn-assets.files.images.students-program.ambassadors.ayush-soni.jpg
+	photo-grey: $fastn-assets.files.images.students-program.ambassadors.ayush-soni-greyscale.jpg
+	link: /champions/ayush-soni/
+	designation: DevRel Engineer
+	
+	-- lib.member: Arpita Jaiswal
+	photo: $fastn-assets.files.images.students-program.champions.arpita.jpg
+	photo-grey: $fastn-assets.files.images.students-program.champions.arpita-greyscale.jpg
+	link: /champions/arpita-jaiswal/
+	designation: Senior Software Engineer
+	
+	-- lib.member: Govindaraman S
+	photo: $fastn-assets.files.images.students-program.ambassadors.govindaraman.jpg
+	photo-grey: $fastn-assets.files.images.students-program.ambassadors.govindaraman-grayscale.jpg
+	link: /champions/govindaraman-s/
+	designation: Front End Developer, Trizwit Labs
+	
+	-- lib.member: Harsh Singh
+	photo: $fastn-assets.files.images.students-program.champions.harsh.jpg
+	photo-grey: $fastn-assets.files.images.students-program.champions.harsh-grayscale.jpg
+	link: /champions/harsh-singh/
+	designation: Software Engineer - Intern
+	
+	-- lib.member: Jahanvi Raycha
+	photo: $fastn-assets.files.images.students-program.champions.jahanvi-raycha.jpg
+	photo-grey: $fastn-assets.files.images.students-program.champions.jahanvi-raycha-grayscale.jpg
+	link: /u/jahanvi/
+	designation: fastn champion
+	
+	-- lib.member: Meenu Kumari
+	photo: $fastn-assets.files.images.students-program.champions.meenu.jpg
+	photo-grey: $fastn-assets.files.images.students-program.champions.meenu-greyscale.jpg
+	link: /champions/meenu-kumari/
+	designation: fastn builder
+	
+	-- lib.member: Priyanka Yadav
+	photo: $fastn-assets.files.images.students-program.champions.priyanka.jpg
+	photo-grey: $fastn-assets.files.images.students-program.champions.priyanka-greyscale.jpg
+	link: /champions/priyanka-yadav/
+	designation: fastn builder
+	
+	-- lib.member: Rithik Seth
+	photo: $fastn-assets.files.images.students-program.champions.rithik.jpg
+	photo-grey: $fastn-assets.files.images.students-program.champions.rithik-greyscale.jpg
+	link: /champions/rithik-seth/
+	designation: Software Engineer
+	
+	-- lib.member: Saurabh Lohia
+	photo: $fastn-assets.files.images.students-program.champions.saurabh-lohiya.jpg
+	photo-grey: $fastn-assets.files.images.students-program.champions.saurabh-lohiya-greyscale.jpg
+	link: /champions/saurabh-lohiya/
+	designation: fastn builder
+	
+-- end: lib.team
+
+
+-- end: ds.page

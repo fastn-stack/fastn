@@ -1,0 +1,161 @@
+-- import: fastn-community.github.io/bling/note
+
+-- component rfc:
+;; the title of the RFC
+caption title:
+;; each rfc should have a unique slug
+string id:
+;; short summary of the RFC
+body short:
+;; possible values: proposal, accepted, rejected, open-questions
+;; `open-questions` means RFC has been reviewed, but some open questions have
+;; been found and RFC has to be updated. Once RFC has been updated it can go
+;; back to `proposal` state.
+string status: proposal
+children c:
+
+-- ds.page: $rfc.title
+
+$rfc.short
+
+	-- note.note: This is a RFC document
+	
+	This document exists to describe a proposal for enhancing the `fastn` language.
+	This is a Request For Comment. Please share your comments by posting them in the
+	pull request for this RFC if this RFC is not merged yet. If the RFC is merged,
+	you can post comment on our [official Discord](https://fastn.com/discord/), or
+	open a [discussion on Github](https://github.com/orgs/fastn-stack/discussions).
+	
+	;; TODO: instead of comment on PR vs on discord/github, if we know the rfc
+	;; status, which we know, show a more precise message
+	
+	Learn about our [RFC process](/rfc/rfc-process/). View all [active
+	RFCs](/rfcs/). WIP RFCs, and RFCs awaiting initial comments can be [found on
+	Github](https://github.com/fastn-stack/fastn.com/pulls?q=is%3Apr+is%3Aopen+label%3Arfc),
+	as Pull Requests, with label `rfc`.
+	
+	
+	-- ds.h2: Status
+	
+	$rfc.status
+	
+	
+	
+	-- ftd.column:
+	width: fill-container
+	children: $rfc.c
+	
+	-- end: ftd.column
+
+-- end: ds.page
+
+-- end: rfc
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- component motivation:
+optional body b:
+children c:
+
+-- titled-section: Motivation
+c: $motivation.c
+b: $motivation.b
+
+-- end: motivation
+
+
+
+
+-- component detailed-design:
+optional body b:
+children c:
+
+-- titled-section: Detailed Design
+c: $detailed-design.c
+b: $detailed-design.b
+
+-- end: detailed-design
+
+
+
+
+-- component alternatives:
+optional body b:
+children c:
+
+-- titled-section: Alternatives
+c: $alternatives.c
+b: $alternatives.b
+
+-- end: alternatives
+
+
+-- component development-status:
+optional body b:
+children c:
+
+-- titled-section: Development Status
+c: $development-status.c
+b: $development-status.b
+
+-- end: development-status
+
+
+-- component teaching-notes:
+optional body b:
+children c:
+
+-- titled-section: Teaching Notes
+c: $teaching-notes.c
+b: $teaching-notes.b
+
+-- end: teaching-notes
+
+
+-- component unresolved-questions:
+optional body b:
+children c:
+
+-- titled-section: Unresolved Questions
+c: $unresolved-questions.c
+b: $unresolved-questions.b
+
+-- end: unresolved-questions
+
+
+
+
+-- component titled-section:
+caption title:
+optional body b:
+children c:
+
+-- ftd.column:
+width: fill-container
+
+	-- ds.h1: $titled-section.title
+	
+	-- ds.markdown:
+	if: { titled-section.b != NULL }
+	
+	$titled-section.b
+	
+	-- ftd.column:
+	width: fill-container
+	children: $titled-section.c
+	
+	-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: titled-section

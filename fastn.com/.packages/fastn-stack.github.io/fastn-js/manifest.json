@@ -1,0 +1,71 @@
+{
+    "files": {
+        "json-exporter.ftd": {
+            "name": "json-exporter.ftd",
+            "checksum": "8A28640DDCBCE9723D732CC7B4242F15A25AFA31E09E71A6154AC77F282791EB",
+            "size": 3996
+        },
+        "FASTN.ftd": {
+            "name": "FASTN.ftd",
+            "checksum": "D4D8A54F547DD49172B9FF02898901D8F447B91E0F4D2C5D6BFA93A4658372F0",
+            "size": 371
+        },
+        "qr-code.ftd": {
+            "name": "qr-code.ftd",
+            "checksum": "7E95423C84118AA6FDB37AD7AFF6767BF3CF2C220F8C2ABE174254EB69B12A96",
+            "size": 1372
+        },
+        "download.js": {
+            "name": "download.js",
+            "checksum": "7A0E3E90E247D397F62299A0C050F657B5B767F340ECB44366903818393DF693",
+            "size": 2298
+        },
+        "syntax-formatter.js": {
+            "name": "syntax-formatter.js",
+            "checksum": "888C81E86F881025BE893B329BE1E619C78E5D0CB5ECF18C4E6DD07C98C9511C",
+            "size": 1741
+        },
+        "lib.js": {
+            "name": "lib.js",
+            "checksum": "2BF1A6A98BED5BCF2DA851068FE9C0C54F289864BBF087DD896E8813FEB2BC41",
+            "size": 424
+        },
+        "typo-exporter.ftd": {
+            "name": "typo-exporter.ftd",
+            "checksum": "E810017DDEC9B7C27B61F5B7C2A7466F4FD37B2987F6E1F7D36B08225793B8A4",
+            "size": 1352
+        },
+        "typo.js": {
+            "name": "typo.js",
+            "checksum": "25CA9866905939FFA5D68AAA9184E5A15059FB878DA5403DE571019A6D1FD9E6",
+            "size": 11596
+        },
+        "index.ftd": {
+            "name": "index.ftd",
+            "checksum": "EAB37AB7D0D1592648D40FE07081B57057B3CEEAF042249C90183ED7230CCDD2",
+            "size": 907
+        },
+        "qrCode.js": {
+            "name": "qrCode.js",
+            "checksum": "3462CF63C57703E3113ECC4C613CBCC55784544102F35F790836228C0A1AEBD3",
+            "size": 1750
+        },
+        "utils.ftd": {
+            "name": "utils.ftd",
+            "checksum": "A7B202483CDE188BFB45264AA70D2849E180F0F8E0DE53CF0BE58DF0BEDB30DC",
+            "size": 1389
+        },
+        "README.md": {
+            "name": "README.md",
+            "checksum": "F6669080090ECB22843054747E19047793210B4D9E35D03FEF89C39C04B2A74D",
+            "size": 139
+        },
+        "figma.js": {
+            "name": "figma.js",
+            "checksum": "7CFEB1234F4CAA4623577677B7511EB20CD7B703C8B663DEF547CBF6E2F1D0D0",
+            "size": 18087
+        }
+    },
+    "zip_url": "https://github.com/fastn-stack/fastn-js/archive/b057049396dcaa6e7522c083ae73325095004b8d.zip",
+    "checksum": "00F4EAAC2AA18CE291775FF7BF724AC55CE636440A0846EC31581AFB3FEAEC4C"
+}

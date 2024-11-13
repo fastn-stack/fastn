@@ -1,0 +1,54 @@
+-- ds.page: Visibility
+
+Access modifiers are special keywords which can be used
+to control the visibility and accessibility of component arguments.
+
+-- ds.h1: Types of Access Modifiers
+
+fastn provides two types of access modifiers which can be used with
+component arguments. If not specified, then the default visibility is public for
+all arguments defined under component definition.
+
+- `public` (Default): This ensures that the arguments can be accessed from
+anywhere.
+- `private`: This ensures that the argument can only be accessed from within the
+component.
+
+-- ds.h1: How to use them ?
+
+To use any access modifier, you simply need to specify it while defining
+component argument during component definition.
+
+-- ds.code: Using access modifier
+lang: ftd
+
+\-- component foo:
+caption name:
+private boolean mouse-hovered: false ;; <hl>
+
+\-- ftd.text: $foo.name
+color: red
+color if { foo.mouse-hovered }: green
+$on-mouse-enter$: $ftd.set-bool($a = $foo.mouse-hovered, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $foo.mouse-hovered, v = false)
+
+\-- end: foo
+
+-- ds.markdown:
+
+Here, we have defined a simple component `foo`. This component is using
+[`ftd.text`](ftd/text/), a kernel component, as a definition which displays the
+caption `name`.
+
+It has a private boolean argument `mouse-hovered` which can be only accessed
+from within the component itself. So while component invocation, we can't access
+this `mouse-hovered` argument.
+
+-- ds.code: Invalid component invocation
+lang: ftd
+
+\;; This should not be done
+\-- foo: xyz
+$mouse-hovered: false
+
+-- end: ds.page

@@ -7,6 +7,18 @@ impl<T> fastn_section::Spanned<T> {
     }
 }
 
+impl fastn_section::Span {
+    pub fn wrap<T>(&self, value: T) -> fastn_section::Spanned<T> {
+        fastn_section::Spanned {
+            span: self.clone(),
+            value,
+        }
+    }
+    pub fn str<'input>(&self, source: &'input str) -> &'input str {
+        &source[self.start..self.end]
+    }
+}
+
 impl From<fastn_section::Span> for fastn_section::Identifier {
     fn from(value: fastn_section::Span) -> Self {
         fastn_section::Identifier { name: value }
@@ -75,7 +87,7 @@ pub fn extend_spanned<T>(
 
 impl fastn_section::Kind {
     #[allow(dead_code)]
-    fn span(&self) -> fastn_section::Span {
+    pub fn span(&self) -> fastn_section::Span {
         todo!()
         // let mut span = self.doc.clone();
         // extend_spanned(&mut span, &self.visibility);
@@ -85,6 +97,13 @@ impl fastn_section::Kind {
 }
 
 impl fastn_section::Section {
+    pub fn span(&self) -> fastn_section::Span {
+        todo!()
+        // let mut span = self.init.name.name.name.clone();
+        // extend_o_span(&mut span, self.function_marker.clone());
+        //
+        // span.unwrap()
+    }
     pub fn full_name_with_kind<'input>(&self, _source: &'input str) -> &'input str {
         todo!()
     }
@@ -94,7 +113,48 @@ impl fastn_section::Section {
     }
 
     pub fn name<'input>(&self, source: &'input str) -> &'input str {
-        &source[self.init.name.name.name.start..self.init.name.name.name.end]
+        self.init.name.name.name.str(source)
+    }
+
+    pub fn caption_as_plain_string<'input>(&self, source: &'input str) -> Option<&'input str> {
+        self.caption
+            .as_ref()
+            .and_then(|c| c.as_plain_string(source))
+    }
+
+    pub fn header_as_plain_string<'input>(
+        &self,
+        source: &'input str,
+        name: &str,
+    ) -> Option<&'input str> {
+        dbg!(self);
+        self.headers
+            .iter()
+            .find(|h| dbg!(h.name(source)) == dbg!(name))
+            .and_then(|h| h.value.as_plain_string(source))
+    }
+}
+
+impl fastn_section::HeaderValue {
+    pub fn as_plain_string<'input>(&self, source: &'input str) -> Option<&'input str> {
+        if self.0.len() != 1 {
+            return None;
+        }
+
+        match self.0.get(0) {
+            Some(fastn_section::Tes::Text(s)) => Some(s.str(source)),
+            _ => None,
+        }
+    }
+}
+
+impl fastn_section::Header {
+    pub fn name<'input>(&self, source: &'input str) -> &'input str {
+        self.name.name.name.str(source)
+    }
+
+    pub fn span(&self) -> fastn_section::Span {
+        self.name.name.name.clone()
     }
 }
 

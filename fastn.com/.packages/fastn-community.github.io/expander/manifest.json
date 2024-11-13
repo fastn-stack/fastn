@@ -1,0 +1,51 @@
+{
+  "files": {
+    "FASTN.ftd": {
+      "name": "FASTN.ftd",
+      "checksum": "F958E7665D298FB245B9486CA07A0CB1977BF00D144AE4632CC56B3385A214EF",
+      "size": 317
+    },
+    "README.md": {
+      "name": "README.md",
+      "checksum": "191F412CA68B858B5187047C6E4845AFDAB0F59BA674A896EAB8E3FA0A0DC362",
+      "size": 74
+    },
+    "doc-site-example.png": {
+      "name": "doc-site-example.png",
+      "checksum": "611E21D16829D0FACDB5D2C21ABA2ADF95BF7359DAFA16FCE1351F0AC0E5C44B",
+      "size": 90059
+    },
+    "images/downarrow-dark.png": {
+      "name": "images/downarrow-dark.png",
+      "checksum": "2E641B375669DC0C2216A21F5323C108E2FC9CD5D58F4FF73A2D036E6103591B",
+      "size": 6324
+    },
+    "images/downarrow.png": {
+      "name": "images/downarrow.png",
+      "checksum": "E781303D66001D3D73431BB3C89119FA54F684E597533A83FA3B7A4C62D871D3",
+      "size": 5122
+    },
+    "images/logo.svg": {
+      "name": "images/logo.svg",
+      "checksum": "EB448956B97334742D603F3D8BAF489EAF5AFBA8C2828324E9D10676D839D622",
+      "size": 8445
+    },
+    "images/uparrow-dark.png": {
+      "name": "images/uparrow-dark.png",
+      "checksum": "ED256577B541F24C004FB92CAD104F18F585B33742E1EB2EDC0322868C85628A",
+      "size": 6307
+    },
+    "images/uparrow.png": {
+      "name": "images/uparrow.png",
+      "checksum": "29A08DFA094DA863D89CDAC77DD2B0D5B08F4C1D350077004C90DCBAA03930C2",
+      "size": 5473
+    },
+    "index.ftd": {
+      "name": "index.ftd",
+      "checksum": "67240A4C960591A4F90BFA260469B6D28006ED6682AF2447D6C9444E55EC99EB",
+      "size": 3168
+    }
+  },
+  "zip_url": "https://github.com/fastn-community/expander/archive/c52b50ed4982c0f66f3dd6f386b3a36d811aa789.zip",
+  "checksum": "C72F00A8AAD6D3993B4988DB9A7D84965C0D476700429CADECDF92CAF1C2509B"
+}

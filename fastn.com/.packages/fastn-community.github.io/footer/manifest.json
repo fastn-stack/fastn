@@ -1,0 +1,191 @@
+{
+  "files": {
+    "Changelog.md": {
+      "name": "Changelog.md",
+      "checksum": "B3B221ACA75950499D44D4AA0EAE6B8E8DADBEA0091F8BAB0D1465E14B4769A5",
+      "size": 1143
+    },
+    "FASTN.ftd": {
+      "name": "FASTN.ftd",
+      "checksum": "FD6F756AA03C7F4258E375AA242E864D43C7511796742D6D668D9F2A5CD4A6B5",
+      "size": 814
+    },
+    "LICENSE": {
+      "name": "LICENSE",
+      "checksum": "5B8B83357C092AC57F28508D18CAB65E4965AAA3BA61226DE038719E022638C1",
+      "size": 1516
+    },
+    "README.md": {
+      "name": "README.md",
+      "checksum": "B82C32C0CB53D14B77D70077C45868BC84698CD15203D3A4B0AD7988107F3081",
+      "size": 1478
+    },
+    "assets/discord-dark.svg": {
+      "name": "assets/discord-dark.svg",
+      "checksum": "EF6AE0A9B6841DB13FA8417A405E3966DD622D1AA28998AC799B6B23843BB1B3",
+      "size": 1399
+    },
+    "assets/discord.svg": {
+      "name": "assets/discord.svg",
+      "checksum": "30616024D62E63C12D9A0D4DDB2DD9C459BC9117147FE6863A1AAFA789241933",
+      "size": 1399
+    },
+    "assets/down-dark.svg": {
+      "name": "assets/down-dark.svg",
+      "checksum": "695E0076E52D35198A605C4619736C988D839AC7E195B43789BBE8599B81BF46",
+      "size": 416
+    },
+    "assets/down.svg": {
+      "name": "assets/down.svg",
+      "checksum": "8ABDABC4DC97C682A712FF3451E796827E472CD0FED4C799625912590FD29A22",
+      "size": 414
+    },
+    "assets/drop-down-dark.svg": {
+      "name": "assets/drop-down-dark.svg",
+      "checksum": "E76BA04B012C6D8503C907D4A1B2F5281EF88C21DB3093481446D4B74E8F8BC6",
+      "size": 243
+    },
+    "assets/drop-down.svg": {
+      "name": "assets/drop-down.svg",
+      "checksum": "89D475FD646AD5100BBE3A914E0510A2311D85BA8F5C8687699B6FD370C11A8D",
+      "size": 242
+    },
+    "assets/drop-up-dark.svg": {
+      "name": "assets/drop-up-dark.svg",
+      "checksum": "AC32CA2F999176F29C7B53FE8D41E922D3E6A54D9AA3CC25CA956164D22E420C",
+      "size": 246
+    },
+    "assets/drop-up.svg": {
+      "name": "assets/drop-up.svg",
+      "checksum": "80DCD8E33700EC2D8765D49A533E3FAA85D4B1C7E3356F49952D58C8180A2C48",
+      "size": 245
+    },
+    "assets/dummy-site-logo.png": {
+      "name": "assets/dummy-site-logo.png",
+      "checksum": "D3D8A3C99985D2F234E694704808A20113C429E848DC07BFE6FA7ED316B0CC79",
+      "size": 2091
+    },
+    "assets/facebook-dark.svg": {
+      "name": "assets/facebook-dark.svg",
+      "checksum": "612E5A5D20C9F6F03902A0CF102CDAC337C951F509628595D645B027492F15B2",
+      "size": 367
+    },
+    "assets/facebook.svg": {
+      "name": "assets/facebook.svg",
+      "checksum": "229286F8BADFC53BADB9F67A345409C5A7D851D6FE569DBCEC1C477ED05C9756",
+      "size": 367
+    },
+    "assets/instagram-dark.svg": {
+      "name": "assets/instagram-dark.svg",
+      "checksum": "F4B701A28C9E753E41736BCEE1A061F02425271EE208F1FFFFC0C350364CD639",
+      "size": 1677
+    },
+    "assets/instagram.svg": {
+      "name": "assets/instagram.svg",
+      "checksum": "185AADB8435E0FCEF94A11981D1F90CB5E5FF1BF57706DD0E9FDA1D908F6AB78",
+      "size": 1677
+    },
+    "assets/ipsum-logo-dark.svg": {
+      "name": "assets/ipsum-logo-dark.svg",
+      "checksum": "8290B3397C465FE1BB40B7CA280C976DF7DA3DABFC655B429805ABF33964FB5B",
+      "size": 16202
+    },
+    "assets/ipsum-logo.svg": {
+      "name": "assets/ipsum-logo.svg",
+      "checksum": "A227CF22E798ACFB2D01B6352FC22A28047444F028AF05440C6CE6F9499C0EDF",
+      "size": 15494
+    },
+    "assets/linkedin.svg": {
+      "name": "assets/linkedin.svg",
+      "checksum": "16560B1BADBB73C952A33455405937861CBF2B9C763AFE1E6DA7CCE850DD5FC8",
+      "size": 996
+    },
+    "assets/logomark.svg": {
+      "name": "assets/logomark.svg",
+      "checksum": "F9335ADB955CBA7743F06A2EBE5F3A889528988AEA0FBBAB15A8ED0E23AA0156",
+      "size": 1936
+    },
+    "assets/on.svg": {
+      "name": "assets/on.svg",
+      "checksum": "629DFFBEB738A25DFB164CAC7E806BAC3F8240F17AC91A5E3A486005C41CE97D",
+      "size": 911
+    },
+    "assets/right-arrow.svg": {
+      "name": "assets/right-arrow.svg",
+      "checksum": "95B87595F4447627E7FE4AB5773F52C857C3C875BF7D09A159D2F55A7F859395",
+      "size": 731
+    },
+    "assets/site-logo.svg": {
+      "name": "assets/site-logo.svg",
+      "checksum": "D365BC96C85D6E4A2A534555A645AA9A4F1B70D0868C81471B7938052AA51653",
+      "size": 1120
+    },
+    "assets/telegram-dark.svg": {
+      "name": "assets/telegram-dark.svg",
+      "checksum": "EECF2B943E021DD4627E11BE7DF0B93DBED8036D53933CCD1A5E5FC8C45BA3E3",
+      "size": 680
+    },
+    "assets/telegram.svg": {
+      "name": "assets/telegram.svg",
+      "checksum": "17C49308152F8E7CE296C5B4D614866CF64F87491A6F3F16E3DCD8CC37FA6D9C",
+      "size": 680
+    },
+    "assets/twitter-dark.svg": {
+      "name": "assets/twitter-dark.svg",
+      "checksum": "9B14FF3BB77CAFF4072D063E0F719FDA7FECA6A8B375DC1E093414F88CFF9D44",
+      "size": 903
+    },
+    "assets/twitter.svg": {
+      "name": "assets/twitter.svg",
+      "checksum": "F03B2923F356917610105EB539C61BAA1537E4AA195E07D5239A0EBE2C47079D",
+      "size": 903
+    },
+    "contribute.ftd": {
+      "name": "contribute.ftd",
+      "checksum": "A486B316A731B117170A738611805C4C45990E586E5DDF346A5EB57510230330",
+      "size": 2443
+    },
+    "docs/fastn-footer.ftd": {
+      "name": "docs/fastn-footer.ftd",
+      "checksum": "1BF4E3970C686FC64A8058BEC4ABD43A720B456DB69D8E1258A85B6C56E1F998",
+      "size": 2054
+    },
+    "docs/index.ftd": {
+      "name": "docs/index.ftd",
+      "checksum": "B7E005FD19066F6FC0FA7D1F562C15E231604A332DD2A946756963BDC1B96B9C",
+      "size": 2999
+    },
+    "docs/left-hug-sitemap-footer.ftd": {
+      "name": "docs/left-hug-sitemap-footer.ftd",
+      "checksum": "4F0950B237AA6F94E9EF97FBC3926DD516650CA883EDE059297262FD060814BF",
+      "size": 6142
+    },
+    "docs/sitemap-footer.ftd": {
+      "name": "docs/sitemap-footer.ftd",
+      "checksum": "6F5CD6BBCFE07182891C6351C31367D9755682999AEC685F5817224F836823CB",
+      "size": 6822
+    },
+    "docs/social-footer.ftd": {
+      "name": "docs/social-footer.ftd",
+      "checksum": "CA0DE0A7EED5469516169CAAF7B2D119B1847E54FD31DCDA0193DDC64501CEFE",
+      "size": 4634
+    },
+    "docs/social-sideline-footer.ftd": {
+      "name": "docs/social-sideline-footer.ftd",
+      "checksum": "356357D1B347818B37CB4C73A0885BD5EAA8E7C0E6F52F035A3607F7624C3755",
+      "size": 6989
+    },
+    "index.ftd": {
+      "name": "index.ftd",
+      "checksum": "434C06E7DECC37C34E6DAFD4CC1334F719450B056BB0001D55F4A8AA38C34A98",
+      "size": 44009
+    },
+    "toc.ftd": {
+      "name": "toc.ftd",
+      "checksum": "4D82B4040E27F5CD8923B2A1FD7166BC081C0D1406AD818140F50600B5ECE63D",
+      "size": 981
+    }
+  },
+  "zip_url": "https://github.com/fastn-community/footer/archive/9b14f6bfa6ebd2103103ff5d02dd4aed152e892f.zip",
+  "checksum": "AB8EC674D31604097FEAC882D40BC4B2BC960FCB24DC3205D71D1CA39C238B08"
+}

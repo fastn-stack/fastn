@@ -1,0 +1,14 @@
+-- import: fastn-stack.github.io/certificates/ambassador
+
+-- ds.page: Ambassador Certification
+
+-- ftd.column:
+width: fill-container
+
+-- ambassador.certificate-2: Krish Gupta
+date: 6th October 2023
+avatar: $assets.files.assets.avatar.krish.png
+
+-- end: ftd.column
+
+-- end: ds.page

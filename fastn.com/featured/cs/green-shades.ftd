@@ -1,0 +1,37 @@
+-- import: fastn.com/featured as ft-ui
+
+
+-- ds.page:
+sidebar: false
+
+-- ft-ui.view-all: Green Color Scheme
+templates: $green-scheme
+
+-- end: ds.page
+
+
+
+
+
+
+
+
+-- ft-ui.template list green-scheme:
+
+-- ft-ui.template: Forest CS
+template-url: /cs/forest-cs/
+screenshot: $fastn-assets.files.images.featured.cs.forest-cs.png
+
+-- ft-ui.template: Midnight Storm CS
+template-url: /cs/midnight-storm-cs/
+screenshot: $fastn-assets.files.images.featured.cs.midnight-storm-cs.png
+
+-- ft-ui.template: Misty Gray CS
+template-url: /cs/misty-gray-cs/
+screenshot: $fastn-assets.files.images.featured.cs.misty-gray-cs.png
+
+-- ft-ui.template: Pretty CS
+template-url: /cs/pretty-cs/
+screenshot: $fastn-assets.files.images.featured.cs.pretty-cs.png
+
+-- end: green-scheme

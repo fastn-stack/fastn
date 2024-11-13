@@ -1,0 +1,75 @@
+-- import: fastn-community.github.io/spectrum-ds/common
+-- import: fastn.com/featured as ft-ui
+
+
+-- ds.user-info: Govindaraman S
+social-links: $social-links
+profile: Designer
+
+-- ds.user-info.works:
+
+	-- ft-ui.grid-view: Hero Components
+	templates: $components
+	show-large: true
+	
+-- end: ds.user-info.works
+
+-- end: ds.user-info
+
+
+
+
+
+
+
+
+
+
+-- common.owner info: Govindaraman S
+profile: /u/govindaraman-s/
+role: Designer
+
+
+
+
+
+-- common.social-media list social-links:
+
+-- common.social-media:
+link: https://github.com/Sarvom
+src: $fastn-assets.files.images.github-grey.svg
+hover-src: $fastn-assets.files.images.github-grey-hover.svg
+
+-- common.social-media:
+link: https://www.linkedin.com/in/govindaraman-s/
+src: $fastn-assets.files.images.linkedin.svg
+hover-src: $fastn-assets.files.images.linkedin-hover.svg
+
+-- end: social-links
+
+
+
+
+-- ft-ui.template list components:
+
+-- ft-ui.template: Hero Bottom Hug
+template-url: /hero-bottom-hug/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-bottom-hug.png
+
+-- ft-ui.template: Hero Bottom Hug Search
+template-url: /hero-bottom-hug-search/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-bottom-hug-search.png
+
+-- ft-ui.template: Hero Left Hug Expanded Search
+template-url: /hero-left-hug-expanded-search/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-left-hug-expanded-search.jpg
+
+-- ft-ui.template: Hero Left Hug Expanded
+template-url: /hero-left-hug-expanded/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-left-hug-expanded.jpg
+
+-- ft-ui.template: Hero Right Hug Expanded Search
+template-url: /hero-right-hug-expanded-search/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-expanded-search.jpg
+
+-- end: components

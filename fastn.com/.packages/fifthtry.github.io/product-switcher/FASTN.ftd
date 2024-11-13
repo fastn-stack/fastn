@@ -1,0 +1,17 @@
+-- import: fastn
+
+-- fastn.package: fifthtry.github.io/product-switcher
+
+-- fastn.dependency: fifthtry.github.io/code-block
+-- fastn.dependency: fastn-community.github.io/site-doc
+
+ 
+
+
+-- fastn.sitemap:
+
+# Home: /
+
+- Documentation: /docs/
+
+# GitHub: https://github.com/FifthTry/product-switcher
