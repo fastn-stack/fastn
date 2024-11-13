@@ -32,4 +32,7 @@ pub use variable::{ConditionalValue, Variable};
 mod web_component;
 pub use web_component::WebComponentDefinition;
 
+mod or_type;
+pub use or_type::{OrType, OrTypeVariant};
+
 pub type Map<T> = std::collections::BTreeMap<String, T>;

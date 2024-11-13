@@ -530,14 +530,14 @@ fn validate_record_fields(
 }
 
 fn check_variant_if_constant(
-    or_variant: &ftd::interpreter::OrTypeVariant,
+    or_variant: &fastn_type::OrTypeVariant,
     _remaining: Option<String>,
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::interpreter::Result<()> {
     match or_variant {
-        ftd::interpreter::OrTypeVariant::AnonymousRecord(_r) => {} // Todo: check on remaining for constant and throw error if found
-        ftd::interpreter::OrTypeVariant::Regular(_r) => {} // Todo: check on remaining for constant and throw error if found
-        ftd::interpreter::OrTypeVariant::Constant(c) => {
+        fastn_type::OrTypeVariant::AnonymousRecord(_r) => {} // Todo: check on remaining for constant and throw error if found
+        fastn_type::OrTypeVariant::Regular(_r) => {} // Todo: check on remaining for constant and throw error if found
+        fastn_type::OrTypeVariant::Constant(c) => {
             return ftd::interpreter::utils::e2(
                 format!("Cannot pass deconstructed constant variant `{}`", c.name),
                 doc.name,

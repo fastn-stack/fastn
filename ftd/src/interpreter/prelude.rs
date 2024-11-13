@@ -5,8 +5,4 @@ pub use ftd::interpreter::main::{
     ToProcessItem,
 };
 
-pub use ftd::interpreter::things::{
-    default,
-    or_type::{OrType, OrTypeVariant},
-    Thing,
-};
+pub use ftd::interpreter::things::{default, Thing};

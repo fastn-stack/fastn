@@ -1,5 +1,6 @@
 use ftd::interpreter::expression::ExpressionExt;
 use ftd::interpreter::things::component::ComponentDefinitionExt;
+use ftd::interpreter::things::or_type::OrTypeVariantExt;
 use ftd::interpreter::things::record::RecordExt;
 use ftd::interpreter::FunctionExt;
 
@@ -83,7 +84,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::OrType> {
+    ) -> ftd::interpreter::Result<fastn_type::OrType> {
         match self.get_thing(name, line_number)? {
             ftd::interpreter::Thing::OrType(ot) => Ok(ot),
             t => self.err(
@@ -818,7 +819,7 @@ impl<'a> TDoc<'a> {
         &mut self,
         name: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::OrType>> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::OrType>> {
         match self.search_thing(name, line_number)? {
             ftd::interpreter::StateWithThing::State(s) => {
                 Ok(ftd::interpreter::StateWithThing::new_state(s))
@@ -843,7 +844,7 @@ impl<'a> TDoc<'a> {
         name: &str,
         line_number: usize,
     ) -> ftd::interpreter::Result<
-        ftd::interpreter::StateWithThing<(String, ftd::interpreter::OrTypeVariant)>,
+        ftd::interpreter::StateWithThing<(String, fastn_type::OrTypeVariant)>,
     > {
         match self.search_thing(name, line_number)? {
             ftd::interpreter::StateWithThing::State(s) => {
@@ -997,11 +998,7 @@ impl<'a> TDoc<'a> {
                         _ => thing.clone(),
                     }
                 }
-                ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
-                    name,
-                    variants,
-                    ..
-                }) => {
+                ftd::interpreter::Thing::OrType(fastn_type::OrType { name, variants, .. }) => {
                     let variant = variants
                         .iter()
                         .find_or_first(|variant| variant.name().eq(&format!("{name}.{v}")))
@@ -1457,12 +1454,8 @@ impl<'a> TDoc<'a> {
                         _ => thing,
                     }
                 }
-                ftd::interpreter::Thing::OrType(ftd::interpreter::OrType {
-                    name,
-                    variants,
-                    ..
-                }) => {
-                    let or_type_name = ftd::interpreter::OrType::or_type_name(name.as_str());
+                ftd::interpreter::Thing::OrType(fastn_type::OrType { name, variants, .. }) => {
+                    let or_type_name = fastn_type::OrType::or_type_name(name.as_str());
                     if let Some(thing) = variants.into_iter().find(|or_type_variant| {
                         let variant_name = or_type_variant.name();
                         variant_name

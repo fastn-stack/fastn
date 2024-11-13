@@ -1,5 +1,6 @@
 use ftd::interpreter::expression::ExpressionExt;
 use ftd::interpreter::things::function::FunctionCallExt;
+use ftd::interpreter::things::or_type::OrTypeVariantExt;
 use ftd::interpreter::things::record::FieldExt;
 use ftd::interpreter::{FunctionExt, KindExt};
 
@@ -776,8 +777,8 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                                 line_number: value.line_number(),
                             })?;
                         let value = match &variant {
-                            ftd::interpreter::OrTypeVariant::Constant(c) => return ftd::interpreter::utils::e2(format!("Cannot pass constant variant as property, variant: `{}`. Help: Pass variant as value instead", c.name), doc.name, c.line_number),
-                            ftd::interpreter::OrTypeVariant::AnonymousRecord(record) =>
+                            fastn_type::OrTypeVariant::Constant(c) => return ftd::interpreter::utils::e2(format!("Cannot pass constant variant as property, variant: `{}`. Help: Pass variant as value instead", c.name), doc.name, c.line_number),
+                            fastn_type::OrTypeVariant::AnonymousRecord(record) =>
                                 try_ok_state!(fastn_type::PropertyValue::from_record(
                         record,
                         value,
@@ -787,7 +788,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                         definition_name_with_arguments,
                         loop_object_name_and_kind,
                     )?),
-                            ftd::interpreter::OrTypeVariant::Regular(regular) => {
+                            fastn_type::OrTypeVariant::Regular(regular) => {
                                 let mut variant_name = variant_name.trim_start_matches(format!("{}.", variant.name()).as_str()).trim().to_string();
                                 if variant_name.eq(&variant.name()) {
                                     variant_name = "".to_string();
@@ -1617,18 +1618,17 @@ impl ValueExt for fastn_type::Value {
 
     fn ui(
         &self,
-        _doc_id: &str,
-        _line_number: usize,
+        doc_id: &str,
+        line_number: usize,
     ) -> ftd::interpreter::Result<fastn_type::Component> {
-        todo!()
-        // match self {
-        //     fastn_type::Value::UI { component, .. } => Ok(component.to_owned()),
-        //     t => ftd::interpreter::utils::e2(
-        //         format!("Expected UI, found: `{:?}`", t),
-        //         doc_id,
-        //         line_number,
-        //     ),
-        // }
+        match self {
+            fastn_type::Value::UI { component, .. } => Ok(component.to_owned()),
+            t => ftd::interpreter::utils::e2(
+                format!("Expected UI, found: `{:?}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
     }
 
     fn record_fields(

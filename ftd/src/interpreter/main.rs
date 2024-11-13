@@ -1,5 +1,6 @@
 use ftd::interpreter::expression::ExpressionExt;
 use ftd::interpreter::things::component::ComponentDefinitionExt;
+use ftd::interpreter::things::or_type::OrTypeExt;
 use ftd::interpreter::things::record::RecordExt;
 use ftd::interpreter::things::web_component::WebComponentDefinitionExt;
 use ftd::interpreter::FunctionExt;
@@ -319,10 +320,10 @@ impl InterpreterState {
             } else if ast.is_or_type() {
                 if !is_in_bag {
                     if number_of_scan.eq(&1) {
-                        ftd::interpreter::OrType::scan_ast(ast, &mut doc)?;
+                        fastn_type::OrType::scan_ast(ast, &mut doc)?;
                         continue;
                     } else {
-                        match ftd::interpreter::OrType::from_ast(ast, &mut doc)? {
+                        match fastn_type::OrType::from_ast(ast, &mut doc)? {
                             ftd::interpreter::StateWithThing::State(s) => {
                                 return Ok(s.into_interpreter(self))
                             }

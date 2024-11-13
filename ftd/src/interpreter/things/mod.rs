@@ -12,10 +12,10 @@ pub(crate) mod web_component;
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Thing {
     Record(fastn_type::Record),
-    OrType(ftd::interpreter::OrType),
+    OrType(fastn_type::OrType),
     OrTypeWithVariant {
         or_type: String,
-        variant: ftd::interpreter::OrTypeVariant,
+        variant: fastn_type::OrTypeVariant,
     },
     Variable(fastn_type::Variable),
     Component(fastn_type::ComponentDefinition),
