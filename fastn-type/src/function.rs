@@ -1,4 +1,36 @@
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct Function {
+    pub name: String,
+    pub return_kind: fastn_type::KindData,
+    pub arguments: Vec<fastn_type::Argument>,
+    pub expression: Vec<fastn_type::FunctionExpression>,
+    pub js: Option<fastn_type::PropertyValue>,
+    pub line_number: usize,
+    pub external_implementation: bool,
+}
+
+impl Function {
+    pub fn new(
+        name: &str,
+        return_kind: fastn_type::KindData,
+        arguments: Vec<fastn_type::Argument>,
+        expression: Vec<fastn_type::FunctionExpression>,
+        js: Option<fastn_type::PropertyValue>,
+        line_number: usize,
+    ) -> Function {
+        Function {
+            name: name.to_string(),
+            return_kind,
+            arguments,
+            expression,
+            js,
+            line_number,
+            external_implementation: false,
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct FunctionCall {
     pub name: String,
     pub kind: fastn_type::KindData,
@@ -30,4 +62,10 @@ impl FunctionCall {
             module_name,
         }
     }
+}
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct FunctionExpression {
+    pub expression: String,
+    pub line_number: usize,
 }

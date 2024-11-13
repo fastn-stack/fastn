@@ -305,7 +305,7 @@ pub struct Component {
     pub name: String,
     pub properties: Vec<Property>,
     pub iteration: Box<Option<Loop>>,
-    pub condition: Box<Option<ftd::interpreter::Expression>>,
+    pub condition: Box<Option<fastn_type::Expression>>,
     pub events: Vec<Event>,
     pub children: Vec<Component>,
     pub source: ComponentSource,

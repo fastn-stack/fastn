@@ -84,7 +84,7 @@ pub(crate) fn update_instruction_for_loop_element(
 
 pub(crate) fn update_condition_in_component(
     component: &mut fastn_type::Component,
-    outer_condition: ftd::interpreter::Expression,
+    outer_condition: fastn_type::Expression,
 ) {
     if let Some(condition) = component.condition.as_mut() {
         let references = {
@@ -92,7 +92,7 @@ pub(crate) fn update_condition_in_component(
             reference.extend(condition.references.to_owned());
             reference
         };
-        let new_condition = ftd::interpreter::Expression {
+        let new_condition = fastn_type::Expression {
             expression: fastn_grammar::evalexpr::ExprNode::new(
                 fastn_grammar::evalexpr::Operator::RootNode,
             )
@@ -296,7 +296,7 @@ fn update_local_variable_reference_in_property(
 }
 
 fn update_local_variable_reference_in_condition(
-    condition: &mut ftd::interpreter::Expression,
+    condition: &mut fastn_type::Expression,
     local_variable: &ftd::Map<String>,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     replace_property_value: &ftd::Map<fastn_type::PropertyValue>,
@@ -593,7 +593,7 @@ pub(crate) fn replace_last_occurrence(s: &str, old_word: &str, new_word: &str) -
 pub(crate) fn get_evaluated_property(
     target_property: &fastn_type::Property,
     properties: &[fastn_type::Property],
-    arguments: &[ftd::interpreter::Argument],
+    arguments: &[fastn_type::Argument],
     component_name: &str,
     doc_name: &str,
     line_number: usize,

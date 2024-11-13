@@ -1,3 +1,8 @@
+use ftd::interpreter::expression::ExpressionExt;
+use ftd::interpreter::things::component::ComponentDefinitionExt;
+use ftd::interpreter::things::record::RecordExt;
+use ftd::interpreter::FunctionExt;
+
 #[derive(Debug, PartialEq)]
 pub struct TDoc<'a> {
     pub name: &'a str,
@@ -62,7 +67,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Record> {
+    ) -> ftd::interpreter::Result<fastn_type::Record> {
         match self.get_thing(name, line_number)? {
             ftd::interpreter::Thing::Record(r) => Ok(r),
             t => self.err(
@@ -94,7 +99,7 @@ impl<'a> TDoc<'a> {
         &mut self,
         name: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Record>> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::Record>> {
         match self.search_thing(name, line_number)? {
             ftd::interpreter::StateWithThing::State(s) => {
                 Ok(ftd::interpreter::StateWithThing::new_state(s))
@@ -541,11 +546,8 @@ impl<'a> TDoc<'a> {
         &mut self,
         name: &str,
         line_number: usize,
-        component_definition_name_with_arguments: &Option<(
-            &str,
-            &mut [ftd::interpreter::Argument],
-        )>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
+        component_definition_name_with_arguments: &Option<(&str, &mut [fastn_type::Argument])>,
+        loop_object_name_and_kind: &Option<(String, fastn_type::Argument, Option<String>)>,
     ) -> ftd::interpreter::Result<
         ftd::interpreter::StateWithThing<(
             fastn_type::PropertyValueSource,
@@ -735,7 +737,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::ComponentDefinition> {
+    ) -> ftd::interpreter::Result<fastn_type::ComponentDefinition> {
         match self.get_thing(name, line_number)? {
             ftd::interpreter::Thing::Component(c) => Ok(c),
             t => self.err(
@@ -767,9 +769,8 @@ impl<'a> TDoc<'a> {
         &mut self,
         name: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<
-        ftd::interpreter::StateWithThing<ftd::interpreter::ComponentDefinition>,
-    > {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::ComponentDefinition>>
+    {
         match self.search_thing(name, line_number)? {
             ftd::interpreter::StateWithThing::State(s) => {
                 Ok(ftd::interpreter::StateWithThing::new_state(s))
@@ -1029,7 +1030,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Function> {
+    ) -> ftd::interpreter::Result<fastn_type::Function> {
         let initial_thing = self.get_initial_thing(name, line_number)?.0;
         initial_thing.function(self.name, line_number)
     }
@@ -1038,8 +1039,7 @@ impl<'a> TDoc<'a> {
         &mut self,
         name: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Function>>
-    {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::Function>> {
         let name = ftd_p1::AccessModifier::remove_modifiers(name);
         let initial_thing = try_ok_state!(self.search_initial_thing(name.as_str(), line_number)?).0;
         Ok(ftd::interpreter::StateWithThing::new_thing(

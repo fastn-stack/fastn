@@ -1,3 +1,5 @@
+use ftd::interpreter::expression::ExpressionExt;
+
 #[derive(Debug, PartialEq)]
 pub struct ExecuteDoc<'a> {
     pub name: &'a str,
@@ -269,7 +271,7 @@ impl ExecuteDoc<'_> {
         instruction: &fastn_type::Component,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
-        component_definition: ftd::interpreter::ComponentDefinition,
+        component_definition: fastn_type::ComponentDefinition,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<fastn_type::Component> {
         let mut component_definition = component_definition;
@@ -744,7 +746,7 @@ impl ExecuteDoc<'_> {
         instruction: &fastn_type::Component,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
-        component_definition: ftd::interpreter::ComponentDefinition,
+        component_definition: fastn_type::ComponentDefinition,
     ) -> ftd::executor::Result<ftd::executor::Element> {
         let mut component_definition = component_definition;
         let local_variable_map = doc.insert_local_variables(
@@ -774,7 +776,7 @@ impl ExecuteDoc<'_> {
         instruction: &fastn_type::Component,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
-        component_definition: &ftd::interpreter::ComponentDefinition,
+        component_definition: &fastn_type::ComponentDefinition,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<()> {
         use itertools::Itertools;
@@ -807,7 +809,7 @@ impl ExecuteDoc<'_> {
         instruction: &fastn_type::Component,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
-        component_definition: &ftd::interpreter::ComponentDefinition,
+        component_definition: &fastn_type::ComponentDefinition,
         is_dummy: bool,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
         device: Option<ftd::executor::Device>,
@@ -1109,7 +1111,7 @@ impl Device {
                 fastn_grammar::evalexpr::ExprNode::new(fastn_grammar::evalexpr::Operator::RootNode)
                     .add_children(vec![expression]);
 
-            let condition = ftd::interpreter::Expression {
+            let condition = fastn_type::Expression {
                 expression,
                 references: std::iter::IntoIterator::into_iter([(
                     "ftd.device".to_string(),

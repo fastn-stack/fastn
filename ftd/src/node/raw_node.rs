@@ -2,7 +2,7 @@
 pub struct RawNode {
     pub name: String,
     pub node: ftd::node::Node,
-    pub arguments: Vec<ftd::interpreter::Argument>,
+    pub arguments: Vec<fastn_type::Argument>,
 }
 
 impl RawNode {

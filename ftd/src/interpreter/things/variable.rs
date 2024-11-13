@@ -260,14 +260,14 @@ impl Variable {
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct ConditionalValue {
-    pub condition: ftd::interpreter::Expression,
+    pub condition: fastn_type::Expression,
     pub value: fastn_type::PropertyValue,
     pub line_number: usize,
 }
 
 impl ConditionalValue {
     pub fn new(
-        condition: ftd::interpreter::Expression,
+        condition: fastn_type::Expression,
         value: fastn_type::PropertyValue,
         line_number: usize,
     ) -> ConditionalValue {

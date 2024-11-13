@@ -4,7 +4,7 @@ pub struct Node {
     pub events: Vec<Event>,
     pub node: String,
     pub display: String,
-    pub condition: Option<ftd::interpreter::Expression>,
+    pub condition: Option<fastn_type::Expression>,
     pub attrs: ftd::Map<ftd::node::Value>,
     pub style: ftd::Map<ftd::node::Value>,
     pub children: Vec<Node>,

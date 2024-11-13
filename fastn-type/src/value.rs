@@ -183,7 +183,7 @@ pub enum Value {
     },
     Module {
         name: String,
-        // things: fastn_type::Map<fastn_type::ModuleThing>,
+        things: fastn_type::Map<fastn_type::ModuleThing>,
     },
 }
 
@@ -273,6 +273,50 @@ impl Value {
         match self {
             fastn_type::Value::Module { name, .. } => Some(name.to_string()),
             _ => None,
+        }
+    }
+
+    pub fn mut_module_optional(
+        &mut self,
+    ) -> Option<(&str, &mut fastn_type::Map<fastn_type::ModuleThing>)> {
+        match self {
+            fastn_type::Value::Module { name, things } => Some((name, things)),
+            _ => None,
+        }
+    }
+
+    pub fn is_null(&self) -> bool {
+        if let Self::String { text, .. } = self {
+            return text.is_empty();
+        }
+        if let Self::Optional { data, .. } = self {
+            let value = if let Some(fastn_type::Value::String { text, .. }) = data.as_ref() {
+                text.is_empty()
+            } else {
+                false
+            };
+            if data.as_ref().eq(&None) || value {
+                return true;
+            }
+        }
+        false
+    }
+
+    pub fn is_empty(&self) -> bool {
+        if let Self::List { data, .. } = self {
+            if data.is_empty() {
+                return true;
+            }
+        }
+        false
+    }
+
+    pub fn is_equal(&self, other: &Self) -> bool {
+        match (self.to_owned().inner(), other.to_owned().inner()) {
+            (Some(Value::String { text: ref a, .. }), Some(Value::String { text: ref b, .. })) => {
+                a == b
+            }
+            (a, b) => a == b,
         }
     }
 }

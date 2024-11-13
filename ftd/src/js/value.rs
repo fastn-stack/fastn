@@ -160,8 +160,16 @@ fn properties_to_js_conditional_formula(
     }
 }
 
-impl ftd::interpreter::Expression {
-    pub(crate) fn get_deps(&self, rdata: &ftd::js::ResolverData) -> Vec<String> {
+pub(crate) trait ExpressionExt {
+    fn get_deps(&self, rdata: &ftd::js::ResolverData) -> Vec<String>;
+    fn update_node_with_variable_reference_js(
+        &self,
+        rdata: &ftd::js::ResolverData,
+    ) -> fastn_grammar::evalexpr::ExprNode;
+}
+
+impl ExpressionExt for fastn_type::Expression {
+    fn get_deps(&self, rdata: &ftd::js::ResolverData) -> Vec<String> {
         use ftd::js::fastn_type_functions::PropertyValueExt;
 
         let mut deps = vec![];
@@ -171,7 +179,7 @@ impl ftd::interpreter::Expression {
         deps
     }
 
-    pub fn update_node_with_variable_reference_js(
+    fn update_node_with_variable_reference_js(
         &self,
         rdata: &ftd::js::ResolverData,
     ) -> fastn_grammar::evalexpr::ExprNode {
@@ -216,8 +224,19 @@ impl ftd::interpreter::Expression {
     }
 }
 
-impl ftd::interpreter::Argument {
-    pub(crate) fn get_default_value(&self) -> Option<ftd::js::Value> {
+pub(crate) trait ArgumentExt {
+    fn get_default_value(&self) -> Option<ftd::js::Value>;
+    fn get_value(&self, properties: &[fastn_type::Property]) -> ftd::js::Value;
+    fn get_optional_value(
+        &self,
+        properties: &[fastn_type::Property],
+        // doc_name: &str,
+        // line_number: usize
+    ) -> Option<ftd::js::Value>;
+}
+
+impl ArgumentExt for fastn_type::Argument {
+    fn get_default_value(&self) -> Option<ftd::js::Value> {
         use ftd::js::fastn_type_functions::PropertyValueExt;
 
         if let Some(ref value) = self.value {
@@ -236,7 +255,7 @@ impl ftd::interpreter::Argument {
             None
         }
     }
-    pub(crate) fn get_value(&self, properties: &[fastn_type::Property]) -> ftd::js::Value {
+    fn get_value(&self, properties: &[fastn_type::Property]) -> ftd::js::Value {
         if let Some(value) = self.get_optional_value(properties) {
             value
         } else if let Some(value) = self.get_default_value() {
@@ -246,7 +265,7 @@ impl ftd::interpreter::Argument {
         }
     }
 
-    pub(crate) fn get_optional_value(
+    fn get_optional_value(
         &self,
         properties: &[fastn_type::Property],
         // doc_name: &str,
@@ -269,7 +288,7 @@ impl ftd::interpreter::Argument {
 pub(crate) fn get_optional_js_value(
     key: &str,
     properties: &[fastn_type::Property],
-    arguments: &[ftd::interpreter::Argument],
+    arguments: &[fastn_type::Argument],
 ) -> Option<ftd::js::Value> {
     let argument = arguments.iter().find(|v| v.name.eq(key)).unwrap();
     argument.get_optional_value(properties)
@@ -278,7 +297,7 @@ pub(crate) fn get_optional_js_value(
 pub(crate) fn get_optional_js_value_with_default(
     key: &str,
     properties: &[fastn_type::Property],
-    arguments: &[ftd::interpreter::Argument],
+    arguments: &[fastn_type::Argument],
 ) -> Option<ftd::js::Value> {
     let argument = arguments.iter().find(|v| v.name.eq(key)).unwrap();
     argument
@@ -289,7 +308,7 @@ pub(crate) fn get_optional_js_value_with_default(
 pub(crate) fn get_js_value_with_default(
     key: &str,
     properties: &[fastn_type::Property],
-    arguments: &[ftd::interpreter::Argument],
+    arguments: &[fastn_type::Argument],
     default: ftd::js::Value,
 ) -> ftd::js::Value {
     ftd::js::value::get_optional_js_value(key, properties, arguments).unwrap_or(default)

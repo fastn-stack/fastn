@@ -1,28 +1,38 @@
-#[derive(Debug, Default, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Record {
-    pub name: String,
-    pub fields: Vec<Field>,
-    pub line_number: usize,
+pub(crate) trait RecordExt {
+    fn scan_ast(
+        ast: ftd_ast::Ast,
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()>;
+    fn scan_record(
+        record: ftd_ast::Record,
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()>;
+    fn from_ast(
+        ast: ftd_ast::Ast,
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::Record>>;
+    fn from_record(
+        record: ftd_ast::Record,
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::Record>>;
+    fn get_field(
+        &self,
+        name: &str,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<&fastn_type::Field>;
 }
 
-impl Record {
-    fn new(name: &str, fields: Vec<Field>, line_number: usize) -> Record {
-        Record {
-            name: name.to_string(),
-            fields,
-            line_number,
-        }
-    }
-
-    pub(crate) fn scan_ast(
+impl RecordExt for fastn_type::Record {
+    fn scan_ast(
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         let record = ast.get_record(doc.name)?;
-        Record::scan_record(record, doc)
+        fastn_type::Record::scan_record(record, doc)
     }
 
-    pub(crate) fn scan_record(
+    fn scan_record(
         record: ftd_ast::Record,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
@@ -32,21 +42,21 @@ impl Record {
             fastn_type::Kind::record(name.as_str()),
         )])
         .collect::<ftd::Map<fastn_type::Kind>>();
-        Field::scan_ast_fields(record.fields, doc, &known_kinds)
+        fastn_type::Field::scan_ast_fields(record.fields, doc, &known_kinds)
     }
 
-    pub(crate) fn from_ast(
+    fn from_ast(
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Record>> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::Record>> {
         let record = ast.get_record(doc.name)?;
-        Record::from_record(record, doc)
+        fastn_type::Record::from_record(record, doc)
     }
 
-    pub(crate) fn from_record(
+    fn from_record(
         record: ftd_ast::Record,
         doc: &mut ftd::interpreter::TDoc,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Record>> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::Record>> {
         let name = doc.resolve_name(record.name.as_str());
         let known_kinds = std::iter::IntoIterator::into_iter([(
             record.name.to_string(),
@@ -55,26 +65,24 @@ impl Record {
             },
         )])
         .collect::<ftd::Map<fastn_type::Kind>>();
-        let fields = try_ok_state!(Field::from_ast_fields(
+        let fields = try_ok_state!(fastn_type::Field::from_ast_fields(
             record.name.as_str(),
             record.fields,
             doc,
             &known_kinds
         )?);
         validate_record_fields(name.as_str(), &fields, doc.name)?;
-        Ok(ftd::interpreter::StateWithThing::new_thing(Record::new(
-            name.as_str(),
-            fields,
-            record.line_number,
-        )))
+        Ok(ftd::interpreter::StateWithThing::new_thing(
+            fastn_type::Record::new(name.as_str(), fields, record.line_number),
+        ))
     }
 
-    pub(crate) fn get_field(
+    fn get_field(
         &self,
         name: &str,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<&Field> {
+    ) -> ftd::interpreter::Result<&fastn_type::Field> {
         use itertools::Itertools;
 
         let field = self.fields.iter().filter(|v| v.name.eq(name)).collect_vec();
@@ -106,35 +114,84 @@ impl Record {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Field {
-    pub name: String,
-    pub kind: fastn_type::KindData,
-    pub mutable: bool,
-    pub value: Option<fastn_type::PropertyValue>,
-    pub line_number: usize,
-    pub access_modifier: ftd_p1::AccessModifier,
+pub(crate) trait FieldExt {
+    fn get_default_interpreter_property_value(
+        &self,
+        properties: &[fastn_type::Property],
+    ) -> ftd::interpreter::Result<Option<fastn_type::PropertyValue>>;
+    fn get_default_interpreter_value(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+        properties: &[fastn_type::Property],
+    ) -> ftd::interpreter::Result<Option<fastn_type::Value>>;
+    fn scan_ast_fields(
+        fields: Vec<ftd_ast::Field>,
+        doc: &mut ftd::interpreter::TDoc,
+        known_kinds: &ftd::Map<fastn_type::Kind>,
+    ) -> ftd::interpreter::Result<()>;
+    fn resolve_kinds_from_ast_fields(
+        ast_fields: Vec<ftd_ast::Field>,
+        doc: &mut ftd::interpreter::TDoc,
+        known_kinds: &ftd::Map<fastn_type::Kind>,
+    ) -> ftd::interpreter::Result<
+        ftd::interpreter::StateWithThing<Vec<ftd::executor::FieldWithValue>>,
+    >;
+    fn resolve_values_from_ast_fields(
+        definition_name: &str,
+        fields_with_resolved_kinds: Vec<(fastn_type::Field, Option<ftd_ast::VariableValue>)>,
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<fastn_type::Field>>>;
+    fn from_ast_fields(
+        name: &str,
+        fields: Vec<ftd_ast::Field>,
+        doc: &mut ftd::interpreter::TDoc,
+        known_kinds: &ftd::Map<fastn_type::Kind>,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<fastn_type::Field>>>;
+    fn scan_ast_field(
+        field: ftd_ast::Field,
+        doc: &mut ftd::interpreter::TDoc,
+        known_kinds: &ftd::Map<fastn_type::Kind>,
+    ) -> ftd::interpreter::Result<()>;
+    fn from_ast_field(
+        field: ftd_ast::Field,
+        doc: &mut ftd::interpreter::TDoc,
+        known_kinds: &ftd::Map<fastn_type::Kind>,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::Field>>;
+    fn from_ast_field_kind(
+        field: ftd_ast::Field,
+        doc: &mut ftd::interpreter::TDoc,
+        known_kinds: &ftd::Map<fastn_type::Kind>,
+    ) -> ftd::interpreter::Result<
+        ftd::interpreter::StateWithThing<(fastn_type::Field, Option<ftd_ast::VariableValue>)>,
+    >;
+    fn for_component_or_web_component(
+        component_name: &str,
+        definition_name_with_arguments: &Option<(&str, &mut [fastn_type::Field])>,
+        doc: &mut ftd::interpreter::TDoc,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<fastn_type::Field>>>;
+    fn for_component(
+        component_name: &str,
+        definition_name_with_arguments: &Option<(&str, &mut [fastn_type::Field])>,
+        doc: &mut ftd::interpreter::TDoc,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<fastn_type::Field>>>;
+    fn for_web_component(
+        component_name: &str,
+        definition_name_with_arguments: &Option<(&str, &mut [fastn_type::Field])>,
+        doc: &mut ftd::interpreter::TDoc,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<fastn_type::Field>>>;
+    fn update_with_or_type_variant(
+        &mut self,
+        doc: &mut ftd::interpreter::TDoc,
+        variant: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<()>>;
 }
 
-impl Field {
-    pub fn new(
-        name: &str,
-        kind: fastn_type::KindData,
-        mutable: bool,
-        value: Option<fastn_type::PropertyValue>,
-        line_number: usize,
-    ) -> Field {
-        Field {
-            name: name.to_string(),
-            kind,
-            mutable,
-            value,
-            line_number,
-            access_modifier: Default::default(),
-        }
-    }
-
-    pub(crate) fn get_default_interpreter_property_value(
+impl FieldExt for fastn_type::Field {
+    fn get_default_interpreter_property_value(
         &self,
         properties: &[fastn_type::Property],
     ) -> ftd::interpreter::Result<Option<fastn_type::PropertyValue>> {
@@ -156,7 +213,7 @@ impl Field {
         Ok(None)
     }
 
-    pub(crate) fn get_default_interpreter_value(
+    fn get_default_interpreter_value(
         &self,
         doc: &ftd::interpreter::TDoc,
         properties: &[fastn_type::Property],
@@ -170,64 +227,18 @@ impl Field {
         Ok(None)
     }
 
-    pub fn to_sources(&self) -> Vec<fastn_type::PropertySource> {
-        let mut sources = vec![fastn_type::PropertySource::Header {
-            name: self.name.to_string(),
-            mutable: self.mutable,
-        }];
-        if self.is_caption() {
-            sources.push(fastn_type::PropertySource::Caption);
-        }
-
-        if self.is_body() {
-            sources.push(fastn_type::PropertySource::Body);
-        }
-
-        if self.is_subsection_ui() {
-            sources.push(fastn_type::PropertySource::Subsection);
-        }
-
-        sources
-    }
-
-    pub fn default(name: &str, kind: fastn_type::KindData) -> Field {
-        Field {
-            name: name.to_string(),
-            kind,
-            mutable: false,
-            value: None,
-            line_number: 0,
-            access_modifier: Default::default(),
-        }
-    }
-
-    pub fn default_with_value(
-        name: &str,
-        kind: fastn_type::KindData,
-        value: fastn_type::PropertyValue,
-    ) -> Field {
-        Field {
-            name: name.to_string(),
-            kind,
-            mutable: false,
-            value: Some(value),
-            line_number: 0,
-            access_modifier: Default::default(),
-        }
-    }
-
-    pub(crate) fn scan_ast_fields(
+    fn scan_ast_fields(
         fields: Vec<ftd_ast::Field>,
         doc: &mut ftd::interpreter::TDoc,
         known_kinds: &ftd::Map<fastn_type::Kind>,
     ) -> ftd::interpreter::Result<()> {
         for field in fields {
-            Field::scan_ast_field(field, doc, known_kinds)?;
+            fastn_type::Field::scan_ast_field(field, doc, known_kinds)?;
         }
         Ok(())
     }
 
-    pub fn resolve_kinds_from_ast_fields(
+    fn resolve_kinds_from_ast_fields(
         ast_fields: Vec<ftd_ast::Field>,
         doc: &mut ftd::interpreter::TDoc,
         known_kinds: &ftd::Map<fastn_type::Kind>,
@@ -236,7 +247,7 @@ impl Field {
     > {
         let mut fields_with_resolved_kinds = vec![];
         for field in ast_fields {
-            fields_with_resolved_kinds.push(try_ok_state!(Field::from_ast_field_kind(
+            fields_with_resolved_kinds.push(try_ok_state!(fastn_type::Field::from_ast_field_kind(
                 field,
                 doc,
                 known_kinds
@@ -247,11 +258,11 @@ impl Field {
         ))
     }
 
-    pub fn resolve_values_from_ast_fields(
+    fn resolve_values_from_ast_fields(
         definition_name: &str,
-        mut fields_with_resolved_kinds: Vec<(Field, Option<ftd_ast::VariableValue>)>,
+        mut fields_with_resolved_kinds: Vec<(fastn_type::Field, Option<ftd_ast::VariableValue>)>,
         doc: &mut ftd::interpreter::TDoc,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<Field>>> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<fastn_type::Field>>> {
         use ftd::interpreter::PropertyValueExt;
         use itertools::Itertools;
 
@@ -285,27 +296,25 @@ impl Field {
         Ok(ftd::interpreter::StateWithThing::new_thing(resolved_fields))
     }
 
-    pub(crate) fn from_ast_fields(
+    fn from_ast_fields(
         name: &str,
         fields: Vec<ftd_ast::Field>,
         doc: &mut ftd::interpreter::TDoc,
         known_kinds: &ftd::Map<fastn_type::Kind>,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<Field>>> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<fastn_type::Field>>> {
         // First resolve all kinds from ast fields
-        let partial_resolved_fields = try_ok_state!(Field::resolve_kinds_from_ast_fields(
-            fields,
-            doc,
-            known_kinds
-        )?);
+        let partial_resolved_fields = try_ok_state!(
+            fastn_type::Field::resolve_kinds_from_ast_fields(fields, doc, known_kinds)?
+        );
 
         // Once ast kinds are resolved, then try resolving ast values
         let resolved_fields =
-            Field::resolve_values_from_ast_fields(name, partial_resolved_fields, doc)?;
+            fastn_type::Field::resolve_values_from_ast_fields(name, partial_resolved_fields, doc)?;
 
         Ok(resolved_fields)
     }
 
-    pub(crate) fn scan_ast_field(
+    fn scan_ast_field(
         field: ftd_ast::Field,
         doc: &mut ftd::interpreter::TDoc,
         known_kinds: &ftd::Map<fastn_type::Kind>,
@@ -321,11 +330,11 @@ impl Field {
         Ok(())
     }
 
-    pub(crate) fn from_ast_field(
+    fn from_ast_field(
         field: ftd_ast::Field,
         doc: &mut ftd::interpreter::TDoc,
         known_kinds: &ftd::Map<fastn_type::Kind>,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Field>> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::Field>> {
         use ftd::interpreter::{KindDataExt, PropertyValueExt};
 
         let kind = try_ok_state!(fastn_type::KindData::from_ast_kind(
@@ -346,22 +355,24 @@ impl Field {
             None
         };
 
-        Ok(ftd::interpreter::StateWithThing::new_thing(Field {
-            name: field.name.to_string(),
-            kind,
-            mutable: field.mutable,
-            value,
-            line_number: field.line_number,
-            access_modifier: field.access_modifier,
-        }))
+        Ok(ftd::interpreter::StateWithThing::new_thing(
+            fastn_type::Field {
+                name: field.name.to_string(),
+                kind,
+                mutable: field.mutable,
+                value,
+                line_number: field.line_number,
+                access_modifier: access_modifier(field.access_modifier),
+            },
+        ))
     }
 
-    pub(crate) fn from_ast_field_kind(
+    fn from_ast_field_kind(
         field: ftd_ast::Field,
         doc: &mut ftd::interpreter::TDoc,
         known_kinds: &ftd::Map<fastn_type::Kind>,
     ) -> ftd::interpreter::Result<
-        ftd::interpreter::StateWithThing<(Field, Option<ftd_ast::VariableValue>)>,
+        ftd::interpreter::StateWithThing<(fastn_type::Field, Option<ftd_ast::VariableValue>)>,
     > {
         use ftd::interpreter::KindDataExt;
 
@@ -373,43 +384,24 @@ impl Field {
         )?);
 
         Ok(ftd::interpreter::StateWithThing::new_thing((
-            Field {
+            fastn_type::Field {
                 name: field.name.to_string(),
                 kind,
                 mutable: field.mutable,
                 value: None,
                 line_number: field.line_number,
-                access_modifier: field.access_modifier,
+                access_modifier: access_modifier(field.access_modifier),
             },
             field.value,
         )))
     }
 
-    pub fn is_caption(&self) -> bool {
-        self.kind.caption
-    }
-
-    pub fn is_subsection_ui(&self) -> bool {
-        self.kind.kind.clone().inner_list().is_subsection_ui()
-    }
-
-    pub fn is_body(&self) -> bool {
-        self.kind.body
-    }
-
-    pub(crate) fn is_value_required(&self) -> bool {
-        if self.kind.is_optional() || self.kind.is_list() {
-            return false;
-        }
-        self.value.is_none()
-    }
-
-    pub(crate) fn for_component_or_web_component(
+    fn for_component_or_web_component(
         component_name: &str,
-        definition_name_with_arguments: &Option<(&str, &mut [Field])>,
+        definition_name_with_arguments: &Option<(&str, &mut [fastn_type::Field])>,
         doc: &mut ftd::interpreter::TDoc,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<Field>>> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<fastn_type::Field>>> {
         match Self::for_component(
             component_name,
             definition_name_with_arguments,
@@ -430,12 +422,12 @@ impl Field {
             },
         }
     }
-    pub(crate) fn for_component(
+    fn for_component(
         component_name: &str,
-        definition_name_with_arguments: &Option<(&str, &mut [Field])>,
+        definition_name_with_arguments: &Option<(&str, &mut [fastn_type::Field])>,
         doc: &mut ftd::interpreter::TDoc,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<Field>>> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<fastn_type::Field>>> {
         Ok(ftd::interpreter::StateWithThing::new_thing(
             match definition_name_with_arguments {
                 Some((name, arg)) if name.eq(&component_name) => arg.to_vec(),
@@ -444,12 +436,12 @@ impl Field {
         ))
     }
 
-    pub(crate) fn for_web_component(
+    fn for_web_component(
         component_name: &str,
-        definition_name_with_arguments: &Option<(&str, &mut [Field])>,
+        definition_name_with_arguments: &Option<(&str, &mut [fastn_type::Field])>,
         doc: &mut ftd::interpreter::TDoc,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<Field>>> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Vec<fastn_type::Field>>> {
         Ok(ftd::interpreter::StateWithThing::new_thing(
             match definition_name_with_arguments {
                 Some((name, arg)) if name.eq(&component_name) => arg.to_vec(),
@@ -460,7 +452,7 @@ impl Field {
         ))
     }
 
-    pub fn update_with_or_type_variant(
+    fn update_with_or_type_variant(
         &mut self,
         doc: &mut ftd::interpreter::TDoc,
         variant: &str,
@@ -511,9 +503,16 @@ impl Field {
     }
 }
 
+fn access_modifier(am: ftd_p1::AccessModifier) -> fastn_type::AccessModifier {
+    match am {
+        ftd_p1::AccessModifier::Private => fastn_type::AccessModifier::Private,
+        ftd_p1::AccessModifier::Public => fastn_type::AccessModifier::Public,
+    }
+}
+
 fn validate_record_fields(
     rec_name: &str,
-    fields: &[Field],
+    fields: &[fastn_type::Field],
     doc_id: &str,
 ) -> ftd::interpreter::Result<()> {
     if let Some(field) = fields.iter().find(|v| v.mutable) {

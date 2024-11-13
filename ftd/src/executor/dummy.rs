@@ -152,14 +152,14 @@ impl DummyElement {
 
 #[derive(serde::Deserialize, Clone, Debug, PartialEq, serde::Serialize)]
 pub struct ElementConstructor {
-    pub arguments: Vec<ftd::interpreter::Argument>,
+    pub arguments: Vec<fastn_type::Argument>,
     pub element: ftd::executor::Element,
     pub name: String,
 }
 
 impl ElementConstructor {
     pub(crate) fn new(
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         element: ftd::executor::Element,
         name: &str,
     ) -> ElementConstructor {

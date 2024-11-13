@@ -98,16 +98,16 @@ When the interpreter starts, it creates a `bag`
 lang: rs
 
 pub enum Thing {
-    Record(ftd::interpreter::Record),
+    Record(fastn_type::Record),
     OrType(ftd::interpreter::OrType),
     OrTypeWithVariant {
         or_type: String,
         variant: ftd::interpreter::OrTypeVariant,
     },
     Variable(ftd::interpreter::Variable),
-    Component(ftd::interpreter::ComponentDefinition),
+    Component(fastn_type::ComponentDefinition),
     WebComponent(ftd::interpreter::WebComponentDefinition),
-    Function(ftd::interpreter::Function),
+    Function(fastn_type::Function),
 }
 
 -- ds.markdown:

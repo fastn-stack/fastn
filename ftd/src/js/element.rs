@@ -1100,7 +1100,7 @@ pub struct ContainerProperties {
 impl ContainerProperties {
     pub fn from(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
     ) -> ContainerProperties {
         ContainerProperties {
             spacing: ftd::js::value::get_optional_js_value("spacing", properties, arguments),
@@ -1169,7 +1169,7 @@ pub struct Container {
 impl Container {
     pub fn from(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
     ) -> Container {
         Container {
             children: ftd::js::utils::get_js_value_from_properties(
@@ -1241,7 +1241,7 @@ pub struct Row {
 impl InheritedProperties {
     pub fn from(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
     ) -> InheritedProperties {
         InheritedProperties {
             colors: ftd::js::value::get_optional_js_value("colors", properties, arguments),
@@ -1619,7 +1619,7 @@ impl Document {
 impl DocumentMeta {
     pub fn from(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
     ) -> DocumentMeta {
         DocumentMeta {
             favicon: ftd::js::value::get_optional_js_value("favicon", properties, arguments),
@@ -2099,7 +2099,7 @@ pub struct TextCommon {
 impl TextCommon {
     pub fn from(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
     ) -> TextCommon {
         TextCommon {
             text_transform: ftd::js::value::get_optional_js_value(
@@ -2420,7 +2420,7 @@ pub struct Common {
 impl Common {
     pub fn from(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         events: &[fastn_type::Event],
     ) -> Common {
         Common {

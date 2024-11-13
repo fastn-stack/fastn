@@ -977,7 +977,7 @@ fn node_for_properties(
 
 fn dependency_map_from_condition(
     var_dependencies: &mut ftd::VecMap<String>,
-    condition: &Option<ftd::interpreter::Expression>,
+    condition: &Option<fastn_type::Expression>,
     node_change_id: &str,
     doc: &ftd::interpreter::TDoc,
 ) {

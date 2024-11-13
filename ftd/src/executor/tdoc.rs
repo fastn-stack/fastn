@@ -90,7 +90,7 @@ impl TDoc<'_> {
         &mut self,
         component_name: &str,
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         container: &[usize],
         line_number: usize,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
@@ -119,13 +119,13 @@ impl TDoc<'_> {
         &mut self,
         component_name: &str,
         properties: &[fastn_type::Property],
-        argument: &ftd::interpreter::Argument,
+        argument: &fastn_type::Argument,
         container: &[usize],
         line_number: usize,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
         insert_null: bool,
     ) -> ftd::executor::Result<Option<(String, String, Vec<String>)>> {
-        use ftd::interpreter::{PropertyExt, PropertySourceExt};
+        use ftd::interpreter::PropertyExt;
 
         let string_container = ftd::executor::utils::get_string_container(container);
         let source = argument.to_sources();

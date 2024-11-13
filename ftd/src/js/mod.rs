@@ -10,6 +10,7 @@ mod utils;
 mod value;
 
 pub use element::{Common, Element};
+use ftd::js::value::ArgumentExt;
 pub use resolver::ResolverData;
 pub use value::Value;
 
@@ -177,8 +178,11 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
     }
 }
 
-impl ftd::interpreter::Function {
-    pub fn to_ast(&self, doc: &ftd::interpreter::TDoc) -> fastn_js::Ast {
+pub(crate) trait FunctionExt {
+    fn to_ast(&self, doc: &ftd::interpreter::TDoc) -> fastn_js::Ast;
+}
+impl FunctionExt for fastn_type::Function {
+    fn to_ast(&self, doc: &ftd::interpreter::TDoc) -> fastn_js::Ast {
         use itertools::Itertools;
 
         fastn_js::udf_with_arguments(
@@ -265,8 +269,12 @@ impl ftd::interpreter::Variable {
     }
 }
 
-impl ftd::interpreter::ComponentDefinition {
-    pub fn to_ast(
+pub(crate) trait ComponentDefinitionExt {
+    fn to_ast(&self, doc: &ftd::interpreter::TDoc, has_rive_components: &mut bool)
+        -> fastn_js::Ast;
+}
+impl ComponentDefinitionExt for fastn_type::ComponentDefinition {
+    fn to_ast(
         &self,
         doc: &ftd::interpreter::TDoc,
         has_rive_components: &mut bool,

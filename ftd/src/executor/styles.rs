@@ -149,7 +149,7 @@ impl Length {
 
     pub(crate) fn optional_length(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -424,7 +424,7 @@ impl BreakpointWidth {
 
     pub(crate) fn optional_breakpoint_width(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -542,7 +542,7 @@ impl Alignment {
     #[allow(dead_code)]
     pub(crate) fn optional_alignment(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -780,7 +780,7 @@ impl Resizing {
 
     pub(crate) fn optional_resizing(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -1434,7 +1434,7 @@ impl Background {
 
     pub(crate) fn optional_background(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -1910,7 +1910,7 @@ impl Shadow {
 
     pub(crate) fn optional_shadow(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -2062,7 +2062,7 @@ impl Color {
 
     pub(crate) fn optional_color(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -2231,7 +2231,7 @@ impl Spacing {
 
     pub(crate) fn optional_spacing_mode(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -2339,7 +2339,7 @@ impl AlignSelf {
 
     pub(crate) fn optional_align_self(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -2414,7 +2414,7 @@ impl Overflow {
 
     pub(crate) fn optional_overflow(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -2488,7 +2488,7 @@ impl Resize {
 
     pub(crate) fn optional_resize(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -2563,7 +2563,7 @@ impl TextAlign {
 
     pub(crate) fn optional_text_align(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -2701,7 +2701,7 @@ impl Cursor {
 
     pub(crate) fn optional_cursor(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -3079,7 +3079,7 @@ impl ResponsiveType {
 
     pub(crate) fn optional_responsive_type(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -3221,7 +3221,7 @@ impl Anchor {
 
     pub(crate) fn optional_anchor(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -3310,7 +3310,7 @@ impl TextInputType {
 
     pub(crate) fn optional_text_input_type(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -3397,7 +3397,7 @@ impl Region {
 
     pub(crate) fn optional_region(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -3485,7 +3485,7 @@ impl WhiteSpace {
 
     pub(crate) fn optional_whitespace(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -3565,7 +3565,7 @@ impl Display {
 
     pub(crate) fn optional_display(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -3837,7 +3837,7 @@ impl TextStyle {
 
     pub(crate) fn optional_text_style(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -4005,7 +4005,7 @@ impl TextTransform {
 
     pub(crate) fn optional_text_transform(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -4090,7 +4090,7 @@ impl BorderStyle {
 
     pub(crate) fn optional_border_style(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -4171,7 +4171,7 @@ impl ImageFit {
 
     pub(crate) fn optional_image_fit(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -4250,7 +4250,7 @@ impl Loading {
 
     pub(crate) fn loading_with_default(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,

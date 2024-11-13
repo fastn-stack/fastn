@@ -217,7 +217,7 @@ pub(crate) fn function_call_to_js_formula(
 }
 
 pub(crate) fn is_ui_argument(
-    component_arguments: &[ftd::interpreter::Argument],
+    component_arguments: &[fastn_type::Argument],
     remaining: &str,
 ) -> bool {
     component_arguments
@@ -226,7 +226,7 @@ pub(crate) fn is_ui_argument(
 }
 
 pub(crate) fn is_module_argument(
-    component_arguments: &[ftd::interpreter::Argument],
+    component_arguments: &[fastn_type::Argument],
     remaining: &str,
 ) -> Option<String> {
     use ftd::interpreter::PropertyValueExt;

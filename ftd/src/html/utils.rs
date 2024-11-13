@@ -1,3 +1,5 @@
+use ftd::interpreter::expression::ExpressionExt;
+
 pub fn trim_all_lines(s: &str) -> String {
     use itertools::Itertools;
 
@@ -98,12 +100,12 @@ pub(crate) fn get_formatted_dep_string_from_property_value(
     }))
 }
 
-pub(crate) fn get_condition_string(condition: &ftd::interpreter::Expression) -> String {
+pub(crate) fn get_condition_string(condition: &fastn_type::Expression) -> String {
     get_condition_string_(condition, true)
 }
 
 pub(crate) fn get_condition_string_(
-    condition: &ftd::interpreter::Expression,
+    condition: &fastn_type::Expression,
     extra_args: bool,
 ) -> String {
     let node = condition.update_node_with_variable_reference();
@@ -510,7 +512,7 @@ pub(crate) fn to_properties_string(
 
 pub(crate) fn to_argument_string(
     id: &str,
-    arguments: &[ftd::interpreter::Argument],
+    arguments: &[fastn_type::Argument],
     doc: &ftd::interpreter::TDoc,
     node: &str,
 ) -> Option<String> {

@@ -1,7 +1,9 @@
+use ftd::interpreter::FieldExt;
+
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct WebComponentDefinition {
     pub name: String,
-    pub arguments: Vec<ftd::interpreter::Argument>,
+    pub arguments: Vec<fastn_type::Argument>,
     pub js: fastn_type::PropertyValue,
     pub line_number: usize,
 }
@@ -9,7 +11,7 @@ pub struct WebComponentDefinition {
 impl WebComponentDefinition {
     pub(crate) fn new(
         name: &str,
-        arguments: Vec<ftd::interpreter::Argument>,
+        arguments: Vec<fastn_type::Argument>,
         js: fastn_type::PropertyValue,
         line_number: usize,
     ) -> WebComponentDefinition {
@@ -27,7 +29,7 @@ impl WebComponentDefinition {
     ) -> ftd::interpreter::Result<()> {
         let web_component_definition = ast.get_web_component_definition(doc.name)?;
 
-        ftd::interpreter::Argument::scan_ast_fields(
+        fastn_type::Argument::scan_ast_fields(
             web_component_definition.arguments,
             doc,
             &Default::default(),
@@ -57,7 +59,7 @@ impl WebComponentDefinition {
             Some(&fastn_type::Kind::string().into_kind_data()),
         )?);
 
-        let arguments = try_ok_state!(ftd::interpreter::Argument::from_ast_fields(
+        let arguments = try_ok_state!(fastn_type::Argument::from_ast_fields(
             web_component_definition.name.as_str(),
             web_component_definition.arguments,
             doc,

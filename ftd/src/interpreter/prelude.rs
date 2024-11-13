@@ -6,13 +6,8 @@ pub use ftd::interpreter::main::{
 };
 
 pub use ftd::interpreter::things::{
-    component::{Argument, ComponentDefinition, ComponentSource},
     default,
-    expression::Expression,
-    function::{Function, FunctionCall},
     or_type::{OrType, OrTypeVariant},
-    record::{Field, Record},
-    value::{PropertyValue, PropertyValueSource, Value},
     variable::{ConditionalValue, Variable},
     web_component::WebComponentDefinition,
     Thing,

@@ -1,3 +1,9 @@
+use ftd::interpreter::ComponentExt;
+use ftd::interpreter::expression::ExpressionExt;
+use ftd::interpreter::things::component::ComponentDefinitionExt;
+use ftd::interpreter::things::record::RecordExt;
+use ftd::interpreter::FunctionExt;
+
 /// The `InterpreterState` struct is a representation of the state of an interpreter. It contains
 /// information about the interpreter's current state and its progress through the code being
 /// interpreted.
@@ -240,7 +246,7 @@ impl InterpreterState {
     }
 
     pub fn continue_processing(mut self) -> ftd::interpreter::Result<Interpreter> {
-        use ftd::interpreter::{ComponentExt, PropertyValueExt, ValueExt};
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
 
         while let Some((doc_name, number_of_scan, ast, exports)) = self.get_next_ast() {
             if let Some(interpreter) = self.resolve_pending_imports::<ftd::interpreter::Thing>()? {
@@ -285,10 +291,10 @@ impl InterpreterState {
             if ast.is_record() {
                 if !is_in_bag {
                     if number_of_scan.eq(&1) {
-                        ftd::interpreter::Record::scan_ast(ast, &mut doc)?;
+                        fastn_type::Record::scan_ast(ast, &mut doc)?;
                         continue;
                     } else {
-                        match ftd::interpreter::Record::from_ast(ast, &mut doc)? {
+                        match fastn_type::Record::from_ast(ast, &mut doc)? {
                             ftd::interpreter::StateWithThing::State(s) => {
                                 return Ok(s.into_interpreter(self))
                             }
@@ -339,10 +345,10 @@ impl InterpreterState {
             } else if ast.is_function() {
                 if !is_in_bag {
                     if number_of_scan.eq(&1) {
-                        ftd::interpreter::Function::scan_ast(ast, &mut doc)?;
+                        fastn_type::Function::scan_ast(ast, &mut doc)?;
                         continue;
                     } else {
-                        match ftd::interpreter::Function::from_ast(ast, &mut doc)? {
+                        match fastn_type::Function::from_ast(ast, &mut doc)? {
                             ftd::interpreter::StateWithThing::State(s) => {
                                 return Ok(s.into_interpreter(self))
                             }
@@ -421,10 +427,10 @@ impl InterpreterState {
             } else if ast.is_component_definition() {
                 if !is_in_bag {
                     if number_of_scan.eq(&1) {
-                        ftd::interpreter::ComponentDefinition::scan_ast(ast, &mut doc)?;
+                        fastn_type::ComponentDefinition::scan_ast(ast, &mut doc)?;
                         continue;
                     } else {
-                        match ftd::interpreter::ComponentDefinition::from_ast(ast, &mut doc)? {
+                        match fastn_type::ComponentDefinition::from_ast(ast, &mut doc)? {
                             ftd::interpreter::StateWithThing::State(s) => {
                                 return Ok(s.into_interpreter(self))
                             }
@@ -1217,7 +1223,7 @@ impl Document {
     }
 
     fn get_redirect_with_code(&self, kind: &str) -> ftd::interpreter::Result<Option<String>> {
-        use ftd::interpreter::{ComponentExt, ValueExt};
+        use ftd::interpreter::ValueExt;
 
         let redirects = self.get_instructions(kind);
 

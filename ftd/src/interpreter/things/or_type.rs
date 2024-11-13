@@ -1,3 +1,6 @@
+use ftd::interpreter::things::record::RecordExt;
+use ftd::interpreter::FieldExt;
+
 #[derive(Debug, Default, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct OrType {
     pub name: String,
@@ -64,21 +67,21 @@ impl OrType {
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum OrTypeVariant {
-    AnonymousRecord(ftd::interpreter::Record),
-    Regular(ftd::interpreter::Field),
-    Constant(ftd::interpreter::Field),
+    AnonymousRecord(fastn_type::Record),
+    Regular(fastn_type::Field),
+    Constant(fastn_type::Field),
 }
 
 impl OrTypeVariant {
-    pub fn new_record(record: ftd::interpreter::Record) -> OrTypeVariant {
+    pub fn new_record(record: fastn_type::Record) -> OrTypeVariant {
         OrTypeVariant::AnonymousRecord(record)
     }
 
-    pub fn new_constant(variant: ftd::interpreter::Field) -> OrTypeVariant {
+    pub fn new_constant(variant: fastn_type::Field) -> OrTypeVariant {
         OrTypeVariant::Constant(variant)
     }
 
-    pub fn new_regular(variant: ftd::interpreter::Field) -> OrTypeVariant {
+    pub fn new_regular(variant: fastn_type::Field) -> OrTypeVariant {
         OrTypeVariant::Regular(variant)
     }
 
@@ -94,7 +97,7 @@ impl OrTypeVariant {
         }
     }
 
-    pub fn ok_constant(&self, doc_id: &str) -> ftd::interpreter::Result<&ftd::interpreter::Field> {
+    pub fn ok_constant(&self, doc_id: &str) -> ftd::interpreter::Result<&fastn_type::Field> {
         match self {
             ftd::interpreter::OrTypeVariant::Constant(c) => Ok(c),
             t => ftd::interpreter::utils::e2(
@@ -119,13 +122,13 @@ impl OrTypeVariant {
     ) -> ftd::interpreter::Result<()> {
         match ast_variant {
             ftd_ast::OrTypeVariant::AnonymousRecord(record) => {
-                ftd::interpreter::Record::scan_record(record, doc)
+                fastn_type::Record::scan_record(record, doc)
             }
             ftd_ast::OrTypeVariant::Regular(variant) => {
-                ftd::interpreter::Field::scan_ast_field(variant, doc, &Default::default())
+                fastn_type::Field::scan_ast_field(variant, doc, &Default::default())
             }
             ftd_ast::OrTypeVariant::Constant(variant) => {
-                ftd::interpreter::Field::scan_ast_field(variant, doc, &Default::default())
+                fastn_type::Field::scan_ast_field(variant, doc, &Default::default())
             }
         }
     }
@@ -138,19 +141,19 @@ impl OrTypeVariant {
             ftd_ast::OrTypeVariant::AnonymousRecord(record) => {
                 Ok(ftd::interpreter::StateWithThing::new_thing(
                     ftd::interpreter::OrTypeVariant::new_record(try_ok_state!(
-                        ftd::interpreter::Record::from_record(record, doc)?
+                        fastn_type::Record::from_record(record, doc)?
                     )),
                 ))
             }
             ftd_ast::OrTypeVariant::Regular(variant) => {
                 Ok(ftd::interpreter::StateWithThing::new_thing(
                     ftd::interpreter::OrTypeVariant::new_regular(try_ok_state!(
-                        ftd::interpreter::Field::from_ast_field(variant, doc, &Default::default())?
+                        fastn_type::Field::from_ast_field(variant, doc, &Default::default())?
                     )),
                 ))
             }
             ftd_ast::OrTypeVariant::Constant(variant) => {
-                let variant = try_ok_state!(ftd::interpreter::Field::from_ast_field(
+                let variant = try_ok_state!(fastn_type::Field::from_ast_field(
                     variant,
                     doc,
                     &Default::default()
@@ -163,7 +166,7 @@ impl OrTypeVariant {
         }
     }
 
-    pub fn fields(&self) -> Vec<&ftd::interpreter::Field> {
+    pub fn fields(&self) -> Vec<&fastn_type::Field> {
         match self {
             OrTypeVariant::AnonymousRecord(r) => r.fields.iter().collect(),
             OrTypeVariant::Regular(r) => vec![r],
@@ -190,7 +193,7 @@ impl OrTypeVariant {
 }
 
 fn validate_constant_variant(
-    variant: &ftd::interpreter::Field,
+    variant: &fastn_type::Field,
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::interpreter::Result<()> {
     if variant.value.is_none()

@@ -5,7 +5,7 @@ pub struct Component {
     pub name: String,
     pub properties: Vec<Property>,
     pub iteration: Box<Option<Loop>>,
-    // pub condition: Box<Option<fastn_type::Expression>>,
+    pub condition: Box<Option<fastn_type::Expression>>,
     pub events: Vec<Event>,
     pub children: Vec<Component>,
     pub source: ComponentSource,
@@ -19,7 +19,7 @@ impl fastn_type::Component {
             name: name.to_string(),
             properties: vec![],
             iteration: Box::new(None),
-            // condition: Box::new(None),
+            condition: Box::new(None),
             events: vec![],
             children: vec![],
             source: Default::default(),
@@ -54,7 +54,7 @@ pub struct Event {
 pub struct Property {
     pub value: fastn_type::PropertyValue,
     pub source: fastn_type::PropertySource,
-    // pub condition: Option<fastn_type::Expression>,
+    pub condition: Option<fastn_type::Expression>,
     pub line_number: usize,
 }
 
@@ -107,3 +107,14 @@ pub enum EventName {
     RiveStateChange(String),
     RivePause(String),
 }
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub struct ComponentDefinition {
+    pub name: String,
+    pub arguments: Vec<Argument>,
+    pub definition: fastn_type::Component,
+    pub css: Option<fastn_type::PropertyValue>,
+    pub line_number: usize,
+}
+
+pub type Argument = fastn_type::Field;

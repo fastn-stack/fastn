@@ -1,3 +1,5 @@
+use ftd::interpreter::expression::ExpressionExt;
+
 #[derive(serde::Deserialize, Clone, Debug, PartialEq, serde::Serialize)]
 pub enum Element {
     Row(Row),
@@ -86,7 +88,7 @@ impl Element {
 pub struct RawElement {
     pub name: String,
     pub properties: Vec<(String, fastn_type::Property)>,
-    pub condition: Option<ftd::interpreter::Expression>,
+    pub condition: Option<fastn_type::Expression>,
     pub children: Vec<Element>,
     pub events: Vec<Event>,
     pub line_number: usize,
@@ -212,7 +214,7 @@ pub struct ImageSrc {
 impl ImageSrc {
     pub(crate) fn optional_image(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -346,7 +348,7 @@ pub struct RawImage {
 impl RawImage {
     pub(crate) fn optional_image(
         properties: &[fastn_type::Property],
-        arguments: &[ftd::interpreter::Argument],
+        arguments: &[fastn_type::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -434,8 +436,8 @@ pub struct Code {
 pub fn code_from_properties(
     properties: &[fastn_type::Property],
     events: &[fastn_type::Event],
-    arguments: &[ftd::interpreter::Argument],
-    condition: &Option<ftd::interpreter::Expression>,
+    arguments: &[fastn_type::Argument],
+    condition: &Option<fastn_type::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -542,8 +544,8 @@ pub struct Iframe {
 pub fn iframe_from_properties(
     properties: &[fastn_type::Property],
     events: &[fastn_type::Event],
-    arguments: &[ftd::interpreter::Argument],
-    condition: &Option<ftd::interpreter::Expression>,
+    arguments: &[fastn_type::Argument],
+    condition: &Option<fastn_type::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -740,7 +742,7 @@ pub struct Common {
     pub align_self: ftd::executor::Value<Option<ftd::executor::AlignSelf>>,
     pub data_id: String,
     pub line_number: usize,
-    pub condition: Option<ftd::interpreter::Expression>,
+    pub condition: Option<fastn_type::Expression>,
     pub overflow: ftd::executor::Value<Option<ftd::executor::Overflow>>,
     pub overflow_x: ftd::executor::Value<Option<ftd::executor::Overflow>>,
     pub overflow_y: ftd::executor::Value<Option<ftd::executor::Overflow>>,
@@ -783,8 +785,8 @@ pub fn default_column() -> Column {
 pub fn text_from_properties(
     properties: &[fastn_type::Property],
     events: &[fastn_type::Event],
-    arguments: &[ftd::interpreter::Argument],
-    condition: &Option<ftd::interpreter::Expression>,
+    arguments: &[fastn_type::Argument],
+    condition: &Option<fastn_type::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     is_dummy: bool,
@@ -878,8 +880,8 @@ pub fn text_from_properties(
 pub fn integer_from_properties(
     properties: &[fastn_type::Property],
     events: &[fastn_type::Event],
-    arguments: &[ftd::interpreter::Argument],
-    condition: &Option<ftd::interpreter::Expression>,
+    arguments: &[fastn_type::Argument],
+    condition: &Option<fastn_type::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -977,8 +979,8 @@ pub fn integer_from_properties(
 pub fn decimal_from_properties(
     properties: &[fastn_type::Property],
     events: &[fastn_type::Event],
-    arguments: &[ftd::interpreter::Argument],
-    condition: &Option<ftd::interpreter::Expression>,
+    arguments: &[fastn_type::Argument],
+    condition: &Option<fastn_type::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -1076,8 +1078,8 @@ pub fn decimal_from_properties(
 pub fn boolean_from_properties(
     properties: &[fastn_type::Property],
     events: &[fastn_type::Event],
-    arguments: &[ftd::interpreter::Argument],
-    condition: &Option<ftd::interpreter::Expression>,
+    arguments: &[fastn_type::Argument],
+    condition: &Option<fastn_type::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -1160,8 +1162,8 @@ pub fn boolean_from_properties(
 pub fn image_from_properties(
     properties: &[fastn_type::Property],
     events: &[fastn_type::Event],
-    arguments: &[ftd::interpreter::Argument],
-    condition: &Option<ftd::interpreter::Expression>,
+    arguments: &[fastn_type::Argument],
+    condition: &Option<fastn_type::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -1228,8 +1230,8 @@ pub fn image_from_properties(
 pub fn row_from_properties(
     properties: &[fastn_type::Property],
     events: &[fastn_type::Event],
-    arguments: &[ftd::interpreter::Argument],
-    condition: &Option<ftd::interpreter::Expression>,
+    arguments: &[fastn_type::Argument],
+    condition: &Option<fastn_type::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -1266,8 +1268,8 @@ pub fn row_from_properties(
 pub fn column_from_properties(
     properties: &[fastn_type::Property],
     events: &[fastn_type::Event],
-    arguments: &[ftd::interpreter::Argument],
-    condition: &Option<ftd::interpreter::Expression>,
+    arguments: &[fastn_type::Argument],
+    condition: &Option<fastn_type::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -1304,8 +1306,8 @@ pub fn column_from_properties(
 pub fn container_element_from_properties(
     properties: &[fastn_type::Property],
     events: &[fastn_type::Event],
-    arguments: &[ftd::interpreter::Argument],
-    condition: &Option<ftd::interpreter::Expression>,
+    arguments: &[fastn_type::Argument],
+    condition: &Option<fastn_type::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -1344,8 +1346,8 @@ pub fn container_element_from_properties(
 pub fn rive_from_properties(
     properties: &[fastn_type::Property],
     events: &[fastn_type::Event],
-    arguments: &[ftd::interpreter::Argument],
-    condition: &Option<ftd::interpreter::Expression>,
+    arguments: &[fastn_type::Argument],
+    condition: &Option<fastn_type::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -1445,7 +1447,7 @@ pub fn rive_from_properties(
 
 pub fn document_from_properties(
     properties: &[fastn_type::Property],
-    arguments: &[ftd::interpreter::Argument],
+    arguments: &[fastn_type::Argument],
     doc: &mut ftd::executor::TDoc,
     line_number: usize,
     children: Vec<Element>,
@@ -1470,7 +1472,7 @@ pub fn document_from_properties(
 #[allow(clippy::too_many_arguments)]
 pub fn html_data_from_properties(
     properties: &[fastn_type::Property],
-    arguments: &[ftd::interpreter::Argument],
+    arguments: &[fastn_type::Argument],
     doc: &mut ftd::executor::TDoc,
     line_number: usize,
     component_name: &str,
@@ -1558,8 +1560,8 @@ pub fn html_data_from_properties(
 pub fn common_from_properties(
     properties: &[fastn_type::Property],
     events: &[fastn_type::Event],
-    arguments: &[ftd::interpreter::Argument],
-    condition: &Option<ftd::interpreter::Expression>,
+    arguments: &[fastn_type::Argument],
+    condition: &Option<fastn_type::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -2213,7 +2215,7 @@ pub fn common_from_properties(
 #[allow(clippy::too_many_arguments)]
 pub fn container_from_properties(
     properties: &[fastn_type::Property],
-    arguments: &[ftd::interpreter::Argument],
+    arguments: &[fastn_type::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
     children: Vec<Element>,
@@ -2287,8 +2289,8 @@ impl TextInput {
 pub fn text_input_from_properties(
     properties: &[fastn_type::Property],
     events: &[fastn_type::Event],
-    arguments: &[ftd::interpreter::Argument],
-    condition: &Option<ftd::interpreter::Expression>,
+    arguments: &[fastn_type::Argument],
+    condition: &Option<fastn_type::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -2422,8 +2424,8 @@ impl CheckBox {
 pub fn checkbox_from_properties(
     properties: &[fastn_type::Property],
     events: &[fastn_type::Event],
-    arguments: &[ftd::interpreter::Argument],
-    condition: &Option<ftd::interpreter::Expression>,
+    arguments: &[fastn_type::Argument],
+    condition: &Option<fastn_type::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,

@@ -1,42 +1,33 @@
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Function {
-    pub name: String,
-    pub return_kind: fastn_type::KindData,
-    pub arguments: Vec<ftd::interpreter::Argument>,
-    pub expression: Vec<Expression>,
-    pub js: Option<fastn_type::PropertyValue>,
-    pub line_number: usize,
-    pub external_implementation: bool,
-}
+use ftd::interpreter::things::record::FieldExt;
+use ftd::interpreter::{PropertyValueExt, PropertyValueSourceExt};
 
-impl Function {
-    fn new(
-        name: &str,
-        return_kind: fastn_type::KindData,
-        arguments: Vec<ftd::interpreter::Argument>,
-        expression: Vec<Expression>,
-        js: Option<fastn_type::PropertyValue>,
+pub(crate) trait FunctionExt {
+    fn scan_ast(
+        ast: ftd_ast::Ast,
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()>;
+    fn from_ast(
+        ast: ftd_ast::Ast,
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::Function>>;
+    fn resolve(
+        &self,
+        _kind: &fastn_type::KindData,
+        values: &ftd::Map<fastn_type::PropertyValue>,
+        doc: &ftd::interpreter::TDoc,
         line_number: usize,
-    ) -> Function {
-        Function {
-            name: name.to_string(),
-            return_kind,
-            arguments,
-            expression,
-            js,
-            line_number,
-            external_implementation: false,
-        }
-    }
-
-    pub(crate) fn scan_ast(
+    ) -> ftd::interpreter::Result<Option<fastn_type::Value>>;
+    fn convert_to_evalexpr_expression(&self) -> String;
+}
+impl FunctionExt for fastn_type::Function {
+    fn scan_ast(
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         use ftd::interpreter::KindDataExt;
 
         let function = ast.get_function(doc.name)?;
-        ftd::interpreter::Argument::scan_ast_fields(function.arguments, doc, &Default::default())?;
+        fastn_type::Argument::scan_ast_fields(function.arguments, doc, &Default::default())?;
 
         fastn_type::KindData::scan_ast_kind(
             function.kind,
@@ -48,11 +39,10 @@ impl Function {
         Ok(())
     }
 
-    pub(crate) fn from_ast(
+    fn from_ast(
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Function>>
-    {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::Function>> {
         use ftd::interpreter::KindDataExt;
         use ftd::interpreter::PropertyValueExt;
 
@@ -75,7 +65,7 @@ impl Function {
             None
         };
 
-        let arguments = try_ok_state!(ftd::interpreter::Argument::from_ast_fields(
+        let arguments = try_ok_state!(fastn_type::Argument::from_ast_fields(
             function.name.as_str(),
             function.arguments,
             doc,
@@ -89,22 +79,24 @@ impl Function {
             function.line_number,
         )?);
 
-        let expression = vec![Expression {
+        let expression = vec![fastn_type::FunctionExpression {
             expression: function.definition.value.to_string(),
             line_number: function.definition.line_number,
         }];
 
-        Ok(ftd::interpreter::StateWithThing::new_thing(Function::new(
-            name.as_str(),
-            kind,
-            arguments,
-            expression,
-            js,
-            function.line_number,
-        )))
+        Ok(ftd::interpreter::StateWithThing::new_thing(
+            fastn_type::Function::new(
+                name.as_str(),
+                kind,
+                arguments,
+                expression,
+                js,
+                function.line_number,
+            ),
+        ))
     }
 
-    pub(crate) fn resolve(
+    fn resolve(
         &self,
         _kind: &fastn_type::KindData,
         values: &ftd::Map<fastn_type::PropertyValue>,
@@ -215,7 +207,7 @@ impl Function {
         Ok(None)
     }
 
-    pub(crate) fn convert_to_evalexpr_expression(&self) -> String {
+    fn convert_to_evalexpr_expression(&self) -> String {
         use itertools::Itertools;
 
         self.expression
@@ -237,101 +229,34 @@ Todo: Convert Expression into
     pub struct Operation(pub String);
 */
 
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Expression {
-    pub expression: String,
-    pub line_number: usize,
-}
-
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct FunctionCall {
-    pub name: String,
-    pub kind: fastn_type::KindData,
-    pub is_mutable: bool,
-    pub line_number: usize,
-    pub values: ftd::Map<fastn_type::PropertyValue>,
-    pub order: Vec<String>,
-    // (Default module, Argument name of module kind)
-    pub module_name: Option<(String, String)>,
-}
-
-impl FunctionCall {
-    pub fn new(
-        name: &str,
-        kind: fastn_type::KindData,
-        is_mutable: bool,
+pub(crate) trait FunctionCallExt {
+    fn from_string(
+        value: &str,
+        doc: &mut ftd::interpreter::TDoc,
+        mutable: bool,
+        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_type::Argument])>,
+        loop_object_name_and_kind: &Option<(String, fastn_type::Argument, Option<String>)>,
         line_number: usize,
-        values: ftd::Map<fastn_type::PropertyValue>,
-        order: Vec<String>,
-        module_name: Option<(String, String)>,
-    ) -> FunctionCall {
-        FunctionCall {
-            name: name.to_string(),
-            kind,
-            is_mutable,
-            line_number,
-            values,
-            order,
-            module_name,
-        }
-    }
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::FunctionCall>>;
 
-    pub(crate) fn scan_string(
+    fn scan_string(
         value: &str,
         doc: &mut ftd::interpreter::TDoc,
         definition_name_with_arguments: Option<(&str, &[String])>,
         loop_object_name_and_kind: &Option<String>,
         line_number: usize,
-    ) -> ftd::interpreter::Result<()> {
-        use ftd::interpreter::PropertyValueExt;
+    ) -> ftd::interpreter::Result<()>;
+}
 
-        let expression = value
-            .trim_start_matches(ftd::interpreter::utils::REFERENCE)
-            .to_string();
-
-        let (function_name, properties) =
-            ftd::interpreter::utils::get_function_name_and_properties(
-                expression.as_str(),
-                doc.name,
-                line_number,
-            )?;
-
-        let initial_kind_with_remaining_and_source =
-            ftd::interpreter::utils::is_argument_in_component_or_loop(
-                function_name.as_str(),
-                doc,
-                definition_name_with_arguments,
-                loop_object_name_and_kind,
-            );
-
-        if !initial_kind_with_remaining_and_source {
-            doc.scan_initial_thing(function_name.as_str(), line_number)?;
-        }
-
-        for (_, value) in properties.iter() {
-            fastn_type::PropertyValue::scan_string_with_argument(
-                value,
-                doc,
-                line_number,
-                definition_name_with_arguments,
-                loop_object_name_and_kind,
-            )?;
-        }
-
-        Ok(())
-    }
-
-    pub(crate) fn from_string(
+impl FunctionCallExt for fastn_type::FunctionCall {
+    fn from_string(
         value: &str,
         doc: &mut ftd::interpreter::TDoc,
         mutable: bool,
-        definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
+        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_type::Argument])>,
+        loop_object_name_and_kind: &Option<(String, fastn_type::Argument, Option<String>)>,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::FunctionCall>>
-    {
-        use ftd::interpreter::{PropertyValueExt, PropertyValueSourceExt};
-
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::FunctionCall>> {
         let expression = value
             .trim_start_matches(ftd::interpreter::utils::REFERENCE)
             .to_string();
@@ -464,7 +389,7 @@ impl FunctionCall {
         let reference_full_name = source.get_reference_name(function_name.as_str(), doc);
 
         Ok(ftd::interpreter::StateWithThing::new_thing(
-            ftd::interpreter::FunctionCall::new(
+            fastn_type::FunctionCall::new(
                 reference_full_name.as_str(),
                 function.return_kind.clone(),
                 mutable,
@@ -474,5 +399,48 @@ impl FunctionCall {
                 module_name,
             ),
         ))
+    }
+
+    fn scan_string(
+        value: &str,
+        doc: &mut ftd::interpreter::TDoc,
+        definition_name_with_arguments: Option<(&str, &[String])>,
+        loop_object_name_and_kind: &Option<String>,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<()> {
+        let expression = value
+            .trim_start_matches(ftd::interpreter::utils::REFERENCE)
+            .to_string();
+
+        let (function_name, properties) =
+            ftd::interpreter::utils::get_function_name_and_properties(
+                expression.as_str(),
+                doc.name,
+                line_number,
+            )?;
+
+        let initial_kind_with_remaining_and_source =
+            ftd::interpreter::utils::is_argument_in_component_or_loop(
+                function_name.as_str(),
+                doc,
+                definition_name_with_arguments,
+                loop_object_name_and_kind,
+            );
+
+        if !initial_kind_with_remaining_and_source {
+            doc.scan_initial_thing(function_name.as_str(), line_number)?;
+        }
+
+        for (_, value) in properties.iter() {
+            fastn_type::PropertyValue::scan_string_with_argument(
+                value,
+                doc,
+                line_number,
+                definition_name_with_arguments,
+                loop_object_name_and_kind,
+            )?;
+        }
+
+        Ok(())
     }
 }

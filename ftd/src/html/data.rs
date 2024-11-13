@@ -1,3 +1,5 @@
+use ftd::interpreter::expression::ExpressionExt;
+
 pub struct DataGenerator<'a> {
     pub doc: &'a ftd::interpreter::TDoc<'a>,
 }

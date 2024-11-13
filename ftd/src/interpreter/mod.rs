@@ -32,7 +32,6 @@ macro_rules! try_state {
 #[macro_use]
 mod test;
 mod constants;
-mod fastn_type_functions;
 mod main;
 pub mod prelude;
 mod tdoc;
@@ -41,13 +40,18 @@ pub mod utils;
 
 pub use prelude::*;
 
-pub use fastn_type_functions::KindDataExt;
-pub(crate) use fastn_type_functions::{
-    ComponentExt, EventNameExt, FunctionCallExt, LoopExt, PropertyExt, PropertySourceExt,
-    PropertyValueExt, PropertyValueSourceExt, ValueExt,
-};
 pub use tdoc::{BagOrState, TDoc};
+pub(crate) use things::component::ComponentExt;
+pub(crate) use things::component::EventNameExt;
+pub(crate) use things::component::LoopExt;
+pub(crate) use things::component::PropertyExt;
+pub(crate) use things::component::PropertySourceExt;
 pub use things::expression;
+
+pub(crate) use things::function::FunctionExt;
+pub(crate) use things::kind::{KindDataExt, KindExt};
+pub(crate) use things::record::FieldExt;
+pub(crate) use things::value::{PropertyValueExt, PropertyValueSourceExt, ValueExt};
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
@@ -122,4 +126,3 @@ pub enum Error {
 }
 
 pub type Result<T> = std::result::Result<T, Error>;
-pub type ModuleThing = ftd::interpreter::things::ModuleThing;
