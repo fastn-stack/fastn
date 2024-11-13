@@ -349,12 +349,11 @@ pub fn from_tree(
     fastn_js::component0(fastn_js::MAIN_FUNCTION, statements)
 }
 
-
 pub trait WebComponentDefinitionExt {
     fn to_ast(&self, doc: &ftd::interpreter::TDoc) -> fastn_js::Ast;
 }
 
-impl WebComponentDefinitionExt for  fastn_type::WebComponentDefinition {
+impl WebComponentDefinitionExt for fastn_type::WebComponentDefinition {
     fn to_ast(&self, doc: &ftd::interpreter::TDoc) -> fastn_js::Ast {
         use itertools::Itertools;
 
