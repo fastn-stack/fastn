@@ -57,6 +57,8 @@ impl DummyElement {
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
         found_elements: &mut std::collections::HashSet<String>,
     ) -> ftd::executor::Result<ftd::executor::Element> {
+        use ftd::executor::fastn_type_functions::ComponentExt;
+
         if let Some(iteration) = instruction.iteration.take() {
             return Ok(ftd::executor::Element::IterativeElement(
                 ftd::executor::IterativeElement {

@@ -175,6 +175,8 @@ pub(crate) fn update_local_variable_references_in_component_(
     doc: &mut ftd::executor::TDoc,
     is_children: bool,
 ) {
+    use ftd::executor::fastn_type_functions::ComponentExt;
+
     if component.is_variable() {
         let mut component_name = fastn_type::PropertyValue::Reference {
             name: component.name.to_string(),

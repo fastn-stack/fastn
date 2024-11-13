@@ -2642,6 +2642,8 @@ impl Common {
         doc: &ftd::interpreter::TDoc,
         rdata: &ftd::js::ResolverData,
     ) -> Vec<fastn_js::ComponentStatement> {
+        use ftd::js::fastn_type_functions::EventExt;
+
         let mut component_statements = vec![];
         for event in self.events.iter() {
             if let Some(event_handler) = event.to_event_handler_js(element_name, doc, rdata) {
@@ -3276,51 +3278,6 @@ impl Common {
             ));
         }
         component_statements
-    }
-}
-
-impl fastn_type::Event {
-    pub(crate) fn to_event_handler_js(
-        &self,
-        element_name: &str,
-        doc: &ftd::interpreter::TDoc,
-        rdata: &ftd::js::ResolverData,
-    ) -> Option<fastn_js::EventHandler> {
-        use ftd::js::fastn_type_functions::FunctionCallExt;
-
-        self.name
-            .to_js_event_name()
-            .map(|event| fastn_js::EventHandler {
-                event,
-                action: self.action.to_js_function(doc, rdata),
-                element_name: element_name.to_string(),
-            })
-    }
-}
-
-impl fastn_type::EventName {
-    fn to_js_event_name(&self) -> Option<fastn_js::Event> {
-        use itertools::Itertools;
-
-        match self {
-            fastn_type::EventName::Click => Some(fastn_js::Event::Click),
-            fastn_type::EventName::MouseEnter => Some(fastn_js::Event::MouseEnter),
-            fastn_type::EventName::MouseLeave => Some(fastn_js::Event::MouseLeave),
-            fastn_type::EventName::ClickOutside => Some(fastn_js::Event::ClickOutside),
-            fastn_type::EventName::GlobalKey(gk) => Some(fastn_js::Event::GlobalKey(
-                gk.iter().map(|v| ftd::js::utils::to_key(v)).collect_vec(),
-            )),
-            fastn_type::EventName::GlobalKeySeq(gk) => Some(fastn_js::Event::GlobalKeySeq(
-                gk.iter().map(|v| ftd::js::utils::to_key(v)).collect_vec(),
-            )),
-            fastn_type::EventName::Input => Some(fastn_js::Event::Input),
-            fastn_type::EventName::Change => Some(fastn_js::Event::Change),
-            fastn_type::EventName::Blur => Some(fastn_js::Event::Blur),
-            fastn_type::EventName::Focus => Some(fastn_js::Event::Focus),
-            fastn_type::EventName::RivePlay(_)
-            | fastn_type::EventName::RivePause(_)
-            | fastn_type::EventName::RiveStateChange(_) => None,
-        }
     }
 }
 

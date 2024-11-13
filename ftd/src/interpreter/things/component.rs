@@ -2,7 +2,7 @@
 pub struct ComponentDefinition {
     pub name: String,
     pub arguments: Vec<Argument>,
-    pub definition: Component,
+    pub definition: fastn_type::Component,
     pub css: Option<fastn_type::PropertyValue>,
     pub line_number: usize,
 }
@@ -639,23 +639,6 @@ pub struct Property {
 }
 
 impl Property {
-    pub(crate) fn resolve(
-        &self,
-        doc: &ftd::interpreter::TDoc,
-        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::interpreter::Result<Option<fastn_type::Value>> {
-        use ftd::interpreter::PropertyValueExt;
-
-        Ok(match self.condition {
-            Some(ref condition) if !condition.eval(doc)? => None,
-            _ => Some(self.value.clone().resolve_with_inherited(
-                doc,
-                self.line_number,
-                inherited_variables,
-            )?),
-        })
-    }
-
     fn from_ast_properties_and_children(
         ast_properties: Vec<ftd_ast::Property>,
         ast_children: Vec<ftd_ast::ComponentInvocation>,
@@ -1311,7 +1294,7 @@ fn get_module_name_and_thing(
     definition_name_with_arguments: &mut Option<(&str, &mut [Argument])>,
     component_argument: &ftd::interpreter::Argument,
 ) -> ftd::interpreter::Result<(String, ftd::Map<ftd::interpreter::ModuleThing>)> {
-    use ftd::interpreter::PropertyValueExt;
+    use ftd::interpreter::{PropertyExt, PropertyValueExt};
 
     let default_things = {
         let value = if let Some(ref value) = component_argument.value {

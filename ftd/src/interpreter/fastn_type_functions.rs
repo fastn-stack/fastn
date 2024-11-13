@@ -2121,6 +2121,33 @@ impl FunctionCallExt for fastn_type::FunctionCall {
     }
 }
 
+pub(crate) trait PropertyExt {
+    fn resolve(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    ) -> ftd::interpreter::Result<Option<fastn_type::Value>>;
+}
+
+impl PropertyExt for fastn_type::Property {
+    fn resolve(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+        inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
+    ) -> ftd::interpreter::Result<Option<fastn_type::Value>> {
+        use ftd::interpreter::PropertyValueExt;
+
+        Ok(match self.condition {
+            Some(ref condition) if !condition.eval(doc)? => None,
+            _ => Some(self.value.clone().resolve_with_inherited(
+                doc,
+                self.line_number,
+                inherited_variables,
+            )?),
+        })
+    }
+}
+
 pub fn check_for_caption_and_body(s: &mut String) -> (bool, bool) {
     use itertools::Itertools;
 

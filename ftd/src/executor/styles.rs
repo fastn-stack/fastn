@@ -458,8 +458,9 @@ impl BreakpointWidth {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<BreakpointWidth> {
-        use ftd::executor::fastn_type_functions::PropertyValueExt as _;
+        use ftd::executor::fastn_type_functions::{PropertySourceExt, PropertyValueExt as _};
         use ftd::interpreter::{PropertyValueExt, ValueExt};
+
         let get_property_value = |field_name: &str| {
             values
                 .get(field_name)
@@ -935,7 +936,7 @@ impl BackgroundImage {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::BackgroundImage> {
-        use ftd::executor::fastn_type_functions::PropertyValueExt;
+        use ftd::executor::fastn_type_functions::{PropertySourceExt, PropertyValueExt};
 
         let get_property_value = |field_name: &str| {
             values
@@ -1109,7 +1110,7 @@ impl LinearGradientColor {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<LinearGradientColor> {
-        use ftd::executor::fastn_type_functions::PropertyValueExt;
+        use ftd::executor::fastn_type_functions::{PropertySourceExt, PropertyValueExt};
 
         let get_property_value = |field_name: &str| {
             values
@@ -1332,7 +1333,8 @@ impl LinearGradient {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::LinearGradient> {
-        use ftd::executor::fastn_type_functions::PropertyValueExt;
+        use ftd::executor::fastn_type_functions::{PropertySourceExt, PropertyValueExt};
+
         let get_property_value = |field_name: &str| {
             values
                 .get(field_name)
@@ -1822,7 +1824,7 @@ impl Shadow {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::Shadow> {
-        use ftd::executor::fastn_type_functions::PropertyValueExt as _;
+        use ftd::executor::fastn_type_functions::{PropertySourceExt, PropertyValueExt as _};
         use ftd::interpreter::{PropertyValueExt, ValueExt};
 
         let get_property_value = |field_name: &str| {
@@ -1999,7 +2001,7 @@ impl Color {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Color> {
-        use ftd::executor::fastn_type_functions::PropertyValueExt as _;
+        use ftd::executor::fastn_type_functions::{PropertySourceExt, PropertyValueExt as _};
         use ftd::interpreter::{PropertyValueExt, ValueExt};
 
         let light = {

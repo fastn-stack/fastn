@@ -198,6 +198,8 @@ impl ExecuteDoc<'_> {
         start_index: usize,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<Vec<(Option<String>, Vec<usize>, fastn_type::Component)>> {
+        use ftd::js::fastn_type_functions::ComponentExt;
+
         if instruction.is_loop() {
             ExecuteDoc::get_loop_instructions(
                 instruction,
@@ -436,6 +438,7 @@ impl ExecuteDoc<'_> {
         instructions: &[fastn_type::Component],
         doc: &mut ftd::executor::TDoc,
     ) -> ftd::executor::Result<Vec<ftd::executor::Element>> {
+        use ftd::executor::fastn_type_functions::ComponentExt;
         use ftd::interpreter::{PropertyValueExt, ValueExt};
 
         let mut elements = vec![];

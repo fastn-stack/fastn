@@ -114,6 +114,8 @@ pub(crate) fn find_value_by_argument(
     is_dummy: bool,
     inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
 ) -> ftd::executor::Result<ftd::executor::Value<Option<fastn_type::Value>>> {
+    use ftd::interpreter::PropertyExt;
+
     let properties = {
         let new_properties = ftd::interpreter::utils::find_properties_by_source(
             source,

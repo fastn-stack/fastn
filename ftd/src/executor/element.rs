@@ -283,7 +283,7 @@ impl ImageSrc {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ImageSrc> {
-        use ftd::executor::fastn_type_functions::PropertyValueExt as _;
+        use ftd::executor::fastn_type_functions::{PropertySourceExt, PropertyValueExt as _};
         use ftd::interpreter::{PropertyValueExt, ValueExt};
 
         let light = {
@@ -388,7 +388,7 @@ impl RawImage {
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<RawImage> {
-        use ftd::executor::fastn_type_functions::PropertyValueExt as _;
+        use ftd::executor::fastn_type_functions::{PropertySourceExt, PropertyValueExt as _};
         use ftd::interpreter::{PropertyValueExt, ValueExt};
 
         let src = {
