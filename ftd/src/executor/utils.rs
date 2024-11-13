@@ -598,6 +598,8 @@ pub(crate) fn get_evaluated_property(
     doc_name: &str,
     line_number: usize,
 ) -> ftd::executor::Result<Option<fastn_type::Property>> {
+    use ftd::interpreter::PropertyExt;
+
     let key = if let Some(key) = target_property.get_local_argument(component_name) {
         key
     } else {

@@ -240,7 +240,7 @@ impl InterpreterState {
     }
 
     pub fn continue_processing(mut self) -> ftd::interpreter::Result<Interpreter> {
-        use ftd::interpreter::{PropertyValueExt, ValueExt};
+        use ftd::interpreter::{ComponentExt, PropertyValueExt, ValueExt};
 
         while let Some((doc_name, number_of_scan, ast, exports)) = self.get_next_ast() {
             if let Some(interpreter) = self.resolve_pending_imports::<ftd::interpreter::Thing>()? {
@@ -1217,7 +1217,7 @@ impl Document {
     }
 
     fn get_redirect_with_code(&self, kind: &str) -> ftd::interpreter::Result<Option<String>> {
-        use ftd::interpreter::ValueExt;
+        use ftd::interpreter::{ComponentExt, ValueExt};
 
         let redirects = self.get_instructions(kind);
 

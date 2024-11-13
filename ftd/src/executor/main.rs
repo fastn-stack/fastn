@@ -360,6 +360,8 @@ impl ExecuteDoc<'_> {
         start_index: usize,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<Vec<(Option<String>, Vec<usize>, fastn_type::Component)>> {
+        use ftd::interpreter::LoopExt;
+
         let iteration = if let Some(iteration) = instruction.iteration.as_ref() {
             iteration
         } else {

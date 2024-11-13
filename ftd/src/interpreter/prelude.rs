@@ -6,10 +6,7 @@ pub use ftd::interpreter::main::{
 };
 
 pub use ftd::interpreter::things::{
-    component::{
-        Argument, Component, ComponentDefinition, ComponentSource, Event, EventName, Loop,
-        Property, PropertySource,
-    },
+    component::{Argument, ComponentDefinition, ComponentSource},
     default,
     expression::Expression,
     function::{Function, FunctionCall},

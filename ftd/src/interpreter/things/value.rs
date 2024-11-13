@@ -375,46 +375,6 @@ impl PropertyValue {
         }
     }
 
-    fn to_ui_value(
-        key: &str,
-        value: ftd_ast::VariableValue,
-        doc: &mut ftd::interpreter::TDoc,
-        definition_name_with_arguments: &mut Option<(&str, &mut [ftd::interpreter::Argument])>,
-        loop_object_name_and_kind: &Option<(String, ftd::interpreter::Argument, Option<String>)>,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::PropertyValue>> {
-        let line_number = value.line_number();
-
-        if key.eq("ftd.ui") {
-            return fastn_type::PropertyValue::from_ast_value_with_argument(
-                value,
-                doc,
-                false,
-                Some(&fastn_type::Kind::ui().into_kind_data()),
-                definition_name_with_arguments,
-                loop_object_name_and_kind,
-            );
-        }
-        let ast_component =
-            ftd_ast::ComponentInvocation::from_variable_value(key, value, doc.name)?;
-        let component = try_ok_state!(fastn_type::Component::from_ast_component(
-            ast_component,
-            definition_name_with_arguments,
-            doc,
-        )?);
-
-        Ok(ftd::interpreter::StateWithThing::new_thing(
-            fastn_type::PropertyValue::Value {
-                value: ftd::interpreter::Value::UI {
-                    name: component.name.to_string(),
-                    kind: fastn_type::Kind::ui().into_kind_data(),
-                    component,
-                },
-                is_mutable: false,
-                line_number,
-            },
-        ))
-    }
-
     fn from_record(
         record: &ftd::interpreter::Record,
         value: ftd_ast::VariableValue,
@@ -1926,13 +1886,6 @@ impl Value {
     pub fn module_name_optional(&self) -> Option<String> {
         match self {
             ftd::interpreter::Value::Module { name, .. } => Some(name.to_string()),
-            _ => None,
-        }
-    }
-
-    pub fn module_thing_optional(&self) -> Option<&ftd::Map<ftd::interpreter::ModuleThing>> {
-        match self {
-            ftd::interpreter::Value::Module { things, .. } => Some(things),
             _ => None,
         }
     }

@@ -12,6 +12,22 @@ pub struct Component {
     pub line_number: usize,
 }
 
+impl fastn_type::Component {
+    pub fn from_name(name: &str) -> fastn_type::Component {
+        fastn_type::Component {
+            id: None,
+            name: name.to_string(),
+            properties: vec![],
+            iteration: Box::new(None),
+            // condition: Box::new(None),
+            events: vec![],
+            children: vec![],
+            source: Default::default(),
+            line_number: 0,
+        }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Loop {
     pub on: fastn_type::PropertyValue,
@@ -53,6 +69,26 @@ pub enum PropertySource {
     },
     Subsection,
     Default,
+}
+
+impl fastn_type::PropertySource {
+    pub fn is_equal(&self, other: &fastn_type::PropertySource) -> bool {
+        match self {
+            fastn_type::PropertySource::Caption
+            | fastn_type::PropertySource::Body
+            | fastn_type::PropertySource::Subsection
+            | fastn_type::PropertySource::Default => self.eq(other),
+            fastn_type::PropertySource::Header { name, .. } => {
+                matches!(other, fastn_type::PropertySource::Header {
+                    name: other_name, ..
+               } if other_name.eq(name))
+            }
+        }
+    }
+
+    pub fn is_default(&self) -> bool {
+        matches!(self, fastn_type::PropertySource::Default)
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]

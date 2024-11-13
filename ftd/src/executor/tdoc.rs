@@ -125,7 +125,7 @@ impl TDoc<'_> {
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
         insert_null: bool,
     ) -> ftd::executor::Result<Option<(String, String, Vec<String>)>> {
-        use ftd::interpreter::PropertyExt;
+        use ftd::interpreter::{PropertyExt, PropertySourceExt};
 
         let string_container = ftd::executor::utils::get_string_container(container);
         let source = argument.to_sources();
