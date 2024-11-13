@@ -1,3 +1,5 @@
+use ftd::interpreter::{PropertyValueExt, ValueExt};
+
 pub async fn process(
     value: ftd_ast::VariableValue,
     kind: fastn_type::Kind,

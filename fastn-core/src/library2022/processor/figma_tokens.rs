@@ -1,3 +1,4 @@
+use ftd::interpreter::PropertyValueExt;
 use serde::{Deserialize, Serialize};
 
 pub fn process_figma_tokens(

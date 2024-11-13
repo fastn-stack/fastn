@@ -4669,7 +4669,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             ftd::interpreter::FTD_TYPE_DATA.to_string(),
             ftd::interpreter::Thing::Record(fastn_type::Record {
                 name: ftd::interpreter::FTD_TYPE_DATA.to_string(),
-                fields: vec![fastn_type::Record {
+                fields: vec![fastn_type::Field {
                     name: "heading-large".to_string(),
                     kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
@@ -4677,7 +4677,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     value: None,
                     access_modifier: Default::default(),
                     line_number: 0
-                }, fastn_type::Record {
+                }, fastn_type::Field {
                     name: "heading-medium".to_string(),
                     kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
@@ -4685,7 +4685,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     value: None,
                     access_modifier: Default::default(),
                     line_number: 0
-                }, fastn_type::Record {
+                }, fastn_type::Field {
                     name: "heading-small".to_string(),
                     kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
@@ -4693,7 +4693,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     value: None,
                     access_modifier: Default::default(),
                     line_number: 0
-                },fastn_type::Record {
+                }, fastn_type::Field {
                     name: "heading-hero".to_string(),
                     kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
@@ -4701,7 +4701,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     value: None,
                     access_modifier: Default::default(),
                     line_number: 0
-                },fastn_type::Record {
+                }, fastn_type::Field {
                     name: "heading-tiny".to_string(),
                     kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
@@ -4709,7 +4709,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     value: None,
                     access_modifier: Default::default(),
                     line_number: 0
-                },fastn_type::Record {
+                }, fastn_type::Field {
                     name: "copy-small".to_string(),
                     kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
@@ -4717,7 +4717,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     value: None,
                     access_modifier: Default::default(),
                     line_number: 0
-                },fastn_type::Record {
+                }, fastn_type::Field {
                     name: "copy-regular".to_string(),
                     kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
@@ -4725,7 +4725,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     value: None,
                     access_modifier: Default::default(),
                     line_number: 0
-                },fastn_type::Record {
+                }, fastn_type::Field {
                     name: "copy-large".to_string(),
                     kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
@@ -4733,7 +4733,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     value: None,
                     access_modifier: Default::default(),
                     line_number: 0
-                },fastn_type::Record {
+                }, fastn_type::Field {
                     name: "fine-print".to_string(),
                     kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
@@ -4741,7 +4741,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     value: None,
                     access_modifier: Default::default(),
                     line_number: 0
-                },fastn_type::Record {
+                }, fastn_type::Field {
                     name: "blockquote".to_string(),
                     kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
@@ -4749,7 +4749,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     value: None,
                     access_modifier: Default::default(),
                     line_number: 0
-                },fastn_type::Record {
+                }, fastn_type::Field {
                     name: "source-code".to_string(),
                     kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
@@ -4757,7 +4757,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     value: None,
                     access_modifier: Default::default(),
                     line_number: 0
-                },fastn_type::Record {
+                }, fastn_type::Field {
                     name: "button-small".to_string(),
                     kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
@@ -4765,7 +4765,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     value: None,
                     access_modifier: Default::default(),
                     line_number: 0
-                },fastn_type::Record {
+                }, fastn_type::Field {
                     name: "button-medium".to_string(),
                     kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
@@ -4773,7 +4773,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     value: None,
                     access_modifier: Default::default(),
                     line_number: 0,
-                },fastn_type::Record {
+                }, fastn_type::Field {
                     name: "button-large".to_string(),
                     kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
@@ -4781,7 +4781,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     value: None,
                     access_modifier: Default::default(),
                     line_number: 0,
-                },fastn_type::Record {
+                }, fastn_type::Field {
                     name: "link".to_string(),
                     kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
@@ -4789,7 +4789,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     value: None,
                     access_modifier: Default::default(),
                     line_number: 0,
-                },fastn_type::Record {
+                }, fastn_type::Field {
                     name: "label-large".to_string(),
                     kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
@@ -4797,7 +4797,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     value: None,
                     access_modifier: Default::default(),
                     line_number: 0
-                },fastn_type::Record {
+                }, fastn_type::Field {
                     name: "label-small".to_string(),
                     kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
@@ -9953,7 +9953,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             ftd::interpreter::FTD_BREAKPOINT_WIDTH_DATA.to_string(),
             ftd::interpreter::Thing::Record(fastn_type::Record {
                 name: ftd::interpreter::FTD_BREAKPOINT_WIDTH_DATA.to_string(),
-                fields: vec![fastn_type::Record {
+                fields: vec![fastn_type::Field {
                     name: "mobile".to_string(),
                     kind: fastn_type::Kind::integer().into_kind_data().caption(),
                     mutable: false,

@@ -1,7 +1,7 @@
 use ftd::interpreter::things::record::FieldExt;
 use ftd::interpreter::{PropertyValueExt, PropertyValueSourceExt};
 
-pub(crate) trait FunctionExt {
+pub trait FunctionExt {
     fn scan_ast(
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,

@@ -114,7 +114,7 @@ impl RecordExt for fastn_type::Record {
     }
 }
 
-pub(crate) trait FieldExt {
+pub trait FieldExt {
     fn get_default_interpreter_property_value(
         &self,
         properties: &[fastn_type::Property],

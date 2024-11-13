@@ -365,7 +365,7 @@ pub fn get_argument_for_reference_and_remaining(
         if name.starts_with(format!("{}#{}", doc.name, ftd::interpreter::FTD_LOOP_COUNTER).as_str())
         {
             return Ok(Some((
-                fastn_type::Record::default(
+                fastn_type::Field::default(
                     ftd::interpreter::FTD_LOOP_COUNTER,
                     fastn_type::Kind::integer().into_optional().into_kind_data(),
                 ),
@@ -377,7 +377,7 @@ pub fn get_argument_for_reference_and_remaining(
         if let Some(loop_counter_alias) = loop_counter_alias {
             if name.starts_with(loop_counter_alias.as_str()) {
                 return Ok(Some((
-                    fastn_type::Record::default(
+                    fastn_type::Field::default(
                         loop_counter_alias,
                         fastn_type::Kind::integer().into_optional().into_kind_data(),
                     ),

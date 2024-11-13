@@ -1,4 +1,4 @@
-pub(crate) trait KindExt {
+pub trait KindExt {
     fn list_type(
         &self,
         doc_name: &str,
@@ -203,21 +203,3 @@ pub fn is_body(s: &str) -> bool {
     s.eq("body")
 }
 
-fn get_kind(
-    expected_kind: Option<&fastn_type::KindData>,
-    found_kind: &fastn_type::KindData,
-) -> fastn_type::KindData {
-    if let Some(expected_kind) = expected_kind {
-        if expected_kind.kind.ref_inner_list().ref_inner().is_ui() {
-            expected_kind.clone()
-        } else {
-            let mut expected_kind = expected_kind.clone();
-            if !found_kind.is_module() && !found_kind.is_or_type() {
-                expected_kind.kind = found_kind.kind.clone();
-            }
-            expected_kind
-        }
-    } else {
-        found_kind.clone()
-    }
-}

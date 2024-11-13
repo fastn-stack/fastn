@@ -41,17 +41,18 @@ pub mod utils;
 pub use prelude::*;
 
 pub use tdoc::{BagOrState, TDoc};
-pub(crate) use things::component::ComponentExt;
-pub(crate) use things::component::EventNameExt;
-pub(crate) use things::component::LoopExt;
-pub(crate) use things::component::PropertyExt;
-pub(crate) use things::component::PropertySourceExt;
+pub use things::component::ComponentExt;
+pub use things::component::EventNameExt;
+pub use things::component::LoopExt;
+pub use things::component::PropertyExt;
+pub use things::component::PropertySourceExt;
 pub use things::expression;
 
-pub(crate) use things::function::FunctionExt;
-pub(crate) use things::kind::{KindDataExt, KindExt};
-pub(crate) use things::record::FieldExt;
-pub(crate) use things::value::{PropertyValueExt, PropertyValueSourceExt, ValueExt};
+pub use things::function::FunctionExt;
+pub use things::kind::KindDataExt;
+pub use things::kind::KindExt;
+pub use things::record::FieldExt;
+pub use things::value::{PropertyValueExt, PropertyValueSourceExt, ValueExt};
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {

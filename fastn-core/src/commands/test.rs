@@ -1,3 +1,5 @@
+use ftd::interpreter::{ComponentExt, PropertyValueExt, ValueExt};
+
 pub(crate) const TEST_FOLDER: &str = "_tests";
 pub(crate) const FIXTURE_FOLDER: &str = "fixtures";
 pub(crate) const TEST_FILE_EXTENSION: &str = ".test.ftd";

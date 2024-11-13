@@ -1,3 +1,5 @@
+use ftd::js::value::ArgumentExt;
+
 #[allow(dead_code)]
 pub fn trim_all_lines(s: &str) -> String {
     use itertools::Itertools;

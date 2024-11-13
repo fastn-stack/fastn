@@ -1,3 +1,5 @@
+use ftd::interpreter::PropertyValueExt;
+
 pub(crate) fn get_p1_data(
     name: &str,
     value: &ftd_ast::VariableValue,

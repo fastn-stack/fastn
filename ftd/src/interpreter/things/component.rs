@@ -2,7 +2,7 @@ use ftd::interpreter::expression::ExpressionExt;
 use ftd::interpreter::things::function::FunctionCallExt;
 use ftd::interpreter::things::record::FieldExt;
 
-pub(crate) trait ComponentDefinitionExt {
+pub trait ComponentDefinitionExt {
     fn new(
         name: &str,
         arguments: Vec<fastn_type::Argument>,
@@ -414,7 +414,7 @@ fn get_module_name_and_thing(
     }
 }
 
-pub(crate) trait PropertyExt {
+pub trait PropertyExt {
     fn resolve(
         &self,
         doc: &ftd::interpreter::TDoc,
@@ -959,7 +959,7 @@ impl PropertyExt for fastn_type::Property {
     }
 }
 
-pub(crate) trait ComponentExt {
+pub trait ComponentExt {
     fn scan_ast(
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
@@ -1454,7 +1454,7 @@ impl ComponentExt for fastn_type::Component {
     }
 }
 
-pub(crate) trait LoopExt {
+pub trait LoopExt {
     fn new(
         on: fastn_type::PropertyValue,
         alias: &str,
@@ -1602,7 +1602,7 @@ impl LoopExt for fastn_type::Loop {
     }
 }
 
-pub(crate) trait EventExt {
+pub trait EventExt {
     fn from_ast_event(
         ast_event: ftd_ast::Event,
         definition_name_with_arguments: &mut Option<(&str, &mut [fastn_type::Argument])>,
@@ -1733,7 +1733,7 @@ impl EventExt for fastn_type::Event {
     }
 }
 
-pub(crate) trait EventNameExt {
+pub trait EventNameExt {
     fn from_string(
         e: &str,
         doc_id: &str,
@@ -1804,7 +1804,7 @@ impl EventNameExt for fastn_type::EventName {
     }
 }
 
-pub(crate) trait PropertySourceExt {
+pub trait PropertySourceExt {
     fn from_ast(item: ftd_ast::PropertySource) -> Self;
 }
 

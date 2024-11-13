@@ -1,3 +1,5 @@
+use ftd::js::value::{ArgumentExt, ExpressionExt};
+
 pub(crate) trait FunctionCallExt {
     fn to_js_function(
         &self,

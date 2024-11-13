@@ -1,9 +1,9 @@
 use ftd::interpreter::expression::ExpressionExt;
 use ftd::interpreter::things::function::FunctionCallExt;
 use ftd::interpreter::things::record::FieldExt;
-use ftd::interpreter::FunctionExt;
+use ftd::interpreter::{FunctionExt, KindExt};
 
-pub(crate) trait PropertyValueExt {
+pub trait PropertyValueExt {
     fn resolve(
         self,
         doc: &ftd::interpreter::TDoc,
@@ -1399,7 +1399,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
     }
 }
 
-pub(crate) trait PropertyValueSourceExt {
+pub trait PropertyValueSourceExt {
     fn get_reference_name(&self, name: &str, doc: &ftd::interpreter::TDoc) -> String;
 }
 impl PropertyValueSourceExt for fastn_type::PropertyValueSource {
@@ -1422,7 +1422,7 @@ impl PropertyValueSourceExt for fastn_type::PropertyValueSource {
     }
 }
 
-pub(crate) trait ValueExt {
+pub trait ValueExt {
     fn string(&self, doc_id: &str, line_number: usize) -> ftd::interpreter::Result<String>;
     fn decimal(&self, doc_id: &str, line_number: usize) -> ftd::interpreter::Result<f64>;
     fn integer(&self, doc_id: &str, line_number: usize) -> ftd::interpreter::Result<i64>;
