@@ -5,7 +5,7 @@ pub fn section_init(
     scanner.skip_spaces();
     let dashdash = scanner.token("--")?;
     scanner.skip_spaces();
-    let name = fastn_section::kinded_name(scanner)?;
+    let name = fastn_section::parser::kinded_name(scanner)?;
     scanner.skip_spaces();
     let colon = scanner.token(":")?;
     Some(fastn_section::SectionInit {

@@ -1,7 +1,7 @@
 pub fn qualified_identifier(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Option<fastn_section::QualifiedIdentifier> {
-    let module = match fastn_section::module_name(scanner) {
+    let module = match fastn_section::parser::module_name(scanner) {
         Some(module) => match scanner.peek() {
             Some('#') => {
                 scanner.pop();
@@ -19,7 +19,7 @@ pub fn qualified_identifier(
 
     let terms = {
         let mut terms = Vec::new();
-        while let Some(identifier) = fastn_section::identifier(scanner) {
+        while let Some(identifier) = fastn_section::parser::identifier(scanner) {
             terms.push(identifier);
             if !scanner.take('.') {
                 break;

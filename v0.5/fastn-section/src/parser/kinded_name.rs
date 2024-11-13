@@ -1,10 +1,10 @@
 pub fn kinded_name(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Option<fastn_section::KindedName> {
-    let kind = fastn_section::kind(scanner);
+    let kind = fastn_section::parser::kind(scanner);
     scanner.skip_spaces();
 
-    let name = match fastn_section::identifier(scanner) {
+    let name = match fastn_section::parser::identifier(scanner) {
         Some(v) => v,
         None => {
             return kind.and_then(Into::into);

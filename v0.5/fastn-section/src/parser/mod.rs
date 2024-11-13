@@ -1,13 +1,23 @@
-pub(super) mod header_value;
-pub(super) mod identifier;
-pub(super) mod kind;
-pub(super) mod kinded_name;
-pub(super) mod module_name;
-pub(super) mod package_name;
-pub(super) mod qualified_identifier;
-pub(super) mod section;
-pub(super) mod section_init;
-pub(super) mod visibility;
+mod header_value;
+mod identifier;
+mod kind;
+mod kinded_name;
+mod module_name;
+mod package_name;
+mod qualified_identifier;
+mod section;
+mod section_init;
+mod visibility;
+
+pub use header_value::header_value;
+pub use identifier::identifier;
+pub use kind::kind;
+pub use kinded_name::kinded_name;
+pub use module_name::module_name;
+pub use package_name::package_name;
+pub use qualified_identifier::qualified_identifier;
+pub use section::section;
+pub use section_init::section_init;
 
 impl fastn_section::Document {
     pub fn parse(source: &str) -> fastn_section::Document {
@@ -24,7 +34,7 @@ impl fastn_section::Document {
 pub fn document(scanner: &mut fastn_section::Scanner<fastn_section::Document>) {
     // TODO: parse module_doc, comments etc
     scanner.skip_spaces();
-    while let Some(section) = fastn_section::section(scanner) {
+    while let Some(section) = fastn_section::parser::section(scanner) {
         scanner.skip_spaces();
         scanner.skip_new_lines();
         scanner.skip_spaces();

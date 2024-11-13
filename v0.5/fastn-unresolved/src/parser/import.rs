@@ -33,7 +33,7 @@ pub(super) fn import(
 
     // ensure there are no extra headers, children or body
     fastn_unresolved::utils::assert_no_body(&section, document);
-    fastn_unresolved::utils::assert_no_sub_sections(&section, document);
+    fastn_unresolved::utils::assert_no_children(&section, document);
     fastn_unresolved::utils::assert_no_extra_headers(
         source,
         &section,

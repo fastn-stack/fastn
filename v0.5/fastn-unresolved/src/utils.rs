@@ -37,11 +37,11 @@ pub(crate) fn assert_no_body(
     true
 }
 
-pub(crate) fn assert_no_sub_sections(
+pub(crate) fn assert_no_children(
     section: &fastn_section::Section,
     document: &mut fastn_unresolved::Document,
 ) -> bool {
-    if !section.sub_sections.is_empty() {
+    if !section.children.is_empty() {
         document.errors.push(
             section
                 .init

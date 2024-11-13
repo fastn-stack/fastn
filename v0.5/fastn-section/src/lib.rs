@@ -14,15 +14,6 @@ mod warning;
 mod wiggin;
 
 pub use error::Error;
-pub use fastn_section::parser::header_value::header_value;
-pub use fastn_section::parser::identifier::identifier;
-pub use fastn_section::parser::kind::kind;
-pub use fastn_section::parser::kinded_name::kinded_name;
-pub use fastn_section::parser::module_name::module_name;
-pub use fastn_section::parser::package_name::package_name;
-pub use fastn_section::parser::qualified_identifier::qualified_identifier;
-pub use fastn_section::parser::section::section;
-pub use fastn_section::parser::section_init::section_init;
 pub use fastn_section::warning::Warning;
 pub use scanner::{Scannable, Scanner};
 
@@ -80,8 +71,7 @@ pub struct Section {
     pub caption: Option<fastn_section::HeaderValue>,
     pub headers: Vec<Header>,
     pub body: Option<fastn_section::HeaderValue>,
-    pub children: Vec<Section>, // TODO: this must be `Spanned<Section>`
-    pub sub_sections: Vec<fastn_section::Spanned<Section>>,
+    pub children: Vec<Section>,
     pub function_marker: Option<fastn_section::Span>,
     pub is_commented: bool,
     // if the user used `-- end: <section-name>` to end the section
