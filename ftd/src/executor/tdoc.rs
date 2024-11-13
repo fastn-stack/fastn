@@ -1,3 +1,5 @@
+use ftd::interpreter::VariableExt;
+
 #[derive(Debug, PartialEq)]
 pub struct TDoc<'a> {
     pub name: &'a str,
@@ -154,7 +156,7 @@ impl TDoc<'_> {
             (None, vec![]),
             |(mut default, mut conditions), property| {
                 if let Some(condition) = property.condition {
-                    conditions.push(ftd::interpreter::ConditionalValue::new(
+                    conditions.push(fastn_type::ConditionalValue::new(
                         condition,
                         property.value,
                         property.line_number,
@@ -233,7 +235,7 @@ impl TDoc<'_> {
             );
         }
 
-        let variable = ftd::interpreter::Variable {
+        let variable = fastn_type::Variable {
             name: variable_name.to_string(),
             kind: argument.kind.to_owned(),
             mutable: argument.mutable,

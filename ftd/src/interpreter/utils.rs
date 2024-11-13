@@ -392,7 +392,7 @@ pub fn get_argument_for_reference_and_remaining(
 }
 
 pub fn validate_variable(
-    variable: &ftd::interpreter::Variable,
+    variable: &fastn_type::Variable,
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::interpreter::Result<()> {
     if !variable.mutable {

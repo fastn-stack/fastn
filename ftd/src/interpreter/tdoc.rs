@@ -123,7 +123,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Variable> {
+    ) -> ftd::interpreter::Result<fastn_type::Variable> {
         match self.get_thing(name, line_number)? {
             ftd::interpreter::Thing::Variable(r) => Ok(r),
             t => self.err(
@@ -152,8 +152,7 @@ impl<'a> TDoc<'a> {
         &mut self,
         name: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Variable>>
-    {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::Variable>> {
         match self.search_thing(name, line_number)? {
             ftd::interpreter::StateWithThing::State(s) => {
                 Ok(ftd::interpreter::StateWithThing::new_state(s))
@@ -326,7 +325,7 @@ impl<'a> TDoc<'a> {
         name: &'a str,
         value: fastn_type::PropertyValue,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Variable> {
+    ) -> ftd::interpreter::Result<fastn_type::Variable> {
         let (mut variable, mut remaining) = self.get_initial_variable(name, line_number)?;
 
         if !variable.mutable {
@@ -357,8 +356,7 @@ impl<'a> TDoc<'a> {
             name: Option<String>,
             doc: &ftd::interpreter::TDoc,
             line_number: usize,
-        ) -> ftd::interpreter::Result<Option<(ftd::interpreter::Variable, Option<String>)>>
-        {
+        ) -> ftd::interpreter::Result<Option<(fastn_type::Variable, Option<String>)>> {
             use ftd::interpreter::PropertyValueExt;
 
             let mut variable = None;
@@ -435,7 +433,7 @@ impl<'a> TDoc<'a> {
         }
 
         fn set_value_(
-            variable: &mut ftd::interpreter::Variable,
+            variable: &mut fastn_type::Variable,
             value: fastn_type::PropertyValue,
             remaining: Option<String>,
             doc: &ftd::interpreter::TDoc,
@@ -896,7 +894,7 @@ impl<'a> TDoc<'a> {
 
             let (v, remaining) = ftd::interpreter::utils::split_at(name, ".");
             let thing = match thing.clone() {
-                ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+                ftd::interpreter::Thing::Variable(fastn_type::Variable {
                     name,
                     value,
                     mutable,
@@ -942,23 +940,22 @@ impl<'a> TDoc<'a> {
                                     );
                                 }
                             };
-                            let thing =
-                                ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
-                                    name,
-                                    kind: kind.to_owned(),
-                                    mutable,
-                                    value: fastn_type::PropertyValue::Value {
-                                        value: fastn_type::Value::Optional {
-                                            data: Box::new(None),
-                                            kind,
-                                        },
-                                        is_mutable: mutable,
-                                        line_number,
+                            let thing = ftd::interpreter::Thing::Variable(fastn_type::Variable {
+                                name,
+                                kind: kind.to_owned(),
+                                mutable,
+                                value: fastn_type::PropertyValue::Value {
+                                    value: fastn_type::Value::Optional {
+                                        data: Box::new(None),
+                                        kind,
                                     },
-                                    conditional_value: vec![],
+                                    is_mutable: mutable,
                                     line_number,
-                                    is_static: !mutable,
-                                });
+                                },
+                                conditional_value: vec![],
+                                line_number,
+                                is_static: !mutable,
+                            });
                             if let Some(remaining) = remaining {
                                 return get_thing_(doc, line_number, &remaining, &thing);
                             }
@@ -971,7 +968,7 @@ impl<'a> TDoc<'a> {
                             value: val,
                             line_number,
                             is_mutable,
-                        }) => ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+                        }) => ftd::interpreter::Thing::Variable(fastn_type::Variable {
                             name,
                             kind: fastn_type::KindData {
                                 kind: val.kind(),
@@ -1051,7 +1048,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<(ftd::interpreter::Variable, Option<String>)> {
+    ) -> ftd::interpreter::Result<(fastn_type::Variable, Option<String>)> {
         self.get_initial_variable_with_inherited(name, line_number, &Default::default())
     }
 
@@ -1060,7 +1057,7 @@ impl<'a> TDoc<'a> {
         name: &'a str,
         line_number: usize,
         inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::interpreter::Result<(ftd::interpreter::Variable, Option<String>)> {
+    ) -> ftd::interpreter::Result<(fastn_type::Variable, Option<String>)> {
         let (initial_thing, remaining) =
             self.get_initial_thing_with_inherited(name, line_number, inherited_variables)?;
         Ok((initial_thing.variable(self.name, line_number)?, remaining))
@@ -1334,7 +1331,7 @@ impl<'a> TDoc<'a> {
 
             let (v, remaining) = ftd::interpreter::utils::split_at(name, ".");
             let thing = match thing.clone() {
-                ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+                ftd::interpreter::Thing::Variable(fastn_type::Variable {
                     name,
                     value,
                     mutable,
@@ -1381,23 +1378,22 @@ impl<'a> TDoc<'a> {
                                     );
                                 }
                             };
-                            let thing =
-                                ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
-                                    name,
-                                    kind: kind.to_owned(),
-                                    mutable,
-                                    value: fastn_type::PropertyValue::Value {
-                                        value: fastn_type::Value::Optional {
-                                            data: Box::new(None),
-                                            kind,
-                                        },
-                                        is_mutable: mutable,
-                                        line_number,
+                            let thing = ftd::interpreter::Thing::Variable(fastn_type::Variable {
+                                name,
+                                kind: kind.to_owned(),
+                                mutable,
+                                value: fastn_type::PropertyValue::Value {
+                                    value: fastn_type::Value::Optional {
+                                        data: Box::new(None),
+                                        kind,
                                     },
-                                    conditional_value: vec![],
+                                    is_mutable: mutable,
                                     line_number,
-                                    is_static: !mutable,
-                                });
+                                },
+                                conditional_value: vec![],
+                                line_number,
+                                is_static: !mutable,
+                            });
                             if let Some(remaining) = remaining {
                                 return search_thing_(doc, line_number, &remaining, thing);
                             }
@@ -1410,7 +1406,7 @@ impl<'a> TDoc<'a> {
                             value: val,
                             line_number,
                             ..
-                        }) => ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+                        }) => ftd::interpreter::Thing::Variable(fastn_type::Variable {
                             name,
                             kind: fastn_type::KindData {
                                 kind: val.kind(),

@@ -4056,7 +4056,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#dark-mode".to_string(),
-            ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+            ftd::interpreter::Thing::Variable(fastn_type::Variable {
                 name: "ftd#dark-mode".to_string(),
                 kind: fastn_type::Kind::boolean().into_kind_data(),
                 mutable: true,
@@ -4072,7 +4072,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#empty".to_string(),
-            ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+            ftd::interpreter::Thing::Variable(fastn_type::Variable {
                 name: "ftd#empty".to_string(),
                 kind: fastn_type::Kind::string().into_kind_data(),
                 mutable: false,
@@ -4088,7 +4088,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#space".to_string(),
-            ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+            ftd::interpreter::Thing::Variable(fastn_type::Variable {
                 name: "ftd#space".to_string(),
                 kind: fastn_type::Kind::string().into_kind_data(),
                 mutable: false,
@@ -4104,7 +4104,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#nbsp".to_string(),
-            ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+            ftd::interpreter::Thing::Variable(fastn_type::Variable {
                 name: "ftd#nbsp".to_string(),
                 kind: fastn_type::Kind::string().into_kind_data(),
                 mutable: false,
@@ -4120,7 +4120,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#non-breaking-space".to_string(),
-            ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+            ftd::interpreter::Thing::Variable(fastn_type::Variable {
                 name: "ftd#non-breaking-space".to_string(),
                 kind: fastn_type::Kind::string().into_kind_data(),
                 mutable: false,
@@ -4136,7 +4136,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#system-dark-mode".to_string(),
-            ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+            ftd::interpreter::Thing::Variable(fastn_type::Variable {
                 name: "ftd#system-dark-mode".to_string(),
                 kind: fastn_type::Kind::boolean().into_kind_data(),
                 mutable: true,
@@ -4152,7 +4152,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#follow-system-dark-mode".to_string(),
-            ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+            ftd::interpreter::Thing::Variable(fastn_type::Variable {
                 name: "ftd#follow-system-dark-mode".to_string(),
                 kind: fastn_type::Kind::boolean().into_kind_data(),
                 mutable: true,
@@ -4811,7 +4811,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#font-display".to_string(),
-             ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+             ftd::interpreter::Thing::Variable(fastn_type::Variable {
                  name: "ftd#font-display".to_string(),
                  kind: fastn_type::Kind::string().into_kind_data(),
                  mutable: true,
@@ -4827,7 +4827,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#font-copy".to_string(),
-            ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+            ftd::interpreter::Thing::Variable(fastn_type::Variable {
                 name: "ftd#font-copy".to_string(),
                 kind: fastn_type::Kind::string().into_kind_data(),
                 mutable: true,
@@ -4843,7 +4843,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#font-code".to_string(),
-            ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+            ftd::interpreter::Thing::Variable(fastn_type::Variable {
                 name: "ftd#font-code".to_string(),
                 kind: fastn_type::Kind::string().into_kind_data(),
                 mutable: true,
@@ -4859,7 +4859,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#default-types".to_string(),
-            ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+            ftd::interpreter::Thing::Variable(fastn_type::Variable {
                 name: "ftd#default-types".to_string(),
                 kind: fastn_type::Kind::record(ftd::interpreter::FTD_TYPE_DATA).into_kind_data(),
                 mutable: true,
@@ -7621,7 +7621,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#default-colors".to_string(),
-            ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+            ftd::interpreter::Thing::Variable(fastn_type::Variable {
                 name: "ftd#default-colors".to_string(),
                 kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR_SCHEME)
                     .into_kind_data(),
@@ -9966,7 +9966,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             ftd::interpreter::FTD_BREAKPOINT_WIDTH.to_string(),
-            ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+            ftd::interpreter::Thing::Variable(fastn_type::Variable {
                 name: ftd::interpreter::FTD_BREAKPOINT_WIDTH.to_string(),
                 kind: fastn_type::Kind::record
                     (ftd::interpreter::FTD_BREAKPOINT_WIDTH_DATA).into_kind_data(),
@@ -10026,7 +10026,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             ftd::interpreter::FTD_DEVICE.to_string(),
-            ftd::interpreter::Thing::Variable(ftd::interpreter::Variable {
+            ftd::interpreter::Thing::Variable(fastn_type::Variable {
                 name: ftd::interpreter::FTD_DEVICE.to_string(),
                 kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_DEVICE_DATA)
                     .into_kind_data(),

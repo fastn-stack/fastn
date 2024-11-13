@@ -1,8 +1,8 @@
 use ftd::interpreter::expression::ExpressionExt;
 use ftd::interpreter::things::component::ComponentDefinitionExt;
 use ftd::interpreter::things::record::RecordExt;
-use ftd::interpreter::ComponentExt;
 use ftd::interpreter::FunctionExt;
+use ftd::interpreter::{ComponentExt, VariableExt};
 
 /// The `InterpreterState` struct is a representation of the state of an interpreter. It contains
 /// information about the interpreter's current state and its progress through the code being
@@ -382,10 +382,10 @@ impl InterpreterState {
             } else if ast.is_variable_definition() {
                 if !is_in_bag {
                     if number_of_scan.eq(&1) {
-                        ftd::interpreter::Variable::scan_ast(ast, &mut doc)?;
+                        fastn_type::Variable::scan_ast(ast, &mut doc)?;
                         continue;
                     } else {
-                        match ftd::interpreter::Variable::from_ast(ast, &mut doc, number_of_scan)? {
+                        match fastn_type::Variable::from_ast(ast, &mut doc, number_of_scan)? {
                             ftd::interpreter::StateWithThing::State(s) => {
                                 return Ok(s.into_interpreter(self))
                             }
@@ -408,10 +408,10 @@ impl InterpreterState {
                 }
             } else if ast.is_variable_invocation() {
                 if number_of_scan.eq(&1) {
-                    ftd::interpreter::Variable::scan_update_from_ast(ast, &mut doc)?;
+                    fastn_type::Variable::scan_update_from_ast(ast, &mut doc)?;
                     continue;
                 } else {
-                    match ftd::interpreter::Variable::update_from_ast(ast, &mut doc)? {
+                    match fastn_type::Variable::update_from_ast(ast, &mut doc)? {
                         ftd::interpreter::StateWithThing::State(s) => {
                             return Ok(s.into_interpreter(self))
                         }
@@ -892,7 +892,7 @@ impl InterpreterState {
         let value =
             value.into_property_value(variable_definition.mutable, variable_definition.line_number);
 
-        let variable = ftd::interpreter::Variable {
+        let variable = fastn_type::Variable {
             name,
             kind,
             mutable: variable_definition.mutable,
@@ -923,7 +923,7 @@ impl InterpreterState {
         let aliases = parsed_document.doc_aliases.clone();
         let doc = ftd::interpreter::TDoc::new_state(&name, &aliases, &mut self);
         let var_name = doc.resolve_name(variable);
-        let variable = ftd::interpreter::Variable {
+        let variable = fastn_type::Variable {
             name: var_name,
             kind: value.kind().into_kind_data(),
             mutable: false,

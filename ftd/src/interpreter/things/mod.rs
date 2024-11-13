@@ -17,7 +17,7 @@ pub enum Thing {
         or_type: String,
         variant: ftd::interpreter::OrTypeVariant,
     },
-    Variable(ftd::interpreter::Variable),
+    Variable(fastn_type::Variable),
     Component(fastn_type::ComponentDefinition),
     WebComponent(ftd::interpreter::WebComponentDefinition),
     Function(fastn_type::Function),
@@ -59,7 +59,7 @@ impl Thing {
         self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Variable> {
+    ) -> ftd::interpreter::Result<fastn_type::Variable> {
         match self {
             ftd::interpreter::Thing::Variable(v) => Ok(v),
             t => ftd::interpreter::utils::e2(

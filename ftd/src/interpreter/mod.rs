@@ -53,6 +53,7 @@ pub use things::kind::KindDataExt;
 pub use things::kind::KindExt;
 pub use things::record::FieldExt;
 pub use things::value::{PropertyValueExt, PropertyValueSourceExt, ValueExt};
+pub use things::variable::VariableExt;
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {

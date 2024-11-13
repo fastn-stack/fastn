@@ -1,16 +1,25 @@
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Variable {
-    pub name: String,
-    pub kind: fastn_type::KindData,
-    pub mutable: bool,
-    pub value: fastn_type::PropertyValue,
-    pub conditional_value: Vec<ConditionalValue>,
-    pub line_number: usize,
-    pub is_static: bool,
+pub trait VariableExt {
+    fn scan_ast(
+        ast: ftd_ast::Ast,
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()>;
+    fn from_ast(
+        ast: ftd_ast::Ast,
+        doc: &mut ftd::interpreter::TDoc,
+        number_of_scan: usize,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::Variable>>;
+    fn scan_update_from_ast(
+        ast: ftd_ast::Ast,
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<()>;
+    fn update_from_ast(
+        ast: ftd_ast::Ast,
+        doc: &mut ftd::interpreter::TDoc,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::Variable>>;
+    fn set_static(self, doc: &ftd::interpreter::TDoc) -> Self;
 }
-
-impl Variable {
-    pub(crate) fn scan_ast(
+impl VariableExt for fastn_type::Variable {
+    fn scan_ast(
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
@@ -72,12 +81,11 @@ impl Variable {
         Ok(())
     }
 
-    pub(crate) fn from_ast(
+    fn from_ast(
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
         number_of_scan: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Variable>>
-    {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::Variable>> {
         use ftd::interpreter::{KindDataExt, PropertyValueExt};
 
         let variable_definition = ast.clone().get_variable_definition(doc.name)?;
@@ -171,7 +179,7 @@ impl Variable {
             Some(&kind),
         )?);
 
-        let variable = Variable {
+        let variable = fastn_type::Variable {
             name,
             kind,
             mutable: variable_definition.mutable,
@@ -187,7 +195,7 @@ impl Variable {
         Ok(ftd::interpreter::StateWithThing::new_thing(variable))
     }
 
-    pub(crate) fn scan_update_from_ast(
+    fn scan_update_from_ast(
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
@@ -197,11 +205,10 @@ impl Variable {
         fastn_type::PropertyValue::scan_ast_value(variable_definition.value, doc)
     }
 
-    pub(crate) fn update_from_ast(
+    fn update_from_ast(
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<ftd::interpreter::Variable>>
-    {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::Variable>> {
         use ftd::interpreter::PropertyValueExt;
 
         let variable_definition = ast.get_variable_invocation(doc.name)?;
@@ -225,7 +232,7 @@ impl Variable {
         Ok(ftd::interpreter::StateWithThing::new_thing(variable))
     }
 
-    pub fn set_static(self, doc: &ftd::interpreter::TDoc) -> Self {
+    fn set_static(self, doc: &ftd::interpreter::TDoc) -> Self {
         use ftd::interpreter::PropertyValueExt;
 
         let mut variable = self;
@@ -251,30 +258,5 @@ impl Variable {
         }
 
         variable
-    }
-
-    pub fn is_static(&self) -> bool {
-        !self.mutable && self.is_static
-    }
-}
-
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct ConditionalValue {
-    pub condition: fastn_type::Expression,
-    pub value: fastn_type::PropertyValue,
-    pub line_number: usize,
-}
-
-impl ConditionalValue {
-    pub fn new(
-        condition: fastn_type::Expression,
-        value: fastn_type::PropertyValue,
-        line_number: usize,
-    ) -> ConditionalValue {
-        ConditionalValue {
-            condition,
-            value,
-            line_number,
-        }
     }
 }

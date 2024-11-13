@@ -218,8 +218,17 @@ impl FunctionExt for fastn_type::Function {
     }
 }
 
-impl ftd::interpreter::Variable {
-    pub fn to_ast(
+pub(crate) trait VariableExt {
+    fn to_ast(
+        &self,
+        doc: &ftd::interpreter::TDoc,
+        prefix: Option<String>,
+        has_rive_components: &mut bool,
+    ) -> fastn_js::Ast;
+}
+
+impl VariableExt for fastn_type::Variable {
+    fn to_ast(
         &self,
         doc: &ftd::interpreter::TDoc,
         prefix: Option<String>,

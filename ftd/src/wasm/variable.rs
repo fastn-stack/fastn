@@ -1,4 +1,4 @@
-impl ftd::interpreter::Variable {
+impl fastn_type::Variable {
     // Input:
     //  "foo#message", type: String, value: "Hello World"
     // Output:

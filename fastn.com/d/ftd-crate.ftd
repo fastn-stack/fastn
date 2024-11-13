@@ -104,7 +104,7 @@ pub enum Thing {
         or_type: String,
         variant: ftd::interpreter::OrTypeVariant,
     },
-    Variable(ftd::interpreter::Variable),
+    Variable(fastn_type::Variable),
     Component(fastn_type::ComponentDefinition),
     WebComponent(ftd::interpreter::WebComponentDefinition),
     Function(fastn_type::Function),

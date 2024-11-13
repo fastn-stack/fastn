@@ -26,4 +26,7 @@ pub use record::{AccessModifier, Field, Record};
 mod module_thing;
 pub use module_thing::ModuleThing;
 
+mod variable;
+pub use variable::{ConditionalValue, Variable};
+
 pub type Map<T> = std::collections::BTreeMap<String, T>;
