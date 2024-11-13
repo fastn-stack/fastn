@@ -4,8 +4,36 @@ on:
   workflow_dispatch:
   push:
     branches: [ main ]
+    paths:
+      # Order matters!
+      # See https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#onpushpull_requestpull_request_targetpathspaths-ignore
+      - '**.rs'
+      - '**.ftd' # ftd/html/js/css are fbt-tests items mostly
+      - '**.p1'
+      - '**.html'
+      - '**.js'
+      - '**.css'
+      - '!t/' # We use this for playground
+      - '!fastn.com/'
+      - '!v0.5/' # TODO: remove this when we're ready to release v0.5
+      - '!.github/'
+      - '.github/workflows/tests-and-formatting.yml'
   pull_request:
     branches: [ main ]
+    paths:
+      # Order matters!
+      # See https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#onpushpull_requestpull_request_targetpathspaths-ignore
+      - '**.rs'
+      - '**.ftd' # ftd/html/js/css are fbt-tests items mostly
+      - '**.p1'
+      - '**.html'
+      - '**.js'
+      - '**.css'
+      - '!t/' # We use this for playground
+      - '!fastn.com/'
+      - '!v0.5/' # TODO: remove this when we're ready to release v0.5
+      - '!.github/'
+      - '.github/workflows/tests-and-formatting.yml'
 jobs:
   tests-and-formatting:
     name: Rust/JS Checks/Formatting
