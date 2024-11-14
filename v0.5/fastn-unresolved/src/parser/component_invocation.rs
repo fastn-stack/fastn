@@ -38,6 +38,6 @@ mod tests {
 
     #[test]
     fn component_invocation() {
-        t!("-- import: foo", { "import": "foo" });
+        t!("-- ftd.text: hello", { "content": "ftd.text", "caption": "hello" });
     }
 }
