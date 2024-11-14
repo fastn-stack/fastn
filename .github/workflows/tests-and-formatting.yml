@@ -14,9 +14,9 @@ on:
       - '**.js'
       - '**.css'
       - '!t/**' # We use this for playground
-      - '!fastn.com/'
+      - '!fastn.com/**'
       - '!v0.5/**' # TODO: remove this when we're ready to release v0.5
-      - '!.github/'
+      - '!.github/**'
       - '.github/workflows/tests-and-formatting.yml'
   pull_request:
     branches: [ main ]
@@ -29,10 +29,10 @@ on:
       - '**.html'
       - '**.js'
       - '**.css'
-      - '!t/' # We use this for playground
-      - '!fastn.com/'
-      - '!v0.5/' # TODO: remove this when we're ready to release v0.5
-      - '!.github/'
+      - '!t/**' # We use this for playground
+      - '!fastn.com/**'
+      - '!v0.5/**' # TODO: remove this when we're ready to release v0.5
+      - '!.github/**'
       - '.github/workflows/tests-and-formatting.yml'
 jobs:
   tests-and-formatting:
