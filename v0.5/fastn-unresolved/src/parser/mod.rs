@@ -45,7 +45,7 @@ pub fn parse(_document_id: &str, source: &str) -> fastn_unresolved::Document {
 fn t1<PARSER, TESTER>(source: &str, expected: serde_json::Value, parser: PARSER, tester: TESTER)
 where
     PARSER: Fn(&str, fastn_section::Section, &mut fastn_unresolved::Document),
-    TESTER: FnOnce(fastn_unresolved::Document, &str, serde_json::Value) -> bool,
+    TESTER: FnOnce(fastn_unresolved::Document, &str, serde_json::Value),
 {
     println!("--------- testing -----------\n{source}\n--------- source ------------");
 
@@ -60,7 +60,7 @@ where
     // assert everything else is empty
     parser(source, section, &mut document);
 
-    assert!(tester(document, source, expected));
+    tester(document, source, expected);
 }
 
 #[cfg(test)]

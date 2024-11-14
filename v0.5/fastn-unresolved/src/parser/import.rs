@@ -108,16 +108,16 @@ fn aliasable(s: &str) -> fastn_unresolved::AliasableIdentifier {
 
 #[cfg(test)]
 mod tests {
-    fn tester(
-        mut d: fastn_unresolved::Document,
-        source: &str,
-        expected: serde_json::Value,
-    ) -> bool {
+    #[track_caller]
+    fn tester(mut d: fastn_unresolved::Document, source: &str, expected: serde_json::Value) {
         assert!(d.content.is_empty());
         assert!(d.definitions.is_empty());
         assert_eq!(d.imports.len(), 1);
 
-        fastn_section::JDebug::debug(&d.imports.pop().unwrap(), source) == expected
+        assert_eq!(
+            fastn_section::JDebug::debug(&d.imports.pop().unwrap(), source),
+            expected
+        )
     }
 
     fastn_unresolved::tt!(super::import, tester);
