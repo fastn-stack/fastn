@@ -136,6 +136,11 @@ mod tests {
         t!("-- import: foo", { "import": "foo" });
         t!("-- import: foo.fifthtry.site/bar", { "import": "foo.fifthtry.site/bar" });
         t!("-- import: foo as f", { "import": "foo=>f" });
+    }
+
+    #[test]
+    #[should_panic]
+    fn failing_tests() {
         t!("-- import: foo as f\nexposing: x", { "import": "foo=>f", "exposing": ["x"] });
         t!("-- import: foo\nexposing: x", { "import": "foo", "exposing": ["x"] });
         t!("-- import: foo\nexposing: x, y, z", { "import": "foo", "exposing": ["x", "y", "z"] });
