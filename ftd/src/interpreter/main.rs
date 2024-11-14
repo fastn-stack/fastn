@@ -1214,7 +1214,10 @@ impl Document {
             .collect_vec()
     }
 
-    pub fn get_component_by_id(&self, component_id: &str) -> Option<&fastn_type::ComponentInvocation> {
+    pub fn get_component_by_id(
+        &self,
+        component_id: &str,
+    ) -> Option<&fastn_type::ComponentInvocation> {
         self.tree.iter().find(|v| {
             if let Some(id) = &v.id {
                 return id.eq(component_id);

@@ -596,11 +596,13 @@ impl PropertyExt for fastn_type::Property {
         let children = {
             let mut children = vec![];
             for child in ast_children {
-                children.push(try_ok_state!(fastn_type::ComponentInvocation::from_ast_component(
-                    child,
-                    definition_name_with_arguments,
-                    doc
-                )?));
+                children.push(try_ok_state!(
+                    fastn_type::ComponentInvocation::from_ast_component(
+                        child,
+                        definition_name_with_arguments,
+                        doc
+                    )?
+                ));
             }
             children
         };
@@ -645,7 +647,11 @@ impl PropertyExt for fastn_type::Property {
         }
 
         for child in ast_children {
-            fastn_type::ComponentInvocation::scan_ast_component(child, definition_name_with_arguments, doc)?;
+            fastn_type::ComponentInvocation::scan_ast_component(
+                child,
+                definition_name_with_arguments,
+                doc,
+            )?;
         }
 
         Ok(())
@@ -999,7 +1005,9 @@ pub trait ComponentExt {
         ast_properties: &[ftd_ast::Property],
         ast_children: &[ftd_ast::ComponentInvocation],
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Option<fastn_type::ComponentInvocation>>>;
+    ) -> ftd::interpreter::Result<
+        ftd::interpreter::StateWithThing<Option<fastn_type::ComponentInvocation>>,
+    >;
 }
 
 impl ComponentExt for fastn_type::ComponentInvocation {
@@ -1014,7 +1022,8 @@ impl ComponentExt for fastn_type::ComponentInvocation {
     fn from_ast(
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::ComponentInvocation>> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::ComponentInvocation>>
+    {
         let component_invocation = ast.get_component_invocation(doc.name)?;
         fastn_type::ComponentInvocation::from_ast_component(component_invocation, &mut None, doc)
     }
@@ -1023,7 +1032,8 @@ impl ComponentExt for fastn_type::ComponentInvocation {
         ast_component: ftd_ast::ComponentInvocation,
         definition_name_with_arguments: &mut Option<(&str, &mut [fastn_type::Argument])>,
         doc: &mut ftd::interpreter::TDoc,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::ComponentInvocation>> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::ComponentInvocation>>
+    {
         let name = doc.resolve_name(ast_component.name.as_str());
 
         // If the component is from `module` type argument
@@ -1072,18 +1082,20 @@ impl ComponentExt for fastn_type::ComponentInvocation {
             doc,
         )?);
 
-        if let Some(component) = try_ok_state!(fastn_type::ComponentInvocation::variable_component_from_ast(
-            ast_component.name.as_str(),
-            definition_name_with_arguments,
-            doc,
-            &iteration,
-            &condition,
-            &loop_object_name_and_kind,
-            events.as_slice(),
-            &ast_component.properties,
-            &ast_component.children,
-            ast_component.line_number
-        )?) {
+        if let Some(component) = try_ok_state!(
+            fastn_type::ComponentInvocation::variable_component_from_ast(
+                ast_component.name.as_str(),
+                definition_name_with_arguments,
+                doc,
+                &iteration,
+                &condition,
+                &loop_object_name_and_kind,
+                events.as_slice(),
+                &ast_component.properties,
+                &ast_component.children,
+                ast_component.line_number
+            )?
+        ) {
             return Ok(ftd::interpreter::StateWithThing::new_thing(component));
         }
 
@@ -1332,8 +1344,9 @@ impl ComponentExt for fastn_type::ComponentInvocation {
         ast_properties: &[ftd_ast::Property],
         ast_children: &[ftd_ast::ComponentInvocation],
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Option<fastn_type::ComponentInvocation>>>
-    {
+    ) -> ftd::interpreter::Result<
+        ftd::interpreter::StateWithThing<Option<fastn_type::ComponentInvocation>>,
+    > {
         use ftd::interpreter::{PropertyValueExt, PropertyValueSourceExt};
 
         let name = doc.resolve_name(name);
