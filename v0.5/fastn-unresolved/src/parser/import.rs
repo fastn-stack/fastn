@@ -108,7 +108,13 @@ fn aliasable(s: &str) -> fastn_unresolved::AliasableIdentifier {
 
 #[cfg(test)]
 mod tests {
-    fastn_unresolved::tt!(super::import, |mut d| Box::new(d.imports.pop().unwrap()));
+    fastn_unresolved::tt!(super::import, |mut d, s, expected| {
+        // todo: assert everything else is empty in document
+        assert!(d.content.is_empty());
+        assert_eq!(d.imports.len(), 1);
+
+        fastn_section::JDebug::debug(&d.imports.pop().unwrap(), s) == expected
+    });
 
     #[test]
     fn test_import() {

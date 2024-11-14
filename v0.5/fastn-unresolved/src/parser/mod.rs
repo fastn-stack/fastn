@@ -42,10 +42,10 @@ pub fn parse(_document_id: &str, source: &str) -> fastn_unresolved::Document {
 #[cfg(test)]
 #[track_caller]
 /// t1 takes a function parses a single section. and another function to extract the debug value
-fn t1<PARSER, DEBUG>(source: &str, expected: serde_json::Value, parser: PARSER, debug: DEBUG)
+fn t1<PARSER, TESTER>(source: &str, expected: serde_json::Value, parser: PARSER, tester: TESTER)
 where
     PARSER: Fn(&str, fastn_section::Section, &mut fastn_unresolved::Document),
-    DEBUG: FnOnce(fastn_unresolved::Document) -> Box<dyn fastn_section::JDebug>,
+    TESTER: FnOnce(fastn_unresolved::Document, &str, serde_json::Value) -> bool,
 {
     println!("--------- testing -----------\n{source}\n--------- source ------------");
 
@@ -60,7 +60,7 @@ where
     // assert everything else is empty
     parser(source, section, &mut document);
 
-    assert_eq!(debug(document).debug(source), expected);
+    assert!(tester(document, source, expected));
 }
 
 #[cfg(test)]
