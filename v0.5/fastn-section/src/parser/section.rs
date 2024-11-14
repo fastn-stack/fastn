@@ -6,16 +6,15 @@ pub fn section(
     scanner.skip_spaces();
     let caption = fastn_section::parser::header_value(scanner);
 
-    // TODO: implement headers, body
     Some(fastn_section::Section {
         init: section_init,
         caption,
-        headers: vec![],
-        body: None,
-        children: vec![],
-        function_marker: None,
-        is_commented: false,
-        has_end: false,
+        headers: fastn_section::parser::headers(scanner),
+        body: fastn_section::parser::body(scanner),
+        children: vec![],      // children is populated by the wiggin::ender.
+        function_marker: None, // TODO
+        is_commented: false,   // TODO
+        has_end: false,        // has_end is populated by the wiggin::ender.
     })
 }
 

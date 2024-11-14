@@ -1,4 +1,6 @@
+mod body;
 mod header_value;
+mod headers;
 mod identifier;
 mod kind;
 mod kinded_name;
@@ -9,7 +11,9 @@ mod section;
 mod section_init;
 mod visibility;
 
+pub use body::body;
 pub use header_value::header_value;
+pub use headers::headers;
 pub use identifier::identifier;
 pub use kind::kind;
 pub use kinded_name::kinded_name;

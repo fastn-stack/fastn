@@ -2,7 +2,12 @@
 # on our repo page.
 # Refer: https://github.com/github/linguist/blob/master/docs/overrides.md
 
-*.html linguist-generated
+**.html linguist-generated
 default-*.js linguist-generated
 default-*.css linguist-generated
+fastn-core/fbt-tests/** linguist-generated
 manifest.json linguist-generated
+fastn.com/.packages/** linguist-vendored
+ftd/t/executor/*.json linguist-generated
+ftd/t/interpreter/*.json linguist-generated
+ftd/t/node/*.json linguist-generated
