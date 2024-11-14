@@ -23,22 +23,21 @@ pub(super) fn component_invocation(
 
 #[cfg(test)]
 mod tests {
-    fn tester(
-        mut d: fastn_unresolved::Document,
-        source: &str,
-        expected: serde_json::Value,
-    ) -> bool {
+    fn tester(mut d: fastn_unresolved::Document, source: &str, expected: serde_json::Value) {
         assert!(d.imports.is_empty());
         assert!(d.definitions.is_empty());
         assert_eq!(d.content.len(), 1);
 
-        fastn_section::JDebug::debug(&d.content.pop().unwrap(), source) == expected
+        assert_eq!(
+            fastn_section::JDebug::debug(&d.content.pop().unwrap(), source),
+            expected
+        )
     }
 
     fastn_unresolved::tt!(super::component_invocation, tester);
 
     #[test]
     fn component_invocation() {
-        t!("-- import: foo", { "import": "foo" });
+        t!("-- ftd.text: hello", { "content": "ftd.text", "caption": "hello" });
     }
 }
