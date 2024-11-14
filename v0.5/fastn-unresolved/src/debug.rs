@@ -1,3 +1,5 @@
+use serde_json::Value;
+
 impl fastn_section::JDebug for fastn_unresolved::Import {
     fn debug(&self, source: &str) -> serde_json::Value {
         let mut o = serde_json::Map::new();
@@ -49,5 +51,11 @@ impl fastn_section::JDebug for fastn_unresolved::AliasableIdentifier {
             None => self.name.0.to_string(),
         }
         .into()
+    }
+}
+
+impl fastn_section::JDebug for fastn_unresolved::ComponentInvocation {
+    fn debug(&self, _source: &str) -> Value {
+        todo!()
     }
 }
