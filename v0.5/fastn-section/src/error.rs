@@ -22,6 +22,7 @@ pub enum Error {
     ImportMustHaveCaption,
     BodyNotAllowed,
     ExtraArgumentFound,
+    ComponentIsNotAFunction,
     // SectionNotFound(&'a str),
     // MoreThanOneCaption,
     // ParseError,

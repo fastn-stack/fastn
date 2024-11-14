@@ -1,3 +1,4 @@
+mod component_invocation;
 mod import;
 
 pub fn parse(_document_id: &str, source: &str) -> fastn_unresolved::Document {
@@ -6,7 +7,7 @@ pub fn parse(_document_id: &str, source: &str) -> fastn_unresolved::Document {
     // guess the section and call the appropriate unresolved method.
     for section in sections.into_iter() {
         let name = section.name(source).to_ascii_lowercase();
-        let kind = section.kind_name(source).to_ascii_lowercase();
+        let kind = section.kind_name(source).map(str::to_ascii_lowercase);
         // at this level we are very liberal, we just need a hint to which parser to use.
         // the parsers themselves do the error checks and validation.
         //
@@ -17,19 +18,60 @@ pub fn parse(_document_id: &str, source: &str) -> fastn_unresolved::Document {
         // so if we do not get exact match, we try to do recovery (maybe we can use
         // https://github.com/lotabout/fuzzy-matcher).
         match (
-            kind.as_str(),
+            kind.as_deref(),
             name.as_str(),
             section.function_marker.is_some(),
         ) {
-            ("import", _, _) | (_, "import", _) => import::import(source, section, &mut document),
-            ("record", _, _) => todo!(),
-            ("type", _, _) => todo!(),
-            ("module", _, _) => todo!(),
-            ("component", _, _) => todo!(),
-            (_, _, true) => todo!(),
+            (Some("import"), _, _) | (_, "import", _) => {
+                import::import(source, section, &mut document)
+            }
+            (Some("record"), _, _) => todo!(),
+            (Some("type"), _, _) => todo!(),
+            (Some("module"), _, _) => todo!(),
+            (Some("component"), _, _) => todo!(),
+            (None, _, _) => {
+                component_invocation::component_invocation(source, section, &mut document)
+            }
             (_, _, _) => todo!(),
         }
     }
 
     document
+}
+
+#[cfg(test)]
+#[track_caller]
+/// t1 takes a function parses a single section. and another function to extract the debug value
+fn t1<PARSER, DEBUG>(source: &str, expected: serde_json::Value, parser: PARSER, debug: DEBUG)
+where
+    PARSER: Fn(&str, fastn_section::Section, &mut fastn_unresolved::Document),
+    DEBUG: FnOnce(fastn_unresolved::Document) -> Box<dyn fastn_section::JDebug>,
+{
+    println!("--------- testing -----------\n{source}\n--------- source ------------");
+
+    let (mut document, sections) =
+        fastn_unresolved::Document::new(fastn_section::Document::parse(source));
+
+    let section = {
+        assert_eq!(sections.len(), 1);
+        sections.into_iter().next().unwrap()
+    };
+
+    // assert everything else is empty
+    parser(source, section, &mut document);
+
+    assert_eq!(debug(document).debug(source), expected);
+}
+
+#[cfg(test)]
+#[macro_export]
+macro_rules! tt {
+    ($p:expr, $d:expr) => {
+        #[allow(unused_macros)]
+        macro_rules! t {
+            ($source:expr, $expected:tt) => {
+                fastn_unresolved::parser::t1($source, serde_json::json!($expected), $p, $d);
+            };
+        }
+    };
 }

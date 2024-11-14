@@ -72,7 +72,7 @@ pub struct Import {
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct ComponentInvocation {
     pub name: Identifier,
-    pub caption: Vec<fastn_section::Tes>,
+    pub caption: Option<fastn_section::HeaderValue>,
     pub arguments: Vec<Argument>,
     pub body: Vec<fastn_section::Tes>,
     pub children: Vec<ComponentInvocation>,

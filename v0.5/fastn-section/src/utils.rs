@@ -108,7 +108,7 @@ impl fastn_section::Section {
         todo!()
     }
 
-    pub fn kind_name<'input>(&self, _source: &'input str) -> &'input str {
+    pub fn kind_name<'input>(&self, _source: &'input str) -> Option<&'input str> {
         todo!()
     }
 
