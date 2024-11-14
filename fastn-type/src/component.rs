@@ -1,5 +1,5 @@
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Component {
+pub struct ComponentInvocation {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
     pub name: String,
@@ -7,14 +7,14 @@ pub struct Component {
     pub iteration: Box<Option<Loop>>,
     pub condition: Box<Option<fastn_type::Expression>>,
     pub events: Vec<Event>,
-    pub children: Vec<Component>,
+    pub children: Vec<ComponentInvocation>,
     pub source: ComponentSource,
     pub line_number: usize,
 }
 
-impl fastn_type::Component {
-    pub fn from_name(name: &str) -> fastn_type::Component {
-        fastn_type::Component {
+impl fastn_type::ComponentInvocation {
+    pub fn from_name(name: &str) -> fastn_type::ComponentInvocation {
+        fastn_type::ComponentInvocation {
             id: None,
             name: name.to_string(),
             properties: vec![],
@@ -128,7 +128,7 @@ pub enum EventName {
 pub struct ComponentDefinition {
     pub name: String,
     pub arguments: Vec<Argument>,
-    pub definition: fastn_type::Component,
+    pub definition: fastn_type::ComponentInvocation,
     pub css: Option<fastn_type::PropertyValue>,
     pub line_number: usize,
 }
@@ -137,7 +137,7 @@ impl fastn_type::ComponentDefinition {
     pub fn new(
         name: &str,
         arguments: Vec<fastn_type::Argument>,
-        definition: fastn_type::Component,
+        definition: fastn_type::ComponentInvocation,
         css: Option<fastn_type::PropertyValue>,
         line_number: usize,
     ) -> fastn_type::ComponentDefinition {

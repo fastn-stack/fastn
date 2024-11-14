@@ -18,11 +18,11 @@ pub(crate) fn get_string_container(local_container: &[usize]) -> String {
 }
 
 pub(crate) fn create_dummy_instruction_for_loop_element(
-    instruction: &fastn_type::Component,
+    instruction: &fastn_type::ComponentInvocation,
     doc: &mut ftd::executor::TDoc,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     local_container: &[usize],
-) -> ftd::executor::Result<fastn_type::Component> {
+) -> ftd::executor::Result<fastn_type::ComponentInvocation> {
     let mut instruction = instruction.clone();
     /*let reference_replace_pattern = fastn_type::PropertyValueSource::Loop(alias.to_string())
         .get_reference_name(alias, &doc.itdoc());
@@ -43,7 +43,7 @@ pub(crate) fn create_dummy_instruction_for_loop_element(
 
 #[allow(clippy::too_many_arguments)]
 pub(crate) fn update_instruction_for_loop_element(
-    instruction: &fastn_type::Component,
+    instruction: &fastn_type::ComponentInvocation,
     doc: &mut ftd::executor::TDoc,
     index_in_loop: usize,
     alias: &str,
@@ -51,7 +51,7 @@ pub(crate) fn update_instruction_for_loop_element(
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     local_container: &[usize],
     doc_name: &str,
-) -> ftd::executor::Result<fastn_type::Component> {
+) -> ftd::executor::Result<fastn_type::ComponentInvocation> {
     use ftd::interpreter::PropertyValueSourceExt;
 
     let mut instruction = instruction.clone();
@@ -83,7 +83,7 @@ pub(crate) fn update_instruction_for_loop_element(
 }
 
 pub(crate) fn update_condition_in_component(
-    component: &mut fastn_type::Component,
+    component: &mut fastn_type::ComponentInvocation,
     outer_condition: fastn_type::Expression,
 ) {
     if let Some(condition) = component.condition.as_mut() {
@@ -113,7 +113,7 @@ pub(crate) fn update_condition_in_component(
 }
 
 pub(crate) fn update_events_in_component(
-    component: &mut fastn_type::Component,
+    component: &mut fastn_type::ComponentInvocation,
     outer_event: Vec<fastn_type::Event>,
 ) {
     component.events.extend(outer_event);
@@ -132,7 +132,7 @@ pub(crate) fn insert_local_variables(
 }
 
 pub(crate) fn update_inherited_reference_in_instruction(
-    component_definition: &mut fastn_type::Component,
+    component_definition: &mut fastn_type::ComponentInvocation,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     local_container: &[usize],
     doc: &mut ftd::executor::TDoc,
@@ -148,7 +148,7 @@ pub(crate) fn update_inherited_reference_in_instruction(
 }
 
 pub(crate) fn update_local_variable_references_in_component(
-    component: &mut fastn_type::Component,
+    component: &mut fastn_type::ComponentInvocation,
     local_variable_map: &ftd::Map<String>,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     replace_property_value: &ftd::Map<fastn_type::PropertyValue>,
@@ -167,7 +167,7 @@ pub(crate) fn update_local_variable_references_in_component(
 }
 
 pub(crate) fn update_local_variable_references_in_component_(
-    component: &mut fastn_type::Component,
+    component: &mut fastn_type::ComponentInvocation,
     local_variable_map: &ftd::Map<String>,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     replace_property_value: &ftd::Map<fastn_type::PropertyValue>,

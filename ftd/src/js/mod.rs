@@ -326,7 +326,7 @@ impl ComponentDefinitionExt for fastn_type::ComponentDefinition {
 }
 
 pub fn from_tree(
-    tree: &[fastn_type::Component],
+    tree: &[fastn_type::ComponentInvocation],
     doc: &ftd::interpreter::TDoc,
     has_rive_components: &mut bool,
 ) -> fastn_js::Ast {

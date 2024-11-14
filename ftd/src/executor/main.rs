@@ -5,7 +5,7 @@ pub struct ExecuteDoc<'a> {
     pub name: &'a str,
     pub aliases: &'a ftd::Map<String>,
     pub bag: &'a mut indexmap::IndexMap<String, ftd::interpreter::Thing>,
-    pub instructions: &'a [fastn_type::Component],
+    pub instructions: &'a [fastn_type::ComponentInvocation],
     pub dummy_instructions: &'a mut ftd::VecMap<ftd::executor::DummyElement>,
     pub element_constructor: &'a mut ftd::Map<ftd::executor::ElementConstructor>,
     pub js: &'a mut std::collections::HashSet<String>,
@@ -156,7 +156,7 @@ impl ExecuteDoc<'_> {
 
     #[allow(clippy::type_complexity)]
     pub(crate) fn get_instructions_from_instructions(
-        instructions: &[fastn_type::Component],
+        instructions: &[fastn_type::ComponentInvocation],
         doc: &mut ftd::executor::TDoc,
         parent_container: &[usize],
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
@@ -165,7 +165,7 @@ impl ExecuteDoc<'_> {
         Vec<(
             Option<String>,
             Vec<usize>,
-            fastn_type::Component,
+            fastn_type::ComponentInvocation,
             Option<Device>,
         )>,
     > {
@@ -194,12 +194,12 @@ impl ExecuteDoc<'_> {
 
     #[allow(clippy::type_complexity)]
     fn get_instructions_from_instruction(
-        instruction: &fastn_type::Component,
+        instruction: &fastn_type::ComponentInvocation,
         doc: &mut ftd::executor::TDoc,
         parent_container: &[usize],
         start_index: usize,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::executor::Result<Vec<(Option<String>, Vec<usize>, fastn_type::Component)>> {
+    ) -> ftd::executor::Result<Vec<(Option<String>, Vec<usize>, fastn_type::ComponentInvocation)>> {
         use ftd::js::fastn_type_functions::ComponentExt;
 
         if instruction.is_loop() {
@@ -218,7 +218,7 @@ impl ExecuteDoc<'_> {
     }
 
     fn execute_web_component(
-        instruction: &fastn_type::Component,
+        instruction: &fastn_type::ComponentInvocation,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
         web_component_definition: fastn_type::WebComponentDefinition,
@@ -268,12 +268,12 @@ impl ExecuteDoc<'_> {
     }
 
     fn get_simple_instruction(
-        instruction: &fastn_type::Component,
+        instruction: &fastn_type::ComponentInvocation,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
         component_definition: fastn_type::ComponentDefinition,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::executor::Result<fastn_type::Component> {
+    ) -> ftd::executor::Result<fastn_type::ComponentInvocation> {
         let mut component_definition = component_definition;
         let local_variable_map = doc.insert_local_variables(
             component_definition.name.as_str(),
@@ -317,9 +317,9 @@ impl ExecuteDoc<'_> {
     }
 
     fn get_instruction_from_variable(
-        instruction: &fastn_type::Component,
+        instruction: &fastn_type::ComponentInvocation,
         doc: &mut ftd::executor::TDoc,
-    ) -> ftd::executor::Result<fastn_type::Component> {
+    ) -> ftd::executor::Result<fastn_type::ComponentInvocation> {
         use ftd::interpreter::{PropertyValueExt, ValueExt};
 
         if doc
@@ -356,12 +356,12 @@ impl ExecuteDoc<'_> {
 
     #[allow(clippy::type_complexity)]
     fn get_loop_instructions(
-        instruction: &fastn_type::Component,
+        instruction: &fastn_type::ComponentInvocation,
         doc: &mut ftd::executor::TDoc,
         parent_container: &[usize],
         start_index: usize,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::executor::Result<Vec<(Option<String>, Vec<usize>, fastn_type::Component)>> {
+    ) -> ftd::executor::Result<Vec<(Option<String>, Vec<usize>, fastn_type::ComponentInvocation)>> {
         use ftd::interpreter::LoopExt;
 
         let iteration = if let Some(iteration) = instruction.iteration.as_ref() {
@@ -439,7 +439,7 @@ impl ExecuteDoc<'_> {
     // TODO: Remove this after: Throw error when dummy is ready
     #[allow(unused_must_use)]
     fn execute_from_instructions_loop(
-        instructions: &[fastn_type::Component],
+        instructions: &[fastn_type::ComponentInvocation],
         doc: &mut ftd::executor::TDoc,
     ) -> ftd::executor::Result<Vec<ftd::executor::Element>> {
         use ftd::executor::fastn_type_functions::ComponentExt;
@@ -773,7 +773,7 @@ impl ExecuteDoc<'_> {
     }*/
 
     pub(crate) fn add_colors_and_types_local_variable(
-        instruction: &fastn_type::Component,
+        instruction: &fastn_type::ComponentInvocation,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
         component_definition: &fastn_type::ComponentDefinition,
@@ -806,7 +806,7 @@ impl ExecuteDoc<'_> {
     }
 
     pub(crate) fn execute_kernel_components(
-        instruction: &fastn_type::Component,
+        instruction: &fastn_type::ComponentInvocation,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
         component_definition: &fastn_type::ComponentDefinition,
@@ -1068,7 +1068,7 @@ impl Device {
         matches!(self, Device::Desktop)
     }
 
-    fn add_condition(&self, instruction: &mut fastn_type::Component, line_number: usize) {
+    fn add_condition(&self, instruction: &mut fastn_type::ComponentInvocation, line_number: usize) {
         let expression =
             fastn_grammar::evalexpr::ExprNode::new(fastn_grammar::evalexpr::Operator::Eq)
                 .add_children(vec![

@@ -13,8 +13,8 @@ pub use kind::{Kind, KindData};
 
 mod component;
 pub use component::{
-    Argument, Component, ComponentDefinition, ComponentSource, Event, EventName, Loop, Property,
-    PropertySource,
+    Argument, ComponentDefinition, ComponentInvocation, ComponentSource, Event, EventName, Loop,
+    Property, PropertySource,
 };
 
 mod expression;

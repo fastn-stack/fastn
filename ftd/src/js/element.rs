@@ -25,7 +25,7 @@ pub enum Element {
 
 impl Element {
     pub fn from_interpreter_component(
-        component: &fastn_type::Component,
+        component: &fastn_type::ComponentInvocation,
         doc: &ftd::interpreter::TDoc,
     ) -> Element {
         match component.name.as_str() {
@@ -151,7 +151,7 @@ pub struct CheckBox {
 }
 
 impl CheckBox {
-    pub fn from(component: &fastn_type::Component) -> CheckBox {
+    pub fn from(component: &fastn_type::ComponentInvocation) -> CheckBox {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#checkbox")
             .unwrap()
@@ -238,7 +238,7 @@ pub struct TextInput {
 }
 
 impl TextInput {
-    pub fn from(component: &fastn_type::Component) -> TextInput {
+    pub fn from(component: &fastn_type::ComponentInvocation) -> TextInput {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#text-input")
             .unwrap()
@@ -397,7 +397,7 @@ pub struct Iframe {
 }
 
 impl Iframe {
-    pub fn from(component: &fastn_type::Component) -> Iframe {
+    pub fn from(component: &fastn_type::ComponentInvocation) -> Iframe {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#iframe")
             .unwrap()
@@ -515,7 +515,10 @@ pub struct Code {
 }
 
 impl Code {
-    pub fn from(component: &fastn_type::Component, _doc: &ftd::interpreter::TDoc) -> Code {
+    pub fn from(
+        component: &fastn_type::ComponentInvocation,
+        _doc: &ftd::interpreter::TDoc,
+    ) -> Code {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#code")
             .unwrap()
@@ -640,7 +643,7 @@ pub struct Image {
 }
 
 impl Image {
-    pub fn from(component: &fastn_type::Component) -> Image {
+    pub fn from(component: &fastn_type::ComponentInvocation) -> Image {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#image")
             .unwrap()
@@ -752,7 +755,7 @@ pub struct Audio {
 }
 
 impl Audio {
-    pub fn from(component: &fastn_type::Component) -> Audio {
+    pub fn from(component: &fastn_type::ComponentInvocation) -> Audio {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#audio")
             .unwrap()
@@ -880,7 +883,7 @@ pub struct Video {
 }
 
 impl Video {
-    pub fn from(component: &fastn_type::Component) -> Video {
+    pub fn from(component: &fastn_type::ComponentInvocation) -> Video {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#video")
             .unwrap()
@@ -1287,7 +1290,7 @@ impl InheritedProperties {
 }
 
 impl Text {
-    pub fn from(component: &fastn_type::Component) -> Text {
+    pub fn from(component: &fastn_type::ComponentInvocation) -> Text {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#text")
             .unwrap()
@@ -1351,7 +1354,7 @@ impl Text {
 }
 
 impl Integer {
-    pub fn from(component: &fastn_type::Component) -> Integer {
+    pub fn from(component: &fastn_type::ComponentInvocation) -> Integer {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#integer")
             .unwrap()
@@ -1416,7 +1419,7 @@ impl Integer {
 }
 
 impl Decimal {
-    pub fn from(component: &fastn_type::Component) -> Decimal {
+    pub fn from(component: &fastn_type::ComponentInvocation) -> Decimal {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#decimal")
             .unwrap()
@@ -1481,7 +1484,7 @@ impl Decimal {
 }
 
 impl Boolean {
-    pub fn from(component: &fastn_type::Component) -> Boolean {
+    pub fn from(component: &fastn_type::ComponentInvocation) -> Boolean {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#boolean")
             .unwrap()
@@ -1546,7 +1549,7 @@ impl Boolean {
 }
 
 impl Document {
-    pub fn from(component: &fastn_type::Component) -> Document {
+    pub fn from(component: &fastn_type::ComponentInvocation) -> Document {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#document")
             .unwrap()
@@ -1823,7 +1826,7 @@ impl DocumentMeta {
 }
 
 impl Column {
-    pub fn from(component: &fastn_type::Component) -> Column {
+    pub fn from(component: &fastn_type::ComponentInvocation) -> Column {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#column")
             .unwrap()
@@ -1889,7 +1892,7 @@ impl Column {
 }
 
 impl Row {
-    pub fn from(component: &fastn_type::Component) -> Row {
+    pub fn from(component: &fastn_type::ComponentInvocation) -> Row {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#row")
             .unwrap()
@@ -1955,7 +1958,7 @@ impl Row {
 }
 
 impl ContainerElement {
-    pub fn from(component: &fastn_type::Component) -> ContainerElement {
+    pub fn from(component: &fastn_type::ComponentInvocation) -> ContainerElement {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#container")
             .unwrap()
@@ -2023,7 +2026,7 @@ pub struct Device {
 }
 
 impl Device {
-    pub fn from(component: &fastn_type::Component, device: &str) -> Device {
+    pub fn from(component: &fastn_type::ComponentInvocation, device: &str) -> Device {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get(device)
             .unwrap()
@@ -2208,7 +2211,7 @@ pub struct Rive {
 }
 
 impl Rive {
-    pub fn from(component: &fastn_type::Component) -> Rive {
+    pub fn from(component: &fastn_type::ComponentInvocation) -> Rive {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#rive")
             .unwrap()

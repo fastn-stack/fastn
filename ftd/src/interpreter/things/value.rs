@@ -1380,7 +1380,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
         }
         let ast_component =
             ftd_ast::ComponentInvocation::from_variable_value(key, value, doc.name)?;
-        let component = try_ok_state!(fastn_type::Component::from_ast_component(
+        let component = try_ok_state!(fastn_type::ComponentInvocation::from_ast_component(
             ast_component,
             definition_name_with_arguments,
             doc,
@@ -1447,7 +1447,7 @@ pub trait ValueExt {
         &self,
         _doc_id: &str,
         _line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_type::Component>;
+    ) -> ftd::interpreter::Result<fastn_type::ComponentInvocation>;
     fn record_fields(
         &self,
         doc_id: &str,
@@ -1620,7 +1620,7 @@ impl ValueExt for fastn_type::Value {
         &self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_type::Component> {
+    ) -> ftd::interpreter::Result<fastn_type::ComponentInvocation> {
         match self {
             fastn_type::Value::UI { component, .. } => Ok(component.to_owned()),
             t => ftd::interpreter::utils::e2(

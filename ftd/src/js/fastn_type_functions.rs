@@ -401,7 +401,7 @@ pub(crate) trait ComponentExt {
     fn is_loop(&self) -> bool;
 }
 
-impl ComponentExt for fastn_type::Component {
+impl ComponentExt for fastn_type::ComponentInvocation {
     fn to_component_statements(
         &self,
         parent: &str,

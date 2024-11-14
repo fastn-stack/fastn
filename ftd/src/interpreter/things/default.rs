@@ -4177,7 +4177,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         .into_kind_data().caption_or_body(),
                     ),
                 ],
-                definition: fastn_type::Component::from_name("ftd.kernel"),
+                definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
                 css: None,
                 line_number: 0,
             }),
@@ -4193,7 +4193,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                             .into_kind_data().caption_or_body(),
                     ),
                 ],
-                definition: fastn_type::Component::from_name("ftd.kernel"),
+                definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
                 css: None,
                 line_number: 0,
             }),
@@ -10698,7 +10698,7 @@ pub fn fastn_migration_function() -> fastn_type::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: fastn_type::Component::from_name("ftd.kernel"),
+        definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -10791,7 +10791,7 @@ pub fn fastn_get_function() -> fastn_type::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: fastn_type::Component::from_name("ftd.kernel"),
+        definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -10834,7 +10834,7 @@ pub fn fastn_post_function() -> fastn_type::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: fastn_type::Component::from_name("ftd.kernel"),
+        definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -10847,7 +10847,7 @@ pub fn fastn_redirect_function() -> fastn_type::ComponentDefinition {
             "http-redirect",
             fastn_type::Kind::string().into_kind_data().caption(),
         )],
-        definition: fastn_type::Component::from_name("ftd.kernel"),
+        definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -10872,7 +10872,7 @@ pub fn fastn_test_function() -> fastn_type::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: fastn_type::Component::from_name("ftd.kernel"),
+        definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -10919,7 +10919,7 @@ pub fn image_function() -> fastn_type::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: fastn_type::Component::from_name("ftd.kernel"),
+        definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -10953,7 +10953,7 @@ pub fn audio_function() -> fastn_type::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: fastn_type::Component::from_name("ftd.kernel"),
+        definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11004,7 +11004,7 @@ pub fn video_function() -> fastn_type::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: fastn_type::Component::from_name("ftd.kernel"),
+        definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11040,7 +11040,7 @@ pub fn boolean_function() -> fastn_type::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: fastn_type::Component::from_name("ftd.kernel"),
+        definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11065,7 +11065,7 @@ pub fn checkbox_function() -> fastn_type::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: fastn_type::Component::from_name("ftd.kernel"),
+        definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11113,7 +11113,7 @@ pub fn text_input_function() -> fastn_type::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: fastn_type::Component::from_name("ftd.kernel"),
+        definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11149,7 +11149,7 @@ pub fn integer_function() -> fastn_type::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: fastn_type::Component::from_name("ftd.kernel"),
+        definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11181,7 +11181,7 @@ pub fn decimal_function() -> fastn_type::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: fastn_type::Component::from_name("ftd.kernel"),
+        definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11203,7 +11203,7 @@ pub fn markup_function() -> fastn_type::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: fastn_type::Component::from_name("ftd.kernel"),
+        definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11220,7 +11220,7 @@ pub fn row_function() -> fastn_type::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: fastn_type::Component::from_name("ftd.kernel"),
+        definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11275,7 +11275,7 @@ pub fn rive_function() -> fastn_type::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: fastn_type::Component::from_name("ftd.kernel"),
+        definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11297,7 +11297,7 @@ pub fn container_function() -> fastn_type::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: fastn_type::Component::from_name("ftd.kernel"),
+        definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11307,7 +11307,7 @@ pub fn desktop_function() -> fastn_type::ComponentDefinition {
     fastn_type::ComponentDefinition {
         name: "ftd#desktop".to_string(),
         arguments: [container_root_arguments()].concat().into_iter().collect(),
-        definition: fastn_type::Component::from_name("ftd.kernel"),
+        definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11317,7 +11317,7 @@ pub fn mobile_function() -> fastn_type::ComponentDefinition {
     fastn_type::ComponentDefinition {
         name: "ftd#mobile".to_string(),
         arguments: [container_root_arguments()].concat().into_iter().collect(),
-        definition: fastn_type::Component::from_name("ftd.kernel"),
+        definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11356,7 +11356,7 @@ pub fn code_function() -> fastn_type::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: fastn_type::Component::from_name("ftd.kernel"),
+        definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11397,7 +11397,7 @@ pub fn iframe_function() -> fastn_type::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: fastn_type::Component::from_name("ftd.kernel"),
+        definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11414,7 +11414,7 @@ pub fn column_function() -> fastn_type::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: fastn_type::Component::from_name("ftd.kernel"),
+        definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }
@@ -11557,7 +11557,7 @@ pub fn document_function() -> fastn_type::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
-        definition: fastn_type::Component::from_name("ftd.kernel"),
+        definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
     }

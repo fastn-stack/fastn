@@ -17,17 +17,17 @@ pub(crate) trait ComponentExt {
     fn get_children(
         &self,
         doc: &ftd::interpreter::TDoc,
-    ) -> ftd::interpreter::Result<Vec<fastn_type::Component>>;
+    ) -> ftd::interpreter::Result<Vec<fastn_type::ComponentInvocation>>;
     fn get_children_property(&self) -> Option<fastn_type::Property>;
     fn get_children_properties(&self) -> Vec<fastn_type::Property>;
     fn is_variable(&self) -> bool;
 }
 
-impl ComponentExt for fastn_type::Component {
+impl ComponentExt for fastn_type::ComponentInvocation {
     fn get_children(
         &self,
         doc: &ftd::interpreter::TDoc,
-    ) -> ftd::interpreter::Result<Vec<fastn_type::Component>> {
+    ) -> ftd::interpreter::Result<Vec<fastn_type::ComponentInvocation>> {
         use ftd::interpreter::PropertyValueExt;
 
         let property = if let Some(property) = self.get_children_property() {

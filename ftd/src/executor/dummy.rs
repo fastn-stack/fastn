@@ -21,7 +21,7 @@ impl DummyElement {
     }
 
     pub(crate) fn from_instruction(
-        instruction: fastn_type::Component,
+        instruction: fastn_type::ComponentInvocation,
         doc: &mut ftd::executor::TDoc,
         dummy_reference: String,
         local_container: &[usize],
@@ -51,7 +51,7 @@ impl DummyElement {
     }
 
     pub(crate) fn from_instruction_to_element(
-        mut instruction: fastn_type::Component,
+        mut instruction: fastn_type::ComponentInvocation,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,

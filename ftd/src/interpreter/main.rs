@@ -37,7 +37,7 @@ pub struct InterpreterState {
     pub to_process: ToProcess,
     pub pending_imports: PendingImports,
     pub parsed_libs: ftd::Map<ParsedDocument>,
-    pub instructions: Vec<fastn_type::Component>,
+    pub instructions: Vec<fastn_type::ComponentInvocation>,
     pub in_process: Vec<(String, usize, ftd_ast::Ast)>,
 }
 
@@ -497,10 +497,10 @@ impl InterpreterState {
                 }
             } else if ast.is_component() {
                 if number_of_scan.eq(&1) {
-                    fastn_type::Component::scan_ast(ast, &mut doc)?;
+                    fastn_type::ComponentInvocation::scan_ast(ast, &mut doc)?;
                     continue;
                 } else {
-                    match fastn_type::Component::from_ast(ast, &mut doc)? {
+                    match fastn_type::ComponentInvocation::from_ast(ast, &mut doc)? {
                         ftd::interpreter::StateWithThing::State(s) => {
                             return Ok(s.into_interpreter(self))
                         }
@@ -1185,7 +1185,7 @@ impl InterpreterWithoutState {
 pub struct Document {
     pub data: indexmap::IndexMap<String, ftd::interpreter::Thing>,
     pub name: String,
-    pub tree: Vec<fastn_type::Component>,
+    pub tree: Vec<fastn_type::ComponentInvocation>,
     pub aliases: ftd::Map<String>,
     pub js: std::collections::HashSet<String>,
     pub css: std::collections::HashSet<String>,
@@ -1199,7 +1199,7 @@ impl Document {
             bag: ftd::interpreter::BagOrState::Bag(&self.data),
         }
     }
-    pub fn get_instructions(&self, component_name: &str) -> Vec<fastn_type::Component> {
+    pub fn get_instructions(&self, component_name: &str) -> Vec<fastn_type::ComponentInvocation> {
         use itertools::Itertools;
 
         self.tree
@@ -1214,7 +1214,7 @@ impl Document {
             .collect_vec()
     }
 
-    pub fn get_component_by_id(&self, component_id: &str) -> Option<&fastn_type::Component> {
+    pub fn get_component_by_id(&self, component_id: &str) -> Option<&fastn_type::ComponentInvocation> {
         self.tree.iter().find(|v| {
             if let Some(id) = &v.id {
                 return id.eq(component_id);

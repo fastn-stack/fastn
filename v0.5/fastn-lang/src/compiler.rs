@@ -16,6 +16,7 @@ pub async fn compile(
     // this guy will maintain symbols that failed to resolve, along with their dependencies, or maybe
     // just the one dependency that failed?
     let _d = fastn_unresolved::parse(document_id, source);
+    for c in _d.content {}
     todo!()
 }
 
