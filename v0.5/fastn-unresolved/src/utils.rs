@@ -88,3 +88,9 @@ impl std::str::FromStr for fastn_unresolved::Identifier {
         Ok(fastn_unresolved::Identifier(s.to_string()))
     }
 }
+
+impl<U, R> From<U> for fastn_unresolved::UR<U, R> {
+    fn from(u: U) -> fastn_unresolved::UR<U, R> {
+        fastn_unresolved::UR::UnResolved(u)
+    }
+}

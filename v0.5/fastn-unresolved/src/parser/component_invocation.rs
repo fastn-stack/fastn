@@ -13,11 +13,11 @@ pub(super) fn component_invocation(
     document
         .content
         .push(fastn_unresolved::ComponentInvocation {
-            name: fastn_unresolved::Identifier(section.name(source).to_string()),
+            name: fastn_unresolved::Identifier(section.name(source).to_string()).into(),
             caption: section.caption,
-            arguments: vec![], // todo
-            body: vec![],      // todo
-            children: vec![],  // todo
+            properties: vec![], // todo
+            body: vec![],       // todo
+            children: vec![],   // todo
         })
 }
 

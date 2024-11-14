@@ -35,15 +35,15 @@ pub struct Definition {
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub enum InnerDefinition {
     Component {
-        properties: Vec<Property>,
+        properties: Vec<Argument>,
         body: Vec<ComponentInvocation>,
     },
     Variable {
-        arguments: Vec<Argument>,
+        arguments: Vec<Property>,
         caption: Vec<fastn_section::Tes>,
     },
     Function {
-        properties: Vec<Property>,
+        properties: Vec<Argument>,
         return_type: Option<Kind>,
         body: Vec<fastn_section::Tes>,
     },
@@ -51,10 +51,10 @@ pub enum InnerDefinition {
     // name: foo ;; we are updating / setting the default value
     TypeAlias {
         kind: Kind,
-        arguments: Vec<Argument>,
+        arguments: Vec<Property>,
     },
     Record {
-        properties: Vec<Property>,
+        properties: Vec<Argument>,
     },
     // TODO: OrType(fastn_section::Section),
     // TODO: Module(fastn_section::Section),
@@ -69,23 +69,43 @@ pub struct Import {
     pub exposing: Option<Export>,
 }
 
+// #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+// pub struct ComponentInvocation {
+//     #[serde(skip_serializing_if = "Option::is_none")]
+//     pub id: Option<String>,
+//     pub name: String,
+//     pub properties: Vec<Property>,
+//     pub iteration: Box<Option<Loop>>,
+//     pub condition: Box<Option<fastn_type::Expression>>,
+//     pub events: Vec<Event>,
+//     pub children: Vec<ComponentInvocation>,
+//     pub source: ComponentSource,
+//     pub line_number: usize,
+// }
+
+#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+pub enum UR<U, R> {
+    Resolved(R),
+    UnResolved(U),
+}
+
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct ComponentInvocation {
-    pub name: Identifier,
+    pub name: UR<Identifier, Identifier>,
     pub caption: Option<fastn_section::HeaderValue>,
-    pub arguments: Vec<Argument>,
+    pub properties: Vec<Property>,
     pub body: Vec<fastn_section::Tes>,
     pub children: Vec<ComponentInvocation>,
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Argument {
+pub struct Property {
     pub name: Identifier,
     pub value: Vec<fastn_section::Tes>,
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct Property {
+pub struct Argument {
     pub name: Identifier,
     pub kind: Kind,
     pub visibility: fastn_section::Visibility,
