@@ -59,3 +59,11 @@ impl fastn_section::JDebug for fastn_unresolved::ComponentInvocation {
         todo!()
     }
 }
+
+impl<U: fastn_section::JDebug, R: fastn_section::JDebug> fastn_section::JDebug
+    for fastn_unresolved::UR<U, R>
+{
+    fn debug(&self, _source: &str) -> Value {
+        todo!()
+    }
+}

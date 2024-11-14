@@ -10,15 +10,16 @@ pub(super) fn component_invocation(
         // we will go ahead with this component invocation parsing
     }
 
-    document
-        .content
-        .push(fastn_unresolved::ComponentInvocation {
+    document.content.push(
+        fastn_unresolved::ComponentInvocation {
             name: fastn_unresolved::Identifier(section.name(source).to_string()).into(),
             caption: section.caption.into(),
             properties: vec![],  // todo
             body: vec![].into(), // todo
             children: vec![],    // todo
-        })
+        }
+        .into(),
+    )
 }
 
 #[cfg(test)]

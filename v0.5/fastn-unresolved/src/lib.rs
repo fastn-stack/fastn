@@ -16,7 +16,7 @@ pub struct Document {
     pub module_doc: Option<fastn_section::Span>,
     pub imports: Vec<fastn_unresolved::Import>,
     pub definitions: Vec<Definition>,
-    pub content: Vec<ComponentInvocation>,
+    pub content: Vec<UR<ComponentInvocation, fastn_type::ComponentInvocation>>,
     pub errors: Vec<fastn_section::Spanned<fastn_section::Error>>,
     pub warnings: Vec<fastn_section::Spanned<fastn_section::Warning>>,
     pub comments: Vec<fastn_section::Span>,

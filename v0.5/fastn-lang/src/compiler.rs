@@ -7,16 +7,54 @@
 ///
 /// earlier we had strict mode here, but to simplify things, now we let the caller convert non-empty
 /// warnings from OK part as error, and discard the generated JS.
-pub async fn compile(
-    _symbols: &mut Box<dyn fastn_lang::SymbolStore<'_>>,
+pub async fn compile<'input>(
+    _symbols: &mut Box<dyn fastn_lang::SymbolStore<'input>>,
     document_id: &str,
     source: &str,
     _auto_imports: &[fastn_section::AutoImport],
 ) -> Result<fastn_lang::compiler::Output, fastn_lang::compiler::Error> {
     // this guy will maintain symbols that failed to resolve, along with their dependencies, or maybe
     // just the one dependency that failed?
-    let d = fastn_unresolved::parse(document_id, source);
-    for _c in d.content {}
+    let mut d = fastn_unresolved::parse(document_id, source);
+    let mut bag = std::collections::HashMap::new();
+
+    for _ in 1..10 {
+        // we only make 10 attempts to resolve the document
+        let mut symbols = resolve_document(&mut d, &mut bag);
+        if symbols.is_empty() {
+            break;
+        }
+        // this itself has to happen in a loop
+        for _ in 1..10 {
+            // TODO: fetch symbols from
+            let mut symbols = resolve_symbols(&mut d, &mut bag, symbols);
+            if symbols.is_empty() {
+                break;
+            }
+        }
+    }
+
+    todo!()
+}
+
+fn resolve_symbols(
+    _d: &mut fastn_unresolved::Document,
+    _bag: &mut std::collections::HashMap<String, fastn_lang::LookupResult>,
+    _symbols: Vec<fastn_unresolved::SymbolName>,
+) -> Vec<fastn_unresolved::SymbolName> {
+    todo!()
+}
+
+fn resolve_document(
+    d: &mut fastn_unresolved::Document,
+    _bag: &mut std::collections::HashMap<String, fastn_lang::LookupResult>,
+) -> Vec<fastn_unresolved::SymbolName> {
+    for ci in &d.content {
+        if let fastn_unresolved::UR::UnResolved(c) = ci {
+            todo!()
+        }
+    }
+
     todo!()
 }
 
