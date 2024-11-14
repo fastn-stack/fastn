@@ -111,10 +111,20 @@ name = "fastn-static"
 version = "0.1.0"
 
 [[package]]
+name = "fastn-type"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1494ecd11081fa81a57265457a27262fb640e70cf84acf2c551a8e8a2d69c1c1"
+dependencies = [
+ "serde",
+]
+
+[[package]]
 name = "fastn-unresolved"
 version = "0.1.0"
 dependencies = [
  "fastn-section",
+ "fastn-type",
  "serde",
  "serde_json",
 ]

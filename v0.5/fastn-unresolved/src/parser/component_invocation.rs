@@ -14,10 +14,10 @@ pub(super) fn component_invocation(
         .content
         .push(fastn_unresolved::ComponentInvocation {
             name: fastn_unresolved::Identifier(section.name(source).to_string()).into(),
-            caption: section.caption,
-            properties: vec![], // todo
-            body: vec![],       // todo
-            children: vec![],   // todo
+            caption: section.caption.into(),
+            properties: vec![],  // todo
+            body: vec![].into(), // todo
+            children: vec![],    // todo
         })
 }
 

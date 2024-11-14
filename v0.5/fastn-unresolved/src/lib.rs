@@ -92,11 +92,12 @@ pub enum UR<U, R> {
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct ComponentInvocation {
     pub name: UR<Identifier, Identifier>,
-    /// once a caption is resolved it is set to () here, and moved to properties
+    /// once a caption is resolved, it is set to () here, and moved to properties
     pub caption: UR<Option<fastn_section::HeaderValue>, ()>,
-    pub properties: Vec<UR<Property, ()>>,
-    pub body: Vec<fastn_section::Tes>,
-    pub children: Vec<ComponentInvocation>,
+    pub properties: Vec<UR<Property, fastn_type::Property>>,
+    /// once the body is resolved, it is set to () here, and moved to properties
+    pub body: UR<Vec<fastn_section::Tes>, ()>,
+    pub children: Vec<UR<ComponentInvocation, fastn_type::ComponentInvocation>>,
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
