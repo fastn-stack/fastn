@@ -1538,13 +1538,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "fastn-grammar"
-version = "0.1.0"
-dependencies = [
- "serde",
-]
-
-[[package]]
 name = "fastn-issues"
 version = "0.1.0"
 dependencies = [
@@ -1557,7 +1550,7 @@ dependencies = [
 name = "fastn-js"
 version = "0.1.0"
 dependencies = [
- "fastn-grammar",
+ "fastn-type",
  "indoc",
  "itertools 0.13.0",
  "prettify-js",
@@ -1608,7 +1601,6 @@ dependencies = [
 name = "fastn-type"
 version = "0.1.0"
 dependencies = [
- "fastn-grammar",
  "serde",
 ]
 
@@ -1727,7 +1719,6 @@ dependencies = [
  "comrak",
  "css-color-parser",
  "diffy",
- "fastn-grammar",
  "fastn-js",
  "fastn-type",
  "format_num",

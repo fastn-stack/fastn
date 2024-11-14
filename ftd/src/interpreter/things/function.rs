@@ -103,11 +103,11 @@ impl FunctionExt for fastn_type::Function {
         doc: &ftd::interpreter::TDoc,
         line_number: usize,
     ) -> ftd::interpreter::Result<Option<fastn_type::Value>> {
-        use fastn_grammar::evalexpr::*;
+        use fastn_type::evalexpr::*;
         use ftd::interpreter::{PropertyValueExt, ValueExt};
 
         struct VariableContext {
-            value: fastn_grammar::evalexpr::Value,
+            value: fastn_type::evalexpr::Value,
             reference: Option<String>,
             mutable: bool,
             kind: fastn_type::Kind,
@@ -167,7 +167,7 @@ impl FunctionExt for fastn_type::Function {
 
         let expression = self.convert_to_evalexpr_expression();
 
-        let eval = fastn_grammar::evalexpr::eval_with_context_mut(
+        let eval = fastn_type::evalexpr::eval_with_context_mut(
             expression.as_str(),
             &mut evalexpr_context,
         )?;

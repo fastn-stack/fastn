@@ -165,7 +165,7 @@ pub(crate) trait ExpressionExt {
     fn update_node_with_variable_reference_js(
         &self,
         rdata: &ftd::js::ResolverData,
-    ) -> fastn_grammar::evalexpr::ExprNode;
+    ) -> fastn_type::evalexpr::ExprNode;
 }
 
 impl ExpressionExt for fastn_type::Expression {
@@ -182,25 +182,25 @@ impl ExpressionExt for fastn_type::Expression {
     fn update_node_with_variable_reference_js(
         &self,
         rdata: &ftd::js::ResolverData,
-    ) -> fastn_grammar::evalexpr::ExprNode {
+    ) -> fastn_type::evalexpr::ExprNode {
         return update_node_with_variable_reference_js_(&self.expression, &self.references, rdata);
 
         fn update_node_with_variable_reference_js_(
-            expr: &fastn_grammar::evalexpr::ExprNode,
+            expr: &fastn_type::evalexpr::ExprNode,
             references: &ftd::Map<fastn_type::PropertyValue>,
             rdata: &ftd::js::ResolverData,
-        ) -> fastn_grammar::evalexpr::ExprNode {
+        ) -> fastn_type::evalexpr::ExprNode {
             let mut operator = expr.operator().clone();
-            if let fastn_grammar::evalexpr::Operator::VariableIdentifierRead { ref identifier } =
+            if let fastn_type::evalexpr::Operator::VariableIdentifierRead { ref identifier } =
                 operator
             {
                 if format!("${}", ftd::interpreter::FTD_LOOP_COUNTER).eq(identifier) {
-                    operator = fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
+                    operator = fastn_type::evalexpr::Operator::VariableIdentifierRead {
                         identifier: "index".to_string(),
                     }
                 } else if let Some(loop_counter_alias) = rdata.loop_counter_alias {
                     if loop_counter_alias.eq(identifier.trim_start_matches('$')) {
-                        operator = fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
+                        operator = fastn_type::evalexpr::Operator::VariableIdentifierRead {
                             identifier: "index".to_string(),
                         }
                     }
@@ -208,7 +208,7 @@ impl ExpressionExt for fastn_type::Expression {
                     references.get(identifier)
                 {
                     let name = ftd::js::utils::update_reference(name, rdata);
-                    operator = fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
+                    operator = fastn_type::evalexpr::Operator::VariableIdentifierRead {
                         identifier: fastn_js::utils::reference_to_js(name.as_str()),
                     }
                 }
@@ -219,7 +219,7 @@ impl ExpressionExt for fastn_type::Expression {
                     child, references, rdata,
                 ));
             }
-            fastn_grammar::evalexpr::ExprNode::new(operator).add_children(children)
+            fastn_type::evalexpr::ExprNode::new(operator).add_children(children)
         }
     }
 }

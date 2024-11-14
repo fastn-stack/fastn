@@ -4,37 +4,31 @@
 
 extern crate self as fastn_type;
 
-mod function;
-pub use function::{Function, FunctionCall, FunctionExpression};
-mod value;
-pub use value::{PropertyValue, PropertyValueSource, Value};
-mod kind;
-pub use kind::{Kind, KindData};
-
 mod component;
+pub mod evalexpr;
+mod expression;
+mod function;
+mod kind;
+mod module_thing;
+mod or_type;
+mod record;
+mod value;
+mod variable;
+mod web_component;
+
 pub use component::{
     Argument, ComponentDefinition, ComponentInvocation, ComponentSource, Event, EventName, Loop,
     Property, PropertySource,
 };
-
-mod expression;
 pub use expression::Expression;
-
-mod record;
-pub use record::{AccessModifier, Field, Record};
-
-mod module_thing;
+pub use function::{Function, FunctionCall, FunctionExpression};
+pub use kind::{Kind, KindData};
 pub use module_thing::ModuleThing;
-
-mod variable;
-pub use variable::{ConditionalValue, Variable};
-
-mod web_component;
-pub use web_component::WebComponentDefinition;
-
-mod or_type;
 pub use or_type::{OrType, OrTypeVariant};
-
+pub use record::{AccessModifier, Field, Record};
+pub use value::{PropertyValue, PropertyValueSource, Value};
+pub use variable::{ConditionalValue, Variable};
+pub use web_component::WebComponentDefinition;
 pub type Map<T> = std::collections::BTreeMap<String, T>;
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]

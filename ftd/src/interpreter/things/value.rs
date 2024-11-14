@@ -1461,14 +1461,14 @@ pub trait ValueExt {
     fn into_evalexpr_value(
         self,
         doc: &ftd::interpreter::TDoc,
-    ) -> ftd::interpreter::Result<fastn_grammar::evalexpr::Value>;
+    ) -> ftd::interpreter::Result<fastn_type::evalexpr::Value>;
     fn to_evalexpr_value(
         &self,
         doc: &ftd::interpreter::TDoc,
         line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_grammar::evalexpr::Value>;
+    ) -> ftd::interpreter::Result<fastn_type::evalexpr::Value>;
     fn from_evalexpr_value(
-        value: fastn_grammar::evalexpr::Value,
+        value: fastn_type::evalexpr::Value,
         expected_kind: &fastn_type::Kind,
         doc_name: &str,
         line_number: usize,
@@ -1664,21 +1664,17 @@ impl ValueExt for fastn_type::Value {
     fn into_evalexpr_value(
         self,
         doc: &ftd::interpreter::TDoc,
-    ) -> ftd::interpreter::Result<fastn_grammar::evalexpr::Value> {
+    ) -> ftd::interpreter::Result<fastn_type::evalexpr::Value> {
         match self {
-            fastn_type::Value::String { text } => Ok(fastn_grammar::evalexpr::Value::String(text)),
-            fastn_type::Value::Integer { value } => Ok(fastn_grammar::evalexpr::Value::Int(value)),
-            fastn_type::Value::Decimal { value } => {
-                Ok(fastn_grammar::evalexpr::Value::Float(value))
-            }
-            fastn_type::Value::Boolean { value } => {
-                Ok(fastn_grammar::evalexpr::Value::Boolean(value))
-            }
+            fastn_type::Value::String { text } => Ok(fastn_type::evalexpr::Value::String(text)),
+            fastn_type::Value::Integer { value } => Ok(fastn_type::evalexpr::Value::Int(value)),
+            fastn_type::Value::Decimal { value } => Ok(fastn_type::evalexpr::Value::Float(value)),
+            fastn_type::Value::Boolean { value } => Ok(fastn_type::evalexpr::Value::Boolean(value)),
             fastn_type::Value::Optional { data, .. } => {
                 if let Some(data) = data.as_ref() {
                     data.clone().into_evalexpr_value(doc)
                 } else {
-                    Ok(fastn_grammar::evalexpr::Value::Empty)
+                    Ok(fastn_type::evalexpr::Value::Empty)
                 }
             }
             fastn_type::Value::OrType { value, .. } => {
@@ -1687,7 +1683,7 @@ impl ValueExt for fastn_type::Value {
             }
             fastn_type::Value::Record { .. } => {
                 if let Ok(Some(value)) = ftd::interpreter::utils::get_value(doc, &self) {
-                    Ok(fastn_grammar::evalexpr::Value::String(value.to_string()))
+                    Ok(fastn_type::evalexpr::Value::String(value.to_string()))
                 } else {
                     unimplemented!("{:?}", self)
                 }
@@ -1698,7 +1694,7 @@ impl ValueExt for fastn_type::Value {
                     let line_number = item.line_number();
                     values.push(item.resolve(doc, line_number)?.into_evalexpr_value(doc)?);
                 }
-                Ok(fastn_grammar::evalexpr::Value::Tuple(values))
+                Ok(fastn_type::evalexpr::Value::Tuple(values))
             }
             t => unimplemented!("{:?}", t),
         }
@@ -1708,14 +1704,14 @@ impl ValueExt for fastn_type::Value {
         &self,
         doc: &ftd::interpreter::TDoc,
         line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_grammar::evalexpr::Value> {
+    ) -> ftd::interpreter::Result<fastn_type::evalexpr::Value> {
         Ok(match self {
             fastn_type::Value::String { text } => {
-                fastn_grammar::evalexpr::Value::String(text.to_string())
+                fastn_type::evalexpr::Value::String(text.to_string())
             }
-            fastn_type::Value::Integer { value } => fastn_grammar::evalexpr::Value::Int(*value),
-            fastn_type::Value::Decimal { value } => fastn_grammar::evalexpr::Value::Float(*value),
-            fastn_type::Value::Boolean { value } => fastn_grammar::evalexpr::Value::Boolean(*value),
+            fastn_type::Value::Integer { value } => fastn_type::evalexpr::Value::Int(*value),
+            fastn_type::Value::Decimal { value } => fastn_type::evalexpr::Value::Float(*value),
+            fastn_type::Value::Boolean { value } => fastn_type::evalexpr::Value::Boolean(*value),
             fastn_type::Value::List { data, .. } => {
                 let mut values = vec![];
                 for value in data {
@@ -1725,13 +1721,13 @@ impl ValueExt for fastn_type::Value {
                         .to_evalexpr_value(doc, value.line_number())?;
                     values.push(v);
                 }
-                fastn_grammar::evalexpr::Value::Tuple(values)
+                fastn_type::evalexpr::Value::Tuple(values)
             }
             fastn_type::Value::Optional { data, .. } => {
                 if let Some(data) = data.as_ref() {
                     data.to_evalexpr_value(doc, line_number)?
                 } else {
-                    fastn_grammar::evalexpr::Value::Empty
+                    fastn_type::evalexpr::Value::Empty
                 }
             }
             t => unimplemented!("{:?}", t),
@@ -1739,25 +1735,25 @@ impl ValueExt for fastn_type::Value {
     }
 
     fn from_evalexpr_value(
-        value: fastn_grammar::evalexpr::Value,
+        value: fastn_type::evalexpr::Value,
         expected_kind: &fastn_type::Kind,
         doc_name: &str,
         line_number: usize,
     ) -> ftd::interpreter::Result<fastn_type::Value> {
         Ok(match value {
-            fastn_grammar::evalexpr::Value::String(text) if expected_kind.is_string() => {
+            fastn_type::evalexpr::Value::String(text) if expected_kind.is_string() => {
                 fastn_type::Value::String { text }
             }
-            fastn_grammar::evalexpr::Value::Float(value) if expected_kind.is_decimal() => {
+            fastn_type::evalexpr::Value::Float(value) if expected_kind.is_decimal() => {
                 fastn_type::Value::Decimal { value }
             }
-            fastn_grammar::evalexpr::Value::Int(value) if expected_kind.is_integer() => {
+            fastn_type::evalexpr::Value::Int(value) if expected_kind.is_integer() => {
                 fastn_type::Value::Integer { value }
             }
-            fastn_grammar::evalexpr::Value::Boolean(value) if expected_kind.is_boolean() => {
+            fastn_type::evalexpr::Value::Boolean(value) if expected_kind.is_boolean() => {
                 fastn_type::Value::Boolean { value }
             }
-            fastn_grammar::evalexpr::Value::Tuple(data) if expected_kind.is_list() => {
+            fastn_type::evalexpr::Value::Tuple(data) if expected_kind.is_list() => {
                 let mut values = vec![];
                 let val_kind = expected_kind.list_type(doc_name, line_number)?;
                 for val in data {
@@ -1777,7 +1773,7 @@ impl ValueExt for fastn_type::Value {
                     kind: fastn_type::KindData::new(val_kind),
                 }
             }
-            fastn_grammar::evalexpr::Value::Empty if expected_kind.is_optional() => {
+            fastn_type::evalexpr::Value::Empty if expected_kind.is_optional() => {
                 fastn_type::Value::Optional {
                     data: Box::new(None),
                     kind: fastn_type::KindData::new(expected_kind.clone()),

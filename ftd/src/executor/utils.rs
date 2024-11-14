@@ -93,11 +93,11 @@ pub(crate) fn update_condition_in_component(
             reference
         };
         let new_condition = fastn_type::Expression {
-            expression: fastn_grammar::evalexpr::ExprNode::new(
-                fastn_grammar::evalexpr::Operator::RootNode,
+            expression: fastn_type::evalexpr::ExprNode::new(
+                fastn_type::evalexpr::Operator::RootNode,
             )
-            .add_children(vec![fastn_grammar::evalexpr::ExprNode::new(
-                fastn_grammar::evalexpr::Operator::And,
+            .add_children(vec![fastn_type::evalexpr::ExprNode::new(
+                fastn_type::evalexpr::Operator::And,
             )
             .add_children(vec![
                 outer_condition.expression,

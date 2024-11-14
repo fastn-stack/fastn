@@ -137,15 +137,15 @@ fn filename_with_second_last_extension_replaced_with_json(
 
 #[test]
 fn evalexpr_test() {
-    use fastn_grammar::evalexpr::*;
+    use fastn_type::evalexpr::*;
     let mut context = ftd::interpreter::default::default_context().unwrap();
-    dbg!(fastn_grammar::evalexpr::build_operator_tree("$a >= $b").unwrap());
-    dbg!(fastn_grammar::evalexpr::build_operator_tree(
+    dbg!(fastn_type::evalexpr::build_operator_tree("$a >= $b").unwrap());
+    dbg!(fastn_type::evalexpr::build_operator_tree(
         "(e = \"\"; ftd.is_empty(e)) && (d = \
         4; d > 7) && (6 > 7)"
     )
     .unwrap());
-    dbg!(fastn_grammar::evalexpr::build_operator_tree("(6 > 7) && (true)").unwrap());
+    dbg!(fastn_type::evalexpr::build_operator_tree("(6 > 7) && (true)").unwrap());
     assert_eq!(
         eval_with_context_mut(
             "(e = \"\"; ftd.is_empty(e)) && (d = 4; d > 7)",

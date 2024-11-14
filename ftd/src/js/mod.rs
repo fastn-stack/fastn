@@ -186,9 +186,7 @@ impl FunctionExt for fastn_type::Function {
             self.name.as_str(),
             self.expression
                 .iter()
-                .map(|e| {
-                    fastn_grammar::evalexpr::build_operator_tree(e.expression.as_str()).unwrap()
-                })
+                .map(|e| fastn_type::evalexpr::build_operator_tree(e.expression.as_str()).unwrap())
                 .collect_vec(),
             self.arguments
                 .iter()

@@ -199,7 +199,8 @@ impl ExecuteDoc<'_> {
         parent_container: &[usize],
         start_index: usize,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::executor::Result<Vec<(Option<String>, Vec<usize>, fastn_type::ComponentInvocation)>> {
+    ) -> ftd::executor::Result<Vec<(Option<String>, Vec<usize>, fastn_type::ComponentInvocation)>>
+    {
         use ftd::js::fastn_type_functions::ComponentExt;
 
         if instruction.is_loop() {
@@ -361,7 +362,8 @@ impl ExecuteDoc<'_> {
         parent_container: &[usize],
         start_index: usize,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::executor::Result<Vec<(Option<String>, Vec<usize>, fastn_type::ComponentInvocation)>> {
+    ) -> ftd::executor::Result<Vec<(Option<String>, Vec<usize>, fastn_type::ComponentInvocation)>>
+    {
         use ftd::interpreter::LoopExt;
 
         let iteration = if let Some(iteration) = instruction.iteration.as_ref() {
@@ -1069,28 +1071,23 @@ impl Device {
     }
 
     fn add_condition(&self, instruction: &mut fastn_type::ComponentInvocation, line_number: usize) {
-        let expression =
-            fastn_grammar::evalexpr::ExprNode::new(fastn_grammar::evalexpr::Operator::Eq)
-                .add_children(vec![
-                    fastn_grammar::evalexpr::ExprNode::new(
-                        fastn_grammar::evalexpr::Operator::VariableIdentifierRead {
-                            identifier: "ftd.device".to_string(),
-                        },
-                    ),
-                    fastn_grammar::evalexpr::ExprNode::new(
-                        fastn_grammar::evalexpr::Operator::Const {
-                            value: fastn_grammar::evalexpr::Value::String(
-                                self.to_str().to_string(),
-                            ),
-                        },
-                    ),
-                ]);
+        let expression = fastn_type::evalexpr::ExprNode::new(fastn_type::evalexpr::Operator::Eq)
+            .add_children(vec![
+                fastn_type::evalexpr::ExprNode::new(
+                    fastn_type::evalexpr::Operator::VariableIdentifierRead {
+                        identifier: "ftd.device".to_string(),
+                    },
+                ),
+                fastn_type::evalexpr::ExprNode::new(fastn_type::evalexpr::Operator::Const {
+                    value: fastn_type::evalexpr::Value::String(self.to_str().to_string()),
+                }),
+            ]);
 
         if let Some(condition) = instruction.condition.as_mut() {
             let expression =
-                fastn_grammar::evalexpr::ExprNode::new(fastn_grammar::evalexpr::Operator::RootNode)
-                    .add_children(vec![fastn_grammar::evalexpr::ExprNode::new(
-                        fastn_grammar::evalexpr::Operator::And,
+                fastn_type::evalexpr::ExprNode::new(fastn_type::evalexpr::Operator::RootNode)
+                    .add_children(vec![fastn_type::evalexpr::ExprNode::new(
+                        fastn_type::evalexpr::Operator::And,
                     )
                     .add_children(vec![expression, condition.expression.to_owned()])]);
 
@@ -1108,7 +1105,7 @@ impl Device {
             );
         } else {
             let expression =
-                fastn_grammar::evalexpr::ExprNode::new(fastn_grammar::evalexpr::Operator::RootNode)
+                fastn_type::evalexpr::ExprNode::new(fastn_type::evalexpr::Operator::RootNode)
                     .add_children(vec![expression]);
 
             let condition = fastn_type::Expression {
