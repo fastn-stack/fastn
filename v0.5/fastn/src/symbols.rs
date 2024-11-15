@@ -10,11 +10,8 @@ pub struct Symbols {
     >,
 }
 
-impl<'input> fastn_compiler::SymbolStore<'input> for Symbols {
-    fn lookup(
-        &'input mut self,
-        symbol: &fastn_unresolved::SymbolName,
-    ) -> fastn_compiler::LookupResult<'input> {
+impl Symbols {
+    fn lookup(&mut self, symbol: &fastn_unresolved::SymbolName) -> fastn_compiler::LookupResult {
         // using if let Some(v) is shorter, but borrow checker doesn't like it
         if self.failed.contains_key(symbol) {
             return fastn_compiler::LookupResult::LastResolutionFailed(
@@ -79,5 +76,14 @@ impl<'input> fastn_compiler::SymbolStore<'input> for Symbols {
                     )
                 },
             )
+    }
+}
+
+impl<'input> fastn_compiler::SymbolStore<'input> for Symbols {
+    fn lookup(
+        &'input mut self,
+        symbols: &[fastn_unresolved::SymbolName],
+    ) -> Vec<fastn_compiler::LookupResult<'input>> {
+        symbols.iter().map(|s| self.lookup(s)).collect()
     }
 }

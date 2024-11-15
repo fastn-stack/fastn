@@ -21,5 +21,8 @@ pub enum LookupResult<'input> {
 }
 
 pub trait SymbolStore<'input> {
-    fn lookup(&'input mut self, name: &fastn_unresolved::SymbolName) -> LookupResult<'input>;
+    fn lookup(
+        &'input mut self,
+        symbols: &[fastn_unresolved::SymbolName],
+    ) -> Vec<LookupResult<'input>>;
 }
