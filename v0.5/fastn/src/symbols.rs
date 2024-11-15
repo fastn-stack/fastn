@@ -1,11 +1,10 @@
 #[derive(Debug, Default)]
 pub struct Symbols {
-    resolved: std::collections::HashMap<fastn_unresolved::SymbolName, fastn_type::Definition>,
     failed: std::collections::HashMap<fastn_unresolved::SymbolName, Vec<fastn_section::Error>>,
     unresolved: std::collections::HashMap<
         fastn_unresolved::ModuleName,
         (
-            String,
+            String, // source
             std::collections::HashMap<fastn_unresolved::Identifier, fastn_unresolved::Definition>,
         ),
     >,
@@ -22,9 +21,6 @@ impl<'input> fastn_lang::SymbolStore<'input> for Symbols {
                 self.failed.get(symbol).unwrap(),
             );
         }
-        if self.resolved.contains_key(symbol) {
-            return fastn_lang::LookupResult::Resolved(self.resolved.get(symbol).unwrap());
-        }
         if self.unresolved.contains_key(&symbol.module) {
             let (source, symbols) = self.unresolved.get(&symbol.module).unwrap();
             // since we read all unresolved symbols defined in a module in one go, we can just check
@@ -39,6 +35,49 @@ impl<'input> fastn_lang::SymbolStore<'input> for Symbols {
         }
 
         // we need to fetch the symbol from the store
-        todo!()
+        let source = match std::fs::File::open(format!("{}.ftd", symbol.module.name.0))
+            .and_then(std::io::read_to_string)
+        {
+            Ok(v) => v,
+            Err(_e) => {
+                self.failed
+                    .insert(symbol.clone(), vec![fastn_section::Error::SymbolNotFound]);
+                return fastn_lang::LookupResult::NotFound;
+            }
+        };
+
+        let d = fastn_unresolved::parse(&symbol.module, &source);
+        let definitions = d
+            .definitions
+            .into_iter()
+            .map(|d| match d {
+                fastn_unresolved::UR::UnResolved(v) => (v.name().into(), v),
+                fastn_unresolved::UR::Resolved(_) => {
+                    unreachable!()
+                }
+            })
+            .collect();
+
+        self.unresolved
+            .insert(symbol.module.clone(), (source, definitions));
+
+        self.unresolved
+            .get(&symbol.module)
+            .unwrap()
+            .1
+            .get(&symbol.name)
+            .map_or(
+                {
+                    self.failed
+                        .insert(symbol.clone(), vec![fastn_section::Error::SymbolNotFound]);
+                    fastn_lang::LookupResult::NotFound
+                },
+                |v| {
+                    fastn_lang::LookupResult::Unresolved(
+                        v,
+                        &self.unresolved.get(&symbol.module).unwrap().0,
+                    )
+                },
+            )
     }
 }

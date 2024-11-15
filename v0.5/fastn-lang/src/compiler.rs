@@ -9,7 +9,7 @@
 /// warnings from OK part as error, and discard the generated JS.
 pub async fn compile<'input>(
     symbols: &mut Box<dyn fastn_lang::SymbolStore<'input>>,
-    document_id: &str,
+    document_id: &fastn_unresolved::ModuleName,
     source: &str,
     _auto_imports: &[fastn_section::AutoImport],
 ) -> Result<fastn_lang::compiler::Output, fastn_lang::compiler::Error> {

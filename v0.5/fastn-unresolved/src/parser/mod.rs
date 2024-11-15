@@ -1,7 +1,10 @@
 mod component_invocation;
 mod import;
 
-pub fn parse(_document_id: &str, source: &str) -> fastn_unresolved::Document {
+pub fn parse(
+    _document_id: &fastn_unresolved::ModuleName,
+    source: &str,
+) -> fastn_unresolved::Document {
     let (mut document, sections) =
         fastn_unresolved::Document::new(fastn_section::Document::parse(source));
     // guess the section and call the appropriate unresolved method.

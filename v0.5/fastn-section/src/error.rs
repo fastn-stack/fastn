@@ -23,6 +23,7 @@ pub enum Error {
     BodyNotAllowed,
     ExtraArgumentFound,
     ComponentIsNotAFunction,
+    SymbolNotFound,
     // SectionNotFound(&'a str),
     // MoreThanOneCaption,
     // ParseError,
