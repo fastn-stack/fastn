@@ -214,6 +214,7 @@ fn error(e: &fastn_section::Error, _s: &fastn_section::Span, _source: &str) -> s
         fastn_section::Error::BodyNotAllowed => "body_not_allowed",
         fastn_section::Error::ExtraArgumentFound => "extra_argument_found",
         fastn_section::Error::ComponentIsNotAFunction => "component_is_not_a_function",
+        fastn_section::Error::SymbolNotFound => "symbol_not_found",
     };
 
     serde_json::json!({ "error": v})
