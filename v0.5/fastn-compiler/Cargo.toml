@@ -1,5 +1,5 @@
 [package]
-name = "fastn-lang"
+name = "fastn-compiler"
 version = "0.1.0"
 authors.workspace = true
 edition.workspace = true
@@ -13,8 +13,5 @@ homepage.workspace = true
 fastn-section.workspace = true
 fastn-type.workspace = true
 fastn-unresolved.workspace = true
-serde_json.workspace = true
 
-[dev-dependencies]
-serde_json.workspace = true
 

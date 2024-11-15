@@ -60,13 +60,22 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 name = "fastn"
 version = "0.1.0"
 dependencies = [
+ "fastn-compiler",
  "fastn-core",
- "fastn-lang",
  "fastn-section",
  "fastn-type",
  "fastn-unresolved",
  "serde_json",
  "tokio",
+]
+
+[[package]]
+name = "fastn-compiler"
+version = "0.1.0"
+dependencies = [
+ "fastn-section",
+ "fastn-type",
+ "fastn-unresolved",
 ]
 
 [[package]]
@@ -81,16 +90,6 @@ dependencies = [
 name = "fastn-jdebug"
 version = "0.1.1"
 dependencies = [
- "serde_json",
-]
-
-[[package]]
-name = "fastn-lang"
-version = "0.1.0"
-dependencies = [
- "fastn-section",
- "fastn-type",
- "fastn-unresolved",
  "serde_json",
 ]
 

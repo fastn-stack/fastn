@@ -18,7 +18,7 @@ async fn render_document(
 ) {
     // let _js = match config.document_js(path) {
     //     Some(v) => v,
-    //     None => fastn_lang::compile(config, path, strict).await,
+    //     None => fastn_compiler::compile(config, path, strict).await,
     // };
 
     todo!()
