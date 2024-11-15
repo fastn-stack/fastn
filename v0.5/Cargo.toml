@@ -38,7 +38,7 @@ homepage = "https://fastn.com"
 # using the latest dependency, and what is the plan to move to the latest version.
 
 fastn-lang = { path = "fastn-lang" }
-fastn-type = "0.1.0"
+fastn-type = "0.1.1"
 fastn-section = { path = "fastn-section" }
 fastn-static = { path = "fastn-static" }
 fastn-core = { path = "fastn-core" }

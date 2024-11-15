@@ -9,7 +9,7 @@ pub(crate) mod value;
 pub(crate) mod variable;
 pub(crate) mod web_component;
 
-pub type Thing = fastn_type::Thing;
+pub type Thing = fastn_type::Definition;
 
 pub trait ThingExt {
     fn variable(

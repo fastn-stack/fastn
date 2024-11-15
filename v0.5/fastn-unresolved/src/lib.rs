@@ -15,7 +15,7 @@ pub use parser::parse;
 pub struct Document {
     pub module_doc: Option<fastn_section::Span>,
     pub imports: Vec<fastn_unresolved::Import>,
-    pub definitions: Vec<Definition>,
+    pub definitions: Vec<UR<Definition, fastn_type::Definition>>,
     pub content: Vec<UR<ComponentInvocation, fastn_type::ComponentInvocation>>,
     pub errors: Vec<fastn_section::Spanned<fastn_section::Error>>,
     pub warnings: Vec<fastn_section::Spanned<fastn_section::Warning>>,
@@ -26,35 +26,44 @@ pub struct Document {
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Definition {
     pub doc: Option<fastn_section::Span>,
-    pub name: Identifier,
+    /// resolving an identifier means making sure it is unique in the document, and performing
+    /// other checks.
+    pub name: UR<Identifier, Identifier>,
     pub visibility: fastn_section::Visibility,
-    pub kind: Kind,
     pub inner: InnerDefinition,
 }
 
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub enum InnerDefinition {
     Component {
-        properties: Vec<Argument>,
-        body: Vec<ComponentInvocation>,
+        properties: Vec<UR<Argument, fastn_type::Argument>>,
+        body: Vec<UR<ComponentInvocation, fastn_type::ComponentInvocation>>,
     },
     Variable {
-        arguments: Vec<Property>,
-        caption: Vec<fastn_section::Tes>,
+        kind: UR<Kind, fastn_type::Kind>,
+        properties: Vec<UR<Property, fastn_type::Property>>,
+        /// resolved caption goes to properties
+        caption: UR<Vec<fastn_section::Tes>, ()>,
+        /// resolved body goes to properties
+        body: UR<Vec<fastn_section::Tes>, ()>,
     },
     Function {
-        properties: Vec<Argument>,
-        return_type: Option<Kind>,
-        body: Vec<fastn_section::Tes>,
+        arguments: Vec<UR<Argument, fastn_type::Argument>>,
+        return_type: Option<UR<Kind, fastn_type::Kind>>,
+        /// this one is a little interesting, the number of expressions can be more than the number
+        /// of Tes, this because we can have multiple expressions in a single Tes.
+        body: Vec<UR<fastn_section::Tes, fastn_type::FunctionExpression>>,
     },
-    // -- type foo: person
-    // name: foo ;; we are updating / setting the default value
     TypeAlias {
-        kind: Kind,
-        arguments: Vec<Property>,
+        kind: UR<Kind, fastn_type::Kind>,
+        /// ```ftd
+        /// -- type foo: person
+        /// name: foo                  ;; we are updating / setting the default value
+        /// ```
+        arguments: Vec<UR<Property, fastn_type::Property>>,
     },
     Record {
-        properties: Vec<Argument>,
+        properties: Vec<UR<Argument, fastn_type::Argument>>,
     },
     // TODO: OrType(fastn_section::Section),
     // TODO: Module(fastn_section::Section),
