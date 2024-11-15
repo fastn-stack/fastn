@@ -11,19 +11,22 @@ pub struct Symbols {
     >,
 }
 
-#[async_trait::async_trait]
 impl<'input> fastn_lang::SymbolStore<'input> for Symbols {
-    async fn lookup(
+    fn lookup(
         &'input mut self,
         symbol: &fastn_unresolved::SymbolName,
     ) -> fastn_lang::LookupResult<'input> {
-        if let Some(v) = self.failed.get(symbol) {
-            return fastn_lang::LookupResult::LastResolutionFailed(v);
+        // using if let Some(v) is shorter, but borrow checker doesn't like it
+        if self.failed.contains_key(symbol) {
+            return fastn_lang::LookupResult::LastResolutionFailed(
+                self.failed.get(symbol).unwrap(),
+            );
         }
-        if let Some(v) = self.resolved.get(symbol) {
-            return fastn_lang::LookupResult::Resolved(v);
+        if self.resolved.contains_key(symbol) {
+            return fastn_lang::LookupResult::Resolved(self.resolved.get(symbol).unwrap());
         }
-        if let Some((source, symbols)) = self.unresolved.get(&symbol.module) {
+        if self.unresolved.contains_key(&symbol.module) {
+            let (source, symbols) = self.unresolved.get(&symbol.module).unwrap();
             // since we read all unresolved symbols defined in a module in one go, we can just check
             // if the symbol is present in the hashmap
             return match symbols.get(&symbol.name) {

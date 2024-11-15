@@ -20,7 +20,6 @@ pub enum LookupResult<'input> {
     LastResolutionFailed(&'input Vec<fastn_section::Error>),
 }
 
-#[async_trait::async_trait]
 pub trait SymbolStore<'input> {
-    async fn lookup(&'input mut self, name: &fastn_unresolved::SymbolName) -> LookupResult<'input>;
+    fn lookup(&'input mut self, name: &fastn_unresolved::SymbolName) -> LookupResult<'input>;
 }

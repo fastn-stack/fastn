@@ -9,13 +9,10 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
-fastn-lang.workspace = true
-fastn-type.workspace = true
-fastn-section.workspace = true
-fastn-unresolved.workspace = true
-#fastn-static.workspace = true
 fastn-core.workspace = true
-#serde.workspace = true
+fastn-lang.workspace = true
+fastn-section.workspace = true
+fastn-type.workspace = true
+fastn-unresolved.workspace = true
 serde_json.workspace = true
-async-trait.workspace = true
 tokio.workspace = true
