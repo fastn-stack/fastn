@@ -115,7 +115,7 @@ mod tests {
         assert_eq!(d.imports.len(), 1);
 
         assert_eq!(
-            fastn_section::JDebug::debug(&d.imports.pop().unwrap(), source),
+            fastn_jdebug::JDebug::debug(&d.imports.pop().unwrap(), source),
             expected
         )
     }

@@ -10,6 +10,9 @@ homepage.workspace = true
 
 [dependencies]
 serde.workspace = true
+
+[dev-dependencies]
 serde_json.workspace = true
+fastn-jdebug.workspace = true
 
 

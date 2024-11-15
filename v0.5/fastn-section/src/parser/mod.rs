@@ -49,7 +49,7 @@ pub fn document(scanner: &mut fastn_section::Scanner<fastn_section::Document>) {
 #[cfg(test)]
 #[track_caller]
 fn p<
-    T: fastn_section::JDebug,
+    T: fastn_jdebug::JDebug,
     F: FnOnce(&mut fastn_section::Scanner<fastn_section::Document>) -> T,
 >(
     source: &str,

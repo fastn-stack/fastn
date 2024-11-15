@@ -14,4 +14,5 @@ serde.workspace = true
 fastn-type.workspace = true
 
 [dev-dependencies]
+fastn-jdebug.workspace = true
 serde_json.workspace = true

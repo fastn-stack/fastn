@@ -1,62 +1,33 @@
-fn span(s: &fastn_section::Span, key: &str, source: &str) -> serde_json::Value {
-    serde_json::json!({ key: (source[s.start..s.end]).to_string()})
-}
+// fn span(s: &fastn_section::Span, key: &str, source: &str) -> serde_json::Value {
+//     serde_json::json!({ key: (source[s.start..s.end]).to_string()})
+// }
 
-impl fastn_section::JDebug for fastn_section::Span {
+impl fastn_jdebug::JDebug for fastn_section::Span {
     fn debug(&self, source: &str) -> serde_json::Value {
         let t = &source[self.start..self.end];
         if t.is_empty() { "<empty>" } else { t }.into()
     }
 }
 
-impl<T: fastn_section::JDebug> fastn_section::JDebug for fastn_section::Spanned<T> {
+impl<T: fastn_jdebug::JDebug> fastn_jdebug::JDebug for fastn_section::Spanned<T> {
     fn debug(&self, source: &str) -> serde_json::Value {
         self.value.debug(source)
     }
 }
 
-impl fastn_section::JDebug for fastn_section::Spanned<()> {
-    fn debug(&self, source: &str) -> serde_json::Value {
-        span(&self.span, "spanned", source)
-    }
-}
+// impl fastn_jdebug::JDebug for fastn_section::Spanned<()> {
+//     fn debug(&self, source: &str) -> serde_json::Value {
+//         span(&self.span, "spanned", source)
+//     }
+// }
 
-impl<T: fastn_section::JDebug> fastn_section::JDebug for Vec<T> {
-    fn debug(&self, source: &str) -> serde_json::Value {
-        serde_json::Value::Array(self.iter().map(|v| v.debug(source)).collect())
-    }
-}
-
-impl<T: fastn_section::JDebug> fastn_section::JDebug
-    for std::collections::HashMap<fastn_section::Identifier, T>
-{
-    fn debug(&self, source: &str) -> serde_json::Value {
-        let mut o = serde_json::Map::new();
-        for (k, v) in self {
-            o.insert(
-                source[k.name.start..k.name.end].to_string(),
-                v.debug(source),
-            );
-        }
-        serde_json::Value::Object(o)
-    }
-}
-
-impl<T: fastn_section::JDebug> fastn_section::JDebug for Option<T> {
-    fn debug(&self, source: &str) -> serde_json::Value {
-        self.as_ref()
-            .map(|v| v.debug(source))
-            .unwrap_or(serde_json::Value::Null)
-    }
-}
-
-impl fastn_section::JDebug for fastn_section::Visibility {
+impl fastn_jdebug::JDebug for fastn_section::Visibility {
     fn debug(&self, _source: &str) -> serde_json::Value {
         format!("{self:?}").into()
     }
 }
 
-impl fastn_section::JDebug for fastn_section::Document {
+impl fastn_jdebug::JDebug for fastn_section::Document {
     fn debug(&self, source: &str) -> serde_json::Value {
         let mut o = serde_json::Map::new();
         if self.module_doc.is_some() {
@@ -80,7 +51,7 @@ impl fastn_section::JDebug for fastn_section::Document {
     }
 }
 
-impl fastn_section::JDebug for fastn_section::Section {
+impl fastn_jdebug::JDebug for fastn_section::Section {
     fn debug(&self, source: &str) -> serde_json::Value {
         // todo: add headers etc (only if they are not null)
         let mut o = serde_json::Map::new();
@@ -94,13 +65,13 @@ impl fastn_section::JDebug for fastn_section::Section {
     }
 }
 
-impl fastn_section::JDebug for fastn_section::SectionInit {
+impl fastn_jdebug::JDebug for fastn_section::SectionInit {
     fn debug(&self, source: &str) -> serde_json::Value {
         self.name.debug(source)
     }
 }
 
-impl fastn_section::JDebug for fastn_section::KindedName {
+impl fastn_jdebug::JDebug for fastn_section::KindedName {
     fn debug(&self, source: &str) -> serde_json::Value {
         let mut o = serde_json::Map::new();
         if let Some(kind) = &self.kind {
@@ -111,7 +82,7 @@ impl fastn_section::JDebug for fastn_section::KindedName {
     }
 }
 
-impl fastn_section::JDebug for fastn_section::Kind {
+impl fastn_jdebug::JDebug for fastn_section::Kind {
     fn debug(&self, source: &str) -> serde_json::Value {
         if let Some(v) = self.to_identifier() {
             return v.debug(source);
@@ -132,7 +103,7 @@ impl fastn_section::JDebug for fastn_section::Kind {
     }
 }
 
-impl fastn_section::JDebug for fastn_section::QualifiedIdentifier {
+impl fastn_jdebug::JDebug for fastn_section::QualifiedIdentifier {
     fn debug(&self, source: &str) -> serde_json::Value {
         if self.terms.is_empty() {
             return self.module.debug(source);
@@ -145,13 +116,13 @@ impl fastn_section::JDebug for fastn_section::QualifiedIdentifier {
     }
 }
 
-impl fastn_section::JDebug for fastn_section::HeaderValue {
+impl fastn_jdebug::JDebug for fastn_section::HeaderValue {
     fn debug(&self, source: &str) -> serde_json::Value {
         self.0.debug(source)
     }
 }
 
-impl fastn_section::JDebug for fastn_section::Tes {
+impl fastn_jdebug::JDebug for fastn_section::Tes {
     fn debug(&self, source: &str) -> serde_json::Value {
         match self {
             fastn_section::Tes::Text(e) => e.debug(source),
@@ -161,13 +132,13 @@ impl fastn_section::JDebug for fastn_section::Tes {
     }
 }
 
-impl fastn_section::JDebug for fastn_section::Identifier {
+impl fastn_jdebug::JDebug for fastn_section::Identifier {
     fn debug(&self, source: &str) -> serde_json::Value {
         self.name.debug(source)
     }
 }
 
-impl fastn_section::JDebug for fastn_section::PackageName {
+impl fastn_jdebug::JDebug for fastn_section::PackageName {
     fn debug(&self, source: &str) -> serde_json::Value {
         format!(
             "{} as {}",
@@ -178,7 +149,7 @@ impl fastn_section::JDebug for fastn_section::PackageName {
     }
 }
 
-impl fastn_section::JDebug for fastn_section::AliasableIdentifier {
+impl fastn_jdebug::JDebug for fastn_section::AliasableIdentifier {
     fn debug(&self, source: &str) -> serde_json::Value {
         if self.alias.is_none() {
             return self.name.debug(source);
@@ -191,7 +162,7 @@ impl fastn_section::JDebug for fastn_section::AliasableIdentifier {
     }
 }
 
-impl fastn_section::JDebug for fastn_section::ModuleName {
+impl fastn_jdebug::JDebug for fastn_section::ModuleName {
     fn debug(&self, source: &str) -> serde_json::Value {
         if self.path.is_empty()
             && self.name.alias.is_none()
@@ -220,7 +191,7 @@ impl fastn_section::JDebug for fastn_section::ModuleName {
     }
 }
 
-impl fastn_section::JDebug for fastn_section::Error {
+impl fastn_jdebug::JDebug for fastn_section::Error {
     fn debug(&self, source: &str) -> serde_json::Value {
         error(self, &Default::default(), source)
     }

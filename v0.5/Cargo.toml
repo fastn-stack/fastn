@@ -7,6 +7,7 @@ members = [
     "fastn-static",
     "fastn-unresolved",
     "fastn-update",
+    "fastn-jdebug",
 ]
 exclude = []
 resolver = "2"
@@ -39,6 +40,7 @@ homepage = "https://fastn.com"
 
 fastn-lang = { path = "fastn-lang" }
 fastn-type = "0.1.1"
+fastn-jdebug = { version = "0.1.0", path = "fastn-jdebug" }
 fastn-section = { path = "fastn-section" }
 fastn-static = { path = "fastn-static" }
 fastn-core = { path = "fastn-core" }

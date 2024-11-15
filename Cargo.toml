@@ -6,7 +6,6 @@ members = [
     "fastn-ds",
     "fastn-expr",
     "fastn-issues",
-    "fastn-jdebug",
     "fastn-js",
     "fastn-lang",
     "fastn-package",

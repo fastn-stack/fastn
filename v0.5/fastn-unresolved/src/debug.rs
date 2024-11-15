@@ -1,6 +1,6 @@
 use serde_json::Value;
 
-impl fastn_section::JDebug for fastn_unresolved::Import {
+impl fastn_jdebug::JDebug for fastn_unresolved::Import {
     fn debug(&self, source: &str) -> serde_json::Value {
         let mut o = serde_json::Map::new();
 
@@ -33,7 +33,7 @@ impl fastn_section::JDebug for fastn_unresolved::Import {
     }
 }
 
-impl fastn_section::JDebug for fastn_unresolved::Export {
+impl fastn_jdebug::JDebug for fastn_unresolved::Export {
     fn debug(&self, source: &str) -> serde_json::Value {
         match self {
             fastn_unresolved::Export::All => "all".into(),
@@ -44,7 +44,7 @@ impl fastn_section::JDebug for fastn_unresolved::Export {
     }
 }
 
-impl fastn_section::JDebug for fastn_unresolved::AliasableIdentifier {
+impl fastn_jdebug::JDebug for fastn_unresolved::AliasableIdentifier {
     fn debug(&self, _source: &str) -> serde_json::Value {
         match self.alias {
             Some(ref v) => format!("{}=>{}", self.name.0, v.0),
@@ -54,13 +54,13 @@ impl fastn_section::JDebug for fastn_unresolved::AliasableIdentifier {
     }
 }
 
-impl fastn_section::JDebug for fastn_unresolved::ComponentInvocation {
+impl fastn_jdebug::JDebug for fastn_unresolved::ComponentInvocation {
     fn debug(&self, _source: &str) -> Value {
         todo!()
     }
 }
 
-impl<U: fastn_section::JDebug, R: fastn_section::JDebug> fastn_section::JDebug
+impl<U: fastn_jdebug::JDebug, R: fastn_jdebug::JDebug> fastn_jdebug::JDebug
     for fastn_unresolved::UR<U, R>
 {
     fn debug(&self, _source: &str) -> Value {
