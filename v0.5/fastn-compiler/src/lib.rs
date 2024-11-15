@@ -2,7 +2,7 @@
 #![deny(unused_crate_dependencies)]
 #![warn(clippy::used_underscore_binding)]
 
-extern crate self as fastn_lang;
+extern crate self as fastn_compiler;
 
 mod compiler;
 mod symbols;
