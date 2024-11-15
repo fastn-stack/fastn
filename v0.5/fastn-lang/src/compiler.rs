@@ -27,7 +27,7 @@ pub async fn compile<'input>(
         // this itself has to happen in a loop
         for _ in 1..10 {
             // TODO: fetch symbols from
-            let mut symbols = resolve_symbols(&mut d, &mut bag, symbols);
+            resolve_symbols(&mut d, &mut bag, &mut symbols);
             if symbols.is_empty() {
                 break;
             }
@@ -40,7 +40,7 @@ pub async fn compile<'input>(
 fn resolve_symbols(
     _d: &mut fastn_unresolved::Document,
     _bag: &mut std::collections::HashMap<String, fastn_lang::LookupResult>,
-    _symbols: Vec<fastn_unresolved::SymbolName>,
+    _symbols: &mut [fastn_unresolved::SymbolName],
 ) -> Vec<fastn_unresolved::SymbolName> {
     todo!()
 }
@@ -50,7 +50,7 @@ fn resolve_document(
     _bag: &mut std::collections::HashMap<String, fastn_lang::LookupResult>,
 ) -> Vec<fastn_unresolved::SymbolName> {
     for ci in &d.content {
-        if let fastn_unresolved::UR::UnResolved(c) = ci {
+        if let fastn_unresolved::UR::UnResolved(_c) = ci {
             todo!()
         }
     }

@@ -94,3 +94,19 @@ impl<U, R> From<U> for fastn_unresolved::UR<U, R> {
         fastn_unresolved::UR::UnResolved(u)
     }
 }
+
+impl<U, V> fastn_unresolved::UR<U, V> {
+    pub fn unresolved(&self) -> Option<&U> {
+        match self {
+            fastn_unresolved::UR::UnResolved(u) => Some(u),
+            _ => None,
+        }
+    }
+
+    pub fn resolved(&self) -> Option<&V> {
+        match self {
+            fastn_unresolved::UR::Resolved(v) => Some(v),
+            _ => None,
+        }
+    }
+}
