@@ -21,20 +21,23 @@ pub async fn compile<'input>(
     // we only make 10 attempts to resolve the document
     for _ in 1..10 {
         // resolve_document can internally run in parallel.
-        let mut unresolved_symbols = resolve_document(&mut d, &mut bag);
+        let (mut unresolved_symbols, partially_resolved) = resolve_document(&mut d, &bag);
+        update_partially_resolved(&mut bag, partially_resolved);
         if unresolved_symbols.is_empty() {
             break;
         }
 
-        update_bag(symbols, &mut d, &mut bag, &mut unresolved_symbols).await;
+        fetch_unresolved_symbols(symbols, &mut d, &mut bag, &mut unresolved_symbols).await;
         // this itself has to happen in a loop
         for _ in 1..10 {
             // resolve_document can internally run in parallel.
-            resolve_symbols(&mut d, &mut bag, &mut unresolved_symbols);
+            let partially_resolved = resolve_symbols(&mut d, &bag, &mut unresolved_symbols);
+            update_partially_resolved(&mut bag, partially_resolved);
+
             if unresolved_symbols.is_empty() {
                 break;
             }
-            update_bag(symbols, &mut d, &mut bag, &mut unresolved_symbols).await;
+            fetch_unresolved_symbols(symbols, &mut d, &mut bag, &mut unresolved_symbols).await;
         }
 
         if !unresolved_symbols.is_empty() {
@@ -45,7 +48,14 @@ pub async fn compile<'input>(
     todo!()
 }
 
-async fn update_bag<'input>(
+fn update_partially_resolved(
+    _bag: &mut std::collections::HashMap<String, fastn_lang::LookupResult<'_>>,
+    _partially_resolved: Vec<fastn_unresolved::Definition>,
+) {
+    todo!()
+}
+
+async fn fetch_unresolved_symbols<'input>(
     _symbols: &mut Box<dyn fastn_lang::SymbolStore<'input>>,
     _d: &mut fastn_unresolved::Document,
     _bag: &mut std::collections::HashMap<String, fastn_lang::LookupResult<'input>>,
@@ -54,26 +64,31 @@ async fn update_bag<'input>(
     todo!()
 }
 
-/// try to resolve as many symbols as possible, and return the ones that could not be resolved
-/// because we do not have data in the bag.
+/// try to resolve as many symbols as possible, and return the ones that we made any progress on.
 ///
-/// this function should be called in a loop, until it returns an empty list of symbols.
+/// this function should be called in a loop, until list of symbols is empty.
 fn resolve_symbols(
     _d: &mut fastn_unresolved::Document,
-    _bag: &mut std::collections::HashMap<String, fastn_lang::LookupResult>,
+    _bag: &std::collections::HashMap<String, fastn_lang::LookupResult>,
     _symbols: &mut [fastn_unresolved::SymbolName],
-) -> Vec<fastn_unresolved::SymbolName> {
+) -> Vec<fastn_unresolved::Definition> {
     todo!()
 }
 
 /// try to make as much progress as possibly by resolving as many symbols as possible, and return
 /// the vec of ones that could not be resolved.
 ///
+/// it also returns vec of partially resolved symbols, so we do not directly modify the bag, we want
+/// all bag updates to happen in one place.
+///
 /// if this returns an empty list of symbols, we can go ahead and generate the JS.
 fn resolve_document(
     d: &mut fastn_unresolved::Document,
-    _bag: &mut std::collections::HashMap<String, fastn_lang::LookupResult>,
-) -> Vec<fastn_unresolved::SymbolName> {
+    _bag: &std::collections::HashMap<String, fastn_lang::LookupResult>,
+) -> (
+    Vec<fastn_unresolved::SymbolName>,
+    Vec<fastn_unresolved::Definition>,
+) {
     for ci in &d.content {
         if let fastn_unresolved::UR::UnResolved(_c) = ci {
             todo!()
