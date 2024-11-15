@@ -17,10 +17,10 @@ pub enum LookupResult<'input> {
     ///
     /// what if we store the dependencies it failed on, so when any of them changes, we can
     /// revalidate?
-    LastResolutionFailed(Vec<fastn_section::Error>),
+    LastResolutionFailed(&'input Vec<fastn_section::Error>),
 }
 
 #[async_trait::async_trait]
 pub trait SymbolStore<'input> {
-    async fn lookup(&'input mut self, qualified_identifier: &str) -> LookupResult<'input>;
+    async fn lookup(&'input mut self, name: &fastn_unresolved::SymbolName) -> LookupResult<'input>;
 }

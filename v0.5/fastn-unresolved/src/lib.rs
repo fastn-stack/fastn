@@ -122,16 +122,16 @@ pub struct Argument {
     pub default: Option<fastn_section::Tes>,
 }
 
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, Hash, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct PackageName(pub String);
 
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, Eq, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct ModuleName {
     pub name: Identifier,
     pub package: PackageName,
 }
 
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, Hash, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Identifier(pub String);
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
@@ -147,7 +147,7 @@ pub struct AliasableIdentifier {
     pub name: Identifier,
 }
 
-#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, Eq, Hash, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct SymbolName {
     pub module: ModuleName,
     /// can name contain dots? after we have `-- module foo:` feature it will, but now?
