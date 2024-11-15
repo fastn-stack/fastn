@@ -101,6 +101,7 @@ version = "0.1.0"
 dependencies = [
  "async-trait",
  "fastn-section",
+ "fastn-type",
  "fastn-unresolved",
  "serde_json",
 ]
