@@ -17,10 +17,6 @@ pub use error::Error;
 pub use fastn_section::warning::Warning;
 pub use scanner::{Scannable, Scanner};
 
-pub trait JDebug {
-    fn debug(&self, source: &str) -> serde_json::Value;
-}
-
 pub enum Diagnostic {
     Error(Error),
     Warning(Warning),

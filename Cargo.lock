@@ -1547,6 +1547,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "fastn-jdebug"
+version = "0.1.0"
+
+[[package]]
 name = "fastn-js"
 version = "0.1.0"
 dependencies = [
@@ -1599,7 +1603,7 @@ dependencies = [
 
 [[package]]
 name = "fastn-type"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "serde",
 ]

@@ -112,9 +112,9 @@ version = "0.1.0"
 
 [[package]]
 name = "fastn-type"
-version = "0.1.0"
+version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1494ecd11081fa81a57265457a27262fb640e70cf84acf2c551a8e8a2d69c1c1"
+checksum = "9883bbd7d5d180775a060a91fe8ef54be033146d55318e4e8ab6099d4a58072e"
 dependencies = [
  "serde",
 ]
