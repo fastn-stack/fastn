@@ -10,6 +10,7 @@ homepage.workspace = true
 
 [dependencies]
 fastn-lang.workspace = true
+fastn-type.workspace = true
 fastn-section.workspace = true
 fastn-unresolved.workspace = true
 #fastn-static.workspace = true

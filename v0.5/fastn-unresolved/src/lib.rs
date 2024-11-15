@@ -71,7 +71,6 @@ pub enum InnerDefinition {
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Import {
-    pub package: PackageName,
     pub module: ModuleName,
     pub alias: Option<Identifier>,
     pub export: Option<Export>,
@@ -127,7 +126,10 @@ pub struct Argument {
 pub struct PackageName(pub String);
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
-pub struct ModuleName(pub String);
+pub struct ModuleName {
+    pub name: Identifier,
+    pub package: PackageName,
+}
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub struct Identifier(pub String);
@@ -147,7 +149,6 @@ pub struct AliasableIdentifier {
 
 #[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
 pub struct SymbolName {
-    pub package: PackageName,
     pub module: ModuleName,
     /// can name contain dots? after we have `-- module foo:` feature it will, but now?
     pub name: Identifier, // name comes after #

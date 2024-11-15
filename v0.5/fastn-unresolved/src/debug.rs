@@ -4,10 +4,10 @@ impl fastn_jdebug::JDebug for fastn_unresolved::Import {
     fn debug(&self, source: &str) -> serde_json::Value {
         let mut o = serde_json::Map::new();
 
-        let name = if self.package.0.is_empty() {
-            self.module.0.to_string()
+        let name = if self.module.package.0.is_empty() {
+            self.module.name.0.to_string()
         } else {
-            format!("{}/{}", self.package.0, self.module.0)
+            format!("{}/{}", self.module.package.0, self.module.name.0)
         };
 
         o.insert(

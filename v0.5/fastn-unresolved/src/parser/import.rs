@@ -73,8 +73,10 @@ fn parse_import(
     };
 
     Some(fastn_unresolved::Import {
-        package: fastn_unresolved::PackageName(package.to_string()),
-        module: fastn_unresolved::ModuleName(module.to_string()),
+        module: fastn_unresolved::ModuleName {
+            name: module.into(),
+            package: fastn_unresolved::PackageName(package.to_string()),
+        },
         alias: alias.map(|v| fastn_unresolved::Identifier(v.to_string())),
         export: parse_field("export", source, section, document),
         exposing: parse_field("exposing", source, section, document),

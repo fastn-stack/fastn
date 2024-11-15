@@ -75,6 +75,7 @@ dependencies = [
  "fastn-core",
  "fastn-lang",
  "fastn-section",
+ "fastn-type",
  "fastn-unresolved",
  "serde_json",
  "tokio",

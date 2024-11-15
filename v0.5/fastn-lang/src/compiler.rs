@@ -18,7 +18,8 @@ pub async fn compile<'input>(
     let mut d = fastn_unresolved::parse(document_id, source);
     let mut bag = std::collections::HashMap::new();
 
-    // we only make 10 attempts to resolve the document
+    // we only make 10 attempts to resolve the document: we need a warning if we are not able to
+    // resolve the document in 10 attempts.
     for _ in 1..10 {
         // resolve_document can internally run in parallel.
         let (mut unresolved_symbols, partially_resolved) = resolve_document(&mut d, &bag);
@@ -28,7 +29,8 @@ pub async fn compile<'input>(
         }
 
         fetch_unresolved_symbols(symbols, &mut d, &mut bag, &mut unresolved_symbols).await;
-        // this itself has to happen in a loop
+        // this itself has to happen in a loop. we need a warning if we are not able to resolve all
+        // symbols in 10 attempts.
         for _ in 1..10 {
             // resolve_document can internally run in parallel.
             let partially_resolved = resolve_symbols(&mut d, &bag, &mut unresolved_symbols);
