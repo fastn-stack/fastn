@@ -8,7 +8,7 @@
 /// earlier we had strict mode here, but to simplify things, now we let the caller convert non-empty
 /// warnings from OK part as error, and discard the generated JS.
 pub async fn compile(
-    symbols: &mut Box<dyn fastn_compiler::SymbolStore>,
+    mut symbols: impl fastn_compiler::SymbolStore,
     document_id: &fastn_unresolved::ModuleName,
     source: &str,
     _auto_imports: &[fastn_section::AutoImport],
@@ -29,7 +29,13 @@ pub async fn compile(
             break;
         }
 
-        fetch_unresolved_symbols(symbols, &mut bag, &mut unresolved_symbols, &mut interner).await;
+        fetch_unresolved_symbols(
+            &mut symbols,
+            &mut bag,
+            &mut unresolved_symbols,
+            &mut interner,
+        )
+        .await;
         // this itself has to happen in a loop. we need a warning if we are not able to resolve all
         // symbols in 10 attempts.
         for _ in 1..10 {
@@ -40,8 +46,13 @@ pub async fn compile(
             if unresolved_symbols.is_empty() {
                 break;
             }
-            fetch_unresolved_symbols(symbols, &mut bag, &mut unresolved_symbols, &mut interner)
-                .await;
+            fetch_unresolved_symbols(
+                &mut symbols,
+                &mut bag,
+                &mut unresolved_symbols,
+                &mut interner,
+            )
+            .await;
         }
 
         if !unresolved_symbols.is_empty() {
@@ -63,7 +74,7 @@ fn update_partially_resolved(
 }
 
 async fn fetch_unresolved_symbols(
-    symbols: &mut Box<dyn fastn_compiler::SymbolStore>,
+    symbols: &mut impl fastn_compiler::SymbolStore,
     _bag: &mut std::collections::HashMap<
         fastn_unresolved::SymbolName,
         fastn_compiler::LookupResult,
