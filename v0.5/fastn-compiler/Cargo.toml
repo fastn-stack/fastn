@@ -13,5 +13,6 @@ homepage.workspace = true
 fastn-section.workspace = true
 fastn-type.workspace = true
 fastn-unresolved.workspace = true
+string-interner.workspace = true
 
 

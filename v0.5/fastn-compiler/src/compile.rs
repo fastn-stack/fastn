@@ -7,12 +7,13 @@
 ///
 /// earlier we had strict mode here, but to simplify things, now we let the caller convert non-empty
 /// warnings from OK part as error, and discard the generated JS.
-pub async fn compile<'input>(
-    symbols: &'input mut Box<dyn fastn_compiler::SymbolStore<'input>>,
+pub async fn compile(
+    symbols: &mut Box<dyn fastn_compiler::SymbolStore>,
     document_id: &fastn_unresolved::ModuleName,
     source: &str,
     _auto_imports: &[fastn_section::AutoImport],
 ) -> Result<fastn_compiler::Output, fastn_compiler::Error> {
+    let mut interner = string_interner::StringInterner::new();
     // this guy will maintain symbols that failed to resolve, along with their dependencies, or maybe
     // just the one dependency that failed?
     let mut d = fastn_unresolved::parse(document_id, source);
@@ -28,7 +29,7 @@ pub async fn compile<'input>(
             break;
         }
 
-        fetch_unresolved_symbols(symbols, &mut bag, &mut unresolved_symbols).await;
+        fetch_unresolved_symbols(symbols, &mut bag, &mut unresolved_symbols, &mut interner).await;
         // this itself has to happen in a loop. we need a warning if we are not able to resolve all
         // symbols in 10 attempts.
         for _ in 1..10 {
@@ -39,7 +40,8 @@ pub async fn compile<'input>(
             if unresolved_symbols.is_empty() {
                 break;
             }
-            fetch_unresolved_symbols(symbols, &mut bag, &mut unresolved_symbols).await;
+            fetch_unresolved_symbols(symbols, &mut bag, &mut unresolved_symbols, &mut interner)
+                .await;
         }
 
         if !unresolved_symbols.is_empty() {
@@ -53,22 +55,23 @@ pub async fn compile<'input>(
 fn update_partially_resolved(
     _bag: &mut std::collections::HashMap<
         fastn_unresolved::SymbolName,
-        fastn_compiler::LookupResult<'_>,
+        fastn_compiler::LookupResult,
     >,
     _partially_resolved: Vec<fastn_unresolved::Definition>,
 ) {
     todo!()
 }
 
-async fn fetch_unresolved_symbols<'input>(
-    symbols: &'input mut Box<dyn fastn_compiler::SymbolStore<'input>>,
+async fn fetch_unresolved_symbols(
+    symbols: &mut Box<dyn fastn_compiler::SymbolStore>,
     _bag: &mut std::collections::HashMap<
         fastn_unresolved::SymbolName,
-        fastn_compiler::LookupResult<'input>,
+        fastn_compiler::LookupResult,
     >,
     symbols_to_fetch: &mut [fastn_unresolved::SymbolName],
+    interner: &mut string_interner::DefaultStringInterner,
 ) {
-    let _found = symbols.lookup(symbols_to_fetch);
+    let _found = symbols.lookup(interner, symbols_to_fetch);
 }
 
 /// try to resolve as many symbols as possible, and return the ones that we made any progress on.
