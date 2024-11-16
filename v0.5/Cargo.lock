@@ -66,6 +66,7 @@ dependencies = [
  "fastn-type",
  "fastn-unresolved",
  "serde_json",
+ "string-interner",
  "tokio",
 ]
 

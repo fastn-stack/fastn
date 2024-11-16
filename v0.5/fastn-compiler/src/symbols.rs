@@ -1,23 +1,11 @@
-pub struct LookupResult {
-    #[expect(dead_code)]
-    symbol: Symbol,
-    #[expect(dead_code)]
-    source: string_interner::DefaultSymbol,
-    // package: string_interner::DefaultBackend,
-    // module: string_interner::DefaultBackend,
-}
-
-pub enum Symbol {
+pub enum LookupResult {
     /// the unresolved symbol and the file source it was resolved from
     ///
     /// the resolved and unresolved symbols contain spans so we need source to translate them to
     /// names
-    #[expect(dead_code)]
-    Unresolved(fastn_unresolved::Definition),
+    Unresolved(string_interner::DefaultSymbol, fastn_unresolved::Definition),
     /// the resolved symbol and the file source it was resolved from
-    #[expect(dead_code)]
-    Resolved(fastn_type::Definition),
-    #[expect(dead_code)]
+    Resolved(string_interner::DefaultSymbol, fastn_type::Definition),
     NotFound,
     /// if the resolution failed, we need not try to resolve it again, unless dependencies change.
     ///
@@ -29,14 +17,22 @@ pub enum Symbol {
     ///
     /// what if we store the dependencies it failed on, so when any of them changes, we can
     /// revalidate?
-    #[expect(dead_code)]
     LastResolutionFailed(Vec<fastn_section::Error>),
 }
 
 pub trait SymbolStore {
+    /// it is okay / acceptable to return more symbols than asked.
+    ///
+    /// this is because if we are fetching symbols by parsing a ftd file, it makes sense to store
+    /// all the symbols found in that file in one go.
+    /// instead of parsing the file multiple times, or storing the symbols on the type implementing
+    /// this trait.
+    ///
+    /// or maybe the system can predict that if you asked for one symbol, you are going to ask
+    /// for some related symbols soon.
     fn lookup(
         &mut self,
-        interner: &string_interner::DefaultStringInterner,
+        interner: &mut string_interner::DefaultStringInterner,
         symbols: &[fastn_unresolved::SymbolName],
     ) -> Vec<LookupResult>;
 }

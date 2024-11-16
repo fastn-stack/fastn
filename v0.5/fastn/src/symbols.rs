@@ -1,89 +1,53 @@
 #[derive(Debug, Default)]
-pub struct Symbols {
-    failed: std::collections::HashMap<fastn_unresolved::SymbolName, Vec<fastn_section::Error>>,
-    unresolved: std::collections::HashMap<
-        fastn_unresolved::ModuleName,
-        (
-            String, // source
-            std::collections::HashMap<fastn_unresolved::Identifier, fastn_unresolved::Definition>,
-        ),
-    >,
-}
+pub struct Symbols {}
 
 impl Symbols {
-    fn lookup(&mut self, symbol: &fastn_unresolved::SymbolName) -> fastn_compiler::LookupResult {
-        // using if let Some(v) is shorter, but borrow checker doesn't like it
-        if self.failed.contains_key(symbol) {
-            return fastn_compiler::LookupResult::LastResolutionFailed(
-                self.failed.get(symbol).unwrap(),
-            );
-        }
-        if self.unresolved.contains_key(&symbol.module) {
-            let (source, symbols) = self.unresolved.get(&symbol.module).unwrap();
-            // since we read all unresolved symbols defined in a module in one go, we can just check
-            // if the symbol is present in the hashmap
-            return match symbols.get(&symbol.name) {
-                Some(v) => fastn_compiler::LookupResult::Unresolved(v, source),
-                None => {
-                    self.failed.insert(symbol.clone(), vec![]);
-                    fastn_compiler::LookupResult::NotFound
-                }
-            };
-        }
-
+    fn lookup(
+        &mut self,
+        interner: &mut string_interner::DefaultStringInterner,
+        module: &fastn_unresolved::ModuleName,
+    ) -> Vec<fastn_compiler::LookupResult> {
         // we need to fetch the symbol from the store
-        let source = match std::fs::File::open(format!("{}.ftd", symbol.module.name.0))
+        let source = match std::fs::File::open(format!("{}.ftd", module.name.0))
             .and_then(std::io::read_to_string)
         {
             Ok(v) => v,
             Err(_e) => {
-                self.failed
-                    .insert(symbol.clone(), vec![fastn_section::Error::SymbolNotFound]);
-                return fastn_compiler::LookupResult::NotFound;
+                return vec![];
             }
         };
 
-        let d = fastn_unresolved::parse(&symbol.module, &source);
-        let definitions = d
-            .definitions
+        let d = fastn_unresolved::parse(module, &source);
+        let s = interner.get_or_intern(&source);
+
+        d.definitions
             .into_iter()
             .map(|d| match d {
-                fastn_unresolved::UR::UnResolved(v) => (v.name().into(), v),
+                fastn_unresolved::UR::UnResolved(v) => {
+                    fastn_compiler::LookupResult::Unresolved(s, v)
+                }
                 fastn_unresolved::UR::Resolved(_) => {
-                    unreachable!()
+                    unreachable!(
+                        "resolved definitions should not be present in the unresolved document"
+                    )
                 }
             })
-            .collect();
-
-        self.unresolved
-            .insert(symbol.module.clone(), (source, definitions));
-
-        self.unresolved
-            .get(&symbol.module)
-            .unwrap()
-            .1
-            .get(&symbol.name)
-            .map_or(
-                {
-                    self.failed
-                        .insert(symbol.clone(), vec![fastn_section::Error::SymbolNotFound]);
-                    fastn_compiler::LookupResult::NotFound
-                },
-                |v| {
-                    fastn_compiler::LookupResult::Unresolved(
-                        v,
-                        &self.unresolved.get(&symbol.module).unwrap().0,
-                    )
-                },
-            )
+            .collect()
     }
 }
 
-impl<'input> fastn_compiler::SymbolStore<'input> for Symbols {
+impl fastn_compiler::SymbolStore for Symbols {
     fn lookup(
-        &'input mut self,
+        &mut self,
+        interner: &mut string_interner::DefaultStringInterner,
         symbols: &[fastn_unresolved::SymbolName],
-    ) -> Vec<fastn_compiler::LookupResult<'input>> {
-        symbols.iter().map(|s| self.lookup(s)).collect()
+    ) -> Vec<fastn_compiler::LookupResult> {
+        symbols
+            .iter()
+            .map(|s| &s.module)
+            .collect::<std::collections::HashSet<_>>()
+            .into_iter()
+            .flat_map(|m| self.lookup(interner, m))
+            .collect()
     }
 }
