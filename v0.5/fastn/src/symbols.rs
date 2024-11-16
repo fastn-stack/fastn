@@ -2,7 +2,7 @@
 pub struct Symbols {}
 
 impl Symbols {
-    fn lookup(
+    fn find_all_definitions_in_a_module(
         &mut self,
         interner: &mut string_interner::DefaultStringInterner,
         module: &fastn_unresolved::ModuleName,
@@ -42,12 +42,14 @@ impl fastn_compiler::SymbolStore for Symbols {
         interner: &mut string_interner::DefaultStringInterner,
         symbols: &[fastn_unresolved::SymbolName],
     ) -> Vec<fastn_compiler::LookupResult> {
-        symbols
+        let unique_modules = symbols
             .iter()
             .map(|s| &s.module)
-            .collect::<std::collections::HashSet<_>>()
+            .collect::<std::collections::HashSet<_>>();
+
+        unique_modules
             .into_iter()
-            .flat_map(|m| self.lookup(interner, m))
+            .flat_map(|m| self.find_all_definitions_in_a_module(interner, m))
             .collect()
     }
 }
