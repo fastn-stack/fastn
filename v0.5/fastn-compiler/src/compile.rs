@@ -48,18 +48,12 @@ impl Compiler {
     /// try to make as much progress as possibly by resolving as many symbols as possible, and return
     /// the vec of ones that could not be resolved.
     ///
-    /// it also returns vec of partially resolved symbols, so we do not directly modify the bag, we want
-    /// all bag updates to happen in one place.
-    ///
     /// if this returns an empty list of symbols, we can go ahead and generate the JS.
     fn resolve_document(
         &mut self,
         d: &mut fastn_unresolved::Document,
-    ) -> (
-        Vec<fastn_unresolved::SymbolName>,
-        Vec<fastn_unresolved::Definition>,
-    ) {
-        for ci in &d.content {
+    ) -> Vec<fastn_unresolved::SymbolName> {
+        for ci in d.content.iter_mut() {
             if let fastn_unresolved::UR::UnResolved(_c) = ci {
                 todo!()
             }
@@ -79,8 +73,7 @@ impl Compiler {
         // resolve the document in 10 attempts.
         for _ in 1..10 {
             // resolve_document can internally run in parallel.
-            let (mut unresolved_symbols, partially_resolved) = self.resolve_document(&mut d);
-            self.update_partially_resolved(partially_resolved);
+            let mut unresolved_symbols = self.resolve_document(&mut d);
             if unresolved_symbols.is_empty() {
                 break;
             }

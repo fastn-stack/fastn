@@ -17,7 +17,6 @@ impl Symbols {
             }
         };
 
-        let source_symbol = interner.get_or_intern(&source);
         let d = fastn_unresolved::parse(module, &source, source_symbol);
         let package = interner.get_or_intern(&module.package.0);
         let module = interner.get_or_intern(&module.name.0);
