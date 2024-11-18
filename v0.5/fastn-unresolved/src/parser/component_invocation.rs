@@ -1,5 +1,4 @@
 pub(super) fn component_invocation(
-    source: &str,
     section: fastn_section::Section,
     document: &mut fastn_unresolved::Document,
 ) {
@@ -12,7 +11,7 @@ pub(super) fn component_invocation(
 
     document.content.push(
         fastn_unresolved::ComponentInvocation {
-            name: fastn_unresolved::Identifier(section.name().clone()).into(),
+            name: fastn_unresolved::Identifier(section.name_span().clone()).into(),
             caption: section.caption.into(),
             properties: vec![],  // todo
             body: vec![].into(), // todo
@@ -24,13 +23,13 @@ pub(super) fn component_invocation(
 
 #[cfg(test)]
 mod tests {
-    fn tester(mut d: fastn_unresolved::Document, source: &str, expected: serde_json::Value) {
+    fn tester(mut d: fastn_unresolved::Document, expected: serde_json::Value) {
         assert!(d.imports.is_empty());
         assert!(d.definitions.is_empty());
         assert_eq!(d.content.len(), 1);
 
         assert_eq!(
-            fastn_jdebug::JDebug::debug(d.content.pop().unwrap().unresolved().unwrap(), source),
+            fastn_jdebug::JDebug::debug(d.content.pop().unwrap().unresolved().unwrap()),
             expected
         )
     }

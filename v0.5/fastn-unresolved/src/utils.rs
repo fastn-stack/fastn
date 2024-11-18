@@ -21,8 +21,8 @@ impl fastn_unresolved::Document {
 impl fastn_unresolved::Definition {
     pub fn name(&self) -> &str {
         match self.name {
-            fastn_unresolved::UR::UnResolved(ref u) => u.0.as_str(),
-            fastn_unresolved::UR::Resolved(ref r) => r.0.as_str(),
+            fastn_unresolved::UR::UnResolved(ref u) => u.0.str(),
+            fastn_unresolved::UR::Resolved(ref r) => r.0.str(),
         }
     }
 }
@@ -66,14 +66,13 @@ pub(crate) fn assert_no_children(
 }
 
 pub(crate) fn assert_no_extra_headers(
-    source: &str,
     section: &fastn_section::Section,
     document: &mut fastn_unresolved::Document,
     allowed: &[&str],
 ) -> bool {
     let mut found = false;
     for header in &section.headers {
-        if !allowed.contains(&header.name(source)) {
+        if !allowed.contains(&header.name()) {
             document
                 .errors
                 .push(header.span().wrap(fastn_section::Error::ExtraArgumentFound));

@@ -129,11 +129,11 @@ dependencies = [
 name = "fastn-unresolved"
 version = "0.1.0"
 dependencies = [
+ "arcstr",
  "fastn-jdebug",
  "fastn-section",
  "fastn-type",
  "serde_json",
- "string-interner",
 ]
 
 [[package]]

@@ -4,14 +4,14 @@ mod import;
 pub fn parse(
     _document_id: &fastn_unresolved::ModuleName,
     source: &str,
-    source_symbol: string_interner::DefaultSymbol,
 ) -> fastn_unresolved::Document {
-    let (mut document, sections) =
-        fastn_unresolved::Document::new(fastn_section::Document::parse(source, source_symbol));
+    let (mut document, sections) = fastn_unresolved::Document::new(fastn_section::Document::parse(
+        &arcstr::ArcStr::from(source),
+    ));
     // guess the section and call the appropriate unresolved method.
     for section in sections.into_iter() {
-        let name = section.name(source).to_ascii_lowercase();
-        let kind = section.kind_name(source).map(str::to_ascii_lowercase);
+        let name = section.name().to_ascii_lowercase();
+        let kind = section.kind_name().map(str::to_ascii_lowercase);
         // at this level we are very liberal, we just need a hint to which parser to use.
         // the parsers themselves do the error checks and validation.
         //
@@ -26,16 +26,12 @@ pub fn parse(
             name.as_str(),
             section.function_marker.is_some(),
         ) {
-            (Some("import"), _, _) | (_, "import", _) => {
-                import::import(source, section, &mut document)
-            }
+            (Some("import"), _, _) | (_, "import", _) => import::import(section, &mut document),
             (Some("record"), _, _) => todo!(),
             (Some("type"), _, _) => todo!(),
             (Some("module"), _, _) => todo!(),
             (Some("component"), _, _) => todo!(),
-            (None, _, _) => {
-                component_invocation::component_invocation(source, section, &mut document)
-            }
+            (None, _, _) => component_invocation::component_invocation(section, &mut document),
             (_, _, _) => todo!(),
         }
     }

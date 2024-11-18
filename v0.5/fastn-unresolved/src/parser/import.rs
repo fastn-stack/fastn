@@ -1,8 +1,4 @@
-pub(super) fn import(
-    source: &str,
-    section: fastn_section::Section,
-    document: &mut fastn_unresolved::Document,
-) {
+pub(super) fn import(section: fastn_section::Section, document: &mut fastn_unresolved::Document) {
     if let Some(ref kind) = section.init.name.kind {
         document
             .errors
@@ -11,7 +7,7 @@ pub(super) fn import(
     }
 
     // section.name must be exactly import.
-    if section.name(source) != "import" {
+    if section.name() != "import" {
         document.errors.push(
             section
                 .init
@@ -23,7 +19,7 @@ pub(super) fn import(
         // we will go ahead with this import statement parsing
     }
 
-    let i = match parse_import(&section, source, document) {
+    let i = match parse_import(&section, document) {
         Some(v) => v,
         None => {
             // error handling is job of parse_module_name().
@@ -34,21 +30,15 @@ pub(super) fn import(
     // ensure there are no extra headers, children or body
     fastn_unresolved::utils::assert_no_body(&section, document);
     fastn_unresolved::utils::assert_no_children(&section, document);
-    fastn_unresolved::utils::assert_no_extra_headers(
-        source,
-        &section,
-        document,
-        &["exports", "exposing"],
-    );
+    fastn_unresolved::utils::assert_no_extra_headers(&section, document, &["exports", "exposing"]);
     document.imports.push(i);
 }
 
 fn parse_import(
     section: &fastn_section::Section,
-    source: &str,
     document: &mut fastn_unresolved::Document,
 ) -> Option<fastn_unresolved::Import> {
-    let caption = match section.caption_as_plain_string(source) {
+    let caption = match section.caption_as_plain_string() {
         Some(v) => v,
         None => {
             document.errors.push(
@@ -77,21 +67,20 @@ fn parse_import(
             name: module.into(),
             package: fastn_unresolved::PackageName(package.to_string()),
         },
-        alias: alias.map(|v| fastn_unresolved::Identifier(v.to_string())),
-        export: parse_field("export", source, section, document),
-        exposing: parse_field("exposing", source, section, document),
+        alias: alias.map(|v| fastn_unresolved::Identifier(v)),
+        export: parse_field("export", section, document),
+        exposing: parse_field("exposing", section, document),
     })
 }
 
 fn parse_field(
     field: &str,
-    source: &str,
     section: &fastn_section::Section,
     _document: &mut fastn_unresolved::Document,
 ) -> Option<fastn_unresolved::Export> {
-    let header = match section.header_as_plain_string(field, source) {
+    let header = match section.header_as_plain_string(field) {
         Some(v) => v,
-        None => return dbg!(None),
+        None => return None,
     };
 
     Some(fastn_unresolved::Export::Things(

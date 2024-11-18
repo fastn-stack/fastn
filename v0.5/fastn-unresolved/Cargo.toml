@@ -9,10 +9,9 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
+arcstr.workspace = true
 fastn-section.workspace = true
 fastn-type.workspace = true
-# serde.workspace = true
-string-interner.workspace = true
 
 [dev-dependencies]
 fastn-jdebug.workspace = true
