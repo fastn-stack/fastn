@@ -12,7 +12,7 @@ pub(super) fn component_invocation(
 
     document.content.push(
         fastn_unresolved::ComponentInvocation {
-            name: fastn_unresolved::Identifier(section.name(source).to_string()).into(),
+            name: fastn_unresolved::Identifier(section.name().clone()).into(),
             caption: section.caption.into(),
             properties: vec![],  // todo
             body: vec![].into(), // todo
