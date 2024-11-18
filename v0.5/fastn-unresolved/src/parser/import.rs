@@ -38,7 +38,7 @@ fn parse_import(
     section: &fastn_section::Section,
     document: &mut fastn_unresolved::Document,
 ) -> Option<fastn_unresolved::Import> {
-    let caption = match section.caption_as_plain_string() {
+    let caption = match section.caption_as_plain_span() {
         Some(v) => v,
         None => {
             document.errors.push(
@@ -52,9 +52,9 @@ fn parse_import(
 
     // section.caption must be single text block, parsable as a module-name.
     //       module-name must be internally able to handle aliasing.
-    let (module, alias) = match caption.split_once(" as ") {
+    let (module, alias) = match caption.str().split_once(" as ") {
         Some((module, alias)) => (module, Some(alias)),
-        None => (caption, None),
+        None => (caption.str(), None),
     };
 
     let (package, module) = match module.split_once("/") {
@@ -106,7 +106,7 @@ mod tests {
         assert_eq!(d.imports.len(), 1);
 
         assert_eq!(
-            fastn_jdebug::JDebug::debug(&d.imports.pop().unwrap(), source),
+            fastn_jdebug::JDebug::debug(&d.imports.pop().unwrap()),
             expected
         )
     }

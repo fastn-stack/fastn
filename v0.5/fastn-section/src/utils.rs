@@ -87,7 +87,7 @@ impl fastn_section::Section {
         todo!()
     }
 
-    pub fn kind_name(&self) -> Option<&fastn_section::Span> {
+    pub fn kind_name(&self) -> Option<&str> {
         todo!()
     }
 
@@ -99,8 +99,8 @@ impl fastn_section::Section {
         &self.init.name.name.name
     }
 
-    pub fn caption_as_plain_string(&self) -> Option<&str> {
-        self.caption.as_ref().and_then(|c| c.as_plain_string())
+    pub fn caption_as_plain_span(&self) -> Option<&fastn_section::Span> {
+        self.caption.as_ref().and_then(|c| c.as_plain_span())
     }
 
     pub fn header_as_plain_string(&self, name: &str) -> Option<&str> {
@@ -113,12 +113,16 @@ impl fastn_section::Section {
 
 impl fastn_section::HeaderValue {
     pub fn as_plain_string(&self) -> Option<&str> {
+        self.as_plain_span().map(fastn_section::Span::str)
+    }
+
+    pub fn as_plain_span(&self) -> Option<&fastn_section::Span> {
         if self.0.len() != 1 {
             return None;
         }
 
         match self.0.get(0) {
-            Some(fastn_section::Tes::Text(s)) => Some(s.str()),
+            Some(fastn_section::Tes::Text(s)) => Some(s),
             _ => None,
         }
     }
