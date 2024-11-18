@@ -215,6 +215,15 @@ impl fastn_section::QualifiedIdentifier {
     }
 }
 
+pub fn dummy_span() -> fastn_section::Span {
+    use string_interner::Symbol;
+    fastn_section::Span {
+        start: 0,
+        end: 0,
+        source: string_interner::DefaultSymbol::try_from_usize(1).unwrap(),
+    }
+}
+
 impl fastn_section::Section {
     pub fn with_name(
         name: fastn_section::Span,
@@ -222,14 +231,22 @@ impl fastn_section::Section {
     ) -> Box<fastn_section::Section> {
         Box::new(fastn_section::Section {
             init: fastn_section::SectionInit {
+                dashdash: dummy_span(),
                 name: fastn_section::KindedName {
                     kind: None,
                     name: name.into(),
                 },
-                ..Default::default()
+
+                colon: dummy_span(),
             },
+            caption: None,
+            headers: vec![],
+            body: None,
+            children: vec![],
             function_marker,
-            ..Default::default()
+
+            is_commented: false,
+            has_end: false,
         })
     }
 }

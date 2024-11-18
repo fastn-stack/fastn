@@ -24,9 +24,13 @@ pub use section::section;
 pub use section_init::section_init;
 
 impl fastn_section::Document {
-    pub fn parse(source: &str) -> fastn_section::Document {
+    pub fn parse(
+        source: &str,
+        source_symbol: string_interner::DefaultSymbol,
+    ) -> fastn_section::Document {
         let mut scanner = fastn_section::Scanner::new(
             source,
+            source_symbol,
             Default::default(),
             fastn_section::Document::default(),
         );
@@ -57,8 +61,10 @@ fn p<
     debug: serde_json::Value,
     remaining: &str,
 ) {
+    use string_interner::Symbol;
     let mut scanner = fastn_section::Scanner::new(
         source,
+        string_interner::DefaultSymbol::try_from_usize(1).unwrap(),
         Default::default(),
         fastn_section::Document::default(),
     );

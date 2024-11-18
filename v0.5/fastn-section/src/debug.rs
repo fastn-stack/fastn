@@ -193,11 +193,15 @@ impl fastn_jdebug::JDebug for fastn_section::ModuleName {
 
 impl fastn_jdebug::JDebug for fastn_section::Error {
     fn debug(&self, source: &str) -> serde_json::Value {
-        error(self, &Default::default(), source)
+        error(self, None, source)
     }
 }
 
-fn error(e: &fastn_section::Error, _s: &fastn_section::Span, _source: &str) -> serde_json::Value {
+fn error(
+    e: &fastn_section::Error,
+    _s: Option<fastn_section::Span>,
+    _source: &str,
+) -> serde_json::Value {
     let v = match e {
         fastn_section::Error::UnexpectedDocComment => "unexpected_doc_comment",
         fastn_section::Error::UnwantedTextFound => "unwanted_text_found",

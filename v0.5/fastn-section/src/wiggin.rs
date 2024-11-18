@@ -244,7 +244,7 @@ mod test {
         }
 
         fn span(&self) -> fastn_section::Span {
-            Default::default()
+            fastn_section::utils::dummy_span()
         }
     }
 
@@ -316,7 +316,7 @@ mod test {
             errors
                 .into_iter()
                 .map(|value| fastn_section::Spanned {
-                    span: Default::default(),
+                    span: fastn_section::utils::dummy_span(),
                     value,
                 })
                 .collect::<Vec<_>>()

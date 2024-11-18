@@ -69,7 +69,7 @@ pub enum InnerDefinition {
     // TODO: Module(fastn_section::Section),
 }
 
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Import {
     pub module: ModuleName,
     pub alias: Option<Identifier>,
@@ -77,7 +77,7 @@ pub struct Import {
     pub exposing: Option<Export>,
 }
 
-// #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+// #[derive(Debug, Clone, PartialEq)]
 // pub struct ComponentInvocation {
 //     #[serde(skip_serializing_if = "Option::is_none")]
 //     pub id: Option<String>,
@@ -91,13 +91,13 @@ pub struct Import {
 //     pub line_number: usize,
 // }
 
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum UR<U, R> {
     Resolved(R),
     UnResolved(U),
 }
 
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct ComponentInvocation {
     pub name: UR<Identifier, Identifier>,
     /// once a caption is resolved, it is set to () here, and moved to properties
@@ -108,13 +108,13 @@ pub struct ComponentInvocation {
     pub children: Vec<UR<ComponentInvocation, fastn_type::ComponentInvocation>>,
 }
 
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Property {
     pub name: Identifier,
     pub value: Vec<fastn_section::Tes>,
 }
 
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Argument {
     pub name: Identifier,
     pub kind: Kind,
@@ -122,26 +122,26 @@ pub struct Argument {
     pub default: Option<fastn_section::Tes>,
 }
 
-#[derive(Debug, Clone, Hash, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, Hash, Eq, PartialEq)]
 pub struct PackageName(pub String);
 
-#[derive(Debug, Clone, Eq, Hash, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, Eq, Hash, PartialEq)]
 pub struct ModuleName {
     pub name: Identifier,
     pub package: PackageName,
 }
 
-#[derive(Debug, Clone, Hash, Eq, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, Hash, Eq, PartialEq)]
 pub struct Identifier(pub String);
 
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Export {
     All,
     Things(Vec<AliasableIdentifier>),
 }
 
 /// is this generic enough?
-#[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct AliasableIdentifier {
     pub alias: Option<Identifier>,
     pub name: Identifier,

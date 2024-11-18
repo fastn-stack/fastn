@@ -5,6 +5,7 @@ pub trait Scannable {
 
 #[derive(Debug)]
 pub struct Scanner<'input, T: Scannable> {
+    pub source_symbol: string_interner::DefaultSymbol,
     input: &'input str,
     chars: std::iter::Peekable<std::str::CharIndices<'input>>,
     /// index is byte position in the input
@@ -20,10 +21,16 @@ pub struct Index<'input> {
 }
 
 impl<'input, T: Scannable> Scanner<'input, T> {
-    pub fn new(input: &str, fuel: fastn_section::Fuel, t: T) -> Scanner<T> {
+    pub fn new(
+        input: &str,
+        source_symbol: string_interner::DefaultSymbol,
+        fuel: fastn_section::Fuel,
+        t: T,
+    ) -> Scanner<T> {
         assert!(input.len() < 10_000_000); // can't unresolved > 10MB file
         Scanner {
             input,
+            source_symbol,
             chars: input.char_indices().peekable(),
             fuel,
             index: 0,
@@ -39,6 +46,7 @@ impl<'input, T: Scannable> Scanner<'input, T> {
         fastn_section::Span {
             start,
             end: self.index,
+            source: self.source_symbol,
         }
     }
 

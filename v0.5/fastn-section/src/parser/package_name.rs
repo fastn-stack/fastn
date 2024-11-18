@@ -15,6 +15,7 @@ pub fn package_name(
         alias: fastn_section::Span {
             start: span.start,
             end: span.start + name.len(),
+            source: scanner.source_symbol,
         },
         name: span,
     })
