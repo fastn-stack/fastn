@@ -1,12 +1,3 @@
-impl<T> fastn_section::Spanned<T> {
-    pub fn map<T2, F: FnOnce(T) -> T2>(self, f: F) -> fastn_section::Spanned<T2> {
-        fastn_section::Spanned {
-            span: self.span,
-            value: f(self.value),
-        }
-    }
-}
-
 impl From<fastn_section::Span> for fastn_section::Identifier {
     fn from(value: fastn_section::Span) -> Self {
         fastn_section::Identifier { name: value }

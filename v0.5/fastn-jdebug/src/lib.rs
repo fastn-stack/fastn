@@ -82,3 +82,18 @@ impl fastn_jdebug::Span {
         &interner.resolve(self.source).unwrap()[self.start..self.end]
     }
 }
+
+impl<T> fastn_jdebug::Spanned<T> {
+    pub fn map<T2, F: FnOnce(T) -> T2>(self, f: F) -> fastn_jdebug::Spanned<T2> {
+        fastn_jdebug::Spanned {
+            span: self.span,
+            value: f(self.value),
+        }
+    }
+}
+
+impl<T: fastn_jdebug::JDebug> fastn_jdebug::JDebug for fastn_jdebug::Spanned<T> {
+    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
+        self.value.debug(interner)
+    }
+}

@@ -61,15 +61,15 @@ fn p<
     debug: serde_json::Value,
     remaining: &str,
 ) {
-    use string_interner::Symbol;
+    let mut interner = string_interner::DefaultStringInterner::default();
     let mut scanner = fastn_section::Scanner::new(
         source,
-        string_interner::DefaultSymbol::try_from_usize(1).unwrap(),
+        interner.get_or_intern(source),
         Default::default(),
         fastn_section::Document::default(),
     );
     let result = f(&mut scanner);
-    assert_eq!(result.debug(source), debug);
+    assert_eq!(result.debug(&interner), debug);
     assert_eq!(scanner.remaining(), remaining);
 }
 

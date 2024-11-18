@@ -2,12 +2,6 @@
 //     serde_json::json!({ key: (interner[s.start..s.end]).to_string()})
 // }
 
-impl<T: fastn_jdebug::JDebug> fastn_jdebug::JDebug for fastn_section::Spanned<T> {
-    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
-        self.value.debug(interner)
-    }
-}
-
 // impl fastn_jdebug::JDebug for fastn_section::Spanned<()> {
 //     fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
 //         span(&self.span, "spanned", interner)
@@ -135,8 +129,8 @@ impl fastn_jdebug::JDebug for fastn_section::PackageName {
     fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
         format!(
             "{} as {}",
-            &interner[self.name.start..self.name.end],
-            &interner[self.alias.start..self.alias.end],
+            &interner.resolve(self.name.source).unwrap()[self.name.start..self.name.end],
+            &interner.resolve(self.alias.source).unwrap()[self.alias.start..self.alias.end],
         )
         .into()
     }
