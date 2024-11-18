@@ -127,7 +127,7 @@ impl fastn_jdebug::JDebug for fastn_section::Identifier {
 
 impl fastn_jdebug::JDebug for fastn_section::PackageName {
     fn debug(&self) -> serde_json::Value {
-        format!("{} as {}", &self.name, &self.alias).into()
+        format!("{} as {}", self.name.str(), self.alias.str()).into()
     }
 }
 

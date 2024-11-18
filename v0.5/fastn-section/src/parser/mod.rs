@@ -52,20 +52,18 @@ fn p<
     T: fastn_jdebug::JDebug,
     F: FnOnce(&mut fastn_section::Scanner<fastn_section::Document>) -> T,
 >(
-    source: &str,
+    source: &arcstr::ArcStr,
     f: F,
     debug: serde_json::Value,
     remaining: &str,
 ) {
-    let mut interner = string_interner::DefaultStringInterner::default();
     let mut scanner = fastn_section::Scanner::new(
         source,
-        interner.get_or_intern(source),
         Default::default(),
         fastn_section::Document::default(),
     );
     let result = f(&mut scanner);
-    assert_eq!(result.debug(&interner), debug);
+    assert_eq!(result.debug(), debug);
     assert_eq!(scanner.remaining(), remaining);
 }
 
@@ -75,16 +73,31 @@ macro_rules! tt {
         #[allow(unused_macros)]
         macro_rules! t {
             ($source:expr, $debug:tt, $remaining:expr) => {
-                fastn_section::parser::p($source, $f, serde_json::json!($debug), $remaining);
+                fastn_section::parser::p(
+                    &arcstr::literal!($source),
+                    $f,
+                    serde_json::json!($debug),
+                    $remaining,
+                );
             };
             ($source:expr, $debug:tt) => {
-                fastn_section::parser::p($source, $f, serde_json::json!($debug), "");
+                fastn_section::parser::p(
+                    &arcstr::literal!($source),
+                    $f,
+                    serde_json::json!($debug),
+                    "",
+                );
             };
         }
         #[allow(unused_macros)]
         macro_rules! f {
             ($source:expr) => {
-                fastn_section::parser::p($source, $f, serde_json::json!(null), $source);
+                fastn_section::parser::p(
+                    &arcstr::literal!($source),
+                    $f,
+                    serde_json::json!(null),
+                    $source,
+                );
             };
         }
     };

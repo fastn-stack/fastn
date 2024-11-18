@@ -61,11 +61,9 @@ mod test {
             },
             ""
         );
-        use string_interner::Symbol;
         assert_eq!(
             super::qualified_identifier(&mut fastn_section::Scanner::new(
-                " string",
-                string_interner::DefaultSymbol::try_from_usize(1).unwrap(),
+                &arcstr::literal!(" string"),
                 Default::default(),
                 fastn_section::Document::default()
             ),),
