@@ -11,7 +11,7 @@ homepage.workspace = true
 [dependencies]
 fastn-section.workspace = true
 fastn-type.workspace = true
-serde.workspace = true
+# serde.workspace = true
 string-interner.workspace = true
 
 [dev-dependencies]

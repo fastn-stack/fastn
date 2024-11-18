@@ -70,8 +70,11 @@ impl Compiler {
 
     async fn compile(
         &mut self,
-        mut d: fastn_unresolved::Document,
+        document_id: &fastn_unresolved::ModuleName,
+        source: &str,
     ) -> Result<fastn_compiler::Output, fastn_compiler::Error> {
+        let source_symbol = self.interner.get_or_intern(source);
+        let mut d = fastn_unresolved::parse(document_id, source, source_symbol);
         // we only make 10 attempts to resolve the document: we need a warning if we are not able to
         // resolve the document in 10 attempts.
         for _ in 1..10 {
@@ -121,6 +124,6 @@ pub async fn compile(
     auto_imports: Vec<fastn_section::AutoImport>,
 ) -> Result<fastn_compiler::Output, fastn_compiler::Error> {
     Compiler::new(symbols, auto_imports)
-        .compile(fastn_unresolved::parse(document_id, source))
+        .compile(document_id, source)
         .await
 }

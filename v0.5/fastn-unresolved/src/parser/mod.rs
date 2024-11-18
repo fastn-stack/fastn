@@ -51,10 +51,13 @@ where
     PARSER: Fn(&str, fastn_section::Section, &mut fastn_unresolved::Document),
     TESTER: FnOnce(fastn_unresolved::Document, &str, serde_json::Value),
 {
+    use string_interner::Symbol;
     println!("--------- testing -----------\n{source}\n--------- source ------------");
 
-    let (mut document, sections) =
-        fastn_unresolved::Document::new(fastn_section::Document::parse(source));
+    let (mut document, sections) = fastn_unresolved::Document::new(fastn_section::Document::parse(
+        source,
+        string_interner::DefaultSymbol::try_from_usize(1).unwrap(),
+    ));
 
     let section = {
         assert_eq!(sections.len(), 1);

@@ -125,7 +125,6 @@ dependencies = [
  "fastn-jdebug",
  "fastn-section",
  "fastn-type",
- "serde",
  "serde_json",
  "string-interner",
 ]

@@ -11,7 +11,7 @@ mod utils;
 
 pub use parser::parse;
 
-#[derive(Debug, Clone, Default, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, Default)]
 pub struct Document {
     pub module_doc: Option<fastn_section::Span>,
     pub imports: Vec<fastn_unresolved::Import>,
@@ -23,7 +23,7 @@ pub struct Document {
     pub line_starts: Vec<u32>,
 }
 
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone)]
 pub struct Definition {
     pub doc: Option<fastn_section::Span>,
     /// resolving an identifier means making sure it is unique in the document, and performing
@@ -33,7 +33,7 @@ pub struct Definition {
     pub inner: InnerDefinition,
 }
 
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone)]
 pub enum InnerDefinition {
     Component {
         properties: Vec<UR<Argument, fastn_type::Argument>>,
@@ -147,7 +147,7 @@ pub struct AliasableIdentifier {
     pub name: Identifier,
 }
 
-#[derive(Debug, Clone, Eq, Hash, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, Eq, Hash, PartialEq)]
 pub struct SymbolName {
     pub module: ModuleName,
     /// can name contain dots? after we have `-- module foo:` feature it will, but now?
@@ -156,7 +156,7 @@ pub struct SymbolName {
 
 /// We cannot have kinds of like Record(SymbolName), OrType(SymbolName), because they are not
 /// yet "resolved", eg `-- foo x:`, we do not know if `foo` is a record or an or-type.
-#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Kind {
     Integer,
     Decimal,
