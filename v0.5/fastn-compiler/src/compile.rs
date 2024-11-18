@@ -105,7 +105,7 @@ impl Compiler {
     }
 }
 
-/// this is our main compiler module
+/// this is our main compiler
 ///
 /// it should be called with a parsed document, and it returns generated JS.
 ///

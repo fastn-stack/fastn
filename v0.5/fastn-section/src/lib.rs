@@ -32,13 +32,15 @@ pub type Result<T> = std::result::Result<T, fastn_section::Error>;
 /// both start, and length. or we keep our life simple, we have can have sections that are really
 /// long, eg a long ftd file. lets assume this is the decision for v0.5. we can demote usize to u32
 /// as we do not expect individual documents to be larger than few GBs.
-#[derive(Debug, PartialEq, Hash, Eq, Clone, Default, serde::Serialize, serde::Deserialize)]
+#[derive(PartialEq, Hash, Debug, Eq, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Span {
     pub start: usize,
     pub end: usize,
+    #[serde(skip)]
+    pub source: string_interner::DefaultSymbol,
 }
 
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Spanned<T> {
     pub span: Span,
     pub value: T,
@@ -58,12 +60,9 @@ pub struct Document {
 // level crate
 pub struct AutoImport {}
 
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
-#[serde(default)]
+#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Section {
     pub init: fastn_section::SectionInit,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(default)]
     pub caption: Option<fastn_section::HeaderValue>,
     pub headers: Vec<Header>,
     pub body: Option<fastn_section::HeaderValue>,
@@ -75,14 +74,14 @@ pub struct Section {
 }
 
 /// example: `-- list<string> foo:`
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub struct SectionInit {
     pub dashdash: fastn_section::Span, // for syntax highlighting and formatting
     pub name: fastn_section::KindedName,
     pub colon: fastn_section::Span, // for syntax highlighting and formatting
 }
 
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub struct Header {
     pub name: fastn_section::KindedName,
     pub condition: Option<fastn_section::Span>,
@@ -97,12 +96,12 @@ pub struct Header {
 ///
 /// TODO: identifiers can't be keywords of the language, e.g., `import`, `record`, `component`.
 /// but it can be built in types e.g., `integer` etc.
-#[derive(Debug, PartialEq, Clone, Hash, Eq, Default, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, Clone, Hash, Eq, serde::Serialize, serde::Deserialize)]
 pub struct Identifier {
     pub name: fastn_section::Span,
 }
 
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub struct AliasableIdentifier {
     pub name: fastn_section::Span,
     pub alias: Option<fastn_section::Span>,
@@ -120,7 +119,7 @@ pub struct AliasableIdentifier {
 /// `.` is allowed in domain names.
 /// TODO: domain name can't begin or end with a `.`.
 /// TODO: `.` can't be repeated.
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub struct PackageName {
     pub name: fastn_section::Span,
     // for foo.com, the alias is `foo` (the first part before the first dot)
@@ -129,7 +128,7 @@ pub struct PackageName {
 }
 
 /// module name looks like <package-name>(/<identifier>)*/?)
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub struct ModuleName {
     pub package: PackageName,
     pub name: AliasableIdentifier,
@@ -168,7 +167,7 @@ pub struct Kind {
 }
 
 /// example: `list<string> foo` | `foo bar` | `bar`
-#[derive(Debug, PartialEq, Clone, Default, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, PartialEq, Clone, serde::Serialize, serde::Deserialize)]
 pub struct KindedName {
     pub kind: Option<Kind>,
     pub name: Identifier,
