@@ -1,35 +1,35 @@
-// fn span(s: &fastn_section::Span, key: &str, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
-//     serde_json::json!({ key: (interner[s.start..s.end]).to_string()})
+// fn span(s: &fastn_section::Span, key: &str) -> serde_json::Value {
+//     serde_json::json!({ key: ([s.start..s.end]).to_string()})
 // }
 
 // impl fastn_jdebug::JDebug for fastn_section::Spanned<()> {
-//     fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
-//         span(&self.span, "spanned", interner)
+//     fn debug(&self) -> serde_json::Value {
+//         span(&self.span, "spanned", )
 //     }
 // }
 
 impl fastn_jdebug::JDebug for fastn_section::Visibility {
-    fn debug(&self, _interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
+    fn debug(&self) -> serde_json::Value {
         format!("{self:?}").into()
     }
 }
 
 impl fastn_jdebug::JDebug for fastn_section::Document {
-    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
+    fn debug(&self) -> serde_json::Value {
         let mut o = serde_json::Map::new();
         if self.module_doc.is_some() {
             // TODO: can we create a map with `&'static str` keys to avoid this to_string()?
-            o.insert("module-doc".to_string(), self.module_doc.debug(interner));
+            o.insert("module-doc".to_string(), self.module_doc.debug());
         }
         if !self.errors.is_empty() {
-            o.insert("errors".to_string(), self.errors.debug(interner));
+            o.insert("errors".to_string(), self.errors.debug());
         }
         if !self.comments.is_empty() {
-            o.insert("comments".to_string(), self.comments.debug(interner));
+            o.insert("comments".to_string(), self.comments.debug());
         }
 
         if !self.sections.is_empty() {
-            o.insert("sections".to_string(), self.sections.debug(interner));
+            o.insert("sections".to_string(), self.sections.debug());
         }
         if o.is_empty() {
             return "<empty-document>".into();
@@ -39,13 +39,13 @@ impl fastn_jdebug::JDebug for fastn_section::Document {
 }
 
 impl fastn_jdebug::JDebug for fastn_section::Section {
-    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
+    fn debug(&self) -> serde_json::Value {
         // todo: add headers etc (only if they are not null)
         let mut o = serde_json::Map::new();
-        o.insert("init".to_string(), self.init.debug(interner));
+        o.insert("init".to_string(), self.init.debug());
 
         if let Some(c) = &self.caption {
-            o.insert("caption".to_string(), c.0.debug(interner));
+            o.insert("caption".to_string(), c.0.debug());
         }
 
         serde_json::Value::Object(o)
@@ -53,110 +53,105 @@ impl fastn_jdebug::JDebug for fastn_section::Section {
 }
 
 impl fastn_jdebug::JDebug for fastn_section::SectionInit {
-    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
-        self.name.debug(interner)
+    fn debug(&self) -> serde_json::Value {
+        self.name.debug()
     }
 }
 
 impl fastn_jdebug::JDebug for fastn_section::KindedName {
-    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
+    fn debug(&self) -> serde_json::Value {
         let mut o = serde_json::Map::new();
         if let Some(kind) = &self.kind {
-            o.insert("kind".into(), kind.debug(interner));
+            o.insert("kind".into(), kind.debug());
         }
-        o.insert("name".into(), self.name.debug(interner));
+        o.insert("name".into(), self.name.debug());
         serde_json::Value::Object(o)
     }
 }
 
 impl fastn_jdebug::JDebug for fastn_section::Kind {
-    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
+    fn debug(&self) -> serde_json::Value {
         if let Some(v) = self.to_identifier() {
-            return v.debug(interner);
+            return v.debug();
         }
 
         let mut o = serde_json::Map::new();
         if let Some(doc) = &self.doc {
-            o.insert("doc".into(), doc.debug(interner));
+            o.insert("doc".into(), doc.debug());
         }
         if let Some(visibility) = &self.visibility {
-            o.insert("visibility".into(), visibility.debug(interner));
+            o.insert("visibility".into(), visibility.debug());
         }
-        o.insert("name".into(), self.name.debug(interner));
+        o.insert("name".into(), self.name.debug());
         if let Some(args) = &self.args {
-            o.insert("args".into(), args.debug(interner));
+            o.insert("args".into(), args.debug());
         }
         serde_json::Value::Object(o)
     }
 }
 
 impl fastn_jdebug::JDebug for fastn_section::QualifiedIdentifier {
-    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
+    fn debug(&self) -> serde_json::Value {
         if self.terms.is_empty() {
-            return self.module.debug(interner);
+            return self.module.debug();
         }
 
         serde_json::json! ({
-            "module": self.module.debug(interner),
-            "terms": self.terms.debug(interner),
+            "module": self.module.debug(),
+            "terms": self.terms.debug(),
         })
     }
 }
 
 impl fastn_jdebug::JDebug for fastn_section::HeaderValue {
-    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
-        self.0.debug(interner)
+    fn debug(&self) -> serde_json::Value {
+        self.0.debug()
     }
 }
 
 impl fastn_jdebug::JDebug for fastn_section::Tes {
-    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
+    fn debug(&self) -> serde_json::Value {
         match self {
-            fastn_section::Tes::Text(e) => e.debug(interner),
-            fastn_section::Tes::Expression { content, .. } => content.debug(interner),
-            fastn_section::Tes::Section(e) => e.debug(interner),
+            fastn_section::Tes::Text(e) => e.debug(),
+            fastn_section::Tes::Expression { content, .. } => content.debug(),
+            fastn_section::Tes::Section(e) => e.debug(),
         }
     }
 }
 
 impl fastn_jdebug::JDebug for fastn_section::Identifier {
-    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
-        self.name.debug(interner)
+    fn debug(&self) -> serde_json::Value {
+        self.name.debug()
     }
 }
 
 impl fastn_jdebug::JDebug for fastn_section::PackageName {
-    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
-        format!(
-            "{} as {}",
-            &interner.resolve(self.name.source).unwrap()[self.name.start..self.name.end],
-            &interner.resolve(self.alias.source).unwrap()[self.alias.start..self.alias.end],
-        )
-        .into()
+    fn debug(&self) -> serde_json::Value {
+        format!("{} as {}", &self.name, &self.alias).into()
     }
 }
 
 impl fastn_jdebug::JDebug for fastn_section::AliasableIdentifier {
-    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
+    fn debug(&self) -> serde_json::Value {
         if self.alias.is_none() {
-            return self.name.debug(interner);
+            return self.name.debug();
         }
 
         serde_json::json! ({
-            "name": self.name.debug(interner),
-            "alias": self.alias.debug(interner),
+            "name": self.name.debug(),
+            "alias": self.alias.debug(),
         })
     }
 }
 
 impl fastn_jdebug::JDebug for fastn_section::ModuleName {
-    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
+    fn debug(&self) -> serde_json::Value {
         if self.path.is_empty()
             && self.name.alias.is_none()
             && self.name.name == self.package.name
             && self.name.name == self.package.alias
         {
-            return self.name.name.debug(interner);
+            return self.name.name.debug();
         }
 
         if self.path.is_empty()
@@ -165,30 +160,26 @@ impl fastn_jdebug::JDebug for fastn_section::ModuleName {
             && self.package.name != self.package.alias
             && self.name.name == self.package.alias
         {
-            return self.package.debug(interner);
+            return self.package.debug();
         }
 
         let mut o = serde_json::Map::new();
-        o.insert("package".into(), self.package.debug(interner));
-        o.insert("name".into(), self.name.debug(interner));
+        o.insert("package".into(), self.package.debug());
+        o.insert("name".into(), self.name.debug());
         if !self.path.is_empty() {
-            o.insert("path".into(), self.path.debug(interner));
+            o.insert("path".into(), self.path.debug());
         }
         serde_json::Value::Object(o)
     }
 }
 
 impl fastn_jdebug::JDebug for fastn_section::Error {
-    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
-        error(self, None, interner)
+    fn debug(&self) -> serde_json::Value {
+        error(self, None)
     }
 }
 
-fn error(
-    e: &fastn_section::Error,
-    _s: Option<fastn_section::Span>,
-    _interner: &string_interner::DefaultStringInterner,
-) -> serde_json::Value {
+fn error(e: &fastn_section::Error, _s: Option<fastn_section::Span>) -> serde_json::Value {
     let v = match e {
         fastn_section::Error::UnexpectedDocComment => "unexpected_doc_comment",
         fastn_section::Error::UnwantedTextFound => "unwanted_text_found",

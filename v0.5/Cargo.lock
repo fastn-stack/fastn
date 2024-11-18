@@ -106,10 +106,10 @@ dependencies = [
 name = "fastn-section"
 version = "0.1.0"
 dependencies = [
+ "arcstr",
  "fastn-jdebug",
  "serde",
  "serde_json",
- "string-interner",
 ]
 
 [[package]]

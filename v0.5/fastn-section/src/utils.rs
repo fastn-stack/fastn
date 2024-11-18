@@ -99,15 +99,11 @@ impl fastn_section::Section {
         self.caption.as_ref().and_then(|c| c.as_plain_span())
     }
 
-    pub fn header_as_plain_string(
-        &self,
-        name: &str,
-        interner: &string_interner::DefaultStringInterner,
-    ) -> Option<&fastn_section::Span> {
+    pub fn header_as_plain_string(&self, name: &str) -> Option<&fastn_section::Span> {
         dbg!(self);
         self.headers
             .iter()
-            .find(|h| h.name().str(interner) == dbg!(name))
+            .find(|h| h.name().str() == dbg!(name))
             .and_then(|h| h.value.as_plain_span())
     }
 }
@@ -188,15 +184,6 @@ impl fastn_section::QualifiedIdentifier {
     }
 }
 
-pub fn dummy_span() -> fastn_section::Span {
-    use string_interner::Symbol;
-    fastn_section::Span {
-        start: 0,
-        end: 0,
-        source: string_interner::DefaultSymbol::try_from_usize(1).unwrap(),
-    }
-}
-
 impl fastn_section::Section {
     pub fn with_name(
         name: fastn_section::Span,
@@ -204,13 +191,12 @@ impl fastn_section::Section {
     ) -> Box<fastn_section::Section> {
         Box::new(fastn_section::Section {
             init: fastn_section::SectionInit {
-                dashdash: dummy_span(),
+                dashdash: Default::default(),
                 name: fastn_section::KindedName {
                     kind: None,
                     name: name.into(),
                 },
-
-                colon: dummy_span(),
+                colon: Default::default(),
             },
             caption: None,
             headers: vec![],

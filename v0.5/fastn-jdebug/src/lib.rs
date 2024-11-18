@@ -13,7 +13,7 @@ extern crate self as fastn_jdebug;
 /// both start, and length. or we keep our life simple, we have can have sections that are really
 /// long, eg a long ftd file. lets assume this is the decision for v0.5. we can demote usize to u32
 /// as we do not expect individual documents to be larger than few GBs.
-#[derive(PartialEq, Hash, Debug, Eq, Clone)]
+#[derive(PartialEq, Hash, Debug, Eq, Clone, Default)]
 pub struct Span {
     inner: arcstr::Substr,
 }
@@ -32,6 +32,12 @@ impl fastn_jdebug::JDebug for fastn_jdebug::Span {
         .into()
     }
 }
+
+// impl AsRef<str> for fastn_jdebug::Span {
+//     fn as_ref(&self) -> &str {
+//         self.inner.as_str()
+//     }
+// }
 
 impl<T: fastn_jdebug::JDebug> fastn_jdebug::JDebug for Vec<T> {
     fn debug(&self) -> serde_json::Value {
@@ -72,6 +78,30 @@ impl fastn_jdebug::Span {
             span: self.clone(),
             value,
         }
+    }
+
+    pub fn span(&self, start: usize, end: usize) -> fastn_jdebug::Span {
+        fastn_jdebug::Span {
+            inner: self.inner.substr(start..end),
+        }
+    }
+
+    pub fn start(&self) -> usize {
+        self.inner.range().start
+    }
+
+    pub fn end(&self) -> usize {
+        self.inner.range().end
+    }
+
+    pub fn str(&self) -> &str {
+        &self.inner
+    }
+}
+
+impl From<arcstr::Substr> for Span {
+    fn from(inner: arcstr::Substr) -> Self {
+        fastn_jdebug::Span { inner }
     }
 }
 

@@ -2,45 +2,39 @@
 /// list and then calls `ender` for the list itself
 #[allow(dead_code)]
 pub fn ender(
-    source: &str,
     o: &mut fastn_section::Document,
     sections: Vec<fastn_section::Section>,
 ) -> Vec<fastn_section::Section> {
     // recursive part
-    let sections = sections
-        .into_iter()
-        .map(|s| section_ender(source, o, s))
-        .collect();
+    let sections = sections.into_iter().map(|s| section_ender(o, s)).collect();
 
     // non recursive part
-    inner_ender(source, o, sections)
+    inner_ender(o, sections)
 }
 
 fn section_ender(
-    source: &str,
     o: &mut fastn_section::Document,
     mut section: fastn_section::Section,
 ) -> fastn_section::Section {
     if let Some(caption) = section.caption {
-        section.caption = Some(header_value_ender(source, o, caption));
+        section.caption = Some(header_value_ender(o, caption));
     }
     section.headers = section
         .headers
         .into_iter()
         .map(|mut h| {
-            h.value = header_value_ender(source, o, h.value);
+            h.value = header_value_ender(o, h.value);
             h
         })
         .collect();
     if let Some(body) = section.body {
-        section.body = Some(header_value_ender(source, o, body));
+        section.body = Some(header_value_ender(o, body));
     }
-    section.children = ender(source, o, section.children);
+    section.children = ender(o, section.children);
     section
 }
 
 fn header_value_ender(
-    source: &str,
     o: &mut fastn_section::Document,
     header: fastn_section::HeaderValue,
 ) -> fastn_section::HeaderValue {
@@ -57,10 +51,10 @@ fn header_value_ender(
                 } => fastn_section::Tes::Expression {
                     start,
                     end,
-                    content: header_value_ender(source, o, content),
+                    content: header_value_ender(o, content),
                 },
                 fastn_section::Tes::Section(sections) => {
-                    fastn_section::Tes::Section(ender(source, o, sections))
+                    fastn_section::Tes::Section(ender(o, sections))
                 }
             })
             .collect(),
@@ -71,14 +65,10 @@ fn header_value_ender(
 ///
 /// example:
 /// [{section: "foo"}, {section: "bar"}, "-- end: foo"] -> [{section: "foo", children: [{section: "bar"}]}]
-fn inner_ender<T: SectionProxy>(
-    source: &str,
-    o: &mut fastn_section::Document,
-    sections: Vec<T>,
-) -> Vec<T> {
+fn inner_ender<T: SectionProxy>(o: &mut fastn_section::Document, sections: Vec<T>) -> Vec<T> {
     let mut stack = Vec::new();
     'outer: for section in sections {
-        match section.mark(source).unwrap() {
+        match section.mark().unwrap() {
             // If the section is a start marker, push it onto the stack
             Mark::Start(_name) => {
                 stack.push(section);
@@ -87,7 +77,7 @@ fn inner_ender<T: SectionProxy>(
             Mark::End(e_name) => {
                 let mut children = Vec::new(); // Collect children for the matching section
                 while let Some(mut candidate) = stack.pop() {
-                    match candidate.mark(source).unwrap() {
+                    match candidate.mark().unwrap() {
                         Mark::Start(name) => {
                             // If the candidate section name is the same as the end section name
                             // and is not ended, add the children to the candidate.
@@ -137,10 +127,7 @@ enum Mark<'input> {
 /// trait for the real Section type
 trait SectionProxy: Sized + std::fmt::Debug {
     /// returns the name of the section, and if it starts or ends the section
-    fn mark<'input>(
-        &'input self,
-        source: &'input str,
-    ) -> Result<Mark<'input>, fastn_section::Error>;
+    fn mark(&self) -> Result<Mark, fastn_section::Error>;
 
     /// Adds a list of children to the current section. It is typically called when the section
     /// is finalized or ended, hence `self.has_ended` function, if called after this, should return
@@ -157,12 +144,9 @@ trait SectionProxy: Sized + std::fmt::Debug {
 }
 
 impl SectionProxy for fastn_section::Section {
-    fn mark<'input>(
-        &'input self,
-        source: &'input str,
-    ) -> Result<Mark<'input>, fastn_section::Error> {
+    fn mark(&self) -> Result<Mark, fastn_section::Error> {
         let span = &self.init.name.name.name;
-        let name = &source[span.start..span.end];
+        let name = span.str();
         if name != "end" {
             return Ok(Mark::Start(name));
         }
@@ -173,7 +157,7 @@ impl SectionProxy for fastn_section::Section {
         };
 
         let v = match (caption.0.get(0), caption.0.len()) {
-            (Some(fastn_section::Tes::Text(span)), 1) => &source[span.start..span.end].trim(),
+            (Some(fastn_section::Tes::Text(span)), 1) => span.str().trim(),
             (Some(_), _) => return Err(fastn_section::Error::EndContainsData),
             (None, _) => return Err(fastn_section::Error::SectionNameNotFoundForEnd),
         };
@@ -223,10 +207,7 @@ mod test {
     }
 
     impl super::SectionProxy for DummySection {
-        fn mark<'input>(
-            &'input self,
-            _source: &'input str,
-        ) -> Result<super::Mark<'input>, fastn_section::Error> {
+        fn mark(&self) -> Result<super::Mark, fastn_section::Error> {
             if self.has_end_mark {
                 Ok(super::Mark::End(&self.name))
             } else {
@@ -244,7 +225,7 @@ mod test {
         }
 
         fn span(&self) -> fastn_section::Span {
-            fastn_section::utils::dummy_span()
+            Default::default()
         }
     }
 
@@ -299,7 +280,7 @@ mod test {
     fn t(source: &str, expected: &str) {
         let mut o = fastn_section::Document::default();
         let sections = parse(source);
-        let sections = super::inner_ender(source, &mut o, sections);
+        let sections = super::inner_ender(&mut o, sections);
         assert_eq!(to_str(&sections), expected);
         // assert!(o.items.is_empty());
     }
@@ -308,7 +289,7 @@ mod test {
     fn f(source: &str, expected: &str, errors: Vec<fastn_section::Error>) {
         let mut o = fastn_section::Document::default();
         let sections = parse(source);
-        let sections = super::inner_ender(source, &mut o, sections);
+        let sections = super::inner_ender(&mut o, sections);
         assert_eq!(to_str(&sections), expected);
 
         assert_eq!(
@@ -316,7 +297,7 @@ mod test {
             errors
                 .into_iter()
                 .map(|value| fastn_section::Spanned {
-                    span: fastn_section::utils::dummy_span(),
+                    span: Default::default(),
                     value,
                 })
                 .collect::<Vec<_>>()

@@ -5,8 +5,7 @@ pub trait Scannable {
 
 #[derive(Debug)]
 pub struct Scanner<'input, T: Scannable> {
-    pub source_symbol: string_interner::DefaultSymbol,
-    input: &'input str,
+    input: &'input arcstr::ArcStr,
     chars: std::iter::Peekable<std::str::CharIndices<'input>>,
     /// index is byte position in the input
     index: usize,
@@ -21,33 +20,23 @@ pub struct Index<'input> {
 }
 
 impl<'input, T: Scannable> Scanner<'input, T> {
-    pub fn new(
-        input: &str,
-        source_symbol: string_interner::DefaultSymbol,
-        fuel: fastn_section::Fuel,
-        t: T,
-    ) -> Scanner<T> {
+    pub fn new(input: &'input arcstr::ArcStr, fuel: fastn_section::Fuel, t: T) -> Scanner<T> {
         assert!(input.len() < 10_000_000); // can't unresolved > 10MB file
         Scanner {
-            input,
-            source_symbol,
             chars: input.char_indices().peekable(),
+            input,
             fuel,
             index: 0,
             output: t,
         }
     }
 
-    pub fn source(&self, span: &fastn_section::Span) -> &'input str {
-        &self.input[span.start..span.end]
+    fn span(&self, start: usize) -> fastn_section::Span {
+        self.input.substr(start..self.index).into()
     }
 
-    fn span(&self, start: usize) -> fastn_section::Span {
-        fastn_section::Span {
-            start,
-            end: self.index,
-            source: self.source_symbol,
-        }
+    pub fn span_range(&self, start: usize, end: usize) -> fastn_section::Span {
+        self.input.substr(start..end).into()
     }
 
     pub fn take_while<F: Fn(char) -> bool>(&mut self, f: F) -> Option<fastn_section::Span> {

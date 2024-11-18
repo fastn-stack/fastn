@@ -8,15 +8,10 @@ pub fn package_name(
 
     let span = scanner.take_while(|c| c.is_alphanumeric() || c == '.')?;
 
-    let o_name = scanner.source(&span);
-    let name = o_name.split_once('.').unwrap_or((o_name, "")).0;
+    let name = span.str().split_once('.').unwrap_or((span.str(), "")).0;
 
     Some(fastn_section::PackageName {
-        alias: fastn_section::Span {
-            start: span.start,
-            end: span.start + name.len(),
-            source: scanner.source_symbol,
-        },
+        alias: scanner.span_range(span.start(), span.start() + name.len()),
         name: span,
     })
 }
