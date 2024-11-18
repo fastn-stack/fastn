@@ -64,10 +64,7 @@ pub async fn compile(
 }
 
 fn update_partially_resolved(
-    _bag: &mut std::collections::HashMap<
-        fastn_unresolved::SymbolName,
-        fastn_compiler::LookupResult,
-    >,
+    _bag: &mut std::collections::HashMap<fastn_compiler::Symbol, fastn_compiler::LookupResult>,
     _partially_resolved: Vec<fastn_unresolved::Definition>,
 ) {
     todo!()
@@ -75,10 +72,7 @@ fn update_partially_resolved(
 
 async fn fetch_unresolved_symbols(
     symbols: &mut impl fastn_compiler::SymbolStore,
-    _bag: &mut std::collections::HashMap<
-        fastn_unresolved::SymbolName,
-        fastn_compiler::LookupResult,
-    >,
+    _bag: &mut std::collections::HashMap<fastn_compiler::Symbol, fastn_compiler::LookupResult>,
     symbols_to_fetch: &mut [fastn_unresolved::SymbolName],
     interner: &mut string_interner::DefaultStringInterner,
 ) {
@@ -87,10 +81,10 @@ async fn fetch_unresolved_symbols(
 
 /// try to resolve as many symbols as possible, and return the ones that we made any progress on.
 ///
-/// this function should be called in a loop, until list of symbols is empty.
+/// this function should be called in a loop, until the list of symbols is empty.
 fn resolve_symbols(
     _d: &mut fastn_unresolved::Document,
-    _bag: &std::collections::HashMap<fastn_unresolved::SymbolName, fastn_compiler::LookupResult>,
+    _bag: &std::collections::HashMap<fastn_compiler::Symbol, fastn_compiler::LookupResult>,
     _symbols: &mut [fastn_unresolved::SymbolName],
 ) -> Vec<fastn_unresolved::Definition> {
     todo!()
@@ -105,7 +99,7 @@ fn resolve_symbols(
 /// if this returns an empty list of symbols, we can go ahead and generate the JS.
 fn resolve_document(
     d: &mut fastn_unresolved::Document,
-    _bag: &std::collections::HashMap<fastn_unresolved::SymbolName, fastn_compiler::LookupResult>,
+    _bag: &std::collections::HashMap<fastn_compiler::Symbol, fastn_compiler::LookupResult>,
 ) -> (
     Vec<fastn_unresolved::SymbolName>,
     Vec<fastn_unresolved::Definition>,
