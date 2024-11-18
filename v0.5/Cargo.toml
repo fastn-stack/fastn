@@ -38,6 +38,7 @@ homepage = "https://fastn.com"
 # and create its own [dependencies.<name>] section. Also, document it with why are you not
 # using the latest dependency, and what is the plan to move to the latest version.
 
+arcstr = "1"
 fastn-compiler = { path = "fastn-compiler" }
 fastn-core = { path = "fastn-core" }
 fastn-jdebug = { version = "0.1.0", path = "fastn-jdebug" }
@@ -52,3 +53,4 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 string-interner = "0.18"
 tokio = { version = "1", features = ["full"] }
+

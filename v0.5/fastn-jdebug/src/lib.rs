@@ -15,32 +15,34 @@ extern crate self as fastn_jdebug;
 /// as we do not expect individual documents to be larger than few GBs.
 #[derive(PartialEq, Hash, Debug, Eq, Clone)]
 pub struct Span {
-    pub start: usize,
-    pub end: usize,
-    pub source: string_interner::DefaultSymbol,
+    inner: arcstr::Substr,
 }
 
 pub trait JDebug {
-    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value;
+    fn debug(&self) -> serde_json::Value;
 }
 
 impl fastn_jdebug::JDebug for fastn_jdebug::Span {
-    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
-        let t = &interner.resolve(self.source).unwrap()[self.start..self.end];
-        if t.is_empty() { "<empty>" } else { t }.into()
+    fn debug(&self) -> serde_json::Value {
+        if self.inner.is_empty() {
+            "<empty>"
+        } else {
+            self.inner.as_str()
+        }
+        .into()
     }
 }
 
 impl<T: fastn_jdebug::JDebug> fastn_jdebug::JDebug for Vec<T> {
-    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
-        serde_json::Value::Array(self.iter().map(|v| v.debug(interner)).collect())
+    fn debug(&self) -> serde_json::Value {
+        serde_json::Value::Array(self.iter().map(|v| v.debug()).collect())
     }
 }
 
 impl<T: fastn_jdebug::JDebug> fastn_jdebug::JDebug for Option<T> {
-    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
+    fn debug(&self) -> serde_json::Value {
         self.as_ref()
-            .map(|v| v.debug(interner))
+            .map(|v| v.debug())
             .unwrap_or(serde_json::Value::Null)
     }
 }
@@ -48,14 +50,11 @@ impl<T: fastn_jdebug::JDebug> fastn_jdebug::JDebug for Option<T> {
 impl<K: AsRef<fastn_jdebug::Span>, V: fastn_jdebug::JDebug> fastn_jdebug::JDebug
     for std::collections::HashMap<K, V>
 {
-    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
+    fn debug(&self) -> serde_json::Value {
         let mut o = serde_json::Map::new();
         for (k, v) in self {
             let r = k.as_ref();
-            o.insert(
-                interner.resolve(r.source).unwrap()[r.start..r.end].to_string(),
-                v.debug(interner),
-            );
+            o.insert(r.inner.to_string(), v.debug());
         }
         serde_json::Value::Object(o)
     }
@@ -74,13 +73,6 @@ impl fastn_jdebug::Span {
             value,
         }
     }
-
-    pub fn str<'input>(
-        &self,
-        interner: &'input string_interner::DefaultStringInterner,
-    ) -> &'input str {
-        &interner.resolve(self.source).unwrap()[self.start..self.end]
-    }
 }
 
 impl<T> fastn_jdebug::Spanned<T> {
@@ -93,7 +85,7 @@ impl<T> fastn_jdebug::Spanned<T> {
 }
 
 impl<T: fastn_jdebug::JDebug> fastn_jdebug::JDebug for fastn_jdebug::Spanned<T> {
-    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
-        self.value.debug(interner)
+    fn debug(&self) -> serde_json::Value {
+        self.value.debug()
     }
 }
