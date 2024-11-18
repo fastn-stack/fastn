@@ -131,8 +131,7 @@ pub struct ModuleName {
     pub package: PackageName,
 }
 
-#[derive(Debug, Clone, Hash, Eq, PartialEq)]
-pub struct Identifier(pub fastn_section::Span);
+pub type Identifier = fastn_section::Identifier;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Export {
