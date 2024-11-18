@@ -1,4 +1,4 @@
-impl From<fastn_section::Span> for fastn_section::Identifier {
+impl From<fastn_jdebug::Span> for fastn_section::Identifier {
     fn from(value: fastn_section::Span) -> Self {
         fastn_section::Identifier { name: value }
     }

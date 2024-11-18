@@ -83,20 +83,6 @@ pub(crate) fn assert_no_extra_headers(
     !found
 }
 
-impl From<&str> for fastn_unresolved::Identifier {
-    fn from(s: &str) -> fastn_unresolved::Identifier {
-        fastn_unresolved::Identifier(s.to_string())
-    }
-}
-
-impl std::str::FromStr for fastn_unresolved::Identifier {
-    type Err = ();
-
-    fn from_str(s: &str) -> Result<fastn_unresolved::Identifier, ()> {
-        Ok(fastn_unresolved::Identifier(s.to_string()))
-    }
-}
-
 impl<U, R> From<U> for fastn_unresolved::UR<U, R> {
     fn from(u: U) -> fastn_unresolved::UR<U, R> {
         fastn_unresolved::UR::UnResolved(u)

@@ -33,11 +33,11 @@ impl fastn_jdebug::JDebug for fastn_jdebug::Span {
     }
 }
 
-// impl AsRef<str> for fastn_jdebug::Span {
-//     fn as_ref(&self) -> &str {
-//         self.inner.as_str()
-//     }
-// }
+impl AsRef<arcstr::Substr> for fastn_jdebug::Span {
+    fn as_ref(&self) -> &arcstr::Substr {
+        &self.inner
+    }
+}
 
 impl<T: fastn_jdebug::JDebug> fastn_jdebug::JDebug for Vec<T> {
     fn debug(&self) -> serde_json::Value {
@@ -73,6 +73,12 @@ pub struct Spanned<T> {
 }
 
 impl fastn_jdebug::Span {
+    pub fn inner_str(&self, s: &str) -> fastn_jdebug::Span {
+        fastn_jdebug::Span {
+            inner: self.inner.substr_from(s),
+        }
+    }
+
     pub fn wrap<T>(&self, value: T) -> fastn_jdebug::Spanned<T> {
         fastn_jdebug::Spanned {
             span: self.clone(),
