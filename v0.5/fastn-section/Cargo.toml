@@ -11,9 +11,9 @@ homepage.workspace = true
 [dependencies]
 serde.workspace = true
 string-interner.workspace = true
+fastn-jdebug.workspace = true
 
 [dev-dependencies]
 serde_json.workspace = true
-fastn-jdebug.workspace = true
 
 

@@ -7,22 +7,6 @@ impl<T> fastn_section::Spanned<T> {
     }
 }
 
-impl fastn_section::Span {
-    pub fn wrap<T>(&self, value: T) -> fastn_section::Spanned<T> {
-        fastn_section::Spanned {
-            span: self.clone(),
-            value,
-        }
-    }
-
-    pub fn str<'input>(
-        &self,
-        interner: &'input string_interner::DefaultStringInterner,
-    ) -> &'input str {
-        &interner.resolve(self.source).unwrap()[self.start..self.end]
-    }
-}
-
 impl From<fastn_section::Span> for fastn_section::Identifier {
     fn from(value: fastn_section::Span) -> Self {
         fastn_section::Identifier { name: value }

@@ -93,6 +93,7 @@ name = "fastn-jdebug"
 version = "0.1.1"
 dependencies = [
  "serde_json",
+ "string-interner",
 ]
 
 [[package]]

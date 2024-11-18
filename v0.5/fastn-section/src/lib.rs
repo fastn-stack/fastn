@@ -14,6 +14,7 @@ mod warning;
 mod wiggin;
 
 pub use error::Error;
+pub use fastn_jdebug::{Span, Spanned};
 pub use fastn_section::warning::Warning;
 pub use scanner::{Scannable, Scanner};
 
@@ -23,27 +24,6 @@ pub enum Diagnostic {
 }
 
 pub type Result<T> = std::result::Result<T, fastn_section::Error>;
-/// TODO: span has to keep track of the document as well now.
-/// TODO: demote usize to u32.
-///
-/// the document would be document id as stored in sqlite documents table.
-///
-/// Note: instead of Range, we will use a custom struct, we can use a single 32bit data to store
-/// both start, and length. or we keep our life simple, we have can have sections that are really
-/// long, eg a long ftd file. lets assume this is the decision for v0.5. we can demote usize to u32
-/// as we do not expect individual documents to be larger than few GBs.
-#[derive(PartialEq, Hash, Debug, Eq, Clone)]
-pub struct Span {
-    pub start: usize,
-    pub end: usize,
-    pub source: string_interner::DefaultSymbol,
-}
-
-#[derive(Debug, PartialEq, Clone)]
-pub struct Spanned<T> {
-    pub span: Span,
-    pub value: T,
-}
 
 #[derive(Debug, Clone, Default)]
 pub struct Document {

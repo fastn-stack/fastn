@@ -10,3 +10,4 @@ homepage.workspace = true
 
 [dependencies]
 serde_json = "1"
+string-interner = "0.18"
