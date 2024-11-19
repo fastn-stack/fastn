@@ -70,7 +70,7 @@ impl Compiler {
                 }
                 Some(fastn_unresolved::UR::Resolved(_)) => unreachable!(),
                 _ => {
-                    r.unresolvable.insert(symbol);
+                    r.unresolvable.insert(symbol.clone());
                 }
             }
             if let Some(fastn_unresolved::UR::UnResolved(definition)) = definition {
@@ -80,6 +80,7 @@ impl Compiler {
                             .insert(sym, fastn_unresolved::UR::Resolved(resolved));
                     }
                     Err(s) => {
+                        r.need_more_symbols.insert(symbol);
                         self.bag.insert(sym, fastn_unresolved::UR::UnResolved(s));
                     }
                 }
