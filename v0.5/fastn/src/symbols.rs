@@ -8,7 +8,7 @@ impl Symbols {
         module: &fastn_unresolved::ModuleName,
     ) -> Vec<fastn_compiler::LookupResult> {
         // we need to fetch the symbol from the store
-        let source = match std::fs::File::open(format!("{}.ftd", module.name.0))
+        let source = match std::fs::File::open(format!("{}.ftd", module.name.str()))
             .and_then(std::io::read_to_string)
         {
             Ok(v) => v,
@@ -17,20 +17,18 @@ impl Symbols {
             }
         };
 
-        let d = fastn_unresolved::parse(module, &source, source_symbol);
-        let package = interner.get_or_intern(&module.package.0);
-        let module = interner.get_or_intern(&module.name.0);
+        let d = fastn_unresolved::parse(module, &source);
 
         d.definitions
             .into_iter()
             .map(|d| match d {
                 fastn_unresolved::UR::UnResolved(v) => fastn_compiler::LookupResult::Unresolved(
-                    fastn_compiler::Symbol {
-                        package,
-                        module,
-                        identity: interner.get_or_intern(&v.name.unresolved().unwrap().0),
-                        source: source_symbol,
-                    },
+                    interner.get_or_intern(format!(
+                        "{}/{}#{}",
+                        module.package.str(),
+                        module.name.str(),
+                        &v.name.unresolved().unwrap().str()
+                    )),
                     v,
                 ),
                 fastn_unresolved::UR::Resolved(_) => {

@@ -27,6 +27,12 @@ impl fastn_unresolved::Definition {
     }
 }
 
+impl fastn_unresolved::PackageName {
+    pub fn str(&self) -> &str {
+        self.0.str()
+    }
+}
+
 pub(crate) fn assert_no_body(
     section: &fastn_section::Section,
     document: &mut fastn_unresolved::Document,

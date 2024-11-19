@@ -123,7 +123,7 @@ pub struct Argument {
 }
 
 #[derive(Debug, Clone, Hash, Eq, PartialEq)]
-pub struct PackageName(pub String);
+pub struct PackageName(pub Identifier);
 
 #[derive(Debug, Clone, Eq, Hash, PartialEq)]
 pub struct ModuleName {

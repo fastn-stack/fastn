@@ -65,7 +65,7 @@ fn parse_import(
     Some(fastn_unresolved::Import {
         module: fastn_unresolved::ModuleName {
             name: caption.inner_str(module).into(),
-            package: fastn_unresolved::PackageName(package.to_string()),
+            package: fastn_unresolved::PackageName(caption.inner_str(package).into()),
         },
         alias: alias.map(|v| fastn_unresolved::Identifier {
             name: caption.inner_str(v),

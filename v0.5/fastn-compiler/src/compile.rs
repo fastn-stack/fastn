@@ -2,7 +2,7 @@ struct Compiler {
     symbols: Box<dyn fastn_compiler::SymbolStore>,
     interner: string_interner::DefaultStringInterner,
     #[expect(unused)]
-    bag: std::collections::HashMap<fastn_compiler::Symbol, fastn_compiler::LookupResult>,
+    bag: std::collections::HashMap<string_interner::DefaultSymbol, fastn_compiler::LookupResult>,
     #[expect(unused)]
     auto_imports: Vec<fastn_section::AutoImport>,
 }
@@ -67,8 +67,7 @@ impl Compiler {
         document_id: &fastn_unresolved::ModuleName,
         source: &str,
     ) -> Result<fastn_compiler::Output, fastn_compiler::Error> {
-        let source_symbol = self.interner.get_or_intern(source);
-        let mut d = fastn_unresolved::parse(document_id, source, source_symbol);
+        let mut d = fastn_unresolved::parse(document_id, source);
         // we only make 10 attempts to resolve the document: we need a warning if we are not able to
         // resolve the document in 10 attempts.
         for _ in 1..10 {
