@@ -12,7 +12,8 @@ impl Symbols {
             .and_then(std::io::read_to_string)
         {
             Ok(v) => v,
-            Err(_e) => {
+            Err(e) => {
+                println!("failed to read file {}.ftd: {e:?}", module.name.str());
                 return vec![];
             }
         };
@@ -37,7 +38,7 @@ impl Symbols {
                     fastn_unresolved::UR::UnResolved(v)
                 }
                 _ => {
-                    unreachable!("resolved definitions should only return unresolved definitions")
+                    unreachable!("fastn_unresolved::parse() only returns unresolved definitions")
                 }
             })
             .collect()

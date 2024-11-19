@@ -48,6 +48,19 @@ impl Compiler {
         let mut r = ResolveSymbolsResult::default();
         for symbol in symbols {
             let sym = symbol.symbol(&mut self.interner);
+            // what if this is a recursive definition?
+            // `foo` calling `foo`?
+            // we will not find `foo` in the `bag` anymore, so we have to explicitly check for that.
+            // but what if `foo` calls `bar` and `bar` calls `foo`?
+            // we will not be able to resolve that.
+            // it won't be a problem because `definition.resolve()` is not recursive, meaning if
+            // `foo` is being resolved,
+            // and it encounters `bar`, we will not try to internally
+            // resolve `bar`, we will stop till bar is fully resolved.
+            // in case of recursion, the foo will have first resolved its signature, and then,
+            // when `bar` needs signature of `foo,`
+            // it will find it from the partially resolved
+            // `foo` in the `bag`.
             let mut definition = self.bag.remove(&sym);
             match definition.as_mut() {
                 Some(fastn_unresolved::UR::UnResolved(definition)) => {

@@ -14,11 +14,6 @@ pub use parser::parse;
 
 pub type LookupResult = fastn_unresolved::UR<fastn_unresolved::Definition, fastn_type::Definition>;
 
-// pub struct LookupResult {
-//     pub symbol: string_interner::DefaultSymbol,
-//     pub definition: fastn_unresolved::UR<fastn_unresolved::Definition, fastn_type::Definition>,
-// }
-
 #[derive(Debug, Clone, Default)]
 pub struct Document {
     pub module_doc: Option<fastn_section::Span>,
