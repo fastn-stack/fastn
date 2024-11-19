@@ -34,10 +34,7 @@ impl Symbols {
                     v.symbol = Some(symbol);
                     v.module = Some(module_i);
                     v.package = Some(package_i);
-                    fastn_unresolved::LookupResult {
-                        symbol,
-                        definition: fastn_unresolved::UR::UnResolved(v),
-                    }
+                    fastn_unresolved::UR::UnResolved(v)
                 }
                 _ => {
                     unreachable!("resolved definitions should only return unresolved definitions")

@@ -25,39 +25,16 @@ impl Compiler {
         }
     }
 
-    fn update_partially_resolved(&mut self, partially_resolved: Vec<fastn_unresolved::Definition>) {
-        for definition in partially_resolved {
-            let symbol = definition.symbol.unwrap();
-            match definition.resolved() {
-                Ok(v) => {
-                    self.bag.insert(
-                        symbol,
-                        fastn_unresolved::LookupResult {
-                            symbol,
-                            definition: fastn_unresolved::UR::Resolved(v),
-                        },
-                    );
-                }
-                Err(v) => {
-                    self.bag.insert(
-                        symbol,
-                        fastn_unresolved::LookupResult {
-                            symbol,
-                            definition: fastn_unresolved::UR::UnResolved(v),
-                        },
-                    );
-                }
-            }
-        }
-    }
-
     async fn fetch_unresolved_symbols(
         &mut self,
         symbols_to_fetch: &[fastn_unresolved::SymbolName],
     ) {
         let definitions = self.symbols.lookup(&mut self.interner, symbols_to_fetch);
         for definition in definitions {
-            self.bag.insert(definition.symbol, definition);
+            // the following is only okay if our symbol store only returns unresolved definitions,
+            // some other store might return resolved definitions, and we need to handle that.
+            self.bag
+                .insert(definition.unresolved().unwrap().symbol.unwrap(), definition);
         }
     }
 
@@ -72,7 +49,7 @@ impl Compiler {
         for symbol in symbols {
             let sym = symbol.symbol(&mut self.interner);
             let mut definition = self.bag.remove(&sym);
-            match definition.as_mut().map(|v| &mut v.definition) {
+            match definition.as_mut() {
                 Some(fastn_unresolved::UR::UnResolved(definition)) => {
                     r.need_more_symbols
                         .extend_from_slice(&definition.resolve(&self.bag));
@@ -80,8 +57,16 @@ impl Compiler {
                 Some(fastn_unresolved::UR::Resolved(_)) => unreachable!(),
                 _ => r.unresolvable.push(symbol),
             }
-            if let Some(definition) = definition {
-                self.bag.insert(sym, definition);
+            if let Some(fastn_unresolved::UR::UnResolved(definition)) = definition {
+                match definition.resolved() {
+                    Ok(resolved) => {
+                        self.bag
+                            .insert(sym, fastn_unresolved::UR::Resolved(resolved));
+                    }
+                    Err(s) => {
+                        self.bag.insert(sym, fastn_unresolved::UR::UnResolved(s));
+                    }
+                }
             }
         }
 
@@ -125,7 +110,6 @@ impl Compiler {
                 // resolve_document can internally run in parallel.
                 r = self.resolve_symbols(r.need_more_symbols);
                 unresolvable.extend_from_slice(&r.unresolvable);
-                self.update_partially_resolved(r.partially_resolved);
                 if r.need_more_symbols.is_empty() {
                     break;
                 }
@@ -163,7 +147,6 @@ pub async fn compile(
 
 #[derive(Default)]
 struct ResolveSymbolsResult {
-    partially_resolved: Vec<fastn_unresolved::Definition>,
     need_more_symbols: Vec<fastn_unresolved::SymbolName>,
     unresolvable: Vec<fastn_unresolved::SymbolName>,
 }
