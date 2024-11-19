@@ -21,8 +21,8 @@ impl fastn_unresolved::Document {
 impl fastn_unresolved::Definition {
     pub fn name(&self) -> &str {
         match self.name {
-            fastn_unresolved::UR::UnResolved(ref u) => u.0.str(),
-            fastn_unresolved::UR::Resolved(ref r) => r.0.str(),
+            fastn_unresolved::UR::UnResolved(ref u) => u.str(),
+            fastn_unresolved::UR::Resolved(ref r) => r.str(),
         }
     }
 }

@@ -89,18 +89,18 @@ fn parse_field(
         header
             .str()
             .split(",")
-            .map(|v| fastn_unresolved::AliasableIdentifier {
-                name: header.inner_str(v).into(),
-                alias: None,
-            })
+            .map(|v| aliasable(header, v))
             .collect(),
     ))
 }
 
-fn aliasable(s: &str) -> fastn_unresolved::AliasableIdentifier {
+fn aliasable(span: &fastn_section::Span, s: &str) -> fastn_unresolved::AliasableIdentifier {
     let (name, alias) = match s.split_once(" as ") {
-        Some((name, alias)) => (name.into(), Some(alias.into())),
-        None => (s.into(), None),
+        Some((name, alias)) => (
+            span.inner_str(name).into(),
+            Some(span.inner_str(alias).into()),
+        ),
+        None => (span.inner_str(s).into(), None),
     };
 
     fastn_unresolved::AliasableIdentifier { name, alias }

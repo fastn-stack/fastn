@@ -181,6 +181,12 @@ impl From<fastn_section::QualifiedIdentifier> for fastn_section::Kind {
     }
 }
 
+impl fastn_section::Identifier {
+    pub fn str(&self) -> &str {
+        self.name.str()
+    }
+}
+
 impl fastn_section::QualifiedIdentifier {
     pub fn new(
         module: Option<fastn_section::ModuleName>,
