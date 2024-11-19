@@ -1766,15 +1766,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ftd-tc"
-version = "0.1.0"
-dependencies = [
- "ftd-ast",
- "ftd-p1",
- "thiserror",
-]
-
-[[package]]
 name = "futures"
 version = "0.3.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"

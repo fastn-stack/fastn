@@ -18,7 +18,6 @@ members = [
     "ftd",
     "ftd-ast",
     "ftd-p1",
-    "ftd-tc",
     "t",
     # "fastn-wasm",
     # "fastn-runtime",
@@ -102,7 +101,6 @@ fastn-expr.path = "fastn-expr"
 format_num = "0.1"
 ftd.path = "ftd"
 ftd-p1.path = "ftd-p1"
-ftd-tc.path = "ftd-tc"
 ftd-ast.path = "ftd-ast"
 fastn-js.path = "fastn-js"
 ft-sys-shared = "0.1.4"
