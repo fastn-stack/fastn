@@ -5,15 +5,15 @@ impl fastn_jdebug::JDebug for fastn_unresolved::Import {
         let mut o = serde_json::Map::new();
 
         let name = if self.module.package.0.is_empty() {
-            self.module.name.0.str().to_string()
+            self.module.name.str().to_string()
         } else {
-            format!("{}/{}", self.module.package.0, self.module.name.0.str())
+            format!("{}/{}", self.module.package.0, self.module.name.str())
         };
 
         o.insert(
             "import".into(),
             match self.alias {
-                Some(ref v) => format!("{name}=>{}", v.0.str()),
+                Some(ref v) => format!("{name}=>{}", v.str()),
                 None => name,
             }
             .into(),
@@ -47,8 +47,8 @@ impl fastn_jdebug::JDebug for fastn_unresolved::Export {
 impl fastn_jdebug::JDebug for fastn_unresolved::AliasableIdentifier {
     fn debug(&self) -> serde_json::Value {
         match self.alias {
-            Some(ref v) => format!("{}=>{}", self.name.0.str(), v.0.str()),
-            None => self.name.0.str().to_string(),
+            Some(ref v) => format!("{}=>{}", self.name.str(), v.str()),
+            None => self.name.str().to_string(),
         }
         .into()
     }

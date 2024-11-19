@@ -132,6 +132,10 @@ impl fastn_section::Header {
     pub fn name(&self) -> &str {
         self.name.name.name.str()
     }
+
+    pub fn name_span(&self) -> &fastn_section::Span {
+        &self.name.name.name
+    }
 }
 
 impl fastn_section::Kind {

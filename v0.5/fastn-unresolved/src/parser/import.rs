@@ -109,7 +109,7 @@ fn aliasable(span: &fastn_section::Span, s: &str) -> fastn_unresolved::Aliasable
 #[cfg(test)]
 mod tests {
     #[track_caller]
-    fn tester(mut d: fastn_unresolved::Document, source: &str, expected: serde_json::Value) {
+    fn tester(mut d: fastn_unresolved::Document, expected: serde_json::Value) {
         assert!(d.content.is_empty());
         assert!(d.definitions.is_empty());
         assert_eq!(d.imports.len(), 1);

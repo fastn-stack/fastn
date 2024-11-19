@@ -73,9 +73,11 @@ pub(crate) fn assert_no_extra_headers(
     let mut found = false;
     for header in &section.headers {
         if !allowed.contains(&header.name()) {
-            document
-                .errors
-                .push(header.span().wrap(fastn_section::Error::ExtraArgumentFound));
+            document.errors.push(
+                header
+                    .name_span()
+                    .wrap(fastn_section::Error::ExtraArgumentFound),
+            );
             found = true;
         }
     }

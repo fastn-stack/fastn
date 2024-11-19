@@ -44,8 +44,8 @@ pub fn parse(
 /// t1 takes a function parses a single section. and another function to extract the debug value
 fn t1<PARSER, TESTER>(source: &str, expected: serde_json::Value, parser: PARSER, tester: TESTER)
 where
-    PARSER: Fn(&str, fastn_section::Section, &mut fastn_unresolved::Document),
-    TESTER: FnOnce(fastn_unresolved::Document, &str, serde_json::Value),
+    PARSER: Fn(fastn_section::Section, &mut fastn_unresolved::Document),
+    TESTER: FnOnce(fastn_unresolved::Document, serde_json::Value),
 {
     println!("--------- testing -----------\n{source}\n--------- source ------------");
 
@@ -59,9 +59,9 @@ where
     };
 
     // assert everything else is empty
-    parser(source, section, &mut document);
+    parser(section, &mut document);
 
-    tester(document, source, expected);
+    tester(document, expected);
 }
 
 #[cfg(test)]
