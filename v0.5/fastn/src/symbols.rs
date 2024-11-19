@@ -6,7 +6,7 @@ impl Symbols {
         &mut self,
         interner: &mut string_interner::DefaultStringInterner,
         module: &fastn_unresolved::ModuleName,
-    ) -> Vec<fastn_compiler::LookupResult> {
+    ) -> Vec<fastn_unresolved::LookupResult> {
         // we need to fetch the symbol from the store
         let source = match std::fs::File::open(format!("{}.ftd", module.name.str()))
             .and_then(std::io::read_to_string)
@@ -34,7 +34,7 @@ impl Symbols {
                     v.symbol = Some(symbol);
                     v.module = Some(module_i);
                     v.package = Some(package_i);
-                    fastn_compiler::LookupResult {
+                    fastn_unresolved::LookupResult {
                         symbol,
                         definition: fastn_unresolved::UR::UnResolved(v),
                     }
@@ -52,7 +52,7 @@ impl fastn_compiler::SymbolStore for Symbols {
         &mut self,
         interner: &mut string_interner::DefaultStringInterner,
         symbols: &[fastn_unresolved::SymbolName],
-    ) -> Vec<fastn_compiler::LookupResult> {
+    ) -> Vec<fastn_unresolved::LookupResult> {
         let unique_modules = symbols
             .iter()
             .map(|s| &s.module)

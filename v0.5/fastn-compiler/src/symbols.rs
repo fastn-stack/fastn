@@ -1,8 +1,3 @@
-pub struct LookupResult {
-    pub symbol: string_interner::DefaultSymbol,
-    pub definition: fastn_unresolved::UR<fastn_unresolved::Definition, fastn_type::Definition>,
-}
-
 pub trait SymbolStore {
     /// it is okay / acceptable to return more symbols than asked.
     ///
@@ -17,5 +12,5 @@ pub trait SymbolStore {
         &mut self,
         interner: &mut string_interner::DefaultStringInterner,
         symbols: &[fastn_unresolved::SymbolName],
-    ) -> Vec<LookupResult>;
+    ) -> Vec<fastn_unresolved::LookupResult>;
 }

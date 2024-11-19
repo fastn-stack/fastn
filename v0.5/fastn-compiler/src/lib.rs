@@ -9,7 +9,7 @@ mod symbols;
 
 pub use compiler::compile;
 pub use fastn_section::Result;
-pub use symbols::{LookupResult, SymbolStore};
+pub use symbols::SymbolStore;
 
 pub struct Output {
     #[expect(unused)]
