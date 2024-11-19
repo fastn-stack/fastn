@@ -67,9 +67,8 @@ impl Compiler {
     fn resolve_symbols(
         &mut self,
         symbols: Vec<fastn_unresolved::SymbolName>,
-        r: &mut ResolveSymbolsResult,
-    ) {
-        r.clear();
+    ) -> ResolveSymbolsResult {
+        let mut r = ResolveSymbolsResult::default();
         for symbol in symbols {
             let sym = symbol.symbol(&mut self.interner);
             match self.bag.get_mut(&sym).map(|v| &mut v.definition) {
@@ -80,6 +79,8 @@ impl Compiler {
                 _ => r.unresolvable.push(symbol),
             }
         }
+
+        r
     }
 
     /// try to make as much progress as possibly by resolving as many symbols as possible, and return
@@ -117,9 +118,9 @@ impl Compiler {
 
             for _ in 1..10 {
                 // resolve_document can internally run in parallel.
-                self.resolve_symbols(r.need_more_symbols.clone(), &mut r);
+                r = self.resolve_symbols(r.need_more_symbols);
                 unresolvable.extend_from_slice(&r.unresolvable);
-                self.update_partially_resolved(r.partially_resolved.clone());
+                self.update_partially_resolved(r.partially_resolved);
                 if r.need_more_symbols.is_empty() {
                     break;
                 }
