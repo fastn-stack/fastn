@@ -5,6 +5,7 @@ impl fastn_unresolved::ComponentInvocation {
             string_interner::DefaultSymbol,
             fastn_unresolved::LookupResult,
         >,
+        _document: &mut fastn_unresolved::Document,
     ) -> std::collections::HashSet<fastn_unresolved::SymbolName> {
         todo!()
     }
@@ -17,6 +18,7 @@ impl fastn_unresolved::Definition {
             string_interner::DefaultSymbol,
             fastn_unresolved::LookupResult,
         >,
+        _document: &mut fastn_unresolved::Document,
     ) -> std::collections::HashSet<fastn_unresolved::SymbolName> {
         todo!()
     }

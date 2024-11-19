@@ -15,7 +15,7 @@ pub struct Output {
     #[expect(unused)]
     js: String,
     #[expect(unused)]
-    warnings: Vec<fastn_section::Warning>,
+    warnings: Vec<fastn_section::Spanned<fastn_section::Warning>>,
     #[expect(unused)]
     resolved: Vec<fastn_type::Definition>,
     // should we also return / cache partially resolved symbols?

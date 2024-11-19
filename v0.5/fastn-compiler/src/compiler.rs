@@ -1,9 +1,17 @@
+const ITERATION_THRESHOLD: usize = 100;
+
 struct Compiler {
     symbols: Box<dyn fastn_compiler::SymbolStore>,
     interner: string_interner::DefaultStringInterner,
     bag: std::collections::HashMap<string_interner::DefaultSymbol, fastn_unresolved::LookupResult>,
     #[expect(unused)]
     auto_imports: Vec<fastn_section::AutoImport>,
+    content: Vec<
+        fastn_unresolved::UR<
+            fastn_unresolved::ComponentInvocation,
+            fastn_type::ComponentInvocation,
+        >,
+    >,
     document: fastn_unresolved::Document,
 }
 
@@ -14,12 +22,15 @@ impl Compiler {
         document_id: &fastn_unresolved::ModuleName,
         source: &str,
     ) -> Self {
-        let document = fastn_unresolved::parse(document_id, source);
+        let mut document = fastn_unresolved::parse(document_id, source);
+        let content = document.content;
+        document.content = vec![];
 
         Self {
             symbols,
             interner: string_interner::StringInterner::new(),
             bag: std::collections::HashMap::new(),
+            content,
             auto_imports,
             document,
         }
@@ -66,7 +77,8 @@ impl Compiler {
             let mut definition = self.bag.remove(&sym);
             match definition.as_mut() {
                 Some(fastn_unresolved::UR::UnResolved(definition)) => {
-                    r.need_more_symbols.extend(definition.resolve(&self.bag));
+                    r.need_more_symbols
+                        .extend(definition.resolve(&self.bag, &mut self.document));
                 }
                 Some(fastn_unresolved::UR::Resolved(_)) => unreachable!(),
                 _ => {
@@ -97,22 +109,24 @@ impl Compiler {
     fn resolve_document(&mut self) -> std::collections::HashSet<fastn_unresolved::SymbolName> {
         let mut stuck_on_symbols = std::collections::HashSet::new();
 
-        for ci in self.document.content.iter_mut() {
+        for ci in self.content.iter_mut() {
             if let fastn_unresolved::UR::UnResolved(c) = ci {
-                stuck_on_symbols.extend(c.resolve(&self.bag));
+                stuck_on_symbols.extend(c.resolve(&self.bag, &mut self.document));
             }
         }
 
         stuck_on_symbols
     }
 
-    async fn compile(&mut self) -> Result<fastn_compiler::Output, fastn_compiler::Error> {
+    async fn compile(mut self) -> Result<fastn_compiler::Output, fastn_compiler::Error> {
         // we only make 10 attempts to resolve the document: we need a warning if we are not able to
         // resolve the document in 10 attempts.
         let mut unresolvable = std::collections::HashSet::new();
         // let mut ever_used = std::collections::HashSet::new();
-        for _ in 1..10 {
+        let mut iterations = 0;
+        while iterations < ITERATION_THRESHOLD {
             // resolve_document can internally run in parallel.
+            // TODO: pass unresolvable to self.resolve_document() and make sure they don't come back
             let unresolved_symbols = self.resolve_document();
             if unresolved_symbols.is_empty() {
                 break;
@@ -124,8 +138,9 @@ impl Compiler {
             let mut r = ResolveSymbolsResult::default();
             r.need_more_symbols.extend(unresolved_symbols);
 
-            for _ in 1..10 {
+            while iterations < ITERATION_THRESHOLD {
                 // resolve_document can internally run in parallel.
+                // TODO: pass unresolvable to self.resolve_symbols() and make sure they don't come back
                 r = self.resolve_symbols(r.need_more_symbols);
                 unresolvable.extend(r.unresolvable);
                 if r.need_more_symbols.is_empty() {
@@ -133,14 +148,37 @@ impl Compiler {
                 }
                 // ever_used.extend(r.need_more_symbols);
                 self.fetch_unresolved_symbols(&r.need_more_symbols).await;
+                iterations += 1;
             }
+
+            iterations += 1;
         }
 
-        if !unresolvable.is_empty() {
-            // we were not able to resolve all symbols
+        // we are here means ideally we are done.
+        // we could have some unresolvable symbols or self.document.errors may not be empty.
+        if !unresolvable.is_empty()
+            || !self.document.errors.is_empty()
+            || iterations == ITERATION_THRESHOLD
+        {
+            // we were not able to resolve all symbols or there were errors
+            #[allow(clippy::diverging_sub_expression)]
+            #[expect(unreachable_code)]
+            return Err(fastn_compiler::Error {
+                messages: todo!(),
+                resolved: todo!(),
+                symbol_errors: todo!(),
+            });
         }
 
-        todo!()
+        // there were no errors, etc.
+
+        #[allow(clippy::diverging_sub_expression)]
+        #[expect(unreachable_code)]
+        Ok(fastn_compiler::Output {
+            js: todo!(),
+            warnings: self.document.warnings,
+            resolved: vec![], // for now, we are not tracking resolved
+        })
     }
 }
 
