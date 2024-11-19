@@ -6,6 +6,7 @@ impl fastn_unresolved::ComponentInvocation {
             fastn_unresolved::LookupResult,
         >,
         _document: &mut fastn_unresolved::Document,
+        _auto_imports: &[fastn_section::AutoImport],
     ) -> std::collections::HashSet<fastn_unresolved::SymbolName> {
         todo!()
     }
@@ -19,6 +20,7 @@ impl fastn_unresolved::Definition {
             fastn_unresolved::LookupResult,
         >,
         _document: &mut fastn_unresolved::Document,
+        _auto_imports: &[fastn_section::AutoImport],
     ) -> std::collections::HashSet<fastn_unresolved::SymbolName> {
         todo!()
     }

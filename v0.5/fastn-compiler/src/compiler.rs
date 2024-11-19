@@ -80,8 +80,11 @@ impl Compiler {
             let mut definition = self.bag.remove(&sym);
             match definition.as_mut() {
                 Some(fastn_unresolved::UR::UnResolved(definition)) => {
-                    r.need_more_symbols
-                        .extend(definition.resolve(&self.bag, &mut self.document));
+                    r.need_more_symbols.extend(definition.resolve(
+                        &self.bag,
+                        &mut self.document,
+                        &self.auto_imports,
+                    ));
                 }
                 Some(fastn_unresolved::UR::Resolved(_)) => unreachable!(),
                 _ => {
@@ -118,7 +121,7 @@ impl Compiler {
         for ci in content {
             match ci {
                 fastn_unresolved::UR::UnResolved(mut c) => {
-                    let needed = c.resolve(&self.bag, &mut self.document);
+                    let needed = c.resolve(&self.bag, &mut self.document, &self.auto_imports);
                     if needed.is_empty() {
                         new_content.push(fastn_unresolved::UR::Resolved(c.resolved().unwrap()));
                     } else {
