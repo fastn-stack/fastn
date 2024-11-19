@@ -21,11 +21,16 @@ impl Compiler {
 
     fn update_partially_resolved(&mut self, partially_resolved: Vec<fastn_unresolved::Definition>) {
         for definition in partially_resolved {
-            if definition.is_resolved() {
-                let _resolved = definition.resolved();
-                todo!("update bag")
-            } else {
-                todo!("update bag")
+            let sym = definition.symbol.unwrap();
+            match definition.resolved() {
+                Ok(v) => {
+                    self.bag
+                        .insert(sym, fastn_compiler::LookupResult::Resolved(sym, v));
+                }
+                Err(v) => {
+                    self.bag
+                        .insert(sym, fastn_compiler::LookupResult::Unresolved(sym, v));
+                }
             }
         }
     }

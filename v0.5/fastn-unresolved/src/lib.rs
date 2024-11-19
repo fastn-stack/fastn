@@ -53,8 +53,8 @@ pub enum InnerDefinition {
     Function {
         arguments: Vec<UR<Argument, fastn_type::Argument>>,
         return_type: Option<UR<Kind, fastn_type::Kind>>,
-        /// This one is a little interesting, the number of expressions can be higher than the number
-        /// of Tes, this because we can have multiple expressions in a single Tes.
+        /// This one is a little interesting, the number of expressions can be higher than the
+        /// number of Tes, this because we can have multiple expressions in a single `Tes`.
         ///
         /// ```ftd
         /// -- integer x():
@@ -105,20 +105,6 @@ pub struct Import {
     pub export: Option<Export>,
     pub exposing: Option<Export>,
 }
-
-// #[derive(Debug, Clone, PartialEq)]
-// pub struct ComponentInvocation {
-//     #[serde(skip_serializing_if = "Option::is_none")]
-//     pub id: Option<String>,
-//     pub name: String,
-//     pub properties: Vec<Property>,
-//     pub iteration: Box<Option<Loop>>,
-//     pub condition: Box<Option<fastn_type::Expression>>,
-//     pub events: Vec<Event>,
-//     pub children: Vec<ComponentInvocation>,
-//     pub source: ComponentSource,
-//     pub line_number: usize,
-// }
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum UR<U, R> {

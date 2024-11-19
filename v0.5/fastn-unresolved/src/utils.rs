@@ -26,11 +26,7 @@ impl fastn_unresolved::Definition {
         }
     }
 
-    pub fn is_resolved(&self) -> bool {
-        todo!()
-    }
-
-    pub fn resolved(self) -> fastn_type::Definition {
+    pub fn resolved(self) -> Result<fastn_type::Definition, Self> {
         // must be called only if `is_resolved()` has returned true
         todo!()
     }
