@@ -4,10 +4,10 @@
 
 extern crate self as fastn_compiler;
 
-mod compile;
+mod compiler;
 mod symbols;
 
-pub use compile::compile;
+pub use compiler::compile;
 pub use fastn_section::Result;
 pub use symbols::{LookupResult, SymbolStore};
 

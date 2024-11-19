@@ -1,7 +1,6 @@
 struct Compiler {
     symbols: Box<dyn fastn_compiler::SymbolStore>,
     interner: string_interner::DefaultStringInterner,
-    #[expect(unused)]
     bag: std::collections::HashMap<string_interner::DefaultSymbol, fastn_compiler::LookupResult>,
     #[expect(unused)]
     auto_imports: Vec<fastn_section::AutoImport>,
@@ -31,7 +30,10 @@ impl Compiler {
         &mut self,
         symbols_to_fetch: &mut [fastn_unresolved::SymbolName],
     ) {
-        let _found = self.symbols.lookup(&mut self.interner, symbols_to_fetch);
+        let symbols = self.symbols.lookup(&mut self.interner, symbols_to_fetch);
+        for symbol in symbols {
+            self.bag.insert(symbol.symbol(), symbol);
+        }
     }
 
     /// try to resolve as many symbols as possible, and return the ones that we made any progress on.

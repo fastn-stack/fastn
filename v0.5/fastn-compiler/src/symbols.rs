@@ -6,7 +6,7 @@ pub enum LookupResult {
     Unresolved(string_interner::DefaultSymbol, fastn_unresolved::Definition),
     /// the resolved symbol and the file source it was resolved from.
     Resolved(string_interner::DefaultSymbol, fastn_type::Definition),
-    NotFound,
+    NotFound(string_interner::DefaultSymbol),
     /// if the resolution failed, we need not try to resolve it again, unless dependencies change.
     ///
     /// say when we are processing x.ftd we found out that the symbol foo is invalid, so when we are
@@ -17,7 +17,18 @@ pub enum LookupResult {
     ///
     /// what if we store the dependencies it failed on, so when any of them changes, we can
     /// revalidate?
-    LastResolutionFailed(Vec<fastn_section::Error>),
+    LastResolutionFailed(string_interner::DefaultSymbol, Vec<fastn_section::Error>),
+}
+
+impl LookupResult {
+    pub fn symbol(&self) -> string_interner::DefaultSymbol {
+        match self {
+            LookupResult::Unresolved(s, _) => *s,
+            LookupResult::Resolved(s, _) => *s,
+            LookupResult::NotFound(s) => *s,
+            LookupResult::LastResolutionFailed(s, _) => *s,
+        }
+    }
 }
 
 pub trait SymbolStore {
