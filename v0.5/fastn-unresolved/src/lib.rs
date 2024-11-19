@@ -111,6 +111,18 @@ pub struct Import {
 pub enum UR<U, R> {
     Resolved(R),
     UnResolved(U),
+    NotFound,
+    /// if the resolution failed, we need not try to resolve it again, unless dependencies change.
+    ///
+    /// say when we are processing x.ftd we found out that the symbol foo is invalid, so when we are
+    /// processing y.ftd, and we find foo, we can directly say that it is invalid.
+    ///
+    /// this is the goal, but we do not know why isn't `foo` valid, meaning on what another symbol
+    /// does it depend on, so when do we "revalidate" the symbol?
+    ///
+    /// what if we store the dependencies it failed on, so when any of them changes, we can
+    /// revalidate?
+    Invalid(Vec<fastn_section::Error>),
 }
 
 #[derive(Debug, Clone, PartialEq)]

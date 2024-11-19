@@ -23,6 +23,8 @@ impl fastn_unresolved::Definition {
         match self.name {
             fastn_unresolved::UR::UnResolved(ref u) => u.str(),
             fastn_unresolved::UR::Resolved(ref r) => r.str(),
+            fastn_unresolved::UR::NotFound => unreachable!(),
+            fastn_unresolved::UR::Invalid(_) => unreachable!(),
         }
     }
 
@@ -115,5 +117,19 @@ impl<U, V> fastn_unresolved::UR<U, V> {
             fastn_unresolved::UR::Resolved(v) => Some(v),
             _ => None,
         }
+    }
+}
+
+impl fastn_unresolved::SymbolName {
+    pub fn symbol(
+        &self,
+        interner: &mut string_interner::DefaultStringInterner,
+    ) -> string_interner::DefaultSymbol {
+        interner.get_or_intern(format!(
+            "{}/{}#{}",
+            self.module.package.str(),
+            self.module.name.str(),
+            self.name.str()
+        ))
     }
 }

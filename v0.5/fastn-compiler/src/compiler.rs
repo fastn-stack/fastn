@@ -27,15 +27,25 @@ impl Compiler {
 
     fn update_partially_resolved(&mut self, partially_resolved: Vec<fastn_unresolved::Definition>) {
         for definition in partially_resolved {
-            let sym = definition.symbol.unwrap();
+            let symbol = definition.symbol.unwrap();
             match definition.resolved() {
                 Ok(v) => {
-                    self.bag
-                        .insert(sym, fastn_compiler::LookupResult::Resolved(sym, v));
+                    self.bag.insert(
+                        symbol,
+                        fastn_compiler::LookupResult {
+                            symbol,
+                            definition: fastn_unresolved::UR::Resolved(v),
+                        },
+                    );
                 }
                 Err(v) => {
-                    self.bag
-                        .insert(sym, fastn_compiler::LookupResult::Unresolved(sym, v));
+                    self.bag.insert(
+                        symbol,
+                        fastn_compiler::LookupResult {
+                            symbol,
+                            definition: fastn_unresolved::UR::UnResolved(v),
+                        },
+                    );
                 }
             }
         }
@@ -45,9 +55,9 @@ impl Compiler {
         &mut self,
         symbols_to_fetch: &[fastn_unresolved::SymbolName],
     ) {
-        let symbols = self.symbols.lookup(&mut self.interner, symbols_to_fetch);
-        for symbol in symbols {
-            self.bag.insert(symbol.symbol(), symbol);
+        let definitions = self.symbols.lookup(&mut self.interner, symbols_to_fetch);
+        for definition in definitions {
+            self.bag.insert(definition.symbol, definition);
         }
     }
 
@@ -56,9 +66,24 @@ impl Compiler {
     /// this function should be called in a loop, until the list of symbols is empty.
     fn resolve_symbols(
         &mut self,
-        _symbols: &mut [fastn_unresolved::SymbolName],
-    ) -> Vec<fastn_unresolved::Definition> {
-        todo!()
+        symbols: &[fastn_unresolved::SymbolName],
+    ) -> (
+        Vec<fastn_unresolved::Definition>,
+        Vec<fastn_unresolved::SymbolName>,
+    ) {
+        let mut stuck_on_symbols = vec![];
+        for symbol in symbols {
+            let sym = symbol.symbol(&mut self.interner);
+            // if let Some(fastn_compiler::LookupResult::UnResolved(_, definition)) =
+            //     self.bag.get_mut(&sym)
+            // {
+            //     stuck_on_symbols.extend_from_slice(definition.resolve());
+            // } else {
+            //     stuck_on_symbols.push(symbol.definition().clone());
+            // }
+            todo!()
+        }
+        (stuck_on_symbols, todo!())
     }
 
     /// try to make as much progress as possibly by resolving as many symbols as possible, and return
@@ -82,7 +107,7 @@ impl Compiler {
         // resolve the document in 10 attempts.
         for _ in 1..10 {
             // resolve_document can internally run in parallel.
-            let mut unresolved_symbols = self.resolve_document();
+            let unresolved_symbols = self.resolve_document();
             if unresolved_symbols.is_empty() {
                 break;
             }
@@ -92,7 +117,8 @@ impl Compiler {
             // symbols in 10 attempts.
             for _ in 1..10 {
                 // resolve_document can internally run in parallel.
-                let partially_resolved = self.resolve_symbols(&mut unresolved_symbols);
+                let (partially_resolved, unresolved_symbols) =
+                    self.resolve_symbols(&unresolved_symbols);
                 self.update_partially_resolved(partially_resolved);
 
                 if unresolved_symbols.is_empty() {

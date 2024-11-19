@@ -1,34 +1,6 @@
-pub enum LookupResult {
-    /// the unresolved symbol and the file source it was resolved from.
-    ///
-    /// the resolved and unresolved symbols contain spans, so we need the source to translate them
-    /// to names.
-    Unresolved(string_interner::DefaultSymbol, fastn_unresolved::Definition),
-    /// the resolved symbol and the file source it was resolved from.
-    Resolved(string_interner::DefaultSymbol, fastn_type::Definition),
-    NotFound(string_interner::DefaultSymbol),
-    /// if the resolution failed, we need not try to resolve it again, unless dependencies change.
-    ///
-    /// say when we are processing x.ftd we found out that the symbol foo is invalid, so when we are
-    /// processing y.ftd, and we find foo, we can directly say that it is invalid.
-    ///
-    /// this is the goal, but we do not know why isn't `foo` valid, meaning on what another symbol
-    /// does it depend on, so when do we "revalidate" the symbol?
-    ///
-    /// what if we store the dependencies it failed on, so when any of them changes, we can
-    /// revalidate?
-    LastResolutionFailed(string_interner::DefaultSymbol, Vec<fastn_section::Error>),
-}
-
-impl LookupResult {
-    pub fn symbol(&self) -> string_interner::DefaultSymbol {
-        match self {
-            LookupResult::Unresolved(s, _) => *s,
-            LookupResult::Resolved(s, _) => *s,
-            LookupResult::NotFound(s) => *s,
-            LookupResult::LastResolutionFailed(s, _) => *s,
-        }
-    }
+pub struct LookupResult {
+    pub symbol: string_interner::DefaultSymbol,
+    pub definition: fastn_unresolved::UR<fastn_unresolved::Definition, fastn_type::Definition>,
 }
 
 pub trait SymbolStore {
