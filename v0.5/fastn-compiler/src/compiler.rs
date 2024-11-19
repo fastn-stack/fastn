@@ -67,8 +67,9 @@ impl Compiler {
     fn resolve_symbols(
         &mut self,
         symbols: Vec<fastn_unresolved::SymbolName>,
-    ) -> ResolveSymbolsResult {
-        let mut r = ResolveSymbolsResult::default();
+        r: &mut ResolveSymbolsResult,
+    ) {
+        r.clear();
         for symbol in symbols {
             let sym = symbol.symbol(&mut self.interner);
             match self.bag.get_mut(&sym).map(|v| &mut v.definition) {
@@ -79,7 +80,6 @@ impl Compiler {
                 _ => r.unresolvable.push(symbol),
             }
         }
-        r
     }
 
     /// try to make as much progress as possibly by resolving as many symbols as possible, and return
@@ -112,11 +112,14 @@ impl Compiler {
             self.fetch_unresolved_symbols(&unresolved_symbols).await;
             // this itself has to happen in a loop. we need a warning if we are not able to resolve all
             // symbols in 10 attempts.
+            let mut r = ResolveSymbolsResult::default();
+            r.need_more_symbols.extend(unresolved_symbols);
+
             for _ in 1..10 {
                 // resolve_document can internally run in parallel.
-                let r = self.resolve_symbols(unresolved_symbols);
-                unresolvable.extend(r.unresolvable);
-                self.update_partially_resolved(r.partially_resolved);
+                self.resolve_symbols(r.need_more_symbols.clone(), &mut r);
+                unresolvable.extend_from_slice(&r.unresolvable);
+                self.update_partially_resolved(r.partially_resolved.clone());
                 if r.need_more_symbols.is_empty() {
                     break;
                 }
@@ -157,4 +160,12 @@ struct ResolveSymbolsResult {
     partially_resolved: Vec<fastn_unresolved::Definition>,
     need_more_symbols: Vec<fastn_unresolved::SymbolName>,
     unresolvable: Vec<fastn_unresolved::SymbolName>,
+}
+
+impl ResolveSymbolsResult {
+    fn clear(&mut self) {
+        self.partially_resolved.clear();
+        self.need_more_symbols.clear();
+        self.unresolvable.clear();
+    }
 }
