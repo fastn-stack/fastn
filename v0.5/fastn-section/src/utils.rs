@@ -103,11 +103,11 @@ impl fastn_section::Section {
         self.caption.as_ref().and_then(|c| c.as_plain_span())
     }
 
-    pub fn header_as_plain_string(&self, name: &str) -> Option<&str> {
+    pub fn header_as_plain_span(&self, name: &str) -> Option<&fastn_section::Span> {
         self.headers
             .iter()
             .find(|h| h.name() == name)
-            .and_then(|h| h.value.as_plain_string())
+            .and_then(|h| h.value.as_plain_span())
     }
 }
 

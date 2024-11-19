@@ -80,13 +80,20 @@ fn parse_field(
     section: &fastn_section::Section,
     _document: &mut fastn_unresolved::Document,
 ) -> Option<fastn_unresolved::Export> {
-    let header = match section.header_as_plain_string(field) {
+    let header = match section.header_as_plain_span(field) {
         Some(v) => v,
         None => return None,
     };
 
     Some(fastn_unresolved::Export::Things(
-        header.split(",").map(aliasable).collect(),
+        header
+            .str()
+            .split(",")
+            .map(|v| fastn_unresolved::AliasableIdentifier {
+                name: header.inner_str(v).into(),
+                alias: None,
+            })
+            .collect(),
     ))
 }
 
