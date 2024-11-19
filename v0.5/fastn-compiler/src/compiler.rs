@@ -6,10 +6,12 @@ struct Compiler {
     bag: std::collections::HashMap<string_interner::DefaultSymbol, fastn_unresolved::LookupResult>,
     #[expect(unused)]
     auto_imports: Vec<fastn_section::AutoImport>,
-    content: Vec<
-        fastn_unresolved::UR<
-            fastn_unresolved::ComponentInvocation,
-            fastn_type::ComponentInvocation,
+    content: Option<
+        Vec<
+            fastn_unresolved::UR<
+                fastn_unresolved::ComponentInvocation,
+                fastn_type::ComponentInvocation,
+            >,
         >,
     >,
     document: fastn_unresolved::Document,
@@ -23,7 +25,7 @@ impl Compiler {
         source: &str,
     ) -> Self {
         let mut document = fastn_unresolved::parse(document_id, source);
-        let content = document.content;
+        let content = Some(document.content);
         document.content = vec![];
 
         Self {
@@ -109,11 +111,25 @@ impl Compiler {
     fn resolve_document(&mut self) -> std::collections::HashSet<fastn_unresolved::SymbolName> {
         let mut stuck_on_symbols = std::collections::HashSet::new();
 
-        for ci in self.content.iter_mut() {
-            if let fastn_unresolved::UR::UnResolved(c) = ci {
-                stuck_on_symbols.extend(c.resolve(&self.bag, &mut self.document));
+        let content = self.content.replace(vec![]).unwrap();
+        let mut new_content = vec![];
+
+        for ci in content {
+            match ci {
+                fastn_unresolved::UR::UnResolved(mut c) => {
+                    let needed = c.resolve(&self.bag, &mut self.document);
+                    if needed.is_empty() {
+                        new_content.push(fastn_unresolved::UR::Resolved(c.resolved().unwrap()));
+                    } else {
+                        stuck_on_symbols.extend(needed);
+                        new_content.push(fastn_unresolved::UR::UnResolved(c));
+                    }
+                }
+                v => new_content.push(v),
             }
         }
+
+        self.content = Some(new_content);
 
         stuck_on_symbols
     }

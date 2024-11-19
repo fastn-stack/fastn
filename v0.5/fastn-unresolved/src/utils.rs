@@ -18,6 +18,13 @@ impl fastn_unresolved::Document {
     }
 }
 
+impl fastn_unresolved::ComponentInvocation {
+    pub fn resolved(self) -> Result<fastn_type::ComponentInvocation, Box<Self>> {
+        // must be called only if `is_resolved()` has returned true
+        todo!()
+    }
+}
+
 impl fastn_unresolved::Definition {
     pub fn name(&self) -> &str {
         match self.name {
