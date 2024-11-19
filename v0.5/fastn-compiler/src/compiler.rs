@@ -19,11 +19,15 @@ impl Compiler {
         }
     }
 
-    fn update_partially_resolved(
-        &mut self,
-        _partially_resolved: Vec<fastn_unresolved::Definition>,
-    ) {
-        todo!()
+    fn update_partially_resolved(&mut self, partially_resolved: Vec<fastn_unresolved::Definition>) {
+        for definition in partially_resolved {
+            if definition.is_resolved() {
+                let _resolved = definition.resolved();
+                todo!("update bag")
+            } else {
+                todo!("update bag")
+            }
+        }
     }
 
     async fn fetch_unresolved_symbols(

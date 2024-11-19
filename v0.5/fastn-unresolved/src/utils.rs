@@ -25,6 +25,15 @@ impl fastn_unresolved::Definition {
             fastn_unresolved::UR::Resolved(ref r) => r.str(),
         }
     }
+
+    pub fn is_resolved(&self) -> bool {
+        todo!()
+    }
+
+    pub fn resolved(self) -> fastn_type::Definition {
+        // must be called only if `is_resolved()` has returned true
+        todo!()
+    }
 }
 
 impl fastn_unresolved::PackageName {
