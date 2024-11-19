@@ -134,6 +134,7 @@ dependencies = [
  "fastn-section",
  "fastn-type",
  "serde_json",
+ "string-interner",
 ]
 
 [[package]]

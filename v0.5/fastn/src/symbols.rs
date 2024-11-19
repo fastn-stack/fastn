@@ -18,19 +18,24 @@ impl Symbols {
         };
 
         let d = fastn_unresolved::parse(module, &source);
+        let package_i = interner.get_or_intern(module.package.str());
+        let module_i = interner.get_or_intern(module.name.str());
 
         d.definitions
             .into_iter()
             .map(|d| match d {
-                fastn_unresolved::UR::UnResolved(v) => fastn_compiler::LookupResult::Unresolved(
-                    interner.get_or_intern(format!(
+                fastn_unresolved::UR::UnResolved(mut v) => {
+                    let symbol = interner.get_or_intern(format!(
                         "{}/{}#{}",
                         module.package.str(),
                         module.name.str(),
                         &v.name.unresolved().unwrap().str()
-                    )),
-                    v,
-                ),
+                    ));
+                    v.symbol = Some(symbol);
+                    v.module = Some(module_i);
+                    v.package = Some(package_i);
+                    fastn_compiler::LookupResult::Unresolved(symbol, v)
+                }
                 fastn_unresolved::UR::Resolved(_) => {
                     unreachable!(
                         "resolved definitions should not be present in the unresolved document"

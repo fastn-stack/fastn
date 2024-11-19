@@ -25,6 +25,9 @@ pub struct Document {
 
 #[derive(Debug, Clone)]
 pub struct Definition {
+    pub symbol: Option<string_interner::DefaultSymbol>, // <package-name>/<module-name>#<definition-name>
+    pub module: Option<string_interner::DefaultSymbol>,
+    pub package: Option<string_interner::DefaultSymbol>,
     pub doc: Option<fastn_section::Span>,
     /// resolving an identifier means making sure it is unique in the document, and performing
     /// other checks.
