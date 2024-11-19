@@ -66,24 +66,20 @@ impl Compiler {
     /// this function should be called in a loop, until the list of symbols is empty.
     fn resolve_symbols(
         &mut self,
-        symbols: &[fastn_unresolved::SymbolName],
-    ) -> (
-        Vec<fastn_unresolved::Definition>,
-        Vec<fastn_unresolved::SymbolName>,
-    ) {
-        let mut stuck_on_symbols = vec![];
+        symbols: Vec<fastn_unresolved::SymbolName>,
+    ) -> ResolveSymbolsResult {
+        let mut r = ResolveSymbolsResult::default();
         for symbol in symbols {
             let sym = symbol.symbol(&mut self.interner);
-            // if let Some(fastn_compiler::LookupResult::UnResolved(_, definition)) =
-            //     self.bag.get_mut(&sym)
-            // {
-            //     stuck_on_symbols.extend_from_slice(definition.resolve());
-            // } else {
-            //     stuck_on_symbols.push(symbol.definition().clone());
-            // }
-            todo!()
+            match self.bag.get_mut(&sym).map(|v| &mut v.definition) {
+                Some(fastn_unresolved::UR::Resolved(_)) => unreachable!(),
+                Some(fastn_unresolved::UR::UnResolved(definition)) => {
+                    r.need_more_symbols.extend_from_slice(&definition.resolve());
+                }
+                _ => r.unresolvable.push(symbol),
+            }
         }
-        (stuck_on_symbols, todo!())
+        r
     }
 
     /// try to make as much progress as possibly by resolving as many symbols as possible, and return
@@ -105,6 +101,7 @@ impl Compiler {
     async fn compile(&mut self) -> Result<fastn_compiler::Output, fastn_compiler::Error> {
         // we only make 10 attempts to resolve the document: we need a warning if we are not able to
         // resolve the document in 10 attempts.
+        let mut unresolvable = vec![];
         for _ in 1..10 {
             // resolve_document can internally run in parallel.
             let unresolved_symbols = self.resolve_document();
@@ -117,17 +114,16 @@ impl Compiler {
             // symbols in 10 attempts.
             for _ in 1..10 {
                 // resolve_document can internally run in parallel.
-                let (partially_resolved, unresolved_symbols) =
-                    self.resolve_symbols(&unresolved_symbols);
-                self.update_partially_resolved(partially_resolved);
-
-                if unresolved_symbols.is_empty() {
+                let r = self.resolve_symbols(unresolved_symbols);
+                unresolvable.extend(r.unresolvable);
+                self.update_partially_resolved(r.partially_resolved);
+                if r.need_more_symbols.is_empty() {
                     break;
                 }
-                self.fetch_unresolved_symbols(&unresolved_symbols).await;
+                self.fetch_unresolved_symbols(&r.need_more_symbols).await;
             }
 
-            if !unresolved_symbols.is_empty() {
+            if !unresolvable.is_empty() {
                 // we were not able to resolve all symbols
             }
         }
@@ -154,4 +150,11 @@ pub async fn compile(
     Compiler::new(symbols, auto_imports, document_id, source)
         .compile()
         .await
+}
+
+#[derive(Default)]
+struct ResolveSymbolsResult {
+    partially_resolved: Vec<fastn_unresolved::Definition>,
+    need_more_symbols: Vec<fastn_unresolved::SymbolName>,
+    unresolvable: Vec<fastn_unresolved::SymbolName>,
 }

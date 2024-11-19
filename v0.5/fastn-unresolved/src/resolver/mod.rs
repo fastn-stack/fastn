@@ -3,3 +3,9 @@ impl fastn_unresolved::ComponentInvocation {
         todo!()
     }
 }
+
+impl fastn_unresolved::Definition {
+    pub fn resolve(&mut self) -> Vec<fastn_unresolved::SymbolName> {
+        todo!()
+    }
+}
