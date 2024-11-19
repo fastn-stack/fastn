@@ -5,7 +5,7 @@ impl fastn_unresolved::ComponentInvocation {
             string_interner::DefaultSymbol,
             fastn_unresolved::LookupResult,
         >,
-    ) -> Vec<fastn_unresolved::SymbolName> {
+    ) -> std::collections::HashSet<fastn_unresolved::SymbolName> {
         todo!()
     }
 }
@@ -17,7 +17,7 @@ impl fastn_unresolved::Definition {
             string_interner::DefaultSymbol,
             fastn_unresolved::LookupResult,
         >,
-    ) -> Vec<fastn_unresolved::SymbolName> {
+    ) -> std::collections::HashSet<fastn_unresolved::SymbolName> {
         todo!()
     }
 }

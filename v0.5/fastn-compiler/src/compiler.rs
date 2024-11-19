@@ -27,7 +27,7 @@ impl Compiler {
 
     async fn fetch_unresolved_symbols(
         &mut self,
-        symbols_to_fetch: &[fastn_unresolved::SymbolName],
+        symbols_to_fetch: &std::collections::HashSet<fastn_unresolved::SymbolName>,
     ) {
         let definitions = self.symbols.lookup(&mut self.interner, symbols_to_fetch);
         for definition in definitions {
@@ -43,7 +43,7 @@ impl Compiler {
     /// this function should be called in a loop, until the list of symbols is empty.
     fn resolve_symbols(
         &mut self,
-        symbols: Vec<fastn_unresolved::SymbolName>,
+        symbols: std::collections::HashSet<fastn_unresolved::SymbolName>,
     ) -> ResolveSymbolsResult {
         let mut r = ResolveSymbolsResult::default();
         for symbol in symbols {
@@ -61,14 +61,17 @@ impl Compiler {
             // when `bar` needs signature of `foo,`
             // it will find it from the partially resolved
             // `foo` in the `bag`.
+            // to make sure this happens better, we have to ensure that the definition.resolve()
+            // tries to resolve the signature first, and then the body.
             let mut definition = self.bag.remove(&sym);
             match definition.as_mut() {
                 Some(fastn_unresolved::UR::UnResolved(definition)) => {
-                    r.need_more_symbols
-                        .extend_from_slice(&definition.resolve(&self.bag));
+                    r.need_more_symbols.extend(definition.resolve(&self.bag));
                 }
                 Some(fastn_unresolved::UR::Resolved(_)) => unreachable!(),
-                _ => r.unresolvable.push(symbol),
+                _ => {
+                    r.unresolvable.insert(symbol);
+                }
             }
             if let Some(fastn_unresolved::UR::UnResolved(definition)) = definition {
                 match definition.resolved() {
@@ -90,8 +93,8 @@ impl Compiler {
     /// the vec of ones that could not be resolved.
     ///
     /// if this returns an empty list of symbols, we can go ahead and generate the JS.
-    fn resolve_document(&mut self) -> Vec<fastn_unresolved::SymbolName> {
-        let mut stuck_on_symbols = vec![];
+    fn resolve_document(&mut self) -> std::collections::HashSet<fastn_unresolved::SymbolName> {
+        let mut stuck_on_symbols = std::collections::HashSet::new();
 
         for ci in self.document.content.iter_mut() {
             if let fastn_unresolved::UR::UnResolved(c) = ci {
@@ -105,14 +108,15 @@ impl Compiler {
     async fn compile(&mut self) -> Result<fastn_compiler::Output, fastn_compiler::Error> {
         // we only make 10 attempts to resolve the document: we need a warning if we are not able to
         // resolve the document in 10 attempts.
-        let mut unresolvable = vec![];
+        let mut unresolvable = std::collections::HashSet::new();
+        // let mut ever_used = std::collections::HashSet::new();
         for _ in 1..10 {
             // resolve_document can internally run in parallel.
             let unresolved_symbols = self.resolve_document();
             if unresolved_symbols.is_empty() {
                 break;
             }
-
+            // ever_used.extend(&unresolved_symbols);
             self.fetch_unresolved_symbols(&unresolved_symbols).await;
             // this itself has to happen in a loop. we need a warning if we are not able to resolve all
             // symbols in 10 attempts.
@@ -122,16 +126,17 @@ impl Compiler {
             for _ in 1..10 {
                 // resolve_document can internally run in parallel.
                 r = self.resolve_symbols(r.need_more_symbols);
-                unresolvable.extend_from_slice(&r.unresolvable);
+                unresolvable.extend(r.unresolvable);
                 if r.need_more_symbols.is_empty() {
                     break;
                 }
+                // ever_used.extend(r.need_more_symbols);
                 self.fetch_unresolved_symbols(&r.need_more_symbols).await;
             }
+        }
 
-            if !unresolvable.is_empty() {
-                // we were not able to resolve all symbols
-            }
+        if !unresolvable.is_empty() {
+            // we were not able to resolve all symbols
         }
 
         todo!()
@@ -160,6 +165,6 @@ pub async fn compile(
 
 #[derive(Default)]
 struct ResolveSymbolsResult {
-    need_more_symbols: Vec<fastn_unresolved::SymbolName>,
-    unresolvable: Vec<fastn_unresolved::SymbolName>,
+    need_more_symbols: std::collections::HashSet<fastn_unresolved::SymbolName>,
+    unresolvable: std::collections::HashSet<fastn_unresolved::SymbolName>,
 }

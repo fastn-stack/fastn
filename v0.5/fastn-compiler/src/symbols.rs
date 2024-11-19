@@ -11,6 +11,6 @@ pub trait SymbolStore {
     fn lookup(
         &mut self,
         interner: &mut string_interner::DefaultStringInterner,
-        symbols: &[fastn_unresolved::SymbolName],
+        symbols: &std::collections::HashSet<fastn_unresolved::SymbolName>,
     ) -> Vec<fastn_unresolved::LookupResult>;
 }

@@ -49,7 +49,7 @@ impl fastn_compiler::SymbolStore for Symbols {
     fn lookup(
         &mut self,
         interner: &mut string_interner::DefaultStringInterner,
-        symbols: &[fastn_unresolved::SymbolName],
+        symbols: &std::collections::HashSet<fastn_unresolved::SymbolName>,
     ) -> Vec<fastn_unresolved::LookupResult> {
         let unique_modules = symbols
             .iter()
