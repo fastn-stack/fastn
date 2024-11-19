@@ -55,7 +55,30 @@ pub enum InnerDefinition {
         return_type: Option<UR<Kind, fastn_type::Kind>>,
         /// this one is a little interesting, the number of expressions can be more than the number
         /// of Tes, this because we can have multiple expressions in a single Tes.
+        /// -- integer x():
+        ///
+        /// foo();
+        /// bar()
+        ///
+        /// -- integer p: x()
+        ///
+        /// when we are parsing `x`, we will get the body as a single `Tes::Text("foo();\nbar()")`.
+        /// in the `body` below we will start with `Vec<UR::UnResolved(Tes::Text("foo();\nbar()"))>`.
+        ///
+        /// when trying to resolve it, we will first get "stuck" at `foo();` and would have made no
+        /// progress in first pass (we will realise we need definition of `foo` to make progress,
+        /// but we havent yet made any progress.
+        ///
+        /// after `foo` is resolved, and we are called again, we can fully parse `foo();` statement,
+        /// and would get stuck at `bar`. Now we can throw this away and not modify `body` at all,
+        /// in which case we will have to reparse `foo();` line once `bar` is available, and if
+        /// there are many such so far unknown symbols, we will be doing a lot of reparsing.
+        ///
+        /// so the other approach is to modify the body to `Vec<UR::Resolved(<parsed-foo>),
+        /// UR::UnResolved(Tes::Text("nbar()"))>`. Notice how we have reduced the `Tex::Text()` part
+        /// to no longer refer to `foo()`, and only keep the part that is still unresolved.
         body: Vec<UR<fastn_section::Tes, fastn_type::FunctionExpression>>,
+        // body: Vec<UR<fastn_section::Tes, fastn_fscript::FunctionExpression>>,
     },
     TypeAlias {
         kind: UR<Kind, fastn_type::Kind>,
