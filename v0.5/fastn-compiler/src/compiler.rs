@@ -6,6 +6,7 @@ struct Compiler {
     bag: std::collections::HashMap<string_interner::DefaultSymbol, fastn_unresolved::LookupResult>,
     #[expect(unused)]
     auto_imports: Vec<fastn_section::AutoImport>,
+    /// checkout resolve_document for why this is an Option
     content: Option<
         Vec<
             fastn_unresolved::UR<
