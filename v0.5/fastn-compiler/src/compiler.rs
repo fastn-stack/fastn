@@ -4,18 +4,7 @@ struct Compiler {
     bag: std::collections::HashMap<string_interner::DefaultSymbol, fastn_compiler::LookupResult>,
     #[expect(unused)]
     auto_imports: Vec<fastn_section::AutoImport>,
-    #[expect(unused)]
-    errors: Vec<fastn_section::Spanned<fastn_section::Error>>,
-    #[expect(unused)]
-    warnings: Vec<fastn_section::Spanned<fastn_section::Warning>>,
-    #[expect(unused)]
-    comments: Vec<fastn_section::Span>,
-    content: Vec<
-        fastn_unresolved::UR<
-            fastn_unresolved::ComponentInvocation,
-            fastn_type::ComponentInvocation,
-        >,
-    >,
+    document: fastn_unresolved::Document,
 }
 
 impl Compiler {
@@ -25,17 +14,14 @@ impl Compiler {
         document_id: &fastn_unresolved::ModuleName,
         source: &str,
     ) -> Self {
-        let d = fastn_unresolved::parse(document_id, source);
+        let document = fastn_unresolved::parse(document_id, source);
 
         Self {
             symbols,
             interner: string_interner::StringInterner::new(),
             bag: std::collections::HashMap::new(),
             auto_imports,
-            errors: d.errors,
-            warnings: d.warnings,
-            comments: d.comments,
-            content: d.content,
+            document,
         }
     }
 
@@ -57,7 +43,7 @@ impl Compiler {
 
     async fn fetch_unresolved_symbols(
         &mut self,
-        symbols_to_fetch: &mut [fastn_unresolved::SymbolName],
+        symbols_to_fetch: &[fastn_unresolved::SymbolName],
     ) {
         let symbols = self.symbols.lookup(&mut self.interner, symbols_to_fetch);
         for symbol in symbols {
@@ -80,13 +66,15 @@ impl Compiler {
     ///
     /// if this returns an empty list of symbols, we can go ahead and generate the JS.
     fn resolve_document(&mut self) -> Vec<fastn_unresolved::SymbolName> {
-        for ci in self.content.iter_mut() {
-            if let fastn_unresolved::UR::UnResolved(_c) = ci {
-                todo!()
+        let mut stuck_on_symbols = vec![];
+
+        for ci in self.document.content.iter_mut() {
+            if let fastn_unresolved::UR::UnResolved(c) = ci {
+                stuck_on_symbols.extend(c.resolve());
             }
         }
 
-        todo!()
+        stuck_on_symbols
     }
 
     async fn compile(&mut self) -> Result<fastn_compiler::Output, fastn_compiler::Error> {
@@ -99,7 +87,7 @@ impl Compiler {
                 break;
             }
 
-            self.fetch_unresolved_symbols(&mut unresolved_symbols).await;
+            self.fetch_unresolved_symbols(&unresolved_symbols).await;
             // this itself has to happen in a loop. we need a warning if we are not able to resolve all
             // symbols in 10 attempts.
             for _ in 1..10 {
@@ -110,7 +98,7 @@ impl Compiler {
                 if unresolved_symbols.is_empty() {
                     break;
                 }
-                self.fetch_unresolved_symbols(&mut unresolved_symbols).await;
+                self.fetch_unresolved_symbols(&unresolved_symbols).await;
             }
 
             if !unresolved_symbols.is_empty() {
