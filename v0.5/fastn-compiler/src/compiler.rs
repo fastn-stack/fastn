@@ -4,18 +4,38 @@ struct Compiler {
     bag: std::collections::HashMap<string_interner::DefaultSymbol, fastn_compiler::LookupResult>,
     #[expect(unused)]
     auto_imports: Vec<fastn_section::AutoImport>,
+    #[expect(unused)]
+    errors: Vec<fastn_section::Spanned<fastn_section::Error>>,
+    #[expect(unused)]
+    warnings: Vec<fastn_section::Spanned<fastn_section::Warning>>,
+    #[expect(unused)]
+    comments: Vec<fastn_section::Span>,
+    content: Vec<
+        fastn_unresolved::UR<
+            fastn_unresolved::ComponentInvocation,
+            fastn_type::ComponentInvocation,
+        >,
+    >,
 }
 
 impl Compiler {
     fn new(
         symbols: Box<dyn fastn_compiler::SymbolStore>,
         auto_imports: Vec<fastn_section::AutoImport>,
+        document_id: &fastn_unresolved::ModuleName,
+        source: &str,
     ) -> Self {
+        let d = fastn_unresolved::parse(document_id, source);
+
         Self {
             symbols,
             interner: string_interner::StringInterner::new(),
             bag: std::collections::HashMap::new(),
             auto_imports,
+            errors: d.errors,
+            warnings: d.warnings,
+            comments: d.comments,
+            content: d.content,
         }
     }
 
@@ -50,7 +70,6 @@ impl Compiler {
     /// this function should be called in a loop, until the list of symbols is empty.
     fn resolve_symbols(
         &mut self,
-        _doc: &mut fastn_unresolved::Document,
         _symbols: &mut [fastn_unresolved::SymbolName],
     ) -> Vec<fastn_unresolved::Definition> {
         todo!()
@@ -60,11 +79,8 @@ impl Compiler {
     /// the vec of ones that could not be resolved.
     ///
     /// if this returns an empty list of symbols, we can go ahead and generate the JS.
-    fn resolve_document(
-        &mut self,
-        d: &mut fastn_unresolved::Document,
-    ) -> Vec<fastn_unresolved::SymbolName> {
-        for ci in d.content.iter_mut() {
+    fn resolve_document(&mut self) -> Vec<fastn_unresolved::SymbolName> {
+        for ci in self.content.iter_mut() {
             if let fastn_unresolved::UR::UnResolved(_c) = ci {
                 todo!()
             }
@@ -73,17 +89,12 @@ impl Compiler {
         todo!()
     }
 
-    async fn compile(
-        &mut self,
-        document_id: &fastn_unresolved::ModuleName,
-        source: &str,
-    ) -> Result<fastn_compiler::Output, fastn_compiler::Error> {
-        let mut d = fastn_unresolved::parse(document_id, source);
+    async fn compile(&mut self) -> Result<fastn_compiler::Output, fastn_compiler::Error> {
         // we only make 10 attempts to resolve the document: we need a warning if we are not able to
         // resolve the document in 10 attempts.
         for _ in 1..10 {
             // resolve_document can internally run in parallel.
-            let mut unresolved_symbols = self.resolve_document(&mut d);
+            let mut unresolved_symbols = self.resolve_document();
             if unresolved_symbols.is_empty() {
                 break;
             }
@@ -93,7 +104,7 @@ impl Compiler {
             // symbols in 10 attempts.
             for _ in 1..10 {
                 // resolve_document can internally run in parallel.
-                let partially_resolved = self.resolve_symbols(&mut d, &mut unresolved_symbols);
+                let partially_resolved = self.resolve_symbols(&mut unresolved_symbols);
                 self.update_partially_resolved(partially_resolved);
 
                 if unresolved_symbols.is_empty() {
@@ -126,7 +137,7 @@ pub async fn compile(
     source: &str,
     auto_imports: Vec<fastn_section::AutoImport>,
 ) -> Result<fastn_compiler::Output, fastn_compiler::Error> {
-    Compiler::new(symbols, auto_imports)
-        .compile(document_id, source)
+    Compiler::new(symbols, auto_imports, document_id, source)
+        .compile()
         .await
 }
