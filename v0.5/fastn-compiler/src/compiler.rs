@@ -2,6 +2,7 @@ const ITERATION_THRESHOLD: usize = 100;
 
 pub(crate) struct Compiler {
     symbols: Box<dyn fastn_compiler::SymbolStore>,
+    symbols_used: std::collections::HashSet<fastn_unresolved::SymbolName>,
     interner: string_interner::DefaultStringInterner,
     bag: std::collections::HashMap<string_interner::DefaultSymbol, fastn_unresolved::LookupResult>,
     auto_imports: Vec<fastn_section::AutoImport>,
@@ -43,6 +44,7 @@ impl Compiler {
             content,
             auto_imports,
             document,
+            symbols_used: Default::default(),
         }
     }
 
@@ -50,6 +52,7 @@ impl Compiler {
         &mut self,
         symbols_to_fetch: &std::collections::HashSet<fastn_unresolved::SymbolName>,
     ) {
+        self.symbols_used.extend(symbols_to_fetch.iter().cloned());
         let definitions = self.symbols.lookup(&mut self.interner, symbols_to_fetch);
         for definition in definitions {
             // the following is only okay if our symbol store only returns unresolved definitions,
