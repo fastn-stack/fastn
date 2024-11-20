@@ -8,7 +8,7 @@ mod builtins;
 mod compiler;
 mod symbols;
 
-pub use builtins::builtins;
+pub use builtins::BUILTINS;
 pub use compiler::compile;
 pub use fastn_section::Result;
 pub use symbols::SymbolStore;
