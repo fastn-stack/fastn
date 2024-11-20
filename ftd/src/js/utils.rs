@@ -29,7 +29,7 @@ pub fn get_css_html(external_css: &[String]) -> String {
 
 pub(crate) fn get_rive_event(
     events: &[fastn_resolved::Event],
-    doc: &ftd::interpreter::TDoc,
+    doc: &fastn_resolved::js::TDoc,
     rdata: &ftd::js::ResolverData,
     element_name: &str,
 ) -> String {
@@ -202,7 +202,7 @@ pub(crate) fn get_js_value_from_properties(
 
 pub(crate) fn function_call_to_js_formula(
     function_call: &fastn_resolved::FunctionCall,
-    doc: &ftd::interpreter::TDoc,
+    doc: &fastn_resolved::js::TDoc,
     rdata: &ftd::js::ResolverData,
 ) -> fastn_js::Formula {
     use ftd::js::fastn_type_functions::{FunctionCallExt, PropertyValueExt};
@@ -269,7 +269,7 @@ pub(crate) fn is_module_argument(
 /// second element is the corresponding set property value. Returns `None` if any retrieval or
 /// conversion operation fails.
 pub(crate) fn get_set_property_values_for_provided_component_properties(
-    doc: &ftd::interpreter::TDoc,
+    doc: &fastn_resolved::js::TDoc,
     rdata: &ftd::js::ResolverData,
     component_name: &str,
     component_properties: &[fastn_resolved::Property],

@@ -8,6 +8,7 @@ mod component;
 pub mod evalexpr;
 mod expression;
 mod function;
+pub mod js;
 mod kind;
 mod module_thing;
 mod or_type;

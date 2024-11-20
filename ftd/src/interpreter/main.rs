@@ -93,7 +93,7 @@ impl InterpreterState {
     }
 
     /**
-    The `tdoc` method is a function that is defined within the `InterpreterState` struct. It
+    The `tdoc` method is a function defined within the `InterpreterState` struct. It
     takes in two parameters:
 
     - `doc_name`: a reference to a string slice representing the name of the document

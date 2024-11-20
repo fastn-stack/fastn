@@ -1611,6 +1611,7 @@ dependencies = [
 name = "fastn-resolved"
 version = "0.1.0"
 dependencies = [
+ "indexmap",
  "serde",
 ]
 

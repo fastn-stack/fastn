@@ -3,7 +3,7 @@ use ftd::js::value::{ArgumentExt, ExpressionExt};
 pub(crate) trait FunctionCallExt {
     fn to_js_function(
         &self,
-        doc: &ftd::interpreter::TDoc,
+        doc: &fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
     ) -> fastn_js::Function;
 }
@@ -11,7 +11,7 @@ pub(crate) trait FunctionCallExt {
 impl FunctionCallExt for fastn_resolved::FunctionCall {
     fn to_js_function(
         &self,
-        doc: &ftd::interpreter::TDoc,
+        doc: &fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
     ) -> fastn_js::Function {
         let mut parameters = vec![];
@@ -50,20 +50,20 @@ pub(crate) trait PropertyValueExt {
 
     fn to_fastn_js_value_with_none(
         &self,
-        doc: &ftd::interpreter::TDoc,
+        doc: &fastn_resolved::js::TDoc,
         has_rive_components: &mut bool,
     ) -> fastn_js::SetPropertyValue;
 
     fn to_fastn_js_value(
         &self,
-        doc: &ftd::interpreter::TDoc,
+        doc: &fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
     ) -> fastn_js::SetPropertyValue;
 
     fn to_fastn_js_value_with_ui(
         &self,
-        doc: &ftd::interpreter::TDoc,
+        doc: &fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         has_rive_components: &mut bool,
         is_ui_component: bool,
@@ -87,7 +87,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
 
     fn to_fastn_js_value_with_none(
         &self,
-        doc: &ftd::interpreter::TDoc,
+        doc: &fastn_resolved::js::TDoc,
         has_rive_components: &mut bool,
     ) -> fastn_js::SetPropertyValue {
         self.to_fastn_js_value_with_ui(
@@ -100,7 +100,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
 
     fn to_fastn_js_value(
         &self,
-        doc: &ftd::interpreter::TDoc,
+        doc: &fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
     ) -> fastn_js::SetPropertyValue {
@@ -109,7 +109,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
 
     fn to_fastn_js_value_with_ui(
         &self,
-        doc: &ftd::interpreter::TDoc,
+        doc: &fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         has_rive_components: &mut bool,
         should_return: bool,
@@ -146,7 +146,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
 pub(crate) trait ValueExt {
     fn to_fastn_js_value(
         &self,
-        doc: &ftd::interpreter::TDoc,
+        doc: &fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         has_rive_components: &mut bool,
         should_return: bool,
@@ -156,7 +156,7 @@ pub(crate) trait ValueExt {
 impl ValueExt for fastn_resolved::Value {
     fn to_fastn_js_value(
         &self,
-        doc: &ftd::interpreter::TDoc,
+        doc: &fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         has_rive_components: &mut bool,
         should_return: bool,
@@ -289,7 +289,7 @@ pub(crate) trait EventExt {
     fn to_event_handler_js(
         &self,
         element_name: &str,
-        doc: &ftd::interpreter::TDoc,
+        doc: &fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
     ) -> Option<fastn_js::EventHandler>;
 }
@@ -298,7 +298,7 @@ impl EventExt for fastn_resolved::Event {
     fn to_event_handler_js(
         &self,
         element_name: &str,
-        doc: &ftd::interpreter::TDoc,
+        doc: &fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
     ) -> Option<fastn_js::EventHandler> {
         use ftd::js::fastn_type_functions::FunctionCallExt;
@@ -348,7 +348,7 @@ pub(crate) trait ComponentExt {
         &self,
         parent: &str,
         index: usize,
-        doc: &ftd::interpreter::TDoc,
+        doc: &fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -357,7 +357,7 @@ pub(crate) trait ComponentExt {
         &self,
         parent: &str,
         index: usize,
-        doc: &ftd::interpreter::TDoc,
+        doc: &fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -366,7 +366,7 @@ pub(crate) trait ComponentExt {
         &self,
         parent: &str,
         index: usize,
-        doc: &ftd::interpreter::TDoc,
+        doc: &fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -375,7 +375,7 @@ pub(crate) trait ComponentExt {
         &self,
         parent: &str,
         index: usize,
-        doc: &ftd::interpreter::TDoc,
+        doc: &fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -384,7 +384,7 @@ pub(crate) trait ComponentExt {
         &self,
         parent: &str,
         index: usize,
-        doc: &ftd::interpreter::TDoc,
+        doc: &fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -393,7 +393,7 @@ pub(crate) trait ComponentExt {
         &self,
         parent: &str,
         index: usize,
-        doc: &ftd::interpreter::TDoc,
+        doc: &fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -406,7 +406,7 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
         &self,
         parent: &str,
         index: usize,
-        doc: &ftd::interpreter::TDoc,
+        doc: &fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -503,7 +503,7 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
         &self,
         parent: &str,
         index: usize,
-        doc: &ftd::interpreter::TDoc,
+        doc: &fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -559,7 +559,7 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
         &self,
         parent: &str,
         index: usize,
-        doc: &ftd::interpreter::TDoc,
+        doc: &fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -587,7 +587,7 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
         &self,
         parent: &str,
         index: usize,
-        doc: &ftd::interpreter::TDoc,
+        doc: &fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -643,7 +643,7 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
         &self,
         parent: &str,
         index: usize,
-        doc: &ftd::interpreter::TDoc,
+        doc: &fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -726,7 +726,7 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
         &self,
         parent: &str,
         index: usize,
-        doc: &ftd::interpreter::TDoc,
+        doc: &fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
