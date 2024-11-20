@@ -100,8 +100,6 @@ dependencies = [
 [[package]]
 name = "fastn-builtins"
 version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "db94f40a79ab6212f9515643f5dbc529669f61687ca6c69e7601cbf8e12bdba8"
 dependencies = [
  "fastn-resolved",
  "indexmap",
@@ -139,9 +137,7 @@ dependencies = [
 
 [[package]]
 name = "fastn-resolved"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a3fc2d6c07470c89b49a6abb2eddd615aeb97a3989630aae9714db514db936ce"
+version = "0.1.1"
 dependencies = [
  "serde",
 ]

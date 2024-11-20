@@ -274,16 +274,15 @@ pub(crate) fn get_set_property_values_for_provided_component_properties(
     rdata: &fastn_resolved_to_js::ResolverData,
     component_name: &str,
     component_properties: &[fastn_resolved::Property],
-    line_number: usize,
     has_rive_components: &mut bool,
 ) -> Option<Vec<(String, fastn_js::SetPropertyValue, bool)>> {
     use itertools::Itertools;
 
     // Attempt to retrieve component or web component arguments
-    doc.get_opt_component(component_name, line_number)
+    doc.get_opt_component(component_name)
         .map(|v| v.arguments)
         .or(doc
-            .get_opt_web_component(component_name, line_number)
+            .get_opt_web_component(component_name)
             .map(|v| v.arguments))
         .map(|arguments| {
             // Collect valid arguments matching the provided properties and their set property values

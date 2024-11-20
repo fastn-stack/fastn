@@ -2218,13 +2218,13 @@ impl<'a> TDoc<'a> {
 }
 
 impl<'a> fastn_resolved::tdoc::TDoc for TDoc<'a> {
-    fn get_opt_function(&self, name: &str, line_number: usize) -> Option<Function> {
-        let initial_thing = self.get_initial_thing(name, line_number).ok()?.0;
-        initial_thing.function(self.name, line_number).ok()
+    fn get_opt_function(&self, name: &str) -> Option<Function> {
+        let initial_thing = self.get_initial_thing(name, 0).ok()?.0;
+        initial_thing.function(self.name, 0).ok()
     }
 
-    fn get_opt_record(&self, name: &str, line_number: usize) -> Option<Record> {
-        match self.get_thing(name, line_number).ok()? {
+    fn get_opt_record(&self, name: &str) -> Option<Record> {
+        match self.get_thing(name, 0).ok()? {
             ftd::interpreter::Thing::Record(r) => Some(r),
             _ => None,
         }
@@ -2234,19 +2234,15 @@ impl<'a> fastn_resolved::tdoc::TDoc for TDoc<'a> {
         self.name
     }
 
-    fn get_opt_component(&self, name: &str, line_number: usize) -> Option<ComponentDefinition> {
-        match self.get_thing(name, line_number).ok()? {
+    fn get_opt_component(&self, name: &str) -> Option<ComponentDefinition> {
+        match self.get_thing(name, 0).ok()? {
             ftd::interpreter::Thing::Component(c) => Some(c),
             _ => None,
         }
     }
 
-    fn get_opt_web_component(
-        &self,
-        name: &str,
-        line_number: usize,
-    ) -> Option<fastn_resolved::WebComponentDefinition> {
-        match self.get_thing(name, line_number).ok()? {
+    fn get_opt_web_component(&self, name: &str) -> Option<fastn_resolved::WebComponentDefinition> {
+        match self.get_thing(name, 0).ok()? {
             ftd::interpreter::Thing::WebComponent(c) => Some(c),
             _ => None,
         }

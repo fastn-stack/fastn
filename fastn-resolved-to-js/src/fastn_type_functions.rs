@@ -27,9 +27,7 @@ impl FunctionCallExt for fastn_resolved::FunctionCall {
                 format!("{default_module}#").as_str(),
             );
         }
-        let function = doc
-            .get_opt_function(name.as_str(), self.line_number)
-            .unwrap();
+        let function = doc.get_opt_function(name.as_str()).unwrap();
         for argument in function.arguments {
             if let Some(value) = self.values.get(argument.name.as_str()) {
                 parameters.push((
@@ -229,7 +227,7 @@ impl ValueExt for fastn_resolved::Value {
                 fields: record_fields,
                 name,
             } => {
-                let record = doc.get_opt_record(name, 0).unwrap();
+                let record = doc.get_opt_record(name).unwrap();
                 let mut fields = vec![];
                 for field in record.fields {
                     if let Some(value) = record_fields.get(field.name.as_str()) {
@@ -605,7 +603,6 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
                 rdata,
                 self.name.as_str(),
                 self.properties.as_slice(),
-                self.line_number,
                 has_rive_components,
             )
         {
@@ -666,7 +663,7 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
             _ => return None,
         }
 
-        let component = doc.get_opt_component(component_name.as_str(), self.line_number)?;
+        let component = doc.get_opt_component(component_name.as_str())?;
 
         let mut arguments = vec![];
 
@@ -679,7 +676,6 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
                 rdata,
                 component_name.as_str(),
                 self.properties.as_slice(),
-                self.line_number,
                 has_rive_components,
             )?;
         } else if !fastn_resolved_to_js::utils::is_ui_argument(
