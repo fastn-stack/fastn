@@ -91,7 +91,7 @@ enum-iterator-derive = "0.6"
 fastn-ds.path = "fastn-ds"
 fastn-update.path = "fastn-update"
 fastn-builtins.path = "fastn-builtins"
-fastn-resolved.path = "fastn-resolved"
+fastn-resolved = { path = "fastn-resolved", version = "0.1.0" }
 fastn-core.path = "fastn-core"
 fastn-issues.path = "fastn-issues"
 fastn-package.path = "fastn-package"
