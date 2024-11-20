@@ -3,9 +3,9 @@ use serde::{Deserialize, Serialize};
 
 pub fn process_typography_tokens(
     value: ftd_ast::VariableValue,
-    kind: fastn_type::Kind,
+    kind: fastn_resolved::Kind,
     doc: &mut ftd::interpreter::TDoc,
-) -> ftd::interpreter::Result<fastn_type::Value> {
+) -> ftd::interpreter::Result<fastn_resolved::Value> {
     let line_number = value.line_number();
     let mut variable_name: Option<String> = None;
 
@@ -123,8 +123,8 @@ fn extract_types(
     };
 
     let fields = match &v.value {
-        fastn_type::PropertyValue::Value {
-            value: fastn_type::Value::Record { fields, .. },
+        fastn_resolved::PropertyValue::Value {
+            value: fastn_resolved::Value::Record { fields, .. },
             ..
         } => fields,
         t => {
@@ -157,13 +157,13 @@ fn extract_types(
 
 fn extract_desktop_mobile_values(
     type_name: String,
-    responsive_value: &fastn_type::Value,
+    responsive_value: &fastn_resolved::Value,
     doc: &ftd::interpreter::TDoc,
     desktop_types: &mut ftd::Map<TypeData>,
     mobile_types: &mut ftd::Map<TypeData>,
     line_number: usize,
 ) -> ftd::interpreter::Result<()> {
-    if let fastn_type::Value::Record { fields, .. } = responsive_value {
+    if let fastn_resolved::Value::Record { fields, .. } = responsive_value {
         if responsive_value.is_record(ftd::interpreter::FTD_RESPONSIVE_TYPE) {
             if let Some(desktop_value) = fields.get("desktop") {
                 let resolved_desktop_value = desktop_value
@@ -206,12 +206,12 @@ fn extract_desktop_mobile_values(
 
 fn extract_type_data(
     type_name: String,
-    type_value: &fastn_type::Value,
+    type_value: &fastn_resolved::Value,
     doc: &ftd::interpreter::TDoc,
     save_types: &mut ftd::Map<TypeData>,
     line_number: usize,
 ) -> ftd::interpreter::Result<()> {
-    if let fastn_type::Value::Record { fields, .. } = type_value {
+    if let fastn_resolved::Value::Record { fields, .. } = type_value {
         if type_value.is_record(ftd::interpreter::FTD_TYPE) {
             let size_field = fields.get("size").cloned();
             let letter_spacing_field = fields.get("letter-spacing").cloned();
@@ -250,26 +250,26 @@ fn extract_type_data(
     Ok(())
 }
 
-fn extract_raw_data(property_value: Option<fastn_type::PropertyValue>) -> Option<ValueType> {
+fn extract_raw_data(property_value: Option<fastn_resolved::PropertyValue>) -> Option<ValueType> {
     return match property_value.as_ref() {
-        Some(fastn_type::PropertyValue::Value { value, .. }) => match value {
-            fastn_type::Value::String { text } => Some(ValueType {
+        Some(fastn_resolved::PropertyValue::Value { value, .. }) => match value {
+            fastn_resolved::Value::String { text } => Some(ValueType {
                 value: text.to_string(),
                 type_: "string".to_string(),
             }),
-            fastn_type::Value::Integer { value, .. } => Some(ValueType {
+            fastn_resolved::Value::Integer { value, .. } => Some(ValueType {
                 value: value.to_string(),
                 type_: "integer".to_string(),
             }),
-            fastn_type::Value::Decimal { value, .. } => Some(ValueType {
+            fastn_resolved::Value::Decimal { value, .. } => Some(ValueType {
                 value: value.to_string(),
                 type_: "decimal".to_string(),
             }),
-            fastn_type::Value::Boolean { value, .. } => Some(ValueType {
+            fastn_resolved::Value::Boolean { value, .. } => Some(ValueType {
                 value: value.to_string(),
                 type_: "boolean".to_string(),
             }),
-            fastn_type::Value::OrType {
+            fastn_resolved::Value::OrType {
                 value,
                 full_variant,
                 ..
@@ -288,12 +288,12 @@ fn extract_raw_data(property_value: Option<fastn_type::PropertyValue>) -> Option
             }
             _ => None,
         },
-        Some(fastn_type::PropertyValue::Reference { name, .. }) => Some(ValueType {
+        Some(fastn_resolved::PropertyValue::Reference { name, .. }) => Some(ValueType {
             value: name.to_string(),
             type_: "reference".to_string(),
         }),
-        Some(fastn_type::PropertyValue::Clone { .. }) => None,
-        Some(fastn_type::PropertyValue::FunctionCall { .. }) => None,
+        Some(fastn_resolved::PropertyValue::Clone { .. }) => None,
+        Some(fastn_resolved::PropertyValue::FunctionCall { .. }) => None,
         None => None,
     };
 }

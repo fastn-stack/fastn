@@ -123,7 +123,7 @@ impl Formula {
 
 #[derive(Debug)]
 pub struct ConditionalValue {
-    pub condition: Option<fastn_type::evalexpr::ExprNode>,
+    pub condition: Option<fastn_resolved::evalexpr::ExprNode>,
     pub expression: SetPropertyValue,
 }
 

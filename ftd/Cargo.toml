@@ -39,7 +39,7 @@ thiserror.workspace = true
 tracing.workspace = true
 fastn-js.workspace = true
 indexmap.workspace = true
-fastn-type.workspace = true
+fastn-resolved.workspace = true
 fastn-builtins.workspace = true
 
 [dev-dependencies]

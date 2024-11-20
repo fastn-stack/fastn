@@ -44,7 +44,7 @@ fastn-core = { path = "fastn-core" }
 fastn-jdebug = { version = "0.1.0", path = "fastn-jdebug" }
 fastn-section = { path = "fastn-section" }
 fastn-static = { path = "fastn-static" }
-fastn-type = "0.1.1"
+fastn-resolved = "0.1.0"
 fastn-unresolved = { path = "fastn-unresolved" }
 fastn-update = { path = "fastn-update" }
 insta = { version = "1", features = ["yaml", "glob"] }

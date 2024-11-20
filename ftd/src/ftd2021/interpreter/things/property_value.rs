@@ -142,7 +142,7 @@ pub enum Value {
     // TODO: UI
     // UI {
     //     name: String,
-    //     component: fastn_type::Component,
+    //     component: fastn_resolved::Component,
     // },
 }
 

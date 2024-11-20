@@ -98,16 +98,16 @@ When the interpreter starts, it creates a `bag`
 lang: rs
 
 pub enum Thing {
-    Record(fastn_type::Record),
-    OrType(fastn_type::OrType),
+    Record(fastn_resolved::Record),
+    OrType(fastn_resolved::OrType),
     OrTypeWithVariant {
         or_type: String,
-        variant: fastn_type::OrTypeVariant,
+        variant: fastn_resolved::OrTypeVariant,
     },
-    Variable(fastn_type::Variable),
-    Component(fastn_type::ComponentDefinition),
-    WebComponent(fastn_type::WebComponentDefinition),
-    Function(fastn_type::Function),
+    Variable(fastn_resolved::Variable),
+    Component(fastn_resolved::ComponentDefinition),
+    WebComponent(fastn_resolved::WebComponentDefinition),
+    Function(fastn_resolved::Function),
 }
 
 -- ds.markdown:

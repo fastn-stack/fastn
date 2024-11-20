@@ -3,16 +3,16 @@ pub trait KindExt {
         &self,
         doc_name: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_type::Kind>;
+    ) -> ftd::interpreter::Result<fastn_resolved::Kind>;
 }
-impl KindExt for fastn_type::Kind {
+impl KindExt for fastn_resolved::Kind {
     fn list_type(
         &self,
         doc_name: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_type::Kind> {
+    ) -> ftd::interpreter::Result<fastn_resolved::Kind> {
         match &self {
-            fastn_type::Kind::List { kind } => Ok(kind.as_ref().clone()),
+            fastn_resolved::Kind::List { kind } => Ok(kind.as_ref().clone()),
             t => ftd::interpreter::utils::e2(
                 format!("Expected List, found: `{:?}`", t),
                 doc_name,
@@ -25,23 +25,23 @@ impl KindExt for fastn_type::Kind {
 pub trait KindDataExt {
     fn from_ast_kind(
         var_kind: ftd_ast::VariableKind,
-        known_kinds: &ftd::Map<fastn_type::Kind>,
+        known_kinds: &ftd::Map<fastn_resolved::Kind>,
         doc: &mut ftd::interpreter::TDoc,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::KindData>>;
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::KindData>>;
 
     fn into_by_ast_modifier(self, modifier: &ftd_ast::VariableModifier) -> Self;
     fn scan_ast_kind(
         var_kind: ftd_ast::VariableKind,
-        known_kinds: &ftd::Map<fastn_type::Kind>,
+        known_kinds: &ftd::Map<fastn_resolved::Kind>,
         doc: &mut ftd::interpreter::TDoc,
         line_number: usize,
     ) -> ftd::interpreter::Result<()>;
 }
-impl KindDataExt for fastn_type::KindData {
+impl KindDataExt for fastn_resolved::KindData {
     fn scan_ast_kind(
         var_kind: ftd_ast::VariableKind,
-        known_kinds: &ftd::Map<fastn_type::Kind>,
+        known_kinds: &ftd::Map<fastn_resolved::Kind>,
         doc: &mut ftd::interpreter::TDoc,
         line_number: usize,
     ) -> ftd::interpreter::Result<()> {
@@ -56,10 +56,10 @@ impl KindDataExt for fastn_type::KindData {
 
     fn from_ast_kind(
         var_kind: ftd_ast::VariableKind,
-        known_kinds: &ftd::Map<fastn_type::Kind>,
+        known_kinds: &ftd::Map<fastn_resolved::Kind>,
         doc: &mut ftd::interpreter::TDoc,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::KindData>> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::KindData>> {
         let mut ast_kind = ftd_p1::AccessModifier::remove_modifiers(var_kind.kind.as_str());
         // let mut ast_kind = var_kind.kind.clone();
         let (caption, body) = check_for_caption_and_body(&mut ast_kind);
@@ -72,8 +72,8 @@ impl KindDataExt for fastn_type::KindData {
                 ));
             }
 
-            let mut kind_data = fastn_type::KindData {
-                kind: fastn_type::Kind::String,
+            let mut kind_data = fastn_resolved::KindData {
+                kind: fastn_resolved::Kind::String,
                 caption,
                 body,
             };
@@ -85,15 +85,15 @@ impl KindDataExt for fastn_type::KindData {
             return Ok(ftd::interpreter::StateWithThing::new_thing(kind_data));
         }
         let kind = match ast_kind.as_ref() {
-            "string" => fastn_type::Kind::string(),
-            "object" => fastn_type::Kind::object(),
-            "integer" => fastn_type::Kind::integer(),
-            "decimal" => fastn_type::Kind::decimal(),
-            "boolean" => fastn_type::Kind::boolean(),
-            "void" => fastn_type::Kind::void(),
-            "ftd.ui" => fastn_type::Kind::ui(),
-            "module" => fastn_type::Kind::module(),
-            "kw-args" => fastn_type::Kind::kwargs(),
+            "string" => fastn_resolved::Kind::string(),
+            "object" => fastn_resolved::Kind::object(),
+            "integer" => fastn_resolved::Kind::integer(),
+            "decimal" => fastn_resolved::Kind::decimal(),
+            "boolean" => fastn_resolved::Kind::boolean(),
+            "void" => fastn_resolved::Kind::void(),
+            "ftd.ui" => fastn_resolved::Kind::ui(),
+            "module" => fastn_resolved::Kind::module(),
+            "kw-args" => fastn_resolved::Kind::kwargs(),
             "children" => {
                 if let Some(modifier) = var_kind.modifier {
                     return ftd::interpreter::utils::e2(
@@ -102,17 +102,19 @@ impl KindDataExt for fastn_type::KindData {
                         line_number,
                     );
                 }
-                fastn_type::Kind::List {
-                    kind: Box::new(fastn_type::Kind::subsection_ui()),
+                fastn_resolved::Kind::List {
+                    kind: Box::new(fastn_resolved::Kind::subsection_ui()),
                 }
             }
             k if known_kinds.contains_key(k) => known_kinds.get(k).unwrap().to_owned(),
             k => match try_ok_state!(doc.search_thing(k, line_number)?) {
-                ftd::interpreter::Thing::Record(r) => fastn_type::Kind::record(r.name.as_str()),
-                ftd::interpreter::Thing::Component(_) => fastn_type::Kind::ui(),
-                ftd::interpreter::Thing::OrType(o) => fastn_type::Kind::or_type(o.name.as_str()),
+                ftd::interpreter::Thing::Record(r) => fastn_resolved::Kind::record(r.name.as_str()),
+                ftd::interpreter::Thing::Component(_) => fastn_resolved::Kind::ui(),
+                ftd::interpreter::Thing::OrType(o) => {
+                    fastn_resolved::Kind::or_type(o.name.as_str())
+                }
                 ftd::interpreter::Thing::OrTypeWithVariant { or_type, variant } => {
-                    fastn_type::Kind::or_type_with_variant(
+                    fastn_resolved::Kind::or_type_with_variant(
                         or_type.as_str(),
                         variant.name().as_str(),
                         variant.name().as_str(),
@@ -129,7 +131,7 @@ impl KindDataExt for fastn_type::KindData {
             },
         };
 
-        let mut kind_data = fastn_type::KindData {
+        let mut kind_data = fastn_resolved::KindData {
             kind,
             caption,
             body,

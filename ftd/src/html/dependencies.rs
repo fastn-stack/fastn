@@ -977,7 +977,7 @@ fn node_for_properties(
 
 fn dependency_map_from_condition(
     var_dependencies: &mut ftd::VecMap<String>,
-    condition: &Option<fastn_type::Expression>,
+    condition: &Option<fastn_resolved::Expression>,
     node_change_id: &str,
     doc: &ftd::interpreter::TDoc,
 ) {
@@ -990,7 +990,7 @@ fn dependency_map_from_condition(
 
 fn dependency_map_from_property_value(
     var_dependencies: &mut ftd::VecMap<String>,
-    property_value: &fastn_type::PropertyValue,
+    property_value: &fastn_resolved::PropertyValue,
     node_change_id: &str,
     doc: &ftd::interpreter::TDoc,
 ) {
@@ -1001,7 +1001,7 @@ fn dependency_map_from_property_value(
 }
 
 fn is_static_expression(
-    property_value: &fastn_type::PropertyValue,
+    property_value: &fastn_resolved::PropertyValue,
     condition: &Option<String>,
     doc: &ftd::interpreter::TDoc,
 ) -> bool {
@@ -1009,7 +1009,7 @@ fn is_static_expression(
     use ftd::interpreter::ValueExt;
 
     if property_value.kind().is_ftd_length() {
-        if let fastn_type::PropertyValue::Value {
+        if let fastn_resolved::PropertyValue::Value {
             value, line_number, ..
         } = property_value
         {
@@ -1024,13 +1024,13 @@ fn is_static_expression(
     }
 
     if property_value.kind().is_ftd_resizing() {
-        if let fastn_type::PropertyValue::Value {
+        if let fastn_resolved::PropertyValue::Value {
             value, line_number, ..
         } = property_value
         {
             let property_value = value.get_or_type(doc.name, *line_number).unwrap().2;
             if property_value.kind().is_ftd_length() {
-                if let fastn_type::PropertyValue::Value {
+                if let fastn_resolved::PropertyValue::Value {
                     value, line_number, ..
                 } = property_value
                 {
@@ -1047,7 +1047,7 @@ fn is_static_expression(
     }
 
     if property_value.kind().is_ftd_image_src() || property_value.kind().is_ftd_color() {
-        if let fastn_type::PropertyValue::Value {
+        if let fastn_resolved::PropertyValue::Value {
             value, line_number, ..
         } = property_value
         {

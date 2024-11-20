@@ -1437,7 +1437,7 @@ dependencies = [
 name = "fastn-builtins"
 version = "0.1.0"
 dependencies = [
- "fastn-type",
+ "fastn-resolved",
  "indexmap",
  "itertools 0.13.0",
  "regex",
@@ -1467,7 +1467,7 @@ dependencies = [
  "fastn-js",
  "fastn-observer",
  "fastn-package",
- "fastn-type",
+ "fastn-resolved",
  "fastn-utils",
  "fbt-lib",
  "ft-sys-shared",
@@ -1560,7 +1560,7 @@ dependencies = [
 name = "fastn-js"
 version = "0.1.0"
 dependencies = [
- "fastn-type",
+ "fastn-resolved",
  "indoc",
  "itertools 0.13.0",
  "prettify-js",
@@ -1608,7 +1608,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "fastn-type"
+name = "fastn-resolved"
 version = "0.1.1"
 dependencies = [
  "serde",
@@ -1731,7 +1731,7 @@ dependencies = [
  "diffy",
  "fastn-builtins",
  "fastn-js",
- "fastn-type",
+ "fastn-resolved",
  "format_num",
  "ftd-ast",
  "ftd-p1",

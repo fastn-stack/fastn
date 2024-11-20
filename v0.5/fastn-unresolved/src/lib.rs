@@ -13,14 +13,15 @@ mod utils;
 pub use parser::parse;
 pub use resolver::{ResolutionInput, ResolutionOutput};
 
-pub type LookupResult = fastn_unresolved::UR<fastn_unresolved::Definition, fastn_type::Definition>;
+pub type LookupResult =
+    fastn_unresolved::UR<fastn_unresolved::Definition, fastn_resolved::Definition>;
 
 #[derive(Debug, Clone, Default)]
 pub struct Document {
     pub module_doc: Option<fastn_section::Span>,
     pub imports: Vec<fastn_unresolved::Import>,
-    pub definitions: Vec<UR<Definition, fastn_type::Definition>>,
-    pub content: Vec<UR<ComponentInvocation, fastn_type::ComponentInvocation>>,
+    pub definitions: Vec<UR<Definition, fastn_resolved::Definition>>,
+    pub content: Vec<UR<ComponentInvocation, fastn_resolved::ComponentInvocation>>,
     pub errors: Vec<fastn_section::Spanned<fastn_section::Error>>,
     pub warnings: Vec<fastn_section::Spanned<fastn_section::Warning>>,
     pub comments: Vec<fastn_section::Span>,
@@ -43,20 +44,20 @@ pub struct Definition {
 #[derive(Debug, Clone)]
 pub enum InnerDefinition {
     Component {
-        properties: Vec<UR<Argument, fastn_type::Argument>>,
-        body: Vec<UR<ComponentInvocation, fastn_type::ComponentInvocation>>,
+        properties: Vec<UR<Argument, fastn_resolved::Argument>>,
+        body: Vec<UR<ComponentInvocation, fastn_resolved::ComponentInvocation>>,
     },
     Variable {
-        kind: UR<Kind, fastn_type::Kind>,
-        properties: Vec<UR<Property, fastn_type::Property>>,
+        kind: UR<Kind, fastn_resolved::Kind>,
+        properties: Vec<UR<Property, fastn_resolved::Property>>,
         /// resolved caption goes to properties
         caption: UR<Vec<fastn_section::Tes>, ()>,
         /// resolved body goes to properties
         body: UR<Vec<fastn_section::Tes>, ()>,
     },
     Function {
-        arguments: Vec<UR<Argument, fastn_type::Argument>>,
-        return_type: Option<UR<Kind, fastn_type::Kind>>,
+        arguments: Vec<UR<Argument, fastn_resolved::Argument>>,
+        return_type: Option<UR<Kind, fastn_resolved::Kind>>,
         /// This one is a little interesting, the number of expressions can be higher than the
         /// number of Tes, this because we can have multiple expressions in a single `Tes`.
         ///
@@ -84,19 +85,19 @@ pub enum InnerDefinition {
         /// So the other approach is to modify the body to `Vec<UR::Resolved(<parsed-foo>),
         /// UR::UnResolved(Tes::Text("bar()"))>`. Notice how we have reduced the `Tex::Text()` part
         /// to no longer refer to `foo()`, and only keep the part that is still unresolved.
-        body: Vec<UR<fastn_section::Tes, fastn_type::FunctionExpression>>,
+        body: Vec<UR<fastn_section::Tes, fastn_resolved::FunctionExpression>>,
         // body: Vec<UR<fastn_section::Tes, fastn_fscript::Expression>>,
     },
     TypeAlias {
-        kind: UR<Kind, fastn_type::Kind>,
+        kind: UR<Kind, fastn_resolved::Kind>,
         /// ```ftd
         /// -- type foo: person
         /// name: foo                  ;; we are updating / setting the default value
         /// ```
-        arguments: Vec<UR<Property, fastn_type::Property>>,
+        arguments: Vec<UR<Property, fastn_resolved::Property>>,
     },
     Record {
-        properties: Vec<UR<Argument, fastn_type::Argument>>,
+        properties: Vec<UR<Argument, fastn_resolved::Argument>>,
     },
     // TODO: OrType(fastn_section::Section),
     // TODO: Module(fastn_section::Section),
@@ -133,10 +134,10 @@ pub struct ComponentInvocation {
     pub name: UR<Identifier, Identifier>,
     /// once a caption is resolved, it is set to () here, and moved to properties
     pub caption: UR<Option<fastn_section::HeaderValue>, ()>,
-    pub properties: Vec<UR<Property, fastn_type::Property>>,
+    pub properties: Vec<UR<Property, fastn_resolved::Property>>,
     /// once the body is resolved, it is set to () here, and moved to properties
     pub body: UR<Vec<fastn_section::Tes>, ()>,
-    pub children: Vec<UR<ComponentInvocation, fastn_type::ComponentInvocation>>,
+    pub children: Vec<UR<ComponentInvocation, fastn_resolved::ComponentInvocation>>,
 }
 
 #[derive(Debug, Clone, PartialEq)]

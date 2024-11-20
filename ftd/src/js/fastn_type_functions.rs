@@ -8,7 +8,7 @@ pub(crate) trait FunctionCallExt {
     ) -> fastn_js::Function;
 }
 
-impl FunctionCallExt for fastn_type::FunctionCall {
+impl FunctionCallExt for fastn_resolved::FunctionCall {
     fn to_js_function(
         &self,
         doc: &ftd::interpreter::TDoc,
@@ -72,7 +72,7 @@ pub(crate) trait PropertyValueExt {
     fn to_value(&self) -> ftd::js::Value;
 }
 
-impl PropertyValueExt for fastn_type::PropertyValue {
+impl PropertyValueExt for fastn_resolved::PropertyValue {
     fn get_deps(&self, rdata: &ftd::js::ResolverData) -> Vec<String> {
         let mut deps = vec![];
         if let Some(reference) = self.get_reference_or_clone() {
@@ -124,19 +124,19 @@ impl PropertyValueExt for fastn_type::PropertyValue {
 
     fn to_value(&self) -> ftd::js::Value {
         match self {
-            fastn_type::PropertyValue::Value { ref value, .. } => {
+            fastn_resolved::PropertyValue::Value { ref value, .. } => {
                 ftd::js::Value::Data(value.to_owned())
             }
-            fastn_type::PropertyValue::Reference { ref name, .. } => {
+            fastn_resolved::PropertyValue::Reference { ref name, .. } => {
                 ftd::js::Value::Reference(ftd::js::value::ReferenceData {
                     name: name.clone().to_string(),
                     value: Some(self.clone()),
                 })
             }
-            fastn_type::PropertyValue::FunctionCall(ref function_call) => {
+            fastn_resolved::PropertyValue::FunctionCall(ref function_call) => {
                 ftd::js::Value::FunctionCall(function_call.to_owned())
             }
-            fastn_type::PropertyValue::Clone { ref name, .. } => {
+            fastn_resolved::PropertyValue::Clone { ref name, .. } => {
                 ftd::js::Value::Clone(name.to_owned())
             }
         }
@@ -153,7 +153,7 @@ pub(crate) trait ValueExt {
     ) -> fastn_js::SetPropertyValue;
 }
 
-impl ValueExt for fastn_type::Value {
+impl ValueExt for fastn_resolved::Value {
     fn to_fastn_js_value(
         &self,
         doc: &ftd::interpreter::TDoc,
@@ -164,26 +164,26 @@ impl ValueExt for fastn_type::Value {
         use itertools::Itertools;
 
         match self {
-            fastn_type::Value::Boolean { value } => {
+            fastn_resolved::Value::Boolean { value } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::Boolean(*value))
             }
-            fastn_type::Value::Optional { data, .. } => {
+            fastn_resolved::Value::Optional { data, .. } => {
                 if let Some(data) = data.as_ref() {
                     data.to_fastn_js_value(doc, rdata, has_rive_components, should_return)
                 } else {
                     fastn_js::SetPropertyValue::Value(fastn_js::Value::Null)
                 }
             }
-            fastn_type::Value::String { text } => {
+            fastn_resolved::Value::String { text } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::String(text.to_string()))
             }
-            fastn_type::Value::Integer { value } => {
+            fastn_resolved::Value::Integer { value } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::Integer(*value))
             }
-            fastn_type::Value::Decimal { value } => {
+            fastn_resolved::Value::Decimal { value } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::Decimal(*value))
             }
-            fastn_type::Value::OrType {
+            fastn_resolved::Value::OrType {
                 name,
                 value,
                 full_variant,
@@ -208,7 +208,7 @@ impl ValueExt for fastn_type::Value {
                     value: None,
                 })
             }
-            fastn_type::Value::List { data, .. } => {
+            fastn_resolved::Value::List { data, .. } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::List {
                     value: data
                         .iter()
@@ -223,7 +223,7 @@ impl ValueExt for fastn_type::Value {
                         .collect_vec(),
                 })
             }
-            fastn_type::Value::Record {
+            fastn_resolved::Value::Record {
                 fields: record_fields,
                 name,
             } => {
@@ -263,7 +263,7 @@ impl ValueExt for fastn_type::Value {
                     other_references: vec![],
                 })
             }
-            fastn_type::Value::UI { component, .. } => {
+            fastn_resolved::Value::UI { component, .. } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::UI {
                     value: component.to_component_statements(
                         fastn_js::FUNCTION_PARENT,
@@ -275,7 +275,7 @@ impl ValueExt for fastn_type::Value {
                     ),
                 })
             }
-            fastn_type::Value::Module { name, .. } => {
+            fastn_resolved::Value::Module { name, .. } => {
                 fastn_js::SetPropertyValue::Value(fastn_js::Value::Module {
                     name: name.to_string(),
                 })
@@ -294,7 +294,7 @@ pub(crate) trait EventExt {
     ) -> Option<fastn_js::EventHandler>;
 }
 
-impl EventExt for fastn_type::Event {
+impl EventExt for fastn_resolved::Event {
     fn to_event_handler_js(
         &self,
         element_name: &str,
@@ -317,28 +317,28 @@ pub(crate) trait EventNameExt {
     fn to_js_event_name(&self) -> Option<fastn_js::Event>;
 }
 
-impl EventNameExt for fastn_type::EventName {
+impl EventNameExt for fastn_resolved::EventName {
     fn to_js_event_name(&self) -> Option<fastn_js::Event> {
         use itertools::Itertools;
 
         match self {
-            fastn_type::EventName::Click => Some(fastn_js::Event::Click),
-            fastn_type::EventName::MouseEnter => Some(fastn_js::Event::MouseEnter),
-            fastn_type::EventName::MouseLeave => Some(fastn_js::Event::MouseLeave),
-            fastn_type::EventName::ClickOutside => Some(fastn_js::Event::ClickOutside),
-            fastn_type::EventName::GlobalKey(gk) => Some(fastn_js::Event::GlobalKey(
+            fastn_resolved::EventName::Click => Some(fastn_js::Event::Click),
+            fastn_resolved::EventName::MouseEnter => Some(fastn_js::Event::MouseEnter),
+            fastn_resolved::EventName::MouseLeave => Some(fastn_js::Event::MouseLeave),
+            fastn_resolved::EventName::ClickOutside => Some(fastn_js::Event::ClickOutside),
+            fastn_resolved::EventName::GlobalKey(gk) => Some(fastn_js::Event::GlobalKey(
                 gk.iter().map(|v| ftd::js::utils::to_key(v)).collect_vec(),
             )),
-            fastn_type::EventName::GlobalKeySeq(gk) => Some(fastn_js::Event::GlobalKeySeq(
+            fastn_resolved::EventName::GlobalKeySeq(gk) => Some(fastn_js::Event::GlobalKeySeq(
                 gk.iter().map(|v| ftd::js::utils::to_key(v)).collect_vec(),
             )),
-            fastn_type::EventName::Input => Some(fastn_js::Event::Input),
-            fastn_type::EventName::Change => Some(fastn_js::Event::Change),
-            fastn_type::EventName::Blur => Some(fastn_js::Event::Blur),
-            fastn_type::EventName::Focus => Some(fastn_js::Event::Focus),
-            fastn_type::EventName::RivePlay(_)
-            | fastn_type::EventName::RivePause(_)
-            | fastn_type::EventName::RiveStateChange(_) => None,
+            fastn_resolved::EventName::Input => Some(fastn_js::Event::Input),
+            fastn_resolved::EventName::Change => Some(fastn_js::Event::Change),
+            fastn_resolved::EventName::Blur => Some(fastn_js::Event::Blur),
+            fastn_resolved::EventName::Focus => Some(fastn_js::Event::Focus),
+            fastn_resolved::EventName::RivePlay(_)
+            | fastn_resolved::EventName::RivePause(_)
+            | fastn_resolved::EventName::RiveStateChange(_) => None,
         }
     }
 }
@@ -401,7 +401,7 @@ pub(crate) trait ComponentExt {
     fn is_loop(&self) -> bool;
 }
 
-impl ComponentExt for fastn_type::ComponentInvocation {
+impl ComponentExt for fastn_resolved::ComponentInvocation {
     fn to_component_statements(
         &self,
         parent: &str,

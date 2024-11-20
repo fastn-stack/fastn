@@ -87,8 +87,8 @@ impl Element {
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct RawElement {
     pub name: String,
-    pub properties: Vec<(String, fastn_type::Property)>,
-    pub condition: Option<fastn_type::Expression>,
+    pub properties: Vec<(String, fastn_resolved::Property)>,
+    pub condition: Option<fastn_resolved::Expression>,
     pub children: Vec<Element>,
     pub events: Vec<Event>,
     pub line_number: usize,
@@ -97,13 +97,13 @@ pub struct RawElement {
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct IterativeElement {
     pub element: Box<ftd::executor::Element>,
-    pub iteration: fastn_type::Loop,
+    pub iteration: fastn_resolved::Loop,
 }
 
 #[derive(serde::Deserialize, Debug, Default, PartialEq, Clone, serde::Serialize)]
 pub struct WebComponent {
     pub name: String,
-    pub properties: ftd::Map<fastn_type::PropertyValue>,
+    pub properties: ftd::Map<fastn_resolved::PropertyValue>,
     pub device: Option<ftd::executor::Device>,
     pub line_number: usize,
 }
@@ -213,8 +213,8 @@ pub struct ImageSrc {
 #[allow(dead_code)]
 impl ImageSrc {
     pub(crate) fn optional_image(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -240,7 +240,7 @@ impl ImageSrc {
     }
 
     fn from_optional_values(
-        or_type_value: Option<ftd::Map<fastn_type::PropertyValue>>,
+        or_type_value: Option<ftd::Map<fastn_resolved::PropertyValue>>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<ImageSrc>> {
@@ -252,7 +252,7 @@ impl ImageSrc {
     }
 
     pub(crate) fn from_value(
-        value: fastn_type::PropertyValue,
+        value: fastn_resolved::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ImageSrc> {
@@ -260,7 +260,7 @@ impl ImageSrc {
 
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
-            Some(fastn_type::Value::Record { name, fields })
+            Some(fastn_resolved::Value::Record { name, fields })
                 if name.eq(ftd::interpreter::FTD_IMAGE_SRC) =>
             {
                 fields
@@ -281,7 +281,7 @@ impl ImageSrc {
     }
 
     fn from_values(
-        values: ftd::Map<fastn_type::PropertyValue>,
+        values: ftd::Map<fastn_resolved::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ImageSrc> {
@@ -302,7 +302,7 @@ impl ImageSrc {
                     .resolve(&doc.itdoc(), line_number)?
                     .string(doc.name, line_number)?,
                 Some(line_number),
-                vec![value.to_property(fastn_type::PropertySource::header("light"))],
+                vec![value.to_property(fastn_resolved::PropertySource::header("light"))],
             )
         };
 
@@ -314,7 +314,7 @@ impl ImageSrc {
                         .resolve(&doc.itdoc(), line_number)?
                         .string(doc.name, line_number)?,
                     Some(line_number),
-                    vec![value.to_property(fastn_type::PropertySource::header("dark"))],
+                    vec![value.to_property(fastn_resolved::PropertySource::header("dark"))],
                 )
             } else {
                 light.clone()
@@ -347,8 +347,8 @@ pub struct RawImage {
 
 impl RawImage {
     pub(crate) fn optional_image(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -374,7 +374,7 @@ impl RawImage {
     }
 
     fn from_optional_values(
-        or_type_value: Option<ftd::Map<fastn_type::PropertyValue>>,
+        or_type_value: Option<ftd::Map<fastn_resolved::PropertyValue>>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<RawImage>> {
@@ -386,7 +386,7 @@ impl RawImage {
     }
 
     fn from_values(
-        values: ftd::Map<fastn_type::PropertyValue>,
+        values: ftd::Map<fastn_resolved::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<RawImage> {
@@ -405,7 +405,7 @@ impl RawImage {
                     .resolve(&doc.itdoc(), line_number)?
                     .string(doc.name, line_number)?,
                 Some(line_number),
-                vec![value.to_property(fastn_type::PropertySource::header("src"))],
+                vec![value.to_property(fastn_resolved::PropertySource::header("src"))],
             )
         };
 
@@ -434,10 +434,10 @@ pub struct Code {
 
 #[allow(clippy::too_many_arguments)]
 pub fn code_from_properties(
-    properties: &[fastn_type::Property],
-    events: &[fastn_type::Event],
-    arguments: &[fastn_type::Argument],
-    condition: &Option<fastn_type::Expression>,
+    properties: &[fastn_resolved::Property],
+    events: &[fastn_resolved::Event],
+    arguments: &[fastn_resolved::Argument],
+    condition: &Option<fastn_resolved::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -542,10 +542,10 @@ pub struct Iframe {
 
 #[allow(clippy::too_many_arguments)]
 pub fn iframe_from_properties(
-    properties: &[fastn_type::Property],
-    events: &[fastn_type::Event],
-    arguments: &[fastn_type::Argument],
-    condition: &Option<fastn_type::Expression>,
+    properties: &[fastn_resolved::Property],
+    events: &[fastn_resolved::Event],
+    arguments: &[fastn_resolved::Argument],
+    condition: &Option<fastn_resolved::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -682,7 +682,7 @@ pub struct Container {
     pub device: Option<ftd::executor::Device>,
 }
 
-pub type Event = fastn_type::Event;
+pub type Event = fastn_resolved::Event;
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct Common {
@@ -742,7 +742,7 @@ pub struct Common {
     pub align_self: ftd::executor::Value<Option<ftd::executor::AlignSelf>>,
     pub data_id: String,
     pub line_number: usize,
-    pub condition: Option<fastn_type::Expression>,
+    pub condition: Option<fastn_resolved::Expression>,
     pub overflow: ftd::executor::Value<Option<ftd::executor::Overflow>>,
     pub overflow_x: ftd::executor::Value<Option<ftd::executor::Overflow>>,
     pub overflow_y: ftd::executor::Value<Option<ftd::executor::Overflow>>,
@@ -783,10 +783,10 @@ pub fn default_column() -> Column {
 
 #[allow(clippy::too_many_arguments)]
 pub fn text_from_properties(
-    properties: &[fastn_type::Property],
-    events: &[fastn_type::Event],
-    arguments: &[fastn_type::Argument],
-    condition: &Option<fastn_type::Expression>,
+    properties: &[fastn_resolved::Property],
+    events: &[fastn_resolved::Event],
+    arguments: &[fastn_resolved::Argument],
+    condition: &Option<fastn_resolved::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     is_dummy: bool,
@@ -878,10 +878,10 @@ pub fn text_from_properties(
 
 #[allow(clippy::too_many_arguments)]
 pub fn integer_from_properties(
-    properties: &[fastn_type::Property],
-    events: &[fastn_type::Event],
-    arguments: &[fastn_type::Argument],
-    condition: &Option<fastn_type::Expression>,
+    properties: &[fastn_resolved::Property],
+    events: &[fastn_resolved::Event],
+    arguments: &[fastn_resolved::Argument],
+    condition: &Option<fastn_resolved::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -977,10 +977,10 @@ pub fn integer_from_properties(
 
 #[allow(clippy::too_many_arguments)]
 pub fn decimal_from_properties(
-    properties: &[fastn_type::Property],
-    events: &[fastn_type::Event],
-    arguments: &[fastn_type::Argument],
-    condition: &Option<fastn_type::Expression>,
+    properties: &[fastn_resolved::Property],
+    events: &[fastn_resolved::Event],
+    arguments: &[fastn_resolved::Argument],
+    condition: &Option<fastn_resolved::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -1076,10 +1076,10 @@ pub fn decimal_from_properties(
 
 #[allow(clippy::too_many_arguments)]
 pub fn boolean_from_properties(
-    properties: &[fastn_type::Property],
-    events: &[fastn_type::Event],
-    arguments: &[fastn_type::Argument],
-    condition: &Option<fastn_type::Expression>,
+    properties: &[fastn_resolved::Property],
+    events: &[fastn_resolved::Event],
+    arguments: &[fastn_resolved::Argument],
+    condition: &Option<fastn_resolved::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -1160,10 +1160,10 @@ pub fn boolean_from_properties(
 
 #[allow(clippy::too_many_arguments)]
 pub fn image_from_properties(
-    properties: &[fastn_type::Property],
-    events: &[fastn_type::Event],
-    arguments: &[fastn_type::Argument],
-    condition: &Option<fastn_type::Expression>,
+    properties: &[fastn_resolved::Property],
+    events: &[fastn_resolved::Event],
+    arguments: &[fastn_resolved::Argument],
+    condition: &Option<fastn_resolved::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -1228,10 +1228,10 @@ pub fn image_from_properties(
 
 #[allow(clippy::too_many_arguments)]
 pub fn row_from_properties(
-    properties: &[fastn_type::Property],
-    events: &[fastn_type::Event],
-    arguments: &[fastn_type::Argument],
-    condition: &Option<fastn_type::Expression>,
+    properties: &[fastn_resolved::Property],
+    events: &[fastn_resolved::Event],
+    arguments: &[fastn_resolved::Argument],
+    condition: &Option<fastn_resolved::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -1266,10 +1266,10 @@ pub fn row_from_properties(
 
 #[allow(clippy::too_many_arguments)]
 pub fn column_from_properties(
-    properties: &[fastn_type::Property],
-    events: &[fastn_type::Event],
-    arguments: &[fastn_type::Argument],
-    condition: &Option<fastn_type::Expression>,
+    properties: &[fastn_resolved::Property],
+    events: &[fastn_resolved::Event],
+    arguments: &[fastn_resolved::Argument],
+    condition: &Option<fastn_resolved::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -1304,10 +1304,10 @@ pub fn column_from_properties(
 
 #[allow(clippy::too_many_arguments)]
 pub fn container_element_from_properties(
-    properties: &[fastn_type::Property],
-    events: &[fastn_type::Event],
-    arguments: &[fastn_type::Argument],
-    condition: &Option<fastn_type::Expression>,
+    properties: &[fastn_resolved::Property],
+    events: &[fastn_resolved::Event],
+    arguments: &[fastn_resolved::Argument],
+    condition: &Option<fastn_resolved::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -1344,10 +1344,10 @@ pub fn container_element_from_properties(
 
 #[allow(clippy::too_many_arguments)]
 pub fn rive_from_properties(
-    properties: &[fastn_type::Property],
-    events: &[fastn_type::Event],
-    arguments: &[fastn_type::Argument],
-    condition: &Option<fastn_type::Expression>,
+    properties: &[fastn_resolved::Property],
+    events: &[fastn_resolved::Event],
+    arguments: &[fastn_resolved::Argument],
+    condition: &Option<fastn_resolved::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -1446,8 +1446,8 @@ pub fn rive_from_properties(
 }
 
 pub fn document_from_properties(
-    properties: &[fastn_type::Property],
-    arguments: &[fastn_type::Argument],
+    properties: &[fastn_resolved::Property],
+    arguments: &[fastn_resolved::Argument],
     doc: &mut ftd::executor::TDoc,
     line_number: usize,
     children: Vec<Element>,
@@ -1471,8 +1471,8 @@ pub fn document_from_properties(
 
 #[allow(clippy::too_many_arguments)]
 pub fn html_data_from_properties(
-    properties: &[fastn_type::Property],
-    arguments: &[fastn_type::Argument],
+    properties: &[fastn_resolved::Property],
+    arguments: &[fastn_resolved::Argument],
     doc: &mut ftd::executor::TDoc,
     line_number: usize,
     component_name: &str,
@@ -1558,10 +1558,10 @@ pub fn html_data_from_properties(
 
 #[allow(clippy::too_many_arguments)]
 pub fn common_from_properties(
-    properties: &[fastn_type::Property],
-    events: &[fastn_type::Event],
-    arguments: &[fastn_type::Argument],
-    condition: &Option<fastn_type::Expression>,
+    properties: &[fastn_resolved::Property],
+    events: &[fastn_resolved::Event],
+    arguments: &[fastn_resolved::Argument],
+    condition: &Option<fastn_resolved::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -2214,8 +2214,8 @@ pub fn common_from_properties(
 
 #[allow(clippy::too_many_arguments)]
 pub fn container_from_properties(
-    properties: &[fastn_type::Property],
-    arguments: &[fastn_type::Argument],
+    properties: &[fastn_resolved::Property],
+    arguments: &[fastn_resolved::Argument],
     doc: &ftd::executor::TDoc,
     line_number: usize,
     children: Vec<Element>,
@@ -2287,10 +2287,10 @@ impl TextInput {
 
 #[allow(clippy::too_many_arguments)]
 pub fn text_input_from_properties(
-    properties: &[fastn_type::Property],
-    events: &[fastn_type::Event],
-    arguments: &[fastn_type::Argument],
-    condition: &Option<fastn_type::Expression>,
+    properties: &[fastn_resolved::Property],
+    events: &[fastn_resolved::Event],
+    arguments: &[fastn_resolved::Argument],
+    condition: &Option<fastn_resolved::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,
@@ -2422,10 +2422,10 @@ impl CheckBox {
 
 #[allow(clippy::too_many_arguments)]
 pub fn checkbox_from_properties(
-    properties: &[fastn_type::Property],
-    events: &[fastn_type::Event],
-    arguments: &[fastn_type::Argument],
-    condition: &Option<fastn_type::Expression>,
+    properties: &[fastn_resolved::Property],
+    events: &[fastn_resolved::Event],
+    arguments: &[fastn_resolved::Argument],
+    condition: &Option<fastn_resolved::Expression>,
     doc: &mut ftd::executor::TDoc,
     local_container: &[usize],
     line_number: usize,

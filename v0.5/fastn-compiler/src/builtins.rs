@@ -9,9 +9,10 @@
 /// [1]: https://doc.rust-lang.org/beta/std/sync/struct.LazyLock.html#method.deref
 pub static BUILTINS: std::sync::LazyLock<
     // TODO: consider https://crates.io/crates/phf
-    std::collections::HashMap<string_interner::DefaultSymbol, fastn_type::Definition>,
+    std::collections::HashMap<string_interner::DefaultSymbol, fastn_resolved::Definition>,
 > = std::sync::LazyLock::new(builtins);
 
-fn builtins() -> std::collections::HashMap<string_interner::DefaultSymbol, fastn_type::Definition> {
+fn builtins(
+) -> std::collections::HashMap<string_interner::DefaultSymbol, fastn_resolved::Definition> {
     todo!()
 }

@@ -12,4 +12,4 @@ homepage.workspace = true
 regex.workspace = true
 indexmap.workspace = true
 itertools.workspace = true
-fastn-type.workspace = true
+fastn-resolved.workspace = true

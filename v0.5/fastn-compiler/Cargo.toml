@@ -11,7 +11,7 @@ homepage.workspace = true
 
 [dependencies]
 fastn-section.workspace = true
-fastn-type.workspace = true
+fastn-resolved.workspace = true
 fastn-unresolved.workspace = true
 string-interner.workspace = true
 

@@ -1,10 +1,10 @@
 pub fn process(
     variable_name: String,
     value: ftd_ast::VariableValue,
-    kind: fastn_type::Kind,
+    kind: fastn_resolved::Kind,
     doc: &ftd::interpreter::TDoc,
     req_config: &mut fastn_core::RequestConfig,
-) -> ftd::interpreter::Result<fastn_type::Value> {
+) -> ftd::interpreter::Result<fastn_resolved::Value> {
     req_config.response_is_cacheable = false;
 
     let mut data = req_config.request.query().clone();

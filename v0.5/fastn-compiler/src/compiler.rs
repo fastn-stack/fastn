@@ -11,7 +11,7 @@ pub(crate) struct Compiler {
         Vec<
             fastn_unresolved::UR<
                 fastn_unresolved::ComponentInvocation,
-                fastn_type::ComponentInvocation,
+                fastn_resolved::ComponentInvocation,
             >,
         >,
     >,

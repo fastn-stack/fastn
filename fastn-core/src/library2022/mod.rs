@@ -248,7 +248,7 @@ impl Library2022 {
         processor: String,
         doc: &'a mut ftd::interpreter::TDoc<'a>,
         preview_session_id: &Option<String>,
-    ) -> ftd::interpreter::Result<fastn_type::Value> {
+    ) -> ftd::interpreter::Result<fastn_resolved::Value> {
         tracing::info!(
             msg = "stuck-on-processor",
             doc = doc.name,
@@ -328,13 +328,13 @@ impl Library2022 {
 fn get_processor_data(
     ast: ftd_ast::Ast,
     doc: &mut ftd::interpreter::TDoc,
-) -> ftd::interpreter::Result<(String, String, ftd_ast::VariableValue, fastn_type::Kind)> {
+) -> ftd::interpreter::Result<(String, String, ftd_ast::VariableValue, fastn_resolved::Kind)> {
     use ftd::interpreter::KindDataExt;
 
     let line_number = ast.line_number();
     let ast_name = ast.name();
     if let Ok(variable_definition) = ast.clone().get_variable_definition(doc.name) {
-        let kind = fastn_type::KindData::from_ast_kind(
+        let kind = fastn_resolved::KindData::from_ast_kind(
             variable_definition.kind,
             &Default::default(),
             doc,

@@ -18,13 +18,13 @@ pub(crate) fn get_string_container(local_container: &[usize]) -> String {
 }
 
 pub(crate) fn create_dummy_instruction_for_loop_element(
-    instruction: &fastn_type::ComponentInvocation,
+    instruction: &fastn_resolved::ComponentInvocation,
     doc: &mut ftd::executor::TDoc,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     local_container: &[usize],
-) -> ftd::executor::Result<fastn_type::ComponentInvocation> {
+) -> ftd::executor::Result<fastn_resolved::ComponentInvocation> {
     let mut instruction = instruction.clone();
-    /*let reference_replace_pattern = fastn_type::PropertyValueSource::Loop(alias.to_string())
+    /*let reference_replace_pattern = fastn_resolved::PropertyValueSource::Loop(alias.to_string())
         .get_reference_name(alias, &doc.itdoc());
     let replace_with = format!("{}.INDEX", reference_name);
     let map =
@@ -43,7 +43,7 @@ pub(crate) fn create_dummy_instruction_for_loop_element(
 
 #[allow(clippy::too_many_arguments)]
 pub(crate) fn update_instruction_for_loop_element(
-    instruction: &fastn_type::ComponentInvocation,
+    instruction: &fastn_resolved::ComponentInvocation,
     doc: &mut ftd::executor::TDoc,
     index_in_loop: usize,
     alias: &str,
@@ -51,11 +51,11 @@ pub(crate) fn update_instruction_for_loop_element(
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     local_container: &[usize],
     doc_name: &str,
-) -> ftd::executor::Result<fastn_type::ComponentInvocation> {
+) -> ftd::executor::Result<fastn_resolved::ComponentInvocation> {
     use ftd::interpreter::PropertyValueSourceExt;
 
     let mut instruction = instruction.clone();
-    let reference_replace_pattern = fastn_type::PropertyValueSource::Loop(alias.to_string())
+    let reference_replace_pattern = fastn_resolved::PropertyValueSource::Loop(alias.to_string())
         .get_reference_name(alias, &doc.itdoc());
     let replace_with = format!("{}.{}", reference_name, index_in_loop);
     let map =
@@ -63,7 +63,7 @@ pub(crate) fn update_instruction_for_loop_element(
     let replace_property_value = std::iter::IntoIterator::into_iter([(
         doc.itdoc()
             .resolve_name(format!("{}#{}", doc_name, ftd::interpreter::FTD_LOOP_COUNTER).as_str()),
-        fastn_type::Value::Integer {
+        fastn_resolved::Value::Integer {
             value: index_in_loop as i64,
         }
         .into_property_value(false, instruction.line_number),
@@ -83,8 +83,8 @@ pub(crate) fn update_instruction_for_loop_element(
 }
 
 pub(crate) fn update_condition_in_component(
-    component: &mut fastn_type::ComponentInvocation,
-    outer_condition: fastn_type::Expression,
+    component: &mut fastn_resolved::ComponentInvocation,
+    outer_condition: fastn_resolved::Expression,
 ) {
     if let Some(condition) = component.condition.as_mut() {
         let references = {
@@ -92,12 +92,12 @@ pub(crate) fn update_condition_in_component(
             reference.extend(condition.references.to_owned());
             reference
         };
-        let new_condition = fastn_type::Expression {
-            expression: fastn_type::evalexpr::ExprNode::new(
-                fastn_type::evalexpr::Operator::RootNode,
+        let new_condition = fastn_resolved::Expression {
+            expression: fastn_resolved::evalexpr::ExprNode::new(
+                fastn_resolved::evalexpr::Operator::RootNode,
             )
-            .add_children(vec![fastn_type::evalexpr::ExprNode::new(
-                fastn_type::evalexpr::Operator::And,
+            .add_children(vec![fastn_resolved::evalexpr::ExprNode::new(
+                fastn_resolved::evalexpr::Operator::And,
             )
             .add_children(vec![
                 outer_condition.expression,
@@ -113,8 +113,8 @@ pub(crate) fn update_condition_in_component(
 }
 
 pub(crate) fn update_events_in_component(
-    component: &mut fastn_type::ComponentInvocation,
-    outer_event: Vec<fastn_type::Event>,
+    component: &mut fastn_resolved::ComponentInvocation,
+    outer_event: Vec<fastn_resolved::Event>,
 ) {
     component.events.extend(outer_event);
 }
@@ -132,7 +132,7 @@ pub(crate) fn insert_local_variables(
 }
 
 pub(crate) fn update_inherited_reference_in_instruction(
-    component_definition: &mut fastn_type::ComponentInvocation,
+    component_definition: &mut fastn_resolved::ComponentInvocation,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     local_container: &[usize],
     doc: &mut ftd::executor::TDoc,
@@ -148,10 +148,10 @@ pub(crate) fn update_inherited_reference_in_instruction(
 }
 
 pub(crate) fn update_local_variable_references_in_component(
-    component: &mut fastn_type::ComponentInvocation,
+    component: &mut fastn_resolved::ComponentInvocation,
     local_variable_map: &ftd::Map<String>,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    replace_property_value: &ftd::Map<fastn_type::PropertyValue>,
+    replace_property_value: &ftd::Map<fastn_resolved::PropertyValue>,
     local_container: &[usize],
     doc: &mut ftd::executor::TDoc,
 ) {
@@ -167,10 +167,10 @@ pub(crate) fn update_local_variable_references_in_component(
 }
 
 pub(crate) fn update_local_variable_references_in_component_(
-    component: &mut fastn_type::ComponentInvocation,
+    component: &mut fastn_resolved::ComponentInvocation,
     local_variable_map: &ftd::Map<String>,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    replace_property_value: &ftd::Map<fastn_type::PropertyValue>,
+    replace_property_value: &ftd::Map<fastn_resolved::PropertyValue>,
     local_container: &[usize],
     doc: &mut ftd::executor::TDoc,
     is_children: bool,
@@ -178,10 +178,10 @@ pub(crate) fn update_local_variable_references_in_component_(
     use ftd::executor::fastn_type_functions::ComponentExt;
 
     if component.is_variable() {
-        let mut component_name = fastn_type::PropertyValue::Reference {
+        let mut component_name = fastn_resolved::PropertyValue::Reference {
             name: component.name.to_string(),
-            kind: fastn_type::Kind::ui().into_kind_data(),
-            source: fastn_type::PropertyValueSource::Global,
+            kind: fastn_resolved::Kind::ui().into_kind_data(),
+            source: fastn_resolved::PropertyValueSource::Global,
             is_mutable: false,
             line_number: 0,
         };
@@ -239,7 +239,7 @@ pub(crate) fn update_local_variable_references_in_component_(
         );
     }
 
-    if let Some(fastn_type::Loop { on, .. }) = component.iteration.as_mut() {
+    if let Some(fastn_resolved::Loop { on, .. }) = component.iteration.as_mut() {
         update_local_variable_reference_in_property_value(
             on,
             local_variable_map,
@@ -265,10 +265,10 @@ pub(crate) fn update_local_variable_references_in_component_(
 }
 
 fn update_local_variable_reference_in_property(
-    property: &mut fastn_type::Property,
+    property: &mut fastn_resolved::Property,
     local_variable: &ftd::Map<String>,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    replace_property_value: &ftd::Map<fastn_type::PropertyValue>,
+    replace_property_value: &ftd::Map<fastn_resolved::PropertyValue>,
     local_container: &[usize],
     doc: &mut ftd::executor::TDoc,
     is_children: bool,
@@ -296,10 +296,10 @@ fn update_local_variable_reference_in_property(
 }
 
 fn update_local_variable_reference_in_condition(
-    condition: &mut fastn_type::Expression,
+    condition: &mut fastn_resolved::Expression,
     local_variable: &ftd::Map<String>,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    replace_property_value: &ftd::Map<fastn_type::PropertyValue>,
+    replace_property_value: &ftd::Map<fastn_resolved::PropertyValue>,
     local_container: &[usize],
     doc: &mut ftd::executor::TDoc,
     is_children: bool,
@@ -318,18 +318,18 @@ fn update_local_variable_reference_in_condition(
 }
 
 fn update_local_variable_reference_in_property_value(
-    property_value: &mut fastn_type::PropertyValue,
+    property_value: &mut fastn_resolved::PropertyValue,
     local_variable: &ftd::Map<String>,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    replace_property_value: &ftd::Map<fastn_type::PropertyValue>,
+    replace_property_value: &ftd::Map<fastn_resolved::PropertyValue>,
     local_container: &[usize],
     doc: &mut ftd::executor::TDoc,
     is_children: bool, //Using children
 ) {
     let reference_or_clone = match property_value {
-        fastn_type::PropertyValue::Reference { name, .. }
-        | fastn_type::PropertyValue::Clone { name, .. } => name.to_string(),
-        fastn_type::PropertyValue::FunctionCall(function_call) => {
+        fastn_resolved::PropertyValue::Reference { name, .. }
+        | fastn_resolved::PropertyValue::Clone { name, .. } => name.to_string(),
+        fastn_resolved::PropertyValue::FunctionCall(function_call) => {
             for property_value in function_call.values.values_mut() {
                 update_local_variable_reference_in_property_value(
                     property_value,
@@ -343,10 +343,10 @@ fn update_local_variable_reference_in_property_value(
             }
             return;
         }
-        fastn_type::PropertyValue::Value { value, .. } => {
+        fastn_resolved::PropertyValue::Value { value, .. } => {
             let is_children = is_children || value.kind().inner_list().is_subsection_ui();
             return match value {
-                fastn_type::Value::List { data, .. } => {
+                fastn_resolved::Value::List { data, .. } => {
                     for d in data.iter_mut() {
                         update_local_variable_reference_in_property_value(
                             d,
@@ -359,8 +359,8 @@ fn update_local_variable_reference_in_property_value(
                         );
                     }
                 }
-                fastn_type::Value::Record { fields, .. }
-                | fastn_type::Value::Object { values: fields } => {
+                fastn_resolved::Value::Record { fields, .. }
+                | fastn_resolved::Value::Object { values: fields } => {
                     for d in fields.values_mut() {
                         update_local_variable_reference_in_property_value(
                             d,
@@ -373,7 +373,7 @@ fn update_local_variable_reference_in_property_value(
                         );
                     }
                 }
-                fastn_type::Value::UI {
+                fastn_resolved::Value::UI {
                     component, name, ..
                 } => {
                     if let Some(local_variable) = local_variable.iter().find_map(|(k, v)| {
@@ -395,7 +395,7 @@ fn update_local_variable_reference_in_property_value(
                         is_children,
                     )
                 }
-                fastn_type::Value::OrType { value, .. } => {
+                fastn_resolved::Value::OrType { value, .. } => {
                     update_local_variable_reference_in_property_value(
                         value,
                         local_variable,
@@ -437,7 +437,7 @@ fn update_local_variable_reference_in_property_value(
 }
 
 fn update_inherited_reference_in_property_value(
-    property_value: &mut fastn_type::PropertyValue,
+    property_value: &mut fastn_resolved::PropertyValue,
     reference_or_clone: &str,
     inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     local_container: &[usize],
@@ -483,7 +483,7 @@ fn update_inherited_reference_in_property_value(
             };
 
             if let Ok(ftd::interpreter::StateWithThing::Thing(property)) =
-                fastn_type::PropertyValue::from_ast_value(
+                fastn_resolved::PropertyValue::from_ast_value(
                     ftd_ast::VariableValue::String {
                         // TODO: ftd#default-colors, ftd#default-types
                         value: format!("${}", reference_name),
@@ -520,7 +520,7 @@ fn update_inherited_reference_in_property_value(
                 .starts_with(format!("{}.colors", ftd::interpreter::FTD_INHERITED).as_str()))
     {
         if let Ok(ftd::interpreter::StateWithThing::Thing(property)) =
-            fastn_type::PropertyValue::from_ast_value(
+            fastn_resolved::PropertyValue::from_ast_value(
                 ftd_ast::VariableValue::String {
                     // TODO: ftd#default-colors, ftd#default-types
                     value: {
@@ -591,13 +591,13 @@ pub(crate) fn replace_last_occurrence(s: &str, old_word: &str, new_word: &str) -
 }
 
 pub(crate) fn get_evaluated_property(
-    target_property: &fastn_type::Property,
-    properties: &[fastn_type::Property],
-    arguments: &[fastn_type::Argument],
+    target_property: &fastn_resolved::Property,
+    properties: &[fastn_resolved::Property],
+    arguments: &[fastn_resolved::Argument],
     component_name: &str,
     doc_name: &str,
     line_number: usize,
-) -> ftd::executor::Result<Option<fastn_type::Property>> {
+) -> ftd::executor::Result<Option<fastn_resolved::Property>> {
     use ftd::interpreter::PropertyExt;
 
     let key = if let Some(key) = target_property.get_local_argument(component_name) {

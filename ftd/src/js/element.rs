@@ -25,7 +25,7 @@ pub enum Element {
 
 impl Element {
     pub fn from_interpreter_component(
-        component: &fastn_type::ComponentInvocation,
+        component: &fastn_resolved::ComponentInvocation,
         doc: &ftd::interpreter::TDoc,
     ) -> Element {
         match component.name.as_str() {
@@ -151,7 +151,7 @@ pub struct CheckBox {
 }
 
 impl CheckBox {
-    pub fn from(component: &fastn_type::ComponentInvocation) -> CheckBox {
+    pub fn from(component: &fastn_resolved::ComponentInvocation) -> CheckBox {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#checkbox")
             .unwrap()
@@ -238,7 +238,7 @@ pub struct TextInput {
 }
 
 impl TextInput {
-    pub fn from(component: &fastn_type::ComponentInvocation) -> TextInput {
+    pub fn from(component: &fastn_resolved::ComponentInvocation) -> TextInput {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#text-input")
             .unwrap()
@@ -397,7 +397,7 @@ pub struct Iframe {
 }
 
 impl Iframe {
-    pub fn from(component: &fastn_type::ComponentInvocation) -> Iframe {
+    pub fn from(component: &fastn_resolved::ComponentInvocation) -> Iframe {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#iframe")
             .unwrap()
@@ -516,7 +516,7 @@ pub struct Code {
 
 impl Code {
     pub fn from(
-        component: &fastn_type::ComponentInvocation,
+        component: &fastn_resolved::ComponentInvocation,
         _doc: &ftd::interpreter::TDoc,
     ) -> Code {
         let component_definition = ftd::interpreter::default::get_default_bag()
@@ -643,7 +643,7 @@ pub struct Image {
 }
 
 impl Image {
-    pub fn from(component: &fastn_type::ComponentInvocation) -> Image {
+    pub fn from(component: &fastn_resolved::ComponentInvocation) -> Image {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#image")
             .unwrap()
@@ -755,7 +755,7 @@ pub struct Audio {
 }
 
 impl Audio {
-    pub fn from(component: &fastn_type::ComponentInvocation) -> Audio {
+    pub fn from(component: &fastn_resolved::ComponentInvocation) -> Audio {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#audio")
             .unwrap()
@@ -883,7 +883,7 @@ pub struct Video {
 }
 
 impl Video {
-    pub fn from(component: &fastn_type::ComponentInvocation) -> Video {
+    pub fn from(component: &fastn_resolved::ComponentInvocation) -> Video {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#video")
             .unwrap()
@@ -1102,8 +1102,8 @@ pub struct ContainerProperties {
 
 impl ContainerProperties {
     pub fn from(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
     ) -> ContainerProperties {
         ContainerProperties {
             spacing: ftd::js::value::get_optional_js_value("spacing", properties, arguments),
@@ -1171,8 +1171,8 @@ pub struct Container {
 
 impl Container {
     pub fn from(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
     ) -> Container {
         Container {
             children: ftd::js::utils::get_js_value_from_properties(
@@ -1243,8 +1243,8 @@ pub struct Row {
 
 impl InheritedProperties {
     pub fn from(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
     ) -> InheritedProperties {
         InheritedProperties {
             colors: ftd::js::value::get_optional_js_value("colors", properties, arguments),
@@ -1290,7 +1290,7 @@ impl InheritedProperties {
 }
 
 impl Text {
-    pub fn from(component: &fastn_type::ComponentInvocation) -> Text {
+    pub fn from(component: &fastn_resolved::ComponentInvocation) -> Text {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#text")
             .unwrap()
@@ -1354,7 +1354,7 @@ impl Text {
 }
 
 impl Integer {
-    pub fn from(component: &fastn_type::ComponentInvocation) -> Integer {
+    pub fn from(component: &fastn_resolved::ComponentInvocation) -> Integer {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#integer")
             .unwrap()
@@ -1419,7 +1419,7 @@ impl Integer {
 }
 
 impl Decimal {
-    pub fn from(component: &fastn_type::ComponentInvocation) -> Decimal {
+    pub fn from(component: &fastn_resolved::ComponentInvocation) -> Decimal {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#decimal")
             .unwrap()
@@ -1484,7 +1484,7 @@ impl Decimal {
 }
 
 impl Boolean {
-    pub fn from(component: &fastn_type::ComponentInvocation) -> Boolean {
+    pub fn from(component: &fastn_resolved::ComponentInvocation) -> Boolean {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#boolean")
             .unwrap()
@@ -1549,7 +1549,7 @@ impl Boolean {
 }
 
 impl Document {
-    pub fn from(component: &fastn_type::ComponentInvocation) -> Document {
+    pub fn from(component: &fastn_resolved::ComponentInvocation) -> Document {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#document")
             .unwrap()
@@ -1621,8 +1621,8 @@ impl Document {
 
 impl DocumentMeta {
     pub fn from(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
     ) -> DocumentMeta {
         DocumentMeta {
             favicon: ftd::js::value::get_optional_js_value("favicon", properties, arguments),
@@ -1826,7 +1826,7 @@ impl DocumentMeta {
 }
 
 impl Column {
-    pub fn from(component: &fastn_type::ComponentInvocation) -> Column {
+    pub fn from(component: &fastn_resolved::ComponentInvocation) -> Column {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#column")
             .unwrap()
@@ -1892,7 +1892,7 @@ impl Column {
 }
 
 impl Row {
-    pub fn from(component: &fastn_type::ComponentInvocation) -> Row {
+    pub fn from(component: &fastn_resolved::ComponentInvocation) -> Row {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#row")
             .unwrap()
@@ -1958,7 +1958,7 @@ impl Row {
 }
 
 impl ContainerElement {
-    pub fn from(component: &fastn_type::ComponentInvocation) -> ContainerElement {
+    pub fn from(component: &fastn_resolved::ComponentInvocation) -> ContainerElement {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#container")
             .unwrap()
@@ -2026,7 +2026,7 @@ pub struct Device {
 }
 
 impl Device {
-    pub fn from(component: &fastn_type::ComponentInvocation, device: &str) -> Device {
+    pub fn from(component: &fastn_resolved::ComponentInvocation, device: &str) -> Device {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get(device)
             .unwrap()
@@ -2101,8 +2101,8 @@ pub struct TextCommon {
 
 impl TextCommon {
     pub fn from(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
     ) -> TextCommon {
         TextCommon {
             text_transform: ftd::js::value::get_optional_js_value(
@@ -2211,7 +2211,7 @@ pub struct Rive {
 }
 
 impl Rive {
-    pub fn from(component: &fastn_type::ComponentInvocation) -> Rive {
+    pub fn from(component: &fastn_resolved::ComponentInvocation) -> Rive {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#rive")
             .unwrap()
@@ -2415,16 +2415,16 @@ pub struct Common {
     pub shadow: Option<ftd::js::Value>,
     pub css: Option<ftd::js::Value>,
     pub js: Option<ftd::js::Value>,
-    pub events: Vec<fastn_type::Event>,
+    pub events: Vec<fastn_resolved::Event>,
     pub selectable: Option<ftd::js::Value>,
     pub mask: Option<ftd::js::Value>,
 }
 
 impl Common {
     pub fn from(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
-        events: &[fastn_type::Event],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
+        events: &[fastn_resolved::Event],
     ) -> Common {
         Common {
             id: ftd::js::value::get_optional_js_value("id", properties, arguments),

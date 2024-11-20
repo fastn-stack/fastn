@@ -1,10 +1,10 @@
 pub fn process_readers(
     _value: ftd_ast::VariableValue,
-    _kind: fastn_type::Kind,
+    _kind: fastn_resolved::Kind,
     _doc: &ftd::interpreter::TDoc,
     _req_config: &fastn_core::RequestConfig,
     _document_id: &str,
-) -> ftd::interpreter::Result<fastn_type::Value> {
+) -> ftd::interpreter::Result<fastn_resolved::Value> {
     Err(ftd::interpreter::Error::OtherError(
         "document-readers is not implemented in this version. Switch to an \
             older version."
@@ -14,11 +14,11 @@ pub fn process_readers(
 
 pub fn process_writers(
     _value: ftd_ast::VariableValue,
-    _kind: fastn_type::Kind,
+    _kind: fastn_resolved::Kind,
     _doc: &ftd::interpreter::TDoc,
     _req_config: &fastn_core::RequestConfig,
     _document_id: &str,
-) -> ftd::interpreter::Result<fastn_type::Value> {
+) -> ftd::interpreter::Result<fastn_resolved::Value> {
     Err(ftd::interpreter::Error::OtherError(
         "document-writers is not implemented in this version. Switch to an \
             older version."
@@ -28,18 +28,18 @@ pub fn process_writers(
 
 pub fn current_url(
     req_config: &fastn_core::RequestConfig,
-) -> ftd::interpreter::Result<fastn_type::Value> {
-    Ok(fastn_type::Value::String {
+) -> ftd::interpreter::Result<fastn_resolved::Value> {
+    Ok(fastn_resolved::Value::String {
         text: req_config.url(),
     })
 }
 
 pub fn document_id(
     _value: ftd_ast::VariableValue,
-    _kind: fastn_type::Kind,
+    _kind: fastn_resolved::Kind,
     doc: &ftd::interpreter::TDoc,
     req_config: &fastn_core::RequestConfig,
-) -> ftd::interpreter::Result<fastn_type::Value> {
+) -> ftd::interpreter::Result<fastn_resolved::Value> {
     let doc_id = req_config.doc_id().unwrap_or_else(|| {
         doc.name
             .to_string()
@@ -53,33 +53,33 @@ pub fn document_id(
         .trim_matches('/');
 
     if document_id.is_empty() {
-        return Ok(fastn_type::Value::String {
+        return Ok(fastn_resolved::Value::String {
             text: "/".to_string(),
         });
     }
 
-    Ok(fastn_type::Value::String {
+    Ok(fastn_resolved::Value::String {
         text: format!("/{}/", document_id),
     })
 }
 
 pub fn document_full_id(
     _value: ftd_ast::VariableValue,
-    _kind: fastn_type::Kind,
+    _kind: fastn_resolved::Kind,
     doc: &ftd::interpreter::TDoc,
     req_config: &fastn_core::RequestConfig,
-) -> ftd::interpreter::Result<fastn_type::Value> {
-    Ok(fastn_type::Value::String {
+) -> ftd::interpreter::Result<fastn_resolved::Value> {
+    Ok(fastn_resolved::Value::String {
         text: fastn_core::library2022::utils::document_full_id(req_config, doc)?,
     })
 }
 
 pub fn document_suffix(
     _value: ftd_ast::VariableValue,
-    kind: fastn_type::Kind,
+    kind: fastn_resolved::Kind,
     doc: &ftd::interpreter::TDoc,
     req_config: &fastn_core::RequestConfig,
-) -> ftd::interpreter::Result<fastn_type::Value> {
+) -> ftd::interpreter::Result<fastn_resolved::Value> {
     let doc_id = req_config.doc_id().unwrap_or_else(|| {
         doc.name
             .to_string()
@@ -89,11 +89,11 @@ pub fn document_suffix(
     let value = doc_id
         .split_once("/-/")
         .map(|(_, y)| y.trim().to_string())
-        .map(|suffix| fastn_type::Value::String { text: suffix });
+        .map(|suffix| fastn_resolved::Value::String { text: suffix });
 
-    Ok(fastn_type::Value::Optional {
+    Ok(fastn_resolved::Value::Optional {
         data: Box::new(value),
-        kind: fastn_type::KindData {
+        kind: fastn_resolved::KindData {
             kind,
             caption: false,
             body: false,
@@ -103,11 +103,11 @@ pub fn document_suffix(
 
 pub async fn document_name<'a>(
     value: ftd_ast::VariableValue,
-    _kind: fastn_type::Kind,
+    _kind: fastn_resolved::Kind,
     doc: &ftd::interpreter::TDoc<'a>,
     req_config: &fastn_core::RequestConfig,
     preview_session_id: &Option<String>,
-) -> ftd::interpreter::Result<fastn_type::Value> {
+) -> ftd::interpreter::Result<fastn_resolved::Value> {
     let doc_id = req_config.doc_id().unwrap_or_else(|| {
         doc.name
             .to_string()
@@ -124,7 +124,7 @@ pub async fn document_name<'a>(
             line_number: value.line_number(),
         })?;
 
-    Ok(fastn_type::Value::String {
+    Ok(fastn_resolved::Value::String {
         text: file_path.trim().to_string(),
     })
 }

@@ -8,24 +8,24 @@ pub(crate) mod value;
 pub(crate) mod variable;
 pub(crate) mod web_component;
 
-pub type Thing = fastn_type::Definition;
+pub type Thing = fastn_resolved::Definition;
 
 pub trait ThingExt {
     fn variable(
         self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_type::Variable>;
+    ) -> ftd::interpreter::Result<fastn_resolved::Variable>;
     fn record(
         self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_type::Record>;
+    ) -> ftd::interpreter::Result<fastn_resolved::Record>;
     fn function(
         self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_type::Function>;
+    ) -> ftd::interpreter::Result<fastn_resolved::Function>;
 }
 
 impl ThingExt for Thing {
@@ -33,7 +33,7 @@ impl ThingExt for Thing {
         self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_type::Variable> {
+    ) -> ftd::interpreter::Result<fastn_resolved::Variable> {
         match self {
             ftd::interpreter::Thing::Variable(v) => Ok(v),
             t => ftd::interpreter::utils::e2(
@@ -48,7 +48,7 @@ impl ThingExt for Thing {
         self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_type::Record> {
+    ) -> ftd::interpreter::Result<fastn_resolved::Record> {
         match self {
             ftd::interpreter::Thing::Record(v) => Ok(v),
             t => ftd::interpreter::utils::e2(
@@ -63,7 +63,7 @@ impl ThingExt for Thing {
         self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_type::Function> {
+    ) -> ftd::interpreter::Result<fastn_resolved::Function> {
         match self {
             ftd::interpreter::Thing::Function(v) => Ok(v),
             t => ftd::interpreter::utils::e2(

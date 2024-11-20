@@ -109,7 +109,7 @@ pub enum Error {
     },
 
     #[error("EvalexprError: {}", _0)]
-    EvalexprError(#[from] fastn_type::evalexpr::EvalexprError),
+    EvalexprError(#[from] fastn_resolved::evalexpr::EvalexprError),
 
     #[error("serde error: {source}")]
     Serde {

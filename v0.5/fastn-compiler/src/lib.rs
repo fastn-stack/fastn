@@ -21,7 +21,7 @@ pub struct Output {
     #[expect(unused)]
     warnings: Vec<fastn_section::Spanned<fastn_section::Warning>>,
     #[expect(unused)]
-    resolved: Vec<fastn_type::Definition>,
+    resolved: Vec<fastn_resolved::Definition>,
     // should we also return / cache partially resolved symbols?
 }
 
@@ -34,7 +34,7 @@ pub struct Error {
     /// we are not returning vec string (dependencies here), because `Definition::dependencies()` is
     /// going to do that.
     #[expect(unused)]
-    resolved: Vec<fastn_type::Definition>,
+    resolved: Vec<fastn_resolved::Definition>,
     /// while parsing, we found some symbols are wrong, e.g., say the document tried to use component `
     /// foo` but `foo` internally is calling `bar`, and there is no such component, and say `foo` is
     /// trying to use `baz` as a type, but there is no such type. Anyone else trying to use `foo`

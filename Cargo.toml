@@ -10,7 +10,7 @@ members = [
     "fastn-js",
     "fastn-lang",
     "fastn-package",
-    "fastn-type",
+    "fastn-resolved",
     "fastn-update",
     "fastn-utils",
     "fbt",
@@ -91,7 +91,7 @@ enum-iterator-derive = "0.6"
 fastn-ds.path = "fastn-ds"
 fastn-update.path = "fastn-update"
 fastn-builtins.path = "fastn-builtins"
-fastn-type.path = "fastn-type"
+fastn-resolved.path = "fastn-resolved"
 fastn-core.path = "fastn-core"
 fastn-issues.path = "fastn-issues"
 fastn-package.path = "fastn-package"

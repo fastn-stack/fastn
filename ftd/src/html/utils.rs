@@ -64,7 +64,7 @@ pub(crate) fn node_change_id(id: &str, attr: &str) -> String {
 pub(crate) fn get_formatted_dep_string_from_property_value(
     id: &str,
     doc: &ftd::interpreter::TDoc,
-    property_value: &fastn_type::PropertyValue,
+    property_value: &fastn_resolved::PropertyValue,
     pattern_with_eval: &Option<(String, bool)>,
     field: Option<String>,
     string_needs_no_quotes: bool,
@@ -100,12 +100,12 @@ pub(crate) fn get_formatted_dep_string_from_property_value(
     }))
 }
 
-pub(crate) fn get_condition_string(condition: &fastn_type::Expression) -> String {
+pub(crate) fn get_condition_string(condition: &fastn_resolved::Expression) -> String {
     get_condition_string_(condition, true)
 }
 
 pub(crate) fn get_condition_string_(
-    condition: &fastn_type::Expression,
+    condition: &fastn_resolved::Expression,
     extra_args: bool,
 ) -> String {
     let node = condition.update_node_with_variable_reference();
@@ -167,7 +167,7 @@ pub(crate) fn js_expression_from_list(
 }
 
 pub(crate) fn is_dark_mode_dependent(
-    value: &fastn_type::PropertyValue,
+    value: &fastn_resolved::PropertyValue,
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::html::Result<bool> {
     use ftd::interpreter::PropertyValueExt;
@@ -179,7 +179,7 @@ pub(crate) fn is_dark_mode_dependent(
 }
 
 pub(crate) fn is_device_dependent(
-    value: &fastn_type::PropertyValue,
+    value: &fastn_resolved::PropertyValue,
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::html::Result<bool> {
     use ftd::interpreter::{PropertyValueExt, ValueExt};
@@ -204,7 +204,7 @@ pub(crate) fn is_device_dependent(
 }
 
 pub(crate) fn dependencies_from_property_value(
-    property_value: &fastn_type::PropertyValue,
+    property_value: &fastn_resolved::PropertyValue,
     doc: &ftd::interpreter::TDoc,
 ) -> Vec<String> {
     use ftd::html::fastn_type_functions::KindExt;
@@ -285,7 +285,7 @@ pub(crate) fn dependencies_from_property_value(
 }
 
 fn dependencies_from_length_property_value(
-    property_value: &fastn_type::PropertyValue,
+    property_value: &fastn_resolved::PropertyValue,
     doc: &ftd::interpreter::TDoc,
 ) -> Vec<String> {
     use ftd::html::fastn_type_functions::KindExt;
@@ -469,7 +469,7 @@ pub(crate) fn get_new_number(keys: &Vec<String>, name: &str) -> usize {
 
 pub(crate) fn to_properties_string(
     id: &str,
-    properties: &[(String, fastn_type::Property)],
+    properties: &[(String, fastn_resolved::Property)],
     doc: &ftd::interpreter::TDoc,
     node: &str,
 ) -> Option<String> {
@@ -512,7 +512,7 @@ pub(crate) fn to_properties_string(
 
 pub(crate) fn to_argument_string(
     id: &str,
-    arguments: &[fastn_type::Argument],
+    arguments: &[fastn_resolved::Argument],
     doc: &ftd::interpreter::TDoc,
     node: &str,
 ) -> Option<String> {
@@ -706,12 +706,12 @@ fn get_rive_event(
     id: &str,
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::html::Result<String> {
-    let mut events_map: ftd::VecMap<(&String, &fastn_type::FunctionCall)> = ftd::VecMap::new();
+    let mut events_map: ftd::VecMap<(&String, &fastn_resolved::FunctionCall)> = ftd::VecMap::new();
     for event in rive.events.iter() {
         let (event_name, input, action) = match &event.name {
-            fastn_type::EventName::RivePlay(timeline) => ("onPlay", timeline, &event.action),
-            fastn_type::EventName::RivePause(timeline) => ("onPause", timeline, &event.action),
-            fastn_type::EventName::RiveStateChange(state) => {
+            fastn_resolved::EventName::RivePlay(timeline) => ("onPlay", timeline, &event.action),
+            fastn_resolved::EventName::RivePause(timeline) => ("onPause", timeline, &event.action),
+            fastn_resolved::EventName::RiveStateChange(state) => {
                 ("onStateChange", state, &event.action)
             }
             _ => continue,

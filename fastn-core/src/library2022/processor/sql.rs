@@ -2,11 +2,11 @@ use crate::library2022::processor::sqlite::result_to_value;
 
 pub async fn process(
     value: ftd_ast::VariableValue,
-    kind: fastn_type::Kind,
+    kind: fastn_resolved::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     config: &mut fastn_core::RequestConfig,
     q_kind: &str,
-) -> ftd::interpreter::Result<fastn_type::Value> {
+) -> ftd::interpreter::Result<fastn_resolved::Value> {
     // we can in future do a more fine-grained analysis if the response
     // is cacheable or not, say depending on HTTP Vary header, etc.
     config.response_is_cacheable = false;

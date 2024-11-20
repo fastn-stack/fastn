@@ -7,7 +7,7 @@ pub trait VariableExt {
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
         number_of_scan: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::Variable>>;
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::Variable>>;
     fn scan_update_from_ast(
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
@@ -15,10 +15,10 @@ pub trait VariableExt {
     fn update_from_ast(
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::Variable>>;
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::Variable>>;
     fn set_static(self, doc: &ftd::interpreter::TDoc) -> Self;
 }
-impl VariableExt for fastn_type::Variable {
+impl VariableExt for fastn_resolved::Variable {
     fn scan_ast(
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
@@ -26,14 +26,14 @@ impl VariableExt for fastn_type::Variable {
         use ftd::interpreter::{KindDataExt, PropertyValueExt};
 
         let variable_definition = ast.clone().get_variable_definition(doc.name)?;
-        fastn_type::KindData::scan_ast_kind(
+        fastn_resolved::KindData::scan_ast_kind(
             variable_definition.kind,
             &Default::default(),
             doc,
             variable_definition.line_number,
         )?;
 
-        fastn_type::PropertyValue::scan_ast_value(variable_definition.value, doc)?;
+        fastn_resolved::PropertyValue::scan_ast_value(variable_definition.value, doc)?;
 
         if let Some(processor) = variable_definition.processor {
             let name = doc.resolve_name(processor.as_str());
@@ -85,12 +85,12 @@ impl VariableExt for fastn_type::Variable {
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
         number_of_scan: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::Variable>> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::Variable>> {
         use ftd::interpreter::{KindDataExt, PropertyValueExt};
 
         let variable_definition = ast.clone().get_variable_definition(doc.name)?;
         let name = doc.resolve_name(variable_definition.name.as_str());
-        let kind = try_ok_state!(fastn_type::KindData::from_ast_kind(
+        let kind = try_ok_state!(fastn_resolved::KindData::from_ast_kind(
             variable_definition.kind,
             &Default::default(),
             doc,
@@ -137,7 +137,7 @@ impl VariableExt for fastn_type::Variable {
                 .any(|v| thing_name.eq(v))
             {
                 if number_of_scan.lt(&1) {
-                    fastn_type::PropertyValue::scan_ast_value(variable_definition.value, doc)?;
+                    fastn_resolved::PropertyValue::scan_ast_value(variable_definition.value, doc)?;
                     return Ok(ftd::interpreter::StateWithThing::new_continue());
                 }
                 let result = ftd::interpreter::StateWithThing::new_state(
@@ -157,7 +157,7 @@ impl VariableExt for fastn_type::Variable {
                 } else {
                     return Ok(result);
                 };
-                fastn_type::PropertyValue::scan_ast_value(variable_definition.value, doc)?;
+                fastn_resolved::PropertyValue::scan_ast_value(variable_definition.value, doc)?;
                 if initial_length < doc.state().unwrap().pending_imports.stack.len() {
                     return Ok(ftd::interpreter::StateWithThing::new_continue());
                 }
@@ -172,14 +172,14 @@ impl VariableExt for fastn_type::Variable {
             };
         }
 
-        let value = try_ok_state!(fastn_type::PropertyValue::from_ast_value(
+        let value = try_ok_state!(fastn_resolved::PropertyValue::from_ast_value(
             variable_definition.value,
             doc,
             variable_definition.mutable,
             Some(&kind),
         )?);
 
-        let variable = fastn_type::Variable {
+        let variable = fastn_resolved::Variable {
             name,
             kind,
             mutable: variable_definition.mutable,
@@ -202,13 +202,13 @@ impl VariableExt for fastn_type::Variable {
         use ftd::interpreter::PropertyValueExt;
 
         let variable_definition = ast.get_variable_invocation(doc.name)?;
-        fastn_type::PropertyValue::scan_ast_value(variable_definition.value, doc)
+        fastn_resolved::PropertyValue::scan_ast_value(variable_definition.value, doc)
     }
 
     fn update_from_ast(
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::Variable>> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::Variable>> {
         use ftd::interpreter::PropertyValueExt;
 
         let variable_definition = ast.get_variable_invocation(doc.name)?;
@@ -217,7 +217,7 @@ impl VariableExt for fastn_type::Variable {
             variable_definition.line_number,
         )?);
 
-        let value = try_ok_state!(fastn_type::PropertyValue::from_ast_value(
+        let value = try_ok_state!(fastn_resolved::PropertyValue::from_ast_value(
             variable_definition.value,
             doc,
             true,

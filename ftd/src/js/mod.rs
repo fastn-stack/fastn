@@ -141,8 +141,11 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
                         variant
                             .name()
                             .trim_start_matches(
-                                format!("{}.", fastn_type::OrType::or_type_name(ot.name.as_str()))
-                                    .as_str(),
+                                format!(
+                                    "{}.",
+                                    fastn_resolved::OrType::or_type_name(ot.name.as_str())
+                                )
+                                .as_str(),
                             )
                             .to_string(),
                         value.to_fastn_js_value_with_none(&doc, &mut false),
@@ -178,7 +181,7 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
 pub(crate) trait FunctionExt {
     fn to_ast(&self, doc: &ftd::interpreter::TDoc) -> fastn_js::Ast;
 }
-impl FunctionExt for fastn_type::Function {
+impl FunctionExt for fastn_resolved::Function {
     fn to_ast(&self, doc: &ftd::interpreter::TDoc) -> fastn_js::Ast {
         use itertools::Itertools;
 
@@ -186,7 +189,9 @@ impl FunctionExt for fastn_type::Function {
             self.name.as_str(),
             self.expression
                 .iter()
-                .map(|e| fastn_type::evalexpr::build_operator_tree(e.expression.as_str()).unwrap())
+                .map(|e| {
+                    fastn_resolved::evalexpr::build_operator_tree(e.expression.as_str()).unwrap()
+                })
                 .collect_vec(),
             self.arguments
                 .iter()
@@ -222,7 +227,7 @@ pub(crate) trait VariableExt {
     ) -> fastn_js::Ast;
 }
 
-impl VariableExt for fastn_type::Variable {
+impl VariableExt for fastn_resolved::Variable {
     fn to_ast(
         &self,
         doc: &ftd::interpreter::TDoc,
@@ -277,7 +282,7 @@ pub(crate) trait ComponentDefinitionExt {
     fn to_ast(&self, doc: &ftd::interpreter::TDoc, has_rive_components: &mut bool)
         -> fastn_js::Ast;
 }
-impl ComponentDefinitionExt for fastn_type::ComponentDefinition {
+impl ComponentDefinitionExt for fastn_resolved::ComponentDefinition {
     fn to_ast(
         &self,
         doc: &ftd::interpreter::TDoc,
@@ -324,7 +329,7 @@ impl ComponentDefinitionExt for fastn_type::ComponentDefinition {
 }
 
 pub fn from_tree(
-    tree: &[fastn_type::ComponentInvocation],
+    tree: &[fastn_resolved::ComponentInvocation],
     doc: &ftd::interpreter::TDoc,
     has_rive_components: &mut bool,
 ) -> fastn_js::Ast {
@@ -348,7 +353,7 @@ pub trait WebComponentDefinitionExt {
     fn to_ast(&self, doc: &ftd::interpreter::TDoc) -> fastn_js::Ast;
 }
 
-impl WebComponentDefinitionExt for fastn_type::WebComponentDefinition {
+impl WebComponentDefinitionExt for fastn_resolved::WebComponentDefinition {
     fn to_ast(&self, doc: &ftd::interpreter::TDoc) -> fastn_js::Ast {
         use itertools::Itertools;
 

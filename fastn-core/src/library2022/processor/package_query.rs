@@ -1,9 +1,9 @@
 pub async fn process(
     value: ftd_ast::VariableValue,
-    kind: fastn_type::Kind,
+    kind: fastn_resolved::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &fastn_core::RequestConfig,
-) -> ftd::interpreter::Result<fastn_type::Value> {
+) -> ftd::interpreter::Result<fastn_resolved::Value> {
     let (headers, query) =
         fastn_core::library2022::processor::sqlite::get_p1_data("package-data", &value, doc.name)?;
 
