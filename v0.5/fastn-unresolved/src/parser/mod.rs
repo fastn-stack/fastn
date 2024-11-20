@@ -1,4 +1,5 @@
 mod component_invocation;
+mod function_definition;
 mod import;
 
 pub fn parse(
@@ -31,6 +32,7 @@ pub fn parse(
             (Some("type"), _, _) => todo!(),
             (Some("module"), _, _) => todo!(),
             (Some("component"), _, _) => todo!(),
+            (_, _, true) => function_definition::function_definition(section, &mut document),
             (None, _, _) => component_invocation::component_invocation(section, &mut document),
             (_, _, _) => todo!(),
         }

@@ -60,6 +60,12 @@ impl fastn_jdebug::JDebug for fastn_unresolved::ComponentInvocation {
     }
 }
 
+impl fastn_jdebug::JDebug for fastn_unresolved::Definition {
+    fn debug(&self) -> Value {
+        todo!()
+    }
+}
+
 impl<U: fastn_jdebug::JDebug, R: fastn_jdebug::JDebug> fastn_jdebug::JDebug
     for fastn_unresolved::UR<U, R>
 {
