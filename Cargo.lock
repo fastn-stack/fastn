@@ -1730,6 +1730,7 @@ dependencies = [
  "comrak",
  "css-color-parser",
  "diffy",
+ "fastn-builtins",
  "fastn-js",
  "fastn-type",
  "format_num",

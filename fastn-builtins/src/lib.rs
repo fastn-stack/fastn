@@ -3,9 +3,7 @@
 
 extern crate self as fastn_builtins;
 
-mod constants;
-
-pub use constants::*;
+pub mod constants;
 
 pub type Map<T> = std::collections::BTreeMap<String, T>;
 use fastn_type::evalexpr::ContextWithMutableFunctions;
