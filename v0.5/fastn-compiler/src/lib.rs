@@ -6,10 +6,12 @@ extern crate self as fastn_compiler;
 
 mod builtins;
 mod compiler;
+mod js;
 mod symbols;
 
 pub use builtins::BUILTINS;
 pub use compiler::compile;
+pub(crate) use compiler::Compiler;
 pub use fastn_section::Result;
 pub use symbols::SymbolStore;
 

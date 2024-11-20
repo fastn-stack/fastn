@@ -1,6 +1,6 @@
 const ITERATION_THRESHOLD: usize = 100;
 
-struct Compiler {
+pub(crate) struct Compiler {
     symbols: Box<dyn fastn_compiler::SymbolStore>,
     interner: string_interner::DefaultStringInterner,
     bag: std::collections::HashMap<string_interner::DefaultSymbol, fastn_unresolved::LookupResult>,
@@ -46,7 +46,7 @@ impl Compiler {
         }
     }
 
-    async fn fetch_unresolved_symbols(
+    fn fetch_unresolved_symbols(
         &mut self,
         symbols_to_fetch: &std::collections::HashSet<fastn_unresolved::SymbolName>,
     ) {
@@ -145,7 +145,7 @@ impl Compiler {
         stuck_on_symbols
     }
 
-    async fn compile(mut self) -> Result<fastn_compiler::Output, fastn_compiler::Error> {
+    fn compile(mut self) -> Result<fastn_compiler::Output, fastn_compiler::Error> {
         // we only make 10 attempts to resolve the document: we need a warning if we are not able to
         // resolve the document in 10 attempts.
         let mut unresolvable = std::collections::HashSet::new();
@@ -159,7 +159,7 @@ impl Compiler {
                 break;
             }
             // ever_used.extend(&unresolved_symbols);
-            self.fetch_unresolved_symbols(&unresolved_symbols).await;
+            self.fetch_unresolved_symbols(&unresolved_symbols);
             // this itself has to happen in a loop. we need a warning if we are not able to resolve all
             // symbols in 10 attempts.
             let mut r = ResolveSymbolsResult::default();
@@ -174,7 +174,7 @@ impl Compiler {
                     break;
                 }
                 // ever_used.extend(r.need_more_symbols);
-                self.fetch_unresolved_symbols(&r.need_more_symbols).await;
+                self.fetch_unresolved_symbols(&r.need_more_symbols);
                 iterations += 1;
             }
 
@@ -188,8 +188,6 @@ impl Compiler {
             || iterations == ITERATION_THRESHOLD
         {
             // we were not able to resolve all symbols or there were errors
-            #[allow(clippy::diverging_sub_expression)]
-            #[expect(unreachable_code)]
             return Err(fastn_compiler::Error {
                 messages: todo!(),
                 resolved: todo!(),
@@ -198,11 +196,8 @@ impl Compiler {
         }
 
         // there were no errors, etc.
-
-        #[allow(clippy::diverging_sub_expression)]
-        #[expect(unreachable_code)]
         Ok(fastn_compiler::Output {
-            js: todo!(),
+            js: self.js(),
             warnings: self.document.warnings,
             resolved: vec![], // for now, we are not tracking resolved
         })
@@ -218,15 +213,13 @@ impl Compiler {
 ///
 /// earlier we had strict mode here, but to simplify things, now we let the caller convert non-empty
 /// warnings from OK part as error, and discard the generated JS.
-pub async fn compile(
+pub fn compile(
     symbols: Box<dyn fastn_compiler::SymbolStore>,
     document_id: &fastn_unresolved::ModuleName,
     source: &str,
     auto_imports: Vec<fastn_section::AutoImport>,
 ) -> Result<fastn_compiler::Output, fastn_compiler::Error> {
-    Compiler::new(symbols, auto_imports, document_id, source)
-        .compile()
-        .await
+    Compiler::new(symbols, auto_imports, document_id, source).compile()
 }
 
 #[derive(Default)]

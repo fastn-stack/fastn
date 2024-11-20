@@ -8,6 +8,7 @@ pub trait SymbolStore {
     ///
     /// or maybe the system can predict that if you asked for one symbol, you are going to ask
     /// for some related symbols soon.
+    // TODO: should we make it async?
     fn lookup(
         &mut self,
         interner: &mut string_interner::DefaultStringInterner,

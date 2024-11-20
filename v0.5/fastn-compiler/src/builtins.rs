@@ -8,6 +8,7 @@
 ///
 /// [1]: https://doc.rust-lang.org/beta/std/sync/struct.LazyLock.html#method.deref
 pub static BUILTINS: std::sync::LazyLock<
+    // TODO: consider https://crates.io/crates/phf
     std::collections::HashMap<string_interner::DefaultSymbol, fastn_type::Definition>,
 > = std::sync::LazyLock::new(builtins);
 
