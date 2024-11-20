@@ -117,6 +117,7 @@ dependencies = [
  "fastn-resolved",
  "fastn-section",
  "fastn-unresolved",
+ "indexmap",
  "string-interner",
 ]
 
