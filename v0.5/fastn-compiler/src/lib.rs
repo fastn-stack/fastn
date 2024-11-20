@@ -8,6 +8,7 @@ mod compiler;
 mod js;
 mod symbols;
 mod tdoc;
+pub use tdoc::TDoc;
 mod utils;
 
 pub use compiler::compile;

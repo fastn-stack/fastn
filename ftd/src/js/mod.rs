@@ -92,7 +92,7 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
 
     // Check if document tree has rive. This is used to add rive script.
     let mut has_rive_components = false;
-    let mut document_asts = vec![ftd::js::from_tree(
+    let mut document_asts = vec![fastn_resolved_to_js::from_tree(
         document.tree.as_slice(),
         &doc,
         &mut has_rive_components,
@@ -171,25 +171,4 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
         asts: document_asts,
         scripts,
     }
-}
-
-pub fn from_tree(
-    tree: &[fastn_resolved::ComponentInvocation],
-    doc: &dyn fastn_resolved::tdoc::TDoc,
-    has_rive_components: &mut bool,
-) -> fastn_js::Ast {
-    use fastn_resolved_to_js::ComponentExt;
-
-    let mut statements = vec![];
-    for (index, component) in tree.iter().enumerate() {
-        statements.extend(component.to_component_statements(
-            fastn_js::COMPONENT_PARENT,
-            index,
-            doc,
-            &fastn_resolved_to_js::ResolverData::none(),
-            false,
-            has_rive_components,
-        ))
-    }
-    fastn_js::component0(fastn_js::MAIN_FUNCTION, statements)
 }

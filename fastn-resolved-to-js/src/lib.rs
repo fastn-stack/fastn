@@ -308,3 +308,56 @@ impl<T: std::cmp::PartialEq> VecMap<T> {
         values
     }
 }
+
+pub fn default_bag_into_js_ast(doc: &dyn fastn_resolved::tdoc::TDoc) -> Vec<fastn_js::Ast> {
+    let mut ftd_asts = vec![];
+
+    let mut export_asts = vec![];
+    for thing in fastn_builtins::get_default_bag().values() {
+        if let fastn_resolved::Definition::Variable(v) = thing {
+            ftd_asts.push(v.to_ast(doc, None, &mut false));
+        } else if let fastn_resolved::Definition::Function(f) = thing {
+            if f.external_implementation {
+                continue;
+            }
+            ftd_asts.push(f.to_ast(doc));
+        } else if let fastn_resolved::Definition::Export { from, to, .. } = thing {
+            export_asts.push(fastn_js::Ast::Export {
+                from: from.to_string(),
+                to: to.to_string(),
+            })
+        }
+    }
+
+    // Global default inherited variable
+    ftd_asts.push(fastn_js::Ast::StaticVariable(fastn_js::StaticVariable {
+        name: "inherited".to_string(),
+        value: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
+            fields: vec![
+                (
+                    "colors".to_string(),
+                    fastn_js::SetPropertyValue::Reference(
+                        "ftd#default-colors__DOT__getClone()__DOT__setAndReturn\
+                        (\"is_root\"__COMMA__\
+                         true)"
+                            .to_string(),
+                    ),
+                ),
+                (
+                    "types".to_string(),
+                    fastn_js::SetPropertyValue::Reference(
+                        "ftd#default-types__DOT__getClone()__DOT__setAndReturn\
+                        (\"is_root\"__COMMA__\
+                         true)"
+                            .to_string(),
+                    ),
+                ),
+            ],
+            other_references: vec![],
+        }),
+        prefix: None,
+    }));
+
+    ftd_asts.extend(export_asts);
+    ftd_asts
+}
