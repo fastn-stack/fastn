@@ -167,6 +167,7 @@ dependencies = [
  "fastn-jdebug",
  "fastn-resolved",
  "fastn-section",
+ "indexmap",
  "serde_json",
  "string-interner",
 ]

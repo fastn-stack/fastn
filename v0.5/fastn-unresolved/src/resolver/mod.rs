@@ -11,8 +11,8 @@ pub struct ResolutionInput<'a> {
         fastn_unresolved::LookupResult,
     >,
     pub auto_imports: &'a [fastn_section::AutoImport],
-    pub builtins:
-        &'a std::collections::HashMap<string_interner::DefaultSymbol, fastn_resolved::Definition>,
+    // TODO: use interned string instead of String below
+    pub builtins: &'a indexmap::IndexMap<String, fastn_resolved::Definition>,
 }
 
 impl fastn_unresolved::ComponentInvocation {

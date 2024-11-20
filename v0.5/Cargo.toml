@@ -48,6 +48,7 @@ fastn-resolved = "0.1.0"
 fastn-builtins = "0.1.0"
 fastn-unresolved = { path = "fastn-unresolved" }
 fastn-update = { path = "fastn-update" }
+indexmap = "2"
 insta = { version = "1", features = ["yaml", "glob"] }
 itertools = "0.13"
 serde = { version = "1", features = ["derive"] }
