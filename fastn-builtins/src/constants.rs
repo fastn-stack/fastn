@@ -1,5 +1,5 @@
-pub static FTD_HIGHLIGHTER: once_cell::sync::Lazy<regex::Regex> =
-    once_cell::sync::Lazy::new(|| regex::Regex::new(r"((;;)( *)(<hl>))( *)(\n?)$").unwrap());
+pub static FTD_HIGHLIGHTER: std::sync::LazyLock<regex::Regex> =
+    std::sync::LazyLock::new(|| regex::Regex::new(r"((;;)( *)(<hl>))( *)(\n?)$").unwrap());
 
 pub const FTD_BREAKPOINT_WIDTH: &str = "ftd#breakpoint-width";
 pub const FTD_BREAKPOINT_WIDTH_DATA: &str = "ftd#breakpoint-width-data";

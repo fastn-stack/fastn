@@ -10887,12 +10887,11 @@ pub fn fastn_test_function() -> fastn_type::ComponentDefinition {
     }
 }
 
-pub static DEFAULT_BAG: once_cell::sync::OnceCell<
-    indexmap::IndexMap<String, fastn_type::Definition>,
-> = once_cell::sync::OnceCell::new();
+pub static DEFAULT_BAG: std::sync::LazyLock<indexmap::IndexMap<String, fastn_type::Definition>> =
+    std::sync::LazyLock::new(default_bag);
 
 pub fn get_default_bag() -> &'static indexmap::IndexMap<String, fastn_type::Definition> {
-    DEFAULT_BAG.get_or_init(default_bag)
+    &DEFAULT_BAG
 }
 
 pub fn image_function() -> fastn_type::ComponentDefinition {

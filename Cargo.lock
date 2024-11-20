@@ -1440,7 +1440,6 @@ dependencies = [
  "fastn-type",
  "indexmap",
  "itertools 0.13.0",
- "once_cell",
  "regex",
 ]
 

@@ -11,6 +11,5 @@ homepage.workspace = true
 [dependencies]
 regex.workspace = true
 indexmap.workspace = true
-once_cell.workspace = true
 itertools.workspace = true
 fastn-type.workspace = true
