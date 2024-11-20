@@ -1,3 +1,10 @@
+pub struct ResolutionOutput {
+    pub stuck_on: std::collections::HashSet<fastn_unresolved::SymbolName>,
+    pub errors: Vec<fastn_section::Spanned<fastn_section::Error>>,
+    pub warnings: Vec<fastn_section::Spanned<fastn_section::Warning>>,
+    pub comments: Vec<fastn_section::Span>,
+}
+
 impl fastn_unresolved::ComponentInvocation {
     pub fn resolve(
         &mut self,
@@ -5,9 +12,8 @@ impl fastn_unresolved::ComponentInvocation {
             string_interner::DefaultSymbol,
             fastn_unresolved::LookupResult,
         >,
-        _document: &mut fastn_unresolved::Document,
         _auto_imports: &[fastn_section::AutoImport],
-    ) -> std::collections::HashSet<fastn_unresolved::SymbolName> {
+    ) -> ResolutionOutput {
         todo!()
     }
 }
@@ -19,9 +25,8 @@ impl fastn_unresolved::Definition {
             string_interner::DefaultSymbol,
             fastn_unresolved::LookupResult,
         >,
-        _document: &mut fastn_unresolved::Document,
         _auto_imports: &[fastn_section::AutoImport],
-    ) -> std::collections::HashSet<fastn_unresolved::SymbolName> {
+    ) -> ResolutionOutput {
         todo!()
     }
 }

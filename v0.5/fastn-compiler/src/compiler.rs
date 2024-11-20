@@ -4,7 +4,6 @@ struct Compiler {
     symbols: Box<dyn fastn_compiler::SymbolStore>,
     interner: string_interner::DefaultStringInterner,
     bag: std::collections::HashMap<string_interner::DefaultSymbol, fastn_unresolved::LookupResult>,
-    #[expect(unused)]
     auto_imports: Vec<fastn_section::AutoImport>,
     /// checkout resolve_document for why this is an Option
     content: Option<
@@ -80,11 +79,9 @@ impl Compiler {
             let mut definition = self.bag.remove(&sym);
             match definition.as_mut() {
                 Some(fastn_unresolved::UR::UnResolved(definition)) => {
-                    r.need_more_symbols.extend(definition.resolve(
-                        &self.bag,
-                        &mut self.document,
-                        &self.auto_imports,
-                    ));
+                    let o = definition.resolve(&self.bag, &self.auto_imports);
+                    r.need_more_symbols.extend(o.stuck_on);
+                    self.document.merge(o.errors, o.warnings, o.comments);
                 }
                 Some(fastn_unresolved::UR::Resolved(_)) => unreachable!(),
                 _ => {
@@ -121,13 +118,15 @@ impl Compiler {
         for ci in content {
             match ci {
                 fastn_unresolved::UR::UnResolved(mut c) => {
-                    let needed = c.resolve(&self.bag, &mut self.document, &self.auto_imports);
-                    if needed.is_empty() {
+                    let needed = c.resolve(&self.bag, &self.auto_imports);
+                    if needed.stuck_on.is_empty() {
                         new_content.push(fastn_unresolved::UR::Resolved(c.resolved().unwrap()));
                     } else {
-                        stuck_on_symbols.extend(needed);
+                        stuck_on_symbols.extend(needed.stuck_on);
                         new_content.push(fastn_unresolved::UR::UnResolved(c));
                     }
+                    self.document
+                        .merge(needed.errors, needed.warnings, needed.comments);
                 }
                 v => new_content.push(v),
             }

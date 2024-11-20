@@ -16,6 +16,17 @@ impl fastn_unresolved::Document {
             document.sections,
         )
     }
+
+    pub fn merge(
+        &mut self,
+        errors: Vec<fastn_section::Spanned<fastn_section::Error>>,
+        warnings: Vec<fastn_section::Spanned<fastn_section::Warning>>,
+        comments: Vec<fastn_section::Span>,
+    ) {
+        self.errors.extend(errors);
+        self.warnings.extend(warnings);
+        self.comments.extend(comments);
+    }
 }
 
 impl fastn_unresolved::ComponentInvocation {
