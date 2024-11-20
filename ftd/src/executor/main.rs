@@ -206,7 +206,7 @@ impl ExecuteDoc<'_> {
             fastn_resolved::ComponentInvocation,
         )>,
     > {
-        use ftd::js::fastn_type_functions::ComponentExt;
+        use fastn_resolved_to_js::ComponentExt;
 
         if instruction.is_loop() {
             ExecuteDoc::get_loop_instructions(

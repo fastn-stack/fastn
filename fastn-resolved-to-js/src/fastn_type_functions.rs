@@ -1,4 +1,4 @@
-use ftd::js::value::{ArgumentExt, ExpressionExt};
+use fastn_resolved_to_js::value::{ArgumentExt, ExpressionExt};
 
 pub(crate) trait FunctionCallExt {
     fn to_js_function(
@@ -20,7 +20,7 @@ impl FunctionCallExt for fastn_resolved::FunctionCall {
         if let Some((default_module, module_variable_name)) = &self.module_name {
             function_name =
                 fastn_js::FunctionData::Definition(fastn_js::SetPropertyValue::Reference(
-                    ftd::js::utils::update_reference(name.as_str(), rdata),
+                    fastn_resolved_to_js::utils::update_reference(name.as_str(), rdata),
                 ));
             name = name.replace(
                 format!("{module_variable_name}.").as_str(),
@@ -47,7 +47,7 @@ impl FunctionCallExt for fastn_resolved::FunctionCall {
     }
 }
 
-pub(crate) trait PropertyValueExt {
+pub trait PropertyValueExt {
     fn get_deps(&self, rdata: &fastn_resolved_to_js::ResolverData) -> Vec<String>;
 
     fn to_fastn_js_value_with_none(
@@ -71,14 +71,16 @@ pub(crate) trait PropertyValueExt {
         is_ui_component: bool,
     ) -> fastn_js::SetPropertyValue;
 
-    fn to_value(&self) -> ftd::js::Value;
+    fn to_value(&self) -> fastn_resolved_to_js::Value;
 }
 
 impl PropertyValueExt for fastn_resolved::PropertyValue {
     fn get_deps(&self, rdata: &fastn_resolved_to_js::ResolverData) -> Vec<String> {
         let mut deps = vec![];
         if let Some(reference) = self.get_reference_or_clone() {
-            deps.push(ftd::js::utils::update_reference(reference, rdata));
+            deps.push(fastn_resolved_to_js::utils::update_reference(
+                reference, rdata,
+            ));
         } else if let Some(function) = self.get_function() {
             for value in function.values.values() {
                 deps.extend(value.get_deps(rdata));
@@ -124,22 +126,22 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
         )
     }
 
-    fn to_value(&self) -> ftd::js::Value {
+    fn to_value(&self) -> fastn_resolved_to_js::Value {
         match self {
             fastn_resolved::PropertyValue::Value { ref value, .. } => {
-                ftd::js::Value::Data(value.to_owned())
+                fastn_resolved_to_js::Value::Data(value.to_owned())
             }
             fastn_resolved::PropertyValue::Reference { ref name, .. } => {
-                ftd::js::Value::Reference(ftd::js::value::ReferenceData {
+                fastn_resolved_to_js::Value::Reference(fastn_resolved_to_js::value::ReferenceData {
                     name: name.clone().to_string(),
                     value: Some(self.clone()),
                 })
             }
             fastn_resolved::PropertyValue::FunctionCall(ref function_call) => {
-                ftd::js::Value::FunctionCall(function_call.to_owned())
+                fastn_resolved_to_js::Value::FunctionCall(function_call.to_owned())
             }
             fastn_resolved::PropertyValue::Clone { ref name, .. } => {
-                ftd::js::Value::Clone(name.to_owned())
+                fastn_resolved_to_js::Value::Clone(name.to_owned())
             }
         }
     }
@@ -191,7 +193,7 @@ impl ValueExt for fastn_resolved::Value {
                 full_variant,
                 variant,
             } => {
-                let (js_variant, has_value) = ftd::js::value::ftd_to_js_variant(
+                let (js_variant, has_value) = fastn_resolved_to_js::value::ftd_to_js_variant(
                     name,
                     variant,
                     full_variant,
@@ -303,7 +305,7 @@ impl EventExt for fastn_resolved::Event {
         doc: &dyn fastn_resolved::tdoc::TDoc,
         rdata: &fastn_resolved_to_js::ResolverData,
     ) -> Option<fastn_js::EventHandler> {
-        use ftd::js::fastn_type_functions::FunctionCallExt;
+        use fastn_resolved_to_js::fastn_type_functions::FunctionCallExt;
 
         self.name
             .to_js_event_name()
@@ -329,10 +331,14 @@ impl EventNameExt for fastn_resolved::EventName {
             fastn_resolved::EventName::MouseLeave => Some(fastn_js::Event::MouseLeave),
             fastn_resolved::EventName::ClickOutside => Some(fastn_js::Event::ClickOutside),
             fastn_resolved::EventName::GlobalKey(gk) => Some(fastn_js::Event::GlobalKey(
-                gk.iter().map(|v| ftd::js::utils::to_key(v)).collect_vec(),
+                gk.iter()
+                    .map(|v| fastn_resolved_to_js::utils::to_key(v))
+                    .collect_vec(),
             )),
             fastn_resolved::EventName::GlobalKeySeq(gk) => Some(fastn_js::Event::GlobalKeySeq(
-                gk.iter().map(|v| ftd::js::utils::to_key(v)).collect_vec(),
+                gk.iter()
+                    .map(|v| fastn_resolved_to_js::utils::to_key(v))
+                    .collect_vec(),
             )),
             fastn_resolved::EventName::Input => Some(fastn_js::Event::Input),
             fastn_resolved::EventName::Change => Some(fastn_js::Event::Change),
@@ -345,7 +351,7 @@ impl EventNameExt for fastn_resolved::EventName {
     }
 }
 
-pub(crate) trait ComponentExt {
+pub trait ComponentExt {
     fn to_component_statements(
         &self,
         parent: &str,
@@ -413,17 +419,16 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
         should_return: bool,
         has_rive_components: &mut bool,
     ) -> Vec<fastn_js::ComponentStatement> {
-        use ftd::js::fastn_type_functions::PropertyValueExt;
+        use fastn_resolved_to_js::fastn_type_functions::PropertyValueExt;
         use itertools::Itertools;
 
         let loop_alias = self.iteration.clone().map(|v| v.alias);
         let loop_counter_alias = self.iteration.clone().and_then(|v| {
             if let Some(ref loop_counter_alias) = v.loop_counter_alias {
                 let (_, loop_counter_alias, _remaining) =
-                    ftd::interpreter::utils::get_doc_name_and_thing_name_and_remaining(
+                    fastn_resolved_to_js::utils::get_doc_name_and_thing_name_and_remaining(
                         loop_counter_alias.as_str(),
                         doc.name(),
-                        v.line_number,
                     );
                 return Some(loop_counter_alias);
             }
@@ -566,19 +571,21 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
         should_return: bool,
         has_rive_components: &mut bool,
     ) -> Option<Vec<fastn_js::ComponentStatement>> {
-        if ftd::js::element::is_kernel(self.name.as_str()) {
+        if fastn_resolved_to_js::element::is_kernel(self.name.as_str()) {
             if !*has_rive_components {
-                *has_rive_components = ftd::js::element::is_rive_component(self.name.as_str());
+                *has_rive_components =
+                    fastn_resolved_to_js::element::is_rive_component(self.name.as_str());
             }
             Some(
-                ftd::js::Element::from_interpreter_component(self, doc).to_component_statements(
-                    parent,
-                    index,
-                    doc,
-                    rdata,
-                    should_return,
-                    has_rive_components,
-                ),
+                fastn_resolved_to_js::Element::from_interpreter_component(self, doc)
+                    .to_component_statements(
+                        parent,
+                        index,
+                        doc,
+                        rdata,
+                        should_return,
+                        has_rive_components,
+                    ),
             )
         } else {
             None
@@ -595,7 +602,7 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
         has_rive_components: &mut bool,
     ) -> Option<Vec<fastn_js::ComponentStatement>> {
         if let Some(arguments) =
-            ftd::js::utils::get_set_property_values_for_provided_component_properties(
+            fastn_resolved_to_js::utils::get_set_property_values_for_provided_component_properties(
                 doc,
                 rdata,
                 self.name.as_str(),
@@ -650,11 +657,8 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
         should_return: bool,
         has_rive_components: &mut bool,
     ) -> Option<Vec<fastn_js::ComponentStatement>> {
-        let (component_name, remaining) = ftd::interpreter::utils::get_doc_name_and_remaining(
-            self.name.as_str(),
-            doc.name(),
-            self.line_number,
-        );
+        let (component_name, remaining) =
+            fastn_resolved_to_js::utils::get_doc_name_and_remaining(self.name.as_str());
 
         let remaining = remaining?;
 
@@ -668,10 +672,11 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
 
         let mut arguments = vec![];
 
-        if let Some(component_name) =
-            ftd::js::utils::is_module_argument(component.arguments.as_slice(), remaining.as_str())
-        {
-            arguments = ftd::js::utils::get_set_property_values_for_provided_component_properties(
+        if let Some(component_name) = fastn_resolved_to_js::utils::is_module_argument(
+            component.arguments.as_slice(),
+            remaining.as_str(),
+        ) {
+            arguments = fastn_resolved_to_js::utils::get_set_property_values_for_provided_component_properties(
                 doc,
                 rdata,
                 component_name.as_str(),
@@ -679,18 +684,24 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
                 self.line_number,
                 has_rive_components,
             )?;
-        } else if !ftd::js::utils::is_ui_argument(
+        } else if !fastn_resolved_to_js::utils::is_ui_argument(
             component.arguments.as_slice(),
             remaining.as_str(),
         ) {
             return None;
         }
 
-        let value = ftd::js::Value::Reference(ftd::js::value::ReferenceData {
-            name: self.name.to_owned(),
-            value: None,
-        })
-        .to_set_property_value_with_ui(doc, rdata, has_rive_components, should_return);
+        let value =
+            fastn_resolved_to_js::Value::Reference(fastn_resolved_to_js::value::ReferenceData {
+                name: self.name.to_owned(),
+                value: None,
+            })
+            .to_set_property_value_with_ui(
+                doc,
+                rdata,
+                has_rive_components,
+                should_return,
+            );
         let instantiate_component = fastn_js::InstantiateComponent::new_with_definition(
             value,
             arguments,
@@ -744,11 +755,17 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
         }*/
 
         // The reference `self.name` is either the ftd.ui type variable or the loop-alias
-        let value = ftd::js::Value::Reference(ftd::js::value::ReferenceData {
-            name: self.name.to_owned(),
-            value: None,
-        })
-        .to_set_property_value_with_ui(doc, rdata, has_rive_components, should_return);
+        let value =
+            fastn_resolved_to_js::Value::Reference(fastn_resolved_to_js::value::ReferenceData {
+                name: self.name.to_owned(),
+                value: None,
+            })
+            .to_set_property_value_with_ui(
+                doc,
+                rdata,
+                has_rive_components,
+                should_return,
+            );
 
         let instantiate_component = fastn_js::InstantiateComponent::new_with_definition(
             value,

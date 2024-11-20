@@ -1314,8 +1314,8 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
         doc: &ftd::interpreter::Document,
         kwargs_name: &str,
     ) -> ftd::interpreter::Result<ftd::Map<String>> {
+        use fastn_resolved_to_js::PropertyValueExt;
         use ftd::interpreter::ValueExt;
-        use ftd::js::fastn_type_functions::PropertyValueExt;
 
         let property = match self.get_interpreter_value_of_argument(kwargs_name, &doc.tdoc())? {
             Some(property) => property,

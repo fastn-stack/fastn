@@ -1,4 +1,4 @@
-use ftd::js::value::ArgumentExt;
+use fastn_resolved_to_js::value::ArgumentExt;
 
 #[allow(dead_code)]
 pub fn trim_all_lines(s: &str) -> String {
@@ -33,7 +33,8 @@ pub(crate) fn get_rive_event(
     rdata: &fastn_resolved_to_js::ResolverData,
     element_name: &str,
 ) -> String {
-    let mut events_map: ftd::VecMap<(&String, &fastn_resolved::FunctionCall)> = ftd::VecMap::new();
+    let mut events_map: fastn_resolved_to_js::VecMap<(&String, &fastn_resolved::FunctionCall)> =
+        fastn_resolved_to_js::VecMap::new();
     for event in events.iter() {
         let (event_name, input, action) = match &event.name {
             fastn_resolved::EventName::RivePlay(timeline) => ("onPlay", timeline, &event.action),
@@ -49,8 +50,9 @@ pub(crate) fn get_rive_event(
     for (on, actions) in events_map.value {
         let mut actions_vec = vec![];
         for (input, action) in actions {
-            let action = ftd::js::utils::function_call_to_js_formula(action, doc, rdata)
-                .formula_value_to_js(&Some(element_name.to_string()));
+            let action =
+                fastn_resolved_to_js::utils::function_call_to_js_formula(action, doc, rdata)
+                    .formula_value_to_js(&Some(element_name.to_string()));
             actions_vec.push(format!(
                 indoc::indoc! {"
                       if (input === \"{input}\") {{
@@ -79,7 +81,7 @@ pub(crate) fn get_rive_event(
     events_vec.join("\n")
 }
 
-pub(crate) fn get_external_scripts(has_rive_components: bool) -> Vec<String> {
+pub fn get_external_scripts(has_rive_components: bool) -> Vec<String> {
     let mut scripts = vec![];
     if has_rive_components {
         scripts.push(
@@ -116,7 +118,7 @@ pub(crate) fn update_reference(
 ) -> String {
     let name = reference.to_string();
 
-    if ftd::interpreter::FTD_SPECIAL_VALUE
+    if fastn_builtins::constants::FTD_SPECIAL_VALUE
         .trim_start_matches('$')
         .eq(reference)
     {
@@ -124,7 +126,7 @@ pub(crate) fn update_reference(
         return format!("fastn_utils.getNodeValue({component_name})");
     }
 
-    if ftd::interpreter::FTD_SPECIAL_CHECKED
+    if fastn_builtins::constants::FTD_SPECIAL_CHECKED
         .trim_start_matches('$')
         .eq(reference)
     {
@@ -158,10 +160,10 @@ pub(crate) fn update_reference(
 
     if let Some(loop_counter_alias) = rdata.loop_counter_alias {
         if let Some(ref doc_name) = rdata.doc_name {
-            let resolved_alias = ftd::interpreter::utils::resolve_name(
+            let resolved_alias = fastn_resolved_to_js::utils::resolve_name(
                 loop_counter_alias,
                 doc_name.as_str(),
-                &ftd::interpreter::default::default_aliases(),
+                &fastn_builtins::default_aliases(),
             );
 
             if name.eq(resolved_alias.as_str()) {
@@ -170,7 +172,7 @@ pub(crate) fn update_reference(
         }
     }
 
-    if name.contains(ftd::interpreter::FTD_LOOP_COUNTER) {
+    if name.contains(fastn_builtins::constants::FTD_LOOP_COUNTER) {
         return "index".to_string();
     }
 
@@ -187,8 +189,8 @@ fn is_ftd_thing(name: &str) -> bool {
 
 pub(crate) fn get_js_value_from_properties(
     properties: &[fastn_resolved::Property],
-) -> Option<ftd::js::Value> {
-    use ftd::js::fastn_type_functions::PropertyValueExt;
+) -> Option<fastn_resolved_to_js::Value> {
+    use fastn_resolved_to_js::fastn_type_functions::PropertyValueExt;
     if properties.is_empty() {
         return None;
     }
@@ -200,7 +202,9 @@ pub(crate) fn get_js_value_from_properties(
         }
     }
 
-    Some(ftd::js::Value::ConditionalFormula(properties.to_owned()))
+    Some(fastn_resolved_to_js::Value::ConditionalFormula(
+        properties.to_owned(),
+    ))
 }
 
 pub(crate) fn function_call_to_js_formula(
@@ -208,7 +212,7 @@ pub(crate) fn function_call_to_js_formula(
     doc: &dyn fastn_resolved::tdoc::TDoc,
     rdata: &fastn_resolved_to_js::ResolverData,
 ) -> fastn_js::Formula {
-    use ftd::js::fastn_type_functions::{FunctionCallExt, PropertyValueExt};
+    use fastn_resolved_to_js::fastn_type_functions::{FunctionCallExt, PropertyValueExt};
 
     let mut deps = vec![];
     for property_value in function_call.values.values() {
@@ -234,8 +238,6 @@ pub(crate) fn is_module_argument(
     component_arguments: &[fastn_resolved::Argument],
     remaining: &str,
 ) -> Option<String> {
-    use ftd::interpreter::PropertyValueExt;
-
     let (module_name, component_name) = remaining.split_once('.')?;
     component_arguments.iter().find_map(|v| {
         if v.name.eq(module_name) && v.kind.is_module() {
@@ -308,4 +310,106 @@ pub(crate) fn get_set_property_values_for_provided_component_properties(
                 })
                 .collect_vec()
         })
+}
+
+pub(crate) fn get_doc_name_and_remaining(s: &str) -> (String, Option<String>) {
+    let mut part1 = "".to_string();
+    let mut pattern_to_split_at = s.to_string();
+    if let Some((p1, p2)) = s.split_once('#') {
+        part1 = format!("{}#", p1);
+        pattern_to_split_at = p2.to_string();
+    }
+    if pattern_to_split_at.contains('.') {
+        let (p1, p2) = split(pattern_to_split_at.as_str(), ".").unwrap();
+        (format!("{}{}", part1, p1), Some(p2))
+    } else {
+        (s.to_string(), None)
+    }
+}
+
+pub fn split(name: &str, split_at: &str) -> Option<(String, String)> {
+    if !name.contains(split_at) {
+        return None;
+    }
+    let mut part = name.splitn(2, split_at);
+    let part_1 = part.next().unwrap().trim();
+    let part_2 = part.next().unwrap().trim();
+    Some((part_1.to_string(), part_2.to_string()))
+}
+
+pub fn get_doc_name_and_thing_name_and_remaining(
+    s: &str,
+    doc_id: &str,
+) -> (String, String, Option<String>) {
+    let (doc_name, remaining) = get_doc_name_and_remaining(s);
+    if let Some((doc_name, thing_name)) = doc_name.split_once('#') {
+        (doc_name.to_string(), thing_name.to_string(), remaining)
+    } else {
+        (doc_id.to_string(), doc_name, remaining)
+    }
+}
+
+pub fn get_children_properties_from_properties(
+    properties: &[fastn_resolved::Property],
+) -> Vec<fastn_resolved::Property> {
+    use itertools::Itertools;
+
+    properties
+        .iter()
+        .filter_map(|v| {
+            if v.value.kind().inner_list().is_subsection_ui() {
+                Some(v.to_owned())
+            } else {
+                None
+            }
+        })
+        .collect_vec()
+}
+
+pub fn resolve_name(name: &str, doc_name: &str, aliases: &fastn_builtins::Map<String>) -> String {
+    let name = name
+        .trim_start_matches(fastn_resolved_to_js::CLONE)
+        .trim_start_matches(fastn_resolved_to_js::REFERENCE)
+        .to_string();
+
+    if name.contains('#') {
+        return name;
+    }
+
+    let doc_name = doc_name.trim_end_matches('/');
+    match fastn_resolved_to_js::utils::split_module(name.as_str()) {
+        (Some(m), v, None) => match aliases.get(m) {
+            Some(m) => format!("{}#{}", m, v),
+            None => format!("{}#{}.{}", doc_name, m, v),
+        },
+        (Some(m), v, Some(c)) => match aliases.get(m) {
+            Some(m) => format!("{}#{}.{}", m, v, c),
+            None => format!("{}#{}.{}.{}", doc_name, m, v, c),
+        },
+        (None, v, None) => format!("{}#{}", doc_name, v),
+        _ => unimplemented!(),
+    }
+}
+
+pub fn split_module(id: &str) -> (Option<&str>, &str, Option<&str>) {
+    match id.split_once('.') {
+        Some((p1, p2)) => match p2.split_once('.') {
+            Some((p21, p22)) => (Some(p1), p21, Some(p22)),
+            None => (Some(p1), p2, None),
+        },
+        None => (None, id, None),
+    }
+}
+
+pub(crate) fn find_properties_by_source_without_default(
+    sources: &[fastn_resolved::PropertySource],
+    properties: &[fastn_resolved::Property],
+) -> Vec<fastn_resolved::Property> {
+    use itertools::Itertools;
+
+    properties
+        .iter()
+        .filter(|v| sources.iter().any(|s| v.source.is_equal(s)))
+        .map(ToOwned::to_owned)
+        .collect_vec()
 }

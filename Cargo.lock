@@ -1618,7 +1618,12 @@ dependencies = [
 name = "fastn-resolved-to-js"
 version = "0.1.0"
 dependencies = [
+ "fastn-builtins",
  "fastn-js",
+ "fastn-resolved",
+ "indoc",
+ "itertools 0.13.0",
+ "serde",
 ]
 
 [[package]]

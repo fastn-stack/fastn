@@ -105,6 +105,13 @@ impl PropertyValue {
         }
     }
 
+    pub fn value_optional(&self) -> Option<&fastn_resolved::Value> {
+        match self {
+            fastn_resolved::PropertyValue::Value { value, .. } => Some(value),
+            _ => None,
+        }
+    }
+
     pub fn set_mutable(&mut self, mutable: bool) {
         match self {
             PropertyValue::Value { is_mutable, .. }

@@ -145,14 +145,14 @@ impl Element {
 
 #[derive(Debug)]
 pub struct CheckBox {
-    pub enabled: Option<ftd::js::Value>,
-    pub checked: Option<ftd::js::Value>,
+    pub enabled: Option<fastn_resolved_to_js::Value>,
+    pub checked: Option<fastn_resolved_to_js::Value>,
     pub common: Common,
 }
 
 impl CheckBox {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> CheckBox {
-        let component_definition = ftd::interpreter::default::get_default_bag()
+        let component_definition = fastn_builtins::get_default_bag()
             .get("ftd#checkbox")
             .unwrap()
             .clone()
@@ -160,12 +160,12 @@ impl CheckBox {
             .unwrap();
 
         CheckBox {
-            enabled: ftd::js::value::get_optional_js_value(
+            enabled: fastn_resolved_to_js::value::get_optional_js_value(
                 "enabled",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            checked: ftd::js::value::get_optional_js_value(
+            checked: fastn_resolved_to_js::value::get_optional_js_value(
                 "checked",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -227,19 +227,19 @@ impl CheckBox {
 
 #[derive(Debug)]
 pub struct TextInput {
-    pub placeholder: Option<ftd::js::Value>,
-    pub multiline: Option<ftd::js::Value>,
-    pub max_length: Option<ftd::js::Value>,
-    pub _type: Option<ftd::js::Value>,
-    pub value: Option<ftd::js::Value>,
-    pub default_value: Option<ftd::js::Value>,
-    pub enabled: Option<ftd::js::Value>,
+    pub placeholder: Option<fastn_resolved_to_js::Value>,
+    pub multiline: Option<fastn_resolved_to_js::Value>,
+    pub max_length: Option<fastn_resolved_to_js::Value>,
+    pub _type: Option<fastn_resolved_to_js::Value>,
+    pub value: Option<fastn_resolved_to_js::Value>,
+    pub default_value: Option<fastn_resolved_to_js::Value>,
+    pub enabled: Option<fastn_resolved_to_js::Value>,
     pub common: Common,
 }
 
 impl TextInput {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> TextInput {
-        let component_definition = ftd::interpreter::default::get_default_bag()
+        let component_definition = fastn_builtins::get_default_bag()
             .get("ftd#text-input")
             .unwrap()
             .clone()
@@ -247,37 +247,37 @@ impl TextInput {
             .unwrap();
 
         TextInput {
-            placeholder: ftd::js::value::get_optional_js_value(
+            placeholder: fastn_resolved_to_js::value::get_optional_js_value(
                 "placeholder",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            multiline: ftd::js::value::get_optional_js_value(
+            multiline: fastn_resolved_to_js::value::get_optional_js_value(
                 "multiline",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            _type: ftd::js::value::get_optional_js_value(
+            _type: fastn_resolved_to_js::value::get_optional_js_value(
                 "type",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            value: ftd::js::value::get_optional_js_value(
+            value: fastn_resolved_to_js::value::get_optional_js_value(
                 "value",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            default_value: ftd::js::value::get_optional_js_value(
+            default_value: fastn_resolved_to_js::value::get_optional_js_value(
                 "default-value",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            enabled: ftd::js::value::get_optional_js_value(
+            enabled: fastn_resolved_to_js::value::get_optional_js_value(
                 "enabled",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            max_length: ftd::js::value::get_optional_js_value(
+            max_length: fastn_resolved_to_js::value::get_optional_js_value(
                 "max-length",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -390,15 +390,15 @@ impl TextInput {
 #[derive(Debug)]
 pub struct Iframe {
     pub common: Common,
-    pub src: Option<ftd::js::Value>,
-    pub srcdoc: Option<ftd::js::Value>,
-    pub youtube: Option<ftd::js::Value>,
-    pub loading: Option<ftd::js::Value>,
+    pub src: Option<fastn_resolved_to_js::Value>,
+    pub srcdoc: Option<fastn_resolved_to_js::Value>,
+    pub youtube: Option<fastn_resolved_to_js::Value>,
+    pub loading: Option<fastn_resolved_to_js::Value>,
 }
 
 impl Iframe {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> Iframe {
-        let component_definition = ftd::interpreter::default::get_default_bag()
+        let component_definition = fastn_builtins::get_default_bag()
             .get("ftd#iframe")
             .unwrap()
             .clone()
@@ -411,22 +411,22 @@ impl Iframe {
                 component_definition.arguments.as_slice(),
                 component.events.as_slice(),
             ),
-            src: ftd::js::value::get_optional_js_value(
+            src: fastn_resolved_to_js::value::get_optional_js_value(
                 "src",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            srcdoc: ftd::js::value::get_optional_js_value(
+            srcdoc: fastn_resolved_to_js::value::get_optional_js_value(
                 "srcdoc",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            loading: ftd::js::value::get_optional_js_value(
+            loading: fastn_resolved_to_js::value::get_optional_js_value(
                 "loading",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            youtube: ftd::js::value::get_optional_js_value(
+            youtube: fastn_resolved_to_js::value::get_optional_js_value(
                 "youtube",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -508,10 +508,10 @@ impl Iframe {
 pub struct Code {
     pub common: Common,
     pub text_common: TextCommon,
-    pub code: ftd::js::Value,
-    pub lang: ftd::js::Value,
-    pub theme: ftd::js::Value,
-    pub show_line_number: ftd::js::Value,
+    pub code: fastn_resolved_to_js::Value,
+    pub lang: fastn_resolved_to_js::Value,
+    pub theme: fastn_resolved_to_js::Value,
+    pub show_line_number: fastn_resolved_to_js::Value,
 }
 
 impl Code {
@@ -519,7 +519,7 @@ impl Code {
         component: &fastn_resolved::ComponentInvocation,
         _doc: &dyn fastn_resolved::tdoc::TDoc,
     ) -> Code {
-        let component_definition = ftd::interpreter::default::get_default_bag()
+        let component_definition = fastn_builtins::get_default_bag()
             .get("ftd#code")
             .unwrap()
             .clone()
@@ -536,26 +536,28 @@ impl Code {
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            // code: ftd::js::Value::from_str_value(stylized_code.as_str()),
-            code: ftd::js::value::get_optional_js_value(
+            // code: fastn_resolved_to_js::Value::from_str_value(stylized_code.as_str()),
+            code: fastn_resolved_to_js::value::get_optional_js_value(
                 "text",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             )
             .unwrap(),
-            lang: ftd::js::value::get_js_value_with_default(
+            lang: fastn_resolved_to_js::value::get_js_value_with_default(
                 "lang",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
-                ftd::js::Value::from_str_value("txt"),
+                fastn_resolved_to_js::Value::from_str_value("txt"),
             ),
-            theme: ftd::js::value::get_js_value_with_default(
+            theme: fastn_resolved_to_js::value::get_js_value_with_default(
                 "theme",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
-                ftd::js::Value::from_str_value(ftd::js::CODE_DEFAULT_THEME),
+                fastn_resolved_to_js::Value::from_str_value(
+                    fastn_resolved_to_js::CODE_DEFAULT_THEME,
+                ),
             ),
-            show_line_number: ftd::js::value::get_optional_js_value_with_default(
+            show_line_number: fastn_resolved_to_js::value::get_optional_js_value_with_default(
                 "show-line-number",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -635,39 +637,39 @@ impl Code {
 
 #[derive(Debug)]
 pub struct Image {
-    pub src: ftd::js::Value,
-    pub fit: Option<ftd::js::Value>,
-    pub alt: Option<ftd::js::Value>,
-    pub fetch_priority: Option<ftd::js::Value>,
+    pub src: fastn_resolved_to_js::Value,
+    pub fit: Option<fastn_resolved_to_js::Value>,
+    pub alt: Option<fastn_resolved_to_js::Value>,
+    pub fetch_priority: Option<fastn_resolved_to_js::Value>,
     pub common: Common,
 }
 
 impl Image {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> Image {
-        let component_definition = ftd::interpreter::default::get_default_bag()
+        let component_definition = fastn_builtins::get_default_bag()
             .get("ftd#image")
             .unwrap()
             .clone()
             .component()
             .unwrap();
         Image {
-            src: ftd::js::value::get_optional_js_value(
+            src: fastn_resolved_to_js::value::get_optional_js_value(
                 "src",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             )
             .unwrap(),
-            fit: ftd::js::value::get_optional_js_value(
+            fit: fastn_resolved_to_js::value::get_optional_js_value(
                 "fit",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            fetch_priority: ftd::js::value::get_optional_js_value(
+            fetch_priority: fastn_resolved_to_js::value::get_optional_js_value(
                 "fetch-priority",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            alt: ftd::js::value::get_optional_js_value(
+            alt: fastn_resolved_to_js::value::get_optional_js_value(
                 "alt",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -746,45 +748,45 @@ impl Image {
 
 #[derive(Debug)]
 pub struct Audio {
-    pub src: ftd::js::Value,
-    pub controls: Option<ftd::js::Value>,
-    pub loop_: Option<ftd::js::Value>,
-    pub muted: Option<ftd::js::Value>,
-    pub autoplay: Option<ftd::js::Value>,
+    pub src: fastn_resolved_to_js::Value,
+    pub controls: Option<fastn_resolved_to_js::Value>,
+    pub loop_: Option<fastn_resolved_to_js::Value>,
+    pub muted: Option<fastn_resolved_to_js::Value>,
+    pub autoplay: Option<fastn_resolved_to_js::Value>,
     pub common: Common,
 }
 
 impl Audio {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> Audio {
-        let component_definition = ftd::interpreter::default::get_default_bag()
+        let component_definition = fastn_builtins::get_default_bag()
             .get("ftd#audio")
             .unwrap()
             .clone()
             .component()
             .unwrap();
         Audio {
-            src: ftd::js::value::get_optional_js_value(
+            src: fastn_resolved_to_js::value::get_optional_js_value(
                 "src",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             )
             .unwrap(),
-            autoplay: ftd::js::value::get_optional_js_value(
+            autoplay: fastn_resolved_to_js::value::get_optional_js_value(
                 "autoplay",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            controls: ftd::js::value::get_optional_js_value(
+            controls: fastn_resolved_to_js::value::get_optional_js_value(
                 "controls",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            loop_: ftd::js::value::get_optional_js_value(
+            loop_: fastn_resolved_to_js::value::get_optional_js_value(
                 "loop",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            muted: ftd::js::value::get_optional_js_value(
+            muted: fastn_resolved_to_js::value::get_optional_js_value(
                 "muted",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -872,57 +874,57 @@ impl Audio {
 }
 #[derive(Debug)]
 pub struct Video {
-    pub src: ftd::js::Value,
-    pub fit: Option<ftd::js::Value>,
-    pub controls: Option<ftd::js::Value>,
-    pub loop_video: Option<ftd::js::Value>,
-    pub muted: Option<ftd::js::Value>,
-    pub autoplay: Option<ftd::js::Value>,
-    pub poster: Option<ftd::js::Value>,
+    pub src: fastn_resolved_to_js::Value,
+    pub fit: Option<fastn_resolved_to_js::Value>,
+    pub controls: Option<fastn_resolved_to_js::Value>,
+    pub loop_video: Option<fastn_resolved_to_js::Value>,
+    pub muted: Option<fastn_resolved_to_js::Value>,
+    pub autoplay: Option<fastn_resolved_to_js::Value>,
+    pub poster: Option<fastn_resolved_to_js::Value>,
     pub common: Common,
 }
 
 impl Video {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> Video {
-        let component_definition = ftd::interpreter::default::get_default_bag()
+        let component_definition = fastn_builtins::get_default_bag()
             .get("ftd#video")
             .unwrap()
             .clone()
             .component()
             .unwrap();
         Video {
-            src: ftd::js::value::get_optional_js_value(
+            src: fastn_resolved_to_js::value::get_optional_js_value(
                 "src",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             )
             .unwrap(),
-            fit: ftd::js::value::get_optional_js_value(
+            fit: fastn_resolved_to_js::value::get_optional_js_value(
                 "fit",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            autoplay: ftd::js::value::get_optional_js_value(
+            autoplay: fastn_resolved_to_js::value::get_optional_js_value(
                 "autoplay",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            controls: ftd::js::value::get_optional_js_value(
+            controls: fastn_resolved_to_js::value::get_optional_js_value(
                 "controls",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            loop_video: ftd::js::value::get_optional_js_value(
+            loop_video: fastn_resolved_to_js::value::get_optional_js_value(
                 "loop",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            muted: ftd::js::value::get_optional_js_value(
+            muted: fastn_resolved_to_js::value::get_optional_js_value(
                 "muted",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            poster: ftd::js::value::get_optional_js_value(
+            poster: fastn_resolved_to_js::value::get_optional_js_value(
                 "poster",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -1031,28 +1033,28 @@ impl Video {
 
 #[derive(Debug)]
 pub struct Text {
-    pub text: ftd::js::Value,
+    pub text: fastn_resolved_to_js::Value,
     pub common: Common,
     pub text_common: TextCommon,
 }
 
 #[derive(Debug)]
 pub struct Integer {
-    pub value: ftd::js::Value,
+    pub value: fastn_resolved_to_js::Value,
     pub common: Common,
     pub text_common: TextCommon,
 }
 
 #[derive(Debug)]
 pub struct Decimal {
-    pub value: ftd::js::Value,
+    pub value: fastn_resolved_to_js::Value,
     pub common: Common,
     pub text_common: TextCommon,
 }
 
 #[derive(Debug)]
 pub struct Boolean {
-    pub value: ftd::js::Value,
+    pub value: fastn_resolved_to_js::Value,
     pub common: Common,
     pub text_common: TextCommon,
 }
@@ -1060,23 +1062,23 @@ pub struct Boolean {
 #[derive(Debug)]
 pub struct Document {
     pub container: Container,
-    pub breakpoint_width: Option<ftd::js::Value>,
+    pub breakpoint_width: Option<fastn_resolved_to_js::Value>,
     pub metadata: DocumentMeta,
 }
 
 #[derive(Debug)]
 pub struct DocumentMeta {
-    pub title: Option<ftd::js::Value>,
-    pub favicon: Option<ftd::js::Value>,
-    pub og_title: Option<ftd::js::Value>,
-    pub twitter_title: Option<ftd::js::Value>,
-    pub description: Option<ftd::js::Value>,
-    pub og_description: Option<ftd::js::Value>,
-    pub twitter_description: Option<ftd::js::Value>,
-    pub facebook_domain_verification: Option<ftd::js::Value>,
-    pub og_image: Option<ftd::js::Value>,
-    pub twitter_image: Option<ftd::js::Value>,
-    pub theme_color: Option<ftd::js::Value>,
+    pub title: Option<fastn_resolved_to_js::Value>,
+    pub favicon: Option<fastn_resolved_to_js::Value>,
+    pub og_title: Option<fastn_resolved_to_js::Value>,
+    pub twitter_title: Option<fastn_resolved_to_js::Value>,
+    pub description: Option<fastn_resolved_to_js::Value>,
+    pub og_description: Option<fastn_resolved_to_js::Value>,
+    pub twitter_description: Option<fastn_resolved_to_js::Value>,
+    pub facebook_domain_verification: Option<fastn_resolved_to_js::Value>,
+    pub og_image: Option<fastn_resolved_to_js::Value>,
+    pub twitter_image: Option<fastn_resolved_to_js::Value>,
+    pub theme_color: Option<fastn_resolved_to_js::Value>,
 }
 
 #[derive(Debug)]
@@ -1088,16 +1090,16 @@ pub struct Column {
 
 #[derive(Debug)]
 pub struct InheritedProperties {
-    pub colors: Option<ftd::js::Value>,
-    pub types: Option<ftd::js::Value>,
+    pub colors: Option<fastn_resolved_to_js::Value>,
+    pub types: Option<fastn_resolved_to_js::Value>,
 }
 
 #[derive(Debug)]
 pub struct ContainerProperties {
-    pub spacing: Option<ftd::js::Value>,
-    pub wrap: Option<ftd::js::Value>,
-    pub align_content: Option<ftd::js::Value>,
-    pub backdrop_filter: Option<ftd::js::Value>,
+    pub spacing: Option<fastn_resolved_to_js::Value>,
+    pub wrap: Option<fastn_resolved_to_js::Value>,
+    pub align_content: Option<fastn_resolved_to_js::Value>,
+    pub backdrop_filter: Option<fastn_resolved_to_js::Value>,
 }
 
 impl ContainerProperties {
@@ -1106,14 +1108,16 @@ impl ContainerProperties {
         arguments: &[fastn_resolved::Argument],
     ) -> ContainerProperties {
         ContainerProperties {
-            spacing: ftd::js::value::get_optional_js_value("spacing", properties, arguments),
-            wrap: ftd::js::value::get_optional_js_value("wrap", properties, arguments),
-            align_content: ftd::js::value::get_optional_js_value(
+            spacing: fastn_resolved_to_js::value::get_optional_js_value(
+                "spacing", properties, arguments,
+            ),
+            wrap: fastn_resolved_to_js::value::get_optional_js_value("wrap", properties, arguments),
+            align_content: fastn_resolved_to_js::value::get_optional_js_value(
                 "align-content",
                 properties,
                 arguments,
             ),
-            backdrop_filter: ftd::js::value::get_optional_js_value(
+            backdrop_filter: fastn_resolved_to_js::value::get_optional_js_value(
                 "backdrop-filter",
                 properties,
                 arguments,
@@ -1165,7 +1169,7 @@ impl ContainerProperties {
 
 #[derive(Debug)]
 pub struct Container {
-    pub children: Option<ftd::js::Value>,
+    pub children: Option<fastn_resolved_to_js::Value>,
     pub inherited: InheritedProperties,
 }
 
@@ -1175,8 +1179,8 @@ impl Container {
         arguments: &[fastn_resolved::Argument],
     ) -> Container {
         Container {
-            children: ftd::js::utils::get_js_value_from_properties(
-                ftd::interpreter::utils::get_children_properties_from_properties(properties)
+            children: fastn_resolved_to_js::utils::get_js_value_from_properties(
+                fastn_resolved_to_js::utils::get_children_properties_from_properties(properties)
                     .as_slice(),
             ),
             inherited: InheritedProperties::from(properties, arguments),
@@ -1247,8 +1251,12 @@ impl InheritedProperties {
         arguments: &[fastn_resolved::Argument],
     ) -> InheritedProperties {
         InheritedProperties {
-            colors: ftd::js::value::get_optional_js_value("colors", properties, arguments),
-            types: ftd::js::value::get_optional_js_value("types", properties, arguments),
+            colors: fastn_resolved_to_js::value::get_optional_js_value(
+                "colors", properties, arguments,
+            ),
+            types: fastn_resolved_to_js::value::get_optional_js_value(
+                "types", properties, arguments,
+            ),
         }
     }
 
@@ -1291,14 +1299,14 @@ impl InheritedProperties {
 
 impl Text {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> Text {
-        let component_definition = ftd::interpreter::default::get_default_bag()
+        let component_definition = fastn_builtins::get_default_bag()
             .get("ftd#text")
             .unwrap()
             .clone()
             .component()
             .unwrap();
         Text {
-            text: ftd::js::value::get_optional_js_value(
+            text: fastn_resolved_to_js::value::get_optional_js_value(
                 "text",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -1355,14 +1363,14 @@ impl Text {
 
 impl Integer {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> Integer {
-        let component_definition = ftd::interpreter::default::get_default_bag()
+        let component_definition = fastn_builtins::get_default_bag()
             .get("ftd#integer")
             .unwrap()
             .clone()
             .component()
             .unwrap();
         Integer {
-            value: ftd::js::value::get_optional_js_value(
+            value: fastn_resolved_to_js::value::get_optional_js_value(
                 "value",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -1420,14 +1428,14 @@ impl Integer {
 
 impl Decimal {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> Decimal {
-        let component_definition = ftd::interpreter::default::get_default_bag()
+        let component_definition = fastn_builtins::get_default_bag()
             .get("ftd#decimal")
             .unwrap()
             .clone()
             .component()
             .unwrap();
         Decimal {
-            value: ftd::js::value::get_optional_js_value(
+            value: fastn_resolved_to_js::value::get_optional_js_value(
                 "value",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -1485,14 +1493,14 @@ impl Decimal {
 
 impl Boolean {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> Boolean {
-        let component_definition = ftd::interpreter::default::get_default_bag()
+        let component_definition = fastn_builtins::get_default_bag()
             .get("ftd#boolean")
             .unwrap()
             .clone()
             .component()
             .unwrap();
         Boolean {
-            value: ftd::js::value::get_optional_js_value(
+            value: fastn_resolved_to_js::value::get_optional_js_value(
                 "value",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -1550,7 +1558,7 @@ impl Boolean {
 
 impl Document {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> Document {
-        let component_definition = ftd::interpreter::default::get_default_bag()
+        let component_definition = fastn_builtins::get_default_bag()
             .get("ftd#document")
             .unwrap()
             .clone()
@@ -1562,7 +1570,7 @@ impl Document {
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            breakpoint_width: ftd::js::value::get_optional_js_value(
+            breakpoint_width: fastn_resolved_to_js::value::get_optional_js_value(
                 "breakpoint",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -1625,41 +1633,49 @@ impl DocumentMeta {
         arguments: &[fastn_resolved::Argument],
     ) -> DocumentMeta {
         DocumentMeta {
-            favicon: ftd::js::value::get_optional_js_value("favicon", properties, arguments),
-            title: ftd::js::value::get_optional_js_value("title", properties, arguments),
-            og_title: ftd::js::value::get_optional_js_value("og-title", properties, arguments),
-            twitter_title: ftd::js::value::get_optional_js_value(
+            favicon: fastn_resolved_to_js::value::get_optional_js_value(
+                "favicon", properties, arguments,
+            ),
+            title: fastn_resolved_to_js::value::get_optional_js_value(
+                "title", properties, arguments,
+            ),
+            og_title: fastn_resolved_to_js::value::get_optional_js_value(
+                "og-title", properties, arguments,
+            ),
+            twitter_title: fastn_resolved_to_js::value::get_optional_js_value(
                 "twitter-title",
                 properties,
                 arguments,
             ),
-            description: ftd::js::value::get_optional_js_value(
+            description: fastn_resolved_to_js::value::get_optional_js_value(
                 "description",
                 properties,
                 arguments,
             ),
-            og_description: ftd::js::value::get_optional_js_value(
+            og_description: fastn_resolved_to_js::value::get_optional_js_value(
                 "og-description",
                 properties,
                 arguments,
             ),
-            twitter_description: ftd::js::value::get_optional_js_value(
+            twitter_description: fastn_resolved_to_js::value::get_optional_js_value(
                 "twitter-description",
                 properties,
                 arguments,
             ),
-            og_image: ftd::js::value::get_optional_js_value("og-image", properties, arguments),
-            twitter_image: ftd::js::value::get_optional_js_value(
+            og_image: fastn_resolved_to_js::value::get_optional_js_value(
+                "og-image", properties, arguments,
+            ),
+            twitter_image: fastn_resolved_to_js::value::get_optional_js_value(
                 "twitter-image",
                 properties,
                 arguments,
             ),
-            theme_color: ftd::js::value::get_optional_js_value(
+            theme_color: fastn_resolved_to_js::value::get_optional_js_value(
                 "theme-color",
                 properties,
                 arguments,
             ),
-            facebook_domain_verification: ftd::js::value::get_optional_js_value(
+            facebook_domain_verification: fastn_resolved_to_js::value::get_optional_js_value(
                 "facebook-domain-verification",
                 properties,
                 arguments,
@@ -1667,8 +1683,8 @@ impl DocumentMeta {
         }
     }
 
-    pub fn has_self_reference(&self, value: &ftd::js::Value) -> bool {
-        if let ftd::js::Value::Reference(reference) = value {
+    pub fn has_self_reference(&self, value: &fastn_resolved_to_js::Value) -> bool {
+        if let fastn_resolved_to_js::Value::Reference(reference) = value {
             return reference.name.starts_with("ftd#document");
         }
         false
@@ -1676,9 +1692,9 @@ impl DocumentMeta {
 
     pub fn set_property_value_with_self_reference(
         &self,
-        value: &ftd::js::Value,
+        value: &fastn_resolved_to_js::Value,
         value_kind: fastn_js::PropertyKind,
-        referenced_value: &Option<ftd::js::Value>,
+        referenced_value: &Option<fastn_resolved_to_js::Value>,
         component_statements: &mut Vec<fastn_js::ComponentStatement>,
         doc: &dyn fastn_resolved::tdoc::TDoc,
         rdata: &fastn_resolved_to_js::ResolverData,
@@ -1827,7 +1843,7 @@ impl DocumentMeta {
 
 impl Column {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> Column {
-        let component_definition = ftd::interpreter::default::get_default_bag()
+        let component_definition = fastn_builtins::get_default_bag()
             .get("ftd#column")
             .unwrap()
             .clone()
@@ -1893,7 +1909,7 @@ impl Column {
 
 impl Row {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> Row {
-        let component_definition = ftd::interpreter::default::get_default_bag()
+        let component_definition = fastn_builtins::get_default_bag()
             .get("ftd#row")
             .unwrap()
             .clone()
@@ -1959,7 +1975,7 @@ impl Row {
 
 impl ContainerElement {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> ContainerElement {
-        let component_definition = ftd::interpreter::default::get_default_bag()
+        let component_definition = fastn_builtins::get_default_bag()
             .get("ftd#container")
             .unwrap()
             .clone()
@@ -2027,7 +2043,7 @@ pub struct Device {
 
 impl Device {
     pub fn from(component: &fastn_resolved::ComponentInvocation, device: &str) -> Device {
-        let component_definition = ftd::interpreter::default::get_default_bag()
+        let component_definition = fastn_builtins::get_default_bag()
             .get(device)
             .unwrap()
             .clone()
@@ -2089,14 +2105,14 @@ impl Device {
 
 #[derive(Debug)]
 pub struct TextCommon {
-    pub text_transform: Option<ftd::js::Value>,
-    pub text_indent: Option<ftd::js::Value>,
-    pub text_align: Option<ftd::js::Value>,
-    pub line_clamp: Option<ftd::js::Value>,
-    pub style: Option<ftd::js::Value>,
-    pub display: Option<ftd::js::Value>,
-    pub link_color: Option<ftd::js::Value>,
-    pub text_shadow: Option<ftd::js::Value>,
+    pub text_transform: Option<fastn_resolved_to_js::Value>,
+    pub text_indent: Option<fastn_resolved_to_js::Value>,
+    pub text_align: Option<fastn_resolved_to_js::Value>,
+    pub line_clamp: Option<fastn_resolved_to_js::Value>,
+    pub style: Option<fastn_resolved_to_js::Value>,
+    pub display: Option<fastn_resolved_to_js::Value>,
+    pub link_color: Option<fastn_resolved_to_js::Value>,
+    pub text_shadow: Option<fastn_resolved_to_js::Value>,
 }
 
 impl TextCommon {
@@ -2105,22 +2121,38 @@ impl TextCommon {
         arguments: &[fastn_resolved::Argument],
     ) -> TextCommon {
         TextCommon {
-            text_transform: ftd::js::value::get_optional_js_value(
+            text_transform: fastn_resolved_to_js::value::get_optional_js_value(
                 "text-transform",
                 properties,
                 arguments,
             ),
-            text_indent: ftd::js::value::get_optional_js_value(
+            text_indent: fastn_resolved_to_js::value::get_optional_js_value(
                 "text-indent",
                 properties,
                 arguments,
             ),
-            text_align: ftd::js::value::get_optional_js_value("text-align", properties, arguments),
-            line_clamp: ftd::js::value::get_optional_js_value("line-clamp", properties, arguments),
-            style: ftd::js::value::get_optional_js_value("style", properties, arguments),
-            display: ftd::js::value::get_optional_js_value("display", properties, arguments),
-            link_color: ftd::js::value::get_optional_js_value("link-color", properties, arguments),
-            text_shadow: ftd::js::value::get_optional_js_value(
+            text_align: fastn_resolved_to_js::value::get_optional_js_value(
+                "text-align",
+                properties,
+                arguments,
+            ),
+            line_clamp: fastn_resolved_to_js::value::get_optional_js_value(
+                "line-clamp",
+                properties,
+                arguments,
+            ),
+            style: fastn_resolved_to_js::value::get_optional_js_value(
+                "style", properties, arguments,
+            ),
+            display: fastn_resolved_to_js::value::get_optional_js_value(
+                "display", properties, arguments,
+            ),
+            link_color: fastn_resolved_to_js::value::get_optional_js_value(
+                "link-color",
+                properties,
+                arguments,
+            ),
+            text_shadow: fastn_resolved_to_js::value::get_optional_js_value(
                 "text-shadow",
                 properties,
                 arguments,
@@ -2201,18 +2233,18 @@ impl TextCommon {
 
 #[derive(Debug)]
 pub struct Rive {
-    pub src: ftd::js::Value,
-    pub canvas_width: Option<ftd::js::Value>,
-    pub canvas_height: Option<ftd::js::Value>,
-    pub state_machines: ftd::js::Value,
-    pub autoplay: ftd::js::Value,
-    pub artboard: Option<ftd::js::Value>,
+    pub src: fastn_resolved_to_js::Value,
+    pub canvas_width: Option<fastn_resolved_to_js::Value>,
+    pub canvas_height: Option<fastn_resolved_to_js::Value>,
+    pub state_machines: fastn_resolved_to_js::Value,
+    pub autoplay: fastn_resolved_to_js::Value,
+    pub artboard: Option<fastn_resolved_to_js::Value>,
     pub common: Common,
 }
 
 impl Rive {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> Rive {
-        let component_definition = ftd::interpreter::default::get_default_bag()
+        let component_definition = fastn_builtins::get_default_bag()
             .get("ftd#rive")
             .unwrap()
             .clone()
@@ -2220,35 +2252,35 @@ impl Rive {
             .unwrap();
 
         Rive {
-            src: ftd::js::value::get_optional_js_value(
+            src: fastn_resolved_to_js::value::get_optional_js_value(
                 "src",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             )
             .unwrap(),
-            canvas_width: ftd::js::value::get_optional_js_value(
+            canvas_width: fastn_resolved_to_js::value::get_optional_js_value(
                 "canvas-width",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            canvas_height: ftd::js::value::get_optional_js_value(
+            canvas_height: fastn_resolved_to_js::value::get_optional_js_value(
                 "canvas-height",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
-            state_machines: ftd::js::value::get_optional_js_value_with_default(
+            state_machines: fastn_resolved_to_js::value::get_optional_js_value_with_default(
                 "state-machine",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             )
             .unwrap(),
-            autoplay: ftd::js::value::get_optional_js_value_with_default(
+            autoplay: fastn_resolved_to_js::value::get_optional_js_value_with_default(
                 "autoplay",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             )
             .unwrap(),
-            artboard: ftd::js::value::get_optional_js_value(
+            artboard: fastn_resolved_to_js::value::get_optional_js_value(
                 "artboard",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
@@ -2288,7 +2320,7 @@ impl Rive {
                 )
             });
 
-        let rive_events = ftd::js::utils::get_rive_event(
+        let rive_events = fastn_resolved_to_js::utils::get_rive_event(
             self.common.events.as_slice(),
             doc,
             rdata,
@@ -2345,79 +2377,79 @@ impl Rive {
 
 #[derive(Debug)]
 pub struct Common {
-    pub id: Option<ftd::js::Value>,
-    pub region: Option<ftd::js::Value>,
-    pub download: Option<ftd::js::Value>,
-    pub link: Option<ftd::js::Value>,
-    pub link_rel: Option<ftd::js::Value>,
-    pub open_in_new_tab: Option<ftd::js::Value>,
-    pub align_self: Option<ftd::js::Value>,
-    pub width: Option<ftd::js::Value>,
-    pub height: Option<ftd::js::Value>,
-    pub padding: Option<ftd::js::Value>,
-    pub padding_horizontal: Option<ftd::js::Value>,
-    pub padding_vertical: Option<ftd::js::Value>,
-    pub padding_left: Option<ftd::js::Value>,
-    pub padding_right: Option<ftd::js::Value>,
-    pub padding_top: Option<ftd::js::Value>,
-    pub padding_bottom: Option<ftd::js::Value>,
-    pub margin: Option<ftd::js::Value>,
-    pub margin_horizontal: Option<ftd::js::Value>,
-    pub margin_vertical: Option<ftd::js::Value>,
-    pub margin_left: Option<ftd::js::Value>,
-    pub margin_right: Option<ftd::js::Value>,
-    pub margin_top: Option<ftd::js::Value>,
-    pub margin_bottom: Option<ftd::js::Value>,
-    pub border_width: Option<ftd::js::Value>,
-    pub border_top_width: Option<ftd::js::Value>,
-    pub border_bottom_width: Option<ftd::js::Value>,
-    pub border_left_width: Option<ftd::js::Value>,
-    pub border_right_width: Option<ftd::js::Value>,
-    pub border_radius: Option<ftd::js::Value>,
-    pub border_top_left_radius: Option<ftd::js::Value>,
-    pub border_top_right_radius: Option<ftd::js::Value>,
-    pub border_bottom_left_radius: Option<ftd::js::Value>,
-    pub border_bottom_right_radius: Option<ftd::js::Value>,
-    pub border_style: Option<ftd::js::Value>,
-    pub border_style_vertical: Option<ftd::js::Value>,
-    pub border_style_horizontal: Option<ftd::js::Value>,
-    pub border_left_style: Option<ftd::js::Value>,
-    pub border_right_style: Option<ftd::js::Value>,
-    pub border_top_style: Option<ftd::js::Value>,
-    pub border_bottom_style: Option<ftd::js::Value>,
-    pub border_color: Option<ftd::js::Value>,
-    pub border_left_color: Option<ftd::js::Value>,
-    pub border_right_color: Option<ftd::js::Value>,
-    pub border_top_color: Option<ftd::js::Value>,
-    pub border_bottom_color: Option<ftd::js::Value>,
-    pub color: Option<ftd::js::Value>,
-    pub background: Option<ftd::js::Value>,
-    pub role: Option<ftd::js::Value>,
-    pub z_index: Option<ftd::js::Value>,
-    pub sticky: Option<ftd::js::Value>,
-    pub top: Option<ftd::js::Value>,
-    pub bottom: Option<ftd::js::Value>,
-    pub left: Option<ftd::js::Value>,
-    pub right: Option<ftd::js::Value>,
-    pub overflow: Option<ftd::js::Value>,
-    pub overflow_x: Option<ftd::js::Value>,
-    pub overflow_y: Option<ftd::js::Value>,
-    pub opacity: Option<ftd::js::Value>,
-    pub cursor: Option<ftd::js::Value>,
-    pub resize: Option<ftd::js::Value>,
-    pub max_height: Option<ftd::js::Value>,
-    pub max_width: Option<ftd::js::Value>,
-    pub min_height: Option<ftd::js::Value>,
-    pub min_width: Option<ftd::js::Value>,
-    pub whitespace: Option<ftd::js::Value>,
-    pub classes: Option<ftd::js::Value>,
-    pub anchor: Option<ftd::js::Value>,
-    pub shadow: Option<ftd::js::Value>,
-    pub css: Option<ftd::js::Value>,
-    pub js: Option<ftd::js::Value>,
+    pub id: Option<fastn_resolved_to_js::Value>,
+    pub region: Option<fastn_resolved_to_js::Value>,
+    pub download: Option<fastn_resolved_to_js::Value>,
+    pub link: Option<fastn_resolved_to_js::Value>,
+    pub link_rel: Option<fastn_resolved_to_js::Value>,
+    pub open_in_new_tab: Option<fastn_resolved_to_js::Value>,
+    pub align_self: Option<fastn_resolved_to_js::Value>,
+    pub width: Option<fastn_resolved_to_js::Value>,
+    pub height: Option<fastn_resolved_to_js::Value>,
+    pub padding: Option<fastn_resolved_to_js::Value>,
+    pub padding_horizontal: Option<fastn_resolved_to_js::Value>,
+    pub padding_vertical: Option<fastn_resolved_to_js::Value>,
+    pub padding_left: Option<fastn_resolved_to_js::Value>,
+    pub padding_right: Option<fastn_resolved_to_js::Value>,
+    pub padding_top: Option<fastn_resolved_to_js::Value>,
+    pub padding_bottom: Option<fastn_resolved_to_js::Value>,
+    pub margin: Option<fastn_resolved_to_js::Value>,
+    pub margin_horizontal: Option<fastn_resolved_to_js::Value>,
+    pub margin_vertical: Option<fastn_resolved_to_js::Value>,
+    pub margin_left: Option<fastn_resolved_to_js::Value>,
+    pub margin_right: Option<fastn_resolved_to_js::Value>,
+    pub margin_top: Option<fastn_resolved_to_js::Value>,
+    pub margin_bottom: Option<fastn_resolved_to_js::Value>,
+    pub border_width: Option<fastn_resolved_to_js::Value>,
+    pub border_top_width: Option<fastn_resolved_to_js::Value>,
+    pub border_bottom_width: Option<fastn_resolved_to_js::Value>,
+    pub border_left_width: Option<fastn_resolved_to_js::Value>,
+    pub border_right_width: Option<fastn_resolved_to_js::Value>,
+    pub border_radius: Option<fastn_resolved_to_js::Value>,
+    pub border_top_left_radius: Option<fastn_resolved_to_js::Value>,
+    pub border_top_right_radius: Option<fastn_resolved_to_js::Value>,
+    pub border_bottom_left_radius: Option<fastn_resolved_to_js::Value>,
+    pub border_bottom_right_radius: Option<fastn_resolved_to_js::Value>,
+    pub border_style: Option<fastn_resolved_to_js::Value>,
+    pub border_style_vertical: Option<fastn_resolved_to_js::Value>,
+    pub border_style_horizontal: Option<fastn_resolved_to_js::Value>,
+    pub border_left_style: Option<fastn_resolved_to_js::Value>,
+    pub border_right_style: Option<fastn_resolved_to_js::Value>,
+    pub border_top_style: Option<fastn_resolved_to_js::Value>,
+    pub border_bottom_style: Option<fastn_resolved_to_js::Value>,
+    pub border_color: Option<fastn_resolved_to_js::Value>,
+    pub border_left_color: Option<fastn_resolved_to_js::Value>,
+    pub border_right_color: Option<fastn_resolved_to_js::Value>,
+    pub border_top_color: Option<fastn_resolved_to_js::Value>,
+    pub border_bottom_color: Option<fastn_resolved_to_js::Value>,
+    pub color: Option<fastn_resolved_to_js::Value>,
+    pub background: Option<fastn_resolved_to_js::Value>,
+    pub role: Option<fastn_resolved_to_js::Value>,
+    pub z_index: Option<fastn_resolved_to_js::Value>,
+    pub sticky: Option<fastn_resolved_to_js::Value>,
+    pub top: Option<fastn_resolved_to_js::Value>,
+    pub bottom: Option<fastn_resolved_to_js::Value>,
+    pub left: Option<fastn_resolved_to_js::Value>,
+    pub right: Option<fastn_resolved_to_js::Value>,
+    pub overflow: Option<fastn_resolved_to_js::Value>,
+    pub overflow_x: Option<fastn_resolved_to_js::Value>,
+    pub overflow_y: Option<fastn_resolved_to_js::Value>,
+    pub opacity: Option<fastn_resolved_to_js::Value>,
+    pub cursor: Option<fastn_resolved_to_js::Value>,
+    pub resize: Option<fastn_resolved_to_js::Value>,
+    pub max_height: Option<fastn_resolved_to_js::Value>,
+    pub max_width: Option<fastn_resolved_to_js::Value>,
+    pub min_height: Option<fastn_resolved_to_js::Value>,
+    pub min_width: Option<fastn_resolved_to_js::Value>,
+    pub whitespace: Option<fastn_resolved_to_js::Value>,
+    pub classes: Option<fastn_resolved_to_js::Value>,
+    pub anchor: Option<fastn_resolved_to_js::Value>,
+    pub shadow: Option<fastn_resolved_to_js::Value>,
+    pub css: Option<fastn_resolved_to_js::Value>,
+    pub js: Option<fastn_resolved_to_js::Value>,
     pub events: Vec<fastn_resolved::Event>,
-    pub selectable: Option<ftd::js::Value>,
-    pub mask: Option<ftd::js::Value>,
+    pub selectable: Option<fastn_resolved_to_js::Value>,
+    pub mask: Option<fastn_resolved_to_js::Value>,
 }
 
 impl Common {
@@ -2427,214 +2459,296 @@ impl Common {
         events: &[fastn_resolved::Event],
     ) -> Common {
         Common {
-            id: ftd::js::value::get_optional_js_value("id", properties, arguments),
-            download: ftd::js::value::get_optional_js_value("download", properties, arguments),
-            css: ftd::js::value::get_optional_js_value("css", properties, arguments),
-            js: ftd::js::value::get_optional_js_value("js", properties, arguments),
-            region: ftd::js::value::get_optional_js_value("region", properties, arguments),
-            link: ftd::js::value::get_optional_js_value("link", properties, arguments),
-            link_rel: ftd::js::value::get_optional_js_value("rel", properties, arguments),
-            open_in_new_tab: ftd::js::value::get_optional_js_value(
+            id: fastn_resolved_to_js::value::get_optional_js_value("id", properties, arguments),
+            download: fastn_resolved_to_js::value::get_optional_js_value(
+                "download", properties, arguments,
+            ),
+            css: fastn_resolved_to_js::value::get_optional_js_value("css", properties, arguments),
+            js: fastn_resolved_to_js::value::get_optional_js_value("js", properties, arguments),
+            region: fastn_resolved_to_js::value::get_optional_js_value(
+                "region", properties, arguments,
+            ),
+            link: fastn_resolved_to_js::value::get_optional_js_value("link", properties, arguments),
+            link_rel: fastn_resolved_to_js::value::get_optional_js_value(
+                "rel", properties, arguments,
+            ),
+            open_in_new_tab: fastn_resolved_to_js::value::get_optional_js_value(
                 "open-in-new-tab",
                 properties,
                 arguments,
             ),
-            anchor: ftd::js::value::get_optional_js_value("anchor", properties, arguments),
-            classes: ftd::js::value::get_optional_js_value("classes", properties, arguments),
-            align_self: ftd::js::value::get_optional_js_value("align-self", properties, arguments),
-            width: ftd::js::value::get_optional_js_value("width", properties, arguments),
-            height: ftd::js::value::get_optional_js_value("height", properties, arguments),
-            padding: ftd::js::value::get_optional_js_value("padding", properties, arguments),
-            padding_horizontal: ftd::js::value::get_optional_js_value(
+            anchor: fastn_resolved_to_js::value::get_optional_js_value(
+                "anchor", properties, arguments,
+            ),
+            classes: fastn_resolved_to_js::value::get_optional_js_value(
+                "classes", properties, arguments,
+            ),
+            align_self: fastn_resolved_to_js::value::get_optional_js_value(
+                "align-self",
+                properties,
+                arguments,
+            ),
+            width: fastn_resolved_to_js::value::get_optional_js_value(
+                "width", properties, arguments,
+            ),
+            height: fastn_resolved_to_js::value::get_optional_js_value(
+                "height", properties, arguments,
+            ),
+            padding: fastn_resolved_to_js::value::get_optional_js_value(
+                "padding", properties, arguments,
+            ),
+            padding_horizontal: fastn_resolved_to_js::value::get_optional_js_value(
                 "padding-horizontal",
                 properties,
                 arguments,
             ),
-            padding_vertical: ftd::js::value::get_optional_js_value(
+            padding_vertical: fastn_resolved_to_js::value::get_optional_js_value(
                 "padding-vertical",
                 properties,
                 arguments,
             ),
-            padding_left: ftd::js::value::get_optional_js_value(
+            padding_left: fastn_resolved_to_js::value::get_optional_js_value(
                 "padding-left",
                 properties,
                 arguments,
             ),
-            padding_right: ftd::js::value::get_optional_js_value(
+            padding_right: fastn_resolved_to_js::value::get_optional_js_value(
                 "padding-right",
                 properties,
                 arguments,
             ),
-            padding_top: ftd::js::value::get_optional_js_value(
+            padding_top: fastn_resolved_to_js::value::get_optional_js_value(
                 "padding-top",
                 properties,
                 arguments,
             ),
-            padding_bottom: ftd::js::value::get_optional_js_value(
+            padding_bottom: fastn_resolved_to_js::value::get_optional_js_value(
                 "padding-bottom",
                 properties,
                 arguments,
             ),
-            margin: ftd::js::value::get_optional_js_value("margin", properties, arguments),
-            margin_horizontal: ftd::js::value::get_optional_js_value(
+            margin: fastn_resolved_to_js::value::get_optional_js_value(
+                "margin", properties, arguments,
+            ),
+            margin_horizontal: fastn_resolved_to_js::value::get_optional_js_value(
                 "margin-horizontal",
                 properties,
                 arguments,
             ),
-            margin_vertical: ftd::js::value::get_optional_js_value(
+            margin_vertical: fastn_resolved_to_js::value::get_optional_js_value(
                 "margin-vertical",
                 properties,
                 arguments,
             ),
-            margin_left: ftd::js::value::get_optional_js_value(
+            margin_left: fastn_resolved_to_js::value::get_optional_js_value(
                 "margin-left",
                 properties,
                 arguments,
             ),
-            margin_right: ftd::js::value::get_optional_js_value(
+            margin_right: fastn_resolved_to_js::value::get_optional_js_value(
                 "margin-right",
                 properties,
                 arguments,
             ),
-            margin_top: ftd::js::value::get_optional_js_value("margin-top", properties, arguments),
-            margin_bottom: ftd::js::value::get_optional_js_value(
+            margin_top: fastn_resolved_to_js::value::get_optional_js_value(
+                "margin-top",
+                properties,
+                arguments,
+            ),
+            margin_bottom: fastn_resolved_to_js::value::get_optional_js_value(
                 "margin-bottom",
                 properties,
                 arguments,
             ),
-            border_width: ftd::js::value::get_optional_js_value(
+            border_width: fastn_resolved_to_js::value::get_optional_js_value(
                 "border-width",
                 properties,
                 arguments,
             ),
-            border_top_width: ftd::js::value::get_optional_js_value(
+            border_top_width: fastn_resolved_to_js::value::get_optional_js_value(
                 "border-top-width",
                 properties,
                 arguments,
             ),
-            border_bottom_width: ftd::js::value::get_optional_js_value(
+            border_bottom_width: fastn_resolved_to_js::value::get_optional_js_value(
                 "border-bottom-width",
                 properties,
                 arguments,
             ),
-            border_left_width: ftd::js::value::get_optional_js_value(
+            border_left_width: fastn_resolved_to_js::value::get_optional_js_value(
                 "border-left-width",
                 properties,
                 arguments,
             ),
-            border_right_width: ftd::js::value::get_optional_js_value(
+            border_right_width: fastn_resolved_to_js::value::get_optional_js_value(
                 "border-right-width",
                 properties,
                 arguments,
             ),
-            border_radius: ftd::js::value::get_optional_js_value(
+            border_radius: fastn_resolved_to_js::value::get_optional_js_value(
                 "border-radius",
                 properties,
                 arguments,
             ),
-            border_top_left_radius: ftd::js::value::get_optional_js_value(
+            border_top_left_radius: fastn_resolved_to_js::value::get_optional_js_value(
                 "border-top-left-radius",
                 properties,
                 arguments,
             ),
-            border_top_right_radius: ftd::js::value::get_optional_js_value(
+            border_top_right_radius: fastn_resolved_to_js::value::get_optional_js_value(
                 "border-top-right-radius",
                 properties,
                 arguments,
             ),
-            border_bottom_left_radius: ftd::js::value::get_optional_js_value(
+            border_bottom_left_radius: fastn_resolved_to_js::value::get_optional_js_value(
                 "border-bottom-left-radius",
                 properties,
                 arguments,
             ),
-            border_bottom_right_radius: ftd::js::value::get_optional_js_value(
+            border_bottom_right_radius: fastn_resolved_to_js::value::get_optional_js_value(
                 "border-bottom-right-radius",
                 properties,
                 arguments,
             ),
-            border_style: ftd::js::value::get_optional_js_value(
+            border_style: fastn_resolved_to_js::value::get_optional_js_value(
                 "border-style",
                 properties,
                 arguments,
             ),
-            border_style_vertical: ftd::js::value::get_optional_js_value(
+            border_style_vertical: fastn_resolved_to_js::value::get_optional_js_value(
                 "border-style-vertical",
                 properties,
                 arguments,
             ),
-            border_style_horizontal: ftd::js::value::get_optional_js_value(
+            border_style_horizontal: fastn_resolved_to_js::value::get_optional_js_value(
                 "border-style-horizontal",
                 properties,
                 arguments,
             ),
-            border_left_style: ftd::js::value::get_optional_js_value(
+            border_left_style: fastn_resolved_to_js::value::get_optional_js_value(
                 "border-style-left",
                 properties,
                 arguments,
             ),
-            border_right_style: ftd::js::value::get_optional_js_value(
+            border_right_style: fastn_resolved_to_js::value::get_optional_js_value(
                 "border-style-right",
                 properties,
                 arguments,
             ),
-            border_top_style: ftd::js::value::get_optional_js_value(
+            border_top_style: fastn_resolved_to_js::value::get_optional_js_value(
                 "border-style-top",
                 properties,
                 arguments,
             ),
-            border_bottom_style: ftd::js::value::get_optional_js_value(
+            border_bottom_style: fastn_resolved_to_js::value::get_optional_js_value(
                 "border-style-bottom",
                 properties,
                 arguments,
             ),
-            border_color: ftd::js::value::get_optional_js_value(
+            border_color: fastn_resolved_to_js::value::get_optional_js_value(
                 "border-color",
                 properties,
                 arguments,
             ),
-            border_left_color: ftd::js::value::get_optional_js_value(
+            border_left_color: fastn_resolved_to_js::value::get_optional_js_value(
                 "border-left-color",
                 properties,
                 arguments,
             ),
-            border_right_color: ftd::js::value::get_optional_js_value(
+            border_right_color: fastn_resolved_to_js::value::get_optional_js_value(
                 "border-right-color",
                 properties,
                 arguments,
             ),
-            border_top_color: ftd::js::value::get_optional_js_value(
+            border_top_color: fastn_resolved_to_js::value::get_optional_js_value(
                 "border-top-color",
                 properties,
                 arguments,
             ),
-            border_bottom_color: ftd::js::value::get_optional_js_value(
+            border_bottom_color: fastn_resolved_to_js::value::get_optional_js_value(
                 "border-bottom-color",
                 properties,
                 arguments,
             ),
-            color: ftd::js::value::get_optional_js_value("color", properties, arguments),
-            background: ftd::js::value::get_optional_js_value("background", properties, arguments),
-            role: ftd::js::value::get_optional_js_value("role", properties, arguments),
-            z_index: ftd::js::value::get_optional_js_value("z-index", properties, arguments),
-            sticky: ftd::js::value::get_optional_js_value("sticky", properties, arguments),
-            top: ftd::js::value::get_optional_js_value("top", properties, arguments),
-            bottom: ftd::js::value::get_optional_js_value("bottom", properties, arguments),
-            left: ftd::js::value::get_optional_js_value("left", properties, arguments),
-            right: ftd::js::value::get_optional_js_value("right", properties, arguments),
-            overflow: ftd::js::value::get_optional_js_value("overflow", properties, arguments),
-            overflow_x: ftd::js::value::get_optional_js_value("overflow-x", properties, arguments),
-            overflow_y: ftd::js::value::get_optional_js_value("overflow-y", properties, arguments),
-            opacity: ftd::js::value::get_optional_js_value("opacity", properties, arguments),
-            cursor: ftd::js::value::get_optional_js_value("cursor", properties, arguments),
-            resize: ftd::js::value::get_optional_js_value("resize", properties, arguments),
-            max_height: ftd::js::value::get_optional_js_value("max-height", properties, arguments),
-            max_width: ftd::js::value::get_optional_js_value("max-width", properties, arguments),
-            min_height: ftd::js::value::get_optional_js_value("min-height", properties, arguments),
-            min_width: ftd::js::value::get_optional_js_value("min-width", properties, arguments),
-            whitespace: ftd::js::value::get_optional_js_value("white-space", properties, arguments),
-            shadow: ftd::js::value::get_optional_js_value("shadow", properties, arguments),
-            selectable: ftd::js::value::get_optional_js_value("selectable", properties, arguments),
-            mask: ftd::js::value::get_optional_js_value("mask", properties, arguments),
+            color: fastn_resolved_to_js::value::get_optional_js_value(
+                "color", properties, arguments,
+            ),
+            background: fastn_resolved_to_js::value::get_optional_js_value(
+                "background",
+                properties,
+                arguments,
+            ),
+            role: fastn_resolved_to_js::value::get_optional_js_value("role", properties, arguments),
+            z_index: fastn_resolved_to_js::value::get_optional_js_value(
+                "z-index", properties, arguments,
+            ),
+            sticky: fastn_resolved_to_js::value::get_optional_js_value(
+                "sticky", properties, arguments,
+            ),
+            top: fastn_resolved_to_js::value::get_optional_js_value("top", properties, arguments),
+            bottom: fastn_resolved_to_js::value::get_optional_js_value(
+                "bottom", properties, arguments,
+            ),
+            left: fastn_resolved_to_js::value::get_optional_js_value("left", properties, arguments),
+            right: fastn_resolved_to_js::value::get_optional_js_value(
+                "right", properties, arguments,
+            ),
+            overflow: fastn_resolved_to_js::value::get_optional_js_value(
+                "overflow", properties, arguments,
+            ),
+            overflow_x: fastn_resolved_to_js::value::get_optional_js_value(
+                "overflow-x",
+                properties,
+                arguments,
+            ),
+            overflow_y: fastn_resolved_to_js::value::get_optional_js_value(
+                "overflow-y",
+                properties,
+                arguments,
+            ),
+            opacity: fastn_resolved_to_js::value::get_optional_js_value(
+                "opacity", properties, arguments,
+            ),
+            cursor: fastn_resolved_to_js::value::get_optional_js_value(
+                "cursor", properties, arguments,
+            ),
+            resize: fastn_resolved_to_js::value::get_optional_js_value(
+                "resize", properties, arguments,
+            ),
+            max_height: fastn_resolved_to_js::value::get_optional_js_value(
+                "max-height",
+                properties,
+                arguments,
+            ),
+            max_width: fastn_resolved_to_js::value::get_optional_js_value(
+                "max-width",
+                properties,
+                arguments,
+            ),
+            min_height: fastn_resolved_to_js::value::get_optional_js_value(
+                "min-height",
+                properties,
+                arguments,
+            ),
+            min_width: fastn_resolved_to_js::value::get_optional_js_value(
+                "min-width",
+                properties,
+                arguments,
+            ),
+            whitespace: fastn_resolved_to_js::value::get_optional_js_value(
+                "white-space",
+                properties,
+                arguments,
+            ),
+            shadow: fastn_resolved_to_js::value::get_optional_js_value(
+                "shadow", properties, arguments,
+            ),
+            selectable: fastn_resolved_to_js::value::get_optional_js_value(
+                "selectable",
+                properties,
+                arguments,
+            ),
+            mask: fastn_resolved_to_js::value::get_optional_js_value("mask", properties, arguments),
             events: events.to_vec(),
         }
     }
@@ -2645,7 +2759,7 @@ impl Common {
         doc: &dyn fastn_resolved::tdoc::TDoc,
         rdata: &fastn_resolved_to_js::ResolverData,
     ) -> Vec<fastn_js::ComponentStatement> {
-        use ftd::js::fastn_type_functions::EventExt;
+        use fastn_resolved_to_js::fastn_type_functions::EventExt;
 
         let mut component_statements = vec![];
         for event in self.events.iter() {

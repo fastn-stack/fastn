@@ -121,8 +121,6 @@ pub trait PropertyValueExt {
         doc_id: &str,
         line_number: usize,
     ) -> ftd::interpreter::Result<&mut fastn_resolved::Value>;
-
-    fn value_optional(&self) -> Option<&fastn_resolved::Value>;
     fn to_ui_value(
         key: &str,
         value: ftd_ast::VariableValue,
@@ -1368,10 +1366,6 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                 line_number,
             ),
         }
-    }
-
-    fn value_optional(&self) -> Option<&fastn_resolved::Value> {
-        self.value("", 0).ok()
     }
 
     fn to_ui_value(
