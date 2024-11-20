@@ -65,7 +65,71 @@ impl fastn_jdebug::JDebug for fastn_unresolved::ComponentInvocation {
 
 impl fastn_jdebug::JDebug for fastn_unresolved::Definition {
     fn debug(&self) -> Value {
-        todo!()
+        serde_json::json!({
+            "name": self.name.debug(),
+            "visibility": self.visibility.debug(),
+            "inner": self.inner.debug(),
+        })
+    }
+}
+
+impl fastn_jdebug::JDebug for fastn_unresolved::InnerDefinition {
+    fn debug(&self) -> serde_json::Value {
+        match self {
+            crate::InnerDefinition::Function { arguments, .. } => {
+                let args = arguments.iter().map(|v| match v { 
+                    fastn_unresolved::UR::UnResolved(v) => v.debug(),
+                    fastn_unresolved::UR::Resolved(v) => serde_json::to_value(v).unwrap(),
+                    _ => unimplemented!(),
+                }).collect::<Vec<_>>();
+
+                serde_json::json!({
+                    "args": args,
+                    // "return_type": return_type.debug(),
+                    // "body": body.debug(),
+                })
+            }
+            crate::InnerDefinition::Component { .. } => todo!(),
+            crate::InnerDefinition::Variable { .. } => todo!(),
+            crate::InnerDefinition::TypeAlias { .. } => todo!(),
+            crate::InnerDefinition::Record { .. } => todo!(),
+        }
+    }
+}
+
+impl fastn_jdebug::JDebug for fastn_unresolved::Argument {
+    fn debug(&self) -> serde_json::Value {
+        serde_json::json!({
+            "name": self.name.debug(),
+            "kind": self.kind.debug(),
+            "visibility": self.visibility.debug(),
+            "default": self.default.debug(),
+        })
+    }
+}
+
+impl fastn_jdebug::JDebug for fastn_unresolved::Kind {
+    fn debug(&self) -> serde_json::Value {
+        match self {
+            crate::Kind::Integer => "integer".into(),
+            crate::Kind::Decimal => "decimal".into(),
+            crate::Kind::String => "string".into(),
+            crate::Kind::Boolean => "boolean".into(),
+            crate::Kind::Option(k) => format!("Option<{}>", k.debug()).into(),
+            crate::Kind::List(k) => format!("List<{}>", k.debug()).into(),
+            crate::Kind::Caption(k) => format!("Caption<{}>", k.debug()).into(),
+            crate::Kind::Body(k) => format!("Body<{}>", k.debug()).into(),
+            crate::Kind::CaptionOrBody(k) => format!("CaptionOrBody<{}>", k.debug()).into(),
+            crate::Kind::Custom(k) => format!("Custom<{}>", k.debug()).into(),
+        }
+    }
+}
+
+impl fastn_jdebug::JDebug for fastn_unresolved::SymbolName {
+    fn debug(&self) -> serde_json::Value {
+        serde_json::json!({
+            "name": self.name.debug(),
+        })
     }
 }
 

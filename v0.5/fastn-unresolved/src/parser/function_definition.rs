@@ -40,7 +40,11 @@ mod tests {
     fastn_unresolved::tt!(super::function_definition, tester);
 
     #[test]
-    fn component_invocation() {
-        t!("-- void foo():\n\ntodo()", { "content": "ftd.text", "caption": "hello" });
+    fn function_definition() {
+        t!("-- void foo():\n\ntodo()", {
+            "return_type": "void",
+            "name": "foo",
+            "content": "todo()"
+        });
     }
 }
