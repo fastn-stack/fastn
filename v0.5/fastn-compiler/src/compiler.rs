@@ -18,6 +18,14 @@ struct Compiler {
 }
 
 impl Compiler {
+    fn resolution_input(&self) -> fastn_unresolved::ResolutionInput {
+        fastn_unresolved::ResolutionInput {
+            bag: &self.bag,
+            auto_imports: &self.auto_imports,
+            builtins: fastn_compiler::builtins(),
+        }
+    }
+
     fn new(
         symbols: Box<dyn fastn_compiler::SymbolStore>,
         auto_imports: Vec<fastn_section::AutoImport>,
@@ -79,7 +87,7 @@ impl Compiler {
             let mut definition = self.bag.remove(&sym);
             match definition.as_mut() {
                 Some(fastn_unresolved::UR::UnResolved(definition)) => {
-                    let o = definition.resolve(&self.bag, &self.auto_imports);
+                    let o = definition.resolve(self.resolution_input());
                     r.need_more_symbols.extend(o.stuck_on);
                     self.document.merge(o.errors, o.warnings, o.comments);
                 }
@@ -118,7 +126,7 @@ impl Compiler {
         for ci in content {
             match ci {
                 fastn_unresolved::UR::UnResolved(mut c) => {
-                    let needed = c.resolve(&self.bag, &self.auto_imports);
+                    let needed = c.resolve(self.resolution_input());
                     if needed.stuck_on.is_empty() {
                         new_content.push(fastn_unresolved::UR::Resolved(c.resolved().unwrap()));
                     } else {

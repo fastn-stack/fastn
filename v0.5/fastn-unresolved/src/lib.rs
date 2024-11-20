@@ -11,7 +11,7 @@ mod resolver;
 mod utils;
 
 pub use parser::parse;
-pub use resolver::ResolutionOutput;
+pub use resolver::{ResolutionInput, ResolutionOutput};
 
 pub type LookupResult = fastn_unresolved::UR<fastn_unresolved::Definition, fastn_type::Definition>;
 

@@ -5,28 +5,24 @@ pub struct ResolutionOutput {
     pub comments: Vec<fastn_section::Span>,
 }
 
+pub struct ResolutionInput<'a> {
+    pub bag: &'a std::collections::HashMap<
+        string_interner::DefaultSymbol,
+        fastn_unresolved::LookupResult,
+    >,
+    pub auto_imports: &'a [fastn_section::AutoImport],
+    pub builtins:
+        &'a std::collections::HashMap<string_interner::DefaultSymbol, fastn_type::Definition>,
+}
+
 impl fastn_unresolved::ComponentInvocation {
-    pub fn resolve(
-        &mut self,
-        _bag: &std::collections::HashMap<
-            string_interner::DefaultSymbol,
-            fastn_unresolved::LookupResult,
-        >,
-        _auto_imports: &[fastn_section::AutoImport],
-    ) -> ResolutionOutput {
+    pub fn resolve(&mut self, _input: ResolutionInput<'_>) -> ResolutionOutput {
         todo!()
     }
 }
 
 impl fastn_unresolved::Definition {
-    pub fn resolve(
-        &mut self,
-        _bag: &std::collections::HashMap<
-            string_interner::DefaultSymbol,
-            fastn_unresolved::LookupResult,
-        >,
-        _auto_imports: &[fastn_section::AutoImport],
-    ) -> ResolutionOutput {
+    pub fn resolve(&mut self, _input: ResolutionInput<'_>) -> ResolutionOutput {
         todo!()
     }
 }
