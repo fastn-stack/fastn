@@ -3,7 +3,7 @@ use ftd::js::value::{ArgumentExt, ExpressionExt};
 pub(crate) trait FunctionCallExt {
     fn to_js_function(
         &self,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
     ) -> fastn_js::Function;
 }
@@ -11,7 +11,7 @@ pub(crate) trait FunctionCallExt {
 impl FunctionCallExt for fastn_resolved::FunctionCall {
     fn to_js_function(
         &self,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
     ) -> fastn_js::Function {
         let mut parameters = vec![];
@@ -27,7 +27,9 @@ impl FunctionCallExt for fastn_resolved::FunctionCall {
                 format!("{default_module}#").as_str(),
             );
         }
-        let function = doc.get_function(name.as_str(), self.line_number).unwrap();
+        let function = doc
+            .get_opt_function(name.as_str(), self.line_number)
+            .unwrap();
         for argument in function.arguments {
             if let Some(value) = self.values.get(argument.name.as_str()) {
                 parameters.push((
@@ -50,20 +52,20 @@ pub(crate) trait PropertyValueExt {
 
     fn to_fastn_js_value_with_none(
         &self,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         has_rive_components: &mut bool,
     ) -> fastn_js::SetPropertyValue;
 
     fn to_fastn_js_value(
         &self,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
     ) -> fastn_js::SetPropertyValue;
 
     fn to_fastn_js_value_with_ui(
         &self,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         has_rive_components: &mut bool,
         is_ui_component: bool,
@@ -87,7 +89,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
 
     fn to_fastn_js_value_with_none(
         &self,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         has_rive_components: &mut bool,
     ) -> fastn_js::SetPropertyValue {
         self.to_fastn_js_value_with_ui(
@@ -100,7 +102,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
 
     fn to_fastn_js_value(
         &self,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
     ) -> fastn_js::SetPropertyValue {
@@ -109,7 +111,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
 
     fn to_fastn_js_value_with_ui(
         &self,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         has_rive_components: &mut bool,
         should_return: bool,
@@ -146,7 +148,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
 pub(crate) trait ValueExt {
     fn to_fastn_js_value(
         &self,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         has_rive_components: &mut bool,
         should_return: bool,
@@ -156,7 +158,7 @@ pub(crate) trait ValueExt {
 impl ValueExt for fastn_resolved::Value {
     fn to_fastn_js_value(
         &self,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         has_rive_components: &mut bool,
         should_return: bool,
@@ -194,7 +196,7 @@ impl ValueExt for fastn_resolved::Value {
                     variant,
                     full_variant,
                     value,
-                    doc.name,
+                    doc.name(),
                     value.line_number(),
                 );
                 if has_value {
@@ -227,7 +229,7 @@ impl ValueExt for fastn_resolved::Value {
                 fields: record_fields,
                 name,
             } => {
-                let record = doc.get_record(name, 0).unwrap();
+                let record = doc.get_opt_record(name, 0).unwrap();
                 let mut fields = vec![];
                 for field in record.fields {
                     if let Some(value) = record_fields.get(field.name.as_str()) {
@@ -289,7 +291,7 @@ pub(crate) trait EventExt {
     fn to_event_handler_js(
         &self,
         element_name: &str,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
     ) -> Option<fastn_js::EventHandler>;
 }
@@ -298,7 +300,7 @@ impl EventExt for fastn_resolved::Event {
     fn to_event_handler_js(
         &self,
         element_name: &str,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
     ) -> Option<fastn_js::EventHandler> {
         use ftd::js::fastn_type_functions::FunctionCallExt;
@@ -348,7 +350,7 @@ pub(crate) trait ComponentExt {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -357,7 +359,7 @@ pub(crate) trait ComponentExt {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -366,7 +368,7 @@ pub(crate) trait ComponentExt {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -375,7 +377,7 @@ pub(crate) trait ComponentExt {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -384,7 +386,7 @@ pub(crate) trait ComponentExt {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -393,7 +395,7 @@ pub(crate) trait ComponentExt {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -406,7 +408,7 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -420,7 +422,7 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
                 let (_, loop_counter_alias, _remaining) =
                     ftd::interpreter::utils::get_doc_name_and_thing_name_and_remaining(
                         loop_counter_alias.as_str(),
-                        doc.name,
+                        doc.name(),
                         v.line_number,
                     );
                 return Some(loop_counter_alias);
@@ -435,7 +437,7 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
                 &rdata.clone_with_new_loop_alias(
                     &loop_alias,
                     &loop_counter_alias,
-                    doc.name.to_string(),
+                    doc.name().to_string(),
                 ),
                 true,
                 has_rive_components,
@@ -445,7 +447,7 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
                 parent,
                 index,
                 doc,
-                &rdata.clone_with_new_loop_alias(&None, &None, doc.name.to_string()),
+                &rdata.clone_with_new_loop_alias(&None, &None, doc.name().to_string()),
                 should_return,
                 has_rive_components,
             )
@@ -461,7 +463,7 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
                             v.get_deps(&rdata.clone_with_new_loop_alias(
                                 &loop_alias,
                                 &loop_counter_alias,
-                                doc.name.to_string(),
+                                doc.name().to_string(),
                             ))
                         })
                         .collect_vec(),
@@ -469,7 +471,7 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
                         &rdata.clone_with_new_loop_alias(
                             &loop_alias,
                             &loop_counter_alias,
-                            doc.name.to_string(),
+                            doc.name().to_string(),
                         ),
                     ),
                     statements: component_statements,
@@ -486,7 +488,7 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
                     &rdata.clone_with_new_loop_alias(
                         &loop_alias,
                         &loop_counter_alias,
-                        doc.name.to_string(),
+                        doc.name().to_string(),
                     ),
                     false,
                 ),
@@ -503,7 +505,7 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -559,7 +561,7 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -587,7 +589,7 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -643,14 +645,14 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
     ) -> Option<Vec<fastn_js::ComponentStatement>> {
         let (component_name, remaining) = ftd::interpreter::utils::get_doc_name_and_remaining(
             self.name.as_str(),
-            doc.name,
+            doc.name(),
             self.line_number,
         );
 
@@ -662,9 +664,7 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
             _ => return None,
         }
 
-        let component = doc
-            .get_component(component_name.as_str(), self.line_number)
-            .ok()?;
+        let component = doc.get_opt_component(component_name.as_str(), self.line_number)?;
 
         let mut arguments = vec![];
 
@@ -726,7 +726,7 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,

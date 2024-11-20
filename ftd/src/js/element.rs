@@ -26,7 +26,7 @@ pub enum Element {
 impl Element {
     pub fn from_interpreter_component(
         component: &fastn_resolved::ComponentInvocation,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
     ) -> Element {
         match component.name.as_str() {
             "ftd#text" => Element::Text(Text::from(component)),
@@ -56,7 +56,7 @@ impl Element {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -182,7 +182,7 @@ impl CheckBox {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -294,7 +294,7 @@ impl TextInput {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -438,7 +438,7 @@ impl Iframe {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -517,7 +517,7 @@ pub struct Code {
 impl Code {
     pub fn from(
         component: &fastn_resolved::ComponentInvocation,
-        _doc: &fastn_resolved::js::TDoc,
+        _doc: &dyn fastn_resolved::js::TDoc,
     ) -> Code {
         let component_definition = ftd::interpreter::default::get_default_bag()
             .get("ftd#code")
@@ -568,7 +568,7 @@ impl Code {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -684,7 +684,7 @@ impl Image {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -801,7 +801,7 @@ impl Audio {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -939,7 +939,7 @@ impl Video {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -1124,7 +1124,7 @@ impl ContainerProperties {
     pub fn to_set_properties(
         &self,
         element_name: &str,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
@@ -1185,7 +1185,7 @@ impl Container {
 
     pub(crate) fn to_component_statements(
         &self,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         has_rive_components: &mut bool,
         should_return: bool,
@@ -1254,7 +1254,7 @@ impl InheritedProperties {
 
     pub(crate) fn get_inherited_variables(
         &self,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         component_name: &str,
     ) -> Option<fastn_js::StaticVariable> {
@@ -1320,7 +1320,7 @@ impl Text {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -1384,7 +1384,7 @@ impl Integer {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -1449,7 +1449,7 @@ impl Decimal {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -1514,7 +1514,7 @@ impl Boolean {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -1578,7 +1578,7 @@ impl Document {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &mut ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -1680,7 +1680,7 @@ impl DocumentMeta {
         value_kind: fastn_js::PropertyKind,
         referenced_value: &Option<ftd::js::Value>,
         component_statements: &mut Vec<fastn_js::ComponentStatement>,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         element_name: &str,
     ) {
@@ -1699,7 +1699,7 @@ impl DocumentMeta {
 
     pub(crate) fn to_component_statements(
         &self,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         element_name: &str,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -1855,7 +1855,7 @@ impl Column {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &mut ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -1920,7 +1920,7 @@ impl Row {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &mut ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -1983,7 +1983,7 @@ impl ContainerElement {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &mut ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -2046,7 +2046,7 @@ impl Device {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &mut ftd::js::ResolverData,
         should_return: bool,
         has_rive_components: &mut bool,
@@ -2131,7 +2131,7 @@ impl TextCommon {
     pub fn to_set_properties(
         &self,
         element_name: &str,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
@@ -2265,7 +2265,7 @@ impl Rive {
         &self,
         parent: &str,
         index: usize,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &mut ftd::js::ResolverData,
         should_return: bool,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -2642,7 +2642,7 @@ impl Common {
     pub fn to_set_properties_without_role(
         &self,
         element_name: &str,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
     ) -> Vec<fastn_js::ComponentStatement> {
         use ftd::js::fastn_type_functions::EventExt;
@@ -3250,7 +3250,7 @@ impl Common {
     pub fn to_set_properties_with_text(
         &self,
         element_name: &str,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         text_component_statement: fastn_js::ComponentStatement,
     ) -> Vec<fastn_js::ComponentStatement> {
@@ -3270,7 +3270,7 @@ impl Common {
     pub fn to_set_properties(
         &self,
         element_name: &str,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];

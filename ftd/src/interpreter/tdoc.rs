@@ -1,3 +1,4 @@
+use fastn_resolved::{ComponentDefinition, Function, Record};
 use ftd::interpreter::expression::ExpressionExt;
 use ftd::interpreter::things::component::ComponentDefinitionExt;
 use ftd::interpreter::things::or_type::OrTypeVariantExt;
@@ -2213,5 +2214,41 @@ impl<'a> TDoc<'a> {
             self.name,
             line_number,
         )
+    }
+}
+
+impl<'a> fastn_resolved::js::TDoc for TDoc<'a> {
+    fn get_opt_function(&self, name: &str, line_number: usize) -> Option<Function> {
+        let initial_thing = self.get_initial_thing(name, line_number).ok()?.0;
+        initial_thing.function(self.name, line_number).ok()
+    }
+
+    fn get_opt_record(&self, name: &str, line_number: usize) -> Option<Record> {
+        match self.get_thing(name, line_number).ok()? {
+            ftd::interpreter::Thing::Record(r) => Some(r),
+            _ => None,
+        }
+    }
+
+    fn name(&self) -> &str {
+        self.name
+    }
+
+    fn get_opt_component(&self, name: &str, line_number: usize) -> Option<ComponentDefinition> {
+        match self.get_thing(name, line_number).ok()? {
+            ftd::interpreter::Thing::Component(c) => Some(c),
+            _ => None,
+        }
+    }
+
+    fn get_opt_web_component(
+        &self,
+        name: &str,
+        line_number: usize,
+    ) -> Option<fastn_resolved::WebComponentDefinition> {
+        match self.get_thing(name, line_number).ok()? {
+            ftd::interpreter::Thing::WebComponent(c) => Some(c),
+            _ => None,
+        }
     }
 }

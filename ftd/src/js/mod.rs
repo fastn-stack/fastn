@@ -26,10 +26,10 @@ pub fn all_js_without_test(package_name: &str) -> String {
 pub fn default_bag_into_js_ast() -> Vec<fastn_js::Ast> {
     let mut ftd_asts = vec![];
     let bag = ftd::interpreter::default::get_default_bag();
-    let doc = fastn_resolved::js::TDoc {
+    let doc = ftd::interpreter::TDoc {
         name: "",
         aliases: &ftd::interpreter::default::default_aliases(),
-        bag,
+        bag: ftd::interpreter::BagOrState::Bag(&bag),
     };
     let mut export_asts = vec![];
     for thing in ftd::interpreter::default::get_default_bag().values() {
@@ -94,11 +94,8 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
     use ftd::js::fastn_type_functions::PropertyValueExt;
     use itertools::Itertools;
 
-    let doc = fastn_resolved::js::TDoc {
-        name: &document.name,
-        aliases: &document.aliases,
-        bag: &document.data,
-    };
+    let doc = ftd::interpreter::TDoc::new(&document.name, &document.aliases, &document.data);
+
     // Check if document tree has rive. This is used to add rive script.
     let mut has_rive_components = false;
     let mut document_asts = vec![ftd::js::from_tree(
@@ -183,10 +180,10 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
 }
 
 pub(crate) trait FunctionExt {
-    fn to_ast(&self, doc: &fastn_resolved::js::TDoc) -> fastn_js::Ast;
+    fn to_ast(&self, doc: &dyn fastn_resolved::js::TDoc) -> fastn_js::Ast;
 }
 impl FunctionExt for fastn_resolved::Function {
-    fn to_ast(&self, doc: &fastn_resolved::js::TDoc) -> fastn_js::Ast {
+    fn to_ast(&self, doc: &dyn fastn_resolved::js::TDoc) -> fastn_js::Ast {
         use itertools::Itertools;
 
         fastn_js::udf_with_arguments(
@@ -225,7 +222,7 @@ impl FunctionExt for fastn_resolved::Function {
 pub(crate) trait VariableExt {
     fn to_ast(
         &self,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         prefix: Option<String>,
         has_rive_components: &mut bool,
     ) -> fastn_js::Ast;
@@ -234,14 +231,14 @@ pub(crate) trait VariableExt {
 impl VariableExt for fastn_resolved::Variable {
     fn to_ast(
         &self,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         prefix: Option<String>,
         has_rive_components: &mut bool,
     ) -> fastn_js::Ast {
         use ftd::interpreter::PropertyValueExt;
         use ftd::js::fastn_type_functions::{PropertyValueExt as _, ValueExt as _};
 
-        if let Ok(value) = self.value.value(doc.name, self.value.line_number()) {
+        if let Ok(value) = self.value.value(doc.name(), self.value.line_number()) {
             if self.kind.is_record() {
                 return fastn_js::Ast::RecordInstance(fastn_js::RecordInstance {
                     name: self.name.to_string(),
@@ -285,14 +282,14 @@ impl VariableExt for fastn_resolved::Variable {
 pub(crate) trait ComponentDefinitionExt {
     fn to_ast(
         &self,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         has_rive_components: &mut bool,
     ) -> fastn_js::Ast;
 }
 impl ComponentDefinitionExt for fastn_resolved::ComponentDefinition {
     fn to_ast(
         &self,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         has_rive_components: &mut bool,
     ) -> fastn_js::Ast {
         use ftd::js::fastn_type_functions::ComponentExt;
@@ -337,7 +334,7 @@ impl ComponentDefinitionExt for fastn_resolved::ComponentDefinition {
 
 pub fn from_tree(
     tree: &[fastn_resolved::ComponentInvocation],
-    doc: &fastn_resolved::js::TDoc,
+    doc: &dyn fastn_resolved::js::TDoc,
     has_rive_components: &mut bool,
 ) -> fastn_js::Ast {
     use ftd::js::fastn_type_functions::ComponentExt;
@@ -357,11 +354,11 @@ pub fn from_tree(
 }
 
 pub trait WebComponentDefinitionExt {
-    fn to_ast(&self, doc: &fastn_resolved::js::TDoc) -> fastn_js::Ast;
+    fn to_ast(&self, doc: &dyn fastn_resolved::js::TDoc) -> fastn_js::Ast;
 }
 
 impl WebComponentDefinitionExt for fastn_resolved::WebComponentDefinition {
-    fn to_ast(&self, doc: &fastn_resolved::js::TDoc) -> fastn_js::Ast {
+    fn to_ast(&self, doc: &dyn fastn_resolved::js::TDoc) -> fastn_js::Ast {
         use itertools::Itertools;
 
         let kernel = fastn_js::Kernel::from_component(

@@ -16,7 +16,7 @@ pub struct ReferenceData {
 impl Value {
     pub(crate) fn to_set_property_value_with_none(
         &self,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         has_rive_components: &mut bool,
     ) -> fastn_js::SetPropertyValue {
         self.to_set_property_value_with_ui(
@@ -29,7 +29,7 @@ impl Value {
 
     pub(crate) fn to_set_property_value(
         &self,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
     ) -> fastn_js::SetPropertyValue {
         self.to_set_property_value_with_ui(doc, rdata, &mut false, false)
@@ -37,7 +37,7 @@ impl Value {
 
     pub(crate) fn to_set_property_value_with_ui(
         &self,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         rdata: &ftd::js::ResolverData,
         has_rive_components: &mut bool,
         should_return: bool,
@@ -61,7 +61,7 @@ impl Value {
                             variant.as_str(),
                             full_variant.as_str(),
                             value,
-                            doc.name,
+                            doc.name(),
                             value.line_number(),
                         );
 
@@ -104,7 +104,7 @@ impl Value {
     pub(crate) fn to_set_property(
         &self,
         kind: fastn_js::PropertyKind,
-        doc: &fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::js::TDoc,
         element_name: &str,
         rdata: &ftd::js::ResolverData,
     ) -> fastn_js::SetProperty {
@@ -131,7 +131,7 @@ impl Value {
 }
 
 fn properties_to_js_conditional_formula(
-    doc: &fastn_resolved::js::TDoc,
+    doc: &dyn fastn_resolved::js::TDoc,
     properties: &[fastn_resolved::Property],
     rdata: &ftd::js::ResolverData,
 ) -> fastn_js::Formula {

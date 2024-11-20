@@ -9,5 +9,4 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
-indexmap.workspace = true
 serde.workspace = true

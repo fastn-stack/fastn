@@ -29,7 +29,7 @@ pub fn get_css_html(external_css: &[String]) -> String {
 
 pub(crate) fn get_rive_event(
     events: &[fastn_resolved::Event],
-    doc: &fastn_resolved::js::TDoc,
+    doc: &dyn fastn_resolved::js::TDoc,
     rdata: &ftd::js::ResolverData,
     element_name: &str,
 ) -> String {
@@ -202,7 +202,7 @@ pub(crate) fn get_js_value_from_properties(
 
 pub(crate) fn function_call_to_js_formula(
     function_call: &fastn_resolved::FunctionCall,
-    doc: &fastn_resolved::js::TDoc,
+    doc: &dyn fastn_resolved::js::TDoc,
     rdata: &ftd::js::ResolverData,
 ) -> fastn_js::Formula {
     use ftd::js::fastn_type_functions::{FunctionCallExt, PropertyValueExt};
@@ -269,7 +269,7 @@ pub(crate) fn is_module_argument(
 /// second element is the corresponding set property value. Returns `None` if any retrieval or
 /// conversion operation fails.
 pub(crate) fn get_set_property_values_for_provided_component_properties(
-    doc: &fastn_resolved::js::TDoc,
+    doc: &dyn fastn_resolved::js::TDoc,
     rdata: &ftd::js::ResolverData,
     component_name: &str,
     component_properties: &[fastn_resolved::Property],
@@ -279,10 +279,10 @@ pub(crate) fn get_set_property_values_for_provided_component_properties(
     use itertools::Itertools;
 
     // Attempt to retrieve component or web component arguments
-    doc.get_component(component_name, line_number)
+    doc.get_opt_component(component_name, line_number)
         .map(|v| v.arguments)
         .or(doc
-            .get_web_component(component_name, line_number)
+            .get_opt_web_component(component_name, line_number)
             .map(|v| v.arguments))
         .map(|arguments| {
             // Collect valid arguments matching the provided properties and their set property values
@@ -305,5 +305,4 @@ pub(crate) fn get_set_property_values_for_provided_component_properties(
                 })
                 .collect_vec()
         })
-        .ok()
 }
