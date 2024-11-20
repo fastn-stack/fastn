@@ -16,12 +16,12 @@ pub struct ReferenceData {
 impl Value {
     pub(crate) fn to_set_property_value_with_none(
         &self,
-        doc: &dyn fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::tdoc::TDoc,
         has_rive_components: &mut bool,
     ) -> fastn_js::SetPropertyValue {
         self.to_set_property_value_with_ui(
             doc,
-            &ftd::js::ResolverData::none(),
+            &fastn_resolved_to_js::ResolverData::none(),
             has_rive_components,
             false,
         )
@@ -29,16 +29,16 @@ impl Value {
 
     pub(crate) fn to_set_property_value(
         &self,
-        doc: &dyn fastn_resolved::js::TDoc,
-        rdata: &ftd::js::ResolverData,
+        doc: &dyn fastn_resolved::tdoc::TDoc,
+        rdata: &fastn_resolved_to_js::ResolverData,
     ) -> fastn_js::SetPropertyValue {
         self.to_set_property_value_with_ui(doc, rdata, &mut false, false)
     }
 
     pub(crate) fn to_set_property_value_with_ui(
         &self,
-        doc: &dyn fastn_resolved::js::TDoc,
-        rdata: &ftd::js::ResolverData,
+        doc: &dyn fastn_resolved::tdoc::TDoc,
+        rdata: &fastn_resolved_to_js::ResolverData,
         has_rive_components: &mut bool,
         should_return: bool,
     ) -> fastn_js::SetPropertyValue {
@@ -104,9 +104,9 @@ impl Value {
     pub(crate) fn to_set_property(
         &self,
         kind: fastn_js::PropertyKind,
-        doc: &dyn fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::tdoc::TDoc,
         element_name: &str,
-        rdata: &ftd::js::ResolverData,
+        rdata: &fastn_resolved_to_js::ResolverData,
     ) -> fastn_js::SetProperty {
         fastn_js::SetProperty {
             kind,
@@ -131,9 +131,9 @@ impl Value {
 }
 
 fn properties_to_js_conditional_formula(
-    doc: &dyn fastn_resolved::js::TDoc,
+    doc: &dyn fastn_resolved::tdoc::TDoc,
     properties: &[fastn_resolved::Property],
-    rdata: &ftd::js::ResolverData,
+    rdata: &fastn_resolved_to_js::ResolverData,
 ) -> fastn_js::Formula {
     use ftd::js::fastn_type_functions::PropertyValueExt;
 
@@ -161,15 +161,15 @@ fn properties_to_js_conditional_formula(
 }
 
 pub(crate) trait ExpressionExt {
-    fn get_deps(&self, rdata: &ftd::js::ResolverData) -> Vec<String>;
+    fn get_deps(&self, rdata: &fastn_resolved_to_js::ResolverData) -> Vec<String>;
     fn update_node_with_variable_reference_js(
         &self,
-        rdata: &ftd::js::ResolverData,
+        rdata: &fastn_resolved_to_js::ResolverData,
     ) -> fastn_resolved::evalexpr::ExprNode;
 }
 
 impl ExpressionExt for fastn_resolved::Expression {
-    fn get_deps(&self, rdata: &ftd::js::ResolverData) -> Vec<String> {
+    fn get_deps(&self, rdata: &fastn_resolved_to_js::ResolverData) -> Vec<String> {
         use ftd::js::fastn_type_functions::PropertyValueExt;
 
         let mut deps = vec![];
@@ -181,14 +181,14 @@ impl ExpressionExt for fastn_resolved::Expression {
 
     fn update_node_with_variable_reference_js(
         &self,
-        rdata: &ftd::js::ResolverData,
+        rdata: &fastn_resolved_to_js::ResolverData,
     ) -> fastn_resolved::evalexpr::ExprNode {
         return update_node_with_variable_reference_js_(&self.expression, &self.references, rdata);
 
         fn update_node_with_variable_reference_js_(
             expr: &fastn_resolved::evalexpr::ExprNode,
             references: &ftd::Map<fastn_resolved::PropertyValue>,
-            rdata: &ftd::js::ResolverData,
+            rdata: &fastn_resolved_to_js::ResolverData,
         ) -> fastn_resolved::evalexpr::ExprNode {
             let mut operator = expr.operator().clone();
             if let fastn_resolved::evalexpr::Operator::VariableIdentifierRead { ref identifier } =

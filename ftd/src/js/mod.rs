@@ -5,13 +5,11 @@
 mod ftd_test_helpers;
 mod element;
 pub(crate) mod fastn_type_functions;
-mod resolver;
 mod utils;
 mod value;
 
 pub use element::{Common, Element};
 use ftd::js::value::ArgumentExt;
-pub use resolver::ResolverData;
 pub use value::Value;
 
 pub const CODE_DEFAULT_THEME: &str = "fastn-theme.dark";
@@ -180,10 +178,10 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
 }
 
 pub(crate) trait FunctionExt {
-    fn to_ast(&self, doc: &dyn fastn_resolved::js::TDoc) -> fastn_js::Ast;
+    fn to_ast(&self, doc: &dyn fastn_resolved::tdoc::TDoc) -> fastn_js::Ast;
 }
 impl FunctionExt for fastn_resolved::Function {
-    fn to_ast(&self, doc: &dyn fastn_resolved::js::TDoc) -> fastn_js::Ast {
+    fn to_ast(&self, doc: &dyn fastn_resolved::tdoc::TDoc) -> fastn_js::Ast {
         use itertools::Itertools;
 
         fastn_js::udf_with_arguments(
@@ -203,7 +201,7 @@ impl FunctionExt for fastn_resolved::Function {
                                 v.name.to_string(),
                                 val.to_set_property_value(
                                     doc,
-                                    &ftd::js::ResolverData::new_with_component_definition_name(
+                                    &fastn_resolved_to_js::ResolverData::new_with_component_definition_name(
                                         &Some(self.name.to_string()),
                                     ),
                                 ),
@@ -222,7 +220,7 @@ impl FunctionExt for fastn_resolved::Function {
 pub(crate) trait VariableExt {
     fn to_ast(
         &self,
-        doc: &dyn fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::tdoc::TDoc,
         prefix: Option<String>,
         has_rive_components: &mut bool,
     ) -> fastn_js::Ast;
@@ -231,7 +229,7 @@ pub(crate) trait VariableExt {
 impl VariableExt for fastn_resolved::Variable {
     fn to_ast(
         &self,
-        doc: &dyn fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::tdoc::TDoc,
         prefix: Option<String>,
         has_rive_components: &mut bool,
     ) -> fastn_js::Ast {
@@ -244,7 +242,7 @@ impl VariableExt for fastn_resolved::Variable {
                     name: self.name.to_string(),
                     fields: value.to_fastn_js_value(
                         doc,
-                        &ftd::js::ResolverData::none(),
+                        &fastn_resolved_to_js::ResolverData::none(),
                         has_rive_components,
                         false,
                     ),
@@ -282,14 +280,14 @@ impl VariableExt for fastn_resolved::Variable {
 pub(crate) trait ComponentDefinitionExt {
     fn to_ast(
         &self,
-        doc: &dyn fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::tdoc::TDoc,
         has_rive_components: &mut bool,
     ) -> fastn_js::Ast;
 }
 impl ComponentDefinitionExt for fastn_resolved::ComponentDefinition {
     fn to_ast(
         &self,
-        doc: &dyn fastn_resolved::js::TDoc,
+        doc: &dyn fastn_resolved::tdoc::TDoc,
         has_rive_components: &mut bool,
     ) -> fastn_js::Ast {
         use ftd::js::fastn_type_functions::ComponentExt;
@@ -300,7 +298,7 @@ impl ComponentDefinitionExt for fastn_resolved::ComponentDefinition {
             fastn_js::COMPONENT_PARENT,
             0,
             doc,
-            &ftd::js::ResolverData::new_with_component_definition_name(&Some(
+            &fastn_resolved_to_js::ResolverData::new_with_component_definition_name(&Some(
                 self.name.to_string(),
             )),
             true,
@@ -317,7 +315,7 @@ impl ComponentDefinitionExt for fastn_resolved::ComponentDefinition {
                             v.name.to_string(),
                             val.to_set_property_value_with_ui(
                                 doc,
-                                &ftd::js::ResolverData::new_with_component_definition_name(&Some(
+                                &fastn_resolved_to_js::ResolverData::new_with_component_definition_name(&Some(
                                     self.name.to_string(),
                                 )),
                                 has_rive_components,
@@ -334,7 +332,7 @@ impl ComponentDefinitionExt for fastn_resolved::ComponentDefinition {
 
 pub fn from_tree(
     tree: &[fastn_resolved::ComponentInvocation],
-    doc: &dyn fastn_resolved::js::TDoc,
+    doc: &dyn fastn_resolved::tdoc::TDoc,
     has_rive_components: &mut bool,
 ) -> fastn_js::Ast {
     use ftd::js::fastn_type_functions::ComponentExt;
@@ -345,7 +343,7 @@ pub fn from_tree(
             fastn_js::COMPONENT_PARENT,
             index,
             doc,
-            &ftd::js::ResolverData::none(),
+            &fastn_resolved_to_js::ResolverData::none(),
             false,
             has_rive_components,
         ))
@@ -354,11 +352,11 @@ pub fn from_tree(
 }
 
 pub trait WebComponentDefinitionExt {
-    fn to_ast(&self, doc: &dyn fastn_resolved::js::TDoc) -> fastn_js::Ast;
+    fn to_ast(&self, doc: &dyn fastn_resolved::tdoc::TDoc) -> fastn_js::Ast;
 }
 
 impl WebComponentDefinitionExt for fastn_resolved::WebComponentDefinition {
-    fn to_ast(&self, doc: &dyn fastn_resolved::js::TDoc) -> fastn_js::Ast {
+    fn to_ast(&self, doc: &dyn fastn_resolved::tdoc::TDoc) -> fastn_js::Ast {
         use itertools::Itertools;
 
         let kernel = fastn_js::Kernel::from_component(
@@ -385,7 +383,7 @@ impl WebComponentDefinitionExt for fastn_resolved::WebComponentDefinition {
                             v.name.to_string(),
                             val.to_set_property_value(
                                 doc,
-                                &ftd::js::ResolverData::new_with_component_definition_name(&Some(
+                                &fastn_resolved_to_js::ResolverData::new_with_component_definition_name(&Some(
                                     self.name.to_string(),
                                 )),
                             ),

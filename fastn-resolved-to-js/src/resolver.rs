@@ -11,7 +11,7 @@ pub struct ResolverData<'a> {
 }
 
 impl<'a> ResolverData<'a> {
-    pub(crate) fn none() -> ResolverData<'a> {
+    pub fn none() -> ResolverData<'a> {
         ResolverData {
             component_definition_name: &None,
             record_definition_name: &None,
@@ -24,7 +24,7 @@ impl<'a> ResolverData<'a> {
         }
     }
 
-    pub(crate) fn new_with_component_definition_name(
+    pub fn new_with_component_definition_name(
         component_definition_name: &'a Option<String>,
     ) -> ResolverData<'a> {
         let mut rdata = ResolverData::none();
@@ -32,7 +32,7 @@ impl<'a> ResolverData<'a> {
         rdata
     }
 
-    pub(crate) fn clone_with_default_inherited_variable(&self) -> ResolverData<'a> {
+    pub fn clone_with_default_inherited_variable(&self) -> ResolverData<'a> {
         ResolverData {
             component_definition_name: self.component_definition_name,
             record_definition_name: self.record_definition_name,
@@ -45,7 +45,7 @@ impl<'a> ResolverData<'a> {
         }
     }
 
-    pub(crate) fn clone_with_new_inherited_variable(
+    pub fn clone_with_new_inherited_variable(
         &self,
         inherited_variable_name: &'a str,
     ) -> ResolverData<'a> {
@@ -61,7 +61,7 @@ impl<'a> ResolverData<'a> {
         }
     }
 
-    pub(crate) fn clone_with_new_component_name(
+    pub fn clone_with_new_component_name(
         &self,
         component_name: Option<String>,
     ) -> ResolverData<'a> {
@@ -77,7 +77,7 @@ impl<'a> ResolverData<'a> {
         }
     }
 
-    pub(crate) fn clone_with_new_device(
+    pub fn clone_with_new_device(
         &self,
         device: &'a Option<fastn_js::DeviceType>,
     ) -> ResolverData<'a> {
@@ -93,7 +93,7 @@ impl<'a> ResolverData<'a> {
         }
     }
 
-    pub(crate) fn clone_with_new_loop_alias(
+    pub fn clone_with_new_loop_alias(
         &self,
         loop_alias: &'a Option<String>,
         loop_counter_alias: &'a Option<String>,
@@ -111,7 +111,7 @@ impl<'a> ResolverData<'a> {
         }
     }
 
-    pub(crate) fn clone_with_new_record_definition_name(
+    pub fn clone_with_new_record_definition_name(
         &self,
         record_definition_name: &'a Option<String>,
     ) -> ResolverData<'a> {

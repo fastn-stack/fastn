@@ -2217,7 +2217,7 @@ impl<'a> TDoc<'a> {
     }
 }
 
-impl<'a> fastn_resolved::js::TDoc for TDoc<'a> {
+impl<'a> fastn_resolved::tdoc::TDoc for TDoc<'a> {
     fn get_opt_function(&self, name: &str, line_number: usize) -> Option<Function> {
         let initial_thing = self.get_initial_thing(name, line_number).ok()?.0;
         initial_thing.function(self.name, line_number).ok()

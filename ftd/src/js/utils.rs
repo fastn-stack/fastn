@@ -29,8 +29,8 @@ pub fn get_css_html(external_css: &[String]) -> String {
 
 pub(crate) fn get_rive_event(
     events: &[fastn_resolved::Event],
-    doc: &dyn fastn_resolved::js::TDoc,
-    rdata: &ftd::js::ResolverData,
+    doc: &dyn fastn_resolved::tdoc::TDoc,
+    rdata: &fastn_resolved_to_js::ResolverData,
     element_name: &str,
 ) -> String {
     let mut events_map: ftd::VecMap<(&String, &fastn_resolved::FunctionCall)> = ftd::VecMap::new();
@@ -107,10 +107,13 @@ pub(crate) fn to_key(key: &str) -> String {
 }
 
 pub(crate) fn update_reference_with_none(reference: &str) -> String {
-    update_reference(reference, &ftd::js::ResolverData::none())
+    update_reference(reference, &fastn_resolved_to_js::ResolverData::none())
 }
 
-pub(crate) fn update_reference(reference: &str, rdata: &ftd::js::ResolverData) -> String {
+pub(crate) fn update_reference(
+    reference: &str,
+    rdata: &fastn_resolved_to_js::ResolverData,
+) -> String {
     let name = reference.to_string();
 
     if ftd::interpreter::FTD_SPECIAL_VALUE
@@ -202,8 +205,8 @@ pub(crate) fn get_js_value_from_properties(
 
 pub(crate) fn function_call_to_js_formula(
     function_call: &fastn_resolved::FunctionCall,
-    doc: &dyn fastn_resolved::js::TDoc,
-    rdata: &ftd::js::ResolverData,
+    doc: &dyn fastn_resolved::tdoc::TDoc,
+    rdata: &fastn_resolved_to_js::ResolverData,
 ) -> fastn_js::Formula {
     use ftd::js::fastn_type_functions::{FunctionCallExt, PropertyValueExt};
 
@@ -269,8 +272,8 @@ pub(crate) fn is_module_argument(
 /// second element is the corresponding set property value. Returns `None` if any retrieval or
 /// conversion operation fails.
 pub(crate) fn get_set_property_values_for_provided_component_properties(
-    doc: &dyn fastn_resolved::js::TDoc,
-    rdata: &ftd::js::ResolverData,
+    doc: &dyn fastn_resolved::tdoc::TDoc,
+    rdata: &fastn_resolved_to_js::ResolverData,
     component_name: &str,
     component_properties: &[fastn_resolved::Property],
     line_number: usize,

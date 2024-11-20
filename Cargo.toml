@@ -11,6 +11,7 @@ members = [
     "fastn-lang",
     "fastn-package",
     "fastn-resolved",
+    "fastn-resolved-to-js",
     "fastn-update",
     "fastn-utils",
     "fbt",
@@ -92,6 +93,7 @@ fastn-ds.path = "fastn-ds"
 fastn-update.path = "fastn-update"
 fastn-builtins.path = "fastn-builtins"
 fastn-resolved = { path = "fastn-resolved", version = "0.1.0" }
+fastn-resolved-to-js.path = "fastn-resolved-to-js"
 fastn-core.path = "fastn-core"
 fastn-issues.path = "fastn-issues"
 fastn-package.path = "fastn-package"
