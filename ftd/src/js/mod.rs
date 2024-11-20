@@ -23,7 +23,7 @@ pub fn default_bag_into_js_ast() -> Vec<fastn_js::Ast> {
     let doc = ftd::interpreter::TDoc {
         name: "",
         aliases: &ftd::interpreter::default::default_aliases(),
-        bag: ftd::interpreter::BagOrState::Bag(&bag),
+        bag: ftd::interpreter::BagOrState::Bag(bag),
     };
     let mut export_asts = vec![];
     for thing in ftd::interpreter::default::get_default_bag().values() {

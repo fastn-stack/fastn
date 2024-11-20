@@ -198,8 +198,6 @@ impl ValueExt for fastn_resolved::Value {
                     variant,
                     full_variant,
                     value,
-                    doc.name(),
-                    value.line_number(),
                 );
                 if has_value {
                     return fastn_js::SetPropertyValue::Value(fastn_js::Value::OrType {

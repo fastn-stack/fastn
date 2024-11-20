@@ -7,6 +7,7 @@ extern crate self as fastn_compiler;
 mod compiler;
 mod js;
 mod symbols;
+mod tdoc;
 mod utils;
 
 pub use compiler::compile;

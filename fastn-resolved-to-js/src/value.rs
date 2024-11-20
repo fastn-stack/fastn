@@ -14,19 +14,6 @@ pub struct ReferenceData {
 }
 
 impl Value {
-    pub(crate) fn to_set_property_value_with_none(
-        &self,
-        doc: &dyn fastn_resolved::tdoc::TDoc,
-        has_rive_components: &mut bool,
-    ) -> fastn_js::SetPropertyValue {
-        self.to_set_property_value_with_ui(
-            doc,
-            &fastn_resolved_to_js::ResolverData::none(),
-            has_rive_components,
-            false,
-        )
-    }
-
     pub(crate) fn to_set_property_value(
         &self,
         doc: &dyn fastn_resolved::tdoc::TDoc,
@@ -61,8 +48,6 @@ impl Value {
                             variant.as_str(),
                             full_variant.as_str(),
                             value,
-                            doc.name(),
-                            value.line_number(),
                         );
 
                         // return or-type value with reference
@@ -228,7 +213,6 @@ impl ExpressionExt for fastn_resolved::Expression {
 
 pub(crate) trait ArgumentExt {
     fn get_default_value(&self) -> Option<fastn_resolved_to_js::Value>;
-    fn get_value(&self, properties: &[fastn_resolved::Property]) -> fastn_resolved_to_js::Value;
     fn get_optional_value(
         &self,
         properties: &[fastn_resolved::Property],
@@ -259,15 +243,6 @@ impl ArgumentExt for fastn_resolved::Argument {
             ))
         } else {
             None
-        }
-    }
-    fn get_value(&self, properties: &[fastn_resolved::Property]) -> fastn_resolved_to_js::Value {
-        if let Some(value) = self.get_optional_value(properties) {
-            value
-        } else if let Some(value) = self.get_default_value() {
-            value
-        } else {
-            panic!("{}", format!("Expected value for argument: {:?}", &self))
         }
     }
 
@@ -327,8 +302,6 @@ pub(crate) fn ftd_to_js_variant(
     variant: &str,
     full_variant: &str,
     value: &fastn_resolved::PropertyValue,
-    doc_id: &str,
-    line_number: usize,
 ) -> (String, bool) {
     // returns (JSVariant, has_value)
     let variant = variant

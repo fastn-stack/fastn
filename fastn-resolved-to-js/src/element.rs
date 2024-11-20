@@ -10,7 +10,7 @@ pub enum Element {
     Boolean(Boolean),
     Column(Column),
     Row(Row),
-    ContainerElement(ContainerElement),
+    Container(ContainerElement),
     Image(Image),
     Audio(Audio),
     Video(Video),
@@ -35,7 +35,7 @@ impl Element {
             "ftd#boolean" => Element::Boolean(Boolean::from(component)),
             "ftd#column" => Element::Column(Column::from(component)),
             "ftd#row" => Element::Row(Row::from(component)),
-            "ftd#container" => Element::ContainerElement(ContainerElement::from(component)),
+            "ftd#container" => Element::Container(ContainerElement::from(component)),
             "ftd#image" => Element::Image(Image::from(component)),
             "ftd#video" => Element::Video(Video::from(component)),
             "ftd#audio" => Element::Audio(Audio::from(component)),
@@ -99,7 +99,7 @@ impl Element {
                 should_return,
                 has_rive_components,
             ),
-            Element::ContainerElement(container) => container.to_component_statements(
+            Element::Container(container) => container.to_component_statements(
                 parent,
                 index,
                 doc,
@@ -2232,6 +2232,7 @@ impl TextCommon {
 }
 
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct Rive {
     pub src: fastn_resolved_to_js::Value,
     pub canvas_width: Option<fastn_resolved_to_js::Value>,

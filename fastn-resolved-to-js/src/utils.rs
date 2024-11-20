@@ -108,10 +108,6 @@ pub(crate) fn to_key(key: &str) -> String {
     .to_string()
 }
 
-pub(crate) fn update_reference_with_none(reference: &str) -> String {
-    update_reference(reference, &fastn_resolved_to_js::ResolverData::none())
-}
-
 pub(crate) fn update_reference(
     reference: &str,
     rdata: &fastn_resolved_to_js::ResolverData,
