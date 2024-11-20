@@ -4,7 +4,6 @@
 
 extern crate self as fastn_section;
 
-#[cfg(test)]
 mod debug;
 mod error;
 mod parser;

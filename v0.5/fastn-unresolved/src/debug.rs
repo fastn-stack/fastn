@@ -56,7 +56,9 @@ impl fastn_jdebug::JDebug for fastn_unresolved::AliasableIdentifier {
 
 impl fastn_jdebug::JDebug for fastn_unresolved::ComponentInvocation {
     fn debug(&self) -> Value {
-        todo!()
+        serde_json::json!({
+            "name": self.name.debug(),
+        })
     }
 }
 
@@ -70,6 +72,11 @@ impl<U: fastn_jdebug::JDebug, R: fastn_jdebug::JDebug> fastn_jdebug::JDebug
     for fastn_unresolved::UR<U, R>
 {
     fn debug(&self) -> Value {
-        todo!()
+        match self {
+            crate::UR::Resolved(r) => r.debug(),
+            crate::UR::UnResolved(u) => u.debug(),
+            crate::UR::NotFound => unimplemented!(),
+            crate::UR::Invalid(_) => unimplemented!(),
+        }
     }
 }

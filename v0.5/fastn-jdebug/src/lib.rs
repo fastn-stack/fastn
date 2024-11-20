@@ -125,3 +125,9 @@ impl<T: fastn_jdebug::JDebug> fastn_jdebug::JDebug for fastn_jdebug::Spanned<T> 
         self.value.debug()
     }
 }
+
+impl fastn_jdebug::JDebug for () {
+    fn debug(&self) -> serde_json::Value {
+        serde_json::Value::Null
+    }
+}
