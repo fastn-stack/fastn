@@ -1,3 +1,13 @@
+#![allow(clippy::derive_partial_eq_without_eq, clippy::get_first)]
+#![warn(clippy::used_underscore_binding)]
+
+extern crate self as fastn_builtins;
+
+mod constants;
+
+pub use constants::*;
+
+pub type Map<T> = std::collections::BTreeMap<String, T>;
 use fastn_type::evalexpr::ContextWithMutableFunctions;
 
 /**
@@ -5,7 +15,7 @@ use fastn_type::evalexpr::ContextWithMutableFunctions;
 * with the only default alias being "ftd" itself. This allows users to reference the `ftd` module
 * using this alias instead of the full module name.
 **/
-pub fn default_aliases() -> ftd::Map<String> {
+pub fn default_aliases() -> Map<String> {
     std::iter::IntoIterator::into_iter([
         ("ftd".to_string(), "ftd".to_string()),
         ("inherited".to_string(), "inherited".to_string()),
@@ -30,7 +40,7 @@ enable light mode in the application.
 enable system mode in the application, which means the application will use the system's default
 color scheme.
 */
-pub fn default_functions() -> ftd::Map<fastn_type::evalexpr::Function> {
+pub fn default_functions() -> Map<fastn_type::evalexpr::Function> {
     use fastn_type::evalexpr::*;
 
     std::iter::IntoIterator::into_iter([
@@ -43,7 +53,7 @@ pub fn default_functions() -> ftd::Map<fastn_type::evalexpr::Function> {
                     let mut new_string = vec![];
                     for line in s.split('\n') {
                         new_string.push(
-                            ftd::interpreter::FTD_HIGHLIGHTER.replace(line, regex::NoExpand("")),
+                            fastn_builtins::constants::FTD_HIGHLIGHTER.replace(line, regex::NoExpand("")),
                         );
                     }
                     Ok(Value::String(new_string.join("\n")))
@@ -62,7 +72,7 @@ pub fn default_functions() -> ftd::Map<fastn_type::evalexpr::Function> {
                             let mut new_string = vec![];
                             for line in s.split('\n') {
                                 new_string.push(
-                                    ftd::interpreter::FTD_HIGHLIGHTER
+                                    fastn_builtins::constants::FTD_HIGHLIGHTER
                                         .replace(line, regex::NoExpand("")),
                                 );
                             }
@@ -127,10 +137,11 @@ pub fn default_functions() -> ftd::Map<fastn_type::evalexpr::Function> {
             Function::new(|_| Ok(Value::Empty)),
         ),
     ])
-    .collect()
+        .collect()
 }
 
-pub fn default_context() -> ftd::interpreter::Result<fastn_type::evalexpr::HashMapContext> {
+pub fn default_context(
+) -> Result<fastn_type::evalexpr::HashMapContext, fastn_type::evalexpr::EvalexprError> {
     let mut context = fastn_type::evalexpr::HashMapContext::new();
     for (key, function) in default_functions() {
         context.set_function(key, function)?;
@@ -145,86 +156,86 @@ The `Map` is a data structure that stores key-value pairs in a hash table. In th
 are `String`s representing the names of different `Thing`s, and the values are the `Thing`s
 themselves.
 **/
-pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
+pub fn default_bag() -> indexmap::IndexMap<String, fastn_type::Definition> {
     let record = |n: &str, r: &str| (n.to_string(), fastn_type::Kind::record(r));
     let _color = |n: &str| record(n, "ftd#color");
     let things = vec![
         (
             "ftd#row".to_string(),
-            ftd::interpreter::Thing::Component(row_function()),
+            fastn_type::Definition::Component(row_function()),
         ),
         (
             "ftd#rive".to_string(),
-            ftd::interpreter::Thing::Component(rive_function()),
+            fastn_type::Definition::Component(rive_function()),
         ),
         (
             "ftd#container".to_string(),
-            ftd::interpreter::Thing::Component(container_function()),
+            fastn_type::Definition::Component(container_function()),
         ),
         (
             "ftd#desktop".to_string(),
-            ftd::interpreter::Thing::Component(desktop_function()),
+            fastn_type::Definition::Component(desktop_function()),
         ),
         (
             "ftd#mobile".to_string(),
-            ftd::interpreter::Thing::Component(mobile_function()),
+            fastn_type::Definition::Component(mobile_function()),
         ),
         (
             "ftd#code".to_string(),
-            ftd::interpreter::Thing::Component(code_function()),
+            fastn_type::Definition::Component(code_function()),
         ),
         (
             "ftd#iframe".to_string(),
-            ftd::interpreter::Thing::Component(iframe_function()),
+            fastn_type::Definition::Component(iframe_function()),
         ),
         (
             "ftd#column".to_string(),
-            ftd::interpreter::Thing::Component(column_function()),
+            fastn_type::Definition::Component(column_function()),
         ),
         (
             "ftd#document".to_string(),
-            ftd::interpreter::Thing::Component(document_function()),
+            fastn_type::Definition::Component(document_function()),
         ),
         (
             "ftd#text".to_string(),
-            ftd::interpreter::Thing::Component(markup_function()),
+            fastn_type::Definition::Component(markup_function()),
         ),
         (
             "ftd#integer".to_string(),
-            ftd::interpreter::Thing::Component(integer_function()),
+            fastn_type::Definition::Component(integer_function()),
         ),
         (
             "ftd#decimal".to_string(),
-            ftd::interpreter::Thing::Component(decimal_function()),
+            fastn_type::Definition::Component(decimal_function()),
         ),
         (
             "ftd#boolean".to_string(),
-            ftd::interpreter::Thing::Component(boolean_function()),
+            fastn_type::Definition::Component(boolean_function()),
         ),
         (
             "ftd#text-input".to_string(),
-            ftd::interpreter::Thing::Component(text_input_function()),
+            fastn_type::Definition::Component(text_input_function()),
         ),
         (
             "ftd#checkbox".to_string(),
-            ftd::interpreter::Thing::Component(checkbox_function()),
+            fastn_type::Definition::Component(checkbox_function()),
         ),
         (
             "ftd#image".to_string(),
-            ftd::interpreter::Thing::Component(image_function()),
+            fastn_type::Definition::Component(image_function()),
         ),
 
         (
             "ftd#audio".to_string(),
-            ftd::interpreter::Thing::Component(audio_function()),
+            fastn_type::Definition::Component(audio_function()),
         ),
         (
             "ftd#video".to_string(),
-            ftd::interpreter::Thing::Component(video_function()),
+            fastn_type::Definition::Component(video_function()),
         ),
         (
             "ftd#set-rive-boolean".to_string(),
-            ftd::interpreter::Thing::Function(fastn_type::Function {
+            fastn_type::Definition::Function(fastn_type::Function {
                 name: "ftd#set-rive-boolean".to_string(),
                 return_kind: fastn_type::KindData {
                     kind: fastn_type::Kind::void(),
@@ -270,7 +281,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#toggle-rive-boolean".to_string(),
-            ftd::interpreter::Thing::Function(fastn_type::Function {
+            fastn_type::Definition::Function(fastn_type::Function {
                 name: "ftd#toggle-rive-boolean".to_string(),
                 return_kind: fastn_type::KindData {
                     kind: fastn_type::Kind::void(),
@@ -308,7 +319,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#set-rive-integer".to_string(),
-            ftd::interpreter::Thing::Function(fastn_type::Function {
+            fastn_type::Definition::Function(fastn_type::Function {
                 name: "ftd#set-rive-integer".to_string(),
                 return_kind: fastn_type::KindData {
                     kind: fastn_type::Kind::void(),
@@ -354,7 +365,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#fire-rive".to_string(),
-            ftd::interpreter::Thing::Function(fastn_type::Function {
+            fastn_type::Definition::Function(fastn_type::Function {
                 name: "ftd#fire-rive".to_string(),
                 return_kind: fastn_type::KindData {
                     kind: fastn_type::Kind::void(),
@@ -392,7 +403,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#play-rive".to_string(),
-            ftd::interpreter::Thing::Function(fastn_type::Function {
+            fastn_type::Definition::Function(fastn_type::Function {
                 name: "ftd#play-rive".to_string(),
                 return_kind: fastn_type::KindData {
                     kind: fastn_type::Kind::void(),
@@ -430,7 +441,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#pause-rive".to_string(),
-            ftd::interpreter::Thing::Function(fastn_type::Function {
+            fastn_type::Definition::Function(fastn_type::Function {
                 name: "ftd#pause-rive".to_string(),
                 return_kind: fastn_type::KindData {
                     kind: fastn_type::Kind::void(),
@@ -468,7 +479,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#toggle-play-rive".to_string(),
-            ftd::interpreter::Thing::Function(fastn_type::Function {
+            fastn_type::Definition::Function(fastn_type::Function {
                 name: "ftd#toggle-play-rive".to_string(),
                 return_kind: fastn_type::KindData {
                     kind: fastn_type::Kind::void(),
@@ -506,7 +517,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#toggle".to_string(),
-            ftd::interpreter::Thing::Function(fastn_type::Function {
+            fastn_type::Definition::Function(fastn_type::Function {
                 name: "ftd#toggle".to_string(),
                 return_kind: fastn_type::KindData {
                     kind: fastn_type::Kind::void(),
@@ -540,7 +551,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#integer-field-with-default".to_string(),
-            ftd::interpreter::Thing::Function(fastn_type::Function {
+            fastn_type::Definition::Function(fastn_type::Function {
                 name: "ftd#integer-field-with-default".to_string(),
                 return_kind: fastn_type::KindData {
                     kind: fastn_type::Kind::record("ftd#integer-field"),
@@ -586,7 +597,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#decimal-field-with-default".to_string(),
-            ftd::interpreter::Thing::Function(fastn_type::Function {
+            fastn_type::Definition::Function(fastn_type::Function {
                 name: "ftd#decimal-field-with-default".to_string(),
                 return_kind: fastn_type::KindData {
                     kind: fastn_type::Kind::record("ftd#decimal-field"),
@@ -632,7 +643,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#boolean-field-with-default".to_string(),
-            ftd::interpreter::Thing::Function(fastn_type::Function {
+            fastn_type::Definition::Function(fastn_type::Function {
                 name: "ftd#boolean-field-with-default".to_string(),
                 return_kind: fastn_type::KindData {
                     kind: fastn_type::Kind::record("ftd#boolean-field"),
@@ -677,7 +688,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             })
         ),        (
             "ftd#string-field-with-default".to_string(),
-            ftd::interpreter::Thing::Function(fastn_type::Function {
+            fastn_type::Definition::Function(fastn_type::Function {
                 name: "ftd#string-field-with-default".to_string(),
                 return_kind: fastn_type::KindData {
                     kind: fastn_type::Kind::record("ftd#string-field"),
@@ -723,7 +734,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#increment".to_string(),
-            ftd::interpreter::Thing::Function(fastn_type::Function {
+            fastn_type::Definition::Function(fastn_type::Function {
                 name: "ftd#increment".to_string(),
                 return_kind: fastn_type::KindData {
                     kind: fastn_type::Kind::void(),
@@ -757,7 +768,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#increment-by".to_string(),
-            ftd::interpreter::Thing::Function(fastn_type::Function {
+            fastn_type::Definition::Function(fastn_type::Function {
                 name: "ftd#increment-by".to_string(),
                 return_kind: fastn_type::KindData {
                     kind: fastn_type::Kind::void(),
@@ -803,7 +814,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#decrement".to_string(),
-            ftd::interpreter::Thing::Function(fastn_type::Function {
+            fastn_type::Definition::Function(fastn_type::Function {
                 name: "ftd#decrement".to_string(),
                 return_kind: fastn_type::KindData {
                     kind: fastn_type::Kind::void(),
@@ -837,7 +848,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#decrement-by".to_string(),
-            ftd::interpreter::Thing::Function(fastn_type::Function {
+            fastn_type::Definition::Function(fastn_type::Function {
                 name: "ftd#decrement-by".to_string(),
                 return_kind: fastn_type::KindData {
                     kind: fastn_type::Kind::void(),
@@ -883,7 +894,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#enable-light-mode".to_string(),
-            ftd::interpreter::Thing::Function(fastn_type::Function {
+            fastn_type::Definition::Function(fastn_type::Function {
                 name: "ftd#enable-light-mode".to_string(),
                 return_kind: fastn_type::KindData {
                     kind: fastn_type::Kind::void(),
@@ -905,7 +916,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#enable-dark-mode".to_string(),
-            ftd::interpreter::Thing::Function(fastn_type::Function {
+            fastn_type::Definition::Function(fastn_type::Function {
                 name: "ftd#enable-dark-mode".to_string(),
                 return_kind: fastn_type::KindData {
                     kind: fastn_type::Kind::void(),
@@ -927,7 +938,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#enable-system-mode".to_string(),
-            ftd::interpreter::Thing::Function(fastn_type::Function {
+            fastn_type::Definition::Function(fastn_type::Function {
                 name: "ftd#enable-system-mode".to_string(),
                 return_kind: fastn_type::KindData {
                     kind: fastn_type::Kind::void(),
@@ -949,7 +960,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#clean-code".to_string(),
-            ftd::interpreter::Thing::Function(fastn_type::Function {
+            fastn_type::Definition::Function(fastn_type::Function {
                 name: "ftd#clean-code".to_string(),
                 return_kind: fastn_type::KindData {
                     kind: fastn_type::Kind::string(),
@@ -995,7 +1006,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#copy-to-clipboard".to_string(),
-            ftd::interpreter::Thing::Function(fastn_type::Function {
+            fastn_type::Definition::Function(fastn_type::Function {
                 name: "ftd#copy-to-clipboard".to_string(),
                 return_kind: fastn_type::KindData {
                     kind: fastn_type::Kind::void(),
@@ -1029,7 +1040,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#set-bool".to_string(),
-            ftd::interpreter::Thing::Function(fastn_type::Function {
+            fastn_type::Definition::Function(fastn_type::Function {
                 name: "ftd#set-bool".to_string(),
                 return_kind: fastn_type::KindData {
                     kind: fastn_type::Kind::void(),
@@ -1075,7 +1086,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#set-boolean".to_string(),
-            ftd::interpreter::Thing::Function(fastn_type::Function {
+            fastn_type::Definition::Function(fastn_type::Function {
                 name: "ftd#set-boolean".to_string(),
                 return_kind: fastn_type::KindData {
                     kind: fastn_type::Kind::void(),
@@ -1121,7 +1132,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#set-string".to_string(),
-            ftd::interpreter::Thing::Function(fastn_type::Function {
+            fastn_type::Definition::Function(fastn_type::Function {
                 name: "ftd#set-string".to_string(),
                 return_kind: fastn_type::KindData {
                     kind: fastn_type::Kind::void(),
@@ -1167,7 +1178,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#set-integer".to_string(),
-            ftd::interpreter::Thing::Function(fastn_type::Function {
+            fastn_type::Definition::Function(fastn_type::Function {
                 name: "ftd#set-integer".to_string(),
                 return_kind: fastn_type::KindData {
                     kind: fastn_type::Kind::void(),
@@ -1212,9 +1223,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             })
         ),
         (
-            ftd::interpreter::FTD_IMAGE_SRC.to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
-                name: ftd::interpreter::FTD_IMAGE_SRC.to_string(),
+            fastn_builtins::constants::FTD_IMAGE_SRC.to_string(),
+            fastn_type::Definition::Record(fastn_type::Record {
+                name: fastn_builtins::constants::FTD_IMAGE_SRC.to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     fastn_type::Field {
                         name: "light".to_string(),
@@ -1229,10 +1240,10 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         kind: fastn_type::Kind::string().into_kind_data(),
                         mutable: false,
                         value: Some(fastn_type::PropertyValue::Reference {
-                            name: ftd::interpreter::FTD_IMAGE_SRC_LIGHT.to_string(),
+                            name: fastn_builtins::constants::FTD_IMAGE_SRC_LIGHT.to_string(),
                             kind: fastn_type::Kind::string().into_kind_data(),
                             source: fastn_type::PropertyValueSource::Local(
-                                ftd::interpreter::FTD_IMAGE_SRC.to_string(),
+                                fastn_builtins::constants::FTD_IMAGE_SRC.to_string(),
                             ),
                             is_mutable: false,
                             line_number: 0,
@@ -1241,14 +1252,14 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         line_number: 0,
                     },
                 ])
-                .collect(),
+                    .collect(),
                 line_number: 0,
             }),
         ),
         (
-            ftd::interpreter::FTD_VIDEO_SRC.to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
-                name: ftd::interpreter::FTD_VIDEO_SRC.to_string(),
+            fastn_builtins::constants::FTD_VIDEO_SRC.to_string(),
+            fastn_type::Definition::Record(fastn_type::Record {
+                name: fastn_builtins::constants::FTD_VIDEO_SRC.to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     fastn_type::Field {
                         name: "light".to_string(),
@@ -1263,10 +1274,10 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         kind: fastn_type::Kind::string().into_kind_data(),
                         mutable: false,
                         value: Some(fastn_type::PropertyValue::Reference {
-                            name: ftd::interpreter::FTD_VIDEO_SRC_LIGHT.to_string(),
+                            name: fastn_builtins::constants::FTD_VIDEO_SRC_LIGHT.to_string(),
                             kind: fastn_type::Kind::string().into_kind_data(),
                             source: fastn_type::PropertyValueSource::Local(
-                                ftd::interpreter::FTD_VIDEO_SRC.to_string(),
+                                fastn_builtins::constants::FTD_VIDEO_SRC.to_string(),
                             ),
                             is_mutable: false,
                             line_number: 0,
@@ -1275,14 +1286,14 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         line_number: 0,
                     },
                 ])
-                .collect(),
+                    .collect(),
                 line_number: 0,
             }),
         ),
         (
-            ftd::interpreter::FTD_RAW_IMAGE_SRC.to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
-                name: ftd::interpreter::FTD_RAW_IMAGE_SRC.to_string(),
+            fastn_builtins::constants::FTD_RAW_IMAGE_SRC.to_string(),
+            fastn_type::Definition::Record(fastn_type::Record {
+                name: fastn_builtins::constants::FTD_RAW_IMAGE_SRC.to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     fastn_type::Field {
                         name: "src".to_string(),
@@ -1298,9 +1309,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_COLOR.to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
-                name: ftd::interpreter::FTD_COLOR.to_string(),
+            fastn_builtins::constants::FTD_COLOR.to_string(),
+            fastn_type::Definition::Record(fastn_type::Record {
+                name: fastn_builtins::constants::FTD_COLOR.to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     fastn_type::Field {
                         name: "light".to_string(),
@@ -1315,10 +1326,10 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         kind: fastn_type::Kind::string().into_kind_data(),
                         mutable: false,
                         value: Some(fastn_type::PropertyValue::Reference {
-                            name: ftd::interpreter::FTD_COLOR_LIGHT.to_string(),
+                            name: fastn_builtins::constants::FTD_COLOR_LIGHT.to_string(),
                             kind: fastn_type::Kind::string().into_kind_data(),
                             source: fastn_type::PropertyValueSource::Local(
-                                ftd::interpreter::FTD_COLOR.to_string(),
+                                fastn_builtins::constants::FTD_COLOR.to_string(),
                             ),
                             is_mutable: false,
                             line_number: 0,
@@ -1327,25 +1338,25 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         line_number: 0,
                     },
                 ])
-                .collect(),
+                    .collect(),
                 line_number: 0,
             }),
         ),
         (
-            ftd::interpreter::FTD_SHADOW.to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
-                name: ftd::interpreter::FTD_SHADOW.to_string(),
+            fastn_builtins::constants::FTD_SHADOW.to_string(),
+            fastn_type::Definition::Record(fastn_type::Record {
+                name: fastn_builtins::constants::FTD_SHADOW.to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     fastn_type::Field {
                         name: "x-offset".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data(),
                         mutable: false,
                         value: Some(fastn_type::PropertyValue::Value {
                             value: fastn_type::Value::OrType {
-                                name: ftd::interpreter::FTD_LENGTH.to_string(),
-                                variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
-                                full_variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
+                                name: fastn_builtins::constants::FTD_LENGTH.to_string(),
+                                variant: fastn_builtins::constants::FTD_LENGTH_PX.to_string(),
+                                full_variant: fastn_builtins::constants::FTD_LENGTH_PX.to_string(),
                                 value: Box::new
                                     (fastn_type::PropertyValue::Value {
                                         value: fastn_type::Value::Integer {
@@ -1363,14 +1374,14 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "y-offset".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data(),
                         mutable: false,
                         value: Some(fastn_type::PropertyValue::Value {
                             value: fastn_type::Value::OrType {
-                                name: ftd::interpreter::FTD_LENGTH.to_string(),
-                                variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
-                                full_variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
+                                name: fastn_builtins::constants::FTD_LENGTH.to_string(),
+                                variant: fastn_builtins::constants::FTD_LENGTH_PX.to_string(),
+                                full_variant: fastn_builtins::constants::FTD_LENGTH_PX.to_string(),
                                 value: Box::new
                                     (fastn_type::PropertyValue::Value {
                                         value: fastn_type::Value::Integer {
@@ -1388,14 +1399,14 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "blur".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data(),
                         mutable: false,
                         value: Some(fastn_type::PropertyValue::Value {
                             value: fastn_type::Value::OrType {
-                                name: ftd::interpreter::FTD_LENGTH.to_string(),
-                                variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
-                                full_variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
+                                name: fastn_builtins::constants::FTD_LENGTH.to_string(),
+                                variant: fastn_builtins::constants::FTD_LENGTH_PX.to_string(),
+                                full_variant: fastn_builtins::constants::FTD_LENGTH_PX.to_string(),
                                 value: Box::new
                                     (fastn_type::PropertyValue::Value {
                                         value: fastn_type::Value::Integer {
@@ -1413,14 +1424,14 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "spread".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data(),
                         mutable: false,
                         value: Some(fastn_type::PropertyValue::Value {
                             value: fastn_type::Value::OrType {
-                                name: ftd::interpreter::FTD_LENGTH.to_string(),
-                                variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
-                                full_variant: ftd::interpreter::FTD_LENGTH_PX.to_string(),
+                                name: fastn_builtins::constants::FTD_LENGTH.to_string(),
+                                variant: fastn_builtins::constants::FTD_LENGTH_PX.to_string(),
+                                full_variant: fastn_builtins::constants::FTD_LENGTH_PX.to_string(),
                                 value: Box::new
                                     (fastn_type::PropertyValue::Value {
                                         value: fastn_type::Value::Integer {
@@ -1438,13 +1449,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "color".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         access_modifier: Default::default(),
                         value: Some(fastn_type::PropertyValue::Value {
                             value: fastn_type::Value::Record {
-                                name: ftd::interpreter::FTD_COLOR.to_string(),
+                                name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                 fields: std::iter::IntoIterator::into_iter([
                                     (
                                         "light".to_string(),
@@ -1487,77 +1498,77 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_BACKDROP_FILTER.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_BACKDROP_FILTER.to_string(),
+            fastn_builtins::constants::FTD_BACKDROP_FILTER.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_BACKDROP_FILTER.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKDROP_FILTER_BLUR,
-                        fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        fastn_builtins::constants::FTD_BACKDROP_FILTER_BLUR,
+                        fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data(),
                         false,
                         None,
                         0,
                     )),
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKDROP_FILTER_BRIGHTNESS,
-                        fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        fastn_builtins::constants::FTD_BACKDROP_FILTER_BRIGHTNESS,
+                        fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data(),
                         false,
                         None,
                         0,
                     )),
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKDROP_FILTER_CONTRAST,
-                        fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        fastn_builtins::constants::FTD_BACKDROP_FILTER_CONTRAST,
+                        fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data(),
                         false,
                         None,
                         0,
                     )),
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKDROP_FILTER_GRAYSCALE,
-                        fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        fastn_builtins::constants::FTD_BACKDROP_FILTER_GRAYSCALE,
+                        fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data(),
                         false,
                         None,
                         0,
                     )),
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKDROP_FILTER_INVERT,
-                        fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        fastn_builtins::constants::FTD_BACKDROP_FILTER_INVERT,
+                        fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data(),
                         false,
                         None,
                         0,
                     )),
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKDROP_FILTER_OPACITY,
-                        fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        fastn_builtins::constants::FTD_BACKDROP_FILTER_OPACITY,
+                        fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data(),
                         false,
                         None,
                         0,
                     )),
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKDROP_FILTER_SEPIA,
-                        fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        fastn_builtins::constants::FTD_BACKDROP_FILTER_SEPIA,
+                        fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data(),
                         false,
                         None,
                         0,
                     )),
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKDROP_FILTER_SATURATE,
-                        fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        fastn_builtins::constants::FTD_BACKDROP_FILTER_SATURATE,
+                        fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data(),
                         false,
                         None,
                         0,
                     )),
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKDROP_FILTER_MULTI,
-                        fastn_type::Kind::record(ftd::interpreter::FTD_BACKDROP_MULTI)
+                        fastn_builtins::constants::FTD_BACKDROP_FILTER_MULTI,
+                        fastn_type::Kind::record(fastn_builtins::constants::FTD_BACKDROP_MULTI)
                             .into_kind_data(),
                         false,
                         None,
@@ -1568,13 +1579,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_BACKDROP_MULTI.to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
-                name: ftd::interpreter::FTD_BACKDROP_MULTI.to_string(),
+            fastn_builtins::constants::FTD_BACKDROP_MULTI.to_string(),
+            fastn_type::Definition::Record(fastn_type::Record {
+                name: fastn_builtins::constants::FTD_BACKDROP_MULTI.to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     fastn_type::Field {
                         name: "blur".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
                         value: None,
@@ -1583,7 +1594,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "brightness".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
                         value: None,
@@ -1592,7 +1603,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "contrast".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
                         value: None,
@@ -1601,7 +1612,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "grayscale".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
                         value: None,
@@ -1610,7 +1621,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "invert".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
                         value: None,
@@ -1619,7 +1630,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "opacity".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
                         value: None,
@@ -1628,7 +1639,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "sepia".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
                         value: None,
@@ -1637,7 +1648,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "saturate".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
                         value: None,
@@ -1649,13 +1660,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_LENGTH_PAIR.to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
-                name: ftd::interpreter::FTD_LENGTH_PAIR.to_string(),
+            fastn_builtins::constants::FTD_LENGTH_PAIR.to_string(),
+            fastn_type::Definition::Record(fastn_type::Record {
+                name: fastn_builtins::constants::FTD_LENGTH_PAIR.to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     fastn_type::Field {
                         name: "x".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -1664,7 +1675,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "y".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -1676,13 +1687,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_BG_IMAGE.to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
-                name: ftd::interpreter::FTD_BG_IMAGE.to_string(),
+            fastn_builtins::constants::FTD_BG_IMAGE.to_string(),
+            fastn_type::Definition::Record(fastn_type::Record {
+                name: fastn_builtins::constants::FTD_BG_IMAGE.to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     fastn_type::Field {
                         name: "src".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_IMAGE_SRC)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_IMAGE_SRC)
                             .into_kind_data().caption(),
                         mutable: false,
                         value: None,
@@ -1691,7 +1702,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "repeat".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_BACKGROUND_REPEAT)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_BACKGROUND_REPEAT)
                             .into_kind_data().into_optional(),
                         mutable: false,
                         value: None,
@@ -1700,7 +1711,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "size".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_BACKGROUND_SIZE)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_BACKGROUND_SIZE)
                             .into_kind_data().into_optional(),
                         mutable: false,
                         value: None,
@@ -1709,7 +1720,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "position".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_BACKGROUND_POSITION)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_BACKGROUND_POSITION)
                             .into_kind_data().into_optional(),
                         mutable: false,
                         value: None,
@@ -1721,13 +1732,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_LINEAR_GRADIENT_COLOR.to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
-                name: ftd::interpreter::FTD_LINEAR_GRADIENT_COLOR.to_string(),
+            fastn_builtins::constants::FTD_LINEAR_GRADIENT_COLOR.to_string(),
+            fastn_type::Definition::Record(fastn_type::Record {
+                name: fastn_builtins::constants::FTD_LINEAR_GRADIENT_COLOR.to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     fastn_type::Field {
                         name: "color".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data().caption(),
                         mutable: false,
                         value: None,
@@ -1736,7 +1747,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "start".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
                         value: None,
@@ -1745,7 +1756,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "end".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
                         value: None,
@@ -1754,7 +1765,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "stop-position".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
                         value: None,
@@ -1766,12 +1777,12 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS.to_string(),
+            fastn_builtins::constants::FTD_LINEAR_GRADIENT_DIRECTIONS.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_LINEAR_GRADIENT_DIRECTIONS.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_ANGLE,
+                        fastn_builtins::constants::FTD_LINEAR_GRADIENT_DIRECTIONS_ANGLE,
                         fastn_type::Kind::decimal()
                             .into_kind_data(),
                         false,
@@ -1779,7 +1790,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_TURN,
+                        fastn_builtins::constants::FTD_LINEAR_GRADIENT_DIRECTIONS_TURN,
                         fastn_type::Kind::decimal()
                             .into_kind_data(),
                         false,
@@ -1787,7 +1798,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_LEFT,
+                        fastn_builtins::constants::FTD_LINEAR_GRADIENT_DIRECTIONS_LEFT,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -1797,7 +1808,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_RIGHT,
+                        fastn_builtins::constants::FTD_LINEAR_GRADIENT_DIRECTIONS_RIGHT,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -1807,7 +1818,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_TOP,
+                        fastn_builtins::constants::FTD_LINEAR_GRADIENT_DIRECTIONS_TOP,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -1817,7 +1828,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_BOTTOM,
+                        fastn_builtins::constants::FTD_LINEAR_GRADIENT_DIRECTIONS_BOTTOM,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -1827,7 +1838,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_TOP_LEFT,
+                        fastn_builtins::constants::FTD_LINEAR_GRADIENT_DIRECTIONS_TOP_LEFT,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -1837,7 +1848,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_BOTTOM_LEFT,
+                        fastn_builtins::constants::FTD_LINEAR_GRADIENT_DIRECTIONS_BOTTOM_LEFT,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -1847,7 +1858,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_TOP_RIGHT,
+                        fastn_builtins::constants::FTD_LINEAR_GRADIENT_DIRECTIONS_TOP_RIGHT,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -1857,7 +1868,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_BOTTOM_RIGHT,
+                        fastn_builtins::constants::FTD_LINEAR_GRADIENT_DIRECTIONS_BOTTOM_RIGHT,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -1871,21 +1882,21 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_LINEAR_GRADIENT.to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
-                name: ftd::interpreter::FTD_LINEAR_GRADIENT.to_string(),
+            fastn_builtins::constants::FTD_LINEAR_GRADIENT.to_string(),
+            fastn_type::Definition::Record(fastn_type::Record {
+                name: fastn_builtins::constants::FTD_LINEAR_GRADIENT.to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     fastn_type::Field {
                         name: "direction".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LINEAR_GRADIENT_DIRECTIONS)
                             .into_kind_data().into_optional(),
                         mutable: false,
                         value: Some(fastn_type::PropertyValue::Value {
                             value: fastn_type::Value::OrType {
-                                name: ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS.to_string(),
-                                variant: ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_BOTTOM
+                                name: fastn_builtins::constants::FTD_LINEAR_GRADIENT_DIRECTIONS.to_string(),
+                                variant: fastn_builtins::constants::FTD_LINEAR_GRADIENT_DIRECTIONS_BOTTOM
                                     .to_string(),
-                                full_variant: ftd::interpreter::FTD_LINEAR_GRADIENT_DIRECTIONS_BOTTOM.to_string(),
+                                full_variant: fastn_builtins::constants::FTD_LINEAR_GRADIENT_DIRECTIONS_BOTTOM.to_string(),
                                 value: Box::new
                                     (fastn_type::PropertyValue::Value {
                                         value: fastn_type::Value::String {
@@ -1903,7 +1914,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "colors".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_LINEAR_GRADIENT_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_LINEAR_GRADIENT_COLOR)
                             .into_list().into_kind_data(),
                         mutable: false,
                         value: None,
@@ -1915,30 +1926,30 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_BACKGROUND.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_BACKGROUND.to_string(),
+            fastn_builtins::constants::FTD_BACKGROUND.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_BACKGROUND.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::Regular(
-                    fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKGROUND_SOLID,
-                        fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        fastn_type::Field::new(
+                            fastn_builtins::constants::FTD_BACKGROUND_SOLID,
+                            fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
+                                .into_kind_data(),
+                            false,
+                            None,
+                            0,
+                        )),
+                    fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
+                        fastn_builtins::constants::FTD_BACKGROUND_IMAGE,
+                        fastn_type::Kind::record(fastn_builtins::constants::FTD_BG_IMAGE)
                             .into_kind_data(),
                         false,
                         None,
                         0,
                     )),
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKGROUND_IMAGE,
-                        fastn_type::Kind::record(ftd::interpreter::FTD_BG_IMAGE)
-                            .into_kind_data(),
-                        false,
-                        None,
-                        0,
-                    )),
-                    fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKGROUND_LINEAR_GRADIENT,
-                        fastn_type::Kind::record(ftd::interpreter::FTD_LINEAR_GRADIENT)
+                        fastn_builtins::constants::FTD_BACKGROUND_LINEAR_GRADIENT,
+                        fastn_type::Kind::record(fastn_builtins::constants::FTD_LINEAR_GRADIENT)
                             .into_kind_data(),
                         false,
                         None,
@@ -1949,12 +1960,12 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_BACKGROUND_REPEAT.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_BACKGROUND_REPEAT.to_string(),
+            fastn_builtins::constants::FTD_BACKGROUND_REPEAT.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_BACKGROUND_REPEAT.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKGROUND_REPEAT_BOTH_REPEAT,
+                        fastn_builtins::constants::FTD_BACKGROUND_REPEAT_BOTH_REPEAT,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -1964,7 +1975,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKGROUND_REPEAT_X_REPEAT,
+                        fastn_builtins::constants::FTD_BACKGROUND_REPEAT_X_REPEAT,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -1974,7 +1985,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKGROUND_REPEAT_Y_REPEAT,
+                        fastn_builtins::constants::FTD_BACKGROUND_REPEAT_Y_REPEAT,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -1984,7 +1995,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKGROUND_REPEAT_NO_REPEAT,
+                        fastn_builtins::constants::FTD_BACKGROUND_REPEAT_NO_REPEAT,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -1994,7 +2005,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKGROUND_REPEAT_SPACE,
+                        fastn_builtins::constants::FTD_BACKGROUND_REPEAT_SPACE,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -2004,7 +2015,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKGROUND_REPEAT_ROUND,
+                        fastn_builtins::constants::FTD_BACKGROUND_REPEAT_ROUND,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -2018,12 +2029,12 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_BACKGROUND_SIZE.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_BACKGROUND_SIZE.to_string(),
+            fastn_builtins::constants::FTD_BACKGROUND_SIZE.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_BACKGROUND_SIZE.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKGROUND_SIZE_AUTO,
+                        fastn_builtins::constants::FTD_BACKGROUND_SIZE_AUTO,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -2033,7 +2044,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKGROUND_SIZE_COVER,
+                        fastn_builtins::constants::FTD_BACKGROUND_SIZE_COVER,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -2043,7 +2054,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKGROUND_SIZE_CONTAIN,
+                        fastn_builtins::constants::FTD_BACKGROUND_SIZE_CONTAIN,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -2053,11 +2064,11 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::AnonymousRecord(fastn_type::Record {
-                        name: ftd::interpreter::FTD_BACKGROUND_SIZE_LENGTH.to_string(),
+                        name: fastn_builtins::constants::FTD_BACKGROUND_SIZE_LENGTH.to_string(),
                         fields: std::iter::IntoIterator::into_iter([
                             fastn_type::Field {
                                 name: "x".to_string(),
-                                kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                                kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                                     .into_kind_data(),
                                 mutable: false,
                                 value: None,
@@ -2066,7 +2077,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                             },
                             fastn_type::Field {
                                 name: "y".to_string(),
-                                kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                                kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                                     .into_kind_data(),
                                 mutable: false,
                                 value: None,
@@ -2081,12 +2092,12 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_BACKGROUND_POSITION.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_BACKGROUND_POSITION.to_string(),
+            fastn_builtins::constants::FTD_BACKGROUND_POSITION.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_BACKGROUND_POSITION.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKGROUND_POSITION_LEFT,
+                        fastn_builtins::constants::FTD_BACKGROUND_POSITION_LEFT,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -2096,7 +2107,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKGROUND_POSITION_CENTER,
+                        fastn_builtins::constants::FTD_BACKGROUND_POSITION_CENTER,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -2106,7 +2117,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKGROUND_POSITION_RIGHT,
+                        fastn_builtins::constants::FTD_BACKGROUND_POSITION_RIGHT,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -2116,7 +2127,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKGROUND_POSITION_LEFT_TOP,
+                        fastn_builtins::constants::FTD_BACKGROUND_POSITION_LEFT_TOP,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -2126,7 +2137,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKGROUND_POSITION_LEFT_CENTER,
+                        fastn_builtins::constants::FTD_BACKGROUND_POSITION_LEFT_CENTER,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -2136,7 +2147,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKGROUND_POSITION_LEFT_BOTTOM,
+                        fastn_builtins::constants::FTD_BACKGROUND_POSITION_LEFT_BOTTOM,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -2146,7 +2157,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKGROUND_POSITION_CENTER_TOP,
+                        fastn_builtins::constants::FTD_BACKGROUND_POSITION_CENTER_TOP,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -2156,7 +2167,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKGROUND_POSITION_CENTER_CENTER,
+                        fastn_builtins::constants::FTD_BACKGROUND_POSITION_CENTER_CENTER,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -2166,7 +2177,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKGROUND_POSITION_CENTER_BOTTOM,
+                        fastn_builtins::constants::FTD_BACKGROUND_POSITION_CENTER_BOTTOM,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -2176,7 +2187,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKGROUND_POSITION_RIGHT_TOP,
+                        fastn_builtins::constants::FTD_BACKGROUND_POSITION_RIGHT_TOP,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -2186,7 +2197,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKGROUND_POSITION_RIGHT_CENTER,
+                        fastn_builtins::constants::FTD_BACKGROUND_POSITION_RIGHT_CENTER,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -2196,7 +2207,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BACKGROUND_POSITION_RIGHT_BOTTOM,
+                        fastn_builtins::constants::FTD_BACKGROUND_POSITION_RIGHT_BOTTOM,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -2206,11 +2217,11 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::AnonymousRecord(fastn_type::Record {
-                        name: ftd::interpreter::FTD_BACKGROUND_POSITION_LENGTH.to_string(),
+                        name: fastn_builtins::constants::FTD_BACKGROUND_POSITION_LENGTH.to_string(),
                         fields: std::iter::IntoIterator::into_iter([
                             fastn_type::Field {
                                 name: "x".to_string(),
-                                kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                                kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                                     .into_kind_data(),
                                 mutable: false,
                                 value: None,
@@ -2219,7 +2230,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                             },
                             fastn_type::Field {
                                 name: "y".to_string(),
-                                kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                                kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                                     .into_kind_data(),
                                 mutable: false,
                                 value: None,
@@ -2234,113 +2245,113 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_ALIGN.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_ALIGN.to_string(),
+            fastn_builtins::constants::FTD_ALIGN.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_ALIGN.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_ALIGN_TOP_LEFT,
+                        fastn_builtins::constants::FTD_ALIGN_TOP_LEFT,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
                             fastn_type::Value::new_string(
-                                ftd::interpreter::FTD_ALIGN_TOP_LEFT,
+                                fastn_builtins::constants::FTD_ALIGN_TOP_LEFT,
                             )
-                            .into_property_value(false, 0),
-                        ),
-                        0,
-                    )),
-                    fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_ALIGN_TOP_CENTER,
-                        fastn_type::Kind::string().into_kind_data(),
-                        false,
-                        Some(
-                            fastn_type::Value::new_string(
-                                ftd::interpreter::FTD_ALIGN_TOP_CENTER,
-                            )
-                            .into_property_value(false, 0),
-                        ),
-                        0,
-                    )),
-                    fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_ALIGN_TOP_RIGHT,
-                        fastn_type::Kind::string().into_kind_data(),
-                        false,
-                        Some(
-                            fastn_type::Value::new_string(
-                                ftd::interpreter::FTD_ALIGN_TOP_RIGHT,
-                            )
-                            .into_property_value(false, 0),
-                        ),
-                        0,
-                    )),
-                    fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_ALIGN_LEFT,
-                        fastn_type::Kind::string().into_kind_data(),
-                        false,
-                        Some(
-                            fastn_type::Value::new_string(ftd::interpreter::FTD_ALIGN_LEFT)
                                 .into_property_value(false, 0),
                         ),
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_ALIGN_CENTER,
+                        fastn_builtins::constants::FTD_ALIGN_TOP_CENTER,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
                             fastn_type::Value::new_string(
-                                ftd::interpreter::FTD_ALIGN_CENTER,
+                                fastn_builtins::constants::FTD_ALIGN_TOP_CENTER,
                             )
-                            .into_property_value(false, 0),
+                                .into_property_value(false, 0),
                         ),
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_ALIGN_RIGHT,
+                        fastn_builtins::constants::FTD_ALIGN_TOP_RIGHT,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
                             fastn_type::Value::new_string(
-                                ftd::interpreter::FTD_ALIGN_RIGHT,
+                                fastn_builtins::constants::FTD_ALIGN_TOP_RIGHT,
                             )
-                            .into_property_value(false, 0),
+                                .into_property_value(false, 0),
                         ),
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_ALIGN_BOTTOM_LEFT,
+                        fastn_builtins::constants::FTD_ALIGN_LEFT,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
-                            fastn_type::Value::new_string(
-                                ftd::interpreter::FTD_ALIGN_BOTTOM_LEFT,
-                            )
-                            .into_property_value(false, 0),
+                            fastn_type::Value::new_string(fastn_builtins::constants::FTD_ALIGN_LEFT)
+                                .into_property_value(false, 0),
                         ),
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_ALIGN_BOTTOM_CENTER,
+                        fastn_builtins::constants::FTD_ALIGN_CENTER,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
                             fastn_type::Value::new_string(
-                                ftd::interpreter::FTD_ALIGN_BOTTOM_CENTER,
+                                fastn_builtins::constants::FTD_ALIGN_CENTER,
                             )
-                            .into_property_value(false, 0),
+                                .into_property_value(false, 0),
                         ),
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_ALIGN_BOTTOM_RIGHT,
+                        fastn_builtins::constants::FTD_ALIGN_RIGHT,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
                             fastn_type::Value::new_string(
-                                ftd::interpreter::FTD_ALIGN_BOTTOM_RIGHT,
+                                fastn_builtins::constants::FTD_ALIGN_RIGHT,
                             )
-                            .into_property_value(false, 0),
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
+                        fastn_builtins::constants::FTD_ALIGN_BOTTOM_LEFT,
+                        fastn_type::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            fastn_type::Value::new_string(
+                                fastn_builtins::constants::FTD_ALIGN_BOTTOM_LEFT,
+                            )
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
+                        fastn_builtins::constants::FTD_ALIGN_BOTTOM_CENTER,
+                        fastn_type::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            fastn_type::Value::new_string(
+                                fastn_builtins::constants::FTD_ALIGN_BOTTOM_CENTER,
+                            )
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
+                        fastn_builtins::constants::FTD_ALIGN_BOTTOM_RIGHT,
+                        fastn_type::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            fastn_type::Value::new_string(
+                                fastn_builtins::constants::FTD_ALIGN_BOTTOM_RIGHT,
+                            )
+                                .into_property_value(false, 0),
                         ),
                         0,
                     )),
@@ -2349,20 +2360,20 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_SPACING.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_SPACING.to_string(),
+            fastn_builtins::constants::FTD_SPACING.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_SPACING.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_SPACING_FIXED,
-                        fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        fastn_builtins::constants::FTD_SPACING_FIXED,
+                        fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data(),
                         false,
                         None,
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_SPACING_SPACE_BETWEEN,
+                        fastn_builtins::constants::FTD_SPACING_SPACE_BETWEEN,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2372,7 +2383,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_SPACING_SPACE_EVENLY,
+                        fastn_builtins::constants::FTD_SPACING_SPACE_EVENLY,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2382,7 +2393,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_SPACING_SPACE_AROUND,
+                        fastn_builtins::constants::FTD_SPACING_SPACE_AROUND,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2396,12 +2407,12 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_IMAGE_FIT.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_IMAGE_FIT.to_string(),
+            fastn_builtins::constants::FTD_IMAGE_FIT.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_IMAGE_FIT.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_IMAGE_FIT_NONE,
+                        fastn_builtins::constants::FTD_IMAGE_FIT_NONE,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2411,7 +2422,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_IMAGE_FIT_COVER,
+                        fastn_builtins::constants::FTD_IMAGE_FIT_COVER,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2421,7 +2432,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_IMAGE_FIT_CONTAIN,
+                        fastn_builtins::constants::FTD_IMAGE_FIT_CONTAIN,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2431,7 +2442,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_IMAGE_FIT_FILL,
+                        fastn_builtins::constants::FTD_IMAGE_FIT_FILL,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2441,7 +2452,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_IMAGE_FIT_SCALE_DOWN,
+                        fastn_builtins::constants::FTD_IMAGE_FIT_SCALE_DOWN,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2456,51 +2467,51 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-             ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY.to_string(),
-             ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                 name: ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY.to_string(),
-                 variants: vec![
-                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                         ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY_AUTO,
-                         fastn_type::Kind::string().into_kind_data(),
-                         false,
-                         Some(
-                              fastn_type::Value::new_string("auto")
-                                  .into_property_value(false, 0),
-                         ),
-                                0,
-                         )),
-                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                         ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY_LOW,
-                         fastn_type::Kind::string().into_kind_data(),
-                         false,
-                         Some(
-                              fastn_type::Value::new_string("low")
-                                  .into_property_value(false, 0),
-                         ),
-                                0,
-                         )),
-                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                         ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY_HIGH,
-                         fastn_type::Kind::string().into_kind_data(),
-                         false,
-                         Some(
-                              fastn_type::Value::new_string("high")
-                                  .into_property_value(false, 0),
-                         ),
-                                0,
-                            )),
-                        ],
-                        line_number: 0,
-                    }),
+            fastn_builtins::constants::FTD_IMAGE_FETCH_PRIORITY.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_IMAGE_FETCH_PRIORITY.to_string(),
+                variants: vec![
+                    fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
+                        fastn_builtins::constants::FTD_IMAGE_FETCH_PRIORITY_AUTO,
+                        fastn_type::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            fastn_type::Value::new_string("auto")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
+                        fastn_builtins::constants::FTD_IMAGE_FETCH_PRIORITY_LOW,
+                        fastn_type::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            fastn_type::Value::new_string("low")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
+                        fastn_builtins::constants::FTD_IMAGE_FETCH_PRIORITY_HIGH,
+                        fastn_type::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            fastn_type::Value::new_string("high")
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                ],
+                line_number: 0,
+            }),
         ),
         (
-            ftd::interpreter::FTD_ANCHOR.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_ANCHOR.to_string(),
+            fastn_builtins::constants::FTD_ANCHOR.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_ANCHOR.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_ANCHOR_ID,
+                        fastn_builtins::constants::FTD_ANCHOR_ID,
                         fastn_type::Kind::string()
                             .into_kind_data(),
                         false,
@@ -2508,7 +2519,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_ANCHOR_PARENT,
+                        fastn_builtins::constants::FTD_ANCHOR_PARENT,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2518,7 +2529,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_ANCHOR_WINDOW,
+                        fastn_builtins::constants::FTD_ANCHOR_WINDOW,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2532,12 +2543,12 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_OVERFLOW.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_OVERFLOW.to_string(),
+            fastn_builtins::constants::FTD_OVERFLOW.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_OVERFLOW.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_OVERFLOW_SCROLL,
+                        fastn_builtins::constants::FTD_OVERFLOW_SCROLL,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2547,7 +2558,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_OVERFLOW_VISIBLE,
+                        fastn_builtins::constants::FTD_OVERFLOW_VISIBLE,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2557,7 +2568,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_OVERFLOW_HIDDEN,
+                        fastn_builtins::constants::FTD_OVERFLOW_HIDDEN,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2567,7 +2578,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_OVERFLOW_AUTO,
+                        fastn_builtins::constants::FTD_OVERFLOW_AUTO,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2581,12 +2592,12 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_RESIZE.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_RESIZE.to_string(),
+            fastn_builtins::constants::FTD_RESIZE.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_RESIZE.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_RESIZE_HORIZONTAL,
+                        fastn_builtins::constants::FTD_RESIZE_HORIZONTAL,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2596,7 +2607,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_RESIZE_VERTICAL,
+                        fastn_builtins::constants::FTD_RESIZE_VERTICAL,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2606,7 +2617,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_RESIZE_BOTH,
+                        fastn_builtins::constants::FTD_RESIZE_BOTH,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2620,12 +2631,12 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_CURSOR.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_CURSOR.to_string(),
+            fastn_builtins::constants::FTD_CURSOR.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_CURSOR.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_DEFAULT,
+                        fastn_builtins::constants::FTD_CURSOR_DEFAULT,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2635,7 +2646,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_NONE,
+                        fastn_builtins::constants::FTD_CURSOR_NONE,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2645,7 +2656,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_CONTEXT_MENU,
+                        fastn_builtins::constants::FTD_CURSOR_CONTEXT_MENU,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2655,7 +2666,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_HELP,
+                        fastn_builtins::constants::FTD_CURSOR_HELP,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2665,7 +2676,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_POINTER,
+                        fastn_builtins::constants::FTD_CURSOR_POINTER,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2675,7 +2686,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_PROGRESS,
+                        fastn_builtins::constants::FTD_CURSOR_PROGRESS,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2685,7 +2696,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_WAIT,
+                        fastn_builtins::constants::FTD_CURSOR_WAIT,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2695,7 +2706,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_CELL,
+                        fastn_builtins::constants::FTD_CURSOR_CELL,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2705,7 +2716,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_CROSSHAIR,
+                        fastn_builtins::constants::FTD_CURSOR_CROSSHAIR,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2715,7 +2726,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_TEXT,
+                        fastn_builtins::constants::FTD_CURSOR_TEXT,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2725,7 +2736,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_VERTICAL_TEXT,
+                        fastn_builtins::constants::FTD_CURSOR_VERTICAL_TEXT,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2735,7 +2746,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_ALIAS,
+                        fastn_builtins::constants::FTD_CURSOR_ALIAS,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2745,7 +2756,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_COPY,
+                        fastn_builtins::constants::FTD_CURSOR_COPY,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2755,7 +2766,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_MOVE,
+                        fastn_builtins::constants::FTD_CURSOR_MOVE,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2765,7 +2776,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_NO_DROP,
+                        fastn_builtins::constants::FTD_CURSOR_NO_DROP,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2775,7 +2786,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_NOT_ALLOWED,
+                        fastn_builtins::constants::FTD_CURSOR_NOT_ALLOWED,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2785,7 +2796,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_GRAB,
+                        fastn_builtins::constants::FTD_CURSOR_GRAB,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2795,7 +2806,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_GRABBING,
+                        fastn_builtins::constants::FTD_CURSOR_GRABBING,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2805,7 +2816,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_E_RESIZE,
+                        fastn_builtins::constants::FTD_CURSOR_E_RESIZE,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2815,7 +2826,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_N_RESIZE,
+                        fastn_builtins::constants::FTD_CURSOR_N_RESIZE,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2825,7 +2836,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_NE_RESIZE,
+                        fastn_builtins::constants::FTD_CURSOR_NE_RESIZE,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2835,7 +2846,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_NW_RESIZE,
+                        fastn_builtins::constants::FTD_CURSOR_NW_RESIZE,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2845,7 +2856,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_S_RESIZE,
+                        fastn_builtins::constants::FTD_CURSOR_S_RESIZE,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2855,7 +2866,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_SE_RESIZE,
+                        fastn_builtins::constants::FTD_CURSOR_SE_RESIZE,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2865,7 +2876,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_SW_RESIZE,
+                        fastn_builtins::constants::FTD_CURSOR_SW_RESIZE,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2875,7 +2886,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_W_RESIZE,
+                        fastn_builtins::constants::FTD_CURSOR_W_RESIZE,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2885,7 +2896,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_EW_RESIZE,
+                        fastn_builtins::constants::FTD_CURSOR_EW_RESIZE,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2895,7 +2906,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_NS_RESIZE,
+                        fastn_builtins::constants::FTD_CURSOR_NS_RESIZE,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2905,7 +2916,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_NESW_RESIZE,
+                        fastn_builtins::constants::FTD_CURSOR_NESW_RESIZE,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2915,7 +2926,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_NWSE_RESIZE,
+                        fastn_builtins::constants::FTD_CURSOR_NWSE_RESIZE,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2925,7 +2936,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_COL_RESIZE,
+                        fastn_builtins::constants::FTD_CURSOR_COL_RESIZE,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2935,7 +2946,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_ROW_RESIZE,
+                        fastn_builtins::constants::FTD_CURSOR_ROW_RESIZE,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2945,7 +2956,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_ALL_SCROLL,
+                        fastn_builtins::constants::FTD_CURSOR_ALL_SCROLL,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2955,7 +2966,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_ZOOM_IN,
+                        fastn_builtins::constants::FTD_CURSOR_ZOOM_IN,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2965,7 +2976,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_CURSOR_ZOOM_OUT,
+                        fastn_builtins::constants::FTD_CURSOR_ZOOM_OUT,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2979,12 +2990,12 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_ALIGN_SELF.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_ALIGN_SELF.to_string(),
+            fastn_builtins::constants::FTD_ALIGN_SELF.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_ALIGN_SELF.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_ALIGN_SELF_START,
+                        fastn_builtins::constants::FTD_ALIGN_SELF_START,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -2994,7 +3005,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_ALIGN_SELF_CENTER,
+                        fastn_builtins::constants::FTD_ALIGN_SELF_CENTER,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -3004,7 +3015,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_ALIGN_SELF_END,
+                        fastn_builtins::constants::FTD_ALIGN_SELF_END,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -3018,12 +3029,12 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_TEXT_ALIGN.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_TEXT_ALIGN.to_string(),
+            fastn_builtins::constants::FTD_TEXT_ALIGN.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_TEXT_ALIGN.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_ALIGN_START,
+                        fastn_builtins::constants::FTD_TEXT_ALIGN_START,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -3033,7 +3044,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_ALIGN_CENTER,
+                        fastn_builtins::constants::FTD_TEXT_ALIGN_CENTER,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -3043,7 +3054,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_ALIGN_END,
+                        fastn_builtins::constants::FTD_TEXT_ALIGN_END,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -3053,7 +3064,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_ALIGN_JUSTIFY,
+                        fastn_builtins::constants::FTD_TEXT_ALIGN_JUSTIFY,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -3067,12 +3078,12 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_LINK_REL.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_LINK_REL.to_string(),
+            fastn_builtins::constants::FTD_LINK_REL.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_LINK_REL.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LINK_REL_NO_FOLLOW,
+                        fastn_builtins::constants::FTD_LINK_REL_NO_FOLLOW,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -3082,7 +3093,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LINK_REL_SPONSORED,
+                        fastn_builtins::constants::FTD_LINK_REL_SPONSORED,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -3092,7 +3103,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LINK_REL_UGC,
+                        fastn_builtins::constants::FTD_LINK_REL_UGC,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
@@ -3106,49 +3117,49 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_RESIZING.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_RESIZING.to_string(),
+            fastn_builtins::constants::FTD_RESIZING.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_RESIZING.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_RESIZING_HUG_CONTENT,
+                        fastn_builtins::constants::FTD_RESIZING_HUG_CONTENT,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
                             fastn_type::Value::new_string(
-                                ftd::interpreter::FTD_RESIZING_HUG_CONTENT,
-                            )
-                            .into_property_value(false, 0),
-                        ),
-                        0,
-                    )),
-                    fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_RESIZING_AUTO,
-                        fastn_type::Kind::string().into_kind_data(),
-                        false,
-                        Some(
-                            fastn_type::Value::new_string(
-                                ftd::interpreter::FTD_RESIZING_AUTO,
+                                fastn_builtins::constants::FTD_RESIZING_HUG_CONTENT,
                             )
                                 .into_property_value(false, 0),
                         ),
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_RESIZING_FILL_CONTAINER,
+                        fastn_builtins::constants::FTD_RESIZING_AUTO,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
                             fastn_type::Value::new_string(
-                                ftd::interpreter::FTD_RESIZING_FILL_CONTAINER,
+                                fastn_builtins::constants::FTD_RESIZING_AUTO,
                             )
-                            .into_property_value(false, 0),
+                                .into_property_value(false, 0),
+                        ),
+                        0,
+                    )),
+                    fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
+                        fastn_builtins::constants::FTD_RESIZING_FILL_CONTAINER,
+                        fastn_type::Kind::string().into_kind_data(),
+                        false,
+                        Some(
+                            fastn_type::Value::new_string(
+                                fastn_builtins::constants::FTD_RESIZING_FILL_CONTAINER,
+                            )
+                                .into_property_value(false, 0),
                         ),
                         0,
                     )),
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_RESIZING_FIXED,
-                        fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        fastn_builtins::constants::FTD_RESIZING_FIXED,
+                        fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data(),
                         false,
                         None,
@@ -3159,22 +3170,22 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_WHITESPACE.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_WHITESPACE.to_string(),
+            fastn_builtins::constants::FTD_WHITESPACE.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_WHITESPACE.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_WHITESPACE_NORMAL,
+                        fastn_builtins::constants::FTD_WHITESPACE_NORMAL,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
                         false,
                         Some(fastn_type::Value::new_string("normal")
-                                  .into_property_value(false, 0),),
+                                 .into_property_value(false, 0),),
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_WHITESPACE_NOWRAP,
+                        fastn_builtins::constants::FTD_WHITESPACE_NOWRAP,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3184,7 +3195,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_WHITESPACE_PRE,
+                        fastn_builtins::constants::FTD_WHITESPACE_PRE,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3194,7 +3205,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_WHITESPACE_PREWRAP,
+                        fastn_builtins::constants::FTD_WHITESPACE_PREWRAP,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3204,7 +3215,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_WHITESPACE_PRELINE,
+                        fastn_builtins::constants::FTD_WHITESPACE_PRELINE,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3214,7 +3225,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_WHITESPACE_BREAKSPACES,
+                        fastn_builtins::constants::FTD_WHITESPACE_BREAKSPACES,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3228,12 +3239,12 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_DISPLAY.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_DISPLAY.to_string(),
+            fastn_builtins::constants::FTD_DISPLAY.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_DISPLAY.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_DISPLAY_BLOCK,
+                        fastn_builtins::constants::FTD_DISPLAY_BLOCK,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3243,7 +3254,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_DISPLAY_INLINE,
+                        fastn_builtins::constants::FTD_DISPLAY_INLINE,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3253,7 +3264,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_DISPLAY_INLINE_BLOCK,
+                        fastn_builtins::constants::FTD_DISPLAY_INLINE_BLOCK,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3267,12 +3278,12 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_LENGTH.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_LENGTH.to_string(),
+            fastn_builtins::constants::FTD_LENGTH.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_LENGTH.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LENGTH_PX,
+                        fastn_builtins::constants::FTD_LENGTH_PX,
                         fastn_type::Kind::integer()
                             .into_kind_data()
                             .caption(),
@@ -3281,7 +3292,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LENGTH_PERCENT,
+                        fastn_builtins::constants::FTD_LENGTH_PERCENT,
                         fastn_type::Kind::decimal()
                             .into_kind_data()
                             .caption(),
@@ -3290,14 +3301,14 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LENGTH_CALC,
+                        fastn_builtins::constants::FTD_LENGTH_CALC,
                         fastn_type::Kind::string().into_kind_data().caption(),
                         false,
                         None,
                         0,
                     )),
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LENGTH_VH,
+                        fastn_builtins::constants::FTD_LENGTH_VH,
                         fastn_type::Kind::decimal()
                             .into_kind_data()
                             .caption(),
@@ -3306,7 +3317,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LENGTH_VW,
+                        fastn_builtins::constants::FTD_LENGTH_VW,
                         fastn_type::Kind::decimal()
                             .into_kind_data()
                             .caption(),
@@ -3315,7 +3326,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LENGTH_VMIN,
+                        fastn_builtins::constants::FTD_LENGTH_VMIN,
                         fastn_type::Kind::decimal()
                             .into_kind_data()
                             .caption(),
@@ -3324,35 +3335,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LENGTH_VMAX,
-                        fastn_type::Kind::decimal()
-                            .into_kind_data()
-                            .caption(),
-                        false,
-                        None,
-                        0,
-                    )),
-
-                    fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LENGTH_DVH,
-                        fastn_type::Kind::decimal()
-                            .into_kind_data()
-                            .caption(),
-                        false,
-                        None,
-                        0,
-                    )),
-                    fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LENGTH_LVH,
-                        fastn_type::Kind::decimal()
-                            .into_kind_data()
-                            .caption(),
-                        false,
-                        None,
-                        0,
-                    )),
-                    fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LENGTH_SVH,
+                        fastn_builtins::constants::FTD_LENGTH_VMAX,
                         fastn_type::Kind::decimal()
                             .into_kind_data()
                             .caption(),
@@ -3362,7 +3345,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     )),
 
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LENGTH_EM,
+                        fastn_builtins::constants::FTD_LENGTH_DVH,
                         fastn_type::Kind::decimal()
                             .into_kind_data()
                             .caption(),
@@ -3371,7 +3354,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LENGTH_REM,
+                        fastn_builtins::constants::FTD_LENGTH_LVH,
                         fastn_type::Kind::decimal()
                             .into_kind_data()
                             .caption(),
@@ -3380,8 +3363,36 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LENGTH_RESPONSIVE,
-                        fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_LENGTH)
+                        fastn_builtins::constants::FTD_LENGTH_SVH,
+                        fastn_type::Kind::decimal()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+
+                    fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
+                        fastn_builtins::constants::FTD_LENGTH_EM,
+                        fastn_type::Kind::decimal()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
+                        fastn_builtins::constants::FTD_LENGTH_REM,
+                        fastn_type::Kind::decimal()
+                            .into_kind_data()
+                            .caption(),
+                        false,
+                        None,
+                        0,
+                    )),
+                    fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
+                        fastn_builtins::constants::FTD_LENGTH_RESPONSIVE,
+                        fastn_type::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_LENGTH)
                             .into_kind_data()
                             .caption(),
                         false,
@@ -3393,13 +3404,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_RESPONSIVE_LENGTH.to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
-                name: ftd::interpreter::FTD_RESPONSIVE_LENGTH.to_string(),
+            fastn_builtins::constants::FTD_RESPONSIVE_LENGTH.to_string(),
+            fastn_type::Definition::Record(fastn_type::Record {
+                name: fastn_builtins::constants::FTD_RESPONSIVE_LENGTH.to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     fastn_type::Field {
                         name: "desktop".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data()
                             .caption(),
                         mutable: false,
@@ -3409,15 +3420,15 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "mobile".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data(),
                         mutable: false,
                         access_modifier: Default::default(),
                         value: Some(fastn_type::PropertyValue::Reference {
-                            name: ftd::interpreter::FTD_RESPONSIVE_LENGTH_DESKTOP.to_string(),
+                            name: fastn_builtins::constants::FTD_RESPONSIVE_LENGTH_DESKTOP.to_string(),
                             kind: fastn_type::Kind::string().into_kind_data(),
                             source: fastn_type::PropertyValueSource::Local(
-                                ftd::interpreter::FTD_RESPONSIVE_LENGTH.to_string(),
+                                fastn_builtins::constants::FTD_RESPONSIVE_LENGTH.to_string(),
                             ),
                             is_mutable: false,
                             line_number: 0,
@@ -3425,17 +3436,17 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         line_number: 0,
                     },
                 ])
-                .collect(),
+                    .collect(),
                 line_number: 0,
             }),
         ),
         (
-            ftd::interpreter::FTD_FONT_SIZE.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
+            fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_FONT_SIZE_PX,
+                        fastn_builtins::constants::FTD_FONT_SIZE_PX,
                         fastn_type::Kind::integer()
                             .into_kind_data()
                             .caption(),
@@ -3444,7 +3455,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_FONT_SIZE_EM,
+                        fastn_builtins::constants::FTD_FONT_SIZE_EM,
                         fastn_type::Kind::decimal()
                             .into_kind_data()
                             .caption(),
@@ -3453,7 +3464,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_FONT_SIZE_REM,
+                        fastn_builtins::constants::FTD_FONT_SIZE_REM,
                         fastn_type::Kind::decimal()
                             .into_kind_data()
                             .caption(),
@@ -3466,12 +3477,12 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_REGION.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_REGION.to_string(),
+            fastn_builtins::constants::FTD_REGION.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_REGION.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_REGION_H1,
+                        fastn_builtins::constants::FTD_REGION_H1,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3481,7 +3492,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_REGION_H2,
+                        fastn_builtins::constants::FTD_REGION_H2,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3491,7 +3502,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_REGION_H3,
+                        fastn_builtins::constants::FTD_REGION_H3,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3501,7 +3512,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_REGION_H4,
+                        fastn_builtins::constants::FTD_REGION_H4,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3511,7 +3522,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_REGION_H5,
+                        fastn_builtins::constants::FTD_REGION_H5,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3521,7 +3532,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_REGION_H6,
+                        fastn_builtins::constants::FTD_REGION_H6,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3535,12 +3546,12 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_TEXT_INPUT_TYPE.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_TEXT_INPUT_TYPE.to_string(),
+            fastn_builtins::constants::FTD_TEXT_INPUT_TYPE.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_TEXT_INPUT_TYPE.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_INPUT_TYPE_TEXT,
+                        fastn_builtins::constants::FTD_TEXT_INPUT_TYPE_TEXT,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3550,7 +3561,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_INPUT_TYPE_EMAIL,
+                        fastn_builtins::constants::FTD_TEXT_INPUT_TYPE_EMAIL,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3560,7 +3571,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_INPUT_TYPE_PASSWORD,
+                        fastn_builtins::constants::FTD_TEXT_INPUT_TYPE_PASSWORD,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3570,7 +3581,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_INPUT_TYPE_URL,
+                        fastn_builtins::constants::FTD_TEXT_INPUT_TYPE_URL,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3580,7 +3591,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_INPUT_TYPE_DATETIME,
+                        fastn_builtins::constants::FTD_TEXT_INPUT_TYPE_DATETIME,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3590,7 +3601,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_INPUT_TYPE_DATE,
+                        fastn_builtins::constants::FTD_TEXT_INPUT_TYPE_DATE,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3600,7 +3611,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_INPUT_TYPE_TIME,
+                        fastn_builtins::constants::FTD_TEXT_INPUT_TYPE_TIME,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3610,7 +3621,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_INPUT_TYPE_MONTH,
+                        fastn_builtins::constants::FTD_TEXT_INPUT_TYPE_MONTH,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3620,7 +3631,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_INPUT_TYPE_WEEK,
+                        fastn_builtins::constants::FTD_TEXT_INPUT_TYPE_WEEK,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3630,7 +3641,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_INPUT_TYPE_COLOR,
+                        fastn_builtins::constants::FTD_TEXT_INPUT_TYPE_COLOR,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3640,7 +3651,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_INPUT_TYPE_FILE,
+                        fastn_builtins::constants::FTD_TEXT_INPUT_TYPE_FILE,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3654,12 +3665,12 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_LOADING.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_LOADING.to_string(),
+            fastn_builtins::constants::FTD_LOADING.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_LOADING.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LOADING_EAGER,
+                        fastn_builtins::constants::FTD_LOADING_EAGER,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3669,7 +3680,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_LOADING_LAZY,
+                        fastn_builtins::constants::FTD_LOADING_LAZY,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3683,12 +3694,12 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_BORDER_STYLE.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_BORDER_STYLE.to_string(),
+            fastn_builtins::constants::FTD_BORDER_STYLE.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_BORDER_STYLE.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BORDER_STYLE_DASHED,
+                        fastn_builtins::constants::FTD_BORDER_STYLE_DASHED,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3698,7 +3709,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BORDER_STYLE_DOTTED,
+                        fastn_builtins::constants::FTD_BORDER_STYLE_DOTTED,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3708,7 +3719,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BORDER_STYLE_DOUBLE,
+                        fastn_builtins::constants::FTD_BORDER_STYLE_DOUBLE,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3718,7 +3729,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BORDER_STYLE_GROOVE,
+                        fastn_builtins::constants::FTD_BORDER_STYLE_GROOVE,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3728,7 +3739,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BORDER_STYLE_INSET,
+                        fastn_builtins::constants::FTD_BORDER_STYLE_INSET,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3738,7 +3749,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BORDER_STYLE_OUTSET,
+                        fastn_builtins::constants::FTD_BORDER_STYLE_OUTSET,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3748,7 +3759,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BORDER_STYLE_RIDGE,
+                        fastn_builtins::constants::FTD_BORDER_STYLE_RIDGE,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3758,7 +3769,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_BORDER_STYLE_SOLID,
+                        fastn_builtins::constants::FTD_BORDER_STYLE_SOLID,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3772,12 +3783,12 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_TEXT_STYLE.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_TEXT_STYLE.to_string(),
+            fastn_builtins::constants::FTD_TEXT_STYLE.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_TEXT_STYLE.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_STYLE_UNDERLINE,
+                        fastn_builtins::constants::FTD_TEXT_STYLE_UNDERLINE,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3786,7 +3797,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_STYLE_STRIKE,
+                        fastn_builtins::constants::FTD_TEXT_STYLE_STRIKE,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3795,7 +3806,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_STYLE_ITALIC,
+                        fastn_builtins::constants::FTD_TEXT_STYLE_ITALIC,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3804,7 +3815,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_STYLE_WEIGHT_HEAVY,
+                        fastn_builtins::constants::FTD_TEXT_STYLE_WEIGHT_HEAVY,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3813,7 +3824,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_STYLE_WEIGHT_EXTRA_BOLD,
+                        fastn_builtins::constants::FTD_TEXT_STYLE_WEIGHT_EXTRA_BOLD,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3822,7 +3833,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_STYLE_WEIGHT_BOLD,
+                        fastn_builtins::constants::FTD_TEXT_STYLE_WEIGHT_BOLD,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3831,7 +3842,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_STYLE_WEIGHT_SEMI_BOLD,
+                        fastn_builtins::constants::FTD_TEXT_STYLE_WEIGHT_SEMI_BOLD,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3840,7 +3851,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_STYLE_WEIGHT_MEDIUM,
+                        fastn_builtins::constants::FTD_TEXT_STYLE_WEIGHT_MEDIUM,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3849,7 +3860,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_STYLE_WEIGHT_REGULAR,
+                        fastn_builtins::constants::FTD_TEXT_STYLE_WEIGHT_REGULAR,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3858,7 +3869,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_STYLE_WEIGHT_LIGHT,
+                        fastn_builtins::constants::FTD_TEXT_STYLE_WEIGHT_LIGHT,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3867,7 +3878,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_STYLE_WEIGHT_EXTRA_LIGHT,
+                        fastn_builtins::constants::FTD_TEXT_STYLE_WEIGHT_EXTRA_LIGHT,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3876,7 +3887,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_STYLE_WEIGHT_HAIRLINE,
+                        fastn_builtins::constants::FTD_TEXT_STYLE_WEIGHT_HAIRLINE,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3889,12 +3900,12 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_TEXT_TRANSFORM.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_TEXT_TRANSFORM.to_string(),
+            fastn_builtins::constants::FTD_TEXT_TRANSFORM.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_TEXT_TRANSFORM.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_TRANSFORM_NONE,
+                        fastn_builtins::constants::FTD_TEXT_TRANSFORM_NONE,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3904,7 +3915,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_TRANSFORM_CAPITALIZE,
+                        fastn_builtins::constants::FTD_TEXT_TRANSFORM_CAPITALIZE,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3914,7 +3925,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_TRANSFORM_UPPERCASE,
+                        fastn_builtins::constants::FTD_TEXT_TRANSFORM_UPPERCASE,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3924,7 +3935,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_TRANSFORM_LOWERCASE,
+                        fastn_builtins::constants::FTD_TEXT_TRANSFORM_LOWERCASE,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3934,7 +3945,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_TRANSFORM_INITIAL,
+                        fastn_builtins::constants::FTD_TEXT_TRANSFORM_INITIAL,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3944,7 +3955,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_TEXT_TRANSFORM_INHERIT,
+                        fastn_builtins::constants::FTD_TEXT_TRANSFORM_INHERIT,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -3958,13 +3969,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_TYPE.to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
-                name: ftd::interpreter::FTD_TYPE.to_string(),
+            fastn_builtins::constants::FTD_TYPE.to_string(),
+            fastn_type::Definition::Record(fastn_type::Record {
+                name: fastn_builtins::constants::FTD_TYPE.to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     fastn_type::Field {
                         name: "size".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_FONT_SIZE)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_FONT_SIZE)
                             .into_optional()
                             .into_kind_data(),
                         mutable: false,
@@ -3974,7 +3985,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "line-height".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_FONT_SIZE)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_FONT_SIZE)
                             .into_optional()
                             .into_kind_data(),
                         mutable: false,
@@ -3984,7 +3995,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "letter-spacing".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_FONT_SIZE)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_FONT_SIZE)
                             .into_optional()
                             .into_kind_data(),
                         mutable: false,
@@ -4013,18 +4024,18 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         line_number: 0,
                     },
                 ])
-                .collect(),
+                    .collect(),
                 line_number: 0,
             }),
         ),
         (
-            ftd::interpreter::FTD_RESPONSIVE_TYPE.to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
-                name: ftd::interpreter::FTD_RESPONSIVE_TYPE.to_string(),
+            fastn_builtins::constants::FTD_RESPONSIVE_TYPE.to_string(),
+            fastn_type::Definition::Record(fastn_type::Record {
+                name: fastn_builtins::constants::FTD_RESPONSIVE_TYPE.to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     fastn_type::Field {
                         name: "desktop".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_TYPE)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_TYPE)
                             .into_kind_data().caption(),
                         mutable: false,
                         value: None,
@@ -4033,16 +4044,16 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "mobile".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_TYPE)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_TYPE)
                             .into_kind_data(),
                         mutable: false,
                         access_modifier: Default::default(),
                         value: Some(fastn_type::PropertyValue::Reference {
-                            name: ftd::interpreter::FTD_RESPONSIVE_TYPE_DESKTOP.to_string(),
-                            kind: fastn_type::Kind::record(ftd::interpreter::FTD_TYPE)
+                            name: fastn_builtins::constants::FTD_RESPONSIVE_TYPE_DESKTOP.to_string(),
+                            kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_TYPE)
                                 .into_kind_data(),
                             source: fastn_type::PropertyValueSource::Local(
-                                ftd::interpreter::FTD_RESPONSIVE_TYPE.to_string(),
+                                fastn_builtins::constants::FTD_RESPONSIVE_TYPE.to_string(),
                             ),
                             is_mutable: false,
                             line_number: 0,
@@ -4050,13 +4061,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         line_number: 0,
                     },
                 ])
-                .collect(),
+                    .collect(),
                 line_number: 0,
             }),
         ),
         (
             "ftd#dark-mode".to_string(),
-            ftd::interpreter::Thing::Variable(fastn_type::Variable {
+            fastn_type::Definition::Variable(fastn_type::Variable {
                 name: "ftd#dark-mode".to_string(),
                 kind: fastn_type::Kind::boolean().into_kind_data(),
                 mutable: true,
@@ -4072,7 +4083,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#empty".to_string(),
-            ftd::interpreter::Thing::Variable(fastn_type::Variable {
+            fastn_type::Definition::Variable(fastn_type::Variable {
                 name: "ftd#empty".to_string(),
                 kind: fastn_type::Kind::string().into_kind_data(),
                 mutable: false,
@@ -4088,7 +4099,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#space".to_string(),
-            ftd::interpreter::Thing::Variable(fastn_type::Variable {
+            fastn_type::Definition::Variable(fastn_type::Variable {
                 name: "ftd#space".to_string(),
                 kind: fastn_type::Kind::string().into_kind_data(),
                 mutable: false,
@@ -4104,7 +4115,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#nbsp".to_string(),
-            ftd::interpreter::Thing::Variable(fastn_type::Variable {
+            fastn_type::Definition::Variable(fastn_type::Variable {
                 name: "ftd#nbsp".to_string(),
                 kind: fastn_type::Kind::string().into_kind_data(),
                 mutable: false,
@@ -4120,7 +4131,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#non-breaking-space".to_string(),
-            ftd::interpreter::Thing::Variable(fastn_type::Variable {
+            fastn_type::Definition::Variable(fastn_type::Variable {
                 name: "ftd#non-breaking-space".to_string(),
                 kind: fastn_type::Kind::string().into_kind_data(),
                 mutable: false,
@@ -4136,7 +4147,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#system-dark-mode".to_string(),
-            ftd::interpreter::Thing::Variable(fastn_type::Variable {
+            fastn_type::Definition::Variable(fastn_type::Variable {
                 name: "ftd#system-dark-mode".to_string(),
                 kind: fastn_type::Kind::boolean().into_kind_data(),
                 mutable: true,
@@ -4152,7 +4163,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#follow-system-dark-mode".to_string(),
-            ftd::interpreter::Thing::Variable(fastn_type::Variable {
+            fastn_type::Definition::Variable(fastn_type::Variable {
                 name: "ftd#follow-system-dark-mode".to_string(),
                 kind: fastn_type::Kind::boolean().into_kind_data(),
                 mutable: true,
@@ -4168,13 +4179,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#permanent-redirect".to_string(),
-            ftd::interpreter::Thing::Component(fastn_type::ComponentDefinition {
+            fastn_type::Definition::Component(fastn_type::ComponentDefinition {
                 name: "ftd#permanent-redirect".to_string(),
                 arguments: vec![
                     fastn_type::Argument::default(
-                    "url",
-                    fastn_type::Kind::string()
-                        .into_kind_data().caption_or_body(),
+                        "url",
+                        fastn_type::Kind::string()
+                            .into_kind_data().caption_or_body(),
                     ),
                 ],
                 definition: fastn_type::ComponentInvocation::from_name("ftd.kernel"),
@@ -4184,7 +4195,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#temporary-redirect".to_string(),
-            ftd::interpreter::Thing::Component(fastn_type::ComponentDefinition {
+            fastn_type::Definition::Component(fastn_type::ComponentDefinition {
                 name: "ftd#temporary-redirect".to_string(),
                 arguments: vec![
                     fastn_type::Argument::default(
@@ -4199,13 +4210,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_BACKGROUND_COLOR.to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
-                name: ftd::interpreter::FTD_BACKGROUND_COLOR.to_string(),
+            fastn_builtins::constants::FTD_BACKGROUND_COLOR.to_string(),
+            fastn_type::Definition::Record(fastn_type::Record {
+                name: fastn_builtins::constants::FTD_BACKGROUND_COLOR.to_string(),
                 fields: vec![
                     fastn_type::Field {
                         name: "base".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4214,7 +4225,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "step-1".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4223,7 +4234,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "step-2".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4232,7 +4243,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "overlay".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4241,7 +4252,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "code".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4253,13 +4264,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_CTA_COLOR.to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
-                name: ftd::interpreter::FTD_CTA_COLOR.to_string(),
+            fastn_builtins::constants::FTD_CTA_COLOR.to_string(),
+            fastn_type::Definition::Record(fastn_type::Record {
+                name: fastn_builtins::constants::FTD_CTA_COLOR.to_string(),
                 fields: vec![
                     fastn_type::Field {
                         name: "base".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4268,7 +4279,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "hover".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4277,7 +4288,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "pressed".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4286,7 +4297,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "disabled".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4295,7 +4306,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "focused".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4304,7 +4315,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "border".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4313,7 +4324,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "border-disabled".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4322,7 +4333,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "text".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4331,7 +4342,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "text-disabled".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4343,13 +4354,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_PST.to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
-                name: ftd::interpreter::FTD_PST.to_string(),
+            fastn_builtins::constants::FTD_PST.to_string(),
+            fastn_type::Definition::Record(fastn_type::Record {
+                name: fastn_builtins::constants::FTD_PST.to_string(),
                 fields: vec![
                     fastn_type::Field {
                         name: "primary".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4358,7 +4369,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "secondary".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4367,7 +4378,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "tertiary".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4379,13 +4390,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_BTB.to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
-                name: ftd::interpreter::FTD_BTB.to_string(),
+            fastn_builtins::constants::FTD_BTB.to_string(),
+            fastn_type::Definition::Record(fastn_type::Record {
+                name: fastn_builtins::constants::FTD_BTB.to_string(),
                 fields: vec![
                     fastn_type::Field {
                         name: "base".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4394,7 +4405,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "text".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4403,7 +4414,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "border".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4415,13 +4426,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_CUSTOM_COLORS.to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
-                name: ftd::interpreter::FTD_CUSTOM_COLORS.to_string(),
+            fastn_builtins::constants::FTD_CUSTOM_COLORS.to_string(),
+            fastn_type::Definition::Record(fastn_type::Record {
+                name: fastn_builtins::constants::FTD_CUSTOM_COLORS.to_string(),
                 fields: vec![
                     fastn_type::Field {
                         name: "one".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4430,7 +4441,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "two".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4439,7 +4450,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "three".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4448,7 +4459,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "four".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4457,7 +4468,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "five".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4466,7 +4477,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "six".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4475,7 +4486,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "seven".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4484,7 +4495,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "eight".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4493,7 +4504,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "nine".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4502,7 +4513,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "ten".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4514,9 +4525,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_COLOR_SCHEME.to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
-                name: ftd::interpreter::FTD_COLOR_SCHEME.to_string(),
+            fastn_builtins::constants::FTD_COLOR_SCHEME.to_string(),
+            fastn_type::Definition::Record(fastn_type::Record {
+                name: fastn_builtins::constants::FTD_COLOR_SCHEME.to_string(),
                 fields: vec![
                     fastn_type::Field {
                         name: "background".to_string(),
@@ -4529,7 +4540,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "border".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4538,7 +4549,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "border-strong".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4547,7 +4558,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "text".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4556,7 +4567,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "text-strong".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4565,7 +4576,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "shadow".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4574,7 +4585,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "scrim".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -4666,12 +4677,12 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_TYPE_DATA.to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
-                name: ftd::interpreter::FTD_TYPE_DATA.to_string(),
+            fastn_builtins::constants::FTD_TYPE_DATA.to_string(),
+            fastn_type::Definition::Record(fastn_type::Record {
+                name: fastn_builtins::constants::FTD_TYPE_DATA.to_string(),
                 fields: vec![fastn_type::Field {
                     name: "heading-large".to_string(),
-                    kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
+                    kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
                     value: None,
@@ -4679,7 +4690,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     line_number: 0
                 }, fastn_type::Field {
                     name: "heading-medium".to_string(),
-                    kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
+                    kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
                     value: None,
@@ -4687,7 +4698,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     line_number: 0
                 }, fastn_type::Field {
                     name: "heading-small".to_string(),
-                    kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
+                    kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
                     value: None,
@@ -4695,7 +4706,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     line_number: 0
                 }, fastn_type::Field {
                     name: "heading-hero".to_string(),
-                    kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
+                    kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
                     value: None,
@@ -4703,7 +4714,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     line_number: 0
                 }, fastn_type::Field {
                     name: "heading-tiny".to_string(),
-                    kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
+                    kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
                     value: None,
@@ -4711,7 +4722,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     line_number: 0
                 }, fastn_type::Field {
                     name: "copy-small".to_string(),
-                    kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
+                    kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
                     value: None,
@@ -4719,7 +4730,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     line_number: 0
                 }, fastn_type::Field {
                     name: "copy-regular".to_string(),
-                    kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
+                    kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
                     value: None,
@@ -4727,7 +4738,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     line_number: 0
                 }, fastn_type::Field {
                     name: "copy-large".to_string(),
-                    kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
+                    kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
                     value: None,
@@ -4735,7 +4746,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     line_number: 0
                 }, fastn_type::Field {
                     name: "fine-print".to_string(),
-                    kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
+                    kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
                     value: None,
@@ -4743,7 +4754,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     line_number: 0
                 }, fastn_type::Field {
                     name: "blockquote".to_string(),
-                    kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
+                    kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
                     value: None,
@@ -4751,7 +4762,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     line_number: 0
                 }, fastn_type::Field {
                     name: "source-code".to_string(),
-                    kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
+                    kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
                     value: None,
@@ -4759,7 +4770,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     line_number: 0
                 }, fastn_type::Field {
                     name: "button-small".to_string(),
-                    kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
+                    kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
                     value: None,
@@ -4767,7 +4778,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     line_number: 0
                 }, fastn_type::Field {
                     name: "button-medium".to_string(),
-                    kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
+                    kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
                     value: None,
@@ -4775,7 +4786,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     line_number: 0,
                 }, fastn_type::Field {
                     name: "button-large".to_string(),
-                    kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
+                    kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
                     value: None,
@@ -4783,7 +4794,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     line_number: 0,
                 }, fastn_type::Field {
                     name: "link".to_string(),
-                    kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
+                    kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
                     value: None,
@@ -4791,7 +4802,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     line_number: 0,
                 }, fastn_type::Field {
                     name: "label-large".to_string(),
-                    kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
+                    kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
                     value: None,
@@ -4799,7 +4810,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     line_number: 0
                 }, fastn_type::Field {
                     name: "label-small".to_string(),
-                    kind: fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
+                    kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
                     value: None,
@@ -4811,23 +4822,23 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#font-display".to_string(),
-             ftd::interpreter::Thing::Variable(fastn_type::Variable {
-                 name: "ftd#font-display".to_string(),
-                 kind: fastn_type::Kind::string().into_kind_data(),
-                 mutable: true,
-                 value: fastn_type::PropertyValue::Value {
-                     value: fastn_type::Value::new_string("sans-serif"),
-                     is_mutable: true,
-                     line_number: 0
-                 },
-                 conditional_value: vec![],
-                 line_number: 0,
-                 is_static: false
-             })
+            fastn_type::Definition::Variable(fastn_type::Variable {
+                name: "ftd#font-display".to_string(),
+                kind: fastn_type::Kind::string().into_kind_data(),
+                mutable: true,
+                value: fastn_type::PropertyValue::Value {
+                    value: fastn_type::Value::new_string("sans-serif"),
+                    is_mutable: true,
+                    line_number: 0
+                },
+                conditional_value: vec![],
+                line_number: 0,
+                is_static: false
+            })
         ),
         (
             "ftd#font-copy".to_string(),
-            ftd::interpreter::Thing::Variable(fastn_type::Variable {
+            fastn_type::Definition::Variable(fastn_type::Variable {
                 name: "ftd#font-copy".to_string(),
                 kind: fastn_type::Kind::string().into_kind_data(),
                 mutable: true,
@@ -4843,7 +4854,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#font-code".to_string(),
-            ftd::interpreter::Thing::Variable(fastn_type::Variable {
+            fastn_type::Definition::Variable(fastn_type::Variable {
                 name: "ftd#font-code".to_string(),
                 kind: fastn_type::Kind::string().into_kind_data(),
                 mutable: true,
@@ -4859,26 +4870,26 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#default-types".to_string(),
-            ftd::interpreter::Thing::Variable(fastn_type::Variable {
+            fastn_type::Definition::Variable(fastn_type::Variable {
                 name: "ftd#default-types".to_string(),
-                kind: fastn_type::Kind::record(ftd::interpreter::FTD_TYPE_DATA).into_kind_data(),
+                kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_TYPE_DATA).into_kind_data(),
                 mutable: true,
                 value: fastn_type::PropertyValue::Value {
                     value: fastn_type::Value::Record {
-                        name: ftd::interpreter::FTD_TYPE_DATA.to_string(),
+                        name: fastn_builtins::constants::FTD_TYPE_DATA.to_string(),
                         fields: std::iter::IntoIterator::into_iter([
                             // HEADING TYPES -------------------------------------------
                             (
                                 "heading-hero".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_RESPONSIVE_TYPE.to_string(),
+                                        name: fastn_builtins::constants::FTD_RESPONSIVE_TYPE.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "desktop".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -4896,9 +4907,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -4916,9 +4927,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -4952,7 +4963,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "mobile".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -4970,9 +4981,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -4990,9 +5001,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -5033,13 +5044,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "heading-large".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_RESPONSIVE_TYPE.to_string(),
+                                        name: fastn_builtins::constants::FTD_RESPONSIVE_TYPE.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "desktop".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -5057,9 +5068,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -5077,9 +5088,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -5113,7 +5124,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "mobile".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -5131,9 +5142,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -5151,9 +5162,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -5194,13 +5205,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "heading-medium".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_RESPONSIVE_TYPE.to_string(),
+                                        name: fastn_builtins::constants::FTD_RESPONSIVE_TYPE.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "desktop".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -5218,9 +5229,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -5238,9 +5249,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -5274,7 +5285,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "mobile".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -5292,9 +5303,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -5312,9 +5323,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -5355,13 +5366,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "heading-small".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_RESPONSIVE_TYPE.to_string(),
+                                        name: fastn_builtins::constants::FTD_RESPONSIVE_TYPE.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "desktop".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -5379,9 +5390,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -5399,9 +5410,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -5435,7 +5446,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "mobile".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -5453,9 +5464,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -5473,9 +5484,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -5516,13 +5527,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "heading-tiny".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_RESPONSIVE_TYPE.to_string(),
+                                        name: fastn_builtins::constants::FTD_RESPONSIVE_TYPE.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "desktop".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -5540,9 +5551,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -5560,9 +5571,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -5596,7 +5607,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "mobile".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -5614,9 +5625,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -5634,9 +5645,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -5678,13 +5689,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "copy-large".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_RESPONSIVE_TYPE.to_string(),
+                                        name: fastn_builtins::constants::FTD_RESPONSIVE_TYPE.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "desktop".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -5702,9 +5713,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -5722,9 +5733,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -5758,7 +5769,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "mobile".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -5776,9 +5787,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -5796,9 +5807,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -5839,13 +5850,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "copy-regular".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_RESPONSIVE_TYPE.to_string(),
+                                        name: fastn_builtins::constants::FTD_RESPONSIVE_TYPE.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "desktop".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -5863,9 +5874,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -5883,9 +5894,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -5919,7 +5930,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "mobile".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -5937,9 +5948,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -5957,9 +5968,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -6000,13 +6011,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "copy-small".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_RESPONSIVE_TYPE.to_string(),
+                                        name: fastn_builtins::constants::FTD_RESPONSIVE_TYPE.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "desktop".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -6024,9 +6035,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -6044,9 +6055,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -6080,7 +6091,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "mobile".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -6098,9 +6109,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -6118,9 +6129,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -6162,13 +6173,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "fine-print".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_RESPONSIVE_TYPE.to_string(),
+                                        name: fastn_builtins::constants::FTD_RESPONSIVE_TYPE.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "desktop".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -6186,9 +6197,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -6206,9 +6217,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -6242,7 +6253,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "mobile".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -6260,9 +6271,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -6280,9 +6291,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -6323,13 +6334,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "blockquote".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_RESPONSIVE_TYPE.to_string(),
+                                        name: fastn_builtins::constants::FTD_RESPONSIVE_TYPE.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "desktop".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -6347,9 +6358,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -6367,9 +6378,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -6403,7 +6414,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "mobile".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -6421,9 +6432,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -6441,9 +6452,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -6484,13 +6495,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "source-code".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_RESPONSIVE_TYPE.to_string(),
+                                        name: fastn_builtins::constants::FTD_RESPONSIVE_TYPE.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "desktop".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -6508,9 +6519,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -6528,9 +6539,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -6564,7 +6575,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "mobile".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -6582,9 +6593,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -6602,9 +6613,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -6646,13 +6657,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "label-large".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_RESPONSIVE_TYPE.to_string(),
+                                        name: fastn_builtins::constants::FTD_RESPONSIVE_TYPE.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "desktop".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -6670,9 +6681,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -6690,9 +6701,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -6726,7 +6737,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "mobile".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -6744,9 +6755,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -6764,9 +6775,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -6807,13 +6818,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "label-small".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_RESPONSIVE_TYPE.to_string(),
+                                        name: fastn_builtins::constants::FTD_RESPONSIVE_TYPE.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "desktop".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -6831,9 +6842,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -6851,9 +6862,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -6887,7 +6898,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "mobile".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -6905,9 +6916,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -6925,9 +6936,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -6969,13 +6980,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "button-large".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_RESPONSIVE_TYPE.to_string(),
+                                        name: fastn_builtins::constants::FTD_RESPONSIVE_TYPE.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "desktop".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -6993,9 +7004,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -7013,9 +7024,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -7049,7 +7060,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "mobile".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -7067,9 +7078,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -7087,9 +7098,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -7130,13 +7141,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "button-medium".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_RESPONSIVE_TYPE.to_string(),
+                                        name: fastn_builtins::constants::FTD_RESPONSIVE_TYPE.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "desktop".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -7154,9 +7165,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -7174,9 +7185,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -7210,7 +7221,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "mobile".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -7228,9 +7239,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -7248,9 +7259,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -7291,13 +7302,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "button-small".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_RESPONSIVE_TYPE.to_string(),
+                                        name: fastn_builtins::constants::FTD_RESPONSIVE_TYPE.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "desktop".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -7315,9 +7326,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -7335,9 +7346,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -7371,7 +7382,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "mobile".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -7389,9 +7400,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -7409,9 +7420,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -7452,13 +7463,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "link".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_RESPONSIVE_TYPE.to_string(),
+                                        name: fastn_builtins::constants::FTD_RESPONSIVE_TYPE.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "desktop".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -7476,9 +7487,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -7496,9 +7507,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -7532,7 +7543,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "mobile".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_TYPE.to_string(),
+                                                        name: fastn_builtins::constants::FTD_TYPE.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "font-family".to_string(),
@@ -7550,9 +7561,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "size".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -7570,9 +7581,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                                 "line-height".to_string(),
                                                                 fastn_type::PropertyValue::Value {
                                                                     value: fastn_type::Value::OrType {
-                                                                        name: ftd::interpreter::FTD_FONT_SIZE.to_string(),
-                                                                        variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
-                                                                        full_variant: ftd::interpreter::FTD_FONT_SIZE_PX.to_string(),
+                                                                        name: fastn_builtins::constants::FTD_FONT_SIZE.to_string(),
+                                                                        variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
+                                                                        full_variant: fastn_builtins::constants::FTD_FONT_SIZE_PX.to_string(),
                                                                         value: Box::new
                                                                             (fastn_type::PropertyValue::Value {
                                                                                 value: fastn_type::Value::Integer {
@@ -7621,26 +7632,26 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#default-colors".to_string(),
-            ftd::interpreter::Thing::Variable(fastn_type::Variable {
+            fastn_type::Definition::Variable(fastn_type::Variable {
                 name: "ftd#default-colors".to_string(),
-                kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR_SCHEME)
+                kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR_SCHEME)
                     .into_kind_data(),
                 mutable: true,
                 value: fastn_type::PropertyValue::Value {
                     value: fastn_type::Value::Record {
-                        name: ftd::interpreter::FTD_COLOR_SCHEME.to_string(),
+                        name: fastn_builtins::constants::FTD_COLOR_SCHEME.to_string(),
                         fields: std::iter::IntoIterator::into_iter([
                             (
                                 "background".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_BACKGROUND_COLOR.to_string(),
+                                        name: fastn_builtins::constants::FTD_BACKGROUND_COLOR.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "base".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -7672,7 +7683,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "step-1".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -7704,7 +7715,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "step-2".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -7736,7 +7747,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "overlay".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -7770,7 +7781,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "code".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -7809,7 +7820,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "border".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([(
                                             "light".to_string(),
                                             fastn_type::PropertyValue::Value {
@@ -7841,7 +7852,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "border-strong".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([(
                                             "light".to_string(),
                                             fastn_type::PropertyValue::Value {
@@ -7873,7 +7884,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "text".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([(
                                             "light".to_string(),
                                             fastn_type::PropertyValue::Value {
@@ -7905,7 +7916,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "text-strong".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([(
                                             "light".to_string(),
                                             fastn_type::PropertyValue::Value {
@@ -7937,7 +7948,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "shadow".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([(
                                             "light".to_string().to_string(),
                                             fastn_type::PropertyValue::Value {
@@ -7969,7 +7980,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "scrim".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([(
                                             "light".to_string(),
                                             fastn_type::PropertyValue::Value {
@@ -8001,13 +8012,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "cta-primary".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_CTA_COLOR.to_string(),
+                                        name: fastn_builtins::constants::FTD_CTA_COLOR.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "base".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8036,7 +8047,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "hover".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8065,7 +8076,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "pressed".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8094,7 +8105,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "disabled".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8123,7 +8134,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "focused".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8152,7 +8163,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "border".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8181,7 +8192,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "text".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8210,7 +8221,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "border-disabled".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8239,7 +8250,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "text-disabled".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8274,13 +8285,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "cta-secondary".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_CTA_COLOR.to_string(),
+                                        name: fastn_builtins::constants::FTD_CTA_COLOR.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "base".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8309,7 +8320,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "hover".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8338,7 +8349,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "pressed".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8367,7 +8378,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "disabled".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8396,7 +8407,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "focused".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8425,7 +8436,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "border".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8454,7 +8465,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "text".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8483,7 +8494,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "border-disabled".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8512,7 +8523,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "text-disabled".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8547,13 +8558,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "cta-tertiary".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_CTA_COLOR.to_string(),
+                                        name: fastn_builtins::constants::FTD_CTA_COLOR.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "base".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8582,7 +8593,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "hover".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8611,7 +8622,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "pressed".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8640,7 +8651,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "disabled".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8669,7 +8680,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "focused".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8698,7 +8709,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "border".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8727,7 +8738,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "text".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8756,7 +8767,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "border-disabled".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8785,7 +8796,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "text-disabled".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8820,13 +8831,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "cta-danger".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_CTA_COLOR.to_string(),
+                                        name: fastn_builtins::constants::FTD_CTA_COLOR.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "base".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8855,7 +8866,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "hover".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8884,7 +8895,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "pressed".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8913,7 +8924,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "disabled".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8942,7 +8953,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "focused".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -8971,7 +8982,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "border".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -9000,7 +9011,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "text".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9031,7 +9042,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "border-disabled".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -9060,7 +9071,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "text-disabled".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([(
                                                             "light".to_string(),
                                                             fastn_type::PropertyValue::Value {
@@ -9095,13 +9106,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "accent".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_PST.to_string(),
+                                        name: fastn_builtins::constants::FTD_PST.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "primary".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9132,7 +9143,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "secondary".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9163,7 +9174,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "tertiary".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9200,13 +9211,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "error".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_BTB.to_string(),
+                                        name: fastn_builtins::constants::FTD_BTB.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "base".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9237,7 +9248,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "text".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9268,7 +9279,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "border".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9305,13 +9316,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "success".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_BTB.to_string(),
+                                        name: fastn_builtins::constants::FTD_BTB.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "base".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9342,7 +9353,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "text".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9373,7 +9384,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "border".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9410,13 +9421,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "info".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_BTB.to_string(),
+                                        name: fastn_builtins::constants::FTD_BTB.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "base".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9447,7 +9458,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "text".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9478,7 +9489,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "border".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9515,13 +9526,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "warning".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_BTB.to_string(),
+                                        name: fastn_builtins::constants::FTD_BTB.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "base".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9552,7 +9563,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "text".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9583,7 +9594,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "border".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9620,13 +9631,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                 "custom".to_string(),
                                 fastn_type::PropertyValue::Value {
                                     value: fastn_type::Value::Record {
-                                        name: ftd::interpreter::FTD_CUSTOM_COLORS.to_string(),
+                                        name: fastn_builtins::constants::FTD_CUSTOM_COLORS.to_string(),
                                         fields: std::iter::IntoIterator::into_iter([
                                             (
                                                 "one".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9657,7 +9668,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "two".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9688,7 +9699,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "three".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9719,7 +9730,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "four".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9750,7 +9761,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "five".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9781,7 +9792,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "six".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9812,7 +9823,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "seven".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9843,7 +9854,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "eight".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9874,7 +9885,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "nine".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9905,7 +9916,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                                                 "ten".to_string(),
                                                 fastn_type::PropertyValue::Value {
                                                     value: fastn_type::Value::Record {
-                                                        name: ftd::interpreter::FTD_COLOR.to_string(),
+                                                        name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                                         fields: std::iter::IntoIterator::into_iter([
                                                             (
                                                                 "light".to_string(),
@@ -9950,9 +9961,9 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_BREAKPOINT_WIDTH_DATA.to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
-                name: ftd::interpreter::FTD_BREAKPOINT_WIDTH_DATA.to_string(),
+            fastn_builtins::constants::FTD_BREAKPOINT_WIDTH_DATA.to_string(),
+            fastn_type::Definition::Record(fastn_type::Record {
+                name: fastn_builtins::constants::FTD_BREAKPOINT_WIDTH_DATA.to_string(),
                 fields: vec![fastn_type::Field {
                     name: "mobile".to_string(),
                     kind: fastn_type::Kind::integer().into_kind_data().caption(),
@@ -9965,15 +9976,15 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             })
         ),
         (
-            ftd::interpreter::FTD_BREAKPOINT_WIDTH.to_string(),
-            ftd::interpreter::Thing::Variable(fastn_type::Variable {
-                name: ftd::interpreter::FTD_BREAKPOINT_WIDTH.to_string(),
+            fastn_builtins::constants::FTD_BREAKPOINT_WIDTH.to_string(),
+            fastn_type::Definition::Variable(fastn_type::Variable {
+                name: fastn_builtins::constants::FTD_BREAKPOINT_WIDTH.to_string(),
                 kind: fastn_type::Kind::record
-                    (ftd::interpreter::FTD_BREAKPOINT_WIDTH_DATA).into_kind_data(),
+                    (fastn_builtins::constants::FTD_BREAKPOINT_WIDTH_DATA).into_kind_data(),
                 mutable: true,
                 value: fastn_type::PropertyValue::Value {
                     value: fastn_type::Value::Record {
-                        name: ftd::interpreter::FTD_BREAKPOINT_WIDTH_DATA.to_string(),
+                        name: fastn_builtins::constants::FTD_BREAKPOINT_WIDTH_DATA.to_string(),
                         fields: std::iter::IntoIterator::into_iter([
                             (
                                 "mobile".to_string(),
@@ -9996,22 +10007,22 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             })
         ),
         (
-            ftd::interpreter::FTD_DEVICE_DATA.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_DEVICE_DATA.to_string(),
+            fastn_builtins::constants::FTD_DEVICE_DATA.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_DEVICE_DATA.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_DEVICE_DATA_MOBILE,
+                        fastn_builtins::constants::FTD_DEVICE_DATA_MOBILE,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
                         false,
                         Some(fastn_type::Value::new_string("mobile")
-                                    .into_property_value(false, 0),),
+                                 .into_property_value(false, 0),),
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_DEVICE_DATA_DESKTOP,
+                        fastn_builtins::constants::FTD_DEVICE_DATA_DESKTOP,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -10025,17 +10036,17 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             })
         ),
         (
-            ftd::interpreter::FTD_DEVICE.to_string(),
-            ftd::interpreter::Thing::Variable(fastn_type::Variable {
-                name: ftd::interpreter::FTD_DEVICE.to_string(),
-                kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_DEVICE_DATA)
+            fastn_builtins::constants::FTD_DEVICE.to_string(),
+            fastn_type::Definition::Variable(fastn_type::Variable {
+                name: fastn_builtins::constants::FTD_DEVICE.to_string(),
+                kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_DEVICE_DATA)
                     .into_kind_data(),
                 mutable: true,
                 value: fastn_type::PropertyValue::Value {
                     value: fastn_type::Value::OrType {
-                        name: ftd::interpreter::FTD_DEVICE_DATA.to_string(),
-                        variant: ftd::interpreter::FTD_DEVICE_DATA_MOBILE.to_string(),
-                        full_variant: ftd::interpreter::FTD_DEVICE_DATA_MOBILE.to_string(),
+                        name: fastn_builtins::constants::FTD_DEVICE_DATA.to_string(),
+                        variant: fastn_builtins::constants::FTD_DEVICE_DATA_MOBILE.to_string(),
+                        full_variant: fastn_builtins::constants::FTD_DEVICE_DATA_MOBILE.to_string(),
                         value: Box::new(fastn_type::Value::new_string("mobile")
                             .into_property_value(false, 0))
                     },
@@ -10048,13 +10059,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             })
         ),
         (
-            ftd::interpreter::FTD_MASK_IMAGE_DATA.to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
-                name: ftd::interpreter::FTD_MASK_IMAGE_DATA.to_string(),
+            fastn_builtins::constants::FTD_MASK_IMAGE_DATA.to_string(),
+            fastn_type::Definition::Record(fastn_type::Record {
+                name: fastn_builtins::constants::FTD_MASK_IMAGE_DATA.to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     fastn_type::Field {
                         name: "src".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_IMAGE_SRC)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_IMAGE_SRC)
                             .into_kind_data().caption().into_optional(),
                         mutable: false,
                         value: None,
@@ -10063,7 +10074,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "linear-gradient".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_LINEAR_GRADIENT)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_LINEAR_GRADIENT)
                             .into_kind_data()
                             .into_optional(),
                         mutable: false,
@@ -10073,7 +10084,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "color".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data()
                             .into_optional(),
                         mutable: false,
@@ -10086,39 +10097,39 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_MASK_SIZE.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_MASK_SIZE.to_string(),
+            fastn_builtins::constants::FTD_MASK_SIZE.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_MASK_SIZE.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_MASK_SIZE_FIXED,
-                        fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                        fastn_builtins::constants::FTD_MASK_SIZE_FIXED,
+                        fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data(),
                         false,
                         None,
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_MASK_SIZE_AUTO,
+                        fastn_builtins::constants::FTD_MASK_SIZE_AUTO,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
                             fastn_type::Value::new_string(
-                                ftd::interpreter::FTD_MASK_SIZE_AUTO,
+                                fastn_builtins::constants::FTD_MASK_SIZE_AUTO,
                             )
-                            .into_property_value(false, 0),
+                                .into_property_value(false, 0),
                         ),
                         0,
                     )),
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_MASK_SIZE_COVER,
+                        fastn_builtins::constants::FTD_MASK_SIZE_COVER,
                         fastn_type::Kind::string().into_kind_data(),
                         false,
                         Some(
                             fastn_type::Value::new_string(
-                                ftd::interpreter::FTD_MASK_SIZE_CONTAIN,
+                                fastn_builtins::constants::FTD_MASK_SIZE_CONTAIN,
                             )
-                            .into_property_value(false, 0),
+                                .into_property_value(false, 0),
                         ),
                         0,
                     )),
@@ -10128,12 +10139,12 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
 
         (
-            ftd::interpreter::FTD_MASK_REPEAT.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_MASK_REPEAT.to_string(),
+            fastn_builtins::constants::FTD_MASK_REPEAT.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_MASK_REPEAT.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_MASK_REPEAT_BOTH_REPEAT,
+                        fastn_builtins::constants::FTD_MASK_REPEAT_BOTH_REPEAT,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -10143,7 +10154,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_MASK_REPEAT_X_REPEAT,
+                        fastn_builtins::constants::FTD_MASK_REPEAT_X_REPEAT,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -10153,7 +10164,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_MASK_REPEAT_Y_REPEAT,
+                        fastn_builtins::constants::FTD_MASK_REPEAT_Y_REPEAT,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -10163,7 +10174,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_MASK_REPEAT_NO_REPEAT,
+                        fastn_builtins::constants::FTD_MASK_REPEAT_NO_REPEAT,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -10173,7 +10184,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_MASK_REPEAT_SPACE,
+                        fastn_builtins::constants::FTD_MASK_REPEAT_SPACE,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -10183,7 +10194,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_MASK_REPEAT_ROUND,
+                        fastn_builtins::constants::FTD_MASK_REPEAT_ROUND,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -10197,12 +10208,12 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_MASK_POSITION.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_MASK_POSITION.to_string(),
+            fastn_builtins::constants::FTD_MASK_POSITION.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_MASK_POSITION.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_MASK_POSITION_LEFT,
+                        fastn_builtins::constants::FTD_MASK_POSITION_LEFT,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -10212,7 +10223,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_MASK_POSITION_CENTER,
+                        fastn_builtins::constants::FTD_MASK_POSITION_CENTER,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -10222,7 +10233,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_MASK_POSITION_RIGHT,
+                        fastn_builtins::constants::FTD_MASK_POSITION_RIGHT,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -10232,7 +10243,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_MASK_POSITION_LEFT_TOP,
+                        fastn_builtins::constants::FTD_MASK_POSITION_LEFT_TOP,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -10242,7 +10253,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_MASK_POSITION_LEFT_CENTER,
+                        fastn_builtins::constants::FTD_MASK_POSITION_LEFT_CENTER,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -10252,7 +10263,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_MASK_POSITION_LEFT_BOTTOM,
+                        fastn_builtins::constants::FTD_MASK_POSITION_LEFT_BOTTOM,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -10262,7 +10273,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_MASK_POSITION_CENTER_TOP,
+                        fastn_builtins::constants::FTD_MASK_POSITION_CENTER_TOP,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -10272,7 +10283,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_MASK_POSITION_CENTER_CENTER,
+                        fastn_builtins::constants::FTD_MASK_POSITION_CENTER_CENTER,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -10282,7 +10293,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_MASK_POSITION_CENTER_BOTTOM,
+                        fastn_builtins::constants::FTD_MASK_POSITION_CENTER_BOTTOM,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -10292,7 +10303,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_MASK_POSITION_RIGHT_TOP,
+                        fastn_builtins::constants::FTD_MASK_POSITION_RIGHT_TOP,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -10302,7 +10313,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_MASK_POSITION_RIGHT_CENTER,
+                        fastn_builtins::constants::FTD_MASK_POSITION_RIGHT_CENTER,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -10312,7 +10323,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::Constant(fastn_type::Field::new(
-                        ftd::interpreter::FTD_MASK_POSITION_RIGHT_BOTTOM,
+                        fastn_builtins::constants::FTD_MASK_POSITION_RIGHT_BOTTOM,
                         fastn_type::Kind::string()
                             .into_kind_data()
                             .caption(),
@@ -10322,11 +10333,11 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                         0,
                     )),
                     fastn_type::OrTypeVariant::AnonymousRecord(fastn_type::Record {
-                        name: ftd::interpreter::FTD_MASK_POSITION_LENGTH.to_string(),
+                        name: fastn_builtins::constants::FTD_MASK_POSITION_LENGTH.to_string(),
                         fields: std::iter::IntoIterator::into_iter([
                             fastn_type::Field {
                                 name: "x".to_string(),
-                                kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                                kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                                     .into_kind_data(),
                                 mutable: false,
                                 value: None,
@@ -10335,7 +10346,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                             },
                             fastn_type::Field {
                                 name: "y".to_string(),
-                                kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+                                kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                                     .into_kind_data(),
                                 mutable: false,
                                 value: None,
@@ -10350,13 +10361,13 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_MASK_MULTI_DATA.to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
-                name: ftd::interpreter::FTD_MASK_MULTI_DATA.to_string(),
+            fastn_builtins::constants::FTD_MASK_MULTI_DATA.to_string(),
+            fastn_type::Definition::Record(fastn_type::Record {
+                name: fastn_builtins::constants::FTD_MASK_MULTI_DATA.to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     fastn_type::Field {
                         name: "image".to_string(),
-                        kind: fastn_type::Kind::record(ftd::interpreter::FTD_MASK_IMAGE_DATA)
+                        kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_MASK_IMAGE_DATA)
                             .into_kind_data(),
                         mutable: false,
                         value: None,
@@ -10365,7 +10376,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "size".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_MASK_SIZE)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_MASK_SIZE)
                             .into_kind_data()
                             .into_optional(),
                         mutable: false,
@@ -10375,7 +10386,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "size-x".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_MASK_SIZE)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_MASK_SIZE)
                             .into_kind_data()
                             .into_optional(),
                         mutable: false,
@@ -10385,7 +10396,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "size-y".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_MASK_SIZE)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_MASK_SIZE)
                             .into_kind_data()
                             .into_optional(),
                         mutable: false,
@@ -10395,7 +10406,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "repeat".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_MASK_REPEAT)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_MASK_REPEAT)
                             .into_kind_data()
                             .into_optional(),
                         mutable: false,
@@ -10405,7 +10416,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
                     },
                     fastn_type::Field {
                         name: "position".to_string(),
-                        kind: fastn_type::Kind::or_type(ftd::interpreter::FTD_MASK_POSITION)
+                        kind: fastn_type::Kind::or_type(fastn_builtins::constants::FTD_MASK_POSITION)
                             .into_kind_data()
                             .into_optional(),
                         mutable: false,
@@ -10418,21 +10429,21 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
             }),
         ),
         (
-            ftd::interpreter::FTD_MASK.to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
-                name: ftd::interpreter::FTD_MASK.to_string(),
+            fastn_builtins::constants::FTD_MASK.to_string(),
+            fastn_type::Definition::OrType(fastn_type::OrType {
+                name: fastn_builtins::constants::FTD_MASK.to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_MASK_IMAGE,
-                        fastn_type::Kind::record(ftd::interpreter::FTD_MASK_IMAGE_DATA)
+                        fastn_builtins::constants::FTD_MASK_IMAGE,
+                        fastn_type::Kind::record(fastn_builtins::constants::FTD_MASK_IMAGE_DATA)
                             .into_kind_data(),
                         false,
                         None,
                         0,
                     )),
                     fastn_type::OrTypeVariant::Regular(fastn_type::Field::new(
-                        ftd::interpreter::FTD_MASK_MULTI,
-                        fastn_type::Kind::record(ftd::interpreter::FTD_MASK_MULTI_DATA)
+                        fastn_builtins::constants::FTD_MASK_MULTI,
+                        fastn_type::Kind::record(fastn_builtins::constants::FTD_MASK_MULTI_DATA)
                             .into_kind_data(),
                         false,
                         None,
@@ -10444,7 +10455,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#integer-field".to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
+            fastn_type::Definition::Record(fastn_type::Record {
                 name: "ftd#integer-field".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     fastn_type::Field {
@@ -10483,7 +10494,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#decimal-field".to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
+            fastn_type::Definition::Record(fastn_type::Record {
                 name: "ftd#decimal-field".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     fastn_type::Field {
@@ -10522,7 +10533,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#boolean-field".to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
+            fastn_type::Definition::Record(fastn_type::Record {
                 name: "ftd#boolean-field".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     fastn_type::Field {
@@ -10561,7 +10572,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#string-field".to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
+            fastn_type::Definition::Record(fastn_type::Record {
                 name: "ftd#string-field".to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     fastn_type::Field {
@@ -10600,7 +10611,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#http-method".to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
+            fastn_type::Definition::OrType(fastn_type::OrType {
                 name: "ftd#http-method".to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
@@ -10629,7 +10640,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
         ),
         (
             "ftd#http-redirect".to_string(),
-            ftd::interpreter::Thing::OrType(fastn_type::OrType {
+            fastn_type::Definition::OrType(fastn_type::OrType {
                 name: "ftd#http-redirect".to_string(),
                 variants: vec![
                     fastn_type::OrTypeVariant::new_constant(fastn_type::Field::new(
@@ -10671,10 +10682,10 @@ pub fn default_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
     things.into_iter().collect()
 }
 
-pub fn default_migration_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
+pub fn default_migration_bag() -> indexmap::IndexMap<String, fastn_type::Definition> {
     let test_things = vec![(
         "fastn#migration".to_string(),
-        ftd::interpreter::Thing::Component(fastn_migration_function()),
+        fastn_type::Definition::Component(fastn_migration_function()),
     )];
     test_things.into_iter().collect()
 }
@@ -10704,12 +10715,12 @@ pub fn fastn_migration_function() -> fastn_type::ComponentDefinition {
     }
 }
 
-pub fn default_test_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing> {
+pub fn default_test_bag() -> indexmap::IndexMap<String, fastn_type::Definition> {
     let test_things = vec![
         (
-            ftd::interpreter::FASTN_GET_QUERY_PARAMS.to_string(),
-            ftd::interpreter::Thing::Record(fastn_type::Record {
-                name: ftd::interpreter::FASTN_GET_QUERY_PARAMS.to_string(),
+            fastn_builtins::constants::FASTN_GET_QUERY_PARAMS.to_string(),
+            fastn_type::Definition::Record(fastn_type::Record {
+                name: fastn_builtins::constants::FASTN_GET_QUERY_PARAMS.to_string(),
                 fields: std::iter::IntoIterator::into_iter([
                     fastn_type::Field {
                         name: "key".to_string(),
@@ -10734,19 +10745,19 @@ pub fn default_test_bag() -> indexmap::IndexMap<String, ftd::interpreter::Thing>
         ),
         (
             "fastn#get".to_string(),
-            ftd::interpreter::Thing::Component(fastn_get_function()),
+            fastn_type::Definition::Component(fastn_get_function()),
         ),
         (
             "fastn#post".to_string(),
-            ftd::interpreter::Thing::Component(fastn_post_function()),
+            fastn_type::Definition::Component(fastn_post_function()),
         ),
         (
             "fastn#redirect".to_string(),
-            ftd::interpreter::Thing::Component(fastn_redirect_function()),
+            fastn_type::Definition::Component(fastn_redirect_function()),
         ),
         (
             "fastn#test".to_string(),
-            ftd::interpreter::Thing::Component(fastn_test_function()),
+            fastn_type::Definition::Component(fastn_test_function()),
         ),
     ];
     test_things.into_iter().collect()
@@ -10783,7 +10794,7 @@ pub fn fastn_get_function() -> fastn_type::ComponentDefinition {
             ),
             fastn_type::Argument::default(
                 "query-params",
-                fastn_type::Kind::record(ftd::interpreter::FASTN_GET_QUERY_PARAMS)
+                fastn_type::Kind::record(fastn_builtins::constants::FASTN_GET_QUERY_PARAMS)
                     .into_list()
                     .into_kind_data(),
             ),
@@ -10879,11 +10890,11 @@ pub fn fastn_test_function() -> fastn_type::ComponentDefinition {
 }
 
 pub static DEFAULT_BAG: once_cell::sync::OnceCell<
-    indexmap::IndexMap<String, ftd::interpreter::things::Thing>,
+    indexmap::IndexMap<String, fastn_type::Definition>,
 > = once_cell::sync::OnceCell::new();
 
-pub fn get_default_bag() -> &'static indexmap::IndexMap<String, ftd::interpreter::things::Thing> {
-    DEFAULT_BAG.get_or_init(ftd::interpreter::things::default::default_bag)
+pub fn get_default_bag() -> &'static indexmap::IndexMap<String, fastn_type::Definition> {
+    DEFAULT_BAG.get_or_init(default_bag)
 }
 
 pub fn image_function() -> fastn_type::ComponentDefinition {
@@ -10894,13 +10905,13 @@ pub fn image_function() -> fastn_type::ComponentDefinition {
             vec![
                 fastn_type::Argument::default(
                     "src",
-                    fastn_type::Kind::record(ftd::interpreter::FTD_IMAGE_SRC)
+                    fastn_type::Kind::record(fastn_builtins::constants::FTD_IMAGE_SRC)
                         .into_kind_data()
                         .caption(),
                 ),
                 fastn_type::Argument::default(
                     "fit",
-                    fastn_type::Kind::or_type(ftd::interpreter::FTD_IMAGE_FIT)
+                    fastn_type::Kind::or_type(fastn_builtins::constants::FTD_IMAGE_FIT)
                         .into_kind_data()
                         .into_optional(),
                 ),
@@ -10910,7 +10921,7 @@ pub fn image_function() -> fastn_type::ComponentDefinition {
                 ),
                 fastn_type::Argument::default(
                     "fetch-priority",
-                    fastn_type::Kind::or_type(ftd::interpreter::FTD_IMAGE_FETCH_PRIORITY)
+                    fastn_type::Kind::or_type(fastn_builtins::constants::FTD_IMAGE_FETCH_PRIORITY)
                         .into_kind_data()
                         .into_optional(),
                 ),
@@ -10967,13 +10978,13 @@ pub fn video_function() -> fastn_type::ComponentDefinition {
             vec![
                 fastn_type::Argument::default(
                     "src",
-                    fastn_type::Kind::record(ftd::interpreter::FTD_VIDEO_SRC)
+                    fastn_type::Kind::record(fastn_builtins::constants::FTD_VIDEO_SRC)
                         .into_kind_data()
                         .caption(),
                 ),
                 fastn_type::Argument::default(
                     "fit",
-                    fastn_type::Kind::or_type(ftd::interpreter::FTD_IMAGE_FIT)
+                    fastn_type::Kind::or_type(fastn_builtins::constants::FTD_IMAGE_FIT)
                         .into_kind_data()
                         .into_optional(),
                 ),
@@ -10995,7 +11006,7 @@ pub fn video_function() -> fastn_type::ComponentDefinition {
                 ),
                 fastn_type::Argument::default(
                     "poster",
-                    fastn_type::Kind::record(ftd::interpreter::FTD_IMAGE_SRC)
+                    fastn_type::Kind::record(fastn_builtins::constants::FTD_IMAGE_SRC)
                         .into_optional()
                         .into_kind_data(),
                 ),
@@ -11104,7 +11115,7 @@ pub fn text_input_function() -> fastn_type::ComponentDefinition {
                 ),
                 fastn_type::Argument::default(
                     "type",
-                    fastn_type::Kind::or_type(ftd::interpreter::FTD_TEXT_INPUT_TYPE)
+                    fastn_type::Kind::or_type(fastn_builtins::constants::FTD_TEXT_INPUT_TYPE)
                         .into_optional()
                         .into_kind_data(),
                 ),
@@ -11289,7 +11300,7 @@ pub fn container_function() -> fastn_type::ComponentDefinition {
             common_arguments(),
             vec![fastn_type::Argument::default(
                 "display",
-                fastn_type::Kind::or_type(ftd::interpreter::FTD_DISPLAY)
+                fastn_type::Kind::or_type(fastn_builtins::constants::FTD_DISPLAY)
                     .into_optional()
                     .into_kind_data(),
             )],
@@ -11388,7 +11399,7 @@ pub fn iframe_function() -> fastn_type::ComponentDefinition {
                 ),
                 fastn_type::Argument::default(
                     "loading",
-                    fastn_type::Kind::or_type(ftd::interpreter::FTD_LOADING)
+                    fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LOADING)
                         .into_optional()
                         .into_kind_data(),
                 ),
@@ -11426,13 +11437,13 @@ pub fn document_function() -> fastn_type::ComponentDefinition {
         arguments: [vec![
             fastn_type::Argument::default(
                 "favicon",
-                fastn_type::Kind::record(ftd::interpreter::FTD_RAW_IMAGE_SRC)
+                fastn_type::Kind::record(fastn_builtins::constants::FTD_RAW_IMAGE_SRC)
                     .into_optional()
                     .into_kind_data(),
             ),
             fastn_type::Argument::default(
                 "breakpoint",
-                fastn_type::Kind::record(ftd::interpreter::FTD_BREAKPOINT_WIDTH_DATA)
+                fastn_type::Kind::record(fastn_builtins::constants::FTD_BREAKPOINT_WIDTH_DATA)
                     .into_optional()
                     .into_kind_data(),
             ),
@@ -11509,13 +11520,13 @@ pub fn document_function() -> fastn_type::ComponentDefinition {
             },
             fastn_type::Argument::default(
                 "og-image",
-                fastn_type::Kind::record(ftd::interpreter::FTD_RAW_IMAGE_SRC)
+                fastn_type::Kind::record(fastn_builtins::constants::FTD_RAW_IMAGE_SRC)
                     .into_optional()
                     .into_kind_data(),
             ),
             fastn_type::Argument {
                 name: "twitter-image".to_string(),
-                kind: fastn_type::Kind::record(ftd::interpreter::FTD_RAW_IMAGE_SRC)
+                kind: fastn_type::Kind::record(fastn_builtins::constants::FTD_RAW_IMAGE_SRC)
                     .into_optional()
                     .into_kind_data(),
                 mutable: false,
@@ -11531,7 +11542,7 @@ pub fn document_function() -> fastn_type::ComponentDefinition {
             },
             fastn_type::Argument::default(
                 "theme-color",
-                fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+                fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                     .into_optional()
                     .into_kind_data(),
             ),
@@ -11543,13 +11554,13 @@ pub fn document_function() -> fastn_type::ComponentDefinition {
             ),
             fastn_type::Argument::default(
                 "colors",
-                fastn_type::Kind::record(ftd::interpreter::FTD_COLOR_SCHEME)
+                fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR_SCHEME)
                     .into_optional()
                     .into_kind_data(),
             ),
             fastn_type::Argument::default(
                 "types",
-                fastn_type::Kind::record(ftd::interpreter::FTD_TYPE_DATA)
+                fastn_type::Kind::record(fastn_builtins::constants::FTD_TYPE_DATA)
                     .into_optional()
                     .into_kind_data(),
             ),
@@ -11573,13 +11584,13 @@ fn container_root_arguments() -> Vec<fastn_type::Argument> {
         ),
         fastn_type::Argument::default(
             "colors",
-            fastn_type::Kind::record(ftd::interpreter::FTD_COLOR_SCHEME)
+            fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR_SCHEME)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "types",
-            fastn_type::Kind::record(ftd::interpreter::FTD_TYPE_DATA)
+            fastn_type::Kind::record(fastn_builtins::constants::FTD_TYPE_DATA)
                 .into_optional()
                 .into_kind_data(),
         ),
@@ -11594,19 +11605,19 @@ fn container_arguments() -> Vec<fastn_type::Argument> {
         ),
         fastn_type::Argument::default(
             "align-content",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_ALIGN)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_ALIGN)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "spacing",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_SPACING)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_SPACING)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "backdrop-filter",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_BACKDROP_FILTER)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_BACKDROP_FILTER)
                 .into_optional()
                 .into_kind_data(),
         ),
@@ -11621,7 +11632,7 @@ fn common_arguments() -> Vec<fastn_type::Argument> {
         ),
         fastn_type::Argument::default(
             "shadow",
-            fastn_type::Kind::record(ftd::interpreter::FTD_SHADOW)
+            fastn_type::Kind::record(fastn_builtins::constants::FTD_SHADOW)
                 .into_optional()
                 .into_kind_data(),
         ),
@@ -11631,7 +11642,7 @@ fn common_arguments() -> Vec<fastn_type::Argument> {
         ),
         fastn_type::Argument::default(
             "rel",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LINK_REL)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LINK_REL)
                 .into_list()
                 .into_kind_data(),
         ),
@@ -11645,43 +11656,43 @@ fn common_arguments() -> Vec<fastn_type::Argument> {
         ),
         fastn_type::Argument::default(
             "border-style",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_BORDER_STYLE)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_BORDER_STYLE)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "border-style-left",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_BORDER_STYLE)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_BORDER_STYLE)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "border-style-right",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_BORDER_STYLE)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_BORDER_STYLE)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "border-style-top",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_BORDER_STYLE)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_BORDER_STYLE)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "border-style-bottom",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_BORDER_STYLE)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_BORDER_STYLE)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "border-style-vertical",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_BORDER_STYLE)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_BORDER_STYLE)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "border-style-horizontal",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_BORDER_STYLE)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_BORDER_STYLE)
                 .into_optional()
                 .into_kind_data(),
         ),
@@ -11691,61 +11702,61 @@ fn common_arguments() -> Vec<fastn_type::Argument> {
         ),
         fastn_type::Argument::default(
             "white-space",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_WHITESPACE)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_WHITESPACE)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "text-transform",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_TEXT_TRANSFORM)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_TEXT_TRANSFORM)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "region",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_REGION)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_REGION)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "left",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "right",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "top",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "bottom",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "anchor",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_ANCHOR)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_ANCHOR)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "role",
-            fastn_type::Kind::record(ftd::interpreter::FTD_RESPONSIVE_TYPE)
+            fastn_type::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "cursor",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_CURSOR)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_CURSOR)
                 .into_optional()
                 .into_kind_data(),
         ),
@@ -11767,253 +11778,253 @@ fn common_arguments() -> Vec<fastn_type::Argument> {
         ),
         fastn_type::Argument::default(
             "resize",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_RESIZE)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_RESIZE)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "overflow",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_OVERFLOW)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_OVERFLOW)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "overflow-x",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_OVERFLOW)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_OVERFLOW)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "overflow-y",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_OVERFLOW)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_OVERFLOW)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "align-self",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_ALIGN_SELF)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_ALIGN_SELF)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "background",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_BACKGROUND)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_BACKGROUND)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "border-color",
-            fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+            fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "color",
-            fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+            fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "max-width",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_RESIZING)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_RESIZING)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "min-width",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_RESIZING)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_RESIZING)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "min-height",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_RESIZING)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_RESIZING)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "max-height",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_RESIZING)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_RESIZING)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "width",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_RESIZING)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_RESIZING)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "height",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_RESIZING)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_RESIZING)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "padding",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "padding-vertical",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "padding-horizontal",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "padding-left",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "padding-right",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "padding-top",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "padding-bottom",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "margin",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "margin-vertical",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "margin-horizontal",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "margin-left",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "margin-right",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "margin-top",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "margin-bottom",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "border-width",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "border-bottom-width",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "border-bottom-color",
-            fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+            fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "border-top-width",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "border-top-color",
-            fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+            fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "border-left-width",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "border-left-color",
-            fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+            fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "border-right-width",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "border-right-color",
-            fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+            fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "border-radius",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "border-top-left-radius",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "border-top-right-radius",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "border-bottom-left-radius",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "border-bottom-right-radius",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_optional()
                 .into_kind_data(),
         ),
@@ -12027,7 +12038,7 @@ fn common_arguments() -> Vec<fastn_type::Argument> {
         ),
         fastn_type::Argument::default(
             "mask",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_MASK)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_MASK)
                 .into_optional()
                 .into_kind_data(),
         ),
@@ -12038,13 +12049,13 @@ fn text_arguments() -> Vec<fastn_type::Argument> {
     vec![
         fastn_type::Argument::default(
             "display",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_DISPLAY)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_DISPLAY)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "text-align",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_TEXT_ALIGN)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_TEXT_ALIGN)
                 .into_optional()
                 .into_kind_data(),
         ),
@@ -12054,26 +12065,26 @@ fn text_arguments() -> Vec<fastn_type::Argument> {
         ),
         fastn_type::Argument::default(
             "text-indent",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_LENGTH)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                 .into_kind_data()
                 .into_optional(),
         ),
         fastn_type::Argument::default(
             "style",
-            fastn_type::Kind::or_type(ftd::interpreter::FTD_TEXT_STYLE)
+            fastn_type::Kind::or_type(fastn_builtins::constants::FTD_TEXT_STYLE)
                 .into_list()
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "link-color",
-            fastn_type::Kind::record(ftd::interpreter::FTD_COLOR)
+            fastn_type::Kind::record(fastn_builtins::constants::FTD_COLOR)
                 .into_optional()
                 .into_kind_data(),
         ),
         fastn_type::Argument::default(
             "text-shadow",
-            fastn_type::Kind::record(ftd::interpreter::FTD_SHADOW)
+            fastn_type::Kind::record(fastn_builtins::constants::FTD_SHADOW)
                 .into_optional()
                 .into_kind_data(),
         ),

@@ -31,7 +31,6 @@ macro_rules! try_state {
 #[cfg(test)]
 #[macro_use]
 mod test;
-mod constants;
 mod main;
 pub mod prelude;
 mod tdoc;

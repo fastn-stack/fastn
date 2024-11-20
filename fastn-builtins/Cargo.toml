@@ -1,0 +1,16 @@
+[package]
+name = "fastn-builtins"
+version = "0.1.0"
+authors.workspace = true
+edition.workspace = true
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+
+[dependencies]
+regex.workspace = true
+indexmap.workspace = true
+once_cell.workspace = true
+itertools.workspace = true
+fastn-type.workspace = true
