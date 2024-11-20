@@ -57,7 +57,8 @@ impl fastn_jdebug::JDebug for fastn_unresolved::AliasableIdentifier {
 impl fastn_jdebug::JDebug for fastn_unresolved::ComponentInvocation {
     fn debug(&self) -> Value {
         serde_json::json!({
-            "name": self.name.debug(),
+            "content": self.name.debug(),
+            "caption": self.caption.debug(),
         })
     }
 }
