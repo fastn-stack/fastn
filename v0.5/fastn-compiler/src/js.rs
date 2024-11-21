@@ -9,10 +9,10 @@ impl fastn_compiler::Compiler {
         // self.content should be all UR::R now
         let resolved_content = self.resolved_content();
         // every symbol in self.symbol_used in the bag must be UR::R now
-        let needed_symbols = self.needed_symbols();
+        let used_definitions = self.used_definitions();
         let doc = fastn_compiler::TDoc {
             name: "",
-            definitions: &needed_symbols,
+            definitions: &used_definitions,
             builtins: fastn_builtins::builtins(),
         };
 
@@ -26,20 +26,20 @@ impl fastn_compiler::Compiler {
             &mut has_rive_components,
         )];
 
-        for thing in needed_symbols.values() {
-            if let fastn_resolved::Definition::Component(c) = thing {
+        for definition in used_definitions.values() {
+            if let fastn_resolved::Definition::Component(c) = definition {
                 document_asts.push(c.to_ast(&doc, &mut has_rive_components));
-            } else if let fastn_resolved::Definition::Variable(v) = thing {
+            } else if let fastn_resolved::Definition::Variable(v) = definition {
                 document_asts.push(v.to_ast(
                     &doc,
                     Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string()),
                     &mut has_rive_components,
                 ));
-            } else if let fastn_resolved::Definition::WebComponent(web_component) = thing {
+            } else if let fastn_resolved::Definition::WebComponent(web_component) = definition {
                 document_asts.push(web_component.to_ast(&doc));
-            } else if let fastn_resolved::Definition::Function(f) = thing {
+            } else if let fastn_resolved::Definition::Function(f) = definition {
                 document_asts.push(f.to_ast(&doc));
-            } else if let fastn_resolved::Definition::Export { from, to, .. } = thing {
+            } else if let fastn_resolved::Definition::Export { from, to, .. } = definition {
                 if doc.get_opt_record(from).is_some() {
                     continue;
                 }
@@ -47,7 +47,7 @@ impl fastn_compiler::Compiler {
                     from: from.to_string(),
                     to: to.to_string(),
                 })
-            } else if let fastn_resolved::Definition::OrType(ot) = thing {
+            } else if let fastn_resolved::Definition::OrType(ot) = definition {
                 let mut fields = vec![];
                 for variant in &ot.variants {
                     if let Some(value) = &variant.clone().fields().get(0).unwrap().value {
@@ -81,10 +81,10 @@ impl fastn_compiler::Compiler {
 
         let mut scripts = fastn_resolved_to_js::utils::get_external_scripts(has_rive_components);
         scripts.push(fastn_resolved_to_js::utils::get_js_html(
-            self.external_js_files(&needed_symbols).as_slice(),
+            self.external_js_files(&used_definitions).as_slice(),
         ));
         scripts.push(fastn_resolved_to_js::utils::get_css_html(
-            self.external_css_files(&needed_symbols).as_slice(),
+            self.external_css_files(&used_definitions).as_slice(),
         ));
 
         let js_document_script = fastn_js::to_js(document_asts.as_slice(), "");

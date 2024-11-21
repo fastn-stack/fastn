@@ -9,7 +9,9 @@ impl fastn_compiler::Compiler {
             .collect()
     }
 
-    pub(crate) fn needed_symbols(&self) -> indexmap::IndexMap<String, &fastn_resolved::Definition> {
+    pub(crate) fn used_definitions(
+        &self,
+    ) -> indexmap::IndexMap<String, &fastn_resolved::Definition> {
         // go through self.symbols_used and get the resolved definitions
         let mut definitions = indexmap::IndexMap::new();
         // for symbol in self.symbols_used.iter() {
