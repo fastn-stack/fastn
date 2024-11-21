@@ -15,7 +15,7 @@ pub(crate) struct Compiler {
             >,
         >,
     >,
-    document: fastn_unresolved::Document,
+    pub(crate) document: fastn_unresolved::Document,
 }
 
 impl Compiler {

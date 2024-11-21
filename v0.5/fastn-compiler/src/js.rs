@@ -16,7 +16,7 @@ impl fastn_compiler::Compiler {
             builtins: fastn_builtins::builtins(),
         };
 
-        // Check if document tree has rive. This is used to add rive script.
+        // Check if the document tree uses Rive, if so add the Rive script.
         let mut has_rive_components = false;
         let mut export_asts = vec![];
 
@@ -26,7 +26,7 @@ impl fastn_compiler::Compiler {
             &mut has_rive_components,
         )];
 
-        for (_key, thing) in needed_symbols.iter() {
+        for thing in needed_symbols.values() {
             if let fastn_resolved::Definition::Component(c) = thing {
                 document_asts.push(c.to_ast(&doc, &mut has_rive_components));
             } else if let fastn_resolved::Definition::Variable(v) = thing {

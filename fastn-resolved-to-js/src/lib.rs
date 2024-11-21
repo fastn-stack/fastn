@@ -152,7 +152,7 @@ impl fastn_resolved_to_js::extensions::ComponentDefinitionExt
 }
 
 pub fn from_tree(
-    tree: &[fastn_resolved::ComponentInvocation],
+    tree: &[&fastn_resolved::ComponentInvocation],
     doc: &dyn fastn_resolved::tdoc::TDoc,
     has_rive_components: &mut bool,
 ) -> fastn_js::Ast {
