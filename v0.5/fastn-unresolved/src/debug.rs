@@ -65,27 +65,35 @@ impl fastn_jdebug::JDebug for fastn_unresolved::ComponentInvocation {
 
 impl fastn_jdebug::JDebug for fastn_unresolved::Definition {
     fn debug(&self) -> Value {
-        serde_json::json!({
-            "name": self.name.debug(),
-            "visibility": self.visibility.debug(),
-            "inner": self.inner.debug(),
-        })
+        let mut o = serde_json::Map::new();
+        o.insert("name".into(), self.name.debug());
+        let inner = self.inner.debug();
+        o.extend(inner.as_object().unwrap().clone());
+
+        serde_json::Value::Object(o)
     }
 }
 
 impl fastn_jdebug::JDebug for fastn_unresolved::InnerDefinition {
     fn debug(&self) -> serde_json::Value {
         match self {
-            crate::InnerDefinition::Function { arguments, .. } => {
+            crate::InnerDefinition::Function { arguments, return_type, .. } => {
                 let args = arguments.iter().map(|v| match v { 
                     fastn_unresolved::UR::UnResolved(v) => v.debug(),
                     fastn_unresolved::UR::Resolved(v) => serde_json::to_value(v).unwrap(),
                     _ => unimplemented!(),
                 }).collect::<Vec<_>>();
 
+
+                let return_type = return_type.clone().map(|r| match r {
+                    fastn_unresolved::UR::UnResolved(v) => v.debug(),
+                    fastn_unresolved::UR::Resolved(v) => serde_json::to_value(v).unwrap(),
+                    _ => unimplemented!(),
+                }).unwrap_or_else(|| "void".into());
+
                 serde_json::json!({
                     "args": args,
-                    // "return_type": return_type.debug(),
+                    "return_type": return_type,
                     // "body": body.debug(),
                 })
             }

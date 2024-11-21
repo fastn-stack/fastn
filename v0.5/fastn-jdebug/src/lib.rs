@@ -66,7 +66,7 @@ impl<K: AsRef<fastn_jdebug::Span>, V: fastn_jdebug::JDebug> fastn_jdebug::JDebug
     }
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, Default)]
 pub struct Spanned<T> {
     pub span: Span,
     pub value: T,

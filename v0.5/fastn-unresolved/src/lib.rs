@@ -56,6 +56,12 @@ pub enum InnerDefinition {
     },
     Function {
         arguments: Vec<UR<Argument, fastn_resolved::Argument>>,
+        /// `None` means `void`. The `void` keyword is implied in fastn code:
+        /// ```ftd
+        /// -- foo(): ;; function with void return type
+        ///
+        /// ;; function body
+        /// ```
         return_type: Option<UR<Kind, fastn_resolved::Kind>>,
         /// This one is a little interesting, the number of expressions can be higher than the
         /// number of Tes, this because we can have multiple expressions in a single `Tes`.
@@ -201,4 +207,24 @@ pub enum Kind {
     // TODO: Future(Kind),
     // TODO: Result(Kind, Kind),
     Custom(SymbolName),
+}
+
+pub enum FromSectionKindError {
+    InvalidKind,
+}
+
+impl TryFrom<fastn_section::Kind> for Kind {
+    type Error = FromSectionKindError;
+
+    fn try_from(kind: fastn_section::Kind) -> Result<Self, Self::Error> {
+        let ident = match kind.to_identifier() {
+            Some(ident) => ident,
+            None => return Err(FromSectionKindError::InvalidKind),
+        };
+
+        match ident.str() {
+            "integer" => Ok(Kind::Integer),
+            _ => unreachable!(),
+        }
+    }
 }
