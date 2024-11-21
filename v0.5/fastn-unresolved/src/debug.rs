@@ -80,7 +80,7 @@ impl fastn_jdebug::JDebug for fastn_unresolved::InnerDefinition {
             crate::InnerDefinition::Function { arguments, return_type, .. } => {
                 let args = arguments.iter().map(|v| match v { 
                     fastn_unresolved::UR::UnResolved(v) => v.debug(),
-                    fastn_unresolved::UR::Resolved(v) => serde_json::to_value(v).unwrap(),
+                    fastn_unresolved::UR::Resolved(_v) => todo!(),
                     _ => unimplemented!(),
                 }).collect::<Vec<_>>();
 
@@ -110,8 +110,6 @@ impl fastn_jdebug::JDebug for fastn_unresolved::Argument {
         serde_json::json!({
             "name": self.name.debug(),
             "kind": self.kind.debug(),
-            "visibility": self.visibility.debug(),
-            "default": self.default.debug(),
         })
     }
 }
