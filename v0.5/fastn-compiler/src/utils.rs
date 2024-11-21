@@ -29,11 +29,11 @@ impl fastn_compiler::Compiler {
         used_definitions
             .values()
             .filter_map(|definition| match definition {
-                fastn_resolved::Definition::WebComponent(web_component) => {
-                    web_component.js().map(ToOwned::to_owned)
-                }
+                fastn_resolved::Definition::WebComponent(web_component) => web_component.js(),
+                fastn_resolved::Definition::Function(f) => f.js(),
                 _ => None,
             })
+            .map(ToOwned::to_owned)
             .collect()
     }
 

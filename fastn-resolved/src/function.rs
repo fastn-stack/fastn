@@ -28,6 +28,16 @@ impl Function {
             external_implementation: false,
         }
     }
+
+    pub fn js(&self) -> Option<&str> {
+        match self.js {
+            Some(fastn_resolved::PropertyValue::Value {
+                value: fastn_resolved::Value::String { ref text },
+                ..
+            }) => Some(text),
+            _ => None,
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
