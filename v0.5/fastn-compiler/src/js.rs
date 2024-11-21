@@ -89,17 +89,12 @@ impl fastn_compiler::Compiler {
 
         let js_document_script = fastn_js::to_js(document_asts.as_slice(), "");
 
-        let js_ftd_script = fastn_js::to_js(
-            fastn_resolved_to_js::default_bag_into_js_ast(&doc).as_slice(),
-            "foo",
-        );
-
-        let _ssr_body = fastn_js::ssr_with_js_string(
-            "foo",
-            format!("{js_ftd_script}\n{js_document_script}").as_str(),
-        )
-        .unwrap();
-
-        todo!()
+        js_document_script
     }
+}
+
+pub struct Output {
+    js: String,
+    css_files: Vec<String>,
+    js_files: Vec<String>,
 }
