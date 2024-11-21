@@ -24,10 +24,17 @@ impl fastn_compiler::Compiler {
 
     pub(crate) fn external_js_files(
         &self,
-        _needed_symbols: &indexmap::IndexMap<String, &fastn_resolved::Definition>,
+        used_definitions: &indexmap::IndexMap<String, &fastn_resolved::Definition>,
     ) -> Vec<String> {
-        // go through needed_symbols and get the external js files
-        todo!()
+        used_definitions
+            .values()
+            .filter_map(|definition| match definition {
+                fastn_resolved::Definition::WebComponent(web_component) => {
+                    web_component.js().map(ToOwned::to_owned)
+                }
+                _ => None,
+            })
+            .collect()
     }
 
     pub(crate) fn external_css_files(

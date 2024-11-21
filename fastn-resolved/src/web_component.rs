@@ -20,4 +20,14 @@ impl WebComponentDefinition {
             line_number,
         }
     }
+
+    pub fn js(&self) -> Option<&str> {
+        match self.js {
+            fastn_resolved::PropertyValue::Value { ref value, .. } => match value {
+                fastn_resolved::Value::String { text } => Some(text),
+                _ => None,
+            },
+            _ => None,
+        }
+    }
 }
