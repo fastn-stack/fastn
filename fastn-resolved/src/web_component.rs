@@ -23,10 +23,10 @@ impl WebComponentDefinition {
 
     pub fn js(&self) -> Option<&str> {
         match self.js {
-            fastn_resolved::PropertyValue::Value { ref value, .. } => match value {
-                fastn_resolved::Value::String { text } => Some(text),
-                _ => None,
-            },
+            fastn_resolved::PropertyValue::Value {
+                value: fastn_resolved::Value::String { ref text },
+                ..
+            } => Some(text),
             _ => None,
         }
     }
