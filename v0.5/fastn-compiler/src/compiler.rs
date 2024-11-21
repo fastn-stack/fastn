@@ -2,9 +2,10 @@ const ITERATION_THRESHOLD: usize = 100;
 
 pub(crate) struct Compiler {
     symbols: Box<dyn fastn_compiler::SymbolStore>,
-    symbols_used: std::collections::HashSet<fastn_unresolved::SymbolName>,
+    pub(crate) symbols_used: std::collections::HashSet<fastn_unresolved::SymbolName>,
     interner: string_interner::DefaultStringInterner,
-    bag: std::collections::HashMap<string_interner::DefaultSymbol, fastn_unresolved::LookupResult>,
+    pub(crate) bag:
+        std::collections::HashMap<string_interner::DefaultSymbol, fastn_unresolved::LookupResult>,
     auto_imports: Vec<fastn_section::AutoImport>,
     /// checkout resolve_document for why this is an Option
     content: Option<

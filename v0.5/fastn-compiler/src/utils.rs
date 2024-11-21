@@ -9,20 +9,28 @@ impl fastn_compiler::Compiler {
             .collect()
     }
 
-    pub(crate) fn needed_symbols(&self) -> indexmap::IndexMap<String, fastn_resolved::Definition> {
+    pub(crate) fn needed_symbols(&self) -> indexmap::IndexMap<String, &fastn_resolved::Definition> {
         // go through self.symbols_used and get the resolved definitions
-        todo!()
+        let mut definitions = indexmap::IndexMap::new();
+        // for symbol in self.symbols_used.iter() {
+        //     if let Some(definition) = self.bag.get(symbol) {
+        //         definitions.insert(symbol.clone(), definition);
+        //     }
+        // }
+        definitions
     }
+
     pub(crate) fn external_js_files(
         &self,
-        _needed_symbols: &indexmap::IndexMap<String, fastn_resolved::Definition>,
+        _needed_symbols: &indexmap::IndexMap<String, &fastn_resolved::Definition>,
     ) -> Vec<String> {
         // go through needed_symbols and get the external js files
         todo!()
     }
+
     pub(crate) fn external_css_files(
         &self,
-        _needed_symbols: &indexmap::IndexMap<String, fastn_resolved::Definition>,
+        _needed_symbols: &indexmap::IndexMap<String, &fastn_resolved::Definition>,
     ) -> Vec<String> {
         // go through needed_symbols and get the external css files
         todo!()
