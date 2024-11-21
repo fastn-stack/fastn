@@ -292,7 +292,7 @@ pub fn default_bag_into_js_ast(doc: &dyn fastn_resolved::tdoc::TDoc) -> Vec<fast
     let mut ftd_asts = vec![];
 
     let mut export_asts = vec![];
-    for thing in fastn_builtins::get_default_bag().values() {
+    for thing in fastn_builtins::builtins().values() {
         if let fastn_resolved::Definition::Variable(v) = thing {
             ftd_asts.push(v.to_ast(doc, None, &mut false));
         } else if let fastn_resolved::Definition::Function(f) = thing {

@@ -87,7 +87,7 @@ impl InterpreterState {
     fn new(id: String) -> InterpreterState {
         InterpreterState {
             id,
-            bag: ftd::interpreter::default::get_default_bag().clone(),
+            bag: ftd::interpreter::default::builtins().clone(),
             ..Default::default()
         }
     }

@@ -17,14 +17,14 @@ pub fn all_js_without_test(package_name: &str) -> String {
 /// This returns asts of things present in `ftd` module or `default_bag`
 pub fn default_bag_into_js_ast() -> Vec<fastn_js::Ast> {
     let mut ftd_asts = vec![];
-    let bag = ftd::interpreter::default::get_default_bag();
+    let bag = ftd::interpreter::default::builtins();
     let doc = ftd::interpreter::TDoc {
         name: "",
         aliases: &ftd::interpreter::default::default_aliases(),
         bag: ftd::interpreter::BagOrState::Bag(bag),
     };
     let mut export_asts = vec![];
-    for thing in ftd::interpreter::default::get_default_bag().values() {
+    for thing in ftd::interpreter::default::builtins().values() {
         if let ftd::interpreter::Thing::Variable(v) = thing {
             ftd_asts.push(v.to_ast(&doc, None, &mut false));
         } else if let ftd::interpreter::Thing::Function(f) = thing {
@@ -95,7 +95,7 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
         &doc,
         &mut has_rive_components,
     )];
-    let default_thing_name = ftd::interpreter::default::get_default_bag()
+    let default_thing_name = ftd::interpreter::default::builtins()
         .into_iter()
         .map(|v| v.0)
         .collect_vec();

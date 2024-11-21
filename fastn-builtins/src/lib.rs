@@ -10913,12 +10913,11 @@ pub fn fastn_test_function() -> fastn_resolved::ComponentDefinition {
     }
 }
 
-pub static DEFAULT_BAG: std::sync::LazyLock<
-    indexmap::IndexMap<String, fastn_resolved::Definition>,
-> = std::sync::LazyLock::new(default_bag);
+static BUILTINS: std::sync::LazyLock<indexmap::IndexMap<String, fastn_resolved::Definition>> =
+    std::sync::LazyLock::new(default_bag);
 
-pub fn get_default_bag() -> &'static indexmap::IndexMap<String, fastn_resolved::Definition> {
-    &DEFAULT_BAG
+pub fn builtins() -> &'static indexmap::IndexMap<String, fastn_resolved::Definition> {
+    &BUILTINS
 }
 
 pub fn image_function() -> fastn_resolved::ComponentDefinition {

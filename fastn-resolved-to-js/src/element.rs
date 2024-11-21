@@ -154,7 +154,7 @@ pub struct CheckBox {
 
 impl CheckBox {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> CheckBox {
-        let component_definition = fastn_builtins::get_default_bag()
+        let component_definition = fastn_builtins::builtins()
             .get("ftd#checkbox")
             .unwrap()
             .clone()
@@ -241,7 +241,7 @@ pub struct TextInput {
 
 impl TextInput {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> TextInput {
-        let component_definition = fastn_builtins::get_default_bag()
+        let component_definition = fastn_builtins::builtins()
             .get("ftd#text-input")
             .unwrap()
             .clone()
@@ -400,7 +400,7 @@ pub struct Iframe {
 
 impl Iframe {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> Iframe {
-        let component_definition = fastn_builtins::get_default_bag()
+        let component_definition = fastn_builtins::builtins()
             .get("ftd#iframe")
             .unwrap()
             .clone()
@@ -521,7 +521,7 @@ impl Code {
         component: &fastn_resolved::ComponentInvocation,
         _doc: &dyn fastn_resolved::tdoc::TDoc,
     ) -> Code {
-        let component_definition = fastn_builtins::get_default_bag()
+        let component_definition = fastn_builtins::builtins()
             .get("ftd#code")
             .unwrap()
             .clone()
@@ -648,7 +648,7 @@ pub struct Image {
 
 impl Image {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> Image {
-        let component_definition = fastn_builtins::get_default_bag()
+        let component_definition = fastn_builtins::builtins()
             .get("ftd#image")
             .unwrap()
             .clone()
@@ -760,7 +760,7 @@ pub struct Audio {
 
 impl Audio {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> Audio {
-        let component_definition = fastn_builtins::get_default_bag()
+        let component_definition = fastn_builtins::builtins()
             .get("ftd#audio")
             .unwrap()
             .clone()
@@ -888,7 +888,7 @@ pub struct Video {
 
 impl Video {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> Video {
-        let component_definition = fastn_builtins::get_default_bag()
+        let component_definition = fastn_builtins::builtins()
             .get("ftd#video")
             .unwrap()
             .clone()
@@ -1301,7 +1301,7 @@ impl InheritedProperties {
 
 impl Text {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> Text {
-        let component_definition = fastn_builtins::get_default_bag()
+        let component_definition = fastn_builtins::builtins()
             .get("ftd#text")
             .unwrap()
             .clone()
@@ -1365,7 +1365,7 @@ impl Text {
 
 impl Integer {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> Integer {
-        let component_definition = fastn_builtins::get_default_bag()
+        let component_definition = fastn_builtins::builtins()
             .get("ftd#integer")
             .unwrap()
             .clone()
@@ -1430,7 +1430,7 @@ impl Integer {
 
 impl Decimal {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> Decimal {
-        let component_definition = fastn_builtins::get_default_bag()
+        let component_definition = fastn_builtins::builtins()
             .get("ftd#decimal")
             .unwrap()
             .clone()
@@ -1495,7 +1495,7 @@ impl Decimal {
 
 impl Boolean {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> Boolean {
-        let component_definition = fastn_builtins::get_default_bag()
+        let component_definition = fastn_builtins::builtins()
             .get("ftd#boolean")
             .unwrap()
             .clone()
@@ -1560,7 +1560,7 @@ impl Boolean {
 
 impl Document {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> Document {
-        let component_definition = fastn_builtins::get_default_bag()
+        let component_definition = fastn_builtins::builtins()
             .get("ftd#document")
             .unwrap()
             .clone()
@@ -1845,7 +1845,7 @@ impl DocumentMeta {
 
 impl Column {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> Column {
-        let component_definition = fastn_builtins::get_default_bag()
+        let component_definition = fastn_builtins::builtins()
             .get("ftd#column")
             .unwrap()
             .clone()
@@ -1911,7 +1911,7 @@ impl Column {
 
 impl Row {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> Row {
-        let component_definition = fastn_builtins::get_default_bag()
+        let component_definition = fastn_builtins::builtins()
             .get("ftd#row")
             .unwrap()
             .clone()
@@ -1977,7 +1977,7 @@ impl Row {
 
 impl ContainerElement {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> ContainerElement {
-        let component_definition = fastn_builtins::get_default_bag()
+        let component_definition = fastn_builtins::builtins()
             .get("ftd#container")
             .unwrap()
             .clone()
@@ -2045,7 +2045,7 @@ pub struct Device {
 
 impl Device {
     pub fn from(component: &fastn_resolved::ComponentInvocation, device: &str) -> Device {
-        let component_definition = fastn_builtins::get_default_bag()
+        let component_definition = fastn_builtins::builtins()
             .get(device)
             .unwrap()
             .clone()
@@ -2247,7 +2247,7 @@ pub struct Rive {
 
 impl Rive {
     pub fn from(component: &fastn_resolved::ComponentInvocation) -> Rive {
-        let component_definition = fastn_builtins::get_default_bag()
+        let component_definition = fastn_builtins::builtins()
             .get("ftd#rive")
             .unwrap()
             .clone()

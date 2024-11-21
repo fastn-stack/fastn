@@ -44,7 +44,7 @@ fn p(
             }
         }
     };
-    for thing in ftd::interpreter::default::get_default_bag().keys() {
+    for thing in ftd::interpreter::default::builtins().keys() {
         i.data.swap_remove(thing);
     }
     let expected_json = serde_json::to_string_pretty(&i).unwrap();

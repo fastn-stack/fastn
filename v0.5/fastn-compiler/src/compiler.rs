@@ -23,7 +23,7 @@ impl Compiler {
         fastn_unresolved::resolver::Input {
             bag: &self.bag,
             auto_imports: &self.auto_imports,
-            builtins: &fastn_builtins::DEFAULT_BAG,
+            builtins: fastn_builtins::builtins(),
         }
     }
 

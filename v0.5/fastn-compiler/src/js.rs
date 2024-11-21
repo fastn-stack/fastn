@@ -12,8 +12,8 @@ impl fastn_compiler::Compiler {
         let needed_symbols = self.needed_symbols();
         let doc = fastn_compiler::TDoc {
             name: "",
-            bag: &needed_symbols,
-            default_bag: fastn_builtins::get_default_bag(),
+            definitions: &needed_symbols,
+            builtins: fastn_builtins::builtins(),
         };
 
         // Check if document tree has rive. This is used to add rive script.
