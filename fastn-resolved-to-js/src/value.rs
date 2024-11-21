@@ -1,3 +1,5 @@
+use fastn_resolved_to_js::extensions::*;
+
 #[derive(Debug)]
 pub enum Value {
     Data(fastn_resolved::Value),
@@ -29,8 +31,6 @@ impl Value {
         has_rive_components: &mut bool,
         should_return: bool,
     ) -> fastn_js::SetPropertyValue {
-        use fastn_resolved_to_js::fastn_type_functions::ValueExt;
-
         match self {
             Value::Data(value) => {
                 value.to_fastn_js_value(doc, rdata, has_rive_components, should_return)
@@ -122,8 +122,6 @@ fn properties_to_js_conditional_formula(
     properties: &[fastn_resolved::Property],
     rdata: &fastn_resolved_to_js::ResolverData,
 ) -> fastn_js::Formula {
-    use fastn_resolved_to_js::fastn_type_functions::PropertyValueExt;
-
     let mut deps = vec![];
     let mut conditional_values = vec![];
     for property in properties {
@@ -147,18 +145,8 @@ fn properties_to_js_conditional_formula(
     }
 }
 
-pub(crate) trait ExpressionExt {
-    fn get_deps(&self, rdata: &fastn_resolved_to_js::ResolverData) -> Vec<String>;
-    fn update_node_with_variable_reference_js(
-        &self,
-        rdata: &fastn_resolved_to_js::ResolverData,
-    ) -> fastn_resolved::evalexpr::ExprNode;
-}
-
-impl ExpressionExt for fastn_resolved::Expression {
+impl fastn_resolved_to_js::extensions::ExpressionExt for fastn_resolved::Expression {
     fn get_deps(&self, rdata: &fastn_resolved_to_js::ResolverData) -> Vec<String> {
-        use fastn_resolved_to_js::fastn_type_functions::PropertyValueExt;
-
         let mut deps = vec![];
         for property_value in self.references.values() {
             deps.extend(property_value.get_deps(rdata));
@@ -211,20 +199,8 @@ impl ExpressionExt for fastn_resolved::Expression {
     }
 }
 
-pub(crate) trait ArgumentExt {
-    fn get_default_value(&self) -> Option<fastn_resolved_to_js::Value>;
-    fn get_optional_value(
-        &self,
-        properties: &[fastn_resolved::Property],
-        // doc_name: &str,
-        // line_number: usize
-    ) -> Option<fastn_resolved_to_js::Value>;
-}
-
-impl ArgumentExt for fastn_resolved::Argument {
+impl fastn_resolved_to_js::extensions::ArgumentExt for fastn_resolved::Argument {
     fn get_default_value(&self) -> Option<fastn_resolved_to_js::Value> {
-        use fastn_resolved_to_js::fastn_type_functions::PropertyValueExt;
-
         if let Some(ref value) = self.value {
             Some(value.to_value())
         } else if self.kind.is_list() {

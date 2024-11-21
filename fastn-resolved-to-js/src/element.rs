@@ -2,6 +2,8 @@
 #![allow(renamed_and_removed_lints)]
 #![allow(too_many_arguments)]
 
+use fastn_resolved_to_js::extensions::*;
+
 #[derive(Debug)]
 pub enum Element {
     Text(Text),
@@ -2760,8 +2762,6 @@ impl Common {
         doc: &dyn fastn_resolved::tdoc::TDoc,
         rdata: &fastn_resolved_to_js::ResolverData,
     ) -> Vec<fastn_js::ComponentStatement> {
-        use fastn_resolved_to_js::fastn_type_functions::EventExt;
-
         let mut component_statements = vec![];
         for event in self.events.iter() {
             if let Some(event_handler) = event.to_event_handler_js(element_name, doc, rdata) {

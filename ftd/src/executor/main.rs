@@ -1,3 +1,4 @@
+use fastn_resolved_to_js::extensions::*;
 use ftd::interpreter::expression::ExpressionExt;
 
 #[derive(Debug, PartialEq)]
@@ -206,8 +207,6 @@ impl ExecuteDoc<'_> {
             fastn_resolved::ComponentInvocation,
         )>,
     > {
-        use fastn_resolved_to_js::ComponentExt;
-
         if instruction.is_loop() {
             ExecuteDoc::get_loop_instructions(
                 instruction,

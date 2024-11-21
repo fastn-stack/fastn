@@ -4,24 +4,21 @@ mod resolver;
 pub use resolver::ResolverData;
 
 mod value;
-use value::ArgumentExt;
 pub use value::Value;
 
 mod element;
 use element::Element;
 
+pub mod extensions;
 mod fastn_type_functions;
-pub use fastn_type_functions::{ComponentExt, PropertyValueExt};
 pub mod utils;
+use extensions::*;
 
 pub const CODE_DEFAULT_THEME: &str = "fastn-theme.dark";
 pub const REFERENCE: &str = "$";
 pub const CLONE: &str = "*$";
 
-pub trait FunctionExt {
-    fn to_ast(&self, doc: &dyn fastn_resolved::tdoc::TDoc) -> fastn_js::Ast;
-}
-impl FunctionExt for fastn_resolved::Function {
+impl fastn_resolved_to_js::extensions::FunctionExt for fastn_resolved::Function {
     fn to_ast(&self, doc: &dyn fastn_resolved::tdoc::TDoc) -> fastn_js::Ast {
         use itertools::Itertools;
 
@@ -58,15 +55,6 @@ impl FunctionExt for fastn_resolved::Function {
     }
 }
 
-pub trait VariableExt {
-    fn to_ast(
-        &self,
-        doc: &dyn fastn_resolved::tdoc::TDoc,
-        prefix: Option<String>,
-        has_rive_components: &mut bool,
-    ) -> fastn_js::Ast;
-}
-
 impl VariableExt for fastn_resolved::Variable {
     fn to_ast(
         &self,
@@ -74,8 +62,6 @@ impl VariableExt for fastn_resolved::Variable {
         prefix: Option<String>,
         has_rive_components: &mut bool,
     ) -> fastn_js::Ast {
-        use fastn_resolved_to_js::fastn_type_functions::{PropertyValueExt, ValueExt};
-
         if let Some(value) = self.value.value_optional() {
             if self.kind.is_record() {
                 return fastn_js::Ast::RecordInstance(fastn_js::RecordInstance {
@@ -117,20 +103,15 @@ impl VariableExt for fastn_resolved::Variable {
     }
 }
 
-pub trait ComponentDefinitionExt {
-    fn to_ast(
-        &self,
-        doc: &dyn fastn_resolved::tdoc::TDoc,
-        has_rive_components: &mut bool,
-    ) -> fastn_js::Ast;
-}
-impl ComponentDefinitionExt for fastn_resolved::ComponentDefinition {
+impl fastn_resolved_to_js::extensions::ComponentDefinitionExt
+    for fastn_resolved::ComponentDefinition
+{
     fn to_ast(
         &self,
         doc: &dyn fastn_resolved::tdoc::TDoc,
         has_rive_components: &mut bool,
     ) -> fastn_js::Ast {
-        use fastn_resolved_to_js::fastn_type_functions::ComponentExt;
+        use fastn_resolved_to_js::extensions::ComponentExt;
         use itertools::Itertools;
 
         let mut statements = vec![];
@@ -175,7 +156,7 @@ pub fn from_tree(
     doc: &dyn fastn_resolved::tdoc::TDoc,
     has_rive_components: &mut bool,
 ) -> fastn_js::Ast {
-    use fastn_resolved_to_js::fastn_type_functions::ComponentExt;
+    use fastn_resolved_to_js::extensions::ComponentExt;
 
     let mut statements = vec![];
     for (index, component) in tree.iter().enumerate() {
@@ -189,10 +170,6 @@ pub fn from_tree(
         ))
     }
     fastn_js::component0(fastn_js::MAIN_FUNCTION, statements)
-}
-
-pub trait WebComponentDefinitionExt {
-    fn to_ast(&self, doc: &dyn fastn_resolved::tdoc::TDoc) -> fastn_js::Ast;
 }
 
 impl WebComponentDefinitionExt for fastn_resolved::WebComponentDefinition {
@@ -310,6 +287,8 @@ impl<T: std::cmp::PartialEq> VecMap<T> {
 }
 
 pub fn default_bag_into_js_ast(doc: &dyn fastn_resolved::tdoc::TDoc) -> Vec<fastn_js::Ast> {
+    use extensions::*;
+
     let mut ftd_asts = vec![];
 
     let mut export_asts = vec![];

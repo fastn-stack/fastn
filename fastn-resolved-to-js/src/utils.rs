@@ -1,4 +1,4 @@
-use fastn_resolved_to_js::value::ArgumentExt;
+use fastn_resolved_to_js::extensions::*;
 
 #[allow(dead_code)]
 pub fn trim_all_lines(s: &str) -> String {
@@ -186,7 +186,7 @@ fn is_ftd_thing(name: &str) -> bool {
 pub(crate) fn get_js_value_from_properties(
     properties: &[fastn_resolved::Property],
 ) -> Option<fastn_resolved_to_js::Value> {
-    use fastn_resolved_to_js::fastn_type_functions::PropertyValueExt;
+    use fastn_resolved_to_js::extensions::PropertyValueExt;
     if properties.is_empty() {
         return None;
     }
@@ -208,8 +208,6 @@ pub(crate) fn function_call_to_js_formula(
     doc: &dyn fastn_resolved::tdoc::TDoc,
     rdata: &fastn_resolved_to_js::ResolverData,
 ) -> fastn_js::Formula {
-    use fastn_resolved_to_js::fastn_type_functions::{FunctionCallExt, PropertyValueExt};
-
     let mut deps = vec![];
     for property_value in function_call.values.values() {
         deps.extend(property_value.get_deps(rdata));

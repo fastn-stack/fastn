@@ -1,8 +1,6 @@
 #![allow(dead_code)]
 
-use fastn_resolved_to_js::{
-    ComponentDefinitionExt, FunctionExt, VariableExt, WebComponentDefinitionExt,
-};
+use fastn_resolved_to_js::extensions::*;
 
 #[cfg(test)]
 #[macro_use]
@@ -85,7 +83,7 @@ pub struct JSAstData {
 }
 
 pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
-    use fastn_resolved_to_js::PropertyValueExt;
+    use fastn_resolved_to_js::extensions::*;
     use itertools::Itertools;
 
     let doc = ftd::interpreter::TDoc::new(&document.name, &document.aliases, &document.data);

@@ -1,10 +1,7 @@
 impl fastn_compiler::Compiler {
     pub(crate) fn js(&self) -> String {
         use fastn_resolved::tdoc::TDoc;
-        use fastn_resolved_to_js::{
-            ComponentDefinitionExt, FunctionExt, PropertyValueExt, VariableExt,
-            WebComponentDefinitionExt,
-        };
+        use fastn_resolved_to_js::extensions::*;
 
         // this function should look a bit like ftd::js::document_into_js_ast(), we do not need
         // to construct the Document object there, but will fetch all the fields as variables
@@ -16,7 +13,7 @@ impl fastn_compiler::Compiler {
         let doc = fastn_compiler::TDoc {
             name: "",
             bag: &needed_symbols,
-            default_bag: &fastn_builtins::get_default_bag(),
+            default_bag: fastn_builtins::get_default_bag(),
         };
 
         // Check if document tree has rive. This is used to add rive script.
