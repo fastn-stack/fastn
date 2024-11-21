@@ -2,10 +2,10 @@ const ITERATION_THRESHOLD: usize = 100;
 
 pub(crate) struct Compiler {
     symbols: Box<dyn fastn_compiler::SymbolStore>,
-    pub(crate) definitions_used: std::collections::HashSet<fastn_unresolved::SymbolName>,
-    interner: string_interner::DefaultStringInterner,
+    pub(crate) definitions_used: std::collections::HashSet<fastn_unresolved::Symbol>,
+    pub(crate) interner: string_interner::DefaultStringInterner,
     pub(crate) definitions:
-        std::collections::HashMap<string_interner::DefaultSymbol, fastn_unresolved::LookupResult>,
+        std::collections::HashMap<fastn_unresolved::Symbol, fastn_unresolved::LookupResult>,
     auto_imports: Vec<fastn_section::AutoImport>,
     /// checkout resolve_document for why this is an Option
     content: Option<
@@ -51,7 +51,7 @@ impl Compiler {
 
     fn fetch_unresolved_symbols(
         &mut self,
-        symbols_to_fetch: &std::collections::HashSet<fastn_unresolved::SymbolName>,
+        symbols_to_fetch: &std::collections::HashSet<fastn_unresolved::Symbol>,
     ) {
         self.definitions_used
             .extend(symbols_to_fetch.iter().cloned());
@@ -59,8 +59,10 @@ impl Compiler {
         for definition in definitions {
             // the following is only okay if our symbol store only returns unresolved definitions,
             // some other store might return resolved definitions, and we need to handle that.
-            self.definitions
-                .insert(definition.unresolved().unwrap().symbol.unwrap(), definition);
+            self.definitions.insert(
+                definition.unresolved().unwrap().symbol.clone().unwrap(),
+                definition,
+            );
         }
     }
 
@@ -69,11 +71,10 @@ impl Compiler {
     /// this function should be called in a loop, until the list of symbols is empty.
     fn resolve_symbols(
         &mut self,
-        symbols: std::collections::HashSet<fastn_unresolved::SymbolName>,
+        symbols: std::collections::HashSet<fastn_unresolved::Symbol>,
     ) -> ResolveSymbolsResult {
         let mut r = ResolveSymbolsResult::default();
         for symbol in symbols {
-            let sym = symbol.symbol(&mut self.interner);
             // what if this is a recursive definition?
             // `foo` calling `foo`?
             // we will not find `foo` in the `bag` anymore, so we have to explicitly check for that.
@@ -89,7 +90,7 @@ impl Compiler {
             // `foo` in the `bag`.
             // to make sure this happens better, we have to ensure that the definition.resolve()
             // tries to resolve the signature first, and then the body.
-            let mut definition = self.definitions.remove(&sym);
+            let mut definition = self.definitions.remove(&symbol);
             match definition.as_mut() {
                 Some(fastn_unresolved::UR::UnResolved(definition)) => {
                     let o = definition.resolve(self.resolution_input());
@@ -105,12 +106,12 @@ impl Compiler {
                 match definition.resolved() {
                     Ok(resolved) => {
                         self.definitions
-                            .insert(sym, fastn_unresolved::UR::Resolved(resolved));
+                            .insert(symbol, fastn_unresolved::UR::Resolved(resolved));
                     }
                     Err(s) => {
-                        r.need_more_symbols.insert(symbol);
+                        r.need_more_symbols.insert(symbol.clone());
                         self.definitions
-                            .insert(sym, fastn_unresolved::UR::UnResolved(s));
+                            .insert(symbol, fastn_unresolved::UR::UnResolved(s));
                     }
                 }
             }
@@ -123,7 +124,7 @@ impl Compiler {
     /// the vec of ones that could not be resolved.
     ///
     /// if this returns an empty list of symbols, we can go ahead and generate the JS.
-    fn resolve_document(&mut self) -> std::collections::HashSet<fastn_unresolved::SymbolName> {
+    fn resolve_document(&mut self) -> std::collections::HashSet<fastn_unresolved::Symbol> {
         let mut stuck_on_symbols = std::collections::HashSet::new();
 
         let content = self.content.replace(vec![]).unwrap();
@@ -230,6 +231,6 @@ pub fn compile(
 
 #[derive(Default)]
 struct ResolveSymbolsResult {
-    need_more_symbols: std::collections::HashSet<fastn_unresolved::SymbolName>,
-    unresolvable: std::collections::HashSet<fastn_unresolved::SymbolName>,
+    need_more_symbols: std::collections::HashSet<fastn_unresolved::Symbol>,
+    unresolvable: std::collections::HashSet<fastn_unresolved::Symbol>,
 }

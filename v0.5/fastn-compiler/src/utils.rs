@@ -14,11 +14,17 @@ impl fastn_compiler::Compiler {
     ) -> indexmap::IndexMap<String, &fastn_resolved::Definition> {
         // go through self.symbols_used and get the resolved definitions
         let mut definitions = indexmap::IndexMap::new();
-        // for symbol in self.symbols_used.iter() {
-        //     if let Some(definition) = self.bag.get(symbol) {
-        //         definitions.insert(symbol.clone(), definition);
-        //     }
-        // }
+        for definition in self.definitions_used.iter() {
+            if let Some(definition) = self.definitions.get(definition) {
+                // definitions.insert(symbol.clone(), definition);
+                todo!()
+            } else if let Some(definition) =
+                fastn_builtins::builtins().get(definition.symbol(&self.interner))
+            {
+                // definitions.insert(symbol.clone(), definition);
+                todo!()
+            }
+        }
         definitions
     }
 

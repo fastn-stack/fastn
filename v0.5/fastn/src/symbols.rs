@@ -5,7 +5,7 @@ impl Symbols {
     fn find_all_definitions_in_a_module(
         &mut self,
         interner: &mut string_interner::DefaultStringInterner,
-        module: &fastn_unresolved::ModuleName,
+        symbol: &fastn_unresolved::Symbol,
     ) -> Vec<fastn_unresolved::LookupResult> {
         // we need to fetch the symbol from the store
         let source = match std::fs::File::open(format!("{}.ftd", module.name.str()))
@@ -49,11 +49,11 @@ impl fastn_compiler::SymbolStore for Symbols {
     fn lookup(
         &mut self,
         interner: &mut string_interner::DefaultStringInterner,
-        symbols: &std::collections::HashSet<fastn_unresolved::SymbolName>,
+        symbols: &std::collections::HashSet<fastn_unresolved::Symbol>,
     ) -> Vec<fastn_unresolved::LookupResult> {
         let unique_modules = symbols
             .iter()
-            .map(|s| &s.module)
+            .map(|s| &s.module(interner))
             .collect::<std::collections::HashSet<_>>();
 
         unique_modules

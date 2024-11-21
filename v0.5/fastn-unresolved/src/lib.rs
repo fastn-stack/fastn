@@ -12,6 +12,16 @@ mod utils;
 
 pub use parser::parse;
 
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+pub struct Symbol {
+    /// this store the <package>/<module>#<name> of the symbol
+    interned: string_interner::DefaultSymbol,
+    /// length of the <package> part of the symbol
+    package_len: u16,
+    /// length of the <module> part of the symbol
+    module_len: u16,
+}
+
 pub type LookupResult =
     fastn_unresolved::UR<fastn_unresolved::Definition, fastn_resolved::Definition>;
 
@@ -29,9 +39,7 @@ pub struct Document {
 
 #[derive(Debug, Clone)]
 pub struct Definition {
-    pub symbol: Option<string_interner::DefaultSymbol>, // <package-name>/<module-name>#<definition-name>
-    pub module: Option<string_interner::DefaultSymbol>,
-    pub package: Option<string_interner::DefaultSymbol>,
+    pub symbol: Option<Symbol>, // <package-name>/<module-name>#<definition-name>
     pub doc: Option<fastn_section::Span>,
     /// resolving an identifier means making sure it is unique in the document, and performing
     /// other checks.
@@ -177,13 +185,6 @@ pub struct AliasableIdentifier {
     pub name: Identifier,
 }
 
-#[derive(Debug, Clone, Eq, Hash, PartialEq)]
-pub struct SymbolName {
-    pub module: ModuleName,
-    /// can name contain dots? after we have `-- module foo:` feature it will, but now?
-    pub name: Identifier, // name comes after #
-}
-
 /// We cannot have kinds of like Record(SymbolName), OrType(SymbolName), because they are not
 /// yet "resolved", eg `-- foo x:`, we do not know if `foo` is a record or an or-type.
 #[derive(Debug, Clone, PartialEq)]
@@ -200,5 +201,5 @@ pub enum Kind {
     CaptionOrBody(Box<Kind>),
     // TODO: Future(Kind),
     // TODO: Result(Kind, Kind),
-    Custom(SymbolName),
+    Custom(Symbol),
 }

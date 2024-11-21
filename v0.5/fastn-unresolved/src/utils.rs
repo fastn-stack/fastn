@@ -138,16 +138,28 @@ impl<U, V> fastn_unresolved::UR<U, V> {
     }
 }
 
-impl fastn_unresolved::SymbolName {
-    pub fn symbol(
+impl fastn_unresolved::Symbol {
+    pub fn symbol<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
+        interner.resolve(self.interned).unwrap()
+    }
+
+    pub fn package<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
+        &self.symbol(interner)[..self.package_len as usize]
+    }
+
+    pub fn module<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
+        &self.symbol(interner)[self.package_len as usize + 1
+            ..self.package_len as usize + 1 + self.module_len as usize]
+    }
+
+    pub fn package_module<'a>(
         &self,
-        interner: &mut string_interner::DefaultStringInterner,
-    ) -> string_interner::DefaultSymbol {
-        interner.get_or_intern(format!(
-            "{}/{}#{}",
-            self.module.package.str(),
-            self.module.name.str(),
-            self.name.str()
-        ))
+        interner: &'a string_interner::DefaultStringInterner,
+    ) -> &'a str {
+        &self.symbol(interner)[..self.package_len as usize + 1 + self.module_len as usize]
+    }
+
+    pub fn name<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
+        &self.symbol(interner)[self.package_len as usize + 1 + self.module_len as usize + 1..]
     }
 }
