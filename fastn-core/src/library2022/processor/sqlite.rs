@@ -31,18 +31,18 @@ pub(crate) fn get_p1_data(
 
 pub(crate) fn result_to_value(
     result: Vec<Vec<serde_json::Value>>,
-    kind: fastn_type::Kind,
+    kind: fastn_resolved::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     value: &ftd_ast::VariableValue,
-) -> ftd::interpreter::Result<fastn_type::Value> {
+) -> ftd::interpreter::Result<fastn_resolved::Value> {
     if kind.is_list() {
         doc.rows_to_value(result.as_slice(), &kind, value)
     } else {
         match result.len() {
             1 => doc.row_to_value(&result[0], &kind, value),
-            0 if kind.is_optional() => Ok(fastn_type::Value::Optional {
+            0 if kind.is_optional() => Ok(fastn_resolved::Value::Optional {
                 data: Box::new(None),
-                kind: fastn_type::KindData::new(kind),
+                kind: fastn_resolved::KindData::new(kind),
             }),
             len => ftd::interpreter::utils::e2(
                 format!("Query returned {} rows, expected one row", len),
@@ -79,16 +79,16 @@ fn resolve_variable_from_doc(
     Ok(value_to_bind(thing))
 }
 
-fn value_to_bind(v: fastn_type::Value) -> ft_sys_shared::SqliteRawValue {
+fn value_to_bind(v: fastn_resolved::Value) -> ft_sys_shared::SqliteRawValue {
     match v {
-        fastn_type::Value::String { text } => ft_sys_shared::SqliteRawValue::Text(text),
-        fastn_type::Value::Integer { value } => ft_sys_shared::SqliteRawValue::Integer(value),
-        fastn_type::Value::Decimal { value } => ft_sys_shared::SqliteRawValue::Real(value),
-        fastn_type::Value::Optional { data, .. } => match data.as_ref() {
+        fastn_resolved::Value::String { text } => ft_sys_shared::SqliteRawValue::Text(text),
+        fastn_resolved::Value::Integer { value } => ft_sys_shared::SqliteRawValue::Integer(value),
+        fastn_resolved::Value::Decimal { value } => ft_sys_shared::SqliteRawValue::Real(value),
+        fastn_resolved::Value::Optional { data, .. } => match data.as_ref() {
             Some(v) => value_to_bind(v.to_owned()),
             None => ft_sys_shared::SqliteRawValue::Null,
         },
-        fastn_type::Value::Boolean { value } => {
+        fastn_resolved::Value::Boolean { value } => {
             ft_sys_shared::SqliteRawValue::Integer(value as i64)
         }
         _ => unimplemented!(), // Handle other types as needed

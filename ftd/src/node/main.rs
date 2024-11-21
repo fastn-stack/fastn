@@ -4,7 +4,7 @@ pub struct Node {
     pub events: Vec<Event>,
     pub node: String,
     pub display: String,
-    pub condition: Option<fastn_type::Expression>,
+    pub condition: Option<fastn_resolved::Expression>,
     pub attrs: ftd::Map<ftd::node::Value>,
     pub style: ftd::Map<ftd::node::Value>,
     pub children: Vec<Node>,
@@ -102,13 +102,13 @@ impl ftd::executor::HTMLData {
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct RawNodeData {
-    pub properties: Vec<(String, fastn_type::Property)>,
-    pub iteration: Option<fastn_type::Loop>,
+    pub properties: Vec<(String, fastn_resolved::Property)>,
+    pub iteration: Option<fastn_resolved::Loop>,
 }
 
 #[derive(serde::Deserialize, Debug, PartialEq, Default, Clone, serde::Serialize)]
 pub struct WebComponentData {
-    pub properties: ftd::Map<fastn_type::PropertyValue>,
+    pub properties: ftd::Map<fastn_resolved::PropertyValue>,
 }
 
 pub type Event = ftd::executor::Event;

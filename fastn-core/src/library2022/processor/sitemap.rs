@@ -1,9 +1,9 @@
 pub fn process(
     value: ftd_ast::VariableValue,
-    kind: fastn_type::Kind,
+    kind: fastn_resolved::Kind,
     doc: &ftd::interpreter::TDoc,
     req_config: &fastn_core::RequestConfig,
-) -> ftd::interpreter::Result<fastn_type::Value> {
+) -> ftd::interpreter::Result<fastn_resolved::Value> {
     if let Some(ref sitemap) = req_config.config.package.sitemap {
         let doc_id = req_config
             .current_document
@@ -30,10 +30,10 @@ pub fn process(
 
 pub fn full_sitemap_process(
     value: ftd_ast::VariableValue,
-    kind: fastn_type::Kind,
+    kind: fastn_resolved::Kind,
     doc: &ftd::interpreter::TDoc,
     req_config: &fastn_core::RequestConfig,
-) -> ftd::interpreter::Result<fastn_type::Value> {
+) -> ftd::interpreter::Result<fastn_resolved::Value> {
     if let Some(ref sitemap) = req_config.config.package.sitemap {
         let doc_id = req_config
             .current_document

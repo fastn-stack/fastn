@@ -1,24 +1,33 @@
 const ITERATION_THRESHOLD: usize = 100;
 
-struct Compiler {
+pub(crate) struct Compiler {
     symbols: Box<dyn fastn_compiler::SymbolStore>,
+    pub(crate) definitions_used: std::collections::HashSet<fastn_unresolved::SymbolName>,
     interner: string_interner::DefaultStringInterner,
-    bag: std::collections::HashMap<string_interner::DefaultSymbol, fastn_unresolved::LookupResult>,
-    #[expect(unused)]
+    pub(crate) definitions:
+        std::collections::HashMap<string_interner::DefaultSymbol, fastn_unresolved::LookupResult>,
     auto_imports: Vec<fastn_section::AutoImport>,
     /// checkout resolve_document for why this is an Option
     content: Option<
         Vec<
             fastn_unresolved::UR<
                 fastn_unresolved::ComponentInvocation,
-                fastn_type::ComponentInvocation,
+                fastn_resolved::ComponentInvocation,
             >,
         >,
     >,
-    document: fastn_unresolved::Document,
+    pub(crate) document: fastn_unresolved::Document,
 }
 
 impl Compiler {
+    fn resolution_input(&self) -> fastn_unresolved::resolver::Input {
+        fastn_unresolved::resolver::Input {
+            definitions: &self.definitions,
+            auto_imports: &self.auto_imports,
+            builtins: fastn_builtins::builtins(),
+        }
+    }
+
     fn new(
         symbols: Box<dyn fastn_compiler::SymbolStore>,
         auto_imports: Vec<fastn_section::AutoImport>,
@@ -32,22 +41,25 @@ impl Compiler {
         Self {
             symbols,
             interner: string_interner::StringInterner::new(),
-            bag: std::collections::HashMap::new(),
+            definitions: std::collections::HashMap::new(),
             content,
             auto_imports,
             document,
+            definitions_used: Default::default(),
         }
     }
 
-    async fn fetch_unresolved_symbols(
+    fn fetch_unresolved_symbols(
         &mut self,
         symbols_to_fetch: &std::collections::HashSet<fastn_unresolved::SymbolName>,
     ) {
+        self.definitions_used
+            .extend(symbols_to_fetch.iter().cloned());
         let definitions = self.symbols.lookup(&mut self.interner, symbols_to_fetch);
         for definition in definitions {
             // the following is only okay if our symbol store only returns unresolved definitions,
             // some other store might return resolved definitions, and we need to handle that.
-            self.bag
+            self.definitions
                 .insert(definition.unresolved().unwrap().symbol.unwrap(), definition);
         }
     }
@@ -77,14 +89,12 @@ impl Compiler {
             // `foo` in the `bag`.
             // to make sure this happens better, we have to ensure that the definition.resolve()
             // tries to resolve the signature first, and then the body.
-            let mut definition = self.bag.remove(&sym);
+            let mut definition = self.definitions.remove(&sym);
             match definition.as_mut() {
                 Some(fastn_unresolved::UR::UnResolved(definition)) => {
-                    r.need_more_symbols.extend(definition.resolve(
-                        &self.bag,
-                        &mut self.document,
-                        &self.auto_imports,
-                    ));
+                    let o = definition.resolve(self.resolution_input());
+                    r.need_more_symbols.extend(o.stuck_on);
+                    self.document.merge(o.errors, o.warnings, o.comments);
                 }
                 Some(fastn_unresolved::UR::Resolved(_)) => unreachable!(),
                 _ => {
@@ -94,12 +104,13 @@ impl Compiler {
             if let Some(fastn_unresolved::UR::UnResolved(definition)) = definition {
                 match definition.resolved() {
                     Ok(resolved) => {
-                        self.bag
+                        self.definitions
                             .insert(sym, fastn_unresolved::UR::Resolved(resolved));
                     }
                     Err(s) => {
                         r.need_more_symbols.insert(symbol);
-                        self.bag.insert(sym, fastn_unresolved::UR::UnResolved(s));
+                        self.definitions
+                            .insert(sym, fastn_unresolved::UR::UnResolved(s));
                     }
                 }
             }
@@ -121,13 +132,15 @@ impl Compiler {
         for ci in content {
             match ci {
                 fastn_unresolved::UR::UnResolved(mut c) => {
-                    let needed = c.resolve(&self.bag, &mut self.document, &self.auto_imports);
-                    if needed.is_empty() {
+                    let needed = c.resolve(self.resolution_input());
+                    if needed.stuck_on.is_empty() {
                         new_content.push(fastn_unresolved::UR::Resolved(c.resolved().unwrap()));
                     } else {
-                        stuck_on_symbols.extend(needed);
+                        stuck_on_symbols.extend(needed.stuck_on);
                         new_content.push(fastn_unresolved::UR::UnResolved(c));
                     }
+                    self.document
+                        .merge(needed.errors, needed.warnings, needed.comments);
                 }
                 v => new_content.push(v),
             }
@@ -138,7 +151,7 @@ impl Compiler {
         stuck_on_symbols
     }
 
-    async fn compile(mut self) -> Result<fastn_compiler::Output, fastn_compiler::Error> {
+    fn compile(mut self) -> Result<fastn_compiler::Output, fastn_compiler::Error> {
         // we only make 10 attempts to resolve the document: we need a warning if we are not able to
         // resolve the document in 10 attempts.
         let mut unresolvable = std::collections::HashSet::new();
@@ -152,7 +165,7 @@ impl Compiler {
                 break;
             }
             // ever_used.extend(&unresolved_symbols);
-            self.fetch_unresolved_symbols(&unresolved_symbols).await;
+            self.fetch_unresolved_symbols(&unresolved_symbols);
             // this itself has to happen in a loop. we need a warning if we are not able to resolve all
             // symbols in 10 attempts.
             let mut r = ResolveSymbolsResult::default();
@@ -167,7 +180,7 @@ impl Compiler {
                     break;
                 }
                 // ever_used.extend(r.need_more_symbols);
-                self.fetch_unresolved_symbols(&r.need_more_symbols).await;
+                self.fetch_unresolved_symbols(&r.need_more_symbols);
                 iterations += 1;
             }
 
@@ -181,8 +194,6 @@ impl Compiler {
             || iterations == ITERATION_THRESHOLD
         {
             // we were not able to resolve all symbols or there were errors
-            #[allow(clippy::diverging_sub_expression)]
-            #[expect(unreachable_code)]
             return Err(fastn_compiler::Error {
                 messages: todo!(),
                 resolved: todo!(),
@@ -191,11 +202,8 @@ impl Compiler {
         }
 
         // there were no errors, etc.
-
-        #[allow(clippy::diverging_sub_expression)]
-        #[expect(unreachable_code)]
         Ok(fastn_compiler::Output {
-            js: todo!(),
+            js: self.js(),
             warnings: self.document.warnings,
             resolved: vec![], // for now, we are not tracking resolved
         })
@@ -211,15 +219,13 @@ impl Compiler {
 ///
 /// earlier we had strict mode here, but to simplify things, now we let the caller convert non-empty
 /// warnings from OK part as error, and discard the generated JS.
-pub async fn compile(
+pub fn compile(
     symbols: Box<dyn fastn_compiler::SymbolStore>,
     document_id: &fastn_unresolved::ModuleName,
     source: &str,
     auto_imports: Vec<fastn_section::AutoImport>,
 ) -> Result<fastn_compiler::Output, fastn_compiler::Error> {
-    Compiler::new(symbols, auto_imports, document_id, source)
-        .compile()
-        .await
+    Compiler::new(symbols, auto_imports, document_id, source).compile()
 }
 
 #[derive(Default)]

@@ -38,7 +38,7 @@ pub fn interpret_helper(
             } => {
                 let variable_definition = ast.clone().get_variable_definition(module.as_str())?;
                 let processor = variable_definition.processor.unwrap();
-                let value = fastn_type::Value::String {
+                let value = fastn_resolved::Value::String {
                     text: variable_definition
                         .value
                         .caption()
@@ -55,7 +55,7 @@ pub fn interpret_helper(
                 ..
             } => {
                 if module.eq("test") {
-                    let value = fastn_type::Value::String {
+                    let value = fastn_resolved::Value::String {
                         text: variable.to_uppercase().to_string(),
                     };
                     s = state.continue_after_variable(module.as_str(), variable.as_str(), value)?;
@@ -77,7 +77,7 @@ fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
     let doc = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
     let mut executor =
         ftd::executor::ExecuteDoc::from_interpreter(doc).unwrap_or_else(|e| panic!("{:?}", e));
-    for thing in ftd::interpreter::default::get_default_bag().keys() {
+    for thing in ftd::interpreter::default::builtins().keys() {
         executor.bag.swap_remove(thing);
     }
     let expected_json = serde_json::to_string_pretty(&executor).unwrap();

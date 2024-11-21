@@ -64,7 +64,7 @@ tracing.workspace = true
 url.workspace = true
 zip.workspace = true
 fastn-expr.workspace = true
-fastn-type.workspace = true
+fastn-resolved.workspace = true
 
 [dev-dependencies]
 fbt-lib.workspace = true

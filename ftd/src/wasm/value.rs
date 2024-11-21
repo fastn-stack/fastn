@@ -1,7 +1,7 @@
-impl fastn_type::Value {
+impl fastn_resolved::Value {
     pub fn create(&self) -> fastn_wasm::Expression {
         match self {
-            fastn_type::Value::String { text } => {
+            fastn_resolved::Value::String { text } => {
                 let data = text.into_bytes();
 
                 fastn_wasm::Expression::Call {

@@ -16,10 +16,21 @@ impl fastn_unresolved::Document {
             document.sections,
         )
     }
+
+    pub fn merge(
+        &mut self,
+        errors: Vec<fastn_section::Spanned<fastn_section::Error>>,
+        warnings: Vec<fastn_section::Spanned<fastn_section::Warning>>,
+        comments: Vec<fastn_section::Span>,
+    ) {
+        self.errors.extend(errors);
+        self.warnings.extend(warnings);
+        self.comments.extend(comments);
+    }
 }
 
 impl fastn_unresolved::ComponentInvocation {
-    pub fn resolved(self) -> Result<fastn_type::ComponentInvocation, Box<Self>> {
+    pub fn resolved(self) -> Result<fastn_resolved::ComponentInvocation, Box<Self>> {
         // must be called only if `is_resolved()` has returned true
         todo!()
     }
@@ -35,7 +46,7 @@ impl fastn_unresolved::Definition {
         }
     }
 
-    pub fn resolved(self) -> Result<fastn_type::Definition, Self> {
+    pub fn resolved(self) -> Result<fastn_resolved::Definition, Self> {
         // must be called only if `is_resolved()` has returned true
         todo!()
     }

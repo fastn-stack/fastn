@@ -31,7 +31,6 @@ macro_rules! try_state {
 #[cfg(test)]
 #[macro_use]
 mod test;
-mod constants;
 mod main;
 pub mod prelude;
 mod tdoc;
@@ -110,7 +109,7 @@ pub enum Error {
     },
 
     #[error("EvalexprError: {}", _0)]
-    EvalexprError(#[from] fastn_type::evalexpr::EvalexprError),
+    EvalexprError(#[from] fastn_resolved::evalexpr::EvalexprError),
 
     #[error("serde error: {source}")]
     Serde {

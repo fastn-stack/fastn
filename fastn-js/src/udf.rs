@@ -3,13 +3,13 @@ pub struct UDF {
     pub name: String,
     pub params: Vec<String>,
     pub args: Vec<(String, fastn_js::SetPropertyValue)>,
-    pub body: Vec<fastn_type::evalexpr::ExprNode>,
+    pub body: Vec<fastn_resolved::evalexpr::ExprNode>,
     pub is_external_js_present: bool,
 }
 
 pub fn udf_with_arguments(
     name: &str,
-    body: Vec<fastn_type::evalexpr::ExprNode>,
+    body: Vec<fastn_resolved::evalexpr::ExprNode>,
     args: Vec<(String, fastn_js::SetPropertyValue)>,
     is_external_js_present: bool,
 ) -> fastn_js::Ast {

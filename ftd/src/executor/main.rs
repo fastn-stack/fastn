@@ -1,3 +1,4 @@
+use fastn_resolved_to_js::extensions::*;
 use ftd::interpreter::expression::ExpressionExt;
 
 #[derive(Debug, PartialEq)]
@@ -5,7 +6,7 @@ pub struct ExecuteDoc<'a> {
     pub name: &'a str,
     pub aliases: &'a ftd::Map<String>,
     pub bag: &'a mut indexmap::IndexMap<String, ftd::interpreter::Thing>,
-    pub instructions: &'a [fastn_type::ComponentInvocation],
+    pub instructions: &'a [fastn_resolved::ComponentInvocation],
     pub dummy_instructions: &'a mut ftd::VecMap<ftd::executor::DummyElement>,
     pub element_constructor: &'a mut ftd::Map<ftd::executor::ElementConstructor>,
     pub js: &'a mut std::collections::HashSet<String>,
@@ -133,13 +134,13 @@ impl ExecuteDoc<'_> {
         let breakpoint_width_from_bag = bag.get_mut(ftd::interpreter::FTD_BREAKPOINT_WIDTH);
 
         if let Some(ftd::interpreter::Thing::Variable(v)) = breakpoint_width_from_bag {
-            v.value = fastn_type::PropertyValue::Value {
-                value: fastn_type::Value::Record {
+            v.value = fastn_resolved::PropertyValue::Value {
+                value: fastn_resolved::Value::Record {
                     name: ftd::interpreter::FTD_BREAKPOINT_WIDTH_DATA.to_string(),
                     fields: std::iter::IntoIterator::into_iter([(
                         "mobile".to_string(),
-                        fastn_type::PropertyValue::Value {
-                            value: fastn_type::Value::Integer {
+                        fastn_resolved::PropertyValue::Value {
+                            value: fastn_resolved::Value::Integer {
                                 value: breakpoint_width,
                             },
                             is_mutable: false,
@@ -156,7 +157,7 @@ impl ExecuteDoc<'_> {
 
     #[allow(clippy::type_complexity)]
     pub(crate) fn get_instructions_from_instructions(
-        instructions: &[fastn_type::ComponentInvocation],
+        instructions: &[fastn_resolved::ComponentInvocation],
         doc: &mut ftd::executor::TDoc,
         parent_container: &[usize],
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
@@ -165,7 +166,7 @@ impl ExecuteDoc<'_> {
         Vec<(
             Option<String>,
             Vec<usize>,
-            fastn_type::ComponentInvocation,
+            fastn_resolved::ComponentInvocation,
             Option<Device>,
         )>,
     > {
@@ -194,15 +195,18 @@ impl ExecuteDoc<'_> {
 
     #[allow(clippy::type_complexity)]
     fn get_instructions_from_instruction(
-        instruction: &fastn_type::ComponentInvocation,
+        instruction: &fastn_resolved::ComponentInvocation,
         doc: &mut ftd::executor::TDoc,
         parent_container: &[usize],
         start_index: usize,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::executor::Result<Vec<(Option<String>, Vec<usize>, fastn_type::ComponentInvocation)>>
-    {
-        use ftd::js::fastn_type_functions::ComponentExt;
-
+    ) -> ftd::executor::Result<
+        Vec<(
+            Option<String>,
+            Vec<usize>,
+            fastn_resolved::ComponentInvocation,
+        )>,
+    > {
         if instruction.is_loop() {
             ExecuteDoc::get_loop_instructions(
                 instruction,
@@ -219,10 +223,10 @@ impl ExecuteDoc<'_> {
     }
 
     fn execute_web_component(
-        instruction: &fastn_type::ComponentInvocation,
+        instruction: &fastn_resolved::ComponentInvocation,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
-        web_component_definition: fastn_type::WebComponentDefinition,
+        web_component_definition: fastn_resolved::WebComponentDefinition,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
         device: Option<ftd::executor::Device>,
     ) -> ftd::executor::Result<ftd::executor::Element> {
@@ -236,16 +240,16 @@ impl ExecuteDoc<'_> {
             true,
         )?;
 
-        let mut properties: ftd::Map<fastn_type::PropertyValue> = Default::default();
+        let mut properties: ftd::Map<fastn_resolved::PropertyValue> = Default::default();
 
         for argument in web_component_definition.arguments.as_slice() {
             let property_value = if let Some(local_variable) = local_variable_map
                 .get(format!("{}.{}", instruction.name, argument.name.as_str()).as_str())
             {
-                fastn_type::PropertyValue::Reference {
+                fastn_resolved::PropertyValue::Reference {
                     name: local_variable.to_string(),
                     kind: argument.kind.to_owned(),
-                    source: fastn_type::PropertyValueSource::Global,
+                    source: fastn_resolved::PropertyValueSource::Global,
                     is_mutable: argument.mutable,
                     line_number: instruction.line_number,
                 }
@@ -269,12 +273,12 @@ impl ExecuteDoc<'_> {
     }
 
     fn get_simple_instruction(
-        instruction: &fastn_type::ComponentInvocation,
+        instruction: &fastn_resolved::ComponentInvocation,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
-        component_definition: fastn_type::ComponentDefinition,
+        component_definition: fastn_resolved::ComponentDefinition,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::executor::Result<fastn_type::ComponentInvocation> {
+    ) -> ftd::executor::Result<fastn_resolved::ComponentInvocation> {
         let mut component_definition = component_definition;
         let local_variable_map = doc.insert_local_variables(
             component_definition.name.as_str(),
@@ -318,9 +322,9 @@ impl ExecuteDoc<'_> {
     }
 
     fn get_instruction_from_variable(
-        instruction: &fastn_type::ComponentInvocation,
+        instruction: &fastn_resolved::ComponentInvocation,
         doc: &mut ftd::executor::TDoc,
-    ) -> ftd::executor::Result<fastn_type::ComponentInvocation> {
+    ) -> ftd::executor::Result<fastn_resolved::ComponentInvocation> {
         use ftd::interpreter::{PropertyValueExt, ValueExt};
 
         if doc
@@ -329,7 +333,7 @@ impl ExecuteDoc<'_> {
             .is_ok()
         {
             let mut component = instruction.to_owned();
-            component.source = fastn_type::ComponentSource::Declaration;
+            component.source = fastn_resolved::ComponentSource::Declaration;
             return Ok(component);
         }
         let mut component = doc
@@ -350,20 +354,25 @@ impl ExecuteDoc<'_> {
             instruction.events.to_owned(),
         );
 
-        component.source = fastn_type::ComponentSource::Declaration;
+        component.source = fastn_resolved::ComponentSource::Declaration;
 
         Ok(component)
     }
 
     #[allow(clippy::type_complexity)]
     fn get_loop_instructions(
-        instruction: &fastn_type::ComponentInvocation,
+        instruction: &fastn_resolved::ComponentInvocation,
         doc: &mut ftd::executor::TDoc,
         parent_container: &[usize],
         start_index: usize,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::executor::Result<Vec<(Option<String>, Vec<usize>, fastn_type::ComponentInvocation)>>
-    {
+    ) -> ftd::executor::Result<
+        Vec<(
+            Option<String>,
+            Vec<usize>,
+            fastn_resolved::ComponentInvocation,
+        )>,
+    > {
         use ftd::interpreter::LoopExt;
 
         let iteration = if let Some(iteration) = instruction.iteration.as_ref() {
@@ -441,7 +450,7 @@ impl ExecuteDoc<'_> {
     // TODO: Remove this after: Throw error when dummy is ready
     #[allow(unused_must_use)]
     fn execute_from_instructions_loop(
-        instructions: &[fastn_type::ComponentInvocation],
+        instructions: &[fastn_resolved::ComponentInvocation],
         doc: &mut ftd::executor::TDoc,
     ) -> ftd::executor::Result<Vec<ftd::executor::Element>> {
         use ftd::executor::fastn_type_functions::ComponentExt;
@@ -629,7 +638,7 @@ impl ExecuteDoc<'_> {
     }
 
     /*    fn execute_from_instructions(
-        instructions: &[fastn_type::Component],
+        instructions: &[fastn_resolved::Component],
         doc: &mut ftd::executor::TDoc,
         parent_container: &[usize],
     ) -> ftd::executor::Result<Vec<ftd::executor::Element>> {
@@ -659,7 +668,7 @@ impl ExecuteDoc<'_> {
     }
 
     fn execute_from_instruction(
-        instruction: &fastn_type::Component,
+        instruction: &fastn_resolved::Component,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
     ) -> ftd::executor::Result<ftd::executor::Element> {
@@ -694,7 +703,7 @@ impl ExecuteDoc<'_> {
     }
 
     fn execute_recursive_component(
-        instruction: &fastn_type::Component,
+        instruction: &fastn_resolved::Component,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
     ) -> ftd::executor::Result<Vec<ftd::executor::Element>> {
@@ -745,10 +754,10 @@ impl ExecuteDoc<'_> {
     }
 
     fn execute_simple_component(
-        instruction: &fastn_type::Component,
+        instruction: &fastn_resolved::Component,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
-        component_definition: fastn_type::ComponentDefinition,
+        component_definition: fastn_resolved::ComponentDefinition,
     ) -> ftd::executor::Result<ftd::executor::Element> {
         let mut component_definition = component_definition;
         let local_variable_map = doc.insert_local_variables(
@@ -775,10 +784,10 @@ impl ExecuteDoc<'_> {
     }*/
 
     pub(crate) fn add_colors_and_types_local_variable(
-        instruction: &fastn_type::ComponentInvocation,
+        instruction: &fastn_resolved::ComponentInvocation,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
-        component_definition: &fastn_type::ComponentDefinition,
+        component_definition: &fastn_resolved::ComponentDefinition,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
     ) -> ftd::executor::Result<()> {
         use itertools::Itertools;
@@ -808,10 +817,10 @@ impl ExecuteDoc<'_> {
     }
 
     pub(crate) fn execute_kernel_components(
-        instruction: &fastn_type::ComponentInvocation,
+        instruction: &fastn_resolved::ComponentInvocation,
         doc: &mut ftd::executor::TDoc,
         local_container: &[usize],
-        component_definition: &fastn_type::ComponentDefinition,
+        component_definition: &fastn_resolved::ComponentDefinition,
         is_dummy: bool,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
         device: Option<ftd::executor::Device>,
@@ -1070,52 +1079,63 @@ impl Device {
         matches!(self, Device::Desktop)
     }
 
-    fn add_condition(&self, instruction: &mut fastn_type::ComponentInvocation, line_number: usize) {
-        let expression = fastn_type::evalexpr::ExprNode::new(fastn_type::evalexpr::Operator::Eq)
-            .add_children(vec![
-                fastn_type::evalexpr::ExprNode::new(
-                    fastn_type::evalexpr::Operator::VariableIdentifierRead {
-                        identifier: "ftd.device".to_string(),
-                    },
-                ),
-                fastn_type::evalexpr::ExprNode::new(fastn_type::evalexpr::Operator::Const {
-                    value: fastn_type::evalexpr::Value::String(self.to_str().to_string()),
-                }),
-            ]);
+    fn add_condition(
+        &self,
+        instruction: &mut fastn_resolved::ComponentInvocation,
+        line_number: usize,
+    ) {
+        let expression =
+            fastn_resolved::evalexpr::ExprNode::new(fastn_resolved::evalexpr::Operator::Eq)
+                .add_children(vec![
+                    fastn_resolved::evalexpr::ExprNode::new(
+                        fastn_resolved::evalexpr::Operator::VariableIdentifierRead {
+                            identifier: "ftd.device".to_string(),
+                        },
+                    ),
+                    fastn_resolved::evalexpr::ExprNode::new(
+                        fastn_resolved::evalexpr::Operator::Const {
+                            value: fastn_resolved::evalexpr::Value::String(
+                                self.to_str().to_string(),
+                            ),
+                        },
+                    ),
+                ]);
 
         if let Some(condition) = instruction.condition.as_mut() {
-            let expression =
-                fastn_type::evalexpr::ExprNode::new(fastn_type::evalexpr::Operator::RootNode)
-                    .add_children(vec![fastn_type::evalexpr::ExprNode::new(
-                        fastn_type::evalexpr::Operator::And,
-                    )
-                    .add_children(vec![expression, condition.expression.to_owned()])]);
+            let expression = fastn_resolved::evalexpr::ExprNode::new(
+                fastn_resolved::evalexpr::Operator::RootNode,
+            )
+            .add_children(vec![fastn_resolved::evalexpr::ExprNode::new(
+                fastn_resolved::evalexpr::Operator::And,
+            )
+            .add_children(vec![expression, condition.expression.to_owned()])]);
 
             condition.expression = expression;
 
             condition.references.insert(
                 "ftd.device".to_string(),
-                fastn_type::PropertyValue::Reference {
+                fastn_resolved::PropertyValue::Reference {
                     name: "ftd#device".to_string(),
-                    kind: fastn_type::Kind::record("ftd#device-data").into_kind_data(),
-                    source: fastn_type::PropertyValueSource::Global,
+                    kind: fastn_resolved::Kind::record("ftd#device-data").into_kind_data(),
+                    source: fastn_resolved::PropertyValueSource::Global,
                     is_mutable: false,
                     line_number,
                 },
             );
         } else {
-            let expression =
-                fastn_type::evalexpr::ExprNode::new(fastn_type::evalexpr::Operator::RootNode)
-                    .add_children(vec![expression]);
+            let expression = fastn_resolved::evalexpr::ExprNode::new(
+                fastn_resolved::evalexpr::Operator::RootNode,
+            )
+            .add_children(vec![expression]);
 
-            let condition = fastn_type::Expression {
+            let condition = fastn_resolved::Expression {
                 expression,
                 references: std::iter::IntoIterator::into_iter([(
                     "ftd.device".to_string(),
-                    fastn_type::PropertyValue::Reference {
+                    fastn_resolved::PropertyValue::Reference {
                         name: "ftd#device".to_string(),
-                        kind: fastn_type::Kind::record("ftd#device-data").into_kind_data(),
-                        source: fastn_type::PropertyValueSource::Global,
+                        kind: fastn_resolved::Kind::record("ftd#device-data").into_kind_data(),
+                        source: fastn_resolved::PropertyValueSource::Global,
                         is_mutable: false,
                         line_number,
                     },

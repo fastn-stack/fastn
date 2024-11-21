@@ -9,64 +9,66 @@ pub trait PropertyValueExt {
         self,
         doc: &ftd::interpreter::TDoc,
         line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_type::Value>;
+    ) -> ftd::interpreter::Result<fastn_resolved::Value>;
 
     fn resolve_with_inherited(
         self,
         doc: &ftd::interpreter::TDoc,
         line_number: usize,
         inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::interpreter::Result<fastn_type::Value>;
+    ) -> ftd::interpreter::Result<fastn_resolved::Value>;
 
     fn from_ast_value(
         value: ftd_ast::VariableValue,
         doc: &mut ftd::interpreter::TDoc,
         mutable: bool,
-        expected_kind: Option<&fastn_type::KindData>,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::PropertyValue>>;
+        expected_kind: Option<&fastn_resolved::KindData>,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::PropertyValue>>;
 
     fn from_ast_value_with_argument(
         value: ftd_ast::VariableValue,
         doc: &mut ftd::interpreter::TDoc,
         is_mutable: bool,
-        expected_kind: Option<&fastn_type::KindData>,
-        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_type::Argument])>,
-        loop_object_name_and_kind: &Option<(String, fastn_type::Argument, Option<String>)>,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::PropertyValue>>;
+        expected_kind: Option<&fastn_resolved::KindData>,
+        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_resolved::Argument])>,
+        loop_object_name_and_kind: &Option<(String, fastn_resolved::Argument, Option<String>)>,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::PropertyValue>>;
 
     fn reference_from_ast_value(
         value: ftd_ast::VariableValue,
         doc: &mut ftd::interpreter::TDoc,
         mutable: bool,
-        expected_kind: Option<&fastn_type::KindData>,
-        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_type::Argument])>,
-        loop_object_name_and_kind: &Option<(String, fastn_type::Argument, Option<String>)>,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Option<fastn_type::PropertyValue>>>;
+        expected_kind: Option<&fastn_resolved::KindData>,
+        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_resolved::Argument])>,
+        loop_object_name_and_kind: &Option<(String, fastn_resolved::Argument, Option<String>)>,
+    ) -> ftd::interpreter::Result<
+        ftd::interpreter::StateWithThing<Option<fastn_resolved::PropertyValue>>,
+    >;
 
     fn value_from_ast_value(
         value: ftd_ast::VariableValue,
         doc: &mut ftd::interpreter::TDoc,
         is_mutable: bool,
-        expected_kind: Option<&fastn_type::KindData>,
-        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_type::Argument])>,
-        loop_object_name_and_kind: &Option<(String, fastn_type::Argument, Option<String>)>,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::PropertyValue>>;
+        expected_kind: Option<&fastn_resolved::KindData>,
+        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_resolved::Argument])>,
+        loop_object_name_and_kind: &Option<(String, fastn_resolved::Argument, Option<String>)>,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::PropertyValue>>;
 
     fn value(
         &self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<&fastn_type::Value>;
+    ) -> ftd::interpreter::Result<&fastn_resolved::Value>;
 
     fn from_record(
-        record: &fastn_type::Record,
+        record: &fastn_resolved::Record,
         value: ftd_ast::VariableValue,
         doc: &mut ftd::interpreter::TDoc,
         is_mutable: bool,
-        _expected_kind: &fastn_type::KindData,
-        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_type::Argument])>,
-        loop_object_name_and_kind: &Option<(String, fastn_type::Argument, Option<String>)>,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::PropertyValue>>;
+        _expected_kind: &fastn_resolved::KindData,
+        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_resolved::Argument])>,
+        loop_object_name_and_kind: &Option<(String, fastn_resolved::Argument, Option<String>)>,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::PropertyValue>>;
 
     fn scan_value_from_ast_value(
         value: ftd_ast::VariableValue,
@@ -105,12 +107,12 @@ pub trait PropertyValueExt {
     fn from_string_with_argument(
         value: &str,
         doc: &mut ftd::interpreter::TDoc,
-        expected_kind: Option<&fastn_type::KindData>,
+        expected_kind: Option<&fastn_resolved::KindData>,
         mutable: bool,
         line_number: usize,
-        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_type::Argument])>,
-        loop_object_name_and_kind: &Option<(String, fastn_type::Argument, Option<String>)>,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::PropertyValue>>;
+        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_resolved::Argument])>,
+        loop_object_name_and_kind: &Option<(String, fastn_resolved::Argument, Option<String>)>,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::PropertyValue>>;
 
     fn is_static(&self, doc: &ftd::interpreter::TDoc) -> bool;
 
@@ -118,23 +120,21 @@ pub trait PropertyValueExt {
         &mut self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<&mut fastn_type::Value>;
-
-    fn value_optional(&self) -> Option<&fastn_type::Value>;
+    ) -> ftd::interpreter::Result<&mut fastn_resolved::Value>;
     fn to_ui_value(
         key: &str,
         value: ftd_ast::VariableValue,
         doc: &mut ftd::interpreter::TDoc,
-        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_type::Argument])>,
-        loop_object_name_and_kind: &Option<(String, fastn_type::Argument, Option<String>)>,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::PropertyValue>>;
+        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_resolved::Argument])>,
+        loop_object_name_and_kind: &Option<(String, fastn_resolved::Argument, Option<String>)>,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::PropertyValue>>;
 }
-impl PropertyValueExt for fastn_type::PropertyValue {
+impl PropertyValueExt for fastn_resolved::PropertyValue {
     fn resolve(
         self,
         doc: &ftd::interpreter::TDoc,
         line_number: usize, // Todo: Remove this line number instead use self.line_number()
-    ) -> ftd::interpreter::Result<fastn_type::Value> {
+    ) -> ftd::interpreter::Result<fastn_resolved::Value> {
         self.resolve_with_inherited(doc, line_number, &Default::default())
     }
 
@@ -143,14 +143,14 @@ impl PropertyValueExt for fastn_type::PropertyValue {
         doc: &ftd::interpreter::TDoc,
         line_number: usize,
         inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::interpreter::Result<fastn_type::Value> {
+    ) -> ftd::interpreter::Result<fastn_resolved::Value> {
         match self {
-            fastn_type::PropertyValue::Value { value, .. } => Ok(value),
-            fastn_type::PropertyValue::Reference { name, kind, .. }
-            | fastn_type::PropertyValue::Clone { name, kind, .. } => {
+            fastn_resolved::PropertyValue::Value { value, .. } => Ok(value),
+            fastn_resolved::PropertyValue::Reference { name, kind, .. }
+            | fastn_resolved::PropertyValue::Clone { name, kind, .. } => {
                 doc.resolve_with_inherited(name.as_str(), &kind, line_number, inherited_variables)
             }
-            fastn_type::PropertyValue::FunctionCall(fastn_type::FunctionCall {
+            fastn_resolved::PropertyValue::FunctionCall(fastn_resolved::FunctionCall {
                 name,
                 kind,
                 values,
@@ -176,9 +176,10 @@ impl PropertyValueExt for fastn_type::PropertyValue {
         value: ftd_ast::VariableValue,
         doc: &mut ftd::interpreter::TDoc,
         mutable: bool,
-        expected_kind: Option<&fastn_type::KindData>,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::PropertyValue>> {
-        fastn_type::PropertyValue::from_ast_value_with_argument(
+        expected_kind: Option<&fastn_resolved::KindData>,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::PropertyValue>>
+    {
+        fastn_resolved::PropertyValue::from_ast_value_with_argument(
             value,
             doc,
             mutable,
@@ -192,21 +193,24 @@ impl PropertyValueExt for fastn_type::PropertyValue {
         value: ftd_ast::VariableValue,
         doc: &mut ftd::interpreter::TDoc,
         is_mutable: bool,
-        expected_kind: Option<&fastn_type::KindData>,
-        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_type::Argument])>,
-        loop_object_name_and_kind: &Option<(String, fastn_type::Argument, Option<String>)>,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::PropertyValue>> {
-        if let Some(reference) = try_ok_state!(fastn_type::PropertyValue::reference_from_ast_value(
-            value.clone(),
-            doc,
-            is_mutable,
-            expected_kind,
-            definition_name_with_arguments,
-            loop_object_name_and_kind,
-        )?) {
+        expected_kind: Option<&fastn_resolved::KindData>,
+        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_resolved::Argument])>,
+        loop_object_name_and_kind: &Option<(String, fastn_resolved::Argument, Option<String>)>,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::PropertyValue>>
+    {
+        if let Some(reference) =
+            try_ok_state!(fastn_resolved::PropertyValue::reference_from_ast_value(
+                value.clone(),
+                doc,
+                is_mutable,
+                expected_kind,
+                definition_name_with_arguments,
+                loop_object_name_and_kind,
+            )?)
+        {
             Ok(ftd::interpreter::StateWithThing::new_thing(reference))
         } else {
-            fastn_type::PropertyValue::value_from_ast_value(
+            fastn_resolved::PropertyValue::value_from_ast_value(
                 value,
                 doc,
                 is_mutable,
@@ -221,11 +225,12 @@ impl PropertyValueExt for fastn_type::PropertyValue {
         value: ftd_ast::VariableValue,
         doc: &mut ftd::interpreter::TDoc,
         mutable: bool,
-        expected_kind: Option<&fastn_type::KindData>,
-        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_type::Argument])>,
-        loop_object_name_and_kind: &Option<(String, fastn_type::Argument, Option<String>)>,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<Option<fastn_type::PropertyValue>>>
-    {
+        expected_kind: Option<&fastn_resolved::KindData>,
+        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_resolved::Argument])>,
+        loop_object_name_and_kind: &Option<(String, fastn_resolved::Argument, Option<String>)>,
+    ) -> ftd::interpreter::Result<
+        ftd::interpreter::StateWithThing<Option<fastn_resolved::PropertyValue>>,
+    > {
         match value.string(doc.name) {
             Ok(expression)
                 if expression
@@ -256,7 +261,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                                     && (ekind.kind.ref_inner().is_record()
                                         || ekind.kind.ref_inner().is_or_type()) =>
                             {
-                                return Ok(fastn_type::PropertyValue::value_from_ast_value(
+                                return Ok(fastn_resolved::PropertyValue::value_from_ast_value(
                                     value,
                                     doc,
                                     mutable,
@@ -282,10 +287,10 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                         let kind = get_kind(expected_kind, &found_kind);
 
                         return Ok(ftd::interpreter::StateWithThing::new_thing(Some(
-                            fastn_type::PropertyValue::Reference {
+                            fastn_resolved::PropertyValue::Reference {
                                 name: reference,
                                 kind: kind.to_owned(),
-                                source: fastn_type::PropertyValueSource::Global,
+                                source: fastn_resolved::PropertyValueSource::Global,
                                 is_mutable: false,
                                 line_number: 0,
                             },
@@ -294,10 +299,10 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                 }
                 if let Some(kind) = expected_kind {
                     Ok(ftd::interpreter::StateWithThing::new_thing(Some(
-                        fastn_type::PropertyValue::Reference {
+                        fastn_resolved::PropertyValue::Reference {
                             name: expression.trim_start_matches('$').to_string(),
                             kind: kind.to_owned(),
-                            source: fastn_type::PropertyValueSource::Global,
+                            source: fastn_resolved::PropertyValueSource::Global,
                             is_mutable: false,
                             line_number: 0,
                         },
@@ -308,10 +313,12 @@ impl PropertyValueExt for fastn_type::PropertyValue {
             }
             Ok(expression) if expression.eq(ftd::interpreter::FTD_SPECIAL_VALUE) => {
                 Ok(ftd::interpreter::StateWithThing::new_thing(Some(
-                    fastn_type::PropertyValue::Reference {
+                    fastn_resolved::PropertyValue::Reference {
                         name: "VALUE".to_string(),
-                        kind: fastn_type::Kind::string().into_optional().into_kind_data(),
-                        source: fastn_type::PropertyValueSource::Global,
+                        kind: fastn_resolved::Kind::string()
+                            .into_optional()
+                            .into_kind_data(),
+                        source: fastn_resolved::PropertyValueSource::Global,
                         is_mutable: false,
                         line_number: 0,
                     },
@@ -319,10 +326,12 @@ impl PropertyValueExt for fastn_type::PropertyValue {
             }
             Ok(expression) if expression.eq(ftd::interpreter::FTD_SPECIAL_CHECKED) => {
                 Ok(ftd::interpreter::StateWithThing::new_thing(Some(
-                    fastn_type::PropertyValue::Reference {
+                    fastn_resolved::PropertyValue::Reference {
                         name: "CHECKED".to_string(),
-                        kind: fastn_type::Kind::boolean().into_optional().into_kind_data(),
-                        source: fastn_type::PropertyValueSource::Global,
+                        kind: fastn_resolved::Kind::boolean()
+                            .into_optional()
+                            .into_kind_data(),
+                        source: fastn_resolved::PropertyValueSource::Global,
                         is_mutable: false,
                         line_number: 0,
                     },
@@ -341,7 +350,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                     .trim_start_matches(ftd::interpreter::utils::REFERENCE)
                     .to_string();
 
-                let mut function_call = try_ok_state!(fastn_type::FunctionCall::from_string(
+                let mut function_call = try_ok_state!(fastn_resolved::FunctionCall::from_string(
                     expression.as_str(),
                     doc,
                     mutable,
@@ -358,7 +367,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                             && (ekind.kind.ref_inner().is_record()
                                 || ekind.kind.ref_inner().is_or_type()) =>
                     {
-                        return Ok(fastn_type::PropertyValue::value_from_ast_value(
+                        return Ok(fastn_resolved::PropertyValue::value_from_ast_value(
                             value,
                             doc,
                             mutable,
@@ -399,7 +408,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                 }
 
                 Ok(ftd::interpreter::StateWithThing::new_thing(Some(
-                    fastn_type::PropertyValue::FunctionCall(function_call),
+                    fastn_resolved::PropertyValue::FunctionCall(function_call),
                 )))
             }
             Ok(reference) if reference.starts_with(ftd::interpreter::utils::CLONE) => {
@@ -428,7 +437,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                             && (ekind.kind.ref_inner().is_record()
                                 || ekind.kind.ref_inner().is_or_type()) =>
                     {
-                        return Ok(fastn_type::PropertyValue::value_from_ast_value(
+                        return Ok(fastn_resolved::PropertyValue::value_from_ast_value(
                             value,
                             doc,
                             mutable,
@@ -464,7 +473,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                 }
 
                 Ok(ftd::interpreter::StateWithThing::new_thing(Some(
-                    fastn_type::PropertyValue::Clone {
+                    fastn_resolved::PropertyValue::Clone {
                         name: reference_full_name,
                         kind,
                         source,
@@ -499,7 +508,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                             && (ekind.kind.ref_inner().is_record()
                                 || ekind.kind.ref_inner().is_or_type()) =>
                     {
-                        return Ok(fastn_type::PropertyValue::value_from_ast_value(
+                        return Ok(fastn_resolved::PropertyValue::value_from_ast_value(
                             value,
                             doc,
                             mutable,
@@ -570,7 +579,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                 }
 
                 Ok(ftd::interpreter::StateWithThing::new_thing(Some(
-                    fastn_type::PropertyValue::Reference {
+                    fastn_resolved::PropertyValue::Reference {
                         name: reference_full_name,
                         kind,
                         source,
@@ -587,10 +596,11 @@ impl PropertyValueExt for fastn_type::PropertyValue {
         value: ftd_ast::VariableValue,
         doc: &mut ftd::interpreter::TDoc,
         is_mutable: bool,
-        expected_kind: Option<&fastn_type::KindData>,
-        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_type::Argument])>,
-        loop_object_name_and_kind: &Option<(String, fastn_type::Argument, Option<String>)>,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::PropertyValue>> {
+        expected_kind: Option<&fastn_resolved::KindData>,
+        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_resolved::Argument])>,
+        loop_object_name_and_kind: &Option<(String, fastn_resolved::Argument, Option<String>)>,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::PropertyValue>>
+    {
         let expected_kind = expected_kind.ok_or(ftd::interpreter::Error::ParseError {
             message: "Need expected kind".to_string(),
             doc_id: doc.name.to_string(),
@@ -609,13 +619,13 @@ impl PropertyValueExt for fastn_type::PropertyValue {
             value: ftd_ast::VariableValue,
             doc: &mut ftd::interpreter::TDoc,
             is_mutable: bool,
-            expected_kind: &fastn_type::KindData,
-            definition_name_with_arguments: &mut Option<(&str, &mut [fastn_type::Argument])>,
-            loop_object_name_and_kind: &Option<(String, fastn_type::Argument, Option<String>)>,
-        ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::PropertyValue>>
+            expected_kind: &fastn_resolved::KindData,
+            definition_name_with_arguments: &mut Option<(&str, &mut [fastn_resolved::Argument])>,
+            loop_object_name_and_kind: &Option<(String, fastn_resolved::Argument, Option<String>)>,
+        ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::PropertyValue>>
         {
             Ok(match &expected_kind.kind.clone() {
-                fastn_type::Kind::Optional { kind } => {
+                fastn_resolved::Kind::Optional { kind } => {
                     let kind = kind.clone().into_kind_data();
                     value.is_null();
                     match value {
@@ -623,8 +633,8 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                             value: ref ivalue, ..
                         } => match ivalue.as_ref() {
                             None => ftd::interpreter::StateWithThing::new_thing(
-                                fastn_type::PropertyValue::Value {
-                                    value: fastn_type::Value::Optional {
+                                fastn_resolved::PropertyValue::Value {
+                                    value: fastn_resolved::Value::Optional {
                                         data: Box::new(None),
                                         kind,
                                     },
@@ -651,7 +661,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                         )?,
                     }
                 }
-                fastn_type::Kind::Constant { kind } => {
+                fastn_resolved::Kind::Constant { kind } => {
                     let kind = kind.clone().into_kind_data();
                     get_property_value(
                         value,
@@ -662,43 +672,43 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                         loop_object_name_and_kind,
                     )?
                 }
-                fastn_type::Kind::String => {
-                    ftd::interpreter::StateWithThing::new_thing(fastn_type::PropertyValue::Value {
-                        value: fastn_type::Value::String {
+                fastn_resolved::Kind::String => ftd::interpreter::StateWithThing::new_thing(
+                    fastn_resolved::PropertyValue::Value {
+                        value: fastn_resolved::Value::String {
                             text: value.string(doc.name)?,
                         },
                         is_mutable,
                         line_number: value.line_number(),
-                    })
-                }
-                fastn_type::Kind::Integer => {
-                    ftd::interpreter::StateWithThing::new_thing(fastn_type::PropertyValue::Value {
-                        value: fastn_type::Value::Integer {
+                    },
+                ),
+                fastn_resolved::Kind::Integer => ftd::interpreter::StateWithThing::new_thing(
+                    fastn_resolved::PropertyValue::Value {
+                        value: fastn_resolved::Value::Integer {
                             value: value.string(doc.name)?.parse()?,
                         },
                         is_mutable,
                         line_number: value.line_number(),
-                    })
-                }
-                fastn_type::Kind::Decimal => {
-                    ftd::interpreter::StateWithThing::new_thing(fastn_type::PropertyValue::Value {
-                        value: fastn_type::Value::Decimal {
+                    },
+                ),
+                fastn_resolved::Kind::Decimal => ftd::interpreter::StateWithThing::new_thing(
+                    fastn_resolved::PropertyValue::Value {
+                        value: fastn_resolved::Value::Decimal {
                             value: value.string(doc.name)?.parse()?,
                         },
                         is_mutable,
                         line_number: value.line_number(),
-                    })
-                }
-                fastn_type::Kind::Boolean => {
-                    ftd::interpreter::StateWithThing::new_thing(fastn_type::PropertyValue::Value {
-                        value: fastn_type::Value::Boolean {
+                    },
+                ),
+                fastn_resolved::Kind::Boolean => ftd::interpreter::StateWithThing::new_thing(
+                    fastn_resolved::PropertyValue::Value {
+                        value: fastn_resolved::Value::Boolean {
                             value: value.string(doc.name)?.parse()?,
                         },
                         is_mutable,
                         line_number: value.line_number(),
-                    })
-                }
-                fastn_type::Kind::List { kind } => {
+                    },
+                ),
+                fastn_resolved::Kind::List { kind } => {
                     let line_number = value.line_number();
                     let value_list = value.into_list(doc.name, kind.get_name())?;
                     let mut values = vec![];
@@ -716,7 +726,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                             );
                         }
                         values.push(if kind.is_ui() {
-                            try_ok_state!(fastn_type::PropertyValue::to_ui_value(
+                            try_ok_state!(fastn_resolved::PropertyValue::to_ui_value(
                                 &key,
                                 value,
                                 doc,
@@ -724,11 +734,11 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                                 loop_object_name_and_kind
                             )?)
                         } else {
-                            try_ok_state!(fastn_type::PropertyValue::from_ast_value(
+                            try_ok_state!(fastn_resolved::PropertyValue::from_ast_value(
                                 value,
                                 doc,
                                 is_mutable,
-                                Some(&fastn_type::KindData {
+                                Some(&fastn_resolved::KindData {
                                     kind: kind.as_ref().clone(),
                                     caption: expected_kind.caption,
                                     body: expected_kind.body,
@@ -736,18 +746,20 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                             )?)
                         });
                     }
-                    ftd::interpreter::StateWithThing::new_thing(fastn_type::PropertyValue::Value {
-                        value: fastn_type::Value::List {
-                            data: values,
-                            kind: expected_kind.clone().inner_list(),
+                    ftd::interpreter::StateWithThing::new_thing(
+                        fastn_resolved::PropertyValue::Value {
+                            value: fastn_resolved::Value::List {
+                                data: values,
+                                kind: expected_kind.clone().inner_list(),
+                            },
+                            is_mutable,
+                            line_number,
                         },
-                        is_mutable,
-                        line_number,
-                    })
+                    )
                 }
-                fastn_type::Kind::Record { name } if value.is_record() || value.is_string() => {
+                fastn_resolved::Kind::Record { name } if value.is_record() || value.is_string() => {
                     let record = try_ok_state!(doc.search_record(name, value.line_number())?);
-                    fastn_type::PropertyValue::from_record(
+                    fastn_resolved::PropertyValue::from_record(
                         &record,
                         value,
                         doc,
@@ -757,7 +769,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                         loop_object_name_and_kind,
                     )?
                 }
-                fastn_type::Kind::OrType { name, variant, .. } => {
+                fastn_resolved::Kind::OrType { name, variant, .. } => {
                     let or_type = try_ok_state!(doc.search_or_type(name, value.line_number())?);
                     let line_number = value.line_number();
                     if let Some(variant_name) = variant {
@@ -777,9 +789,9 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                                 line_number: value.line_number(),
                             })?;
                         let value = match &variant {
-                            fastn_type::OrTypeVariant::Constant(c) => return ftd::interpreter::utils::e2(format!("Cannot pass constant variant as property, variant: `{}`. Help: Pass variant as value instead", c.name), doc.name, c.line_number),
-                            fastn_type::OrTypeVariant::AnonymousRecord(record) =>
-                                try_ok_state!(fastn_type::PropertyValue::from_record(
+                            fastn_resolved::OrTypeVariant::Constant(c) => return ftd::interpreter::utils::e2(format!("Cannot pass constant variant as property, variant: `{}`. Help: Pass variant as value instead", c.name), doc.name, c.line_number),
+                            fastn_resolved::OrTypeVariant::AnonymousRecord(record) =>
+                                try_ok_state!(fastn_resolved::PropertyValue::from_record(
                         record,
                         value,
                         doc,
@@ -788,7 +800,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                         definition_name_with_arguments,
                         loop_object_name_and_kind,
                     )?),
-                            fastn_type::OrTypeVariant::Regular(regular) => {
+                            fastn_resolved::OrTypeVariant::Regular(regular) => {
                                 let mut variant_name = variant_name.trim_start_matches(format!("{}.", variant.name()).as_str()).trim().to_string();
                                 if variant_name.eq(&variant.name()) {
                                     variant_name = "".to_string();
@@ -796,13 +808,13 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                                 let kind = if regular.kind.kind.ref_inner().is_or_type() && !variant_name.is_empty() {
                                     let (name, variant, _full_variant) = regular.kind.kind.get_or_type().unwrap();
                                     let variant_name = format!("{}.{}", name, variant_name);
-                                    fastn_type::Kind::or_type_with_variant(name.as_str(), variant.unwrap_or_else(|| variant_name.clone()).as_str(), variant_name.as_str()).into_kind_data()
+                                    fastn_resolved::Kind::or_type_with_variant(name.as_str(), variant.unwrap_or_else(|| variant_name.clone()).as_str(), variant_name.as_str()).into_kind_data()
                                 } else {
                                     regular.kind.to_owned()
                                 };
 
                                 try_ok_state!(
-                            fastn_type::PropertyValue::from_ast_value_with_argument(
+                            fastn_resolved::PropertyValue::from_ast_value_with_argument(
                                 value,
                                 doc,
                                 is_mutable,
@@ -814,7 +826,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                             }
                         };
                         ftd::interpreter::StateWithThing::new_thing(
-                            fastn_type::Value::new_or_type(
+                            fastn_resolved::Value::new_or_type(
                                 name,
                                 variant.name().as_str(),
                                 variant_name,
@@ -856,7 +868,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                                 })?;
 
                         ftd::interpreter::StateWithThing::new_thing(
-                            fastn_type::Value::new_or_type(
+                            fastn_resolved::Value::new_or_type(
                                 name,
                                 constant.name.as_str(),
                                 constant.name.as_str(),
@@ -866,16 +878,16 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                         )
                     }
                 }
-                fastn_type::Kind::Module => {
-                    ftd::interpreter::StateWithThing::new_thing(fastn_type::PropertyValue::Value {
-                        value: fastn_type::Value::Module {
+                fastn_resolved::Kind::Module => ftd::interpreter::StateWithThing::new_thing(
+                    fastn_resolved::PropertyValue::Value {
+                        value: fastn_resolved::Value::Module {
                             name: doc.resolve_module_name(value.string(doc.name)?.as_str()),
                             things: Default::default(),
                         },
                         is_mutable,
                         line_number: value.line_number(),
-                    })
-                }
+                    },
+                ),
                 t => {
                     unimplemented!("t::{:?}  {:?}", t, value)
                 }
@@ -887,9 +899,9 @@ impl PropertyValueExt for fastn_type::PropertyValue {
         &self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<&fastn_type::Value> {
+    ) -> ftd::interpreter::Result<&fastn_resolved::Value> {
         match self {
-            fastn_type::PropertyValue::Value { value, .. } => Ok(value),
+            fastn_resolved::PropertyValue::Value { value, .. } => Ok(value),
             t => ftd::interpreter::utils::e2(
                 format!("Expected value found `{:?}`", t).as_str(),
                 doc_id,
@@ -899,14 +911,15 @@ impl PropertyValueExt for fastn_type::PropertyValue {
     }
 
     fn from_record(
-        record: &fastn_type::Record,
+        record: &fastn_resolved::Record,
         value: ftd_ast::VariableValue,
         doc: &mut ftd::interpreter::TDoc,
         is_mutable: bool,
-        _expected_kind: &fastn_type::KindData,
-        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_type::Argument])>,
-        loop_object_name_and_kind: &Option<(String, fastn_type::Argument, Option<String>)>,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::PropertyValue>> {
+        _expected_kind: &fastn_resolved::KindData,
+        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_resolved::Argument])>,
+        loop_object_name_and_kind: &Option<(String, fastn_resolved::Argument, Option<String>)>,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::PropertyValue>>
+    {
         if !(value.is_record() || value.is_string()) {
             return ftd::interpreter::utils::e2(
                 format!("`{:?}` value is npt supported yet", value),
@@ -932,12 +945,13 @@ impl PropertyValueExt for fastn_type::PropertyValue {
         };
 
         // TODO: Check if the record name and the value kind are same
-        let mut result_field: fastn_type::Map<fastn_type::PropertyValue> = Default::default();
+        let mut result_field: fastn_resolved::Map<fastn_resolved::PropertyValue> =
+            Default::default();
         for field in record.fields.iter() {
             if field.is_caption() && caption.is_some() {
                 let caption = caption.as_ref().unwrap().clone();
                 let property_value =
-                    try_ok_state!(fastn_type::PropertyValue::from_ast_value_with_argument(
+                    try_ok_state!(fastn_resolved::PropertyValue::from_ast_value_with_argument(
                         caption,
                         doc,
                         field.mutable || is_mutable,
@@ -951,7 +965,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
             if field.is_body() && body.is_some() {
                 let body = body.as_ref().unwrap();
                 let property_value =
-                    try_ok_state!(fastn_type::PropertyValue::from_ast_value_with_argument(
+                    try_ok_state!(fastn_resolved::PropertyValue::from_ast_value_with_argument(
                         ftd_ast::VariableValue::String {
                             value: body.value.to_string(),
                             line_number: body.line_number,
@@ -973,8 +987,8 @@ impl PropertyValueExt for fastn_type::PropertyValue {
             if headers.is_none() && field.kind.is_optional() {
                 result_field.insert(
                     field.name.to_string(),
-                    fastn_type::PropertyValue::Value {
-                        value: fastn_type::Value::Optional {
+                    fastn_resolved::PropertyValue::Value {
+                        value: fastn_resolved::Value::Optional {
                             data: Box::new(None),
                             kind: field.kind.to_owned().inner(),
                         },
@@ -995,7 +1009,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                     variable.set_line_number(value.line_number())
                 }
                 let property_value =
-                    try_ok_state!(fastn_type::PropertyValue::from_ast_value_with_argument(
+                    try_ok_state!(fastn_resolved::PropertyValue::from_ast_value_with_argument(
                         variable,
                         doc,
                         field.mutable || is_mutable,
@@ -1010,7 +1024,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
             if headers.is_none() && field.value.is_some() {
                 let value = field.value.as_ref().unwrap();
                 match value {
-                    fastn_type::PropertyValue::Reference {
+                    fastn_resolved::PropertyValue::Reference {
                         name: refernence,
                         source,
                         ..
@@ -1078,7 +1092,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
             }
 
             let property_value =
-                try_ok_state!(fastn_type::PropertyValue::from_ast_value_with_argument(
+                try_ok_state!(fastn_resolved::PropertyValue::from_ast_value_with_argument(
                     first_header.value.clone(),
                     doc,
                     field.mutable || is_mutable,
@@ -1089,8 +1103,8 @@ impl PropertyValueExt for fastn_type::PropertyValue {
             result_field.insert(field.name.to_string(), property_value);
         }
         Ok(ftd::interpreter::StateWithThing::new_thing(
-            fastn_type::PropertyValue::Value {
-                value: fastn_type::Value::Record {
+            fastn_resolved::PropertyValue::Value {
+                value: fastn_resolved::Value::Record {
                     name: name.to_string(),
                     fields: result_field,
                 },
@@ -1108,7 +1122,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
     ) -> ftd::interpreter::Result<()> {
         match value {
             ftd_ast::VariableValue::Optional { value, .. } if value.is_some() => {
-                fastn_type::PropertyValue::scan_ast_value_with_argument(
+                fastn_resolved::PropertyValue::scan_ast_value_with_argument(
                     value.unwrap(),
                     doc,
                     definition_name_with_arguments,
@@ -1117,7 +1131,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
             }
             ftd_ast::VariableValue::List { value, .. } => {
                 for val in value {
-                    fastn_type::PropertyValue::scan_ast_value_with_argument(
+                    fastn_resolved::PropertyValue::scan_ast_value_with_argument(
                         val.value,
                         doc,
                         definition_name_with_arguments,
@@ -1133,7 +1147,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                 ..
             } => {
                 if let Some(caption) = caption.as_ref() {
-                    fastn_type::PropertyValue::scan_ast_value_with_argument(
+                    fastn_resolved::PropertyValue::scan_ast_value_with_argument(
                         caption.to_owned(),
                         doc,
                         definition_name_with_arguments,
@@ -1141,14 +1155,14 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                     )?;
                 }
                 for header in headers.0 {
-                    fastn_type::PropertyValue::scan_ast_value_with_argument(
+                    fastn_resolved::PropertyValue::scan_ast_value_with_argument(
                         header.value,
                         doc,
                         definition_name_with_arguments,
                         loop_object_name_and_kind,
                     )?;
                     if let Some(condition) = header.condition {
-                        fastn_type::Expression::scan_ast_condition(
+                        fastn_resolved::Expression::scan_ast_condition(
                             ftd_ast::Condition::new(condition.as_str(), header.line_number),
                             definition_name_with_arguments,
                             loop_object_name_and_kind,
@@ -1157,7 +1171,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                     }
                 }
                 if let Some(body) = body {
-                    fastn_type::PropertyValue::scan_string_with_argument(
+                    fastn_resolved::PropertyValue::scan_string_with_argument(
                         body.value.as_str(),
                         doc,
                         body.line_number,
@@ -1167,7 +1181,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                 }
 
                 for val in values {
-                    fastn_type::PropertyValue::scan_ast_value_with_argument(
+                    fastn_resolved::PropertyValue::scan_ast_value_with_argument(
                         val.value,
                         doc,
                         definition_name_with_arguments,
@@ -1186,7 +1200,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
         definition_name_with_arguments: Option<(&str, &[String])>,
         loop_object_name_and_kind: &Option<String>,
     ) -> ftd::interpreter::Result<()> {
-        if fastn_type::PropertyValue::scan_reference_from_ast_value(
+        if fastn_resolved::PropertyValue::scan_reference_from_ast_value(
             value.clone(),
             doc,
             definition_name_with_arguments,
@@ -1194,7 +1208,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
         )? {
             Ok(())
         } else {
-            fastn_type::PropertyValue::scan_value_from_ast_value(
+            fastn_resolved::PropertyValue::scan_value_from_ast_value(
                 value,
                 doc,
                 definition_name_with_arguments,
@@ -1217,7 +1231,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
             condition: None,
         };
 
-        fastn_type::PropertyValue::scan_ast_value_with_argument(
+        fastn_resolved::PropertyValue::scan_ast_value_with_argument(
             value,
             doc,
             definition_name_with_arguments,
@@ -1245,7 +1259,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
                     .trim_start_matches(ftd::interpreter::utils::REFERENCE)
                     .to_string();
 
-                fastn_type::FunctionCall::scan_string(
+                fastn_resolved::FunctionCall::scan_string(
                     expression.as_str(),
                     doc,
                     definition_name_with_arguments,
@@ -1285,18 +1299,19 @@ impl PropertyValueExt for fastn_type::PropertyValue {
         value: ftd_ast::VariableValue,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
-        fastn_type::PropertyValue::scan_ast_value_with_argument(value, doc, None, &None)
+        fastn_resolved::PropertyValue::scan_ast_value_with_argument(value, doc, None, &None)
     }
 
     fn from_string_with_argument(
         value: &str,
         doc: &mut ftd::interpreter::TDoc,
-        expected_kind: Option<&fastn_type::KindData>,
+        expected_kind: Option<&fastn_resolved::KindData>,
         mutable: bool,
         line_number: usize,
-        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_type::Argument])>,
-        loop_object_name_and_kind: &Option<(String, fastn_type::Argument, Option<String>)>,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::PropertyValue>> {
+        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_resolved::Argument])>,
+        loop_object_name_and_kind: &Option<(String, fastn_resolved::Argument, Option<String>)>,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::PropertyValue>>
+    {
         let value = ftd_ast::VariableValue::String {
             value: value.to_string(),
             line_number,
@@ -1304,7 +1319,7 @@ impl PropertyValueExt for fastn_type::PropertyValue {
             condition: None,
         };
 
-        fastn_type::PropertyValue::from_ast_value_with_argument(
+        fastn_resolved::PropertyValue::from_ast_value_with_argument(
             value,
             doc,
             mutable,
@@ -1316,16 +1331,16 @@ impl PropertyValueExt for fastn_type::PropertyValue {
 
     fn is_static(&self, doc: &ftd::interpreter::TDoc) -> bool {
         match self {
-            fastn_type::PropertyValue::Clone { .. } => true,
-            fastn_type::PropertyValue::Reference { is_mutable, .. } if *is_mutable => true,
-            fastn_type::PropertyValue::Reference {
+            fastn_resolved::PropertyValue::Clone { .. } => true,
+            fastn_resolved::PropertyValue::Reference { is_mutable, .. } if *is_mutable => true,
+            fastn_resolved::PropertyValue::Reference {
                 name, line_number, ..
             } => doc
                 .get_variable(name, *line_number)
                 .map(|v| v.is_static())
                 .unwrap_or(true),
-            fastn_type::PropertyValue::Value { value, .. } => value.is_static(doc),
-            fastn_type::PropertyValue::FunctionCall(f) => {
+            fastn_resolved::PropertyValue::Value { value, .. } => value.is_static(doc),
+            fastn_resolved::PropertyValue::FunctionCall(f) => {
                 let mut is_static = true;
                 for d in f.values.values() {
                     if !d.is_static(doc) {
@@ -1342,9 +1357,9 @@ impl PropertyValueExt for fastn_type::PropertyValue {
         &mut self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<&mut fastn_type::Value> {
+    ) -> ftd::interpreter::Result<&mut fastn_resolved::Value> {
         match self {
-            fastn_type::PropertyValue::Value { value, .. } => Ok(value),
+            fastn_resolved::PropertyValue::Value { value, .. } => Ok(value),
             t => ftd::interpreter::utils::e2(
                 format!("Expected value found `{:?}`", t).as_str(),
                 doc_id,
@@ -1353,44 +1368,41 @@ impl PropertyValueExt for fastn_type::PropertyValue {
         }
     }
 
-    fn value_optional(&self) -> Option<&fastn_type::Value> {
-        self.value("", 0).ok()
-    }
-
     fn to_ui_value(
         key: &str,
         value: ftd_ast::VariableValue,
         doc: &mut ftd::interpreter::TDoc,
-        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_type::Argument])>,
-        loop_object_name_and_kind: &Option<(String, fastn_type::Argument, Option<String>)>,
-    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_type::PropertyValue>> {
+        definition_name_with_arguments: &mut Option<(&str, &mut [fastn_resolved::Argument])>,
+        loop_object_name_and_kind: &Option<(String, fastn_resolved::Argument, Option<String>)>,
+    ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::PropertyValue>>
+    {
         use ftd::interpreter::ComponentExt;
 
         let line_number = value.line_number();
 
         if key.eq("ftd.ui") {
-            return fastn_type::PropertyValue::from_ast_value_with_argument(
+            return fastn_resolved::PropertyValue::from_ast_value_with_argument(
                 value,
                 doc,
                 false,
-                Some(&fastn_type::Kind::ui().into_kind_data()),
+                Some(&fastn_resolved::Kind::ui().into_kind_data()),
                 definition_name_with_arguments,
                 loop_object_name_and_kind,
             );
         }
         let ast_component =
             ftd_ast::ComponentInvocation::from_variable_value(key, value, doc.name)?;
-        let component = try_ok_state!(fastn_type::ComponentInvocation::from_ast_component(
+        let component = try_ok_state!(fastn_resolved::ComponentInvocation::from_ast_component(
             ast_component,
             definition_name_with_arguments,
             doc,
         )?);
 
         Ok(ftd::interpreter::StateWithThing::new_thing(
-            fastn_type::PropertyValue::Value {
-                value: fastn_type::Value::UI {
+            fastn_resolved::PropertyValue::Value {
+                value: fastn_resolved::Value::UI {
                     name: component.name.to_string(),
-                    kind: fastn_type::Kind::ui().into_kind_data(),
+                    kind: fastn_resolved::Kind::ui().into_kind_data(),
                     component,
                 },
                 is_mutable: false,
@@ -1403,16 +1415,16 @@ impl PropertyValueExt for fastn_type::PropertyValue {
 pub trait PropertyValueSourceExt {
     fn get_reference_name(&self, name: &str, doc: &ftd::interpreter::TDoc) -> String;
 }
-impl PropertyValueSourceExt for fastn_type::PropertyValueSource {
+impl PropertyValueSourceExt for fastn_resolved::PropertyValueSource {
     fn get_reference_name(&self, name: &str, doc: &ftd::interpreter::TDoc) -> String {
         let name = name
             .strip_prefix(ftd::interpreter::utils::REFERENCE)
             .or_else(|| name.strip_prefix(ftd::interpreter::utils::CLONE))
             .unwrap_or(name);
         match self {
-            fastn_type::PropertyValueSource::Global => doc.resolve_name(name),
-            fastn_type::PropertyValueSource::Local(_)
-            | fastn_type::PropertyValueSource::Loop(_) => {
+            fastn_resolved::PropertyValueSource::Global => doc.resolve_name(name),
+            fastn_resolved::PropertyValueSource::Local(_)
+            | fastn_resolved::PropertyValueSource::Loop(_) => {
                 if name.contains('#') {
                     name.to_string()
                 } else {
@@ -1442,51 +1454,54 @@ pub trait ValueExt {
         &self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<(&String, &String, &fastn_type::PropertyValue)>;
+    ) -> ftd::interpreter::Result<(&String, &String, &fastn_resolved::PropertyValue)>;
     fn ui(
         &self,
         _doc_id: &str,
         _line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_type::ComponentInvocation>;
+    ) -> ftd::interpreter::Result<fastn_resolved::ComponentInvocation>;
     fn record_fields(
         &self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::Map<fastn_type::PropertyValue>>;
+    ) -> ftd::interpreter::Result<ftd::Map<fastn_resolved::PropertyValue>>;
     fn kwargs(
         &self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::Map<fastn_type::PropertyValue>>;
+    ) -> ftd::interpreter::Result<ftd::Map<fastn_resolved::PropertyValue>>;
     fn into_evalexpr_value(
         self,
         doc: &ftd::interpreter::TDoc,
-    ) -> ftd::interpreter::Result<fastn_type::evalexpr::Value>;
+    ) -> ftd::interpreter::Result<fastn_resolved::evalexpr::Value>;
     fn to_evalexpr_value(
         &self,
         doc: &ftd::interpreter::TDoc,
         line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_type::evalexpr::Value>;
+    ) -> ftd::interpreter::Result<fastn_resolved::evalexpr::Value>;
     fn from_evalexpr_value(
-        value: fastn_type::evalexpr::Value,
-        expected_kind: &fastn_type::Kind,
+        value: fastn_resolved::evalexpr::Value,
+        expected_kind: &fastn_resolved::Kind,
         doc_name: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_type::Value>;
+    ) -> ftd::interpreter::Result<fastn_resolved::Value>;
     fn is_static(&self, doc: &ftd::interpreter::TDoc) -> bool;
-    fn module_thing_optional(&self) -> Option<&ftd::Map<fastn_type::ModuleThing>>;
+    fn module_thing_optional(&self) -> Option<&ftd::Map<fastn_resolved::ModuleThing>>;
     fn get_kwargs(
         &self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<&ftd::Map<fastn_type::PropertyValue>>;
+    ) -> ftd::interpreter::Result<&ftd::Map<fastn_resolved::PropertyValue>>;
     fn optional_string(
         &self,
         doc_id: &str,
         line_number: usize,
     ) -> ftd::interpreter::Result<Option<String>>;
-    fn into_property_value(self, is_mutable: bool, line_number: usize)
-        -> fastn_type::PropertyValue;
+    fn into_property_value(
+        self,
+        is_mutable: bool,
+        line_number: usize,
+    ) -> fastn_resolved::PropertyValue;
     fn to_serde_value(
         &self,
         doc: &ftd::interpreter::TDoc<'_>,
@@ -1495,17 +1510,17 @@ pub trait ValueExt {
         &self,
         doc: &ftd::interpreter::TDoc<'_>,
         _use_quotes: bool,
-    ) -> ftd::interpreter::Result<Option<Vec<fastn_type::Value>>>;
+    ) -> ftd::interpreter::Result<Option<Vec<fastn_resolved::Value>>>;
     fn to_json_string(
         &self,
         doc: &ftd::interpreter::TDoc<'_>,
         use_quotes: bool,
     ) -> ftd::interpreter::Result<Option<String>>;
 }
-impl ValueExt for fastn_type::Value {
+impl ValueExt for fastn_resolved::Value {
     fn string(&self, doc_id: &str, line_number: usize) -> ftd::interpreter::Result<String> {
         match self {
-            fastn_type::Value::String { text } => Ok(text.to_string()),
+            fastn_resolved::Value::String { text } => Ok(text.to_string()),
             t => ftd::interpreter::utils::e2(
                 format!("Expected String, found: `{:?}`", t),
                 doc_id,
@@ -1516,7 +1531,7 @@ impl ValueExt for fastn_type::Value {
 
     fn decimal(&self, doc_id: &str, line_number: usize) -> ftd::interpreter::Result<f64> {
         match self {
-            fastn_type::Value::Decimal { value } => Ok(*value),
+            fastn_resolved::Value::Decimal { value } => Ok(*value),
             t => ftd::interpreter::utils::e2(
                 format!("Expected Decimal, found: `{:?}`", t),
                 doc_id,
@@ -1527,7 +1542,7 @@ impl ValueExt for fastn_type::Value {
 
     fn integer(&self, doc_id: &str, line_number: usize) -> ftd::interpreter::Result<i64> {
         match self {
-            fastn_type::Value::Integer { value } => Ok(*value),
+            fastn_resolved::Value::Integer { value } => Ok(*value),
             t => ftd::interpreter::utils::e2(
                 format!("Expected Integer, found: `{:?}`", t),
                 doc_id,
@@ -1538,7 +1553,7 @@ impl ValueExt for fastn_type::Value {
 
     fn bool(&self, doc_id: &str, line_number: usize) -> ftd::interpreter::Result<bool> {
         match self {
-            fastn_type::Value::Boolean { value } => Ok(*value),
+            fastn_resolved::Value::Boolean { value } => Ok(*value),
             t => ftd::interpreter::utils::e2(
                 format!("Expected Boolean, found: `{:?}`", t),
                 doc_id,
@@ -1553,14 +1568,14 @@ impl ValueExt for fastn_type::Value {
         line_number: usize,
     ) -> ftd::interpreter::Result<Option<i64>> {
         match self {
-            fastn_type::Value::Optional { data, kind } if kind.is_integer() => {
+            fastn_resolved::Value::Optional { data, kind } if kind.is_integer() => {
                 if let Some(data) = data.as_ref() {
                     data.optional_integer(doc_id, line_number)
                 } else {
                     Ok(None)
                 }
             }
-            fastn_type::Value::Integer { value } => Ok(Some(*value)),
+            fastn_resolved::Value::Integer { value } => Ok(Some(*value)),
             t => ftd::interpreter::utils::e2(
                 format!("Expected Optional Integer, found: `{:?}`", t),
                 doc_id,
@@ -1575,7 +1590,7 @@ impl ValueExt for fastn_type::Value {
         line_number: usize,
     ) -> ftd::interpreter::Result<Vec<String>> {
         match self {
-            fastn_type::Value::List { data, kind } if kind.is_string() => {
+            fastn_resolved::Value::List { data, kind } if kind.is_string() => {
                 let mut values = vec![];
                 for item in data.iter() {
                     let line_number = item.line_number();
@@ -1587,7 +1602,7 @@ impl ValueExt for fastn_type::Value {
                 }
                 Ok(values)
             }
-            fastn_type::Value::String { text } => Ok(vec![text.to_string()]),
+            fastn_resolved::Value::String { text } => Ok(vec![text.to_string()]),
             t => ftd::interpreter::utils::e2(
                 format!("Expected String list, found: `{:?}`", t),
                 doc.name,
@@ -1600,7 +1615,7 @@ impl ValueExt for fastn_type::Value {
         &self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<(&String, &String, &fastn_type::PropertyValue)> {
+    ) -> ftd::interpreter::Result<(&String, &String, &fastn_resolved::PropertyValue)> {
         match self {
             Self::OrType {
                 name,
@@ -1620,9 +1635,9 @@ impl ValueExt for fastn_type::Value {
         &self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_type::ComponentInvocation> {
+    ) -> ftd::interpreter::Result<fastn_resolved::ComponentInvocation> {
         match self {
-            fastn_type::Value::UI { component, .. } => Ok(component.to_owned()),
+            fastn_resolved::Value::UI { component, .. } => Ok(component.to_owned()),
             t => ftd::interpreter::utils::e2(
                 format!("Expected UI, found: `{:?}`", t),
                 doc_id,
@@ -1635,7 +1650,7 @@ impl ValueExt for fastn_type::Value {
         &self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::Map<fastn_type::PropertyValue>> {
+    ) -> ftd::interpreter::Result<ftd::Map<fastn_resolved::PropertyValue>> {
         match self {
             Self::Record { fields, .. } => Ok(fields.to_owned()),
             t => ftd::interpreter::utils::e2(
@@ -1650,7 +1665,7 @@ impl ValueExt for fastn_type::Value {
         &self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::Map<fastn_type::PropertyValue>> {
+    ) -> ftd::interpreter::Result<ftd::Map<fastn_resolved::PropertyValue>> {
         match self {
             Self::KwArgs { arguments } => Ok(arguments.to_owned()),
             t => ftd::interpreter::utils::e2(
@@ -1664,37 +1679,45 @@ impl ValueExt for fastn_type::Value {
     fn into_evalexpr_value(
         self,
         doc: &ftd::interpreter::TDoc,
-    ) -> ftd::interpreter::Result<fastn_type::evalexpr::Value> {
+    ) -> ftd::interpreter::Result<fastn_resolved::evalexpr::Value> {
         match self {
-            fastn_type::Value::String { text } => Ok(fastn_type::evalexpr::Value::String(text)),
-            fastn_type::Value::Integer { value } => Ok(fastn_type::evalexpr::Value::Int(value)),
-            fastn_type::Value::Decimal { value } => Ok(fastn_type::evalexpr::Value::Float(value)),
-            fastn_type::Value::Boolean { value } => Ok(fastn_type::evalexpr::Value::Boolean(value)),
-            fastn_type::Value::Optional { data, .. } => {
+            fastn_resolved::Value::String { text } => {
+                Ok(fastn_resolved::evalexpr::Value::String(text))
+            }
+            fastn_resolved::Value::Integer { value } => {
+                Ok(fastn_resolved::evalexpr::Value::Int(value))
+            }
+            fastn_resolved::Value::Decimal { value } => {
+                Ok(fastn_resolved::evalexpr::Value::Float(value))
+            }
+            fastn_resolved::Value::Boolean { value } => {
+                Ok(fastn_resolved::evalexpr::Value::Boolean(value))
+            }
+            fastn_resolved::Value::Optional { data, .. } => {
                 if let Some(data) = data.as_ref() {
                     data.clone().into_evalexpr_value(doc)
                 } else {
-                    Ok(fastn_type::evalexpr::Value::Empty)
+                    Ok(fastn_resolved::evalexpr::Value::Empty)
                 }
             }
-            fastn_type::Value::OrType { value, .. } => {
+            fastn_resolved::Value::OrType { value, .. } => {
                 let line_number = value.line_number();
                 value.resolve(doc, line_number)?.into_evalexpr_value(doc)
             }
-            fastn_type::Value::Record { .. } => {
+            fastn_resolved::Value::Record { .. } => {
                 if let Ok(Some(value)) = ftd::interpreter::utils::get_value(doc, &self) {
-                    Ok(fastn_type::evalexpr::Value::String(value.to_string()))
+                    Ok(fastn_resolved::evalexpr::Value::String(value.to_string()))
                 } else {
                     unimplemented!("{:?}", self)
                 }
             }
-            fastn_type::Value::List { data, .. } => {
+            fastn_resolved::Value::List { data, .. } => {
                 let mut values = vec![];
                 for item in data {
                     let line_number = item.line_number();
                     values.push(item.resolve(doc, line_number)?.into_evalexpr_value(doc)?);
                 }
-                Ok(fastn_type::evalexpr::Value::Tuple(values))
+                Ok(fastn_resolved::evalexpr::Value::Tuple(values))
             }
             t => unimplemented!("{:?}", t),
         }
@@ -1704,15 +1727,21 @@ impl ValueExt for fastn_type::Value {
         &self,
         doc: &ftd::interpreter::TDoc,
         line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_type::evalexpr::Value> {
+    ) -> ftd::interpreter::Result<fastn_resolved::evalexpr::Value> {
         Ok(match self {
-            fastn_type::Value::String { text } => {
-                fastn_type::evalexpr::Value::String(text.to_string())
+            fastn_resolved::Value::String { text } => {
+                fastn_resolved::evalexpr::Value::String(text.to_string())
             }
-            fastn_type::Value::Integer { value } => fastn_type::evalexpr::Value::Int(*value),
-            fastn_type::Value::Decimal { value } => fastn_type::evalexpr::Value::Float(*value),
-            fastn_type::Value::Boolean { value } => fastn_type::evalexpr::Value::Boolean(*value),
-            fastn_type::Value::List { data, .. } => {
+            fastn_resolved::Value::Integer { value } => {
+                fastn_resolved::evalexpr::Value::Int(*value)
+            }
+            fastn_resolved::Value::Decimal { value } => {
+                fastn_resolved::evalexpr::Value::Float(*value)
+            }
+            fastn_resolved::Value::Boolean { value } => {
+                fastn_resolved::evalexpr::Value::Boolean(*value)
+            }
+            fastn_resolved::Value::List { data, .. } => {
                 let mut values = vec![];
                 for value in data {
                     let v = value
@@ -1721,13 +1750,13 @@ impl ValueExt for fastn_type::Value {
                         .to_evalexpr_value(doc, value.line_number())?;
                     values.push(v);
                 }
-                fastn_type::evalexpr::Value::Tuple(values)
+                fastn_resolved::evalexpr::Value::Tuple(values)
             }
-            fastn_type::Value::Optional { data, .. } => {
+            fastn_resolved::Value::Optional { data, .. } => {
                 if let Some(data) = data.as_ref() {
                     data.to_evalexpr_value(doc, line_number)?
                 } else {
-                    fastn_type::evalexpr::Value::Empty
+                    fastn_resolved::evalexpr::Value::Empty
                 }
             }
             t => unimplemented!("{:?}", t),
@@ -1735,30 +1764,30 @@ impl ValueExt for fastn_type::Value {
     }
 
     fn from_evalexpr_value(
-        value: fastn_type::evalexpr::Value,
-        expected_kind: &fastn_type::Kind,
+        value: fastn_resolved::evalexpr::Value,
+        expected_kind: &fastn_resolved::Kind,
         doc_name: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_type::Value> {
+    ) -> ftd::interpreter::Result<fastn_resolved::Value> {
         Ok(match value {
-            fastn_type::evalexpr::Value::String(text) if expected_kind.is_string() => {
-                fastn_type::Value::String { text }
+            fastn_resolved::evalexpr::Value::String(text) if expected_kind.is_string() => {
+                fastn_resolved::Value::String { text }
             }
-            fastn_type::evalexpr::Value::Float(value) if expected_kind.is_decimal() => {
-                fastn_type::Value::Decimal { value }
+            fastn_resolved::evalexpr::Value::Float(value) if expected_kind.is_decimal() => {
+                fastn_resolved::Value::Decimal { value }
             }
-            fastn_type::evalexpr::Value::Int(value) if expected_kind.is_integer() => {
-                fastn_type::Value::Integer { value }
+            fastn_resolved::evalexpr::Value::Int(value) if expected_kind.is_integer() => {
+                fastn_resolved::Value::Integer { value }
             }
-            fastn_type::evalexpr::Value::Boolean(value) if expected_kind.is_boolean() => {
-                fastn_type::Value::Boolean { value }
+            fastn_resolved::evalexpr::Value::Boolean(value) if expected_kind.is_boolean() => {
+                fastn_resolved::Value::Boolean { value }
             }
-            fastn_type::evalexpr::Value::Tuple(data) if expected_kind.is_list() => {
+            fastn_resolved::evalexpr::Value::Tuple(data) if expected_kind.is_list() => {
                 let mut values = vec![];
                 let val_kind = expected_kind.list_type(doc_name, line_number)?;
                 for val in data {
-                    values.push(fastn_type::PropertyValue::Value {
-                        value: fastn_type::Value::from_evalexpr_value(
+                    values.push(fastn_resolved::PropertyValue::Value {
+                        value: fastn_resolved::Value::from_evalexpr_value(
                             val,
                             &val_kind,
                             doc_name,
@@ -1768,15 +1797,15 @@ impl ValueExt for fastn_type::Value {
                         line_number,
                     });
                 }
-                fastn_type::Value::List {
+                fastn_resolved::Value::List {
                     data: values,
-                    kind: fastn_type::KindData::new(val_kind),
+                    kind: fastn_resolved::KindData::new(val_kind),
                 }
             }
-            fastn_type::evalexpr::Value::Empty if expected_kind.is_optional() => {
-                fastn_type::Value::Optional {
+            fastn_resolved::evalexpr::Value::Empty if expected_kind.is_optional() => {
+                fastn_resolved::Value::Optional {
                     data: Box::new(None),
-                    kind: fastn_type::KindData::new(expected_kind.clone()),
+                    kind: fastn_resolved::KindData::new(expected_kind.clone()),
                 }
             }
             t => {
@@ -1791,10 +1820,10 @@ impl ValueExt for fastn_type::Value {
 
     fn is_static(&self, doc: &ftd::interpreter::TDoc) -> bool {
         match self {
-            fastn_type::Value::Optional { data, .. } if data.is_some() => {
+            fastn_resolved::Value::Optional { data, .. } if data.is_some() => {
                 data.clone().unwrap().is_static(doc)
             }
-            fastn_type::Value::List { data, .. } => {
+            fastn_resolved::Value::List { data, .. } => {
                 let mut is_static = true;
                 for d in data {
                     if !d.is_static(doc) {
@@ -1804,9 +1833,9 @@ impl ValueExt for fastn_type::Value {
                 }
                 is_static
             }
-            fastn_type::Value::Record { fields, .. }
-            | fastn_type::Value::Object { values: fields, .. }
-            | fastn_type::Value::KwArgs {
+            fastn_resolved::Value::Record { fields, .. }
+            | fastn_resolved::Value::Object { values: fields, .. }
+            | fastn_resolved::Value::KwArgs {
                 arguments: fields, ..
             } => {
                 let mut is_static = true;
@@ -1822,9 +1851,9 @@ impl ValueExt for fastn_type::Value {
         }
     }
 
-    fn module_thing_optional(&self) -> Option<&ftd::Map<fastn_type::ModuleThing>> {
+    fn module_thing_optional(&self) -> Option<&ftd::Map<fastn_resolved::ModuleThing>> {
         match self {
-            fastn_type::Value::Module { things, .. } => Some(things),
+            fastn_resolved::Value::Module { things, .. } => Some(things),
             _ => None,
         }
     }
@@ -1834,7 +1863,7 @@ impl ValueExt for fastn_type::Value {
         &self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<&ftd::Map<fastn_type::PropertyValue>> {
+    ) -> ftd::interpreter::Result<&ftd::Map<fastn_resolved::PropertyValue>> {
         match self {
             Self::KwArgs { arguments } => Ok(arguments),
             t => ftd::interpreter::utils::e2(
@@ -1851,14 +1880,14 @@ impl ValueExt for fastn_type::Value {
         line_number: usize,
     ) -> ftd::interpreter::Result<Option<String>> {
         match self {
-            fastn_type::Value::Optional { data, kind } if kind.is_string() => {
+            fastn_resolved::Value::Optional { data, kind } if kind.is_string() => {
                 if let Some(data) = data.as_ref() {
                     data.optional_string(doc_id, line_number)
                 } else {
                     Ok(None)
                 }
             }
-            fastn_type::Value::String { text } => Ok(Some(text.to_string())),
+            fastn_resolved::Value::String { text } => Ok(Some(text.to_string())),
             t => ftd::interpreter::utils::e2(
                 format!("Expected Optional String, found: `{:?}`", t),
                 doc_id,
@@ -1871,8 +1900,8 @@ impl ValueExt for fastn_type::Value {
         self,
         is_mutable: bool,
         line_number: usize,
-    ) -> fastn_type::PropertyValue {
-        fastn_type::PropertyValue::Value {
+    ) -> fastn_resolved::PropertyValue {
+        fastn_resolved::PropertyValue::Value {
             value: self,
             is_mutable,
             line_number,
@@ -1884,22 +1913,22 @@ impl ValueExt for fastn_type::Value {
         doc: &ftd::interpreter::TDoc<'_>,
     ) -> ftd::interpreter::Result<Option<serde_json::Value>> {
         match self {
-            fastn_type::Value::String { text, .. } => {
+            fastn_resolved::Value::String { text, .. } => {
                 Ok(Some(serde_json::Value::String(text.to_owned())))
             }
-            fastn_type::Value::Integer { value } => Ok(Some(serde_json::json!(value))),
-            fastn_type::Value::Decimal { value } => Ok(Some(serde_json::json!(value))),
-            fastn_type::Value::Boolean { value } => {
+            fastn_resolved::Value::Integer { value } => Ok(Some(serde_json::json!(value))),
+            fastn_resolved::Value::Decimal { value } => Ok(Some(serde_json::json!(value))),
+            fastn_resolved::Value::Boolean { value } => {
                 Ok(Some(serde_json::Value::Bool(value.to_owned())))
             }
-            fastn_type::Value::Optional { data, .. } => {
+            fastn_resolved::Value::Optional { data, .. } => {
                 if let Some(data) = data.as_ref() {
                     data.to_serde_value(doc)
                 } else {
                     Ok(Some(serde_json::Value::Null))
                 }
             }
-            fastn_type::Value::Object { values } => {
+            fastn_resolved::Value::Object { values } => {
                 let mut new_values: ftd::Map<serde_json::Value> = Default::default();
                 for (k, v) in values {
                     let resolved_value = v.clone().resolve(doc, 0)?;
@@ -1909,7 +1938,7 @@ impl ValueExt for fastn_type::Value {
                 }
                 Ok(Some(serde_json::to_value(&new_values)?))
             }
-            fastn_type::Value::KwArgs { arguments } => {
+            fastn_resolved::Value::KwArgs { arguments } => {
                 let mut new_values: ftd::Map<serde_json::Value> = Default::default();
                 for (k, v) in arguments {
                     let resolved_value = v.clone().resolve(doc, 0)?;
@@ -1919,7 +1948,7 @@ impl ValueExt for fastn_type::Value {
                 }
                 Ok(Some(serde_json::to_value(&new_values)?))
             }
-            fastn_type::Value::Record { fields, .. } => {
+            fastn_resolved::Value::Record { fields, .. } => {
                 let mut new_values: ftd::Map<serde_json::Value> = Default::default();
                 for (k, v) in fields {
                     let resolved_value = v.clone().resolve(doc, 0)?;
@@ -1929,7 +1958,7 @@ impl ValueExt for fastn_type::Value {
                 }
                 Ok(Some(serde_json::to_value(&new_values)?))
             }
-            fastn_type::Value::List { data, .. } => {
+            fastn_resolved::Value::List { data, .. } => {
                 let mut new_values: Vec<serde_json::Value> = Default::default();
                 for v in data {
                     let resolved_value = v.clone().resolve(doc, 0)?;
@@ -1947,9 +1976,9 @@ impl ValueExt for fastn_type::Value {
         &self,
         doc: &ftd::interpreter::TDoc<'_>,
         _use_quotes: bool,
-    ) -> ftd::interpreter::Result<Option<Vec<fastn_type::Value>>> {
+    ) -> ftd::interpreter::Result<Option<Vec<fastn_resolved::Value>>> {
         match self {
-            fastn_type::Value::List { data, .. } => {
+            fastn_resolved::Value::List { data, .. } => {
                 let mut values = vec![];
                 for d in data.iter() {
                     let resolved_value = d.clone().resolve(doc, d.line_number())?;
@@ -1967,27 +1996,27 @@ impl ValueExt for fastn_type::Value {
         use_quotes: bool,
     ) -> ftd::interpreter::Result<Option<String>> {
         match self {
-            fastn_type::Value::String { text } => {
+            fastn_resolved::Value::String { text } => {
                 if use_quotes {
                     Ok(Some(format!("\"{}\"", text)))
                 } else {
                     Ok(Some(text.to_string()))
                 }
             }
-            fastn_type::Value::Integer { value } => Ok(Some(value.to_string())),
-            fastn_type::Value::Decimal { value } => Ok(Some(value.to_string())),
-            fastn_type::Value::Boolean { value } => Ok(Some(value.to_string())),
-            fastn_type::Value::Optional { data, .. } => {
+            fastn_resolved::Value::Integer { value } => Ok(Some(value.to_string())),
+            fastn_resolved::Value::Decimal { value } => Ok(Some(value.to_string())),
+            fastn_resolved::Value::Boolean { value } => Ok(Some(value.to_string())),
+            fastn_resolved::Value::Optional { data, .. } => {
                 if let Some(data) = data.as_ref() {
                     data.to_json_string(doc, use_quotes)
                 } else {
                     Ok(Some("".to_string()))
                 }
             }
-            fastn_type::Value::Object { .. }
-            | fastn_type::Value::Record { .. }
-            | fastn_type::Value::List { .. }
-            | fastn_type::Value::KwArgs { .. } => {
+            fastn_resolved::Value::Object { .. }
+            | fastn_resolved::Value::Record { .. }
+            | fastn_resolved::Value::List { .. }
+            | fastn_resolved::Value::KwArgs { .. } => {
                 Ok(Some(serde_json::to_string(&self.to_serde_value(doc)?)?))
             }
             _ => Ok(None),
@@ -1996,9 +2025,9 @@ impl ValueExt for fastn_type::Value {
 }
 
 fn get_kind(
-    expected_kind: Option<&fastn_type::KindData>,
-    found_kind: &fastn_type::KindData,
-) -> fastn_type::KindData {
+    expected_kind: Option<&fastn_resolved::KindData>,
+    found_kind: &fastn_resolved::KindData,
+) -> fastn_resolved::KindData {
     if let Some(expected_kind) = expected_kind {
         if expected_kind.kind.ref_inner_list().ref_inner().is_ui() {
             expected_kind.clone()

@@ -22,7 +22,7 @@ impl Default for Length {
 
 impl Length {
     fn from_optional_values(
-        or_type_value: Option<(String, fastn_type::PropertyValue)>,
+        or_type_value: Option<(String, fastn_resolved::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Length>> {
@@ -34,7 +34,7 @@ impl Length {
     }
 
     fn from_value(
-        value: fastn_type::PropertyValue,
+        value: fastn_resolved::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Length> {
@@ -47,14 +47,14 @@ impl Length {
     }
 
     fn from_optional_value(
-        or_type_value: Option<fastn_type::PropertyValue>,
+        or_type_value: Option<fastn_resolved::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Length>> {
         use ftd::interpreter::PropertyValueExt;
         if let Some(value) = or_type_value {
             let binding = value.clone().resolve(&doc.itdoc(), line_number)?;
-            if let fastn_type::Value::Optional { data, .. } = &binding {
+            if let fastn_resolved::Value::Optional { data, .. } = &binding {
                 if data.is_none() {
                     return Ok(None);
                 }
@@ -65,7 +65,7 @@ impl Length {
     }
 
     fn from_values(
-        or_type_value: (String, fastn_type::PropertyValue),
+        or_type_value: (String, fastn_resolved::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Length> {
@@ -148,8 +148,8 @@ impl Length {
     }
 
     pub(crate) fn optional_length(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -271,7 +271,7 @@ pub struct LengthPair {
 
 impl LengthPair {
     fn from_value(
-        value: fastn_type::PropertyValue,
+        value: fastn_resolved::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<LengthPair> {
@@ -279,7 +279,7 @@ impl LengthPair {
 
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
-            Some(fastn_type::Value::Record { name, fields })
+            Some(fastn_resolved::Value::Record { name, fields })
                 if name.eq(ftd::interpreter::FTD_LENGTH_PAIR)
                     || name.eq(ftd::interpreter::FTD_BACKGROUND_SIZE_LENGTH)
                     || name.eq(ftd::interpreter::FTD_BACKGROUND_POSITION_LENGTH) =>
@@ -302,7 +302,7 @@ impl LengthPair {
     }
 
     fn from_values(
-        values: ftd::Map<fastn_type::PropertyValue>,
+        values: ftd::Map<fastn_resolved::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<LengthPair> {
@@ -344,7 +344,7 @@ pub struct ResponsiveLength {
 
 impl ResponsiveLength {
     fn from_value(
-        value: fastn_type::PropertyValue,
+        value: fastn_resolved::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ResponsiveLength> {
@@ -352,7 +352,7 @@ impl ResponsiveLength {
 
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
-            Some(fastn_type::Value::Record { name, fields })
+            Some(fastn_resolved::Value::Record { name, fields })
                 if name.eq(ftd::interpreter::FTD_RESPONSIVE_LENGTH) =>
             {
                 fields
@@ -373,7 +373,7 @@ impl ResponsiveLength {
     }
 
     fn from_values(
-        values: ftd::Map<fastn_type::PropertyValue>,
+        values: ftd::Map<fastn_resolved::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ResponsiveLength> {
@@ -407,7 +407,7 @@ pub struct BreakpointWidth {
 
 impl BreakpointWidth {
     fn from_optional_values(
-        or_type_value: Option<ftd::Map<fastn_type::PropertyValue>>,
+        or_type_value: Option<ftd::Map<fastn_resolved::PropertyValue>>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<ftd::executor::BreakpointWidth>> {
@@ -423,8 +423,8 @@ impl BreakpointWidth {
     }
 
     pub(crate) fn optional_breakpoint_width(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -454,7 +454,7 @@ impl BreakpointWidth {
     }
 
     fn from_values(
-        values: ftd::Map<fastn_type::PropertyValue>,
+        values: ftd::Map<fastn_resolved::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<BreakpointWidth> {
@@ -482,7 +482,7 @@ impl BreakpointWidth {
                 .integer(doc.name, line_number)?,
             Some(line_number),
             vec![get_property_value("mobile")?
-                .to_property(fastn_type::PropertySource::header("mobile"))],
+                .to_property(fastn_resolved::PropertySource::header("mobile"))],
         );
 
         Ok(BreakpointWidth { mobile })
@@ -505,7 +505,7 @@ pub enum Alignment {
 
 impl Alignment {
     fn from_optional_values(
-        or_type_value: Option<(String, fastn_type::PropertyValue)>,
+        or_type_value: Option<(String, fastn_resolved::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -517,7 +517,7 @@ impl Alignment {
     }
 
     fn from_values(
-        or_type_value: (String, fastn_type::PropertyValue),
+        or_type_value: (String, fastn_resolved::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -541,8 +541,8 @@ impl Alignment {
 
     #[allow(dead_code)]
     pub(crate) fn optional_alignment(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -739,7 +739,7 @@ pub enum Resizing {
 
 impl Resizing {
     fn from_optional_values(
-        or_type_value: Option<(String, fastn_type::PropertyValue)>,
+        or_type_value: Option<(String, fastn_resolved::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -751,7 +751,7 @@ impl Resizing {
     }
 
     fn from_values(
-        or_type_value: (String, fastn_type::PropertyValue),
+        or_type_value: (String, fastn_resolved::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -779,8 +779,8 @@ impl Resizing {
     }
 
     pub(crate) fn optional_resizing(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -903,7 +903,7 @@ pub struct BackgroundImage {
 
 impl BackgroundImage {
     fn from_value(
-        value: fastn_type::PropertyValue,
+        value: fastn_resolved::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::BackgroundImage> {
@@ -911,7 +911,7 @@ impl BackgroundImage {
 
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
-            Some(fastn_type::Value::Record { name, fields })
+            Some(fastn_resolved::Value::Record { name, fields })
                 if name.eq(ftd::interpreter::FTD_BG_IMAGE) =>
             {
                 fields
@@ -932,7 +932,7 @@ impl BackgroundImage {
     }
 
     fn from_values(
-        values: ftd::Map<fastn_type::PropertyValue>,
+        values: ftd::Map<fastn_resolved::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::BackgroundImage> {
@@ -955,7 +955,8 @@ impl BackgroundImage {
                 line_number,
             )?,
             Some(line_number),
-            vec![get_property_value("src")?.to_property(fastn_type::PropertySource::header("src"))],
+            vec![get_property_value("src")?
+                .to_property(fastn_resolved::PropertySource::header("src"))],
         );
 
         let repeat = ftd::executor::Value::new(
@@ -966,7 +967,7 @@ impl BackgroundImage {
             )?,
             Some(line_number),
             vec![get_property_value("repeat")?
-                .to_property(fastn_type::PropertySource::header("repeat"))],
+                .to_property(fastn_resolved::PropertySource::header("repeat"))],
         );
 
         let size = ftd::executor::Value::new(
@@ -976,9 +977,8 @@ impl BackgroundImage {
                 line_number,
             )?,
             Some(line_number),
-            vec![
-                get_property_value("size")?.to_property(fastn_type::PropertySource::header("size"))
-            ],
+            vec![get_property_value("size")?
+                .to_property(fastn_resolved::PropertySource::header("size"))],
         );
 
         let position = ftd::executor::Value::new(
@@ -989,7 +989,7 @@ impl BackgroundImage {
             )?,
             Some(line_number),
             vec![get_property_value("position")?
-                .to_property(fastn_type::PropertySource::header("position"))],
+                .to_property(fastn_resolved::PropertySource::header("position"))],
         );
 
         Ok(ftd::executor::BackgroundImage {
@@ -1036,7 +1036,7 @@ pub struct LinearGradientColor {
 
 impl LinearGradientColor {
     fn from_vec_values(
-        value: fastn_type::PropertyValue,
+        value: fastn_resolved::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Vec<LinearGradientColor>> {
@@ -1045,7 +1045,7 @@ impl LinearGradientColor {
         let mut result = vec![];
         let value = value.resolve(&doc.itdoc(), line_number)?;
         match value.inner() {
-            Some(fastn_type::Value::List { data, kind })
+            Some(fastn_resolved::Value::List { data, kind })
                 if kind
                     .kind
                     .get_name()
@@ -1076,7 +1076,7 @@ impl LinearGradientColor {
     }
 
     fn from_value(
-        value: fastn_type::PropertyValue,
+        value: fastn_resolved::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<LinearGradientColor> {
@@ -1084,7 +1084,7 @@ impl LinearGradientColor {
 
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
-            Some(fastn_type::Value::Record { name, fields })
+            Some(fastn_resolved::Value::Record { name, fields })
                 if name.eq(ftd::interpreter::FTD_LINEAR_GRADIENT_COLOR) =>
             {
                 fields
@@ -1105,7 +1105,7 @@ impl LinearGradientColor {
     }
 
     fn from_values(
-        values: ftd::Map<fastn_type::PropertyValue>,
+        values: ftd::Map<fastn_resolved::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<LinearGradientColor> {
@@ -1138,7 +1138,7 @@ impl LinearGradientColor {
             )?,
             Some(line_number),
             vec![get_property_value("start")?
-                .to_property(fastn_type::PropertySource::header("start"))],
+                .to_property(fastn_resolved::PropertySource::header("start"))],
         );
 
         let end = ftd::executor::Value::new(
@@ -1148,7 +1148,8 @@ impl LinearGradientColor {
                 line_number,
             )?,
             Some(line_number),
-            vec![get_property_value("end")?.to_property(fastn_type::PropertySource::header("end"))],
+            vec![get_property_value("end")?
+                .to_property(fastn_resolved::PropertySource::header("end"))],
         );
 
         let stop_position = ftd::executor::Value::new(
@@ -1159,7 +1160,7 @@ impl LinearGradientColor {
             )?,
             Some(line_number),
             vec![get_property_value("stop-position")?
-                .to_property(fastn_type::PropertySource::header("stop-position"))],
+                .to_property(fastn_resolved::PropertySource::header("stop-position"))],
         );
 
         Ok(ftd::executor::LinearGradientColor {
@@ -1201,7 +1202,7 @@ pub enum LinearGradientDirection {
 
 impl LinearGradientDirection {
     fn from_value(
-        value: fastn_type::PropertyValue,
+        value: fastn_resolved::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<LinearGradientDirection> {
@@ -1213,7 +1214,7 @@ impl LinearGradientDirection {
     }
 
     fn from_values(
-        or_type_value: (String, fastn_type::PropertyValue),
+        or_type_value: (String, fastn_resolved::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -1298,14 +1299,14 @@ pub struct LinearGradient {
 
 impl LinearGradient {
     fn from_value(
-        value: fastn_type::PropertyValue,
+        value: fastn_resolved::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::LinearGradient> {
         use ftd::interpreter::PropertyValueExt;
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
-            Some(fastn_type::Value::Record { name, fields })
+            Some(fastn_resolved::Value::Record { name, fields })
                 if name.eq(ftd::interpreter::FTD_LINEAR_GRADIENT) =>
             {
                 fields
@@ -1326,7 +1327,7 @@ impl LinearGradient {
     }
 
     fn from_values(
-        values: ftd::Map<fastn_type::PropertyValue>,
+        values: ftd::Map<fastn_resolved::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::LinearGradient> {
@@ -1350,7 +1351,7 @@ impl LinearGradient {
             )?,
             Some(line_number),
             vec![get_property_value("direction")?
-                .to_property(fastn_type::PropertySource::header("direction"))],
+                .to_property(fastn_resolved::PropertySource::header("direction"))],
         );
 
         let colors = ftd::executor::Value::new(
@@ -1361,7 +1362,7 @@ impl LinearGradient {
             )?,
             Some(line_number),
             vec![get_property_value("colors")?
-                .to_property(fastn_type::PropertySource::header("colors"))],
+                .to_property(fastn_resolved::PropertySource::header("colors"))],
         );
 
         Ok(ftd::executor::LinearGradient { direction, colors })
@@ -1389,7 +1390,7 @@ pub enum Background {
 
 impl Background {
     fn from_optional_values(
-        or_type_value: Option<(String, fastn_type::PropertyValue)>,
+        or_type_value: Option<(String, fastn_resolved::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -1405,7 +1406,7 @@ impl Background {
     }
 
     fn from_values(
-        or_type_value: (String, fastn_type::PropertyValue),
+        or_type_value: (String, fastn_resolved::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -1430,8 +1431,8 @@ impl Background {
     }
 
     pub(crate) fn optional_background(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -1552,14 +1553,14 @@ pub enum BackgroundRepeat {
 
 impl BackgroundRepeat {
     fn from_optional_value(
-        value: fastn_type::PropertyValue,
+        value: fastn_resolved::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<ftd::executor::BackgroundRepeat>> {
         use ftd::interpreter::{PropertyValueExt, ValueExt};
 
         let binding = value.resolve(&doc.itdoc(), line_number)?;
-        if let fastn_type::Value::Optional { data, .. } = &binding {
+        if let fastn_resolved::Value::Optional { data, .. } = &binding {
             if data.is_none() {
                 return Ok(None);
             }
@@ -1575,7 +1576,7 @@ impl BackgroundRepeat {
     }
 
     fn from_values(
-        or_type_value: (String, fastn_type::PropertyValue),
+        or_type_value: (String, fastn_resolved::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::BackgroundRepeat> {
@@ -1631,14 +1632,14 @@ pub enum BackgroundSize {
 
 impl BackgroundSize {
     fn from_optional_value(
-        value: fastn_type::PropertyValue,
+        value: fastn_resolved::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<ftd::executor::BackgroundSize>> {
         use ftd::interpreter::{PropertyValueExt, ValueExt};
 
         let binding = value.resolve(&doc.itdoc(), line_number)?;
-        if let fastn_type::Value::Optional { data, .. } = &binding {
+        if let fastn_resolved::Value::Optional { data, .. } = &binding {
             if data.is_none() {
                 return Ok(None);
             }
@@ -1654,7 +1655,7 @@ impl BackgroundSize {
     }
 
     fn from_values(
-        or_type_value: (String, fastn_type::PropertyValue),
+        or_type_value: (String, fastn_resolved::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::BackgroundSize> {
@@ -1706,14 +1707,14 @@ pub enum BackgroundPosition {
 
 impl BackgroundPosition {
     fn from_optional_value(
-        value: fastn_type::PropertyValue,
+        value: fastn_resolved::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<ftd::executor::BackgroundPosition>> {
         use ftd::interpreter::{PropertyValueExt, ValueExt};
 
         let binding = value.resolve(&doc.itdoc(), line_number)?;
-        if let fastn_type::Value::Optional { data, .. } = &binding {
+        if let fastn_resolved::Value::Optional { data, .. } = &binding {
             if data.is_none() {
                 return Ok(None);
             }
@@ -1729,7 +1730,7 @@ impl BackgroundPosition {
     }
 
     fn from_values(
-        or_type_value: (String, fastn_type::PropertyValue),
+        or_type_value: (String, fastn_resolved::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::BackgroundPosition> {
@@ -1817,7 +1818,7 @@ pub struct Shadow {
 
 impl Shadow {
     fn from_values(
-        values: ftd::Map<fastn_type::PropertyValue>,
+        values: ftd::Map<fastn_resolved::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::Shadow> {
@@ -1838,36 +1839,35 @@ impl Shadow {
             Length::from_value(get_property_value("x-offset")?.clone(), doc, line_number)?,
             Some(line_number),
             vec![get_property_value("x-offset")?
-                .to_property(fastn_type::PropertySource::header("x-offset"))],
+                .to_property(fastn_resolved::PropertySource::header("x-offset"))],
         );
 
         let y_offset = ftd::executor::Value::new(
             Length::from_value(get_property_value("y-offset")?.clone(), doc, line_number)?,
             Some(line_number),
             vec![get_property_value("y-offset")?
-                .to_property(fastn_type::PropertySource::header("y-offset"))],
+                .to_property(fastn_resolved::PropertySource::header("y-offset"))],
         );
 
         let blur = ftd::executor::Value::new(
             Length::from_value(get_property_value("blur")?.clone(), doc, line_number)?,
             Some(line_number),
-            vec![
-                get_property_value("blur")?.to_property(fastn_type::PropertySource::header("blur"))
-            ],
+            vec![get_property_value("blur")?
+                .to_property(fastn_resolved::PropertySource::header("blur"))],
         );
 
         let spread = ftd::executor::Value::new(
             Length::from_value(get_property_value("spread")?.clone(), doc, line_number)?,
             Some(line_number),
             vec![get_property_value("spread")?
-                .to_property(fastn_type::PropertySource::header("spread"))],
+                .to_property(fastn_resolved::PropertySource::header("spread"))],
         );
 
         let color = ftd::executor::Value::new(
             Color::from_value(get_property_value("color")?.clone(), doc, line_number)?,
             Some(line_number),
             vec![get_property_value("color")?
-                .to_property(fastn_type::PropertySource::header("color"))],
+                .to_property(fastn_resolved::PropertySource::header("color"))],
         );
 
         let inset = ftd::executor::Value::new(
@@ -1877,7 +1877,7 @@ impl Shadow {
                 .bool(doc.name, line_number)?,
             Some(line_number),
             vec![get_property_value("inset")?
-                .to_property(fastn_type::PropertySource::header("inset"))],
+                .to_property(fastn_resolved::PropertySource::header("inset"))],
         );
 
         Ok(ftd::executor::Shadow {
@@ -1891,7 +1891,7 @@ impl Shadow {
     }
 
     fn from_optional_values(
-        or_type_value: Option<ftd::Map<fastn_type::PropertyValue>>,
+        or_type_value: Option<ftd::Map<fastn_resolved::PropertyValue>>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<ftd::executor::Shadow>> {
@@ -1907,8 +1907,8 @@ impl Shadow {
     }
 
     pub(crate) fn optional_shadow(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -1966,7 +1966,7 @@ pub struct Color {
 
 impl Color {
     fn from_value(
-        value: fastn_type::PropertyValue,
+        value: fastn_resolved::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Color> {
@@ -1974,7 +1974,7 @@ impl Color {
 
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
-            Some(fastn_type::Value::Record { name, fields })
+            Some(fastn_resolved::Value::Record { name, fields })
                 if name.eq(ftd::interpreter::FTD_COLOR) =>
             {
                 fields
@@ -1995,7 +1995,7 @@ impl Color {
     }
 
     fn from_values(
-        values: ftd::Map<fastn_type::PropertyValue>,
+        values: ftd::Map<fastn_resolved::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Color> {
@@ -2020,7 +2020,7 @@ impl Color {
                     line_number,
                 )?,
                 Some(line_number),
-                vec![value.to_property(fastn_type::PropertySource::header("light"))],
+                vec![value.to_property(fastn_resolved::PropertySource::header("light"))],
             )
         };
 
@@ -2036,7 +2036,7 @@ impl Color {
                         line_number,
                     )?,
                     Some(line_number),
-                    vec![value.to_property(fastn_type::PropertySource::header("dark"))],
+                    vec![value.to_property(fastn_resolved::PropertySource::header("dark"))],
                 )
             } else {
                 light.clone()
@@ -2047,7 +2047,7 @@ impl Color {
     }
 
     fn from_optional_values(
-        or_type_value: Option<ftd::Map<fastn_type::PropertyValue>>,
+        or_type_value: Option<ftd::Map<fastn_resolved::PropertyValue>>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Color>> {
@@ -2059,8 +2059,8 @@ impl Color {
     }
 
     pub(crate) fn optional_color(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -2194,7 +2194,7 @@ pub enum Spacing {
 
 impl Spacing {
     fn from_optional_values(
-        or_type_value: Option<(String, fastn_type::PropertyValue)>,
+        or_type_value: Option<(String, fastn_resolved::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -2206,7 +2206,7 @@ impl Spacing {
     }
 
     fn from_values(
-        or_type_value: (String, fastn_type::PropertyValue),
+        or_type_value: (String, fastn_resolved::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -2228,8 +2228,8 @@ impl Spacing {
     }
 
     pub(crate) fn optional_spacing_mode(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -2307,7 +2307,7 @@ pub enum AlignSelf {
 
 impl AlignSelf {
     fn from_optional_values(
-        or_type_value: Option<(String, fastn_type::PropertyValue)>,
+        or_type_value: Option<(String, fastn_resolved::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -2319,7 +2319,7 @@ impl AlignSelf {
     }
 
     fn from_values(
-        or_type_value: (String, fastn_type::PropertyValue),
+        or_type_value: (String, fastn_resolved::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -2336,8 +2336,8 @@ impl AlignSelf {
     }
 
     pub(crate) fn optional_align_self(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -2381,7 +2381,7 @@ pub enum Overflow {
 
 impl Overflow {
     fn from_optional_values(
-        or_type_value: Option<(String, fastn_type::PropertyValue)>,
+        or_type_value: Option<(String, fastn_resolved::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -2393,7 +2393,7 @@ impl Overflow {
     }
 
     fn from_values(
-        or_type_value: (String, fastn_type::PropertyValue),
+        or_type_value: (String, fastn_resolved::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -2411,8 +2411,8 @@ impl Overflow {
     }
 
     pub(crate) fn optional_overflow(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -2456,7 +2456,7 @@ pub enum Resize {
 
 impl Resize {
     fn from_optional_values(
-        or_type_value: Option<(String, fastn_type::PropertyValue)>,
+        or_type_value: Option<(String, fastn_resolved::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -2468,7 +2468,7 @@ impl Resize {
     }
 
     fn from_values(
-        or_type_value: (String, fastn_type::PropertyValue),
+        or_type_value: (String, fastn_resolved::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -2485,8 +2485,8 @@ impl Resize {
     }
 
     pub(crate) fn optional_resize(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -2530,7 +2530,7 @@ pub enum TextAlign {
 
 impl TextAlign {
     fn from_optional_values(
-        or_type_value: Option<(String, fastn_type::PropertyValue)>,
+        or_type_value: Option<(String, fastn_resolved::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -2542,7 +2542,7 @@ impl TextAlign {
     }
 
     fn from_values(
-        or_type_value: (String, fastn_type::PropertyValue),
+        or_type_value: (String, fastn_resolved::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -2560,8 +2560,8 @@ impl TextAlign {
     }
 
     pub(crate) fn optional_text_align(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -2637,7 +2637,7 @@ pub enum Cursor {
 
 impl Cursor {
     fn from_optional_values(
-        or_type_value: Option<(String, fastn_type::PropertyValue)>,
+        or_type_value: Option<(String, fastn_resolved::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -2649,7 +2649,7 @@ impl Cursor {
     }
 
     fn from_values(
-        or_type_value: (String, fastn_type::PropertyValue),
+        or_type_value: (String, fastn_resolved::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -2698,8 +2698,8 @@ impl Cursor {
     }
 
     pub(crate) fn optional_cursor(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -2780,7 +2780,7 @@ impl Default for FontSize {
 
 impl FontSize {
     fn from_optional_value(
-        value: fastn_type::PropertyValue,
+        value: fastn_resolved::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<FontSize>> {
@@ -2788,7 +2788,7 @@ impl FontSize {
 
         let value = value.resolve(&doc.itdoc(), line_number)?;
         match value.inner() {
-            Some(fastn_type::Value::OrType {
+            Some(fastn_resolved::Value::OrType {
                 name,
                 variant,
                 value,
@@ -2812,7 +2812,7 @@ impl FontSize {
     }
 
     fn from_values(
-        or_type_value: (String, fastn_type::PropertyValue),
+        or_type_value: (String, fastn_resolved::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -2936,7 +2936,7 @@ impl Type {
     }
 
     fn from_value(
-        value: fastn_type::PropertyValue,
+        value: fastn_resolved::PropertyValue,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Type> {
@@ -2944,7 +2944,7 @@ impl Type {
 
         let value = value.resolve(&doc.itdoc(), line_number)?;
         let fields = match value.inner() {
-            Some(fastn_type::Value::Record { name, fields })
+            Some(fastn_resolved::Value::Record { name, fields })
                 if name.eq(ftd::interpreter::FTD_TYPE) =>
             {
                 fields
@@ -2965,7 +2965,7 @@ impl Type {
     }
 
     fn from_values(
-        values: ftd::Map<fastn_type::PropertyValue>,
+        values: ftd::Map<fastn_resolved::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Type> {
@@ -3037,7 +3037,7 @@ pub struct ResponsiveType {
 
 impl ResponsiveType {
     fn from_values(
-        values: ftd::Map<fastn_type::PropertyValue>,
+        values: ftd::Map<fastn_resolved::PropertyValue>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ResponsiveType> {
@@ -3064,7 +3064,7 @@ impl ResponsiveType {
     }
 
     fn from_optional_values(
-        or_type_value: Option<ftd::Map<fastn_type::PropertyValue>>,
+        or_type_value: Option<ftd::Map<fastn_resolved::PropertyValue>>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -3076,8 +3076,8 @@ impl ResponsiveType {
     }
 
     pub(crate) fn optional_responsive_type(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -3181,7 +3181,7 @@ pub enum Anchor {
 
 impl Anchor {
     fn from_optional_values(
-        or_type_value: Option<(String, fastn_type::PropertyValue)>,
+        or_type_value: Option<(String, fastn_resolved::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -3193,7 +3193,7 @@ impl Anchor {
     }
 
     fn from_values(
-        or_type_value: (String, fastn_type::PropertyValue),
+        or_type_value: (String, fastn_resolved::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -3218,8 +3218,8 @@ impl Anchor {
     }
 
     pub(crate) fn optional_anchor(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -3270,7 +3270,7 @@ pub enum TextInputType {
 
 impl TextInputType {
     fn from_optional_values(
-        or_type_value: Option<(String, fastn_type::PropertyValue)>,
+        or_type_value: Option<(String, fastn_resolved::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -3282,7 +3282,7 @@ impl TextInputType {
     }
 
     fn from_values(
-        or_type_value: (String, fastn_type::PropertyValue),
+        or_type_value: (String, fastn_resolved::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -3307,8 +3307,8 @@ impl TextInputType {
     }
 
     pub(crate) fn optional_text_input_type(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -3362,7 +3362,7 @@ pub enum Region {
 
 impl Region {
     fn from_optional_values(
-        or_type_value: Option<(String, fastn_type::PropertyValue)>,
+        or_type_value: Option<(String, fastn_resolved::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -3374,7 +3374,7 @@ impl Region {
     }
 
     fn from_values(
-        or_type_value: (String, fastn_type::PropertyValue),
+        or_type_value: (String, fastn_resolved::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -3394,8 +3394,8 @@ impl Region {
     }
 
     pub(crate) fn optional_region(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -3450,7 +3450,7 @@ pub enum WhiteSpace {
 
 impl WhiteSpace {
     fn from_optional_values(
-        or_type_value: Option<(String, fastn_type::PropertyValue)>,
+        or_type_value: Option<(String, fastn_resolved::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -3462,7 +3462,7 @@ impl WhiteSpace {
     }
 
     fn from_values(
-        or_type_value: (String, fastn_type::PropertyValue),
+        or_type_value: (String, fastn_resolved::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -3482,8 +3482,8 @@ impl WhiteSpace {
     }
 
     pub(crate) fn optional_whitespace(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -3529,7 +3529,7 @@ pub enum Display {
 
 impl Display {
     fn from_optional_values(
-        or_type_value: Option<(String, fastn_type::PropertyValue)>,
+        or_type_value: Option<(String, fastn_resolved::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<ftd::executor::Display>> {
@@ -3545,7 +3545,7 @@ impl Display {
     }
 
     fn from_values(
-        or_type_value: (String, fastn_type::PropertyValue),
+        or_type_value: (String, fastn_resolved::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<ftd::executor::Display> {
@@ -3562,8 +3562,8 @@ impl Display {
     }
 
     pub(crate) fn optional_display(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -3692,7 +3692,7 @@ impl TextStyle {
     }
 
     fn from_optional_values(
-        or_type_value: Option<Vec<(String, fastn_type::PropertyValue)>>,
+        or_type_value: Option<Vec<(String, fastn_resolved::PropertyValue)>>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -3704,7 +3704,7 @@ impl TextStyle {
     }
 
     fn from_values(
-        or_type_values: Vec<(String, fastn_type::PropertyValue)>,
+        or_type_values: Vec<(String, fastn_resolved::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -3834,8 +3834,8 @@ impl TextStyle {
     }
 
     pub(crate) fn optional_text_style(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -3970,7 +3970,7 @@ pub enum TextTransform {
 
 impl TextTransform {
     fn from_optional_values(
-        or_type_value: Option<(String, fastn_type::PropertyValue)>,
+        or_type_value: Option<(String, fastn_resolved::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -3982,7 +3982,7 @@ impl TextTransform {
     }
 
     fn from_values(
-        or_type_value: (String, fastn_type::PropertyValue),
+        or_type_value: (String, fastn_resolved::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -4002,8 +4002,8 @@ impl TextTransform {
     }
 
     pub(crate) fn optional_text_transform(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -4054,7 +4054,7 @@ pub enum BorderStyle {
 
 impl BorderStyle {
     fn from_optional_values(
-        or_type_value: Option<(String, fastn_type::PropertyValue)>,
+        or_type_value: Option<(String, fastn_resolved::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -4065,7 +4065,7 @@ impl BorderStyle {
     }
 
     fn from_values(
-        or_type_value: (String, fastn_type::PropertyValue),
+        or_type_value: (String, fastn_resolved::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -4087,8 +4087,8 @@ impl BorderStyle {
     }
 
     pub(crate) fn optional_border_style(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -4138,7 +4138,7 @@ pub enum ImageFit {
 
 impl ImageFit {
     fn from_optional_values(
-        or_type_value: Option<(String, fastn_type::PropertyValue)>,
+        or_type_value: Option<(String, fastn_resolved::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -4149,7 +4149,7 @@ impl ImageFit {
     }
 
     fn from_values(
-        or_type_value: (String, fastn_type::PropertyValue),
+        or_type_value: (String, fastn_resolved::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -4168,8 +4168,8 @@ impl ImageFit {
     }
 
     pub(crate) fn optional_image_fit(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,
@@ -4216,7 +4216,7 @@ pub enum Loading {
 
 impl Loading {
     fn from_optional_values(
-        or_type_value: Option<(String, fastn_type::PropertyValue)>,
+        or_type_value: Option<(String, fastn_resolved::PropertyValue)>,
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Option<Self>> {
@@ -4228,7 +4228,7 @@ impl Loading {
     }
 
     fn from_values(
-        or_type_value: (String, fastn_type::PropertyValue),
+        or_type_value: (String, fastn_resolved::PropertyValue),
         doc: &ftd::executor::TDoc,
         line_number: usize,
     ) -> ftd::executor::Result<Self> {
@@ -4247,8 +4247,8 @@ impl Loading {
     }
 
     pub(crate) fn loading_with_default(
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         doc: &ftd::executor::TDoc,
         line_number: usize,
         key: &str,

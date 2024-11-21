@@ -91,8 +91,8 @@ impl TDoc<'_> {
     pub(crate) fn insert_local_variables(
         &mut self,
         component_name: &str,
-        properties: &[fastn_type::Property],
-        arguments: &[fastn_type::Argument],
+        properties: &[fastn_resolved::Property],
+        arguments: &[fastn_resolved::Argument],
         container: &[usize],
         line_number: usize,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
@@ -120,8 +120,8 @@ impl TDoc<'_> {
     pub(crate) fn insert_local_variable(
         &mut self,
         component_name: &str,
-        properties: &[fastn_type::Property],
-        argument: &fastn_type::Argument,
+        properties: &[fastn_resolved::Property],
+        argument: &fastn_resolved::Argument,
         container: &[usize],
         line_number: usize,
         inherited_variables: &mut ftd::VecMap<(String, Vec<usize>)>,
@@ -141,7 +141,7 @@ impl TDoc<'_> {
 
         let name_in_component_definition = format!("{}.{}", component_name, argument.name);
         if argument.kind.is_module() {
-            if let fastn_type::Value::Module { name, .. } = properties
+            if let fastn_resolved::Value::Module { name, .. } = properties
                 .first()
                 .unwrap()
                 .resolve(&self.itdoc(), &Default::default())?
@@ -156,7 +156,7 @@ impl TDoc<'_> {
             (None, vec![]),
             |(mut default, mut conditions), property| {
                 if let Some(condition) = property.condition {
-                    conditions.push(fastn_type::ConditionalValue::new(
+                    conditions.push(fastn_resolved::ConditionalValue::new(
                         condition,
                         property.value,
                         property.line_number,
@@ -172,8 +172,8 @@ impl TDoc<'_> {
             (default.0, default.1, false)
         } else {
             (
-                fastn_type::PropertyValue::Value {
-                    value: fastn_type::Value::Optional {
+                fastn_resolved::PropertyValue::Value {
+                    value: fastn_resolved::Value::Optional {
                         data: Box::new(None),
                         kind: argument.kind.to_owned(),
                     },
@@ -235,7 +235,7 @@ impl TDoc<'_> {
             );
         }
 
-        let variable = fastn_type::Variable {
+        let variable = fastn_resolved::Variable {
             name: variable_name.to_string(),
             kind: argument.kind.to_owned(),
             mutable: argument.mutable,
@@ -261,15 +261,18 @@ impl TDoc<'_> {
     }
 }
 
-fn get_self_reference(default: &fastn_type::PropertyValue, component_name: &str) -> Vec<String> {
+fn get_self_reference(
+    default: &fastn_resolved::PropertyValue,
+    component_name: &str,
+) -> Vec<String> {
     match default {
-        fastn_type::PropertyValue::Reference { name, .. }
-        | fastn_type::PropertyValue::Clone { name, .. }
+        fastn_resolved::PropertyValue::Reference { name, .. }
+        | fastn_resolved::PropertyValue::Clone { name, .. }
             if name.starts_with(format!("{}.", component_name).as_str()) =>
         {
             vec![name.to_string()]
         }
-        fastn_type::PropertyValue::FunctionCall(f) => {
+        fastn_resolved::PropertyValue::FunctionCall(f) => {
             let mut self_reference = vec![];
             for arguments in f.values.values() {
                 self_reference.extend(get_self_reference(arguments, component_name));
@@ -280,13 +283,13 @@ fn get_self_reference(default: &fastn_type::PropertyValue, component_name: &str)
     }
 }
 
-fn set_reference_name(default: &mut fastn_type::PropertyValue, values: &ftd::Map<String>) {
+fn set_reference_name(default: &mut fastn_resolved::PropertyValue, values: &ftd::Map<String>) {
     match default {
-        fastn_type::PropertyValue::Reference { name, .. }
-        | fastn_type::PropertyValue::Clone { name, .. } => {
+        fastn_resolved::PropertyValue::Reference { name, .. }
+        | fastn_resolved::PropertyValue::Clone { name, .. } => {
             *name = values.get(name).unwrap().to_string();
         }
-        fastn_type::PropertyValue::FunctionCall(f) => {
+        fastn_resolved::PropertyValue::FunctionCall(f) => {
             for arguments in f.values.values_mut() {
                 set_reference_name(arguments, values);
             }

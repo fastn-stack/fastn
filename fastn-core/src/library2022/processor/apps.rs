@@ -1,9 +1,9 @@
 pub fn process(
     value: ftd_ast::VariableValue,
-    kind: fastn_type::Kind,
+    kind: fastn_resolved::Kind,
     doc: &ftd::interpreter::TDoc,
     req_config: &fastn_core::RequestConfig,
-) -> ftd::interpreter::Result<fastn_type::Value> {
+) -> ftd::interpreter::Result<fastn_resolved::Value> {
     use itertools::Itertools;
     #[derive(Debug, serde::Serialize)]
     struct UiApp {

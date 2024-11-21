@@ -8,13 +8,13 @@ pub struct Value {
 
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub struct PropertyWithPattern {
-    pub property: fastn_type::Property,
+    pub property: fastn_resolved::Property,
     pub pattern_with_eval: Option<(String, bool)>,
 }
 
 impl PropertyWithPattern {
     fn new(
-        property: fastn_type::Property,
+        property: fastn_resolved::Property,
         pattern_with_eval: Option<(String, bool)>,
     ) -> PropertyWithPattern {
         PropertyWithPattern {
@@ -83,10 +83,10 @@ impl Value {
     }
 }
 
-fn get_pattern_from_kind(kind: &fastn_type::Kind, doc_id: &str) -> Option<(String, bool)> {
+fn get_pattern_from_kind(kind: &fastn_resolved::Kind, doc_id: &str) -> Option<(String, bool)> {
     match kind {
-        fastn_type::Kind::OrType { name, .. } if name.eq(ftd::interpreter::FTD_LENGTH) => None,
-        fastn_type::Kind::OrType {
+        fastn_resolved::Kind::OrType { name, .. } if name.eq(ftd::interpreter::FTD_LENGTH) => None,
+        fastn_resolved::Kind::OrType {
             name,
             variant: Some(variant),
             full_variant,

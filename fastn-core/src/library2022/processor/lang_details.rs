@@ -1,9 +1,9 @@
 pub async fn process(
     value: ftd_ast::VariableValue,
-    kind: fastn_type::Kind,
+    kind: fastn_resolved::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &mut fastn_core::RequestConfig,
-) -> ftd::interpreter::Result<fastn_type::Value> {
+) -> ftd::interpreter::Result<fastn_resolved::Value> {
     let current_language = req_config.config.package.current_language_meta()?;
     let available_languages = req_config.config.package.available_languages_meta()?;
     doc.from_json(

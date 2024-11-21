@@ -9,18 +9,18 @@ pub trait WebComponentDefinitionExt {
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<
-        ftd::interpreter::StateWithThing<fastn_type::WebComponentDefinition>,
+        ftd::interpreter::StateWithThing<fastn_resolved::WebComponentDefinition>,
     >;
 }
 
-impl WebComponentDefinitionExt for fastn_type::WebComponentDefinition {
+impl WebComponentDefinitionExt for fastn_resolved::WebComponentDefinition {
     fn scan_ast(
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<()> {
         let web_component_definition = ast.get_web_component_definition(doc.name)?;
 
-        fastn_type::Argument::scan_ast_fields(
+        fastn_resolved::Argument::scan_ast_fields(
             web_component_definition.arguments,
             doc,
             &Default::default(),
@@ -33,14 +33,14 @@ impl WebComponentDefinitionExt for fastn_type::WebComponentDefinition {
         ast: ftd_ast::Ast,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<
-        ftd::interpreter::StateWithThing<fastn_type::WebComponentDefinition>,
+        ftd::interpreter::StateWithThing<fastn_resolved::WebComponentDefinition>,
     > {
         use ftd::interpreter::PropertyValueExt;
 
         let web_component_definition = ast.get_web_component_definition(doc.name)?;
         let name = doc.resolve_name(web_component_definition.name.as_str());
 
-        let js = try_ok_state!(fastn_type::PropertyValue::from_ast_value(
+        let js = try_ok_state!(fastn_resolved::PropertyValue::from_ast_value(
             ftd_ast::VariableValue::String {
                 line_number: web_component_definition.line_number(),
                 value: web_component_definition.js,
@@ -49,10 +49,10 @@ impl WebComponentDefinitionExt for fastn_type::WebComponentDefinition {
             },
             doc,
             false,
-            Some(&fastn_type::Kind::string().into_kind_data()),
+            Some(&fastn_resolved::Kind::string().into_kind_data()),
         )?);
 
-        let arguments = try_ok_state!(fastn_type::Argument::from_ast_fields(
+        let arguments = try_ok_state!(fastn_resolved::Argument::from_ast_fields(
             web_component_definition.name.as_str(),
             web_component_definition.arguments,
             doc,
@@ -60,7 +60,7 @@ impl WebComponentDefinitionExt for fastn_type::WebComponentDefinition {
         )?);
 
         Ok(ftd::interpreter::StateWithThing::new_thing(
-            fastn_type::WebComponentDefinition::new(
+            fastn_resolved::WebComponentDefinition::new(
                 name.as_str(),
                 arguments,
                 js,

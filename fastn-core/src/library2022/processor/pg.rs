@@ -1,9 +1,9 @@
 pub async fn process(
     value: ftd_ast::VariableValue,
-    kind: fastn_type::Kind,
+    kind: fastn_resolved::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &fastn_core::RequestConfig,
-) -> ftd::interpreter::Result<fastn_type::Value> {
+) -> ftd::interpreter::Result<fastn_resolved::Value> {
     let (headers, query) = super::sqlite::get_p1_data("pg", &value, doc.name)?;
 
     let query_response = execute_query(
@@ -66,19 +66,25 @@ fn resolve_variable_from_doc(
     };
 
     Ok(match (e, thing) {
-        (&postgres_types::Type::TEXT, fastn_type::Value::String { text, .. }) => Box::new(text),
-        (&postgres_types::Type::VARCHAR, fastn_type::Value::String { text, .. }) => Box::new(text),
-        (&postgres_types::Type::INT4, fastn_type::Value::Integer { value, .. }) => {
+        (&postgres_types::Type::TEXT, fastn_resolved::Value::String { text, .. }) => Box::new(text),
+        (&postgres_types::Type::VARCHAR, fastn_resolved::Value::String { text, .. }) => {
+            Box::new(text)
+        }
+        (&postgres_types::Type::INT4, fastn_resolved::Value::Integer { value, .. }) => {
             Box::new(value as i32)
         }
-        (&postgres_types::Type::INT8, fastn_type::Value::Integer { value, .. }) => Box::new(value),
-        (&postgres_types::Type::FLOAT4, fastn_type::Value::Decimal { value, .. }) => {
-            Box::new(value as f32)
-        }
-        (&postgres_types::Type::FLOAT8, fastn_type::Value::Decimal { value, .. }) => {
+        (&postgres_types::Type::INT8, fastn_resolved::Value::Integer { value, .. }) => {
             Box::new(value)
         }
-        (&postgres_types::Type::BOOL, fastn_type::Value::Boolean { value, .. }) => Box::new(value),
+        (&postgres_types::Type::FLOAT4, fastn_resolved::Value::Decimal { value, .. }) => {
+            Box::new(value as f32)
+        }
+        (&postgres_types::Type::FLOAT8, fastn_resolved::Value::Decimal { value, .. }) => {
+            Box::new(value)
+        }
+        (&postgres_types::Type::BOOL, fastn_resolved::Value::Boolean { value, .. }) => {
+            Box::new(value)
+        }
         (e, a) => {
             return ftd::interpreter::utils::e2(
                 format!("for {} postgresql expected ${:?}, found {:?}", var, e, a),

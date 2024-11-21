@@ -1,10 +1,10 @@
 pub async fn fetch_files(
     value: ftd_ast::VariableValue,
-    kind: fastn_type::Kind,
+    kind: fastn_resolved::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &fastn_core::RequestConfig,
     preview_session_id: &Option<String>,
-) -> ftd::interpreter::Result<fastn_type::Value> {
+) -> ftd::interpreter::Result<fastn_resolved::Value> {
     if !kind.is_string() {
         return ftd::interpreter::utils::e2(
             format!("Expected kind is `string`, found: `{:?}`", kind),
@@ -24,7 +24,7 @@ pub async fn fetch_files(
             line_number: value.line_number(),
         })?;
 
-    Ok(fastn_type::Value::String {
+    Ok(fastn_resolved::Value::String {
         text: req_config
             .config
             .ds

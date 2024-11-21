@@ -2,7 +2,7 @@
 pub struct RawNode {
     pub name: String,
     pub node: ftd::node::Node,
-    pub arguments: Vec<fastn_type::Argument>,
+    pub arguments: Vec<fastn_resolved::Argument>,
 }
 
 impl RawNode {
@@ -29,8 +29,8 @@ impl RawNode {
 
 /*pub struct HelperNode {
     pub name: String,
-    pub properties: Vec<(String, fastn_type::Property)>,
-    pub iteration: Option<fastn_type::Loop>,
+    pub properties: Vec<(String, fastn_resolved::Property)>,
+    pub iteration: Option<fastn_resolved::Loop>,
     pub node: ftd::node::Node,
 }*/
 

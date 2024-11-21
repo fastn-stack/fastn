@@ -886,13 +886,13 @@ impl UDFStatement {
 pub struct ExpressionGenerator;
 
 impl ExpressionGenerator {
-    pub fn to_js(&self, node: &fastn_type::evalexpr::ExprNode) -> String {
+    pub fn to_js(&self, node: &fastn_resolved::evalexpr::ExprNode) -> String {
         self.to_js_(node, true, &[], false)
     }
 
     pub fn to_js_(
         &self,
-        node: &fastn_type::evalexpr::ExprNode,
+        node: &fastn_resolved::evalexpr::ExprNode,
         root: bool,
         arguments: &[(String, Option<String>)],
         no_getter: bool,
@@ -1010,12 +1010,12 @@ impl ExpressionGenerator {
         if let Some(mut operator) = self.has_operator(node.operator()) {
             // Todo: if node.children().len() != 2 {throw error}
             let first = node.children().first().unwrap(); //todo remove unwrap()
-            if matches!(node.operator(), fastn_type::evalexpr::Operator::Not)
-                || matches!(node.operator(), fastn_type::evalexpr::Operator::Neg)
+            if matches!(node.operator(), fastn_resolved::evalexpr::Operator::Not)
+                || matches!(node.operator(), fastn_resolved::evalexpr::Operator::Neg)
             {
                 return [operator, self.to_js_(first, false, arguments, false)].join("");
             }
-            if matches!(node.operator(), fastn_type::evalexpr::Operator::Neq) {
+            if matches!(node.operator(), fastn_resolved::evalexpr::Operator::Neq) {
                 // For js conversion
                 operator = "!==".to_string();
             }
@@ -1073,54 +1073,56 @@ impl ExpressionGenerator {
         }
     }
 
-    pub fn has_value(&self, operator: &fastn_type::evalexpr::Operator) -> Option<String> {
+    pub fn has_value(&self, operator: &fastn_resolved::evalexpr::Operator) -> Option<String> {
         match operator {
-            fastn_type::evalexpr::Operator::Const { .. }
-            | fastn_type::evalexpr::Operator::VariableIdentifierRead { .. }
-            | fastn_type::evalexpr::Operator::VariableIdentifierWrite { .. } => {
+            fastn_resolved::evalexpr::Operator::Const { .. }
+            | fastn_resolved::evalexpr::Operator::VariableIdentifierRead { .. }
+            | fastn_resolved::evalexpr::Operator::VariableIdentifierWrite { .. } => {
                 Some(operator.to_string())
             }
             _ => None,
         }
     }
 
-    pub fn has_function(&self, operator: &fastn_type::evalexpr::Operator) -> Option<String> {
+    pub fn has_function(&self, operator: &fastn_resolved::evalexpr::Operator) -> Option<String> {
         match operator {
-            fastn_type::evalexpr::Operator::FunctionIdentifier { .. } => Some(operator.to_string()),
+            fastn_resolved::evalexpr::Operator::FunctionIdentifier { .. } => {
+                Some(operator.to_string())
+            }
             _ => None,
         }
     }
 
-    pub fn is_assignment(&self, operator: &fastn_type::evalexpr::Operator) -> bool {
-        matches!(operator, fastn_type::evalexpr::Operator::Assign)
+    pub fn is_assignment(&self, operator: &fastn_resolved::evalexpr::Operator) -> bool {
+        matches!(operator, fastn_resolved::evalexpr::Operator::Assign)
     }
 
-    pub fn is_chain(&self, operator: &fastn_type::evalexpr::Operator) -> bool {
-        matches!(operator, fastn_type::evalexpr::Operator::Chain)
+    pub fn is_chain(&self, operator: &fastn_resolved::evalexpr::Operator) -> bool {
+        matches!(operator, fastn_resolved::evalexpr::Operator::Chain)
     }
 
-    pub fn is_tuple(&self, operator: &fastn_type::evalexpr::Operator) -> bool {
-        matches!(operator, fastn_type::evalexpr::Operator::Tuple)
+    pub fn is_tuple(&self, operator: &fastn_resolved::evalexpr::Operator) -> bool {
+        matches!(operator, fastn_resolved::evalexpr::Operator::Tuple)
     }
 
-    pub fn is_null(&self, operator: &fastn_type::evalexpr::Operator) -> bool {
+    pub fn is_null(&self, operator: &fastn_resolved::evalexpr::Operator) -> bool {
         matches!(
             operator,
-            fastn_type::evalexpr::Operator::Const {
-                value: fastn_type::evalexpr::Value::Empty,
+            fastn_resolved::evalexpr::Operator::Const {
+                value: fastn_resolved::evalexpr::Value::Empty,
             }
         )
     }
 
-    pub fn function_name(&self, operator: &fastn_type::evalexpr::Operator) -> Option<String> {
-        if let fastn_type::evalexpr::Operator::FunctionIdentifier { identifier } = operator {
+    pub fn function_name(&self, operator: &fastn_resolved::evalexpr::Operator) -> Option<String> {
+        if let fastn_resolved::evalexpr::Operator::FunctionIdentifier { identifier } = operator {
             Some(identifier.to_string())
         } else {
             None
         }
     }
 
-    pub fn has_operator(&self, operator: &fastn_type::evalexpr::Operator) -> Option<String> {
+    pub fn has_operator(&self, operator: &fastn_resolved::evalexpr::Operator) -> Option<String> {
         if self.has_value(operator).is_none()
             && self.has_function(operator).is_none()
             && !self.is_chain(operator)
@@ -1134,8 +1136,8 @@ impl ExpressionGenerator {
         }
     }
 
-    pub fn is_root(&self, operator: &fastn_type::evalexpr::Operator) -> bool {
-        matches!(operator, fastn_type::evalexpr::Operator::RootNode)
+    pub fn is_root(&self, operator: &fastn_resolved::evalexpr::Operator) -> bool {
+        matches!(operator, fastn_resolved::evalexpr::Operator::RootNode)
     }
 }
 

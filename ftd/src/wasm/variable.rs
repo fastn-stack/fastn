@@ -1,4 +1,4 @@
-impl fastn_type::Variable {
+impl fastn_resolved::Variable {
     // Input:
     //  "foo#message", type: String, value: "Hello World"
     // Output:
@@ -7,7 +7,7 @@ impl fastn_type::Variable {
     // )
     pub fn global_expression(&self, idx: usize) -> fastn_wasm::Expression {
         let create = match &self.value {
-            fastn_type::PropertyValue::Value { value, .. } => value.create(),
+            fastn_resolved::PropertyValue::Value { value, .. } => value.create(),
             _ => panic!("Not implemented: {:?}", self),
         };
 

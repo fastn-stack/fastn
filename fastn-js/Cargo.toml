@@ -13,7 +13,7 @@ homepage.workspace = true
 pretty.workspace = true
 itertools.workspace = true
 indoc.workspace = true
-fastn-type.workspace = true
+fastn-resolved.workspace = true
 prettify-js.workspace = true
 thiserror.workspace = true
 

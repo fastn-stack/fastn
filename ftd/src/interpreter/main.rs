@@ -26,7 +26,7 @@ use ftd::interpreter::{ComponentExt, VariableExt};
 /// - `parsed_libs`: an `ftd::Map` of `ParsedDocument`s that represents the parsed libraries for the
 ///   interpreter.
 ///
-/// - `instructions`: a `Vec` of `fastn_type::Component`s that represents the instructions
+/// - `instructions`: a `Vec` of `fastn_resolved::Component`s that represents the instructions
 ///   that the interpreter has processed.
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct InterpreterState {
@@ -37,7 +37,7 @@ pub struct InterpreterState {
     pub to_process: ToProcess,
     pub pending_imports: PendingImports,
     pub parsed_libs: ftd::Map<ParsedDocument>,
-    pub instructions: Vec<fastn_type::ComponentInvocation>,
+    pub instructions: Vec<fastn_resolved::ComponentInvocation>,
     pub in_process: Vec<(String, usize, ftd_ast::Ast)>,
 }
 
@@ -87,13 +87,13 @@ impl InterpreterState {
     fn new(id: String) -> InterpreterState {
         InterpreterState {
             id,
-            bag: ftd::interpreter::default::get_default_bag().clone(),
+            bag: ftd::interpreter::default::builtins().clone(),
             ..Default::default()
         }
     }
 
     /**
-    The `tdoc` method is a function that is defined within the `InterpreterState` struct. It
+    The `tdoc` method is a function defined within the `InterpreterState` struct. It
     takes in two parameters:
 
     - `doc_name`: a reference to a string slice representing the name of the document
@@ -293,10 +293,10 @@ impl InterpreterState {
             if ast.is_record() {
                 if !is_in_bag {
                     if number_of_scan.eq(&1) {
-                        fastn_type::Record::scan_ast(ast, &mut doc)?;
+                        fastn_resolved::Record::scan_ast(ast, &mut doc)?;
                         continue;
                     } else {
-                        match fastn_type::Record::from_ast(ast, &mut doc)? {
+                        match fastn_resolved::Record::from_ast(ast, &mut doc)? {
                             ftd::interpreter::StateWithThing::State(s) => {
                                 return Ok(s.into_interpreter(self))
                             }
@@ -320,10 +320,10 @@ impl InterpreterState {
             } else if ast.is_or_type() {
                 if !is_in_bag {
                     if number_of_scan.eq(&1) {
-                        fastn_type::OrType::scan_ast(ast, &mut doc)?;
+                        fastn_resolved::OrType::scan_ast(ast, &mut doc)?;
                         continue;
                     } else {
-                        match fastn_type::OrType::from_ast(ast, &mut doc)? {
+                        match fastn_resolved::OrType::from_ast(ast, &mut doc)? {
                             ftd::interpreter::StateWithThing::State(s) => {
                                 return Ok(s.into_interpreter(self))
                             }
@@ -347,10 +347,10 @@ impl InterpreterState {
             } else if ast.is_function() {
                 if !is_in_bag {
                     if number_of_scan.eq(&1) {
-                        fastn_type::Function::scan_ast(ast, &mut doc)?;
+                        fastn_resolved::Function::scan_ast(ast, &mut doc)?;
                         continue;
                     } else {
-                        match fastn_type::Function::from_ast(ast, &mut doc)? {
+                        match fastn_resolved::Function::from_ast(ast, &mut doc)? {
                             ftd::interpreter::StateWithThing::State(s) => {
                                 return Ok(s.into_interpreter(self))
                             }
@@ -384,10 +384,10 @@ impl InterpreterState {
             } else if ast.is_variable_definition() {
                 if !is_in_bag {
                     if number_of_scan.eq(&1) {
-                        fastn_type::Variable::scan_ast(ast, &mut doc)?;
+                        fastn_resolved::Variable::scan_ast(ast, &mut doc)?;
                         continue;
                     } else {
-                        match fastn_type::Variable::from_ast(ast, &mut doc, number_of_scan)? {
+                        match fastn_resolved::Variable::from_ast(ast, &mut doc, number_of_scan)? {
                             ftd::interpreter::StateWithThing::State(s) => {
                                 return Ok(s.into_interpreter(self))
                             }
@@ -410,10 +410,10 @@ impl InterpreterState {
                 }
             } else if ast.is_variable_invocation() {
                 if number_of_scan.eq(&1) {
-                    fastn_type::Variable::scan_update_from_ast(ast, &mut doc)?;
+                    fastn_resolved::Variable::scan_update_from_ast(ast, &mut doc)?;
                     continue;
                 } else {
-                    match fastn_type::Variable::update_from_ast(ast, &mut doc)? {
+                    match fastn_resolved::Variable::update_from_ast(ast, &mut doc)? {
                         ftd::interpreter::StateWithThing::State(s) => {
                             return Ok(s.into_interpreter(self))
                         }
@@ -429,10 +429,10 @@ impl InterpreterState {
             } else if ast.is_component_definition() {
                 if !is_in_bag {
                     if number_of_scan.eq(&1) {
-                        fastn_type::ComponentDefinition::scan_ast(ast, &mut doc)?;
+                        fastn_resolved::ComponentDefinition::scan_ast(ast, &mut doc)?;
                         continue;
                     } else {
-                        match fastn_type::ComponentDefinition::from_ast(ast, &mut doc)? {
+                        match fastn_resolved::ComponentDefinition::from_ast(ast, &mut doc)? {
                             ftd::interpreter::StateWithThing::State(s) => {
                                 return Ok(s.into_interpreter(self))
                             }
@@ -465,10 +465,10 @@ impl InterpreterState {
             } else if ast.is_web_component_definition() {
                 if !is_in_bag {
                     if number_of_scan.eq(&1) {
-                        fastn_type::WebComponentDefinition::scan_ast(ast, &mut doc)?;
+                        fastn_resolved::WebComponentDefinition::scan_ast(ast, &mut doc)?;
                         continue;
                     } else {
-                        match fastn_type::WebComponentDefinition::from_ast(ast, &mut doc)? {
+                        match fastn_resolved::WebComponentDefinition::from_ast(ast, &mut doc)? {
                             ftd::interpreter::StateWithThing::State(s) => {
                                 return Ok(s.into_interpreter(self))
                             }
@@ -497,10 +497,10 @@ impl InterpreterState {
                 }
             } else if ast.is_component() {
                 if number_of_scan.eq(&1) {
-                    fastn_type::ComponentInvocation::scan_ast(ast, &mut doc)?;
+                    fastn_resolved::ComponentInvocation::scan_ast(ast, &mut doc)?;
                     continue;
                 } else {
-                    match fastn_type::ComponentInvocation::from_ast(ast, &mut doc)? {
+                    match fastn_resolved::ComponentInvocation::from_ast(ast, &mut doc)? {
                         ftd::interpreter::StateWithThing::State(s) => {
                             return Ok(s.into_interpreter(self))
                         }
@@ -868,7 +868,7 @@ impl InterpreterState {
     #[tracing::instrument(skip_all)]
     pub fn continue_after_processor(
         mut self,
-        value: fastn_type::Value,
+        value: fastn_resolved::Value,
         ast: ftd_ast::Ast,
     ) -> ftd::interpreter::Result<Interpreter> {
         use ftd::interpreter::KindDataExt;
@@ -880,7 +880,7 @@ impl InterpreterState {
         let mut doc = ftd::interpreter::TDoc::new_state(&name, &aliases, &mut self);
         let variable_definition = ast.get_variable_definition(doc.name)?;
         let name = doc.resolve_name(variable_definition.name.as_str());
-        let kind = match fastn_type::KindData::from_ast_kind(
+        let kind = match fastn_resolved::KindData::from_ast_kind(
             variable_definition.kind,
             &Default::default(),
             &mut doc,
@@ -894,7 +894,7 @@ impl InterpreterState {
         let value =
             value.into_property_value(variable_definition.mutable, variable_definition.line_number);
 
-        let variable = fastn_type::Variable {
+        let variable = fastn_resolved::Variable {
             name,
             kind,
             mutable: variable_definition.mutable,
@@ -918,14 +918,14 @@ impl InterpreterState {
         mut self,
         module: &str,
         variable: &str,
-        value: fastn_type::Value,
+        value: fastn_resolved::Value,
     ) -> ftd::interpreter::Result<Interpreter> {
         let parsed_document = self.parsed_libs.get(module).unwrap();
         let name = parsed_document.name.to_string();
         let aliases = parsed_document.doc_aliases.clone();
         let doc = ftd::interpreter::TDoc::new_state(&name, &aliases, &mut self);
         let var_name = doc.resolve_name(variable);
-        let variable = fastn_type::Variable {
+        let variable = fastn_resolved::Variable {
             name: var_name,
             kind: value.kind().into_kind_data(),
             mutable: false,
@@ -1185,7 +1185,7 @@ impl InterpreterWithoutState {
 pub struct Document {
     pub data: indexmap::IndexMap<String, ftd::interpreter::Thing>,
     pub name: String,
-    pub tree: Vec<fastn_type::ComponentInvocation>,
+    pub tree: Vec<fastn_resolved::ComponentInvocation>,
     pub aliases: ftd::Map<String>,
     pub js: std::collections::HashSet<String>,
     pub css: std::collections::HashSet<String>,
@@ -1199,7 +1199,10 @@ impl Document {
             bag: ftd::interpreter::BagOrState::Bag(&self.data),
         }
     }
-    pub fn get_instructions(&self, component_name: &str) -> Vec<fastn_type::ComponentInvocation> {
+    pub fn get_instructions(
+        &self,
+        component_name: &str,
+    ) -> Vec<fastn_resolved::ComponentInvocation> {
         use itertools::Itertools;
 
         self.tree
@@ -1217,7 +1220,7 @@ impl Document {
     pub fn get_component_by_id(
         &self,
         component_id: &str,
-    ) -> Option<&fastn_type::ComponentInvocation> {
+    ) -> Option<&fastn_resolved::ComponentInvocation> {
         self.tree.iter().find(|v| {
             if let Some(id) = &v.id {
                 return id.eq(component_id);
@@ -1314,22 +1317,27 @@ impl Document {
         }
     }
 
-    fn value_to_json(&self, v: &fastn_type::Value) -> ftd::interpreter::Result<serde_json::Value> {
+    fn value_to_json(
+        &self,
+        v: &fastn_resolved::Value,
+    ) -> ftd::interpreter::Result<serde_json::Value> {
         use ftd::interpreter::PropertyValueExt;
 
         let doc = self.tdoc();
         Ok(match v {
-            fastn_type::Value::Integer { value } => {
+            fastn_resolved::Value::Integer { value } => {
                 serde_json::Value::Number(serde_json::Number::from(*value))
             }
-            fastn_type::Value::Boolean { value } => serde_json::Value::Bool(*value),
-            fastn_type::Value::Decimal { value } => {
+            fastn_resolved::Value::Boolean { value } => serde_json::Value::Bool(*value),
+            fastn_resolved::Value::Decimal { value } => {
                 serde_json::Value::Number(serde_json::Number::from_f64(*value).unwrap())
                 // TODO: remove unwrap
             }
-            fastn_type::Value::String { text, .. } => serde_json::Value::String(text.to_owned()),
-            fastn_type::Value::Record { fields, .. } => self.object_to_json(fields)?,
-            fastn_type::Value::OrType { variant, value, .. } => {
+            fastn_resolved::Value::String { text, .. } => {
+                serde_json::Value::String(text.to_owned())
+            }
+            fastn_resolved::Value::Record { fields, .. } => self.object_to_json(fields)?,
+            fastn_resolved::Value::OrType { variant, value, .. } => {
                 let mut map = serde_json::Map::new();
                 map.insert(
                     "type".to_string(),
@@ -1341,13 +1349,13 @@ impl Document {
                 );
                 serde_json::Value::Object(map)
             }
-            fastn_type::Value::List { data, .. } => self.list_to_json(
+            fastn_resolved::Value::List { data, .. } => self.list_to_json(
                 data.iter()
                     .filter_map(|v| v.clone().resolve(&doc, v.line_number()).ok())
-                    .collect::<Vec<fastn_type::Value>>()
+                    .collect::<Vec<fastn_resolved::Value>>()
                     .as_slice(),
             )?,
-            fastn_type::Value::Optional { data, .. } => match data.as_ref() {
+            fastn_resolved::Value::Optional { data, .. } => match data.as_ref() {
                 Some(v) => self.value_to_json(v)?,
                 None => serde_json::Value::Null,
             },
@@ -1363,7 +1371,7 @@ impl Document {
 
     fn list_to_json(
         &self,
-        data: &[fastn_type::Value],
+        data: &[fastn_resolved::Value],
     ) -> ftd::interpreter::Result<serde_json::Value> {
         let mut list = vec![];
         for item in data.iter() {
@@ -1374,7 +1382,7 @@ impl Document {
 
     fn object_to_json(
         &self,
-        fields: &ftd::Map<fastn_type::PropertyValue>,
+        fields: &ftd::Map<fastn_resolved::PropertyValue>,
     ) -> ftd::interpreter::Result<serde_json::Value> {
         let mut map = serde_json::Map::new();
         for (k, v) in fields.iter() {
@@ -1385,7 +1393,7 @@ impl Document {
 
     fn property_value_to_json(
         &self,
-        v: &fastn_type::PropertyValue,
+        v: &fastn_resolved::PropertyValue,
     ) -> ftd::interpreter::Result<serde_json::Value> {
         use ftd::interpreter::PropertyValueExt;
 

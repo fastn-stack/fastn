@@ -1,9 +1,9 @@
 pub fn process(
     value: ftd_ast::VariableValue,
-    kind: fastn_type::Kind,
+    kind: fastn_resolved::Kind,
     doc: &ftd::interpreter::TDoc,
     req_config: &mut fastn_core::RequestConfig,
-) -> ftd::interpreter::Result<fastn_type::Value> {
+) -> ftd::interpreter::Result<fastn_resolved::Value> {
     req_config.response_is_cacheable = false;
 
     let (section_name, headers, body, line_number) = match value.get_record(doc.name) {
@@ -34,7 +34,7 @@ pub fn process(
 
     if let Some(data) = req_config.extra_data.get(key.as_str()) {
         return match kind {
-            fastn_type::Kind::Integer => {
+            fastn_resolved::Kind::Integer => {
                 let value2 =
                     data.parse::<i64>()
                         .map_err(|e| ftd::interpreter::Error::ParseError {
@@ -44,7 +44,7 @@ pub fn process(
                         })?;
                 doc.from_json(&value2, &kind, &value)
             }
-            fastn_type::Kind::Decimal { .. } => {
+            fastn_resolved::Kind::Decimal { .. } => {
                 let value2 =
                     data.parse::<f64>()
                         .map_err(|e| ftd::interpreter::Error::ParseError {
@@ -54,7 +54,7 @@ pub fn process(
                         })?;
                 doc.from_json(&value2, &kind, &value)
             }
-            fastn_type::Kind::Boolean { .. } => {
+            fastn_resolved::Kind::Boolean { .. } => {
                 let value2 =
                     data.parse::<bool>()
                         .map_err(|e| ftd::interpreter::Error::ParseError {

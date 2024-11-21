@@ -1,10 +1,10 @@
 pub async fn process(
     value: ftd_ast::VariableValue,
-    kind: fastn_type::Kind,
+    kind: fastn_resolved::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
     req_config: &mut fastn_core::RequestConfig,
     preview_session_id: &Option<String>,
-) -> ftd::interpreter::Result<fastn_type::Value> {
+) -> ftd::interpreter::Result<fastn_resolved::Value> {
     // TODO: document key should be optional
 
     let headers = match value.get_record(doc.name) {
