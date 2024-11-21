@@ -278,10 +278,10 @@ pub(crate) fn get_set_property_values_for_provided_component_properties(
 
     // Attempt to retrieve component or web component arguments
     doc.get_opt_component(component_name)
-        .map(|v| v.arguments)
+        .map(|v| &v.arguments)
         .or(doc
             .get_opt_web_component(component_name)
-            .map(|v| v.arguments))
+            .map(|v| &v.arguments))
         .map(|arguments| {
             // Collect valid arguments matching the provided properties and their set property values
             arguments

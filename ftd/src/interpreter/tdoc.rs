@@ -69,7 +69,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_resolved::Record> {
+    ) -> ftd::interpreter::Result<&fastn_resolved::Record> {
         match self.get_thing(name, line_number)? {
             ftd::interpreter::Thing::Record(r) => Ok(r),
             t => self.err(
@@ -85,7 +85,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_resolved::OrType> {
+    ) -> ftd::interpreter::Result<&fastn_resolved::OrType> {
         match self.get_thing(name, line_number)? {
             ftd::interpreter::Thing::OrType(ot) => Ok(ot),
             t => self.err(
@@ -110,7 +110,7 @@ impl<'a> TDoc<'a> {
                 Ok(ftd::interpreter::StateWithThing::new_continue())
             }
             ftd::interpreter::StateWithThing::Thing(ftd::interpreter::Thing::Record(r)) => {
-                Ok(ftd::interpreter::StateWithThing::new_thing(r))
+                Ok(ftd::interpreter::StateWithThing::new_thing(r.clone()))
             }
             ftd::interpreter::StateWithThing::Thing(t) => self.err(
                 format!("Expected Record, found: `{:?}`", t).as_str(),
@@ -125,7 +125,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_resolved::Variable> {
+    ) -> ftd::interpreter::Result<&fastn_resolved::Variable> {
         match self.get_thing(name, line_number)? {
             ftd::interpreter::Thing::Variable(r) => Ok(r),
             t => self.err(
@@ -141,7 +141,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         line_number: usize,
         name: &'a str,
-    ) -> ftd::interpreter::Result<fastn_resolved::Value> {
+    ) -> ftd::interpreter::Result<&fastn_resolved::Value> {
         use ftd::interpreter::PropertyValueExt;
         // TODO: name can be a.b.c, and a and a.b are records with right fields
         match self.get_thing(name, line_number)? {
@@ -873,7 +873,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<ftd::interpreter::Thing> {
+    ) -> ftd::interpreter::Result<&ftd::interpreter::Thing> {
         let name = name
             .strip_prefix(ftd::interpreter::utils::REFERENCE)
             .or_else(|| name.strip_prefix(ftd::interpreter::utils::CLONE))
@@ -891,7 +891,7 @@ impl<'a> TDoc<'a> {
             line_number: usize,
             name: &str,
             thing: &ftd::interpreter::Thing,
-        ) -> ftd::interpreter::Result<ftd::interpreter::Thing> {
+        ) -> ftd::interpreter::Result<&ftd::interpreter::Thing> {
             use ftd::interpreter::PropertyValueExt;
             use itertools::Itertools;
 
@@ -1754,7 +1754,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<(ftd::interpreter::Thing, Option<String>)> {
+    ) -> ftd::interpreter::Result<(&ftd::interpreter::Thing, Option<String>)> {
         self.get_initial_thing_with_inherited(name, line_number, &Default::default())
     }
 
@@ -1763,7 +1763,7 @@ impl<'a> TDoc<'a> {
         name: &'a str,
         line_number: usize,
         inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::interpreter::Result<(ftd::interpreter::Thing, Option<String>)> {
+    ) -> ftd::interpreter::Result<(&ftd::interpreter::Thing, Option<String>)> {
         let name = name
             .strip_prefix(ftd::interpreter::utils::REFERENCE)
             .or_else(|| name.strip_prefix(ftd::interpreter::utils::CLONE))
@@ -1787,7 +1787,7 @@ impl<'a> TDoc<'a> {
             tdoc: &TDoc,
             name: &str,
             line_number: usize,
-        ) -> ftd::interpreter::Result<(ftd::interpreter::Thing, Option<String>)> {
+        ) -> ftd::interpreter::Result<(&ftd::interpreter::Thing, Option<String>)> {
             let (splited_name, remaining_value) = if let Ok(function_name) =
                 ftd::interpreter::utils::get_function_name(name, tdoc.name, line_number)
             {
@@ -2234,7 +2234,7 @@ impl<'a> fastn_resolved::tdoc::TDoc for TDoc<'a> {
         self.name
     }
 
-    fn get_opt_component(&self, name: &str) -> Option<ComponentDefinition> {
+    fn get_opt_component(&self, name: &str) -> Option<&ComponentDefinition> {
         match self.get_thing(name, 0).ok()? {
             ftd::interpreter::Thing::Component(c) => Some(c),
             _ => None,

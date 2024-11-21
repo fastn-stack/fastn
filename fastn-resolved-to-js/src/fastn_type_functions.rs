@@ -20,7 +20,7 @@ impl FunctionCallExt for fastn_resolved::FunctionCall {
             );
         }
         let function = doc.get_opt_function(name.as_str()).unwrap();
-        for argument in function.arguments {
+        for argument in function.arguments.iter() {
             if let Some(value) = self.values.get(argument.name.as_str()) {
                 parameters.push((
                     argument.name.to_string(),
@@ -184,7 +184,7 @@ impl fastn_resolved_to_js::extensions::ValueExt for fastn_resolved::Value {
             } => {
                 let record = doc.get_opt_record(name).unwrap();
                 let mut fields = vec![];
-                for field in record.fields {
+                for field in record.fields.iter() {
                     if let Some(value) = record_fields.get(field.name.as_str()) {
                         fields.push((
                             field.name.to_string(),
