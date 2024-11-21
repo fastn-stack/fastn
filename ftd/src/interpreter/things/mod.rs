@@ -17,15 +17,20 @@ pub trait ThingExt {
         line_number: usize,
     ) -> ftd::interpreter::Result<fastn_resolved::Variable>;
     fn record(
-        self,
+        &self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_resolved::Record>;
+    ) -> ftd::interpreter::Result<&fastn_resolved::Record>;
+    fn web_component(
+        &self,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<&fastn_resolved::WebComponentDefinition>;
     fn function(
-        self,
+        &self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_resolved::Function>;
+    ) -> ftd::interpreter::Result<&fastn_resolved::Function>;
 }
 
 impl ThingExt for Thing {
@@ -45,10 +50,10 @@ impl ThingExt for Thing {
     }
 
     fn record(
-        self,
+        &self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_resolved::Record> {
+    ) -> ftd::interpreter::Result<&fastn_resolved::Record> {
         match self {
             ftd::interpreter::Thing::Record(v) => Ok(v),
             t => ftd::interpreter::utils::e2(
@@ -59,11 +64,26 @@ impl ThingExt for Thing {
         }
     }
 
-    fn function(
-        self,
+    fn web_component(
+        &self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<fastn_resolved::Function> {
+    ) -> ftd::interpreter::Result<&fastn_resolved::WebComponentDefinition> {
+        match self {
+            ftd::interpreter::Thing::WebComponent(v) => Ok(v),
+            t => ftd::interpreter::utils::e2(
+                format!("Expected WebComponent, found: `{:?}`", t),
+                doc_id,
+                line_number,
+            ),
+        }
+    }
+
+    fn function(
+        &self,
+        doc_id: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<&fastn_resolved::Function> {
         match self {
             ftd::interpreter::Thing::Function(v) => Ok(v),
             t => ftd::interpreter::utils::e2(

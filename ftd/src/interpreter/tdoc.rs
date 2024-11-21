@@ -69,7 +69,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<&fastn_resolved::Record> {
+    ) -> ftd::interpreter::Result<fastn_resolved::Record> {
         match self.get_thing(name, line_number)? {
             ftd::interpreter::Thing::Record(r) => Ok(r),
             t => self.err(
@@ -85,7 +85,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<&fastn_resolved::OrType> {
+    ) -> ftd::interpreter::Result<fastn_resolved::OrType> {
         match self.get_thing(name, line_number)? {
             ftd::interpreter::Thing::OrType(ot) => Ok(ot),
             t => self.err(
@@ -125,7 +125,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<&fastn_resolved::Variable> {
+    ) -> ftd::interpreter::Result<fastn_resolved::Variable> {
         match self.get_thing(name, line_number)? {
             ftd::interpreter::Thing::Variable(r) => Ok(r),
             t => self.err(
@@ -141,7 +141,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         line_number: usize,
         name: &'a str,
-    ) -> ftd::interpreter::Result<&fastn_resolved::Value> {
+    ) -> ftd::interpreter::Result<fastn_resolved::Value> {
         use ftd::interpreter::PropertyValueExt;
         // TODO: name can be a.b.c, and a and a.b are records with right fields
         match self.get_thing(name, line_number)? {
@@ -873,7 +873,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<&ftd::interpreter::Thing> {
+    ) -> ftd::interpreter::Result<ftd::interpreter::Thing> {
         let name = name
             .strip_prefix(ftd::interpreter::utils::REFERENCE)
             .or_else(|| name.strip_prefix(ftd::interpreter::utils::CLONE))
@@ -882,7 +882,7 @@ impl<'a> TDoc<'a> {
         let (initial_thing, remaining) = self.get_initial_thing(name, line_number)?;
 
         if let Some(remaining) = remaining {
-            return get_thing_(self, line_number, remaining.as_str(), &initial_thing);
+            return get_thing_(self, line_number, remaining.as_str(), initial_thing);
         }
         return Ok(initial_thing);
 
@@ -890,8 +890,8 @@ impl<'a> TDoc<'a> {
             doc: &ftd::interpreter::TDoc,
             line_number: usize,
             name: &str,
-            thing: &ftd::interpreter::Thing,
-        ) -> ftd::interpreter::Result<&ftd::interpreter::Thing> {
+            thing: ftd::interpreter::Thing,
+        ) -> ftd::interpreter::Result<ftd::interpreter::Thing> {
             use ftd::interpreter::PropertyValueExt;
             use itertools::Itertools;
 
@@ -961,7 +961,7 @@ impl<'a> TDoc<'a> {
                                     is_static: !mutable,
                                 });
                             if let Some(remaining) = remaining {
-                                return get_thing_(doc, line_number, &remaining, &thing);
+                                return get_thing_(doc, line_number, &remaining, thing);
                             }
                             return Ok(thing);
                         }
@@ -993,7 +993,7 @@ impl<'a> TDoc<'a> {
                         | Some(fastn_resolved::PropertyValue::Clone { name, .. }) => {
                             let (initial_thing, name) = doc.get_initial_thing(name, line_number)?;
                             if let Some(remaining) = name {
-                                get_thing_(doc, line_number, remaining.as_str(), &initial_thing)?
+                                get_thing_(doc, line_number, remaining.as_str(), initial_thing)?
                             } else {
                                 initial_thing
                             }
@@ -1019,7 +1019,7 @@ impl<'a> TDoc<'a> {
                 }
             };
             if let Some(remaining) = remaining {
-                return get_thing_(doc, line_number, &remaining, &thing);
+                return get_thing_(doc, line_number, &remaining, thing);
             }
             Ok(thing)
         }
@@ -1031,7 +1031,7 @@ impl<'a> TDoc<'a> {
         line_number: usize,
     ) -> ftd::interpreter::Result<fastn_resolved::Function> {
         let initial_thing = self.get_initial_thing(name, line_number)?.0;
-        initial_thing.function(self.name, line_number)
+        initial_thing.function(self.name, line_number).cloned()
     }
 
     pub fn search_function(
@@ -1042,7 +1042,7 @@ impl<'a> TDoc<'a> {
         let name = ftd_p1::AccessModifier::remove_modifiers(name);
         let initial_thing = try_ok_state!(self.search_initial_thing(name.as_str(), line_number)?).0;
         Ok(ftd::interpreter::StateWithThing::new_thing(
-            initial_thing.function(self.name, line_number)?,
+            initial_thing.function(self.name, line_number)?.clone(),
         ))
     }
 
@@ -1754,7 +1754,7 @@ impl<'a> TDoc<'a> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<(&ftd::interpreter::Thing, Option<String>)> {
+    ) -> ftd::interpreter::Result<(ftd::interpreter::Thing, Option<String>)> {
         self.get_initial_thing_with_inherited(name, line_number, &Default::default())
     }
 
@@ -1763,7 +1763,7 @@ impl<'a> TDoc<'a> {
         name: &'a str,
         line_number: usize,
         inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::interpreter::Result<(&ftd::interpreter::Thing, Option<String>)> {
+    ) -> ftd::interpreter::Result<(ftd::interpreter::Thing, Option<String>)> {
         let name = name
             .strip_prefix(ftd::interpreter::utils::REFERENCE)
             .or_else(|| name.strip_prefix(ftd::interpreter::utils::CLONE))
@@ -1781,44 +1781,39 @@ impl<'a> TDoc<'a> {
 
         let name = self.resolve_name(name);
 
-        return get_reexport_thing(self, &name, line_number);
+        self.get_reexport_thing(&name, line_number)
+            .map(|(thing, remaining)| (thing.clone(), remaining))
+    }
 
-        fn get_reexport_thing(
-            tdoc: &TDoc,
-            name: &str,
-            line_number: usize,
-        ) -> ftd::interpreter::Result<(&ftd::interpreter::Thing, Option<String>)> {
-            let (splited_name, remaining_value) = if let Ok(function_name) =
-                ftd::interpreter::utils::get_function_name(name, tdoc.name, line_number)
-            {
-                (function_name, None)
-            } else {
-                ftd::interpreter::utils::get_doc_name_and_remaining(name, tdoc.name, line_number)
-            };
+    fn get_reexport_thing(
+        &self,
+        name: &str,
+        line_number: usize,
+    ) -> ftd::interpreter::Result<(&ftd::interpreter::Thing, Option<String>)> {
+        let (splited_name, remaining_value) = if let Ok(function_name) =
+            ftd::interpreter::utils::get_function_name(name, self.name, line_number)
+        {
+            (function_name, None)
+        } else {
+            ftd::interpreter::utils::get_doc_name_and_remaining(name, self.name, line_number)
+        };
 
-            let (thing_name, remaining) =
-                match tdoc.bag().get(splited_name.as_str()).map(ToOwned::to_owned) {
-                    Some(a) => (a, remaining_value),
-                    None => match tdoc.bag().get(name).map(|v| (v.to_owned(), None)) {
-                        Some(a) => a,
-                        None => {
-                            return tdoc.err(
-                                "not found",
-                                splited_name,
-                                "get_initial_thing",
-                                line_number,
-                            );
-                        }
-                    },
-                };
+        let (thing_name, remaining) = match self.bag().get(splited_name.as_str()) {
+            Some(a) => (a, remaining_value),
+            None => match self.bag().get(name).map(|v| (v, None)) {
+                Some(a) => a,
+                None => {
+                    return self.err("not found", splited_name, "get_initial_thing", line_number);
+                }
+            },
+        };
 
-            if let ftd::interpreter::Thing::Export { ref from, .. } = thing_name {
-                let thing_name = get_reexport_thing(tdoc, from, line_number)?.0;
-                return Ok((thing_name, remaining));
-            }
-
-            Ok((thing_name, remaining))
+        if let ftd::interpreter::Thing::Export { ref from, .. } = thing_name {
+            let thing_name = self.get_reexport_thing(from, line_number)?.0;
+            return Ok((thing_name, remaining));
         }
+
+        Ok((thing_name, remaining))
     }
 
     pub fn rows_to_value(
@@ -2218,16 +2213,14 @@ impl<'a> TDoc<'a> {
 }
 
 impl<'a> fastn_resolved::tdoc::TDoc for TDoc<'a> {
-    fn get_opt_function(&self, name: &str) -> Option<Function> {
-        let initial_thing = self.get_initial_thing(name, 0).ok()?.0;
+    fn get_opt_function(&self, name: &str) -> Option<&Function> {
+        let initial_thing = self.get_reexport_thing(name, 0).ok()?.0;
         initial_thing.function(self.name, 0).ok()
     }
 
-    fn get_opt_record(&self, name: &str) -> Option<Record> {
-        match self.get_thing(name, 0).ok()? {
-            ftd::interpreter::Thing::Record(r) => Some(r),
-            _ => None,
-        }
+    fn get_opt_record(&self, name: &str) -> Option<&Record> {
+        let initial_thing = self.get_reexport_thing(name, 0).ok()?.0;
+        initial_thing.record(self.name, 0).ok()
     }
 
     fn name(&self) -> &str {
@@ -2235,16 +2228,12 @@ impl<'a> fastn_resolved::tdoc::TDoc for TDoc<'a> {
     }
 
     fn get_opt_component(&self, name: &str) -> Option<&ComponentDefinition> {
-        match self.get_thing(name, 0).ok()? {
-            ftd::interpreter::Thing::Component(c) => Some(c),
-            _ => None,
-        }
+        let initial_thing = self.get_reexport_thing(name, 0).ok()?.0;
+        initial_thing.component_ref()
     }
 
-    fn get_opt_web_component(&self, name: &str) -> Option<fastn_resolved::WebComponentDefinition> {
-        match self.get_thing(name, 0).ok()? {
-            ftd::interpreter::Thing::WebComponent(c) => Some(c),
-            _ => None,
-        }
+    fn get_opt_web_component(&self, name: &str) -> Option<&fastn_resolved::WebComponentDefinition> {
+        let initial_thing = self.get_reexport_thing(name, 0).ok()?.0;
+        initial_thing.web_component(self.name, 0).ok()
     }
 }

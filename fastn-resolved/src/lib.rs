@@ -85,4 +85,11 @@ impl Definition {
             _ => None,
         }
     }
+
+    pub fn component_ref(&self) -> Option<&fastn_resolved::ComponentDefinition> {
+        match self {
+            fastn_resolved::Definition::Component(v) => Some(v),
+            _ => None,
+        }
+    }
 }

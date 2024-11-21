@@ -134,7 +134,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
         self,
         doc: &ftd::interpreter::TDoc,
         line_number: usize, // Todo: Remove this line number instead use self.line_number()
-    ) -> ftd::interpreter::Result<&fastn_resolved::Value> {
+    ) -> ftd::interpreter::Result<fastn_resolved::Value> {
         self.resolve_with_inherited(doc, line_number, &Default::default())
     }
 
@@ -143,7 +143,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
         doc: &ftd::interpreter::TDoc,
         line_number: usize,
         inherited_variables: &ftd::VecMap<(String, Vec<usize>)>,
-    ) -> ftd::interpreter::Result<&fastn_resolved::Value> {
+    ) -> ftd::interpreter::Result<fastn_resolved::Value> {
         match self {
             fastn_resolved::PropertyValue::Value { value, .. } => Ok(value),
             fastn_resolved::PropertyValue::Reference { name, kind, .. }
