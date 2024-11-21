@@ -25,7 +25,7 @@ pub fn parse(
         match (
             kind.as_deref(),
             name.as_str(),
-            section.function_marker.is_some(),
+            section.init.function_marker.is_some(),
         ) {
             (Some("import"), _, _) | (_, "import", _) => import::import(section, &mut document),
             (Some("record"), _, _) => todo!(),

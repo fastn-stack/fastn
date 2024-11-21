@@ -2,7 +2,7 @@ pub(super) fn component_invocation(
     section: fastn_section::Section,
     document: &mut fastn_unresolved::Document,
 ) {
-    if let Some(ref m) = section.function_marker {
+    if let Some(ref m) = section.init.function_marker {
         document
             .errors
             .push(m.wrap(fastn_section::Error::ComponentIsNotAFunction));

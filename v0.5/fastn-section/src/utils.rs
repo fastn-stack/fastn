@@ -214,13 +214,12 @@ impl fastn_section::Section {
                     name: name.into(),
                 },
                 colon: Default::default(),
+                function_marker,
             },
             caption: None,
             headers: vec![],
             body: None,
             children: vec![],
-            function_marker,
-
             is_commented: false,
             has_end: false,
         })
