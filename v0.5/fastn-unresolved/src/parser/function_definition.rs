@@ -2,6 +2,8 @@ pub(super) fn function_definition(
     section: fastn_section::Section,
     document: &mut fastn_unresolved::Document,
 ) {
+    // TODO: remove .unwrap() and put errors in `document.errors`
+
     let name = section.name_span().clone();
     let visibility = section
         .init
@@ -19,6 +21,36 @@ pub(super) fn function_definition(
         .and_then(|k| k.try_into().ok())
         .map(|k| fastn_unresolved::UR::UnResolved(k));
 
+    let arguments: Vec<_> = section
+        .headers
+        .into_iter()
+        .map(|h| {
+            let kind = h.name.kind.clone().unwrap().try_into().ok().unwrap();
+            let visibility = h
+                .name
+                .kind
+                .and_then(|x| x.visibility)
+                .unwrap_or_default()
+                .value;
+
+            fastn_unresolved::Argument {
+                name: h.name.name,
+                kind,
+                visibility,
+                default: Default::default(), // TODO: parse TES
+            }
+            .into()
+        })
+        .collect();
+
+    let body = section
+        .body
+        .unwrap()
+        .0
+        .into_iter()
+        .map(|b| b.into())
+        .collect();
+
     // TODO: get rid of all the Default::default below
     document.definitions.push(
         fastn_unresolved::Definition {
@@ -29,9 +61,9 @@ pub(super) fn function_definition(
             visibility,
             name: fastn_unresolved::Identifier { name }.into(),
             inner: fastn_unresolved::InnerDefinition::Function {
-                arguments: Default::default(),
+                arguments,
                 return_type,
-                body: Default::default(),
+                body,
             },
         }
         .into(),
@@ -55,7 +87,7 @@ mod tests {
 
     #[test]
     fn function_definition() {
-        t!("-- foo():\n\ntodo()", {
+        t!("-- foo():\nstring test:\n\ntodo()", {
             "return_type": "void",
             "name": "foo",
             "content": "todo()",
