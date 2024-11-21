@@ -9,7 +9,7 @@ pub struct Output {
 }
 
 pub struct Input<'a> {
-    pub bag: &'a std::collections::HashMap<
+    pub definitions: &'a std::collections::HashMap<
         string_interner::DefaultSymbol,
         fastn_unresolved::LookupResult,
     >,

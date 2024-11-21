@@ -2,9 +2,9 @@ const ITERATION_THRESHOLD: usize = 100;
 
 pub(crate) struct Compiler {
     symbols: Box<dyn fastn_compiler::SymbolStore>,
-    pub(crate) symbols_used: std::collections::HashSet<fastn_unresolved::SymbolName>,
+    pub(crate) definitions_used: std::collections::HashSet<fastn_unresolved::SymbolName>,
     interner: string_interner::DefaultStringInterner,
-    pub(crate) bag:
+    pub(crate) definitions:
         std::collections::HashMap<string_interner::DefaultSymbol, fastn_unresolved::LookupResult>,
     auto_imports: Vec<fastn_section::AutoImport>,
     /// checkout resolve_document for why this is an Option
@@ -22,7 +22,7 @@ pub(crate) struct Compiler {
 impl Compiler {
     fn resolution_input(&self) -> fastn_unresolved::resolver::Input {
         fastn_unresolved::resolver::Input {
-            bag: &self.bag,
+            definitions: &self.definitions,
             auto_imports: &self.auto_imports,
             builtins: fastn_builtins::builtins(),
         }
@@ -41,11 +41,11 @@ impl Compiler {
         Self {
             symbols,
             interner: string_interner::StringInterner::new(),
-            bag: std::collections::HashMap::new(),
+            definitions: std::collections::HashMap::new(),
             content,
             auto_imports,
             document,
-            symbols_used: Default::default(),
+            definitions_used: Default::default(),
         }
     }
 
@@ -53,12 +53,13 @@ impl Compiler {
         &mut self,
         symbols_to_fetch: &std::collections::HashSet<fastn_unresolved::SymbolName>,
     ) {
-        self.symbols_used.extend(symbols_to_fetch.iter().cloned());
+        self.definitions_used
+            .extend(symbols_to_fetch.iter().cloned());
         let definitions = self.symbols.lookup(&mut self.interner, symbols_to_fetch);
         for definition in definitions {
             // the following is only okay if our symbol store only returns unresolved definitions,
             // some other store might return resolved definitions, and we need to handle that.
-            self.bag
+            self.definitions
                 .insert(definition.unresolved().unwrap().symbol.unwrap(), definition);
         }
     }
@@ -88,7 +89,7 @@ impl Compiler {
             // `foo` in the `bag`.
             // to make sure this happens better, we have to ensure that the definition.resolve()
             // tries to resolve the signature first, and then the body.
-            let mut definition = self.bag.remove(&sym);
+            let mut definition = self.definitions.remove(&sym);
             match definition.as_mut() {
                 Some(fastn_unresolved::UR::UnResolved(definition)) => {
                     let o = definition.resolve(self.resolution_input());
@@ -103,12 +104,13 @@ impl Compiler {
             if let Some(fastn_unresolved::UR::UnResolved(definition)) = definition {
                 match definition.resolved() {
                     Ok(resolved) => {
-                        self.bag
+                        self.definitions
                             .insert(sym, fastn_unresolved::UR::Resolved(resolved));
                     }
                     Err(s) => {
                         r.need_more_symbols.insert(symbol);
-                        self.bag.insert(sym, fastn_unresolved::UR::UnResolved(s));
+                        self.definitions
+                            .insert(sym, fastn_unresolved::UR::UnResolved(s));
                     }
                 }
             }
