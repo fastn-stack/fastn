@@ -19,8 +19,8 @@ pub(crate) struct Compiler {
 }
 
 impl Compiler {
-    fn resolution_input(&self) -> fastn_unresolved::ResolutionInput {
-        fastn_unresolved::ResolutionInput {
+    fn resolution_input(&self) -> fastn_unresolved::resolver::Input {
+        fastn_unresolved::resolver::Input {
             bag: &self.bag,
             auto_imports: &self.auto_imports,
             builtins: &fastn_builtins::DEFAULT_BAG,

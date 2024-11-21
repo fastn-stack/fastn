@@ -7,11 +7,10 @@ extern crate self as fastn_unresolved;
 #[cfg(test)]
 mod debug;
 mod parser;
-mod resolver;
+pub mod resolver;
 mod utils;
 
 pub use parser::parse;
-pub use resolver::{ResolutionInput, ResolutionOutput};
 
 pub type LookupResult =
     fastn_unresolved::UR<fastn_unresolved::Definition, fastn_resolved::Definition>;
