@@ -1031,7 +1031,7 @@ impl<'a> TDoc<'a> {
         line_number: usize,
     ) -> ftd::interpreter::Result<fastn_resolved::Function> {
         let initial_thing = self.get_initial_thing(name, line_number)?.0;
-        initial_thing.function(self.name, line_number).cloned()
+        Ok(initial_thing.function(self.name, line_number)?.clone())
     }
 
     pub fn search_function(
@@ -2213,27 +2213,27 @@ impl<'a> TDoc<'a> {
 }
 
 impl<'a> fastn_resolved::tdoc::TDoc for TDoc<'a> {
-    fn get_opt_function(&self, name: &str) -> Option<&Function> {
+    fn get_opt_function(&self, name: &str) -> Option<Function> {
         let initial_thing = self.get_reexport_thing(name, 0).ok()?.0;
-        initial_thing.function(self.name, 0).ok()
+        initial_thing.function(self.name, 0).ok().clone()
     }
 
-    fn get_opt_record(&self, name: &str) -> Option<&Record> {
+    fn get_opt_record(&self, name: &str) -> Option<Record> {
         let initial_thing = self.get_reexport_thing(name, 0).ok()?.0;
-        initial_thing.record(self.name, 0).ok()
+        initial_thing.record(self.name, 0).ok().clone()
     }
 
     fn name(&self) -> &str {
         self.name
     }
 
-    fn get_opt_component(&self, name: &str) -> Option<&ComponentDefinition> {
+    fn get_opt_component(&self, name: &str) -> Option<ComponentDefinition> {
         let initial_thing = self.get_reexport_thing(name, 0).ok()?.0;
-        initial_thing.component_ref()
+        initial_thing.clone().component()
     }
 
-    fn get_opt_web_component(&self, name: &str) -> Option<&fastn_resolved::WebComponentDefinition> {
+    fn get_opt_web_component(&self, name: &str) -> Option<fastn_resolved::WebComponentDefinition> {
         let initial_thing = self.get_reexport_thing(name, 0).ok()?.0;
-        initial_thing.web_component(self.name, 0).ok()
+        initial_thing.web_component(self.name, 0).ok().clone()
     }
 }

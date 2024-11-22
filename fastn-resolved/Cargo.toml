@@ -8,5 +8,9 @@ license = "BSD-3-Clause"
 repository.workspace = true
 homepage.workspace = true
 
+[features]
+owned-tdoc = []
+
 [dependencies]
 serde.workspace = true
+
