@@ -48,8 +48,6 @@ fastn-resolved = { path = "../fastn-resolved" }
 fastn-builtins = { path = "../fastn-builtins" }
 fastn-resolved-to-js = { path = "../fastn-resolved-to-js" }
 fastn-js = { path = "../fastn-js" }
-#fastn-resolved = { git = "https://github.com/fastn-stack/fastn.git", rev = "17b7ebca9869c20f6ce86090116614168a18f37e" }
-#fastn-builtins = { git = "https://github.com/fastn-stack/fastn.git", rev = "17b7ebca9869c20f6ce86090116614168a18f37e" }
 fastn-unresolved = { path = "fastn-unresolved" }
 fastn-update = { path = "fastn-update" }
 indexmap = "2"
