@@ -14,8 +14,9 @@ pub use parser::parse;
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub struct Symbol {
+    // 8 bytes
     /// this store the <package>/<module>#<name> of the symbol
-    interned: string_interner::DefaultSymbol,
+    interned: string_interner::DefaultSymbol, // u32
     /// length of the <package> part of the symbol
     package_len: u16,
     /// length of the <module> part of the symbol

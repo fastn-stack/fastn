@@ -139,6 +139,42 @@ impl<U, V> fastn_unresolved::UR<U, V> {
 }
 
 impl fastn_unresolved::Symbol {
+    pub fn new(
+        package: &str,
+        module: &str,
+        name: &str,
+        interner: &mut string_interner::DefaultStringInterner,
+    ) -> fastn_unresolved::Symbol {
+        fastn_unresolved::Symbol {
+            package_len: package.len() as u16,
+            module_len: module.len() as u16,
+            interned: interner.get_or_intern(format!("{package}/{module}#{name}")),
+        }
+    }
+
+    pub fn erase_name(
+        &self,
+        interner: &mut string_interner::DefaultStringInterner,
+    ) -> fastn_unresolved::Symbol {
+        self.with_name("", interner)
+    }
+
+    pub fn with_name(
+        &self,
+        name: &str,
+        interner: &mut string_interner::DefaultStringInterner,
+    ) -> fastn_unresolved::Symbol {
+        fastn_unresolved::Symbol {
+            package_len: self.package_len,
+            module_len: self.module_len,
+            interned: interner.get_or_intern(format!(
+                "{}/{}#{name}",
+                self.package(interner),
+                self.module(interner)
+            )),
+        }
+    }
+
     pub fn symbol<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
         interner.resolve(self.interned).unwrap()
     }
@@ -150,13 +186,6 @@ impl fastn_unresolved::Symbol {
     pub fn module<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
         &self.symbol(interner)[self.package_len as usize + 1
             ..self.package_len as usize + 1 + self.module_len as usize]
-    }
-
-    pub fn package_module<'a>(
-        &self,
-        interner: &'a string_interner::DefaultStringInterner,
-    ) -> &'a str {
-        &self.symbol(interner)[..self.package_len as usize + 1 + self.module_len as usize]
     }
 
     pub fn name<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {

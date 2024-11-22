@@ -31,10 +31,9 @@ impl Compiler {
     fn new(
         symbols: Box<dyn fastn_compiler::SymbolStore>,
         auto_imports: Vec<fastn_section::AutoImport>,
-        document_id: &fastn_unresolved::ModuleName,
         source: &str,
     ) -> Self {
-        let mut document = fastn_unresolved::parse(document_id, source);
+        let mut document = fastn_unresolved::parse(source);
         let content = Some(document.content);
         document.content = vec![];
 
@@ -222,11 +221,10 @@ impl Compiler {
 /// warnings from OK part as error, and discard the generated JS.
 pub fn compile(
     symbols: Box<dyn fastn_compiler::SymbolStore>,
-    document_id: &fastn_unresolved::ModuleName,
     source: &str,
     auto_imports: Vec<fastn_section::AutoImport>,
 ) -> Result<fastn_compiler::Output, fastn_compiler::Error> {
-    Compiler::new(symbols, auto_imports, document_id, source).compile()
+    Compiler::new(symbols, auto_imports, source).compile()
 }
 
 #[derive(Default)]

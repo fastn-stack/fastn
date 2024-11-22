@@ -5,36 +5,25 @@ impl Symbols {
     fn find_all_definitions_in_a_module(
         &mut self,
         interner: &mut string_interner::DefaultStringInterner,
-        symbol: &fastn_unresolved::Symbol,
+        (file, symbol): (String, fastn_unresolved::Symbol),
     ) -> Vec<fastn_unresolved::LookupResult> {
         // we need to fetch the symbol from the store
-        let source = match std::fs::File::open(format!("{}.ftd", module.name.str()))
-            .and_then(std::io::read_to_string)
-        {
+        let source = match std::fs::File::open(file.as_str()).and_then(std::io::read_to_string) {
             Ok(v) => v,
             Err(e) => {
-                println!("failed to read file {}.ftd: {e:?}", module.name.str());
+                println!("failed to read file {}.ftd: {e:?}", file);
                 return vec![];
             }
         };
 
-        let d = fastn_unresolved::parse(module, &source);
-        let package_i = interner.get_or_intern(module.package.str());
-        let module_i = interner.get_or_intern(module.name.str());
+        let d = fastn_unresolved::parse(&source);
 
         d.definitions
             .into_iter()
             .map(|d| match d {
                 fastn_unresolved::UR::UnResolved(mut v) => {
-                    let symbol = interner.get_or_intern(format!(
-                        "{}/{}#{}",
-                        module.package.str(),
-                        module.name.str(),
-                        &v.name.unresolved().unwrap().str()
-                    ));
-                    v.symbol = Some(symbol);
-                    v.module = Some(module_i);
-                    v.package = Some(package_i);
+                    v.symbol =
+                        Some(symbol.with_name(&v.name.unresolved().unwrap().str(), interner));
                     fastn_unresolved::UR::UnResolved(v)
                 }
                 _ => {
@@ -53,7 +42,7 @@ impl fastn_compiler::SymbolStore for Symbols {
     ) -> Vec<fastn_unresolved::LookupResult> {
         let unique_modules = symbols
             .iter()
-            .map(|s| &s.module(interner))
+            .map(|s| file_for_symbol(s, interner))
             .collect::<std::collections::HashSet<_>>();
 
         unique_modules
@@ -61,4 +50,18 @@ impl fastn_compiler::SymbolStore for Symbols {
             .flat_map(|m| self.find_all_definitions_in_a_module(interner, m))
             .collect()
     }
+}
+
+fn file_for_symbol(
+    symbol: &fastn_unresolved::Symbol,
+    interner: &mut string_interner::DefaultStringInterner,
+) -> (String, fastn_unresolved::Symbol) {
+    (
+        format!(
+            "{}/{}.ftd",
+            symbol.package(interner),
+            symbol.module(interner)
+        ),
+        symbol.erase_name(interner),
+    )
 }
