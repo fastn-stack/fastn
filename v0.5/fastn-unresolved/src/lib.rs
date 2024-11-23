@@ -51,14 +51,10 @@ pub struct Definition {
 
 #[derive(Debug, Clone)]
 pub enum InnerDefinition {
-    SymbolAlias {
-        to: Symbol,
-    },
-    ModuleAlias {
-        to: Symbol,
-    },
+    SymbolAlias(Symbol),
+    ModuleAlias(Symbol),
     Component {
-        properties: Vec<UR<Argument, fastn_resolved::Argument>>,
+        arguments: Vec<UR<Argument, fastn_resolved::Argument>>,
         body: Vec<UR<ComponentInvocation, fastn_resolved::ComponentInvocation>>,
     },
     Variable {
@@ -102,16 +98,16 @@ pub enum InnerDefinition {
         body: Vec<UR<fastn_section::Tes, fastn_resolved::FunctionExpression>>,
         // body: Vec<UR<fastn_section::Tes, fastn_fscript::Expression>>,
     },
-    TypeAlias {
-        kind: UR<Kind, fastn_resolved::Kind>,
-        /// ```ftd
-        /// -- type foo: person
-        /// name: foo                  ;; we are updating / setting the default value
-        /// ```
-        arguments: Vec<UR<Property, fastn_resolved::Property>>,
-    },
+    // TypeAlias {
+    //     kind: UR<Kind, fastn_resolved::Kind>,
+    //     /// ```ftd
+    //     /// -- type foo: person
+    //     /// name: foo                  ;; we are updating / setting the default value
+    //     /// ```
+    //     arguments: Vec<UR<Property, fastn_resolved::Property>>,
+    // },
     Record {
-        properties: Vec<UR<Argument, fastn_resolved::Argument>>,
+        arguments: Vec<UR<Argument, fastn_resolved::Argument>>,
     },
     // TODO: OrType(fastn_section::Section),
     // TODO: Module(fastn_section::Section),
