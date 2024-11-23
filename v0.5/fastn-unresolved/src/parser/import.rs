@@ -1,3 +1,5 @@
+use crate::{Export, Identifier, ModuleName};
+
 pub(super) fn import(section: fastn_section::Section, document: &mut fastn_unresolved::Document) {
     if let Some(ref kind) = section.init.name.kind {
         document
@@ -38,7 +40,7 @@ pub(super) fn import(section: fastn_section::Section, document: &mut fastn_unres
 fn parse_import(
     section: &fastn_section::Section,
     document: &mut fastn_unresolved::Document,
-) -> Option<fastn_unresolved::Import> {
+) -> Option<Import> {
     let caption = match section.caption_as_plain_span() {
         Some(v) => v,
         None => {
@@ -63,7 +65,7 @@ fn parse_import(
         None => ("", module),
     };
 
-    Some(fastn_unresolved::Import {
+    Some(Import {
         module: fastn_unresolved::ModuleName {
             name: caption.inner_str(module).into(),
             package: fastn_unresolved::PackageName(caption.inner_str(package).into()),
@@ -74,6 +76,14 @@ fn parse_import(
         export: parse_field("export", section, document),
         exposing: parse_field("exposing", section, document),
     })
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct Import {
+    pub module: ModuleName,
+    pub alias: Option<Identifier>,
+    pub export: Option<Export>,
+    pub exposing: Option<Export>,
 }
 
 fn parse_field(
@@ -109,6 +119,8 @@ fn aliasable(span: &fastn_section::Span, s: &str) -> fastn_unresolved::Aliasable
 
 #[cfg(test)]
 mod tests {
+    use crate::parser::import::Import;
+
     #[track_caller]
     fn tester(mut d: fastn_unresolved::Document, expected: serde_json::Value) {
         assert!(d.content.is_empty());
@@ -147,5 +159,38 @@ mod tests {
         t!("-- import: foo\nexport: x, y, z\nexposing: y", { "import": "foo", "export": ["x", "y", "z"], "exposing": ["y"] });
         t!("-- import: foo as f\nexport: x as y\nexposing: y", { "import": "foo as f", "export": ["x=>y"], "exposing": ["y"] });
         t!("-- import: foo as f\nexport: x as y, z\nexposing: y", { "import": "foo as f", "export": ["x=>y", "z"], "exposing": ["y"] });
+    }
+
+    impl fastn_jdebug::JDebug for Import {
+        fn debug(&self) -> serde_json::Value {
+            let mut o = serde_json::Map::new();
+
+            let name = if self.module.package.str().is_empty() {
+                self.module.name.str().to_string()
+            } else {
+                format!("{}/{}", self.module.package.str(), self.module.name.str())
+            };
+
+            o.insert(
+                "import".into(),
+                match self.alias {
+                    Some(ref v) => format!("{name}=>{}", v.str()),
+                    None => name,
+                }
+                .into(),
+            );
+
+            dbg!(&self);
+
+            if let Some(ref v) = self.export {
+                o.insert("export".into(), v.debug());
+            }
+
+            if let Some(ref v) = self.exposing {
+                o.insert("exposing".into(), v.debug());
+            }
+
+            serde_json::Value::Object(o)
+        }
     }
 }

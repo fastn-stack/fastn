@@ -118,14 +118,6 @@ pub enum InnerDefinition {
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub struct Import {
-    pub module: ModuleName,
-    pub alias: Option<Identifier>,
-    pub export: Option<Export>,
-    pub exposing: Option<Export>,
-}
-
-#[derive(Debug, Clone, PartialEq)]
 pub enum UR<U = Definition, R = fastn_unresolved::Definition> {
     Resolved(R),
     UnResolved(U),
