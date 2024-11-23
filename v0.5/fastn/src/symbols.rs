@@ -18,32 +18,21 @@ impl Symbols {
             }
         };
 
-        let d = fastn_unresolved::parse(&source);
-        let mut definitions = d
-            .desugar_imports(&self.auto_imports)
+        let mut d = fastn_unresolved::parse(&source);
+        d.desugar_imports(&self.auto_imports);
+
+        d.definitions
             .into_iter()
-            .map(|v| v.into())
-            .collect::<Vec<_>>();
-
-        definitions.extend_from_slice(
-            &d.definitions
-                .into_iter()
-                .map(|d| match d {
-                    fastn_unresolved::UR::UnResolved(mut v) => {
-                        v.symbol =
-                            Some(symbol.with_name(v.name.unresolved().unwrap().str(), interner));
-                        fastn_unresolved::UR::UnResolved(v)
-                    }
-                    _ => {
-                        unreachable!(
-                            "fastn_unresolved::parse() only returns unresolved definitions"
-                        )
-                    }
-                })
-                .collect::<Vec<_>>(),
-        );
-
-        definitions
+            .map(|d| match d {
+                fastn_unresolved::UR::UnResolved(mut v) => {
+                    v.symbol = Some(symbol.with_name(v.name.unresolved().unwrap().str(), interner));
+                    fastn_unresolved::UR::UnResolved(v)
+                }
+                _ => {
+                    unreachable!("fastn_unresolved::parse() only returns unresolved definitions")
+                }
+            })
+            .collect::<Vec<_>>()
     }
 }
 

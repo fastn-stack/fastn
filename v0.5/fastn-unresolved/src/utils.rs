@@ -29,9 +29,10 @@ impl fastn_unresolved::Document {
     }
 
     pub fn desugar_imports(
-        &self,
+        &mut self,
         _auto_imports: &[fastn_section::AutoImport],
     ) -> Vec<fastn_unresolved::Definition> {
+        // empty out self.imports, and add definitions to the top of the self.definitions
         todo!()
     }
 }

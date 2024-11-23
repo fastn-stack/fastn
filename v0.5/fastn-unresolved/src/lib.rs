@@ -51,6 +51,12 @@ pub struct Definition {
 
 #[derive(Debug, Clone)]
 pub enum InnerDefinition {
+    SymbolAlias {
+        to: Symbol,
+    },
+    ModuleAlias {
+        to: Symbol,
+    },
     Component {
         properties: Vec<UR<Argument, fastn_resolved::Argument>>,
         body: Vec<UR<ComponentInvocation, fastn_resolved::ComponentInvocation>>,
