@@ -7,6 +7,7 @@
 
 mod component_invocation;
 mod definition;
+mod name;
 
 pub struct Input<'a> {
     pub definitions: &'a std::collections::HashMap<fastn_unresolved::Symbol, fastn_unresolved::URD>,
@@ -14,6 +15,7 @@ pub struct Input<'a> {
     pub interner: &'a string_interner::DefaultStringInterner,
 }
 
+#[derive(Debug, Default)]
 pub struct Output {
     pub stuck_on: std::collections::HashSet<fastn_unresolved::Symbol>,
     pub errors: Vec<fastn_section::Spanned<fastn_section::Error>>,

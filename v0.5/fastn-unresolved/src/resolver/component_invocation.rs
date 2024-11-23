@@ -1,8 +1,9 @@
 impl fastn_unresolved::ComponentInvocation {
     pub fn resolve(
         &mut self,
-        _input: fastn_unresolved::resolver::Input<'_>,
-    ) -> fastn_unresolved::resolver::Output {
-        todo!()
+        input: fastn_unresolved::resolver::Input<'_>,
+        output: &mut fastn_unresolved::resolver::Output,
+    ) {
+        fastn_unresolved::resolver::name::resolve(&mut self.name, input, output);
     }
 }

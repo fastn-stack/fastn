@@ -89,7 +89,8 @@ impl Compiler {
             let mut definition = self.definitions.remove(&symbol);
             match definition.as_mut() {
                 Some(fastn_unresolved::UR::UnResolved(definition)) => {
-                    let o = definition.resolve(self.resolution_input());
+                    let mut o = Default::default();
+                    definition.resolve(self.resolution_input(), &mut o);
                     r.need_more_symbols.extend(o.stuck_on);
                     self.document.merge(o.errors, o.warnings, o.comments);
                 }
@@ -129,7 +130,8 @@ impl Compiler {
         for ci in content {
             match ci {
                 fastn_unresolved::UR::UnResolved(mut c) => {
-                    let needed = c.resolve(self.resolution_input());
+                    let mut needed = Default::default();
+                    c.resolve(self.resolution_input(), &mut needed);
                     if needed.stuck_on.is_empty() {
                         new_content.push(fastn_unresolved::UR::Resolved(c.resolved().unwrap()));
                     } else {
