@@ -26,7 +26,7 @@ fn render_document(
         .unwrap();
     let _o = fastn_compiler::compile(
         Box::new(fastn::Symbols {
-            auto_imports: &config.auto_imports,
+            auto_imports: config.auto_imports.clone(),
         }),
         &source,
     );

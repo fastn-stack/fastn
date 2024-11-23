@@ -37,7 +37,7 @@ pub struct Document {
 
 // this type is not really needed here, but adding here because fastn-section is our lowest
 // level crate
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AutoImport {}
 
 #[derive(Debug, PartialEq, Clone)]

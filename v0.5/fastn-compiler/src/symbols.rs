@@ -1,4 +1,4 @@
-pub trait SymbolStore: Sized {
+pub trait SymbolStore {
     /// it is okay / acceptable to return more symbols than asked.
     ///
     /// this is because if we are fetching symbols by parsing a ftd file, it makes sense to store

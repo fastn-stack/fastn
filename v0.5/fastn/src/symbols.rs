@@ -1,9 +1,9 @@
 #[derive(Debug)]
-pub struct Symbols<'a> {
-    pub auto_imports: &'a Vec<fastn_section::AutoImport>,
+pub struct Symbols {
+    pub auto_imports: Vec<fastn_section::AutoImport>,
 }
 
-impl Symbols<'_> {
+impl Symbols {
     fn find_all_definitions_in_a_module(
         &mut self,
         interner: &mut string_interner::DefaultStringInterner,
@@ -47,7 +47,7 @@ impl Symbols<'_> {
     }
 }
 
-impl fastn_compiler::SymbolStore for Symbols<'_> {
+impl fastn_compiler::SymbolStore for Symbols {
     fn lookup(
         &mut self,
         interner: &mut string_interner::DefaultStringInterner,
