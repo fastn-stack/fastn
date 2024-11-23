@@ -171,12 +171,6 @@ pub struct ModuleName {
 
 pub type Identifier = fastn_section::Identifier;
 
-#[derive(Debug, Clone, PartialEq)]
-pub enum Export {
-    All,
-    Things(Vec<AliasableIdentifier>),
-}
-
 /// is this generic enough?
 #[derive(Debug, Clone, PartialEq)]
 pub struct AliasableIdentifier {

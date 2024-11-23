@@ -1,14 +1,3 @@
-impl fastn_jdebug::JDebug for fastn_unresolved::Export {
-    fn debug(&self) -> serde_json::Value {
-        match self {
-            fastn_unresolved::Export::All => "all".into(),
-            fastn_unresolved::Export::Things(v) => {
-                serde_json::Value::Array(v.iter().map(|v| v.debug()).collect())
-            }
-        }
-    }
-}
-
 impl fastn_jdebug::JDebug for fastn_unresolved::AliasableIdentifier {
     fn debug(&self) -> serde_json::Value {
         match self.alias {

@@ -1,4 +1,4 @@
-use crate::{Export, Identifier, ModuleName};
+use crate::AliasableIdentifier;
 
 pub(super) fn import(section: fastn_section::Section, document: &mut fastn_unresolved::Document) {
     if let Some(ref kind) = section.init.name.kind {
@@ -79,9 +79,15 @@ fn parse_import(
 }
 
 #[derive(Debug, Clone, PartialEq)]
+pub enum Export {
+    All,
+    Things(Vec<AliasableIdentifier>),
+}
+
+#[derive(Debug, Clone, PartialEq)]
 pub struct Import {
-    pub module: ModuleName,
-    pub alias: Option<Identifier>,
+    pub module: fastn_unresolved::ModuleName,
+    pub alias: Option<fastn_unresolved::Identifier>,
     pub export: Option<Export>,
     pub exposing: Option<Export>,
 }
@@ -90,13 +96,13 @@ fn parse_field(
     field: &str,
     section: &fastn_section::Section,
     _document: &mut fastn_unresolved::Document,
-) -> Option<fastn_unresolved::Export> {
+) -> Option<Export> {
     let header = match section.header_as_plain_span(field) {
         Some(v) => v,
         None => return None,
     };
 
-    Some(fastn_unresolved::Export::Things(
+    Some(Export::Things(
         header
             .str()
             .split(",")
@@ -119,8 +125,6 @@ fn aliasable(span: &fastn_section::Span, s: &str) -> fastn_unresolved::Aliasable
 
 #[cfg(test)]
 mod tests {
-    use crate::parser::import::Import;
-
     #[track_caller]
     fn tester(mut d: fastn_unresolved::Document, expected: serde_json::Value) {
         assert!(d.content.is_empty());
@@ -161,7 +165,7 @@ mod tests {
         t!("-- import: foo as f\nexport: x as y, z\nexposing: y", { "import": "foo as f", "export": ["x=>y", "z"], "exposing": ["y"] });
     }
 
-    impl fastn_jdebug::JDebug for Import {
+    impl fastn_jdebug::JDebug for super::Import {
         fn debug(&self) -> serde_json::Value {
             let mut o = serde_json::Map::new();
 
@@ -191,6 +195,17 @@ mod tests {
             }
 
             serde_json::Value::Object(o)
+        }
+    }
+
+    impl fastn_jdebug::JDebug for super::Export {
+        fn debug(&self) -> serde_json::Value {
+            match self {
+                super::Export::All => "all".into(),
+                super::Export::Things(v) => {
+                    serde_json::Value::Array(v.iter().map(|v| v.debug()).collect())
+                }
+            }
         }
     }
 }
