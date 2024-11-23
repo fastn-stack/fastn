@@ -1,10 +1,16 @@
 mod component_invocation;
 mod import;
 
-pub fn parse(source: &str) -> fastn_unresolved::Document {
+pub fn parse(
+    source: &str,
+    _auto_imports: &[fastn_section::AutoImport],
+) -> fastn_unresolved::Document {
     let (mut document, sections) = fastn_unresolved::Document::new(fastn_section::Document::parse(
         &arcstr::ArcStr::from(source),
     ));
+
+    // todo: first go through just the imports and desugar them
+
     // guess the section and call the appropriate unresolved method.
     for section in sections.into_iter() {
         let name = section.name().to_ascii_lowercase();

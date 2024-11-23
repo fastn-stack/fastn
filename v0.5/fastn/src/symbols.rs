@@ -18,8 +18,7 @@ impl Symbols {
             }
         };
 
-        let mut d = fastn_unresolved::parse(&source);
-        d.desugar_imports(&self.auto_imports);
+        let d = fastn_unresolved::parse(&source, &self.auto_imports);
 
         d.definitions
             .into_iter()

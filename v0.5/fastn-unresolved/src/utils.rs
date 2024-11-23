@@ -27,14 +27,6 @@ impl fastn_unresolved::Document {
         self.warnings.extend(warnings);
         self.comments.extend(comments);
     }
-
-    pub fn desugar_imports(
-        &mut self,
-        _auto_imports: &[fastn_section::AutoImport],
-    ) -> Vec<fastn_unresolved::Definition> {
-        // empty out self.imports, and add definitions to the top of the self.definitions
-        todo!()
-    }
 }
 
 impl fastn_unresolved::ComponentInvocation {

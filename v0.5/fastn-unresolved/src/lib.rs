@@ -29,7 +29,6 @@ pub type LookupResult =
 #[derive(Debug, Clone, Default)]
 pub struct Document {
     pub module_doc: Option<fastn_section::Span>,
-    pub imports: Vec<fastn_unresolved::Import>,
     pub definitions: Vec<UR<Definition, fastn_resolved::Definition>>,
     pub content: Vec<UR<ComponentInvocation, fastn_resolved::ComponentInvocation>>,
     pub errors: Vec<fastn_section::Spanned<fastn_section::Error>>,
