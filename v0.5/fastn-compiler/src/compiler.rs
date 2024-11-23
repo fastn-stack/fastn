@@ -23,7 +23,6 @@ impl Compiler {
     fn resolution_input(&self) -> fastn_unresolved::resolver::Input {
         fastn_unresolved::resolver::Input {
             definitions: &self.definitions,
-            auto_imports: &self.auto_imports,
             builtins: fastn_builtins::builtins(),
         }
     }

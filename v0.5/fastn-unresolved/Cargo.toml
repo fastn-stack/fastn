@@ -14,6 +14,7 @@ fastn-section.workspace = true
 fastn-resolved.workspace = true
 string-interner.workspace = true
 indexmap.workspace = true
+id-arena.workspace = true
 
 [dev-dependencies]
 fastn-jdebug.workspace = true

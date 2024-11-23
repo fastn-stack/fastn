@@ -1,5 +1,7 @@
 #[derive(Debug, Default)]
-pub struct Symbols {}
+pub struct Symbols {
+    auto_imports: Vec<fastn_section::AutoImport>,
+}
 
 impl Symbols {
     fn find_all_definitions_in_a_module(
@@ -17,20 +19,30 @@ impl Symbols {
         };
 
         let d = fastn_unresolved::parse(&source);
+        let mut definitions = d
+            .desugar_imports(&self.auto_imports)
+            .map(|v| v.into())
+            .collect::<Vec<_>>();
 
-        d.definitions
-            .into_iter()
-            .map(|d| match d {
-                fastn_unresolved::UR::UnResolved(mut v) => {
-                    v.symbol =
-                        Some(symbol.with_name(&v.name.unresolved().unwrap().str(), interner));
-                    fastn_unresolved::UR::UnResolved(v)
-                }
-                _ => {
-                    unreachable!("fastn_unresolved::parse() only returns unresolved definitions")
-                }
-            })
-            .collect()
+        definitions.extend_from_slice(
+            &d.definitions
+                .into_iter()
+                .map(|d| match d {
+                    fastn_unresolved::UR::UnResolved(mut v) => {
+                        v.symbol =
+                            Some(symbol.with_name(&v.name.unresolved().unwrap().str(), interner));
+                        fastn_unresolved::UR::UnResolved(v)
+                    }
+                    _ => {
+                        unreachable!(
+                            "fastn_unresolved::parse() only returns unresolved definitions"
+                        )
+                    }
+                })
+                .collect(),
+        );
+
+        definitions
     }
 }
 

@@ -27,6 +27,13 @@ impl fastn_unresolved::Document {
         self.warnings.extend(warnings);
         self.comments.extend(comments);
     }
+
+    pub fn desugar_imports(
+        &self,
+        _auto_imports: &[fastn_section::AutoImport],
+    ) -> Vec<fastn_unresolved::Definition> {
+        todo!()
+    }
 }
 
 impl fastn_unresolved::ComponentInvocation {
