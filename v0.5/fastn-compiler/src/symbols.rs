@@ -13,6 +13,6 @@ pub trait SymbolStore {
         &mut self,
         interner: &mut string_interner::DefaultStringInterner,
         symbols: &std::collections::HashSet<fastn_unresolved::Symbol>,
-        desugared_auto_imports: &[fastn_unresolved::UR],
-    ) -> Vec<fastn_unresolved::LookupResult>;
+        desugared_auto_imports: &[fastn_unresolved::URD],
+    ) -> Vec<fastn_unresolved::URD>;
 }

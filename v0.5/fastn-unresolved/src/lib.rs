@@ -24,14 +24,17 @@ pub struct Symbol {
     module_len: u16,
 }
 
-pub type LookupResult =
-    fastn_unresolved::UR<fastn_unresolved::Definition, fastn_resolved::Definition>;
+pub type URD = fastn_unresolved::UR<fastn_unresolved::Definition, fastn_resolved::Definition>;
+pub type URCI = fastn_unresolved::UR<
+    fastn_unresolved::ComponentInvocation,
+    fastn_resolved::ComponentInvocation,
+>;
 
 #[derive(Debug, Clone, Default)]
 pub struct Document {
     pub module_doc: Option<fastn_section::Span>,
-    pub definitions: Vec<UR>,
-    pub content: Vec<UR<ComponentInvocation, fastn_resolved::ComponentInvocation>>,
+    pub definitions: Vec<URD>,
+    pub content: Vec<URCI>,
     pub errors: Vec<fastn_section::Spanned<fastn_section::Error>>,
     pub warnings: Vec<fastn_section::Spanned<fastn_section::Warning>>,
     pub comments: Vec<fastn_section::Span>,
@@ -55,7 +58,7 @@ pub enum InnerDefinition {
     ModuleAlias(Symbol),
     Component {
         arguments: Vec<UR<Argument, fastn_resolved::Argument>>,
-        body: Vec<UR<ComponentInvocation, fastn_resolved::ComponentInvocation>>,
+        body: Vec<URCI>,
     },
     Variable {
         kind: UR<Kind, fastn_resolved::Kind>,
@@ -114,7 +117,7 @@ pub enum InnerDefinition {
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub enum UR<U = Definition, R = fastn_unresolved::Definition> {
+pub enum UR<U, R> {
     Resolved(R),
     UnResolved(U),
     NotFound,

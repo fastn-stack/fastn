@@ -78,6 +78,7 @@ fn parse_import(
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum Export {
+    #[expect(unused)]
     All,
     Things(Vec<AliasableIdentifier>),
 }
@@ -131,7 +132,7 @@ fn aliasable(span: &fastn_section::Span, s: &str) -> AliasableIdentifier {
 #[cfg(test)]
 mod tests {
     #[track_caller]
-    fn tester(mut d: fastn_unresolved::Document, expected: serde_json::Value) {
+    fn tester(d: fastn_unresolved::Document, _expected: serde_json::Value) {
         assert!(d.content.is_empty());
         assert!(d.definitions.is_empty());
 

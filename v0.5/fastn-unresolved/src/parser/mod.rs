@@ -1,7 +1,7 @@
 mod component_invocation;
 mod import;
 
-pub fn parse(source: &str, auto_imports: &[fastn_unresolved::UR]) -> fastn_unresolved::Document {
+pub fn parse(source: &str, auto_imports: &[fastn_unresolved::URD]) -> fastn_unresolved::Document {
     let (mut document, sections) = fastn_unresolved::Document::new(
         fastn_section::Document::parse(&arcstr::ArcStr::from(source)),
         auto_imports,

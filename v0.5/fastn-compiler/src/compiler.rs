@@ -5,18 +5,11 @@ pub(crate) struct Compiler {
     pub(crate) definitions_used: std::collections::HashSet<fastn_unresolved::Symbol>,
     pub(crate) interner: string_interner::DefaultStringInterner,
     pub(crate) definitions:
-        std::collections::HashMap<fastn_unresolved::Symbol, fastn_unresolved::LookupResult>,
+        std::collections::HashMap<fastn_unresolved::Symbol, fastn_unresolved::URD>,
     /// checkout resolve_document for why this is an Option
-    content: Option<
-        Vec<
-            fastn_unresolved::UR<
-                fastn_unresolved::ComponentInvocation,
-                fastn_resolved::ComponentInvocation,
-            >,
-        >,
-    >,
+    content: Option<Vec<fastn_unresolved::URCI>>,
     pub(crate) document: fastn_unresolved::Document,
-    desugared_auto_import: Vec<fastn_unresolved::UR>,
+    desugared_auto_import: Vec<fastn_unresolved::URD>,
 }
 
 impl Compiler {
