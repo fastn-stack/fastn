@@ -171,13 +171,6 @@ pub struct ModuleName {
 
 pub type Identifier = fastn_section::Identifier;
 
-/// is this generic enough?
-#[derive(Debug, Clone, PartialEq)]
-pub struct AliasableIdentifier {
-    pub alias: Option<Identifier>,
-    pub name: Identifier,
-}
-
 /// We cannot have kinds of like Record(SymbolName), OrType(SymbolName), because they are not
 /// yet "resolved", eg `-- foo x:`, we do not know if `foo` is a record or an or-type.
 #[derive(Debug, Clone, PartialEq)]

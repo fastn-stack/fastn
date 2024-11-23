@@ -1,5 +1,3 @@
-use crate::AliasableIdentifier;
-
 pub(super) fn import(section: fastn_section::Section, document: &mut fastn_unresolved::Document) {
     if let Some(ref kind) = section.init.name.kind {
         document
@@ -21,7 +19,7 @@ pub(super) fn import(section: fastn_section::Section, document: &mut fastn_unres
         // we will go ahead with this import statement parsing
     }
 
-    let i = match parse_import(&section, document) {
+    let _i = match parse_import(&section, document) {
         Some(v) => v,
         None => {
             // error handling is job of parse_module_name().
@@ -84,6 +82,13 @@ pub enum Export {
     Things(Vec<AliasableIdentifier>),
 }
 
+/// is this generic enough?
+#[derive(Debug, Clone, PartialEq)]
+pub struct AliasableIdentifier {
+    pub alias: Option<fastn_unresolved::Identifier>,
+    pub name: fastn_unresolved::Identifier,
+}
+
 #[derive(Debug, Clone, PartialEq)]
 pub struct Import {
     pub module: fastn_unresolved::ModuleName,
@@ -111,7 +116,7 @@ fn parse_field(
     ))
 }
 
-fn aliasable(span: &fastn_section::Span, s: &str) -> fastn_unresolved::AliasableIdentifier {
+fn aliasable(span: &fastn_section::Span, s: &str) -> AliasableIdentifier {
     let (name, alias) = match s.split_once(" as ") {
         Some((name, alias)) => (
             span.inner_str(name).into(),
@@ -120,7 +125,7 @@ fn aliasable(span: &fastn_section::Span, s: &str) -> fastn_unresolved::Aliasable
         None => (span.inner_str(s).into(), None),
     };
 
-    fastn_unresolved::AliasableIdentifier { name, alias }
+    AliasableIdentifier { name, alias }
 }
 
 #[cfg(test)]
@@ -206,6 +211,16 @@ mod tests {
                     serde_json::Value::Array(v.iter().map(|v| v.debug()).collect())
                 }
             }
+        }
+    }
+
+    impl fastn_jdebug::JDebug for super::AliasableIdentifier {
+        fn debug(&self) -> serde_json::Value {
+            match self.alias {
+                Some(ref v) => format!("{}=>{}", self.name.str(), v.str()),
+                None => self.name.str().to_string(),
+            }
+            .into()
         }
     }
 }
