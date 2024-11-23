@@ -31,7 +31,8 @@ pub(super) fn import(section: fastn_section::Section, document: &mut fastn_unres
     fastn_unresolved::utils::assert_no_body(&section, document);
     fastn_unresolved::utils::assert_no_children(&section, document);
     fastn_unresolved::utils::assert_no_extra_headers(&section, document, &["exports", "exposing"]);
-    document.imports.push(i);
+    todo!()
+    // document.imports.push(i);
 }
 
 fn parse_import(
@@ -112,12 +113,11 @@ mod tests {
     fn tester(mut d: fastn_unresolved::Document, expected: serde_json::Value) {
         assert!(d.content.is_empty());
         assert!(d.definitions.is_empty());
-        assert_eq!(d.imports.len(), 1);
 
-        assert_eq!(
-            fastn_jdebug::JDebug::debug(&d.imports.pop().unwrap()),
-            expected
-        )
+        // assert_eq!(
+        //     fastn_jdebug::JDebug::debug(&d.imports.pop().unwrap()),
+        //     expected
+        // )
     }
 
     fastn_unresolved::tt!(super::import, tester);

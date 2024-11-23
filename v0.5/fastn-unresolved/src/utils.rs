@@ -1,12 +1,15 @@
 impl fastn_unresolved::Document {
     pub(crate) fn new(
         document: fastn_section::Document,
+        desugared_auto_imports: &[fastn_unresolved::UR<
+            fastn_unresolved::Definition,
+            fastn_resolved::Definition,
+        >],
     ) -> (fastn_unresolved::Document, Vec<fastn_section::Section>) {
         (
             fastn_unresolved::Document {
                 module_doc: document.module_doc,
-                imports: vec![],
-                definitions: Default::default(),
+                definitions: desugared_auto_imports.to_vec(),
                 content: vec![],
                 errors: document.errors,
                 warnings: document.warnings,
@@ -191,4 +194,10 @@ impl fastn_unresolved::Symbol {
     pub fn name<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
         &self.symbol(interner)[self.package_len as usize + 1 + self.module_len as usize + 1..]
     }
+}
+
+pub fn desugar_auto_imports(
+    _auto_imports: &[fastn_section::AutoImport],
+) -> Vec<fastn_unresolved::UR<fastn_unresolved::Definition, fastn_resolved::Definition>> {
+    todo!()
 }

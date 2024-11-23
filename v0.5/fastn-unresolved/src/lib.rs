@@ -11,6 +11,7 @@ pub mod resolver;
 mod utils;
 
 pub use parser::parse;
+pub use utils::desugar_auto_imports;
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub struct Symbol {

@@ -3,11 +3,15 @@ mod import;
 
 pub fn parse(
     source: &str,
-    _auto_imports: &[fastn_section::AutoImport],
+    auto_imports: &[fastn_unresolved::UR<
+        fastn_unresolved::Definition,
+        fastn_resolved::Definition,
+    >],
 ) -> fastn_unresolved::Document {
-    let (mut document, sections) = fastn_unresolved::Document::new(fastn_section::Document::parse(
-        &arcstr::ArcStr::from(source),
-    ));
+    let (mut document, sections) = fastn_unresolved::Document::new(
+        fastn_section::Document::parse(&arcstr::ArcStr::from(source)),
+        auto_imports,
+    );
 
     // todo: first go through just the imports and desugar them
 
@@ -52,9 +56,10 @@ where
 {
     println!("--------- testing -----------\n{source}\n--------- source ------------");
 
-    let (mut document, sections) = fastn_unresolved::Document::new(fastn_section::Document::parse(
-        &arcstr::ArcStr::from(source),
-    ));
+    let (mut document, sections) = fastn_unresolved::Document::new(
+        fastn_section::Document::parse(&arcstr::ArcStr::from(source)),
+        &[],
+    );
 
     let section = {
         assert_eq!(sections.len(), 1);

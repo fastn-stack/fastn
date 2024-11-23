@@ -24,11 +24,6 @@ fn render_document(
     let source = std::fs::File::open(path)
         .and_then(std::io::read_to_string)
         .unwrap();
-    let _o = fastn_compiler::compile(
-        Box::new(fastn::Symbols {
-            auto_imports: config.auto_imports.clone(),
-        }),
-        &source,
-    );
+    let _o = fastn_compiler::compile(Box::new(fastn::Symbols {}), &source, &config.auto_imports);
     todo!()
 }

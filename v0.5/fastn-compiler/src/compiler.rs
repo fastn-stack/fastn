@@ -16,6 +16,8 @@ pub(crate) struct Compiler {
         >,
     >,
     pub(crate) document: fastn_unresolved::Document,
+    desugared_auto_import:
+        Vec<fastn_unresolved::UR<fastn_unresolved::Definition, fastn_resolved::Definition>>,
 }
 
 impl Compiler {
@@ -27,8 +29,12 @@ impl Compiler {
         }
     }
 
-    fn new(symbols: Box<dyn fastn_compiler::SymbolStore>, source: &str) -> Self {
-        let mut document = fastn_unresolved::parse(source);
+    fn new(
+        symbols: Box<dyn fastn_compiler::SymbolStore>,
+        source: &str,
+        auto_imports: &[fastn_section::AutoImport],
+    ) -> Self {
+        let mut document = fastn_unresolved::parse(source, &[]);
         let content = Some(document.content);
         document.content = vec![];
 
@@ -39,6 +45,7 @@ impl Compiler {
             content,
             document,
             definitions_used: Default::default(),
+            desugared_auto_import: fastn_unresolved::desugar_auto_imports(auto_imports),
         }
     }
 
@@ -48,7 +55,11 @@ impl Compiler {
     ) {
         self.definitions_used
             .extend(symbols_to_fetch.iter().cloned());
-        let definitions = self.symbols.lookup(&mut self.interner, symbols_to_fetch);
+        let definitions = self.symbols.lookup(
+            &mut self.interner,
+            symbols_to_fetch,
+            &self.desugared_auto_import,
+        );
         for definition in definitions {
             // the following is only okay if our symbol store only returns unresolved definitions,
             // some other store might return resolved definitions, and we need to handle that.
@@ -216,8 +227,9 @@ impl Compiler {
 pub fn compile(
     symbols: Box<dyn fastn_compiler::SymbolStore>,
     source: &str,
+    auto_imports: &[fastn_section::AutoImport],
 ) -> Result<fastn_compiler::Output, fastn_compiler::Error> {
-    Compiler::new(symbols, source).compile()
+    Compiler::new(symbols, source, auto_imports).compile()
 }
 
 #[derive(Default)]
