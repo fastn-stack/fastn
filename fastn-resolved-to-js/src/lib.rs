@@ -10,9 +10,11 @@ mod element;
 use element::Element;
 
 pub mod extensions;
-mod fastn_type_functions;
-pub mod utils;
 use extensions::*;
+
+mod fastn_type_functions;
+mod html;
+pub mod utils;
 
 pub const CODE_DEFAULT_THEME: &str = "fastn-theme.dark";
 pub const REFERENCE: &str = "$";

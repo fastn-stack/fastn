@@ -18,3 +18,5 @@ itertools.workspace = true
 fastn-builtins.workspace = true
 indoc.workspace = true
 serde.workspace = true
+once_cell.workspace = true
+sha2.workspace = true

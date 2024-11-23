@@ -1,0 +1,51 @@
+/*
+https://github.com/PrismJS/prism/blob/59e5a3471377057de1f401ba38337aca27b80e03/plugins/line-highlight/prism-line-numbers.css - a Prism provide line-numbers CSS
+Copyright (c) 2012 Lea Verou (MIT Licensed)
+https://github.com/PrismJS/prism/releases/tag/v1.29.0
+https://github.com/PrismJS/prism
+
+Content taken from https://raw.githubusercontent.com/PrismJS/prism/59e5a3471377057de1f401ba38337aca27b80e03/plugins/line-numbers/prism-line-numbers.min.css
+*/
+
+
+pre[class*="language-"].line-numbers {
+    position: relative;
+    padding-left: 3.8em !important;
+    counter-reset: linenumber;
+}
+
+pre[class*="language-"].line-numbers > code {
+    position: relative;
+    white-space: inherit;
+    padding-left: 0 !important;
+}
+
+.line-numbers .line-numbers-rows {
+    position: absolute;
+    pointer-events: none;
+    top: 0;
+    font-size: 100%;
+    left: -3.8em;
+    width: 3em; /* works for line-numbers below 1000 lines */
+    letter-spacing: -1px;
+    border-right: 1px solid #999;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+}
+
+.line-numbers-rows > span {
+    display: block;
+    counter-increment: linenumber;
+}
+
+.line-numbers-rows > span:before {
+    content: counter(linenumber);
+    color: #999;
+    display: block;
+    padding-right: 0.8em;
+    text-align: right;
+}
