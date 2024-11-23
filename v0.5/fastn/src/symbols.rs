@@ -21,6 +21,7 @@ impl Symbols {
         let d = fastn_unresolved::parse(&source);
         let mut definitions = d
             .desugar_imports(&self.auto_imports)
+            .into_iter()
             .map(|v| v.into())
             .collect::<Vec<_>>();
 
@@ -30,7 +31,7 @@ impl Symbols {
                 .map(|d| match d {
                     fastn_unresolved::UR::UnResolved(mut v) => {
                         v.symbol =
-                            Some(symbol.with_name(&v.name.unresolved().unwrap().str(), interner));
+                            Some(symbol.with_name(v.name.unresolved().unwrap().str(), interner));
                         fastn_unresolved::UR::UnResolved(v)
                     }
                     _ => {
@@ -39,7 +40,7 @@ impl Symbols {
                         )
                     }
                 })
-                .collect(),
+                .collect::<Vec<_>>(),
         );
 
         definitions

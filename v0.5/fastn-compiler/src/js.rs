@@ -93,6 +93,7 @@ impl fastn_compiler::Compiler {
     }
 }
 
+#[expect(unused)]
 pub struct Output {
     js: String,
     css_files: Vec<String>,

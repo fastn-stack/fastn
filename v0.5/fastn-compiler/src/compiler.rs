@@ -6,7 +6,6 @@ pub(crate) struct Compiler {
     pub(crate) interner: string_interner::DefaultStringInterner,
     pub(crate) definitions:
         std::collections::HashMap<fastn_unresolved::Symbol, fastn_unresolved::LookupResult>,
-    auto_imports: Vec<fastn_section::AutoImport>,
     /// checkout resolve_document for why this is an Option
     content: Option<
         Vec<
@@ -24,14 +23,11 @@ impl Compiler {
         fastn_unresolved::resolver::Input {
             definitions: &self.definitions,
             builtins: fastn_builtins::builtins(),
+            interner: &self.interner,
         }
     }
 
-    fn new(
-        symbols: Box<dyn fastn_compiler::SymbolStore>,
-        auto_imports: Vec<fastn_section::AutoImport>,
-        source: &str,
-    ) -> Self {
+    fn new(symbols: Box<dyn fastn_compiler::SymbolStore>, source: &str) -> Self {
         let mut document = fastn_unresolved::parse(source);
         let content = Some(document.content);
         document.content = vec![];
@@ -41,7 +37,6 @@ impl Compiler {
             interner: string_interner::StringInterner::new(),
             definitions: std::collections::HashMap::new(),
             content,
-            auto_imports,
             document,
             definitions_used: Default::default(),
         }
@@ -221,9 +216,8 @@ impl Compiler {
 pub fn compile(
     symbols: Box<dyn fastn_compiler::SymbolStore>,
     source: &str,
-    auto_imports: Vec<fastn_section::AutoImport>,
 ) -> Result<fastn_compiler::Output, fastn_compiler::Error> {
-    Compiler::new(symbols, auto_imports, source).compile()
+    Compiler::new(symbols, source).compile()
 }
 
 #[derive(Default)]

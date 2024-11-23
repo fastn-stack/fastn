@@ -50,7 +50,6 @@ fastn-resolved-to-js = { path = "../fastn-resolved-to-js" }
 fastn-js = { path = "../fastn-js" }
 fastn-unresolved = { path = "fastn-unresolved" }
 fastn-update = { path = "fastn-update" }
-id-arena = "2"
 indexmap = "2"
 insta = { version = "1", features = ["yaml", "glob"] }
 itertools = "0.13"

@@ -13,9 +13,6 @@ pub struct Input<'a> {
         &'a std::collections::HashMap<fastn_unresolved::Symbol, fastn_unresolved::LookupResult>,
     pub builtins: &'a indexmap::IndexMap<String, fastn_resolved::Definition>,
     pub interner: &'a string_interner::DefaultStringInterner,
-    // TODO: this should be a better data structure. the exposing bits and exports should be
-    //       handled separately in Symbols trait handler
-    pub import_arena: id_arena::Arena<Vec<fastn_unresolved::Import>>,
 }
 
 pub struct Output {
