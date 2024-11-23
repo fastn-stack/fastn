@@ -30,7 +30,7 @@ pub type LookupResult =
 #[derive(Debug, Clone, Default)]
 pub struct Document {
     pub module_doc: Option<fastn_section::Span>,
-    pub definitions: Vec<UR<Definition, fastn_resolved::Definition>>,
+    pub definitions: Vec<UR>,
     pub content: Vec<UR<ComponentInvocation, fastn_resolved::ComponentInvocation>>,
     pub errors: Vec<fastn_section::Spanned<fastn_section::Error>>,
     pub warnings: Vec<fastn_section::Spanned<fastn_section::Warning>>,
@@ -126,7 +126,7 @@ pub struct Import {
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub enum UR<U, R> {
+pub enum UR<U = Definition, R = fastn_unresolved::Definition> {
     Resolved(R),
     UnResolved(U),
     NotFound,

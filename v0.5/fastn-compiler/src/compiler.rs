@@ -16,8 +16,7 @@ pub(crate) struct Compiler {
         >,
     >,
     pub(crate) document: fastn_unresolved::Document,
-    desugared_auto_import:
-        Vec<fastn_unresolved::UR<fastn_unresolved::Definition, fastn_resolved::Definition>>,
+    desugared_auto_import: Vec<fastn_unresolved::UR>,
 }
 
 impl Compiler {

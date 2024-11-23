@@ -6,10 +6,7 @@ impl Symbols {
         &mut self,
         interner: &mut string_interner::DefaultStringInterner,
         (file, symbol): (String, fastn_unresolved::Symbol),
-        desugared_auto_imports: &[fastn_unresolved::UR<
-            fastn_unresolved::Definition,
-            fastn_resolved::Definition,
-        >],
+        desugared_auto_imports: &[fastn_unresolved::UR],
     ) -> Vec<fastn_unresolved::LookupResult> {
         // we need to fetch the symbol from the store
         let source = match std::fs::File::open(file.as_str()).and_then(std::io::read_to_string) {
@@ -42,10 +39,7 @@ impl fastn_compiler::SymbolStore for Symbols {
         &mut self,
         interner: &mut string_interner::DefaultStringInterner,
         symbols: &std::collections::HashSet<fastn_unresolved::Symbol>,
-        desugared_auto_imports: &[fastn_unresolved::UR<
-            fastn_unresolved::Definition,
-            fastn_resolved::Definition,
-        >],
+        desugared_auto_imports: &[fastn_unresolved::UR],
     ) -> Vec<fastn_unresolved::LookupResult> {
         let unique_modules = symbols
             .iter()

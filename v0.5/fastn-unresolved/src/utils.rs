@@ -1,10 +1,7 @@
 impl fastn_unresolved::Document {
     pub(crate) fn new(
         document: fastn_section::Document,
-        desugared_auto_imports: &[fastn_unresolved::UR<
-            fastn_unresolved::Definition,
-            fastn_resolved::Definition,
-        >],
+        desugared_auto_imports: &[fastn_unresolved::UR],
     ) -> (fastn_unresolved::Document, Vec<fastn_section::Section>) {
         (
             fastn_unresolved::Document {
@@ -198,6 +195,6 @@ impl fastn_unresolved::Symbol {
 
 pub fn desugar_auto_imports(
     _auto_imports: &[fastn_section::AutoImport],
-) -> Vec<fastn_unresolved::UR<fastn_unresolved::Definition, fastn_resolved::Definition>> {
+) -> Vec<fastn_unresolved::UR> {
     todo!()
 }
