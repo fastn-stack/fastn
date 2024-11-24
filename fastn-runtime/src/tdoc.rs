@@ -4,7 +4,6 @@ use indexmap::IndexMap;
 pub struct TDoc<'a> {
     pub name: &'a str,
     pub definitions: indexmap::IndexMap<String, fastn_resolved::Definition>,
-    pub builtins: &'static indexmap::IndexMap<String, fastn_resolved::Definition>,
 }
 
 impl TDoc<'_> {
@@ -13,7 +12,7 @@ impl TDoc<'_> {
             return Some(definition);
         }
 
-        if let Some(definition) = self.builtins.get(name) {
+        if let Some(definition) = fastn_builtins::builtins().get(name) {
             return Some(definition);
         }
 

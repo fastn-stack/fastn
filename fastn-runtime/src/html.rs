@@ -15,7 +15,6 @@ impl HtmlData {
         let doc = fastn_runtime::TDoc {
             name: "foo", // Todo: Package name
             definitions: o.definitions,
-            builtins: fastn_builtins::builtins(),
         };
 
         let output = fastn_runtime::get_all_asts(&doc, &o.content);
