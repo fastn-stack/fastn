@@ -1,20 +1,19 @@
 extern crate self as fastn_resolved_to_js;
 
 mod resolver;
-pub use resolver::ResolverData;
-
-mod value;
-pub use value::Value;
 
 mod element;
-use element::Element;
-
 pub mod extensions;
-use extensions::*;
-
 mod fastn_type_functions;
 mod html;
 pub mod utils;
+mod value;
+
+use element::Element;
+use extensions::*;
+pub use html::{Favicon, HtmlInput, Package};
+pub use resolver::ResolverData;
+pub use value::Value;
 
 pub const CODE_DEFAULT_THEME: &str = "fastn-theme.dark";
 pub const REFERENCE: &str = "$";

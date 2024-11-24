@@ -1,5 +1,5 @@
 fn main() {
-    let c = fastn_resolved::ComponentInvocation {
+    let _c = fastn_resolved::ComponentInvocation {
         id: None,
         name: "ftd#text".to_string(),
         properties: vec![], // add hello-world caption etc.
