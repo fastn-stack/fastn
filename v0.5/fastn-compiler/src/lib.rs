@@ -5,17 +5,14 @@
 extern crate self as fastn_compiler;
 
 mod compiler;
-pub use compiler::compile;
-pub(crate) use compiler::Compiler;
-
 mod symbols;
-pub use symbols::SymbolStore;
-
 mod tdoc;
 mod utils;
 pub use tdoc::CompiledDocument;
 
+pub use compiler::compile;
 pub use fastn_section::Result;
+pub use symbols::SymbolStore;
 
 pub struct Error {
     #[expect(unused)]
