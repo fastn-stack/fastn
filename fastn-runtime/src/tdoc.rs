@@ -1,3 +1,6 @@
+use fastn_resolved::Definition;
+use indexmap::IndexMap;
+
 pub struct TDoc<'a> {
     pub name: &'a str,
     pub definitions: indexmap::IndexMap<String, fastn_resolved::Definition>,
@@ -49,5 +52,9 @@ impl<'a> fastn_resolved::tdoc::TDoc for TDoc<'a> {
             Some(fastn_resolved::Definition::WebComponent(f)) => Some(f.clone()),
             _ => None,
         }
+    }
+
+    fn definitions(&self) -> &IndexMap<String, Definition> {
+        &self.definitions
     }
 }

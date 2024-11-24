@@ -347,10 +347,9 @@ pub struct AstOutput {
     pub ast: Vec<fastn_js::Ast>,
     pub has_rive_components: bool,
 }
-pub fn get_all_asts<'a, T: Iterator<Item = &'a fastn_resolved::Definition>>(
+pub fn get_all_asts(
     doc: &dyn fastn_resolved::tdoc::TDoc,
     tree: &[fastn_resolved::ComponentInvocation],
-    used_definitions: T,
 ) -> AstOutput {
     // Check if the document tree uses Rive, if so add the Rive script.
     let mut has_rive_components = false;
@@ -362,7 +361,8 @@ pub fn get_all_asts<'a, T: Iterator<Item = &'a fastn_resolved::Definition>>(
         &mut has_rive_components,
     )];
 
-    for definition in used_definitions {
+    for definition in doc.definitions().values() {
+        // TODO: if definition.symbol starts with `ftd#` continue
         if let fastn_resolved::Definition::Component(c) = definition {
             document_asts.push(c.to_ast(doc, &mut has_rive_components));
         } else if let fastn_resolved::Definition::Variable(v) = definition {
@@ -376,7 +376,7 @@ pub fn get_all_asts<'a, T: Iterator<Item = &'a fastn_resolved::Definition>>(
         } else if let fastn_resolved::Definition::Function(f) = definition {
             document_asts.push(f.to_ast(doc));
         } else if let fastn_resolved::Definition::Export { from, to, .. } = definition {
-            if doc.get_opt_record(from).is_some() {
+            if doc.get_opt_record(&from).is_some() {
                 continue;
             }
             export_asts.push(fastn_js::Ast::Export {

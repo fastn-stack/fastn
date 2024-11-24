@@ -18,7 +18,7 @@ fn main() {
 
     let h = fastn_runtime::HtmlData::from_cd(fastn_resolved::CompiledDocument {
         content: vec![c],
-        definitions: Default::default(),
+        definitions: fastn_builtins::builtins().clone(),
     });
 
     std::fs::write(std::path::PathBuf::from("output.html"), h.to_test_html()).unwrap();

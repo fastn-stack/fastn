@@ -18,13 +18,7 @@ impl HtmlData {
             builtins: fastn_builtins::builtins(),
         };
 
-        let output = fastn_runtime::get_all_asts(
-            &doc,
-            &o.content,
-            std::iter::IntoIterator::into_iter([fastn_builtins::builtins()
-                .get("ftd#text")
-                .unwrap()]),
-        );
+        let output = fastn_runtime::get_all_asts(&doc, &o.content);
 
         let js_document_script = fastn_js::to_js(output.ast.as_slice(), "foo");
         let js_ftd_script = fastn_js::to_js(
