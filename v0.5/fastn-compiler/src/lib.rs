@@ -14,7 +14,7 @@ pub use symbols::SymbolStore;
 mod js;
 mod tdoc;
 mod utils;
-pub use tdoc::TDoc;
+pub use tdoc::CompiledDocument;
 
 pub use fastn_section::Result;
 

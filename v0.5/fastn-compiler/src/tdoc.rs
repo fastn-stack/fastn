@@ -1,10 +1,10 @@
-pub struct TDoc<'a> {
-    pub name: &'a str,
+pub struct CompiledDocument {
+    pub name: String,
     pub definitions: &'a indexmap::IndexMap<String, &'a fastn_resolved::Definition>,
     pub builtins: &'static indexmap::IndexMap<String, fastn_resolved::Definition>,
 }
 
-impl TDoc<'_> {
+impl CompiledDocument<'_> {
     fn get(&self, name: &str) -> Option<&fastn_resolved::Definition> {
         if let Some(definition) = self.definitions.get(name) {
             return Some(definition);
@@ -18,7 +18,7 @@ impl TDoc<'_> {
     }
 }
 
-impl<'a> fastn_resolved::tdoc::TDoc for TDoc<'a> {
+impl<'a> fastn_resolved::tdoc::TDoc for CompiledDocument<'a> {
     fn get_opt_function(&self, name: &str) -> Option<&fastn_resolved::Function> {
         match self.get(name) {
             Some(fastn_resolved::Definition::Function(f)) => Some(f),

@@ -10,7 +10,7 @@ impl fastn_compiler::Compiler {
         let resolved_content = self.resolved_content();
         // every symbol in self.symbol_used in the bag must be UR::R now
         let used_definitions = self.used_definitions();
-        let doc = fastn_compiler::TDoc {
+        let doc = fastn_compiler::CompiledDocument {
             name: "foo", // Todo: Package name
             definitions: &used_definitions,
             builtins: fastn_builtins::builtins(),

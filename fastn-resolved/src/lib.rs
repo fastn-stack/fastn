@@ -86,3 +86,5 @@ impl Definition {
         }
     }
 }
+
+pub struct CompiledDocument {}

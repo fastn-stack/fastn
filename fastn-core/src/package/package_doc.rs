@@ -317,7 +317,7 @@ pub(crate) fn file_id_to_names(id: &str) -> Vec<String> {
 }
 
 pub enum FTDResult {
-    Html(Vec<u8>),
+    Html(fastn_resolved::CompiledDocument),
     Redirect { url: String, code: u16 },
 }
 
@@ -368,7 +368,7 @@ pub(crate) async fn read_ftd_(
     test: bool,
     only_js: bool,
     preview_session_id: &Option<String>,
-) -> fastn_core::Result<FTDResult> {
+) -> fastn_core::Result<fastn_resolved::CompiledDocument> {
     tracing::info!(document = main.id);
     match config.config.ftd_edition {
         fastn_core::FTDEdition::FTD2022 => {

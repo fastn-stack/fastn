@@ -46,7 +46,7 @@ fastn-section = { path = "fastn-section" }
 fastn-static = { path = "fastn-static" }
 fastn-resolved = { path = "../fastn-resolved" }
 fastn-builtins = { path = "../fastn-builtins" }
-fastn-resolved-to-js = { path = "../fastn-resolved-to-js" }
+fastn-resolved-to-js = { path = "../fastn-runtime" }
 fastn-js = { path = "../fastn-js" }
 fastn-unresolved = { path = "fastn-unresolved" }
 fastn-update = { path = "fastn-update" }

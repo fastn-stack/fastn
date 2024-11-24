@@ -222,7 +222,7 @@ pub fn compile(
     symbols: Box<dyn fastn_compiler::SymbolStore>,
     source: &str,
     auto_imports: &[fastn_section::AutoImport],
-) -> Result<fastn_compiler::Output, fastn_compiler::Error> {
+) -> Result<fastn_resolved::CompiledDocument, fastn_compiler::Error> {
     Compiler::new(symbols, source, auto_imports).compile()
 }
 
