@@ -1,4 +1,4 @@
-use fastn_resolved_to_js::extensions::*;
+use fastn_runtime::extensions::*;
 
 #[allow(dead_code)]
 pub fn trim_all_lines(s: &str) -> String {
@@ -30,11 +30,11 @@ pub fn get_css_html(external_css: &[String]) -> String {
 pub(crate) fn get_rive_event(
     events: &[fastn_resolved::Event],
     doc: &dyn fastn_resolved::tdoc::TDoc,
-    rdata: &fastn_resolved_to_js::ResolverData,
+    rdata: &fastn_runtime::ResolverData,
     element_name: &str,
 ) -> String {
-    let mut events_map: fastn_resolved_to_js::VecMap<(&String, &fastn_resolved::FunctionCall)> =
-        fastn_resolved_to_js::VecMap::new();
+    let mut events_map: fastn_runtime::VecMap<(&String, &fastn_resolved::FunctionCall)> =
+        fastn_runtime::VecMap::new();
     for event in events.iter() {
         let (event_name, input, action) = match &event.name {
             fastn_resolved::EventName::RivePlay(timeline) => ("onPlay", timeline, &event.action),
@@ -50,9 +50,8 @@ pub(crate) fn get_rive_event(
     for (on, actions) in events_map.value {
         let mut actions_vec = vec![];
         for (input, action) in actions {
-            let action =
-                fastn_resolved_to_js::utils::function_call_to_js_formula(action, doc, rdata)
-                    .formula_value_to_js(&Some(element_name.to_string()));
+            let action = fastn_runtime::utils::function_call_to_js_formula(action, doc, rdata)
+                .formula_value_to_js(&Some(element_name.to_string()));
             actions_vec.push(format!(
                 indoc::indoc! {"
                       if (input === \"{input}\") {{
@@ -108,10 +107,7 @@ pub(crate) fn to_key(key: &str) -> String {
     .to_string()
 }
 
-pub(crate) fn update_reference(
-    reference: &str,
-    rdata: &fastn_resolved_to_js::ResolverData,
-) -> String {
+pub(crate) fn update_reference(reference: &str, rdata: &fastn_runtime::ResolverData) -> String {
     let name = reference.to_string();
 
     if fastn_builtins::constants::FTD_SPECIAL_VALUE
@@ -156,7 +152,7 @@ pub(crate) fn update_reference(
 
     if let Some(loop_counter_alias) = rdata.loop_counter_alias {
         if let Some(ref doc_name) = rdata.doc_name {
-            let resolved_alias = fastn_resolved_to_js::utils::resolve_name(
+            let resolved_alias = fastn_runtime::utils::resolve_name(
                 loop_counter_alias,
                 doc_name.as_str(),
                 &fastn_builtins::default_aliases(),
@@ -185,8 +181,8 @@ fn is_ftd_thing(name: &str) -> bool {
 
 pub(crate) fn get_js_value_from_properties(
     properties: &[fastn_resolved::Property],
-) -> Option<fastn_resolved_to_js::Value> {
-    use fastn_resolved_to_js::extensions::PropertyValueExt;
+) -> Option<fastn_runtime::Value> {
+    use fastn_runtime::extensions::PropertyValueExt;
     if properties.is_empty() {
         return None;
     }
@@ -198,7 +194,7 @@ pub(crate) fn get_js_value_from_properties(
         }
     }
 
-    Some(fastn_resolved_to_js::Value::ConditionalFormula(
+    Some(fastn_runtime::Value::ConditionalFormula(
         properties.to_owned(),
     ))
 }
@@ -206,7 +202,7 @@ pub(crate) fn get_js_value_from_properties(
 pub(crate) fn function_call_to_js_formula(
     function_call: &fastn_resolved::FunctionCall,
     doc: &dyn fastn_resolved::tdoc::TDoc,
-    rdata: &fastn_resolved_to_js::ResolverData,
+    rdata: &fastn_runtime::ResolverData,
 ) -> fastn_js::Formula {
     let mut deps = vec![];
     for property_value in function_call.values.values() {
@@ -269,7 +265,7 @@ pub(crate) fn is_module_argument(
 /// conversion operation fails.
 pub(crate) fn get_set_property_values_for_provided_component_properties(
     doc: &dyn fastn_resolved::tdoc::TDoc,
-    rdata: &fastn_resolved_to_js::ResolverData,
+    rdata: &fastn_runtime::ResolverData,
     component_name: &str,
     component_properties: &[fastn_resolved::Property],
     has_rive_components: &mut bool,
@@ -361,8 +357,8 @@ pub fn get_children_properties_from_properties(
 
 pub fn resolve_name(name: &str, doc_name: &str, aliases: &fastn_builtins::Map<String>) -> String {
     let name = name
-        .trim_start_matches(fastn_resolved_to_js::CLONE)
-        .trim_start_matches(fastn_resolved_to_js::REFERENCE)
+        .trim_start_matches(fastn_runtime::CLONE)
+        .trim_start_matches(fastn_runtime::REFERENCE)
         .to_string();
 
     if name.contains('#') {
@@ -370,7 +366,7 @@ pub fn resolve_name(name: &str, doc_name: &str, aliases: &fastn_builtins::Map<St
     }
 
     let doc_name = doc_name.trim_end_matches('/');
-    match fastn_resolved_to_js::utils::split_module(name.as_str()) {
+    match fastn_runtime::utils::split_module(name.as_str()) {
         (Some(m), v, None) => match aliases.get(m) {
             Some(m) => format!("{}#{}", m, v),
             None => format!("{}#{}.{}", doc_name, m, v),

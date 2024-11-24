@@ -1611,11 +1611,12 @@ dependencies = [
 name = "fastn-resolved"
 version = "0.1.1"
 dependencies = [
+ "indexmap",
  "serde",
 ]
 
 [[package]]
-name = "fastn-resolved-to-js"
+name = "fastn-runtime"
 version = "0.1.0"
 dependencies = [
  "fastn-builtins",
@@ -1747,7 +1748,7 @@ dependencies = [
  "fastn-builtins",
  "fastn-js",
  "fastn-resolved",
- "fastn-resolved-to-js",
+ "fastn-runtime",
  "format_num",
  "ftd-ast",
  "ftd-p1",

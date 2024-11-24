@@ -41,7 +41,7 @@ fastn-js.workspace = true
 indexmap.workspace = true
 fastn-resolved = { workspace = true, features = ["owned-tdoc"] }
 fastn-builtins.workspace = true
-fastn-resolved-to-js.workspace = true
+fastn-runtime.workspace = true
 
 [dev-dependencies]
 diffy.workspace = true

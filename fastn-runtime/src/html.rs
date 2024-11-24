@@ -1,4 +1,4 @@
-use fastn_resolved_to_js::extensions::*;
+use fastn_runtime::extensions::*;
 
 pub struct HtmlInput {
     pub package: Package,
@@ -72,12 +72,9 @@ impl HtmlInput {
     }
 
     fn get_script_file(&self) -> String {
-        let mut scripts =
-            fastn_resolved_to_js::utils::get_external_scripts(self.has_rive_component);
-        scripts.push(fastn_resolved_to_js::utils::get_js_html(
-            self.js_files.as_slice(),
-        ));
-        scripts.push(fastn_resolved_to_js::utils::get_css_html(
+        let mut scripts = fastn_runtime::utils::get_external_scripts(self.has_rive_component);
+        scripts.push(fastn_runtime::utils::get_js_html(self.js_files.as_slice()));
+        scripts.push(fastn_runtime::utils::get_css_html(
             self.css_files.as_slice(),
         ));
 

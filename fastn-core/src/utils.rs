@@ -631,7 +631,7 @@ pub async fn replace_markers_2022(
     font_style: &str,
     base_url: &str,
     session_id: &Option<String>,
-) -> String {
+) -> fastn_resolved::CompiledDocument {
     ftd::html::utils::trim_all_lines(
         s.replace(
             "__ftd_meta_data__",
@@ -731,7 +731,7 @@ pub async fn replace_markers_2023(
     base_url: &str,
     config: &fastn_core::Config,
     session_id: &Option<String>,
-) -> String {
+) -> fastn_resolved::CompiledDocument {
     format!(
         include_str!("../../ftd/ftd-js.html"),
         fastn_package = get_fastn_package_data(&config.package).as_str(),

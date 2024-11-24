@@ -1,4 +1,4 @@
-use fastn_resolved_to_js::extensions::*;
+use fastn_runtime::extensions::*;
 use ftd::interpreter::expression::ExpressionExt;
 
 #[derive(Debug, PartialEq)]

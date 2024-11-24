@@ -16,13 +16,13 @@ fn main() {
         line_number: 0,
     };
 
-    let doc = fastn_resolved_to_js::TDoc {
+    let doc = fastn_runtime::TDoc {
         name: "foo", // Todo: Package name
         definitions: Default::default(),
         builtins: fastn_builtins::builtins(),
     };
 
-    let output = fastn_resolved_to_js::get_all_asts(
+    let output = fastn_runtime::get_all_asts(
         &doc,
         &[&c],
         std::iter::IntoIterator::into_iter([fastn_builtins::builtins().get("ftd#text").unwrap()]),
@@ -30,12 +30,12 @@ fn main() {
 
     let js_document_script = fastn_js::to_js(output.ast.as_slice(), "foo");
     let js_ftd_script = fastn_js::to_js(
-        fastn_resolved_to_js::default_bag_into_js_ast(&doc).as_slice(),
+        fastn_runtime::default_bag_into_js_ast(&doc).as_slice(),
         "foo",
     );
     let js = format!("{js_ftd_script}\n{js_document_script}");
-    let html = fastn_resolved_to_js::HtmlInput {
-        package: fastn_resolved_to_js::Package::new_name("foo"), // Todo
+    let html = fastn_runtime::HtmlInput {
+        package: fastn_runtime::Package::new_name("foo"), // Todo
         js,
         css_files: vec![],
         js_files: vec![],

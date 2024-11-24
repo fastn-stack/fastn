@@ -368,7 +368,7 @@ pub(crate) async fn read_ftd_(
     test: bool,
     only_js: bool,
     preview_session_id: &Option<String>,
-) -> fastn_core::Result<fastn_resolved::CompiledDocument> {
+) -> fastn_core::Result<FTDResult> {
     tracing::info!(document = main.id);
     match config.config.ftd_edition {
         fastn_core::FTDEdition::FTD2022 => {
