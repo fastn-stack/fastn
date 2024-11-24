@@ -91,7 +91,7 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
     // Check if document tree has rive. This is used to add rive script.
     let mut has_rive_components = false;
     let mut document_asts = vec![fastn_runtime::from_tree(
-        &document.tree.as_slice().iter().collect::<Vec<_>>(),
+        document.tree.as_slice(),
         &doc,
         &mut has_rive_components,
     )];

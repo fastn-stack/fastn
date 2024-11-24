@@ -13,7 +13,7 @@ mod value;
 
 use element::Element;
 use extensions::*;
-pub use html::{Favicon, HtmlInput, Package};
+pub use html::{Favicon, HtmlData, Package};
 pub use resolver::ResolverData;
 pub use value::Value;
 
@@ -153,7 +153,7 @@ impl fastn_runtime::extensions::ComponentDefinitionExt for fastn_resolved::Compo
 }
 
 pub fn from_tree(
-    tree: &[&fastn_resolved::ComponentInvocation],
+    tree: &[fastn_resolved::ComponentInvocation],
     doc: &dyn fastn_resolved::tdoc::TDoc,
     has_rive_components: &mut bool,
 ) -> fastn_js::Ast {
@@ -349,7 +349,7 @@ pub struct AstOutput {
 }
 pub fn get_all_asts<'a, T: Iterator<Item = &'a fastn_resolved::Definition>>(
     doc: &dyn fastn_resolved::tdoc::TDoc,
-    tree: &[&fastn_resolved::ComponentInvocation],
+    tree: &[fastn_resolved::ComponentInvocation],
     used_definitions: T,
 ) -> AstOutput {
     // Check if the document tree uses Rive, if so add the Rive script.

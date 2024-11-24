@@ -1,6 +1,6 @@
 use fastn_runtime::extensions::*;
 
-pub struct HtmlInput {
+pub struct HtmlData {
     pub package: Package,
     pub js: String,
     pub css_files: Vec<String>,
@@ -10,7 +10,38 @@ pub struct HtmlInput {
 }
 const EMPTY_HTML_BODY: &str = "<body></body><style id=\"styles\"></style>";
 
-impl HtmlInput {
+impl HtmlData {
+    fn from_cd(o: fastn_resolved::CompiledDocument) -> fastn_runtime::HtmlData {
+        let doc = fastn_runtime::TDoc {
+            name: "foo", // Todo: Package name
+            definitions: o.definitions,
+            builtins: fastn_builtins::builtins(),
+        };
+
+        let output = fastn_runtime::get_all_asts(
+            &doc,
+            &o.content,
+            std::iter::IntoIterator::into_iter([fastn_builtins::builtins()
+                .get("ftd#text")
+                .unwrap()]),
+        );
+
+        let js_document_script = fastn_js::to_js(output.ast.as_slice(), "foo");
+        let js_ftd_script = fastn_js::to_js(
+            fastn_runtime::default_bag_into_js_ast(&doc).as_slice(),
+            "foo",
+        );
+        let js = format!("{js_ftd_script}\n{js_document_script}");
+        fastn_runtime::HtmlData {
+            package: fastn_runtime::Package::new_name("foo"), // Todo
+            js,
+            css_files: vec![],
+            js_files: vec![],
+            doc: Box::new(doc),
+            has_rive_component: output.has_rive_components,
+        }
+    }
+
     pub fn to_html(&self) -> String {
         self.to_html_(false)
     }
