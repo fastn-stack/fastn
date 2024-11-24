@@ -87,4 +87,7 @@ impl Definition {
     }
 }
 
-pub struct CompiledDocument {}
+pub struct CompiledDocument {
+    pub content: Vec<fastn_resolved::ComponentInvocation>,
+    pub definitions: indexmap::IndexMap<String, fastn_resolved::Definition>,
+}

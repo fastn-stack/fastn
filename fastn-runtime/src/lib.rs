@@ -422,3 +422,24 @@ pub fn get_all_asts<'a, T: Iterator<Item = &'a fastn_resolved::Definition>>(
         has_rive_components,
     }
 }
+
+pub(crate) fn external_js_files(
+    used_definitions: &indexmap::IndexMap<String, &fastn_resolved::Definition>,
+) -> Vec<String> {
+    used_definitions
+        .values()
+        .filter_map(|definition| match definition {
+            fastn_resolved::Definition::WebComponent(web_component) => web_component.js(),
+            fastn_resolved::Definition::Function(f) => f.js(),
+            _ => None,
+        })
+        .map(ToOwned::to_owned)
+        .collect()
+}
+
+pub(crate) fn external_css_files(
+    _needed_symbols: &indexmap::IndexMap<String, &fastn_resolved::Definition>,
+) -> Vec<String> {
+    // go through needed_symbols and get the external css files
+    todo!()
+}

@@ -11,22 +11,11 @@ pub(crate) use compiler::Compiler;
 mod symbols;
 pub use symbols::SymbolStore;
 
-mod js;
 mod tdoc;
 mod utils;
 pub use tdoc::CompiledDocument;
 
 pub use fastn_section::Result;
-
-pub struct Output {
-    #[expect(unused)]
-    js: fastn_resolved_to_js::HtmlInput,
-    #[expect(unused)]
-    warnings: Vec<fastn_section::Spanned<fastn_section::Warning>>,
-    #[expect(unused)]
-    resolved: Vec<fastn_resolved::Definition>,
-    // should we also return / cache partially resolved symbols?
-}
 
 pub struct Error {
     #[expect(unused)]

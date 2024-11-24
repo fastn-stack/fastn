@@ -45,11 +45,7 @@ fn main() {
 
     let html_str = html.to_test_html();
 
-    std::fs::write(
-        std::path::PathBuf::from("../output.html"),
-        html_str,
-    )
-    .unwrap();
+    std::fs::write(std::path::PathBuf::from("../output.html"), html_str).unwrap();
 
     // this main should create a HTML file, and store it in current folder as index.html etc.
 }

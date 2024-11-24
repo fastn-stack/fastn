@@ -150,7 +150,7 @@ impl Compiler {
         stuck_on_symbols
     }
 
-    fn compile(mut self) -> Result<fastn_compiler::Output, fastn_compiler::Error> {
+    fn compile(mut self) -> Result<fastn_resolved::CompiledDocument, fastn_compiler::Error> {
         // we only make 10 attempts to resolve the document: we need a warning if we are not able to
         // resolve the document in 10 attempts.
         let mut unresolvable = std::collections::HashSet::new();
@@ -201,10 +201,13 @@ impl Compiler {
         }
 
         // there were no errors, etc.
-        Ok(fastn_compiler::Output {
-            js: self.js(),
-            warnings: self.document.warnings,
-            resolved: vec![], // for now, we are not tracking resolved
+        Ok(fastn_resolved::CompiledDocument {
+            content: fastn_compiler::utils::resolved_content(self.document.content),
+            definitions: fastn_compiler::utils::used_definitions(
+                self.definitions,
+                self.definitions_used,
+                self.interner,
+            ),
         })
     }
 }

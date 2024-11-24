@@ -13,4 +13,5 @@ owned-tdoc = []
 
 [dependencies]
 serde.workspace = true
+indexmap.workspace = true
 

@@ -136,6 +136,13 @@ impl<U, V> fastn_unresolved::UR<U, V> {
             _ => None,
         }
     }
+
+    pub fn into_resolved(self) -> V {
+        match self {
+            fastn_unresolved::UR::Resolved(v) => v,
+            _ => panic!(),
+        }
+    }
 }
 
 impl fastn_unresolved::Symbol {
