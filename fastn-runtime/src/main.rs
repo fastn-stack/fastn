@@ -16,7 +16,12 @@ fn main() {
         line_number: 0,
     };
 
-    std::fs::write(std::path::PathBuf::from("../output.html"), html_str).unwrap();
+    let h = fastn_runtime::HtmlData::from_cd(fastn_resolved::CompiledDocument {
+        content: vec![c],
+        definitions: Default::default(),
+    });
+
+    std::fs::write(std::path::PathBuf::from("output.html"), h.to_test_html()).unwrap();
 
     // this main should create a HTML file, and store it in current folder as index.html etc.
 }

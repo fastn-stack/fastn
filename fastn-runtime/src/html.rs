@@ -11,7 +11,7 @@ pub struct HtmlData {
 const EMPTY_HTML_BODY: &str = "<body></body><style id=\"styles\"></style>";
 
 impl HtmlData {
-    fn from_cd(o: fastn_resolved::CompiledDocument) -> fastn_runtime::HtmlData {
+    pub fn from_cd(o: fastn_resolved::CompiledDocument) -> fastn_runtime::HtmlData {
         let doc = fastn_runtime::TDoc {
             name: "foo", // Todo: Package name
             definitions: o.definitions,
