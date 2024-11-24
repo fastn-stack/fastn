@@ -12,18 +12,23 @@ const EMPTY_HTML_BODY: &str = "<body></body><style id=\"styles\"></style>";
 
 impl HtmlInput {
     pub fn to_html(&self) -> String {
-        let mut scripts =
-            fastn_resolved_to_js::utils::get_external_scripts(self.has_rive_component);
-        scripts.push(fastn_resolved_to_js::utils::get_js_html(
-            self.js_files.as_slice(),
-        ));
-        scripts.push(fastn_resolved_to_js::utils::get_css_html(
-            self.css_files.as_slice(),
-        ));
+        self.to_html_(false)
+    }
+
+    pub fn to_test_html(&self) -> String {
+        self.to_html_(true)
+    }
+
+    fn to_html_(&self, test: bool) -> String {
+        let script_file = if test {
+            self.get_test_script_file()
+        } else {
+            self.get_script_file()
+        };
 
         format!(
             include_str!("../../ftd/ftd-js.html"),
-            fastn_package = self.package.name,
+            fastn_package = self.get_fastn_package_data(),
             base_url_tag = self
                 .package
                 .base_url
@@ -38,24 +43,57 @@ impl HtmlInput {
                 .unwrap_or_default()
                 .as_str(),
             js_script = format!("{}{}", self.js, available_code_themes()).as_str(),
-            script_file = format!(
-                r#"
+            script_file = script_file.as_str(),
+            extra_js = "", // Todo
+            default_css = fastn_js::ftd_js_css(),
+            html_body = EMPTY_HTML_BODY // Todo: format!("{}{}", EMPTY_HTML_BODY, font_style)
+        )
+    }
+
+    fn get_test_script_file(&self) -> String {
+        format!(
+            r#"
+                <script src="../fastn-js/prism/prism.js"></script>
+                <script src="../fastn-js/prism/prism-line-highlight.js"></script>
+                <script src="../fastn-js/prism/prism-line-numbers.js"></script>
+                <script src="../fastn-js/prism/prism-rust.js"></script>
+                <script src="../fastn-js/prism/prism-json.js"></script>
+                <script src="../fastn-js/prism/prism-python.js"></script>
+                <script src="../fastn-js/prism/prism-markdown.js"></script>
+                <script src="../fastn-js/prism/prism-bash.js"></script>
+                <script src="../fastn-js/prism/prism-sql.js"></script>
+                <script src="../fastn-js/prism/prism-javascript.js"></script>
+                <link rel="stylesheet" href="../fastn-js/prism/prism-line-highlight.css">
+                <link rel="stylesheet" href="../fastn-js/prism/prism-line-numbers.css">
+                <script>{}</script>
+            "#,
+            all_js_without_test(self.package.name.as_str(), self.doc.as_ref())
+        )
+    }
+
+    fn get_script_file(&self) -> String {
+        let mut scripts =
+            fastn_resolved_to_js::utils::get_external_scripts(self.has_rive_component);
+        scripts.push(fastn_resolved_to_js::utils::get_js_html(
+            self.js_files.as_slice(),
+        ));
+        scripts.push(fastn_resolved_to_js::utils::get_css_html(
+            self.css_files.as_slice(),
+        ));
+
+        format!(
+            r#"
                 <script src="{}"></script>
                 <script src="{}"></script>
                 <script src="{}"></script>
                 <link rel="stylesheet" href="{}">
                 {}
             "#,
-                hashed_markdown_js(),
-                hashed_prism_js(),
-                hashed_default_ftd_js(self.package.name.as_str(), self.doc.as_ref()),
-                hashed_prism_css(),
-                scripts.join("").as_str()
-            )
-            .as_str(),
-            extra_js = "", // Todo
-            default_css = fastn_js::ftd_js_css(),
-            html_body = EMPTY_HTML_BODY // Todo: format!("{}{}", EMPTY_HTML_BODY, font_style)
+            hashed_markdown_js(),
+            hashed_prism_js(),
+            hashed_default_ftd_js(self.package.name.as_str(), self.doc.as_ref()),
+            hashed_prism_css(),
+            scripts.join("").as_str()
         )
     }
 
@@ -180,6 +218,16 @@ pub struct Package {
     name: String,
     base_url: Option<String>,
     favicon: Option<Favicon>,
+}
+
+impl Package {
+    pub fn new_name(name: &str) -> Package {
+        Package {
+            name: name.to_string(),
+            base_url: None,
+            favicon: None,
+        }
+    }
 }
 
 #[derive(Debug, Default)]

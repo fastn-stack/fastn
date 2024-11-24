@@ -20,3 +20,4 @@ indoc.workspace = true
 serde.workspace = true
 once_cell.workspace = true
 sha2.workspace = true
+indexmap.workspace = true

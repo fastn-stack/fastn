@@ -236,6 +236,7 @@ dependencies = [
  "fastn-builtins",
  "fastn-js",
  "fastn-resolved",
+ "indexmap",
  "indoc",
  "itertools",
  "once_cell",

@@ -1621,6 +1621,7 @@ dependencies = [
  "fastn-builtins",
  "fastn-js",
  "fastn-resolved",
+ "indexmap",
  "indoc",
  "itertools 0.13.0",
  "once_cell",

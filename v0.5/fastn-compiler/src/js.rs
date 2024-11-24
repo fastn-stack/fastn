@@ -11,7 +11,7 @@ impl fastn_compiler::Compiler {
         // every symbol in self.symbol_used in the bag must be UR::R now
         let used_definitions = self.used_definitions();
         let doc = fastn_compiler::TDoc {
-            name: "", // Todo: Package name
+            name: "foo", // Todo: Package name
             definitions: &used_definitions,
             builtins: fastn_builtins::builtins(),
         };
@@ -23,7 +23,7 @@ impl fastn_compiler::Compiler {
             resolved_content.as_slice(),
             used_definitions.into_iter().map(|(_, v)| v),
         );
-        let js = fastn_js::to_js(output.ast.as_slice(), "");
+        let js = fastn_js::to_js(output.ast.as_slice(), ""); // Todo: package name
 
         fastn_resolved_to_js::HtmlInput {
             package: Default::default(), // Todo

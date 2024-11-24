@@ -6,6 +6,8 @@ mod element;
 pub mod extensions;
 mod fastn_type_functions;
 mod html;
+mod tdoc;
+pub use tdoc::TDoc;
 pub mod utils;
 mod value;
 
@@ -342,6 +344,7 @@ pub fn default_bag_into_js_ast(doc: &dyn fastn_resolved::tdoc::TDoc) -> Vec<fast
     ftd_asts
 }
 
+#[derive(Debug)]
 pub struct AstOutput {
     pub ast: Vec<fastn_js::Ast>,
     pub has_rive_components: bool,
