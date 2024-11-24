@@ -1,3 +1,4 @@
+#[async_trait::async_trait]
 pub trait SymbolStore {
     /// it is okay / acceptable to return more symbols than asked.
     ///
@@ -9,7 +10,7 @@ pub trait SymbolStore {
     /// or maybe the system can predict that if you asked for one symbol, you are going to ask
     /// for some related symbols soon.
     // TODO: should we make it async?
-    fn lookup(
+    async fn lookup(
         &mut self,
         interner: &mut string_interner::DefaultStringInterner,
         symbols: &std::collections::HashSet<fastn_unresolved::Symbol>,

@@ -9,6 +9,7 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
+async-trait.workspace = true
 fastn-core.workspace = true
 fastn-compiler.workspace = true
 fastn-section.workspace = true

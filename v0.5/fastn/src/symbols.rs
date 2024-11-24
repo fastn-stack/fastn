@@ -34,8 +34,9 @@ impl Symbols {
     }
 }
 
+#[async_trait::async_trait]
 impl fastn_compiler::SymbolStore for Symbols {
-    fn lookup(
+    async fn lookup(
         &mut self,
         interner: &mut string_interner::DefaultStringInterner,
         symbols: &std::collections::HashSet<fastn_unresolved::Symbol>,

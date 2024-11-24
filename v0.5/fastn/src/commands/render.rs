@@ -3,14 +3,14 @@ impl fastn::commands::Render {
         let route = config.resolve(self.path.as_str()).await;
         match route {
             fastn_core::Route::Document(path, data) => {
-                render_document(config, path.as_str(), data, self.strict)
+                render_document(config, path.as_str(), data, self.strict).await
             }
             _ => todo!(),
         };
     }
 }
 
-fn render_document(
+async fn render_document(
     config: &fastn_core::Config,
     path: &str,
     _data: serde_json::Value,
@@ -24,6 +24,7 @@ fn render_document(
     let source = std::fs::File::open(path)
         .and_then(std::io::read_to_string)
         .unwrap();
-    let _o = fastn_compiler::compile(Box::new(fastn::Symbols {}), &source, &config.auto_imports);
+    let _o =
+        fastn_compiler::compile(Box::new(fastn::Symbols {}), &source, &config.auto_imports).await;
     todo!()
 }

@@ -41,17 +41,20 @@ impl Compiler {
         }
     }
 
-    fn fetch_unresolved_symbols(
+    async fn fetch_unresolved_symbols(
         &mut self,
         symbols_to_fetch: &std::collections::HashSet<fastn_unresolved::Symbol>,
     ) {
         self.definitions_used
             .extend(symbols_to_fetch.iter().cloned());
-        let definitions = self.symbols.lookup(
-            &mut self.interner,
-            symbols_to_fetch,
-            &self.desugared_auto_import,
-        );
+        let definitions = self
+            .symbols
+            .lookup(
+                &mut self.interner,
+                symbols_to_fetch,
+                &self.desugared_auto_import,
+            )
+            .await;
         for definition in definitions {
             // the following is only okay if our symbol store only returns unresolved definitions,
             // some other store might return resolved definitions, and we need to handle that.
@@ -150,7 +153,7 @@ impl Compiler {
         stuck_on_symbols
     }
 
-    fn compile(mut self) -> Result<fastn_resolved::CompiledDocument, fastn_compiler::Error> {
+    async fn compile(mut self) -> Result<fastn_resolved::CompiledDocument, fastn_compiler::Error> {
         // we only make 10 attempts to resolve the document: we need a warning if we are not able to
         // resolve the document in 10 attempts.
         let mut unresolvable = std::collections::HashSet::new();
@@ -164,7 +167,7 @@ impl Compiler {
                 break;
             }
             // ever_used.extend(&unresolved_symbols);
-            self.fetch_unresolved_symbols(&unresolved_symbols);
+            self.fetch_unresolved_symbols(&unresolved_symbols).await;
             // this itself has to happen in a loop. we need a warning if we are not able to resolve all
             // symbols in 10 attempts.
             let mut r = ResolveSymbolsResult::default();
@@ -179,7 +182,7 @@ impl Compiler {
                     break;
                 }
                 // ever_used.extend(r.need_more_symbols);
-                self.fetch_unresolved_symbols(&r.need_more_symbols);
+                self.fetch_unresolved_symbols(&r.need_more_symbols).await;
                 iterations += 1;
             }
 
@@ -221,12 +224,12 @@ impl Compiler {
 ///
 /// earlier we had strict mode here, but to simplify things, now we let the caller convert non-empty
 /// warnings from OK part as error, and discard the generated JS.
-pub fn compile(
+pub async fn compile(
     symbols: Box<dyn fastn_compiler::SymbolStore>,
     source: &str,
     auto_imports: &[fastn_section::AutoImport],
 ) -> Result<fastn_resolved::CompiledDocument, fastn_compiler::Error> {
-    Compiler::new(symbols, source, auto_imports).compile()
+    Compiler::new(symbols, source, auto_imports).compile().await
 }
 
 #[derive(Default)]
