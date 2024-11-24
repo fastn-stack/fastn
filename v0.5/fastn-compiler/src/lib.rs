@@ -18,7 +18,7 @@ pub use symbols::SymbolStore;
 
 pub struct Output {
     #[expect(unused)]
-    js: String,
+    js: fastn_resolved_to_js::HtmlInput,
     #[expect(unused)]
     warnings: Vec<fastn_section::Spanned<fastn_section::Warning>>,
     #[expect(unused)]

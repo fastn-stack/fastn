@@ -1,18 +1,26 @@
 use fastn_resolved_to_js::extensions::*;
 
 pub struct HtmlInput {
-    package: Package,
-    js: String,
-    #[expect(unused)]
-    css_files: Vec<String>,
-    #[expect(unused)]
-    js_files: Vec<String>,
-    doc: dyn fastn_resolved::tdoc::TDoc,
+    pub package: Package,
+    pub js: String,
+    pub css_files: Vec<String>,
+    pub js_files: Vec<String>,
+    pub doc: Box<dyn fastn_resolved::tdoc::TDoc>,
+    pub has_rive_component: bool,
 }
 const EMPTY_HTML_BODY: &str = "<body></body><style id=\"styles\"></style>";
 
 impl HtmlInput {
     pub fn to_html(&self) -> String {
+        let mut scripts =
+            fastn_resolved_to_js::utils::get_external_scripts(self.has_rive_component);
+        scripts.push(fastn_resolved_to_js::utils::get_js_html(
+            self.js_files.as_slice(),
+        ));
+        scripts.push(fastn_resolved_to_js::utils::get_css_html(
+            self.css_files.as_slice(),
+        ));
+
         format!(
             include_str!("../../ftd/ftd-js.html"),
             fastn_package = self.package.name,
@@ -36,11 +44,13 @@ impl HtmlInput {
                 <script src="{}"></script>
                 <script src="{}"></script>
                 <link rel="stylesheet" href="{}">
+                {}
             "#,
                 hashed_markdown_js(),
                 hashed_prism_js(),
-                hashed_default_ftd_js(self.package.name.as_str(), &self.doc),
+                hashed_default_ftd_js(self.package.name.as_str(), self.doc.as_ref()),
                 hashed_prism_css(),
+                scripts.join("").as_str()
             )
             .as_str(),
             extra_js = "", // Todo
@@ -165,12 +175,14 @@ fn default_bag_into_js_ast(doc: &dyn fastn_resolved::tdoc::TDoc) -> Vec<fastn_js
     ftd_asts
 }
 
+#[derive(Debug, Default)]
 pub struct Package {
     name: String,
     base_url: Option<String>,
     favicon: Option<Favicon>,
 }
 
+#[derive(Debug, Default)]
 pub struct Favicon {
     path: String,
     content_type: String,
