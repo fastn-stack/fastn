@@ -1,4 +1,4 @@
-use fastn_resolved::{ComponentDefinition, Function, Record};
+use fastn_resolved::{ComponentDefinition, Definition, Function, Record};
 use ftd::interpreter::expression::ExpressionExt;
 use ftd::interpreter::things::component::ComponentDefinitionExt;
 use ftd::interpreter::things::or_type::OrTypeVariantExt;
@@ -2243,5 +2243,9 @@ impl<'a> fastn_resolved::tdoc::TDoc for TDoc<'a> {
             ftd::interpreter::Thing::WebComponent(c) => Some(c),
             _ => None,
         }
+    }
+
+    fn definitions(&self) -> &indexmap::IndexMap<String, Definition> {
+        self.bag()
     }
 }
