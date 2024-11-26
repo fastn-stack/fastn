@@ -132,6 +132,13 @@ pub struct QualifiedIdentifier {
 /// example: `list<string>` | `foo<a, b>` | `foo<bar<k>>` | `foo<a, b<asd>, c, d>` |
 /// `foo<a, b, c, d, e>`
 ///
+/// ```ftd
+/// -- list<
+///     ;; foo
+///     integer
+/// > string:
+/// ```
+///
 /// // |foo<>|
 ///
 /// note that this function is not responsible for parsing the visibility or doc-comments,

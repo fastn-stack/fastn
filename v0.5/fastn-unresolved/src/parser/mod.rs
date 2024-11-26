@@ -12,7 +12,9 @@ pub fn parse(source: &str, auto_imports: &[fastn_unresolved::URD]) -> fastn_unre
     // guess the section and call the appropriate unresolved method.
     for section in sections.into_iter() {
         let name = section.name().to_ascii_lowercase();
-        let kind = section.kind_name().map(str::to_ascii_lowercase);
+        let kind = section
+            .simple_section_kind_name()
+            .map(str::to_ascii_lowercase);
         // at this level we are very liberal, we just need a hint to which parser to use.
         // the parsers themselves do the error checks and validation.
         //
