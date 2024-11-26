@@ -50,4 +50,8 @@ impl fastn_resolved::tdoc::TDoc for CompiledDocument {
             _ => None,
         }
     }
+
+    fn definitions(&self) -> &indexmap::IndexMap<String, fastn_resolved::Definition> {
+        &self.definitions
+    }
 }
