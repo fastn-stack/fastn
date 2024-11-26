@@ -203,5 +203,6 @@ impl fastn_unresolved::Symbol {
 pub fn desugar_auto_imports(
     _auto_imports: &[fastn_section::AutoImport],
 ) -> Vec<fastn_unresolved::URD> {
-    todo!()
+    // todo!()
+    vec![]
 }

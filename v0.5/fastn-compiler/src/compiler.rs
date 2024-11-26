@@ -135,12 +135,7 @@ impl Compiler {
                 fastn_unresolved::UR::UnResolved(mut c) => {
                     let mut needed = Default::default();
                     c.resolve(self.resolution_input(), &mut needed);
-                    if needed.stuck_on.is_empty() {
-                        new_content.push(fastn_unresolved::UR::Resolved(c.resolved().unwrap()));
-                    } else {
-                        stuck_on_symbols.extend(needed.stuck_on);
-                        new_content.push(fastn_unresolved::UR::UnResolved(c));
-                    }
+                    stuck_on_symbols.extend(needed.stuck_on);
                     self.document
                         .merge(needed.errors, needed.warnings, needed.comments);
                 }
