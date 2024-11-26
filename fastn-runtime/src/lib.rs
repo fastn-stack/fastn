@@ -376,7 +376,7 @@ pub fn get_all_asts(
         } else if let fastn_resolved::Definition::Function(f) = definition {
             document_asts.push(f.to_ast(doc));
         } else if let fastn_resolved::Definition::Export { from, to, .. } = definition {
-            if doc.get_opt_record(&from).is_some() {
+            if doc.get_opt_record(from).is_some() {
                 continue;
             }
             export_asts.push(fastn_js::Ast::Export {
