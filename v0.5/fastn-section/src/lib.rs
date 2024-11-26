@@ -18,6 +18,7 @@ pub use fastn_jdebug::{Span, Spanned};
 pub use fastn_section::warning::Warning;
 pub use scanner::{Scannable, Scanner};
 
+#[derive(Debug)]
 pub enum Diagnostic {
     Error(Error),
     Warning(Warning),

@@ -1,6 +1,3 @@
-use fastn_resolved::Definition;
-use indexmap::IndexMap;
-
 pub struct TDoc<'a> {
     pub name: &'a str,
     pub definitions: indexmap::IndexMap<String, fastn_resolved::Definition>,
@@ -20,6 +17,7 @@ impl TDoc<'_> {
     }
 }
 
+#[cfg(feature = "owned-tdoc")]
 impl<'a> fastn_resolved::tdoc::TDoc for TDoc<'a> {
     fn get_opt_function(&self, name: &str) -> Option<fastn_resolved::Function> {
         match self.get(name) {
@@ -53,7 +51,46 @@ impl<'a> fastn_resolved::tdoc::TDoc for TDoc<'a> {
         }
     }
 
-    fn definitions(&self) -> &IndexMap<String, Definition> {
+    fn definitions(&self) -> &indexmap::IndexMap<String, fastn_resolved::Definition> {
+        &self.definitions
+    }
+}
+
+#[cfg(not(feature = "owned-tdoc"))]
+impl<'a> fastn_resolved::tdoc::TDoc for TDoc<'a> {
+    fn get_opt_function(&self, name: &str) -> Option<&fastn_resolved::Function> {
+        match self.get(name) {
+            Some(fastn_resolved::Definition::Function(f)) => Some(f),
+            _ => None,
+        }
+    }
+
+    fn get_opt_record(&self, name: &str) -> Option<&fastn_resolved::Record> {
+        match self.get(name) {
+            Some(fastn_resolved::Definition::Record(f)) => Some(f),
+            _ => None,
+        }
+    }
+
+    fn name(&self) -> &str {
+        self.name
+    }
+
+    fn get_opt_component(&self, name: &str) -> Option<&fastn_resolved::ComponentDefinition> {
+        match self.get(name) {
+            Some(fastn_resolved::Definition::Component(f)) => Some(f),
+            _ => None,
+        }
+    }
+
+    fn get_opt_web_component(&self, name: &str) -> Option<&fastn_resolved::WebComponentDefinition> {
+        match self.get(name) {
+            Some(fastn_resolved::Definition::WebComponent(f)) => Some(f),
+            _ => None,
+        }
+    }
+
+    fn definitions(&self) -> &indexmap::IndexMap<String, fastn_resolved::Definition> {
         &self.definitions
     }
 }

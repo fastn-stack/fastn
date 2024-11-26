@@ -1,7 +1,6 @@
 pub struct CompiledDocument {
     pub name: String,
     pub definitions: indexmap::IndexMap<String, fastn_resolved::Definition>,
-    pub builtins: &'static indexmap::IndexMap<String, fastn_resolved::Definition>,
 }
 
 impl CompiledDocument {
@@ -10,7 +9,7 @@ impl CompiledDocument {
             return Some(definition);
         }
 
-        if let Some(definition) = self.builtins.get(name) {
+        if let Some(definition) = fastn_builtins::builtins().get(name) {
             return Some(definition);
         }
 

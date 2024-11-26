@@ -14,6 +14,7 @@ pub use compiler::compile;
 pub use fastn_section::Result;
 pub use symbols::SymbolStore;
 
+#[derive(Debug)]
 pub struct Error {
     #[expect(unused)]
     messages: Vec<fastn_section::Diagnostic>,
@@ -46,6 +47,7 @@ pub struct Error {
 }
 
 /// a symbol can fail because of multiple errors, and we will store the various ones in the
+#[derive(Debug)]
 pub struct SymbolError {
     #[expect(unused)]
     symbol: fastn_unresolved::Identifier,

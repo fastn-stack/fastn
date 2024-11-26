@@ -14,6 +14,7 @@ fastn-core.workspace = true
 fastn-compiler.workspace = true
 fastn-section.workspace = true
 fastn-resolved.workspace = true
+fastn-runtime.workspace = true
 fastn-unresolved.workspace = true
 serde_json.workspace = true
 string-interner.workspace = true
