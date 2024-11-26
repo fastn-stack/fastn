@@ -12,6 +12,6 @@ pub enum Route {
 
 impl fastn_core::Config {
     pub async fn resolve(&self, _path: &str) -> Route {
-        todo!()
+        Route::Document("index.ftd".to_string(), serde_json::Value::Null)
     }
 }
