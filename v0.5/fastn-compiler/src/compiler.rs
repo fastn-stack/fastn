@@ -134,7 +134,7 @@ impl Compiler {
             match ci {
                 fastn_unresolved::UR::UnResolved(mut c) => {
                     let mut needed = Default::default();
-                    c.resolve(self.resolution_input(), &mut needed);
+                    c.resolve(&self.resolution_input(), &mut needed);
                     stuck_on_symbols.extend(needed.stuck_on);
                     self.document
                         .merge(needed.errors, needed.warnings, needed.comments);
