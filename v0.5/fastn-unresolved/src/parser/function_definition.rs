@@ -55,8 +55,6 @@ pub(super) fn function_definition(
     document.definitions.push(
         fastn_unresolved::Definition {
             symbol: Default::default(),
-            module: Default::default(),
-            package: Default::default(),
             doc: Default::default(),
             visibility,
             name: fastn_unresolved::Identifier { name }.into(),
@@ -73,7 +71,6 @@ pub(super) fn function_definition(
 #[cfg(test)]
 mod tests {
     fn tester(mut d: fastn_unresolved::Document, expected: serde_json::Value) {
-        assert!(d.imports.is_empty());
         assert!(d.content.is_empty());
         assert_eq!(d.definitions.len(), 1);
 

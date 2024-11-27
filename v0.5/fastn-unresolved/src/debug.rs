@@ -1,3 +1,5 @@
+use serde_json::Value;
+
 impl fastn_jdebug::JDebug for fastn_unresolved::ComponentInvocation {
     fn debug(&self) -> Value {
         serde_json::json!({
@@ -43,8 +45,9 @@ impl fastn_jdebug::JDebug for fastn_unresolved::InnerDefinition {
             }
             crate::InnerDefinition::Component { .. } => todo!(),
             crate::InnerDefinition::Variable { .. } => todo!(),
-            crate::InnerDefinition::TypeAlias { .. } => todo!(),
             crate::InnerDefinition::Record { .. } => todo!(),
+            crate::InnerDefinition::SymbolAlias { .. } => todo!(),
+            crate::InnerDefinition::ModuleAlias { .. } => todo!(),
         }
     }
 }
@@ -75,11 +78,9 @@ impl fastn_jdebug::JDebug for fastn_unresolved::Kind {
     }
 }
 
-impl fastn_jdebug::JDebug for fastn_unresolved::SymbolName {
+impl fastn_jdebug::JDebug for fastn_unresolved::Symbol {
     fn debug(&self) -> serde_json::Value {
-        serde_json::json!({
-            "name": self.name.debug(),
-        })
+        todo!()
     }
 }
 
