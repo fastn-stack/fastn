@@ -87,8 +87,23 @@ impl fastn_section::Section {
         todo!()
     }
 
-    pub fn kind_name(&self) -> Option<&str> {
-        todo!()
+    pub fn simple_section_kind_name(&self) -> Option<&str> {
+        let kind = match self.init.name.kind {
+            Some(ref k) => k,
+            None => return None,
+        };
+
+        // the reason doc must be none as this is for section, and section doc is not stored in
+        // kind.doc.
+        if kind.args.is_some()
+            || kind.doc.is_some()
+            || kind.name.module.is_some()
+            || kind.name.terms.len() != 1
+        {
+            return None;
+        }
+
+        kind.name.terms.first().map(fastn_section::Identifier::str)
     }
 
     pub fn name(&self) -> &str {
@@ -188,6 +203,13 @@ impl From<fastn_section::QualifiedIdentifier> for fastn_section::Kind {
 impl fastn_section::Identifier {
     pub fn str(&self) -> &str {
         self.name.str()
+    }
+
+    pub fn spanned(&self, e: fastn_section::Error) -> fastn_section::Spanned<fastn_section::Error> {
+        fastn_section::Spanned {
+            span: self.name.clone(),
+            value: e,
+        }
     }
 }
 

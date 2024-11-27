@@ -11,16 +11,41 @@ pub mod resolver;
 mod utils;
 
 pub use parser::parse;
+pub use utils::desugar_auto_imports;
 
-pub type LookupResult =
-    fastn_unresolved::UR<fastn_unresolved::Definition, fastn_resolved::Definition>;
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+pub struct Symbol {
+    // 8 bytes
+    /// this store the <package>/<module>#<name> of the symbol
+    interned: string_interner::DefaultSymbol, // u32
+    /// length of the <package> part of the symbol
+    package_len: u16,
+    /// length of the <module> part of the symbol
+    module_len: u16,
+}
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+pub struct Module {
+    // 6 bytes
+    /// this store the <package>/<module>#<name> of the symbol
+    interned: string_interner::DefaultSymbol, // u32
+    /// length of the <package> part of the symbol
+    package_len: u16,
+}
+
+pub type URD = fastn_unresolved::UR<fastn_unresolved::Definition, fastn_resolved::Definition>;
+pub type URCI = fastn_unresolved::UR<
+    fastn_unresolved::ComponentInvocation,
+    fastn_resolved::ComponentInvocation,
+>;
+pub type URIS = fastn_unresolved::UR<fastn_unresolved::Identifier, fastn_unresolved::Symbol>;
+
+#[derive(Debug, Clone)]
 pub struct Document {
+    pub module: Module,
     pub module_doc: Option<fastn_section::Span>,
-    pub imports: Vec<fastn_unresolved::Import>,
-    pub definitions: Vec<UR<Definition, fastn_resolved::Definition>>,
-    pub content: Vec<UR<ComponentInvocation, fastn_resolved::ComponentInvocation>>,
+    pub definitions: Vec<URD>,
+    pub content: Vec<URCI>,
     pub errors: Vec<fastn_section::Spanned<fastn_section::Error>>,
     pub warnings: Vec<fastn_section::Spanned<fastn_section::Warning>>,
     pub comments: Vec<fastn_section::Span>,
@@ -29,9 +54,7 @@ pub struct Document {
 
 #[derive(Debug, Clone)]
 pub struct Definition {
-    pub symbol: Option<string_interner::DefaultSymbol>, // <package-name>/<module-name>#<definition-name>
-    pub module: Option<string_interner::DefaultSymbol>,
-    pub package: Option<string_interner::DefaultSymbol>,
+    pub symbol: Option<Symbol>, // <package-name>/<module-name>#<definition-name>
     pub doc: Option<fastn_section::Span>,
     /// resolving an identifier means making sure it is unique in the document, and performing
     /// other checks.
@@ -42,9 +65,11 @@ pub struct Definition {
 
 #[derive(Debug, Clone)]
 pub enum InnerDefinition {
+    SymbolAlias(Symbol),
+    ModuleAlias(Symbol),
     Component {
-        properties: Vec<UR<Argument, fastn_resolved::Argument>>,
-        body: Vec<UR<ComponentInvocation, fastn_resolved::ComponentInvocation>>,
+        arguments: Vec<UR<Argument, fastn_resolved::Argument>>,
+        body: Vec<URCI>,
     },
     Variable {
         kind: UR<Kind, fastn_resolved::Kind>,
@@ -93,27 +118,19 @@ pub enum InnerDefinition {
         body: Vec<UR<fastn_section::Tes, fastn_resolved::FunctionExpression>>,
         // body: Vec<UR<fastn_section::Tes, fastn_fscript::Expression>>,
     },
-    TypeAlias {
-        kind: UR<Kind, fastn_resolved::Kind>,
-        /// ```ftd
-        /// -- type foo: person
-        /// name: foo                  ;; we are updating / setting the default value
-        /// ```
-        arguments: Vec<UR<Property, fastn_resolved::Property>>,
-    },
+    // TypeAlias {
+    //     kind: UR<Kind, fastn_resolved::Kind>,
+    //     /// ```ftd
+    //     /// -- type foo: person
+    //     /// name: foo                  ;; we are updating / setting the default value
+    //     /// ```
+    //     arguments: Vec<UR<Property, fastn_resolved::Property>>,
+    // },
     Record {
-        properties: Vec<UR<Argument, fastn_resolved::Argument>>,
+        arguments: Vec<UR<Argument, fastn_resolved::Argument>>,
     },
     // TODO: OrType(fastn_section::Section),
     // TODO: Module(fastn_section::Section),
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct Import {
-    pub module: ModuleName,
-    pub alias: Option<Identifier>,
-    pub export: Option<Export>,
-    pub exposing: Option<Export>,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -136,7 +153,11 @@ pub enum UR<U, R> {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct ComponentInvocation {
-    pub name: UR<Identifier, Identifier>,
+    /// this contains a symbol that is the module where this component invocation happened.
+    ///
+    /// all local symbols are resolved with respect to the module.
+    pub module: Module,
+    pub name: URIS,
     /// once a caption is resolved, it is set to () here, and moved to properties
     pub caption: UR<Option<fastn_section::HeaderValue>, ()>,
     pub properties: Vec<UR<Property, fastn_resolved::Property>>,
@@ -170,26 +191,6 @@ pub struct ModuleName {
 
 pub type Identifier = fastn_section::Identifier;
 
-#[derive(Debug, Clone, PartialEq)]
-pub enum Export {
-    All,
-    Things(Vec<AliasableIdentifier>),
-}
-
-/// is this generic enough?
-#[derive(Debug, Clone, PartialEq)]
-pub struct AliasableIdentifier {
-    pub alias: Option<Identifier>,
-    pub name: Identifier,
-}
-
-#[derive(Debug, Clone, Eq, Hash, PartialEq)]
-pub struct SymbolName {
-    pub module: ModuleName,
-    /// can name contain dots? after we have `-- module foo:` feature it will, but now?
-    pub name: Identifier, // name comes after #
-}
-
 /// We cannot have kinds of like Record(SymbolName), OrType(SymbolName), because they are not
 /// yet "resolved", eg `-- foo x:`, we do not know if `foo` is a record or an or-type.
 #[derive(Debug, Clone, PartialEq)]
@@ -206,7 +207,7 @@ pub enum Kind {
     CaptionOrBody(Box<Kind>),
     // TODO: Future(Kind),
     // TODO: Result(Kind, Kind),
-    Custom(SymbolName),
+    Custom(Symbol),
 }
 
 pub enum FromSectionKindError {

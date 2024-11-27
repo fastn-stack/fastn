@@ -11,7 +11,7 @@ members = [
     "fastn-lang",
     "fastn-package",
     "fastn-resolved",
-    "fastn-resolved-to-js",
+    "fastn-runtime",
     "fastn-update",
     "fastn-utils",
     "fbt",
@@ -22,9 +22,9 @@ members = [
     "ftd-p1",
     "t",
     # "fastn-wasm",
-    # "fastn-runtime",
+    # "fastn-wasm-runtime",
 ]
-exclude = ["fastn-runtime", "fastn-wasm", "integration-tests/wasm", "v0.5"]
+exclude = ["fastn-wasm-runtime", "fastn-wasm", "integration-tests/wasm", "v0.5"]
 resolver = "2"
 
 [workspace.package]
@@ -46,7 +46,7 @@ homepage = "https://fastn.com"
 [profile.release]
 # Enabling this descreased our binary size from 30M to 27M on linux (as of 12th Jun 2023).
 # The build time went up (no objective data). Disabling it for now. It made a huge difference
-# in fastn-runtime wasm size (without lto: 2.1M with lto: 518K).
+# in fastn-wasm-runtime wasm size (without lto: 2.1M with lto: 518K).
 
 strip = true
 # lto = true

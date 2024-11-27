@@ -17,6 +17,7 @@ pub use fastn_jdebug::{Span, Spanned};
 pub use fastn_section::warning::Warning;
 pub use scanner::{Scannable, Scanner};
 
+#[derive(Debug)]
 pub enum Diagnostic {
     Error(Error),
     Warning(Warning),
@@ -36,6 +37,7 @@ pub struct Document {
 
 // this type is not really needed here, but adding here because fastn-section is our lowest
 // level crate
+#[derive(Debug, Clone)]
 pub struct AutoImport {}
 
 #[derive(Debug, PartialEq, Clone)]
@@ -128,6 +130,13 @@ pub struct QualifiedIdentifier {
 // to KindedName smaller and Kind bigger.
 /// example: `list<string>` | `foo<a, b>` | `foo<bar<k>>` | `foo<a, b<asd>, c, d>` |
 /// `foo<a, b, c, d, e>`
+///
+/// ```ftd
+/// -- list<
+///     ;; foo
+///     integer
+/// > string:
+/// ```
 ///
 /// // |foo<>|
 ///

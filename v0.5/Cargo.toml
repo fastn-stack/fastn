@@ -39,17 +39,16 @@ homepage = "https://fastn.com"
 # using the latest dependency, and what is the plan to move to the latest version.
 
 arcstr = "1"
+async-trait = "0.1"
 fastn-compiler = { path = "fastn-compiler" }
 fastn-core = { path = "fastn-core" }
 fastn-jdebug = { version = "0.1.0", path = "fastn-jdebug" }
 fastn-section = { path = "fastn-section" }
 fastn-static = { path = "fastn-static" }
 fastn-resolved = { path = "../fastn-resolved" }
+fastn-runtime = { path = "../fastn-runtime" }
 fastn-builtins = { path = "../fastn-builtins" }
-fastn-resolved-to-js = { path = "../fastn-resolved-to-js" }
 fastn-js = { path = "../fastn-js" }
-#fastn-resolved = { git = "https://github.com/fastn-stack/fastn.git", rev = "17b7ebca9869c20f6ce86090116614168a18f37e" }
-#fastn-builtins = { git = "https://github.com/fastn-stack/fastn.git", rev = "17b7ebca9869c20f6ce86090116614168a18f37e" }
 fastn-unresolved = { path = "fastn-unresolved" }
 fastn-update = { path = "fastn-update" }
 indexmap = "2"

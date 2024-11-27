@@ -11,6 +11,7 @@ pub(super) fn component_invocation(
 
     document.content.push(
         fastn_unresolved::ComponentInvocation {
+            module: document.module.clone(),
             name: fastn_unresolved::Identifier {
                 name: section.name_span().clone(),
             }
@@ -27,7 +28,7 @@ pub(super) fn component_invocation(
 #[cfg(test)]
 mod tests {
     fn tester(mut d: fastn_unresolved::Document, expected: serde_json::Value) {
-        assert!(d.imports.is_empty());
+        // assert!(d.imports.is_empty());
         assert!(d.definitions.is_empty());
         assert_eq!(d.content.len(), 1);
 

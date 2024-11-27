@@ -3,16 +3,24 @@ mod function_definition;
 mod import;
 
 pub fn parse(
-    _document_id: &fastn_unresolved::ModuleName,
+    module: fastn_unresolved::Module,
     source: &str,
+    auto_imports: &[fastn_unresolved::URD],
 ) -> fastn_unresolved::Document {
-    let (mut document, sections) = fastn_unresolved::Document::new(fastn_section::Document::parse(
-        &arcstr::ArcStr::from(source),
-    ));
+    let (mut document, sections) = fastn_unresolved::Document::new(
+        module,
+        fastn_section::Document::parse(&arcstr::ArcStr::from(source)),
+        auto_imports,
+    );
+
+    // todo: first go through just the imports and desugar them
+
     // guess the section and call the appropriate unresolved method.
     for section in sections.into_iter() {
         let name = section.name().to_ascii_lowercase();
-        let kind = section.kind_name().map(str::to_ascii_lowercase);
+        let kind = section
+            .simple_section_kind_name()
+            .map(str::to_ascii_lowercase);
         // at this level we are very liberal, we just need a hint to which parser to use.
         // the parsers themselves do the error checks and validation.
         //
@@ -51,9 +59,10 @@ where
 {
     println!("--------- testing -----------\n{source}\n--------- source ------------");
 
-    let (mut document, sections) = fastn_unresolved::Document::new(fastn_section::Document::parse(
-        &arcstr::ArcStr::from(source),
-    ));
+    let (mut document, sections) = fastn_unresolved::Document::new(
+        fastn_section::Document::parse(&arcstr::ArcStr::from(source)),
+        &[],
+    );
 
     let section = {
         assert_eq!(sections.len(), 1);

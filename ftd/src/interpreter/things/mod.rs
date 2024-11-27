@@ -20,17 +20,17 @@ pub trait ThingExt {
         &self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<&fastn_resolved::Record>;
+    ) -> ftd::interpreter::Result<fastn_resolved::Record>;
     fn web_component(
         &self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<&fastn_resolved::WebComponentDefinition>;
+    ) -> ftd::interpreter::Result<fastn_resolved::WebComponentDefinition>;
     fn function(
         &self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<&fastn_resolved::Function>;
+    ) -> ftd::interpreter::Result<fastn_resolved::Function>;
 }
 
 impl ThingExt for Thing {
@@ -53,9 +53,9 @@ impl ThingExt for Thing {
         &self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<&fastn_resolved::Record> {
+    ) -> ftd::interpreter::Result<fastn_resolved::Record> {
         match self {
-            ftd::interpreter::Thing::Record(v) => Ok(v),
+            ftd::interpreter::Thing::Record(v) => Ok(v.clone()),
             t => ftd::interpreter::utils::e2(
                 format!("Expected Record, found: `{:?}`", t),
                 doc_id,
@@ -68,9 +68,9 @@ impl ThingExt for Thing {
         &self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<&fastn_resolved::WebComponentDefinition> {
+    ) -> ftd::interpreter::Result<fastn_resolved::WebComponentDefinition> {
         match self {
-            ftd::interpreter::Thing::WebComponent(v) => Ok(v),
+            ftd::interpreter::Thing::WebComponent(v) => Ok(v.to_owned()),
             t => ftd::interpreter::utils::e2(
                 format!("Expected WebComponent, found: `{:?}`", t),
                 doc_id,
@@ -83,9 +83,9 @@ impl ThingExt for Thing {
         &self,
         doc_id: &str,
         line_number: usize,
-    ) -> ftd::interpreter::Result<&fastn_resolved::Function> {
+    ) -> ftd::interpreter::Result<fastn_resolved::Function> {
         match self {
-            ftd::interpreter::Thing::Function(v) => Ok(v),
+            ftd::interpreter::Thing::Function(v) => Ok(v.to_owned()),
             t => ftd::interpreter::utils::e2(
                 format!("Expected Function, found: `{:?}`", t),
                 doc_id,

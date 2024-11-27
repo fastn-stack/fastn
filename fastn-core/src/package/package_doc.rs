@@ -317,7 +317,7 @@ pub(crate) fn file_id_to_names(id: &str) -> Vec<String> {
 }
 
 pub enum FTDResult {
-    Html(Vec<u8>),
+    Html(fastn_resolved::CompiledDocument),
     Redirect { url: String, code: u16 },
 }
 
@@ -365,22 +365,14 @@ pub(crate) async fn read_ftd_(
     main: &fastn_core::Document,
     base_url: &str,
     download_assets: bool,
-    test: bool,
+    _test: bool,
     only_js: bool,
     preview_session_id: &Option<String>,
 ) -> fastn_core::Result<FTDResult> {
     tracing::info!(document = main.id);
     match config.config.ftd_edition {
         fastn_core::FTDEdition::FTD2022 => {
-            read_ftd_2022(
-                config,
-                main,
-                base_url,
-                download_assets,
-                test,
-                preview_session_id,
-            )
-            .await
+            unreachable!()
         }
         fastn_core::FTDEdition::FTD2023 => {
             read_ftd_2023(
@@ -394,74 +386,6 @@ pub(crate) async fn read_ftd_(
             .await
         }
     }
-}
-
-#[tracing::instrument(name = "read_ftd_2022", skip_all)]
-pub(crate) async fn read_ftd_2022(
-    config: &mut fastn_core::RequestConfig,
-    main: &fastn_core::Document,
-    base_url: &str,
-    download_assets: bool,
-    test: bool,
-    preview_session_id: &Option<String>,
-) -> fastn_core::Result<FTDResult> {
-    let font_style = config.config.get_font_style();
-    let c = &config.config.clone();
-
-    let current_package = config
-        .config
-        .find_package_else_default(main.package_name.as_str(), None);
-
-    config.document_id.clone_from(&main.id);
-    config.base_url = base_url.to_string();
-
-    // Get Prefix Body => [AutoImports + Actual Doc content]
-    let mut doc_content =
-        current_package.get_prefixed_body(main.content.as_str(), main.id.as_str(), true);
-    // Fix aliased imports to full path (if any)
-    doc_content = current_package.fix_imports_in_body(doc_content.as_str(), main.id.as_str())?;
-
-    let line_number = doc_content.split('\n').count() - main.content.split('\n').count();
-    let main_ftd_doc = match fastn_core::doc::interpret_helper(
-        main.id_with_package().as_str(),
-        doc_content.as_str(),
-        config,
-        base_url,
-        download_assets,
-        line_number,
-        preview_session_id,
-    )
-    .await
-    {
-        Ok(v) => v,
-        Err(e) => {
-            tracing::error!(msg = "failed to parse", doc = main.id.as_str());
-            return Err(fastn_core::Error::PackageError {
-                message: format!("failed to parse {:?}", &e),
-            });
-        }
-    };
-
-    if let Some((url, code)) = main_ftd_doc.get_redirect()? {
-        return Ok(FTDResult::Redirect { url, code });
-    }
-
-    let executor = ftd::executor::ExecuteDoc::from_interpreter(main_ftd_doc)?;
-    let node = ftd::node::NodeData::from_rt(executor);
-    let html_ui = ftd::html::HtmlUI::from_node_data(node, "main", test)?;
-
-    let file_content = fastn_core::utils::replace_markers_2022(
-        fastn_core::ftd_html(),
-        html_ui,
-        c,
-        main.id_to_path().as_str(),
-        font_style.as_str(),
-        base_url,
-        preview_session_id,
-    )
-    .await;
-
-    Ok(FTDResult::Html(file_content.into()))
 }
 
 #[allow(clippy::await_holding_refcell_ref)]

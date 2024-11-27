@@ -9,11 +9,14 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
+async-trait.workspace = true
 fastn-core.workspace = true
 fastn-compiler.workspace = true
 fastn-section.workspace = true
 fastn-resolved.workspace = true
+fastn-runtime.workspace = true
 fastn-unresolved.workspace = true
 serde_json.workspace = true
 string-interner.workspace = true
 tokio.workspace = true
+# fastn-runtime.workspace = true

@@ -3,41 +3,21 @@ name = "fastn-runtime"
 version = "0.1.0"
 authors.workspace = true
 edition.workspace = true
+description.workspace = true
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 
-[lib]
-crate-type = ["cdylib"]
-
 [features]
-default = ["server"]
-server = ["tokio", "fastn-wasm", "wasmtime", "taffy", "pretty"]
-native = ["winit", "env_logger", "log", "wgpu", "render", "pretty"]
-# render feature will be enabled only when we want to do native rendering, which is when terminal and native is set
-render = []
-terminal = ["render", "taffy", "pretty"]
-browser = ["wasm-bindgen", "web-sys" ]
+owned-tdoc = ["fastn-resolved/owned-tdoc"]
 
 [dependencies]
-async-trait.workspace = true
-bitflags.workspace = true
-bytemuck.workspace = true
-env_logger = { workspace = true, optional = true }
-fastn-wasm = { workspace = true, optional = true }
-log = { workspace = true, optional = true }
-once_cell.workspace = true
-pretty = { workspace = true, optional = true }
-serde.workspace = true
-slotmap.workspace = true
-taffy = { workspace = true, optional = true }
-thiserror.workspace = true
-tokio = { workspace = true, optional = true }
-wasmtime = { workspace = true, optional = true }
-wgpu = { workspace = true, optional = true }
-winit = { workspace = true, optional = true }
-wasm-bindgen = { workspace = true, optional = true }
-web-sys = { workspace = true, optional = true }
-
-[dev-dependencies]
+fastn-js.workspace = true
+fastn-resolved.workspace = true
+itertools.workspace = true
+fastn-builtins.workspace = true
 indoc.workspace = true
+serde.workspace = true
+once_cell.workspace = true
+sha2.workspace = true
+indexmap.workspace = true

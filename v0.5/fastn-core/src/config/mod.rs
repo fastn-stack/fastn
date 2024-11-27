@@ -3,7 +3,7 @@ mod read;
 #[allow(dead_code)]
 pub struct Config {
     sitemap: Sitemap,
-    auto_imports: Vec<fastn_section::AutoImport>,
+    pub auto_imports: Vec<fastn_section::AutoImport>,
     redirects: Vec<Redirect>,
     dynamic_routes: Vec<DynamicRoute>,
 }

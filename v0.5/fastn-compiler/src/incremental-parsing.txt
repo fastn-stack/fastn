@@ -1,0 +1,139 @@
+||||| source |||||
+
+file name
+source code
+
+
+|||| unresolved ||||
+
+symbol name : <package>/<module>#<name>
+`fastn_unresolved::Definition` serialize json
+source of symbol
+
+- if source of symbol changes we delete the row and create a new row
+
+||||| resolved |||||
+
+symbol name
+fk: unresolved.id : on delete cascade
+`fastn_resolved::Definition` serialize json
+
+- foo
+- bar
+- baz
+
+| dependency |
+
+
+
+from: symbol name
+from_id: fk: resolved.id (on delete cascade)
+to: symbol name
+to_id: fk: resolved.id (on delete set null)
+
+scenario: foo called bar and baz [ (from: foo, to: bar), (from: foo, to: baz) )
+  foo is changing: the on-delete cascade will delete the two rows
+  bar is changing: (from: foo, to: bar) will become (from: foo, to: null);
+                   delete from resolved where dependency.from_id = resolved.id and dependency.to_id is null
+
+
+
+
+Package: amitu.com
+Module: index.ftd : amitu.com | a.ftd : amitu.com/a | a/index.ftd : amitu.com/a
+name: x : amitu.com/a#x
+
+
+
+----------------------
+
+So imagine a table like this: `| file name | source? | content
+(unresolved) | unresolved | resolved | js | dependencies|`.
+
+When a file is updated we parse it's content and unresolved and do:
+`update table set source ?new-source, unresolved = ?new-unresolved,
+content = ?new-content resolved = null, js = null, dependencies = null
+where dependencies contains ?filename or name = ?file-name`.
+
+When JS is requested, and js column is `null`, we try to create JS by
+resolving all the `content`.
+
+We do the compiler loop, as discussed earlier (find all unresolved
+symbols that need to be resolved in this phase of trying to resolve
+content, and then find all unresolved symbols etc..).
+
+We keep the trait. But the trait has only one add resolve method,
+which takes all resolved stuff, which is called at the end of the
+content resolution loop. This was we do only one write operation.
+We are trying to solve the chattiness of using our current
+fastn_lang::DS trait, where for every symbol lookup (resolved or
+unresolved), we do not want to do a SQL query. So when we have to
+read, a symbol, we read all the symbol from that file, both
+resolved and unresolved. So  we are minimising the number of reads
+as well. We have to do as many reads as number of times the
+compiler loop gets stuck, as a single read query we can fetch data
+ for more than one documents.
+
+I think it is a given we have to use SQLite as the backing db for
+`fastn_lang::DS` trait, both for `fastn` and `hostn` (fifthtry's
+hosted solution).
+
+
+----------------
+
+Another important aspect of this design is that we are not keeping
+any in memory shared resolved/unresolved stuff. On every request we
+will fetch them from DB. Since we have to fetch from DB only when
+JS file is missing, and once we generate a JS file it stays
+generated till any of its dependencies is modified, which is rare,
+this design allows us to not worry about cache expiry.
+
+Further we can do the entire JS generation thing inside a single
+READ transaction, so concurrent writes to the same DB will not
+lead to corrupted JS (eg the symbol we relied on got modified
+while we were doing our compilation loop).
+
+For fastn we can store all the dependencies in the same sqlite db.
+For hostn we can keep one db for every site, and one db for every
+dependency-version combination. We can even suffix the fastn
+version to DB names, so if fastn changes, we do not have to worry
+if old stuff are still compatible with new one, and we re-generate
+all JS, symbols etc.
+
+
+-------------
+
+# DB Requirement
+
+The store we use to store resolved / unresolved stuff, should it
+be JSON files or do we really need sqlite?
+
+The most interesting query is the query is the update query I
+showed. If there are 100s of documents that directly or indirectly
+depend on say `lib.ftd`, we want delete processed data from all
+files that depended on lib.
+
+If we have to do it via json files, we will have to either open
+all the files for each document in the package. Or we try keep
+a reverse dependency, eg `lib.json` keeps track of every document
+that directly or indirectly depended on `lib.ftd`.
+
+But to quickly get all symbols the current module depends on, we
+do not want to read all the 100s of json files (every document in
+the package), so we have to keep the list of documents this
+document depends on and the list of documents that depend on it.
+
+If we make a mistake in these lists, the code would be buggy, eg
+if we forgot to clear dependent documents we will serve stale
+stuff. And possibly mixed stale.
+
+Atomically updating potentially thousands of files, concurrently
+is hard problem. But SQLite can do this easily, and we are
+guaranteed due to transaction that we are reading is consistent.
+
+Another possibility is we keep everything in a single file, and
+maintain a struct, that is behind a rw lock, and any modification
+is persisted to disc. The disadvantage is read/write amplification,
+ instead of a few kb, we will be reading / writing mbs. SQLite is
+ better at managing this because it only updates the rows that
+ have changed.

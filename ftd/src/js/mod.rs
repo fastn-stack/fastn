@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-use fastn_resolved_to_js::extensions::*;
+use fastn_runtime::extensions::*;
 
 #[cfg(test)]
 #[macro_use]
@@ -83,15 +83,15 @@ pub struct JSAstData {
 }
 
 pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
-    use fastn_resolved_to_js::extensions::*;
+    use fastn_runtime::extensions::*;
     use itertools::Itertools;
 
     let doc = ftd::interpreter::TDoc::new(&document.name, &document.aliases, &document.data);
 
     // Check if document tree has rive. This is used to add rive script.
     let mut has_rive_components = false;
-    let mut document_asts = vec![fastn_resolved_to_js::from_tree(
-        &document.tree.as_slice().iter().collect::<Vec<_>>(),
+    let mut document_asts = vec![fastn_runtime::from_tree(
+        document.tree.as_slice(),
         &doc,
         &mut has_rive_components,
     )];
@@ -157,11 +157,11 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
     }
 
     document_asts.extend(export_asts);
-    let mut scripts = fastn_resolved_to_js::utils::get_external_scripts(has_rive_components);
-    scripts.push(fastn_resolved_to_js::utils::get_js_html(
+    let mut scripts = fastn_runtime::utils::get_external_scripts(has_rive_components);
+    scripts.push(fastn_runtime::utils::get_js_html(
         document.js.into_iter().collect_vec().as_slice(),
     ));
-    scripts.push(fastn_resolved_to_js::utils::get_css_html(
+    scripts.push(fastn_runtime::utils::get_css_html(
         document.css.into_iter().collect_vec().as_slice(),
     ));
 

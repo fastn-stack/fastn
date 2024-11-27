@@ -5,27 +5,16 @@
 extern crate self as fastn_compiler;
 
 mod compiler;
-mod js;
 mod symbols;
 mod tdoc;
-pub use tdoc::TDoc;
 mod utils;
+pub use tdoc::CompiledDocument;
 
 pub use compiler::compile;
-pub(crate) use compiler::Compiler;
 pub use fastn_section::Result;
 pub use symbols::SymbolStore;
 
-pub struct Output {
-    #[expect(unused)]
-    js: String,
-    #[expect(unused)]
-    warnings: Vec<fastn_section::Spanned<fastn_section::Warning>>,
-    #[expect(unused)]
-    resolved: Vec<fastn_resolved::Definition>,
-    // should we also return / cache partially resolved symbols?
-}
-
+#[derive(Debug)]
 pub struct Error {
     #[expect(unused)]
     messages: Vec<fastn_section::Diagnostic>,
@@ -58,6 +47,7 @@ pub struct Error {
 }
 
 /// a symbol can fail because of multiple errors, and we will store the various ones in the
+#[derive(Debug)]
 pub struct SymbolError {
     #[expect(unused)]
     symbol: fastn_unresolved::Identifier,

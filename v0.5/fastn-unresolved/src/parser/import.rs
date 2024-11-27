@@ -19,7 +19,7 @@ pub(super) fn import(section: fastn_section::Section, document: &mut fastn_unres
         // we will go ahead with this import statement parsing
     }
 
-    let i = match parse_import(&section, document) {
+    let _i = match parse_import(&section, document) {
         Some(v) => v,
         None => {
             // error handling is job of parse_module_name().
@@ -31,13 +31,14 @@ pub(super) fn import(section: fastn_section::Section, document: &mut fastn_unres
     fastn_unresolved::utils::assert_no_body(&section, document);
     fastn_unresolved::utils::assert_no_children(&section, document);
     fastn_unresolved::utils::assert_no_extra_headers(&section, document, &["exports", "exposing"]);
-    document.imports.push(i);
+    todo!()
+    // document.imports.push(i);
 }
 
 fn parse_import(
     section: &fastn_section::Section,
     document: &mut fastn_unresolved::Document,
-) -> Option<fastn_unresolved::Import> {
+) -> Option<Import> {
     let caption = match section.caption_as_plain_span() {
         Some(v) => v,
         None => {
@@ -62,7 +63,7 @@ fn parse_import(
         None => ("", module),
     };
 
-    Some(fastn_unresolved::Import {
+    Some(Import {
         module: fastn_unresolved::ModuleName {
             name: caption.inner_str(module).into(),
             package: fastn_unresolved::PackageName(caption.inner_str(package).into()),
@@ -75,17 +76,39 @@ fn parse_import(
     })
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub enum Export {
+    #[expect(unused)]
+    All,
+    Things(Vec<AliasableIdentifier>),
+}
+
+/// is this generic enough?
+#[derive(Debug, Clone, PartialEq)]
+pub struct AliasableIdentifier {
+    pub alias: Option<fastn_unresolved::Identifier>,
+    pub name: fastn_unresolved::Identifier,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct Import {
+    pub module: fastn_unresolved::ModuleName,
+    pub alias: Option<fastn_unresolved::Identifier>,
+    pub export: Option<Export>,
+    pub exposing: Option<Export>,
+}
+
 fn parse_field(
     field: &str,
     section: &fastn_section::Section,
     _document: &mut fastn_unresolved::Document,
-) -> Option<fastn_unresolved::Export> {
+) -> Option<Export> {
     let header = match section.header_as_plain_span(field) {
         Some(v) => v,
         None => return None,
     };
 
-    Some(fastn_unresolved::Export::Things(
+    Some(Export::Things(
         header
             .str()
             .split(",")
@@ -94,7 +117,7 @@ fn parse_field(
     ))
 }
 
-fn aliasable(span: &fastn_section::Span, s: &str) -> fastn_unresolved::AliasableIdentifier {
+fn aliasable(span: &fastn_section::Span, s: &str) -> AliasableIdentifier {
     let (name, alias) = match s.split_once(" as ") {
         Some((name, alias)) => (
             span.inner_str(name).into(),
@@ -103,21 +126,20 @@ fn aliasable(span: &fastn_section::Span, s: &str) -> fastn_unresolved::Aliasable
         None => (span.inner_str(s).into(), None),
     };
 
-    fastn_unresolved::AliasableIdentifier { name, alias }
+    AliasableIdentifier { name, alias }
 }
 
 #[cfg(test)]
 mod tests {
     #[track_caller]
-    fn tester(mut d: fastn_unresolved::Document, expected: serde_json::Value) {
+    fn tester(d: fastn_unresolved::Document, _expected: serde_json::Value) {
         assert!(d.content.is_empty());
         assert!(d.definitions.is_empty());
-        assert_eq!(d.imports.len(), 1);
 
-        assert_eq!(
-            fastn_jdebug::JDebug::debug(&d.imports.pop().unwrap()),
-            expected
-        )
+        // assert_eq!(
+        //     fastn_jdebug::JDebug::debug(&d.imports.pop().unwrap()),
+        //     expected
+        // )
     }
 
     fastn_unresolved::tt!(super::import, tester);
@@ -147,5 +169,59 @@ mod tests {
         t!("-- import: foo\nexport: x, y, z\nexposing: y", { "import": "foo", "export": ["x", "y", "z"], "exposing": ["y"] });
         t!("-- import: foo as f\nexport: x as y\nexposing: y", { "import": "foo as f", "export": ["x=>y"], "exposing": ["y"] });
         t!("-- import: foo as f\nexport: x as y, z\nexposing: y", { "import": "foo as f", "export": ["x=>y", "z"], "exposing": ["y"] });
+    }
+
+    impl fastn_jdebug::JDebug for super::Import {
+        fn debug(&self) -> serde_json::Value {
+            let mut o = serde_json::Map::new();
+
+            let name = if self.module.package.str().is_empty() {
+                self.module.name.str().to_string()
+            } else {
+                format!("{}/{}", self.module.package.str(), self.module.name.str())
+            };
+
+            o.insert(
+                "import".into(),
+                match self.alias {
+                    Some(ref v) => format!("{name}=>{}", v.str()),
+                    None => name,
+                }
+                .into(),
+            );
+
+            dbg!(&self);
+
+            if let Some(ref v) = self.export {
+                o.insert("export".into(), v.debug());
+            }
+
+            if let Some(ref v) = self.exposing {
+                o.insert("exposing".into(), v.debug());
+            }
+
+            serde_json::Value::Object(o)
+        }
+    }
+
+    impl fastn_jdebug::JDebug for super::Export {
+        fn debug(&self) -> serde_json::Value {
+            match self {
+                super::Export::All => "all".into(),
+                super::Export::Things(v) => {
+                    serde_json::Value::Array(v.iter().map(|v| v.debug()).collect())
+                }
+            }
+        }
+    }
+
+    impl fastn_jdebug::JDebug for super::AliasableIdentifier {
+        fn debug(&self) -> serde_json::Value {
+            match self.alias {
+                Some(ref v) => format!("{}=>{}", self.name.str(), v.str()),
+                None => self.name.str().to_string(),
+            }
+            .into()
+        }
     }
 }

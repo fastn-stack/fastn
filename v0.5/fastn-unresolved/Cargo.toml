@@ -10,10 +10,11 @@ homepage.workspace = true
 
 [dependencies]
 arcstr.workspace = true
+fastn-builtins.workspace = true
 fastn-section.workspace = true
 fastn-resolved.workspace = true
 string-interner.workspace = true
-indexmap.workspace = true
+# indexmap.workspace = true
 
 [dev-dependencies]
 fastn-jdebug.workspace = true

@@ -85,11 +85,9 @@ impl Definition {
             _ => None,
         }
     }
+}
 
-    pub fn component_ref(&self) -> Option<&fastn_resolved::ComponentDefinition> {
-        match self {
-            fastn_resolved::Definition::Component(v) => Some(v),
-            _ => None,
-        }
-    }
+pub struct CompiledDocument {
+    pub content: Vec<fastn_resolved::ComponentInvocation>,
+    pub definitions: indexmap::IndexMap<String, fastn_resolved::Definition>,
 }

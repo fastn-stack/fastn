@@ -15,7 +15,7 @@ extern crate self as fastn_jdebug;
 /// as we do not expect individual documents to be larger than few GBs.
 #[derive(PartialEq, Hash, Debug, Eq, Clone, Default)]
 pub struct Span {
-    inner: arcstr::Substr,
+    inner: arcstr::Substr, // this is currently a 32-byte struct.
 }
 
 pub trait JDebug {

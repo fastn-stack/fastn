@@ -11,8 +11,8 @@ impl fastn::commands::Render {
 }
 
 async fn render_document(
-    _config: &mut fastn_core::Config,
-    _path: &str,
+    config: &fastn_core::Config,
+    path: &str,
     _data: serde_json::Value,
     _strict: bool,
 ) {
@@ -21,5 +21,19 @@ async fn render_document(
     //     None => fastn_compiler::compile(config, path, strict).await,
     // };
 
-    todo!()
+    let source = std::fs::File::open(path)
+        .and_then(std::io::read_to_string)
+        .unwrap();
+    let o = fastn_compiler::compile(
+        Box::new(fastn::Symbols {}),
+        &source,
+        "main",
+        "",
+        &config.auto_imports,
+    )
+    .await
+    .unwrap();
+    let h = fastn_runtime::HtmlData::from_cd(o);
+    let html = h.to_test_html();
+    std::fs::write(path.replace(".ftd", ".html"), html).unwrap();
 }

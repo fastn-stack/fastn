@@ -15,7 +15,7 @@ impl FunctionGenerator {
         for function in node_data
             .bag
             .values()
-            .filter_map(|v| v.function(node_data.name.as_str(), 0).ok().cloned())
+            .filter_map(|v| v.to_owned().function(node_data.name.as_str(), 0).ok())
         {
             vector.push(self.get_function(function)?)
         }
