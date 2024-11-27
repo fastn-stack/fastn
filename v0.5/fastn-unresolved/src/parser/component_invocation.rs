@@ -12,9 +12,9 @@ pub(super) fn component_invocation(
     document.content.push(
         fastn_unresolved::ComponentInvocation {
             module: document.module.clone(),
-            name: fastn_unresolved::Identifier {
+            name: fastn_unresolved::IdentifierReference::Local(fastn_unresolved::Identifier {
                 name: section.name_span().clone(),
-            }
+            })
             .into(),
             caption: section.caption.into(),
             properties: vec![],  // todo
