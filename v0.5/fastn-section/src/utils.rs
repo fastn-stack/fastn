@@ -204,6 +204,13 @@ impl fastn_section::Identifier {
     pub fn str(&self) -> &str {
         self.name.str()
     }
+
+    pub fn spanned(&self, e: fastn_section::Error) -> fastn_section::Spanned<fastn_section::Error> {
+        fastn_section::Spanned {
+            span: self.name.clone(),
+            value: e,
+        }
+    }
 }
 
 impl fastn_section::QualifiedIdentifier {
