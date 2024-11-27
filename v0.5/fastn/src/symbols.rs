@@ -17,7 +17,7 @@ impl Symbols {
             }
         };
 
-        let d = fastn_unresolved::parse(&source, desugared_auto_imports);
+        let d = fastn_unresolved::parse(symbol.clone(), &source, desugared_auto_imports);
 
         d.definitions
             .into_iter()

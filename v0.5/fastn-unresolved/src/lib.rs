@@ -29,9 +29,11 @@ pub type URCI = fastn_unresolved::UR<
     fastn_unresolved::ComponentInvocation,
     fastn_resolved::ComponentInvocation,
 >;
+pub type URIS = fastn_unresolved::UR<fastn_unresolved::Identifier, fastn_unresolved::Symbol>;
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone)]
 pub struct Document {
+    pub module: Symbol,
     pub module_doc: Option<fastn_section::Span>,
     pub definitions: Vec<URD>,
     pub content: Vec<URCI>,
@@ -136,7 +138,11 @@ pub enum UR<U, R> {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct ComponentInvocation {
-    pub name: UR<Identifier, Identifier>,
+    /// this contains a symbol that is the module where this component invocation happened.
+    ///
+    /// all local symbols are resolved with respect to the module.
+    pub module: Symbol,
+    pub name: URIS,
     /// once a caption is resolved, it is set to () here, and moved to properties
     pub caption: UR<Option<fastn_section::HeaderValue>, ()>,
     pub properties: Vec<UR<Property, fastn_resolved::Property>>,

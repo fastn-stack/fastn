@@ -1,10 +1,12 @@
 impl fastn_unresolved::Document {
     pub(crate) fn new(
+        module: fastn_unresolved::Symbol,
         document: fastn_section::Document,
         desugared_auto_imports: &[fastn_unresolved::URD],
     ) -> (fastn_unresolved::Document, Vec<fastn_section::Section>) {
         (
             fastn_unresolved::Document {
+                module,
                 module_doc: document.module_doc,
                 definitions: desugared_auto_imports.to_vec(),
                 content: vec![],
@@ -182,21 +184,21 @@ impl fastn_unresolved::Symbol {
         }
     }
 
-    pub fn symbol<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
+    pub fn str<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
         interner.resolve(self.interned).unwrap()
     }
 
     pub fn package<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
-        &self.symbol(interner)[..self.package_len as usize]
+        &self.str(interner)[..self.package_len as usize]
     }
 
     pub fn module<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
-        &self.symbol(interner)[self.package_len as usize + 1
+        &self.str(interner)[self.package_len as usize + 1
             ..self.package_len as usize + 1 + self.module_len as usize]
     }
 
     pub fn name<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
-        &self.symbol(interner)[self.package_len as usize + 1 + self.module_len as usize + 1..]
+        &self.str(interner)[self.package_len as usize + 1 + self.module_len as usize + 1..]
     }
 }
 

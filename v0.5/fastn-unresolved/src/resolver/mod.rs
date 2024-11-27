@@ -7,13 +7,10 @@
 
 mod component_invocation;
 mod definition;
-mod name;
+mod input;
+mod symbol;
 
-pub struct Input<'a> {
-    pub definitions: &'a std::collections::HashMap<fastn_unresolved::Symbol, fastn_unresolved::URD>,
-    pub builtins: &'a indexmap::IndexMap<String, fastn_resolved::Definition>,
-    pub interner: &'a string_interner::DefaultStringInterner,
-}
+pub use input::Input;
 
 #[derive(Debug, Default)]
 pub struct Output {

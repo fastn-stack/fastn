@@ -16,7 +16,6 @@ impl Compiler {
     fn resolution_input(&self) -> fastn_unresolved::resolver::Input {
         fastn_unresolved::resolver::Input {
             definitions: &self.definitions,
-            builtins: fastn_builtins::builtins(),
             interner: &self.interner,
         }
     }
@@ -24,15 +23,23 @@ impl Compiler {
     fn new(
         symbols: Box<dyn fastn_compiler::SymbolStore>,
         source: &str,
+        package: &str,
+        module: &str,
         auto_imports: &[fastn_section::AutoImport],
     ) -> Self {
-        let mut document = fastn_unresolved::parse(source, &[]);
+        let mut interner = string_interner::StringInterner::new();
+
+        let mut document = fastn_unresolved::parse(
+            fastn_unresolved::Symbol::new(package, module, "", &mut interner),
+            source,
+            &[],
+        );
         let content = Some(document.content);
         document.content = vec![];
 
         Self {
             symbols,
-            interner: string_interner::StringInterner::new(),
+            interner,
             definitions: std::collections::HashMap::new(),
             content,
             document,
@@ -222,9 +229,13 @@ impl Compiler {
 pub async fn compile(
     symbols: Box<dyn fastn_compiler::SymbolStore>,
     source: &str,
+    package: &str,
+    module: &str,
     auto_imports: &[fastn_section::AutoImport],
 ) -> Result<fastn_resolved::CompiledDocument, fastn_compiler::Error> {
-    Compiler::new(symbols, source, auto_imports).compile().await
+    Compiler::new(symbols, source, package, module, auto_imports)
+        .compile()
+        .await
 }
 
 #[derive(Default)]

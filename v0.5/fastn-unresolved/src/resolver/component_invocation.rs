@@ -10,11 +10,19 @@ impl fastn_unresolved::ComponentInvocation {
             }
         }
 
-        let component =
-            match fastn_unresolved::resolver::name::resolve(&mut self.name, input, output) {
-                Some(c) => c,
-                None => return,
-            };
+        fastn_unresolved::resolver::symbol::resolve(
+            &self.module,
+            &mut self.name,
+            input,
+            output,
+            vec![], // TODO
+        );
+
+        let component = match self.name {
+            fastn_unresolved::UR::Resolved(ref name) => input.get_component(name).unwrap(),
+            // in case of error or not found, nothing left to do
+            _ => return,
+        };
 
         dbg!(component);
     }

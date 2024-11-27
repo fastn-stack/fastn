@@ -17,8 +17,7 @@ pub(crate) fn used_definitions(
         if let Some(_definition) = definitions.get(definition) {
             // definitions.insert(symbol.clone(), definition);
             todo!()
-        } else if let Some(_definition) =
-            fastn_builtins::builtins().get(definition.symbol(&interner))
+        } else if let Some(_definition) = fastn_builtins::builtins().get(definition.str(&interner))
         {
             // definitions.insert(symbol.clone(), definition);
             todo!()

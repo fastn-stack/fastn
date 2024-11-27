@@ -276,10 +276,10 @@ name = "fastn-unresolved"
 version = "0.1.0"
 dependencies = [
  "arcstr",
+ "fastn-builtins",
  "fastn-jdebug",
  "fastn-resolved",
  "fastn-section",
- "indexmap",
  "serde_json",
  "string-interner",
 ]

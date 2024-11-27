@@ -11,6 +11,7 @@ pub(super) fn component_invocation(
 
     document.content.push(
         fastn_unresolved::ComponentInvocation {
+            module: document.module.clone(),
             name: fastn_unresolved::Identifier {
                 name: section.name_span().clone(),
             }
