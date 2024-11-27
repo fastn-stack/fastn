@@ -12,8 +12,4 @@ homepage.workspace = true
 arcstr.workspace = true
 serde.workspace = true
 fastn-jdebug.workspace = true
-
-[dev-dependencies]
 serde_json.workspace = true
-
-

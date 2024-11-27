@@ -4,7 +4,6 @@
 
 extern crate self as fastn_section;
 
-#[cfg(test)]
 mod debug;
 mod error;
 mod parser;
@@ -48,7 +47,6 @@ pub struct Section {
     pub headers: Vec<Header>,
     pub body: Option<fastn_section::HeaderValue>,
     pub children: Vec<Section>,
-    pub function_marker: Option<fastn_section::Span>,
     pub is_commented: bool,
     // if the user used `-- end: <section-name>` to end the section
     pub has_end: bool,
@@ -60,6 +58,7 @@ pub struct SectionInit {
     pub dashdash: fastn_section::Span, // for syntax highlighting and formatting
     pub name: fastn_section::KindedName,
     pub colon: fastn_section::Span, // for syntax highlighting and formatting
+    pub function_marker: Option<fastn_section::Span>,
 }
 
 #[derive(Debug, PartialEq, Clone)]

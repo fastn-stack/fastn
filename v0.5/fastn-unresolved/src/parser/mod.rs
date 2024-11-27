@@ -1,4 +1,5 @@
 mod component_invocation;
+mod function_definition;
 mod import;
 
 pub fn parse(
@@ -32,13 +33,14 @@ pub fn parse(
         match (
             kind.as_deref(),
             name.as_str(),
-            section.function_marker.is_some(),
+            section.init.function_marker.is_some(),
         ) {
             (Some("import"), _, _) | (_, "import", _) => import::import(section, &mut document),
             (Some("record"), _, _) => todo!(),
             (Some("type"), _, _) => todo!(),
             (Some("module"), _, _) => todo!(),
             (Some("component"), _, _) => todo!(),
+            (_, _, true) => function_definition::function_definition(section, &mut document),
             (None, _, _) => component_invocation::component_invocation(section, &mut document),
             (_, _, _) => todo!(),
         }
@@ -58,6 +60,7 @@ where
     println!("--------- testing -----------\n{source}\n--------- source ------------");
 
     let (mut document, sections) = fastn_unresolved::Document::new(
+        todo!(),
         fastn_section::Document::parse(&arcstr::ArcStr::from(source)),
         &[],
     );

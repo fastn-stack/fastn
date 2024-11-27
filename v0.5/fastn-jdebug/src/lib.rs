@@ -66,7 +66,7 @@ impl<K: AsRef<fastn_jdebug::Span>, V: fastn_jdebug::JDebug> fastn_jdebug::JDebug
     }
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, Default)]
 pub struct Spanned<T> {
     pub span: Span,
     pub value: T,
@@ -123,5 +123,11 @@ impl<T> fastn_jdebug::Spanned<T> {
 impl<T: fastn_jdebug::JDebug> fastn_jdebug::JDebug for fastn_jdebug::Spanned<T> {
     fn debug(&self) -> serde_json::Value {
         self.value.debug()
+    }
+}
+
+impl fastn_jdebug::JDebug for () {
+    fn debug(&self) -> serde_json::Value {
+        serde_json::Value::Null
     }
 }
