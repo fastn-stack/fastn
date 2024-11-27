@@ -10,50 +10,30 @@ mod parser;
 pub mod resolver;
 mod utils;
 
+use fastn_section::{Identifier, Symbol};
 pub use parser::parse;
 pub use utils::desugar_auto_imports;
-
-#[derive(Debug, Clone, Hash, PartialEq, Eq)]
-pub struct Symbol {
-    // 8 bytes
-    /// this store the <package>/<module>#<name> of the symbol
-    interned: string_interner::DefaultSymbol, // u32
-    /// length of the <package> part of the symbol
-    package_len: u16,
-    /// length of the <module> part of the symbol
-    module_len: u16,
-}
-
-#[derive(Debug, Clone, Hash, PartialEq, Eq)]
-pub struct Module {
-    // 6 bytes
-    /// this store the <package>/<module>#<name> of the symbol
-    interned: string_interner::DefaultSymbol, // u32
-    /// length of the <package> part of the symbol
-    package_len: u16,
-}
 
 pub type URD = fastn_unresolved::UR<fastn_unresolved::Definition, fastn_resolved::Definition>;
 pub type URCI = fastn_unresolved::UR<
     fastn_unresolved::ComponentInvocation,
     fastn_resolved::ComponentInvocation,
 >;
-pub type URIS =
-    fastn_unresolved::UR<fastn_unresolved::IdentifierReference, fastn_unresolved::Symbol>;
+pub type URIS = fastn_unresolved::UR<fastn_unresolved::IdentifierReference, fastn_section::Symbol>;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum IdentifierReference {
     // foo
     Local(Identifier),
     // bar.foo: module = bar, name: foo
-    Imported { module: Module, name: Identifier },
+    Imported(Symbol),
     // bar#foo: component using the absolute path.
-    Absolute { module: Module, name: Identifier },
+    Absolute(Symbol),
 }
 
 #[derive(Debug, Clone)]
 pub struct Document {
-    pub module: Module,
+    pub module: fastn_section::Module,
     pub module_doc: Option<fastn_section::Span>,
     pub definitions: Vec<URD>,
     pub content: Vec<URCI>,
@@ -65,19 +45,19 @@ pub struct Document {
 
 #[derive(Debug, Clone)]
 pub struct Definition {
-    pub symbol: Option<Symbol>, // <package-name>/<module-name>#<definition-name>
+    pub symbol: Option<fastn_section::Symbol>, // <package-name>/<module-name>#<definition-name>
     pub doc: Option<fastn_section::Span>,
     /// resolving an identifier means making sure it is unique in the document, and performing
     /// other checks.
-    pub name: UR<Identifier, Identifier>,
+    pub name: UR<fastn_section::Identifier, fastn_section::Identifier>,
     pub visibility: fastn_section::Visibility,
     pub inner: InnerDefinition,
 }
 
 #[derive(Debug, Clone)]
 pub enum InnerDefinition {
-    SymbolAlias(Symbol),
-    ModuleAlias(Symbol),
+    SymbolAlias(fastn_section::Symbol),
+    ModuleAlias(fastn_section::Symbol),
     Component {
         arguments: Vec<UR<Argument, fastn_resolved::Argument>>,
         body: Vec<URCI>,
@@ -167,7 +147,7 @@ pub struct ComponentInvocation {
     /// this contains a symbol that is the module where this component invocation happened.
     ///
     /// all local symbols are resolved with respect to the module.
-    pub module: Module,
+    pub module: fastn_section::Module,
     pub name: URIS,
     /// once a caption is resolved, it is set to () here, and moved to properties
     pub caption: UR<Option<fastn_section::HeaderValue>, ()>,
@@ -179,28 +159,18 @@ pub struct ComponentInvocation {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Property {
-    pub name: Identifier,
+    pub name: fastn_section::Identifier,
     pub value: Vec<fastn_section::Tes>,
 }
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Argument {
-    pub name: Identifier,
+    pub name: fastn_section::Identifier,
+    pub doc: Option<fastn_section::Span>,
     pub kind: Kind,
     pub visibility: fastn_section::Visibility,
     pub default: Option<fastn_section::Tes>,
 }
-
-#[derive(Debug, Clone, Hash, Eq, PartialEq)]
-pub struct PackageName(pub Identifier);
-
-#[derive(Debug, Clone, Eq, Hash, PartialEq)]
-pub struct ModuleName {
-    pub name: Identifier,
-    pub package: PackageName,
-}
-
-pub type Identifier = fastn_section::Identifier;
 
 /// We cannot have kinds of like Record(SymbolName), OrType(SymbolName), because they are not
 /// yet "resolved", eg `-- foo x:`, we do not know if `foo` is a record or an or-type.
@@ -218,7 +188,7 @@ pub enum Kind {
     CaptionOrBody(Box<Kind>),
     // TODO: Future(Kind),
     // TODO: Result(Kind, Kind),
-    Custom(Symbol),
+    Custom(fastn_section::Symbol),
 }
 
 pub enum FromSectionKindError {

@@ -64,11 +64,11 @@ fn parse_import(
     };
 
     Some(Import {
-        module: fastn_unresolved::ModuleName {
-            name: caption.inner_str(module).into(),
-            package: fastn_unresolved::PackageName(caption.inner_str(package).into()),
-        },
-        alias: alias.map(|v| fastn_unresolved::Identifier {
+        module: fastn_section::Module::new(
+            caption.inner_str(module).str(),
+            caption.inner_str(package).str(),
+        ),
+        alias: alias.map(|v| fastn_section::Identifier {
             name: caption.inner_str(v),
         }),
         export: parse_field("export", section, document),
@@ -86,14 +86,14 @@ pub enum Export {
 /// is this generic enough?
 #[derive(Debug, Clone, PartialEq)]
 pub struct AliasableIdentifier {
-    pub alias: Option<fastn_unresolved::Identifier>,
-    pub name: fastn_unresolved::Identifier,
+    pub alias: Option<fastn_section::Identifier>,
+    pub name: fastn_section::Identifier,
 }
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Import {
-    pub module: fastn_unresolved::ModuleName,
-    pub alias: Option<fastn_unresolved::Identifier>,
+    pub module: fastn_section::Module,
+    pub alias: Option<fastn_section::Identifier>,
     pub export: Option<Export>,
     pub exposing: Option<Export>,
 }
@@ -175,10 +175,10 @@ mod tests {
         fn debug(&self) -> serde_json::Value {
             let mut o = serde_json::Map::new();
 
-            let name = if self.module.package.str().is_empty() {
-                self.module.name.str().to_string()
+            let name = if self.module.package().is_empty() {
+                self.module().to_string()
             } else {
-                format!("{}/{}", self.module.package.str(), self.module.name.str())
+                format!("{}/{}", self.module.package(), self.module.name.str())
             };
 
             o.insert(

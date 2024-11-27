@@ -35,10 +35,37 @@ pub struct Document {
     pub line_starts: Vec<u32>,
 }
 
-// this type is not really needed here, but adding here because fastn-section is our lowest
-// level crate
-#[derive(Debug, Clone)]
-pub struct AutoImport {}
+/// identifier is variable or component etc name
+///
+/// identifier starts with Unicode alphabet and can contain any alphanumeric Unicode character
+/// dash (`-`) and underscore (`_`) are also allowed
+///
+/// TODO: identifiers can't be keywords of the language, e.g., `import`, `record`, `component`.
+/// but it can be built in types e.g., `integer` etc.
+#[derive(Debug, PartialEq, Clone, Hash, Eq)]
+pub struct Identifier {
+    pub name: fastn_section::Span,
+}
+
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+pub struct Symbol {
+    // 8 bytes
+    /// this store the <package>/<module>#<name> of the symbol
+    interned: string_interner::DefaultSymbol, // u32
+    /// length of the <package> part of the symbol
+    package_len: u16,
+    /// length of the <module> part of the symbol
+    module_len: u16,
+}
+
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+pub struct Module {
+    // 6 bytes
+    /// this store the <package>/<module>#<name> of the symbol
+    interned: string_interner::DefaultSymbol, // u32
+    /// length of the <package> part of the symbol
+    package_len: u16,
+}
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Section {
@@ -56,72 +83,23 @@ pub struct Section {
 #[derive(Debug, PartialEq, Clone)]
 pub struct SectionInit {
     pub dashdash: fastn_section::Span, // for syntax highlighting and formatting
-    pub name: fastn_section::KindedName,
+    pub name: fastn_section::Identifier,
+    pub kind: Option<fastn_section::Kind>,
+    pub doc: Option<fastn_section::Span>,
+    pub visibility: Option<fastn_section::Spanned<fastn_section::Visibility>>,
     pub colon: fastn_section::Span, // for syntax highlighting and formatting
     pub function_marker: Option<fastn_section::Span>,
 }
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Header {
-    pub name: fastn_section::KindedName,
+    pub name: fastn_section::Identifier,
+    pub kind: Option<fastn_section::Kind>,
+    pub doc: Option<fastn_section::Span>,
+    pub visibility: Option<fastn_section::Spanned<fastn_section::Visibility>>,
     pub condition: Option<fastn_section::Span>,
     pub value: fastn_section::HeaderValue,
     pub is_commented: bool,
-}
-
-/// identifier is variable or component etc name
-///
-/// identifier starts with Unicode alphabet and can contain any alphanumeric Unicode character
-/// dash (`-`) and underscore (`_`) are also allowed
-///
-/// TODO: identifiers can't be keywords of the language, e.g., `import`, `record`, `component`.
-/// but it can be built in types e.g., `integer` etc.
-#[derive(Debug, PartialEq, Clone, Hash, Eq)]
-pub struct Identifier {
-    pub name: fastn_section::Span,
-}
-
-#[derive(Debug, PartialEq, Clone)]
-pub struct AliasableIdentifier {
-    pub name: fastn_section::Span,
-    pub alias: Option<fastn_section::Span>,
-}
-
-/// package names for fastn as domain names.
-///
-/// domain names usually do not allow Unicode, and you have to use punycode.
-/// but we allow Unicode in package names.
-///
-/// TODO: domain name can contain hyphens.
-/// TODO: domain name can’t begin or end with a hyphen.
-/// underscore is not permitted in domain names.
-///
-/// `.` is allowed in domain names.
-/// TODO: domain name can't begin or end with a `.`.
-/// TODO: `.` can't be repeated.
-#[derive(Debug, PartialEq, Clone)]
-pub struct PackageName {
-    pub name: fastn_section::Span,
-    // for foo.com, the alias is `foo` (the first part before the first dot)
-    // TODO: unless it is `www`, then its the second part
-    pub alias: fastn_section::Span,
-}
-
-/// module name looks like <package-name>(/<identifier>)*/?)
-#[derive(Debug, PartialEq, Clone)]
-pub struct ModuleName {
-    pub package: PackageName,
-    pub name: AliasableIdentifier,
-    pub path: Vec<Identifier>, // rest of the path
-}
-
-/// module name looks like <module-name>#<identifier>
-#[derive(Debug, PartialEq, Clone, Default)]
-pub struct QualifiedIdentifier {
-    // the part comes before `#`
-    pub module: Option<ModuleName>,
-    // the part comes after `#`
-    pub terms: Vec<Identifier>,
 }
 
 // Note: doc and visibility technically do not belong to Kind, but we are keeping them here
@@ -142,22 +120,12 @@ pub struct QualifiedIdentifier {
 ///
 /// note that this function is not responsible for parsing the visibility or doc-comments,
 /// it only parses the name and args
-#[derive(Debug, PartialEq, Clone, Default)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct Kind {
-    // only kinded section / header can have doc
-    pub doc: Option<fastn_section::Span>,
-    pub visibility: Option<fastn_section::Spanned<fastn_section::Visibility>>,
-    pub name: QualifiedIdentifier,
+    pub name: Symbol,
     // during parsing, we can encounter `foo<>`, which needs to be differentiated from `foo`
     // therefore we are using `Option<Vec<>>` here
     pub args: Option<Vec<Kind>>,
-}
-
-/// example: `list<string> foo` | `foo bar` | `bar`
-#[derive(Debug, PartialEq, Clone)]
-pub struct KindedName {
-    pub kind: Option<Kind>,
-    pub name: Identifier,
 }
 
 #[derive(Debug, PartialEq, Clone, Default)]

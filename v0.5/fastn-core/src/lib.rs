@@ -9,3 +9,8 @@ mod route;
 
 pub use config::{Config, DynamicRoute, Redirect, Sitemap};
 pub use route::Route;
+
+// this type is not really needed here, but adding here because fastn-section is our lowest
+// level crate
+#[derive(Debug, Clone)]
+pub struct AutoImport {}

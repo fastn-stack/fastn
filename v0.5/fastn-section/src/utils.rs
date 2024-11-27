@@ -4,33 +4,6 @@ impl From<fastn_jdebug::Span> for fastn_section::Identifier {
     }
 }
 
-impl From<fastn_section::Span> for fastn_section::AliasableIdentifier {
-    fn from(value: fastn_section::Span) -> Self {
-        fastn_section::AliasableIdentifier {
-            name: value,
-            alias: None,
-        }
-    }
-}
-
-impl From<fastn_section::Identifier> for fastn_section::AliasableIdentifier {
-    fn from(value: fastn_section::Identifier) -> Self {
-        fastn_section::AliasableIdentifier {
-            name: value.name,
-            alias: None,
-        }
-    }
-}
-
-impl From<fastn_section::Identifier> for fastn_section::QualifiedIdentifier {
-    fn from(value: fastn_section::Identifier) -> Self {
-        fastn_section::QualifiedIdentifier {
-            module: None,
-            terms: vec![value],
-        }
-    }
-}
-
 impl From<fastn_section::Kind> for Option<fastn_section::KindedName> {
     fn from(value: fastn_section::Kind) -> Self {
         Some(fastn_section::KindedName {
@@ -191,14 +164,14 @@ impl fastn_section::Kind {
     }
 }
 
-impl From<fastn_section::QualifiedIdentifier> for fastn_section::Kind {
-    fn from(name: fastn_section::QualifiedIdentifier) -> Self {
-        fastn_section::Kind {
-            name,
-            ..Default::default()
-        }
-    }
-}
+// impl From<fastn_section::QualifiedIdentifier> for fastn_section::Kind {
+//     fn from(name: fastn_section::QualifiedIdentifier) -> Self {
+//         fastn_section::Kind {
+//             name,
+//             ..Default::default()
+//         }
+//     }
+// }
 
 impl fastn_section::Identifier {
     pub fn str(&self) -> &str {
@@ -213,15 +186,15 @@ impl fastn_section::Identifier {
     }
 }
 
-impl fastn_section::QualifiedIdentifier {
-    pub fn new(
-        module: Option<fastn_section::ModuleName>,
-        terms: Vec<fastn_section::Identifier>,
-    ) -> Self {
-        assert!(module.is_some() || !terms.is_empty());
-        fastn_section::QualifiedIdentifier { module, terms }
-    }
-}
+// impl fastn_section::QualifiedIdentifier {
+//     pub fn new(
+//         module: Option<fastn_section::ModuleName>,
+//         terms: Vec<fastn_section::Identifier>,
+//     ) -> Self {
+//         assert!(module.is_some() || !terms.is_empty());
+//         fastn_section::QualifiedIdentifier { module, terms }
+//     }
+// }
 
 impl fastn_section::Section {
     pub fn with_name(
@@ -256,5 +229,94 @@ impl fastn_section::Scannable for fastn_section::Document {
 
     fn add_comment(&mut self, comment: fastn_section::Span) {
         self.comments.push(comment);
+    }
+}
+
+impl fastn_section::Symbol {
+    pub fn new(
+        package: &str,
+        module: &str,
+        name: &str,
+        interner: &mut string_interner::DefaultStringInterner,
+    ) -> fastn_section::Symbol {
+        fastn_section::Symbol {
+            package_len: package.len() as u16,
+            module_len: module.len() as u16,
+            interned: interner.get_or_intern(format!("{package}/{module}#{name}")),
+        }
+    }
+
+    pub fn parent(
+        &self,
+        interner: &mut string_interner::DefaultStringInterner,
+    ) -> fastn_section::Module {
+        fastn_section::Module {
+            package_len: self.package_len,
+            interned: interner.get_or_intern(format!(
+                "{}/{}",
+                self.package(interner),
+                self.module(interner)
+            )),
+        }
+    }
+
+    pub fn str<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
+        interner.resolve(self.interned).unwrap()
+    }
+
+    pub fn package<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
+        &self.str(interner)[..self.package_len as usize]
+    }
+
+    pub fn module<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
+        &self.str(interner)[self.package_len as usize + 1
+            ..self.package_len as usize + 1 + self.module_len as usize]
+    }
+
+    pub fn name<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
+        &self.str(interner)[self.package_len as usize + 1 + self.module_len as usize + 1..]
+    }
+}
+
+impl fastn_section::Module {
+    pub fn new(
+        package: &str,
+        module: &str,
+        interner: &mut string_interner::DefaultStringInterner,
+    ) -> fastn_section::Module {
+        fastn_section::Module {
+            package_len: package.len() as u16,
+            interned: interner.get_or_intern(format!("{package}/{module}")),
+        }
+    }
+
+    pub fn str<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
+        interner.resolve(self.interned).unwrap()
+    }
+
+    pub fn package<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
+        &self.str(interner)[..self.package_len as usize]
+    }
+
+    pub fn name<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
+        &self.str(interner)[self.package_len as usize + 1..]
+    }
+
+    pub fn symbol(
+        &self,
+        name: &str,
+        interner: &mut string_interner::DefaultStringInterner,
+    ) -> fastn_section::Symbol {
+        let module_len = interner.resolve(self.interned).unwrap().len() as u16 - self.package_len;
+
+        fastn_section::Symbol {
+            package_len: self.package_len,
+            module_len,
+            interned: interner.get_or_intern(format!(
+                "{}/{}#{name}",
+                self.package(interner),
+                self.module(interner)
+            )),
+        }
     }
 }
