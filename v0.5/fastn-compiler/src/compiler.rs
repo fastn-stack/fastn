@@ -30,7 +30,7 @@ impl Compiler {
         let mut interner = string_interner::StringInterner::new();
 
         let mut document = fastn_unresolved::parse(
-            fastn_unresolved::Symbol::new(package, module, "", &mut interner),
+            fastn_unresolved::Module::new(package, module, &mut interner),
             source,
             &[],
         );

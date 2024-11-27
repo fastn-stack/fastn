@@ -5,7 +5,7 @@ impl Symbols {
     fn find_all_definitions_in_a_module(
         &mut self,
         interner: &mut string_interner::DefaultStringInterner,
-        (file, symbol): (String, fastn_unresolved::Symbol),
+        (file, module): (String, fastn_unresolved::Module),
         desugared_auto_imports: &[fastn_unresolved::URD],
     ) -> Vec<fastn_unresolved::URD> {
         // we need to fetch the symbol from the store
@@ -17,13 +17,13 @@ impl Symbols {
             }
         };
 
-        let d = fastn_unresolved::parse(symbol.clone(), &source, desugared_auto_imports);
+        let d = fastn_unresolved::parse(module.clone(), &source, desugared_auto_imports);
 
         d.definitions
             .into_iter()
             .map(|d| match d {
                 fastn_unresolved::UR::UnResolved(mut v) => {
-                    v.symbol = Some(symbol.with_name(v.name.unresolved().unwrap().str(), interner));
+                    v.symbol = Some(module.symbol(v.name.unresolved().unwrap().str(), interner));
                     fastn_unresolved::UR::UnResolved(v)
                 }
                 _ => {
@@ -59,13 +59,13 @@ impl fastn_compiler::SymbolStore for Symbols {
 fn file_for_symbol(
     symbol: &fastn_unresolved::Symbol,
     interner: &mut string_interner::DefaultStringInterner,
-) -> (String, fastn_unresolved::Symbol) {
+) -> (String, fastn_unresolved::Module) {
     (
         format!(
             "{}/{}.ftd",
             symbol.package(interner),
             symbol.module(interner)
         ),
-        symbol.erase_name(interner),
+        symbol.parent(interner),
     )
 }

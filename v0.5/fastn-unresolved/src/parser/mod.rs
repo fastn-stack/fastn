@@ -2,7 +2,7 @@ mod component_invocation;
 mod import;
 
 pub fn parse(
-    module: fastn_unresolved::Symbol,
+    module: fastn_unresolved::Module,
     source: &str,
     auto_imports: &[fastn_unresolved::URD],
 ) -> fastn_unresolved::Document {

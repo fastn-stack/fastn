@@ -24,6 +24,15 @@ pub struct Symbol {
     module_len: u16,
 }
 
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+pub struct Module {
+    // 6 bytes
+    /// this store the <package>/<module>#<name> of the symbol
+    interned: string_interner::DefaultSymbol, // u32
+    /// length of the <package> part of the symbol
+    package_len: u16,
+}
+
 pub type URD = fastn_unresolved::UR<fastn_unresolved::Definition, fastn_resolved::Definition>;
 pub type URCI = fastn_unresolved::UR<
     fastn_unresolved::ComponentInvocation,
@@ -33,7 +42,7 @@ pub type URIS = fastn_unresolved::UR<fastn_unresolved::Identifier, fastn_unresol
 
 #[derive(Debug, Clone)]
 pub struct Document {
-    pub module: Symbol,
+    pub module: Module,
     pub module_doc: Option<fastn_section::Span>,
     pub definitions: Vec<URD>,
     pub content: Vec<URCI>,
@@ -141,7 +150,7 @@ pub struct ComponentInvocation {
     /// this contains a symbol that is the module where this component invocation happened.
     ///
     /// all local symbols are resolved with respect to the module.
-    pub module: Symbol,
+    pub module: Module,
     pub name: URIS,
     /// once a caption is resolved, it is set to () here, and moved to properties
     pub caption: UR<Option<fastn_section::HeaderValue>, ()>,

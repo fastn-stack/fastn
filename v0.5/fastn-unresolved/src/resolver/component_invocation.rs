@@ -15,7 +15,7 @@ impl fastn_unresolved::ComponentInvocation {
             &mut self.name,
             input,
             output,
-            vec![], // TODO
+            &[], // TODO
         );
 
         let component = match self.name {
