@@ -265,7 +265,6 @@ dependencies = [
  "fastn-jdebug",
  "serde",
  "serde_json",
- "string-interner",
 ]
 
 [[package]]

@@ -13,4 +13,3 @@ arcstr.workspace = true
 serde.workspace = true
 fastn-jdebug.workspace = true
 serde_json.workspace = true
-string-interner.workspace = true

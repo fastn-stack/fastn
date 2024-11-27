@@ -4,15 +4,6 @@ impl From<fastn_jdebug::Span> for fastn_section::Identifier {
     }
 }
 
-impl From<fastn_section::Kind> for Option<fastn_section::KindedName> {
-    fn from(value: fastn_section::Kind) -> Self {
-        Some(fastn_section::KindedName {
-            kind: None,
-            name: value.to_identifier()?,
-        })
-    }
-}
-
 pub fn extend_span(span: &mut Option<fastn_section::Span>, other: fastn_section::Span) {
     if let Some(_s) = span {
         // s.extend(other);
@@ -61,7 +52,7 @@ impl fastn_section::Section {
     }
 
     pub fn simple_section_kind_name(&self) -> Option<&str> {
-        let kind = match self.init.name.kind {
+        let kind = match self.init.kind {
             Some(ref k) => k,
             None => return None,
         };
@@ -69,22 +60,21 @@ impl fastn_section::Section {
         // the reason doc must be none as this is for section, and section doc is not stored in
         // kind.doc.
         if kind.args.is_some()
-            || kind.doc.is_some()
-            || kind.name.module.is_some()
-            || kind.name.terms.len() != 1
+        // || kind.name.module.is_some()
+        // || kind.name.terms.len() != 1
         {
             return None;
         }
 
-        kind.name.terms.first().map(fastn_section::Identifier::str)
+        Some(kind.name.str())
     }
 
     pub fn name(&self) -> &str {
-        self.init.name.name.name.str()
+        self.init.name.name.str()
     }
 
     pub fn name_span(&self) -> &fastn_section::Span {
-        &self.init.name.name.name
+        &self.init.name.name
     }
 
     pub fn caption_as_plain_span(&self) -> Option<&fastn_section::Span> {
@@ -117,16 +107,6 @@ impl fastn_section::HeaderValue {
 }
 
 impl fastn_section::Header {
-    pub fn name(&self) -> &str {
-        self.name.name.name.str()
-    }
-
-    pub fn name_span(&self) -> &fastn_section::Span {
-        &self.name.name.name
-    }
-}
-
-impl fastn_section::Kind {
     pub fn attach_doc(&mut self, doc: fastn_section::Span) {
         if self.doc.is_some() {
             panic!("doc already attached");
@@ -144,23 +124,22 @@ impl fastn_section::Kind {
         self.visibility = Some(visibility);
     }
 
+    pub fn name(&self) -> &str {
+        self.name.name.str()
+    }
+
+    pub fn name_span(&self) -> &fastn_section::Span {
+        &self.name.name
+    }
+}
+
+impl fastn_section::Kind {
     pub fn to_identifier(&self) -> Option<fastn_section::Identifier> {
-        if self.args.is_some()
-            || self.doc.is_some()
-            || self.visibility.is_some()
-            || !self.name.terms.is_empty()
-            || self.name.module.is_none()
-            || !self.name.terms.is_empty()
-        {
+        if self.args.is_some() {
             return None;
         }
 
-        let m = self.name.module.as_ref()?;
-        if !m.path.is_empty() {
-            return None;
-        }
-
-        Some(m.package.name.clone().into())
+        Some(self.name.clone())
     }
 }
 
@@ -204,12 +183,12 @@ impl fastn_section::Section {
         Box::new(fastn_section::Section {
             init: fastn_section::SectionInit {
                 dashdash: Default::default(),
-                name: fastn_section::KindedName {
-                    kind: None,
-                    name: name.into(),
-                },
+                kind: None,
+                doc: None,
+                name: name.into(),
                 colon: Default::default(),
                 function_marker,
+                visibility: None,
             },
             caption: None,
             headers: vec![],
@@ -229,94 +208,5 @@ impl fastn_section::Scannable for fastn_section::Document {
 
     fn add_comment(&mut self, comment: fastn_section::Span) {
         self.comments.push(comment);
-    }
-}
-
-impl fastn_section::Symbol {
-    pub fn new(
-        package: &str,
-        module: &str,
-        name: &str,
-        interner: &mut string_interner::DefaultStringInterner,
-    ) -> fastn_section::Symbol {
-        fastn_section::Symbol {
-            package_len: package.len() as u16,
-            module_len: module.len() as u16,
-            interned: interner.get_or_intern(format!("{package}/{module}#{name}")),
-        }
-    }
-
-    pub fn parent(
-        &self,
-        interner: &mut string_interner::DefaultStringInterner,
-    ) -> fastn_section::Module {
-        fastn_section::Module {
-            package_len: self.package_len,
-            interned: interner.get_or_intern(format!(
-                "{}/{}",
-                self.package(interner),
-                self.module(interner)
-            )),
-        }
-    }
-
-    pub fn str<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
-        interner.resolve(self.interned).unwrap()
-    }
-
-    pub fn package<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
-        &self.str(interner)[..self.package_len as usize]
-    }
-
-    pub fn module<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
-        &self.str(interner)[self.package_len as usize + 1
-            ..self.package_len as usize + 1 + self.module_len as usize]
-    }
-
-    pub fn name<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
-        &self.str(interner)[self.package_len as usize + 1 + self.module_len as usize + 1..]
-    }
-}
-
-impl fastn_section::Module {
-    pub fn new(
-        package: &str,
-        module: &str,
-        interner: &mut string_interner::DefaultStringInterner,
-    ) -> fastn_section::Module {
-        fastn_section::Module {
-            package_len: package.len() as u16,
-            interned: interner.get_or_intern(format!("{package}/{module}")),
-        }
-    }
-
-    pub fn str<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
-        interner.resolve(self.interned).unwrap()
-    }
-
-    pub fn package<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
-        &self.str(interner)[..self.package_len as usize]
-    }
-
-    pub fn name<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
-        &self.str(interner)[self.package_len as usize + 1..]
-    }
-
-    pub fn symbol(
-        &self,
-        name: &str,
-        interner: &mut string_interner::DefaultStringInterner,
-    ) -> fastn_section::Symbol {
-        let module_len = interner.resolve(self.interned).unwrap().len() as u16 - self.package_len;
-
-        fastn_section::Symbol {
-            package_len: self.package_len,
-            module_len,
-            interned: interner.get_or_intern(format!(
-                "{}/{}#{name}",
-                self.package(interner),
-                self.module(interner)
-            )),
-        }
     }
 }

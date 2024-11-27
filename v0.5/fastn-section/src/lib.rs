@@ -47,26 +47,6 @@ pub struct Identifier {
     pub name: fastn_section::Span,
 }
 
-#[derive(Debug, Clone, Hash, PartialEq, Eq)]
-pub struct Symbol {
-    // 8 bytes
-    /// this store the <package>/<module>#<name> of the symbol
-    interned: string_interner::DefaultSymbol, // u32
-    /// length of the <package> part of the symbol
-    package_len: u16,
-    /// length of the <module> part of the symbol
-    module_len: u16,
-}
-
-#[derive(Debug, Clone, Hash, PartialEq, Eq)]
-pub struct Module {
-    // 6 bytes
-    /// this store the <package>/<module>#<name> of the symbol
-    interned: string_interner::DefaultSymbol, // u32
-    /// length of the <package> part of the symbol
-    package_len: u16,
-}
-
 #[derive(Debug, PartialEq, Clone)]
 pub struct Section {
     pub init: fastn_section::SectionInit,
@@ -122,7 +102,7 @@ pub struct Header {
 /// it only parses the name and args
 #[derive(Debug, PartialEq, Clone)]
 pub struct Kind {
-    pub name: Symbol,
+    pub name: Identifier,
     // during parsing, we can encounter `foo<>`, which needs to be differentiated from `foo`
     // therefore we are using `Option<Vec<>>` here
     pub args: Option<Vec<Kind>>,

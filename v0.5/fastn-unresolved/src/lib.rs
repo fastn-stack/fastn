@@ -10,7 +10,6 @@ mod parser;
 pub mod resolver;
 mod utils;
 
-use fastn_section::{Identifier, Symbol};
 pub use parser::parse;
 pub use utils::desugar_auto_imports;
 
@@ -19,21 +18,42 @@ pub type URCI = fastn_unresolved::UR<
     fastn_unresolved::ComponentInvocation,
     fastn_resolved::ComponentInvocation,
 >;
-pub type URIS = fastn_unresolved::UR<fastn_unresolved::IdentifierReference, fastn_section::Symbol>;
+pub type URIS =
+    fastn_unresolved::UR<fastn_unresolved::IdentifierReference, fastn_unresolved::Symbol>;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum IdentifierReference {
     // foo
-    Local(Identifier),
+    Local(fastn_section::Identifier),
     // bar.foo: module = bar, name: foo
     Imported(Symbol),
     // bar#foo: component using the absolute path.
     Absolute(Symbol),
 }
 
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+pub struct Symbol {
+    // 8 bytes
+    /// this store the <package>/<module>#<name> of the symbol
+    interned: string_interner::DefaultSymbol, // u32
+    /// length of the <package> part of the symbol
+    package_len: u16,
+    /// length of the <module> part of the symbol
+    module_len: u16,
+}
+
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+pub struct Module {
+    // 6 bytes
+    /// this store the <package>/<module>#<name> of the symbol
+    interned: string_interner::DefaultSymbol, // u32
+    /// length of the <package> part of the symbol
+    package_len: u16,
+}
+
 #[derive(Debug, Clone)]
 pub struct Document {
-    pub module: fastn_section::Module,
+    pub module: fastn_unresolved::Module,
     pub module_doc: Option<fastn_section::Span>,
     pub definitions: Vec<URD>,
     pub content: Vec<URCI>,
@@ -45,7 +65,7 @@ pub struct Document {
 
 #[derive(Debug, Clone)]
 pub struct Definition {
-    pub symbol: Option<fastn_section::Symbol>, // <package-name>/<module-name>#<definition-name>
+    pub symbol: Option<fastn_unresolved::Symbol>, // <package-name>/<module-name>#<definition-name>
     pub doc: Option<fastn_section::Span>,
     /// resolving an identifier means making sure it is unique in the document, and performing
     /// other checks.
@@ -56,8 +76,8 @@ pub struct Definition {
 
 #[derive(Debug, Clone)]
 pub enum InnerDefinition {
-    SymbolAlias(fastn_section::Symbol),
-    ModuleAlias(fastn_section::Symbol),
+    SymbolAlias(fastn_unresolved::Symbol),
+    ModuleAlias(fastn_unresolved::Symbol),
     Component {
         arguments: Vec<UR<Argument, fastn_resolved::Argument>>,
         body: Vec<URCI>,
@@ -147,7 +167,7 @@ pub struct ComponentInvocation {
     /// this contains a symbol that is the module where this component invocation happened.
     ///
     /// all local symbols are resolved with respect to the module.
-    pub module: fastn_section::Module,
+    pub module: fastn_unresolved::Module,
     pub name: URIS,
     /// once a caption is resolved, it is set to () here, and moved to properties
     pub caption: UR<Option<fastn_section::HeaderValue>, ()>,
@@ -188,7 +208,7 @@ pub enum Kind {
     CaptionOrBody(Box<Kind>),
     // TODO: Future(Kind),
     // TODO: Result(Kind, Kind),
-    Custom(fastn_section::Symbol),
+    Custom(fastn_unresolved::Symbol),
 }
 
 pub enum FromSectionKindError {
