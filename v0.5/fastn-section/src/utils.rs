@@ -195,8 +195,16 @@ impl std::fmt::Display for fastn_section::IdentifierReference {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let str = match self {
             fastn_section::IdentifierReference::Local(ref name) => name.str().to_string(),
-            fastn_section::IdentifierReference::Absolute { module, name } => {
-                format!("{}#{}", module.str(), name.str())
+            fastn_section::IdentifierReference::Absolute {
+                package,
+                module,
+                name,
+            } => {
+                if module.str().is_empty() {
+                    format!("{}#{}", package.str(), name.str())
+                } else {
+                    format!("{}/{}#{}", package.str(), module.str(), name.str())
+                }
             }
             fastn_section::IdentifierReference::Imported { module, name } => {
                 format!("{}.{}", module.str(), name.str())

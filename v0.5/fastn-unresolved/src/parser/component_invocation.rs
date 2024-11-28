@@ -47,6 +47,6 @@ mod tests {
 
     #[test]
     fn component_invocation() {
-        t!("-- ftd.text: hello", { "content": "ftd.text", "caption": ["hello"] });
+        t!("-- ftd.text: hello", {"content": "ftd.text", "caption": ["hello"]});
     }
 }

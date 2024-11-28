@@ -81,6 +81,7 @@ pub enum IdentifierReference {
     },
     // bar#foo: component using the absolute path.
     Absolute {
+        package: fastn_section::Span,
         module: fastn_section::Span,
         name: fastn_section::Span,
     },

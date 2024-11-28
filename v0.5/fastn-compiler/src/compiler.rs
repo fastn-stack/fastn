@@ -13,13 +13,6 @@ pub(crate) struct Compiler {
 }
 
 impl Compiler {
-    fn resolution_input(&self) -> fastn_unresolved::resolver::Input {
-        fastn_unresolved::resolver::Input {
-            definitions: &self.definitions,
-            interner: &self.interner,
-        }
-    }
-
     fn new(
         symbols: Box<dyn fastn_compiler::SymbolStore>,
         source: &str,
@@ -101,7 +94,7 @@ impl Compiler {
             match definition.as_mut() {
                 Some(fastn_unresolved::UR::UnResolved(definition)) => {
                     let mut o = Default::default();
-                    definition.resolve(self.resolution_input(), &mut o);
+                    definition.resolve(&self.definitions, &mut self.interner, &mut o);
                     r.need_more_symbols.extend(o.stuck_on);
                     self.document.merge(o.errors, o.warnings, o.comments);
                 }
@@ -142,7 +135,7 @@ impl Compiler {
             match ci {
                 fastn_unresolved::UR::UnResolved(mut c) => {
                     let mut needed = Default::default();
-                    c.resolve(&self.resolution_input(), &mut needed);
+                    c.resolve(&self.definitions, &mut self.interner, &mut needed);
                     stuck_on_symbols.extend(needed.stuck_on);
                     self.document
                         .merge(needed.errors, needed.warnings, needed.comments);

@@ -8,15 +8,29 @@
 pub fn resolve(
     _module: &fastn_unresolved::Module,
     name: &mut fastn_unresolved::URIS,
-    _input: &fastn_unresolved::resolver::Input<'_>,
+    _definitions: &std::collections::HashMap<fastn_unresolved::Symbol, fastn_unresolved::URD>,
+    interner: &mut string_interner::DefaultStringInterner,
     _output: &mut fastn_unresolved::resolver::Output,
     _locals: &[Vec<fastn_unresolved::UR<fastn_unresolved::Argument, fastn_resolved::Argument>>],
 ) {
-    let _inner_name = if let fastn_unresolved::UR::UnResolved(name) = name {
+    let inner_name = if let fastn_unresolved::UR::UnResolved(name) = name {
         name
     } else {
         return;
     };
 
-    *name = fastn_unresolved::UR::Resolved(todo!());
+    let symbol = match inner_name {
+        fastn_section::IdentifierReference::Absolute {
+            package,
+            module,
+            name,
+        } => {
+            let symbol =
+                fastn_unresolved::Symbol::new(package.str(), module.str(), name.str(), interner);
+            symbol
+        }
+        _ => todo!(),
+    };
+
+    *name = fastn_unresolved::UR::Resolved(symbol);
 }

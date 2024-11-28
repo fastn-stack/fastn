@@ -7,10 +7,7 @@
 
 mod component_invocation;
 mod definition;
-mod input;
 mod symbol;
-
-pub use input::Input;
 
 #[derive(Debug, Default)]
 pub struct Output {

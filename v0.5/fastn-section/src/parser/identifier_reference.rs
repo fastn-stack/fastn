@@ -28,7 +28,9 @@ fn from_span(
     if let Some((module, name)) = span.str().split_once("#") {
         validate_name(name)?;
 
+        let (package, module) = module.split_once("/").unwrap_or((module, ""));
         return Ok(fastn_section::IdentifierReference::Absolute {
+            package: span.inner_str(package),
             module: span.inner_str(module),
             name: span.inner_str(name),
         });

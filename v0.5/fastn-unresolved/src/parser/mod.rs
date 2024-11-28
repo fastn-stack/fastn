@@ -58,7 +58,7 @@ pub fn parse(
 
 #[cfg(test)]
 #[track_caller]
-/// t1 takes a function parses a single section. and another function to extract the debug value
+/// t1 takes a function parses a single section. and another function to test the parsed document
 fn t1<PARSER, TESTER>(source: &str, expected: serde_json::Value, parser: PARSER, tester: TESTER)
 where
     PARSER: Fn(
