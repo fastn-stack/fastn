@@ -6,7 +6,6 @@ extern crate self as fastn_section;
 
 mod debug;
 mod error;
-mod jdebug;
 mod parser;
 mod scanner;
 mod utils;
@@ -14,9 +13,32 @@ mod warning;
 mod wiggin;
 
 pub use error::Error;
-pub use fastn_section::jdebug::{JDebug, Span, Spanned};
 pub use fastn_section::warning::Warning;
 pub use scanner::{ECey, Scanner};
+
+/// TODO: span has to keep track of the document as well now.
+/// TODO: demote usize to u32.
+///
+/// the document would be document id as stored in sqlite documents table.
+///
+/// Note: instead of Range, we will use a custom struct, we can use a single 32bit data to store
+/// both start, and length. or we keep our life simple, we have can have sections that are really
+/// long, eg a long ftd file. lets assume this is the decision for v0.5. we can demote usize to u32
+/// as we do not expect individual documents to be larger than few GBs.
+#[derive(PartialEq, Hash, Debug, Eq, Clone, Default)]
+pub struct Span {
+    inner: arcstr::Substr, // this is currently a 32-byte struct.
+}
+
+#[derive(Debug, PartialEq, Clone, Default)]
+pub struct Spanned<T> {
+    pub span: Span,
+    pub value: T,
+}
+
+pub trait JDebug {
+    fn debug(&self) -> serde_json::Value;
+}
 
 #[derive(Debug)]
 pub enum Diagnostic {

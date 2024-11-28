@@ -145,3 +145,107 @@ fn error(e: &fastn_section::Error, _s: Option<fastn_section::Span>) -> serde_jso
 
     serde_json::json!({ "error": v})
 }
+
+impl fastn_section::JDebug for fastn_section::Span {
+    fn debug(&self) -> serde_json::Value {
+        if self.inner.is_empty() {
+            "<empty>"
+        } else {
+            self.inner.as_str()
+        }
+        .into()
+    }
+}
+
+impl AsRef<arcstr::Substr> for fastn_section::Span {
+    fn as_ref(&self) -> &arcstr::Substr {
+        &self.inner
+    }
+}
+
+impl<T: fastn_section::JDebug> fastn_section::JDebug for Vec<T> {
+    fn debug(&self) -> serde_json::Value {
+        serde_json::Value::Array(self.iter().map(|v| v.debug()).collect())
+    }
+}
+
+impl<T: fastn_section::JDebug> fastn_section::JDebug for Option<T> {
+    fn debug(&self) -> serde_json::Value {
+        self.as_ref()
+            .map(|v| v.debug())
+            .unwrap_or(serde_json::Value::Null)
+    }
+}
+
+impl<K: AsRef<fastn_section::Span>, V: fastn_section::JDebug> fastn_section::JDebug
+    for std::collections::HashMap<K, V>
+{
+    fn debug(&self) -> serde_json::Value {
+        let mut o = serde_json::Map::new();
+        for (k, v) in self {
+            let r = k.as_ref();
+            o.insert(r.inner.to_string(), v.debug());
+        }
+        serde_json::Value::Object(o)
+    }
+}
+
+impl fastn_section::Span {
+    pub fn inner_str(&self, s: &str) -> fastn_section::Span {
+        fastn_section::Span {
+            inner: self.inner.substr_from(s),
+        }
+    }
+
+    pub fn wrap<T>(&self, value: T) -> fastn_section::Spanned<T> {
+        fastn_section::Spanned {
+            span: self.clone(),
+            value,
+        }
+    }
+
+    pub fn span(&self, start: usize, end: usize) -> fastn_section::Span {
+        fastn_section::Span {
+            inner: self.inner.substr(start..end),
+        }
+    }
+
+    pub fn start(&self) -> usize {
+        self.inner.range().start
+    }
+
+    pub fn end(&self) -> usize {
+        self.inner.range().end
+    }
+
+    pub fn str(&self) -> &str {
+        &self.inner
+    }
+}
+
+impl From<arcstr::Substr> for fastn_section::Span {
+    fn from(inner: arcstr::Substr) -> Self {
+        fastn_section::Span { inner }
+    }
+}
+
+impl<T> fastn_section::Spanned<T> {
+    pub fn map<T2, F: FnOnce(T) -> T2>(self, f: F) -> fastn_section::Spanned<T2> {
+        fastn_section::Spanned {
+            span: self.span,
+            value: f(self.value),
+        }
+    }
+}
+
+impl<T: fastn_section::JDebug> fastn_section::JDebug for fastn_section::Spanned<T> {
+    fn debug(&self) -> serde_json::Value {
+        self.value.debug()
+    }
+}
+
+impl fastn_section::JDebug for () {
+    fn debug(&self) -> serde_json::Value {
+        serde_json::Value::Null
+    }
+}
