@@ -1,6 +1,7 @@
 pub(super) fn component_invocation(
     section: fastn_section::Section,
     document: &mut fastn_unresolved::Document,
+    _interner: &mut string_interner::DefaultStringInterner,
 ) {
     if let Some(ref m) = section.init.function_marker {
         document
@@ -24,13 +25,20 @@ pub(super) fn component_invocation(
 
 #[cfg(test)]
 mod tests {
-    fn tester(mut d: fastn_unresolved::Document, expected: serde_json::Value) {
+    fn tester(
+        mut d: fastn_unresolved::Document,
+        expected: serde_json::Value,
+        interner: &string_interner::DefaultStringInterner,
+    ) {
         // assert!(d.imports.is_empty());
         assert!(d.definitions.is_empty());
         assert_eq!(d.content.len(), 1);
 
         assert_eq!(
-            fastn_unresolved::JDebug::debug(d.content.pop().unwrap().unresolved().unwrap()),
+            fastn_unresolved::JIDebug::idebug(
+                d.content.pop().unwrap().unresolved().unwrap(),
+                interner
+            ),
             expected
         )
     }
