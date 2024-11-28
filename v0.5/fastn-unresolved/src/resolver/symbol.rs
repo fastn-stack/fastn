@@ -24,10 +24,14 @@ pub fn resolve(
             package,
             module,
             name,
-        } => {
-            let symbol =
-                fastn_unresolved::Symbol::new(package.str(), module.str(), name.str(), interner);
-            symbol
+        } => fastn_unresolved::Symbol::new(package.str(), module.str(), name.str(), interner),
+        fastn_section::IdentifierReference::Imported { module, name } => {
+            if module.str() == "ftd" {
+                fastn_unresolved::Symbol::new("ftd", "", name.str(), interner)
+            } else {
+                // checkout aliases in this module
+                todo!()
+            }
         }
         _ => todo!(),
     };

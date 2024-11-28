@@ -219,9 +219,13 @@ impl fastn_unresolved::Module {
     ) -> fastn_unresolved::Symbol {
         let module_len = interner.resolve(self.interned).unwrap().len() as u16 - self.package_len;
         let v = if module_len == 0 {
-            format!("{package}#{name}")
+            format!("{}#{name}", self.package(interner))
         } else {
-            format!("{package}/{module}#{name}")
+            format!(
+                "{}/{}#{name}",
+                self.package(interner),
+                self.module(interner)
+            )
         };
         fastn_unresolved::Symbol {
             package_len: self.package_len,
