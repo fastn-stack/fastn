@@ -75,7 +75,7 @@ impl fastn_jdebug::JDebug for fastn_section::SectionInit {
 
 impl fastn_jdebug::JDebug for fastn_section::Kind {
     fn debug(&self) -> serde_json::Value {
-        if let Some(v) = self.to_identifier() {
+        if let Some(v) = self.to_identifier_reference() {
             return v.debug();
         }
 
@@ -107,6 +107,12 @@ impl fastn_jdebug::JDebug for fastn_section::Tes {
 impl fastn_jdebug::JDebug for fastn_section::Identifier {
     fn debug(&self) -> serde_json::Value {
         self.name.debug()
+    }
+}
+
+impl fastn_jdebug::JDebug for fastn_section::IdentifierReference {
+    fn debug(&self) -> serde_json::Value {
+        todo!()
     }
 }
 

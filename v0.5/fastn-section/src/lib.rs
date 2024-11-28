@@ -15,7 +15,7 @@ mod wiggin;
 pub use error::Error;
 pub use fastn_jdebug::{Span, Spanned};
 pub use fastn_section::warning::Warning;
-pub use scanner::{Scannable, Scanner};
+pub use scanner::{ECey, Scanner};
 
 #[derive(Debug)]
 pub enum Diagnostic {
@@ -50,16 +50,16 @@ pub struct Identifier {
 #[derive(Debug, Clone, PartialEq)]
 pub enum IdentifierReference {
     // foo
-    Local(fastn_section::Identifier),
+    Local(fastn_section::Span),
     // bar.foo: module = bar, name: foo
     Imported {
-        module: fastn_section::Identifier,
-        name: fastn_section::Identifier,
+        module: fastn_section::Span,
+        name: fastn_section::Span,
     },
     // bar#foo: component using the absolute path.
     Absolute {
-        module: fastn_section::Identifier,
-        name: fastn_section::Identifier,
+        module: fastn_section::Span,
+        name: fastn_section::Span,
     },
 }
 
@@ -79,7 +79,7 @@ pub struct Section {
 #[derive(Debug, PartialEq, Clone)]
 pub struct SectionInit {
     pub dashdash: fastn_section::Span, // for syntax highlighting and formatting
-    pub name: fastn_section::Identifier,
+    pub name: fastn_section::IdentifierReference,
     pub kind: Option<fastn_section::Kind>,
     pub doc: Option<fastn_section::Span>,
     pub visibility: Option<fastn_section::Spanned<fastn_section::Visibility>>,

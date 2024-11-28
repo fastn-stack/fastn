@@ -66,15 +66,24 @@ impl fastn_section::Section {
             return None;
         }
 
-        Some(kind.name.str())
+        match kind.name {
+            fastn_section::IdentifierReference::Local(ref kind) => Some(kind.str()),
+            _ => None,
+        }
     }
 
-    pub fn name(&self) -> &str {
-        self.init.name.name.str()
+    pub fn simple_name(&self) -> Option<&str> {
+        match self.init.name {
+            fastn_section::IdentifierReference::Local(ref name) => Some(name.str()),
+            _ => None,
+        }
     }
 
-    pub fn name_span(&self) -> &fastn_section::Span {
-        &self.init.name.name
+    pub fn simple_name_span(&self) -> &fastn_section::Span {
+        match self.init.name {
+            fastn_section::IdentifierReference::Local(ref name) => name,
+            _ => panic!("not a local name"),
+        }
     }
 
     pub fn caption_as_plain_span(&self) -> Option<&fastn_section::Span> {
@@ -134,7 +143,7 @@ impl fastn_section::Header {
 }
 
 impl fastn_section::Kind {
-    pub fn to_identifier(&self) -> Option<fastn_section::Identifier> {
+    pub fn to_identifier_reference(&self) -> Option<fastn_section::IdentifierReference> {
         if self.args.is_some() {
             return None;
         }
@@ -143,8 +152,8 @@ impl fastn_section::Kind {
     }
 }
 
-impl From<fastn_section::Identifier> for fastn_section::Kind {
-    fn from(name: fastn_section::Identifier) -> Self {
+impl From<fastn_section::IdentifierReference> for fastn_section::Kind {
+    fn from(name: fastn_section::IdentifierReference) -> Self {
         fastn_section::Kind { name, args: None }
     }
 }
@@ -159,6 +168,12 @@ impl fastn_section::Identifier {
             span: self.name.clone(),
             value: e,
         }
+    }
+}
+
+impl From<fastn_section::Span> for fastn_section::IdentifierReference {
+    fn from(name: fastn_section::Span) -> Self {
+        fastn_section::IdentifierReference::Local(name)
     }
 }
 
@@ -197,7 +212,7 @@ impl fastn_section::Section {
     }
 }
 
-impl fastn_section::Scannable for fastn_section::Document {
+impl fastn_section::ECey for fastn_section::Document {
     fn add_error(&mut self, span: fastn_section::Span, error: fastn_section::Error) {
         self.errors
             .push(fastn_section::Spanned { span, value: error });

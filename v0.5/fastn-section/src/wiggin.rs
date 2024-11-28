@@ -118,9 +118,9 @@ fn inner_ender<T: SectionProxy>(o: &mut fastn_section::Document, sections: Vec<T
     stack
 }
 
-enum Mark<'input> {
-    Start(&'input str),
-    End(&'input str),
+enum Mark {
+    Start(fastn_section::IdentifierReference),
+    End(fastn_section::IdentifierReference),
 }
 
 /// we are using a proxy trait so we can write tests against a fake type, and then implement the
@@ -145,10 +145,8 @@ trait SectionProxy: Sized + std::fmt::Debug {
 
 impl SectionProxy for fastn_section::Section {
     fn mark(&self) -> Result<Mark, fastn_section::Error> {
-        let span = &self.init.name.name;
-        let name = span.str();
-        if name != "end" {
-            return Ok(Mark::Start(name));
+        if self.simple_name() != Some("end") {
+            return Ok(Mark::Start(self.init.name.clone()));
         }
 
         let caption = match self.caption.as_ref() {
@@ -156,17 +154,23 @@ impl SectionProxy for fastn_section::Section {
             None => return Err(fastn_section::Error::SectionNameNotFoundForEnd),
         };
 
-        let v = match (caption.0.get(0), caption.0.len()) {
-            (Some(fastn_section::Tes::Text(span)), 1) => span.str().trim(),
-            (Some(_), _) => return Err(fastn_section::Error::EndContainsData),
-            (None, _) => return Err(fastn_section::Error::SectionNameNotFoundForEnd),
-        };
-
-        // if v is not a single word, we have a problem
-        if v.contains(' ') || v.contains('\t') {
-            // SES::String cannot contain new lines.
+        if caption.0.len() > 1 {
             return Err(fastn_section::Error::EndContainsData);
         }
+
+        let v = match caption.0.get(0) {
+            Some(fastn_section::Tes::Text(span)) => {
+                let v = span.str().trim();
+                // if v is not a single word, we have a problem
+                if v.contains(' ') || v.contains('\t') {
+                    // SES::String cannot contain new lines.
+                    return Err(fastn_section::Error::EndContainsData);
+                }
+                v
+            }
+            Some(_) => return Err(fastn_section::Error::EndContainsData),
+            None => return Err(fastn_section::Error::SectionNameNotFoundForEnd),
+        };
 
         Ok(Mark::End(v))
     }
@@ -194,7 +198,7 @@ mod test {
     #[allow(dead_code)] // #[expect(dead_code)] is not working
     #[derive(Debug)]
     struct DummySection {
-        name: String,
+        name: fastn_section::IdentifierReference,
         // does the section have end mark like
         // `/foo`
         // where `/` marks end of the section `foo`
@@ -209,7 +213,7 @@ mod test {
     impl super::SectionProxy for DummySection {
         fn mark(&self) -> Result<super::Mark, fastn_section::Error> {
             if self.has_end_mark {
-                Ok(super::Mark::End(&self.name))
+                Ok(super::Mark::End(self.name))
             } else {
                 Ok(super::Mark::Start(&self.name))
             }

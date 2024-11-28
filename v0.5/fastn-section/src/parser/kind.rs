@@ -1,7 +1,7 @@
 pub fn kind(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Option<fastn_section::Kind> {
-    let qi = match fastn_section::parser::identifier(scanner) {
+    let qi = match fastn_section::parser::identifier_reference(scanner) {
         Some(qi) => qi,
         None => return None,
     };

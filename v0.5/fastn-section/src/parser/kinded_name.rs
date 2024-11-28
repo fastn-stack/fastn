@@ -4,7 +4,7 @@ pub fn kinded_name(
     let kind = fastn_section::parser::kind(scanner);
     scanner.skip_spaces();
 
-    let name = match fastn_section::parser::identifier(scanner) {
+    let name = match fastn_section::parser::identifier_reference(scanner) {
         Some(v) => v,
         None => {
             return kind.and_then(Into::into);
@@ -16,7 +16,7 @@ pub fn kinded_name(
 
 pub struct KindedName {
     pub kind: Option<fastn_section::Kind>,
-    pub name: fastn_section::Identifier,
+    pub name: fastn_section::IdentifierReference,
 }
 
 impl fastn_jdebug::JDebug for KindedName {
@@ -34,7 +34,7 @@ impl From<fastn_section::Kind> for Option<KindedName> {
     fn from(value: fastn_section::Kind) -> Self {
         Some(KindedName {
             kind: None,
-            name: value.to_identifier()?,
+            name: value.to_identifier_reference()?,
         })
     }
 }

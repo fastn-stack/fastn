@@ -1,10 +1,10 @@
-pub trait Scannable {
+pub trait ECey {
     fn add_error(&mut self, span: fastn_section::Span, message: fastn_section::Error);
     fn add_comment(&mut self, span: fastn_section::Span);
 }
 
 #[derive(Debug)]
-pub struct Scanner<'input, T: Scannable> {
+pub struct Scanner<'input, T: ECey> {
     input: &'input arcstr::ArcStr,
     chars: std::iter::Peekable<std::str::CharIndices<'input>>,
     /// index is byte position in the input
@@ -19,7 +19,15 @@ pub struct Index<'input> {
     chars: std::iter::Peekable<std::str::CharIndices<'input>>,
 }
 
-impl<'input, T: Scannable> Scanner<'input, T> {
+impl<'input, T: ECey> Scanner<'input, T> {
+    pub fn add_error(&mut self, span: fastn_section::Span, message: fastn_section::Error) {
+        self.output.add_error(span, message)
+    }
+
+    pub fn add_comment(&mut self, span: fastn_section::Span) {
+        self.output.add_comment(span)
+    }
+
     pub fn new(input: &'input arcstr::ArcStr, fuel: fastn_section::Fuel, t: T) -> Scanner<T> {
         assert!(input.len() < 10_000_000); // can't unresolved > 10MB file
         Scanner {

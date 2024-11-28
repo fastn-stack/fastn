@@ -7,6 +7,7 @@ mod kinded_name;
 // mod module_name;
 // mod package_name;
 // mod qualified_identifier;
+mod identifier_reference;
 mod section;
 mod section_init;
 mod visibility;
@@ -14,7 +15,9 @@ mod visibility;
 pub use body::body;
 pub use header_value::header_value;
 pub use headers::headers;
+#[expect(unused)]
 pub use identifier::identifier;
+pub use identifier_reference::identifier_reference;
 pub use kind::kind;
 pub use kinded_name::kinded_name;
 // pub use module_name::module_name;
