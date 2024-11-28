@@ -37,15 +37,19 @@ pub fn get_component<'a>(
     interner: &string_interner::DefaultStringInterner,
     symbol: &fastn_unresolved::Symbol,
 ) -> Option<&'a fastn_resolved::ComponentDefinition> {
+    println!("looking for: {}", symbol.str(interner));
     if let Some(fastn_unresolved::UR::Resolved(fastn_resolved::Definition::Component(v))) =
         definitions.get(symbol)
     {
+        println!("found in definitions");
         return Some(v);
     }
     if let Some(fastn_resolved::Definition::Component(v)) =
         fastn_builtins::builtins().get(symbol.str(interner))
     {
+        println!("found in builtins");
         return Some(v);
     }
+    println!("not found");
     None
 }

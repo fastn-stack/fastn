@@ -138,10 +138,15 @@ impl fastn_unresolved::Symbol {
         name: &str,
         interner: &mut string_interner::DefaultStringInterner,
     ) -> fastn_unresolved::Symbol {
+        let v = if module.is_empty() {
+            format!("{package}#{name}")
+        } else {
+            format!("{package}/{module}#{name}")
+        };
         fastn_unresolved::Symbol {
             package_len: package.len() as u16,
             module_len: module.len() as u16,
-            interned: interner.get_or_intern(format!("{package}/{module}#{name}")),
+            interned: interner.get_or_intern(v),
         }
     }
 
