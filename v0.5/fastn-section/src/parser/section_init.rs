@@ -5,7 +5,7 @@ pub fn section_init(
     scanner.skip_spaces();
     let dashdash = scanner.token("--")?;
     scanner.skip_spaces();
-    let name = fastn_section::parser::identifier(scanner)?;
+    let kinded_name = fastn_section::parser::kinded_name(scanner)?;
     scanner.skip_spaces();
 
     let function_marker = scanner.token("(");
@@ -20,11 +20,11 @@ pub fn section_init(
 
     Some(fastn_section::SectionInit {
         dashdash,
-        name,
+        name: kinded_name.name,
+        kind: kinded_name.kind,
         colon,
         function_marker,
         doc: None,
-        kind: None,
         visibility: None,
     })
 }
@@ -40,7 +40,7 @@ mod test {
         t!("-- foo: hello", {"name": "foo"}, " hello");
         t!("-- integer foo: hello", {"name": "foo", "kind": "integer"}, " hello");
         t!("-- integer héllo: foo", {"name": "héllo", "kind": "integer"}, " foo");
-        t!("-- integer foo():", {"name": "foo", "kind": "integer"});
+        t!("-- integer foo():", {"function": "foo", "kind": "integer"});
         // t!("-- list<integer> foo:", {"name": {"name": "foo", "kind": "integer"}}, "");
     }
 }

@@ -1,6 +1,6 @@
 pub fn kinded_name(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
-) -> Option<fastn_section::KindedName> {
+) -> Option<KindedName> {
     let kind = fastn_section::parser::kind(scanner);
     scanner.skip_spaces();
 
@@ -11,7 +11,32 @@ pub fn kinded_name(
         }
     };
 
-    Some(fastn_section::KindedName { kind, name })
+    Some(KindedName { kind, name })
+}
+
+pub struct KindedName {
+    pub kind: Option<fastn_section::Kind>,
+    pub name: fastn_section::Identifier,
+}
+
+impl fastn_jdebug::JDebug for KindedName {
+    fn debug(&self) -> serde_json::Value {
+        let mut o = serde_json::Map::new();
+        if let Some(kind) = &self.kind {
+            o.insert("kind".into(), kind.debug());
+        }
+        o.insert("name".into(), self.name.debug());
+        serde_json::Value::Object(o)
+    }
+}
+
+impl From<fastn_section::Kind> for Option<KindedName> {
+    fn from(value: fastn_section::Kind) -> Self {
+        Some(KindedName {
+            kind: None,
+            name: value.to_identifier()?,
+        })
+    }
 }
 
 #[cfg(test)]
