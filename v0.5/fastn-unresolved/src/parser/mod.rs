@@ -75,9 +75,10 @@ where
     println!("--------- testing -----------\n{source}\n--------- source ------------");
 
     let mut interner: string_interner::DefaultStringInterner = Default::default();
+    let module = fastn_unresolved::Module::new("main", "", &mut interner);
 
     let (mut document, sections) = fastn_unresolved::Document::new(
-        todo!(),
+        module,
         fastn_section::Document::parse(&arcstr::ArcStr::from(source)),
         &[],
     );
