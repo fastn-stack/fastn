@@ -154,13 +154,14 @@ impl fastn_unresolved::Symbol {
         &self,
         interner: &mut string_interner::DefaultStringInterner,
     ) -> fastn_unresolved::Module {
+        let v = if self.module_len == 0 {
+            self.package(interner).to_string()
+        } else {
+            format!("{}/{}", self.package(interner), self.module(interner))
+        };
         fastn_unresolved::Module {
             package_len: self.package_len,
-            interned: interner.get_or_intern(format!(
-                "{}/{}",
-                self.package(interner),
-                self.module(interner)
-            )),
+            interned: interner.get_or_intern(v),
         }
     }
 
@@ -188,9 +189,14 @@ impl fastn_unresolved::Module {
         module: &str,
         interner: &mut string_interner::DefaultStringInterner,
     ) -> fastn_unresolved::Module {
+        let v = if module.is_empty() {
+            package.to_string()
+        } else {
+            format!("{package}/{module}")
+        };
         fastn_unresolved::Module {
             package_len: package.len() as u16,
-            interned: interner.get_or_intern(format!("{package}/{module}")),
+            interned: interner.get_or_intern(v),
         }
     }
 
@@ -212,15 +218,15 @@ impl fastn_unresolved::Module {
         interner: &mut string_interner::DefaultStringInterner,
     ) -> fastn_unresolved::Symbol {
         let module_len = interner.resolve(self.interned).unwrap().len() as u16 - self.package_len;
-
+        let v = if module_len == 0 {
+            format!("{package}#{name}")
+        } else {
+            format!("{package}/{module}#{name}")
+        };
         fastn_unresolved::Symbol {
             package_len: self.package_len,
             module_len,
-            interned: interner.get_or_intern(format!(
-                "{}/{}#{name}",
-                self.package(interner),
-                self.module(interner)
-            )),
+            interned: interner.get_or_intern(v),
         }
     }
 }
