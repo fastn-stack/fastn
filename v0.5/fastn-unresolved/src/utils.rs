@@ -197,7 +197,7 @@ impl fastn_unresolved::Module {
         &self.str(interner)[..self.package_len as usize]
     }
 
-    pub fn name<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
+    pub fn module<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
         &self.str(interner)[self.package_len as usize + 1..]
     }
 

@@ -25,7 +25,7 @@ impl Compiler {
         source: &str,
         package: &str,
         module: &str,
-        desugared_auto_import: Vec<fastn_unresolved::URD>,
+        desugared_auto_import: &[fastn_unresolved::URD],
     ) -> Self {
         let mut interner = string_interner::StringInterner::new();
 
@@ -33,6 +33,7 @@ impl Compiler {
             fastn_unresolved::Module::new(package, module, &mut interner),
             source,
             &[],
+            &mut interner,
         );
         let content = Some(document.content);
         document.content = vec![];
@@ -44,7 +45,7 @@ impl Compiler {
             content,
             document,
             definitions_used: Default::default(),
-            desugared_auto_import,
+            desugared_auto_import: desugared_auto_import.to_vec(),
         }
     }
 
@@ -231,7 +232,7 @@ pub async fn compile(
     source: &str,
     package: &str,
     module: &str,
-    auto_imports: Vec<fastn_unresolved::URD>,
+    auto_imports: &[fastn_unresolved::URD],
 ) -> Result<fastn_resolved::CompiledDocument, fastn_compiler::Error> {
     Compiler::new(symbols, source, package, module, auto_imports)
         .compile()

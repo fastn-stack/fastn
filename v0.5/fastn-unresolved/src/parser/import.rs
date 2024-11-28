@@ -1,4 +1,8 @@
-pub(super) fn import(section: fastn_section::Section, document: &mut fastn_unresolved::Document) {
+pub(super) fn import(
+    section: fastn_section::Section,
+    document: &mut fastn_unresolved::Document,
+    interner: &mut string_interner::DefaultStringInterner,
+) {
     if let Some(ref kind) = section.init.kind {
         document
             .errors
@@ -17,7 +21,7 @@ pub(super) fn import(section: fastn_section::Section, document: &mut fastn_unres
         // we will go ahead with this import statement parsing
     }
 
-    let _i = match parse_import(&section, document) {
+    let _i = match parse_import(&section, document, interner) {
         Some(v) => v,
         None => {
             // error handling is job of parse_module_name().
@@ -36,6 +40,7 @@ pub(super) fn import(section: fastn_section::Section, document: &mut fastn_unres
 fn parse_import(
     section: &fastn_section::Section,
     document: &mut fastn_unresolved::Document,
+    interner: &mut string_interner::DefaultStringInterner,
 ) -> Option<Import> {
     let caption = match section.caption_as_plain_span() {
         Some(v) => v,
@@ -65,6 +70,7 @@ fn parse_import(
         module: fastn_unresolved::Module::new(
             caption.inner_str(module).str(),
             caption.inner_str(package).str(),
+            interner,
         ),
         alias: alias.map(|v| fastn_section::Identifier {
             name: caption.inner_str(v),

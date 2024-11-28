@@ -11,7 +11,6 @@ pub mod resolver;
 mod utils;
 
 pub use parser::parse;
-pub use utils::desugar_auto_imports;
 
 pub type URD = fastn_unresolved::UR<fastn_unresolved::Definition, fastn_resolved::Definition>;
 pub type URCI = fastn_unresolved::UR<

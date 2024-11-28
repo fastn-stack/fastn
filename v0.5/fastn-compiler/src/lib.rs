@@ -50,7 +50,7 @@ pub struct Error {
 #[derive(Debug)]
 pub struct SymbolError {
     #[expect(unused)]
-    symbol: fastn_unresolved::Identifier,
+    symbol: fastn_section::Identifier,
     #[expect(unused)]
     dependencies: Vec<String>,
     /// this is all the errors that came when trying to resolve this symbol.

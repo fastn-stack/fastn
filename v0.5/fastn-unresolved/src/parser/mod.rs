@@ -6,6 +6,7 @@ pub fn parse(
     module: fastn_unresolved::Module,
     source: &str,
     auto_imports: &[fastn_unresolved::URD],
+    interner: &mut string_interner::DefaultStringInterner,
 ) -> fastn_unresolved::Document {
     let (mut document, sections) = fastn_unresolved::Document::new(
         module,
@@ -17,7 +18,7 @@ pub fn parse(
 
     // guess the section and call the appropriate unresolved method.
     for section in sections.into_iter() {
-        let name = section.simple_name().to_ascii_lowercase();
+        let name = section.simple_name().map(|v| v.to_ascii_lowercase());
         let kind = section
             .simple_section_kind_name()
             .map(str::to_ascii_lowercase);
@@ -32,10 +33,12 @@ pub fn parse(
         // https://github.com/lotabout/fuzzy-matcher).
         match (
             kind.as_deref(),
-            name.as_str(),
+            name.as_deref(),
             section.init.function_marker.is_some(),
         ) {
-            (Some("import"), _, _) | (_, "import", _) => import::import(section, &mut document),
+            (Some("import"), _, _) | (_, Some("import"), _) => {
+                import::import(section, &mut document, interner)
+            }
             (Some("record"), _, _) => todo!(),
             (Some("type"), _, _) => todo!(),
             (Some("module"), _, _) => todo!(),
