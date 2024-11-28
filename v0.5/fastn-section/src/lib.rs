@@ -47,6 +47,22 @@ pub struct Identifier {
     pub name: fastn_section::Span,
 }
 
+#[derive(Debug, Clone, PartialEq)]
+pub enum IdentifierReference {
+    // foo
+    Local(fastn_section::Identifier),
+    // bar.foo: module = bar, name: foo
+    Imported {
+        module: fastn_section::Identifier,
+        name: fastn_section::Identifier,
+    },
+    // bar#foo: component using the absolute path.
+    Absolute {
+        module: fastn_section::Identifier,
+        name: fastn_section::Identifier,
+    },
+}
+
 #[derive(Debug, PartialEq, Clone)]
 pub struct Section {
     pub init: fastn_section::SectionInit,
@@ -102,7 +118,7 @@ pub struct Header {
 /// it only parses the name and args
 #[derive(Debug, PartialEq, Clone)]
 pub struct Kind {
-    pub name: Identifier,
+    pub name: IdentifierReference,
     // during parsing, we can encounter `foo<>`, which needs to be differentiated from `foo`
     // therefore we are using `Option<Vec<>>` here
     pub args: Option<Vec<Kind>>,

@@ -18,18 +18,7 @@ pub type URCI = fastn_unresolved::UR<
     fastn_unresolved::ComponentInvocation,
     fastn_resolved::ComponentInvocation,
 >;
-pub type URIS =
-    fastn_unresolved::UR<fastn_unresolved::IdentifierReference, fastn_unresolved::Symbol>;
-
-#[derive(Debug, Clone, PartialEq)]
-pub enum IdentifierReference {
-    // foo
-    Local(fastn_section::Identifier),
-    // bar.foo: module = bar, name: foo
-    Imported(Symbol),
-    // bar#foo: component using the absolute path.
-    Absolute(Symbol),
-}
+pub type URIS = fastn_unresolved::UR<fastn_section::IdentifierReference, fastn_unresolved::Symbol>;
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub struct Symbol {
