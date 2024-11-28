@@ -143,14 +143,11 @@ impl fastn_section::Kind {
     }
 }
 
-// impl From<fastn_section::QualifiedIdentifier> for fastn_section::Kind {
-//     fn from(name: fastn_section::QualifiedIdentifier) -> Self {
-//         fastn_section::Kind {
-//             name,
-//             ..Default::default()
-//         }
-//     }
-// }
+impl From<fastn_section::Identifier> for fastn_section::Kind {
+    fn from(name: fastn_section::Identifier) -> Self {
+        fastn_section::Kind { name, args: None }
+    }
+}
 
 impl fastn_section::Identifier {
     pub fn str(&self) -> &str {

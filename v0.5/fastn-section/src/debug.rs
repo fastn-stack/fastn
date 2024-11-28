@@ -58,17 +58,6 @@ impl fastn_jdebug::JDebug for fastn_section::SectionInit {
     }
 }
 
-impl fastn_jdebug::JDebug for fastn_section::KindedName {
-    fn debug(&self) -> serde_json::Value {
-        let mut o = serde_json::Map::new();
-        if let Some(kind) = &self.kind {
-            o.insert("kind".into(), kind.debug());
-        }
-        o.insert("name".into(), self.name.debug());
-        serde_json::Value::Object(o)
-    }
-}
-
 impl fastn_jdebug::JDebug for fastn_section::Kind {
     fn debug(&self) -> serde_json::Value {
         if let Some(v) = self.to_identifier() {
@@ -76,30 +65,11 @@ impl fastn_jdebug::JDebug for fastn_section::Kind {
         }
 
         let mut o = serde_json::Map::new();
-        if let Some(doc) = &self.doc {
-            o.insert("doc".into(), doc.debug());
-        }
-        if let Some(visibility) = &self.visibility {
-            o.insert("visibility".into(), visibility.debug());
-        }
         o.insert("name".into(), self.name.debug());
         if let Some(args) = &self.args {
             o.insert("args".into(), args.debug());
         }
         serde_json::Value::Object(o)
-    }
-}
-
-impl fastn_jdebug::JDebug for fastn_section::QualifiedIdentifier {
-    fn debug(&self) -> serde_json::Value {
-        if self.terms.is_empty() {
-            return self.module.debug();
-        }
-
-        serde_json::json! ({
-            "module": self.module.debug(),
-            "terms": self.terms.debug(),
-        })
     }
 }
 
@@ -122,54 +92,6 @@ impl fastn_jdebug::JDebug for fastn_section::Tes {
 impl fastn_jdebug::JDebug for fastn_section::Identifier {
     fn debug(&self) -> serde_json::Value {
         self.name.debug()
-    }
-}
-
-impl fastn_jdebug::JDebug for fastn_section::PackageName {
-    fn debug(&self) -> serde_json::Value {
-        format!("{} as {}", self.name.str(), self.alias.str()).into()
-    }
-}
-
-impl fastn_jdebug::JDebug for fastn_section::AliasableIdentifier {
-    fn debug(&self) -> serde_json::Value {
-        if self.alias.is_none() {
-            return self.name.debug();
-        }
-
-        serde_json::json! ({
-            "name": self.name.debug(),
-            "alias": self.alias.debug(),
-        })
-    }
-}
-
-impl fastn_jdebug::JDebug for fastn_section::ModuleName {
-    fn debug(&self) -> serde_json::Value {
-        if self.path.is_empty()
-            && self.name.alias.is_none()
-            && self.name.name == self.package.name
-            && self.name.name == self.package.alias
-        {
-            return self.name.name.debug();
-        }
-
-        if self.path.is_empty()
-            && self.name.name != self.package.name
-            && self.name.alias.is_none()
-            && self.package.name != self.package.alias
-            && self.name.name == self.package.alias
-        {
-            return self.package.debug();
-        }
-
-        let mut o = serde_json::Map::new();
-        o.insert("package".into(), self.package.debug());
-        o.insert("name".into(), self.name.debug());
-        if !self.path.is_empty() {
-            o.insert("path".into(), self.path.debug());
-        }
-        serde_json::Value::Object(o)
     }
 }
 

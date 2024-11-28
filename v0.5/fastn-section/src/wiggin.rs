@@ -145,7 +145,7 @@ trait SectionProxy: Sized + std::fmt::Debug {
 
 impl SectionProxy for fastn_section::Section {
     fn mark(&self) -> Result<Mark, fastn_section::Error> {
-        let span = &self.init.name.name.name;
+        let span = &self.init.name.name;
         let name = span.str();
         if name != "end" {
             return Ok(Mark::Start(name));

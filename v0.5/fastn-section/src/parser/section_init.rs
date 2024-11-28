@@ -5,7 +5,7 @@ pub fn section_init(
     scanner.skip_spaces();
     let dashdash = scanner.token("--")?;
     scanner.skip_spaces();
-    let name = fastn_section::parser::kinded_name(scanner)?;
+    let name = fastn_section::parser::identifier(scanner)?;
     scanner.skip_spaces();
 
     let function_marker = scanner.token("(");
@@ -23,6 +23,9 @@ pub fn section_init(
         name,
         colon,
         function_marker,
+        doc: None,
+        kind: None,
+        visibility: None,
     })
 }
 
