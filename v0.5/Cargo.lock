@@ -209,6 +209,7 @@ name = "fastn-core"
 version = "0.1.0"
 dependencies = [
  "fastn-section",
+ "fastn-unresolved",
  "serde_json",
 ]
 

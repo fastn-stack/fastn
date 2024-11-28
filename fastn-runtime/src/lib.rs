@@ -421,6 +421,7 @@ pub fn get_all_asts(
     }
 }
 
+#[expect(unused)]
 pub(crate) fn external_js_files(
     used_definitions: &indexmap::IndexMap<String, &fastn_resolved::Definition>,
 ) -> Vec<String> {
@@ -435,6 +436,7 @@ pub(crate) fn external_js_files(
         .collect()
 }
 
+#[expect(unused)]
 pub(crate) fn external_css_files(
     _needed_symbols: &indexmap::IndexMap<String, &fastn_resolved::Definition>,
 ) -> Vec<String> {

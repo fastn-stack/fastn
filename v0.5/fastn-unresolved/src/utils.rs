@@ -54,25 +54,14 @@ impl fastn_unresolved::Definition {
     }
 }
 
-impl fastn_unresolved::PackageName {
-    pub fn str(&self) -> &str {
-        self.0.str()
-    }
-}
-
 pub(crate) fn assert_no_body(
     section: &fastn_section::Section,
     document: &mut fastn_unresolved::Document,
 ) -> bool {
     if section.body.is_some() {
-        document.errors.push(
-            section
-                .init
-                .name
-                .name
-                .name
-                .wrap(fastn_section::Error::BodyNotAllowed),
-        );
+        document
+            .errors
+            .push(section.init.name.wrap(fastn_section::Error::BodyNotAllowed));
         return false;
     }
 
@@ -84,14 +73,9 @@ pub(crate) fn assert_no_children(
     document: &mut fastn_unresolved::Document,
 ) -> bool {
     if !section.children.is_empty() {
-        document.errors.push(
-            section
-                .init
-                .name
-                .name
-                .name
-                .wrap(fastn_section::Error::BodyNotAllowed),
-        );
+        document
+            .errors
+            .push(section.init.name.wrap(fastn_section::Error::BodyNotAllowed));
         return false;
     }
 
@@ -145,13 +129,6 @@ impl<U, V> fastn_unresolved::UR<U, V> {
             _ => panic!(),
         }
     }
-}
-
-pub fn desugar_auto_imports(
-    _auto_imports: &[fastn_section::AutoImport],
-) -> Vec<fastn_unresolved::URD> {
-    // todo!()
-    vec![]
 }
 
 impl fastn_unresolved::Symbol {

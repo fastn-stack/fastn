@@ -12,7 +12,7 @@ pub(super) fn component_invocation(
     document.content.push(
         fastn_unresolved::ComponentInvocation {
             module: document.module.clone(),
-            name: fastn_unresolved::IdentifierReference::Local(fastn_section::Identifier {
+            name: fastn_section::IdentifierReference::Local(fastn_section::Identifier {
                 name: section.name_span().clone(),
             })
             .into(),

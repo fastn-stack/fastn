@@ -208,13 +208,16 @@ impl TryFrom<fastn_section::Kind> for Kind {
     type Error = FromSectionKindError;
 
     fn try_from(kind: fastn_section::Kind) -> Result<Self, Self::Error> {
-        let ident = match kind.to_identifier() {
+        let ident = match kind.to_identifier_reference() {
             Some(ident) => ident,
             None => return Err(FromSectionKindError::InvalidKind),
         };
 
-        match ident.str() {
-            "integer" => Ok(Kind::Integer),
+        match ident {
+            fastn_section::IdentifierReference::Local(v) => match v.str() {
+                "integer" => Ok(Kind::Integer),
+                _ => todo!(),
+            },
             _ => unreachable!(),
         }
     }

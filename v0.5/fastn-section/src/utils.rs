@@ -171,6 +171,20 @@ impl fastn_section::Identifier {
     }
 }
 
+impl fastn_section::IdentifierReference {
+    pub fn wrap<T>(&self, value: T) -> fastn_jdebug::Spanned<T> {
+        let span = match self {
+            fastn_section::IdentifierReference::Local(ref name) => name.clone(),
+            // TODO: this is wrong, we should coalesce the spans.
+            fastn_section::IdentifierReference::Absolute { module, .. } => module.clone(),
+            // TODO: this is wrong, we should coalesce the spans.
+            fastn_section::IdentifierReference::Imported { module, .. } => module.clone(),
+        };
+
+        fastn_jdebug::Spanned { span, value }
+    }
+}
+
 impl From<fastn_section::Span> for fastn_section::IdentifierReference {
     fn from(name: fastn_section::Span) -> Self {
         fastn_section::IdentifierReference::Local(name)

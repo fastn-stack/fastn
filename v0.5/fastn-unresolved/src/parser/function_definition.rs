@@ -4,7 +4,7 @@ pub(super) fn function_definition(
 ) {
     // TODO: remove .unwrap() and put errors in `document.errors`
 
-    let name = section.name_span().clone();
+    let name = section.simple_name_span().clone();
     let visibility = section.init.visibility.unwrap_or_default().value;
 
     let return_type: Option<fastn_unresolved::UR<fastn_unresolved::Kind, _>> = section

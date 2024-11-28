@@ -25,7 +25,7 @@ impl Compiler {
         source: &str,
         package: &str,
         module: &str,
-        auto_imports: &[fastn_section::AutoImport],
+        desugared_auto_import: Vec<fastn_unresolved::URD>,
     ) -> Self {
         let mut interner = string_interner::StringInterner::new();
 
@@ -44,7 +44,7 @@ impl Compiler {
             content,
             document,
             definitions_used: Default::default(),
-            desugared_auto_import: fastn_unresolved::desugar_auto_imports(auto_imports),
+            desugared_auto_import,
         }
     }
 
@@ -231,7 +231,7 @@ pub async fn compile(
     source: &str,
     package: &str,
     module: &str,
-    auto_imports: &[fastn_section::AutoImport],
+    auto_imports: Vec<fastn_unresolved::URD>,
 ) -> Result<fastn_resolved::CompiledDocument, fastn_compiler::Error> {
     Compiler::new(symbols, source, package, module, auto_imports)
         .compile()

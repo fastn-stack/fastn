@@ -17,7 +17,7 @@ pub fn parse(
 
     // guess the section and call the appropriate unresolved method.
     for section in sections.into_iter() {
-        let name = section.name().to_ascii_lowercase();
+        let name = section.simple_name().to_ascii_lowercase();
         let kind = section
             .simple_section_kind_name()
             .map(str::to_ascii_lowercase);

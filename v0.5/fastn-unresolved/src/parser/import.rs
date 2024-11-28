@@ -7,11 +7,10 @@ pub(super) fn import(section: fastn_section::Section, document: &mut fastn_unres
     }
 
     // section.name must be exactly import.
-    if section.name() != "import" {
+    if section.simple_name() != Some("import") {
         document.errors.push(
             section
                 .init
-                .name
                 .name
                 .wrap(fastn_section::Error::ImportMustBeImport),
         );
