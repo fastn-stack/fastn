@@ -13,7 +13,8 @@ pub struct DynamicRoute {}
 pub struct Redirect {}
 pub struct Sitemap {}
 
-pub fn desugar_auto_imports(_auto_imports: &[AutoImport]) -> Vec<fastn_unresolved::URD> {
+#[expect(unused)]
+fn desugar_auto_imports(_auto_imports: &[AutoImport]) -> Vec<fastn_unresolved::URD> {
     // todo!()
     vec![]
 }

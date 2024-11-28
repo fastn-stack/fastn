@@ -18,7 +18,7 @@ impl TDoc<'_> {
 }
 
 #[cfg(feature = "owned-tdoc")]
-impl<'a> fastn_resolved::tdoc::TDoc for TDoc<'a> {
+impl fastn_resolved::tdoc::TDoc for TDoc<'_> {
     fn get_opt_function(&self, name: &str) -> Option<fastn_resolved::Function> {
         match self.get(name) {
             Some(fastn_resolved::Definition::Function(f)) => Some(f.clone()),

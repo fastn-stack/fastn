@@ -86,13 +86,13 @@ fn test_available_code_themes() -> String {
 }
 
 fn get_dummy_package_data() -> String {
-    return indoc::indoc! {
+    indoc::indoc! {
         "
         let __fastn_package_name__ = \"foo\";
         "
     }
     .trim()
-    .to_string();
+    .to_string()
 }
 
 #[track_caller]

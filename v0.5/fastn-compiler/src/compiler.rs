@@ -192,11 +192,12 @@ impl Compiler {
             || iterations == ITERATION_THRESHOLD
         {
             // we were not able to resolve all symbols or there were errors
-            return Err(fastn_compiler::Error {
-                messages: todo!(),
-                resolved: todo!(),
-                symbol_errors: todo!(),
-            });
+            // return Err(fastn_compiler::Error {
+            //     messages: todo!(),
+            //     resolved: todo!(),
+            //     symbol_errors: todo!(),
+            // });
+            todo!();
         }
 
         // there were no errors, etc.

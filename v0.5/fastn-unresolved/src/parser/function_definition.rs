@@ -12,7 +12,7 @@ pub(super) fn function_definition(
         .init
         .kind
         .and_then(|k| k.try_into().ok())
-        .map(|k| fastn_unresolved::UR::UnResolved(k));
+        .map(fastn_unresolved::UR::UnResolved);
 
     let arguments: Vec<_> = section
         .headers

@@ -28,7 +28,11 @@ impl<'input, T: ECey> Scanner<'input, T> {
         self.output.add_comment(span)
     }
 
-    pub fn new(input: &'input arcstr::ArcStr, fuel: fastn_section::Fuel, t: T) -> Scanner<T> {
+    pub fn new(
+        input: &'input arcstr::ArcStr,
+        fuel: fastn_section::Fuel,
+        t: T,
+    ) -> Scanner<'input, T> {
         assert!(input.len() < 10_000_000); // can't unresolved > 10MB file
         Scanner {
             chars: input.char_indices().peekable(),

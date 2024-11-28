@@ -851,7 +851,7 @@ impl TDoc<'_> {
                 }
                 ftd::Value::Record { name, fields }
             }
-            ftd::ftd2021::p2::Kind::String { .. } if row.first().is_some() => ftd::Value::String {
+            ftd::ftd2021::p2::Kind::String { .. } if !row.is_empty() => ftd::Value::String {
                 text: serde_json::from_value::<String>(row.first().unwrap().to_owned()).map_err(
                     |_| ftd::ftd2021::p1::Error::ParseError {
                         message: format!("Can't parse to string, found: {:?}", row),
@@ -861,38 +861,33 @@ impl TDoc<'_> {
                 )?,
                 source: ftd::TextSource::Header,
             },
-            ftd::ftd2021::p2::Kind::Integer { .. } if row.first().is_some() => {
-                ftd::Value::Integer {
-                    value: serde_json::from_value::<i64>(row.first().unwrap().to_owned()).map_err(
-                        |_| ftd::ftd2021::p1::Error::ParseError {
-                            message: format!("Can't parse to integer, found: {:?}", row),
-                            doc_id: self.name.to_string(),
-                            line_number,
-                        },
-                    )?,
-                }
-            }
-            ftd::ftd2021::p2::Kind::Decimal { .. } if row.first().is_some() => {
-                ftd::Value::Decimal {
-                    value: serde_json::from_value::<f64>(row.first().unwrap().to_owned()).map_err(
-                        |_| ftd::ftd2021::p1::Error::ParseError {
-                            message: format!("Can't parse to decimal, found: {:?}", row),
-                            doc_id: self.name.to_string(),
-                            line_number,
-                        },
-                    )?,
-                }
-            }
-            ftd::ftd2021::p2::Kind::Boolean { .. } if row.first().is_some() => {
-                ftd::Value::Boolean {
-                    value: serde_json::from_value::<bool>(row.first().unwrap().to_owned())
-                        .map_err(|_| ftd::ftd2021::p1::Error::ParseError {
-                            message: format!("Can't parse to boolean,found: {:?}", row),
-                            doc_id: self.name.to_string(),
-                            line_number,
-                        })?,
-                }
-            }
+            ftd::ftd2021::p2::Kind::Integer { .. } if !row.is_empty() => ftd::Value::Integer {
+                value: serde_json::from_value::<i64>(row.first().unwrap().to_owned()).map_err(
+                    |_| ftd::ftd2021::p1::Error::ParseError {
+                        message: format!("Can't parse to integer, found: {:?}", row),
+                        doc_id: self.name.to_string(),
+                        line_number,
+                    },
+                )?,
+            },
+            ftd::ftd2021::p2::Kind::Decimal { .. } if !row.is_empty() => ftd::Value::Decimal {
+                value: serde_json::from_value::<f64>(row.first().unwrap().to_owned()).map_err(
+                    |_| ftd::ftd2021::p1::Error::ParseError {
+                        message: format!("Can't parse to decimal, found: {:?}", row),
+                        doc_id: self.name.to_string(),
+                        line_number,
+                    },
+                )?,
+            },
+            ftd::ftd2021::p2::Kind::Boolean { .. } if !row.is_empty() => ftd::Value::Boolean {
+                value: serde_json::from_value::<bool>(row.first().unwrap().to_owned()).map_err(
+                    |_| ftd::ftd2021::p1::Error::ParseError {
+                        message: format!("Can't parse to boolean,found: {:?}", row),
+                        doc_id: self.name.to_string(),
+                        line_number,
+                    },
+                )?,
+            },
             t => unimplemented!(
                 "{:?} not yet implemented, line number: {}, doc: {}",
                 t,
@@ -1151,7 +1146,7 @@ impl TDoc<'_> {
         &'a self,
         name: &'a str,
         line_number: usize,
-    ) -> ftd::ftd2021::p1::Result<Option<&str>> {
+    ) -> ftd::ftd2021::p1::Result<Option<&'a str>> {
         if name.contains('#') {
             match name.split_once('#') {
                 Some((p1, _)) => {

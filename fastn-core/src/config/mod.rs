@@ -592,7 +592,7 @@ impl Config {
         String,
         &'a fastn_core::Package,
         String,
-        Option<&fastn_core::package::app::App>,
+        Option<&'a fastn_core::package::app::App>,
     )> {
         // Problem for recursive dependency is that only current package contains dependency,
         // dependent package does not contain dependency

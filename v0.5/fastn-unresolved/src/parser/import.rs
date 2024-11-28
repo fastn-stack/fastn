@@ -139,7 +139,7 @@ mod tests {
     fn tester(
         d: fastn_unresolved::Document,
         _expected: serde_json::Value,
-        interner: &string_interner::DefaultStringInterner,
+        _interner: &string_interner::DefaultStringInterner,
     ) {
         assert!(d.content.is_empty());
         assert!(d.definitions.is_empty());
@@ -228,7 +228,7 @@ mod tests {
     }
 
     impl fastn_unresolved::JIDebug for super::AliasableIdentifier {
-        fn idebug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
+        fn idebug(&self, _interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
             match self.alias {
                 Some(ref v) => format!("{}=>{}", self.name.str(), v.str()),
                 None => self.name.str().to_string(),

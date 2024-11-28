@@ -81,7 +81,7 @@ impl Context for EmptyContext {
     }
 }
 
-impl<'a> IterateVariablesContext<'a> for EmptyContext {
+impl IterateVariablesContext<'_> for EmptyContext {
     type VariableIterator = iter::Empty<(String, Value)>;
     type VariableNameIterator = iter::Empty<String>;
 

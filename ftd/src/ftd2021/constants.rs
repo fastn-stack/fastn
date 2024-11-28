@@ -108,11 +108,11 @@ pub mod regex {
 
     /// fetches capture group by group index and returns it as &str
     pub fn capture_group_by_index<'a>(capture: &'a regex::Captures, group_index: usize) -> &'a str {
-        return capture.get(group_index).map_or("", |c| c.as_str());
+        capture.get(group_index).map_or("", |c| c.as_str())
     }
 
     /// fetches the capture group by group name and returns it as &str
     pub fn capture_group_by_name<'a>(capture: &'a regex::Captures, group_name: &str) -> &'a str {
-        return capture.name(group_name).map_or("", |c| c.as_str());
+        capture.name(group_name).map_or("", |c| c.as_str())
     }
 }

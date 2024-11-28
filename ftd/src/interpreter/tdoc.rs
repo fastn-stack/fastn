@@ -43,7 +43,7 @@ impl<'a> TDoc<'a> {
         }
     }
 
-    pub fn state(&'a self) -> Option<&&'a mut ftd::interpreter::InterpreterState> {
+    pub fn state(&'a self) -> Option<&'a &'a mut ftd::interpreter::InterpreterState> {
         match &self.bag {
             BagOrState::Bag(_) => None,
             BagOrState::State(s) => Some(s),
@@ -2212,7 +2212,7 @@ impl<'a> TDoc<'a> {
     }
 }
 
-impl<'a> fastn_resolved::tdoc::TDoc for TDoc<'a> {
+impl fastn_resolved::tdoc::TDoc for TDoc<'_> {
     fn get_opt_function(&self, name: &str) -> Option<Function> {
         match self.get_thing(name, 0).ok()? {
             ftd::interpreter::Thing::Function(r) => Some(r),
