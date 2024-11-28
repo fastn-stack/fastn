@@ -177,6 +177,21 @@ impl From<fastn_section::Span> for fastn_section::IdentifierReference {
     }
 }
 
+impl std::fmt::Display for fastn_section::IdentifierReference {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let str = match self {
+            fastn_section::IdentifierReference::Local(ref name) => name.str().to_string(),
+            fastn_section::IdentifierReference::Absolute { module, name } => {
+                format!("{}#{}", module.str(), name.str())
+            }
+            fastn_section::IdentifierReference::Imported { module, name } => {
+                format!("{}.{}", module.str(), name.str())
+            }
+        };
+        write!(f, "{}", str)
+    }
+}
+
 // impl fastn_section::QualifiedIdentifier {
 //     pub fn new(
 //         module: Option<fastn_section::ModuleName>,

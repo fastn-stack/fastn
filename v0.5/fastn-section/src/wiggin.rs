@@ -119,8 +119,8 @@ fn inner_ender<T: SectionProxy>(o: &mut fastn_section::Document, sections: Vec<T
 }
 
 enum Mark {
-    Start(fastn_section::IdentifierReference),
-    End(fastn_section::IdentifierReference),
+    Start(String),
+    End(String),
 }
 
 /// we are using a proxy trait so we can write tests against a fake type, and then implement the
@@ -146,7 +146,7 @@ trait SectionProxy: Sized + std::fmt::Debug {
 impl SectionProxy for fastn_section::Section {
     fn mark(&self) -> Result<Mark, fastn_section::Error> {
         if self.simple_name() != Some("end") {
-            return Ok(Mark::Start(self.init.name.clone()));
+            return Ok(Mark::Start(self.init.name.to_string()));
         }
 
         let caption = match self.caption.as_ref() {
@@ -172,7 +172,7 @@ impl SectionProxy for fastn_section::Section {
             None => return Err(fastn_section::Error::SectionNameNotFoundForEnd),
         };
 
-        Ok(Mark::End(v))
+        Ok(Mark::End(v.to_string()))
     }
 
     fn add_children(&mut self, children: Vec<Self>) {
@@ -198,7 +198,7 @@ mod test {
     #[allow(dead_code)] // #[expect(dead_code)] is not working
     #[derive(Debug)]
     struct DummySection {
-        name: fastn_section::IdentifierReference,
+        name: String,
         // does the section have end mark like
         // `/foo`
         // where `/` marks end of the section `foo`
@@ -213,9 +213,9 @@ mod test {
     impl super::SectionProxy for DummySection {
         fn mark(&self) -> Result<super::Mark, fastn_section::Error> {
             if self.has_end_mark {
-                Ok(super::Mark::End(self.name))
+                Ok(super::Mark::End(self.name.clone()))
             } else {
-                Ok(super::Mark::Start(&self.name))
+                Ok(super::Mark::Start(self.name.clone()))
             }
         }
 
