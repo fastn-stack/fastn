@@ -5,18 +5,10 @@ pub(super) fn function_definition(
     // TODO: remove .unwrap() and put errors in `document.errors`
 
     let name = section.name_span().clone();
-    let visibility = section
-        .init
-        .name
-        .kind
-        .as_ref()
-        .and_then(|x| x.visibility.clone())
-        .unwrap_or_default()
-        .value;
+    let visibility = section.init.visibility.unwrap_or_default().value;
 
     let return_type: Option<fastn_unresolved::UR<fastn_unresolved::Kind, _>> = section
         .init
-        .name
         .kind
         .and_then(|k| k.try_into().ok())
         .map(|k| fastn_unresolved::UR::UnResolved(k));
@@ -25,16 +17,12 @@ pub(super) fn function_definition(
         .headers
         .into_iter()
         .map(|h| {
-            let kind = h.name.kind.clone().unwrap().try_into().ok().unwrap();
-            let visibility = h
-                .name
-                .kind
-                .and_then(|x| x.visibility)
-                .unwrap_or_default()
-                .value;
+            let kind = h.kind.clone().unwrap().try_into().ok().unwrap();
+            let visibility = h.visibility.unwrap_or_default().value;
 
             fastn_unresolved::Argument {
-                name: h.name.name,
+                name: h.name,
+                doc: None,
                 kind,
                 visibility,
                 default: Default::default(), // TODO: parse TES
@@ -57,7 +45,7 @@ pub(super) fn function_definition(
             symbol: Default::default(),
             doc: Default::default(),
             visibility,
-            name: fastn_unresolved::Identifier { name }.into(),
+            name: fastn_section::Identifier { name }.into(),
             inner: fastn_unresolved::InnerDefinition::Function {
                 arguments,
                 return_type,

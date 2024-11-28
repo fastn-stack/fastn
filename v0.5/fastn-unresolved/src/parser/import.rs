@@ -1,5 +1,5 @@
 pub(super) fn import(section: fastn_section::Section, document: &mut fastn_unresolved::Document) {
-    if let Some(ref kind) = section.init.name.kind {
+    if let Some(ref kind) = section.init.kind {
         document
             .errors
             .push(kind.span().wrap(fastn_section::Error::ImportCantHaveType));
@@ -11,7 +11,6 @@ pub(super) fn import(section: fastn_section::Section, document: &mut fastn_unres
         document.errors.push(
             section
                 .init
-                .name
                 .name
                 .name
                 .wrap(fastn_section::Error::ImportMustBeImport),
@@ -64,7 +63,7 @@ fn parse_import(
     };
 
     Some(Import {
-        module: fastn_section::Module::new(
+        module: fastn_unresolved::Module::new(
             caption.inner_str(module).str(),
             caption.inner_str(package).str(),
         ),
@@ -92,7 +91,7 @@ pub struct AliasableIdentifier {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Import {
-    pub module: fastn_section::Module,
+    pub module: fastn_unresolved::Module,
     pub alias: Option<fastn_section::Identifier>,
     pub export: Option<Export>,
     pub exposing: Option<Export>,
