@@ -1,9 +1,3 @@
-#![allow(clippy::derive_partial_eq_without_eq, clippy::get_first)]
-#![deny(unused_crate_dependencies)]
-#![warn(clippy::used_underscore_binding)]
-
-extern crate self as fastn_jdebug;
-
 /// TODO: span has to keep track of the document as well now.
 /// TODO: demote usize to u32.
 ///
@@ -22,7 +16,7 @@ pub trait JDebug {
     fn debug(&self) -> serde_json::Value;
 }
 
-impl fastn_jdebug::JDebug for fastn_jdebug::Span {
+impl fastn_section::JDebug for fastn_section::Span {
     fn debug(&self) -> serde_json::Value {
         if self.inner.is_empty() {
             "<empty>"
@@ -33,19 +27,19 @@ impl fastn_jdebug::JDebug for fastn_jdebug::Span {
     }
 }
 
-impl AsRef<arcstr::Substr> for fastn_jdebug::Span {
+impl AsRef<arcstr::Substr> for fastn_section::Span {
     fn as_ref(&self) -> &arcstr::Substr {
         &self.inner
     }
 }
 
-impl<T: fastn_jdebug::JDebug> fastn_jdebug::JDebug for Vec<T> {
+impl<T: fastn_section::JDebug> fastn_section::JDebug for Vec<T> {
     fn debug(&self) -> serde_json::Value {
         serde_json::Value::Array(self.iter().map(|v| v.debug()).collect())
     }
 }
 
-impl<T: fastn_jdebug::JDebug> fastn_jdebug::JDebug for Option<T> {
+impl<T: fastn_section::JDebug> fastn_section::JDebug for Option<T> {
     fn debug(&self) -> serde_json::Value {
         self.as_ref()
             .map(|v| v.debug())
@@ -53,7 +47,7 @@ impl<T: fastn_jdebug::JDebug> fastn_jdebug::JDebug for Option<T> {
     }
 }
 
-impl<K: AsRef<fastn_jdebug::Span>, V: fastn_jdebug::JDebug> fastn_jdebug::JDebug
+impl<K: AsRef<fastn_section::Span>, V: fastn_section::JDebug> fastn_section::JDebug
     for std::collections::HashMap<K, V>
 {
     fn debug(&self) -> serde_json::Value {
@@ -72,22 +66,22 @@ pub struct Spanned<T> {
     pub value: T,
 }
 
-impl fastn_jdebug::Span {
-    pub fn inner_str(&self, s: &str) -> fastn_jdebug::Span {
-        fastn_jdebug::Span {
+impl fastn_section::Span {
+    pub fn inner_str(&self, s: &str) -> fastn_section::Span {
+        fastn_section::Span {
             inner: self.inner.substr_from(s),
         }
     }
 
-    pub fn wrap<T>(&self, value: T) -> fastn_jdebug::Spanned<T> {
-        fastn_jdebug::Spanned {
+    pub fn wrap<T>(&self, value: T) -> fastn_section::Spanned<T> {
+        fastn_section::Spanned {
             span: self.clone(),
             value,
         }
     }
 
-    pub fn span(&self, start: usize, end: usize) -> fastn_jdebug::Span {
-        fastn_jdebug::Span {
+    pub fn span(&self, start: usize, end: usize) -> fastn_section::Span {
+        fastn_section::Span {
             inner: self.inner.substr(start..end),
         }
     }
@@ -107,26 +101,26 @@ impl fastn_jdebug::Span {
 
 impl From<arcstr::Substr> for Span {
     fn from(inner: arcstr::Substr) -> Self {
-        fastn_jdebug::Span { inner }
+        fastn_section::Span { inner }
     }
 }
 
-impl<T> fastn_jdebug::Spanned<T> {
-    pub fn map<T2, F: FnOnce(T) -> T2>(self, f: F) -> fastn_jdebug::Spanned<T2> {
-        fastn_jdebug::Spanned {
+impl<T> fastn_section::Spanned<T> {
+    pub fn map<T2, F: FnOnce(T) -> T2>(self, f: F) -> fastn_section::Spanned<T2> {
+        fastn_section::Spanned {
             span: self.span,
             value: f(self.value),
         }
     }
 }
 
-impl<T: fastn_jdebug::JDebug> fastn_jdebug::JDebug for fastn_jdebug::Spanned<T> {
+impl<T: fastn_section::JDebug> fastn_section::JDebug for fastn_section::Spanned<T> {
     fn debug(&self) -> serde_json::Value {
         self.value.debug()
     }
 }
 
-impl fastn_jdebug::JDebug for () {
+impl fastn_section::JDebug for () {
     fn debug(&self) -> serde_json::Value {
         serde_json::Value::Null
     }

@@ -1,6 +1,6 @@
 use serde_json::Value;
 
-impl fastn_jdebug::JDebug for fastn_unresolved::ComponentInvocation {
+impl fastn_section::JDebug for fastn_unresolved::ComponentInvocation {
     fn debug(&self) -> Value {
         serde_json::json!({
             "content": self.name.debug(),
@@ -9,7 +9,7 @@ impl fastn_jdebug::JDebug for fastn_unresolved::ComponentInvocation {
     }
 }
 
-impl fastn_jdebug::JDebug for fastn_unresolved::Definition {
+impl fastn_section::JDebug for fastn_unresolved::Definition {
     fn debug(&self) -> Value {
         let mut o = serde_json::Map::new();
         o.insert("name".into(), self.name.debug());
@@ -20,22 +20,31 @@ impl fastn_jdebug::JDebug for fastn_unresolved::Definition {
     }
 }
 
-impl fastn_jdebug::JDebug for fastn_unresolved::InnerDefinition {
+impl fastn_section::JDebug for fastn_unresolved::InnerDefinition {
     fn debug(&self) -> serde_json::Value {
         match self {
-            crate::InnerDefinition::Function { arguments, return_type, .. } => {
-                let args = arguments.iter().map(|v| match v { 
-                    fastn_unresolved::UR::UnResolved(v) => v.debug(),
-                    fastn_unresolved::UR::Resolved(_v) => todo!(),
-                    _ => unimplemented!(),
-                }).collect::<Vec<_>>();
+            crate::InnerDefinition::Function {
+                arguments,
+                return_type,
+                ..
+            } => {
+                let args = arguments
+                    .iter()
+                    .map(|v| match v {
+                        fastn_unresolved::UR::UnResolved(v) => v.debug(),
+                        fastn_unresolved::UR::Resolved(_v) => todo!(),
+                        _ => unimplemented!(),
+                    })
+                    .collect::<Vec<_>>();
 
-
-                let return_type = return_type.clone().map(|r| match r {
-                    fastn_unresolved::UR::UnResolved(v) => v.debug(),
-                    fastn_unresolved::UR::Resolved(v) => serde_json::to_value(v).unwrap(),
-                    _ => unimplemented!(),
-                }).unwrap_or_else(|| "void".into());
+                let return_type = return_type
+                    .clone()
+                    .map(|r| match r {
+                        fastn_unresolved::UR::UnResolved(v) => v.debug(),
+                        fastn_unresolved::UR::Resolved(v) => serde_json::to_value(v).unwrap(),
+                        _ => unimplemented!(),
+                    })
+                    .unwrap_or_else(|| "void".into());
 
                 serde_json::json!({
                     "args": args,
@@ -52,7 +61,7 @@ impl fastn_jdebug::JDebug for fastn_unresolved::InnerDefinition {
     }
 }
 
-impl fastn_jdebug::JDebug for fastn_unresolved::Argument {
+impl fastn_section::JDebug for fastn_unresolved::Argument {
     fn debug(&self) -> serde_json::Value {
         serde_json::json!({
             "name": self.name.debug(),
@@ -61,7 +70,7 @@ impl fastn_jdebug::JDebug for fastn_unresolved::Argument {
     }
 }
 
-impl fastn_jdebug::JDebug for fastn_unresolved::Kind {
+impl fastn_section::JDebug for fastn_unresolved::Kind {
     fn debug(&self) -> serde_json::Value {
         match self {
             crate::Kind::Integer => "integer".into(),
@@ -78,13 +87,13 @@ impl fastn_jdebug::JDebug for fastn_unresolved::Kind {
     }
 }
 
-impl fastn_jdebug::JDebug for fastn_unresolved::Symbol {
+impl fastn_section::JDebug for fastn_unresolved::Symbol {
     fn debug(&self) -> serde_json::Value {
         todo!()
     }
 }
 
-impl<U: fastn_jdebug::JDebug, R: fastn_jdebug::JDebug> fastn_jdebug::JDebug
+impl<U: fastn_section::JDebug, R: fastn_section::JDebug> fastn_section::JDebug
     for fastn_unresolved::UR<U, R>
 {
     fn debug(&self) -> Value {

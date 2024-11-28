@@ -6,6 +6,7 @@ extern crate self as fastn_section;
 
 mod debug;
 mod error;
+mod jdebug;
 mod parser;
 mod scanner;
 mod utils;
@@ -13,7 +14,7 @@ mod warning;
 mod wiggin;
 
 pub use error::Error;
-pub use fastn_jdebug::{Span, Spanned};
+pub use fastn_section::jdebug::{JDebug, Span, Spanned};
 pub use fastn_section::warning::Warning;
 pub use scanner::{ECey, Scanner};
 

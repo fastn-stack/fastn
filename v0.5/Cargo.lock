@@ -214,14 +214,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "fastn-jdebug"
-version = "0.1.1"
-dependencies = [
- "arcstr",
- "serde_json",
-]
-
-[[package]]
 name = "fastn-js"
 version = "0.1.0"
 dependencies = [
@@ -263,7 +255,6 @@ name = "fastn-section"
 version = "0.1.0"
 dependencies = [
  "arcstr",
- "fastn-jdebug",
  "serde",
  "serde_json",
 ]
@@ -278,7 +269,6 @@ version = "0.1.0"
 dependencies = [
  "arcstr",
  "fastn-builtins",
- "fastn-jdebug",
  "fastn-resolved",
  "fastn-section",
  "serde_json",

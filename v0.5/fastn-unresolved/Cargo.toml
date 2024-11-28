@@ -17,5 +17,4 @@ string-interner.workspace = true
 # indexmap.workspace = true
 
 [dev-dependencies]
-fastn-jdebug.workspace = true
 serde_json.workspace = true

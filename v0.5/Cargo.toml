@@ -7,7 +7,6 @@ members = [
     "fastn-static",
     "fastn-unresolved",
     "fastn-update",
-    "fastn-jdebug",
 ]
 exclude = []
 resolver = "2"

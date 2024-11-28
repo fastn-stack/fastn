@@ -141,7 +141,7 @@ mod tests {
         assert!(d.definitions.is_empty());
 
         // assert_eq!(
-        //     fastn_jdebug::JDebug::debug(&d.imports.pop().unwrap()),
+        //     fastn_section::JDebug::debug(&d.imports.pop().unwrap()),
         //     expected
         // )
     }
@@ -175,7 +175,7 @@ mod tests {
         t!("-- import: foo as f\nexport: x as y, z\nexposing: y", { "import": "foo as f", "export": ["x=>y", "z"], "exposing": ["y"] });
     }
 
-    impl fastn_jdebug::JDebug for super::Import {
+    impl fastn_section::JDebug for super::Import {
         fn debug(&self) -> serde_json::Value {
             let mut o = serde_json::Map::new();
 
@@ -208,7 +208,7 @@ mod tests {
         }
     }
 
-    impl fastn_jdebug::JDebug for super::Export {
+    impl fastn_section::JDebug for super::Export {
         fn debug(&self) -> serde_json::Value {
             match self {
                 super::Export::All => "all".into(),
@@ -219,7 +219,7 @@ mod tests {
         }
     }
 
-    impl fastn_jdebug::JDebug for super::AliasableIdentifier {
+    impl fastn_section::JDebug for super::AliasableIdentifier {
         fn debug(&self) -> serde_json::Value {
             match self.alias {
                 Some(ref v) => format!("{}=>{}", self.name.str(), v.str()),

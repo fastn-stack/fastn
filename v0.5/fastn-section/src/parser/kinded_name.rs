@@ -19,7 +19,7 @@ pub struct KindedName {
     pub name: fastn_section::IdentifierReference,
 }
 
-impl fastn_jdebug::JDebug for KindedName {
+impl fastn_section::JDebug for KindedName {
     fn debug(&self) -> serde_json::Value {
         let mut o = serde_json::Map::new();
         if let Some(kind) = &self.kind {

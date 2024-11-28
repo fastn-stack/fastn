@@ -11,5 +11,4 @@ homepage.workspace = true
 [dependencies]
 arcstr.workspace = true
 serde.workspace = true
-fastn-jdebug.workspace = true
 serde_json.workspace = true
