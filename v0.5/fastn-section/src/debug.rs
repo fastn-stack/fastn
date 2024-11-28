@@ -54,7 +54,22 @@ impl fastn_jdebug::JDebug for fastn_section::Section {
 
 impl fastn_jdebug::JDebug for fastn_section::SectionInit {
     fn debug(&self) -> serde_json::Value {
-        self.name.debug()
+        let mut o = serde_json::Map::new();
+        if self.function_marker.is_some() {
+            o.insert("function".into(), self.name.debug());
+        } else {
+            o.insert("name".into(), self.name.debug());
+        }
+        if let Some(v) = &self.visibility {
+            o.insert("visibility".into(), v.debug());
+        }
+        if let Some(v) = &self.kind {
+            o.insert("kind".into(), v.debug());
+        }
+        if let Some(v) = &self.doc {
+            o.insert("doc".into(), v.debug());
+        }
+        serde_json::Value::Object(o)
     }
 }
 
