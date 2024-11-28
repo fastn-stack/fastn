@@ -1,27 +1,31 @@
-use serde_json::Value;
+use fastn_section::JDebug;
 
-impl fastn_section::JDebug for fastn_unresolved::ComponentInvocation {
-    fn debug(&self) -> Value {
+pub(crate) trait JIDebug {
+    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value;
+}
+
+impl fastn_unresolved::JIDebug for fastn_unresolved::ComponentInvocation {
+    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
         serde_json::json!({
-            "content": self.name.debug(),
-            "caption": self.caption.debug(),
+            "content": self.name.debug(interner),
+            "caption": self.caption.debug(interner),
         })
     }
 }
 
-impl fastn_section::JDebug for fastn_unresolved::Definition {
-    fn debug(&self) -> Value {
+impl fastn_unresolved::JIDebug for fastn_unresolved::Definition {
+    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
         let mut o = serde_json::Map::new();
-        o.insert("name".into(), self.name.debug());
-        let inner = self.inner.debug();
+        o.insert("name".into(), self.name.debug(interner));
+        let inner = self.inner.debug(interner);
         o.extend(inner.as_object().unwrap().clone());
 
         serde_json::Value::Object(o)
     }
 }
 
-impl fastn_section::JDebug for fastn_unresolved::InnerDefinition {
-    fn debug(&self) -> serde_json::Value {
+impl fastn_unresolved::JIDebug for fastn_unresolved::InnerDefinition {
+    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
         match self {
             crate::InnerDefinition::Function {
                 arguments,
@@ -31,7 +35,7 @@ impl fastn_section::JDebug for fastn_unresolved::InnerDefinition {
                 let args = arguments
                     .iter()
                     .map(|v| match v {
-                        fastn_unresolved::UR::UnResolved(v) => v.debug(),
+                        fastn_unresolved::UR::UnResolved(v) => v.debug(interner),
                         fastn_unresolved::UR::Resolved(_v) => todo!(),
                         _ => unimplemented!(),
                     })
@@ -40,7 +44,7 @@ impl fastn_section::JDebug for fastn_unresolved::InnerDefinition {
                 let return_type = return_type
                     .clone()
                     .map(|r| match r {
-                        fastn_unresolved::UR::UnResolved(v) => v.debug(),
+                        fastn_unresolved::UR::UnResolved(v) => v.debug(interner),
                         fastn_unresolved::UR::Resolved(v) => serde_json::to_value(v).unwrap(),
                         _ => unimplemented!(),
                     })
@@ -61,45 +65,45 @@ impl fastn_section::JDebug for fastn_unresolved::InnerDefinition {
     }
 }
 
-impl fastn_section::JDebug for fastn_unresolved::Argument {
-    fn debug(&self) -> serde_json::Value {
+impl fastn_unresolved::JIDebug for fastn_unresolved::Argument {
+    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
         serde_json::json!({
             "name": self.name.debug(),
-            "kind": self.kind.debug(),
+            "kind": self.kind.debug(interner),
         })
     }
 }
 
-impl fastn_section::JDebug for fastn_unresolved::Kind {
-    fn debug(&self) -> serde_json::Value {
+impl fastn_unresolved::JIDebug for fastn_unresolved::Kind {
+    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
         match self {
             crate::Kind::Integer => "integer".into(),
             crate::Kind::Decimal => "decimal".into(),
             crate::Kind::String => "string".into(),
             crate::Kind::Boolean => "boolean".into(),
-            crate::Kind::Option(k) => format!("Option<{}>", k.debug()).into(),
-            crate::Kind::List(k) => format!("List<{}>", k.debug()).into(),
-            crate::Kind::Caption(k) => format!("Caption<{}>", k.debug()).into(),
-            crate::Kind::Body(k) => format!("Body<{}>", k.debug()).into(),
-            crate::Kind::CaptionOrBody(k) => format!("CaptionOrBody<{}>", k.debug()).into(),
-            crate::Kind::Custom(k) => format!("Custom<{}>", k.debug()).into(),
+            crate::Kind::Option(k) => format!("Option<{}>", k.debug(interner)).into(),
+            crate::Kind::List(k) => format!("List<{}>", k.debug(interner)).into(),
+            crate::Kind::Caption(k) => format!("Caption<{}>", k.debug(interner)).into(),
+            crate::Kind::Body(k) => format!("Body<{}>", k.debug(interner)).into(),
+            crate::Kind::CaptionOrBody(k) => format!("CaptionOrBody<{}>", k.debug(interner)).into(),
+            crate::Kind::Custom(k) => format!("Custom<{}>", k.debug(interner)).into(),
         }
     }
 }
 
-impl fastn_section::JDebug for fastn_unresolved::Symbol {
-    fn debug(&self) -> serde_json::Value {
+impl fastn_unresolved::JIDebug for fastn_unresolved::Symbol {
+    fn debug(&self, _interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
         todo!()
     }
 }
 
-impl<U: fastn_section::JDebug, R: fastn_section::JDebug> fastn_section::JDebug
+impl<U: fastn_unresolved::JIDebug, R: fastn_unresolved::JIDebug> fastn_unresolved::JIDebug
     for fastn_unresolved::UR<U, R>
 {
-    fn debug(&self) -> Value {
+    fn debug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
         match self {
-            crate::UR::Resolved(r) => r.debug(),
-            crate::UR::UnResolved(u) => u.debug(),
+            crate::UR::Resolved(r) => r.debug(interner),
+            crate::UR::UnResolved(u) => u.debug(interner),
             crate::UR::NotFound => unimplemented!(),
             crate::UR::Invalid(_) => unimplemented!(),
         }

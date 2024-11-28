@@ -63,7 +63,7 @@ mod tests {
         assert_eq!(d.definitions.len(), 1);
 
         assert_eq!(
-            fastn_section::JDebug::debug(d.definitions.pop().unwrap().unresolved().unwrap()),
+            fastn_unresolved::JDebug::debug(d.definitions.pop().unwrap().unresolved().unwrap()),
             expected
         )
     }

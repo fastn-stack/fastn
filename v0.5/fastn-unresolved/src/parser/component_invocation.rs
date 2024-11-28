@@ -30,7 +30,7 @@ mod tests {
         assert_eq!(d.content.len(), 1);
 
         assert_eq!(
-            fastn_section::JDebug::debug(d.content.pop().unwrap().unresolved().unwrap()),
+            fastn_unresolved::JDebug::debug(d.content.pop().unwrap().unresolved().unwrap()),
             expected
         )
     }
