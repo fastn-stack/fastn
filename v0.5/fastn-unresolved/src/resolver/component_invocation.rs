@@ -20,7 +20,7 @@ impl fastn_unresolved::ComponentInvocation {
             &[], // TODO
         );
 
-        let component = match self.name {
+        let _component = match self.name {
             fastn_unresolved::UR::Resolved(ref name) => {
                 get_component(definitions, interner, name).unwrap()
             }
@@ -28,7 +28,7 @@ impl fastn_unresolved::ComponentInvocation {
             _ => return,
         };
 
-        dbg!(component);
+        // dbg!(component);
     }
 }
 
