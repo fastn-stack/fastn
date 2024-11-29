@@ -1,9 +1,13 @@
 impl fastn::commands::Render {
-    pub async fn run(self, config: &mut fastn_core::Config) {
+    pub async fn run(
+        self,
+        config: &mut fastn_core::Config,
+        interner: string_interner::DefaultStringInterner,
+    ) {
         let route = config.resolve(self.path.as_str()).await;
         match route {
             fastn_core::Route::Document(path, data) => {
-                render_document(config, path.as_str(), data, self.strict).await
+                render_document(config, path.as_str(), data, self.strict, interner).await
             }
             _ => todo!(),
         };
@@ -15,6 +19,7 @@ async fn render_document(
     path: &str,
     _data: serde_json::Value,
     _strict: bool,
+    interner: string_interner::DefaultStringInterner,
 ) {
     // let _js = match config.document_js(path) {
     //     Some(v) => v,
@@ -30,6 +35,7 @@ async fn render_document(
         "main",
         "",
         &config.auto_imports,
+        interner,
     )
     .await
     .unwrap();

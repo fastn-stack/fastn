@@ -19,9 +19,8 @@ impl Compiler {
         package: &str,
         module: &str,
         desugared_auto_import: &[fastn_unresolved::URD],
+        mut interner: string_interner::DefaultStringInterner,
     ) -> Self {
-        let mut interner = string_interner::StringInterner::new();
-
         let mut document = fastn_unresolved::parse(
             fastn_unresolved::Module::new(package, module, &mut interner),
             source,
@@ -227,8 +226,9 @@ pub async fn compile(
     package: &str,
     module: &str,
     auto_imports: &[fastn_unresolved::URD],
+    interner: string_interner::DefaultStringInterner,
 ) -> Result<fastn_resolved::CompiledDocument, fastn_compiler::Error> {
-    Compiler::new(symbols, source, package, module, auto_imports)
+    Compiler::new(symbols, source, package, module, auto_imports, interner)
         .compile()
         .await
 }
