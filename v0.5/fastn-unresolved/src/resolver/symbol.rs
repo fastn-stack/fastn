@@ -7,6 +7,7 @@
 /// with the innermost block as the last entry.
 pub fn resolve(
     _module: &fastn_unresolved::Module,
+    // parent: Option<fastn_unresolved::Symbol>,
     name: &mut fastn_unresolved::URIS,
     _definitions: &std::collections::HashMap<fastn_unresolved::Symbol, fastn_unresolved::URD>,
     interner: &mut string_interner::DefaultStringInterner,

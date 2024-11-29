@@ -23,5 +23,5 @@ fn main() {
 
     std::fs::write(std::path::PathBuf::from("output.html"), h.to_test_html()).unwrap();
 
-    // this main should create a HTML file, and store it in current folder as index.html etc.
+    // this main should create an HTML file, and store it in the current folder as index.html etc.
 }
