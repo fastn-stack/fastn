@@ -139,7 +139,7 @@ mod tests {
     fn tester(
         d: fastn_unresolved::Document,
         _expected: serde_json::Value,
-        _interner: &string_interner::DefaultStringInterner,
+        _arena: &fastn_unresolved::Arena,
     ) {
         assert!(d.content.is_empty());
         assert!(d.definitions.is_empty());
@@ -205,11 +205,11 @@ mod tests {
             dbg!(&self);
 
             if let Some(ref v) = self.export {
-                o.insert("export".into(), v.idebug(&arena.interner));
+                o.insert("export".into(), v.idebug(arena));
             }
 
             if let Some(ref v) = self.exposing {
-                o.insert("exposing".into(), v.idebug(&arena.interner));
+                o.insert("exposing".into(), v.idebug(arena));
             }
 
             serde_json::Value::Object(o)
@@ -217,18 +217,18 @@ mod tests {
     }
 
     impl fastn_unresolved::JIDebug for super::Export {
-        fn idebug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
+        fn idebug(&self, arena: &fastn_unresolved::Arena) -> serde_json::Value {
             match self {
                 super::Export::All => "all".into(),
                 super::Export::Things(v) => {
-                    serde_json::Value::Array(v.iter().map(|v| v.idebug(interner)).collect())
+                    serde_json::Value::Array(v.iter().map(|v| v.idebug(arena)).collect())
                 }
             }
         }
     }
 
     impl fastn_unresolved::JIDebug for super::AliasableIdentifier {
-        fn idebug(&self, _interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
+        fn idebug(&self, _arena: &fastn_unresolved::Arena) -> serde_json::Value {
             match self.alias {
                 Some(ref v) => format!("{}=>{}", self.name.str(), v.str()),
                 None => self.name.str().to_string(),

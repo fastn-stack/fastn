@@ -57,26 +57,18 @@ pub fn parse(
 /// t1 takes a function parses a single section. and another function to test the parsed document
 fn t1<PARSER, TESTER>(source: &str, expected: serde_json::Value, parser: PARSER, tester: TESTER)
 where
-    PARSER: Fn(
-        fastn_section::Section,
-        &mut fastn_unresolved::Document,
-        &mut string_interner::DefaultStringInterner,
-    ),
-    TESTER: FnOnce(
-        fastn_unresolved::Document,
-        serde_json::Value,
-        &string_interner::DefaultStringInterner,
-    ),
+    PARSER:
+        Fn(fastn_section::Section, &mut fastn_unresolved::Document, &mut fastn_unresolved::Arena),
+    TESTER: FnOnce(fastn_unresolved::Document, serde_json::Value, &fastn_unresolved::Arena),
 {
     println!("--------- testing -----------\n{source}\n--------- source ------------");
 
-    let mut interner: string_interner::DefaultStringInterner = Default::default();
-    let module = fastn_unresolved::Module::new("main", "", &mut interner);
+    let mut arena = fastn_unresolved::Arena::default();
+    let module = fastn_unresolved::Module::new("main", "", &mut arena);
 
     let (mut document, sections) = fastn_unresolved::Document::new(
         module,
         fastn_section::Document::parse(&arcstr::ArcStr::from(source)),
-        &[],
     );
 
     let section = {
@@ -85,9 +77,9 @@ where
     };
 
     // assert everything else is empty
-    parser(section, &mut document, &mut interner);
+    parser(section, &mut document, &mut arena);
 
-    tester(document, expected, &interner);
+    tester(document, expected, &arena);
 }
 
 #[cfg(test)]

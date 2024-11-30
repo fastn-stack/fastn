@@ -77,6 +77,7 @@ pub struct Document {
 #[derive(Debug, Clone)]
 pub struct Definition {
     pub symbol: Option<fastn_unresolved::Symbol>, // <package-name>/<module-name>#<definition-name>
+    pub scope: Vec<SFId>,
     pub doc: Option<fastn_section::Span>,
     /// resolving an identifier means making sure it is unique in the document, and performing
     /// other checks.

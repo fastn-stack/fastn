@@ -28,7 +28,7 @@ mod tests {
     fn tester(
         mut d: fastn_unresolved::Document,
         expected: serde_json::Value,
-        interner: &string_interner::DefaultStringInterner,
+        arena: &fastn_unresolved::Arena,
     ) {
         // assert!(d.imports.is_empty());
         assert!(d.definitions.is_empty());
@@ -37,7 +37,7 @@ mod tests {
         assert_eq!(
             fastn_unresolved::JIDebug::idebug(
                 d.content.pop().unwrap().unresolved().unwrap(),
-                interner
+                arena
             ),
             expected
         )
