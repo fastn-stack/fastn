@@ -41,16 +41,16 @@ impl fastn_compiler::SymbolStore for Symbols {
         arena: &mut fastn_unresolved::Arena,
         symbols: &std::collections::HashSet<fastn_unresolved::Symbol>,
         auto_import_scope: fastn_unresolved::SFId,
-    ) -> Vec<fastn_unresolved::URD> {
+    ) {
         let unique_modules = symbols
             .iter()
             .map(|s| file_for_symbol(s, arena))
             .collect::<std::collections::HashSet<_>>();
 
-        unique_modules
+        let _: Vec<_> = unique_modules
             .into_iter()
-            .flat_map(|m| self.find_all_definitions_in_a_module(arena, m, auto_import_scope))
-            .collect()
+            .map(|m| self.find_all_definitions_in_a_module(arena, m, auto_import_scope))
+            .collect();
     }
 }
 

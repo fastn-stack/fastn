@@ -53,6 +53,7 @@ pub fn parse(
         }
     }
 
+    document.add_definitions_to_scope(arena);
     document
 }
 

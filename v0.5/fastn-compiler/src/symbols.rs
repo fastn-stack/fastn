@@ -15,5 +15,5 @@ pub trait SymbolStore {
         arena: &mut fastn_unresolved::Arena,
         symbols: &std::collections::HashSet<fastn_unresolved::Symbol>,
         auto_imports: fastn_unresolved::SFId,
-    ) -> Vec<fastn_unresolved::URD>;
+    );
 }

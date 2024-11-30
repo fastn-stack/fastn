@@ -17,11 +17,6 @@ async fn render_document(
     _strict: bool,
     arena: fastn_unresolved::Arena,
 ) {
-    // let _js = match config.document_js(path) {
-    //     Some(v) => v,
-    //     None => fastn_compiler::compile(config, path, strict).await,
-    // };
-
     let source = std::fs::File::open(path)
         .and_then(std::io::read_to_string)
         .unwrap();
