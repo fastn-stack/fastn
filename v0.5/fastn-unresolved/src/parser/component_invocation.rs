@@ -1,7 +1,7 @@
 pub(super) fn component_invocation(
     section: fastn_section::Section,
     document: &mut fastn_unresolved::Document,
-    _interner: &mut string_interner::DefaultStringInterner,
+    _arena: &mut fastn_unresolved::Arena,
 ) {
     if let Some(ref m) = section.init.function_marker {
         document

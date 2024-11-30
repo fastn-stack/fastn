@@ -6,7 +6,7 @@ pub fn parse(
     module: fastn_unresolved::Module,
     source: &str,
     auto_imports: &[fastn_unresolved::URD],
-    interner: &mut string_interner::DefaultStringInterner,
+    arena: &mut fastn_unresolved::Arena,
 ) -> fastn_unresolved::Document {
     let (mut document, sections) = fastn_unresolved::Document::new(
         module,
@@ -37,17 +37,15 @@ pub fn parse(
             section.init.function_marker.is_some(),
         ) {
             (Some("import"), _, _) | (_, Some("import"), _) => {
-                import::import(section, &mut document, interner)
+                import::import(section, &mut document, arena)
             }
             (Some("record"), _, _) => todo!(),
             (Some("type"), _, _) => todo!(),
             (Some("module"), _, _) => todo!(),
             (Some("component"), _, _) => todo!(),
-            (_, _, true) => {
-                function_definition::function_definition(section, &mut document, interner)
-            }
+            (_, _, true) => function_definition::function_definition(section, &mut document, arena),
             (None, _, _) => {
-                component_invocation::component_invocation(section, &mut document, interner)
+                component_invocation::component_invocation(section, &mut document, arena)
             }
             (_, _, _) => todo!(),
         }

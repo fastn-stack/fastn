@@ -3,7 +3,7 @@ const ITERATION_THRESHOLD: usize = 100;
 pub(crate) struct Compiler {
     symbols: Box<dyn fastn_compiler::SymbolStore>,
     pub(crate) definitions_used: std::collections::HashSet<fastn_unresolved::Symbol>,
-    pub(crate) interner: string_interner::DefaultStringInterner,
+    pub(crate) arena: fastn_unresolved::Arena,
     pub(crate) definitions:
         std::collections::HashMap<fastn_unresolved::Symbol, fastn_unresolved::URD>,
     /// checkout resolve_document for why this is an Option
@@ -19,20 +19,20 @@ impl Compiler {
         package: &str,
         module: &str,
         desugared_auto_import: &[fastn_unresolved::URD],
-        mut interner: string_interner::DefaultStringInterner,
+        mut arena: fastn_unresolved::Arena,
     ) -> Self {
         let mut document = fastn_unresolved::parse(
-            fastn_unresolved::Module::new(package, module, &mut interner),
+            fastn_unresolved::Module::new(package, module, &mut arena),
             source,
             &[],
-            &mut interner,
+            &mut arena,
         );
         let content = Some(document.content);
         document.content = vec![];
 
         Self {
             symbols,
-            interner,
+            arena,
             definitions: std::collections::HashMap::new(),
             content,
             document,
@@ -50,7 +50,7 @@ impl Compiler {
         let definitions = self
             .symbols
             .lookup(
-                &mut self.interner,
+                &mut self.arena,
                 symbols_to_fetch,
                 &self.desugared_auto_import,
             )
@@ -93,7 +93,7 @@ impl Compiler {
             match definition.as_mut() {
                 Some(fastn_unresolved::UR::UnResolved(definition)) => {
                     let mut o = Default::default();
-                    definition.resolve(&self.definitions, &mut self.interner, &mut o);
+                    definition.resolve(&self.definitions, &mut self.arena, &mut o);
                     r.need_more_symbols.extend(o.stuck_on);
                     self.document.merge(o.errors, o.warnings, o.comments);
                 }
@@ -134,7 +134,7 @@ impl Compiler {
             match ci {
                 fastn_unresolved::UR::UnResolved(mut c) => {
                     let mut needed = Default::default();
-                    c.resolve(&self.definitions, &mut self.interner, &mut needed);
+                    c.resolve(&self.definitions, &mut self.arena, &mut needed);
                     stuck_on_symbols.extend(needed.stuck_on);
                     self.document
                         .merge(needed.errors, needed.warnings, needed.comments);
@@ -205,7 +205,7 @@ impl Compiler {
             definitions: fastn_compiler::utils::used_definitions(
                 self.definitions,
                 self.definitions_used,
-                self.interner,
+                self.arena,
             ),
         })
     }
@@ -226,9 +226,9 @@ pub async fn compile(
     package: &str,
     module: &str,
     auto_imports: &[fastn_unresolved::URD],
-    interner: string_interner::DefaultStringInterner,
+    arena: fastn_unresolved::Arena,
 ) -> Result<fastn_resolved::CompiledDocument, fastn_compiler::Error> {
-    Compiler::new(symbols, source, package, module, auto_imports, interner)
+    Compiler::new(symbols, source, package, module, auto_imports, arena)
         .compile()
         .await
 }

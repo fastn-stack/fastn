@@ -10,7 +10,7 @@ pub fn resolve(
     // parent: Option<fastn_unresolved::Symbol>,
     name: &mut fastn_unresolved::URIS,
     _definitions: &std::collections::HashMap<fastn_unresolved::Symbol, fastn_unresolved::URD>,
-    interner: &mut string_interner::DefaultStringInterner,
+    arena: &mut fastn_unresolved::Arena,
     _output: &mut fastn_unresolved::resolver::Output,
     _locals: &[Vec<fastn_unresolved::UR<fastn_unresolved::Argument, fastn_resolved::Argument>>],
 ) {
@@ -25,10 +25,10 @@ pub fn resolve(
             package,
             module,
             name,
-        } => fastn_unresolved::Symbol::new(package.str(), module.str(), name.str(), interner),
+        } => fastn_unresolved::Symbol::new(package.str(), module.str(), name.str(), arena),
         fastn_section::IdentifierReference::Imported { module, name } => {
             if module.str() == "ftd" {
-                fastn_unresolved::Symbol::new("ftd", "", name.str(), interner)
+                fastn_unresolved::Symbol::new("ftd", "", name.str(), arena)
             } else {
                 // checkout aliases in this module
                 todo!()

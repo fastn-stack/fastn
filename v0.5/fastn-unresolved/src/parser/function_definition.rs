@@ -1,7 +1,7 @@
 pub(super) fn function_definition(
     section: fastn_section::Section,
     document: &mut fastn_unresolved::Document,
-    _interner: &mut string_interner::DefaultStringInterner,
+    _arena: &mut fastn_unresolved::Arena,
 ) {
     // TODO: remove .unwrap() and put errors in `document.errors`
 

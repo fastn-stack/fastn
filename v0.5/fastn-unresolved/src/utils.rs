@@ -136,7 +136,7 @@ impl fastn_unresolved::Symbol {
         package: &str,
         module: &str,
         name: &str,
-        interner: &mut string_interner::DefaultStringInterner,
+        arena: &mut fastn_unresolved::Arena,
     ) -> fastn_unresolved::Symbol {
         let v = if module.is_empty() {
             format!("{package}#{name}")
@@ -146,40 +146,37 @@ impl fastn_unresolved::Symbol {
         fastn_unresolved::Symbol {
             package_len: package.len() as u16,
             module_len: module.len() as u16,
-            interned: interner.get_or_intern(v),
+            interned: arena.interner.get_or_intern(v),
         }
     }
 
-    pub fn parent(
-        &self,
-        interner: &mut string_interner::DefaultStringInterner,
-    ) -> fastn_unresolved::Module {
+    pub fn parent(&self, arena: &mut fastn_unresolved::Arena) -> fastn_unresolved::Module {
         let v = if self.module_len == 0 {
-            self.package(interner).to_string()
+            self.package(arena).to_string()
         } else {
-            format!("{}/{}", self.package(interner), self.module(interner))
+            format!("{}/{}", self.package(arena), self.module(arena))
         };
         fastn_unresolved::Module {
             package_len: self.package_len,
-            interned: interner.get_or_intern(v),
+            interned: arena.interner.get_or_intern(v),
         }
     }
 
-    pub fn str<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
-        interner.resolve(self.interned).unwrap()
+    pub fn str<'a>(&self, arena: &'a fastn_unresolved::Arena) -> &'a str {
+        arena.interner.resolve(self.interned).unwrap()
     }
 
-    pub fn package<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
-        &self.str(interner)[..self.package_len as usize]
+    pub fn package<'a>(&self, arena: &'a fastn_unresolved::Arena) -> &'a str {
+        &self.str(arena)[..self.package_len as usize]
     }
 
-    pub fn module<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
-        &self.str(interner)[self.package_len as usize + 1
+    pub fn module<'a>(&self, arena: &'a fastn_unresolved::Arena) -> &'a str {
+        &self.str(arena)[self.package_len as usize + 1
             ..self.package_len as usize + 1 + self.module_len as usize]
     }
 
-    pub fn name<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
-        &self.str(interner)[self.package_len as usize + 1 + self.module_len as usize + 1..]
+    pub fn name<'a>(&self, arena: &'a fastn_unresolved::Arena) -> &'a str {
+        &self.str(arena)[self.package_len as usize + 1 + self.module_len as usize + 1..]
     }
 }
 
@@ -187,7 +184,7 @@ impl fastn_unresolved::Module {
     pub fn new(
         package: &str,
         module: &str,
-        interner: &mut string_interner::DefaultStringInterner,
+        arena: &mut fastn_unresolved::Arena,
     ) -> fastn_unresolved::Module {
         let v = if module.is_empty() {
             package.to_string()
@@ -196,41 +193,38 @@ impl fastn_unresolved::Module {
         };
         fastn_unresolved::Module {
             package_len: package.len() as u16,
-            interned: interner.get_or_intern(v),
+            interned: arena.interner.get_or_intern(v),
         }
     }
 
-    pub fn str<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
-        interner.resolve(self.interned).unwrap()
+    pub fn str<'a>(&self, arena: &'a fastn_unresolved::Arena) -> &'a str {
+        arena.interner.resolve(self.interned).unwrap()
     }
 
-    pub fn package<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
-        &self.str(interner)[..self.package_len as usize]
+    pub fn package<'a>(&self, arena: &'a fastn_unresolved::Arena) -> &'a str {
+        &self.str(arena)[..self.package_len as usize]
     }
 
-    pub fn module<'a>(&self, interner: &'a string_interner::DefaultStringInterner) -> &'a str {
-        &self.str(interner)[self.package_len as usize + 1..]
+    pub fn module<'a>(&self, arena: &'a fastn_unresolved::Arena) -> &'a str {
+        &self.str(arena)[self.package_len as usize + 1..]
     }
 
     pub fn symbol(
         &self,
         name: &str,
-        interner: &mut string_interner::DefaultStringInterner,
+        arena: &mut fastn_unresolved::Arena,
     ) -> fastn_unresolved::Symbol {
-        let module_len = interner.resolve(self.interned).unwrap().len() as u16 - self.package_len;
+        let module_len =
+            arena.interner.resolve(self.interned).unwrap().len() as u16 - self.package_len;
         let v = if module_len == 0 {
-            format!("{}#{name}", self.package(interner))
+            format!("{}#{name}", self.package(arena))
         } else {
-            format!(
-                "{}/{}#{name}",
-                self.package(interner),
-                self.module(interner)
-            )
+            format!("{}/{}#{name}", self.package(arena), self.module(arena))
         };
         fastn_unresolved::Symbol {
             package_len: self.package_len,
             module_len,
-            interned: interner.get_or_intern(v),
+            interned: arena.interner.get_or_intern(v),
         }
     }
 }

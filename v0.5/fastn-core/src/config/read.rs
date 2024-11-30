@@ -1,7 +1,7 @@
 impl fastn_core::Config {
     pub async fn read(
         _fastn_ftd: fastn_section::Document,
-        _interner: &mut string_interner::DefaultStringInterner,
+        _interner: &mut fastn_unresolved::Arena,
     ) -> Result<Self, ReadError> {
         Ok(fastn_core::Config {
             sitemap: fastn_core::Sitemap {},

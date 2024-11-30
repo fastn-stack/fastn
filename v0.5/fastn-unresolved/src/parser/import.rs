@@ -1,7 +1,7 @@
 pub(super) fn import(
     section: fastn_section::Section,
     document: &mut fastn_unresolved::Document,
-    interner: &mut string_interner::DefaultStringInterner,
+    arena: &mut fastn_unresolved::Arena,
 ) {
     if let Some(ref kind) = section.init.kind {
         document
@@ -21,7 +21,7 @@ pub(super) fn import(
         // we will go ahead with this import statement parsing
     }
 
-    let _i = match parse_import(&section, document, interner) {
+    let _i = match parse_import(&section, document, arena) {
         Some(v) => v,
         None => {
             // error handling is job of parse_module_name().
@@ -40,7 +40,7 @@ pub(super) fn import(
 fn parse_import(
     section: &fastn_section::Section,
     document: &mut fastn_unresolved::Document,
-    interner: &mut string_interner::DefaultStringInterner,
+    arena: &mut fastn_unresolved::Arena,
 ) -> Option<Import> {
     let caption = match section.caption_as_plain_span() {
         Some(v) => v,
@@ -70,7 +70,7 @@ fn parse_import(
         module: fastn_unresolved::Module::new(
             caption.inner_str(module).str(),
             caption.inner_str(package).str(),
-            interner,
+            arena,
         ),
         alias: alias.map(|v| fastn_section::Identifier {
             name: caption.inner_str(v),
@@ -180,16 +180,16 @@ mod tests {
     }
 
     impl fastn_unresolved::JIDebug for super::Import {
-        fn idebug(&self, interner: &string_interner::DefaultStringInterner) -> serde_json::Value {
+        fn idebug(&self, arena: &fastn_unresolved::Arena) -> serde_json::Value {
             let mut o = serde_json::Map::new();
 
-            let name = if self.module.package(interner).is_empty() {
-                self.module.module(interner).to_string()
+            let name = if self.module.package(arena).is_empty() {
+                self.module.module(arena).to_string()
             } else {
                 format!(
                     "{}/{}",
-                    self.module.package(interner),
-                    self.module.module(interner)
+                    self.module.package(arena),
+                    self.module.module(arena)
                 )
             };
 
@@ -205,11 +205,11 @@ mod tests {
             dbg!(&self);
 
             if let Some(ref v) = self.export {
-                o.insert("export".into(), v.idebug(interner));
+                o.insert("export".into(), v.idebug(&arena.interner));
             }
 
             if let Some(ref v) = self.exposing {
-                o.insert("exposing".into(), v.idebug(interner));
+                o.insert("exposing".into(), v.idebug(&arena.interner));
             }
 
             serde_json::Value::Object(o)

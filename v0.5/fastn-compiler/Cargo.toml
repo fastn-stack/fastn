@@ -16,4 +16,3 @@ fastn-resolved.workspace = true
 fastn-builtins.workspace = true
 fastn-unresolved.workspace = true
 indexmap.workspace = true
-string-interner.workspace = true

@@ -21,6 +21,27 @@ pub type URCI = fastn_unresolved::UR<
 >;
 pub type URIS = fastn_unresolved::UR<fastn_section::IdentifierReference, fastn_unresolved::Symbol>;
 
+pub type Bag = std::collections::HashMap<fastn_unresolved::Symbol, fastn_unresolved::URD>;
+
+#[derive(Default)]
+pub struct Arena {
+    pub interner: string_interner::DefaultStringInterner,
+    pub sfa: SFArena,
+}
+
+pub struct ScopeFrame {
+    pub name: String,
+    pub bag: Bag,
+}
+
+pub struct ScopeStack {
+    pub frames: Vec<ScopeFrame>,
+}
+
+pub type SFId = id_arena::Id<ScopeFrame>;
+pub type SFArena = id_arena::Arena<ScopeFrame>;
+// pub type ScopeStackId = id_arena::Id<ScopeStack>;
+
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub struct Symbol {
     // 8 bytes

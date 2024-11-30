@@ -12,4 +12,3 @@ homepage.workspace = true
 fastn-section.workspace = true
 fastn-unresolved.workspace = true
 serde_json.workspace = true
-string-interner.workspace = true

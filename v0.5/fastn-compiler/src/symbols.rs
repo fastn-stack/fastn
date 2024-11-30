@@ -12,7 +12,7 @@ pub trait SymbolStore {
     // TODO: should we make it async?
     async fn lookup(
         &mut self,
-        interner: &mut string_interner::DefaultStringInterner,
+        arena: &mut fastn_unresolved::Arena,
         symbols: &std::collections::HashSet<fastn_unresolved::Symbol>,
         desugared_auto_imports: &[fastn_unresolved::URD],
     ) -> Vec<fastn_unresolved::URD>;
