@@ -168,6 +168,10 @@ impl fastn_unresolved::Symbol {
         arena.interner.resolve(self.interned).unwrap()
     }
 
+    pub fn string(&self, arena: &fastn_unresolved::Arena) -> String {
+        self.str(arena).to_string()
+    }
+
     pub fn package<'a>(&self, arena: &'a fastn_unresolved::Arena) -> &'a str {
         &self.str(arena)[..self.package_len as usize]
     }

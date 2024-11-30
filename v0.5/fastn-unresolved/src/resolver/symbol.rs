@@ -9,7 +9,7 @@ pub fn resolve(
     current_module: &fastn_unresolved::Module,
     // parent: Option<fastn_unresolved::Symbol>,
     name: &mut fastn_unresolved::URIS,
-    definitions: &std::collections::HashMap<fastn_unresolved::Symbol, fastn_unresolved::URD>,
+    definitions: &std::collections::HashMap<String, fastn_unresolved::URD>,
     arena: &mut fastn_unresolved::Arena,
     _output: &mut fastn_unresolved::resolver::Output,
     _locals: &[Vec<fastn_unresolved::UR<fastn_unresolved::Argument, fastn_resolved::Argument>>],
@@ -34,9 +34,7 @@ pub fn resolve(
             // module from the module alias.
             // we combine the target module with the name, "x" to get the target symbol.
 
-            match definitions.get(&current_module.symbol(module.str(), arena)) {
-                // ideally we should resolve everything, but we will actually never resolve
-                // aliases, and always do the resolution when needed?
+            match definitions.get(&current_module.symbol(module.str(), arena).string(arena)) {
                 Some(fastn_unresolved::UR::UnResolved(fastn_unresolved::Definition {
                     inner: fastn_unresolved::InnerDefinition::ModuleAlias(target),
                     ..

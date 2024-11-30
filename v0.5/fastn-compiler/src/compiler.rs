@@ -4,8 +4,7 @@ pub(crate) struct Compiler {
     symbols: Box<dyn fastn_compiler::SymbolStore>,
     pub(crate) definitions_used: std::collections::HashSet<fastn_unresolved::Symbol>,
     pub(crate) arena: fastn_unresolved::Arena,
-    pub(crate) definitions:
-        std::collections::HashMap<fastn_unresolved::Symbol, fastn_unresolved::URD>,
+    pub(crate) definitions: std::collections::HashMap<String, fastn_unresolved::URD>,
     /// checkout resolve_document for why this is an Option
     content: Option<Vec<fastn_unresolved::URCI>>,
     pub(crate) document: fastn_unresolved::Document,
@@ -50,7 +49,13 @@ impl Compiler {
             // the following is only okay if our symbol store only returns unresolved definitions,
             // some other store might return resolved definitions, and we need to handle that.
             self.definitions.insert(
-                definition.unresolved().unwrap().symbol.clone().unwrap(),
+                definition
+                    .unresolved()
+                    .unwrap()
+                    .symbol
+                    .clone()
+                    .unwrap()
+                    .string(&self.arena),
                 definition,
             );
         }
@@ -80,7 +85,7 @@ impl Compiler {
             // `foo` in the `bag`.
             // to make sure this happens better, we have to ensure that the definition.resolve()
             // tries to resolve the signature first, and then the body.
-            let mut definition = self.definitions.remove(&symbol);
+            let mut definition = self.definitions.remove(symbol.str(&self.arena));
             match definition.as_mut() {
                 Some(fastn_unresolved::UR::UnResolved(definition)) => {
                     let mut o = Default::default();
@@ -96,13 +101,17 @@ impl Compiler {
             if let Some(fastn_unresolved::UR::UnResolved(definition)) = definition {
                 match definition.resolved() {
                     Ok(resolved) => {
-                        self.definitions
-                            .insert(symbol, fastn_unresolved::UR::Resolved(resolved));
+                        self.definitions.insert(
+                            symbol.string(&self.arena),
+                            fastn_unresolved::UR::Resolved(resolved),
+                        );
                     }
                     Err(s) => {
                         r.need_more_symbols.insert(symbol.clone());
-                        self.definitions
-                            .insert(symbol, fastn_unresolved::UR::UnResolved(s));
+                        self.definitions.insert(
+                            symbol.string(&self.arena),
+                            fastn_unresolved::UR::UnResolved(s),
+                        );
                     }
                 }
             }
