@@ -35,13 +35,14 @@ pub type Map<T> = std::collections::BTreeMap<String, T>;
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Definition {
     SymbolAlias {
-        symbol: String,
-        alias: String,
+        package: String,
+        module: String,
+        name: String,
         line_number: usize,
     },
     ModuleAlias {
+        package: String,
         module: String,
-        alias: String,
         line_number: usize,
     },
     Record(fastn_resolved::Record),
@@ -74,8 +75,8 @@ impl Definition {
             fastn_resolved::Definition::WebComponent(w) => w.name.to_string(),
             fastn_resolved::Definition::Export { to, .. } => to.to_string(),
             // TODO: check if the following two are valid
-            Definition::SymbolAlias { alias, .. } => alias.to_string(),
-            Definition::ModuleAlias { alias, .. } => alias.to_string(),
+            Definition::SymbolAlias { name, .. } => name.clone(),
+            Definition::ModuleAlias { .. } => todo!(),
         }
     }
 

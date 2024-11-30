@@ -159,7 +159,8 @@ pub enum UR<U, R> {
     ///
     /// what if we store the dependencies it failed on, so when any of them changes, we can
     /// revalidate?
-    Invalid(Vec<fastn_section::Error>),
+    Invalid(fastn_section::Error),
+    InvalidN(Vec<fastn_section::Error>),
 }
 
 #[derive(Debug, Clone, PartialEq)]
