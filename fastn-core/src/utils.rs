@@ -641,7 +641,7 @@ pub async fn replace_markers_2023(
     base_url: &str,
     config: &fastn_core::Config,
     session_id: &Option<String>,
-) -> fastn_resolved::CompiledDocument {
+) -> String {
     format!(
         include_str!("../../ftd/ftd-js.html"),
         fastn_package = get_fastn_package_data(&config.package).as_str(),
