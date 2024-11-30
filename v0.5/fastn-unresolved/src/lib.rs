@@ -64,6 +64,7 @@ pub struct Module {
 
 #[derive(Debug, Clone)]
 pub struct Document {
+    pub scope: [SFId; 2],
     pub module: fastn_unresolved::Module,
     pub module_doc: Option<fastn_section::Span>,
     pub definitions: Vec<URD>,
@@ -77,7 +78,10 @@ pub struct Document {
 #[derive(Debug, Clone)]
 pub struct Definition {
     pub symbol: Option<fastn_unresolved::Symbol>, // <package-name>/<module-name>#<definition-name>
-    pub scope: Vec<SFId>,
+    /// we will keep the builtins not as ScopeFrame, but as plain hashmap.
+    /// we have two scopes at this level, the auto-imports, and scope of all symbols explicitly
+    /// imported/defined in the document this definition exists in.
+    pub scope: [SFId; 2],
     pub doc: Option<fastn_section::Span>,
     /// resolving an identifier means making sure it is unique in the document, and performing
     /// other checks.

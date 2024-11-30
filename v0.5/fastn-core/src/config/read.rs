@@ -5,7 +5,7 @@ impl fastn_core::Config {
     ) -> Result<Self, ReadError> {
         Ok(fastn_core::Config {
             sitemap: fastn_core::Sitemap {},
-            auto_imports: None,
+            auto_import_scope: desugar_auto_imports(&[]),
             redirects: vec![],
             dynamic_routes: vec![],
         })
@@ -15,4 +15,10 @@ impl fastn_core::Config {
 #[derive(Debug)]
 pub enum ReadError {
     SourceError(fastn_section::Error),
+}
+
+fn desugar_auto_imports(
+    _auto_imports: &[fastn_core::config::AutoImport],
+) -> fastn_unresolved::SFId {
+    todo!()
 }

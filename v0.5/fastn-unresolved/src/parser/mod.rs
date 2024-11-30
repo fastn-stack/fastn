@@ -6,10 +6,14 @@ pub fn parse(
     module: fastn_unresolved::Module,
     source: &str,
     arena: &mut fastn_unresolved::Arena,
+    auto_imports: fastn_unresolved::SFId,
 ) -> fastn_unresolved::Document {
+    let scope = arena.new_scope("module");
     let (mut document, sections) = fastn_unresolved::Document::new(
         module,
         fastn_section::Document::parse(&arcstr::ArcStr::from(source)),
+        auto_imports,
+        scope,
     );
 
     // todo: first go through just the imports and desugar them
@@ -65,10 +69,14 @@ where
 
     let mut arena = fastn_unresolved::Arena::default();
     let module = fastn_unresolved::Module::new("main", "", &mut arena);
+    let auto_import_scope = arena.new_scope("auto-import");
+    let module_scope = arena.new_scope("module");
 
     let (mut document, sections) = fastn_unresolved::Document::new(
         module,
         fastn_section::Document::parse(&arcstr::ArcStr::from(source)),
+        auto_import_scope,
+        module_scope,
     );
 
     let section = {

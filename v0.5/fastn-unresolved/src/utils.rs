@@ -2,10 +2,13 @@ impl fastn_unresolved::Document {
     pub(crate) fn new(
         module: fastn_unresolved::Module,
         document: fastn_section::Document,
+        auto_import_scope: fastn_unresolved::SFId,
+        module_scope: fastn_unresolved::SFId,
     ) -> (fastn_unresolved::Document, Vec<fastn_section::Section>) {
         (
             fastn_unresolved::Document {
                 module,
+                scope: [auto_import_scope, module_scope],
                 module_doc: document.module_doc,
                 definitions: vec![],
                 content: vec![],
@@ -225,5 +228,14 @@ impl fastn_unresolved::Module {
             module_len,
             interned: arena.interner.get_or_intern(v),
         }
+    }
+}
+
+impl fastn_unresolved::Arena {
+    pub fn new_scope(&mut self, name: &str) -> fastn_unresolved::SFId {
+        self.sfa.alloc(fastn_unresolved::ScopeFrame {
+            name: name.to_string(),
+            bag: Default::default(),
+        })
     }
 }

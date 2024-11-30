@@ -44,7 +44,7 @@ pub(super) fn function_definition(
     document.definitions.push(
         fastn_unresolved::Definition {
             symbol: Default::default(),
-            scope: vec![],
+            scope: document.scope,
             doc: Default::default(),
             visibility,
             name: fastn_section::Identifier { name }.into(),

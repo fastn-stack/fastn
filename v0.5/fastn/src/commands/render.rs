@@ -30,7 +30,7 @@ async fn render_document(
         &source,
         "main",
         "",
-        config.auto_imports,
+        config.auto_import_scope,
         arena,
     )
     .await
