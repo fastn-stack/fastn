@@ -11,9 +11,9 @@ pub fn section(
         caption,
         headers: fastn_section::parser::headers(scanner),
         body: fastn_section::parser::body(scanner),
-        children: vec![],      // children is populated by the wiggin::ender.
-        is_commented: false,   // TODO
-        has_end: false,        // has_end is populated by the wiggin::ender.
+        children: vec![],    // children is populated by the wiggin::ender.
+        is_commented: false, // TODO
+        has_end: false,      // has_end is populated by the wiggin::ender.
     })
 }
 

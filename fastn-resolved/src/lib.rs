@@ -34,16 +34,16 @@ pub type Map<T> = std::collections::BTreeMap<String, T>;
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Definition {
-    SymbolAlias {
-        symbol: String,
-        alias: String,
-        line_number: usize,
-    },
-    ModuleAlias {
-        module: String,
-        alias: String,
-        line_number: usize,
-    },
+    // SymbolAlias {
+    //     symbol: String,
+    //     alias: String,
+    //     line_number: usize,
+    // },
+    // ModuleAlias {
+    //     module: String,
+    //     alias: String,
+    //     line_number: usize,
+    // },
     Record(fastn_resolved::Record),
     OrType(fastn_resolved::OrType),
     OrTypeWithVariant {
@@ -74,8 +74,8 @@ impl Definition {
             fastn_resolved::Definition::WebComponent(w) => w.name.to_string(),
             fastn_resolved::Definition::Export { to, .. } => to.to_string(),
             // TODO: check if the following two are valid
-            Definition::SymbolAlias { alias, .. } => alias.to_string(),
-            Definition::ModuleAlias { alias, .. } => alias.to_string(),
+            // Definition::SymbolAlias { alias, .. } => alias.to_string(),
+            // Definition::ModuleAlias { alias, .. } => alias.to_string(),
         }
     }
 
@@ -89,8 +89,8 @@ impl Definition {
             Definition::OrTypeWithVariant { variant, .. } => variant.line_number(),
             Definition::WebComponent(w) => w.line_number,
             Definition::Export { line_number, .. } => *line_number,
-            Definition::SymbolAlias { line_number, .. } => *line_number,
-            Definition::ModuleAlias { line_number, .. } => *line_number,
+            // Definition::SymbolAlias { line_number, .. } => *line_number,
+            // Definition::ModuleAlias { line_number, .. } => *line_number,
         }
     }
 

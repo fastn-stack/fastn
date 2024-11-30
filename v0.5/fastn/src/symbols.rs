@@ -6,7 +6,6 @@ impl Symbols {
         &mut self,
         arena: &mut fastn_unresolved::Arena,
         (file, module): (String, fastn_unresolved::Module),
-        auto_import_scope: fastn_unresolved::SFId,
     ) -> Vec<fastn_unresolved::URD> {
         // we need to fetch the symbol from the store
         let source = match std::fs::File::open(file.as_str()).and_then(std::io::read_to_string) {
@@ -17,7 +16,7 @@ impl Symbols {
             }
         };
 
-        let d = fastn_unresolved::parse(module.clone(), &source, arena, auto_import_scope);
+        let d = fastn_unresolved::parse(module.clone(), &source, arena);
 
         d.definitions
             .into_iter()
@@ -40,17 +39,17 @@ impl fastn_compiler::SymbolStore for Symbols {
         &mut self,
         arena: &mut fastn_unresolved::Arena,
         symbols: &std::collections::HashSet<fastn_unresolved::Symbol>,
-        auto_import_scope: fastn_unresolved::SFId,
-    ) {
+        // auto_import_scope: fastn_unresolved::SFId,
+    ) -> Vec<fastn_unresolved::URD> {
         let unique_modules = symbols
             .iter()
             .map(|s| file_for_symbol(s, arena))
             .collect::<std::collections::HashSet<_>>();
 
-        let _: Vec<_> = unique_modules
+        unique_modules
             .into_iter()
-            .map(|m| self.find_all_definitions_in_a_module(arena, m, auto_import_scope))
-            .collect();
+            .flat_map(|m| self.find_all_definitions_in_a_module(arena, m))
+            .collect()
     }
 }
 

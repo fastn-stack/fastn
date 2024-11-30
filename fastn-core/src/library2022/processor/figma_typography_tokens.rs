@@ -251,7 +251,7 @@ fn extract_type_data(
 }
 
 fn extract_raw_data(property_value: Option<fastn_resolved::PropertyValue>) -> Option<ValueType> {
-    return match property_value.as_ref() {
+    match property_value.as_ref() {
         Some(fastn_resolved::PropertyValue::Value { value, .. }) => match value {
             fastn_resolved::Value::String { text } => Some(ValueType {
                 value: text.to_string(),
@@ -295,7 +295,7 @@ fn extract_raw_data(property_value: Option<fastn_resolved::PropertyValue>) -> Op
         Some(fastn_resolved::PropertyValue::Clone { .. }) => None,
         Some(fastn_resolved::PropertyValue::FunctionCall { .. }) => None,
         None => None,
-    };
+    }
 }
 
 #[derive(Debug, Default, Serialize, Deserialize)]

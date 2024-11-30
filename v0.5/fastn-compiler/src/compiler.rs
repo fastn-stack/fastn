@@ -9,7 +9,7 @@ pub(crate) struct Compiler {
     /// checkout resolve_document for why this is an Option
     content: Option<Vec<fastn_unresolved::URCI>>,
     pub(crate) document: fastn_unresolved::Document,
-    auto_import_scope: fastn_unresolved::SFId,
+    // auto_import_scope: fastn_unresolved::SFId,
 }
 
 impl Compiler {
@@ -18,14 +18,13 @@ impl Compiler {
         source: &str,
         package: &str,
         module: &str,
-        auto_import_scope: fastn_unresolved::SFId,
+        // auto_import_scope: fastn_unresolved::SFId,
         mut arena: fastn_unresolved::Arena,
     ) -> Self {
         let mut document = fastn_unresolved::parse(
             fastn_unresolved::Module::new(package, module, &mut arena),
             source,
             &mut arena,
-            auto_import_scope,
         );
         let content = Some(document.content);
         document.content = vec![];
@@ -37,7 +36,6 @@ impl Compiler {
             content,
             document,
             definitions_used: Default::default(),
-            auto_import_scope,
         }
     }
 
@@ -47,10 +45,7 @@ impl Compiler {
     ) {
         self.definitions_used
             .extend(symbols_to_fetch.iter().cloned());
-        let definitions = self
-            .symbols
-            .lookup(&mut self.arena, symbols_to_fetch, self.auto_import_scope)
-            .await;
+        let definitions = self.symbols.lookup(&mut self.arena, symbols_to_fetch).await;
         for definition in definitions {
             // the following is only okay if our symbol store only returns unresolved definitions,
             // some other store might return resolved definitions, and we need to handle that.
@@ -221,10 +216,10 @@ pub async fn compile(
     source: &str,
     package: &str,
     module: &str,
-    auto_import_scope: fastn_unresolved::SFId,
+    // auto_import_scope: fastn_unresolved::SFId,
     arena: fastn_unresolved::Arena,
 ) -> Result<fastn_resolved::CompiledDocument, fastn_compiler::Error> {
-    Compiler::new(symbols, source, package, module, auto_import_scope, arena)
+    Compiler::new(symbols, source, package, module, arena)
         .compile()
         .await
 }

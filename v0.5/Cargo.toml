@@ -44,13 +44,12 @@ fastn-core = { path = "fastn-core" }
 fastn-jdebug = { version = "0.1.0", path = "fastn-jdebug" }
 fastn-section = { path = "fastn-section" }
 fastn-static = { path = "fastn-static" }
-fastn-resolved = { path = "../fastn-resolved" }
-fastn-runtime = { path = "../fastn-runtime" }
+fastn-resolved = { path = "../fastn-resolved", default-features = false }
+fastn-runtime = { path = "../fastn-runtime", default-features = false }
 fastn-builtins = { path = "../fastn-builtins" }
 fastn-js = { path = "../fastn-js" }
 fastn-unresolved = { path = "fastn-unresolved" }
 fastn-update = { path = "fastn-update" }
-id-arena = "2"
 indexmap = "2"
 insta = { version = "1", features = ["yaml", "glob"] }
 itertools = "0.13"

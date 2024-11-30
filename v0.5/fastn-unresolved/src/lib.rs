@@ -26,21 +26,7 @@ pub type Bag = std::collections::HashMap<fastn_unresolved::Symbol, fastn_unresol
 #[derive(Default)]
 pub struct Arena {
     pub interner: string_interner::DefaultStringInterner,
-    pub sfa: SFArena,
 }
-
-pub struct ScopeFrame {
-    pub name: String,
-    pub bag: Bag,
-}
-
-pub struct ScopeStack {
-    pub frames: Vec<ScopeFrame>,
-}
-
-pub type SFId = id_arena::Id<ScopeFrame>;
-pub type SFArena = id_arena::Arena<ScopeFrame>;
-// pub type ScopeStackId = id_arena::Id<ScopeStack>;
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub struct Symbol {
@@ -64,7 +50,6 @@ pub struct Module {
 
 #[derive(Debug, Clone)]
 pub struct Document {
-    pub scope: [SFId; 2],
     pub module: fastn_unresolved::Module,
     pub module_doc: Option<fastn_section::Span>,
     pub definitions: Vec<URD>,
@@ -81,7 +66,6 @@ pub struct Definition {
     /// we will keep the builtins not as ScopeFrame, but as plain hashmap.
     /// we have two scopes at this level, the auto-imports, and scope of all symbols explicitly
     /// imported/defined in the document this definition exists in.
-    pub scope: [SFId; 2],
     pub doc: Option<fastn_section::Span>,
     /// resolving an identifier means making sure it is unique in the document, and performing
     /// other checks.

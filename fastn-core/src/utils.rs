@@ -292,7 +292,7 @@ pub struct Timer<'a> {
     msg: &'a str,
 }
 
-impl<'a> Timer<'a> {
+impl Timer<'_> {
     pub fn it<T>(&self, a: T) -> T {
         use colored::Colorize;
 
@@ -607,6 +607,7 @@ async fn get_extra_js(
     )
 }
 
+#[expect(unused)]
 async fn get_extra_css(
     config: &fastn_core::Config,
     external_css: &[String],
