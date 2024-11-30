@@ -5,13 +5,11 @@ mod import;
 pub fn parse(
     module: fastn_unresolved::Module,
     source: &str,
-    auto_imports: &[fastn_unresolved::URD],
     arena: &mut fastn_unresolved::Arena,
 ) -> fastn_unresolved::Document {
     let (mut document, sections) = fastn_unresolved::Document::new(
         module,
         fastn_section::Document::parse(&arcstr::ArcStr::from(source)),
-        auto_imports,
     );
 
     // todo: first go through just the imports and desugar them

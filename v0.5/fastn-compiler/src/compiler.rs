@@ -9,7 +9,7 @@ pub(crate) struct Compiler {
     /// checkout resolve_document for why this is an Option
     content: Option<Vec<fastn_unresolved::URCI>>,
     pub(crate) document: fastn_unresolved::Document,
-    desugared_auto_import: Vec<fastn_unresolved::URD>,
+    auto_imports: Option<fastn_unresolved::SFId>,
 }
 
 impl Compiler {
@@ -18,13 +18,12 @@ impl Compiler {
         source: &str,
         package: &str,
         module: &str,
-        desugared_auto_import: &[fastn_unresolved::URD],
+        auto_imports: Option<fastn_unresolved::SFId>,
         mut arena: fastn_unresolved::Arena,
     ) -> Self {
         let mut document = fastn_unresolved::parse(
             fastn_unresolved::Module::new(package, module, &mut arena),
             source,
-            &[],
             &mut arena,
         );
         let content = Some(document.content);
@@ -37,7 +36,7 @@ impl Compiler {
             content,
             document,
             definitions_used: Default::default(),
-            desugared_auto_import: desugared_auto_import.to_vec(),
+            auto_imports,
         }
     }
 
@@ -49,11 +48,7 @@ impl Compiler {
             .extend(symbols_to_fetch.iter().cloned());
         let definitions = self
             .symbols
-            .lookup(
-                &mut self.arena,
-                symbols_to_fetch,
-                &self.desugared_auto_import,
-            )
+            .lookup(&mut self.arena, symbols_to_fetch, &self.auto_imports)
             .await;
         for definition in definitions {
             // the following is only okay if our symbol store only returns unresolved definitions,
@@ -225,7 +220,7 @@ pub async fn compile(
     source: &str,
     package: &str,
     module: &str,
-    auto_imports: &[fastn_unresolved::URD],
+    auto_imports: Option<fastn_unresolved::SFId>,
     arena: fastn_unresolved::Arena,
 ) -> Result<fastn_resolved::CompiledDocument, fastn_compiler::Error> {
     Compiler::new(symbols, source, package, module, auto_imports, arena)

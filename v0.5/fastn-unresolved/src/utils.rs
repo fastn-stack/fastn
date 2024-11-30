@@ -2,13 +2,12 @@ impl fastn_unresolved::Document {
     pub(crate) fn new(
         module: fastn_unresolved::Module,
         document: fastn_section::Document,
-        desugared_auto_imports: &[fastn_unresolved::URD],
     ) -> (fastn_unresolved::Document, Vec<fastn_section::Section>) {
         (
             fastn_unresolved::Document {
                 module,
                 module_doc: document.module_doc,
-                definitions: desugared_auto_imports.to_vec(),
+                definitions: vec![],
                 content: vec![],
                 errors: document.errors,
                 warnings: document.warnings,
