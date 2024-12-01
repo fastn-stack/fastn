@@ -68,8 +68,8 @@ fn parse_import(
 
     Some(Import {
         module: fastn_unresolved::Module::new(
-            caption.inner_str(module).str(),
             caption.inner_str(package).str(),
+            Some(caption.inner_str(module).str()),
             arena,
         ),
         alias: alias.map(|v| fastn_section::Identifier {

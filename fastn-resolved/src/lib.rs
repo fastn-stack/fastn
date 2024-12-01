@@ -34,16 +34,10 @@ pub type Map<T> = std::collections::BTreeMap<String, T>;
 
 #[derive(Debug, Clone, PartialEq, serde::Deserialize, serde::Serialize)]
 pub enum Definition {
-    SymbolAlias {
+    /// every module is a "thing" and can be referred to etc., so we need to keep track of them
+    Module {
         package: String,
-        module: String,
-        name: String,
-        line_number: usize,
-    },
-    ModuleAlias {
-        package: String,
-        module: String,
-        line_number: usize,
+        module: Option<String>,
     },
     Record(fastn_resolved::Record),
     OrType(fastn_resolved::OrType),
@@ -74,9 +68,14 @@ impl Definition {
             fastn_resolved::Definition::Function(f) => f.name.to_string(),
             fastn_resolved::Definition::WebComponent(w) => w.name.to_string(),
             fastn_resolved::Definition::Export { to, .. } => to.to_string(),
-            // TODO: check if the following two are valid
-            Definition::SymbolAlias { name, .. } => name.clone(),
-            Definition::ModuleAlias { .. } => todo!(),
+            Definition::Module {
+                package,
+                module: None,
+            } => package.clone(),
+            Definition::Module {
+                package,
+                module: Some(module),
+            } => format!("{}/{}", package, module),
         }
     }
 
@@ -90,8 +89,9 @@ impl Definition {
             Definition::OrTypeWithVariant { variant, .. } => variant.line_number(),
             Definition::WebComponent(w) => w.line_number,
             Definition::Export { line_number, .. } => *line_number,
-            Definition::SymbolAlias { line_number, .. } => *line_number,
-            Definition::ModuleAlias { line_number, .. } => *line_number,
+            // module is not defined on any given line, unless it is defined using the future
+            // module proposal, till now we return 0
+            Definition::Module { .. } => 0,
         }
     }
 

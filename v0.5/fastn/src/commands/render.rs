@@ -20,7 +20,7 @@ async fn render_document(
     let source = std::fs::File::open(path)
         .and_then(std::io::read_to_string)
         .unwrap();
-    let o = fastn_compiler::compile(Box::new(fastn::Symbols {}), &source, "main", "", arena)
+    let o = fastn_compiler::compile(Box::new(fastn::Symbols {}), &source, "main", None, arena)
         .await
         .unwrap();
     let h = fastn_runtime::HtmlData::from_cd(o);

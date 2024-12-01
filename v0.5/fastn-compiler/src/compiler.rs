@@ -16,7 +16,7 @@ impl Compiler {
         symbols: Box<dyn fastn_compiler::SymbolStore>,
         source: &str,
         package: &str,
-        module: &str,
+        module: Option<&str>,
         // auto_import_scope: fastn_unresolved::SFId,
         mut arena: fastn_unresolved::Arena,
     ) -> Self {
@@ -224,7 +224,7 @@ pub async fn compile(
     symbols: Box<dyn fastn_compiler::SymbolStore>,
     source: &str,
     package: &str,
-    module: &str,
+    module: Option<&str>,
     // auto_import_scope: fastn_unresolved::SFId,
     arena: fastn_unresolved::Arena,
 ) -> Result<fastn_resolved::CompiledDocument, fastn_compiler::Error> {

@@ -58,7 +58,11 @@ fn file_for_symbol(
     arena: &mut fastn_unresolved::Arena,
 ) -> (String, fastn_unresolved::Module) {
     (
-        format!("{}/{}.ftd", symbol.package(arena), symbol.module(arena)),
+        // this code is non sense right now
+        match symbol.module(arena) {
+            Some(module) => format!("{}/{}.ftd", symbol.package(arena), module),
+            None => format!("{}/index.ftd", symbol.package(arena)),
+        },
         symbol.parent(arena),
     )
 }

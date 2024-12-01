@@ -36,7 +36,7 @@ pub fn resolve(
             // if it is not in unresolved-state, or if it is missing in definitions, we add "bar#x"
             // to output.stuck_on.
             // if it is in error state, or not found state, we resolve ourselves as them.
-            fastn_unresolved::Symbol::new(package.str(), module.str(), name.str(), arena)
+            fastn_unresolved::Symbol::new(package.str(), Some(module.str()), name.str(), arena)
         }
         fastn_section::IdentifierReference::Imported {
             module,
@@ -50,7 +50,7 @@ pub fn resolve(
             // module from the module alias.
             // we combine the target module with the name, "x" to get the target symbol.
             match definitions.get(target_symbol.str(arena)) {
-                Some(fastn_unresolved::UR::Resolved(fastn_resolved::Definition::ModuleAlias {
+                Some(fastn_unresolved::UR::Resolved(fastn_resolved::Definition::Module {
                     package,
                     module,
                     ..
@@ -58,7 +58,7 @@ pub fn resolve(
                     // what we stored in resolved place, no further action is required.
                     *name = fastn_unresolved::UR::Resolved(fastn_unresolved::Symbol::new(
                         package,
-                        module,
+                        module.as_deref(),
                         dotted_name.str(),
                         arena,
                     ));

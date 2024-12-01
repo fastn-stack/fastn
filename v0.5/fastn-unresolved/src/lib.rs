@@ -13,6 +13,7 @@ mod utils;
 #[cfg(test)]
 pub(crate) use debug::JIDebug;
 pub use parser::parse;
+use std::num::NonZeroU16;
 
 pub type URD = fastn_unresolved::UR<fastn_unresolved::Definition, fastn_resolved::Definition>;
 pub type URCI = fastn_unresolved::UR<
@@ -34,9 +35,9 @@ pub struct Symbol {
     /// this store the <package>/<module>#<name> of the symbol
     interned: string_interner::DefaultSymbol, // u32
     /// length of the <package> part of the symbol
-    package_len: u16,
+    package_len: NonZeroU16,
     /// length of the <module> part of the symbol
-    module_len: u16,
+    module_len: Option<NonZeroU16>,
 }
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
@@ -45,7 +46,7 @@ pub struct Module {
     /// this store the <package>/<module>#<name> of the symbol
     interned: string_interner::DefaultSymbol, // u32
     /// length of the <package> part of the symbol
-    package_len: u16,
+    package_len: NonZeroU16,
 }
 
 #[derive(Debug, Clone)]
