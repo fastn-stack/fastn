@@ -5,7 +5,7 @@ impl fastn_core::Config {
     ) -> Result<Self, ReadError> {
         Ok(fastn_core::Config {
             sitemap: fastn_core::Sitemap {},
-            auto_import_scope: desugar_auto_imports(arena, &[]),
+            auto_imports: desugar_auto_imports(arena, &[]),
             redirects: vec![],
             dynamic_routes: vec![],
         })
@@ -20,6 +20,6 @@ pub enum ReadError {
 fn desugar_auto_imports(
     arena: &mut fastn_unresolved::Arena,
     _auto_imports: &[fastn_core::config::AutoImport],
-) -> fastn_unresolved::SFId {
-    arena.new_scope("auto-imports")
+) -> fastn_unresolved::AliasesID {
+    arena.new_aliases()
 }

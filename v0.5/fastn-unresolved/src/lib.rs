@@ -20,27 +20,14 @@ pub type URCI = fastn_unresolved::UR<
     fastn_resolved::ComponentInvocation,
 >;
 pub type URIS = fastn_unresolved::UR<fastn_section::IdentifierReference, fastn_unresolved::Symbol>;
-
-pub type Bag = std::collections::HashMap<fastn_unresolved::Symbol, fastn_unresolved::URD>;
+pub type Aliases = std::collections::HashMap<String, String>;
+pub type AliasesID = id_arena::Id<Aliases>;
 
 #[derive(Default)]
 pub struct Arena {
     pub interner: string_interner::DefaultStringInterner,
-    pub sfa: SFArena,
+    pub aliases: id_arena::Arena<Aliases>,
 }
-
-pub struct ScopeFrame {
-    pub name: String,
-    pub bag: Bag,
-}
-
-pub struct ScopeStack {
-    pub frames: Vec<ScopeFrame>,
-}
-
-pub type SFId = id_arena::Id<ScopeFrame>;
-pub type SFArena = id_arena::Arena<ScopeFrame>;
-// pub type ScopeStackId = id_arena::Id<ScopeStack>;
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub struct Symbol {
@@ -48,9 +35,9 @@ pub struct Symbol {
     /// this store the <package>/<module>#<name> of the symbol
     interned: string_interner::DefaultSymbol, // u32
     /// length of the <package> part of the symbol
-    package_len: u16,
+    package_len: std::num::NonZeroU16,
     /// length of the <module> part of the symbol
-    module_len: u16,
+    module_len: Option<std::num::NonZeroU16>,
 }
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
@@ -59,12 +46,12 @@ pub struct Module {
     /// this store the <package>/<module>#<name> of the symbol
     interned: string_interner::DefaultSymbol, // u32
     /// length of the <package> part of the symbol
-    package_len: u16,
+    package_len: std::num::NonZeroU16,
 }
 
 #[derive(Debug, Clone)]
 pub struct Document {
-    pub scope: [SFId; 2],
+    pub aliases: AliasesID,
     pub module: fastn_unresolved::Module,
     pub module_doc: Option<fastn_section::Span>,
     pub definitions: Vec<URD>,
@@ -77,11 +64,11 @@ pub struct Document {
 
 #[derive(Debug, Clone)]
 pub struct Definition {
+    pub aliases: AliasesID,
     pub symbol: Option<fastn_unresolved::Symbol>, // <package-name>/<module-name>#<definition-name>
     /// we will keep the builtins not as ScopeFrame, but as plain hashmap.
     /// we have two scopes at this level, the auto-imports, and scope of all symbols explicitly
     /// imported/defined in the document this definition exists in.
-    pub scope: [SFId; 2],
     pub doc: Option<fastn_section::Span>,
     /// resolving an identifier means making sure it is unique in the document, and performing
     /// other checks.
@@ -175,7 +162,8 @@ pub enum UR<U, R> {
     ///
     /// what if we store the dependencies it failed on, so when any of them changes, we can
     /// revalidate?
-    Invalid(Vec<fastn_section::Error>),
+    Invalid(fastn_section::Error),
+    InvalidN(Vec<fastn_section::Error>),
 }
 
 #[derive(Debug, Clone, PartialEq)]

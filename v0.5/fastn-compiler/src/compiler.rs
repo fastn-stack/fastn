@@ -4,12 +4,11 @@ pub(crate) struct Compiler {
     symbols: Box<dyn fastn_compiler::SymbolStore>,
     pub(crate) definitions_used: std::collections::HashSet<fastn_unresolved::Symbol>,
     pub(crate) arena: fastn_unresolved::Arena,
-    pub(crate) definitions:
-        std::collections::HashMap<fastn_unresolved::Symbol, fastn_unresolved::URD>,
+    pub(crate) definitions: std::collections::HashMap<String, fastn_unresolved::URD>,
     /// checkout resolve_document for why this is an Option
     content: Option<Vec<fastn_unresolved::URCI>>,
     pub(crate) document: fastn_unresolved::Document,
-    auto_import_scope: fastn_unresolved::SFId,
+    auto_imports: fastn_unresolved::AliasesID,
 }
 
 impl Compiler {
@@ -17,15 +16,15 @@ impl Compiler {
         symbols: Box<dyn fastn_compiler::SymbolStore>,
         source: &str,
         package: &str,
-        module: &str,
-        auto_import_scope: fastn_unresolved::SFId,
+        module: Option<&str>,
+        auto_imports: fastn_unresolved::AliasesID,
         mut arena: fastn_unresolved::Arena,
     ) -> Self {
         let mut document = fastn_unresolved::parse(
             fastn_unresolved::Module::new(package, module, &mut arena),
             source,
             &mut arena,
-            auto_import_scope,
+            auto_imports,
         );
         let content = Some(document.content);
         document.content = vec![];
@@ -36,8 +35,8 @@ impl Compiler {
             definitions: std::collections::HashMap::new(),
             content,
             document,
+            auto_imports,
             definitions_used: Default::default(),
-            auto_import_scope,
         }
     }
 
@@ -49,13 +48,19 @@ impl Compiler {
             .extend(symbols_to_fetch.iter().cloned());
         let definitions = self
             .symbols
-            .lookup(&mut self.arena, symbols_to_fetch, self.auto_import_scope)
+            .lookup(&mut self.arena, symbols_to_fetch, self.auto_imports)
             .await;
         for definition in definitions {
             // the following is only okay if our symbol store only returns unresolved definitions,
             // some other store might return resolved definitions, and we need to handle that.
             self.definitions.insert(
-                definition.unresolved().unwrap().symbol.clone().unwrap(),
+                definition
+                    .unresolved()
+                    .unwrap()
+                    .symbol
+                    .clone()
+                    .unwrap()
+                    .string(&self.arena),
                 definition,
             );
         }
@@ -85,7 +90,7 @@ impl Compiler {
             // `foo` in the `bag`.
             // to make sure this happens better, we have to ensure that the definition.resolve()
             // tries to resolve the signature first, and then the body.
-            let mut definition = self.definitions.remove(&symbol);
+            let mut definition = self.definitions.remove(symbol.str(&self.arena));
             match definition.as_mut() {
                 Some(fastn_unresolved::UR::UnResolved(definition)) => {
                     let mut o = Default::default();
@@ -101,13 +106,17 @@ impl Compiler {
             if let Some(fastn_unresolved::UR::UnResolved(definition)) = definition {
                 match definition.resolved() {
                     Ok(resolved) => {
-                        self.definitions
-                            .insert(symbol, fastn_unresolved::UR::Resolved(resolved));
+                        self.definitions.insert(
+                            symbol.string(&self.arena),
+                            fastn_unresolved::UR::Resolved(resolved),
+                        );
                     }
                     Err(s) => {
                         r.need_more_symbols.insert(symbol.clone());
-                        self.definitions
-                            .insert(symbol, fastn_unresolved::UR::UnResolved(s));
+                        self.definitions.insert(
+                            symbol.string(&self.arena),
+                            fastn_unresolved::UR::UnResolved(s),
+                        );
                     }
                 }
             }
@@ -220,11 +229,11 @@ pub async fn compile(
     symbols: Box<dyn fastn_compiler::SymbolStore>,
     source: &str,
     package: &str,
-    module: &str,
-    auto_import_scope: fastn_unresolved::SFId,
+    module: Option<&str>,
+    auto_imports: fastn_unresolved::AliasesID,
     arena: fastn_unresolved::Arena,
 ) -> Result<fastn_resolved::CompiledDocument, fastn_compiler::Error> {
-    Compiler::new(symbols, source, package, module, auto_import_scope, arena)
+    Compiler::new(symbols, source, package, module, auto_imports, arena)
         .compile()
         .await
 }

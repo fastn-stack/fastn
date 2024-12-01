@@ -6,14 +6,12 @@ pub fn parse(
     module: fastn_unresolved::Module,
     source: &str,
     arena: &mut fastn_unresolved::Arena,
-    auto_imports: fastn_unresolved::SFId,
+    auto_imports: fastn_unresolved::AliasesID,
 ) -> fastn_unresolved::Document {
-    let scope = arena.new_scope("module");
     let (mut document, sections) = fastn_unresolved::Document::new(
         module,
         fastn_section::Document::parse(&arcstr::ArcStr::from(source)),
         auto_imports,
-        scope,
     );
 
     // todo: first go through just the imports and desugar them
@@ -53,6 +51,7 @@ pub fn parse(
         }
     }
 
+    document.add_definitions_to_scope(arena);
     document
 }
 
@@ -68,15 +67,12 @@ where
     println!("--------- testing -----------\n{source}\n--------- source ------------");
 
     let mut arena = fastn_unresolved::Arena::default();
-    let module = fastn_unresolved::Module::new("main", "", &mut arena);
-    let auto_import_scope = arena.new_scope("auto-import");
-    let module_scope = arena.new_scope("module");
+    let module = fastn_unresolved::Module::new("main", None, &mut arena);
 
     let (mut document, sections) = fastn_unresolved::Document::new(
         module,
         fastn_section::Document::parse(&arcstr::ArcStr::from(source)),
-        auto_import_scope,
-        module_scope,
+        arena.new_aliases(),
     );
 
     let section = {

@@ -7,14 +7,14 @@ pub(crate) fn resolved_content(
 }
 
 pub(crate) fn used_definitions(
-    definitions: std::collections::HashMap<fastn_unresolved::Symbol, fastn_unresolved::URD>,
+    definitions: std::collections::HashMap<String, fastn_unresolved::URD>,
     definitions_used: std::collections::HashSet<fastn_unresolved::Symbol>,
     arena: fastn_unresolved::Arena,
 ) -> indexmap::IndexMap<String, fastn_resolved::Definition> {
     // go through self.symbols_used and get the resolved definitions
     let def_map = indexmap::IndexMap::new();
     for definition in definitions_used.iter() {
-        if let Some(_definition) = definitions.get(definition) {
+        if let Some(_definition) = definitions.get(definition.str(&arena)) {
             // definitions.insert(symbol.clone(), definition);
             todo!()
         } else if let Some(_definition) = fastn_builtins::builtins().get(definition.str(&arena)) {

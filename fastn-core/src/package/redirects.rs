@@ -142,13 +142,13 @@ pub fn find_redirect<'a>(redirects: &'a ftd::Map<String>, path: &str) -> Option<
             .trim_end_matches(".ftd")
     );
 
-    return if redirects.contains_key(original) {
+    if redirects.contains_key(original) {
         redirects.get(original)
     } else if redirects.contains_key(fixed.as_str()) {
         redirects.get(fixed.as_str())
     } else {
         None
-    };
+    }
 }
 
 #[cfg(test)]

@@ -112,6 +112,7 @@ impl<U: fastn_unresolved::JIDebug, R: fastn_unresolved::JIDebug> fastn_unresolve
             crate::UR::UnResolved(u) => u.idebug(arena),
             crate::UR::NotFound => unimplemented!(),
             crate::UR::Invalid(_) => unimplemented!(),
+            crate::UR::InvalidN(_) => unimplemented!(),
         }
     }
 }

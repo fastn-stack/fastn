@@ -410,10 +410,10 @@ impl Config {
             generated_style.push('\n');
             entry = package.next();
         }
-        return match generated_style.trim().is_empty() {
+        match generated_style.trim().is_empty() {
             false => format!("<style>{}</style>", generated_style),
             _ => "".to_string(),
-        };
+        }
     }
 
     pub(crate) async fn download_fonts(

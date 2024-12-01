@@ -2,13 +2,12 @@ impl fastn_unresolved::Document {
     pub(crate) fn new(
         module: fastn_unresolved::Module,
         document: fastn_section::Document,
-        auto_import_scope: fastn_unresolved::SFId,
-        module_scope: fastn_unresolved::SFId,
+        auto_imports: fastn_unresolved::AliasesID,
     ) -> (fastn_unresolved::Document, Vec<fastn_section::Section>) {
         (
             fastn_unresolved::Document {
                 module,
-                scope: [auto_import_scope, module_scope],
+                aliases: auto_imports,
                 module_doc: document.module_doc,
                 definitions: vec![],
                 content: vec![],
@@ -31,6 +30,11 @@ impl fastn_unresolved::Document {
         self.warnings.extend(warnings);
         self.comments.extend(comments);
     }
+
+    pub(crate) fn add_definitions_to_scope(&mut self, _arena: &mut fastn_unresolved::Arena) {
+        // this takes id auto imports in self.aliases, and creates a new Aliases with imports
+        // merged into it, and updates the self.aliases to point to that
+    }
 }
 
 impl fastn_unresolved::ComponentInvocation {
@@ -47,6 +51,7 @@ impl fastn_unresolved::Definition {
             fastn_unresolved::UR::Resolved(ref r) => r.str(),
             fastn_unresolved::UR::NotFound => unreachable!(),
             fastn_unresolved::UR::Invalid(_) => unreachable!(),
+            fastn_unresolved::UR::InvalidN(_) => unreachable!(),
         }
     }
 
@@ -136,27 +141,25 @@ impl<U, V> fastn_unresolved::UR<U, V> {
 impl fastn_unresolved::Symbol {
     pub fn new(
         package: &str,
-        module: &str,
+        module: Option<&str>,
         name: &str,
         arena: &mut fastn_unresolved::Arena,
     ) -> fastn_unresolved::Symbol {
-        let v = if module.is_empty() {
-            format!("{package}#{name}")
-        } else {
-            format!("{package}/{module}#{name}")
+        let v = match module {
+            Some(module) => format!("{package}/{module}#{name}"),
+            None => format!("{package}#{name}"),
         };
         fastn_unresolved::Symbol {
-            package_len: package.len() as u16,
-            module_len: module.len() as u16,
+            package_len: std::num::NonZeroU16::new(package.len() as u16).unwrap(),
+            module_len: module.map(|v| std::num::NonZeroU16::new(v.len() as u16).unwrap()),
             interned: arena.interner.get_or_intern(v),
         }
     }
 
     pub fn parent(&self, arena: &mut fastn_unresolved::Arena) -> fastn_unresolved::Module {
-        let v = if self.module_len == 0 {
-            self.package(arena).to_string()
-        } else {
-            format!("{}/{}", self.package(arena), self.module(arena))
+        let v = match self.module_len {
+            None => format!("{}/{}", self.package(arena), self.module(arena).unwrap()),
+            Some(_) => self.package(arena).to_string(),
         };
         fastn_unresolved::Module {
             package_len: self.package_len,
@@ -168,33 +171,41 @@ impl fastn_unresolved::Symbol {
         arena.interner.resolve(self.interned).unwrap()
     }
 
-    pub fn package<'a>(&self, arena: &'a fastn_unresolved::Arena) -> &'a str {
-        &self.str(arena)[..self.package_len as usize]
+    pub fn string(&self, arena: &fastn_unresolved::Arena) -> String {
+        self.str(arena).to_string()
     }
 
-    pub fn module<'a>(&self, arena: &'a fastn_unresolved::Arena) -> &'a str {
-        &self.str(arena)[self.package_len as usize + 1
-            ..self.package_len as usize + 1 + self.module_len as usize]
+    pub fn package<'a>(&self, arena: &'a fastn_unresolved::Arena) -> &'a str {
+        &self.str(arena)[..self.package_len.get() as usize]
+    }
+
+    pub fn module<'a>(&self, arena: &'a fastn_unresolved::Arena) -> Option<&'a str> {
+        self.module_len.map(|module_len| {
+            &self.str(arena)[self.package_len.get() as usize + 1
+                ..self.package_len.get() as usize + 1 + module_len.get() as usize]
+        })
     }
 
     pub fn name<'a>(&self, arena: &'a fastn_unresolved::Arena) -> &'a str {
-        &self.str(arena)[self.package_len as usize + 1 + self.module_len as usize + 1..]
+        &self.str(arena)[self.package_len.get() as usize
+            + 1
+            + self.module_len.map(|v| v.get()).unwrap_or_default() as usize
+            + 1..]
     }
 }
 
 impl fastn_unresolved::Module {
     pub fn new(
         package: &str,
-        module: &str,
+        module: Option<&str>,
         arena: &mut fastn_unresolved::Arena,
     ) -> fastn_unresolved::Module {
-        let v = if module.is_empty() {
-            package.to_string()
-        } else {
-            format!("{package}/{module}")
+        let v = match module {
+            None => package.to_string(),
+            Some(module) => format!("{package}/{module}"),
         };
         fastn_unresolved::Module {
-            package_len: package.len() as u16,
+            package_len: std::num::NonZeroU16::new(package.len() as u16).unwrap(),
             interned: arena.interner.get_or_intern(v),
         }
     }
@@ -204,11 +215,11 @@ impl fastn_unresolved::Module {
     }
 
     pub fn package<'a>(&self, arena: &'a fastn_unresolved::Arena) -> &'a str {
-        &self.str(arena)[..self.package_len as usize]
+        &self.str(arena)[..self.package_len.get() as usize]
     }
 
     pub fn module<'a>(&self, arena: &'a fastn_unresolved::Arena) -> &'a str {
-        &self.str(arena)[self.package_len as usize + 1..]
+        &self.str(arena)[self.package_len.get() as usize + 1..]
     }
 
     pub fn symbol(
@@ -216,9 +227,16 @@ impl fastn_unresolved::Module {
         name: &str,
         arena: &mut fastn_unresolved::Arena,
     ) -> fastn_unresolved::Symbol {
-        let module_len =
-            arena.interner.resolve(self.interned).unwrap().len() as u16 - self.package_len;
-        let v = if module_len == 0 {
+        let module_len = {
+            let len = arena.interner.resolve(self.interned).unwrap().len() as u16
+                - self.package_len.get();
+            if len > 0 {
+                Some(std::num::NonZeroU16::new(len).unwrap())
+            } else {
+                None
+            }
+        };
+        let v = if module_len.is_none() {
             format!("{}#{name}", self.package(arena))
         } else {
             format!("{}/{}#{name}", self.package(arena), self.module(arena))
@@ -232,10 +250,7 @@ impl fastn_unresolved::Module {
 }
 
 impl fastn_unresolved::Arena {
-    pub fn new_scope(&mut self, name: &str) -> fastn_unresolved::SFId {
-        self.sfa.alloc(fastn_unresolved::ScopeFrame {
-            name: name.to_string(),
-            bag: Default::default(),
-        })
+    pub fn new_aliases(&mut self) -> fastn_unresolved::AliasesID {
+        self.aliases.alloc(fastn_unresolved::Aliases::default())
     }
 }

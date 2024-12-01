@@ -10,6 +10,7 @@ homepage.workspace = true
 
 [features]
 owned-tdoc = ["fastn-resolved/owned-tdoc"]
+default = ["owned-tdoc"]
 
 [dependencies]
 fastn-js.workspace = true

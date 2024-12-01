@@ -1,7 +1,7 @@
 impl fastn_unresolved::ComponentInvocation {
     pub fn resolve(
         &mut self,
-        definitions: &std::collections::HashMap<fastn_unresolved::Symbol, fastn_unresolved::URD>,
+        definitions: &std::collections::HashMap<String, fastn_unresolved::URD>,
         arena: &mut fastn_unresolved::Arena,
         output: &mut fastn_unresolved::resolver::Output,
     ) {
@@ -33,13 +33,13 @@ impl fastn_unresolved::ComponentInvocation {
 }
 
 pub fn get_component<'a>(
-    definitions: &'a std::collections::HashMap<fastn_unresolved::Symbol, fastn_unresolved::URD>,
+    definitions: &'a std::collections::HashMap<String, fastn_unresolved::URD>,
     arena: &fastn_unresolved::Arena,
     symbol: &fastn_unresolved::Symbol,
 ) -> Option<&'a fastn_resolved::ComponentDefinition> {
     println!("looking for: {}", symbol.str(arena));
     if let Some(fastn_unresolved::UR::Resolved(fastn_resolved::Definition::Component(v))) =
-        definitions.get(symbol)
+        definitions.get(symbol.str(arena))
     {
         println!("found in definitions");
         return Some(v);

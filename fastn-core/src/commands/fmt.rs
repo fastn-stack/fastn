@@ -252,11 +252,7 @@ fn section(input: &mut String) -> Option<Section> {
         if !trimmed_line.is_empty() {
             trimmed_line = format!(
                 "{}{}",
-                " ".repeat(if current_leading_spaces_count > leading_spaces_count {
-                    current_leading_spaces_count - leading_spaces_count
-                } else {
-                    0
-                }),
+                " ".repeat(current_leading_spaces_count.saturating_sub(leading_spaces_count)),
                 trimmed_line.trim()
             );
         }

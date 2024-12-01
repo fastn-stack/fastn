@@ -292,7 +292,7 @@ pub struct Timer<'a> {
     msg: &'a str,
 }
 
-impl<'a> Timer<'a> {
+impl Timer<'_> {
     pub fn it<T>(&self, a: T) -> T {
         use colored::Colorize;
 
