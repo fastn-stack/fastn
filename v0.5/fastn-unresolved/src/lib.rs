@@ -13,7 +13,6 @@ mod utils;
 #[cfg(test)]
 pub(crate) use debug::JIDebug;
 pub use parser::parse;
-use std::num::NonZeroU16;
 
 pub type URD = fastn_unresolved::UR<fastn_unresolved::Definition, fastn_resolved::Definition>;
 pub type URCI = fastn_unresolved::UR<
@@ -21,12 +20,13 @@ pub type URCI = fastn_unresolved::UR<
     fastn_resolved::ComponentInvocation,
 >;
 pub type URIS = fastn_unresolved::UR<fastn_section::IdentifierReference, fastn_unresolved::Symbol>;
-
-pub type Bag = std::collections::HashMap<fastn_unresolved::Symbol, fastn_unresolved::URD>;
+pub type Aliases = std::collections::HashMap<String, String>;
+pub type AliasesID = id_arena::Id<Aliases>;
 
 #[derive(Default)]
 pub struct Arena {
     pub interner: string_interner::DefaultStringInterner,
+    pub aliases: id_arena::Arena<Aliases>,
 }
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
@@ -35,9 +35,9 @@ pub struct Symbol {
     /// this store the <package>/<module>#<name> of the symbol
     interned: string_interner::DefaultSymbol, // u32
     /// length of the <package> part of the symbol
-    package_len: NonZeroU16,
+    package_len: std::num::NonZeroU16,
     /// length of the <module> part of the symbol
-    module_len: Option<NonZeroU16>,
+    module_len: Option<std::num::NonZeroU16>,
 }
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
@@ -46,11 +46,12 @@ pub struct Module {
     /// this store the <package>/<module>#<name> of the symbol
     interned: string_interner::DefaultSymbol, // u32
     /// length of the <package> part of the symbol
-    package_len: NonZeroU16,
+    package_len: std::num::NonZeroU16,
 }
 
 #[derive(Debug, Clone)]
 pub struct Document {
+    pub aliases: AliasesID,
     pub module: fastn_unresolved::Module,
     pub module_doc: Option<fastn_section::Span>,
     pub definitions: Vec<URD>,
@@ -63,6 +64,7 @@ pub struct Document {
 
 #[derive(Debug, Clone)]
 pub struct Definition {
+    pub aliases: AliasesID,
     pub symbol: Option<fastn_unresolved::Symbol>, // <package-name>/<module-name>#<definition-name>
     /// we will keep the builtins not as ScopeFrame, but as plain hashmap.
     /// we have two scopes at this level, the auto-imports, and scope of all symbols explicitly

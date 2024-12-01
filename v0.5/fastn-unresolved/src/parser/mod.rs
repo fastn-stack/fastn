@@ -6,12 +6,12 @@ pub fn parse(
     module: fastn_unresolved::Module,
     source: &str,
     arena: &mut fastn_unresolved::Arena,
-    // auto_imports: fastn_unresolved::SFId,
+    auto_imports: fastn_unresolved::AliasesID,
 ) -> fastn_unresolved::Document {
     let (mut document, sections) = fastn_unresolved::Document::new(
         module,
         fastn_section::Document::parse(&arcstr::ArcStr::from(source)),
-        // auto_imports,
+        auto_imports,
     );
 
     // todo: first go through just the imports and desugar them
@@ -72,6 +72,7 @@ where
     let (mut document, sections) = fastn_unresolved::Document::new(
         module,
         fastn_section::Document::parse(&arcstr::ArcStr::from(source)),
+        arena.new_aliases(),
     );
 
     let section = {

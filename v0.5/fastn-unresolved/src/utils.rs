@@ -1,14 +1,13 @@
-use std::num::NonZeroU16;
-
 impl fastn_unresolved::Document {
     pub(crate) fn new(
         module: fastn_unresolved::Module,
         document: fastn_section::Document,
-        // auto_import_scope: fastn_unresolved::SFId,
+        auto_imports: fastn_unresolved::AliasesID,
     ) -> (fastn_unresolved::Document, Vec<fastn_section::Section>) {
         (
             fastn_unresolved::Document {
                 module,
+                aliases: auto_imports,
                 module_doc: document.module_doc,
                 definitions: vec![],
                 content: vec![],
@@ -32,7 +31,10 @@ impl fastn_unresolved::Document {
         self.comments.extend(comments);
     }
 
-    pub(crate) fn add_definitions_to_scope(&mut self, _arena: &mut fastn_unresolved::Arena) {}
+    pub(crate) fn add_definitions_to_scope(&mut self, _arena: &mut fastn_unresolved::Arena) {
+        // this takes id auto imports in self.aliases, and creates a new Aliases with imports
+        // merged into it, and updates the self.aliases to point to that
+    }
 }
 
 impl fastn_unresolved::ComponentInvocation {
@@ -148,8 +150,8 @@ impl fastn_unresolved::Symbol {
             None => format!("{package}#{name}"),
         };
         fastn_unresolved::Symbol {
-            package_len: NonZeroU16::new(package.len() as u16).unwrap(),
-            module_len: module.map(|v| NonZeroU16::new(v.len() as u16).unwrap()),
+            package_len: std::num::NonZeroU16::new(package.len() as u16).unwrap(),
+            module_len: module.map(|v| std::num::NonZeroU16::new(v.len() as u16).unwrap()),
             interned: arena.interner.get_or_intern(v),
         }
     }
@@ -203,7 +205,7 @@ impl fastn_unresolved::Module {
             Some(module) => format!("{package}/{module}"),
         };
         fastn_unresolved::Module {
-            package_len: NonZeroU16::new(package.len() as u16).unwrap(),
+            package_len: std::num::NonZeroU16::new(package.len() as u16).unwrap(),
             interned: arena.interner.get_or_intern(v),
         }
     }
@@ -229,7 +231,7 @@ impl fastn_unresolved::Module {
             let len = arena.interner.resolve(self.interned).unwrap().len() as u16
                 - self.package_len.get();
             if len > 0 {
-                Some(NonZeroU16::new(len).unwrap())
+                Some(std::num::NonZeroU16::new(len).unwrap())
             } else {
                 None
             }
@@ -244,5 +246,11 @@ impl fastn_unresolved::Module {
             module_len,
             interned: arena.interner.get_or_intern(v),
         }
+    }
+}
+
+impl fastn_unresolved::Arena {
+    pub fn new_aliases(&mut self) -> fastn_unresolved::AliasesID {
+        self.aliases.alloc(fastn_unresolved::Aliases::default())
     }
 }

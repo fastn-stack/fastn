@@ -8,7 +8,7 @@ pub(crate) struct Compiler {
     /// checkout resolve_document for why this is an Option
     content: Option<Vec<fastn_unresolved::URCI>>,
     pub(crate) document: fastn_unresolved::Document,
-    // auto_import_scope: fastn_unresolved::SFId,
+    auto_imports: fastn_unresolved::AliasesID,
 }
 
 impl Compiler {
@@ -17,13 +17,14 @@ impl Compiler {
         source: &str,
         package: &str,
         module: Option<&str>,
-        // auto_import_scope: fastn_unresolved::SFId,
+        auto_imports: fastn_unresolved::AliasesID,
         mut arena: fastn_unresolved::Arena,
     ) -> Self {
         let mut document = fastn_unresolved::parse(
             fastn_unresolved::Module::new(package, module, &mut arena),
             source,
             &mut arena,
+            auto_imports,
         );
         let content = Some(document.content);
         document.content = vec![];
@@ -34,6 +35,7 @@ impl Compiler {
             definitions: std::collections::HashMap::new(),
             content,
             document,
+            auto_imports,
             definitions_used: Default::default(),
         }
     }
@@ -44,7 +46,10 @@ impl Compiler {
     ) {
         self.definitions_used
             .extend(symbols_to_fetch.iter().cloned());
-        let definitions = self.symbols.lookup(&mut self.arena, symbols_to_fetch).await;
+        let definitions = self
+            .symbols
+            .lookup(&mut self.arena, symbols_to_fetch, self.auto_imports)
+            .await;
         for definition in definitions {
             // the following is only okay if our symbol store only returns unresolved definitions,
             // some other store might return resolved definitions, and we need to handle that.
@@ -225,10 +230,10 @@ pub async fn compile(
     source: &str,
     package: &str,
     module: Option<&str>,
-    // auto_import_scope: fastn_unresolved::SFId,
+    auto_imports: fastn_unresolved::AliasesID,
     arena: fastn_unresolved::Arena,
 ) -> Result<fastn_resolved::CompiledDocument, fastn_compiler::Error> {
-    Compiler::new(symbols, source, package, module, arena)
+    Compiler::new(symbols, source, package, module, auto_imports, arena)
         .compile()
         .await
 }
