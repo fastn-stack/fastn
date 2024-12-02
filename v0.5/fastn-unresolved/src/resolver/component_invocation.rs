@@ -17,6 +17,7 @@ impl fastn_unresolved::ComponentInvocation {
             }
         }
 
+        println!("{:?}", self.name);
         fastn_unresolved::resolver::symbol(
             self.aliases,
             &self.module,
@@ -27,11 +28,19 @@ impl fastn_unresolved::ComponentInvocation {
             output,
             &[], // TODO
         );
+        println!("{:?}", self.name);
 
         let name = match self.name {
             fastn_unresolved::UR::Resolved(ref name) => name,
             // in case of error or not found, nothing left to do
-            _ => return,
+            fastn_unresolved::UR::UnResolved(_) => {
+                return;
+            }
+            // TODO: handle errors
+            ref t => {
+                println!("{t:?}");
+                todo!()
+            }
         };
 
         let _component = match get_component(definitions, arena, name) {
@@ -46,7 +55,7 @@ impl fastn_unresolved::ComponentInvocation {
             }
         };
 
-        todo!()
+        // todo!()
     }
 }
 

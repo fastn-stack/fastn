@@ -106,9 +106,9 @@ pub fn symbol(
         }
         None => {
             if fastn_builtins::builtins().contains_key(target_symbol_key) {
-                *name = fastn_unresolved::UR::Invalid(fastn_section::Error::InvalidIdentifier);
+                *name = fastn_unresolved::UR::Resolved(target_symbol);
             } else {
-                todo!()
+                *name = fastn_unresolved::UR::Invalid(fastn_section::Error::InvalidIdentifier);
             }
         }
     }
