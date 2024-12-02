@@ -71,9 +71,9 @@ pub fn symbol(
                     todo!()
                 }
                 None => {
-                    // there are two case where this is valid.
-                    // a, if the module was defined in the current module using the `-- module foo:`
-                    // syntax, which we currently do not support
+                    // there are two cases where this is valid.
+                    // a, if the module was defined in the current module using the future
+                    // `-- module foo: ` syntax.
                     // b, this is a foo.bar case, where foo is the name of component, and we have
                     // to look for bar in the arguments.
                     //

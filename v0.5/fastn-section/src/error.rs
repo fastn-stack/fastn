@@ -25,6 +25,7 @@ pub enum Error {
     ComponentIsNotAFunction,
     SymbolNotFound,
     InvalidIdentifier,
+    UnexpectedCaption,
     // SectionNotFound(&'a str),
     // MoreThanOneCaption,
     // ParseError,
