@@ -43,7 +43,7 @@ impl fastn_unresolved::ComponentInvocation {
             }
         };
 
-        let _component = match get_component(definitions, arena, name) {
+        let component = match get_component(definitions, arena, name) {
             Some(fastn_unresolved::UR::Resolved(component)) => component,
             Some(fastn_unresolved::UR::UnResolved(_)) => {
                 output.stuck_on.insert(name.clone());
@@ -55,7 +55,17 @@ impl fastn_unresolved::ComponentInvocation {
             }
         };
 
-        // todo!()
+        fastn_unresolved::resolver::arguments(
+            &component.arguments,
+            &mut self.caption,
+            &mut self.properties,
+            &mut self.body,
+            &self.children,
+            definitions,
+            modules,
+            arena,
+            output,
+        )
     }
 }
 

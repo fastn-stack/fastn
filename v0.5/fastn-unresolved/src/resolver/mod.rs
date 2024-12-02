@@ -5,10 +5,12 @@
 //!
 //! so that we can add methods on `fastn_unresolved::ComponentInvocations` etc.
 
+mod arguments;
 mod component_invocation;
 mod definition;
 mod symbol;
 
+use arguments::arguments;
 use symbol::symbol;
 
 #[derive(Debug, Default)]
