@@ -717,7 +717,7 @@ pub(crate) fn insert_module_thing(
         things,
         name: module_name,
     } = arg
-        .value
+        .default
         .as_mut()
         .ok_or(ftd::interpreter::Error::ValueNotFound {
             doc_id: doc.name.to_string(),
@@ -829,7 +829,7 @@ pub(crate) fn validate_properties_and_set_default(
 
         if argument.kind.is_module() {
             let (_default_module, arg_things) = match argument
-                .value
+                .default
                 .as_ref()
                 .unwrap()
                 .value(doc_id, line_number)?
@@ -854,7 +854,7 @@ pub(crate) fn validate_properties_and_set_default(
         }
     }
     if found_default.is_none() {
-        if let Some(ref default_value) = argument.value {
+        if let Some(ref default_value) = argument.default {
             properties.push(fastn_resolved::Property {
                 value: default_value.to_owned(),
                 source: fastn_resolved::PropertySource::Default,

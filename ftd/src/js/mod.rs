@@ -129,7 +129,7 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
         } else if let ftd::interpreter::Thing::OrType(ot) = thing {
             let mut fields = vec![];
             for variant in &ot.variants {
-                if let Some(value) = &variant.clone().fields().get(0).unwrap().value {
+                if let Some(value) = &variant.clone().fields().get(0).unwrap().default {
                     fields.push((
                         variant
                             .name()

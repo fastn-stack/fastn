@@ -854,18 +854,16 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                         }
 
                         let constant = or_type_variant.ok_constant(doc.name)?;
-                        let value =
-                            constant
-                                .value
-                                .clone()
-                                .ok_or(ftd::interpreter::Error::ParseError {
-                                    message: format!(
-                                        "Expected value for constant variant `{}`",
-                                        constant.name
-                                    ),
-                                    doc_id: doc.name.to_string(),
-                                    line_number: constant.line_number,
-                                })?;
+                        let value = constant.default.clone().ok_or(
+                            ftd::interpreter::Error::ParseError {
+                                message: format!(
+                                    "Expected value for constant variant `{}`",
+                                    constant.name
+                                ),
+                                doc_id: doc.name.to_string(),
+                                line_number: constant.line_number,
+                            },
+                        )?;
 
                         ftd::interpreter::StateWithThing::new_thing(
                             fastn_resolved::Value::new_or_type(
@@ -1021,8 +1019,8 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                 continue;
             }
 
-            if headers.is_none() && field.value.is_some() {
-                let value = field.value.as_ref().unwrap();
+            if headers.is_none() && field.default.is_some() {
+                let value = field.default.as_ref().unwrap();
                 match value {
                     fastn_resolved::PropertyValue::Reference {
                         name: refernence,

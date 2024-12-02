@@ -631,7 +631,6 @@ impl<'a> TDoc<'a> {
                     ),
                     ftd::interpreter::Thing::Function(f) => (f.return_kind, false),
                     ftd::interpreter::Thing::Export { .. } => unreachable!(),
-                    ftd::interpreter::Thing::Module { .. } => todo!(),
                 };
 
                 (

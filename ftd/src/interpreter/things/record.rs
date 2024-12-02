@@ -288,7 +288,7 @@ impl FieldExt for fastn_resolved::Field {
                 None
             };
 
-            field.value = value;
+            field.default = value;
         }
         let resolved_fields = fields_with_resolved_kinds
             .into_iter()
@@ -368,7 +368,7 @@ impl FieldExt for fastn_resolved::Field {
                 name: field.name.to_string(),
                 kind,
                 mutable: field.mutable,
-                value,
+                default: value,
                 line_number: field.line_number,
                 access_modifier: access_modifier(field.access_modifier),
             },
@@ -396,7 +396,7 @@ impl FieldExt for fastn_resolved::Field {
                 name: field.name.to_string(),
                 kind,
                 mutable: field.mutable,
-                value: None,
+                default: None,
                 line_number: field.line_number,
                 access_modifier: access_modifier(field.access_modifier),
             },

@@ -324,7 +324,7 @@ fn get_module_name_and_thing(
     use ftd::interpreter::{PropertyValueExt, ValueExt};
 
     let default_things = {
-        let value = if let Some(ref value) = component_argument.value {
+        let value = if let Some(ref value) = component_argument.default {
             value.clone().resolve(doc, module_property.line_number)?
         } else {
             return ftd::interpreter::utils::e2(
@@ -353,7 +353,7 @@ fn get_module_name_and_thing(
                 module_property.line_number,
             )?
         {
-            if let Some(ref mut property_value) = argument.value {
+            if let Some(ref mut property_value) = argument.default {
                 if let fastn_resolved::PropertyValue::Value { value, .. } = property_value {
                     if let Some((name, thing)) = value.mut_module_optional() {
                         thing.extend(default_things);
@@ -1406,7 +1406,7 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
                     if arg.kind.is_module() {
                         let component_name = {
                             let (m_name, _) = match arg
-                                .value
+                                .default
                                 .as_ref()
                                 .unwrap()
                                 .clone()
@@ -1541,7 +1541,7 @@ impl LoopExt for fastn_resolved::Loop {
             name: self.alias.to_string(),
             kind: fastn_resolved::KindData::new(kind),
             mutable: self.on.is_mutable(),
-            value: Some(self.on.to_owned()),
+            default: Some(self.on.to_owned()),
             line_number: self.on.line_number(),
             access_modifier: Default::default(),
         })

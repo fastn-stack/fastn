@@ -253,7 +253,7 @@ impl ExecuteDoc<'_> {
                     is_mutable: argument.mutable,
                     line_number: instruction.line_number,
                 }
-            } else if let Some(ref value) = argument.value {
+            } else if let Some(ref value) = argument.default {
                 value.to_owned()
             } else {
                 unreachable!()

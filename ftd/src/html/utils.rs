@@ -519,7 +519,7 @@ pub(crate) fn to_argument_string(
     let mut properties_string = "".to_string();
     for argument in arguments {
         let mut result_value = "null".to_string();
-        if let Some(ref value) = argument.value {
+        if let Some(ref value) = argument.default {
             if let Ok(Some(value_string)) =
                 ftd::html::utils::get_formatted_dep_string_from_property_value(
                     id, doc, value, &None, None, false,

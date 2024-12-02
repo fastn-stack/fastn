@@ -21,19 +21,32 @@ pub fn arguments(
 
 fn caption_or_body(
     v: &mut fastn_unresolved::UR<Option<fastn_section::HeaderValue>, ()>,
-    _is_caption: bool,
+    is_caption: bool,
     arguments: &[fastn_resolved::Argument],
 ) {
     if let fastn_unresolved::UR::UnResolved(None) = v {
-        *v = fastn_unresolved::UR::Resolved(())
+        *v = fastn_unresolved::UR::Resolved(());
+        return;
     }
-    if let fastn_unresolved::UR::UnResolved(Some(_v)) = v {
-        // see if any of the arguments are of type caption.
+
+    let _argument = if let fastn_unresolved::UR::UnResolved(Some(_v)) = v {
+        // see if any of the arguments are of type caption or body
         // assume there is only one such argument, because otherwise arguments would have failed
         // to resolve
-        match arguments.iter().find(|v| v.is_caption()) {
-            Some(_v) => todo!(),
-            None => *v = fastn_unresolved::UR::Invalid(fastn_section::Error::UnexpectedCaption),
+        match arguments.iter().find(|v| {
+            if is_caption {
+                v.is_caption()
+            } else {
+                v.is_body()
+            }
+        }) {
+            Some(v) => v,
+            None => {
+                *v = fastn_unresolved::UR::Invalid(fastn_section::Error::UnexpectedCaption);
+                return;
+            }
         }
-    }
+    } else {
+        return;
+    };
 }

@@ -19,7 +19,7 @@ pub struct Field {
     pub name: String,
     pub kind: fastn_resolved::KindData,
     pub mutable: bool,
-    pub value: Option<fastn_resolved::PropertyValue>,
+    pub default: Option<fastn_resolved::PropertyValue>,
     pub line_number: usize,
     pub access_modifier: AccessModifier,
 }
@@ -36,7 +36,7 @@ impl Field {
             name: name.to_string(),
             kind,
             mutable,
-            value,
+            default: value,
             line_number,
             access_modifier: Default::default(),
         }
@@ -67,7 +67,7 @@ impl Field {
             name: name.to_string(),
             kind,
             mutable: false,
-            value: None,
+            default: None,
             line_number: 0,
             access_modifier: Default::default(),
         }
@@ -82,7 +82,7 @@ impl Field {
             name: name.to_string(),
             kind,
             mutable: false,
-            value: Some(value),
+            default: Some(value),
             line_number: 0,
             access_modifier: Default::default(),
         }
@@ -104,7 +104,7 @@ impl Field {
         if self.kind.is_optional() || self.kind.is_list() {
             return false;
         }
-        self.value.is_none()
+        self.default.is_none()
     }
 }
 
