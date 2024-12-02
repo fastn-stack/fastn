@@ -182,7 +182,7 @@ pub struct ComponentInvocation {
     pub caption: UR<Option<fastn_section::HeaderValue>, ()>,
     pub properties: Vec<UR<Property, fastn_resolved::Property>>,
     /// once the body is resolved, it is set to () here, and moved to properties
-    pub body: UR<Vec<fastn_section::Tes>, ()>,
+    pub body: UR<Option<fastn_section::HeaderValue>, ()>,
     pub children: Vec<UR<ComponentInvocation, fastn_resolved::ComponentInvocation>>,
 }
 

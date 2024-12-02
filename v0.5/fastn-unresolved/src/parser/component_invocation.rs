@@ -16,9 +16,9 @@ pub(super) fn component_invocation(
             module: document.module.clone(),
             name: fastn_unresolved::UR::UnResolved(section.init.name.clone()),
             caption: section.caption.into(),
-            properties: vec![],  // todo
-            body: vec![].into(), // todo
-            children: vec![],    // todo
+            properties: vec![],                           // todo
+            body: fastn_unresolved::UR::UnResolved(None), // todo
+            children: vec![],                             // todo
         }
         .into(),
     )
