@@ -202,8 +202,6 @@ mod tests {
                 .into(),
             );
 
-            dbg!(&self);
-
             if let Some(ref v) = self.export {
                 o.insert("export".into(), v.idebug(arena));
             }

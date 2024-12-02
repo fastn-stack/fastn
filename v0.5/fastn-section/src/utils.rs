@@ -176,7 +176,7 @@ impl fastn_section::IdentifierReference {
         let span = match self {
             fastn_section::IdentifierReference::Local(ref name) => name.clone(),
             // TODO: this is wrong, we should coalesce the spans.
-            fastn_section::IdentifierReference::Absolute { module, .. } => module.clone(),
+            fastn_section::IdentifierReference::Absolute { package, .. } => package.clone(),
             // TODO: this is wrong, we should coalesce the spans.
             fastn_section::IdentifierReference::Imported { module, .. } => module.clone(),
         };
@@ -199,13 +199,10 @@ impl std::fmt::Display for fastn_section::IdentifierReference {
                 package,
                 module,
                 name,
-            } => {
-                if module.str().is_empty() {
-                    format!("{}#{}", package.str(), name.str())
-                } else {
-                    format!("{}/{}#{}", package.str(), module.str(), name.str())
-                }
-            }
+            } => match module {
+                Some(module) => format!("{}/{}#{}", package.str(), module.str(), name.str()),
+                None => format!("{}#{}", package.str(), name.str()),
+            },
             fastn_section::IdentifierReference::Imported { module, name } => {
                 format!("{}.{}", module.str(), name.str())
             }

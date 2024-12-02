@@ -39,7 +39,12 @@ pub fn symbol(
             // if it is not in unresolved-state, or if it is missing in definitions, we add "bar#x"
             // to output.stuck_on.
             // if it is in error state, or not found state, we resolve ourselves as them.
-            fastn_unresolved::Symbol::new(package.str(), Some(module.str()), name.str(), arena)
+            fastn_unresolved::Symbol::new(
+                package.str(),
+                module.as_ref().map(|v| v.str()),
+                name.str(),
+                arena,
+            )
         }
         fastn_section::IdentifierReference::Local(name) => {
             // we combine the name with current_module to create the target symbol.
@@ -81,7 +86,9 @@ pub fn symbol(
         }
     };
 
-    match definitions.get(target_symbol.str(arena)) {
+    let target_symbol_key = target_symbol.str(arena);
+
+    match definitions.get(target_symbol_key) {
         Some(fastn_unresolved::UR::UnResolved(_)) => {
             output.stuck_on.insert(target_symbol);
         }
@@ -98,7 +105,11 @@ pub fn symbol(
             *name = fastn_unresolved::UR::Resolved(target_symbol);
         }
         None => {
-            todo!()
+            if fastn_builtins::builtins().contains_key(target_symbol_key) {
+                *name = fastn_unresolved::UR::Invalid(fastn_section::Error::InvalidIdentifier);
+            } else {
+                todo!()
+            }
         }
     }
 }

@@ -84,7 +84,7 @@ pub enum IdentifierReference {
     Absolute {
         // -- foo#bar:
         package: fastn_section::Span,
-        module: fastn_section::Span,
+        module: Option<fastn_section::Span>,
         name: fastn_section::Span,
     },
 }

@@ -27,11 +27,14 @@ fn from_span(
 ) -> Result<fastn_section::IdentifierReference, fastn_section::Error> {
     if let Some((module, name)) = span.str().split_once("#") {
         validate_name(name)?;
-
         let (package, module) = module.split_once("/").unwrap_or((module, ""));
         return Ok(fastn_section::IdentifierReference::Absolute {
             package: span.inner_str(package),
-            module: span.inner_str(module),
+            module: if module.is_empty() {
+                None
+            } else {
+                Some(span.inner_str(module))
+            },
             name: span.inner_str(name),
         });
     }
