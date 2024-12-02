@@ -28,15 +28,25 @@ impl fastn_unresolved::ComponentInvocation {
             &[], // TODO
         );
 
-        let _component = match self.name {
-            fastn_unresolved::UR::Resolved(ref name) => {
-                get_component(definitions, arena, name).unwrap()
-            }
+        let name = match self.name {
+            fastn_unresolved::UR::Resolved(ref name) => name,
             // in case of error or not found, nothing left to do
             _ => return,
         };
 
-        // dbg!(component);
+        let _component = match get_component(definitions, arena, name) {
+            Some(fastn_unresolved::UR::Resolved(component)) => component,
+            Some(fastn_unresolved::UR::UnResolved(_)) => {
+                output.stuck_on.insert(name.clone());
+                return;
+            }
+            Some(_) | None => {
+                // handle error
+                todo!()
+            }
+        };
+
+        todo!()
     }
 }
 
@@ -44,19 +54,25 @@ pub fn get_component<'a>(
     definitions: &'a std::collections::HashMap<String, fastn_unresolved::URD>,
     arena: &fastn_unresolved::Arena,
     symbol: &fastn_unresolved::Symbol,
-) -> Option<&'a fastn_resolved::ComponentDefinition> {
+) -> Option<
+    fastn_unresolved::UR<&'a fastn_unresolved::Definition, &'a fastn_resolved::ComponentDefinition>,
+> {
     println!("looking for: {}", symbol.str(arena));
-    if let Some(fastn_unresolved::UR::Resolved(fastn_resolved::Definition::Component(v))) =
-        definitions.get(symbol.str(arena))
-    {
-        println!("found in definitions");
-        return Some(v);
+    match definitions.get(symbol.str(arena)) {
+        Some(fastn_unresolved::UR::Resolved(fastn_resolved::Definition::Component(v))) => {
+            return Some(fastn_unresolved::UR::Resolved(v))
+        }
+        Some(fastn_unresolved::UR::UnResolved(v)) => {
+            return Some(fastn_unresolved::UR::UnResolved(v))
+        }
+        Some(_) | None => {}
     }
+
     if let Some(fastn_resolved::Definition::Component(v)) =
         fastn_builtins::builtins().get(symbol.str(arena))
     {
         println!("found in builtins");
-        return Some(v);
+        return Some(fastn_unresolved::UR::Resolved(v));
     }
     println!("not found");
     None
