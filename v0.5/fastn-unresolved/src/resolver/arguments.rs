@@ -29,7 +29,7 @@ fn caption_or_body(
         return;
     }
 
-    let _argument = if let fastn_unresolved::UR::UnResolved(Some(_v)) = v {
+    let (argument, inner_v) = if let fastn_unresolved::UR::UnResolved(Some(inner_v)) = v {
         // see if any of the arguments are of type caption or body
         // assume there is only one such argument, because otherwise arguments would have failed
         // to resolve
@@ -40,7 +40,7 @@ fn caption_or_body(
                 v.is_body()
             }
         }) {
-            Some(v) => v,
+            Some(a) => (a, inner_v),
             None => {
                 *v = fastn_unresolved::UR::Invalid(fastn_section::Error::UnexpectedCaption);
                 return;
@@ -49,4 +49,22 @@ fn caption_or_body(
     } else {
         return;
     };
+
+    match crate::resolver::arguments::argument(argument, inner_v) {
+        Ok(Some(_p)) => {
+            todo!()
+            // *v = fastn_unresolved::UR::Resolved(p)
+        }
+        Ok(None) => {
+            todo!()
+        }
+        Err(e) => *v = fastn_unresolved::UR::Invalid(e),
+    }
+}
+
+fn argument(
+    _argument: &fastn_resolved::Argument,
+    _value: &fastn_section::HeaderValue,
+) -> Result<Option<fastn_resolved::Property>, fastn_section::Error> {
+    todo!()
 }

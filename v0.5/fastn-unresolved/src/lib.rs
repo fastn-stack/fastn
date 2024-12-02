@@ -189,7 +189,7 @@ pub struct ComponentInvocation {
 #[derive(Debug, Clone, PartialEq)]
 pub struct Property {
     pub name: fastn_section::Identifier,
-    pub value: Vec<fastn_section::Tes>,
+    pub value: fastn_section::HeaderValue,
 }
 
 #[derive(Debug, Clone, PartialEq)]
