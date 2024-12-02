@@ -258,4 +258,14 @@ impl fastn_unresolved::Arena {
     pub fn new_aliases(&mut self) -> fastn_unresolved::AliasesID {
         self.aliases.alloc(fastn_unresolved::Aliases::default())
     }
+    pub fn module_alias(
+        &self,
+        aid: fastn_unresolved::AliasesID,
+        module: &str,
+    ) -> Option<fastn_unresolved::SoM> {
+        self.aliases
+            .get(aid)
+            .and_then(|v| v.get(module))
+            .map(|v| v.to_owned())
+    }
 }

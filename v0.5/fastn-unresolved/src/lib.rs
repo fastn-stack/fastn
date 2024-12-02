@@ -49,6 +49,7 @@ pub struct Module {
     package_len: std::num::NonZeroU16,
 }
 
+#[derive(Clone)]
 pub enum SoM {
     Symbol(Symbol),
     Module(Module),

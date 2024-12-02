@@ -65,8 +65,6 @@ impl fastn_unresolved::JIDebug for fastn_unresolved::InnerDefinition {
             crate::InnerDefinition::Component { .. } => todo!(),
             crate::InnerDefinition::Variable { .. } => todo!(),
             crate::InnerDefinition::Record { .. } => todo!(),
-            crate::InnerDefinition::SymbolAlias { .. } => todo!(),
-            crate::InnerDefinition::ModuleAlias { .. } => todo!(),
         }
     }
 }

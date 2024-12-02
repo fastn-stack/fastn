@@ -5,6 +5,7 @@
 /// e.g., inside a function we can have block containing blocks, and each block may have defined
 /// some variables, each such nested block is passed as locals,
 /// with the innermost block as the last entry.
+#[allow(clippy::too_many_arguments)]
 pub fn symbol(
     aid: fastn_unresolved::AliasesID,
     // foo.ftd (current_module = foo, package = foo, module = "")
@@ -15,9 +16,9 @@ pub fn symbol(
     // S3_name="bar#x"
     name: &mut fastn_unresolved::URIS,
     definitions: &std::collections::HashMap<String, fastn_unresolved::URD>,
-    modules: &std::collections::HashMap<fastn_unresolved::Module, bool>,
+    _modules: &std::collections::HashMap<fastn_unresolved::Module, bool>,
     arena: &mut fastn_unresolved::Arena,
-    _output: &mut fastn_unresolved::resolver::Output,
+    output: &mut fastn_unresolved::resolver::Output,
     _locals: &[Vec<fastn_unresolved::UR<fastn_unresolved::Argument, fastn_resolved::Argument>>],
 ) {
     let inner_name = if let fastn_unresolved::UR::UnResolved(name) = name {
@@ -47,7 +48,7 @@ pub fn symbol(
             match arena.aliases.get(aid).and_then(|v| v.get(name.str())) {
                 Some(fastn_unresolved::SoM::Symbol(s)) => s.clone(),
                 Some(fastn_unresolved::SoM::Module(_)) => {
-                    // report an error, resolve always resolves
+                    // report an error, this function always resolves a symbol
                     todo!()
                 }
                 None => current_module.symbol(name.str(), arena),
@@ -57,43 +58,47 @@ pub fn symbol(
             module,
             name: dotted_name,
         } => {
-            let target_symbol = current_module.symbol(module.str(), arena);
-            // current module is foo.ftd
-            // it has -- import: bar at the top
-            // the value of module and name is "bar" and "x" respectively
-            // current_module.symbol(module) should be a module alias, we should get the target
-            // module from the module alias.
-            // we combine the target module with the name, "x" to get the target symbol.
-            match definitions.get(target_symbol.str(arena)) {
-                // Some(fastn_unresolved::UR::Resolved(fastn_resolved::Definition::Module {
-                //     package,
-                //     module,
-                //     ..
-                // })) => {
-                //     // what we stored in resolved place, no further action is required.
-                //     *name = fastn_unresolved::UR::Resolved(fastn_unresolved::Symbol::new(
-                //         package,
-                //         module.as_deref(),
-                //         dotted_name.str(),
-                //         arena,
-                //     ));
-                //     return;
-                // }
-                // Some(fastn_unresolved::UR::UnResolved(_)) => {
-                //     output.stuck_on.insert(target_symbol);
-                //     return;
-                // }
-                // Some(fastn_unresolved::UR::NotFound) => {
-                //     *name = fastn_unresolved::UR::Invalid(fastn_section::Error::InvalidIdentifier);
-                //     return;
-                // }
-                _ => {
-                    // we have
+            let o = arena.module_alias(aid, module.str());
+            match o {
+                Some(fastn_unresolved::SoM::Module(m)) => m.symbol(dotted_name.str(), arena),
+                Some(fastn_unresolved::SoM::Symbol(_s)) => {
+                    // report an error, this function always resolves a symbol
+                    todo!()
+                }
+                None => {
+                    // there are two case where this is valid.
+                    // a, if the module was defined in the current module using the `-- module foo:`
+                    // syntax, which we currently do not support
+                    // b, this is a foo.bar case, where foo is the name of component, and we have
+                    // to look for bar in the arguments.
+                    //
+                    // note that in case of b, if the argument type was a module, we may have more
+                    // than one dots present in the dotted_name, and we will have to parse it
+                    // appropriately
                     todo!()
                 }
             }
         }
     };
 
-    *name = fastn_unresolved::UR::Resolved(target_symbol);
+    match definitions.get(target_symbol.str(arena)) {
+        Some(fastn_unresolved::UR::UnResolved(_)) => {
+            output.stuck_on.insert(target_symbol);
+        }
+        Some(fastn_unresolved::UR::NotFound) => {
+            *name = fastn_unresolved::UR::Invalid(fastn_section::Error::InvalidIdentifier);
+        }
+        Some(fastn_unresolved::UR::Invalid(_)) => {
+            todo!()
+        }
+        Some(fastn_unresolved::UR::InvalidN(_)) => {
+            todo!()
+        }
+        Some(fastn_unresolved::UR::Resolved(_)) => {
+            *name = fastn_unresolved::UR::Resolved(target_symbol);
+        }
+        None => {
+            todo!()
+        }
+    }
 }
