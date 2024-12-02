@@ -9,6 +9,8 @@ mod component_invocation;
 mod definition;
 mod symbol;
 
+use symbol::symbol;
+
 #[derive(Debug, Default)]
 pub struct Output {
     pub stuck_on: std::collections::HashSet<fastn_unresolved::Symbol>,

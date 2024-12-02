@@ -73,14 +73,16 @@ pub struct Identifier {
 #[derive(Debug, Clone, PartialEq)]
 pub enum IdentifierReference {
     // foo
-    Local(fastn_section::Span),
+    Local(fastn_section::Span), // -- foo:
     // bar.foo: module = bar, name: foo
     Imported {
+        // -- foo.bar: (foo/bar#bar)
         module: fastn_section::Span,
         name: fastn_section::Span,
     },
     // bar#foo: component using the absolute path.
     Absolute {
+        // -- foo#bar:
         package: fastn_section::Span,
         module: fastn_section::Span,
         name: fastn_section::Span,

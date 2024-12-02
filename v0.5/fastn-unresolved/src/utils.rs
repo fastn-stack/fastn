@@ -172,10 +172,8 @@ impl fastn_unresolved::Symbol {
     }
 
     pub fn base<'a>(&self, arena: &'a fastn_unresolved::Arena) -> &'a str {
-        &self.str(
-            arena[..self.package_len.get() as usize
-                + self.module_len.map(|v| v.get() + 1).unwrap_or(0) as usize],
-        )
+        &self.str(arena)[..self.package_len.get() as usize
+            + self.module_len.map(|v| v.get() + 1).unwrap_or(0) as usize]
     }
 
     pub fn string(&self, arena: &fastn_unresolved::Arena) -> String {

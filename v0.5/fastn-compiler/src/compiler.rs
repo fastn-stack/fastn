@@ -1,10 +1,18 @@
 const ITERATION_THRESHOLD: usize = 100;
-
+// foo.ftd
+// -- import: foo as f (f => foo)
+//
+// -- import: bar      (bar => Module<bar>, x => Symbol<bar.y>) (bar => bar, x => bar.y)
+// exposing: y as x
+//
 pub(crate) struct Compiler {
     symbols: Box<dyn fastn_compiler::SymbolStore>,
     pub(crate) definitions_used: std::collections::HashSet<fastn_unresolved::Symbol>,
     pub(crate) arena: fastn_unresolved::Arena,
     pub(crate) definitions: std::collections::HashMap<String, fastn_unresolved::URD>,
+    /// we keep track of every module found (or not found), if not in dict we don't know
+    /// if module exists, if in dict bool tells if it exists.
+    pub(crate) modules: std::collections::HashMap<fastn_unresolved::Module, bool>,
     /// checkout resolve_document for why this is an Option
     content: Option<Vec<fastn_unresolved::URCI>>,
     pub(crate) document: fastn_unresolved::Document,
@@ -33,6 +41,7 @@ impl Compiler {
             symbols,
             arena,
             definitions: std::collections::HashMap::new(),
+            modules: std::collections::HashMap::new(),
             content,
             document,
             auto_imports,
@@ -94,7 +103,7 @@ impl Compiler {
             match definition.as_mut() {
                 Some(fastn_unresolved::UR::UnResolved(definition)) => {
                     let mut o = Default::default();
-                    definition.resolve(&self.definitions, &mut self.arena, &mut o);
+                    definition.resolve(&self.definitions, &self.modules, &mut self.arena, &mut o);
                     r.need_more_symbols.extend(o.stuck_on);
                     self.document.merge(o.errors, o.warnings, o.comments);
                 }
@@ -139,7 +148,12 @@ impl Compiler {
             match ci {
                 fastn_unresolved::UR::UnResolved(mut c) => {
                     let mut needed = Default::default();
-                    c.resolve(&self.definitions, &mut self.arena, &mut needed);
+                    c.resolve(
+                        &self.definitions,
+                        &self.modules,
+                        &mut self.arena,
+                        &mut needed,
+                    );
                     stuck_on_symbols.extend(needed.stuck_on);
                     self.document
                         .merge(needed.errors, needed.warnings, needed.comments);

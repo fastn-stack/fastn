@@ -22,7 +22,8 @@ fn desugar_auto_imports(
     _auto_imports: &[fastn_core::config::AutoImport],
 ) -> fastn_unresolved::AliasesID {
     let id = arena.new_aliases();
+    let ftd = fastn_unresolved::SoM::Module(fastn_unresolved::Module::new("ftd", None, arena));
     let aliases = arena.aliases.get_mut(id).unwrap();
-    aliases.insert("ftd".to_string(), "ftd".to_string());
+    aliases.insert("ftd".to_string(), ftd);
     id
 }

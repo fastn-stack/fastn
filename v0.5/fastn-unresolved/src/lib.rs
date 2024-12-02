@@ -20,7 +20,7 @@ pub type URCI = fastn_unresolved::UR<
     fastn_resolved::ComponentInvocation,
 >;
 pub type URIS = fastn_unresolved::UR<fastn_section::IdentifierReference, fastn_unresolved::Symbol>;
-pub type Aliases = std::collections::HashMap<String, String>;
+pub type Aliases = std::collections::HashMap<String, fastn_unresolved::SoM>;
 pub type AliasesID = id_arena::Id<Aliases>;
 
 #[derive(Default)]
@@ -47,6 +47,11 @@ pub struct Module {
     interned: string_interner::DefaultSymbol, // u32
     /// length of the <package> part of the symbol
     package_len: std::num::NonZeroU16,
+}
+
+pub enum SoM {
+    Symbol(Symbol),
+    Module(Module),
 }
 
 #[derive(Debug, Clone)]
@@ -79,8 +84,6 @@ pub struct Definition {
 
 #[derive(Debug, Clone)]
 pub enum InnerDefinition {
-    SymbolAlias(fastn_unresolved::Symbol),
-    ModuleAlias(fastn_unresolved::Module),
     Component {
         arguments: Vec<UR<Argument, fastn_resolved::Argument>>,
         body: Vec<URCI>,
@@ -168,6 +171,7 @@ pub enum UR<U, R> {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct ComponentInvocation {
+    pub aliases: AliasesID,
     /// this contains a symbol that is the module where this component invocation happened.
     ///
     /// all local symbols are resolved with respect to the module.
