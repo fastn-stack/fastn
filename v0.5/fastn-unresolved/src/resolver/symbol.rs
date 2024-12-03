@@ -20,11 +20,11 @@ pub fn symbol(
     arena: &mut fastn_unresolved::Arena,
     output: &mut fastn_unresolved::resolver::Output,
     _locals: &[Vec<fastn_unresolved::UR<fastn_unresolved::Argument, fastn_resolved::Argument>>],
-) {
+) -> bool {
     let inner_name = if let fastn_unresolved::UR::UnResolved(name) = name {
         name
     } else {
-        return;
+        return true;
     };
 
     let target_symbol = match inner_name {
@@ -91,9 +91,11 @@ pub fn symbol(
     match definitions.get(target_symbol_key) {
         Some(fastn_unresolved::UR::UnResolved(_)) => {
             output.stuck_on.insert(target_symbol);
+            false
         }
         Some(fastn_unresolved::UR::NotFound) => {
             *name = fastn_unresolved::UR::Invalid(fastn_section::Error::InvalidIdentifier);
+            true
         }
         Some(fastn_unresolved::UR::Invalid(_)) => {
             todo!()
@@ -103,6 +105,7 @@ pub fn symbol(
         }
         Some(fastn_unresolved::UR::Resolved(_)) => {
             *name = fastn_unresolved::UR::Resolved(target_symbol);
+            true
         }
         None => {
             if fastn_builtins::builtins().contains_key(target_symbol_key) {
@@ -110,6 +113,7 @@ pub fn symbol(
             } else {
                 *name = fastn_unresolved::UR::Invalid(fastn_section::Error::InvalidIdentifier);
             }
+            true
         }
     }
 }

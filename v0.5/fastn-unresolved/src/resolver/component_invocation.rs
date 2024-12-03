@@ -5,7 +5,8 @@ impl fastn_unresolved::ComponentInvocation {
         modules: &std::collections::HashMap<fastn_unresolved::Module, bool>,
         arena: &mut fastn_unresolved::Arena,
         output: &mut fastn_unresolved::resolver::Output,
-    ) {
+    ) -> bool {
+        let mut resolved = true;
         // -- foo: (foo has children)
         //    -- bar:
         // -- end: foo
@@ -13,12 +14,12 @@ impl fastn_unresolved::ComponentInvocation {
         // we resolve children first (so we can do early returns after this for loop)
         for c in self.children.iter_mut() {
             if let fastn_unresolved::UR::UnResolved(ref mut c) = c {
-                c.resolve(definitions, modules, arena, output);
+                resolved &= c.resolve(definitions, modules, arena, output);
             }
         }
 
         println!("{:?}", self.name);
-        fastn_unresolved::resolver::symbol(
+        resolved &= fastn_unresolved::resolver::symbol(
             self.aliases,
             &self.module,
             &mut self.name,
@@ -34,7 +35,7 @@ impl fastn_unresolved::ComponentInvocation {
             fastn_unresolved::UR::Resolved(ref name) => name,
             // in case of error or not found, nothing left to do
             fastn_unresolved::UR::UnResolved(_) => {
-                return;
+                return false;
             }
             // TODO: handle errors
             ref t => {
@@ -47,7 +48,7 @@ impl fastn_unresolved::ComponentInvocation {
             Some(fastn_unresolved::UR::Resolved(component)) => component,
             Some(fastn_unresolved::UR::UnResolved(_)) => {
                 output.stuck_on.insert(name.clone());
-                return;
+                return false;
             }
             Some(_) | None => {
                 // handle error
@@ -55,7 +56,7 @@ impl fastn_unresolved::ComponentInvocation {
             }
         };
 
-        fastn_unresolved::resolver::arguments(
+        resolved &= fastn_unresolved::resolver::arguments(
             &component.arguments,
             &mut self.caption,
             &mut self.properties,
@@ -65,7 +66,13 @@ impl fastn_unresolved::ComponentInvocation {
             modules,
             arena,
             output,
-        )
+        );
+
+        if resolved {
+            // *self = fastn_unresolved::UR::Resolved()
+            todo!()
+        }
+        resolved
     }
 }
 

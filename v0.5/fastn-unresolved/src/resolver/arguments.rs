@@ -14,9 +14,10 @@ pub fn arguments(
     _modules: &std::collections::HashMap<fastn_unresolved::Module, bool>,
     _arena: &mut fastn_unresolved::Arena,
     _output: &mut fastn_unresolved::resolver::Output,
-) {
-    caption_or_body(caption, true, arguments, properties);
-    caption_or_body(body, false, arguments, properties);
+) -> bool {
+    let mut resolved = true;
+    resolved &= caption_or_body(caption, true, arguments, properties);
+    resolved &= caption_or_body(body, false, arguments, properties);
     for p in properties.iter_mut() {
         let inner_p = if let fastn_unresolved::UR::UnResolved(inner_p) = p {
             inner_p
@@ -28,12 +29,19 @@ pub fn arguments(
             Property::Field(inner_p.name.str()),
             &inner_p.value,
         ) {
-            Ok(Some(d)) => *p = fastn_unresolved::UR::Resolved(d),
-            Ok(None) => {}
-            Err(e) => *p = fastn_unresolved::UR::Invalid(e),
+            Ok(Some(d)) => {
+                *p = fastn_unresolved::UR::Resolved(d);
+                resolved &= true;
+            }
+            Ok(None) => resolved = false,
+            Err(e) => {
+                *p = fastn_unresolved::UR::Invalid(e);
+                resolved &= true;
+            }
         }
     }
 
+    resolved
     // TODO: check if any required argument is missing (should only be done when everything is
     //       resolved, how do we track this resolution?
     //       maybe this function can return a bool to say everything is resolved? but if everything
@@ -48,10 +56,10 @@ fn caption_or_body(
     properties: &mut Vec<
         fastn_unresolved::UR<fastn_unresolved::Property, fastn_resolved::Property>,
     >,
-) {
+) -> bool {
     if let fastn_unresolved::UR::UnResolved(None) = v {
         *v = fastn_unresolved::UR::Resolved(());
-        return;
+        return true;
     }
 
     let inner_v = if let fastn_unresolved::UR::UnResolved(Some(inner_v)) = v {
@@ -60,7 +68,7 @@ fn caption_or_body(
         // to resolve
         inner_v
     } else {
-        return;
+        return true;
     };
 
     match resolve_argument(
@@ -75,9 +83,13 @@ fn caption_or_body(
         Ok(Some(p)) => {
             *v = fastn_unresolved::UR::Resolved(());
             properties.push(fastn_unresolved::UR::Resolved(p));
+            true
         }
-        Ok(None) => {}
-        Err(e) => *v = fastn_unresolved::UR::Invalid(e),
+        Ok(None) => false,
+        Err(e) => {
+            *v = fastn_unresolved::UR::Invalid(e);
+            true
+        }
     }
 }
 
