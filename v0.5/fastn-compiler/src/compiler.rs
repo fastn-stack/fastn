@@ -162,7 +162,7 @@ impl Compiler {
                 false
             };
             if resolved {
-                ci.resolve_it()
+                ci.resolve_it(&self.arena)
             }
             new_content.push(ci);
         }

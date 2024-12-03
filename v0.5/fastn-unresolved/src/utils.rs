@@ -132,9 +132,9 @@ impl<U: std::fmt::Debug, R: std::fmt::Debug> fastn_unresolved::UR<U, R> {
         }
     }
 
-    pub fn resolve_it(&mut self)
+    pub fn resolve_it(&mut self, arena: &fastn_unresolved::Arena)
     where
-        R: From<U>,
+        R: FromWithArena<U>,
     {
         match self {
             fastn_unresolved::UR::UnResolved(_) => {}
@@ -145,7 +145,7 @@ impl<U: std::fmt::Debug, R: std::fmt::Debug> fastn_unresolved::UR<U, R> {
             fastn_unresolved::UR::UnResolved(u) => u,
             _ => unreachable!(),
         };
-        *self = fastn_unresolved::UR::Resolved(Some(u.into()));
+        *self = fastn_unresolved::UR::Resolved(Some(FromWithArena::from(u, arena)));
     }
 
     pub fn into_resolved(self) -> R {
@@ -156,9 +156,27 @@ impl<U: std::fmt::Debug, R: std::fmt::Debug> fastn_unresolved::UR<U, R> {
     }
 }
 
-impl From<fastn_unresolved::ComponentInvocation> for fastn_resolved::ComponentInvocation {
-    fn from(_inv: fastn_unresolved::ComponentInvocation) -> Self {
-        todo!()
+pub trait FromWithArena<T> {
+    fn from(value: T, arena: &fastn_unresolved::Arena) -> Self;
+}
+
+impl FromWithArena<fastn_unresolved::ComponentInvocation> for fastn_resolved::ComponentInvocation {
+    fn from(u: fastn_unresolved::ComponentInvocation, arena: &fastn_unresolved::Arena) -> Self {
+        fastn_resolved::ComponentInvocation {
+            id: None,
+            name: u.name.resolved().unwrap().string(arena),
+            properties: u
+                .properties
+                .into_iter()
+                .map(|u| u.into_resolved())
+                .collect(),
+            iteration: Box::new(None),
+            condition: Box::new(None),
+            events: vec![],
+            children: vec![],
+            source: Default::default(),
+            line_number: 0,
+        }
     }
 }
 
