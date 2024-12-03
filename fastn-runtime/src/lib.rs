@@ -386,7 +386,7 @@ pub fn get_all_asts(
         } else if let fastn_resolved::Definition::OrType(ot) = definition {
             let mut fields = vec![];
             for variant in &ot.variants {
-                if let Some(ref value) = variant.clone().fields().first().unwrap().default {
+                if let Some(ref value) = variant.clone().fields().first().unwrap().value {
                     fields.push((
                         variant
                             .name()

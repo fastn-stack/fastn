@@ -150,7 +150,7 @@ fn validate_constant_variant(
     variant: &fastn_resolved::Field,
     doc: &ftd::interpreter::TDoc,
 ) -> ftd::interpreter::Result<()> {
-    if variant.default.is_none()
+    if variant.value.is_none()
         && !(variant.kind.is_void() || variant.kind.is_optional() || variant.kind.is_list())
     {
         return ftd::interpreter::utils::e2(

@@ -290,7 +290,7 @@ impl FunctionCallExt for fastn_resolved::FunctionCall {
                 if let Some(fastn_resolved::PropertyValue::Value {
                     value: fastn_resolved::Value::Module { ref name, .. },
                     ..
-                }) = argument.default
+                }) = argument.value
                 {
                     if let Some(function) = function {
                         module_name = Some((
@@ -367,7 +367,7 @@ impl FunctionCallExt for fastn_resolved::FunctionCall {
                     loop_object_name_and_kind,
                 )?)
             } else {
-                match argument.default {
+                match argument.value {
                     Some(ref value) => value.clone(),
                     None if argument.kind.is_optional() => fastn_resolved::PropertyValue::new_none(
                         argument.kind.clone(),

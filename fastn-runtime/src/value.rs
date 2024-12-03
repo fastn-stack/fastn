@@ -202,7 +202,7 @@ impl fastn_runtime::extensions::ExpressionExt for fastn_resolved::Expression {
 
 impl fastn_runtime::extensions::ArgumentExt for fastn_resolved::Argument {
     fn get_default_value(&self) -> Option<fastn_runtime::Value> {
-        if let Some(ref value) = self.default {
+        if let Some(ref value) = self.value {
             Some(value.to_value())
         } else if self.kind.is_list() {
             Some(fastn_runtime::Value::Data(fastn_resolved::Value::List {

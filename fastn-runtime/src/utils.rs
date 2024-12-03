@@ -232,7 +232,7 @@ pub(crate) fn is_module_argument(
     component_arguments.iter().find_map(|v| {
         if v.name.eq(module_name) && v.kind.is_module() {
             let module = v
-                .default
+                .value
                 .as_ref()
                 .and_then(|v| v.value_optional())
                 .and_then(|v| v.module_name_optional())?;

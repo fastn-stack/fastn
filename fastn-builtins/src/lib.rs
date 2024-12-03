@@ -245,7 +245,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "rive".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -253,7 +253,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "input".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -261,7 +261,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "value".to_string(),
                         kind: fastn_resolved::Kind::boolean().into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -291,7 +291,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "rive".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -299,7 +299,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "input".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -329,7 +329,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "rive".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -337,7 +337,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "input".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -345,7 +345,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "value".to_string(),
                         kind: fastn_resolved::Kind::integer().into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -375,7 +375,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "rive".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -383,7 +383,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "input".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -413,7 +413,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "rive".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -421,7 +421,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "input".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -451,7 +451,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "rive".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -459,7 +459,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "input".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -489,7 +489,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "rive".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -497,7 +497,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "input".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -531,7 +531,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: true,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -565,7 +565,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -577,7 +577,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -611,7 +611,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -623,7 +623,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -657,7 +657,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -669,7 +669,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -702,7 +702,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -714,7 +714,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -748,7 +748,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: true,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -782,7 +782,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: true,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -794,7 +794,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -828,7 +828,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: true,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -862,7 +862,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: true,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -874,7 +874,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -974,7 +974,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -986,7 +986,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1020,7 +1020,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1054,7 +1054,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: true,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1066,7 +1066,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1100,7 +1100,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: true,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1112,7 +1112,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1146,7 +1146,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: true,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1158,7 +1158,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1192,7 +1192,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: true,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1204,7 +1204,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             body: false,
                         },
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1229,7 +1229,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "light".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data().caption(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1237,7 +1237,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "dark".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data(),
                         mutable: false,
-                        default: Some(fastn_resolved::PropertyValue::Reference {
+                        value: Some(fastn_resolved::PropertyValue::Reference {
                             name: fastn_builtins::constants::FTD_IMAGE_SRC_LIGHT.to_string(),
                             kind: fastn_resolved::Kind::string().into_kind_data(),
                             source: fastn_resolved::PropertyValueSource::Local(
@@ -1263,7 +1263,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "light".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data().caption(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1271,7 +1271,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "dark".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data(),
                         mutable: false,
-                        default: Some(fastn_resolved::PropertyValue::Reference {
+                        value: Some(fastn_resolved::PropertyValue::Reference {
                             name: fastn_builtins::constants::FTD_VIDEO_SRC_LIGHT.to_string(),
                             kind: fastn_resolved::Kind::string().into_kind_data(),
                             source: fastn_resolved::PropertyValueSource::Local(
@@ -1297,7 +1297,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "src".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data().caption(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1315,7 +1315,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "light".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data().caption(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1323,7 +1323,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "dark".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data(),
                         mutable: false,
-                        default: Some(fastn_resolved::PropertyValue::Reference {
+                        value: Some(fastn_resolved::PropertyValue::Reference {
                             name: fastn_builtins::constants::FTD_COLOR_LIGHT.to_string(),
                             kind: fastn_resolved::Kind::string().into_kind_data(),
                             source: fastn_resolved::PropertyValueSource::Local(
@@ -1350,7 +1350,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data(),
                         mutable: false,
-                        default: Some(fastn_resolved::PropertyValue::Value {
+                        value: Some(fastn_resolved::PropertyValue::Value {
                             value: fastn_resolved::Value::OrType {
                                 name: fastn_builtins::constants::FTD_LENGTH.to_string(),
                                 variant: fastn_builtins::constants::FTD_LENGTH_PX.to_string(),
@@ -1375,7 +1375,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data(),
                         mutable: false,
-                        default: Some(fastn_resolved::PropertyValue::Value {
+                        value: Some(fastn_resolved::PropertyValue::Value {
                             value: fastn_resolved::Value::OrType {
                                 name: fastn_builtins::constants::FTD_LENGTH.to_string(),
                                 variant: fastn_builtins::constants::FTD_LENGTH_PX.to_string(),
@@ -1400,7 +1400,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data(),
                         mutable: false,
-                        default: Some(fastn_resolved::PropertyValue::Value {
+                        value: Some(fastn_resolved::PropertyValue::Value {
                             value: fastn_resolved::Value::OrType {
                                 name: fastn_builtins::constants::FTD_LENGTH.to_string(),
                                 variant: fastn_builtins::constants::FTD_LENGTH_PX.to_string(),
@@ -1425,7 +1425,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data(),
                         mutable: false,
-                        default: Some(fastn_resolved::PropertyValue::Value {
+                        value: Some(fastn_resolved::PropertyValue::Value {
                             value: fastn_resolved::Value::OrType {
                                 name: fastn_builtins::constants::FTD_LENGTH.to_string(),
                                 variant: fastn_builtins::constants::FTD_LENGTH_PX.to_string(),
@@ -1451,7 +1451,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             .into_kind_data(),
                         mutable: false,
                         access_modifier: Default::default(),
-                        default: Some(fastn_resolved::PropertyValue::Value {
+                        value: Some(fastn_resolved::PropertyValue::Value {
                             value: fastn_resolved::Value::Record {
                                 name: fastn_builtins::constants::FTD_COLOR.to_string(),
                                 fields: std::iter::IntoIterator::into_iter([
@@ -1484,7 +1484,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             .into_kind_data(),
                         mutable: false,
                         access_modifier: Default::default(),
-                        default: Some(fastn_resolved::PropertyValue::Value {
+                        value: Some(fastn_resolved::PropertyValue::Value {
                             value: fastn_resolved::Value::Boolean { value: false },
                             is_mutable: false,
                             line_number: 0,
@@ -1586,7 +1586,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1595,7 +1595,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1604,7 +1604,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1613,7 +1613,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1622,7 +1622,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1631,7 +1631,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1640,7 +1640,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1649,7 +1649,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1667,7 +1667,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1676,7 +1676,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1694,7 +1694,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_IMAGE_SRC)
                             .into_kind_data().caption(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1703,7 +1703,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_BACKGROUND_REPEAT)
                             .into_kind_data().into_optional(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1712,7 +1712,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_BACKGROUND_SIZE)
                             .into_kind_data().into_optional(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1721,7 +1721,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_BACKGROUND_POSITION)
                             .into_kind_data().into_optional(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1739,7 +1739,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data().caption(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1748,7 +1748,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1757,7 +1757,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1766,7 +1766,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                             .into_kind_data().into_optional(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -1889,7 +1889,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_LINEAR_GRADIENT_DIRECTIONS)
                             .into_kind_data().into_optional(),
                         mutable: false,
-                        default: Some(fastn_resolved::PropertyValue::Value {
+                        value: Some(fastn_resolved::PropertyValue::Value {
                             value: fastn_resolved::Value::OrType {
                                 name: fastn_builtins::constants::FTD_LINEAR_GRADIENT_DIRECTIONS.to_string(),
                                 variant: fastn_builtins::constants::FTD_LINEAR_GRADIENT_DIRECTIONS_BOTTOM
@@ -1915,7 +1915,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_LINEAR_GRADIENT_COLOR)
                             .into_list().into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -2069,7 +2069,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                                 kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                                     .into_kind_data(),
                                 mutable: false,
-                                default: None,
+                                value: None,
                                 access_modifier: Default::default(),
                                 line_number: 0,
                             },
@@ -2078,7 +2078,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                                 kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                                     .into_kind_data(),
                                 mutable: false,
-                                default: None,
+                                value: None,
                                 access_modifier: Default::default(),
                                 line_number: 0,
                             },
@@ -2222,7 +2222,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                                 kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                                     .into_kind_data(),
                                 mutable: false,
-                                default: None,
+                                value: None,
                                 access_modifier: Default::default(),
                                 line_number: 0,
                             },
@@ -2231,7 +2231,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                                 kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                                     .into_kind_data(),
                                 mutable: false,
-                                default: None,
+                                value: None,
                                 access_modifier: Default::default(),
                                 line_number: 0,
                             },
@@ -3412,7 +3412,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             .into_kind_data()
                             .caption(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -3422,7 +3422,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             .into_kind_data(),
                         mutable: false,
                         access_modifier: Default::default(),
-                        default: Some(fastn_resolved::PropertyValue::Reference {
+                        value: Some(fastn_resolved::PropertyValue::Reference {
                             name: fastn_builtins::constants::FTD_RESPONSIVE_LENGTH_DESKTOP.to_string(),
                             kind: fastn_resolved::Kind::string().into_kind_data(),
                             source: fastn_resolved::PropertyValueSource::Local(
@@ -3977,7 +3977,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             .into_optional()
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -3987,7 +3987,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             .into_optional()
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -3997,7 +3997,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             .into_optional()
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4007,7 +4007,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             .into_optional()
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4017,7 +4017,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             .into_list()
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4036,7 +4036,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_TYPE)
                             .into_kind_data().caption(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4046,7 +4046,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             .into_kind_data(),
                         mutable: false,
                         access_modifier: Default::default(),
-                        default: Some(fastn_resolved::PropertyValue::Reference {
+                        value: Some(fastn_resolved::PropertyValue::Reference {
                             name: fastn_builtins::constants::FTD_RESPONSIVE_TYPE_DESKTOP.to_string(),
                             kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_TYPE)
                                 .into_kind_data(),
@@ -4217,7 +4217,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4226,7 +4226,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4235,7 +4235,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4244,7 +4244,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4253,7 +4253,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4271,7 +4271,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4280,7 +4280,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4289,7 +4289,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4298,7 +4298,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4307,7 +4307,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4316,7 +4316,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4325,7 +4325,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4334,7 +4334,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4343,7 +4343,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4361,7 +4361,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4370,7 +4370,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4379,7 +4379,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4397,7 +4397,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4406,7 +4406,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4415,7 +4415,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4433,7 +4433,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4442,7 +4442,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4451,7 +4451,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4460,7 +4460,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4469,7 +4469,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4478,7 +4478,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4487,7 +4487,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4496,7 +4496,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4505,7 +4505,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4514,7 +4514,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4532,7 +4532,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record("ftd#background-colors")
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4541,7 +4541,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4550,7 +4550,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4559,7 +4559,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4568,7 +4568,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         line_number: 0,
                         access_modifier: Default::default(),
                     },
@@ -4577,7 +4577,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         line_number: 0,
                         access_modifier: Default::default(),
                     },
@@ -4586,7 +4586,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_COLOR)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         line_number: 0,
                         access_modifier: Default::default(),
                     },
@@ -4594,7 +4594,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "cta-primary".to_string(),
                         kind: fastn_resolved::Kind::record("ftd#cta-colors").into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         line_number: 0,
                         access_modifier: Default::default(),
                     },
@@ -4602,7 +4602,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "cta-secondary".to_string(),
                         kind: fastn_resolved::Kind::record("ftd#cta-colors").into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         line_number: 0,
                         access_modifier: Default::default(),
                     },
@@ -4610,7 +4610,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "cta-tertiary".to_string(),
                         kind: fastn_resolved::Kind::record("ftd#cta-colors").into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         line_number: 0,
                         access_modifier: Default::default(),
                     },
@@ -4618,7 +4618,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "cta-danger".to_string(),
                         kind: fastn_resolved::Kind::record("ftd#cta-colors").into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         line_number: 0,
                         access_modifier: Default::default(),
                     },
@@ -4626,7 +4626,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "accent".to_string(),
                         kind: fastn_resolved::Kind::record("ftd#pst").into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         line_number: 0,
                         access_modifier: Default::default(),
                     },
@@ -4634,7 +4634,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "error".to_string(),
                         kind: fastn_resolved::Kind::record("ftd#btb").into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         line_number: 0,
                         access_modifier: Default::default(),
                     },
@@ -4642,7 +4642,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "success".to_string(),
                         kind: fastn_resolved::Kind::record("ftd#btb").into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4650,7 +4650,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "info".to_string(),
                         kind: fastn_resolved::Kind::record("ftd#btb").into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4658,7 +4658,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "warning".to_string(),
                         kind: fastn_resolved::Kind::record("ftd#btb").into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4666,7 +4666,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "custom".to_string(),
                         kind: fastn_resolved::Kind::record("ftd#custom-colors").into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -4683,7 +4683,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                     kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
-                    default: None,
+                    value: None,
                     access_modifier: Default::default(),
                     line_number: 0
                 }, fastn_resolved::Field {
@@ -4691,7 +4691,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                     kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
-                    default: None,
+                    value: None,
                     access_modifier: Default::default(),
                     line_number: 0
                 }, fastn_resolved::Field {
@@ -4699,7 +4699,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                     kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
-                    default: None,
+                    value: None,
                     access_modifier: Default::default(),
                     line_number: 0
                 }, fastn_resolved::Field {
@@ -4707,7 +4707,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                     kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
-                    default: None,
+                    value: None,
                     access_modifier: Default::default(),
                     line_number: 0
                 }, fastn_resolved::Field {
@@ -4715,7 +4715,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                     kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
-                    default: None,
+                    value: None,
                     access_modifier: Default::default(),
                     line_number: 0
                 }, fastn_resolved::Field {
@@ -4723,7 +4723,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                     kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
-                    default: None,
+                    value: None,
                     access_modifier: Default::default(),
                     line_number: 0
                 }, fastn_resolved::Field {
@@ -4731,7 +4731,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                     kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
-                    default: None,
+                    value: None,
                     access_modifier: Default::default(),
                     line_number: 0
                 }, fastn_resolved::Field {
@@ -4739,7 +4739,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                     kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
-                    default: None,
+                    value: None,
                     access_modifier: Default::default(),
                     line_number: 0
                 }, fastn_resolved::Field {
@@ -4747,7 +4747,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                     kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
-                    default: None,
+                    value: None,
                     access_modifier: Default::default(),
                     line_number: 0
                 }, fastn_resolved::Field {
@@ -4755,7 +4755,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                     kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
-                    default: None,
+                    value: None,
                     access_modifier: Default::default(),
                     line_number: 0
                 }, fastn_resolved::Field {
@@ -4763,7 +4763,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                     kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
-                    default: None,
+                    value: None,
                     access_modifier: Default::default(),
                     line_number: 0
                 }, fastn_resolved::Field {
@@ -4771,7 +4771,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                     kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
-                    default: None,
+                    value: None,
                     access_modifier: Default::default(),
                     line_number: 0
                 }, fastn_resolved::Field {
@@ -4779,7 +4779,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                     kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
-                    default: None,
+                    value: None,
                     access_modifier: Default::default(),
                     line_number: 0,
                 }, fastn_resolved::Field {
@@ -4787,7 +4787,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                     kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
-                    default: None,
+                    value: None,
                     access_modifier: Default::default(),
                     line_number: 0,
                 }, fastn_resolved::Field {
@@ -4795,7 +4795,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                     kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
-                    default: None,
+                    value: None,
                     access_modifier: Default::default(),
                     line_number: 0,
                 }, fastn_resolved::Field {
@@ -4803,7 +4803,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                     kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
-                    default: None,
+                    value: None,
                     access_modifier: Default::default(),
                     line_number: 0
                 }, fastn_resolved::Field {
@@ -4811,7 +4811,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                     kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_RESPONSIVE_TYPE)
                         .into_kind_data(),
                     mutable: false,
-                    default: None,
+                    value: None,
                     access_modifier: Default::default(),
                     line_number: 0
                 },],
@@ -9966,7 +9966,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                     name: "mobile".to_string(),
                     kind: fastn_resolved::Kind::integer().into_kind_data().caption(),
                     mutable: false,
-                    default: None,
+                    value: None,
                     access_modifier: Default::default(),
                     line_number: 0
                 }],
@@ -10066,7 +10066,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_IMAGE_SRC)
                             .into_kind_data().caption().into_optional(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -10076,7 +10076,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             .into_kind_data()
                             .into_optional(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -10086,7 +10086,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             .into_kind_data()
                             .into_optional(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -10338,7 +10338,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                                 kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                                     .into_kind_data(),
                                 mutable: false,
-                                default: None,
+                                value: None,
                                 access_modifier: Default::default(),
                                 line_number: 0,
                             },
@@ -10347,7 +10347,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                                 kind: fastn_resolved::Kind::or_type(fastn_builtins::constants::FTD_LENGTH)
                                     .into_kind_data(),
                                 mutable: false,
-                                default: None,
+                                value: None,
                                 access_modifier: Default::default(),
                                 line_number: 0,
                             },
@@ -10368,7 +10368,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         kind: fastn_resolved::Kind::record(fastn_builtins::constants::FTD_MASK_IMAGE_DATA)
                             .into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -10378,7 +10378,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             .into_kind_data()
                             .into_optional(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -10388,7 +10388,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             .into_kind_data()
                             .into_optional(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -10398,7 +10398,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             .into_kind_data()
                             .into_optional(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -10408,7 +10408,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             .into_kind_data()
                             .into_optional(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -10418,7 +10418,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                             .into_kind_data()
                             .into_optional(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -10460,7 +10460,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "name".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data().caption(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -10468,7 +10468,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "value".to_string(),
                         kind: fastn_resolved::Kind::integer().into_kind_data(),
                         mutable: false,
-                        default: Some(fastn_resolved::PropertyValue::Value {
+                        value: Some(fastn_resolved::PropertyValue::Value {
                             value: fastn_resolved::Value::Integer {
                                 value: 0
                             },
@@ -10482,7 +10482,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "error".to_string(),
                         kind: fastn_resolved::Kind::string().into_optional().into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -10499,7 +10499,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "name".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data().caption(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -10507,7 +10507,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "value".to_string(),
                         kind: fastn_resolved::Kind::decimal().into_kind_data(),
                         mutable: false,
-                        default: Some(fastn_resolved::PropertyValue::Value {
+                        value: Some(fastn_resolved::PropertyValue::Value {
                             value: fastn_resolved::Value::Decimal {
                                 value: 0.0,
                             },
@@ -10521,7 +10521,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "error".to_string(),
                         kind: fastn_resolved::Kind::string().into_optional().into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -10538,7 +10538,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "name".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data().caption(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -10546,7 +10546,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "value".to_string(),
                         kind: fastn_resolved::Kind::boolean().into_kind_data(),
                         mutable: false,
-                        default: Some(fastn_resolved::PropertyValue::Value {
+                        value: Some(fastn_resolved::PropertyValue::Value {
                             value: fastn_resolved::Value::Boolean {
                                 value: false,
                             },
@@ -10560,7 +10560,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "error".to_string(),
                         kind: fastn_resolved::Kind::string().into_optional().into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -10577,7 +10577,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "name".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data().caption(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -10585,7 +10585,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "value".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data(),
                         mutable: false,
-                        default: Some(fastn_resolved::PropertyValue::Value {
+                        value: Some(fastn_resolved::PropertyValue::Value {
                             value: fastn_resolved::Value::String {
                                 text: "".to_string(),
                             },
@@ -10599,7 +10599,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "error".to_string(),
                         kind: fastn_resolved::Kind::string().into_optional().into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -10724,7 +10724,7 @@ pub fn default_test_bag() -> indexmap::IndexMap<String, fastn_resolved::Definiti
                         name: "key".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data().caption(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -10732,7 +10732,7 @@ pub fn default_test_bag() -> indexmap::IndexMap<String, fastn_resolved::Definiti
                         name: "value".to_string(),
                         kind: fastn_resolved::Kind::string().into_kind_data(),
                         mutable: false,
-                        default: None,
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -11354,7 +11354,7 @@ pub fn rive_function() -> fastn_resolved::ComponentDefinition {
                     name: "autoplay".to_string(),
                     kind: fastn_resolved::Kind::boolean().into_kind_data(),
                     mutable: false,
-                    default: Some(fastn_resolved::PropertyValue::Value {
+                    value: Some(fastn_resolved::PropertyValue::Value {
                         value: fastn_resolved::Value::Boolean { value: true },
                         is_mutable: false,
                         line_number: 0,
@@ -11559,7 +11559,7 @@ pub fn document_function() -> fastn_resolved::ComponentDefinition {
                     .into_optional()
                     .into_kind_data(),
                 mutable: false,
-                default: Some(fastn_resolved::PropertyValue::Reference {
+                value: Some(fastn_resolved::PropertyValue::Reference {
                     name: "ftd#document.title".to_string(),
                     kind: fastn_resolved::Kind::string()
                         .into_optional()
@@ -11577,7 +11577,7 @@ pub fn document_function() -> fastn_resolved::ComponentDefinition {
                     .into_optional()
                     .into_kind_data(),
                 mutable: false,
-                default: Some(fastn_resolved::PropertyValue::Reference {
+                value: Some(fastn_resolved::PropertyValue::Reference {
                     name: "ftd#document.title".to_string(),
                     kind: fastn_resolved::Kind::string()
                         .into_optional()
@@ -11601,7 +11601,7 @@ pub fn document_function() -> fastn_resolved::ComponentDefinition {
                     .into_optional()
                     .into_kind_data(),
                 mutable: false,
-                default: Some(fastn_resolved::PropertyValue::Reference {
+                value: Some(fastn_resolved::PropertyValue::Reference {
                     name: "ftd#document.description".to_string(),
                     kind: fastn_resolved::Kind::string()
                         .into_optional()
@@ -11619,7 +11619,7 @@ pub fn document_function() -> fastn_resolved::ComponentDefinition {
                     .into_optional()
                     .into_kind_data(),
                 mutable: false,
-                default: Some(fastn_resolved::PropertyValue::Reference {
+                value: Some(fastn_resolved::PropertyValue::Reference {
                     name: "ftd#document.description".to_string(),
                     kind: fastn_resolved::Kind::string()
                         .into_optional()
@@ -11643,7 +11643,7 @@ pub fn document_function() -> fastn_resolved::ComponentDefinition {
                     .into_optional()
                     .into_kind_data(),
                 mutable: false,
-                default: Some(fastn_resolved::PropertyValue::Reference {
+                value: Some(fastn_resolved::PropertyValue::Reference {
                     name: "ftd#document.og-image".to_string(),
                     kind: fastn_resolved::Kind::string().into_kind_data(),
                     source: fastn_resolved::PropertyValueSource::Local("document".to_string()),
