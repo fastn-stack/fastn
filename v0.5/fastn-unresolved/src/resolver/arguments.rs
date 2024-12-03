@@ -33,6 +33,12 @@ pub fn arguments(
             Err(e) => *p = fastn_unresolved::UR::Invalid(e),
         }
     }
+
+    // TODO: check if any required argument is missing (should only be done when everything is
+    //       resolved, how do we track this resolution?
+    //       maybe this function can return a bool to say everything is resolved? but if everything
+    //       is marked resolved, we have an issue, maybe we put something extra in properties in
+    //       unresolved state, and resolve only when this is done?
 }
 
 fn caption_or_body(
@@ -81,25 +87,56 @@ enum Property<'a> {
     Body,
 }
 
+impl Property<'_> {
+    fn source(&self) -> fastn_resolved::PropertySource {
+        match self {
+            Property::Field(f) => fastn_resolved::PropertySource::Header {
+                name: f.to_string(),
+                mutable: false,
+            },
+            Property::Body => fastn_resolved::PropertySource::Body,
+            Property::Caption => fastn_resolved::PropertySource::Caption,
+        }
+    }
+}
+
 fn resolve_argument(
     arguments: &[fastn_resolved::Argument],
     property: Property,
-    _value: &fastn_section::HeaderValue,
+    value: &fastn_section::HeaderValue,
 ) -> Result<Option<fastn_resolved::Property>, fastn_section::Error> {
-    let _argument = match arguments.iter().find(|v| {
-        match property {
-            Property::Caption => v.is_caption(),
-            Property::Body => v.is_body(),
-            Property::Field(ref f) => &v.name == f,
-        }
-        // if is_caption {
-        //     v.is_caption()
-        // } else {
-        //     v.is_body()
-        // }
+    let argument = match arguments.iter().find(|v| match property {
+        Property::Caption => v.is_caption(),
+        Property::Body => v.is_body(),
+        Property::Field(ref f) => &v.name == f,
     }) {
         Some(a) => a,
         None => return Err(fastn_section::Error::UnexpectedCaption), // TODO: do better
+    };
+
+    match argument.kind.kind {
+        fastn_resolved::Kind::String => resolve_string(&property, value),
+        _ => todo!(),
+    }
+}
+
+fn resolve_string(
+    property: &Property,
+    value: &fastn_section::HeaderValue,
+) -> Result<Option<fastn_resolved::Property>, fastn_section::Error> {
+    if let Some(v) = value.as_plain_string() {
+        return Ok(Some(fastn_resolved::Property {
+            value: fastn_resolved::PropertyValue::Value {
+                value: fastn_resolved::Value::String {
+                    text: v.to_string(),
+                },
+                is_mutable: false,
+                line_number: 0,
+            },
+            source: property.source(),
+            condition: None,
+            line_number: 0,
+        }));
     };
 
     todo!()
