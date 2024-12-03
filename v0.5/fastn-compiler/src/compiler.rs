@@ -117,7 +117,7 @@ impl Compiler {
                     Ok(resolved) => {
                         self.definitions.insert(
                             symbol.string(&self.arena),
-                            fastn_unresolved::UR::Resolved(resolved),
+                            fastn_unresolved::UR::Resolved(Some(resolved)),
                         );
                     }
                     Err(s) => {

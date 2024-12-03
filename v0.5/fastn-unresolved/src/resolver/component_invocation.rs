@@ -44,10 +44,10 @@ impl fastn_unresolved::ComponentInvocation {
             }
         };
 
-        let component = match get_component(definitions, arena, name) {
+        let component = match get_component(definitions, arena, name.as_ref().unwrap()) {
             Some(fastn_unresolved::UR::Resolved(component)) => component,
             Some(fastn_unresolved::UR::UnResolved(_)) => {
-                output.stuck_on.insert(name.clone());
+                output.stuck_on.insert(name.clone().unwrap());
                 return false;
             }
             Some(_) | None => {
@@ -57,7 +57,7 @@ impl fastn_unresolved::ComponentInvocation {
         };
 
         resolved &= fastn_unresolved::resolver::arguments(
-            &component.arguments,
+            &component.unwrap().arguments,
             &mut self.caption,
             &mut self.properties,
             &mut self.body,
@@ -85,9 +85,10 @@ pub fn get_component<'a>(
 > {
     println!("looking for: {}", symbol.str(arena));
     match definitions.get(symbol.str(arena)) {
-        Some(fastn_unresolved::UR::Resolved(fastn_resolved::Definition::Component(v))) => {
-            return Some(fastn_unresolved::UR::Resolved(v))
+        Some(fastn_unresolved::UR::Resolved(Some(fastn_resolved::Definition::Component(v)))) => {
+            return Some(fastn_unresolved::UR::Resolved(Some(v)))
         }
+        Some(fastn_unresolved::UR::Resolved(None)) => unreachable!(),
         Some(fastn_unresolved::UR::UnResolved(v)) => {
             return Some(fastn_unresolved::UR::UnResolved(v))
         }
@@ -98,7 +99,7 @@ pub fn get_component<'a>(
         fastn_builtins::builtins().get(symbol.str(arena))
     {
         println!("found in builtins");
-        return Some(fastn_unresolved::UR::Resolved(v));
+        return Some(fastn_unresolved::UR::Resolved(Some(v)));
     }
     println!("not found");
     None

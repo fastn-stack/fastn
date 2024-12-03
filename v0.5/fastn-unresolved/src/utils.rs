@@ -38,7 +38,7 @@ impl fastn_unresolved::Document {
 }
 
 impl fastn_unresolved::ComponentInvocation {
-    pub fn resolved(self) -> Result<fastn_resolved::ComponentInvocation, Box<Self>> {
+    pub fn resolve_it(&mut self) -> bool {
         // must be called only if `is_resolved()` has returned true
         todo!()
     }
@@ -48,7 +48,8 @@ impl fastn_unresolved::Definition {
     pub fn name(&self) -> &str {
         match self.name {
             fastn_unresolved::UR::UnResolved(ref u) => u.str(),
-            fastn_unresolved::UR::Resolved(ref r) => r.str(),
+            fastn_unresolved::UR::Resolved(Some(ref r)) => r.str(),
+            fastn_unresolved::UR::Resolved(None) => unreachable!(),
             fastn_unresolved::UR::NotFound => unreachable!(),
             fastn_unresolved::UR::Invalid(_) => unreachable!(),
             fastn_unresolved::UR::InvalidN(_) => unreachable!(),
@@ -115,7 +116,7 @@ impl<U: std::fmt::Debug, R: std::fmt::Debug> From<U> for fastn_unresolved::UR<U,
     }
 }
 
-impl<U: std::fmt::Debug, V: std::fmt::Debug> fastn_unresolved::UR<U, V> {
+impl<U: std::fmt::Debug, R: std::fmt::Debug> fastn_unresolved::UR<U, R> {
     pub fn unresolved(&self) -> Option<&U> {
         match self {
             fastn_unresolved::UR::UnResolved(u) => Some(u),
@@ -123,16 +124,33 @@ impl<U: std::fmt::Debug, V: std::fmt::Debug> fastn_unresolved::UR<U, V> {
         }
     }
 
-    pub fn resolved(&self) -> Option<&V> {
+    pub fn resolved(&self) -> Option<&R> {
         match self {
-            fastn_unresolved::UR::Resolved(v) => Some(v),
+            fastn_unresolved::UR::Resolved(Some(v)) => Some(v),
+            fastn_unresolved::UR::Resolved(None) => unreachable!(),
             _ => None,
         }
     }
 
-    pub fn into_resolved(self) -> V {
+    pub fn resolve_it(&mut self)
+    where
+        R: From<U>,
+    {
         match self {
-            fastn_unresolved::UR::Resolved(v) => v,
+            fastn_unresolved::UR::UnResolved(_) => {}
+            _ => panic!("cannot resolve it"),
+        }
+
+        let u = match std::mem::replace(self, fastn_unresolved::UR::Resolved(None)) {
+            fastn_unresolved::UR::UnResolved(u) => u,
+            _ => unreachable!(),
+        };
+        *self = fastn_unresolved::UR::Resolved(Some(u.into()));
+    }
+
+    pub fn into_resolved(self) -> R {
+        match self {
+            fastn_unresolved::UR::Resolved(Some(r)) => r,
             _ => panic!("{self:?}"),
         }
     }

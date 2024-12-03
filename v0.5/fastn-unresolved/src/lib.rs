@@ -153,7 +153,11 @@ pub enum InnerDefinition {
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum UR<U: std::fmt::Debug, R: std::fmt::Debug> {
-    Resolved(R),
+    /// we are using Option<R> here because we want to convert from UnResolved to Resolved without
+    /// cloning.
+    /// most data going to be on the Resolved side is already there in the UnResolved, the Option
+    /// allows us to use mem::replace. See
+    Resolved(Option<R>),
     UnResolved(U),
     NotFound,
     /// if the resolution failed, we need not try to resolve it again, unless dependencies change.

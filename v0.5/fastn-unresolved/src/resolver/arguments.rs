@@ -30,7 +30,7 @@ pub fn arguments(
             &inner_p.value,
         ) {
             Ok(Some(d)) => {
-                *p = fastn_unresolved::UR::Resolved(d);
+                *p = fastn_unresolved::UR::Resolved(Some(d));
                 resolved &= true;
             }
             Ok(None) => resolved = false,
@@ -58,7 +58,7 @@ fn caption_or_body(
     >,
 ) -> bool {
     if let fastn_unresolved::UR::UnResolved(None) = v {
-        *v = fastn_unresolved::UR::Resolved(());
+        *v = fastn_unresolved::UR::Resolved(Some(()));
         return true;
     }
 
@@ -81,8 +81,8 @@ fn caption_or_body(
         inner_v,
     ) {
         Ok(Some(p)) => {
-            *v = fastn_unresolved::UR::Resolved(());
-            properties.push(fastn_unresolved::UR::Resolved(p));
+            *v = fastn_unresolved::UR::Resolved(Some(()));
+            properties.push(fastn_unresolved::UR::Resolved(Some(p)));
             true
         }
         Ok(None) => false,

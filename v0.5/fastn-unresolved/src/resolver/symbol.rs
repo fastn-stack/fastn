@@ -104,12 +104,12 @@ pub fn symbol(
             todo!()
         }
         Some(fastn_unresolved::UR::Resolved(_)) => {
-            *name = fastn_unresolved::UR::Resolved(target_symbol);
+            *name = fastn_unresolved::UR::Resolved(Some(target_symbol));
             true
         }
         None => {
             if fastn_builtins::builtins().contains_key(target_symbol_key) {
-                *name = fastn_unresolved::UR::Resolved(target_symbol);
+                *name = fastn_unresolved::UR::Resolved(Some(target_symbol));
             } else {
                 *name = fastn_unresolved::UR::Invalid(fastn_section::Error::InvalidIdentifier);
             }
