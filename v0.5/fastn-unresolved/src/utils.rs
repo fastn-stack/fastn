@@ -109,13 +109,13 @@ pub(crate) fn assert_no_extra_headers(
     !found
 }
 
-impl<U, R> From<U> for fastn_unresolved::UR<U, R> {
+impl<U: std::fmt::Debug, R: std::fmt::Debug> From<U> for fastn_unresolved::UR<U, R> {
     fn from(u: U) -> fastn_unresolved::UR<U, R> {
         fastn_unresolved::UR::UnResolved(u)
     }
 }
 
-impl<U, V> fastn_unresolved::UR<U, V> {
+impl<U: std::fmt::Debug, V: std::fmt::Debug> fastn_unresolved::UR<U, V> {
     pub fn unresolved(&self) -> Option<&U> {
         match self {
             fastn_unresolved::UR::UnResolved(u) => Some(u),
@@ -133,7 +133,7 @@ impl<U, V> fastn_unresolved::UR<U, V> {
     pub fn into_resolved(self) -> V {
         match self {
             fastn_unresolved::UR::Resolved(v) => v,
-            _ => panic!(),
+            _ => panic!("{self:?}"),
         }
     }
 }

@@ -1,6 +1,7 @@
 pub(crate) fn resolved_content(
     content: Vec<fastn_unresolved::URCI>,
 ) -> Vec<fastn_resolved::ComponentInvocation> {
+    dbg!(&content);
     // self.content should be all UR::R now
     // every symbol in self.symbol_used in the bag must be UR::R now
     content.into_iter().map(|ur| ur.into_resolved()).collect()

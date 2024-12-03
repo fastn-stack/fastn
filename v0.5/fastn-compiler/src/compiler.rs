@@ -142,26 +142,24 @@ impl Compiler {
         let mut stuck_on_symbols = std::collections::HashSet::new();
 
         let content = self.content.replace(vec![]).unwrap();
+        dbg!(&content);
         let mut new_content = vec![];
 
-        for ci in content {
-            match ci {
-                fastn_unresolved::UR::UnResolved(mut c) => {
-                    let mut needed = Default::default();
-                    c.resolve(
-                        &self.definitions,
-                        &self.modules,
-                        &mut self.arena,
-                        &mut needed,
-                    );
-                    stuck_on_symbols.extend(needed.stuck_on);
-                    self.document
-                        .merge(needed.errors, needed.warnings, needed.comments);
-                }
-                v => new_content.push(v),
+        for mut ci in content {
+            if let fastn_unresolved::UR::UnResolved(ref mut c) = ci {
+                let mut needed = Default::default();
+                c.resolve(
+                    &self.definitions,
+                    &self.modules,
+                    &mut self.arena,
+                    &mut needed,
+                );
+                stuck_on_symbols.extend(needed.stuck_on);
+                self.document
+                    .merge(needed.errors, needed.warnings, needed.comments);
             }
+            new_content.push(ci);
         }
-
         self.content = Some(new_content);
 
         stuck_on_symbols
@@ -176,10 +174,13 @@ impl Compiler {
         while iterations < ITERATION_THRESHOLD {
             // resolve_document can internally run in parallel.
             // TODO: pass unresolvable to self.resolve_document() and make sure they don't come back
+            dbg!(&self.content);
             let unresolved_symbols = self.resolve_document();
             if unresolved_symbols.is_empty() {
+                dbg!(&self.content);
                 break;
             }
+            dbg!(&self.content);
             // ever_used.extend(&unresolved_symbols);
             self.fetch_unresolved_symbols(&unresolved_symbols).await;
             // this itself has to happen in a loop. we need a warning if we are not able to resolve all
@@ -219,14 +220,14 @@ impl Compiler {
         }
 
         // there were no errors, etc.
-        Ok(fastn_resolved::CompiledDocument {
-            content: fastn_compiler::utils::resolved_content(self.document.content),
+        Ok(dbg!(fastn_resolved::CompiledDocument {
+            content: fastn_compiler::utils::resolved_content(self.content.unwrap()),
             definitions: fastn_compiler::utils::used_definitions(
                 self.definitions,
                 self.definitions_used,
                 self.arena,
             ),
-        })
+        }))
     }
 }
 

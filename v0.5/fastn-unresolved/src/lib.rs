@@ -152,7 +152,7 @@ pub enum InnerDefinition {
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub enum UR<U, R> {
+pub enum UR<U: std::fmt::Debug, R: std::fmt::Debug> {
     Resolved(R),
     UnResolved(U),
     NotFound,
