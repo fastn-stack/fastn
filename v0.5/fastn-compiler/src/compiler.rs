@@ -146,9 +146,9 @@ impl Compiler {
         let mut new_content = vec![];
 
         for mut ci in content {
-            if let fastn_unresolved::UR::UnResolved(ref mut c) = ci {
+            let resolved = if let fastn_unresolved::UR::UnResolved(ref mut c) = ci {
                 let mut needed = Default::default();
-                c.resolve(
+                let resolved = c.resolve(
                     &self.definitions,
                     &self.modules,
                     &mut self.arena,
@@ -157,6 +157,12 @@ impl Compiler {
                 stuck_on_symbols.extend(needed.stuck_on);
                 self.document
                     .merge(needed.errors, needed.warnings, needed.comments);
+                resolved
+            } else {
+                false
+            };
+            if resolved {
+                ci.resolve_it()
             }
             new_content.push(ci);
         }

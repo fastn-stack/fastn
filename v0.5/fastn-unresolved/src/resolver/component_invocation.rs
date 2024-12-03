@@ -68,10 +68,6 @@ impl fastn_unresolved::ComponentInvocation {
             output,
         );
 
-        if resolved {
-            // *self = fastn_unresolved::UR::Resolved()
-            todo!()
-        }
         resolved
     }
 }

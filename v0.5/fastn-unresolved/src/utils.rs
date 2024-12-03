@@ -156,6 +156,12 @@ impl<U: std::fmt::Debug, R: std::fmt::Debug> fastn_unresolved::UR<U, R> {
     }
 }
 
+impl From<fastn_unresolved::ComponentInvocation> for fastn_resolved::ComponentInvocation {
+    fn from(_inv: fastn_unresolved::ComponentInvocation) -> Self {
+        todo!()
+    }
+}
+
 impl fastn_unresolved::Symbol {
     pub fn new(
         package: &str,
