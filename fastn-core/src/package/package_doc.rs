@@ -393,6 +393,9 @@ pub(crate) async fn read_ftd_(
             )
             .await
         }
+        fastn_core::FTDEdition::FTD2024 => {
+            todo!()
+        }
     }
 }
 

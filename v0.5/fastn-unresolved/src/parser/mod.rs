@@ -72,6 +72,7 @@ where
     let (mut document, sections) = fastn_unresolved::Document::new(
         module,
         fastn_section::Document::parse(&arcstr::ArcStr::from(source)),
+        &mut arena,
     );
 
     let section = {

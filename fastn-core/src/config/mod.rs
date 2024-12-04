@@ -8,6 +8,7 @@ pub enum FTDEdition {
     FTD2022,
     #[default]
     FTD2023,
+    FTD2024,
 }
 
 impl FTDEdition {
@@ -15,6 +16,7 @@ impl FTDEdition {
         match s {
             "2022" => Ok(FTDEdition::FTD2022),
             "2023" => Ok(FTDEdition::FTD2023),
+            "2024" => Ok(FTDEdition::FTD2024),
             t => {
                 fastn_core::usage_error(format!("Unknown edition `{}`. Help use `2022` instead", t))
             }
