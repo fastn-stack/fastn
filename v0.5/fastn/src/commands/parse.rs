@@ -1,5 +1,14 @@
 // does error handling
 pub fn parse() -> fastn::commands::Cli {
+    if std::env::args().any(|x| x == "serve") {
+        return fastn::commands::Cli::Serve(fastn::commands::Serve {
+            listen: "127.0.0.1:8000".parse().unwrap(),
+            watch: false,
+            build: false,
+            offline: false,
+        });
+    }
+
     // TODO
     fastn::commands::Cli::Render(fastn::commands::Render {
         path: "/".to_string(),

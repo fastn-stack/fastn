@@ -46,10 +46,13 @@ fastn-resolved = { path = "../fastn-resolved", default-features = false }
 fastn-runtime = { path = "../fastn-runtime", default-features = false }
 fastn-builtins = { path = "../fastn-builtins" }
 fastn-unresolved = { path = "fastn-unresolved" }
+hyper = { version = "1.5.1", features = ["server", "http1"] }
+hyper-util = { version = "0.1.10", features = ["tokio"] }
+http-body-util = "0.1"
 id-arena = "2"
 indexmap = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 string-interner = "0.18"
-tokio = { version = "1", features = ["full"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 
