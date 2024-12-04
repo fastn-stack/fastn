@@ -16,11 +16,9 @@ members = [
     "fastn-utils",
     "fbt",
     "fbt_lib",
-    "foo",
     "ftd",
     "ftd-ast",
     "ftd-p1",
-    "t",
 ]
 exclude = ["fastn-wasm-runtime", "fastn-wasm", "integration-tests/wasm", "v0.5"]
 resolver = "2"
