@@ -355,6 +355,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "arcstr"
+version = "1.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "03918c3dbd7701a85c6b9887732e2921175f26c350b4563841d0958c21d57e6d"
+
+[[package]]
 name = "arrayvec"
 version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1410,6 +1416,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "fastn-compiler"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "fastn-builtins",
+ "fastn-resolved",
+ "fastn-section",
+ "fastn-unresolved",
+ "indexmap",
+]
+
+[[package]]
 name = "fastn-core"
 version = "0.1.0"
 dependencies = [
@@ -1477,6 +1495,8 @@ dependencies = [
  "deadpool",
  "deadpool-postgres",
  "dirs",
+ "fastn-compiler",
+ "fastn-unresolved",
  "fastn-utils",
  "ft-sys-shared",
  "futures-util",
@@ -1581,6 +1601,27 @@ dependencies = [
  "once_cell",
  "serde",
  "sha2",
+]
+
+[[package]]
+name = "fastn-section"
+version = "0.1.0"
+dependencies = [
+ "arcstr",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "fastn-unresolved"
+version = "0.1.0"
+dependencies = [
+ "arcstr",
+ "fastn-builtins",
+ "fastn-resolved",
+ "fastn-section",
+ "id-arena",
+ "string-interner",
 ]
 
 [[package]]
@@ -3652,6 +3693,16 @@ name = "stable_deref_trait"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a8f112729512f8e442d81f95a8a7ddf2b7c6b8a1a6f509a95864142b30cab2d3"
+
+[[package]]
+name = "string-interner"
+version = "0.18.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1a3275464d7a9f2d4cac57c89c2ef96a8524dba2864c8d6f82e3980baf136f9b"
+dependencies = [
+ "hashbrown 0.15.2",
+ "serde",
+]
 
 [[package]]
 name = "stringprep"

@@ -92,6 +92,8 @@ fastn-core.path = "fastn-core"
 fastn-issues.path = "fastn-issues"
 fastn-package.path = "fastn-package"
 fastn-utils.path = "fastn-utils"
+fastn-compiler = { path = "v0.5/fastn-compiler", features = ["owned-tdoc"] }
+fastn-unresolved.path = "v0.5/fastn-unresolved"
 fastn-runtime.path = "fastn-runtime"
 fbt-lib.path = "fbt_lib"
 fastn-expr.path = "fastn-expr"

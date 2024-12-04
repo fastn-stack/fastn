@@ -10,6 +10,7 @@ mod user_data;
 mod utils;
 pub mod wasm;
 pub use user_data::UserDataError;
+mod symbols;
 
 pub use create_pool::create_pool;
 
