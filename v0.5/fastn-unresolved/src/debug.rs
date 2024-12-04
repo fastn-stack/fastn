@@ -4,11 +4,44 @@ pub(crate) trait JIDebug: std::fmt::Debug {
     fn idebug(&self, arena: &fastn_unresolved::Arena) -> serde_json::Value;
 }
 
-impl<T: JDebug> JIDebug for T {
+impl<T: fastn_unresolved::JIDebug> fastn_unresolved::JIDebug for Option<T> {
+    fn idebug(&self, arena: &fastn_unresolved::Arena) -> serde_json::Value {
+        self.as_ref()
+            .map(|v| v.idebug(arena))
+            .unwrap_or(serde_json::Value::Null)
+    }
+}
+
+impl fastn_unresolved::JIDebug for fastn_section::Identifier {
     fn idebug(&self, _arena: &fastn_unresolved::Arena) -> serde_json::Value {
         self.debug()
     }
 }
+
+impl fastn_unresolved::JIDebug for fastn_section::IdentifierReference {
+    fn idebug(&self, _arena: &fastn_unresolved::Arena) -> serde_json::Value {
+        self.debug()
+    }
+}
+
+impl fastn_unresolved::JIDebug for fastn_section::HeaderValue {
+    fn idebug(&self, _arena: &fastn_unresolved::Arena) -> serde_json::Value {
+        self.debug()
+    }
+}
+
+impl fastn_unresolved::JIDebug for () {
+    fn idebug(&self, _arena: &fastn_unresolved::Arena) -> serde_json::Value {
+        self.debug()
+    }
+}
+
+// this leads to conflicting implementation issue
+// impl<T: JDebug> JIDebug for T {
+//     fn idebug(&self, _arena: &fastn_unresolved::Arena) -> serde_json::Value {
+//         self.debug()
+//     }
+// }
 
 impl fastn_unresolved::JIDebug for fastn_unresolved::ComponentInvocation {
     fn idebug(&self, arena: &fastn_unresolved::Arena) -> serde_json::Value {
