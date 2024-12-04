@@ -12,7 +12,7 @@ pub(super) fn component_invocation(
 
     document.content.push(
         fastn_unresolved::ComponentInvocation {
-            aliases: document.aliases,
+            aliases: document.aliases.unwrap(),
             module: document.module.clone(),
             name: fastn_unresolved::UR::UnResolved(section.init.name.clone()),
             caption: section.caption.into(),

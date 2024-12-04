@@ -45,7 +45,7 @@ pub(super) fn function_definition(
         fastn_unresolved::Definition {
             symbol: Default::default(),
             doc: Default::default(),
-            aliases: document.aliases,
+            aliases: document.aliases.unwrap(),
             visibility,
             name: fastn_section::Identifier { name }.into(),
             inner: fastn_unresolved::InnerDefinition::Function {

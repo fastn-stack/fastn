@@ -16,7 +16,7 @@ pub(crate) struct Compiler {
     /// checkout resolve_document for why this is an Option
     content: Option<Vec<fastn_unresolved::URCI>>,
     pub(crate) document: fastn_unresolved::Document,
-    auto_imports: fastn_unresolved::AliasesID,
+    global_aliases: fastn_unresolved::AliasesSimple,
 }
 
 impl Compiler {
@@ -25,16 +25,14 @@ impl Compiler {
         source: &str,
         package: &str,
         module: Option<&str>,
-        auto_imports: fastn_unresolved::AliasesID,
-        global_arena: &fastn_unresolved::Arena,
+        global_aliases: fastn_unresolved::AliasesSimple,
     ) -> Self {
         let mut arena = fastn_unresolved::Arena::default();
         let mut document = fastn_unresolved::parse(
             fastn_unresolved::Module::new(package, module, &mut arena),
             source,
             &mut arena,
-            auto_imports,
-            global_arena,
+            &global_aliases,
         );
         let content = Some(document.content);
         document.content = vec![];
@@ -46,7 +44,7 @@ impl Compiler {
             modules: std::collections::HashMap::new(),
             content,
             document,
-            auto_imports,
+            global_aliases,
             definitions_used: Default::default(),
         }
     }
@@ -59,7 +57,7 @@ impl Compiler {
             .extend(symbols_to_fetch.iter().cloned());
         let definitions = self
             .symbols
-            .lookup(&mut self.arena, symbols_to_fetch, self.auto_imports)
+            .lookup(&mut self.arena, &self.global_aliases, symbols_to_fetch)
             .await;
         for definition in definitions {
             // the following is only okay if our symbol store only returns unresolved definitions,
@@ -249,14 +247,13 @@ impl Compiler {
 /// earlier we had strict mode here, but to simplify things, now we let the caller convert non-empty
 /// warnings from OK part as error, and discard the generated JS.
 pub async fn compile(
-    symbols: Box<dyn fastn_compiler::SymbolStore>,
+    symbols: Box<dyn fastn_compiler::SymbolStore + Send>,
     source: &str,
     package: &str,
     module: Option<&str>,
-    auto_imports: fastn_unresolved::AliasesID,
-    global_arena: &fastn_unresolved::Arena,
+    global_aliases: fastn_unresolved::AliasesSimple,
 ) -> Result<fastn_resolved::CompiledDocument, fastn_compiler::Error> {
-    Compiler::new(symbols, source, package, module, auto_imports, global_arena)
+    Compiler::new(symbols, source, package, module, global_aliases)
         .compile()
         .await
 }

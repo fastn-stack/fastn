@@ -1,13 +1,10 @@
-use std::sync::Arc;
-
 impl fastn::commands::Serve {
-    pub async fn run(self, config: fastn_core::Config, arena: fastn_unresolved::Arena) {
+    pub async fn run(self, config: fastn_core::Config) {
         let listener = match tokio::net::TcpListener::bind(&self.listen).await {
             Ok(listener) => listener,
             Err(e) => panic!("failed to bind to {}: {}", self.listen, e),
         };
-        let arena = Arc::new(arena);
-        println!("Listening on {}://{}.", self.listen, self.protocol);
+        println!("Listening on {}://{}.", self.protocol, self.listen);
         loop {
             let (stream, _) = match listener.accept().await {
                 Ok(stream) => stream,
@@ -24,6 +21,7 @@ impl fastn::commands::Serve {
             // `hyper::rt` IO traits.
             let io = hyper_util::rt::TokioIo::new(stream);
 
+            let auto_imports = config.auto_imports.clone();
             // Spawn a tokio task to serve multiple connections concurrently
             tokio::task::spawn(async move {
                 // Finally, we bind the incoming connection to our `hello` service
@@ -31,7 +29,7 @@ impl fastn::commands::Serve {
                     // `service_fn` converts our function in a `Service`
                     .serve_connection(
                         io,
-                        hyper::service::service_fn(|r| render(r, config.auto_imports, &arena)),
+                        hyper::service::service_fn(|r| render(r, auto_imports.clone())),
                     )
                     .await
                 {
@@ -44,16 +42,14 @@ impl fastn::commands::Serve {
 
 async fn render(
     _: hyper::Request<hyper::body::Incoming>,
-    auto_imports: fastn_unresolved::AliasesID,
-    global_arena: &fastn_unresolved::Arena,
+    global_aliases: fastn_unresolved::AliasesSimple,
 ) -> Result<hyper::Response<http_body_util::Full<hyper::body::Bytes>>, std::convert::Infallible> {
+    // let route = fastn_core::Route::Document("index.ftd".to_string(), serde_json::Value::Null);
     Ok(hyper::Response::new(http_body_util::Full::new(
-        // hyper::body::Bytes::from("Hello, World!"),
         hyper::body::Bytes::from(
             fastn::commands::render::render_document(
-                auto_imports,
-                global_arena,
-                "/",
+                global_aliases,
+                "index.ftd",
                 serde_json::Value::Null,
                 false,
             )

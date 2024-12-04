@@ -3,7 +3,7 @@ mod read;
 #[allow(dead_code)]
 pub struct Config {
     sitemap: Sitemap,
-    pub auto_imports: fastn_unresolved::AliasesID,
+    pub auto_imports: fastn_unresolved::AliasesSimple,
     redirects: Vec<Redirect>,
     dynamic_routes: Vec<DynamicRoute>,
 }

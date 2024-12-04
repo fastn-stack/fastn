@@ -21,7 +21,10 @@ pub type URCI = fastn_unresolved::UR<
 >;
 pub type URIS = fastn_unresolved::UR<fastn_section::IdentifierReference, fastn_unresolved::Symbol>;
 pub type Aliases = std::collections::HashMap<String, fastn_unresolved::SoM>;
+pub type AliasesSimple =
+    std::collections::HashMap<String, fastn_unresolved::SoMBase<String, String>>;
 pub type AliasesID = id_arena::Id<Aliases>;
+pub type SoM = fastn_unresolved::SoMBase<Symbol, Module>;
 
 #[derive(Default)]
 pub struct Arena {
@@ -50,14 +53,14 @@ pub struct Module {
 }
 
 #[derive(Clone)]
-pub enum SoM {
-    Symbol(Symbol),
-    Module(Module),
+pub enum SoMBase<S, M> {
+    Symbol(S),
+    Module(M),
 }
 
 #[derive(Debug, Clone)]
 pub struct Document {
-    pub aliases: AliasesID,
+    pub aliases: Option<AliasesID>,
     pub module: fastn_unresolved::Module,
     pub module_doc: Option<fastn_section::Span>,
     pub definitions: Vec<URD>,

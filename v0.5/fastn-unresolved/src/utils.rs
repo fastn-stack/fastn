@@ -2,12 +2,12 @@ impl fastn_unresolved::Document {
     pub(crate) fn new(
         module: fastn_unresolved::Module,
         document: fastn_section::Document,
-        auto_imports: fastn_unresolved::AliasesID,
+        arena: &mut fastn_unresolved::Arena,
     ) -> (fastn_unresolved::Document, Vec<fastn_section::Section>) {
         (
             fastn_unresolved::Document {
                 module,
-                aliases: auto_imports,
+                aliases: Some(arena.new_aliases()),
                 module_doc: document.module_doc,
                 definitions: vec![],
                 content: vec![],
@@ -34,7 +34,7 @@ impl fastn_unresolved::Document {
     pub(crate) fn add_definitions_to_scope(
         &mut self,
         _arena: &mut fastn_unresolved::Arena,
-        _global_arena: &fastn_unresolved::Arena,
+        _global_aliases: &fastn_unresolved::AliasesSimple,
     ) {
         // this takes id auto imports in self.aliases, and creates a new Aliases with imports
         // merged into it, and updates the self.aliases to point to that
