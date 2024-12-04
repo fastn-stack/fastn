@@ -6,6 +6,7 @@ pub fn parse() -> fastn::commands::Cli {
             watch: false,
             build: false,
             offline: false,
+            protocol: "http".to_string(),
         });
     }
 

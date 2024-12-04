@@ -1,6 +1,6 @@
 use fastn_section::JDebug;
 
-pub(crate) trait JIDebug {
+pub(crate) trait JIDebug: std::fmt::Debug {
     fn idebug(&self, arena: &fastn_unresolved::Arena) -> serde_json::Value;
 }
 
@@ -96,8 +96,8 @@ impl fastn_unresolved::JIDebug for fastn_unresolved::Kind {
 }
 
 impl fastn_unresolved::JIDebug for fastn_unresolved::Symbol {
-    fn idebug(&self, _arena: &fastn_unresolved::Arena) -> serde_json::Value {
-        todo!()
+    fn idebug(&self, arena: &fastn_unresolved::Arena) -> serde_json::Value {
+        self.string(arena).into()
     }
 }
 

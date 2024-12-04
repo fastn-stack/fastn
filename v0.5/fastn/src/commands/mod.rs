@@ -58,6 +58,7 @@ pub struct Render {
 }
 
 pub struct Serve {
+    pub protocol: String,
     pub listen: std::net::SocketAddr,
     pub watch: bool,
     pub build: bool,

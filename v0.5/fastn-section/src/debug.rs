@@ -178,8 +178,8 @@ impl<T: fastn_section::JDebug> fastn_section::JDebug for Option<T> {
     }
 }
 
-impl<K: AsRef<fastn_section::Span>, V: fastn_section::JDebug> fastn_section::JDebug
-    for std::collections::HashMap<K, V>
+impl<K: AsRef<fastn_section::Span> + std::fmt::Debug, V: fastn_section::JDebug>
+    fastn_section::JDebug for std::collections::HashMap<K, V>
 {
     fn debug(&self) -> serde_json::Value {
         let mut o = serde_json::Map::new();

@@ -14,6 +14,7 @@ pub fn kinded_name(
     Some(KindedName { kind, name })
 }
 
+#[derive(Debug)]
 pub struct KindedName {
     pub kind: Option<fastn_section::Kind>,
     pub name: fastn_section::IdentifierReference,

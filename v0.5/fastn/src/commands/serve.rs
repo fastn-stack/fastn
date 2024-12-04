@@ -4,7 +4,7 @@ impl fastn::commands::Serve {
             Ok(listener) => listener,
             Err(e) => panic!("failed to bind to {}: {}", self.listen, e),
         };
-        println!("Listening on {proto}://{}.", self.listen, proto = "http");
+        println!("Listening on {}://{}.", self.listen, self.protocol);
         loop {
             let (stream, _) = match listener.accept().await {
                 Ok(stream) => stream,

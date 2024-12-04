@@ -36,7 +36,7 @@ pub struct Spanned<T> {
     pub value: T,
 }
 
-pub trait JDebug {
+pub trait JDebug: std::fmt::Debug {
     fn debug(&self) -> serde_json::Value;
 }
 
