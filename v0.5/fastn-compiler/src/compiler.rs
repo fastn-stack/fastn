@@ -142,7 +142,6 @@ impl Compiler {
         let mut stuck_on_symbols = std::collections::HashSet::new();
 
         let content = self.content.replace(vec![]).unwrap();
-        dbg!(&content);
         let mut new_content = vec![];
 
         for mut ci in content {
@@ -180,13 +179,10 @@ impl Compiler {
         while iterations < ITERATION_THRESHOLD {
             // resolve_document can internally run in parallel.
             // TODO: pass unresolvable to self.resolve_document() and make sure they don't come back
-            dbg!(&self.content);
             let unresolved_symbols = self.resolve_document();
             if unresolved_symbols.is_empty() {
-                dbg!(&self.content);
                 break;
             }
-            dbg!(&self.content);
             // ever_used.extend(&unresolved_symbols);
             self.fetch_unresolved_symbols(&unresolved_symbols).await;
             // this itself has to happen in a loop. we need a warning if we are not able to resolve all
@@ -226,14 +222,14 @@ impl Compiler {
         }
 
         // there were no errors, etc.
-        Ok(dbg!(fastn_resolved::CompiledDocument {
+        Ok(fastn_resolved::CompiledDocument {
             content: fastn_compiler::utils::resolved_content(self.content.unwrap()),
             definitions: fastn_compiler::utils::used_definitions(
                 self.definitions,
                 self.definitions_used,
                 self.arena,
             ),
-        }))
+        })
     }
 }
 

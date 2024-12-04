@@ -52,7 +52,7 @@ pub struct Module {
     package_len: std::num::NonZeroU16,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum SoMBase<S, M> {
     Symbol(S),
     Module(M),
