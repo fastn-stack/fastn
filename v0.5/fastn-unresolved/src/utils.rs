@@ -31,7 +31,11 @@ impl fastn_unresolved::Document {
         self.comments.extend(comments);
     }
 
-    pub(crate) fn add_definitions_to_scope(&mut self, _arena: &mut fastn_unresolved::Arena) {
+    pub(crate) fn add_definitions_to_scope(
+        &mut self,
+        _arena: &mut fastn_unresolved::Arena,
+        _global_arena: &fastn_unresolved::Arena,
+    ) {
         // this takes id auto imports in self.aliases, and creates a new Aliases with imports
         // merged into it, and updates the self.aliases to point to that
     }

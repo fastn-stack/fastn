@@ -5,6 +5,7 @@ impl Symbols {
     fn find_all_definitions_in_a_module(
         &mut self,
         arena: &mut fastn_unresolved::Arena,
+        global_arena: &fastn_unresolved::Arena,
         (file, module): (String, fastn_unresolved::Module),
         auto_imports: fastn_unresolved::AliasesID,
     ) -> Vec<fastn_unresolved::URD> {
@@ -17,7 +18,7 @@ impl Symbols {
             }
         };
 
-        let d = fastn_unresolved::parse(module.clone(), &source, arena, auto_imports);
+        let d = fastn_unresolved::parse(module.clone(), &source, arena, auto_imports, global_arena);
 
         d.definitions
             .into_iter()
@@ -39,6 +40,7 @@ impl fastn_compiler::SymbolStore for Symbols {
     async fn lookup(
         &mut self,
         arena: &mut fastn_unresolved::Arena,
+        global_arena: &fastn_unresolved::Arena,
         symbols: &std::collections::HashSet<fastn_unresolved::Symbol>,
         auto_imports: fastn_unresolved::AliasesID,
     ) -> Vec<fastn_unresolved::URD> {
@@ -49,7 +51,9 @@ impl fastn_compiler::SymbolStore for Symbols {
 
         unique_modules
             .into_iter()
-            .flat_map(|m| self.find_all_definitions_in_a_module(arena, m, auto_imports))
+            .flat_map(|m| {
+                self.find_all_definitions_in_a_module(arena, global_arena, m, auto_imports)
+            })
             .collect()
     }
 }

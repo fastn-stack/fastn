@@ -7,6 +7,7 @@ pub fn parse(
     source: &str,
     arena: &mut fastn_unresolved::Arena,
     auto_imports: fastn_unresolved::AliasesID,
+    global_arena: &fastn_unresolved::Arena,
 ) -> fastn_unresolved::Document {
     let (mut document, sections) = fastn_unresolved::Document::new(
         module,
@@ -51,7 +52,7 @@ pub fn parse(
         }
     }
 
-    document.add_definitions_to_scope(arena);
+    document.add_definitions_to_scope(arena, global_arena);
     document
 }
 

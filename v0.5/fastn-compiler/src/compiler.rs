@@ -26,13 +26,15 @@ impl Compiler {
         package: &str,
         module: Option<&str>,
         auto_imports: fastn_unresolved::AliasesID,
-        mut arena: fastn_unresolved::Arena,
+        global_arena: &fastn_unresolved::Arena,
     ) -> Self {
+        let mut arena = fastn_unresolved::Arena::default();
         let mut document = fastn_unresolved::parse(
             fastn_unresolved::Module::new(package, module, &mut arena),
             source,
             &mut arena,
             auto_imports,
+            global_arena,
         );
         let content = Some(document.content);
         document.content = vec![];
@@ -252,9 +254,9 @@ pub async fn compile(
     package: &str,
     module: Option<&str>,
     auto_imports: fastn_unresolved::AliasesID,
-    arena: fastn_unresolved::Arena,
+    global_arena: &fastn_unresolved::Arena,
 ) -> Result<fastn_resolved::CompiledDocument, fastn_compiler::Error> {
-    Compiler::new(symbols, source, package, module, auto_imports, arena)
+    Compiler::new(symbols, source, package, module, auto_imports, global_arena)
         .compile()
         .await
 }

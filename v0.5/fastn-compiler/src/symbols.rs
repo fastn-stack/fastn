@@ -13,6 +13,7 @@ pub trait SymbolStore {
     async fn lookup(
         &mut self,
         arena: &mut fastn_unresolved::Arena,
+        global_arena: &fastn_unresolved::Arena,
         symbols: &std::collections::HashSet<fastn_unresolved::Symbol>,
         auto_imports: fastn_unresolved::AliasesID,
     ) -> Vec<fastn_unresolved::URD>;

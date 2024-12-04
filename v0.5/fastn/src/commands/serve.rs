@@ -1,9 +1,12 @@
+use std::sync::Arc;
+
 impl fastn::commands::Serve {
-    pub async fn run(self, _config: fastn_core::Config, _interner: fastn_unresolved::Arena) {
+    pub async fn run(self, config: fastn_core::Config, arena: fastn_unresolved::Arena) {
         let listener = match tokio::net::TcpListener::bind(&self.listen).await {
             Ok(listener) => listener,
             Err(e) => panic!("failed to bind to {}: {}", self.listen, e),
         };
+        let arena = Arc::new(arena);
         println!("Listening on {}://{}.", self.listen, self.protocol);
         loop {
             let (stream, _) = match listener.accept().await {
@@ -26,7 +29,10 @@ impl fastn::commands::Serve {
                 // Finally, we bind the incoming connection to our `hello` service
                 if let Err(err) = hyper::server::conn::http1::Builder::new()
                     // `service_fn` converts our function in a `Service`
-                    .serve_connection(io, hyper::service::service_fn(hello))
+                    .serve_connection(
+                        io,
+                        hyper::service::service_fn(|r| render(r, config.auto_imports, &arena)),
+                    )
                     .await
                 {
                     eprintln!("Error serving connection: {:?}", err);
@@ -36,10 +42,23 @@ impl fastn::commands::Serve {
     }
 }
 
-async fn hello(
+async fn render(
     _: hyper::Request<hyper::body::Incoming>,
+    auto_imports: fastn_unresolved::AliasesID,
+    global_arena: &fastn_unresolved::Arena,
 ) -> Result<hyper::Response<http_body_util::Full<hyper::body::Bytes>>, std::convert::Infallible> {
     Ok(hyper::Response::new(http_body_util::Full::new(
-        hyper::body::Bytes::from("Hello, World!"),
+        // hyper::body::Bytes::from("Hello, World!"),
+        hyper::body::Bytes::from(
+            fastn::commands::render::render_document(
+                auto_imports,
+                global_arena,
+                "/",
+                serde_json::Value::Null,
+                false,
+            )
+            .await
+            .into_bytes(),
+        ),
     )))
 }

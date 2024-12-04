@@ -1,22 +1,25 @@
 impl fastn::commands::Render {
-    pub async fn run(self, config: &mut fastn_core::Config, arena: fastn_unresolved::Arena) {
+    pub async fn run(self, config: &mut fastn_core::Config, arena: &fastn_unresolved::Arena) {
         let route = config.resolve(self.path.as_str()).await;
         match route {
             fastn_core::Route::Document(path, data) => {
-                render_document(config, path.as_str(), data, self.strict, arena).await
+                let html =
+                    render_document(config.auto_imports, arena, path.as_str(), data, self.strict)
+                        .await;
+                std::fs::write(path.replace(".ftd", ".html"), html).unwrap();
             }
             _ => todo!(),
         };
     }
 }
 
-async fn render_document(
-    config: &fastn_core::Config,
+pub(crate) async fn render_document(
+    auto_imports: fastn_unresolved::AliasesID,
+    global_arena: &fastn_unresolved::Arena,
     path: &str,
     _data: serde_json::Value,
     _strict: bool,
-    arena: fastn_unresolved::Arena,
-) {
+) -> String {
     let source = std::fs::File::open(path)
         .and_then(std::io::read_to_string)
         .unwrap();
@@ -25,12 +28,12 @@ async fn render_document(
         &source,
         "main",
         None,
-        config.auto_imports,
-        arena,
+        auto_imports,
+        global_arena,
     )
     .await
     .unwrap();
+
     let h = fastn_runtime::HtmlData::from_cd(o);
-    let html = h.to_test_html();
-    std::fs::write(path.replace(".ftd", ".html"), html).unwrap();
+    h.to_test_html()
 }
