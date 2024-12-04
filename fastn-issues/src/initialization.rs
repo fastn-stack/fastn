@@ -5,11 +5,6 @@ pub enum InitializePackageError {
         #[from]
         source: FastnFTDError,
     },
-    #[error("db initialisation error: {source}")]
-    InitializeDBError {
-        #[from]
-        source: InitializeDBError,
-    },
 }
 
 #[derive(thiserror::Error, Debug)]
@@ -86,12 +81,4 @@ pub enum GetNameError {
     },
     #[error("fastn.package was not initialised in FASTN.ftd")]
     PackageIsNone,
-}
-
-#[derive(thiserror::Error, Debug)]
-pub enum InitializeDBError {
-    #[error("cant open db connection: {source}")]
-    OpenDBConnection { source: rusqlite::Error },
-    #[error("cant create tables: {source}")]
-    CreateTables { source: rusqlite::Error },
 }

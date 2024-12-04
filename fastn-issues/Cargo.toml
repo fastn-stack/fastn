@@ -9,5 +9,4 @@ homepage.workspace = true
 
 [dependencies]
 ftd.workspace = true
-rusqlite.workspace = true
 thiserror.workspace = true
