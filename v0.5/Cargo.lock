@@ -227,13 +227,16 @@ name = "fastn-runtime"
 version = "0.1.0"
 dependencies = [
  "fastn-builtins",
+ "fastn-compiler",
  "fastn-js",
  "fastn-resolved",
+ "fastn-unresolved",
  "indexmap",
  "indoc",
  "itertools",
  "once_cell",
  "serde",
+ "serde_json",
  "sha2",
 ]
 

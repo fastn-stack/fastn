@@ -35,7 +35,7 @@ impl fastn_ds::DocumentStore {
 }
 
 #[async_trait::async_trait]
-impl fastn_compiler::SymbolStore for fastn_ds::DocumentStore {
+impl fastn_compiler::SymbolStore for &mut fastn_ds::DocumentStore {
     async fn lookup(
         &mut self,
         arena: &mut fastn_unresolved::Arena,

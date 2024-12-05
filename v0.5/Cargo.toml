@@ -39,7 +39,7 @@ homepage = "https://fastn.com"
 
 arcstr = "1"
 async-trait = "0.1"
-fastn-compiler = { path = "fastn-compiler" }
+fastn-compiler = { path = "fastn-compiler", default-features = false }
 fastn-core = { path = "fastn-core" }
 fastn-section = { path = "fastn-section" }
 fastn-resolved = { path = "../fastn-resolved", default-features = false }

@@ -1450,6 +1450,7 @@ dependencies = [
  "fastn-observer",
  "fastn-package",
  "fastn-resolved",
+ "fastn-runtime",
  "fastn-utils",
  "fbt-lib",
  "ft-sys-shared",
@@ -1593,13 +1594,16 @@ name = "fastn-runtime"
 version = "0.1.0"
 dependencies = [
  "fastn-builtins",
+ "fastn-compiler",
  "fastn-js",
  "fastn-resolved",
+ "fastn-unresolved",
  "indexmap",
  "indoc",
  "itertools 0.13.0",
  "once_cell",
  "serde",
+ "serde_json",
  "sha2",
 ]
 

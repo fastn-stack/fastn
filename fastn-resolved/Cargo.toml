@@ -1,17 +1,17 @@
 [package]
 name = "fastn-resolved"
 version = "0.1.1"
-authors.workspace = true
-edition.workspace = true
-description.workspace = true
+#authors.workspace = true
+edition = "2021"
+#description.workspace = true
 license = "BSD-3-Clause"
-repository.workspace = true
-homepage.workspace = true
+#repository.workspace = true
+#homepage.workspace = true
 
 [features]
 owned-tdoc = []
 
 [dependencies]
-serde.workspace = true
-indexmap.workspace = true
+serde = "1"
+indexmap = "2"
 

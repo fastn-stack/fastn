@@ -9,7 +9,7 @@ repository.workspace = true
 homepage.workspace = true
 
 [features]
-owned-tdoc = []
+owned-tdoc = ["fastn-resolved/owned-tdoc"]
 
 [dependencies]
 async-trait.workspace = true
