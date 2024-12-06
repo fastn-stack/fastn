@@ -15,7 +15,7 @@ pub enum CompilerState {
 // exposing: y as x
 pub struct Compiler {
     pub(crate) definitions_used: std::collections::HashSet<fastn_unresolved::Symbol>,
-    pub(crate) arena: fastn_unresolved::Arena,
+    pub arena: fastn_unresolved::Arena,
     pub(crate) definitions: std::collections::HashMap<String, fastn_unresolved::URD>,
     /// we keep track of every module found (or not found), if not in dict we don't know
     /// if module exists, if in dict bool tells if it exists.
@@ -23,8 +23,8 @@ pub struct Compiler {
     /// checkout resolve_document for why this is an Option
     pub(crate) content: Option<Vec<fastn_unresolved::URCI>>,
     pub(crate) document: fastn_unresolved::Document,
-    #[expect(unused)]
-    pub(crate) global_aliases: fastn_unresolved::AliasesSimple,
+    pub global_aliases: fastn_unresolved::AliasesSimple,
+    iterations: usize,
 }
 
 impl Compiler {
@@ -52,34 +52,8 @@ impl Compiler {
             document,
             global_aliases,
             definitions_used: Default::default(),
+            iterations: 0,
         }
-    }
-
-    async fn fetch_unresolved_symbols(
-        &mut self,
-        _symbols_to_fetch: &std::collections::HashSet<fastn_unresolved::Symbol>,
-    ) {
-        todo!()
-        // self.definitions_used
-        //     .extend(symbols_to_fetch.iter().cloned());
-        // let definitions = self
-        //     .symbols
-        //     .lookup(&mut self.arena, &self.global_aliases, symbols_to_fetch)
-        //     .await;
-        // for definition in definitions {
-        //     // the following is only okay if our symbol store only returns unresolved definitions,
-        //     // some other store might return resolved definitions, and we need to handle that.
-        //     self.definitions.insert(
-        //         definition
-        //             .unresolved()
-        //             .unwrap()
-        //             .symbol
-        //             .clone()
-        //             .unwrap()
-        //             .string(&self.arena),
-        //         definition,
-        //     );
-        // }
     }
 
     /// try to resolve as many symbols as possible, and return the ones that we made any progress on.
@@ -177,48 +151,57 @@ impl Compiler {
         stuck_on_symbols
     }
 
-    async fn compile(mut self) -> CompilerState {
-        // we only make 10 attempts to resolve the document: we need a warning if we are not able to
-        // resolve the document in 10 attempts.
-        let mut unresolvable = std::collections::HashSet::new();
-        // let mut ever_used = std::collections::HashSet::new();
-        let mut iterations = 0;
-        while iterations < ITERATION_THRESHOLD {
-            // resolve_document can internally run in parallel.
-            // TODO: pass unresolvable to self.resolve_document() and make sure they don't come back
-            let unresolved_symbols = self.resolve_document();
-            if unresolved_symbols.is_empty() {
-                break;
-            }
-            // ever_used.extend(&unresolved_symbols);
-            self.fetch_unresolved_symbols(&unresolved_symbols).await;
-            // this itself has to happen in a loop. we need a warning if we are not able to resolve all
-            // symbols in 10 attempts.
-            let mut r = ResolveSymbolsResult::default();
-            r.need_more_symbols.extend(unresolved_symbols);
-
-            while iterations < ITERATION_THRESHOLD {
-                // resolve_document can internally run in parallel.
-                // TODO: pass unresolvable to self.resolve_symbols() and make sure they don't come back
-                r = self.resolve_symbols(r.need_more_symbols);
-                unresolvable.extend(r.unresolvable);
-                if r.need_more_symbols.is_empty() {
-                    break;
-                }
-                // ever_used.extend(r.need_more_symbols);
-                self.fetch_unresolved_symbols(&r.need_more_symbols).await;
-                iterations += 1;
-            }
-
-            iterations += 1;
+    pub fn continue_with_definitions(
+        mut self,
+        definitions: Vec<fastn_unresolved::URD>,
+    ) -> CompilerState {
+        self.iterations += 1;
+        if self.iterations > ITERATION_THRESHOLD {
+            panic!("iterations too high");
         }
 
+        for definition in definitions {
+            // the following is only okay if our symbol store only returns unresolved definitions,
+            // some other store might return resolved definitions, and we need to handle that.
+            self.definitions.insert(
+                definition
+                    .unresolved()
+                    .unwrap()
+                    .symbol
+                    .clone()
+                    .unwrap()
+                    .string(&self.arena),
+                definition,
+            );
+        }
+
+        let unresolved_symbols = self.resolve_document();
+        if unresolved_symbols.is_empty() {
+            return CompilerState::Done(self.finalise(false));
+        }
+
+        // this itself has to happen in a loop. we need a warning if we are not able to resolve all
+        // symbols in 10 attempts.
+        let mut r = ResolveSymbolsResult {
+            need_more_symbols: unresolved_symbols,
+            unresolvable: Default::default(),
+        };
+        r = self.resolve_symbols(r.need_more_symbols);
+
+        if r.need_more_symbols.is_empty() {
+            return CompilerState::Done(self.finalise(true));
+        }
+
+        CompilerState::StuckOnSymbols(Box::new(self), r.need_more_symbols)
+    }
+
+    fn finalise(
+        self,
+        some_symbols_are_unresolved: bool,
+    ) -> Result<fastn_resolved::CompiledDocument, fastn_compiler::Error> {
         // we are here means ideally we are done.
         // we could have some unresolvable symbols or self.document.errors may not be empty.
-        if !unresolvable.is_empty()
-            || !self.document.errors.is_empty()
-            || iterations == ITERATION_THRESHOLD
-        {
+        if some_symbols_are_unresolved || !self.document.errors.is_empty() {
             // we were not able to resolve all symbols or there were errors
             // return Err(fastn_compiler::Error {
             //     messages: todo!(),
@@ -229,14 +212,14 @@ impl Compiler {
         }
 
         // there were no errors, etc.
-        CompilerState::Done(Ok(fastn_resolved::CompiledDocument {
+        Ok(fastn_resolved::CompiledDocument {
             content: fastn_compiler::utils::resolved_content(self.content.unwrap()),
             definitions: fastn_compiler::utils::used_definitions(
                 self.definitions,
                 self.definitions_used,
                 self.arena,
             ),
-        }))
+        })
     }
 }
 
@@ -249,15 +232,13 @@ impl Compiler {
 ///
 /// earlier we had strict mode here, but to simplify things, now we let the caller convert non-empty
 /// warnings from OK part as error, and discard the generated JS.
-pub async fn compile(
+pub fn compile(
     source: &str,
     package: &str,
     module: Option<&str>,
     global_aliases: fastn_unresolved::AliasesSimple,
 ) -> CompilerState {
-    Compiler::new(source, package, module, global_aliases)
-        .compile()
-        .await
+    Compiler::new(source, package, module, global_aliases).continue_with_definitions(vec![])
 }
 
 #[derive(Default)]

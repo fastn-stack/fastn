@@ -8,9 +8,6 @@ license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 
-[features]
-owned-tdoc = ["fastn-resolved/owned-tdoc"]
-
 [dependencies]
 fastn-section.workspace = true
 fastn-resolved.workspace = true

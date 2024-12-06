@@ -4,8 +4,7 @@ pub struct Symbols {}
 impl Symbols {
     fn find_all_definitions_in_a_module(
         &mut self,
-        arena: &mut fastn_unresolved::Arena,
-        global_aliases: &fastn_unresolved::AliasesSimple,
+        compiler: &mut fastn_compiler::Compiler,
         (file, module): (String, fastn_unresolved::Module),
     ) -> Vec<fastn_unresolved::URD> {
         // we need to fetch the symbol from the store
@@ -17,13 +16,21 @@ impl Symbols {
             }
         };
 
-        let d = fastn_unresolved::parse(module.clone(), &source, arena, global_aliases);
+        let d = fastn_unresolved::parse(
+            module.clone(),
+            &source,
+            &mut compiler.arena,
+            &Default::default(), // TODO
+                                 // compiler.global_aliases,
+        );
 
         d.definitions
             .into_iter()
             .map(|d| match d {
                 fastn_unresolved::UR::UnResolved(mut v) => {
-                    v.symbol = Some(module.symbol(v.name.unresolved().unwrap().str(), arena));
+                    v.symbol = Some(
+                        module.symbol(v.name.unresolved().unwrap().str(), &mut compiler.arena),
+                    );
                     fastn_unresolved::UR::UnResolved(v)
                 }
                 _ => {
@@ -35,21 +42,19 @@ impl Symbols {
 }
 
 impl Symbols {
-    #[expect(unused)]
-    async fn lookup(
+    pub async fn lookup(
         &mut self,
-        arena: &mut fastn_unresolved::Arena,
-        global_aliases: &fastn_unresolved::AliasesSimple,
+        compiler: &mut fastn_compiler::Compiler,
         symbols: &std::collections::HashSet<fastn_unresolved::Symbol>,
     ) -> Vec<fastn_unresolved::URD> {
         let unique_modules = symbols
             .iter()
-            .map(|s| file_for_symbol(s, arena))
+            .map(|s| file_for_symbol(s, &mut compiler.arena))
             .collect::<std::collections::HashSet<_>>();
 
         unique_modules
             .into_iter()
-            .flat_map(|m| self.find_all_definitions_in_a_module(arena, global_aliases, m))
+            .flat_map(|m| self.find_all_definitions_in_a_module(compiler, m))
             .collect()
     }
 }

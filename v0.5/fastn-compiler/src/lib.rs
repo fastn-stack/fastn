@@ -5,11 +5,9 @@
 extern crate self as fastn_compiler;
 
 mod compiler;
-mod tdoc;
 mod utils;
-pub use tdoc::CompiledDocument;
 
-pub use compiler::compile;
+pub use compiler::{compile, Compiler, CompilerState};
 pub use fastn_section::Result;
 
 #[derive(Debug)]

@@ -10,8 +10,8 @@ homepage.workspace = true
 
 [dependencies]
 fastn-core.workspace = true
-#fastn-compiler.workspace = true
-#fastn-runtime.workspace = true
+fastn-compiler.workspace = true
+fastn-runtime.workspace = true
 fastn-unresolved.workspace = true
 hyper.workspace = true
 http-body-util.workspace = true
