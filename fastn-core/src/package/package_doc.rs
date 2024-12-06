@@ -397,11 +397,10 @@ pub(crate) async fn read_ftd_(
     }
 }
 
-async fn read_ftd_2024(_config: &mut fastn_core::RequestConfig) -> fastn_core::Result<FTDResult> {
+async fn read_ftd_2024(config: &fastn_core::RequestConfig) -> fastn_core::Result<FTDResult> {
     Ok(FTDResult::Html(
         fastn_runtime::render_2024_document(
-            // Box::new(&mut config.config.ds),
-            todo!(),
+            &config.config.ds,
             Default::default(),
             "index.ftd",
             serde_json::Value::Null,

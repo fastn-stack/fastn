@@ -1,5 +1,5 @@
 #[async_trait::async_trait]
-pub trait SymbolStore: Send {
+pub trait SymbolStore {
     /// it is okay / acceptable to return more symbols than asked.
     ///
     /// this is because if we are fetching symbols by parsing a ftd file, it makes sense to store
@@ -11,7 +11,7 @@ pub trait SymbolStore: Send {
     /// for some related symbols soon.
     // TODO: should we make it async?
     async fn lookup(
-        &mut self,
+        &self,
         arena: &mut fastn_unresolved::Arena,
         global_aliases: &fastn_unresolved::AliasesSimple,
         symbols: &std::collections::HashSet<fastn_unresolved::Symbol>,

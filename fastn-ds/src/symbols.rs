@@ -1,6 +1,6 @@
 impl fastn_ds::DocumentStore {
     async fn find_all_definitions_in_a_module(
-        &mut self,
+        &self,
         arena: &mut fastn_unresolved::Arena,
         global_aliases: &fastn_unresolved::AliasesSimple,
         (file, module): (String, fastn_unresolved::Module),
@@ -35,9 +35,9 @@ impl fastn_ds::DocumentStore {
 }
 
 #[async_trait::async_trait]
-impl fastn_compiler::SymbolStore for &mut fastn_ds::DocumentStore {
+impl fastn_compiler::SymbolStore for &fastn_ds::DocumentStore {
     async fn lookup(
-        &mut self,
+        &self,
         arena: &mut fastn_unresolved::Arena,
         global_aliases: &fastn_unresolved::AliasesSimple,
         symbols: &std::collections::HashSet<fastn_unresolved::Symbol>,

@@ -445,7 +445,7 @@ pub(crate) fn external_css_files(
 }
 
 pub async fn render_2024_document(
-    symbols: Box<dyn fastn_compiler::SymbolStore + Send>,
+    symbols: dyn fastn_compiler::SymbolStore,
     global_aliases: fastn_unresolved::AliasesSimple,
     path: &str,
     _data: serde_json::Value,
