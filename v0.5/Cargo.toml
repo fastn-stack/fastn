@@ -2,7 +2,7 @@
 members = [
     "fastn",
     "fastn-compiler",
-    "fastn-core",
+    "fastn-core", "fastn-package",
     "fastn-router",
     "fastn-section",
     "fastn-static",

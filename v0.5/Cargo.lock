@@ -202,6 +202,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "fastn-package"
+version = "0.1.0"
+
+[[package]]
 name = "fastn-resolved"
 version = "0.1.1"
 dependencies = [
