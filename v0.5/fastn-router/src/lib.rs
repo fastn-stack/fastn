@@ -1,4 +1,20 @@
-#![allow(dead_code)]
+#![allow(clippy::derive_partial_eq_without_eq, clippy::get_first)]
+#![deny(unused_crate_dependencies)]
+#![warn(clippy::used_underscore_binding)]
+
+extern crate self as fastn_router;
+
+mod read;
+mod route;
+
+pub struct Router {}
+
+pub enum Method {
+    Get,
+    Post,
+}
+
+#[allow(dead_code)]
 // the router will depend on fastn-section.
 pub enum Route {
     NotFound,
@@ -8,10 +24,4 @@ pub enum Route {
     Wasm(String, serde_json::Value),
     Redirect(String),
     Static(String),
-}
-
-impl fastn_core::Config {
-    pub async fn resolve(&self, _path: &str) -> fastn_core::Route {
-        fastn_core::Route::Document("index.ftd".to_string(), serde_json::Value::Null)
-    }
 }

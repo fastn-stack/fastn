@@ -148,6 +148,7 @@ version = "0.1.0"
 dependencies = [
  "fastn-compiler",
  "fastn-core",
+ "fastn-router",
  "fastn-runtime",
  "fastn-unresolved",
  "http-body-util",
@@ -184,7 +185,6 @@ version = "0.1.0"
 dependencies = [
  "fastn-section",
  "fastn-unresolved",
- "serde_json",
 ]
 
 [[package]]
@@ -207,6 +207,13 @@ version = "0.1.1"
 dependencies = [
  "indexmap",
  "serde",
+]
+
+[[package]]
+name = "fastn-router"
+version = "0.1.0"
+dependencies = [
+ "serde_json",
 ]
 
 [[package]]

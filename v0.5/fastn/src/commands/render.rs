@@ -1,8 +1,8 @@
 impl fastn::commands::Render {
     pub async fn run(self, config: &mut fastn_core::Config) {
-        let route = config.resolve(self.path.as_str()).await;
+        let route = fastn_router::Router::read().route("/", fastn_router::Method::Get, &[]);
         match route {
-            fastn_core::Route::Document(path, data) => {
+            fastn_router::Route::Document(path, data) => {
                 let html = fastn::commands::render::render_document(
                     config.auto_imports.clone(),
                     path.as_str(),

@@ -1,8 +1,9 @@
 [workspace]
 members = [
     "fastn",
-    "fastn-core",
     "fastn-compiler",
+    "fastn-core",
+    "fastn-router",
     "fastn-section",
     "fastn-static",
     "fastn-unresolved",
@@ -38,16 +39,17 @@ homepage = "https://fastn.com"
 # using the latest dependency, and what is the plan to move to the latest version.
 
 arcstr = "1"
+fastn-builtins = { path = "../fastn-builtins" }
 fastn-compiler = { path = "fastn-compiler", default-features = false }
 fastn-core = { path = "fastn-core" }
-fastn-section = { path = "fastn-section" }
 fastn-resolved = { path = "../fastn-resolved", default-features = false }
+fastn-router = { path = "fastn-router" }
 fastn-runtime = { path = "../fastn-runtime", default-features = false }
-fastn-builtins = { path = "../fastn-builtins" }
+fastn-section = { path = "fastn-section" }
 fastn-unresolved = { path = "fastn-unresolved" }
+http-body-util = "0.1"
 hyper = { version = "1.5.1", features = ["server", "http1"] }
 hyper-util = { version = "0.1.10", features = ["tokio"] }
-http-body-util = "0.1"
 id-arena = "2"
 indexmap = "2"
 serde = { version = "1", features = ["derive"] }
