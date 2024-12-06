@@ -49,6 +49,7 @@ async fn render(
     Ok(hyper::Response::new(http_body_util::Full::new(
         hyper::body::Bytes::from(
             fastn::commands::render::render_document(
+                Box::new(fastn::Symbols {}),
                 global_aliases,
                 "index.ftd",
                 serde_json::Value::Null,

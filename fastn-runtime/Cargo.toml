@@ -9,7 +9,7 @@ repository.workspace = true
 homepage.workspace = true
 
 [features]
-owned-tdoc = ["fastn-resolved/owned-tdoc", "fastn-compiler/owned-tdoc"]
+owned-tdoc = ["fastn-resolved/owned-tdoc"]
 
 [dependencies]
 fastn-js.workspace = true
@@ -21,6 +21,3 @@ serde.workspace = true
 once_cell.workspace = true
 sha2.workspace = true
 indexmap.workspace = true
-fastn-compiler.workspace = true
-fastn-unresolved.workspace = true
-serde_json.workspace = true

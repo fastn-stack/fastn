@@ -443,21 +443,3 @@ pub(crate) fn external_css_files(
     // go through needed_symbols and get the external css files
     todo!()
 }
-
-pub async fn render_2024_document(
-    symbols: dyn fastn_compiler::SymbolStore,
-    global_aliases: fastn_unresolved::AliasesSimple,
-    path: &str,
-    _data: serde_json::Value,
-    _strict: bool,
-) -> String {
-    let source = std::fs::File::open(path)
-        .and_then(std::io::read_to_string)
-        .unwrap();
-    let o = fastn_compiler::compile(symbols, &source, "main", None, global_aliases)
-        .await
-        .unwrap();
-
-    let h = fastn_runtime::HtmlData::from_cd(o);
-    h.to_test_html()
-}

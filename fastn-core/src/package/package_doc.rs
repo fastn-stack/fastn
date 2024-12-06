@@ -393,22 +393,7 @@ pub(crate) async fn read_ftd_(
             )
             .await
         }
-        fastn_core::FTDEdition::FTD2024 => read_ftd_2024(config).await,
     }
-}
-
-async fn read_ftd_2024(config: &fastn_core::RequestConfig) -> fastn_core::Result<FTDResult> {
-    Ok(FTDResult::Html(
-        fastn_runtime::render_2024_document(
-            &config.config.ds,
-            Default::default(),
-            "index.ftd",
-            serde_json::Value::Null,
-            false,
-        )
-        .await
-        .into_bytes(),
-    ))
 }
 
 #[tracing::instrument(name = "read_ftd_2022", skip_all)]
