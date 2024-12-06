@@ -1,12 +1,19 @@
 const ITERATION_THRESHOLD: usize = 100;
+
+pub enum CompilerState {
+    StuckOnSymbols(
+        Box<Compiler>,
+        std::collections::HashSet<fastn_unresolved::Symbol>,
+    ),
+    Done(Result<fastn_resolved::CompiledDocument, fastn_compiler::Error>),
+}
+
 // foo.ftd
 // -- import: foo as f (f => foo)
 //
 // -- import: bar      (bar => Module<bar>, x => Symbol<bar.y>) (bar => bar, x => bar.y)
 // exposing: y as x
-//
-pub(crate) struct Compiler {
-    symbols: Box<dyn fastn_compiler::SymbolStore>,
+pub struct Compiler {
     pub(crate) definitions_used: std::collections::HashSet<fastn_unresolved::Symbol>,
     pub(crate) arena: fastn_unresolved::Arena,
     pub(crate) definitions: std::collections::HashMap<String, fastn_unresolved::URD>,
@@ -14,14 +21,14 @@ pub(crate) struct Compiler {
     /// if module exists, if in dict bool tells if it exists.
     pub(crate) modules: std::collections::HashMap<fastn_unresolved::Module, bool>,
     /// checkout resolve_document for why this is an Option
-    content: Option<Vec<fastn_unresolved::URCI>>,
+    pub(crate) content: Option<Vec<fastn_unresolved::URCI>>,
     pub(crate) document: fastn_unresolved::Document,
-    global_aliases: fastn_unresolved::AliasesSimple,
+    #[expect(unused)]
+    pub(crate) global_aliases: fastn_unresolved::AliasesSimple,
 }
 
 impl Compiler {
     fn new(
-        symbols: Box<dyn fastn_compiler::SymbolStore>,
         source: &str,
         package: &str,
         module: Option<&str>,
@@ -39,7 +46,6 @@ impl Compiler {
 
         Self {
             arena,
-            symbols,
             definitions: std::collections::HashMap::new(),
             modules: std::collections::HashMap::new(),
             content,
@@ -51,28 +57,29 @@ impl Compiler {
 
     async fn fetch_unresolved_symbols(
         &mut self,
-        symbols_to_fetch: &std::collections::HashSet<fastn_unresolved::Symbol>,
+        _symbols_to_fetch: &std::collections::HashSet<fastn_unresolved::Symbol>,
     ) {
-        self.definitions_used
-            .extend(symbols_to_fetch.iter().cloned());
-        let definitions = self
-            .symbols
-            .lookup(&mut self.arena, &self.global_aliases, symbols_to_fetch)
-            .await;
-        for definition in definitions {
-            // the following is only okay if our symbol store only returns unresolved definitions,
-            // some other store might return resolved definitions, and we need to handle that.
-            self.definitions.insert(
-                definition
-                    .unresolved()
-                    .unwrap()
-                    .symbol
-                    .clone()
-                    .unwrap()
-                    .string(&self.arena),
-                definition,
-            );
-        }
+        todo!()
+        // self.definitions_used
+        //     .extend(symbols_to_fetch.iter().cloned());
+        // let definitions = self
+        //     .symbols
+        //     .lookup(&mut self.arena, &self.global_aliases, symbols_to_fetch)
+        //     .await;
+        // for definition in definitions {
+        //     // the following is only okay if our symbol store only returns unresolved definitions,
+        //     // some other store might return resolved definitions, and we need to handle that.
+        //     self.definitions.insert(
+        //         definition
+        //             .unresolved()
+        //             .unwrap()
+        //             .symbol
+        //             .clone()
+        //             .unwrap()
+        //             .string(&self.arena),
+        //         definition,
+        //     );
+        // }
     }
 
     /// try to resolve as many symbols as possible, and return the ones that we made any progress on.
@@ -170,7 +177,7 @@ impl Compiler {
         stuck_on_symbols
     }
 
-    async fn compile(mut self) -> Result<fastn_resolved::CompiledDocument, fastn_compiler::Error> {
+    async fn compile(mut self) -> CompilerState {
         // we only make 10 attempts to resolve the document: we need a warning if we are not able to
         // resolve the document in 10 attempts.
         let mut unresolvable = std::collections::HashSet::new();
@@ -222,14 +229,14 @@ impl Compiler {
         }
 
         // there were no errors, etc.
-        Ok(fastn_resolved::CompiledDocument {
+        CompilerState::Done(Ok(fastn_resolved::CompiledDocument {
             content: fastn_compiler::utils::resolved_content(self.content.unwrap()),
             definitions: fastn_compiler::utils::used_definitions(
                 self.definitions,
                 self.definitions_used,
                 self.arena,
             ),
-        })
+        }))
     }
 }
 
@@ -243,13 +250,12 @@ impl Compiler {
 /// earlier we had strict mode here, but to simplify things, now we let the caller convert non-empty
 /// warnings from OK part as error, and discard the generated JS.
 pub async fn compile(
-    symbols: Box<dyn fastn_compiler::SymbolStore + Send>,
     source: &str,
     package: &str,
     module: Option<&str>,
     global_aliases: fastn_unresolved::AliasesSimple,
-) -> Result<fastn_resolved::CompiledDocument, fastn_compiler::Error> {
-    Compiler::new(symbols, source, package, module, global_aliases)
+) -> CompilerState {
+    Compiler::new(source, package, module, global_aliases)
         .compile()
         .await
 }

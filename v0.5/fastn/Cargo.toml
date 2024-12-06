@@ -9,10 +9,9 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
-async-trait.workspace = true
 fastn-core.workspace = true
-fastn-compiler.workspace = true
-fastn-runtime.workspace = true
+#fastn-compiler.workspace = true
+#fastn-runtime.workspace = true
 fastn-unresolved.workspace = true
 hyper.workspace = true
 http-body-util.workspace = true

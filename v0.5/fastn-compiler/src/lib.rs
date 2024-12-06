@@ -5,14 +5,12 @@
 extern crate self as fastn_compiler;
 
 mod compiler;
-mod symbols;
 mod tdoc;
 mod utils;
 pub use tdoc::CompiledDocument;
 
 pub use compiler::compile;
 pub use fastn_section::Result;
-pub use symbols::SymbolStore;
 
 #[derive(Debug)]
 pub struct Error {

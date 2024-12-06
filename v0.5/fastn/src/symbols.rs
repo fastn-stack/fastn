@@ -34,8 +34,8 @@ impl Symbols {
     }
 }
 
-#[async_trait::async_trait]
-impl fastn_compiler::SymbolStore for Symbols {
+impl Symbols {
+    #[expect(unused)]
     async fn lookup(
         &mut self,
         arena: &mut fastn_unresolved::Arena,
