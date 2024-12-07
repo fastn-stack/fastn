@@ -23,3 +23,7 @@ pub enum OutputRequested {
     UI,
     Data,
 }
+
+pub fn full_filler(_i: Vec<String>) -> Vec<(String, Option<String>)> {
+    todo!()
+}

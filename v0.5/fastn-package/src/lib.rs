@@ -3,7 +3,7 @@
 #![warn(clippy::used_underscore_binding)]
 #![allow(dead_code)]
 
-mod read;
+pub mod reader;
 
 extern crate self as fastn_package;
 

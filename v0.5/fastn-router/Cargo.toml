@@ -10,3 +10,4 @@ homepage.workspace = true
 
 [dependencies]
 serde_json.workspace = true
+fastn-section.workspace = true

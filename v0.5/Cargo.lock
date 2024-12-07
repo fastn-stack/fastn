@@ -150,6 +150,7 @@ dependencies = [
  "fastn-package",
  "fastn-router",
  "fastn-runtime",
+ "fastn-section",
  "fastn-unresolved",
  "http-body-util",
  "hyper",
@@ -196,6 +197,9 @@ dependencies = [
 [[package]]
 name = "fastn-package"
 version = "0.1.0"
+dependencies = [
+ "fastn-section",
+]
 
 [[package]]
 name = "fastn-resolved"
@@ -209,6 +213,7 @@ dependencies = [
 name = "fastn-router"
 version = "0.1.0"
 dependencies = [
+ "fastn-section",
  "serde_json",
 ]
 

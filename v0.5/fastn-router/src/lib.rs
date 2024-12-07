@@ -4,7 +4,7 @@
 
 extern crate self as fastn_router;
 
-mod read;
+pub mod reader;
 mod route;
 
 pub struct Router {}
