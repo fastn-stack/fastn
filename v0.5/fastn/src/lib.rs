@@ -27,3 +27,7 @@ pub enum OutputRequested {
 pub fn full_filler(_i: Vec<String>) -> Vec<(String, Option<String>)> {
     todo!()
 }
+
+pub async fn full_filler_async(_i: Vec<String>) -> Vec<(String, Option<String>)> {
+    todo!()
+}
