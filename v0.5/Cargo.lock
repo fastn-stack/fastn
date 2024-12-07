@@ -147,7 +147,6 @@ name = "fastn"
 version = "0.1.0"
 dependencies = [
  "fastn-compiler",
- "fastn-continuation",
  "fastn-package",
  "fastn-router",
  "fastn-runtime",
