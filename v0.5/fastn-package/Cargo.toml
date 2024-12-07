@@ -9,4 +9,4 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
-fastn-section.workspace = true
+fastn-continuation.workspace = true

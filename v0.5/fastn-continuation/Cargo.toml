@@ -1,5 +1,5 @@
 [package]
-name = "fastn-router"
+name = "fastn-continuation"
 version = "0.1.0"
 authors.workspace = true
 edition.workspace = true
@@ -9,5 +9,3 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
-serde_json.workspace = true
-fastn-continuation.workspace = true

@@ -1,6 +1,6 @@
 impl fastn::commands::Render {
     pub async fn run(self, config: &mut fastn_package::Package, _router: fastn_router::Router) {
-        let route = fastn_section::consume(fastn_router::Router::reader(), fastn::full_filler)
+        let route = fastn_continuation::consume(fastn_router::Router::reader(), fastn::full_filler)
             .route("/", fastn_router::Method::Get, &[]);
         match route {
             fastn_router::Route::Document(path, data) => {

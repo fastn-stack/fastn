@@ -1,8 +1,9 @@
 #[tokio::main]
 async fn main() {
     let command = fastn::commands::parse();
-    let mut package = fastn_section::consume(fastn_package::Package::reader(), fastn::full_filler);
-    let router = fastn_section::consume(fastn_router::Router::reader(), fastn::full_filler);
+    let mut package =
+        fastn_continuation::consume(fastn_package::Package::reader(), fastn::full_filler);
+    let router = fastn_continuation::consume(fastn_router::Router::reader(), fastn::full_filler);
     // read config here and pass to everyone?
     // do common build stuff here
     match command {
