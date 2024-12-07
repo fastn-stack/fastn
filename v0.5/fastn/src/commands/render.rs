@@ -1,5 +1,5 @@
 impl fastn::commands::Render {
-    pub async fn run(self, config: &mut fastn_core::Config) {
+    pub async fn run(self, config: &mut fastn_package::Package, _router: fastn_router::Router) {
         let route = fastn_router::Router::read().route("/", fastn_router::Method::Get, &[]);
         match route {
             fastn_router::Route::Document(path, data) => {
@@ -18,7 +18,7 @@ impl fastn::commands::Render {
 }
 
 pub async fn render_document(
-    global_aliases: fastn_unresolved::AliasesSimple,
+    global_aliases: Vec<fastn_package::AutoImport>,
     path: &str,
     _data: serde_json::Value,
     _strict: bool,
@@ -26,7 +26,7 @@ pub async fn render_document(
     let source = std::fs::File::open(path)
         .and_then(std::io::read_to_string)
         .unwrap();
-    let mut cs = fastn_compiler::compile(&source, "main", None, global_aliases);
+    let mut cs = fastn_compiler::compile(&source, "main", None, todo!());
     let mut symbol_store = fastn::Symbols {};
 
     let o = loop {

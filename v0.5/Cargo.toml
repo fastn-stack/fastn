@@ -2,7 +2,7 @@
 members = [
     "fastn",
     "fastn-compiler",
-    "fastn-core", "fastn-package",
+    "fastn-package",
     "fastn-router",
     "fastn-section",
     "fastn-static",
@@ -41,8 +41,8 @@ homepage = "https://fastn.com"
 arcstr = "1"
 fastn-builtins = { path = "../fastn-builtins" }
 fastn-compiler = { path = "fastn-compiler", default-features = false }
-fastn-core = { path = "fastn-core" }
 fastn-resolved = { path = "../fastn-resolved", default-features = false }
+fastn-package = { path = "fastn-package", default-features = false }
 fastn-router = { path = "fastn-router" }
 fastn-runtime = { path = "../fastn-runtime", default-features = false }
 fastn-section = { path = "fastn-section" }

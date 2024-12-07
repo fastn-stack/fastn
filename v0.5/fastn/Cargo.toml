@@ -10,7 +10,7 @@ homepage.workspace = true
 
 [dependencies]
 fastn-compiler.workspace = true
-fastn-core.workspace = true
+fastn-package.workspace = true
 fastn-router.workspace = true
 fastn-runtime.workspace = true
 fastn-unresolved.workspace = true

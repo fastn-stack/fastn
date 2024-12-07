@@ -3,17 +3,20 @@
 #![warn(clippy::used_underscore_binding)]
 #![allow(dead_code)]
 
+mod read;
+
 extern crate self as fastn_package;
 
 pub struct Package {
     name: String,
     systems: Vec<System>,
     dependencies: Vec<Dependency>,
-    auto_imports: AutoImport,
+    pub auto_imports: Vec<AutoImport>,
     apps: Vec<App>,
 }
 
-pub type AutoImport = Vec<(String, String)>;
+#[derive(Clone)]
+pub struct AutoImport {}
 
 // -- system: design-system.com
 // via: amitu.com/ds
@@ -31,7 +34,7 @@ pub struct Dependency {
     // vector of alias of the systems this dependency and everything downstream
     capabilities: Vec<SystemAlias>,
     dependencies: Vec<Dependency>,
-    auto_imports: AutoImport,
+    auto_imports: Vec<AutoImport>,
 }
 
 // -- path: /blog/
@@ -49,6 +52,7 @@ pub struct App {
     // this must already be added as a Dependency (not a system) and is its name
     name: String,
     mount_point: String,
+    // apps can have their own apps
     apps: Vec<App>,
     // Dependency.capabilities will be merged with this when serving these routes
     capabilities: Vec<SystemAlias>,
