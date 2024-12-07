@@ -239,6 +239,7 @@ impl fastn_continuation::Continuation for Compiler {
         fastn_continuation::Result::Stuck(Box::new(self), r.need_more_symbols)
     }
 }
+
 #[derive(Default)]
 struct ResolveSymbolsResult {
     need_more_symbols: std::collections::HashSet<fastn_unresolved::Symbol>,
