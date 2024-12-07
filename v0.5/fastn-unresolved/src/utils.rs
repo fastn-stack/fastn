@@ -31,6 +31,7 @@ impl fastn_unresolved::Document {
         self.comments.extend(comments);
     }
 
+    #[expect(unused)]
     pub(crate) fn add_definitions_to_scope(
         &mut self,
         _arena: &mut fastn_unresolved::Arena,

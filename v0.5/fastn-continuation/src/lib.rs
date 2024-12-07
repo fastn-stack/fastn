@@ -26,6 +26,23 @@ where
     }
 }
 
+pub fn consume_with<C: Continuation, F>(mut c: Result<C>, f: F) -> C::Output
+where
+    F: Fn(&mut C, C::NeededInput) -> C::NeededOutput,
+{
+    loop {
+        match c {
+            Result::Stuck(mut ic, input) => {
+                let o = f(&mut ic, input);
+                c = ic.continue_after(o);
+            }
+            Result::Done(c) => {
+                return c;
+            }
+        }
+    }
+}
+
 pub async fn consume_async<C: Continuation, Fut>(
     mut c: Result<C>,
     f: impl Fn(C::NeededInput) -> Fut,

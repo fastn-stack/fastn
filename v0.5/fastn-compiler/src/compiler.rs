@@ -1,13 +1,5 @@
 const ITERATION_THRESHOLD: usize = 100;
 
-pub enum CompilerState {
-    StuckOnSymbols(
-        Box<Compiler>,
-        std::collections::HashSet<fastn_unresolved::Symbol>,
-    ),
-    Done(Result<fastn_resolved::CompiledDocument, fastn_compiler::Error>),
-}
-
 // foo.ftd
 // -- import: foo as f (f => foo)
 //
@@ -23,7 +15,7 @@ pub struct Compiler {
     /// checkout resolve_document for why this is an Option
     pub(crate) content: Option<Vec<fastn_unresolved::URCI>>,
     pub(crate) document: fastn_unresolved::Document,
-    pub global_aliases: fastn_unresolved::AliasesSimple,
+    // pub global_aliases: fastn_unresolved::AliasesSimple,
     iterations: usize,
 }
 
@@ -32,14 +24,14 @@ impl Compiler {
         source: &str,
         package: &str,
         module: Option<&str>,
-        global_aliases: fastn_unresolved::AliasesSimple,
+        // global_aliases: fastn_unresolved::AliasesSimple,
     ) -> Self {
         let mut arena = fastn_unresolved::Arena::default();
         let mut document = fastn_unresolved::parse(
             fastn_unresolved::Module::new(package, module, &mut arena),
             source,
             &mut arena,
-            &global_aliases,
+            // &global_aliases,
         );
         let content = Some(document.content);
         document.content = vec![];
@@ -50,7 +42,7 @@ impl Compiler {
             modules: std::collections::HashMap::new(),
             content,
             document,
-            global_aliases,
+            // global_aliases,
             definitions_used: Default::default(),
             iterations: 0,
         }
@@ -151,50 +143,6 @@ impl Compiler {
         stuck_on_symbols
     }
 
-    pub fn continue_with_definitions(
-        mut self,
-        definitions: Vec<fastn_unresolved::URD>,
-    ) -> CompilerState {
-        self.iterations += 1;
-        if self.iterations > ITERATION_THRESHOLD {
-            panic!("iterations too high");
-        }
-
-        for definition in definitions {
-            // the following is only okay if our symbol store only returns unresolved definitions,
-            // some other store might return resolved definitions, and we need to handle that.
-            self.definitions.insert(
-                definition
-                    .unresolved()
-                    .unwrap()
-                    .symbol
-                    .clone()
-                    .unwrap()
-                    .string(&self.arena),
-                definition,
-            );
-        }
-
-        let unresolved_symbols = self.resolve_document();
-        if unresolved_symbols.is_empty() {
-            return CompilerState::Done(self.finalise(false));
-        }
-
-        // this itself has to happen in a loop. we need a warning if we are not able to resolve all
-        // symbols in 10 attempts.
-        let mut r = ResolveSymbolsResult {
-            need_more_symbols: unresolved_symbols,
-            unresolvable: Default::default(),
-        };
-        r = self.resolve_symbols(r.need_more_symbols);
-
-        if r.need_more_symbols.is_empty() {
-            return CompilerState::Done(self.finalise(true));
-        }
-
-        CompilerState::StuckOnSymbols(Box::new(self), r.need_more_symbols)
-    }
-
     fn finalise(
         self,
         some_symbols_are_unresolved: bool,
@@ -236,11 +184,61 @@ pub fn compile(
     source: &str,
     package: &str,
     module: Option<&str>,
-    global_aliases: fastn_unresolved::AliasesSimple,
-) -> CompilerState {
-    Compiler::new(source, package, module, global_aliases).continue_with_definitions(vec![])
+) -> fastn_continuation::Result<Compiler> {
+    use fastn_continuation::Continuation;
+
+    Compiler::new(source, package, module).continue_after(vec![])
 }
 
+impl fastn_continuation::Continuation for Compiler {
+    type Output = Result<fastn_resolved::CompiledDocument, fastn_compiler::Error>;
+    type NeededInput = std::collections::HashSet<fastn_unresolved::Symbol>;
+    type NeededOutput = Vec<fastn_unresolved::URD>;
+
+    fn continue_after(
+        mut self,
+        definitions: Self::NeededOutput,
+    ) -> fastn_continuation::Result<Self> {
+        self.iterations += 1;
+        if self.iterations > ITERATION_THRESHOLD {
+            panic!("iterations too high");
+        }
+
+        for definition in definitions {
+            // the following is only okay if our symbol store only returns unresolved definitions,
+            // some other store might return resolved definitions, and we need to handle that.
+            self.definitions.insert(
+                definition
+                    .unresolved()
+                    .unwrap()
+                    .symbol
+                    .clone()
+                    .unwrap()
+                    .string(&self.arena),
+                definition,
+            );
+        }
+
+        let unresolved_symbols = self.resolve_document();
+        if unresolved_symbols.is_empty() {
+            return fastn_continuation::Result::Done(self.finalise(false));
+        }
+
+        // this itself has to happen in a loop. we need a warning if we are not able to resolve all
+        // symbols in 10 attempts.
+        let mut r = ResolveSymbolsResult {
+            need_more_symbols: unresolved_symbols,
+            unresolvable: Default::default(),
+        };
+        r = self.resolve_symbols(r.need_more_symbols);
+
+        if r.need_more_symbols.is_empty() {
+            return fastn_continuation::Result::Done(self.finalise(true));
+        }
+
+        fastn_continuation::Result::Stuck(Box::new(self), r.need_more_symbols)
+    }
+}
 #[derive(Default)]
 struct ResolveSymbolsResult {
     need_more_symbols: std::collections::HashSet<fastn_unresolved::Symbol>,

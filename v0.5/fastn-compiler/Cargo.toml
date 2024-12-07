@@ -11,6 +11,7 @@ homepage.workspace = true
 [dependencies]
 fastn-builtins.workspace = true
 fastn-resolved.workspace = true
+fastn-continuation.workspace = true
 fastn-section.workspace = true
 fastn-unresolved.workspace = true
 indexmap.workspace = true

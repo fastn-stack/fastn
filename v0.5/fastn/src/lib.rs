@@ -12,8 +12,6 @@ use tokio as _;
 pub mod commands;
 mod symbols;
 
-pub use symbols::Symbols;
-
 pub enum Action {
     Read,
     Write,
