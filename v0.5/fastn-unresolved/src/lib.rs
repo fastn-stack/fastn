@@ -13,7 +13,9 @@ mod utils;
 #[cfg(test)]
 pub(crate) use debug::JIDebug;
 pub use parser::parse;
+pub use utils::resolve_it;
 
+pub type UR<U, R> = fastn_continuation::UR<U, R, fastn_section::Error>;
 pub type URD = fastn_unresolved::UR<fastn_unresolved::Definition, fastn_resolved::Definition>;
 pub type URCI = fastn_unresolved::UR<
     fastn_unresolved::ComponentInvocation,
@@ -152,29 +154,6 @@ pub enum InnerDefinition {
     },
     // TODO: OrType(fastn_section::Section),
     // TODO: Module(fastn_section::Section),
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub enum UR<U: std::fmt::Debug, R: std::fmt::Debug> {
-    /// we are using Option<R> here because we want to convert from UnResolved to Resolved without
-    /// cloning.
-    /// most data going to be on the Resolved side is already there in the UnResolved, the Option
-    /// allows us to use mem::replace. See
-    Resolved(Option<R>),
-    UnResolved(U),
-    NotFound,
-    /// if the resolution failed, we need not try to resolve it again, unless dependencies change.
-    ///
-    /// say when we are processing x.ftd we found out that the symbol foo is invalid, so when we are
-    /// processing y.ftd, and we find foo, we can directly say that it is invalid.
-    ///
-    /// this is the goal, but we do not know why isn't `foo` valid, meaning on what another symbol
-    /// does it depend on, so when do we "revalidate" the symbol?
-    ///
-    /// what if we store the dependencies it failed on, so when any of them changes, we can
-    /// revalidate?
-    Invalid(fastn_section::Error),
-    InvalidN(Vec<fastn_section::Error>),
 }
 
 #[derive(Debug, Clone, PartialEq)]

@@ -134,7 +134,7 @@ impl Compiler {
                 false
             };
             if resolved {
-                ci.resolve_it(&self.arena)
+                fastn_unresolved::resolve_it(&mut ci, &self.arena)
             }
             new_content.push(ci);
         }

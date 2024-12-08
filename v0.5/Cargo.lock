@@ -270,6 +270,7 @@ version = "0.1.0"
 dependencies = [
  "arcstr",
  "fastn-builtins",
+ "fastn-continuation",
  "fastn-resolved",
  "fastn-section",
  "id-arena",

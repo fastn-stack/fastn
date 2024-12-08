@@ -115,52 +115,6 @@ pub(crate) fn assert_no_extra_headers(
     !found
 }
 
-impl<U: std::fmt::Debug, R: std::fmt::Debug> From<U> for fastn_unresolved::UR<U, R> {
-    fn from(u: U) -> fastn_unresolved::UR<U, R> {
-        fastn_unresolved::UR::UnResolved(u)
-    }
-}
-
-impl<U: std::fmt::Debug, R: std::fmt::Debug> fastn_unresolved::UR<U, R> {
-    pub fn unresolved(&self) -> Option<&U> {
-        match self {
-            fastn_unresolved::UR::UnResolved(u) => Some(u),
-            _ => None,
-        }
-    }
-
-    pub fn resolved(&self) -> Option<&R> {
-        match self {
-            fastn_unresolved::UR::Resolved(Some(v)) => Some(v),
-            fastn_unresolved::UR::Resolved(None) => unreachable!(),
-            _ => None,
-        }
-    }
-
-    pub fn resolve_it(&mut self, arena: &fastn_unresolved::Arena)
-    where
-        R: FromWithArena<U>,
-    {
-        match self {
-            fastn_unresolved::UR::UnResolved(_) => {}
-            _ => panic!("cannot resolve it"),
-        }
-
-        let u = match std::mem::replace(self, fastn_unresolved::UR::Resolved(None)) {
-            fastn_unresolved::UR::UnResolved(u) => u,
-            _ => unreachable!(),
-        };
-        *self = fastn_unresolved::UR::Resolved(Some(FromWithArena::from(u, arena)));
-    }
-
-    pub fn into_resolved(self) -> R {
-        match self {
-            fastn_unresolved::UR::Resolved(Some(r)) => r,
-            _ => panic!("{self:?}"),
-        }
-    }
-}
-
 pub trait FromWithArena<T> {
     fn from(value: T, arena: &fastn_unresolved::Arena) -> Self;
 }
@@ -315,4 +269,22 @@ impl fastn_unresolved::Arena {
             .and_then(|v| v.get(module))
             .map(|v| v.to_owned())
     }
+}
+
+pub fn resolve_it<U: std::fmt::Debug, R>(
+    ur: &mut fastn_unresolved::UR<U, R>,
+    arena: &fastn_unresolved::Arena,
+) where
+    R: FromWithArena<U> + std::fmt::Debug,
+{
+    match ur {
+        fastn_continuation::UR::UnResolved(_) => {}
+        _ => panic!("cannot resolve it"),
+    }
+
+    let u = match std::mem::replace(ur, fastn_continuation::UR::Resolved(None)) {
+        fastn_continuation::UR::UnResolved(u) => u,
+        _ => unreachable!(),
+    };
+    *ur = fastn_continuation::UR::Resolved(Some(FromWithArena::from(u, arena)));
 }
