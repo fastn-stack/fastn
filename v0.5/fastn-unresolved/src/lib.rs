@@ -13,7 +13,6 @@ mod utils;
 #[cfg(test)]
 pub(crate) use debug::JIDebug;
 pub use parser::parse;
-pub use utils::resolve_it;
 
 pub type UR<U, R> = fastn_continuation::UR<U, R, fastn_section::Error>;
 pub type URD = fastn_unresolved::UR<fastn_unresolved::Definition, fastn_resolved::Definition>;

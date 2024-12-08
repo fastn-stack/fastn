@@ -115,11 +115,9 @@ pub(crate) fn assert_no_extra_headers(
     !found
 }
 
-pub trait FromWithArena<T> {
-    fn from(value: T, arena: &fastn_unresolved::Arena) -> Self;
-}
-
-impl FromWithArena<fastn_unresolved::ComponentInvocation> for fastn_resolved::ComponentInvocation {
+impl fastn_continuation::FromWith<fastn_unresolved::ComponentInvocation, &fastn_unresolved::Arena>
+    for fastn_resolved::ComponentInvocation
+{
     fn from(u: fastn_unresolved::ComponentInvocation, arena: &fastn_unresolved::Arena) -> Self {
         fastn_resolved::ComponentInvocation {
             id: None,
@@ -269,22 +267,4 @@ impl fastn_unresolved::Arena {
             .and_then(|v| v.get(module))
             .map(|v| v.to_owned())
     }
-}
-
-pub fn resolve_it<U: std::fmt::Debug, R>(
-    ur: &mut fastn_unresolved::UR<U, R>,
-    arena: &fastn_unresolved::Arena,
-) where
-    R: FromWithArena<U> + std::fmt::Debug,
-{
-    match ur {
-        fastn_continuation::UR::UnResolved(_) => {}
-        _ => panic!("cannot resolve it"),
-    }
-
-    let u = match std::mem::replace(ur, fastn_continuation::UR::Resolved(None)) {
-        fastn_continuation::UR::UnResolved(u) => u,
-        _ => unreachable!(),
-    };
-    *ur = fastn_continuation::UR::Resolved(Some(FromWithArena::from(u, arena)));
 }

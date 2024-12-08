@@ -7,6 +7,9 @@ pub mod reader;
 
 extern crate self as fastn_package;
 
+pub type UR<U, R> = fastn_continuation::UR<U, R, fastn_section::Error>;
+
+#[derive(Debug)]
 pub struct Package {
     name: String,
     systems: Vec<System>,
@@ -15,20 +18,23 @@ pub struct Package {
     apps: Vec<App>,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct AutoImport {}
 
 // -- system: design-system.com
 // via: amitu.com/ds
 // alias: some alias ;; if alias is not provided, this is globally passed
+#[derive(Debug)]
 pub struct System {
     via: String,
     sensitive: bool,
     alias: Option<SystemAlias>,
 }
 
+#[derive(Debug)]
 pub struct SystemAlias(String);
 
+#[derive(Debug)]
 pub struct Dependency {
     name: String,
     // vector of alias of the systems this dependency and everything downstream
@@ -39,6 +45,7 @@ pub struct Dependency {
 
 // -- path: /blog/
 // allow: colorful-ds
+#[derive(Debug)]
 pub struct CapabilityOverride {
     // capabilities for any url prefix can be overridden using this
     path: String,
@@ -48,6 +55,7 @@ pub struct CapabilityOverride {
     capabilities: Vec<SystemAlias>,
 }
 
+#[derive(Debug)]
 pub struct App {
     // this must already be added as a Dependency (not a system) and is its name
     name: String,

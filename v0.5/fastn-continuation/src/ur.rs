@@ -21,6 +21,10 @@ pub enum UR<U: std::fmt::Debug, R: std::fmt::Debug, E: std::fmt::Debug> {
     InvalidN(Vec<E>),
 }
 
+pub trait FromWith<X, W> {
+    fn from(x: X, w: W) -> Self;
+}
+
 impl<U: std::fmt::Debug, R: std::fmt::Debug, E: std::fmt::Debug> From<U>
     for fastn_continuation::UR<U, R, E>
 {
@@ -50,5 +54,21 @@ impl<U: std::fmt::Debug, R: std::fmt::Debug, E: std::fmt::Debug> fastn_continuat
             fastn_continuation::UR::Resolved(Some(r)) => r,
             _ => panic!("{self:?}"),
         }
+    }
+
+    pub fn resolve_it<W>(&mut self, w: W)
+    where
+        R: FromWith<U, W> + std::fmt::Debug,
+    {
+        match self {
+            fastn_continuation::UR::UnResolved(_) => {}
+            _ => panic!("cannot resolve it"),
+        }
+
+        let u = match std::mem::replace(self, fastn_continuation::UR::Resolved(None)) {
+            fastn_continuation::UR::UnResolved(u) => u,
+            _ => unreachable!(),
+        };
+        *self = fastn_continuation::UR::Resolved(Some(FromWith::from(u, w)));
     }
 }

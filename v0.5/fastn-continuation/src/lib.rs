@@ -12,7 +12,7 @@ mod ur;
 pub use provider::{AsyncProvider, AsyncProviderWith};
 pub use provider::{Provider, ProviderWith};
 pub use result::Result;
-pub use ur::UR;
+pub use ur::{FromWith, UR};
 
 pub trait Continuation {
     type Output;

@@ -10,3 +10,4 @@ homepage.workspace = true
 
 [dependencies]
 fastn-continuation.workspace = true
+fastn-section.workspace = true
