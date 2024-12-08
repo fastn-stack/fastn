@@ -19,7 +19,7 @@ impl fastn::commands::Render {
 
 impl fastn_continuation::Provider for &fastn::commands::Render {
     type Needed = Vec<String>;
-    type Found = Vec<(String, Option<String>)>;
+    type Found = Vec<(String, Option<fastn_section::Document>)>;
 
     fn provide(&self, _needed: Self::Needed) -> Self::Found {
         todo!()

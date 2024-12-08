@@ -11,6 +11,7 @@ homepage.workspace = true
 [dependencies]
 fastn-compiler.workspace = true
 fastn-package.workspace = true
+fastn-section.workspace = true
 fastn-continuation.workspace = true
 fastn-router.workspace = true
 fastn-runtime.workspace = true

@@ -17,9 +17,12 @@ impl fastn_continuation::Continuation for State {
     type Output = fastn_package::Package;
     type Needed = Vec<String>;
     // File name
-    type Found = Vec<(String, Option<String>)>;
+    type Found = Vec<(String, Option<fastn_section::Document>)>;
 
-    fn continue_after(self, _n: Vec<(String, Option<String>)>) -> fastn_continuation::Result<Self> {
+    fn continue_after(
+        self,
+        _n: Vec<(String, Option<fastn_section::Document>)>,
+    ) -> fastn_continuation::Result<Self> {
         todo!()
     }
 }
