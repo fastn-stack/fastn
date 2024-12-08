@@ -9,10 +9,11 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
+async-trait.workspace = true
 fastn-compiler.workspace = true
 fastn-package.workspace = true
 fastn-section.workspace = true
-fastn-continuation.workspace = true
+fastn-continuation = { workspace = true, features = ["async_provider"] }
 fastn-router.workspace = true
 fastn-runtime.workspace = true
 fastn-unresolved.workspace = true

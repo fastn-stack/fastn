@@ -10,7 +10,10 @@ extern crate self as fastn;
 use tokio as _;
 
 pub mod commands;
-mod symbols;
+mod definition_provider;
+mod section_provider;
+
+pub use section_provider::SectionProvider;
 
 pub enum Action {
     Read,

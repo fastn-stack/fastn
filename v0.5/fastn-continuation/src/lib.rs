@@ -9,8 +9,8 @@ mod result;
 mod ur;
 
 #[cfg(feature = "async_provider")]
-pub use provider::{AsyncProvider, AsyncProviderWith};
-pub use provider::{Provider, ProviderWith};
+pub use provider::{AsyncMutProvider, AsyncMutProviderWith, AsyncProvider, AsyncProviderWith};
+pub use provider::{MutProvider, MutProviderWith, Provider, ProviderWith};
 pub use result::Result;
 pub use ur::{FromWith, UR};
 

@@ -1,10 +1,6 @@
 impl fastn::commands::Render {
-    pub async fn run(self, _package: &mut fastn_package::Package, _router: fastn_router::Router) {
-        let route = fastn_router::Router::reader().consume(&self).route(
-            "/",
-            fastn_router::Method::Get,
-            &[],
-        );
+    pub async fn run(self, _package: &mut fastn_package::Package, router: fastn_router::Router) {
+        let route = router.route("/", fastn_router::Method::Get, &[]);
         match route {
             fastn_router::Route::Document(path, data) => {
                 let html =
@@ -17,20 +13,12 @@ impl fastn::commands::Render {
     }
 }
 
-impl fastn_continuation::Provider for &fastn::commands::Render {
-    type Needed = Vec<String>;
-    type Found = Vec<(String, Option<fastn_section::Document>)>;
-
-    fn provide(&self, _needed: Self::Needed) -> Self::Found {
-        todo!()
-    }
-}
-
 pub async fn render_document(path: &str, _data: serde_json::Value, _strict: bool) -> String {
     let source = std::fs::File::open(path)
         .and_then(std::io::read_to_string)
         .unwrap();
-    let o = fastn_compiler::compile(&source, "main", None).consume_with_fn(fastn::symbols::lookup);
+    let o = fastn_compiler::compile(&source, "main", None)
+        .consume_with_fn(fastn::definition_provider::lookup);
     let h = fastn_runtime::HtmlData::from_cd(o.unwrap());
     h.to_test_html()
 }

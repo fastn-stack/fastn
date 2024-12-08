@@ -174,4 +174,84 @@ where
             }
         }
     }
+
+    pub fn mut_consume<P>(mut self, mut p: P) -> C::Output
+    where
+        P: fastn_continuation::MutProvider<Needed = C::Needed, Found = C::Found>,
+    {
+        loop {
+            match self {
+                fastn_continuation::Result::Init(ic) => {
+                    self = ic.continue_after(Default::default());
+                }
+                fastn_continuation::Result::Stuck(ic, needed) => {
+                    self = ic.continue_after(p.provide(needed));
+                }
+                fastn_continuation::Result::Done(c) => {
+                    return c;
+                }
+            }
+        }
+    }
+
+    pub fn mut_consume_with<P>(mut self, mut p: P) -> C::Output
+    where
+        P: fastn_continuation::MutProviderWith<Needed = C::Needed, Found = C::Found, Context = C>,
+    {
+        loop {
+            match self {
+                fastn_continuation::Result::Init(ic) => {
+                    self = ic.continue_after(Default::default());
+                }
+                fastn_continuation::Result::Stuck(mut ic, needed) => {
+                    let o = p.provide(&mut ic, needed);
+                    self = ic.continue_after(o);
+                }
+                fastn_continuation::Result::Done(c) => {
+                    return c;
+                }
+            }
+        }
+    }
+
+    #[cfg(feature = "async_provider")]
+    pub async fn mut_consume_async<P>(mut self, mut p: P) -> C::Output
+    where
+        P: fastn_continuation::AsyncMutProvider<Needed = C::Needed, Found = C::Found>,
+    {
+        loop {
+            match self {
+                fastn_continuation::Result::Init(ic) => {
+                    self = ic.continue_after(Default::default());
+                }
+                fastn_continuation::Result::Stuck(ic, needed) => {
+                    self = ic.continue_after(p.provide(needed).await);
+                }
+                fastn_continuation::Result::Done(c) => {
+                    return c;
+                }
+            }
+        }
+    }
+
+    #[cfg(feature = "async_provider")]
+    pub async fn mut_consume_with_async<P>(mut self, p: P) -> C::Output
+    where
+        P: fastn_continuation::AsyncProviderWith<Needed = C::Needed, Found = C::Found, Context = C>,
+    {
+        loop {
+            match self {
+                fastn_continuation::Result::Init(ic) => {
+                    self = ic.continue_after(Default::default());
+                }
+                fastn_continuation::Result::Stuck(mut ic, needed) => {
+                    let o = p.provide(&mut ic, needed).await;
+                    self = ic.continue_after(o);
+                }
+                fastn_continuation::Result::Done(c) => {
+                    return c;
+                }
+            }
+        }
+    }
 }
