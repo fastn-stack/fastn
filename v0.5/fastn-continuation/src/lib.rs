@@ -10,6 +10,25 @@ pub trait Provider {
     fn provide(&self, input: Self::Input) -> Self::Output;
 }
 
+#[cfg(feature = "async_provider")]
+#[async_trait::async_trait]
+pub trait AsyncProvider {
+    type Input;
+    type Output;
+
+    async fn provide(&self, input: Self::Input) -> Self::Output;
+}
+
+#[cfg(feature = "async_provider")]
+#[async_trait::async_trait]
+pub trait AsyncProviderWith {
+    type Input;
+    type Output;
+    type Context;
+
+    async fn provide(&self, context: &mut Self::Context, input: Self::Input) -> Self::Output;
+}
+
 pub trait ProviderWith {
     type Input;
     type Output;
@@ -17,22 +36,6 @@ pub trait ProviderWith {
 
     fn provide(&self, context: &mut Self::Context, input: Self::Input) -> Self::Output;
 }
-
-// impl<I, O> Provider for dyn Fn(I) -> O {
-//     type Input = I;
-//     type Output = O;
-//     fn provide(&self, input: Self::Input) -> Self::Output {
-//         self(input)
-//     }
-// }
-
-// impl<I, O> Provider for fn(I) -> O {
-//     type Input = I;
-//     type Output = O;
-//     fn provide(&self, input: Self::Input) -> Self::Output {
-//         self(input)
-//     }
-// }
 
 pub trait Continuation {
     type Output;
@@ -108,7 +111,24 @@ impl<C: Continuation> Result<C> {
         }
     }
 
-    pub async fn consume_async<Fut>(mut self, f: impl Fn(C::NeededInput) -> Fut) -> C::Output
+    #[cfg(feature = "async_provider")]
+    pub async fn consume_async<P>(mut self, p: P) -> C::Output
+    where
+        P: AsyncProvider<Input = C::NeededInput, Output = C::NeededOutput>,
+    {
+        loop {
+            match self {
+                Result::Stuck(ic, input) => {
+                    self = ic.continue_after(p.provide(input).await);
+                }
+                Result::Done(c) => {
+                    return c;
+                }
+            }
+        }
+    }
+
+    pub async fn consume_async_fn<Fut>(mut self, f: impl Fn(C::NeededInput) -> Fut) -> C::Output
     where
         Fut: std::future::Future<Output = C::NeededOutput>,
     {
@@ -124,7 +144,25 @@ impl<C: Continuation> Result<C> {
         }
     }
 
-    pub async fn consume_with_async<Fut>(
+    #[cfg(feature = "async_provider")]
+    pub async fn consume_with_async<P>(mut self, p: P) -> C::Output
+    where
+        P: AsyncProviderWith<Input = C::NeededInput, Output = C::NeededOutput, Context = C>,
+    {
+        loop {
+            match self {
+                Result::Stuck(mut ic, input) => {
+                    let o = p.provide(&mut ic, input).await;
+                    self = ic.continue_after(o);
+                }
+                Result::Done(c) => {
+                    return c;
+                }
+            }
+        }
+    }
+
+    pub async fn consume_with_async_fn<Fut>(
         mut self,
         f: impl Fn(&mut C, C::NeededInput) -> Fut,
     ) -> C::Output

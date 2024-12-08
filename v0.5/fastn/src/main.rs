@@ -3,7 +3,7 @@ async fn main() {
     let command = fastn::commands::parse();
     let mut package = fastn_package::Package::reader().consume_fn(fastn::full_filler);
     let router = fastn_router::Router::reader()
-        .consume_async(fastn::full_filler_async)
+        .consume_async_fn(fastn::full_filler_async)
         .await;
     // read config here and pass to everyone?
     // do common build stuff here

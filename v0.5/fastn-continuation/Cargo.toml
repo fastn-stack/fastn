@@ -8,4 +8,8 @@ license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 
+[features]
+async_provider = ["async-trait"]
+
 [dependencies]
+async-trait = { workspace = true, optional = true }
