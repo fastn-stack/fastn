@@ -21,7 +21,7 @@ impl fastn_continuation::Continuation for State {
 
     fn continue_after(
         self,
-        _n: Vec<(String, Option<fastn_section::Document>)>,
+        _n: Vec<(String, &Option<fastn_section::Document>)>,
     ) -> fastn_continuation::Result<Self> {
         todo!()
     }
