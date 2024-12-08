@@ -1,7 +1,7 @@
 #[tokio::main]
 async fn main() {
     let command = fastn::commands::parse();
-    let mut package = fastn_package::Package::reader().consume(fastn::full_filler as fn(_) -> _);
+    let mut package = fastn_package::Package::reader().consume_fn(fastn::full_filler);
     let router = fastn_router::Router::reader()
         .consume_async(fastn::full_filler_async)
         .await;

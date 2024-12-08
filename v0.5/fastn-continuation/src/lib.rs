@@ -10,21 +10,29 @@ pub trait Provider {
     fn provide(&self, input: Self::Input) -> Self::Output;
 }
 
-impl<I, O> Provider for dyn Fn(I) -> O {
-    type Input = I;
-    type Output = O;
-    fn provide(&self, input: Self::Input) -> Self::Output {
-        self(input)
-    }
+pub trait ProviderWith {
+    type Input;
+    type Output;
+    type Context;
+
+    fn provide(&self, context: &mut Self::Context, input: Self::Input) -> Self::Output;
 }
 
-impl<I, O> Provider for fn(I) -> O {
-    type Input = I;
-    type Output = O;
-    fn provide(&self, input: Self::Input) -> Self::Output {
-        self(input)
-    }
-}
+// impl<I, O> Provider for dyn Fn(I) -> O {
+//     type Input = I;
+//     type Output = O;
+//     fn provide(&self, input: Self::Input) -> Self::Output {
+//         self(input)
+//     }
+// }
+
+// impl<I, O> Provider for fn(I) -> O {
+//     type Input = I;
+//     type Output = O;
+//     fn provide(&self, input: Self::Input) -> Self::Output {
+//         self(input)
+//     }
+// }
 
 pub trait Continuation {
     type Output;
@@ -50,7 +58,40 @@ impl<C: Continuation> Result<C> {
         }
     }
 
-    pub fn consume_with<F>(mut self, f: F) -> C::Output
+    pub fn consume_fn<F>(mut self, f: F) -> C::Output
+    where
+        F: Fn(C::NeededInput) -> C::NeededOutput,
+    {
+        loop {
+            match self {
+                Result::Stuck(ic, input) => {
+                    self = ic.continue_after(f(input));
+                }
+                Result::Done(c) => {
+                    return c;
+                }
+            }
+        }
+    }
+
+    pub fn consume_with<P>(mut self, p: P) -> C::Output
+    where
+        P: ProviderWith<Input = C::NeededInput, Output = C::NeededOutput, Context = C>,
+    {
+        loop {
+            match self {
+                Result::Stuck(mut ic, input) => {
+                    let o = p.provide(&mut ic, input);
+                    self = ic.continue_after(o);
+                }
+                Result::Done(c) => {
+                    return c;
+                }
+            }
+        }
+    }
+
+    pub fn consume_with_fn<F>(mut self, f: F) -> C::Output
     where
         F: Fn(&mut C, C::NeededInput) -> C::NeededOutput,
     {
