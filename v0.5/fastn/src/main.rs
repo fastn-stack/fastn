@@ -1,12 +1,12 @@
 #[tokio::main]
 async fn main() {
     let command = fastn::commands::parse();
-    let section_provider = fastn::SectionProvider::default();
+    let mut section_provider = fastn::SectionProvider::default();
     let mut package = fastn_package::Package::reader()
-        .mut_consume_async(&section_provider)
+        .mut_consume_async(&mut section_provider)
         .await;
     let router = fastn_router::Router::reader()
-        .mut_consume_async(&section_provider)
+        .mut_consume_async(&mut section_provider)
         .await;
     // read config here and pass to everyone?
     // do common build stuff here
