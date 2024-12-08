@@ -1,9 +1,9 @@
+#[derive(Default)]
 pub struct State {}
 
 impl fastn_router::Router {
     pub fn reader() -> fastn_continuation::Result<State> {
-        // TODO: lets make as much progress as we can
-        fastn_continuation::Result::Stuck(Box::new(State {}), Default::default())
+        fastn_continuation::Result::Stuck(Default::default(), vec!["FASTN.ftd".to_string()])
     }
 }
 

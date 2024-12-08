@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct State {
     name: String,
     systems: Vec<fastn_package::UR<String, fastn_package::System>>,
@@ -8,16 +8,8 @@ pub struct State {
 }
 
 impl fastn_package::Package {
-    // s: FASTN.ftd source code
     pub fn reader() -> fastn_continuation::Result<State> {
-        // TODO: lets make as much progress as we can
-        fastn_continuation::Result::Init(Box::new(State {
-            name: "".to_string(),
-            systems: vec![],
-            dependencies: vec![],
-            auto_imports: vec![],
-            apps: vec![],
-        }))
+        fastn_continuation::Result::Stuck(Default::default(), vec!["FASTN.ftd".to_string()])
     }
 }
 

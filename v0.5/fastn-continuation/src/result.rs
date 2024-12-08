@@ -4,6 +4,12 @@ pub enum Result<C: fastn_continuation::Continuation + ?Sized> {
     Done(C::Output),
 }
 
+impl<C: fastn_continuation::Continuation + Default> Default for Result<C> {
+    fn default() -> Self {
+        Result::Init(Box::default())
+    }
+}
+
 impl<C: fastn_continuation::Continuation> Result<C>
 where
     C::Found: Default,
