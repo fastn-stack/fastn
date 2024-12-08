@@ -1,15 +1,22 @@
 pub enum Result<C: fastn_continuation::Continuation + ?Sized> {
-    Done(C::Output),
+    Init(Box<C>),
     Stuck(Box<C>, C::Needed),
+    Done(C::Output),
 }
 
-impl<C: fastn_continuation::Continuation> Result<C> {
+impl<C: fastn_continuation::Continuation> Result<C>
+where
+    C::Found: Default,
+{
     pub fn consume<P>(mut self, p: P) -> C::Output
     where
         P: fastn_continuation::Provider<Needed = C::Needed, Found = C::Found>,
     {
         loop {
             match self {
+                fastn_continuation::Result::Init(ic) => {
+                    self = ic.continue_after(Default::default());
+                }
                 fastn_continuation::Result::Stuck(ic, needed) => {
                     self = ic.continue_after(p.provide(needed));
                 }
@@ -26,6 +33,9 @@ impl<C: fastn_continuation::Continuation> Result<C> {
     {
         loop {
             match self {
+                fastn_continuation::Result::Init(ic) => {
+                    self = ic.continue_after(Default::default());
+                }
                 fastn_continuation::Result::Stuck(ic, needed) => {
                     self = ic.continue_after(f(needed));
                 }
@@ -42,6 +52,9 @@ impl<C: fastn_continuation::Continuation> Result<C> {
     {
         loop {
             match self {
+                fastn_continuation::Result::Init(ic) => {
+                    self = ic.continue_after(Default::default());
+                }
                 fastn_continuation::Result::Stuck(mut ic, needed) => {
                     let o = p.provide(&mut ic, needed);
                     self = ic.continue_after(o);
@@ -59,6 +72,9 @@ impl<C: fastn_continuation::Continuation> Result<C> {
     {
         loop {
             match self {
+                fastn_continuation::Result::Init(ic) => {
+                    self = ic.continue_after(Default::default());
+                }
                 fastn_continuation::Result::Stuck(mut ic, needed) => {
                     let o = f(&mut ic, needed);
                     self = ic.continue_after(o);
@@ -77,6 +93,9 @@ impl<C: fastn_continuation::Continuation> Result<C> {
     {
         loop {
             match self {
+                fastn_continuation::Result::Init(ic) => {
+                    self = ic.continue_after(Default::default());
+                }
                 fastn_continuation::Result::Stuck(ic, needed) => {
                     self = ic.continue_after(p.provide(needed).await);
                 }
@@ -93,6 +112,9 @@ impl<C: fastn_continuation::Continuation> Result<C> {
     {
         loop {
             match self {
+                fastn_continuation::Result::Init(ic) => {
+                    self = ic.continue_after(Default::default());
+                }
                 fastn_continuation::Result::Stuck(ic, needed) => {
                     self = ic.continue_after(f(needed).await);
                 }
@@ -110,6 +132,9 @@ impl<C: fastn_continuation::Continuation> Result<C> {
     {
         loop {
             match self {
+                fastn_continuation::Result::Init(ic) => {
+                    self = ic.continue_after(Default::default());
+                }
                 fastn_continuation::Result::Stuck(mut ic, needed) => {
                     let o = p.provide(&mut ic, needed).await;
                     self = ic.continue_after(o);
@@ -130,6 +155,9 @@ impl<C: fastn_continuation::Continuation> Result<C> {
     {
         loop {
             match self {
+                fastn_continuation::Result::Init(ic) => {
+                    self = ic.continue_after(Default::default());
+                }
                 Result::Stuck(mut ic, needed) => {
                     let o = f(&mut ic, needed).await;
                     self = ic.continue_after(o);

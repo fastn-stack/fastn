@@ -1,25 +1,23 @@
 #[derive(Debug)]
 pub struct State {
     name: String,
-    systems: Vec<fastn_package::UR<fastn_package::System, ()>>,
-    dependencies: Vec<fastn_package::UR<fastn_package::Dependency, ()>>,
+    systems: Vec<fastn_package::UR<String, fastn_package::System>>,
+    dependencies: Vec<fastn_package::UR<String, fastn_package::Dependency>>,
     pub auto_imports: Vec<fastn_package::AutoImport>,
-    apps: Vec<fastn_package::UR<fastn_package::App, ()>>,
+    apps: Vec<fastn_package::UR<String, fastn_package::App>>,
 }
 
 impl fastn_package::Package {
+    // s: FASTN.ftd source code
     pub fn reader() -> fastn_continuation::Result<State> {
         // TODO: lets make as much progress as we can
-        fastn_continuation::Result::Stuck(
-            Box::new(State {
-                name: "".to_string(),
-                systems: vec![],
-                dependencies: vec![],
-                auto_imports: vec![],
-                apps: vec![],
-            }),
-            Default::default(),
-        )
+        fastn_continuation::Result::Init(Box::new(State {
+            name: "".to_string(),
+            systems: vec![],
+            dependencies: vec![],
+            auto_imports: vec![],
+            apps: vec![],
+        }))
     }
 }
 

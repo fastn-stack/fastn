@@ -3,9 +3,9 @@
 #![warn(clippy::used_underscore_binding)]
 #![allow(dead_code)]
 
-pub mod reader;
-
 extern crate self as fastn_package;
+
+pub mod reader;
 
 pub type UR<U, R> = fastn_continuation::UR<U, R, fastn_section::Error>;
 
