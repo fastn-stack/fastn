@@ -3,6 +3,29 @@ pub enum Result<C: Continuation + ?Sized> {
     Stuck(Box<C>, C::NeededInput),
 }
 
+pub trait Provider {
+    type Input;
+    type Output;
+
+    fn provide(&self, input: Self::Input) -> Self::Output;
+}
+
+impl<I, O> Provider for dyn Fn(I) -> O {
+    type Input = I;
+    type Output = O;
+    fn provide(&self, input: Self::Input) -> Self::Output {
+        self(input)
+    }
+}
+
+impl<I, O> Provider for fn(I) -> O {
+    type Input = I;
+    type Output = O;
+    fn provide(&self, input: Self::Input) -> Self::Output {
+        self(input)
+    }
+}
+
 pub trait Continuation {
     type Output;
     type NeededInput;
@@ -11,14 +34,14 @@ pub trait Continuation {
 }
 
 impl<C: Continuation> Result<C> {
-    pub fn consume<F>(mut self, f: F) -> C::Output
+    pub fn consume<P>(mut self, p: P) -> C::Output
     where
-        F: Fn(C::NeededInput) -> C::NeededOutput,
+        P: Provider<Input = C::NeededInput, Output = C::NeededOutput>,
     {
         loop {
             match self {
                 Result::Stuck(ic, input) => {
-                    self = ic.continue_after(f(input));
+                    self = ic.continue_after(p.provide(input));
                 }
                 Result::Done(c) => {
                     return c;

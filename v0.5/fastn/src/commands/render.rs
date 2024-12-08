@@ -1,8 +1,10 @@
 impl fastn::commands::Render {
     pub async fn run(self, _package: &mut fastn_package::Package, _router: fastn_router::Router) {
-        let route = fastn_router::Router::reader()
-            .consume(fastn::full_filler)
-            .route("/", fastn_router::Method::Get, &[]);
+        let route = fastn_router::Router::reader().consume(&self).route(
+            "/",
+            fastn_router::Method::Get,
+            &[],
+        );
         match route {
             fastn_router::Route::Document(path, data) => {
                 let html =
@@ -12,6 +14,15 @@ impl fastn::commands::Render {
             }
             _ => todo!(),
         };
+    }
+}
+
+impl fastn_continuation::Provider for &fastn::commands::Render {
+    type Input = Vec<String>;
+    type Output = Vec<(String, Option<String>)>;
+
+    fn provide(&self, _input: Self::Input) -> Self::Output {
+        todo!()
     }
 }
 
