@@ -1,58 +1,58 @@
 pub enum Result<C: Continuation + ?Sized> {
     Done(C::Output),
-    Stuck(Box<C>, C::NeededInput),
+    Stuck(Box<C>, C::Needed),
 }
 
 pub trait Provider {
-    type Input;
-    type Output;
+    type Needed;
+    type Found;
 
-    fn provide(&self, input: Self::Input) -> Self::Output;
+    fn provide(&self, needed: Self::Needed) -> Self::Found;
 }
 
 #[cfg(feature = "async_provider")]
 #[async_trait::async_trait]
 pub trait AsyncProvider {
-    type Input;
-    type Output;
+    type Needed;
+    type Found;
 
-    async fn provide(&self, input: Self::Input) -> Self::Output;
+    async fn provide(&self, needed: Self::Needed) -> Self::Found;
 }
 
 #[cfg(feature = "async_provider")]
 #[async_trait::async_trait]
 pub trait AsyncProviderWith {
-    type Input;
-    type Output;
+    type Needed;
+    type Found;
     type Context;
 
-    async fn provide(&self, context: &mut Self::Context, input: Self::Input) -> Self::Output;
+    async fn provide(&self, context: &mut Self::Context, needed: Self::Needed) -> Self::Found;
 }
 
 pub trait ProviderWith {
-    type Input;
-    type Output;
+    type Needed;
+    type Found;
     type Context;
 
-    fn provide(&self, context: &mut Self::Context, input: Self::Input) -> Self::Output;
+    fn provide(&self, context: &mut Self::Context, needed: Self::Needed) -> Self::Found;
 }
 
 pub trait Continuation {
     type Output;
-    type NeededInput;
-    type NeededOutput;
-    fn continue_after(self, n: Self::NeededOutput) -> Result<Self>;
+    type Needed;
+    type Found;
+    fn continue_after(self, found: Self::Found) -> Result<Self>;
 }
 
 impl<C: Continuation> Result<C> {
     pub fn consume<P>(mut self, p: P) -> C::Output
     where
-        P: Provider<Input = C::NeededInput, Output = C::NeededOutput>,
+        P: Provider<Needed = C::Needed, Found = C::Found>,
     {
         loop {
             match self {
-                Result::Stuck(ic, input) => {
-                    self = ic.continue_after(p.provide(input));
+                Result::Stuck(ic, needed) => {
+                    self = ic.continue_after(p.provide(needed));
                 }
                 Result::Done(c) => {
                     return c;
@@ -63,12 +63,12 @@ impl<C: Continuation> Result<C> {
 
     pub fn consume_fn<F>(mut self, f: F) -> C::Output
     where
-        F: Fn(C::NeededInput) -> C::NeededOutput,
+        F: Fn(C::Needed) -> C::Found,
     {
         loop {
             match self {
-                Result::Stuck(ic, input) => {
-                    self = ic.continue_after(f(input));
+                Result::Stuck(ic, needed) => {
+                    self = ic.continue_after(f(needed));
                 }
                 Result::Done(c) => {
                     return c;
@@ -79,12 +79,12 @@ impl<C: Continuation> Result<C> {
 
     pub fn consume_with<P>(mut self, p: P) -> C::Output
     where
-        P: ProviderWith<Input = C::NeededInput, Output = C::NeededOutput, Context = C>,
+        P: ProviderWith<Needed = C::Needed, Found = C::Found, Context = C>,
     {
         loop {
             match self {
-                Result::Stuck(mut ic, input) => {
-                    let o = p.provide(&mut ic, input);
+                Result::Stuck(mut ic, needed) => {
+                    let o = p.provide(&mut ic, needed);
                     self = ic.continue_after(o);
                 }
                 Result::Done(c) => {
@@ -96,12 +96,12 @@ impl<C: Continuation> Result<C> {
 
     pub fn consume_with_fn<F>(mut self, f: F) -> C::Output
     where
-        F: Fn(&mut C, C::NeededInput) -> C::NeededOutput,
+        F: Fn(&mut C, C::Needed) -> C::Found,
     {
         loop {
             match self {
-                Result::Stuck(mut ic, input) => {
-                    let o = f(&mut ic, input);
+                Result::Stuck(mut ic, needed) => {
+                    let o = f(&mut ic, needed);
                     self = ic.continue_after(o);
                 }
                 Result::Done(c) => {
@@ -114,12 +114,12 @@ impl<C: Continuation> Result<C> {
     #[cfg(feature = "async_provider")]
     pub async fn consume_async<P>(mut self, p: P) -> C::Output
     where
-        P: AsyncProvider<Input = C::NeededInput, Output = C::NeededOutput>,
+        P: AsyncProvider<Needed = C::Needed, Found = C::Found>,
     {
         loop {
             match self {
-                Result::Stuck(ic, input) => {
-                    self = ic.continue_after(p.provide(input).await);
+                Result::Stuck(ic, needed) => {
+                    self = ic.continue_after(p.provide(needed).await);
                 }
                 Result::Done(c) => {
                     return c;
@@ -128,14 +128,14 @@ impl<C: Continuation> Result<C> {
         }
     }
 
-    pub async fn consume_async_fn<Fut>(mut self, f: impl Fn(C::NeededInput) -> Fut) -> C::Output
+    pub async fn consume_async_fn<Fut>(mut self, f: impl Fn(C::Needed) -> Fut) -> C::Output
     where
-        Fut: std::future::Future<Output = C::NeededOutput>,
+        Fut: std::future::Future<Output = C::Found>,
     {
         loop {
             match self {
-                Result::Stuck(ic, input) => {
-                    self = ic.continue_after(f(input).await);
+                Result::Stuck(ic, needed) => {
+                    self = ic.continue_after(f(needed).await);
                 }
                 Result::Done(c) => {
                     return c;
@@ -147,12 +147,12 @@ impl<C: Continuation> Result<C> {
     #[cfg(feature = "async_provider")]
     pub async fn consume_with_async<P>(mut self, p: P) -> C::Output
     where
-        P: AsyncProviderWith<Input = C::NeededInput, Output = C::NeededOutput, Context = C>,
+        P: AsyncProviderWith<Needed = C::Needed, Found = C::Found, Context = C>,
     {
         loop {
             match self {
-                Result::Stuck(mut ic, input) => {
-                    let o = p.provide(&mut ic, input).await;
+                Result::Stuck(mut ic, needed) => {
+                    let o = p.provide(&mut ic, needed).await;
                     self = ic.continue_after(o);
                 }
                 Result::Done(c) => {
@@ -164,15 +164,15 @@ impl<C: Continuation> Result<C> {
 
     pub async fn consume_with_async_fn<Fut>(
         mut self,
-        f: impl Fn(&mut C, C::NeededInput) -> Fut,
+        f: impl Fn(&mut C, C::Needed) -> Fut,
     ) -> C::Output
     where
-        Fut: std::future::Future<Output = C::NeededOutput>,
+        Fut: std::future::Future<Output = C::Found>,
     {
         loop {
             match self {
-                Result::Stuck(mut ic, input) => {
-                    let o = f(&mut ic, input).await;
+                Result::Stuck(mut ic, needed) => {
+                    let o = f(&mut ic, needed).await;
                     self = ic.continue_after(o);
                 }
                 Result::Done(c) => {

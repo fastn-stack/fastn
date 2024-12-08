@@ -18,10 +18,10 @@ impl fastn::commands::Render {
 }
 
 impl fastn_continuation::Provider for &fastn::commands::Render {
-    type Input = Vec<String>;
-    type Output = Vec<(String, Option<String>)>;
+    type Needed = Vec<String>;
+    type Found = Vec<(String, Option<String>)>;
 
-    fn provide(&self, _input: Self::Input) -> Self::Output {
+    fn provide(&self, _needed: Self::Needed) -> Self::Found {
         todo!()
     }
 }

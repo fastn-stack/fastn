@@ -192,13 +192,10 @@ pub fn compile(
 
 impl fastn_continuation::Continuation for Compiler {
     type Output = Result<fastn_resolved::CompiledDocument, fastn_compiler::Error>;
-    type NeededInput = std::collections::HashSet<fastn_unresolved::Symbol>;
-    type NeededOutput = Vec<fastn_unresolved::URD>;
+    type Needed = std::collections::HashSet<fastn_unresolved::Symbol>;
+    type Found = Vec<fastn_unresolved::URD>;
 
-    fn continue_after(
-        mut self,
-        definitions: Self::NeededOutput,
-    ) -> fastn_continuation::Result<Self> {
+    fn continue_after(mut self, definitions: Self::Found) -> fastn_continuation::Result<Self> {
         self.iterations += 1;
         if self.iterations > ITERATION_THRESHOLD {
             panic!("iterations too high");

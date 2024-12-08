@@ -9,11 +9,11 @@ impl fastn_package::Package {
 
 impl fastn_continuation::Continuation for State {
     type Output = fastn_package::Package;
-    type NeededInput = Vec<String>;
+    type Needed = Vec<String>;
     // File name
-    type NeededOutput = Vec<(String, Option<String>)>;
+    type Found = Vec<(String, Option<String>)>;
 
-    fn continue_after(self, _n: Self::NeededOutput) -> fastn_continuation::Result<Self> {
+    fn continue_after(self, _n: Vec<(String, Option<String>)>) -> fastn_continuation::Result<Self> {
         todo!()
     }
 }
