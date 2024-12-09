@@ -44,7 +44,7 @@ pub struct Dependency {
 }
 
 // -- path: /blog/
-// allow: colorful-ds
+// provide: colorful-ds
 #[derive(Debug)]
 pub struct CapabilityOverride {
     // capabilities for any url prefix can be overridden using this
@@ -55,6 +55,19 @@ pub struct CapabilityOverride {
     capabilities: Vec<SystemAlias>,
 }
 
+// -- app: /todo/
+// provide: amitu.com/db
+//
+// -- or --
+//
+// -- app: /todo/
+// name: arpita.com/todo
+// provide: amitu.com/db
+//
+// -- dependency: arpita.com/todo-main
+// provide: amitu.com/db
+//
+// -- end: app
 #[derive(Debug)]
 pub struct App {
     // this must already be added as a Dependency (not a system) and is its name
