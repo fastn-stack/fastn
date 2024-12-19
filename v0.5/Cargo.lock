@@ -189,6 +189,7 @@ version = "0.1.0"
 dependencies = [
  "fastn-builtins",
  "fastn-continuation",
+ "fastn-package",
  "fastn-resolved",
  "fastn-section",
  "fastn-unresolved",
@@ -277,6 +278,7 @@ dependencies = [
  "arcstr",
  "fastn-builtins",
  "fastn-continuation",
+ "fastn-package",
  "fastn-resolved",
  "fastn-section",
  "id-arena",

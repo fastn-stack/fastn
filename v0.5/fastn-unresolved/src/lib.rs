@@ -60,10 +60,15 @@ pub enum SoMBase<S, M> {
 }
 
 #[derive(Debug, Clone)]
+pub struct Package {
+    inner: std::sync::Arc<fastn_section::Package>,
+}
+
+#[derive(Debug, Clone)]
 pub struct Document {
     pub aliases: Option<AliasesID>,
     pub module: fastn_unresolved::Module,
-    // pub package: fastn_unresolved::Package, // auto import, dependencies
+    pub package: fastn_unresolved::Package, // auto import, dependencies
     pub module_doc: Option<fastn_section::Span>,
     pub definitions: Vec<URD>,
     pub content: Vec<URCI>,
@@ -76,6 +81,7 @@ pub struct Document {
 #[derive(Debug, Clone)]
 pub struct Definition {
     pub aliases: AliasesID,
+    pub module: fastn_unresolved::Module,
     pub symbol: Option<fastn_unresolved::Symbol>, // <package-name>/<module-name>#<definition-name>
     /// we will keep the builtins not as ScopeFrame, but as plain hashmap.
     /// we have two scopes at this level, the auto-imports, and scope of all symbols explicitly

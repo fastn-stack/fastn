@@ -43,6 +43,7 @@ pub(super) fn function_definition(
     // TODO: get rid of all the Default::default below
     document.definitions.push(
         fastn_unresolved::Definition {
+            module: document.module.clone(),
             symbol: Default::default(),
             doc: Default::default(),
             aliases: document.aliases.unwrap(),

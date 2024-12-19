@@ -11,11 +11,11 @@ pub type UR<U, R> = fastn_continuation::UR<U, R, fastn_section::Error>;
 
 #[derive(Debug)]
 pub struct Package {
-    name: String,
-    systems: Vec<System>,
-    dependencies: Vec<Dependency>,
+    pub name: String,
+    pub systems: Vec<System>,
+    pub dependencies: Vec<Dependency>,
     pub auto_imports: Vec<AutoImport>,
-    apps: Vec<App>,
+    pub apps: Vec<App>,
 }
 
 #[derive(Clone, Debug)]

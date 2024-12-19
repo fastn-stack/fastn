@@ -17,18 +17,21 @@ pub struct Compiler {
     pub(crate) document: fastn_unresolved::Document,
     // pub global_aliases: fastn_unresolved::AliasesSimple,
     iterations: usize,
+    package: fastn_package::Package,
 }
 
 impl Compiler {
     fn new(
         source: &str,
-        package: &str,
+        package: fastn_package::Package,
         module: Option<&str>,
         // global_aliases: fastn_unresolved::AliasesSimple,
     ) -> Self {
         let mut arena = fastn_unresolved::Arena::default();
+
         let mut document = fastn_unresolved::parse(
-            fastn_unresolved::Module::new(package, module, &mut arena),
+            &package,
+            fastn_unresolved::Module::new(package.name.as_str(), module, &mut arena),
             source,
             &mut arena,
             // &global_aliases,
@@ -37,6 +40,7 @@ impl Compiler {
         document.content = vec![];
 
         Self {
+            package,
             arena,
             definitions: std::collections::HashMap::new(),
             modules: std::collections::HashMap::new(),
@@ -182,7 +186,7 @@ impl Compiler {
 /// warnings from OK part as error, and discard the generated JS.
 pub fn compile(
     source: &str,
-    package: &str,
+    package: fastn_package::Package,
     module: Option<&str>,
 ) -> fastn_continuation::Result<Compiler> {
     use fastn_continuation::Continuation;
