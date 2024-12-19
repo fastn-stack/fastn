@@ -10,12 +10,14 @@ mod route;
 #[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
 pub struct Router {}
 
+#[derive(Debug, Copy, PartialEq, Clone)]
 pub enum Method {
     Get,
     Post,
 }
 
 #[allow(dead_code)]
+#[derive(Debug)]
 // the router will depend on fastn-section.
 pub enum Route {
     NotFound,
@@ -27,6 +29,7 @@ pub enum Route {
     Static(String),
 }
 
+#[derive(Debug)]
 pub struct Document {
     // this is private yet
     #[expect(unused)]
