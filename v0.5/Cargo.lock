@@ -238,6 +238,7 @@ version = "0.1.0"
 dependencies = [
  "fastn-continuation",
  "fastn-section",
+ "serde",
  "serde_json",
 ]
 

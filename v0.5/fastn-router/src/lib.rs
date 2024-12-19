@@ -21,8 +21,27 @@ pub enum Route {
     NotFound,
     // String contains the path, the data may contain more than that was passed to route, e.g., it
     // can extract some extra path-specific data from FASTN.ftd file
-    Document(String, serde_json::Value),
-    Wasm(String, serde_json::Value),
+    Document(Document),
+    Wasm(String),
     Redirect(String),
     Static(String),
+}
+
+pub struct Document {
+    // this is private yet
+    #[expect(unused)]
+    pub(crate) path: String,
+    #[expect(unused)]
+    pub(crate) partial: serde_json::Value,
+    #[expect(unused)]
+    pub(crate) keys: Vec<String>,
+}
+
+#[derive(Debug)]
+pub enum RouterError {}
+
+impl Document {
+    pub fn with_data(self, _data: &[u8]) -> Result<(String, serde_json::Value), RouterError> {
+        todo!()
+    }
 }

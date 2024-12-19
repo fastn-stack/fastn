@@ -63,7 +63,7 @@ pub enum SoMBase<S, M> {
 pub struct Document {
     pub aliases: Option<AliasesID>,
     pub module: fastn_unresolved::Module,
-    pub package: fastn_unresolved::Package, // auto import, dependencies
+    // pub package: fastn_unresolved::Package, // auto import, dependencies
     pub module_doc: Option<fastn_section::Span>,
     pub definitions: Vec<URD>,
     pub content: Vec<URCI>,

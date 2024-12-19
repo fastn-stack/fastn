@@ -1,8 +1,9 @@
 impl fastn::commands::Render {
     pub async fn run(self, _package: &mut fastn_package::Package, router: fastn_router::Router) {
-        let route = router.route("/", fastn_router::Method::Get, &[]);
+        let route = router.route("/", fastn_router::Method::Get);
         match route {
-            fastn_router::Route::Document(path, data) => {
+            fastn_router::Route::Document(doc) => {
+                let (path, data) = doc.with_data(&[]).unwrap();
                 let html =
                     fastn::commands::render::render_document(path.as_str(), data, self.strict)
                         .await;
