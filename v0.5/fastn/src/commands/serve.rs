@@ -51,7 +51,7 @@ async fn render(
             fastn::commands::render::render_document(
                 // global_aliases,
                 "index.ftd",
-                serde_json::Value::Null,
+                serde_json::Map::new(),
                 false,
             )
             .await

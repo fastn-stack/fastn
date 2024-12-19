@@ -44,7 +44,10 @@ pub struct Document {
 pub enum RouterError {}
 
 impl Document {
-    pub fn with_data(self, _data: &[u8]) -> Result<(String, serde_json::Value), RouterError> {
+    pub fn with_data(
+        self,
+        _data: &[u8],
+    ) -> Result<(String, serde_json::Map<String, serde_json::Value>), RouterError> {
         todo!()
     }
 }
