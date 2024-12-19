@@ -7,6 +7,7 @@ extern crate self as fastn_router;
 pub mod reader;
 mod route;
 
+#[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
 pub struct Router {}
 
 pub enum Method {

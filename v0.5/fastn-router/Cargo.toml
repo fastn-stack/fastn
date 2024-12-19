@@ -9,6 +9,7 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
+serde.workspace = true
 serde_json.workspace = true
 fastn-continuation.workspace = true
 fastn-section.workspace = true
