@@ -25,9 +25,10 @@ pub enum Route {
     // String contains the path, the data may contain more than that was passed to route, e.g., it
     // can extract some extra path-specific data from FASTN.ftd file
     Document(Document),
-    Wasm(String),
+    Wasm((String, Document)),
     Redirect(String),
-    Static(String),
+    /// we return the not found document as well in case the static file is missing
+    Static((String, Document)),
 }
 
 #[derive(Debug)]
