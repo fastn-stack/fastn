@@ -27,13 +27,3 @@ impl Store {
         }
     }
 }
-
-impl Store {
-    pub fn to_http(&self) -> ft_sys_shared::Request {
-        self.req.clone()
-    }
-
-    pub fn store_response(&mut self, r: ft_sys_shared::Request) {
-        self.response = Some(r);
-    }
-}

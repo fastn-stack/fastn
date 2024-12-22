@@ -7,3 +7,9 @@ pub async fn send_response(
     caller.data_mut().store_response(r);
     Ok(())
 }
+
+impl fastn_wasm::Store {
+    pub fn store_response(&mut self, r: ft_sys_shared::Request) {
+        self.response = Some(r);
+    }
+}

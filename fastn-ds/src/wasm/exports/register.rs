@@ -44,16 +44,12 @@ impl fastn_wasm::Store {
         );
 
         // request related stuff
-        fastn_ds::func0ret!(
-            linker,
-            "http_get_request",
-            fastn_ds::wasm::exports::http::get_request
-        );
-        fastn_ds::func2ret!(linker, "http_send_request", fastn_wasm::send_request);
+        fastn_ds::func0ret!(linker, "http_get_request", fastn_wasm::http::get_request);
+        fastn_ds::func2ret!(linker, "http_send_request", fastn_wasm::http::send_request);
         fastn_ds::func2!(
             linker,
             "http_send_response",
-            fastn_ds::wasm::exports::http::send_response
+            fastn_wasm::http::send_response
         );
 
         // document store related
