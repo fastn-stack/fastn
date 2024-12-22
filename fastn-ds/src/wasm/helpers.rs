@@ -1,13 +1,10 @@
-pub async fn str(
-    str: &str,
-    caller: &mut wasmtime::Caller<'_, fastn_ds::wasm::Store>,
-) -> wasmtime::Result<i32> {
+pub async fn str<S: Send>(str: &str, caller: &mut wasmtime::Caller<'_, S>) -> wasmtime::Result<i32> {
     send_bytes(str.as_bytes(), caller).await
 }
 
-pub async fn send_bytes(
+pub async fn send_bytes<S: Send>(
     bytes: &[u8],
-    caller: &mut wasmtime::Caller<'_, fastn_ds::wasm::Store>,
+    caller: &mut wasmtime::Caller<'_, S>,
 ) -> wasmtime::Result<i32> {
     let ptr = alloc(bytes.len() as i32, caller).await?;
 
@@ -17,36 +14,36 @@ pub async fn send_bytes(
     Ok(ptr)
 }
 
-pub fn get_str(
+pub fn get_str<S: Send>(
     ptr: i32,
     len: i32,
-    caller: &mut wasmtime::Caller<'_, fastn_ds::wasm::Store>,
+    caller: &mut wasmtime::Caller<'_, S>,
 ) -> wasmtime::Result<String> {
     get_bytes(ptr, len, caller).map(|v| unsafe { String::from_utf8_unchecked(v) })
 }
 
-pub async fn send_json<T: serde::Serialize>(
+pub async fn send_json<S: Send, T: serde::Serialize>(
     t: T,
-    caller: &mut wasmtime::Caller<'_, fastn_ds::wasm::Store>,
+    caller: &mut wasmtime::Caller<'_, S>,
 ) -> wasmtime::Result<i32> {
     let bytes = serde_json::to_vec(&t).unwrap();
     send_bytes(&bytes, caller).await
 }
 
-pub fn get_json<T: serde::de::DeserializeOwned>(
+pub fn get_json<S: Send, T: serde::de::DeserializeOwned>(
     ptr: i32,
     len: i32,
-    caller: &mut wasmtime::Caller<'_, fastn_ds::wasm::Store>,
+    caller: &mut wasmtime::Caller<'_, S>,
 ) -> wasmtime::Result<T> {
     let bytes = get_bytes(ptr, len, caller)?;
     Ok(serde_json::from_slice(&bytes).unwrap())
 }
 
 #[allow(clippy::uninit_vec)]
-pub fn get_bytes(
+pub fn get_bytes<S: Send>(
     ptr: i32,
     len: i32,
-    caller: &mut wasmtime::Caller<'_, fastn_ds::wasm::Store>,
+    caller: &mut wasmtime::Caller<'_, S>,
 ) -> wasmtime::Result<Vec<u8>> {
     let mem = caller.get_export("memory").unwrap().into_memory().unwrap();
     let mut buf: Vec<u8> = Vec::with_capacity(len as usize);
@@ -58,10 +55,7 @@ pub fn get_bytes(
     Ok(buf)
 }
 
-async fn _dealloc(
-    ptr: i32,
-    caller: &mut wasmtime::Caller<'_, fastn_ds::wasm::Store>,
-) -> wasmtime::Result<()> {
+async fn _dealloc<S: Send>(ptr: i32, caller: &mut wasmtime::Caller<'_, S>) -> wasmtime::Result<()> {
     let mut result = vec![wasmtime::Val::I32(0)];
     let dealloc = caller
         .get_export("dealloc")
@@ -80,10 +74,10 @@ async fn _dealloc(
     res
 }
 
-async fn _dealloc_with_len(
+async fn _dealloc_with_len<S: Send>(
     ptr: i32,
     len: i32,
-    caller: &mut wasmtime::Caller<'_, fastn_ds::wasm::Store>,
+    caller: &mut wasmtime::Caller<'_, S>,
 ) -> wasmtime::Result<()> {
     let mut result = vec![wasmtime::Val::I32(0)];
     let dealloc_with_len = caller
@@ -107,10 +101,7 @@ async fn _dealloc_with_len(
     res
 }
 
-async fn alloc(
-    size: i32,
-    caller: &mut wasmtime::Caller<'_, fastn_ds::wasm::Store>,
-) -> wasmtime::Result<i32> {
+async fn alloc<S: Send>(size: i32, caller: &mut wasmtime::Caller<'_, S>) -> wasmtime::Result<i32> {
     let mut result = vec![wasmtime::Val::I32(0)];
     let alloc = caller
         .get_export("alloc")
