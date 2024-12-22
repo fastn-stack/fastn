@@ -6,9 +6,9 @@ pub async fn query(
     ptr: i32,
     len: i32,
 ) -> wasmtime::Result<i32> {
-    let q: Query = fastn_ds::wasm::helpers::get_json(ptr, len, &mut caller)?;
+    let q: Query = fastn_wasm::helpers::get_json(ptr, len, &mut caller)?;
     let res = caller.data_mut().sqlite_query(q).await?;
-    fastn_ds::wasm::helpers::send_json(res, &mut caller).await
+    fastn_wasm::helpers::send_json(res, &mut caller).await
 }
 
 #[derive(serde::Deserialize, Debug)]

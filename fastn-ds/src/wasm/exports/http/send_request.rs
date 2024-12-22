@@ -3,7 +3,7 @@ pub async fn send_request(
     ptr: i32,
     len: i32,
 ) -> wasmtime::Result<i32> {
-    let r: ft_sys_shared::Request = fastn_ds::wasm::helpers::get_json(ptr, len, &mut caller)?;
+    let r: ft_sys_shared::Request = fastn_wasm::helpers::get_json(ptr, len, &mut caller)?;
 
     let mut headers = reqwest::header::HeaderMap::new();
     for (header_name, header_value) in r.headers {
@@ -27,5 +27,5 @@ pub async fn send_request(
     }
     let response = response.body(reqwest_response.bytes().await?)?;
 
-    fastn_ds::wasm::helpers::send_json(ft_sys_shared::Request::from(response), &mut caller).await
+    fastn_wasm::helpers::send_json(ft_sys_shared::Request::from(response), &mut caller).await
 }

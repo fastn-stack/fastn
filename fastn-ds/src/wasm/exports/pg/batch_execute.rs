@@ -4,9 +4,9 @@ pub async fn batch_execute(
     ptr: i32,
     len: i32,
 ) -> wasmtime::Result<i32> {
-    let q = fastn_ds::wasm::helpers::get_str(ptr, len, &mut caller)?;
+    let q = fastn_wasm::helpers::get_str(ptr, len, &mut caller)?;
     let res = caller.data_mut().pg_batch_execute(conn, q).await?;
-    fastn_ds::wasm::helpers::send_json(res, &mut caller).await
+    fastn_wasm::helpers::send_json(res, &mut caller).await
 }
 
 impl fastn_ds::wasm::Store {

@@ -3,7 +3,7 @@ pub async fn connect(
     ptr: i32,
     len: i32,
 ) -> wasmtime::Result<i32> {
-    let db_url = fastn_ds::wasm::helpers::get_str(ptr, len, &mut caller)?;
+    let db_url = fastn_wasm::helpers::get_str(ptr, len, &mut caller)?;
     caller.data_mut().pg_connect(db_url.as_str()).await
 }
 

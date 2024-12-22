@@ -1,4 +1,7 @@
-pub async fn str<S: Send>(str: &str, caller: &mut wasmtime::Caller<'_, S>) -> wasmtime::Result<i32> {
+pub async fn str<S: Send>(
+    str: &str,
+    caller: &mut wasmtime::Caller<'_, S>,
+) -> wasmtime::Result<i32> {
     send_bytes(str.as_bytes(), caller).await
 }
 
