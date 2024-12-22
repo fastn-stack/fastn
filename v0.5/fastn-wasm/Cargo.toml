@@ -9,6 +9,10 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
+async-lock.workspace = true
+actix-web.workspace = true
+deadpool.workspace = true
+deadpool-postgres.workspace = true
 wasmtime.workspace = true
 serde_json.workspace = true
 serde.workspace = true
@@ -16,5 +20,7 @@ ft-sys-shared.workspace = true
 rand.workspace = true
 http.workspace = true
 reqwest.workspace = true
+rusqlite.workspace = true
 chrono.workspace = true
 magic-crypt.workspace = true
+scc.workspace = true

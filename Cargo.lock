@@ -1623,12 +1623,18 @@ dependencies = [
 name = "fastn-wasm"
 version = "0.1.0"
 dependencies = [
+ "actix-web",
+ "async-lock",
  "chrono",
+ "deadpool",
+ "deadpool-postgres",
  "ft-sys-shared",
  "http 1.2.0",
  "magic-crypt",
  "rand",
  "reqwest",
+ "rusqlite",
+ "scc",
  "serde",
  "serde_json",
  "wasmtime",

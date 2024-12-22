@@ -1,5 +1,5 @@
-impl fastn_ds::wasm::Store {
-    pub fn register_functions(&self, linker: &mut wasmtime::Linker<fastn_ds::wasm::Store>) {
+impl fastn_wasm::Store {
+    pub fn register_functions(&self, linker: &mut wasmtime::Linker<fastn_wasm::Store>) {
         // general utility functions
         fastn_ds::func2!(linker, "env_print", fastn_wasm::env::print);
         fastn_ds::func0ret!(linker, "env_now", fastn_wasm::env::now);

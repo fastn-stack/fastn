@@ -10,5 +10,7 @@ pub mod ds;
 pub mod env;
 pub mod helpers;
 pub mod send_request;
+mod store;
 
 pub use send_request::send_request;
+pub use store::Store;

@@ -40,8 +40,12 @@ homepage = "https://fastn.com"
 # and create its own [dependencies.<name>] section. Also, document it with why are you not
 # using the latest dependency, and what is the plan to move to the latest version.
 
+actix-web = "4"
 arcstr = "1"
 async-trait = "0.1"
+async-lock = "3"
+deadpool = "0.10"
+deadpool-postgres = "0.12"
 fastn-builtins = { path = "../fastn-builtins" }
 fastn-compiler = { path = "fastn-compiler" }
 fastn-continuation = { path = "fastn-continuation" }
@@ -60,6 +64,7 @@ id-arena = "2"
 indexmap = "2"
 rand = "0.8"
 reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+scc = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 string-interner = "0.18"
@@ -68,3 +73,15 @@ wasmtime = "28"
 chrono = { version = "0.4", features = ["serde"] }
 magic-crypt = { version = "4", default-features = false }
 
+[workspace.dependencies.rusqlite]
+version = "0.31"
+features = [
+    # We are using the bundled version of rusqlite, so we do not need sqlitelib, headers as a
+    # dependency. By default, if we do not bundle, our binary will link against system
+    # provided sqlite, which would have been a good thing, if we used system sqlite, our
+    # binary size would be smaller, compile time lesser, but unfortunately we can not assume
+    # sqlite dynamic library is installed on everyone's machine. We can choose to give two
+    # binaries, one with bundled, one without, but it is not worth the tradeoff right now.
+    "bundled",
+    "column_decltype",
+]

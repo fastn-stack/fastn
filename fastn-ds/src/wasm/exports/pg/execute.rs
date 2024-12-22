@@ -1,5 +1,5 @@
 pub async fn execute(
-    mut caller: wasmtime::Caller<'_, fastn_ds::wasm::Store>,
+    mut caller: wasmtime::Caller<'_, fastn_wasm::Store>,
     conn: i32,
     ptr: i32,
     len: i32,
@@ -10,7 +10,7 @@ pub async fn execute(
     fastn_wasm::helpers::send_json(res, &mut caller).await
 }
 
-impl fastn_ds::wasm::Store {
+impl fastn_wasm::Store {
     pub async fn pg_execute(
         &mut self,
         conn: i32,
