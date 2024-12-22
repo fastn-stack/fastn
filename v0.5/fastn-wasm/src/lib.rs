@@ -4,4 +4,11 @@
 
 extern crate self as fastn_wasm;
 
+pub mod aws;
+pub mod crypto;
+pub mod ds;
+pub mod env;
 pub mod helpers;
+pub mod send_request;
+
+pub use send_request::send_request;

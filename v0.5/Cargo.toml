@@ -45,20 +45,26 @@ async-trait = "0.1"
 fastn-builtins = { path = "../fastn-builtins" }
 fastn-compiler = { path = "fastn-compiler" }
 fastn-continuation = { path = "fastn-continuation" }
-fastn-resolved = { path = "../fastn-resolved" }
 fastn-package = { path = "fastn-package" }
+fastn-resolved = { path = "../fastn-resolved" }
 fastn-router = { path = "fastn-router" }
 fastn-runtime = { path = "../fastn-runtime" }
 fastn-section = { path = "fastn-section" }
 fastn-unresolved = { path = "fastn-unresolved" }
+ft-sys-shared = "0.1.4"
+http = "1"
 http-body-util = "0.1"
 hyper = { version = "1.5.1", features = ["server", "http1"] }
 hyper-util = { version = "0.1.10", features = ["tokio"] }
 id-arena = "2"
 indexmap = "2"
+rand = "0.8"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 string-interner = "0.18"
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "fs"] }
 wasmtime = "28"
+chrono = { version = "0.4", features = ["serde"] }
+magic-crypt = { version = "4", default-features = false }
 

@@ -1483,7 +1483,6 @@ dependencies = [
  "async-trait",
  "bytes",
  "camino",
- "chrono",
  "deadpool",
  "deadpool-postgres",
  "dirs",
@@ -1494,9 +1493,7 @@ dependencies = [
  "http 1.2.0",
  "ignore",
  "libsqlite3-sys",
- "magic-crypt",
  "once_cell",
- "rand",
  "reqwest",
  "rusqlite",
  "scc",
@@ -1626,6 +1623,12 @@ dependencies = [
 name = "fastn-wasm"
 version = "0.1.0"
 dependencies = [
+ "chrono",
+ "ft-sys-shared",
+ "http 1.2.0",
+ "magic-crypt",
+ "rand",
+ "reqwest",
  "serde",
  "serde_json",
  "wasmtime",

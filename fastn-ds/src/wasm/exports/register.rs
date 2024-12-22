@@ -1,22 +1,14 @@
 impl fastn_ds::wasm::Store {
     pub fn register_functions(&self, linker: &mut wasmtime::Linker<fastn_ds::wasm::Store>) {
         // general utility functions
-        fastn_ds::func2!(linker, "env_print", fastn_ds::wasm::exports::env::print);
-        fastn_ds::func0ret!(linker, "env_now", fastn_ds::wasm::exports::env::now);
-        fastn_ds::func2ret!(linker, "env_var", fastn_ds::wasm::exports::env::var);
-        fastn_ds::func0ret!(linker, "env_random", fastn_ds::wasm::exports::env::random);
+        fastn_ds::func2!(linker, "env_print", fastn_wasm::env::print);
+        fastn_ds::func0ret!(linker, "env_now", fastn_wasm::env::now);
+        fastn_ds::func2ret!(linker, "env_var", fastn_wasm::env::var);
+        fastn_ds::func0ret!(linker, "env_random", fastn_wasm::env::random);
 
         // cryptography related stuff
-        fastn_ds::func2ret!(
-            linker,
-            "crypto_encrypt",
-            fastn_ds::wasm::exports::crypto::encrypt
-        );
-        fastn_ds::func2ret!(
-            linker,
-            "crypto_decrypt",
-            fastn_ds::wasm::exports::crypto::decrypt
-        );
+        fastn_ds::func2ret!(linker, "crypto_encrypt", fastn_wasm::crypto::encrypt);
+        fastn_ds::func2ret!(linker, "crypto_decrypt", fastn_wasm::crypto::decrypt);
 
         // sqlite
         fastn_ds::func2ret!(
@@ -57,13 +49,7 @@ impl fastn_ds::wasm::Store {
             "http_get_request",
             fastn_ds::wasm::exports::http::get_request
         );
-
-        fastn_ds::func2ret!(
-            linker,
-            "http_send_request",
-            fastn_ds::wasm::exports::http::send_request
-        );
-
+        fastn_ds::func2ret!(linker, "http_send_request", fastn_wasm::send_request);
         fastn_ds::func2!(
             linker,
             "http_send_response",
@@ -71,23 +57,14 @@ impl fastn_ds::wasm::Store {
         );
 
         // document store related
-        fastn_ds::func2ret!(
-            linker,
-            "hostn_tejar_write",
-            fastn_ds::wasm::exports::ds::tejar_write
-        );
-
-        fastn_ds::func2ret!(
-            linker,
-            "hostn_tejar_read",
-            fastn_ds::wasm::exports::ds::tejar_read
-        );
+        fastn_ds::func2ret!(linker, "hostn_tejar_write", fastn_wasm::ds::tejar_write);
+        fastn_ds::func2ret!(linker, "hostn_tejar_read", fastn_wasm::ds::tejar_read);
 
         // aws
         fastn_ds::func2ret!(
             linker,
             "hostn_aws_pre_signed_request",
-            fastn_ds::wasm::exports::aws::pre_signed_request
+            fastn_wasm::aws::pre_signed_request
         );
     }
 }
