@@ -28,10 +28,10 @@ impl fastn_wasm::Store {
 
         async fn get_client(
             pool: &deadpool_postgres::Pool,
-            clients: &mut Vec<fastn_ds::wasm::Conn>,
+            clients: &mut Vec<fastn_wasm::Conn>,
         ) -> wasmtime::Result<i32> {
             let client = pool.get().await?;
-            clients.push(fastn_ds::wasm::Conn { client });
+            clients.push(fastn_wasm::Conn { client });
             Ok(clients.len() as i32 - 1)
         }
     }

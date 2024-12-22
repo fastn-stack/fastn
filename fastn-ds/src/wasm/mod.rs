@@ -1,8 +1,5 @@
 pub mod exports;
 pub mod macros;
-mod store;
-
-pub use store::{Conn, Store};
 
 #[tracing::instrument(skip_all)]
 pub async fn process_http_request(
