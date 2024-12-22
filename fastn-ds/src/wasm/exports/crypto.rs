@@ -1,7 +1,7 @@
 use magic_crypt::MagicCryptTrait;
 
-pub async fn encrypt(
-    mut caller: wasmtime::Caller<'_, fastn_ds::wasm::Store>,
+pub async fn encrypt<S: Send>(
+    mut caller: wasmtime::Caller<'_, S>,
     ptr: i32,
     len: i32,
 ) -> wasmtime::Result<i32> {
@@ -12,8 +12,8 @@ pub async fn encrypt(
     fastn_wasm::helpers::send_bytes(&o.into_bytes(), &mut caller).await
 }
 
-pub async fn decrypt(
-    mut caller: wasmtime::Caller<'_, fastn_ds::wasm::Store>,
+pub async fn decrypt<S: Send>(
+    mut caller: wasmtime::Caller<'_, S>,
     ptr: i32,
     len: i32,
 ) -> wasmtime::Result<i32> {

@@ -1,5 +1,5 @@
-pub async fn send_request(
-    mut caller: wasmtime::Caller<'_, fastn_ds::wasm::Store>,
+pub async fn send_request<S: Send>(
+    mut caller: wasmtime::Caller<'_, S>,
     ptr: i32,
     len: i32,
 ) -> wasmtime::Result<i32> {

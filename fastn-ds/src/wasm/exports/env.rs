@@ -1,5 +1,5 @@
-pub async fn print(
-    mut caller: wasmtime::Caller<'_, fastn_ds::wasm::Store>,
+pub async fn print<T: Send>(
+    mut caller: wasmtime::Caller<'_, T>,
     ptr: i32,
     len: i32,
 ) -> wasmtime::Result<()> {
@@ -11,8 +11,8 @@ pub async fn print(
     Ok(())
 }
 
-pub async fn var(
-    mut caller: wasmtime::Caller<'_, fastn_ds::wasm::Store>,
+pub async fn var<S: Send>(
+    mut caller: wasmtime::Caller<'_, S>,
     ptr: i32,
     len: i32,
 ) -> wasmtime::Result<i32> {
@@ -22,12 +22,10 @@ pub async fn var(
     fastn_wasm::helpers::send_json(value, &mut caller).await
 }
 
-pub async fn now(mut caller: wasmtime::Caller<'_, fastn_ds::wasm::Store>) -> wasmtime::Result<i32> {
+pub async fn now<S: Send>(mut caller: wasmtime::Caller<'_, S>) -> wasmtime::Result<i32> {
     fastn_wasm::helpers::send_json(chrono::Utc::now(), &mut caller).await
 }
 
-pub async fn random(
-    mut caller: wasmtime::Caller<'_, fastn_ds::wasm::Store>,
-) -> wasmtime::Result<i32> {
+pub async fn random<S: Send>(mut caller: wasmtime::Caller<'_, S>) -> wasmtime::Result<i32> {
     fastn_wasm::helpers::send_json(rand::random::<f64>(), &mut caller).await
 }
