@@ -1,5 +1,5 @@
-impl fastn_wasm::Store {
-    pub fn register_functions(&self, linker: &mut wasmtime::Linker<fastn_wasm::Store>) {
+impl<T: fastn_wasm::StoreExt> fastn_wasm::Store<T> {
+    pub fn register_functions(&self, linker: &mut wasmtime::Linker<fastn_wasm::Store<T>>) {
         // general utility functions
         fastn_ds::func2!(linker, "env_print", fastn_wasm::env::print);
         fastn_ds::func0ret!(linker, "env_now", fastn_wasm::env::now);
@@ -11,11 +11,7 @@ impl fastn_wasm::Store {
         fastn_ds::func2ret!(linker, "crypto_decrypt", fastn_wasm::crypto::decrypt);
 
         // sqlite
-        fastn_ds::func2ret!(
-            linker,
-            "sqlite_connect",
-            fastn_ds::wasm::exports::sqlite::connect
-        );
+        fastn_ds::func2ret!(linker, "sqlite_connect", fastn_wasm::sqlite::connect);
         fastn_ds::func3ret!(
             linker,
             "sqlite_query",

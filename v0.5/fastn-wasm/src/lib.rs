@@ -10,6 +10,7 @@ pub mod ds;
 pub mod env;
 pub mod helpers;
 pub mod http;
+pub mod sqlite;
 mod store;
 
-pub use store::{Conn, Store};
+pub use store::{Conn, Store, StoreExt};
