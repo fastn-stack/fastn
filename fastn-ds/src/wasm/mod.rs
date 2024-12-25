@@ -1,11 +1,13 @@
-use fastn_wasm::ConnectionExt;
-
 pub mod exports;
 
 pub struct Store;
 
 impl fastn_wasm::StoreExt for Store {
-    fn connection_open(&self, store_db_url: &str, db_url: &str) -> wasmtime::Result<Box<dyn ConnectionExt>> {
+    fn connection_open(
+        &self,
+        store_db_url: &str,
+        db_url: &str,
+    ) -> wasmtime::Result<Box<dyn fastn_wasm::ConnectionExt>> {
         let conn = Connection(rusqlite::Connection::open(if db_url == "default" {
             store_db_url
         } else {
@@ -18,7 +20,13 @@ impl fastn_wasm::StoreExt for Store {
 
 pub struct Connection(rusqlite::Connection);
 
-impl fastn_wasm::ConnectionExt for Connection {}
+impl fastn_wasm::ConnectionExt for Connection {
+    fn prepare(&self, sql: &str) -> Result<rusqlite::Statement, fastn_wasm::ExecuteError> {
+        self.0
+            .prepare(sql)
+            .map_err(|e| fastn_wasm::ExecuteError::Rusqlite(e))
+    }
+}
 
 #[tracing::instrument(skip_all)]
 pub async fn process_http_request(

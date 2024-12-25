@@ -16,7 +16,7 @@ mod sqlite;
 mod store;
 
 pub use http::send_request::send_request;
-pub use store::{Conn, ConnectionExt, Store, StoreExt};
+pub use store::{Conn, ConnectionExt, ExecuteError, Store, StoreExt};
 
 pub static WASM_ENGINE: once_cell::sync::Lazy<wasmtime::Engine> =
     once_cell::sync::Lazy::new(|| {
