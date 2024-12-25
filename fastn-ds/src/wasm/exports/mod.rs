@@ -1,4 +1,2 @@
-mod http;
-mod pg;
-mod register;
-mod sqlite;
+// mod pg;
+// mod sqlite;

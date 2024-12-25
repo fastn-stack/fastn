@@ -1,7 +1,7 @@
 use std::os::raw::c_int;
 
 pub async fn query(
-    mut caller: wasmtime::Caller<'_, fastn_ds::wasm::Store>,
+    mut caller: wasmtime::Caller<'_, fastn_wasm::Store>,
     _conn: i32,
     ptr: i32,
     len: i32,
@@ -73,7 +73,7 @@ struct Field {
     bytes: Option<Value>,
 }
 
-impl fastn_ds::wasm::Store {
+impl fastn_wasm::Store {
     pub async fn sqlite_query(
         &mut self,
         q: Query,

@@ -6,7 +6,7 @@ macro_rules! func0ret {
                 "env",
                 $func_name,
                 wasmtime::FuncType::new(
-                    &fastn_ds::WASM_ENGINE,
+                    &fastn_wasm::WASM_ENGINE,
                     [].iter().cloned(),
                     [wasmtime::ValType::I32].iter().cloned(),
                 ),
@@ -29,7 +29,7 @@ macro_rules! func2 {
                 "env",
                 $func_name,
                 wasmtime::FuncType::new(
-                    &fastn_ds::WASM_ENGINE,
+                    &fastn_wasm::WASM_ENGINE,
                     [wasmtime::ValType::I32, wasmtime::ValType::I32]
                         .iter()
                         .cloned(),
@@ -56,7 +56,7 @@ macro_rules! func2ret {
                 "env",
                 $func_name,
                 wasmtime::FuncType::new(
-                    &fastn_ds::WASM_ENGINE,
+                    &fastn_wasm::WASM_ENGINE,
                     [wasmtime::ValType::I32, wasmtime::ValType::I32]
                         .iter()
                         .cloned(),
@@ -83,7 +83,7 @@ macro_rules! func3ret {
                 "env",
                 $func_name,
                 wasmtime::FuncType::new(
-                    &fastn_ds::WASM_ENGINE,
+                    &fastn_wasm::WASM_ENGINE,
                     [
                         wasmtime::ValType::I32,
                         wasmtime::ValType::I32,

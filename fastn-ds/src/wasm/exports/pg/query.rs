@@ -1,5 +1,5 @@
 pub async fn query(
-    mut caller: wasmtime::Caller<'_, fastn_ds::wasm::Store>,
+    mut caller: wasmtime::Caller<'_, fastn_wasm::Store>,
     conn: i32,
     ptr: i32,
     len: i32,
@@ -108,7 +108,7 @@ impl PgRow {
     }
 }
 
-impl fastn_ds::wasm::Store {
+impl fastn_wasm::Store {
     pub async fn pg_query(
         &mut self,
         conn: i32,

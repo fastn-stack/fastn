@@ -1,5 +1,5 @@
 pub async fn connect(
-    mut caller: wasmtime::Caller<'_, fastn_ds::wasm::Store>,
+    mut caller: wasmtime::Caller<'_, fastn_wasm::Store>,
     ptr: i32,
     len: i32,
 ) -> wasmtime::Result<i32> {
@@ -7,7 +7,7 @@ pub async fn connect(
     caller.data_mut().pg_connect(db_url.as_str()).await
 }
 
-impl fastn_ds::wasm::Store {
+impl fastn_wasm::Store {
     pub async fn pg_connect(&mut self, db_url: &str) -> wasmtime::Result<i32> {
         let db_url = if db_url == "default" {
             self.db_url.as_str()
@@ -28,10 +28,10 @@ impl fastn_ds::wasm::Store {
 
         async fn get_client(
             pool: &deadpool_postgres::Pool,
-            clients: &mut Vec<fastn_ds::wasm::Conn>,
+            clients: &mut Vec<fastn_wasm::Conn>,
         ) -> wasmtime::Result<i32> {
             let client = pool.get().await?;
-            clients.push(fastn_ds::wasm::Conn { client });
+            clients.push(fastn_wasm::Conn { client });
             Ok(clients.len() as i32 - 1)
         }
     }

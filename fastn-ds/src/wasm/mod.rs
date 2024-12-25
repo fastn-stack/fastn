@@ -1,8 +1,24 @@
-pub mod exports;
-pub mod macros;
-mod store;
+use fastn_wasm::ConnectionExt;
 
-pub use store::{Conn, Store};
+pub mod exports;
+
+pub struct Store;
+
+impl fastn_wasm::StoreExt for Store {
+    fn connection_open(&self, store_db_url: &str, db_url: &str) -> wasmtime::Result<Box<dyn ConnectionExt>> {
+        let conn = Connection(rusqlite::Connection::open(if db_url == "default" {
+            store_db_url
+        } else {
+            db_url
+        })?);
+
+        Ok(Box::new(conn))
+    }
+}
+
+pub struct Connection(rusqlite::Connection);
+
+impl fastn_wasm::ConnectionExt for Connection {}
 
 #[tracing::instrument(skip_all)]
 pub async fn process_http_request(
@@ -12,7 +28,8 @@ pub async fn process_http_request(
     db_url: String,
 ) -> wasmtime::Result<ft_sys_shared::Request> {
     let path = req.uri.clone();
-    let hostn_store = fastn_ds::wasm::Store::new(req, wasm_pg_pools, db_url);
+    let hostn_store: fastn_wasm::Store<Store> =
+        fastn_wasm::Store::new(req, wasm_pg_pools, db_url, Store);
     let mut linker = wasmtime::Linker::new(module.engine());
     hostn_store.register_functions(&mut linker);
     let wasm_store = wasmtime::Store::new(module.engine(), hostn_store);

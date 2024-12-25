@@ -1,7 +1,7 @@
 use crate::wasm::exports::sqlite::query::rusqlite_to_diesel;
 
 pub async fn execute(
-    mut caller: wasmtime::Caller<'_, fastn_ds::wasm::Store>,
+    mut caller: wasmtime::Caller<'_, fastn_wasm::Store>,
     ptr: i32,
     len: i32,
 ) -> wasmtime::Result<i32> {
@@ -11,7 +11,7 @@ pub async fn execute(
     fastn_wasm::helpers::send_json(res, &mut caller).await
 }
 
-impl fastn_ds::wasm::Store {
+impl fastn_wasm::Store {
     async fn sqlite_execute(
         &mut self,
         q: fastn_ds::wasm::exports::sqlite::Query,
