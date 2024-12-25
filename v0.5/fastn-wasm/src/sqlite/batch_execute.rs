@@ -1,7 +1,5 @@
-use crate::wasm::exports::sqlite::query::rusqlite_to_diesel;
-
-pub async fn batch_execute(
-    mut caller: wasmtime::Caller<'_, fastn_wasm::Store>,
+pub async fn batch_execute<STORE: fastn_wasm::StoreExt>(
+    mut caller: wasmtime::Caller<'_, fastn_wasm::Store<STORE>>,
     ptr: i32,
     len: i32,
 ) -> wasmtime::Result<i32> {
@@ -10,7 +8,7 @@ pub async fn batch_execute(
     fastn_wasm::helpers::send_json(res, &mut caller).await
 }
 
-impl fastn_wasm::Store {
+impl<STORE: fastn_wasm::StoreExt> fastn_wasm::Store<STORE> {
     pub async fn sqlite_batch_execute(
         &mut self,
         q: String,
@@ -29,12 +27,15 @@ impl fastn_wasm::Store {
         println!("batch: {q:?}");
         Ok(match conn.execute_batch(q.as_str()) {
             Ok(()) => Ok(()),
-            Err(e) => {
+            Err(fastn_wasm::ExecuteError::Rusqlite(e)) => {
                 eprint!("err: {e:?}");
-                let e = rusqlite_to_diesel(e);
+                let e = fastn_wasm::sqlite::query::rusqlite_to_diesel(e);
                 eprintln!("err: {e:?}");
                 return Ok(Err(e));
             }
+            Err(fastn_wasm::ExecuteError::InvalidQuery(e)) => {
+                return Ok(Err(ft_sys_shared::DbError::UnableToSendCommand(e)))
+            } // Todo: Handle error message
         })
     }
 }

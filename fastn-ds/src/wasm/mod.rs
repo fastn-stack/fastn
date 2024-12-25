@@ -26,6 +26,22 @@ impl fastn_wasm::ConnectionExt for Connection {
             .prepare(sql)
             .map_err(|e| fastn_wasm::ExecuteError::Rusqlite(e))
     }
+
+    fn execute(
+        &self,
+        query: &str,
+        binds: Vec<fastn_wasm::Value>,
+    ) -> Result<usize, fastn_wasm::ExecuteError> {
+        self.0
+            .execute(query, rusqlite::params_from_iter(binds))
+            .map_err(|e| fastn_wasm::ExecuteError::Rusqlite(e))
+    }
+
+    fn execute_batch(&self, query: &str) -> Result<(), fastn_wasm::ExecuteError> {
+        self.0
+            .execute_batch(query)
+            .map_err(|e| fastn_wasm::ExecuteError::Rusqlite(e))
+    }
 }
 
 #[tracing::instrument(skip_all)]
