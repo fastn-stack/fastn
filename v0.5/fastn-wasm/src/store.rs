@@ -8,7 +8,15 @@ pub struct Store<STORE: StoreExt> {
     pub inner: STORE,
 }
 
-pub trait ConnectionExt: Send {}
+#[derive(Debug)]
+pub enum ExecuteError {
+    Rusqlite(rusqlite::Error),
+    InvalidQuery(String),
+}
+
+pub trait ConnectionExt: Send {
+    fn prepare(&self, sql: &str) -> Result<rusqlite::Statement, ExecuteError>;
+}
 
 pub trait StoreExt: Send {
     fn connection_open(

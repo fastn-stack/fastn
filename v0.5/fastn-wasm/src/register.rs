@@ -12,11 +12,7 @@ impl<STORE: fastn_wasm::StoreExt> fastn_wasm::Store<STORE> {
 
         // sqlite
         fastn_wasm::func2ret!(linker, "sqlite_connect", fastn_wasm::sqlite::connect);
-        // fastn_wasm::func3ret!(
-        //     linker,
-        //     "sqlite_query",
-        //     fastn_wasm::wasm::exports::sqlite::query
-        // );
+        fastn_wasm::func3ret!(linker, "sqlite_query", fastn_wasm::sqlite::query);
         // fastn_wasm::func2ret!(
         //     linker,
         //     "sqlite_execute",

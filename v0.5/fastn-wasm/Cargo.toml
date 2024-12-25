@@ -24,3 +24,5 @@ deadpool.workspace = true
 deadpool-postgres.workspace = true
 scc.workspace = true
 once_cell.workspace = true
+rusqlite.workspace = true
+libsqlite3-sys.workspace = true

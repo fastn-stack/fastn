@@ -1,14 +1,12 @@
-use std::os::raw::c_int;
-
-pub async fn query(
-    mut caller: wasmtime::Caller<'_, fastn_ds::wasm::Store>,
+pub async fn query<STORE: fastn_wasm::StoreExt>(
+    mut caller: wasmtime::Caller<'_, fastn_wasm::Store<STORE>>,
     _conn: i32,
     ptr: i32,
     len: i32,
 ) -> wasmtime::Result<i32> {
-    let q: Query = fastn_ds::wasm::helpers::get_json(ptr, len, &mut caller)?;
+    let q: Query = fastn_wasm::helpers::get_json(ptr, len, &mut caller)?;
     let res = caller.data_mut().sqlite_query(q).await?;
-    fastn_ds::wasm::helpers::send_json(res, &mut caller).await
+    fastn_wasm::helpers::send_json(res, &mut caller).await
 }
 
 #[derive(serde::Deserialize, Debug)]
@@ -73,7 +71,7 @@ struct Field {
     bytes: Option<Value>,
 }
 
-impl fastn_ds::wasm::Store {
+impl<STORE: fastn_wasm::StoreExt> fastn_wasm::Store<STORE> {
     pub async fn sqlite_query(
         &mut self,
         q: Query,
@@ -91,12 +89,15 @@ impl fastn_ds::wasm::Store {
         println!("query1: {q:?}");
         let mut stmt = match conn.prepare(q.sql.as_str()) {
             Ok(v) => v,
-            Err(e) => {
+            Err(fastn_wasm::ExecuteError::Rusqlite(e)) => {
                 eprint!("err: {e:?}");
                 let e = rusqlite_to_diesel(e);
                 eprintln!("err: {e:?}");
                 return Ok(Err(e));
             }
+            Err(fastn_wasm::ExecuteError::InvalidQuery(e)) => {
+                return Ok(Err(ft_sys_shared::DbError::UnableToSendCommand(e)))
+            } // Todo: Handle error message
         };
 
         let columns: Vec<String> = stmt
@@ -158,7 +159,7 @@ pub fn rusqlite_to_diesel(e: rusqlite::Error) -> ft_sys_shared::DbError {
     }
 }
 
-fn code_to_kind(code: c_int) -> ft_sys_shared::DatabaseErrorKind {
+fn code_to_kind(code: std::os::raw::c_int) -> ft_sys_shared::DatabaseErrorKind {
     // borrowed from diesel/sqlite/last_error function
     match code {
         libsqlite3_sys::SQLITE_CONSTRAINT_UNIQUE | libsqlite3_sys::SQLITE_CONSTRAINT_PRIMARYKEY => {
