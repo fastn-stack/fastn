@@ -9,6 +9,16 @@ pub mod crypto;
 pub mod ds;
 pub mod env;
 pub mod helpers;
-pub mod send_request;
+pub mod http;
+pub mod macros;
+pub mod register;
+mod sqlite;
+mod store;
 
-pub use send_request::send_request;
+pub use http::send_request::send_request;
+pub use store::{Conn, ConnectionExt, Store, StoreExt};
+
+pub static WASM_ENGINE: once_cell::sync::Lazy<wasmtime::Engine> =
+    once_cell::sync::Lazy::new(|| {
+        wasmtime::Engine::new(wasmtime::Config::new().async_support(true)).unwrap()
+    });
