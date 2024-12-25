@@ -13,13 +13,14 @@ impl<STORE: fastn_wasm::StoreExt> fastn_wasm::Store<STORE> {
         // sqlite
         fastn_wasm::func2ret!(linker, "sqlite_connect", fastn_wasm::sqlite::connect);
         fastn_wasm::func3ret!(linker, "sqlite_query", fastn_wasm::sqlite::query);
-        // fastn_wasm::func2ret!(
-        //     linker,
-        //     "sqlite_execute",
-        //     fastn_wasm::wasm::exports::sqlite::execute
-        // );
-        //
-        // // pg related stuff
+        fastn_wasm::func2ret!(linker, "sqlite_execute", fastn_wasm::sqlite::execute);
+        fastn_wasm::func2ret!(
+            linker,
+            "sqlite_batch_execute",
+            fastn_wasm::sqlite::batch_execute
+        );
+
+        // pg related stuff
         // fastn_wasm::func2ret!(linker, "pg_connect", fastn_wasm::wasm::exports::pg::connect);
         // fastn_wasm::func3ret!(linker, "pg_query", fastn_wasm::wasm::exports::pg::query);
         // fastn_wasm::func3ret!(linker, "pg_execute", fastn_wasm::wasm::exports::pg::execute);
@@ -29,11 +30,6 @@ impl<STORE: fastn_wasm::StoreExt> fastn_wasm::Store<STORE> {
         //     fastn_wasm::wasm::exports::pg::batch_execute
         // );
         //
-        // fastn_wasm::func2ret!(
-        //     linker,
-        //     "sqlite_batch_execute",
-        //     fastn_wasm::wasm::exports::sqlite::batch_execute
-        // );
         //
         // // request related stuff
         fastn_wasm::func0ret!(linker, "http_get_request", fastn_wasm::http::get_request);

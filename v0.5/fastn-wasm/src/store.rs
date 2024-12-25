@@ -7,17 +7,6 @@ pub struct Store<STORE: StoreExt> {
     pub db_url: String,
     pub inner: STORE,
 }
-
-#[derive(Debug)]
-pub enum ExecuteError {
-    Rusqlite(rusqlite::Error),
-    InvalidQuery(String),
-}
-
-pub trait ConnectionExt: Send {
-    fn prepare(&self, sql: &str) -> Result<rusqlite::Statement, ExecuteError>;
-}
-
 pub trait StoreExt: Send {
     fn connection_open(
         &self,
@@ -48,3 +37,17 @@ impl<STORE: StoreExt> Store<STORE> {
         }
     }
 }
+
+#[derive(Debug)]
+pub enum ExecuteError {
+    Rusqlite(rusqlite::Error),
+    InvalidQuery(String),
+}
+
+pub trait ConnectionExt: Send {
+    fn prepare(&self, sql: &str) -> Result<rusqlite::Statement, ExecuteError>;
+    fn execute(&self, query: &str, binds: Vec<Value>) -> Result<usize, ExecuteError>;
+    fn execute_batch(&self, query: &str) -> Result<(), ExecuteError>;
+}
+
+pub type Value = ft_sys_shared::SqliteRawValue;

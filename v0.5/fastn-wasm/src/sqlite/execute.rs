@@ -1,20 +1,17 @@
-use crate::wasm::exports::sqlite::query::rusqlite_to_diesel;
-
-pub async fn execute(
-    mut caller: wasmtime::Caller<'_, fastn_wasm::Store>,
+pub async fn execute<STORE: fastn_wasm::StoreExt>(
+    mut caller: wasmtime::Caller<'_, fastn_wasm::Store<STORE>>,
     ptr: i32,
     len: i32,
 ) -> wasmtime::Result<i32> {
-    let q: fastn_ds::wasm::exports::sqlite::Query =
-        fastn_wasm::helpers::get_json(ptr, len, &mut caller)?;
+    let q: fastn_wasm::sqlite::Query = fastn_wasm::helpers::get_json(ptr, len, &mut caller)?;
     let res = caller.data_mut().sqlite_execute(q).await?;
     fastn_wasm::helpers::send_json(res, &mut caller).await
 }
 
-impl fastn_wasm::Store {
+impl<STORE: fastn_wasm::StoreExt> fastn_wasm::Store<STORE> {
     async fn sqlite_execute(
         &mut self,
-        q: fastn_ds::wasm::exports::sqlite::Query,
+        q: fastn_wasm::sqlite::Query,
     ) -> wasmtime::Result<Result<usize, ft_sys_shared::DbError>> {
         let conn = if let Some(ref mut conn) = self.sqlite {
             conn
@@ -27,14 +24,17 @@ impl fastn_wasm::Store {
 
         let conn = conn.lock().await;
         println!("execute: {q:?}");
-        match conn.execute(q.sql.as_str(), rusqlite::params_from_iter(q.binds)) {
+        match conn.execute(q.sql.as_str(), q.binds) {
             Ok(cursor) => Ok(Ok(cursor)),
-            Err(e) => {
+            Err(fastn_wasm::ExecuteError::Rusqlite(e)) => {
                 eprint!("err: {e:?}");
-                let e = rusqlite_to_diesel(e);
+                let e = fastn_wasm::sqlite::query::rusqlite_to_diesel(e);
                 eprintln!("err: {e:?}");
                 Ok(Err(e))
             }
+            Err(fastn_wasm::ExecuteError::InvalidQuery(e)) => {
+                Ok(Err(ft_sys_shared::DbError::UnableToSendCommand(e)))
+            } // Todo: Handle error message
         }
     }
 }

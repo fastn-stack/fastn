@@ -11,8 +11,8 @@ pub async fn query<STORE: fastn_wasm::StoreExt>(
 
 #[derive(serde::Deserialize, Debug)]
 pub struct Query {
-    sql: String,
-    binds: Vec<Value>,
+    pub sql: String,
+    pub binds: Vec<fastn_wasm::Value>,
 }
 
 #[derive(serde::Serialize, Debug)]
@@ -20,8 +20,6 @@ pub struct Cursor {
     columns: Vec<String>,
     rows: Vec<Row>,
 }
-
-pub type Value = ft_sys_shared::SqliteRawValue;
 
 #[derive(Debug, Hash, PartialEq, Eq, Clone, Copy, serde::Deserialize, serde::Serialize)]
 pub enum SqliteType {
@@ -43,7 +41,7 @@ pub enum SqliteType {
 
 #[derive(serde::Serialize, Debug)]
 struct Row {
-    fields: Vec<Value>,
+    fields: Vec<fastn_wasm::Value>,
 }
 
 impl Row {
@@ -52,13 +50,13 @@ impl Row {
         for i in 0..len {
             let field = row.get_ref_unwrap(i);
             let field = match field {
-                rusqlite::types::ValueRef::Null => Value::Null,
-                rusqlite::types::ValueRef::Integer(i) => Value::Integer(i),
-                rusqlite::types::ValueRef::Real(f) => Value::Real(f),
+                rusqlite::types::ValueRef::Null => fastn_wasm::Value::Null,
+                rusqlite::types::ValueRef::Integer(i) => fastn_wasm::Value::Integer(i),
+                rusqlite::types::ValueRef::Real(f) => fastn_wasm::Value::Real(f),
                 rusqlite::types::ValueRef::Text(s) => {
-                    Value::Text(String::from_utf8_lossy(s).to_string())
+                    fastn_wasm::Value::Text(String::from_utf8_lossy(s).to_string())
                 }
-                rusqlite::types::ValueRef::Blob(b) => Value::Blob(b.to_vec()),
+                rusqlite::types::ValueRef::Blob(b) => fastn_wasm::Value::Blob(b.to_vec()),
             };
             fields.push(field);
         }
@@ -68,7 +66,7 @@ impl Row {
 
 #[allow(dead_code)]
 struct Field {
-    bytes: Option<Value>,
+    bytes: Option<fastn_wasm::Value>,
 }
 
 impl<STORE: fastn_wasm::StoreExt> fastn_wasm::Store<STORE> {
