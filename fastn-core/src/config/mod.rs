@@ -1085,7 +1085,7 @@ impl Config {
             config.package.endpoints
         };
 
-        fastn_ds::insert_or_update(
+        fastn_wasm::insert_or_update(
             &config.all_packages,
             package.name.to_string(),
             package.to_owned(),
@@ -1139,7 +1139,7 @@ impl Config {
 
     #[cfg(not(feature = "use-config-json"))]
     pub(crate) fn add_package(&self, package: &fastn_core::Package) {
-        fastn_ds::insert_or_update(
+        fastn_wasm::insert_or_update(
             &self.all_packages,
             package.name.to_string(),
             package.to_owned(),
@@ -1213,7 +1213,7 @@ async fn get_all_packages(
     session_id: &Option<String>,
 ) -> fastn_core::Result<scc::HashMap<String, fastn_core::Package>> {
     let all_packages = scc::HashMap::new();
-    fastn_ds::insert_or_update(&all_packages, package.name.to_string(), package.to_owned());
+    fastn_wasm::insert_or_update(&all_packages, package.name.to_string(), package.to_owned());
     let config_temp = config_temp::ConfigTemp::read(ds, session_id).await?;
     let other = config_temp
         .get_all_packages(ds, package, package_root, session_id)
@@ -1236,6 +1236,6 @@ async fn get_all_packages(
     _session_id: &Option<String>,
 ) -> fastn_core::Result<scc::HashMap<String, fastn_core::Package>> {
     let all_packages = scc::HashMap::new();
-    fastn_ds::insert_or_update(&all_packages, package.name.to_string(), package.to_owned());
+    fastn_wasm::insert_or_update(&all_packages, package.name.to_string(), package.to_owned());
     Ok(all_packages)
 }

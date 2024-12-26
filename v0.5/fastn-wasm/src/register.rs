@@ -21,24 +21,19 @@ impl<STORE: fastn_wasm::StoreExt> fastn_wasm::Store<STORE> {
         );
 
         // pg related stuff
-        // fastn_wasm::func2ret!(linker, "pg_connect", fastn_wasm::wasm::exports::pg::connect);
-        // fastn_wasm::func3ret!(linker, "pg_query", fastn_wasm::wasm::exports::pg::query);
-        // fastn_wasm::func3ret!(linker, "pg_execute", fastn_wasm::wasm::exports::pg::execute);
-        // fastn_wasm::func3ret!(
-        //     linker,
-        //     "pg_batch_execute",
-        //     fastn_wasm::wasm::exports::pg::batch_execute
-        // );
-        //
-        //
-        // // request related stuff
+        fastn_wasm::func2ret!(linker, "pg_connect", fastn_wasm::pg::connect);
+        fastn_wasm::func3ret!(linker, "pg_query", fastn_wasm::pg::query);
+        fastn_wasm::func3ret!(linker, "pg_execute", fastn_wasm::pg::execute);
+        fastn_wasm::func3ret!(linker, "pg_batch_execute", fastn_wasm::pg::batch_execute);
+
+        // request related stuff
         fastn_wasm::func0ret!(linker, "http_get_request", fastn_wasm::http::get_request);
-        fastn_wasm::func2ret!(linker, "http_send_request", fastn_wasm::send_request);
-        // fastn_wasm::func2!(
-        //     linker,
-        //     "http_send_response",
-        //     fastn_wasm::wasm::exports::http::send_response
-        // );
+        fastn_wasm::func2ret!(linker, "http_send_request", fastn_wasm::http::send_request);
+        fastn_wasm::func2!(
+            linker,
+            "http_send_response",
+            fastn_wasm::http::send_response
+        );
 
         // document store related
         fastn_wasm::func2ret!(linker, "hostn_tejar_write", fastn_wasm::ds::tejar_write);

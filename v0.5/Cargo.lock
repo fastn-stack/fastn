@@ -1061,10 +1061,12 @@ version = "0.1.0"
 dependencies = [
  "actix-web",
  "async-lock",
+ "bytes",
  "chrono",
  "deadpool",
  "deadpool-postgres",
  "ft-sys-shared",
+ "futures-util",
  "http 1.2.0",
  "libsqlite3-sys",
  "magic-crypt",
@@ -1075,6 +1077,7 @@ dependencies = [
  "scc",
  "serde",
  "serde_json",
+ "tokio-postgres",
  "wasmtime",
 ]
 
@@ -2026,6 +2029,9 @@ dependencies = [
  "bytes",
  "fallible-iterator 0.2.0",
  "postgres-protocol",
+ "serde",
+ "serde_json",
+ "uuid",
 ]
 
 [[package]]

@@ -84,7 +84,7 @@ impl ConfigTemp {
                 .to_package(package_root, package_name, ds, package, session_id)
                 .await?;
             ConfigTemp::check_dependencies_provided(package, &mut current_package)?;
-            fastn_ds::insert_or_update(&all_packages, package_name.clone(), current_package);
+            fastn_wasm::insert_or_update(&all_packages, package_name.clone(), current_package);
         }
 
         Ok(all_packages)

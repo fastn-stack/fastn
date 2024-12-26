@@ -8,6 +8,7 @@ pub struct Store<STORE: StoreExt> {
     pub inner: STORE,
 }
 pub trait StoreExt: Send {
+    fn get_db_url(&self, store_db_url: &str, db_url: &str) -> String;
     fn connection_open(
         &self,
         store_db_url: &str,

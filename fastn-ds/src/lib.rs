@@ -2,16 +2,12 @@
 #![deny(unused_crate_dependencies)]
 
 extern crate self as fastn_ds;
-
-mod create_pool;
 pub mod http;
 pub mod reqwest_util;
 mod user_data;
 mod utils;
 pub mod wasm;
 pub use user_data::UserDataError;
-
-pub use create_pool::create_pool;
 
 #[derive(Debug, Clone)]
 pub struct DocumentStore {
@@ -201,9 +197,9 @@ impl DocumentStore {
             return Ok(p.get().clone());
         }
 
-        let pool = fastn_ds::create_pool(db_path.as_str()).await?;
+        let pool = fastn_wasm::create_pool(db_path.as_str()).await?;
 
-        fastn_ds::insert_or_update(&self.pg_pools, db_path.to_string(), pool.clone());
+        fastn_wasm::insert_or_update(&self.pg_pools, db_path.to_string(), pool.clone());
 
         Ok(pool)
     }
@@ -244,7 +240,11 @@ impl DocumentStore {
 
                 // we are only storing compiled module if we are not in debug mode
                 if !self.env_bool("FASTN_DEBUG", false).await? {
-                    fastn_ds::insert_or_update(&self.wasm_modules, path.to_string(), module.clone())
+                    fastn_wasm::insert_or_update(
+                        &self.wasm_modules,
+                        path.to_string(),
+                        module.clone(),
+                    )
                 }
 
                 Ok(module)

@@ -236,7 +236,7 @@ impl Library2022 {
                 line_number: 0,
             })?;
 
-        fastn_ds::insert_or_update(&self.config.all_packages, package.name.clone(), package);
+        fastn_wasm::insert_or_update(&self.config.all_packages, package.name.clone(), package);
 
         Ok(())
     }

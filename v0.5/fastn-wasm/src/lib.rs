@@ -5,20 +5,37 @@
 extern crate self as fastn_wasm;
 
 pub mod aws;
+mod create_pool;
 pub mod crypto;
 pub mod ds;
 pub mod env;
 pub mod helpers;
 pub mod http;
 pub mod macros;
+mod pg;
 pub mod register;
 mod sqlite;
 mod store;
 
-pub use http::send_request::send_request;
+pub use create_pool::create_pool;
 pub use store::{Conn, ConnectionExt, ExecuteError, Store, StoreExt, Value};
 
 pub static WASM_ENGINE: once_cell::sync::Lazy<wasmtime::Engine> =
     once_cell::sync::Lazy::new(|| {
         wasmtime::Engine::new(wasmtime::Config::new().async_support(true)).unwrap()
     });
+
+pub fn insert_or_update<K, V>(map: &scc::HashMap<K, V>, key: K, value: V)
+where
+    K: std::hash::Hash,
+    K: std::cmp::Eq,
+{
+    match map.entry(key) {
+        scc::hash_map::Entry::Occupied(mut ov) => {
+            ov.insert(value);
+        }
+        scc::hash_map::Entry::Vacant(vv) => {
+            vv.insert_entry(value);
+        }
+    }
+}

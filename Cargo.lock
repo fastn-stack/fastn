@@ -1443,6 +1443,7 @@ dependencies = [
  "fastn-resolved",
  "fastn-runtime",
  "fastn-utils",
+ "fastn-wasm",
  "fbt-lib",
  "ft-sys-shared",
  "ftd",
@@ -1496,7 +1497,6 @@ dependencies = [
  "serde_json",
  "thiserror 2.0.9",
  "tokio",
- "tokio-postgres",
  "tracing",
  "url",
  "wasmtime",
@@ -1620,10 +1620,12 @@ version = "0.1.0"
 dependencies = [
  "actix-web",
  "async-lock",
+ "bytes",
  "chrono",
  "deadpool",
  "deadpool-postgres",
  "ft-sys-shared",
+ "futures-util",
  "http 1.2.0",
  "libsqlite3-sys",
  "magic-crypt",
@@ -1634,6 +1636,7 @@ dependencies = [
  "scc",
  "serde",
  "serde_json",
+ "tokio-postgres",
  "wasmtime",
 ]
 
