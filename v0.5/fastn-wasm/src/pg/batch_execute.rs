@@ -1,5 +1,5 @@
-pub async fn batch_execute(
-    mut caller: wasmtime::Caller<'_, fastn_wasm::Store>,
+pub async fn batch_execute<STORE: fastn_wasm::StoreExt>(
+    mut caller: wasmtime::Caller<'_, fastn_wasm::Store<STORE>>,
     conn: i32,
     ptr: i32,
     len: i32,
@@ -9,7 +9,7 @@ pub async fn batch_execute(
     fastn_wasm::helpers::send_json(res, &mut caller).await
 }
 
-impl fastn_wasm::Store {
+impl<STORE: fastn_wasm::StoreExt> fastn_wasm::Store<STORE> {
     pub async fn pg_batch_execute(
         &mut self,
         conn: i32,
@@ -28,7 +28,7 @@ impl fastn_wasm::Store {
 
         Ok(match client.client.batch_execute(q.as_str()).await {
             Ok(()) => Ok(()),
-            Err(e) => Err(fastn_ds::wasm::exports::pg::pg_to_shared(e)),
+            Err(e) => Err(fastn_wasm::pg::pg_to_shared(e)),
         })
     }
 }

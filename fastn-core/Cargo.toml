@@ -59,6 +59,7 @@ zip.workspace = true
 fastn-expr.workspace = true
 fastn-resolved.workspace = true
 fastn-runtime.workspace = true
+fastn-wasm.workspace = true
 
 [dev-dependencies]
 fbt-lib.workspace = true

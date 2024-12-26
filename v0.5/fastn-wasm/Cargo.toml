@@ -26,3 +26,6 @@ scc.workspace = true
 once_cell.workspace = true
 rusqlite.workspace = true
 libsqlite3-sys.workspace = true
+tokio-postgres.workspace = true
+bytes.workspace = true
+futures-util.workspace = true
