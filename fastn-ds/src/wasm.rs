@@ -57,8 +57,7 @@ pub async fn process_http_request(
     db_url: String,
 ) -> wasmtime::Result<ft_sys_shared::Request> {
     let path = req.uri.clone();
-    let hostn_store: fastn_wasm::Store<Store> =
-        fastn_wasm::Store::new(req, wasm_pg_pools, db_url, Store);
+    let hostn_store = fastn_wasm::Store::new(req, wasm_pg_pools, db_url, Store);
     let mut linker = wasmtime::Linker::new(module.engine());
     hostn_store.register_functions(&mut linker);
     let wasm_store = wasmtime::Store::new(module.engine(), hostn_store);
