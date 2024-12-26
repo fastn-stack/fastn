@@ -15,16 +15,11 @@ tokio.workspace = true
 thiserror.workspace = true
 actix-web.workspace = true
 deadpool-postgres.workspace = true
-#deadpool.workspace = true
 actix-http.workspace = true
-#async-lock.workspace = true
 http.workspace = true
 bytes.workspace = true
 camino.workspace = true
-#libsqlite3-sys.workspace = true
-#futures-util.workspace = true
 async-trait.workspace = true
-#tokio-postgres.workspace = true
 ignore.workspace = true
 dirs.workspace = true
 tracing.workspace = true
@@ -33,8 +28,6 @@ reqwest.workspace = true
 once_cell.workspace = true
 url.workspace = true
 scc.workspace = true
-#serde.workspace = true
 serde_json.workspace = true
 wasmtime.workspace = true
 ft-sys-shared = { workspace = true, features = ["rusqlite"] }
-
