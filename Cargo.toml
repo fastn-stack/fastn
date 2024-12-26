@@ -71,7 +71,6 @@ dirs = "5"
 deadpool-postgres = "0.12"
 deadpool = "0.10"
 tokio-postgres = { version = "0.7", features = ["with-serde_json-1", "with-uuid-1"] }
-async-lock = "3"
 async-recursion = "1"
 async-trait = "0.1"
 camino = "1"
@@ -144,9 +143,6 @@ quick-js = "0.4"
 git = "https://github.com/fastn-stack/fastn-observer"
 rev = "5f64c7b"
 
-[workspace.dependencies.libsqlite3-sys]
-# this should be synced with whatever rusqlite uses
-version = "0.28.0"
 
 [workspace.dependencies.rusqlite]
 version = "0.31"
