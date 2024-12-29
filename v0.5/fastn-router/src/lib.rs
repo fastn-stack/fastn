@@ -35,6 +35,7 @@ pub enum Route {
     Static {
         package: String,
         path: String,
+        mime: String,
         not_found: Document,
     },
 }
