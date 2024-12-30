@@ -8,7 +8,7 @@ async fn main() {
     };
 
     let module = wasmtime::Module::from_binary(
-        &fastn_ds::WASM_ENGINE,
+        &fastn_wasm::WASM_ENGINE,
         &tokio::fs::read(
             "../../ft-sdk/sample-wasm/target/wasm32-unknown-unknown/release/sample_wasm.wasm",
         )

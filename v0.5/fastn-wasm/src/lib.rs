@@ -21,7 +21,7 @@ pub use process_http_request::process_http_request;
 pub(crate) use store::Conn;
 pub use store::{ConnectionExt, SQLError, Store, StoreExt, StoreImpl};
 
-pub(crate) static WASM_ENGINE: once_cell::sync::Lazy<wasmtime::Engine> =
+pub static WASM_ENGINE: once_cell::sync::Lazy<wasmtime::Engine> =
     once_cell::sync::Lazy::new(|| {
         wasmtime::Engine::new(wasmtime::Config::new().async_support(true)).unwrap()
     });

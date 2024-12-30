@@ -156,11 +156,6 @@ pub trait RequestType {
     fn body(&self) -> &[u8];
 }
 
-pub static WASM_ENGINE: once_cell::sync::Lazy<wasmtime::Engine> =
-    once_cell::sync::Lazy::new(|| {
-        wasmtime::Engine::new(wasmtime::Config::new().async_support(true)).unwrap()
-    });
-
 #[derive(thiserror::Error, Debug)]
 pub enum CreatePoolError {
     #[error("pool error {0}")]
@@ -175,7 +170,7 @@ pub enum CreatePoolError {
 pub async fn wasmc(path: &str) -> wasmtime::Result<()> {
     Ok(tokio::fs::write(
         format!("{path}c"),
-        wasmtime::Module::from_file(&WASM_ENGINE, path)?.serialize()?,
+        wasmtime::Module::from_file(&fastn_wasm::WASM_ENGINE, path)?.serialize()?,
     )
     .await?)
 }
@@ -227,13 +222,13 @@ impl DocumentStore {
             None => {
                 let wasmc_path = fastn_ds::Path::new(format!("{path}c").as_str());
                 let module = match unsafe {
-                    wasmtime::Module::from_trusted_file(&WASM_ENGINE, &wasmc_path.path)
+                    wasmtime::Module::from_trusted_file(&fastn_wasm::WASM_ENGINE, &wasmc_path.path)
                 } {
                     Ok(m) => m,
                     Err(e) => {
                         tracing::info!("could not read {wasmc_path:?} file: {e:?}");
                         let source = self.read_content(&fastn_ds::Path::new(path), &None).await?;
-                        wasmtime::Module::from_binary(&WASM_ENGINE, &source)?
+                        wasmtime::Module::from_binary(&fastn_wasm::WASM_ENGINE, &source)?
                     }
                 };
 
