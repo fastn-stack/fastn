@@ -506,7 +506,7 @@ impl DocumentStore {
         };
         let store =
             fastn_wasm::Store::new(req, self.pg_pools.clone(), db_path, fastn_ds::wasm::Store);
-        Ok(fastn_utils::process_http_request(&wasm_url, module, store).await?)
+        Ok(fastn_wasm::process_http_request(&wasm_url, module, store).await?)
     }
 
     // This method will connect client request to the out of the world

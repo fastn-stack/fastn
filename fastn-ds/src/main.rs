@@ -23,7 +23,7 @@ async fn main() {
         "".to_string(),
         fastn_ds::wasm::Store,
     );
-    let resp = fastn_utils::process_http_request("/", module, store)
+    let resp = fastn_wasm::process_http_request("/", module, store)
         .await
         .unwrap();
 

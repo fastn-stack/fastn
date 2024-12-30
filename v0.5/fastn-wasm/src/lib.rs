@@ -13,11 +13,13 @@ pub mod helpers;
 pub mod http;
 pub mod macros;
 mod pg;
+mod process_http_request;
 pub mod register;
 mod sqlite;
 mod store;
 
 pub use create_pool::create_pool;
+pub use process_http_request::{process_http_request, to_response};
 pub use store::{Conn, ConnectionExt, ExecuteError, Store, StoreExt, Value};
 
 pub static WASM_ENGINE: once_cell::sync::Lazy<wasmtime::Engine> =

@@ -1059,6 +1059,7 @@ version = "0.1.0"
 name = "fastn-wasm"
 version = "0.1.0"
 dependencies = [
+ "actix-http",
  "actix-web",
  "async-lock",
  "bytes",
@@ -1078,6 +1079,7 @@ dependencies = [
  "serde",
  "serde_json",
  "tokio-postgres",
+ "tracing",
  "wasmtime",
 ]
 

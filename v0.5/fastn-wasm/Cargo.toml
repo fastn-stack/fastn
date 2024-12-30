@@ -9,6 +9,7 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
+actix-http.workspace = true
 wasmtime.workspace = true
 serde_json.workspace = true
 serde.workspace = true
@@ -20,6 +21,8 @@ chrono.workspace = true
 magic-crypt.workspace = true
 async-lock.workspace = true
 actix-web.workspace = true
+tracing.workspace = true
+thiserror.workspace = true
 deadpool.workspace = true
 deadpool-postgres.workspace = true
 scc.workspace = true

@@ -40,8 +40,15 @@ homepage = "https://fastn.com"
 # and create its own [dependencies.<name>] section. Also, document it with why are you not
 # using the latest dependency, and what is the plan to move to the latest version.
 
+actix-web = "4"
+actix-http = "3"
 arcstr = "1"
+async-lock = "3"
 async-trait = "0.1"
+bytes = "1"
+chrono = { version = "0.4", features = ["serde"] }
+deadpool = "0.10"
+deadpool-postgres = "0.12"
 fastn-builtins = { path = "../fastn-builtins" }
 fastn-compiler = { path = "fastn-compiler" }
 fastn-continuation = { path = "fastn-continuation" }
@@ -52,31 +59,27 @@ fastn-runtime = { path = "../fastn-runtime" }
 fastn-section = { path = "fastn-section" }
 fastn-unresolved = { path = "fastn-unresolved" }
 ft-sys-shared = "0.1.4"
+futures-util = { version = "0.3", default-features = false, features = ["std"] }
 http = "1"
 http-body-util = "0.1"
 hyper = { version = "1.5.1", features = ["server", "http1"] }
 hyper-util = { version = "0.1.10", features = ["tokio"] }
 id-arena = "2"
 indexmap = "2"
+libsqlite3-sys = "0.28.0"
+magic-crypt = { version = "4", default-features = false }
+once_cell = "1"
 rand = "0.8"
 reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+scc = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 string-interner = "0.18"
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "fs"] }
-wasmtime = "28"
-chrono = { version = "0.4", features = ["serde"] }
-magic-crypt = { version = "4", default-features = false }
-actix-web = "4"
-async-lock = "3"
-deadpool = "0.10"
-deadpool-postgres = "0.12"
-scc = "2"
-once_cell = "1"
-libsqlite3-sys = "0.28.0"
 tokio-postgres = { version = "0.7", features = ["with-serde_json-1", "with-uuid-1"] }
-bytes = "1"
-futures-util = { version = "0.3", default-features = false, features = ["std"] }
+tracing = "0.1"
+thiserror = "2"
+wasmtime = "28"
 
 [workspace.dependencies.rusqlite]
 version = "0.31"

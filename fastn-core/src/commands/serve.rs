@@ -526,7 +526,7 @@ async fn handle_endpoints(
             .handle_wasm(url, req, endpoint.mountpoint.to_string(), session_id)
             .await
         {
-            Ok(r) => Some(Ok(fastn_utils::to_response(r))),
+            Ok(r) => Some(Ok(fastn_wasm::to_response(r))),
             Err(e) => return Some(Err(e.into())),
         };
     }
