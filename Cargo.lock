@@ -1478,7 +1478,6 @@ dependencies = [
 name = "fastn-ds"
 version = "0.1.0"
 dependencies = [
- "actix-http",
  "actix-web",
  "async-trait",
  "bytes",
@@ -1607,10 +1606,14 @@ dependencies = [
 name = "fastn-utils"
 version = "0.1.0"
 dependencies = [
+ "actix-http",
+ "actix-web",
+ "fastn-wasm",
  "ft-sys-shared",
  "rusqlite",
  "serde_json",
  "thiserror 2.0.9",
+ "tracing",
  "wasmtime",
 ]
 

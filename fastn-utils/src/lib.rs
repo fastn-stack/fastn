@@ -3,11 +3,46 @@
 
 pub mod sql;
 
+#[tracing::instrument(skip_all)]
+pub async fn process_http_request<STORE: fastn_wasm::StoreExt>(
+    path: &str,
+    module: wasmtime::Module,
+    store: fastn_wasm::Store<STORE>,
+) -> wasmtime::Result<ft_sys_shared::Request> {
+    let mut linker = wasmtime::Linker::new(module.engine());
+    store.register_functions(&mut linker);
+    let wasm_store = wasmtime::Store::new(module.engine(), store);
+    let (wasm_store, r) = handle(wasm_store, module, linker, path).await?;
+    if let Some(r) = r {
+        return Ok(r);
+    }
+
+    Ok(wasm_store
+        .into_data()
+        .response
+        .ok_or(crate::WasmError::EndpointDidNotReturnResponse)?)
+}
+
+pub fn to_response(req: ft_sys_shared::Request) -> actix_web::HttpResponse {
+    println!("{req:?}");
+    let mut builder = actix_web::HttpResponse::build(req.method.parse().unwrap());
+    let mut resp = builder.status(req.method.parse().unwrap()).body(req.body);
+
+    for (k, v) in req.headers {
+        resp.headers_mut().insert(
+            k.parse().unwrap(),
+            actix_http::header::HeaderValue::from_bytes(v.as_slice()).unwrap(),
+        );
+    }
+
+    resp
+}
+
 pub async fn handle<S: Send>(
     mut wasm_store: wasmtime::Store<S>,
     module: wasmtime::Module,
     linker: wasmtime::Linker<S>,
-    path: String,
+    path: &str,
 ) -> wasmtime::Result<(wasmtime::Store<S>, Option<ft_sys_shared::Request>)> {
     let instance = match linker.instantiate_async(&mut wasm_store, &module).await {
         Ok(i) => i,
@@ -21,7 +56,7 @@ pub async fn handle<S: Send>(
         }
     };
 
-    let (mut wasm_store, main) = get_entrypoint(instance, wasm_store, path.as_str());
+    let (mut wasm_store, main) = get_entrypoint(instance, wasm_store, path);
 
     let main = match main {
         Ok(v) => v,

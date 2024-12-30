@@ -9,25 +9,24 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
-fastn-utils.workspace = true
-fastn-wasm.workspace = true
-tokio.workspace = true
-thiserror.workspace = true
 actix-web.workspace = true
-deadpool-postgres.workspace = true
-actix-http.workspace = true
-http.workspace = true
+async-trait.workspace = true
 bytes.workspace = true
 camino.workspace = true
-async-trait.workspace = true
-ignore.workspace = true
+deadpool-postgres.workspace = true
 dirs.workspace = true
-tracing.workspace = true
-rusqlite.workspace = true
-reqwest.workspace = true
+fastn-utils.workspace = true
+fastn-wasm.workspace = true
+ft-sys-shared = { workspace = true, features = ["rusqlite"] }
+http.workspace = true
+ignore.workspace = true
 once_cell.workspace = true
-url.workspace = true
+reqwest.workspace = true
+rusqlite.workspace = true
 scc.workspace = true
 serde_json.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+url.workspace = true
 wasmtime.workspace = true
-ft-sys-shared = { workspace = true, features = ["rusqlite"] }

@@ -9,8 +9,12 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
-wasmtime.workspace = true
-thiserror.workspace = true
+actix-http.workspace = true
+actix-web.workspace = true
+fastn-wasm.workspace = true
 ft-sys-shared = { workspace = true, features = ["rusqlite"] }
 rusqlite.workspace = true
 serde_json.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+wasmtime.workspace = true
