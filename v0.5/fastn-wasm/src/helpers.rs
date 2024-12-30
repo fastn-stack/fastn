@@ -1,3 +1,4 @@
+#[expect(dead_code)]
 pub async fn str<S: Send>(
     str: &str,
     caller: &mut wasmtime::Caller<'_, S>,

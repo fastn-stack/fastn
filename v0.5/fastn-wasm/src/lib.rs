@@ -4,17 +4,17 @@
 
 extern crate self as fastn_wasm;
 
-pub mod aws;
+pub(crate) mod aws;
 mod create_pool;
-pub mod crypto;
-pub mod ds;
-pub mod env;
-pub mod helpers;
-pub mod http;
-pub mod macros;
+pub(crate) mod crypto;
+pub(crate) mod ds;
+pub(crate) mod env;
+pub(crate) mod helpers;
+pub(crate) mod http;
+pub(crate) mod macros;
 mod pg;
 mod process_http_request;
-pub mod register;
+pub(crate) mod register;
 mod sqlite;
 mod store;
 
