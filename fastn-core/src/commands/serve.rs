@@ -526,7 +526,7 @@ async fn handle_endpoints(
             .handle_wasm(url, req, endpoint.mountpoint.to_string(), session_id)
             .await
         {
-            Ok(r) => Some(Ok(fastn_wasm::to_response(r))),
+            Ok(r) => Some(Ok(to_response(r))),
             Err(e) => return Some(Err(e.into())),
         };
     }
@@ -547,6 +547,21 @@ async fn handle_endpoints(
 
     let actix_response = fastn_core::http::ResponseBuilder::from_reqwest(response).await;
     Some(Ok(actix_response))
+}
+
+pub fn to_response(req: ft_sys_shared::Request) -> actix_web::HttpResponse {
+    println!("{req:?}");
+    let mut builder = actix_web::HttpResponse::build(req.method.parse().unwrap());
+    let mut resp = builder.status(req.method.parse().unwrap()).body(req.body);
+
+    for (k, v) in req.headers {
+        resp.headers_mut().insert(
+            k.parse().unwrap(),
+            actix_http::header::HeaderValue::from_bytes(v.as_slice()).unwrap(),
+        );
+    }
+
+    resp
 }
 
 async fn handle_apps(

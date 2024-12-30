@@ -1422,6 +1422,7 @@ dependencies = [
 name = "fastn-core"
 version = "0.1.0"
 dependencies = [
+ "actix-http",
  "actix-web",
  "antidote",
  "async-recursion",
@@ -1615,8 +1616,6 @@ dependencies = [
 name = "fastn-wasm"
 version = "0.1.0"
 dependencies = [
- "actix-http",
- "actix-web",
  "async-lock",
  "bytes",
  "chrono",

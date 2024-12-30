@@ -19,7 +19,7 @@ mod sqlite;
 mod store;
 
 pub use create_pool::create_pool;
-pub use process_http_request::{process_http_request, to_response};
+pub use process_http_request::process_http_request;
 pub(crate) use store::Conn;
 pub use store::{ConnectionExt, SQLError, Store, StoreExt, StoreImpl};
 

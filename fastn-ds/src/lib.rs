@@ -503,8 +503,12 @@ impl DocumentStore {
             headers,
             body: req.body().to_vec(),
         };
-        let store =
-            fastn_wasm::Store::new(req, self.pg_pools.clone(), db_path, fastn_wasm::StoreImpl);
+        let store = fastn_wasm::Store::new(
+            req,
+            self.pg_pools.clone().into_inner(),
+            db_path,
+            fastn_wasm::StoreImpl,
+        );
         Ok(fastn_wasm::process_http_request(&wasm_url, module, store).await?)
     }
 

@@ -40,8 +40,6 @@ homepage = "https://fastn.com"
 # and create its own [dependencies.<name>] section. Also, document it with why are you not
 # using the latest dependency, and what is the plan to move to the latest version.
 
-actix-web = "4"
-actix-http = "3"
 arcstr = "1"
 async-lock = "3"
 async-trait = "0.1"

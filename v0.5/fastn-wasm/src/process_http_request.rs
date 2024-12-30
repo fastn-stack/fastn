@@ -18,21 +18,6 @@ pub async fn process_http_request<STORE: fastn_wasm::StoreExt>(
         .ok_or(WasmError::EndpointDidNotReturnResponse)?)
 }
 
-pub fn to_response(req: ft_sys_shared::Request) -> actix_web::HttpResponse {
-    println!("{req:?}");
-    let mut builder = actix_web::HttpResponse::build(req.method.parse().unwrap());
-    let mut resp = builder.status(req.method.parse().unwrap()).body(req.body);
-
-    for (k, v) in req.headers {
-        resp.headers_mut().insert(
-            k.parse().unwrap(),
-            actix_http::header::HeaderValue::from_bytes(v.as_slice()).unwrap(),
-        );
-    }
-
-    resp
-}
-
 pub async fn handle<S: Send>(
     mut wasm_store: wasmtime::Store<S>,
     module: wasmtime::Module,
