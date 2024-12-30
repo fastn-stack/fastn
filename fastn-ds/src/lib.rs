@@ -6,7 +6,6 @@ pub mod http;
 pub mod reqwest_util;
 mod user_data;
 mod utils;
-pub mod wasm;
 pub use user_data::UserDataError;
 
 #[derive(Debug, Clone)]
@@ -505,7 +504,7 @@ impl DocumentStore {
             body: req.body().to_vec(),
         };
         let store =
-            fastn_wasm::Store::new(req, self.pg_pools.clone(), db_path, fastn_ds::wasm::Store);
+            fastn_wasm::Store::new(req, self.pg_pools.clone(), db_path, fastn_wasm::StoreImpl);
         Ok(fastn_wasm::process_http_request(&wasm_url, module, store).await?)
     }
 

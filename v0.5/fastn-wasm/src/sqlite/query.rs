@@ -89,13 +89,13 @@ impl<STORE: fastn_wasm::StoreExt> fastn_wasm::Store<STORE> {
         println!("query1: {q:?}");
         let mut stmt = match conn.prepare(q.sql.as_str()) {
             Ok(v) => v,
-            Err(fastn_wasm::ExecuteError::Rusqlite(e)) => {
+            Err(fastn_wasm::SQLError::Rusqlite(e)) => {
                 eprint!("err: {e:?}");
                 let e = rusqlite_to_diesel(e);
                 eprintln!("err: {e:?}");
                 return Ok(Err(e));
             }
-            Err(fastn_wasm::ExecuteError::InvalidQuery(e)) => {
+            Err(fastn_wasm::SQLError::InvalidQuery(e)) => {
                 return Ok(Err(ft_sys_shared::DbError::UnableToSendCommand(e)))
             } // Todo: Handle error message
         };

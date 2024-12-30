@@ -21,7 +21,7 @@ async fn main() {
         req,
         Default::default(),
         "".to_string(),
-        fastn_ds::wasm::Store,
+        fastn_wasm::StoreImpl,
     );
     let resp = fastn_wasm::process_http_request("/", module, store)
         .await

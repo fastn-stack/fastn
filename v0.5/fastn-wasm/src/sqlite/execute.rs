@@ -26,13 +26,13 @@ impl<STORE: fastn_wasm::StoreExt> fastn_wasm::Store<STORE> {
         println!("execute: {q:?}");
         match conn.execute(q.sql.as_str(), q.binds) {
             Ok(cursor) => Ok(Ok(cursor)),
-            Err(fastn_wasm::ExecuteError::Rusqlite(e)) => {
+            Err(fastn_wasm::SQLError::Rusqlite(e)) => {
                 eprint!("err: {e:?}");
                 let e = fastn_wasm::sqlite::query::rusqlite_to_diesel(e);
                 eprintln!("err: {e:?}");
                 Ok(Err(e))
             }
-            Err(fastn_wasm::ExecuteError::InvalidQuery(e)) => {
+            Err(fastn_wasm::SQLError::InvalidQuery(e)) => {
                 Ok(Err(ft_sys_shared::DbError::UnableToSendCommand(e)))
             } // Todo: Handle error message
         }

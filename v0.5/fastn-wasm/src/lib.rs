@@ -21,7 +21,7 @@ mod store;
 pub use create_pool::create_pool;
 pub use process_http_request::{process_http_request, to_response};
 pub(crate) use store::Conn;
-pub use store::{ConnectionExt, ExecuteError, Store, StoreExt};
+pub use store::{ConnectionExt, SQLError, Store, StoreExt, StoreImpl};
 
 pub(crate) static WASM_ENGINE: once_cell::sync::Lazy<wasmtime::Engine> =
     once_cell::sync::Lazy::new(|| {
