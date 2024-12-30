@@ -637,18 +637,3 @@ fn home() -> camino::Utf8PathBuf {
     };
     camino::Utf8PathBuf::from_path_buf(home).expect("Issue while reading your home directory")
 }
-
-pub fn insert_or_update<K, V>(map: &scc::HashMap<K, V>, key: K, value: V)
-where
-    K: std::hash::Hash,
-    K: std::cmp::Eq,
-{
-    match map.entry(key) {
-        scc::hash_map::Entry::Occupied(mut ov) => {
-            ov.insert(value);
-        }
-        scc::hash_map::Entry::Vacant(vv) => {
-            vv.insert_entry(value);
-        }
-    }
-}
