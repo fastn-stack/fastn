@@ -16,7 +16,7 @@ impl<STORE: fastn_wasm::StoreExt> fastn_wasm::Store<STORE> {
         return match self.pg_pools.get(db_url.as_str()) {
             Some(pool) => get_client(pool.get(), &mut clients).await,
             None => {
-                let pool = fastn_wasm::create_pool(db_url.as_str()).await?;
+                let pool = fastn_wasm::pg::create_pool(db_url.as_str()).await?;
                 fastn_wasm::insert_or_update(&self.pg_pools, db_url.to_string(), pool);
                 get_client(
                     self.pg_pools.get(db_url.as_str()).unwrap().get(),

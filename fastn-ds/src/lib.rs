@@ -196,7 +196,7 @@ impl DocumentStore {
             return Ok(p.get().clone());
         }
 
-        let pool = fastn_wasm::create_pool(db_path.as_str()).await?;
+        let pool = fastn_wasm::pg::create_pool(db_path.as_str()).await?;
 
         fastn_wasm::insert_or_update(&self.pg_pools, db_path.to_string(), pool.clone());
 

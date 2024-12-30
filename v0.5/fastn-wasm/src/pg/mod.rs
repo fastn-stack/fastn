@@ -1,14 +1,16 @@
 mod batch_execute;
 mod connect;
+mod create_pool;
 mod db_error;
 mod execute;
 mod query;
 
-pub use batch_execute::batch_execute;
-pub use connect::connect;
-pub use db_error::pg_to_shared;
-pub use execute::execute;
-pub use query::query;
+pub(crate) use batch_execute::batch_execute;
+pub(crate) use connect::connect;
+pub use create_pool::create_pool;
+pub(crate) use db_error::pg_to_shared;
+pub(crate) use execute::execute;
+pub(crate) use query::query;
 
 #[derive(serde::Deserialize, Debug)]
 pub struct Query {

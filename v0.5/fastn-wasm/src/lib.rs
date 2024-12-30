@@ -5,20 +5,18 @@
 extern crate self as fastn_wasm;
 
 pub(crate) mod aws;
-mod create_pool;
 pub(crate) mod crypto;
 pub(crate) mod ds;
 pub(crate) mod env;
 pub(crate) mod helpers;
 pub(crate) mod http;
 pub(crate) mod macros;
-mod pg;
+pub mod pg;
 mod process_http_request;
 pub(crate) mod register;
 mod sqlite;
 mod store;
 
-pub use create_pool::create_pool;
 pub use process_http_request::process_http_request;
 pub(crate) use store::Conn;
 pub use store::{ConnectionExt, SQLError, Store, StoreExt, StoreImpl};
