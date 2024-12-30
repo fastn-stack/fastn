@@ -35,7 +35,7 @@ impl fastn_wasm::ConnectionExt for Connection {
     fn execute(
         &self,
         query: &str,
-        binds: Vec<fastn_wasm::Value>,
+        binds: Vec<ft_sys_shared::SqliteRawValue>,
     ) -> Result<usize, fastn_wasm::ExecuteError> {
         self.0
             .execute(query, rusqlite::params_from_iter(binds))
