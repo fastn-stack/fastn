@@ -2,6 +2,7 @@ pub(super) fn import(
     section: fastn_section::Section,
     document: &mut fastn_unresolved::Document,
     arena: &mut fastn_unresolved::Arena,
+    _package: &Option<&fastn_package::Package>,
 ) {
     if let Some(ref kind) = section.init.kind {
         document

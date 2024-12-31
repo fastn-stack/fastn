@@ -2,6 +2,7 @@ pub(super) fn function_definition(
     section: fastn_section::Section,
     document: &mut fastn_unresolved::Document,
     _arena: &mut fastn_unresolved::Arena,
+    _package: &Option<&fastn_package::Package>,
 ) {
     // TODO: remove .unwrap() and put errors in `document.errors`
 

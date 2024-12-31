@@ -3,18 +3,20 @@ mod function_definition;
 mod import;
 
 pub fn parse(
-    _main_package: &fastn_package::MainPackage,
+    main_package: &fastn_package::MainPackage,
     module: fastn_unresolved::Module,
     source: &str,
     arena: &mut fastn_unresolved::Arena,
     // global_aliases: &fastn_unresolved::AliasesSimple,
 ) -> fastn_unresolved::Document {
+    let package_name = module.package(arena).to_string();
     let (mut document, sections) = fastn_unresolved::Document::new(
         module,
         fastn_section::Document::parse(&arcstr::ArcStr::from(source)),
         arena,
     );
 
+    let package = main_package.packages.get(&package_name);
     // todo: first go through just the imports and desugar them
 
     // guess the section and call the appropriate unresolved method.
@@ -38,15 +40,17 @@ pub fn parse(
             section.init.function_marker.is_some(),
         ) {
             (Some("import"), _, _) | (_, Some("import"), _) => {
-                import::import(section, &mut document, arena)
+                import::import(section, &mut document, arena, &package)
             }
             (Some("record"), _, _) => todo!(),
             (Some("type"), _, _) => todo!(),
             (Some("module"), _, _) => todo!(),
             (Some("component"), _, _) => todo!(),
-            (_, _, true) => function_definition::function_definition(section, &mut document, arena),
+            (_, _, true) => {
+                function_definition::function_definition(section, &mut document, arena, &package)
+            }
             (None, _, _) => {
-                component_invocation::component_invocation(section, &mut document, arena)
+                component_invocation::component_invocation(section, &mut document, arena, &package)
             }
             (_, _, _) => todo!(),
         }
@@ -61,8 +65,12 @@ pub fn parse(
 /// t1 takes a function parses a single section. and another function to test the parsed document
 fn t1<PARSER, TESTER>(source: &str, expected: serde_json::Value, parser: PARSER, tester: TESTER)
 where
-    PARSER:
-        Fn(fastn_section::Section, &mut fastn_unresolved::Document, &mut fastn_unresolved::Arena),
+    PARSER: Fn(
+        fastn_section::Section,
+        &mut fastn_unresolved::Document,
+        &mut fastn_unresolved::Arena,
+        &Option<&fastn_package::Package>,
+    ),
     TESTER: FnOnce(fastn_unresolved::Document, serde_json::Value, &fastn_unresolved::Arena),
 {
     println!("--------- testing -----------\n{source}\n--------- source ------------");
@@ -81,7 +89,7 @@ where
     };
 
     // assert everything else is empty
-    parser(section, &mut document, &mut arena);
+    parser(section, &mut document, &mut arena, &None);
 
     tester(document, expected, &arena);
 }
