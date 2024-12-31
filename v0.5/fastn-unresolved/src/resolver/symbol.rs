@@ -20,6 +20,7 @@ pub fn symbol(
     arena: &mut fastn_unresolved::Arena,
     output: &mut fastn_unresolved::resolver::Output,
     _locals: &[Vec<fastn_unresolved::UR<fastn_unresolved::Argument, fastn_resolved::Argument>>],
+    _main_package: &fastn_package::MainPackage,
 ) -> bool {
     let inner_name = if let fastn_unresolved::UR::UnResolved(name) = name {
         name

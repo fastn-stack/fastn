@@ -7,7 +7,6 @@ pub fn parse(
     module: fastn_unresolved::Module,
     source: &str,
     arena: &mut fastn_unresolved::Arena,
-    // global_aliases: &fastn_unresolved::AliasesSimple,
 ) -> fastn_unresolved::Document {
     let package_name = module.package(arena).to_string();
     let (mut document, sections) = fastn_unresolved::Document::new(

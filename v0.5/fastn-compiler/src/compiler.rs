@@ -80,7 +80,13 @@ impl Compiler {
             match definition.as_mut() {
                 Some(fastn_unresolved::UR::UnResolved(definition)) => {
                     let mut o = Default::default();
-                    definition.resolve(&self.definitions, &self.modules, &mut self.arena, &mut o);
+                    definition.resolve(
+                        &self.definitions,
+                        &self.modules,
+                        &mut self.arena,
+                        &mut o,
+                        &self.main_package,
+                    );
                     r.need_more_symbols.extend(o.stuck_on);
                     self.document.merge(o.errors, o.warnings, o.comments);
                 }
@@ -129,6 +135,7 @@ impl Compiler {
                     &self.modules,
                     &mut self.arena,
                     &mut needed,
+                    &self.main_package,
                 );
                 stuck_on_symbols.extend(needed.stuck_on);
                 self.document
