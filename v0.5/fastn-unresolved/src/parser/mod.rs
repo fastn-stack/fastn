@@ -3,6 +3,7 @@ mod function_definition;
 mod import;
 
 pub fn parse(
+    _main_package: &fastn_package::MainPackage,
     module: fastn_unresolved::Module,
     source: &str,
     arena: &mut fastn_unresolved::Arena,

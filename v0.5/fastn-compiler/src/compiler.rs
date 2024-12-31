@@ -17,8 +17,7 @@ pub struct Compiler {
     pub(crate) document: fastn_unresolved::Document,
     // pub global_aliases: fastn_unresolved::AliasesSimple,
     iterations: usize,
-    #[expect(unused)]
-    main_package: fastn_package::MainPackage,
+    pub main_package: fastn_package::MainPackage,
 }
 
 impl Compiler {
@@ -31,6 +30,7 @@ impl Compiler {
         let mut arena = fastn_unresolved::Arena::default();
 
         let mut document = fastn_unresolved::parse(
+            &main_package,
             fastn_unresolved::Module::new(main_package.name.as_str(), module, &mut arena),
             source,
             &mut arena,

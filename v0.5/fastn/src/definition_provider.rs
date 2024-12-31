@@ -11,7 +11,12 @@ fn find_all_definitions_in_a_module(
         }
     };
 
-    let d = fastn_unresolved::parse(module.clone(), &source, &mut compiler.arena);
+    let d = fastn_unresolved::parse(
+        &compiler.main_package,
+        module.clone(),
+        &source,
+        &mut compiler.arena,
+    );
 
     d.definitions
         .into_iter()
