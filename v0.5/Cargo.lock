@@ -844,6 +844,7 @@ dependencies = [
  "bytes",
  "chrono",
  "http",
+ "rusqlite",
  "serde",
  "thiserror 1.0.69",
 ]

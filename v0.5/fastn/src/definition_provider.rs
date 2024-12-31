@@ -11,7 +11,14 @@ fn find_all_definitions_in_a_module(
         }
     };
 
-    let d = fastn_unresolved::parse(module.clone(), &source, &mut compiler.arena);
+    let package = fastn_package::Package {
+        name: file.to_string(),
+        systems: vec![],
+        dependencies: vec![],
+        auto_imports: vec![],
+        apps: vec![],
+    };
+    let d = fastn_unresolved::parse(package.into(), module.clone(), &source, &mut compiler.arena);
 
     d.definitions
         .into_iter()

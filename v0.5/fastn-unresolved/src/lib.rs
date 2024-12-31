@@ -61,7 +61,7 @@ pub enum SoMBase<S, M> {
 
 #[derive(Debug, Clone)]
 pub struct Package {
-    inner: std::sync::Arc<fastn_section::Package>,
+    inner: std::sync::Arc<fastn_package::Package>,
 }
 
 #[derive(Debug, Clone)]

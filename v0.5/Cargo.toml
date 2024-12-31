@@ -56,7 +56,7 @@ fastn-router = { path = "fastn-router" }
 fastn-runtime = { path = "../fastn-runtime" }
 fastn-section = { path = "fastn-section" }
 fastn-unresolved = { path = "fastn-unresolved" }
-ft-sys-shared = "0.1.4"
+ft-sys-shared = { version = "0.1.4", features = ["rusqlite"] }
 futures-util = { version = "0.3", default-features = false, features = ["std"] }
 http = "1"
 http-body-util = "0.1"

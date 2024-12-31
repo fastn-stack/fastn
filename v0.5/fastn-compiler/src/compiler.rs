@@ -17,7 +17,8 @@ pub struct Compiler {
     pub(crate) document: fastn_unresolved::Document,
     // pub global_aliases: fastn_unresolved::AliasesSimple,
     iterations: usize,
-    package: fastn_package::Package,
+    #[expect(unused)]
+    package: fastn_unresolved::Package,
 }
 
 impl Compiler {
@@ -29,9 +30,10 @@ impl Compiler {
     ) -> Self {
         let mut arena = fastn_unresolved::Arena::default();
 
+        let package: fastn_unresolved::Package = package.into();
         let mut document = fastn_unresolved::parse(
-            &package,
-            fastn_unresolved::Module::new(package.name.as_str(), module, &mut arena),
+            package.clone(),
+            fastn_unresolved::Module::new(package.as_ref().name.as_str(), module, &mut arena),
             source,
             &mut arena,
             // &global_aliases,

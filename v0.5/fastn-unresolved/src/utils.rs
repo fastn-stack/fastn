@@ -278,3 +278,9 @@ impl From<fastn_package::Package> for fastn_unresolved::Package {
         }
     }
 }
+
+impl AsRef<fastn_package::Package> for fastn_unresolved::Package {
+    fn as_ref(&self) -> &fastn_package::Package {
+        &self.inner
+    }
+}

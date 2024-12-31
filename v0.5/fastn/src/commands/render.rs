@@ -22,8 +22,18 @@ pub async fn render_document(
     let source = std::fs::File::open(path)
         .and_then(std::io::read_to_string)
         .unwrap();
-    let o = fastn_compiler::compile(&source, "main", None)
-        .consume_with_fn(fastn::definition_provider::lookup);
+    let o = fastn_compiler::compile(
+        &source,
+        fastn_package::Package {
+            name: "main".to_string(),
+            systems: vec![],
+            dependencies: vec![],
+            auto_imports: vec![],
+            apps: vec![],
+        },
+        None,
+    )
+    .consume_with_fn(fastn::definition_provider::lookup);
     let h = fastn_runtime::HtmlData::from_cd(o.unwrap());
     h.to_test_html()
 }
