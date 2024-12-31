@@ -13,6 +13,7 @@ on:
       - '**.html'
       - '**.js'
       - '**.css'
+      - 'Cargo.toml.*'
       - '!t/**' # We use this for playground
       - '!fastn.com/**'
       - '!v0.5/**' # TODO: remove this when we're ready to release v0.5
@@ -29,6 +30,7 @@ on:
       - '**.html'
       - '**.js'
       - '**.css'
+      - 'Cargo.toml.*'
       - '!t/**' # We use this for playground
       - '!fastn.com/**'
       - '!v0.5/**' # TODO: remove this when we're ready to release v0.5
