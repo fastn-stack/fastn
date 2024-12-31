@@ -60,15 +60,9 @@ pub enum SoMBase<S, M> {
 }
 
 #[derive(Debug, Clone)]
-pub struct Package {
-    inner: std::sync::Arc<fastn_package::Package>,
-}
-
-#[derive(Debug, Clone)]
 pub struct Document {
     pub aliases: Option<AliasesID>,
     pub module: fastn_unresolved::Module,
-    pub package: fastn_unresolved::Package, // auto import, dependencies
     pub module_doc: Option<fastn_section::Span>,
     pub definitions: Vec<URD>,
     pub content: Vec<URCI>,

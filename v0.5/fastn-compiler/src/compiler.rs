@@ -18,22 +18,20 @@ pub struct Compiler {
     // pub global_aliases: fastn_unresolved::AliasesSimple,
     iterations: usize,
     #[expect(unused)]
-    package: fastn_unresolved::Package,
+    main_package: fastn_package::MainPackage,
 }
 
 impl Compiler {
     fn new(
         source: &str,
-        package: fastn_package::Package,
+        main_package: fastn_package::MainPackage,
         module: Option<&str>,
         // global_aliases: fastn_unresolved::AliasesSimple,
     ) -> Self {
         let mut arena = fastn_unresolved::Arena::default();
 
-        let package: fastn_unresolved::Package = package.into();
         let mut document = fastn_unresolved::parse(
-            package.clone(),
-            fastn_unresolved::Module::new(package.as_ref().name.as_str(), module, &mut arena),
+            fastn_unresolved::Module::new(main_package.name.as_str(), module, &mut arena),
             source,
             &mut arena,
             // &global_aliases,
@@ -42,7 +40,7 @@ impl Compiler {
         document.content = vec![];
 
         Self {
-            package,
+            main_package,
             arena,
             definitions: std::collections::HashMap::new(),
             modules: std::collections::HashMap::new(),
@@ -188,12 +186,12 @@ impl Compiler {
 /// warnings from OK part as error, and discard the generated JS.
 pub fn compile(
     source: &str,
-    package: fastn_package::Package,
+    main_package: fastn_package::MainPackage,
     module: Option<&str>,
 ) -> fastn_continuation::Result<Compiler> {
     use fastn_continuation::Continuation;
 
-    Compiler::new(source, package, module).continue_after(vec![])
+    Compiler::new(source, main_package, module).continue_after(vec![])
 }
 
 impl fastn_continuation::Continuation for Compiler {

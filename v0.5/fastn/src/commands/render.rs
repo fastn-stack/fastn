@@ -24,12 +24,11 @@ pub async fn render_document(
         .unwrap();
     let o = fastn_compiler::compile(
         &source,
-        fastn_package::Package {
+        fastn_package::MainPackage {
             name: "main".to_string(),
             systems: vec![],
-            dependencies: vec![],
-            auto_imports: vec![],
             apps: vec![],
+            packages: Default::default(),
         },
         None,
     )

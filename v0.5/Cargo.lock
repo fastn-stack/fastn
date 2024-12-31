@@ -775,7 +775,6 @@ dependencies = [
  "arcstr",
  "fastn-builtins",
  "fastn-continuation",
- "fastn-package",
  "fastn-resolved",
  "fastn-section",
  "id-arena",

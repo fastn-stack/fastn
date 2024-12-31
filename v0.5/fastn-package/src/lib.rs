@@ -10,12 +10,18 @@ pub mod reader;
 pub type UR<U, R> = fastn_continuation::UR<U, R, fastn_section::Error>;
 
 #[derive(Debug)]
-pub struct Package {
+pub struct MainPackage {
     pub name: String,
     pub systems: Vec<System>,
+    pub apps: Vec<App>,
+    pub packages: std::collections::HashMap<String, Package>,
+}
+
+#[derive(Debug)]
+pub struct Package {
+    pub name: String,
     pub dependencies: Vec<Dependency>,
     pub auto_imports: Vec<AutoImport>,
-    pub apps: Vec<App>,
 }
 
 #[derive(Clone, Debug)]

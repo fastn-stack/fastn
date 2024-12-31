@@ -1,13 +1,11 @@
 impl fastn_unresolved::Document {
     pub(crate) fn new(
         module: fastn_unresolved::Module,
-        package: fastn_unresolved::Package,
         document: fastn_section::Document,
         arena: &mut fastn_unresolved::Arena,
     ) -> (fastn_unresolved::Document, Vec<fastn_section::Section>) {
         (
             fastn_unresolved::Document {
-                package,
                 module,
                 aliases: Some(arena.new_aliases()),
                 module_doc: document.module_doc,
@@ -268,19 +266,5 @@ impl fastn_unresolved::Arena {
             .get(aid)
             .and_then(|v| v.get(module))
             .map(|v| v.to_owned())
-    }
-}
-
-impl From<fastn_package::Package> for fastn_unresolved::Package {
-    fn from(value: fastn_package::Package) -> Self {
-        Self {
-            inner: std::sync::Arc::new(value),
-        }
-    }
-}
-
-impl AsRef<fastn_package::Package> for fastn_unresolved::Package {
-    fn as_ref(&self) -> &fastn_package::Package {
-        &self.inner
     }
 }

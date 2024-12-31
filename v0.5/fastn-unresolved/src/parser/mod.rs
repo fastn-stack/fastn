@@ -3,7 +3,6 @@ mod function_definition;
 mod import;
 
 pub fn parse(
-    package: fastn_unresolved::Package,
     module: fastn_unresolved::Module,
     source: &str,
     arena: &mut fastn_unresolved::Arena,
@@ -11,7 +10,6 @@ pub fn parse(
 ) -> fastn_unresolved::Document {
     let (mut document, sections) = fastn_unresolved::Document::new(
         module,
-        package,
         fastn_section::Document::parse(&arcstr::ArcStr::from(source)),
         arena,
     );
@@ -70,17 +68,8 @@ where
 
     let mut arena = fastn_unresolved::Arena::default();
     let module = fastn_unresolved::Module::new("main", None, &mut arena);
-    let package = fastn_package::Package {
-        name: "t".to_string(),
-        systems: vec![],
-        dependencies: vec![],
-        auto_imports: vec![],
-        apps: vec![],
-    };
-
     let (mut document, sections) = fastn_unresolved::Document::new(
         module,
-        package.into(),
         fastn_section::Document::parse(&arcstr::ArcStr::from(source)),
         &mut arena,
     );
