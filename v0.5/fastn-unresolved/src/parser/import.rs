@@ -34,6 +34,7 @@ pub(super) fn import(
     fastn_unresolved::utils::assert_no_body(&section, document);
     fastn_unresolved::utils::assert_no_children(&section, document);
     fastn_unresolved::utils::assert_no_extra_headers(&section, document, &["exports", "exposing"]);
+    // TODO: assert that the import statement is for a module in dependency
     todo!()
     // document.imports.push(i);
 }

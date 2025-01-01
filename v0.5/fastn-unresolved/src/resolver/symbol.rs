@@ -87,6 +87,7 @@ pub fn symbol(
         }
     };
 
+    // check if target symbol is part of a direct dependency.
     let target_symbol_key = target_symbol.str(arena);
 
     match definitions.get(target_symbol_key) {

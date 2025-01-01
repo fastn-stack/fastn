@@ -26,7 +26,7 @@ impl fastn_continuation::AsyncMutProvider for &mut SectionProvider {
                     r.push((f, Ok(d)));
                 }
                 Err(e) => {
-                    todo!("error handler not ready for: {e:?}")
+                    todo!("error handler not ready for[{f}]: {e:?}")
                 }
             }
         }
