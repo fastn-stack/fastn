@@ -15,6 +15,8 @@ impl fastn_continuation::AsyncMutProvider for &mut SectionProvider {
     )>;
 
     async fn provide(&mut self, needed: Vec<String>) -> Self::Found {
+        // file name will be FASTN.ftd for current package. for dependencies the file name will be
+        // <name-of-package>/FASTN.ftd.
         let mut r = vec![];
         for f in needed {
             if let Some(doc) = self.cache.get(&f) {
@@ -22,10 +24,24 @@ impl fastn_continuation::AsyncMutProvider for &mut SectionProvider {
                 continue;
             }
 
-            match tokio::fs::read_to_string(&f).await {
+            let (file_to_read, file_list) = match f.split_once('/') {
+                Some((package, rest)) => {
+                    assert_eq!("FASTN.ftd", rest);
+                    let package_dir = format!(".fastn/packages/{package}/");
+                    (
+                        format!("{package_dir}FASTN.ftd"),
+                        get_file_list(Some(package_dir.as_str())),
+                    )
+                }
+                None => {
+                    assert_eq!("FASTN.ftd", &f);
+                    (f.to_string(), get_file_list(None))
+                }
+            };
+
+            match tokio::fs::read_to_string(&file_to_read).await {
                 Ok(v) => {
                     let d = fastn_section::Document::parse(&arcstr::ArcStr::from(v));
-                    let file_list = vec![];
                     self.cache
                         .insert(f.clone(), Ok((d.clone(), file_list.clone())));
                     r.push((f, Ok((d, file_list))));
@@ -37,4 +53,41 @@ impl fastn_continuation::AsyncMutProvider for &mut SectionProvider {
         }
         r
     }
+}
+
+fn get_file_list(package_dir: Option<&str>) -> Vec<String> {
+    let file_walker = ignore::WalkBuilder::new(package_dir.unwrap_or("."))
+        .hidden(false)
+        .git_ignore(true)
+        .git_exclude(true)
+        .git_global(true)
+        .ignore(true)
+        .parents(true)
+        .build();
+
+    let mut files = vec![];
+    for path in file_walker.flatten() {
+        if path.path().is_dir() {
+            continue;
+        }
+
+        let file_name = match path.path().to_str() {
+            Some(v) => v.to_string(),
+            None => {
+                eprintln!("file path is not valid: {:?}", path.path());
+                continue;
+            }
+        };
+
+        if file_name.starts_with(".git/")
+            || file_name.starts_with(".github/")
+            || file_name.eq(".gitignore")
+        {
+            continue;
+        }
+
+        files.push(file_name);
+    }
+
+    files
 }

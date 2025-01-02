@@ -63,6 +63,7 @@ http-body-util = "0.1"
 hyper = { version = "1.5.1", features = ["server", "http1"] }
 hyper-util = { version = "0.1.10", features = ["tokio"] }
 id-arena = "2"
+ignore = "0.4"
 indexmap = "2"
 libsqlite3-sys = "0.28.0"
 magic-crypt = { version = "4", default-features = false }
@@ -73,10 +74,10 @@ scc = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 string-interner = "0.18"
+thiserror = "2"
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "fs"] }
 tokio-postgres = { version = "0.7", features = ["with-serde_json-1", "with-uuid-1"] }
 tracing = "0.1"
-thiserror = "2"
 wasmtime = "28"
 
 [workspace.dependencies.rusqlite]

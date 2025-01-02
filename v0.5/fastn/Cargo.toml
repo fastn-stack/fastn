@@ -12,14 +12,15 @@ homepage.workspace = true
 arcstr.workspace = true
 async-trait.workspace = true
 fastn-compiler.workspace = true
-fastn-package.workspace = true
-fastn-section.workspace = true
 fastn-continuation = { workspace = true, features = ["async_provider"] }
+fastn-package.workspace = true
 fastn-router.workspace = true
 fastn-runtime.workspace = true
+fastn-section.workspace = true
 fastn-unresolved.workspace = true
 http-body-util.workspace = true
 hyper-util.workspace = true
 hyper.workspace = true
+ignore.workspace = true
 serde_json.workspace = true
 tokio.workspace = true

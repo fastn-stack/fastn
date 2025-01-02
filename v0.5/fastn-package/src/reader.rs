@@ -23,11 +23,12 @@ impl fastn_continuation::Continuation for State {
 
     fn continue_after(
         self,
-        _n: Vec<(
+        n: Vec<(
             String,
             Result<(fastn_section::Document, Vec<String>), fastn_section::Error>,
         )>,
     ) -> fastn_continuation::Result<Self> {
+        dbg!(n);
         todo!()
     }
 }
