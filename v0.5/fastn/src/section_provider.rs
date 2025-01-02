@@ -1,6 +1,9 @@
 #[derive(Default)]
 pub struct SectionProvider {
-    cache: std::collections::HashMap<String, Result<fastn_section::Document, fastn_section::Error>>,
+    cache: std::collections::HashMap<
+        String,
+        Result<(fastn_section::Document, Vec<String>), fastn_section::Error>,
+    >,
 }
 
 #[async_trait::async_trait]
@@ -8,7 +11,7 @@ impl fastn_continuation::AsyncMutProvider for &mut SectionProvider {
     type Needed = Vec<String>;
     type Found = Vec<(
         String,
-        Result<fastn_section::Document, fastn_section::Error>,
+        Result<(fastn_section::Document, Vec<String>), fastn_section::Error>,
     )>;
 
     async fn provide(&mut self, needed: Vec<String>) -> Self::Found {
@@ -22,8 +25,10 @@ impl fastn_continuation::AsyncMutProvider for &mut SectionProvider {
             match tokio::fs::read_to_string(&f).await {
                 Ok(v) => {
                     let d = fastn_section::Document::parse(&arcstr::ArcStr::from(v));
-                    self.cache.insert(f.clone(), Ok(d.clone()));
-                    r.push((f, Ok(d)));
+                    let file_list = vec![];
+                    self.cache
+                        .insert(f.clone(), Ok((d.clone(), file_list.clone())));
+                    r.push((f, Ok((d, file_list))));
                 }
                 Err(e) => {
                     todo!("error handler not ready for[{f}]: {e:?}")

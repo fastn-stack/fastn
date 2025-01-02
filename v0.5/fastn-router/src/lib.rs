@@ -8,7 +8,18 @@ pub mod reader;
 mod route;
 
 #[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
-pub struct Router {}
+pub struct Router {
+    file_list: Vec<String>,
+    redirects: Vec<(String, String)>,
+    dynamic_urls: Vec<DynamicUrl>,
+    wasm_mounts: Vec<WasmMount>,
+}
+
+#[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
+struct DynamicUrl {}
+
+#[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
+struct WasmMount {}
 
 #[derive(Debug, Copy, PartialEq, Clone)]
 pub enum Method {
@@ -31,7 +42,6 @@ pub enum Route {
     },
     Redirect(String),
     /// we return the not found document as well in case the static file is missing
-    ///
     Static {
         package: String,
         path: String,
