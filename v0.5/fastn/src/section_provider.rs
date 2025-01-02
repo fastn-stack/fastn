@@ -1,8 +1,9 @@
 #[derive(Default)]
 pub struct SectionProvider {
+    #[expect(clippy::type_complexity)]
     cache: std::collections::HashMap<
         String,
-        Result<(fastn_section::Document, Vec<String>), fastn_section::Error>,
+        Result<Option<(fastn_section::Document, Vec<String>)>, fastn_section::Error>,
     >,
 }
 
@@ -11,7 +12,7 @@ impl fastn_continuation::AsyncMutProvider for &mut SectionProvider {
     type Needed = Vec<String>;
     type Found = Vec<(
         String,
-        Result<(fastn_section::Document, Vec<String>), fastn_section::Error>,
+        Result<Option<(fastn_section::Document, Vec<String>)>, fastn_section::Error>,
     )>;
 
     async fn provide(&mut self, needed: Vec<String>) -> Self::Found {
@@ -30,12 +31,12 @@ impl fastn_continuation::AsyncMutProvider for &mut SectionProvider {
                     let package_dir = format!(".fastn/packages/{package}/");
                     (
                         format!("{package_dir}FASTN.ftd"),
-                        get_file_list(Some(package_dir.as_str())),
+                        get_file_list(package_dir.as_str()),
                     )
                 }
                 None => {
                     assert_eq!("FASTN.ftd", &f);
-                    (f.to_string(), get_file_list(None))
+                    (f.to_string(), get_file_list("."))
                 }
             };
 
@@ -43,11 +44,13 @@ impl fastn_continuation::AsyncMutProvider for &mut SectionProvider {
                 Ok(v) => {
                     let d = fastn_section::Document::parse(&arcstr::ArcStr::from(v));
                     self.cache
-                        .insert(f.clone(), Ok((d.clone(), file_list.clone())));
-                    r.push((f, Ok((d, file_list))));
+                        .insert(f.clone(), Ok(Some((d.clone(), file_list.clone()))));
+                    r.push((f, Ok(Some((d, file_list)))));
                 }
                 Err(e) => {
-                    todo!("error handler not ready for[{f}]: {e:?}")
+                    eprintln!("failed to read file: {e:?}");
+                    self.cache.insert(f.clone(), Ok(None));
+                    r.push((f, Ok(None)));
                 }
             }
         }
@@ -55,8 +58,8 @@ impl fastn_continuation::AsyncMutProvider for &mut SectionProvider {
     }
 }
 
-fn get_file_list(package_dir: Option<&str>) -> Vec<String> {
-    let file_walker = ignore::WalkBuilder::new(package_dir.unwrap_or("."))
+fn get_file_list(package_dir: &str) -> Vec<String> {
+    let file_walker = ignore::WalkBuilder::new(package_dir)
         .hidden(false)
         .git_ignore(true)
         .git_exclude(true)
