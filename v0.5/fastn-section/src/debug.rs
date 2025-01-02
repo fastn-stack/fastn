@@ -142,6 +142,7 @@ fn error(e: &fastn_section::Error, _s: Option<fastn_section::Span>) -> serde_jso
         fastn_section::Error::SymbolNotFound => "symbol_not_found",
         fastn_section::Error::InvalidIdentifier => "invalid_identifier",
         fastn_section::Error::UnexpectedCaption => "unexpected_caption",
+        fastn_section::Error::InvalidPackageFile => "invalid_package_file",
     };
 
     serde_json::json!({ "error": v})

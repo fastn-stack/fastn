@@ -15,7 +15,11 @@ impl fastn_package::Package {
 }
 
 impl fastn_continuation::Continuation for State {
-    type Output = fastn_package::Package;
+    // we return a package object if we parsed, even a partial package.
+    type Output = (
+        Option<fastn_package::Package>,
+        Vec<fastn_section::Diagnostic>,
+    );
     type Needed = Vec<String>; // vec of file names
     type Found = Vec<(
         String, // file name
@@ -23,7 +27,7 @@ impl fastn_continuation::Continuation for State {
     )>;
 
     fn continue_after(
-        self,
+        mut self,
         n: Vec<(
             String,
             Result<Option<(fastn_section::Document, Vec<String>)>, fastn_section::Error>,
@@ -35,8 +39,23 @@ impl fastn_continuation::Continuation for State {
                 assert_eq!(n.len(), 1);
                 assert_eq!(n[0].0, "FASTN.ftd");
 
-                match n.get(0) {
-                    Some((_name, Ok(Some((_doc, _file_list))))) => {
+                match n.into_iter().next() {
+                    Some((_name, Ok(Some((doc, file_list))))) => {
+                        let _package = match parse_package(doc, file_list) {
+                            Ok(package) => package,
+                            Err(_e) => {
+                                // we found a "valid" fastn_package::Document, but it is not a valid
+                                // FASTN.ftd to the extent
+                                // that we could not create even a broken Package object out of it
+                                return fastn_continuation::Result::Done((
+                                    None,
+                                    vec![fastn_section::Diagnostic::Error(
+                                        fastn_section::Error::InvalidPackageFile,
+                                    )],
+                                ));
+                            }
+                        };
+                        self.name = fastn_package::UR::Resolved(Some("foo".to_string()));
                         todo!()
                     }
                     Some((_name, Ok(None))) | Some((_name, Err(_))) => {
@@ -55,4 +74,11 @@ impl fastn_continuation::Continuation for State {
             }
         }
     }
+}
+
+fn parse_package(
+    _doc: fastn_section::Document,
+    _file_list: Vec<String>,
+) -> Result<fastn_package::Package, fastn_section::Error> {
+    todo!()
 }
