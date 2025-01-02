@@ -30,18 +30,29 @@ impl fastn_continuation::Continuation for State {
         )>,
     ) -> fastn_continuation::Result<Self> {
         match self.name {
+            // if the name is not resolved means this is the first attempt.
             fastn_package::UR::UnResolved(()) => {
                 assert_eq!(n.len(), 1);
+                assert_eq!(n[0].0, "FASTN.ftd");
 
                 match n.get(0) {
-                    Some((name, Ok(Some((_doc, _file_list))))) => {
-                        assert_eq!(name, "FASTN.ftd");
+                    Some((_name, Ok(Some((_doc, _file_list))))) => {
                         todo!()
                     }
-                    _ => todo!(),
+                    Some((_name, Ok(None))) | Some((_name, Err(_))) => {
+                        // Ok(None) means we failed to find a file named FASTN.ftd.
+                        // Err(e) means we failed to parse the content of FASTN.ftd.
+                        todo!()
+                    }
+                    None => unreachable!("we did a check for this already, list has 1 element"),
                 }
             }
-            _ => todo!(),
+            // even if we failed to find name, we still continue to process as many dependencies,
+            // etc. as possible.
+            // so this case handles both name found and name error cases.
+            _ => {
+                todo!()
+            }
         }
     }
 }
