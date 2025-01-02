@@ -17,7 +17,7 @@ pub(crate) mod register;
 mod sqlite;
 mod store;
 
-pub use process_http_request::{process_http_request, WasmError};
+pub use process_http_request::{process_http_request, WasmError, handle};
 pub(crate) use store::Conn;
 pub use store::{ConnectionExt, SQLError, Store, StoreExt, StoreImpl};
 
