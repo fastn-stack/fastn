@@ -21,6 +21,12 @@ pub enum UR<U: std::fmt::Debug, R: std::fmt::Debug, E: std::fmt::Debug> {
     InvalidN(Vec<E>),
 }
 
+impl<U: Default + std::fmt::Debug, R: std::fmt::Debug, E: std::fmt::Debug> Default for UR<U, R, E> {
+    fn default() -> Self {
+        UR::UnResolved(Default::default())
+    }
+}
+
 pub trait FromWith<X, W> {
     fn from(x: X, w: W) -> Self;
 }
