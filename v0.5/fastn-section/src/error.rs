@@ -27,6 +27,11 @@ pub enum Error {
     InvalidIdentifier,
     UnexpectedCaption,
     InvalidPackageFile,
+    // package: <caption> is either missing or is "complex"
+    PackageNameNotInCaption,
+    UnexpectedSectionInPackageFile,
+    // FASTN.ftd does not contain `package:` declaration
+    PackageDeclarationMissing,
     // SectionNotFound(&'a str),
     // MoreThanOneCaption,
     // ParseError,

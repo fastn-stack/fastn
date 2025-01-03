@@ -89,11 +89,21 @@ impl fastn_continuation::Continuation for State {
 
 fn parse_package(
     doc: fastn_section::Document,
-    _file_list: Vec<String>,
+    file_list: Vec<String>,
 ) -> PResult<fastn_package::Package> {
     let mut warnings = vec![];
-    let mut package = fastn_package::Package::default();
+    let mut errors = vec![];
+
+    let mut package = fastn_package::Package {
+        name: "".to_string(),
+        dependencies: vec![],
+        auto_imports: vec![],
+        file_list,
+    };
+
     for section in doc.sections.iter() {
+        let span = section.span();
+
         match section.simple_name() {
             Some("package") => {
                 match section.simple_caption() {
@@ -101,12 +111,12 @@ fn parse_package(
                     None => {
                         // we do not bail at this point,
                         // missing package name is just a warning for now
-                        warnings.push(
-                            section
-                                .span()
-                                .wrap(fastn_section::Warning::PackageNameNotInCaption),
-                        );
+                        errors.push(span.wrap(fastn_section::Error::PackageNameNotInCaption));
                     }
+                };
+
+                if !section.headers.is_empty() {
+                    warnings.push(span.wrap(fastn_section::Warning::AliasNotNeeded))
                 }
             }
             Some("dependency") => {
@@ -119,10 +129,10 @@ fn parse_package(
                 todo!()
             }
             Some(_t) => {
-                warnings.push(
+                errors.push(
                     section
                         .span()
-                        .wrap(fastn_section::Warning::UnexpectedSectionInPackageFile),
+                        .wrap(fastn_section::Error::UnexpectedSectionInPackageFile),
                 );
             }
             None => {
@@ -134,13 +144,13 @@ fn parse_package(
     }
 
     if package.name.is_empty()
-        && !warnings
+        && !errors
             .iter()
-            .any(|v| v.value == fastn_section::Warning::PackageDeclarationMissing)
+            .any(|v| v.value == fastn_section::Error::PackageDeclarationMissing)
     {
         // we do not bail at this point, missing package name is just a warning for now
-        warnings.push(
-            fastn_section::Span::default().wrap(fastn_section::Warning::PackageDeclarationMissing),
+        errors.push(
+            fastn_section::Span::default().wrap(fastn_section::Error::PackageDeclarationMissing),
         );
     }
 
