@@ -12,9 +12,12 @@ type NResult = Result<(fastn_section::Document, Vec<String>), std::sync::Arc<std
 impl fastn_continuation::Continuation for State {
     type Output = fastn_router::Router;
     type Needed = Vec<String>; // vec of file names
-    type Found = Vec<(String, NResult)>;
+    type Found = Vec<(Option<String>, NResult)>;
 
-    fn continue_after(self, _n: Vec<(String, NResult)>) -> fastn_continuation::Result<Self> {
+    fn continue_after(
+        self,
+        _n: Vec<(Option<String>, NResult)>,
+    ) -> fastn_continuation::Result<Self> {
         todo!()
     }
 }

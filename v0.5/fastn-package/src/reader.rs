@@ -41,14 +41,17 @@ impl fastn_continuation::Continuation for State {
     // we return a package object if we parsed, even a partial package.
     type Output = PResult<fastn_package::MainPackage>;
     type Needed = Vec<String>; // vec of file names
-    type Found = Vec<(String, NResult)>;
+    type Found = Vec<(Option<String>, NResult)>;
 
-    fn continue_after(mut self, n: Vec<(String, NResult)>) -> fastn_continuation::Result<Self> {
+    fn continue_after(
+        mut self,
+        n: Vec<(Option<String>, NResult)>,
+    ) -> fastn_continuation::Result<Self> {
         match self.name {
             // if the name is not resolved means this is the first attempt.
             fastn_package::UR::UnResolved(()) => {
                 assert_eq!(n.len(), 1);
-                assert_eq!(n[0].0, "FASTN.ftd");
+                assert_eq!(n[0].0, None);
 
                 match n.into_iter().next() {
                     Some((_name, Ok((doc, file_list)))) => {

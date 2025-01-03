@@ -1,6 +1,6 @@
 #[derive(Default)]
 pub struct SectionProvider {
-    cache: std::collections::HashMap<String, NResult>,
+    cache: std::collections::HashMap<Option<String>, NResult>,
 }
 
 type NResult = Result<(fastn_section::Document, Vec<String>), std::sync::Arc<std::io::Error>>;
@@ -8,45 +8,46 @@ type NResult = Result<(fastn_section::Document, Vec<String>), std::sync::Arc<std
 #[async_trait::async_trait]
 impl fastn_continuation::AsyncMutProvider for &mut SectionProvider {
     type Needed = Vec<String>;
-    type Found = Vec<(String, NResult)>;
+    type Found = Vec<(Option<String>, NResult)>;
 
     async fn provide(&mut self, needed: Vec<String>) -> Self::Found {
         // file name will be FASTN.ftd for current package. for dependencies the file name will be
         // <name-of-package>/FASTN.ftd.
-        let mut r = vec![];
+        let mut r: Self::Found = vec![];
         for f in needed {
-            if let Some(doc) = self.cache.get(&f) {
-                r.push((f, doc.clone()));
-                continue;
-            }
-
-            let (file_to_read, file_list) = match f.split_once('/') {
+            let (package, package_dir) = match f.split_once('/') {
                 Some((package, rest)) => {
                     assert_eq!("FASTN.ftd", rest);
-                    let package_dir = format!(".fastn/packages/{package}/");
                     (
-                        format!("{package_dir}FASTN.ftd"),
-                        get_file_list(package_dir.as_str()),
+                        Some(package.to_string()),
+                        format!(".fastn/packages/{package}/"),
                     )
                 }
                 None => {
                     assert_eq!("FASTN.ftd", &f);
-                    (f.to_string(), get_file_list("."))
+                    (None, "./".to_string())
                 }
             };
 
-            match tokio::fs::read_to_string(&file_to_read).await {
+            if let Some(doc) = self.cache.get(&package) {
+                r.push((package, doc.clone()));
+                continue;
+            }
+
+            let file_list = get_file_list(&package_dir);
+
+            match tokio::fs::read_to_string(&format!("{package_dir}FASTN.ftd")).await {
                 Ok(v) => {
                     let d = fastn_section::Document::parse(&arcstr::ArcStr::from(v));
                     self.cache
-                        .insert(f.clone(), Ok((d.clone(), file_list.clone())));
-                    r.push((f, Ok((d, file_list))));
+                        .insert(package.clone(), Ok((d.clone(), file_list.clone())));
+                    r.push((package, Ok((d, file_list))));
                 }
                 Err(e) => {
                     eprintln!("failed to read file: {e:?}");
                     let e = std::sync::Arc::new(e);
-                    self.cache.insert(f.clone(), Err(e.clone()));
-                    r.push((f, Err(e)));
+                    self.cache.insert(package.clone(), Err(e.clone()));
+                    r.push((package, Err(e)));
                 }
             }
         }
