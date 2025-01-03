@@ -40,6 +40,19 @@ impl fastn_package::Package {
     }
 }
 
+fn collect_dependencies(
+    _waiting_for: &mut std::collections::HashMap<String, Vec<String>>,
+    _p: &fastn_package::Package,
+) {
+    todo!()
+}
+
+impl State {
+    fn finalize(self) -> fastn_continuation::Result<Self> {
+        todo!()
+    }
+}
+
 impl fastn_continuation::Continuation for State {
     // we return a package object if we parsed, even a partial package.
     type Output = PResult<fastn_package::MainPackage>;
@@ -50,6 +63,9 @@ impl fastn_continuation::Continuation for State {
         mut self,
         n: Vec<(Option<String>, NResult)>,
     ) -> fastn_continuation::Result<Self> {
+        let mut new_dependencies: std::collections::HashMap<String, Vec<String>> =
+            Default::default();
+
         match self.name {
             // if the name is not resolved means this is the first attempt.
             fastn_package::UR::UnResolved(()) => {
@@ -59,27 +75,33 @@ impl fastn_continuation::Continuation for State {
 
                 match n.into_iter().next() {
                     Some((_name, Ok((doc, file_list)))) => {
-                        let _package = match parse_package(doc, file_list) {
+                        let package = match parse_package(doc, file_list) {
                             Ok((package, warnings)) => {
                                 self.diagnostics.extend(
                                     warnings
                                         .into_iter()
                                         .map(|v| v.map(fastn_section::Diagnostic::Warning)),
                                 );
+                                collect_dependencies(&mut new_dependencies, &package);
                                 package
                             }
                             Err(diagnostics) => {
                                 self.diagnostics.extend(diagnostics);
-                                return fastn_continuation::Result::Done(Err(self.diagnostics));
+                                return self.finalize();
                             }
                         };
-                        // self.name = fastn_package::UR::Resolved();
-                        todo!()
+                        if !package.name.is_empty() {
+                            self.name = fastn_package::UR::Resolved(Some(package.name.clone()));
+                            self.packages.insert(package.name.clone(), package);
+                        }
                     }
                     Some((_name, Err(_))) => {
-                        // Ok(None) means we failed to find a file named FASTN.ftd.
-                        // Err(e) means we failed to parse the content of FASTN.ftd.
-                        todo!()
+                        self.diagnostics.push(fastn_section::Span::default().wrap(
+                            fastn_section::Diagnostic::Error(
+                                fastn_section::Error::PackageFileNotFound,
+                            ),
+                        ));
+                        return self.finalize();
                     }
                     None => unreachable!("we did a check for this already, list has 1 element"),
                 }
@@ -91,6 +113,10 @@ impl fastn_continuation::Continuation for State {
                 todo!()
             }
         }
+
+        self.waiting_for.clear();
+        self.waiting_for.extend(new_dependencies);
+        self.finalize()
     }
 }
 

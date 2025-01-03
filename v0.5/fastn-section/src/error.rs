@@ -28,6 +28,7 @@ pub enum Error {
     InvalidIdentifier,
     UnexpectedCaption,
     InvalidPackageFile,
+    PackageFileNotFound,
     // package: <caption> is either missing or is "complex"
     PackageNameNotInCaption,
     UnexpectedSectionInPackageFile,
