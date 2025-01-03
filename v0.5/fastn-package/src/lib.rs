@@ -23,6 +23,7 @@ pub struct Package {
     pub dependencies: Vec<Dependency>,
     pub auto_imports: Vec<AutoImport>,
     pub file_list: Vec<String>,
+    pub favicon: Option<String>,
 }
 
 #[derive(Clone, Debug)]

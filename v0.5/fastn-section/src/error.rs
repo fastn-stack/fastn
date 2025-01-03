@@ -22,6 +22,7 @@ pub enum Error {
     ImportMustHaveCaption,
     BodyNotAllowed,
     ExtraArgumentFound,
+    ArgumentValueRequired,
     ComponentIsNotAFunction,
     SymbolNotFound,
     InvalidIdentifier,

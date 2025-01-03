@@ -94,13 +94,14 @@ fn parse_package(
     doc: fastn_section::Document,
     file_list: Vec<String>,
 ) -> PResult<fastn_package::Package> {
-    let mut warnings = vec![];
+    let warnings = vec![];
     let mut errors = vec![];
 
     let mut package = fastn_package::Package {
         name: "".to_string(),
         dependencies: vec![],
         auto_imports: vec![],
+        favicon: None,
         file_list,
     };
 
@@ -118,8 +119,22 @@ fn parse_package(
                     }
                 };
 
-                if !section.headers.is_empty() {
-                    warnings.push(span.wrap(fastn_section::Warning::AliasNotNeeded))
+                for header in section.headers.iter() {
+                    match header.name() {
+                        "favicon" => match header.simple_value() {
+                            Some(v) => package.favicon = Some(v.to_string()),
+                            None => errors.push(
+                                header
+                                    .name_span()
+                                    .wrap(fastn_section::Error::ArgumentValueRequired),
+                            ),
+                        },
+                        _ => errors.push(
+                            header
+                                .name_span()
+                                .wrap(fastn_section::Error::ExtraArgumentFound),
+                        ),
+                    }
                 }
             }
             Some("dependency") => {

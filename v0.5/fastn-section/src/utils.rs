@@ -141,6 +141,10 @@ impl fastn_section::Header {
         self.name.name.str()
     }
 
+    pub fn simple_value(&self) -> Option<&str> {
+        todo!()
+    }
+
     pub fn name_span(&self) -> &fastn_section::Span {
         &self.name.name
     }
