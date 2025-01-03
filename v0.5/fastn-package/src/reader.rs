@@ -29,11 +29,7 @@ type PResult<T> = std::result::Result<
     (T, Vec<fastn_section::Spanned<fastn_section::Warning>>),
     Vec<fastn_section::Spanned<fastn_section::Diagnostic>>,
 >;
-
-type NResult = std::result::Result<
-    Option<(fastn_section::Document, Vec<String>)>,
-    fastn_section::Spanned<fastn_section::Error>,
->;
+type NResult = Result<(fastn_section::Document, Vec<String>), std::sync::Arc<std::io::Error>>;
 
 impl fastn_package::Package {
     pub fn reader() -> fastn_continuation::Result<State> {
@@ -55,7 +51,7 @@ impl fastn_continuation::Continuation for State {
                 assert_eq!(n[0].0, "FASTN.ftd");
 
                 match n.into_iter().next() {
-                    Some((_name, Ok(Some((doc, file_list))))) => {
+                    Some((_name, Ok((doc, file_list)))) => {
                         let _package = match parse_package(doc, file_list) {
                             Ok((package, warnings)) => {
                                 self.diagnostics.extend(
@@ -73,7 +69,7 @@ impl fastn_continuation::Continuation for State {
                         // self.name = fastn_package::UR::Resolved();
                         todo!()
                     }
-                    Some((_name, Ok(None))) | Some((_name, Err(_))) => {
+                    Some((_name, Err(_))) => {
                         // Ok(None) means we failed to find a file named FASTN.ftd.
                         // Err(e) means we failed to parse the content of FASTN.ftd.
                         todo!()

@@ -7,10 +7,7 @@ impl fastn_router::Router {
     }
 }
 
-type NResult = std::result::Result<
-    Option<(fastn_section::Document, Vec<String>)>,
-    fastn_section::Spanned<fastn_section::Error>,
->;
+type NResult = Result<(fastn_section::Document, Vec<String>), std::sync::Arc<std::io::Error>>;
 
 impl fastn_continuation::Continuation for State {
     type Output = fastn_router::Router;

@@ -3,10 +3,7 @@ pub struct SectionProvider {
     cache: std::collections::HashMap<String, NResult>,
 }
 
-type NResult = std::result::Result<
-    Option<(fastn_section::Document, Vec<String>)>,
-    fastn_section::Spanned<fastn_section::Error>,
->;
+type NResult = Result<(fastn_section::Document, Vec<String>), std::sync::Arc<std::io::Error>>;
 
 #[async_trait::async_trait]
 impl fastn_continuation::AsyncMutProvider for &mut SectionProvider {
@@ -42,13 +39,14 @@ impl fastn_continuation::AsyncMutProvider for &mut SectionProvider {
                 Ok(v) => {
                     let d = fastn_section::Document::parse(&arcstr::ArcStr::from(v));
                     self.cache
-                        .insert(f.clone(), Ok(Some((d.clone(), file_list.clone()))));
-                    r.push((f, Ok(Some((d, file_list)))));
+                        .insert(f.clone(), Ok((d.clone(), file_list.clone())));
+                    r.push((f, Ok((d, file_list))));
                 }
                 Err(e) => {
                     eprintln!("failed to read file: {e:?}");
-                    self.cache.insert(f.clone(), Ok(None));
-                    r.push((f, Ok(None)));
+                    let e = std::sync::Arc::new(e);
+                    self.cache.insert(f.clone(), Err(e.clone()));
+                    r.push((f, Err(e)));
                 }
             }
         }
