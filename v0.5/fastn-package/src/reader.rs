@@ -65,7 +65,17 @@ impl State {
             return fastn_continuation::Result::Done(Err(self.diagnostics));
         }
         if !self.waiting_for.is_empty() {
-            let needed = self.waiting_for.keys().cloned().collect();
+            let needed = self
+                .waiting_for
+                .keys()
+                .map(|p| {
+                    if p.ends_with('/') {
+                        format!("{p}FASTN.ftd")
+                    } else {
+                        format!("{p}/FASTN.ftd")
+                    }
+                })
+                .collect();
             return fastn_continuation::Result::Stuck(Box::new(self), needed);
         }
         fastn_continuation::Result::Done(Ok((
@@ -270,7 +280,7 @@ fn parse_package(
 #[cfg(test)]
 mod tests {
     pub struct TestProvider {
-        data: std::collections::HashMap<String, String>,
+        data: std::collections::HashMap<String, (String, Vec<String>)>,
     }
 
     impl fastn_continuation::Provider for &TestProvider {

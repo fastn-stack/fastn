@@ -15,7 +15,8 @@ impl fastn_continuation::AsyncMutProvider for &mut SectionProvider {
         // <name-of-package>/FASTN.ftd.
         let mut r: Self::Found = vec![];
         for f in needed {
-            let (package, package_dir) = match f.split_once('/') {
+            dbg!(&f);
+            let (package, package_dir) = match f.rsplit_once('/') {
                 Some((package, rest)) => {
                     assert_eq!("FASTN.ftd", rest);
                     (
