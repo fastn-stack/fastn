@@ -1,10 +1,6 @@
 #[derive(Default)]
 pub struct SectionProvider {
-    #[expect(clippy::type_complexity)]
-    cache: std::collections::HashMap<
-        String,
-        Result<Option<(fastn_section::Document, Vec<String>)>, fastn_section::Error>,
-    >,
+    cache: std::collections::HashMap<String, NResult>,
 }
 
 type NResult = std::result::Result<

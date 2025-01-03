@@ -103,8 +103,6 @@ fn parse_package(
                 match section.simple_caption() {
                     Some(name) => package.name = name.to_string(),
                     None => {
-                        // TODO: keep track of which FASTN.ftd has this issue, we are not keeping track
-                        //       of error and warning locations / file names so far
                         // we do not bail at this point,
                         // missing package name is just a warning for now
                         warnings.push(
@@ -115,8 +113,21 @@ fn parse_package(
                     }
                 }
             }
-            Some(_) => {
+            Some("dependency") => {
                 todo!()
+            }
+            Some("app") => {
+                todo!()
+            }
+            Some("urls") => {
+                todo!()
+            }
+            Some(_t) => {
+                warnings.push(
+                    section
+                        .span()
+                        .wrap(fastn_section::Warning::UnexpectedSectionInPackageFile),
+                );
             }
             None => {
                 // we found a section without name.

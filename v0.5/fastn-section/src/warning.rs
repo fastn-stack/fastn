@@ -6,7 +6,7 @@ pub enum Warning {
     UnderscoreInIdentifier,
     // we prefer lowercase in identifiers, e.g., `foo` instead of `Foo`
     IdentifierNotLowerCased,
-    // eg a component defined something but never used it
+    // e.g., a component defined something but never used it
     UnusedProperty,
     UsedIdentifierStartsWithUnderscore,
     // unused import
@@ -19,4 +19,5 @@ pub enum Warning {
     PackageNameNotInCaption,
     // FASTN.ftd does not contain `package:` declaration
     PackageDeclarationMissing,
+    UnexpectedSectionInPackageFile,
 }
