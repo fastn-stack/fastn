@@ -260,3 +260,21 @@ impl fastn_section::ECey for fastn_section::Document {
         self.comments.push(comment);
     }
 }
+
+impl fastn_section::Document {
+    pub fn diagnostics(self) -> Vec<fastn_section::Spanned<fastn_section::Diagnostic>> {
+        let mut o: Vec<_> = self
+            .errors
+            .into_iter()
+            .map(|v| v.map(fastn_section::Diagnostic::Error))
+            .collect();
+
+        o.extend(
+            self.warnings
+                .into_iter()
+                .map(|v| v.map(fastn_section::Diagnostic::Warning)),
+        );
+
+        o
+    }
+}

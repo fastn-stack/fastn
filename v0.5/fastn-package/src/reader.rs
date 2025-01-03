@@ -22,11 +22,18 @@ pub struct State {
     pub auto_imports: Vec<fastn_package::AutoImport>,
     apps: Vec<fastn_package::UR<String, fastn_package::App>>,
     packages: std::collections::HashMap<String, fastn_package::Package>,
-    pub diagnostics: Vec<fastn_section::Diagnostic>,
+    pub diagnostics: Vec<fastn_section::Spanned<fastn_section::Diagnostic>>,
 }
 
-type PResult<T> =
-    std::result::Result<(T, Vec<fastn_section::Warning>), Vec<fastn_section::Diagnostic>>;
+type PResult<T> = std::result::Result<
+    (T, Vec<fastn_section::Spanned<fastn_section::Warning>>),
+    Vec<fastn_section::Spanned<fastn_section::Diagnostic>>,
+>;
+
+type NResult = std::result::Result<
+    Option<(fastn_section::Document, Vec<String>)>,
+    fastn_section::Spanned<fastn_section::Error>,
+>;
 
 impl fastn_package::Package {
     pub fn reader() -> fastn_continuation::Result<State> {
@@ -38,18 +45,9 @@ impl fastn_continuation::Continuation for State {
     // we return a package object if we parsed, even a partial package.
     type Output = PResult<fastn_package::MainPackage>;
     type Needed = Vec<String>; // vec of file names
-    type Found = Vec<(
-        String, // file name
-        Result<Option<(fastn_section::Document, Vec<String>)>, fastn_section::Error>,
-    )>;
+    type Found = Vec<(String, NResult)>;
 
-    fn continue_after(
-        mut self,
-        n: Vec<(
-            String,
-            Result<Option<(fastn_section::Document, Vec<String>)>, fastn_section::Error>,
-        )>,
-    ) -> fastn_continuation::Result<Self> {
+    fn continue_after(mut self, n: Vec<(String, NResult)>) -> fastn_continuation::Result<Self> {
         match self.name {
             // if the name is not resolved means this is the first attempt.
             fastn_package::UR::UnResolved(()) => {
@@ -61,7 +59,9 @@ impl fastn_continuation::Continuation for State {
                         let _package = match parse_package(doc, file_list) {
                             Ok((package, warnings)) => {
                                 self.diagnostics.extend(
-                                    warnings.into_iter().map(fastn_section::Diagnostic::Warning),
+                                    warnings
+                                        .into_iter()
+                                        .map(|v| v.map(fastn_section::Diagnostic::Warning)),
                                 );
                                 package
                             }
@@ -97,24 +97,44 @@ fn parse_package(
 ) -> PResult<fastn_package::Package> {
     let mut warnings = vec![];
     let mut package = fastn_package::Package::default();
-    let sections = doc.sections.iter();
-    match sections
-        .clone()
-        .find(|&section| section.simple_name() == Some("name"))
-    {
-        Some(section) => match section.simple_caption() {
-            Some(name) => package.name = name.to_string(),
-            None => {
-                // TODO: keep track of which FASTN.ftd has this issue, we are not keeping track
-                //       of error and warning locations / file names so far
-                warnings.push(fastn_section::Warning::PackageNameNotInCaption);
-                // we do not bail at this point, missing package name is just a warning for now
+    for section in doc.sections.iter() {
+        match section.simple_name() {
+            Some("package") => {
+                match section.simple_caption() {
+                    Some(name) => package.name = name.to_string(),
+                    None => {
+                        // TODO: keep track of which FASTN.ftd has this issue, we are not keeping track
+                        //       of error and warning locations / file names so far
+                        // we do not bail at this point,
+                        // missing package name is just a warning for now
+                        warnings.push(
+                            section
+                                .span()
+                                .wrap(fastn_section::Warning::PackageNameNotInCaption),
+                        );
+                    }
+                }
             }
-        },
-        None => {
-            warnings.push(fastn_section::Warning::PackageNameNotInCaption);
-            // we do not bail at this point, missing package name is just a warning for now
+            Some(_) => {
+                todo!()
+            }
+            None => {
+                // we found a section without name.
+                // this is an error that Document must already have collected it, nothing to do.
+                return Err(doc.diagnostics());
+            }
         }
+    }
+
+    if package.name.is_empty()
+        && !warnings
+            .iter()
+            .any(|v| v.value == fastn_section::Warning::PackageDeclarationMissing)
+    {
+        // we do not bail at this point, missing package name is just a warning for now
+        warnings.push(
+            fastn_section::Span::default().wrap(fastn_section::Warning::PackageDeclarationMissing),
+        );
     }
 
     Ok((package, warnings))

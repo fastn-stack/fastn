@@ -27,6 +27,7 @@ pub use scanner::{ECey, Scanner};
 /// as we do not expect individual documents to be larger than few GBs.
 #[derive(PartialEq, Hash, Debug, Eq, Clone, Default)]
 pub struct Span {
+    // TODO: store file name here
     inner: arcstr::Substr, // this is currently a 32-byte struct.
 }
 
