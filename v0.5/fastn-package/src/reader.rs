@@ -1,3 +1,19 @@
+// # note on error handling.
+//
+// we can handle error in this parser in such a way that our rest of parsers that come after,
+// like router parser, and the actual compiler, can run even if there are some issues (error, not
+// warning) encountered in this phase.
+//
+// but for simplicity’s sake, we are going to not do that now, and return either a package object
+// if there are no errors (maybe warnings).
+//
+// even within this parser, we bail early if any one FASTN.ftd is found with errors in it, this is
+// kind of acceptable as all FASTN.ftd files, other the one in the current package, must not have
+// errors because they are published dependencies.
+//
+// though this is not strictly true, say if one of the dependencies needed some system, and main
+// package has not provided it, then dependency can also have errors.
+
 #[derive(Debug, Default)]
 pub struct State {
     name: fastn_package::UR<(), String>,
@@ -6,7 +22,11 @@ pub struct State {
     pub auto_imports: Vec<fastn_package::AutoImport>,
     apps: Vec<fastn_package::UR<String, fastn_package::App>>,
     packages: std::collections::HashMap<String, fastn_package::Package>,
+    pub diagnostics: Vec<fastn_section::Diagnostic>,
 }
+
+type PResult<T> =
+    std::result::Result<(T, Vec<fastn_section::Warning>), Vec<fastn_section::Diagnostic>>;
 
 impl fastn_package::Package {
     pub fn reader() -> fastn_continuation::Result<State> {
@@ -16,10 +36,7 @@ impl fastn_package::Package {
 
 impl fastn_continuation::Continuation for State {
     // we return a package object if we parsed, even a partial package.
-    type Output = (
-        Option<fastn_package::Package>,
-        Vec<fastn_section::Diagnostic>,
-    );
+    type Output = PResult<fastn_package::MainPackage>;
     type Needed = Vec<String>; // vec of file names
     type Found = Vec<(
         String, // file name
@@ -42,20 +59,18 @@ impl fastn_continuation::Continuation for State {
                 match n.into_iter().next() {
                     Some((_name, Ok(Some((doc, file_list))))) => {
                         let _package = match parse_package(doc, file_list) {
-                            Ok(package) => package,
-                            Err(_e) => {
-                                // we found a "valid" fastn_package::Document, but it is not a valid
-                                // FASTN.ftd to the extent
-                                // that we could not create even a broken Package object out of it
-                                return fastn_continuation::Result::Done((
-                                    None,
-                                    vec![fastn_section::Diagnostic::Error(
-                                        fastn_section::Error::InvalidPackageFile,
-                                    )],
-                                ));
+                            Ok((package, warnings)) => {
+                                self.diagnostics.extend(
+                                    warnings.into_iter().map(fastn_section::Diagnostic::Warning),
+                                );
+                                package
+                            }
+                            Err(diagnostics) => {
+                                self.diagnostics.extend(diagnostics);
+                                return fastn_continuation::Result::Done(Err(self.diagnostics));
                             }
                         };
-                        self.name = fastn_package::UR::Resolved(Some("foo".to_string()));
+                        // self.name = fastn_package::UR::Resolved();
                         todo!()
                     }
                     Some((_name, Ok(None))) | Some((_name, Err(_))) => {
@@ -79,6 +94,6 @@ impl fastn_continuation::Continuation for State {
 fn parse_package(
     _doc: fastn_section::Document,
     _file_list: Vec<String>,
-) -> Result<fastn_package::Package, fastn_section::Error> {
+) -> PResult<fastn_package::Package> {
     todo!()
 }

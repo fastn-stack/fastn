@@ -29,7 +29,7 @@ impl fastn::commands::Build {
     ///
     /// `fastn build --strict` runs the build in strict mode. in this mode, all warnings are treated
     /// as errors, including invalid formatting.
-    pub async fn run(self, _package: fastn_package::Package) {
+    pub async fn run(self, _package: fastn_package::MainPackage) {
         // go through the entire package, and compile all the files
         for _document in changed_documents() {
             // check if we already have JS, if not compile it
