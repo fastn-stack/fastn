@@ -2,11 +2,16 @@
 async fn main() {
     let command = fastn::commands::parse();
     let mut section_provider = fastn::SectionProvider::default();
-    let (mut package, diagnostics) = match fastn_package::Package::reader()
+    let mut package = match fastn_package::Package::reader()
         .mut_consume_async(&mut section_provider)
         .await
     {
-        Ok(v) => v,
+        Ok((main_package, warnings)) =>  {
+            for warning in warnings {
+                eprintln!("{warning:?}");
+            }
+            main_package
+        }
         Err(diagnostics) => {
             eprintln!("failed to parse package: ");
             for diagnostic in diagnostics {
@@ -15,9 +20,6 @@ async fn main() {
             std::process::exit(1);
         }
     };
-    for diagnostic in diagnostics {
-        eprintln!("{:?}", diagnostic);
-    }
     let router = fastn_router::Router::reader()
         .mut_consume_async(&mut section_provider)
         .await;
