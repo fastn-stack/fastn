@@ -41,12 +41,12 @@ impl fastn_section::Kind {
 
 impl fastn_section::Section {
     pub fn span(&self) -> fastn_section::Span {
-        todo!()
-        // let mut span = self.init.name.name.name.clone();
-        // extend_o_span(&mut span, self.function_marker.clone());
-        //
-        // span.unwrap()
+        let mut span = Some(self.init.name.span());
+        extend_o_span(&mut span, self.init.function_marker.clone());
+
+        span.unwrap()
     }
+
     pub fn full_name_with_kind(&self) -> &fastn_section::Span {
         todo!()
     }
@@ -180,16 +180,20 @@ impl fastn_section::Identifier {
 }
 
 impl fastn_section::IdentifierReference {
-    pub fn wrap<T>(&self, value: T) -> fastn_section::Spanned<T> {
-        let span = match self {
+    pub fn span(&self) -> fastn_section::Span {
+        match self {
             fastn_section::IdentifierReference::Local(ref name) => name.clone(),
             // TODO: this is wrong, we should coalesce the spans.
             fastn_section::IdentifierReference::Absolute { package, .. } => package.clone(),
             // TODO: this is wrong, we should coalesce the spans.
             fastn_section::IdentifierReference::Imported { module, .. } => module.clone(),
-        };
-
-        fastn_section::Spanned { span, value }
+        }
+    }
+    pub fn wrap<T>(&self, value: T) -> fastn_section::Spanned<T> {
+        fastn_section::Spanned {
+            span: self.span(),
+            value,
+        }
     }
 }
 

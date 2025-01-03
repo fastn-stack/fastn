@@ -41,10 +41,18 @@ impl fastn_package::Package {
 }
 
 fn collect_dependencies(
-    _waiting_for: &mut std::collections::HashMap<String, Vec<String>>,
-    _p: &fastn_package::Package,
+    waiting_for: &mut std::collections::HashMap<String, Vec<String>>,
+    p: &fastn_package::Package,
 ) {
-    todo!()
+    if p.name.is_empty() {
+        return;
+    }
+    for dependency in p.dependencies.iter() {
+        waiting_for
+            .entry(dependency.name.clone())
+            .or_default()
+            .push(p.name.clone());
+    }
 }
 
 impl State {
