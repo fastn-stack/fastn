@@ -15,4 +15,8 @@ pub enum Warning {
     UnusedDependency,
     // Doc missing on some public symbol
     DocMissing,
+    // package: <caption> is either missing or is "complex"
+    PackageNameNotInCaption,
+    // FASTN.ftd does not contain `package:` declaration
+    PackageDeclarationMissing,
 }

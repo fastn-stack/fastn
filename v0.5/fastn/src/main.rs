@@ -6,7 +6,7 @@ async fn main() {
         .mut_consume_async(&mut section_provider)
         .await
     {
-        Ok((main_package, warnings)) =>  {
+        Ok((main_package, warnings)) => {
             for warning in warnings {
                 eprintln!("{warning:?}");
             }
@@ -15,7 +15,7 @@ async fn main() {
         Err(diagnostics) => {
             eprintln!("failed to parse package: ");
             for diagnostic in diagnostics {
-                eprintln!("{:?}", diagnostic);
+                eprintln!("{diagnostic:?}");
             }
             std::process::exit(1);
         }

@@ -17,11 +17,12 @@ pub struct MainPackage {
     pub packages: std::collections::HashMap<String, Package>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Package {
     pub name: String,
     pub dependencies: Vec<Dependency>,
     pub auto_imports: Vec<AutoImport>,
+    pub file_list: Vec<String>,
 }
 
 #[derive(Clone, Debug)]

@@ -92,8 +92,30 @@ impl fastn_continuation::Continuation for State {
 }
 
 fn parse_package(
-    _doc: fastn_section::Document,
+    doc: fastn_section::Document,
     _file_list: Vec<String>,
 ) -> PResult<fastn_package::Package> {
-    todo!()
+    let mut warnings = vec![];
+    let mut package = fastn_package::Package::default();
+    let sections = doc.sections.iter();
+    match sections
+        .clone()
+        .find(|&section| section.simple_name() == Some("name"))
+    {
+        Some(section) => match section.simple_caption() {
+            Some(name) => package.name = name.to_string(),
+            None => {
+                // TODO: keep track of which FASTN.ftd has this issue, we are not keeping track
+                //       of error and warning locations / file names so far
+                warnings.push(fastn_section::Warning::PackageNameNotInCaption);
+                // we do not bail at this point, missing package name is just a warning for now
+            }
+        },
+        None => {
+            warnings.push(fastn_section::Warning::PackageNameNotInCaption);
+            // we do not bail at this point, missing package name is just a warning for now
+        }
+    }
+
+    Ok((package, warnings))
 }
