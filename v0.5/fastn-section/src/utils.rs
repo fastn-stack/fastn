@@ -269,6 +269,15 @@ impl fastn_section::ECey for fastn_section::Document {
     }
 }
 
+impl fastn_section::Diagnostic {
+    pub fn into_warning(self) -> fastn_section::Warning {
+        match self {
+            fastn_section::Diagnostic::Warning(w) => w,
+            fastn_section::Diagnostic::Error(_) => panic!("not a warning"),
+        }
+    }
+}
+
 impl fastn_section::Document {
     pub fn diagnostics(self) -> Vec<fastn_section::Spanned<fastn_section::Diagnostic>> {
         let mut o: Vec<_> = self
@@ -281,6 +290,22 @@ impl fastn_section::Document {
             self.warnings
                 .into_iter()
                 .map(|v| v.map(fastn_section::Diagnostic::Warning)),
+        );
+
+        o
+    }
+
+    pub fn diagnostics_cloned(&self) -> Vec<fastn_section::Spanned<fastn_section::Diagnostic>> {
+        let mut o: Vec<_> = self
+            .errors
+            .iter()
+            .map(|v| v.clone().map(fastn_section::Diagnostic::Error))
+            .collect();
+
+        o.extend(
+            self.warnings
+                .iter()
+                .map(|v| v.clone().map(fastn_section::Diagnostic::Warning)),
         );
 
         o

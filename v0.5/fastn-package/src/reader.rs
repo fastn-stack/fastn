@@ -57,7 +57,35 @@ fn collect_dependencies(
 
 impl State {
     fn finalize(self) -> fastn_continuation::Result<Self> {
-        todo!()
+        if self
+            .diagnostics
+            .iter()
+            .any(|d| matches!(d.value, fastn_section::Diagnostic::Error(_)))
+        {
+            return fastn_continuation::Result::Done(Err(self.diagnostics));
+        }
+        if !self.waiting_for.is_empty() {
+            let needed = self.waiting_for.keys().cloned().collect();
+            return fastn_continuation::Result::Stuck(Box::new(self), needed);
+        }
+        fastn_continuation::Result::Done(Ok((
+            fastn_package::MainPackage {
+                name: self.name.into_resolved(),
+                systems: vec![],
+                apps: vec![],
+                packages: self.packages,
+            },
+            self.diagnostics
+                .into_iter()
+                .map(|v| v.map(|v| v.into_warning()))
+                .collect(),
+        )))
+    }
+
+    fn collect_diagnostics(&mut self, doc: &fastn_section::Document) {
+        for diagnostic in doc.diagnostics_cloned() {
+            self.diagnostics.push(diagnostic);
+        }
     }
 }
 
@@ -83,6 +111,7 @@ impl fastn_continuation::Continuation for State {
 
                 match n.into_iter().next() {
                     Some((_name, Ok((doc, file_list)))) => {
+                        self.collect_diagnostics(&doc);
                         let package = match parse_package(doc, file_list) {
                             Ok((package, warnings)) => {
                                 self.diagnostics.extend(
