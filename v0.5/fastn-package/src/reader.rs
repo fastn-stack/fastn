@@ -266,3 +266,31 @@ fn parse_package(
 
     Ok((package, warnings))
 }
+
+#[cfg(test)]
+mod tests {
+    pub struct TestProvider {
+        data: std::collections::HashMap<String, String>,
+    }
+
+    impl fastn_continuation::Provider for &TestProvider {
+        type Needed = Vec<String>;
+        type Found = Vec<(Option<String>, super::NResult)>;
+
+        fn provide(&self, _needed: Vec<String>) -> Self::Found {
+            todo!()
+        }
+    }
+
+    #[test]
+    fn basic() {
+        let section_provider = TestProvider {
+            data: Default::default(),
+        };
+        let (_package, warnings) = fastn_package::Package::reader()
+            .consume(&section_provider)
+            .unwrap();
+
+        assert!(warnings.is_empty())
+    }
+}
