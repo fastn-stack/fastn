@@ -23,6 +23,9 @@ pub struct State {
     apps: Vec<fastn_package::UR<String, fastn_package::App>>,
     packages: std::collections::HashMap<String, fastn_package::Package>,
     pub diagnostics: Vec<fastn_section::Spanned<fastn_section::Diagnostic>>,
+    // if both a/FASTN.ftd and b/FASTN.ftd need x/FASTN.ftd, this will contain x => [a, b].
+    // this will reset on every "continue after".
+    pub waiting_for: std::collections::HashMap<String, Vec<String>>,
 }
 
 type PResult<T> = std::result::Result<
@@ -52,6 +55,7 @@ impl fastn_continuation::Continuation for State {
             fastn_package::UR::UnResolved(()) => {
                 assert_eq!(n.len(), 1);
                 assert_eq!(n[0].0, None);
+                assert!(self.waiting_for.is_empty());
 
                 match n.into_iter().next() {
                     Some((_name, Ok((doc, file_list)))) => {
@@ -102,6 +106,7 @@ fn parse_package(
         dependencies: vec![],
         auto_imports: vec![],
         favicon: None,
+        urls: vec![],
         file_list,
     };
 
@@ -129,6 +134,7 @@ fn parse_package(
                                     .wrap(fastn_section::Error::ArgumentValueRequired),
                             ),
                         },
+                        // TODO: default-language, language-<code> etc
                         _ => errors.push(
                             header
                                 .name_span()
@@ -138,6 +144,29 @@ fn parse_package(
                 }
             }
             Some("dependency") => {
+                match section.simple_caption() {
+                    Some(name) => {
+                        package.dependencies.push(fastn_package::Dependency {
+                            name: name.to_string(),
+                            capabilities: vec![],
+                            dependencies: vec![],
+                            auto_imports: vec![],
+                        });
+                    }
+                    None => {
+                        // we do not bail at this point,
+                        // missing package name is just a warning for now
+                        errors.push(span.wrap(fastn_section::Error::PackageNameNotInCaption));
+                    }
+                };
+
+                for header in section.headers.iter() {
+                    header
+                        .name_span()
+                        .wrap(fastn_section::Error::ExtraArgumentFound);
+                }
+            }
+            Some("auto-import") => {
                 todo!()
             }
             Some("app") => {

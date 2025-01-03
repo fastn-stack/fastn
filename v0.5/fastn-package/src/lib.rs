@@ -22,12 +22,16 @@ pub struct Package {
     pub name: String,
     pub dependencies: Vec<Dependency>,
     pub auto_imports: Vec<AutoImport>,
+    pub urls: Vec<UrlPattern>,
     pub file_list: Vec<String>,
     pub favicon: Option<String>,
 }
 
 #[derive(Clone, Debug)]
 pub struct AutoImport {}
+
+#[derive(Clone, Debug)]
+pub struct UrlPattern {}
 
 // -- system: design-system.com
 // via: amitu.com/ds
