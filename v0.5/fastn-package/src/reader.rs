@@ -163,8 +163,6 @@ impl fastn_continuation::Continuation for State {
                 for d in n.into_iter() {
                     match d {
                         (Some(p), Ok((doc, file_list))) => {
-                            // TODO: lot of duplication from fastn_package::UR::UnResolved(())
-                            //       branch, create helper on State
                             if let Err(()) = self.process_package(
                                 doc,
                                 file_list,
