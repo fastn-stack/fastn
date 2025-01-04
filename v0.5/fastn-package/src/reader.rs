@@ -139,7 +139,30 @@ impl fastn_continuation::Continuation for State {
             // so this case handles both name found and name error cases.
             _ => {
                 assert_eq!(n.len(), self.waiting_for.len());
-                dbg!(&n);
+
+                for d in n.into_iter() {
+                    match d {
+                        (Some(p), Ok((doc, file_list))) => {
+                            // TODO: lot of duplication from fastn_package::UR::UnResolved(())
+                            //       branch, create helper on State
+                            self.collect_diagnostics(&doc);
+                            let (package, warnings) = parse_package(doc, file_list).unwrap();
+                            assert_eq!(package.name, p);
+                            self.diagnostics.extend(
+                                warnings
+                                    .into_iter()
+                                    .map(|v| v.map(fastn_section::Diagnostic::Warning)),
+                            );
+                            todo!()
+                        }
+                        (Some(_p), Err(_e)) => {
+                            todo!()
+                        }
+                        (None, _) => panic!(
+                            "only main package can be None, and we have already processed it"
+                        ),
+                    }
+                }
                 todo!()
             }
         }
@@ -337,8 +360,13 @@ mod tests {
             "},
             std::collections::HashMap::from([("bar", "-- package: bar")]),
             |package, warnings| {
+                // TODO: use fastn_section::Debug to make these terser more exhaustive
                 assert_eq!(package.name, "foo");
+                assert_eq!(package.packages.len(), 2);
                 assert!(warnings.is_empty());
+                let bar = package.packages.get("bar").unwrap();
+                assert_eq!(bar.name, "bar");
+                assert_eq!(bar.dependencies.len(), 0);
             },
         );
     }
