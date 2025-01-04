@@ -46,12 +46,11 @@ impl State {
     fn process_package(
         &mut self,
         doc: fastn_section::Document,
-        file_list: Vec<String>,
         new_dependencies: &mut std::collections::HashMap<String, Vec<String>>,
         expected_name: Option<&str>,
     ) -> Result<String, ()> {
         self.collect_diagnostics(&doc);
-        match parse_package(doc, file_list) {
+        match parse_package(doc) {
             Ok((package, warnings)) => {
                 if let Some(expected_name) = expected_name {
                     assert_eq!(package.name, expected_name);
@@ -133,8 +132,8 @@ impl fastn_continuation::Continuation for State {
                 assert!(self.waiting_for.is_empty());
 
                 match n.into_iter().next() {
-                    Some((_name, Ok((doc, file_list)))) => {
-                        match self.process_package(doc, file_list, &mut new_dependencies, None) {
+                    Some((_name, Ok((doc, _file_list)))) => {
+                        match self.process_package(doc, &mut new_dependencies, None) {
                             Ok(package_name) => {
                                 if !package_name.is_empty() {
                                     self.name = fastn_package::UR::Resolved(Some(package_name));
@@ -162,13 +161,10 @@ impl fastn_continuation::Continuation for State {
 
                 for d in n.into_iter() {
                     match d {
-                        (Some(p), Ok((doc, file_list))) => {
-                            if let Err(()) = self.process_package(
-                                doc,
-                                file_list,
-                                &mut new_dependencies,
-                                Some(&p),
-                            ) {
+                        (Some(p), Ok((doc, _file_list))) => {
+                            if let Err(()) =
+                                self.process_package(doc, &mut new_dependencies, Some(&p))
+                            {
                                 return self.finalize();
                             }
                         }
@@ -191,7 +187,6 @@ impl fastn_continuation::Continuation for State {
 
 fn parse_package(
     doc: fastn_section::Document,
-    file_list: Vec<String>,
 ) -> fastn_utils::section_provider::PResult<fastn_package::Package> {
     let warnings = vec![];
     let mut errors = vec![];
@@ -201,8 +196,6 @@ fn parse_package(
         dependencies: vec![],
         auto_imports: vec![],
         favicon: None,
-        urls: vec![],
-        file_list,
     };
 
     for section in doc.sections.iter() {

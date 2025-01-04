@@ -9,17 +9,57 @@ mod route;
 
 #[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
 pub struct Router {
-    file_list: Vec<String>,
-    redirects: Vec<(String, String)>,
+    /// name of the current package
+    name: String,
+    /// list of files in the current package.
+    /// note that this is the canonical url: /-/<current-package>/<file>
+    /// tho we allow /<file> also with header `Link: </-/<current-package>/<file>>; rel="canonical"`.
+    /// for the current package and all dependencies, we store the list of files
+    file_list: std::collections::HashMap<String, Vec<String>>,
+    redirects: Vec<Redirect>,
+    /// only for current package
     dynamic_urls: Vec<DynamicUrl>,
+    /// only for current package
     wasm_mounts: Vec<WasmMount>,
 }
 
 #[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
-struct DynamicUrl {}
+pub struct Redirect {
+    source: String,
+    destination: String,
+    /// source and end can end with *, in which case wildcard will be true
+    wildcard: bool,
+}
 
 #[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
-struct WasmMount {}
+pub enum Fragment {
+    Exact(String),
+    Argument { kind: Kind, name: String },
+}
+
+#[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
+pub enum Kind {
+    Integer,
+    String,
+    Boolean,
+    Decimal,
+}
+
+#[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
+pub struct DynamicUrl {
+    fragments: Vec<Fragment>,
+}
+
+#[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
+struct WasmMount {
+    /// any url starting with this
+    url: String,
+    /// will be handled by this wasm file
+    wasm_file: String,
+    /// we will remove the url part, and send request to whatever comes after url, but prepended
+    /// with wasm_base
+    wasm_base: String, // default value /
+}
 
 #[derive(Debug, Copy, PartialEq, Clone)]
 pub enum Method {
