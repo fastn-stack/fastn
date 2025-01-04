@@ -16,7 +16,7 @@ impl State {
         let mut needed = vec![];
         for name in self.waiting_for.iter() {
             if !self.file_list.contains_key(name) {
-                needed.push(name.to_string());
+                needed.push(fastn_utils::section_provider::package_file(name));
             }
         }
 

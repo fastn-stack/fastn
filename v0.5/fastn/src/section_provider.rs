@@ -13,7 +13,6 @@ impl fastn_continuation::AsyncMutProvider for &mut SectionProvider {
         // <name-of-package>/FASTN.ftd.
         let mut r: Self::Found = vec![];
         for f in needed {
-            dbg!(&f);
             let (package, package_dir) = fastn_utils::section_provider::name_to_package(&f);
 
             if let Some(doc) = self.cache.get(&package) {
