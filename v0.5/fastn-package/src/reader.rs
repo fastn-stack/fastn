@@ -43,6 +43,38 @@ fn collect_dependencies(
 }
 
 impl State {
+    fn process_package(
+        &mut self,
+        doc: fastn_section::Document,
+        file_list: Vec<String>,
+        new_dependencies: &mut std::collections::HashMap<String, Vec<String>>,
+        expected_name: Option<&str>,
+    ) -> Result<String, ()> {
+        self.collect_diagnostics(&doc);
+        match parse_package(doc, file_list) {
+            Ok((package, warnings)) => {
+                if let Some(expected_name) = expected_name {
+                    assert_eq!(package.name, expected_name);
+                }
+                self.diagnostics.extend(
+                    warnings
+                        .into_iter()
+                        .map(|v| v.map(fastn_section::Diagnostic::Warning)),
+                );
+                collect_dependencies(new_dependencies, &package);
+                let package_name = package.name.clone();
+                if !package_name.is_empty() {
+                    self.packages.insert(package.name.clone(), package);
+                }
+                Ok(package_name)
+            }
+            Err(diagnostics) => {
+                self.diagnostics.extend(diagnostics);
+                Err(())
+            }
+        }
+    }
+
     fn finalize(self) -> fastn_continuation::Result<Self> {
         if self
             .diagnostics
@@ -102,25 +134,13 @@ impl fastn_continuation::Continuation for State {
 
                 match n.into_iter().next() {
                     Some((_name, Ok((doc, file_list)))) => {
-                        self.collect_diagnostics(&doc);
-                        let package = match parse_package(doc, file_list) {
-                            Ok((package, warnings)) => {
-                                self.diagnostics.extend(
-                                    warnings
-                                        .into_iter()
-                                        .map(|v| v.map(fastn_section::Diagnostic::Warning)),
-                                );
-                                collect_dependencies(&mut new_dependencies, &package);
-                                package
+                        match self.process_package(doc, file_list, &mut new_dependencies, None) {
+                            Ok(package_name) => {
+                                if !package_name.is_empty() {
+                                    self.name = fastn_package::UR::Resolved(Some(package_name));
+                                }
                             }
-                            Err(diagnostics) => {
-                                self.diagnostics.extend(diagnostics);
-                                return self.finalize();
-                            }
-                        };
-                        if !package.name.is_empty() {
-                            self.name = fastn_package::UR::Resolved(Some(package.name.clone()));
-                            self.packages.insert(package.name.clone(), package);
+                            Err(()) => return self.finalize(),
                         }
                     }
                     Some((_name, Err(_))) => {
@@ -145,16 +165,14 @@ impl fastn_continuation::Continuation for State {
                         (Some(p), Ok((doc, file_list))) => {
                             // TODO: lot of duplication from fastn_package::UR::UnResolved(())
                             //       branch, create helper on State
-                            self.collect_diagnostics(&doc);
-                            let (package, warnings) = parse_package(doc, file_list).unwrap();
-                            assert_eq!(package.name, p);
-                            self.diagnostics.extend(
-                                warnings
-                                    .into_iter()
-                                    .map(|v| v.map(fastn_section::Diagnostic::Warning)),
-                            );
-                            collect_dependencies(&mut new_dependencies, &package);
-                            self.packages.insert(package.name.clone(), package);
+                            if let Err(()) = self.process_package(
+                                doc,
+                                file_list,
+                                &mut new_dependencies,
+                                Some(&p),
+                            ) {
+                                return self.finalize();
+                            }
                         }
                         (Some(_p), Err(_e)) => {
                             todo!()
