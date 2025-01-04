@@ -2,7 +2,7 @@ pub(super) fn import(
     section: fastn_section::Section,
     document: &mut fastn_unresolved::Document,
     arena: &mut fastn_unresolved::Arena,
-    _package: &Option<&fastn_package::Package>,
+    package: &Option<&fastn_package::Package>,
 ) {
     if let Some(ref kind) = section.init.kind {
         document
@@ -22,7 +22,7 @@ pub(super) fn import(
         // we will go ahead with this import statement parsing
     }
 
-    let _i = match parse_import(&section, document, arena) {
+    let i = match parse_import(&section, document, arena) {
         Some(v) => v,
         None => {
             // error handling is job of parse_module_name().
@@ -34,9 +34,49 @@ pub(super) fn import(
     fastn_unresolved::utils::assert_no_body(&section, document);
     fastn_unresolved::utils::assert_no_children(&section, document);
     fastn_unresolved::utils::assert_no_extra_headers(&section, document, &["exports", "exposing"]);
-    // TODO: assert that the import statement is for a module in dependency
-    todo!()
+    validate_import_module_in_dependencies(section, document, arena, package, &i);
+
+    todo!();
     // document.imports.push(i);
+}
+
+/// Validates that the import statement references a module in the current package or package's
+/// dependencies.
+fn validate_import_module_in_dependencies(
+    section: fastn_section::Section,
+    document: &mut fastn_unresolved::Document,
+    arena: &mut fastn_unresolved::Arena,
+    package: &Option<&fastn_package::Package>,
+    i: &Import,
+) {
+    // ensure that the import statement is for a module in dependency
+    match package {
+        Some(package) => {
+            let imported_package_name = i.module.package(arena);
+
+            // Check if the imported package exists in dependencies or matches the current package name
+            let is_valid_import = package.dependencies.iter().any(|dep| {
+                dep.name.as_str() == imported_package_name || dep.name.as_str() == package.name
+            });
+
+            if !is_valid_import {
+                document.errors.push(
+                    section
+                        .init
+                        .name
+                        .wrap(fastn_section::Error::ImportPackageNotFound),
+                );
+            }
+        }
+        None => {
+            document.errors.push(
+                section
+                    .init
+                    .name
+                    .wrap(fastn_section::Error::PackageNotFound),
+            );
+        }
+    }
 }
 
 fn parse_import(

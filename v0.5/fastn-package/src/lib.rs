@@ -48,7 +48,7 @@ pub struct SystemAlias(String);
 
 #[derive(Debug)]
 pub struct Dependency {
-    name: String,
+    pub name: String,
     // vector of alias of the systems this dependency and everything downstream
     capabilities: Vec<SystemAlias>,
     dependencies: Vec<Dependency>,

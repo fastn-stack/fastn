@@ -20,6 +20,7 @@ pub enum Error {
     ImportCantHaveType,
     ImportMustBeImport,
     ImportMustHaveCaption,
+    ImportPackageNotFound,
     BodyNotAllowed,
     ExtraArgumentFound,
     ArgumentValueRequired,
@@ -34,6 +35,7 @@ pub enum Error {
     UnexpectedSectionInPackageFile,
     // FASTN.ftd does not contain `package:` declaration
     PackageDeclarationMissing,
+    PackageNotFound,
     // SectionNotFound(&'a str),
     // MoreThanOneCaption,
     // ParseError,
