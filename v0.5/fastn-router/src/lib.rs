@@ -7,7 +7,7 @@ extern crate self as fastn_router;
 mod reader;
 mod route;
 
-#[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
+#[derive(serde::Deserialize, serde::Serialize, Debug, Clone, Default)]
 pub struct Router {
     /// name of the current package
     name: String,

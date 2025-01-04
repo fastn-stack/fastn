@@ -2,11 +2,50 @@
 pub struct State {
     name: String,
     file_list: std::collections::HashMap<String, Vec<String>>,
+    waiting_for: Vec<String>,
 }
 
 impl fastn_router::Router {
     pub fn reader() -> fastn_continuation::Result<State> {
         fastn_continuation::Result::Stuck(Default::default(), vec!["FASTN.ftd".to_string()])
+    }
+}
+
+impl State {
+    fn finalize(self) -> fastn_continuation::Result<Self> {
+        let mut needed = vec![];
+        for name in self.waiting_for.iter() {
+            if !self.file_list.contains_key(name) {
+                needed.push(name.to_string());
+            }
+        }
+
+        if needed.is_empty() {
+            return fastn_continuation::Result::Done(Ok((
+                fastn_router::Router {
+                    name: self.name,
+                    file_list: self.file_list,
+                    ..Default::default()
+                },
+                vec![],
+            )));
+        }
+
+        fastn_continuation::Result::Stuck(Box::new(self), needed)
+    }
+
+    fn process_doc(&mut self, doc: fastn_section::Document, file_list: Vec<String>) {
+        let (name, deps) = match get_dependencies(doc) {
+            Some(v) => v,
+            None => return,
+        };
+
+        if self.name.is_empty() {
+            self.name = name.clone();
+        }
+
+        self.file_list.insert(name, file_list);
+        self.waiting_for.extend(deps);
     }
 }
 
@@ -19,18 +58,13 @@ impl fastn_continuation::Continuation for State {
         mut self,
         n: fastn_utils::section_provider::Found,
     ) -> fastn_continuation::Result<Self> {
-        assert_eq!(n.len(), 1);
-        assert_eq!(n[0].0, None);
-        match n.into_iter().next() {
-            Some((_name, Ok((doc, _file_list)))) => {
-                if let Some((name, deps)) = get_dependencies(doc) {
-                    self.name = name.clone();
-                    self.file_list.insert(name, deps);
-                }
-                todo!()
+        for (_name, result) in n.into_iter() {
+            if let Ok((doc, file_list)) = result {
+                self.process_doc(doc, file_list);
             }
-            _ => todo!(),
         }
+
+        self.finalize()
     }
 }
 
