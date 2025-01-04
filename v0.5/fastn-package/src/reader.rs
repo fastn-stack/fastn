@@ -55,13 +55,7 @@ impl State {
             let needed = self
                 .waiting_for
                 .keys()
-                .map(|p| {
-                    if p.ends_with('/') {
-                        format!("{p}FASTN.ftd")
-                    } else {
-                        format!("{p}/FASTN.ftd")
-                    }
-                })
+                .map(|p| fastn_utils::section_provider::package_file(p))
                 .collect();
             return fastn_continuation::Result::Stuck(Box::new(self), needed);
         }
@@ -274,16 +268,19 @@ mod tests {
         main: &'static str,
         mut rest: std::collections::HashMap<&'static str, &'static str>,
     ) -> fastn_utils::section_provider::test::SectionProvider {
+        dbg!(main, &rest);
         let mut data = std::collections::HashMap::from([(
             "FASTN.ftd".to_string(),
             (main.to_string(), vec![]),
         )]);
         for (k, v) in rest.drain() {
-            let (_, package_dir) = fastn_utils::section_provider::name_to_package(k);
-            data.insert(format!("{package_dir}FASTN.ftd"), (v.to_string(), vec![]));
+            data.insert(
+                fastn_utils::section_provider::package_file(k),
+                (v.to_string(), vec![]),
+            );
         }
 
-        fastn_utils::section_provider::test::SectionProvider { data }
+        dbg!(fastn_utils::section_provider::test::SectionProvider { data })
     }
 
     #[track_caller]

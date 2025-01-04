@@ -22,9 +22,18 @@ pub fn name_to_package(name: &str) -> (Option<String>, String) {
     }
 }
 
+pub fn package_file(package_name: &str) -> String {
+    if package_name.ends_with('/') {
+        format!("{package_name}FASTN.ftd")
+    } else {
+        format!("{package_name}/FASTN.ftd")
+    }
+}
+
 #[cfg(feature = "test-utils")]
 pub mod test {
 
+    #[derive(Debug)]
     pub struct SectionProvider {
         pub data: std::collections::HashMap<String, (String, Vec<String>)>,
     }
