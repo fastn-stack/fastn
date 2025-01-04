@@ -23,8 +23,9 @@ pub fn name_to_package(name: &str) -> (Option<String>, String) {
 
 #[cfg(feature = "test-utils")]
 pub mod test {
+
     pub struct SectionProvider {
-        pub data: std::collections::HashMap<String, (String, Vec<String>)>,
+        pub data: std::collections::HashMap<&'static str, (String, Vec<String>)>,
     }
 
     #[derive(Debug, thiserror::Error)]
@@ -42,7 +43,7 @@ pub mod test {
             for f in needed {
                 let package = super::name_to_package(&f).0;
 
-                match self.data.get(&f) {
+                match self.data.get(&f.as_str()) {
                     Some((content, file_list)) => {
                         let d = fastn_section::Document::parse(&arcstr::ArcStr::from(content));
                         r.push((package, Ok((d, file_list.to_owned()))));

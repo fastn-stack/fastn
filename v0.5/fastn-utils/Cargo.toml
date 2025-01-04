@@ -16,4 +16,3 @@ fastn-continuation = { workspace = true, optional = true }
 fastn-section.workspace = true
 arcstr = { workspace = true, optional = true }
 thiserror = { workspace = true, optional = true }
-# indoc = { workspace = true, optional = true }

@@ -15,3 +15,4 @@ fastn-utils.workspace = true
 
 [dev-dependencies]
 fastn-utils = { workspace = true, features = ["test-utils"] }
+indoc = { workspace = true }

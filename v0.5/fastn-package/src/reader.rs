@@ -266,13 +266,64 @@ fn parse_package(
 
 #[cfg(test)]
 mod tests {
-    #[test]
-    fn basic() {
-        let section_provider = fastn_utils::section_provider::test::SectionProvider {
-            data: Default::default(),
-        };
-        let (_package, _warnings) = fastn_package::Package::reader()
+    use indoc::indoc;
+
+    fn construct(
+        main: &'static str,
+        mut rest: std::collections::HashMap<&'static str, &'static str>,
+    ) -> fastn_utils::section_provider::test::SectionProvider {
+        let mut data = std::collections::HashMap::from([("FASTN.ftd", (main.to_string(), vec![]))]);
+        for (k, v) in rest.drain() {
+            data.insert(k, (v.to_string(), vec![]));
+        }
+
+        fastn_utils::section_provider::test::SectionProvider { data }
+    }
+
+    #[track_caller]
+    fn ok<F>(main: &'static str, rest: std::collections::HashMap<&'static str, &'static str>, f: F)
+    where
+        F: FnOnce(fastn_package::MainPackage, Vec<fastn_section::Spanned<fastn_section::Warning>>),
+    {
+        let section_provider = construct(main, rest);
+        let (package, warnings) = fastn_package::Package::reader()
             .consume(&section_provider)
             .unwrap();
+
+        f(package, warnings)
+    }
+
+    #[track_caller]
+    fn ok0<F>(main: &'static str, f: F)
+    where
+        F: FnOnce(fastn_package::MainPackage, Vec<fastn_section::Spanned<fastn_section::Warning>>),
+    {
+        ok(main, Default::default(), f)
+    }
+
+    #[track_caller]
+    fn err<F>(main: &'static str, rest: std::collections::HashMap<&'static str, &'static str>, f: F)
+    where
+        F: FnOnce(Vec<fastn_section::Spanned<fastn_section::Diagnostic>>),
+    {
+        let section_provider = construct(main, rest);
+        let diagnostics = fastn_package::Package::reader()
+            .consume(&section_provider)
+            .unwrap_err();
+
+        f(diagnostics)
+    }
+
+    #[test]
+    fn basic() {
+        ok0(
+            indoc! {"
+                -- package: foo
+            "},
+            |package, warnings| {
+                assert_eq!(package.name, "foo");
+                assert!(warnings.is_empty());
+            },
+        );
     }
 }

@@ -733,6 +733,7 @@ dependencies = [
  "fastn-continuation",
  "fastn-section",
  "fastn-utils",
+ "indoc",
 ]
 
 [[package]]
