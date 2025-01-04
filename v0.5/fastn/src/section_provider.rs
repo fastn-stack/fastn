@@ -1,14 +1,12 @@
 #[derive(Default)]
 pub struct SectionProvider {
-    cache: std::collections::HashMap<Option<String>, NResult>,
+    cache: std::collections::HashMap<Option<String>, fastn_utils::section_provider::NResult>,
 }
-
-type NResult = Result<(fastn_section::Document, Vec<String>), std::sync::Arc<std::io::Error>>;
 
 #[async_trait::async_trait]
 impl fastn_continuation::AsyncMutProvider for &mut SectionProvider {
     type Needed = Vec<String>;
-    type Found = Vec<(Option<String>, NResult)>;
+    type Found = Vec<(Option<String>, fastn_utils::section_provider::NResult)>;
 
     async fn provide(&mut self, needed: Vec<String>) -> Self::Found {
         // file name will be FASTN.ftd for current package. for dependencies the file name will be

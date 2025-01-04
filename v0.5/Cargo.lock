@@ -673,6 +673,7 @@ dependencies = [
  "fastn-runtime",
  "fastn-section",
  "fastn-unresolved",
+ "fastn-utils",
  "http-body-util",
  "hyper",
  "hyper-util",
@@ -731,6 +732,7 @@ version = "0.1.0"
 dependencies = [
  "fastn-continuation",
  "fastn-section",
+ "fastn-utils",
 ]
 
 [[package]]
@@ -746,7 +748,7 @@ name = "fastn-router"
 version = "0.1.0"
 dependencies = [
  "fastn-continuation",
- "fastn-section",
+ "fastn-utils",
  "serde",
  "serde_json",
 ]
@@ -797,6 +799,16 @@ dependencies = [
 [[package]]
 name = "fastn-update"
 version = "0.1.0"
+
+[[package]]
+name = "fastn-utils"
+version = "0.1.0"
+dependencies = [
+ "arcstr",
+ "fastn-continuation",
+ "fastn-section",
+ "thiserror 2.0.9",
+]
 
 [[package]]
 name = "fastn-wasm"

@@ -12,4 +12,4 @@ homepage.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 fastn-continuation.workspace = true
-fastn-section.workspace = true
+fastn-utils.workspace = true

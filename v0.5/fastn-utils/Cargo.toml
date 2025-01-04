@@ -1,5 +1,5 @@
 [package]
-name = "fastn-package"
+name = "fastn-utils"
 version = "0.1.0"
 authors.workspace = true
 edition.workspace = true
@@ -11,4 +11,5 @@ homepage.workspace = true
 [dependencies]
 fastn-continuation.workspace = true
 fastn-section.workspace = true
-fastn-utils.workspace = true
+arcstr.workspace = true
+thiserror.workspace = true

@@ -9,6 +9,7 @@ members = [
     "fastn-static",
     "fastn-unresolved",
     "fastn-update",
+    "fastn-utils",
     "fastn-wasm",
 ]
 exclude = []
@@ -56,6 +57,7 @@ fastn-router = { path = "fastn-router" }
 fastn-runtime = { path = "../fastn-runtime" }
 fastn-section = { path = "fastn-section" }
 fastn-unresolved = { path = "fastn-unresolved" }
+fastn-utils = { path = "fastn-utils" }
 ft-sys-shared = { version = "0.1.4", features = ["rusqlite"] }
 futures-util = { version = "0.3", default-features = false, features = ["std"] }
 http = "1"

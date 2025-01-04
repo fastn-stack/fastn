@@ -18,6 +18,7 @@ fastn-router.workspace = true
 fastn-runtime.workspace = true
 fastn-section.workspace = true
 fastn-unresolved.workspace = true
+fastn-utils.workspace = true
 http-body-util.workspace = true
 hyper-util.workspace = true
 hyper.workspace = true

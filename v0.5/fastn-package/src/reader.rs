@@ -28,12 +28,6 @@ pub struct State {
     pub waiting_for: std::collections::HashMap<String, Vec<String>>,
 }
 
-type PResult<T> = std::result::Result<
-    (T, Vec<fastn_section::Spanned<fastn_section::Warning>>),
-    Vec<fastn_section::Spanned<fastn_section::Diagnostic>>,
->;
-type NResult = Result<(fastn_section::Document, Vec<String>), std::sync::Arc<std::io::Error>>;
-
 impl fastn_package::Package {
     pub fn reader() -> fastn_continuation::Result<State> {
         fastn_continuation::Result::Stuck(Default::default(), vec!["FASTN.ftd".to_string()])
@@ -101,13 +95,13 @@ impl State {
 
 impl fastn_continuation::Continuation for State {
     // we return a package object if we parsed, even a partial package.
-    type Output = PResult<fastn_package::MainPackage>;
+    type Output = fastn_utils::section_provider::PResult<fastn_package::MainPackage>;
     type Needed = Vec<String>; // vec of file names
-    type Found = Vec<(Option<String>, NResult)>;
+    type Found = Vec<(Option<String>, fastn_utils::section_provider::NResult)>;
 
     fn continue_after(
         mut self,
-        n: Vec<(Option<String>, NResult)>,
+        n: Vec<(Option<String>, fastn_utils::section_provider::NResult)>,
     ) -> fastn_continuation::Result<Self> {
         let mut new_dependencies: std::collections::HashMap<String, Vec<String>> =
             Default::default();
@@ -170,7 +164,7 @@ impl fastn_continuation::Continuation for State {
 fn parse_package(
     doc: fastn_section::Document,
     file_list: Vec<String>,
-) -> PResult<fastn_package::Package> {
+) -> fastn_utils::section_provider::PResult<fastn_package::Package> {
     let warnings = vec![];
     let mut errors = vec![];
 
@@ -279,22 +273,10 @@ fn parse_package(
 
 #[cfg(test)]
 mod tests {
-    pub struct TestProvider {
-        data: std::collections::HashMap<String, (String, Vec<String>)>,
-    }
-
-    impl fastn_continuation::Provider for &TestProvider {
-        type Needed = Vec<String>;
-        type Found = Vec<(Option<String>, super::NResult)>;
-
-        fn provide(&self, _needed: Vec<String>) -> Self::Found {
-            todo!()
-        }
-    }
 
     #[test]
     fn basic() {
-        let section_provider = TestProvider {
+        let section_provider = fastn_utils::section_provider::test::SectionProvider {
             data: Default::default(),
         };
         let (_package, warnings) = fastn_package::Package::reader()
