@@ -144,6 +144,8 @@ impl fastn_continuation::Continuation for State {
             // etc. as possible.
             // so this case handles both name found and name error cases.
             _ => {
+                assert_eq!(n.len(), self.waiting_for.len());
+                dbg!(&n);
                 todo!()
             }
         }
@@ -272,9 +274,13 @@ mod tests {
         main: &'static str,
         mut rest: std::collections::HashMap<&'static str, &'static str>,
     ) -> fastn_utils::section_provider::test::SectionProvider {
-        let mut data = std::collections::HashMap::from([("FASTN.ftd", (main.to_string(), vec![]))]);
+        let mut data = std::collections::HashMap::from([(
+            "FASTN.ftd".to_string(),
+            (main.to_string(), vec![]),
+        )]);
         for (k, v) in rest.drain() {
-            data.insert(k, (v.to_string(), vec![]));
+            let (_, package_dir) = fastn_utils::section_provider::name_to_package(k);
+            data.insert(format!("{package_dir}FASTN.ftd"), (v.to_string(), vec![]));
         }
 
         fastn_utils::section_provider::test::SectionProvider { data }
@@ -320,6 +326,19 @@ mod tests {
             indoc! {"
                 -- package: foo
             "},
+            |package, warnings| {
+                assert_eq!(package.name, "foo");
+                assert!(warnings.is_empty());
+            },
+        );
+
+        ok(
+            indoc! {"
+                -- package: foo
+
+                -- dependency: bar
+            "},
+            std::collections::HashMap::from([("bar", "-- package: bar")]),
             |package, warnings| {
                 assert_eq!(package.name, "foo");
                 assert!(warnings.is_empty());
