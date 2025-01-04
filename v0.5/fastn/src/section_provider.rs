@@ -14,19 +14,7 @@ impl fastn_continuation::AsyncMutProvider for &mut SectionProvider {
         let mut r: Self::Found = vec![];
         for f in needed {
             dbg!(&f);
-            let (package, package_dir) = match f.rsplit_once('/') {
-                Some((package, rest)) => {
-                    assert_eq!("FASTN.ftd", rest);
-                    (
-                        Some(package.to_string()),
-                        format!(".fastn/packages/{package}/"),
-                    )
-                }
-                None => {
-                    assert_eq!("FASTN.ftd", &f);
-                    (None, "./".to_string())
-                }
-            };
+            let (package, package_dir) = fastn_utils::section_provider::name_to_package(&f);
 
             if let Some(doc) = self.cache.get(&package) {
                 r.push((package, doc.clone()));

@@ -4,6 +4,22 @@ pub type PResult<T> = std::result::Result<
 >;
 pub type NResult = Result<(fastn_section::Document, Vec<String>), std::sync::Arc<std::io::Error>>;
 
+pub fn name_to_package(name: &str) -> (Option<String>, String) {
+    match name.rsplit_once('/') {
+        Some((package, rest)) => {
+            assert_eq!("FASTN.ftd", rest);
+            (
+                Some(package.to_string()),
+                format!(".fastn/packages/{package}/"),
+            )
+        }
+        None => {
+            assert_eq!("FASTN.ftd", name);
+            (None, "./".to_string())
+        }
+    }
+}
+
 pub mod test {
     pub struct SectionProvider {
         pub data: std::collections::HashMap<String, (String, Vec<String>)>,
@@ -22,16 +38,7 @@ pub mod test {
         fn provide(&self, needed: Vec<String>) -> Self::Found {
             let mut r = vec![];
             for f in needed {
-                let package = match f.rsplit_once('/') {
-                    Some((package, rest)) => {
-                        assert_eq!("FASTN.ftd", rest);
-                        Some(package.to_string())
-                    }
-                    None => {
-                        assert_eq!("FASTN.ftd", &f);
-                        None
-                    }
-                };
+                let package = super::name_to_package(&f).0;
 
                 match self.data.get(&f) {
                     Some((content, file_list)) => {
