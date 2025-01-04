@@ -153,7 +153,8 @@ impl fastn_continuation::Continuation for State {
                                     .into_iter()
                                     .map(|v| v.map(fastn_section::Diagnostic::Warning)),
                             );
-                            todo!()
+                            collect_dependencies(&mut new_dependencies, &package);
+                            self.packages.insert(package.name.clone(), package);
                         }
                         (Some(_p), Err(_e)) => {
                             todo!()
@@ -163,7 +164,6 @@ impl fastn_continuation::Continuation for State {
                         ),
                     }
                 }
-                todo!()
             }
         }
 
@@ -291,7 +291,6 @@ mod tests {
         main: &'static str,
         mut rest: std::collections::HashMap<&'static str, &'static str>,
     ) -> fastn_utils::section_provider::test::SectionProvider {
-        dbg!(main, &rest);
         let mut data = std::collections::HashMap::from([(
             "FASTN.ftd".to_string(),
             (main.to_string(), vec![]),
@@ -303,7 +302,7 @@ mod tests {
             );
         }
 
-        dbg!(fastn_utils::section_provider::test::SectionProvider { data })
+        fastn_utils::section_provider::test::SectionProvider { data }
     }
 
     #[track_caller]

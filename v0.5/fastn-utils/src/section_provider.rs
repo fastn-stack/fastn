@@ -6,7 +6,6 @@ pub type NResult = Result<(fastn_section::Document, Vec<String>), std::sync::Arc
 pub type Found = Vec<(Option<String>, NResult)>;
 
 pub fn name_to_package(name: &str) -> (Option<String>, String) {
-    dbg!(name);
     match name.rsplit_once('/') {
         Some((package, rest)) => {
             assert_eq!("FASTN.ftd", rest);
