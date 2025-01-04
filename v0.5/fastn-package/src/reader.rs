@@ -12,13 +12,13 @@ pub struct State {
     name: fastn_package::UR<(), String>,
     systems: Vec<fastn_package::UR<String, fastn_package::System>>,
     dependencies: Vec<fastn_package::UR<String, fastn_package::Dependency>>,
-    pub auto_imports: Vec<fastn_package::AutoImport>,
+    auto_imports: Vec<fastn_package::AutoImport>,
     apps: Vec<fastn_package::UR<String, fastn_package::App>>,
     packages: std::collections::HashMap<String, fastn_package::Package>,
-    pub diagnostics: Vec<fastn_section::Spanned<fastn_section::Diagnostic>>,
+    diagnostics: Vec<fastn_section::Spanned<fastn_section::Diagnostic>>,
     // if both a/FASTN.ftd and b/FASTN.ftd need x/FASTN.ftd, this will contain x => [a, b].
     // this will reset on every "continue after".
-    pub waiting_for: std::collections::HashMap<String, Vec<String>>,
+    waiting_for: std::collections::HashMap<String, Vec<String>>,
 }
 
 impl fastn_package::Package {

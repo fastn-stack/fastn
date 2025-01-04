@@ -13,8 +13,8 @@ serde.workspace = true
 serde_json.workspace = true
 fastn-continuation.workspace = true
 fastn-utils.workspace = true
+fastn-section.workspace = true
 
 [dev-dependencies]
 fastn-utils = { workspace = true, features = ["test-utils"] }
-fastn-section.workspace = true
 indoc.workspace = true
