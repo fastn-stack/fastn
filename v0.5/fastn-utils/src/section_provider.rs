@@ -37,6 +37,26 @@ pub mod test {
         pub data: std::collections::HashMap<String, (String, Vec<String>)>,
     }
 
+    impl SectionProvider {
+        pub fn new(
+            main: &'static str,
+            mut rest: std::collections::HashMap<&'static str, &'static str>,
+        ) -> Self {
+            let mut data = std::collections::HashMap::from([(
+                "FASTN.ftd".to_string(),
+                (main.to_string(), vec![]),
+            )]);
+            for (k, v) in rest.drain() {
+                data.insert(
+                    fastn_utils::section_provider::package_file(k),
+                    (v.to_string(), vec![]),
+                );
+            }
+
+            fastn_utils::section_provider::test::SectionProvider { data }
+        }
+    }
+
     #[derive(Debug, thiserror::Error)]
     pub enum Error {
         #[error("file not found")]

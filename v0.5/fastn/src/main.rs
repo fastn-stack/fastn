@@ -20,9 +20,24 @@ async fn main() {
             std::process::exit(1);
         }
     };
-    let router = fastn_router::Router::reader()
+    let router = match fastn_router::Router::reader()
         .mut_consume_async(&mut section_provider)
-        .await;
+        .await
+    {
+        Ok((router, warnings)) => {
+            for warning in warnings {
+                eprintln!("{warning:?}");
+            }
+            router
+        }
+        Err(diagnostics) => {
+            eprintln!("failed to parse package: ");
+            for diagnostic in diagnostics {
+                eprintln!("{diagnostic:?}");
+            }
+            std::process::exit(1);
+        }
+    };
     // read config here and pass to everyone?
     // do common build stuff here
     match command {

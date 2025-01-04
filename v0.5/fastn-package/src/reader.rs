@@ -296,30 +296,13 @@ fn parse_package(
 mod tests {
     use indoc::indoc;
 
-    fn construct(
-        main: &'static str,
-        mut rest: std::collections::HashMap<&'static str, &'static str>,
-    ) -> fastn_utils::section_provider::test::SectionProvider {
-        let mut data = std::collections::HashMap::from([(
-            "FASTN.ftd".to_string(),
-            (main.to_string(), vec![]),
-        )]);
-        for (k, v) in rest.drain() {
-            data.insert(
-                fastn_utils::section_provider::package_file(k),
-                (v.to_string(), vec![]),
-            );
-        }
-
-        fastn_utils::section_provider::test::SectionProvider { data }
-    }
-
     #[track_caller]
     fn ok<F>(main: &'static str, rest: std::collections::HashMap<&'static str, &'static str>, f: F)
     where
         F: FnOnce(fastn_package::MainPackage, Vec<fastn_section::Spanned<fastn_section::Warning>>),
     {
-        let section_provider = construct(main, rest);
+        let section_provider =
+            fastn_utils::section_provider::test::SectionProvider::new(main, rest);
         let (package, warnings) = fastn_package::Package::reader()
             .consume(&section_provider)
             .unwrap();
@@ -340,7 +323,8 @@ mod tests {
     where
         F: FnOnce(Vec<fastn_section::Spanned<fastn_section::Diagnostic>>),
     {
-        let section_provider = construct(main, rest);
+        let section_provider =
+            fastn_utils::section_provider::test::SectionProvider::new(main, rest);
         let diagnostics = fastn_package::Package::reader()
             .consume(&section_provider)
             .unwrap_err();

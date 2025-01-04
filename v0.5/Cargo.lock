@@ -749,7 +749,9 @@ name = "fastn-router"
 version = "0.1.0"
 dependencies = [
  "fastn-continuation",
+ "fastn-section",
  "fastn-utils",
+ "indoc",
  "serde",
  "serde_json",
 ]
