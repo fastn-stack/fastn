@@ -6,7 +6,7 @@ pub struct SectionProvider {
 #[async_trait::async_trait]
 impl fastn_continuation::AsyncMutProvider for &mut SectionProvider {
     type Needed = Vec<String>;
-    type Found = Vec<(Option<String>, fastn_utils::section_provider::NResult)>;
+    type Found = fastn_utils::section_provider::Found;
 
     async fn provide(&mut self, needed: Vec<String>) -> Self::Found {
         // file name will be FASTN.ftd for current package. for dependencies the file name will be

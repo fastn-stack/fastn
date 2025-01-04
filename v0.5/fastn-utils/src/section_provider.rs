@@ -3,6 +3,7 @@ pub type PResult<T> = std::result::Result<
     Vec<fastn_section::Spanned<fastn_section::Diagnostic>>,
 >;
 pub type NResult = Result<(fastn_section::Document, Vec<String>), std::sync::Arc<std::io::Error>>;
+pub type Found = Vec<(Option<String>, NResult)>;
 
 pub fn name_to_package(name: &str) -> (Option<String>, String) {
     match name.rsplit_once('/') {

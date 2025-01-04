@@ -10,11 +10,11 @@ impl fastn_router::Router {
 impl fastn_continuation::Continuation for State {
     type Output = fastn_router::Router;
     type Needed = Vec<String>; // vec of file names
-    type Found = Vec<(Option<String>, fastn_utils::section_provider::NResult)>;
+    type Found = fastn_utils::section_provider::Found;
 
     fn continue_after(
         self,
-        _n: Vec<(Option<String>, fastn_utils::section_provider::NResult)>,
+        _n: fastn_utils::section_provider::Found,
     ) -> fastn_continuation::Result<Self> {
         todo!()
     }

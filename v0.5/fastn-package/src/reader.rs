@@ -97,11 +97,11 @@ impl fastn_continuation::Continuation for State {
     // we return a package object if we parsed, even a partial package.
     type Output = fastn_utils::section_provider::PResult<fastn_package::MainPackage>;
     type Needed = Vec<String>; // vec of file names
-    type Found = Vec<(Option<String>, fastn_utils::section_provider::NResult)>;
+    type Found = fastn_utils::section_provider::Found;
 
     fn continue_after(
         mut self,
-        n: Vec<(Option<String>, fastn_utils::section_provider::NResult)>,
+        n: fastn_utils::section_provider::Found,
     ) -> fastn_continuation::Result<Self> {
         let mut new_dependencies: std::collections::HashMap<String, Vec<String>> =
             Default::default();
