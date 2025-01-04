@@ -13,3 +13,4 @@ fastn-continuation.workspace = true
 fastn-section.workspace = true
 arcstr.workspace = true
 thiserror.workspace = true
+indoc.workspace = true

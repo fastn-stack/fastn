@@ -1,18 +1,11 @@
 // # note on error handling.
 //
 // we can handle error in this parser in such a way that our rest of parsers that come after,
-// like router parser, and the actual compiler, can run even if there are some issues (error, not
-// warning) encountered in this phase.
+// like router parser, and the actual compiler,
+// can run even if there are some errors encountered in this phase.
 //
 // but for simplicity’s sake, we are going to not do that now, and return either a package object
-// if there are no errors (maybe warnings).
-//
-// even within this parser, we bail early if any one FASTN.ftd is found with errors in it, this is
-// kind of acceptable as all FASTN.ftd files, other the one in the current package, must not have
-// errors because they are published dependencies.
-//
-// though this is not strictly true, say if one of the dependencies needed some system, and main
-// package has not provided it, then dependency can also have errors.
+// and warning if there are no errors or an error if there are any errors.
 
 #[derive(Debug, Default)]
 pub struct State {
@@ -276,13 +269,21 @@ mod tests {
 
     #[test]
     fn basic() {
-        let section_provider = fastn_utils::section_provider::test::SectionProvider {
-            data: Default::default(),
-        };
-        let (_package, warnings) = fastn_package::Package::reader()
-            .consume(&section_provider)
-            .unwrap();
+        fastn_utils::section_provider::ok(
+            "-- package: test",
+            [("foo.com/asdf.ftd", "-- package: foo.com/asdf")],
+            |(package, warnings)| {
+                assert_eq!(package.name, "test");
+                assert!(warnings.is_empty());
+            },
+        );
 
-        assert!(warnings.is_empty())
+        fastn_utils::section_provider_err! {
+            "-- package1: test",
+            "foo.com/asdf.ftd" => "-- package: foo.com/asdf",
+            |diagnostics| {
+                assert_eq!(diagnostics.len(), 1);
+            }
+        }
     }
 }
