@@ -82,26 +82,29 @@ impl State {
         {
             return fastn_continuation::Result::Done(Err(self.diagnostics));
         }
-        if !self.waiting_for.is_empty() {
-            let needed = self
-                .waiting_for
-                .keys()
-                .map(|p| fastn_utils::section_provider::package_file(p))
-                .collect();
-            return fastn_continuation::Result::Stuck(Box::new(self), needed);
+
+        if self.waiting_for.is_empty() {
+            return fastn_continuation::Result::Done(Ok((
+                fastn_package::MainPackage {
+                    name: self.name.into_resolved(),
+                    systems: vec![],
+                    apps: vec![],
+                    packages: self.packages,
+                },
+                self.diagnostics
+                    .into_iter()
+                    .map(|v| v.map(|v| v.into_warning()))
+                    .collect(),
+            )));
         }
-        fastn_continuation::Result::Done(Ok((
-            fastn_package::MainPackage {
-                name: self.name.into_resolved(),
-                systems: vec![],
-                apps: vec![],
-                packages: self.packages,
-            },
-            self.diagnostics
-                .into_iter()
-                .map(|v| v.map(|v| v.into_warning()))
-                .collect(),
-        )))
+
+        let needed = self
+            .waiting_for
+            .keys()
+            .map(|p| fastn_utils::section_provider::package_file(p))
+            .collect();
+
+        fastn_continuation::Result::Stuck(Box::new(self), needed)
     }
 
     fn collect_diagnostics(&mut self, doc: &fastn_section::Document) {
