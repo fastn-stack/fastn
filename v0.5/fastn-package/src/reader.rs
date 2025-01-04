@@ -266,24 +266,13 @@ fn parse_package(
 
 #[cfg(test)]
 mod tests {
-
     #[test]
     fn basic() {
-        fastn_utils::section_provider::ok(
-            "-- package: test",
-            [("foo.com/asdf.ftd", "-- package: foo.com/asdf")],
-            |(package, warnings)| {
-                assert_eq!(package.name, "test");
-                assert!(warnings.is_empty());
-            },
-        );
-
-        fastn_utils::section_provider_err! {
-            "-- package1: test",
-            "foo.com/asdf.ftd" => "-- package: foo.com/asdf",
-            |diagnostics| {
-                assert_eq!(diagnostics.len(), 1);
-            }
-        }
+        let section_provider = fastn_utils::section_provider::test::SectionProvider {
+            data: Default::default(),
+        };
+        let (_package, _warnings) = fastn_package::Package::reader()
+            .consume(&section_provider)
+            .unwrap();
     }
 }

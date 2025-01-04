@@ -807,7 +807,6 @@ dependencies = [
  "arcstr",
  "fastn-continuation",
  "fastn-section",
- "indoc",
  "thiserror 2.0.9",
 ]
 

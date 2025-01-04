@@ -21,21 +21,7 @@ pub fn name_to_package(name: &str) -> (Option<String>, String) {
     }
 }
 
-fastn_utils::section_provider_ok! {
-    "-- package: test",
-    "foo.com/asdf" => "-- package: foo.com/asdf",
-    |(package, warnings)| {
-        assert_eq!(package.name, "test");
-        assert!(warnings.is_empty());
-    }
-}
-
-macro_rules! section_provider_ok {
-    ($main:expr, $($file:expr => $content:expr),?, $block:expr) => {
-        let main = indoc::indoc!($main);
-    };
-}
-
+#[cfg(feature = "test-utils")]
 pub mod test {
     pub struct SectionProvider {
         pub data: std::collections::HashMap<String, (String, Vec<String>)>,

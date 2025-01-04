@@ -8,9 +8,12 @@ license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 
+[features]
+test-utils = ["arcstr", "thiserror", "fastn-continuation"]
+
 [dependencies]
-fastn-continuation.workspace = true
+fastn-continuation = { workspace = true, optional = true }
 fastn-section.workspace = true
-arcstr.workspace = true
-thiserror.workspace = true
-indoc.workspace = true
+arcstr = { workspace = true, optional = true }
+thiserror = { workspace = true, optional = true }
+# indoc = { workspace = true, optional = true }

@@ -12,3 +12,6 @@ homepage.workspace = true
 fastn-continuation.workspace = true
 fastn-section.workspace = true
 fastn-utils.workspace = true
+
+[dev-dependencies]
+fastn-utils = { workspace = true, features = ["test-utils"] }
