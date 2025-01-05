@@ -11,7 +11,7 @@ pub fn parse(
     let package_name = module.package(arena).to_string();
     let (mut document, sections) = fastn_unresolved::Document::new(
         module,
-        fastn_section::Document::parse(&arcstr::ArcStr::from(source)),
+        fastn_section::Document::parse(&arcstr::ArcStr::from(source), module),
         arena,
     );
 
@@ -78,7 +78,7 @@ where
     let module = fastn_section::Module::main(&mut arena);
     let (mut document, sections) = fastn_unresolved::Document::new(
         module,
-        fastn_section::Document::parse(&arcstr::ArcStr::from(source)),
+        fastn_section::Document::parse(&arcstr::ArcStr::from(source), module),
         &mut arena,
     );
 

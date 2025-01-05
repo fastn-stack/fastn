@@ -7,7 +7,7 @@ pub(super) fn function_definition(
     // TODO: remove .unwrap() and put errors in `document.errors`
 
     let name = section.simple_name_span().clone();
-    let visibility = section.init.visibility.unwrap_or_default().value;
+    let visibility = section.init.visibility.map(|v| v.value).unwrap_or_default();
 
     let return_type: Option<fastn_unresolved::UR<fastn_unresolved::Kind, _>> = section
         .init
@@ -20,7 +20,7 @@ pub(super) fn function_definition(
         .into_iter()
         .map(|h| {
             let kind = h.kind.clone().unwrap().try_into().ok().unwrap();
-            let visibility = h.visibility.unwrap_or_default().value;
+            let visibility = h.visibility.map(|v| v.value).unwrap_or_default();
 
             fastn_unresolved::Argument {
                 name: h.name,
@@ -44,7 +44,7 @@ pub(super) fn function_definition(
     // TODO: get rid of all the Default::default below
     document.definitions.push(
         fastn_unresolved::Definition {
-            module: document.module.clone(),
+            module: document.module,
             symbol: Default::default(),
             doc: Default::default(),
             aliases: document.aliases.unwrap(),

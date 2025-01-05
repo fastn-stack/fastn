@@ -91,17 +91,3 @@ impl fastn_section::JIDebug for fastn_unresolved::Kind {
         }
     }
 }
-
-impl<U: fastn_section::JIDebug, R: fastn_section::JIDebug> fastn_section::JIDebug
-    for fastn_unresolved::UR<U, R>
-{
-    fn idebug(&self, arena: &fastn_section::Arena) -> serde_json::Value {
-        match self {
-            crate::UR::Resolved(r) => r.idebug(arena),
-            crate::UR::UnResolved(u) => u.idebug(arena),
-            crate::UR::NotFound => unimplemented!(),
-            crate::UR::Invalid(_) => unimplemented!(),
-            crate::UR::InvalidN(_) => unimplemented!(),
-        }
-    }
-}
