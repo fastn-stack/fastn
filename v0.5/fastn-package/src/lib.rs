@@ -15,7 +15,7 @@ pub use reader::Reader;
 
 #[derive(Debug)]
 pub struct MainPackage {
-    pub module: fastn_section::Module,
+    pub name: String,
     pub systems: Vec<System>,
     pub apps: Vec<App>,
     pub packages: std::collections::HashMap<String, Package>,
@@ -23,7 +23,7 @@ pub struct MainPackage {
 
 #[derive(Debug)]
 pub struct Package {
-    pub module: fastn_section::Module,
+    pub name: String,
     pub dependencies: Vec<Dependency>,
     pub auto_imports: Vec<AutoImport>,
     pub favicon: Option<String>,

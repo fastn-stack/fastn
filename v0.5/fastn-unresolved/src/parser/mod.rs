@@ -75,7 +75,7 @@ where
     println!("--------- testing -----------\n{source}\n--------- source ------------");
 
     let mut arena = fastn_unresolved::Arena::default();
-    let module = fastn_unresolved::Module::new("main", None, &mut arena);
+    let module = fastn_unresolved::Module::main(&mut arena);
     let (mut document, sections) = fastn_unresolved::Document::new(
         module,
         fastn_section::Document::parse(&arcstr::ArcStr::from(source)),

@@ -385,6 +385,10 @@ impl fastn_section::Symbol {
 }
 
 impl fastn_section::Module {
+    pub fn main(arena: &mut fastn_section::Arena) -> fastn_section::Module {
+        Self::new("main", None, arena)
+    }
+
     pub fn new(
         package: &str,
         module: Option<&str>,

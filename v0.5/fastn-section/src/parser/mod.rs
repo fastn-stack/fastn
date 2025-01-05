@@ -73,7 +73,7 @@ fn p<
     remaining: &str,
 ) {
     let mut arena = fastn_section::Arena::default();
-    let module = fastn_section::Module::new("main", None, &mut arena);
+    let module = fastn_section::Module::main(&mut arena);
 
     let mut scanner = fastn_section::Scanner::new(
         source,

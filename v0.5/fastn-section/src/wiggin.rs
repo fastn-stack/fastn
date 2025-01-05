@@ -285,7 +285,7 @@ mod test {
     #[track_caller]
     fn t(source: &str, expected: &str) {
         let mut arena = fastn_section::Arena::default();
-        let module = fastn_section::Module::new("main", None, &mut arena);
+        let module = fastn_section::Module::main(&mut arena);
         let mut o = fastn_section::Document {
             module,
             module_doc: None,
@@ -304,7 +304,7 @@ mod test {
     #[track_caller]
     fn f(source: &str, expected: &str, errors: Vec<fastn_section::Error>) {
         let mut arena = fastn_section::Arena::default();
-        let module = fastn_section::Module::new("main", None, &mut arena);
+        let module = fastn_section::Module::main(&mut arena);
         let mut o = fastn_section::Document {
             module,
             module_doc: None,
