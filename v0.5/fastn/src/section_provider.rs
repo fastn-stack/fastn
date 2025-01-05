@@ -3,6 +3,33 @@ pub struct SectionProvider {
     cache: std::collections::HashMap<Option<String>, fastn_utils::section_provider::NResult>,
 }
 
+impl SectionProvider {
+    pub async fn read<T, C>(&mut self, reader: fastn_continuation::Result<C>) -> T
+    where
+        C: fastn_continuation::Continuation<
+            Output = fastn_utils::section_provider::PResult<T>,
+            Needed = Vec<String>,
+            Found = fastn_utils::section_provider::Found,
+        >,
+    {
+        match reader.mut_consume_async(self).await {
+            Ok((value, warnings)) => {
+                for warning in warnings {
+                    eprintln!("{warning:?}");
+                }
+                value
+            }
+            Err(diagnostics) => {
+                eprintln!("failed to parse package: ");
+                for diagnostic in diagnostics {
+                    eprintln!("{diagnostic:?}");
+                }
+                std::process::exit(1);
+            }
+        }
+    }
+}
+
 #[async_trait::async_trait]
 impl fastn_continuation::AsyncMutProvider for &mut SectionProvider {
     type Needed = Vec<String>;
