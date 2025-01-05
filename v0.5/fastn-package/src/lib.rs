@@ -5,9 +5,10 @@
 
 extern crate self as fastn_package;
 
-pub mod reader;
+mod reader;
 
 pub type UR<U, R> = fastn_continuation::UR<U, R, fastn_section::Error>;
+pub use reader::Reader;
 
 #[derive(Debug)]
 pub struct MainPackage {

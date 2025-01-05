@@ -8,7 +8,7 @@
 // and warning if there are no errors or an error if there are any errors.
 
 #[derive(Debug, Default)]
-pub struct State {
+pub struct Reader {
     name: fastn_package::UR<(), String>,
     systems: Vec<fastn_package::UR<String, fastn_package::System>>,
     dependencies: Vec<fastn_package::UR<String, fastn_package::Dependency>>,
@@ -19,12 +19,6 @@ pub struct State {
     // if both a/FASTN.ftd and b/FASTN.ftd need x/FASTN.ftd, this will contain x => [a, b].
     // this will reset on every "continue after".
     waiting_for: std::collections::HashMap<String, Vec<String>>,
-}
-
-impl fastn_package::Package {
-    pub fn reader() -> fastn_continuation::Result<State> {
-        fastn_continuation::Result::Stuck(Default::default(), vec!["FASTN.ftd".to_string()])
-    }
 }
 
 fn collect_dependencies(
@@ -42,7 +36,7 @@ fn collect_dependencies(
     }
 }
 
-impl State {
+impl Reader {
     fn process_package(
         &mut self,
         doc: fastn_section::Document,
@@ -114,7 +108,7 @@ impl State {
     }
 }
 
-impl fastn_continuation::Continuation for State {
+impl fastn_continuation::Continuation for Reader {
     // we return a package object if we parsed, even a partial package.
     type Output = fastn_utils::section_provider::PResult<fastn_package::MainPackage>;
     type Needed = Vec<String>; // vec of file names

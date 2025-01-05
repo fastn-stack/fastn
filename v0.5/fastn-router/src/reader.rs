@@ -1,17 +1,11 @@
 #[derive(Debug, Default)]
-pub struct State {
+pub struct Reader {
     name: String,
     file_list: std::collections::HashMap<String, Vec<String>>,
     waiting_for: Vec<String>,
 }
 
-impl fastn_router::Router {
-    pub fn reader() -> fastn_continuation::Result<State> {
-        fastn_continuation::Result::Stuck(Default::default(), vec!["FASTN.ftd".to_string()])
-    }
-}
-
-impl State {
+impl Reader {
     fn finalize(self) -> fastn_continuation::Result<Self> {
         let mut needed = vec![];
         for name in self.waiting_for.iter() {
@@ -49,7 +43,7 @@ impl State {
     }
 }
 
-impl fastn_continuation::Continuation for State {
+impl fastn_continuation::Continuation for Reader {
     type Output = fastn_utils::section_provider::PResult<fastn_router::Router>;
     type Needed = Vec<String>; // vec of file names
     type Found = fastn_utils::section_provider::Found;
