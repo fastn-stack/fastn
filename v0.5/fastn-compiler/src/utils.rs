@@ -9,7 +9,7 @@ pub(crate) fn resolved_content(
 pub(crate) fn used_definitions(
     definitions: std::collections::HashMap<String, fastn_unresolved::URD>,
     definitions_used: std::collections::HashSet<fastn_section::Symbol>,
-    arena: fastn_unresolved::Arena,
+    arena: fastn_section::Arena,
 ) -> indexmap::IndexMap<String, fastn_resolved::Definition> {
     // go through self.symbols_used and get the resolved definitions
     let def_map = indexmap::IndexMap::new();

@@ -2,7 +2,8 @@
 async fn main() {
     let command = fastn::commands::parse();
     let mut section_provider = fastn::SectionProvider::default();
-    let mut package = section_provider.read(fastn_package::reader()).await;
+    let module = fastn_section::Module::main(&mut section_provider.arena);
+    let mut package = section_provider.read(fastn_package::reader(module)).await;
     let router = section_provider.read(fastn_router::reader()).await;
     // read config here and pass to everyone?
     // do common build stuff here

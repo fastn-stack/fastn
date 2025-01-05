@@ -1,6 +1,6 @@
 fn find_all_definitions_in_a_module(
     compiler: &mut fastn_compiler::Compiler,
-    (file, module): (String, fastn_unresolved::Module),
+    (file, module): (String, fastn_section::Module),
 ) -> Vec<fastn_unresolved::URD> {
     // we need to fetch the symbol from the store
     let source = match std::fs::File::open(file.as_str()).and_then(std::io::read_to_string) {
@@ -11,12 +11,7 @@ fn find_all_definitions_in_a_module(
         }
     };
 
-    let d = fastn_unresolved::parse(
-        &compiler.main_package,
-        module.clone(),
-        &source,
-        &mut compiler.arena,
-    );
+    let d = fastn_unresolved::parse(&compiler.main_package, module, &source, &mut compiler.arena);
 
     d.definitions
         .into_iter()
@@ -50,8 +45,8 @@ pub fn lookup(
 
 fn file_for_symbol(
     symbol: &fastn_section::Symbol,
-    arena: &mut fastn_unresolved::Arena,
-) -> (String, fastn_unresolved::Module) {
+    arena: &mut fastn_section::Arena,
+) -> (String, fastn_section::Module) {
     (
         // this code is nonsense right now
         match symbol.module(arena) {

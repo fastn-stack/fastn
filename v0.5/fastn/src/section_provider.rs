@@ -1,16 +1,21 @@
 #[derive(Default)]
 pub struct SectionProvider {
     cache: std::collections::HashMap<Option<String>, fastn_utils::section_provider::NResult>,
+    pub arena: fastn_section::Arena,
 }
 
 impl SectionProvider {
+    pub fn arena(self) -> fastn_section::Arena {
+        self.arena
+    }
+
     pub async fn read<T, C>(&mut self, reader: fastn_continuation::Result<C>) -> T
     where
         C: fastn_continuation::Continuation<
-                Output = fastn_utils::section_provider::PResult<T>,
-                Needed = Vec<String>,
-                Found = fastn_utils::section_provider::Found,
-            > + Default,
+            Output = fastn_utils::section_provider::PResult<T>,
+            Needed = Vec<String>,
+            Found = fastn_utils::section_provider::Found,
+        >,
     {
         match reader.mut_consume_async(self).await {
             Ok((value, warnings)) => {
@@ -42,6 +47,11 @@ impl fastn_continuation::AsyncMutProvider for &mut SectionProvider {
         for f in needed {
             let (package, package_dir) = fastn_utils::section_provider::name_to_package(&f);
 
+            let module = match package {
+                Some(ref v) => fastn_section::Module::new(v, None, &mut self.arena),
+                None => fastn_section::Module::new("main", None, &mut self.arena),
+            };
+
             if let Some(doc) = self.cache.get(&package) {
                 r.push((package, doc.clone()));
                 continue;
@@ -51,7 +61,7 @@ impl fastn_continuation::AsyncMutProvider for &mut SectionProvider {
 
             match tokio::fs::read_to_string(&format!("{package_dir}FASTN.ftd")).await {
                 Ok(v) => {
-                    let d = fastn_section::Document::parse(&arcstr::ArcStr::from(v));
+                    let d = fastn_section::Document::parse(&arcstr::ArcStr::from(v), module);
                     self.cache
                         .insert(package.clone(), Ok((d.clone(), file_list.clone())));
                     r.push((package, Ok((d, file_list))));

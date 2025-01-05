@@ -7,7 +7,7 @@ const ITERATION_THRESHOLD: usize = 100;
 // exposing: y as x
 pub struct Compiler {
     pub(crate) definitions_used: std::collections::HashSet<fastn_section::Symbol>,
-    pub arena: fastn_unresolved::Arena,
+    pub arena: fastn_section::Arena,
     pub(crate) definitions: std::collections::HashMap<String, fastn_unresolved::URD>,
     /// we keep track of every module found (or not found), if not in dict we don't know
     /// if module exists, if in dict bool tells if it exists.
@@ -27,7 +27,7 @@ impl Compiler {
         module: Option<&str>,
         // global_aliases: fastn_unresolved::AliasesSimple,
     ) -> Self {
-        let mut arena = fastn_unresolved::Arena::default();
+        let mut arena = fastn_section::Arena::default();
 
         let mut document = fastn_unresolved::parse(
             &main_package,
