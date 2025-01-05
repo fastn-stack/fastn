@@ -1,7 +1,7 @@
 pub(super) fn import(
     section: fastn_section::Section,
     document: &mut fastn_unresolved::Document,
-    arena: &mut fastn_unresolved::Arena,
+    arena: &mut fastn_section::Arena,
     package: &Option<&fastn_package::Package>,
 ) {
     if let Some(ref kind) = section.init.kind {
@@ -45,7 +45,7 @@ pub(super) fn import(
 fn validate_import_module_in_dependencies(
     section: fastn_section::Section,
     document: &mut fastn_unresolved::Document,
-    arena: &mut fastn_unresolved::Arena,
+    arena: &mut fastn_section::Arena,
     package: &Option<&fastn_package::Package>,
     i: &Import,
 ) {
@@ -82,7 +82,7 @@ fn validate_import_module_in_dependencies(
 fn parse_import(
     section: &fastn_section::Section,
     document: &mut fastn_unresolved::Document,
-    arena: &mut fastn_unresolved::Arena,
+    arena: &mut fastn_section::Arena,
 ) -> Option<Import> {
     let caption = match section.caption_as_plain_span() {
         Some(v) => v,
@@ -110,13 +110,13 @@ fn parse_import(
 
     Some(Import {
         module: if let Some(module) = module {
-            fastn_unresolved::Module::new(
+            fastn_section::Module::new(
                 caption.inner_str(package).str(),
                 Some(caption.inner_str(module).str()),
                 arena,
             )
         } else {
-            fastn_unresolved::Module::new(caption.inner_str(package).str(), None, arena)
+            fastn_section::Module::new(caption.inner_str(package).str(), None, arena)
         },
         alias: alias.map(|v| fastn_section::Identifier {
             name: caption.inner_str(v),
@@ -142,7 +142,7 @@ pub struct AliasableIdentifier {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Import {
-    pub module: fastn_unresolved::Module,
+    pub module: fastn_section::Module,
     pub alias: Option<fastn_section::Identifier>,
     pub export: Option<Export>,
     pub exposing: Option<Export>,
@@ -185,7 +185,7 @@ mod tests {
     fn tester(
         d: fastn_unresolved::Document,
         _expected: serde_json::Value,
-        _arena: &fastn_unresolved::Arena,
+        _arena: &fastn_section::Arena,
     ) {
         assert!(d.content.is_empty());
         assert!(d.definitions.is_empty());
@@ -225,8 +225,8 @@ mod tests {
         t!("-- import: foo as f\nexport: x as y, z\nexposing: y", { "import": "foo as f", "export": ["x=>y", "z"], "exposing": ["y"] });
     }
 
-    impl fastn_unresolved::JIDebug for super::Import {
-        fn idebug(&self, arena: &fastn_unresolved::Arena) -> serde_json::Value {
+    impl fastn_section::JIDebug for super::Import {
+        fn idebug(&self, arena: &fastn_section::Arena) -> serde_json::Value {
             let mut o = serde_json::Map::new();
 
             let name = if self.module.package(arena).is_empty() {
@@ -260,8 +260,8 @@ mod tests {
         }
     }
 
-    impl fastn_unresolved::JIDebug for super::Export {
-        fn idebug(&self, arena: &fastn_unresolved::Arena) -> serde_json::Value {
+    impl fastn_section::JIDebug for super::Export {
+        fn idebug(&self, arena: &fastn_section::Arena) -> serde_json::Value {
             match self {
                 super::Export::All => "all".into(),
                 super::Export::Things(v) => {
@@ -271,8 +271,8 @@ mod tests {
         }
     }
 
-    impl fastn_unresolved::JIDebug for super::AliasableIdentifier {
-        fn idebug(&self, _arena: &fastn_unresolved::Arena) -> serde_json::Value {
+    impl fastn_section::JIDebug for super::AliasableIdentifier {
+        fn idebug(&self, _arena: &fastn_section::Arena) -> serde_json::Value {
             match self.alias {
                 Some(ref v) => format!("{}=>{}", self.name.str(), v.str()),
                 None => self.name.str().to_string(),

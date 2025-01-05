@@ -20,6 +20,7 @@ pub type Aliases = std::collections::HashMap<String, fastn_section::SoM>;
 pub type AliasesSimple = std::collections::HashMap<String, fastn_section::SoMBase<String, String>>;
 pub type AliasesID = id_arena::Id<Aliases>;
 pub type SoM = fastn_section::SoMBase<Symbol, Module>;
+pub type UR<U, R> = fastn_continuation::UR<U, R, fastn_section::Error>;
 
 /// TODO: span has to keep track of the document as well now.
 /// TODO: demote usize to u32.
@@ -76,6 +77,10 @@ pub struct Spanned<T> {
 
 pub trait JDebug: std::fmt::Debug {
     fn debug(&self) -> serde_json::Value;
+}
+
+pub trait JIDebug: std::fmt::Debug {
+    fn idebug(&self, arena: &fastn_section::Arena) -> serde_json::Value;
 }
 
 #[derive(Debug)]

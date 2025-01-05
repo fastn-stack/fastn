@@ -35,7 +35,7 @@ fn find_all_definitions_in_a_module(
 
 pub fn lookup(
     compiler: &mut fastn_compiler::Compiler,
-    symbols: std::collections::HashSet<fastn_unresolved::Symbol>,
+    symbols: std::collections::HashSet<fastn_section::Symbol>,
 ) -> Vec<fastn_unresolved::URD> {
     let unique_modules = symbols
         .iter()
@@ -49,7 +49,7 @@ pub fn lookup(
 }
 
 fn file_for_symbol(
-    symbol: &fastn_unresolved::Symbol,
+    symbol: &fastn_section::Symbol,
     arena: &mut fastn_unresolved::Arena,
 ) -> (String, fastn_unresolved::Module) {
     (

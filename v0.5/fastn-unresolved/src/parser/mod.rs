@@ -4,9 +4,9 @@ mod import;
 
 pub fn parse(
     main_package: &fastn_package::MainPackage,
-    module: fastn_unresolved::Module,
+    module: fastn_section::Module,
     source: &str,
-    arena: &mut fastn_unresolved::Arena,
+    arena: &mut fastn_section::Arena,
 ) -> fastn_unresolved::Document {
     let package_name = module.package(arena).to_string();
     let (mut document, sections) = fastn_unresolved::Document::new(
@@ -67,15 +67,15 @@ where
     PARSER: Fn(
         fastn_section::Section,
         &mut fastn_unresolved::Document,
-        &mut fastn_unresolved::Arena,
+        &mut fastn_section::Arena,
         &Option<&fastn_package::Package>,
     ),
-    TESTER: FnOnce(fastn_unresolved::Document, serde_json::Value, &fastn_unresolved::Arena),
+    TESTER: FnOnce(fastn_unresolved::Document, serde_json::Value, &fastn_section::Arena),
 {
     println!("--------- testing -----------\n{source}\n--------- source ------------");
 
-    let mut arena = fastn_unresolved::Arena::default();
-    let module = fastn_unresolved::Module::main(&mut arena);
+    let mut arena = fastn_section::Arena::default();
+    let module = fastn_section::Module::main(&mut arena);
     let (mut document, sections) = fastn_unresolved::Document::new(
         module,
         fastn_section::Document::parse(&arcstr::ArcStr::from(source)),

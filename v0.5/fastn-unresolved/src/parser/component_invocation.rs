@@ -1,7 +1,7 @@
 pub(super) fn component_invocation(
     section: fastn_section::Section,
     document: &mut fastn_unresolved::Document,
-    _arena: &mut fastn_unresolved::Arena,
+    _arena: &mut fastn_section::Arena,
     _package: &Option<&fastn_package::Package>,
 ) {
     if let Some(ref m) = section.init.function_marker {
@@ -30,17 +30,14 @@ mod tests {
     fn tester(
         mut d: fastn_unresolved::Document,
         expected: serde_json::Value,
-        arena: &fastn_unresolved::Arena,
+        arena: &fastn_section::Arena,
     ) {
         // assert!(d.imports.is_empty());
         assert!(d.definitions.is_empty());
         assert_eq!(d.content.len(), 1);
 
         assert_eq!(
-            fastn_unresolved::JIDebug::idebug(
-                d.content.pop().unwrap().unresolved().unwrap(),
-                arena
-            ),
+            fastn_section::JIDebug::idebug(d.content.pop().unwrap().unresolved().unwrap(), arena),
             expected
         )
     }

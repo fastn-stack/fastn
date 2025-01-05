@@ -7,17 +7,17 @@
 /// with the innermost block as the last entry.
 #[allow(clippy::too_many_arguments)]
 pub fn symbol(
-    aid: fastn_unresolved::AliasesID,
+    aid: fastn_section::AliasesID,
     // foo.ftd (current_module = foo, package = foo, module = "")
-    current_module: &fastn_unresolved::Module,
-    // parent: Option<fastn_unresolved::Symbol>,
+    current_module: &fastn_section::Module,
+    // parent: Option<fastn_section::Symbol>,
     // S1_name="bar.x"
     // S2_name="x"
     // S3_name="bar#x"
     name: &mut fastn_unresolved::URIS,
     definitions: &std::collections::HashMap<String, fastn_unresolved::URD>,
-    _modules: &std::collections::HashMap<fastn_unresolved::Module, bool>,
-    arena: &mut fastn_unresolved::Arena,
+    _modules: &std::collections::HashMap<fastn_section::Module, bool>,
+    arena: &mut fastn_section::Arena,
     output: &mut fastn_unresolved::resolver::Output,
     _locals: &[Vec<fastn_unresolved::UR<fastn_unresolved::Argument, fastn_resolved::Argument>>],
     _main_package: &fastn_package::MainPackage,
@@ -40,7 +40,7 @@ pub fn symbol(
             // if it is not in unresolved-state, or if it is missing in definitions, we add "bar#x"
             // to output.stuck_on.
             // if it is in error state, or not found state, we resolve ourselves as them.
-            fastn_unresolved::Symbol::new(
+            fastn_section::Symbol::new(
                 package.str(),
                 module.as_ref().map(|v| v.str()),
                 name.str(),
@@ -52,8 +52,8 @@ pub fn symbol(
             // but what if the name is an alias?
             // we resolve the alias first.
             match arena.aliases.get(aid).and_then(|v| v.get(name.str())) {
-                Some(fastn_unresolved::SoM::Symbol(s)) => s.clone(),
-                Some(fastn_unresolved::SoM::Module(_)) => {
+                Some(fastn_section::SoM::Symbol(s)) => s.clone(),
+                Some(fastn_section::SoM::Module(_)) => {
                     // report an error, this function always resolves a symbol
                     todo!()
                 }
@@ -66,8 +66,8 @@ pub fn symbol(
         } => {
             let o = arena.module_alias(aid, module.str());
             match o {
-                Some(fastn_unresolved::SoM::Module(m)) => m.symbol(dotted_name.str(), arena),
-                Some(fastn_unresolved::SoM::Symbol(_s)) => {
+                Some(fastn_section::SoM::Module(m)) => m.symbol(dotted_name.str(), arena),
+                Some(fastn_section::SoM::Symbol(_s)) => {
                     // report an error, this function always resolves a symbol
                     todo!()
                 }

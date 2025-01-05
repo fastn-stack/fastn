@@ -10,8 +10,6 @@ mod parser;
 pub mod resolver;
 mod utils;
 
-#[cfg(test)]
-pub(crate) use debug::JIDebug;
 pub use parser::parse;
 
 pub type UR<U, R> = fastn_continuation::UR<U, R, fastn_section::Error>;

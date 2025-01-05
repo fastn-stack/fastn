@@ -14,3 +14,4 @@ serde.workspace = true
 serde_json.workspace = true
 string-interner.workspace = true
 id-arena.workspace = true
+fastn-continuation.workspace = true

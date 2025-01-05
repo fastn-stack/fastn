@@ -1,50 +1,14 @@
 use fastn_section::JDebug;
 
-pub(crate) trait JIDebug: std::fmt::Debug {
-    fn idebug(&self, arena: &fastn_unresolved::Arena) -> serde_json::Value;
-}
-
-impl<T: fastn_unresolved::JIDebug> fastn_unresolved::JIDebug for Option<T> {
-    fn idebug(&self, arena: &fastn_unresolved::Arena) -> serde_json::Value {
-        self.as_ref()
-            .map(|v| v.idebug(arena))
-            .unwrap_or(serde_json::Value::Null)
-    }
-}
-
-impl fastn_unresolved::JIDebug for fastn_section::Identifier {
-    fn idebug(&self, _arena: &fastn_unresolved::Arena) -> serde_json::Value {
-        self.debug()
-    }
-}
-
-impl fastn_unresolved::JIDebug for fastn_section::IdentifierReference {
-    fn idebug(&self, _arena: &fastn_unresolved::Arena) -> serde_json::Value {
-        self.debug()
-    }
-}
-
-impl fastn_unresolved::JIDebug for fastn_section::HeaderValue {
-    fn idebug(&self, _arena: &fastn_unresolved::Arena) -> serde_json::Value {
-        self.debug()
-    }
-}
-
-impl fastn_unresolved::JIDebug for () {
-    fn idebug(&self, _arena: &fastn_unresolved::Arena) -> serde_json::Value {
-        self.debug()
-    }
-}
-
 // this leads to conflicting implementation issue
 // impl<T: JDebug> JIDebug for T {
-//     fn idebug(&self, _arena: &fastn_unresolved::Arena) -> serde_json::Value {
+//     fn idebug(&self, _arena: &fastn_section::Arena) -> serde_json::Value {
 //         self.debug()
 //     }
 // }
 
-impl fastn_unresolved::JIDebug for fastn_unresolved::ComponentInvocation {
-    fn idebug(&self, arena: &fastn_unresolved::Arena) -> serde_json::Value {
+impl fastn_section::JIDebug for fastn_unresolved::ComponentInvocation {
+    fn idebug(&self, arena: &fastn_section::Arena) -> serde_json::Value {
         serde_json::json!({
             "content": self.name.idebug(arena),
             "caption": self.caption.idebug(arena),
@@ -52,8 +16,8 @@ impl fastn_unresolved::JIDebug for fastn_unresolved::ComponentInvocation {
     }
 }
 
-impl fastn_unresolved::JIDebug for fastn_unresolved::Definition {
-    fn idebug(&self, arena: &fastn_unresolved::Arena) -> serde_json::Value {
+impl fastn_section::JIDebug for fastn_unresolved::Definition {
+    fn idebug(&self, arena: &fastn_section::Arena) -> serde_json::Value {
         let mut o = serde_json::Map::new();
         o.insert("name".into(), self.name.idebug(arena));
         let inner = self.inner.idebug(arena);
@@ -63,8 +27,8 @@ impl fastn_unresolved::JIDebug for fastn_unresolved::Definition {
     }
 }
 
-impl fastn_unresolved::JIDebug for fastn_unresolved::InnerDefinition {
-    fn idebug(&self, arena: &fastn_unresolved::Arena) -> serde_json::Value {
+impl fastn_section::JIDebug for fastn_unresolved::InnerDefinition {
+    fn idebug(&self, arena: &fastn_section::Arena) -> serde_json::Value {
         match self {
             crate::InnerDefinition::Function {
                 arguments,
@@ -102,8 +66,8 @@ impl fastn_unresolved::JIDebug for fastn_unresolved::InnerDefinition {
     }
 }
 
-impl fastn_unresolved::JIDebug for fastn_unresolved::Argument {
-    fn idebug(&self, arena: &fastn_unresolved::Arena) -> serde_json::Value {
+impl fastn_section::JIDebug for fastn_unresolved::Argument {
+    fn idebug(&self, arena: &fastn_section::Arena) -> serde_json::Value {
         serde_json::json!({
             "name": self.name.debug(),
             "kind": self.kind.idebug(arena),
@@ -111,8 +75,8 @@ impl fastn_unresolved::JIDebug for fastn_unresolved::Argument {
     }
 }
 
-impl fastn_unresolved::JIDebug for fastn_unresolved::Kind {
-    fn idebug(&self, arena: &fastn_unresolved::Arena) -> serde_json::Value {
+impl fastn_section::JIDebug for fastn_unresolved::Kind {
+    fn idebug(&self, arena: &fastn_section::Arena) -> serde_json::Value {
         match self {
             crate::Kind::Integer => "integer".into(),
             crate::Kind::Decimal => "decimal".into(),
@@ -128,16 +92,10 @@ impl fastn_unresolved::JIDebug for fastn_unresolved::Kind {
     }
 }
 
-impl fastn_unresolved::JIDebug for fastn_unresolved::Symbol {
-    fn idebug(&self, arena: &fastn_unresolved::Arena) -> serde_json::Value {
-        self.string(arena).into()
-    }
-}
-
-impl<U: fastn_unresolved::JIDebug, R: fastn_unresolved::JIDebug> fastn_unresolved::JIDebug
+impl<U: fastn_section::JIDebug, R: fastn_section::JIDebug> fastn_section::JIDebug
     for fastn_unresolved::UR<U, R>
 {
-    fn idebug(&self, arena: &fastn_unresolved::Arena) -> serde_json::Value {
+    fn idebug(&self, arena: &fastn_section::Arena) -> serde_json::Value {
         match self {
             crate::UR::Resolved(r) => r.idebug(arena),
             crate::UR::UnResolved(u) => u.idebug(arena),

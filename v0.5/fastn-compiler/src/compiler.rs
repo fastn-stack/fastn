@@ -6,7 +6,7 @@ const ITERATION_THRESHOLD: usize = 100;
 // -- import: bar      (bar => Module<bar>, x => Symbol<bar.y>) (bar => bar, x => bar.y)
 // exposing: y as x
 pub struct Compiler {
-    pub(crate) definitions_used: std::collections::HashSet<fastn_unresolved::Symbol>,
+    pub(crate) definitions_used: std::collections::HashSet<fastn_section::Symbol>,
     pub arena: fastn_unresolved::Arena,
     pub(crate) definitions: std::collections::HashMap<String, fastn_unresolved::URD>,
     /// we keep track of every module found (or not found), if not in dict we don't know
@@ -57,7 +57,7 @@ impl Compiler {
     /// this function should be called in a loop, until the list of symbols is empty.
     fn resolve_symbols(
         &mut self,
-        symbols: std::collections::HashSet<fastn_unresolved::Symbol>,
+        symbols: std::collections::HashSet<fastn_section::Symbol>,
     ) -> ResolveSymbolsResult {
         let mut r = ResolveSymbolsResult::default();
         for symbol in symbols {
@@ -121,7 +121,7 @@ impl Compiler {
     /// the vec of ones that could not be resolved.
     ///
     /// if this returns an empty list of symbols, we can go ahead and generate the JS.
-    fn resolve_document(&mut self) -> std::collections::HashSet<fastn_unresolved::Symbol> {
+    fn resolve_document(&mut self) -> std::collections::HashSet<fastn_section::Symbol> {
         let mut stuck_on_symbols = std::collections::HashSet::new();
 
         let content = self.content.replace(vec![]).unwrap();
@@ -203,7 +203,7 @@ pub fn compile(
 
 impl fastn_continuation::Continuation for Compiler {
     type Output = Result<fastn_resolved::CompiledDocument, fastn_compiler::Error>;
-    type Needed = std::collections::HashSet<fastn_unresolved::Symbol>;
+    type Needed = std::collections::HashSet<fastn_section::Symbol>;
     type Found = Vec<fastn_unresolved::URD>;
 
     fn continue_after(mut self, definitions: Self::Found) -> fastn_continuation::Result<Self> {
@@ -250,6 +250,6 @@ impl fastn_continuation::Continuation for Compiler {
 
 #[derive(Default)]
 struct ResolveSymbolsResult {
-    need_more_symbols: std::collections::HashSet<fastn_unresolved::Symbol>,
-    unresolvable: std::collections::HashSet<fastn_unresolved::Symbol>,
+    need_more_symbols: std::collections::HashSet<fastn_section::Symbol>,
+    unresolvable: std::collections::HashSet<fastn_section::Symbol>,
 }

@@ -1,7 +1,7 @@
 pub(super) fn function_definition(
     section: fastn_section::Section,
     document: &mut fastn_unresolved::Document,
-    _arena: &mut fastn_unresolved::Arena,
+    _arena: &mut fastn_section::Arena,
     _package: &Option<&fastn_package::Package>,
 ) {
     // TODO: remove .unwrap() and put errors in `document.errors`
@@ -65,13 +65,13 @@ mod tests {
     fn tester(
         mut d: fastn_unresolved::Document,
         expected: serde_json::Value,
-        arena: &fastn_unresolved::Arena,
+        arena: &fastn_section::Arena,
     ) {
         assert!(d.content.is_empty());
         assert_eq!(d.definitions.len(), 1);
 
         assert_eq!(
-            fastn_unresolved::JIDebug::idebug(
+            fastn_section::JIDebug::idebug(
                 d.definitions.pop().unwrap().unresolved().unwrap(),
                 arena
             ),

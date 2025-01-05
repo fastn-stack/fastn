@@ -2,8 +2,8 @@ impl fastn_unresolved::ComponentInvocation {
     pub fn resolve(
         &mut self,
         definitions: &std::collections::HashMap<String, fastn_unresolved::URD>,
-        modules: &std::collections::HashMap<fastn_unresolved::Module, bool>,
-        arena: &mut fastn_unresolved::Arena,
+        modules: &std::collections::HashMap<fastn_section::Module, bool>,
+        arena: &mut fastn_section::Arena,
         output: &mut fastn_unresolved::resolver::Output,
         main_package: &fastn_package::MainPackage,
     ) -> bool {
@@ -77,8 +77,8 @@ impl fastn_unresolved::ComponentInvocation {
 
 pub fn get_component<'a>(
     definitions: &'a std::collections::HashMap<String, fastn_unresolved::URD>,
-    arena: &fastn_unresolved::Arena,
-    symbol: &fastn_unresolved::Symbol,
+    arena: &fastn_section::Arena,
+    symbol: &fastn_section::Symbol,
 ) -> Option<
     fastn_unresolved::UR<&'a fastn_unresolved::Definition, &'a fastn_resolved::ComponentDefinition>,
 > {
