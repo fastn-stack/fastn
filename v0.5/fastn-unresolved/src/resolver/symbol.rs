@@ -16,7 +16,6 @@ pub fn symbol(
     // S3_name="bar#x"
     name: &mut fastn_unresolved::URIS,
     definitions: &std::collections::HashMap<String, fastn_unresolved::URD>,
-    _modules: &std::collections::HashMap<fastn_section::Module, bool>,
     arena: &mut fastn_section::Arena,
     output: &mut fastn_unresolved::resolver::Output,
     _locals: &[Vec<fastn_unresolved::UR<fastn_unresolved::Argument, fastn_resolved::Argument>>],

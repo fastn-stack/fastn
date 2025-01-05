@@ -2,7 +2,6 @@ impl fastn_unresolved::ComponentInvocation {
     pub fn resolve(
         &mut self,
         definitions: &std::collections::HashMap<String, fastn_unresolved::URD>,
-        modules: &std::collections::HashMap<fastn_section::Module, bool>,
         arena: &mut fastn_section::Arena,
         output: &mut fastn_unresolved::resolver::Output,
         main_package: &fastn_package::MainPackage,
@@ -15,7 +14,7 @@ impl fastn_unresolved::ComponentInvocation {
         // we resolve children first (so we can do early returns after this for loop)
         for c in self.children.iter_mut() {
             if let fastn_unresolved::UR::UnResolved(ref mut c) = c {
-                resolved &= c.resolve(definitions, modules, arena, output, main_package);
+                resolved &= c.resolve(definitions, arena, output, main_package);
             }
         }
 
@@ -25,7 +24,6 @@ impl fastn_unresolved::ComponentInvocation {
             &self.module,
             &mut self.name,
             definitions,
-            modules,
             arena,
             output,
             &[], // TODO
@@ -65,7 +63,6 @@ impl fastn_unresolved::ComponentInvocation {
             &mut self.body,
             &self.children,
             definitions,
-            modules,
             arena,
             output,
             main_package,

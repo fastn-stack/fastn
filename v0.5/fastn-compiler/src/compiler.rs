@@ -9,9 +9,6 @@ pub struct Compiler {
     pub(crate) definitions_used: std::collections::HashSet<fastn_section::Symbol>,
     pub arena: fastn_section::Arena,
     pub(crate) definitions: std::collections::HashMap<String, fastn_unresolved::URD>,
-    /// we keep track of every module found (or not found), if not in dict we don't know
-    /// if module exists, if in dict bool tells if it exists.
-    pub(crate) modules: std::collections::HashMap<fastn_section::Module, bool>,
     /// checkout resolve_document for why this is an Option
     pub(crate) content: Option<Vec<fastn_unresolved::URCI>>,
     pub(crate) document: fastn_unresolved::Document,
@@ -43,7 +40,6 @@ impl Compiler {
             main_package,
             arena,
             definitions: std::collections::HashMap::new(),
-            modules: std::collections::HashMap::new(),
             content,
             document,
             // global_aliases,
@@ -82,7 +78,6 @@ impl Compiler {
                     let mut o = Default::default();
                     definition.resolve(
                         &self.definitions,
-                        &self.modules,
                         &mut self.arena,
                         &mut o,
                         &self.main_package,
@@ -132,7 +127,6 @@ impl Compiler {
                 let mut needed = Default::default();
                 let resolved = c.resolve(
                     &self.definitions,
-                    &self.modules,
                     &mut self.arena,
                     &mut needed,
                     &self.main_package,
