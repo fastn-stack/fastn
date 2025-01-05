@@ -4,7 +4,7 @@ pub struct SectionProvider {
 }
 
 impl SectionProvider {
-    pub async fn read<T, C>(&mut self) -> T
+    pub async fn read<T, C>(&mut self, reader: fastn_continuation::Result<C>) -> T
     where
         C: fastn_continuation::Continuation<
                 Output = fastn_utils::section_provider::PResult<T>,
@@ -12,10 +12,6 @@ impl SectionProvider {
                 Found = fastn_utils::section_provider::Found,
             > + Default,
     {
-        let reader = fastn_continuation::Result::Stuck(
-            Box::new(C::default()),
-            vec!["FASTN.ftd".to_string()],
-        );
         match reader.mut_consume_async(self).await {
             Ok((value, warnings)) => {
                 for warning in warnings {

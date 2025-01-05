@@ -7,6 +7,10 @@
 // but for simplicity’s sake, we are going to not do that now, and return either a package object
 // and warning if there are no errors or an error if there are any errors.
 
+pub fn reader() -> fastn_continuation::Result<Reader> {
+    fastn_continuation::Result::Stuck(Box::new(Reader::default()), vec!["FASTN.ftd".to_string()])
+}
+
 #[derive(Debug, Default)]
 pub struct Reader {
     module: fastn_package::UR<(), fastn_section::Module>,
@@ -299,11 +303,12 @@ mod tests {
     where
         F: FnOnce(fastn_package::MainPackage, Vec<fastn_section::Spanned<fastn_section::Warning>>),
     {
-        let section_provider =
-            fastn_utils::section_provider::test::SectionProvider::new(main, rest);
-        let (package, warnings) = fastn_package::Package::reader()
-            .consume(&section_provider)
-            .unwrap();
+        let section_provider = fastn_utils::section_provider::test::SectionProvider::new(
+            main,
+            rest,
+            fastn_section::Arena::default(),
+        );
+        let (package, warnings) = fastn_package::reader().consume(&section_provider).unwrap();
 
         f(package, warnings)
     }
@@ -321,9 +326,12 @@ mod tests {
     where
         F: FnOnce(Vec<fastn_section::Spanned<fastn_section::Diagnostic>>),
     {
-        let section_provider =
-            fastn_utils::section_provider::test::SectionProvider::new(main, rest);
-        let diagnostics = fastn_package::Package::reader()
+        let section_provider = fastn_utils::section_provider::test::SectionProvider::new(
+            main,
+            rest,
+            fastn_section::Arena::default(),
+        );
+        let diagnostics = fastn_package::reader()
             .consume(&section_provider)
             .unwrap_err();
 
