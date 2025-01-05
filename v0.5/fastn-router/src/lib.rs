@@ -109,7 +109,6 @@ impl Document {
         self,
         _data: &[u8],
     ) -> Result<(String, serde_json::Map<String, serde_json::Value>), RouterError> {
-        dbg!(_data);
         todo!()
     }
 }
