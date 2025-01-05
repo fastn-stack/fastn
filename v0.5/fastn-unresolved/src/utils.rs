@@ -1,8 +1,8 @@
 impl fastn_unresolved::Document {
     pub(crate) fn new(
-        module: fastn_unresolved::Module,
+        module: fastn_section::Module,
         document: fastn_section::Document,
-        arena: &mut fastn_unresolved::Arena,
+        arena: &mut fastn_section::Arena,
     ) -> (fastn_unresolved::Document, Vec<fastn_section::Section>) {
         (
             fastn_unresolved::Document {
@@ -34,8 +34,8 @@ impl fastn_unresolved::Document {
     #[expect(unused)]
     pub(crate) fn add_definitions_to_scope(
         &mut self,
-        _arena: &mut fastn_unresolved::Arena,
-        _global_aliases: &fastn_unresolved::AliasesSimple,
+        _arena: &mut fastn_section::Arena,
+        _global_aliases: &fastn_section::AliasesSimple,
     ) {
         // this takes id auto imports in self.aliases, and creates a new Aliases with imports
         // merged into it, and updates the self.aliases to point to that
@@ -115,10 +115,10 @@ pub(crate) fn assert_no_extra_headers(
     !found
 }
 
-impl fastn_continuation::FromWith<fastn_unresolved::ComponentInvocation, &fastn_unresolved::Arena>
+impl fastn_continuation::FromWith<fastn_unresolved::ComponentInvocation, &fastn_section::Arena>
     for fastn_resolved::ComponentInvocation
 {
-    fn from(u: fastn_unresolved::ComponentInvocation, arena: &fastn_unresolved::Arena) -> Self {
+    fn from(u: fastn_unresolved::ComponentInvocation, arena: &fastn_section::Arena) -> Self {
         fastn_resolved::ComponentInvocation {
             id: None,
             name: u.name.resolved().unwrap().string(arena),
@@ -134,137 +134,5 @@ impl fastn_continuation::FromWith<fastn_unresolved::ComponentInvocation, &fastn_
             source: Default::default(),
             line_number: 0,
         }
-    }
-}
-
-impl fastn_unresolved::Symbol {
-    pub fn new(
-        package: &str,
-        module: Option<&str>,
-        name: &str,
-        arena: &mut fastn_unresolved::Arena,
-    ) -> fastn_unresolved::Symbol {
-        let v = match module {
-            Some(module) => format!("{package}/{module}#{name}"),
-            None => format!("{package}#{name}"),
-        };
-        fastn_unresolved::Symbol {
-            package_len: std::num::NonZeroU16::new(package.len() as u16).unwrap(),
-            module_len: module.map(|v| std::num::NonZeroU16::new(v.len() as u16).unwrap()),
-            interned: arena.interner.get_or_intern(v),
-        }
-    }
-
-    pub fn parent(&self, arena: &mut fastn_unresolved::Arena) -> fastn_unresolved::Module {
-        let v = match self.module_len {
-            None => format!("{}/{}", self.package(arena), self.module(arena).unwrap()),
-            Some(_) => self.package(arena).to_string(),
-        };
-        fastn_unresolved::Module {
-            package_len: self.package_len,
-            interned: arena.interner.get_or_intern(v),
-        }
-    }
-
-    pub fn str<'a>(&self, arena: &'a fastn_unresolved::Arena) -> &'a str {
-        arena.interner.resolve(self.interned).unwrap()
-    }
-
-    pub fn base<'a>(&self, arena: &'a fastn_unresolved::Arena) -> &'a str {
-        &self.str(arena)[..self.package_len.get() as usize
-            + self.module_len.map(|v| v.get() + 1).unwrap_or(0) as usize]
-    }
-
-    pub fn string(&self, arena: &fastn_unresolved::Arena) -> String {
-        self.str(arena).to_string()
-    }
-
-    pub fn package<'a>(&self, arena: &'a fastn_unresolved::Arena) -> &'a str {
-        &self.str(arena)[..self.package_len.get() as usize]
-    }
-
-    pub fn module<'a>(&self, arena: &'a fastn_unresolved::Arena) -> Option<&'a str> {
-        self.module_len.map(|module_len| {
-            &self.str(arena)[self.package_len.get() as usize + 1
-                ..self.package_len.get() as usize + 1 + module_len.get() as usize]
-        })
-    }
-
-    pub fn name<'a>(&self, arena: &'a fastn_unresolved::Arena) -> &'a str {
-        &self.str(arena)[self.package_len.get() as usize
-            + 1
-            + self.module_len.map(|v| v.get()).unwrap_or_default() as usize
-            + 1..]
-    }
-}
-
-impl fastn_unresolved::Module {
-    pub fn new(
-        package: &str,
-        module: Option<&str>,
-        arena: &mut fastn_unresolved::Arena,
-    ) -> fastn_unresolved::Module {
-        let v = match module {
-            None => package.to_string(),
-            Some(module) => format!("{package}/{module}"),
-        };
-        fastn_unresolved::Module {
-            package_len: std::num::NonZeroU16::new(package.len() as u16).unwrap(),
-            interned: arena.interner.get_or_intern(v),
-        }
-    }
-
-    pub fn str<'a>(&self, arena: &'a fastn_unresolved::Arena) -> &'a str {
-        arena.interner.resolve(self.interned).unwrap()
-    }
-
-    pub fn package<'a>(&self, arena: &'a fastn_unresolved::Arena) -> &'a str {
-        &self.str(arena)[..self.package_len.get() as usize]
-    }
-
-    pub fn module<'a>(&self, arena: &'a fastn_unresolved::Arena) -> &'a str {
-        &self.str(arena)[self.package_len.get() as usize + 1..]
-    }
-
-    pub fn symbol(
-        &self,
-        name: &str,
-        arena: &mut fastn_unresolved::Arena,
-    ) -> fastn_unresolved::Symbol {
-        let module_len = {
-            let len = arena.interner.resolve(self.interned).unwrap().len() as u16
-                - self.package_len.get();
-            if len > 0 {
-                Some(std::num::NonZeroU16::new(len).unwrap())
-            } else {
-                None
-            }
-        };
-        let v = if module_len.is_none() {
-            format!("{}#{name}", self.package(arena))
-        } else {
-            format!("{}/{}#{name}", self.package(arena), self.module(arena))
-        };
-        fastn_unresolved::Symbol {
-            package_len: self.package_len,
-            module_len,
-            interned: arena.interner.get_or_intern(v),
-        }
-    }
-}
-
-impl fastn_unresolved::Arena {
-    pub fn new_aliases(&mut self) -> fastn_unresolved::AliasesID {
-        self.aliases.alloc(fastn_unresolved::Aliases::default())
-    }
-    pub fn module_alias(
-        &self,
-        aid: fastn_unresolved::AliasesID,
-        module: &str,
-    ) -> Option<fastn_unresolved::SoM> {
-        self.aliases
-            .get(aid)
-            .and_then(|v| v.get(module))
-            .map(|v| v.to_owned())
     }
 }

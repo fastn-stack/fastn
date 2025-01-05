@@ -199,6 +199,7 @@ mod test {
     #[derive(Debug)]
     struct DummySection {
         name: String,
+        module: fastn_section::Module,
         // does the section have end mark like
         // `/foo`
         // where `/` marks end of the section `foo`
@@ -229,18 +230,19 @@ mod test {
         }
 
         fn span(&self) -> fastn_section::Span {
-            Default::default()
+            fastn_section::Span::with_module(self.module)
         }
     }
 
     // format: foo -> bar -> /foo (
-    fn parse(name: &str) -> Vec<DummySection> {
+    fn parse(name: &str, module: fastn_section::Module) -> Vec<DummySection> {
         let mut sections = vec![];
         let current = &mut sections;
         for part in name.split(" -> ") {
             let is_end = part.starts_with('/');
             let name = if is_end { &part[1..] } else { part };
             let section = DummySection {
+                module,
                 name: name.to_string(),
                 has_end_mark: is_end,
                 has_ended: false,
@@ -282,8 +284,18 @@ mod test {
 
     #[track_caller]
     fn t(source: &str, expected: &str) {
-        let mut o = fastn_section::Document::default();
-        let sections = parse(source);
+        let mut arena = fastn_section::Arena::default();
+        let module = fastn_section::Module::new("main", None, &mut arena);
+        let mut o = fastn_section::Document {
+            module,
+            module_doc: None,
+            sections: vec![],
+            errors: vec![],
+            warnings: vec![],
+            comments: vec![],
+            line_starts: vec![],
+        };
+        let sections = parse(source, module);
         let sections = super::inner_ender(&mut o, sections);
         assert_eq!(to_str(&sections), expected);
         // assert!(o.items.is_empty());
@@ -291,8 +303,18 @@ mod test {
 
     #[track_caller]
     fn f(source: &str, expected: &str, errors: Vec<fastn_section::Error>) {
-        let mut o = fastn_section::Document::default();
-        let sections = parse(source);
+        let mut arena = fastn_section::Arena::default();
+        let module = fastn_section::Module::new("main", None, &mut arena);
+        let mut o = fastn_section::Document {
+            module,
+            module_doc: None,
+            sections: vec![],
+            errors: vec![],
+            warnings: vec![],
+            comments: vec![],
+            line_starts: vec![],
+        };
+        let sections = parse(source, module);
         let sections = super::inner_ender(&mut o, sections);
         assert_eq!(to_str(&sections), expected);
 
@@ -301,7 +323,7 @@ mod test {
             errors
                 .into_iter()
                 .map(|value| fastn_section::Spanned {
-                    span: Default::default(),
+                    span: fastn_section::Span::with_module(module),
                     value,
                 })
                 .collect::<Vec<_>>()

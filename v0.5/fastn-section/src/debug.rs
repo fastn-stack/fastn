@@ -197,6 +197,7 @@ impl fastn_section::Span {
     pub fn inner_str(&self, s: &str) -> fastn_section::Span {
         fastn_section::Span {
             inner: self.inner.substr_from(s),
+            module: self.module,
         }
     }
 
@@ -210,6 +211,7 @@ impl fastn_section::Span {
     pub fn span(&self, start: usize, end: usize) -> fastn_section::Span {
         fastn_section::Span {
             inner: self.inner.substr(start..end),
+            module: self.module,
         }
     }
 
@@ -223,12 +225,6 @@ impl fastn_section::Span {
 
     pub fn str(&self) -> &str {
         &self.inner
-    }
-}
-
-impl From<arcstr::Substr> for fastn_section::Span {
-    fn from(inner: arcstr::Substr) -> Self {
-        fastn_section::Span { inner }
     }
 }
 

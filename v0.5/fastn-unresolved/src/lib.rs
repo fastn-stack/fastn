@@ -20,49 +20,12 @@ pub type URCI = fastn_unresolved::UR<
     fastn_unresolved::ComponentInvocation,
     fastn_resolved::ComponentInvocation,
 >;
-pub type URIS = fastn_unresolved::UR<fastn_section::IdentifierReference, fastn_unresolved::Symbol>;
-pub type Aliases = std::collections::HashMap<String, fastn_unresolved::SoM>;
-pub type AliasesSimple =
-    std::collections::HashMap<String, fastn_unresolved::SoMBase<String, String>>;
-pub type AliasesID = id_arena::Id<Aliases>;
-pub type SoM = fastn_unresolved::SoMBase<Symbol, Module>;
-
-#[derive(Default)]
-pub struct Arena {
-    pub interner: string_interner::DefaultStringInterner,
-    pub aliases: id_arena::Arena<Aliases>,
-}
-
-#[derive(Debug, Clone, Hash, PartialEq, Eq)]
-pub struct Symbol {
-    // 8 bytes
-    /// this store the <package>/<module>#<name> of the symbol
-    interned: string_interner::DefaultSymbol, // u32
-    /// length of the <package> part of the symbol
-    package_len: std::num::NonZeroU16,
-    /// length of the <module> part of the symbol
-    module_len: Option<std::num::NonZeroU16>,
-}
-
-#[derive(Debug, Clone, Hash, PartialEq, Eq)]
-pub struct Module {
-    // 6 bytes
-    /// this store the <package>/<module>#<name> of the symbol
-    interned: string_interner::DefaultSymbol, // u32
-    /// length of the <package> part of the symbol
-    package_len: std::num::NonZeroU16,
-}
-
-#[derive(Clone, Debug)]
-pub enum SoMBase<S, M> {
-    Symbol(S),
-    Module(M),
-}
+pub type URIS = fastn_unresolved::UR<fastn_section::IdentifierReference, fastn_section::Symbol>;
 
 #[derive(Debug, Clone)]
 pub struct Document {
-    pub aliases: Option<AliasesID>,
-    pub module: fastn_unresolved::Module,
+    pub aliases: Option<fastn_section::AliasesID>,
+    pub module: fastn_section::Module,
     pub module_doc: Option<fastn_section::Span>,
     pub definitions: Vec<URD>,
     pub content: Vec<URCI>,
@@ -74,9 +37,9 @@ pub struct Document {
 
 #[derive(Debug, Clone)]
 pub struct Definition {
-    pub aliases: AliasesID,
-    pub module: fastn_unresolved::Module,
-    pub symbol: Option<fastn_unresolved::Symbol>, // <package-name>/<module-name>#<definition-name>
+    pub aliases: fastn_section::AliasesID,
+    pub module: fastn_section::Module,
+    pub symbol: Option<fastn_section::Symbol>, // <package-name>/<module-name>#<definition-name>
     /// we will keep the builtins not as ScopeFrame, but as plain hashmap.
     /// we have two scopes at this level, the auto-imports, and scope of all symbols explicitly
     /// imported/defined in the document this definition exists in.
@@ -158,11 +121,11 @@ pub enum InnerDefinition {
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct ComponentInvocation {
-    pub aliases: AliasesID,
+    pub aliases: fastn_section::AliasesID,
     /// this contains a symbol that is the module where this component invocation happened.
     ///
     /// all local symbols are resolved with respect to the module.
-    pub module: fastn_unresolved::Module,
+    pub module: fastn_section::Module,
     pub name: URIS,
     /// once a caption is resolved, it is set to () here, and moved to properties
     pub caption: UR<Option<fastn_section::HeaderValue>, ()>,
@@ -203,7 +166,7 @@ pub enum Kind {
     CaptionOrBody(Box<Kind>),
     // TODO: Future(Kind),
     // TODO: Result(Kind, Kind),
-    Custom(fastn_unresolved::Symbol),
+    Custom(fastn_section::Symbol),
 }
 
 pub enum FromSectionKindError {

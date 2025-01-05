@@ -27,11 +27,23 @@ pub use section::section;
 pub use section_init::section_init;
 
 impl fastn_section::Document {
-    pub fn parse(source: &arcstr::ArcStr) -> fastn_section::Document {
+    pub fn parse(
+        source: &arcstr::ArcStr,
+        module: fastn_section::Module,
+    ) -> fastn_section::Document {
         let mut scanner = fastn_section::Scanner::new(
             source,
             Default::default(),
-            fastn_section::Document::default(),
+            module,
+            fastn_section::Document {
+                module,
+                module_doc: None,
+                sections: vec![],
+                errors: vec![],
+                warnings: vec![],
+                comments: vec![],
+                line_starts: vec![],
+            },
         );
         document(&mut scanner);
         scanner.output
@@ -60,10 +72,22 @@ fn p<
     debug: serde_json::Value,
     remaining: &str,
 ) {
+    let mut arena = fastn_section::Arena::default();
+    let module = fastn_section::Module::new("main", None, &mut arena);
+
     let mut scanner = fastn_section::Scanner::new(
         source,
         Default::default(),
-        fastn_section::Document::default(),
+        module,
+        fastn_section::Document {
+            module,
+            module_doc: None,
+            sections: vec![],
+            errors: vec![],
+            warnings: vec![],
+            comments: vec![],
+            line_starts: vec![],
+        },
     );
     let result = f(&mut scanner);
     assert_eq!(result.debug(), debug);

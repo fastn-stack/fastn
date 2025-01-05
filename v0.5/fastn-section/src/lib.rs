@@ -16,6 +16,11 @@ pub use error::Error;
 pub use fastn_section::warning::Warning;
 pub use scanner::{ECey, Scanner};
 
+pub type Aliases = std::collections::HashMap<String, fastn_section::SoM>;
+pub type AliasesSimple = std::collections::HashMap<String, fastn_section::SoMBase<String, String>>;
+pub type AliasesID = id_arena::Id<Aliases>;
+pub type SoM = fastn_section::SoMBase<Symbol, Module>;
+
 /// TODO: span has to keep track of the document as well now.
 /// TODO: demote usize to u32.
 ///
@@ -25,13 +30,45 @@ pub use scanner::{ECey, Scanner};
 /// both start, and length. or we keep our life simple, we have can have sections that are really
 /// long, eg a long ftd file. lets assume this is the decision for v0.5. we can demote usize to u32
 /// as we do not expect individual documents to be larger than few GBs.
-#[derive(PartialEq, Hash, Debug, Eq, Clone, Default)]
+#[derive(PartialEq, Hash, Debug, Eq, Clone)]
 pub struct Span {
-    // TODO: store file name here
     inner: arcstr::Substr, // this is currently a 32-byte struct.
+    module: Module,
 }
 
-#[derive(Debug, PartialEq, Clone, Default)]
+#[derive(Debug, Clone, Hash, PartialEq, Eq, Copy)]
+pub struct Module {
+    // 6 bytes
+    /// this store the <package>/<module>#<name> of the symbol
+    interned: string_interner::DefaultSymbol, // u32
+    /// length of the <package> part of the symbol
+    package_len: std::num::NonZeroU16,
+}
+
+#[derive(Default)]
+pub struct Arena {
+    pub interner: string_interner::DefaultStringInterner,
+    pub aliases: id_arena::Arena<Aliases>,
+}
+
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+pub struct Symbol {
+    // 8 bytes
+    /// this store the <package>/<module>#<name> of the symbol
+    interned: string_interner::DefaultSymbol, // u32
+    /// length of the <package> part of the symbol
+    package_len: std::num::NonZeroU16,
+    /// length of the <module> part of the symbol
+    module_len: Option<std::num::NonZeroU16>,
+}
+
+#[derive(Clone, Debug)]
+pub enum SoMBase<S, M> {
+    Symbol(S),
+    Module(M),
+}
+
+#[derive(Debug, PartialEq, Clone)]
 pub struct Spanned<T> {
     pub span: Span,
     pub value: T,
@@ -49,8 +86,9 @@ pub enum Diagnostic {
 
 pub type Result<T> = std::result::Result<T, fastn_section::Error>;
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone)]
 pub struct Document {
+    pub module: Module,
     pub module_doc: Option<fastn_section::Span>,
     pub sections: Vec<Section>,
     pub errors: Vec<fastn_section::Spanned<fastn_section::Error>>,
@@ -92,6 +130,7 @@ pub enum IdentifierReference {
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct Section {
+    pub module: Module,
     pub init: fastn_section::SectionInit,
     pub caption: Option<fastn_section::HeaderValue>,
     pub headers: Vec<Header>,
@@ -154,10 +193,10 @@ pub struct Kind {
 #[derive(Debug, PartialEq, Clone, Default)]
 pub struct HeaderValue(pub Vec<Tes>);
 
-/// example: `hello` | `hello ${world}` | `hello ${world} ${ -- foo: }` | `{ \n text text \n }`
+/// example: `hello` | `hello ${world}` | `hello ${world} ${ -- foo: }` | `{ \n some text \n }`
 /// it can even have recursive structure, e.g., `hello ${ { \n text-text \n } }`.
 /// each recursion starts with `{` and ends with `}`.
-/// if the text inside { starts with `--` then the content is a section,
+/// if the text inside {} starts with `--` then the content is a section,
 /// and we should use `fastn_section::parser::section()` parser to unresolved it.
 /// otherwise it is a text.
 #[derive(Debug, PartialEq, Clone)]

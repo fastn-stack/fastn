@@ -776,8 +776,10 @@ name = "fastn-section"
 version = "0.1.0"
 dependencies = [
  "arcstr",
+ "id-arena",
  "serde",
  "serde_json",
+ "string-interner",
 ]
 
 [[package]]

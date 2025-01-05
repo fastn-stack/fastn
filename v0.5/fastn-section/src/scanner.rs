@@ -6,6 +6,7 @@ pub trait ECey {
 #[derive(Debug)]
 pub struct Scanner<'input, T: ECey> {
     input: &'input arcstr::ArcStr,
+    pub module: fastn_section::Module,
     chars: std::iter::Peekable<std::str::CharIndices<'input>>,
     /// index is byte position in the input
     index: usize,
@@ -31,6 +32,7 @@ impl<'input, T: ECey> Scanner<'input, T> {
     pub fn new(
         input: &'input arcstr::ArcStr,
         fuel: fastn_section::Fuel,
+        module: fastn_section::Module,
         t: T,
     ) -> Scanner<'input, T> {
         assert!(input.len() < 10_000_000); // can't unresolved > 10MB file
@@ -39,16 +41,23 @@ impl<'input, T: ECey> Scanner<'input, T> {
             input,
             fuel,
             index: 0,
+            module,
             output: t,
         }
     }
 
     fn span(&self, start: usize) -> fastn_section::Span {
-        self.input.substr(start..self.index).into()
+        fastn_section::Span {
+            inner: self.input.substr(start..self.index),
+            module: self.module,
+        }
     }
 
     pub fn span_range(&self, start: usize, end: usize) -> fastn_section::Span {
-        self.input.substr(start..end).into()
+        fastn_section::Span {
+            inner: self.input.substr(start..end),
+            module: self.module,
+        }
     }
 
     pub fn take_while<F: Fn(char) -> bool>(&mut self, f: F) -> Option<fastn_section::Span> {

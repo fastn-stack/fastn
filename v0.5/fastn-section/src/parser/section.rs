@@ -8,6 +8,7 @@ pub fn section(
 
     Some(fastn_section::Section {
         init: section_init,
+        module: scanner.module,
         caption,
         headers: fastn_section::parser::headers(scanner),
         body: fastn_section::parser::body(scanner),

@@ -9,7 +9,7 @@
 
 #[derive(Debug, Default)]
 pub struct Reader {
-    name: fastn_package::UR<(), String>,
+    module: fastn_package::UR<(), fastn_section::Module>,
     systems: Vec<fastn_package::UR<String, fastn_package::System>>,
     dependencies: Vec<fastn_package::UR<String, fastn_package::Dependency>>,
     auto_imports: Vec<fastn_package::AutoImport>,
@@ -140,11 +140,12 @@ impl fastn_continuation::Continuation for Reader {
                         }
                     }
                     Some((_name, Err(_))) => {
-                        self.diagnostics.push(fastn_section::Span::default().wrap(
-                            fastn_section::Diagnostic::Error(
-                                fastn_section::Error::PackageFileNotFound,
-                            ),
-                        ));
+                        self.diagnostics
+                            .push(fastn_section::Span::with_module(self.module).wrap(
+                                fastn_section::Diagnostic::Error(
+                                    fastn_section::Error::PackageFileNotFound,
+                                ),
+                            ));
                         return self.finalize();
                     }
                     None => unreachable!("we did a check for this already, list has 1 element"),

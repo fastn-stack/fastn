@@ -11,7 +11,7 @@ pub struct Compiler {
     pub(crate) definitions: std::collections::HashMap<String, fastn_unresolved::URD>,
     /// we keep track of every module found (or not found), if not in dict we don't know
     /// if module exists, if in dict bool tells if it exists.
-    pub(crate) modules: std::collections::HashMap<fastn_unresolved::Module, bool>,
+    pub(crate) modules: std::collections::HashMap<fastn_section::Module, bool>,
     /// checkout resolve_document for why this is an Option
     pub(crate) content: Option<Vec<fastn_unresolved::URCI>>,
     pub(crate) document: fastn_unresolved::Document,
@@ -31,7 +31,7 @@ impl Compiler {
 
         let mut document = fastn_unresolved::parse(
             &main_package,
-            fastn_unresolved::Module::new(main_package.name.as_str(), module, &mut arena),
+            fastn_section::Module::new(main_package.name.as_str(), module, &mut arena),
             source,
             &mut arena,
             // &global_aliases,

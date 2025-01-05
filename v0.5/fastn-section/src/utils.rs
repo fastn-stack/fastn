@@ -39,6 +39,15 @@ impl fastn_section::Kind {
     }
 }
 
+impl fastn_section::Span {
+    pub fn with_module(module: fastn_section::Module) -> fastn_section::Span {
+        fastn_section::Span {
+            inner: Default::default(),
+            module,
+        }
+    }
+}
+
 impl fastn_section::Section {
     pub fn span(&self) -> fastn_section::Span {
         let mut span = Some(self.init.name.span());
@@ -238,13 +247,15 @@ impl fastn_section::Section {
         name: fastn_section::Span,
         function_marker: Option<fastn_section::Span>,
     ) -> Box<fastn_section::Section> {
+        let module = name.module;
         Box::new(fastn_section::Section {
+            module,
             init: fastn_section::SectionInit {
-                dashdash: Default::default(),
+                dashdash: fastn_section::Span::with_module(module),
                 kind: None,
                 doc: None,
                 name: name.into(),
-                colon: Default::default(),
+                colon: fastn_section::Span::with_module(module),
                 function_marker,
                 visibility: None,
             },
@@ -309,5 +320,133 @@ impl fastn_section::Document {
         );
 
         o
+    }
+}
+
+impl fastn_section::Symbol {
+    pub fn new(
+        package: &str,
+        module: Option<&str>,
+        name: &str,
+        arena: &mut fastn_section::Arena,
+    ) -> fastn_section::Symbol {
+        let v = match module {
+            Some(module) => format!("{package}/{module}#{name}"),
+            None => format!("{package}#{name}"),
+        };
+        fastn_section::Symbol {
+            package_len: std::num::NonZeroU16::new(package.len() as u16).unwrap(),
+            module_len: module.map(|v| std::num::NonZeroU16::new(v.len() as u16).unwrap()),
+            interned: arena.interner.get_or_intern(v),
+        }
+    }
+
+    pub fn parent(&self, arena: &mut fastn_section::Arena) -> fastn_section::Module {
+        let v = match self.module_len {
+            None => format!("{}/{}", self.package(arena), self.module(arena).unwrap()),
+            Some(_) => self.package(arena).to_string(),
+        };
+        fastn_section::Module {
+            package_len: self.package_len,
+            interned: arena.interner.get_or_intern(v),
+        }
+    }
+
+    pub fn str<'a>(&self, arena: &'a fastn_section::Arena) -> &'a str {
+        arena.interner.resolve(self.interned).unwrap()
+    }
+
+    pub fn base<'a>(&self, arena: &'a fastn_section::Arena) -> &'a str {
+        &self.str(arena)[..self.package_len.get() as usize
+            + self.module_len.map(|v| v.get() + 1).unwrap_or(0) as usize]
+    }
+
+    pub fn string(&self, arena: &fastn_section::Arena) -> String {
+        self.str(arena).to_string()
+    }
+
+    pub fn package<'a>(&self, arena: &'a fastn_section::Arena) -> &'a str {
+        &self.str(arena)[..self.package_len.get() as usize]
+    }
+
+    pub fn module<'a>(&self, arena: &'a fastn_section::Arena) -> Option<&'a str> {
+        self.module_len.map(|module_len| {
+            &self.str(arena)[self.package_len.get() as usize + 1
+                ..self.package_len.get() as usize + 1 + module_len.get() as usize]
+        })
+    }
+
+    pub fn name<'a>(&self, arena: &'a fastn_section::Arena) -> &'a str {
+        &self.str(arena)[self.package_len.get() as usize
+            + 1
+            + self.module_len.map(|v| v.get()).unwrap_or_default() as usize
+            + 1..]
+    }
+}
+
+impl fastn_section::Module {
+    pub fn new(
+        package: &str,
+        module: Option<&str>,
+        arena: &mut fastn_section::Arena,
+    ) -> fastn_section::Module {
+        let v = match module {
+            None => package.to_string(),
+            Some(module) => format!("{package}/{module}"),
+        };
+        fastn_section::Module {
+            package_len: std::num::NonZeroU16::new(package.len() as u16).unwrap(),
+            interned: arena.interner.get_or_intern(v),
+        }
+    }
+
+    pub fn str<'a>(&self, arena: &'a fastn_section::Arena) -> &'a str {
+        arena.interner.resolve(self.interned).unwrap()
+    }
+
+    pub fn package<'a>(&self, arena: &'a fastn_section::Arena) -> &'a str {
+        &self.str(arena)[..self.package_len.get() as usize]
+    }
+
+    pub fn module<'a>(&self, arena: &'a fastn_section::Arena) -> &'a str {
+        &self.str(arena)[self.package_len.get() as usize + 1..]
+    }
+
+    pub fn symbol(&self, name: &str, arena: &mut fastn_section::Arena) -> fastn_section::Symbol {
+        let module_len = {
+            let len = arena.interner.resolve(self.interned).unwrap().len() as u16
+                - self.package_len.get();
+            if len > 0 {
+                Some(std::num::NonZeroU16::new(len).unwrap())
+            } else {
+                None
+            }
+        };
+        let v = if module_len.is_none() {
+            format!("{}#{name}", self.package(arena))
+        } else {
+            format!("{}/{}#{name}", self.package(arena), self.module(arena))
+        };
+        fastn_section::Symbol {
+            package_len: self.package_len,
+            module_len,
+            interned: arena.interner.get_or_intern(v),
+        }
+    }
+}
+
+impl fastn_section::Arena {
+    pub fn new_aliases(&mut self) -> fastn_section::AliasesID {
+        self.aliases.alloc(fastn_section::Aliases::default())
+    }
+    pub fn module_alias(
+        &self,
+        aid: fastn_section::AliasesID,
+        module: &str,
+    ) -> Option<fastn_section::SoM> {
+        self.aliases
+            .get(aid)
+            .and_then(|v| v.get(module))
+            .map(|v| v.to_owned())
     }
 }
