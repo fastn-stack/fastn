@@ -8,19 +8,20 @@ extern crate self as fastn_package;
 mod reader;
 
 pub type UR<U, R> = fastn_continuation::UR<U, R, fastn_section::Error>;
+
 pub use reader::Reader;
 
 #[derive(Debug)]
 pub struct MainPackage {
-    pub name: String,
+    pub module: fastn_section::Module,
     pub systems: Vec<System>,
     pub apps: Vec<App>,
     pub packages: std::collections::HashMap<String, Package>,
 }
 
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct Package {
-    pub name: String,
+    pub module: fastn_section::Module,
     pub dependencies: Vec<Dependency>,
     pub auto_imports: Vec<AutoImport>,
     pub favicon: Option<String>,

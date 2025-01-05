@@ -80,7 +80,7 @@ impl Reader {
         if self.waiting_for.is_empty() {
             return fastn_continuation::Result::Done(Ok((
                 fastn_package::MainPackage {
-                    name: self.name.into_resolved(),
+                    name: self.module.into_resolved(),
                     systems: vec![],
                     apps: vec![],
                     packages: self.packages,

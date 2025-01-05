@@ -35,12 +35,14 @@ pub mod test {
     #[derive(Debug)]
     pub struct SectionProvider {
         pub data: std::collections::HashMap<String, (String, Vec<String>)>,
+        pub arena: fastn_section::Arena,
     }
 
     impl SectionProvider {
         pub fn new(
             main: &'static str,
             mut rest: std::collections::HashMap<&'static str, &'static str>,
+            arena: fastn_section::Arena,
         ) -> Self {
             let mut data = std::collections::HashMap::from([(
                 "FASTN.ftd".to_string(),
@@ -53,7 +55,7 @@ pub mod test {
                 );
             }
 
-            fastn_utils::section_provider::test::SectionProvider { data }
+            fastn_utils::section_provider::test::SectionProvider { data, arena }
         }
     }
 
@@ -63,18 +65,24 @@ pub mod test {
         NotFound,
     }
 
-    impl fastn_continuation::Provider for &SectionProvider {
+    impl fastn_continuation::MutProvider for &mut SectionProvider {
         type Needed = Vec<String>;
         type Found = super::Found;
 
-        fn provide(&self, needed: Vec<String>) -> Self::Found {
+        fn provide(&mut self, needed: Vec<String>) -> Self::Found {
             let mut r = vec![];
             for f in needed {
                 let package = super::name_to_package(&f).0;
 
+                let module = match package {
+                    Some(ref v) => fastn_section::Module::new(v, None, &mut self.arena),
+                    None => fastn_section::Module::new("main", None, &mut self.arena),
+                };
+
                 match self.data.get(&f) {
                     Some((content, file_list)) => {
-                        let d = fastn_section::Document::parse(&arcstr::ArcStr::from(content));
+                        let d =
+                            fastn_section::Document::parse(&arcstr::ArcStr::from(content), module);
                         r.push((package, Ok((d, file_list.to_owned()))));
                     }
                     None => {

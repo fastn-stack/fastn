@@ -45,7 +45,7 @@ pub struct Module {
     package_len: std::num::NonZeroU16,
 }
 
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub struct Arena {
     pub interner: string_interner::DefaultStringInterner,
     pub aliases: id_arena::Arena<Aliases>,
