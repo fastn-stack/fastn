@@ -124,3 +124,53 @@ pub fn symbol(
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    #[track_caller]
+    fn t_(
+        name_to_resolve: &str,
+        current_module: &str,
+        sources: std::collections::HashMap<String, String>,
+        dependencies: std::collections::HashMap<String, Vec<String>>,
+        expected: &str,
+    ) {
+        todo!()
+    }
+
+    macro_rules! t {
+        ($name:expr, $expected:expr) => {
+            t_(
+                $name,
+                "",
+                std::collections::HashMap::new(),
+                std::collections::HashMap::new(),
+                $expected,
+            );
+        };
+    }
+
+    #[test]
+    fn basic() {
+        t!("ftd.text", "ftd.text");
+        // t!("ftd#text", "ftd.text");
+        // t!("foo", "-- integer foo: 10", "main.foo");
+        // t!("ftd.txt", "-- integer foo: 10", "main.foo");
+        // t!("ftd#txt", "-- integer foo: 10", "main.foo");
+        // t!("bar", "-- import: current-package/foo",  {"current-package/foo": "-- integer bar: 10"}, "foo.bar");
+        // t!(
+        //     "foo.bar",
+        //     "-- import: other-package/foo",
+        //     {"other-package/foo": "-- integer bar: 10"},
+        //     {"current-package": ["other-package"]},
+        //     "foo.bar"
+        // );
+        // t!(
+        //     "foo.bar",
+        //     "-- import: other-package/foo",
+        //     {"other-package/foo": "-- public integer bar: 10"},
+        //     {"current-package": ["other-package"]},
+        //     "foo.bar"
+        // );
+    }
+}
