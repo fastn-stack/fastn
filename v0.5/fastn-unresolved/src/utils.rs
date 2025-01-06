@@ -7,7 +7,7 @@ impl fastn_unresolved::Document {
         (
             fastn_unresolved::Document {
                 module,
-                aliases: Some(arena.new_aliases()),
+                aliases: Some(arena.default_aliases()),
                 module_doc: document.module_doc,
                 definitions: vec![],
                 content: vec![],
