@@ -137,6 +137,7 @@ fn resolve_string(
     property: &Property,
     value: &fastn_section::HeaderValue,
 ) -> Result<Option<fastn_resolved::Property>, fastn_section::Error> {
+    // -- ftd.text: hello world
     if let Some(v) = value.as_plain_string() {
         return Ok(Some(fastn_resolved::Property {
             value: fastn_resolved::PropertyValue::Value {
@@ -152,5 +153,6 @@ fn resolve_string(
         }));
     };
 
+    // -- ftd.text: hello ${ foo }, bye { -- bar: }
     todo!()
 }
