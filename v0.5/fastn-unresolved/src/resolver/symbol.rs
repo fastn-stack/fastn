@@ -119,7 +119,10 @@ pub fn symbol(
             true
         }
         None => {
-            tracing::info!("No definition exist for {}, checking builtins", target_symbol_key);
+            tracing::info!(
+                "No definition exist for {}, checking builtins",
+                target_symbol_key
+            );
             if fastn_builtins::builtins().contains_key(target_symbol_key) {
                 tracing::info!("Found {} in builtins", target_symbol_key);
                 *name = fastn_unresolved::UR::Resolved(Some(target_symbol));
@@ -133,15 +136,61 @@ pub fn symbol(
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+
     #[track_caller]
     fn t_(
         name_to_resolve: &str,
         current_module: &str,
-        sources: std::collections::HashMap<String, String>,
-        dependencies: std::collections::HashMap<String, Vec<String>>,
+        _sources: std::collections::HashMap<String, String>,
+        _dependencies: std::collections::HashMap<String, Vec<String>>,
         expected: &str,
     ) {
-        todo!()
+        let package_name = "main";
+        let main_package = fastn_package::MainPackage {
+            name: package_name.to_string(),
+            systems: vec![],
+            apps: vec![],
+            packages: Default::default(),
+        };
+
+        let mut arena = fastn_section::Arena::default();
+
+        let document = {
+            let source = format!("--{}: basic", name_to_resolve);
+            let module = if current_module.is_empty() {
+                fastn_section::Module::main(&mut arena)
+            } else {
+                fastn_section::Module::new(package_name, Some(current_module), &mut arena)
+            };
+            fastn_unresolved::parse(&main_package, module, &source, &mut arena)
+        };
+
+        let mut name = document
+            .content
+            .first()
+            .unwrap()
+            .unresolved()
+            .unwrap()
+            .name
+            .clone();
+
+        let resolved = symbol(
+            document.aliases.unwrap(),
+            document.module,
+            &mut name,
+            &Default::default(),
+            &mut arena,
+            &mut fastn_unresolved::resolver::Output::default(),
+            &[],
+            &main_package,
+        );
+
+        assert_eq!(resolved, true);
+
+        let output_str = name.resolved().unwrap().str(&arena);
+
+        assert_eq!(expected, output_str);
     }
 
     macro_rules! t {
@@ -158,8 +207,8 @@ mod tests {
 
     #[test]
     fn basic() {
-        t!("ftd.text", "ftd.text");
-        // t!("ftd#text", "ftd.text");
+        t!("ftd.text", "ftd#text"); // Resolve builtin
+        t!("ftd#text", "ftd#text"); // Resolve absolute symbol usage
         // t!("foo", "-- integer foo: 10", "main.foo");
         // t!("ftd.txt", "-- integer foo: 10", "main.foo");
         // t!("ftd#txt", "-- integer foo: 10", "main.foo");
