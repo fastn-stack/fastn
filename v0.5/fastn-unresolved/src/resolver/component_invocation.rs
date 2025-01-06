@@ -7,8 +7,6 @@ impl fastn_unresolved::ComponentInvocation {
         output: &mut fastn_unresolved::resolver::Output,
         main_package: &fastn_package::MainPackage,
     ) -> bool {
-        tracing::info!("resolve: ComponentInvocation({:?}) for package: {}", self.name, main_package.name);
-
         let mut resolved = true;
         // -- foo: (foo has children)
         //    -- bar:
@@ -21,7 +19,7 @@ impl fastn_unresolved::ComponentInvocation {
             }
         }
 
-        println!("{:?}", self.name);
+        tracing::info!("Resolve: ComponentInvocation({:?}) for package: {}", self.name, main_package.name);
         resolved &= fastn_unresolved::resolver::symbol(
             self.aliases,
             self.module,
@@ -32,7 +30,7 @@ impl fastn_unresolved::ComponentInvocation {
             &[], // TODO
             main_package,
         );
-        println!("{:?}", self.name);
+        tracing::info!("Resolved got {:?}", self.name);
 
         let name = match self.name {
             fastn_unresolved::UR::Resolved(ref name) => name,
@@ -42,7 +40,7 @@ impl fastn_unresolved::ComponentInvocation {
             }
             // TODO: handle errors
             ref t => {
-                println!("{t:?}");
+                tracing::error!("{t:?}");
                 todo!()
             }
         };
@@ -76,6 +74,7 @@ impl fastn_unresolved::ComponentInvocation {
     }
 }
 
+#[tracing::instrument(skip_all)]
 pub fn get_component<'a>(
     definitions: &'a std::collections::HashMap<String, fastn_unresolved::URD>,
     arena: &fastn_section::Arena,
@@ -83,7 +82,7 @@ pub fn get_component<'a>(
 ) -> Option<
     fastn_unresolved::UR<&'a fastn_unresolved::Definition, &'a fastn_resolved::ComponentDefinition>,
 > {
-    println!("looking for: {}", symbol.str(arena));
+    tracing::info!("get_component: symbol: {}", symbol.str(arena));
     match definitions.get(symbol.str(arena)) {
         Some(fastn_unresolved::UR::Resolved(Some(fastn_resolved::Definition::Component(v)))) => {
             return Some(fastn_unresolved::UR::Resolved(Some(v)))
@@ -98,9 +97,9 @@ pub fn get_component<'a>(
     if let Some(fastn_resolved::Definition::Component(v)) =
         fastn_builtins::builtins().get(symbol.str(arena))
     {
-        println!("found in builtins");
+        tracing::info!("found in builtins");
         return Some(fastn_unresolved::UR::Resolved(Some(v)));
     }
-    println!("not found");
+    tracing::warn!("not found");
     None
 }

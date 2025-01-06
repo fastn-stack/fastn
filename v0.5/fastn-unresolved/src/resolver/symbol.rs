@@ -45,6 +45,7 @@ pub fn symbol(
             // if it is not in unresolved-state, or if it is missing in definitions, we add "bar#x"
             // to output.stuck_on.
             // if it is in error state, or not found state, we resolve ourselves as them.
+            tracing::info!("Absolute: {} {:?} {}", package.str(), module, name.str());
             fastn_section::Symbol::new(
                 package.str(),
                 module.as_ref().map(|v| v.str()),
@@ -70,7 +71,6 @@ pub fn symbol(
             name: dotted_name,
         } => {
             let o = arena.module_alias(aid, module.str());
-            tracing::info!("Imported module: {:?}", o);
             match o {
                 Some(fastn_section::SoM::Module(m)) => m.symbol(dotted_name.str(), arena),
                 Some(fastn_section::SoM::Symbol(_s)) => {
@@ -98,10 +98,12 @@ pub fn symbol(
 
     match definitions.get(target_symbol_key) {
         Some(fastn_unresolved::UR::UnResolved(_)) => {
+            tracing::info!("{} is unresolved, adding to stuck_on", target_symbol_key);
             output.stuck_on.insert(target_symbol);
             false
         }
         Some(fastn_unresolved::UR::NotFound) => {
+            tracing::info!("{} not found", target_symbol_key);
             *name = fastn_unresolved::UR::Invalid(fastn_section::Error::InvalidIdentifier);
             true
         }
@@ -112,11 +114,14 @@ pub fn symbol(
             todo!()
         }
         Some(fastn_unresolved::UR::Resolved(_)) => {
+            tracing::info!("Found a resolved definition for {}", target_symbol_key);
             *name = fastn_unresolved::UR::Resolved(Some(target_symbol));
             true
         }
         None => {
+            tracing::info!("No definition exist for {}, checking builtins", target_symbol_key);
             if fastn_builtins::builtins().contains_key(target_symbol_key) {
+                tracing::info!("Found {} in builtins", target_symbol_key);
                 *name = fastn_unresolved::UR::Resolved(Some(target_symbol));
             } else {
                 *name = fastn_unresolved::UR::Invalid(fastn_section::Error::InvalidIdentifier);
