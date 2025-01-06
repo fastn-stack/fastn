@@ -21,7 +21,7 @@ impl fastn_unresolved::ComponentInvocation {
         println!("{:?}", self.name);
         resolved &= fastn_unresolved::resolver::symbol(
             self.aliases,
-            &self.module,
+            self.module,
             &mut self.name,
             definitions,
             arena,
@@ -62,6 +62,7 @@ impl fastn_unresolved::ComponentInvocation {
             &mut self.properties,
             &mut self.body,
             &self.children,
+            self.module,
             definitions,
             arena,
             output,

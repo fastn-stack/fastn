@@ -9,7 +9,13 @@
 pub fn symbol(
     aid: fastn_section::AliasesID,
     // foo.ftd (current_module = foo, package = foo, module = "")
-    current_module: &fastn_section::Module,
+
+    // [amitu.com/bar] (amitu.com/bar/FASTN: dependency amitu.com/foo)
+    //
+    // -- import: amitu.com/foo (Alias: foo -> SoM::M<amitu.com/foo>)
+    // exposing: bar            (bar -> SoM::S(<amitu.com/foo#bar>)
+    // -- amitu.com/foo#bar:
+    current_module: fastn_section::Module,
     // parent: Option<fastn_section::Symbol>,
     // S1_name="bar.x"
     // S2_name="x"

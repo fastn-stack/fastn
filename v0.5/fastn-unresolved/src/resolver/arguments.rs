@@ -10,6 +10,7 @@ pub fn arguments(
         fastn_unresolved::ComponentInvocation,
         fastn_resolved::ComponentInvocation,
     >],
+    _module: fastn_section::Module,
     _definitions: &std::collections::HashMap<String, fastn_unresolved::URD>,
     _arena: &mut fastn_section::Arena,
     _output: &mut fastn_unresolved::resolver::Output,

@@ -382,6 +382,7 @@ mod tests {
                 // TODO: use fastn_section::Debug to make these terser more exhaustive
                 assert_eq!(package.name, "foo");
                 assert_eq!(package.packages.len(), 2);
+                assert_eq!(package.apps.len(), 0);
                 assert!(warnings.is_empty());
                 let bar = package.packages.get("bar").unwrap();
                 assert_eq!(bar.name, "bar");
