@@ -416,6 +416,8 @@ impl fastn_section::Module {
         &self.str(arena)[self.package_len.get() as usize + 1..]
     }
 
+    /// Construct a symbol associated with this [Module]
+    #[tracing::instrument(skip(arena, self))]
     pub fn symbol(&self, name: &str, arena: &mut fastn_section::Arena) -> fastn_section::Symbol {
         let module_len = {
             let len = arena.interner.resolve(self.interned).unwrap().len() as u16
@@ -440,8 +442,18 @@ impl fastn_section::Module {
 }
 
 impl fastn_section::Arena {
-    pub fn new_aliases(&mut self) -> fastn_section::AliasesID {
-        self.aliases.alloc(fastn_section::Aliases::default())
+    pub fn default_aliases(&mut self) -> fastn_section::AliasesID {
+        // Prelude are aliases available to every [fastn_unresolved::Document] without any explicit
+        // imports.
+        // See [fastn_builtins] for definitions.
+        // TODO: should probably use [HashMap::with_capacity]
+        let mut prelude = fastn_section::Aliases::new();
+        prelude.insert(
+            "ftd".to_string(),
+            fastn_section::SoM::Module(fastn_section::Module::new("ftd", None, self)),
+        );
+
+        self.aliases.alloc(prelude)
     }
     pub fn module_alias(
         &self,
