@@ -15,6 +15,8 @@ mod section_provider;
 
 pub use section_provider::SectionProvider;
 
+use fastn_observer as _;
+
 pub enum Action {
     Read,
     Write,

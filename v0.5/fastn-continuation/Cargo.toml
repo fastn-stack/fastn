@@ -13,3 +13,4 @@ async_provider = ["async-trait"]
 
 [dependencies]
 async-trait = { workspace = true, optional = true }
+tracing.workspace = true

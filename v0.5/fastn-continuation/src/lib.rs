@@ -14,6 +14,8 @@ pub use provider::{MutProvider, MutProviderWith, Provider, ProviderWith};
 pub use result::Result;
 pub use ur::{FromWith, UR};
 
+use tracing as _;
+
 pub trait Continuation {
     type Output;
     type Needed;

@@ -1,11 +1,6 @@
-/// how to resolve local symbols, e.g., inside a function / component
-///
-/// locals is the stack of locals (excluding globals).
-///
-/// e.g., inside a function we can have block containing blocks, and each block may have defined
-/// some variables, each such nested block is passed as locals,
-/// with the innermost block as the last entry.
+/// Resolve symbols, e.g., inside a function / component
 #[allow(clippy::too_many_arguments)]
+#[tracing::instrument(skip(definitions, arena))]
 pub fn symbol(
     aid: fastn_section::AliasesID,
     // foo.ftd (current_module = foo, package = foo, module = "")
@@ -24,6 +19,11 @@ pub fn symbol(
     definitions: &std::collections::HashMap<String, fastn_unresolved::URD>,
     arena: &mut fastn_section::Arena,
     output: &mut fastn_unresolved::resolver::Output,
+    // locals is the stack of locals (excluding globals).
+    //
+    // e.g., inside a function we can have block containing blocks, and each block may have defined
+    // some variables, each such nested block is passed as locals,
+    // with the innermost block as the last entry.
     _locals: &[Vec<fastn_unresolved::UR<fastn_unresolved::Argument, fastn_resolved::Argument>>],
     _main_package: &fastn_package::MainPackage,
 ) -> bool {
@@ -70,6 +70,7 @@ pub fn symbol(
             name: dotted_name,
         } => {
             let o = arena.module_alias(aid, module.str());
+            tracing::info!("Imported module: {:?}", o);
             match o {
                 Some(fastn_section::SoM::Module(m)) => m.symbol(dotted_name.str(), arena),
                 Some(fastn_section::SoM::Symbol(_s)) => {

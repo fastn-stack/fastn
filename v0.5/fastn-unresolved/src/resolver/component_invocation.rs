@@ -1,4 +1,5 @@
 impl fastn_unresolved::ComponentInvocation {
+    #[tracing::instrument(skip_all)]
     pub fn resolve(
         &mut self,
         definitions: &std::collections::HashMap<String, fastn_unresolved::URD>,
@@ -6,6 +7,8 @@ impl fastn_unresolved::ComponentInvocation {
         output: &mut fastn_unresolved::resolver::Output,
         main_package: &fastn_package::MainPackage,
     ) -> bool {
+        tracing::info!("resolve: ComponentInvocation({:?}) for package: {}", self.name, main_package.name);
+
         let mut resolved = true;
         // -- foo: (foo has children)
         //    -- bar:
