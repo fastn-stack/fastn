@@ -18,6 +18,7 @@ impl fastn::commands::Render {
     }
 }
 
+#[tracing::instrument]
 pub async fn render_document(
     path: &str,
     _data: serde_json::Map<String, serde_json::Value>,

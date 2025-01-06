@@ -51,6 +51,7 @@ impl Compiler {
     /// try to resolve as many symbols as possible, and return the ones that we made any progress on.
     ///
     /// this function should be called in a loop, until the list of symbols is empty.
+    #[tracing::instrument(skip(self))]
     fn resolve_symbols(
         &mut self,
         symbols: std::collections::HashSet<fastn_section::Symbol>,
@@ -116,6 +117,7 @@ impl Compiler {
     /// the vec of ones that could not be resolved.
     ///
     /// if this returns an empty list of symbols, we can go ahead and generate the JS.
+    #[tracing::instrument(skip(self))]
     fn resolve_document(&mut self) -> std::collections::HashSet<fastn_section::Symbol> {
         let mut stuck_on_symbols = std::collections::HashSet::new();
 
@@ -185,6 +187,7 @@ impl Compiler {
 ///
 /// earlier we had strict mode here, but to simplify things, now we let the caller convert non-empty
 /// warnings from OK part as error, and discard the generated JS.
+#[tracing::instrument]
 pub fn compile(
     source: &str,
     main_package: fastn_package::MainPackage,
@@ -200,6 +203,7 @@ impl fastn_continuation::Continuation for Compiler {
     type Needed = std::collections::HashSet<fastn_section::Symbol>;
     type Found = Vec<fastn_unresolved::URD>;
 
+    #[tracing::instrument(skip(self))]
     fn continue_after(mut self, definitions: Self::Found) -> fastn_continuation::Result<Self> {
         self.iterations += 1;
         if self.iterations > ITERATION_THRESHOLD {

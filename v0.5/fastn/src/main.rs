@@ -1,5 +1,6 @@
 #[tokio::main]
 async fn main() {
+    fastn_observer::observe();
     let command = fastn::commands::parse();
     let mut section_provider = fastn::SectionProvider::default();
     let module = fastn_section::Module::main(&mut section_provider.arena);

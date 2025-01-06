@@ -16,3 +16,4 @@ fastn-package.workspace = true
 fastn-section.workspace = true
 fastn-unresolved.workspace = true
 indexmap.workspace = true
+tracing.workspace = true
