@@ -42,6 +42,7 @@ pub fn parse(
                 import::import(section, &mut document, arena, &package)
             }
             (Some("record"), _, _) => todo!(),
+            // is "type" a "integer" "string" etc?
             (Some("type"), _, _) => todo!(),
             (Some("module"), _, _) => todo!(),
             (Some("component"), _, _) => todo!(),
@@ -51,7 +52,22 @@ pub fn parse(
             (None, _, _) => {
                 component_invocation::component_invocation(section, &mut document, arena, &package)
             }
-            (_, _, _) => todo!(),
+            (_, _, _) => {
+                let mut it = String::new();
+
+                it.push_str("-- ");
+                if let Some(ref k) = kind {
+                    it.push_str(&k);
+                    it.push_str(" ");
+                }
+
+                if let Some(ref n) = name {
+                    it.push_str(&n);
+                    it.push_str(": ");
+                }
+
+                todo!("CANT PARSE: `{it}`")
+            }
         }
     }
 

@@ -142,7 +142,7 @@ mod tests {
     fn t_(
         name_to_resolve: &str,
         current_module: &str,
-        _sources: std::collections::HashMap<String, String>,
+        sources: std::collections::HashMap<String, String>,
         _dependencies: std::collections::HashMap<String, Vec<String>>,
         expected: &str,
     ) {
@@ -157,7 +157,12 @@ mod tests {
         let mut arena = fastn_section::Arena::default();
 
         let document = {
-            let source = format!("--{}: basic", name_to_resolve);
+            let source = if let Some(v) = sources.get(current_module) {
+                format!("{}\n--{}: $ftd.empty()", v.clone(), name_to_resolve)
+            } else {
+                format!("--{}: basic", name_to_resolve)
+            };
+
             let module = if current_module.is_empty() {
                 fastn_section::Module::main(&mut arena)
             } else {
@@ -194,22 +199,34 @@ mod tests {
     }
 
     macro_rules! t {
-        ($name:expr, $expected:expr) => {
+        ($name_to_resolve:expr, $expected:expr) => {
             t_(
-                $name,
+                $name_to_resolve,
                 "",
                 std::collections::HashMap::new(),
                 std::collections::HashMap::new(),
                 $expected,
             );
         };
+        ($name_to_resolve:expr, $source:expr, $expected:expr) => {
+            let mut sources = std::collections::HashMap::new();
+            sources.insert("main".to_string(), $source.to_string());
+
+            t_(
+                $name_to_resolve,
+                "main",
+                sources,
+                std::collections::HashMap::new(),
+                $expected,
+            );
+        }
     }
 
     #[test]
     fn basic() {
         t!("ftd.text", "ftd#text"); // Resolve builtin
         t!("ftd#text", "ftd#text"); // Resolve absolute symbol usage
-        // t!("foo", "-- integer foo: 10", "main.foo");
+        t!("foo", "-- integer foo: 10", "main.foo");
         // t!("ftd.txt", "-- integer foo: 10", "main.foo");
         // t!("ftd#txt", "-- integer foo: 10", "main.foo");
         // t!("bar", "-- import: current-package/foo",  {"current-package/foo": "-- integer bar: 10"}, "foo.bar");
