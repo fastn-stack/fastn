@@ -36,6 +36,29 @@ pub(super) fn import(
     fastn_unresolved::utils::assert_no_extra_headers(&section, document, &["exports", "exposing"]);
     validate_import_module_in_dependencies(section, document, arena, package, &i);
 
+    // Add alias in document
+    let alias = i
+        .alias
+        .as_ref()
+        .map(|alias| alias.str().to_string())
+        .unwrap_or_else(|| i.module.package(arena).to_string());
+
+    match document.aliases {
+        Some(id) => {
+            arena
+                .aliases
+                .get_mut(id)
+                .unwrap()
+                .insert(alias, fastn_section::SoM::Module(i.module));
+        }
+        None => {
+            let aliases =
+                fastn_section::Aliases::from_iter([(alias, fastn_section::SoM::Module(i.module))]);
+            document.aliases = Some(arena.aliases.alloc(aliases));
+        }
+    }
+
+    // Todo: Add Symbol aliases for export and exposing as well
     todo!();
     // document.imports.push(i);
 }
@@ -103,7 +126,7 @@ fn parse_import(
         None => (caption.str(), None),
     };
 
-    let (package, module) = match module.split_once("/") {
+    let (package, module) = match module.rsplit_once("/") {
         Some((package, module)) => (package, Some(module)),
         None => (module, None),
     };
