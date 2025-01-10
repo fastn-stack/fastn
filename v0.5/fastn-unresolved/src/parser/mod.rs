@@ -38,9 +38,13 @@ pub fn parse(
             name.as_deref(),
             section.init.function_marker.is_some(),
         ) {
-            (Some("import"), _, _) | (_, Some("import"), _) => {
-                import::import(section, &mut document, arena, &package)
-            }
+            (Some("import"), _, _) | (_, Some("import"), _) => import::import(
+                section,
+                &mut document,
+                arena,
+                &package,
+                main_package.name.as_str(),
+            ),
             (Some("record"), _, _) => todo!(),
             (Some("type"), _, _) => todo!(),
             (Some("module"), _, _) => todo!(),
