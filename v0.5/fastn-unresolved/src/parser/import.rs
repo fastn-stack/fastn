@@ -176,10 +176,7 @@ fn parse_field(
     section: &fastn_section::Section,
     _document: &mut fastn_unresolved::Document,
 ) -> Option<Export> {
-    let header = match section.header_as_plain_span(field) {
-        Some(v) => v,
-        None => return None,
-    };
+    let header = section.header_as_plain_span(field)?;
 
     Some(Export::Things(
         header

@@ -18,7 +18,7 @@ impl Record {
         section
             .kind
             .as_ref()
-            .map_or(false, |s| s.eq(ftd_ast::constants::RECORD))
+            .is_some_and(|s| s.eq(ftd_ast::constants::RECORD))
     }
 
     pub(crate) fn from_p1(section: &ftd_p1::Section, doc_id: &str) -> ftd_ast::Result<Record> {

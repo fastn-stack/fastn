@@ -29,7 +29,7 @@ impl ComponentDefinition {
     }
 
     pub fn is_component_definition(section: &ftd_p1::Section) -> bool {
-        section.kind.as_ref().map_or(false, |s| s.eq(COMPONENT))
+        section.kind.as_ref().is_some_and(|s| s.eq(COMPONENT))
     }
 
     pub fn from_p1(

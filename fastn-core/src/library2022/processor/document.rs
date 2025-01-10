@@ -101,10 +101,10 @@ pub fn document_suffix(
     })
 }
 
-pub async fn document_name<'a>(
+pub async fn document_name(
     value: ftd_ast::VariableValue,
     _kind: fastn_resolved::Kind,
-    doc: &ftd::interpreter::TDoc<'a>,
+    doc: &ftd::interpreter::TDoc<'_>,
     req_config: &fastn_core::RequestConfig,
     preview_session_id: &Option<String>,
 ) -> ftd::interpreter::Result<fastn_resolved::Value> {

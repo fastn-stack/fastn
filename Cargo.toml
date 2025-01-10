@@ -75,7 +75,7 @@ async-recursion = "1"
 async-trait = "0.1"
 camino = "1"
 clap = "4"
-colored = "2"
+colored = "3"
 css-color-parser = "0.1"
 diffy = "0.4"
 dotenvy = "0.15"
@@ -106,7 +106,7 @@ futures-core = "0.3"
 ignore = "0.4"
 include_dir = "0.7"
 indoc = "2"
-itertools = "0.13"
+itertools = "0.14"
 http = "1"
 bytes = "1"
 mime_guess = "2"
@@ -183,7 +183,7 @@ features = [
 
 [workspace.dependencies.comrak]
 # We use comrak for markup processing.
-version = "0.32"
+version = "0.33"
 # By default, comrak ships with support for syntax highlighting using syntext for "fenced
 # code blocks". We have disabled that by not using default features. We did that because
 # we already have a way to show code in ftd, ftd.code. Further, comark requires syntect 4.6,

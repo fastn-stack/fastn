@@ -21,8 +21,8 @@ impl fastn::commands::Render {
 #[tracing::instrument]
 pub async fn render_document(
     path: &str,
-    _data: serde_json::Map<String, serde_json::Value>,
-    _strict: bool,
+    data: serde_json::Map<String, serde_json::Value>,
+    strict: bool,
 ) -> String {
     let source = std::fs::File::open(path)
         .and_then(std::io::read_to_string)

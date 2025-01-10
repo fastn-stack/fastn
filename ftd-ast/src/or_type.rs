@@ -17,7 +17,7 @@ impl OrType {
     }
 
     pub(crate) fn is_or_type(section: &ftd_p1::Section) -> bool {
-        section.kind.as_ref().map_or(false, |s| s.eq(ORTYPE))
+        section.kind.as_ref().is_some_and(|s| s.eq(ORTYPE))
     }
 
     pub(crate) fn from_p1(section: &ftd_p1::Section, doc_id: &str) -> ftd_ast::Result<OrType> {

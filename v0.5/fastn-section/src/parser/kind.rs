@@ -1,10 +1,7 @@
 pub fn kind(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Option<fastn_section::Kind> {
-    let qi = match fastn_section::parser::identifier_reference(scanner) {
-        Some(qi) => qi,
-        None => return None,
-    };
+    let qi = fastn_section::parser::identifier_reference(scanner)?;
 
     // By scoping `index` here, it becomes eligible for garbage collection as soon
     // as it’s no longer necessary, reducing memory usage.

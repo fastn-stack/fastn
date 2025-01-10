@@ -24,8 +24,8 @@ pub fn symbol(
     // e.g., inside a function we can have block containing blocks, and each block may have defined
     // some variables, each such nested block is passed as locals,
     // with the innermost block as the last entry.
-    _locals: &[Vec<fastn_unresolved::UR<fastn_unresolved::Argument, fastn_resolved::Argument>>],
-    _main_package: &fastn_package::MainPackage,
+    locals: &[Vec<fastn_unresolved::UR<fastn_unresolved::Argument, fastn_resolved::Argument>>],
+    main_package: &fastn_package::MainPackage,
 ) -> bool {
     let inner_name = if let fastn_unresolved::UR::UnResolved(name) = name {
         name
@@ -186,7 +186,7 @@ mod tests {
             &main_package,
         );
 
-        assert_eq!(resolved, true);
+        assert!(resolved);
 
         let output_str = name.resolved().unwrap().str(&arena);
 
@@ -209,23 +209,23 @@ mod tests {
     fn basic() {
         t!("ftd.text", "ftd#text"); // Resolve builtin
         t!("ftd#text", "ftd#text"); // Resolve absolute symbol usage
-        // t!("foo", "-- integer foo: 10", "main.foo");
-        // t!("ftd.txt", "-- integer foo: 10", "main.foo");
-        // t!("ftd#txt", "-- integer foo: 10", "main.foo");
-        // t!("bar", "-- import: current-package/foo",  {"current-package/foo": "-- integer bar: 10"}, "foo.bar");
-        // t!(
-        //     "foo.bar",
-        //     "-- import: other-package/foo",
-        //     {"other-package/foo": "-- integer bar: 10"},
-        //     {"current-package": ["other-package"]},
-        //     "foo.bar"
-        // );
-        // t!(
-        //     "foo.bar",
-        //     "-- import: other-package/foo",
-        //     {"other-package/foo": "-- public integer bar: 10"},
-        //     {"current-package": ["other-package"]},
-        //     "foo.bar"
-        // );
+                                    // t!("foo", "-- integer foo: 10", "main.foo");
+                                    // t!("ftd.txt", "-- integer foo: 10", "main.foo");
+                                    // t!("ftd#txt", "-- integer foo: 10", "main.foo");
+                                    // t!("bar", "-- import: current-package/foo",  {"current-package/foo": "-- integer bar: 10"}, "foo.bar");
+                                    // t!(
+                                    //     "foo.bar",
+                                    //     "-- import: other-package/foo",
+                                    //     {"other-package/foo": "-- integer bar: 10"},
+                                    //     {"current-package": ["other-package"]},
+                                    //     "foo.bar"
+                                    // );
+                                    // t!(
+                                    //     "foo.bar",
+                                    //     "-- import: other-package/foo",
+                                    //     {"other-package/foo": "-- public integer bar: 10"},
+                                    //     {"current-package": ["other-package"]},
+                                    //     "foo.bar"
+                                    // );
     }
 }

@@ -8,7 +8,7 @@ pub const RECORD: &str = "record";
 
 impl Record {
     pub(crate) fn is_record(section: &ftd_p1::Section) -> bool {
-        section.kind.as_ref().map_or(false, |s| s.eq(RECORD))
+        section.kind.as_ref().is_some_and(|s| s.eq(RECORD))
     }
 
     pub(crate) fn from_p1(

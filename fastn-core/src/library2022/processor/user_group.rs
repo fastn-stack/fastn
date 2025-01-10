@@ -41,10 +41,10 @@ pub async fn get_identities(
 }
 
 // is user can_read the document or not based on defined readers in sitemap
-pub async fn is_reader<'a>(
+pub async fn is_reader(
     _value: ftd_ast::VariableValue,
     _kind: fastn_resolved::Kind,
-    _doc: &ftd::interpreter::TDoc<'a>,
+    _doc: &ftd::interpreter::TDoc<'_>,
     _req_config: &fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<fastn_resolved::Value> {
     Err(ftd::interpreter::Error::OtherError(
