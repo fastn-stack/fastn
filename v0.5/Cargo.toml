@@ -19,6 +19,7 @@ resolver = "2"
 authors = [
     "Amit Upadhyay <upadhyay@gmail.com>",
     "Arpita Jaiswal <arpita@fifthtry.com>",
+    "Siddhant Kumar <siddhant@fifthtry.com>",
 ]
 edition = "2021"
 description = "fastn: Full-stack Web Development Made Easy"

@@ -31,6 +31,7 @@ authors = [
     "Abrar Khan <abrar@fifthtry.com>",
     "Rithik Seth <rithik@fifthtry.com>",
     "Ganesh Salunke <ganesh@fifthtry.com>",
+    "Siddhant Kumar <siddhant@fifthtry.com>",
 ]
 edition = "2021"
 description = "fastn: Full-stack Web Development Made Easy"
