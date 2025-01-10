@@ -3,6 +3,7 @@ pub(super) fn import(
     document: &mut fastn_unresolved::Document,
     arena: &mut fastn_section::Arena,
     package: &Option<&fastn_package::Package>,
+    main_package_name: &str,
 ) {
     if let Some(ref kind) = section.init.kind {
         document
@@ -36,7 +37,18 @@ pub(super) fn import(
     fastn_unresolved::utils::assert_no_extra_headers(&section, document, &["exports", "exposing"]);
     validate_import_module_in_dependencies(section, document, arena, package, &i);
 
-    // Add alias in document
+    // Add import in document
+    add_import_in_document(document, arena, &i);
+
+    // Add Symbol aliases
+    add_symbol_aliases(document, arena, &i, main_package_name, package);
+}
+
+fn add_import_in_document(
+    document: &mut fastn_unresolved::Document,
+    arena: &mut fastn_section::Arena,
+    i: &Import,
+) {
     let alias = i
         .alias
         .as_ref()
@@ -57,10 +69,36 @@ pub(super) fn import(
             document.aliases = Some(arena.aliases.alloc(aliases));
         }
     }
+}
 
-    // Todo: Add Symbol aliases for export and exposing as well
-    todo!();
-    // document.imports.push(i);
+fn is_main_package(package: &Option<&fastn_package::Package>, main_package_name: &str) -> bool {
+    match package {
+        Some(package) => package.name == main_package_name,
+        None => false,
+    }
+}
+
+fn add_symbol_aliases(
+    _document: &mut fastn_unresolved::Document,
+    _arena: &mut fastn_section::Arena,
+    i: &Import,
+    main_package_name: &str,
+    package: &Option<&fastn_package::Package>,
+) {
+    let alias = if is_main_package(package, main_package_name) {
+        // Add Symbol aliases for exposing
+        &i.exposing
+    } else {
+        // Add Symbol aliases for exports
+        &i.export
+    };
+
+    let _alias = match alias {
+        Some(alias) => alias,
+        None => return,
+    };
+
+    todo!()
 }
 
 /// Validates that the import statement references a module in the current package or package's
