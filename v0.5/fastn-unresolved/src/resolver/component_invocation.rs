@@ -19,7 +19,11 @@ impl fastn_unresolved::ComponentInvocation {
             }
         }
 
-        tracing::info!("Resolve: ComponentInvocation({:?}) for package: {}", self.name, main_package.name);
+        tracing::info!(
+            "Resolve: ComponentInvocation({:?}) for package: {}",
+            self.name,
+            main_package.name
+        );
         resolved &= fastn_unresolved::resolver::symbol(
             self.aliases,
             self.module,
