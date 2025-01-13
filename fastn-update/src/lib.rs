@@ -129,7 +129,12 @@ async fn update_dependencies(
             let package_name = dep_package.name.clone();
             let dependency_path = &packages_root.join(&package_name);
 
-            if is_fifthtry_site_package(package_name.as_str()) {
+            if ds
+                .exists(&packages_root.join(&package_name).join(".is-local"), &None)
+                .await
+            {
+                continue;
+            } else if is_fifthtry_site_package(package_name.as_str()) {
                 update_fifthtry_site_dependency(
                     &dependency,
                     ds,
