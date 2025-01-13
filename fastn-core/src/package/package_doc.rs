@@ -69,7 +69,6 @@ impl fastn_core::Package {
         Ok(manifest)
     }
 
-    #[cfg(not(feature = "use-config-json"))]
     #[tracing::instrument(skip(self, ds))]
     pub(crate) async fn fs_fetch_by_id(
         &self,
@@ -109,52 +108,52 @@ impl fastn_core::Package {
         })
     }
 
-    #[cfg(feature = "use-config-json")]
-    pub(crate) async fn fs_fetch_by_id(
-        &self,
-        id: &str,
-        package_root: Option<&fastn_ds::Path>,
-        ds: &fastn_ds::DocumentStore,
-        session_id: &Option<String>,
-    ) -> fastn_core::Result<(String, Vec<u8>)> {
-        let new_id = if fastn_core::file::is_static(id)? {
-            if !self.files.contains(&id.trim_start_matches('/').to_string()) {
-                return Err(fastn_core::Error::PackageError {
-                    message: format!(
-                        "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
-                        id, &self.name
-                    ),
-                });
-            }
-
-            Some(id.to_string())
-        } else {
-            file_id_to_names(id)
-                .iter()
-                .find(|id| self.files.contains(id))
-                .map(|id| id.to_string())
-        };
-        if let Some(id) = new_id {
-            if let Ok(data) = self
-                .fs_fetch_by_file_name(id.as_str(), package_root, ds, session_id)
-                .await
-            {
-                return Ok((id.to_string(), data));
-            }
-        }
-
-        tracing::error!(
-            msg = "fs-error: file not found",
-            document = id,
-            package = self.name
-        );
-        Err(fastn_core::Error::PackageError {
-            message: format!(
-                "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
-                id, &self.name
-            ),
-        })
-    }
+    // #[cfg(feature = "use-config-json")]
+    // pub(crate) async fn fs_fetch_by_id(
+    //     &self,
+    //     id: &str,
+    //     package_root: Option<&fastn_ds::Path>,
+    //     ds: &fastn_ds::DocumentStore,
+    //     session_id: &Option<String>,
+    // ) -> fastn_core::Result<(String, Vec<u8>)> {
+    //     let new_id = if fastn_core::file::is_static(id)? {
+    //         if !self.files.contains(&id.trim_start_matches('/').to_string()) {
+    //             return Err(fastn_core::Error::PackageError {
+    //                 message: format!(
+    //                     "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {} 3",
+    //                     id, &self.name
+    //                 ),
+    //             });
+    //         }
+    //
+    //         Some(id.to_string())
+    //     } else {
+    //         file_id_to_names(id)
+    //             .iter()
+    //             .find(|id| self.files.contains(id))
+    //             .map(|id| id.to_string())
+    //     };
+    //     if let Some(id) = new_id {
+    //         if let Ok(data) = self
+    //             .fs_fetch_by_file_name(id.as_str(), package_root, ds, session_id)
+    //             .await
+    //         {
+    //             return Ok((id.to_string(), data));
+    //         }
+    //     }
+    //
+    //     tracing::error!(
+    //         msg = "fs-error: file not found",
+    //         document = id,
+    //         package = self.name
+    //     );
+    //     Err(fastn_core::Error::PackageError {
+    //         message: format!(
+    //             "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {} 2",
+    //             id, &self.name
+    //         ),
+    //     })
+    // }
 
     pub(crate) async fn resolve_by_file_name(
         &self,
@@ -260,7 +259,7 @@ impl fastn_core::Package {
                         tracing::error!(id = id, msg = "id error: can not get the dark");
                         return Err(fastn_core::Error::PackageError {
                             message: format!(
-                                "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {}",
+                                "fs_fetch_by_id:: Corresponding file not found for id: {}. Package: {} 1",
                                 id, &self.name
                             ),
                         });
