@@ -127,9 +127,14 @@ async fn update_dependencies(
 
             let dep_package = &dependency.package;
             let package_name = dep_package.name.clone();
-            let dependency_path = &packages_root.join(&package_name);
-
-            if is_fifthtry_site_package(package_name.as_str()) {
+            let dependency_path = packages_root.join(&package_name);
+            if ds.exists(&dependency_path.join(".is-local"), &None).await {
+                all_packages.push((
+                    package_name.to_string(),
+                    update_local_package_manifest(&dependency_path).await?,
+                ));
+                // explicitly not updating updated_packages as we did not actually update anything
+            } else if is_fifthtry_site_package(package_name.as_str()) {
                 update_fifthtry_site_dependency(
                     &dependency,
                     ds,
@@ -159,7 +164,7 @@ async fn update_dependencies(
             }
 
             let dep_package =
-                utils::resolve_dependency_package(ds, &dependency, dependency_path).await?;
+                utils::resolve_dependency_package(ds, &dependency, &dependency_path).await?;
             resolved.insert(package_name.to_string());
             pb.inc_length(1);
             stack.push(dep_package);
@@ -285,6 +290,16 @@ async fn update_fifthtry_site_dependency(
     all_packages.push((package_name.to_string(), manifest));
     *updated_packages += 1;
     Ok(())
+}
+
+async fn update_local_package_manifest(
+    _path: &fastn_ds::Path,
+) -> Result<fastn_core::Manifest, fastn_update::UpdateError> {
+    Ok(fastn_core::Manifest {
+        files: Default::default(),
+        zip_url: "".to_string(),
+        checksum: "".to_string(),
+    })
 }
 
 async fn download_unpack_zip_and_get_manifest(
