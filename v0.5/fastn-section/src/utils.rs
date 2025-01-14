@@ -167,6 +167,19 @@ impl fastn_section::Kind {
 
         Some(self.name.clone())
     }
+
+    pub fn to_identifier(&self) -> Option<fastn_section::Identifier> {
+        if self.args.is_some() {
+            return None;
+        }
+
+        match self.name {
+            fastn_section::IdentifierReference::Local(ref name) => {
+                Some(fastn_section::Identifier { name: name.clone() })
+            }
+            _ => None,
+        }
+    }
 }
 
 impl From<fastn_section::IdentifierReference> for fastn_section::Kind {
