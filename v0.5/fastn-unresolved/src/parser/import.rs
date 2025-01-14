@@ -254,7 +254,16 @@ mod tests {
         // )
     }
 
-    fastn_unresolved::tt!(super::import, tester);
+    fn import_function(
+        section: fastn_section::Section,
+        document: &mut fastn_unresolved::Document,
+        arena: &mut fastn_section::Arena,
+        package: &Option<&fastn_package::Package>,
+    ) {
+        super::import(section, document, arena, package, "foo");
+    }
+
+    fastn_unresolved::tt!(import_function, tester);
 
     #[test]
     fn import() {
