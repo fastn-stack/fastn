@@ -239,6 +239,14 @@ fn aliasable(span: &fastn_section::Span, s: &str) -> AliasableIdentifier {
 
 #[cfg(test)]
 mod tests {
+    fastn_unresolved::tt!(import_function, tester);
+
+    #[test]
+    fn import() {
+        t!("-- import: foo", { "import": "foo" });
+        // t!("-- import: foo.fifthtry.site/bar", { "import": "foo.fifthtry.site/bar" });
+        // t!("-- import: foo as f", { "import": "foo=>f" });
+    }
 
     #[track_caller]
     fn tester(
@@ -249,7 +257,6 @@ mod tests {
         assert!(d.content.is_empty());
         assert!(d.definitions.is_empty());
         assert!(d.aliases.is_some());
-
 
         assert_eq!(
             fastn_section::JIDebug::idebug(&AliasesID(d.aliases.unwrap()), arena),
@@ -264,15 +271,6 @@ mod tests {
         package: &Option<&fastn_package::Package>,
     ) {
         super::import(section, document, arena, package, "foo");
-    }
-
-    fastn_unresolved::tt!(import_function, tester);
-
-    #[test]
-    fn import() {
-        t!("-- import: foo", { "import": "foo" });
-        // t!("-- import: foo.fifthtry.site/bar", { "import": "foo.fifthtry.site/bar" });
-        // t!("-- import: foo as f", { "import": "foo=>f" });
     }
 
     #[test]
