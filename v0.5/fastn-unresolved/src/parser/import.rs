@@ -49,11 +49,7 @@ fn add_import_in_document(
     arena: &mut fastn_section::Arena,
     i: &Import,
 ) {
-    let alias = i
-        .alias
-        .as_ref()
-        .map(|alias| alias.str().to_string())
-        .unwrap_or_else(|| i.module.package(arena).to_string());
+    let alias = i.alias.str().to_string();
 
     match document.aliases {
         Some(id) => {
@@ -159,15 +155,23 @@ fn parse_import(
 
     // section.caption must be single text block, parsable as a module-name.
     //       module-name must be internally able to handle aliasing.
-    let (module, alias) = match caption.str().split_once(" as ") {
+    let (raw_module, alias) = match caption.str().split_once(" as ") {
         Some((module, alias)) => (module, Some(alias)),
         None => (caption.str(), None),
     };
 
-    let (package, module) = match module.rsplit_once("/") {
+    let (package, module) = match raw_module.rsplit_once("/") {
         Some((package, module)) => (package, Some(module)),
-        None => (module, None),
+        None => (raw_module, None),
     };
+
+    // Determine the alias: prioritize explicit alias, fallback to module name, then package name
+    let alias = alias
+        .or(module)
+        .unwrap_or_else(|| match package.rsplit_once(".") {
+            Some((_, alias)) => alias,
+            None => package,
+        });
 
     Some(Import {
         module: if let Some(module) = module {
@@ -179,9 +183,9 @@ fn parse_import(
         } else {
             fastn_section::Module::new(caption.inner_str(package).str(), None, arena)
         },
-        alias: alias.map(|v| fastn_section::Identifier {
-            name: caption.inner_str(v),
-        }),
+        alias: fastn_section::Identifier {
+            name: caption.inner_str(alias),
+        },
         export: parse_field("export", section, document),
         exposing: parse_field("exposing", section, document),
     })
@@ -204,7 +208,7 @@ pub struct AliasableIdentifier {
 #[derive(Debug, Clone, PartialEq)]
 pub struct Import {
     pub module: fastn_section::Module,
-    pub alias: Option<fastn_section::Identifier>,
+    pub alias: fastn_section::Identifier,
     pub export: Option<Export>,
     pub exposing: Option<Export>,
 }
@@ -244,8 +248,8 @@ mod tests {
     #[test]
     fn import() {
         t!("-- import: foo", { "import": "foo" });
-        // t!("-- import: foo.fifthtry.site/bar", { "import": "foo.fifthtry.site/bar" });
-        // t!("-- import: foo as f", { "import": "foo=>f" });
+        t!("-- import: foo.fifthtry.site/bar", { "import": "foo.fifthtry.site/bar=>bar" });
+        t!("-- import: foo as f", { "import": "foo=>f" });
     }
 
     #[track_caller]
@@ -318,62 +322,6 @@ mod tests {
             }
 
             serde_json::Value::Object(o)
-        }
-    }
-
-    impl fastn_section::JIDebug for super::Import {
-        fn idebug(&self, arena: &fastn_section::Arena) -> serde_json::Value {
-            let mut o = serde_json::Map::new();
-
-            let name = if self.module.package(arena).is_empty() {
-                self.module.module(arena).to_string()
-            } else {
-                format!(
-                    "{}/{}",
-                    self.module.package(arena),
-                    self.module.module(arena)
-                )
-            };
-
-            o.insert(
-                "import".into(),
-                match self.alias {
-                    Some(ref v) => format!("{name}=>{}", v.str()),
-                    None => name,
-                }
-                .into(),
-            );
-
-            if let Some(ref v) = self.export {
-                o.insert("export".into(), v.idebug(arena));
-            }
-
-            if let Some(ref v) = self.exposing {
-                o.insert("exposing".into(), v.idebug(arena));
-            }
-
-            serde_json::Value::Object(o)
-        }
-    }
-
-    impl fastn_section::JIDebug for super::Export {
-        fn idebug(&self, arena: &fastn_section::Arena) -> serde_json::Value {
-            match self {
-                super::Export::All => "all".into(),
-                super::Export::Things(v) => {
-                    serde_json::Value::Array(v.iter().map(|v| v.idebug(arena)).collect())
-                }
-            }
-        }
-    }
-
-    impl fastn_section::JIDebug for super::AliasableIdentifier {
-        fn idebug(&self, _arena: &fastn_section::Arena) -> serde_json::Value {
-            match self.alias {
-                Some(ref v) => format!("{}=>{}", self.name.str(), v.str()),
-                None => self.name.str().to_string(),
-            }
-            .into()
         }
     }
 }
