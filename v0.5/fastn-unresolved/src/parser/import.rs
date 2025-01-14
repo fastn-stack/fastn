@@ -239,19 +239,22 @@ fn aliasable(span: &fastn_section::Span, s: &str) -> AliasableIdentifier {
 
 #[cfg(test)]
 mod tests {
+
     #[track_caller]
     fn tester(
         d: fastn_unresolved::Document,
-        _expected: serde_json::Value,
-        _arena: &fastn_section::Arena,
+        expected: serde_json::Value,
+        arena: &fastn_section::Arena,
     ) {
         assert!(d.content.is_empty());
         assert!(d.definitions.is_empty());
+        assert!(d.aliases.is_some());
 
-        // assert_eq!(
-        //     fastn_unresolved::JDebug::debug(&d.imports.pop().unwrap()),
-        //     expected
-        // )
+
+        assert_eq!(
+            fastn_section::JIDebug::idebug(&AliasesID(d.aliases.unwrap()), arena),
+            expected
+        )
     }
 
     fn import_function(
@@ -290,6 +293,34 @@ mod tests {
         t!("-- import: foo\nexport: x, y, z\nexposing: y", { "import": "foo", "export": ["x", "y", "z"], "exposing": ["y"] });
         t!("-- import: foo as f\nexport: x as y\nexposing: y", { "import": "foo as f", "export": ["x=>y"], "exposing": ["y"] });
         t!("-- import: foo as f\nexport: x as y, z\nexposing: y", { "import": "foo as f", "export": ["x=>y", "z"], "exposing": ["y"] });
+    }
+
+    #[derive(Debug)]
+    struct AliasesID(fastn_section::AliasesID);
+    impl fastn_section::JIDebug for AliasesID {
+        fn idebug(&self, arena: &fastn_section::Arena) -> serde_json::Value {
+            let aliases = arena.aliases.get(self.0).unwrap();
+            let mut o = serde_json::Map::new();
+            for (key, value) in aliases {
+                match value {
+                    fastn_section::SoM::Module(m) => {
+                        let module_name = m.str(arena);
+                        if module_name.eq("ftd") {
+                            continue;
+                        }
+
+                        if module_name.eq(key) {
+                            o.insert("import".into(), module_name.into());
+                        } else {
+                            o.insert("import".into(), format!("{module_name}=>{key}").into());
+                        }
+                    }
+                    fastn_section::SoM::Symbol(_) => todo!(),
+                }
+            }
+
+            serde_json::Value::Object(o)
+        }
     }
 
     impl fastn_section::JIDebug for super::Import {
