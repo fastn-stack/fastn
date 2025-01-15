@@ -8,7 +8,7 @@
 //     }
 // }
 
-use crate::JDebug;
+use fastn_section::JDebug;
 
 impl fastn_section::JDebug for fastn_section::Visibility {
     fn debug(&self) -> serde_json::Value {
@@ -111,6 +111,17 @@ impl fastn_section::JDebug for fastn_section::Kind {
 impl fastn_section::JDebug for fastn_section::HeaderValue {
     fn debug(&self) -> serde_json::Value {
         self.0.debug()
+    }
+}
+
+impl fastn_section::JDebug for fastn_section::KindedName {
+    fn debug(&self) -> serde_json::Value {
+        let mut o = serde_json::Map::new();
+        if let Some(kind) = &self.kind {
+            o.insert("kind".into(), kind.debug());
+        }
+        o.insert("name".into(), self.name.debug());
+        serde_json::Value::Object(o)
     }
 }
 

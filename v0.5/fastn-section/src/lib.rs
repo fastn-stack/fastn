@@ -237,3 +237,9 @@ pub struct Fuel {
     #[allow(dead_code)]
     remaining: std::rc::Rc<std::cell::RefCell<usize>>,
 }
+
+#[derive(Debug)]
+pub struct KindedName {
+    pub kind: Option<Kind>,
+    pub name: IdentifierReference,
+}
