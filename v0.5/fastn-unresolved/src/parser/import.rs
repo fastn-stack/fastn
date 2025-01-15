@@ -38,43 +38,26 @@ pub(super) fn import(
     validate_import_module_in_dependencies(section, document, arena, package, &i);
 
     // Add import in document
-    add_import_in_document(document, arena, &i);
+    add_import(document, arena, &i);
 
-    // Add Symbol aliases
-    add_symbol_aliases(document, arena, &i, main_package_name, package);
+    // Add export and exposing in document
+    add_export_and_exposing(document, arena, &i, main_package_name, package);
 }
 
-fn add_import_in_document(
+fn add_import(
     document: &mut fastn_unresolved::Document,
     arena: &mut fastn_section::Arena,
     i: &Import,
 ) {
-    let alias = i.alias.str().to_string();
-
-    match document.aliases {
-        Some(id) => {
-            arena
-                .aliases
-                .get_mut(id)
-                .unwrap()
-                .insert(alias, fastn_section::SoM::Module(i.module));
-        }
-        None => {
-            let aliases =
-                fastn_section::Aliases::from_iter([(alias, fastn_section::SoM::Module(i.module))]);
-            document.aliases = Some(arena.aliases.alloc(aliases));
-        }
-    }
+    add_to_document_alias(
+        document,
+        arena,
+        i.alias.str(),
+        fastn_section::SoM::Module(i.module),
+    );
 }
 
-fn is_main_package(package: &Option<&fastn_package::Package>, main_package_name: &str) -> bool {
-    match package {
-        Some(package) => package.name == main_package_name,
-        None => false,
-    }
-}
-
-fn add_symbol_aliases(
+fn add_export_and_exposing(
     document: &mut fastn_unresolved::Document,
     arena: &mut fastn_section::Arena,
     i: &Import,
@@ -98,32 +81,39 @@ fn add_symbol_aliases(
         Export::All => todo!(),
         Export::Things(things) => {
             for thing in things {
-                let alias = thing
-                    .alias
-                    .as_ref()
-                    .unwrap_or_else(|| &thing.name)
-                    .str()
-                    .to_string();
+                let alias = thing.alias.as_ref().unwrap_or_else(|| &thing.name).str();
 
                 let symbol = i.module.symbol(thing.name.str(), arena);
-
-                match document.aliases {
-                    Some(id) => {
-                        arena
-                            .aliases
-                            .get_mut(id)
-                            .unwrap()
-                            .insert(alias, fastn_section::SoM::Symbol(symbol));
-                    }
-                    None => {
-                        let aliases = fastn_section::Aliases::from_iter([(
-                            alias,
-                            fastn_section::SoM::Symbol(symbol),
-                        )]);
-                        document.aliases = Some(arena.aliases.alloc(aliases));
-                    }
-                }
+                add_to_document_alias(document, arena, alias, fastn_section::SoM::Symbol(symbol));
             }
+        }
+    }
+}
+
+fn is_main_package(package: &Option<&fastn_package::Package>, main_package_name: &str) -> bool {
+    match package {
+        Some(package) => package.name == main_package_name,
+        None => false,
+    }
+}
+
+fn add_to_document_alias(
+    document: &mut fastn_unresolved::Document,
+    arena: &mut fastn_section::Arena,
+    alias: &str,
+    som: fastn_section::SoM,
+) {
+    match document.aliases {
+        Some(id) => {
+            arena
+                .aliases
+                .get_mut(id)
+                .unwrap()
+                .insert(alias.to_string(), som);
+        }
+        None => {
+            let aliases = fastn_section::Aliases::from_iter([(alias.to_string(), som)]);
+            document.aliases = Some(arena.aliases.alloc(aliases));
         }
     }
 }
