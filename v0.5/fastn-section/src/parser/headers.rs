@@ -20,7 +20,7 @@ pub fn headers(
         }
 
         scanner.skip_spaces();
-        let value = fastn_section::parser::header_value(scanner);
+        let value = fastn_section::parser::header_value(scanner).unwrap_or_default();
 
         // TODO: all the rest
         headers.push(fastn_section::Header {

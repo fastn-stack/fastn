@@ -165,7 +165,7 @@ pub struct Header {
     pub doc: Option<fastn_section::Span>,
     pub visibility: Option<fastn_section::Spanned<fastn_section::Visibility>>,
     pub condition: Option<fastn_section::Span>,
-    pub value: Option<fastn_section::HeaderValue>,
+    pub value: fastn_section::HeaderValue,
     pub is_commented: bool,
 }
 
