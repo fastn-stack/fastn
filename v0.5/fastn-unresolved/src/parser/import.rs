@@ -272,12 +272,18 @@ mod tests {
             t!("-- import: foo", { "import": "foo" });
             t!("-- import: foo.fifthtry.site/bar", { "import": "foo.fifthtry.site/bar=>bar" });
             t!("-- import: foo as f", { "import": "foo=>f" });
+
             t!("-- import: foo\nexposing: bar", { "import": "foo", "symbols": ["foo#bar"] });
             t!("-- import: foo as f\nexposing: bar", { "import": "foo=>f", "symbols": ["foo#bar"] });
             t!(
                 "-- import: foo as f\nexposing: bar, moo",
                 { "import": "foo=>f", "symbols": ["foo#bar", "foo#moo"] }
             );
+            t!(
+                "-- import: foo as f\nexposing: bar as b, moo",
+                { "import": "foo=>f", "symbols": ["foo#bar=>b", "foo#moo"] }
+            );
+
             t!("-- import: foo\nexport: bar", { "import": "foo" });
         }
     }
@@ -371,7 +377,7 @@ mod tests {
         fn idebug(&self, arena: &fastn_section::Arena) -> serde_json::Value {
             let aliases = arena.aliases.get(self.0).unwrap();
             let mut o = serde_json::Map::new();
-            let mut symbols: Vec<&str> = vec![];
+            let mut symbols: Vec<String> = vec![];
             for (key, value) in aliases {
                 match value {
                     fastn_section::SoM::Module(m) => {
@@ -387,7 +393,12 @@ mod tests {
                         }
                     }
                     fastn_section::SoM::Symbol(s) => {
-                        symbols.push(s.str(arena));
+                        let symbol_name = s.str(arena).to_string();
+                        if symbol_name.ends_with(format!("#{key}").as_str()) {
+                            symbols.push(symbol_name)
+                        } else {
+                            symbols.push(format!("{symbol_name}=>{key}"));
+                        }
                     }
                 }
             }
