@@ -274,19 +274,33 @@ fn aliasable(span: &fastn_section::Span, s: &str) -> AliasableIdentifier {
 
 #[cfg(test)]
 mod tests {
-    fastn_unresolved::tt!(import_function, tester);
+    mod main_package {
+        fastn_unresolved::tt!(super::import_in_main_package_function, super::tester);
 
-    #[test]
-    fn import() {
-        t!("-- import: foo", { "import": "foo" });
-        t!("-- import: foo.fifthtry.site/bar", { "import": "foo.fifthtry.site/bar=>bar" });
-        t!("-- import: foo as f", { "import": "foo=>f" });
-        t!("-- import: foo\nexposing: bar", { "import": "foo", "symbols": ["foo#bar"] });
-        t!("-- import: foo as f\nexposing: bar", { "import": "foo=>f", "symbols": ["foo#bar"] });
-        t!(
-            "-- import: foo as f\nexposing: bar, moo",
-            { "import": "foo=>f", "symbols": ["foo#bar", "foo#moo"] }
-        );
+        #[test]
+        fn import() {
+            t!("-- import: foo", { "import": "foo" });
+            t!("-- import: foo.fifthtry.site/bar", { "import": "foo.fifthtry.site/bar=>bar" });
+            t!("-- import: foo as f", { "import": "foo=>f" });
+            t!("-- import: foo\nexposing: bar", { "import": "foo", "symbols": ["foo#bar"] });
+            t!("-- import: foo as f\nexposing: bar", { "import": "foo=>f", "symbols": ["foo#bar"] });
+            t!(
+                "-- import: foo as f\nexposing: bar, moo",
+                { "import": "foo=>f", "symbols": ["foo#bar", "foo#moo"] }
+            );
+            t!("-- import: foo\nexport: bar", { "import": "foo" });
+        }
+    }
+
+    mod other_package {
+        fastn_unresolved::tt!(super::import_in_other_package_function, super::tester);
+
+        #[test]
+        fn import() {
+            t!("-- import: foo", { "import": "foo" });
+            t!("-- import: foo\nexport: bar", { "import": "foo", "symbols": ["foo#bar"] });
+            t!("-- import: foo\nexposing: bar", { "import": "foo" });
+        }
     }
 
     #[track_caller]
@@ -305,40 +319,60 @@ mod tests {
         )
     }
 
-    fn import_function(
+    fn import_in_main_package_function(
         section: fastn_section::Section,
         document: &mut fastn_unresolved::Document,
         arena: &mut fastn_section::Arena,
         _package: &Option<&fastn_package::Package>,
     ) {
         let package = fastn_package::Package {
-            name: "foo".to_string(),
+            name: "main".to_string(),
             dependencies: vec![],
             auto_imports: vec![],
             favicon: None,
         };
 
-        super::import(section, document, arena, &Some(&package), "foo");
+        super::import(section, document, arena, &Some(&package), "main");
     }
 
-    #[test]
-    #[should_panic]
-    fn failing_tests() {
-        t!("-- import: foo as f\nexposing: x", { "import": "foo=>f", "exposing": ["x"] });
-        t!("-- import: foo\nexposing: x", { "import": "foo", "exposing": ["x"] });
-        t!("-- import: foo\nexposing: x, y, z", { "import": "foo", "exposing": ["x", "y", "z"] });
-        t!("-- import: foo as f\nexposing: x as y", { "import": "foo as f", "exposing": ["x=>y"] });
-        t!("-- import: foo as f\nexposing: x as y, z", { "import": "foo as f", "exposing": ["x=>y", "z"] });
-        t!("-- import: foo as f\nexport: x", { "import": "foo=>f", "export": ["x"] });
-        t!("-- import: foo\nexport: x", { "import": "foo", "export": ["x"] });
-        t!("-- import: foo\nexport: x, y, z", { "import": "foo", "export": ["x", "y", "z"] });
-        t!("-- import: foo as f\nexport: x as y", { "import": "foo as f", "export": ["x=>y"] });
-        t!("-- import: foo as f\nexport: x as y, z", { "import": "foo as f", "export": ["x=>y", "z"] });
-        t!("-- import: foo as f\nexport: x\nexposing: y", { "import": "foo=>f", "export": ["x"], "exposing": ["y"] });
-        t!("-- import: foo\nexport: x\nexposing: y", { "import": "foo", "export": ["x"], "exposing": ["y"] });
-        t!("-- import: foo\nexport: x, y, z\nexposing: y", { "import": "foo", "export": ["x", "y", "z"], "exposing": ["y"] });
-        t!("-- import: foo as f\nexport: x as y\nexposing: y", { "import": "foo as f", "export": ["x=>y"], "exposing": ["y"] });
-        t!("-- import: foo as f\nexport: x as y, z\nexposing: y", { "import": "foo as f", "export": ["x=>y", "z"], "exposing": ["y"] });
+    fn import_in_other_package_function(
+        section: fastn_section::Section,
+        document: &mut fastn_unresolved::Document,
+        arena: &mut fastn_section::Arena,
+        _package: &Option<&fastn_package::Package>,
+    ) {
+        let package = fastn_package::Package {
+            name: "other".to_string(),
+            dependencies: vec![],
+            auto_imports: vec![],
+            favicon: None,
+        };
+
+        super::import(section, document, arena, &Some(&package), "main");
+    }
+
+    mod fail {
+
+        fastn_unresolved::tt!(super::import_in_other_package_function, super::tester);
+        #[test]
+        #[should_panic]
+        fn failing_tests() {
+            t!("-- import: foo as f\nexposing: x", { "import": "foo=>f", "exposing": ["x"] });
+            t!("-- import: foo\nexposing: x", { "import": "foo", "exposing": ["x"] });
+            t!("-- import: foo\nexposing: x, y, z", { "import": "foo", "exposing": ["x", "y", "z"] });
+            t!("-- import: foo as f\nexposing: x as y", { "import": "foo as f", "exposing": ["x=>y"] });
+            t!("-- import: foo as f\nexposing: x as y, z", { "import": "foo as f", "exposing": ["x=>y", "z"] });
+            t!("-- import: foo as f\nexport: x", { "import": "foo=>f", "export": ["x"] });
+            t!("-- import: foo\nexport: x", { "import": "foo", "export": ["x"] });
+            t!("-- import: foo\nexport: x, y, z", { "import": "foo", "export": ["x", "y", "z"] });
+            t!("-- import: foo as f\nexport: x as y", { "import": "foo as f", "export": ["x=>y"] });
+            t!("-- import: foo as f\nexport: x as y, z", { "import": "foo as f", "export": ["x=>y", "z"] });
+            t!("-- import: foo as f\nexport: x\nexposing: y", { "import": "foo=>f", "export": ["x"], "exposing": ["y"] });
+            t!("-- import: foo\nexport: x\nexposing: y", { "import": "foo", "export": ["x"], "exposing": ["y"] });
+            t!("-- import: foo\nexport: x, y, z\nexposing: y", { "import": "foo", "export": ["x", "y", "z"], "exposing": ["y"] });
+            t!("-- import: foo as f\nexport: x as y\nexposing: y", { "import": "foo as f", "export": ["x=>y"], "exposing": ["y"] });
+            t!("-- import: foo as f\nexport: x as y, z\nexposing: y", { "import": "foo as f", "export": ["x=>y", "z"], "exposing": ["y"] });
+        }
     }
 
     #[derive(Debug)]
