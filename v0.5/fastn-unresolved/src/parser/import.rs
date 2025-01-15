@@ -75,8 +75,8 @@ fn is_main_package(package: &Option<&fastn_package::Package>, main_package_name:
 }
 
 fn add_symbol_aliases(
-    _document: &mut fastn_unresolved::Document,
-    _arena: &mut fastn_section::Arena,
+    document: &mut fastn_unresolved::Document,
+    arena: &mut fastn_section::Arena,
     i: &Import,
     main_package_name: &str,
     package: &Option<&fastn_package::Package>,
@@ -89,12 +89,43 @@ fn add_symbol_aliases(
         &i.export
     };
 
-    let _alias = match alias {
+    let alias = match alias {
         Some(alias) => alias,
         None => return,
     };
 
-    todo!()
+    match alias {
+        Export::All => todo!(),
+        Export::Things(things) => {
+            for thing in things {
+                let alias = thing
+                    .alias
+                    .as_ref()
+                    .unwrap_or_else(|| &thing.name)
+                    .str()
+                    .to_string();
+
+                let symbol = i.module.symbol(thing.name.str(), arena);
+
+                match document.aliases {
+                    Some(id) => {
+                        arena
+                            .aliases
+                            .get_mut(id)
+                            .unwrap()
+                            .insert(alias, fastn_section::SoM::Symbol(symbol));
+                    }
+                    None => {
+                        let aliases = fastn_section::Aliases::from_iter([(
+                            alias,
+                            fastn_section::SoM::Symbol(symbol),
+                        )]);
+                        document.aliases = Some(arena.aliases.alloc(aliases));
+                    }
+                }
+            }
+        }
+    }
 }
 
 /// Validates that the import statement references a module in the current package or package's
@@ -224,7 +255,7 @@ fn parse_field(
         header
             .str()
             .split(",")
-            .map(|v| aliasable(header, v))
+            .map(|v| aliasable(header, v.trim()))
             .collect(),
     ))
 }
@@ -250,6 +281,12 @@ mod tests {
         t!("-- import: foo", { "import": "foo" });
         t!("-- import: foo.fifthtry.site/bar", { "import": "foo.fifthtry.site/bar=>bar" });
         t!("-- import: foo as f", { "import": "foo=>f" });
+        t!("-- import: foo\nexposing: bar", { "import": "foo", "symbols": ["foo#bar"] });
+        t!("-- import: foo as f\nexposing: bar", { "import": "foo=>f", "symbols": ["foo#bar"] });
+        t!(
+            "-- import: foo as f\nexposing: bar, moo",
+            { "import": "foo=>f", "symbols": ["foo#bar", "foo#moo"] }
+        );
     }
 
     #[track_caller]
@@ -272,9 +309,16 @@ mod tests {
         section: fastn_section::Section,
         document: &mut fastn_unresolved::Document,
         arena: &mut fastn_section::Arena,
-        package: &Option<&fastn_package::Package>,
+        _package: &Option<&fastn_package::Package>,
     ) {
-        super::import(section, document, arena, package, "foo");
+        let package = fastn_package::Package {
+            name: "foo".to_string(),
+            dependencies: vec![],
+            auto_imports: vec![],
+            favicon: None,
+        };
+
+        super::import(section, document, arena, &Some(&package), "foo");
     }
 
     #[test]
@@ -303,6 +347,7 @@ mod tests {
         fn idebug(&self, arena: &fastn_section::Arena) -> serde_json::Value {
             let aliases = arena.aliases.get(self.0).unwrap();
             let mut o = serde_json::Map::new();
+            let mut symbols: Vec<&str> = vec![];
             for (key, value) in aliases {
                 match value {
                     fastn_section::SoM::Module(m) => {
@@ -317,8 +362,18 @@ mod tests {
                             o.insert("import".into(), format!("{module_name}=>{key}").into());
                         }
                     }
-                    fastn_section::SoM::Symbol(_) => todo!(),
+                    fastn_section::SoM::Symbol(s) => {
+                        symbols.push(s.str(arena));
+                    }
                 }
+            }
+
+            if !symbols.is_empty() {
+                symbols.sort();
+                o.insert(
+                    "symbols".into(),
+                    serde_json::Value::Array(symbols.into_iter().map(Into::into).collect()),
+                );
             }
 
             serde_json::Value::Object(o)
