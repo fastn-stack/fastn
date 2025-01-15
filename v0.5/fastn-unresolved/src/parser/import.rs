@@ -302,9 +302,20 @@ mod tests {
 
         #[test]
         fn import() {
+            // import without exposing or export
             t!("-- import: foo", { "import": "foo" });
+
+            // import with export
             t!("-- import: foo\nexport: bar", { "import": "foo", "symbols": ["foo#bar"] });
+
+            // import with exposing
             t!("-- import: foo\nexposing: bar", { "import": "foo" });
+
+            // import with both exposing or export
+            t!(
+                "-- import: foo\nexposing: bar\nexport: moo",
+                { "import": "foo", "symbols": ["foo#moo"] }
+            );
         }
     }
 
