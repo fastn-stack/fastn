@@ -269,10 +269,12 @@ mod tests {
 
         #[test]
         fn import() {
+            // import without exposing or export
             t!("-- import: foo", { "import": "foo" });
             t!("-- import: foo.fifthtry.site/bar", { "import": "foo.fifthtry.site/bar=>bar" });
             t!("-- import: foo as f", { "import": "foo=>f" });
 
+            // import with exposing
             t!("-- import: foo\nexposing: bar", { "import": "foo", "symbols": ["foo#bar"] });
             t!("-- import: foo as f\nexposing: bar", { "import": "foo=>f", "symbols": ["foo#bar"] });
             t!(
@@ -284,7 +286,14 @@ mod tests {
                 { "import": "foo=>f", "symbols": ["foo#bar=>b", "foo#moo"] }
             );
 
+            // import with export
             t!("-- import: foo\nexport: bar", { "import": "foo" });
+
+            // import with both exposing or export
+            t!(
+                "-- import: foo\nexposing: bar\nexport: moo",
+                { "import": "foo", "symbols": ["foo#bar"] }
+            );
         }
     }
 
