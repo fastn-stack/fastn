@@ -50,6 +50,24 @@ impl fastn_section::JDebug for fastn_section::Section {
             o.insert("caption".to_string(), c.0.debug());
         }
 
+        if !self.headers.is_empty() {
+            o.insert("headers".into(), self.headers.debug());
+        }
+
+        serde_json::Value::Object(o)
+    }
+}
+
+impl fastn_section::JDebug for fastn_section::Header {
+    fn debug(&self) -> serde_json::Value {
+        let mut o = serde_json::Map::new();
+        if let Some(kind) = &self.kind {
+            o.insert("kind".into(), kind.debug());
+        }
+        o.insert("name".into(), self.name.debug());
+        if !self.value.0.is_empty() {
+            o.insert("value".into(), self.value.debug());
+        }
         serde_json::Value::Object(o)
     }
 }

@@ -6,12 +6,28 @@ pub fn section(
     scanner.skip_spaces();
     let caption = fastn_section::parser::header_value(scanner);
 
+    // Get headers
+    let mut new_line = scanner.token("\n");
+    let mut headers = vec![];
+    if new_line.is_some() {
+        headers = fastn_section::parser::headers(scanner);
+        if !headers.is_empty() {
+            new_line = scanner.token("\n");
+        }
+    }
+
+    // Get body
+    let mut body = None;
+    if new_line.is_some() {
+        body = fastn_section::parser::body(scanner);
+    }
+
     Some(fastn_section::Section {
         init: section_init,
         module: scanner.module,
         caption,
-        headers: fastn_section::parser::headers(scanner),
-        body: fastn_section::parser::body(scanner),
+        headers,
+        body,
         children: vec![],    // children is populated by the wiggin::ender.
         is_commented: false, // TODO
         has_end: false,      // has_end is populated by the wiggin::ender.
@@ -25,5 +41,33 @@ mod test {
     #[test]
     fn section() {
         t!("-- foo: Hello World", {"init": {"name": "foo"}, "caption": ["Hello World"]});
+        t!(
+            "-- foo: Hello World\ngreeting: hello",
+            {
+                "init": {"name": "foo"},
+                "caption": ["Hello World"],
+                "headers": [{
+                    "name": "greeting",
+                    "value": ["hello"]
+                }]
+            }
+        );
+        t!(
+            "-- foo: Hello World\ngreeting: hello\nwishes: Be happy",
+            {
+                "init": {"name": "foo"},
+                "caption": ["Hello World"],
+                "headers": [
+                    {
+                        "name": "greeting",
+                        "value": ["hello"]
+                    },
+                    {
+                        "name": "wishes",
+                        "value": ["Be happy"]
+                    }
+                ]
+            }
+        );
     }
 }

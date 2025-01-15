@@ -2,7 +2,7 @@ pub fn headers(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Vec<fastn_section::Header> {
     let mut headers = vec![];
-    let start_index = scanner.index();
+    let mut found_new_line_at_header_end = true;
 
     loop {
         let index = scanner.index();
@@ -16,6 +16,11 @@ pub fn headers(
         };
         let colon = scanner.token(":");
         if colon.is_none() {
+            scanner.reset(index);
+            break;
+        }
+
+        if !found_new_line_at_header_end {
             scanner.reset(index);
             break;
         }
@@ -36,9 +41,7 @@ pub fn headers(
 
         let new_line = scanner.token("\n");
         if new_line.is_none() {
-            // TODO: throw error
-            scanner.reset(start_index);
-            break;
+            found_new_line_at_header_end = false;
         }
     }
 
@@ -70,25 +73,12 @@ impl From<fastn_section::Kind> for Option<fastn_section::Identifier> {
     }
 }
 
-impl fastn_section::JDebug for fastn_section::Header {
-    fn debug(&self) -> serde_json::Value {
-        let mut o = serde_json::Map::new();
-        if let Some(kind) = &self.kind {
-            o.insert("kind".into(), kind.debug());
-        }
-        o.insert("name".into(), self.name.debug());
-        if !self.value.0.is_empty() {
-            o.insert("value".into(), self.value.debug());
-        }
-        serde_json::Value::Object(o)
-    }
-}
-
 mod test {
     fastn_section::tt!(super::headers);
 
     #[test]
     fn tes() {
+        t!("greeting: hello", [{"name": "greeting", "value": ["hello"]}]);
         t!("greeting: hello\n", [{"name": "greeting", "value": ["hello"]}]);
         t!(
             "greeting: hello\nwishes: Happy New Year\n",
