@@ -73,5 +73,16 @@ mod tests {
                 "properties": [{"name": "color", "value": ["red"]}]
             }
         );
+        t!(
+            "-- ftd.text: hello\ncolor: red\nstyle: bold",
+            {
+                "content": "ftd.text",
+                "caption": ["hello"],
+                "properties": [
+                    {"name": "color", "value": ["red"]},
+                    {"name": "style", "value": ["bold"]}
+                ]
+            }
+        );
     }
 }
