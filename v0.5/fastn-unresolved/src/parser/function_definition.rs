@@ -71,7 +71,7 @@ mod tests {
         assert_eq!(d.definitions.len(), 1);
 
         assert_eq!(
-            fastn_section::JIDebug::idebug(
+            fastn_unresolved::JIDebug::idebug(
                 d.definitions.pop().unwrap().unresolved().unwrap(),
                 arena
             ),

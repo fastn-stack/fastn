@@ -11,13 +11,28 @@ pub(super) fn component_invocation(
         // we will go ahead with this component invocation parsing
     }
 
+    let properties = {
+        let mut properties = vec![];
+        for header in section.headers {
+            // Todo: check header should not have kind and visibility etc
+            // Todo handle condition
+            properties.push(fastn_unresolved::UR::UnResolved(
+                fastn_unresolved::Property {
+                    name: header.name,
+                    value: header.value,
+                },
+            ))
+        }
+        properties
+    };
+
     document.content.push(
         fastn_unresolved::ComponentInvocation {
             aliases: document.aliases.unwrap(),
             module: document.module,
             name: fastn_unresolved::UR::UnResolved(section.init.name.clone()),
             caption: section.caption.into(),
-            properties: vec![],                           // todo
+            properties,
             body: fastn_unresolved::UR::UnResolved(None), // todo
             children: vec![],                             // todo
         }
@@ -37,7 +52,10 @@ mod tests {
         assert_eq!(d.content.len(), 1);
 
         assert_eq!(
-            fastn_section::JIDebug::idebug(d.content.pop().unwrap().unresolved().unwrap(), arena),
+            fastn_unresolved::JIDebug::idebug(
+                d.content.pop().unwrap().unresolved().unwrap(),
+                arena
+            ),
             expected
         )
     }
@@ -47,5 +65,13 @@ mod tests {
     #[test]
     fn component_invocation() {
         t!("-- ftd.text: hello", {"content": "ftd.text", "caption": ["hello"]});
+        t!(
+            "-- ftd.text: hello\ncolor: red",
+            {
+                "content": "ftd.text",
+                "caption": ["hello"],
+                "properties": [{"name": "color", "value": ["red"]}]
+            }
+        );
     }
 }

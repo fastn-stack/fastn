@@ -6,6 +6,7 @@ extern crate self as fastn_unresolved;
 
 #[cfg(test)]
 mod debug;
+
 mod parser;
 pub mod resolver;
 mod utils;
@@ -188,4 +189,9 @@ impl TryFrom<fastn_section::Kind> for Kind {
             _ => unreachable!(),
         }
     }
+}
+
+#[cfg(test)]
+pub trait JIDebug: std::fmt::Debug {
+    fn idebug(&self, arena: &fastn_section::Arena) -> serde_json::Value;
 }

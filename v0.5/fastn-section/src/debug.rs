@@ -8,8 +8,6 @@
 //     }
 // }
 
-use fastn_section::JDebug;
-
 impl fastn_section::JDebug for fastn_section::Visibility {
     fn debug(&self) -> serde_json::Value {
         format!("{self:?}").into()
@@ -277,57 +275,5 @@ impl<T: fastn_section::JDebug> fastn_section::JDebug for fastn_section::Spanned<
 impl fastn_section::JDebug for () {
     fn debug(&self) -> serde_json::Value {
         serde_json::Value::Null
-    }
-}
-
-impl<T: fastn_section::JIDebug> fastn_section::JIDebug for Option<T> {
-    fn idebug(&self, arena: &fastn_section::Arena) -> serde_json::Value {
-        self.as_ref()
-            .map(|v| v.idebug(arena))
-            .unwrap_or(serde_json::Value::Null)
-    }
-}
-
-impl fastn_section::JIDebug for fastn_section::Identifier {
-    fn idebug(&self, _arena: &fastn_section::Arena) -> serde_json::Value {
-        self.debug()
-    }
-}
-
-impl fastn_section::JIDebug for fastn_section::IdentifierReference {
-    fn idebug(&self, _arena: &fastn_section::Arena) -> serde_json::Value {
-        self.debug()
-    }
-}
-
-impl fastn_section::JIDebug for fastn_section::HeaderValue {
-    fn idebug(&self, _arena: &fastn_section::Arena) -> serde_json::Value {
-        self.debug()
-    }
-}
-
-impl fastn_section::JIDebug for () {
-    fn idebug(&self, _arena: &fastn_section::Arena) -> serde_json::Value {
-        self.debug()
-    }
-}
-
-impl fastn_section::JIDebug for fastn_section::Symbol {
-    fn idebug(&self, arena: &fastn_section::Arena) -> serde_json::Value {
-        self.string(arena).into()
-    }
-}
-
-impl<U: fastn_section::JIDebug, R: fastn_section::JIDebug> fastn_section::JIDebug
-    for fastn_section::UR<U, R>
-{
-    fn idebug(&self, arena: &fastn_section::Arena) -> serde_json::Value {
-        match self {
-            fastn_section::UR::Resolved(r) => r.idebug(arena),
-            fastn_section::UR::UnResolved(u) => u.idebug(arena),
-            fastn_section::UR::NotFound => unimplemented!(),
-            fastn_section::UR::Invalid(_) => unimplemented!(),
-            fastn_section::UR::InvalidN(_) => unimplemented!(),
-        }
     }
 }

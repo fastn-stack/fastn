@@ -330,7 +330,7 @@ mod tests {
         assert!(d.aliases.is_some());
 
         assert_eq!(
-            fastn_section::JIDebug::idebug(&AliasesID(d.aliases.unwrap()), arena),
+            fastn_unresolved::JIDebug::idebug(&AliasesID(d.aliases.unwrap()), arena),
             expected
         )
     }
@@ -393,7 +393,7 @@ mod tests {
 
     #[derive(Debug)]
     struct AliasesID(fastn_section::AliasesID);
-    impl fastn_section::JIDebug for AliasesID {
+    impl fastn_unresolved::JIDebug for AliasesID {
         fn idebug(&self, arena: &fastn_section::Arena) -> serde_json::Value {
             let aliases = arena.aliases.get(self.0).unwrap();
             let mut o = serde_json::Map::new();

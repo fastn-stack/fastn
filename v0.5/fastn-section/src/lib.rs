@@ -79,10 +79,6 @@ pub trait JDebug: std::fmt::Debug {
     fn debug(&self) -> serde_json::Value;
 }
 
-pub trait JIDebug: std::fmt::Debug {
-    fn idebug(&self, arena: &fastn_section::Arena) -> serde_json::Value;
-}
-
 #[derive(Debug)]
 pub enum Diagnostic {
     Error(Error),
