@@ -184,7 +184,8 @@ impl TryFrom<fastn_section::Kind> for Kind {
         match ident {
             fastn_section::IdentifierReference::Local(v) => match v.str() {
                 "integer" => Ok(Kind::Integer),
-                _ => todo!(),
+                "string" => Ok(Kind::String),
+                t => todo!("{t}"),
             },
             _ => unreachable!(),
         }

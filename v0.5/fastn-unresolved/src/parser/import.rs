@@ -81,7 +81,7 @@ fn add_export_and_exposing(
         Export::All => todo!(),
         Export::Things(things) => {
             for thing in things {
-                let alias = thing.alias.as_ref().unwrap_or_else(|| &thing.name).str();
+                let alias = thing.alias.as_ref().unwrap_or(&thing.name).str();
 
                 let symbol = i.module.symbol(thing.name.str(), arena);
                 add_to_document_alias(document, arena, alias, fastn_section::SoM::Symbol(symbol));
