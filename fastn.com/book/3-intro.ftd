@@ -2,9 +2,9 @@
 
 -- ds.page: Introduction
 
-Welcome to *The Book Of `fastn` and `ftd`*, an introductory book about `fastn`
-and `ftd`. `fastn` is software stack that helps you create web-applications and
-build websites with ease.
+Welcome to *The Book Of `fastn`, an introductory book about `fastn`. `fastn` is
+software stack that helps you create web-applications and build websites
+with ease.
 
 Learning a programming language from scratch, and building full stack web
 applications or websites, deploying them is not an easy task. Programming is
@@ -18,15 +18,14 @@ learning. They are not even designed for building UI or web applications. To
 build a full stack application, that is easy to maintain, is months or years of
 learning.
 
-`fastn` and `ftd` aim to make it easy. They are designed so a person with zero
-prior programming experience can create and deploy their first website or
+`fastn` aims to make this easy. They are designed so a person with zero prior
+programming experience can create and deploy their first website or
 web-application within a few hours of learning, and yet remain maintainable for
 a large web project.
 
-`fastn` and `ftd` for the next billion programmers. We believe ability to
-program, to build an application that helps you improve your life, should not be
-limited to software professionals, and software companies, but for people at
-large.
+`fastn` for the next billion programmers. We believe ability to program, to
+build an application that helps you improve your life, should not be limited to
+software professionals, and software companies, but for people at large.
 
 Consider spreadsheet applications, they are used by the masses. The formula
 language in spreadsheet applications are easy to learn, you improve your life
@@ -39,27 +38,27 @@ In just a min, you can learn this, and your life is improved. Once you learn
 the formula language, you can keep learning incrementally to keep improving
 your life.
 
-`fastn` and `ftd` let's you do the same, learn a very little, and start getting
-small benefits, and learn more to get larger benefits. Compare that with the
-experience with Python, one of the fastest growing languages, which is considered
-easy today. The hello world program in Python is easy but unfortunately does not
-let you benefit your life must. Or rather, you can benefit a little bit, but as
-soon as you want to move to a little bit more, say want to show a UI, you have
-to suddenly learn a lot more. The learning from `print("hello world")` to
-`import django` and "just use React or jQuery" is not an easy journey and most
-people fail to cross it unless they have decided to devote serious efforts in
-programming.
+`fastn` let's you do the same, learn a very little, and start getting small
+benefits, and learn more to get larger benefits. Compare that with the
+experience with Python, one of the fastest growing languages, which is
+considered easy today. The hello world program in Python is easy but
+unfortunately does not let you benefit your life must. Or rather, you can
+benefit a little bit, but as soon as you want to move to a little bit more, say
+want to show a UI, you have to suddenly learn a lot more. The learning from
+`print("hello world")` to `import django` and "just use React or jQuery" is not
+an easy journey and most people fail to cross it unless they have decided to
+devote serious efforts in programming.
 
--- ds.h1: Who `fastn` and `ftd` are for?
+-- ds.h1: Who is `fastn` for?
 
-`fastn` and `ftd` are ideal for many people for a variety of reasons. Let's look
-at few of the most important groups.
+`fastn` is ideal for many people for a variety of reasons. Let's look at few of
+the most important groups.
 
--- ds.h2: 🚧 `fastn` And `ftd` Are Under Active Development! 🚧
+-- ds.h2: 🚧 `fastn` Is Under Active Development! 🚧
 
 Before you proceed please keep in mind that both the technology, and this book
-are in active development. Some teams are using `fastn`, `ftd` in production,
-but it is not ready for prime time.
+are in active development. Few teams are using `fastn` in production, but it is
+not ready for prime time.
 
 We recommend you use `fastn` and this book for learning purpose only, and wait
 for a more stable release from us before using it in production. If you want to
@@ -77,7 +76,7 @@ pages without added developers to the loop.
 
 -- ds.h2: Developers
 
-Backend developers can use `fastn` and `ftd` to build user interfaces for their
+Backend developers can use `fastn` to build user interfaces for their
 dashboards, APIs etc. They can use `fastn` for their blogs, resume, knowledge
 bases etc.
 
@@ -113,26 +112,25 @@ authentication, access control, dark mode support, clean URLs, etc.
 Startups, like marketing teams have to create a landing page, pricing page,
 knowledge base pages, documentation pages and so on. Startups can easily adopt
 and customise ready made designs made available by increasing community of
-`ftd` developers and designers.
+`fastn` developers and designers.
 
-Startups can chose to use `fastn` and `ftd` for their main product user
-interface as well.
+Startups can chose to use `fastn` for their main product user interface as well.
 
 -- ds.h2: Open Source Developers
 
 Most open source project needs a website, documentation pages, blog etc.
-`fastn` and `ftd` can be used to build such user interfaces as `fastn`, `ftd`
-are easier to learn, are content focused.
+`fastn` can be used to build such user interfaces as `fastn` is easier to learn,
+are content focused.
 
--- ds.h2: Non Software Professionals Up-skilling
+-- ds.h2: Non Software Professionals Up-Skilling
 
 A lot of people can benefit by learning how to make quick web pages and mini
-web apps. If you do data munging in Excel, you can easily convert them to `fastn`,
-use our increasing component libraries to quickly create web pages and apps
-based on that Excel data.
+web apps. If you do data munging in Excel, you can easily convert them to
+`fastn`, use our increasing component libraries to quickly create web pages and
+apps based on that Excel data.
 
 Programming allows one to express ideas that are hard to do in drag and drop
-softwares. Open source means one can do that at home without having to buy
+software. Open source means one can do that at home without having to buy
 expensive software if they are out of job.
 
 -- ds.h2: Students
@@ -170,9 +168,9 @@ might not delve into details on a particular topic but will revisit the topic
 in a later chapter.
 
 You’ll find two kinds of chapters in this book: concept chapters and project
-chapters. In concept chapters, you’ll learn about an aspect of `fastn`, `ftd`
-and even programming in general. In project chapters, we’ll build small programs
-together, applying what you’ve learned so far.
+chapters. In concept chapters, you’ll learn about an aspect of `fastn` and even
+programming in general. In project chapters, we’ll build small programs
+ together, applying what you’ve learned so far.
 
 Chapter 1 explains how to install `fastn`, how to write a "hello world" program,
 how to publish it on the web. Chapter 2 is a hands-on introduction to writing
