@@ -1,6 +1,6 @@
 -- boolean $author-mode: false
 
--- ds.page: The Book Of `fastn` and `ftd`
+-- ds.page: The Book Of `fastn`
 
 *By Amit Upadhyay, with contributions from `fastn` community.*
 
@@ -9,7 +9,7 @@ See the [installation section](/install/) to install or update `fastn`.
 
 The online version of the book is available at
 [`fastn.com/book`](https://fastn.com/book/). You can get the book offline by
-cloning [`github.com/fastn-stack/fastn.com`](https://github.com/fastn-stack/fastn.com)
+cloning [`github.com/fastn-stack/fastn/`](https://github.com/fastn-stack/fastn)
 and, running `fastn serve` and visiting `http://127.0.0.1:8000/book/`.
 
 While reading this book you will invariably come across questions, things may
