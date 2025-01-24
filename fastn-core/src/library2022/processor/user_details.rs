@@ -3,7 +3,7 @@ pub async fn process(
     value: ftd_ast::VariableValue,
     kind: fastn_resolved::Kind,
     doc: &ftd::interpreter::TDoc<'_>,
-    req_config: &fastn_core::RequestConfig,
+    req_config: &mut fastn_core::RequestConfig,
 ) -> ftd::interpreter::Result<fastn_resolved::Value> {
     // we can in future do a more fine-grained analysis if the response
     // is cacheable or not, say depending on HTTP Vary header, etc.
