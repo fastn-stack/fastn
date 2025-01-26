@@ -16,13 +16,27 @@ pub(crate) async fn migrate(config: &fastn_core::Config) -> Result<(), Migration
 }
 
 async fn migrate_app(config: &fastn_core::Config, now: i64) -> Result<(), MigrationError> {
-    migrate_(
-        config,
-        config.package.migrations.as_slice(),
-        config.package.name.as_str(),
-        now,
-    )
-    .await
+    if !config.package.migrations.is_empty() {
+        migrate_(
+            config,
+            config.package.migrations.as_slice(),
+            config.package.name.as_str(),
+            now,
+        )
+        .await?;
+    }
+
+    for app in config.package.apps.iter() {
+        migrate_(
+            config,
+            app.package.migrations.as_slice(),
+            app.name.as_str(),
+            now,
+        )
+        .await?;
+    }
+
+    Ok(())
 }
 
 async fn migrate_fastn(config: &fastn_core::Config, now: i64) -> Result<(), MigrationError> {
@@ -110,6 +124,11 @@ fn validate_migration(
 
 fn has_migrations(config: &fastn_core::Config) -> bool {
     !config.package.migrations.is_empty()
+        || config
+            .package
+            .apps
+            .iter()
+            .any(|a| !a.package.migrations.is_empty())
 }
 
 async fn create_migration_table(config: &fastn_core::Config) -> Result<(), fastn_utils::SqlError> {
