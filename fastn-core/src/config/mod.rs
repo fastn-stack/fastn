@@ -164,8 +164,8 @@ impl RequestConfig {
                 };
 
                 // Getting `document` with dynamic parameters, if exists
-                // It will first resolve in sitemap
-                // Then it will resolve in the dynamic urls
+                // It will first resolve in the sitemap.
+                // If not found, resolve in the dynamic urls.
                 let (document, path_params, extra_data) =
                     fastn_core::sitemap::resolve(sanitized_package, &sanitized_path)?;
 

@@ -77,6 +77,7 @@ impl fastn_core::Package {
         ds: &fastn_ds::DocumentStore,
         session_id: &Option<String>,
     ) -> fastn_core::Result<(String, Vec<u8>)> {
+        let id = id.trim_start_matches(&format!("/-/{}", self.name));
         if fastn_core::file::is_static(id)? {
             if let Ok(data) = self
                 .fs_fetch_by_file_name(id, package_root, ds, session_id)
