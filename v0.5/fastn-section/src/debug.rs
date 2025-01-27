@@ -52,6 +52,10 @@ impl fastn_section::JDebug for fastn_section::Section {
             o.insert("headers".into(), self.headers.debug());
         }
 
+        if let Some(b) = &self.body {
+            o.insert("body".to_string(), b.0.debug());
+        }
+
         serde_json::Value::Object(o)
     }
 }

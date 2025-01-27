@@ -18,6 +18,7 @@ pub fn section(
 
     // Get body
     let mut body = None;
+    // TODO: Throw error if there are no two new lines before body is found
     if new_line.is_some() && scanner.token("\n").is_some() {
         body = fastn_section::parser::body(scanner);
     }
@@ -67,6 +68,27 @@ mod test {
                         "value": ["Be happy"]
                     }
                 ]
+            }
+        );
+
+        t!(
+            "-- foo: Hello World\n\nMy greetings to world!",
+            {
+                "init": {"name": "foo"},
+                "caption": ["Hello World"],
+                "body": ["My greetings to world!"]
+            }
+        );
+        t!(
+            "-- foo: Hello World\ngreeting: hello\n\nMy greetings to world!",
+            {
+                "init": {"name": "foo"},
+                "caption": ["Hello World"],
+                "headers": [{
+                    "name": "greeting",
+                    "value": ["hello"]
+                }],
+                "body": ["My greetings to world!"]
             }
         );
     }

@@ -2,7 +2,7 @@ pub fn headers(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Vec<fastn_section::Header> {
     let mut headers = vec![];
-    let mut found_new_line_at_header_end = true;
+    let mut found_new_line_at_header_end = Some(scanner.index());
 
     loop {
         let index = scanner.index();
@@ -20,7 +20,7 @@ pub fn headers(
             break;
         }
 
-        if !found_new_line_at_header_end {
+        if found_new_line_at_header_end.is_none() {
             scanner.reset(index);
             break;
         }
@@ -39,10 +39,16 @@ pub fn headers(
             is_commented: false,
         });
 
+        found_new_line_at_header_end = Some(scanner.index());
         let new_line = scanner.token("\n");
         if new_line.is_none() {
-            found_new_line_at_header_end = false;
+            found_new_line_at_header_end = None;
         }
+    }
+
+    // Reset the scanner before the new line
+    if let Some(index) = found_new_line_at_header_end {
+        scanner.reset(index);
     }
 
     headers
@@ -77,9 +83,9 @@ mod test {
     fastn_section::tt!(super::headers);
 
     #[test]
-    fn tes() {
+    fn headers() {
         t!("greeting: hello", [{"name": "greeting", "value": ["hello"]}]);
-        t!("greeting: hello\n", [{"name": "greeting", "value": ["hello"]}]);
+        t!("greeting: hello\n", [{"name": "greeting", "value": ["hello"]}], "\n");
         t!(
             "greeting: hello\nwishes: Happy New Year\n",
             [
@@ -91,7 +97,8 @@ mod test {
                     "name": "wishes",
                     "value": ["Happy New Year"]
                 }
-            ]
+            ],
+            "\n"
         );
         t!(
             "greeting: hello\nwishes: Happy New Year\n\nI am not header",
@@ -105,7 +112,7 @@ mod test {
                     "value": ["Happy New Year"]
                 }
             ],
-            "\nI am not header"
+            "\n\nI am not header"
         );
     }
 }
