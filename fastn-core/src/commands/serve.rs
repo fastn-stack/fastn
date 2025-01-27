@@ -13,7 +13,7 @@ fn handle_redirect(
 
 /// path: /-/<package-name>/<file-name>/
 /// path: /<file-name>/
-#[tracing::instrument(skip_all)]
+#[tracing::instrument(skip(config))]
 async fn serve_file(
     config: &mut fastn_core::RequestConfig,
     path: &camino::Utf8Path,
@@ -56,6 +56,8 @@ async fn serve_file(
             };
         }
     };
+
+    tracing::info!("file: {f:?}");
 
     if let fastn_core::File::Code(doc) = f {
         let path = doc.get_full_path().to_string();
@@ -250,6 +252,8 @@ pub async fn serve_helper(
                     )
                 };
 
+                tracing::info!("redirecting to mount-point: {}, path: {}", mp, path);
+
                 let mut resp =
                     actix_web::HttpResponse::new(actix_web::http::StatusCode::PERMANENT_REDIRECT);
                 resp.headers_mut().insert(
@@ -309,6 +313,7 @@ fn shared_to_http(r: ft_sys_shared::Request) -> fastn_core::Result<fastn_core::h
     Ok(resp)
 }
 
+#[tracing::instrument(skip_all)]
 pub fn handle_default_route(
     req: &fastn_core::http::Request,
     package_name: &str,
@@ -382,6 +387,7 @@ pub fn handle_default_route(
     None
 }
 
+#[tracing::instrument(skip_all)]
 async fn handle_static_route(
     path: &str,
     package_name: &str,
@@ -495,6 +501,7 @@ async fn handle_static_route(
     }
 }
 
+#[tracing::instrument(skip_all)]
 async fn handle_endpoints(
     config: &fastn_core::Config,
     req: &fastn_core::http::Request,

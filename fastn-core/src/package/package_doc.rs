@@ -275,6 +275,7 @@ impl fastn_core::Package {
                 }
             } else {
                 for name in file_id_to_names(id) {
+                    tracing::info!("attempting non static file: {}", name);
                     if let Ok(data) = self
                         .fs_fetch_by_file_name(name.as_str(), package_root, ds, session_id)
                         .await
@@ -285,6 +286,7 @@ impl fastn_core::Package {
             }
         }
 
+        tracing::info!("resolve_by_id: not found in the package. Trying fs_fetch_by_id");
         self.fs_fetch_by_id(id, package_root, ds, session_id).await
     }
 }

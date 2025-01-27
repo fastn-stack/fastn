@@ -35,6 +35,7 @@ pub async fn fastn_doc(
 
 // if path starts with /-/package-name or -/package-name,
 // so it trims the package and return the remaining url
+#[tracing::instrument]
 pub fn trim_package_name(path: &str, package_name: &str) -> Option<String> {
     let package_name1 = format!("-/{}", package_name.trim().trim_matches('/'));
     let path = path.trim().trim_start_matches('/');
