@@ -35,7 +35,6 @@ impl SectionProvider {
     }
 }
 
-#[async_trait::async_trait]
 impl fastn_continuation::AsyncMutProvider for &mut SectionProvider {
     type Needed = Vec<String>;
     type Found = fastn_utils::section_provider::Found;

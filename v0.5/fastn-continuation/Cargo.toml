@@ -9,8 +9,8 @@ repository.workspace = true
 homepage.workspace = true
 
 [features]
-async_provider = ["async-trait"]
+async_provider = ["trait-variant"]
 
 [dependencies]
-async-trait = { workspace = true, optional = true }
+trait-variant = { workspace = true, optional = true }
 tracing.workspace = true

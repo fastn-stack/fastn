@@ -44,7 +44,7 @@ homepage = "https://fastn.com"
 
 arcstr = "1"
 async-lock = "3"
-async-trait = "0.1"
+trait-variant = "0.1"
 bytes = "1"
 chrono = { version = "0.4", features = ["serde"] }
 deadpool = "0.10"

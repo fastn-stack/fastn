@@ -10,7 +10,6 @@ homepage.workspace = true
 
 [dependencies]
 arcstr.workspace = true
-async-trait.workspace = true
 fastn-compiler.workspace = true
 fastn-continuation = { workspace = true, features = ["async_provider"] }
 fastn-package.workspace = true

@@ -6,7 +6,7 @@ pub trait Provider {
 }
 
 #[cfg(feature = "async_provider")]
-#[async_trait::async_trait]
+#[trait_variant::make(Send)]
 pub trait AsyncProvider {
     type Needed;
     type Found;
@@ -15,7 +15,7 @@ pub trait AsyncProvider {
 }
 
 #[cfg(feature = "async_provider")]
-#[async_trait::async_trait]
+#[trait_variant::make(Send)]
 pub trait AsyncProviderWith {
     type Needed;
     type Found;
@@ -40,7 +40,7 @@ pub trait MutProvider {
 }
 
 #[cfg(feature = "async_provider")]
-#[async_trait::async_trait]
+#[trait_variant::make(Send)]
 pub trait AsyncMutProvider {
     type Needed;
     type Found;
@@ -49,7 +49,7 @@ pub trait AsyncMutProvider {
 }
 
 #[cfg(feature = "async_provider")]
-#[async_trait::async_trait]
+#[trait_variant::make(Send)]
 pub trait AsyncMutProviderWith {
     type Needed;
     type Found;

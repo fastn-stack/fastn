@@ -674,7 +674,6 @@ name = "fastn"
 version = "0.1.0"
 dependencies = [
  "arcstr",
- "async-trait",
  "fastn-compiler",
  "fastn-continuation",
  "fastn-observer",
@@ -721,8 +720,8 @@ dependencies = [
 name = "fastn-continuation"
 version = "0.1.0"
 dependencies = [
- "async-trait",
  "tracing",
+ "trait-variant",
 ]
 
 [[package]]
