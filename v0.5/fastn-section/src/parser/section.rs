@@ -18,7 +18,7 @@ pub fn section(
 
     // Get body
     let mut body = None;
-    if new_line.is_some() {
+    if new_line.is_some() && scanner.token("\n").is_some() {
         body = fastn_section::parser::body(scanner);
     }
 

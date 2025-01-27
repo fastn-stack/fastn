@@ -46,22 +46,22 @@ impl<'input, T: ECey> Scanner<'input, T> {
         }
     }
 
-    fn span(&self, start: usize) -> fastn_section::Span {
+    pub fn span(&self, start: Index) -> fastn_section::Span {
         fastn_section::Span {
-            inner: self.input.substr(start..self.index),
+            inner: self.input.substr(start.index..self.index),
             module: self.module,
         }
     }
 
-    pub fn span_range(&self, start: usize, end: usize) -> fastn_section::Span {
+    pub fn span_range(&self, start: Index, end: Index) -> fastn_section::Span {
         fastn_section::Span {
-            inner: self.input.substr(start..end),
+            inner: self.input.substr(start.index..end.index),
             module: self.module,
         }
     }
 
     pub fn take_while<F: Fn(char) -> bool>(&mut self, f: F) -> Option<fastn_section::Span> {
-        let start = self.index;
+        let start = self.index();
         while let Some(c) = self.peek() {
             if !f(c) {
                 break;
@@ -69,7 +69,7 @@ impl<'input, T: ECey> Scanner<'input, T> {
             self.pop();
         }
 
-        if self.index == start {
+        if self.index == start.index {
             return None;
         }
 
@@ -176,6 +176,6 @@ impl<'input, T: ECey> Scanner<'input, T> {
             self.pop();
         }
 
-        Some(self.span(start.index))
+        Some(self.span(start))
     }
 }
