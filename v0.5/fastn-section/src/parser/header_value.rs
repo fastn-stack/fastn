@@ -9,6 +9,11 @@ pub fn header_value(
             break;
         }
     }
+
+    if ses.is_empty() {
+        return None;
+    }
+
     Some(fastn_section::HeaderValue(ses))
 }
 

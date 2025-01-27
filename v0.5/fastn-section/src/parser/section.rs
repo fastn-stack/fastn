@@ -72,6 +72,13 @@ mod test {
         );
 
         t!(
+            "-- foo:\n\nMy greetings to world!",
+            {
+                "init": {"name": "foo"},
+                "body": ["My greetings to world!"]
+            }
+        );
+        t!(
             "-- foo: Hello World\n\nMy greetings to world!",
             {
                 "init": {"name": "foo"},
