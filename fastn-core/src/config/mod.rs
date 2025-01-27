@@ -181,11 +181,12 @@ impl RequestConfig {
                 (path_with_package_name, document, path_params, extra_data)
             };
 
-
         let path = path_with_package_name.as_str();
 
         tracing::info!("resolved path: {path}");
-        tracing::info!("document: {document:?}, path_params: {path_params:?}, extra_data: {extra_data:?}");
+        tracing::info!(
+            "document: {document:?}, path_params: {path_params:?}, extra_data: {extra_data:?}"
+        );
 
         if let Some(id) = document {
             let file_name = self

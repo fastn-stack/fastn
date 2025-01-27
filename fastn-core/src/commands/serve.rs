@@ -538,13 +538,12 @@ async fn handle_endpoints(
                 app.mount_point
             );
 
-            let wasm_file = 
-                req
-                    .path()
-                    .trim_start_matches(&app.mount_point)
-                    .split_once('/')
-                    .unwrap_or_default()
-                    .0;
+            let wasm_file = req
+                .path()
+                .trim_start_matches(&app.mount_point)
+                .split_once('/')
+                .unwrap_or_default()
+                .0;
 
             let wasm_path = format!(
                 ".packages/{dep_name}/{wasm_file}.wasm",
@@ -553,7 +552,11 @@ async fn handle_endpoints(
 
             tracing::info!("checking for wasm file: {}", wasm_path);
 
-            if !config.ds.exists(&fastn_ds::Path::new(&wasm_path), session_id).await {
+            if !config
+                .ds
+                .exists(&fastn_ds::Path::new(&wasm_path), session_id)
+                .await
+            {
                 tracing::info!("wasm file not found: {}", wasm_path);
                 tracing::info!("Exiting from handle_endpoints");
                 return None;
@@ -562,8 +565,11 @@ async fn handle_endpoints(
             tracing::info!("wasm file found: {}", wasm_path);
 
             &fastn_package::old_fastn::EndpointData {
-                endpoint:  format!("wasm+proxy://{wasm_path}"),
-                mountpoint:  format!("{app}/{wasm_file}", app = app.mount_point.trim_end_matches('/')),
+                endpoint: format!("wasm+proxy://{wasm_path}"),
+                mountpoint: format!(
+                    "{app}/{wasm_file}",
+                    app = app.mount_point.trim_end_matches('/')
+                ),
                 user_id: None, // idk if we're using this
             }
         }
