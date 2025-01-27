@@ -1,0 +1,42 @@
+-- ds.page: WASM backends with [ft-sdk](https://github.com/fastn-stack/ft-sdk/)
+
+[ft-sdk](https://github.com/fastn-stack/ft-sdk/) is a rust crate that can be
+used to write backend HTTP handlers. You can then compile your rust code into a
+webassembly module (`.wasm` file) that can be used with fastn.
+
+Visit https://github.com/fastn-stack/ft-sdk/tree/main/examples/ to see some
+examples on how to write backend code using `ft-sdk`. You also have access to
+[`diesel`](http://diesel.rs/) a popular rust database query builder.
+
+Once compiled, place the `.wasm` file in the root of your fastn
+package and then put the following in your `FASTN.ftd`
+
+-- ds.code: FASTN.ftd
+lang: ftd
+
+\-- fastn.url-mappings:
+
+;; Assuming your compiled file name is `backend.wasm` and it's on the same
+;; level as your FASTN.ftd in the filesystem
+/backend/* -> wasm+proxy://backend.wasm/*
+
+
+-- ds.h3: WASM modules in [`fastn.app`](/app/)
+
+`fastn` automatically loads `.wasm` files if they exist for a particular
+request. For example, for the following FASTN.ftd configuration:
+
+-- ds.code: FASTN.ftd
+lang: ftd
+
+\-- fastn.app: Auth App
+mount-point: /-/auth/
+package: lets-auth.fifthtry.site
+
+-- ds.markdown:
+
+A request coming on `/-/auth/api/create-account/` will be forwared to the
+`api.wasm` file of `lets-auth.fifthtry.site` if it exists (in it's root
+directory).
+
+-- end: ds.page

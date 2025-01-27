@@ -678,6 +678,10 @@ skip: true
 - Endpoint Guide 🚧: /endpoint/
   document: backend/endpoint.ftd
   skip: true
+- `fastn.app`: /app/
+  document: backend/app.ftd
+- WASM modules: /wasm/
+  document: backend/wasm.ftd
 - Dynamic URLs: /dynamic-urls/
   document: backend/dynamic-urls.ftd
 - `processors`: /processor/-/backend/
