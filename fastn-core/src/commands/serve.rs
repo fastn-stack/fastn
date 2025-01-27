@@ -514,8 +514,59 @@ async fn handle_endpoints(
         .find(|ep| req.path().starts_with(ep.mountpoint.trim_end_matches('/')));
 
     let endpoint = match matched_endpoint {
-        Some(e) => e,
-        None => return None,
+        Some(e) => {
+            tracing::info!("matched endpoint: {:?}", e);
+            e
+        }
+        None => {
+            tracing::info!("no endpoint found in current package. Trying mounted apps");
+            tracing::info!("request path: {}", req.path());
+
+            let app = match config
+                .package
+                .apps
+                .iter()
+                .find(|a| req.path().starts_with(a.mount_point.trim_end_matches('/')))
+            {
+                Some(e) => e,
+                None => return None,
+            };
+
+            tracing::info!(
+                "matched app: {}; mount_point: {}",
+                app.name,
+                app.mount_point
+            );
+
+            let wasm_file = 
+                req
+                    .path()
+                    .trim_start_matches(&app.mount_point)
+                    .split_once('/')
+                    .unwrap_or_default()
+                    .0;
+
+            let wasm_path = format!(
+                ".packages/{dep_name}/{wasm_file}.wasm",
+                dep_name = app.package.name,
+            );
+
+            tracing::info!("checking for wasm file: {}", wasm_path);
+
+            if !config.ds.exists(&fastn_ds::Path::new(&wasm_path), session_id).await {
+                tracing::info!("wasm file not found: {}", wasm_path);
+                tracing::info!("Exiting from handle_endpoints");
+                return None;
+            }
+
+            tracing::info!("wasm file found: {}", wasm_path);
+
+            &fastn_package::old_fastn::EndpointData {
+                endpoint:  format!("wasm+proxy://{wasm_path}"),
+                mountpoint:  format!("{app}/{wasm_file}", app = app.mount_point.trim_end_matches('/')),
+                user_id: None, // idk if we're using this
+            }
+        }
     };
 
     let url = format!(
@@ -526,6 +577,8 @@ async fn handle_endpoints(
             .map(|v| v.trim_start_matches('/'))
             .expect("req.full_path() must start with endpoint.mountpoint")
     );
+
+    tracing::info!("url: {}", url);
 
     if url.starts_with("wasm+proxy://") {
         return match config
@@ -571,6 +624,7 @@ pub fn to_response(req: ft_sys_shared::Request) -> actix_web::HttpResponse {
     resp
 }
 
+#[tracing::instrument(skip_all)]
 async fn handle_apps(
     config: &fastn_core::Config,
     req: &fastn_core::http::Request,
