@@ -1,12 +1,12 @@
--- ds.page: WASM backends with [ft-sdk](https://github.com/fastn-stack/ft-sdk/)
+-- ds.page: WASM backends with `ft-sdk`
 
-[ft-sdk](https://github.com/fastn-stack/ft-sdk/) is a rust crate that can be
-used to write backend HTTP handlers. You can then compile your rust code into a
+[`ft-sdk`](https://github.com/fastn-stack/ft-sdk/) is a Rust crate that can be
+used to write backend HTTP handlers. You can then compile your Rust code into a
 webassembly module (`.wasm` file) that can be used with fastn.
 
 Visit https://github.com/fastn-stack/ft-sdk/tree/main/examples/ to see some
 examples on how to write backend code using `ft-sdk`. You also have access to
-[`diesel`](http://diesel.rs/) a popular rust database query builder.
+[`diesel`](http://diesel.rs/) a popular Rust database query builder.
 
 Once compiled, place the `.wasm` file in the root of your fastn
 package and then put the following in your `FASTN.ftd`
