@@ -147,7 +147,7 @@ pub enum HttpError {
 pub type HttpResponse = ::http::Response<bytes::Bytes>;
 
 #[async_trait::async_trait]
-pub trait RequestType {
+pub trait RequestType: std::fmt::Debug {
     fn headers(&self) -> &reqwest::header::HeaderMap;
     fn method(&self) -> &str;
     fn query_string(&self) -> &str;
@@ -457,6 +457,7 @@ impl DocumentStore {
         std::env::var(key).map_err(|_| EnvironmentError::NotSet(key.to_string()))
     }
 
+    #[tracing::instrument(skip(self))]
     pub async fn handle_wasm<T>(
         &self,
         wasm_url: String,

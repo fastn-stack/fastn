@@ -74,6 +74,7 @@ impl RequestConfig {
         self.config.package.selected_language.clone()
     }
 
+    #[tracing::instrument(skip_all)]
     pub fn new(
         config: &Config,
         request: &fastn_core::http::Request,
@@ -180,7 +181,11 @@ impl RequestConfig {
                 (path_with_package_name, document, path_params, extra_data)
             };
 
+
         let path = path_with_package_name.as_str();
+
+        tracing::info!("resolved path: {path}");
+        tracing::info!("document: {document:?}, path_params: {path_params:?}, extra_data: {extra_data:?}");
 
         if let Some(id) = document {
             let file_name = self
@@ -723,6 +728,7 @@ impl Config {
         ))
     }
 
+    #[tracing::instrument(skip(self))]
     pub(crate) async fn get_file_path_and_resolve(
         &self,
         id: &str,
@@ -731,6 +737,7 @@ impl Config {
         Ok(self.get_file_and_resolve(id, session_id).await?.0)
     }
 
+    #[tracing::instrument(skip(self))]
     pub(crate) async fn get_file_and_resolve(
         &self,
         id: &str,
@@ -766,6 +773,9 @@ impl Config {
         let (file_name, content) = package
             .resolve_by_id(id, None, self.package.name.as_str(), &self.ds, session_id)
             .await?;
+
+        tracing::info!("file: {file_name}");
+
         Ok((format!("{}{}", add_packages, file_name), content))
     }
 

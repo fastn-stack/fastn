@@ -1020,6 +1020,7 @@ pub fn ignore_headers() -> Vec<&'static str> {
     vec!["host", "x-forwarded-ssl"]
 }
 
+#[tracing::instrument]
 pub(crate) fn is_static_path(path: &str) -> bool {
     assert!(path.starts_with('/'));
 
