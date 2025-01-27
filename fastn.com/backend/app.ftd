@@ -1,4 +1,4 @@
--- ds.page: Fastn app
+-- ds.page: `fastn` app
 
 `-- fastn.app` allows you to mount a fastn package at some url of your fastn package.
 
