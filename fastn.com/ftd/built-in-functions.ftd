@@ -649,6 +649,8 @@ return the path prefixed with the `mountpoint` of the app.
 
 The `path` arg must start with a forward slash (/).
 
+Calling this from any `.ftd` file of the root package will simply return the provided `path` argument.
+
 -- ds.h3: Example
 
 -- ds.code: FASTN.ftd
