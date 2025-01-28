@@ -30,6 +30,8 @@ pub mod catch_panic;
 mod library2022;
 mod migrations;
 
+pub(crate) mod host_builtins;
+
 pub(crate) use auto_import::AutoImport;
 pub use commands::{
     build::build, check::post_build_check, fmt::fmt, query::query, serve::listen, test::test,

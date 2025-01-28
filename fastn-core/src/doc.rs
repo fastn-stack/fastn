@@ -25,7 +25,17 @@ fn cached_parse(
     fastn_core::utils::cache_it(id, C { doc, hash }).map(|v| v.doc)
 }
 
-#[tracing::instrument(skip_all)]
+pub fn package_dependent_builtins(
+    pkg: &fastn_core::Package,
+    req_path: &str,
+) -> Vec<(String, fastn_resolved::Definition)> {
+    vec![(
+        "ftd#app-path".to_string(),
+        fastn_core::host_builtins::app_path(pkg, &req_path),
+    )]
+}
+
+#[tracing::instrument(skip(lib))]
 pub async fn interpret_helper(
     name: &str,
     source: &str,
@@ -36,7 +46,9 @@ pub async fn interpret_helper(
     preview_session_id: &Option<String>,
 ) -> ftd::interpreter::Result<ftd::interpreter::Document> {
     let doc = cached_parse(name, source, line_number)?;
-    let mut s = ftd::interpreter::interpret_with_line_number(name, doc)?;
+
+    let builtin_overrides = package_dependent_builtins(&lib.config.package, lib.request.path());
+    let mut s = ftd::interpreter::interpret_with_line_number(name, doc, builtin_overrides)?;
     lib.module_package_map.insert(
         name.trim_matches('/').to_string(),
         lib.config.package.name.to_string(),

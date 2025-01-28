@@ -84,10 +84,33 @@ pub struct ToProcessItem {
 
 impl InterpreterState {
     /// The `new` function returns the new `InterpreterState` instance that it has created.
+    #[allow(dead_code)]
     fn new(id: String) -> InterpreterState {
         InterpreterState {
             id,
             bag: ftd::interpreter::default::builtins().clone(),
+            ..Default::default()
+        }
+    }
+
+    /// [InterpreterState] with stub functions replaces with fastn_core::Package dependant
+    /// functions.
+    /// You pass real functions using the `builtins` parameter.
+    #[tracing::instrument(skip(builtins))]
+    fn new_with_expanded_builtins(
+        id: String,
+        builtins: impl IntoIterator<Item = (String, fastn_resolved::Definition)>,
+    ) -> InterpreterState {
+        let mut bag = ftd::interpreter::default::builtins().clone();
+
+        builtins.into_iter().for_each(|(name, def)| {
+            tracing::info!("Overriding builtin with def from fastn: {}", name);
+            bag.insert(name, def);
+        });
+
+        InterpreterState {
+            id,
+            bag,
             ..Default::default()
         }
     }
@@ -946,16 +969,18 @@ impl InterpreterState {
 
 pub fn interpret(id: &str, source: &str) -> ftd::interpreter::Result<Interpreter> {
     let doc = ParsedDocument::parse_with_line_number(id, source, 0)?;
-    interpret_with_line_number(id, doc)
+    interpret_with_line_number(id, doc, vec![])
 }
 
+#[tracing::instrument(skip_all)]
 pub fn interpret_with_line_number(
     id: &str,
     document: ParsedDocument,
+    builtin_overrides: Vec<(String, fastn_resolved::Definition)>,
 ) -> ftd::interpreter::Result<Interpreter> {
     use itertools::Itertools;
 
-    let mut s = InterpreterState::new(id.to_string());
+    let mut s = InterpreterState::new_with_expanded_builtins(id.to_string(), builtin_overrides);
     s.parsed_libs.insert(id.to_string(), document);
     s.to_process.stack.push((
         id.to_string(),
