@@ -1,7 +1,7 @@
 /// Calling: `ftd.app-path(path = /test/)` in an ftd file of a mounted app will return the path
 /// prefixed with the `mountpoint` of the app.
 ///
-/// The `path` arg must start with a forwar slash (/)
+/// The `path` arg must start with a forward slash (/)
 ///
 /// # Example
 ///

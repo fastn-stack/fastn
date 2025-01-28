@@ -642,8 +642,34 @@ or empty.
 
 -- end: ds.rendered
 
+-- ds.h2: `app-path(path: string)`
+
+Calling `ftd.app-path(path = /test/)` in an ftd file of a mounted app will
+return the path prefixed with the `mountpoint` of the app.
+
+The `path` arg must start with a forward slash (/).
+
+-- ds.h3: Example
+
+-- ds.code: FASTN.ftd
+lang: ftd
+
+\-- import: fastn
+
+\-- fastn.package: test
+
+\-- fastn.app: Test
+mountpoint: /app/
+package: some-test-app.fifthtry.site
 
 
+-- ds.code: some-test-app.fifthtry.site/index.ftd
+lang: ftd
+
+\-- ftd.text: $ftd.app-path(path = /test/)
+
+
+-- ds.markdown: Visiting `/app/` in browser should render text "/app/test/"
 
 
 
