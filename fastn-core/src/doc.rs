@@ -31,7 +31,7 @@ pub fn package_dependent_builtins(
 ) -> Vec<(String, fastn_resolved::Definition)> {
     vec![(
         "ftd#app-path".to_string(),
-        fastn_core::host_builtins::app_path(pkg, &req_path),
+        fastn_core::host_builtins::app_path(pkg, req_path),
     )]
 }
 
