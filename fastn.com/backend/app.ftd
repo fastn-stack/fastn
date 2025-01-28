@@ -16,4 +16,16 @@ The above snippet will mount contents of [lets-auth.fifthtry.site](https://lets-
 
 Visiting `/-/auth/` will load `index.ftd` of lets-auth.fifthtry.site if it's available.
 
+-- ds.h3: `ftd.app-path` function
+
+This functions let's apps construct paths relative to their mountpoint. For
+example, `lets-auth.fifthtry.site/index.ftd` could show a url to its signin
+page (`lets-auth.fifthtry.site/signin.ftd`) using the following code:
+
+-- ds.code: lets-auth.fifthtry.site/index.ftd
+lang: ftd
+
+\-- ftd.text: Sign In
+link: $ftd.app-path(path = /signin/) \;; will become /-/auth/signin/
+
 -- end: ds.page
