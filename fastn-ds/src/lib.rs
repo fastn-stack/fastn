@@ -25,12 +25,24 @@ impl fastn_ds::Path {
         Self {
             path: camino::Utf8PathBuf::from(path.as_ref()),
         }
+        .canonicalize()
+    }
+
+    pub fn canonicalize(self) -> Self {
+        match self.path.canonicalize_utf8() {
+            Ok(path) => Self { path },
+            Err(e) => {
+                tracing::info!("could not canonicalize path: {e:?}, path: {:?}", self.path);
+                self
+            }
+        }
     }
 
     pub fn join<T: AsRef<str>>(&self, path: T) -> Self {
         Self {
             path: self.path.join(path.as_ref()),
         }
+        .canonicalize()
     }
 
     pub fn parent(&self) -> Option<Self> {
@@ -226,7 +238,7 @@ impl DocumentStore {
                 } {
                     Ok(m) => m,
                     Err(e) => {
-                        tracing::info!("could not read {wasmc_path:?} file: {e:?}");
+                        tracing::debug!("could not read {wasmc_path:?} file: {e:?}, trying to read {path:?} file");
                         let source = self.read_content(&fastn_ds::Path::new(path), &None).await?;
                         wasmtime::Module::from_binary(&fastn_wasm::WASM_ENGINE, &source)?
                     }
@@ -344,7 +356,7 @@ impl DocumentStore {
         Ok(contents)
     }
 
-    #[tracing::instrument]
+    // #[tracing::instrument]
     pub async fn read_to_string(
         &self,
         path: &fastn_ds::Path,
@@ -491,7 +503,9 @@ impl DocumentStore {
             .await
             .unwrap_or_else(|_| "sqlite:///fastn.sqlite".to_string());
 
-        let db_path = initialize_sqlite_db(db_url.as_str()).await?;
+        let db_path = initialize_sqlite_db(db_url.as_str())
+            .await
+            .inspect_err(|e| tracing::error!("failed to create db: {e}"))?;
 
         let req = ft_sys_shared::Request {
             uri: wasm_url.clone(),
@@ -601,7 +615,10 @@ impl DocumentStore {
 async fn initialize_sqlite_db(db_url: &str) -> Result<String, fastn_utils::SqlError> {
     let db_path = match db_url.strip_prefix("sqlite:///") {
         Some(db) => db.to_string(),
-        None => return Err(fastn_utils::SqlError::UnknownDB),
+        None => {
+            tracing::info!("unknown db: {db_url}");
+            return Err(fastn_utils::SqlError::UnknownDB);
+        }
     };
 
     // Create SQLite file if it doesn't exist
