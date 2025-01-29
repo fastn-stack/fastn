@@ -17,10 +17,10 @@
     },
     "scrot.png": {
       "name": "scrot.png",
-      "checksum": "1FDAA73B267106322D6F1FA8BB404F20B4A0579B132379F86747DB91CC6CC55C",
-      "size": 321328
+      "checksum": "1F886288F2E5D0B1657A0691A842575844944334FB942772A130A2F0258B0C2D",
+      "size": 470661
     }
   },
   "zip_url": "https://codeload.github.com/amitu/dotcom/zip/refs/heads/main",
-  "checksum": "4A1B247A1BB66B9C926F832768B66FE7DCE3BD7B75A9BF344CB50F28D74E6947"
+  "checksum": "99F068067033DC51A872095AF65499D7A79BD06EAF1278CDEDEDE39992D88B2A"
 }
