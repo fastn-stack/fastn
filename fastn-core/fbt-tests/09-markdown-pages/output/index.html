@@ -360,6 +360,17 @@ td {
   }
 }
 global["main"] = main;
+ftd.app_path = function (args) {
+  let __fastn_super_package_name__ = __fastn_package_name__;
+  __fastn_package_name__ = "amitu";
+  try {
+    let __args__ = fastn_utils.getArgs({
+    }, args);
+    return ("" + fastn_utils.getStaticValue(__args__.path));
+  } finally {
+    __fastn_package_name__ = __fastn_super_package_name__;
+  }
+}
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "code-theme-9A3284FD117DFF7CFD432FF860A5E14169FA592BC3DA4F5E8A6975143F5EA07F.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "code-theme-99CD7B013C96C4632F0AEA39AC265387B814AE85A7D33666A4AE4BEFF59016D0.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "code-theme-B3AEA322EADEDA61F0E219845A0E9C8E73F6345E49362B46E6F52CEE40471248.css";
