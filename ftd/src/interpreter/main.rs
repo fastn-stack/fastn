@@ -99,14 +99,16 @@ impl InterpreterState {
     #[tracing::instrument(skip(builtins))]
     fn new_with_expanded_builtins(
         id: String,
-        builtins: impl IntoIterator<Item = (String, fastn_resolved::Definition)>,
+        builtins: Option<[(String, fastn_resolved::Definition); 1]>,
     ) -> InterpreterState {
         let mut bag = ftd::interpreter::default::builtins().clone();
 
-        builtins.into_iter().for_each(|(name, def)| {
-            tracing::info!("Overriding builtin with def from fastn: {}", name);
-            bag.insert(name, def);
-        });
+        if let Some(builtins) = builtins {
+            for (name, def) in builtins {
+                tracing::info!("Overriding builtin with def from fastn: {}", name);
+                bag.insert(name, def);
+            }
+        }
 
         InterpreterState {
             id,
@@ -969,14 +971,14 @@ impl InterpreterState {
 
 pub fn interpret(id: &str, source: &str) -> ftd::interpreter::Result<Interpreter> {
     let doc = ParsedDocument::parse_with_line_number(id, source, 0)?;
-    interpret_with_line_number(id, doc, vec![])
+    interpret_with_line_number(id, doc, None)
 }
 
 #[tracing::instrument(skip_all)]
 pub fn interpret_with_line_number(
     id: &str,
     document: ParsedDocument,
-    builtin_overrides: Vec<(String, fastn_resolved::Definition)>,
+    builtin_overrides: Option<[(String, fastn_resolved::Definition); 1]>,
 ) -> ftd::interpreter::Result<Interpreter> {
     use itertools::Itertools;
 

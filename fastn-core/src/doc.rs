@@ -28,8 +28,8 @@ fn cached_parse(
 pub fn package_dependent_builtins(
     pkg: &fastn_core::Package,
     req_path: &str,
-) -> Vec<(String, fastn_resolved::Definition)> {
-    vec![(
+) -> [(String, fastn_resolved::Definition); 1] {
+    [(
         "ftd#app-path".to_string(),
         fastn_core::host_builtins::app_path(pkg, req_path),
     )]
@@ -48,7 +48,7 @@ pub async fn interpret_helper(
     let doc = cached_parse(name, source, line_number)?;
 
     let builtin_overrides = package_dependent_builtins(&lib.config.package, lib.request.path());
-    let mut s = ftd::interpreter::interpret_with_line_number(name, doc, builtin_overrides)?;
+    let mut s = ftd::interpreter::interpret_with_line_number(name, doc, Some(builtin_overrides))?;
     lib.module_package_map.insert(
         name.trim_matches('/').to_string(),
         lib.config.package.name.to_string(),
