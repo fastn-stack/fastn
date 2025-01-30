@@ -475,6 +475,7 @@ impl DocumentStore {
         wasm_url: String,
         req: &T,
         mountpoint: String,
+        app_mounts: std::collections::HashMap<String, String>,
         session_id: &Option<String>,
     ) -> Result<ft_sys_shared::Request, HttpError>
     where
@@ -486,10 +487,18 @@ impl DocumentStore {
                 .iter()
                 .map(|(k, v)| (k.as_str().to_string(), v.as_bytes().to_vec()))
                 .collect();
+
             headers.push((
                 fastn_utils::FASTN_MOUNTPOINT.to_string(),
                 mountpoint.into_bytes(),
             ));
+
+            let app_mounts = serde_json::to_string(&app_mounts).unwrap();
+            headers.push((
+                fastn_utils::FASTN_APP_MOUNTS.to_string(),
+                app_mounts.into_bytes(),
+            ));
+
             headers
         };
 

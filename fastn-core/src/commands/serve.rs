@@ -587,9 +587,20 @@ async fn handle_endpoints(
     tracing::info!("url: {}", url);
 
     if url.starts_with("wasm+proxy://") {
+        let app_mounts = match config.package.app_mounts() {
+            Err(e) => return Some(Err(e)),
+            Ok(v) => v,
+        };
+
         return match config
             .ds
-            .handle_wasm(url, req, endpoint.mountpoint.to_string(), session_id)
+            .handle_wasm(
+                url,
+                req,
+                endpoint.mountpoint.to_string(),
+                app_mounts,
+                session_id,
+            )
             .await
         {
             Ok(r) => Some(Ok(to_response(r))),

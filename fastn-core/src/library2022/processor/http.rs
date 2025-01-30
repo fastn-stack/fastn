@@ -133,6 +133,12 @@ pub async fn process(
         let mountpoint = mountpoint.ok_or(ftd::interpreter::Error::OtherError(
             "Mountpoint not found!".to_string(),
         ))?;
+        let app_mounts = req_config
+            .config
+            .package
+            .app_mounts()
+            .or_else(|e| Err(ftd::interpreter::Error::OtherError(e.to_string())))?;
+
         match req_config
             .config
             .ds
@@ -140,6 +146,7 @@ pub async fn process(
                 url.to_string(),
                 &req_config.request,
                 mountpoint,
+                app_mounts,
                 // FIXME: we don't know how to handle unsaved wasm files. Maybe there is no way
                 // that an unsaved .wasm file can exist and this is fine.
                 &None,
