@@ -602,9 +602,9 @@ impl Config {
 
         // For similar package
         // tracing::info!(package = package.name, path = path);
-        if path.starts_with(format!("-/{}", self.package.name.trim_matches('/')).as_str()) {
-            let path_without_package_name = path
-                .trim_start_matches(format!("-/{}", self.package.name.trim_matches('/')).as_str());
+        let dash_path = self.package.dash_path();
+        if path.starts_with(dash_path.as_str()) {
+            let path_without_package_name = path.trim_start_matches(dash_path.as_str());
             return Some((
                 path.to_string(),
                 &self.package,
@@ -619,6 +619,7 @@ impl Config {
             .iter()
             .map(|x| (&x.mount_point, &x.package, x))
         {
+            let dash_path = dep.dash_path();
             if path.starts_with(mp.trim_matches('/')) {
                 // TODO: Need to handle for recursive dependencies mount-point
                 // Note: Currently not working because dependency of package does not contain dependencies
@@ -630,9 +631,8 @@ impl Config {
                     sanitized_path.to_string(),
                     Some(app),
                 ));
-            } else if path.starts_with(format!("-/{}", dep.name.trim_matches('/')).as_str()) {
-                let path_without_package_name =
-                    path.trim_start_matches(format!("-/{}", dep.name.trim_matches('/')).as_str());
+            } else if path.starts_with(dash_path.as_str()) {
+                let path_without_package_name = path.trim_start_matches(dash_path.as_str());
                 return Some((
                     path.to_string(),
                     dep,

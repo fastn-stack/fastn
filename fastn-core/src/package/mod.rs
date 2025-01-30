@@ -76,6 +76,10 @@ pub struct Package {
 }
 
 impl Package {
+    pub fn dash_path(&self) -> String {
+        format!("-/{}", self.name.trim_matches('/'))
+    }
+
     pub fn new(name: &str) -> fastn_core::Package {
         fastn_core::Package {
             name: name.to_string(),
