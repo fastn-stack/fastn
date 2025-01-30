@@ -78,7 +78,7 @@ pub fn get_clean_url(
     } else {
         config
             .get_mountpoint_sanitized_path(url)
-            .map(|(u, _, _, _)| u)
+            .map(|(u, _, _)| u)
             .unwrap_or_else(|| cow_1) // TODO: Error possibly, in that return 404 from proxy
     };
 

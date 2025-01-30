@@ -148,7 +148,7 @@ impl RequestConfig {
             } else {
                 let (path_with_package_name, sanitized_package, sanitized_path) =
                     match self.config.get_mountpoint_sanitized_path(path) {
-                        Some((new_path, package, remaining_path, _)) => {
+                        Some((new_path, package, remaining_path)) => {
                             // Update the sitemap of the package, if it does not contain the sitemap information
                             new_path1 = new_path;
                             if package.name != self.config.package.name {
@@ -584,6 +584,13 @@ impl Config {
             .await)
     }
 
+    fn provided_via_for(
+        &self,
+        _package: &fastn_core::Package,
+    ) -> Option<(&fastn_core::Package, &str)> {
+        None
+    }
+
     // Input
     // path: /todos/add-todo/
     // mount-point: /todos/
@@ -593,12 +600,7 @@ impl Config {
     pub fn get_mountpoint_sanitized_path<'a>(
         &'a self,
         path: &'a str,
-    ) -> Option<(
-        std::borrow::Cow<'a, str>,
-        &'a fastn_core::Package,
-        String,
-        Option<&'a fastn_core::package::app::App>,
-    )> {
+    ) -> Option<(std::borrow::Cow<'a, str>, &'a fastn_core::Package, String)> {
         // Problem for recursive dependency is that only current package contains dependency,
         // dependent package does not contain dependency
 
@@ -611,15 +613,14 @@ impl Config {
                 std::borrow::Cow::from(path),
                 &self.package,
                 path_without_package_name.to_string(),
-                None,
             ));
         }
 
-        for (mp, dep, app) in self
+        for (mp, dep) in self
             .package
             .apps
             .iter()
-            .map(|x| (&x.mount_point, &x.package, x))
+            .map(|x| (&x.mount_point, &x.package))
         {
             let dash_path = dep.dash_path();
             if path.starts_with(mp.trim_matches('/')) {
@@ -627,11 +628,20 @@ impl Config {
                 // Note: Currently not working because dependency of package does not contain dependencies
                 let package_name = dep.name.trim_matches('/');
                 let sanitized_path = path.trim_start_matches(mp.trim_start_matches('/'));
+                if sanitized_path.is_empty() {
+                    if let Some((dep, module)) = self.provided_via_for(dep) {
+                        // TODO: what is sanitized_path used for?
+                        return Some((
+                            std::borrow::Cow::from(module),
+                            dep,
+                            sanitized_path.to_string(),
+                        ));
+                    }
+                }
                 return Some((
                     std::borrow::Cow::from(format!("-/{package_name}/{sanitized_path}")),
                     dep,
                     sanitized_path.to_string(),
-                    Some(app),
                 ));
             } else if path.starts_with(dash_path.as_str()) {
                 let path_without_package_name = path.trim_start_matches(dash_path.as_str());
@@ -639,7 +649,6 @@ impl Config {
                     std::borrow::Cow::from(path),
                     dep,
                     path_without_package_name.to_string(),
-                    Some(app),
                 ));
             }
         }
@@ -791,7 +800,7 @@ impl Config {
     ) -> fastn_core::Result<(String, fastn_core::Package)> {
         let sanitized_id = self
             .get_mountpoint_sanitized_path(id)
-            .map(|(x, _, _, _)| x)
+            .map(|(x, _, _)| x)
             .unwrap_or_else(|| std::borrow::Cow::Borrowed(id));
 
         let id = sanitized_id.as_ref();
