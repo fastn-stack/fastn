@@ -587,7 +587,7 @@ async fn handle_endpoints(
     tracing::info!("url: {}", url);
 
     if url.starts_with("wasm+proxy://") {
-        let app_mounts = match config.package.app_mounts() {
+        let app_mounts = match config.app_mounts() {
             Err(e) => return Some(Err(e)),
             Ok(v) => v,
         };
