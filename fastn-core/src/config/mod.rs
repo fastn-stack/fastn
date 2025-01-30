@@ -1084,9 +1084,19 @@ impl Config {
         // fastn installed Apps
         config.package.apps = {
             let apps_temp: Vec<fastn_core::package::app::AppTemp> = fastn_doc.get("fastn#app")?;
-            let mut apps = vec![];
+            let mut apps: Vec<fastn_core::package::app::App> = vec![];
+
             for app in apps_temp.into_iter() {
-                apps.push(app.into_app(&config, session_id).await?);
+                let new_app_package = app.package.clone();
+                let new_app = app.into_app(&config, session_id).await?;
+
+                if let Some(found_app) = apps.iter().find(|a| a.package.name.eq(&new_app_package)) {
+                    return Err(fastn_core::Error::PackageError {
+                        message: format!("Mounting the same package twice is not yet allowed. Tried mounting `{}` which is aready mounted at `{}`", new_app_package, found_app.mount_point),
+                    });
+                }
+
+                apps.push(new_app);
             }
             apps
         };
