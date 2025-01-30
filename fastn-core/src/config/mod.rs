@@ -139,27 +139,29 @@ impl RequestConfig {
         // Sanitize the mountpoint request.
         // Get the package and sanitized path
         let package1;
+        let new_path1;
 
         // TODO: The shitty code written by me ever
         let (path_with_package_name, document, path_params, extra_data) =
             if fastn_core::file::is_static(path)? {
-                (path.to_string(), None, vec![], Default::default())
+                (path, None, vec![], Default::default())
             } else {
                 let (path_with_package_name, sanitized_package, sanitized_path) =
                     match self.config.get_mountpoint_sanitized_path(path) {
                         Some((new_path, package, remaining_path, _)) => {
                             // Update the sitemap of the package, if it does not contain the sitemap information
+                            new_path1 = new_path;
                             if package.name != self.config.package.name {
                                 package1 = self
                                     .config
                                     .update_sitemap(package, preview_session_id)
                                     .await?;
-                                (new_path, &package1, remaining_path)
+                                (new_path1.as_ref(), &package1, remaining_path)
                             } else {
-                                (new_path, package, remaining_path)
+                                (new_path1.as_ref(), package, remaining_path)
                             }
                         }
-                        None => (path.to_string(), &self.config.package, path.to_string()),
+                        None => (path, &self.config.package, path.to_string()),
                     };
 
                 // Getting `document` with dynamic parameters, if exists
@@ -179,7 +181,7 @@ impl RequestConfig {
                 (path_with_package_name, document, path_params, extra_data)
             };
 
-        let path = path_with_package_name.as_str();
+        let path = path_with_package_name;
 
         tracing::info!("resolved path: {path}");
         tracing::info!(
@@ -588,14 +590,14 @@ impl Config {
     // Output
     // -/<todos-package-name>/add-todo/, <todos-package-name>, /add-todo/
     // #[tracing::instrument(skip_all)]
-    pub fn get_mountpoint_sanitized_path(
-        &self,
-        path: &str,
+    pub fn get_mountpoint_sanitized_path<'a>(
+        &'a self,
+        path: &'a str,
     ) -> Option<(
+        std::borrow::Cow<'a, str>,
+        &'a fastn_core::Package,
         String,
-        &fastn_core::Package,
-        String,
-        Option<&fastn_core::package::app::App>,
+        Option<&'a fastn_core::package::app::App>,
     )> {
         // Problem for recursive dependency is that only current package contains dependency,
         // dependent package does not contain dependency
@@ -606,7 +608,7 @@ impl Config {
         if path.starts_with(dash_path.as_str()) {
             let path_without_package_name = path.trim_start_matches(dash_path.as_str());
             return Some((
-                path.to_string(),
+                std::borrow::Cow::from(path),
                 &self.package,
                 path_without_package_name.to_string(),
                 None,
@@ -626,7 +628,7 @@ impl Config {
                 let package_name = dep.name.trim_matches('/');
                 let sanitized_path = path.trim_start_matches(mp.trim_start_matches('/'));
                 return Some((
-                    format!("-/{package_name}/{sanitized_path}"),
+                    std::borrow::Cow::from(format!("-/{package_name}/{sanitized_path}")),
                     dep,
                     sanitized_path.to_string(),
                     Some(app),
@@ -634,7 +636,7 @@ impl Config {
             } else if path.starts_with(dash_path.as_str()) {
                 let path_without_package_name = path.trim_start_matches(dash_path.as_str());
                 return Some((
-                    path.to_string(),
+                    std::borrow::Cow::from(path),
                     dep,
                     path_without_package_name.to_string(),
                     Some(app),
@@ -790,9 +792,9 @@ impl Config {
         let sanitized_id = self
             .get_mountpoint_sanitized_path(id)
             .map(|(x, _, _, _)| x)
-            .unwrap_or_else(|| id.to_string());
+            .unwrap_or_else(|| std::borrow::Cow::Borrowed(id));
 
-        let id = sanitized_id.as_str();
+        let id = sanitized_id.as_ref();
         let id = if let Some(id) = id.strip_prefix("-/") {
             id
         } else {

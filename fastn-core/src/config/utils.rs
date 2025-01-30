@@ -71,17 +71,19 @@ pub fn get_clean_url(
         ));
     }
 
+    let cow_1 = std::borrow::Cow::from(url);
+
     let url = if url.starts_with("/-/") || url.starts_with("-/") {
-        url.to_string()
+        cow_1
     } else {
         config
             .get_mountpoint_sanitized_path(url)
             .map(|(u, _, _, _)| u)
-            .unwrap_or_else(|| url.to_string()) // TODO: Error possibly, in that return 404 from proxy
+            .unwrap_or_else(|| cow_1) // TODO: Error possibly, in that return 404 from proxy
     };
 
     // This is for current package
-    if let Some(remaining_url) = trim_package_name(url.as_str(), config.package.name.as_str()) {
+    if let Some(remaining_url) = trim_package_name(url.as_ref(), config.package.name.as_str()) {
         if config.package.endpoints.is_empty() {
             return Err(fastn_core::Error::GenericError(format!(
                 "package does not contain the endpoints: {:?}",
@@ -116,7 +118,7 @@ pub fn get_clean_url(
     // Handle logic for apps
     for app in config.package.apps.iter() {
         if let Some(ep) = &app.end_point {
-            if let Some(remaining_url) = trim_package_name(url.as_str(), app.package.name.as_str())
+            if let Some(remaining_url) = trim_package_name(url.as_ref(), app.package.name.as_str())
             {
                 let mut app_conf = app.config.clone();
                 if let Some(user_id) = &app.user_id {
