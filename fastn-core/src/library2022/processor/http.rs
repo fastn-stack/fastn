@@ -137,7 +137,7 @@ pub async fn process(
             .config
             .package
             .app_mounts()
-            .or_else(|e| Err(ftd::interpreter::Error::OtherError(e.to_string())))?;
+            .map_err(|e| ftd::interpreter::Error::OtherError(e.to_string()))?;
 
         match req_config
             .config
