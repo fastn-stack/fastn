@@ -145,24 +145,22 @@ impl RequestConfig {
             if fastn_core::file::is_static(path)? {
                 (path.to_string(), None, vec![], Default::default())
             } else {
-                let (path_with_package_name, sanitized_package, sanitized_path) = match self
-                    .config
-                    .get_mountpoint_sanitized_path(&self.config.package, path)
-                {
-                    Some((new_path, package, remaining_path, _)) => {
-                        // Update the sitemap of the package, if it does not contain the sitemap information
-                        if package.name != self.config.package.name {
-                            package1 = self
-                                .config
-                                .update_sitemap(package, preview_session_id)
-                                .await?;
-                            (new_path, &package1, remaining_path)
-                        } else {
-                            (new_path, package, remaining_path)
+                let (path_with_package_name, sanitized_package, sanitized_path) =
+                    match self.config.get_mountpoint_sanitized_path(path) {
+                        Some((new_path, package, remaining_path, _)) => {
+                            // Update the sitemap of the package, if it does not contain the sitemap information
+                            if package.name != self.config.package.name {
+                                package1 = self
+                                    .config
+                                    .update_sitemap(package, preview_session_id)
+                                    .await?;
+                                (new_path, &package1, remaining_path)
+                            } else {
+                                (new_path, package, remaining_path)
+                            }
                         }
-                    }
-                    None => (path.to_string(), &self.config.package, path.to_string()),
-                };
+                        None => (path.to_string(), &self.config.package, path.to_string()),
+                    };
 
                 // Getting `document` with dynamic parameters, if exists
                 // It will first resolve in the sitemap.
@@ -592,7 +590,6 @@ impl Config {
     // #[tracing::instrument(skip_all)]
     pub fn get_mountpoint_sanitized_path<'a>(
         &'a self,
-        package: &'a fastn_core::Package,
         path: &'a str,
     ) -> Option<(
         String,
@@ -605,18 +602,23 @@ impl Config {
 
         // For similar package
         // tracing::info!(package = package.name, path = path);
-        if path.starts_with(format!("-/{}", package.name.trim_matches('/')).as_str()) {
-            let path_without_package_name =
-                path.trim_start_matches(format!("-/{}", package.name.trim_matches('/')).as_str());
+        if path.starts_with(format!("-/{}", self.package.name.trim_matches('/')).as_str()) {
+            let path_without_package_name = path
+                .trim_start_matches(format!("-/{}", self.package.name.trim_matches('/')).as_str());
             return Some((
                 path.to_string(),
-                package,
+                &self.package,
                 path_without_package_name.to_string(),
                 None,
             ));
         }
 
-        for (mp, dep, app) in package.apps.iter().map(|x| (&x.mount_point, &x.package, x)) {
+        for (mp, dep, app) in self
+            .package
+            .apps
+            .iter()
+            .map(|x| (&x.mount_point, &x.package, x))
+        {
             if path.starts_with(mp.trim_matches('/')) {
                 // TODO: Need to handle for recursive dependencies mount-point
                 // Note: Currently not working because dependency of package does not contain dependencies
@@ -786,7 +788,7 @@ impl Config {
         id: &str,
     ) -> fastn_core::Result<(String, fastn_core::Package)> {
         let sanitized_id = self
-            .get_mountpoint_sanitized_path(&self.package, id)
+            .get_mountpoint_sanitized_path(id)
             .map(|(x, _, _, _)| x)
             .unwrap_or_else(|| id.to_string());
 
