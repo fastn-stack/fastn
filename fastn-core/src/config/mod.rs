@@ -588,14 +588,14 @@ impl Config {
     // Output
     // -/<todos-package-name>/add-todo/, <todos-package-name>, /add-todo/
     // #[tracing::instrument(skip_all)]
-    pub fn get_mountpoint_sanitized_path<'a>(
-        &'a self,
-        path: &'a str,
+    pub fn get_mountpoint_sanitized_path(
+        &self,
+        path: &str,
     ) -> Option<(
         String,
-        &'a fastn_core::Package,
+        &fastn_core::Package,
         String,
-        Option<&'a fastn_core::package::app::App>,
+        Option<&fastn_core::package::app::App>,
     )> {
         // Problem for recursive dependency is that only current package contains dependency,
         // dependent package does not contain dependency
