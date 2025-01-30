@@ -135,7 +135,6 @@ pub async fn process(
         ))?;
         let app_mounts = req_config
             .config
-            .package
             .app_mounts()
             .map_err(|e| ftd::interpreter::Error::OtherError(e.to_string()))?;
 

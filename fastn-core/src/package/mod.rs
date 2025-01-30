@@ -799,46 +799,6 @@ impl Package {
         self.selected_language = Some(language);
         Ok(())
     }
-
-    /// Get mounted apps (package's system name, mount point)
-    ///
-    /// ```ftd
-    /// ;; FASTN.ftd
-    /// -- fastn.app: Auth App
-    /// package: lets-auth.fifthtry.site
-    /// mount-point: /-/auth/
-    ///
-    /// -- fastn.app: Let's Talk App
-    /// package: lets-talk.fifthtry.site
-    /// mount-point: /talk/
-    /// ```
-    ///
-    /// Then the value will be a json string:
-    ///
-    /// ```json
-    /// { "lets-auth": "/-/auth/", "lets-talk": "/talk/" }
-    /// ```
-    ///
-    /// Keys `lets-auth` and `lets-talk` are `system` names of the associated packages.
-    pub fn app_mounts(&self) -> fastn_core::Result<std::collections::HashMap<String, String>> {
-        let mut mounts = std::collections::HashMap::new();
-
-        for a in &self.apps {
-            if a.package.system.is_none() {
-                return fastn_core::usage_error(format!(
-                    "Package {} used for app {} is not a system package",
-                    a.package.name, a.name
-                ));
-            }
-
-            mounts.insert(
-                a.package.system.clone().expect("already checked for None"),
-                a.mount_point.clone(),
-            );
-        }
-
-        Ok(mounts)
-    }
 }
 
 pub(crate) fn get_migration_data(
