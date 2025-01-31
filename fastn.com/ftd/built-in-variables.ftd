@@ -9,6 +9,7 @@
 - [ftd.follow-system-dark-mode](/built-in-variables#ftd-follow-system-dark-mode)
 - [ftd.device](/built-in-variables#ftd-device)
 - [ftd.mobile-breakpoint](/built-in-variables#ftd-mobile-breakpoint)
+- [ftd.main-package](/built-in-variables#ftd-main-package)
 
 -- variable: `ftd.dark-mode`
 type: `boolean`
@@ -43,6 +44,15 @@ default: 768
 `ftd.mobile-breakpoint` is the width in pixels below which `fastn` assumes that
 the device is a mobile device, and sets `ftd.device` to `mobile`.
 
+
+-- variable: `ftd.main-package`
+type: string
+
+This gives you the name of the package from which `fastn serve` was run. This
+is useful for determining if an `.ftd` file contained in a package is run
+standalone (using `fastn serve`) or if the package is mounted in another
+package. If the package is mounted, then this variable will store the package
+name of the mounter .
 
 
 -- end: ds.page
