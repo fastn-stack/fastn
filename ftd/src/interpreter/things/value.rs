@@ -198,26 +198,26 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
         loop_object_name_and_kind: &Option<(String, fastn_resolved::Argument, Option<String>)>,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::PropertyValue>>
     {
-        if let Some(reference) = try_ok_state!(dbg!(
-            fastn_resolved::PropertyValue::reference_from_ast_value(
+        if let Some(reference) =
+            try_ok_state!(fastn_resolved::PropertyValue::reference_from_ast_value(
                 value.clone(),
                 doc,
                 is_mutable,
                 expected_kind,
                 definition_name_with_arguments,
                 loop_object_name_and_kind,
-            )
-        )?) {
+            )?)
+        {
             Ok(ftd::interpreter::StateWithThing::new_thing(reference))
         } else {
-            dbg!(fastn_resolved::PropertyValue::value_from_ast_value(
+            fastn_resolved::PropertyValue::value_from_ast_value(
                 value,
                 doc,
                 is_mutable,
                 expected_kind,
                 definition_name_with_arguments,
                 loop_object_name_and_kind,
-            ))
+            )
         }
     }
 
