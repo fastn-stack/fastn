@@ -4895,6 +4895,42 @@ const ftd = (function () {
         );
     };
 
+    /**
+     * Check if the app is mounted
+     * @param {string} app
+     * @returns {boolean}
+     */
+    exports.is_app_mounted = (app) => {
+        if (app instanceof fastn.mutableClass) app = app.get();
+        app = app.replaceAll("-", "_");
+        return !!ftd.app_mounts.get(app);
+    };
+
+    /**
+     * Construct the `path` relative to the mountpoint of `app`
+     *
+     * @param {string} path
+     * @param {string} app
+     *
+     * @returns {string}
+     */
+    exports.app_path_ex = (path, app) => {
+        if (path instanceof fastn.mutableClass)
+            path = fastn_utils.getStaticValue(path);
+        if (app instanceof fastn.mutableClass)
+            app = fastn_utils.getStaticValue(app);
+
+        app = app.replaceAll("-", "_");
+
+        let prefix = ftd.app_mounts.get(app)?.get() || "";
+
+        if (prefix.length > 0 && prefix.charAt(prefix.length - 1) === "/") {
+            prefix = prefix.substring(0, prefix.length - 1);
+        }
+
+        return prefix + path;
+    };
+
     // Todo: Implement this (Remove highlighter)
     exports.clean_code = (args) => args.a;
 
