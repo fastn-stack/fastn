@@ -141,6 +141,16 @@ fn p(
         }
     };
     let t = t.clone().unwrap_or_default();
+    if let Some(json) = i.get_json().unwrap() {
+        let json: serde_json::Value = serde_json::from_slice(json.as_slice()).unwrap();
+        let json_str = json.to_string();
+        if fix || manual || script {
+            std::fs::write(file_location, json_str).unwrap();
+            return;
+        }
+        assert_eq!(&t, &json_str, "Expected JSON: {}", json_str);
+        return;
+    }
     let js_ast_data = ftd::js::document_into_js_ast(i);
     let js_document_script = fastn_js::to_js(js_ast_data.asts.as_slice(), "foo");
     let js_ftd_script = fastn_js::to_js(ftd::js::default_bag_into_js_ast().as_slice(), "foo");
