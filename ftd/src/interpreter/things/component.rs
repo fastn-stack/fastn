@@ -451,6 +451,7 @@ pub trait PropertyExt {
         component_name: &str,
         component_arguments: &[fastn_resolved::Argument],
         definition_name_with_arguments: &mut Option<(&str, &mut [fastn_resolved::Argument])>,
+        kw_args: &Option<fastn_resolved::Argument>,
         loop_object_name_and_kind: &Option<(String, fastn_resolved::Argument, Option<String>)>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::Property>>;
@@ -458,6 +459,7 @@ pub trait PropertyExt {
         ast_property: &ftd_ast::Property,
         component_name: &str,
         component_argument: &[fastn_resolved::Argument],
+        kw_args: &Option<fastn_resolved::Argument>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::Argument>>;
     fn get_local_argument(&self, component_name: &str) -> Option<String>;
@@ -727,53 +729,35 @@ impl PropertyExt for fastn_resolved::Property {
                 line_number,
             )?);
 
-        let kw_args = component_arguments.iter().find(|a| a.kind.is_kwargs());
-
-        let mut extra_arguments = vec![];
+        let kw_args = {
+            let mut found = false;
+            let mut kw_args = None;
+            for a in &component_arguments {
+                if a.kind.is_kwargs() {
+                    if found {
+                        return Err(ftd::interpreter::Error::ParseError {
+                            message: "Can't have multiple kwargs".to_string(),
+                            doc_id: doc.name.to_string(),
+                            line_number,
+                        });
+                    }
+                    found = true;
+                    kw_args = Some(a.to_owned());
+                }
+            }
+            kw_args
+        };
 
         for property in ast_properties {
-            match fastn_resolved::Property::from_ast_property(
+            properties.push(try_ok_state!(fastn_resolved::Property::from_ast_property(
                 property.clone(),
                 component_name,
                 component_arguments.as_slice(),
                 definition_name_with_arguments,
+                &kw_args,
                 loop_object_name_and_kind,
                 doc,
-            ) {
-                Ok(property) => {
-                    properties.push(try_ok_state!(property));
-                }
-                Err(e) => {
-                    if kw_args.is_some() {
-                        if let Some((name, value)) =
-                            get_extra_argument_property_value(property, doc.name.to_string())?
-                        {
-                            extra_arguments.push((name, value));
-                            continue;
-                        };
-                    }
-
-                    return Err(e);
-                }
-            };
-        }
-
-        if let Some(kw_args) = kw_args {
-            properties.push(fastn_resolved::Property {
-                value: fastn_resolved::PropertyValue::Value {
-                    value: fastn_resolved::Value::KwArgs {
-                        arguments: std::collections::BTreeMap::from_iter(extra_arguments),
-                    },
-                    is_mutable: false,
-                    line_number: kw_args.line_number,
-                },
-                source: fastn_resolved::PropertySource::Header {
-                    name: kw_args.name.clone(),
-                    mutable: false,
-                },
-                condition: None,
-                line_number: kw_args.line_number,
-            });
+            )?));
         }
 
         try_ok_state!(
@@ -803,6 +787,7 @@ impl PropertyExt for fastn_resolved::Property {
         component_name: &str,
         component_arguments: &[fastn_resolved::Argument],
         definition_name_with_arguments: &mut Option<(&str, &mut [fastn_resolved::Argument])>,
+        kw_args: &Option<fastn_resolved::Argument>,
         loop_object_name_and_kind: &Option<(String, fastn_resolved::Argument, Option<String>)>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::Property>> {
@@ -812,6 +797,7 @@ impl PropertyExt for fastn_resolved::Property {
             &ast_property,
             component_name,
             component_arguments,
+            kw_args,
             doc,
         )?);
 
@@ -869,12 +855,13 @@ impl PropertyExt for fastn_resolved::Property {
     fn get_argument_for_property(
         ast_property: &ftd_ast::Property,
         component_name: &str,
-        component_argument: &[fastn_resolved::Argument],
+        component_arguments: &[fastn_resolved::Argument],
+        kw_args: &Option<fastn_resolved::Argument>,
         doc: &mut ftd::interpreter::TDoc,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::Argument>> {
         match &ast_property.source {
             ftd_ast::PropertySource::Caption => Ok(ftd::interpreter::StateWithThing::new_thing(
-                component_argument
+                component_arguments
                     .iter()
                     .find(|v| v.is_caption())
                     .ok_or(ftd::interpreter::Error::ParseError {
@@ -888,7 +875,7 @@ impl PropertyExt for fastn_resolved::Property {
                     .map(ToOwned::to_owned)?,
             )),
             ftd_ast::PropertySource::Body => Ok(ftd::interpreter::StateWithThing::new_thing(
-                component_argument
+                component_arguments
                     .iter()
                     .find(|v| v.is_body())
                     .ok_or(ftd::interpreter::Error::ParseError {
@@ -903,9 +890,10 @@ impl PropertyExt for fastn_resolved::Property {
             )),
             ftd_ast::PropertySource::Header { name, mutable } => {
                 let (name, remaining) = ftd::interpreter::utils::split_at(name, ".");
-                let mut argument = component_argument
+                let mut argument = component_arguments
                     .iter()
                     .find(|v| v.name.eq(name.as_str()))
+                    .or(kw_args.as_ref())
                     .ok_or(ftd::interpreter::Error::ParseError {
                         message: format!(
                             "Header type `{}` mutable: `{}` argument not found for component `{}`",
