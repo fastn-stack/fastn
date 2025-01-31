@@ -242,7 +242,7 @@ impl HeaderValues {
             if header.value.is_null() {
                 Ok(None)
             } else {
-                Ok(Some(header.value.string(doc_id)?))
+                Ok(Some(header.value.string(doc_id)?.to_string()))
             }
         } else {
             Ok(None)
@@ -330,10 +330,10 @@ impl VariableValue {
         name
     }
 
-    pub fn string(&self, doc_id: &str) -> ftd_ast::Result<String> {
+    pub fn string(&self, doc_id: &str) -> ftd_ast::Result<&str> {
         match self {
-            VariableValue::String { value, .. } => Ok(value.to_string()),
-            VariableValue::Constant { value, .. } => Ok(value.to_string()),
+            VariableValue::String { value, .. } => Ok(value),
+            VariableValue::Constant { value, .. } => Ok(value),
             t => ftd_ast::parse_error(
                 format!("Expect Variable value string, found: `{:?}`", t),
                 doc_id,

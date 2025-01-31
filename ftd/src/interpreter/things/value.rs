@@ -198,26 +198,27 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
         loop_object_name_and_kind: &Option<(String, fastn_resolved::Argument, Option<String>)>,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::PropertyValue>>
     {
-        if let Some(reference) =
-            try_ok_state!(fastn_resolved::PropertyValue::reference_from_ast_value(
+        dbg!(&value);
+        if let Some(reference) = try_ok_state!(dbg!(
+            fastn_resolved::PropertyValue::reference_from_ast_value(
                 value.clone(),
                 doc,
                 is_mutable,
                 expected_kind,
                 definition_name_with_arguments,
                 loop_object_name_and_kind,
-            )?)
-        {
+            )
+        )?) {
             Ok(ftd::interpreter::StateWithThing::new_thing(reference))
         } else {
-            fastn_resolved::PropertyValue::value_from_ast_value(
+            dbg!(fastn_resolved::PropertyValue::value_from_ast_value(
                 value,
                 doc,
                 is_mutable,
                 expected_kind,
                 definition_name_with_arguments,
                 loop_object_name_and_kind,
-            )
+            ))
         }
     }
 
@@ -675,7 +676,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                 fastn_resolved::Kind::String => ftd::interpreter::StateWithThing::new_thing(
                     fastn_resolved::PropertyValue::Value {
                         value: fastn_resolved::Value::String {
-                            text: value.string(doc.name)?,
+                            text: value.string(doc.name)?.to_string(),
                         },
                         is_mutable,
                         line_number: value.line_number(),
@@ -881,7 +882,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                 fastn_resolved::Kind::Module => ftd::interpreter::StateWithThing::new_thing(
                     fastn_resolved::PropertyValue::Value {
                         value: fastn_resolved::Value::Module {
-                            name: doc.resolve_module_name(value.string(doc.name)?.as_str()),
+                            name: doc.resolve_module_name(value.string(doc.name)?),
                             things: Default::default(),
                         },
                         is_mutable,

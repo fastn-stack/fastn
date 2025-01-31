@@ -93,7 +93,7 @@ pub async fn process(
         // After resolve headers: id:1234(value of $query.id)
         if value.starts_with('$') {
             if let Some(value) = doc
-                .get_value(header.line_number, value.as_str())?
+                .get_value(header.line_number, value)?
                 .to_json_string(doc, true)?
             {
                 if let Some(key) = fastn_core::http::get_header_key(header.key.as_str()) {
@@ -109,24 +109,24 @@ pub async fn process(
             }
         } else {
             if let Some(key) = fastn_core::http::get_header_key(header.key.as_str()) {
-                conf.insert(key.to_string(), value);
+                conf.insert(key.to_string(), value.to_string());
                 continue;
             }
             if method.as_str().eq("post") {
                 body.push(format!(
                     "\"{}\": \"{}\"",
                     header.key,
-                    fastn_core::utils::escape_string(value.as_str())
+                    fastn_core::utils::escape_string(value)
                 ));
                 continue;
             }
             url.query_pairs_mut()
-                .append_pair(header.key.as_str(), value.as_str());
+                .append_pair(header.key.as_str(), value);
         }
     }
 
     if !req_config.config.test_command_running {
-        println!("calling `http` processor with url: {}", &url);
+        println!("calling `http` processor with url: {url}");
     }
 
     let resp = if url.scheme() == "wasm+proxy" {
