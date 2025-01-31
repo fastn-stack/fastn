@@ -109,9 +109,15 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
         if let ftd::interpreter::Thing::Component(c) = thing {
             document_asts.push(c.to_ast(&doc, &mut has_rive_components));
         } else if let ftd::interpreter::Thing::Variable(v) = thing {
+            let prefix = if v.name == "ftd#main-package" {
+                None
+            } else {
+                Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string())
+            };
+
             document_asts.push(v.to_ast(
                 &doc,
-                Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string()),
+                prefix,
                 &mut has_rive_components,
             ));
         } else if let ftd::interpreter::Thing::WebComponent(web_component) = thing {
