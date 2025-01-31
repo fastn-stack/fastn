@@ -1,5 +1,5 @@
 -- integer x: 20
 
 -- ftd.json:
-;; name: Bob
+name: Bob
 age: $x

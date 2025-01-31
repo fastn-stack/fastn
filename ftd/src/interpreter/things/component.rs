@@ -737,12 +737,9 @@ impl PropertyExt for fastn_resolved::Property {
             // not assume this is kw-args one.
             match get_kw_args_name(&component_arguments, &v) {
                 None => properties.push(v),
-                Some(name) => match v.value {
-                    t @ fastn_resolved::PropertyValue::Reference { .. } => {
-                        kw_args_properties.insert(name.clone(), t);
-                    }
-                    _ => todo!(),
-                },
+                Some(name) => {
+                    kw_args_properties.insert(name.clone(), v.value);
+                }
             }
         }
 
