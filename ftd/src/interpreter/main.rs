@@ -1258,7 +1258,7 @@ impl Document {
     }
 
     pub fn get_json(&self) -> ftd::interpreter::Result<Option<Vec<u8>>> {
-        use ftd::interpreter::PropertyValueExt;
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
 
         let tdoc = self.tdoc();
 
@@ -1281,7 +1281,9 @@ impl Document {
 
             let mut o = serde_json::Map::new();
             for (k, v) in data {
-                o.insert(k, serde_json::to_value(v.resolve(&tdoc, 0)?)?);
+                if let Some(value) = v.resolve(&tdoc, 0)?.to_serde_value(&tdoc)? {
+                    o.insert(k, serde_json::to_value(value)?);
+                }
             }
 
             return Ok(Some(serde_json::to_vec(&o)?));

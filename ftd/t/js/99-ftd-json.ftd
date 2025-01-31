@@ -1,4 +1,5 @@
 -- integer x: 20
 
 -- ftd.json:
-yo-data: $x
+;; name: Bob
+age: $x
