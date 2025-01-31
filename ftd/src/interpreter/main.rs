@@ -1257,15 +1257,19 @@ impl Document {
         })
     }
 
-    fn get_redirect_with_code(&self, kind: &str) -> ftd::interpreter::Result<Option<String>> {
-        use ftd::interpreter::ValueExt;
+    pub fn get_json(&self) -> ftd::interpreter::Result<Option<Vec<u8>>> {
+        use ftd::interpreter::PropertyValueExt;
 
-        let redirects = self.get_instructions(kind);
+        let tdoc = self.tdoc();
 
-        for v in &redirects {
-            let url = match v.get_interpreter_value_of_argument("url", &self.tdoc())? {
-                // .and_then(|v| v.string(self.name.as_str(), 0).ok());
-                Some(v) => v.string(self.name.as_str(), 0)?,
+        for v in self.get_instructions("ftd#json") {
+            if !is_visible(self, &v)? {
+                continue;
+            }
+
+            let data = match v.get_interpreter_value_of_argument("data", &tdoc)? {
+                Some(fastn_resolved::Value::KwArgs { arguments }) => arguments,
+                Some(_) => unreachable!("compiler must have verified this"),
                 None => {
                     return ftd::interpreter::utils::e2(
                         "url not found in redirect",
@@ -1275,17 +1279,33 @@ impl Document {
                 }
             };
 
-            if v.condition.is_none() {
-                return Ok(Some(url));
+            let mut o = serde_json::Map::new();
+            for (k, v) in data {
+                o.insert(k, serde_json::to_value(v.resolve(&tdoc, 0)?)?);
             }
 
-            if let Some(expr) = &v.condition.as_ref() {
-                match expr.eval(&self.tdoc()) {
-                    Ok(b) if b => return Ok(Some(url)),
-                    Err(e) => return Err(e),
-                    _ => {}
-                }
+            return Ok(Some(serde_json::to_vec(&o)?));
+        }
+
+        Ok(None)
+    }
+
+    fn get_redirect_with_code(&self, kind: &str) -> ftd::interpreter::Result<Option<String>> {
+        use ftd::interpreter::ValueExt;
+
+        let tdoc = self.tdoc();
+
+        for v in self.get_instructions(kind) {
+            if !is_visible(self, &v)? {
+                continue;
             }
+
+            return match v.get_interpreter_value_of_argument("url", &tdoc)? {
+                Some(v) => Ok(Some(v.string(self.name.as_str(), 0)?)),
+                None => {
+                    ftd::interpreter::utils::e2("url not found in redirect", self.name.as_str(), 0)
+                }
+            };
         }
 
         Ok(None)
@@ -1472,4 +1492,14 @@ impl<T> StateWithThing<T> {
 
 fn is_special_value(name: &str, module: &str) -> bool {
     name.strip_prefix(module) == Some(&ftd::interpreter::FTD_SPECIAL_VALUE.replace("$", "#"))
+}
+
+fn is_visible(
+    doc: &Document,
+    v: &fastn_resolved::ComponentInvocation,
+) -> ftd::interpreter::Result<bool> {
+    match v.condition.as_ref() {
+        None => Ok(true),
+        Some(condition) => Ok(condition.eval(&doc.tdoc())?),
+    }
 }

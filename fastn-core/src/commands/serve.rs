@@ -100,6 +100,9 @@ async fn serve_file(
                     fastn_core::http::redirect_with_code(url, code)
                 }
             }
+            fastn_core::package::package_doc::FTDResult::Json(json) => {
+                fastn_core::http::ok_with_content_type(json, mime_guess::mime::APPLICATION_JSON)
+            }
         },
         Err(e) => {
             tracing::error!(
