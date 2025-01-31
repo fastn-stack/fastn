@@ -6,6 +6,10 @@ use ftd::interpreter::things::web_component::WebComponentDefinitionExt;
 use ftd::interpreter::FunctionExt;
 use ftd::interpreter::{ComponentExt, VariableExt};
 
+
+/// Array with the size of how many builtins are provided by the host
+pub type HostBuiltins = [(String, fastn_resolved::Definition); 2];
+
 /// The `InterpreterState` struct is a representation of the state of an interpreter. It contains
 /// information about the interpreter's current state and its progress through the code being
 /// interpreted.
@@ -99,7 +103,7 @@ impl InterpreterState {
     #[tracing::instrument(skip(builtins))]
     fn new_with_expanded_builtins(
         id: String,
-        builtins: Option<[(String, fastn_resolved::Definition); 1]>,
+        builtins: Option<HostBuiltins>,
     ) -> InterpreterState {
         let mut bag = ftd::interpreter::default::builtins().clone();
 
@@ -978,7 +982,7 @@ pub fn interpret(id: &str, source: &str) -> ftd::interpreter::Result<Interpreter
 pub fn interpret_with_line_number(
     id: &str,
     document: ParsedDocument,
-    builtin_overrides: Option<[(String, fastn_resolved::Definition); 1]>,
+    builtin_overrides: Option<HostBuiltins>,
 ) -> ftd::interpreter::Result<Interpreter> {
     use itertools::Itertools;
 

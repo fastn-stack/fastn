@@ -28,11 +28,11 @@ fn cached_parse(
 pub fn package_dependent_builtins(
     pkg: &fastn_core::Package,
     req_path: &str,
-) -> [(String, fastn_resolved::Definition); 1] {
-    [(
-        "ftd#app-path".to_string(),
+) -> ftd::interpreter::HostBuiltins {
+    [
         fastn_core::host_builtins::app_path(pkg, req_path),
-    )]
+        fastn_core::host_builtins::main_package(pkg),
+    ]
 }
 
 #[tracing::instrument(skip(lib))]

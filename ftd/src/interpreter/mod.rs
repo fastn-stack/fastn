@@ -55,6 +55,8 @@ pub use things::value::{PropertyValueExt, PropertyValueSourceExt, ValueExt};
 pub use things::variable::VariableExt;
 pub use things::ThingExt;
 
+pub use main::HostBuiltins;
+
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
     #[error("OtherError: {}", _0)]

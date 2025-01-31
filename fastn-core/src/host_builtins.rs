@@ -22,7 +22,7 @@
 ///
 /// Visiting `/app/` in browser should render /app/test/
 #[inline]
-pub fn app_path(pkg: &fastn_core::Package, req_path: &str) -> fastn_resolved::Definition {
+pub fn app_path(pkg: &fastn_core::Package, req_path: &str) -> (String, fastn_resolved::Definition) {
     let prefix = pkg
         .apps
         .iter()
@@ -31,8 +31,9 @@ pub fn app_path(pkg: &fastn_core::Package, req_path: &str) -> fastn_resolved::De
         .unwrap_or_default();
     let prefix = prefix.trim_end_matches('/');
 
-    fastn_resolved::Definition::Function(fastn_resolved::Function {
-        name: "ftd#app-path".to_string(),
+    let name = "ftd#app-path".to_string();
+    let def = fastn_resolved::Definition::Function(fastn_resolved::Function {
+        name: name.clone(),
         return_kind: fastn_resolved::KindData {
             kind: fastn_resolved::Kind::string(),
             caption: false,
@@ -57,5 +58,33 @@ pub fn app_path(pkg: &fastn_core::Package, req_path: &str) -> fastn_resolved::De
         js: None,
         line_number: 0,
         external_implementation: false,
-    })
+    });
+
+    (name, def)
+}
+
+/// Ftd string variable that holds the name of the package.
+///
+/// Useful to determine if the package is run standalone or as a dependency:
+#[inline]
+pub fn main_package(pkg: &fastn_core::Package) -> (String, fastn_resolved::Definition) {
+    let name = "ftd#main-package".to_string();
+    let def = fastn_resolved::Definition::Variable(fastn_resolved::Variable {
+        name: name.clone(),
+        kind: fastn_resolved::Kind::string().into_kind_data(),
+        value: fastn_resolved::PropertyValue::Value {
+            value: fastn_resolved::Value::String {
+                text: pkg.name.clone(),
+            },
+            is_mutable: false,
+            line_number: 0,
+        },
+        conditional_value: vec![],
+        mutable: false,
+        is_static: false,
+        line_number: 0,
+    });
+
+
+    (name, def)
 }
