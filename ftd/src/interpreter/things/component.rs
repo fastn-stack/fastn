@@ -120,36 +120,6 @@ impl ComponentDefinitionExt for fastn_resolved::ComponentDefinition {
     }
 }
 
-pub(crate) fn get_extra_argument_property_value(
-    property: ftd_ast::Property,
-    doc_id: String,
-) -> ftd::interpreter::Result<Option<(String, fastn_resolved::PropertyValue)>> {
-    if let ftd_ast::PropertySource::Header { name, .. } = property.source.clone() {
-        let line_number = property.value.line_number();
-        let value = match property.value {
-            ftd_ast::VariableValue::String { value, .. } => value,
-            value => {
-                return Err(ftd::interpreter::Error::InvalidKind {
-                    doc_id,
-                    line_number: value.line_number(),
-                    message: "kw-args currently support only string values.".to_string(),
-                })
-            }
-        };
-
-        return Ok(Some((
-            name,
-            fastn_resolved::PropertyValue::Value {
-                value: fastn_resolved::Value::new_string(&value),
-                is_mutable: false,
-                line_number,
-            },
-        )));
-    }
-
-    Ok(None)
-}
-
 pub(crate) fn check_if_property_is_provided_for_required_argument(
     component_arguments: &[fastn_resolved::Field],
     properties: &[fastn_resolved::Property],
@@ -748,8 +718,10 @@ impl PropertyExt for fastn_resolved::Property {
             kw_args
         };
 
+        let mut kw_args_properties = std::collections::BTreeMap::new();
+
         for property in ast_properties {
-            properties.push(try_ok_state!(fastn_resolved::Property::from_ast_property(
+            let v = try_ok_state!(fastn_resolved::Property::from_ast_property(
                 property.clone(),
                 component_name,
                 component_arguments.as_slice(),
@@ -757,7 +729,54 @@ impl PropertyExt for fastn_resolved::Property {
                 &kw_args,
                 loop_object_name_and_kind,
                 doc,
-            )?));
+            )?);
+            // so this property could correspond to one of the arguments of the component, or it's
+            // corresponding to the kw-args.
+            // if kw-args is allowed on this component, how do we know?
+            // we can check if the name of the property is one of definition_name_with_arguments, if
+            // not assume this is kw-args one.
+            match get_kw_args_name(definition_name_with_arguments, &v) {
+                None => properties.push(v),
+                Some(name) => match v.value {
+                    fastn_resolved::PropertyValue::Reference {
+                        kind,
+                        source,
+                        is_mutable,
+                        line_number,
+                        ..
+                    } => {
+                        kw_args_properties.insert(
+                            name.clone(),
+                            fastn_resolved::PropertyValue::Reference {
+                                name,
+                                kind,
+                                source,
+                                is_mutable,
+                                line_number,
+                            },
+                        );
+                    }
+                    _ => todo!(),
+                },
+            }
+        }
+
+        if let Some(ref kw_args) = kw_args {
+            properties.push(fastn_resolved::Property {
+                value: fastn_resolved::PropertyValue::Value {
+                    value: fastn_resolved::Value::KwArgs {
+                        arguments: kw_args_properties,
+                    },
+                    is_mutable: false,
+                    line_number: kw_args.line_number,
+                },
+                source: fastn_resolved::PropertySource::Header {
+                    name: kw_args.name.clone(),
+                    mutable: false,
+                },
+                condition: None,
+                line_number: kw_args.line_number,
+            });
         }
 
         try_ok_state!(
@@ -1801,4 +1820,11 @@ impl PropertySourceExt for fastn_resolved::PropertySource {
             }
         }
     }
+}
+
+fn get_kw_args_name(
+    _definition_name_with_arguments: &mut Option<(&str, &mut [fastn_resolved::Argument])>,
+    _property: &fastn_resolved::Property,
+) -> Option<String> {
+    todo!()
 }
