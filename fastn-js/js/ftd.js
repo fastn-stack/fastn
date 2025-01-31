@@ -54,7 +54,7 @@ const ftd = (function () {
         );
     };
 
-    /** 
+    /**
      * Check if the app is mounted
      * @param {string} app
      * @returns {boolean}
@@ -63,7 +63,7 @@ const ftd = (function () {
         if (app instanceof fastn.mutableClass) app = app.get();
         app = app.replaceAll("-", "_");
         return !!ftd.app_mounts.get(app);
-    }
+    };
 
     /**
      * Construct the `path` relative to the mountpoint of `app`
@@ -83,7 +83,7 @@ const ftd = (function () {
 
         let prefix = ftd.app_mounts.get(app)?.get() || "";
 
-        if (prefix.length > 0 && prefix.charAt(prefix.length - 1) === '/') {
+        if (prefix.length > 0 && prefix.charAt(prefix.length - 1) === "/") {
             prefix = prefix.substring(0, prefix.length - 1);
         }
 
