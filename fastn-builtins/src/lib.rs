@@ -4176,6 +4176,21 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
             }),
         ),
         (
+            "ftd#json".to_string(),
+            fastn_resolved::Definition::Component(fastn_resolved::ComponentDefinition {
+                name: "ftd#json".to_string(),
+                arguments: vec![
+                    fastn_resolved::Argument::default(
+                        "data",
+                        fastn_resolved::Kind::KwArgs.into_kind_data(),
+                    ),
+                ],
+                definition: fastn_resolved::ComponentInvocation::from_name("ftd.kernel"),
+                css: None,
+                line_number: 0,
+            }),
+        ),
+        (
             "ftd#permanent-redirect".to_string(),
             fastn_resolved::Definition::Component(fastn_resolved::ComponentDefinition {
                 name: "ftd#permanent-redirect".to_string(),

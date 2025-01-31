@@ -321,6 +321,7 @@ pub(crate) fn file_id_to_names(id: &str) -> Vec<String> {
 pub enum FTDResult {
     Html(Vec<u8>),
     Redirect { url: String, code: u16 },
+    Json(Vec<u8>),
 }
 
 impl FTDResult {
@@ -332,6 +333,7 @@ impl FTDResult {
                 // case
                 fastn_core::utils::redirect_page_html(url).into_bytes()
             }
+            FTDResult::Json(_d) => todo!("json not yet handled"),
         }
     }
 
@@ -448,6 +450,10 @@ pub(crate) async fn read_ftd_2022(
         return Ok(FTDResult::Redirect { url, code });
     }
 
+    if let Some(v) = main_ftd_doc.get_json()? {
+        return Ok(FTDResult::Json(v));
+    }
+
     let executor = ftd::executor::ExecuteDoc::from_interpreter(main_ftd_doc)?;
     let node = ftd::node::NodeData::from_rt(executor);
     let html_ui = ftd::html::HtmlUI::from_node_data(node, "main", test)?;
@@ -514,6 +520,9 @@ pub(crate) async fn read_ftd_2023(
     };
     if let Some((url, code)) = main_ftd_doc.get_redirect()? {
         return Ok(FTDResult::Redirect { url, code });
+    }
+    if let Some(data) = main_ftd_doc.get_json()? {
+        return Ok(FTDResult::Json(data));
     }
 
     let js_ast_data = ftd::js::document_into_js_ast(main_ftd_doc);
