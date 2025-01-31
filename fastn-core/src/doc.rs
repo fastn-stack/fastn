@@ -26,12 +26,13 @@ fn cached_parse(
 }
 
 pub fn package_dependent_builtins(
-    pkg: &fastn_core::Package,
+    config: &fastn_core::Config,
     req_path: &str,
 ) -> ftd::interpreter::HostBuiltins {
     [
-        fastn_core::host_builtins::app_path(pkg, req_path),
-        fastn_core::host_builtins::main_package(pkg),
+        fastn_core::host_builtins::app_path(config, req_path),
+        fastn_core::host_builtins::main_package(config),
+        fastn_core::host_builtins::app_mounts(config),
     ]
 }
 
@@ -47,7 +48,7 @@ pub async fn interpret_helper(
 ) -> ftd::interpreter::Result<ftd::interpreter::Document> {
     let doc = cached_parse(name, source, line_number)?;
 
-    let builtin_overrides = package_dependent_builtins(&lib.config.package, lib.request.path());
+    let builtin_overrides = package_dependent_builtins(&lib.config, lib.request.path());
     let mut s = ftd::interpreter::interpret_with_line_number(name, doc, Some(builtin_overrides))?;
     lib.module_package_map.insert(
         name.trim_matches('/').to_string(),

@@ -73,6 +73,8 @@ pub fn default_bag_into_js_ast() -> Vec<fastn_js::Ast> {
     ftd_asts
 }
 
+const IGNORE_GLOBAL: [&str; 2] = ["ftd#main-package", "ftd#app-mounts"];
+
 #[derive(Debug)]
 pub struct JSAstData {
     /// This contains asts of things (other than `ftd`) and instructions/tree
@@ -109,17 +111,13 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
         if let ftd::interpreter::Thing::Component(c) = thing {
             document_asts.push(c.to_ast(&doc, &mut has_rive_components));
         } else if let ftd::interpreter::Thing::Variable(v) = thing {
-            let prefix = if v.name == "ftd#main-package" {
+            let prefix = if IGNORE_GLOBAL.contains(&v.name.as_str()) {
                 None
             } else {
                 Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string())
             };
 
-            document_asts.push(v.to_ast(
-                &doc,
-                prefix,
-                &mut has_rive_components,
-            ));
+            document_asts.push(v.to_ast(&doc, prefix, &mut has_rive_components));
         } else if let ftd::interpreter::Thing::WebComponent(web_component) = thing {
             document_asts.push(web_component.to_ast(&doc));
         } else if let ftd::interpreter::Thing::Function(f) = thing {
@@ -151,13 +149,18 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
                     ));
                 }
             }
+            let prefix = if IGNORE_GLOBAL.contains(&ot.name.as_str()) {
+                None
+            } else {
+                Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string())
+            };
             document_asts.push(fastn_js::Ast::OrType(fastn_js::OrType {
                 name: ot.name.clone(),
                 variant: fastn_js::SetPropertyValue::Value(fastn_js::Value::Record {
                     fields,
                     other_references: vec![],
                 }),
-                prefix: Some(fastn_js::GLOBAL_VARIABLE_MAP.to_string()),
+                prefix,
             }));
         }
     }
