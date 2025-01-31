@@ -6,7 +6,6 @@ use ftd::interpreter::things::web_component::WebComponentDefinitionExt;
 use ftd::interpreter::FunctionExt;
 use ftd::interpreter::{ComponentExt, VariableExt};
 
-
 /// Array with the size of how many builtins are provided by the host
 pub type HostBuiltins = [(String, fastn_resolved::Definition); 3];
 
@@ -101,10 +100,7 @@ impl InterpreterState {
     /// functions.
     /// You pass real functions using the `builtins` parameter.
     #[tracing::instrument(skip(builtins))]
-    fn new_with_expanded_builtins(
-        id: String,
-        builtins: Option<HostBuiltins>,
-    ) -> InterpreterState {
+    fn new_with_expanded_builtins(id: String, builtins: Option<HostBuiltins>) -> InterpreterState {
         let mut bag = ftd::interpreter::default::builtins().clone();
 
         if let Some(builtins) = builtins {
