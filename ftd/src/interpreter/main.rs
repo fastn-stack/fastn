@@ -8,7 +8,7 @@ use ftd::interpreter::{ComponentExt, VariableExt};
 
 
 /// Array with the size of how many builtins are provided by the host
-pub type HostBuiltins = [(String, fastn_resolved::Definition); 2];
+pub type HostBuiltins = [(String, fastn_resolved::Definition); 3];
 
 /// The `InterpreterState` struct is a representation of the state of an interpreter. It contains
 /// information about the interpreter's current state and its progress through the code being

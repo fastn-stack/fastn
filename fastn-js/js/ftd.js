@@ -54,6 +54,23 @@ const ftd = (function () {
         );
     };
 
+    exports.app_path_ex = (path, app) => {
+        if (path instanceof fastn.mutableClass)
+            path = fastn_utils.getStaticValue(path);
+        if (app instanceof fastn.mutableClass)
+            app = fastn_utils.getStaticValue(app);
+
+        app = app.replaceAll("-", "_");
+
+        let prefix = ftd.app_mounts.get(app)?.get() || "";
+
+        if (prefix.length > 0 && prefix.charAt(prefix.length - 1) === '/') {
+            prefix = prefix.substring(0, prefix.length - 1);
+        }
+
+        return prefix + path;
+    };
+
     // Todo: Implement this (Remove highlighter)
     exports.clean_code = (args) => args.a;
 
