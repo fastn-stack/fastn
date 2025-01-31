@@ -642,10 +642,13 @@ or empty.
 
 -- end: ds.rendered
 
--- ds.h2: `app-path(path: string)`
+-- ds.h2: `app-path(path: string, app: string)`
 
 Calling `ftd.app-path(path = /test/)` in an ftd file of a mounted app will
 return the path prefixed with the `mountpoint` of the app.
+
+The second parameter (`app`) can be used to construct paths for other mounted
+apps. Read [`fastn.app`](/app/) docs to see and example that uses the app argument.
 
 The `path` arg must start with a forward slash (/).
 
@@ -674,8 +677,33 @@ lang: ftd
 -- ds.markdown: Visiting `/app/` in browser should render text "/app/test/"
 
 
+-- ds.h2: `is_app_mounted(app: string)`
+
+Check if the app is mounted. The `app` parameter takes the system name of the
+package that you want to check if it's mounted. Returns a `boolean`.
+
+-- ds.h3: Example
+
+-- ds.code: FASTN.ftd
+lang: ftd
+
+\-- import: fastn
+
+\-- fastn.package: test
+
+\-- fastn.app: Test
+mountpoint: /app/
+package: lets-auth.fifthtry.site
 
 
+-- ds.code: test/index.ftd
+lang: ftd
+
+\-- ftd.text: Auth app is mounted
+if: { ftd.is_app_mounted("lets-auth") } ;; this will return true
+
+\-- ftd.text: Auth app is **NOT** mounted
+if: { !ftd.is_app_mounted("lets-auth") } ;; Notice the !
 
 
 
