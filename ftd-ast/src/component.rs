@@ -534,7 +534,7 @@ impl Loop {
         let is_for_loop = loop_header.key.eq(ftd_ast::utils::FOR);
 
         let (alias, on, loop_counter_alias) = Self::get_loop_parameters(
-            loop_statement.as_str(),
+            loop_statement,
             is_for_loop,
             doc_id,
             loop_header.line_number,
@@ -673,7 +673,7 @@ impl Event {
 
         Ok(Some(Event::new(
             event_name.as_str(),
-            action.as_str(),
+            action,
             header.line_number,
         )))
     }
