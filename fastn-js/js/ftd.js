@@ -54,6 +54,25 @@ const ftd = (function () {
         );
     };
 
+    /** 
+     * Check if the app is mounted
+     * @param {string} app
+     * @returns {boolean}
+     */
+    exports.is_app_mounted = (app) => {
+        if (app instanceof fastn.mutableClass) app = app.get();
+        app = app.replaceAll("-", "_");
+        return !!ftd.app_mounts.get(app);
+    }
+
+    /**
+     * Construct the `path` relative to the mountpoint of `app`
+     *
+     * @param {string} path
+     * @param {string} app
+     *
+     * @returns {string}
+     */
     exports.app_path_ex = (path, app) => {
         if (path instanceof fastn.mutableClass)
             path = fastn_utils.getStaticValue(path);
