@@ -198,7 +198,6 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
         loop_object_name_and_kind: &Option<(String, fastn_resolved::Argument, Option<String>)>,
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::PropertyValue>>
     {
-        dbg!(&value);
         if let Some(reference) = try_ok_state!(dbg!(
             fastn_resolved::PropertyValue::reference_from_ast_value(
                 value.clone(),
@@ -502,8 +501,21 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                     loop_object_name_and_kind,
                 )?);
 
+                let reference_full_name = source.get_reference_name(reference.as_str(), doc);
+
                 match expected_kind {
                     _ if found_kind.is_module() => {}
+                    _ if expected_kind.map(|k| k.is_kwargs()).unwrap_or(false) => {
+                        return Ok(ftd::interpreter::StateWithThing::new_thing(Some(
+                            fastn_resolved::PropertyValue::Reference {
+                                name: reference_full_name,
+                                kind: found_kind,
+                                source,
+                                is_mutable: mutable,
+                                line_number: value.line_number(),
+                            },
+                        )))
+                    }
                     Some(ekind)
                         if !ekind.kind.is_same_as(&found_kind.kind)
                             && (ekind.kind.ref_inner().is_record()
@@ -565,7 +577,6 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                     }
                 }
 
-                let reference_full_name = source.get_reference_name(reference.as_str(), doc);
                 let kind = get_kind(expected_kind, &found_kind);
 
                 if found_kind.is_module() {
