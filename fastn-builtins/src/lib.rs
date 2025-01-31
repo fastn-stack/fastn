@@ -1037,52 +1037,6 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
             })
         ),
         (
-            "ftd#app-path-ex".to_string(),
-            fastn_resolved::Definition::Function(fastn_resolved::Function {
-                name: "ftd#app-path-ex".to_string(),
-                return_kind: fastn_resolved::KindData {
-                    kind: fastn_resolved::Kind::string(),
-                    caption: false,
-                    body: false,
-                },
-                arguments: vec![
-                    fastn_resolved::Argument {
-                        name: "path".to_string(),
-                        kind: fastn_resolved::KindData {
-                            kind: fastn_resolved::Kind::string(),
-                            caption: false,
-                            body: false,
-                        },
-                        mutable: false,
-                        value: None,
-                        access_modifier: Default::default(),
-                        line_number: 0,
-                    },
-                    fastn_resolved::Argument {
-                        name: "app".to_string(),
-                        kind: fastn_resolved::KindData {
-                            kind: fastn_resolved::Kind::string(),
-                            caption: false,
-                            body: false,
-                        },
-                        mutable: false,
-                        value: None,
-                        access_modifier: Default::default(),
-                        line_number: 0,
-                    },
-                ],
-                expression: vec![
-                    fastn_resolved::FunctionExpression {
-                        expression: "ftd.app_path_ex(path, app)".to_string(),
-                        line_number: 0,
-                    }
-                ],
-                js: None,
-                line_number: 0,
-                external_implementation: true
-            })
-        ),
-        (
             "ftd#set-bool".to_string(),
             fastn_resolved::Definition::Function(fastn_resolved::Function {
                 name: "ftd#set-bool".to_string(),
