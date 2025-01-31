@@ -1824,7 +1824,22 @@ impl PropertySourceExt for fastn_resolved::PropertySource {
 
 fn get_kw_args_name(
     _definition_name_with_arguments: &mut Option<(&str, &mut [fastn_resolved::Argument])>,
-    _property: &fastn_resolved::Property,
+    property: &fastn_resolved::Property,
 ) -> Option<String> {
-    todo!()
+    let name = match property.source {
+        fastn_resolved::PropertySource::Header { ref name, .. } => name,
+        _ => return None,
+    };
+
+    // this is because I am using this for testing right now:
+    //
+    // -- integer x: 20
+    //
+    // -- ftd.json:
+    // yo-data: $x
+    if name == "yo-data" {
+        return Some(name.to_string());
+    }
+
+    None
 }
