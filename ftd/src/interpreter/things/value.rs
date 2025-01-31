@@ -900,6 +900,29 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                         line_number: value.line_number(),
                     },
                 ),
+                fastn_resolved::Kind::KwArgs => {
+                    let line_number = value.line_number();
+                    let value_str = value.string(doc.name)?;
+                    let value = if let Ok(value) = value_str.parse::<f64>() {
+                        fastn_resolved::Value::Decimal { value }
+                    } else if let Ok(value) = value_str.parse::<i64>() {
+                        fastn_resolved::Value::Integer { value }
+                    } else if let Ok(value) = value_str.parse::<bool>() {
+                        fastn_resolved::Value::Boolean { value }
+                    } else {
+                        fastn_resolved::Value::String {
+                            text: value_str.to_string(),
+                        }
+                    };
+
+                    ftd::interpreter::StateWithThing::new_thing(
+                        fastn_resolved::PropertyValue::Value {
+                            value,
+                            is_mutable,
+                            line_number,
+                        },
+                    )
+                }
                 t => {
                     unimplemented!("t::{:?}  {:?}", t, value)
                 }
