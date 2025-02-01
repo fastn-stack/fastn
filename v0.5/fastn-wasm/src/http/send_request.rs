@@ -7,9 +7,8 @@ pub async fn send_request<S: Send>(
 
     let mut headers = reqwest::header::HeaderMap::new();
     for (header_name, header_value) in r.headers {
-        let header_name = reqwest::header::HeaderName::from_bytes(header_name.as_bytes()).unwrap(); // todo: remove unwrap()
-        let header_value =
-            reqwest::header::HeaderValue::from_bytes(header_value.as_slice()).unwrap(); // todo: remove unwrap()
+        let header_name = reqwest::header::HeaderName::from_bytes(header_name.as_bytes())?;
+        let header_value = reqwest::header::HeaderValue::from_bytes(header_value.as_slice())?;
         headers.insert(header_name, header_value);
     }
     let reqwest_response = if r.method.to_uppercase().eq("GET") {
