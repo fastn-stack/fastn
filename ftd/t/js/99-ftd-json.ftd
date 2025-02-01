@@ -1,5 +1,18 @@
 -- integer x: 20
 
+-- record foo:
+integer x:
+string y:
+boolean z:
+
+-- foo f:
+x: $x
+y: hello
+z: false
+
 -- ftd.json:
+yo-data: $x
+f: $f
 name: Bob
-age: $x
+inline: 12
+bool: false
