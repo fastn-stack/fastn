@@ -73,7 +73,7 @@ pub fn default_bag_into_js_ast() -> Vec<fastn_js::Ast> {
     ftd_asts
 }
 
-const IGNORE_GLOBAL: [&str; 2] = ["ftd#main-package", "ftd#app-mounts"];
+const IGNORE_GLOBAL: [&str; 2] = ["ftd#main-package", "ftd#app-urls"];
 
 #[derive(Debug)]
 pub struct JSAstData {

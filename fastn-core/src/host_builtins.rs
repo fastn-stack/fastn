@@ -1,4 +1,4 @@
-/// Calling: `ftd.app-path(path = /test/)` in an ftd file of a mounted app will return the path
+/// Calling: `ftd.app-url(path = /test/)` in an ftd file of a mounted app will return the path
 /// prefixed with the `mountpoint` of the app.
 ///
 /// The `path` arg must start with a forward slash (/)
@@ -17,7 +17,7 @@
 ///
 /// ```some-test-app.fifthtry.site/index.ftd
 ///
-/// -- ftd.text: $ftd.app-path(path = /test/)
+/// -- ftd.text: $ftd.app-url(path = /test/)
 /// ```
 ///
 /// Visiting `/app/` in browser should render /app/test/
@@ -34,7 +34,7 @@ pub fn app_path(
         .and_then(|a| a.package.system.clone())
         .unwrap_or_default();
 
-    let name = "ftd#app-path".to_string();
+    let name = "ftd#app-url".to_string();
     let def = fastn_resolved::Definition::Function(fastn_resolved::Function {
         name: name.clone(),
         return_kind: fastn_resolved::KindData {
@@ -71,7 +71,7 @@ pub fn app_path(
             },
         ],
         expression: vec![fastn_resolved::FunctionExpression {
-            expression: "ftd.app_path_ex(path, app)".to_string(),
+            expression: "ftd.app_url_ex(path, app)".to_string(),
             line_number: 0,
         }],
         js: None,
@@ -109,10 +109,10 @@ pub fn main_package(config: &fastn_core::Config) -> (String, fastn_resolved::Def
 
 /// Ftd string variable that holds the `fastn.app` mounts
 ///
-/// Used by `ftd.app-path` to determine the mountpoint of the app
+/// Used by `ftd.app-url` to determine the mountpoint of the app
 #[inline]
 pub fn app_mounts(config: &fastn_core::Config) -> (String, fastn_resolved::Definition) {
-    let name = "ftd#app-mounts".to_string();
+    let name = "ftd#app-urls".to_string();
     let variants = config
         .app_mounts()
         .unwrap_or_default()
