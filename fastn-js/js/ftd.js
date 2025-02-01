@@ -62,7 +62,7 @@ const ftd = (function () {
     exports.is_app_mounted = (app) => {
         if (app instanceof fastn.mutableClass) app = app.get();
         app = app.replaceAll("-", "_");
-        return !!ftd.app_mounts.get(app);
+        return !!ftd.app_urls.get(app);
     };
 
     /**
@@ -73,7 +73,7 @@ const ftd = (function () {
      *
      * @returns {string}
      */
-    exports.app_path_ex = (path, app) => {
+    exports.app_url_ex = (path, app) => {
         if (path instanceof fastn.mutableClass)
             path = fastn_utils.getStaticValue(path);
         if (app instanceof fastn.mutableClass)
@@ -81,7 +81,7 @@ const ftd = (function () {
 
         app = app.replaceAll("-", "_");
 
-        let prefix = ftd.app_mounts.get(app)?.get() || "";
+        let prefix = ftd.app_urls.get(app)?.get() || "";
 
         if (prefix.length > 0 && prefix.charAt(prefix.length - 1) === "/") {
             prefix = prefix.substring(0, prefix.length - 1);

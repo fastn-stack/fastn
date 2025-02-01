@@ -642,9 +642,9 @@ or empty.
 
 -- end: ds.rendered
 
--- ds.h2: `app-path(path: string, app: string)`
+-- ds.h2: `app-url(path: string, app: string)`
 
-Calling `ftd.app-path(path = /test/)` in an ftd file of a mounted app will
+Calling `ftd.app-url(path = /test/)` in an ftd file of a mounted app will
 return the path prefixed with the `mountpoint` of the app.
 
 The second parameter (`app`) can be used to construct paths for other mounted
@@ -671,7 +671,7 @@ package: some-test-app.fifthtry.site
 -- ds.code: some-test-app.fifthtry.site/index.ftd
 lang: ftd
 
-\-- ftd.text: $ftd.app-path(path = /test/)
+\-- ftd.text: $ftd.app-url(path = /test/)
 
 
 -- ds.markdown: Visiting `/app/` in browser should render text "/app/test/"
