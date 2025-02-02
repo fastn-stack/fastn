@@ -36,11 +36,20 @@ pub struct Conn {
 
 impl<STORE: StoreExt> Store<STORE> {
     pub fn new(
-        req: ft_sys_shared::Request,
+        mut req: ft_sys_shared::Request,
         pg_pools: std::sync::Arc<scc::HashMap<String, deadpool_postgres::Pool>>,
         db_url: String,
         inner: STORE,
+        mountpoint: String,
+        app_mounts: std::collections::HashMap<String, String>,
     ) -> Store<STORE> {
+        req.headers
+            .push((FASTN_APP_URL_HEADER.to_string(), mountpoint.into_bytes()));
+
+        let app_mounts = serde_json::to_string(&app_mounts).unwrap();
+        req.headers
+            .push((FASTN_APP_URLS_HEADER.to_string(), app_mounts.into_bytes()));
+
         Self {
             req,
             response: None,
@@ -88,3 +97,47 @@ impl fastn_wasm::ConnectionExt for rusqlite::Connection {
             .map_err(fastn_wasm::SQLError::Rusqlite)
     }
 }
+
+/// `app-url` is the path on which the app is installed.
+///
+/// if in `FASTN.ftd`, we have:
+///
+/// ```ftd
+/// -- import: fastn
+/// -- fastn.package: hello-world
+///
+/// -- fastn.dependency: my-app.com
+///
+/// -- fastn.app: my-app.com
+/// url: /foo/
+/// ```
+///
+/// then the `app-url` is `/foo/`.
+pub const FASTN_APP_URL_HEADER: &str = "x-fastn-app-url";
+
+/// A JSON object that contains the app-urls of `fastn.app`s
+///
+/// If in FASTN.ftd, we have:
+///
+/// ```ftd
+/// -- import: fastn
+/// -- fastn.package: hello-world
+///
+/// -- fastn.app: Auth App
+/// package: lets-auth.fifthtry.site
+/// mount-point: /-/auth/
+///
+/// -- fastn.app: Let's Talk App
+/// package: lets-talk.fifthtry.site
+/// mount-point: /talk/
+/// ```
+///
+/// Then the value will be a JSON string:
+///
+/// ```json
+/// { "lets-auth": "/-/auth/", "lets-talk": "/talk/" }
+/// ```
+///
+/// NOTE: `lets-auth.fifthtry.site` and `lets-talk.fifthtry.site` are required to be a system
+/// package. The names `lets-auth` and `lets-talk` are taken from their `system` field
+pub const FASTN_APP_URLS_HEADER: &str = "x-fastn-app-urls";
