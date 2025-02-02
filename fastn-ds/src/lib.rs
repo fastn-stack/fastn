@@ -481,27 +481,6 @@ impl DocumentStore {
     where
         T: RequestType,
     {
-        let headers: Vec<(String, Vec<u8>)> = {
-            let mut headers: Vec<(String, Vec<u8>)> = req
-                .headers()
-                .iter()
-                .map(|(k, v)| (k.as_str().to_string(), v.as_bytes().to_vec()))
-                .collect();
-
-            headers.push((
-                fastn_utils::FASTN_MOUNTPOINT.to_string(),
-                mountpoint.into_bytes(),
-            ));
-
-            let app_mounts = serde_json::to_string(&app_mounts).unwrap();
-            headers.push((
-                fastn_utils::FASTN_APP_MOUNTS.to_string(),
-                app_mounts.into_bytes(),
-            ));
-
-            headers
-        };
-
         let wasm_file = wasm_url.strip_prefix("wasm+proxy://").unwrap();
         let wasm_file = wasm_file.split_once(".wasm").unwrap().0;
         let module = self
@@ -519,7 +498,11 @@ impl DocumentStore {
         let req = ft_sys_shared::Request {
             uri: wasm_url.clone(),
             method: req.method().to_string(),
-            headers,
+            headers: req
+                .headers()
+                .iter()
+                .map(|(k, v)| (k.as_str().to_string(), v.as_bytes().to_vec()))
+                .collect(),
             body: req.body().to_vec(),
         };
         let store = fastn_wasm::Store::new(
@@ -527,6 +510,8 @@ impl DocumentStore {
             self.pg_pools.clone().into_inner(),
             db_path,
             fastn_wasm::StoreImpl,
+            mountpoint,
+            app_mounts,
         );
         Ok(fastn_wasm::process_http_request(&wasm_url, module, store).await?)
     }
