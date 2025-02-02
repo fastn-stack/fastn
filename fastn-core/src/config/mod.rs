@@ -374,7 +374,7 @@ impl Config {
     /// original_path() returns the path of the original package if the current package is a
     /// translation package. it returns the path in `.packages` folder where the
     pub fn original_path(&self) -> fastn_core::Result<fastn_ds::Path> {
-        let o = match self.package.translation_of.as_ref() {
+        let o = match self.package.translation_of {
             Some(ref o) => o,
             None => {
                 return Err(fastn_core::Error::UsageError {

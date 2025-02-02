@@ -9,7 +9,7 @@ pub struct Package {
     /// The `versioned` stores the boolean value storing of the fastn package is versioned or not
     pub files: Vec<String>,
     pub versioned: bool,
-    pub translation_of: Box<Option<Package>>,
+    pub translation_of: Option<Box<Package>>,
     pub translations: Vec<Package>,
     pub requested_language: Option<String>,
     pub selected_language: Option<String>,
@@ -85,7 +85,7 @@ impl Package {
             name: name.to_string(),
             files: vec![],
             versioned: false,
-            translation_of: Box::new(None),
+            translation_of: None,
             translations: vec![],
             requested_language: None,
             selected_language: None,
@@ -731,7 +731,7 @@ impl Package {
         fastn_core::utils::validate_base_url(&package)?;
 
         if package.import_auto_imports_from_original {
-            if let Some(ref original_package) = *package.translation_of {
+            if let Some(ref original_package) = package.translation_of {
                 if package.auto_import.is_empty() {
                     package
                         .auto_import
@@ -958,7 +958,7 @@ impl PackageTempIntoPackage for fastn_package::old_fastn::PackageTemp {
             name: self.name.clone(),
             files: vec![],
             versioned: self.versioned,
-            translation_of: Box::new(translation_of),
+            translation_of: translation_of.map(Box::new),
             translations,
             requested_language: None,
             selected_language: None,
