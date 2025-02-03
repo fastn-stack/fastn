@@ -7,6 +7,7 @@ extern crate self as fastn_wasm;
 pub(crate) mod aws;
 pub(crate) mod crypto;
 pub(crate) mod ds;
+mod email;
 pub(crate) mod env;
 pub(crate) mod helpers;
 pub(crate) mod http;

@@ -6,6 +6,9 @@ impl<STORE: fastn_wasm::StoreExt> fastn_wasm::Store<STORE> {
         fastn_wasm::func2ret!(linker, "env_var", fastn_wasm::env::var);
         fastn_wasm::func0ret!(linker, "env_random", fastn_wasm::env::random);
 
+        fastn_wasm::func2ret!(linker, "email_send", fastn_wasm::email::send);
+        fastn_wasm::func2!(linker, "email_cancel", fastn_wasm::email::cancel);
+
         // cryptography related stuff
         fastn_wasm::func2ret!(linker, "crypto_encrypt", fastn_wasm::crypto::encrypt);
         fastn_wasm::func2ret!(linker, "crypto_decrypt", fastn_wasm::crypto::decrypt);
