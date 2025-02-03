@@ -890,16 +890,16 @@ dependencies = [
 
 [[package]]
 name = "ft-sys-shared"
-version = "0.1.4"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a5b532b534b1d9ac90e67a134ff546747fc1754b52891603f100a565acd9a889"
+checksum = "7ed8858fce4b6896ef3ff73d6bf8b00d8e4d31c4381a040297d0bb538deab050"
 dependencies = [
  "bytes",
  "chrono",
  "http",
  "rusqlite",
  "serde",
- "thiserror 1.0.69",
+ "thiserror 2.0.11",
 ]
 
 [[package]]
