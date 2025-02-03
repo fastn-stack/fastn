@@ -40,11 +40,11 @@ impl<STORE: StoreExt> Store<STORE> {
         pg_pools: std::sync::Arc<scc::HashMap<String, deadpool_postgres::Pool>>,
         db_url: String,
         inner: STORE,
-        mountpoint: String,
+        app_url: String,
         app_mounts: std::collections::HashMap<String, String>,
     ) -> Store<STORE> {
         req.headers
-            .push((FASTN_APP_URL_HEADER.to_string(), mountpoint.into_bytes()));
+            .push((FASTN_APP_URL_HEADER.to_string(), app_url.into_bytes()));
 
         let app_mounts = serde_json::to_string(&app_mounts).unwrap();
         req.headers

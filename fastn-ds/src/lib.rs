@@ -474,7 +474,7 @@ impl DocumentStore {
         &self,
         wasm_url: String,
         req: &T,
-        mountpoint: String,
+        app_url: String,
         app_mounts: std::collections::HashMap<String, String>,
         session_id: &Option<String>,
     ) -> Result<ft_sys_shared::Request, HttpError>
@@ -510,7 +510,7 @@ impl DocumentStore {
             self.pg_pools.clone().into_inner(),
             db_path,
             fastn_wasm::StoreImpl,
-            mountpoint,
+            app_url,
             app_mounts,
         );
         Ok(fastn_wasm::process_http_request(&wasm_url, module, store).await?)

@@ -516,22 +516,22 @@ async fn handle_endpoints(
         .iter()
         .find(|ep| req.path().starts_with(ep.mountpoint.trim_end_matches('/')));
 
-    let endpoint = match matched_endpoint {
+    let (endpoint, app_url) = match matched_endpoint {
         Some(e) => {
             tracing::info!("matched endpoint: {:?}", e);
-            e
+            (e, e.mountpoint.clone())
         }
         None => {
             tracing::info!("no endpoint found in current package. Trying mounted apps");
             tracing::info!("request path: {}", req.path());
 
-            let app = match config
+            let (app, app_url) = match config
                 .package
                 .apps
                 .iter()
                 .find(|a| req.path().starts_with(a.mount_point.trim_end_matches('/')))
             {
-                Some(e) => e,
+                Some(e) => (e, e.mount_point.clone()),
                 None => return None,
             };
 
@@ -567,14 +567,17 @@ async fn handle_endpoints(
 
             tracing::info!("wasm file found: {}", wasm_path);
 
-            &fastn_package::old_fastn::EndpointData {
-                endpoint: format!("wasm+proxy://{wasm_path}"),
-                mountpoint: format!(
-                    "{app}/{wasm_file}",
-                    app = app.mount_point.trim_end_matches('/')
-                ),
-                user_id: None, // idk if we're using this
-            }
+            (
+                &fastn_package::old_fastn::EndpointData {
+                    endpoint: format!("wasm+proxy://{wasm_path}"),
+                    mountpoint: format!(
+                        "{app}/{wasm_file}",
+                        app = app.mount_point.trim_end_matches('/')
+                    ),
+                    user_id: None, // idk if we're using this
+                },
+                app_url,
+            )
         }
     };
 
@@ -597,13 +600,7 @@ async fn handle_endpoints(
 
         return match config
             .ds
-            .handle_wasm(
-                url,
-                req,
-                endpoint.mountpoint.to_string(),
-                app_mounts,
-                session_id,
-            )
+            .handle_wasm(url, req, app_url, app_mounts, session_id)
             .await
         {
             Ok(r) => Some(Ok(to_response(r))),
