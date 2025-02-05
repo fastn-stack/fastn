@@ -21,6 +21,7 @@ mod store;
 pub use process_http_request::{handle, process_http_request, WasmError};
 pub(crate) use store::Conn;
 pub use store::{ConnectionExt, SQLError, Store, StoreExt, StoreImpl};
+pub use store::{FASTN_APP_URL_HEADER, FASTN_APP_URLS_HEADER};
 
 pub static WASM_ENGINE: once_cell::sync::Lazy<wasmtime::Engine> =
     once_cell::sync::Lazy::new(|| {
