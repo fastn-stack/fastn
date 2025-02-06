@@ -589,7 +589,7 @@ impl Config {
     // mount-point: /todos/
     // Output
     // -/<todos-package-name>/add-todo/, <todos-package-name>, /add-todo/
-    // #[tracing::instrument(skip_all)]
+    #[tracing::instrument(skip(self))]
     pub fn get_mountpoint_sanitized_path<'a>(
         &'a self,
         path: &'a str,
@@ -606,6 +606,7 @@ impl Config {
         // tracing::info!(package = package.name, path = path);
         let dash_path = self.package.dash_path();
         if path.starts_with(dash_path.as_str()) {
+            tracing::info!("path is similar. path: {path}, dash_path: {dash_path}");
             let path_without_package_name = path.trim_start_matches(dash_path.as_str());
             return Some((
                 std::borrow::Cow::from(path),
@@ -627,13 +628,20 @@ impl Config {
                 // Note: Currently not working because dependency of package does not contain dependencies
                 let package_name = dep.name.trim_matches('/');
                 let sanitized_path = path.trim_start_matches(mp.trim_start_matches('/'));
-                return Some((
-                    std::borrow::Cow::from(format!("-/{package_name}/{sanitized_path}")),
-                    dep,
-                    sanitized_path.to_string(),
-                    Some(app),
-                ));
+                let p = std::borrow::Cow::from(format!("-/{package_name}/{sanitized_path}"));
+                tracing::info!(
+                    "path is consume by `fastn.app`. path: {path}, mount-point: {mp}, dash_path: {dash_path}"
+                );
+                tracing::info!(
+                    "Returning: {p}, {sanitized_path}, {app_name}",
+                    app_name = app.name
+                );
+                return Some((p, dep, sanitized_path.to_string(), Some(app)));
             } else if path.starts_with(dash_path.as_str()) {
+                tracing::info!(
+                    "path is not consumed by any `fastn.app`. path: {path}, dash_path: {dash_path}"
+                );
+                tracing::info!("Returning: {path}");
                 let path_without_package_name = path.trim_start_matches(dash_path.as_str());
                 return Some((
                     std::borrow::Cow::from(path),
