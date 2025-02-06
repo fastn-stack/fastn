@@ -628,15 +628,25 @@ impl Config {
                 // Note: Currently not working because dependency of package does not contain dependencies
                 let package_name = dep.name.trim_matches('/');
                 let sanitized_path = path.trim_start_matches(mp.trim_start_matches('/'));
-                let p = std::borrow::Cow::from(format!("-/{package_name}/{sanitized_path}"));
+
+                // If `fastn.app`'s mount-point is '/' then and the request comes on '/' then we
+                // end up creating a '//' path (see below line using format!). To avoid this, we
+                // set it to "" to form a valid path.
+                let sanitized_path = if sanitized_path == "/" {
+                    ""
+                } else {
+                    sanitized_path
+                };
+
+                let ret_path = std::borrow::Cow::from(format!("-/{package_name}/{sanitized_path}"));
                 tracing::info!(
                     "path is consume by `fastn.app`. path: {path}, mount-point: {mp}, dash_path: {dash_path}"
                 );
                 tracing::info!(
-                    "Returning: {p}, {sanitized_path}, {app_name}",
+                    "Returning: path: {ret_path}, sanitized path: {sanitized_path}, app: {app_name}",
                     app_name = app.name
                 );
-                return Some((p, dep, sanitized_path.to_string(), Some(app)));
+                return Some((ret_path, dep, sanitized_path.to_string(), Some(app)));
             } else if path.starts_with(dash_path.as_str()) {
                 tracing::info!(
                     "path is not consumed by any `fastn.app`. path: {path}, dash_path: {dash_path}"
