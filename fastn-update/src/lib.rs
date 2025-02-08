@@ -195,7 +195,9 @@ async fn update_github_dependency(
         )));
     }
 
-    println!("Resolving {}/manifest.json", &package_name);
+    if !fastn_core::utils::is_test() {
+        println!("Resolving {}/manifest.json", &package_name);
+    }
     let (manifest, manifest_bytes) = utils::get_manifest(ds, &package_name).await?;
 
     let manifest_path = dependency_path.join(fastn_core::manifest::MANIFEST_FILE);
@@ -220,12 +222,16 @@ async fn update_github_dependency(
     };
 
     if !should_download_archive {
-        println!(
-            "Skipping download for package \"{}\" as it already exists.",
-            &package_name
-        );
+        if !fastn_core::utils::is_test() {
+            println!(
+                "Skipping download for package \"{}\" as it already exists.",
+                &package_name
+            );
+        }
     } else {
-        println!("Downloading {} archive", &package_name);
+        if !fastn_core::utils::is_test() {
+            println!("Downloading {} archive", &package_name);
+        }
 
         download_unpack_zip_and_get_manifest(
             dependency_path.clone(),
@@ -420,7 +426,9 @@ pub async fn update(ds: &fastn_ds::DocumentStore, check: bool) -> fastn_core::Re
         return Ok(());
     }
 
-    println!("Updating dependencies");
+    if !fastn_core::utils::is_test() {
+        println!("Updating dependencies");
+    }
 
     let updated_packages =
         match update_dependencies(ds, packages_root, &current_package, check).await {
