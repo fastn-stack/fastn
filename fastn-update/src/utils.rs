@@ -28,14 +28,25 @@ pub async fn read_current_package(
 pub(crate) async fn download_archive(
     ds: &fastn_ds::DocumentStore,
     url: &str,
+    path: &fastn_ds::Path,
 ) -> fastn_core::Result<zip::ZipArchive<std::io::Cursor<bytes::Bytes>>> {
-    use std::io::Seek;
+    let etag = match ds.read_to_string(&path.join(".etag"), &None).await {
+        Ok(v) => format!("\"{v}\""),
+        Err(fastn_ds::ReadStringError::ReadError(fastn_ds::ReadError::NotFound(_))) => {
+            "\"0\"".to_string()
+        }
+        Err(e) => return Err(e.into()),
+    };
 
-    let zipball = fastn_core::http::http_get(ds, url).await?;
-    let mut zipball_cursor = std::io::Cursor::new(zipball);
-    zipball_cursor.seek(std::io::SeekFrom::Start(0))?;
-    let archive = zip::ZipArchive::new(zipball_cursor)?;
-    Ok(archive)
+    let mut r = reqwest::Request::new(reqwest::Method::GET, url.parse()?);
+    r.headers_mut().insert(
+        "if-none-match",
+        reqwest::header::HeaderValue::from_str(etag.as_str()).unwrap(),
+    );
+
+    let _resp = fastn_ds::http::DEFAULT_CLIENT.execute(r).await?;
+
+    todo!()
 }
 
 pub(crate) async fn resolve_dependency_package(

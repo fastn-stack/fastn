@@ -300,7 +300,7 @@ async fn download_unpack_zip_and_get_manifest(
 ) -> Result<fastn_core::Manifest, fastn_update::UpdateError> {
     use sha2::{digest::FixedOutput, Digest};
 
-    let mut archive = utils::download_archive(ds, zip_url)
+    let mut archive = utils::download_archive(ds, zip_url, dependency_path)
         .await
         .context(DownloadArchiveSnafu {
             package: package_name,
