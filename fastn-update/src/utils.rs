@@ -27,50 +27,15 @@ pub async fn read_current_package(
 
 pub(crate) async fn download_archive(
     ds: &fastn_ds::DocumentStore,
-    url: String,
+    url: &str,
 ) -> fastn_core::Result<zip::ZipArchive<std::io::Cursor<bytes::Bytes>>> {
     use std::io::Seek;
 
-    let zipball = fastn_core::http::http_get(ds, &url).await?;
+    let zipball = fastn_core::http::http_get(ds, url).await?;
     let mut zipball_cursor = std::io::Cursor::new(zipball);
     zipball_cursor.seek(std::io::SeekFrom::Start(0))?;
     let archive = zip::ZipArchive::new(zipball_cursor)?;
     Ok(archive)
-}
-
-pub(crate) fn read_manifest(
-    bytes: &[u8],
-    package_name: &str,
-) -> Result<fastn_core::Manifest, fastn_update::ManifestError> {
-    let manifest: fastn_core::Manifest =
-        serde_json::de::from_slice(bytes).context(fastn_update::DeserializeManifestSnafu {
-            package: package_name,
-        })?;
-
-    Ok(manifest)
-}
-
-/// Download manifest of the package `<package-name>/manifest.json`
-/// Resolve to `fastn_core::Manifest` struct
-pub(crate) async fn get_manifest(
-    ds: &fastn_ds::DocumentStore,
-    package_name: &str,
-) -> Result<(fastn_core::Manifest, bytes::Bytes), fastn_update::ManifestError> {
-    let manifest_bytes = fastn_core::http::http_get(
-        ds,
-        &format!(
-            "https://{}/{}",
-            package_name,
-            fastn_core::manifest::MANIFEST_FILE
-        ),
-    )
-    .await
-    .context(fastn_update::DownloadManifestSnafu {
-        package: package_name,
-    })?;
-    let manifest = read_manifest(&manifest_bytes, package_name)?;
-
-    Ok((manifest, manifest_bytes))
 }
 
 pub(crate) async fn resolve_dependency_package(
