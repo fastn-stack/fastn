@@ -60,7 +60,7 @@ pub async fn write_manifest_file(
 
     let zip_url = match zip_url {
         Some(zip_url) => zip_url,
-        None => match fastn_core::manifest::utils::get_zipball_url(config.package.name.clone()) {
+        None => match fastn_core::manifest::utils::get_zipball_url(config.package.name.as_str()) {
             Some(gh_zip_url) => gh_zip_url,
             None => {
                 return Err(fastn_core::error::Error::UsageError {

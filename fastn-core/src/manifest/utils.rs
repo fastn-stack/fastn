@@ -13,9 +13,9 @@ fn extract_github_details(package_name: &str) -> Option<(String, String)> {
 
 // https://api.github.com/repos/User/repo/:archive_format/:ref
 // https://stackoverflow.com/questions/8377081/github-api-download-zip-or-tarball-link
-pub(crate) fn get_zipball_url(package_name: String) -> Option<String> {
+pub fn get_zipball_url(package_name: &str) -> Option<String> {
     // For github packages
-    if let Some((username, repository)) = extract_github_details(package_name.as_str()) {
+    if let Some((username, repository)) = extract_github_details(package_name) {
         let url = format!(
             "https://codeload.github.com/{}/{}/zip/refs/heads/main",
             username, repository
