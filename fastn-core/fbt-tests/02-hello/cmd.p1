@@ -4,9 +4,8 @@ output: amitu/.build
 
 -- stdout:
 
-No dependencies to update.
+No dependencies in www.amitu.com.
 Processing www.amitu.com/manifest.json ... done in <omitted>
 Processing www.amitu.com/FASTN/ ... done in <omitted>
 Processing www.amitu.com/fail_doc/ ... Failed done in <omitted>
 Processing www.amitu.com/ ... done in <omitted>
-

@@ -5,7 +5,7 @@ exit-code: 1
 
 -- stdout:
 
-No dependencies to update.
+No dependencies in fastn-stack.github.io/request-data-processor-test.
 Processing fastn-stack.github.io/request-data-processor-test/manifest.json ... done in <omitted>
 Processing fastn-stack.github.io/request-data-processor-test/FASTN/ ... done in <omitted>
 Processing fastn-stack.github.io/request-data-processor-test/err/ ... done in <omitted>

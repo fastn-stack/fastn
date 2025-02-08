@@ -4,6 +4,6 @@ output: .
 
 -- stdout:
 
-No dependencies to update.
+No dependencies in fastn-package.
 Formatting FASTN.ftd ... Done
 Formatting index.ftd ... Done
