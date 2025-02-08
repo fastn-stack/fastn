@@ -222,7 +222,9 @@ async fn update_github_dependency(
 
     let manifest = download_unpack_zip_and_get_manifest(
         dependency_path,
-        "zip url", // TODO
+        fastn_core::manifest::utils::get_zipball_url(package_name.as_str())
+            .unwrap()
+            .as_str(),
         ds,
         package_name.as_str(),
         true,
@@ -231,6 +233,7 @@ async fn update_github_dependency(
     .await?;
 
     all_packages.push((package_name.to_string(), manifest));
+    mred!("updated.");
     Ok(true)
 }
 
@@ -297,15 +300,14 @@ async fn download_unpack_zip_and_get_manifest(
 ) -> Result<fastn_core::Manifest, fastn_update::UpdateError> {
     use sha2::{digest::FixedOutput, Digest};
 
-    let mut files: std::collections::BTreeMap<String, fastn_core::manifest::File> =
-        Default::default();
-
     let mut archive = utils::download_archive(ds, zip_url)
         .await
         .context(DownloadArchiveSnafu {
             package: package_name,
         })?;
 
+    let mut files: std::collections::BTreeMap<String, fastn_core::manifest::File> =
+        Default::default();
     let mut hasher = sha2::Sha256::new();
     for i in 0..archive.len() {
         let mut entry = archive.by_index(i).context(ArchiveEntryReadSnafu {
@@ -420,6 +422,7 @@ pub async fn update(ds: &fastn_ds::DocumentStore, check: bool) -> fastn_core::Re
     match updated_packages {
         0 => println!("No packages updated."),
         1 => println!("Updated package dependency."),
+        _ if fastn_core::utils::is_test() => println!("Updated N dependencies."),
         n => println!("Updated {} dependencies.", n),
     }
 
