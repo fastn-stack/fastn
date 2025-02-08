@@ -28,9 +28,11 @@ pub async fn read_current_package(
 pub(crate) async fn download_archive(
     ds: &fastn_ds::DocumentStore,
     url: &str,
-    path: &fastn_ds::Path,
-) -> fastn_core::Result<zip::ZipArchive<std::io::Cursor<bytes::Bytes>>> {
-    let etag = match ds.read_to_string(&path.join(".etag"), &None).await {
+    etag_file: &fastn_ds::Path,
+) -> fastn_core::Result<(String, zip::ZipArchive<std::io::Cursor<bytes::Bytes>>)> {
+    use std::io::Seek;
+
+    let etag = match ds.read_to_string(etag_file, &None).await {
         Ok(v) => format!("\"{v}\""),
         Err(fastn_ds::ReadStringError::ReadError(fastn_ds::ReadError::NotFound(_))) => {
             "\"0\"".to_string()
@@ -44,9 +46,18 @@ pub(crate) async fn download_archive(
         reqwest::header::HeaderValue::from_str(etag.as_str()).unwrap(),
     );
 
-    let _resp = fastn_ds::http::DEFAULT_CLIENT.execute(r).await?;
-
-    todo!()
+    let resp = fastn_ds::http::DEFAULT_CLIENT.execute(r).await?;
+    let etag = resp
+        .headers()
+        .get("etag")
+        .and_then(|v| v.to_str().ok())
+        .unwrap()
+        .to_string();
+    // TODO: handle 304 response
+    let mut cursor = std::io::Cursor::new(resp.bytes().await?);
+    cursor.seek(std::io::SeekFrom::Start(0))?;
+    let archive = zip::ZipArchive::new(cursor)?;
+    Ok((etag, archive))
 }
 
 pub(crate) async fn resolve_dependency_package(

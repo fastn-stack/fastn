@@ -300,7 +300,9 @@ async fn download_unpack_zip_and_get_manifest(
 ) -> Result<fastn_core::Manifest, fastn_update::UpdateError> {
     use sha2::{digest::FixedOutput, Digest};
 
-    let mut archive = utils::download_archive(ds, zip_url, dependency_path)
+    let etag_file = dependency_path.join(".etag");
+
+    let (etag, mut archive) = utils::download_archive(ds, zip_url, &etag_file)
         .await
         .context(DownloadArchiveSnafu {
             package: package_name,
@@ -361,6 +363,11 @@ async fn download_unpack_zip_and_get_manifest(
         let checksum = format!("{:X}", hasher.finalize_fixed());
         fastn_core::Manifest::new(files, zip_url.to_string(), checksum)
     };
+
+    ds.write_content(&etag_file, etag.as_bytes())
+        .await
+        .inspect_err(|e| eprintln!("failed to write etag file for {package_name}: {e}"))
+        .unwrap_or(());
 
     Ok(manifest)
 }
