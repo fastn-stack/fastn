@@ -4,7 +4,7 @@ output: .build
 
 -- stdout:
 
-No dependencies to update.
+No dependencies in fastn-stack.github.io/text-input-test.
 Processing fastn-stack.github.io/text-input-test/manifest.json ... done in <omitted>
 Processing fastn-stack.github.io/text-input-test/FASTN/ ... done in <omitted>
 Processing fastn-stack.github.io/text-input-test/actions/create-account/ ... done in <omitted>

@@ -4,7 +4,7 @@ output: .build
 
 -- stdout:
 
-No dependencies to update.
+No dependencies in fastn-stack.github.io/guide.
 Processing fastn-stack.github.io/guide/manifest.json ... done in <omitted>
 Processing fastn-stack.github.io/guide/FASTN/ ... done in <omitted>
 Processing fastn-stack.github.io/guide/guide/install/ ... done in <omitted>

@@ -4,7 +4,7 @@ output: amitu/.build
 
 -- stdout:
 
-No dependencies to update.
+No dependencies in www.amitu.com.
 Processing www.amitu.com/manifest.json ... done in <omitted>
 Processing www.amitu.com/FASTN/ ... done in <omitted>
 Processing www.amitu.com/hello.py ... done in <omitted>

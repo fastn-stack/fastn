@@ -4,7 +4,7 @@ output: .build
 
 -- stdout:
 
-No dependencies to update.
+No dependencies in fastn-stack.github.io/http-endpoint-test.
 Processing fastn-stack.github.io/http-endpoint-test/manifest.json ... done in <omitted>
 Processing fastn-stack.github.io/http-endpoint-test/FASTN/ ... done in <omitted>
 Processing fastn-stack.github.io/http-endpoint-test/ ... calling `http` processor with url: http://reqres.in/api/users/2
