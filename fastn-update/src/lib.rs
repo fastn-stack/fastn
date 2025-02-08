@@ -110,7 +110,6 @@ async fn update_dependencies(
     ds: &fastn_ds::DocumentStore,
     packages_root: fastn_ds::Path,
     current_package: &fastn_core::Package,
-    pb: &indicatif::ProgressBar,
     check: bool,
 ) -> Result<usize, UpdateError> {
     let mut stack = vec![current_package.clone()];
@@ -139,7 +138,6 @@ async fn update_dependencies(
                     &dependency,
                     ds,
                     packages_root.clone(),
-                    pb,
                     &mut updated_packages,
                     &mut all_packages,
                     check,
@@ -150,7 +148,6 @@ async fn update_dependencies(
                     &dependency,
                     ds,
                     packages_root.clone(),
-                    pb,
                     &mut updated_packages,
                     &mut all_packages,
                     check,
@@ -166,11 +163,8 @@ async fn update_dependencies(
             let dep_package =
                 utils::resolve_dependency_package(ds, &dependency, &dependency_path).await?;
             resolved.insert(package_name.to_string());
-            pb.inc_length(1);
             stack.push(dep_package);
         }
-
-        pb.inc(1);
     }
 
     fastn_core::ConfigTemp::write(
@@ -187,7 +181,6 @@ async fn update_github_dependency(
     dependency: &fastn_core::package::dependency::Dependency,
     ds: &fastn_ds::DocumentStore,
     packages_root: fastn_ds::Path,
-    pb: &indicatif::ProgressBar,
     updated_packages: &mut usize,
     all_packages: &mut Vec<(String, fastn_core::Manifest)>,
     check: bool,
@@ -202,7 +195,7 @@ async fn update_github_dependency(
         )));
     }
 
-    pb.set_message(format!("Resolving {}/manifest.json", &package_name));
+    println!("Resolving {}/manifest.json", &package_name);
     let (manifest, manifest_bytes) = utils::get_manifest(ds, &package_name).await?;
 
     let manifest_path = dependency_path.join(fastn_core::manifest::MANIFEST_FILE);
@@ -227,12 +220,12 @@ async fn update_github_dependency(
     };
 
     if !should_download_archive {
-        pb.set_message(format!(
+        println!(
             "Skipping download for package \"{}\" as it already exists.",
             &package_name
-        ));
+        );
     } else {
-        pb.set_message(format!("Downloading {} archive", &package_name));
+        println!("Downloading {} archive", &package_name);
 
         download_unpack_zip_and_get_manifest(
             dependency_path.clone(),
@@ -240,7 +233,6 @@ async fn update_github_dependency(
             ds,
             package_name.as_str(),
             Some(&manifest),
-            pb,
             check,
         )
         .await?;
@@ -258,7 +250,6 @@ async fn update_fifthtry_site_dependency(
     dependency: &fastn_core::package::dependency::Dependency,
     ds: &fastn_ds::DocumentStore,
     packages_root: fastn_ds::Path,
-    pb: &indicatif::ProgressBar,
     updated_packages: &mut usize,
     all_packages: &mut Vec<(String, fastn_core::Manifest)>,
     check: bool,
@@ -282,7 +273,6 @@ async fn update_fifthtry_site_dependency(
         ds,
         package_name.as_str(),
         None,
-        pb,
         check,
     )
     .await?;
@@ -308,7 +298,6 @@ async fn download_unpack_zip_and_get_manifest(
     ds: &fastn_ds::DocumentStore,
     package_name: &str,
     manifest: Option<&fastn_core::Manifest>,
-    pb: &indicatif::ProgressBar,
     check: bool,
 ) -> Result<fastn_core::Manifest, fastn_update::UpdateError> {
     use sha2::digest::FixedOutput;
@@ -377,7 +366,6 @@ async fn download_unpack_zip_and_get_manifest(
             }
             let output_path = &dependency_path.join(path_without_prefix);
             write_archive_content(ds, output_path, &buffer, package_name, check).await?;
-            pb.tick();
         }
     }
 
@@ -432,17 +420,10 @@ pub async fn update(ds: &fastn_ds::DocumentStore, check: bool) -> fastn_core::Re
         return Ok(());
     }
 
-    let spinner_style =
-        indicatif::ProgressStyle::with_template("{prefix:.bold.dim} [{pos}/{len}] {spinner} {msg}")
-            .unwrap()
-            .tick_chars("⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏");
-
-    let pb = indicatif::ProgressBar::new(current_package.dependencies.len() as u64);
-    pb.set_style(spinner_style);
-    pb.set_prefix("Updating dependencies");
+    println!("Updating dependencies");
 
     let updated_packages =
-        match update_dependencies(ds, packages_root, &current_package, &pb, check).await {
+        match update_dependencies(ds, packages_root, &current_package, check).await {
             Ok(n) => n,
             Err(UpdateError::Check(e)) => {
                 eprintln!("{}", e);
@@ -454,8 +435,6 @@ pub async fn update(ds: &fastn_ds::DocumentStore, check: bool) -> fastn_core::Re
                 });
             }
         };
-
-    pb.finish_and_clear();
 
     match updated_packages {
         0 => println!("No packages updated."),
