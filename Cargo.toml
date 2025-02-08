@@ -134,7 +134,6 @@ prettify-js = "0.1.0"
 indexmap = { version = "2", features = ["serde"] }
 chrono = { version = "0.4", features = ["serde"] }
 indicatif = "0.17"
-snafu = "0.8"
 rquickjs = { version = "0.6", features = ["macro"] }
 quick-js = "0.4"
 

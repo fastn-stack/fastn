@@ -6,21 +6,21 @@ extern crate self as fastn_update;
 
 mod utils;
 
-#[derive(Snafu, Debug)]
+#[derive(thiserror::Error, Debug)]
 pub enum ManifestError {
-    #[snafu(display("Failed to download manifest.json for package '{package}'"))]
+    #[error("Failed to download manifest.json for package '{package}'")]
     DownloadManifest {
         package: String,
         source: fastn_core::Error,
     },
-    #[snafu(display("Missing archive url in manifest.json for package '{package}'"))]
+    #[error("Missing archive url in manifest.json for package '{package}'")]
     NoZipUrl { package: String },
-    #[snafu(display("Failed to deserialize manifest.json for package '{package}'"))]
+    #[error("Failed to deserialize manifest.json for package '{package}'")]
     DeserializeManifest {
         package: String,
         source: serde_json::Error,
     },
-    #[snafu(display("Failed to read manifest content for package '{package}'"))]
+    #[error("Failed to read manifest content for package '{package}'")]
     ReadManifest {
         package: String,
         source: fastn_ds::ReadError,
@@ -29,26 +29,26 @@ pub enum ManifestError {
 
 #[derive(Snafu, Debug)]
 pub enum ArchiveError {
-    #[snafu(display("Failed to read archive for package '{package}'"))]
+    #[error("Failed to read archive for package '{package}'")]
     ReadArchive {
         package: String,
         source: std::io::Error,
     },
-    #[snafu(display(
+    #[error(
         "Failed to read the archive entry path for the entry '{name}' in the package '{package}'"
-    ))]
+    )]
     ArchiveEntryPathError { package: String, name: String },
-    #[snafu(display("Failed to unpack archive for package '{package}'"))]
+    #[error("Failed to unpack archive for package '{package}'")]
     ArchiveEntryRead {
         package: String,
         source: zip::result::ZipError,
     },
-    #[snafu(display("Failed to download archive for package '{package}'"))]
+    #[error("Failed to download archive for package '{package}'")]
     DownloadArchive {
         package: String,
         source: fastn_core::Error,
     },
-    #[snafu(display("Failed to write archive content for package '{package}'"))]
+    #[error("Failed to write archive content for package '{package}'")]
     WriteArchiveContent {
         package: String,
         source: fastn_ds::WriteError,
@@ -57,7 +57,7 @@ pub enum ArchiveError {
 
 #[derive(Snafu, Debug)]
 pub enum DependencyError {
-    #[snafu(display("Failed to resolve dependency '{package}'"))]
+    #[error("Failed to resolve dependency '{package}'")]
     ResolveDependency {
         package: String,
         source: fastn_core::Error,
@@ -217,8 +217,11 @@ async fn update_github_dependency(
         let existing_manifest_bytes =
             ds.read_content(&manifest_path, &None)
                 .await
-                .context(ReadManifestSnafu {
-                    package: package_name.clone(),
+                .map_err(|source| {
+                    UpdateError::Manifest(ManifestError::ReadManifest {
+                        source,
+                        package: package_name.clone(),
+                    })
                 })?;
         let existing_manifest: fastn_core::Manifest =
             utils::read_manifest(&existing_manifest_bytes, &package_name)?;

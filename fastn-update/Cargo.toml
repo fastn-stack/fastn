@@ -18,7 +18,6 @@ serde_json.workspace = true
 zip.workspace = true
 indicatif.workspace = true
 thiserror.workspace = true
-snafu.workspace = true
 tracing.workspace = true
 colored.workspace = true
 sha2.workspace = true

@@ -1,5 +1,3 @@
-use snafu::ResultExt;
-
 pub async fn from_fastn_doc(
     ds: &fastn_ds::DocumentStore,
     fastn_path: &fastn_ds::Path,
