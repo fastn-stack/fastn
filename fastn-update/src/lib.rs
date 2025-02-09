@@ -130,7 +130,7 @@ async fn update_dependencies(
     packages_root: fastn_ds::Path,
     current_package: &fastn_core::Package,
     check: bool,
-) -> Result<usize, UpdateError> {
+) -> Result<(usize, usize), UpdateError> {
     mprint!("Updating dependencies for {}.\n", current_package.name);
 
     let mut stack = vec![current_package.clone()];
@@ -157,7 +157,7 @@ async fn update_dependencies(
                 false
                 // explicitly not updating updated_packages as we did not actually update anything
             } else if is_fifthtry_site_package(package_name.as_str()) {
-                update_fifthtry_site_dependency(
+                update_fifthtry_dependency(
                     &dependency,
                     ds,
                     packages_root.clone(),
@@ -193,6 +193,7 @@ async fn update_dependencies(
         }
     }
 
+    let total_packages = all_packages.len();
     fastn_core::ConfigTemp::write(
         ds,
         current_package.name.clone(),
@@ -200,7 +201,7 @@ async fn update_dependencies(
     )
     .await?;
 
-    Ok(updated_packages)
+    Ok((updated_packages, total_packages))
 }
 
 async fn update_github_dependency(
@@ -220,7 +221,7 @@ async fn update_github_dependency(
         )));
     }
 
-    let manifest = download_unpack_zip_and_get_manifest(
+    let (manifest, updated) = download_unpack_zip_and_get_manifest(
         dependency_path,
         fastn_core::manifest::utils::get_zipball_url(package_name.as_str())
             .unwrap()
@@ -233,18 +234,16 @@ async fn update_github_dependency(
     .await?;
 
     all_packages.push((package_name.to_string(), manifest));
-    mred!("updated.");
-    Ok(true)
+    Ok(updated)
 }
 
-async fn update_fifthtry_site_dependency(
+async fn update_fifthtry_dependency(
     dependency: &fastn_core::package::dependency::Dependency,
     ds: &fastn_ds::DocumentStore,
     packages_root: fastn_ds::Path,
     all_packages: &mut Vec<(String, fastn_core::Manifest)>,
     check: bool,
 ) -> Result<bool, fastn_update::UpdateError> {
-    let start = std::time::Instant::now();
     let dep_package = &dependency.package;
     let package_name = dep_package.name.clone();
 
@@ -258,7 +257,7 @@ async fn update_fifthtry_site_dependency(
     let dependency_path = &packages_root.join(&package_name);
     let site_zip_url = fastn_core::utils::fifthtry_site_zip_url(site_slug);
 
-    let manifest = download_unpack_zip_and_get_manifest(
+    let (manifest, updated) = download_unpack_zip_and_get_manifest(
         dependency_path,
         site_zip_url.as_str(),
         ds,
@@ -270,14 +269,8 @@ async fn update_fifthtry_site_dependency(
 
     all_packages.push((package_name.to_string(), manifest));
 
-    // call mred with time it took to download
-    let elapsed = start.elapsed();
-    let elapsed_secs = elapsed.as_secs();
-    let elapsed_millis = elapsed.subsec_millis();
-    mred!("updated in {}.{:03}s", elapsed_secs, elapsed_millis);
-
     // todo: return true only if package is updated
-    Ok(true)
+    Ok(updated)
 }
 
 async fn update_local_package_manifest(
@@ -297,14 +290,30 @@ async fn download_unpack_zip_and_get_manifest(
     package_name: &str,
     is_github_package: bool,
     check: bool,
-) -> Result<fastn_core::Manifest, fastn_update::UpdateError> {
+) -> Result<(fastn_core::Manifest, bool), fastn_update::UpdateError> {
     let etag_file = dependency_path.join(".etag");
 
-    let (etag, mut archive) = utils::download_archive(ds, zip_url, &etag_file)
+    let start = std::time::Instant::now();
+    let resp = utils::download_archive(ds, zip_url, &etag_file)
         .await
         .context(DownloadArchiveSnafu {
             package: package_name,
         })?;
+
+    let elapsed = start.elapsed();
+    let elapsed_secs = elapsed.as_secs();
+    let elapsed_millis = elapsed.subsec_millis();
+
+    let (etag, mut archive) = match resp {
+        Some(x) => {
+            mred!("downloaded in {}.{:03}s", elapsed_secs, elapsed_millis);
+            x
+        }
+        None => {
+            mred!("checked in {}.{:03}s", elapsed_secs, elapsed_millis);
+            return Ok((update_local_package_manifest(dependency_path).await?, false));
+        }
+    };
 
     for i in 0..archive.len() {
         let mut entry = archive.by_index(i).context(ArchiveEntryReadSnafu {
@@ -348,7 +357,7 @@ async fn download_unpack_zip_and_get_manifest(
         .inspect_err(|e| eprintln!("failed to write etag file for {package_name}: {e}"))
         .unwrap_or(());
 
-    update_local_package_manifest(dependency_path).await
+    Ok((update_local_package_manifest(dependency_path).await?, true))
 }
 
 fn is_fifthtry_site_package(package_name: &str) -> bool {
@@ -391,7 +400,7 @@ pub async fn update(ds: &fastn_ds::DocumentStore, check: bool) -> fastn_core::Re
         return Ok(());
     }
 
-    let updated_packages =
+    let (updated_packages, total_packages) =
         match update_dependencies(ds, packages_root, &current_package, check).await {
             Ok(n) => n,
             Err(UpdateError::Check(e)) => {
@@ -406,10 +415,10 @@ pub async fn update(ds: &fastn_ds::DocumentStore, check: bool) -> fastn_core::Re
         };
 
     match updated_packages {
-        0 => println!("No packages updated."),
-        1 => println!("Updated package dependency."),
         _ if fastn_core::utils::is_test() => println!("Updated N dependencies."),
-        n => println!("Updated {} dependencies.", n),
+        0 => println!("No packages updated."),
+        1 => println!("Updated 1/{total_packages} package dependency."),
+        _ => println!("Updated {updated_packages}/{total_packages} dependencies."),
     }
 
     Ok(())
