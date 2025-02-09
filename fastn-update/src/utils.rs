@@ -29,7 +29,7 @@ pub(crate) async fn download_archive(
     ds: &fastn_ds::DocumentStore,
     url: &str,
     etag_file: &fastn_ds::Path,
-) -> fastn_core::Result<(String, zip::ZipArchive<std::io::Cursor<bytes::Bytes>>)> {
+) -> fastn_core::Result<Option<(String, zip::ZipArchive<std::io::Cursor<bytes::Bytes>>)>> {
     use std::io::Seek;
 
     let mut r = reqwest::Request::new(reqwest::Method::GET, url.parse()?);
@@ -46,6 +46,10 @@ pub(crate) async fn download_archive(
     };
 
     let resp = fastn_ds::http::DEFAULT_CLIENT.execute(r).await?;
+    if resp.status().as_u16() == 304 {
+        return Ok(None);
+    }
+
     let etag = resp
         .headers()
         .get("Etag")
@@ -56,7 +60,7 @@ pub(crate) async fn download_archive(
     let mut cursor = std::io::Cursor::new(resp.bytes().await?);
     cursor.seek(std::io::SeekFrom::Start(0))?;
     let archive = zip::ZipArchive::new(cursor)?;
-    Ok((etag, archive))
+    Ok(Some((etag, archive)))
 }
 
 pub(crate) async fn resolve_dependency_package(
