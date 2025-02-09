@@ -298,8 +298,6 @@ async fn download_unpack_zip_and_get_manifest(
     is_github_package: bool,
     check: bool,
 ) -> Result<fastn_core::Manifest, fastn_update::UpdateError> {
-    use sha2::{digest::FixedOutput, Digest};
-
     let etag_file = dependency_path.join(".etag");
 
     let (etag, mut archive) = utils::download_archive(ds, zip_url, &etag_file)
@@ -308,9 +306,6 @@ async fn download_unpack_zip_and_get_manifest(
             package: package_name,
         })?;
 
-    let mut files: std::collections::BTreeMap<String, fastn_core::manifest::File> =
-        Default::default();
-    let mut hasher = sha2::Sha256::new();
     for i in 0..archive.len() {
         let mut entry = archive.by_index(i).context(ArchiveEntryReadSnafu {
             package: package_name,
@@ -329,10 +324,6 @@ async fn download_unpack_zip_and_get_manifest(
             let path_string = path.to_string_lossy().into_owned();
             let path_normalized = path_string.replace('\\', "/");
 
-            let file_name = path_normalized.clone();
-            let file_hash = fastn_core::utils::generate_hash(buffer.clone());
-            let file_size = buffer.len();
-
             // For package like `fifthtry.github.io/package-doc`, github zip is a folder called
             // `package-doc-<commit-id>` which contains all files, so path for `FASTN.ftd` becomes
             // `package-doc-<commit-id>/FASTN.ftd` while fifthtry package zip doesn't have any
@@ -347,29 +338,17 @@ async fn download_unpack_zip_and_get_manifest(
                 &path_normalized
             };
 
-            hasher.update(&buffer);
-            // Creating file entry for manifest using archive files
-            files.insert(
-                file_name.clone(),
-                fastn_core::manifest::File::new(file_name, file_hash, file_size),
-            );
-
             let output_path = &dependency_path.join(path_without_prefix);
             write_archive_content(ds, output_path, &buffer, package_name, check).await?;
         }
     }
-
-    let manifest = {
-        let checksum = format!("{:X}", hasher.finalize_fixed());
-        fastn_core::Manifest::new(files, zip_url.to_string(), checksum)
-    };
 
     ds.write_content(&etag_file, etag.as_bytes())
         .await
         .inspect_err(|e| eprintln!("failed to write etag file for {package_name}: {e}"))
         .unwrap_or(());
 
-    Ok(manifest)
+    update_local_package_manifest(dependency_path).await
 }
 
 fn is_fifthtry_site_package(package_name: &str) -> bool {
