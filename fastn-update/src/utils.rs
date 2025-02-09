@@ -32,27 +32,26 @@ pub(crate) async fn download_archive(
 ) -> fastn_core::Result<(String, zip::ZipArchive<std::io::Cursor<bytes::Bytes>>)> {
     use std::io::Seek;
 
-    let etag = match ds.read_to_string(etag_file, &None).await {
-        Ok(v) => format!("\"{v}\""),
-        Err(fastn_ds::ReadStringError::ReadError(fastn_ds::ReadError::NotFound(_))) => {
-            "\"0\"".to_string()
+    let mut r = reqwest::Request::new(reqwest::Method::GET, url.parse()?);
+
+    match ds.read_to_string(etag_file, &None).await {
+        Ok(etag) => {
+            r.headers_mut().insert(
+                "if-None-Match",
+                reqwest::header::HeaderValue::from_str(etag.as_str()).unwrap(),
+            );
         }
+        Err(fastn_ds::ReadStringError::ReadError(fastn_ds::ReadError::NotFound(_))) => (),
         Err(e) => return Err(e.into()),
     };
-
-    let mut r = reqwest::Request::new(reqwest::Method::GET, url.parse()?);
-    r.headers_mut().insert(
-        "if-none-match",
-        reqwest::header::HeaderValue::from_str(etag.as_str()).unwrap(),
-    );
 
     let resp = fastn_ds::http::DEFAULT_CLIENT.execute(r).await?;
     let etag = resp
         .headers()
-        .get("etag")
+        .get("Etag")
         .and_then(|v| v.to_str().ok())
-        .unwrap()
-        .to_string();
+        .map(|v| v.to_string())
+        .unwrap_or_default();
     // TODO: handle 304 response
     let mut cursor = std::io::Cursor::new(resp.bytes().await?);
     cursor.seek(std::io::SeekFrom::Start(0))?;
