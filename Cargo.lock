@@ -1513,7 +1513,6 @@ dependencies = [
  "fastn-ds",
  "reqwest",
  "serde_json",
- "sha2",
  "snafu",
  "thiserror 2.0.11",
  "tracing",
