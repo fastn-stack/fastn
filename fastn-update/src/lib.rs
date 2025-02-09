@@ -116,11 +116,17 @@ macro_rules! mprint {
 }
 
 // macro called mred that prints in red a message, using ansi colors for red,
-macro_rules! mred {
-    ($($arg:tt)*) => {
+macro_rules! mdone {
+    ($red: expr, $($arg:tt)*) => {
         use colored::Colorize;
+
         if !fastn_core::utils::is_test() {
-            println!("{}", format!($($arg)*).red());
+            let msg = format!($($arg)*);
+            if $red {
+                println!("{}", msg.red());
+            } else {
+                println!("{}", msg.green());
+            }
         }
     }
 }
@@ -131,7 +137,8 @@ async fn update_dependencies(
     current_package: &fastn_core::Package,
     check: bool,
 ) -> Result<(usize, usize), UpdateError> {
-    mprint!("Updating dependencies for {}.\n", current_package.name);
+    use colored::Colorize;
+    mprint!("Checking dependencies for {}.\n", current_package.name);
 
     let mut stack = vec![current_package.clone()];
     let mut resolved = std::collections::HashSet::new();
@@ -144,18 +151,17 @@ async fn update_dependencies(
             if resolved.contains(&dependency.package.name) {
                 continue;
             }
-            mprint!("Updating {}: ", dependency.package.name);
+            mprint!("Checking {}: ", dependency.package.name.blue());
             let dep_package = &dependency.package;
             let package_name = dep_package.name.clone();
             let dependency_path = packages_root.join(&package_name);
             let updated = if ds.exists(&dependency_path.join(".is-local"), &None).await {
-                mred!("Local package");
+                mdone!(true, "Local package");
                 all_packages.push((
                     package_name.to_string(),
                     update_local_package_manifest(&dependency_path).await?,
                 ));
                 false
-                // explicitly not updating updated_packages as we did not actually update anything
             } else if is_fifthtry_site_package(package_name.as_str()) {
                 update_fifthtry_dependency(
                     &dependency,
@@ -304,13 +310,15 @@ async fn download_unpack_zip_and_get_manifest(
     let elapsed_secs = elapsed.as_secs();
     let elapsed_millis = elapsed.subsec_millis();
 
+    let red = elapsed_secs > 0 || elapsed_millis > 200;
+
     let (etag, mut archive) = match resp {
         Some(x) => {
-            mred!("downloaded in {}.{:03}s", elapsed_secs, elapsed_millis);
+            mdone!(red, "downloaded in {}.{:03}s", elapsed_secs, elapsed_millis);
             x
         }
         None => {
-            mred!("checked in {}.{:03}s", elapsed_secs, elapsed_millis);
+            mdone!(red, "checked in {}.{:03}s", elapsed_secs, elapsed_millis);
             return Ok((update_local_package_manifest(dependency_path).await?, false));
         }
     };
@@ -416,8 +424,8 @@ pub async fn update(ds: &fastn_ds::DocumentStore, check: bool) -> fastn_core::Re
 
     match updated_packages {
         _ if fastn_core::utils::is_test() => println!("Updated N dependencies."),
-        0 => println!("No packages updated."),
-        1 => println!("Updated 1/{total_packages} package dependency."),
+        0 => println!("All the {total_packages} packages are up to date."),
+        1 => println!("Updated 1/{total_packages} dependency."),
         _ => println!("Updated {updated_packages}/{total_packages} dependencies."),
     }
 
