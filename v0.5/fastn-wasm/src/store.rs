@@ -37,6 +37,7 @@ pub struct Conn {
 }
 
 impl<STORE: StoreExt> Store<STORE> {
+    #[expect(clippy::too_many_arguments)]
     pub fn new(
         main_package: String,
         wasm_package: String,
