@@ -19,6 +19,7 @@ async fn main() {
 
     let store = fastn_wasm::Store::new(
         "".to_string(),
+        "".to_string(),
         req,
         Default::default(),
         "".to_string(),
