@@ -169,6 +169,11 @@ pub async fn serve(
     preview_session_id: &Option<String>,
 ) -> fastn_core::Result<(fastn_core::http::Response, bool)> {
     let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
+    let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse()?;
+
+    if let Some(r) = handle_redirect(config, &path) {
+        return Ok((r, false));
+    }
 
     if req.path() == "/-/auth/logout/" {
         return Ok((clear_sid2(&req), false));
@@ -184,12 +189,6 @@ pub async fn serve(
 
     if let Some(default_response) = handle_default_route(&req, config.package.name.as_str()) {
         return default_response.map(|r| (r, true));
-    }
-
-    let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse()?;
-
-    if let Some(r) = handle_redirect(config, &path) {
-        return Ok((r, false));
     }
 
     if fastn_core::utils::is_static_path(req.path()) {
