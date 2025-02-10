@@ -18,6 +18,7 @@ async fn main() {
     .unwrap();
 
     let store = fastn_wasm::Store::new(
+        "".to_string(),
         req,
         Default::default(),
         "".to_string(),
