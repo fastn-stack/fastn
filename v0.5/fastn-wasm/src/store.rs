@@ -1,4 +1,6 @@
 pub struct Store<STORE: StoreExt> {
+    pub wasm_package: String,
+    pub main_package: String,
     pub req: ft_sys_shared::Request,
     pub clients: std::sync::Arc<async_lock::Mutex<Vec<Conn>>>,
     pub pg_pools: std::sync::Arc<scc::HashMap<String, deadpool_postgres::Pool>>,
@@ -36,6 +38,8 @@ pub struct Conn {
 
 impl<STORE: StoreExt> Store<STORE> {
     pub fn new(
+        main_package: String,
+        wasm_package: String,
         mut req: ft_sys_shared::Request,
         pg_pools: std::sync::Arc<scc::HashMap<String, deadpool_postgres::Pool>>,
         db_url: String,
@@ -43,6 +47,14 @@ impl<STORE: StoreExt> Store<STORE> {
         app_url: String,
         app_mounts: std::collections::HashMap<String, String>,
     ) -> Store<STORE> {
+        req.headers.push((
+            FASTN_MAIN_PACKAGE_HEADER.to_string(),
+            main_package.clone().into_bytes(),
+        ));
+        req.headers.push((
+            FASTN_WASM_PACKAGE_HEADER.to_string(),
+            wasm_package.clone().into_bytes(),
+        ));
         req.headers
             .push((FASTN_APP_URL_HEADER.to_string(), app_url.into_bytes()));
 
@@ -52,6 +64,8 @@ impl<STORE: StoreExt> Store<STORE> {
 
         Self {
             req,
+            wasm_package,
+            main_package,
             response: None,
             clients: Default::default(),
             pg_pools,
@@ -97,6 +111,9 @@ impl fastn_wasm::ConnectionExt for rusqlite::Connection {
             .map_err(fastn_wasm::SQLError::Rusqlite)
     }
 }
+
+pub const FASTN_MAIN_PACKAGE_HEADER: &str = "x-fastn-main-package";
+pub const FASTN_WASM_PACKAGE_HEADER: &str = "x-fastn-wasm-package";
 
 /// `app-url` is the path on which the app is installed.
 ///

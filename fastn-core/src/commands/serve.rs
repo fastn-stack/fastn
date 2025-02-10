@@ -119,28 +119,7 @@ fn guess_mime_type(path: &str) -> mime_guess::Mime {
     mime_guess::from_path(path).first_or_octet_stream()
 }
 
-pub fn clear_sid(req: &fastn_core::http::Request) -> fastn_core::http::Response {
-    let mut cookie = actix_web::cookie::Cookie::build(ft_sys_shared::SESSION_KEY, "")
-        .domain(match req.connection_info.host().split_once(':') {
-            Some((domain, _port)) => domain.to_string(),
-            None => req.connection_info.host().to_string(),
-        })
-        .path("/")
-        .max_age(actix_web::cookie::time::Duration::seconds(34560000))
-        .secure(true)
-        .same_site(actix_web::cookie::SameSite::Strict)
-        .finish();
-    cookie.make_removal();
-
-    dbg!(
-        actix_web::HttpResponse::build(actix_web::http::StatusCode::TEMPORARY_REDIRECT)
-            .insert_header(("LOCATION", "/"))
-            .cookie(cookie)
-            .finish()
-    )
-}
-
-pub fn clear_sid2(req: &fastn_core::http::Request) -> fastn_core::http::Response {
+pub fn clear_session_cookie(req: &fastn_core::http::Request) -> fastn_core::http::Response {
     // safari is ignoring cookie if we return a redirect, so we are returning a meta-refresh
     // further we are not using .secure(true) here because then cookie is not working on
     // localhost
@@ -176,7 +155,7 @@ pub async fn serve(
     }
 
     if req.path() == "/-/auth/logout/" {
-        return Ok((clear_sid2(&req), false));
+        return Ok((clear_session_cookie(&req), false));
     }
 
     if let Some(endpoint_response) = handle_endpoints(config, &req, preview_session_id).await {
@@ -599,7 +578,14 @@ async fn handle_endpoints(
 
         return match config
             .ds
-            .handle_wasm(url, req, app_url, app_mounts, session_id)
+            .handle_wasm(
+                config.package.name.to_string(),
+                url,
+                req,
+                app_url,
+                app_mounts,
+                session_id,
+            )
             .await
         {
             Ok(r) => Some(Ok(to_response(r))),
