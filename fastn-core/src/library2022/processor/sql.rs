@@ -35,9 +35,9 @@ pub async fn process(
     let ds = &config.config.ds;
 
     let res = match if q_kind == "sql-query" {
-        ds.sql_query(db.as_str(), query.as_str(), params).await
+        ds.sql_query(db.as_str(), query.as_str(), &params).await
     } else if q_kind == "sql-execute" {
-        ds.sql_execute(db.as_str(), query.as_str(), params).await
+        ds.sql_execute(db.as_str(), query.as_str(), &params).await
     } else {
         ds.sql_batch(db.as_str(), query.as_str()).await
     } {

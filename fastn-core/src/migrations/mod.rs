@@ -164,7 +164,7 @@ async fn find_latest_applied_migration_number(
                 "#,
             )
             .as_str(),
-            vec![],
+            &[],
         )
         .await?;
 

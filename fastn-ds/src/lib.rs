@@ -262,7 +262,7 @@ impl DocumentStore {
         &self,
         db_url: &str,
         query: &str,
-        params: Vec<ft_sys_shared::SqliteRawValue>,
+        params: &[ft_sys_shared::SqliteRawValue],
     ) -> Result<Vec<Vec<serde_json::Value>>, fastn_utils::SqlError> {
         let db_path = initialize_sqlite_db(db_url).await?;
         let conn = rusqlite::Connection::open_with_flags(
@@ -270,12 +270,13 @@ impl DocumentStore {
             rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY,
         )
         .map_err(fastn_utils::SqlError::Connection)?;
-        let mut stmt = conn.prepare(query).map_err(fastn_utils::SqlError::Query)?;
 
+        let mut stmt = conn.prepare(query).map_err(fastn_utils::SqlError::Query)?;
         let count = stmt.column_count();
         let rows = stmt
             .query(rusqlite::params_from_iter(params))
             .map_err(fastn_utils::SqlError::Query)?;
+
         fastn_utils::rows_to_json(rows, count)
     }
 
@@ -283,7 +284,7 @@ impl DocumentStore {
         &self,
         db_url: &str,
         query: &str,
-        params: Vec<ft_sys_shared::SqliteRawValue>,
+        params: &[ft_sys_shared::SqliteRawValue],
     ) -> Result<Vec<Vec<serde_json::Value>>, fastn_utils::SqlError> {
         let db_path = initialize_sqlite_db(db_url).await?;
         let conn = rusqlite::Connection::open_with_flags(
@@ -291,6 +292,7 @@ impl DocumentStore {
             rusqlite::OpenFlags::SQLITE_OPEN_READ_WRITE,
         )
         .map_err(fastn_utils::SqlError::Connection)?;
+
         Ok(vec![vec![conn
             .execute(query, rusqlite::params_from_iter(params))
             .map_err(fastn_utils::SqlError::Execute)?

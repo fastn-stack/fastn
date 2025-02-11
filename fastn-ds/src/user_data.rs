@@ -35,7 +35,7 @@ impl fastn_ds::DocumentStore {
                 fastn_session.id = $1
                 AND fastn_user.id = fastn_session.uid
             "#,
-            vec![sid.as_str().into()],
+            &[sid.as_str().into()],
         ).await?;
 
         let mut row = match rows.len() {
