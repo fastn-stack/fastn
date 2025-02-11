@@ -1146,7 +1146,7 @@ impl<'a> TDoc<'a> {
                 .ast
                 .iter()
                 .filter(|v| {
-                    !v.is_component()
+                    !v.is_component_invocation()
                         && (v.name().eq(thing_name.as_str())
                             || v.name().starts_with(format!("{}.", thing_name).as_str()))
                 })
@@ -1554,7 +1554,7 @@ impl<'a> TDoc<'a> {
                         state.id.as_str(),
                         &current_parsed_document.doc_aliases,
                     );
-                    !v.is_component()
+                    !v.is_component_invocation()
                         && (name.eq(&format!("{}#{}", doc_name, thing_name))
                             || name.starts_with(format!("{}#{}.", doc_name, thing_name).as_str()))
                 })
@@ -1591,7 +1591,7 @@ impl<'a> TDoc<'a> {
                 .ast
                 .iter()
                 .filter(|v| {
-                    !v.is_component()
+                    !v.is_component_invocation()
                         && (v.name().eq(&thing_name)
                             || v.name().starts_with(format!("{}.", thing_name).as_str()))
                 })
