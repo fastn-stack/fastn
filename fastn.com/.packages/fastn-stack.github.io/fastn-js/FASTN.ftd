@@ -3,7 +3,7 @@
 -- fastn.package: fastn-stack.github.io/fastn-js
 download-base-url: https://raw.githubusercontent.com/fastn-stack/fastn-js/main
 
--- fastn.dependency: fastn-community.github.io/doc-site as ds
+-- fastn.dependency: doc-site.fifthtry.site as ds
 
 -- fastn.auto-import: ds
 
@@ -11,8 +11,8 @@ download-base-url: https://raw.githubusercontent.com/fastn-stack/fastn-js/main
 
 # Home: /
 
-# Typo Exporter: /typo/
+# Typo Exporter: /typo-exporter/
   document: typo-exporter.ftd
 
-# CS Exporter: /cs/
+# CS Exporter: /json-exporter/
   document: json-exporter.ftd
