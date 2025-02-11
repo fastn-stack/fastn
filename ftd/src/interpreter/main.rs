@@ -6,6 +6,8 @@ use ftd::interpreter::things::web_component::WebComponentDefinitionExt;
 use ftd::interpreter::FunctionExt;
 use ftd::interpreter::{ComponentExt, VariableExt};
 
+const MAX_LOOP_ITER: usize = 1_050_000;
+
 /// Array with the size of how many builtins are provided by the host
 pub type HostBuiltins = [(String, fastn_resolved::Definition); 3];
 
@@ -275,7 +277,32 @@ impl InterpreterState {
     pub fn continue_processing(mut self) -> ftd::interpreter::Result<Interpreter> {
         use ftd::interpreter::{PropertyValueExt, ValueExt};
 
+        let mut count = 0;
         while let Some((doc_name, number_of_scan, ast, exports)) = self.get_next_ast() {
+            count += 1;
+
+            if count > MAX_LOOP_ITER {
+                use std::io::Write;
+
+                let mut file = std::fs::OpenOptions::new()
+                    .append(true)
+                    .create(true)
+                    .open("/tmp/max-loop-iters.log")
+                    .unwrap();
+
+                write!(
+                    file,
+                    "[MAX_LOOP_ITER]: id: {}; doc: {}\n",
+                    self.id, doc_name
+                )
+                .unwrap();
+
+                return Err(ftd::interpreter::Error::OtherError(
+                    "Exhausted allocated MAX_LOOP_ITER. The fastn package might have some bug."
+                        .to_string(),
+                ));
+            }
+
             if let Some(interpreter) = self.resolve_pending_imports::<ftd::interpreter::Thing>()? {
                 match interpreter {
                     ftd::interpreter::StateWithThing::State(s) => {
@@ -315,6 +342,20 @@ impl InterpreterState {
             let state = &mut self;
 
             let mut doc = ftd::interpreter::TDoc::new_state(&name, &aliases, state);
+
+            if doc.aliases.get(ast.name().as_str()).is_some() {
+                let message = format!(
+                    "Triying to redefine an alias: `{name}`. This is not allowed.",
+                    name = ast.name(),
+                );
+
+                return Err(ftd::interpreter::Error::ParseError {
+                    message,
+                    doc_id: doc.name.to_string(),
+                    line_number: ast.line_number(),
+                });
+            }
+
             if ast.is_record() {
                 if !is_in_bag {
                     if number_of_scan.eq(&1) {
@@ -520,7 +561,7 @@ impl InterpreterState {
                         }
                     }
                 }
-            } else if ast.is_component() {
+            } else if ast.is_component_invocation() {
                 if number_of_scan.eq(&1) {
                     fastn_resolved::ComponentInvocation::scan_ast(ast, &mut doc)?;
                     continue;
@@ -740,7 +781,7 @@ impl InterpreterState {
                         self.id.as_str(),
                         &current_document.doc_aliases,
                     );
-                    !v.is_component()
+                    !v.is_component_invocation()
                         && (name.eq(&format!("{}#{}", doc_name, thing_name))
                             || name.starts_with(format!("{}#{}.", doc_name, thing_name).as_str()))
                 })
@@ -769,7 +810,7 @@ impl InterpreterState {
             .ast
             .iter()
             .filter(|v| {
-                !v.is_component()
+                !v.is_component_invocation()
                     && (v.name().eq(&thing_name)
                         || v.name().starts_with(format!("{}.", thing_name).as_str()))
             })
@@ -992,7 +1033,7 @@ pub fn interpret_with_line_number(
             .ast
             .iter()
             .filter_map(|v| {
-                if v.is_component() || v.is_always_included_variable_definition() {
+                if v.is_component_invocation() || v.is_always_included_variable_definition() {
                     Some(ftd::interpreter::ToProcessItem {
                         number_of_scan: 0,
                         ast: v.to_owned(),

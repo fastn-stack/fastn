@@ -241,7 +241,7 @@ impl Ast {
         matches!(self, Ast::WebComponentDefinition(_))
     }
 
-    pub fn is_component(&self) -> bool {
+    pub fn is_component_invocation(&self) -> bool {
         matches!(self, Ast::ComponentInvocation(_))
     }
 
