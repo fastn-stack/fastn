@@ -290,12 +290,7 @@ impl InterpreterState {
                     .open("/tmp/max-loop-iters.log")
                     .unwrap();
 
-                write!(
-                    file,
-                    "[MAX_LOOP_ITER]: id: {}; doc: {}\n",
-                    self.id, doc_name
-                )
-                .unwrap();
+                writeln!(file, "[MAX_LOOP_ITER]: id: {}; doc: {}", self.id, doc_name).unwrap();
 
                 return Err(ftd::interpreter::Error::OtherError(
                     "Exhausted allocated MAX_LOOP_ITER. The fastn package might have some bug."
