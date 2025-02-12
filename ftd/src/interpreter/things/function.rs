@@ -245,29 +245,25 @@ fn parse_template(value: &str) -> String {
                     result.push(c);
                 }
             }
+        } else if c == '$' {
+            var_mode = true;
+        } else if c == '\\' {
+            // Escape sequences
+            result.push_str("\\\\");
+        } else if c == '\n' {
+            // Escape sequences
+            result.push_str("\\\\n");
+        } else if c == '"' {
+            result.push_str("\\\"");
         } else {
-            if c == '$' {
-                var_mode = true;
-            } else {
-                if c == '\\' {
-                    // Escape sequences
-                    result.push_str("\\\\");
-                } else if c == '\n' {
-                    // Escape sequences
-                    result.push_str("\\\\n");
-                } else if c == '"' {
-                    result.push_str("\\\"");
-                } else {
-                    result.push(c);
-                }
-            }
+            result.push(c);
         }
     }
 
     if var_mode && !var_name.is_empty() {
         result.push_str(&format!(r#""+{var_name}"#));
     } else {
-        result.push_str("\"");
+        result.push('"');
     }
     result
 }
