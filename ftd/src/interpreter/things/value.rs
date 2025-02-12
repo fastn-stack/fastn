@@ -379,7 +379,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                     }
                     Some(ekind) if !ekind.kind.is_same_as(&found_kind.kind) => {
                         return ftd::interpreter::utils::e2(
-                            format!("Expected kind `{:?}`, found: `{:?}`", ekind, found_kind)
+                            format!("Expected kind 1`{:?}`, found: `{:?}`", ekind, found_kind)
                                 .as_str(),
                             doc.name,
                             value.line_number(),
@@ -449,7 +449,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                     }
                     Some(ekind) if !ekind.kind.is_same_as(&found_kind.kind) => {
                         return ftd::interpreter::utils::e2(
-                            format!("Expected kind `{:?}`, found: `{:?}`", ekind, found_kind)
+                            format!("Expected kind 2`{:?}`, found: `{:?}`", ekind, found_kind)
                                 .as_str(),
                             doc.name,
                             value.line_number(),

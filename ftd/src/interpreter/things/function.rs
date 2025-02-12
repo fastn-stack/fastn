@@ -81,8 +81,14 @@ impl FunctionExt for fastn_resolved::Function {
             function.line_number,
         )?);
 
+        let expression = if kind.kind.is_template() {
+            parse_template(function.definition.value.as_str())
+        } else {
+            function.definition.value.to_string()
+        };
+
         let expression = vec![fastn_resolved::FunctionExpression {
-            expression: function.definition.value.to_string(),
+            expression,
             line_number: function.definition.line_number,
         }];
 
@@ -218,6 +224,52 @@ impl FunctionExt for fastn_resolved::Function {
             .collect_vec()
             .join("\n")
     }
+}
+
+fn parse_template(value: &str) -> String {
+    let mut result = String::from("\"");
+    let mut var_mode = false;
+    let mut var_name = String::new();
+
+    for c in value.chars() {
+        if var_mode {
+            if c.is_alphanumeric() || c == '_' {
+                var_name.push(c);
+            } else {
+                result.push_str(&format!(r#""+{var_name}+""#));
+                var_mode = false;
+                var_name.clear();
+                if c == '$' {
+                    var_mode = true;
+                } else {
+                    result.push(c);
+                }
+            }
+        } else {
+            if c == '$' {
+                var_mode = true;
+            } else {
+                if c == '\\' {
+                    // Escape sequences
+                    result.push_str("\\\\");
+                } else if c == '\n' {
+                    // Escape sequences
+                    result.push_str("\\\\n");
+                } else if c == '"' {
+                    result.push_str("\\\"");
+                } else {
+                    result.push(c);
+                }
+            }
+        }
+    }
+
+    if var_mode && !var_name.is_empty() {
+        result.push_str(&format!(r#""+{var_name}"#));
+    } else {
+        result.push_str("\"");
+    }
+    result
 }
 
 /*

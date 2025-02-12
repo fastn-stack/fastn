@@ -1,0 +1,10 @@
+-- template create-account-confirmation-html(link, name):
+string link:
+string name:
+
+Hi $name,
+
+<fifthtry specific html> $link
+
+
+-- ftd.text: $create-account-confirmation-html(link=/some/link/, name=John)
