@@ -7,4 +7,6 @@ Hi $name,
 <fifthtry specific html> $link
 
 
--- ftd.text: $create-account-confirmation-html(link=/some/link/, name=John)
+-- string html: $create-account-confirmation-html(link=/some/link/, name=John)
+
+-- ftd.text: $html
