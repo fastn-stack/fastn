@@ -528,7 +528,7 @@ impl<'a> TDoc<'a> {
             } else {
                 return ftd::interpreter::utils::e2(
                     format!(
-                        "Expected kind 3`{:?}`, found: \
+                        "Expected kind `{:?}`, found: \
                     `{:?}`",
                         value.kind(),
                         set.kind()
