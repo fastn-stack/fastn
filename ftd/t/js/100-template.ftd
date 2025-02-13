@@ -4,7 +4,7 @@ string name:
 
 Hi $name,
 
-<fifthtry specific html> $link
+Some <b>yo</b>, <a href="$link">Confirm account</a>
 
 
 -- string html: $create-account-confirmation-html(link=/some/link/, name=John)

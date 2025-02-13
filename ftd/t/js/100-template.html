@@ -19,7 +19,7 @@
 </head>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
 <body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3"><p>Hi John,</p>
-&lt;fifthtry specific html&gt; /some/link/</div></div></body><style id="styles">
+Some &lt;b&gt;yo&lt;&#47;b&gt;, &lt;a href=&quot;/some/link/&quot;&gt;Confirm account&lt;&#47;a&gt;</div></div></body><style id="styles">
     .__w-1 { width: 100%; }
 	.__h-2 { height: 100%; }
     </style>
@@ -43,7 +43,7 @@ let foo__create_account_confirmation_html = function (args)
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
-    return ("Hi " + fastn_utils.getStaticValue(__args__.name) + ",\n\n<fifthtry specific html> " + fastn_utils.getStaticValue(__args__.link));
+    return ("Hi " + fastn_utils.getStaticValue(__args__.name) + ",\n\nSome <b>yo</b>, <a href=\"" + fastn_utils.getStaticValue(__args__.link) + "\">Confirm account</a>");
   } finally {
     __fastn_package_name__ = __fastn_super_package_name__;
   }

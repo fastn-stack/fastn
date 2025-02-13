@@ -239,24 +239,10 @@ fn parse_template(value: &str) -> String {
                 result.push_str(&format!(r#""+{var_name}+""#));
                 var_mode = false;
                 var_name.clear();
-                if c == '$' {
-                    var_mode = true;
-                } else {
-                    result.push(c);
-                }
+                insert_char(c, &mut result, &mut var_mode);
             }
-        } else if c == '$' {
-            var_mode = true;
-        } else if c == '\\' {
-            // Escape sequences
-            result.push_str("\\\\");
-        } else if c == '\n' {
-            // Escape sequences
-            result.push_str("\\\\n");
-        } else if c == '"' {
-            result.push_str("\\\"");
         } else {
-            result.push(c);
+            insert_char(c, &mut result, &mut var_mode);
         }
     }
 
@@ -266,6 +252,22 @@ fn parse_template(value: &str) -> String {
         result.push('"');
     }
     result
+}
+
+fn insert_char(c: char, result: &mut String, var_mode: &mut bool) {
+    if c == '$' {
+        *var_mode = true;
+    } else if c == '\\' {
+        // Escape sequences
+        result.push_str("\\\\");
+    } else if c == '\n' {
+        // Escape sequences
+        result.push_str("\\\\n");
+    } else if c == '"' {
+        result.push_str("\\\\\\\"");
+    } else {
+        result.push(c);
+    }
 }
 
 /*
