@@ -1805,7 +1805,9 @@ impl ValueExt for fastn_resolved::Value {
         line_number: usize,
     ) -> ftd::interpreter::Result<fastn_resolved::Value> {
         Ok(match value {
-            fastn_resolved::evalexpr::Value::String(text) if expected_kind.is_string() => {
+            fastn_resolved::evalexpr::Value::String(text)
+                if expected_kind.is_string() || expected_kind.is_template() =>
+            {
                 fastn_resolved::Value::String { text }
             }
             fastn_resolved::evalexpr::Value::Float(value) if expected_kind.is_decimal() => {
