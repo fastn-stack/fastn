@@ -151,6 +151,14 @@ fn p(
         assert_eq!(&t, &json_str, "Expected JSON: {}", json_str);
         return;
     }
+    if let Some((val, _, _)) = i.get_response().unwrap() {
+        if fix || manual || script {
+            std::fs::write(file_location, val).unwrap();
+            return;
+        }
+        assert_eq!(&t, &val, "Expected Response: {}", val);
+        return;
+    }
     let js_ast_data = ftd::js::document_into_js_ast(i);
     let js_document_script = fastn_js::to_js(js_ast_data.asts.as_slice(), "foo");
     let js_ftd_script = fastn_js::to_js(ftd::js::default_bag_into_js_ast().as_slice(), "foo");

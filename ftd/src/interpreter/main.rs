@@ -1349,6 +1349,51 @@ impl Document {
         Ok(None)
     }
 
+    pub fn get_response(&self) -> ftd::interpreter::Result<Option<(String, String, i64)>> {
+        use ftd::interpreter::ValueExt;
+
+        let tdoc = self.tdoc();
+
+        for v in self.get_instructions("ftd#response") {
+            if !is_visible(self, &v)? {
+                continue;
+            }
+
+            let response = match v.get_interpreter_value_of_argument("response", &tdoc)? {
+                Some(v) => remove_escape(v.string(self.name.as_str(), 0)?.as_str()),
+                None => {
+                    return ftd::interpreter::utils::e2(
+                        "response not found in ftd.response",
+                        self.name.as_str(),
+                        0,
+                    );
+                }
+            };
+
+            let content_type = match v.get_interpreter_value_of_argument("content-type", &tdoc)? {
+                Some(v) => v.string(self.name.as_str(), 0)?,
+                None => {
+                    return ftd::interpreter::utils::e2(
+                        "content-type not found in ftd.response",
+                        self.name.as_str(),
+                        0,
+                    );
+                }
+            };
+
+            let status_code = match v.get_interpreter_value_of_argument("status-code", &tdoc)? {
+                Some(v) => v.integer(self.name.as_str(), 0)?,
+                None => 200,
+            };
+
+            // TODO: extract headers
+
+            return Ok(Some((response, content_type, status_code)));
+        }
+
+        Ok(None)
+    }
+
     pub fn get_redirect(&self) -> ftd::interpreter::Result<Option<(String, u16)>> {
         match self.get_redirect_with_code("ftd#permanent-redirect")? {
             Some(v) => Ok(Some((v, 308))),
@@ -1540,4 +1585,37 @@ fn is_visible(
         None => Ok(true),
         Some(condition) => Ok(condition.eval(&doc.tdoc())?),
     }
+}
+
+fn remove_escape(input: &str) -> String {
+    let mut result = String::new();
+    let mut chars = input.chars().peekable();
+
+    while let Some(c) = chars.next() {
+        if c == '\\' {
+            if let Some(&next) = chars.peek() {
+                match next {
+                    '\\' => {
+                        result.push('\\');
+                        chars.next();
+                    }
+                    'n' => {
+                        result.push('\n');
+                        chars.next();
+                    }
+                    '"' => {
+                        result.push('"');
+                        chars.next();
+                    }
+                    _ => result.push(c), // Keep the backslash if not a recognized escape sequence
+                }
+            } else {
+                result.push(c);
+            }
+        } else {
+            result.push(c);
+        }
+    }
+
+    result
 }

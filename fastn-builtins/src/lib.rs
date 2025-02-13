@@ -159,6 +159,10 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
     let _color = |n: &str| record(n, "ftd#color");
     let things = vec![
         (
+            "ftd#response".to_string(),
+            fastn_resolved::Definition::Component(response_function()),
+        ),
+        (
             "ftd#row".to_string(),
             fastn_resolved::Definition::Component(row_function()),
         ),
@@ -11696,6 +11700,35 @@ pub fn document_function() -> fastn_resolved::ComponentDefinition {
         .concat()
         .into_iter()
         .collect(),
+        definition: fastn_resolved::ComponentInvocation::from_name("ftd.kernel"),
+        css: None,
+        line_number: 0,
+    }
+}
+
+pub fn response_function() -> fastn_resolved::ComponentDefinition {
+    fastn_resolved::ComponentDefinition {
+        name: "ftd#response".to_string(),
+        arguments: vec![
+            fastn_resolved::Argument::default(
+                "response",
+                fastn_resolved::Kind::template()
+                    .into_kind_data()
+                    .caption_or_body(),
+            ),
+            fastn_resolved::Argument::default(
+                "content-type",
+                fastn_resolved::Kind::string().into_kind_data(),
+            ),
+            fastn_resolved::Argument::default(
+                "status-code",
+                fastn_resolved::Kind::integer().into_kind_data().optional(),
+            ),
+            fastn_resolved::Argument::default(
+                "data",
+                fastn_resolved::Kind::kwargs().into_kind_data(),
+            ),
+        ],
         definition: fastn_resolved::ComponentInvocation::from_name("ftd.kernel"),
         css: None,
         line_number: 0,
