@@ -327,7 +327,7 @@ pub enum FTDResult {
     Json(Vec<u8>),
     Response {
         response: Vec<u8>,
-        status_code: i64,
+        status_code: u16,
         content_type: mime_guess::Mime,
         headers: fastn_resolved::Map<fastn_resolved::PropertyValue>,
     },

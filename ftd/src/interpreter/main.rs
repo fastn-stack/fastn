@@ -1349,7 +1349,7 @@ impl Document {
         Ok(None)
     }
 
-    pub fn get_response(&self) -> ftd::interpreter::Result<Option<(String, String, i64)>> {
+    pub fn get_response(&self) -> ftd::interpreter::Result<Option<(String, String, u16)>> {
         use ftd::interpreter::ValueExt;
 
         let tdoc = self.tdoc();
@@ -1386,9 +1386,16 @@ impl Document {
                 None => 200,
             };
 
+            if !(100..1000).contains(&status_code) {
+                return ftd::interpreter::utils::e2(
+                    "status code must be between 100 and 999",
+                    self.name.as_str(),
+                    0,
+                );
+            }
             // TODO: extract headers
 
-            return Ok(Some((response, content_type, status_code)));
+            return Ok(Some((response, content_type, status_code as u16)));
         }
 
         Ok(None)

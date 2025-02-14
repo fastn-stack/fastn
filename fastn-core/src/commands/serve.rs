@@ -91,10 +91,15 @@ async fn serve_file(
             }
             fastn_core::package::package_doc::FTDResult::Response {
                 response,
-                status_code: _, // Todo: status_code
+                status_code, // Todo: status_code
                 content_type,
                 headers: _, // Todo: headers
-            } => fastn_core::http::ok_with_content_type(response, content_type),
+            } => actix_web::HttpResponseBuilder::new(
+                // unwrap ok as we already checked if status code < 1000 in get_response()
+                actix_http::StatusCode::from_u16(status_code).unwrap(),
+            )
+            .content_type(content_type)
+            .body(response),
             fastn_core::package::package_doc::FTDResult::Redirect { url, code } => {
                 if Some(mime_guess::mime::APPLICATION_JSON) == config.request.content_type() {
                     fastn_core::http::ok_with_content_type(
