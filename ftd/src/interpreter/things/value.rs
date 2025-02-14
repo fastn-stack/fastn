@@ -684,15 +684,18 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                         loop_object_name_and_kind,
                     )?
                 }
-                fastn_resolved::Kind::String => ftd::interpreter::StateWithThing::new_thing(
-                    fastn_resolved::PropertyValue::Value {
-                        value: fastn_resolved::Value::String {
-                            text: value.string(doc.name)?.to_string(),
+                // Todo: For Template value has variable interpolation. Not just string
+                fastn_resolved::Kind::String | fastn_resolved::Kind::Template => {
+                    ftd::interpreter::StateWithThing::new_thing(
+                        fastn_resolved::PropertyValue::Value {
+                            value: fastn_resolved::Value::String {
+                                text: value.string(doc.name)?.to_string(),
+                            },
+                            is_mutable,
+                            line_number: value.line_number(),
                         },
-                        is_mutable,
-                        line_number: value.line_number(),
-                    },
-                ),
+                    )
+                }
                 fastn_resolved::Kind::Integer => ftd::interpreter::StateWithThing::new_thing(
                     fastn_resolved::PropertyValue::Value {
                         value: fastn_resolved::Value::Integer {

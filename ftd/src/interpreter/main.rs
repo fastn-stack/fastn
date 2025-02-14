@@ -1403,8 +1403,9 @@ impl Document {
                     let mut headers: fastn_resolved::Map<String> = Default::default();
                     for (name, value) in arguments {
                         if let Some(name) = name.strip_prefix("header-") {
-                            if let Some(value) =
-                                value.resolve(&tdoc, v.line_number)?.to_serde_value(&tdoc)?
+                            if let Some(value) = value
+                                .resolve(&tdoc, v.line_number)?
+                                .to_json_string(&tdoc, false)?
                             {
                                 headers.insert(name.to_string(), value.to_string());
                             }
