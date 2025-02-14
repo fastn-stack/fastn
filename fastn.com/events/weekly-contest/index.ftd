@@ -1,6 +1,6 @@
--- import: fastn-community.github.io/bling/collapse
--- import: fifthtry.github.io/button
--- import: fastn-community.github.io/bling/note
+-- import: bling.fifthtry.site/collapse
+-- import: cta-button.fifthtry.site
+-- import: bling.fifthtry.site/note
 
 
 -- ds.page: `fastn` Weekly Contest

@@ -1,0 +1,297 @@
+-- import: fastn.com/components/utils
+
+-- ftd.color title-hover-color: #ef8434
+
+-- component cert-label:
+caption name:
+string cert-link:
+boolean $is-title-hovered: false
+boolean $is-icon-hovered: false
+boolean ignore-links: false
+
+-- ftd.row:
+width: hug-content
+spacing.fixed.px: 10
+align-content: center
+
+-- ftd.text: $cert-label.name
+margin-vertical.em: 0.15
+link if { !cert-label.ignore-links }: $cert-label.cert-link
+role: $inherited.types.heading-small
+color: $inherited.colors.text-strong
+color if { cert-label.is-title-hovered }: $title-hover-color
+$on-mouse-enter$: $ftd.set-bool($a = $cert-label.is-title-hovered, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $cert-label.is-title-hovered, v = false)
+
+-- ftd.image: $assets.files.assets.cert-icon.svg
+if: { !cert-label.ignore-links }
+src if { cert-label.is-icon-hovered }: $assets.files.assets.cert-icon-hover.svg
+width.fixed.px: 32
+link: $cert-label.cert-link
+cursor: pointer
+$on-mouse-enter$: $ftd.set-bool($a = $cert-label.is-icon-hovered, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $cert-label.is-icon-hovered, v = false)
+
+-- end: ftd.row
+
+-- end: cert-label
+
+
+
+
+
+
+-- component display-certificate:
+ftd.ui list ui:
+boolean landscape: true
+string certificate-id: some-certificate-id-for-download-purpose
+private boolean $mouse-in: false
+private boolean $on-hover: false
+private boolean $mouse-over: false
+optional string discord-link:
+optional string github-link:
+optional string linkedin-link:
+
+-- ftd.row:
+width if { ftd.device == "mobile" }: fill-container
+spacing.fixed.px: 24
+
+-- ftd.column:
+width.fixed.px: 1250
+align-content: right
+
+-- social-links:
+discord-link: $display-certificate.discord-link
+github-link: $display-certificate.github-link
+linkedin-link: $display-certificate.linkedin-link
+
+-- download-button:
+certificate-id: $display-certificate.certificate-id
+
+-- ftd.column:
+width: fill-container
+id: $display-certificate.certificate-id
+
+-- display-certificate.ui.0:
+
+-- end: ftd.column
+
+-- ftd.image:
+src: $assets.files.assets.certificate.fastn-badge-white.svg
+width.fixed.px: 140
+link: https://fastn.com/
+margin-top.px: 8
+open-in-new-tab: true
+
+-- end: ftd.column
+
+-- end: ftd.row
+
+-- end: display-certificate
+
+
+
+
+-- component social-links:
+string discord-link:
+string linkedin-link:
+string github-link:
+boolean $discord-mouse-in: false
+boolean $github-mouse-in: false
+boolean $linkedin-mouse-in: false
+
+-- ftd.row:
+width: hug-content
+align-self: end
+padding-horizontal.px: 12
+padding-vertical.px: 20
+color: $inherited.colors.text-strong
+role: $inherited.types.copy-small
+spacing.fixed.px: 20
+margin-left.px if { ftd.device == "desktop"  }: 20
+background.solid: $inherited.colors.background.base
+
+-- ftd.image:
+if: { social-links.discord-link != NULL }
+src: $assets.files.assets.discord.svg
+src if { social-links.discord-mouse-in }: $assets.files.assets.discord-hover.svg
+width.fixed.px: 35
+height.fixed.px: 35
+link: $social-links.discord-link
+$on-mouse-enter$: $ftd.set-bool($a = $social-links.discord-mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $social-links.discord-mouse-in, v = false)
+
+-- ftd.image:
+if: { social-links.linkedin-link != NULL }
+src: $assets.files.assets.linkedin.svg
+src if { social-links.linkedin-mouse-in }: $assets.files.assets.linkedin-hover.svg
+width.fixed.px: 35
+height.fixed.px: 35
+link: $social-links.linkedin-link
+$on-mouse-enter$: $ftd.set-bool($a = $social-links.linkedin-mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $social-links.linkedin-mouse-in, v = false)
+
+-- ftd.image:
+if: { social-links.github-link != NULL }
+src: $assets.files.assets.github.svg
+src if { social-links.github-mouse-in }: $assets.files.assets.github-hover.svg
+width.fixed.px: 35
+height.fixed.px: 35
+link: $social-links.github-link
+$on-mouse-enter$: $ftd.set-bool($a = $social-links.github-mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $social-links.github-mouse-in, v = false)
+
+-- end: ftd.row
+
+-- end: social-links
+
+
+
+
+
+-- component download-button:
+boolean $mouse-in: false
+string certificate-id:
+string filename: certificate.jpg
+
+-- ftd.row:
+width: hug-content
+align-self: end
+padding-horizontal.px: 12
+padding-vertical.px: 10
+border-width.px: 1
+border-color: $inherited.colors.border
+border-radius.px: 48
+color: $inherited.colors.text-strong
+role: $inherited.types.copy-small
+spacing.fixed.px: 8
+margin-left.px if { ftd.device == "desktop"  }: 20
+background.solid: $inherited.colors.background.base
+background.solid if { download-button.mouse-in }: $inherited.colors.cta-primary.hover
+$on-mouse-enter$: $ftd.set-bool($a = $download-button.mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $download-button.mouse-in, v = false)
+$on-click$: $utils.download-as-image(element_id = $download-button.certificate-id, filename = $download-button.filename)
+
+-- ftd.image:
+src: $assets.files.assets.certificate.download.svg
+src if { download-button.mouse-in }: $assets.files.assets.certificate.download-hover.svg
+width.fixed.px: 16
+height.fixed.px: 16
+align-self: center
+
+-- ftd.text: Download Certificate
+align-self: center
+color: $inherited.colors.text
+color if { download-button.mouse-in }: white
+
+-- end: ftd.row
+
+-- end: download-button
+
+
+
+
+-- component certificate-2:
+caption name:
+string awarded-title: fastn Champion
+ftd.image-src logo: https://fastn.com/-/fastn.com/images/fastn-dark.svg
+optional ftd.image-src avatar:
+string date:
+optional string discord-link:
+optional string github-link:
+optional string linkedin-link:
+
+-- display-certificate:
+certificate-id: cert-2
+discord-link: $certificate-2.discord-link
+github-link: $certificate-2.github-link
+linkedin-link: $certificate-2.linkedin-link
+
+;; Define certificate UI below --------------------------------
+
+-- display-certificate.ui:
+
+-- ftd.column:
+width.fixed.px: 1250
+background.image: $bg-image-2
+align-content: center
+padding.px: 40
+
+-- ftd.text: CERTIFICATE OF ACHIEVEMENT
+role: $inherited.types.heading-small
+margin-top.px: 70
+margin-bottom.px: 20
+margin-horizontal.px: 20
+color: $inherited.colors.text-strong
+
+-- ftd.text: This is to certify that
+color: $inherited.colors.text-strong
+role: $inherited.types.copy-regular
+margin-horizontal.px: 20
+
+-- ftd.image:
+if: { certificate-2.avatar != NULL }
+src: $certificate-2.avatar
+width.fixed.px: 100
+border-radius.px: 46
+margin-top.px: 10
+
+-- ftd.text: $certificate-2.name
+role: $inherited.types.heading-medium
+color: $inherited.colors.text-strong
+margin-horizontal.px: 20
+margin-top.px: 20
+margin-bottom.px: 5
+
+-- ftd.image:
+src: $color-bar
+margin-bottom.px: 10
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+margin-horizontal.px: 20
+text-align: center
+width.fixed.px: 600
+
+has successfully completed the fastn Champion Challenges and is
+hereby recognized as a
+
+-- ftd.text: $certificate-2.awarded-title
+role: $inherited.types.heading-medium
+color: $inherited.colors.text-strong
+margin-horizontal.px: 20
+margin-vertical.px: 20
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+margin-horizontal.px: 20
+width.fixed.px: 600
+text-align: center
+
+in demonstrating exceptional dedication, perseverance, and achievement
+in overcoming all challenges under the fastn Champion program.
+
+-- ftd.row:
+margin-top.px: 60
+align-self: end
+width: fill-container
+color: $inherited.colors.text-strong
+spacing: space-between
+
+-- vertical-label: $certificate-2.date
+label: Issued on
+
+-- vertical-label: Amit Upadhyay
+label: Founder & CEO
+
+-- end: ftd.row
+
+-- end: ftd.column
+
+-- end: display-certificate.ui
+
+;; END of certificate UI --------------------------------
+
+-- end: certificate-2

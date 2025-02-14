@@ -1,0 +1,59 @@
+-- record host:
+caption name:
+optional string title:
+optional string email:
+optional string website:
+optional ftd.image-src avatar: $fastn-assets.files.assets.avatar.svg
+optional body bio:
+
+
+
+
+
+
+
+
+
+;;author-meta can be used insite doc-site blog
+-- record author-meta:
+caption title:
+string profile:
+string company:
+string bio-url:
+optional ftd.image-src image:
+body body:
+
+
+
+
+
+
+
+
+
+
+;;post-meta can be used insite doc-site blog
+-- record post-meta:
+caption title:
+string published-on:
+optional ftd.image-src post-image:
+optional body body:
+string post-url:
+author-meta author:
+
+
+
+
+
+
+
+
+
+
+;;common venue record for any event, you can use this into event package
+-- record venue:
+caption name:
+optional string location:
+optional string address:
+optional string website:
+optional string link:

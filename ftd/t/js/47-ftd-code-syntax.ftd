@@ -52,7 +52,7 @@ This is body part of ftd.text
 
 \-- ftd.text: Hello ;; This is inline comment
 
-\-- import: fastn-community.github.io/bling/quote
+\-- import: bling.fifthtry.site/quote
 
 \;; Component invocation
 

@@ -1,9 +1,9 @@
--- import: fastn-stack.github.io/certificates/champion
+-- import: fastn.com/components/certificate
 
 -- ds.page: Champion Certification
 full-width: true
 
--- champion.certificate-2: Adarsh Gupta
+-- certificate.certificate-2: Adarsh Gupta
 date: 6th October 2023
 avatar: $fastn-assets.files.assets.avatar.adarsh-gupta.png
 discord-link: https://discord.com/channels/793929082483769345/1164452136889876510

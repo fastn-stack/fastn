@@ -2,7 +2,7 @@
 -- import: fastn/processors as pr
 -- import: fastn.com/ftd-host/processor
 -- import: fastn.com/backend/env-vars
--- import: fifthtry.github.io/admonitions as cbox
+-- import: admonitions.fifthtry.site as cbox
 
 -- ds.page: GitHub User Details using the `user-details` processor
 
@@ -105,7 +105,7 @@ lang: ftd
 - Configure the following environment variables to let fastn know about your
   GitHub OAuth app:
 
--- env-vars.fastn-auth-variables:
+/-- env-vars.fastn-auth-variables:
 
 -- ds.markdown:
 

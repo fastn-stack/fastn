@@ -1,4 +1,4 @@
--- import: fifthtry.github.io/admonitions as cbox
+-- import: admonitions.fifthtry.site as cbox
 -- import: fastn/processors as pr
 
 -- ds.page: Basic UI
@@ -48,7 +48,7 @@ Here is the list of packages I have used:
 
 -- cbox.text-4: **admonitions**
 
-  fifthtry.github.io/admonitions
+  admonitions.fifthtry.site
 
 
 -- cbox.text-4:  **color-scheme**
@@ -64,7 +64,7 @@ box component I created earlier.
 
 -- cbox.text-4: **expander**
 
-fastn-community.github.io/expander
+expander.fifthtry.site
 
 
 

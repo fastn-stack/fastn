@@ -1,6 +1,6 @@
 -- import: fastn.com/assets
 -- import: fastn.com/blog/authors
--- import: fastn-community.github.io/doc-site/common
+-- import: doc-site.fifthtry.site/common
 
 -- common.post-meta meta: Witty-Hacks!
 published-on: April 07, 2023
@@ -38,7 +38,7 @@ explicit position that basically writing HTML sucks.
 Currently `fastn` is good for authoring static website, you can create
 component libraries or use the ones we have already created like
 [doc-site](https://fifthtry.github.io/doc-site/) or
-[bling](https://fastn-community.github.io/bling/). The component libraries you create
+[bling](https://bling.fifthtry.site/). The component libraries you create
 can be open sourced and added to [featured](/featured/) so people who can not
 create their own UI component can use yours to create their websites.
 

@@ -1,6 +1,6 @@
--- import: fastn-community.github.io/bling/chat
+-- import: bling.fifthtry.site/chat
 -- import: fastn.com/blog/authors
--- import: fastn-community.github.io/doc-site/common
+-- import: doc-site.fifthtry.site/common
 -- import: fastn.com/utils
 
 -- common.post-meta meta: Exploring the Search Feature in fastn.com

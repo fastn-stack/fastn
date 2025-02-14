@@ -1,9 +1,9 @@
--- import: fastn-stack.github.io/certificates/champion
+-- import: fastn.com/components/certificate
 
 -- ds.page: Champion Certification
 full-width: true
 
--- champion.certificate-2: Shantnu Fartode
+-- certificate.certificate-2: Shantnu Fartode
 date: 6th October 2023
 /avatar: $fastn-assets.files.assets.avatar.shantnu-fartode.png
 discord-link: https://discord.com/channels/793929082483769345/1164451594545414144

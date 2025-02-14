@@ -1,8 +1,8 @@
 -- import: fastn.com/blog/authors
--- import: fastn-community.github.io/doc-site/common
+-- import: doc-site.fifthtry.site/common
 -- import: fastn.com/utils
 -- import: fastn.com/content-library as lib
--- import: fifthtry.github.io/admonitions as cbox
+-- import: admonitions.fifthtry.site as cbox
 
 -- ds.page: Understanding Loops
 
@@ -103,6 +103,7 @@ download: index.ftd
 	color: $inherited.colors.text
 	
 	\;; This will print all the numbers from list odd-numbers
+
 	\-- ftd.integer: $number
 	for: $number in $odd-numbers ;; <hl>
 	color: $inherited.colors.text
@@ -110,12 +111,12 @@ download: index.ftd
 	-- ds.rendered.output:
 	
 		;; This will print all the items from list places
-		-- ftd.text: $place
+		/-- ftd.text: $place
 		for: $place in $places
 		color: $inherited.colors.text
 		
 		;; This will print all the numbers from list odd-numbers
-		-- ftd.integer: $number
+		/-- ftd.integer: $number
 		for: $number in $odd-numbers
 		color: $inherited.colors.text
 		
@@ -156,15 +157,16 @@ download: index.ftd
 	
 	-- ds.rendered.output:
 	
-		-- ftd.text: $place
+		/-- ftd.text: $place
 		$loop$: $places as $place
 		color: $inherited.colors.text
 		
-		-- ftd.integer: $number
+		/-- ftd.integer: $number
 		$loop$: $odd-numbers as $number
 		color: $inherited.colors.text
 		
 		;; This will print all the numbers from list odd-numbers
+
 	-- end: ds.rendered.output
 
 -- end: ds.rendered

@@ -1,11 +1,11 @@
--- import: fastn-community.github.io/winter-cs as winter-cs
--- import: fastn-community.github.io/dark-flame-cs as dark-flame-cs
--- import: fastn-community.github.io/forest-cs as forest-cs
--- import: fastn-community.github.io/saturated-sunset-cs as sunset-cs
--- import: fifthtry.github.io/button
+-- import: winter-cs.fifthtry.site as winter-cs
+-- import: dark-flame-cs.fifthtry.site as dark-flame-cs
+-- import: forest-cs.fifthtry.site as forest-cs
+-- import: saturated-sunset-cs.fifthtry.site as sunset-cs
+-- import: cta-button.fifthtry.site as button
 -- import: fastn.dev/assets
 -- import: fastn.com/blog/authors
--- import: fastn-community.github.io/doc-site/common
+-- import: doc-site.fifthtry.site/common
 
 -- common.post-meta meta: Showcase Color Scheme
 published-on: February 20, 2023
@@ -69,7 +69,7 @@ color, then, is inherited by `color-display`.
 -- ds.code: Using forest cs
 lang: ftd
 
-\-- import: fastn-community.github.io/forest-cs
+\-- import: forest-cs.fifthtry.site
 
 \-- ftd.column:
 colors: $forest-cs.main
@@ -207,7 +207,7 @@ We will then incorporate this component within a container and provide the
 -- ds.code: Using `my-color` component
 lang: ftd
 
-\-- import: fastn-community.github.io/saturated-sunset-cs as sunset-cs
+\-- import: saturated-sunset-cs.fifthtry.site as sunset-cs
 
 \-- ftd.column:
 colors: $sunset-cs.main
@@ -241,7 +241,7 @@ We can also apply another color scheme, such as `forest-cs`:
 -- ds.code: Using `my-color` component
 lang: ftd
 
-\-- import: fastn-community.github.io/forest-cs
+\-- import: forest-cs.fifthtry.site
 
 \-- ftd.column:
 colors: $forest-cs.main

@@ -1,5 +1,5 @@
 -- import: fastn.com/content-library as lib
--- import: fastn-community.github.io/banner
+-- import: site-banner.fifthtry.site as banner
 
 ;; Create rich user interfaces, integrate with
 ;; Domain specific language for writing content and creating rich user interfaces,
@@ -40,7 +40,7 @@ sidebar: false
 	
 		-- lib.feature-card.code:
 		
-		\-- import: fastn-community.github.io/bling/chat
+		\-- import: bling.fifthtry.site/chat
 		
 		\-- chat.message-left: Hello World! 😀
 		

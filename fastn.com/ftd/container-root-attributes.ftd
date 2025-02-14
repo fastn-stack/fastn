@@ -1,5 +1,5 @@
--- import: fastn-community.github.io/saturated-sunset-cs as cs
--- import: fastn-community.github.io/virgil-typography as typo
+-- import: saturated-sunset-cs.fifthtry.site as cs
+-- import: virgil-typography.fifthtry.site as typo
 
 -- ds.page: Container Root Attributes
 
@@ -60,7 +60,7 @@ type `ftd.color-scheme` and is optional.
 
 	-- ds.rendered.input:
 	
-	\-- import: fastn-community.github.io/saturated-sunset-cs as cs
+	\-- import: saturated-sunset-cs.fifthtry.site as cs
 	
 	\-- ftd.column:
 	colors: $cs.main
@@ -110,7 +110,7 @@ and is optional.
 
 	-- ds.rendered.input:
 	
-	\-- import: fastn-community.github.io/virgil-typography as typo
+	\-- import: virgil-typography.fifthtry.site as typo
 	
 	\-- ftd.column:
 	types: $typo.types

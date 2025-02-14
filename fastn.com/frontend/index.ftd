@@ -1,7 +1,7 @@
--- import: fastn-community.github.io/bling/quote
+-- import: bling.fifthtry.site/quote
 -- import: fastn.com/ftd as ftd-index
--- import: fastn-community.github.io/bling/chat
--- import: fastn-community.github.io/bling/assets
+-- import: bling.fifthtry.site/chat
+-- import: bling.fifthtry.site/assets
 
 -- ds.page: Building Frontend With `fastn`
 
@@ -73,7 +73,7 @@ Here is an example:
 These are not built-in components of fastn, but are using
 [open source component libraries](/featured/) built with fastn. Click here to
 view the
-[chat component](https://fastn-community.github.io/bling/chat/).
+[chat component](https://bling.fifthtry.site/chat/).
 
 Example of a little more complex component:
 
@@ -81,7 +81,7 @@ Example of a little more complex component:
 
 	-- ds.rendered.input:
 	
-	\-- import: fastn-community.github.io/bling/quote
+	\-- import: bling.fifthtry.site/quote
 	
 	\-- quote.rustic: Nandhini, Content Writer
 	
@@ -99,7 +99,7 @@ Example of a little more complex component:
 
 -- ds.markdown:
 
-Click here to view the [quote component](https://fastn-community.github.io/bling/quote/).
+Click here to view the [quote component](https://bling.fifthtry.site/quote/).
 
 Check out our rich library of readymade components including
 [doc sites](https://fastn.com/featured/ds/doc-site/),

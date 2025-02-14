@@ -13,7 +13,7 @@ your package, you'll need to import it into one of the module.
 
 For example, let's say you're using the `page` component from
 [`doc-site`](https://fastn-community.github.io/doc-site/) package and want to
-apply the [`forest-cs`](https://fastn-community.github.io/forest-cs) color scheme
+apply the [`forest-cs`](https://forest-cs.fifthtry.site) color scheme
 package on top of it. You first create a new module, let's say `my-ds.ftd`. Then
 you import `forest-cs` package module and then create a new component called
 `page` there.
@@ -23,7 +23,7 @@ Here's what your `my-ds.ftd` module would look like:
 -- ds.code: `my-ds.ftd`
 lang: ftd
 
-\-- import: fastn-community.github.io/forest-cs
+\-- import: forest-cs.fifthtry.site
 \-- import: fastn-community.github.io/doc-site as ds
 
 \-- component page:
