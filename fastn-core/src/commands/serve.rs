@@ -103,11 +103,32 @@ async fn serve_file(
 
                 for (header_name, header_value) in headers {
                     let header_name =
-                        actix_web::http::header::HeaderName::from_str(header_name.as_str())
-                            .unwrap(); // Todo: Remove unwrap()
+                        match actix_web::http::header::HeaderName::from_str(header_name.as_str()) {
+                            Ok(v) => v,
+                            Err(e) => {
+                                tracing::error!(
+                                    msg = "fastn-Error",
+                                    path = path.as_str(),
+                                    error = e.to_string()
+                                );
+                                continue;
+                            }
+                        };
+
                     let header_value =
-                        actix_web::http::header::HeaderValue::from_str(header_value.as_str())
-                            .unwrap(); // Todo: Remove unwrap()
+                        match actix_web::http::header::HeaderValue::from_str(header_value.as_str())
+                        {
+                            Ok(v) => v,
+                            Err(e) => {
+                                tracing::error!(
+                                    msg = "fastn-Error",
+                                    path = path.as_str(),
+                                    error = e.to_string()
+                                );
+                                continue;
+                            }
+                        };
+
                     response.headers_mut().insert(header_name, header_value);
                 }
 
