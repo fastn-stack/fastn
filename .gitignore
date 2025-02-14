@@ -11,6 +11,8 @@ integration-tests/test.wasm
 # nix symlink to the build output
 result
 
+fastn.com/.packages
+
 .direnv
 .envrc
 
