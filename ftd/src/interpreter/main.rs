@@ -1402,11 +1402,11 @@ impl Document {
                 Some(fastn_resolved::Value::KwArgs { arguments }) => {
                     let mut headers: fastn_resolved::Map<String> = Default::default();
                     for (name, value) in arguments {
-                        if name.starts_with("header-") {
+                        if let Some(name) = name.strip_prefix("header-") {
                             if let Some(value) =
                                 value.resolve(&tdoc, v.line_number)?.to_serde_value(&tdoc)?
                             {
-                                headers.insert(name, value.to_string());
+                                headers.insert(name.to_string(), value.to_string());
                             }
                         }
                     }
