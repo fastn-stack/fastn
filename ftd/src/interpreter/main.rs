@@ -1350,7 +1350,7 @@ impl Document {
     }
 
     // Returns (response, content-type, status, headers)
-    #[allow(clippy::type_complexity)]
+    #[expect(clippy::type_complexity)]
     pub fn get_response(
         &self,
     ) -> ftd::interpreter::Result<Option<(String, String, u16, fastn_resolved::Map<String>)>> {
