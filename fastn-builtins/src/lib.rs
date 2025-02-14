@@ -11716,13 +11716,25 @@ pub fn response_function() -> fastn_resolved::ComponentDefinition {
                     .into_kind_data()
                     .caption_or_body(),
             ),
-            fastn_resolved::Argument::default(
+            fastn_resolved::Argument::default_with_value(
                 "content-type",
                 fastn_resolved::Kind::string().into_kind_data(),
+                fastn_resolved::PropertyValue::Value {
+                    value: fastn_resolved::Value::String {
+                        text: "text/html".to_string(),
+                    },
+                    is_mutable: false,
+                    line_number: 0,
+                },
             ),
-            fastn_resolved::Argument::default(
+            fastn_resolved::Argument::default_with_value(
                 "status-code",
                 fastn_resolved::Kind::integer().into_kind_data().optional(),
+                fastn_resolved::PropertyValue::Value {
+                    value: fastn_resolved::Value::Integer { value: 200 },
+                    is_mutable: false,
+                    line_number: 0,
+                },
             ),
             fastn_resolved::Argument::default(
                 "data",

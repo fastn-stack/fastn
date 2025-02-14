@@ -151,7 +151,7 @@ fn p(
         assert_eq!(&t, &json_str, "Expected JSON: {}", json_str);
         return;
     }
-    if let Some((val, _, _)) = i.get_response().unwrap() {
+    if let Some((val, _, _, _)) = i.get_response().unwrap() {
         if fix || manual || script {
             std::fs::write(file_location, val).unwrap();
             return;

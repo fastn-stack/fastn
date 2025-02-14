@@ -1,4 +1,3 @@
-use fastn_resolved::PropertyValue;
 use ftd::interpreter::expression::ExpressionExt;
 use ftd::interpreter::things::component::ComponentDefinitionExt;
 use ftd::interpreter::things::or_type::OrTypeExt;
@@ -1353,7 +1352,7 @@ impl Document {
     // Returns (response, content-type, status, headers)
     pub fn get_response(
         &self,
-    ) -> ftd::interpreter::Result<Option<(String, String, i64, fastn_resolved::Map<String>)>> {
+    ) -> ftd::interpreter::Result<Option<(String, String, u16, fastn_resolved::Map<String>)>> {
         use ftd::interpreter::{PropertyValueExt, ValueExt};
 
         let tdoc = self.tdoc();
@@ -1390,6 +1389,14 @@ impl Document {
                 None => 200,
             };
 
+            if !(100..1000).contains(&status_code) {
+                return ftd::interpreter::utils::e2(
+                    "status code must be between 100 and 999",
+                    self.name.as_str(),
+                    0,
+                );
+            }
+
             let headers = match v.get_interpreter_value_of_argument("data", &tdoc)? {
                 Some(fastn_resolved::Value::KwArgs { arguments }) => {
                     let mut headers: fastn_resolved::Map<String> = Default::default();
@@ -1414,9 +1421,7 @@ impl Document {
                 }
             };
 
-            // TODO: extract headers
-
-            return Ok(Some((response, content_type, status_code, headers)));
+            return Ok(Some((response, content_type, status_code as u16, headers)));
         }
 
         Ok(None)

@@ -464,7 +464,8 @@ pub(crate) async fn read_ftd_2022(
         return Ok(FTDResult::Response {
             response: response.into(),
             content_type: content_type.parse().unwrap(), // TODO: Remove unwrap()
-            status_code: actix_web::http::StatusCode::from_u16(status_code as u16).unwrap(), // TODO: Remove unwrap()
+            // unwrap ok as we already checked if status code < 1000 in get_response()
+            status_code: actix_web::http::StatusCode::from_u16(status_code).unwrap(),
             headers,
         });
     }
@@ -544,7 +545,8 @@ pub(crate) async fn read_ftd_2023(
         return Ok(FTDResult::Response {
             response: response.into(),
             content_type: content_type.parse().unwrap(), // TODO: Remove unwrap()
-            status_code: actix_web::http::StatusCode::from_u16(status_code as u16).unwrap(), // TODO: Remove unwrap()
+            // unwrap ok as we already checked if status code < 1000 in get_response()
+            status_code: actix_web::http::StatusCode::from_u16(status_code).unwrap(),
             headers,
         });
     }

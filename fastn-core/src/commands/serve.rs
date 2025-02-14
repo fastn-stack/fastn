@@ -91,13 +91,13 @@ async fn serve_file(
             }
             fastn_core::package::package_doc::FTDResult::Response {
                 response,
-                status_code, // Todo: status_code
+                status_code,
                 content_type,
-                headers, // Todo: headers
+                headers,
             } => {
                 use std::str::FromStr;
 
-                let mut builder = actix_web::HttpResponseBuilder::new(status_code)
+                let mut response = actix_web::HttpResponseBuilder::new(status_code)
                     .content_type(content_type)
                     .body(response);
 
@@ -108,10 +108,10 @@ async fn serve_file(
                     let header_value =
                         actix_web::http::header::HeaderValue::from_str(header_value.as_str())
                             .unwrap(); // Todo: Remove unwrap()
-                    builder.headers_mut().insert(header_name, header_value);
+                    response.headers_mut().insert(header_name, header_value);
                 }
 
-                builder
+                response
             }
             fastn_core::package::package_doc::FTDResult::Redirect { url, code } => {
                 if Some(mime_guess::mime::APPLICATION_JSON) == config.request.content_type() {
