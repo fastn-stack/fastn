@@ -327,9 +327,9 @@ pub enum FTDResult {
     Json(Vec<u8>),
     Response {
         response: Vec<u8>,
-        status_code: i64,
+        status_code: actix_web::http::StatusCode,
         content_type: mime_guess::Mime,
-        headers: fastn_resolved::Map<fastn_resolved::PropertyValue>,
+        headers: fastn_resolved::Map<String>,
     },
 }
 
@@ -460,12 +460,12 @@ pub(crate) async fn read_ftd_2022(
         return Ok(FTDResult::Redirect { url, code });
     }
 
-    if let Some((response, content_type, status_code)) = main_ftd_doc.get_response()? {
+    if let Some((response, content_type, status_code, headers)) = main_ftd_doc.get_response()? {
         return Ok(FTDResult::Response {
             response: response.into(),
             content_type: content_type.parse().unwrap(), // TODO: Remove unwrap()
-            status_code,
-            headers: Default::default(),
+            status_code: actix_web::http::StatusCode::from_u16(status_code as u16).unwrap(), // TODO: Remove unwrap()
+            headers,
         });
     }
 
@@ -540,12 +540,12 @@ pub(crate) async fn read_ftd_2023(
     if let Some((url, code)) = main_ftd_doc.get_redirect()? {
         return Ok(FTDResult::Redirect { url, code });
     }
-    if let Some((response, content_type, status_code)) = main_ftd_doc.get_response()? {
+    if let Some((response, content_type, status_code, headers)) = main_ftd_doc.get_response()? {
         return Ok(FTDResult::Response {
             response: response.into(),
             content_type: content_type.parse().unwrap(), // TODO: Remove unwrap()
-            status_code,
-            headers: Default::default(),
+            status_code: actix_web::http::StatusCode::from_u16(status_code as u16).unwrap(), // TODO: Remove unwrap()
+            headers,
         });
     }
     if let Some(data) = main_ftd_doc.get_json()? {

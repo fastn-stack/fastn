@@ -1,3 +1,4 @@
+use fastn_resolved::PropertyValue;
 use ftd::interpreter::expression::ExpressionExt;
 use ftd::interpreter::things::component::ComponentDefinitionExt;
 use ftd::interpreter::things::or_type::OrTypeExt;
@@ -1349,8 +1350,11 @@ impl Document {
         Ok(None)
     }
 
-    pub fn get_response(&self) -> ftd::interpreter::Result<Option<(String, String, i64)>> {
-        use ftd::interpreter::ValueExt;
+    // Returns (response, content-type, status, headers)
+    pub fn get_response(
+        &self,
+    ) -> ftd::interpreter::Result<Option<(String, String, i64, fastn_resolved::Map<String>)>> {
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
 
         let tdoc = self.tdoc();
 
@@ -1360,35 +1364,59 @@ impl Document {
             }
 
             let response = match v.get_interpreter_value_of_argument("response", &tdoc)? {
-                Some(v) => remove_escape(v.string(self.name.as_str(), 0)?.as_str()),
+                Some(val) => remove_escape(val.string(self.name.as_str(), v.line_number)?.as_str()),
                 None => {
                     return ftd::interpreter::utils::e2(
                         "response not found in ftd.response",
                         self.name.as_str(),
-                        0,
+                        v.line_number,
                     );
                 }
             };
 
             let content_type = match v.get_interpreter_value_of_argument("content-type", &tdoc)? {
-                Some(v) => v.string(self.name.as_str(), 0)?,
+                Some(val) => val.string(self.name.as_str(), v.line_number)?,
                 None => {
                     return ftd::interpreter::utils::e2(
                         "content-type not found in ftd.response",
                         self.name.as_str(),
-                        0,
+                        v.line_number,
                     );
                 }
             };
 
             let status_code = match v.get_interpreter_value_of_argument("status-code", &tdoc)? {
-                Some(v) => v.integer(self.name.as_str(), 0)?,
+                Some(val) => val.integer(self.name.as_str(), v.line_number)?,
                 None => 200,
+            };
+
+            let headers = match v.get_interpreter_value_of_argument("data", &tdoc)? {
+                Some(fastn_resolved::Value::KwArgs { arguments }) => {
+                    let mut headers: fastn_resolved::Map<String> = Default::default();
+                    for (name, value) in arguments {
+                        if name.starts_with("header-") {
+                            if let Some(value) =
+                                value.resolve(&tdoc, v.line_number)?.to_serde_value(&tdoc)?
+                            {
+                                headers.insert(name, value.to_string());
+                            }
+                        }
+                    }
+                    headers
+                }
+                Some(_) => unreachable!("compiler must have verified this"),
+                None => {
+                    return ftd::interpreter::utils::e2(
+                        "url not found in redirect",
+                        self.name.as_str(),
+                        v.line_number,
+                    )
+                }
             };
 
             // TODO: extract headers
 
-            return Ok(Some((response, content_type, status_code)));
+            return Ok(Some((response, content_type, status_code, headers)));
         }
 
         Ok(None)
