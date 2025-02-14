@@ -1,9 +1,9 @@
 -- import: fastn.com/featured as ft-ui
--- import: fastn-community.github.io/spectrum-ds/common
--- import: fastn-community.github.io/spectrum-ds as ds
+-- import: spectrum-ds.fifthtry.site/common
+-- import: spectrum-ds.fifthtry.site as ds
 -- import: fastn.com/content-library as footer
--- import: fastn-community.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-typography as typo
+-- import: dark-flame-cs.fifthtry.site
+-- import: fastn-typography.fifthtry.site as typo
 -- import: fastn.com/featured/contributors/developers/shaheen-senpai
 -- import: fastn.com/featured/contributors/developers/saurabh-lohiya
 -- import: fastn.com/featured/contributors/developers/priyanka-yadav

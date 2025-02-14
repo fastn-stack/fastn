@@ -1,9 +1,9 @@
--- import: fastn-stack.github.io/certificates/champion
+-- import: fastn.com/components/certificate
 
 -- ds.page: Champion Certification
 full-width: true
 
--- champion.certificate-2: Rutuja Kapate
+-- certificate.certificate-2: Rutuja Kapate
 date: 6th October 2023
 avatar: $fastn-assets.files.assets.avatar.rutuja.jpeg
 discord-link: https://discord.com/channels/793929082483769345/1159790128370307133

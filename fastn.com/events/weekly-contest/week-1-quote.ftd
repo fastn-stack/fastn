@@ -1,5 +1,5 @@
 -- import: fastn.com/blog/authors
--- import: fastn-community.github.io/doc-site/common
+-- import: doc-site.fifthtry.site/common
 -- import: fastn.com/utils
 
 -- common.post-meta meta: Week 1 Contest - Quote
@@ -25,7 +25,7 @@ To kickstart your journey, here are some helpful resources:
 [here](https://fastn.com/featured/components/quotes/).
 
 - **User Manual**: A step-by-step guidance on building the quote component.
-[Access User Manual](https://fastn-community.github.io/bling/quote/)
+[Access User Manual](https://bling.fifthtry.site/quote/)
 
 
 -- ds.h1: Ready to accept the challenge?

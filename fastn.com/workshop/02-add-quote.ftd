@@ -1,4 +1,4 @@
--- import: fifthtry.github.io/admonitions as cbox
+-- import: admonitions.fifthtry.site as cbox
 
 -- ds.page: Add quote - `fastn` Workshop
 
@@ -22,7 +22,7 @@ Before we start with the second step. Make sure to close the server created for
 -- ds.h1: Second part
 
 In the second part, we will learn how to add a
-[`quote`](https://fastn-community.github.io/bling/quote/) component that is
+[`quote`](https://bling.fifthtry.site/quote/) component that is
 [featured](/featured/) in our official website.
 
 `Quote` is a component of `bling` dependency package.

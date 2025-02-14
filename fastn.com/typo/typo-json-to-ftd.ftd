@@ -1,6 +1,6 @@
--- import: fifthtry.github.io/fastn-typography as fastn-typo
--- import: fastn-stack.github.io/fastn-js/assets as js-assets
--- import: fastn-stack.github.io/fastn-js/typo-exporter as t
+-- import: fastn-typography.fifthtry.site as fastn-typo
+-- import: fastn.com/assets as js-assets
+-- import: fastn.com/components/typo-exporter as t
 -- import: fastn/processors as pr
 
 -- optional string $code:
@@ -39,9 +39,9 @@ Below mentioned code shows how we can generate equivalent `fastn` code for
 
 	-- ds.rendered.input:
 	
-	\-- import: fastn-stack.github.io/fastn-js/assets as js-assets
+	\-- import: fastn.com/assets as js-assets
 	\-- import: fastn-community.github.io/doc-site as ds
-	\-- import: fifthtry.github.io/fastn-typography as fastn-typo
+	\-- import: fastn-typography.fifthtry.site as fastn-typo
 	
 	\-- optional string $code:
 	\-- optional string $formatted-code:
@@ -55,7 +55,7 @@ Below mentioned code shows how we can generate equivalent `fastn` code for
 	string json:
 	string $store_at:
 	string $formatted_string:
-	js: [$js-assets.files.typo.js]
+	js: [$js-assets.files.js.typo.js]
 	
 	value = typo_to_ftd(json);
 	store_at = value[0];

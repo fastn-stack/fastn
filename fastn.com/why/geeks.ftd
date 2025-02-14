@@ -1313,7 +1313,7 @@ adding it as a dependency, and assigning it at the top level:
 -- ds.code:
 lang: ftd
 
-\-- import: fastn-community.github.io/dark-flame-cs
+\-- import: dark-flame-cs.fifthtry.site
 \-- import: fifthtry.github.io/fastn-io-typography as ft-typography
 
 \;; the top level document is usually `ftd.document`

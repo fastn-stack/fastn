@@ -173,7 +173,7 @@ lang: ftd
 \-- obj:
 $loop$: $uis as $obj
 
--- ds.output:
+/-- ds.output:
 
 	-- obj:
 	$loop$: $uis as $obj

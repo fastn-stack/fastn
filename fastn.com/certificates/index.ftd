@@ -1,4 +1,4 @@
--- import: fastn-stack.github.io/certificates
+-- import: fastn.com/components/certificates
 exposing: cert-label
 
 -- ds.page: fastn Champions

@@ -1,4 +1,4 @@
--- import: fastn-community.github.io/bling/quote
+-- import: bling.fifthtry.site/quote
 -- import: fastn.com/ftd as ftd-index
 
 -- ds.page: `fastn` - Full-stack Web Development Made Easy
@@ -69,7 +69,7 @@ Learn more about [`fastn` Programming Language](/ftd/).
 lang: ftd
 
 
-\-- import: fastn-community.github.io/bling/quote
+\-- import: bling.fifthtry.site/quote
 
 \-- quote.charcoal: Amit Upadhyay
 label: Creator of `fastn`

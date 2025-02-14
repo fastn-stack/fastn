@@ -1,4 +1,4 @@
--- import: fastn-stack.github.io/fastn-js/utils as js-utils
+-- import: fastn.com/components/utils as js-utils
 
 -- ds.page:
 
