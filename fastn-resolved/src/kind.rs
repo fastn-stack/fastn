@@ -30,6 +30,7 @@ pub enum Kind {
     Void,
     Module,
     KwArgs,
+    Template,
 }
 
 impl Kind {
@@ -49,6 +50,7 @@ impl Kind {
             Kind::KwArgs => "kw-args".to_string(),
             Kind::UI { name, .. } => name.clone().unwrap_or("record".to_string()),
             Kind::Record { name } => name.clone(),
+            Kind::Template => "template".to_string(),
         }
     }
 
@@ -59,6 +61,8 @@ impl Kind {
             (Self::Optional { kind, .. }, _) => kind.is_same_as(other),
             (_, Self::Optional { kind: other, .. }) => self.is_same_as(other),
             (Self::List { kind: k1 }, Self::List { kind: k2 }) => k1.is_same_as(k2),
+            (Self::Template, Self::String) => true,
+            (Self::String, Self::Template) => true,
             _ => self.eq(other),
         }
     }
@@ -89,6 +93,10 @@ impl Kind {
 
     pub fn kwargs() -> Kind {
         Kind::KwArgs
+    }
+
+    pub fn template() -> Kind {
+        Kind::Template
     }
 
     pub fn ui() -> Kind {
@@ -248,6 +256,10 @@ impl Kind {
 
     pub fn is_boolean(&self) -> bool {
         matches!(self, Kind::Boolean { .. })
+    }
+
+    pub fn is_template(&self) -> bool {
+        matches!(self, Kind::Template { .. })
     }
 
     pub fn is_decimal(&self) -> bool {

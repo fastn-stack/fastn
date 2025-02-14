@@ -684,15 +684,18 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                         loop_object_name_and_kind,
                     )?
                 }
-                fastn_resolved::Kind::String => ftd::interpreter::StateWithThing::new_thing(
-                    fastn_resolved::PropertyValue::Value {
-                        value: fastn_resolved::Value::String {
-                            text: value.string(doc.name)?.to_string(),
+                // Todo: For Template value has variable interpolation. Not just string
+                fastn_resolved::Kind::String | fastn_resolved::Kind::Template => {
+                    ftd::interpreter::StateWithThing::new_thing(
+                        fastn_resolved::PropertyValue::Value {
+                            value: fastn_resolved::Value::String {
+                                text: value.string(doc.name)?.to_string(),
+                            },
+                            is_mutable,
+                            line_number: value.line_number(),
                         },
-                        is_mutable,
-                        line_number: value.line_number(),
-                    },
-                ),
+                    )
+                }
                 fastn_resolved::Kind::Integer => ftd::interpreter::StateWithThing::new_thing(
                     fastn_resolved::PropertyValue::Value {
                         value: fastn_resolved::Value::Integer {
@@ -1805,7 +1808,9 @@ impl ValueExt for fastn_resolved::Value {
         line_number: usize,
     ) -> ftd::interpreter::Result<fastn_resolved::Value> {
         Ok(match value {
-            fastn_resolved::evalexpr::Value::String(text) if expected_kind.is_string() => {
+            fastn_resolved::evalexpr::Value::String(text)
+                if expected_kind.is_string() || expected_kind.is_template() =>
+            {
                 fastn_resolved::Value::String { text }
             }
             fastn_resolved::evalexpr::Value::Float(value) if expected_kind.is_decimal() => {

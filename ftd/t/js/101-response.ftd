@@ -1,0 +1,13 @@
+-- template create-account-confirmation-html(link, name):
+string link:
+string name:
+
+Hi $name,
+
+Some <b>yo</b>, <a href="$link">Confirm account</a>
+
+
+-- string html: $create-account-confirmation-html(link=/some/link/, name=John)
+
+-- ftd.response: $html
+content-type: text/html

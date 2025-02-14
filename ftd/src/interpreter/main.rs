@@ -1349,6 +1349,86 @@ impl Document {
         Ok(None)
     }
 
+    // Returns (response, content-type, status, headers)
+    #[expect(clippy::type_complexity)]
+    pub fn get_response(
+        &self,
+    ) -> ftd::interpreter::Result<Option<(String, String, u16, fastn_resolved::Map<String>)>> {
+        use ftd::interpreter::{PropertyValueExt, ValueExt};
+
+        let tdoc = self.tdoc();
+
+        for v in self.get_instructions("ftd#response") {
+            if !is_visible(self, &v)? {
+                continue;
+            }
+
+            let response = match v.get_interpreter_value_of_argument("response", &tdoc)? {
+                Some(val) => remove_escape(val.string(self.name.as_str(), v.line_number)?.as_str()),
+                None => {
+                    return ftd::interpreter::utils::e2(
+                        "response not found in ftd.response",
+                        self.name.as_str(),
+                        v.line_number,
+                    );
+                }
+            };
+
+            let content_type = match v.get_interpreter_value_of_argument("content-type", &tdoc)? {
+                Some(val) => val.string(self.name.as_str(), v.line_number)?,
+                None => {
+                    return ftd::interpreter::utils::e2(
+                        "content-type not found in ftd.response",
+                        self.name.as_str(),
+                        v.line_number,
+                    );
+                }
+            };
+
+            let status_code = match v.get_interpreter_value_of_argument("status-code", &tdoc)? {
+                Some(val) => val.integer(self.name.as_str(), v.line_number)?,
+                None => 200,
+            };
+
+            if !(100..1000).contains(&status_code) {
+                return ftd::interpreter::utils::e2(
+                    "status code must be between 100 and 999",
+                    self.name.as_str(),
+                    0,
+                );
+            }
+
+            let headers = match v.get_interpreter_value_of_argument("data", &tdoc)? {
+                Some(fastn_resolved::Value::KwArgs { arguments }) => {
+                    let mut headers: fastn_resolved::Map<String> = Default::default();
+                    for (name, value) in arguments {
+                        if let Some(name) = name.strip_prefix("header-") {
+                            if let Some(value) = value
+                                .resolve(&tdoc, v.line_number)?
+                                .to_json_string(&tdoc, false)?
+                            {
+                                headers.insert(name.to_string(), value.to_string());
+                            }
+                        }
+                    }
+                    headers
+                }
+                Some(_) => unreachable!("compiler must have verified this"),
+                None => {
+                    return ftd::interpreter::utils::e2(
+                        "url not found in redirect",
+                        self.name.as_str(),
+                        v.line_number,
+                    )
+                }
+            };
+
+            return Ok(Some((response, content_type, status_code as u16, headers)));
+        }
+
+        Ok(None)
+    }
+
     pub fn get_redirect(&self) -> ftd::interpreter::Result<Option<(String, u16)>> {
         match self.get_redirect_with_code("ftd#permanent-redirect")? {
             Some(v) => Ok(Some((v, 308))),
@@ -1540,4 +1620,37 @@ fn is_visible(
         None => Ok(true),
         Some(condition) => Ok(condition.eval(&doc.tdoc())?),
     }
+}
+
+fn remove_escape(input: &str) -> String {
+    let mut result = String::new();
+    let mut chars = input.chars().peekable();
+
+    while let Some(c) = chars.next() {
+        if c == '\\' {
+            if let Some(&next) = chars.peek() {
+                match next {
+                    '\\' => {
+                        result.push('\\');
+                        chars.next();
+                    }
+                    'n' => {
+                        result.push('\n');
+                        chars.next();
+                    }
+                    '"' => {
+                        result.push('"');
+                        chars.next();
+                    }
+                    _ => result.push(c), // Keep the backslash if not a recognized escape sequence
+                }
+            } else {
+                result.push(c);
+            }
+        } else {
+            result.push(c);
+        }
+    }
+
+    result
 }

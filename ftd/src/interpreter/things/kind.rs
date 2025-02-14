@@ -94,6 +94,7 @@ impl KindDataExt for fastn_resolved::KindData {
             "ftd.ui" => fastn_resolved::Kind::ui(),
             "module" => fastn_resolved::Kind::module(),
             "kw-args" => fastn_resolved::Kind::kwargs(),
+            "template" => fastn_resolved::Kind::template(),
             "children" => {
                 if let Some(modifier) = var_kind.modifier {
                     return ftd::interpreter::utils::e2(

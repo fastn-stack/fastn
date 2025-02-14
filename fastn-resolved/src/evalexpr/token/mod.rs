@@ -230,6 +230,7 @@ fn parse_escape_sequence<Iter: Iterator<Item = char>>(iter: &mut Iter) -> Evalex
     match iter.next() {
         Some('"') => Ok('"'),
         Some('\\') => Ok('\\'),
+        Some('n') => Ok('n'),
         Some(c) => Err(EvalexprError::IllegalEscapeSequence(format!("\\{}", c))),
         None => Err(EvalexprError::IllegalEscapeSequence("\\".to_string())),
     }
