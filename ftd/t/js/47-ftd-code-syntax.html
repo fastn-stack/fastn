@@ -2,27 +2,34 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    
+
     <meta content="fastn" name="generator">
-    
-    
+
+
     <script>
         let __fastn_package_name__ = "foo";
     </script>
 
     <script src="fastn-js.js"></script>
-    
+
 
     <style>
-       
+
     </style>
 </head>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-<body data-id="1"><div data-id="2" class="ft_column __w-1 __h-2"><div data-id="3" class="ft_row __w-3 __pt-4 __pb-5 __jc-6"><pre data-id="4" class="language-ftd fastn-theme-light"><code data-id="5" class="language-ftd fastn-theme-light">/-- ds.code:
+<meta name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<body data-id="1">
+<div data-id="2" class="ft_column __w-1 __h-2">
+    <div data-id="3" class="ft_row __w-3 __pt-4 __pb-5 __jc-6"><pre data-id="4"
+                                                                    class="language-ftd fastn-theme-light"><code
+            data-id="5" class="language-ftd fastn-theme-light">/-- ds.code:
 lang: ftd
 
 fooo
-</code></pre><pre data-id="6" class="language-ftd fastn-theme-light"><code data-id="7" class="language-ftd fastn-theme-light">;; Section Comment
+</code></pre>
+        <pre data-id="6" class="language-ftd fastn-theme-light"><code
+                data-id="7" class="language-ftd fastn-theme-light">;; Section Comment
 
 /-- ftd.text:
 color: red
@@ -33,7 +40,7 @@ This is body part of ftd.text
 
 -- ftd.text: Hello ;; This is inline comment
 
--- import: fastn-community.github.io/bling/quote
+-- import: bling.fifthtry.site/quote
 
 ;; Component invocation
 
@@ -96,7 +103,9 @@ color: $inherited.colors.text-strong
 
 -- ui:
 $loop$: $foo as $ui
-</code></pre><pre data-id="8" class="language-ftd fastn-theme-dark"><code data-id="9" class="language-ftd fastn-theme-dark">;; Section Comment
+</code></pre>
+        <pre data-id="8" class="language-ftd fastn-theme-dark"><code data-id="9"
+                                                                     class="language-ftd fastn-theme-dark">;; Section Comment
 
 /-- ftd.text:
 color: red
@@ -107,7 +116,7 @@ This is body part of ftd.text
 
 -- ftd.text: Hello ;; This is inline comment
 
--- import: fastn-community.github.io/bling/quote
+-- import: bling.fifthtry.site/quote
 
 ;; Component invocation
 
@@ -170,107 +179,126 @@ color: $inherited.colors.text-strong
 
 -- ui:
 $loop$: $foo as $ui
-</code></pre></div></div></body><style id="styles">
-    .__w-1 { width: 100%; }
-	.__h-2 { height: 100%; }
-	.__w-3 { width: 100%; }
-	.__pt-4 { padding-top: 50px; }
-	.__pb-5 { padding-bottom: 50px; }
-	.__jc-6 { justify-content: space-around; }
-    </style>
-<script>
-    (function() {
-        let main = function (parent) {
-  let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "foo";
-  try {
-    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
-    parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(50), inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceAround, inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
-      let rooti0 = foo__debug_test(root, inherited);
-    },
-    function (root, inherited) {
-      let rooti0 = foo__ftd_code_test(root, inherited);
-    },
-    function (root, inherited) {
-      let rooti0 = foo__ftd_code_test(root, inherited, {
-        theme: "fastn-theme.dark"
-      });
+</code></pre>
+    </div>
+</div>
+</body>
+<style id="styles">
+    .__w-1 {
+        width: 100%;
     }
-    ]), inherited);
-  } finally {
-    __fastn_package_name__ = __fastn_super_package_name__;
-  }
-}
-global["main"] = main;
-let foo__debug_test = function (parent, inherited, args)
-{
-  let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "foo";
-  try {
-    let __args__ = {
-      theme: "fastn-theme.light",
-    };
-    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
-    __args__ = fastn_utils.getArgs(__args__, args);
-    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Code);
-    parenti0.setProperty(fastn_dom.PropertyKind.Code, "/-- ds.code:\nlang: ftd\n\nfooo", inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.CodeLanguage, "ftd", inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.CodeTheme, __args__.theme, inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.CodeShowLineNumber, false, inherited);
-    return parenti0;
-  } finally {
-    __fastn_package_name__ = __fastn_super_package_name__;
-  }
-}
-global["foo__debug_test"] = foo__debug_test;
-let foo__ftd_code_test = function (parent, inherited, args)
-{
-  let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "foo";
-  try {
-    let __args__ = {
-      theme: "fastn-theme.light",
-    };
-    inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
-    __args__ = fastn_utils.getArgs(__args__, args);
-    let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Code);
-    parenti0.setProperty(fastn_dom.PropertyKind.Code, ";; Section Comment\n\n\/-- ftd.text:\ncolor: red\n\nThis is body part of ftd.text\n\n;; Inline comment as line comment\n\n-- ftd.text: Hello ;; This is inline comment\n\n-- import: fastn-community.github.io/bling/quote\n\n;; Component invocation\n\n-- quote.charcoal: Amit Upadhyay\nlabel: Creator of `fastn`\navatar: $fastn-assets.files.images.amitu.jpg\nlogo: $fastn-assets.files.images.logo-fifthtry.svg\n\nThe web has lost some of the exuberance from the\nearly 2000s, and it makes me a little sad.\n\n;; Component Definition\n\n-- component toggle-text:\nboolean $current: false\ncaption title:\n\n-- ftd.text: $toggle-text.title\nalign-self: center\ntext-align: center\ncolor if { toggle-text.current }: #D42D42\ncolor: $inherited.colors.cta-primary.text\nbackground.solid: $inherited.colors.cta-primary.base\nborder-radius.px: 5\nborder-radius.px: 5\n$on-click$: $ftd.toggle($a = $toggle-text.current)\n\n-- end: toggle-text\n\n;; Record definition\n\n-- record Person:\ncaption name:\nbody description:\nstring id:\ninteger age:\n\n;; Variable definition\n\n-- integer key: 1\n\n-- ftd.text: Key is one\nif: { key == 1 }\ncolor: red\npadding.px: 10\n\n;; List and list initialization\n\n-- ftd.ui list foo:\n\n-- foo:\n\n-- ftd.text: Hello World!\ncolor: $inherited.colors.text-strong\n\n-- ftd.text: I love `fastn`.\ncolor: $inherited.colors.text-strong\n\n-- end: foo\n\n-- ui:\n$loop$: $foo as $ui", inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.CodeLanguage, "ftd", inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.CodeTheme, __args__.theme, inherited);
-    parenti0.setProperty(fastn_dom.PropertyKind.CodeShowLineNumber, false, inherited);
-    return parenti0;
-  } finally {
-    __fastn_package_name__ = __fastn_super_package_name__;
-  }
-}
-global["foo__ftd_code_test"] = foo__ftd_code_test;
-fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
-fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
-fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
-fastn_dom.codeData.availableThemes["dracula-theme"] = "../../theme_css/dracula-theme.css";
-fastn_dom.codeData.availableThemes["duotone-theme.dark"] = "../../theme_css/duotone-theme.dark.css";
-fastn_dom.codeData.availableThemes["duotone-theme.earth"] = "../../theme_css/duotone-theme.earth.css";
-fastn_dom.codeData.availableThemes["duotone-theme.forest"] = "../../theme_css/duotone-theme.forest.css";
-fastn_dom.codeData.availableThemes["duotone-theme.light"] = "../../theme_css/duotone-theme.light.css";
-fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "../../theme_css/duotone-theme.sea.css";
-fastn_dom.codeData.availableThemes["duotone-theme.space"] = "../../theme_css/duotone-theme.space.css";
-fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
-fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
-fastn_dom.codeData.availableThemes["fire.light"] = "../../theme_css/fire.light.css";
-fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "../../theme_css/gruvbox-theme.dark.css";
-fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "../../theme_css/gruvbox-theme.light.css";
-fastn_dom.codeData.availableThemes["laserwave-theme"] = "../../theme_css/laserwave-theme.css";
-fastn_dom.codeData.availableThemes["material-theme.dark"] = "../../theme_css/material-theme.dark.css";
-fastn_dom.codeData.availableThemes["material-theme.light"] = "../../theme_css/material-theme.light.css";
-fastn_dom.codeData.availableThemes["nightowl-theme"] = "../../theme_css/nightowl-theme.css";
-fastn_dom.codeData.availableThemes["one-theme.dark"] = "../../theme_css/one-theme.dark.css";
-fastn_dom.codeData.availableThemes["one-theme.light"] = "../../theme_css/one-theme.light.css";
-fastn_dom.codeData.availableThemes["vs-theme.dark"] = "../../theme_css/vs-theme.dark.css";
-fastn_dom.codeData.availableThemes["vs-theme.light"] = "../../theme_css/vs-theme.light.css";
-fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-theme.css";
+
+    .__h-2 {
+        height: 100%;
+    }
+
+    .__w-3 {
+        width: 100%;
+    }
+
+    .__pt-4 {
+        padding-top: 50px;
+    }
+
+    .__pb-5 {
+        padding-bottom: 50px;
+    }
+
+    .__jc-6 {
+        justify-content: space-around;
+    }
+</style>
+<script>
+    (function () {
+        let main = function (parent) {
+            let __fastn_super_package_name__ = __fastn_package_name__;
+            __fastn_package_name__ = "foo";
+            try {
+                let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Row);
+                parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
+                parenti0.setProperty(fastn_dom.PropertyKind.PaddingVertical, fastn_dom.Length.Px(50), inherited);
+                parenti0.setProperty(fastn_dom.PropertyKind.Spacing, fastn_dom.Spacing.SpaceAround, inherited);
+                parenti0.setProperty(fastn_dom.PropertyKind.Children, fastn.mutableList([function (root, inherited) {
+                    let rooti0 = foo__debug_test(root, inherited);
+                },
+                    function (root, inherited) {
+                        let rooti0 = foo__ftd_code_test(root, inherited);
+                    },
+                    function (root, inherited) {
+                        let rooti0 = foo__ftd_code_test(root, inherited, {
+                            theme: "fastn-theme.dark"
+                        });
+                    }
+                ]), inherited);
+            } finally {
+                __fastn_package_name__ = __fastn_super_package_name__;
+            }
+        }
+        global["main"] = main;
+        let foo__debug_test = function (parent, inherited, args) {
+            let __fastn_super_package_name__ = __fastn_package_name__;
+            __fastn_package_name__ = "foo";
+            try {
+                let __args__ = {
+                    theme: "fastn-theme.light",
+                };
+                inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
+                __args__ = fastn_utils.getArgs(__args__, args);
+                let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Code);
+                parenti0.setProperty(fastn_dom.PropertyKind.Code, "/-- ds.code:\nlang: ftd\n\nfooo", inherited);
+                parenti0.setProperty(fastn_dom.PropertyKind.CodeLanguage, "ftd", inherited);
+                parenti0.setProperty(fastn_dom.PropertyKind.CodeTheme, __args__.theme, inherited);
+                parenti0.setProperty(fastn_dom.PropertyKind.CodeShowLineNumber, false, inherited);
+                return parenti0;
+            } finally {
+                __fastn_package_name__ = __fastn_super_package_name__;
+            }
+        }
+        global["foo__debug_test"] = foo__debug_test;
+        let foo__ftd_code_test = function (parent, inherited, args) {
+            let __fastn_super_package_name__ = __fastn_package_name__;
+            __fastn_package_name__ = "foo";
+            try {
+                let __args__ = {
+                    theme: "fastn-theme.light",
+                };
+                inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
+                __args__ = fastn_utils.getArgs(__args__, args);
+                let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Code);
+                parenti0.setProperty(fastn_dom.PropertyKind.Code, ";; Section Comment\n\n\/-- ftd.text:\ncolor: red\n\nThis is body part of ftd.text\n\n;; Inline comment as line comment\n\n-- ftd.text: Hello ;; This is inline comment\n\n-- import: bling.fifthtry.site/quote\n\n;; Component invocation\n\n-- quote.charcoal: Amit Upadhyay\nlabel: Creator of `fastn`\navatar: $fastn-assets.files.images.amitu.jpg\nlogo: $fastn-assets.files.images.logo-fifthtry.svg\n\nThe web has lost some of the exuberance from the\nearly 2000s, and it makes me a little sad.\n\n;; Component Definition\n\n-- component toggle-text:\nboolean $current: false\ncaption title:\n\n-- ftd.text: $toggle-text.title\nalign-self: center\ntext-align: center\ncolor if { toggle-text.current }: #D42D42\ncolor: $inherited.colors.cta-primary.text\nbackground.solid: $inherited.colors.cta-primary.base\nborder-radius.px: 5\nborder-radius.px: 5\n$on-click$: $ftd.toggle($a = $toggle-text.current)\n\n-- end: toggle-text\n\n;; Record definition\n\n-- record Person:\ncaption name:\nbody description:\nstring id:\ninteger age:\n\n;; Variable definition\n\n-- integer key: 1\n\n-- ftd.text: Key is one\nif: { key == 1 }\ncolor: red\npadding.px: 10\n\n;; List and list initialization\n\n-- ftd.ui list foo:\n\n-- foo:\n\n-- ftd.text: Hello World!\ncolor: $inherited.colors.text-strong\n\n-- ftd.text: I love `fastn`.\ncolor: $inherited.colors.text-strong\n\n-- end: foo\n\n-- ui:\n$loop$: $foo as $ui", inherited);
+                parenti0.setProperty(fastn_dom.PropertyKind.CodeLanguage, "ftd", inherited);
+                parenti0.setProperty(fastn_dom.PropertyKind.CodeTheme, __args__.theme, inherited);
+                parenti0.setProperty(fastn_dom.PropertyKind.CodeShowLineNumber, false, inherited);
+                return parenti0;
+            } finally {
+                __fastn_package_name__ = __fastn_super_package_name__;
+            }
+        }
+        global["foo__ftd_code_test"] = foo__ftd_code_test;
+        fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
+        fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
+        fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
+        fastn_dom.codeData.availableThemes["dracula-theme"] = "../../theme_css/dracula-theme.css";
+        fastn_dom.codeData.availableThemes["duotone-theme.dark"] = "../../theme_css/duotone-theme.dark.css";
+        fastn_dom.codeData.availableThemes["duotone-theme.earth"] = "../../theme_css/duotone-theme.earth.css";
+        fastn_dom.codeData.availableThemes["duotone-theme.forest"] = "../../theme_css/duotone-theme.forest.css";
+        fastn_dom.codeData.availableThemes["duotone-theme.light"] = "../../theme_css/duotone-theme.light.css";
+        fastn_dom.codeData.availableThemes["duotone-theme.sea"] = "../../theme_css/duotone-theme.sea.css";
+        fastn_dom.codeData.availableThemes["duotone-theme.space"] = "../../theme_css/duotone-theme.space.css";
+        fastn_dom.codeData.availableThemes["fastn-theme.dark"] = "../../theme_css/fastn-theme.dark.css";
+        fastn_dom.codeData.availableThemes["fastn-theme.light"] = "../../theme_css/fastn-theme.light.css";
+        fastn_dom.codeData.availableThemes["fire.light"] = "../../theme_css/fire.light.css";
+        fastn_dom.codeData.availableThemes["gruvbox-theme.dark"] = "../../theme_css/gruvbox-theme.dark.css";
+        fastn_dom.codeData.availableThemes["gruvbox-theme.light"] = "../../theme_css/gruvbox-theme.light.css";
+        fastn_dom.codeData.availableThemes["laserwave-theme"] = "../../theme_css/laserwave-theme.css";
+        fastn_dom.codeData.availableThemes["material-theme.dark"] = "../../theme_css/material-theme.dark.css";
+        fastn_dom.codeData.availableThemes["material-theme.light"] = "../../theme_css/material-theme.light.css";
+        fastn_dom.codeData.availableThemes["nightowl-theme"] = "../../theme_css/nightowl-theme.css";
+        fastn_dom.codeData.availableThemes["one-theme.dark"] = "../../theme_css/one-theme.dark.css";
+        fastn_dom.codeData.availableThemes["one-theme.light"] = "../../theme_css/one-theme.light.css";
+        fastn_dom.codeData.availableThemes["vs-theme.dark"] = "../../theme_css/vs-theme.dark.css";
+        fastn_dom.codeData.availableThemes["vs-theme.light"] = "../../theme_css/vs-theme.light.css";
+        fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-theme.css";
 
         let main_wrapper = function (parent) {
             let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
@@ -282,7 +310,7 @@ fastn_dom.codeData.availableThemes["ztouch-theme"] = "../../theme_css/ztouch-the
         ftd.post_init();
     })();
 
-    window.onload = function() {
+    window.onload = function () {
         fastn_utils.resetFullHeight();
         fastn_utils.setFullHeight();
         ftd.emit_on_load();
