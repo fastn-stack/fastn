@@ -101,7 +101,7 @@ ftd.path = "ftd"
 ftd-p1.path = "ftd-p1"
 ftd-ast.path = "ftd-ast"
 fastn-js.path = "fastn-js"
-ft-sys-shared = { version = "0.1.8", features = ["rusqlite", "host-only"] }
+ft-sys-shared = { version = "0.2", features = ["rusqlite", "host-only"] }
 futures = "0.3"
 futures-util = { version = "0.3", default-features = false, features = ["std"] }
 futures-core = "0.3"
