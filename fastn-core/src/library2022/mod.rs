@@ -33,8 +33,8 @@ impl Library2022 {
         &self,
         current_processing_module: &str,
     ) -> ftd_p1::Result<fastn_core::Package> {
-        let current_package_name = self
-            .module_package_map
+        println!("get_current_package -> {current_processing_module}");
+        let current_package_name = dbg!(&self.module_package_map)
             .get(current_processing_module.trim_matches('/'))
             .ok_or_else(|| ftd_p1::Error::ParseError {
                 message: "The processing document stack is empty: Can't find module in any package"
@@ -42,6 +42,8 @@ impl Library2022 {
                 doc_id: current_processing_module.to_string(),
                 line_number: 0,
             })?;
+
+        println!("get_current_package current_package_name -> {current_package_name}");
 
         self.config
             .all_packages
@@ -91,32 +93,28 @@ impl Library2022 {
             session_id: &Option<String>,
         ) -> fastn_core::Result<(String, String, usize)> {
             let package = lib.get_current_package(current_processing_module)?;
-            if name.starts_with(package.name.as_str()) {
-                if let Some((content, size)) =
-                    get_data_from_package(name, &package, lib, session_id).await?
-                {
-                    return Ok((content, name.to_string(), size));
-                }
-            }
-            // Self package referencing
-            if package.name.ends_with(name.trim_end_matches('/')) {
-                let package_index = format!("{}/", package.name.as_str());
-                if let Some((content, size)) =
-                    get_data_from_package(package_index.as_str(), &package, lib, session_id).await?
-                {
-                    return Ok((content, format!("{package_index}index.ftd"), size));
-                }
+            println!(
+                "get_for_package {} - current_processing_module: {current_processing_module} - \
+                package.name: {} - lib.config.package.name: {}",
+                name, package.name, lib.config.package.name
+            );
+
+            if let Some(val) = get_for_package_(name, lib, &package, session_id).await? {
+                return Ok(val);
             }
 
-            for (alias, package) in package.aliases() {
-                lib.push_package_under_process(name, package, session_id)
-                    .await?;
-                if name.starts_with(alias) {
-                    let name = name.replacen(alias, &package.name, 1);
-                    if let Some((content, size)) =
-                        get_data_from_package(name.as_str(), package, lib, session_id).await?
+            let main_package = lib.config.package.name.to_string();
+            // Check for app possibility
+            if current_processing_module.contains("/-/") && main_package == package.name {
+                let package_name = current_processing_module.split_once("/-/").unwrap().0;
+                if let Some(app) = package
+                    .apps
+                    .iter()
+                    .find(|app| app.package.name == package_name)
+                {
+                    if let Some(val) = get_for_package_(name, lib, &app.package, session_id).await?
                     {
-                        return Ok((content, name.to_string(), size));
+                        return Ok(val);
                     }
                 }
             }
@@ -146,7 +144,46 @@ impl Library2022 {
                 }
             }*/
 
-            fastn_core::usage_error(format!("library not found: {}", name))
+            fastn_core::usage_error(format!("library not found 1: {}: {package:?}", name))
+        }
+
+        async fn get_for_package_(
+            name: &str,
+            lib: &mut fastn_core::Library2022,
+            package: &fastn_core::Package,
+            session_id: &Option<String>,
+        ) -> fastn_core::Result<Option<(String, String, usize)>> {
+            if name.starts_with(package.name.as_str()) {
+                if let Some((content, size)) =
+                    get_data_from_package(name, &package, lib, session_id).await?
+                {
+                    return Ok(Some((content, name.to_string(), size)));
+                }
+            }
+            // Self package referencing
+            if package.name.ends_with(name.trim_end_matches('/')) {
+                let package_index = format!("{}/", package.name.as_str());
+                if let Some((content, size)) =
+                    get_data_from_package(package_index.as_str(), &package, lib, session_id).await?
+                {
+                    return Ok(Some((content, format!("{package_index}index.ftd"), size)));
+                }
+            }
+
+            for (alias, package) in package.aliases() {
+                lib.push_package_under_process(name, package, session_id)
+                    .await?;
+                if name.starts_with(alias) {
+                    let name = name.replacen(alias, &package.name, 1);
+                    if let Some((content, size)) =
+                        get_data_from_package(name.as_str(), package, lib, session_id).await?
+                    {
+                        return Ok(Some((content, name.to_string(), size)));
+                    }
+                }
+            }
+
+            Ok(None)
         }
 
         // TODO: This function is too long. Break it down.
@@ -196,6 +233,7 @@ impl Library2022 {
         package: &fastn_core::Package,
         _session_id: &Option<String>,
     ) -> ftd::ftd2021::p1::Result<()> {
+        println!("module_package_map insert 2 {module}, {}", package.name);
         self.module_package_map.insert(
             module.trim_matches('/').to_string(),
             package.name.to_string(),
@@ -218,6 +256,7 @@ impl Library2022 {
         package: &fastn_core::Package,
         session_id: &Option<String>,
     ) -> ftd::ftd2021::p1::Result<()> {
+        println!("module_package_map insert 3 {module}, {}", package.name);
         self.module_package_map.insert(
             module.trim_matches('/').to_string(),
             package.name.to_string(),

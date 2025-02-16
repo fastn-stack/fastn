@@ -50,6 +50,10 @@ pub async fn interpret_helper(
 
     let builtin_overrides = package_dependent_builtins(&lib.config, lib.request.path());
     let mut s = ftd::interpreter::interpret_with_line_number(name, doc, Some(builtin_overrides))?;
+    println!(
+        "module_package_map insert 1 {name}, {}",
+        lib.config.package.name
+    );
     lib.module_package_map.insert(
         name.trim_matches('/').to_string(),
         lib.config.package.name.to_string(),
