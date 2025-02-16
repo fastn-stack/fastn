@@ -353,7 +353,7 @@ impl ExampleLibrary {
     ) -> ftd2021::p1::Result<String> {
         match self.get(name, doc) {
             Some(v) => Ok(v),
-            None => ftd2021::p2::utils::e2(format!("library not found: {}", name), "", 0),
+            None => ftd2021::p2::utils::e2(format!("library not found 4: {}", name), "", 0),
         }
     }
 }

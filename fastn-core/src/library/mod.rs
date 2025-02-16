@@ -95,7 +95,7 @@ impl FastnLibrary {
     ) -> ftd::ftd2021::p1::Result<String> {
         match self.get(name, doc) {
             Some(v) => Ok(v),
-            None => ftd::ftd2021::p2::utils::e2(format!("library not found: {}", name), "", 0),
+            None => ftd::ftd2021::p2::utils::e2(format!("library not found 2: {}", name), "", 0),
         }
     }
 }
