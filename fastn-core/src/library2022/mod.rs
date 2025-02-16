@@ -99,10 +99,6 @@ impl Library2022 {
                 name, package.name, lib.config.package.name
             );
 
-            if let Some(val) = get_for_package_(name, lib, &package, session_id).await? {
-                return Ok(val);
-            }
-
             let main_package = lib.config.package.name.to_string();
             // Check for app possibility
             if current_processing_module.contains("/-/") && main_package == package.name {
@@ -117,6 +113,10 @@ impl Library2022 {
                         return Ok(val);
                     }
                 }
+            }
+
+            if let Some(val) = get_for_package_(name, lib, &package, session_id).await? {
+                return Ok(val);
             }
 
             /*let translation_of = match package.translation_of.as_ref() {
