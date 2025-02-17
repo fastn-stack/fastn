@@ -13,7 +13,7 @@ learn it for building their web projects.
 -- ds.code:
 lang: ftd
 
-\-- import: fastn-community.github.io/bling/quote
+\-- import: bling.fifthtry.site/quote
 
 \-- quote.charcoal: Amit Upadhyay
 label: Creator of `fastn`

@@ -1,12 +1,12 @@
--- import: fastn-community.github.io/bling/collapse
--- import: fastn-community.github.io/bling/modal-cover
--- import: fastn-community.github.io/bling/quote
+-- import: bling.fifthtry.site/collapse
+-- import: bling.fifthtry.site/modal-cover
+-- import: bling.fifthtry.site/quote
 
 -- boolean $show-modal: false
 
--- import: fastn-community.github.io/bling/chat
+-- import: bling.fifthtry.site/chat
 -- import: fastn.com/blog/authors
--- import: fastn-community.github.io/doc-site/common
+-- import: doc-site.fifthtry.site/common
 
 -- common.post-meta meta: A Content Writer’s Journey with fastn
 published-on: August 10, 2023

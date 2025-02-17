@@ -320,8 +320,17 @@ pub(crate) fn file_id_to_names(id: &str) -> Vec<String> {
 
 pub enum FTDResult {
     Html(Vec<u8>),
-    Redirect { url: String, code: u16 },
+    Redirect {
+        url: String,
+        code: u16,
+    },
     Json(Vec<u8>),
+    Response {
+        response: Vec<u8>,
+        status_code: actix_web::http::StatusCode,
+        content_type: mime_guess::Mime,
+        headers: fastn_resolved::Map<String>,
+    },
 }
 
 impl FTDResult {
@@ -334,6 +343,7 @@ impl FTDResult {
                 fastn_core::utils::redirect_page_html(url).into_bytes()
             }
             FTDResult::Json(_d) => todo!("json not yet handled"),
+            FTDResult::Response { .. } => todo!("response not yet handled"),
         }
     }
 
@@ -450,6 +460,16 @@ pub(crate) async fn read_ftd_2022(
         return Ok(FTDResult::Redirect { url, code });
     }
 
+    if let Some((response, content_type, status_code, headers)) = main_ftd_doc.get_response()? {
+        return Ok(FTDResult::Response {
+            response: response.into(),
+            content_type: content_type.parse().unwrap(), // TODO: Remove unwrap()
+            // unwrap ok as we already checked if status code < 1000 in get_response()
+            status_code: actix_web::http::StatusCode::from_u16(status_code).unwrap(),
+            headers,
+        });
+    }
+
     if let Some(v) = main_ftd_doc.get_json()? {
         return Ok(FTDResult::Json(v));
     }
@@ -524,6 +544,15 @@ pub(crate) async fn read_ftd_2023(
     };
     if let Some((url, code)) = main_ftd_doc.get_redirect()? {
         return Ok(FTDResult::Redirect { url, code });
+    }
+    if let Some((response, content_type, status_code, headers)) = main_ftd_doc.get_response()? {
+        return Ok(FTDResult::Response {
+            response: response.into(),
+            content_type: content_type.parse().unwrap(), // TODO: Remove unwrap()
+            // unwrap ok as we already checked if status code < 1000 in get_response()
+            status_code: actix_web::http::StatusCode::from_u16(status_code).unwrap(),
+            headers,
+        });
     }
     if let Some(data) = main_ftd_doc.get_json()? {
         return Ok(FTDResult::Json(data));

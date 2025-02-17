@@ -27,7 +27,7 @@ sidebar: false
 
             -- lib.feature-card.code:
 
-                   \-- import: fastn-community.github.io/bling/chat
+                   \-- import: bling.fifthtry.site/chat
 
                 \-- chat.message-left: Hello World! 😀
 

@@ -1,7 +1,7 @@
--- import: fastn-stack.github.io/ftd-web-component-example
--- import: fastn-community.github.io/bling/quote
+-- import: ftd-web-component.fifthtry.site
+-- import: bling.fifthtry.site/quote
 -- import: fastn.com/blog/authors
--- import: fastn-community.github.io/doc-site/common
+-- import: doc-site.fifthtry.site/common
 
 -- common.post-meta meta: Ahoy, Web Components!
 published-on: February 25, 2023
@@ -44,7 +44,7 @@ in this blog post. All I had to do was a line of dependency in `FASTN.ftd`:
 -- ds.code: Dependency in `FASTN.ftd`
 lang: ftd
 
-\-- fastn.dependency: fastn-stack.github.io/ftd-web-component-example
+\-- fastn.dependency: ftd-web-component.fifthtry.site
 
 -- ds.markdown:
 
@@ -53,7 +53,7 @@ And the following two lines to get the demo:
 -- ds.code: the blog post page
 lang: ftd
 
-\-- import: fastn-stack.github.io/ftd-web-component-example
+\-- import: ftd-web-component.fifthtry.site
 
 ;; where I want to place the demo
 

@@ -1,9 +1,0 @@
--- import: fastn-community.github.io/business-card/docs
--- import: fastn-community.github.io/pattern-business-card
-
--- docs.detail-doc:
-package-name: pattern-business-card
-package-full-name:  fastn-community.github.io/pattern-business-card
-github: https://github.com/fastn-community/pattern-business-card
-category: fastn-community.github.io/pattern-business-card
-;; license-url: https://github.com/fastn-community/pattern-business-card/blob/main/LICENSE

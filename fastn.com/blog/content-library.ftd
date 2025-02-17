@@ -1,5 +1,5 @@
 -- import: fastn.com/blog/authors
--- import: fastn-community.github.io/doc-site/common
+-- import: doc-site.fifthtry.site/common
 -- import: fastn.com/content-library as cl
 
 -- common.post-meta meta: Create a `content-library.ftd` file for recurring content components

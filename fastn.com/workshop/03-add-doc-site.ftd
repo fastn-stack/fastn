@@ -1,4 +1,4 @@
--- import: fifthtry.github.io/admonitions as cbox
+-- import: admonitions.fifthtry.site as cbox
 
 -- ds.page: Add doc-site - `fastn` Workshop
 
@@ -103,7 +103,7 @@ If you miss out any step, checkout the whole source code below:
 
 -- ds.code: In `index.ftd`
 
-\-- import: fastn-community.github.io/bling/quote
+\-- import: bling.fifthtry.site/quote
 \-- import: fastn-community.github.io/doc-site as ds
 
 \-- ds.page: Page Title    ;; <hl>

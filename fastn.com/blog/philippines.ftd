@@ -1,7 +1,7 @@
 -- import: fastn.com/blog/lib
--- import: fastn-community.github.io/bling/quote
+-- import: bling.fifthtry.site/quote
 -- import: fastn.com/blog/authors
--- import: fastn-community.github.io/doc-site/common
+-- import: doc-site.fifthtry.site/common
 
 -- common.post-meta meta: `fastn` goes to Philippines
 published-on: April 13, 2023

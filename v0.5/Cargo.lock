@@ -366,7 +366,7 @@ dependencies = [
  "regalloc2",
  "rustc-hash",
  "serde",
- "smallvec",
+ "smallvec 1.13.2",
  "target-lexicon",
 ]
 
@@ -413,7 +413,7 @@ checksum = "4fac41e16729107393174b0c9e3730fb072866100e1e64e80a1a963b2e484d57"
 dependencies = [
  "cranelift-codegen",
  "log",
- "smallvec",
+ "smallvec 1.13.2",
  "target-lexicon",
 ]
 
@@ -744,7 +744,7 @@ version = "0.1.0"
 source = "git+https://github.com/fastn-stack/fastn-observer?rev=5f64c7b#5f64c7b28b447ce76e24e9428a9c113fa11118fb"
 dependencies = [
  "ansi_term",
- "smallvec",
+ "smallvec 1.13.2",
  "tokio",
  "tracing",
  "tracing-subscriber",
@@ -890,15 +890,17 @@ dependencies = [
 
 [[package]]
 name = "ft-sys-shared"
-version = "0.1.8"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "10b147d0f1376b1ee43d5c91ab5913994dcb8dd70bd5e3c74dd1382225d0af3d"
+checksum = "76f40d2c7e55ad9e0e60162566617b0cd82363ba71af206c82afc36eaf527ec4"
 dependencies = [
  "bytes",
  "chrono",
  "http",
  "rusqlite",
  "serde",
+ "serde_json",
+ "smallvec 2.0.0-alpha.10",
  "thiserror 2.0.11",
 ]
 
@@ -1147,7 +1149,7 @@ dependencies = [
  "httpdate",
  "itoa",
  "pin-project-lite",
- "smallvec",
+ "smallvec 1.13.2",
  "tokio",
  "want",
 ]
@@ -1268,7 +1270,7 @@ dependencies = [
  "icu_normalizer_data",
  "icu_properties",
  "icu_provider",
- "smallvec",
+ "smallvec 1.13.2",
  "utf16_iter",
  "utf8_iter",
  "write16",
@@ -1349,7 +1351,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "686f825264d630750a544639377bae737628043f20d38bbc029e8f29ea968a7e"
 dependencies = [
  "idna_adapter",
- "smallvec",
+ "smallvec 1.13.2",
  "utf8_iter",
 ]
 
@@ -1718,7 +1720,7 @@ dependencies = [
  "cfg-if",
  "libc",
  "redox_syscall",
- "smallvec",
+ "smallvec 1.13.2",
  "windows-targets",
 ]
 
@@ -2093,7 +2095,7 @@ dependencies = [
  "hashbrown 0.15.2",
  "log",
  "rustc-hash",
- "smallvec",
+ "smallvec 1.13.2",
 ]
 
 [[package]]
@@ -2257,7 +2259,7 @@ dependencies = [
  "fallible-streaming-iterator",
  "hashlink",
  "libsqlite3-sys",
- "smallvec",
+ "smallvec 1.13.2",
 ]
 
 [[package]]
@@ -2487,6 +2489,15 @@ name = "smallvec"
 version = "1.13.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3c5e1a9a646d36c3599cd173a41282daf47c44583ad367b8e6837255952e5c67"
+dependencies = [
+ "serde",
+]
+
+[[package]]
+name = "smallvec"
+version = "2.0.0-alpha.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "51d44cfb396c3caf6fbfd0ab422af02631b69ddd96d2eff0b0f0724f9024051b"
 dependencies = [
  "serde",
 ]
@@ -2887,7 +2898,7 @@ checksum = "e8189decb5ac0fa7bc8b96b7cb9b2701d60d48805aca84a238004d665fcc4008"
 dependencies = [
  "nu-ansi-term",
  "sharded-slab",
- "smallvec",
+ "smallvec 1.13.2",
  "thread_local",
  "tracing-core",
  "tracing-log",
@@ -3227,7 +3238,7 @@ dependencies = [
  "serde",
  "serde_derive",
  "serde_json",
- "smallvec",
+ "smallvec 1.13.2",
  "sptr",
  "target-lexicon",
  "trait-variant",
@@ -3317,7 +3328,7 @@ dependencies = [
  "itertools 0.12.1",
  "log",
  "object",
- "smallvec",
+ "smallvec 1.13.2",
  "target-lexicon",
  "thiserror 1.0.69",
  "wasmparser 0.221.3",
@@ -3344,7 +3355,7 @@ dependencies = [
  "semver",
  "serde",
  "serde_derive",
- "smallvec",
+ "smallvec 1.13.2",
  "target-lexicon",
  "wasm-encoder 0.221.3",
  "wasmparser 0.221.3",
@@ -3548,7 +3559,7 @@ dependencies = [
  "cranelift-codegen",
  "gimli",
  "regalloc2",
- "smallvec",
+ "smallvec 1.13.2",
  "target-lexicon",
  "thiserror 1.0.69",
  "wasmparser 0.221.3",

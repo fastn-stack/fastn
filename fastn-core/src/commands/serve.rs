@@ -95,6 +95,51 @@ async fn serve_file(
             fastn_core::package::package_doc::FTDResult::Html(body) => {
                 fastn_core::http::ok_with_content_type(body, mime_guess::mime::TEXT_HTML_UTF_8)
             }
+            fastn_core::package::package_doc::FTDResult::Response {
+                response,
+                status_code,
+                content_type,
+                headers,
+            } => {
+                use std::str::FromStr;
+
+                let mut response = actix_web::HttpResponseBuilder::new(status_code)
+                    .content_type(content_type)
+                    .body(response);
+
+                for (header_name, header_value) in headers {
+                    let header_name =
+                        match actix_web::http::header::HeaderName::from_str(header_name.as_str()) {
+                            Ok(v) => v,
+                            Err(e) => {
+                                tracing::error!(
+                                    msg = "fastn-Error",
+                                    path = path.as_str(),
+                                    error = e.to_string()
+                                );
+                                continue;
+                            }
+                        };
+
+                    let header_value =
+                        match actix_web::http::header::HeaderValue::from_str(header_value.as_str())
+                        {
+                            Ok(v) => v,
+                            Err(e) => {
+                                tracing::error!(
+                                    msg = "fastn-Error",
+                                    path = path.as_str(),
+                                    error = e.to_string()
+                                );
+                                continue;
+                            }
+                        };
+
+                    response.headers_mut().insert(header_name, header_value);
+                }
+
+                response
+            }
             fastn_core::package::package_doc::FTDResult::Redirect { url, code } => {
                 if Some(mime_guess::mime::APPLICATION_JSON) == config.request.content_type() {
                     fastn_core::http::ok_with_content_type(

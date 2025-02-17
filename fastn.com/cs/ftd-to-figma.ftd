@@ -1,6 +1,6 @@
 -- import: fastn/processors as pr
--- import: fastn-community.github.io/forest-cs as forest-cs
--- import: fastn-community.github.io/saturated-sunset-cs as sunset-cs
+-- import: forest-cs.fifthtry.site as forest-cs
+-- import: saturated-sunset-cs.fifthtry.site as sunset-cs
 
 -- string forest-figma:
 $processor$: pr.figma-cs-token
@@ -66,7 +66,7 @@ Download and save the below json code by clicking at the download
 icon in the code-block below.
 
 `Note:` You can also get this json from its
-[color documentation](https://fastn-community.github.io/forest-cs/)
+[color documentation](https://forest-cs.fifthtry.site/)
 
 -- ds.code: forest-cs
 lang: json
@@ -187,7 +187,7 @@ Let's use `sunset-cs` now. Download this below json code as a new json file
 named `sunset-cs.json` by clicking at the download button.
 
 `Note:` You can also get this json from its
-[color documentation](https://fastn-community.github.io/saturated-sunset-cs/)
+[color documentation](https://saturated-sunset-cs.fifthtry.site/)
 
 -- ds.code: Sunset-cs
 lang: json
@@ -236,9 +236,9 @@ Congratulations you have successfully completed this tutorial.
 
 Check out these fastn color-schemes which you can use right away
 
-- [Dark flame CS](https://fastn-community.github.io/dark-flame-cs/)
-- [Forest CS](https://fastn-community.github.io/forest-cs/)
-- [Saturated sunset CS](https://fastn-community.github.io/saturated-sunset-cs/)
+- [Dark flame CS](https://dark-flame-cs.fifthtry.site/)
+- [Forest CS](https://forest-cs.fifthtry.site/)
+- [Saturated sunset CS](https://saturated-sunset-cs.fifthtry.site/)
 - [Winter CS](https://fastn-community.github.io/winter-cs/)
 
 -- end: ds.page

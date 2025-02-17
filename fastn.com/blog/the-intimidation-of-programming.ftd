@@ -1,6 +1,6 @@
 -- import: fastn.com/ftd as ftd-index
 -- import: fastn.com/blog/authors
--- import: fastn-community.github.io/doc-site/common
+-- import: doc-site.fifthtry.site/common
 
 -- common.post-meta meta: The Intimidation of Programming
 published-on: July 28, 2023

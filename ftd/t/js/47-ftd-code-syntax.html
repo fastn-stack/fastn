@@ -33,7 +33,7 @@ This is body part of ftd.text
 
 -- ftd.text: Hello ;; This is inline comment
 
--- import: fastn-community.github.io/bling/quote
+-- import: bling.fifthtry.site/quote
 
 ;; Component invocation
 
@@ -107,7 +107,7 @@ This is body part of ftd.text
 
 -- ftd.text: Hello ;; This is inline comment
 
--- import: fastn-community.github.io/bling/quote
+-- import: bling.fifthtry.site/quote
 
 ;; Component invocation
 
@@ -237,7 +237,7 @@ let foo__ftd_code_test = function (parent, inherited, args)
     inherited = fastn_utils.getInheritedValues(__args__, inherited, args);
     __args__ = fastn_utils.getArgs(__args__, args);
     let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Code);
-    parenti0.setProperty(fastn_dom.PropertyKind.Code, ";; Section Comment\n\n\/-- ftd.text:\ncolor: red\n\nThis is body part of ftd.text\n\n;; Inline comment as line comment\n\n-- ftd.text: Hello ;; This is inline comment\n\n-- import: fastn-community.github.io/bling/quote\n\n;; Component invocation\n\n-- quote.charcoal: Amit Upadhyay\nlabel: Creator of `fastn`\navatar: $fastn-assets.files.images.amitu.jpg\nlogo: $fastn-assets.files.images.logo-fifthtry.svg\n\nThe web has lost some of the exuberance from the\nearly 2000s, and it makes me a little sad.\n\n;; Component Definition\n\n-- component toggle-text:\nboolean $current: false\ncaption title:\n\n-- ftd.text: $toggle-text.title\nalign-self: center\ntext-align: center\ncolor if { toggle-text.current }: #D42D42\ncolor: $inherited.colors.cta-primary.text\nbackground.solid: $inherited.colors.cta-primary.base\nborder-radius.px: 5\nborder-radius.px: 5\n$on-click$: $ftd.toggle($a = $toggle-text.current)\n\n-- end: toggle-text\n\n;; Record definition\n\n-- record Person:\ncaption name:\nbody description:\nstring id:\ninteger age:\n\n;; Variable definition\n\n-- integer key: 1\n\n-- ftd.text: Key is one\nif: { key == 1 }\ncolor: red\npadding.px: 10\n\n;; List and list initialization\n\n-- ftd.ui list foo:\n\n-- foo:\n\n-- ftd.text: Hello World!\ncolor: $inherited.colors.text-strong\n\n-- ftd.text: I love `fastn`.\ncolor: $inherited.colors.text-strong\n\n-- end: foo\n\n-- ui:\n$loop$: $foo as $ui", inherited);
+    parenti0.setProperty(fastn_dom.PropertyKind.Code, ";; Section Comment\n\n\/-- ftd.text:\ncolor: red\n\nThis is body part of ftd.text\n\n;; Inline comment as line comment\n\n-- ftd.text: Hello ;; This is inline comment\n\n-- import: bling.fifthtry.site/quote\n\n;; Component invocation\n\n-- quote.charcoal: Amit Upadhyay\nlabel: Creator of `fastn`\navatar: $fastn-assets.files.images.amitu.jpg\nlogo: $fastn-assets.files.images.logo-fifthtry.svg\n\nThe web has lost some of the exuberance from the\nearly 2000s, and it makes me a little sad.\n\n;; Component Definition\n\n-- component toggle-text:\nboolean $current: false\ncaption title:\n\n-- ftd.text: $toggle-text.title\nalign-self: center\ntext-align: center\ncolor if { toggle-text.current }: #D42D42\ncolor: $inherited.colors.cta-primary.text\nbackground.solid: $inherited.colors.cta-primary.base\nborder-radius.px: 5\nborder-radius.px: 5\n$on-click$: $ftd.toggle($a = $toggle-text.current)\n\n-- end: toggle-text\n\n;; Record definition\n\n-- record Person:\ncaption name:\nbody description:\nstring id:\ninteger age:\n\n;; Variable definition\n\n-- integer key: 1\n\n-- ftd.text: Key is one\nif: { key == 1 }\ncolor: red\npadding.px: 10\n\n;; List and list initialization\n\n-- ftd.ui list foo:\n\n-- foo:\n\n-- ftd.text: Hello World!\ncolor: $inherited.colors.text-strong\n\n-- ftd.text: I love `fastn`.\ncolor: $inherited.colors.text-strong\n\n-- end: foo\n\n-- ui:\n$loop$: $foo as $ui", inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.CodeLanguage, "ftd", inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.CodeTheme, __args__.theme, inherited);
     parenti0.setProperty(fastn_dom.PropertyKind.CodeShowLineNumber, false, inherited);

@@ -1,7 +1,7 @@
--- import: fastn-community.github.io/spectrum-ds/common
--- import: fastn-community.github.io/footer
--- import: fastn-community.github.io/dark-flame-cs
--- import: fifthtry.github.io/fastn-typography as typo
+-- import: spectrum-ds.fifthtry.site/common
+-- import: footer.fifthtry.site
+-- import: dark-flame-cs.fifthtry.site
+-- import: fastn-typography.fifthtry.site as typo
 -- import: fastn.com/ambassadors as lib2
 
 

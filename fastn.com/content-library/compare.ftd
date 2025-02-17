@@ -1,6 +1,6 @@
 -- import: fastn.com/ftd as ftd-index
--- import: fastn-community.github.io/bling/quote
--- import: fastn-community.github.io/bling/modal-cover
+-- import: bling.fifthtry.site/quote
+-- import: bling.fifthtry.site/modal-cover
 
 
 
@@ -159,7 +159,7 @@ max-width.fixed.px: 980
 	There are [doc-sites](https://fastn.com/featured/doc-sites/),
 	[blogs](https://fastn.com/featured/blog-templates/),
 	[landing pages](https://fastn.com/featured/landing-pages/)
-	to individual component library like [bling](https://fastn-community.github.io/bling/),
+	to individual component library like [bling](https://bling.fifthtry.site/),
 	[hero sections](https://fastn.com/featured/sections/heros/), and more.
 	
 	The best part? All components in the ecosystem adhere to a unified design
@@ -325,7 +325,7 @@ max-width.fixed.px: 980
 	There are [doc-sites](https://fastn.com/featured/doc-sites/),
 	[blogs](https://fastn.com/featured/blog-templates/),
 	[landing pages](https://fastn.com/featured/landing-pages/)
-	to individual component library like [bling](https://fastn-community.github.io/bling/),
+	to individual component library like [bling](https://bling.fifthtry.site/),
 	[hero sections](https://fastn.com/featured/sections/heros/), and more.
 	
 	The best part? All components in the ecosystem adhere to a unified design

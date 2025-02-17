@@ -1,5 +1,5 @@
--- import: fifthtry.github.io/admonitions as cbox
--- import: fastn-community.github.io/bling/read-more
+-- import: admonitions.fifthtry.site as cbox
+-- import: bling.fifthtry.site/read-more
 
 -- ds.page: `processor` In `fastn`
 
