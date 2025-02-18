@@ -517,10 +517,14 @@ pub(crate) async fn read_ftd_2023(
         current_package.get_prefixed_body(main.content.as_str(), main.id.as_str(), true);
     // Fix aliased imports to full path (if any)
     doc_content = current_package.fix_imports_in_body(doc_content.as_str(), main.id.as_str())?;
+    println!("read_ftd_2023 current_package: {current_package:?}");
+    println!("read_ftd_2023 doc_content: {doc_content}");
+    println!("read_ftd_2023 package_name: {package_name}");
+    println!("main: {main:?}");
 
     let line_number = doc_content.split('\n').count() - main.content.split('\n').count();
     let main_ftd_doc = match fastn_core::doc::interpret_helper(
-        main.id_with_package().as_str(),
+        dbg!(main.id_with_package().as_str()),
         doc_content.as_str(),
         config,
         base_url,
