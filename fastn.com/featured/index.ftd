@@ -73,7 +73,7 @@ more-link: /featured/fonts/
 
 -- component grid-view:
 optional caption title:
-template list templates:
+template-data list templates:
 optional string more-link:
 optional string more-link-text:
 boolean $hover: false
@@ -156,9 +156,9 @@ max-width.fixed.px if { grid-view.show-large } : 1340
 		spacing.fixed.px: 32
 		overflow-x: auto
 		margin-vertical.px: 40
-		
+
 			-- grid-of-items: $obj.title
-			$loop$: $grid-view.templates as $obj
+            for: $obj in $grid-view.templates
 			template-url: $obj.template-url
 			licence-url: $obj.licence-url
 			github-url: $obj.github-url
@@ -168,7 +168,7 @@ max-width.fixed.px if { grid-view.show-large } : 1340
 			wip: $obj.wip
 			two-fold: $obj.two-fold
 			show-large: $grid-view.show-large
-			
+
 		-- end: ftd.row
 
 	-- end: ftd.desktop
@@ -180,7 +180,7 @@ max-width.fixed.px if { grid-view.show-large } : 1340
 		spacing.fixed.px: 32
 		
 			-- grid-of-items: $obj.title
-			$loop$: $grid-view.templates as $obj
+            for: $obj in $grid-view.templates
 			template-url: $obj.template-url
 			licence-url: $obj.licence-url
 			github-url: $obj.github-url
@@ -209,7 +209,7 @@ max-width.fixed.px if { grid-view.show-large } : 1340
 
 -- component view-all:
 optional caption title:
-template list templates:
+template-data list templates:
 optional body body:
 boolean $hover: false
 
@@ -263,7 +263,7 @@ spacing.fixed.px if { ftd.device == "mobile" }: 24
 		margin-vertical.px: 40
 		
 			-- grid-of-items: $obj.title
-			$loop$: $view-all.templates as $obj
+            for: $obj in $view-all.templates
 			template-url: $obj.template-url
 			licence-url: $obj.licence-url
 			github-url: $obj.github-url
@@ -284,7 +284,7 @@ spacing.fixed.px if { ftd.device == "mobile" }: 24
 		spacing.fixed.px: 32
 		
 			-- grid-of-items: $obj.title
-			$loop$: $view-all.templates as $obj
+            for: $obj in $view-all.templates
 			template-url: $obj.template-url
 			licence-url: $obj.licence-url
 			github-url: $obj.github-url
@@ -505,7 +505,7 @@ link: $grid-of-items.template-url
 
 
 
--- record template:
+-- record template-data:
 caption title:
 string template-url:
 optional ftd.image-src screenshot:
@@ -516,17 +516,17 @@ boolean is-last: false
 boolean wip: false
 boolean two-fold: false
 
--- template list doc-sites:
+-- template-data list doc-sites:
 
--- template: Doc-site
+-- template-data: Doc-site
 template-url: featured/ds/doc-site/
 screenshot: $fastn-assets.files.images.featured.doc-sites.doc-site.jpg
 
--- template: Midnight Rush
+-- template-data: Midnight Rush
 template-url: featured/ds/mr-ds/
 screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
 
--- template: Midnight Storm
+-- template-data: Midnight Storm
 template-url: featured/ds/midnight-storm/
 screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
 
@@ -536,17 +536,17 @@ screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
 
 
 
--- template list landing-pages:
+-- template-data list landing-pages:
 
--- template: Midnight Storm
+-- template-data: Midnight Storm
 template-url: featured/landing/midnight-storm-landing/
 screenshot: $fastn-assets.files.images.featured.landing.ms-landing-demo.png
 
--- template: Midnight Rush
+-- template-data: Midnight Rush
 template-url: featured/landing/mr-landing/
 screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
 
--- template: Misty Gray
+-- template-data: Misty Gray
 template-url: featured/landing/misty-gray-landing/
 screenshot: $fastn-assets.files.images.featured.landing.misty-gray-landing.png
 
@@ -555,17 +555,17 @@ screenshot: $fastn-assets.files.images.featured.landing.misty-gray-landing.png
 
 
 
--- template list blog-sites:
+-- template-data list blog-sites:
 
--- template: Midnight Rush
+-- template-data: Midnight Rush
 template-url: featured/blogs/mr-blog/
 screenshot: $fastn-assets.files.images.featured.blog.midnight-rush-blog.jpg
 
--- template: Midnight Storm
+-- template-data: Midnight Storm
 template-url: featured/blogs/ms-blog/
 screenshot: $fastn-assets.files.images.featured.blog.midnight-storm.jpg
 
--- template: Misty Gray
+-- template-data: Misty Gray
 template-url: featured/blogs/mg-blog/
 screenshot: $fastn-assets.files.images.featured.blog.misty-gray.jpg
 
@@ -575,17 +575,17 @@ screenshot: $fastn-assets.files.images.featured.blog.misty-gray.jpg
 
 
 
--- template list resumes:
+-- template-data list resumes:
 
--- template: Caffeine
+-- template-data: Caffeine
 template-url: featured/resumes/caffiene/
 screenshot: $fastn-assets.files.images.featured.resumes.caffiene.png
 
--- template: Resume 1
+-- template-data: Resume 1
 template-url: featured/resumes/resume-1/
 screenshot: $fastn-assets.files.images.featured.resumes.resume-1.png
 
--- template: Resume 10
+-- template-data: Resume 10
 template-url: featured/resumes/resume-10/
 screenshot: $fastn-assets.files.images.featured.resumes.resume-10.png
 
@@ -593,17 +593,17 @@ screenshot: $fastn-assets.files.images.featured.resumes.resume-10.png
 
 
 
--- template list portfolios:
+-- template-data list portfolios:
 
--- template: Texty PS
+-- template-data: Texty PS
 template-url: featured/portfolios/texty-ps/
 screenshot: $fastn-assets.files.images.featured.portfolios.texty-ps.png
 
--- template: Johny PS
+-- template-data: Johny PS
 template-url: featured/portfolios/johny-ps/
 screenshot: $fastn-assets.files.images.featured.portfolios.johny-ps.png
 
--- template: Portfolio
+-- template-data: Portfolio
 template-url: featured/portfolios/portfolio/
 screenshot: $fastn-assets.files.images.featured.portfolios.portfolio.png
 
@@ -612,9 +612,9 @@ screenshot: $fastn-assets.files.images.featured.portfolios.portfolio.png
 
 
 
--- template list workshops:
+-- template-data list workshops:
 
--- template: Workshop 1
+-- template-data: Workshop 1
 template-url: featured/workshops/workshop-1/
 screenshot: $fastn-assets.files.images.featured.workshops.workshop-1.png
 
@@ -628,17 +628,17 @@ screenshot: $fastn-assets.files.images.featured.workshops.workshop-1.png
 
 
 
--- template list schemes:
+-- template-data list schemes:
 
--- template: Saturated Sunset CS
+-- template-data: Saturated Sunset CS
 template-url: /cs/saturated-sunset-cs/
 screenshot: $fastn-assets.files.images.featured.cs.saturated-sunset-cs.png
 
--- template: Midnight Rush CS
+-- template-data: Midnight Rush CS
 template-url: /cs/midnight-rush-cs/
 screenshot: $fastn-assets.files.images.featured.cs.midnight-rush-cs.png
 
--- template: Blog Template 1 CS
+-- template-data: Blog Template 1 CS
 template-url: /cs/blog-template-1-cs/
 screenshot: $fastn-assets.files.images.featured.cs.blog-template-1-cs.png
 
@@ -653,17 +653,17 @@ screenshot: $fastn-assets.files.images.featured.cs.blog-template-1-cs.png
 
 
 
--- template list bling:
+-- template-data list bling:
 
--- template: Business Cards
+-- template-data: Business Cards
 template-url: /featured/components/business-cards/
 screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-front.jpg
 
--- template: Modal Cover
+-- template-data: Modal Cover
 template-url: featured/components/modals/modal-cover/
 screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
 
--- template: Header / Navbars
+-- template-data: Header / Navbars
 template-url: https://fastn-community.github.io/header/
 screenshot: $fastn-assets.files.images.featured.components.header.jpg
 
@@ -682,17 +682,17 @@ depending on the programming language.
 
 
 
--- template list fonts:
+-- template-data list fonts:
 
--- template: Inter Typography
+-- template-data: Inter Typography
 template-url: /fonts/inter/
 screenshot: $fastn-assets.files.images.featured.font.inter-font.jpg
 
--- template: Opensans Typography
+-- template-data: Opensans Typography
 template-url: /fonts/opensans/
 screenshot: $fastn-assets.files.images.featured.font.opensans-font.jpg
 
--- template: Roboto Typography
+-- template-data: Roboto Typography
 template-url: /fonts/roboto/
 screenshot: $fastn-assets.files.images.featured.font.roboto-font.jpg
 
@@ -700,17 +700,17 @@ screenshot: $fastn-assets.files.images.featured.font.roboto-font.jpg
 
 
 
--- template list sections:
+-- template-data list sections:
 
--- template: Giggle Presentation Template
+-- template-data: Giggle Presentation Template
 template-url: /featured/sections/slides/giggle-presentation-template/
 screenshot: $fastn-assets.files.images.featured.sections.slides.giggle-presentation-template.png
 
--- template: Hero Right Hug Expanded
+-- template-data: Hero Right Hug Expanded
 template-url: /hero-right-hug-expanded/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-expanded.jpg
 
--- template: Image Gallery IG
+-- template-data: Image Gallery IG
 template-url: /featured/sections/cards/image-gallery-ig/
 screenshot: $fastn-assets.files.images.featured.sections.image-gallery-ig.png
 
