@@ -13,9 +13,9 @@ templates: $kvt
 
 
 
--- ft-ui.template list kvt:
+-- ft-ui.template-data list kvt:
 
--- ft-ui.template: Key Value Table 1
+-- ft-ui.template-data: Key Value Table 1
 template-url: /featured/sections/kvt/kvt-1/
 screenshot: $fastn-assets.files.images.featured.sections.kvt-1.png
 

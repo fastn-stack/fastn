@@ -18,36 +18,36 @@ templates: $landing
 
 
 
--- ft-ui.template list landing:
+-- ft-ui.template-data list landing:
 
--- ft-ui.template: Midnight Rush
+-- ft-ui.template-data: Midnight Rush
 template-url: featured/landing/mr-landing/
 screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
 
--- ft-ui.template: Midnight Storm
+-- ft-ui.template-data: Midnight Storm
 template-url: featured/landing/midnight-storm-landing/
 screenshot: $fastn-assets.files.images.featured.landing.ms-landing-demo.png
 
--- ft-ui.template: Misty Gray
+-- ft-ui.template-data: Misty Gray
 template-url: featured/landing/misty-gray-landing/
 screenshot: $fastn-assets.files.images.featured.landing.misty-gray-landing.png
 
--- ft-ui.template: Studious Couscous
+-- ft-ui.template-data: Studious Couscous
 template-url: featured/landing/studious-couscous/
 screenshot: $fastn-assets.files.images.featured.landing.studious-couscous.png
 wip: true
 
--- ft-ui.template: CT Landing Page
+-- ft-ui.template-data: CT Landing Page
 template-url: featured/landing/ct-landing/
 screenshot: $fastn-assets.files.images.featured.landing.ct-landing-page.png
 wip: true
 
--- ft-ui.template: Docusaurus Theme
+-- ft-ui.template-data: Docusaurus Theme
 template-url: featured/landing/docusaurus-theme/
 screenshot: $fastn-assets.files.images.featured.landing.docusaurus-theme.png
 wip: true
 
--- ft-ui.template: Forest FOSS Template
+-- ft-ui.template-data: Forest FOSS Template
 template-url: featured/landing/forest-foss-template/
 screenshot: $fastn-assets.files.images.featured.landing.forest-foss-template.png
 wip: true

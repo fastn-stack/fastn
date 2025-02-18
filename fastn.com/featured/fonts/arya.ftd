@@ -20,21 +20,21 @@ demo-link: https://fastn-community.github.io/arya-typography/fastn-typography/
 
 
 
--- ft-ui.template list typographies:
+-- ft-ui.template-data list typographies:
 
--- ft-ui.template: Inter Typography
+-- ft-ui.template-data: Inter Typography
 template-url: /fonts/inter/
 screenshot: $fastn-assets.files.images.featured.font.inter-font.jpg
 
--- ft-ui.template: Opensans Typography
+-- ft-ui.template-data: Opensans Typography
 template-url: /fonts/opensans/
 screenshot: $fastn-assets.files.images.featured.font.opensans-font.jpg
 
--- ft-ui.template: Roboto Typography
+-- ft-ui.template-data: Roboto Typography
 template-url: /fonts/roboto/
 screenshot: $fastn-assets.files.images.featured.font.roboto-font.jpg
 
--- ft-ui.template: Lato Typography
+-- ft-ui.template-data: Lato Typography
 template-url: /fonts/lato/
 screenshot: $fastn-assets.files.images.featured.font.lato-font.jpg
 

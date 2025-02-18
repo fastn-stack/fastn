@@ -13,53 +13,53 @@ templates: $simple-quotes
 
 
 
--- ft-ui.template list simple-quotes:
+-- ft-ui.template-data list simple-quotes:
 
--- ft-ui.template: Chalice
+-- ft-ui.template-data: Chalice
 template-url: /quotes/chalice/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-1.png
 
--- ft-ui.template: Rustic
+-- ft-ui.template-data: Rustic
 template-url: /quotes/rustic/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-2.png
 
--- ft-ui.template: Echo
+-- ft-ui.template-data: Echo
 template-url: /quotes/echo/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-3.png
 
--- ft-ui.template: Onyx
+-- ft-ui.template-data: Onyx
 template-url: /quotes/onyx/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-4.png
 
--- ft-ui.template: Marengo
+-- ft-ui.template-data: Marengo
 template-url: /quotes/marengo/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-5.png
 
--- ft-ui.template: Chrome
+-- ft-ui.template-data: Chrome
 template-url: /quotes/chrome/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-6.png
 
--- ft-ui.template: Dorian
+-- ft-ui.template-data: Dorian
 template-url: /quotes/dorian/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-7.png
 
--- ft-ui.template: Marengo Hug
+-- ft-ui.template-data: Marengo Hug
 template-url: /quotes/marengo-hug/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-8.png
 
--- ft-ui.template: Matte
+-- ft-ui.template-data: Matte
 template-url: /quotes/matte/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-9.png
 
--- ft-ui.template: Scorpion
+-- ft-ui.template-data: Scorpion
 template-url: /quotes/scorpion/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-10.png
 
--- ft-ui.template: Silver
+-- ft-ui.template-data: Silver
 template-url: /quotes/silver/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-11.png
 
--- ft-ui.template: Storm Cloud
+-- ft-ui.template-data: Storm Cloud
 template-url: /quotes/storm-cloud/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-12.png
 

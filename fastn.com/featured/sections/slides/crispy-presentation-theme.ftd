@@ -29,21 +29,21 @@ demo-link: https://fifthtry.github.io/Crispy-Presentation-Theme
 
 
 
--- ft-ui.template list slides:
+-- ft-ui.template-data list slides:
 
--- ft-ui.template: Giggle Presentation Template
+-- ft-ui.template-data: Giggle Presentation Template
 template-url: /featured/sections/slides/giggle-presentation-template/
 screenshot: $fastn-assets.files.images.featured.sections.slides.giggle-presentation-template.png
 
--- ft-ui.template: Rotary Presentation Template
+-- ft-ui.template-data: Rotary Presentation Template
 template-url: /featured/sections/slides/rotary-presentation-template/
 screenshot: $fastn-assets.files.images.featured.sections.slides.rotary-presentation-template.png
 
--- ft-ui.template: Streamline Slides
+-- ft-ui.template-data: Streamline Slides
 template-url: /featured/sections/slides/streamline-slides/
 screenshot: $fastn-assets.files.images.featured.sections.slides.streamline-slides.png
 
--- ft-ui.template: Simple Dark Slides
+-- ft-ui.template-data: Simple Dark Slides
 template-url: /featured/sections/slides/simple-dark-slides/
 screenshot: $fastn-assets.files.images.featured.sections.slides.simple-dark-slides.png
 

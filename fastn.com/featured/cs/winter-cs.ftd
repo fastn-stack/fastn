@@ -22,21 +22,21 @@ demo-link: https://fastn-community.github.io/winter-cs/
 
 
 
--- ft-ui.template list similar-schemes:
+-- ft-ui.template-data list similar-schemes:
 
--- ft-ui.template: Dark Flame CS
+-- ft-ui.template-data: Dark Flame CS
 template-url: /cs/dark-flame-cs/
 screenshot: $fastn-assets.files.images.featured.cs.dark-flame-cs.png
 
--- ft-ui.template: Navy Nebula CS
+-- ft-ui.template-data: Navy Nebula CS
 template-url: /cs/navy-nebula-cs/
 screenshot: $fastn-assets.files.images.featured.cs.navy-nebula-cs.png
 
--- ft-ui.template: Forest CS
+-- ft-ui.template-data: Forest CS
 template-url: /cs/forest-cs/
 screenshot: $fastn-assets.files.images.featured.cs.forest-cs.png
 
--- ft-ui.template: Midnight Storm CS
+-- ft-ui.template-data: Midnight Storm CS
 template-url: /cs/midnight-storm-cs/
 screenshot: $fastn-assets.files.images.featured.cs.midnight-storm-cs.png
 

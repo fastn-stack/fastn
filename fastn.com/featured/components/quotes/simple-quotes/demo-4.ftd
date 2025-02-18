@@ -24,21 +24,21 @@ demo-link: https://bling.fifthtry.site/quote/
 
 
 
--- ft-ui.template list quotes:
+-- ft-ui.template-data list quotes:
 
--- ft-ui.template: Chalice
+-- ft-ui.template-data: Chalice
 template-url: /quotes/chalice/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-1.png
 
--- ft-ui.template: Marengo
+-- ft-ui.template-data: Marengo
 template-url: /quotes/marengo/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-5.png
 
--- ft-ui.template: Chrome
+-- ft-ui.template-data: Chrome
 template-url: /quotes/chrome/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-6.png
 
--- ft-ui.template: Scorpion
+-- ft-ui.template-data: Scorpion
 template-url: /quotes/scorpion/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-10.png
 

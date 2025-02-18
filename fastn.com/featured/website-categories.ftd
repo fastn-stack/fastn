@@ -49,17 +49,17 @@ more-link: /featured/workshops/
 
 
 
--- ft-ui.template list doc-sites:
+-- ft-ui.template-data list doc-sites:
 
--- ft-ui.template: Midnight Rush
+-- ft-ui.template-data: Midnight Rush
 template-url: featured/ds/mr-ds/
 screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
 
--- ft-ui.template: Midnight Storm
+-- ft-ui.template-data: Midnight Storm
 template-url: featured/ds/midnight-storm/
 screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-storm.jpg
 
--- ft-ui.template: Misty Gray
+-- ft-ui.template-data: Misty Gray
 template-url: featured/ds/misty-gray/
 screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
 
@@ -69,17 +69,17 @@ screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
 
 
 
--- ft-ui.template list landing-pages:
+-- ft-ui.template-data list landing-pages:
 
--- ft-ui.template: Midnight Storm
+-- ft-ui.template-data: Midnight Storm
 template-url: featured/landing/midnight-storm-landing/
 screenshot: $fastn-assets.files.images.featured.landing.ms-landing-demo.png
 
--- ft-ui.template: Midnight Rush
+-- ft-ui.template-data: Midnight Rush
 template-url: featured/landing/mr-landing/
 screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
 
--- ft-ui.template: Misty Gray
+-- ft-ui.template-data: Misty Gray
 template-url: featured/landing/misty-gray-landing/
 screenshot: $fastn-assets.files.images.featured.landing.misty-gray-landing.png
 
@@ -88,17 +88,17 @@ screenshot: $fastn-assets.files.images.featured.landing.misty-gray-landing.png
 
 
 
--- ft-ui.template list blog-sites:
+-- ft-ui.template-data list blog-sites:
 
--- ft-ui.template: Midnight Rush
+-- ft-ui.template-data: Midnight Rush
 template-url: featured/blogs/mr-blog/
 screenshot: $fastn-assets.files.images.featured.blog.midnight-rush-blog.jpg
 
--- ft-ui.template: Midnight Storm
+-- ft-ui.template-data: Midnight Storm
 template-url: featured/blogs/ms-blog/
 screenshot: $fastn-assets.files.images.featured.blog.midnight-storm.jpg
 
--- ft-ui.template: Misty Gray
+-- ft-ui.template-data: Misty Gray
 template-url: featured/blogs/mg-blog/
 screenshot: $fastn-assets.files.images.featured.blog.misty-gray.jpg
 
@@ -108,17 +108,17 @@ screenshot: $fastn-assets.files.images.featured.blog.misty-gray.jpg
 
 
 
--- ft-ui.template list resumes:
+-- ft-ui.template-data list resumes:
 
--- ft-ui.template: Caffeine
+-- ft-ui.template-data: Caffeine
 template-url: featured/resumes/caffiene/
 screenshot: $fastn-assets.files.images.featured.resumes.caffiene.png
 
--- ft-ui.template: Resume 1
+-- ft-ui.template-data: Resume 1
 template-url: featured/resumes/resume-1/
 screenshot: $fastn-assets.files.images.featured.resumes.resume-1.png
 
--- ft-ui.template: Resume 10
+-- ft-ui.template-data: Resume 10
 template-url: featured/resumes/resume-10/
 screenshot: $fastn-assets.files.images.featured.resumes.resume-10.png
 
@@ -128,9 +128,9 @@ screenshot: $fastn-assets.files.images.featured.resumes.resume-10.png
 
 
 
--- ft-ui.template list workshops:
+-- ft-ui.template-data list workshops:
 
--- ft-ui.template: Workshop 1
+-- ft-ui.template-data: Workshop 1
 template-url: featured/workshops/workshop-1/
 screenshot: $fastn-assets.files.images.featured.workshops.workshop-1.png
 
@@ -141,17 +141,17 @@ screenshot: $fastn-assets.files.images.featured.workshops.workshop-1.png
 
 
 
--- ft-ui.template list portfolios:
+-- ft-ui.template-data list portfolios:
 
--- ft-ui.template: Texty PS
+-- ft-ui.template-data: Texty PS
 template-url: featured/portfolios/texty-ps/
 screenshot: $fastn-assets.files.images.featured.portfolios.texty-ps.png
 
--- ft-ui.template: Johny PS
+-- ft-ui.template-data: Johny PS
 template-url: featured/portfolios/johny-ps/
 screenshot: $fastn-assets.files.images.featured.portfolios.johny-ps.png
 
--- ft-ui.template: Portfolio
+-- ft-ui.template-data: Portfolio
 template-url: featured/portfolios/portfolio/
 screenshot: $fastn-assets.files.images.featured.portfolios.portfolio.png
 
@@ -161,13 +161,13 @@ screenshot: $fastn-assets.files.images.featured.portfolios.portfolio.png
 
 
 
--- ft-ui.template list resumes:
+-- ft-ui.template-data list resumes:
 
--- ft-ui.template: Caffeine
+-- ft-ui.template-data: Caffeine
 template-url: featured/resumes/caffiene/
 screenshot: $fastn-assets.files.images.featured.resumes.caffiene.png
 
--- ft-ui.template: Resume 1
+-- ft-ui.template-data: Resume 1
 template-url: featured/resumes/resume-1/
 screenshot: $fastn-assets.files.images.featured.resumes.resume-1.png
 
@@ -177,13 +177,13 @@ screenshot: $fastn-assets.files.images.featured.resumes.resume-1.png
 
 
 
--- ft-ui.template list workshops:
+-- ft-ui.template-data list workshops:
 
--- ft-ui.template: Workshop 1
+-- ft-ui.template-data: Workshop 1
 template-url: featured/workshops/workshop-1/
 screenshot: $fastn-assets.files.images.featured.workshops.workshop-1.png
 
--- ft-ui.template: Event 1
+-- ft-ui.template-data: Event 1
 template-url: featured/workshops/event-1/
 screenshot: $fastn-assets.files.images.featured.workshops.event-1.png
 

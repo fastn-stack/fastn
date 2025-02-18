@@ -50,25 +50,25 @@ hover-src: $fastn-assets.files.images.linkedin-hover.svg
 
 
 
--- ft-ui.template list components:
+-- ft-ui.template-data list components:
 
--- ft-ui.template: Hero Bottom Hug
+-- ft-ui.template-data: Hero Bottom Hug
 template-url: /hero-bottom-hug/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-bottom-hug.png
 
--- ft-ui.template: Hero Bottom Hug Search
+-- ft-ui.template-data: Hero Bottom Hug Search
 template-url: /hero-bottom-hug-search/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-bottom-hug-search.png
 
--- ft-ui.template: Hero Left Hug Expanded Search
+-- ft-ui.template-data: Hero Left Hug Expanded Search
 template-url: /hero-left-hug-expanded-search/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-left-hug-expanded-search.jpg
 
--- ft-ui.template: Hero Left Hug Expanded
+-- ft-ui.template-data: Hero Left Hug Expanded
 template-url: /hero-left-hug-expanded/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-left-hug-expanded.jpg
 
--- ft-ui.template: Hero Right Hug Expanded Search
+-- ft-ui.template-data: Hero Right Hug Expanded Search
 template-url: /hero-right-hug-expanded-search/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-expanded-search.jpg
 

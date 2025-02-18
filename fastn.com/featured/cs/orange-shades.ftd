@@ -16,13 +16,13 @@ templates: $orange-scheme
 
 
 
--- ft-ui.template list orange-scheme:
+-- ft-ui.template-data list orange-scheme:
 
--- ft-ui.template: Dark Flame CS
+-- ft-ui.template-data: Dark Flame CS
 template-url: /cs/dark-flame-cs/
 screenshot: $fastn-assets.files.images.featured.cs.dark-flame-cs.png
 
--- ft-ui.template: Navy Nebula CS
+-- ft-ui.template-data: Navy Nebula CS
 template-url: /cs/navy-nebula-cs/
 screenshot: $fastn-assets.files.images.featured.cs.navy-nebula-cs.png
 

@@ -25,21 +25,21 @@ demo-link: https://fastn-community.github.io/midnight-rush/landing/
 
 
 
--- ft-ui.template list landing:
+-- ft-ui.template-data list landing:
 
--- ft-ui.template: Midnight Storm
+-- ft-ui.template-data: Midnight Storm
 template-url: featured/landing/midnight-storm-landing/
 screenshot: $fastn-assets.files.images.featured.landing.ms-landing-demo.png
 
--- ft-ui.template: Misty Gray
+-- ft-ui.template-data: Misty Gray
 template-url: featured/landing/misty-gray-landing/
 screenshot: $fastn-assets.files.images.featured.landing.misty-gray-landing.png
 
--- ft-ui.template: CT Landing Page
+-- ft-ui.template-data: CT Landing Page
 template-url: featured/landing-pages/
 screenshot: $fastn-assets.files.images.featured.landing.ct-landing-page.png
 
--- ft-ui.template: Studious Couscous
+-- ft-ui.template-data: Studious Couscous
 template-url: featured/landing/studious-couscous/
 screenshot: $fastn-assets.files.images.featured.landing.studious-couscous.png
 

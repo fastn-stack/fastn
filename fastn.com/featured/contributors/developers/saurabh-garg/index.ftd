@@ -87,9 +87,9 @@ optional string link:
 
 
 
--- ft-ui.template list doc-sites:
+-- ft-ui.template-data list doc-sites:
 
--- ft-ui.template: Docusaurus Theme
+-- ft-ui.template-data: Docusaurus Theme
 template-url: featured/ds/docusaurus-theme/
 screenshot: $fastn-assets.files.images.featured.doc-sites.docusaurus-theme.png
 wip: true

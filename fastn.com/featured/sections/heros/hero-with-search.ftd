@@ -14,9 +14,9 @@ templates: $hero-with-search
 
 
 
--- ft-ui.template list hero-with-search:
+-- ft-ui.template-data list hero-with-search:
 
--- ft-ui.template: Hero with search - Design 1
+-- ft-ui.template-data: Hero with search - Design 1
 template-url: /hero-4/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-4.png
 

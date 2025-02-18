@@ -24,17 +24,17 @@ more-link: /quotes/quotes-with-images/
 
 
 
--- ft-ui.template list simple-quotes:
+-- ft-ui.template-data list simple-quotes:
 
--- ft-ui.template: Marengo
+-- ft-ui.template-data: Marengo
 template-url: /quotes/marengo/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-5.png
 
--- ft-ui.template: Chrome
+-- ft-ui.template-data: Chrome
 template-url: /quotes/chrome/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-6.png
 
--- ft-ui.template: Dorian
+-- ft-ui.template-data: Dorian
 template-url: /quotes/dorian/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-7.png
 
@@ -45,9 +45,9 @@ screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.
 
 
 
--- ft-ui.template list author-icon-quotes:
+-- ft-ui.template-data list author-icon-quotes:
 
--- ft-ui.template: Charcoal
+-- ft-ui.template-data: Charcoal
 template-url: /quotes/charcoal/
 screenshot: $fastn-assets.files.images.featured.components.quotes.author-icon-quotes.demo-1.png
 
@@ -59,9 +59,9 @@ screenshot: $fastn-assets.files.images.featured.components.quotes.author-icon-qu
 
 
 
--- ft-ui.template list quotes-with-images:
+-- ft-ui.template-data list quotes-with-images:
 
--- ft-ui.template: Electric
+-- ft-ui.template-data: Electric
 template-url: /quotes/electric/
 screenshot: $fastn-assets.files.images.featured.components.quotes.quotes-with-images.demo-1.png
 

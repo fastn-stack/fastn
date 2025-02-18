@@ -88,9 +88,9 @@ optional string link:
 
 
 
--- ft-ui.template list doc-sites:
+-- ft-ui.template-data list doc-sites:
 
--- ft-ui.template: Dash Dash DS
+-- ft-ui.template-data: Dash Dash DS
 template-url: featured/ds/dash-dash-ds/
 screenshot: $fastn-assets.files.images.featured.doc-sites.dash-dash-ds.png
 wip: true
