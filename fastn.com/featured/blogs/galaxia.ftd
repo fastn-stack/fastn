@@ -15,21 +15,21 @@ github-url: https://github.com/meenukumari28/galaxia/
 demo-link: https://meenukumari28.github.io/galaxia/
 
 
--- ft-ui.template list blog-sites:
+-- ft-ui.template-data list blog-sites:
 
--- ft-ui.template: Simple Site
+-- ft-ui.template-data: Simple Site
 template-url: featured/blogs/doc-site/
 screenshot: $fastn-assets.files.images.featured.blog.doc-site-blog.png
 
--- ft-ui.template: Midnight Rush
+-- ft-ui.template-data: Midnight Rush
 template-url: featured/blogs/mr-blog/
 screenshot: $fastn-assets.files.images.featured.blog.midnight-rush-blog.jpg
 
--- ft-ui.template: Misty Gray
+-- ft-ui.template-data: Misty Gray
 template-url: featured/blogs/mg-blog/
 screenshot: $fastn-assets.files.images.featured.blog.misty-gray.jpg
 
--- ft-ui.template: Rocky
+-- ft-ui.template-data: Rocky
 template-url: featured/blogs/rocky/
 screenshot: $fastn-assets.files.images.featured.blog.rocky.png
 

@@ -75,17 +75,17 @@ more-link: /featured/components/
 
 
 
--- ft-ui.template list components:
+-- ft-ui.template-data list components:
 
--- ft-ui.template: Gradient Business Card
+-- ft-ui.template-data: Gradient Business Card
 template-url: featured/components/business-cards/gradient-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-front.jpg
 
--- ft-ui.template: Modal Cover
+-- ft-ui.template-data: Modal Cover
 template-url: featured/components/modals/modal-cover/
 screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
 
--- ft-ui.template: Pattern Business Card
+-- ft-ui.template-data: Pattern Business Card
 template-url: featured/components/business-cards/pattern-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.pattern-business-card-front.jpg
 

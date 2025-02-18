@@ -23,9 +23,9 @@ demo-link: https://fastn-community.github.io/footer/docs/sitemap-footer/
 
 
 
--- ft-ui.template list footers:
+-- ft-ui.template-data list footers:
 
--- ft-ui.template: Footer - 3
+-- ft-ui.template-data: Footer - 3
 template-url: /featured/components/footers/footer-3/
 screenshot: $fastn-assets.files.images.featured.components.footer-3.png
 

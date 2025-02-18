@@ -16,13 +16,13 @@ templates: $red-scheme
 
 
 
--- ft-ui.template list red-scheme:
+-- ft-ui.template-data list red-scheme:
 
--- ft-ui.template: Saturated Sunset CS
+-- ft-ui.template-data: Saturated Sunset CS
 template-url: /cs/saturated-sunset-cs/
 screenshot: $fastn-assets.files.images.featured.cs.saturated-sunset-cs.png
 
--- ft-ui.template: Pink Tree CS
+-- ft-ui.template-data: Pink Tree CS
 template-url: /cs/pink-tree-cs/
 screenshot: $fastn-assets.files.images.featured.cs.pink-tree-cs.png
 

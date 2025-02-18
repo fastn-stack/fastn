@@ -23,9 +23,9 @@ demo-link: https://fastnui.trizwit.com/UI-Components/Footer/footer-3/
 
 
 
--- ft-ui.template list footers:
+-- ft-ui.template-data list footers:
 
--- ft-ui.template: Footer
+-- ft-ui.template-data: Footer
 template-url: /featured/components/footers/footer/
 screenshot: $fastn-assets.files.images.featured.components.footer.png
 

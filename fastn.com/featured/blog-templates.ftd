@@ -17,75 +17,75 @@ templates: $blogs
 
 
 
--- ft-ui.template list blogs:
+-- ft-ui.template-data list blogs:
 
--- ft-ui.template: Simple Site Blog
+-- ft-ui.template-data: Simple Site Blog
 template-url: featured/blogs/doc-site/
 screenshot: $fastn-assets.files.images.featured.blog.doc-site-blog.png
 
--- ft-ui.template: Midnight Rush
+-- ft-ui.template-data: Midnight Rush
 template-url: featured/blogs/mr-blog/
 screenshot: $fastn-assets.files.images.featured.blog.midnight-rush-blog.jpg
 
--- ft-ui.template: Midnight Storm
+-- ft-ui.template-data: Midnight Storm
 template-url: featured/blogs/ms-blog/
 screenshot: $fastn-assets.files.images.featured.blog.midnight-storm.jpg
 
--- ft-ui.template: Misty Gray
+-- ft-ui.template-data: Misty Gray
 template-url: featured/blogs/mg-blog/
 screenshot: $fastn-assets.files.images.featured.blog.misty-gray.jpg
 
--- ft-ui.template: Dash Dash DS
+-- ft-ui.template-data: Dash Dash DS
 template-url: featured/blogs/dash-dash-ds/
 screenshot: $fastn-assets.files.images.featured.blog.dash-dash-ds.png
 wip: true
 
--- ft-ui.template: Pink Tree
+-- ft-ui.template-data: Pink Tree
 template-url: featured/blogs/pink-tree/
 screenshot: $fastn-assets.files.images.featured.blog.pink-tree.png
 wip: true
 
--- ft-ui.template: Rocky
+-- ft-ui.template-data: Rocky
 template-url: featured/blogs/rocky/
 screenshot: $fastn-assets.files.images.featured.blog.rocky.png
 wip: true
 
--- ft-ui.template: Simple Blog
+-- ft-ui.template-data: Simple Blog
 template-url: featured/blogs/simple-blog/
 screenshot: $fastn-assets.files.images.featured.blog.simple-blog.png
 wip: true
 
--- ft-ui.template: Yellow Lily
+-- ft-ui.template-data: Yellow Lily
 template-url: featured/blogs/yellow-lily/
 screenshot: $fastn-assets.files.images.featured.blog.yellow-lily.png
 wip: true
 
--- ft-ui.template: Blue Wave
+-- ft-ui.template-data: Blue Wave
 template-url: featured/blogs/blue-wave/
 screenshot: $fastn-assets.files.images.featured.blog.blue-wave.png
 wip: true
 
--- ft-ui.template: Blog Components
+-- ft-ui.template-data: Blog Components
 template-url: featured/blogs/blog-components/
 screenshot: $fastn-assets.files.images.featured.blog.blog-components.png
 wip: true
 
--- ft-ui.template: Navy Nebula
+-- ft-ui.template-data: Navy Nebula
 template-url: featured/blogs/navy-nebula/
 screenshot: $fastn-assets.files.images.featured.blog.navy-nebula.png
 wip: true
 
--- ft-ui.template: Blog Template 1
+-- ft-ui.template-data: Blog Template 1
 template-url: featured/blogs/blog-template-1/
 screenshot: $fastn-assets.files.images.featured.blog.blog-template-1.png
 wip: true
 
--- ft-ui.template: Galaxia
+-- ft-ui.template-data: Galaxia
 template-url: featured/blogs/galaxia/
 screenshot: $fastn-assets.files.images.featured.blog.galaxia.png
 wip: true
 
--- ft-ui.template: Little Blue
+-- ft-ui.template-data: Little Blue
 template-url: featured/blogs/little-blue/
 screenshot: $fastn-assets.files.images.featured.blog.little-blue.png
 wip: true

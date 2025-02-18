@@ -60,7 +60,7 @@ common.owner list owners:
 string license-url:
 string license:
 string published-date:
-ft-ui.template list cards:
+ft-ui.template-data list cards:
 string github-url:
 string demo-link:
 

@@ -24,26 +24,26 @@ templates: $faqs
 
 
 
--- ft-ui.template list heros:
+-- ft-ui.template-data list heros:
 
--- ft-ui.template: Midnight-rush-hero
+-- ft-ui.template-data: Midnight-rush-hero
 template-url: https://fastn-community.github.io/midnight-rush-hero/
 screenshot: $fastn-assets.files.images.featured.new-sections.midnight-rush.jpg
 
--- ft-ui.template: Midnight-storm-hero
+-- ft-ui.template-data: Midnight-storm-hero
 template-url: https://fastn-community.github.io/midnight-storm-hero/
 screenshot: $fastn-assets.files.images.featured.new-sections.midnight-storm.jpg
 
 -- end: heros
 
 
--- ft-ui.template list logos:
+-- ft-ui.template-data list logos:
 
--- ft-ui.template: Midnight-rush-logo
+-- ft-ui.template-data: Midnight-rush-logo
 template-url: https://fastn-community.github.io/midnight-rush-logo/
 screenshot: $fastn-assets.files.images.featured.new-sections.midnight-rush-logo.png
 
--- ft-ui.template: Midnight-storm-logo
+-- ft-ui.template-data: Midnight-storm-logo
 template-url: https://fastn-community.github.io/midnight-storm-logo/
 screenshot: $fastn-assets.files.images.featured.new-sections.midnight-storm-logo.png
 
@@ -51,39 +51,39 @@ screenshot: $fastn-assets.files.images.featured.new-sections.midnight-storm-logo
 
 
 
--- ft-ui.template list testimonials:
+-- ft-ui.template-data list testimonials:
 
--- ft-ui.template: Midnight-rush-testimonial
+-- ft-ui.template-data: Midnight-rush-testimonial
 template-url: https://fastn-community.github.io/midnight-rush-testimonial/
 screenshot: $fastn-assets.files.images.featured.new-sections.midnight-rush-testimonial.png
 
--- ft-ui.template: Midnight-storm-testimonial
+-- ft-ui.template-data: Midnight-storm-testimonial
 template-url: https://fastn-community.github.io/midnight-storm-testimonial/
 screenshot: $fastn-assets.files.images.featured.new-sections.midnight-storm-testimonial.png
 
 -- end: testimonials
 
 
--- ft-ui.template list features:
+-- ft-ui.template-data list features:
 
--- ft-ui.template: Midnight-rush-features
+-- ft-ui.template-data: Midnight-rush-features
 template-url: https://fastn-community.github.io/midnight-rush-features/
 screenshot: $fastn-assets.files.images.featured.new-sections.midnight-rush-features.png
 
--- ft-ui.template: Midnight-storm-features
+-- ft-ui.template-data: Midnight-storm-features
 template-url: https://fastn-community.github.io/midnight-storm-features/
 screenshot: $fastn-assets.files.images.featured.new-sections.midnight-storm-features.png
 
 -- end: features
 
 
--- ft-ui.template list faqs:
+-- ft-ui.template-data list faqs:
 
--- ft-ui.template: Midnight-rush-faqs
+-- ft-ui.template-data: Midnight-rush-faqs
 template-url: https://fastn-community.github.io/midnight-rush-faqs/
 screenshot: $fastn-assets.files.images.featured.new-sections.midnight-rush-faqs.png
 
--- ft-ui.template: Midnight-storm-faqs
+-- ft-ui.template-data: Midnight-storm-faqs
 template-url: https://fastn-community.github.io/midnight-storm-faqs/
 screenshot: $fastn-assets.files.images.featured.new-sections.midnight-storm-faqs.png
 

@@ -94,9 +94,9 @@ more-link: /featured/quotes/
 
 
 
--- ft-ui.template list admonitions:
+-- ft-ui.template-data list admonitions:
 
--- ft-ui.template: Admonitions
+-- ft-ui.template-data: Admonitions
 template-url: /featured/components/admonitions/
 screenshot: $fastn-assets.files.images.featured.components.admonitions.png
 
@@ -105,9 +105,9 @@ screenshot: $fastn-assets.files.images.featured.components.admonitions.png
 
 
 
--- ft-ui.template list bling:
+-- ft-ui.template-data list bling:
 
--- ft-ui.template: Bling
+-- ft-ui.template-data: Bling
 template-url: /featured/components/bling/
 screenshot: $fastn-assets.files.images.featured.components.bling.jpg
 
@@ -117,9 +117,9 @@ screenshot: $fastn-assets.files.images.featured.components.bling.jpg
 
 
 
--- ft-ui.template list code-block:
+-- ft-ui.template-data list code-block:
 
--- ft-ui.template: Code Block
+-- ft-ui.template-data: Code Block
 template-url: /featured/components/code-block/
 screenshot: $fastn-assets.files.images.featured.components.code-block.jpg
 
@@ -128,9 +128,9 @@ screenshot: $fastn-assets.files.images.featured.components.code-block.jpg
 
 
 
--- ft-ui.template list forms:
+-- ft-ui.template-data list forms:
 
--- ft-ui.template: Subscription Form
+-- ft-ui.template-data: Subscription Form
 template-url: /featured/components/subscription-form/
 screenshot: $fastn-assets.files.images.featured.components.subscription-form.png
 
@@ -139,9 +139,9 @@ screenshot: $fastn-assets.files.images.featured.components.subscription-form.png
 
 
 
--- ft-ui.template list language-switcher:
+-- ft-ui.template-data list language-switcher:
 
--- ft-ui.template: Language Switcher
+-- ft-ui.template-data: Language Switcher
 template-url: /featured/components/language-switcher/
 screenshot: $fastn-assets.files.images.featured.components.language-switcher.png
 
@@ -149,9 +149,9 @@ screenshot: $fastn-assets.files.images.featured.components.language-switcher.png
 
 
 
--- ft-ui.template list buttons:
+-- ft-ui.template-data list buttons:
 
--- ft-ui.template: Buttons
+-- ft-ui.template-data: Buttons
 template-url: /featured/components/buttons/
 screenshot: $fastn-assets.files.images.featured.components.button-1.png
 
@@ -163,9 +163,9 @@ screenshot: $fastn-assets.files.images.featured.components.button-1.png
 
 
 
--- ft-ui.template list headers:
+-- ft-ui.template-data list headers:
 
--- ft-ui.template: Header
+-- ft-ui.template-data: Header
 template-url: /featured/components/headers/header/
 screenshot: $fastn-assets.files.images.featured.components.header.jpg
 
@@ -175,13 +175,13 @@ screenshot: $fastn-assets.files.images.featured.components.header.jpg
 
 
 
--- ft-ui.template list footers:
+-- ft-ui.template-data list footers:
 
--- ft-ui.template: Footers
+-- ft-ui.template-data: Footers
 template-url: /featured/components/footers/footer/
 screenshot: $fastn-assets.files.images.featured.components.footer.png
 
--- ft-ui.template: Footer - 3
+-- ft-ui.template-data: Footer - 3
 template-url: /featured/components/footers/footer-3/
 screenshot: $fastn-assets.files.images.featured.components.footer-3.png
 
@@ -193,17 +193,17 @@ screenshot: $fastn-assets.files.images.featured.components.footer-3.png
 
 
 
--- ft-ui.template list cards:
+-- ft-ui.template-data list cards:
 
--- ft-ui.template: Business Card
+-- ft-ui.template-data: Business Card
 template-url: featured/components/business-cards/card-1/
 screenshot: $fastn-assets.files.images.featured.components.business-card.png
 
--- ft-ui.template: Gradient Business Card
+-- ft-ui.template-data: Gradient Business Card
 template-url: featured/components/business-cards/gradient-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-front.jpg
 
--- ft-ui.template: Midnight Business Card
+-- ft-ui.template-data: Midnight Business Card
 template-url: featured/components/business-cards/midnight-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.midnight-business-card-front.jpg
 
@@ -213,13 +213,13 @@ screenshot: $fastn-assets.files.images.featured.business-cards.midnight-business
 
 
 
--- ft-ui.template list dialogs:
+-- ft-ui.template-data list dialogs:
 
--- ft-ui.template: Modal
+-- ft-ui.template-data: Modal
 template-url: featured/components/modals/modal-1/
 screenshot: $fastn-assets.files.images.featured.components.modal-1.png
 
--- ft-ui.template: Modal Cover
+-- ft-ui.template-data: Modal Cover
 template-url: featured/components/modals/modal-cover/
 screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
 
@@ -228,17 +228,17 @@ screenshot: $fastn-assets.files.images.featured.components.modal-cover.png
 
 
 
--- ft-ui.template list quotes:
+-- ft-ui.template-data list quotes:
 
--- ft-ui.template: Marengo
+-- ft-ui.template-data: Marengo
 template-url: /quotes/marengo/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-5.png
 
--- ft-ui.template: Chrome
+-- ft-ui.template-data: Chrome
 template-url: /quotes/chrome/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-6.png
 
--- ft-ui.template: Dorian
+-- ft-ui.template-data: Dorian
 template-url: /quotes/dorian/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-7.png
 

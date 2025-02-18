@@ -12,25 +12,25 @@ templates: $hero-with-2-cta
 
 
 
--- ft-ui.template list hero-with-2-cta:
+-- ft-ui.template-data list hero-with-2-cta:
 
--- ft-ui.template: Hero with two CTA - Design 1
+-- ft-ui.template-data: Hero with two CTA - Design 1
 template-url: featured/sections/heros/hero-1/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-1.png
 
--- ft-ui.template: Hero with two CTA - Design 2
+-- ft-ui.template-data: Hero with two CTA - Design 2
 template-url: featured/sections/heros/hero-2/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-2.png
 
--- ft-ui.template: Hero with two CTA - Design 3
+-- ft-ui.template-data: Hero with two CTA - Design 3
 template-url: featured/sections/heros/hero-3/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-3.png
 
--- ft-ui.template: Hero with two CTA - Design 4
+-- ft-ui.template-data: Hero with two CTA - Design 4
 template-url: featured/sections/heros/hero-5/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-5.png
 
--- ft-ui.template: Hero with two CTA - Design 5
+-- ft-ui.template-data: Hero with two CTA - Design 5
 template-url: heros/hero-with-2-cta/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-with-2-cta.hero-with-two-cta-5.png
 

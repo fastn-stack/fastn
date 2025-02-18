@@ -16,21 +16,21 @@ templates: $violet-scheme
 
 
 
--- ft-ui.template list violet-scheme:
+-- ft-ui.template-data list violet-scheme:
 
-/-- ft-ui.template: Yellow Lily CS
+/-- ft-ui.template-data: Yellow Lily CS
 template-url: /cs/yellow-lily-cs/
 screenshot: $fastn-assets.files.images.featured.cs.yellow-lily-cs.png
 
-/-- ft-ui.template: Blue Wave CS
+/-- ft-ui.template-data: Blue Wave CS
 template-url: /cs/
 screenshot: $fastn-assets.files.images.featured.cs.blue-wave-cs.png
 
--- ft-ui.template: Little Blue CS
+-- ft-ui.template-data: Little Blue CS
 template-url: /cs/little-blue-cs/
 screenshot: $fastn-assets.files.images.featured.cs.little-blue-cs.png
 
--- ft-ui.template: Blog Template 1 CS
+-- ft-ui.template-data: Blog Template 1 CS
 template-url: /cs/blog-template-1-cs/
 screenshot: $fastn-assets.files.images.featured.cs.blog-template-1-cs.png
 

@@ -25,13 +25,13 @@ demo-link: https://fifthtry.github.io/texty-ps/
 
 
 
--- ft-ui.template list text-ps:
+-- ft-ui.template-data list text-ps:
 
--- ft-ui.template: Johny PS
+-- ft-ui.template-data: Johny PS
 template-url: featured/portfolios/johny-ps/
 screenshot: $fastn-assets.files.images.featured.portfolios.johny-ps.png
 
--- ft-ui.template: Portfolio
+-- ft-ui.template-data: Portfolio
 template-url: featured/portfolios/portfolio/
 screenshot: $fastn-assets.files.images.featured.portfolios.portfolio.png
 

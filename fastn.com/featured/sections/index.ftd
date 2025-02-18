@@ -35,17 +35,17 @@ more-link: /featured/sections/slides/
 
 
 
--- ft-ui.template list heros:
+-- ft-ui.template-data list heros:
 
--- ft-ui.template: Hero Right Hug Expanded Search
+-- ft-ui.template-data: Hero Right Hug Expanded Search
 template-url: /hero-right-hug-expanded-search/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-with-2-cta.hero-with-two-cta-5.png
 
--- ft-ui.template: Hero Right Hug Expanded
+-- ft-ui.template-data: Hero Right Hug Expanded
 template-url: /hero-right-hug-expanded/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-6.png
 
--- ft-ui.template: Hero Right Hug Large
+-- ft-ui.template-data: Hero Right Hug Large
 template-url: /hero-right-hug-large/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-2.png
 
@@ -54,17 +54,17 @@ screenshot: $fastn-assets.files.images.featured.sections.heros.hero-2.png
 
 
 
--- ft-ui.template list cards:
+-- ft-ui.template-data list cards:
 
--- ft-ui.template: Card - 1
+-- ft-ui.template-data: Card - 1
 template-url: /featured/sections/cards/card-1/
 screenshot: $fastn-assets.files.images.featured.sections.card-1.png
 
--- ft-ui.template: Image Card - 1
+-- ft-ui.template-data: Image Card - 1
 template-url: /featured/sections/cards/image-card-1/
 screenshot: $fastn-assets.files.images.featured.sections.image-card-1.png
 
--- ft-ui.template: Image Gallery IG
+-- ft-ui.template-data: Image Gallery IG
 template-url: /featured/sections/cards/image-gallery-ig/
 screenshot: $fastn-assets.files.images.featured.sections.image-gallery-ig.png
 
@@ -73,9 +73,9 @@ screenshot: $fastn-assets.files.images.featured.sections.image-gallery-ig.png
 
 
 
--- ft-ui.template list kvt:
+-- ft-ui.template-data list kvt:
 
--- ft-ui.template: Key Value Table 1
+-- ft-ui.template-data: Key Value Table 1
 template-url: /featured/sections/kvt/kvt-1/
 screenshot: $fastn-assets.files.images.featured.sections.kvt-1.png
 
@@ -83,17 +83,17 @@ screenshot: $fastn-assets.files.images.featured.sections.kvt-1.png
 
 
 
--- ft-ui.template list slides:
+-- ft-ui.template-data list slides:
 
--- ft-ui.template: Crispy Presentation Theme
+-- ft-ui.template-data: Crispy Presentation Theme
 template-url: /featured/sections/slides/crispy-presentation-theme/
 screenshot: $fastn-assets.files.images.featured.sections.slides.crispy-presentation-theme.png
 
--- ft-ui.template: Giggle Presentation Template
+-- ft-ui.template-data: Giggle Presentation Template
 template-url: /featured/sections/slides/giggle-presentation-template/
 screenshot: $fastn-assets.files.images.featured.sections.slides.giggle-presentation-template.png
 
--- ft-ui.template: Rotary Presentation Template
+-- ft-ui.template-data: Rotary Presentation Template
 template-url: /featured/sections/slides/rotary-presentation-template/
 screenshot: $fastn-assets.files.images.featured.sections.slides.rotary-presentation-template.png
 

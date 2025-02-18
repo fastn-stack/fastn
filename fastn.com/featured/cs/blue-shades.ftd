@@ -16,21 +16,21 @@ templates: $blue-scheme
 
 
 
--- ft-ui.template list blue-scheme:
+-- ft-ui.template-data list blue-scheme:
 
--- ft-ui.template: Blog Template CS
+-- ft-ui.template-data: Blog Template CS
 template-url: /cs/blog-template-cs/
 screenshot: $fastn-assets.files.images.featured.cs.blog-template-cs.png
 
--- ft-ui.template: Blue Heal CS
+-- ft-ui.template-data: Blue Heal CS
 template-url: /cs/blue-heal-cs/
 screenshot: $fastn-assets.files.images.featured.cs.blue-heal-cs.png
 
--- ft-ui.template: Midnight Rush CS
+-- ft-ui.template-data: Midnight Rush CS
 template-url: /cs/midnight-rush-cs/
 screenshot: $fastn-assets.files.images.featured.cs.midnight-rush-cs.png
 
--- ft-ui.template: Winter CS
+-- ft-ui.template-data: Winter CS
 template-url: /cs/winter-cs/
 screenshot: $fastn-assets.files.images.featured.cs.winter-cs.png
 

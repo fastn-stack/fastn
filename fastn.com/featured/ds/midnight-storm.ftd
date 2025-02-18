@@ -16,21 +16,21 @@ demo-link: https://fastn-community.github.io/midnight-storm/
 
 
 
--- ft-ui.template list doc-sites:
+-- ft-ui.template-data list doc-sites:
 
--- ft-ui.template: Simple Site
+-- ft-ui.template-data: Simple Site
 template-url: featured/ds/doc-site/
 screenshot: $fastn-assets.files.images.featured.doc-site.jpg
 
--- ft-ui.template: Midnight Rush
+-- ft-ui.template-data: Midnight Rush
 template-url: featured/ds/midnight-rush/
 screenshot: $fastn-assets.files.images.featured.doc-sites.midnight-rush.jpg
 
--- ft-ui.template: Misty Gray
+-- ft-ui.template-data: Misty Gray
 template-url: featured/ds/misty-gray/
 screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
 
--- ft-ui.template: Dash Dash DS
+-- ft-ui.template-data: Dash Dash DS
 template-url: featured/ds/dash-dash-ds/
 screenshot: $fastn-assets.files.images.featured.doc-sites.dash-dash-ds.png
 wip: true
