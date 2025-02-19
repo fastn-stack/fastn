@@ -19,6 +19,15 @@ templates: $fonts-typography
 
 -- ft-ui.template-data list fonts-typography:
 
+-- ft-ui.template-data: Arpona Typography
+template-url: arpona-typography.fifthtry.site/typography/
+licence-url: arpona-typography.fifthtry.site
+github-url: arpona-typography.fifthtry.site
+screenshot: $fastn-assets.files.images.featured.font.arpona.png
+
+`arpona-font` typography is available and can be used inside `fastn` web
+packages.
+
 -- ft-ui.template-data: Arya Typography
 template-url: https://fastn-community.github.io/arya-typography/
 licence-url: https://github.com/fastn-community/arya-typography/blob/main/LICENSE
@@ -26,6 +35,15 @@ github-url: https://github.com/fastn-community/arya-typography
 screenshot: $fastn-assets.files.images.featured.font.arya-font.jpg
 
 `arya-font` typography is available and can be used inside `fastn` web
+packages.
+
+-- ft-ui.template-data: Biro Typography
+template-url: biro-typography.fifthtry.site/typography/
+licence-url: biro-typography.fifthtry.site
+github-url: biro-typography.fifthtry.site
+screenshot: $fastn-assets.files.images.featured.font.biro-font.jpg
+
+`biro-font` typography is available and can be used inside `fastn` web
 packages.
 
 -- ft-ui.template-data: Blaka Typography
@@ -82,6 +100,15 @@ screenshot: $fastn-assets.files.images.featured.font.lobster-font.jpg
 `lobster-font` typography is available and can be used inside `fastn` web
 packages.
 
+-- ft-ui.template-data: Mulish Typography
+template-url: mulish-typography.fifthtry.site/typography/
+licence-url: mulish-typography.fifthtry.site
+github-url: mulish-typography.fifthtry.site
+screenshot: $fastn-assets.files.images.featured.font.mulish.png
+
+`mulish-font` typography is available and can be used inside `fastn` web
+packages.
+
 -- ft-ui.template-data: Opensans Typography
 template-url: https://fastn-community.github.io/opensans-typography/
 licence-url: https://github.com/fastn-community/opensans-typography/blob/main/LICENSE
@@ -91,6 +118,14 @@ screenshot: $fastn-assets.files.images.featured.font.opensans-font.jpg
 `opensans-font` typography is available and can be used inside `fastn` web
 packages.
 
+-- ft-ui.template-data: Paul Jackson Typography
+template-url: paul-jackson-typography.fifthtry.site/typography/
+licence-url: paul-jackson-typography.fifthtry.site
+github-url: paul-jackson-typography.fifthtry.site
+screenshot: $fastn-assets.files.images.featured.font.paul-jackson.png
+
+`paul-jackson-font` typography is available and can be used inside `fastn` web
+packages.
 
 -- ft-ui.template-data: Pragati Narrow Typography
 template-url: https://fastn-community.github.io/pragati-narrow-typography/
