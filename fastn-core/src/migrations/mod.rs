@@ -123,12 +123,7 @@ fn validate_migration(
 }
 
 fn has_migrations(config: &fastn_core::Config) -> bool {
-    !config.package.migrations.is_empty()
-        || config
-            .package
-            .apps
-            .iter()
-            .any(|a| !a.package.migrations.is_empty())
+    !config.package.migrations.is_empty() || !config.package.apps.is_empty()
 }
 
 async fn create_migration_table(config: &fastn_core::Config) -> Result<(), fastn_utils::SqlError> {
