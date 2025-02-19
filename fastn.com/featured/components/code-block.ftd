@@ -46,7 +46,6 @@ max-width.fixed.px: 1340
 	cta-text: User Manual
 	cta-url: https://fastn-community.github.io/code-block/
 	previous-url: featured/components-library/
-	github-url: https://github.com/fastn-community/code-block
 	
 -- end: ds.page.layout-bar
 
