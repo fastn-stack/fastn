@@ -161,7 +161,6 @@ max-width.fixed.px if { grid-view.show-large } : 1340
             for: $obj in $grid-view.templates
 			template-url: $obj.template-url
 			licence-url: $obj.licence-url
-			github-url: $obj.github-url
 			screenshot: $obj.screenshot
 			body: $obj.body
 			is-last: $obj.is-last
@@ -183,7 +182,6 @@ max-width.fixed.px if { grid-view.show-large } : 1340
             for: $obj in $grid-view.templates
 			template-url: $obj.template-url
 			licence-url: $obj.licence-url
-			github-url: $obj.github-url
 			screenshot: $obj.screenshot
 			body: $obj.body
 			is-last: $obj.is-last
@@ -266,7 +264,6 @@ spacing.fixed.px if { ftd.device == "mobile" }: 24
             for: $obj in $view-all.templates
 			template-url: $obj.template-url
 			licence-url: $obj.licence-url
-			github-url: $obj.github-url
 			screenshot: $obj.screenshot
 			body: $obj.body
 			is-last: $obj.is-last
@@ -287,7 +284,6 @@ spacing.fixed.px if { ftd.device == "mobile" }: 24
             for: $obj in $view-all.templates
 			template-url: $obj.template-url
 			licence-url: $obj.licence-url
-			github-url: $obj.github-url
 			screenshot: $obj.screenshot
 			body: $obj.body
 			is-last: $obj.is-last
@@ -313,7 +309,6 @@ spacing.fixed.px if { ftd.device == "mobile" }: 24
 caption title:
 string template-url:
 optional string licence-url:
-string github-url:
 boolean is-last:
 boolean $github-hover: false
 boolean $mit-hover: false
@@ -463,7 +458,7 @@ link: $grid-of-items.template-url
 	
 		-- ftd.row:
 		
-			-- ftd.column:
+			/-- ftd.column:
 			if: { grid-of-items.github-url != NULL  }
 			link: $grid-of-items.github-url
 			
@@ -510,7 +505,6 @@ caption title:
 string template-url:
 optional ftd.image-src screenshot:
 optional string licence-url:
-optional string github-url:
 optional body body:
 boolean is-last: false
 boolean wip: false

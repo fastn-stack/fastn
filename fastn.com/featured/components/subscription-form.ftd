@@ -44,7 +44,6 @@ max-width.fixed.px: 1340
 
 	-- ds.layout: Subscription Form
 	previous-url: featured/components-library/
-	github-url: https://github.com/FifthTry/subscription-app
 	
 -- end: ds.page.layout-bar
 

@@ -470,6 +470,15 @@ skip: true
       skip: true
       document: featured/cs/blog-template-1-cs.ftd
   - Font Typographies: /featured/fonts/
+    - Arpona Typography: /fonts/arpona/
+      skip: true
+      document: featured/fonts/arpona.ftd
+    - Mulish Typography: /fonts/mulish/
+      skip: true
+      document: featured/fonts/mulish.ftd
+    - Biro Typography: /fonts/biro/
+      skip: true
+      document: featured/fonts/biro.ftd
     - Arya Typography: /fonts/arya/
       skip: true
       document: featured/fonts/arya.ftd
@@ -482,6 +491,9 @@ skip: true
     - Opensans Typography: /fonts/opensans/
       skip: true
       document: featured/fonts/opensans.ftd
+    - Paul Jackson Typography: /fonts/paul-jackson/
+      skip: true
+      document: featured/fonts/paul-jackson.ftd
     - Pragati Narrow Typography: /fonts/pragati-narrow/
       skip: true
       document: featured/fonts/pragati-narrow.ftd

@@ -1,16 +1,16 @@
--- import: fastn.com/u/ganesh-salunke
+-- import: fastn.com/u/meenu-kumari
 -- import: fastn.com/featured as ft-ui
 
--- ds.featured-category: Lato Typography
+-- ds.featured-category: Mulish Typography
 featured-link: /featured/fonts/
 category: Font Typography
-image: $fastn-assets.files.images.featured.font.lato-font.jpg
-owners: [$ganesh-salunke.info]
-license-url: https://github.com/fastn-community/lato-typography/blob/main/LICENSE
+image: $fastn-assets.files.images.featured.font.mulish.png
+owners: [$meenu-kumari.info]
+license-url: mulish-typography.fifthtry.site
 license: Creative Commons
 published-date: 26-March-2023
 cards: $typographies
-demo-link: https://lato-typography.fifthtry.site/fastn-typography/
+demo-link: https://mulish-typography.fifthtry.site/typography/
 
 
 

@@ -64,7 +64,6 @@ show-layout-bar: true
 image: $fastn-assets.files.images.featured.workshops.workshop-1.png
 cta-url: https://fifthtry.github.io/workshop-page/
 cta-text: Demo
-github-url: https://github.com/FifthTry/workshop-page/
 cta-2-url: https://fifthtry.github.io/workshop-page/ws-chapter/
 cta-2-text: User Manual
 
