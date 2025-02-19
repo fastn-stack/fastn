@@ -44,7 +44,6 @@ max-width.fixed.px: 1340
 
 	-- ds.layout: Language Switcher
 	previous-url: featured/components-library/
-	github-url: https://github.com/FifthTry/language-switcher
 	
 -- end: ds.page.layout-bar
 
