@@ -1,0 +1,41 @@
+-- import: fastn.com/u/meenu-kumari
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Arpona Typography
+featured-link: /featured/fonts/
+category: Font Typography
+image: $fastn-assets.files.images.featured.font.arpona.png
+owners: [$meenu-kumari.info]
+license-url: arpona-typography.fifthtry.site
+license: Creative Commons
+published-date: 26-March-2023
+cards: $typographies
+github-url: arpona-typography.fifthtry.site
+demo-link: https://arpona-typography.fifthtry.site/typography/
+
+
+
+
+
+
+
+
+-- ft-ui.template-data list typographies:
+
+-- ft-ui.template-data: Inter Typography
+template-url: /fonts/inter/
+screenshot: $fastn-assets.files.images.featured.font.inter-font.jpg
+
+-- ft-ui.template-data: Opensans Typography
+template-url: /fonts/opensans/
+screenshot: $fastn-assets.files.images.featured.font.opensans-font.jpg
+
+-- ft-ui.template-data: Roboto Typography
+template-url: /fonts/roboto/
+screenshot: $fastn-assets.files.images.featured.font.roboto-font.jpg
+
+-- ft-ui.template-data: Lato Typography
+template-url: /fonts/lato/
+screenshot: $fastn-assets.files.images.featured.font.lato-font.jpg
+
+-- end: typographies
