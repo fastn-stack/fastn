@@ -1,0 +1,17 @@
+-- template create-account-confirmation-html(link, name):
+string link:
+string name:
+
+<html>
+<body>
+<h1>Hi $name,</h1>
+<a href="$link">$link</a>
+</body>
+</html>
+
+
+-- string html: $create-account-confirmation-html(link = https://fastn.com/, name = John)
+
+
+-- ftd.json:
+html: $html

@@ -1318,11 +1318,20 @@ impl Document {
             let mut o = serde_json::Map::new();
             for (k, v) in data {
                 if let Some(value) = v.resolve(&tdoc, 0)?.to_serde_value(&tdoc)? {
+                    let value = match value {
+                        serde_json::Value::String(s) => serde_json::Value::String(unescape(&s)?),
+                        v => v,
+                    };
                     o.insert(k, serde_json::to_value(value)?);
                 }
             }
 
             return Ok(Some(serde_json::to_vec(&o)?));
+        }
+
+        #[inline]
+        fn unescape(s: &str) -> serde_json::Result<String> {
+            serde_json::from_str(&format!("\"{}\"", s))
         }
 
         Ok(None)
