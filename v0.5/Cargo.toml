@@ -21,7 +21,7 @@ authors = [
     "Arpita Jaiswal <arpita@fifthtry.com>",
     "Siddhant Kumar <siddhant@fifthtry.com>",
 ]
-edition = "2021"
+edition = "2024"
 description = "fastn: Full-stack Web Development Made Easy"
 license = "AGPL-3"
 repository = "https://github.com/fastn-stack/fastn"
