@@ -102,9 +102,9 @@ impl TDoc<'_> {
                     arguments,
                     None,
                 )?
-            } else if let Ok(value) = arg.to_value(0, self.name) {
+            } else { match arg.to_value(0, self.name) { Ok(value) => {
                 ftd::PropertyValue::Value { value }
-            } else {
+            } _ => {
                 return ftd::ftd2021::p2::utils::e2(
                     format!(
                         "expected default value for local variable 2 {}: {:?} in {}",
@@ -113,7 +113,7 @@ impl TDoc<'_> {
                     self.name,
                     0,
                 );
-            };
+            }}};
             if let ftd::PropertyValue::Variable { ref mut name, .. } = default {
                 if !self.local_variables.contains_key(name) && !self.bag.contains_key(name) {
                     *name = self.resolve_local_variable_name(0, name, string_container)?;
@@ -248,10 +248,10 @@ impl TDoc<'_> {
                 )?;
             }
         }
-        if let Some((ref mut c, _)) = reference {
+        if let Some((c, _)) = reference {
             *c = self.resolve_name(0, format!("{}@{}", c, parent_container).as_str())?;
         }
-        if let Some(ref mut condition) = condition {
+        if let Some(condition) = condition {
             edit_condition(
                 condition,
                 self,
@@ -357,7 +357,7 @@ impl TDoc<'_> {
             ignore_loop: bool,
             ignore_mouse_in: bool,
         ) -> ftd::ftd2021::p1::Result<()> {
-            if let ftd::PropertyValue::Variable { ref mut name, kind } = property_value {
+            if let ftd::PropertyValue::Variable { name, kind } = property_value {
                 if (ignore_loop && name.contains("$loop$"))
                     || (insert_only && !name.as_str().eq("MOUSE-IN"))
                     || (ignore_mouse_in && name.contains("MOUSE-IN"))
@@ -411,16 +411,16 @@ impl TDoc<'_> {
                     });
                     doc.local_variables.insert(key.clone(), local_variable);
                     *name = key;
-                } else if let Some((key, _)) = doc.get_local_variable(
+                } else { match doc.get_local_variable(
                     &doc.resolve_name(0, format!("{}@{}", part1, parent_container).as_str())?,
-                ) {
+                ) { Some((key, _)) => {
                     let key = if let Some(part2) = part2 {
                         format!("{}.{}", key, part2)
                     } else {
                         key.to_string()
                     };
                     *name = key;
-                }
+                } _ => {}}}
             }
             Ok(())
         }
@@ -1093,11 +1093,11 @@ impl TDoc<'_> {
                 v.conditions
                     .into_iter()
                     .flat_map(|(b, v)| {
-                        if let Ok(v) = v.resolve(line_number, self) {
+                        match v.resolve(line_number, self) { Ok(v) => {
                             Some((b, v))
-                        } else {
+                        } _ => {
                             None
-                        }
+                        }}
                     })
                     .collect(),
             )),

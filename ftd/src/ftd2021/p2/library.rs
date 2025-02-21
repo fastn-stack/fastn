@@ -37,7 +37,8 @@ fn read_package(
             line_number: section.line_number,
         }
     })?;
-    if let Ok(ftd::Value::List {
+    match var.value.resolve(section.line_number, doc)
+    { Ok(ftd::Value::List {
         kind:
             ftd::ftd2021::p2::Kind::String {
                 caption,
@@ -46,8 +47,7 @@ fn read_package(
                 is_reference,
             },
         ..
-    }) = var.value.resolve(section.line_number, doc)
-    {
+    }) => {
         let mut data = vec![];
         for line in get.split('\n') {
             if line.is_empty() {
@@ -74,7 +74,7 @@ fn read_package(
                 is_reference,
             },
         })
-    } else {
+    } _ => {
         ftd::ftd2021::p2::utils::unknown_processor_error(
             format!(
                 "list should have 'string' kind, found {:?}",
@@ -83,7 +83,7 @@ fn read_package(
             doc.name.to_string(),
             section.line_number,
         )
-    }
+    }}
 }
 
 fn text_component() -> ftd::ftd2021::p1::Result<ftd::Value> {
@@ -118,13 +118,13 @@ fn read_records(
             line_number: section.line_number,
         }
     })?;
-    if let Ok(ftd::Value::List {
+    match var.value.resolve(section.line_number, doc)
+    { Ok(ftd::Value::List {
         kind: ftd::ftd2021::p2::Kind::Record {
             name, is_reference, ..
         },
         ..
-    }) = var.value.resolve(section.line_number, doc)
-    {
+    }) => {
         let rec = doc.get_record(section.line_number, name.as_str())?;
         let mut data = vec![];
         for line in get.split('\n') {
@@ -167,7 +167,7 @@ fn read_records(
                 is_reference,
             },
         })
-    } else {
+    } _ => {
         ftd::ftd2021::p2::utils::unknown_processor_error(
             format!(
                 "list should have 'string' kind, found {:?}",
@@ -176,7 +176,7 @@ fn read_records(
             doc.name.to_string(),
             section.line_number,
         )
-    }
+    }}
 }
 
 impl TestLibrary {

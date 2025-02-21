@@ -51,7 +51,7 @@ pub fn process(
             serde_json::Value::String(value.to_string())
         }
         ftd_ast::VariableValue::Optional {
-            value: ref ivalue, ..
+            value: ivalue, ..
         } => match ivalue.as_ref() {
             Some(ftd_ast::VariableValue::String { value, .. }) => {
                 serde_json::Value::String(value.to_string())

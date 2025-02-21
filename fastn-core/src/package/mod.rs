@@ -225,7 +225,7 @@ impl Package {
             other: &realm_lang::Language,
             package_name: &str,
         ) -> ftd::interpreter::Result<bool> {
-            if let Some(ref current) = current {
+            if let Some(current) = current {
                 let current = realm_lang::Language::from_2_letter_code(current.as_str()).map_err(
                     |realm_lang::Error::InvalidCode { ref found }| {
                         ftd::interpreter::Error::ParseError {

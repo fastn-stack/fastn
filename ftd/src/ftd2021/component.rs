@@ -971,12 +971,11 @@ fn reevalute_markup(
                     }
                     t
                 };
-                let named_container = if let Ok(mut get) =
-                    markup_get_named_container(&[], root, 0, doc, &mut Default::default(), &[])
-                {
+                let named_container = match markup_get_named_container(&[], root, 0, doc, &mut Default::default(), &[])
+                { Ok(mut get) => {
                     get.extend(named_container.clone());
                     get
-                } else {
+                } _ => {
                     // In case of component variable of markup defined internally,
                     // it won't be present inside doc.bag
                     // Example:
@@ -986,7 +985,7 @@ fn reevalute_markup(
                     //
                     // `bar` here won't be present inside doc.bag
                     named_container.clone()
-                };
+                }};
                 reevalute_markups(&mut t, named_container, doc)?;
                 ftd::IText::Markup(t)
             }
@@ -1390,7 +1389,7 @@ fn get_conditional_attributes(
                         .iter()
                         .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
                         .collect::<ftd::ftd2021::p1::Result<ftd::Map<ftd::Value>>>()?;
-                    let light = if let Some(light) = ftd::ftd2021::p2::element::color_from(
+                    let light = match ftd::ftd2021::p2::element::color_from(
                         ftd::ftd2021::p2::utils::string_optional(
                             "light",
                             &properties,
@@ -1398,19 +1397,19 @@ fn get_conditional_attributes(
                             0,
                         )?,
                         doc.name,
-                    )? {
+                    )? { Some(light) => {
                         ftd::ftd2021::html::color(&light)
-                    } else {
+                    } _ => {
                         "auto".to_string()
-                    };
-                    let dark = if let Some(dark) = ftd::ftd2021::p2::element::color_from(
+                    }};
+                    let dark = match ftd::ftd2021::p2::element::color_from(
                         ftd::ftd2021::p2::utils::string_optional("dark", &properties, doc.name, 0)?,
                         doc.name,
-                    )? {
+                    )? { Some(dark) => {
                         ftd::ftd2021::html::color(&dark)
-                    } else {
+                    } _ => {
                         "auto".to_string()
-                    };
+                    }};
 
                     ftd::ConditionalValue {
                         value: serde_json::json!({ "light": light, "dark": dark, "$kind$": "light" }),
@@ -2027,16 +2026,16 @@ impl Component {
                 | ftd::Element::Markup(_)
                 | ftd::Element::Null => {}
                 ftd::Element::Column(ftd::Column {
-                    ref mut container, ..
+                    container, ..
                 })
                 | ftd::Element::Row(ftd::Row {
-                    ref mut container, ..
+                    container, ..
                 })
                 | ftd::Element::Scene(ftd::Scene {
-                    ref mut container, ..
+                    container, ..
                 })
                 | ftd::Element::Grid(ftd::Grid {
-                    ref mut container, ..
+                    container, ..
                 }) => {
                     let ElementWithContainer {
                         children,

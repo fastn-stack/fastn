@@ -1589,7 +1589,7 @@ pub fn arguments_on_condition(
 ) -> ftd::ftd2021::p1::Result<(ftd::Map<ftd::Value>, bool)> {
     let mut arguments: ftd::Map<ftd::Value> = Default::default();
     let mut is_visible = true;
-    if let ftd::ftd2021::p2::Boolean::IsNotNull { ref value } = condition {
+    if let ftd::ftd2021::p2::Boolean::IsNotNull { value } = condition {
         match value {
             ftd::PropertyValue::Value { .. } => {}
             ftd::PropertyValue::Reference { name, kind }
@@ -1809,7 +1809,7 @@ pub fn convert_to_document_id(doc_name: &str) -> String {
 #[cfg(test)]
 mod test {
     macro_rules! p {
-        ($s:expr, $id: expr, $alias: expr) => {
+        ($s:expr_2021, $id: expr_2021, $alias: expr_2021) => {
             assert_eq!(
                 super::parse_import(&Some($s.to_string()), $id, 0)
                     .unwrap_or_else(|e| panic!("{}", e)),

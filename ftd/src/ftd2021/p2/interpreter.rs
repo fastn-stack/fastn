@@ -192,11 +192,11 @@ impl InterpreterState {
                             &parsed_document.instructions,
                         )?,
                     });
-            } else if let Ok(ftd::ftd2021::variable::VariableData {
+            } else { match var_data
+            { Ok(ftd::ftd2021::variable::VariableData {
                 type_: ftd::ftd2021::variable::Type::Component,
                 ..
-            }) = var_data
-            {
+            }) => {
                 // declare a function
                 let d = ftd::Component::from_p1(&p1, &doc)?;
                 let name = doc.resolve_name(p1.line_number, &d.full_name.to_string())?;
@@ -209,7 +209,7 @@ impl InterpreterState {
                 }
                 thing.push((name, ftd::ftd2021::p2::Thing::Component(d)));
                 // processed_p1.push(p1.name.to_string());
-            } else if let Ok(ref var_data) = var_data {
+            } _ => { match var_data { Ok(ref var_data) => {
                 let d = if p1
                     .header
                     .str(doc.name, p1.line_number, "$processor$")
@@ -236,9 +236,8 @@ impl InterpreterState {
                     );
                 }
                 thing.push((name, ftd::ftd2021::p2::Thing::Variable(d)));
-            } else if let ftd::ftd2021::p2::Thing::Variable(mut v) =
-                doc.get_thing(p1.line_number, p1.name.as_str())?
-            {
+            } _ => { match doc.get_thing(p1.line_number, p1.name.as_str())?
+            { ftd::ftd2021::p2::Thing::Variable(mut v) => {
                 assert!(
                     !(p1.header
                         .str_optional(doc.name, p1.line_number, "if")?
@@ -263,7 +262,7 @@ impl InterpreterState {
                         p1.line_number,
                     );
                 }
-                if let Some(expr) = p1.header.str_optional(doc.name, p1.line_number, "if")? {
+                match p1.header.str_optional(doc.name, p1.line_number, "if")? { Some(expr) => {
                     let val = v.get_value(&p1, &doc)?;
                     v.conditions.push((
                         ftd::ftd2021::p2::Boolean::from_expression(
@@ -275,7 +274,7 @@ impl InterpreterState {
                         )?,
                         val,
                     ));
-                } else if p1
+                } _ => if p1
                     .header
                     .str_optional(doc.name, p1.line_number, "$processor$")?
                     .is_some()
@@ -291,7 +290,7 @@ impl InterpreterState {
                     // v.value = ftd::PropertyValue::Value { value };
                 } else {
                     v.update_from_p1(&p1, &doc)?;
-                }
+                }}
                 thing.push((
                     doc.resolve_name(p1.line_number, doc_name.as_str())?,
                     ftd::ftd2021::p2::Thing::Variable(doc.set_value(
@@ -300,7 +299,7 @@ impl InterpreterState {
                         v,
                     )?),
                 ));
-            } else {
+            } _ => {
                 // cloning because https://github.com/rust-lang/rust/issues/59159
                 match (doc.get_thing(p1.line_number, p1.name.as_str())?).clone() {
                     ftd::ftd2021::p2::Thing::Variable(_) => {
@@ -322,7 +321,7 @@ impl InterpreterState {
                                 section: p1.to_owned(),
                             });
                         }
-                        if let Ok(loop_data) = p1.header.str(doc.name, p1.line_number, "$loop$") {
+                        match p1.header.str(doc.name, p1.line_number, "$loop$") { Ok(loop_data) => {
                             let section_to_subsection = ftd::ftd2021::p1::SubSection {
                                 name: p1.name.to_string(),
                                 caption: p1.caption.to_owned(),
@@ -342,7 +341,7 @@ impl InterpreterState {
                                     )?,
                                 },
                             );
-                        } else {
+                        } _ => {
                             let mut parent = ftd::ChildComponent::from_p1(
                                 p1.line_number,
                                 p1.name.as_str(),
@@ -364,9 +363,8 @@ impl InterpreterState {
                             let mut children = vec![];
 
                             for sub in p1.sub_sections.0.iter() {
-                                if let Ok(loop_data) =
-                                    sub.header.str(doc.name, p1.line_number, "$loop$")
-                                {
+                                match sub.header.str(doc.name, p1.line_number, "$loop$")
+                                { Ok(loop_data) => {
                                     children.push(
                                         ftd::ftd2021::component::recursive_child_component(
                                             loop_data,
@@ -376,7 +374,7 @@ impl InterpreterState {
                                             None,
                                         )?,
                                     );
-                                } else {
+                                } _ => {
                                     let root_name =
                                         ftd::ftd2021::p2::utils::get_root_component_name(
                                             &doc,
@@ -401,13 +399,13 @@ impl InterpreterState {
                                         )?
                                     };
                                     children.push(child);
-                                }
+                                }}
                             }
 
                             parsed_document
                                 .instructions
                                 .push(ftd::Instruction::Component { children, parent })
-                        }
+                        }}
                     }
                     ftd::ftd2021::p2::Thing::Record(mut r) => {
                         r.add_instance(&p1, &doc)?;
@@ -433,7 +431,7 @@ impl InterpreterState {
                         );
                     }
                 };
-            }
+            }}}}}}}
             self.bag.extend(thing);
         }
 
@@ -939,7 +937,7 @@ impl InterpreterState {
             foreign_variables: &[String],
             doc: &ftd::ftd2021::p2::TDoc,
         ) -> ftd::ftd2021::p1::Result<Option<String>> {
-            if let Some(ref mut caption) = caption {
+            if let Some(caption) = caption {
                 if let Some(cap) =
                     process_foreign_variables(caption, foreign_variables, doc, line_number)?
                 {
@@ -955,7 +953,7 @@ impl InterpreterState {
                 }
             }
 
-            if let Some((line_number, ref mut body)) = body {
+            if let Some((line_number, body)) = body {
                 if let Some(b) =
                     process_foreign_variables(body, foreign_variables, doc, *line_number)?
                 {
@@ -1089,7 +1087,7 @@ impl InterpreterState {
             let mut replace_blocks: Vec<ftd::ReplaceLinkBlock<std::collections::HashSet<String>>> =
                 vec![];
 
-            if let Some(ref caption) = caption {
+            if let Some(caption) = caption {
                 let (captured_ids, process_for_escaped_links) = find_referenced_links(caption);
                 if !captured_ids.is_empty() || process_for_escaped_links {
                     replace_blocks.push((
@@ -1111,7 +1109,7 @@ impl InterpreterState {
                 }
             }
 
-            if let Some((ln, ref body)) = body {
+            if let Some((ln, body)) = body {
                 let (captured_ids, process_for_escaped_links) = find_referenced_links(body);
                 if !captured_ids.is_empty() || process_for_escaped_links {
                     replace_blocks.push((

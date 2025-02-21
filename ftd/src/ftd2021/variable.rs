@@ -302,13 +302,13 @@ impl PropertyValue {
             let mut found_kind = kind.to_owned();
             if let Some(ref p2) = p2 {
                 let (name, fields) = match kind.inner() {
-                    ftd::ftd2021::p2::Kind::Record { ref name, .. } => (
+                    ftd::ftd2021::p2::Kind::Record { name, .. } => (
                         name.to_string(),
                         doc.get_record(line_number, &doc.resolve_name(line_number, name)?)?
                             .fields,
                     ),
                     ftd::ftd2021::p2::Kind::OrTypeWithVariant {
-                        ref name, variant, ..
+                        name, variant, ..
                     } => {
                         let name = doc.resolve_name(line_number, name)?;
                         (
@@ -416,13 +416,13 @@ impl PropertyValue {
             } => {
                 assert_eq!(self.kind(), *reference_kind);
                 let (default, condition) =
-                    if let Ok(d) = doc.get_value_and_conditions(0, reference_name.as_str()) {
+                    match doc.get_value_and_conditions(0, reference_name.as_str()) { Ok(d) => {
                         d
-                    } else if let Ok(d) = doc.get_component(0, reference_name.as_str()) {
+                    } _ => { match doc.get_component(0, reference_name.as_str()) { Ok(d) => {
                         return d.to_value(reference_kind);
-                    } else {
+                    } _ => {
                         return reference_kind.to_value(line_number, doc.name);
-                    };
+                    }}}};
                 let mut value = default;
                 for (boolean, property) in condition {
                     if boolean.eval(line_number, doc)? {
@@ -1190,34 +1190,34 @@ fn read_object(
         let line_number = line_number.to_owned();
         let value = if v.trim().starts_with('$') {
             ftd::PropertyValue::resolve_value(line_number, v, None, doc, &Default::default(), None)?
-        } else if let Ok(v) = ftd::PropertyValue::resolve_value(
+        } else { match ftd::PropertyValue::resolve_value(
             line_number,
             v,
             Some(ftd::ftd2021::p2::Kind::decimal()),
             doc,
             &Default::default(),
             None,
-        ) {
+        ) { Ok(v) => {
             v
-        } else if let Ok(v) = ftd::PropertyValue::resolve_value(
+        } _ => { match ftd::PropertyValue::resolve_value(
             line_number,
             v,
             Some(ftd::ftd2021::p2::Kind::boolean()),
             doc,
             &Default::default(),
             None,
-        ) {
+        ) { Ok(v) => {
             v
-        } else if let Ok(v) = ftd::PropertyValue::resolve_value(
+        } _ => { match ftd::PropertyValue::resolve_value(
             line_number,
             v,
             Some(ftd::ftd2021::p2::Kind::integer()),
             doc,
             &Default::default(),
             None,
-        ) {
+        ) { Ok(v) => {
             v
-        } else {
+        } _ => {
             ftd::PropertyValue::resolve_value(
                 line_number,
                 v,
@@ -1226,7 +1226,7 @@ fn read_object(
                 &Default::default(),
                 None,
             )?
-        };
+        }}}}}}};
         values.insert(k.to_string(), value);
     }
 

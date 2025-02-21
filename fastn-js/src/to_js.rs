@@ -693,7 +693,7 @@ fn variable_to_js(
         name
     };
 
-    if let Some(ref prefix) = prefix {
+    if let Some(prefix) = prefix {
         text(format!("fastn_utils.createNestedObject({}, \"{}\",", prefix, name,).as_str())
             .append(value)
             .append(text(");"))

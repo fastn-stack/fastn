@@ -93,7 +93,7 @@ pub(crate) fn store_invocations(
     for (k, v) in invocations.into_iter() {
         if let Some(c) = bag.get_mut(k.as_str()) {
             match c {
-                ftd::ftd2021::p2::Thing::Component(ref mut c) => {
+                ftd::ftd2021::p2::Thing::Component(c) => {
                     if !c.kernel {
                         c.invocations.extend(v)
                     }
@@ -104,7 +104,7 @@ pub(crate) fn store_invocations(
         }
         if let Some(c) = local_variables.get_mut(k.as_str()) {
             match c {
-                ftd::ftd2021::p2::Thing::Component(ref mut c) => {
+                ftd::ftd2021::p2::Thing::Component(c) => {
                     if !c.kernel {
                         c.invocations.extend(v)
                     }

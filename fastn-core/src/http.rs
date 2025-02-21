@@ -180,14 +180,14 @@ impl Request {
         let headers = {
             let mut headers = reqwest::header::HeaderMap::new();
             for (key, value) in req.headers() {
-                if let (Ok(v), Ok(k)) = (
+                match (
                     value.to_str().unwrap_or("").parse::<http::HeaderValue>(),
                     http::HeaderName::from_bytes(key.as_str().as_bytes()),
-                ) {
+                ) { (Ok(v), Ok(k)) => {
                     headers.insert(k, v.clone());
-                } else {
+                } _ => {
                     tracing::warn!("failed to parse header: {key:?} {value:?}");
-                }
+                }}
             }
             headers
         };

@@ -157,20 +157,20 @@ pub(crate) fn find_value_by_argument(
         }
     } else {
         for p in properties.iter() {
-            if let Ok(Some(v)) = p.resolve(&doc.itdoc(), inherited_variables) {
+            match p.resolve(&doc.itdoc(), inherited_variables) { Ok(Some(v)) => {
                 value = Some(v);
                 line_number = Some(p.line_number);
                 if p.condition.is_some() {
                     break;
                 }
-            } else if p.condition.is_none() {
+            } _ => if p.condition.is_none() {
                 if let Some(v) = p.value.get_reference_or_clone() {
                     value = Some(fastn_resolved::Value::new_string(
                         format!("{{{}}}", v).as_str(),
                     ));
                     line_number = Some(p.line_number);
                 }
-            }
+            }}
         }
     }
 
