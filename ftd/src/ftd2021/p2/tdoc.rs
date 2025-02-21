@@ -411,16 +411,16 @@ impl TDoc<'_> {
                     });
                     doc.local_variables.insert(key.clone(), local_variable);
                     *name = key;
-                } else { match doc.get_local_variable(
+                } else if let Some((key, _)) = doc.get_local_variable(
                     &doc.resolve_name(0, format!("{}@{}", part1, parent_container).as_str())?,
-                ) { Some((key, _)) => {
+                ) {
                     let key = if let Some(part2) = part2 {
                         format!("{}.{}", key, part2)
                     } else {
                         key.to_string()
                     };
                     *name = key;
-                } _ => {}}}
+                }
             }
             Ok(())
         }

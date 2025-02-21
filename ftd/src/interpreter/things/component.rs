@@ -1126,10 +1126,9 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
                 &properties,
                 arguments,
             )?;
-        } else { match doc.get_thing(name.as_str(), ast_component.line_number)?
-        { ftd::interpreter::Thing::Component(c) => {
+        } else if let ftd::interpreter::Thing::Component(c) = doc.get_thing(name.as_str(), ast_component.line_number)? {
             Self::assert_no_private_properties_while_invocation(&properties, &c.arguments)?;
-        } _ => {}}}
+        }
 
         let id = ast_component.id;
 

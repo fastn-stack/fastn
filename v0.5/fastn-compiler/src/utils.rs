@@ -17,10 +17,10 @@ pub(crate) fn used_definitions(
         match definitions.get(definition.str(&arena)) { Some(_definition) => {
             // definitions.insert(symbol.clone(), definition);
             todo!()
-        } _ => { match fastn_builtins::builtins().get(definition.str(&arena)) { Some(_definition) => {
+        } _ => { if let Some(_definition) = fastn_builtins::builtins().get(definition.str(&arena)) {
             // definitions.insert(symbol.clone(), definition);
             todo!()
-        } _ => {}}}}
+        }}}
     }
     def_map
 }
