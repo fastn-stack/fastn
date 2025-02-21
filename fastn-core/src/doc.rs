@@ -451,7 +451,7 @@ pub async fn resolve_foreign_variable2022(
                         .get(&format!("{}/{}", package.name, dark_path))
                     {
                         dark_mode = dark.to_string();
-                    } else if let Ok(dark) = package
+                    } else { match package
                         .resolve_by_file_name(
                             dark_path.as_str(),
                             None,
@@ -459,7 +459,7 @@ pub async fn resolve_foreign_variable2022(
                             preview_session_id,
                         )
                         .await
-                    {
+                    { Ok(dark) => {
                         print!("Processing {}/{} ... ", package.name.as_str(), dark_path);
                         fastn_core::utils::write(
                             &lib.config.build_dir().join("-").join(package.name.as_str()),
@@ -480,9 +480,9 @@ pub async fn resolve_foreign_variable2022(
                             format!("Processed {}/{}", package.name.as_str(), dark_path).as_str(),
                             start,
                         );
-                    } else {
+                    } _ => {
                         dark_mode.clone_from(&light_mode);
-                    }
+                    }}}
                     lib.downloaded_assets.insert(
                         format!("{}/{}", package.name, dark_path),
                         dark_mode.to_string(),
@@ -752,13 +752,13 @@ pub async fn resolve_foreign_variable2(
                 let dark_path = format!("{}-dark.{}", file.replace('.', "/"), ext);
                 if download_assets && !file.ends_with("-dark") {
                     let start = std::time::Instant::now();
-                    if let Some(dark) = lib
+                    match lib
                         .config
                         .downloaded_assets
                         .get(&format!("{}/{}", package.name, dark_path))
-                    {
+                    { Some(dark) => {
                         dark_mode = dark.to_string();
-                    } else if let Ok(dark) = package
+                    } _ => { match package
                         .resolve_by_file_name(
                             dark_path.as_str(),
                             None,
@@ -766,7 +766,7 @@ pub async fn resolve_foreign_variable2(
                             session_id,
                         )
                         .await
-                    {
+                    { Ok(dark) => {
                         print!("Processing {}/{} ... ", package.name.as_str(), dark_path);
                         fastn_core::utils::write(
                             &lib.config
@@ -791,9 +791,9 @@ pub async fn resolve_foreign_variable2(
                             format!("Processed {}/{}", package.name.as_str(), dark_path).as_str(),
                             start,
                         );
-                    } else {
+                    } _ => {
                         dark_mode.clone_from(&light_mode);
-                    }
+                    }}}}
                     lib.config.downloaded_assets.insert(
                         format!("{}/{}", package.name, dark_path),
                         dark_mode.to_string(),

@@ -138,15 +138,15 @@ impl ValueExt for fastn_resolved::Value {
             fastn_resolved::Value::List { data, .. } => {
                 let mut values = vec![];
                 for value in data {
-                    let v = if let Some(v) = value
+                    let v = match value
                         .clone()
                         .resolve(doc, line_number)?
                         .to_html_string(doc, value.line_number(), None, id, true)?
-                    {
+                    { Some(v) => {
                         v
-                    } else {
+                    } _ => {
                         continue;
-                    };
+                    }};
                     values.push(v);
                 }
                 Some(format!("{:?}", values.join(" ")))
@@ -174,30 +174,30 @@ impl ValueExt for fastn_resolved::Value {
                 let value = value.to_html_string(doc, field, id, string_needs_no_quotes)?;
                 match value {
                     Some(value) if name.eq(ftd::interpreter::FTD_LENGTH) => {
-                        if let Ok(pattern) = ftd::executor::Length::set_pattern_from_variant_str(
+                        match ftd::executor::Length::set_pattern_from_variant_str(
                             variant,
                             doc.name,
                             line_number,
-                        ) {
+                        ) { Ok(pattern) => {
                             Some(format!("`{}`.format(JSON.stringify({}))", pattern, value))
-                        } else {
+                        } _ => {
                             Some(value)
-                        }
+                        }}
                     }
                     Some(value)
                         if name.eq(ftd::interpreter::FTD_RESIZING)
                             && variant.ne(ftd::interpreter::FTD_RESIZING_FIXED) =>
                     {
-                        if let Ok(pattern) = ftd::executor::Resizing::set_pattern_from_variant_str(
+                        match ftd::executor::Resizing::set_pattern_from_variant_str(
                             variant,
                             full_variant,
                             doc.name,
                             line_number,
-                        ) {
+                        ) { Ok(pattern) => {
                             Some(format!("`{}`.format(JSON.stringify({}))", pattern, value))
-                        } else {
+                        } _ => {
                             Some(value)
-                        }
+                        }}
                     }
                     Some(value) => Some(value),
                     None => None,
@@ -206,13 +206,12 @@ impl ValueExt for fastn_resolved::Value {
             fastn_resolved::Value::Record { fields, .. } => {
                 let mut values = vec![];
                 for (k, v) in fields {
-                    let value = if let Some(v) =
-                        v.to_html_string(doc, field.clone(), id, string_needs_no_quotes)?
-                    {
+                    let value = match v.to_html_string(doc, field.clone(), id, string_needs_no_quotes)?
+                    { Some(v) => {
                         v
-                    } else {
+                    } _ => {
                         "null".to_string()
-                    };
+                    }};
                     values.push(format!("\"{}\": {}", k, value));
                 }
 

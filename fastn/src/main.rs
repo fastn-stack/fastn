@@ -372,18 +372,18 @@ pub fn version() -> &'static str {
 
 fn set_env_vars(is_test_running: bool) {
     let checked_in = {
-        if let Ok(status) = std::process::Command::new("git")
+        match std::process::Command::new("git")
             .arg("ls-files")
             .arg("--error-unmatch")
             .arg(".env")
             .stdout(std::process::Stdio::null())
             .stderr(std::process::Stdio::null())
             .status()
-        {
+        { Ok(status) => {
             status.success() // .env is checked in
-        } else {
+        } _ => {
             false
-        }
+        }}
     };
 
     let ignore = {

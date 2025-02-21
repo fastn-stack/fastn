@@ -285,7 +285,7 @@ impl TocParser {
                         let url_regex = regex::Regex::new(
                             r":[ ]?(?P<url>(?:https?)?://(?:[a-zA-Z0-9]+\.)?(?:[A-z0-9]+\.)(?:[A-z0-9]+)(?:[/A-Za-z0-9\?:\&%]+))"
                         ).unwrap();
-                        if let Some(regex_match) = url_regex.find(current_title.as_str()) {
+                        match url_regex.find(current_title.as_str()) { Some(regex_match) => {
                             let curr_title = current_title.as_str();
                             (
                                 Some(curr_title[..regex_match.start()].trim().to_string()),
@@ -296,13 +296,13 @@ impl TocParser {
                                         .to_string(),
                                 ),
                             )
-                        } else {
+                        } _ => {
                             return Err(ParseError::InvalidTOCItem {
                                 doc_id: self.doc_name.clone(),
                                 message: "Ambiguous <title>: <URL> evaluation. Multiple colons found. Either specify the complete URL or specify the url as an attribute".to_string(),
                                 row_content: current_title.as_str().to_string(),
                             });
-                        }
+                        }}
                     }
                 };
                 TocItem {
@@ -426,10 +426,10 @@ mod test {
     use pretty_assertions::assert_eq;
 
     macro_rules! p {
-        ($s:expr, $t: expr,) => {
+        ($s:expr_2021, $t: expr_2021,) => {
             p!($s, $t)
         };
-        ($s:expr, $t: expr) => {
+        ($s:expr_2021, $t: expr_2021) => {
             assert_eq!(
                 super::ToC::parse($s, "test_doc").unwrap_or_else(|e| panic!("{}", e)),
                 $t

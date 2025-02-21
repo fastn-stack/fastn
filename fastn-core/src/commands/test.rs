@@ -23,7 +23,7 @@ pub(crate) const HTTP_LOCATION_HEADER: &str = "http-location";
 
 macro_rules! log_variable {
     // When verbose is true, debug variables
-    ($verbose:expr, $($variable:expr),*) => {
+    ($verbose:expr_2021, $($variable:expr_2021),*) => {
         if $verbose {
             $(std::dbg!($variable);)*
         }
@@ -32,7 +32,7 @@ macro_rules! log_variable {
 
 macro_rules! log_message {
     // When verbose is true, print message
-    ($verbose:expr, $($message:expr),*) => {
+    ($verbose:expr_2021, $($message:expr_2021),*) => {
         if $verbose {
             $(std::println!($message);)*
         }
@@ -344,7 +344,7 @@ async fn get_instructions_from_test(
     }
 
     let fixtures =
-        if let Some(fixtures) = get_optional_value_list(FIXTURE_HEADER, &property_values, doc)? {
+        match get_optional_value_list(FIXTURE_HEADER, &property_values, doc)? { Some(fixtures) => {
             let mut resolved_fixtures = vec![];
             for fixture in fixtures.iter() {
                 if let fastn_resolved::Value::String { text } = fixture {
@@ -352,9 +352,9 @@ async fn get_instructions_from_test(
                 }
             }
             resolved_fixtures
-        } else {
+        } _ => {
             vec![]
-        };
+        }};
 
     let fixture_instructions =
         get_fixture_instructions(config, fixtures, included_fixtures).await?;

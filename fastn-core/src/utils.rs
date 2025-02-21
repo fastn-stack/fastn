@@ -509,7 +509,7 @@ async fn resolve_favicon(
 
     let (full_fav_path, fav_mime_content_type): (String, String) = {
         match fav_path {
-            Some(ref path) => {
+            Some(path) => {
                 // In this case, favicon is provided with fastn.package in FASTN.ftd
                 get_favicon_path_and_type(package_name, path)
             }

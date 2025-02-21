@@ -1743,11 +1743,11 @@ impl ValueExt for fastn_resolved::Value {
                 value.resolve(doc, line_number)?.into_evalexpr_value(doc)
             }
             fastn_resolved::Value::Record { .. } => {
-                if let Ok(Some(value)) = ftd::interpreter::utils::get_value(doc, &self) {
+                match ftd::interpreter::utils::get_value(doc, &self) { Ok(Some(value)) => {
                     Ok(fastn_resolved::evalexpr::Value::String(value.to_string()))
-                } else {
+                } _ => {
                     unimplemented!("{:?}", self)
-                }
+                }}
             }
             fastn_resolved::Value::List { data, .. } => {
                 let mut values = vec![];

@@ -46,11 +46,11 @@ pub fn url_match(
                 param_type,
             } => {
                 count += 1;
-                if let Ok(value) = get_value_type(req_part, param_type) {
+                match get_value_type(req_part, param_type) { Ok(value) => {
                     path_parameters.push((name.to_string(), value));
-                } else {
+                } _ => {
                     return Ok((false, vec![]));
-                }
+                }}
             }
         };
     }

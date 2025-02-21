@@ -150,11 +150,11 @@ impl Kind {
                     line_number,
                 })?,
             },
-            ftd::ftd2021::p2::Kind::Optional {kind, ..} => if let Ok(f) = kind.to_value(line_number, doc_id) {
+            ftd::ftd2021::p2::Kind::Optional {kind, ..} => match kind.to_value(line_number, doc_id) { Ok(f) => {
                 ftd::Value::Optional {data: Box::new(Some(f)), kind: kind.as_ref().to_owned()}
-            } else {
+            } _ => {
                 ftd::Value::Optional {data: Box::new(None), kind: kind.as_ref().to_owned()}
-            },
+            }},
             ftd::ftd2021::p2::Kind::List { kind, .. } => ftd::Value::List { data: vec![], kind: kind.as_ref().to_owned() },
             _ => return ftd::ftd2021::p2::utils::e2(
                 format!("2 Kind supported for default value are string, integer, decimal and boolean with default value, found: kind `{:?}`", &self),

@@ -1998,28 +1998,28 @@ fn get_translate(
         _ => None,
     };
 
-    if let Some(ref scale) = scale {
+    if let Some(scale) = scale {
         if let Some(d) = translate {
             translate = Some(format!("{} scale({})", d, scale));
         } else {
             translate = Some(format!("scale({})", scale));
         };
     }
-    if let Some(ref scale) = scale_x {
+    if let Some(scale) = scale_x {
         if let Some(d) = translate {
             translate = Some(format!("{} scaleX({})", d, scale));
         } else {
             translate = Some(format!("scaleX({})", scale));
         };
     }
-    if let Some(ref scale) = scale_y {
+    if let Some(scale) = scale_y {
         if let Some(d) = translate {
             translate = Some(format!("{} scaleY({})", d, scale));
         } else {
             translate = Some(format!("scaleY({})", scale));
         };
     }
-    if let Some(ref rotate) = rotate {
+    if let Some(rotate) = rotate {
         if let Some(d) = translate {
             translate = Some(format!("{} rotate({}deg)", d, rotate));
         } else {
