@@ -95,10 +95,10 @@ fn p<
 
 #[macro_export]
 macro_rules! tt {
-    ($f:expr) => {
+    ($f:expr_2021) => {
         #[allow(unused_macros)]
         macro_rules! t {
-            ($source:expr, $debug:tt, $remaining:expr) => {
+            ($source:expr_2021, $debug:tt, $remaining:expr_2021) => {
                 fastn_section::parser::p(
                     &arcstr::literal!($source),
                     $f,
@@ -106,7 +106,7 @@ macro_rules! tt {
                     $remaining,
                 );
             };
-            ($source:expr, $debug:tt) => {
+            ($source:expr_2021, $debug:tt) => {
                 fastn_section::parser::p(
                     &arcstr::literal!($source),
                     $f,
@@ -117,7 +117,7 @@ macro_rules! tt {
         }
         #[allow(unused_macros)]
         macro_rules! f {
-            ($source:expr) => {
+            ($source:expr_2021) => {
                 fastn_section::parser::p(
                     &arcstr::literal!($source),
                     $f,

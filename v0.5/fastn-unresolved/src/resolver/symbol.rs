@@ -194,7 +194,7 @@ mod tests {
     }
 
     macro_rules! t {
-        ($name:expr, $expected:expr) => {
+        ($name:expr_2021, $expected:expr_2021) => {
             t_(
                 $name,
                 "",

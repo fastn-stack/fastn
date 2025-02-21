@@ -125,7 +125,7 @@ impl Compiler {
         let mut new_content = vec![];
 
         for mut ci in content {
-            let resolved = if let fastn_unresolved::UR::UnResolved(ref mut c) = ci {
+            let resolved = match ci { fastn_unresolved::UR::UnResolved(ref mut c) => {
                 let mut needed = Default::default();
                 let resolved = c.resolve(
                     &self.definitions,
@@ -137,9 +137,9 @@ impl Compiler {
                 self.document
                     .merge(needed.errors, needed.warnings, needed.comments);
                 resolved
-            } else {
+            } _ => {
                 false
-            };
+            }};
             if resolved {
                 ci.resolve_it(&self.arena)
             }
