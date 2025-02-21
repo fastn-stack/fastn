@@ -13,14 +13,14 @@ impl<STORE: fastn_wasm::StoreExt> fastn_wasm::Store<STORE> {
         &mut self,
         q: fastn_wasm::sqlite::Query,
     ) -> wasmtime::Result<Result<usize, ft_sys_shared::DbError>> {
-        let conn = if let Some(ref mut conn) = self.sqlite {
+        let conn = match self.sqlite { Some(ref mut conn) => {
             conn
-        } else {
+        } _ => {
             eprintln!("sqlite connection not found");
             return Ok(Err(ft_sys_shared::DbError::UnableToSendCommand(
                 "connection not found".to_string(),
             )));
-        };
+        }};
 
         let conn = conn.lock().await;
         println!("execute: {q:?}");

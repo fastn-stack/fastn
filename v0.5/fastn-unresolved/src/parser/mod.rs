@@ -100,10 +100,10 @@ where
 #[cfg(test)]
 #[macro_export]
 macro_rules! tt {
-    ($p:expr, $d:expr) => {
+    ($p:expr_2021, $d:expr_2021) => {
         #[allow(unused_macros)]
         macro_rules! t {
-            ($source:expr, $expected:tt) => {
+            ($source:expr_2021, $expected:tt) => {
                 fastn_unresolved::parser::t1($source, serde_json::json!($expected), $p, $d);
             };
         }

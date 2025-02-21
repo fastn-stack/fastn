@@ -204,7 +204,7 @@ impl fastn_section::Identifier {
 impl fastn_section::IdentifierReference {
     pub fn span(&self) -> fastn_section::Span {
         match self {
-            fastn_section::IdentifierReference::Local(ref name) => name.clone(),
+            fastn_section::IdentifierReference::Local(name) => name.clone(),
             // TODO: this is wrong, we should coalesce the spans.
             fastn_section::IdentifierReference::Absolute { package, .. } => package.clone(),
             // TODO: this is wrong, we should coalesce the spans.
@@ -228,7 +228,7 @@ impl From<fastn_section::Span> for fastn_section::IdentifierReference {
 impl std::fmt::Display for fastn_section::IdentifierReference {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let str = match self {
-            fastn_section::IdentifierReference::Local(ref name) => name.str().to_string(),
+            fastn_section::IdentifierReference::Local(name) => name.str().to_string(),
             fastn_section::IdentifierReference::Absolute {
                 package,
                 module,

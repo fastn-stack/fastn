@@ -14,7 +14,7 @@ impl fastn_unresolved::ComponentInvocation {
 
         // we resolve children first (so we can do early returns after this for loop)
         for c in self.children.iter_mut() {
-            if let fastn_unresolved::UR::UnResolved(ref mut c) = c {
+            if let fastn_unresolved::UR::UnResolved(c) = c {
                 resolved &= c.resolve(definitions, arena, output, main_package);
             }
         }
