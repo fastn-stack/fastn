@@ -483,22 +483,24 @@ fn update_inherited_reference_in_property_value(
             };
 
             match fastn_resolved::PropertyValue::from_ast_value(
-                    ftd_ast::VariableValue::String {
-                        // TODO: ftd#default-colors, ftd#default-types
-                        value: format!("${}", reference_name),
-                        line_number: 0,
-                        source: ftd_ast::ValueSource::Default,
-                        condition: None,
-                    },
-                    &mut doc.itdoc(),
-                    property_value.is_mutable(),
-                    Some(&property_value.kind().into_kind_data()),
-                )
-            { Ok(ftd::interpreter::StateWithThing::Thing(property)) => {
-                *property_value = property;
-            } _ => {
-                property_value.set_reference_or_clone(reference_name.as_str());
-            }}
+                ftd_ast::VariableValue::String {
+                    // TODO: ftd#default-colors, ftd#default-types
+                    value: format!("${}", reference_name),
+                    line_number: 0,
+                    source: ftd_ast::ValueSource::Default,
+                    condition: None,
+                },
+                &mut doc.itdoc(),
+                property_value.is_mutable(),
+                Some(&property_value.kind().into_kind_data()),
+            ) {
+                Ok(ftd::interpreter::StateWithThing::Thing(property)) => {
+                    *property_value = property;
+                }
+                _ => {
+                    property_value.set_reference_or_clone(reference_name.as_str());
+                }
+            }
 
             property_value.set_reference_or_clone(
                 if let Some(rem) = rem {
@@ -519,42 +521,44 @@ fn update_inherited_reference_in_property_value(
                 .starts_with(format!("{}.colors", ftd::interpreter::FTD_INHERITED).as_str()))
     {
         match fastn_resolved::PropertyValue::from_ast_value(
-                ftd_ast::VariableValue::String {
-                    // TODO: ftd#default-colors, ftd#default-types
-                    value: {
-                        format!(
-                            "$ftd#default-{}{}",
-                            if reference_or_clone.starts_with(
+            ftd_ast::VariableValue::String {
+                // TODO: ftd#default-colors, ftd#default-types
+                value: {
+                    format!(
+                        "$ftd#default-{}{}",
+                        if reference_or_clone.starts_with(
+                            format!("{}.types", ftd::interpreter::FTD_INHERITED).as_str()
+                        ) {
+                            "types"
+                        } else {
+                            "colors"
+                        },
+                        reference_or_clone
+                            .trim_start_matches(
                                 format!("{}.types", ftd::interpreter::FTD_INHERITED).as_str()
-                            ) {
-                                "types"
-                            } else {
-                                "colors"
-                            },
-                            reference_or_clone
-                                .trim_start_matches(
-                                    format!("{}.types", ftd::interpreter::FTD_INHERITED).as_str()
-                                )
-                                .trim_start_matches(
-                                    format!("{}.colors", ftd::interpreter::FTD_INHERITED).as_str()
-                                )
-                        )
-                    },
-                    line_number: 0,
-                    source: ftd_ast::ValueSource::Default,
-                    condition: None,
+                            )
+                            .trim_start_matches(
+                                format!("{}.colors", ftd::interpreter::FTD_INHERITED).as_str()
+                            )
+                    )
                 },
-                &mut doc.itdoc(),
-                property_value.is_mutable(),
-                Some(&property_value.kind().into_kind_data()),
-            )
-        { Ok(ftd::interpreter::StateWithThing::Thing(property)) => {
-            *property_value = property;
-        } _ => {
-            property_value.set_reference_or_clone(
-                format!("ftd#{}", reference_or_clone.trim_start_matches("ftd.")).as_str(),
-            );
-        }}
+                line_number: 0,
+                source: ftd_ast::ValueSource::Default,
+                condition: None,
+            },
+            &mut doc.itdoc(),
+            property_value.is_mutable(),
+            Some(&property_value.kind().into_kind_data()),
+        ) {
+            Ok(ftd::interpreter::StateWithThing::Thing(property)) => {
+                *property_value = property;
+            }
+            _ => {
+                property_value.set_reference_or_clone(
+                    format!("ftd#{}", reference_or_clone.trim_start_matches("ftd.")).as_str(),
+                );
+            }
+        }
     }
 }
 
@@ -621,22 +625,25 @@ pub(crate) fn get_evaluated_property(
     )?
     .into_iter()
     .find(|v| v.condition.is_none())
-    { Some(property) => {
-        get_evaluated_property(
+    {
+        Some(property) => get_evaluated_property(
             &property,
             properties,
             arguments,
             component_name,
             doc_name,
             line_number,
-        )
-    } _ => if argument.kind.is_optional() || argument.kind.is_list() {
-        Ok(None)
-    } else {
-        ftd::executor::utils::parse_error(
-            format!("Expected Value for `{}`", key).as_str(),
-            doc_name,
-            line_number,
-        )
-    }}
+        ),
+        _ => {
+            if argument.kind.is_optional() || argument.kind.is_list() {
+                Ok(None)
+            } else {
+                ftd::executor::utils::parse_error(
+                    format!("Expected Value for `{}`", key).as_str(),
+                    doc_name,
+                    line_number,
+                )
+            }
+        }
+    }
 }

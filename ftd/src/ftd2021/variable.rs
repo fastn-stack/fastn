@@ -307,9 +307,7 @@ impl PropertyValue {
                         doc.get_record(line_number, &doc.resolve_name(line_number, name)?)?
                             .fields,
                     ),
-                    ftd::ftd2021::p2::Kind::OrTypeWithVariant {
-                        name, variant, ..
-                    } => {
+                    ftd::ftd2021::p2::Kind::OrTypeWithVariant { name, variant, .. } => {
                         let name = doc.resolve_name(line_number, name)?;
                         (
                             name.to_string(),
@@ -416,13 +414,17 @@ impl PropertyValue {
             } => {
                 assert_eq!(self.kind(), *reference_kind);
                 let (default, condition) =
-                    match doc.get_value_and_conditions(0, reference_name.as_str()) { Ok(d) => {
-                        d
-                    } _ => { match doc.get_component(0, reference_name.as_str()) { Ok(d) => {
-                        return d.to_value(reference_kind);
-                    } _ => {
-                        return reference_kind.to_value(line_number, doc.name);
-                    }}}};
+                    match doc.get_value_and_conditions(0, reference_name.as_str()) {
+                        Ok(d) => d,
+                        _ => match doc.get_component(0, reference_name.as_str()) {
+                            Ok(d) => {
+                                return d.to_value(reference_kind);
+                            }
+                            _ => {
+                                return reference_kind.to_value(line_number, doc.name);
+                            }
+                        },
+                    };
                 let mut value = default;
                 for (boolean, property) in condition {
                     if boolean.eval(line_number, doc)? {
@@ -1190,43 +1192,50 @@ fn read_object(
         let line_number = line_number.to_owned();
         let value = if v.trim().starts_with('$') {
             ftd::PropertyValue::resolve_value(line_number, v, None, doc, &Default::default(), None)?
-        } else { match ftd::PropertyValue::resolve_value(
-            line_number,
-            v,
-            Some(ftd::ftd2021::p2::Kind::decimal()),
-            doc,
-            &Default::default(),
-            None,
-        ) { Ok(v) => {
-            v
-        } _ => { match ftd::PropertyValue::resolve_value(
-            line_number,
-            v,
-            Some(ftd::ftd2021::p2::Kind::boolean()),
-            doc,
-            &Default::default(),
-            None,
-        ) { Ok(v) => {
-            v
-        } _ => { match ftd::PropertyValue::resolve_value(
-            line_number,
-            v,
-            Some(ftd::ftd2021::p2::Kind::integer()),
-            doc,
-            &Default::default(),
-            None,
-        ) { Ok(v) => {
-            v
-        } _ => {
-            ftd::PropertyValue::resolve_value(
+        } else {
+            match ftd::PropertyValue::resolve_value(
                 line_number,
                 v,
-                Some(ftd::ftd2021::p2::Kind::string()),
+                Some(ftd::ftd2021::p2::Kind::decimal()),
                 doc,
                 &Default::default(),
                 None,
-            )?
-        }}}}}}};
+            ) {
+                Ok(v) => v,
+                _ => {
+                    match ftd::PropertyValue::resolve_value(
+                        line_number,
+                        v,
+                        Some(ftd::ftd2021::p2::Kind::boolean()),
+                        doc,
+                        &Default::default(),
+                        None,
+                    ) {
+                        Ok(v) => v,
+                        _ => {
+                            match ftd::PropertyValue::resolve_value(
+                                line_number,
+                                v,
+                                Some(ftd::ftd2021::p2::Kind::integer()),
+                                doc,
+                                &Default::default(),
+                                None,
+                            ) {
+                                Ok(v) => v,
+                                _ => ftd::PropertyValue::resolve_value(
+                                    line_number,
+                                    v,
+                                    Some(ftd::ftd2021::p2::Kind::string()),
+                                    doc,
+                                    &Default::default(),
+                                    None,
+                                )?,
+                            }
+                        }
+                    }
+                }
+            }
+        };
         values.insert(k.to_string(), value);
     }
 

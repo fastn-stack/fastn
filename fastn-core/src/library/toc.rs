@@ -285,24 +285,27 @@ impl TocParser {
                         let url_regex = regex::Regex::new(
                             r":[ ]?(?P<url>(?:https?)?://(?:[a-zA-Z0-9]+\.)?(?:[A-z0-9]+\.)(?:[A-z0-9]+)(?:[/A-Za-z0-9\?:\&%]+))"
                         ).unwrap();
-                        match url_regex.find(current_title.as_str()) { Some(regex_match) => {
-                            let curr_title = current_title.as_str();
-                            (
-                                Some(curr_title[..regex_match.start()].trim().to_string()),
-                                Some(
-                                    curr_title[regex_match.start()..regex_match.end()]
-                                        .trim_start_matches(':')
-                                        .trim()
-                                        .to_string(),
-                                ),
-                            )
-                        } _ => {
-                            return Err(ParseError::InvalidTOCItem {
+                        match url_regex.find(current_title.as_str()) {
+                            Some(regex_match) => {
+                                let curr_title = current_title.as_str();
+                                (
+                                    Some(curr_title[..regex_match.start()].trim().to_string()),
+                                    Some(
+                                        curr_title[regex_match.start()..regex_match.end()]
+                                            .trim_start_matches(':')
+                                            .trim()
+                                            .to_string(),
+                                    ),
+                                )
+                            }
+                            _ => {
+                                return Err(ParseError::InvalidTOCItem {
                                 doc_id: self.doc_name.clone(),
                                 message: "Ambiguous <title>: <URL> evaluation. Multiple colons found. Either specify the complete URL or specify the url as an attribute".to_string(),
                                 row_content: current_title.as_str().to_string(),
                             });
-                        }}
+                            }
+                        }
                     }
                 };
                 TocItem {

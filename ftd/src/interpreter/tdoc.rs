@@ -214,34 +214,39 @@ impl<'a> TDoc<'a> {
     ) -> ftd::interpreter::Result<fastn_resolved::Value> {
         use ftd::interpreter::PropertyValueExt;
 
-        let (value, _var_name, _var_line_number, remaining) = match self.get_initial_variable_with_inherited(name, line_number, inherited_variables)
-        { Ok(v) => {
-            let mut value = v.0.value;
-            for conditional in v.0.conditional_value.iter() {
-                if conditional.condition.eval(self)? {
-                    value = conditional.value.clone();
-                    break;
+        let (value, _var_name, _var_line_number, remaining) = match self
+            .get_initial_variable_with_inherited(name, line_number, inherited_variables)
+        {
+            Ok(v) => {
+                let mut value = v.0.value;
+                for conditional in v.0.conditional_value.iter() {
+                    if conditional.condition.eval(self)? {
+                        value = conditional.value.clone();
+                        break;
+                    }
                 }
+                (value, v.0.name, v.0.line_number, v.1)
             }
-            (value, v.0.name, v.0.line_number, v.1)
-        } _ => { match self.get_component(name, line_number) { Ok(v) => {
-            (
-                fastn_resolved::PropertyValue::Value {
-                    value: v.to_value(kind),
-                    is_mutable: false,
-                    line_number: v.line_number,
-                },
-                v.name,
-                v.line_number,
-                None,
-            )
-        } _ => {
-            return ftd::interpreter::utils::e2(
-                format!("Cannot find 111 {} in get_thing", name),
-                self.name,
-                line_number,
-            );
-        }}}};
+            _ => match self.get_component(name, line_number) {
+                Ok(v) => (
+                    fastn_resolved::PropertyValue::Value {
+                        value: v.to_value(kind),
+                        is_mutable: false,
+                        line_number: v.line_number,
+                    },
+                    v.name,
+                    v.line_number,
+                    None,
+                ),
+                _ => {
+                    return ftd::interpreter::utils::e2(
+                        format!("Cannot find 111 {} in get_thing", name),
+                        self.name,
+                        line_number,
+                    );
+                }
+            },
+        };
         let value = value.resolve_with_inherited(self, line_number, inherited_variables)?;
         if let Some(remaining) = remaining {
             return resolve_(
@@ -694,13 +699,14 @@ impl<'a> TDoc<'a> {
                 }
                 fastn_resolved::Kind::Optional { kind } => {
                     let state_with_thing = get_kind_(*kind, name, doc, line_number)?;
-                    match state_with_thing { ftd::interpreter::StateWithThing::Thing(ref t) => {
-                        Ok(ftd::interpreter::StateWithThing::new_thing(
-                            t.to_owned().into_optional(),
-                        ))
-                    } _ => {
-                        Ok(state_with_thing)
-                    }}
+                    match state_with_thing {
+                        ftd::interpreter::StateWithThing::Thing(ref t) => {
+                            Ok(ftd::interpreter::StateWithThing::new_thing(
+                                t.to_owned().into_optional(),
+                            ))
+                        }
+                        _ => Ok(state_with_thing),
+                    }
                 }
                 fastn_resolved::Kind::KwArgs => Ok(ftd::interpreter::StateWithThing::new_thing(
                     fastn_resolved::KindData::new(fastn_resolved::Kind::String),
@@ -1789,12 +1795,15 @@ impl<'a> TDoc<'a> {
         name: &str,
         line_number: usize,
     ) -> ftd::interpreter::Result<(&ftd::interpreter::Thing, Option<String>)> {
-        let (splited_name, remaining_value) = match ftd::interpreter::utils::get_function_name(name, self.name, line_number)
-        { Ok(function_name) => {
-            (function_name, None)
-        } _ => {
-            ftd::interpreter::utils::get_doc_name_and_remaining(name, self.name, line_number)
-        }};
+        let (splited_name, remaining_value) =
+            match ftd::interpreter::utils::get_function_name(name, self.name, line_number) {
+                Ok(function_name) => (function_name, None),
+                _ => ftd::interpreter::utils::get_doc_name_and_remaining(
+                    name,
+                    self.name,
+                    line_number,
+                ),
+            };
 
         let (thing_name, remaining) = match self.bag().get(splited_name.as_str()) {
             Some(a) => (a, remaining_value),

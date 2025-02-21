@@ -971,21 +971,30 @@ fn reevalute_markup(
                     }
                     t
                 };
-                let named_container = match markup_get_named_container(&[], root, 0, doc, &mut Default::default(), &[])
-                { Ok(mut get) => {
-                    get.extend(named_container.clone());
-                    get
-                } _ => {
-                    // In case of component variable of markup defined internally,
-                    // it won't be present inside doc.bag
-                    // Example:
-                    // -- ftd.text foo: {bar: Hello}
-                    // --- ftd.text bar:
-                    // color: red
-                    //
-                    // `bar` here won't be present inside doc.bag
-                    named_container.clone()
-                }};
+                let named_container = match markup_get_named_container(
+                    &[],
+                    root,
+                    0,
+                    doc,
+                    &mut Default::default(),
+                    &[],
+                ) {
+                    Ok(mut get) => {
+                        get.extend(named_container.clone());
+                        get
+                    }
+                    _ => {
+                        // In case of component variable of markup defined internally,
+                        // it won't be present inside doc.bag
+                        // Example:
+                        // -- ftd.text foo: {bar: Hello}
+                        // --- ftd.text bar:
+                        // color: red
+                        //
+                        // `bar` here won't be present inside doc.bag
+                        named_container.clone()
+                    }
+                };
                 reevalute_markups(&mut t, named_container, doc)?;
                 ftd::IText::Markup(t)
             }
@@ -1397,19 +1406,17 @@ fn get_conditional_attributes(
                             0,
                         )?,
                         doc.name,
-                    )? { Some(light) => {
-                        ftd::ftd2021::html::color(&light)
-                    } _ => {
-                        "auto".to_string()
-                    }};
+                    )? {
+                        Some(light) => ftd::ftd2021::html::color(&light),
+                        _ => "auto".to_string(),
+                    };
                     let dark = match ftd::ftd2021::p2::element::color_from(
                         ftd::ftd2021::p2::utils::string_optional("dark", &properties, doc.name, 0)?,
                         doc.name,
-                    )? { Some(dark) => {
-                        ftd::ftd2021::html::color(&dark)
-                    } _ => {
-                        "auto".to_string()
-                    }};
+                    )? {
+                        Some(dark) => ftd::ftd2021::html::color(&dark),
+                        _ => "auto".to_string(),
+                    };
 
                     ftd::ConditionalValue {
                         value: serde_json::json!({ "light": light, "dark": dark, "$kind$": "light" }),
@@ -2025,18 +2032,10 @@ impl Component {
                 | ftd::Element::Boolean(_)
                 | ftd::Element::Markup(_)
                 | ftd::Element::Null => {}
-                ftd::Element::Column(ftd::Column {
-                    container, ..
-                })
-                | ftd::Element::Row(ftd::Row {
-                    container, ..
-                })
-                | ftd::Element::Scene(ftd::Scene {
-                    container, ..
-                })
-                | ftd::Element::Grid(ftd::Grid {
-                    container, ..
-                }) => {
+                ftd::Element::Column(ftd::Column { container, .. })
+                | ftd::Element::Row(ftd::Row { container, .. })
+                | ftd::Element::Scene(ftd::Scene { container, .. })
+                | ftd::Element::Grid(ftd::Grid { container, .. }) => {
                     let ElementWithContainer {
                         children,
                         child_container,

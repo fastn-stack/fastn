@@ -50,9 +50,7 @@ pub fn process(
         ftd_ast::VariableValue::String { value, .. } => {
             serde_json::Value::String(value.to_string())
         }
-        ftd_ast::VariableValue::Optional {
-            value: ivalue, ..
-        } => match ivalue.as_ref() {
+        ftd_ast::VariableValue::Optional { value: ivalue, .. } => match ivalue.as_ref() {
             Some(ftd_ast::VariableValue::String { value, .. }) => {
                 serde_json::Value::String(value.to_string())
             }
