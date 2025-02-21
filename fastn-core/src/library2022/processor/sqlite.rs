@@ -21,7 +21,7 @@ pub(crate) fn get_p1_data(
                         ),
                         doc_name,
                         value.line_number(),
-                    )
+                    );
                 }
             },
         )),
@@ -65,14 +65,14 @@ fn resolve_variable_from_doc(
                 format!("{var} is not a variable, it's a {v:?}"),
                 doc.name,
                 line_number,
-            )
+            );
         }
         Err(e) => {
             return ftd::interpreter::utils::e2(
                 format!("${var} not found in the document: {e:?}"),
                 doc.name,
                 line_number,
-            )
+            );
         }
     };
 
@@ -157,7 +157,7 @@ pub fn extract_named_parameters(
                     format!("Error parsing query: {e:?}"),
                     doc.name,
                     line_number,
-                )
+                );
             }
         };
 

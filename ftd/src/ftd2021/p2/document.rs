@@ -597,11 +597,7 @@ impl Document {
 
         // find any text with caption
         if let Some(t) = Self::find_text(&self.main.container.children, |t| {
-            if t.line {
-                Some(t.text.clone())
-            } else {
-                None
-            }
+            if t.line { Some(t.text.clone()) } else { None }
         }) {
             return Some(t);
         }
@@ -666,7 +662,7 @@ impl Document {
                     format!("not a record: {:?}", t),
                     self.name.as_str(),
                     0,
-                )
+                );
             }
         };
 
@@ -682,7 +678,7 @@ impl Document {
                     doc_id: "".to_string(),
                     line_number: 0,
                     key: key.to_string(),
-                })
+                });
             }
         };
         let doc = ftd::ftd2021::p2::TDoc {
@@ -745,7 +741,7 @@ impl Document {
                     format!("unhandled value found(value_to_json): {:?}", v),
                     self.name.as_str(),
                     0,
-                )
+                );
             }
         })
     }

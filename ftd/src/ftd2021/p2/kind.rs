@@ -132,33 +132,74 @@ impl Kind {
         doc_id: &str,
     ) -> ftd::ftd2021::p1::Result<ftd::Value> {
         Ok(match self {
-            ftd::ftd2021::p2::Kind::String { default: Some(d), .. } => ftd::Value::String {text: d.to_string(), source: ftd::TextSource::Default} ,
-            ftd::ftd2021::p2::Kind::Integer { default: Some(d), .. } => ftd::Value::Integer { value: match d.parse::<i64>() {
+            ftd::ftd2021::p2::Kind::String {
+                default: Some(d), ..
+            } => ftd::Value::String {
+                text: d.to_string(),
+                source: ftd::TextSource::Default,
+            },
+            ftd::ftd2021::p2::Kind::Integer {
+                default: Some(d), ..
+            } => ftd::Value::Integer {
+                value: match d.parse::<i64>() {
                     Ok(v) => v,
-                    Err(_) => return ftd::ftd2021::p2::utils::e2(format!("{} is not an integer", d), doc_id, line_number),
+                    Err(_) => {
+                        return ftd::ftd2021::p2::utils::e2(
+                            format!("{} is not an integer", d),
+                            doc_id,
+                            line_number,
+                        );
+                    }
                 },
             },
-            ftd::ftd2021::p2::Kind::Decimal { default: Some(d), .. } => ftd::Value::Decimal { value: d.parse::<f64>().map_err(|e| ftd::ftd2021::p1::Error::ParseError {
-                    message: e.to_string(),
-                    doc_id: doc_id.to_string(),
-                    line_number,
-                })?,
+            ftd::ftd2021::p2::Kind::Decimal {
+                default: Some(d), ..
+            } => ftd::Value::Decimal {
+                value: d
+                    .parse::<f64>()
+                    .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
+                        message: e.to_string(),
+                        doc_id: doc_id.to_string(),
+                        line_number,
+                    })?,
             },
-            ftd::ftd2021::p2::Kind::Boolean { default: Some(d), .. } => ftd::Value::Boolean { value: d.parse::<bool>().map_err(|e| ftd::ftd2021::p1::Error::ParseError {
-                    message: e.to_string(),
-                    doc_id: doc_id.to_string(),
-                    line_number,
-                })?,
+            ftd::ftd2021::p2::Kind::Boolean {
+                default: Some(d), ..
+            } => ftd::Value::Boolean {
+                value: d
+                    .parse::<bool>()
+                    .map_err(|e| ftd::ftd2021::p1::Error::ParseError {
+                        message: e.to_string(),
+                        doc_id: doc_id.to_string(),
+                        line_number,
+                    })?,
             },
-            ftd::ftd2021::p2::Kind::Optional {kind, ..} => match kind.to_value(line_number, doc_id) { Ok(f) => {
-                ftd::Value::Optional {data: Box::new(Some(f)), kind: kind.as_ref().to_owned()}
-            } _ => {
-                ftd::Value::Optional {data: Box::new(None), kind: kind.as_ref().to_owned()}
-            }},
-            ftd::ftd2021::p2::Kind::List { kind, .. } => ftd::Value::List { data: vec![], kind: kind.as_ref().to_owned() },
-            _ => return ftd::ftd2021::p2::utils::e2(
-                format!("2 Kind supported for default value are string, integer, decimal and boolean with default value, found: kind `{:?}`", &self),
-                doc_id,  line_number),
+            ftd::ftd2021::p2::Kind::Optional { kind, .. } => {
+                match kind.to_value(line_number, doc_id) {
+                    Ok(f) => ftd::Value::Optional {
+                        data: Box::new(Some(f)),
+                        kind: kind.as_ref().to_owned(),
+                    },
+                    _ => ftd::Value::Optional {
+                        data: Box::new(None),
+                        kind: kind.as_ref().to_owned(),
+                    },
+                }
+            }
+            ftd::ftd2021::p2::Kind::List { kind, .. } => ftd::Value::List {
+                data: vec![],
+                kind: kind.as_ref().to_owned(),
+            },
+            _ => {
+                return ftd::ftd2021::p2::utils::e2(
+                    format!(
+                        "2 Kind supported for default value are string, integer, decimal and boolean with default value, found: kind `{:?}`",
+                        &self
+                    ),
+                    doc_id,
+                    line_number,
+                );
+            }
         })
     }
 
@@ -488,7 +529,7 @@ impl Kind {
                                 value: ftd::Value::None {
                                     kind: *kind.clone(),
                                 },
-                            })
+                            });
                         }
                     },
                     ftd::ftd2021::p2::Kind::String { .. }
@@ -500,7 +541,7 @@ impl Kind {
                             format!("`{}` is {:?}", name, t),
                             doc.name,
                             line_number,
-                        )
+                        );
                     }
                 };
 

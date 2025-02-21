@@ -47,13 +47,13 @@ pub use things::component::PropertyExt;
 pub use things::component::PropertySourceExt;
 pub use things::expression;
 
+pub use things::ThingExt;
 pub use things::function::FunctionExt;
 pub use things::kind::KindDataExt;
 pub use things::kind::KindExt;
 pub use things::record::FieldExt;
 pub use things::value::{PropertyValueExt, PropertyValueSourceExt, ValueExt};
 pub use things::variable::VariableExt;
-pub use things::ThingExt;
 
 pub use main::HostBuiltins;
 

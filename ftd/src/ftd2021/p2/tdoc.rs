@@ -687,7 +687,7 @@ impl TDoc<'_> {
                                     format!("key not found: {}", key.as_str()),
                                     self.name,
                                     line_number,
-                                )
+                                );
                             }
                         };
                         fields.insert(
@@ -835,7 +835,7 @@ impl TDoc<'_> {
                                     format!("key not found: {}", key.as_str()),
                                     self.name,
                                     line_number,
-                                )
+                                );
                             }
                         };
                         fields.insert(
@@ -923,7 +923,7 @@ impl TDoc<'_> {
                             m,
                             "resolve_name_without_full_path",
                             line_number,
-                        )
+                        );
                     }
                 },
                 (_, _, Some(_)) => unimplemented!(),
@@ -1426,7 +1426,7 @@ impl TDoc<'_> {
                                 thing,
                                 "get_thing",
                                 line_number,
-                            )
+                            );
                         }
                     };
                     if let Some(ftd::PropertyValue::Value { value: val }) = fields.get(v) {

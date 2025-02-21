@@ -36,17 +36,17 @@ pub(crate) use auto_import::AutoImport;
 pub use commands::{
     build::build, check::post_build_check, fmt::fmt, query::query, serve::listen, test::test,
 };
-pub use config::{config_temp, Config, ConfigTemp, FTDEdition, RequestConfig};
+pub use config::{Config, ConfigTemp, FTDEdition, RequestConfig, config_temp};
 pub use doc::resolve_foreign_variable2;
 pub use error::Error;
 pub use file::File;
-pub use file::{get_file, paths_to_files, Document, Static};
+pub use file::{Document, Static, get_file, paths_to_files};
 pub(crate) use font::Font;
 pub use library::{FastnLibrary, Library, Library2};
 pub use library2022::Library2022;
 pub use manifest::Manifest;
-pub(crate) use package::dependency::Dependency;
 pub use package::Package;
+pub(crate) use package::dependency::Dependency;
 pub(crate) use snapshot::Snapshot;
 pub(crate) use tracker::Track;
 pub(crate) use translation::{TranslatedDocument, TranslationData};

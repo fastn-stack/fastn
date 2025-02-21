@@ -383,7 +383,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                                 .as_str(),
                             doc.name,
                             value.line_number(),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -453,7 +453,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                                 .as_str(),
                             doc.name,
                             value.line_number(),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -514,7 +514,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                                 is_mutable: mutable,
                                 line_number: value.line_number(),
                             },
-                        )))
+                        )));
                     }
                     Some(ekind)
                         if !ekind.kind.is_same_as(&found_kind.kind)
@@ -543,7 +543,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                                 .as_str(),
                             doc.name,
                             value.line_number(),
-                        )
+                        );
                     }
                     _ => {}
                 }
@@ -804,40 +804,61 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                                 line_number: value.line_number(),
                             })?;
                         let value = match &variant {
-                            fastn_resolved::OrTypeVariant::Constant(c) => return ftd::interpreter::utils::e2(format!("Cannot pass constant variant as property, variant: `{}`. Help: Pass variant as value instead", c.name), doc.name, c.line_number),
-                            fastn_resolved::OrTypeVariant::AnonymousRecord(record) =>
+                            fastn_resolved::OrTypeVariant::Constant(c) => {
+                                return ftd::interpreter::utils::e2(
+                                    format!(
+                                        "Cannot pass constant variant as property, variant: `{}`. Help: Pass variant as value instead",
+                                        c.name
+                                    ),
+                                    doc.name,
+                                    c.line_number,
+                                );
+                            }
+                            fastn_resolved::OrTypeVariant::AnonymousRecord(record) => {
                                 try_ok_state!(fastn_resolved::PropertyValue::from_record(
-                        record,
-                        value,
-                        doc,
-                        is_mutable,
-                        expected_kind,
-                        definition_name_with_arguments,
-                        loop_object_name_and_kind,
-                    )?),
+                                    record,
+                                    value,
+                                    doc,
+                                    is_mutable,
+                                    expected_kind,
+                                    definition_name_with_arguments,
+                                    loop_object_name_and_kind,
+                                )?)
+                            }
                             fastn_resolved::OrTypeVariant::Regular(regular) => {
-                                let mut variant_name = variant_name.trim_start_matches(format!("{}.", variant.name()).as_str()).trim().to_string();
+                                let mut variant_name = variant_name
+                                    .trim_start_matches(format!("{}.", variant.name()).as_str())
+                                    .trim()
+                                    .to_string();
                                 if variant_name.eq(&variant.name()) {
                                     variant_name = "".to_string();
                                 }
-                                let kind = if regular.kind.kind.ref_inner().is_or_type() && !variant_name.is_empty() {
-                                    let (name, variant, _full_variant) = regular.kind.kind.get_or_type().unwrap();
+                                let kind = if regular.kind.kind.ref_inner().is_or_type()
+                                    && !variant_name.is_empty()
+                                {
+                                    let (name, variant, _full_variant) =
+                                        regular.kind.kind.get_or_type().unwrap();
                                     let variant_name = format!("{}.{}", name, variant_name);
-                                    fastn_resolved::Kind::or_type_with_variant(name.as_str(), variant.unwrap_or_else(|| variant_name.clone()).as_str(), variant_name.as_str()).into_kind_data()
+                                    fastn_resolved::Kind::or_type_with_variant(
+                                        name.as_str(),
+                                        variant.unwrap_or_else(|| variant_name.clone()).as_str(),
+                                        variant_name.as_str(),
+                                    )
+                                    .into_kind_data()
                                 } else {
                                     regular.kind.to_owned()
                                 };
 
                                 try_ok_state!(
-                            fastn_resolved::PropertyValue::from_ast_value_with_argument(
-                                value,
-                                doc,
-                                is_mutable,
-                                Some(&kind),
-                                definition_name_with_arguments,
-                                loop_object_name_and_kind
-                            )?
-                        )
+                                    fastn_resolved::PropertyValue::from_ast_value_with_argument(
+                                        value,
+                                        doc,
+                                        is_mutable,
+                                        Some(&kind),
+                                        definition_name_with_arguments,
+                                        loop_object_name_and_kind
+                                    )?
+                                )
                             }
                         };
                         ftd::interpreter::StateWithThing::new_thing(
@@ -851,8 +872,8 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                         )
                     } else {
                         let value_str = format!("{}.{}", name, value.string(doc.name)?);
-                        let (found_or_type_name, or_type_variant) = try_ok_state!(doc
-                            .search_or_type_with_variant(
+                        let (found_or_type_name, or_type_variant) =
+                            try_ok_state!(doc.search_or_type_with_variant(
                                 value_str.as_str(),
                                 value.line_number()
                             )?);
@@ -1856,7 +1877,7 @@ impl ValueExt for fastn_resolved::Value {
                     format!("Expected kind: `{:?}`, found: `{:?}`", expected_kind, t),
                     doc_name,
                     line_number,
-                )
+                );
             }
         })
     }

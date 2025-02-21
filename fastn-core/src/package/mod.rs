@@ -507,7 +507,10 @@ impl Package {
                 url = format!("{}/", url);
             }
 
-            return format!("\n<link rel=\"canonical\" href=\"{url}\" /><meta property=\"og:url\" content=\"{url}\" />", url = url);
+            return format!(
+                "\n<link rel=\"canonical\" href=\"{url}\" /><meta property=\"og:url\" content=\"{url}\" />",
+                url = url
+            );
         }
 
         if path.starts_with("-/") {
@@ -662,7 +665,7 @@ impl Package {
             None => {
                 return Err(fastn_core::Error::PackageError {
                     message: "FASTN.ftd does not contain package definition".to_string(),
-                })
+                });
             }
         };
 
@@ -711,7 +714,10 @@ impl Package {
 
         if let Some(ref system_alias) = package.system {
             if package.system_is_confidential.unwrap_or(true) {
-                return fastn_core::usage_error(format!("system-is-confidential is needed for system package {} and currently only false is supported.", package.name));
+                return fastn_core::usage_error(format!(
+                    "system-is-confidential is needed for system package {} and currently only false is supported.",
+                    package.name
+                ));
             }
             package.auto_import.push(fastn_core::AutoImport {
                 path: package.name.clone(),
@@ -738,7 +744,10 @@ impl Package {
                         .clone_from(&original_package.auto_import)
                 } else {
                     return Err(fastn_core::Error::PackageError {
-                        message: format!("Can't use `inherit-auto-imports-from-original` along with auto-imports defined for the translation package. Either set `inherit-auto-imports-from-original` to false or remove `fastn.auto-import` from the {package_name}/FASTN.ftd file", package_name=package.name.as_str()),
+                        message: format!(
+                            "Can't use `inherit-auto-imports-from-original` along with auto-imports defined for the translation package. Either set `inherit-auto-imports-from-original` to false or remove `fastn.auto-import` from the {package_name}/FASTN.ftd file",
+                            package_name = package.name.as_str()
+                        ),
                     });
                 }
             }
@@ -787,9 +796,9 @@ impl Package {
             Some(v) => v,
             None => {
                 return fastn_core::usage_error(format!(
-                "Module corresponding to `default-language: {}` is not provided in FASTN.ftd of {}",
-                lang.default_lang, self.name
-            ))
+                    "Module corresponding to `default-language: {}` is not provided in FASTN.ftd of {}",
+                    lang.default_lang, self.name
+                ));
             }
         };
 

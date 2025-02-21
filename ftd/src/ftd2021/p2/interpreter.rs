@@ -269,10 +269,10 @@ impl InterpreterState {
                                                 .is_some()
                                         {
                                             return ftd::ftd2021::p2::utils::e2(
-                        "Currently not supporting `if` for field value update.",
-                        doc.name,
-                        p1.line_number,
-                    );
+                                                "Currently not supporting `if` for field value update.",
+                                                doc.name,
+                                                p1.line_number,
+                                            );
                                         }
                                         match p1.header.str_optional(
                                             doc.name,
@@ -332,10 +332,13 @@ impl InterpreterState {
                                         {
                                             ftd::ftd2021::p2::Thing::Variable(_) => {
                                                 return ftd::ftd2021::p2::utils::e2(
-                            format!("variable should have prefix $, found: `{}`", p1.name),
-                            doc.name,
-                            p1.line_number,
-                        );
+                                                    format!(
+                                                        "variable should have prefix $, found: `{}`",
+                                                        p1.name
+                                                    ),
+                                                    doc.name,
+                                                    p1.line_number,
+                                                );
                                             }
                                             ftd::ftd2021::p2::Thing::Component(c) => {
                                                 if p1
@@ -1382,7 +1385,7 @@ impl InterpreterState {
                 current_processing_document.get_last_mut_section()
             {
                 for (id_map, source, ln) in replace_blocks.iter() {
-                    let is_from_section = source.1 .0;
+                    let is_from_section = source.1.0;
                     let target_text_source = &source.0;
 
                     match is_from_section {
@@ -1407,7 +1410,7 @@ impl InterpreterState {
                             }
                         },
                         false => {
-                            let target_subsection_index = source.1 .1;
+                            let target_subsection_index = source.1.1;
                             let subsections = &mut current_processing_section.sub_sections.0;
 
                             let current_processing_subsection = subsections

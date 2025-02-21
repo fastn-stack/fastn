@@ -198,6 +198,8 @@ pub enum MigrationError {
     AppliedMigrationMismatch,
     #[error("Multiple migrations found with the same name: {name}.")]
     MigrationNameConflict { name: String },
-    #[error("`{name}` is invalid migration name. It must contain only alphanumeric characters, underscores, and hyphens.")]
+    #[error(
+        "`{name}` is invalid migration name. It must contain only alphanumeric characters, underscores, and hyphens."
+    )]
     InvalidMigrationName { name: String },
 }

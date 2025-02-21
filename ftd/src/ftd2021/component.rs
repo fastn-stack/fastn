@@ -223,7 +223,7 @@ impl ChildComponent {
                             format!("{} cant have children", t),
                             doc.name,
                             self.line_number,
-                        )
+                        );
                     }
                 }
             }
@@ -748,7 +748,7 @@ fn markup_get_named_container(
                         format!("cannot find name for container {:?}", container),
                         doc.name,
                         0,
-                    )
+                    );
                 }
             }
         }
@@ -1006,7 +1006,7 @@ fn reevalute_markup(
                     ),
                     doc.name,
                     0,
-                )
+                );
             }
         })
     }
@@ -1356,7 +1356,7 @@ fn get_conditional_attributes(
                         format!("expected int, found3: {:?}", v),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             }
         } else if style_integer_important.contains(&name) {
@@ -1371,7 +1371,7 @@ fn get_conditional_attributes(
                         format!("expected int, found4: {:?}", v),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             }
         } else if style_length.contains(&name) {
@@ -1388,7 +1388,7 @@ fn get_conditional_attributes(
                         format!("expected string, found 8: {:?}", v),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             }
         } else if style_color.contains(&name) {
@@ -1429,7 +1429,7 @@ fn get_conditional_attributes(
                         format!("expected string, found 9: {:?}", v),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             }
         } else if style_overflow.contains(&name) {
@@ -1446,7 +1446,7 @@ fn get_conditional_attributes(
                         format!("expected string, found 10: {:?}", v),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             }
         } else if style_string.contains(&name) {
@@ -1461,7 +1461,7 @@ fn get_conditional_attributes(
                         format!("expected string, found 11: {:?}", v),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             }
         } else if style_boolean.contains(&name) {
@@ -1476,7 +1476,7 @@ fn get_conditional_attributes(
                         format!("expected string, found 12: {:?}", v),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             }
         } else if name.eq("sticky") {
@@ -1493,7 +1493,7 @@ fn get_conditional_attributes(
                         format!("expected boolean, found: {:?}", v),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             }
         } else if name.eq("background-attachment") {
@@ -1510,7 +1510,7 @@ fn get_conditional_attributes(
                         format!("expected boolean, found: {:?}", v),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             }
         } else if name.eq("line-clamp") {
@@ -1525,7 +1525,7 @@ fn get_conditional_attributes(
                         format!("expected int, found5: {:?}", v),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             }
         } else if name.eq("grid-template-areas") {
@@ -1547,7 +1547,7 @@ fn get_conditional_attributes(
                         format!("expected string, found 13: {:?}", v),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             }
         } else {
@@ -3204,7 +3204,7 @@ fn read_arguments(
                         format!("'{}' is not an argument of {}", var_data.name, root),
                         doc.name,
                         i.to_owned(),
-                    )
+                    );
                 }
             }
         } else {

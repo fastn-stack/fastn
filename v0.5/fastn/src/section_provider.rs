@@ -12,10 +12,10 @@ impl SectionProvider {
     pub async fn read<T, C>(&mut self, reader: fastn_continuation::Result<C>) -> T
     where
         C: fastn_continuation::Continuation<
-            Output = fastn_utils::section_provider::PResult<T>,
-            Needed = Vec<String>,
-            Found = fastn_utils::section_provider::Found,
-        >,
+                Output = fastn_utils::section_provider::PResult<T>,
+                Needed = Vec<String>,
+                Found = fastn_utils::section_provider::Found,
+            >,
     {
         match reader.mut_consume_async(self).await {
             Ok((value, warnings)) => {

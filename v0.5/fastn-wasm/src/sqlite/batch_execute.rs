@@ -35,7 +35,7 @@ impl<STORE: fastn_wasm::StoreExt> fastn_wasm::Store<STORE> {
                 return Ok(Err(e));
             }
             Err(fastn_wasm::SQLError::InvalidQuery(e)) => {
-                return Ok(Err(ft_sys_shared::DbError::UnableToSendCommand(e)))
+                return Ok(Err(ft_sys_shared::DbError::UnableToSendCommand(e)));
             } // Todo: Handle error message
         })
     }

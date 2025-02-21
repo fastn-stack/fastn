@@ -3676,11 +3676,7 @@ mod interpreter {
                     vec![
                         (s("about"), {
                             let s = ftd::ftd2021::p2::Kind::body();
-                            if about_optional {
-                                s.into_optional()
-                            } else {
-                                s
-                            }
+                            if about_optional { s.into_optional() } else { s }
                         }),
                         (s("src"), {
                             let s = ftd::ftd2021::p2::Kind::Record {
@@ -3688,11 +3684,7 @@ mod interpreter {
                                 default: None,
                                 is_reference: false,
                             };
-                            if about_optional {
-                                s.into_optional()
-                            } else {
-                                s
-                            }
+                            if about_optional { s.into_optional() } else { s }
                         }),
                         (s("title"), ftd::ftd2021::p2::Kind::caption()),
                     ],
@@ -12207,17 +12199,19 @@ mod interpreter {
                     },
                 }),
                 kernel: false,
-                invocations: vec![std::iter::IntoIterator::into_iter([
-                    (
-                        s("name"),
-                        ftd::Value::String {
-                            text: s("Hello"),
-                            source: ftd::TextSource::Caption,
-                        },
-                    ),
-                    (s("open"), ftd::Value::Boolean { value: true }),
-                ])
-                .collect()],
+                invocations: vec![
+                    std::iter::IntoIterator::into_iter([
+                        (
+                            s("name"),
+                            ftd::Value::String {
+                                text: s("Hello"),
+                                source: ftd::TextSource::Caption,
+                            },
+                        ),
+                        (s("open"), ftd::Value::Boolean { value: true }),
+                    ])
+                    .collect(),
+                ],
                 line_number: 1,
                 ..Default::default()
             }),
@@ -17804,7 +17798,7 @@ mod component {
     fn caption_body_conflicts() {
         // Caption and Header Value conflict
         intf!(
-             "-- ftd.row A: 
+            "-- ftd.row A: 
             caption message: Default message
             
             -- A: Im the message here 
@@ -17815,7 +17809,7 @@ mod component {
 
         // Caption and Body conflict
         intf!(
-             "-- ftd.row A: 
+            "-- ftd.row A: 
             caption or body msg: 
             
             -- A: Caption will say hello

@@ -430,7 +430,7 @@ impl<'a> TDoc<'a> {
                             .as_str(),
                             doc.name,
                             line_number,
-                        )
+                        );
                     }
                 }
             }
@@ -478,7 +478,7 @@ impl<'a> TDoc<'a> {
                                 format!("Expected record, found `{:?}`", t).as_str(),
                                 doc.name,
                                 line_number,
-                            )
+                            );
                         }
                     },
                     fastn_resolved::PropertyValue::Reference {
@@ -1870,7 +1870,7 @@ impl<'a> TDoc<'a> {
                         format!("key not found: {}", key.name.as_str()),
                         self.name,
                         value.line_number(),
-                    )
+                    );
                 }
             };
             fields.insert(
@@ -1978,14 +1978,14 @@ impl<'a> TDoc<'a> {
                 text: match json {
                     serde_json::Value::String(v) => v.to_string(),
                     serde_json::Value::Object(o) => {
-                        return self.handle_object(kind, o, default_value, record_name, line_number)
+                        return self.handle_object(kind, o, default_value, record_name, line_number);
                     }
                     _ => {
                         return ftd::interpreter::utils::e2(
                             format!("Can't parse to string, found: {json}"),
                             self.name,
                             line_number,
-                        )
+                        );
                     }
                 },
             },
@@ -2008,14 +2008,14 @@ impl<'a> TDoc<'a> {
                             })?
                     }
                     serde_json::Value::Object(o) => {
-                        return self.handle_object(kind, o, default_value, record_name, line_number)
+                        return self.handle_object(kind, o, default_value, record_name, line_number);
                     }
                     _ => {
                         return ftd::interpreter::utils::e2(
                             format!("Can't parse to integer, found: {json}"),
                             self.name,
                             line_number,
-                        )
+                        );
                     }
                 },
             },
@@ -2038,14 +2038,14 @@ impl<'a> TDoc<'a> {
                             })?
                     }
                     serde_json::Value::Object(o) => {
-                        return self.handle_object(kind, o, default_value, record_name, line_number)
+                        return self.handle_object(kind, o, default_value, record_name, line_number);
                     }
                     _ => {
                         return ftd::interpreter::utils::e2(
                             format!("Can't parse to decimal, found: {}", json),
                             self.name,
                             line_number,
-                        )
+                        );
                     }
                 },
             },
@@ -2068,18 +2068,18 @@ impl<'a> TDoc<'a> {
                                 message: format!("Can't parse to decimal, found: {json}"),
                                 doc_id: self.name.to_string(),
                                 line_number,
-                            })
+                            });
                         }
                     },
                     serde_json::Value::Object(o) => {
-                        return self.handle_object(kind, o, default_value, record_name, line_number)
+                        return self.handle_object(kind, o, default_value, record_name, line_number);
                     }
                     _ => {
                         return ftd::interpreter::utils::e2(
                             format!("Can't parse to boolean, found: {}", json),
                             self.name,
                             line_number,
-                        )
+                        );
                     }
                 },
             },
@@ -2097,7 +2097,7 @@ impl<'a> TDoc<'a> {
                                     format!("key not found: {}", field.name.as_str()),
                                     self.name,
                                     line_number,
-                                )
+                                );
                             }
                         };
                         fields.insert(

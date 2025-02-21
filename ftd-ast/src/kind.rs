@@ -80,7 +80,7 @@ impl VariableKind {
                     format!("Invalid variable kind, found: `{}`", kind),
                     doc_id,
                     line_number,
-                )
+                );
             }
         };
 

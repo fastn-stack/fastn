@@ -1984,7 +1984,7 @@ impl Position {
                     format!("{} is not a valid alignment", t),
                     doc_id,
                     0,
-                )
+                );
             } // TODO
             None => None,
         })
@@ -2061,7 +2061,7 @@ impl Region {
                     format!("{} is not a valid alignment", t),
                     doc_id,
                     0,
-                )
+                );
             } // TODO
             None => return Ok(None),
         }))
@@ -2172,7 +2172,7 @@ impl Overflow {
                     format!("{} is not a valid property", t),
                     doc_id,
                     0,
-                )
+                );
             } // TODO
             None => return Ok(None),
         }))
@@ -2534,7 +2534,7 @@ impl TextAlign {
                     ),
                     doc_id,
                     0,
-                )
+                );
             }
             None => return Ok(ftd::TextAlign::Left),
         })
@@ -2559,7 +2559,7 @@ impl FontDisplay {
                     format!("{} is not a valid alignment, allowed: swap, block", t),
                     doc_id,
                     0,
-                )
+                );
             } // TODO
             None => return Ok(ftd::FontDisplay::Block),
         })
@@ -2837,7 +2837,7 @@ impl Style {
                         format!("{} is not a valid style", t),
                         doc_id,
                         0,
-                    )
+                    );
                 }
             }
         }
@@ -2906,7 +2906,7 @@ impl TextFormat {
                     format!("{} is not a valid format", t),
                     doc_id,
                     0,
-                )
+                );
             } // TODO
             None => return Ok(ftd::TextFormat::Markdown),
         })

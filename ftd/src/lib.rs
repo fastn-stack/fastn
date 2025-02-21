@@ -7,7 +7,7 @@ pub use ftd2021::component::{ChildComponent, Component, Instruction};
 pub use ftd2021::condition::Condition;
 pub use ftd2021::constants::{identifier, regex};
 pub use ftd2021::event::{Action, Event};
-pub use ftd2021::html::{anchor, color, length, overflow, Collector, Node, StyleSpec};
+pub use ftd2021::html::{Collector, Node, StyleSpec, anchor, color, length, overflow};
 pub use ftd2021::ui::{
     Anchor, AttributeType, Code, Color, ColorValue, Column, Common, ConditionalAttribute,
     ConditionalValue, Container, Element, FontDisplay, GradientDirection, Grid, IFrame, IText,

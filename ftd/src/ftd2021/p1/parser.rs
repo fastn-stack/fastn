@@ -656,15 +656,17 @@ mod test {
 
         "
             ),
-            vec![super::Section::with_name("step")
-                .add_header("method", "GET")
-                .add_sub_section(
-                    super::SubSection::with_name("realm.rr.activity")
-                        .add_header("okind", "")
-                        .add_header("oid", "")
-                        .add_header("ekind", "")
-                        .and_body("null")
-                )]
+            vec![
+                super::Section::with_name("step")
+                    .add_header("method", "GET")
+                    .add_sub_section(
+                        super::SubSection::with_name("realm.rr.activity")
+                            .add_header("okind", "")
+                            .add_header("oid", "")
+                            .add_header("ekind", "")
+                            .and_body("null")
+                    )
+            ]
         )
     }
 
@@ -916,8 +918,10 @@ mod test {
 
             "
             ),
-            vec![super::Section::with_name("foo")
-                .add_sub_section(super::SubSection::with_name("bar").and_body("hello"))],
+            vec![
+                super::Section::with_name("foo")
+                    .add_sub_section(super::SubSection::with_name("bar").and_body("hello"))
+            ],
         );
     }
 

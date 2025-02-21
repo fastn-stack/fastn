@@ -1269,11 +1269,18 @@ mod tests {
             r#"function foo(parent) {let bar;bar = fastn.mutable("hello world");}"#,
         );
         fastn_js::to_js::e(
-            fastn_js::component0("foo", vec![fastn_js::mutable_string("bar", "hello world, a long long long long long string which keeps going on and on and on and on till we run out of line space and still keeps going on and on")]),
+            fastn_js::component0(
+                "foo",
+                vec![fastn_js::mutable_string(
+                    "bar",
+                    "hello world, a long long long long long string which keeps going on and on and on and on till we run out of line space and still keeps going on and on",
+                )],
+            ),
             indoc::indoc!(
                 r#"function foo(parent) {
                 let bar;bar = fastn.mutable("hello world, a long long long long long string which keeps going on and on and on and on till we run out of line space and still keeps going on and on");
-                }"#),
+                }"#
+            ),
         );
         fastn_js::to_js::e(
             fastn_js::component0("foo", vec![fastn_js::mutable_string("bar", "hello\nworld")]),
@@ -1307,11 +1314,18 @@ mod tests {
             r#"function foo(parent) {let bar;bar = "hello world";}"#,
         );
         fastn_js::to_js::e(
-            fastn_js::component0("foo", vec![fastn_js::static_string("bar", "hello world, a long long long long long string which keeps going on and on and on and on till we run out of line space and still keeps going on and on")]),
+            fastn_js::component0(
+                "foo",
+                vec![fastn_js::static_string(
+                    "bar",
+                    "hello world, a long long long long long string which keeps going on and on and on and on till we run out of line space and still keeps going on and on",
+                )],
+            ),
             indoc::indoc!(
                 r#"function foo(parent) {
                 let bar;bar = "hello world, a long long long long long string which keeps going on and on and on and on till we run out of line space and still keeps going on and on";
-                }"#),
+                }"#
+            ),
         );
         fastn_js::to_js::e(
             fastn_js::component0("foo", vec![fastn_js::static_string("bar", "hello\nworld")]),

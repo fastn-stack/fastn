@@ -174,8 +174,9 @@ mod test {
             },
         );
 
-        f(indoc::indoc!(
-            "
+        f(
+            indoc::indoc!(
+                "
             -- integer list ages: 
             
             -- integer: 40
@@ -185,7 +186,7 @@ mod test {
             -- end: ages
             "
             ),
-          "InvalidKind: foo:5 -> List kind mismatch, expected kind `Integer`, found kind `String`"
+            "InvalidKind: foo:5 -> List kind mismatch, expected kind `Integer`, found kind `String`",
         )
     }
 

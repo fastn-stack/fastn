@@ -1,3 +1,3 @@
 mod upload;
 
-pub use upload::{upload_file, upload_folder, UploadError};
+pub use upload::{UploadError, upload_file, upload_folder};

@@ -127,7 +127,7 @@ impl KindDataExt for fastn_resolved::KindData {
                         format!("Can't get find for `{:?}`", t),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             },
         };

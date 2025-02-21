@@ -1,10 +1,10 @@
 pub mod commit_upload;
 pub mod initiate_upload;
 
-pub use commit_upload::{commit_upload, CommitUploadError, CommitUploadRequest};
+pub use commit_upload::{CommitUploadError, CommitUploadRequest, commit_upload};
 pub use initiate_upload::{
-    initiate_upload, ContentToUpload, InitiateUploadError, InitiateUploadRequest,
-    InitiateUploadResponse, PreSignedRequest,
+    ContentToUpload, InitiateUploadError, InitiateUploadRequest, InitiateUploadResponse,
+    PreSignedRequest, initiate_upload,
 };
 
 pub const ENDPOINT: &str = "https://www.fifthtry.com";

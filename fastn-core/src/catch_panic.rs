@@ -1,12 +1,12 @@
 // borrowed from https://github.com/robjtede/actix-web-lab/ (MIT)
 use std::{
-    future::{ready, Ready},
+    future::{Ready, ready},
     panic::AssertUnwindSafe,
     rc::Rc,
 };
 
 use actix_web::{
-    dev::{forward_ready, Service, ServiceRequest, ServiceResponse, Transform},
+    dev::{Service, ServiceRequest, ServiceResponse, Transform, forward_ready},
     error,
 };
 use futures_core::future::LocalBoxFuture;
@@ -97,10 +97,11 @@ const INTERNAL_SERVER_ERROR_MESSAGE: &str = "500 Server Error";
 #[cfg(test)]
 mod tests {
     use actix_web::{
-        body::{to_bytes, MessageBody},
+        App, Error,
+        body::{MessageBody, to_bytes},
         dev::{Service as _, ServiceFactory},
         http::StatusCode,
-        test, web, App, Error,
+        test, web,
     };
 
     use super::*;

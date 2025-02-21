@@ -7,7 +7,7 @@ extern crate self as fastn_compiler;
 mod compiler;
 mod utils;
 
-pub use compiler::{compile, Compiler};
+pub use compiler::{Compiler, compile};
 pub use fastn_section::Result;
 
 #[derive(Debug)]

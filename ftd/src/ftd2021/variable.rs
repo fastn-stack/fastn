@@ -194,7 +194,7 @@ impl PropertyValue {
                                 format!("{} is not present in doc, {:?}", part1, e),
                                 doc.name,
                                 line_number,
-                            )
+                            );
                         }
                     },
                     Some(kind) => (kind.to_owned(), false),
@@ -269,7 +269,7 @@ impl PropertyValue {
                             format!("can't resolve value {} to expected kind {:?}", string, t),
                             doc.name,
                             line_number,
-                        )
+                        );
                     }
                 }
             }
@@ -468,7 +468,7 @@ impl TextSource {
                     format!("expected string kind, found: {:?}", t),
                     doc_id,
                     line_number,
-                )
+                );
             }
         })
     }
@@ -883,7 +883,7 @@ impl Variable {
                     });
             }
             (ftd::ftd2021::p2::Kind::Map { .. }, _) => {
-                return ftd::ftd2021::p2::utils::e2("unexpected map", doc.name, p1.line_number)
+                return ftd::ftd2021::p2::utils::e2("unexpected map", doc.name, p1.line_number);
             }
             (k, _) => self.value = read_value(p1.line_number, k, &p1, doc)?,
         };
@@ -1074,7 +1074,7 @@ fn read_string(
                 format!("both caption: `{}` and body: `{}` present", c, b.1),
                 doc.name,
                 p1.line_number,
-            )
+            );
         }
         (Some(caption), None) => (caption.to_string(), TextSource::Caption, p1.line_number),
         (None, Some(body)) => (body.1.to_string(), TextSource::Body, body.0),
@@ -1083,7 +1083,7 @@ fn read_string(
                 "either body or caption is required for string",
                 doc.name,
                 p1.line_number,
-            )
+            );
         }
     };
     Ok(if let Some(text) = text.strip_prefix('$') {

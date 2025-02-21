@@ -50,12 +50,14 @@ impl AppTemp {
             if value.starts_with("$ENV") {
                 let (_, env_var_name) = match value.trim().split_once('.') {
                     Some(x) => x,
-                    None => return Err(fastn_core::Error::PackageError {
-                        message: format!(
-                            "package-config-error, wrong $ENV in an fastn app, format is <key>=$ENV.env_var_name, key: {}, value: {}",
-                            key, value
-                        ),
-                    }),
+                    None => {
+                        return Err(fastn_core::Error::PackageError {
+                            message: format!(
+                                "package-config-error, wrong $ENV in an fastn app, format is <key>=$ENV.env_var_name, key: {}, value: {}",
+                                key, value
+                            ),
+                        });
+                    }
                 };
 
                 let value =

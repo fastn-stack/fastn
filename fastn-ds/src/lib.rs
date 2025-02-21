@@ -238,7 +238,9 @@ impl DocumentStore {
                 } {
                     Ok(m) => m,
                     Err(e) => {
-                        tracing::debug!("could not read {wasmc_path:?} file: {e:?}, trying to read {path:?} file");
+                        tracing::debug!(
+                            "could not read {wasmc_path:?} file: {e:?}, trying to read {path:?} file"
+                        );
                         let source = self.read_content(&fastn_ds::Path::new(path), &None).await?;
                         wasmtime::Module::from_binary(&fastn_wasm::WASM_ENGINE, &source)?
                     }
@@ -293,10 +295,11 @@ impl DocumentStore {
         )
         .map_err(fastn_utils::SqlError::Connection)?;
 
-        Ok(vec![vec![conn
-            .execute(query, rusqlite::params_from_iter(params))
-            .map_err(fastn_utils::SqlError::Execute)?
-            .into()]])
+        Ok(vec![vec![
+            conn.execute(query, rusqlite::params_from_iter(params))
+                .map_err(fastn_utils::SqlError::Execute)?
+                .into(),
+        ]])
     }
 
     pub async fn sql_batch(

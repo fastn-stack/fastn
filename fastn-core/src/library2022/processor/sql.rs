@@ -47,7 +47,7 @@ pub async fn process(
                 format!("Error executing query: {e:?}"),
                 doc.name,
                 value.line_number(),
-            )
+            );
         }
     };
 

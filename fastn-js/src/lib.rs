@@ -23,7 +23,7 @@ mod udf_statement;
 pub mod utils;
 
 pub use ast::Ast;
-pub use component::{component0, component1, component2, component_with_params, Component};
+pub use component::{Component, component_with_params, component0, component1, component2};
 pub use component_invocation::{
     ElementKind, InstantiateComponent, InstantiateComponentData, Kernel,
 };
@@ -33,16 +33,16 @@ pub use constants::*;
 pub use device::{DeviceBlock, DeviceType};
 pub use event::{Event, EventHandler, Function, FunctionData};
 pub use loop_component::ForLoop;
-pub use mutable_variable::{mutable_integer, mutable_string, MutableList, MutableVariable};
+pub use mutable_variable::{MutableList, MutableVariable, mutable_integer, mutable_string};
 pub use or_type::OrType;
 pub use property::{
     ConditionalValue, Formula, FormulaType, PropertyKind, SetProperty, SetPropertyValue, Value,
 };
 pub use record::RecordInstance;
-pub use ssr::{run_test, ssr, ssr_raw_string_without_test, ssr_str, ssr_with_js_string, SSRError};
-pub use static_variable::{static_integer, static_string, StaticVariable};
+pub use ssr::{SSRError, run_test, ssr, ssr_raw_string_without_test, ssr_str, ssr_with_js_string};
+pub use static_variable::{StaticVariable, static_integer, static_string};
 pub use to_js::to_js;
-pub use udf::{udf_with_arguments, UDF};
+pub use udf::{UDF, udf_with_arguments};
 pub use udf_statement::UDFStatement;
 
 pub fn fastn_assertion_headers(http_status_code: u16, http_location: &str) -> String {
@@ -69,7 +69,9 @@ pub fn all_js_without_test_and_ftd_langugage_js() -> String {
     let ftd_js = include_str_with_debug!("../js/ftd.js");
     let web_component_js = include_str_with_debug!("../js/web-component.js");
     let post_init_js = include_str_with_debug!("../js/postInit.js");
-    format!("{markdown_js}{fastn_js}{dom_js}{utils_js}{virtual_js}{web_component_js}{ftd_js}{post_init_js}")
+    format!(
+        "{markdown_js}{fastn_js}{dom_js}{utils_js}{virtual_js}{web_component_js}{ftd_js}{post_init_js}"
+    )
 }
 
 #[macro_export]

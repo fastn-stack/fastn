@@ -1,9 +1,9 @@
+use ftd::interpreter::FunctionExt;
 use ftd::interpreter::expression::ExpressionExt;
 use ftd::interpreter::things::component::ComponentDefinitionExt;
 use ftd::interpreter::things::or_type::OrTypeExt;
 use ftd::interpreter::things::record::RecordExt;
 use ftd::interpreter::things::web_component::WebComponentDefinitionExt;
-use ftd::interpreter::FunctionExt;
 use ftd::interpreter::{ComponentExt, VariableExt};
 
 const MAX_LOOP_ITER: usize = 1_050_000;
@@ -301,7 +301,7 @@ impl InterpreterState {
             if let Some(interpreter) = self.resolve_pending_imports::<ftd::interpreter::Thing>()? {
                 match interpreter {
                     ftd::interpreter::StateWithThing::State(s) => {
-                        return Ok(s.into_interpreter(self))
+                        return Ok(s.into_interpreter(self));
                     }
                     ftd::interpreter::StateWithThing::Thing(t) => {
                         self.bag.insert(t.name(), t);
@@ -359,7 +359,7 @@ impl InterpreterState {
                     } else {
                         match fastn_resolved::Record::from_ast(ast, &mut doc)? {
                             ftd::interpreter::StateWithThing::State(s) => {
-                                return Ok(s.into_interpreter(self))
+                                return Ok(s.into_interpreter(self));
                             }
                             ftd::interpreter::StateWithThing::Thing(record) => {
                                 ftd::interpreter::utils::insert_export_thing(
@@ -386,7 +386,7 @@ impl InterpreterState {
                     } else {
                         match fastn_resolved::OrType::from_ast(ast, &mut doc)? {
                             ftd::interpreter::StateWithThing::State(s) => {
-                                return Ok(s.into_interpreter(self))
+                                return Ok(s.into_interpreter(self));
                             }
                             ftd::interpreter::StateWithThing::Thing(or_type) => {
                                 ftd::interpreter::utils::insert_export_thing(
@@ -413,7 +413,7 @@ impl InterpreterState {
                     } else {
                         match fastn_resolved::Function::from_ast(ast, &mut doc)? {
                             ftd::interpreter::StateWithThing::State(s) => {
-                                return Ok(s.into_interpreter(self))
+                                return Ok(s.into_interpreter(self));
                             }
                             ftd::interpreter::StateWithThing::Thing(function) => {
                                 if let Some(ref js) = function.js {
@@ -450,7 +450,7 @@ impl InterpreterState {
                     } else {
                         match fastn_resolved::Variable::from_ast(ast, &mut doc, number_of_scan)? {
                             ftd::interpreter::StateWithThing::State(s) => {
-                                return Ok(s.into_interpreter(self))
+                                return Ok(s.into_interpreter(self));
                             }
                             ftd::interpreter::StateWithThing::Thing(variable) => {
                                 ftd::interpreter::utils::insert_export_thing(
@@ -476,7 +476,7 @@ impl InterpreterState {
                 } else {
                     match fastn_resolved::Variable::update_from_ast(ast, &mut doc)? {
                         ftd::interpreter::StateWithThing::State(s) => {
-                            return Ok(s.into_interpreter(self))
+                            return Ok(s.into_interpreter(self));
                         }
                         ftd::interpreter::StateWithThing::Thing(variable) => {
                             self.bag.insert(
@@ -495,7 +495,7 @@ impl InterpreterState {
                     } else {
                         match fastn_resolved::ComponentDefinition::from_ast(ast, &mut doc)? {
                             ftd::interpreter::StateWithThing::State(s) => {
-                                return Ok(s.into_interpreter(self))
+                                return Ok(s.into_interpreter(self));
                             }
                             ftd::interpreter::StateWithThing::Thing(component) => {
                                 if let Some(ref css) = component.css {
@@ -531,7 +531,7 @@ impl InterpreterState {
                     } else {
                         match fastn_resolved::WebComponentDefinition::from_ast(ast, &mut doc)? {
                             ftd::interpreter::StateWithThing::State(s) => {
-                                return Ok(s.into_interpreter(self))
+                                return Ok(s.into_interpreter(self));
                             }
                             ftd::interpreter::StateWithThing::Thing(web_component) => {
                                 let js = web_component
@@ -563,7 +563,7 @@ impl InterpreterState {
                 } else {
                     match fastn_resolved::ComponentInvocation::from_ast(ast, &mut doc)? {
                         ftd::interpreter::StateWithThing::State(s) => {
-                            return Ok(s.into_interpreter(self))
+                            return Ok(s.into_interpreter(self));
                         }
                         ftd::interpreter::StateWithThing::Thing(component) => {
                             self.instructions.push(component);
@@ -1311,7 +1311,7 @@ impl Document {
                         "url not found in redirect",
                         self.name.as_str(),
                         0,
-                    )
+                    );
                 }
             };
 
@@ -1428,7 +1428,7 @@ impl Document {
                         "url not found in redirect",
                         self.name.as_str(),
                         v.line_number,
-                    )
+                    );
                 }
             };
 
@@ -1471,7 +1471,7 @@ impl Document {
                     doc_id: self.name.to_string(),
                     line_number: 0,
                     message: key.to_string(),
-                })
+                });
             }
         };
         let doc = self.tdoc();
@@ -1538,7 +1538,7 @@ impl Document {
                     format!("unhandled value found(value_to_json): {:?}", v),
                     self.name.as_str(),
                     0,
-                )
+                );
             }
         })
     }

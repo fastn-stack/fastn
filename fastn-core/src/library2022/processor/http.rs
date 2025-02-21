@@ -172,7 +172,7 @@ pub async fn process(
                             format!("wasm code is not an integer {}: {e:?}", r.method.as_str()),
                             doc.name,
                             line_number,
-                        )
+                        );
                     }
                 };
 

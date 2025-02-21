@@ -89,11 +89,11 @@ pub fn get_component<'a>(
     tracing::info!("get_component: symbol: {}", symbol.str(arena));
     match definitions.get(symbol.str(arena)) {
         Some(fastn_unresolved::UR::Resolved(Some(fastn_resolved::Definition::Component(v)))) => {
-            return Some(fastn_unresolved::UR::Resolved(Some(v)))
+            return Some(fastn_unresolved::UR::Resolved(Some(v)));
         }
         Some(fastn_unresolved::UR::Resolved(None)) => unreachable!(),
         Some(fastn_unresolved::UR::UnResolved(v)) => {
-            return Some(fastn_unresolved::UR::UnResolved(v))
+            return Some(fastn_unresolved::UR::UnResolved(v));
         }
         Some(_) | None => {}
     }
