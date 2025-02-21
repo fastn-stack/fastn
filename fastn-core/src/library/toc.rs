@@ -429,10 +429,10 @@ mod test {
     use pretty_assertions::assert_eq;
 
     macro_rules! p {
-        ($s:expr_2021, $t: expr_2021,) => {
+        ($s:expr, $t: expr_2021,) => {
             p!($s, $t)
         };
-        ($s:expr_2021, $t: expr_2021) => {
+        ($s:expr, $t: expr_2021) => {
             assert_eq!(
                 super::ToC::parse($s, "test_doc").unwrap_or_else(|e| panic!("{}", e)),
                 $t

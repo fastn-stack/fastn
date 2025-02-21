@@ -77,10 +77,10 @@ pub fn interpret(
 }
 
 macro_rules! p {
-    ($s:expr_2021, $t: expr_2021,) => {
+    ($s:expr, $t: expr_2021,) => {
         p!($s, $t)
     };
-    ($s:expr_2021, $t: expr_2021) => {
+    ($s:expr, $t: expr_2021) => {
         let (ebag, ecol): (ftd::Map<ftd::ftd2021::p2::Thing>, _) = $t;
         let (mut bag, col) = ftd::ftd2021::test::interpret(
             "foo/bar",
@@ -110,10 +110,10 @@ macro_rules! p {
 }
 
 macro_rules! intf {
-    ($s:expr_2021, $m: expr_2021,) => {
+    ($s:expr, $m: expr_2021,) => {
         intf!($s, $m)
     };
-    ($s:expr_2021, $m: expr_2021) => {
+    ($s:expr, $m: expr_2021) => {
         match ftd::ftd2021::test::interpret(
             "foo",
             indoc::indoc!($s),
@@ -17693,10 +17693,10 @@ mod component {
     use ftd::ftd2021::test::*;
 
     macro_rules! p2 {
-        ($s:expr_2021, $doc: expr_2021, $t: expr_2021,) => {
+        ($s:expr, $doc: expr_2021, $t: expr_2021,) => {
             p2!($s, $doc, $t)
         };
-        ($s:expr_2021, $doc: expr_2021, $t: expr_2021) => {
+        ($s:expr, $doc: expr_2021, $t: expr_2021) => {
             let p1 = ftd::ftd2021::p1::parse(indoc::indoc!($s), $doc.name).unwrap();
             pretty_assertions::assert_eq!(ftd::Component::from_p1(&p1[0], &$doc).unwrap(), $t)
         };
@@ -18754,10 +18754,10 @@ mod variable {
     use ftd::ftd2021::test::*;
 
     macro_rules! p2 {
-        ($s:expr_2021, $n: expr_2021, $v: expr_2021, $c: expr_2021,) => {
+        ($s:expr, $n: expr_2021, $v: expr_2021, $c: expr_2021,) => {
             p2!($s, $n, $v, $c)
         };
-        ($s:expr_2021, $n: expr_2021, $v: expr_2021, $c: expr_2021) => {
+        ($s:expr, $n: expr_2021, $v: expr_2021, $c: expr_2021) => {
             let p1 = ftd::ftd2021::p1::parse(indoc::indoc!($s), "foo").unwrap();
             let mut bag = ftd::Map::new();
             let aliases = ftd::Map::new();

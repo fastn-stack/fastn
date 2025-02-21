@@ -1,6 +1,6 @@
 #[macro_export]
 macro_rules! func0ret {
-    ($linker:expr_2021, $func_name:literal, $func:expr_2021) => {{
+    ($linker:expr, $func_name:literal, $func:expr) => {{
         $linker
             .func_new_async(
                 "env",
@@ -23,7 +23,7 @@ macro_rules! func0ret {
 
 #[macro_export]
 macro_rules! func2 {
-    ($linker:expr_2021, $func_name:literal, $func:expr_2021) => {{
+    ($linker:expr, $func_name:literal, $func:expr) => {{
         $linker
             .func_new_async(
                 "env",
@@ -50,7 +50,7 @@ macro_rules! func2 {
 
 #[macro_export]
 macro_rules! func2ret {
-    ($linker:expr_2021, $func_name:literal, $func:expr_2021) => {{
+    ($linker:expr, $func_name:literal, $func:expr) => {{
         $linker
             .func_new_async(
                 "env",
@@ -77,7 +77,7 @@ macro_rules! func2ret {
 
 #[macro_export]
 macro_rules! func3ret {
-    ($linker:expr_2021, $func_name:literal, $func:expr_2021) => {{
+    ($linker:expr, $func_name:literal, $func:expr) => {{
         $linker
             .func_new_async(
                 "env",
