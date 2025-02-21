@@ -1212,13 +1212,16 @@ impl Config {
         package_name: &str,
         default: Option<fastn_core::Package>,
     ) -> fastn_core::Package {
-        match self.all_packages.get(package_name) { Some(package) => {
-            package.get().to_owned()
-        } _ => if let Some(package) = default {
-            package.to_owned()
-        } else {
-            self.package.to_owned()
-        }}
+        match self.all_packages.get(package_name) {
+            Some(package) => package.get().to_owned(),
+            _ => {
+                if let Some(package) = default {
+                    package.to_owned()
+                } else {
+                    self.package.to_owned()
+                }
+            }
+        }
     }
 
     #[cfg(not(feature = "use-config-json"))]

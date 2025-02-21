@@ -379,11 +379,12 @@ fn set_env_vars(is_test_running: bool) {
             .stdout(std::process::Stdio::null())
             .stderr(std::process::Stdio::null())
             .status()
-        { Ok(status) => {
-            status.success() // .env is checked in
-        } _ => {
-            false
-        }}
+        {
+            Ok(status) => {
+                status.success() // .env is checked in
+            }
+            _ => false,
+        }
     };
 
     let ignore = {

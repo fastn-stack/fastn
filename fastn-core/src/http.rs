@@ -183,11 +183,14 @@ impl Request {
                 match (
                     value.to_str().unwrap_or("").parse::<http::HeaderValue>(),
                     http::HeaderName::from_bytes(key.as_str().as_bytes()),
-                ) { (Ok(v), Ok(k)) => {
-                    headers.insert(k, v.clone());
-                } _ => {
-                    tracing::warn!("failed to parse header: {key:?} {value:?}");
-                }}
+                ) {
+                    (Ok(v), Ok(k)) => {
+                        headers.insert(k, v.clone());
+                    }
+                    _ => {
+                        tracing::warn!("failed to parse header: {key:?} {value:?}");
+                    }
+                }
             }
             headers
         };

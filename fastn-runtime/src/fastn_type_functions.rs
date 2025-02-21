@@ -536,8 +536,7 @@ impl fastn_runtime::extensions::ComponentExt for fastn_resolved::ComponentInvoca
         let remaining = remaining?;
 
         match rdata.component_definition_name {
-            Some(component_definition_name) if component_name.eq(component_definition_name) => {
-            }
+            Some(component_definition_name) if component_name.eq(component_definition_name) => {}
             _ => return None,
         }
 

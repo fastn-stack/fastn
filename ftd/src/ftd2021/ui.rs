@@ -1506,11 +1506,12 @@ impl Element {
                         local_variables: &mut Default::default(),
                         referenced_local_variables: &mut Default::default(),
                     },
-                ) { Ok(condition) => {
-                    condition
-                } _ => {
-                    continue;
-                }};
+                ) {
+                    Ok(condition) => condition,
+                    _ => {
+                        continue;
+                    }
+                };
                 let value = match value.resolve(0, &doc) {
                     Ok(value) => match value.to_serde_value() {
                         Some(v) => v,
@@ -1815,12 +1816,8 @@ impl Element {
 
         for element in &mut *elements {
             match element {
-                ftd::Element::Column(ftd::Column {
-                    container, ..
-                })
-                | ftd::Element::Row(ftd::Row {
-                    container, ..
-                }) => {
+                ftd::Element::Column(ftd::Column { container, .. })
+                | ftd::Element::Row(ftd::Row { container, .. }) => {
                     if let Some((_, _, ref mut e)) = container.external_children {
                         ftd::Element::renest_on_region(e);
                     }

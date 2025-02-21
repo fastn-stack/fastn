@@ -102,18 +102,21 @@ impl TDoc<'_> {
                     arguments,
                     None,
                 )?
-            } else { match arg.to_value(0, self.name) { Ok(value) => {
-                ftd::PropertyValue::Value { value }
-            } _ => {
-                return ftd::ftd2021::p2::utils::e2(
-                    format!(
-                        "expected default value for local variable 2 {}: {:?} in {}",
-                        k, arg, root
-                    ),
-                    self.name,
-                    0,
-                );
-            }}};
+            } else {
+                match arg.to_value(0, self.name) {
+                    Ok(value) => ftd::PropertyValue::Value { value },
+                    _ => {
+                        return ftd::ftd2021::p2::utils::e2(
+                            format!(
+                                "expected default value for local variable 2 {}: {:?} in {}",
+                                k, arg, root
+                            ),
+                            self.name,
+                            0,
+                        );
+                    }
+                }
+            };
             if let ftd::PropertyValue::Variable { ref mut name, .. } = default {
                 if !self.local_variables.contains_key(name) && !self.bag.contains_key(name) {
                     *name = self.resolve_local_variable_name(0, name, string_container)?;
@@ -1092,12 +1095,9 @@ impl TDoc<'_> {
                 v.value.resolve(line_number, self)?,
                 v.conditions
                     .into_iter()
-                    .flat_map(|(b, v)| {
-                        match v.resolve(line_number, self) { Ok(v) => {
-                            Some((b, v))
-                        } _ => {
-                            None
-                        }}
+                    .flat_map(|(b, v)| match v.resolve(line_number, self) {
+                        Ok(v) => Some((b, v)),
+                        _ => None,
                     })
                     .collect(),
             )),

@@ -80,12 +80,13 @@ pub(crate) fn get_formatted_dep_string_from_property_value(
         None => None,
     };*/
 
-    let value_string = match property_value.to_html_string(doc, field, id, string_needs_no_quotes)?
-    { Some(value_string) => {
-        value_string
-    } _ => {
-        return Ok(None);
-    }};
+    let value_string =
+        match property_value.to_html_string(doc, field, id, string_needs_no_quotes)? {
+            Some(value_string) => value_string,
+            _ => {
+                return Ok(None);
+            }
+        };
 
     Ok(Some(match pattern_with_eval {
         Some((p, eval)) => {
@@ -294,18 +295,21 @@ fn dependencies_from_length_property_value(
         let value = property_value
             .value(doc.name, property_value.line_number())
             .unwrap();
-        match value.get_or_type(doc.name, property_value.line_number()) { Ok(property_value) => {
-            dependencies_from_property_value(property_value.2, doc)
-        } _ => { match value.record_fields(doc.name, property_value.line_number())
-        { Ok(property_value) => {
-            let mut values = vec![];
-            for field in property_value.values() {
-                values.extend(dependencies_from_property_value(field, doc));
-            }
-            values
-        } _ => {
-            vec![]
-        }}}}
+        match value.get_or_type(doc.name, property_value.line_number()) {
+            Ok(property_value) => dependencies_from_property_value(property_value.2, doc),
+            _ => match value.record_fields(doc.name, property_value.line_number()) {
+                Ok(property_value) => {
+                    let mut values = vec![];
+                    for field in property_value.values() {
+                        values.extend(dependencies_from_property_value(field, doc));
+                    }
+                    values
+                }
+                _ => {
+                    vec![]
+                }
+            },
+        }
     } else {
         vec![]
     }

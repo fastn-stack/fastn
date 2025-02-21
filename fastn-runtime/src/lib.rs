@@ -227,29 +227,38 @@ impl<T: std::cmp::PartialEq> VecMap<T> {
     }
 
     pub fn insert(&mut self, key: String, value: T) {
-        match self.value.get_mut(&key) { Some(v) => {
-            v.push(value);
-        } _ => {
-            self.value.insert(key, vec![value]);
-        }}
+        match self.value.get_mut(&key) {
+            Some(v) => {
+                v.push(value);
+            }
+            _ => {
+                self.value.insert(key, vec![value]);
+            }
+        }
     }
 
     pub fn unique_insert(&mut self, key: String, value: T) {
-        match self.value.get_mut(&key) { Some(v) => {
-            if !v.contains(&value) {
-                v.push(value);
+        match self.value.get_mut(&key) {
+            Some(v) => {
+                if !v.contains(&value) {
+                    v.push(value);
+                }
             }
-        } _ => {
-            self.value.insert(key, vec![value]);
-        }}
+            _ => {
+                self.value.insert(key, vec![value]);
+            }
+        }
     }
 
     pub fn extend(&mut self, key: String, value: Vec<T>) {
-        match self.value.get_mut(&key) { Some(v) => {
-            v.extend(value);
-        } _ => {
-            self.value.insert(key, value);
-        }}
+        match self.value.get_mut(&key) {
+            Some(v) => {
+                v.extend(value);
+            }
+            _ => {
+                self.value.insert(key, value);
+            }
+        }
     }
 
     pub fn get_value(&self, key: &str) -> Vec<&T> {

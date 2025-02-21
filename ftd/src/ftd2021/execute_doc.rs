@@ -308,22 +308,10 @@ impl ExecuteDoc<'_> {
 
         if let Some(append_at) = append_at {
             match current.last_mut() {
-                Some(ftd::Element::Column(ftd::Column {
-                    container: c,
-                    ..
-                }))
-                | Some(ftd::Element::Row(ftd::Row {
-                    container: c,
-                    ..
-                }))
-                | Some(ftd::Element::Scene(ftd::Scene {
-                    container: c,
-                    ..
-                }))
-                | Some(ftd::Element::Grid(ftd::Grid {
-                    container: c,
-                    ..
-                })) => {
+                Some(ftd::Element::Column(ftd::Column { container: c, .. }))
+                | Some(ftd::Element::Row(ftd::Row { container: c, .. }))
+                | Some(ftd::Element::Scene(ftd::Scene { container: c, .. }))
+                | Some(ftd::Element::Grid(ftd::Grid { container: c, .. })) => {
                     let string_container = {
                         let mut new_parent_container = parent_container.to_vec();
                         new_parent_container
@@ -423,18 +411,10 @@ impl ExecuteDoc<'_> {
             };
             let mut child_count = 0;
             let container = match current.last_mut() {
-                Some(ftd::Element::Column(ftd::Column {
-                    container, ..
-                }))
-                | Some(ftd::Element::Row(ftd::Row {
-                    container, ..
-                }))
-                | Some(ftd::Element::Scene(ftd::Scene {
-                    container, ..
-                }))
-                | Some(ftd::Element::Grid(ftd::Grid {
-                    container, ..
-                })) => {
+                Some(ftd::Element::Column(ftd::Column { container, .. }))
+                | Some(ftd::Element::Row(ftd::Row { container, .. }))
+                | Some(ftd::Element::Scene(ftd::Scene { container, .. }))
+                | Some(ftd::Element::Grid(ftd::Grid { container, .. })) => {
                     child_count += container_children.len();
                     container.children.extend(container_children);
                     Some(container)

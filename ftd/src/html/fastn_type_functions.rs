@@ -138,15 +138,18 @@ impl ValueExt for fastn_resolved::Value {
             fastn_resolved::Value::List { data, .. } => {
                 let mut values = vec![];
                 for value in data {
-                    let v = match value
-                        .clone()
-                        .resolve(doc, line_number)?
-                        .to_html_string(doc, value.line_number(), None, id, true)?
-                    { Some(v) => {
-                        v
-                    } _ => {
-                        continue;
-                    }};
+                    let v = match value.clone().resolve(doc, line_number)?.to_html_string(
+                        doc,
+                        value.line_number(),
+                        None,
+                        id,
+                        true,
+                    )? {
+                        Some(v) => v,
+                        _ => {
+                            continue;
+                        }
+                    };
                     values.push(v);
                 }
                 Some(format!("{:?}", values.join(" ")))
@@ -178,11 +181,12 @@ impl ValueExt for fastn_resolved::Value {
                             variant,
                             doc.name,
                             line_number,
-                        ) { Ok(pattern) => {
-                            Some(format!("`{}`.format(JSON.stringify({}))", pattern, value))
-                        } _ => {
-                            Some(value)
-                        }}
+                        ) {
+                            Ok(pattern) => {
+                                Some(format!("`{}`.format(JSON.stringify({}))", pattern, value))
+                            }
+                            _ => Some(value),
+                        }
                     }
                     Some(value)
                         if name.eq(ftd::interpreter::FTD_RESIZING)
@@ -193,11 +197,12 @@ impl ValueExt for fastn_resolved::Value {
                             full_variant,
                             doc.name,
                             line_number,
-                        ) { Ok(pattern) => {
-                            Some(format!("`{}`.format(JSON.stringify({}))", pattern, value))
-                        } _ => {
-                            Some(value)
-                        }}
+                        ) {
+                            Ok(pattern) => {
+                                Some(format!("`{}`.format(JSON.stringify({}))", pattern, value))
+                            }
+                            _ => Some(value),
+                        }
                     }
                     Some(value) => Some(value),
                     None => None,
@@ -206,12 +211,11 @@ impl ValueExt for fastn_resolved::Value {
             fastn_resolved::Value::Record { fields, .. } => {
                 let mut values = vec![];
                 for (k, v) in fields {
-                    let value = match v.to_html_string(doc, field.clone(), id, string_needs_no_quotes)?
-                    { Some(v) => {
-                        v
-                    } _ => {
-                        "null".to_string()
-                    }};
+                    let value =
+                        match v.to_html_string(doc, field.clone(), id, string_needs_no_quotes)? {
+                            Some(v) => v,
+                            _ => "null".to_string(),
+                        };
                     values.push(format!("\"{}\": {}", k, value));
                 }
 

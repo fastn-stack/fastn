@@ -25,11 +25,12 @@ impl Document {
                 value, flags: flag, ..
             }) = v
             {
-                let val = match value.resolve(0, &doc) { Ok(val) => {
-                    val
-                } _ => {
-                    continue;
-                }};
+                let val = match value.resolve(0, &doc) {
+                    Ok(val) => val,
+                    _ => {
+                        continue;
+                    }
+                };
                 if let Some(value) = get_value(&val, &doc) {
                     d.insert(k.to_string(), value);
                 }
@@ -52,11 +53,12 @@ impl Document {
             if let ftd::Value::List { data, .. } = value {
                 let mut list_data = vec![];
                 for val in data {
-                    let val = match val.resolve(0, doc) { Ok(val) => {
-                        val
-                    } _ => {
-                        continue;
-                    }};
+                    let val = match val.resolve(0, doc) {
+                        Ok(val) => val,
+                        _ => {
+                            continue;
+                        }
+                    };
                     if let Some(val) = get_value(&val, doc) {
                         list_data.push(val);
                     }

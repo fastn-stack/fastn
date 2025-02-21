@@ -1126,7 +1126,9 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
                 &properties,
                 arguments,
             )?;
-        } else if let ftd::interpreter::Thing::Component(c) = doc.get_thing(name.as_str(), ast_component.line_number)? {
+        } else if let ftd::interpreter::Thing::Component(c) =
+            doc.get_thing(name.as_str(), ast_component.line_number)?
+        {
             Self::assert_no_private_properties_while_invocation(&properties, &c.arguments)?;
         }
 
@@ -1366,20 +1368,20 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
                 .resolve_name(definition_name_with_arguments.as_ref().unwrap().0)
                 .ne(&name)
         {
-            let mut var_name = match ftd::interpreter::utils::get_argument_for_reference_and_remaining(
+            let mut var_name =
+                match ftd::interpreter::utils::get_argument_for_reference_and_remaining(
                     name.as_str(),
                     doc,
                     definition_name_with_arguments,
                     loop_object_name_and_kind,
                     line_number,
-                )? { Some(value) => {
-                Some((
-                    value.2.get_reference_name(name.as_str(), doc),
-                    Some(value.0),
-                ))
-            } _ => {
-                None
-            }};
+                )? {
+                    Some(value) => Some((
+                        value.2.get_reference_name(name.as_str(), doc),
+                        Some(value.0),
+                    )),
+                    _ => None,
+                };
 
             if var_name.is_none() {
                 if let Ok(variable) = doc.search_variable(name.as_str(), line_number) {
