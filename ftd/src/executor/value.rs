@@ -87,7 +87,7 @@ pub(crate) fn get_value_from_properties_using_key_and_arguments_dummy(
     let expected_kind = value.as_ref().map(|v| v.kind());
     if !expected_kind
         .as_ref()
-        .map_or(true, |v| v.is_same_as(&argument.kind.kind))
+        .is_none_or(|v| v.is_same_as(&argument.kind.kind))
     {
         return ftd::executor::utils::parse_error(
             format!(
