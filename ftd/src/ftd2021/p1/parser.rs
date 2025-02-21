@@ -411,10 +411,10 @@ mod test {
     // invocation of these, instead of inside these, so jumping to failing test
     // is easier.
     macro_rules! p {
-        ($s:expr_2021, $t: expr_2021,) => {
+        ($s:expr, $t: expr_2021,) => {
             p!($s, $t)
         };
-        ($s:expr_2021, $t: expr_2021) => {
+        ($s:expr, $t: expr_2021) => {
             assert_eq!(
                 super::parse($s, "foo")
                     .unwrap_or_else(|e| panic!("{}", e))
@@ -427,10 +427,10 @@ mod test {
     }
 
     macro_rules! f {
-        ($s:expr_2021, $m: expr_2021,) => {
+        ($s:expr, $m: expr_2021,) => {
             f!($s, $m)
         };
-        ($s:expr_2021, $m: expr_2021) => {
+        ($s:expr, $m: expr_2021) => {
             match super::parse($s, "foo") {
                 Ok(r) => panic!("expected failure, found: {:?}", r),
                 Err(e) => {

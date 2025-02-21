@@ -23,7 +23,7 @@ pub(crate) const HTTP_LOCATION_HEADER: &str = "http-location";
 
 macro_rules! log_variable {
     // When verbose is true, debug variables
-    ($verbose:expr_2021, $($variable:expr_2021),*) => {
+    ($verbose:expr, $($variable:expr),*) => {
         if $verbose {
             $(std::dbg!($variable);)*
         }
@@ -32,7 +32,7 @@ macro_rules! log_variable {
 
 macro_rules! log_message {
     // When verbose is true, print message
-    ($verbose:expr_2021, $($message:expr_2021),*) => {
+    ($verbose:expr, $($message:expr),*) => {
         if $verbose {
             $(std::println!($message);)*
         }

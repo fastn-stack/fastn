@@ -1,6 +1,6 @@
 #[macro_export]
 macro_rules! try_ok_state {
-    ($e:expr_2021) => {
+    ($e:expr) => {
         match $e {
             $crate::interpreter::StateWithThing::State(s) => {
                 return Ok($crate::interpreter::StateWithThing::new_state(s))
@@ -15,7 +15,7 @@ macro_rules! try_ok_state {
 
 #[macro_export]
 macro_rules! try_state {
-    ($e:expr_2021) => {
+    ($e:expr) => {
         match $e {
             $crate::interpreter::StateWithThing::State(s) => {
                 return $crate::interpreter::StateWithThing::new_state(s)

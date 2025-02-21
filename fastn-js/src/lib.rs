@@ -74,7 +74,7 @@ pub fn all_js_without_test_and_ftd_langugage_js() -> String {
 
 #[macro_export]
 macro_rules! include_str_with_debug {
-    ($name:expr_2021) => {{
+    ($name:expr) => {{
         let default = include_str!($name);
         if std::env::var("DEBUG").is_ok() {
             std::fs::read_to_string($name).unwrap_or_else(|_| default.to_string())
