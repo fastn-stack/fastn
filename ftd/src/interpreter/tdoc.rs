@@ -1978,7 +1978,13 @@ impl<'a> TDoc<'a> {
                 text: match json {
                     serde_json::Value::String(v) => v.to_string(),
                     serde_json::Value::Object(o) => {
-                        return self.handle_object(kind, o, default_value, record_name, line_number);
+                        return self.handle_object(
+                            kind,
+                            o,
+                            default_value,
+                            record_name,
+                            line_number,
+                        );
                     }
                     _ => {
                         return ftd::interpreter::utils::e2(
@@ -2008,7 +2014,13 @@ impl<'a> TDoc<'a> {
                             })?
                     }
                     serde_json::Value::Object(o) => {
-                        return self.handle_object(kind, o, default_value, record_name, line_number);
+                        return self.handle_object(
+                            kind,
+                            o,
+                            default_value,
+                            record_name,
+                            line_number,
+                        );
                     }
                     _ => {
                         return ftd::interpreter::utils::e2(
@@ -2038,7 +2050,13 @@ impl<'a> TDoc<'a> {
                             })?
                     }
                     serde_json::Value::Object(o) => {
-                        return self.handle_object(kind, o, default_value, record_name, line_number);
+                        return self.handle_object(
+                            kind,
+                            o,
+                            default_value,
+                            record_name,
+                            line_number,
+                        );
                     }
                     _ => {
                         return ftd::interpreter::utils::e2(
@@ -2072,7 +2090,13 @@ impl<'a> TDoc<'a> {
                         }
                     },
                     serde_json::Value::Object(o) => {
-                        return self.handle_object(kind, o, default_value, record_name, line_number);
+                        return self.handle_object(
+                            kind,
+                            o,
+                            default_value,
+                            record_name,
+                            line_number,
+                        );
                     }
                     _ => {
                         return ftd::interpreter::utils::e2(
