@@ -102,7 +102,6 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
         .map(|v| v.0)
         .collect_vec();
 
-
     // Fix the export order while generating ast
     // export item should be inserted as soon as `from` is available
     let mut export_asts: indexmap::IndexMap<String, fastn_js::Ast> = Default::default();
