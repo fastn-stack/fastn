@@ -126,8 +126,6 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
         if default_thing_name.contains(&key) {
             continue;
         }
-        println!("key: {key}");
-        println!("thing: {thing:?}\n\n");
         if let ftd::interpreter::Thing::Component(c) = thing {
             document_asts.push(c.to_ast(&doc, &mut has_rive_components));
         } else if let ftd::interpreter::Thing::Variable(v) = thing {
@@ -182,8 +180,6 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
             document_asts.push(ast);
         }
     }
-
-    println!("document_asts: {document_asts:?}");
 
     document_asts.extend(export_asts.into_iter().map(|(_k, v)| v));
     let mut scripts = fastn_runtime::utils::get_external_scripts(has_rive_components);

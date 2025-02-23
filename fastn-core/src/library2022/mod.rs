@@ -33,7 +33,6 @@ impl Library2022 {
         &self,
         current_processing_module: &str,
     ) -> ftd_p1::Result<fastn_core::Package> {
-        println!("get_current_package -> {current_processing_module}");
         let current_package_name = dbg!(&self.module_package_map)
             .get(current_processing_module.trim_matches('/'))
             .ok_or_else(|| ftd_p1::Error::ParseError {
@@ -42,8 +41,6 @@ impl Library2022 {
                 doc_id: current_processing_module.to_string(),
                 line_number: 0,
             })?;
-
-        println!("get_current_package current_package_name -> {current_package_name}");
 
         self.config
             .all_packages
@@ -93,12 +90,6 @@ impl Library2022 {
             session_id: &Option<String>,
         ) -> fastn_core::Result<(String, String, usize)> {
             let package = lib.get_current_package(current_processing_module)?;
-            println!(
-                "get_for_package {} - current_processing_module: {current_processing_module} - \
-                package.name: {} - lib.config.package.name: {}",
-                name, package.name, lib.config.package.name
-            );
-
             let main_package = lib.config.package.name.to_string();
             // Check for app possibility
             if current_processing_module.contains("/-/") && main_package == package.name {
@@ -233,7 +224,6 @@ impl Library2022 {
         package: &fastn_core::Package,
         _session_id: &Option<String>,
     ) -> ftd::ftd2021::p1::Result<()> {
-        println!("module_package_map insert 2 {module}, {}", package.name);
         self.module_package_map.insert(
             module.trim_matches('/').to_string(),
             package.name.to_string(),
@@ -256,7 +246,6 @@ impl Library2022 {
         package: &fastn_core::Package,
         session_id: &Option<String>,
     ) -> ftd::ftd2021::p1::Result<()> {
-        println!("module_package_map insert 3 {module}, {}", package.name);
         self.module_package_map.insert(
             module.trim_matches('/').to_string(),
             package.name.to_string(),

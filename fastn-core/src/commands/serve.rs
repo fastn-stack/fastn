@@ -35,11 +35,6 @@ async fn serve_file(
         };
     }
 
-    println!(
-        "serve_file 1 {path} {:?} all-packages: {:?}",
-        config.config.package, config.config.all_packages
-    );
-
     let f = match config
         .get_file_and_package_by_id(path.as_str(), preview_session_id)
         .await
@@ -62,7 +57,6 @@ async fn serve_file(
         }
     };
 
-    println!("file: {f:?}");
     tracing::info!("file: {f:?}");
 
     if let fastn_core::File::Code(doc) = f {
@@ -201,33 +195,25 @@ pub async fn serve(
     let mut req_config = fastn_core::RequestConfig::new(config, &req, "", "/");
     let path: camino::Utf8PathBuf = req.path().replacen('/', "", 1).parse()?;
 
-    println!("serve 1");
     if let Some(r) = handle_redirect(config, &path) {
         return Ok((r, false));
     }
 
-    println!("serve 2");
-
     if req.path() == "/-/auth/logout/" {
         return Ok((clear_session_cookie(&req), false));
     }
-    println!("serve 3");
 
     if let Some(endpoint_response) = handle_endpoints(config, &req, preview_session_id).await {
         return endpoint_response.map(|r| (r, false));
     }
-    println!("serve 4");
 
     if let Some(app_response) = handle_apps(config, &req).await {
         return app_response.map(|r| (r, false));
     }
-    println!("serve 5");
 
     if let Some(default_response) = handle_default_route(&req, config.package.name.as_str()) {
         return default_response.map(|r| (r, true));
     }
-
-    println!("serve 6");
 
     if fastn_core::utils::is_static_path(req.path()) {
         return handle_static_route(
@@ -239,8 +225,6 @@ pub async fn serve(
         .await
         .map(|r| (r, true));
     }
-
-    println!("serve 7");
 
     serve_helper(&mut req_config, only_js, path, preview_session_id)
         .await
@@ -261,8 +245,6 @@ pub async fn serve_helper(
         // If not present than proxy pass it
 
         let query_string = req_config.request.query_string().to_string();
-
-        println!("serve_helper 1");
 
         // if start with -/ and mount-point exists so send redirect to mount-point
         // We have to do -/<package-name>/remaining-url/ ==> (<package-name>, remaining-url) ==> (/config.package-name.mount-point/remaining-url/)
@@ -308,12 +290,8 @@ pub async fn serve_helper(
             }
         }
 
-        println!("serve_helper 2");
-
         let file_response =
             serve_file(req_config, path.as_path(), only_js, preview_session_id).await;
-
-        println!("serve_helper 3");
 
         tracing::info!(
             "before executing proxy: file-status: {}, path: {}",
