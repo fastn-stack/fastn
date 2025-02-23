@@ -213,7 +213,7 @@ impl TestLibrary {
     ) -> ftd::ftd2021::p1::Result<String> {
         match self.get(name, doc) {
             Some(v) => Ok(v),
-            None => ftd::ftd2021::p2::utils::e2(format!("library not found 3: {}", name), "", 0),
+            None => ftd::ftd2021::p2::utils::e2(format!("library not found: {}", name), "", 0),
         }
     }
 }
