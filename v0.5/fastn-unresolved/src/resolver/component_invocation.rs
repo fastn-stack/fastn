@@ -14,7 +14,7 @@ impl fastn_unresolved::ComponentInvocation {
 
         // we resolve children first (so we can do early returns after this for loop)
         for c in self.children.iter_mut() {
-            if let fastn_unresolved::UR::UnResolved(ref mut c) = c {
+            if let fastn_unresolved::UR::UnResolved(c) = c {
                 resolved &= c.resolve(definitions, arena, output, main_package);
             }
         }
@@ -89,11 +89,11 @@ pub fn get_component<'a>(
     tracing::info!("get_component: symbol: {}", symbol.str(arena));
     match definitions.get(symbol.str(arena)) {
         Some(fastn_unresolved::UR::Resolved(Some(fastn_resolved::Definition::Component(v)))) => {
-            return Some(fastn_unresolved::UR::Resolved(Some(v)))
+            return Some(fastn_unresolved::UR::Resolved(Some(v)));
         }
         Some(fastn_unresolved::UR::Resolved(None)) => unreachable!(),
         Some(fastn_unresolved::UR::UnResolved(v)) => {
-            return Some(fastn_unresolved::UR::UnResolved(v))
+            return Some(fastn_unresolved::UR::UnResolved(v));
         }
         Some(_) | None => {}
     }

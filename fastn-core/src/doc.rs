@@ -452,37 +452,43 @@ pub async fn resolve_foreign_variable2022(
                         .get(&format!("{}/{}", package.name, dark_path))
                     {
                         dark_mode = dark.to_string();
-                    } else if let Ok(dark) = package
-                        .resolve_by_file_name(
-                            dark_path.as_str(),
-                            None,
-                            &lib.config.ds,
-                            preview_session_id,
-                        )
-                        .await
-                    {
-                        print!("Processing {}/{} ... ", package.name.as_str(), dark_path);
-                        fastn_core::utils::write(
-                            &lib.config.build_dir().join("-").join(package.name.as_str()),
-                            dark_path.as_str(),
-                            dark.as_slice(),
-                            &lib.config.ds,
-                            preview_session_id,
-                        )
-                        .await
-                        .map_err(|e| {
-                            ftd::ftd2021::p1::Error::ParseError {
-                                message: e.to_string(),
-                                doc_id: lib.document_id.to_string(),
-                                line_number: 0,
-                            }
-                        })?;
-                        fastn_core::utils::print_end(
-                            format!("Processed {}/{}", package.name.as_str(), dark_path).as_str(),
-                            start,
-                        );
                     } else {
-                        dark_mode.clone_from(&light_mode);
+                        match package
+                            .resolve_by_file_name(
+                                dark_path.as_str(),
+                                None,
+                                &lib.config.ds,
+                                preview_session_id,
+                            )
+                            .await
+                        {
+                            Ok(dark) => {
+                                print!("Processing {}/{} ... ", package.name.as_str(), dark_path);
+                                fastn_core::utils::write(
+                                    &lib.config.build_dir().join("-").join(package.name.as_str()),
+                                    dark_path.as_str(),
+                                    dark.as_slice(),
+                                    &lib.config.ds,
+                                    preview_session_id,
+                                )
+                                .await
+                                .map_err(|e| {
+                                    ftd::ftd2021::p1::Error::ParseError {
+                                        message: e.to_string(),
+                                        doc_id: lib.document_id.to_string(),
+                                        line_number: 0,
+                                    }
+                                })?;
+                                fastn_core::utils::print_end(
+                                    format!("Processed {}/{}", package.name.as_str(), dark_path)
+                                        .as_str(),
+                                    start,
+                                );
+                            }
+                            _ => {
+                                dark_mode.clone_from(&light_mode);
+                            }
+                        }
                     }
                     lib.downloaded_assets.insert(
                         format!("{}/{}", package.name, dark_path),
@@ -753,47 +759,64 @@ pub async fn resolve_foreign_variable2(
                 let dark_path = format!("{}-dark.{}", file.replace('.', "/"), ext);
                 if download_assets && !file.ends_with("-dark") {
                     let start = std::time::Instant::now();
-                    if let Some(dark) = lib
+                    match lib
                         .config
                         .downloaded_assets
                         .get(&format!("{}/{}", package.name, dark_path))
                     {
-                        dark_mode = dark.to_string();
-                    } else if let Ok(dark) = package
-                        .resolve_by_file_name(
-                            dark_path.as_str(),
-                            None,
-                            &lib.config.config.ds,
-                            session_id,
-                        )
-                        .await
-                    {
-                        print!("Processing {}/{} ... ", package.name.as_str(), dark_path);
-                        fastn_core::utils::write(
-                            &lib.config
-                                .config
-                                .build_dir()
-                                .join("-")
-                                .join(package.name.as_str()),
-                            dark_path.as_str(),
-                            dark.as_slice(),
-                            &lib.config.config.ds,
-                            session_id,
-                        )
-                        .await
-                        .map_err(|e| {
-                            ftd::ftd2021::p1::Error::ParseError {
-                                message: e.to_string(),
-                                doc_id: lib.document_id.to_string(),
-                                line_number: 0,
+                        Some(dark) => {
+                            dark_mode = dark.to_string();
+                        }
+                        _ => {
+                            match package
+                                .resolve_by_file_name(
+                                    dark_path.as_str(),
+                                    None,
+                                    &lib.config.config.ds,
+                                    session_id,
+                                )
+                                .await
+                            {
+                                Ok(dark) => {
+                                    print!(
+                                        "Processing {}/{} ... ",
+                                        package.name.as_str(),
+                                        dark_path
+                                    );
+                                    fastn_core::utils::write(
+                                        &lib.config
+                                            .config
+                                            .build_dir()
+                                            .join("-")
+                                            .join(package.name.as_str()),
+                                        dark_path.as_str(),
+                                        dark.as_slice(),
+                                        &lib.config.config.ds,
+                                        session_id,
+                                    )
+                                    .await
+                                    .map_err(|e| {
+                                        ftd::ftd2021::p1::Error::ParseError {
+                                            message: e.to_string(),
+                                            doc_id: lib.document_id.to_string(),
+                                            line_number: 0,
+                                        }
+                                    })?;
+                                    fastn_core::utils::print_end(
+                                        format!(
+                                            "Processed {}/{}",
+                                            package.name.as_str(),
+                                            dark_path
+                                        )
+                                        .as_str(),
+                                        start,
+                                    );
+                                }
+                                _ => {
+                                    dark_mode.clone_from(&light_mode);
+                                }
                             }
-                        })?;
-                        fastn_core::utils::print_end(
-                            format!("Processed {}/{}", package.name.as_str(), dark_path).as_str(),
-                            start,
-                        );
-                    } else {
-                        dark_mode.clone_from(&light_mode);
+                        }
                     }
                     lib.config.downloaded_assets.insert(
                         format!("{}/{}", package.name, dark_path),

@@ -102,17 +102,20 @@ impl TDoc<'_> {
                     arguments,
                     None,
                 )?
-            } else if let Ok(value) = arg.to_value(0, self.name) {
-                ftd::PropertyValue::Value { value }
             } else {
-                return ftd::ftd2021::p2::utils::e2(
-                    format!(
-                        "expected default value for local variable 2 {}: {:?} in {}",
-                        k, arg, root
-                    ),
-                    self.name,
-                    0,
-                );
+                match arg.to_value(0, self.name) {
+                    Ok(value) => ftd::PropertyValue::Value { value },
+                    _ => {
+                        return ftd::ftd2021::p2::utils::e2(
+                            format!(
+                                "expected default value for local variable 2 {}: {:?} in {}",
+                                k, arg, root
+                            ),
+                            self.name,
+                            0,
+                        );
+                    }
+                }
             };
             if let ftd::PropertyValue::Variable { ref mut name, .. } = default {
                 if !self.local_variables.contains_key(name) && !self.bag.contains_key(name) {
@@ -248,10 +251,10 @@ impl TDoc<'_> {
                 )?;
             }
         }
-        if let Some((ref mut c, _)) = reference {
+        if let Some((c, _)) = reference {
             *c = self.resolve_name(0, format!("{}@{}", c, parent_container).as_str())?;
         }
-        if let Some(ref mut condition) = condition {
+        if let Some(condition) = condition {
             edit_condition(
                 condition,
                 self,
@@ -357,7 +360,7 @@ impl TDoc<'_> {
             ignore_loop: bool,
             ignore_mouse_in: bool,
         ) -> ftd::ftd2021::p1::Result<()> {
-            if let ftd::PropertyValue::Variable { ref mut name, kind } = property_value {
+            if let ftd::PropertyValue::Variable { name, kind } = property_value {
                 if (ignore_loop && name.contains("$loop$"))
                     || (insert_only && !name.as_str().eq("MOUSE-IN"))
                     || (ignore_mouse_in && name.contains("MOUSE-IN"))
@@ -684,7 +687,7 @@ impl TDoc<'_> {
                                     format!("key not found: {}", key.as_str()),
                                     self.name,
                                     line_number,
-                                )
+                                );
                             }
                         };
                         fields.insert(
@@ -832,7 +835,7 @@ impl TDoc<'_> {
                                     format!("key not found: {}", key.as_str()),
                                     self.name,
                                     line_number,
-                                )
+                                );
                             }
                         };
                         fields.insert(
@@ -920,7 +923,7 @@ impl TDoc<'_> {
                             m,
                             "resolve_name_without_full_path",
                             line_number,
-                        )
+                        );
                     }
                 },
                 (_, _, Some(_)) => unimplemented!(),
@@ -1092,12 +1095,9 @@ impl TDoc<'_> {
                 v.value.resolve(line_number, self)?,
                 v.conditions
                     .into_iter()
-                    .flat_map(|(b, v)| {
-                        if let Ok(v) = v.resolve(line_number, self) {
-                            Some((b, v))
-                        } else {
-                            None
-                        }
+                    .flat_map(|(b, v)| match v.resolve(line_number, self) {
+                        Ok(v) => Some((b, v)),
+                        _ => None,
                     })
                     .collect(),
             )),
@@ -1426,7 +1426,7 @@ impl TDoc<'_> {
                                 thing,
                                 "get_thing",
                                 line_number,
-                            )
+                            );
                         }
                     };
                     if let Some(ftd::PropertyValue::Value { value: val }) = fields.get(v) {

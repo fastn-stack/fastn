@@ -109,7 +109,7 @@ impl KindData {
                     str_kind,
                     doc_id,
                     line_number,
-                ))
+                ));
             }
         };
 

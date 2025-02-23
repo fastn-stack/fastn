@@ -1691,7 +1691,7 @@ impl DocumentMeta {
         element_name: &str,
     ) {
         if self.has_self_reference(value) {
-            if let Some(ref referenced_value) = referenced_value {
+            if let Some(referenced_value) = referenced_value {
                 component_statements.push(fastn_js::ComponentStatement::SetProperty(
                     referenced_value.to_set_property(value_kind, doc, element_name, rdata),
                 ));
@@ -2058,7 +2058,7 @@ impl Device {
         has_rive_components: &mut bool,
     ) -> Vec<fastn_js::ComponentStatement> {
         let mut component_statements = vec![];
-        if let Some(ref device) = rdata.device {
+        if let Some(device) = rdata.device {
             if device.ne(&self.device) {
                 return component_statements;
             }

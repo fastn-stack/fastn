@@ -24,21 +24,21 @@ demo-link: https://bling.fifthtry.site/quote/
 
 
 
--- ft-ui.template list quotes:
+-- ft-ui.template-data list quotes:
 
--- ft-ui.template: Electric
+-- ft-ui.template-data: Electric
 template-url: /featured/components/quotes/quotes-with-images/demo-1/
 screenshot: $fastn-assets.files.images.featured.components.quotes.quotes-with-images.demo-1.png
 
--- ft-ui.template: Marengo
+-- ft-ui.template-data: Marengo
 template-url: /quotes/marengo/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-5.png
 
--- ft-ui.template: Chrome
+-- ft-ui.template-data: Chrome
 template-url: /quotes/chrome/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-6.png
 
--- ft-ui.template: Dorian
+-- ft-ui.template-data: Dorian
 template-url: /quotes/dorian/
 screenshot: $fastn-assets.files.images.featured.components.quotes.simple-quotes.demo-7.png
 

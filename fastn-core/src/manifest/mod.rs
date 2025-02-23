@@ -47,8 +47,8 @@ pub async fn write_manifest_file(
     zip_url: Option<String>,
     session_id: &Option<String>,
 ) -> fastn_core::Result<()> {
-    use sha2::digest::FixedOutput;
     use sha2::Digest;
+    use sha2::digest::FixedOutput;
 
     let start = std::time::Instant::now();
 

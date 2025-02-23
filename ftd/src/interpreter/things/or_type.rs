@@ -1,5 +1,5 @@
-use ftd::interpreter::things::record::RecordExt;
 use ftd::interpreter::FieldExt;
+use ftd::interpreter::things::record::RecordExt;
 
 pub trait OrTypeExt {
     fn scan_ast(

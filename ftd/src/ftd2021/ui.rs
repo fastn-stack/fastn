@@ -510,7 +510,7 @@ impl Element {
             is_dummy: bool,
         ) {
             let external_id = {
-                if let Some(ref external_id) = external_id {
+                if let Some(external_id) = external_id {
                     format!(":{}", external_id)
                 } else {
                     "".to_string()
@@ -989,7 +989,7 @@ impl Element {
                 // since font is not conditional attribute yet so this will always pass
                 return;
             }
-            if let Some(ref type_) = font {
+            if let Some(type_) = font {
                 font_condition(type_, id.as_str(), data);
             }
 
@@ -1056,7 +1056,7 @@ impl Element {
             background_image: &Option<ImageSrc>,
         ) {
             let id = id.clone().expect("universal id should be present");
-            if let Some(ref image_src) = background_image {
+            if let Some(image_src) = background_image {
                 image_condition(image_src, id.as_str(), data);
             }
 
@@ -1497,7 +1497,7 @@ impl Element {
                 _ => continue,
             };
             for (condition, value) in conditions {
-                let condition = if let Ok(condition) = condition.to_condition(
+                let condition = match condition.to_condition(
                     0,
                     &ftd::ftd2021::p2::TDoc {
                         name: document.name.as_str(),
@@ -1507,9 +1507,10 @@ impl Element {
                         referenced_local_variables: &mut Default::default(),
                     },
                 ) {
-                    condition
-                } else {
-                    continue;
+                    Ok(condition) => condition,
+                    _ => {
+                        continue;
+                    }
                 };
                 let value = match value.resolve(0, &doc) {
                     Ok(value) => match value.to_serde_value() {
@@ -1815,12 +1816,8 @@ impl Element {
 
         for element in &mut *elements {
             match element {
-                ftd::Element::Column(ftd::Column {
-                    ref mut container, ..
-                })
-                | ftd::Element::Row(ftd::Row {
-                    ref mut container, ..
-                }) => {
+                ftd::Element::Column(ftd::Column { container, .. })
+                | ftd::Element::Row(ftd::Row { container, .. }) => {
                     if let Some((_, _, ref mut e)) = container.external_children {
                         ftd::Element::renest_on_region(e);
                     }
@@ -1987,7 +1984,7 @@ impl Position {
                     format!("{} is not a valid alignment", t),
                     doc_id,
                     0,
-                )
+                );
             } // TODO
             None => None,
         })
@@ -2064,7 +2061,7 @@ impl Region {
                     format!("{} is not a valid alignment", t),
                     doc_id,
                     0,
-                )
+                );
             } // TODO
             None => return Ok(None),
         }))
@@ -2175,7 +2172,7 @@ impl Overflow {
                     format!("{} is not a valid property", t),
                     doc_id,
                     0,
-                )
+                );
             } // TODO
             None => return Ok(None),
         }))
@@ -2537,7 +2534,7 @@ impl TextAlign {
                     ),
                     doc_id,
                     0,
-                )
+                );
             }
             None => return Ok(ftd::TextAlign::Left),
         })
@@ -2562,7 +2559,7 @@ impl FontDisplay {
                     format!("{} is not a valid alignment, allowed: swap, block", t),
                     doc_id,
                     0,
-                )
+                );
             } // TODO
             None => return Ok(ftd::FontDisplay::Block),
         })
@@ -2840,7 +2837,7 @@ impl Style {
                         format!("{} is not a valid style", t),
                         doc_id,
                         0,
-                    )
+                    );
                 }
             }
         }
@@ -2909,7 +2906,7 @@ impl TextFormat {
                     format!("{} is not a valid format", t),
                     doc_id,
                     0,
-                )
+                );
             } // TODO
             None => return Ok(ftd::TextFormat::Markdown),
         })

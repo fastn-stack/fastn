@@ -90,7 +90,7 @@ impl Boolean {
                     format!("{:?} must not happen", self),
                     doc.name,
                     line_number,
-                )
+                );
             }
         };
         return match value.to_serde_value() {
@@ -102,7 +102,7 @@ impl Boolean {
                     ),
                     doc.name,
                     line_number,
-                )
+                );
             }
             Some(value) => Ok(ftd::Condition { variable, value }),
         };
@@ -155,7 +155,7 @@ impl Boolean {
                     format!("'{}' is not valid condition", rest),
                     doc_id,
                     line_number,
-                )
+                );
             }
         })
     }
@@ -281,7 +281,7 @@ impl Boolean {
                     format!("'{}' is not valid condition", expr),
                     doc.name,
                     line_number,
-                )
+                );
             }
         });
 
@@ -417,7 +417,7 @@ impl Boolean {
                     format!("unknown Boolean found: {:?}", self),
                     doc.name,
                     line_number,
-                )
+                );
             }
         })
     }
@@ -447,7 +447,7 @@ impl Boolean {
                     format!("unimplemented for type: {:?}", self),
                     doc_id,
                     line_number,
-                )
+                );
             }
         })
     }

@@ -13,25 +13,25 @@ templates: $cards
 
 
 
--- ft-ui.template list cards:
+-- ft-ui.template-data list cards:
 
--- ft-ui.template: Business Card
+-- ft-ui.template-data: Business Card
 template-url: featured/components/business-cards/card-1/
 screenshot: $fastn-assets.files.images.featured.components.business-card.png
 
--- ft-ui.template: Gradient Business Card
+-- ft-ui.template-data: Gradient Business Card
 template-url: featured/components/business-cards/gradient-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.gradient-business-card-front.jpg
 
--- ft-ui.template: Midnight Business Card
+-- ft-ui.template-data: Midnight Business Card
 template-url: featured/components/business-cards/midnight-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.midnight-business-card-front.jpg
 
--- ft-ui.template: Pattern Business Card
+-- ft-ui.template-data: Pattern Business Card
 template-url: featured/components/business-cards/pattern-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.pattern-business-card-front.jpg
 
--- ft-ui.template: Sunset Business Card
+-- ft-ui.template-data: Sunset Business Card
 template-url: featured/components/business-cards/sunset-card/
 screenshot: $fastn-assets.files.images.featured.business-cards.sunset-business-card-front.jpg
 

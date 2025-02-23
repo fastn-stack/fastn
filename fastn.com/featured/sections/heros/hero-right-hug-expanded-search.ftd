@@ -21,21 +21,21 @@ demo-link: https://saurabh-lohiya.github.io/hero/docs/hero-right-hug-expanded-se
 
 
 
--- ft-ui.template list heros:
+-- ft-ui.template-data list heros:
 
--- ft-ui.template: Hero Bottom Hug
+-- ft-ui.template-data: Hero Bottom Hug
 template-url: featured/sections/heros/hero-bottom-hug/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-bottom-hug.png
 
--- ft-ui.template: Hero Left Hug Expanded
+-- ft-ui.template-data: Hero Left Hug Expanded
 template-url: featured/sections/heros/hero-left-hug-expanded/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-left-hug-expanded.jpg
 
--- ft-ui.template: Hero Right Hug Expanded
+-- ft-ui.template-data: Hero Right Hug Expanded
 template-url: featured/sections/heros/hero-right-hug-expanded/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-expanded.jpg
 
--- ft-ui.template: Hero Right Hug Search
+-- ft-ui.template-data: Hero Right Hug Search
 template-url: /hero-right-hug-search/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-search.jpg
 

@@ -23,13 +23,13 @@ demo-link: https://fastn-community.github.io/saurabh-portfolio/
 
 
 
--- ft-ui.template list text-ps:
+-- ft-ui.template-data list text-ps:
 
--- ft-ui.template: Texty PS
+-- ft-ui.template-data: Texty PS
 template-url: featured/portfolios/texty-ps/
 screenshot: $fastn-assets.files.images.featured.portfolios.texty-ps.png
 
--- ft-ui.template: Johny PS
+-- ft-ui.template-data: Johny PS
 template-url: featured/portfolios/johny-ps/
 screenshot: $fastn-assets.files.images.featured.portfolios.johny-ps.png
 

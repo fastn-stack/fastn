@@ -21,7 +21,7 @@ authors = [
     "Arpita Jaiswal <arpita@fifthtry.com>",
     "Siddhant Kumar <siddhant@fifthtry.com>",
 ]
-edition = "2021"
+edition = "2024"
 description = "fastn: Full-stack Web Development Made Easy"
 license = "AGPL-3"
 repository = "https://github.com/fastn-stack/fastn"
@@ -77,12 +77,12 @@ reqwest = { version = "0.12", default-features = false, features = ["json", "rus
 scc = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-string-interner = "0.18"
+string-interner = "0.19"
 thiserror = "2"
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "fs"] }
 tokio-postgres = { version = "0.7", features = ["with-serde_json-1", "with-uuid-1"] }
 tracing = "0.1"
-wasmtime = "29"
+wasmtime = "30"
 
 [workspace.dependencies.fastn-observer]
 git = "https://github.com/fastn-stack/fastn-observer"

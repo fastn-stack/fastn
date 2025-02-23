@@ -12,7 +12,7 @@ pub mod utils;
 pub use document::Document;
 pub use event::{Action, ActionKind, Event, EventName};
 pub use expression::Boolean;
-pub use interpreter::{default_column, interpret, Thing};
+pub use interpreter::{Thing, default_column, interpret};
 pub use kind::Kind;
 pub use library::TestLibrary;
 pub use record::Record;

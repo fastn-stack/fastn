@@ -37,7 +37,7 @@ pub fn parse_import(
                 "caption is missing in import statement",
                 doc_id,
                 line_number,
-            )
+            );
         }
     };
 
@@ -121,7 +121,7 @@ pub fn boolean_and_ref(
                                 format!("expected boolean, found: {:?}", kind),
                                 doc.name,
                                 line_number,
-                            )
+                            );
                         }
                     };
 
@@ -170,7 +170,7 @@ pub fn boolean_and_ref(
                         format!("expected integer, found 7: {:?}", kind),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             };
             if let Some(ftd::ftd2021::p2::Boolean::IsNotNull {
@@ -236,7 +236,7 @@ pub fn integer_and_ref(
                                 format!("expected integer, found 9: {:?}", kind),
                                 doc.name,
                                 line_number,
-                            )
+                            );
                         }
                     };
 
@@ -285,7 +285,7 @@ pub fn integer_and_ref(
                         format!("expected integer, found 1: {:?}", kind),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             };
             if let Some(ftd::ftd2021::p2::Boolean::IsNotNull {
@@ -351,7 +351,7 @@ pub fn decimal_and_ref(
                                 format!("expected decimal, found: {:?}", kind),
                                 doc.name,
                                 line_number,
-                            )
+                            );
                         }
                     };
 
@@ -400,7 +400,7 @@ pub fn decimal_and_ref(
                         format!("expected integer, found 5: {:?}", kind),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             };
             if let Some(ftd::ftd2021::p2::Boolean::IsNotNull {
@@ -459,7 +459,7 @@ pub fn string_and_source_and_ref(
                         format!("expected string, found 1: {:?}", kind),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             };
 
@@ -472,7 +472,7 @@ pub fn string_and_source_and_ref(
                                 format!("expected string, found 2: {:?}", kind),
                                 doc.name,
                                 line_number,
-                            )
+                            );
                         }
                     };
 
@@ -525,7 +525,7 @@ pub fn string_and_source_and_ref(
                         format!("expected string, found 4: {:?}", kind),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             };
 
@@ -536,7 +536,7 @@ pub fn string_and_source_and_ref(
                         format!("expected string, found 5: {:?}", kind),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             };
             if let Some(ftd::ftd2021::p2::Boolean::IsNotNull {
@@ -622,7 +622,7 @@ pub fn record_and_ref(
                                 format!("expected record, found: {:?}", kind),
                                 doc.name,
                                 line_number,
-                            )
+                            );
                         }
                     };
 
@@ -677,7 +677,7 @@ pub fn record_and_ref(
                         format!("expected record, found: {:?}", kind),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             };
             if let Some(ftd::ftd2021::p2::Boolean::IsNotNull {
@@ -1527,7 +1527,7 @@ pub(crate) fn get_markup_child(
                 "the component should have name",
                 doc.name,
                 sub.line_number,
-            )
+            );
         }
     };
     let sub_caption = if sub.caption.is_none() && sub.body.is_none() {
@@ -1589,7 +1589,7 @@ pub fn arguments_on_condition(
 ) -> ftd::ftd2021::p1::Result<(ftd::Map<ftd::Value>, bool)> {
     let mut arguments: ftd::Map<ftd::Value> = Default::default();
     let mut is_visible = true;
-    if let ftd::ftd2021::p2::Boolean::IsNotNull { ref value } = condition {
+    if let ftd::ftd2021::p2::Boolean::IsNotNull { value } = condition {
         match value {
             ftd::PropertyValue::Value { .. } => {}
             ftd::PropertyValue::Reference { name, kind }
@@ -1641,7 +1641,7 @@ pub fn arguments_on_condition(
                     ),
                     doc_id,
                     line_number,
-                )
+                );
             }
         })
     }
@@ -1809,7 +1809,7 @@ pub fn convert_to_document_id(doc_name: &str) -> String {
 #[cfg(test)]
 mod test {
     macro_rules! p {
-        ($s:expr, $id: expr, $alias: expr) => {
+        ($s:expr, $id: expr_2021, $alias: expr_2021) => {
             assert_eq!(
                 super::parse_import(&Some($s.to_string()), $id, 0)
                     .unwrap_or_else(|e| panic!("{}", e)),

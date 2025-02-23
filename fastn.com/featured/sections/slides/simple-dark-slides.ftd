@@ -23,21 +23,21 @@ demo-link: https://fifthtry.github.io/simple-dark-slides
 
 
 
--- ft-ui.template list slides:
+-- ft-ui.template-data list slides:
 
--- ft-ui.template: Crispy Presentation Theme
+-- ft-ui.template-data: Crispy Presentation Theme
 template-url: /featured/sections/slides/crispy-presentation-theme/
 screenshot: $fastn-assets.files.images.featured.sections.slides.crispy-presentation-theme.png
 
--- ft-ui.template: Giggle Presentation Template
+-- ft-ui.template-data: Giggle Presentation Template
 template-url: /featured/sections/slides/giggle-presentation-template/
 screenshot: $fastn-assets.files.images.featured.sections.slides.giggle-presentation-template.png
 
--- ft-ui.template: Rotary Presentation Template
+-- ft-ui.template-data: Rotary Presentation Template
 template-url: /featured/sections/slides/rotary-presentation-template/
 screenshot: $fastn-assets.files.images.featured.sections.slides.rotary-presentation-template.png
 
--- ft-ui.template: Simple Light Slides
+-- ft-ui.template-data: Simple Light Slides
 template-url: /featured/sections/slides/simple-light-slides/
 screenshot: $fastn-assets.files.images.featured.sections.slides.simple-light-slides.png
 

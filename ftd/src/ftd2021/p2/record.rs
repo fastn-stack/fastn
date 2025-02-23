@@ -124,7 +124,7 @@ impl Record {
                             format!("not yet implemented: {:?}", t),
                             doc.name,
                             p1.line_number,
-                        )
+                        );
                     }
                 },
                 (
@@ -213,7 +213,7 @@ impl Record {
                             format!("not yet implemented: {:?}", t),
                             doc.name,
                             p1.line_number,
-                        )
+                        );
                     }
                 },
                 (Ok(_), _) => {

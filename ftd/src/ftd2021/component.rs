@@ -223,7 +223,7 @@ impl ChildComponent {
                             format!("{} cant have children", t),
                             doc.name,
                             self.line_number,
-                        )
+                        );
                     }
                 }
             }
@@ -748,7 +748,7 @@ fn markup_get_named_container(
                         format!("cannot find name for container {:?}", container),
                         doc.name,
                         0,
-                    )
+                    );
                 }
             }
         }
@@ -971,21 +971,29 @@ fn reevalute_markup(
                     }
                     t
                 };
-                let named_container = if let Ok(mut get) =
-                    markup_get_named_container(&[], root, 0, doc, &mut Default::default(), &[])
-                {
-                    get.extend(named_container.clone());
-                    get
-                } else {
-                    // In case of component variable of markup defined internally,
-                    // it won't be present inside doc.bag
-                    // Example:
-                    // -- ftd.text foo: {bar: Hello}
-                    // --- ftd.text bar:
-                    // color: red
-                    //
-                    // `bar` here won't be present inside doc.bag
-                    named_container.clone()
+                let named_container = match markup_get_named_container(
+                    &[],
+                    root,
+                    0,
+                    doc,
+                    &mut Default::default(),
+                    &[],
+                ) {
+                    Ok(mut get) => {
+                        get.extend(named_container.clone());
+                        get
+                    }
+                    _ => {
+                        // In case of component variable of markup defined internally,
+                        // it won't be present inside doc.bag
+                        // Example:
+                        // -- ftd.text foo: {bar: Hello}
+                        // --- ftd.text bar:
+                        // color: red
+                        //
+                        // `bar` here won't be present inside doc.bag
+                        named_container.clone()
+                    }
                 };
                 reevalute_markups(&mut t, named_container, doc)?;
                 ftd::IText::Markup(t)
@@ -998,7 +1006,7 @@ fn reevalute_markup(
                     ),
                     doc.name,
                     0,
-                )
+                );
             }
         })
     }
@@ -1348,7 +1356,7 @@ fn get_conditional_attributes(
                         format!("expected int, found3: {:?}", v),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             }
         } else if style_integer_important.contains(&name) {
@@ -1363,7 +1371,7 @@ fn get_conditional_attributes(
                         format!("expected int, found4: {:?}", v),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             }
         } else if style_length.contains(&name) {
@@ -1380,7 +1388,7 @@ fn get_conditional_attributes(
                         format!("expected string, found 8: {:?}", v),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             }
         } else if style_color.contains(&name) {
@@ -1390,7 +1398,7 @@ fn get_conditional_attributes(
                         .iter()
                         .map(|(k, v)| v.resolve(line_number, doc).map(|v| (k.to_string(), v)))
                         .collect::<ftd::ftd2021::p1::Result<ftd::Map<ftd::Value>>>()?;
-                    let light = if let Some(light) = ftd::ftd2021::p2::element::color_from(
+                    let light = match ftd::ftd2021::p2::element::color_from(
                         ftd::ftd2021::p2::utils::string_optional(
                             "light",
                             &properties,
@@ -1399,17 +1407,15 @@ fn get_conditional_attributes(
                         )?,
                         doc.name,
                     )? {
-                        ftd::ftd2021::html::color(&light)
-                    } else {
-                        "auto".to_string()
+                        Some(light) => ftd::ftd2021::html::color(&light),
+                        _ => "auto".to_string(),
                     };
-                    let dark = if let Some(dark) = ftd::ftd2021::p2::element::color_from(
+                    let dark = match ftd::ftd2021::p2::element::color_from(
                         ftd::ftd2021::p2::utils::string_optional("dark", &properties, doc.name, 0)?,
                         doc.name,
                     )? {
-                        ftd::ftd2021::html::color(&dark)
-                    } else {
-                        "auto".to_string()
+                        Some(dark) => ftd::ftd2021::html::color(&dark),
+                        _ => "auto".to_string(),
                     };
 
                     ftd::ConditionalValue {
@@ -1423,7 +1429,7 @@ fn get_conditional_attributes(
                         format!("expected string, found 9: {:?}", v),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             }
         } else if style_overflow.contains(&name) {
@@ -1440,7 +1446,7 @@ fn get_conditional_attributes(
                         format!("expected string, found 10: {:?}", v),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             }
         } else if style_string.contains(&name) {
@@ -1455,7 +1461,7 @@ fn get_conditional_attributes(
                         format!("expected string, found 11: {:?}", v),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             }
         } else if style_boolean.contains(&name) {
@@ -1470,7 +1476,7 @@ fn get_conditional_attributes(
                         format!("expected string, found 12: {:?}", v),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             }
         } else if name.eq("sticky") {
@@ -1487,7 +1493,7 @@ fn get_conditional_attributes(
                         format!("expected boolean, found: {:?}", v),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             }
         } else if name.eq("background-attachment") {
@@ -1504,7 +1510,7 @@ fn get_conditional_attributes(
                         format!("expected boolean, found: {:?}", v),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             }
         } else if name.eq("line-clamp") {
@@ -1519,7 +1525,7 @@ fn get_conditional_attributes(
                         format!("expected int, found5: {:?}", v),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             }
         } else if name.eq("grid-template-areas") {
@@ -1541,7 +1547,7 @@ fn get_conditional_attributes(
                         format!("expected string, found 13: {:?}", v),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             }
         } else {
@@ -2026,18 +2032,10 @@ impl Component {
                 | ftd::Element::Boolean(_)
                 | ftd::Element::Markup(_)
                 | ftd::Element::Null => {}
-                ftd::Element::Column(ftd::Column {
-                    ref mut container, ..
-                })
-                | ftd::Element::Row(ftd::Row {
-                    ref mut container, ..
-                })
-                | ftd::Element::Scene(ftd::Scene {
-                    ref mut container, ..
-                })
-                | ftd::Element::Grid(ftd::Grid {
-                    ref mut container, ..
-                }) => {
+                ftd::Element::Column(ftd::Column { container, .. })
+                | ftd::Element::Row(ftd::Row { container, .. })
+                | ftd::Element::Scene(ftd::Scene { container, .. })
+                | ftd::Element::Grid(ftd::Grid { container, .. }) => {
                     let ElementWithContainer {
                         children,
                         child_container,
@@ -3206,7 +3204,7 @@ fn read_arguments(
                         format!("'{}' is not an argument of {}", var_data.name, root),
                         doc.name,
                         i.to_owned(),
-                    )
+                    );
                 }
             }
         } else {

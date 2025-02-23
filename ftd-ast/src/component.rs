@@ -500,13 +500,13 @@ impl Loop {
             let alias = if let Some(alias) = alias {
                 if !alias.starts_with(ftd_ast::utils::REFERENCE) {
                     return ftd_ast::parse_error(
-                    format!(
-                        "Loop alias should start with reference, found: `{}`. Help: use `${}` instead",
-                        alias, alias
-                    ),
-                    doc_id,
-                    line_number,
-                );
+                        format!(
+                            "Loop alias should start with reference, found: `{}`. Help: use `${}` instead",
+                            alias, alias
+                        ),
+                        doc_id,
+                        line_number,
+                    );
                 }
 
                 alias

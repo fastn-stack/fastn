@@ -343,8 +343,8 @@ async fn get_instructions_from_test(
         println!("Test: {}", title);
     }
 
-    let fixtures =
-        if let Some(fixtures) = get_optional_value_list(FIXTURE_HEADER, &property_values, doc)? {
+    let fixtures = match get_optional_value_list(FIXTURE_HEADER, &property_values, doc)? {
+        Some(fixtures) => {
             let mut resolved_fixtures = vec![];
             for fixture in fixtures.iter() {
                 if let fastn_resolved::Value::String { text } = fixture {
@@ -352,9 +352,11 @@ async fn get_instructions_from_test(
                 }
             }
             resolved_fixtures
-        } else {
+        }
+        _ => {
             vec![]
-        };
+        }
+    };
 
     let fixture_instructions =
         get_fixture_instructions(config, fixtures, included_fixtures).await?;

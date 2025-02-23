@@ -1110,7 +1110,10 @@ impl Config {
 
                 if let Some(found_app) = apps.iter().find(|a| a.package.name.eq(&new_app_package)) {
                     return Err(fastn_core::Error::PackageError {
-                        message: format!("Mounting the same package twice is not yet allowed. Tried mounting `{}` which is aready mounted at `{}`", new_app_package, found_app.mount_point),
+                        message: format!(
+                            "Mounting the same package twice is not yet allowed. Tried mounting `{}` which is aready mounted at `{}`",
+                            new_app_package, found_app.mount_point
+                        ),
                     });
                 }
 
@@ -1212,12 +1215,15 @@ impl Config {
         package_name: &str,
         default: Option<fastn_core::Package>,
     ) -> fastn_core::Package {
-        if let Some(package) = self.all_packages.get(package_name) {
-            package.get().to_owned()
-        } else if let Some(package) = default {
-            package.to_owned()
-        } else {
-            self.package.to_owned()
+        match self.all_packages.get(package_name) {
+            Some(package) => package.get().to_owned(),
+            _ => {
+                if let Some(package) = default {
+                    package.to_owned()
+                } else {
+                    self.package.to_owned()
+                }
+            }
         }
     }
 

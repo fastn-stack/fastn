@@ -7,7 +7,7 @@ pub use ftd2021::component::{ChildComponent, Component, Instruction};
 pub use ftd2021::condition::Condition;
 pub use ftd2021::constants::{identifier, regex};
 pub use ftd2021::event::{Action, Event};
-pub use ftd2021::html::{anchor, color, length, overflow, Collector, Node, StyleSpec};
+pub use ftd2021::html::{Collector, Node, StyleSpec, anchor, color, length, overflow};
 pub use ftd2021::ui::{
     Anchor, AttributeType, Code, Color, ColorValue, Column, Common, ConditionalAttribute,
     ConditionalValue, Container, Element, FontDisplay, GradientDirection, Grid, IFrame, IText,
@@ -117,28 +117,37 @@ impl<T: std::cmp::PartialEq> VecMap<T> {
     }
 
     pub fn insert(&mut self, key: String, value: T) {
-        if let Some(v) = self.value.get_mut(&key) {
-            v.push(value);
-        } else {
-            self.value.insert(key, vec![value]);
+        match self.value.get_mut(&key) {
+            Some(v) => {
+                v.push(value);
+            }
+            _ => {
+                self.value.insert(key, vec![value]);
+            }
         }
     }
 
     pub fn unique_insert(&mut self, key: String, value: T) {
-        if let Some(v) = self.value.get_mut(&key) {
-            if !v.contains(&value) {
-                v.push(value);
+        match self.value.get_mut(&key) {
+            Some(v) => {
+                if !v.contains(&value) {
+                    v.push(value);
+                }
             }
-        } else {
-            self.value.insert(key, vec![value]);
+            _ => {
+                self.value.insert(key, vec![value]);
+            }
         }
     }
 
     pub fn extend(&mut self, key: String, value: Vec<T>) {
-        if let Some(v) = self.value.get_mut(&key) {
-            v.extend(value);
-        } else {
-            self.value.insert(key, value);
+        match self.value.get_mut(&key) {
+            Some(v) => {
+                v.extend(value);
+            }
+            _ => {
+                self.value.insert(key, value);
+            }
         }
     }
 

@@ -91,13 +91,13 @@ optional string link:
 
 
 
--- ft-ui.template list doc-sites:
+-- ft-ui.template-data list doc-sites:
 
--- ft-ui.template: Framework DS
+-- ft-ui.template-data: Framework DS
 template-url: featured/ds/framework/
 screenshot: $fastn-assets.files.images.featured.doc-sites.ds-framework.png
 
--- ft-ui.template: Forest Template
+-- ft-ui.template-data: Forest Template
 template-url: featured/ds/forest-template/
 screenshot: $fastn-assets.files.images.featured.doc-sites.forest-template.png
 wip: true
@@ -105,9 +105,9 @@ wip: true
 -- end: doc-sites
 
 
--- ft-ui.template list schemes:
+-- ft-ui.template-data list schemes:
 
--- ft-ui.template: Saturated Sunset CS
+-- ft-ui.template-data: Saturated Sunset CS
 template-url: featured/cs/saturated-sunset-cs/
 screenshot: $fastn-assets.files.images.featured.cs.saturated-sunset-cs.png
 

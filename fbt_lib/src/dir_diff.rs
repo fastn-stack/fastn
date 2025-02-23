@@ -163,10 +163,9 @@ fn walk_dir<P: AsRef<std::path::Path>>(path: P) -> Result<walkdir::IntoIter, std
     let mut walkdir = walkdir::WalkDir::new(path)
         .sort_by(compare_by_file_name)
         .into_iter();
-    if let Some(Err(e)) = walkdir.next() {
-        Err(e.into())
-    } else {
-        Ok(walkdir)
+    match walkdir.next() {
+        Some(Err(e)) => Err(e.into()),
+        _ => Ok(walkdir),
     }
 }
 

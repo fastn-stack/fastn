@@ -147,7 +147,10 @@ impl ConfigTemp {
         current_package.auto_import.extend(auto_imports);
         if let Some(ref package_alias) = current_package.system {
             if current_package.system_is_confidential.unwrap_or(true) {
-                return fastn_core::usage_error(format!("system-is-confidential is needed for system package {} and currently only false is supported.", current_package.name));
+                return fastn_core::usage_error(format!(
+                    "system-is-confidential is needed for system package {} and currently only false is supported.",
+                    current_package.name
+                ));
             }
             if let Some(provided_via) = package.dependencies.iter().find_map(|v| {
                 if v.package.name.eq(&current_package.name) {

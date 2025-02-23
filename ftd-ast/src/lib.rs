@@ -26,8 +26,8 @@ pub use constants::ALWAYS_INCLUDE;
 pub use function::Function;
 pub use import::{Export, Exposing, Import};
 pub use kind::{
-    BodyValue, Condition, HeaderValues, ValueSource, VariableKind, VariableModifier, VariableValue,
-    NULL,
+    BodyValue, Condition, HeaderValues, NULL, ValueSource, VariableKind, VariableModifier,
+    VariableValue,
 };
 pub use or_type::{OrType, OrTypeVariant};
 pub use record::{Field, Record};

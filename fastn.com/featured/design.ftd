@@ -19,17 +19,17 @@ more-link: /featured/fonts/
 
 
 
--- ft-ui.template list schemes:
+-- ft-ui.template-data list schemes:
 
--- ft-ui.template: Saturated Sunset CS
+-- ft-ui.template-data: Saturated Sunset CS
 template-url: /cs/saturated-sunset-cs/
 screenshot: $fastn-assets.files.images.featured.cs.saturated-sunset-cs.png
 
--- ft-ui.template: Midnight Rush CS
+-- ft-ui.template-data: Midnight Rush CS
 template-url: /cs/midnight-rush-cs/
 screenshot: $fastn-assets.files.images.featured.cs.midnight-rush-cs.png
 
--- ft-ui.template: Blog Template 1 CS
+-- ft-ui.template-data: Blog Template 1 CS
 template-url: /cs/blog-template-1-cs/
 screenshot: $fastn-assets.files.images.featured.cs.blog-template-1-cs.png
 
@@ -40,21 +40,21 @@ screenshot: $fastn-assets.files.images.featured.cs.blog-template-1-cs.png
 
 
 
--- ft-ui.template list fonts:
+-- ft-ui.template-data list fonts:
 
--- ft-ui.template: Inter Typography
+-- ft-ui.template-data: Inter Typography
 template-url: /fonts/inter/
 screenshot: $fastn-assets.files.images.featured.font.inter-font.jpg
 
--- ft-ui.template: Opensans Typography
+-- ft-ui.template-data: Opensans Typography
 template-url: /fonts/opensans/
 screenshot: $fastn-assets.files.images.featured.font.opensans-font.jpg
 
--- ft-ui.template: Roboto Typography
+-- ft-ui.template-data: Roboto Typography
 template-url: /fonts/roboto/
 screenshot: $fastn-assets.files.images.featured.font.roboto-font.jpg
 
--- ft-ui.template: Lato Typography
+-- ft-ui.template-data: Lato Typography
 template-url: /fonts/lato/
 screenshot: $fastn-assets.files.images.featured.font.lato-font.jpg
 

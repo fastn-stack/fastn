@@ -426,23 +426,26 @@ impl SitemapParser {
                     _ => {
                         // The URL can have its own colons. So match the URL first
                         let url_regex = crate::http::url_regex();
-                        if let Some(regex_match) = url_regex.find(current_title.as_str()) {
-                            let curr_title = current_title.as_str();
-                            (
-                                Some(curr_title[..regex_match.start()].trim().to_string()),
-                                Some(
-                                    curr_title[regex_match.start()..regex_match.end()]
-                                        .trim_start_matches(':')
-                                        .trim()
-                                        .to_string(),
-                                ),
-                            )
-                        } else {
-                            return Err(ParseError::InvalidTOCItem {
+                        match url_regex.find(current_title.as_str()) {
+                            Some(regex_match) => {
+                                let curr_title = current_title.as_str();
+                                (
+                                    Some(curr_title[..regex_match.start()].trim().to_string()),
+                                    Some(
+                                        curr_title[regex_match.start()..regex_match.end()]
+                                            .trim_start_matches(':')
+                                            .trim()
+                                            .to_string(),
+                                    ),
+                                )
+                            }
+                            _ => {
+                                return Err(ParseError::InvalidTOCItem {
                                 doc_id: self.doc_name.clone(),
                                 message: "Ambiguous <title>: <URL> evaluation. Multiple colons found. Either specify the complete URL or specify the url as an attribute".to_string(),
                                 row_content: current_title.as_str().to_string(),
                             });
+                            }
                         }
                     }
                 };
@@ -621,7 +624,7 @@ impl Sitemap {
             config: &fastn_core::Config,
             session_id: &Option<String>,
         ) -> fastn_core::Result<()> {
-            let (file_location, translation_file_location) = if let Ok(file_name) = config
+            let (file_location, translation_file_location) = match config
                 .get_file_path_and_resolve(
                     &section
                         .document
@@ -631,17 +634,18 @@ impl Sitemap {
                 )
                 .await
             {
-                (
+                Ok(file_name) => (
                     Some(config.ds.root().join(file_name.as_str())),
                     Some(config.ds.root().join(file_name.as_str())),
-                )
-            } else if crate::http::url_regex()
-                .find(section.get_file_id().as_str())
-                .is_some()
-            {
-                (None, None)
-            } else {
-                match fastn_core::Config::get_file_name(
+                ),
+                _ => {
+                    if crate::http::url_regex()
+                        .find(section.get_file_id().as_str())
+                        .is_some()
+                    {
+                        (None, None)
+                    } else {
+                        match fastn_core::Config::get_file_name(
                     current_package_root,
                     section.get_file_id().as_str(),
                     &config.ds,
@@ -679,6 +683,8 @@ impl Sitemap {
                         None,
                     ),
                 }
+                    }
+                }
             };
             section.file_location = file_location;
             section.translation_file_location = translation_file_location;
@@ -704,7 +710,7 @@ impl Sitemap {
             session_id: &Option<String>,
         ) -> fastn_core::Result<()> {
             if let Some(ref id) = subsection.get_file_id() {
-                let (file_location, translation_file_location) = if let Ok(file_name) = config
+                let (file_location, translation_file_location) = match config
                     .get_file_path_and_resolve(
                         &subsection
                             .document
@@ -714,14 +720,15 @@ impl Sitemap {
                     )
                     .await
                 {
-                    (
+                    Ok(file_name) => (
                         Some(config.ds.root().join(file_name.as_str())),
                         Some(config.ds.root().join(file_name.as_str())),
-                    )
-                } else if crate::http::url_regex().find(id.as_str()).is_some() {
-                    (None, None)
-                } else {
-                    match fastn_core::Config::get_file_name(current_package_root, id.as_str(), &config.ds, session_id).await {
+                    ),
+                    _ => {
+                        if crate::http::url_regex().find(id.as_str()).is_some() {
+                            (None, None)
+                        } else {
+                            match fastn_core::Config::get_file_name(current_package_root, id.as_str(), &config.ds, session_id).await {
                         Ok(name) => {
                             if current_package_root.eq(package_root) {
                                 (Some(current_package_root.join(name)), None)
@@ -746,6 +753,8 @@ impl Sitemap {
                             None,
                         ),
                     }
+                        }
+                    }
                 };
                 subsection.file_location = file_location;
                 subsection.translation_file_location = translation_file_location;
@@ -765,25 +774,26 @@ impl Sitemap {
             config: &fastn_core::Config,
             session_id: &Option<String>,
         ) -> fastn_core::Result<()> {
-            let (file_location, translation_file_location) = if let Ok(file_name) = config
+            let (file_location, translation_file_location) = match config
                 .get_file_path_and_resolve(
                     &toc.document.clone().unwrap_or_else(|| toc.get_file_id()),
                     session_id,
                 )
                 .await
             {
-                (
+                Ok(file_name) => (
                     Some(config.ds.root().join(file_name.as_str())),
                     Some(config.ds.root().join(file_name.as_str())),
-                )
-            } else if toc.get_file_id().trim().is_empty()
-                || crate::http::url_regex()
-                    .find(toc.get_file_id().as_str())
-                    .is_some()
-            {
-                (None, None)
-            } else {
-                match fastn_core::Config::get_file_name(current_package_root, toc.get_file_id().as_str(), &config.ds, session_id).await {
+                ),
+                _ => {
+                    if toc.get_file_id().trim().is_empty()
+                        || crate::http::url_regex()
+                            .find(toc.get_file_id().as_str())
+                            .is_some()
+                    {
+                        (None, None)
+                    } else {
+                        match fastn_core::Config::get_file_name(current_package_root, toc.get_file_id().as_str(), &config.ds, session_id).await {
                     Ok(name) => {
                         if current_package_root.eq(package_root) {
                             (Some(current_package_root.join(name)), None)
@@ -815,6 +825,8 @@ impl Sitemap {
                         ),
                         None,
                     ),
+                }
+                    }
                 }
             };
             toc.file_location = file_location;

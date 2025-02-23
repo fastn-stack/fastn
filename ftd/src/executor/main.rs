@@ -1105,10 +1105,10 @@ impl Device {
             let expression = fastn_resolved::evalexpr::ExprNode::new(
                 fastn_resolved::evalexpr::Operator::RootNode,
             )
-            .add_children(vec![fastn_resolved::evalexpr::ExprNode::new(
-                fastn_resolved::evalexpr::Operator::And,
-            )
-            .add_children(vec![expression, condition.expression.to_owned()])]);
+            .add_children(vec![
+                fastn_resolved::evalexpr::ExprNode::new(fastn_resolved::evalexpr::Operator::And)
+                    .add_children(vec![expression, condition.expression.to_owned()]),
+            ]);
 
             condition.expression = expression;
 

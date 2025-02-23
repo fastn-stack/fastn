@@ -289,15 +289,17 @@ fn activity() {
 
         "
         ),
-        &vec![ftd_p1::Section::with_name("step")
-            .add_header_str("method", "GET")
-            .add_sub_section(
-                ftd_p1::Section::with_name("realm.rr.activity")
-                    .add_header_str("okind", "")
-                    .add_header_str("oid", "")
-                    .add_header_str("ekind", "")
-                    .and_body("null"),
-            )],
+        &vec![
+            ftd_p1::Section::with_name("step")
+                .add_header_str("method", "GET")
+                .add_sub_section(
+                    ftd_p1::Section::with_name("realm.rr.activity")
+                        .add_header_str("okind", "")
+                        .add_header_str("oid", "")
+                        .add_header_str("ekind", "")
+                        .and_body("null"),
+                ),
+        ],
     )
 }
 
@@ -553,8 +555,10 @@ fn body_with_empty_lines() {
             -- end: foo
             "
         ),
-        &vec![ftd_p1::Section::with_name("foo")
-            .add_sub_section(ftd_p1::Section::with_name("bar").and_body("hello"))],
+        &vec![
+            ftd_p1::Section::with_name("foo")
+                .add_sub_section(ftd_p1::Section::with_name("bar").and_body("hello")),
+        ],
     );
 }
 

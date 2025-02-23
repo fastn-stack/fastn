@@ -186,14 +186,14 @@ impl VariableFlags {
                     format!("Expected the boolean value for flag, found: `{:?}`", s),
                     doc_id,
                     header.get_line_number(),
-                )
+                );
             }
             ftd_p1::Header::BlockRecordHeader(b) => {
                 return ftd_ast::parse_error(
                     format!("Expected the boolean value for flag, found: `{:?}`", b),
                     doc_id,
                     header.get_line_number(),
-                )
+                );
             }
         };
 

@@ -14,12 +14,17 @@ pub(crate) fn used_definitions(
     // go through self.symbols_used and get the resolved definitions
     let def_map = indexmap::IndexMap::new();
     for definition in definitions_used.iter() {
-        if let Some(_definition) = definitions.get(definition.str(&arena)) {
-            // definitions.insert(symbol.clone(), definition);
-            todo!()
-        } else if let Some(_definition) = fastn_builtins::builtins().get(definition.str(&arena)) {
-            // definitions.insert(symbol.clone(), definition);
-            todo!()
+        match definitions.get(definition.str(&arena)) {
+            Some(_definition) => {
+                // definitions.insert(symbol.clone(), definition);
+                todo!()
+            }
+            _ => {
+                if let Some(_definition) = fastn_builtins::builtins().get(definition.str(&arena)) {
+                    // definitions.insert(symbol.clone(), definition);
+                    todo!()
+                }
+            }
         }
     }
     def_map

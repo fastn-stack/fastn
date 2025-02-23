@@ -295,7 +295,7 @@ impl LengthPair {
                     ),
                     doc.name,
                     line_number,
-                )
+                );
             }
         };
         LengthPair::from_values(fields, doc, line_number)
@@ -366,7 +366,7 @@ impl ResponsiveLength {
                     ),
                     doc.name,
                     line_number,
-                )
+                );
             }
         };
         ResponsiveLength::from_values(fields, doc, line_number)
@@ -481,8 +481,10 @@ impl BreakpointWidth {
                 .resolve(&doc.itdoc(), line_number)?
                 .integer(doc.name, line_number)?,
             Some(line_number),
-            vec![get_property_value("mobile")?
-                .to_property(fastn_resolved::PropertySource::header("mobile"))],
+            vec![
+                get_property_value("mobile")?
+                    .to_property(fastn_resolved::PropertySource::header("mobile")),
+            ],
         );
 
         Ok(BreakpointWidth { mobile })
@@ -925,7 +927,7 @@ impl BackgroundImage {
                     ),
                     doc.name,
                     line_number,
-                )
+                );
             }
         };
         ftd::executor::BackgroundImage::from_values(fields, doc, line_number)
@@ -955,8 +957,10 @@ impl BackgroundImage {
                 line_number,
             )?,
             Some(line_number),
-            vec![get_property_value("src")?
-                .to_property(fastn_resolved::PropertySource::header("src"))],
+            vec![
+                get_property_value("src")?
+                    .to_property(fastn_resolved::PropertySource::header("src")),
+            ],
         );
 
         let repeat = ftd::executor::Value::new(
@@ -966,8 +970,10 @@ impl BackgroundImage {
                 line_number,
             )?,
             Some(line_number),
-            vec![get_property_value("repeat")?
-                .to_property(fastn_resolved::PropertySource::header("repeat"))],
+            vec![
+                get_property_value("repeat")?
+                    .to_property(fastn_resolved::PropertySource::header("repeat")),
+            ],
         );
 
         let size = ftd::executor::Value::new(
@@ -977,8 +983,10 @@ impl BackgroundImage {
                 line_number,
             )?,
             Some(line_number),
-            vec![get_property_value("size")?
-                .to_property(fastn_resolved::PropertySource::header("size"))],
+            vec![
+                get_property_value("size")?
+                    .to_property(fastn_resolved::PropertySource::header("size")),
+            ],
         );
 
         let position = ftd::executor::Value::new(
@@ -988,8 +996,10 @@ impl BackgroundImage {
                 line_number,
             )?,
             Some(line_number),
-            vec![get_property_value("position")?
-                .to_property(fastn_resolved::PropertySource::header("position"))],
+            vec![
+                get_property_value("position")?
+                    .to_property(fastn_resolved::PropertySource::header("position")),
+            ],
         );
 
         Ok(ftd::executor::BackgroundImage {
@@ -1069,7 +1079,7 @@ impl LinearGradientColor {
                     ),
                     doc.name,
                     line_number,
-                )
+                );
             }
         };
         Ok(result)
@@ -1098,7 +1108,7 @@ impl LinearGradientColor {
                     ),
                     doc.name,
                     line_number,
-                )
+                );
             }
         };
         ftd::executor::LinearGradientColor::from_values(fields, doc, line_number)
@@ -1137,8 +1147,10 @@ impl LinearGradientColor {
                 line_number,
             )?,
             Some(line_number),
-            vec![get_property_value("start")?
-                .to_property(fastn_resolved::PropertySource::header("start"))],
+            vec![
+                get_property_value("start")?
+                    .to_property(fastn_resolved::PropertySource::header("start")),
+            ],
         );
 
         let end = ftd::executor::Value::new(
@@ -1148,8 +1160,10 @@ impl LinearGradientColor {
                 line_number,
             )?,
             Some(line_number),
-            vec![get_property_value("end")?
-                .to_property(fastn_resolved::PropertySource::header("end"))],
+            vec![
+                get_property_value("end")?
+                    .to_property(fastn_resolved::PropertySource::header("end")),
+            ],
         );
 
         let stop_position = ftd::executor::Value::new(
@@ -1159,8 +1173,10 @@ impl LinearGradientColor {
                 line_number,
             )?,
             Some(line_number),
-            vec![get_property_value("stop-position")?
-                .to_property(fastn_resolved::PropertySource::header("stop-position"))],
+            vec![
+                get_property_value("stop-position")?
+                    .to_property(fastn_resolved::PropertySource::header("stop-position")),
+            ],
         );
 
         Ok(ftd::executor::LinearGradientColor {
@@ -1320,7 +1336,7 @@ impl LinearGradient {
                     ),
                     doc.name,
                     line_number,
-                )
+                );
             }
         };
         ftd::executor::LinearGradient::from_values(fields, doc, line_number)
@@ -1350,8 +1366,10 @@ impl LinearGradient {
                 line_number,
             )?,
             Some(line_number),
-            vec![get_property_value("direction")?
-                .to_property(fastn_resolved::PropertySource::header("direction"))],
+            vec![
+                get_property_value("direction")?
+                    .to_property(fastn_resolved::PropertySource::header("direction")),
+            ],
         );
 
         let colors = ftd::executor::Value::new(
@@ -1361,8 +1379,10 @@ impl LinearGradient {
                 line_number,
             )?,
             Some(line_number),
-            vec![get_property_value("colors")?
-                .to_property(fastn_resolved::PropertySource::header("colors"))],
+            vec![
+                get_property_value("colors")?
+                    .to_property(fastn_resolved::PropertySource::header("colors")),
+            ],
         );
 
         Ok(ftd::executor::LinearGradient { direction, colors })
@@ -1838,36 +1858,46 @@ impl Shadow {
         let x_offset = ftd::executor::Value::new(
             Length::from_value(get_property_value("x-offset")?.clone(), doc, line_number)?,
             Some(line_number),
-            vec![get_property_value("x-offset")?
-                .to_property(fastn_resolved::PropertySource::header("x-offset"))],
+            vec![
+                get_property_value("x-offset")?
+                    .to_property(fastn_resolved::PropertySource::header("x-offset")),
+            ],
         );
 
         let y_offset = ftd::executor::Value::new(
             Length::from_value(get_property_value("y-offset")?.clone(), doc, line_number)?,
             Some(line_number),
-            vec![get_property_value("y-offset")?
-                .to_property(fastn_resolved::PropertySource::header("y-offset"))],
+            vec![
+                get_property_value("y-offset")?
+                    .to_property(fastn_resolved::PropertySource::header("y-offset")),
+            ],
         );
 
         let blur = ftd::executor::Value::new(
             Length::from_value(get_property_value("blur")?.clone(), doc, line_number)?,
             Some(line_number),
-            vec![get_property_value("blur")?
-                .to_property(fastn_resolved::PropertySource::header("blur"))],
+            vec![
+                get_property_value("blur")?
+                    .to_property(fastn_resolved::PropertySource::header("blur")),
+            ],
         );
 
         let spread = ftd::executor::Value::new(
             Length::from_value(get_property_value("spread")?.clone(), doc, line_number)?,
             Some(line_number),
-            vec![get_property_value("spread")?
-                .to_property(fastn_resolved::PropertySource::header("spread"))],
+            vec![
+                get_property_value("spread")?
+                    .to_property(fastn_resolved::PropertySource::header("spread")),
+            ],
         );
 
         let color = ftd::executor::Value::new(
             Color::from_value(get_property_value("color")?.clone(), doc, line_number)?,
             Some(line_number),
-            vec![get_property_value("color")?
-                .to_property(fastn_resolved::PropertySource::header("color"))],
+            vec![
+                get_property_value("color")?
+                    .to_property(fastn_resolved::PropertySource::header("color")),
+            ],
         );
 
         let inset = ftd::executor::Value::new(
@@ -1876,8 +1906,10 @@ impl Shadow {
                 .resolve(&doc.itdoc(), line_number)?
                 .bool(doc.name, line_number)?,
             Some(line_number),
-            vec![get_property_value("inset")?
-                .to_property(fastn_resolved::PropertySource::header("inset"))],
+            vec![
+                get_property_value("inset")?
+                    .to_property(fastn_resolved::PropertySource::header("inset")),
+            ],
         );
 
         Ok(ftd::executor::Shadow {
@@ -1988,7 +2020,7 @@ impl Color {
                     ),
                     doc.name,
                     line_number,
-                )
+                );
             }
         };
         Color::from_values(fields, doc, line_number)
@@ -2958,7 +2990,7 @@ impl Type {
                     ),
                     doc.name,
                     line_number,
-                )
+                );
             }
         };
         Type::from_values(fields, doc, line_number)
@@ -3794,7 +3826,7 @@ impl TextStyle {
                         format!("Unknown variant `{}` for or-type `ftd.text-style`", t),
                         doc.name,
                         line_number,
-                    )
+                    );
                 }
             };
         }

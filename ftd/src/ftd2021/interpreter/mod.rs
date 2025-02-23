@@ -4,14 +4,14 @@ mod test;
 mod things;
 pub(crate) mod utils;
 
-pub use main::{interpret, Document, Interpreter};
+pub use main::{Document, Interpreter, interpret};
 pub(crate) use tdoc::TDoc;
+pub use things::Thing;
 pub use things::expression::Boolean;
 pub use things::kind::{Kind, KindData};
 pub use things::property_value::PropertyValue;
 pub use things::property_value::Value;
 pub use things::variable::Variable;
-pub use things::Thing;
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {

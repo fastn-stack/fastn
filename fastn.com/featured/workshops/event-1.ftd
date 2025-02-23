@@ -78,9 +78,9 @@ cta-2-text: User Manual
 
 
 
--- ft-ui.template list websites:
+-- ft-ui.template-data list websites:
 
--- ft-ui.template: Workshop 1
+-- ft-ui.template-data: Workshop 1
 template-url: featured/workshops/workshop-1/
 screenshot: $fastn-assets.files.images.featured.workshops.workshop-1.png
 

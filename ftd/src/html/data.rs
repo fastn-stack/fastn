@@ -43,7 +43,7 @@ impl DataGenerator<'_> {
                             ),
                             doc_id: self.doc.name.to_string(),
                             line_number: *line_number,
-                        })
+                        });
                     }
                     _ => continue,
                 }

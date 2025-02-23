@@ -22,7 +22,7 @@ pub fn parse_old_fastn(
                             .expect("we cant get stuck on processor without processor marker")
                             .to_string(),
                     },
-                )
+                );
             }
             ftd::ftd2021::Interpreter::StuckOnImport { module, state: st } => {
                 let source = if module == "fastn" {

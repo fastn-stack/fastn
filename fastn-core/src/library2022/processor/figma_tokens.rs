@@ -271,7 +271,7 @@ fn extract_light_dark_colors(
                 message: format!("Expected record of color-scheme found: {:?}", value),
                 doc_id: doc.name.to_string(),
                 line_number,
-            })
+            });
         }
     };
 
@@ -287,7 +287,7 @@ fn extract_light_dark_colors(
                     doc_id: doc.name.to_string(),
                     line_number,
                     message: format!("Expected string kind for name found: {:?}", variable_name),
-                })
+                });
             }
         };
     }
@@ -312,7 +312,7 @@ fn extract_light_dark_colors(
                 ),
                 doc_id: doc.name.to_string(),
                 line_number,
-            })
+            });
         }
     };
 
@@ -329,7 +329,7 @@ fn extract_light_dark_colors(
                 message: format!("Expected Variable reference, found: {:?}", t),
                 doc_id: doc.name.to_string(),
                 line_number,
-            })
+            });
         }
     };
 
@@ -346,7 +346,7 @@ fn extract_light_dark_colors(
                 ),
                 doc_id: doc.name.to_string(),
                 line_number,
-            })
+            });
         }
     };
 

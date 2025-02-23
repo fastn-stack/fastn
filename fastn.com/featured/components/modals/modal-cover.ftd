@@ -23,9 +23,9 @@ demo-link: https://fastnui.trizwit.com/UI-Components/Modal/
 
 
 
--- ft-ui.template list dialogs:
+-- ft-ui.template-data list dialogs:
 
--- ft-ui.template: Modal 1
+-- ft-ui.template-data: Modal 1
 template-url: featured/components/modals/modal-1/
 screenshot: $fastn-assets.files.images.featured.components.modal-1.png
 

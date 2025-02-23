@@ -33,7 +33,7 @@ authors = [
     "Ganesh Salunke <ganesh@fifthtry.com>",
     "Siddhant Kumar <siddhant@fifthtry.com>",
 ]
-edition = "2021"
+edition = "2024"
 description = "fastn: Full-stack Web Development Made Easy"
 license = "AGPL-3"
 repository = "https://github.com/fastn-stack/fastn"
@@ -74,7 +74,6 @@ deadpool = "0.10"
 tokio-postgres = { version = "0.7", features = ["with-serde_json-1", "with-uuid-1"] }
 async-recursion = "1"
 async-trait = "0.1"
-async-lock = "3"
 camino = "1"
 clap = "4"
 colored = "3"
@@ -129,7 +128,7 @@ tracing = "0.1"
 scc = "2"
 url = "2"
 walkdir = "2"
-wasmtime = "29"
+wasmtime = "30"
 zip = "2"
 prettify-js = "0.1.0"
 indexmap = { version = "2", features = ["serde"] }

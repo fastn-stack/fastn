@@ -13,13 +13,13 @@ templates: $workshops
 
 
 
--- ft-ui.template list workshops:
+-- ft-ui.template-data list workshops:
 
--- ft-ui.template: Workshop 1
+-- ft-ui.template-data: Workshop 1
 template-url: featured/workshops/workshop-1/
 screenshot: $fastn-assets.files.images.featured.workshops.workshop-1.png
 
--- ft-ui.template: Event 1
+-- ft-ui.template-data: Event 1
 template-url: featured/workshops/event-1/
 screenshot: $fastn-assets.files.images.featured.workshops.event-1.png
 

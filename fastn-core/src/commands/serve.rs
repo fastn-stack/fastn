@@ -454,7 +454,6 @@ async fn handle_static_route(
             session_id,
         )
         .await
-        .map_err(Into::into)
     }
 
     async fn handle_not_found_image(

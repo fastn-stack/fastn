@@ -274,7 +274,7 @@ impl ImageSrc {
                     ),
                     doc.name,
                     line_number,
-                )
+                );
             }
         };
         ImageSrc::from_values(fields, doc, line_number)
@@ -609,11 +609,7 @@ pub fn iframe_from_properties(
                 line_number,
             );
         }
-        if src.value.is_some() {
-            src
-        } else {
-            youtube
-        }
+        if src.value.is_some() { src } else { youtube }
     };
 
     let loading = ftd::executor::Loading::loading_with_default(

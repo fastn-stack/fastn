@@ -13,9 +13,9 @@ templates: $headers
 
 
 
--- ft-ui.template list headers:
+-- ft-ui.template-data list headers:
 
--- ft-ui.template: Header
+-- ft-ui.template-data: Header
 template-url: /featured/components/headers/header/
 screenshot: $fastn-assets.files.images.featured.components.header.jpg
 

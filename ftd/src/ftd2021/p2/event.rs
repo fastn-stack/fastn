@@ -684,7 +684,7 @@ impl Action {
                     format!("{} is not a valid action", t),
                     doc.name,
                     line_number,
-                )
+                );
             }
         };
 

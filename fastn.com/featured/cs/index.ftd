@@ -38,13 +38,13 @@ templates: $violet-scheme
 
 
 
--- ft-ui.template list red-scheme:
+-- ft-ui.template-data list red-scheme:
 
--- ft-ui.template: Saturated Sunset CS
+-- ft-ui.template-data: Saturated Sunset CS
 template-url: /cs/saturated-sunset-cs/
 screenshot: $fastn-assets.files.images.featured.cs.saturated-sunset-cs.png
 
--- ft-ui.template: Pink Tree CS
+-- ft-ui.template-data: Pink Tree CS
 template-url: /cs/pink-tree-cs/
 screenshot: $fastn-assets.files.images.featured.cs.pink-tree-cs.png
 
@@ -54,13 +54,13 @@ screenshot: $fastn-assets.files.images.featured.cs.pink-tree-cs.png
 
 
 
--- ft-ui.template list orange-scheme:
+-- ft-ui.template-data list orange-scheme:
 
--- ft-ui.template: Dark Flame CS
+-- ft-ui.template-data: Dark Flame CS
 template-url: /cs/dark-flame-cs/
 screenshot: $fastn-assets.files.images.featured.cs.dark-flame-cs.png
 
--- ft-ui.template: Navy Nebula CS
+-- ft-ui.template-data: Navy Nebula CS
 template-url: /cs/navy-nebula-cs/
 screenshot: $fastn-assets.files.images.featured.cs.navy-nebula-cs.png
 
@@ -70,21 +70,21 @@ screenshot: $fastn-assets.files.images.featured.cs.navy-nebula-cs.png
 
 
 
--- ft-ui.template list green-scheme:
+-- ft-ui.template-data list green-scheme:
 
--- ft-ui.template: Forest CS
+-- ft-ui.template-data: Forest CS
 template-url: /cs/forest-cs/
 screenshot: $fastn-assets.files.images.featured.cs.forest-cs.png
 
--- ft-ui.template: Midnight Storm CS
+-- ft-ui.template-data: Midnight Storm CS
 template-url: /cs/midnight-storm-cs/
 screenshot: $fastn-assets.files.images.featured.cs.midnight-storm-cs.png
 
--- ft-ui.template: Misty Gray CS
+-- ft-ui.template-data: Misty Gray CS
 template-url: /cs/misty-gray-cs/
 screenshot: $fastn-assets.files.images.featured.cs.misty-gray-cs.png
 
-/-- ft-ui.template: Pretty CS
+/-- ft-ui.template-data: Pretty CS
 template-url: /cs/pretty-cs/
 screenshot: $fastn-assets.files.images.featured.cs.pretty-cs.png
 
@@ -95,21 +95,21 @@ screenshot: $fastn-assets.files.images.featured.cs.pretty-cs.png
 
 
 
--- ft-ui.template list blue-scheme:
+-- ft-ui.template-data list blue-scheme:
 
--- ft-ui.template: Blog Template CS
+-- ft-ui.template-data: Blog Template CS
 template-url: /cs/blog-template-cs/
 screenshot: $fastn-assets.files.images.featured.cs.blog-template-cs.png
 
--- ft-ui.template: Blue Heal CS
+-- ft-ui.template-data: Blue Heal CS
 template-url: /cs/blue-heal-cs/
 screenshot: $fastn-assets.files.images.featured.cs.blue-heal-cs.png
 
--- ft-ui.template: Midnight Rush CS
+-- ft-ui.template-data: Midnight Rush CS
 template-url: /cs/midnight-rush-cs/
 screenshot: $fastn-assets.files.images.featured.cs.midnight-rush-cs.png
 
-/-- ft-ui.template: Winter CS
+/-- ft-ui.template-data: Winter CS
 template-url: /cs/winter-cs/
 screenshot: $fastn-assets.files.images.featured.cs.winter-cs.png
 
@@ -119,21 +119,21 @@ screenshot: $fastn-assets.files.images.featured.cs.winter-cs.png
 
 
 
--- ft-ui.template list violet-scheme:
+-- ft-ui.template-data list violet-scheme:
 
-/-- ft-ui.template: Yellow Lily CS
+/-- ft-ui.template-data: Yellow Lily CS
 template-url: /cs/yellow-lily-cs/
 screenshot: $fastn-assets.files.images.featured.cs.yellow-lily-cs.png
 
-/-- ft-ui.template: Blue Wave CS
+/-- ft-ui.template-data: Blue Wave CS
 template-url: /cs/
 screenshot: $fastn-assets.files.images.featured.cs.blue-wave-cs.png
 
--- ft-ui.template: Little Blue CS
+-- ft-ui.template-data: Little Blue CS
 template-url: /cs/little-blue-cs/
 screenshot: $fastn-assets.files.images.featured.cs.little-blue-cs.png
 
--- ft-ui.template: Blog Template 1 CS
+-- ft-ui.template-data: Blog Template 1 CS
 template-url: /cs/blog-template-1-cs/
 screenshot: $fastn-assets.files.images.featured.cs.blog-template-1-cs.png
 

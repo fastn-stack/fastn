@@ -18,11 +18,11 @@ pub(crate) mod register;
 mod sqlite;
 mod store;
 
-pub use process_http_request::{handle, process_http_request, WasmError};
+pub use process_http_request::{WasmError, handle, process_http_request};
 pub(crate) use store::Conn;
 pub use store::{ConnectionExt, SQLError, Store, StoreExt, StoreImpl};
 pub use store::{
-    FASTN_APP_URLS_HEADER, FASTN_APP_URL_HEADER, FASTN_MAIN_PACKAGE_HEADER,
+    FASTN_APP_URL_HEADER, FASTN_APP_URLS_HEADER, FASTN_MAIN_PACKAGE_HEADER,
     FASTN_WASM_PACKAGE_HEADER,
 };
 

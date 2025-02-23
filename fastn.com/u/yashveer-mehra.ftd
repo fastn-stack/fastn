@@ -61,9 +61,9 @@ hover-src: $fastn-assets.files.images.linkedin-hover.svg
 
 
 
--- ft-ui.template list landing:
+-- ft-ui.template-data list landing:
 
--- ft-ui.template: Studious Couscous
+-- ft-ui.template-data: Studious Couscous
 template-url: featured/landing/studious-couscous/
 screenshot: $fastn-assets.files.images.featured.landing.studious-couscous.png
 

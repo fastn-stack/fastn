@@ -33,7 +33,7 @@ pub fn get_var_name_and_default(
                 _ => {
                     return Err(InterpolationError::CantInterpolate(
                         "Invalid expression".to_string(),
-                    ))
+                    ));
                 }
             };
 

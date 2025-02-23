@@ -1,4 +1,4 @@
-use fastn_expr::tokenizer::{tokenize, Operator, Token, TokenizerError};
+use fastn_expr::tokenizer::{Operator, Token, TokenizerError, tokenize};
 
 #[derive(thiserror::Error, Debug, PartialEq)]
 pub enum ParseError {

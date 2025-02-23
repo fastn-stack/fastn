@@ -89,19 +89,19 @@ impl fastn_runtime::extensions::PropertyValueExt for fastn_resolved::PropertyVal
 
     fn to_value(&self) -> fastn_runtime::Value {
         match self {
-            fastn_resolved::PropertyValue::Value { ref value, .. } => {
+            fastn_resolved::PropertyValue::Value { value, .. } => {
                 fastn_runtime::Value::Data(value.to_owned())
             }
-            fastn_resolved::PropertyValue::Reference { ref name, .. } => {
+            fastn_resolved::PropertyValue::Reference { name, .. } => {
                 fastn_runtime::Value::Reference(fastn_runtime::value::ReferenceData {
                     name: name.clone().to_string(),
                     value: Some(self.clone()),
                 })
             }
-            fastn_resolved::PropertyValue::FunctionCall(ref function_call) => {
+            fastn_resolved::PropertyValue::FunctionCall(function_call) => {
                 fastn_runtime::Value::FunctionCall(function_call.to_owned())
             }
-            fastn_resolved::PropertyValue::Clone { ref name, .. } => {
+            fastn_resolved::PropertyValue::Clone { name, .. } => {
                 fastn_runtime::Value::Clone(name.to_owned())
             }
         }
@@ -536,8 +536,7 @@ impl fastn_runtime::extensions::ComponentExt for fastn_resolved::ComponentInvoca
         let remaining = remaining?;
 
         match rdata.component_definition_name {
-            Some(ref component_definition_name) if component_name.eq(component_definition_name) => {
-            }
+            Some(component_definition_name) if component_name.eq(component_definition_name) => {}
             _ => return None,
         }
 

@@ -119,7 +119,7 @@ pub fn process(
                 message: format!("caption name not passed for section: {}", section_name),
                 doc_id: doc.name.to_string(),
                 line_number,
-            })
+            });
         }
     };
 

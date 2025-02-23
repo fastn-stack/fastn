@@ -13,24 +13,24 @@ templates: $cards
 
 
 
--- ft-ui.template list cards:
+-- ft-ui.template-data list cards:
 
--- ft-ui.template: Person Cards
+-- ft-ui.template-data: Person Cards
 template-url: /featured/sections/cards/card-1/
 screenshot: $fastn-assets.files.images.featured.sections.card-1.png
 wip: true
 
--- ft-ui.template: Image Card
+-- ft-ui.template-data: Image Card
 template-url: /featured/sections/cards/image-card-1/
 screenshot: $fastn-assets.files.images.featured.sections.image-card-1.png
 wip: true
 
--- ft-ui.template: Image Gallery IG
+-- ft-ui.template-data: Image Gallery IG
 template-url: /featured/sections/cards/image-gallery-ig/
 screenshot: $fastn-assets.files.images.featured.sections.image-gallery-ig.png
 wip: true
 
--- ft-ui.template: Imagen IG
+-- ft-ui.template-data: Imagen IG
 template-url: /featured/sections/cards/imagen-ig/
 screenshot: $fastn-assets.files.images.featured.sections.imagen-ig.png
 wip: true

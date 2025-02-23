@@ -13,17 +13,17 @@ templates: $portfolios
 
 
 
--- ft-ui.template list portfolios:
+-- ft-ui.template-data list portfolios:
 
--- ft-ui.template: Texty PS
+-- ft-ui.template-data: Texty PS
 template-url: featured/portfolios/texty-ps/
 screenshot: $fastn-assets.files.images.featured.portfolios.texty-ps.png
 
--- ft-ui.template: Johny PS
+-- ft-ui.template-data: Johny PS
 template-url: featured/portfolios/johny-ps/
 screenshot: $fastn-assets.files.images.featured.portfolios.johny-ps.png
 
--- ft-ui.template: Portfolio
+-- ft-ui.template-data: Portfolio
 template-url: featured/portfolios/portfolio/
 screenshot: $fastn-assets.files.images.featured.portfolios.portfolio.png
 

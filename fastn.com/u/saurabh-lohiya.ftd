@@ -66,18 +66,18 @@ hover-src: $fastn-assets.files.images.linkedin-hover.svg
 
 
 
--- ft-ui.template list doc-sites:
+-- ft-ui.template-data list doc-sites:
 
--- ft-ui.template: Misty Gray
+-- ft-ui.template-data: Misty Gray
 template-url: featured/ds/misty-gray/
 screenshot: $fastn-assets.files.images.featured.doc-sites.misty-gray.jpg
 
 -- end: doc-sites
 
 
--- ft-ui.template list schemes:
+-- ft-ui.template-data list schemes:
 
--- ft-ui.template: Misty Gray CS
+-- ft-ui.template-data: Misty Gray CS
 template-url: featured/cs/misty-gray-cs/
 screenshot: $fastn-assets.files.images.featured.cs.misty-gray-cs.png
 

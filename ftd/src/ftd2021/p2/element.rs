@@ -1063,7 +1063,7 @@ pub fn iframe_from_properties(
         ((Some(src), _), (None, _)) => src,
         ((None, _), (Some(id), _)) => id,
         ((Some(_), _), (Some(_), _)) => {
-            return ftd::ftd2021::p2::utils::e2("both src and youtube id provided", doc.name, 0)
+            return ftd::ftd2021::p2::utils::e2("both src and youtube id provided", doc.name, 0);
         }
         ((None, Some(reference)), (None, None)) | ((None, None), (None, Some(reference))) => {
             if let Some(ftd::ftd2021::p2::Boolean::IsNotNull { value }) = condition {
@@ -1079,7 +1079,7 @@ pub fn iframe_from_properties(
                             "src or youtube id is required",
                             doc.name,
                             0,
-                        )
+                        );
                     }
                 }
             } else {

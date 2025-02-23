@@ -129,8 +129,8 @@ impl HtmlData {
 }
 
 fn generate_hash(content: impl AsRef<[u8]>) -> String {
-    use sha2::digest::FixedOutput;
     use sha2::Digest;
+    use sha2::digest::FixedOutput;
     let mut hasher = sha2::Sha256::new();
     hasher.update(content);
     format!("{:X}", hasher.finalize_fixed())

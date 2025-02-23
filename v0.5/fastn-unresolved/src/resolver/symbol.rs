@@ -209,23 +209,23 @@ mod tests {
     fn basic() {
         t!("ftd.text", "ftd#text"); // Resolve builtin
         t!("ftd#text", "ftd#text"); // Resolve absolute symbol usage
-                                    // t!("foo", "-- integer foo: 10", "main.foo");
-                                    // t!("ftd.txt", "-- integer foo: 10", "main.foo");
-                                    // t!("ftd#txt", "-- integer foo: 10", "main.foo");
-                                    // t!("bar", "-- import: current-package/foo",  {"current-package/foo": "-- integer bar: 10"}, "foo.bar");
-                                    // t!(
-                                    //     "foo.bar",
-                                    //     "-- import: other-package/foo",
-                                    //     {"other-package/foo": "-- integer bar: 10"},
-                                    //     {"current-package": ["other-package"]},
-                                    //     "foo.bar"
-                                    // );
-                                    // t!(
-                                    //     "foo.bar",
-                                    //     "-- import: other-package/foo",
-                                    //     {"other-package/foo": "-- public integer bar: 10"},
-                                    //     {"current-package": ["other-package"]},
-                                    //     "foo.bar"
-                                    // );
+        // t!("foo", "-- integer foo: 10", "main.foo");
+        // t!("ftd.txt", "-- integer foo: 10", "main.foo");
+        // t!("ftd#txt", "-- integer foo: 10", "main.foo");
+        // t!("bar", "-- import: current-package/foo",  {"current-package/foo": "-- integer bar: 10"}, "foo.bar");
+        // t!(
+        //     "foo.bar",
+        //     "-- import: other-package/foo",
+        //     {"other-package/foo": "-- integer bar: 10"},
+        //     {"current-package": ["other-package"]},
+        //     "foo.bar"
+        // );
+        // t!(
+        //     "foo.bar",
+        //     "-- import: other-package/foo",
+        //     {"other-package/foo": "-- public integer bar: 10"},
+        //     {"current-package": ["other-package"]},
+        //     "foo.bar"
+        // );
     }
 }

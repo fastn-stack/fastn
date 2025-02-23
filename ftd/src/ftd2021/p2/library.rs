@@ -37,52 +37,52 @@ fn read_package(
             line_number: section.line_number,
         }
     })?;
-    if let Ok(ftd::Value::List {
-        kind:
-            ftd::ftd2021::p2::Kind::String {
-                caption,
-                body,
-                default,
-                is_reference,
-            },
-        ..
-    }) = var.value.resolve(section.line_number, doc)
-    {
-        let mut data = vec![];
-        for line in get.split('\n') {
-            if line.is_empty() {
-                break;
-            }
-            if line.contains('=') {
-                let mut part = line.splitn(2, '=');
-                let _part_1 = part.next().unwrap().trim();
-                let part_2 = part.next().unwrap().trim();
-                data.push(ftd::PropertyValue::Value {
-                    value: ftd::Value::String {
-                        text: part_2.to_string(),
-                        source: ftd::TextSource::Header,
-                    },
-                });
-            }
-        }
+    match var.value.resolve(section.line_number, doc) {
         Ok(ftd::Value::List {
-            data,
-            kind: ftd::ftd2021::p2::Kind::String {
-                caption,
-                body,
-                default,
-                is_reference,
-            },
-        })
-    } else {
-        ftd::ftd2021::p2::utils::unknown_processor_error(
+            kind:
+                ftd::ftd2021::p2::Kind::String {
+                    caption,
+                    body,
+                    default,
+                    is_reference,
+                },
+            ..
+        }) => {
+            let mut data = vec![];
+            for line in get.split('\n') {
+                if line.is_empty() {
+                    break;
+                }
+                if line.contains('=') {
+                    let mut part = line.splitn(2, '=');
+                    let _part_1 = part.next().unwrap().trim();
+                    let part_2 = part.next().unwrap().trim();
+                    data.push(ftd::PropertyValue::Value {
+                        value: ftd::Value::String {
+                            text: part_2.to_string(),
+                            source: ftd::TextSource::Header,
+                        },
+                    });
+                }
+            }
+            Ok(ftd::Value::List {
+                data,
+                kind: ftd::ftd2021::p2::Kind::String {
+                    caption,
+                    body,
+                    default,
+                    is_reference,
+                },
+            })
+        }
+        _ => ftd::ftd2021::p2::utils::unknown_processor_error(
             format!(
                 "list should have 'string' kind, found {:?}",
                 var.value.kind()
             ),
             doc.name.to_string(),
             section.line_number,
-        )
+        ),
     }
 }
 
@@ -118,64 +118,65 @@ fn read_records(
             line_number: section.line_number,
         }
     })?;
-    if let Ok(ftd::Value::List {
-        kind: ftd::ftd2021::p2::Kind::Record {
-            name, is_reference, ..
-        },
-        ..
-    }) = var.value.resolve(section.line_number, doc)
-    {
-        let rec = doc.get_record(section.line_number, name.as_str())?;
-        let mut data = vec![];
-        for line in get.split('\n') {
-            if line.is_empty() {
-                break;
-            }
-            if line.contains('=') {
-                let mut fields: ftd::Map<ftd::PropertyValue> = Default::default();
-                let mut parts = line.splitn(2, '=');
-                for (k, v) in &rec.fields {
-                    let part = parts.next().unwrap().trim();
-                    match v {
-                        ftd::ftd2021::p2::Kind::String { .. } => {
-                            fields.insert(
-                                k.to_string(),
-                                ftd::PropertyValue::Value {
-                                    value: ftd::ftd2021::variable::Value::String {
-                                        text: part.to_string(),
-                                        source: ftd::TextSource::Header,
-                                    },
-                                },
-                            );
-                        }
-                        _ => unimplemented!(),
-                    }
-                }
-                data.push(ftd::PropertyValue::Value {
-                    value: ftd::Value::Record {
-                        name: rec.name.clone(),
-                        fields,
-                    },
-                });
-            }
-        }
+    match var.value.resolve(section.line_number, doc) {
         Ok(ftd::Value::List {
-            data,
-            kind: ftd::ftd2021::p2::Kind::Record {
-                name,
-                default: None,
-                is_reference,
-            },
-        })
-    } else {
-        ftd::ftd2021::p2::utils::unknown_processor_error(
+            kind:
+                ftd::ftd2021::p2::Kind::Record {
+                    name, is_reference, ..
+                },
+            ..
+        }) => {
+            let rec = doc.get_record(section.line_number, name.as_str())?;
+            let mut data = vec![];
+            for line in get.split('\n') {
+                if line.is_empty() {
+                    break;
+                }
+                if line.contains('=') {
+                    let mut fields: ftd::Map<ftd::PropertyValue> = Default::default();
+                    let mut parts = line.splitn(2, '=');
+                    for (k, v) in &rec.fields {
+                        let part = parts.next().unwrap().trim();
+                        match v {
+                            ftd::ftd2021::p2::Kind::String { .. } => {
+                                fields.insert(
+                                    k.to_string(),
+                                    ftd::PropertyValue::Value {
+                                        value: ftd::ftd2021::variable::Value::String {
+                                            text: part.to_string(),
+                                            source: ftd::TextSource::Header,
+                                        },
+                                    },
+                                );
+                            }
+                            _ => unimplemented!(),
+                        }
+                    }
+                    data.push(ftd::PropertyValue::Value {
+                        value: ftd::Value::Record {
+                            name: rec.name.clone(),
+                            fields,
+                        },
+                    });
+                }
+            }
+            Ok(ftd::Value::List {
+                data,
+                kind: ftd::ftd2021::p2::Kind::Record {
+                    name,
+                    default: None,
+                    is_reference,
+                },
+            })
+        }
+        _ => ftd::ftd2021::p2::utils::unknown_processor_error(
             format!(
                 "list should have 'string' kind, found {:?}",
                 var.value.kind()
             ),
             doc.name.to_string(),
             section.line_number,
-        )
+        ),
     }
 }
 

@@ -138,8 +138,8 @@ pub fn default_functions() -> Map<fastn_resolved::evalexpr::Function> {
         .collect()
 }
 
-pub fn default_context(
-) -> Result<fastn_resolved::evalexpr::HashMapContext, fastn_resolved::evalexpr::EvalexprError> {
+pub fn default_context()
+-> Result<fastn_resolved::evalexpr::HashMapContext, fastn_resolved::evalexpr::EvalexprError> {
     let mut context = fastn_resolved::evalexpr::HashMapContext::new();
     for (key, function) in default_functions() {
         context.set_function(key, function)?;

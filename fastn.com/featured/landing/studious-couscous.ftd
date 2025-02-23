@@ -23,21 +23,21 @@ demo-link: https://priyanka9634.github.io/studious-couscous/
 
 
 
--- ft-ui.template list landing:
+-- ft-ui.template-data list landing:
 
--- ft-ui.template: Midnight Storm
+-- ft-ui.template-data: Midnight Storm
 template-url: featured/landing/midnight-storm-landing/
 screenshot: $fastn-assets.files.images.featured.landing.ms-landing-demo.png
 
--- ft-ui.template: Misty Gray
+-- ft-ui.template-data: Misty Gray
 template-url: featured/landing/misty-gray-landing/
 screenshot: $fastn-assets.files.images.featured.landing.misty-gray-landing.png
 
--- ft-ui.template: Midnight Rush
+-- ft-ui.template-data: Midnight Rush
 template-url: featured/landing/mr-landing/
 screenshot: $fastn-assets.files.images.featured.landing.midnight-rush-landing.jpg
 
--- ft-ui.template: CT Landing Page
+-- ft-ui.template-data: CT Landing Page
 template-url: featured/landing-pages/
 screenshot: $fastn-assets.files.images.featured.landing.ct-landing-page.png
 

@@ -120,7 +120,7 @@ pub(crate) fn get_function_name_and_properties(
                 format!("{} is not a function", s),
                 doc_id,
                 line_number,
-            )
+            );
         }
     };
     let function_name = s[..si].to_string();
@@ -440,9 +440,14 @@ pub fn validate_record_value(
     ) -> ftd::interpreter::Result<()> {
         for value in fields.iter() {
             if let Some(reference_name) = value.reference_name() {
-                return ftd::interpreter::utils::e2(format!(
-                    "Currently, reference `{}` to record field  is not supported. Use clone (*) instead", reference_name
-                ), doc.name, value.line_number());
+                return ftd::interpreter::utils::e2(
+                    format!(
+                        "Currently, reference `{}` to record field  is not supported. Use clone (*) instead",
+                        reference_name
+                    ),
+                    doc.name,
+                    value.line_number(),
+                );
             }
 
             if let fastn_resolved::PropertyValue::Value { value, .. } = value {
@@ -564,43 +569,40 @@ pub(crate) fn get_value(
             let value = get_value(doc, &value.clone().resolve(doc, value.line_number())?)?;
             match value {
                 Some(value) if name.eq(ftd::interpreter::FTD_LENGTH) => {
-                    if let Ok(pattern) = ftd::executor::Length::set_value_from_variant(
+                    match ftd::executor::Length::set_value_from_variant(
                         variant.as_str(),
                         value.to_string().as_str(),
                         doc.name,
                         0,
                     ) {
-                        serde_json::to_value(pattern).ok()
-                    } else {
-                        Some(value)
+                        Ok(pattern) => serde_json::to_value(pattern).ok(),
+                        _ => Some(value),
                     }
                 }
                 Some(value) if name.eq(ftd::interpreter::FTD_FONT_SIZE) => {
-                    if let Ok(pattern) = ftd::executor::FontSize::set_value_from_variant(
+                    match ftd::executor::FontSize::set_value_from_variant(
                         variant.as_str(),
                         value.to_string().as_str(),
                         doc.name,
                         0,
                     ) {
-                        serde_json::to_value(pattern).ok()
-                    } else {
-                        Some(value)
+                        Ok(pattern) => serde_json::to_value(pattern).ok(),
+                        _ => Some(value),
                     }
                 }
                 Some(value)
                     if name.eq(ftd::interpreter::FTD_RESIZING_FIXED)
                         && variant.ne(ftd::interpreter::FTD_RESIZING_FIXED) =>
                 {
-                    if let Ok(pattern) = ftd::executor::Resizing::set_value_from_variant(
+                    match ftd::executor::Resizing::set_value_from_variant(
                         variant.as_str(),
                         full_variant.as_str(),
                         doc.name,
                         value.to_string().as_str(),
                         0,
                     ) {
-                        serde_json::to_value(pattern).ok()
-                    } else {
-                        Some(value)
+                        Ok(pattern) => serde_json::to_value(pattern).ok(),
+                        _ => Some(value),
                     }
                 }
                 Some(value) => Some(value),
@@ -735,28 +737,33 @@ pub(crate) fn insert_module_thing(
             reference.strip_prefix(&format!("{}.{}.", component_name, arg.name))
         {
             let module_component_name = format!("{}#{}", module_name, reference);
-            if let Ok(function_definition) =
-                doc.get_function(module_component_name.as_str(), line_number)
-            {
-                let function_module_thing = fastn_resolved::ModuleThing::function(
-                    reference.to_string(),
-                    function_definition.return_kind.clone(),
-                );
-                things.insert(reference.to_string(), function_module_thing);
-            } else if let Ok(module_component_definition) =
-                doc.get_component(module_component_name.as_str(), 0)
-            {
-                let component_module_thing = fastn_resolved::ModuleThing::component(
-                    reference.to_string(),
-                    fastn_resolved::Kind::ui_with_name(reference_full_name).into_kind_data(),
-                    module_component_definition.arguments,
-                );
+            match doc.get_function(module_component_name.as_str(), line_number) {
+                Ok(function_definition) => {
+                    let function_module_thing = fastn_resolved::ModuleThing::function(
+                        reference.to_string(),
+                        function_definition.return_kind.clone(),
+                    );
+                    things.insert(reference.to_string(), function_module_thing);
+                }
+                _ => match doc.get_component(module_component_name.as_str(), 0) {
+                    Ok(module_component_definition) => {
+                        let component_module_thing = fastn_resolved::ModuleThing::component(
+                            reference.to_string(),
+                            fastn_resolved::Kind::ui_with_name(reference_full_name)
+                                .into_kind_data(),
+                            module_component_definition.arguments,
+                        );
 
-                things.insert(reference.to_string(), component_module_thing);
-            } else {
-                let variable_module_thing =
-                    fastn_resolved::ModuleThing::variable(reference.to_string(), kind.clone());
-                things.insert(reference.to_string(), variable_module_thing);
+                        things.insert(reference.to_string(), component_module_thing);
+                    }
+                    _ => {
+                        let variable_module_thing = fastn_resolved::ModuleThing::variable(
+                            reference.to_string(),
+                            kind.clone(),
+                        );
+                        things.insert(reference.to_string(), variable_module_thing);
+                    }
+                },
             }
         }
     }
@@ -840,7 +847,7 @@ pub(crate) fn validate_properties_and_set_default(
                         format!("Expected module, found: {:?}", t),
                         doc_id,
                         line_number,
-                    )
+                    );
                 }
             };
 

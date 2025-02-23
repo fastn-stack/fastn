@@ -85,9 +85,5 @@ where
  * A usize that is the result of the conversion. If the input i32 is negative, returns 0.
  */
 pub(crate) fn i32_to_usize(i: i32) -> usize {
-    if i < 0 {
-        0
-    } else {
-        i as usize
-    }
+    if i < 0 { 0 } else { i as usize }
 }

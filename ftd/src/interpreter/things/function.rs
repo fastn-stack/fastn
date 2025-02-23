@@ -431,7 +431,7 @@ impl FunctionCallExt for fastn_resolved::FunctionCall {
                             ),
                             doc.name,
                             line_number,
-                        )
+                        );
                     }
                 }
             };

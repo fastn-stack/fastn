@@ -58,7 +58,7 @@ fn extract_types(
                 message: format!("Expected record of ftd.type-data found: {:?}", value),
                 doc_id: doc.name.to_string(),
                 line_number,
-            })
+            });
         }
     };
 
@@ -75,7 +75,7 @@ fn extract_types(
                     doc_id: doc.name.to_string(),
                     line_number,
                     message: format!("Expected string kind for name found: {:?}", variable_name),
-                })
+                });
             }
         };
     }
@@ -100,7 +100,7 @@ fn extract_types(
                 ),
                 doc_id: doc.name.to_string(),
                 line_number,
-            })
+            });
         }
     };
 
@@ -118,7 +118,7 @@ fn extract_types(
                 message: format!("Expected Variable reference, found: {:?}", t),
                 doc_id: doc.name.to_string(),
                 line_number,
-            })
+            });
         }
     };
 
@@ -135,7 +135,7 @@ fn extract_types(
                 ),
                 doc_id: doc.name.to_string(),
                 line_number,
-            })
+            });
         }
     };
 

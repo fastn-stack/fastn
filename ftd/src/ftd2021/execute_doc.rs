@@ -59,10 +59,10 @@ impl ExecuteDoc<'_> {
                     let mut current = &children;
                     for i in current_container.iter() {
                         current = match &current[*i] {
-                            ftd::Element::Row(ref r) => &r.container.children,
-                            ftd::Element::Column(ref r) => &r.container.children,
-                            ftd::Element::Scene(ref r) => &r.container.children,
-                            ftd::Element::Grid(ref r) => &r.container.children,
+                            ftd::Element::Row(r) => &r.container.children,
+                            ftd::Element::Column(r) => &r.container.children,
+                            ftd::Element::Scene(r) => &r.container.children,
+                            ftd::Element::Grid(r) => &r.container.children,
                             _ => unreachable!(),
                         };
                     }
@@ -275,10 +275,10 @@ impl ExecuteDoc<'_> {
         let mut current = &mut main;
         for i in current_container.iter() {
             current = match &mut current[*i] {
-                ftd::Element::Row(ref mut r) => &mut r.container.children,
-                ftd::Element::Column(ref mut r) => &mut r.container.children,
-                ftd::Element::Scene(ref mut r) => &mut r.container.children,
-                ftd::Element::Grid(ref mut r) => &mut r.container.children,
+                ftd::Element::Row(r) => &mut r.container.children,
+                ftd::Element::Column(r) => &mut r.container.children,
+                ftd::Element::Scene(r) => &mut r.container.children,
+                ftd::Element::Grid(r) => &mut r.container.children,
                 _ => unreachable!(),
             };
         }
@@ -308,22 +308,10 @@ impl ExecuteDoc<'_> {
 
         if let Some(append_at) = append_at {
             match current.last_mut() {
-                Some(ftd::Element::Column(ftd::Column {
-                    container: ref mut c,
-                    ..
-                }))
-                | Some(ftd::Element::Row(ftd::Row {
-                    container: ref mut c,
-                    ..
-                }))
-                | Some(ftd::Element::Scene(ftd::Scene {
-                    container: ref mut c,
-                    ..
-                }))
-                | Some(ftd::Element::Grid(ftd::Grid {
-                    container: ref mut c,
-                    ..
-                })) => {
+                Some(ftd::Element::Column(ftd::Column { container: c, .. }))
+                | Some(ftd::Element::Row(ftd::Row { container: c, .. }))
+                | Some(ftd::Element::Scene(ftd::Scene { container: c, .. }))
+                | Some(ftd::Element::Grid(ftd::Grid { container: c, .. })) => {
                     let string_container = {
                         let mut new_parent_container = parent_container.to_vec();
                         new_parent_container
@@ -423,18 +411,10 @@ impl ExecuteDoc<'_> {
             };
             let mut child_count = 0;
             let container = match current.last_mut() {
-                Some(ftd::Element::Column(ftd::Column {
-                    ref mut container, ..
-                }))
-                | Some(ftd::Element::Row(ftd::Row {
-                    ref mut container, ..
-                }))
-                | Some(ftd::Element::Scene(ftd::Scene {
-                    ref mut container, ..
-                }))
-                | Some(ftd::Element::Grid(ftd::Grid {
-                    ref mut container, ..
-                })) => {
+                Some(ftd::Element::Column(ftd::Column { container, .. }))
+                | Some(ftd::Element::Row(ftd::Row { container, .. }))
+                | Some(ftd::Element::Scene(ftd::Scene { container, .. }))
+                | Some(ftd::Element::Grid(ftd::Grid { container, .. })) => {
                     child_count += container_children.len();
                     container.children.extend(container_children);
                     Some(container)
