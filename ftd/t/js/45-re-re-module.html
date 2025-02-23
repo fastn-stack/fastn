@@ -79,6 +79,8 @@ let _01_basic_module__print = function (parent, inherited, args)
   }
 }
 global["_01_basic_module__print"] = _01_basic_module__print;
+let _01_basic__print = global["_01_basic_module__print"];
+global["_01_basic__print"] = _01_basic__print;
 let _44_module__bar = function (parent, inherited, args)
 {
   let __fastn_super_package_name__ = __fastn_package_name__;
@@ -156,8 +158,6 @@ let foo__moo = function (parent, inherited, args)
   }
 }
 global["foo__moo"] = foo__moo;
-let _01_basic__print = global["_01_basic_module__print"];
-global["_01_basic__print"] = _01_basic__print;
 fastn_dom.codeData.availableThemes["coldark-theme.dark"] = "../../theme_css/coldark-theme.dark.css";
 fastn_dom.codeData.availableThemes["coldark-theme.light"] = "../../theme_css/coldark-theme.light.css";
 fastn_dom.codeData.availableThemes["coy-theme"] = "../../theme_css/coy-theme.css";
