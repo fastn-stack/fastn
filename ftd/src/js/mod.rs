@@ -104,7 +104,7 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
 
     // Fix the export order while generating ast
     // export item should be inserted as soon as `from` is available
-    let mut export_asts: indexmap::IndexMap<String, fastn_js::Ast> = Default::default();
+    let mut export_asts: indexmap::IndexMap<String, Vec<fastn_js::Ast>> = Default::default();
     for (key, thing) in document.data.iter() {
         if default_thing_name.contains(&key) {
             continue;
@@ -113,13 +113,20 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
             if doc.get_record(from, 0).is_ok() {
                 continue;
             }
-            export_asts.insert(
-                from.to_string(),
-                fastn_js::Ast::Export {
+            if let Some(asts) = export_asts.get_mut(from) {
+                asts.push(fastn_js::Ast::Export {
                     from: from.to_string(),
                     to: to.to_string(),
-                },
-            );
+                });
+            } else {
+                export_asts.insert(
+                    from.to_string(),
+                    vec![fastn_js::Ast::Export {
+                        from: from.to_string(),
+                        to: to.to_string(),
+                    }],
+                );
+            }
         }
     }
 
@@ -178,11 +185,11 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
         }
 
         if let Some(ast) = export_asts.shift_remove(key) {
-            document_asts.push(ast);
+            document_asts.extend(ast);
         }
     }
 
-    document_asts.extend(export_asts.into_iter().map(|(_k, v)| v));
+    document_asts.extend(export_asts.into_iter().map(|(_k, v)| v).flatten());
     let mut scripts = fastn_runtime::utils::get_external_scripts(has_rive_components);
     scripts.push(fastn_runtime::utils::get_js_html(
         document.js.into_iter().collect_vec().as_slice(),
