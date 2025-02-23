@@ -33,7 +33,8 @@ impl Library2022 {
         &self,
         current_processing_module: &str,
     ) -> ftd_p1::Result<fastn_core::Package> {
-        let current_package_name = dbg!(&self.module_package_map)
+        let current_package_name = self
+            .module_package_map
             .get(current_processing_module.trim_matches('/'))
             .ok_or_else(|| ftd_p1::Error::ParseError {
                 message: "The processing document stack is empty: Can't find module in any package"
@@ -146,7 +147,7 @@ impl Library2022 {
         ) -> fastn_core::Result<Option<(String, String, usize)>> {
             if name.starts_with(package.name.as_str()) {
                 if let Some((content, size)) =
-                    get_data_from_package(name, &package, lib, session_id).await?
+                    get_data_from_package(name, package, lib, session_id).await?
                 {
                     return Ok(Some((content, name.to_string(), size)));
                 }
@@ -155,7 +156,7 @@ impl Library2022 {
             if package.name.ends_with(name.trim_end_matches('/')) {
                 let package_index = format!("{}/", package.name.as_str());
                 if let Some((content, size)) =
-                    get_data_from_package(package_index.as_str(), &package, lib, session_id).await?
+                    get_data_from_package(package_index.as_str(), package, lib, session_id).await?
                 {
                     return Ok(Some((content, format!("{package_index}index.ftd"), size)));
                 }
