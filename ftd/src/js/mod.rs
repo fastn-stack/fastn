@@ -189,7 +189,7 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
         }
     }
 
-    document_asts.extend(export_asts.into_iter().map(|(_k, v)| v).flatten());
+    document_asts.extend(export_asts.into_iter().flat_map(|(_k, v)| v));
     let mut scripts = fastn_runtime::utils::get_external_scripts(has_rive_components);
     scripts.push(fastn_runtime::utils::get_js_html(
         document.js.into_iter().collect_vec().as_slice(),
