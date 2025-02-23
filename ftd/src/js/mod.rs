@@ -102,12 +102,32 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
         .map(|v| v.0)
         .collect_vec();
 
-    let mut export_asts = vec![];
+    let mut export_asts: indexmap::IndexMap<String, fastn_js::Ast> = Default::default();
 
     for (key, thing) in document.data.iter() {
         if default_thing_name.contains(&key) {
             continue;
         }
+        if let ftd::interpreter::Thing::Export { from, to, .. } = thing {
+            if doc.get_record(from, 0).is_ok() {
+                continue;
+            }
+            export_asts.insert(
+                from.to_string(),
+                fastn_js::Ast::Export {
+                    from: from.to_string(),
+                    to: to.to_string(),
+                },
+            );
+        }
+    }
+
+    for (key, thing) in document.data.iter() {
+        if default_thing_name.contains(&key) {
+            continue;
+        }
+        println!("key: {key}");
+        println!("thing: {thing:?}\n\n");
         if let ftd::interpreter::Thing::Component(c) = thing {
             document_asts.push(c.to_ast(&doc, &mut has_rive_components));
         } else if let ftd::interpreter::Thing::Variable(v) = thing {
@@ -122,14 +142,8 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
             document_asts.push(web_component.to_ast(&doc));
         } else if let ftd::interpreter::Thing::Function(f) = thing {
             document_asts.push(f.to_ast(&doc));
-        } else if let ftd::interpreter::Thing::Export { from, to, .. } = thing {
-            if doc.get_record(from, 0).is_ok() {
-                continue;
-            }
-            export_asts.push(fastn_js::Ast::Export {
-                from: from.to_string(),
-                to: to.to_string(),
-            })
+        } else if let ftd::interpreter::Thing::Export { .. } = thing {
+            continue;
         } else if let ftd::interpreter::Thing::OrType(ot) = thing {
             let mut fields = vec![];
             for variant in &ot.variants {
@@ -163,9 +177,15 @@ pub fn document_into_js_ast(document: ftd::interpreter::Document) -> JSAstData {
                 prefix,
             }));
         }
+
+        if let Some(ast) = export_asts.shift_remove(key) {
+            document_asts.push(ast);
+        }
     }
 
-    document_asts.extend(export_asts);
+    println!("document_asts: {document_asts:?}");
+
+    document_asts.extend(export_asts.into_iter().map(|(_k, v)| v));
     let mut scripts = fastn_runtime::utils::get_external_scripts(has_rive_components);
     scripts.push(fastn_runtime::utils::get_js_html(
         document.js.into_iter().collect_vec().as_slice(),
