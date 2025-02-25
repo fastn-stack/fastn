@@ -1108,7 +1108,7 @@ impl<'a> TDoc<'a> {
         } {
             state
         } else {
-            return self.err("not found *1*", name, "search_thing", line_number);
+            return self.err("not found", name, "search_thing", line_number);
         };
 
         if doc_name.eq(ftd::interpreter::FTD_INHERITED) {
@@ -1544,7 +1544,7 @@ impl<'a> TDoc<'a> {
         } {
             state
         } else {
-            return self.err("not found *2*", name, "search_thing", line_number);
+            return self.err("not found", name, "search_thing", line_number);
         };
 
         let current_parsed_document = state.parsed_libs.get(state.id.as_str()).unwrap();
@@ -1587,7 +1587,7 @@ impl<'a> TDoc<'a> {
                 }
             } else if !current_doc_contains_thing.is_empty() && state.peek_stack().unwrap().1.gt(&4)
             {
-                return self.err("not found *3*", name, "search_thing", line_number);
+                return self.err("not found", name, "search_thing", line_number);
             }
         }
 
@@ -1702,7 +1702,7 @@ impl<'a> TDoc<'a> {
                         return Ok(thing);
                     }
                 }*/
-                return self.err("not found *4*", name, "search_thing", line_number);
+                return self.err("not found", name, "search_thing", line_number);
             }
 
             state
