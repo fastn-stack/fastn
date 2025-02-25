@@ -100,7 +100,10 @@ jobs:
           path: windows_x64_installer.exe
   release-macos:
     name: Build for MacOS
-    runs-on: macos-latest
+    # don't use later versions, as else our binary will be built for arm64,
+    # and will not work on older macs that are based on x86_64 (intel)
+    # https://github.com/fastn-stack/fastn/issues/2099
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
