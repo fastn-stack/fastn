@@ -765,6 +765,12 @@ impl InterpreterState {
                 line_number,
             );
 
+        println!(
+            "thing_name: {}, doc_name: {}, module: {module}, current_module: {current_module}, \
+            module_things: {:?}, all_things: {:?}",
+            thing_name, doc_name, document.re_exports.module_things, document.re_exports.all_things
+        );
+
         if doc_name.ne(self.id.as_str()) {
             let current_document = self.parsed_libs.get(self.id.as_str()).unwrap();
             let current_doc_contains_thing = current_document
@@ -852,6 +858,39 @@ impl InterpreterState {
                     .unwrap();
                 let mut exports = exports.to_vec();
                 exports.push(name.to_string());
+
+                return self.resolve_import_things(
+                    export_module.as_str(),
+                    format!(
+                        "{}#{}{}",
+                        export_module,
+                        thing_name,
+                        remaining
+                            .as_ref()
+                            .map(|v| format!(".{}", v))
+                            .unwrap_or_default()
+                    )
+                    .as_str(),
+                    line_number,
+                    module,
+                    exports.as_slice(),
+                );
+            } else if module.ne(current_module) && !document.re_exports.all_things.is_empty() {
+                if document.re_exports.all_things.len() != 1 {
+                    return ftd::interpreter::utils::e2(
+                        format!(
+                            "Currently, fastn only support one * export, found in {:?}",
+                            document.re_exports.all_things
+                        ),
+                        name,
+                        line_number,
+                    );
+                }
+                let export_module = document.re_exports.all_things.first().unwrap().clone();
+                let mut exports = exports.to_vec();
+                exports.push(name.to_string());
+
+                println!("star export_module: {export_module}, exports: {exports:?}");
 
                 return self.resolve_import_things(
                     export_module.as_str(),

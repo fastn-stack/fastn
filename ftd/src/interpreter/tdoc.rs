@@ -1108,7 +1108,7 @@ impl<'a> TDoc<'a> {
         } {
             state
         } else {
-            return self.err("not found", name, "search_thing", line_number);
+            return self.err("not found *1*", name, "search_thing", line_number);
         };
 
         if doc_name.eq(ftd::interpreter::FTD_INHERITED) {
@@ -1544,7 +1544,7 @@ impl<'a> TDoc<'a> {
         } {
             state
         } else {
-            return self.err("not found", name, "search_thing", line_number);
+            return self.err("not found *2*", name, "search_thing", line_number);
         };
 
         let current_parsed_document = state.parsed_libs.get(state.id.as_str()).unwrap();
@@ -1587,7 +1587,7 @@ impl<'a> TDoc<'a> {
                 }
             } else if !current_doc_contains_thing.is_empty() && state.peek_stack().unwrap().1.gt(&4)
             {
-                return self.err("not found", name, "search_thing", line_number);
+                return self.err("not found *3*", name, "search_thing", line_number);
             }
         }
 
@@ -1646,6 +1646,32 @@ impl<'a> TDoc<'a> {
                         doc_name.as_str(),
                         exports,
                     );
+                } else if doc_name.ne(&caller) && !parsed_document.re_exports.all_things.is_empty()
+                {
+                    if parsed_document.re_exports.all_things.len() != 1 {
+                        return self.err(
+                            "Currently, fastn only support one * export",
+                            name,
+                            "search_thing",
+                            line_number,
+                        );
+                    }
+                    let module = parsed_document
+                        .re_exports
+                        .all_things
+                        .first()
+                        .unwrap()
+                        .clone();
+                    let mut exports = exports;
+                    exports.push(name);
+                    return self.search_initial_thing_from_doc_name(
+                        module,
+                        thing_name,
+                        remaining,
+                        line_number,
+                        doc_name.as_str(),
+                        exports,
+                    );
                 } else if doc_name.eq(&caller)
                     && parsed_document.exposings.contains_key(thing_name.as_str())
                 {
@@ -1676,7 +1702,7 @@ impl<'a> TDoc<'a> {
                         return Ok(thing);
                     }
                 }*/
-                return self.err("not found", name, "search_thing", line_number);
+                return self.err("not found *4*", name, "search_thing", line_number);
             }
 
             state
@@ -1698,7 +1724,7 @@ impl<'a> TDoc<'a> {
         }
 
         if doc_name.eq(self.name) {
-            return self.err("not found", name, "search_thing", line_number);
+            return self.err("not found *5*", name, "search_thing", line_number);
         }
 
         state
