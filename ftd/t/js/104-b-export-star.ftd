@@ -2,3 +2,4 @@
 export: *
 
 -- integer y: 30
+-- integer g: 60
