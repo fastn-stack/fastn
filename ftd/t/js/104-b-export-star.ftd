@@ -1,0 +1,4 @@
+-- import: 104-a-export-star
+export: *
+
+-- integer y: 30

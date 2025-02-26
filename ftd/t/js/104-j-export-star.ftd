@@ -1,0 +1,5 @@
+-- import: 104-b-export-star as b
+
+-- ftd.json:
+x: $b.x
+y: $b.y
