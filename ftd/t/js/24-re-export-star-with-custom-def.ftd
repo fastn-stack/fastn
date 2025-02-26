@@ -1,0 +1,58 @@
+-- import: 01-basic as b
+export: *
+
+
+;; This is defined here besides in 01-basic
+;; So this should override the `01-basic` print component
+-- component print:
+caption name:
+
+-- ftd.text: $print.name
+color: purple
+
+-- end: print
+
+
+;; This is defined here besides in 01-basic
+;; So this should override the `01-basic` append function
+-- string append(a,b):
+string a:
+string b:
+
+a + " + " + b
+
+
+
+
+
+
+-- b.person list people:
+
+-- b.person: Ritesh
+-- b.person: Rithik
+
+-- end: people
+
+
+
+
+
+-- display-persons:
+p: $people
+
+
+
+
+
+-- component display-persons:
+b.person list p:
+
+-- ftd.column:
+
+-- ftd.text: $obj.name
+for: obj in $display-persons.p
+color: red
+
+-- end: ftd.column
+
+-- end: display-persons
