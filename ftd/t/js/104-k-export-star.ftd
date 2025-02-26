@@ -1,0 +1,9 @@
+-- import: 104-j-export-star as j
+export: *
+
+
+-- ftd.json:
+x: $j.x
+y: $j.y
+z: $j.z
+g: $j.g

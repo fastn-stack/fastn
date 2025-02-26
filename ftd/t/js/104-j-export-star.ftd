@@ -1,4 +1,8 @@
 -- import: 104-b-export-star as b
+export: *
+
+-- integer y: 40
+-- integer z: 50
 
 -- ftd.json:
 x: $b.x
