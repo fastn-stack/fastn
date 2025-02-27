@@ -346,7 +346,7 @@ fn get_module_name_and_thing(
                             format!("Expected module, found: {:?}", t),
                             doc.name,
                             module_property.line_number,
-                        );
+                        )
                     }
                 }
             }
@@ -1368,20 +1368,21 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
                 .resolve_name(definition_name_with_arguments.as_ref().unwrap().0)
                 .ne(&name)
         {
-            let mut var_name =
-                match ftd::interpreter::utils::get_argument_for_reference_and_remaining(
+            let mut var_name = if let Some(value) =
+                ftd::interpreter::utils::get_argument_for_reference_and_remaining(
                     name.as_str(),
                     doc,
                     definition_name_with_arguments,
                     loop_object_name_and_kind,
                     line_number,
                 )? {
-                    Some(value) => Some((
-                        value.2.get_reference_name(name.as_str(), doc),
-                        Some(value.0),
-                    )),
-                    _ => None,
-                };
+                Some((
+                    value.2.get_reference_name(name.as_str(), doc),
+                    Some(value.0),
+                ))
+            } else {
+                None
+            };
 
             if var_name.is_none() {
                 if let Ok(variable) = doc.search_variable(name.as_str(), line_number) {

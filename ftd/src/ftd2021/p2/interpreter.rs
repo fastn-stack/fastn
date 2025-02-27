@@ -192,186 +192,146 @@ impl InterpreterState {
                             &parsed_document.instructions,
                         )?,
                     });
+            } else if let Ok(ftd::ftd2021::variable::VariableData {
+                type_: ftd::ftd2021::variable::Type::Component,
+                ..
+            }) = var_data
+            {
+                // declare a function
+                let d = ftd::Component::from_p1(&p1, &doc)?;
+                let name = doc.resolve_name(p1.line_number, &d.full_name.to_string())?;
+                if self.bag.contains_key(name.as_str()) {
+                    return ftd::ftd2021::p2::utils::e2(
+                        format!("{} is already declared", d.full_name),
+                        doc.name,
+                        p1.line_number,
+                    );
+                }
+                thing.push((name, ftd::ftd2021::p2::Thing::Component(d)));
+                // processed_p1.push(p1.name.to_string());
+            } else if let Ok(ref var_data) = var_data {
+                let d = if p1
+                    .header
+                    .str(doc.name, p1.line_number, "$processor$")
+                    .is_ok()
+                {
+                    // processor case: 1
+                    return Ok(Interpreter::StuckOnProcessor {
+                        state: self,
+                        section: p1,
+                    });
+                } else if var_data.is_none() || var_data.is_optional() {
+                    // declare and instantiate a variable
+                    ftd::Variable::from_p1(&p1, &doc)?
+                } else {
+                    // declare and instantiate a list
+                    ftd::Variable::list_from_p1(&p1, &doc)?
+                };
+                let name = doc.resolve_name(p1.line_number, &d.name)?;
+                if self.bag.contains_key(name.as_str()) {
+                    return ftd::ftd2021::p2::utils::e2(
+                        format!("{} is already declared", d.name),
+                        doc.name,
+                        p1.line_number,
+                    );
+                }
+                thing.push((name, ftd::ftd2021::p2::Thing::Variable(d)));
+            } else if let ftd::ftd2021::p2::Thing::Variable(mut v) =
+                doc.get_thing(p1.line_number, p1.name.as_str())?
+            {
+                assert!(
+                    !(p1.header
+                        .str_optional(doc.name, p1.line_number, "if")?
+                        .is_some()
+                        && p1
+                            .header
+                            .str_optional(doc.name, p1.line_number, "$processor$")?
+                            .is_some())
+                );
+                let (doc_name, remaining) = ftd::ftd2021::p2::utils::get_doc_name_and_remaining(
+                    doc.resolve_name(p1.line_number, p1.name.as_str())?.as_str(),
+                )?;
+                if remaining.is_some()
+                    && p1
+                        .header
+                        .str_optional(doc.name, p1.line_number, "if")?
+                        .is_some()
+                {
+                    return ftd::ftd2021::p2::utils::e2(
+                        "Currently not supporting `if` for field value update.",
+                        doc.name,
+                        p1.line_number,
+                    );
+                }
+                if let Some(expr) = p1.header.str_optional(doc.name, p1.line_number, "if")? {
+                    let val = v.get_value(&p1, &doc)?;
+                    v.conditions.push((
+                        ftd::ftd2021::p2::Boolean::from_expression(
+                            expr,
+                            &doc,
+                            &Default::default(),
+                            (None, None),
+                            p1.line_number,
+                        )?,
+                        val,
+                    ));
+                } else if p1
+                    .header
+                    .str_optional(doc.name, p1.line_number, "$processor$")?
+                    .is_some()
+                {
+                    // processor case: 2
+                    return Ok(Interpreter::StuckOnProcessor {
+                        state: self,
+                        section: p1.to_owned(),
+                    });
+                    // let start = std::time::Instant::now();
+                    // let value = self.lib.process(p1, &doc)?;
+                    // *d_processor = d_processor.saturating_add(std::time::Instant::now() - start);
+                    // v.value = ftd::PropertyValue::Value { value };
+                } else {
+                    v.update_from_p1(&p1, &doc)?;
+                }
+                thing.push((
+                    doc.resolve_name(p1.line_number, doc_name.as_str())?,
+                    ftd::ftd2021::p2::Thing::Variable(doc.set_value(
+                        p1.line_number,
+                        p1.name.as_str(),
+                        v,
+                    )?),
+                ));
             } else {
-                match var_data {
-                    Ok(ftd::ftd2021::variable::VariableData {
-                        type_: ftd::ftd2021::variable::Type::Component,
-                        ..
-                    }) => {
-                        // declare a function
-                        let d = ftd::Component::from_p1(&p1, &doc)?;
-                        let name = doc.resolve_name(p1.line_number, &d.full_name.to_string())?;
-                        if self.bag.contains_key(name.as_str()) {
-                            return ftd::ftd2021::p2::utils::e2(
-                                format!("{} is already declared", d.full_name),
-                                doc.name,
-                                p1.line_number,
-                            );
-                        }
-                        thing.push((name, ftd::ftd2021::p2::Thing::Component(d)));
-                        // processed_p1.push(p1.name.to_string());
+                // cloning because https://github.com/rust-lang/rust/issues/59159
+                match (doc.get_thing(p1.line_number, p1.name.as_str())?).clone() {
+                    ftd::ftd2021::p2::Thing::Variable(_) => {
+                        return ftd::ftd2021::p2::utils::e2(
+                            format!("variable should have prefix $, found: `{}`", p1.name),
+                            doc.name,
+                            p1.line_number,
+                        );
                     }
-                    _ => {
-                        match var_data {
-                            Ok(ref var_data) => {
-                                let d = if p1
-                                    .header
-                                    .str(doc.name, p1.line_number, "$processor$")
-                                    .is_ok()
-                                {
-                                    // processor case: 1
-                                    return Ok(Interpreter::StuckOnProcessor {
-                                        state: self,
-                                        section: p1,
-                                    });
-                                } else if var_data.is_none() || var_data.is_optional() {
-                                    // declare and instantiate a variable
-                                    ftd::Variable::from_p1(&p1, &doc)?
-                                } else {
-                                    // declare and instantiate a list
-                                    ftd::Variable::list_from_p1(&p1, &doc)?
-                                };
-                                let name = doc.resolve_name(p1.line_number, &d.name)?;
-                                if self.bag.contains_key(name.as_str()) {
-                                    return ftd::ftd2021::p2::utils::e2(
-                                        format!("{} is already declared", d.name),
-                                        doc.name,
-                                        p1.line_number,
-                                    );
-                                }
-                                thing.push((name, ftd::ftd2021::p2::Thing::Variable(d)));
-                            }
-                            _ => {
-                                match doc.get_thing(p1.line_number, p1.name.as_str())? {
-                                    ftd::ftd2021::p2::Thing::Variable(mut v) => {
-                                        assert!(
-                                            !(p1.header
-                                                .str_optional(doc.name, p1.line_number, "if")?
-                                                .is_some()
-                                                && p1
-                                                    .header
-                                                    .str_optional(
-                                                        doc.name,
-                                                        p1.line_number,
-                                                        "$processor$"
-                                                    )?
-                                                    .is_some())
-                                        );
-                                        let (doc_name, remaining) =
-                                            ftd::ftd2021::p2::utils::get_doc_name_and_remaining(
-                                                doc.resolve_name(p1.line_number, p1.name.as_str())?
-                                                    .as_str(),
-                                            )?;
-                                        if remaining.is_some()
-                                            && p1
-                                                .header
-                                                .str_optional(doc.name, p1.line_number, "if")?
-                                                .is_some()
-                                        {
-                                            return ftd::ftd2021::p2::utils::e2(
-                                                "Currently not supporting `if` for field value update.",
-                                                doc.name,
-                                                p1.line_number,
-                                            );
-                                        }
-                                        match p1.header.str_optional(
-                                            doc.name,
-                                            p1.line_number,
-                                            "if",
-                                        )? {
-                                            Some(expr) => {
-                                                let val = v.get_value(&p1, &doc)?;
-                                                v.conditions.push((
-                                                    ftd::ftd2021::p2::Boolean::from_expression(
-                                                        expr,
-                                                        &doc,
-                                                        &Default::default(),
-                                                        (None, None),
-                                                        p1.line_number,
-                                                    )?,
-                                                    val,
-                                                ));
-                                            }
-                                            _ => {
-                                                if p1
-                                                    .header
-                                                    .str_optional(
-                                                        doc.name,
-                                                        p1.line_number,
-                                                        "$processor$",
-                                                    )?
-                                                    .is_some()
-                                                {
-                                                    // processor case: 2
-                                                    return Ok(Interpreter::StuckOnProcessor {
-                                                        state: self,
-                                                        section: p1.to_owned(),
-                                                    });
-                                                    // let start = std::time::Instant::now();
-                                                    // let value = self.lib.process(p1, &doc)?;
-                                                    // *d_processor = d_processor.saturating_add(std::time::Instant::now() - start);
-                                                    // v.value = ftd::PropertyValue::Value { value };
-                                                } else {
-                                                    v.update_from_p1(&p1, &doc)?;
-                                                }
-                                            }
-                                        }
-                                        thing.push((
-                                            doc.resolve_name(p1.line_number, doc_name.as_str())?,
-                                            ftd::ftd2021::p2::Thing::Variable(doc.set_value(
-                                                p1.line_number,
-                                                p1.name.as_str(),
-                                                v,
-                                            )?),
-                                        ));
-                                    }
-                                    _ => {
-                                        // cloning because https://github.com/rust-lang/rust/issues/59159
-                                        match (doc.get_thing(p1.line_number, p1.name.as_str())?)
-                                            .clone()
-                                        {
-                                            ftd::ftd2021::p2::Thing::Variable(_) => {
-                                                return ftd::ftd2021::p2::utils::e2(
-                                                    format!(
-                                                        "variable should have prefix $, found: `{}`",
-                                                        p1.name
-                                                    ),
-                                                    doc.name,
-                                                    p1.line_number,
-                                                );
-                                            }
-                                            ftd::ftd2021::p2::Thing::Component(c) => {
-                                                if p1
-                                                    .header
-                                                    .str_optional(
-                                                        doc.name,
-                                                        p1.line_number,
-                                                        "$processor$",
-                                                    )?
-                                                    .is_some()
-                                                {
-                                                    // processor case: 3
-                                                    return Ok(Interpreter::StuckOnProcessor {
-                                                        state: self,
-                                                        section: p1.to_owned(),
-                                                    });
-                                                }
-                                                match p1.header.str(
-                                                    doc.name,
-                                                    p1.line_number,
-                                                    "$loop$",
-                                                ) {
-                                                    Ok(loop_data) => {
-                                                        let section_to_subsection =
-                                                            ftd::ftd2021::p1::SubSection {
-                                                                name: p1.name.to_string(),
-                                                                caption: p1.caption.to_owned(),
-                                                                header: p1.header.to_owned(),
-                                                                body: p1.body.to_owned(),
-                                                                is_commented: p1.is_commented,
-                                                                line_number: p1.line_number,
-                                                            };
-                                                        parsed_document.instructions.push(
+                    ftd::ftd2021::p2::Thing::Component(c) => {
+                        if p1
+                            .header
+                            .str_optional(doc.name, p1.line_number, "$processor$")?
+                            .is_some()
+                        {
+                            // processor case: 3
+                            return Ok(Interpreter::StuckOnProcessor {
+                                state: self,
+                                section: p1.to_owned(),
+                            });
+                        }
+                        if let Ok(loop_data) = p1.header.str(doc.name, p1.line_number, "$loop$") {
+                            let section_to_subsection = ftd::ftd2021::p1::SubSection {
+                                name: p1.name.to_string(),
+                                caption: p1.caption.to_owned(),
+                                header: p1.header.to_owned(),
+                                body: p1.body.to_owned(),
+                                is_commented: p1.is_commented,
+                                line_number: p1.line_number,
+                            };
+                            parsed_document.instructions.push(
                                 ftd::Instruction::RecursiveChildComponent {
                                     child: ftd::ftd2021::component::recursive_child_component(
                                         loop_data,
@@ -382,20 +342,18 @@ impl InterpreterState {
                                     )?,
                                 },
                             );
-                                                    }
-                                                    _ => {
-                                                        let mut parent =
-                                                            ftd::ChildComponent::from_p1(
-                                                                p1.line_number,
-                                                                p1.name.as_str(),
-                                                                &p1.header,
-                                                                &p1.caption,
-                                                                &p1.body,
-                                                                &doc,
-                                                                &Default::default(),
-                                                            )?;
+                        } else {
+                            let mut parent = ftd::ChildComponent::from_p1(
+                                p1.line_number,
+                                p1.name.as_str(),
+                                &p1.header,
+                                &p1.caption,
+                                &p1.body,
+                                &doc,
+                                &Default::default(),
+                            )?;
 
-                                                        ftd::ftd2021::InterpreterState::evaluate_component_for_headings(
+                            ftd::ftd2021::InterpreterState::evaluate_component_for_headings(
                                 &mut parsed_document.page_headings,
                                 &c,
                                 &mut parent,
@@ -403,16 +361,13 @@ impl InterpreterState {
                                 &self.package_name,
                             )?;
 
-                                                        let mut children = vec![];
+                            let mut children = vec![];
 
-                                                        for sub in p1.sub_sections.0.iter() {
-                                                            match sub.header.str(
-                                                                doc.name,
-                                                                p1.line_number,
-                                                                "$loop$",
-                                                            ) {
-                                                                Ok(loop_data) => {
-                                                                    children.push(
+                            for sub in p1.sub_sections.0.iter() {
+                                if let Ok(loop_data) =
+                                    sub.header.str(doc.name, p1.line_number, "$loop$")
+                                {
+                                    children.push(
                                         ftd::ftd2021::component::recursive_child_component(
                                             loop_data,
                                             sub,
@@ -421,24 +376,21 @@ impl InterpreterState {
                                             None,
                                         )?,
                                     );
-                                                                }
-                                                                _ => {
-                                                                    let root_name =
+                                } else {
+                                    let root_name =
                                         ftd::ftd2021::p2::utils::get_root_component_name(
                                             &doc,
                                             parent.root.as_str(),
                                             sub.line_number,
                                         )?;
-                                                                    let child = if root_name
-                                                                        .eq("ftd#text")
-                                                                    {
-                                                                        ftd::ftd2021::p2::utils::get_markup_child(
+                                    let child = if root_name.eq("ftd#text") {
+                                        ftd::ftd2021::p2::utils::get_markup_child(
                                             sub,
                                             &doc,
                                             &parent.arguments,
                                         )?
-                                                                    } else {
-                                                                        ftd::ChildComponent::from_p1(
+                                    } else {
+                                        ftd::ChildComponent::from_p1(
                                             sub.line_number,
                                             sub.name.as_str(),
                                             &sub.header,
@@ -447,56 +399,40 @@ impl InterpreterState {
                                             &doc,
                                             &parent.arguments,
                                         )?
-                                                                    };
-                                                                    children.push(child);
-                                                                }
-                                                            }
-                                                        }
-
-                                                        parsed_document.instructions.push(
-                                                            ftd::Instruction::Component {
-                                                                children,
-                                                                parent,
-                                                            },
-                                                        )
-                                                    }
-                                                }
-                                            }
-                                            ftd::ftd2021::p2::Thing::Record(mut r) => {
-                                                r.add_instance(&p1, &doc)?;
-                                                thing.push((
-                                                    doc.resolve_name(p1.line_number, &p1.name)?,
-                                                    ftd::ftd2021::p2::Thing::Record(r),
-                                                ));
-                                            }
-                                            ftd::ftd2021::p2::Thing::OrType(_r) => {
-                                                // do we allow initialization of a record by name? nopes
-                                                return ftd::ftd2021::p2::utils::e2(
-                                                    format!("'{}' is an or-type", p1.name.as_str()),
-                                                    doc.name,
-                                                    p1.line_number,
-                                                );
-                                            }
-                                            ftd::ftd2021::p2::Thing::OrTypeWithVariant {
-                                                ..
-                                            } => {
-                                                // do we allow initialization of a record by name? nopes
-                                                return ftd::ftd2021::p2::utils::e2(
-                                                    format!(
-                                                        "'{}' is an or-type variant",
-                                                        p1.name.as_str(),
-                                                    ),
-                                                    doc.name,
-                                                    p1.line_number,
-                                                );
-                                            }
-                                        };
-                                    }
+                                    };
+                                    children.push(child);
                                 }
                             }
+
+                            parsed_document
+                                .instructions
+                                .push(ftd::Instruction::Component { children, parent })
                         }
                     }
-                }
+                    ftd::ftd2021::p2::Thing::Record(mut r) => {
+                        r.add_instance(&p1, &doc)?;
+                        thing.push((
+                            doc.resolve_name(p1.line_number, &p1.name)?,
+                            ftd::ftd2021::p2::Thing::Record(r),
+                        ));
+                    }
+                    ftd::ftd2021::p2::Thing::OrType(_r) => {
+                        // do we allow initialization of a record by name? nopes
+                        return ftd::ftd2021::p2::utils::e2(
+                            format!("'{}' is an or-type", p1.name.as_str()),
+                            doc.name,
+                            p1.line_number,
+                        );
+                    }
+                    ftd::ftd2021::p2::Thing::OrTypeWithVariant { .. } => {
+                        // do we allow initialization of a record by name? nopes
+                        return ftd::ftd2021::p2::utils::e2(
+                            format!("'{}' is an or-type variant", p1.name.as_str(),),
+                            doc.name,
+                            p1.line_number,
+                        );
+                    }
+                };
             }
             self.bag.extend(thing);
         }

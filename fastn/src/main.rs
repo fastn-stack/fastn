@@ -372,7 +372,7 @@ pub fn version() -> &'static str {
 
 fn set_env_vars(is_test_running: bool) {
     let checked_in = {
-        match std::process::Command::new("git")
+        if let Ok(status) = std::process::Command::new("git")
             .arg("ls-files")
             .arg("--error-unmatch")
             .arg(".env")
@@ -380,10 +380,9 @@ fn set_env_vars(is_test_running: bool) {
             .stderr(std::process::Stdio::null())
             .status()
         {
-            Ok(status) => {
-                status.success() // .env is checked in
-            }
-            _ => false,
+            status.success() // .env is checked in
+        } else {
+            false
         }
     };
 

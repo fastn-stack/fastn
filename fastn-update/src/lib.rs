@@ -117,7 +117,7 @@ macro_rules! mprint {
 
 // macro called mred that prints in red a message, using ansi colors for red,
 macro_rules! mdone {
-    ($red: expr_2021, $($arg:tt)*) => {
+    ($red: expr, $($arg:tt)*) => {
         use colored::Colorize;
 
         if !fastn_core::utils::is_test() {
