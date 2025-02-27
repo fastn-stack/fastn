@@ -1134,7 +1134,7 @@ impl Config {
         fastn_wasm::insert_or_update(
             &config.all_packages,
             package.name.to_string(),
-            package.to_owned(),
+            config.package.to_owned(),
         );
 
         fastn_core::migrations::migrate(&config).await?;
