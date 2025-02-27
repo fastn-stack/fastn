@@ -59,7 +59,7 @@ fastn-runtime = { path = "../fastn-runtime" }
 fastn-section = { path = "fastn-section" }
 fastn-unresolved = { path = "fastn-unresolved" }
 fastn-utils = { path = "fastn-utils" }
-ft-sys-shared = { version = "0.2", features = ["rusqlite", "host-only"] }
+ft-sys-shared = { version = "0.2.1", features = ["rusqlite", "host-only"] }
 futures-util = { version = "0.3", default-features = false, features = ["std"] }
 http = "1"
 http-body-util = "0.1"
