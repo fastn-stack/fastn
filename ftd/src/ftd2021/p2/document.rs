@@ -25,11 +25,10 @@ impl Document {
                 value, flags: flag, ..
             }) = v
             {
-                let val = match value.resolve(0, &doc) {
-                    Ok(val) => val,
-                    _ => {
-                        continue;
-                    }
+                let val = if let Ok(val) = value.resolve(0, &doc) {
+                    val
+                } else {
+                    continue;
                 };
                 if let Some(value) = get_value(&val, &doc) {
                     d.insert(k.to_string(), value);
@@ -53,11 +52,10 @@ impl Document {
             if let ftd::Value::List { data, .. } = value {
                 let mut list_data = vec![];
                 for val in data {
-                    let val = match val.resolve(0, doc) {
-                        Ok(val) => val,
-                        _ => {
-                            continue;
-                        }
+                    let val = if let Ok(val) = val.resolve(0, doc) {
+                        val
+                    } else {
+                        continue;
                     };
                     if let Some(val) = get_value(&val, doc) {
                         list_data.push(val);
@@ -597,7 +595,11 @@ impl Document {
 
         // find any text with caption
         if let Some(t) = Self::find_text(&self.main.container.children, |t| {
-            if t.line { Some(t.text.clone()) } else { None }
+            if t.line {
+                Some(t.text.clone())
+            } else {
+                None
+            }
         }) {
             return Some(t);
         }
@@ -662,7 +664,7 @@ impl Document {
                     format!("not a record: {:?}", t),
                     self.name.as_str(),
                     0,
-                );
+                )
             }
         };
 
@@ -678,7 +680,7 @@ impl Document {
                     doc_id: "".to_string(),
                     line_number: 0,
                     key: key.to_string(),
-                });
+                })
             }
         };
         let doc = ftd::ftd2021::p2::TDoc {
@@ -741,7 +743,7 @@ impl Document {
                     format!("unhandled value found(value_to_json): {:?}", v),
                     self.name.as_str(),
                     0,
-                );
+                )
             }
         })
     }

@@ -77,10 +77,10 @@ pub fn interpret(
 }
 
 macro_rules! p {
-    ($s:expr, $t: expr_2021,) => {
+    ($s:expr, $t: expr,) => {
         p!($s, $t)
     };
-    ($s:expr, $t: expr_2021) => {
+    ($s:expr, $t: expr) => {
         let (ebag, ecol): (ftd::Map<ftd::ftd2021::p2::Thing>, _) = $t;
         let (mut bag, col) = ftd::ftd2021::test::interpret(
             "foo/bar",
@@ -110,10 +110,10 @@ macro_rules! p {
 }
 
 macro_rules! intf {
-    ($s:expr, $m: expr_2021,) => {
+    ($s:expr, $m: expr,) => {
         intf!($s, $m)
     };
-    ($s:expr, $m: expr_2021) => {
+    ($s:expr, $m: expr) => {
         match ftd::ftd2021::test::interpret(
             "foo",
             indoc::indoc!($s),
@@ -3676,7 +3676,11 @@ mod interpreter {
                     vec![
                         (s("about"), {
                             let s = ftd::ftd2021::p2::Kind::body();
-                            if about_optional { s.into_optional() } else { s }
+                            if about_optional {
+                                s.into_optional()
+                            } else {
+                                s
+                            }
                         }),
                         (s("src"), {
                             let s = ftd::ftd2021::p2::Kind::Record {
@@ -3684,7 +3688,11 @@ mod interpreter {
                                 default: None,
                                 is_reference: false,
                             };
-                            if about_optional { s.into_optional() } else { s }
+                            if about_optional {
+                                s.into_optional()
+                            } else {
+                                s
+                            }
                         }),
                         (s("title"), ftd::ftd2021::p2::Kind::caption()),
                     ],
@@ -12199,19 +12207,17 @@ mod interpreter {
                     },
                 }),
                 kernel: false,
-                invocations: vec![
-                    std::iter::IntoIterator::into_iter([
-                        (
-                            s("name"),
-                            ftd::Value::String {
-                                text: s("Hello"),
-                                source: ftd::TextSource::Caption,
-                            },
-                        ),
-                        (s("open"), ftd::Value::Boolean { value: true }),
-                    ])
-                    .collect(),
-                ],
+                invocations: vec![std::iter::IntoIterator::into_iter([
+                    (
+                        s("name"),
+                        ftd::Value::String {
+                            text: s("Hello"),
+                            source: ftd::TextSource::Caption,
+                        },
+                    ),
+                    (s("open"), ftd::Value::Boolean { value: true }),
+                ])
+                .collect()],
                 line_number: 1,
                 ..Default::default()
             }),
@@ -17687,10 +17693,10 @@ mod component {
     use ftd::ftd2021::test::*;
 
     macro_rules! p2 {
-        ($s:expr, $doc: expr_2021, $t: expr_2021,) => {
+        ($s:expr, $doc: expr, $t: expr,) => {
             p2!($s, $doc, $t)
         };
-        ($s:expr, $doc: expr_2021, $t: expr_2021) => {
+        ($s:expr, $doc: expr, $t: expr) => {
             let p1 = ftd::ftd2021::p1::parse(indoc::indoc!($s), $doc.name).unwrap();
             pretty_assertions::assert_eq!(ftd::Component::from_p1(&p1[0], &$doc).unwrap(), $t)
         };
@@ -17798,7 +17804,7 @@ mod component {
     fn caption_body_conflicts() {
         // Caption and Header Value conflict
         intf!(
-            "-- ftd.row A: 
+             "-- ftd.row A: 
             caption message: Default message
             
             -- A: Im the message here 
@@ -17809,7 +17815,7 @@ mod component {
 
         // Caption and Body conflict
         intf!(
-            "-- ftd.row A: 
+             "-- ftd.row A: 
             caption or body msg: 
             
             -- A: Caption will say hello
@@ -18748,10 +18754,10 @@ mod variable {
     use ftd::ftd2021::test::*;
 
     macro_rules! p2 {
-        ($s:expr, $n: expr_2021, $v: expr_2021, $c: expr_2021,) => {
+        ($s:expr, $n: expr, $v: expr, $c: expr,) => {
             p2!($s, $n, $v, $c)
         };
-        ($s:expr, $n: expr_2021, $v: expr_2021, $c: expr_2021) => {
+        ($s:expr, $n: expr, $v: expr, $c: expr) => {
             let p1 = ftd::ftd2021::p1::parse(indoc::indoc!($s), "foo").unwrap();
             let mut bag = ftd::Map::new();
             let aliases = ftd::Map::new();

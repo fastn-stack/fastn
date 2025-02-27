@@ -180,16 +180,13 @@ impl Request {
         let headers = {
             let mut headers = reqwest::header::HeaderMap::new();
             for (key, value) in req.headers() {
-                match (
+                if let (Ok(v), Ok(k)) = (
                     value.to_str().unwrap_or("").parse::<http::HeaderValue>(),
                     http::HeaderName::from_bytes(key.as_str().as_bytes()),
                 ) {
-                    (Ok(v), Ok(k)) => {
-                        headers.insert(k, v.clone());
-                    }
-                    _ => {
-                        tracing::warn!("failed to parse header: {key:?} {value:?}");
-                    }
+                    headers.insert(k, v.clone());
+                } else {
+                    tracing::warn!("failed to parse header: {key:?} {value:?}");
                 }
             }
             headers
@@ -595,15 +592,9 @@ pub fn is_bot(user_agent: &str) -> bool {
 
 #[test]
 fn test_is_bot() {
-    assert!(is_bot(
-        "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm) Chrome/"
-    ));
-    assert!(is_bot(
-        "Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/W.X.Y.Z Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)) Chrome/"
-    ));
-    assert!(!is_bot(
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-    ));
+    assert!(is_bot("Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm) Chrome/"));
+    assert!(is_bot("Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/W.X.Y.Z Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)) Chrome/"));
+    assert!(!is_bot("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"));
 }
 
 pub(crate) fn get_header_key(header_key: &str) -> Option<&str> {

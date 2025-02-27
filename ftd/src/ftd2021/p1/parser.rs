@@ -411,10 +411,10 @@ mod test {
     // invocation of these, instead of inside these, so jumping to failing test
     // is easier.
     macro_rules! p {
-        ($s:expr, $t: expr_2021,) => {
+        ($s:expr, $t: expr,) => {
             p!($s, $t)
         };
-        ($s:expr, $t: expr_2021) => {
+        ($s:expr, $t: expr) => {
             assert_eq!(
                 super::parse($s, "foo")
                     .unwrap_or_else(|e| panic!("{}", e))
@@ -427,10 +427,10 @@ mod test {
     }
 
     macro_rules! f {
-        ($s:expr, $m: expr_2021,) => {
+        ($s:expr, $m: expr,) => {
             f!($s, $m)
         };
-        ($s:expr, $m: expr_2021) => {
+        ($s:expr, $m: expr) => {
             match super::parse($s, "foo") {
                 Ok(r) => panic!("expected failure, found: {:?}", r),
                 Err(e) => {
@@ -656,17 +656,15 @@ mod test {
 
         "
             ),
-            vec![
-                super::Section::with_name("step")
-                    .add_header("method", "GET")
-                    .add_sub_section(
-                        super::SubSection::with_name("realm.rr.activity")
-                            .add_header("okind", "")
-                            .add_header("oid", "")
-                            .add_header("ekind", "")
-                            .and_body("null")
-                    )
-            ]
+            vec![super::Section::with_name("step")
+                .add_header("method", "GET")
+                .add_sub_section(
+                    super::SubSection::with_name("realm.rr.activity")
+                        .add_header("okind", "")
+                        .add_header("oid", "")
+                        .add_header("ekind", "")
+                        .and_body("null")
+                )]
         )
     }
 
@@ -918,10 +916,8 @@ mod test {
 
             "
             ),
-            vec![
-                super::Section::with_name("foo")
-                    .add_sub_section(super::SubSection::with_name("bar").and_body("hello"))
-            ],
+            vec![super::Section::with_name("foo")
+                .add_sub_section(super::SubSection::with_name("bar").and_body("hello"))],
         );
     }
 

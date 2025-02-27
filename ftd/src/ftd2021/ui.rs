@@ -1497,7 +1497,7 @@ impl Element {
                 _ => continue,
             };
             for (condition, value) in conditions {
-                let condition = match condition.to_condition(
+                let condition = if let Ok(condition) = condition.to_condition(
                     0,
                     &ftd::ftd2021::p2::TDoc {
                         name: document.name.as_str(),
@@ -1507,10 +1507,9 @@ impl Element {
                         referenced_local_variables: &mut Default::default(),
                     },
                 ) {
-                    Ok(condition) => condition,
-                    _ => {
-                        continue;
-                    }
+                    condition
+                } else {
+                    continue;
                 };
                 let value = match value.resolve(0, &doc) {
                     Ok(value) => match value.to_serde_value() {

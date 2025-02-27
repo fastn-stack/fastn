@@ -414,16 +414,12 @@ impl PropertyValue {
             } => {
                 assert_eq!(self.kind(), *reference_kind);
                 let (default, condition) =
-                    match doc.get_value_and_conditions(0, reference_name.as_str()) {
-                        Ok(d) => d,
-                        _ => match doc.get_component(0, reference_name.as_str()) {
-                            Ok(d) => {
-                                return d.to_value(reference_kind);
-                            }
-                            _ => {
-                                return reference_kind.to_value(line_number, doc.name);
-                            }
-                        },
+                    if let Ok(d) = doc.get_value_and_conditions(0, reference_name.as_str()) {
+                        d
+                    } else if let Ok(d) = doc.get_component(0, reference_name.as_str()) {
+                        return d.to_value(reference_kind);
+                    } else {
+                        return reference_kind.to_value(line_number, doc.name);
                     };
                 let mut value = default;
                 for (boolean, property) in condition {
@@ -1192,49 +1188,42 @@ fn read_object(
         let line_number = line_number.to_owned();
         let value = if v.trim().starts_with('$') {
             ftd::PropertyValue::resolve_value(line_number, v, None, doc, &Default::default(), None)?
+        } else if let Ok(v) = ftd::PropertyValue::resolve_value(
+            line_number,
+            v,
+            Some(ftd::ftd2021::p2::Kind::decimal()),
+            doc,
+            &Default::default(),
+            None,
+        ) {
+            v
+        } else if let Ok(v) = ftd::PropertyValue::resolve_value(
+            line_number,
+            v,
+            Some(ftd::ftd2021::p2::Kind::boolean()),
+            doc,
+            &Default::default(),
+            None,
+        ) {
+            v
+        } else if let Ok(v) = ftd::PropertyValue::resolve_value(
+            line_number,
+            v,
+            Some(ftd::ftd2021::p2::Kind::integer()),
+            doc,
+            &Default::default(),
+            None,
+        ) {
+            v
         } else {
-            match ftd::PropertyValue::resolve_value(
+            ftd::PropertyValue::resolve_value(
                 line_number,
                 v,
-                Some(ftd::ftd2021::p2::Kind::decimal()),
+                Some(ftd::ftd2021::p2::Kind::string()),
                 doc,
                 &Default::default(),
                 None,
-            ) {
-                Ok(v) => v,
-                _ => {
-                    match ftd::PropertyValue::resolve_value(
-                        line_number,
-                        v,
-                        Some(ftd::ftd2021::p2::Kind::boolean()),
-                        doc,
-                        &Default::default(),
-                        None,
-                    ) {
-                        Ok(v) => v,
-                        _ => {
-                            match ftd::PropertyValue::resolve_value(
-                                line_number,
-                                v,
-                                Some(ftd::ftd2021::p2::Kind::integer()),
-                                doc,
-                                &Default::default(),
-                                None,
-                            ) {
-                                Ok(v) => v,
-                                _ => ftd::PropertyValue::resolve_value(
-                                    line_number,
-                                    v,
-                                    Some(ftd::ftd2021::p2::Kind::string()),
-                                    doc,
-                                    &Default::default(),
-                                    None,
-                                )?,
-                            }
-                        }
-                    }
-                }
-            }
+            )?
         };
         values.insert(k.to_string(), value);
     }
