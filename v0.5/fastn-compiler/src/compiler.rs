@@ -125,21 +125,20 @@ impl Compiler {
         let mut new_content = vec![];
 
         for mut ci in content {
-            let resolved = match ci {
-                fastn_unresolved::UR::UnResolved(ref mut c) => {
-                    let mut needed = Default::default();
-                    let resolved = c.resolve(
-                        &self.definitions,
-                        &mut self.arena,
-                        &mut needed,
-                        &self.main_package,
-                    );
-                    stuck_on_symbols.extend(needed.stuck_on);
-                    self.document
-                        .merge(needed.errors, needed.warnings, needed.comments);
-                    resolved
-                }
-                _ => false,
+            let resolved = if let fastn_unresolved::UR::UnResolved(ref mut c) = ci {
+                let mut needed = Default::default();
+                let resolved = c.resolve(
+                    &self.definitions,
+                    &mut self.arena,
+                    &mut needed,
+                    &self.main_package,
+                );
+                stuck_on_symbols.extend(needed.stuck_on);
+                self.document
+                    .merge(needed.errors, needed.warnings, needed.comments);
+                resolved
+            } else {
+                false
             };
             if resolved {
                 ci.resolve_it(&self.arena)
