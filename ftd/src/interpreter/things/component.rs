@@ -346,7 +346,7 @@ fn get_module_name_and_thing(
                             format!("Expected module, found: {:?}", t),
                             doc.name,
                             module_property.line_number,
-                        )
+                        );
                     }
                 }
             }

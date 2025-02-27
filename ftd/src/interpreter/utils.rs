@@ -120,7 +120,7 @@ pub(crate) fn get_function_name_and_properties(
                 format!("{} is not a function", s),
                 doc_id,
                 line_number,
-            )
+            );
         }
     };
     let function_name = s[..si].to_string();
@@ -440,9 +440,14 @@ pub fn validate_record_value(
     ) -> ftd::interpreter::Result<()> {
         for value in fields.iter() {
             if let Some(reference_name) = value.reference_name() {
-                return ftd::interpreter::utils::e2(format!(
-                    "Currently, reference `{}` to record field  is not supported. Use clone (*) instead", reference_name
-                ), doc.name, value.line_number());
+                return ftd::interpreter::utils::e2(
+                    format!(
+                        "Currently, reference `{}` to record field  is not supported. Use clone (*) instead",
+                        reference_name
+                    ),
+                    doc.name,
+                    value.line_number(),
+                );
             }
 
             if let fastn_resolved::PropertyValue::Value { value, .. } = value {
@@ -840,7 +845,7 @@ pub(crate) fn validate_properties_and_set_default(
                         format!("Expected module, found: {:?}", t),
                         doc_id,
                         line_number,
-                    )
+                    );
                 }
             };
 
