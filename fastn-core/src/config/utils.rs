@@ -56,6 +56,7 @@ pub fn trim_package_name(path: &str, package_name: &str) -> Option<String> {
 // url: /-/<package-name>/api/ => (package-name, endpoints/api/, app or package config)
 // url: /-/<package-name>/api/ => (package-name, endpoints/api/, app or package config)
 pub fn get_clean_url(
+    package: &fastn_core::Package,
     config: &fastn_core::Config,
     url: &str,
 ) -> fastn_core::Result<(
@@ -83,17 +84,17 @@ pub fn get_clean_url(
     };
 
     // This is for current package
-    if let Some(remaining_url) = trim_package_name(url.as_ref(), config.package.name.as_str()) {
-        if config.package.endpoints.is_empty() {
+    if let Some(remaining_url) = trim_package_name(url.as_ref(), package.name.as_str()) {
+        if package.endpoints.is_empty() {
             return Err(fastn_core::Error::GenericError(format!(
                 "package does not contain the endpoints: {:?}",
-                config.package.name
+                package.name
             )));
         }
 
         let mut end_point = None;
         let mut mountpoint = None;
-        for e in config.package.endpoints.iter() {
+        for e in package.endpoints.iter() {
             if remaining_url.starts_with(e.mountpoint.as_str()) {
                 mountpoint = Some(e.mountpoint.to_string());
                 end_point = Some(e.endpoint.to_string());
@@ -116,7 +117,7 @@ pub fn get_clean_url(
     }
 
     // Handle logic for apps
-    for app in config.package.apps.iter() {
+    for app in package.apps.iter() {
         if let Some(ep) = &app.end_point {
             if let Some(remaining_url) = trim_package_name(url.as_ref(), app.package.name.as_str())
             {
@@ -133,8 +134,7 @@ pub fn get_clean_url(
         }
     }
 
-    if let Some(e) = config
-        .package
+    if let Some(e) = package
         .endpoints
         .iter()
         .find(|&endpoint| url.starts_with(&endpoint.mountpoint))

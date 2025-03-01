@@ -477,6 +477,7 @@ impl DocumentStore {
     #[tracing::instrument(skip(self))]
     pub async fn handle_wasm<T>(
         &self,
+        wasm_package: String,
         main_package: String,
         wasm_url: String,
         req: &T,
@@ -492,10 +493,13 @@ impl DocumentStore {
         let wasm_package = wasm_file
             .split_once("/")
             .map(|(x, _)| x.to_string())
-            .unwrap_or_else(|| main_package.clone());
-        let module = self
-            .get_wasm(format!("{wasm_file}.wasm").as_str(), session_id)
-            .await?;
+            .unwrap_or_else(|| wasm_package.clone());
+        let wasm_path = if main_package.ne(&wasm_package) {
+            format!(".packages/{wasm_package}/{wasm_file}.wasm")
+        } else {
+            format!("{wasm_file}.wasm")
+        };
+        let module = self.get_wasm(wasm_path.as_str(), session_id).await?;
         let db_url = self
             .env("DATABASE_URL")
             .await

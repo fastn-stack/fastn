@@ -624,6 +624,7 @@ async fn handle_endpoints(
             .ds
             .handle_wasm(
                 config.package.name.to_string(),
+                config.package.name.to_string(),
                 url,
                 req,
                 app_url,
