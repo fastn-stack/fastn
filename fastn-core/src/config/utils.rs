@@ -141,7 +141,17 @@ pub fn get_clean_url(
     {
         let endpoint_url = e.endpoint.trim_end_matches('/');
         let relative_path = url.trim_start_matches(&e.mountpoint);
-        let full_url = format!("{}/{}", endpoint_url, relative_path);
+
+        let mut full_url = format!("{}/{}", endpoint_url, relative_path);
+        if package.name.ne(&config.package.name) {
+            if let Some(endpoint_url) = endpoint_url.strip_prefix("wasm+proxy://") {
+                full_url = format!(
+                    "wasm+proxy://.packages/{}/{}/{}",
+                    package.name, endpoint_url, relative_path
+                );
+            }
+        }
+
         return Ok((
             url::Url::parse(&full_url)?,
             Some(e.mountpoint.to_string()),
