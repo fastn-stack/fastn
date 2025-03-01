@@ -63,15 +63,27 @@ pub async fn process(
         }
     };
 
+    let package = if let Some(package) = req_config.config.all_packages.get(doc.name) {
+        package.clone()
+    } else if let Some((doc_name, _)) = doc.name.split_once("/-/") {
+        req_config
+            .config
+            .all_packages
+            .get(doc_name)
+            .map(|v| v.clone())
+            .unwrap_or_else(|| req_config.config.package.clone())
+    } else {
+        req_config.config.package.clone()
+    };
+
     let (mut url, mountpoint, mut conf) = {
         let (mut url, mountpoint, conf) =
-            fastn_core::config::utils::get_clean_url(&req_config.config, url.as_str()).map_err(
-                |e| ftd::interpreter::Error::ParseError {
+            fastn_core::config::utils::get_clean_url(&package, &req_config.config, url.as_str())
+                .map_err(|e| ftd::interpreter::Error::ParseError {
                     message: format!("invalid url: {:?}", e),
                     doc_id: doc.name.to_string(),
                     line_number,
-                },
-            )?;
+                })?;
         if !req_config.request.query_string().is_empty() {
             url.set_query(Some(req_config.request.query_string()));
         }
@@ -142,6 +154,7 @@ pub async fn process(
             .config
             .ds
             .handle_wasm(
+                package.name.clone(),
                 req_config.config.package.name.clone(),
                 url.to_string(),
                 &req_config.request,
