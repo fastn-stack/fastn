@@ -154,7 +154,6 @@ pub async fn process(
             .config
             .ds
             .handle_wasm(
-                package.name.clone(),
                 req_config.config.package.name.clone(),
                 url.to_string(),
                 &req_config.request,
