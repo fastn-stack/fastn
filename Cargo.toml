@@ -183,7 +183,7 @@ features = [
 
 [workspace.dependencies.comrak]
 # We use comrak for markup processing.
-version = "0.35"
+version = "0.36"
 # By default, comrak ships with support for syntax highlighting using syntext for "fenced
 # code blocks". We have disabled that by not using default features. We did that because
 # we already have a way to show code in ftd, ftd.code. Further, comark requires syntect 4.6,
