@@ -2079,7 +2079,7 @@ impl<'a> TDoc<'a> {
                     }
                     _ => {
                         return ftd::interpreter::utils::e2(
-                            format!("Can't parse to decimal, found: {}", json),
+                            format!("Can't parse to decimal, found: {json}"),
                             self.name,
                             line_number,
                         );
@@ -2092,7 +2092,7 @@ impl<'a> TDoc<'a> {
                     serde_json::Value::String(s) => {
                         s.parse::<bool>()
                             .map_err(|_| ftd::interpreter::Error::ParseError {
-                                message: format!("Can't parse to boolean, found: {}", json),
+                                message: format!("Can't parse to boolean, found: {json}"),
                                 doc_id: self.name.to_string(),
                                 line_number,
                             })?
@@ -2119,7 +2119,7 @@ impl<'a> TDoc<'a> {
                     }
                     _ => {
                         return ftd::interpreter::utils::e2(
-                            format!("Can't parse to boolean, found: {}", json),
+                            format!("Can't parse to boolean, found: {json}"),
                             self.name,
                             line_number,
                         );
@@ -2176,7 +2176,7 @@ impl<'a> TDoc<'a> {
                         );
                     } else {
                         return ftd::interpreter::utils::e2(
-                            format!("expected object of record type, found: {}", json),
+                            format!("expected object of record type1 {name}, found: {json}"),
                             self.name,
                             line_number,
                         );
@@ -2184,7 +2184,7 @@ impl<'a> TDoc<'a> {
                 } else {
                     // Todo: Handle default_value
                     return ftd::interpreter::utils::e2(
-                        format!("expected object of record type, found: {}", json),
+                        format!("expected object of record type2 {name}, found: {json}"),
                         self.name,
                         line_number,
                     );

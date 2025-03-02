@@ -696,7 +696,7 @@ impl TDoc<'_> {
                     }
                 } else {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("expected object of record type, found: {}", json),
+                        format!("expected object of record type {name}, found: {json}"),
                         self.name,
                         line_number,
                     );
