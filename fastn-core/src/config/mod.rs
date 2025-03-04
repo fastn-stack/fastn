@@ -148,8 +148,17 @@ impl RequestConfig {
             } else {
                 let (path_with_package_name, sanitized_package, sanitized_path) =
                     match self.config.get_mountpoint_sanitized_path(path) {
-                        Some((new_path, package, remaining_path, _)) => {
+                        Some((new_path, package, remaining_path, app)) => {
                             // Update the sitemap of the package, if it does not contain the sitemap information
+                            if let Some(app) = app {
+                                let mut headers: std::collections::HashMap<String, String> =
+                                    Default::default();
+                                headers.insert(
+                                    fastn_wasm::FASTN_APP_URL_HEADER.to_string(),
+                                    app.mount_point.to_string(),
+                                );
+                                self.request.set_headers(&headers);
+                            }
                             new_path1 = new_path;
                             if package.name != self.config.package.name {
                                 package1 = self
