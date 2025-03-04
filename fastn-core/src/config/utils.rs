@@ -57,7 +57,7 @@ pub fn trim_package_name(path: &str, package_name: &str) -> Option<String> {
 // url: /-/<package-name>/api/ => (package-name, endpoints/api/, app or package config)
 pub fn get_clean_url(
     package: &fastn_core::Package,
-    config: &fastn_core::Config,
+    req_config: &fastn_core::RequestConfig,
     url: &str,
 ) -> fastn_core::Result<(
     url::Url,
@@ -77,7 +77,8 @@ pub fn get_clean_url(
     let url = if url.starts_with("/-/") || url.starts_with("-/") {
         cow_1
     } else {
-        config
+        req_config
+            .config
             .get_mountpoint_sanitized_path(url)
             .map(|(u, _, _, _)| u)
             .unwrap_or_else(|| cow_1) // TODO: Error possibly, in that return 404 from proxy
@@ -143,7 +144,7 @@ pub fn get_clean_url(
         let relative_path = url.trim_start_matches(&e.mountpoint);
 
         let mut full_url = format!("{}/{}", endpoint_url, relative_path);
-        if package.name.ne(&config.package.name) {
+        if package.name.ne(&req_config.config.package.name) {
             if let Some(endpoint_url) = endpoint_url.strip_prefix("wasm+proxy://") {
                 full_url = format!(
                     "wasm+proxy://.packages/{}/{}/{}",
@@ -152,9 +153,19 @@ pub fn get_clean_url(
             }
         }
 
+        let mut mount_point = e.mountpoint.to_string();
+
+        if let Some(value) = req_config
+            .request
+            .headers()
+            .get(fastn_wasm::FASTN_APP_URL_HEADER)
+        {
+            mount_point = value.to_str().unwrap().to_string();
+        }
+
         return Ok((
             url::Url::parse(&full_url)?,
-            Some(e.mountpoint.to_string()),
+            Some(mount_point),
             std::collections::HashMap::new(),
         ));
     }
