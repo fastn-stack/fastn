@@ -306,6 +306,29 @@ skip: true
     - Hero with social icons: /hero-with-social/
       skip: true
       document: /featured/sections/heros/hero-with-social.ftd
+  - Stepper Components: /steppers/
+    document: /featured/sections/steppers/index.ftd
+    - Stepper with border box: /stepper-border-box/
+      skip: true
+      document: /featured/sections/steppers/stepper-border-box.ftd
+    - Stepper with left image: /stepper-left-image/
+      skip: true
+      document: /featured/sections/steppers/stepper-left-image.ftd
+    - Stepper with left right image: /stepper-left-right/
+      skip: true
+      document: /featured/sections/steppers/stepper-left-right.ftd
+    - Stepper with step: /stepper-step/
+      skip: true
+      document: /featured/sections/steppers/stepper-step.ftd
+    - Stepper with background: /stepper-background/
+      skip: true
+      document: /featured/sections/steppers/stepper-background.ftd
+    - Stepper box: /stepper-box/
+      skip: true
+      document: /featured/sections/steppers/stepper-box.ftd
+    - Base Stepper: /base-stepper/
+      skip: true
+      document: /featured/sections/steppers/base-stepper.ftd
   - Key Value Tables: /featured/sections/kvt/
     - Key Value Table 1: /featured/sections/kvt/kvt-1/
       skip: true

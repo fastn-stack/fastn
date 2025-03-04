@@ -14,6 +14,11 @@ templates: $heros
 more-link-text: View more
 more-link: /heros/
 
+-- ft-ui.grid-view: Stepper Components
+templates: $steppers
+more-link-text: View more
+more-link: /steppers/
+
 -- ft-ui.grid-view: Key Value Tables
 templates: $kvt
 ;;more-link-text: View more
@@ -50,6 +55,26 @@ template-url: /hero-right-hug-large/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-2.png
 
 -- end: heros
+
+
+
+
+
+-- ft-ui.template-data list steppers:
+
+-- ft-ui.template-data: Stepper with border box
+template-url: /stepper-border-box/
+screenshot: $fastn-assets.files.images.featured.sections.steppers.stepper-border-box.png
+
+-- ft-ui.template-data: Stepper with left image
+template-url: /stepper-left-image/
+screenshot: $fastn-assets.files.images.featured.sections.steppers.stepper-left-image.png
+
+-- ft-ui.template-data: Stepper with left right image
+template-url: /stepper-left-right/
+screenshot: $fastn-assets.files.images.featured.sections.steppers.stepper-left-right.png
+
+-- end: steppers
 
 
 

@@ -1,0 +1,45 @@
+-- import: fastn.com/featured as ft-ui
+
+-- ds.page:
+sidebar: false
+
+-- ft-ui.view-all: Stepper Components
+templates: $steppers
+
+-- end: ds.page
+
+
+
+
+
+-- ft-ui.template-data list steppers:
+
+-- ft-ui.template-data: Stepper with border box
+template-url: /stepper-border-box/
+screenshot: $fastn-assets.files.images.featured.sections.steppers.stepper-border-box.png
+
+-- ft-ui.template-data: Stepper with left image
+template-url: /stepper-left-image/
+screenshot: $fastn-assets.files.images.featured.sections.steppers.stepper-left-image.png
+
+-- ft-ui.template-data: Stepper with left right image
+template-url: /stepper-left-right/
+screenshot: $fastn-assets.files.images.featured.sections.steppers.stepper-left-right.png
+
+-- ft-ui.template-data: Stepper with step
+template-url: /stepper-step/
+screenshot: $fastn-assets.files.images.featured.sections.steppers.stepper-step.png
+
+-- ft-ui.template-data: Stepper with background
+template-url: /stepper-background/
+screenshot: $fastn-assets.files.images.featured.sections.steppers.stepper-background.png
+
+-- ft-ui.template-data: Stepper box
+template-url: /stepper-box/
+screenshot: $fastn-assets.files.images.featured.sections.steppers.stepper-box.png
+
+-- ft-ui.template-data: Base Stepper
+template-url: /base-stepper/
+screenshot: $fastn-assets.files.images.featured.sections.steppers.base-stepper.png
+
+-- end: steppers

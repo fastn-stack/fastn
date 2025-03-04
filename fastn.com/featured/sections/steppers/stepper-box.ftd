@@ -1,0 +1,41 @@
+-- import: fastn.com/u/meenu-kumari
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Stepper box
+featured-link: /steppers/
+category: Featured Stepper Components
+image: $fastn-assets.files.images.featured.sections.steppers.stepper-box.png
+owners: [$meenu-kumari.info]
+license-url: stepper.fifthtry.site
+license: Creative Commons
+published-date: 31-Aug-2023
+cards: $steppers
+demo-link: stepper.fifthtry.site
+
+
+
+
+
+
+
+
+
+-- ft-ui.template-data list steppers:
+
+-- ft-ui.template-data: Stepper with border box
+template-url: /stepper-border-box/
+screenshot: $fastn-assets.files.images.featured.sections.steppers.stepper-border-box.png
+
+-- ft-ui.template-data: Stepper with left image
+template-url: /stepper-left-image/
+screenshot: $fastn-assets.files.images.featured.sections.steppers.stepper-left-image.png
+
+-- ft-ui.template-data: Stepper with left right image
+template-url: /stepper-left-right/
+screenshot: $fastn-assets.files.images.featured.sections.steppers.stepper-left-right.png
+
+-- ft-ui.template-data: Stepper with step
+template-url: /stepper-step/
+screenshot: $fastn-assets.files.images.featured.sections.steppers.stepper-step.png
+
+-- end: steppers
