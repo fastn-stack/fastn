@@ -78,7 +78,7 @@ pub async fn process(
 
     let (mut url, mountpoint, mut conf) = {
         let (mut url, mountpoint, conf) =
-            fastn_core::config::utils::get_clean_url(&package, &req_config, url.as_str()).map_err(
+            fastn_core::config::utils::get_clean_url(&package, req_config, url.as_str()).map_err(
                 |e| ftd::interpreter::Error::ParseError {
                     message: format!("invalid url: {:?}", e),
                     doc_id: doc.name.to_string(),
