@@ -19,6 +19,12 @@ templates: $steppers
 more-link-text: View more
 more-link: /steppers/
 
+
+-- ft-ui.grid-view: Accordion Components
+templates: $accordions
+more-link-text: View more
+more-link: /accordions/
+
 -- ft-ui.grid-view: Key Value Tables
 templates: $kvt
 ;;more-link-text: View more
@@ -75,6 +81,16 @@ template-url: /stepper-left-right/
 screenshot: $fastn-assets.files.images.featured.sections.steppers.stepper-left-right.png
 
 -- end: steppers
+
+
+
+-- ft-ui.template-data list accordions:
+
+-- ft-ui.template-data: Accordion
+template-url: /accordion/
+screenshot: $fastn-assets.files.images.featured.sections.accordions.accordion.png
+
+-- end: accordions
 
 
 
