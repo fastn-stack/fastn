@@ -329,6 +329,11 @@ skip: true
     - Base Stepper: /base-stepper/
       skip: true
       document: /featured/sections/steppers/base-stepper.ftd
+  - Accordion Components: /accordions/
+    document: /featured/sections/accordions/index.ftd
+    - Accordion: /accordion/
+      skip: true
+      document: /featured/sections/accordions/accordion.ftd
   - Key Value Tables: /featured/sections/kvt/
     - Key Value Table 1: /featured/sections/kvt/kvt-1/
       skip: true
