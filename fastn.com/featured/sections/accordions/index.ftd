@@ -16,6 +16,6 @@ templates: $accordions
 
 -- ft-ui.template-data: Accordion
 template-url: /accordion/
-screenshot: $fastn-assets.files.images.featured.sections.steppers.stepper-border-box.png
+screenshot: $fastn-assets.files.images.featured.sections.accordions.accordion.png
 
 -- end: accordions
