@@ -3,32 +3,6 @@ pub(crate) fn fastn_migrations() -> Vec<fastn_core::package::MigrationData> {
         number: 0,
         name: "initial".to_string(),
         content: r#"
-            CREATE TABLE IF NOT EXISTS fastn_user
-            (
-                id           INTEGER PRIMARY KEY,
-                name         TEXT,
-                identity     TEXT    UNIQUE,
-                data         TEXT    NOT NULL,
-                created_at   INTEGER NOT NULL,
-                updated_at   INTEGER NOT NULL
-            ) STRICT;
-
-
-            CREATE TABLE IF NOT EXISTS fastn_session
-            (
-                id         TEXT    NOT NULL PRIMARY KEY,
-                uid        INTEGER,
-                data       TEXT    NOT NULL,
-                created_at INTEGER NOT NULL,
-                updated_at INTEGER NOT NULL,
-                expires_at INTEGER,
-
-                CONSTRAINT fk_fastn_user
-                FOREIGN KEY (uid)
-                REFERENCES fastn_user (id)
-            ) STRICT;
-
-
             CREATE TABLE IF NOT EXISTS fastn_email_queue
             (
                 id           INTEGER           PRIMARY KEY,
