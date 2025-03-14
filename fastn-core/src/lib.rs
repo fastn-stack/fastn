@@ -1,6 +1,6 @@
 #![recursion_limit = "256"]
 #![deny(unused_extern_crates)]
-#![warn(unused_extern_crates)]
+#![deny(unused_crate_dependencies)]
 
 extern crate self as fastn_core;
 

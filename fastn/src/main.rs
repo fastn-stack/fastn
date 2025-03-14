@@ -1,3 +1,4 @@
+#![deny(unused_extern_crates)]
 #![deny(unused_crate_dependencies)]
 
 pub fn main() {

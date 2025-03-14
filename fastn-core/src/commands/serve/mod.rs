@@ -1,3 +1,6 @@
+#[cfg(feature = "fastn-net")]
+mod iroh;
+
 #[tracing::instrument(skip_all)]
 fn handle_redirect(
     config: &fastn_core::Config,
@@ -729,6 +732,16 @@ pub async fn listen(
 ) -> fastn_core::Result<()> {
     use colored::Colorize;
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
+
+    #[cfg(feature = "fastn-net")]
+    {
+        let config = std::sync::Arc::clone(&config);
+        tokio::spawn(async move {
+            if let Err(e) = fastn_core::commands::serve::iroh::init(config).await {
+                eprintln!("Error in iroh: {e}");
+            }
+        });
+    }
 
     let tcp_listener = match fastn_core::http::get_available_port(port, bind_address) {
         Some(listener) => listener,

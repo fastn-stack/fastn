@@ -9,7 +9,7 @@ homepage.workspace = true
 
 [features]
 default = ["fifthtry", "use-config-json"]
-
+fastn-net = ["fastn-core/fastn-net"]
 fifthtry = ["clift"]
 use-config-json = []
 
