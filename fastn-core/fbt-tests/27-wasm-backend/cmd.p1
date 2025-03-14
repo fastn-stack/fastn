@@ -1,5 +1,5 @@
 -- fbt:
-cmd: cd amitu && FPM_SUPABASE_BASE_URL=a FPM_SUPABASE_API_KEY=b $FBT_CWD/../target/release/fastn --test build --test
+cmd: cd amitu && FPM_SUPABASE_BASE_URL=a FPM_SUPABASE_API_KEY=b $FBT_CWD/../target/debug/fastn --test build --test
 output: amitu/.build
 skip: wasm is not yet implemented
 

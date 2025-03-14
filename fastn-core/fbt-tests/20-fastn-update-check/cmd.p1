@@ -1,5 +1,5 @@
 -- fbt:
-cmd: $FBT_CWD/../target/release/fastn --test update --check
+cmd: $FBT_CWD/../target/debug/fastn --test update --check
 exit-code: 7
 
 -- stdout:
