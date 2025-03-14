@@ -132,7 +132,7 @@ role: $inherited.types.copy-regular
 -- ftd.text: Checkout out our
 
 -- ftd.text: blog post to learn more
-link: https://fastn.io/blog/web-components/
+link: https://fastn.com/blog/web-components/
 
 -- end: ftd.row
 

@@ -282,7 +282,7 @@ fn app(version: &'static str) -> clap::Command {
             clap::Command::new("fmt")
                 .about("Format the fastn package")
                 .arg(clap::arg!(file: [FILE]... "The file to format").required(false))
-                .arg(clap::arg!(-i --noidentation "No identation added to file/package").required(false))
+                .arg(clap::arg!(-i --noindentation "No indentation added to file/package").required(false))
         )
         .subcommand(
             clap::Command::new("wasmc")
@@ -335,7 +335,7 @@ mod sub_command {
             .about("Serve package content over HTTP")
             .after_help("fastn packages can have dynamic features. If your package uses any \
             dynamic feature, then you want to use `fastn serve` instead of `fastn build`.\n\n\
-            Read more about it on https://fastn.io/serve/")
+            Read more about it on https://fastn.com/")
             .arg(clap::arg!(--port <PORT> "The port to listen on [default: first available port starting 8000]"))
             .arg(clap::arg!(--bind <ADDRESS> "The address to bind to").default_value("127.0.0.1"))
             .arg(clap::arg!(--edition <EDITION> "The FTD edition"))
