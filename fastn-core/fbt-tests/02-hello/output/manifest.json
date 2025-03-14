@@ -12,10 +12,10 @@
     },
     "index.ftd": {
       "name": "index.ftd",
-      "checksum": "0A0BF8A949025BA3F05B9D86F4302C9CCC90240E5B542584CDFCB1582677B760",
-      "size": 1045
+      "checksum": "536FAE635E32F503D3B1426E242129BAD7DD2BFE05507F804288B3832B8C04CB",
+      "size": 1049
     }
   },
   "zip_url": "https://codeload.github.com/amitu/dotcom/zip/refs/heads/main",
-  "checksum": "81D50921C5CA5A41C4B44C155D06F6F3DC5AAB8B1D819474362AD3E17829B26C"
+  "checksum": "62B85C7929CE726E320DE9E06022F044EAF6CE24A614E8912E2EC6D971359B90"
 }

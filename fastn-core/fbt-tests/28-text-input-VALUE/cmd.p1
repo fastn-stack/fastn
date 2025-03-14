@@ -1,5 +1,5 @@
 -- fbt:
-cmd: $FBT_CWD/../target/debug/fastn --test build
+cmd: $FBT_CWD/../target/release/fastn --test build
 output: .build
 
 -- stdout:

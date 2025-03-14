@@ -174,7 +174,12 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
     let config = fastn_core::Config::read(ds, true, &None).await?;
 
     if let Some(fmt) = matches.subcommand_matches("fmt") {
-        return fastn_core::fmt(&config, fmt.value_of_("file"), fmt.get_flag("noidentation")).await;
+        return fastn_core::fmt(
+            &config,
+            fmt.value_of_("file"),
+            fmt.get_flag("noindentation"),
+        )
+        .await;
     }
 
     if let Some(wasmc) = matches.subcommand_matches("wasmc") {
