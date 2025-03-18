@@ -27,10 +27,17 @@ pub enum Error {
 async fn async_main() -> Result<(), Error> {
     #[allow(unused_mut)]
     let mut app = app(version());
+
     #[cfg(feature = "fifthtry")]
     {
         app = clift::attach_cmd(app);
     }
+
+    #[cfg(feature = "fastn-net")]
+    {
+        app = fastn_core::iroh::attach_cmd(app);
+    }
+
     let matches = app.get_matches();
 
     set_env_vars(matches.subcommand_matches("test").is_some());
@@ -54,6 +61,12 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
     #[cfg(feature = "fifthtry")]
     if matches.subcommand_matches("upload").is_some() {
         clift::upload(matches).await;
+        return Ok(());
+    }
+
+    #[cfg(feature = "fastn-net")]
+    if matches.subcommand_matches("proxy").is_some() {
+        fastn_core::iroh::proxy(matches).await?;
         return Ok(());
     }
 
@@ -275,11 +288,11 @@ fn app(version: &'static str) -> clap::Command {
                 .arg(clap::arg!(--"check-build" "Checks .build for index files validation."))
                 .arg(clap::arg!(--"external-js" <URL> "Script added in ftd files")
                     .action(clap::ArgAction::Append))
-                .arg(clap::arg!(--"js" <URL> "Script text added in ftd files")
+                .arg(clap::arg!(--js <URL> "Script text added in ftd files")
                     .action(clap::ArgAction::Append))
                 .arg(clap::arg!(--"external-css" <URL> "CSS added in ftd files")
                     .action(clap::ArgAction::Append))
-                .arg(clap::arg!(--"css" <URL> "CSS text added in ftd files")
+                .arg(clap::arg!(--css <URL> "CSS text added in ftd files")
                     .action(clap::ArgAction::Append))
                 .arg(clap::arg!(--edition <EDITION> "The FTD edition"))
                 .arg(clap::arg!(--offline "Disables automatic package update checks to operate in offline mode"))
@@ -303,15 +316,15 @@ fn app(version: &'static str) -> clap::Command {
                 .arg(clap::arg!(--"headless" "Run the test in headless mode"))
                 .arg(clap::arg!(--"external-js" <URL> "Script added in ftd files")
                     .action(clap::ArgAction::Append))
-                .arg(clap::arg!(--"js" <URL> "Script text added in ftd files")
+                .arg(clap::arg!(--js <URL> "Script text added in ftd files")
                     .action(clap::ArgAction::Append))
                 .arg(clap::arg!(--"external-css" <URL> "CSS added in ftd files")
                     .action(clap::ArgAction::Append))
-                .arg(clap::arg!(--"css" <URL> "CSS text added in ftd files")
+                .arg(clap::arg!(--css <URL> "CSS text added in ftd files")
                     .action(clap::ArgAction::Append))
                 .arg(clap::arg!(--edition <EDITION> "The FTD edition"))
-                .arg(clap::arg!(--"script" "Generates a script file (for debugging purposes)"))
-                .arg(clap::arg!(--"verbose" "To provide more better logs (for debugging purposes)"))
+                .arg(clap::arg!(--script "Generates a script file (for debugging purposes)"))
+                .arg(clap::arg!(--verbose "To provide more better logs (for debugging purposes)"))
                 .arg(clap::arg!(--offline "Disables automatic package update checks to operate in offline mode"))
         )
         .subcommand(
@@ -347,11 +360,11 @@ mod sub_command {
             .arg(clap::arg!(--edition <EDITION> "The FTD edition"))
             .arg(clap::arg!(--"external-js" <URL> "Script added in ftd files")
                 .action(clap::ArgAction::Append))
-            .arg(clap::arg!(--"js" <URL> "Script text added in ftd files")
+            .arg(clap::arg!(--js <URL> "Script text added in ftd files")
                 .action(clap::ArgAction::Append))
             .arg(clap::arg!(--"external-css" <URL> "CSS added in ftd files")
                 .action(clap::ArgAction::Append))
-            .arg(clap::arg!(--"css" <URL> "CSS text added in ftd files")
+            .arg(clap::arg!(--css <URL> "CSS text added in ftd files")
                 .action(clap::ArgAction::Append))
             .arg(clap::arg!(--"download-base-url" <URL> "If running without files locally, download needed files from here"))
             .arg(clap::arg!(--offline "Disables automatic package update checks to operate in offline mode"));

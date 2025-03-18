@@ -1,6 +1,3 @@
-#[cfg(feature = "fastn-net")]
-mod iroh;
-
 #[tracing::instrument(skip_all)]
 fn handle_redirect(
     config: &fastn_core::Config,
@@ -737,7 +734,7 @@ pub async fn listen(
     {
         let config = std::sync::Arc::clone(&config);
         tokio::spawn(async move {
-            if let Err(e) = fastn_core::commands::serve::iroh::init(config).await {
+            if let Err(e) = fastn_core::iroh::server::init(config).await {
                 eprintln!("Error in iroh: {e}");
             }
         });

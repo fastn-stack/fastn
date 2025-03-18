@@ -12,6 +12,8 @@ mod config;
 pub mod doc;
 mod file;
 mod font;
+#[cfg(feature = "fastn-net")]
+pub mod iroh;
 pub mod manifest;
 pub mod package;
 #[macro_use]
