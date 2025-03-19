@@ -35,7 +35,7 @@ async fn async_main() -> Result<(), Error> {
 
     #[cfg(feature = "fastn-net")]
     {
-        app = fastn_core::iroh::attach_cmd(app);
+        app = fastn_core::iroh::cmd::attach(app);
     }
 
     let matches = app.get_matches();
@@ -51,7 +51,6 @@ async fn async_main() -> Result<(), Error> {
 }
 
 async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
-    // use colored::Colorize;
     use fastn_core::utils::ValueOf;
 
     if matches.subcommand_name().is_none() {
@@ -66,8 +65,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
 
     #[cfg(feature = "fastn-net")]
     if matches.subcommand_matches("proxy").is_some() {
-        fastn_core::iroh::proxy(matches).await?;
-        return Ok(());
+        return fastn_core::iroh::cmd::parse(matches)?.run().await;
     }
 
     let pg_pools: actix_web::web::Data<scc::HashMap<String, deadpool_postgres::Pool>> =

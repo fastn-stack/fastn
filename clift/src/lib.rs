@@ -19,37 +19,40 @@ pub fn attach_cmd(cmd: clap::Command) -> clap::Command {
 }
 
 pub async fn upload(matches: &clap::ArgMatches) {
-    if let Some(upload) = matches.subcommand_matches("upload") {
-        let site = upload.get_one::<String>("site-slug").unwrap();
-        let file = upload.get_one::<String>("file");
-        let folder = upload.get_one::<String>("folder");
-        let dry_run = *upload.get_one::<bool>("dry-run").unwrap_or(&false);
+    let upload = matches
+        .subcommand_matches("upload")
+        .expect("this function is only called after this check in main");
+    let site = upload
+        .get_one::<String>("site-slug")
+        .expect("this is a required argument");
+    let file = upload.get_one::<String>("file");
+    let folder = upload.get_one::<String>("folder");
+    let dry_run = *upload.get_one::<bool>("dry-run").unwrap_or(&false);
 
-        if file.is_some() && folder.is_some() {
-            eprintln!("both --file and --folder can not be specified");
-            return;
-        }
+    if file.is_some() && folder.is_some() {
+        eprintln!("both --file and --folder can not be specified");
+        return;
+    }
 
-        if let Some(file) = file {
-            if let Err(e) = clift::commands::upload_file(site, file, dry_run).await {
-                eprintln!("Upload failed: {e}");
-                std::process::exit(1);
-            }
-            return;
-        }
-
-        if let Some(folder) = folder {
-            if let Err(e) = clift::commands::upload_folder(site, folder, dry_run).await {
-                eprintln!("Upload failed: {e}");
-                std::process::exit(1);
-            }
-
-            return;
-        }
-
-        if let Err(e) = clift::commands::upload_folder(site, "", dry_run).await {
+    if let Some(file) = file {
+        if let Err(e) = clift::commands::upload_file(site, file, dry_run).await {
             eprintln!("Upload failed: {e}");
             std::process::exit(1);
         }
+        return;
+    }
+
+    if let Some(folder) = folder {
+        if let Err(e) = clift::commands::upload_folder(site, folder, dry_run).await {
+            eprintln!("Upload failed: {e}");
+            std::process::exit(1);
+        }
+
+        return;
+    }
+
+    if let Err(e) = clift::commands::upload_folder(site, "", dry_run).await {
+        eprintln!("Upload failed: {e}");
+        std::process::exit(1);
     }
 }
