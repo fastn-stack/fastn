@@ -19,6 +19,11 @@ templates: $steppers
 more-link-text: View more
 more-link: /steppers/
 
+-- ft-ui.grid-view: Testimonial Components
+templates: $testimonials
+more-link-text: View more
+more-link: /testimonials/
+
 -- ft-ui.grid-view: Key Value Tables
 templates: $kvt
 ;;more-link-text: View more
@@ -75,6 +80,25 @@ template-url: /stepper-left-right/
 screenshot: $fastn-assets.files.images.featured.sections.steppers.stepper-left-right.png
 
 -- end: steppers
+
+
+
+
+-- ft-ui.template-data list testimonials:
+
+-- ft-ui.template-data: Testimonial Nav Card
+template-url: /testimonial-nav-card/
+screenshot: $fastn-assets.files.images.featured.sections.testimonials.testimonial-nav-card.png
+
+-- ft-ui.template-data: Testimonial Square Card
+template-url: /testimonial-square-card/
+screenshot: $fastn-assets.files.images.featured.sections.testimonials.testimonial-square-card.png
+
+-- ft-ui.template-data: Testimonial Card
+template-url: /testimonial-card/
+screenshot: $fastn-assets.files.images.featured.sections.testimonials.testimonial-card.png
+
+-- end: testimonials
 
 
 
