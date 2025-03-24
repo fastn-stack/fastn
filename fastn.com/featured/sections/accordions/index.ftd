@@ -1,0 +1,21 @@
+-- import: fastn.com/featured as ft-ui
+
+-- ds.page:
+sidebar: false
+
+-- ft-ui.view-all: Accordion Components
+templates: $accordions
+
+-- end: ds.page
+
+
+
+
+
+-- ft-ui.template-data list accordions:
+
+-- ft-ui.template-data: Accordion
+template-url: /accordion/
+screenshot: $fastn-assets.files.images.featured.sections.accordions.accordion.png
+
+-- end: accordions

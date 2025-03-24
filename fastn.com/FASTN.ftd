@@ -340,6 +340,11 @@ skip: true
     - Testimonial Square Card: /testimonial-square-card/
       skip: true
       document: /featured/sections/testimonials/testimonial-square-card.ftd
+  - Accordion Components: /accordions/
+    document: /featured/sections/accordions/index.ftd
+    - Accordion: /accordion/
+      skip: true
+      document: /featured/sections/accordions/accordion.ftd
   - Key Value Tables: /featured/sections/kvt/
     - Key Value Table 1: /featured/sections/kvt/kvt-1/
       skip: true
