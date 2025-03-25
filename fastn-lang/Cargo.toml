@@ -3,6 +3,7 @@ name = "fastn-lang"
 version = "0.1.0"
 authors = ["Amit Upadhyay <upadhyay@gmail.com>"]
 edition = "2018"
+rust-version.workspace = true
 
 [dependencies]
 accept-language.workspace = true

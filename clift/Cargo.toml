@@ -2,7 +2,7 @@
 name = "clift"
 version = "0.1.6"
 edition.workspace = true
-
+rust-version.workspace = true
 
 [dependencies]
 clap.workspace = true

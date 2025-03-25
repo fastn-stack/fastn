@@ -6,6 +6,7 @@ edition.workspace = true
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
+rust-version.workspace = true
 
 [lib]
 crate-type = ["cdylib"]
@@ -17,7 +18,7 @@ native = ["winit", "env_logger", "log", "wgpu", "render", "pretty"]
 # render feature will be enabled only when we want to do native rendering, which is when terminal and native is set
 render = []
 terminal = ["render", "taffy", "pretty"]
-browser = ["wasm-bindgen", "web-sys" ]
+browser = ["wasm-bindgen", "web-sys"]
 
 [dependencies]
 async-trait.workspace = true
