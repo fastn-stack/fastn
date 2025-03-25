@@ -143,10 +143,6 @@ pub enum Error {
 
     #[error("MigrationError: {0}")]
     MigrationError(#[from] fastn_core::migrations::MigrationError),
-
-    #[cfg(feature = "fastn-net")]
-    #[error("anyhow: {0}")]
-    AnyhowError(#[from] anyhow::Error),
 }
 
 impl From<std::convert::Infallible> for Error {

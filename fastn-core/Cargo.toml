@@ -11,20 +11,17 @@ rust-version.workspace = true
 [features]
 default = ["use-config-json"]
 use-config-json = []
-fastn-net = ["iroh", "anyhow", "hyper", "hyper-util", "http-body-util"]
 
 [dependencies]
 actix-http.workspace = true
 actix-web.workspace = true
 antidote.workspace = true
-anyhow = { workspace = true, optional = true }
 async-recursion.workspace = true
 async-trait.workspace = true
 bytes.workspace = true
 camino.workspace = true
 chrono.workspace = true
 clap.workspace = true
-iroh = { workspace = true, optional = true }
 colored.workspace = true
 deadpool.workspace = true
 diffy.workspace = true
@@ -46,9 +43,6 @@ futures-core.workspace = true
 futures-util.workspace = true
 futures.workspace = true
 http.workspace = true
-hyper = { workspace = true, optional = true }
-hyper-util = { workspace = true, optional = true }
-http-body-util = { workspace = true, optional = true }
 ignore.workspace = true
 indoc.workspace = true
 itertools.workspace = true

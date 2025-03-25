@@ -33,11 +33,6 @@ async fn async_main() -> Result<(), Error> {
         app = clift::attach_cmd(app);
     }
 
-    #[cfg(feature = "fastn-net")]
-    {
-        app = fastn_core::iroh::cmd::attach(app);
-    }
-
     let matches = app.get_matches();
 
     set_env_vars(matches.subcommand_matches("test").is_some());
@@ -61,11 +56,6 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
     if matches.subcommand_matches("upload").is_some() {
         clift::upload(matches).await;
         return Ok(());
-    }
-
-    #[cfg(feature = "fastn-net")]
-    if matches.subcommand_matches("proxy").is_some() {
-        return fastn_core::iroh::cmd::parse(matches)?.run().await;
     }
 
     let pg_pools: actix_web::web::Data<scc::HashMap<String, deadpool_postgres::Pool>> =
