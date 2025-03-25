@@ -329,6 +329,17 @@ skip: true
     - Base Stepper: /base-stepper/
       skip: true
       document: /featured/sections/steppers/base-stepper.ftd
+  - Testimonial Components: /testimonials/
+    document: /featured/sections/testimonials/index.ftd
+    - Testimonial Nav Card: /testimonial-nav-card/
+      skip: true
+      document: /featured/sections/testimonials/testimonial-nav-card.ftd
+    - Testimonial Card: /testimonial-card/
+      skip: true
+      document: /featured/sections/testimonials/testimonial-card.ftd
+    - Testimonial Square Card: /testimonial-square-card/
+      skip: true
+      document: /featured/sections/testimonials/testimonial-square-card.ftd
   - Accordion Components: /accordions/
     document: /featured/sections/accordions/index.ftd
     - Accordion: /accordion/

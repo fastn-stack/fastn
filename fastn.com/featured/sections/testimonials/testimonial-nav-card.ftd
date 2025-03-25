@@ -1,0 +1,41 @@
+-- import: fastn.com/u/meenu-kumari
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Testimonial Nav Card
+featured-link: /testimonials/
+category: Featured Testimonial Components
+image: $fastn-assets.files.images.featured.sections.testimonials.testimonial-nav-card.png
+owners: [$meenu-kumari.info]
+license-url: testimonial.fifthtry.site
+license: Creative Commons
+published-date: 31-Aug-2023
+cards: $testimonials
+demo-link: testimonial.fifthtry.site
+
+
+
+
+
+
+
+
+
+-- ft-ui.template-data list testimonials:
+
+-- ft-ui.template-data: Testimonial Square Card
+template-url: /testimonial-square-card/
+screenshot: $fastn-assets.files.images.featured.sections.testimonials.testimonial-square-card.png
+
+-- ft-ui.template-data: Testimonial Card
+template-url: /testimonial-card/
+screenshot: $fastn-assets.files.images.featured.sections.testimonials.testimonial-card.png
+
+-- ft-ui.template-data: Stepper with left right image
+template-url: /stepper-left-right/
+screenshot: $fastn-assets.files.images.featured.sections.steppers.stepper-left-right.png
+
+-- ft-ui.template-data: Stepper with step
+template-url: /stepper-step/
+screenshot: $fastn-assets.files.images.featured.sections.steppers.stepper-step.png
+
+-- end: testimonials
