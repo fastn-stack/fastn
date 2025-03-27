@@ -173,6 +173,12 @@ multiline: true
 	
 -- end: ds.output
 
+-- ds.h2: `autofocus: bool`
+
+The default value of this attribute is false.
+
+Indicates that the input should be focused on page load.
+
 
 -- ds.h2: `enabled: optional boolean`
 
