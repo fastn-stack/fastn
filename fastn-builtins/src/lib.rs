@@ -11206,6 +11206,13 @@ pub fn text_input_function() -> fastn_resolved::ComponentDefinition {
                         .into_optional()
                         .into_kind_data(),
                 ),
+                // https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/autofocus
+                fastn_resolved::Argument::default(
+                    "autofocus",
+                    fastn_resolved::Kind::boolean()
+                        .into_optional()
+                        .into_kind_data(),
+                ),
             ],
         ]
         .concat()

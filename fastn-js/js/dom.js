@@ -315,6 +315,7 @@ fastn_dom.PropertyKind = {
     FetchPriority: 123,
     Download: 124,
     SrcDoc: 125,
+    AutoFocus: 126,
 };
 
 fastn_dom.Loading = {
@@ -2385,6 +2386,8 @@ class Node2 {
                     break;
             }
             this.updateTextInputValue();
+        } else if (kind === fastn_dom.PropertyKind.AutoFocus) {
+            this.attachAttribute("autofocus", staticValue);
         } else if (kind === fastn_dom.PropertyKind.Download) {
             if (fastn_utils.isNull(staticValue)) {
                 return;
