@@ -231,6 +231,7 @@ impl CheckBox {
 pub struct TextInput {
     pub placeholder: Option<fastn_runtime::Value>,
     pub multiline: Option<fastn_runtime::Value>,
+    pub autofocus: Option<fastn_runtime::Value>,
     pub max_length: Option<fastn_runtime::Value>,
     pub _type: Option<fastn_runtime::Value>,
     pub value: Option<fastn_runtime::Value>,
@@ -256,6 +257,11 @@ impl TextInput {
             ),
             multiline: fastn_runtime::value::get_optional_js_value(
                 "multiline",
+                component.properties.as_slice(),
+                component_definition.arguments.as_slice(),
+            ),
+            autofocus: fastn_runtime::value::get_optional_js_value(
+                "autofocus",
                 component.properties.as_slice(),
                 component_definition.arguments.as_slice(),
             ),
@@ -323,6 +329,16 @@ impl TextInput {
             component_statements.push(fastn_js::ComponentStatement::SetProperty(
                 multiline.to_set_property(
                     fastn_js::PropertyKind::Multiline,
+                    doc,
+                    kernel.name.as_str(),
+                    rdata,
+                ),
+            ));
+        }
+        if let Some(ref autofocus) = self.autofocus {
+            component_statements.push(fastn_js::ComponentStatement::SetProperty(
+                autofocus.to_set_property(
+                    fastn_js::PropertyKind::AutoFocus,
                     doc,
                     kernel.name.as_str(),
                     rdata,
