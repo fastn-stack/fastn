@@ -55,7 +55,7 @@ spacing.fixed.px: 10
 		
 		-- ftd.text-input:
 		value: $search
-        autofocus: true
+		      autofocus: true
 		placeholder: Enter search query...
 		$on-input$: $ftd.set-string($a = $search, v = $VALUE)
 		$on-input$: $update-search-result($a = $search, s = $sitemap, $uis = $uis)
