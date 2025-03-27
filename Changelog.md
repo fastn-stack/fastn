@@ -1,4 +1,13 @@
-# FTD Change Log
+# `fastn` Change Log
+
+## Unreleased
+
+### fastn: 0.4.100
+
+- Add `autofocus` attribute to `ftd.text-input` component.
+
+
+# FTD Change Log (Old)
 
 ## 23 February 2023
 
