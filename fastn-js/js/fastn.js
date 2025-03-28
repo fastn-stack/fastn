@@ -52,7 +52,7 @@ const fastn = (function (fastn) {
             this.#node.setStaticProperty(
                 this.#property,
                 this.#cached_value,
-                this.#inherited,
+                this.#inherited
             );
         }
     }
@@ -68,7 +68,7 @@ const fastn = (function (fastn) {
             this.#old_closure = null;
             this.#closures = [];
             this.#closureInstance = fastn.closure(() =>
-                this.#closures.forEach((closure) => closure.update()),
+                this.#closures.forEach((closure) => closure.update())
             );
             this.set(val);
         }
@@ -90,9 +90,9 @@ const fastn = (function (fastn) {
         }
 
         forLoop(root, dom_constructor) {
-            if ((!this.#value) instanceof MutableList) {
+            if (!this.#value instanceof MutableList) {
                 throw new Error(
-                    "`forLoop` can only run for MutableList type object",
+                    "`forLoop` can only run for MutableList type object"
                 );
             }
             this.#value.forLoop(root, dom_constructor);
@@ -110,7 +110,7 @@ const fastn = (function (fastn) {
                 // color if { something }: $orange-green
                 // The `this.#value.replace(value);` will replace the value of
                 // `orange-green` with `{light: red, dark: red}`
-                this.#value = value;
+                this.#value.set(value);
             } else if (this.#value instanceof MutableList) {
                 if (value instanceof fastn.mutableClass) {
                     value = value.get();
@@ -122,7 +122,7 @@ const fastn = (function (fastn) {
 
             if (this.#value instanceof Mutable) {
                 this.#old_closure = fastn.closureWithoutExecute(() =>
-                    this.#closureInstance.update(),
+                    this.#closureInstance.update()
                 );
                 this.#value.addClosure(this.#old_closure);
             } else {
@@ -139,7 +139,7 @@ const fastn = (function (fastn) {
         // we have to unlink all nodes, else they will be kept in memory after the node is removed from DOM
         unlinkNode(node) {
             this.#closures = this.#closures.filter(
-                (closure) => closure.getNode() !== node,
+                (closure) => closure.getNode() !== node
             );
         }
 
@@ -183,7 +183,7 @@ const fastn = (function (fastn) {
                     new Closure(function () {
                         proxy.update();
                         proxy.#closures.forEach((closure) => closure.update());
-                    }),
+                    })
                 );
                 targets[idx].addClosure(this);
             }
@@ -245,7 +245,7 @@ const fastn = (function (fastn) {
 
         unlinkNode(node) {
             this.#closures = this.#closures.filter(
-                (closure) => closure.getNode() !== node,
+                (closure) => closure.getNode() !== node
             );
         }
 
@@ -263,7 +263,7 @@ const fastn = (function (fastn) {
             return this.#list.some(
                 (obj) =>
                     fastn_utils.getFlattenStaticValue(obj.item) ===
-                    fastn_utils.getFlattenStaticValue(item),
+                    fastn_utils.getFlattenStaticValue(item)
             );
         }
 
@@ -436,7 +436,7 @@ const fastn = (function (fastn) {
                 new Closure(function () {
                     closure.update();
                     mutable.set(closure.get());
-                }),
+                })
             );
         }
 
@@ -507,7 +507,7 @@ const fastn = (function (fastn) {
 
         unlinkNode(node) {
             this.#closures = this.#closures.filter(
-                (closure) => closure.getNode() !== node,
+                (closure) => closure.getNode() !== node
             );
         }
 
@@ -546,7 +546,7 @@ const fastn = (function (fastn) {
                     throw new Error(
                         "RecordInstance.replace: key " +
                             key +
-                            " not present in new object",
+                            " not present in new object"
                     );
                 }
                 this.#fields[key] = fastn.wrapMutable(obj.#fields[key]);
@@ -559,7 +559,7 @@ const fastn = (function (fastn) {
                 Object.entries(this.#fields).map(([key, value]) => [
                     key,
                     fastn_utils.getFlattenStaticValue(value),
-                ]),
+                ])
             );
         }
 
