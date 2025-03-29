@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### fastn: 0.4.101
+
+- Changing incorrect function to deal with set function for a MutableVariable that holds a RecordInstance as a value
+
+
 ### fastn: 0.4.100
 
 - Add `autofocus` attribute to `ftd.text-input` component.
