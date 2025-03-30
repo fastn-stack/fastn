@@ -221,7 +221,7 @@ const fastn = (function (fastn) {
                 // color if { something }: $orange-green
                 // The `this.#value.replace(value);` will replace the value of
                 // `orange-green` with `{light: red, dark: red}`
-	            this.#value.set(value)
+	            this.#value.set(value);
             } else if (this.#value instanceof MutableList) {
                 if (value instanceof fastn.mutableClass) {
                     value = value.get();
