@@ -1,0 +1,41 @@
+-- import: fastn.com/u/meenu-kumari
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Price Box
+featured-link: /pricing/
+category: Pricing Components
+image: $fastn-assets.files.images.featured.sections.pricing.price-box.png
+owners: [$meenu-kumari.info]
+license-url: pricing.fifthtry.site
+license: Creative Commons
+published-date: 31-Aug-2023
+cards: $pricing
+demo-link: pricing.fifthtry.site
+
+
+
+
+
+
+
+
+
+-- ft-ui.template-data list pricing:
+
+-- ft-ui.template-data: Price Card
+template-url: /price-card/
+screenshot: $fastn-assets.files.images.featured.sections.pricing.price-card.png
+
+-- ft-ui.template-data: Testimonial Nav Card
+template-url: /testimonial-nav-card/
+screenshot: $fastn-assets.files.images.featured.sections.testimonials.testimonial-nav-card.png
+
+-- ft-ui.template-data: Stepper with left right image
+template-url: /stepper-left-right/
+screenshot: $fastn-assets.files.images.featured.sections.steppers.stepper-left-right.png
+
+-- ft-ui.template-data: Stepper with step
+template-url: /stepper-step/
+screenshot: $fastn-assets.files.images.featured.sections.steppers.stepper-step.png
+
+-- end: pricing

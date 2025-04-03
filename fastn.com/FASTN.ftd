@@ -345,6 +345,14 @@ skip: true
     - Accordion: /accordion/
       skip: true
       document: /featured/sections/accordions/accordion.ftd
+  - Pricing Components: /pricing/
+    document: /featured/sections/pricing/index.ftd
+    - Price Box: /price-box/
+      skip: true
+      document: /featured/sections/pricing/price-box.ftd
+    - Price Card: /price-card/
+      skip: true
+      document: /featured/sections/pricing/price-card.ftd
   - Key Value Tables: /featured/sections/kvt/
     - Key Value Table 1: /featured/sections/kvt/kvt-1/
       skip: true
