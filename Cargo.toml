@@ -38,7 +38,7 @@ description = "fastn: Full-stack Web Development Made Easy"
 license = "AGPL-3"
 repository = "https://github.com/fastn-stack/fastn"
 homepage = "https://fastn.com"
-rust-version = "1.85"
+rust-version = "1.86"
 
 [profile.release]
 # Enabling this descreased our binary size from 30M to 27M on linux (as of 12th Jun 2023).

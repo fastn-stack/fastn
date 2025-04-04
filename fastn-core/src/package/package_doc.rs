@@ -56,10 +56,7 @@ impl fastn_core::Package {
             .map(|parent| parent.join(fastn_core::manifest::MANIFEST_FILE));
         let manifest: Option<fastn_core::Manifest> = if let Some(manifest_path) = manifest_path {
             match ds.read_content(&manifest_path, session_id).await {
-                Ok(manifest_bytes) => match serde_json::de::from_slice(manifest_bytes.as_slice()) {
-                    Ok(manifest) => Some(manifest),
-                    Err(_) => None,
-                },
+                Ok(manifest_bytes) => serde_json::de::from_slice(manifest_bytes.as_slice()).ok(),
                 Err(_) => None,
             }
         } else {
@@ -170,21 +167,21 @@ impl fastn_core::Package {
             Some(manifest) => {
                 let new_file_path = match file_path.rsplit_once('.') {
                     Some((remaining, ext))
-                        if mime_guess::MimeGuess::from_ext(ext)
-                            .first_or_octet_stream()
-                            .to_string()
-                            .starts_with("image/") =>
-                    {
-                        if remaining.ends_with("-dark") {
-                            format!(
-                                "{}.{}",
-                                remaining.trim_matches('/').trim_end_matches("-dark"),
-                                ext
-                            )
-                        } else {
-                            format!("{}-dark.{}", remaining.trim_matches('/'), ext)
+                    if mime_guess::MimeGuess::from_ext(ext)
+                        .first_or_octet_stream()
+                        .to_string()
+                        .starts_with("image/") =>
+                        {
+                            if remaining.ends_with("-dark") {
+                                format!(
+                                    "{}.{}",
+                                    remaining.trim_matches('/').trim_end_matches("-dark"),
+                                    ext
+                                )
+                            } else {
+                                format!("{}-dark.{}", remaining.trim_matches('/'), ext)
+                            }
                         }
-                    }
                     _ => {
                         tracing::error!(
                             file_path = file_path,
@@ -241,21 +238,21 @@ impl fastn_core::Package {
 
                 let new_id = match id.rsplit_once('.') {
                     Some((remaining, ext))
-                        if mime_guess::MimeGuess::from_ext(ext)
-                            .first_or_octet_stream()
-                            .to_string()
-                            .starts_with("image/") =>
-                    {
-                        if remaining.ends_with("-dark") {
-                            format!(
-                                "{}.{}",
-                                remaining.trim_matches('/').trim_end_matches("-dark"),
-                                ext
-                            )
-                        } else {
-                            format!("{}-dark.{}", remaining.trim_matches('/'), ext)
+                    if mime_guess::MimeGuess::from_ext(ext)
+                        .first_or_octet_stream()
+                        .to_string()
+                        .starts_with("image/") =>
+                        {
+                            if remaining.ends_with("-dark") {
+                                format!(
+                                    "{}.{}",
+                                    remaining.trim_matches('/').trim_end_matches("-dark"),
+                                    ext
+                                )
+                            } else {
+                                format!("{}-dark.{}", remaining.trim_matches('/'), ext)
+                            }
                         }
-                    }
                     _ => {
                         tracing::error!(id = id, msg = "id error: can not get the dark");
                         return Err(fastn_core::Error::PackageError {
@@ -370,7 +367,7 @@ pub async fn read_ftd(
         false,
         preview_session_id,
     )
-    .await
+        .await
 }
 
 #[tracing::instrument(skip_all)]
@@ -394,7 +391,7 @@ pub(crate) async fn read_ftd_(
                 test,
                 preview_session_id,
             )
-            .await
+                .await
         }
         fastn_core::FTDEdition::FTD2023 => {
             read_ftd_2023(
@@ -405,7 +402,7 @@ pub(crate) async fn read_ftd_(
                 only_js,
                 preview_session_id,
             )
-            .await
+                .await
         }
     }
 }
@@ -445,7 +442,7 @@ pub(crate) async fn read_ftd_2022(
         line_number,
         preview_session_id,
     )
-    .await
+        .await
     {
         Ok(v) => v,
         Err(e) => {
@@ -487,7 +484,7 @@ pub(crate) async fn read_ftd_2022(
         base_url,
         preview_session_id,
     )
-    .await;
+        .await;
 
     Ok(FTDResult::Html(file_content.into()))
 }
@@ -528,7 +525,7 @@ pub(crate) async fn read_ftd_2023(
         line_number,
         preview_session_id,
     )
-    .await
+        .await
     {
         Ok(v) => v,
         Err(e) => {
@@ -585,7 +582,7 @@ pub(crate) async fn read_ftd_2023(
             c,
             preview_session_id,
         )
-        .await
+            .await
     };
 
     Ok(FTDResult::Html(file_content.into()))
@@ -609,7 +606,7 @@ pub(crate) async fn process_ftd(
         test,
         preview_session_id,
     )
-    .await?;
+        .await?;
     fastn_core::utils::overwrite(&build_dir, file_path, &response.html(), &config.config.ds)
         .await?;
 
