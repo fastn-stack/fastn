@@ -1,0 +1,29 @@
+-- import: fastn.com/featured as ft-ui
+
+-- ds.page:
+sidebar: false
+
+-- ft-ui.view-all: Team Components
+templates: $team
+
+-- end: ds.page
+
+
+
+
+
+-- ft-ui.template-data list team:
+
+-- ft-ui.template-data: Team Card
+template-url: /team-card/
+screenshot: $fastn-assets.files.images.featured.sections.team.team-card.png
+
+-- ft-ui.template-data: Member
+template-url: /member/
+screenshot: $fastn-assets.files.images.featured.sections.team.member.png
+
+-- ft-ui.template-data: Member Tile
+template-url: /member-tile/
+screenshot: $fastn-assets.files.images.featured.sections.team.member-tile.png
+
+-- end: team

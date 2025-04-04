@@ -1,0 +1,41 @@
+-- import: fastn.com/u/meenu-kumari
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Team Card
+featured-link: /team/
+category: Featured Team Components
+image: $fastn-assets.files.images.featured.sections.team.team-card.png
+owners: [$meenu-kumari.info]
+license-url: team.fifthtry.site
+license: Creative Commons
+published-date: 31-Aug-2023
+cards: $team
+demo-link: team.fifthtry.site
+
+
+
+
+
+
+
+
+
+-- ft-ui.template-data list team:
+
+-- ft-ui.template-data: Member Tile
+template-url: /member-tile/
+screenshot: $fastn-assets.files.images.featured.sections.team.member-tile.png
+
+-- ft-ui.template-data: Member
+template-url: /member/
+screenshot: $fastn-assets.files.images.featured.sections.team.member.png
+
+-- ft-ui.template-data: Stepper with left right image
+template-url: /stepper-left-right/
+screenshot: $fastn-assets.files.images.featured.sections.team.stepper-left-right.png
+
+-- ft-ui.template-data: Stepper with step
+template-url: /stepper-step/
+screenshot: $fastn-assets.files.images.featured.sections.team.stepper-step.png
+
+-- end: team

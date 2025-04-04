@@ -345,6 +345,17 @@ skip: true
     - Accordion: /accordion/
       skip: true
       document: /featured/sections/accordions/accordion.ftd
+  - Team Components: /team/
+    document: /featured/sections/team/index.ftd
+    - Team Card: /team-card/
+      skip: true
+      document: /featured/sections/team/team-card.ftd
+    - Member: /member/
+      skip: true
+      document: /featured/sections/team/member.ftd
+    - Member Tile: /member-tile/
+      skip: true
+      document: /featured/sections/team/member-tile.ftd
   - Key Value Tables: /featured/sections/kvt/
     - Key Value Table 1: /featured/sections/kvt/kvt-1/
       skip: true
