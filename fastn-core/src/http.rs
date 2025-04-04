@@ -85,8 +85,8 @@ pub fn redirect_with_code(url: String, code: u16) -> fastn_core::http::Response 
             actix_web::HttpResponse::PermanentRedirect()
         }
     }
-        .insert_header(("LOCATION", url))
-        .finish()
+    .insert_header(("LOCATION", url))
+    .finish()
 }
 
 pub fn ok_with_content_type(
