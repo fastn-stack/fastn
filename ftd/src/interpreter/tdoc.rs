@@ -1993,7 +1993,7 @@ impl<'a> TDoc<'a> {
         line_number: usize,
     ) -> ftd::interpreter::Result<fastn_resolved::Value> {
         Ok(match kind {
-            fastn_resolved::Kind::String { .. } => fastn_resolved::Value::String {
+            fastn_resolved::Kind::String => fastn_resolved::Value::String {
                 text: match json {
                     serde_json::Value::String(v) => v.to_string(),
                     serde_json::Value::Object(o) => {
@@ -2014,7 +2014,7 @@ impl<'a> TDoc<'a> {
                     }
                 },
             },
-            fastn_resolved::Kind::Integer { .. } => fastn_resolved::Value::Integer {
+            fastn_resolved::Kind::Integer => fastn_resolved::Value::Integer {
                 value: match json {
                     serde_json::Value::Number(n) => {
                         n.as_i64()
@@ -2050,7 +2050,7 @@ impl<'a> TDoc<'a> {
                     }
                 },
             },
-            fastn_resolved::Kind::Decimal { .. } => fastn_resolved::Value::Decimal {
+            fastn_resolved::Kind::Decimal => fastn_resolved::Value::Decimal {
                 value: match json {
                     serde_json::Value::Number(n) => {
                         n.as_f64()
@@ -2086,7 +2086,7 @@ impl<'a> TDoc<'a> {
                     }
                 },
             },
-            fastn_resolved::Kind::Boolean { .. } => fastn_resolved::Value::Boolean {
+            fastn_resolved::Kind::Boolean => fastn_resolved::Value::Boolean {
                 value: match json {
                     serde_json::Value::Bool(n) => *n,
                     serde_json::Value::String(s) => {

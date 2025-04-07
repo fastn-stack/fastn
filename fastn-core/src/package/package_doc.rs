@@ -56,10 +56,7 @@ impl fastn_core::Package {
             .map(|parent| parent.join(fastn_core::manifest::MANIFEST_FILE));
         let manifest: Option<fastn_core::Manifest> = if let Some(manifest_path) = manifest_path {
             match ds.read_content(&manifest_path, session_id).await {
-                Ok(manifest_bytes) => match serde_json::de::from_slice(manifest_bytes.as_slice()) {
-                    Ok(manifest) => Some(manifest),
-                    Err(_) => None,
-                },
+                Ok(manifest_bytes) => serde_json::de::from_slice(manifest_bytes.as_slice()).ok(),
                 Err(_) => None,
             }
         } else {
