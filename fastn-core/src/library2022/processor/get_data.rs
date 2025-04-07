@@ -44,7 +44,7 @@ pub fn process(
                         })?;
                 doc.from_json(&value2, &kind, &value)
             }
-            fastn_resolved::Kind::Decimal { .. } => {
+            fastn_resolved::Kind::Decimal => {
                 let value2 =
                     data.parse::<f64>()
                         .map_err(|e| ftd::interpreter::Error::ParseError {
@@ -54,7 +54,7 @@ pub fn process(
                         })?;
                 doc.from_json(&value2, &kind, &value)
             }
-            fastn_resolved::Kind::Boolean { .. } => {
+            fastn_resolved::Kind::Boolean => {
                 let value2 =
                     data.parse::<bool>()
                         .map_err(|e| ftd::interpreter::Error::ParseError {

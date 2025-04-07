@@ -520,10 +520,7 @@ pub(crate) fn get_available_port(
         |port: u16, bind_address: &str| std::net::TcpListener::bind((bind_address, port));
 
     if let Some(port) = port {
-        return match available_listener(port, bind_address) {
-            Ok(l) => Some(l),
-            Err(_) => None,
-        };
+        return available_listener(port, bind_address).ok();
     }
 
     for x in 8000..9000 {
