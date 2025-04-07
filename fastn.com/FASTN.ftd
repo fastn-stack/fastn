@@ -345,7 +345,7 @@ skip: true
     - Accordion: /accordion/
       skip: true
       document: /featured/sections/accordions/accordion.ftd
-  - Team Components: /team/
+  - Team Components: featured/team/
     document: /featured/sections/team/index.ftd
     - Team Card: /team-card/
       skip: true
