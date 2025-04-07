@@ -345,7 +345,7 @@ skip: true
     - Accordion: /accordion/
       skip: true
       document: /featured/sections/accordions/accordion.ftd
-  - Pricing Components: /pricing/
+  - Pricing Components: featured/pricing/
     document: /featured/sections/pricing/index.ftd
     - Price Box: /price-box/
       skip: true
