@@ -35,7 +35,7 @@ authors = [
 ]
 edition = "2024"
 description = "fastn: Full-stack Web Development Made Easy"
-license = "AGPL-3"
+license = "UPL-1.0"
 repository = "https://github.com/fastn-stack/fastn"
 homepage = "https://fastn.com"
 rust-version = "1.86"
