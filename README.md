@@ -13,24 +13,25 @@
 
 # `fastn` - Full-stack Web Development Made Easy
 
-`ftd` is a programming language for building user interfaces and content centric
-websites. `ftd` is easy to learn, especially for non programmers, but does not
-compromise on what you can build with it.
+`fastn` is a programming language for building user interfaces and
+content-centric websites. `fastn` is easy to learn, especially for
+non-programmers, but does not compromise on what you can build with it.
 
-`fastn` is a web-framework, a content management system, and an integrated
-development environment for `ftd`. `fastn` is a webserver, and compiles `ftd`
-to HTML/CSS/JS, and can be deployed on your server, or on `fastn cloud` by
-FifthTry.
+`fastn` is also a web-framework, a content management system, and an integrated
+development environment. `fastn` is a webserver, and compiles `fastn` files
+to HTML/CSS/JS, and can be deployed on your server, or on
+[FifthTry](https://www.fifthtry.com).
 
 The quickest way to learn `fastn` is the [short video course we have created:
 expander](https://fastn.com/expander/), it takes you through the basics.
 
-Then checkout the [frontend](https://fastn.com/frontend/) and [backend](https://fastn.com/backend/) sections of
+Then checkout the [frontend](https://fastn.com/frontend/)
+and [backend](https://fastn.com/backend/) sections of
 our documentation.
 
-## `ftd`: Programming Language For The Next Billion Programmers
+## `fastn`: Programming Language For The Next Billion Programmers
 
-`ftd` is designed with minimal and uniform syntax, and at first glance
+`fastn` is designed with minimal and uniform syntax, and at first glance
 does not even look like a programming language.
 
 **No quotes for string, multi-line strings are easy**
@@ -112,7 +113,7 @@ curl -fsSL https://fastn.com/install.sh | bash
 
 ## Integrated Web Development Experience
 
-`ftd` and `fastn` come with package management, web server, opinionated design
+`fastn` comes with package management, web server, opinionated design
 system, dark mode and responsive by default.
 
 If you are getting started with frontend development, `fastn` framework takes
@@ -125,7 +126,8 @@ for building websites.
 ## `fastn` for Static Sites
 
 `fastn` websites can be compiled into static html, js, css etc, and can be
-deployed on any static hosting providers eg [Github Pages](https://fastn.com/github-pages/),
+deployed on any static hosting providers
+eg [Github Pages](https://fastn.com/github-pages/),
 [Vercel](https://fastn.com/vercel/)  etc.
 
 **`ftd` source code of the page you are reading**
@@ -192,23 +194,24 @@ document: profile.ftd
 
 `fastn` can be used for creating a lot of web application backends as well.
 
-## Upcoming WASM Support
+## WASM Support
 
-We are working on `wasm` support so developers can extend `ftd's` standard
-libraries and offer access to more backend functionalities.
+`fastn` supports running Rust programs compiled as wasm.
+[`ft-sdk`](https://docs.rs/ft-sdk/latest/ft_sdk/) can be used to write backend
+applications.
 
 <a href="https://fastn.com/#upcoming-wasm-support" rel="nofollow"><img src="assets/wasm.png" alt="wasm.png" style="max-width: 100%; width: 450px;"></a>
 
 ## Hosting Dynamic Sites
 
-For dynamic sites you can deploy `fastn` cli on the platform of your choice. We
-ship ready made Docker containers that you can add to your infrastructure.
+For dynamic sites you can deploy `fastn` cli on the platform of your choice.
 
-## `fastn` Cloud
+## FifthTry Hosting
 
-We also offer our own hosting solution for your static and dynamic sites. Using
-`fastn` Cloud frees you from devops needs, and you get a fully integrated,
-managed hosting solution, that a non programmers can use with ease.
+We, [FifthTry](https://www.fifthtry.com) also offer our own hosting solution for
+your static and dynamic sites. Using FifthTry hosting frees you from devops
+needs, and you get a fully integrated, managed hosting solution, that a
+non-programmers can use with ease.
 
 ## Usage with Nix
 
@@ -268,12 +271,14 @@ In a `flake.nix` file:
 
 ## License
 
-This project is licensed under the terms of the **AGPL-3**.
+This project is licensed under the terms of the **UPL-1.0**.
 
 ## Examples
 
-The following examples are intended for testing purposes and showcase the range of capabilities of ftd language, from
-basic to advanced use cases. These examples are provided to ensure the proper functioning of ftd and to highlight its
-diverse features.
+The following examples are intended for testing purposes and showcase the of
+capabilities of `fastn` language, from basic to advanced use cases. These
+examples also help ensure the proper functioning of `fastn`, by acting as a
+test.
 
-You can find the examples at the following link: https://fastn-stack.github.io/fastn/
+You can find the examples at the following
+link: https://fastn-stack.github.io/fastn/
