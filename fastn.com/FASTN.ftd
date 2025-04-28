@@ -345,14 +345,17 @@ skip: true
     - Accordion: /accordion/
       skip: true
       document: /featured/sections/accordions/accordion.ftd
-  - Pricing Components: /featured/pricing/
-    document: /featured/sections/pricing/index.ftd
-    - Price Box: /featured/price-box/
+  - Team Components: featured/team/
+    document: /featured/sections/team/index.ftd
+    - Team Card: /featured/team-card/
       skip: true
-      document: /featured/sections/pricing/price-box.ftd
-    - Price Card: /featured/price-card/
+      document: /featured/sections/team/team-card.ftd
+    - Member: /featured/member/
       skip: true
-      document: /featured/sections/pricing/price-card.ftd
+      document: /featured/sections/team/member.ftd
+    - Member Tile: /featured/member-tile/
+      skip: true
+      document: /featured/sections/team/member-tile.ftd
   - Key Value Tables: /featured/sections/kvt/
     - Key Value Table 1: /featured/sections/kvt/kvt-1/
       skip: true
