@@ -60,7 +60,8 @@ string license:
 string published-date:
 ft-ui.template-data list cards:
 string demo-link:
-
+optional body body:
+children content:
 
 -- ds.page:
 show-footer: true
@@ -114,10 +115,53 @@ max-width.fixed.px: 1340
 	image: $featured-category.image
 	cta-url: $featured-category.demo-link
 	cta-text: Demo
+
+	-- description-card:
+	body: $featured-category.body
+	content: $featured-category.content
 	
 -- end: ds.page
 
 -- end: featured-category
+
+
+
+
+
+
+
+
+
+
+-- component description-card:
+body body:
+children content:
+
+-- ftd.column:
+width: fill-container
+spacing.fixed.px: 24
+
+-- ftd.text: How to use
+role: $inherited.types.heading-large
+color: $inherited.colors.accent.primary
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+
+$description-card.body
+
+-- ftd.column:
+width: fill-container
+children: $description-card.content
+margin-bottom.px: 24
+
+-- end: ftd.column
+
+-- end: ftd.column
+
+-- end: description-card
+
 
 
 

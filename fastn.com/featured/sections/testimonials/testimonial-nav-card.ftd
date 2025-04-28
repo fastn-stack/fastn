@@ -10,7 +10,90 @@ license-url: testimonial.fifthtry.site
 license: Creative Commons
 published-date: 31-Aug-2023
 cards: $testimonials
-demo-link: testimonial.fifthtry.site
+demo-link: https://testimonial.fifthtry.site/
+
+To use Testimonial components on your fastn web project, add below into FASTN.ftd file:
+
+-- ds.code:
+
+\-- fastn.dependency: testimonial.fifthtry.site
+
+\-- fastn.auto-import: testimonial.fifthtry.site as testimonials
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+
+If you want to use it on your project then use below given example code and add it inside a .ftd file.
+
+-- ds.code:
+
+\-- testimonials.testimonial-nav-card:
+testimonials: $list-of-testimonials
+nav: $navs
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+
+`testimonials: $list-of-testimonials` is this list of record which takes a
+title, body, avatar, name, and profile, and nav: $navs is this list of record
+which takes active boolean and index to show the active tab. You can copy the
+code example to the bottom of you .ftd file.
+
+-- ds.code:
+
+\-- testimonials.testimonial list list-of-testimonials:
+
+\-- testimonials.testimonial: Fastn
+user: Patrica AVA
+designation: UI Designer
+avatar: $assets.files.assets.avatar.svg
+index: 1
+
+A design approach is a general philosophy that may or may not include a guide
+for specific methods that work.It is a long established fact that a reader will
+be distracted by the readable content of a page when looking at its layout.
+
+\-- testimonials.testimonial: Fastn is power
+user: Meenu
+designation: Fastn Builder
+avatar: $assets.files.assets.avatar.svg
+index: 2
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque molestie ante
+in luctus rutrum. Sed eu orci mi. Cras sit amet ligula vitae enim interdum
+ultrices. Sed a ultrices purus, nec faucibus justo. Nulla ut lacus quis odio
+aliquet faucibus.
+
+\-- testimonials.testimonial: Fastn is best
+user: Priyanka
+designation: Fastn Builder
+avatar: $assets.files.assets.avatar.svg
+index: 3
+
+Nam lacinia nisi sed mauris luctus, id vestibulum enim luctus. Integer iaculis
+est a turpis consequat, id sagittis tellus aliquam. Suspendisse sagittis elit
+nec turpis viverra feugiat. Morbi fermentum convallis magna, eu sagittis ligula
+faucibus at.
+
+\-- end: list-of-testimonials
+
+\-- testimonials.testimonial-nav list navs:
+
+\-- testimonials.testimonial-nav:
+active: true
+index: 1
+
+\-- testimonials.testimonial-nav:
+index: 2
+
+\-- testimonials.testimonial-nav:
+index: 3
+
+\-- end: navs
+
+-- end: ds.featured-category
 
 
 
