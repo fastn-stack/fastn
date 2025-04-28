@@ -13,6 +13,35 @@ published-date: 31-Aug-2023
 cards: $heros
 demo-link: https://hero.fifthtry.site/
 
+To use hero components on your fastn web project, add below into FASTN.ftd file:
+
+-- ds.code:
+
+\-- fastn.dependency: hero.fifthtry.site
+
+\-- fastn.auto-import: hero.fifthtry.site as hero
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+
+If you want to use it on your project then use below given example code and
+add it inside a .ftd file.
+
+-- ds.code:
+
+\-- hero.hero-right-hug-search-label:  We Transform ideas into digital outcomes.
+image: $assets.files.assets.hero-img.jpg
+primary-cta: Button
+error-message: Small Headline
+input-placeholder: Label
+input-label: Small Incidental Text
+
+We are an award-winning strategic design company that provides 
+consultancy services and help you create outstanding digital products.
+
+-- end: ds.featured-category
+
 
 
 
