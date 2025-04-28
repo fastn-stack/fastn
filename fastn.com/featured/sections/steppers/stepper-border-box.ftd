@@ -10,11 +10,60 @@ license-url: stepper.fifthtry.site
 license: Creative Commons
 published-date: 31-Aug-2023
 cards: $steppers
-demo-link: stepper.fifthtry.site
+demo-link: https://stepper.fifthtry.site/
 
+To use Stepper components on your fastn web project, add below into FASTN.ftd file:
 
+-- ds.code:
 
+\-- fastn.dependency: stepper.fifthtry.site
 
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+
+If you want to use it on your project then use below given example code and add it inside a .ftd file.
+
+-- ds.code:
+
+\-- stepper.stepper-border-box:
+numbers: $numbers
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+
+`number: $number` is this list of record which takes title, image, body and
+step number. You can copy the code example to the bottom of you .ftd file.
+
+-- ds.code:
+
+\-- number list numbers:
+
+\-- number:
+image: $assets.files.assets.<your_assets_name>
+number: 1
+
+I design and develop services for customers of all sizes, specializing 
+in creating stylish, modern websites.
+
+\-- number:
+image: $assets.files.assets.<your_assets_name>
+number: 2
+
+I design and develop services for customers of all sizes, specializing 
+in creating stylish, modern websites.
+
+\-- number:
+image: $assets.files.assets.<your_assets_name>
+number: 3
+
+I design and develop services for customers of all sizes, specializing 
+in creating stylish, modern websites.
+
+\-- end: numbers
+
+-- end: ds.featured-category
 
 
 

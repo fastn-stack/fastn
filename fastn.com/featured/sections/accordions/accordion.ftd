@@ -10,9 +10,60 @@ license-url: accordion.fifthtry.site
 license: Creative Commons
 published-date: 31-Aug-2023
 cards: $steppers
-demo-link: accordion.fifthtry.site
+demo-link: https://accordion.fifthtry.site/
 
+To use accordion components on your fastn web project, add below into FASTN.ftd file:
 
+-- ds.code:
+
+\-- fastn.dependency: accordion.fifthtry.site
+
+\-- fastn.auto-import: accordion.fifthtry.site as acc
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+
+If you want to use it on your project then use below given example code and
+add it inside a .ftd file.
+
+-- ds.code:
+
+\-- acc.basic-accordion: Loream
+accordions: $accordions
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+
+`accordions: $accordions` is this list of record which takes title, and body. You can copy the code example to the bottom of you .ftd file.
+
+-- ds.code:
+
+\-- accordion-list list accordions:
+
+\-- accordion-list: Are there really zero fees?
+
+At Fastn, we believe businesses shouldn’t have to wait or pay to access money
+they’ve already earned. That’s why it doesn’t cost a penny to create an account
+and there are zero transaction fees when you use the Fastn platform to pay and
+get paid. If you decide to leverage some of our more premium payment features
+(like Fastn Flow, which lets you get paid before your client pays you) there
+may be a small service.
+
+\-- accordion-list: Is Fastn secure?
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque molestie ante
+in luctus rutrum.
+
+\-- accordion-list: Does Fastn replace my accounting software?
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque molestie ante
+in luctus rutrum.
+
+\-- end: accordions
+
+-- end: ds.featured-category
 
 
 

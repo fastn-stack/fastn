@@ -7,7 +7,7 @@
 -- import: doc-site.fifthtry.site/common
 -- import: fastn.com/content-library as cl
 -- import: fastn.com/FASTN/featured-ds
-export: featured-business,featured-category,user-info
+export: featured-business,featured-category,user-info,description-card
 
 -- import: doc-site.fifthtry.site
 export: markdown,h0,h1,h2,h3,code,rendered,output,image,iframe,youtube,compact-text,post,posts,featured-post,image-first,image-in-between,without-image,author-bio,tip,not-found-1,not-found-2,link,link-group,without-image-half
