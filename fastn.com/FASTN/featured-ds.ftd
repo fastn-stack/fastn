@@ -117,6 +117,7 @@ max-width.fixed.px: 1340
 	cta-text: Demo
 
 	-- description-card:
+	if: { featured-category.body != NULL }
 	body: $featured-category.body
 	content: $featured-category.content
 	

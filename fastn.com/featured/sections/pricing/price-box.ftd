@@ -12,7 +12,117 @@ published-date: 31-Aug-2023
 cards: $pricing
 demo-link: pricing.fifthtry.site
 
+To use pricing components on your fastn web project, add below into FASTN.ftd file:
 
+-- ds.code:
+
+\-- fastn.dependency: pricing.fifthtry.site
+
+\-- fastn.auto-import: pricing.fifthtry.site as price
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+
+If you want to use it on your project then use below given example code and
+add it inside a .ftd file.
+
+-- ds.code:
+
+\-- price.price-card-wrap:
+
+\-- price.price-box: Basic
+active: false 
+price: 0
+currency: $
+subscription: mo
+feature-list: $free-feature-list
+cta-text: Get Started
+cta-link: /price/
+bg-color: $inherited.colors.custom.one
+
+Lorem ipsum dolor sit amet, consectet adipiscing elit.
+
+\-- price.price-box: Standard
+active: true 
+price: 99
+currency: $
+subscription: mo
+feature-list: $startup-feature-list
+cta-text: Get Started
+cta-link: /price/
+bg-color: $inherited.colors.custom.two
+
+Lorem ipsum dolor sit amet, consectet adipiscing elit.
+
+\-- price.price-box: Premium
+active: false 
+price: 153
+currency: $
+subscription: mo
+feature-list: $enterprise-feature-list
+cta-text: Get Started
+cta-link: /price/
+bg-color: $inherited.colors.custom.three
+
+Lorem ipsum dolor sit amet, consectet adipiscing elit.
+
+\-- end: price.price-card-wrap
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+
+`feature-list` is this list of record. You can copy the code example to the
+bottom of you .ftd file.
+
+-- ds.code:
+
+\-- price.feature list free-feature-list:
+
+\-- price.feature: Lorem ipsum dolor sit amet
+
+\-- price.feature: Sed quibusdam sint vel rerum
+
+\-- price.feature: Vel inventore quasi et enim enim
+
+\-- price.feature: In incidunt ipsa et possimus
+
+\-- price.feature: Quo iste quod aut
+
+\-- end: free-feature-list
+
+
+\-- price.feature list startup-feature-list:
+
+\-- price.feature: Lorem ipsum dolor sit amet
+
+\-- price.feature: Sed quibusdam sint vel rerum
+
+\-- price.feature: Vel inventore quasi et enim enim
+
+\-- price.feature: In incidunt ipsa et possimus
+
+\-- price.feature: Quo iste quod aut
+
+\-- end: startup-feature-list
+
+
+\-- price.feature list enterprise-feature-list:
+
+\-- price.feature: Lorem ipsum dolor sit amet
+
+\-- price.feature: Sed quibusdam sint vel rerum
+
+\-- price.feature: Vel inventore quasi et enim enim
+
+\-- price.feature: In incidunt ipsa et possimus
+
+\-- price.feature: Quo iste quod aut
+
+\-- end: enterprise-feature-list
+
+-- end: ds.featured-category
 
 
 
@@ -23,7 +133,7 @@ demo-link: pricing.fifthtry.site
 -- ft-ui.template-data list pricing:
 
 -- ft-ui.template-data: Price Card
-template-url: /price-card/
+template-url: featured/price-card/
 screenshot: $fastn-assets.files.images.featured.sections.pricing.price-card.png
 
 -- ft-ui.template-data: Testimonial Nav Card
