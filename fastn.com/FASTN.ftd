@@ -345,12 +345,12 @@ skip: true
     - Accordion: /accordion/
       skip: true
       document: /featured/sections/accordions/accordion.ftd
-  - Pricing Components: featured/pricing/
+  - Pricing Components: /featured/pricing/
     document: /featured/sections/pricing/index.ftd
-    - Price Box: /price-box/
+    - Price Box: /featured/price-box/
       skip: true
       document: /featured/sections/pricing/price-box.ftd
-    - Price Card: /price-card/
+    - Price Card: /featured/price-card/
       skip: true
       document: /featured/sections/pricing/price-card.ftd
   - Key Value Tables: /featured/sections/kvt/

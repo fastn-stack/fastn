@@ -15,11 +15,11 @@ templates: $pricing
 -- ft-ui.template-data list pricing:
 
 -- ft-ui.template-data: Price Box
-template-url: /price-box/
+template-url: /featured/price-box/
 screenshot: $fastn-assets.files.images.featured.sections.pricing.price-box.png
 
 -- ft-ui.template-data: Price Card
-template-url: /price-card/
+template-url: /featured/price-card/
 screenshot: $fastn-assets.files.images.featured.sections.pricing.price-card.png
 
 -- end: pricing
