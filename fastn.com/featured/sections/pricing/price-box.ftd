@@ -2,7 +2,7 @@
 -- import: fastn.com/featured as ft-ui
 
 -- ds.featured-category: Price Box
-featured-link: /pricing/
+featured-link: /featured/pricing/
 category: Pricing Components
 image: $fastn-assets.files.images.featured.sections.pricing.price-box.png
 owners: [$meenu-kumari.info]
