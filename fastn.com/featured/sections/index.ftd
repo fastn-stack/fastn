@@ -29,6 +29,11 @@ templates: $accordions
 more-link-text: View more
 more-link: /accordions/
 
+-- ft-ui.grid-view: Team Components
+templates: $team
+more-link-text: View more
+more-link: /featured/team/
+
 -- ft-ui.grid-view: Key Value Tables
 templates: $kvt
 ;;more-link-text: View more
@@ -95,6 +100,43 @@ template-url: /accordion/
 screenshot: $fastn-assets.files.images.featured.sections.accordions.accordion.png
 
 -- end: accordions
+
+
+
+-- ft-ui.template-data list pricing:
+
+-- ft-ui.template-data: Price Box
+template-url: /price-box/
+screenshot: $fastn-assets.files.images.featured.sections.pricing.price-box.png
+
+-- ft-ui.template-data: Price Card
+template-url: /price-card/
+screenshot: $fastn-assets.files.images.featured.sections.pricing.price-card.png
+
+-- end: pricing
+
+
+
+
+
+
+-- ft-ui.template-data list team:
+
+-- ft-ui.template-data: Team Card
+template-url: /team-card/
+screenshot: $fastn-assets.files.images.featured.sections.team.team-card.png
+
+-- ft-ui.template-data: Member
+template-url: /member/
+screenshot: $fastn-assets.files.images.featured.sections.team.member.png
+
+-- ft-ui.template-data: Member Tile
+template-url: /member-tile/
+screenshot: $fastn-assets.files.images.featured.sections.team.member-tile.png
+
+-- end: team
+
+
 
 
 
