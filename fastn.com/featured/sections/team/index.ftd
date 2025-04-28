@@ -15,15 +15,15 @@ templates: $team
 -- ft-ui.template-data list team:
 
 -- ft-ui.template-data: Team Card
-template-url: /team-card/
+template-url: /featured/team-card/
 screenshot: $fastn-assets.files.images.featured.sections.team.team-card.png
 
 -- ft-ui.template-data: Member
-template-url: /member/
+template-url: /featured/member/
 screenshot: $fastn-assets.files.images.featured.sections.team.member.png
 
 -- ft-ui.template-data: Member Tile
-template-url: /member-tile/
+template-url: /featured/member-tile/
 screenshot: $fastn-assets.files.images.featured.sections.team.member-tile.png
 
 -- end: team
