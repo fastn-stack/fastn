@@ -32,7 +32,7 @@ more-link: /accordions/
 -- ft-ui.grid-view: Team Components
 templates: $team
 more-link-text: View more
-more-link: /team/
+more-link: /featured/team/
 
 -- ft-ui.grid-view: Key Value Tables
 templates: $kvt
