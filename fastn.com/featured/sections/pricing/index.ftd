@@ -1,0 +1,25 @@
+-- import: fastn.com/featured as ft-ui
+
+-- ds.page:
+sidebar: false
+
+-- ft-ui.view-all: Pricing Components
+templates: $pricing
+
+-- end: ds.page
+
+
+
+
+
+-- ft-ui.template-data list pricing:
+
+-- ft-ui.template-data: Price Box
+template-url: /featured/price-box/
+screenshot: $fastn-assets.files.images.featured.sections.pricing.price-box.png
+
+-- ft-ui.template-data: Price Card
+template-url: /featured/price-card/
+screenshot: $fastn-assets.files.images.featured.sections.pricing.price-card.png
+
+-- end: pricing
