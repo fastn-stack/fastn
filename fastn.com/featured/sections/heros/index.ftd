@@ -54,6 +54,22 @@ screenshot: $fastn-assets.files.images.featured.sections.heros.hero-left-hug-exp
 template-url: /hero-left-hug-expanded/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-left-hug-expanded.jpg
 
+-- ft-ui.template-data: Hero with Background
+template-url: /hero-with-background/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-with-background.png
+
+-- ft-ui.template-data: Hero with Sticky Image
+template-url: /hero-sticky-image/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-sticky-image.png
+
+-- ft-ui.template-data: Hero with Parallax
+template-url: /parallax-hero/
+screenshot: $fastn-assets.files.images.featured.sections.heros.parallax-hero.png
+
+-- ft-ui.template-data: Hero with Circles
+template-url: /circle-hero/
+screenshot: $fastn-assets.files.images.featured.sections.heros.circle-hero.png
+
 /-- ft-ui.template-data: Hero with social icons
 template-url: /hero-with-social/
 screenshot: $fastn-assets.files.images.featured.sections.heros.hero-with-social.png

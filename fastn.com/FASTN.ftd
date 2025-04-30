@@ -271,6 +271,20 @@ skip: true
       skip: true
     - Imagen IG: /featured/sections/cards/imagen-ig/
       skip: true
+    - Overlay Card: /featured/sections/cards/overlay-card/
+      skip: true
+    - Magnifine Card: /featured/sections/cards/magnifine-card/
+      skip: true
+    - News Card: /featured/sections/cards/news-card/
+      skip: true
+    - Metric Card: /featured/sections/cards/metric-card/
+      skip: true
+    - Profile Card: /featured/sections/cards/profile-card/
+      skip: true
+    - Hastag Card: /featured/sections/cards/hastag-card/
+      skip: true
+    - Icon Card: /featured/sections/cards/icon-card/
+      skip: true
   - Hero Components: /heros/
     document: /featured/sections/heros/index.ftd
     - Hero Right Hug Expanded Search: /hero-right-hug-expanded-search/
@@ -306,6 +320,18 @@ skip: true
     - Hero with social icons: /hero-with-social/
       skip: true
       document: /featured/sections/heros/hero-with-social.ftd
+    - Hero with background: /hero-with-background/
+      skip: true
+      document: /featured/sections/heros/hero-with-background.ftd
+    - Hero Sticky Image: /hero-sticky-image/
+      skip: true
+      document: /featured/sections/heros/hero-sticky-image.ftd
+    - Hero with Parallax: /parallax-hero/
+      skip: true
+      document: /featured/sections/heros/parallax-hero.ftd
+    - Hero with Circles: /circle-hero/
+      skip: true
+      document: /featured/sections/heros/circle-hero.ftd
   - Stepper Components: /steppers/
     document: /featured/sections/steppers/index.ftd
     - Stepper with border box: /stepper-border-box/

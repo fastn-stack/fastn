@@ -1,0 +1,34 @@
+-- import: fastn.com/u/meenu-kumari
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Metric Card
+featured-link: /featured/sections/cards/
+category: Featured Cards
+image: $fastn-assets.files.images.featured.sections.cards.metric-card.png
+owners: [$meenu-kumari.info]
+license-url: card.fifthtry.site
+license: Creative Commons
+published-date: 29-Apr-2025
+cards: $cards
+demo-link: https://card.fifthtry.site/
+
+
+
+
+
+
+-- ft-ui.template-data list cards:
+
+-- ft-ui.template-data: Image Card
+template-url: /featured/sections/cards/image-card-1/
+screenshot: $fastn-assets.files.images.featured.sections.image-card-1.png
+
+-- ft-ui.template-data: Image Gallery IG
+template-url: /featured/sections/cards/image-gallery-ig/
+screenshot: $fastn-assets.files.images.featured.sections.image-gallery-ig.png
+
+-- ft-ui.template-data: Imagen IG
+template-url: /featured/sections/cards/imagen-ig/
+screenshot: $fastn-assets.files.images.featured.sections.imagen-ig.png
+
+-- end: cards
