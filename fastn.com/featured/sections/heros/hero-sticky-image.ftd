@@ -1,0 +1,64 @@
+-- import: fastn.com/u/meenu-kumari
+-- import: fastn.com/featured as ft-ui
+
+-- ds.featured-category: Hero Sticky Image
+featured-link: /heros/
+category: Featured Hero Components
+image: $fastn-assets.files.images.featured.sections.heros.hero-sticky-image.png
+owners: [$meenu-kumari.info]
+license-url: https://hero.fifthtry.site/
+license: Creative Commons
+published-date: 29-Apr-2025
+cards: $heros
+demo-link: https://hero.fifthtry.site/
+
+To use hero components on your fastn web project, add below into FASTN.ftd file:
+
+-- ds.code:
+
+\-- fastn.dependency: hero.fifthtry.site
+
+\-- fastn.auto-import: hero.fifthtry.site as hero
+
+-- ftd.text:
+role: $inherited.types.copy-regular
+color: $inherited.colors.text-strong
+
+If you want to use it on your project then use below given example code and
+add it inside a .ftd file.
+
+-- ds.code:
+
+\-- hero.hero-sticky-image:  We Transform ideas into digital outcomes.
+sticky-image: $assets.files.assets.placeholder.svg
+
+We are an award-winning strategic design company that provides 
+consultancy services and help you create outstanding digital products.
+
+-- end: ds.featured-category
+
+
+
+
+
+
+
+-- ft-ui.template-data list heros:
+
+-- ft-ui.template-data: Hero Right Hug Expanded...
+template-url: /hero-right-hug-expanded-search/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-expanded-search.jpg
+
+-- ft-ui.template-data: Hero Right Hug Expanded
+template-url: /hero-right-hug-expanded/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-expanded.jpg
+
+-- ft-ui.template-data: Hero Right Hug Large
+template-url: /hero-right-hug-large/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-large.jpg
+
+-- ft-ui.template-data: Hero Right Hug Search Label
+template-url: /hero-right-hug-search-label/
+screenshot: $fastn-assets.files.images.featured.sections.heros.hero-right-hug-search-label.jpg
+
+-- end: heros

@@ -15,6 +15,34 @@ templates: $cards
 
 -- ft-ui.template-data list cards:
 
+-- ft-ui.template-data: Overlay Card
+template-url: /featured/sections/cards/overlay-card/
+screenshot: $fastn-assets.files.images.featured.sections.cards.overlay-card.png
+
+-- ft-ui.template-data: Magnifine Card
+template-url: /featured/sections/cards/magnifine-card/
+screenshot: $fastn-assets.files.images.featured.sections.cards.magnifine-card.png
+
+-- ft-ui.template-data: News Card
+template-url: /featured/sections/cards/news-card/
+screenshot: $fastn-assets.files.images.featured.sections.cards.news-card.png
+
+-- ft-ui.template-data: Metric Card
+template-url: /featured/sections/cards/metric-card/
+screenshot: $fastn-assets.files.images.featured.sections.cards.metric-card.png
+
+-- ft-ui.template-data: Profile Card
+template-url: /featured/sections/cards/profile-card/
+screenshot: $fastn-assets.files.images.featured.sections.cards.profile-card.png
+
+-- ft-ui.template-data: Hastag Card
+template-url: /featured/sections/cards/hastag-card/
+screenshot: $fastn-assets.files.images.featured.sections.cards.hastag-card.png
+
+-- ft-ui.template-data: Icon Card
+template-url: /featured/sections/cards/icon-card/
+screenshot: $fastn-assets.files.images.featured.sections.cards.icon-card.png
+
 -- ft-ui.template-data: Person Cards
 template-url: /featured/sections/cards/card-1/
 screenshot: $fastn-assets.files.images.featured.sections.card-1.png
