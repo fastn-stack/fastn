@@ -8,17 +8,44 @@ These learning resources will help you to ace the challenges of the
 programs. This program is an official **`certification program`**
 offered to the students to acknowledge their competance in `fastn-stack`.
 
-;; The resources are distributed in the following categories.
--- ds.h1: Try some demo
+-- ds.h1: Introduction
 
-- **Acme:** A [website](/r/acme) created using fastn.
-- **Counter:** Create a [counter component](/r/counter/) using fastn.
+fastn is a modern, declarative framework for building static websites and web
+apps using a single unified syntax: `.ftd` (fastn Text Document). It is
+designed to simplify both content creation and layout logic without requiring
+JavaScript, HTML, or CSS for basic usage.
+
+FifthTry is the platform that powers the fastn framework, focusing on
+developer-centric tools that simplify modern web development.
+
+Here is the process to create your account on FifthTry.
+
+- Video to create account on FifthTry - [Create Account](https://www.youtube.com/watch?v=PcQcPRTxIZQ)
+
+-- ds.h1: Installation
+
+- Install [fastn](https://fastn.com/install/)
+
+-- ds.h1: Basics of fastn
+
+- [Core Components](https://fastn.com/kernel/)
+- [Data Modelling](https://fastn.com/ftd/data-modelling/)
+
+;; The resources are distributed in the following categories.
+;; -- ds.h1: Try some demo
+
+;; - **Acme:** A [website](/r/acme) created using fastn.
+;; - **Counter:** Create a [counter component](/r/counter/) using fastn.
 
 -- ds.h1: Create a website
 
 - **Start with a readymade template:** Create a doc-site with a [fastn Template](https://github.com/fastn-stack/fastn-template).
 - **Quick Build Guide:** Learn how to [build websites using fastn Templates](/quick-build/) in 4 simple steps.
 - **fastn Basics:** Discover beginner level tutorials like using markdown to updating SEO of your website. Check out [fastn Basics](https://fastn.com/markdown/-/frontend/).
+
+-- ds.h1: Featured Components
+
+Check all the [featured components](https://fastn.com/featured/) available in fastn.
 
 ;; - **Workshop** to [create website.](https://github.com/fastn-stack/workshop)
 -- ds.h1: Customize your design
@@ -30,8 +57,6 @@ offered to the students to acknowledge their competance in `fastn-stack`.
 - **Typography:** Discover how to create [typography.](/typography/)
 - **Typography JSON to ftd:** Learn to generate [typography code from JSON](https://fastn.com/typo-json-to-ftd/)
 - **Export Typography as JSON:** Learn to export [`ftd.type-data` variables as JSON](https://fastn.com/typo-to-json/)
-
-
 
 -- ds.h1: Build and customize UI components
 
@@ -56,11 +81,16 @@ offered to the students to acknowledge their competance in `fastn-stack`.
 - **Static hosting on Vercel:** Learn to [publish static site On Vercel](/vercel/)
 - **Dynamic hosting:** Learn [deploying on Heroku](/heroku/)
 
+-- ds.h1: Other References
+
+- [Build your own blog site using FifthTry](https://nandhini.in/build-blog/)
+- [Creating a Collection within an Org](https://www.youtube.com/watch?v=9filCItSrs0 )
+- [FifthTry Editor - Demo by Arpita](https://www.youtube.com/watch?v=k5ysGSflWs8)
+
 ;; -- ds.h1: Other Resources
 
 ;; - **Blog:** [A content writer's experience with fastn.](/writer/)
 ;; - **Case Study:** Learn from a practical case study. Check [acme case study.](/acme/)
-
 
 ;; -- ds.h1: Customize the Design of Your fastn Site
 
@@ -85,10 +115,6 @@ Join 3000+ developers learning `fastn` on
 [our Discord server](https://fastn.com/discord/), since we are a new language
 and there is not much material on Google/StackOverflow, our Discord is the best
 place to ask questions, get help etc.
-
-You can also join
-[`fastn` WhatsApp channel](https://whatsapp.com/channel/0029Va6XNHZ9WtCCkv3KvC0X)
-to stay up to date about fastn.
 
 
 -- end: ds.page-with-no-right-sidebar
