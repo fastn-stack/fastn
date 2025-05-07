@@ -81,11 +81,16 @@ Check all the [featured components](https://fastn.com/featured/) available in fa
 - **Static hosting on Vercel:** Learn to [publish static site On Vercel](/vercel/)
 - **Dynamic hosting:** Learn [deploying on Heroku](/heroku/)
 
+-- ds.h1: Other References
+
+- [Build your own blog site using FifthTry](https://nandhini.in/build-blog/)
+- [Creating a Collection within an Org](https://www.youtube.com/watch?v=9filCItSrs0 )
+- [FifthTry Editor - Demo by Arpita](https://www.youtube.com/watch?v=k5ysGSflWs8)
+
 ;; -- ds.h1: Other Resources
 
 ;; - **Blog:** [A content writer's experience with fastn.](/writer/)
 ;; - **Case Study:** Learn from a practical case study. Check [acme case study.](/acme/)
-
 
 ;; -- ds.h1: Customize the Design of Your fastn Site
 
@@ -110,10 +115,6 @@ Join 3000+ developers learning `fastn` on
 [our Discord server](https://fastn.com/discord/), since we are a new language
 and there is not much material on Google/StackOverflow, our Discord is the best
 place to ask questions, get help etc.
-
-You can also join
-[`fastn` WhatsApp channel](https://whatsapp.com/channel/0029Va6XNHZ9WtCCkv3KvC0X)
-to stay up to date about fastn.
 
 
 -- end: ds.page-with-no-right-sidebar
