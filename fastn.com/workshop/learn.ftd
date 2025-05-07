@@ -18,7 +18,7 @@ JavaScript, HTML, or CSS for basic usage.
 FifthTry is the platform that powers the fastn framework, focusing on
 developer-centric tools that simplify modern web development.
 
-Here is the process to create your account on FifthTry.
+Here is the process to create your account on [FifthTry](https://www.fifthtry.com/).
 
 - Video to create account on FifthTry - [Create Account](https://www.youtube.com/watch?v=PcQcPRTxIZQ)
 
@@ -32,10 +32,10 @@ Here is the process to create your account on FifthTry.
 - [Data Modelling](https://fastn.com/ftd/data-modelling/)
 
 ;; The resources are distributed in the following categories.
--- ds.h1: Try some demo
+;; -- ds.h1: Try some demo
 
-- **Acme:** A [website](/r/acme) created using fastn.
-- **Counter:** Create a [counter component](/r/counter/) using fastn.
+;; - **Acme:** A [website](/r/acme) created using fastn.
+;; - **Counter:** Create a [counter component](/r/counter/) using fastn.
 
 -- ds.h1: Create a website
 
