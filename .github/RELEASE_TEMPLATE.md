@@ -8,7 +8,7 @@ releases.
 
 ## Linux (x64)
 
-Minimum glibc version to run these releases is 2.31.
+Minimum glibc version to run these releases is 2.35.
 
 GitHub Sha: GITHUB_SHA  
 Date: DATE  
