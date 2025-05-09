@@ -1,2 +1,4 @@
--- ftd.text: How to install `fastn` on your system
+-- string title: How to install `fastn` on your system
+
+-- ftd.text: $title
 link: https://fastn.com/install
