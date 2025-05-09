@@ -138,7 +138,8 @@ pub async fn interpret_helper(
 }
 
 // source, foreign_variable, foreign_function
-#[tracing::instrument(skip_all)]
+#[allow(clippy::type_complexity)]
+#[tracing::instrument(skip(lib, _state))]
 pub async fn resolve_import_2022(
     lib: &mut fastn_core::Library2022,
     _state: &mut ftd::interpreter::InterpreterState,
