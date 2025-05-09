@@ -201,10 +201,26 @@ impl Library2022 {
             if !name.starts_with(format!("{}/", package.name.as_str()).as_str()) {
                 return Ok(None);
             }
-            let new_name = name.replacen(package.name.as_str(), "", 1);
+
+            let id = name.replacen(package.name.as_str(), "", 1);
+
+            tracing::info!("checking sitemap for {id}");
+
+            let resolved_id = package
+                .sitemap
+                .as_ref()
+                .and_then(|sitemap| {
+                    sitemap
+                        .resolve_document(&id)
+                        .map(|(sitemap_id, _)| sitemap_id)
+                })
+                .unwrap_or(id);
+
+            tracing::info!("found id in sitemap: {resolved_id}");
+
             let (file_path, data) = package
                 .resolve_by_id(
-                    new_name.as_str(),
+                    resolved_id.as_str(),
                     None,
                     lib.config.package.name.as_str(),
                     &lib.config.ds,
