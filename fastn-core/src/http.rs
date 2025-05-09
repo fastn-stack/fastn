@@ -372,6 +372,7 @@ impl Request {
         self.host.to_string()
     }
 
+    #[tracing::instrument]
     pub fn is_bot(&self) -> bool {
         match self.user_agent() {
             Some(user_agent) => is_bot(&user_agent),

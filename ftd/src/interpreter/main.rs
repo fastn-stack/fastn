@@ -943,6 +943,7 @@ impl InterpreterState {
         Ok(ftd::interpreter::StateWithThing::new_continue())
     }
 
+    #[tracing::instrument(skip_all)]
     pub fn continue_after_import(
         mut self,
         module: &str,

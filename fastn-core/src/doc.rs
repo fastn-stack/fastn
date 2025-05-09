@@ -58,6 +58,7 @@ pub async fn interpret_helper(
     loop {
         match s {
             ftd::interpreter::Interpreter::Done { document: doc } => {
+                tracing::info!("done");
                 document = doc;
                 break;
             }
@@ -66,6 +67,7 @@ pub async fn interpret_helper(
                 state: mut st,
                 caller_module,
             } => {
+                tracing::info!("stuck on import: {module}");
                 let (source, path, foreign_variable, foreign_function, ignore_line_numbers) =
                     resolve_import_2022(
                         lib,
@@ -92,6 +94,7 @@ pub async fn interpret_helper(
                 processor,
                 ..
             } => {
+                tracing::info!("stuck on processor: {processor}");
                 let doc = state.get_current_processing_module().ok_or(
                     ftd::interpreter::Error::ValueNotFound {
                         doc_id: module,
@@ -116,6 +119,7 @@ pub async fn interpret_helper(
                 variable,
                 caller_module,
             } => {
+                tracing::info!("stuck on foreign variable: {variable}");
                 let value = resolve_foreign_variable2022(
                     variable.as_str(),
                     module.as_str(),
@@ -134,6 +138,7 @@ pub async fn interpret_helper(
 }
 
 // source, foreign_variable, foreign_function
+#[tracing::instrument(skip_all)]
 pub async fn resolve_import_2022(
     lib: &mut fastn_core::Library2022,
     _state: &mut ftd::interpreter::InterpreterState,

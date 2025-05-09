@@ -17,6 +17,7 @@ impl KeyValueData {
 pub type Library2022 = fastn_core::RequestConfig;
 
 impl Library2022 {
+    #[tracing::instrument(skip(self))]
     pub async fn get_with_result(
         &mut self,
         name: &str,
@@ -54,6 +55,7 @@ impl Library2022 {
             })
     }
 
+    #[tracing::instrument(skip(self))]
     pub async fn get(
         &mut self,
         name: &str,
@@ -84,6 +86,7 @@ impl Library2022 {
         )
         .await;
 
+        #[tracing::instrument(skip(lib, session_id))]
         async fn get_for_package(
             name: &str,
             lib: &mut fastn_core::Library2022,
@@ -139,6 +142,7 @@ impl Library2022 {
             fastn_core::usage_error(format!("library not found 1: {}: {package:?}", name))
         }
 
+        #[tracing::instrument(skip(lib, package))]
         async fn get_for_package_(
             name: &str,
             lib: &mut fastn_core::Library2022,
@@ -180,6 +184,7 @@ impl Library2022 {
 
         // TODO: This function is too long. Break it down.
         #[allow(clippy::await_holding_refcell_ref)]
+        #[tracing::instrument(skip(lib, package))]
         async fn get_data_from_package(
             name: &str,
             package: &fastn_core::Package,
