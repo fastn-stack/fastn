@@ -1,26 +1,41 @@
 -- ds.page: Why was `fastn` created?
 
-`fastn` was created to simplify web development and make it more accessible, especially for non-programmers. It serves as an open-source, full-stack framework designed to streamline the creation of content-centric and database-driven websites. 
+`fastn` was created to simplify web development and make it more accessible, 
+especially for non-programmers. It serves as an open-source, full-stack framework 
+designed to streamline the creation of content-centric and database-driven websites. 
 
 -- ds.h3: Simplified Development Process
 
-`fastn` introduces an intuitive programming language called ftd, which is easy to learn and use. This simplifies the development process, allowing users to build user interfaces and content-centric websites without extensive programming knowledge.
+`fastn` introduces an intuitive programming language called ftd, 
+which is easy to learn and use. This simplifies the development process, 
+allowing users to build user interfaces and content-centric websites without 
+extensive programming knowledge.
 
 -- ds.h3: Versatility and Power
 
-Despite its user-friendly nature, `fastn` is versatile and powerful, enabling the development of various web applications, including blogs, knowledge bases, portfolios, and marketing websites.
+Despite its user-friendly nature, `fastn` is versatile and powerful, 
+enabling the development of various web applications, including blogs, 
+knowledge bases, portfolios, and marketing websites.
 
 -- ds.h3: Enhanced Developer Productivity
 
- By providing an opinionated design system, package management, and an integrated web server, `fastn` handles many common tasks, freeing developers to focus on building their products.
+ By providing an opinionated design system, package management, 
+ and an integrated web server, `fastn` handles many common tasks, 
+ freeing developers to focus on building their products.
 
 -- ds.h3: Dynamic and Data-Driven Websites
 
-`fastn` excels at creating dynamic and data-driven websites. It supports event handling, form validation, AJAX requests, and seamless integration with SQL databases, making it easier to work with data.
+`fastn` excels at creating dynamic and data-driven websites.
+ It supports event handling, form validation, AJAX requests, 
+ and seamless integration with SQL databases, making it easier to work with data.
 
 -- ds.h3: Easy Deployment
 
-Websites developed with `fastn` can be compiled into static HTML, JavaScript, CSS, and other assets, allowing for easy deployment on various static hosting providers such as GitHub Pages and Vercel. Additionally, `fastn` offers its own hosting solution, Fastn Cloud, providing a managed and integrated hosting platform for both static and dynamic sites.
+Websites developed with `fastn` can be compiled into static HTML, JavaScript, 
+CSS, and other assets, allowing for easy deployment on various static hosting providers 
+such as GitHub Pages and Vercel. Additionally, `fastn` offers its own hosting solution, 
+Fastn Cloud, providing a managed and integrated hosting platform for both static and 
+dynamic sites.
     
 
 -- end: ds.page

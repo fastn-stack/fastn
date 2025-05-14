@@ -1014,14 +1014,14 @@ skip: true
   document: workshop/17-portfolio.ftd
   skip: true
 
-# `fastn` Made Easy- For the Curious & the Creative: /book/
-document: book/index.ftd
+# `fastn` Made Easy - For the Curious & the Creative: /book/
+  document: book/index.ftd
 
 - Introduction: 
-  - Why was `fastn` created ?: /book/why-fastn/
-  document: book/01-introduction/00-why-fastn.ftd
+  - Why was `fastn` created?: /book/why-fastn/
+    document: book/01-introduction/00-why-fastn.ftd
   - FifthTry Offerings: /book/fifthtry/
-  document: book/01-introduction/01-fifthtry.ftd
+    document: book/01-introduction/01-fifthtry.ftd
 
 
 # Blog: /blog/

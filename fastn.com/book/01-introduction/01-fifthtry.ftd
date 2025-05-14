@@ -1,35 +1,52 @@
 -- ds.page: FifthTry Offerings
 
-At FifthTry, we’re reimagining web creation for the curious, the creative, and the content-first. Whether you're a developer, writer, educator, or entrepreneur — our tools are designed to help you bring ideas to life with ease.
+At FifthTry, we’re reimagining web creation for the curious, the creative, and the content-first. 
+
+Whether you're a developer, writer, educator, or entrepreneur — 
+our tools are designed to help you bring ideas to life with ease.
 
 -- ds.h3: `fastn` IDE
 
 Build in your browser.
-No setup, no clutter — just a clean, intuitive workspace to create fastn-powered websites in real-time. Ideal for beginners and pros alike.
+
+No setup, no clutter — just a clean, intuitive workspace to create fastn-powered 
+websites in real-time.
+
+Ideal for beginners and pros alike.
 
 
 -- ds.h3: Documentation Framework (DF)
 
 Docs that grow with your code.
-Connect your GitHub repo, write in FTD (our elegant markdown-like language), and publish continuously updated documentation — no extra tooling needed.
+
+Connect your GitHub repo, write in FTD (our elegant markdown-like language), and 
+publish continuously updated documentation — no extra tooling needed.
 
 
 -- ds.h3: Custom Domains
 
 Make it yours.
-Point your own domain with just a few clicks. We handle the backend magic so your site shows up exactly where you want it.
+
+Point your own domain with just a few clicks. We handle the 
+backend magic so your site shows up exactly where you want it.
 
 
 -- ds.h3: FifthTry Cloud Hosting
 
 From “done” to “deployed” in seconds.
-Your content goes live instantly — hosted, secure, and scalable, with zero maintenance. Focus on creating; we’ll take care of the rest.
+
+Your content goes live instantly — hosted, secure, and scalable, with zero maintenance. 
+Focus on creating; we’ll take care of the rest.
 
     
 -- ds.h3: FTD Language
 
 Write once. Use anywhere.
-Simple enough for beginners, powerful enough for developers. FTD lets you structure content and UI with clean, reusable components.
+
+Simple enough for beginners, powerful enough for developers. 
+FTD lets you structure content and UI with clean, reusable components.
+
+
 
 
 FifthTry is where content meets code — and everyone’s invited.
