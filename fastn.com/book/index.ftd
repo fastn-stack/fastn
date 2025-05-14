@@ -1,31 +1,18 @@
 -- boolean $author-mode: false
 
--- ds.page: The Book Of `fastn`
+-- ds.page: `fastn` Made Easy: For the Curious & the Creative
 
-*By Amit Upadhyay, with contributions from `fastn` community.*
+*By Amit Upadhyay and Deepti Mahadeva, with contributions from `fastn` community.*
 
-This version of the text assumes you are using the latest version of `fastn`.
-See the [installation section](/install/) to install or update `fastn`.
+Welcome to `fastn` Made Easy - For the Curious & the Creative — your friendly guide to building beautiful, content-rich websites without drowning in code!
 
-The online version of the book is available at
-[`fastn.com/book`](https://fastn.com/book/). You can get the book offline by
-cloning [`github.com/fastn-stack/fastn/`](https://github.com/fastn-stack/fastn)
-and, running `fastn serve` and visiting `http://127.0.0.1:8000/book/`.
+Whether you’re a developer, writer, designer, student, teacher, hobbyist, or just someone with a spark of curiosity, this guide is here to help you turn ideas into fully functional websites using `fastn` — an open-source web framework that’s as beginner-friendly as it is powerful.
 
-While reading this book you will invariably come across questions, things may
-not work as mentioned, or something may not be clearly explained. We have a
-[Discord channel: `Web Developers` -> `#book-club`](https://discord.gg/5CDm3jPhAR)
-for people who are reading this book, so feel free to jump over to Discord and
-come say hello!
+Think of `fastn` as your creative playground. With its intuitive language called FTD (FifthTry Document) and a web-based IDE, you can build blogs, portfolios, knowledge bases, or even dynamic data-driven sites — all without wrestling with complex syntax.
 
-The book is not yet complete, and translations of the book are also planned.
-Your contribution is most welcome to help us write and translate it. Please
-reach us out on [`fastn Contributors` -> `#book-and-docs` channel of
-`fastn-stack` server on Discord](https://discord.gg/BMtam65dbK). If you find
-any mistakes in the book you can report it as a [#issues in our Github
-Repository](https://github.com/fastn-stack/fastn.com/issues).
+This guide isn’t just about instructions. It’s about inspiration. It’s about lowering the barrier to entry so you can focus on expressing, sharing, and creating. You bring the curiosity, and `fastn` will bring the tools.
 
-Prefer 📺 video medium of learning? Checkout our [video course](/expander/).
+Let’s make the web a little more you — one page at a time.
 
 
 -- ds.h1: Notes To Editors
@@ -33,16 +20,4 @@ if: { author-mode }
 $on-global-key[e]$: $ftd.toggle($a=$author-mode)
 $on-click$: $ftd.toggle($a=$author-mode)
 
-- the "star us on github" should be a properly designed UI, not just text.
-- in fact entire sidebar can be like that.
-
 -- end: ds.page
-
--- component stuck:
-
--- ds.markdown:
-
-If you get stuck, please come to our [Discord channel: `Web Developers` ->
-`#book-club`](https://discord.gg/5CDm3jPhAR) to get help from us.
-
--- end: stuck
