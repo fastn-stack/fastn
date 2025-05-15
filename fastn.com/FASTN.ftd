@@ -1022,6 +1022,34 @@ skip: true
     document: book/01-introduction/00-why-fastn.ftd
   - FifthTry Offerings: /book/fifthtry/
     document: book/01-introduction/01-fifthtry.ftd
+- Local `fastn` CLI: /book/local-setup/
+  document: book/02-local-setup/01-local-setup.ftd
+  - Install fastn: /book/install/
+  document: author/how-to/install.ftd
+  - On MacOS/Linux: /book/macos/
+    document: author/setup/macos.ftd
+    description: Install on MacOS/Linux
+  - On Windows: /book/windows/
+    document: author/setup/windows.ftd
+    description: Install on Windows
+  - Uninstall fastn: /book/uninstall/
+    document: author/setup/uninstall.ftd
+    decription: Uninstall fastn
+  - Install GitHub: /book/github/
+    document: /get-started/github.ftd
+    skip: true
+  - Install Text Editor: /book/editor/
+    document: /get-started/editor.ftd
+    - Syntax Highlighting Sublime: /book/sublime/
+      document: author/how-to/sublime.ftd
+    - Syntax Highlighting VS Code: /book/vscode/
+      document: author/how-to/vscode.ftd  
+  - First Program - Hello World: /book/hello-world/
+    document: book/02-local-setup/02-hello-world.ftd
+- Fastn Development in the Browser (FifthTry IDE): /book/about-ide/
+  document: book/03-fifthtry/00-about-ide.ftd
+  - Develop and Preview in FifthTry IDE: /book/create-website/
+    document: book/03-fifthtry/01-create-website.ftd
 
 
 # Blog: /blog/

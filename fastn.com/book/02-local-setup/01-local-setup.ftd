@@ -1,0 +1,20 @@
+-- ds.page: Getting Started - Local setup 🚧
+
+Fastn is a modern static site generator built for speed, simplicity, and developer 
+productivity. Follow this guide to set up `fastn` locally on your system.
+
+-- ds.h1: Prerequisites
+
+Basic command line knowledge
+
+Git installed on your system (optional but recommended)
+
+A text editor like VS Code or Sublime Text
+
+
+-- ds.h1: Next Step
+
+Let's install `fastn` on your machine [Install `fastn` ->](/book/install/)
+
+
+-- end: ds.page

@@ -1,0 +1,32 @@
+-- ds.page: FifthTry (IDE)
+
+FifthTry offers an integrated development environment (IDE) as part of its `fastn` ecosystem, 
+designed to streamline web development, especially for non-programmers. 
+This IDE is integrated into their platform, providing a seamless experience for 
+building, hosting, and publishing websites. 
+Key Features of FifthTry's `fastn` IDE
+
+-- ds.h3: Web-Based Interface
+
+The IDE is accessible through a web browser, eliminating the need for local installations 
+and allowing users to work from anywhere.
+
+
+-- ds.h3: User-Friendly Design
+
+Tailored for non-technical users, the IDE emphasizes simplicity and ease of use, enabling 
+content creation and website development without extensive coding knowledge.
+
+
+-- ds.h3: Integrated Hosting
+
+Users can build and deploy their websites directly from the IDE using 
+FifthTry's hosting services, streamlining the development-to-deployment process.
+
+
+-- ds.h3: Collaboration Tools
+
+The platform facilitates collaboration among team members, allowing 
+for shared editing and version control.
+
+-- end: ds.page
