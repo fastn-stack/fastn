@@ -1,0 +1,51 @@
+-- ds.page: Using FifthTry IDE for Fastn Projects
+
+
+-- ds.youtube: 
+v: lh3rRbVBses
+
+
+-- ds.h1: Signing Up or Login to FifthTry
+
+Open your web browser and navigate to [FifthTry](https://www.fifthtry.com/)
+
+If you're new to FifthTry, click on the `Sign up` button to create your account. If you're already a member, simply `Login` using your credentials.
+
+Upon logging in, you'll land on your personal dashboard, where you'll view all your sites.
+
+-- ds.h1: Create your website
+
+Click on the `Create new site +` button to start building your website.
+
+On the prompted page, enter your desired website sub domain name. Example - my-site, read-my-blog, etc. You can give any sub domain name at this point for your website.
+
+Once you've entered your sub domain name, hit the `Create site` button. Your site is now live on [FifthTry](https://www.fifthtry.com/)
+
+-- ds.h1: Editing Your Website
+
+Head to the `Editor` tab to begin working on your website.
+
+Within the editor, you'll find three main options
+
+Preview - View your site.
+Edit - Modify files.
+Delete - Remove files.
+
+Your site comes pre-equipped with default files, including `index.ftd` and `fastn.ftd`, 
+along with the design system package. 
+
+You can add more files by clicking on the `+` icon next to the files.
+
+To save the content of file on IDE, use these commands.
+
+`Run Command (Ctrl-K or Cmd-K)` and `Ctrl-S`
+
+-- ds.h1: Preview Your Website
+
+Preview your work at any point by clciking on the `Preview` button.
+You can toggle between different views (desktop, mobile, tablet) or 
+preview your site in a browser. Any errors will be highlighted along with the line number.
+
+
+
+-- end: ds.page

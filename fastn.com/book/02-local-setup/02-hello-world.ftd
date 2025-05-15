@@ -1,0 +1,98 @@
+-- import: admonitions.fifthtry.site as cbox
+
+-- ds.page: Hello World with `fastn`
+
+Let's create our first program in `fastn` 
+
+If Fastn isn’t installed yet, go ahead and [Install `fastn` ](/book/install/).
+
+-- ds.h1: Prerequisites
+
+Basic command line knowledge
+
+Git installed on your system (optional but recommended)
+
+We recommend [Sublime Text](https://www.sublimetext.com) or
+[VS Code](https://code.visualstudio.com) for working with FTD.
+
+
+-- ds.h1: Let's create our Hello World program
+
+Let's create a `fastn` package and start coding Hello World.
+
+
+-- cbox.info: What is `fastn` package?
+
+
+`fastn` package is a folder that requires atleast two files
+
+- FASTN.ftd
+- index.ftd
+
+There can be any number of `.ftd` file but these two files are essential.
+
+-- ds.markdown:
+
+Create a new folder and rename it as first-project, anywhere in your machine. 
+
+Open the newly created folder in any text editor.
+
+Open the folder and add two new files, `FASTN.ftd` and `index.ftd` to create
+the `fastn` package.
+
+
+
+-- ds.h2: `FASTN.ftd`
+
+It is a special file which keeps package configuration related data like
+- package name
+- package dependencies
+- sitemap, etc
+
+Import the special library, fastn
+
+-- ds.code: Import `fastn`
+lang: ftd
+
+\-- import: fastn
+
+-- ds.markdown:
+
+Then, we create a new fastn package after giving line-space
+
+-- ds.code: Create a fastn package
+lang: ftd
+
+\-- fastn.package: <project-name>
+
+
+-- ds.h2: `index.ftd`
+
+To print Hello World, we are using [`ftd.text`](/row/)
+section
+
+-- ds.code: Code
+lang: ftd
+
+\-- ftd.text: Hello World
+
+
+-- ds.markdown:
+
+Create a local server and run the URL in the web-browser to see the text
+displayed.
+
+Make sure that the directory points to the expander folder you created.
+
+-- ds.code: Terminal command to create local server
+lang: ftd
+
+fastn serve
+
+
+-- ds.markdown:
+
+Using just one line code, we displayed the `Hello World`s.
+
+
+-- end: ds.page
