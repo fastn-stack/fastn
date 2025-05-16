@@ -12,7 +12,7 @@ integration-tests/test.wasm
 result
 
 fastn.com/.packages
-fastn.com/.build
+
 .direnv
 .envrc
 
