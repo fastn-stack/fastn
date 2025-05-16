@@ -1045,13 +1045,18 @@ skip: true
     - Syntax Highlighting VS Code: /book/vscode/
       document: author/how-to/vscode.ftd  
   - First Program - Hello World: /book/hello-world/
-    document: book/02-local-setup/02-hello-world.ftd
+    document: book/01-introduction/03-hello-world.ftd
 - Fastn Development in the Browser (FifthTry IDE): /book/about-ide/
-  document: book/03-fifthtry/00-about-ide.ftd
+  document: book/01-introduction/04-about-ide.ftd
   - Develop and Preview in FifthTry IDE: /book/create-website/
-    document: book/03-fifthtry/01-create-website.ftd
+    document: book/01-introduction/05-create-website.ftd
   - FifthTry Domain Setting and Hosting: /book/fifthtry-hosting/
     document: author/how-to/fifthtry-hosting.ftd
+  - Edit FifthTry Website and Upload: /book/manual-upload/
+    document: book/01-introduction/06-manual-upload.ftd
+- `fastn` Essentials : /book/about-fastn/
+  document: book/01-introduction/07-about-fastn.ftd
+  
 
 
 
