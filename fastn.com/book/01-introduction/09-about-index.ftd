@@ -1,0 +1,31 @@
+-- ds.page: index.ftd in `fastn`
+
+The `index.ftd` file is a core part of any `fastn` project. 
+It serves as the entry point or homepage for your site and is one of the two 
+required files in a valid `fastn` package (along with FASTN.ftd).
+
+-- ds.h1: What is `index.ftd`?
+
+- `index.ftd` is automatically mapped to the root route (/) of your site.
+
+- It is the default page that users see when they visit your website or documentation.
+
+- `fastn` looks for `index.ftd` in each folder to render the content at that route.
+
+-- ds.code: Example: Basic `index.ftd`
+lang: ftd
+
+\-- ftd.text: Welcome to My Fastn Site!
+
+\-- ftd.text: This site is built using the Fastn framework.
+
+-- ds.h1: Best Practices
+
+- Use index.ftd to introduce your site or section.
+
+- Include navigation or links to other pages.
+
+- Keep content modular—use components where possible.
+
+
+-- end: ds.page    

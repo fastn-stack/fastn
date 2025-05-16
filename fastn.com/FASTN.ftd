@@ -1054,8 +1054,12 @@ skip: true
     document: author/how-to/fifthtry-hosting.ftd
   - Edit FifthTry Website and Upload: /book/manual-upload/
     document: book/01-introduction/06-manual-upload.ftd
-- `fastn` Essentials : /book/about-fastn/
-  document: book/01-introduction/07-about-fastn.ftd
+- `fastn` Essentials : /book/fastn-essentials/
+  document: book/01-introduction/07-fastn-essentials.ftd
+  - FASTN.ftd : /book/about-fastn/
+  document: book/01-introduction/08-about-fastn.ftd
+  - index.ftd : /book/about-index/
+  document: book/01-introduction/09-about-index.ftd
   
 
 
