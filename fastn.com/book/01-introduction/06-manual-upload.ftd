@@ -1,0 +1,57 @@
+-- ds.page: Edit Locally and Re-upload a FifthTry Website
+
+If your website is hosted on FifthTry and you want to edit it locally and upload the changes, 
+follow these steps
+
+
+-- ds.h1: Download Website 
+
+- Go to Settings in the FifthTry dashboard.
+
+- ✅ Enable `Mark as Package`.
+
+-- ds.image: Mark as Package setting
+src: $fastn-assets.files.book.images.site-is-package.png
+width: fill-container
+
+- ❌ Optionally disable editing by selecting `Make Non-Editable` (used if pushing from GitHub only).
+
+- Visit the site on the FifthTry dashboard.
+
+- Click on the `Download(ZIP)` option.
+
+-- ds.image: Mark as Package setting
+src: $fastn-assets.files.book.images.download-zip.png
+width: fill-container
+
+-- ds.h1: Make Your Changes
+
+- Unzip the file.
+
+- Edit files locally on your machine.
+
+-- ds.h1: To Upload the Changes Back to FifthTry
+
+- Go to Settings again.
+
+- Generate a Site Token.
+
+-- ds.image: Generate Site Token
+src: $fastn-assets.files.book.images.generate-token.png
+width: fill-container
+
+- Copy the token and run the following command in your terminal
+
+-- ds.code: Upload your website on FifthTry
+lang: ftd
+
+\-- FIFTHTRY_SITE_WRITE_TOKEN=<your-site-token> fastn upload <site-slug>
+
+-- ds.markdown: 
+
+Replace your-site-token and your-site-name with actual values.
+
+
+
+
+-- end: ds.page

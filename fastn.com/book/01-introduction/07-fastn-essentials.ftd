@@ -1,0 +1,33 @@
+-- ds.page: `fastn` Essentials
+
+
+
+A `fastn` package is a folder (i.e., a directory) that contains all the files and 
+configurations required to build a static site or documentation using the `fastn` framework. 
+It follows a specific structure that allows `fastn` to understand how to generate routes, 
+apply layouts, and include dependencies.
+
+
+-- ds.h1: Minimum Required Files
+
+Every fastn package must contain at least two essential files
+
+-- ds.h2: FASTN.ftd 
+
+The FASTN.ftd file is the central configuration file in every Fastn project.
+It defines your website's metadata, dependencies, package structure, routing behavior, 
+and layout preferences. Think of it as the foundation of your site’s logic and structure.
+
+-- ds.h2: index.ftd  
+
+This file serves as the homepage (/) of your website or documentation.
+It is the entry point for users visiting the root URL.
+Without index.ftd, your site would not have a default landing page.
+
+
+-- ds.h1: Additional .ftd Files
+
+Beyond the required two files, you can create any number of .ftd files to 
+build out your site's content and structure.
+
+-- end: ds.page

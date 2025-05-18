@@ -1,0 +1,132 @@
+
+-- ds.page: FASTN.ftd in `fastn`
+
+The FASTN.ftd file is the central configuration file in every Fastn project.
+It defines your website's metadata, dependencies, package structure, routing behavior, 
+and layout preferences. Think of it as the foundation of your site’s logic and structure.
+
+
+-- ds.h1: Site Metadata
+
+- You can declare your site’s name, version, and other identifying information using 
+the fastn.package section.
+
+-- ds.code: FASTN.ftd package name
+lang: ftd
+
+\-- fastn.package: demo.fifthtry.site
+    version: 1.0.0
+    system-is-confidential: false
+
+-- ds.markdown: 
+
+These details help identify your project and manage versioning.
+
+
+
+-- ds.h1: Declaring Dependencies
+
+If your site depends on external 
+`fastn` packages (such as a theme or component library), list them using -- fastn.dependency
+
+-- ds.code: `fastn` external dependencies
+lang: ftd
+
+\-- fastn.dependency: fifthtry.github.io/fastn-theme
+
+-- ds.markdown: 
+
+This tells Fastn to fetch and include that package during the build.
+
+-- ds.h1: Including internal Packages
+
+If you're working with local packages or want 
+to organize your project modularly, you can also include local directories
+
+-- ds.code: `fastn` local dependencies
+lang: ftd
+
+\-- fastn.dependency: blog.fifthtry.site
+provided-via: demo.fifthtry.site/config/blog
+
+-- ds.h1: Routing (File-Based Routing)
+
+Fastn uses a file-based routing system, so no routing table is required.
+
+Your folder and file structure directly maps to site URLs.
+
+-- ds.code: `fastn` file structure and url
+lang: bash
+
+\-- 
+📂 Workshop/
+ ┣ 📄 index.ftd       → /workshop/
+ ┣ 📄 about.ftd       → /about/
+ ┗ 📂 blog/
+    ┣ 📄 index.ftd     → /blog/
+    ┗ 📄 post1.ftd     → /blog/post1/
+
+
+
+-- ds.code: Code in FASTN.ftd 
+lang: bash
+
+\- Workshop: /workshop/
+   skip: true
+    - About Us: /workshop/about/
+      document: workshop/about.ftd
+
+-- ds.h1: Auto Import in FASTN.ftd
+
+In `fastn`, auto-import is a handy feature that lets you automatically make components, 
+functions, or variables from a dependency package available throughout your site without 
+explicitly importing them in every .ftd file.
+
+This is especially useful for things like
+
+- Layouts
+
+- Reusable components or assets (e.g., buttons, cards)
+
+- Global variables or styles
+
+-- ds.code: Auto import in FASTN.ftd
+lang: ftd
+
+\-- fastn.auto-import: fastn.com/assets as fastn-assets
+
+
+-- ds.h1: Sitemap
+
+`fastn.sitemap` is a special section in `fastn` used to define the structure of 
+your website—like a table of contents. It helps `fastn` understand
+
+- What pages exist
+
+- Their URLs
+
+- The order in which they appear
+
+- How they're nested (if at all)
+
+-- ds.code: Example FASTN.ftd with fastn.sitemap
+lang: ftd
+
+\-- fastn.package: demo
+version: 1.0.0
+
+\-- fastn.dependency: roboto-typography.fifthtry.site
+
+\-- fastn.auto-import: demo.fifthtry.site/config/blog as blog
+
+\-- fastn.sitemap:
+
+# HOME: /
+
+# ABOUT: /about/
+
+# BLOG: /blog/
+
+
+
+-- end: ds.page
