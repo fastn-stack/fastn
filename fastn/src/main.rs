@@ -1,8 +1,6 @@
 #![deny(unused_extern_crates)]
 #![deny(unused_crate_dependencies)]
 
-// test
-
 pub fn main() {
     fastn_observer::observe();
 
