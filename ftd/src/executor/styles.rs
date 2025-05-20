@@ -1404,8 +1404,8 @@ impl LinearGradient {
 #[derive(serde::Deserialize, Debug, PartialEq, Clone, serde::Serialize)]
 pub enum Background {
     Solid(ftd::executor::Color),
-    Image(ftd::executor::BackgroundImage),
-    LinearGradient(ftd::executor::LinearGradient),
+    Image(Box<ftd::executor::BackgroundImage>),
+    LinearGradient(Box<ftd::executor::LinearGradient>),
 }
 
 impl Background {
@@ -1434,13 +1434,15 @@ impl Background {
             ftd::interpreter::FTD_BACKGROUND_SOLID => Ok(ftd::executor::Background::Solid(
                 Color::from_value(or_type_value.1, doc, line_number)?,
             )),
-            ftd::interpreter::FTD_BACKGROUND_IMAGE => Ok(ftd::executor::Background::Image(
-                ftd::executor::BackgroundImage::from_value(or_type_value.1, doc, line_number)?,
-            )),
+            ftd::interpreter::FTD_BACKGROUND_IMAGE => {
+                Ok(ftd::executor::Background::Image(Box::new(
+                    ftd::executor::BackgroundImage::from_value(or_type_value.1, doc, line_number)?,
+                )))
+            }
             ftd::interpreter::FTD_BACKGROUND_LINEAR_GRADIENT => {
-                Ok(ftd::executor::Background::LinearGradient(
+                Ok(ftd::executor::Background::LinearGradient(Box::new(
                     ftd::executor::LinearGradient::from_value(or_type_value.1, doc, line_number)?,
-                ))
+                )))
             }
             t => ftd::executor::utils::parse_error(
                 format!("Unknown variant `{}` for or-type `ftd.background`", t),

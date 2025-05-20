@@ -134,7 +134,7 @@ pub fn to_sitemap_compat(
             children.push(child_to_toc_compat);
         }
 
-        let toc_compat = fastn_core::sitemap::toc::TocItemCompat {
+        fastn_core::sitemap::toc::TocItemCompat {
             url: Some(toc_item.id.clone()),
             number: None,
             title: toc_item.title.clone(),
@@ -158,8 +158,7 @@ pub fn to_sitemap_compat(
                 .cloned()
                 .map(|v| v.into()),
             document: None,
-        };
-        toc_compat
+        }
     }
 
     fn to_subsection_compat(

@@ -3,7 +3,7 @@ macro_rules! try_ok_state {
     ($e:expr) => {
         match $e {
             $crate::interpreter::StateWithThing::State(s) => {
-                return Ok($crate::interpreter::StateWithThing::new_state(s))
+                return Ok($crate::interpreter::StateWithThing::new_state(*s))
             }
             $crate::interpreter::StateWithThing::Continue => {
                 return Ok($crate::interpreter::StateWithThing::new_continue())
@@ -18,7 +18,7 @@ macro_rules! try_state {
     ($e:expr) => {
         match $e {
             $crate::interpreter::StateWithThing::State(s) => {
-                return $crate::interpreter::StateWithThing::new_state(s)
+                return $crate::interpreter::StateWithThing::new_state(*s)
             }
             $crate::interpreter::StateWithThing::Continue => {
                 return $crate::interpreter::StateWithThing::new_continue()

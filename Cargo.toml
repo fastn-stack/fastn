@@ -68,7 +68,6 @@ accept-language = "3"
 actix-http = "3"
 actix-web = "4"
 antidote = "1"
-anyhow = "1"
 async-recursion = "1"
 async-trait = "0.1"
 bytes = "1"
@@ -108,13 +107,10 @@ futures = "0.3"
 futures-core = "0.3"
 futures-util = { version = "0.3", default-features = false, features = ["std"] }
 http = "1"
-http-body-util = "0.1.3"
-hyper-util = "0.1.10"
 ignore = "0.4"
 include_dir = "0.7"
 indexmap = { version = "2", features = ["serde"] }
 indoc = "2"
-iroh = "0.34"
 itertools = "0.14"
 mime_guess = "2"
 once_cell = "1"
@@ -139,8 +135,8 @@ tokio-postgres = { version = "0.7", features = ["with-serde_json-1", "with-uuid-
 tracing = "0.1"
 url = "2"
 walkdir = "2"
-wasmtime = "32"
-zip = "2"
+wasmtime = "33"
+zip = "3"
 
 
 [workspace.dependencies.fastn-observer]
