@@ -61,7 +61,7 @@ impl fastn_unresolved::Definition {
         }
     }
 
-    pub fn resolved(self) -> Result<fastn_resolved::Definition, Self> {
+    pub fn resolved(self) -> Result<fastn_resolved::Definition, Box<Self>> {
         // must be called only if `is_resolved()` has returned true
         todo!()
     }

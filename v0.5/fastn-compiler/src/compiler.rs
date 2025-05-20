@@ -103,7 +103,7 @@ impl Compiler {
                         r.need_more_symbols.insert(symbol.clone());
                         self.definitions.insert(
                             symbol.string(&self.arena),
-                            fastn_unresolved::UR::UnResolved(s),
+                            fastn_unresolved::UR::UnResolved(*s),
                         );
                     }
                 }
