@@ -1202,7 +1202,7 @@ pub enum Interpreter {
         document: Document,
     },
     StuckOnProcessor {
-        state: InterpreterState,
+        state: Box<InterpreterState>,
         ast: ftd_ast::Ast,
         module: String,
         processor: String,
@@ -1258,7 +1258,7 @@ impl InterpreterWithoutState {
             } => Interpreter::StuckOnProcessor {
                 ast,
                 module,
-                state,
+                state: Box::new(state),
                 processor,
                 caller_module,
             },
@@ -1610,7 +1610,7 @@ impl Document {
 #[derive(Debug)]
 pub enum StateWithThing<T> {
     Thing(T),
-    State(InterpreterWithoutState),
+    State(Box<InterpreterWithoutState>),
     Continue,
 }
 
@@ -1620,7 +1620,7 @@ impl<T> StateWithThing<T> {
     }
 
     pub fn new_state(state: InterpreterWithoutState) -> StateWithThing<T> {
-        StateWithThing::State(state)
+        StateWithThing::State(Box::new(state))
     }
 
     pub fn is_continue(&self) -> bool {

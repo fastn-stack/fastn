@@ -20,7 +20,7 @@ pub enum Element {
     CheckBox(CheckBox),
     TextInput(TextInput),
     Iframe(Iframe),
-    Code(Code),
+    Code(Box<Code>),
     Rive(Rive),
     Document(Document),
 }
@@ -44,7 +44,7 @@ impl Element {
             "ftd#checkbox" => Element::CheckBox(CheckBox::from(component)),
             "ftd#text-input" => Element::TextInput(TextInput::from(component)),
             "ftd#iframe" => Element::Iframe(Iframe::from(component)),
-            "ftd#code" => Element::Code(Code::from(component, doc)),
+            "ftd#code" => Element::Code(Box::new(Code::from(component, doc))),
             "ftd#desktop" | "ftd#mobile" => {
                 Element::Device(Device::from(component, component.name.as_str()))
             }

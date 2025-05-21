@@ -104,7 +104,7 @@ impl<'a> TDoc<'a> {
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::Record>> {
         match self.search_thing(name, line_number)? {
             ftd::interpreter::StateWithThing::State(s) => {
-                Ok(ftd::interpreter::StateWithThing::new_state(s))
+                Ok(ftd::interpreter::StateWithThing::new_state(*s))
             }
             ftd::interpreter::StateWithThing::Continue => {
                 Ok(ftd::interpreter::StateWithThing::new_continue())
@@ -157,7 +157,7 @@ impl<'a> TDoc<'a> {
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::Variable>> {
         match self.search_thing(name, line_number)? {
             ftd::interpreter::StateWithThing::State(s) => {
-                Ok(ftd::interpreter::StateWithThing::new_state(s))
+                Ok(ftd::interpreter::StateWithThing::new_state(*s))
             }
             ftd::interpreter::StateWithThing::Continue => {
                 Ok(ftd::interpreter::StateWithThing::new_continue())
@@ -722,7 +722,7 @@ impl<'a> TDoc<'a> {
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::KindData>> {
         match self.get_kind_with_argument(name, line_number, &None, &None)? {
             ftd::interpreter::StateWithThing::State(s) => {
-                Ok(ftd::interpreter::StateWithThing::new_state(s))
+                Ok(ftd::interpreter::StateWithThing::new_state(*s))
             }
             ftd::interpreter::StateWithThing::Continue => {
                 Ok(ftd::interpreter::StateWithThing::new_continue())
@@ -774,7 +774,7 @@ impl<'a> TDoc<'a> {
     > {
         match self.search_thing(name, line_number)? {
             ftd::interpreter::StateWithThing::State(s) => {
-                Ok(ftd::interpreter::StateWithThing::new_state(s))
+                Ok(ftd::interpreter::StateWithThing::new_state(*s))
             }
             ftd::interpreter::StateWithThing::Continue => {
                 Ok(ftd::interpreter::StateWithThing::new_continue())
@@ -800,7 +800,7 @@ impl<'a> TDoc<'a> {
     > {
         match self.search_thing(name, line_number)? {
             ftd::interpreter::StateWithThing::State(s) => {
-                Ok(ftd::interpreter::StateWithThing::new_state(s))
+                Ok(ftd::interpreter::StateWithThing::new_state(*s))
             }
             ftd::interpreter::StateWithThing::Continue => {
                 Ok(ftd::interpreter::StateWithThing::new_continue())
@@ -824,7 +824,7 @@ impl<'a> TDoc<'a> {
     ) -> ftd::interpreter::Result<ftd::interpreter::StateWithThing<fastn_resolved::OrType>> {
         match self.search_thing(name, line_number)? {
             ftd::interpreter::StateWithThing::State(s) => {
-                Ok(ftd::interpreter::StateWithThing::new_state(s))
+                Ok(ftd::interpreter::StateWithThing::new_state(*s))
             }
             ftd::interpreter::StateWithThing::Continue => {
                 Ok(ftd::interpreter::StateWithThing::new_continue())
@@ -850,7 +850,7 @@ impl<'a> TDoc<'a> {
     > {
         match self.search_thing(name, line_number)? {
             ftd::interpreter::StateWithThing::State(s) => {
-                Ok(ftd::interpreter::StateWithThing::new_state(s))
+                Ok(ftd::interpreter::StateWithThing::new_state(*s))
             }
             ftd::interpreter::StateWithThing::Continue => {
                 Ok(ftd::interpreter::StateWithThing::new_continue())
