@@ -79,7 +79,7 @@ skip: true
   document: get-started/browse-pick.ftd
 - Quick Build: /quick-build/
   document: get-started/browse-pick.ftd
-- fastn basics: /markdown/-/frontend/
+- fastn web basics: /markdown/-/frontend/
   document: expander/ds/markdown.ftd
   - Markdown: /markdown/-/frontend/
     document: expander/ds/markdown.ftd
@@ -1060,6 +1060,30 @@ skip: true
   document: book/01-introduction/08-about-fastn.ftd
   - index.ftd : /book/about-index/
   document: book/01-introduction/09-about-index.ftd
+  - Markdown: /book/markdown/
+    document: expander/ds/markdown.ftd
+  - Change Color Scheme: /book/color-scheme/
+    document: expander/ds/ds-cs.ftd
+  - Change Typography: /book/typography/
+    document: expander/ds/ds-typography.ftd
+  - Using Components: /book/components/
+    document:/expander/components.ftd
+  - Using images in documents: /book/using-images/
+    document: /expander/imagemodule/index.ftd
+  - Change Theme: /book/theme/
+    document: get-started/theme.ftd
+    skip: true
+  - Sitemap: /book/sitemap/
+    document: expander/ds/understanding-sitemap.ftd
+  - Meta Data: /book/seo-meta/
+      document: expander/ds/meta-data.ftd
+  - Redirects: /book/redirects/
+      document: backend/redirects.ftd
+  - URL: /book/clean-urls/
+      document: expander/sitemap-document.ftd      
+- `fastn` Language basics : /kernel/
+  - Kernel Components: /kernel/
+
 
 
 
