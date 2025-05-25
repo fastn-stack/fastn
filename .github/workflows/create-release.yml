@@ -15,7 +15,7 @@ jobs:
     # using the oldest available ubuntu on github CI to provide maximum compatibility with glibc versions
     # update RELEASE_TEMPLATE with the glibc version
     # on ubuntu-22.04, glibc version is 2.35
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     env:
       CARGO_TERM_COLOR: always
     steps:
@@ -30,20 +30,24 @@ jobs:
             ftd/target
             fifthtry_content/target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - name: Install static glibc
+        run: |
+          sudo apt update && sudo apt install -y libc6-dev
       - name: print rustc version
         run: rustc --version
       - name: cargo build (linux)
-        run: cargo build --release
+        run: |
+          RUSTFLAGS="-C target-feature=+crt-static" cargo build --target x86_64-unknown-linux-gnu --bin fastn --release
       - name: print fastn version
-        run: ./target/release/fastn --version
+        run: ./target/x86_64-unknown-linux-gnu/release/fastn --version
       - name: print file info
         run: |
-          file ./target/release/fastn
-          ldd ./target/release/fastn
+          file ./target/x86_64-unknown-linux-gnu/release/fastn
+          ldd ./target/x86_64-unknown-linux-gnu/release/fastn
       - uses: actions/upload-artifact@v4
         with:
           name: linux_x86_64
-          path: target/release/fastn
+          path: target/x86_64-unknown-linux-gnu/release/fastn
   build-windows:
     name: Build for Windows
     runs-on: windows-2019
