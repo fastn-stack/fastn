@@ -136,7 +136,7 @@ tracing = "0.1"
 url = "2"
 walkdir = "2"
 wasmtime = "33"
-zip = "3"
+zip = "4"
 
 
 [workspace.dependencies.fastn-observer]
@@ -184,7 +184,7 @@ features = [
 
 [workspace.dependencies.comrak]
 # We use comrak for markup processing.
-version = "0.36"
+version = "0.39"
 # By default, comrak ships with support for syntax highlighting using syntext for "fenced
 # code blocks". We have disabled that by not using default features. We did that because
 # we already have a way to show code in ftd, ftd.code. Further, comark requires syntect 4.6,
