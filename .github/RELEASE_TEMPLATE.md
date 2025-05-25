@@ -3,12 +3,8 @@
 Checkout fastn installation step: https://fastn.com/install/.
 
 Note: `fastn_linux_musl_x86_64` is not built with `musl` libc, it is built with
-`glibc` and is not a static binary. The name is kept for consistency with older
+`glibc` and is a static binary. The name is kept for consistency with older
 releases.
-
-## Linux (x64)
-
-Minimum glibc version to run these releases is 2.35.
 
 GitHub Sha: GITHUB_SHA  
 Date: DATE  
