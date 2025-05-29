@@ -10509,6 +10509,51 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                 line_number: 0,
             }),
         ),
+        ( 
+            "ftd#datetime".to_string(),
+            fastn_resolved::Definition::Record(fastn_resolved::Record {
+                name: "ftd#datetime".to_string(),
+                fields: std::iter::IntoIterator::into_iter([
+                    // fastn_resolved::Field {
+                    //     name: "name".to_string(),
+                    //     kind: fastn_resolved::Kind::string().into_kind_data().caption(),
+                    //     mutable: false,
+                    //     value: None,
+                    //     access_modifier: Default::default(),
+                    //     line_number: 0,
+                    // },
+                    fastn_resolved::Field {
+                        name: "date".to_string(),
+                        kind: fastn_resolved::Kind::integer().into_kind_data(),
+                        mutable: false,
+                        value: Some(fastn_resolved::PropertyValue::Value {
+                            value: fastn_resolved::Value::Integer {
+                                value: 0
+                            },
+                            is_mutable: false,
+                            line_number: 0,
+                        }),  
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                    fastn_resolved::Field {
+                        name: "time".to_string(),
+                        kind: fastn_resolved::Kind::integer().into_kind_data(),
+                        mutable: false,
+                        value: Some(fastn_resolved::PropertyValue::Value {
+                            value: fastn_resolved::Value::Integer {
+                                value: 0
+                            },
+                            is_mutable: false,
+                            line_number: 0,
+                        }), 
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    }, 
+                ]).collect(),
+                line_number: 0,
+            }),
+        ),  
         (
             "ftd#datetime-field".to_string(),
             fastn_resolved::Definition::Record(fastn_resolved::Record {
@@ -10526,13 +10571,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "date".to_string(),
                         kind: fastn_resolved::Kind::integer().into_kind_data(),
                         mutable: true,
-                        value: Some(fastn_resolved::PropertyValue::Value {
-                            value: fastn_resolved::Value::Integer {
-                                value: 0
-                            },
-                            is_mutable: false,
-                            line_number: 0,
-                        }),
+                        value: None,  
                         access_modifier: Default::default(),
                         line_number: 0,
                     },
@@ -10540,13 +10579,7 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
                         name: "time".to_string(),
                         kind: fastn_resolved::Kind::integer().into_kind_data(),
                         mutable: true,
-                        value: Some(fastn_resolved::PropertyValue::Value {
-                            value: fastn_resolved::Value::Integer {
-                                value: 0
-                            },
-                            is_mutable: false,
-                            line_number: 0,
-                        }),
+                        value: None,
                         access_modifier: Default::default(),
                         line_number: 0,
                     }, 
