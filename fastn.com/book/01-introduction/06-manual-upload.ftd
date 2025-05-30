@@ -45,7 +45,7 @@ width: fill-container
 -- ds.code: Upload your website on FifthTry
 lang: ftd
 
-\-- FIFTHTRY_SITE_WRITE_TOKEN=<your-site-token> fastn upload <site-slug>
+\ FIFTHTRY_SITE_WRITE_TOKEN=<your-site-token> fastn upload <site-slug>
 
 -- ds.markdown: 
 

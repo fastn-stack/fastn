@@ -9,20 +9,14 @@ consists of command line tool `fastn`.
 To get started, you need to install `fastn`. Refer to the [install
 `fastn`](install/) page to learn how to install `fastn`.
 
--- ds.image:
-src: $fastn-assets.files.images.create-serve-fastn.gif
-width: fill-container
-
-
 
 
 -- ds.h1: Create a package
 
-There are two ways to create a fastn package:
+Create a package manually.
 
 -- utils.switcher:
 s: $create
-
 
 
 
@@ -85,44 +79,6 @@ width: fill-container
 
 
 -- utils.switches list create:
-
-
-
-
--- utils.switches: Using Command (Recommended)
-
--- utils.switches.elements:
-
-	-- ds.h2: Using Command
-	
-	The simplest way to create a `fastn` package is to use the command line tool.
-	Suppose you want to create a package named `hello-fastn`, you need to follow
-	these steps:
-	
-	- [Open the Terminal (Linux/MacOS) or Command prompt (Windows)](open-terminal/)
-	- Run the following command in terminal
-	
-	-- ds.code: create-package
-	lang: sh
-	
-	fastn create-package hello-fastn
-	
-	
-	-- ds.markdown:
-	
-	;; TODO: Give link to about `FASTN.ftd` and `index.ftd`
-	
-	The above command will create a folder named `hello-fastn` containing two files:
-	[`FASTN.ftd`](create-fastn-package/#fastn-ftd) and [`index.ftd`](create-fastn-package/#index-ftd). You can view the contents of this folder in
-	a text editor such as [SublimeText](https://www.sublimetext.com/3).
-	
-	
-	
--- end: utils.switches.elements
-
-
-
-
 
 
 
