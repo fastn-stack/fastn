@@ -535,7 +535,7 @@ const ftd = (function () {
             obj.get("error").set(null);
             data[name] = fastn_utils.getFlattenStaticValue(obj.get("value"));
         }
-
+        console.log("Data object: ", data)
         let init = {
             method: "POST",
             redirect: "error",
