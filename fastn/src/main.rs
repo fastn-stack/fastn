@@ -48,6 +48,11 @@ async fn async_main() -> Result<(), Error> {
 async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
     use fastn_core::utils::ValueOf;
 
+    if let Some(template) = matches.subcommand_matches("template") {
+        let app_name = template.get_one::<String>("name").expect("App name is required");
+        return run_template_command(app_name).await;
+    }
+
     if matches.subcommand_name().is_none() {
         return Ok(());
     }
@@ -334,6 +339,12 @@ fn app(version: &'static str) -> clap::Command {
                 .arg(clap::arg!(--check "Check if packages are in sync with FASTN.ftd without performing updates."))
         )
         .subcommand(sub_command::serve())
+        .subcommand(
+            clap::Command::new("template")
+            .about("Creates a new fastn app using the recommended template provided at https://github.com/fifthtry-community/app-template")
+            .arg(clap::arg!(--"name" <APP_NAME> "Name of the app to create"))
+        )
+
 }
 
 mod sub_command {
@@ -420,4 +431,124 @@ significant security risk in case the source code becomes public."
             println!("INFO: loaded environment variables from .env file.");
         }
     }
+}
+
+async fn run_template_command(app_name: &str) -> fastn_core::Result<()> {
+    use std::process::Stdio;
+
+    println!("Creating new app: {}", app_name);
+
+    let repo_url = "https://github.com/fifthtry-community/app-template.git";
+    let target_dir = format!("lets-{}", app_name);
+    
+    // Clone repository
+    let status = std::process::Command::new("git")
+        .arg("clone")
+        .arg("--depth")
+        .arg("1")
+        .arg(repo_url)
+        .arg(&target_dir)
+        .status()?;
+
+    if !status.success() {
+        eprintln!("Failed to clone repository. Exit status: {}", status);
+        return Ok(());
+    }
+
+    let target_path = std::path::Path::new(&target_dir);
+
+    // Remove .git directory
+    let git_dir = target_path.join(".git");
+    if git_dir.exists() {
+        std::fs::remove_dir_all(&git_dir)
+            .map_err(|e| eprintln!("Failed to remove .git directory: {}", e))
+            .ok();
+    }
+
+    let dir_patterns = [
+        "lets-XXX.fifthtry.site",
+        "lets-XXX.fifthtry-community.com", 
+        "lets-XXX-template.fifthtry.site",
+    ];
+
+    // Process directories and FASTN.ftd files in a single loop
+    let mut renamed_dirs = Vec::new();
+    for pattern in &dir_patterns {
+        let old_dir = pattern.to_string();
+        let new_dir = old_dir.replace("XXX", app_name);
+        let old_path = target_path.join(&old_dir);
+        let new_path = target_path.join(&new_dir);
+
+        if old_path.exists() {
+            // Rename directory
+            if let Err(e) = std::fs::rename(&old_path, &new_path) {
+                eprintln!("Failed to rename directory {}: {}", old_dir, e);
+                continue;
+            }
+            renamed_dirs.push(new_path.clone());
+
+            // Update FASTN.ftd file
+            let fastn_ftd_path = new_path.join("FASTN.ftd");
+            if fastn_ftd_path.exists() {
+                if let Ok(contents) = std::fs::read_to_string(&fastn_ftd_path) {
+                    let new_contents = contents.replace("XXX", app_name);
+                    std::fs::write(&fastn_ftd_path, new_contents)
+                        .map_err(|e| eprintln!("Failed to update FASTN.ftd in {}: {}", new_dir, e))
+                        .ok();
+                }
+            }
+        }
+    }
+
+    // Create symlink
+    let template_dir_name = format!("lets-{}-template.fifthtry.site", app_name);
+    let packages_dir = target_path.join(&template_dir_name).join(".packages");
+    
+    // Create .packages directory if it doesn't exist
+    if let Err(e) = std::fs::create_dir_all(&packages_dir) {
+        eprintln!("Failed to create .packages directory: {}", e);
+    }
+    
+    let symlink_name = format!("lets-{}.fifthtry.site", app_name);
+    let symlink_target = format!("../../lets-{}.fifthtry.site", app_name);
+    let symlink_path = packages_dir.join(&symlink_name);
+
+    if symlink_path.exists() {
+        std::fs::remove_file(&symlink_path).ok();
+    }
+
+    #[cfg(unix)]
+    {
+        use std::os::unix::fs::symlink;
+        symlink(&symlink_target, &symlink_path)
+            .map_err(|e| eprintln!("Failed to create symlink: {}", e))
+            .ok();
+    }
+    #[cfg(windows)]
+    {
+        use std::os::windows::fs::symlink_dir;
+        symlink_dir(&symlink_target, &symlink_path)
+            .map_err(|e| eprintln!("Failed to create symlink: {}", e))
+            .ok();
+    }
+
+    // Run fastn update in each directory
+    for dir_path in renamed_dirs {
+        if dir_path.is_dir() {
+            println!("Running fastn update in {}...", dir_path.display());
+            let status = std::process::Command::new("fastn")
+                .arg("update")
+                .current_dir(&dir_path)
+                .stdout(Stdio::inherit())
+                .stderr(Stdio::inherit())
+                .status();
+
+            if let Err(e) = status {
+                eprintln!("Failed to run fastn update in {}: {}", dir_path.display(), e);
+            }
+        }
+    }
+
+    println!("App 'lets-{}' created successfully!", app_name);
+    Ok(())
 }
