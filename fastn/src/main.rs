@@ -342,9 +342,11 @@ fn app(version: &'static str) -> clap::Command {
         .subcommand(
             clap::Command::new("template")
             .about("Creates a new fastn app using the recommended template provided at https://github.com/fifthtry-community/app-template")
-            .arg(clap::arg!(--"name" <APP_NAME> "Name of the app to create"))
+            .arg(
+                clap::arg!(name: [NAME] "Name of the app to create")
+                    .required(true)
+            )
         )
-
 }
 
 mod sub_command {
@@ -434,36 +436,87 @@ significant security risk in case the source code becomes public."
 }
 
 async fn run_template_command(app_name: &str) -> fastn_core::Result<()> {
-    use std::process::Stdio;
-
     println!("Creating new app: {}", app_name);
 
-    let repo_url = "https://github.com/fifthtry-community/app-template.git";
-    let target_dir = format!("lets-{}", app_name);
+    let zip_url = "https://github.com/fifthtry-community/app-template/zipball/main";
+    let target_dir = app_name.to_string();
     
-    // Clone repository
-    let status = std::process::Command::new("git")
-        .arg("clone")
-        .arg("--depth")
-        .arg("1")
-        .arg(repo_url)
-        .arg(&target_dir)
-        .status()?;
+    // Download the zip file
+    let response = reqwest::get(zip_url).await?;
+    if !response.status().is_success() {
+        return Err(fastn_core::Error::GenericError(format!(
+            "Failed to download template: HTTP {}", 
+            response.status()
+        )));
+    }
+    let zip_bytes = response.bytes().await.map_err(|e| fastn_core::Error::GenericError(e.to_string()))?;
 
-    if !status.success() {
-        eprintln!("Failed to clone repository. Exit status: {}", status);
-        return Ok(());
+    // Extract the zip file
+    let cursor = std::io::Cursor::new(zip_bytes);
+    let mut archive = zip::ZipArchive::new(cursor)
+        .map_err(|e| fastn_core::Error::GenericError(format!("Failed to read zip archive: {}", e)))?;
+
+    let temp_dir = std::env::temp_dir().join(format!("fastn-template-{}", app_name));
+    if temp_dir.exists() {
+        std::fs::remove_dir_all(&temp_dir)
+            .map_err(|e| fastn_core::Error::GenericError(format!("Failed to clean temp directory: {}", e)))?;
     }
 
+    // Extract to temp directory
+    for i in 0..archive.len() {
+        let mut file = archive.by_index(i)
+            .map_err(|e| fastn_core::Error::GenericError(format!("Failed to read zip entry: {}", e)))?;
+        
+        let outpath = match file.enclosed_name() {
+            Some(path) => temp_dir.join(path),
+            None => continue,
+        };
+
+        if file.name().ends_with('/') {
+            std::fs::create_dir_all(&outpath)
+                .map_err(|e| fastn_core::Error::GenericError(format!("Failed to create directory: {}", e)))?;
+        } else {
+            if let Some(p) = outpath.parent() {
+                if !p.exists() {
+                    std::fs::create_dir_all(p)
+                        .map_err(|e| fastn_core::Error::GenericError(format!("Failed to create parent directory: {}", e)))?;
+                }
+            }
+            let mut outfile = std::fs::File::create(&outpath)
+                .map_err(|e| fastn_core::Error::GenericError(format!("Failed to create file: {}", e)))?;
+            std::io::copy(&mut file, &mut outfile)
+                .map_err(|e| fastn_core::Error::GenericError(format!("Failed to extract file: {}", e)))?;
+        }
+    }
+
+    // Find the extracted directory (it will have a name like "fifthtry-community-app-template-<commit-hash>")
+    let extracted_dirs: Vec<_> = std::fs::read_dir(&temp_dir)
+        .map_err(|e| fastn_core::Error::GenericError(format!("Failed to read temp directory: {}", e)))?
+        .filter_map(|entry| {
+            let entry = entry.ok()?;
+            if entry.file_type().ok()?.is_dir() {
+                Some(entry.path())
+            } else {
+                None
+            }
+        })
+        .collect();
+
+    if extracted_dirs.is_empty() {
+        return Err(fastn_core::Error::GenericError("No directories found in extracted zip".to_string()));
+    }
+
+    let source_dir = &extracted_dirs[0];
     let target_path = std::path::Path::new(&target_dir);
 
-    // Remove .git directory
-    let git_dir = target_path.join(".git");
-    if git_dir.exists() {
-        std::fs::remove_dir_all(&git_dir)
-            .map_err(|e| eprintln!("Failed to remove .git directory: {}", e))
-            .ok();
-    }
+    // Move the extracted content to target directory
+    std::fs::rename(source_dir, target_path)
+        .map_err(|e| fastn_core::Error::GenericError(format!("Failed to move extracted files: {}", e)))?;
+
+    // Clean up temp directory
+    std::fs::remove_dir_all(&temp_dir)
+        .map_err(|e| eprintln!("Failed to clean up temp directory: {}", e))
+        .ok();
 
     let dir_patterns = [
         "lets-XXX.fifthtry.site",
@@ -475,7 +528,7 @@ async fn run_template_command(app_name: &str) -> fastn_core::Result<()> {
     let mut renamed_dirs = Vec::new();
     for pattern in &dir_patterns {
         let old_dir = pattern.to_string();
-        let new_dir = old_dir.replace("XXX", app_name);
+        let new_dir = old_dir.replace("lets-XXX", app_name);
         let old_path = target_path.join(&old_dir);
         let new_path = target_path.join(&new_dir);
 
@@ -491,7 +544,7 @@ async fn run_template_command(app_name: &str) -> fastn_core::Result<()> {
             let fastn_ftd_path = new_path.join("FASTN.ftd");
             if fastn_ftd_path.exists() {
                 if let Ok(contents) = std::fs::read_to_string(&fastn_ftd_path) {
-                    let new_contents = contents.replace("XXX", app_name);
+                    let new_contents = contents.replace("lets-XXX", app_name);
                     std::fs::write(&fastn_ftd_path, new_contents)
                         .map_err(|e| eprintln!("Failed to update FASTN.ftd in {}: {}", new_dir, e))
                         .ok();
@@ -501,7 +554,7 @@ async fn run_template_command(app_name: &str) -> fastn_core::Result<()> {
     }
 
     // Create symlink
-    let template_dir_name = format!("lets-{}-template.fifthtry.site", app_name);
+    let template_dir_name = format!("{}-template.fifthtry.site", app_name);
     let packages_dir = target_path.join(&template_dir_name).join(".packages");
     
     // Create .packages directory if it doesn't exist
@@ -509,8 +562,8 @@ async fn run_template_command(app_name: &str) -> fastn_core::Result<()> {
         eprintln!("Failed to create .packages directory: {}", e);
     }
     
-    let symlink_name = format!("lets-{}.fifthtry.site", app_name);
-    let symlink_target = format!("../../lets-{}.fifthtry.site", app_name);
+    let symlink_name = format!("{}.fifthtry.site", app_name);
+    let symlink_target = format!("../../{}.fifthtry.site", app_name);
     let symlink_path = packages_dir.join(&symlink_name);
 
     if symlink_path.exists() {
@@ -532,23 +585,6 @@ async fn run_template_command(app_name: &str) -> fastn_core::Result<()> {
             .ok();
     }
 
-    // Run fastn update in each directory
-    for dir_path in renamed_dirs {
-        if dir_path.is_dir() {
-            println!("Running fastn update in {}...", dir_path.display());
-            let status = std::process::Command::new("fastn")
-                .arg("update")
-                .current_dir(&dir_path)
-                .stdout(Stdio::inherit())
-                .stderr(Stdio::inherit())
-                .status();
-
-            if let Err(e) = status {
-                eprintln!("Failed to run fastn update in {}: {}", dir_path.display(), e);
-            }
-        }
-    }
-
-    println!("App 'lets-{}' created successfully!", app_name);
+    println!("App '{}' created successfully!", app_name);
     Ok(())
 }

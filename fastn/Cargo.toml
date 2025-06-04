@@ -30,3 +30,4 @@ camino.workspace = true
 actix-web.workspace = true
 scc.workspace = true
 deadpool-postgres.workspace = true
+zip.workspace = true
