@@ -518,6 +518,24 @@ async fn run_template_command(app_name: &str) -> fastn_core::Result<()> {
         .map_err(|e| eprintln!("Failed to clean up temp directory: {}", e))
         .ok();
 
+    // Update scripts folder files
+    let scripts_dir = target_path.join("scripts");
+    if scripts_dir.exists() {
+        let script_files = ["auto.sh", "build-wasm.sh", "optimise-wasm.sh", "publish-app.sh"];
+        
+        for script_file in &script_files {
+            let script_path = scripts_dir.join(script_file);
+            if script_path.exists() {
+                if let Ok(contents) = std::fs::read_to_string(&script_path) {
+                    let new_contents = contents.replace("lets-XXX", app_name);
+                    std::fs::write(&script_path, new_contents)
+                        .map_err(|e| eprintln!("Failed to update {} in scripts: {}", script_file, e))
+                        .ok();
+                }
+            }
+        }
+    }
+
     let dir_patterns = [
         "lets-XXX.fifthtry.site",
         "lets-XXX.fifthtry-community.com", 
