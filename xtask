@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+set -e
+
+# Run the xtask binary from the fastn-xtask crate
+exec cargo run --package fastn-xtask --bin xtask -- "$@" 

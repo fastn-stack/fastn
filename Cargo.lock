@@ -1337,13 +1337,13 @@ dependencies = [
  "fastn-ds",
  "fastn-observer",
  "fastn-update",
+ "fastn-xtask",
  "futures",
  "reqwest",
  "scc",
  "serde",
  "thiserror 2.0.12",
  "tokio",
- "zip",
 ]
 
 [[package]]

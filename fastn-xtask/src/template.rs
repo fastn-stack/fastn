@@ -14,7 +14,6 @@ pub async fn run_template_command(app_name: &str) -> fastn_core::Result<()> {
     }
     let zip_bytes = response.bytes().await.map_err(|e| fastn_core::Error::GenericError(e.to_string()))?;
 
-    // Extract the zip file
     let cursor = std::io::Cursor::new(zip_bytes);
     let mut archive = zip::ZipArchive::new(cursor)
         .map_err(|e| fastn_core::Error::GenericError(format!("Failed to read zip archive: {}", e)))?;
@@ -25,7 +24,6 @@ pub async fn run_template_command(app_name: &str) -> fastn_core::Result<()> {
             .map_err(|e| fastn_core::Error::GenericError(format!("Failed to clean temp directory: {}", e)))?;
     }
 
-    // Extract to temp directory
     for i in 0..archive.len() {
         let mut file = archive.by_index(i)
             .map_err(|e| fastn_core::Error::GenericError(format!("Failed to read zip entry: {}", e)))?;

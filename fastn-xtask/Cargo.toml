@@ -9,6 +9,16 @@ repository.workspace = true
 homepage.workspace = true
 rust-version.workspace = true
 
+# Define the library crate
+[lib]
+name = "fastn_xtask"
+path = "src/lib.rs"
+
+# Define the binary that wraps the library functionality
+[[bin]]
+name = "xtask"
+path = "src/main.rs"
+
 [dependencies]
 clap = { workspace = true, features = ["derive"] }
 tokio.workspace = true
