@@ -48,6 +48,11 @@ async fn async_main() -> Result<(), Error> {
 async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
     use fastn_core::utils::ValueOf;
 
+    if let Some(template) = matches.subcommand_matches("template") {
+        let app_name = template.get_one::<String>("name").expect("App name is required");
+        return run_template_command(app_name).await;
+    }
+
     if matches.subcommand_name().is_none() {
         return Ok(());
     }
@@ -333,7 +338,15 @@ fn app(version: &'static str) -> clap::Command {
                 .about("Update dependency packages for this fastn package")
                 .arg(clap::arg!(--check "Check if packages are in sync with FASTN.ftd without performing updates."))
         )
-        .subcommand(sub_command::serve())
+                .subcommand(sub_command::serve())
+        .subcommand(
+            clap::Command::new("template")
+            .about("Creates a new fastn app using the recommended template provided at https://github.com/fifthtry-community/app-template")
+            .arg(
+                clap::arg!(name: [NAME] "Name of the app to create")
+                    .required(true)
+            )
+        )
 }
 
 mod sub_command {
@@ -420,4 +433,8 @@ significant security risk in case the source code becomes public."
             println!("INFO: loaded environment variables from .env file.");
         }
     }
+}
+
+async fn run_template_command(app_name: &str) -> fastn_core::Result<()> {
+    fastn_xtask::core::new_app(app_name).await
 }
