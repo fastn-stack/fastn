@@ -132,7 +132,7 @@ pub struct Request {
     cookies: std::collections::HashMap<String, String>,
     headers: reqwest::header::HeaderMap,
     query: std::collections::HashMap<String, serde_json::Value>,
-    body: actix_web::web::Bytes,
+    pub body: actix_web::web::Bytes,
     ip: Option<String>,
     pub connection_info: actix_web::dev::ConnectionInfo,
     // path_params: Vec<(String, )>

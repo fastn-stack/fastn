@@ -91,7 +91,7 @@ pub async fn process(
         (url, mountpoint, conf)
     };
 
-    let mut body = vec![];
+    let mut body = serde_json::Map::new();
     for header in headers.0 {
         if header.key.as_str() == ftd::PROCESSOR_MARKER
             || header.key.as_str() == "url"
@@ -114,7 +114,7 @@ pub async fn process(
                     continue;
                 }
                 if method.as_str().eq("post") {
-                    body.push(format!("\"{}\": {}", header.key, value));
+                    body.insert(header.key, serde_json::Value::String(value));
                     continue;
                 }
                 url.query_pairs_mut()
@@ -126,11 +126,10 @@ pub async fn process(
                 continue;
             }
             if method.as_str().eq("post") {
-                body.push(format!(
-                    "\"{}\": \"{}\"",
+                body.insert(
                     header.key,
-                    fastn_core::utils::escape_string(value)
-                ));
+                    serde_json::Value::String(fastn_core::utils::escape_string(value)),
+                );
                 continue;
             }
             url.query_pairs_mut()
@@ -150,6 +149,12 @@ pub async fn process(
             .config
             .app_mounts()
             .map_err(|e| ftd::interpreter::Error::OtherError(e.to_string()))?;
+
+        if method == "post" {
+            req_config.request.body = serde_json::to_vec(&body)
+                .map_err(|e| ftd::interpreter::Error::Serde { source: e })?
+                .into();
+        }
 
         match req_config
             .config
@@ -206,7 +211,8 @@ pub async fn process(
             req_config,
             url.as_str(),
             &conf,
-            format!("{{{}}}", body.join(",")).as_str(),
+            &serde_json::to_string(&body)
+                .map_err(|e| ftd::interpreter::Error::Serde { source: e })?,
         )
         .await
         .map_err(|e| ftd::interpreter::Error::DSHttpError {
