@@ -656,7 +656,7 @@ async fn handle_endpoints(
 }
 
 pub fn to_response(req: ft_sys_shared::Request) -> actix_web::HttpResponse {
-    println!("{req:?}");
+    println!("to_response1: {req:?}");
     let mut builder = actix_web::HttpResponse::build(req.method.parse().unwrap());
     let mut resp = builder.status(req.method.parse().unwrap()).body(req.body);
 
