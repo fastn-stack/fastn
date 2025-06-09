@@ -1,5 +1,6 @@
 use ftd::interpreter::{PropertyValueExt, ValueExt};
 
+#[tracing::instrument(name = "http_processor", skip_all)]
 pub async fn process(
     value: ftd_ast::VariableValue,
     kind: fastn_resolved::Kind,
@@ -97,14 +98,19 @@ pub async fn process(
             || header.key.as_str() == "url"
             || header.key.as_str() == "method"
         {
+            tracing::info!("Skipping header: {}", header.key);
             continue;
         }
 
         let value = header.value.string(doc.name)?;
 
+        tracing::info!("Processing header: {}: {:?}", header.key, value);
+
         // 1 id: $query.id
         // After resolve headers: id:1234(value of $query.id)
         if value.starts_with('$') {
+            tracing::info!("Resolving variable in header: {}", value);
+
             if let Some(value) = doc
                 .get_value(header.line_number, value)?
                 .to_json_string(doc, true)?
@@ -142,6 +148,7 @@ pub async fn process(
     }
 
     let resp = if url.scheme() == "wasm+proxy" {
+        tracing::info!("Calling wasm+proxy with url: {url}");
         let mountpoint = mountpoint.ok_or(ftd::interpreter::Error::OtherError(
             "Mountpoint not found!".to_string(),
         ))?;
@@ -207,6 +214,7 @@ pub async fn process(
             e => todo!("error: {e:?}"),
         }
     } else if method.as_str().eq("post") {
+        tracing::info!("Calling POST request with url: {url}");
         fastn_core::http::http_post_with_cookie(
             req_config,
             url.as_str(),
@@ -219,6 +227,7 @@ pub async fn process(
             message: format!("{:?}", e),
         })
     } else {
+        tracing::info!("Calling GET request with url: {url}");
         fastn_core::http::http_get_with_cookie(
             &req_config.config.ds,
             &req_config.request,
