@@ -113,7 +113,6 @@ pub async fn process(
             continue;
         }
 
-
         // 1 id: $query.id
         // After resolve headers: id:1234(value of $query.id)
         if value.starts_with('$') {
@@ -270,7 +269,7 @@ pub async fn process(
         }
     };
 
-    let response_json: serde_json::Value = serde_json::from_slice(&response.to_vec())
+    let response_json: serde_json::Value = serde_json::from_slice(&response)
         .map_err(|e| ftd::interpreter::Error::Serde { source: e })?;
 
     doc.from_json(&response_json, &kind, &value)
