@@ -14,10 +14,10 @@ rust-version.workspace = true
 name = "fastn_xtask"
 path = "src/lib.rs"
 
-# Define the binary that wraps the library functionality
-[[bin]]
-name = "xtask"
-path = "src/main.rs"
+# # Define the binary that wraps the library functionality
+# [[bin]]
+# name = "xtask"
+# path = "src/main.rs"
 
 [dependencies]
 clap = { workspace = true, features = ["derive"] }

@@ -1,4 +1,4 @@
-pub async fn run_template_command(app_name: &str) -> fastn_core::Result<()> {
+pub async fn new_app(app_name: &str) -> fastn_core::Result<()> {
     println!("Creating new app: {}", app_name);
 
     let zip_url = "https://github.com/fifthtry-community/app-template/zipball/main";

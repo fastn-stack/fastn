@@ -50,7 +50,7 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
 
     if let Some(template) = matches.subcommand_matches("template") {
         let app_name = template.get_one::<String>("name").expect("App name is required");
-        return run_template_command(app_name).await;
+        return fastn_xtask::new_app(app_name).await;
     }
 
     if matches.subcommand_name().is_none() {
@@ -433,8 +433,4 @@ significant security risk in case the source code becomes public."
             println!("INFO: loaded environment variables from .env file.");
         }
     }
-}
-
-async fn run_template_command(app_name: &str) -> fastn_core::Result<()> {
-    fastn_xtask::core::new_app(app_name).await
 }
