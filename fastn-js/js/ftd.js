@@ -237,7 +237,7 @@ const ftd = (function () {
         method = method.trim().toUpperCase();
         const init = {
             method,
-            headers: { "Content-Type": "application/json" },
+            headers: {"Content-Type": "application/json"},
         };
         if (headers && headers instanceof fastn.recordInstanceClass) {
             Object.assign(init.headers, headers.toObject());
@@ -529,11 +529,25 @@ const ftd = (function () {
             if (obj instanceof fastn.mutableClass) {
                 obj = obj.get();
             }
-            console.assert(obj instanceof fastn.recordInstanceClass);
-            let name = obj.get("name").get();
-            arg_map[name] = obj;
-            obj.get("error").set(null);
-            data[name] = fastn_utils.getFlattenStaticValue(obj.get("value"));
+            if (obj instanceof Array) {
+                if (obj.length !== 2) {
+                    console.warn(
+                        "[submit_form]: Invalid tuple length, expected 2, got",
+                        obj.length,
+                    );
+                    continue;
+                }
+                let [key, value] = obj;
+                data[fastn_utils.getFlattenStaticValue(key)] = fastn_utils.getFlattenStaticValue(value);
+            }
+            if (obj instanceof fastn.recordInstanceClass) {
+                let name = obj.get("name").get();
+                arg_map[name] = obj;
+                obj.get("error").set(null);
+                data[name] = fastn_utils.getFlattenStaticValue(obj.get("value"));
+            } else {
+                console.warn("unexpected type in submit_form", obj);
+            }
         }
 
         let init = {
@@ -541,7 +555,7 @@ const ftd = (function () {
             redirect: "error",
             // TODO: set credentials?
             credentials: "same-origin",
-            headers: { "Content-Type": "application/json" },
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify(data),
         };
 
