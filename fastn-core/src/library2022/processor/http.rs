@@ -106,6 +106,14 @@ pub async fn process(
 
         tracing::info!("Processing header: {}: {:?}", header.key, value);
 
+        if let Some(key) = fastn_core::http::get_header_key(header.key.as_str()) {
+            let value = value.to_string();
+            tracing::info!("Adding header: {}: {}", key, value);
+            conf.insert(key.to_string(), value);
+            continue;
+        }
+
+
         // 1 id: $query.id
         // After resolve headers: id:1234(value of $query.id)
         if value.starts_with('$') {
@@ -113,33 +121,32 @@ pub async fn process(
 
             if let Some(value) = doc
                 .get_value(header.line_number, value)?
-                .to_json_string(doc, true)?
+                .to_serde_value(doc)?
             {
-                if let Some(key) = fastn_core::http::get_header_key(header.key.as_str()) {
-                    conf.insert(key.to_string(), value.trim_matches('"').to_string());
-                    continue;
-                }
+                tracing::info!("Resolved variable in header: {}: {:?}", header.key, value);
                 if method.as_str().eq("post") {
-                    body.insert(header.key, serde_json::Value::String(value));
-                    continue;
+                    body.insert(header.key, value);
+                } else {
+                    let value = serde_json::to_string(&value)
+                        .map_err(|e| ftd::interpreter::Error::Serde { source: e })?;
+
+                    url.query_pairs_mut()
+                        .append_pair(header.key.as_str(), &value);
                 }
-                url.query_pairs_mut()
-                    .append_pair(header.key.as_str(), value.trim_matches('"'));
             }
         } else {
-            if let Some(key) = fastn_core::http::get_header_key(header.key.as_str()) {
-                conf.insert(key.to_string(), value.to_string());
-                continue;
-            }
+            tracing::info!("Using static value in header: {}: {}", header.key, value);
+
             if method.as_str().eq("post") {
                 body.insert(
                     header.key,
                     serde_json::Value::String(fastn_core::utils::escape_string(value)),
                 );
-                continue;
+            } else {
+                // why not escape_string here?
+                url.query_pairs_mut()
+                    .append_pair(header.key.as_str(), value);
             }
-            url.query_pairs_mut()
-                .append_pair(header.key.as_str(), value);
         }
     }
 
@@ -263,13 +270,7 @@ pub async fn process(
         }
     };
 
-    let response_string =
-        String::from_utf8(response.to_vec()).map_err(|e| ftd::interpreter::Error::ParseError {
-            message: format!("`http` processor API response error: {}", e),
-            doc_id: doc.name.to_string(),
-            line_number,
-        })?;
-    let response_json: serde_json::Value = serde_json::from_str(&response_string)
+    let response_json: serde_json::Value = serde_json::from_slice(&response.to_vec())
         .map_err(|e| ftd::interpreter::Error::Serde { source: e })?;
 
     doc.from_json(&response_json, &kind, &value)
