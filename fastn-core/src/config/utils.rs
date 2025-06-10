@@ -222,7 +222,10 @@ pub async fn get_clean_url(
     }
 
     let url = format!("{}{url}", req_config.url_prefix());
-    tracing::info!("http-processor: end-point not found url: {}. Returning full url", url);
+    tracing::info!(
+        "http-processor: end-point not found url: {}. Returning full url",
+        url
+    );
     Ok((
         url::Url::parse(&url)?,
         None,
