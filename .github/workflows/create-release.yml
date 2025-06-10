@@ -176,7 +176,7 @@ jobs:
             found && /^## [0-9]{2}/ { exit }
             found && /^### malai / { exit }
             found { print }
-          ' CHANGELOG.md | sed "1s/.*/# What's Changed/" >> .github/RELEASE_TEMPLATE.md
+          ' Changelog.md | sed "1s/.*/# What's Changed/" >> .github/RELEASE_TEMPLATE.md
       - uses: ncipollo/release-action@v1
         with:
           artifacts: "~/download/windows/fastn_windows_x86_64.exe,~/download/windows/fastn_setup.exe,~/download/macos/fastn_macos_x86_64,~/download/linux/fastn_linux_musl_x86_64"
