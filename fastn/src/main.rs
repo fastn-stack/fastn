@@ -61,6 +61,10 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return fastn_xtask::run_template();
     }
 
+    if let Some(_optimise_wasm) = matches.subcommand_matches("optimise-wasm") {
+        return fastn_xtask::optimise_wasm();
+    }
+
     if matches.subcommand_name().is_none() {
         return Ok(());
     }
@@ -361,6 +365,10 @@ fn app(version: &'static str) -> clap::Command {
         ).subcommand(
             clap::Command::new("run-template")
             .about("Runs the template app")
+        )
+        .subcommand(
+            clap::Command::new("optimise-wasm")
+            .about("Optimises the WASM file for the fastn app")
         )
 }
 
