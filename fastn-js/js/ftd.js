@@ -237,7 +237,7 @@ const ftd = (function () {
         method = method.trim().toUpperCase();
         const init = {
             method,
-            headers: {"Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
         };
         if (headers && headers instanceof fastn.recordInstanceClass) {
             Object.assign(init.headers, headers.toObject());
@@ -531,20 +531,27 @@ const ftd = (function () {
             }
             if (obj instanceof Array) {
                 if (![2, 3].includes(obj.length)) {
-                    console.error(`[submit_form]: Invalid tuple ${obj}, expected 2 or 3 elements, got ${obj.length}`);
+                    console.error(
+                        `[submit_form]: Invalid tuple ${obj}, expected 2 or 3 elements, got ${obj.length}`,
+                    );
                     return;
                 }
                 let [key, value, error] = obj;
 
                 if (error === "") {
-                    console.warn(`[submit_form]: ${obj} has empty error field. You're`
-                        + "probably passing a mutable string type which does not"
-                        + "work. You have to use `-- optional string $error:` for the error variable");
+                    console.warn(
+                        `[submit_form]: ${obj} has empty error field. You're` +
+                            "probably passing a mutable string type which does not" +
+                            "work. You have to use `-- optional string $error:` for the error variable",
+                    );
                 }
 
                 if (error) {
                     if (!(error instanceof fastn.mutableClass)) {
-                        console.error("[submit_form]: error must be a mutable, got", error);
+                        console.error(
+                            "[submit_form]: error must be a mutable, got",
+                            error,
+                        );
                         return;
                     }
                     error.set(null);
@@ -552,15 +559,18 @@ const ftd = (function () {
 
                 arg_map[key] = fastn.recordInstance({
                     value,
-                })
+                });
                 arg_map[key].set("error", error);
 
-                data[fastn_utils.getFlattenStaticValue(key)] = fastn_utils.getFlattenStaticValue(value);
+                data[fastn_utils.getFlattenStaticValue(key)] =
+                    fastn_utils.getFlattenStaticValue(value);
             } else if (obj instanceof fastn.recordInstanceClass) {
                 let name = obj.get("name").get();
                 obj.get("error").set(null);
                 arg_map[name] = obj;
-                data[name] = fastn_utils.getFlattenStaticValue(obj.get("value"));
+                data[name] = fastn_utils.getFlattenStaticValue(
+                    obj.get("value"),
+                );
             } else {
                 console.warn("unexpected type in submit_form", obj);
             }
@@ -571,7 +581,7 @@ const ftd = (function () {
             redirect: "error",
             // TODO: set credentials?
             credentials: "same-origin",
-            headers: {"Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
         };
 
@@ -599,7 +609,9 @@ const ftd = (function () {
                         }
 
                         if (!obj.get("error")) {
-                            console.warn(`error field not found for ${obj}, ignoring: ${key}`);
+                            console.warn(
+                                `error field not found for ${obj}, ignoring: ${key}`,
+                            );
                             continue;
                         }
 
@@ -617,12 +629,12 @@ const ftd = (function () {
                         // But if it's an `-- optional string $something`, then it is passed as a mutableClass.
                         // The catch is that the above code that creates a
                         // `recordInstance` to store value and error for when
-                        // the obj is a tuple (key, value, error) creates a 
+                        // the obj is a tuple (key, value, error) creates a
                         // nested Mutable for some reason which we're checking here.
                         if (err?.get() instanceof fastn.mutableClass) {
                             err.get().set(error);
                         } else {
-                            err.set(error)
+                            err.set(error);
                         }
                     }
                 } else if (!!response.data) {
