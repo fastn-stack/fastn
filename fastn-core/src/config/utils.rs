@@ -221,9 +221,13 @@ pub async fn get_clean_url(
         ));
     }
 
-    let msg = format!("http-processor: end-point not found url: {}", url);
-    tracing::error!(msg = msg);
-    Err(fastn_core::Error::GenericError(msg))
+    let url = format!("{}{url}", req_config.url_prefix());
+    tracing::info!("http-processor: end-point not found url: {}. Returning full url", url);
+    Ok((
+        url::Url::parse(&url)?,
+        None,
+        std::collections::HashMap::new(),
+    ))
 }
 
 pub(crate) fn is_http_url(url: &str) -> bool {
