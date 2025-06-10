@@ -1,6 +1,26 @@
 # `fastn` Change Log
 
-## Unreleased
+## 10 June 2025
+
+### fastn: 0.4.103
+
+- Fix: Send POST request body with a wasm+proxy:// url used in an http processor.
+- 2757a1e68: Support for tuple style POST body params is in ftd.submit_form, this works similar to the ftd.http function.
+
+## 25 May 2025
+
+### fastn: 0.4.102
+
+- 6e35b7911 - Build static fastn for x86_64-linux-gnu
+
+## 09 May 2025
+
+### fastn: 0.4.101
+
+- Switch to UPL license.
+- cfc0780b9: Fix: Consider `sitemap` items when resolving imports
+
+## 28 March 2025
 
 ### fastn: 0.4.100
 
