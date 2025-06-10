@@ -518,11 +518,38 @@ const ftd = (function () {
         return fastn_utils.private.getCookie("fastn-lang");
     };
 
-    exports.submit_form = function (url, ...args) {
-        if (url instanceof fastn.mutableClass) url = url.get();
+    exports.submit_form = function (url_part, ...args) {
+        let url = url_part;
 
+        let form_error = null;
         let data = {};
         let arg_map = {};
+
+        if (url_part instanceof Array) {
+            if (!url_part.length === 2) {
+                console.error(
+                    `[submit_form]: The first arg must be the url as string or a tuple (url, form_error). Got ${url_part}`,
+                );
+                return;
+            }
+            url = url_part[0];
+            form_error = url_part[1];
+
+            if (!(form_error instanceof fastn.mutableClass)) {
+                console.error(
+                    "[submit_form]: form_error must be a mutable, got",
+                    form_error,
+                );
+                return;
+            }
+            form_error.set(null);
+
+            arg_map["all"] = fastn.recordInstance({
+                error: form_error,
+            });
+        }
+
+        if (url instanceof fastn.mutableClass) url = url.get();
 
         for (let i = 0, len = args.length; i < len; i += 1) {
             let obj = args[i];
@@ -537,6 +564,15 @@ const ftd = (function () {
                     return;
                 }
                 let [key, value, error] = obj;
+
+                key = fastn_utils.getFlattenStaticValue(key);
+
+                if (key == "all") {
+                    console.error(
+                        `[submit_form]: "all" key is reserved. Please change it to something else. Got for (${key}, ${value}, ${error})`,
+                    );
+                    return;
+                }
 
                 if (error === "") {
                     console.warn(
@@ -559,13 +595,20 @@ const ftd = (function () {
 
                 arg_map[key] = fastn.recordInstance({
                     value,
+                    error,
                 });
-                arg_map[key].set("error", error);
 
-                data[fastn_utils.getFlattenStaticValue(key)] =
-                    fastn_utils.getFlattenStaticValue(value);
+                data[key] = fastn_utils.getFlattenStaticValue(value);
             } else if (obj instanceof fastn.recordInstanceClass) {
                 let name = obj.get("name").get();
+
+                if (name == "all") {
+                    console.error(
+                        `[submit_form]: "all" key is reserved. Please change it to something else. Got for ${obj}`,
+                    );
+                    return;
+                }
+
                 obj.get("error").set(null);
                 arg_map[name] = obj;
                 data[name] = fastn_utils.getFlattenStaticValue(
