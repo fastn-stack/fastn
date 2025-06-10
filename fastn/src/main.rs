@@ -69,6 +69,26 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return fastn_xtask::publish_app();
     }
 
+    if let Some(_update_ui) = matches.subcommand_matches("update-ui") {
+        return fastn_xtask::update_ui();
+    }
+
+    if let Some(_update_www) = matches.subcommand_matches("update-www") {
+        return fastn_xtask::update_www();
+    }
+
+    if let Some(_update_template) = matches.subcommand_matches("update-template") {
+        return fastn_xtask::update_template();
+    }
+
+    if let Some(_run_ui) = matches.subcommand_matches("run-ui") {
+        return fastn_xtask::run_ui();
+    }
+
+    if let Some(_run_www) = matches.subcommand_matches("run-www") {
+        return fastn_xtask::run_www();
+    }
+
     if matches.subcommand_name().is_none() {
         return Ok(());
     }
@@ -377,6 +397,26 @@ fn app(version: &'static str) -> clap::Command {
         .subcommand(
             clap::Command::new("publish-app")
             .about("Publishes the fastn app")
+        )
+        .subcommand(
+            clap::Command::new("update-ui")
+            .about("Updates the UI for the fastn app")
+        )
+        .subcommand(
+            clap::Command::new("update-www")
+            .about("Updates the WWW site for the fastn app")
+        )
+        .subcommand(
+            clap::Command::new("run-ui")
+            .about("Runs the UI for the fastn app")
+        )
+        .subcommand(
+            clap::Command::new("run-www")
+            .about("Runs the WWW site for the fastn app")
+        )
+        .subcommand(
+            clap::Command::new("update-template")
+            .about("Updates the template for the fastn app")
         )
 }
 
