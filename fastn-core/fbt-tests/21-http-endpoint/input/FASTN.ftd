@@ -4,5 +4,5 @@
 
 -- fastn.url-mappings:
 
-/api/* -> http+proxy://${env.REQRES}/api/*
+/api/* -> http+proxy://jsonplaceholder.typicode.com/*
 /api/v2/* -> http+proxy://${env.EXAMPLE or "example.com"}/api/v2/*

@@ -1,18 +1,13 @@
 -- import: fastn/processors as pr
 
--- record user-data:
+-- record user:
 integer id:
 string email:
-string first_name:
-
--- record user:
-user-data data:
-
+string name:
 
 -- user u:
 $processor$: pr.http
-url: /api/users/2
-
+url: /api/users/1
 
 
 -- display-user: $u
@@ -25,11 +20,11 @@ caption user u:
 -- ftd.row:
 spacing.fixed.rem: 1
 
--- ftd.integer: $display-user.u.data.id
+-- ftd.integer: $display-user.u.id
 
--- ftd.text: $display-user.u.data.first_name
+-- ftd.text: $display-user.u.name
 
--- ftd.text: $display-user.u.data.email
+-- ftd.text: $display-user.u.email
 
 -- end: ftd.row
 
