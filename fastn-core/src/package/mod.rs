@@ -640,19 +640,6 @@ impl Package {
         Ok(())
     }
 
-    // #[tracing::instrument(skip(self, ds))]
-    // pub(crate) async fn get_and_resolve(
-    //     &self,
-    //     package_root: &fastn_ds::Path,
-    //     ds: &fastn_ds::DocumentStore,
-    //     session_id: &Option<String>,
-    // ) -> fastn_core::Result<fastn_core::Package> {
-    //     let file_extract_path = package_root.join("FASTN.ftd");
-    //     let mut package = self.clone();
-    //     package.resolve(&file_extract_path, ds, session_id).await?;
-    //     Ok(package)
-    // }
-
     pub fn from_fastn_doc(
         ds: &fastn_ds::DocumentStore,
         fastn_doc: &ftd::ftd2021::p2::Document,
