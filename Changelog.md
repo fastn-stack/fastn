@@ -6,6 +6,7 @@
 
 - Fix: Send POST request body with a wasm+proxy:// url used in an http processor.
 - 2757a1e68: Support for tuple style POST body params is in ftd.submit_form, this works similar to the ftd.http function.
+- bcdf41325: Support form form level errors in ftd.submit_form.
 
 ## 25 May 2025
 
