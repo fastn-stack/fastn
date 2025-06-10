@@ -53,8 +53,12 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return fastn_xtask::new_app(app_name).await;
     }
 
-    if let Some(build_wasm) = matches.subcommand_matches("build-wasm") {
+    if let Some(_build_wasm) = matches.subcommand_matches("build-wasm") {
         return fastn_xtask::build_wasm();
+    }
+
+    if let Some(_run_template) = matches.subcommand_matches("run-template") {
+        return fastn_xtask::run_template();
     }
 
     if matches.subcommand_name().is_none() {
@@ -354,6 +358,9 @@ fn app(version: &'static str) -> clap::Command {
         .subcommand(
             clap::Command::new("build-wasm")
             .about("Builds the WASM file for the fastn app")
+        ).subcommand(
+            clap::Command::new("run-template")
+            .about("Runs the template app")
         )
 }
 
