@@ -25,3 +25,4 @@ tokio.workspace = true
 reqwest.workspace = true
 zip.workspace = true
 fastn-core.path="../fastn-core"
+regex = "1.5.4"

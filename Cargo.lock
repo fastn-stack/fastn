@@ -1581,6 +1581,7 @@ version = "0.1.0"
 dependencies = [
  "clap",
  "fastn-core",
+ "regex",
  "reqwest",
  "tokio",
  "zip",
