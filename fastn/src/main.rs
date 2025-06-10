@@ -65,6 +65,10 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return fastn_xtask::optimise_wasm();
     }
 
+    if let Some(_publish_app) = matches.subcommand_matches("publish-app") {
+        return fastn_xtask::publish_app();
+    }
+
     if matches.subcommand_name().is_none() {
         return Ok(());
     }
@@ -369,6 +373,10 @@ fn app(version: &'static str) -> clap::Command {
         .subcommand(
             clap::Command::new("optimise-wasm")
             .about("Optimises the WASM file for the fastn app")
+        )
+        .subcommand(
+            clap::Command::new("publish-app")
+            .about("Publishes the fastn app")
         )
 }
 
