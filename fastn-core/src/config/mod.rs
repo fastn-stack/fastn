@@ -70,6 +70,15 @@ impl RequestConfig {
         self.request.uri.clone()
     }
 
+    /// https://www.example.com/test/ -> https://www.example.com
+    pub fn url_prefix(&self) -> String {
+        format!(
+            "{}://{}",
+            self.request.connection_info.scheme(),
+            self.request.host(),
+        )
+    }
+
     pub fn current_language(&self) -> Option<String> {
         self.config.package.selected_language.clone()
     }

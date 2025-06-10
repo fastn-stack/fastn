@@ -55,7 +55,8 @@ pub fn trim_package_name(path: &str, package_name: &str) -> Option<String> {
 // It will return url with end-point, if package or dependency contains endpoints in them
 // url: /-/<package-name>/api/ => (package-name, endpoints/api/, app or package config)
 // url: /-/<package-name>/api/ => (package-name, endpoints/api/, app or package config)
-pub fn get_clean_url(
+#[tracing::instrument(skip(package, req_config))]
+pub async fn get_clean_url(
     package: &fastn_core::Package,
     req_config: &fastn_core::RequestConfig,
     url: &str,
@@ -65,6 +66,7 @@ pub fn get_clean_url(
     std::collections::HashMap<String, String>,
 )> {
     if url.starts_with("http") {
+        tracing::info!("get_clean_url: url is http(s), returning as is: {}", url);
         return Ok((
             url::Url::parse(url)?,
             None,
@@ -74,18 +76,18 @@ pub fn get_clean_url(
 
     let cow_1 = std::borrow::Cow::from(url);
 
-    let url = if url.starts_with("/-/") || url.starts_with("-/") {
-        cow_1
-    } else {
-        req_config
-            .config
-            .get_mountpoint_sanitized_path(url)
-            .map(|(u, _, _, _)| u)
-            .unwrap_or_else(|| cow_1) // TODO: Error possibly, in that return 404 from proxy
-    };
+    let url = req_config
+        .config
+        .get_mountpoint_sanitized_path(url)
+        .map(|(u, _, _, _)| u)
+        .unwrap_or_else(|| cow_1); // TODO: Error possibly, in that return 404 from proxy
+
+    tracing::info!("url: {}", url);
 
     // This is for current package
     if let Some(remaining_url) = trim_package_name(url.as_ref(), package.name.as_str()) {
+        tracing::info!("remaining_url after trim: {}", remaining_url);
+
         if package.endpoints.is_empty() {
             return Err(fastn_core::Error::GenericError(format!(
                 "package does not contain the endpoints: {:?}",
@@ -118,23 +120,72 @@ pub fn get_clean_url(
     }
 
     // Handle logic for apps
+    tracing::info!("checking for apps in package: {}", package.name);
     for app in package.apps.iter() {
-        if let Some(ep) = &app.end_point {
-            if let Some(remaining_url) = trim_package_name(url.as_ref(), app.package.name.as_str())
+        tracing::info!(?app.end_point, ?app.mount_point, "checking app: {}", app.package.name);
+
+        if url.starts_with(app.mount_point.trim_end_matches('/')) {
+            tracing::info!(
+                "matched app: {}; mount_point: {}",
+                app.name,
+                app.mount_point
+            );
+
+            // TODO: check url-mappings of this app
+
+            let wasm_file = url
+                .trim_start_matches(&app.mount_point)
+                .split_once('/')
+                .unwrap_or_default()
+                .0;
+
+            tracing::info!("wasm_file: {}", wasm_file);
+
+            let wasm_path = format!(
+                ".packages/{dep_name}/{wasm_file}.wasm",
+                dep_name = app.package.name,
+            );
+
+            tracing::info!("wasm_path: {}", wasm_path);
+
+            if !req_config
+                .config
+                .ds
+                .exists(&fastn_ds::Path::new(&wasm_path), &None)
+                .await
             {
-                let mut app_conf = app.config.clone();
-                if let Some(user_id) = &app.user_id {
-                    app_conf.insert("user-id".to_string(), user_id.clone());
-                }
+                let url = format!("{}{url}", req_config.url_prefix());
+
+                tracing::info!(
+                    "wasm file not found: {}. Returning a full url instead: {}",
+                    wasm_path,
+                    url
+                );
+
                 return Ok((
-                    url::Url::parse(format!("{}{}", ep, remaining_url).as_str())?,
+                    url::Url::parse(&url)?,
                     Some(app.mount_point.to_string()),
-                    app_conf,
+                    std::collections::HashMap::new(),
                 ));
             }
+
+            tracing::info!("wasm file found: {}", wasm_path);
+
+            let path = url
+                .trim_start_matches(&app.mount_point)
+                .trim_start_matches(wasm_file);
+
+            tracing::info!("path after wasm_file: {}", path);
+
+            return Ok((
+                url::Url::parse(&format!("wasm+proxy://{wasm_path}{path}"))?,
+                Some(app.mount_point.to_string()),
+                std::collections::HashMap::new(),
+            ));
         }
     }
 
+    tracing::info!("checking for endpoints in package: {}", package.name);
     if let Some(e) = package
         .endpoints
         .iter()
