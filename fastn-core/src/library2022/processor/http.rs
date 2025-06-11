@@ -1,5 +1,6 @@
 use ftd::interpreter::{PropertyValueExt, ValueExt};
 
+#[tracing::instrument(name = "http_processor", skip_all)]
 pub async fn process(
     value: ftd_ast::VariableValue,
     kind: fastn_resolved::Kind,
@@ -78,63 +79,73 @@ pub async fn process(
 
     let (mut url, mountpoint, mut conf) = {
         let (mut url, mountpoint, conf) =
-            fastn_core::config::utils::get_clean_url(&package, req_config, url.as_str()).map_err(
-                |e| ftd::interpreter::Error::ParseError {
+            fastn_core::config::utils::get_clean_url(&package, req_config, url.as_str())
+                .await
+                .map_err(|e| ftd::interpreter::Error::ParseError {
                     message: format!("invalid url: {:?}", e),
                     doc_id: doc.name.to_string(),
                     line_number,
-                },
-            )?;
+                })?;
         if !req_config.request.query_string().is_empty() {
             url.set_query(Some(req_config.request.query_string()));
         }
         (url, mountpoint, conf)
     };
 
-    let mut body = vec![];
+    let mut body = serde_json::Map::new();
     for header in headers.0 {
         if header.key.as_str() == ftd::PROCESSOR_MARKER
             || header.key.as_str() == "url"
             || header.key.as_str() == "method"
         {
+            tracing::info!("Skipping header: {}", header.key);
             continue;
         }
 
         let value = header.value.string(doc.name)?;
 
+        tracing::info!("Processing header: {}: {:?}", header.key, value);
+
+        if let Some(key) = fastn_core::http::get_header_key(header.key.as_str()) {
+            let value = value.to_string();
+            tracing::info!("Adding header: {}: {}", key, value);
+            conf.insert(key.to_string(), value);
+            continue;
+        }
+
         // 1 id: $query.id
         // After resolve headers: id:1234(value of $query.id)
         if value.starts_with('$') {
+            tracing::info!("Resolving variable in header: {}", value);
+
             if let Some(value) = doc
                 .get_value(header.line_number, value)?
-                .to_json_string(doc, true)?
+                .to_serde_value(doc)?
             {
-                if let Some(key) = fastn_core::http::get_header_key(header.key.as_str()) {
-                    conf.insert(key.to_string(), value.trim_matches('"').to_string());
-                    continue;
-                }
+                tracing::info!("Resolved variable in header: {}: {:?}", header.key, value);
                 if method.as_str().eq("post") {
-                    body.push(format!("\"{}\": {}", header.key, value));
-                    continue;
+                    body.insert(header.key, value);
+                } else {
+                    let value = serde_json::to_string(&value)
+                        .map_err(|e| ftd::interpreter::Error::Serde { source: e })?;
+
+                    url.query_pairs_mut()
+                        .append_pair(header.key.as_str(), &value);
                 }
-                url.query_pairs_mut()
-                    .append_pair(header.key.as_str(), value.trim_matches('"'));
             }
         } else {
-            if let Some(key) = fastn_core::http::get_header_key(header.key.as_str()) {
-                conf.insert(key.to_string(), value.to_string());
-                continue;
-            }
+            tracing::info!("Using static value in header: {}: {}", header.key, value);
+
             if method.as_str().eq("post") {
-                body.push(format!(
-                    "\"{}\": \"{}\"",
+                body.insert(
                     header.key,
-                    fastn_core::utils::escape_string(value)
-                ));
-                continue;
+                    serde_json::Value::String(fastn_core::utils::escape_string(value)),
+                );
+            } else {
+                // why not escape_string here?
+                url.query_pairs_mut()
+                    .append_pair(header.key.as_str(), value);
             }
-            url.query_pairs_mut()
-                .append_pair(header.key.as_str(), value);
         }
     }
 
@@ -143,6 +154,7 @@ pub async fn process(
     }
 
     let resp = if url.scheme() == "wasm+proxy" {
+        tracing::info!("Calling wasm+proxy with url: {url}");
         let mountpoint = mountpoint.ok_or(ftd::interpreter::Error::OtherError(
             "Mountpoint not found!".to_string(),
         ))?;
@@ -150,6 +162,12 @@ pub async fn process(
             .config
             .app_mounts()
             .map_err(|e| ftd::interpreter::Error::OtherError(e.to_string()))?;
+
+        if method == "post" {
+            req_config.request.body = serde_json::to_vec(&body)
+                .map_err(|e| ftd::interpreter::Error::Serde { source: e })?
+                .into();
+        }
 
         match req_config
             .config
@@ -202,17 +220,20 @@ pub async fn process(
             e => todo!("error: {e:?}"),
         }
     } else if method.as_str().eq("post") {
+        tracing::info!("Calling POST request with url: {url}");
         fastn_core::http::http_post_with_cookie(
             req_config,
             url.as_str(),
             &conf,
-            format!("{{{}}}", body.join(",")).as_str(),
+            &serde_json::to_string(&body)
+                .map_err(|e| ftd::interpreter::Error::Serde { source: e })?,
         )
         .await
         .map_err(|e| ftd::interpreter::Error::DSHttpError {
             message: format!("{:?}", e),
         })
     } else {
+        tracing::info!("Calling GET request with url: {url}");
         fastn_core::http::http_get_with_cookie(
             &req_config.config.ds,
             &req_config.request,
@@ -248,13 +269,7 @@ pub async fn process(
         }
     };
 
-    let response_string =
-        String::from_utf8(response.to_vec()).map_err(|e| ftd::interpreter::Error::ParseError {
-            message: format!("`http` processor API response error: {}", e),
-            doc_id: doc.name.to_string(),
-            line_number,
-        })?;
-    let response_json: serde_json::Value = serde_json::from_str(&response_string)
+    let response_json: serde_json::Value = serde_json::from_slice(&response)
         .map_err(|e| ftd::interpreter::Error::Serde { source: e })?;
 
     doc.from_json(&response_json, &kind, &value)

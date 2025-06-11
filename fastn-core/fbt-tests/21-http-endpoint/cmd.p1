@@ -1,5 +1,5 @@
 -- fbt:
-cmd: REQRES="reqres.in" $FBT_CWD/../target/debug/fastn --test build
+cmd: $FBT_CWD/../target/debug/fastn --test build
 output: .build
 
 -- stdout:
@@ -7,5 +7,5 @@ output: .build
 No dependencies in fastn-stack.github.io/http-endpoint-test.
 Processing fastn-stack.github.io/http-endpoint-test/manifest.json ... done in <omitted>
 Processing fastn-stack.github.io/http-endpoint-test/FASTN/ ... done in <omitted>
-Processing fastn-stack.github.io/http-endpoint-test/ ... calling `http` processor with url: http://reqres.in/api/users/2
+Processing fastn-stack.github.io/http-endpoint-test/ ... calling `http` processor with url: http://jsonplaceholder.typicode.com/users/1
 done in <omitted>

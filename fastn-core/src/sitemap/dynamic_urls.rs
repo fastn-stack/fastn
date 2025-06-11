@@ -108,7 +108,7 @@ impl DynamicUrls {
     }
 
     #[tracing::instrument(name = "dynamic-urls-resolve-document", skip(self))]
-    pub fn resolve_document<'a>(&'a self, path: &str) -> fastn_core::Result<ResolveDocOutput> {
+    pub fn resolve_document(&self, path: &str) -> fastn_core::Result<ResolveDocOutput> {
         fn resolve_in_toc(
             toc: &fastn_core::sitemap::toc::TocItem,
             path: &str,

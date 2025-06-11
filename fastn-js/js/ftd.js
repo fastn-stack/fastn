@@ -518,22 +518,105 @@ const ftd = (function () {
         return fastn_utils.private.getCookie("fastn-lang");
     };
 
-    exports.submit_form = function (url, ...args) {
-        if (url instanceof fastn.mutableClass) url = url.get();
+    exports.submit_form = function (url_part, ...args) {
+        let url = url_part;
 
+        let form_error = null;
         let data = {};
         let arg_map = {};
+
+        if (url_part instanceof Array) {
+            if (!url_part.length === 2) {
+                console.error(
+                    `[submit_form]: The first arg must be the url as string or a tuple (url, form_error). Got ${url_part}`,
+                );
+                return;
+            }
+            url = url_part[0];
+            form_error = url_part[1];
+
+            if (!(form_error instanceof fastn.mutableClass)) {
+                console.error(
+                    "[submit_form]: form_error must be a mutable, got",
+                    form_error,
+                );
+                return;
+            }
+            form_error.set(null);
+
+            arg_map["all"] = fastn.recordInstance({
+                error: form_error,
+            });
+        }
+
+        if (url instanceof fastn.mutableClass) url = url.get();
 
         for (let i = 0, len = args.length; i < len; i += 1) {
             let obj = args[i];
             if (obj instanceof fastn.mutableClass) {
                 obj = obj.get();
             }
-            console.assert(obj instanceof fastn.recordInstanceClass);
-            let name = obj.get("name").get();
-            arg_map[name] = obj;
-            obj.get("error").set(null);
-            data[name] = fastn_utils.getFlattenStaticValue(obj.get("value"));
+            if (obj instanceof Array) {
+                if (![2, 3].includes(obj.length)) {
+                    console.error(
+                        `[submit_form]: Invalid tuple ${obj}, expected 2 or 3 elements, got ${obj.length}`,
+                    );
+                    return;
+                }
+                let [key, value, error] = obj;
+
+                key = fastn_utils.getFlattenStaticValue(key);
+
+                if (key == "all") {
+                    console.error(
+                        `[submit_form]: "all" key is reserved. Please change it to something else. Got for (${key}, ${value}, ${error})`,
+                    );
+                    return;
+                }
+
+                if (error === "") {
+                    console.warn(
+                        `[submit_form]: ${obj} has empty error field. You're` +
+                            "probably passing a mutable string type which does not" +
+                            "work. You have to use `-- optional string $error:` for the error variable",
+                    );
+                }
+
+                if (error) {
+                    if (!(error instanceof fastn.mutableClass)) {
+                        console.error(
+                            "[submit_form]: error must be a mutable, got",
+                            error,
+                        );
+                        return;
+                    }
+                    error.set(null);
+                }
+
+                arg_map[key] = fastn.recordInstance({
+                    value,
+                    error,
+                });
+
+                data[key] = fastn_utils.getFlattenStaticValue(value);
+            } else if (obj instanceof fastn.recordInstanceClass) {
+                let name = obj.get("name").get();
+
+                if (name == "all") {
+                    console.error(
+                        `[submit_form]: "all" key is reserved. Please change it to something else. Got for ${obj}`,
+                    );
+                    return;
+                }
+
+                obj.get("error").set(null);
+                arg_map[name] = obj;
+                data[name] = fastn_utils.getFlattenStaticValue(
+                    obj.get("value"),
+                );
+            } else {
+                console.warn("unexpected type in submit_form", obj);
+            }
         }
 
         let init = {
@@ -567,13 +650,35 @@ const ftd = (function () {
                             console.warn("found unknown key, ignoring: ", key);
                             continue;
                         }
+
+                        if (!obj.get("error")) {
+                            console.warn(
+                                `error field not found for ${obj}, ignoring: ${key}`,
+                            );
+                            continue;
+                        }
+
                         let error = response.errors[key];
                         if (Array.isArray(error)) {
                             // django returns a list of strings
                             error = error.join(" ");
                         }
                         // @ts-ignore
-                        obj.get("error").set(error);
+                        const err = obj.get("error");
+
+                        // NOTE: when you pass a mutable string type from an ftd
+                        // function to a js func, it is passed as a string type.
+                        // This means we can't mutate it from js.
+                        // But if it's an `-- optional string $something`, then it is passed as a mutableClass.
+                        // The catch is that the above code that creates a
+                        // `recordInstance` to store value and error for when
+                        // the obj is a tuple (key, value, error) creates a
+                        // nested Mutable for some reason which we're checking here.
+                        if (err?.get() instanceof fastn.mutableClass) {
+                            err.get().set(error);
+                        } else {
+                            err.set(error);
+                        }
                     }
                 } else if (!!response.data) {
                     console.error("data not yet implemented");
