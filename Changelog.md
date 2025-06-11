@@ -1,5 +1,13 @@
 # `fastn` Change Log
 
+## 11 June 2025
+
+### fastn: 0.4.104
+
+- 348030b8a: Fix correctly reflect overriden components for system packages. See issue #2139.
+- a42da86f6: Handle package local relative urls in http processor. See PR #2144.
+- 7551fc8f4: Handle wasm modules in mountpoint of app dependencies when called through http processor. See PR #2144.
+
 ## 10 June 2025
 
 ### fastn: 0.4.103
