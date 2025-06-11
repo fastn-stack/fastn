@@ -268,7 +268,12 @@ impl Package {
         })
     }
 
-    pub fn generate_prefix_string(&self, with_alias: bool) -> Option<String> {
+    #[tracing::instrument(skip(self, current_package))]
+    pub fn generate_prefix_string(
+        &self,
+        current_package: &Package,
+        with_alias: bool,
+    ) -> Option<String> {
         self.auto_import.iter().fold(None, |pre, ai| {
             let mut import_doc_path = ai.path.clone();
             if !with_alias {
@@ -287,6 +292,34 @@ impl Package {
                     }
                 }
             }
+
+            tracing::info!(?import_doc_path, ?ai.alias, ?ai.exposing);
+
+            let import_doc_path = if let Some(provided_via) =
+                current_package.dependencies.iter().find_map(|d| {
+                    tracing::info!(
+                        "checking dependency {} in package {}",
+                        d.package.name,
+                        current_package.name
+                    );
+                    if d.package.name == import_doc_path && d.provided_via.is_some() {
+                        d.provided_via.clone()
+                    } else {
+                        None
+                    }
+                }) {
+                tracing::error!(
+                    ?import_doc_path,
+                    ?provided_via,
+                    "Prefixing auto-import inherited- because it's a provided-via the main package"
+                );
+                format!("inherited-{import_doc_path}")
+            } else {
+                import_doc_path
+            };
+
+            tracing::info!(?import_doc_path, "import_doc_path has changed");
+
             Some(format!(
                 "{}\n-- import: {}{}{}",
                 pre.unwrap_or_default(),
@@ -467,11 +500,17 @@ impl Package {
         Ok(new_body)
     }
 
-    pub fn get_prefixed_body(&self, body: &str, id: &str, with_alias: bool) -> String {
+    pub fn get_prefixed_body(
+        &self,
+        current_package: &Package,
+        body: &str,
+        id: &str,
+        with_alias: bool,
+    ) -> String {
         if id.contains("FPM/") {
             return body.to_string();
         };
-        match self.generate_prefix_string(with_alias) {
+        match self.generate_prefix_string(current_package, with_alias) {
             Some(s) => {
                 let t = format!("{}\n\n{}", s, body);
                 self.fix_imports_in_body(t.as_str(), id).ok().unwrap_or(t)

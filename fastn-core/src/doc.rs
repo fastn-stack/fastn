@@ -68,15 +68,26 @@ pub async fn interpret_helper(
                 caller_module,
             } => {
                 tracing::info!("stuck on import: {module}");
+                // TODO: also check if module in in dependencies of this package
+                let caller_module = if module.starts_with("inherited-") {
+                    // We want to use the main package name as the caller_module for this as the
+                    // inherited- package's provided-via path can only be read from the main
+                    // package.
+                    name
+                } else {
+                    &caller_module
+                };
+
                 let (source, path, foreign_variable, foreign_function, ignore_line_numbers) =
                     resolve_import_2022(
                         lib,
                         &mut st,
                         module.as_str(),
-                        caller_module.as_str(),
+                        caller_module,
                         preview_session_id,
                     )
                     .await?;
+                tracing::info!("import resolved: {module} -> {path}");
                 lib.dependencies_during_render.push(path);
                 let doc = cached_parse(module.as_str(), source.as_str(), ignore_line_numbers)?;
                 s = st.continue_after_import(
@@ -137,7 +148,7 @@ pub async fn interpret_helper(
     Ok(document)
 }
 
-// source, foreign_variable, foreign_function
+/// returns: (source, path, foreign_variable, foreign_function, ignore_line_numbers)
 #[allow(clippy::type_complexity)]
 #[tracing::instrument(skip(lib, _state))]
 pub async fn resolve_import_2022(

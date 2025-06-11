@@ -90,7 +90,7 @@ async fn original_package_status(
     } else {
         let body_prefix = config
             .package
-            .generate_prefix_string(false)
+            .generate_prefix_string(&config.package, false)
             .unwrap_or_default();
         format!(
             "{}\n\n-- import: {}/original-status as pi\n\n-- pi.original-status-page:",
@@ -116,7 +116,7 @@ async fn translation_package_status(
     } else {
         let body_prefix = config
             .package
-            .generate_prefix_string(false)
+            .generate_prefix_string(&config.package, false)
             .unwrap_or_default();
         format!(
             "{}\n\n-- import: {}/translation-status as pi\n\n-- pi.translation-status-page:",
