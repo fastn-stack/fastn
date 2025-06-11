@@ -63,6 +63,7 @@ impl Library2022 {
         session_id: &Option<String>,
     ) -> fastn_core::Result<(String, String, usize)> {
         if name == "fastn" {
+            tracing::info!("fastn.ftd requested");
             if self.config.test_command_running {
                 return Ok((
                     fastn_core::commands::test::test_fastn_ftd().to_string(),
@@ -114,30 +115,36 @@ impl Library2022 {
                 return Ok(val);
             }
 
-            /*let translation_of = match package.translation_of.as_ref() {
-                Some(translation_of) => translation_of.to_owned(),
-                None => return None,
-            };
-
-            let name = name.replacen(package.name.as_str(), translation_of.name.as_str(), 1);
-            if name.starts_with(translation_of.name.as_str()) {
-                if let Some((content, size)) =
-                    get_data_from_package(name.as_str(), &translation_of, lib).await
-                {
-                    return Some((content, name.to_string(), size));
-                }
-            }
-
-            for (alias, package) in translation_of.aliases() {
-                if name.starts_with(alias) {
-                    let name = name.replacen(alias, &package.name, 1);
-                    if let Some((content, size)) =
-                        get_data_from_package(name.as_str(), package, lib).await
+            if name.starts_with("inherited-") {
+                // The inherited- prefix is added to every dependency that is `auto-import`ed
+                // and has a provided-via in the main package's FASTN.ftd
+                let new_name = name.trim_start_matches("inherited-");
+                if let Some(provided_via) = package.dependencies.iter().find_map(|d| {
+                    tracing::info!(
+                        "checking dependency {} for {name} in package {}",
+                        d.package.name,
+                        package.name
+                    );
+                    if d.package.name == new_name.trim_end_matches('/') && d.provided_via.is_some()
                     {
-                        return Some((content, name.to_string(), size));
+                        d.provided_via.clone()
+                    } else {
+                        None
+                    }
+                }) {
+                    tracing::error!("using provided-via: {provided_via} for {name}");
+                    if let Some((content, size)) =
+                        get_data_from_package(&provided_via, &package, lib, session_id).await?
+                    {
+                        // NOTE: we still return `name`. This way, we use source of provided-via's
+                        // module but act as if the source is from `name`.
+                        // Also note that this only applies to modules starting with "inherited-"
+                        let name = format!("{}/", name.trim_end_matches('/'));
+                        tracing::info!(?content, ?name);
+                        return Ok((content, name, size));
                     }
                 }
-            }*/
+            }
 
             fastn_core::usage_error(format!("library not found 1: {}: {package:?}", name))
         }
@@ -149,7 +156,9 @@ impl Library2022 {
             package: &fastn_core::Package,
             session_id: &Option<String>,
         ) -> fastn_core::Result<Option<(String, String, usize)>> {
+            tracing::info!("getting data for {name} in package {}", package.name);
             if name.starts_with(package.name.as_str()) {
+                tracing::info!("found {name} in package {}", package.name);
                 if let Some((content, size)) =
                     get_data_from_package(name, package, lib, session_id).await?
                 {
@@ -158,6 +167,10 @@ impl Library2022 {
             }
             // Self package referencing
             if package.name.ends_with(name.trim_end_matches('/')) {
+                tracing::info!(
+                    "self package referencing {name} in package {}",
+                    package.name
+                );
                 let package_index = format!("{}/", package.name.as_str());
                 if let Some((content, size)) =
                     get_data_from_package(package_index.as_str(), package, lib, session_id).await?
@@ -167,6 +180,10 @@ impl Library2022 {
             }
 
             for (alias, package) in package.aliases() {
+                tracing::info!(
+                    "checking alias {alias} for {name} in package {}",
+                    package.name
+                );
                 lib.push_package_under_process(name, package, session_id)
                     .await?;
                 if name.starts_with(alias) {
@@ -182,7 +199,6 @@ impl Library2022 {
             Ok(None)
         }
 
-        // TODO: This function is too long. Break it down.
         #[allow(clippy::await_holding_refcell_ref)]
         #[tracing::instrument(skip(lib, package))]
         async fn get_data_from_package(
@@ -196,6 +212,7 @@ impl Library2022 {
             let package = lib
                 .config
                 .find_package_else_default(package.name.as_str(), Some(package.to_owned()));
+            tracing::info!("checking package: {}", package.name);
             // Explicit check for the current package.
             let name = format!("{}/", name.trim_end_matches('/'));
             if !name.starts_with(format!("{}/", package.name.as_str()).as_str()) {
@@ -231,8 +248,12 @@ impl Library2022 {
                 return Ok(None);
             }
             Ok(String::from_utf8(data).ok().map(|body| {
-                let body_with_prefix =
-                    package.get_prefixed_body(body.as_str(), name.as_str(), true);
+                let body_with_prefix = package.get_prefixed_body(
+                    &lib.config.package,
+                    body.as_str(),
+                    name.as_str(),
+                    true,
+                );
                 let line_number = body_with_prefix.split('\n').count() - body.split('\n').count();
                 (body_with_prefix, line_number)
             }))

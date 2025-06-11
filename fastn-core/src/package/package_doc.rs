@@ -427,8 +427,12 @@ pub(crate) async fn read_ftd_2022(
     config.base_url = base_url.to_string();
 
     // Get Prefix Body => [AutoImports + Actual Doc content]
-    let mut doc_content =
-        current_package.get_prefixed_body(main.content.as_str(), main.id.as_str(), true);
+    let mut doc_content = current_package.get_prefixed_body(
+        &config.config.package,
+        main.content.as_str(),
+        main.id.as_str(),
+        true,
+    );
     // Fix aliased imports to full path (if any)
     doc_content = current_package.fix_imports_in_body(doc_content.as_str(), main.id.as_str())?;
 
@@ -510,8 +514,12 @@ pub(crate) async fn read_ftd_2023(
     config.base_url = base_url.to_string();
 
     // Get Prefix Body => [AutoImports + Actual Doc content]
-    let mut doc_content =
-        current_package.get_prefixed_body(main.content.as_str(), main.id.as_str(), true);
+    let mut doc_content = current_package.get_prefixed_body(
+        &config.config.package,
+        main.content.as_str(),
+        main.id.as_str(),
+        true,
+    );
     // Fix aliased imports to full path (if any)
     doc_content = current_package.fix_imports_in_body(doc_content.as_str(), main.id.as_str())?;
 
