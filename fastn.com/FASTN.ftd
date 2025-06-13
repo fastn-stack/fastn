@@ -8,6 +8,7 @@ zip: https://codeload.github.com/fastn-stack/fastn/zip/refs/heads/main
 -- fastn.dependency: bling.fifthtry.site
 -- fastn.dependency: dark-flame-cs.fifthtry.site
 -- fastn.dependency: doc-site.fifthtry.site
+-- fastn.dependency: color-doc.fifthtry.site
 -- fastn.dependency: forest-cs.fifthtry.site
 -- fastn.dependency: saturated-sunset-cs.fifthtry.site
 -- fastn.dependency: winter-cs.fifthtry.site
