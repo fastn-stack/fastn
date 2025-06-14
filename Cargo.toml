@@ -12,7 +12,8 @@ members = [
     "fastn-package",
     "fastn-runtime",
     "fastn-update",
-    "fastn-utils",
+    "fastn-utils", 
+    "fastn-xtask",
     "fbt",
     "fbt_lib",
     "ftd",
@@ -97,6 +98,7 @@ fastn-runtime = { path = "fastn-runtime", features = ["owned-tdoc"] }
 fastn-update.path = "fastn-update"
 fastn-utils.path = "fastn-utils"
 fastn-wasm.path = "v0.5/fastn-wasm"
+fastn-xtest.path = "fast-xtest"
 fbt-lib.path = "fbt_lib"
 format_num = "0.1"
 ft-sys-shared = { version = "0.2.1", features = ["rusqlite", "host-only"] }
