@@ -1,6 +1,8 @@
 -- import: fastn/processors as pr
 -- import: fastn.com/expander/lib
 -- import: bling.fifthtry.site/note
+-- import: color-doc.fifthtry.site/components as cp
+-- import: color-doc.fifthtry.site as cd
 
 -- ds.page: color-scheme in doc-site
 
@@ -48,15 +50,17 @@ the visual appeal, reinforces branding, improves readability and accessibility,
 engages users, promotes navigation, and creates a cohesive and meaningful user
 experience.
 
--- ds.h1: Introduction
+-- ds.h1: Introduction: Why Color Schemes Matter
 if: { !show-planning }
 
-A color scheme in website creation refers to the selection and arrangement of
-colors used in a design. It is important because it enhances visual appeal,
-establishes branding, improves readability, guides user engagement and
-navigation, creates coherence, and has cultural and psychological significance.
-A well-chosen color scheme contributes to a visually appealing and cohesive
-website that resonates with users.
+Color sets the tone for your website. It builds emotional resonance, guides
+attention, and reinforces your brand. A consistent color scheme ensures
+visual harmony and improves usability—especially across components and pages.
+It is important because it enhances visual appeal, establishes branding,
+improves readability, guides user engagement and navigation, creates
+coherence, and has cultural and psychological significance. A well-chosen
+color scheme contributes to a visually appealing and cohesive website that
+resonates with users.
 
 The importance of a well-thought-out color scheme in website creation cannot be
 overstated as it significantly impacts the overall user experience and
@@ -64,68 +68,71 @@ perception of the site.
 
 `color-scheme` is added through a property of page component of `doc-site`.
 
--- ds.h1: Adding color-scheme
-$on-global-key[alt-p]$: $ftd.toggle($a = $show-planning)
+-- ds.h1: How to use this colour scheme 
 
-**Select/choose the color-scheme of your choice.**
+The importance of colour in a website’s overall look and feel is well known. The
+right colour scheme can evoke emotions, create visual interest, and direct a
+user’s attention to specific elements on a page. That’s why the ftd colour
+scheme framework provides an easy and powerful way to define colour schemes and
+apply them to your website. 
 
-  You can create your own color-scheme or
-  you can select it from the [`featured page`](/featured/cs/).
-  Copy the package name.
+To start, you can choose from [existing colour scheme packages](https://fastn.com/featured/cs/) 
+or create your own
+[custom colour scheme](https://fastn.com/figma-to-fastn-cs/). To apply a colour 
+cheme package on top of your package,
+you’ll need to import it into `FASTN.ftd`. 
 
-  *Note:* For explanation, we have selected
-  [`winter-cs`](https://fastn-community.github.io/winter-cs/)
+- for documentation templates like [doc-site](https://doc-site.fifthtry.site/types/)
 
-The two steps to adding a color-scheme are:
+For example, let’s say you’re using the page component from `doc-site` package
+and want to apply the <add color scheme name here> scheme package on top of it.
 
-- **Add the color-scheme in your project**
+To add color scheme to your [fastn](https://fastn.com/) 
+[doc-site](https://doc-site.fifthtry.site/cs/). Edit your `FASTN.ftd` file and add
+color scheme dependency into it.
 
--- ds.code: **A:** By adding the package as a dependency in `FASTN.ftd` document
+In the below example, we are using <add color scheme name here> color scheme.
+
+Add color scheme dependency into your `FASTN.ftd` file as shown in below
+example:
+
+-- ds.code:
 lang: ftd
 
-\-- fastn.dependency: fastn-community.github.io/winter-cs
-
-
--- ds.code: **B:** And, import the package in the `my-ds` document
-lang: ftd
-
-\-- import: fastn-community.github.io/winter-cs
+\-- fastn.dependency: `<add color scheme name here>`
 
 -- ds.markdown:
 
-- **Use the `colors` property of the `ds.page` component**
+Now modify `FASTN/ds.ftd` module which is already added inside your `fastn`
+package.
 
-  In the previous video, we created a custom component page in the `my-ds`
-  document.
+Import `<add color scheme name here>` dependency into `FASTN/ds.ftd`
 
-  To highlight the benefit of this approach, there's no need to individually
-  add the color-scheme to each page.
-  Instead, by adding the color-scheme once and using `my-ds.page`, the
-  color-scheme will be applied to all pages that utilize `my-ds.page`.
-
-  And if one decides to go for another color-scheme, then changing it once in
-  my-ds document will reflect the new color-scheme across the website.
-
--- ds.code: Using `colors` property
+-- ds.code:
 lang: ftd
-download: my-ds.ftd
 
-\-- component page:
-optional caption title:
-optional body body:
-children wrapper:
+\-- import: `<add color scheme name here>`
 
-\-- ds.page: $page.title
-body: $page.body
-wrapper: $page.wrapper
-colors: $winter-cs.main		;; <hl>
+-- ds.markdown:
 
-\;; content goes here
+Change `-- component page` `colors` property `ftd.color-scheme colors:
+$ftd.default-colors` with `ftd.color-scheme colors: $<add color scheme name here>.main`
 
-\-- end: ds.page
+replace this line of `FASTN/ds.ftd` file:
 
-\-- end: page
+-- ds.code: 
+lang: ftd
 
+\-- ftd.color-scheme color-scheme: $ftd.default-colors
+
+-- ds.markdown:
+
+ with:
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.color-scheme color-scheme: $<add color scheme name here>.main
 
 -- note.note: Note
 
@@ -137,7 +144,6 @@ colors: $winter-cs.main		;; <hl>
   code. In such cases we give alias `as my-cs` after the package name when
   adding it as the dependency. Then pass the reference by alias while importing
   and also passing it as the value of the `colors` property.
-
 
 -- ds.h1: Change the color-scheme
 
@@ -160,6 +166,41 @@ It enhances the visual appeal, reinforces branding, improves readability and
 accessibility, engages users, promotes navigation, and creates a cohesive and
 meaningful user experience.
 
+-- cd.color-pallete: Standalone Colors
+pallete: $cd.standalone
+
+-- cd.color-pallete: Background Colors
+pallete: $cd.background-colors
+
+-- cd.color-pallete: CTA Primary Colors
+pallete: $cd.cta-primary-colors
+
+-- cd.color-pallete: CTA Secondary Colors
+pallete: $cd.cta-secondary-colors
+
+-- cd.color-pallete: CTA Tertiary Colors
+pallete: $cd.cta-tertiary-colors
+
+-- cd.color-pallete: CTA Danger Colors
+pallete: $cd.cta-danger-colors
+
+-- cd.color-pallete: Error Colors
+pallete: $cd.error-colors
+
+-- cd.color-pallete: Success Colors
+pallete: $cd.success-colors
+
+-- cd.color-pallete: Warning Colors
+pallete: $cd.warning-colors
+
+-- cd.color-pallete: Info Colors
+pallete: $cd.info-colors
+
+-- cd.color-pallete: Accent Colors
+pallete: $cd.accent-colors
+
+-- cd.color-pallete: Custom Colors
+pallete: $cd.custom-colors
 
 -- ds.h1: Closing Remarks
 if: { show-planning }
