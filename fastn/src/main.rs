@@ -49,7 +49,9 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
     use fastn_core::utils::ValueOf;
 
     if let Some(template) = matches.subcommand_matches("template") {
-        let app_name = template.get_one::<String>("name").expect("App name is required");
+        let app_name = template
+            .get_one::<String>("name")
+            .expect("App name is required");
         return fastn_xtask::new_app(app_name).await;
     }
 
