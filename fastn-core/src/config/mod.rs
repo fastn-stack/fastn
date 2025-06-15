@@ -70,6 +70,15 @@ impl RequestConfig {
         self.request.uri.clone()
     }
 
+    /// https://www.example.com/test/ -> https://www.example.com
+    pub fn url_prefix(&self) -> String {
+        format!(
+            "{}://{}",
+            self.request.connection_info.scheme(),
+            self.request.host(),
+        )
+    }
+
     pub fn current_language(&self) -> Option<String> {
         self.config.package.selected_language.clone()
     }
@@ -1199,23 +1208,6 @@ impl Config {
             package.name.to_string(),
             package.to_owned(),
         );
-    }
-
-    #[tracing::instrument(skip(self))]
-    pub(crate) async fn get_fastn_document(
-        &self,
-        package_name: &str,
-        session_id: &Option<String>,
-    ) -> fastn_core::Result<ftd::ftd2021::p2::Document> {
-        let package = fastn_core::Package::new(package_name);
-        let root = self.get_root_for_package(&package);
-        let package_fastn_path = root.join("FASTN.ftd");
-        let doc = self
-            .ds
-            .read_to_string(&package_fastn_path, session_id)
-            .await?;
-        let lib = fastn_core::FastnLibrary::default();
-        Ok(fastn_core::doc::parse_ftd("fastn", doc.as_str(), &lib)?)
     }
 
     #[cfg(feature = "use-config-json")]
