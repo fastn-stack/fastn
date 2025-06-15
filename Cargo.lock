@@ -639,6 +639,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "40b6887a1d8685cebccf115538db5c0efe625ccac9696ad45c409d96566e910f"
 dependencies = [
  "clap_builder",
+ "clap_derive",
 ]
 
 [[package]]
@@ -651,6 +652,18 @@ dependencies = [
  "anstyle",
  "clap_lex",
  "strsim",
+]
+
+[[package]]
+name = "clap_derive"
+version = "4.5.32"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "09176aae279615badda0765c0c0b3f6ed53f4709118af73cf4655d85d1530cd7"
+dependencies = [
+ "heck",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.101",
 ]
 
 [[package]]
@@ -1324,6 +1337,7 @@ dependencies = [
  "fastn-ds",
  "fastn-observer",
  "fastn-update",
+ "fastn-xtask",
  "futures",
  "reqwest",
  "scc",
@@ -1559,6 +1573,18 @@ dependencies = [
  "tokio-postgres",
  "tracing",
  "wasmtime",
+]
+
+[[package]]
+name = "fastn-xtask"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "fastn-core",
+ "regex",
+ "reqwest",
+ "tokio",
+ "zip",
 ]
 
 [[package]]
