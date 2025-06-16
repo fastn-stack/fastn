@@ -1,5 +1,14 @@
 # `fastn` Change Log
 
+## 16 June 2025
+
+### fastn: 0.4.105
+
+- fix(http processor): Send unquoted string in url query param to preserve old behaviour.
+- fix: Handle import of system packages from `inherited-` caller module correctly.
+- fix: Only consider main package when resolving imports for `provided-via`.
+- See: https://github.com/fastn-stack/fastn/pull/2151 for more details.
+
 ## 11 June 2025
 
 ### fastn: 0.4.104
