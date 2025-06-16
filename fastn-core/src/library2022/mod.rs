@@ -126,11 +126,13 @@ impl Library2022 {
                 // The inherited- prefix is added to every dependency that is `auto-import`ed
                 // and has a provided-via in the main package's FASTN.ftd
                 let new_name = name.trim_start_matches("inherited-");
-                if let Some(provided_via) = package.dependencies.iter().find_map(|d| {
+                // We only check the main package
+                let main_package = lib.config.package.clone();
+                if let Some(provided_via) = main_package.dependencies.iter().find_map(|d| {
                     tracing::info!(
                         "checking dependency {} for {name} in package {}",
                         d.package.name,
-                        package.name
+                        main_package.name
                     );
                     if d.package.name == new_name.trim_end_matches('/') && d.provided_via.is_some()
                     {
@@ -141,7 +143,7 @@ impl Library2022 {
                 }) {
                     tracing::error!("using provided-via: {provided_via} for {name}");
                     if let Some((content, size)) =
-                        get_data_from_package(&provided_via, &package, lib, session_id).await?
+                        get_data_from_package(&provided_via, &main_package, lib, session_id).await?
                     {
                         // NOTE: we still return `name`. This way, we use source of provided-via's
                         // module but act as if the source is from `name`.
