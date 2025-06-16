@@ -30,6 +30,7 @@ impl Library2022 {
         }
     }
 
+    #[tracing::instrument(skip(self))]
     pub(crate) fn get_current_package(
         &self,
         current_processing_module: &str,
@@ -95,6 +96,12 @@ impl Library2022 {
             session_id: &Option<String>,
         ) -> fastn_core::Result<(String, String, usize)> {
             let package = lib.get_current_package(current_processing_module)?;
+
+            tracing::info!(
+                "getting data for {name} in current package {}",
+                package.name
+            );
+
             let main_package = lib.config.package.name.to_string();
             // Check for app possibility
             if current_processing_module.contains("/-/") && main_package == package.name {
@@ -261,12 +268,15 @@ impl Library2022 {
     }
 
     #[cfg(feature = "use-config-json")]
+    #[tracing::instrument(skip(self, package))]
     pub(crate) async fn push_package_under_process(
         &mut self,
         module: &str,
         package: &fastn_core::Package,
         _session_id: &Option<String>,
     ) -> ftd::ftd2021::p1::Result<()> {
+        tracing::info!("{:?}", package.name);
+
         self.module_package_map.insert(
             module.trim_matches('/').to_string(),
             package.name.to_string(),
