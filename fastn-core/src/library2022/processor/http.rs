@@ -126,8 +126,11 @@ pub async fn process(
                 if method.as_str().eq("post") {
                     body.insert(header.key, value);
                 } else {
-                    let value = serde_json::to_string(&value)
-                        .map_err(|e| ftd::interpreter::Error::Serde { source: e })?;
+                    let value = match value {
+                        serde_json::Value::String(s) => s,
+                        _ => serde_json::to_string(&value)
+                            .map_err(|e| ftd::interpreter::Error::Serde { source: e })?,
+                    };
 
                     url.query_pairs_mut()
                         .append_pair(header.key.as_str(), &value);
