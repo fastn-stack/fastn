@@ -308,7 +308,7 @@ impl Package {
                         None
                     }
                 }) {
-                tracing::error!(
+                tracing::info!(
                     ?import_doc_path,
                     ?provided_via,
                     "Prefixing auto-import inherited- because it's a provided-via the main package"
