@@ -129,11 +129,6 @@ impl Library2022 {
                 // We only check the main package
                 let main_package = lib.config.package.clone();
                 if let Some(provided_via) = main_package.dependencies.iter().find_map(|d| {
-                    tracing::info!(
-                        "checking dependency {} for {name} in package {}",
-                        d.package.name,
-                        main_package.name
-                    );
                     if d.package.name == new_name.trim_end_matches('/') && d.provided_via.is_some()
                     {
                         d.provided_via.clone()
