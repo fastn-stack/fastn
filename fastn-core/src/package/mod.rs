@@ -679,6 +679,7 @@ impl Package {
         Ok(())
     }
 
+    #[cfg(not(feature = "use-config-json"))]
     #[tracing::instrument(skip(self, ds))]
     pub(crate) async fn get_and_resolve(
         &self,
