@@ -69,7 +69,9 @@ pub async fn interpret_helper(
             } => {
                 tracing::info!("stuck on import: {module}");
                 // TODO: also check if module in in dependencies of this package
-                let caller_module = if module.starts_with("inherited-") {
+                let caller_module = if module.starts_with("inherited-")
+                    || caller_module.starts_with("inherited-")
+                {
                     // We want to use the main package name as the caller_module for this as the
                     // inherited- package's provided-via path can only be read from the main
                     // package.
