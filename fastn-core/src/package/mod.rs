@@ -297,11 +297,6 @@ impl Package {
 
             let import_doc_path = if let Some(provided_via) =
                 current_package.dependencies.iter().find_map(|d| {
-                    tracing::info!(
-                        "checking dependency {} in package {}",
-                        d.package.name,
-                        current_package.name
-                    );
                     if d.package.name == import_doc_path && d.provided_via.is_some() {
                         d.provided_via.clone()
                     } else {
