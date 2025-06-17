@@ -1756,6 +1756,9 @@ class Node2 {
     updateMetaTitle(value) {
         if (!ssr && doubleBuffering) {
             if (!fastn_utils.isNull(value)) window.document.title = value;
+        } else {
+            if (fastn_utils.isNull(value)) return;
+            this.#addToGlobalMeta("title", value, "title");
         }
     }
     addMetaTagByName(name, value) {
@@ -1768,6 +1771,8 @@ class Node2 {
             metaTag.setAttribute("name", name);
             metaTag.setAttribute("content", value);
             document.head.appendChild(metaTag);
+        } else {
+            this.#addToGlobalMeta(name, value, "name");
         }
     }
     addMetaTagByProperty(property, value) {
@@ -1780,6 +1785,8 @@ class Node2 {
             metaTag.setAttribute("property", property);
             metaTag.setAttribute("content", value);
             document.head.appendChild(metaTag);
+        } else {
+            this.#addToGlobalMeta(property, value, "property");
         }
     }
     removeMetaTagByName(name) {
@@ -1792,6 +1799,8 @@ class Node2 {
                     break;
                 }
             }
+        } else {
+            this.#removeFromGlobalMeta(name);
         }
     }
     removeMetaTagByProperty(property) {
@@ -1804,6 +1813,8 @@ class Node2 {
                     break;
                 }
             }
+        } else {
+            this.#removeFromGlobalMeta(property);
         }
     }
     // dynamic-class-css
@@ -3557,6 +3568,24 @@ class Node2 {
         this.#parent = null;
         this.#node = null;
     }
+
+    /**
+     * Updates the meta title of the document.
+     *
+     * @param {string} key
+     * @param {string} value
+     *
+     * @param {"property" | "name", "title"} kind
+     */
+    #addToGlobalMeta(key, value, kind) {
+        globalThis.__fastn_meta = globalThis.__fastn_meta || {};
+        globalThis.__fastn_meta[key] = { value, kind };
+    }
+    #removeFromGlobalMeta(key) {
+        if (globalThis.__fastn_meta && globalThis.__fastn_meta[key]) {
+            delete globalThis.__fastn_meta[key];
+        }
+    }
 }
 
 class ConditionalDom {
@@ -4728,7 +4757,25 @@ fastnVirtual.ssr = function (main) {
     main(body);
     ssr = false;
     id_counter = 0;
-    return body.toHtmlAsString() + fastn_dom.getClassesAsString();
+
+    let meta_tags = "";
+    if (globalThis.__fastn_meta) {
+        for (const [key, value] of Object.entries(globalThis.__fastn_meta)) {
+            let meta;
+            if (value.kind === "property") {
+                meta = `<meta property="${key}" content="${value.value}">`;
+            } else if (value.kind === "name") {
+                meta = `<meta name="${key}" content="${value.value}">`;
+            } else if (value.kind === "title") {
+                meta = `<title>${value.value}</title>`;
+            }
+            if (meta) {
+                meta_tags += meta;
+            }
+        }
+    }
+
+    return [body.toHtmlAsString() + fastn_dom.getClassesAsString(), meta_tags];
 };
 class MutableVariable {
     #value;
@@ -5796,7 +5843,7 @@ window.ftd = ftd;
 
 ftd.toggle = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5813,7 +5860,7 @@ ftd.toggle = function (args) {
 }
 ftd.integer_field_with_default = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5824,7 +5871,7 @@ ftd.integer_field_with_default = function (args) {
 }
 ftd.decimal_field_with_default = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5835,7 +5882,7 @@ ftd.decimal_field_with_default = function (args) {
 }
 ftd.boolean_field_with_default = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5846,7 +5893,7 @@ ftd.boolean_field_with_default = function (args) {
 }
 ftd.string_field_with_default = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5857,7 +5904,7 @@ ftd.string_field_with_default = function (args) {
 }
 ftd.increment = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5874,7 +5921,7 @@ ftd.increment = function (args) {
 }
 ftd.increment_by = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5891,7 +5938,7 @@ ftd.increment_by = function (args) {
 }
 ftd.decrement = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5908,7 +5955,7 @@ ftd.decrement = function (args) {
 }
 ftd.decrement_by = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5925,7 +5972,7 @@ ftd.decrement_by = function (args) {
 }
 ftd.enable_light_mode = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5936,7 +5983,7 @@ ftd.enable_light_mode = function (args) {
 }
 ftd.enable_dark_mode = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5947,7 +5994,7 @@ ftd.enable_dark_mode = function (args) {
 }
 ftd.enable_system_mode = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5958,7 +6005,7 @@ ftd.enable_system_mode = function (args) {
 }
 ftd.set_bool = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5975,7 +6022,7 @@ ftd.set_bool = function (args) {
 }
 ftd.set_boolean = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -5992,7 +6039,7 @@ ftd.set_boolean = function (args) {
 }
 ftd.set_string = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
@@ -6009,7 +6056,7 @@ ftd.set_string = function (args) {
 }
 ftd.set_integer = function (args) {
   let __fastn_super_package_name__ = __fastn_package_name__;
-  __fastn_package_name__ = "fastn_stack_github_io_request_data_processor_test";
+  __fastn_package_name__ = "www_amitu_com";
   try {
     let __args__ = fastn_utils.getArgs({
     }, args);
