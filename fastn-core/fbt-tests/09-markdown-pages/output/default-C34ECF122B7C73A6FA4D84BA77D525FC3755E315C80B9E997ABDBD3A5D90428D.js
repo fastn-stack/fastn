@@ -1756,6 +1756,9 @@ class Node2 {
     updateMetaTitle(value) {
         if (!ssr && doubleBuffering) {
             if (!fastn_utils.isNull(value)) window.document.title = value;
+        } else {
+            if (fastn_utils.isNull(value)) return;
+            this.#addToGlobalMeta("title", value, "title");
         }
     }
     addMetaTagByName(name, value) {
@@ -1768,6 +1771,8 @@ class Node2 {
             metaTag.setAttribute("name", name);
             metaTag.setAttribute("content", value);
             document.head.appendChild(metaTag);
+        } else {
+            this.#addToGlobalMeta(name, value, "name");
         }
     }
     addMetaTagByProperty(property, value) {
@@ -1780,6 +1785,8 @@ class Node2 {
             metaTag.setAttribute("property", property);
             metaTag.setAttribute("content", value);
             document.head.appendChild(metaTag);
+        } else {
+            this.#addToGlobalMeta(property, value, "property");
         }
     }
     removeMetaTagByName(name) {
@@ -1792,6 +1799,8 @@ class Node2 {
                     break;
                 }
             }
+        } else {
+            this.#removeFromGlobalMeta(name);
         }
     }
     removeMetaTagByProperty(property) {
@@ -1804,6 +1813,8 @@ class Node2 {
                     break;
                 }
             }
+        } else {
+            this.#removeFromGlobalMeta(property);
         }
     }
     // dynamic-class-css
@@ -3557,6 +3568,24 @@ class Node2 {
         this.#parent = null;
         this.#node = null;
     }
+
+    /**
+     * Updates the meta title of the document.
+     *
+     * @param {string} key
+     * @param {string} value
+     *
+     * @param {"property" | "name", "title"} kind
+     */
+    #addToGlobalMeta(key, value, kind) {
+        globalThis.__fastn_meta = globalThis.__fastn_meta || {};
+        globalThis.__fastn_meta[key] = { value, kind };
+    }
+    #removeFromGlobalMeta(key) {
+        if (globalThis.__fastn_meta && globalThis.__fastn_meta[key]) {
+            delete globalThis.__fastn_meta[key];
+        }
+    }
 }
 
 class ConditionalDom {
@@ -4728,7 +4757,25 @@ fastnVirtual.ssr = function (main) {
     main(body);
     ssr = false;
     id_counter = 0;
-    return body.toHtmlAsString() + fastn_dom.getClassesAsString();
+
+    let meta_tags = "";
+    if (globalThis.__fastn_meta) {
+        for (const [key, value] of Object.entries(globalThis.__fastn_meta)) {
+            let meta;
+            if (value.kind === "property") {
+                meta = `<meta property="${key}" content="${value.value}">`;
+            } else if (value.kind === "name") {
+                meta = `<meta name="${key}" content="${value.value}">`;
+            } else if (value.kind === "title") {
+                meta = `<title>${value.value}</title>`;
+            }
+            if (meta) {
+                meta_tags += meta;
+            }
+        }
+    }
+
+    return [body.toHtmlAsString() + fastn_dom.getClassesAsString(), meta_tags];
 };
 class MutableVariable {
     #value;
