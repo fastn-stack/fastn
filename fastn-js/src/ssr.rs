@@ -31,7 +31,7 @@ pub fn run_test(js: &str) -> Result<Vec<bool>> {
     }
 }
 
-pub fn ssr_str(js: &str) -> Result<String> {
+pub fn ssr_str(js: &str) -> Result<Vec<String>> {
     let all_js = fastn_js::all_js_with_test();
 
     let js = format!("{all_js}{js}");
@@ -40,7 +40,7 @@ pub fn ssr_str(js: &str) -> Result<String> {
     {
         Ok(rquickjs::Context::full(&rquickjs::Runtime::new().unwrap())
             .unwrap()
-            .with(|ctx| ctx.eval::<String, _>(js).unwrap()))
+            .with(|ctx| ctx.eval::<Vec<String>, _>(js).unwrap()))
     }
     #[cfg(not(target_os = "windows"))]
     {
@@ -53,16 +53,16 @@ pub fn ssr_str(js: &str) -> Result<String> {
             )
             .build()
             .unwrap();
-        Ok::<std::string::String, SSRError>(context.eval_as::<String>(js.as_str()).unwrap())
+        Ok::<_, SSRError>(context.eval_as::<Vec<String>>(js.as_str()).unwrap())
     }
 }
 
-pub fn ssr(ast: &[fastn_js::Ast]) -> Result<String> {
+pub fn ssr(ast: &[fastn_js::Ast]) -> Result<Vec<String>> {
     let js = ssr_raw_string("foo", fastn_js::to_js(ast, "foo").as_str());
     ssr_str(&js)
 }
 
-pub fn ssr_with_js_string(package_name: &str, js: &str) -> Result<String> {
+pub fn ssr_with_js_string(package_name: &str, js: &str) -> Result<Vec<String>> {
     let js = ssr_raw_string(package_name, js);
     ssr_str(&js)
 }

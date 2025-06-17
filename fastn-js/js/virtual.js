@@ -170,5 +170,21 @@ fastnVirtual.ssr = function (main) {
     main(body);
     ssr = false;
     id_counter = 0;
-    return body.toHtmlAsString() + fastn_dom.getClassesAsString();
+
+    let meta_tags = "";
+    for (const [key, value] of Object.entries(globalThis.__fastn_meta)) {
+        let meta;
+        if (value.kind === "property") {
+            meta = `<meta property="${key}" content="${value.value}">`;
+        } else if (value.kind === "name") {
+            meta = `<meta name="${key}" content="${value.value}">`;
+        } else if (value.kind === "title") {
+            meta = `<title>${value.value}</title>`;
+        }
+        if (meta) {
+            meta_tags += meta;
+        }
+    }
+
+    return [body.toHtmlAsString() + fastn_dom.getClassesAsString(), meta_tags];
 };
