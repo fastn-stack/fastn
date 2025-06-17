@@ -172,17 +172,19 @@ fastnVirtual.ssr = function (main) {
     id_counter = 0;
 
     let meta_tags = "";
-    for (const [key, value] of Object.entries(globalThis.__fastn_meta)) {
-        let meta;
-        if (value.kind === "property") {
-            meta = `<meta property="${key}" content="${value.value}">`;
-        } else if (value.kind === "name") {
-            meta = `<meta name="${key}" content="${value.value}">`;
-        } else if (value.kind === "title") {
-            meta = `<title>${value.value}</title>`;
-        }
-        if (meta) {
-            meta_tags += meta;
+    if (globalThis.__fastn_meta) {
+        for (const [key, value] of Object.entries(globalThis.__fastn_meta)) {
+            let meta;
+            if (value.kind === "property") {
+                meta = `<meta property="${key}" content="${value.value}">`;
+            } else if (value.kind === "name") {
+                meta = `<meta name="${key}" content="${value.value}">`;
+            } else if (value.kind === "title") {
+                meta = `<title>${value.value}</title>`;
+            }
+            if (meta) {
+                meta_tags += meta;
+            }
         }
     }
 
