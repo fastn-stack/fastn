@@ -1030,6 +1030,9 @@ class Node2 {
     updateMetaTitle(value) {
         if (!ssr && doubleBuffering) {
             if (!fastn_utils.isNull(value)) window.document.title = value;
+        } else {
+            if (fastn_utils.isNull(value)) return;
+            this.#addToGlobalMeta("title", value, "title");
         }
     }
     addMetaTagByName(name, value) {
@@ -1042,6 +1045,8 @@ class Node2 {
             metaTag.setAttribute("name", name);
             metaTag.setAttribute("content", value);
             document.head.appendChild(metaTag);
+        } else {
+            this.#addToGlobalMeta(name, value, "name");
         }
     }
     addMetaTagByProperty(property, value) {
@@ -1054,6 +1059,8 @@ class Node2 {
             metaTag.setAttribute("property", property);
             metaTag.setAttribute("content", value);
             document.head.appendChild(metaTag);
+        } else {
+            this.#addToGlobalMeta(property, value, "property");
         }
     }
     removeMetaTagByName(name) {
@@ -1066,6 +1073,8 @@ class Node2 {
                     break;
                 }
             }
+        } else {
+            this.#removeFromGlobalMeta(name);
         }
     }
     removeMetaTagByProperty(property) {
@@ -1078,6 +1087,8 @@ class Node2 {
                     break;
                 }
             }
+        } else {
+            this.#removeFromGlobalMeta(property);
         }
     }
     // dynamic-class-css
@@ -2830,6 +2841,24 @@ class Node2 {
         this.#mutables = [];
         this.#parent = null;
         this.#node = null;
+    }
+
+    /**
+     * Updates the meta title of the document.
+     *
+     * @param {string} key
+     * @param {string} value
+     *
+     * @param {"property" | "name", "title"} kind
+     */
+    #addToGlobalMeta(key, value, kind) {
+        globalThis.__fastn_meta = globalThis.__fastn_meta || {};
+        globalThis.__fastn_meta[key] = { value, kind };
+    }
+    #removeFromGlobalMeta(key) {
+        if (globalThis.__fastn_meta && globalThis.__fastn_meta[key]) {
+            delete globalThis.__fastn_meta[key];
+        }
     }
 }
 

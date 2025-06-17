@@ -571,20 +571,34 @@ pub(crate) async fn read_ftd_2023(
             format!("{js_ftd_script}\n{js_document_script}").as_str(),
         )
     } else {
-        let ssr_body = if config.request.is_bot() {
-            fastn_js::ssr_with_js_string(
+        let (ssr_body, meta_tags) = if config.request.is_bot() {
+            let ssr_res = fastn_js::ssr_with_js_string(
                 &package_name,
                 format!("{js_ftd_script}\n{js_document_script}").as_str(),
-            )?
+            )?;
+
+            assert_eq!(
+                ssr_res.len(),
+                2,
+                "ssr_with_js_string executes js `ssr` function somewhere down the line which always returns an array of 2 elems"
+            );
+
+            let mut ssr_res = ssr_res.into_iter();
+
+            (
+                ssr_res.next().expect("vec has at least 2 items"),
+                ssr_res.next().expect("vec has at least 2 items"),
+            )
         } else {
-            EMPTY_HTML_BODY.to_string()
+            (EMPTY_HTML_BODY.to_string(), "".to_string())
         };
 
         fastn_core::utils::replace_markers_2023(
-            js_document_script.as_str(),
-            js_ast_data.scripts.join("").as_str(),
-            ssr_body.as_str(),
-            config.config.get_font_style().as_str(),
+            &js_document_script,
+            &js_ast_data.scripts.join(""),
+            &ssr_body,
+            &meta_tags,
+            &config.config.get_font_style(),
             ftd::ftd_js_css(),
             base_url,
             c,

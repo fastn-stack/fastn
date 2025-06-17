@@ -52,6 +52,10 @@ impl HtmlData {
 
         format!(
             include_str!("../../ftd/ftd-js.html"),
+            // NOTE: meta_tags is only used in edition 2023 where we get this by rendering js on
+            // the server (ssr)
+            // In edition 2022, the executor extracts meta tags and handle it separately
+            meta_tags = "",
             fastn_package = self.get_fastn_package_data(),
             base_url_tag = self
                 .package

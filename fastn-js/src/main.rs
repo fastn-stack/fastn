@@ -1,10 +1,10 @@
 fn main() {
     let start = std::time::Instant::now();
-    println!("{}", fastn_js::ssr_str(js()).unwrap());
+    println!("{:?}", fastn_js::ssr_str(js()).unwrap());
     println!("elapsed: {:?}", start.elapsed());
 
     let start = std::time::Instant::now();
-    println!("{}", fastn_js::ssr(&js_constructor()).unwrap());
+    println!("{:?}", fastn_js::ssr(&js_constructor()).unwrap());
     println!("elapsed: {:?}", start.elapsed());
 }
 

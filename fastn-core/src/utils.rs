@@ -726,6 +726,7 @@ pub async fn replace_markers_2023(
     js_script: &str,
     scripts: &str,
     ssr_body: &str,
+    meta_tags: &str,
     font_style: &str,
     default_css: &str,
     base_url: &str,
@@ -734,6 +735,7 @@ pub async fn replace_markers_2023(
 ) -> String {
     format!(
         include_str!("../../ftd/ftd-js.html"),
+        meta_tags = meta_tags,
         fastn_package = get_fastn_package_data(&config.package).as_str(),
         base_url_tag = if !base_url.is_empty() {
             format!("<base href=\"{}\">", base_url)
