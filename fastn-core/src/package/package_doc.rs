@@ -572,23 +572,10 @@ pub(crate) async fn read_ftd_2023(
         )
     } else {
         let (ssr_body, meta_tags) = if config.request.is_bot() {
-            let ssr_res = fastn_js::ssr_with_js_string(
+            fastn_js::ssr_with_js_string(
                 &package_name,
                 format!("{js_ftd_script}\n{js_document_script}").as_str(),
-            )?;
-
-            assert_eq!(
-                ssr_res.len(),
-                2,
-                "ssr_with_js_string executes js `ssr` function somewhere down the line which always returns an array of 2 elems"
-            );
-
-            let mut ssr_res = ssr_res.into_iter();
-
-            (
-                ssr_res.next().expect("vec has at least 2 items"),
-                ssr_res.next().expect("vec has at least 2 items"),
-            )
+            )?
         } else {
             (EMPTY_HTML_BODY.to_string(), "".to_string())
         };
