@@ -62,9 +62,23 @@ pub fn ssr(ast: &[fastn_js::Ast]) -> Result<Vec<String>> {
     ssr_str(&js)
 }
 
-pub fn ssr_with_js_string(package_name: &str, js: &str) -> Result<Vec<String>> {
+/// Returns (ssr_body, meta_tags)
+pub fn ssr_with_js_string(package_name: &str, js: &str) -> Result<(String, String)> {
     let js = ssr_raw_string(package_name, js);
-    ssr_str(&js)
+    let ssr_res = ssr_str(&js)?;
+
+    assert_eq!(
+        ssr_res.len(),
+        2,
+        "ssr_with_js_string executes js `ssr` function somewhere down the line which always returns an array of 2 elems"
+    );
+
+    let mut ssr_res = ssr_res.into_iter();
+
+    Ok((
+        ssr_res.next().expect("vec has at least 2 items"),
+        ssr_res.next().expect("vec has at least 2 items"),
+    ))
 }
 
 pub fn ssr_raw_string(package_name: &str, js: &str) -> String {

@@ -184,7 +184,7 @@ fn p(
                 js_document_script = js_document_script
             )
         } else {
-            let ssr_body = fastn_js::ssr_with_js_string(
+            let (ssr_body, meta_tags) = fastn_js::ssr_with_js_string(
                 "foo",
                 format!("{js_ftd_script}\n{js_document_script}").as_str(),
             )
@@ -192,6 +192,7 @@ fn p(
 
             format!(
                 include_str!("../../ftd-js.html"),
+                meta_tags = meta_tags,
                 fastn_package = dummy_package_data.as_str(),
                 js_script =
                     format!("{js_document_script}{}", test_available_code_themes()).as_str(),
