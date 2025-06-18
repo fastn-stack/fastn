@@ -16,16 +16,6 @@ Commands:
   update           Update dependency packages for this fastn package
   serve            Serve package content over HTTP
   template         Creates a new fastn app using the recommended template provided at https://github.com/fifthtry-community/app-template
-  build-wasm       Builds the WASM file for the fastn app
-  run-template     Runs the template app
-  optimise-wasm    Optimises the WASM file for the fastn app
-  publish-app      Publishes the fastn app
-  update-ui        Updates the UI for the fastn app
-  update-www       Updates the WWW site for the fastn app
-  run-ui           Runs the UI for the fastn app
-  run-www          Runs the WWW site for the fastn app
-  update-template  Updates the template for the fastn app
-  upload           Uploads files in current directory to www.fifthtry.com.
   help             Print this message or the help of the given subcommand(s)
 
 Options:

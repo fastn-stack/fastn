@@ -55,42 +55,6 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         return fastn_xtask::new_app(app_name).await;
     }
 
-    if let Some(_build_wasm) = matches.subcommand_matches("build-wasm") {
-        return fastn_xtask::build_wasm();
-    }
-
-    if let Some(_run_template) = matches.subcommand_matches("run-template") {
-        return fastn_xtask::run_template();
-    }
-
-    if let Some(_optimise_wasm) = matches.subcommand_matches("optimise-wasm") {
-        return fastn_xtask::optimise_wasm();
-    }
-
-    if let Some(_publish_app) = matches.subcommand_matches("publish-app") {
-        return fastn_xtask::publish_app();
-    }
-
-    if let Some(_update_ui) = matches.subcommand_matches("update-ui") {
-        return fastn_xtask::update_ui();
-    }
-
-    if let Some(_update_www) = matches.subcommand_matches("update-www") {
-        return fastn_xtask::update_www();
-    }
-
-    if let Some(_update_template) = matches.subcommand_matches("update-template") {
-        return fastn_xtask::update_template();
-    }
-
-    if let Some(_run_ui) = matches.subcommand_matches("run-ui") {
-        return fastn_xtask::run_ui();
-    }
-
-    if let Some(_run_www) = matches.subcommand_matches("run-www") {
-        return fastn_xtask::run_www();
-    }
-
     if matches.subcommand_name().is_none() {
         return Ok(());
     }
@@ -384,41 +348,6 @@ fn app(version: &'static str) -> clap::Command {
                 clap::arg!(name: [NAME] "Name of the app to create")
                     .required(true)
             )
-        )
-        .subcommand(
-            clap::Command::new("build-wasm")
-            .about("Builds the WASM file for the fastn app")
-        ).subcommand(
-            clap::Command::new("run-template")
-            .about("Runs the template app")
-        )
-        .subcommand(
-            clap::Command::new("optimise-wasm")
-            .about("Optimises the WASM file for the fastn app")
-        )
-        .subcommand(
-            clap::Command::new("publish-app")
-            .about("Publishes the fastn app")
-        )
-        .subcommand(
-            clap::Command::new("update-ui")
-            .about("Updates the UI for the fastn app")
-        )
-        .subcommand(
-            clap::Command::new("update-www")
-            .about("Updates the WWW site for the fastn app")
-        )
-        .subcommand(
-            clap::Command::new("run-ui")
-            .about("Runs the UI for the fastn app")
-        )
-        .subcommand(
-            clap::Command::new("run-www")
-            .about("Runs the WWW site for the fastn app")
-        )
-        .subcommand(
-            clap::Command::new("update-template")
-            .about("Updates the template for the fastn app")
         )
 }
 
