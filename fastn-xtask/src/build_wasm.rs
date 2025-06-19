@@ -7,7 +7,14 @@ pub fn build_wasm() -> fastn_core::Result<()> {
     // Build the WASM target
     println!("Building WASM target...");
     let build_status = Command::new("cargo")
-        .args(["build", "--release", "--target", "wasm32-unknown-unknown"])
+        .args([
+            "build",
+            "--release",
+            "--target",
+            "wasm32-unknown-unknown",
+            "--package",
+            "backend",
+        ])
         .status()
         .map_err(|e| {
             fastn_core::Error::GenericError(format!("Failed to execute cargo build: {}", e))
@@ -23,13 +30,19 @@ pub fn build_wasm() -> fastn_core::Result<()> {
     let current_dir = env::current_dir().map_err(|e| {
         fastn_core::Error::GenericError(format!("Failed to get current directory: {}", e))
     })?;
-    let source1 = current_dir.join("target/wasm32-unknown-unknown/release");
+    let workspace_root = current_dir.parent().ok_or_else(|| {
+        fastn_core::Error::GenericError("Failed to get parent directory".to_string())
+    })?;
+    let source1 = workspace_root.join("target/wasm32-unknown-unknown/release");
 
     let home_dir = env::var("HOME").map_err(|_| {
         fastn_core::Error::GenericError("HOME environment variable not set".to_string())
     })?;
     let source2 = PathBuf::from(&home_dir).join("target/wasm32-unknown-unknown/release");
-
+   
+    println!("source1: {:?}", source1);
+    println!("source2: {:?}", source2);
+    
     let source_dir = if source1.exists() {
         source1
     } else if source2.exists() {
@@ -41,8 +54,7 @@ pub fn build_wasm() -> fastn_core::Result<()> {
     };
 
     // Find directories matching the "*.fifthtry.site" pattern
-    let workspace_root = current_dir.clone();
-    let entries = fs::read_dir(&workspace_root).map_err(|e| {
+    let entries = fs::read_dir(workspace_root).map_err(|e| {
         fastn_core::Error::GenericError(format!("Failed to read workspace directory: {}", e))
     })?;
 
