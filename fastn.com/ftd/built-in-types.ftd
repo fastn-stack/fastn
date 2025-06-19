@@ -1279,7 +1279,7 @@ optional ftd.font-size size:
 optional ftd.font-size line-height:
 optional ftd.font-size letter-spacing:
 optional integer weight:
-optional string font-family:
+optional string list font-family:
 
 -- ds.markdown:
 
@@ -1302,7 +1302,32 @@ weights available depend on the `font-family` that is currently set.
 -- ds.h3: `font-family`
 
 The `font-family` property specifies a font family name and/or generic family
-name for the selected element.
+name for the selected element. You can pass a single value or a list of family
+names.
+
+Typically, a value should be accessed from the [`assets`](/assets/) module in
+the form `$assets.fonts.<font-name>`, where `<font-name>` is defined in your
+`FASTN.ftd` file or in the `FASTN.ftd` file of one of your dependencies.
+
+-- ds.code:
+lang: ftd
+
+\-- ftd.type regular:
+line-height.em: 1.4
+weight: 400
+size.rem: 1.45
+font-family: $my-fonts
+\;; Or, if you just want one font-family specified:
+\;; font-family: $assets.fonts.Montserrat 
+
+\-- string list my-fonts:
+
+\-- string: $assets.fonts.Montserrat
+\-- string: serif
+\-- string: system-ui
+
+\-- end: fonts
+
 
 -- ds.h3: `letter-spacing`
 
