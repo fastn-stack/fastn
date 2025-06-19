@@ -1,5 +1,12 @@
 # `fastn` Change Log
 
+## 19 June 2025
+
+### fastn: 0.4.106
+
+- 83cf66346 - Server render meta tags if request is from a bot.
+- doc: `ftd.type`'s font-family attribute can take fallback fonts.
+
 ## 16 June 2025
 
 ### fastn: 0.4.105
