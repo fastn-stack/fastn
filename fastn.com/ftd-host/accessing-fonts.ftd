@@ -14,7 +14,7 @@ in our module.
 Let's assume that we are using the font package `fifthtry.github.io/roboto-font`
 ([repo](https://github.com/FifthTry/roboto-font)) as a dependency and we want to
 use it in our module. We can import the `assets` module of `roboto-font` package
-to access its fonts.
+to create a [`ftd.type`](/built-in-types#ftd-type) and use it:
 
 -- ds.code:
 
