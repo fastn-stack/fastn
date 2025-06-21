@@ -39,10 +39,10 @@ pub fn build_wasm() -> fastn_core::Result<()> {
         fastn_core::Error::GenericError("HOME environment variable not set".to_string())
     })?;
     let source2 = PathBuf::from(&home_dir).join("target/wasm32-unknown-unknown/release");
-   
+
     println!("source1: {:?}", source1);
     println!("source2: {:?}", source2);
-    
+
     let source_dir = if source1.exists() {
         source1
     } else if source2.exists() {
