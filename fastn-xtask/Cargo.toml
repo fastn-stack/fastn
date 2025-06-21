@@ -1,0 +1,22 @@
+[package]
+name = "fastn-xtask"
+version = "0.1.0"
+authors.workspace = true
+edition.workspace = true
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+rust-version.workspace = true
+
+# Define the library crate
+[lib]
+name = "fastn_xtask"
+path = "src/lib.rs"
+
+[dependencies]
+clap = { workspace = true, features = ["derive"] }
+reqwest.workspace = true
+zip.workspace = true
+fastn-core = { path = "../fastn-core" }
+regex = "1.5.4"
