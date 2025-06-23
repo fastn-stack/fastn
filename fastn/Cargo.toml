@@ -30,4 +30,3 @@ camino.workspace = true
 actix-web.workspace = true
 scc.workspace = true
 deadpool-postgres.workspace = true
-fastn-xtask = { path = "../fastn-xtask" }

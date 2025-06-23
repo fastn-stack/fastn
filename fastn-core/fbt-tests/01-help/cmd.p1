@@ -8,16 +8,15 @@ Will have to be updated every time version changes.
 Usage: fastn [OPTIONS] [COMMAND]
 
 Commands:
-  build     Build static site from this fastn package
-  fmt       Format the fastn package
-  wasmc     Convert .wasm to .wasmc file
-  test      Run the test files in `_tests` folder
-  query     JSON Dump in various stages
-  update    Update dependency packages for this fastn package
-  serve     Serve package content over HTTP
-  template  Creates a new fastn app using the recommended template provided at https://github.com/fifthtry-community/app-template
-  upload    Uploads files in current directory to www.fifthtry.com.
-  help      Print this message or the help of the given subcommand(s)
+  build   Build static site from this fastn package
+  fmt     Format the fastn package
+  wasmc   Convert .wasm to .wasmc file
+  test    Run the test files in `_tests` folder
+  query   JSON Dump in various stages
+  update  Update dependency packages for this fastn package
+  serve   Serve package content over HTTP
+  upload  Uploads files in current directory to www.fifthtry.com.
+  help    Print this message or the help of the given subcommand(s)
 
 Options:
   -c, --check-for-updates  Check for updates

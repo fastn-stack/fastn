@@ -48,13 +48,6 @@ async fn async_main() -> Result<(), Error> {
 async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
     use fastn_core::utils::ValueOf;
 
-    if let Some(template) = matches.subcommand_matches("template") {
-        let app_name = template
-            .get_one::<String>("name")
-            .expect("App name is required");
-        return fastn_xtask::new_app(app_name).await;
-    }
-
     if matches.subcommand_name().is_none() {
         return Ok(());
     }
@@ -341,14 +334,6 @@ fn app(version: &'static str) -> clap::Command {
                 .arg(clap::arg!(--check "Check if packages are in sync with FASTN.ftd without performing updates."))
         )
                 .subcommand(sub_command::serve())
-        .subcommand(
-            clap::Command::new("template")
-            .about("Creates a new fastn app using the recommended template provided at https://github.com/fifthtry-community/app-template")
-            .arg(
-                clap::arg!(name: [NAME] "Name of the app to create")
-                    .required(true)
-            )
-        )
 }
 
 mod sub_command {
