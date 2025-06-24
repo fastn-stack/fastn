@@ -1,4 +1,4 @@
-impl<STORE: fastn_wasm::StoreExt> fastn_wasm::Store<STORE> {
+impl<STORE: fastn_wasm::StoreExt + 'static> fastn_wasm::Store<STORE> {
     pub fn register_functions(&self, linker: &mut wasmtime::Linker<fastn_wasm::Store<STORE>>) {
         // general utility functions
         fastn_wasm::func2!(linker, "env_print", fastn_wasm::env::print);

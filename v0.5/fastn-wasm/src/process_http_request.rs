@@ -1,5 +1,5 @@
 #[tracing::instrument(skip_all)]
-pub async fn process_http_request<STORE: fastn_wasm::StoreExt>(
+pub async fn process_http_request<STORE: fastn_wasm::StoreExt + 'static>(
     path: &str,
     module: wasmtime::Module,
     store: fastn_wasm::Store<STORE>,
