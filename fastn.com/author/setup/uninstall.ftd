@@ -1,4 +1,10 @@
--- ds.page: Uninstall `fastn` on Windows
+-- ds.page: Uninstall `fastn` 
+
+fastn  is compatible with multiple operating systems, including Windows, macOS
+You can refer to the appropriate uninstallation steps based on your operating system.
+
+
+-- ds.h1: Uninstall `fastn` from Windows
 
 Uninstalling `fastn` is as easy as installation. When you download the
 executable file to install, it comes with `uninstall.exe` executable file.
@@ -10,7 +16,7 @@ border-radius.px: 5
 border-color: $inherited.colors.border
 align-self: center
 
--- ds.h1: Steps to Uninstall `fastn`
+-- ds.h2: Steps to Uninstall `fastn`
 
 - Open the `fastn` folder, which you will find in the Program Files in C drive
 - Double click on the `uninstall.exe` file
@@ -35,6 +41,88 @@ It will show a message:
 
 -- ds.image:
 src: $fastn-assets.files.images.setup.uninstall-3.png
+
+-- ds.h1: Uninstall `fastn` from macOS
+
+-- ds.h2: Steps to Uninstall `fastn`
+
+  -- ds.h3: 1. Remove the fastn binary
+
+  If `fastn` was installed globally via the install script,
+  it’s likely in /usr/local/bin/fastn or similar.
+
+  -- ds.code: Find the fastn binary
+  lang: sh
+
+  which fastn
+
+  -- ds.markdown:
+
+  If it shows something like /usr/local/bin/fastn, remove it
+
+  -- ds.code: remove the fastn binary
+  lang: sh
+
+  sudo rm -f /usr/local/bin/fastn
+
+
+  -- ds.h3: 2.Remove `fastn` config and cache (optional)
+
+  `fastn` might store local config or cached files under your home directory. To remove them
+
+  -- ds.code: Find the `fastn` binary
+  lang: sh
+
+  rm -rf ~/.fastn
+
+   -- ds.h3: 3. Remove related entries from shell config
+
+  If you manually added fastn paths or aliases in your .zshrc, .bashrc, or 
+  .bash_profile, open them and remove related lines.
+
+  -- ds.code: 
+  lang: sh
+
+  nano ~/.zshrc  # or ~/.bashrc
+
+  -- ds.markdown:
+
+  Look for line looks like this.
+
+
+  -- ds.code: 
+  lang: sh
+
+  export PATH="$HOME/.fastn/bin:$PATH"
+
+   -- ds.markdown:
+
+  and delete them.
+
+  After editing, apply changes
+
+  -- ds.code: 
+  lang: sh
+
+  source ~/.zshrc  # or source ~/.bashrc
+
+
+-- ds.markdown:
+
+To verify if `fastn` is uninstalled:
+
+- Open `Terminal`
+- Write `fastn` and hit enter
+
+It will show a message:
+
+'fastn': command not found
+
+
+
+
+
+
 
 
 -- end: ds.page

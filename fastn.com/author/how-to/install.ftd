@@ -15,10 +15,11 @@ select one of the following options:
 We recommend installing `fastn` using the installer script. You can do this by
 running the below command in your terminal. This is the preferred method.
 
+
 -- ds.code: Installer Script
 lang: sh
 
-source <(curl -fsSL https://fastn.com/install.sh)
+sh -c "$(curl -fsSL https://fastn.com/install.sh)"
 
 
 -- ds.markdown:
