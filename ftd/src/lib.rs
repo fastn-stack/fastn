@@ -159,13 +159,13 @@ impl<T: std::cmp::PartialEq> VecMap<T> {
                         .map(|a| (a, None))
                         .collect::<Vec<(&T, Option<String>)>>(),
                 );
-            } else if let Some(rem) = key.strip_prefix(format!("{}.", k).as_str()) {
+            } else if let Some(rem) = key.strip_prefix(format!("{k}.").as_str()) {
                 values.extend(
                     v.iter()
                         .map(|a| (a, Some(rem.to_string())))
                         .collect::<Vec<(&T, Option<String>)>>(),
                 );
-            } else if let Some(rem) = k.strip_prefix(format!("{}.", key).as_str()) {
+            } else if let Some(rem) = k.strip_prefix(format!("{key}.").as_str()) {
                 values.extend(
                     v.iter()
                         .map(|a| (a, Some(rem.to_string())))
@@ -307,7 +307,7 @@ impl ExampleLibrary {
     }
 
     pub fn get(&self, name: &str, _doc: &ftd2021::p2::TDoc) -> Option<String> {
-        std::fs::read_to_string(format!("./ftd/examples/{}.ftd", name)).ok()
+        std::fs::read_to_string(format!("./ftd/examples/{name}.ftd")).ok()
     }
 
     /// checks if the current processor is a lazy processor
@@ -331,7 +331,7 @@ impl ExampleLibrary {
         doc: &ftd2021::p2::TDoc,
     ) -> ftd2021::p1::Result<ftd::Value> {
         ftd2021::p2::utils::unknown_processor_error(
-            format!("unimplemented for section {:?} and doc {:?}", section, doc),
+            format!("unimplemented for section {section:?} and doc {doc:?}"),
             doc.name.to_string(),
             section.line_number,
         )
@@ -344,7 +344,7 @@ impl ExampleLibrary {
     ) -> ftd2021::p1::Result<String> {
         match self.get(name, doc) {
             Some(v) => Ok(v),
-            None => ftd2021::p2::utils::e2(format!("library not found: {}", name), "", 0),
+            None => ftd2021::p2::utils::e2(format!("library not found: {name}"), "", 0),
         }
     }
 }

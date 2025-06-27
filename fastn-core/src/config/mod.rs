@@ -15,9 +15,7 @@ impl FTDEdition {
         match s {
             "2022" => Ok(FTDEdition::FTD2022),
             "2023" => Ok(FTDEdition::FTD2023),
-            t => {
-                fastn_core::usage_error(format!("Unknown edition `{}`. Help use `2022` instead", t))
-            }
+            t => fastn_core::usage_error(format!("Unknown edition `{t}`. Help use `2022` instead")),
         }
     }
     pub(crate) fn is_2023(&self) -> bool {
@@ -130,7 +128,7 @@ impl RequestConfig {
         if name.is_empty() {
             "/".to_string()
         } else {
-            format!("/{}/", name)
+            format!("/{name}/")
         }
     }
 
@@ -257,7 +255,7 @@ impl RequestConfig {
                 } else {
                     "".to_string()
                 };
-                file.set_id(format!("{}{}", url, extension).as_str());
+                file.set_id(format!("{url}{extension}").as_str());
             }
             self.current_document = Some(file.get_id().to_string());
             Ok(file)
@@ -298,7 +296,7 @@ impl Config {
         let path_without_root = self
             .path_without_root(path)
             .unwrap_or_else(|_| path.to_string());
-        let track_path = format!("{}.track", path_without_root);
+        let track_path = format!("{path_without_root}.track");
         self.track_dir().join(track_path)
     }
 
@@ -435,7 +433,7 @@ impl Config {
             entry = package.next();
         }
         match generated_style.trim().is_empty() {
-            false => format!("<style>{}</style>", generated_style),
+            false => format!("<style>{generated_style}</style>"),
             _ => "".to_string(),
         }
     }
@@ -464,7 +462,7 @@ impl Config {
                     continue;
                 }
                 let start = std::time::Instant::now();
-                print!("Processing {} ... ", url);
+                print!("Processing {url} ... ");
                 let content = self.get_file_and_resolve(url.as_str(), session_id).await?.1;
                 fastn_core::utils::update(
                     &self.build_dir().join(&url),
@@ -472,7 +470,7 @@ impl Config {
                     &self.ds,
                 )
                 .await?;
-                fastn_core::utils::print_end(format!("Processed {}", url).as_str(), start);
+                fastn_core::utils::print_end(format!("Processed {url}").as_str(), start);
             }
         }
 
@@ -817,7 +815,7 @@ impl Config {
 
         tracing::info!("file: {file_name}");
 
-        Ok((format!("{}{}", add_packages, file_name), content))
+        Ok((format!("{add_packages}{file_name}"), content))
     }
 
     /// Return (package name or alias, package)
@@ -891,16 +889,16 @@ impl Config {
             .replace("index.html", "/");
         if id.eq("/") {
             if ds
-                .exists(&root.join(format!("{}index.ftd", add_packages)), session_id)
+                .exists(&root.join(format!("{add_packages}index.ftd")), session_id)
                 .await
             {
-                return Ok(format!("{}index.ftd", add_packages));
+                return Ok(format!("{add_packages}index.ftd"));
             }
             if ds
-                .exists(&root.join(format!("{}README.md", add_packages)), session_id)
+                .exists(&root.join(format!("{add_packages}README.md")), session_id)
                 .await
             {
-                return Ok(format!("{}README.md", add_packages));
+                return Ok(format!("{add_packages}README.md"));
             }
             return Err(fastn_core::Error::UsageError {
                 message: "File not found".to_string(),
@@ -908,37 +906,34 @@ impl Config {
         }
         id = id.trim_matches('/').to_string();
         if ds
+            .exists(&root.join(format!("{add_packages}{id}.ftd")), session_id)
+            .await
+        {
+            return Ok(format!("{add_packages}{id}.ftd"));
+        }
+        if ds
             .exists(
-                &root.join(format!("{}{}.ftd", add_packages, id)),
+                &root.join(format!("{add_packages}{id}/index.ftd")),
                 session_id,
             )
             .await
         {
-            return Ok(format!("{}{}.ftd", add_packages, id));
+            return Ok(format!("{add_packages}{id}/index.ftd"));
+        }
+        if ds
+            .exists(&root.join(format!("{add_packages}{id}.md")), session_id)
+            .await
+        {
+            return Ok(format!("{add_packages}{id}.md"));
         }
         if ds
             .exists(
-                &root.join(format!("{}{}/index.ftd", add_packages, id)),
+                &root.join(format!("{add_packages}{id}/README.md")),
                 session_id,
             )
             .await
         {
-            return Ok(format!("{}{}/index.ftd", add_packages, id));
-        }
-        if ds
-            .exists(&root.join(format!("{}{}.md", add_packages, id)), session_id)
-            .await
-        {
-            return Ok(format!("{}{}.md", add_packages, id));
-        }
-        if ds
-            .exists(
-                &root.join(format!("{}{}/README.md", add_packages, id)),
-                session_id,
-            )
-            .await
-        {
-            return Ok(format!("{}{}/README.md", add_packages, id));
+            return Ok(format!("{add_packages}{id}/README.md"));
         }
         Err(fastn_core::Error::UsageError {
             message: "File not found".to_string(),

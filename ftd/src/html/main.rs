@@ -229,7 +229,7 @@ impl HtmlGenerator<'_> {
                 node_name.as_str(),
             );
             helper_dummy_html.properties = raw_data.properties;
-            helper_dummy_html.html = format!("{{{}}}", node_name);
+            helper_dummy_html.html = format!("{{{node_name}}}");
             helper_dummy_html.name = node_name.to_string();
             for child in node.children {
                 let mut child_dummy_html = Default::default();
@@ -473,5 +473,5 @@ pub fn escape(s: &str) -> String {
 }
 
 fn quote(i: &str) -> String {
-    format!("{:?}", i)
+    format!("{i:?}")
 }

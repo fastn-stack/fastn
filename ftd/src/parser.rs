@@ -54,7 +54,7 @@ pub fn parse_doc(name: &str, source: &str) -> ftd::interpreter::Result<ftd::inte
                     s = state.continue_after_variable(module.as_str(), variable.as_str(), value)?;
                 } else {
                     return ftd::interpreter::utils::e2(
-                        format!("Unknown module {}", module),
+                        format!("Unknown module {module}"),
                         module.as_str(),
                         0,
                     );

@@ -40,7 +40,7 @@ pub fn convert_to_document_id(doc_name: &str) -> String {
     }
 
     // Attach /{doc_id}/ before returning
-    format!("/{}/", document_id)
+    format!("/{document_id}/")
 }
 
 #[allow(dead_code)]

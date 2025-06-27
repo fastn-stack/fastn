@@ -37,10 +37,7 @@ impl DataGenerator<'_> {
                     }
                     Err(e) if *mutable => {
                         return Err(ftd::html::Error::ParseError {
-                            message: format!(
-                                "Mutablility for inherited is not yet supported, {}",
-                                e
-                            ),
+                            message: format!("Mutablility for inherited is not yet supported, {e}"),
                             doc_id: self.doc.name.to_string(),
                             line_number: *line_number,
                         });

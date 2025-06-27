@@ -57,28 +57,24 @@ impl DependencyGenerator<'_> {
                 .map(|c| ftd::html::utils::get_condition_string_(c, false));
 
             let key = format!(
-                "document.querySelector(`[data-id=\"{}\"]`).style[\"display\"]",
-                node_data_id
+                "document.querySelector(`[data-id=\"{node_data_id}\"]`).style[\"display\"]"
             );
 
             if let Some(condition) = condition {
                 let pos_condition = if condition.contains("ftd#device") {
-                    format!(
-                        "window.ftd.utils.remove_extra_from_id(\"{}\");",
-                        node_data_id
-                    )
+                    format!("window.ftd.utils.remove_extra_from_id(\"{node_data_id}\");")
                 } else {
                     "".to_string()
                 };
 
                 let neg_condition = if condition.contains("ftd#device") {
-                    format!("window.ftd.utils.add_extra_in_id(\"{}\");", node_data_id)
+                    format!("window.ftd.utils.add_extra_in_id(\"{node_data_id}\");")
                 } else {
                     "".to_string()
                 };
 
                 let pos_value = format!("{} = \"{}\";{}", key, self.node.display, pos_condition);
-                let neg_value = format!("{} = \"none\";{}", key, neg_condition);
+                let neg_value = format!("{key} = \"none\";{neg_condition}");
                 expressions.push((Some(condition), pos_value));
                 expressions.push((None, neg_value));
             }
@@ -86,7 +82,7 @@ impl DependencyGenerator<'_> {
             let value = ftd::html::utils::js_expression_from_list(
                 expressions,
                 Some(key.as_str()),
-                format!("{} = null;", key).as_str(),
+                format!("{key} = null;").as_str(),
             );
             if !value.trim().is_empty() {
                 result.push(format!(
@@ -108,11 +104,7 @@ impl DependencyGenerator<'_> {
             var_dependencies,
             node_change_id.as_str(),
             self.doc,
-            format!(
-                "document.querySelector(`[data-id=\"{}\"]`).innerHTML",
-                node_data_id,
-            )
-            .as_str(),
+            format!("document.querySelector(`[data-id=\"{node_data_id}\"]`).innerHTML",).as_str(),
             self.id,
             false,
         )? {
@@ -302,8 +294,7 @@ impl DependencyGenerator<'_> {
                         .map(|v| v.is_mobile())
                         .unwrap_or(false)
                     {
-                        expressions
-                            .push((condition, format!("{} = {};", key, mobile_value_string)));
+                        expressions.push((condition, format!("{key} = {mobile_value_string};")));
                     } else if self
                         .node
                         .device
@@ -311,8 +302,7 @@ impl DependencyGenerator<'_> {
                         .map(|v| v.is_desktop())
                         .unwrap_or(false)
                     {
-                        expressions
-                            .push((condition, format!("{} = {};", key, desktop_value_string)));
+                        expressions.push((condition, format!("{key} = {desktop_value_string};")));
                     } else if desktop_value_string.ne(&mobile_value_string) {
                         is_static = false;
                         let value = ftd::html::utils::js_expression_from_list(
@@ -320,13 +310,11 @@ impl DependencyGenerator<'_> {
                                 (
                                     Some("data[\"ftd#device\"] == \"desktop\"".to_string()),
                                     format!(
-                                        "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
-                                        node_data_id, key, desktop_value_string
+                                        "document.querySelector(`[data-id=\"{node_data_id}\"]`).setAttribute(\"{key}\", {desktop_value_string});"
                                     )
                                 ),
                                 (None, format!(
-                                    "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
-                                    node_data_id, key, mobile_value_string
+                                    "document.querySelector(`[data-id=\"{node_data_id}\"]`).setAttribute(\"{key}\", {mobile_value_string});"
                                 )),
                             ])
                                 .collect(),
@@ -335,14 +323,12 @@ impl DependencyGenerator<'_> {
                                 .as_ref()
                                 .map(|v| {
                                     format!(
-                                        "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
-                                        node_data_id, key, v
+                                        "document.querySelector(`[data-id=\"{node_data_id}\"]`).setAttribute(\"{key}\", {v});"
                                     )
                                 })
                                 .unwrap_or_else(|| {
                                     format!(
-                                        "document.querySelector(`[data-id=\"{}\"]`).removeAttribute(\"{}\");",
-                                        node_data_id, key,
+                                        "document.querySelector(`[data-id=\"{node_data_id}\"]`).removeAttribute(\"{key}\");",
                                     )
                                 })
                                 .as_str(),
@@ -351,8 +337,7 @@ impl DependencyGenerator<'_> {
                     } else {
                         expressions
                             .push((condition, format!(
-                                "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
-                                node_data_id, key, desktop_value_string
+                                "document.querySelector(`[data-id=\"{node_data_id}\"]`).setAttribute(\"{key}\", {desktop_value_string});"
                             )));
                     }
 
@@ -411,13 +396,11 @@ impl DependencyGenerator<'_> {
                                 (
                                     Some("!data[\"ftd#dark-mode\"]".to_string()),
                                     format!(
-                                        "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
-                                        node_data_id, key, light_value_string
+                                        "document.querySelector(`[data-id=\"{node_data_id}\"]`).setAttribute(\"{key}\", {light_value_string});"
                                     )
                                 ),
                                 (None, format!(
-                                    "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
-                                    node_data_id, key, dark_value_string
+                                    "document.querySelector(`[data-id=\"{node_data_id}\"]`).setAttribute(\"{key}\", {dark_value_string});"
                                 )),
                             ])
                             .collect(),
@@ -426,14 +409,12 @@ impl DependencyGenerator<'_> {
                                 .as_ref()
                                 .map(|v| {
                                     format!(
-                                        "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
-                                        node_data_id, key, v
+                                        "document.querySelector(`[data-id=\"{node_data_id}\"]`).setAttribute(\"{key}\", {v});"
                                     )
                                 })
                                 .unwrap_or_else(|| {
                                     format!(
-                                        "document.querySelector(`[data-id=\"{}\"]`).removeAttribute(\"{}\");",
-                                        node_data_id, key,
+                                        "document.querySelector(`[data-id=\"{node_data_id}\"]`).removeAttribute(\"{key}\");",
                                     )
                                 })
                                 .as_str(),
@@ -443,8 +424,7 @@ impl DependencyGenerator<'_> {
                         expressions.push((
                             condition,
                             format!(
-                            "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
-                            node_data_id, key, light_value_string
+                            "document.querySelector(`[data-id=\"{node_data_id}\"]`).setAttribute(\"{key}\", {light_value_string});"
                         ),
                         ));
                     }
@@ -493,8 +473,7 @@ impl DependencyGenerator<'_> {
                         self.doc,
                     );
                     let value = format!(
-                        "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
-                        node_data_id, key, value_string
+                        "document.querySelector(`[data-id=\"{node_data_id}\"]`).setAttribute(\"{key}\", {value_string});"
                     );
                     expressions.push((condition, value));
                 }
@@ -507,14 +486,12 @@ impl DependencyGenerator<'_> {
                     .as_ref()
                     .map(|v| {
                         format!(
-                            "document.querySelector(`[data-id=\"{}\"]`).setAttribute(\"{}\", {});",
-                            node_data_id, key, v
+                            "document.querySelector(`[data-id=\"{node_data_id}\"]`).setAttribute(\"{key}\", {v});"
                         )
                     })
                     .unwrap_or_else(|| {
                         format!(
-                            "document.querySelector(`[data-id=\"{}\"]`).removeAttribute(\"{}\");",
-                            node_data_id, key,
+                            "document.querySelector(`[data-id=\"{node_data_id}\"]`).removeAttribute(\"{key}\");",
                         )
                     })
                     .as_str(),
@@ -533,7 +510,7 @@ impl DependencyGenerator<'_> {
                 key
             );
 
-            value = format!("{}\n{}", value, remove_case_condition);
+            value = format!("{value}\n{remove_case_condition}");
 
             if !value.trim().is_empty() && !is_static {
                 result.push(format!(
@@ -554,10 +531,8 @@ impl DependencyGenerator<'_> {
             let mut is_static = true;
             let node_change_id = ftd::html::utils::node_change_id(node_data_id.as_str(), key);
             let style_key = key.clone();
-            let key = format!(
-                "document.querySelector(`[data-id=\"{}\"]`).style[\"{}\"]",
-                node_data_id, key
-            );
+            let key =
+                format!("document.querySelector(`[data-id=\"{node_data_id}\"]`).style[\"{key}\"]");
 
             let just_one_property_without_condition = attribute.properties.len().eq(&1)
                 && attribute.properties[0].property.condition.is_none();
@@ -612,8 +587,7 @@ impl DependencyGenerator<'_> {
                         .map(|v| v.is_mobile())
                         .unwrap_or(false)
                     {
-                        expressions
-                            .push((condition, format!("{} = {};", key, mobile_value_string)));
+                        expressions.push((condition, format!("{key} = {mobile_value_string};")));
                     } else if self
                         .node
                         .device
@@ -621,17 +595,16 @@ impl DependencyGenerator<'_> {
                         .map(|v| v.is_desktop())
                         .unwrap_or(false)
                     {
-                        expressions
-                            .push((condition, format!("{} = {};", key, desktop_value_string)));
+                        expressions.push((condition, format!("{key} = {desktop_value_string};")));
                     } else if desktop_value_string.ne(&mobile_value_string) {
                         is_static = false;
                         let value = ftd::html::utils::js_expression_from_list(
                             std::iter::IntoIterator::into_iter([
                                 (
                                     Some("data[\"ftd#device\"] == \"desktop\"".to_string()),
-                                    format!("{} = {};", key, desktop_value_string),
+                                    format!("{key} = {desktop_value_string};"),
                                 ),
-                                (None, format!("{} = {};", key, mobile_value_string)),
+                                (None, format!("{key} = {mobile_value_string};")),
                             ])
                             .collect(),
                             Some(key.as_str()),
@@ -647,8 +620,7 @@ impl DependencyGenerator<'_> {
                         );
                         expressions.push((condition, value));
                     } else {
-                        expressions
-                            .push((condition, format!("{} = {};", key, desktop_value_string)));
+                        expressions.push((condition, format!("{key} = {desktop_value_string};")));
                     }
 
                     if !desktop_value_string.is_empty() {
@@ -705,9 +677,9 @@ impl DependencyGenerator<'_> {
                             std::iter::IntoIterator::into_iter([
                                 (
                                     Some("!data[\"ftd#dark-mode\"]".to_string()),
-                                    format!("{} = {};", key, light_value_string),
+                                    format!("{key} = {light_value_string};"),
                                 ),
-                                (None, format!("{} = {};", key, dark_value_string)),
+                                (None, format!("{key} = {dark_value_string};")),
                             ])
                             .collect(),
                             Some(key.as_str()),
@@ -723,7 +695,7 @@ impl DependencyGenerator<'_> {
                         );
                         expressions.push((condition, value));
                     } else {
-                        expressions.push((condition, format!("{} = {};", key, light_value_string)));
+                        expressions.push((condition, format!("{key} = {light_value_string};")));
                     }
 
                     if !light_value_string.is_empty() {
@@ -832,7 +804,7 @@ impl DependencyGenerator<'_> {
                     );
                     value_string = self.filter_style_data(&style_key, value_string.to_string());
                     if !value_string.eq(ftd::interpreter::FTD_VALUE_UNCHANGED) {
-                        let value = format!("{} = {};", key, value_string);
+                        let value = format!("{key} = {value_string};");
                         expressions.push((condition, value));
                     }
                 }
@@ -935,9 +907,9 @@ fn node_for_properties(
             );
 
             let value = if eval {
-                format!("eval(`{}`.format(JSON.stringify({})))", key, value_string)
+                format!("eval(`{key}`.format(JSON.stringify({value_string})))")
             } else {
-                format!("{} = {};", key, value_string)
+                format!("{key} = {value_string};")
             };
             expressions.push((condition, value));
         }

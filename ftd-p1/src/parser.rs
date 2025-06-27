@@ -99,7 +99,7 @@ impl State {
                     let section =
                         self.remove_latest_section()?
                             .ok_or_else(|| ftd_p1::Error::ParseError {
-                                message: format!("No section found to end: {}", caption),
+                                message: format!("No section found to end: {caption}"),
                                 doc_id: self.doc_id.to_string(),
                                 line_number: ftd_p1::utils::i32_to_usize(self.line_number),
                             })?;
@@ -485,7 +485,7 @@ impl State {
                 if first_line {
                     if !trimmed_line.is_empty() && !inline_record_header_found {
                         return Err(ftd_p1::Error::ParseError {
-                            message: format!("start section body '{}' after a newline!!", line),
+                            message: format!("start section body '{line}' after a newline!!"),
                             doc_id: self.doc_id.to_string(),
                             line_number: ftd_p1::utils::i32_to_usize(self.line_number),
                         });
@@ -597,7 +597,7 @@ impl State {
             if first_line {
                 if !line.trim().is_empty() {
                     return Err(ftd_p1::Error::ParseError {
-                        message: format!("start section caption '{}' after a newline!!", line),
+                        message: format!("start section caption '{line}' after a newline!!"),
                         doc_id: self.doc_id.to_string(),
                         line_number: ftd_p1::utils::i32_to_usize(self.line_number),
                     });
@@ -642,7 +642,7 @@ impl State {
             if first_line {
                 if !line.trim().is_empty() {
                     return Err(ftd_p1::Error::ParseError {
-                        message: format!("start section body '{}' after a newline!!", line),
+                        message: format!("start section body '{line}' after a newline!!"),
                         doc_id: self.doc_id.to_string(),
                         line_number: ftd_p1::utils::i32_to_usize(self.line_number),
                     });
@@ -826,7 +826,7 @@ fn colon_separated_values(
 ) -> ftd_p1::Result<(String, Option<String>)> {
     if !line.contains(':') {
         return Err(ftd_p1::Error::ParseError {
-            message: format!(": is missing in: {}", line),
+            message: format!(": is missing in: {line}"),
             // TODO: context should be a few lines before and after the input
             doc_id: doc_id.to_string(),
             line_number,
@@ -857,7 +857,7 @@ fn get_name_and_kind(name_with_kind: &str) -> (String, Option<String>) {
             let mut bracket_content_and_beyond = name_with_kind[si..ei].replace(' ', "");
             // Push any remaining characters including ) and after end bracket
             bracket_content_and_beyond.push_str(&name_with_kind[ei..]);
-            name_with_kind = format!("{}{}", before_brackets, bracket_content_and_beyond);
+            name_with_kind = format!("{before_brackets}{bracket_content_and_beyond}");
         }
     }
 

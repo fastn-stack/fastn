@@ -100,7 +100,7 @@ pub fn parse_named_params(
                     let param_name_part = part[colon_index + 1..part.len() - 1].trim();
                     if type_part.is_empty() || param_name_part.is_empty() {
                         return Err(fastn_core::sitemap::ParseError::InvalidDynamicUrls {
-                            message: format!("dynamic-urls format is wrong for: {}", part),
+                            message: format!("dynamic-urls format is wrong for: {part}"),
                         });
                     }
                     output.push(fastn_core::sitemap::PathParams::named(

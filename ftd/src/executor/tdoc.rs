@@ -24,10 +24,10 @@ impl TDoc<'_> {
     ) -> String {
         let mut resolved_value = name;
         loop {
-            if resolved_value.starts_with(format!("{}.", component_name).as_str()) {
+            if resolved_value.starts_with(format!("{component_name}.").as_str()) {
                 let (name, remaining) = {
                     let mut name = resolved_value
-                        .strip_prefix(format!("{}.", component_name).as_str())
+                        .strip_prefix(format!("{component_name}.").as_str())
                         .unwrap()
                         .to_string();
                     let mut remaining = None;
@@ -35,14 +35,14 @@ impl TDoc<'_> {
                         remaining = Some(var_remaining.to_string());
                         name = var_name.to_string();
                     }
-                    (format!("{}.{}", component_name, name), remaining)
+                    (format!("{component_name}.{name}"), remaining)
                 };
 
                 resolved_value = format!(
                     "{}{}",
                     map.get(name.as_str()).cloned().unwrap().0,
                     if let Some(rem) = remaining {
-                        format!(".{}", rem)
+                        format!(".{rem}")
                     } else {
                         Default::default()
                     }
@@ -268,7 +268,7 @@ fn get_self_reference(
     match default {
         fastn_resolved::PropertyValue::Reference { name, .. }
         | fastn_resolved::PropertyValue::Clone { name, .. }
-            if name.starts_with(format!("{}.", component_name).as_str()) =>
+            if name.starts_with(format!("{component_name}.").as_str()) =>
         {
             vec![name.to_string()]
         }

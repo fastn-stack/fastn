@@ -107,11 +107,11 @@ impl Document {
                     }
                     if let Some(val) = value_fields.get_mut("font-size") {
                         let size = serde_json::to_string(val).unwrap();
-                        *val = serde_json::to_value(format!("{}px", size)).unwrap();
+                        *val = serde_json::to_value(format!("{size}px")).unwrap();
                     }
                     if let Some(val) = value_fields.get_mut("line-height") {
                         let size = serde_json::to_string(val).unwrap();
-                        *val = serde_json::to_value(format!("{}px", size)).unwrap();
+                        *val = serde_json::to_value(format!("{size}px")).unwrap();
                     }
                     serde_json::to_value(value_fields).ok()
                 }
@@ -279,7 +279,7 @@ impl Document {
             }) {
                 let all_keys = keys
                     .iter()
-                    .map(|v| format!("global_keys[\"{}\"]", v))
+                    .map(|v| format!("global_keys[\"{v}\"]"))
                     .join(" && ");
                 keydown_seq_event = format!(
                     indoc::indoc! {"
@@ -299,7 +299,7 @@ impl Document {
             }
 
             if !keydown_seq_event.is_empty() {
-                keydown_events = format!("{}\n\n{}}});", keydown_events, keydown_seq_event);
+                keydown_events = format!("{keydown_events}\n\n{keydown_seq_event}}});");
             }
 
             let mut string = "document.addEventListener(\"click\", function(event) {".to_string();
@@ -316,14 +316,13 @@ impl Document {
                     event = event.action,
                 );
             }
-            string = format!("{}}});", string);
+            string = format!("{string}}});");
 
             if keydown_seq_event.is_empty() {
                 string
             } else {
                 format!(
-                    "{}\n\n\n{}\n\n\n{}\n\n\n{}",
-                    string, global_variables, keydown_events, keyup_events
+                    "{string}\n\n\n{global_variables}\n\n\n{keydown_events}\n\n\n{keyup_events}"
                 )
             }
         }
@@ -401,17 +400,14 @@ impl Document {
         ) {
             let events = ftd::ftd2021::event::group_by_js_event(events);
             for (name, actions) in events {
-                let action = format!(
-                    "window.ftd.handle_event(event, '{}', '{}', this);",
-                    id, actions
-                );
+                let action = format!("window.ftd.handle_event(event, '{id}', '{actions}', this);");
                 if name != "onclickoutside" && !name.starts_with("onglobalkey") {
                     continue;
                 }
                 let oid = if let Some(oid) = data_id {
-                    format!("{}:{}", oid, id)
+                    format!("{oid}:{id}")
                 } else {
-                    format!("{}:root", id)
+                    format!("{id}:root")
                 };
                 event_string.push(EventData { oid, name, action });
             }
@@ -657,7 +653,7 @@ impl Document {
             }
             t => {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("not a record: {:?}", t),
+                    format!("not a record: {t:?}"),
                     self.name.as_str(),
                     0,
                 );
@@ -697,7 +693,7 @@ impl Document {
                 }
                 self.value_to_json(&property_value.resolve(0, &doc)?)
             }
-            t => panic!("{:?} is not a variable", t),
+            t => panic!("{t:?} is not a variable"),
         }
     }
 
@@ -736,7 +732,7 @@ impl Document {
             },
             _ => {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("unhandled value found(value_to_json): {:?}", v),
+                    format!("unhandled value found(value_to_json): {v:?}"),
                     self.name.as_str(),
                     0,
                 );

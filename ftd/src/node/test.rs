@@ -59,7 +59,7 @@ pub fn interpret_helper(
                     s = state.continue_after_variable(module.as_str(), variable.as_str(), value)?;
                 } else {
                     return ftd::interpreter::utils::e2(
-                        format!("Unknown module {}", module),
+                        format!("Unknown module {module}"),
                         module.as_str(),
                         0,
                     );
@@ -72,9 +72,9 @@ pub fn interpret_helper(
 
 #[track_caller]
 fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
-    let doc = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
+    let doc = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{e:?}"));
     let executor =
-        ftd::executor::ExecuteDoc::from_interpreter(doc).unwrap_or_else(|e| panic!("{:?}", e));
+        ftd::executor::ExecuteDoc::from_interpreter(doc).unwrap_or_else(|e| panic!("{e:?}"));
     let mut node = ftd::node::NodeData::from_rt(executor);
     for thing in ftd::interpreter::default::builtins().keys() {
         node.bag.swap_remove(thing);
@@ -84,8 +84,8 @@ fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
         std::fs::write(file_location, expected_json).unwrap();
         return;
     }
-    let t: ftd::node::NodeData = serde_json::from_str(t)
-        .unwrap_or_else(|e| panic!("{:?} Expected JSON: {}", e, expected_json));
+    let t: ftd::node::NodeData =
+        serde_json::from_str(t).unwrap_or_else(|e| panic!("{e:?} Expected JSON: {expected_json}"));
     assert_eq!(&t, &node, "Expected JSON: {}", expected_json)
 }
 

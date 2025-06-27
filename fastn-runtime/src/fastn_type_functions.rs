@@ -27,7 +27,7 @@ impl FunctionCallExt for fastn_resolved::FunctionCall {
                     value.to_value().to_set_property_value(doc, rdata),
                 ));
             } else if argument.get_default_value().is_none() {
-                panic!("Argument value not found {:?}", argument)
+                panic!("Argument value not found {argument:?}")
             }
         }
         fastn_js::Function {

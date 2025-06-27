@@ -22,7 +22,7 @@ pub fn interpret_helper(
                     foreign_variable.push("var".to_string());
                     foreign_function.push("fn".to_string());
                 }
-                if let Ok(value) = std::fs::read_to_string(format!("./t/html/{}.ftd", module)) {
+                if let Ok(value) = std::fs::read_to_string(format!("./t/html/{module}.ftd")) {
                     source = value;
                 }
                 let document =
@@ -64,7 +64,7 @@ pub fn interpret_helper(
                     s = state.continue_after_variable(module.as_str(), variable.as_str(), value)?;
                 } else {
                     return ftd::interpreter::utils::e2(
-                        format!("Unknown module {}", module),
+                        format!("Unknown module {module}"),
                         module.as_str(),
                         0,
                     );
@@ -77,12 +77,12 @@ pub fn interpret_helper(
 
 #[track_caller]
 fn p(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
-    let doc = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
+    let doc = interpret_helper("foo", s).unwrap_or_else(|e| panic!("{e:?}"));
     let executor =
-        ftd::executor::ExecuteDoc::from_interpreter(doc).unwrap_or_else(|e| panic!("{:?}", e));
+        ftd::executor::ExecuteDoc::from_interpreter(doc).unwrap_or_else(|e| panic!("{e:?}"));
     let node = ftd::node::NodeData::from_rt(executor);
-    let html_ui = ftd::html::HtmlUI::from_node_data(node, "main", false)
-        .unwrap_or_else(|e| panic!("{:?}", e));
+    let html_ui =
+        ftd::html::HtmlUI::from_node_data(node, "main", false).unwrap_or_else(|e| panic!("{e:?}"));
     let ftd_js = std::fs::read_to_string("build.js").expect("build.js not found");
     let html_str = ftd::html::utils::trim_all_lines(
         std::fs::read_to_string("build.html")

@@ -23,7 +23,7 @@ impl OrType {
     pub(crate) fn from_p1(section: &ftd_p1::Section, doc_id: &str) -> ftd_ast::Result<OrType> {
         if !Self::is_or_type(section) {
             return ftd_ast::parse_error(
-                format!("Section is not or-type section, found `{:?}`", section),
+                format!("Section is not or-type section, found `{section:?}`"),
                 doc_id,
                 section.line_number,
             );
@@ -52,10 +52,7 @@ impl ftd_ast::Field {
     ) -> ftd_ast::Result<ftd_ast::Field> {
         if !ftd_ast::VariableDefinition::is_variable_definition(section) {
             return ftd_ast::parse_error(
-                format!(
-                    "Section is not or-type variant section, found `{:?}`",
-                    section
-                ),
+                format!("Section is not or-type variant section, found `{section:?}`"),
                 doc_id,
                 section.line_number,
             );

@@ -75,7 +75,7 @@ pub fn code(code: &str, ext: &str, theme: &str, doc_id: &str) -> ftd::executor::
         theme
     } else {
         return Err(ftd::executor::Error::ParseError {
-            message: format!("'{}' is not a valid theme", theme),
+            message: format!("'{theme}' is not a valid theme"),
             doc_id: doc_id.to_string(),
             line_number: 0,
         });
@@ -113,8 +113,7 @@ fn highlighted_html_for_string(
             let f = color_to_hex(&style.foreground);
             output.push_str(
                 format!(
-                    "<span style=\"background-color:{}; display: block; margin: 0 -1.1764705882em; padding: 0 1.1764705882em; box-shadow: 2px 0 0 0 {} inset\">",
-                    b, f
+                    "<span style=\"background-color:{b}; display: block; margin: 0 -1.1764705882em; padding: 0 1.1764705882em; box-shadow: 2px 0 0 0 {f} inset\">"
                 )
                 .as_str(),
             );
@@ -145,10 +144,7 @@ fn start_highlighted_html_snippet(t: &syntect::highlighting::Theme) -> String {
         .map(|c| format!("background-color:{};", color_to_hex(&c)))
         .unwrap_or_default();
 
-    format!(
-        "<pre style=\"padding: 0.7720588235em 1.1764705882em; {}\">\n",
-        c
-    )
+    format!("<pre style=\"padding: 0.7720588235em 1.1764705882em; {c}\">\n")
 }
 
 fn color_to_hex(c: &syntect::highlighting::Color) -> String {

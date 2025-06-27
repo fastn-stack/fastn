@@ -379,7 +379,7 @@ impl ExecuteDoc<'_> {
             iteration
         } else {
             return ftd::executor::utils::parse_error(
-                format!("Expected recursive, found: `{:?}`", instruction),
+                format!("Expected recursive, found: `{instruction:?}`"),
                 doc.name,
                 instruction.line_number,
             );
@@ -502,7 +502,7 @@ impl ExecuteDoc<'_> {
                         .clone()
                         .resolve(&doc.itdoc(), web_component_definition.line_number)?
                         .string(doc.name, web_component_definition.line_number)?;
-                    doc.js.insert(format!("{}:type=\"module\"", js));
+                    doc.js.insert(format!("{js}:type=\"module\""));
                     ExecuteDoc::insert_element(
                         &mut elements,
                         container.as_slice(),

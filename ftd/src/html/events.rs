@@ -144,12 +144,12 @@ fn to_event_name(event_name: &fastn_resolved::EventName) -> String {
         fastn_resolved::EventName::Change => "onchange".to_string(),
         fastn_resolved::EventName::Blur => "onblur".to_string(),
         fastn_resolved::EventName::Focus => "onfocus".to_string(),
-        fastn_resolved::EventName::RivePlay(timeline) => format!("onriveplay[{}]", timeline),
+        fastn_resolved::EventName::RivePlay(timeline) => format!("onriveplay[{timeline}]"),
         fastn_resolved::EventName::RiveStateChange(state_change) => {
-            format!("onrivestatechange[{}]", state_change)
+            format!("onrivestatechange[{state_change}]")
         }
         fastn_resolved::EventName::RivePause(timeline) => {
-            format!("onrivepause[{}]", timeline)
+            format!("onrivepause[{timeline}]")
         }
     }
 }

@@ -269,13 +269,13 @@ impl<T: std::cmp::PartialEq> VecMap<T> {
                         .map(|a| (a, None))
                         .collect::<Vec<(&T, Option<String>)>>(),
                 );
-            } else if let Some(rem) = key.strip_prefix(format!("{}.", k).as_str()) {
+            } else if let Some(rem) = key.strip_prefix(format!("{k}.").as_str()) {
                 values.extend(
                     v.iter()
                         .map(|a| (a, Some(rem.to_string())))
                         .collect::<Vec<(&T, Option<String>)>>(),
                 );
-            } else if let Some(rem) = k.strip_prefix(format!("{}.", key).as_str()) {
+            } else if let Some(rem) = k.strip_prefix(format!("{key}.").as_str()) {
                 values.extend(
                     v.iter()
                         .map(|a| (a, Some(rem.to_string())))

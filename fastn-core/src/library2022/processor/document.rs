@@ -59,7 +59,7 @@ pub fn document_id(
     }
 
     Ok(fastn_resolved::Value::String {
-        text: format!("/{}/", document_id),
+        text: format!("/{document_id}/"),
     })
 }
 

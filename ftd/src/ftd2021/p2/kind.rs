@@ -145,7 +145,7 @@ impl Kind {
                     Ok(v) => v,
                     Err(_) => {
                         return ftd::ftd2021::p2::utils::e2(
-                            format!("{} is not an integer", d),
+                            format!("{d} is not an integer"),
                             doc_id,
                             line_number,
                         );
@@ -539,7 +539,7 @@ impl Kind {
                     | ftd::ftd2021::p2::Kind::Boolean { .. } => false,
                     t => {
                         return ftd::ftd2021::p2::utils::e2(
-                            format!("`{}` is {:?}", name, t),
+                            format!("`{name}` is {t:?}"),
                             doc.name,
                             line_number,
                         );
@@ -572,7 +572,7 @@ impl Kind {
                     (default, ftd::TextSource::Default)
                 } else {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("`{}` is required", name),
+                        format!("`{name}` is required"),
                         doc.name,
                         line_number,
                     );
@@ -632,7 +632,7 @@ impl Kind {
                 value: ftd::Value::String { text: v, source },
             }),
             v => ftd::ftd2021::p2::utils::e2(
-                format!("unknown kind found: {:?}", v),
+                format!("unknown kind found: {v:?}"),
                 doc.name,
                 line_number,
             ),

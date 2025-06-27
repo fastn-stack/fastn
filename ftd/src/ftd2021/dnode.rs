@@ -67,12 +67,7 @@ impl DNode {
         };
 
         if self.node == "img" {
-            return format!(
-                "<img {attrs} {style} {classes}>",
-                attrs = attrs,
-                style = style,
-                classes = classes
-            );
+            return format!("<img {attrs} {style} {classes}>");
         }
 
         let body = match self.text.as_ref() {
@@ -99,5 +94,5 @@ impl DNode {
 }
 
 fn quote(i: &str) -> String {
-    format!("{:?}", i)
+    format!("{i:?}")
 }

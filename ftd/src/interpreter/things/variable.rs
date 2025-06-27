@@ -46,7 +46,7 @@ impl VariableExt for fastn_resolved::Variable {
                 state
             } else {
                 return ftd::interpreter::utils::e2(
-                    format!("Processor: `{}` not found", processor),
+                    format!("Processor: `{processor}` not found"),
                     doc.name,
                     variable_definition.line_number,
                 );
@@ -72,7 +72,7 @@ impl VariableExt for fastn_resolved::Variable {
                 state
                     .pending_imports
                     .contains
-                    .insert((doc_name.to_string(), format!("{}#{}", doc_name, thing_name)));
+                    .insert((doc_name.to_string(), format!("{doc_name}#{thing_name}")));
             }
 
             return Ok(());
@@ -107,7 +107,7 @@ impl VariableExt for fastn_resolved::Variable {
                 (*state).clone()
             } else {
                 return ftd::interpreter::utils::e2(
-                    format!("Processor: `{}` not found", processor),
+                    format!("Processor: `{processor}` not found"),
                     doc.name,
                     variable_definition.line_number,
                 );
@@ -145,7 +145,7 @@ impl VariableExt for fastn_resolved::Variable {
                         ast,
                         module: doc_name,
                         processor: if let Some(remaining) = remaining {
-                            format!("{}.{}", thing_name, remaining)
+                            format!("{thing_name}.{remaining}")
                         } else {
                             thing_name
                         },

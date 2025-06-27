@@ -22,7 +22,7 @@ impl Definition {
     ) -> ftd::ftd2021::di::Result<Definition> {
         if !Self::is_definition(section) {
             return ftd::ftd2021::di::parse_error(
-                format!("Section is not `definition`, found `{:?}`", section),
+                format!("Section is not `definition`, found `{section:?}`"),
                 doc_id,
                 section.line_number,
             );
@@ -36,10 +36,7 @@ impl Definition {
             kind
         } else {
             return ftd::ftd2021::di::parse_error(
-                format!(
-                    "Section is not `definition`, kind not found, found `{:?}`",
-                    section
-                ),
+                format!("Section is not `definition`, kind not found, found `{section:?}`"),
                 doc_id,
                 section.line_number,
             );

@@ -11,14 +11,14 @@ pub fn resolve_name(name: &str, doc_name: &str, aliases: &ftd::Map<String>) -> S
     let doc_name = doc_name.trim_end_matches('/');
     match ftd::interpreter::utils::split_module(name.as_str()) {
         (Some(m), v, None) => match aliases.get(m) {
-            Some(m) => format!("{}#{}", m, v),
-            None => format!("{}#{}.{}", doc_name, m, v),
+            Some(m) => format!("{m}#{v}"),
+            None => format!("{doc_name}#{m}.{v}"),
         },
         (Some(m), v, Some(c)) => match aliases.get(m) {
-            Some(m) => format!("{}#{}.{}", m, v, c),
-            None => format!("{}#{}.{}.{}", doc_name, m, v, c),
+            Some(m) => format!("{m}#{v}.{c}"),
+            None => format!("{doc_name}#{m}.{v}.{c}"),
         },
-        (None, v, None) => format!("{}#{}", doc_name, v),
+        (None, v, None) => format!("{doc_name}#{v}"),
         _ => unimplemented!(),
     }
 }
@@ -117,7 +117,7 @@ pub(crate) fn get_function_name_and_properties(
         (Some(si), Some(ei)) if si < ei => (si, ei),
         _ => {
             return ftd::interpreter::utils::e2(
-                format!("{} is not a function", s),
+                format!("{s} is not a function"),
                 doc_id,
                 line_number,
             );
@@ -143,14 +143,14 @@ pub(crate) fn get_doc_name_and_remaining(
     let mut part1 = "".to_string();
     let mut pattern_to_split_at = s.to_string();
     if let Some((p1, p2)) = s.split_once('#') {
-        part1 = format!("{}#", p1);
+        part1 = format!("{p1}#");
         pattern_to_split_at = p2.to_string();
     }
     if pattern_to_split_at.contains('.') {
         let (p1, p2) =
             ftd::interpreter::utils::split(pattern_to_split_at.as_str(), ".", doc_id, line_number)
                 .unwrap();
-        (format!("{}{}", part1, p1), Some(p2))
+        (format!("{part1}{p1}"), Some(p2))
     } else {
         (s.to_string(), None)
     }
@@ -181,7 +181,7 @@ pub fn split(
 ) -> ftd::interpreter::Result<(String, String)> {
     if !name.contains(split_at) {
         return ftd::interpreter::utils::e2(
-            format!("{} is not found in {}", split_at, name),
+            format!("{split_at} is not found in {name}"),
             doc_id,
             line_number,
         );
@@ -221,7 +221,7 @@ pub fn is_argument_in_component_or_loop(
 
     if let Some((component_name, arguments)) = component_definition_name_with_arguments {
         if let Some(referenced_argument) = name
-            .strip_prefix(format!("{}.", component_name).as_str())
+            .strip_prefix(format!("{component_name}.").as_str())
             .or_else(|| name.strip_prefix(format!("{}#{}.", doc.name, component_name).as_str()))
         {
             let (p1, _p2) = ftd::interpreter::utils::split_at(referenced_argument, ".");
@@ -232,7 +232,7 @@ pub fn is_argument_in_component_or_loop(
     }
     if let Some(loop_name) = loop_object_name_and_kind {
         let name = doc.resolve_name(name);
-        if name.starts_with(format!("{}.", loop_name).as_str())
+        if name.starts_with(format!("{loop_name}.").as_str())
             || name.starts_with(format!("{}#{}.", doc.name, loop_name).as_str())
             || name.eq(loop_name)
             || name.eq(format!("{}#{}", doc.name, loop_name).as_str())
@@ -255,15 +255,15 @@ pub fn get_mut_argument_for_reference<'a>(
 ) -> ftd::interpreter::Result<Option<(String, &'a mut fastn_resolved::Argument)>> {
     if let Some((component_name, arguments)) = component_definition_name_with_arguments {
         if let Some(referenced_argument) = name
-            .strip_prefix(format!("{}.", component_name).as_str())
-            .or_else(|| name.strip_prefix(format!("{}#{}.", doc_name, component_name).as_str()))
+            .strip_prefix(format!("{component_name}.").as_str())
+            .or_else(|| name.strip_prefix(format!("{doc_name}#{component_name}.").as_str()))
         {
             let (p1, _) = ftd::interpreter::utils::split_at(referenced_argument, ".");
             return if let Some(argument) = arguments.iter_mut().find(|v| v.name.eq(p1.as_str())) {
                 Ok(Some((component_name.to_string(), argument)))
             } else {
                 ftd::interpreter::utils::e2(
-                    format!("{} is not the argument in {}", p1, component_name),
+                    format!("{p1} is not the argument in {component_name}"),
                     doc_name,
                     line_number,
                 )
@@ -296,8 +296,8 @@ pub fn get_component_argument_for_reference_and_remaining<'a>(
         };
 
     let referenced_argument = if let Some(referenced_argument) = name
-        .strip_prefix(format!("{}.", component_name).as_str())
-        .or_else(|| name.strip_prefix(format!("{}#{}.", doc_name, component_name).as_str()))
+        .strip_prefix(format!("{component_name}.").as_str())
+        .or_else(|| name.strip_prefix(format!("{doc_name}#{component_name}.").as_str()))
     {
         referenced_argument
     } else {
@@ -313,7 +313,7 @@ pub fn get_component_argument_for_reference_and_remaining<'a>(
         )))
     } else {
         ftd::interpreter::utils::e2(
-            format!("{} is not the argument in {}", p1, component_name),
+            format!("{p1} is not the argument in {component_name}"),
             doc_name,
             line_number,
         )
@@ -335,7 +335,7 @@ pub fn get_argument_for_reference_and_remaining(
 > {
     if let Some((component_name, arguments)) = component_definition_name_with_arguments {
         if let Some(referenced_argument) = name
-            .strip_prefix(format!("{}.", component_name).as_str())
+            .strip_prefix(format!("{component_name}.").as_str())
             .or_else(|| name.strip_prefix(format!("{}#{}.", doc.name, component_name).as_str()))
         {
             let (p1, p2) = ftd::interpreter::utils::split_at(referenced_argument, ".");
@@ -347,7 +347,7 @@ pub fn get_argument_for_reference_and_remaining(
                 )))
             } else {
                 ftd::interpreter::utils::e2(
-                    format!("{} is not the argument in {}", p1, component_name),
+                    format!("{p1} is not the argument in {component_name}"),
                     doc.name,
                     line_number,
                 )
@@ -357,7 +357,7 @@ pub fn get_argument_for_reference_and_remaining(
     if let Some((loop_name, loop_argument, loop_counter_alias)) = loop_object_name_and_kind {
         let p2 = ftd::interpreter::utils::split_at(name, ".").1;
         let name = doc.resolve_name(name);
-        if name.starts_with(format!("{}.", loop_name).as_str())
+        if name.starts_with(format!("{loop_name}.").as_str())
             || name.starts_with(format!("{}#{}.", doc.name, loop_name).as_str())
             || name.eq(loop_name)
             || name.eq(format!("{}#{}", doc.name, loop_name).as_str())
@@ -442,8 +442,7 @@ pub fn validate_record_value(
             if let Some(reference_name) = value.reference_name() {
                 return ftd::interpreter::utils::e2(
                     format!(
-                        "Currently, reference `{}` to record field  is not supported. Use clone (*) instead",
-                        reference_name
+                        "Currently, reference `{reference_name}` to record field  is not supported. Use clone (*) instead"
                     ),
                     doc.name,
                     value.line_number(),
@@ -500,8 +499,7 @@ pub fn validate_property_value_for_mutable(
             if let Some(ref_name) = value.reference_name() {
                 return ftd::interpreter::utils::e2(
                     format!(
-                        "Cannot pass reference `{}`:`{}` to mutable: Hint: Use *${} instead.",
-                        key, ref_name, ref_name
+                        "Cannot pass reference `{key}`:`{ref_name}` to mutable: Hint: Use *${ref_name} instead."
                     ),
                     doc.name,
                     value.line_number(),
@@ -643,7 +641,7 @@ pub(crate) fn find_inherited_variables(
     if local_container.is_none() {
         if let Some(((reference, _), rem)) = values.last() {
             return Some(if let Some(rem) = rem {
-                format!("{}.{}", reference, rem)
+                format!("{reference}.{rem}")
             } else {
                 reference.to_string()
             });
@@ -666,7 +664,7 @@ pub(crate) fn find_inherited_variables(
             }
 
             return Some(if let Some(rem) = rem {
-                format!("{}.{}", reference, rem)
+                format!("{reference}.{rem}")
             } else {
                 reference.to_string()
             });
@@ -716,7 +714,7 @@ pub(crate) fn insert_module_thing(
     .ok_or(ftd::interpreter::Error::ValueNotFound {
         doc_id: doc.name.to_string(),
         line_number,
-        message: format!("{} not found in component arguments.", reference,),
+        message: format!("{reference} not found in component arguments.",),
     })?;
     if let fastn_resolved::Value::Module {
         things,
@@ -727,7 +725,7 @@ pub(crate) fn insert_module_thing(
         .ok_or(ftd::interpreter::Error::ValueNotFound {
             doc_id: doc.name.to_string(),
             line_number,
-            message: format!("{} not found in component arguments.", reference),
+            message: format!("{reference} not found in component arguments."),
         })?
         .value_mut(doc.name, line_number)?
     {
@@ -739,7 +737,7 @@ pub(crate) fn insert_module_thing(
         if let Some(reference) =
             reference.strip_prefix(&format!("{}.{}.", component_name, arg.name))
         {
-            let module_component_name = format!("{}#{}", module_name, reference);
+            let module_component_name = format!("{module_name}#{reference}");
             if let Ok(function_definition) =
                 doc.get_function(module_component_name.as_str(), line_number)
             {
@@ -809,10 +807,7 @@ pub(crate) fn validate_properties_and_set_default(
         let found_kind = property.value.kind();
         if !found_kind.is_same_as(expected_kind) {
             return ftd::interpreter::utils::e2(
-                format!(
-                    "Expected kind is `{:?}`, found: `{:?}`",
-                    expected_kind, found_kind,
-                ),
+                format!("Expected kind is `{expected_kind:?}`, found: `{found_kind:?}`",),
                 doc_id,
                 property.line_number,
             );
@@ -820,10 +815,7 @@ pub(crate) fn validate_properties_and_set_default(
 
         if found_default.is_some() && property.condition.is_none() {
             return ftd::interpreter::utils::e2(
-                format!(
-                    "Already found default property in line number {:?}",
-                    found_default
-                ),
+                format!("Already found default property in line number {found_default:?}"),
                 doc_id,
                 property.line_number,
             );
@@ -842,7 +834,7 @@ pub(crate) fn validate_properties_and_set_default(
                 fastn_resolved::Value::Module { name, things } => (name, things),
                 t => {
                     return ftd::interpreter::utils::e2(
-                        format!("Expected module, found: {:?}", t),
+                        format!("Expected module, found: {t:?}"),
                         doc_id,
                         line_number,
                     );

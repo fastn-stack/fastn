@@ -75,7 +75,7 @@ pub fn process(
             Some(extension) => {
                 if !extension.eq("json") {
                     return Err(ftd::interpreter::Error::ParseError {
-                        message: format!("only json file supported {}", path),
+                        message: format!("only json file supported {path}"),
                         doc_id: doc.name.to_string(),
                         line_number,
                     });
@@ -83,7 +83,7 @@ pub fn process(
             }
             None => {
                 return Err(ftd::interpreter::Error::ParseError {
-                    message: format!("file does not have any extension {}", path),
+                    message: format!("file does not have any extension {path}"),
                     doc_id: doc.name.to_string(),
                     line_number,
                 });
@@ -92,7 +92,7 @@ pub fn process(
 
         let file = std::fs::read_to_string(path.as_str()).map_err(|_e| {
             ftd::interpreter::Error::ParseError {
-                message: format!("file path not found {}", path),
+                message: format!("file path not found {path}"),
                 doc_id: doc.name.to_string(),
                 line_number,
             }
@@ -116,7 +116,7 @@ pub fn process(
         Some(ref caption) => caption.to_string(),
         None => {
             return Err(ftd::interpreter::Error::ParseError {
-                message: format!("caption name not passed for section: {}", section_name),
+                message: format!("caption name not passed for section: {section_name}"),
                 doc_id: doc.name.to_string(),
                 line_number,
             });

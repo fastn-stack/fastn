@@ -31,7 +31,7 @@ impl DI {
             DI::Invocation(ftd::ftd2021::di::Invocation::from_p1(section, doc_id)?)
         } else {
             return Err(ftd::ftd2021::di::Error::ParseError {
-                message: format!("Invalid DI, found: `{:?}`", section),
+                message: format!("Invalid DI, found: `{section:?}`"),
                 doc_id: doc_id.to_string(),
                 line_number: section.line_number,
             });

@@ -24,7 +24,7 @@ fn colon_separated_values(
 ) -> Result<(String, Option<String>)> {
     if !line.contains(':') {
         return Err(ftd::ftd2021::p1::Error::ParseError {
-            message: format!("`:` is missing in: {}", line),
+            message: format!("`:` is missing in: {line}"),
             // TODO: context should be a few lines before and after the input
             doc_id: doc_id.to_string(),
             line_number,
@@ -61,7 +61,7 @@ impl State {
 
         if !line.starts_with("-- ") && !line.starts_with("/-- ") {
             return Err(ftd::ftd2021::p1::Error::ParseError {
-                message: format!("Expecting -- , found: {}", line,),
+                message: format!("Expecting -- , found: {line}",),
                 // TODO: context should be a few lines before and after the input
                 doc_id: doc_id.to_string(),
                 line_number,
@@ -117,7 +117,7 @@ impl State {
         // then throw error
         if !line.contains(':') {
             return Err(ftd::ftd2021::p1::Error::ParseError {
-                message: format!("start section body \'{}\' after a newline!!", line),
+                message: format!("start section body \'{line}\' after a newline!!"),
                 doc_id: doc_id.to_string(),
                 line_number,
             });
@@ -155,7 +155,7 @@ impl State {
         // otherwise throw error
         if !line.contains(':') {
             return Err(ftd::ftd2021::p1::Error::ParseError {
-                message: format!("start sub-section body \'{}\' after a newline!!", line),
+                message: format!("start sub-section body \'{line}\' after a newline!!"),
                 doc_id: doc_id.to_string(),
                 line_number,
             });

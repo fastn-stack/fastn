@@ -85,7 +85,7 @@ impl Ast {
             Ast::ComponentInvocation(ftd_ast::ComponentInvocation::from_p1(section, doc_id)?)
         } else {
             return Err(ftd_ast::Error::Parse {
-                message: format!("Invalid AST, found: `{:?}`", section),
+                message: format!("Invalid AST, found: `{section:?}`"),
                 doc_id: doc_id.to_string(),
                 line_number: section.line_number,
             });
@@ -111,7 +111,7 @@ impl Ast {
             return Ok(r);
         }
         ftd_ast::parse_error(
-            format!("`{:?}` is not a record", self),
+            format!("`{self:?}` is not a record"),
             doc_id,
             self.line_number(),
         )
@@ -122,7 +122,7 @@ impl Ast {
             return Ok(o);
         }
         ftd_ast::parse_error(
-            format!("`{:?}` is not a or-type", self),
+            format!("`{self:?}` is not a or-type"),
             doc_id,
             self.line_number(),
         )
@@ -133,7 +133,7 @@ impl Ast {
             return Ok(r);
         }
         ftd_ast::parse_error(
-            format!("`{:?}` is not a function", self),
+            format!("`{self:?}` is not a function"),
             doc_id,
             self.line_number(),
         )
@@ -147,7 +147,7 @@ impl Ast {
             return Ok(v);
         }
         ftd_ast::parse_error(
-            format!("`{:?}` is not a variable definition", self),
+            format!("`{self:?}` is not a variable definition"),
             doc_id,
             self.line_number(),
         )
@@ -161,7 +161,7 @@ impl Ast {
             return Ok(v);
         }
         ftd_ast::parse_error(
-            format!("`{:?}` is not a variable definition", self),
+            format!("`{self:?}` is not a variable definition"),
             doc_id,
             self.line_number(),
         )
@@ -175,7 +175,7 @@ impl Ast {
             return Ok(v);
         }
         ftd_ast::parse_error(
-            format!("`{:?}` is not a component definition", self),
+            format!("`{self:?}` is not a component definition"),
             doc_id,
             self.line_number(),
         )
@@ -189,7 +189,7 @@ impl Ast {
             return Ok(v);
         }
         ftd_ast::parse_error(
-            format!("`{:?}` is not a web-component definition", self),
+            format!("`{self:?}` is not a web-component definition"),
             doc_id,
             self.line_number(),
         )
@@ -203,7 +203,7 @@ impl Ast {
             return Ok(v);
         }
         ftd_ast::parse_error(
-            format!("`{:?}` is not a component definition", self),
+            format!("`{self:?}` is not a component definition"),
             doc_id,
             self.line_number(),
         )

@@ -38,10 +38,7 @@ impl ComponentDefinition {
     ) -> ftd_ast::Result<ComponentDefinition> {
         if !Self::is_component_definition(section) {
             return ftd_ast::parse_error(
-                format!(
-                    "Section is not component definition section, found `{:?}`",
-                    section
-                ),
+                format!("Section is not component definition section, found `{section:?}`"),
                 doc_id,
                 section.line_number,
             );
@@ -49,10 +46,7 @@ impl ComponentDefinition {
 
         if section.sub_sections.len() != 1 {
             return ftd_ast::parse_error(
-                format!(
-                    "Component definition should be exactly one, found `{:?}`",
-                    section
-                ),
+                format!("Component definition should be exactly one, found `{section:?}`"),
                 doc_id,
                 section.line_number,
             );
@@ -125,7 +119,7 @@ impl ComponentInvocation {
     ) -> ftd_ast::Result<ComponentInvocation> {
         if !Self::is_component(section) {
             return ftd_ast::parse_error(
-                format!("Section is not ComponentDefinition, found `{:?}`", section),
+                format!("Section is not ComponentDefinition, found `{section:?}`"),
                 doc_id,
                 section.line_number,
             );
@@ -393,7 +387,7 @@ impl Property {
             || Event::get_event_name(header.get_key().as_str()).is_some()
         {
             return ftd_ast::parse_error(
-                format!("Header is not property, found `{:?}`", header),
+                format!("Header is not property, found `{header:?}`"),
                 doc_id,
                 header.get_line_number(),
             );
@@ -501,8 +495,7 @@ impl Loop {
                 if !alias.starts_with(ftd_ast::utils::REFERENCE) {
                     return ftd_ast::parse_error(
                         format!(
-                            "Loop alias should start with reference, found: `{}`. Help: use `${}` instead",
-                            alias, alias
+                            "Loop alias should start with reference, found: `{alias}`. Help: use `${alias}` instead"
                         ),
                         doc_id,
                         line_number,
@@ -543,8 +536,7 @@ impl Loop {
         if !on.starts_with(ftd_ast::utils::REFERENCE) && !on.starts_with(ftd_ast::utils::CLONE) {
             return ftd_ast::parse_error(
                 format!(
-                    "Loop should be on some reference, found: `{}`. Help: use `${}` instead",
-                    on, on
+                    "Loop should be on some reference, found: `{on}`. Help: use `${on}` instead"
                 ),
                 doc_id,
                 loop_header.line_number,
@@ -594,8 +586,7 @@ impl Loop {
         if !on.starts_with(ftd_ast::utils::REFERENCE) && !on.starts_with(ftd_ast::utils::CLONE) {
             return ftd_ast::parse_error(
                 format!(
-                    "Loop should be on some reference, found: `{}`. Help: use `${}` instead",
-                    on, on
+                    "Loop should be on some reference, found: `{on}`. Help: use `${on}` instead"
                 ),
                 doc_id,
                 loop_header.get_line_number(),
@@ -635,7 +626,7 @@ impl Event {
     fn get_event_name_from_header_value(header_value: &HeaderValue) -> Option<String> {
         let mut name = header_value.key.clone();
         if header_value.mutable {
-            name = format!("${}", name);
+            name = format!("${name}");
         }
         Event::get_event_name(name.as_str())
     }

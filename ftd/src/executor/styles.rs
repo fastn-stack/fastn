@@ -140,7 +140,7 @@ impl Length {
                 ResponsiveLength::from_value(or_type_value.1.clone(), doc, line_number)?,
             ))),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant `{}` for or-type `ftd.length`", t),
+                format!("Unknown variant `{t}` for or-type `ftd.length`"),
                 doc.name,
                 line_number,
             ),
@@ -176,15 +176,15 @@ impl Length {
 
     pub fn to_css_string(&self, device: &Option<ftd::executor::Device>) -> String {
         match self {
-            Length::Px(px) => format!("{}px", px),
-            Length::Percent(p) => format!("{}%", p),
-            Length::Calc(calc) => format!("calc({})", calc),
-            Length::Vh(vh) => format!("{}vh", vh),
-            Length::Vw(vw) => format!("{}vw", vw),
-            Length::Vmin(vmin) => format!("{}vmin", vmin),
-            Length::Vmax(vmax) => format!("{}vmax", vmax),
-            Length::Em(em) => format!("{}em", em),
-            Length::Rem(rem) => format!("{}rem", rem),
+            Length::Px(px) => format!("{px}px"),
+            Length::Percent(p) => format!("{p}%"),
+            Length::Calc(calc) => format!("calc({calc})"),
+            Length::Vh(vh) => format!("{vh}vh"),
+            Length::Vw(vw) => format!("{vw}vw"),
+            Length::Vmin(vmin) => format!("{vmin}vmin"),
+            Length::Vmax(vmax) => format!("{vmax}vmax"),
+            Length::Em(em) => format!("{em}em"),
+            Length::Rem(rem) => format!("{rem}rem"),
             Length::Responsive(r) => match device {
                 Some(ftd::executor::Device::Mobile) => r.mobile.to_css_string(device),
                 _ => r.desktop.to_css_string(device),
@@ -208,7 +208,7 @@ impl Length {
             | ftd::interpreter::FTD_LENGTH_EM
             | ftd::interpreter::FTD_LENGTH_REM => Ok("{0}"),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant found for ftd.length: `{}`", t),
+                format!("Unknown variant found for ftd.length: `{t}`"),
                 doc_id,
                 line_number,
             ),
@@ -231,7 +231,7 @@ impl Length {
             ftd::interpreter::FTD_LENGTH_EM => Ok("{0}em"),
             ftd::interpreter::FTD_LENGTH_REM => Ok("{0}rem"),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant found for ftd.length: `{}`", t),
+                format!("Unknown variant found for ftd.length: `{t}`"),
                 doc_id,
                 line_number,
             ),
@@ -245,17 +245,17 @@ impl Length {
         line_number: usize,
     ) -> ftd::executor::Result<String> {
         match variant {
-            ftd::interpreter::FTD_LENGTH_PX => Ok(format!("{}px", value)),
-            ftd::interpreter::FTD_LENGTH_PERCENT => Ok(format!("{}%", value)),
-            ftd::interpreter::FTD_LENGTH_CALC => Ok(format!("calc({})", value)),
-            ftd::interpreter::FTD_LENGTH_VH => Ok(format!("{}vh", value)),
-            ftd::interpreter::FTD_LENGTH_VW => Ok(format!("{}vw", value)),
-            ftd::interpreter::FTD_LENGTH_VMIN => Ok(format!("{}vmin", value)),
-            ftd::interpreter::FTD_LENGTH_VMAX => Ok(format!("{}vmax", value)),
-            ftd::interpreter::FTD_LENGTH_EM => Ok(format!("{}em", value)),
-            ftd::interpreter::FTD_LENGTH_REM => Ok(format!("{}rem", value)),
+            ftd::interpreter::FTD_LENGTH_PX => Ok(format!("{value}px")),
+            ftd::interpreter::FTD_LENGTH_PERCENT => Ok(format!("{value}%")),
+            ftd::interpreter::FTD_LENGTH_CALC => Ok(format!("calc({value})")),
+            ftd::interpreter::FTD_LENGTH_VH => Ok(format!("{value}vh")),
+            ftd::interpreter::FTD_LENGTH_VW => Ok(format!("{value}vw")),
+            ftd::interpreter::FTD_LENGTH_VMIN => Ok(format!("{value}vmin")),
+            ftd::interpreter::FTD_LENGTH_VMAX => Ok(format!("{value}vmax")),
+            ftd::interpreter::FTD_LENGTH_EM => Ok(format!("{value}em")),
+            ftd::interpreter::FTD_LENGTH_REM => Ok(format!("{value}rem")),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant found for ftd.length: `{}`", t),
+                format!("Unknown variant found for ftd.length: `{t}`"),
                 doc_id,
                 line_number,
             ),
@@ -534,7 +534,7 @@ impl Alignment {
             ftd::interpreter::FTD_ALIGN_BOTTOM_CENTER => Ok(Alignment::BottomCenter),
             ftd::interpreter::FTD_ALIGN_BOTTOM_RIGHT => Ok(Alignment::BottomRight),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant `{}` for or-type `ftd.alignment`", t),
+                format!("Unknown variant `{t}` for or-type `ftd.alignment`"),
                 doc.name,
                 line_number,
             ),
@@ -773,7 +773,7 @@ impl Resizing {
             ftd::interpreter::FTD_RESIZING_AUTO => Ok(Resizing::Auto),
             ftd::interpreter::FTD_RESIZING_FILL_CONTAINER => Ok(Resizing::FillContainer),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant `{}` for or-type `ftd.resizing`", t),
+                format!("Unknown variant `{t}` for or-type `ftd.resizing`"),
                 doc.name,
                 line_number,
             ),
@@ -825,7 +825,7 @@ impl Resizing {
         match variant {
             ftd::interpreter::FTD_RESIZING_FIXED => {
                 let remaining = full_variant
-                    .trim_start_matches(format!("{}.", variant).as_str())
+                    .trim_start_matches(format!("{variant}.").as_str())
                     .to_string();
                 let variant = format!("{}.{}", ftd::interpreter::FTD_LENGTH, remaining);
                 Ok((
@@ -837,7 +837,7 @@ impl Resizing {
             ftd::interpreter::FTD_RESIZING_HUG_CONTENT => Ok(("fit-content", false)),
             ftd::interpreter::FTD_RESIZING_AUTO => Ok(("auto", false)),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant found for ftd.resizing: `{}`", t),
+                format!("Unknown variant found for ftd.resizing: `{t}`"),
                 doc_id,
                 line_number,
             ),
@@ -853,7 +853,7 @@ impl Resizing {
         match variant {
             ftd::interpreter::FTD_RESIZING_FIXED => {
                 let remaining = full_variant
-                    .trim_start_matches(format!("{}.", variant).as_str())
+                    .trim_start_matches(format!("{variant}.").as_str())
                     .to_string();
                 let variant = format!("{}.{}", ftd::interpreter::FTD_LENGTH, remaining);
                 Length::set_pattern_from_variant_str(variant.as_str(), doc_id, line_number)
@@ -862,7 +862,7 @@ impl Resizing {
             ftd::interpreter::FTD_RESIZING_HUG_CONTENT => Ok("fit-content"),
             ftd::interpreter::FTD_RESIZING_AUTO => Ok("auto"),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant found for ftd.resizing: `{}`", t),
+                format!("Unknown variant found for ftd.resizing: `{t}`"),
                 doc_id,
                 line_number,
             ),
@@ -879,7 +879,7 @@ impl Resizing {
         match variant {
             ftd::interpreter::FTD_RESIZING_FIXED => {
                 let remaining = full_variant
-                    .trim_start_matches(format!("{}.", variant).as_str())
+                    .trim_start_matches(format!("{variant}.").as_str())
                     .to_string();
                 let variant = format!("{}.{}", ftd::interpreter::FTD_LENGTH, remaining);
                 Length::set_value_from_variant(variant.as_str(), value, doc_id, line_number)
@@ -888,7 +888,7 @@ impl Resizing {
             ftd::interpreter::FTD_RESIZING_HUG_CONTENT => Ok("fit-content".to_string()),
             ftd::interpreter::FTD_RESIZING_AUTO => Ok("auto".to_string()),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant found for ftd.resizing: `{}`", t),
+                format!("Unknown variant found for ftd.resizing: `{t}`"),
                 doc_id,
                 line_number,
             ),
@@ -944,7 +944,7 @@ impl BackgroundImage {
             values
                 .get(field_name)
                 .ok_or_else(|| ftd::executor::Error::ParseError {
-                    message: format!("`{}` field in ftd.background-image not found", field_name),
+                    message: format!("`{field_name}` field in ftd.background-image not found"),
                     doc_id: doc.name.to_string(),
                     line_number,
                 })
@@ -1125,10 +1125,7 @@ impl LinearGradientColor {
             values
                 .get(field_name)
                 .ok_or_else(|| ftd::executor::Error::ParseError {
-                    message: format!(
-                        "`{}` field in ftd.linear-gradient-color not found",
-                        field_name
-                    ),
+                    message: format!("`{field_name}` field in ftd.linear-gradient-color not found"),
                     doc_id: doc.name.to_string(),
                     line_number,
                 })
@@ -1280,10 +1277,7 @@ impl LinearGradientDirection {
                 ))
             }
             t => ftd::executor::utils::parse_error(
-                format!(
-                    "Unknown variant `{}` for or-type `ftd.linear-gradient-directions`",
-                    t
-                ),
+                format!("Unknown variant `{t}` for or-type `ftd.linear-gradient-directions`"),
                 doc.name,
                 line_number,
             ),
@@ -1301,8 +1295,8 @@ impl LinearGradientDirection {
             LinearGradientDirection::BottomLeft => "225deg".to_string(),
             LinearGradientDirection::TopRight => "45deg".to_string(),
             LinearGradientDirection::BottomRight => "135deg".to_string(),
-            LinearGradientDirection::Angle(a) => format!("{}deg", a),
-            LinearGradientDirection::Turn(t) => format!("{}turn", t),
+            LinearGradientDirection::Angle(a) => format!("{a}deg"),
+            LinearGradientDirection::Turn(t) => format!("{t}turn"),
         }
     }
 }
@@ -1353,7 +1347,7 @@ impl LinearGradient {
             values
                 .get(field_name)
                 .ok_or_else(|| ftd::executor::Error::ParseError {
-                    message: format!("`{}` field in ftd.linear-gradient not found", field_name),
+                    message: format!("`{field_name}` field in ftd.linear-gradient not found"),
                     doc_id: doc.name.to_string(),
                     line_number,
                 })
@@ -1445,7 +1439,7 @@ impl Background {
                 )))
             }
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant `{}` for or-type `ftd.background`", t),
+                format!("Unknown variant `{t}` for or-type `ftd.background`"),
                 doc.name,
                 line_number,
             ),
@@ -1622,10 +1616,7 @@ impl BackgroundRepeat {
                 Ok(ftd::executor::BackgroundRepeat::Round)
             }
             t => ftd::executor::utils::parse_error(
-                format!(
-                    "Unknown variant `{}` for or-type `ftd.background-repeat`",
-                    t
-                ),
+                format!("Unknown variant `{t}` for or-type `ftd.background-repeat`"),
                 doc.name,
                 line_number,
             ),
@@ -1693,7 +1684,7 @@ impl BackgroundSize {
                 ))
             }
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant `{}` for or-type `ftd.background-size`", t),
+                format!("Unknown variant `{t}` for or-type `ftd.background-size`"),
                 doc.name,
                 line_number,
             ),
@@ -1799,10 +1790,7 @@ impl BackgroundPosition {
                 ))
             }
             t => ftd::executor::utils::parse_error(
-                format!(
-                    "Unknown variant `{}` for or-type `ftd.background-position`",
-                    t
-                ),
+                format!("Unknown variant `{t}` for or-type `ftd.background-position`"),
                 doc.name,
                 line_number,
             ),
@@ -1851,7 +1839,7 @@ impl Shadow {
             values
                 .get(field_name)
                 .ok_or_else(|| ftd::executor::Error::ParseError {
-                    message: format!("`{}` field in ftd.shadow not found", field_name),
+                    message: format!("`{field_name}` field in ftd.shadow not found"),
                     doc_id: doc.name.to_string(),
                     line_number,
                 })
@@ -1978,10 +1966,7 @@ impl Shadow {
         };
         let color = self.color.value.to_css_string();
 
-        format!(
-            "{} {} {} {} {} {}",
-            inset, color, x_offset, y_offset, blur, spread
-        )
+        format!("{inset} {color} {x_offset} {y_offset} {blur} {spread}")
     }
 
     pub fn box_shadow_pattern() -> (String, bool) {
@@ -2174,7 +2159,7 @@ impl ColorValue {
             // (7thSigil) unlike original js code, NaN is impossible
             if iv > 0xffffffff {
                 return ftd::executor::utils::parse_error(
-                    format!("{} is not a valid color", v),
+                    format!("{v} is not a valid color"),
                     doc_id,
                     line_number,
                 );
@@ -2196,7 +2181,7 @@ impl ColorValue {
                     alpha: v.a,
                 }),
                 Err(e) => ftd::executor::utils::parse_error(
-                    format!("{} is not a valid color: {:?}", v, e),
+                    format!("{v} is not a valid color: {e:?}"),
                     doc_id,
                     line_number,
                 ),
@@ -2254,7 +2239,7 @@ impl Spacing {
                 line_number,
             )?)),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant `{}` for or-type `ftd.spacing`", t),
+                format!("Unknown variant `{t}` for or-type `ftd.spacing`"),
                 doc.name,
                 line_number,
             ),
@@ -2362,7 +2347,7 @@ impl AlignSelf {
             ftd::interpreter::FTD_ALIGN_SELF_CENTER => Ok(AlignSelf::Center),
             ftd::interpreter::FTD_ALIGN_SELF_END => Ok(AlignSelf::End),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant `{}` for or-type `ftd.align-self`", t),
+                format!("Unknown variant `{t}` for or-type `ftd.align-self`"),
                 doc.name,
                 line_number,
             ),
@@ -2437,7 +2422,7 @@ impl Overflow {
             ftd::interpreter::FTD_OVERFLOW_HIDDEN => Ok(Overflow::Hidden),
             ftd::interpreter::FTD_OVERFLOW_AUTO => Ok(Overflow::Auto),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant `{}` for or-type `ftd.overflow`", t),
+                format!("Unknown variant `{t}` for or-type `ftd.overflow`"),
                 doc.name,
                 line_number,
             ),
@@ -2511,7 +2496,7 @@ impl Resize {
             ftd::interpreter::FTD_RESIZE_VERTICAL => Ok(Resize::Vertical),
             ftd::interpreter::FTD_RESIZE_BOTH => Ok(Resize::Both),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant `{}` for or-type `ftd.resize`", t),
+                format!("Unknown variant `{t}` for or-type `ftd.resize`"),
                 doc.name,
                 line_number,
             ),
@@ -2586,7 +2571,7 @@ impl TextAlign {
             ftd::interpreter::FTD_TEXT_ALIGN_END => Ok(TextAlign::End),
             ftd::interpreter::FTD_TEXT_ALIGN_JUSTIFY => Ok(TextAlign::Justify),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant `{}` for or-type `ftd.text-align`", t),
+                format!("Unknown variant `{t}` for or-type `ftd.text-align`"),
                 doc.name,
                 line_number,
             ),
@@ -2724,7 +2709,7 @@ impl Cursor {
             ftd::interpreter::FTD_CURSOR_ZOOM_IN => Ok(Cursor::ZoomIn),
             ftd::interpreter::FTD_CURSOR_ZOOM_OUT => Ok(Cursor::ZoomOut),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant `{}` for or-type `ftd.cursor`", t),
+                format!("Unknown variant `{t}` for or-type `ftd.cursor`"),
                 doc.name,
                 line_number,
             ),
@@ -2875,7 +2860,7 @@ impl FontSize {
                     .decimal(doc.name, line_number)?,
             )),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant `{}` for or-type `ftd.font-size`", t),
+                format!("Unknown variant `{t}` for or-type `ftd.font-size`"),
                 doc.name,
                 line_number,
             ),
@@ -2884,9 +2869,9 @@ impl FontSize {
 
     pub fn to_css_string(&self) -> String {
         match self {
-            FontSize::Px(px) => format!("{}px", px),
-            FontSize::Em(em) => format!("{}em", em),
-            FontSize::Rem(rem) => format!("{}rem", rem),
+            FontSize::Px(px) => format!("{px}px"),
+            FontSize::Em(em) => format!("{em}em"),
+            FontSize::Rem(rem) => format!("{rem}rem"),
         }
     }
 
@@ -2900,7 +2885,7 @@ impl FontSize {
             | ftd::interpreter::FTD_FONT_SIZE_EM
             | ftd::interpreter::FTD_FONT_SIZE_REM => Ok("{0}"),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant found for ftd.font-size: `{}`", t),
+                format!("Unknown variant found for ftd.font-size: `{t}`"),
                 doc_id,
                 line_number,
             ),
@@ -2917,7 +2902,7 @@ impl FontSize {
             ftd::interpreter::FTD_FONT_SIZE_EM => Ok("{0}em"),
             ftd::interpreter::FTD_FONT_SIZE_REM => Ok("{0}rem"),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant found for ftd.font-size: `{}`", t),
+                format!("Unknown variant found for ftd.font-size: `{t}`"),
                 doc_id,
                 line_number,
             ),
@@ -2931,11 +2916,11 @@ impl FontSize {
         line_number: usize,
     ) -> ftd::executor::Result<String> {
         match variant {
-            ftd::interpreter::FTD_FONT_SIZE_PX => Ok(format!("{}px", value)),
-            ftd::interpreter::FTD_FONT_SIZE_EM => Ok(format!("{}em", value)),
-            ftd::interpreter::FTD_FONT_SIZE_REM => Ok(format!("{}rem", value)),
+            ftd::interpreter::FTD_FONT_SIZE_PX => Ok(format!("{value}px")),
+            ftd::interpreter::FTD_FONT_SIZE_EM => Ok(format!("{value}em")),
+            ftd::interpreter::FTD_FONT_SIZE_REM => Ok(format!("{value}rem")),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant found for ftd.font-size: `{}`", t),
+                format!("Unknown variant found for ftd.font-size: `{t}`"),
                 doc_id,
                 line_number,
             ),
@@ -3244,7 +3229,7 @@ impl Anchor {
                     .string(doc.name, line_number)?,
             )),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant `{}` for or-type `ftd.anchor`", t),
+                format!("Unknown variant `{t}` for or-type `ftd.anchor`"),
                 doc.name,
                 line_number,
             ),
@@ -3333,7 +3318,7 @@ impl TextInputType {
             ftd::interpreter::FTD_TEXT_INPUT_TYPE_COLOR => Ok(TextInputType::COLOR),
             ftd::interpreter::FTD_TEXT_INPUT_TYPE_FILE => Ok(TextInputType::FILE),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant `{}` for or-type `ftd.text-input-type`", t),
+                format!("Unknown variant `{t}` for or-type `ftd.text-input-type`"),
                 doc.name,
                 line_number,
             ),
@@ -3420,7 +3405,7 @@ impl Region {
             ftd::interpreter::FTD_REGION_H5 => Ok(Region::H5),
             ftd::interpreter::FTD_REGION_H6 => Ok(Region::H6),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant `{}` for or-type `ftd.region`", t),
+                format!("Unknown variant `{t}` for or-type `ftd.region`"),
                 doc.name,
                 line_number,
             ),
@@ -3508,7 +3493,7 @@ impl WhiteSpace {
             ftd::interpreter::FTD_WHITESPACE_PRELINE => Ok(WhiteSpace::PRELINE),
             ftd::interpreter::FTD_WHITESPACE_BREAKSPACES => Ok(WhiteSpace::BREAKSPACES),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant `{}` for or-type `ftd.whitespace`", t),
+                format!("Unknown variant `{t}` for or-type `ftd.whitespace`"),
                 doc.name,
                 line_number,
             ),
@@ -3588,7 +3573,7 @@ impl Display {
             ftd::interpreter::FTD_DISPLAY_INLINE => Ok(ftd::executor::Display::Inline),
             ftd::interpreter::FTD_DISPLAY_INLINE_BLOCK => Ok(ftd::executor::Display::InlineBlock),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant `{}` for or-type `ftd.display`", t),
+                format!("Unknown variant `{t}` for or-type `ftd.display`"),
                 doc.name,
                 line_number,
             ),
@@ -3825,7 +3810,7 @@ impl TextStyle {
                 }
                 t => {
                     return ftd::executor::utils::parse_error(
-                        format!("Unknown variant `{}` for or-type `ftd.text-style`", t),
+                        format!("Unknown variant `{t}` for or-type `ftd.text-style`"),
                         doc.name,
                         line_number,
                     );
@@ -3837,7 +3822,7 @@ impl TextStyle {
         for (style, count) in booleans.iter() {
             if *count > 1 {
                 return ftd::executor::utils::parse_error(
-                    format!("\'{}\' repeated {} times", style, count),
+                    format!("\'{style}\' repeated {count} times"),
                     doc.name,
                     line_number,
                 );
@@ -3857,7 +3842,7 @@ impl TextStyle {
         for (weight, count) in weights.iter() {
             if *count > 1 {
                 return ftd::executor::utils::parse_error(
-                    format!("\'{}\' repeated {} times ", weight, count),
+                    format!("\'{weight}\' repeated {count} times "),
                     doc.name,
                     line_number,
                 );
@@ -3942,7 +3927,7 @@ impl TextStyle {
             true => return ftd::interpreter::FTD_VALUE_UNCHANGED.to_string(),
             false => filtered.to_string(),
         };
-        format!("\"{}\"", res)
+        format!("\"{res}\"")
     }
 
     pub fn filter_for_decoration(values: String) -> String {
@@ -3965,7 +3950,7 @@ impl TextStyle {
             true => return ftd::interpreter::FTD_VALUE_UNCHANGED.to_string(),
             false => filtered.to_string(),
         };
-        format!("\"{}\"", res)
+        format!("\"{res}\"")
     }
 
     pub fn filter_for_weight(values: String) -> String {
@@ -3988,7 +3973,7 @@ impl TextStyle {
             true => return ftd::interpreter::FTD_VALUE_UNCHANGED.to_string(),
             false => filtered.to_string(),
         };
-        format!("\"{}\"", res)
+        format!("\"{res}\"")
     }
 }
 
@@ -4028,7 +4013,7 @@ impl TextTransform {
             ftd::interpreter::FTD_TEXT_TRANSFORM_INITIAL => Ok(TextTransform::INITIAL),
             ftd::interpreter::FTD_TEXT_TRANSFORM_INHERIT => Ok(TextTransform::INHERIT),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant `{}` for or-type `ftd.text-transform`", t),
+                format!("Unknown variant `{t}` for or-type `ftd.text-transform`"),
                 doc.name,
                 line_number,
             ),
@@ -4113,7 +4098,7 @@ impl BorderStyle {
             ftd::interpreter::FTD_BORDER_STYLE_INSET => Ok(BorderStyle::INSET),
             ftd::interpreter::FTD_BORDER_STYLE_DOUBLE => Ok(BorderStyle::DOUBLE),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant `{}` for or-type `ftd.border-style`", t),
+                format!("Unknown variant `{t}` for or-type `ftd.border-style`"),
                 doc.name,
                 line_number,
             ),
@@ -4194,7 +4179,7 @@ impl ImageFit {
             ftd::interpreter::FTD_IMAGE_FIT_FILL => Ok(ImageFit::FILL),
             ftd::interpreter::FTD_IMAGE_FIT_SCALE_DOWN => Ok(ImageFit::SCALEDOWN),
             t => ftd::executor::utils::parse_error(
-                format!("Unknown variant `{}` for or-type `ftd.image-fit`", t),
+                format!("Unknown variant `{t}` for or-type `ftd.image-fit`"),
                 doc.name,
                 line_number,
             ),
@@ -4271,8 +4256,7 @@ impl Loading {
             ftd::interpreter::FTD_LOADING_EAGER => Ok(Loading::Eager),
             t => ftd::executor::utils::parse_error(
                 format!(
-                    "Unknown variant `{}` for or-type `ftd.loading`. Help: use `lazy` or `eager`",
-                    t
+                    "Unknown variant `{t}` for or-type `ftd.loading`. Help: use `lazy` or `eager`"
                 ),
                 doc.name,
                 line_number,

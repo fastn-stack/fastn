@@ -32,7 +32,7 @@ pub fn code(code: &str, ext: &str, theme: &str, doc_id: &str) -> ftd::ftd2021::p
         .unwrap_or_else(|| SS.find_syntax_plain_text());
     if !TS.themes.contains_key(theme) {
         return Err(ftd::ftd2021::p1::Error::ParseError {
-            message: format!("'{}' is not a valid theme", theme),
+            message: format!("'{theme}' is not a valid theme"),
             doc_id: doc_id.to_string(),
             line_number: 0,
         });

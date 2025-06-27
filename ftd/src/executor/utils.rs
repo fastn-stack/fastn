@@ -57,7 +57,7 @@ pub(crate) fn update_instruction_for_loop_element(
     let mut instruction = instruction.clone();
     let reference_replace_pattern = fastn_resolved::PropertyValueSource::Loop(alias.to_string())
         .get_reference_name(alias, &doc.itdoc());
-    let replace_with = format!("{}.{}", reference_name, index_in_loop);
+    let replace_with = format!("{reference_name}.{index_in_loop}");
     let map =
         std::iter::IntoIterator::into_iter([(reference_replace_pattern, replace_with)]).collect();
     let replace_property_value = std::iter::IntoIterator::into_iter([(
@@ -126,7 +126,7 @@ pub(crate) fn insert_local_variables(
     local_container: &[usize],
 ) {
     for (k, v) in local_variable_map {
-        let key = k.trim_start_matches(format!("{}.", component_name).as_str());
+        let key = k.trim_start_matches(format!("{component_name}.").as_str());
         inherited_variables.insert(key.to_string(), (v.to_string(), local_container.to_vec()));
     }
 }
@@ -377,7 +377,7 @@ fn update_local_variable_reference_in_property_value(
                     component, name, ..
                 } => {
                     if let Some(local_variable) = local_variable.iter().find_map(|(k, v)| {
-                        if name.starts_with(format!("{}.", k).as_str()) || k.eq(name) {
+                        if name.starts_with(format!("{k}.").as_str()) || k.eq(name) {
                             Some(name.replace(k, v))
                         } else {
                             None
@@ -412,7 +412,7 @@ fn update_local_variable_reference_in_property_value(
     };
 
     if let Some(local_variable) = local_variable.iter().find_map(|(k, v)| {
-        if reference_or_clone.starts_with(format!("{}.", k).as_str()) || reference_or_clone.eq(k) {
+        if reference_or_clone.starts_with(format!("{k}.").as_str()) || reference_or_clone.eq(k) {
             Some(reference_or_clone.replace(k, v))
         } else {
             None
@@ -477,7 +477,7 @@ fn update_inherited_reference_in_property_value(
         if found {
             is_reference_updated = true;
             let reference_name = if let Some(rem) = rem {
-                format!("{}.{}", reference, rem)
+                format!("{reference}.{rem}")
             } else {
                 reference.to_string()
             };
@@ -486,7 +486,7 @@ fn update_inherited_reference_in_property_value(
                 fastn_resolved::PropertyValue::from_ast_value(
                     ftd_ast::VariableValue::String {
                         // TODO: ftd#default-colors, ftd#default-types
-                        value: format!("${}", reference_name),
+                        value: format!("${reference_name}"),
                         line_number: 0,
                         source: ftd_ast::ValueSource::Default,
                         condition: None,
@@ -503,7 +503,7 @@ fn update_inherited_reference_in_property_value(
 
             property_value.set_reference_or_clone(
                 if let Some(rem) = rem {
-                    format!("{}.{}", reference, rem)
+                    format!("{reference}.{rem}")
                 } else {
                     reference.to_string()
                 }
@@ -608,7 +608,7 @@ pub(crate) fn get_evaluated_property(
 
     let argument = arguments.iter().find(|v| v.name.eq(key.as_str())).ok_or(
         ftd::executor::Error::ParseError {
-            message: format!("Cannot find `{}` argument", key),
+            message: format!("Cannot find `{key}` argument"),
             doc_id: doc_name.to_string(),
             line_number,
         },
@@ -636,7 +636,7 @@ pub(crate) fn get_evaluated_property(
         Ok(None)
     } else {
         ftd::executor::utils::parse_error(
-            format!("Expected Value for `{}`", key).as_str(),
+            format!("Expected Value for `{key}`").as_str(),
             doc_name,
             line_number,
         )

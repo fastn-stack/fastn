@@ -66,14 +66,14 @@ pub fn resolve_name(name: &str, doc_name: &str, aliases: &ftd::Map<String>) -> S
     }
     match ftd::ftd2021::interpreter::utils::split_module(name) {
         (Some(m), v, None) => match aliases.get(m) {
-            Some(m) => format!("{}#{}", m, v),
-            None => format!("{}#{}.{}", doc_name, m, v),
+            Some(m) => format!("{m}#{v}"),
+            None => format!("{doc_name}#{m}.{v}"),
         },
         (Some(m), v, Some(c)) => match aliases.get(m) {
-            Some(m) => format!("{}#{}.{}", m, v, c),
-            None => format!("{}#{}.{}.{}", doc_name, m, v, c),
+            Some(m) => format!("{m}#{v}.{c}"),
+            None => format!("{doc_name}#{m}.{v}.{c}"),
         },
-        (None, v, None) => format!("{}#{}", doc_name, v),
+        (None, v, None) => format!("{doc_name}#{v}"),
         _ => unimplemented!(),
     }
 }

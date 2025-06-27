@@ -412,7 +412,7 @@ pub async fn update(ds: &fastn_ds::DocumentStore, check: bool) -> fastn_core::Re
         match update_dependencies(ds, packages_root, &current_package, check).await {
             Ok(n) => n,
             Err(UpdateError::Check(e)) => {
-                eprintln!("{}", e);
+                eprintln!("{e}");
                 std::process::exit(7);
             }
             Err(e) => {

@@ -45,7 +45,7 @@ pub(crate) fn result_to_value(
                 kind: fastn_resolved::KindData::new(kind),
             }),
             len => ftd::interpreter::utils::e2(
-                format!("Query returned {} rows, expected one row", len),
+                format!("Query returned {len} rows, expected one row"),
                 doc.name,
                 value.line_number(),
             ),

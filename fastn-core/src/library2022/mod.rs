@@ -50,7 +50,7 @@ impl Library2022 {
             .get(current_package_name)
             .map(|p| p.get().to_owned())
             .ok_or_else(|| ftd_p1::Error::ParseError {
-                message: format!("Can't find current package: {}", current_package_name),
+                message: format!("Can't find current package: {current_package_name}"),
                 doc_id: "".to_string(),
                 line_number: 0,
             })
@@ -150,7 +150,7 @@ impl Library2022 {
                 }
             }
 
-            fastn_core::usage_error(format!("library not found 1: {}: {package:?}", name))
+            fastn_core::usage_error(format!("library not found 1: {name}: {package:?}"))
         }
 
         #[tracing::instrument(skip(lib, package))]
@@ -397,7 +397,7 @@ impl Library2022 {
             t => Err(ftd::interpreter::Error::ParseError {
                 doc_id: self.document_id.to_string(),
                 line_number,
-                message: format!("fastn-Error: No such processor: {}", t),
+                message: format!("fastn-Error: No such processor: {t}"),
             }),
         }
     }
@@ -431,7 +431,7 @@ fn get_processor_data(
             variable_definition
                 .processor
                 .ok_or(ftd::interpreter::Error::ParseError {
-                    message: format!("No processor found for `{}`", ast_name),
+                    message: format!("No processor found for `{ast_name}`"),
                     doc_id: doc.name.to_string(),
                     line_number,
                 })?;
@@ -453,7 +453,7 @@ fn get_processor_data(
             variable_invocation
                 .processor
                 .ok_or(ftd::interpreter::Error::ParseError {
-                    message: format!("No processor found for `{}`", ast_name),
+                    message: format!("No processor found for `{ast_name}`"),
                     doc_id: doc.name.to_string(),
                     line_number,
                 })?;

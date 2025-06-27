@@ -340,7 +340,7 @@ async fn get_instructions_from_test(
     let property_values = instruction.get_interpreter_property_value_of_all_arguments(doc)?;
 
     if let Some(title) = get_optional_value_string(TEST_TITLE_HEADER, &property_values, doc)? {
-        println!("Test: {}", title);
+        println!("Test: {title}");
     }
 
     let fixtures =
@@ -388,15 +388,14 @@ async fn read_fixture_instructions(
 ) -> fastn_core::Result<Vec<fastn_resolved::ComponentInvocation>> {
     let fixture_files = config.get_fixture_files().await?;
     let current_fixture_file = fixture_files.iter().find(|d| {
-        d.id.trim_start_matches(format!("{}/{}/", TEST_FOLDER, FIXTURE_FOLDER).as_str())
+        d.id.trim_start_matches(format!("{TEST_FOLDER}/{FIXTURE_FOLDER}/").as_str())
             .trim_end_matches(FIXTURE_FILE_EXTENSION)
             .eq(fixture_file_name)
     });
 
     if current_fixture_file.is_none() {
         return fastn_core::usage_error(format!(
-            "Fixture: {} not found inside fixtures folder",
-            fixture_file_name
+            "Fixture: {fixture_file_name} not found inside fixtures folder"
         ));
     }
 
@@ -531,7 +530,7 @@ async fn get_post_response_for_id(
                     .test_results
                     .insert(test_id.clone(), just_response_body.to_string());
             }
-            format!("fastn.http_response = {}", just_response_body)
+            format!("fastn.http_response = {just_response_body}")
         } else {
             // considering raw text when json response is not received
             format!("fastn.http_response = \"{}\";", just_response_body.trim())
@@ -747,7 +746,7 @@ async fn get_js_for_id(
                     .test_results
                     .insert(test_id.clone(), just_response_body.to_string());
             }
-            format!("fastn.http_response = {}", just_response_body)
+            format!("fastn.http_response = {just_response_body}")
         } else {
             just_response_body.to_string()
         };
@@ -831,8 +830,7 @@ fn get_value_ok(
     line_number: usize,
 ) -> fastn_core::Result<fastn_resolved::Value> {
     get_value(key, property_values).ok_or(fastn_core::Error::NotFound(format!(
-        "Key '{}' not found, line number: {}",
-        key, line_number
+        "Key '{key}' not found, line number: {line_number}"
     )))
 }
 
@@ -896,8 +894,7 @@ pub fn assert_optional_headers(
         && optional_test_parameters.contains_key(HTTP_REDIRECT_HEADER)
     {
         return fastn_core::usage_error(format!(
-            "Use either [{} and {}] or [{}] both not allowed.",
-            HTTP_STATUS_HEADER, HTTP_LOCATION_HEADER, HTTP_REDIRECT_HEADER
+            "Use either [{HTTP_STATUS_HEADER} and {HTTP_LOCATION_HEADER}] or [{HTTP_REDIRECT_HEADER}] both not allowed."
         ));
     }
     Ok(true)
@@ -929,8 +926,7 @@ pub fn assert_redirect(
     let response_location = get_response_location(response)?.unwrap_or_default();
     if !response_location.eq(redirection_location) {
         return fastn_core::assert_error(format!(
-            "HTTP redirect location mismatch. Expected \"{:?}\", Found \"{:?}\"",
-            redirection_location, response_location
+            "HTTP redirect location mismatch. Expected \"{redirection_location:?}\", Found \"{response_location:?}\""
         ));
     }
 
@@ -951,8 +947,7 @@ pub fn assert_location_and_status(
 
     if !response_status_code_string.eq(expected_status_code) {
         return fastn_core::assert_error(format!(
-            "HTTP status code mismatch. Expected {}, Found {}",
-            expected_status_code, response_status_code
+            "HTTP status code mismatch. Expected {expected_status_code}, Found {response_status_code}"
         ));
     }
 
@@ -962,8 +957,7 @@ pub fn assert_location_and_status(
     if let Some(expected_location) = expected_location {
         if !expected_location.eq(response_location.as_str()) {
             return fastn_core::assert_error(format!(
-                "HTTP Location mismatch. Expected \"{:?}\", Found \"{:?}\"",
-                expected_location, response_location
+                "HTTP Location mismatch. Expected \"{expected_location:?}\", Found \"{response_location:?}\""
             ));
         }
     }
@@ -1032,7 +1026,7 @@ fn fastn_test_data(
                     .test_data
                     .insert(key.clone(), val.to_string());
 
-                Some(format!("fastn.test_data[\"{}\"] = \"{}\";", key, val,))
+                Some(format!("fastn.test_data[\"{key}\"] = \"{val}\";",))
             } else {
                 None
             }
@@ -1042,7 +1036,7 @@ fn fastn_test_data(
     let existing_test_data = test_parameters
         .test_data
         .iter()
-        .map(|(k, v)| format!("fastn.test_data[\"{}\"] = \"{}\";", k, v,))
+        .map(|(k, v)| format!("fastn.test_data[\"{k}\"] = \"{v}\";",))
         .join("\n");
 
     res.push_str(existing_test_data.as_str());
@@ -1087,11 +1081,7 @@ async fn execute_redirect_instruction(
 
     get_js_for_id(
         redirect_from_url,
-        format!(
-            "Redirecting from {} -> {}",
-            redirect_from_url, redirect_to_url,
-        )
-        .as_str(),
+        format!("Redirecting from {redirect_from_url} -> {redirect_to_url}",).as_str(),
         params,
         config,
         saved_cookies,

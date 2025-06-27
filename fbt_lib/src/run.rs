@@ -16,26 +16,23 @@ pub fn main_with_filters(filters: &[String], to_fix: bool, folder: Option<String
             return Some(1);
         }
         Err(crate::Error::TestsFolderNotReadable(e)) => {
-            eprintln!("{}", format!("Tests folder is unreadable: {:?}", e).red());
+            eprintln!("{}", format!("Tests folder is unreadable: {e:?}").red());
             return Some(1);
         }
         Err(crate::Error::CantReadConfig(e)) => {
-            eprintln!("{}", format!("Cant read config file: {:?}", e).red());
+            eprintln!("{}", format!("Cant read config file: {e:?}").red());
             return Some(1);
         }
         Err(crate::Error::InvalidConfig(e)) => {
-            eprintln!("{}", format!("Cant parse config file: {:?}", e).red());
+            eprintln!("{}", format!("Cant parse config file: {e:?}").red());
             return Some(1);
         }
         Err(crate::Error::BuildFailedToLaunch(e)) => {
-            eprintln!(
-                "{}",
-                format!("Build command failed to launch: {:?}", e).red()
-            );
+            eprintln!("{}", format!("Build command failed to launch: {e:?}").red());
             return Some(1);
         }
         Err(crate::Error::BuildFailed(e)) => {
-            eprintln!("{}", format!("Build failed: {:?}", e).red());
+            eprintln!("{}", format!("Build failed: {e:?}").red());
             return Some(1);
         }
     };
@@ -183,9 +180,8 @@ pub fn test_all(
     let test_folder = folder
         .map(|v| v.trim_end_matches('/').to_string())
         .unwrap_or_else(|| "./fbt-tests".to_string());
-    let config = match std::fs::read_to_string(format!("{}/fbt.p1", test_folder).as_str()) {
-        Ok(v) => match crate::Config::parse(v.as_str(), format!("{}/fbt.p1", test_folder).as_str())
-        {
+    let config = match std::fs::read_to_string(format!("{test_folder}/fbt.p1").as_str()) {
+        Ok(v) => match crate::Config::parse(v.as_str(), format!("{test_folder}/fbt.p1").as_str()) {
             Ok(config) => {
                 if let Some(ref b) = config.build {
                     match if cfg!(target_os = "windows") {
@@ -300,7 +296,7 @@ fn test_one(
 
     let config = match std::fs::read_to_string(entry.join("cmd.p1")) {
         Ok(c) => {
-            match crate::TestConfig::parse(c.as_str(), format!("{}/cmd.p1", id).as_str(), global) {
+            match crate::TestConfig::parse(c.as_str(), format!("{id}/cmd.p1").as_str(), global) {
                 Ok(c) => c,
                 Err(e) => return err(crate::Failure::CmdFileInvalid { error: e }),
             }

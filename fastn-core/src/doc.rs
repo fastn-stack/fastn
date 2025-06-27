@@ -349,7 +349,7 @@ pub async fn resolve_foreign_variable2022(
         }
     }
 
-    return ftd::interpreter::utils::e2(format!("{} not found 2", variable).as_str(), doc_name, 0);
+    return ftd::interpreter::utils::e2(format!("{variable} not found 2").as_str(), doc_name, 0);
 
     async fn get_assets_value(
         module: &str,
@@ -651,7 +651,7 @@ pub async fn resolve_foreign_variable2(
         }
     }
 
-    return ftd::ftd2021::p2::utils::e2(format!("{} not found 2", variable).as_str(), doc_name, 0);
+    return ftd::ftd2021::p2::utils::e2(format!("{variable} not found 2").as_str(), doc_name, 0);
 
     async fn get_assets_value(
         package: &fastn_core::Package,
@@ -916,7 +916,7 @@ fn resolve_ftd_foreign_variable(
             .to_string(),
             source: ftd::TextSource::Header,
         }),
-        _ => ftd::ftd2021::p2::utils::e2(format!("{} not found 3", variable).as_str(), doc_name, 0),
+        _ => ftd::ftd2021::p2::utils::e2(format!("{variable} not found 3").as_str(), doc_name, 0),
     }
 }
 
@@ -936,6 +936,6 @@ fn resolve_ftd_foreign_variable_2022(
             .unwrap()
             .to_string(),
         }),
-        _ => ftd::ftd2021::p2::utils::e2(format!("{} not found 3", variable).as_str(), doc_name, 0),
+        _ => ftd::ftd2021::p2::utils::e2(format!("{variable} not found 3").as_str(), doc_name, 0),
     }
 }

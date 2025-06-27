@@ -109,7 +109,7 @@ impl fastn_js::Event {
                 format!(
                     "fastn_dom.Event.GlobalKey([{}])",
                     gk.iter()
-                        .map(|v| format!("\"{}\"", v))
+                        .map(|v| format!("\"{v}\""))
                         .collect_vec()
                         .join(", ")
                 )
@@ -119,7 +119,7 @@ impl fastn_js::Event {
                 format!(
                     "fastn_dom.Event.GlobalKeySeq([{}])",
                     gk.iter()
-                        .map(|v| format!("\"{}\"", v))
+                        .map(|v| format!("\"{v}\""))
                         .collect_vec()
                         .join(", ")
                 )
@@ -165,7 +165,7 @@ impl fastn_js::Function {
                     "}}{});",
                     element_name
                         .as_ref()
-                        .map(|v| format!(", {}", v))
+                        .map(|v| format!(", {v}"))
                         .unwrap_or_default()
                 )
                 .as_str(),
@@ -234,7 +234,7 @@ impl fastn_js::ComponentStatement {
             fastn_js::ComponentStatement::OrType(ot) => ot.to_js(),
             fastn_js::ComponentStatement::DeviceBlock(db) => db.to_js(),
             fastn_js::ComponentStatement::AnyBlock(ab) => {
-                text(format!("if (!ssr) {{{}}}", ab).as_str())
+                text(format!("if (!ssr) {{{ab}}}").as_str())
             }
         }
     }
@@ -470,8 +470,7 @@ fn func(
             ))
             .append(pretty::RcDoc::softline_())
             .append(text(&format!(
-                "__fastn_package_name__ = \"{}\";",
-                package_name
+                "__fastn_package_name__ = \"{package_name}\";"
             )))
             .append(pretty::RcDoc::softline_())
             .append(text("try {"))
@@ -694,7 +693,7 @@ fn variable_to_js(
     };
 
     if let Some(prefix) = prefix {
-        text(format!("fastn_utils.createNestedObject({}, \"{}\",", prefix, name,).as_str())
+        text(format!("fastn_utils.createNestedObject({prefix}, \"{name}\",",).as_str())
             .append(value)
             .append(text(");"))
     } else {
@@ -924,7 +923,7 @@ impl ExpressionGenerator {
             };
 
             return if root && !is_assignment_or_chain && !f.is_empty() {
-                format!("return {};", f)
+                format!("return {f};")
             } else {
                 f
             };
@@ -1050,9 +1049,9 @@ impl ExpressionGenerator {
                         None
                     }
                 })
-                .map(|v| format!("{}.", v))
+                .map(|v| format!("{v}."))
                 .unwrap_or_default();
-            format!("{}{}", prefix, value)
+            format!("{prefix}{value}")
         };
 
         if node.operator().get_variable_identifier_read().is_some() && !no_getter {
@@ -1067,7 +1066,7 @@ impl ExpressionGenerator {
             }
 
             // When there is no chained dot operator value
-            format!("fastn_utils.getStaticValue({})", value)
+            format!("fastn_utils.getStaticValue({value})")
         } else {
             value
         }
@@ -1163,8 +1162,8 @@ pub fn get_chained_getter_string(value: &str) -> String {
 #[track_caller]
 pub fn e(f: fastn_js::Ast, s: &str) {
     let g = to_js(&[f], "foo");
-    println!("got: {}", g);
-    println!("expected: {}", s);
+    println!("got: {g}");
+    println!("expected: {s}");
     assert_eq!(g, s);
 }
 

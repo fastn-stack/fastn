@@ -48,7 +48,7 @@ pub fn get_cache_file(id: &str) -> Option<std::path::PathBuf> {
 
     if !base_path.exists() {
         if let Err(err) = std::fs::create_dir_all(&base_path) {
-            eprintln!("Failed to create cache directory: {}", err);
+            eprintln!("Failed to create cache directory: {err}");
             return None;
         }
     }
@@ -86,10 +86,10 @@ where
     let cache_file = get_cache_file(id)
         .ok_or_else(|| ftd::interpreter::Error::OtherError("cache dir not found".to_string()))?;
     std::fs::create_dir_all(cache_file.parent().unwrap()).map_err(|e| {
-        ftd::interpreter::Error::OtherError(format!("failed to create cache dir: {}", e))
+        ftd::interpreter::Error::OtherError(format!("failed to create cache dir: {e}"))
     })?;
     std::fs::write(cache_file, serde_json::to_string(&d)?).map_err(|e| {
-        ftd::interpreter::Error::OtherError(format!("failed to write cache file: {}", e))
+        ftd::interpreter::Error::OtherError(format!("failed to write cache file: {e}"))
     })?;
     Ok(d)
 }
@@ -326,14 +326,14 @@ pub(crate) fn history_path(
 
 pub(crate) fn snapshot_id(path: &str, timestamp: &u128) -> String {
     if let Some((id, ext)) = path.rsplit_once('.') {
-        format!("{}.{}.{}", id, timestamp, ext)
+        format!("{id}.{timestamp}.{ext}")
     } else {
-        format!("{}.{}", path, timestamp)
+        format!("{path}.{timestamp}")
     }
 }
 
 pub(crate) fn track_path(id: &str, base_path: &fastn_ds::Path) -> fastn_ds::Path {
-    base_path.join(".tracks").join(format!("{}.track", id))
+    base_path.join(".tracks").join(format!("{id}.track"))
 }
 
 pub(crate) async fn get_number_of_documents(
@@ -444,7 +444,7 @@ pub fn escape_ftd(file: &str) -> String {
     file.split('\n')
         .map(|v| {
             if v.starts_with("-- ") || v.starts_with("--- ") {
-                format!("\\{}", v)
+                format!("\\{v}")
             } else {
                 v.to_string()
             }
@@ -488,8 +488,7 @@ async fn resolve_favicon(
     /// returns html tag for using favicon.
     fn favicon_html(favicon_path: &str, content_type: &str) -> String {
         let favicon_html = format!(
-            "\n<link rel=\"shortcut icon\" href=\"{}\" type=\"{}\">",
-            favicon_path, content_type
+            "\n<link rel=\"shortcut icon\" href=\"{favicon_path}\" type=\"{content_type}\">"
         );
         favicon_html
     }
@@ -547,7 +546,7 @@ async fn resolve_favicon(
 pub fn get_external_js_html(external_js: &[String]) -> String {
     let mut result = "".to_string();
     for js in external_js {
-        result = format!("{}<script src=\"{}\"></script>", result, js);
+        result = format!("{result}<script src=\"{js}\"></script>");
     }
     result
 }
@@ -555,7 +554,7 @@ pub fn get_external_js_html(external_js: &[String]) -> String {
 pub fn get_external_css_html(external_js: &[String]) -> String {
     let mut result = "".to_string();
     for js in external_js {
-        result = format!("{}<link rel=\"stylesheet\" href=\"{}.css\">", result, js);
+        result = format!("{result}<link rel=\"stylesheet\" href=\"{js}.css\">");
     }
     result
 }
@@ -569,7 +568,7 @@ pub async fn get_inline_js_html(
     for path in inline_js {
         let path = fastn_ds::Path::new(path);
         if let Ok(content) = config.ds.read_to_string(&path, session_id).await {
-            result = format!("{}<script>{}</script>", result, content);
+            result = format!("{result}<script>{content}</script>");
         }
     }
     result
@@ -584,7 +583,7 @@ pub async fn get_inline_css_html(
     for path in inline_js {
         let path = fastn_ds::Path::new(path);
         if let Ok(content) = config.ds.read_to_string(&path, session_id).await {
-            result = format!("{}<style>{}</style>", result, content);
+            result = format!("{result}<style>{content}</style>");
         }
     }
     result
@@ -738,7 +737,7 @@ pub async fn replace_markers_2023(
         meta_tags = meta_tags,
         fastn_package = get_fastn_package_data(&config.package).as_str(),
         base_url_tag = if !base_url.is_empty() {
-            format!("<base href=\"{}\">", base_url)
+            format!("<base href=\"{base_url}\">")
         } else {
             "".to_string()
         },
@@ -779,7 +778,7 @@ pub async fn replace_markers_2023(
         .await
         .as_str(),
         default_css = default_css,
-        html_body = format!("{}{}", ssr_body, font_style).as_str(),
+        html_body = format!("{ssr_body}{font_style}").as_str(),
     )
 }
 
@@ -846,15 +845,12 @@ pub async fn update(
             file_root,
             root.file_name()
                 .ok_or_else(|| fastn_core::Error::UsageError {
-                    message: format!("Invalid File Path: Can't find file name `{:?}`", root),
+                    message: format!("Invalid File Path: Can't find file name `{root:?}`"),
                 })?,
         )
     } else {
         return Err(fastn_core::Error::UsageError {
-            message: format!(
-                "Invalid File Path: file path doesn't have parent: {:?}",
-                root
-            ),
+            message: format!("Invalid File Path: file path doesn't have parent: {root:?}"),
         });
     };
 
@@ -914,7 +910,7 @@ pub async fn remove_except(
 pub fn query(uri: &str) -> fastn_core::Result<Vec<(String, String)>> {
     use itertools::Itertools;
     Ok(
-        url::Url::parse(format!("https://fifthtry.com/{}", uri).as_str())?
+        url::Url::parse(format!("https://fifthtry.com/{uri}").as_str())?
             .query_pairs()
             .into_owned()
             .collect_vec(),
@@ -1091,8 +1087,7 @@ async fn get_interpolated_value(
             }
             _ => {
                 return Err(fastn_core::error::Error::generic(format!(
-                    "unknown variable '{}'.",
-                    input,
+                    "unknown variable '{input}'.",
                 )));
             }
         },
@@ -1119,8 +1114,7 @@ async fn get_env_value_or_default(
                 Ok(default_value)
             } else {
                 Err(fastn_core::error::Error::generic(format!(
-                    "could not find environment variable '{}': {e}",
-                    env_key
+                    "could not find environment variable '{env_key}': {e}"
                 )))
             }
         }

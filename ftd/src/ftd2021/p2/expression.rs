@@ -56,7 +56,7 @@ impl Boolean {
                     ftd::PropertyValue::Variable { name, .. } => doc.get_value(0, name)?,
                     _ => {
                         return ftd::ftd2021::p2::utils::e2(
-                            format!("{:?} must be value or argument", right),
+                            format!("{right:?} must be value or argument"),
                             doc.name,
                             line_number,
                         );
@@ -87,7 +87,7 @@ impl Boolean {
             }
             _ => {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("{:?} must not happen", self),
+                    format!("{self:?} must not happen"),
                     doc.name,
                     line_number,
                 );
@@ -97,8 +97,7 @@ impl Boolean {
             None => {
                 return ftd::ftd2021::p2::utils::e2(
                     format!(
-                        "expected value of type String, Integer, Decimal or Boolean, found: {:?}",
-                        value
+                        "expected value of type String, Integer, Decimal or Boolean, found: {value:?}"
                     ),
                     doc.name,
                     line_number,
@@ -116,7 +115,7 @@ impl Boolean {
                 ftd::PropertyValue::Variable { name, .. }
                 | ftd::PropertyValue::Reference { name, .. } => Ok(name.to_string()),
                 _ => ftd::ftd2021::p2::utils::e2(
-                    format!("{:?} must be variable or local variable", value),
+                    format!("{value:?} must be variable or local variable"),
                     doc.name,
                     line_number,
                 ),
@@ -152,7 +151,7 @@ impl Boolean {
             ),
             _ => {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("'{}' is not valid condition", rest),
+                    format!("'{rest}' is not valid condition"),
                     doc_id,
                     line_number,
                 );
@@ -189,7 +188,7 @@ impl Boolean {
                     )?;
                     if !value.kind().is_optional() {
                         return ftd::ftd2021::p2::utils::e2(
-                            format!("'{}' is not to an optional", left),
+                            format!("'{left}' is not to an optional"),
                             doc.name,
                             line_number,
                         );
@@ -226,7 +225,7 @@ impl Boolean {
                 )?;
                 if !value.kind().is_list() {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("'{}' is not to a list", left),
+                        format!("'{left}' is not to a list"),
                         doc.name,
                         line_number,
                     );
@@ -278,7 +277,7 @@ impl Boolean {
             }
             _ => {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("'{}' is not valid condition", expr),
+                    format!("'{expr}' is not valid condition"),
                     doc.name,
                     line_number,
                 );
@@ -414,7 +413,7 @@ impl Boolean {
                 .is_equal(&right.resolve(line_number, doc)?),
             _ => {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("unknown Boolean found: {:?}", self),
+                    format!("unknown Boolean found: {self:?}"),
                     doc.name,
                     line_number,
                 );
@@ -444,7 +443,7 @@ impl Boolean {
             Self::IsNotNull { .. } | Self::IsNull { .. } => false,
             _ => {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("unimplemented for type: {:?}", self),
+                    format!("unimplemented for type: {self:?}"),
                     doc_id,
                     line_number,
                 );

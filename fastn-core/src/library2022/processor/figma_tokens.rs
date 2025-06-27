@@ -268,7 +268,7 @@ fn extract_light_dark_colors(
         ftd_ast::VariableValue::Record { headers, .. } => headers,
         _ => {
             return Err(ftd::interpreter::Error::InvalidKind {
-                message: format!("Expected record of color-scheme found: {:?}", value),
+                message: format!("Expected record of color-scheme found: {value:?}"),
                 doc_id: doc.name.to_string(),
                 line_number,
             });
@@ -286,7 +286,7 @@ fn extract_light_dark_colors(
                 return Err(ftd::interpreter::Error::InvalidKind {
                     doc_id: doc.name.to_string(),
                     line_number,
-                    message: format!("Expected string kind for name found: {:?}", variable_name),
+                    message: format!("Expected string kind for name found: {variable_name:?}"),
                 });
             }
         };
@@ -296,7 +296,7 @@ fn extract_light_dark_colors(
         variable
     } else {
         return Err(ftd::interpreter::Error::InvalidKind {
-            message: format!("`variable` named header not found: {:?}", value),
+            message: format!("`variable` named header not found: {value:?}"),
             doc_id: doc.name.to_string(),
             line_number,
         });
@@ -306,10 +306,7 @@ fn extract_light_dark_colors(
         ftd_ast::VariableValue::String { value: hval, .. } => hval,
         t => {
             return Err(ftd::interpreter::Error::InvalidKind {
-                message: format!(
-                    "Expected `variable` header as key value pair: found: {:?}",
-                    t
-                ),
+                message: format!("Expected `variable` header as key value pair: found: {t:?}"),
                 doc_id: doc.name.to_string(),
                 line_number,
             });
@@ -326,7 +323,7 @@ fn extract_light_dark_colors(
         Some(ftd::interpreter::Thing::Variable(v)) => v,
         t => {
             return Err(ftd::interpreter::Error::InvalidKind {
-                message: format!("Expected Variable reference, found: {:?}", t),
+                message: format!("Expected Variable reference, found: {t:?}"),
                 doc_id: doc.name.to_string(),
                 line_number,
             });
@@ -341,8 +338,7 @@ fn extract_light_dark_colors(
         t => {
             return Err(ftd::interpreter::Error::InvalidKind {
                 message: format!(
-                    "Expected variable of type record `ftd.color-scheme`: found {:?}",
-                    t
+                    "Expected variable of type record `ftd.color-scheme`: found {t:?}"
                 ),
                 doc_id: doc.name.to_string(),
                 line_number,

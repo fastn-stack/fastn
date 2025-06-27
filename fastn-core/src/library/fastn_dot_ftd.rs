@@ -119,11 +119,11 @@ fn capital_fastn(lib: &fastn_core::Library) -> String {
     );
 
     if let Some(ref zip) = lib.config.config.package.zip {
-        s.push_str(format!("zip: {}", zip).as_str());
+        s.push_str(format!("zip: {zip}").as_str());
     }
 
     if let Some(ref favicon) = lib.config.config.package.favicon {
-        s.push_str(format!("\nfavicon: {}", favicon).as_str());
+        s.push_str(format!("\nfavicon: {favicon}").as_str());
     }
 
     s

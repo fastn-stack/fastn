@@ -145,7 +145,7 @@ impl InterpreterState {
             self.parsed_libs
                 .get(doc_name)
                 .ok_or(ftd::interpreter::Error::ParseError {
-                    message: format!("Cannot find this document: `{}`", doc_name),
+                    message: format!("Cannot find this document: `{doc_name}`"),
                     doc_id: doc_name.to_string(),
                     line_number,
                 })?;
@@ -539,7 +539,7 @@ impl InterpreterState {
                                     .to_owned()
                                     .resolve(&doc, web_component.line_number)?
                                     .string(doc.name, web_component.line_number)?;
-                                self.js.insert(format!("{}:type=\"module\"", js));
+                                self.js.insert(format!("{js}:type=\"module\""));
                                 ftd::interpreter::utils::insert_export_thing(
                                     exports.as_slice(),
                                     web_component.name.as_str(),
@@ -683,7 +683,7 @@ impl InterpreterState {
                     );
                 self.to_process.contains.remove(&(
                     document.name.to_string(),
-                    format!("{}#{}", doc_name, thing_name),
+                    format!("{doc_name}#{thing_name}"),
                 ));
             }
             if asts.is_empty() {
@@ -777,8 +777,8 @@ impl InterpreterState {
                         &current_document.doc_aliases,
                     );
                     !v.is_component_invocation()
-                        && (name.eq(&format!("{}#{}", doc_name, thing_name))
-                            || name.starts_with(format!("{}#{}.", doc_name, thing_name).as_str()))
+                        && (name.eq(&format!("{doc_name}#{thing_name}"))
+                            || name.starts_with(format!("{doc_name}#{thing_name}.").as_str()))
                 })
                 .map(|v| ftd::interpreter::ToProcessItem {
                     number_of_scan: 0,
@@ -790,14 +790,14 @@ impl InterpreterState {
                 && !self
                     .to_process
                     .contains
-                    .contains(&(self.id.to_string(), format!("{}#{}", doc_name, thing_name)))
+                    .contains(&(self.id.to_string(), format!("{doc_name}#{thing_name}")))
             {
                 self.to_process
                     .stack
                     .push((self.id.to_string(), current_doc_contains_thing));
                 self.to_process
                     .contains
-                    .insert((self.id.to_string(), format!("{}#{}", doc_name, thing_name)));
+                    .insert((self.id.to_string(), format!("{doc_name}#{thing_name}")));
             }
         }
 
@@ -807,7 +807,7 @@ impl InterpreterState {
             .filter(|v| {
                 !v.is_component_invocation()
                     && (v.name().eq(&thing_name)
-                        || v.name().starts_with(format!("{}.", thing_name).as_str()))
+                        || v.name().starts_with(format!("{thing_name}.").as_str()))
             })
             .map(|v| ftd::interpreter::ToProcessItem {
                 number_of_scan: 0,
@@ -819,7 +819,7 @@ impl InterpreterState {
         if !ast_for_thing.is_empty() {
             self.to_process
                 .contains
-                .insert((doc_name.to_string(), format!("{}#{}", doc_name, thing_name)));
+                .insert((doc_name.to_string(), format!("{doc_name}#{thing_name}")));
             self.to_process
                 .stack
                 .push((doc_name.to_string(), ast_for_thing));
@@ -830,7 +830,7 @@ impl InterpreterState {
                     ftd::interpreter::InterpreterWithoutState::StuckOnForeignVariable {
                         module: doc_name,
                         variable: remaining
-                            .map(|v| format!("{}.{}", thing_name, v))
+                            .map(|v| format!("{thing_name}.{v}"))
                             .unwrap_or(thing_name),
                         caller_module: current_module.to_string(),
                     },
@@ -861,7 +861,7 @@ impl InterpreterState {
                         thing_name,
                         remaining
                             .as_ref()
-                            .map(|v| format!(".{}", v))
+                            .map(|v| format!(".{v}"))
                             .unwrap_or_default()
                     )
                     .as_str(),
@@ -892,7 +892,7 @@ impl InterpreterState {
                         thing_name,
                         remaining
                             .as_ref()
-                            .map(|v| format!(".{}", v))
+                            .map(|v| format!(".{v}"))
                             .unwrap_or_default()
                     )
                     .as_str(),
@@ -919,7 +919,7 @@ impl InterpreterState {
                         thing_name,
                         remaining
                             .as_ref()
-                            .map(|v| format!(".{}", v))
+                            .map(|v| format!(".{v}"))
                             .unwrap_or_default()
                     )
                     .as_str(),
@@ -929,7 +929,7 @@ impl InterpreterState {
                 );
             } else if !found_foreign_variable {
                 return ftd::interpreter::utils::e2(
-                    format!("`{}` not found", name),
+                    format!("`{name}` not found"),
                     name,
                     line_number,
                 );
@@ -938,7 +938,7 @@ impl InterpreterState {
         self.pending_imports.stack.pop();
         self.pending_imports
             .contains
-            .remove(&(doc_name.to_string(), format!("{}#{}", doc_name, thing_name)));
+            .remove(&(doc_name.to_string(), format!("{doc_name}#{thing_name}")));
 
         Ok(ftd::interpreter::StateWithThing::new_continue())
     }
@@ -1363,7 +1363,7 @@ impl Document {
 
         #[inline]
         fn unescape(s: &str) -> serde_json::Result<String> {
-            serde_json::from_str(&format!("\"{}\"", s))
+            serde_json::from_str(&format!("\"{s}\""))
         }
 
         Ok(None)
@@ -1519,7 +1519,7 @@ impl Document {
                 let value = property_value.clone().resolve(&doc, v.line_number)?;
                 self.value_to_json(&value)
             }
-            t => panic!("{:?} is not a variable", t),
+            t => panic!("{t:?} is not a variable"),
         }
     }
 
@@ -1567,7 +1567,7 @@ impl Document {
             },
             _ => {
                 return ftd::interpreter::utils::e2(
-                    format!("unhandled value found(value_to_json): {:?}", v),
+                    format!("unhandled value found(value_to_json): {v:?}"),
                     self.name.as_str(),
                     0,
                 );

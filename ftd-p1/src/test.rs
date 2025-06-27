@@ -3,7 +3,7 @@ use {indoc::indoc, pretty_assertions::assert_eq}; // macro
 #[track_caller]
 fn p(s: &str, t: &Vec<ftd_p1::Section>) {
     let data = super::parse(s, "foo")
-        .unwrap_or_else(|e| panic!("{:?}", e))
+        .unwrap_or_else(|e| panic!("{e:?}"))
         .iter()
         .map(|v| v.without_line_number())
         .collect::<Vec<ftd_p1::Section>>();
@@ -14,7 +14,7 @@ fn p(s: &str, t: &Vec<ftd_p1::Section>) {
 #[track_caller]
 fn p1(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
     let data = super::parse(s, "foo")
-        .unwrap_or_else(|e| panic!("{:?}", e))
+        .unwrap_or_else(|e| panic!("{e:?}"))
         .iter()
         .map(|v| v.without_line_number())
         .collect::<Vec<ftd_p1::Section>>();
@@ -23,15 +23,15 @@ fn p1(s: &str, t: &str, fix: bool, file_location: &std::path::PathBuf) {
         std::fs::write(file_location, expected_json).unwrap();
         return;
     }
-    let t: Vec<ftd_p1::Section> = serde_json::from_str(t)
-        .unwrap_or_else(|e| panic!("{:?} Expected JSON: {}", e, expected_json));
+    let t: Vec<ftd_p1::Section> =
+        serde_json::from_str(t).unwrap_or_else(|e| panic!("{e:?} Expected JSON: {expected_json}"));
     assert_eq!(&t, &data, "Expected JSON: {}", expected_json)
 }
 
 #[track_caller]
 fn f(s: &str, m: &str) {
     match super::parse(s, "foo") {
-        Ok(r) => panic!("expected failure, found: {:?}", r),
+        Ok(r) => panic!("expected failure, found: {r:?}"),
         Err(e) => {
             let expected = m.trim();
             let f2 = e.to_string();
@@ -45,7 +45,7 @@ fn f(s: &str, m: &str) {
                         .to_string()
                         .replace("\\ No newline at end of file", "")
                 );
-                println!("expected:\n{}\nfound:\n{}\n", expected, f2);
+                println!("expected:\n{expected}\nfound:\n{f2}\n");
                 panic!("test failed")
             }
         }

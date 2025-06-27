@@ -72,17 +72,13 @@ pub fn get_name<'b>(prefix: &str, s: &'b str, doc_id: &str) -> ftd::ftd2021::p1:
     match s.split_once(' ') {
         Some((p1, p2)) => {
             if p1 != prefix {
-                return ftd::ftd2021::p2::utils::e2(
-                    format!("must start with {}", prefix),
-                    doc_id,
-                    0,
-                );
+                return ftd::ftd2021::p2::utils::e2(format!("must start with {prefix}"), doc_id, 0);
                 // TODO:
             }
             Ok(p2)
         }
         None => ftd::ftd2021::p2::utils::e2(
-            format!("{} does not contain space (prefix={})", s, prefix),
+            format!("{s} does not contain space (prefix={prefix})"),
             doc_id,
             0, // TODO
         ),
@@ -107,7 +103,7 @@ pub fn boolean_and_ref(
                 && !matches!(kind, ftd::ftd2021::p2::Kind::Element)
             {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("expected boolean, found: {:?}", kind),
+                    format!("expected boolean, found: {kind:?}"),
                     doc.name,
                     line_number,
                 );
@@ -118,7 +114,7 @@ pub fn boolean_and_ref(
                         Some(reference) => reference,
                         None => {
                             return ftd::ftd2021::p2::utils::e2(
-                                format!("expected boolean, found: {:?}", kind),
+                                format!("expected boolean, found: {kind:?}"),
                                 doc.name,
                                 line_number,
                             );
@@ -145,7 +141,7 @@ pub fn boolean_and_ref(
                     Ok((value.to_owned(), complete_reference(reference)))
                 }
                 _ => ftd::ftd2021::p2::utils::e2(
-                    format!("expected boolean, found: {:?}", kind),
+                    format!("expected boolean, found: {kind:?}"),
                     doc.name,
                     line_number,
                 ),
@@ -157,7 +153,7 @@ pub fn boolean_and_ref(
                 && !matches!(kind, ftd::ftd2021::p2::Kind::Element)
             {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("expected boolean, found: {:?}", kind),
+                    format!("expected boolean, found: {kind:?}"),
                     doc.name,
                     line_number,
                 );
@@ -167,7 +163,7 @@ pub fn boolean_and_ref(
                 Some(reference) => reference,
                 None => {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("expected integer, found 7: {:?}", kind),
+                        format!("expected integer, found 7: {kind:?}"),
                         doc.name,
                         line_number,
                     );
@@ -190,17 +186,17 @@ pub fn boolean_and_ref(
                 }
             }
             ftd::ftd2021::p2::utils::e2(
-                format!("expected boolean, found: {:?}", kind),
+                format!("expected boolean, found: {kind:?}"),
                 doc.name,
                 line_number,
             )
         }
         Some(v) => ftd::ftd2021::p2::utils::e2(
-            format!("expected boolean, found: {:?}", v),
+            format!("expected boolean, found: {v:?}"),
             doc.name,
             line_number,
         ),
-        None => ftd::ftd2021::p2::utils::e2(format!("'{}' not found", name), doc.name, line_number),
+        None => ftd::ftd2021::p2::utils::e2(format!("'{name}' not found"), doc.name, line_number),
     }
 }
 
@@ -222,7 +218,7 @@ pub fn integer_and_ref(
                 && !matches!(kind, ftd::ftd2021::p2::Kind::Element)
             {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("expected integer, found 8: {:?}", kind),
+                    format!("expected integer, found 8: {kind:?}"),
                     doc.name,
                     line_number,
                 );
@@ -233,7 +229,7 @@ pub fn integer_and_ref(
                         Some(reference) => reference,
                         None => {
                             return ftd::ftd2021::p2::utils::e2(
-                                format!("expected integer, found 9: {:?}", kind),
+                                format!("expected integer, found 9: {kind:?}"),
                                 doc.name,
                                 line_number,
                             );
@@ -260,7 +256,7 @@ pub fn integer_and_ref(
                     Ok((value.to_owned(), complete_reference(reference)))
                 }
                 _ => ftd::ftd2021::p2::utils::e2(
-                    format!("expected integer, found 10: {:?}", kind),
+                    format!("expected integer, found 10: {kind:?}"),
                     doc.name,
                     line_number,
                 ),
@@ -272,7 +268,7 @@ pub fn integer_and_ref(
                 && !matches!(kind, ftd::ftd2021::p2::Kind::Element)
             {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("expected integer, found 11: {:?}", kind),
+                    format!("expected integer, found 11: {kind:?}"),
                     doc.name,
                     line_number,
                 );
@@ -282,7 +278,7 @@ pub fn integer_and_ref(
                 Some(reference) => reference,
                 None => {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("expected integer, found 1: {:?}", kind),
+                        format!("expected integer, found 1: {kind:?}"),
                         doc.name,
                         line_number,
                     );
@@ -305,17 +301,17 @@ pub fn integer_and_ref(
                 }
             }
             ftd::ftd2021::p2::utils::e2(
-                format!("expected integer, found 2: {:?}", kind),
+                format!("expected integer, found 2: {kind:?}"),
                 doc.name,
                 line_number,
             )
         }
         Some(v) => ftd::ftd2021::p2::utils::e2(
-            format!("expected integer, found 3: {:?}", v),
+            format!("expected integer, found 3: {v:?}"),
             doc.name,
             line_number,
         ),
-        None => ftd::ftd2021::p2::utils::e2(format!("'{}' not found", name), doc.name, line_number),
+        None => ftd::ftd2021::p2::utils::e2(format!("'{name}' not found"), doc.name, line_number),
     }
 }
 
@@ -337,7 +333,7 @@ pub fn decimal_and_ref(
                 && !matches!(kind, ftd::ftd2021::p2::Kind::Element)
             {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("expected decimal, found: {:?}", kind),
+                    format!("expected decimal, found: {kind:?}"),
                     doc.name,
                     line_number,
                 );
@@ -348,7 +344,7 @@ pub fn decimal_and_ref(
                         Some(reference) => reference,
                         None => {
                             return ftd::ftd2021::p2::utils::e2(
-                                format!("expected decimal, found: {:?}", kind),
+                                format!("expected decimal, found: {kind:?}"),
                                 doc.name,
                                 line_number,
                             );
@@ -375,7 +371,7 @@ pub fn decimal_and_ref(
                     Ok((value.to_owned(), complete_reference(reference)))
                 }
                 _ => ftd::ftd2021::p2::utils::e2(
-                    format!("expected decimal, found: {:?}", kind),
+                    format!("expected decimal, found: {kind:?}"),
                     doc.name,
                     line_number,
                 ),
@@ -387,7 +383,7 @@ pub fn decimal_and_ref(
                 && !matches!(kind, ftd::ftd2021::p2::Kind::Element)
             {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("expected integer, found 4: {:?}", kind),
+                    format!("expected integer, found 4: {kind:?}"),
                     doc.name,
                     line_number,
                 );
@@ -397,7 +393,7 @@ pub fn decimal_and_ref(
                 Some(reference) => reference,
                 None => {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("expected integer, found 5: {:?}", kind),
+                        format!("expected integer, found 5: {kind:?}"),
                         doc.name,
                         line_number,
                     );
@@ -420,17 +416,17 @@ pub fn decimal_and_ref(
                 }
             }
             ftd::ftd2021::p2::utils::e2(
-                format!("expected decimal, found: {:?}", kind),
+                format!("expected decimal, found: {kind:?}"),
                 doc.name,
                 line_number,
             )
         }
         Some(v) => ftd::ftd2021::p2::utils::e2(
-            format!("expected decimal, found: {:?}", v),
+            format!("expected decimal, found: {v:?}"),
             doc.name,
             line_number,
         ),
-        None => ftd::ftd2021::p2::utils::e2(format!("'{}' not found", name), doc.name, line_number),
+        None => ftd::ftd2021::p2::utils::e2(format!("'{name}' not found"), doc.name, line_number),
     }
 }
 
@@ -456,7 +452,7 @@ pub fn string_and_source_and_ref(
                 }
                 _ => {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("expected string, found 1: {:?}", kind),
+                        format!("expected string, found 1: {kind:?}"),
                         doc.name,
                         line_number,
                     );
@@ -469,7 +465,7 @@ pub fn string_and_source_and_ref(
                         Some(reference) => reference,
                         None => {
                             return ftd::ftd2021::p2::utils::e2(
-                                format!("expected string, found 2: {:?}", kind),
+                                format!("expected string, found 2: {kind:?}"),
                                 doc.name,
                                 line_number,
                             );
@@ -506,7 +502,7 @@ pub fn string_and_source_and_ref(
                     complete_reference(reference),
                 )),
                 _ => ftd::ftd2021::p2::utils::e2(
-                    format!("expected string, found 3: {:?}", kind),
+                    format!("expected string, found 3: {kind:?}"),
                     doc.name,
                     line_number,
                 ),
@@ -522,7 +518,7 @@ pub fn string_and_source_and_ref(
                 }
                 _ => {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("expected string, found 4: {:?}", kind),
+                        format!("expected string, found 4: {kind:?}"),
                         doc.name,
                         line_number,
                     );
@@ -533,7 +529,7 @@ pub fn string_and_source_and_ref(
                 Some(reference) => reference,
                 None => {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("expected string, found 5: {:?}", kind),
+                        format!("expected string, found 5: {kind:?}"),
                         doc.name,
                         line_number,
                     );
@@ -560,17 +556,17 @@ pub fn string_and_source_and_ref(
                 }
             }
             ftd::ftd2021::p2::utils::e2(
-                format!("expected string, found 6: {:?}", kind),
+                format!("expected string, found 6: {kind:?}"),
                 doc.name,
                 line_number,
             )
         }
         Some(v) => ftd::ftd2021::p2::utils::e2(
-            format!("expected string, found 7: {:?}", v),
+            format!("expected string, found 7: {v:?}"),
             doc.name,
             line_number,
         ),
-        None => ftd::ftd2021::p2::utils::e2(format!("'{}' not found", name), doc.name, line_number),
+        None => ftd::ftd2021::p2::utils::e2(format!("'{name}' not found"), doc.name, line_number),
     }
 }
 
@@ -607,7 +603,7 @@ pub fn record_and_ref(
                 && !matches!(kind, ftd::ftd2021::p2::Kind::Element)
             {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("expected record, found: {:?}", kind),
+                    format!("expected record, found: {kind:?}"),
                     doc.name,
                     line_number,
                 );
@@ -619,7 +615,7 @@ pub fn record_and_ref(
                         Some(reference) => reference,
                         None => {
                             return ftd::ftd2021::p2::utils::e2(
-                                format!("expected record, found: {:?}", kind),
+                                format!("expected record, found: {kind:?}"),
                                 doc.name,
                                 line_number,
                             );
@@ -652,7 +648,7 @@ pub fn record_and_ref(
                     Ok((fields.to_owned(), complete_reference(reference)))
                 }
                 _ => ftd::ftd2021::p2::utils::e2(
-                    format!("expected record, found: {:?}", kind),
+                    format!("expected record, found: {kind:?}"),
                     doc.name,
                     line_number,
                 ),
@@ -664,7 +660,7 @@ pub fn record_and_ref(
                 && !matches!(kind, ftd::ftd2021::p2::Kind::Element)
             {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("expected record, found: {:?}", kind),
+                    format!("expected record, found: {kind:?}"),
                     doc.name,
                     line_number,
                 );
@@ -674,7 +670,7 @@ pub fn record_and_ref(
                 Some(reference) => reference,
                 None => {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("expected record, found: {:?}", kind),
+                        format!("expected record, found: {kind:?}"),
                         doc.name,
                         line_number,
                     );
@@ -700,17 +696,17 @@ pub fn record_and_ref(
                 }
             }
             ftd::ftd2021::p2::utils::e2(
-                format!("expected record, found: {:?}", kind),
+                format!("expected record, found: {kind:?}"),
                 doc.name,
                 line_number,
             )
         }
         Some(v) => ftd::ftd2021::p2::utils::e2(
-            format!("expected record, found: {:?}", v),
+            format!("expected record, found: {v:?}"),
             doc.name,
             line_number,
         ),
-        None => ftd::ftd2021::p2::utils::e2(format!("'{}' not found", name), doc.name, line_number),
+        None => ftd::ftd2021::p2::utils::e2(format!("'{name}' not found"), doc.name, line_number),
     }
 }
 
@@ -746,13 +742,13 @@ pub fn record_optional_with_ref(
             }
             None => Ok((None, None)),
             v => ftd::ftd2021::p2::utils::e2(
-                format!("expected record, for: `{}` found: {:?}", name, v),
+                format!("expected record, for: `{name}` found: {v:?}"),
                 doc.name,
                 line_number,
             ),
         },
         Some(v) => ftd::ftd2021::p2::utils::e2(
-            format!("expected record, for: `{}` found: {:?}", name, v),
+            format!("expected record, for: `{name}` found: {v:?}"),
             doc.name,
             line_number,
         ),
@@ -779,13 +775,13 @@ pub fn record_optional(
             Some(ftd::Value::Record { fields, .. }) => Ok(Some(fields.to_owned())),
             None => Ok(None),
             v => ftd::ftd2021::p2::utils::e2(
-                format!("expected record, for: `{}` found: {:?}", name, v),
+                format!("expected record, for: `{name}` found: {v:?}"),
                 doc_id,
                 line_number,
             ),
         },
         Some(v) => ftd::ftd2021::p2::utils::e2(
-            format!("expected record, for: `{}` found: {:?}", name, v),
+            format!("expected record, for: `{name}` found: {v:?}"),
             doc_id,
             line_number,
         ),
@@ -825,13 +821,13 @@ pub fn string_optional_with_ref(
             }
             None => Ok((None, (*reference).to_owned())),
             v => ftd::ftd2021::p2::utils::e2(
-                format!("expected string, for: `{}` found: {:?}", name, v),
+                format!("expected string, for: `{name}` found: {v:?}"),
                 doc.name,
                 line_number,
             ),
         },
         Some(v) => ftd::ftd2021::p2::utils::e2(
-            format!("expected string, for: `{}` found: {:?}", name, v),
+            format!("expected string, for: `{name}` found: {v:?}"),
             doc.name,
             line_number,
         ),
@@ -858,13 +854,13 @@ pub fn string_optional(
             Some(ftd::Value::String { text: v, .. }) => Ok(Some(v.to_string())),
             None => Ok(None),
             v => ftd::ftd2021::p2::utils::e2(
-                format!("expected string, for: `{}` found: {:?}", name, v),
+                format!("expected string, for: `{name}` found: {v:?}"),
                 doc_id,
                 line_number,
             ),
         },
         Some(v) => ftd::ftd2021::p2::utils::e2(
-            format!("expected string, for: `{}` found: {:?}", name, v),
+            format!("expected string, for: `{name}` found: {v:?}"),
             doc_id,
             line_number,
         ),
@@ -917,7 +913,7 @@ pub fn string_list_optional(
                     }
                     None => Ok(None),
                     v => ftd::ftd2021::p2::utils::e2(
-                        format!("expected list of strings, for: `{}` found: {:?}", name, v),
+                        format!("expected list of strings, for: `{name}` found: {v:?}"),
                         doc.name,
                         line_number,
                     ),
@@ -926,7 +922,7 @@ pub fn string_list_optional(
             Ok(None)
         }
         Some(v) => ftd::ftd2021::p2::utils::e2(
-            format!("expected list of strings, for: `{}` found: {:?}", name, v),
+            format!("expected list of strings, for: `{name}` found: {v:?}"),
             doc.name,
             line_number,
         ),
@@ -948,13 +944,13 @@ pub fn string(
         }) => match data.as_ref() {
             Some(ftd::Value::String { text: v, .. }) => Ok(v.to_string()),
             v => ftd::ftd2021::p2::utils::e2(
-                format!("expected string, for: `{}` found: {:?}", name, v),
+                format!("expected string, for: `{name}` found: {v:?}"),
                 doc_id,
                 line_number,
             ),
         },
         v => ftd::ftd2021::p2::utils::e2(
-            format!("expected string, for: `{}` found: {:?}", name, v),
+            format!("expected string, for: `{name}` found: {v:?}"),
             doc_id,
             line_number,
         ),
@@ -974,11 +970,9 @@ pub fn string_with_default(
             kind: ftd::ftd2021::p2::Kind::String { .. },
         }) => Ok(def.to_string()),
         Some(ftd::Value::None { .. }) => Ok(def.to_string()),
-        Some(v) => ftd::ftd2021::p2::utils::e2(
-            format!("expected bool, found: {:?}", v),
-            doc_id,
-            line_number,
-        ),
+        Some(v) => {
+            ftd::ftd2021::p2::utils::e2(format!("expected bool, found: {v:?}"), doc_id, line_number)
+        }
         None => Ok(def.to_string()),
     }
 }
@@ -992,11 +986,11 @@ pub fn int(
     match properties.get(name) {
         Some(ftd::Value::Integer { value: v, .. }) => Ok(*v),
         Some(v) => ftd::ftd2021::p2::utils::e2(
-            format!("[{}] expected int, found1: {:?}", name, v),
+            format!("[{name}] expected int, found1: {v:?}"),
             doc_id,
             line_number,
         ),
-        None => ftd::ftd2021::p2::utils::e2(format!("'{}' not found", name), doc_id, line_number),
+        None => ftd::ftd2021::p2::utils::e2(format!("'{name}' not found"), doc_id, line_number),
     }
 }
 
@@ -1019,13 +1013,13 @@ pub fn int_optional(
             Some(ftd::Value::Integer { value }) => Ok(Some(*value)),
             None => Ok(None),
             v => ftd::ftd2021::p2::utils::e2(
-                format!("expected integer, for: `{}` found: {:?}", name, v),
+                format!("expected integer, for: `{name}` found: {v:?}"),
                 doc_id,
                 line_number,
             ),
         },
         Some(v) => ftd::ftd2021::p2::utils::e2(
-            format!("expected integer, found 6: {:?}", v),
+            format!("expected integer, found 6: {v:?}"),
             doc_id,
             line_number,
         ),
@@ -1046,11 +1040,9 @@ pub fn int_with_default(
             kind: ftd::ftd2021::p2::Kind::Integer { .. },
         }) => Ok(def),
         Some(ftd::Value::None { .. }) => Ok(def),
-        Some(v) => ftd::ftd2021::p2::utils::e2(
-            format!("expected int, found2: {:?}", v),
-            doc_id,
-            line_number,
-        ),
+        Some(v) => {
+            ftd::ftd2021::p2::utils::e2(format!("expected int, found2: {v:?}"), doc_id, line_number)
+        }
         None => Ok(def),
     }
 }
@@ -1079,11 +1071,9 @@ pub fn bool_with_default(
             kind: ftd::ftd2021::p2::Kind::Boolean { .. },
         }) => Ok(def),
         Some(ftd::Value::None { .. }) => Ok(def),
-        Some(v) => ftd::ftd2021::p2::utils::e2(
-            format!("expected bool, found: {:?}", v),
-            doc_id,
-            line_number,
-        ),
+        Some(v) => {
+            ftd::ftd2021::p2::utils::e2(format!("expected bool, found: {v:?}"), doc_id, line_number)
+        }
         None => Ok(def),
     }
 }
@@ -1097,11 +1087,11 @@ pub fn bool_(
     match properties.get(name) {
         Some(ftd::Value::Boolean { value: v, .. }) => Ok(*v),
         Some(v) => ftd::ftd2021::p2::utils::e2(
-            format!("[{}] expected bool, found: {:?}", name, v),
+            format!("[{name}] expected bool, found: {v:?}"),
             doc_id,
             line_number,
         ),
-        None => ftd::ftd2021::p2::utils::e2(format!("'{}' not found", name), doc_id, line_number),
+        None => ftd::ftd2021::p2::utils::e2(format!("'{name}' not found"), doc_id, line_number),
     }
 }
 
@@ -1123,16 +1113,14 @@ pub fn bool_optional(
             Some(ftd::Value::Boolean { value: v }) => Ok(Some(*v)),
             None => Ok(None),
             v => ftd::ftd2021::p2::utils::e2(
-                format!("expected bool, for: `{}` found: {:?}", name, v),
+                format!("expected bool, for: `{name}` found: {v:?}"),
                 doc_id,
                 line_number,
             ),
         },
-        Some(v) => ftd::ftd2021::p2::utils::e2(
-            format!("expected bool, found: {:?}", v),
-            doc_id,
-            line_number,
-        ),
+        Some(v) => {
+            ftd::ftd2021::p2::utils::e2(format!("expected bool, found: {v:?}"), doc_id, line_number)
+        }
         None => Ok(None),
     }
 }
@@ -1146,11 +1134,11 @@ pub fn decimal(
     match properties.get(name) {
         Some(ftd::Value::Decimal { value: v, .. }) => Ok(*v),
         Some(v) => ftd::ftd2021::p2::utils::e2(
-            format!("[{}] expected Decimal, found: {:?}", name, v),
+            format!("[{name}] expected Decimal, found: {v:?}"),
             doc_id,
             line_number,
         ),
-        None => ftd::ftd2021::p2::utils::e2(format!("'{}' not found", name), doc_id, line_number),
+        None => ftd::ftd2021::p2::utils::e2(format!("'{name}' not found"), doc_id, line_number),
     }
 }
 
@@ -1173,13 +1161,13 @@ pub fn decimal_optional(
             Some(ftd::Value::Decimal { value: v }) => Ok(Some(*v)),
             None => Ok(None),
             v => ftd::ftd2021::p2::utils::e2(
-                format!("expected decimal, for: `{}` found: {:?}", name, v),
+                format!("expected decimal, for: `{name}` found: {v:?}"),
                 doc_id,
                 line_number,
             ),
         },
         Some(v) => ftd::ftd2021::p2::utils::e2(
-            format!("expected decimal, found: {:?}", v),
+            format!("expected decimal, found: {v:?}"),
             doc_id,
             line_number,
         ),
@@ -1201,12 +1189,12 @@ pub(crate) fn get_doc_name_and_remaining(
     let mut part1 = "".to_string();
     let mut pattern_to_split_at = s.to_string();
     if let Some((p1, p2)) = s.split_once('#') {
-        part1 = format!("{}#", p1);
+        part1 = format!("{p1}#");
         pattern_to_split_at = p2.to_string();
     }
     Ok(if pattern_to_split_at.contains('.') {
         let (p1, p2) = ftd::ftd2021::p2::utils::split(pattern_to_split_at, ".")?;
-        (format!("{}{}", part1, p1), Some(p2))
+        (format!("{part1}{p1}"), Some(p2))
     } else {
         (s.to_string(), None)
     })
@@ -1226,14 +1214,14 @@ pub(crate) fn resolve_local_variable_name(
     Ok(if let Some(ref p2) = part2 {
         ftd::ftd2021::p2::utils::resolve_name(
             line_number,
-            format!("{}@{}.{}", part1, container, p2).as_str(),
+            format!("{part1}@{container}.{p2}").as_str(),
             doc_name,
             aliases,
         )?
     } else {
         ftd::ftd2021::p2::utils::resolve_name(
             line_number,
-            format!("{}@{}", part1, container).as_str(),
+            format!("{part1}@{container}").as_str(),
             doc_name,
             aliases,
         )?
@@ -1252,14 +1240,14 @@ pub fn resolve_name(
     Ok(
         match ftd::ftd2021::p2::utils::split_module(name, doc_name, line_number)? {
             (Some(m), v, None) => match aliases.get(m) {
-                Some(m) => format!("{}#{}", m, v),
-                None => format!("{}#{}.{}", doc_name, m, v),
+                Some(m) => format!("{m}#{v}"),
+                None => format!("{doc_name}#{m}.{v}"),
             },
             (Some(m), v, Some(c)) => match aliases.get(m) {
-                Some(m) => format!("{}#{}.{}", m, v, c),
-                None => format!("{}#{}.{}.{}", doc_name, m, v, c),
+                Some(m) => format!("{m}#{v}.{c}"),
+                None => format!("{doc_name}#{m}.{v}.{c}"),
             },
-            (None, v, None) => format!("{}#{}", doc_name, v),
+            (None, v, None) => format!("{doc_name}#{v}"),
             _ => unimplemented!(),
         },
     )
@@ -1267,11 +1255,7 @@ pub fn resolve_name(
 
 pub fn split(name: String, split_at: &str) -> ftd::ftd2021::p1::Result<(String, String)> {
     if !name.contains(split_at) {
-        return ftd::ftd2021::p2::utils::e2(
-            format!("{} is not found in {}", split_at, name),
-            "",
-            0,
-        );
+        return ftd::ftd2021::p2::utils::e2(format!("{split_at} is not found in {name}"), "", 0);
     }
     let mut part = name.splitn(2, split_at);
     let part_1 = part.next().unwrap().trim();
@@ -1470,7 +1454,7 @@ pub fn reorder(
         {
             if p1_map.contains_key(name) {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("{} is already declared", name),
+                    format!("{name} is already declared"),
                     doc.name,
                     p1.line_number,
                 );
@@ -1575,7 +1559,7 @@ pub fn structure_header_to_properties(
             false,
         ),
         t => ftd::ftd2021::p2::utils::e2(
-            format!("expected component, found: {:?}", t),
+            format!("expected component, found: {t:?}"),
             doc.name,
             line_number,
         ),
@@ -1636,8 +1620,7 @@ pub fn arguments_on_condition(
             _ => {
                 return ftd::ftd2021::p2::utils::e2(
                     format!(
-                        "implemented for string, integer, decimal and boolean, found: {:?}",
-                        kind
+                        "implemented for string, integer, decimal and boolean, found: {kind:?}"
                     ),
                     doc_id,
                     line_number,
@@ -1803,7 +1786,7 @@ pub fn convert_to_document_id(doc_name: &str) -> String {
     }
 
     // Attach /{doc_id}/ before returning
-    format!("/{}/", document_id)
+    format!("/{document_id}/")
 }
 
 #[cfg(test)]

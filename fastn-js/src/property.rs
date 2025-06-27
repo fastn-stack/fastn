@@ -170,7 +170,7 @@ pub(crate) fn conditional_values_to_js(
 
     let default = match default {
         Some(d) if conditions.is_empty() => d,
-        Some(d) => format!("else {{ return {}; }}", d),
+        Some(d) => format!("else {{ return {d}; }}"),
         None => "".to_string(),
     };
 
@@ -221,7 +221,7 @@ impl Value {
                     .replace('\n', "\\n") // escape new line character
                     .replace(r#"\""#, "\"") // unescape an already escaped seq
                     .replace('\"', "\\\""); // escape " (quote)
-                format!("\"{}\"", s)
+                format!("\"{s}\"")
             }
             Value::Integer(i) => i.to_string(),
             Value::Decimal(f) => f.to_string(),

@@ -737,8 +737,7 @@ impl Sitemap {
                                 fastn_core::Config::get_file_name(package_root, id.as_str(),&config.ds, session_id).await.map_err(
                                     |e| fastn_core::Error::UsageError {
                                         message: format!(
-                                            "`{}` not found, fix fastn.sitemap in FASTN.ftd. Error: {:?}",
-                                            id, e
+                                            "`{id}` not found, fix fastn.sitemap in FASTN.ftd. Error: {e:?}"
                                         ),
                                     },
                                 )?,
@@ -1257,7 +1256,7 @@ impl Sitemap {
             if id.ends_with('/') || id.ends_with("index.html") {
                 return Some(id.to_string());
             }
-            Some(format!("{}/", id))
+            Some(format!("{id}/"))
         }
     }
 

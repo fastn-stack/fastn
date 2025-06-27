@@ -181,7 +181,7 @@ fn read_records(
 
 impl TestLibrary {
     pub fn get(&self, name: &str, _doc: &ftd::ftd2021::p2::TDoc) -> Option<String> {
-        std::fs::read_to_string(format!("./tests/{}.ftd", name)).ok()
+        std::fs::read_to_string(format!("./tests/{name}.ftd")).ok()
     }
 
     pub fn process(
@@ -198,7 +198,7 @@ impl TestLibrary {
             "read_package_records_from_cargo_toml" => read_records(section, doc),
             "text-component-processor" => text_component(),
             t => ftd::ftd2021::p2::utils::e2(
-                format!("unknown processor: {}", t),
+                format!("unknown processor: {t}"),
                 doc.name,
                 section.line_number.to_owned(),
             ),
@@ -212,7 +212,7 @@ impl TestLibrary {
     ) -> ftd::ftd2021::p1::Result<String> {
         match self.get(name, doc) {
             Some(v) => Ok(v),
-            None => ftd::ftd2021::p2::utils::e2(format!("library not found: {}", name), "", 0),
+            None => ftd::ftd2021::p2::utils::e2(format!("library not found: {name}"), "", 0),
         }
     }
 }

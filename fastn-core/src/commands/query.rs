@@ -15,7 +15,7 @@ pub async fn query(
     if let Some(path) = path {
         let file = documents.values().find(|v| v.get_id().eq(path)).ok_or(
             fastn_core::Error::UsageError {
-                message: format!("{} not found in the package", path),
+                message: format!("{path} not found in the package"),
             },
         )?;
 

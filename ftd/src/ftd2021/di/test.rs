@@ -3,18 +3,18 @@ use {indoc::indoc, pretty_assertions::assert_eq};
 
 #[track_caller]
 fn p(s: &str, t: &Vec<ftd::ftd2021::di::DI>) {
-    let sections = ftd_p1::parse(s, "foo").unwrap_or_else(|e| panic!("{:?}", e));
+    let sections = ftd_p1::parse(s, "foo").unwrap_or_else(|e| panic!("{e:?}"));
     let ast = ftd::ftd2021::di::DI::from_sections(sections.as_slice(), "foo")
-        .unwrap_or_else(|e| panic!("{:?}", e));
+        .unwrap_or_else(|e| panic!("{e:?}"));
     assert_eq!(t, &ast,)
 }
 
 #[track_caller]
 fn f(s: &str, m: &str) {
-    let sections = ftd_p1::parse(s, "foo").unwrap_or_else(|e| panic!("{:?}", e));
+    let sections = ftd_p1::parse(s, "foo").unwrap_or_else(|e| panic!("{e:?}"));
     let ast = ftd::ftd2021::di::DI::from_sections(sections.as_slice(), "foo");
     match ast {
-        Ok(r) => panic!("expected failure, found: {:?}", r),
+        Ok(r) => panic!("expected failure, found: {r:?}"),
         Err(e) => {
             let expected = m.trim();
             let f2 = e.to_string();
@@ -28,7 +28,7 @@ fn f(s: &str, m: &str) {
                         .to_string()
                         .replace("\\ No newline at end of file", "")
                 );
-                println!("expected:\n{}\nfound:\n{}\n", expected, f2);
+                println!("expected:\n{expected}\nfound:\n{f2}\n");
                 panic!("test failed")
             }
         }

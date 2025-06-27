@@ -308,7 +308,7 @@ mod test {
     #[track_caller]
     fn p(s: &str, t: super::KindData) {
         assert_eq!(
-            super::KindData::from_p1_kind(s, "foo", 0).unwrap_or_else(|e| panic!("{:?}", e)),
+            super::KindData::from_p1_kind(s, "foo", 0).unwrap_or_else(|e| panic!("{e:?}")),
             t
         )
     }
@@ -316,7 +316,7 @@ mod test {
     #[track_caller]
     fn f(s: &str, m: &str) {
         match super::KindData::from_p1_kind(s, "foo", 0) {
-            Ok(r) => panic!("expected failure, found: {:?}", r),
+            Ok(r) => panic!("expected failure, found: {r:?}"),
             Err(e) => {
                 let expected = m.trim();
                 let f2 = e.to_string();
@@ -330,7 +330,7 @@ mod test {
                             .to_string()
                             .replace("\\ No newline at end of file", "")
                     );
-                    println!("expected:\n{}\nfound:\n{}\n", expected, f2);
+                    println!("expected:\n{expected}\nfound:\n{f2}\n");
                     panic!("test failed")
                 }
             }

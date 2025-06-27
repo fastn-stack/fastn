@@ -28,13 +28,13 @@ pub fn trim_brackets(s: &str) -> String {
 }
 
 pub(crate) fn name_with_id(s: &str, id: &str) -> String {
-    format!("{}:{}", s, id)
+    format!("{s}:{id}")
 }
 
 pub(crate) fn function_name_to_js_function(s: &str) -> String {
     let mut s = s.to_string();
     if s.as_bytes()[0].is_ascii_digit() {
-        s = format!("_{}", s);
+        s = format!("_{s}");
     }
     s.replace('#', "__")
         .replace('-', "_")
@@ -53,12 +53,12 @@ pub(crate) fn full_data_id(id: &str, data_id: &str) -> String {
     if data_id.trim().is_empty() {
         id.to_string()
     } else {
-        format!("{}:{}", data_id, id)
+        format!("{data_id}:{id}")
     }
 }
 
 pub(crate) fn node_change_id(id: &str, attr: &str) -> String {
-    format!("{}__{}", id, attr)
+    format!("{id}__{attr}")
 }
 
 pub(crate) fn get_formatted_dep_string_from_property_value(
@@ -90,9 +90,9 @@ pub(crate) fn get_formatted_dep_string_from_property_value(
 
     Ok(Some(match pattern_with_eval {
         Some((p, eval)) => {
-            let mut pattern = format!("`{}`.format(JSON.stringify({}))", p, value_string);
+            let mut pattern = format!("`{p}`.format(JSON.stringify({value_string}))");
             if *eval {
-                pattern = format!("eval({})", pattern)
+                pattern = format!("eval({pattern})")
             }
             pattern
         }
@@ -150,9 +150,9 @@ pub(crate) fn js_expression_from_list(
 
     let default = match default {
         Some(d) if conditions.is_empty() => d,
-        Some(d) => format!("else {{{}}}", d),
+        Some(d) => format!("else {{{d}}}"),
         None if !conditions.is_empty() && key.is_some() && !default_for_null.is_empty() => {
-            format!("else {{ {} }}", default_for_null)
+            format!("else {{ {default_for_null} }}")
         }
         None => "".to_string(),
     };
@@ -387,7 +387,7 @@ pub(crate) fn events_to_string(events: Vec<(String, String, String)>) -> String 
     }) {
         let all_keys = keys
             .iter()
-            .map(|v| format!("global_keys[\"{}\"]", v))
+            .map(|v| format!("global_keys[\"{v}\"]"))
             .join(" && ");
         keydown_seq_event = format!(
             indoc::indoc! {"
@@ -408,7 +408,7 @@ pub(crate) fn events_to_string(events: Vec<(String, String, String)>) -> String 
     }
 
     if !keydown_seq_event.is_empty() {
-        keydown_events = format!("{}\n\n{}}});", keydown_events, keydown_seq_event);
+        keydown_events = format!("{keydown_events}\n\n{keydown_seq_event}}});");
     }
 
     let mut string = "document.addEventListener(\"click\", function(event) {".to_string();
@@ -425,13 +425,10 @@ pub(crate) fn events_to_string(events: Vec<(String, String, String)>) -> String 
             event = event.2,
         );
     }
-    string = format!("{}}});", string);
+    string = format!("{string}}});");
 
     if !keydown_seq_event.is_empty() {
-        format!(
-            "{}\n\n\n{}\n\n\n{}\n\n\n{}",
-            string, global_variables, keydown_events, keyup_events
-        )
+        format!("{string}\n\n\n{global_variables}\n\n\n{keydown_events}\n\n\n{keyup_events}")
     } else {
         string
     }
@@ -457,7 +454,7 @@ fn to_key(key: &str) -> String {
 pub(crate) fn get_new_number(keys: &Vec<String>, name: &str) -> usize {
     let mut number = 0;
     for key in keys {
-        if let Some(str_number) = key.strip_prefix(format!("{}_", name).as_str()) {
+        if let Some(str_number) = key.strip_prefix(format!("{name}_").as_str()) {
             let found_number = str_number.parse::<usize>().unwrap();
             if found_number >= number {
                 number = found_number;
@@ -491,13 +488,13 @@ pub(crate) fn to_properties_string(
                     false,
                 )
             {
-                let value = format!("args[\"{}\"][\"{}\"] = {};", node, key, value_string);
+                let value = format!("args[\"{node}\"][\"{key}\"] = {value_string};");
                 expressions.push((condition, value));
             }
         }
         let value =
             ftd::html::utils::js_expression_from_list(expressions, Some(key.as_str()), "null");
-        properties_string = format!("{}\n\n{}", properties_string, value);
+        properties_string = format!("{properties_string}\n\n{value}");
     }
     if properties_string.is_empty() {
         None
@@ -610,9 +607,9 @@ pub fn get_js_html(external_js: &[String]) -> String {
     let mut result = "".to_string();
     for js in external_js {
         if let Some((js, tags)) = js.split_once(':') {
-            result = format!("{}<script src=\"{}\" {}></script>", result, js, tags);
+            result = format!("{result}<script src=\"{js}\" {tags}></script>");
         } else {
-            result = format!("{}<script src=\"{}\"></script>", result, js);
+            result = format!("{result}<script src=\"{js}\"></script>");
         }
     }
     result
@@ -665,7 +662,7 @@ fn get_rive_html(
             "[{}]",
             rive.state_machine
                 .iter()
-                .map(|v| format!("'{}'", v))
+                .map(|v| format!("'{v}'"))
                 .join(",")
         )
     };
@@ -673,7 +670,7 @@ fn get_rive_html(
     let artboard = rive
         .artboard
         .as_ref()
-        .map_or("null".to_string(), |v| format!("'{}'", v));
+        .map_or("null".to_string(), |v| format!("'{v}'"));
 
     let events = get_rive_event(rive, id, doc)?;
 
@@ -726,10 +723,7 @@ fn get_rive_event(
             let action = {
                 let action = ftd::html::Action::from_function_call(action, id, doc)?.into_list();
                 let serde_action = serde_json::to_string(&action).expect("");
-                format!(
-                    "window.ftd.handle_event(event, '{}', '{}', this)",
-                    id, serde_action
-                )
+                format!("window.ftd.handle_event(event, '{id}', '{serde_action}', this)")
             };
             actions_vec.push(format!(
                 indoc::indoc! {"
@@ -761,7 +755,7 @@ fn get_rive_event(
 pub fn get_css_html(external_css: &[String]) -> String {
     let mut result = "".to_string();
     for css in external_css {
-        result = format!("{}<link rel=\"stylesheet\" href=\"{}\">", result, css);
+        result = format!("{result}<link rel=\"stylesheet\" href=\"{css}\">");
     }
     result
 }
@@ -769,49 +763,36 @@ pub fn get_css_html(external_css: &[String]) -> String {
 pub fn get_meta_data(html_data: &ftd::html::HTMLData) -> String {
     let mut result = vec![];
     if let Some(ref title) = html_data.og_title {
-        result.push(format!(
-            "<meta property=\"og:title\" content=\"{}\">",
-            title
-        ));
+        result.push(format!("<meta property=\"og:title\" content=\"{title}\">"));
     }
     if let Some(ref title) = html_data.twitter_title {
-        result.push(format!(
-            "<meta name=\"twitter:title\" content=\"{}\">",
-            title
-        ));
+        result.push(format!("<meta name=\"twitter:title\" content=\"{title}\">"));
     }
     if let Some(ref description) = html_data.og_description {
         result.push(format!(
-            "<meta property=\"og:description\" content=\"{}\">",
-            description
+            "<meta property=\"og:description\" content=\"{description}\">"
         ));
     }
     if let Some(ref description) = html_data.description {
         result.push(format!(
-            "<meta name=\"description\" content=\"{}\">",
-            description
+            "<meta name=\"description\" content=\"{description}\">"
         ));
     }
     if let Some(ref title) = html_data.twitter_description {
         result.push(format!(
-            "<meta name=\"twitter:description\" content=\"{}\">",
-            title
+            "<meta name=\"twitter:description\" content=\"{title}\">"
         ));
     }
     if let Some(ref image) = html_data.og_image {
-        result.push(format!(
-            "<meta property=\"og:image\" content=\"{}\">",
-            image
-        ));
+        result.push(format!("<meta property=\"og:image\" content=\"{image}\">"));
     }
     if let Some(ref image) = html_data.twitter_image {
         result.push(format!(
-            "<meta property=\"twitter:image\" content=\"{}\">",
-            image
+            "<meta property=\"twitter:image\" content=\"{image}\">"
         ));
     }
     if let Some(ref color) = html_data.theme_color {
-        result.push(format!("<meta name=\"theme-color\" content=\"{}\">", color));
+        result.push(format!("<meta name=\"theme-color\" content=\"{color}\">"));
     }
     result.join("")
 }

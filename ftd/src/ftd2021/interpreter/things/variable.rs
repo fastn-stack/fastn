@@ -52,7 +52,7 @@ impl Variable {
             }),
             ftd2021::interpreter::PropertyValue::Reference { .. } => unimplemented!(),
             t => Err(ftd_p1::Error::ParseError {
-                message: format!("Expected boolean found: {:?}", t),
+                message: format!("Expected boolean found: {t:?}"),
                 doc_id: doc_id.to_string(),
                 line_number: s.line_number,
             }),
@@ -80,12 +80,12 @@ mod test {
     #[track_caller]
     fn p(s: &str, t: ftd2021::interpreter::Variable) {
         let section = ftd_p1::parse(s, "foo")
-            .unwrap_or_else(|e| panic!("{:?}", e))
+            .unwrap_or_else(|e| panic!("{e:?}"))
             .first()
             .unwrap()
             .to_owned();
         assert_eq!(
-            super::Variable::from_p1_section(&section, "foo").unwrap_or_else(|e| panic!("{:?}", e)),
+            super::Variable::from_p1_section(&section, "foo").unwrap_or_else(|e| panic!("{e:?}")),
             t
         )
     }
@@ -93,12 +93,12 @@ mod test {
     #[track_caller]
     fn f(s: &str, m: &str) {
         let section = ftd_p1::parse(s, "foo")
-            .unwrap_or_else(|e| panic!("{:?}", e))
+            .unwrap_or_else(|e| panic!("{e:?}"))
             .first()
             .unwrap()
             .to_owned();
         match super::Variable::from_p1_section(&section, "foo") {
-            Ok(r) => panic!("expected failure, found: {:?}", r),
+            Ok(r) => panic!("expected failure, found: {r:?}"),
             Err(e) => {
                 let expected = m.trim();
                 let f2 = e.to_string();
@@ -112,7 +112,7 @@ mod test {
                             .to_string()
                             .replace("\\ No newline at end of file", "")
                     );
-                    println!("expected:\n{}\nfound:\n{}\n", expected, f2);
+                    println!("expected:\n{expected}\nfound:\n{f2}\n");
                     panic!("test failed")
                 }
             }

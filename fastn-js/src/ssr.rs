@@ -22,7 +22,7 @@ pub fn run_test(js: &str) -> Result<Vec<bool>> {
         let context = quick_js::Context::builder()
             .console(
                 |level: quick_js::console::Level, args: Vec<quick_js::JsValue>| {
-                    eprintln!("{}: {:?}", level, args);
+                    eprintln!("{level}: {args:?}");
                 },
             )
             .build()
@@ -48,7 +48,7 @@ pub fn ssr_str(js: &str) -> Result<Vec<String>> {
         let context = quick_js::Context::builder()
             .console(
                 |level: quick_js::console::Level, args: Vec<quick_js::JsValue>| {
-                    eprintln!("{}: {:?}", level, args);
+                    eprintln!("{level}: {args:?}");
                 },
             )
             .build()
@@ -83,14 +83,14 @@ pub fn ssr_with_js_string(package_name: &str, js: &str) -> Result<(String, Strin
 
 pub fn ssr_raw_string(package_name: &str, js: &str) -> String {
     format!("
-        let __fastn_package_name__ = \"{}\";\n{}
+        let __fastn_package_name__ = \"{package_name}\";\n{js}
         let main_wrapper = function(parent) {{
             let parenti0 = fastn_dom.createKernel(parent, fastn_dom.ElementKind.Column);
             parenti0.setProperty(fastn_dom.PropertyKind.Width, fastn_dom.Resizing.FillContainer, inherited);
             parenti0.setProperty(fastn_dom.PropertyKind.Height, fastn_dom.Resizing.FillContainer, inherited);
             main(parenti0);
         }};
-        fastnVirtual.ssr(main_wrapper);", package_name, js)
+        fastnVirtual.ssr(main_wrapper);")
 }
 
 pub fn ssr_raw_string_without_test(package_name: &str, js: &str) -> String {

@@ -24,7 +24,7 @@ pub async fn process(
 
     if method.as_str().ne("get") && method.as_str().ne("post") {
         return ftd::interpreter::utils::e2(
-            format!("only GET and POST methods are allowed, found: {}", method),
+            format!("only GET and POST methods are allowed, found: {method}"),
             doc.name,
             line_number,
         );
@@ -82,7 +82,7 @@ pub async fn process(
             fastn_core::config::utils::get_clean_url(&package, req_config, url.as_str())
                 .await
                 .map_err(|e| ftd::interpreter::Error::ParseError {
-                    message: format!("invalid url: {:?}", e),
+                    message: format!("invalid url: {e:?}"),
                     doc_id: doc.name.to_string(),
                     line_number,
                 })?;
@@ -233,7 +233,7 @@ pub async fn process(
         )
         .await
         .map_err(|e| ftd::interpreter::Error::DSHttpError {
-            message: format!("{:?}", e),
+            message: format!("{e:?}"),
         })
     } else {
         tracing::info!("Calling GET request with url: {url}");
@@ -246,7 +246,7 @@ pub async fn process(
         )
         .await
         .map_err(|e| ftd::interpreter::Error::DSHttpError {
-            message: format!("{:?}", e),
+            message: format!("{e:?}"),
         })
     };
 
@@ -258,14 +258,14 @@ pub async fn process(
         Ok((Err(e), cookies)) => {
             req_config.processor_set_cookies.extend(cookies);
             return ftd::interpreter::utils::e2(
-                format!("HTTP::get failed: {:?}", e),
+                format!("HTTP::get failed: {e:?}"),
                 doc.name,
                 line_number,
             );
         }
         Err(e) => {
             return ftd::interpreter::utils::e2(
-                format!("HTTP::get failed: {:?}", e),
+                format!("HTTP::get failed: {e:?}"),
                 doc.name,
                 line_number,
             );

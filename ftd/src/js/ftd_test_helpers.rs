@@ -22,7 +22,7 @@ pub fn interpret_helper(
                     foreign_variable.push("var".to_string());
                     foreign_function.push("fn".to_string());
                 }
-                if let Ok(value) = std::fs::read_to_string(format!("./t/js/{}.ftd", module)) {
+                if let Ok(value) = std::fs::read_to_string(format!("./t/js/{module}.ftd")) {
                     source = value;
                 }
                 let document =
@@ -63,7 +63,7 @@ pub fn interpret_helper(
                     s = state.continue_after_variable(module.as_str(), variable.as_str(), value)?;
                 } else {
                     return ftd::interpreter::utils::e2(
-                        format!("Unknown module {}", module),
+                        format!("Unknown module {module}"),
                         module.as_str(),
                         0,
                     );
@@ -119,10 +119,7 @@ fn p(
                 return;
             }
             if t.is_some() {
-                panic!(
-                    "{:?} file not expected. found: {:?}",
-                    file_location, expected_error
-                );
+                panic!("{file_location:?} file not expected. found: {expected_error:?}");
             }
             match e.as_ref() {
                 Some(found_error) => {
@@ -135,7 +132,7 @@ fn p(
                     return;
                 }
                 None => {
-                    panic!("{:?}", expected_error);
+                    panic!("{expected_error:?}");
                 }
             }
         }
@@ -371,6 +368,6 @@ fn filename_with_second_last_extension_replaced_with_json(
                 ""
             }
         )),
-        path.with_file_name(format!("{}.error", stem)),
+        path.with_file_name(format!("{stem}.error")),
     )
 }

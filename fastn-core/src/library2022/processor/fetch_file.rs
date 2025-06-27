@@ -7,7 +7,7 @@ pub async fn fetch_files(
 ) -> ftd::interpreter::Result<fastn_resolved::Value> {
     if !kind.is_string() {
         return ftd::interpreter::utils::e2(
-            format!("Expected kind is `string`, found: `{:?}`", kind),
+            format!("Expected kind is `string`, found: `{kind:?}`"),
             doc.name,
             value.line_number(),
         );
