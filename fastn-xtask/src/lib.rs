@@ -31,7 +31,7 @@ pub mod update_template;
 pub use update_template::update_template;
 
 
-pub fn cli() -> Result<(), String> {
+pub fn main() -> Result<(), String> {
     let task = env::args().nth(1);
     match task.as_deref() {
         Some("build-wasm") => build_wasm::build_wasm().map_err(|e| e.to_string())?,
