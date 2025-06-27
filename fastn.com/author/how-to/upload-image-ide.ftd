@@ -1,0 +1,34 @@
+-- ds.page: Upload an Image using FifthTry online editor (IDE)
+
+
+In this video we will learn how to upload an image using FifthTry IDE
+
+-- ds.youtube:
+v: WV8ZOZ4mbCI
+
+
+-- ds.h2: Steps to upload an image in FifthTry IDE
+
+- Open the FifthTry editor for your project.
+
+- Press Ctrl + K (or Cmd + K on Mac) to open the command window.
+
+- Type the following command
+
+-- ds.code:
+lang: ftd
+
+upload-file assets/your-image-name.png
+
+-- ds.markdown:
+
+- Hit Enter or click Run.
+
+- A file selector will appear—choose the image from your machine to upload.
+
+Your image will be saved in the assets/ folder and can be used in your .ftd files.
+
+
+
+-- end: ds.page
+
