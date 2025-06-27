@@ -73,7 +73,7 @@ impl<'a> TDoc<'a> {
         match self.get_thing(name, line_number)? {
             ftd::interpreter::Thing::Record(r) => Ok(r),
             t => self.err(
-                format!("Expected Record, found: `{:?}`", t).as_str(),
+                format!("Expected Record, found: `{t:?}`").as_str(),
                 name,
                 "get_record",
                 line_number,
@@ -89,7 +89,7 @@ impl<'a> TDoc<'a> {
         match self.get_thing(name, line_number)? {
             ftd::interpreter::Thing::OrType(ot) => Ok(ot),
             t => self.err(
-                format!("Expected OrType, found: `{:?}`", t).as_str(),
+                format!("Expected OrType, found: `{t:?}`").as_str(),
                 name,
                 "get_or_type",
                 line_number,
@@ -113,7 +113,7 @@ impl<'a> TDoc<'a> {
                 Ok(ftd::interpreter::StateWithThing::new_thing(r.clone()))
             }
             ftd::interpreter::StateWithThing::Thing(t) => self.err(
-                format!("Expected Record, found: `{:?}`", t).as_str(),
+                format!("Expected Record, found: `{t:?}`").as_str(),
                 name,
                 "search_record",
                 line_number,
@@ -129,7 +129,7 @@ impl<'a> TDoc<'a> {
         match self.get_thing(name, line_number)? {
             ftd::interpreter::Thing::Variable(r) => Ok(r),
             t => self.err(
-                format!("Expected Variable, found: `{:?}`", t).as_str(),
+                format!("Expected Variable, found: `{t:?}`").as_str(),
                 name,
                 "get_variable",
                 line_number,
@@ -166,7 +166,7 @@ impl<'a> TDoc<'a> {
                 Ok(ftd::interpreter::StateWithThing::new_thing(r))
             }
             ftd::interpreter::StateWithThing::Thing(t) => self.err(
-                format!("Expected Variable, found: `{:?}`", t).as_str(),
+                format!("Expected Variable, found: `{t:?}`").as_str(),
                 name,
                 "search_variable",
                 line_number,
@@ -189,7 +189,7 @@ impl<'a> TDoc<'a> {
             let d =
                 ftd::interpreter::utils::get_doc_name_and_remaining(l, self.name, line_number).0;
             if ftd::interpreter::utils::get_special_variable().contains(&d.as_str()) {
-                return Ok(format!("${}", l));
+                return Ok(format!("${l}"));
             }
             format!("${}", self.resolve_name(l))
         } else {
@@ -238,7 +238,7 @@ impl<'a> TDoc<'a> {
             )
         } else {
             return ftd::interpreter::utils::e2(
-                format!("Cannot find 111 {} in get_thing", name),
+                format!("Cannot find 111 {name} in get_thing"),
                 self.name,
                 line_number,
             );
@@ -271,7 +271,7 @@ impl<'a> TDoc<'a> {
                     let field = fields
                         .get(p1.as_str())
                         .ok_or(ftd::interpreter::Error::ParseError {
-                            message: format!("Can't find field `{}` in record `{}`", p1, rec_name),
+                            message: format!("Can't find field `{p1}` in record `{rec_name}`"),
                             doc_id: doc.name.to_string(),
                             line_number,
                         })?
@@ -293,10 +293,7 @@ impl<'a> TDoc<'a> {
                     let value = data
                         .get(p1)
                         .ok_or(ftd::interpreter::Error::ParseError {
-                            message: format!(
-                                "Can't find index `{}` in list of kind `{:?}`",
-                                p1, kind
-                            ),
+                            message: format!("Can't find index `{p1}` in list of kind `{kind:?}`"),
                             doc_id: doc.name.to_string(),
                             line_number,
                         })?
@@ -314,7 +311,7 @@ impl<'a> TDoc<'a> {
                     Ok(value)
                 }
                 t => ftd::interpreter::utils::e2(
-                    format!("Expected record found `{:?}`", t).as_str(),
+                    format!("Expected record found `{t:?}`").as_str(),
                     doc.name,
                     line_number,
                 ),
@@ -369,10 +366,7 @@ impl<'a> TDoc<'a> {
                 value = var.value.clone();
                 variable = Some(var);
                 remaining = if let Some(remaining) = remaining {
-                    Some(
-                        rem.map(|v| format!("{}.{}", v, remaining))
-                            .unwrap_or(remaining),
-                    )
+                    Some(rem.map(|v| format!("{v}.{remaining}")).unwrap_or(remaining))
                 } else {
                     rem
                 };
@@ -387,8 +381,7 @@ impl<'a> TDoc<'a> {
                 let value = value.value(doc.name, line_number)?.inner().ok_or(
                     ftd::interpreter::Error::ParseError {
                         message: format!(
-                            "Value expected found null, `{:?}` in line number {}",
-                            value, line_number
+                            "Value expected found null, `{value:?}` in line number {line_number}"
                         ),
                         doc_id: doc.name.to_string(),
                         line_number,
@@ -404,8 +397,7 @@ impl<'a> TDoc<'a> {
                             .get(p1.as_str())
                             .ok_or(ftd::interpreter::Error::ParseError {
                                 message: format!(
-                                    "Expected field {} in record `{}` in line number {}",
-                                    p1, rec_name, line_number
+                                    "Expected field {p1} in record `{rec_name}` in line number {line_number}"
                                 ),
                                 doc_id: doc.name.to_string(),
                                 line_number,
@@ -419,11 +411,8 @@ impl<'a> TDoc<'a> {
                     }
                     t => {
                         return ftd::interpreter::utils::e2(
-                            format!(
-                                "Expected record, found `{:?}` in line number {}",
-                                t, line_number
-                            )
-                            .as_str(),
+                            format!("Expected record, found `{t:?}` in line number {line_number}")
+                                .as_str(),
                             doc.name,
                             line_number,
                         );
@@ -459,10 +448,7 @@ impl<'a> TDoc<'a> {
                         fastn_resolved::Value::Record { name, fields } => {
                             let field = fields.get_mut(p1.as_str()).ok_or(
                                 ftd::interpreter::Error::ParseError {
-                                    message: format!(
-                                        "Can't find field `{}` in record `{}`",
-                                        p1, name
-                                    ),
+                                    message: format!("Can't find field `{p1}` in record `{name}`"),
                                     doc_id: doc.name.to_string(),
                                     line_number,
                                 },
@@ -471,7 +457,7 @@ impl<'a> TDoc<'a> {
                         }
                         t => {
                             return ftd::interpreter::utils::e2(
-                                format!("Expected record, found `{:?}`", t).as_str(),
+                                format!("Expected record, found `{t:?}`").as_str(),
                                 doc.name,
                                 line_number,
                             );
@@ -509,8 +495,7 @@ impl<'a> TDoc<'a> {
                             .resolve(kind, values, doc, line_number)?
                             .ok_or(ftd::interpreter::Error::ParseError {
                                 message: format!(
-                                    "Expected return value of type {:?} for function {}",
-                                    kind, name
+                                    "Expected return value of type {kind:?} for function {name}"
                                 ),
                                 doc_id: doc.name.to_string(),
                                 line_number,
@@ -707,7 +692,7 @@ impl<'a> TDoc<'a> {
                     fastn_resolved::KindData::new(fastn_resolved::Kind::String),
                 )),
                 t => ftd::interpreter::utils::e2(
-                    format!("Expected Record field `{}`, found: `{:?}`", name, t),
+                    format!("Expected Record field `{name}`, found: `{t:?}`"),
                     doc.name,
                     line_number,
                 ),
@@ -741,7 +726,7 @@ impl<'a> TDoc<'a> {
         match self.get_thing(name, line_number)? {
             ftd::interpreter::Thing::Component(c) => Ok(c),
             t => self.err(
-                format!("Expected Component, found: `{:?}`", t).as_str(),
+                format!("Expected Component, found: `{t:?}`").as_str(),
                 name,
                 "get_component",
                 line_number,
@@ -757,7 +742,7 @@ impl<'a> TDoc<'a> {
         match self.get_thing(name, line_number)? {
             ftd::interpreter::Thing::WebComponent(c) => Ok(c),
             t => self.err(
-                format!("Expected web-component, found: `{:?}`", t).as_str(),
+                format!("Expected web-component, found: `{t:?}`").as_str(),
                 name,
                 "get_web_component",
                 line_number,
@@ -783,7 +768,7 @@ impl<'a> TDoc<'a> {
                 Ok(ftd::interpreter::StateWithThing::new_thing(c))
             }
             ftd::interpreter::StateWithThing::Thing(t) => self.err(
-                format!("Expected Component, found: `{:?}`", t).as_str(),
+                format!("Expected Component, found: `{t:?}`").as_str(),
                 name,
                 "search_component",
                 line_number,
@@ -809,7 +794,7 @@ impl<'a> TDoc<'a> {
                 Ok(ftd::interpreter::StateWithThing::new_thing(c))
             }
             ftd::interpreter::StateWithThing::Thing(t) => self.err(
-                format!("Expected WebComponent, found: `{:?}`", t).as_str(),
+                format!("Expected WebComponent, found: `{t:?}`").as_str(),
                 name,
                 "search_web_component",
                 line_number,
@@ -833,7 +818,7 @@ impl<'a> TDoc<'a> {
                 Ok(ftd::interpreter::StateWithThing::new_thing(c))
             }
             ftd::interpreter::StateWithThing::Thing(t) => self.err(
-                format!("Expected OrType, found: `{:?}`", t).as_str(),
+                format!("Expected OrType, found: `{t:?}`").as_str(),
                 name,
                 "search_or_type",
                 line_number,
@@ -861,7 +846,7 @@ impl<'a> TDoc<'a> {
                 or_type, variant,
             ))),
             ftd::interpreter::StateWithThing::Thing(t) => self.err(
-                format!("Expected OrTypeWithVariant, found: `{:?}`", t).as_str(),
+                format!("Expected OrTypeWithVariant, found: `{t:?}`").as_str(),
                 name,
                 "search_or_type_with_variant",
                 line_number,
@@ -1091,7 +1076,7 @@ impl<'a> TDoc<'a> {
             thing_name,
             remaining
                 .as_ref()
-                .map(|v| format!(".{}", v))
+                .map(|v| format!(".{v}"))
                 .unwrap_or_default()
         );
 
@@ -1148,7 +1133,7 @@ impl<'a> TDoc<'a> {
                 .filter(|v| {
                     !v.is_component_invocation()
                         && (v.name().eq(thing_name.as_str())
-                            || v.name().starts_with(format!("{}.", thing_name).as_str()))
+                            || v.name().starts_with(format!("{thing_name}.").as_str()))
                 })
                 .map(|v| (0, v.to_owned()))
                 .collect_vec();
@@ -1172,7 +1157,7 @@ impl<'a> TDoc<'a> {
                     state
                         .pending_imports
                         .contains
-                        .insert((doc_name.to_string(), format!("{}#{}", doc_name, thing_name)));
+                        .insert((doc_name.to_string(), format!("{doc_name}#{thing_name}")));
                 } else if doc_name.ne(&caller)
                     && parsed_document
                         .re_exports
@@ -1232,12 +1217,12 @@ impl<'a> TDoc<'a> {
             if !state
                 .pending_imports
                 .contains
-                .contains(&(doc_name.to_string(), format!("{}#{}", doc_name, thing_name)))
+                .contains(&(doc_name.to_string(), format!("{doc_name}#{thing_name}")))
             {
                 state
                     .pending_imports
                     .contains
-                    .insert((doc_name.to_string(), format!("{}#{}", doc_name, thing_name)));
+                    .insert((doc_name.to_string(), format!("{doc_name}#{thing_name}")));
 
                 state
                     .pending_imports
@@ -1264,7 +1249,7 @@ impl<'a> TDoc<'a> {
             state
                 .pending_imports
                 .contains
-                .insert((doc_name.to_string(), format!("{}#{}", doc_name, thing_name)));
+                .insert((doc_name.to_string(), format!("{doc_name}#{thing_name}")));
         }
 
         Ok(())
@@ -1470,7 +1455,7 @@ impl<'a> TDoc<'a> {
                     if let Some(thing) = variants.into_iter().find(|or_type_variant| {
                         let variant_name = or_type_variant.name();
                         variant_name
-                            .trim_start_matches(format!("{}.", or_type_name).as_str())
+                            .trim_start_matches(format!("{or_type_name}.").as_str())
                             .eq(&v)
                     }) {
                         // Todo: Handle remaining
@@ -1480,11 +1465,8 @@ impl<'a> TDoc<'a> {
                         }
                     } else {
                         return doc.err(
-                            format!(
-                                "Can't find variant `{}` in or-type `{}`",
-                                name, or_type_name
-                            )
-                            .as_str(),
+                            format!("Can't find variant `{name}` in or-type `{or_type_name}`")
+                                .as_str(),
                             thing,
                             "search_thing_",
                             line_number,
@@ -1493,7 +1475,7 @@ impl<'a> TDoc<'a> {
                 }
                 _ => {
                     return doc.err(
-                        format!("not an or-type `{}`", name).as_str(),
+                        format!("not an or-type `{name}`").as_str(),
                         thing,
                         "search_thing_",
                         line_number,
@@ -1527,7 +1509,7 @@ impl<'a> TDoc<'a> {
             thing_name,
             remaining
                 .as_ref()
-                .map(|v| format!(".{}", v))
+                .map(|v| format!(".{v}"))
                 .unwrap_or_default()
         );
 
@@ -1555,8 +1537,8 @@ impl<'a> TDoc<'a> {
                         &current_parsed_document.doc_aliases,
                     );
                     !v.is_component_invocation()
-                        && (name.eq(&format!("{}#{}", doc_name, thing_name))
-                            || name.starts_with(format!("{}#{}.", doc_name, thing_name).as_str()))
+                        && (name.eq(&format!("{doc_name}#{thing_name}"))
+                            || name.starts_with(format!("{doc_name}#{thing_name}.").as_str()))
                 })
                 .map(|v| ftd::interpreter::ToProcessItem {
                     number_of_scan: 0,
@@ -1573,12 +1555,12 @@ impl<'a> TDoc<'a> {
                 if !state
                     .to_process
                     .contains
-                    .contains(&(state.id.to_string(), format!("{}#{}", doc_name, thing_name)))
+                    .contains(&(state.id.to_string(), format!("{doc_name}#{thing_name}")))
                 {
                     state
                         .to_process
                         .contains
-                        .insert((state.id.to_string(), format!("{}#{}", doc_name, thing_name)));
+                        .insert((state.id.to_string(), format!("{doc_name}#{thing_name}")));
                 }
             } else if !current_doc_contains_thing.is_empty() && state.peek_stack().unwrap().1.gt(&4)
             {
@@ -1593,7 +1575,7 @@ impl<'a> TDoc<'a> {
                 .filter(|v| {
                     !v.is_component_invocation()
                         && (v.name().eq(&thing_name)
-                            || v.name().starts_with(format!("{}.", thing_name).as_str()))
+                            || v.name().starts_with(format!("{thing_name}.").as_str()))
                 })
                 .map(|v| ftd::interpreter::ToProcessItem {
                     number_of_scan: 0,
@@ -1612,7 +1594,7 @@ impl<'a> TDoc<'a> {
                         ftd::interpreter::InterpreterWithoutState::StuckOnForeignVariable {
                             module: doc_name.to_string(),
                             variable: remaining
-                                .map(|v| format!("{}.{}", thing_name, v))
+                                .map(|v| format!("{thing_name}.{v}"))
                                 .unwrap_or(thing_name),
                             caller_module: self.name.to_string(),
                         },
@@ -1707,12 +1689,12 @@ impl<'a> TDoc<'a> {
             if !state
                 .to_process
                 .contains
-                .contains(&(doc_name.to_string(), format!("{}#{}", doc_name, thing_name)))
+                .contains(&(doc_name.to_string(), format!("{doc_name}#{thing_name}")))
             {
                 state
                     .to_process
                     .contains
-                    .insert((doc_name.to_string(), format!("{}#{}", doc_name, thing_name)));
+                    .insert((doc_name.to_string(), format!("{doc_name}#{thing_name}")));
             }
 
             return Ok(ftd::interpreter::StateWithThing::new_continue());
@@ -2207,7 +2189,7 @@ impl<'a> TDoc<'a> {
                 } else {
                     // Todo: Handle `default_value`
                     return ftd::interpreter::utils::e2(
-                        format!("expected object of list type, found: {}", json),
+                        format!("expected object of list type, found: {json}"),
                         self.name,
                         line_number,
                     );

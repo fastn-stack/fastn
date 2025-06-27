@@ -31,5 +31,5 @@ async fn main() {
         .await
         .unwrap();
 
-    println!("{:?}", resp);
+    println!("{resp:?}");
 }

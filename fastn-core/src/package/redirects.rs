@@ -113,12 +113,7 @@ impl UrlMappingsTemp {
         let from = from.trim().to_owned();
         let to = to.trim().to_owned();
 
-        assert!(
-            !from.eq(to.as_str()),
-            "Redirect {} -> {} is invalid",
-            from,
-            to
-        );
+        assert!(!from.eq(to.as_str()), "Redirect {from} -> {to} is invalid");
         assert!(
             !redirects.contains_key(from.as_str()),
             "Redirect {} -> {} is invalid, since {} -> {} already exists",
@@ -214,7 +209,7 @@ mod tests {
                     )
                 );
             }
-            e => panic!("Was expecting assert error, found: {:?}", e),
+            e => panic!("Was expecting assert error, found: {e:?}"),
         }
     }
 
@@ -241,7 +236,7 @@ mod tests {
                     )
                 );
             }
-            e => panic!("Was expecting assert error, found: {:?}", e),
+            e => panic!("Was expecting assert error, found: {e:?}"),
         }
     }
 }

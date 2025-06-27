@@ -42,10 +42,7 @@ impl TDoc<'_> {
                 } else {
                     //todo
                     return ftd::ftd2021::p2::utils::e2(
-                        format!(
-                            "expected default value for local variable {}: {:?} in {}",
-                            k, arg, root
-                        ),
+                        format!("expected default value for local variable {k}: {arg:?} in {root}"),
                         self.name,
                         0,
                     );
@@ -63,8 +60,7 @@ impl TDoc<'_> {
                             } else {
                                 return ftd::ftd2021::p2::utils::e2(
                                     format!(
-                                        "expected UI for local variable {}: {:?} in {}, found: `{:?}`",
-                                        k, arg, root, value
+                                        "expected UI for local variable {k}: {arg:?} in {root}, found: `{value:?}`"
                                     ),
                                     self.name,
                                     0,
@@ -106,10 +102,7 @@ impl TDoc<'_> {
                 ftd::PropertyValue::Value { value }
             } else {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!(
-                        "expected default value for local variable 2 {}: {:?} in {}",
-                        k, arg, root
-                    ),
+                    format!("expected default value for local variable 2 {k}: {arg:?} in {root}"),
                     self.name,
                     0,
                 );
@@ -249,7 +242,7 @@ impl TDoc<'_> {
             }
         }
         if let Some((c, _)) = reference {
-            *c = self.resolve_name(0, format!("{}@{}", c, parent_container).as_str())?;
+            *c = self.resolve_name(0, format!("{c}@{parent_container}").as_str())?;
         }
         if let Some(condition) = condition {
             edit_condition(
@@ -412,10 +405,10 @@ impl TDoc<'_> {
                     doc.local_variables.insert(key.clone(), local_variable);
                     *name = key;
                 } else if let Some((key, _)) = doc.get_local_variable(
-                    &doc.resolve_name(0, format!("{}@{}", part1, parent_container).as_str())?,
+                    &doc.resolve_name(0, format!("{part1}@{parent_container}").as_str())?,
                 ) {
                     let key = if let Some(part2) = part2 {
-                        format!("{}.{}", key, part2)
+                        format!("{key}.{part2}")
                     } else {
                         key.to_string()
                     };
@@ -595,7 +588,7 @@ impl TDoc<'_> {
         T: serde::Serialize + std::fmt::Debug,
     {
         let json = serde_json::to_value(json).map_err(|e| ftd::ftd2021::p1::Error::ParseError {
-            message: format!("Can't serialize to json: {:?}, found: {:?}", e, json),
+            message: format!("Can't serialize to json: {e:?}, found: {json:?}"),
             doc_id: self.name.to_string(),
             line_number: section.line_number,
         })?;
@@ -638,7 +631,7 @@ impl TDoc<'_> {
             ftd::ftd2021::p2::Kind::String { .. } => ftd::Value::String {
                 text: serde_json::from_value::<String>(json.to_owned()).map_err(|_| {
                     ftd::ftd2021::p1::Error::ParseError {
-                        message: format!("Can't parse to string, found: {}", json),
+                        message: format!("Can't parse to string, found: {json}"),
                         doc_id: self.name.to_string(),
                         line_number,
                     }
@@ -648,7 +641,7 @@ impl TDoc<'_> {
             ftd::ftd2021::p2::Kind::Integer { .. } => ftd::Value::Integer {
                 value: serde_json::from_value::<i64>(json.to_owned()).map_err(|_| {
                     ftd::ftd2021::p1::Error::ParseError {
-                        message: format!("Can't parse to integer, found: {}", json),
+                        message: format!("Can't parse to integer, found: {json}"),
                         doc_id: self.name.to_string(),
                         line_number,
                     }
@@ -657,7 +650,7 @@ impl TDoc<'_> {
             ftd::ftd2021::p2::Kind::Decimal { .. } => ftd::Value::Decimal {
                 value: serde_json::from_value::<f64>(json.to_owned()).map_err(|_| {
                     ftd::ftd2021::p1::Error::ParseError {
-                        message: format!("Can't parse to decimal, found: {}", json),
+                        message: format!("Can't parse to decimal, found: {json}"),
                         doc_id: self.name.to_string(),
                         line_number,
                     }
@@ -666,7 +659,7 @@ impl TDoc<'_> {
             ftd::ftd2021::p2::Kind::Boolean { .. } => ftd::Value::Boolean {
                 value: serde_json::from_value::<bool>(json.to_owned()).map_err(|_| {
                     ftd::ftd2021::p1::Error::ParseError {
-                        message: format!("Can't parse to boolean,found: {}", json),
+                        message: format!("Can't parse to boolean,found: {json}"),
                         doc_id: self.name.to_string(),
                         line_number,
                     }
@@ -714,7 +707,7 @@ impl TDoc<'_> {
                     }
                 } else {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("expected object of list type, found: {}", json),
+                        format!("expected object of list type, found: {json}"),
                         self.name,
                         line_number,
                     );
@@ -843,7 +836,7 @@ impl TDoc<'_> {
                         );
                     } else {
                         return ftd::ftd2021::p2::utils::e2(
-                            format!("field `{}` not found", key),
+                            format!("field `{key}` not found"),
                             self.name,
                             line_number,
                         );
@@ -854,7 +847,7 @@ impl TDoc<'_> {
             ftd::ftd2021::p2::Kind::String { .. } if !row.is_empty() => ftd::Value::String {
                 text: serde_json::from_value::<String>(row.first().unwrap().to_owned()).map_err(
                     |_| ftd::ftd2021::p1::Error::ParseError {
-                        message: format!("Can't parse to string, found: {:?}", row),
+                        message: format!("Can't parse to string, found: {row:?}"),
                         doc_id: self.name.to_string(),
                         line_number,
                     },
@@ -864,7 +857,7 @@ impl TDoc<'_> {
             ftd::ftd2021::p2::Kind::Integer { .. } if !row.is_empty() => ftd::Value::Integer {
                 value: serde_json::from_value::<i64>(row.first().unwrap().to_owned()).map_err(
                     |_| ftd::ftd2021::p1::Error::ParseError {
-                        message: format!("Can't parse to integer, found: {:?}", row),
+                        message: format!("Can't parse to integer, found: {row:?}"),
                         doc_id: self.name.to_string(),
                         line_number,
                     },
@@ -873,7 +866,7 @@ impl TDoc<'_> {
             ftd::ftd2021::p2::Kind::Decimal { .. } if !row.is_empty() => ftd::Value::Decimal {
                 value: serde_json::from_value::<f64>(row.first().unwrap().to_owned()).map_err(
                     |_| ftd::ftd2021::p1::Error::ParseError {
-                        message: format!("Can't parse to decimal, found: {:?}", row),
+                        message: format!("Can't parse to decimal, found: {row:?}"),
                         doc_id: self.name.to_string(),
                         line_number,
                     },
@@ -882,7 +875,7 @@ impl TDoc<'_> {
             ftd::ftd2021::p2::Kind::Boolean { .. } if !row.is_empty() => ftd::Value::Boolean {
                 value: serde_json::from_value::<bool>(row.first().unwrap().to_owned()).map_err(
                     |_| ftd::ftd2021::p1::Error::ParseError {
-                        message: format!("Can't parse to boolean,found: {:?}", row),
+                        message: format!("Can't parse to boolean,found: {row:?}"),
                         doc_id: self.name.to_string(),
                         line_number,
                     },
@@ -913,7 +906,7 @@ impl TDoc<'_> {
         Ok(
             match ftd::ftd2021::p2::utils::split_module(name, self.name, line_number)? {
                 (Some(m), v, None) => match self.aliases.get(m) {
-                    Some(m) => format!("{}#{}", m, v),
+                    Some(m) => format!("{m}#{v}"),
                     None => {
                         return self.err(
                             "alias not found",
@@ -948,9 +941,9 @@ impl TDoc<'_> {
         Ok(
             match ftd::ftd2021::p2::utils::split_module(name, self.name, line_number)? {
                 (Some(m), v, None) => match self.aliases.get(m) {
-                    Some(m) => format!("{}#{}", m, v),
+                    Some(m) => format!("{m}#{v}"),
                     None => match available_components.get(m) {
-                        Some(a) => format!("{}#{}", a, v),
+                        Some(a) => format!("{a}#{v}"),
                         None => {
                             return self.err(
                                 "alias not found",
@@ -962,9 +955,9 @@ impl TDoc<'_> {
                     },
                 },
                 (Some(m), v, Some(c)) => match self.aliases.get(m) {
-                    Some(m) => format!("{}#{}.{}", m, v, c),
+                    Some(m) => format!("{m}#{v}.{c}"),
                     None => match available_components.get(m) {
-                        Some(a) => format!("{}#{}.{}", a, v, c),
+                        Some(a) => format!("{a}#{v}.{c}"),
                         None => {
                             return self.err(
                                 "alias not found",
@@ -999,10 +992,10 @@ impl TDoc<'_> {
             format!("${}", s)*/
             let d = ftd::ftd2021::p2::utils::get_doc_name_and_remaining(l)?.0;
             if arguments.contains_key(d.as_str()) || get_special_variable().contains(&d.as_str()) {
-                return Ok(format!("${}", l));
+                return Ok(format!("${l}"));
             }
             let s = self.resolve_name(line_number, l)?;
-            format!("${}", s)
+            format!("${s}")
         } else {
             name.to_string()
         });
@@ -1185,7 +1178,7 @@ impl TDoc<'_> {
                 let mut full_name = (name.to_string(), None);
                 if let Some((s, n)) = name.split_once('#') {
                     if let Some((v, remaining_value)) = n.split_once('.') {
-                        full_name.0 = format!("{}#{}", s, v);
+                        full_name.0 = format!("{s}#{v}");
                         full_name.1 = Some(remaining_value.to_string());
                     }
                 }
@@ -1227,10 +1220,10 @@ impl TDoc<'_> {
 
             match doc
                 .bag
-                .get(format!("{}#{}", doc_name, name).as_str())
+                .get(format!("{doc_name}#{name}").as_str())
                 .or_else(|| {
                     doc.local_variables
-                        .get(format!("{}#{}", doc_name, name).as_str())
+                        .get(format!("{doc_name}#{name}").as_str())
                 })
                 .map(ToOwned::to_owned)
             {
@@ -1239,7 +1232,7 @@ impl TDoc<'_> {
                     Some(doc_name) => match doc.aliases.get(doc_name) {
                         Some(g) => doc
                             .bag
-                            .get(format!("{}#{}", g, name).as_str())
+                            .get(format!("{g}#{name}").as_str())
                             .map(|v| (v.clone(), remaining_value)),
                         None => None,
                     },
@@ -1267,7 +1260,7 @@ impl TDoc<'_> {
             variable
         } else {
             return ftd::ftd2021::p2::utils::e2(
-                format!("Expected variable, found: `{:#?}`", initial_thing),
+                format!("Expected variable, found: `{initial_thing:#?}`"),
                 self.name,
                 line_number,
             );

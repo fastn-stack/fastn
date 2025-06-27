@@ -84,7 +84,7 @@ async fn upload_(
 ) -> Result<(), UploadError> {
     let mut uploader = match std::env::var("DEBUG_USE_TEJAR_FOLDER") {
         Ok(path) => {
-            let path = std::path::PathBuf::from(path).join(format!("{}.tejar", tejar_file_id));
+            let path = std::path::PathBuf::from(path).join(format!("{tejar_file_id}.tejar"));
             println!("DEBUG_USE_TEJAR_FOLDER: {path:?}");
             clift::utils::Uploader::debug(&path).await?
         }

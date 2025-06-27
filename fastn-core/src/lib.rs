@@ -187,7 +187,7 @@ pub fn debug_env_vars() -> String {
                 .any(|prefix| key.starts_with(prefix))
         })
         .fold(String::new(), |consolidated_res, (key, value)| {
-            format!("{}\n{}: {}", consolidated_res, key, value)
+            format!("{consolidated_res}\n{key}: {value}")
         })
 }
 

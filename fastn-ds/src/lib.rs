@@ -87,7 +87,7 @@ fn package_ignores(
 ) -> Result<ignore::overrides::Override, ignore::Error> {
     let mut overrides = ignore::overrides::OverrideBuilder::new(root_path);
     for ignored_path in ignore_paths {
-        overrides.add(format!("!{}", ignored_path).as_str())?;
+        overrides.add(format!("!{ignored_path}").as_str())?;
     }
     overrides.build()
 }

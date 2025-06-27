@@ -31,10 +31,7 @@ pub fn interpret(
 #[cfg(test)]
 #[track_caller]
 fn p(s: &str, t: &ftd::Map<ftd::ftd2021::interpreter::Thing>) {
-    assert_eq!(
-        t,
-        &interpret("foo", s).unwrap_or_else(|e| panic!("{:?}", e))
-    )
+    assert_eq!(t, &interpret("foo", s).unwrap_or_else(|e| panic!("{e:?}")))
 }
 
 #[test]

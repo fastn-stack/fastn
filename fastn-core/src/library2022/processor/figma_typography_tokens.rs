@@ -55,7 +55,7 @@ fn extract_types(
         ftd_ast::VariableValue::Record { headers, .. } => headers,
         _ => {
             return Err(ftd::interpreter::Error::InvalidKind {
-                message: format!("Expected record of ftd.type-data found: {:?}", value),
+                message: format!("Expected record of ftd.type-data found: {value:?}"),
                 doc_id: doc.name.to_string(),
                 line_number,
             });
@@ -74,7 +74,7 @@ fn extract_types(
                 return Err(ftd::interpreter::Error::InvalidKind {
                     doc_id: doc.name.to_string(),
                     line_number,
-                    message: format!("Expected string kind for name found: {:?}", variable_name),
+                    message: format!("Expected string kind for name found: {variable_name:?}"),
                 });
             }
         };
@@ -84,7 +84,7 @@ fn extract_types(
         variable
     } else {
         return Err(ftd::interpreter::Error::InvalidKind {
-            message: format!("`variable` header not found: {:?}", value),
+            message: format!("`variable` header not found: {value:?}"),
             doc_id: doc.name.to_string(),
             line_number,
         });
@@ -94,10 +94,7 @@ fn extract_types(
         ftd_ast::VariableValue::String { value: hval, .. } => hval,
         t => {
             return Err(ftd::interpreter::Error::InvalidKind {
-                message: format!(
-                    "Expected `variable` header as key value pair: found: {:?}",
-                    t
-                ),
+                message: format!("Expected `variable` header as key value pair: found: {t:?}"),
                 doc_id: doc.name.to_string(),
                 line_number,
             });
@@ -115,7 +112,7 @@ fn extract_types(
         Some(ftd::interpreter::Thing::Variable(v)) => v,
         t => {
             return Err(ftd::interpreter::Error::InvalidKind {
-                message: format!("Expected Variable reference, found: {:?}", t),
+                message: format!("Expected Variable reference, found: {t:?}"),
                 doc_id: doc.name.to_string(),
                 line_number,
             });
@@ -130,8 +127,7 @@ fn extract_types(
         t => {
             return Err(ftd::interpreter::Error::InvalidKind {
                 message: format!(
-                    "Expected variable of type record `ftd.color-scheme`: found {:?}",
-                    t
+                    "Expected variable of type record `ftd.color-scheme`: found {t:?}"
                 ),
                 doc_id: doc.name.to_string(),
                 line_number,
@@ -193,8 +189,7 @@ fn extract_desktop_mobile_values(
         } else {
             return Err(ftd::interpreter::Error::InvalidKind {
                 message: format!(
-                    "Expected value of type record `ftd.responsive-type`: found {:?}",
-                    responsive_value,
+                    "Expected value of type record `ftd.responsive-type`: found {responsive_value:?}",
                 ),
                 doc_id: doc.name.to_string(),
                 line_number,
@@ -237,10 +232,7 @@ fn extract_type_data(
             );
         } else {
             return Err(ftd::interpreter::Error::InvalidKind {
-                message: format!(
-                    "Expected value of type record `ftd.type`: found {:?}",
-                    type_value,
-                ),
+                message: format!("Expected value of type record `ftd.type`: found {type_value:?}",),
                 doc_id: doc.name.to_string(),
                 line_number,
             });

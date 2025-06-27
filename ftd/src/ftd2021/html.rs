@@ -85,7 +85,7 @@ impl Node {
                                 let mut child = child.clone();
                                 child.attrs.insert(
                                     "data-ext-id".to_string(),
-                                    format!("{}:{}", data_id, parent_id),
+                                    format!("{data_id}:{parent_id}"),
                                 );
                                 children.push(child);
                             }
@@ -188,9 +188,9 @@ impl Node {
         let attrs = {
             let mut attrs = self.attrs.to_owned();
             let oid = if let Some(oid) = attrs.get("data-id") {
-                format!("{}:{}", oid, parent_id)
+                format!("{oid}:{parent_id}")
             } else {
-                format!("{}:root", parent_id)
+                format!("{parent_id}:root")
             };
             attrs.insert("data-id".to_string(), oid);
             attrs
@@ -372,8 +372,7 @@ impl ftd::Scene {
                 ..Default::default()
             };
             if let Some(ref data_id) = self.common.data_id {
-                node.attrs
-                    .insert(s("data-id"), format!("{}:scene", data_id));
+                node.attrs.insert(s("data-id"), format!("{data_id}:scene"));
             } else {
                 node.attrs.insert(s("data-id"), s("scene:root"));
             }
@@ -406,7 +405,7 @@ impl ftd::Scene {
                     }
                     if let Some(ref data_id) = self.common.data_id {
                         node.attrs
-                            .insert(s("data-id"), format!("{}:scene-bg", data_id));
+                            .insert(s("data-id"), format!("{data_id}:scene-bg"));
                     }
                     node
                 };
@@ -460,10 +459,10 @@ impl ftd::Scene {
             let (key, value) = spacing(p, "margin-left");
             match p {
                 ftd::Spacing::Absolute { value } => {
-                    main_node.children_style.insert(key, format!("{}px", value));
+                    main_node.children_style.insert(key, format!("{value}px"));
                     main_node
                         .attrs
-                        .insert(s("data-spacing"), format!("margin-left:{}px", value))
+                        .insert(s("data-spacing"), format!("margin-left:{value}px"))
                 }
                 _ => main_node.style.insert(key, value),
             };
@@ -488,7 +487,7 @@ impl ftd::Grid {
             .collect::<Vec<&str>>();
         let mut css_areas = s("");
         for area in areas {
-            css_areas = format!("{}'{}'", css_areas, area);
+            css_areas = format!("{css_areas}'{area}'");
         }
         n.style.insert(s("grid-template-areas"), css_areas);
 
@@ -500,13 +499,13 @@ impl ftd::Grid {
             n.style.insert(s("grid-template-rows"), s(rows.trim()));
         }
         if let Some(ref gap) = self.spacing {
-            n.style.insert(s("grid-gap"), format!("{}px", gap));
+            n.style.insert(s("grid-gap"), format!("{gap}px"));
         }
         if let Some(ref gap) = self.spacing_vertical {
-            n.style.insert(s("column-gap"), format!("{}px", gap));
+            n.style.insert(s("column-gap"), format!("{gap}px"));
         }
         if let Some(ref gap) = self.spacing_horizontal {
-            n.style.insert(s("row-gap"), format!("{}px", gap));
+            n.style.insert(s("row-gap"), format!("{gap}px"));
         }
         if let Some(ref auto_flow) = self.auto_flow {
             n.style.insert(s("grid-auto-flow"), s(auto_flow));
@@ -561,9 +560,9 @@ impl ftd::Row {
             let (key, value) = spacing(p, "margin-left");
             match p {
                 ftd::Spacing::Absolute { value } => {
-                    n.children_style.insert(key, format!("{}px", value));
+                    n.children_style.insert(key, format!("{value}px"));
                     n.attrs
-                        .insert(s("data-spacing"), format!("margin-left:{}px", value))
+                        .insert(s("data-spacing"), format!("margin-left:{value}px"))
                 }
                 _ => n.style.insert(key, value),
             };
@@ -622,9 +621,9 @@ impl ftd::Column {
             let (key, value) = spacing(p, "margin-top");
             match p {
                 ftd::Spacing::Absolute { value } => {
-                    n.children_style.insert(key, format!("{}px", value));
+                    n.children_style.insert(key, format!("{value}px"));
                     n.attrs
-                        .insert(s("data-spacing"), format!("margin-top:{}px", value))
+                        .insert(s("data-spacing"), format!("margin-top:{value}px"))
                 }
                 _ => n.style.insert(key, value),
             };
@@ -739,7 +738,7 @@ impl ftd::Collector {
         let classes = self.get_classes(desktop_style.clone());
 
         for class in classes {
-            let mobile_class = format!("body.ftd-mobile .{}", class);
+            let mobile_class = format!("body.ftd-mobile .{class}");
             let mobile_style_spec = if let Some(mobile_style_spec) = self.classes.get(&mobile_class)
             {
                 mobile_style_spec
@@ -747,7 +746,7 @@ impl ftd::Collector {
                 continue;
             };
 
-            let xl_class = format!("body.ftd-xl .{}", class);
+            let xl_class = format!("body.ftd-xl .{class}");
             let xl_style_spec = if let Some(xl_style_spec) = self.classes.get(&xl_class) {
                 xl_style_spec
             } else {
@@ -759,8 +758,8 @@ impl ftd::Collector {
             }
         }
         let class = self.insert_class(desktop_style, None);
-        self.insert_class(mobile_style, Some(format!("body.ftd-mobile .{}", class)));
-        self.insert_class(xl_style, Some(format!("body.ftd-xl .{}", class)));
+        self.insert_class(mobile_style, Some(format!("body.ftd-mobile .{class}")));
+        self.insert_class(xl_style, Some(format!("body.ftd-xl .{class}")));
         class
     }
 
@@ -775,7 +774,7 @@ impl ftd::Collector {
         let classes = self.get_classes(light_style.clone());
 
         for class in classes {
-            let dark_class = format!("body.fpm-dark .{}", class);
+            let dark_class = format!("body.fpm-dark .{class}");
             let dark_style_spec = if let Some(dark_style_spec) = self.classes.get(&dark_class) {
                 dark_style_spec
             } else {
@@ -787,7 +786,7 @@ impl ftd::Collector {
             }
         }
         let class = self.insert_class(light_style, None);
-        self.insert_class(dark_style, Some(format!("body.fpm-dark .{}", class)));
+        self.insert_class(dark_style, Some(format!("body.fpm-dark .{class}")));
         class
     }
 
@@ -817,7 +816,7 @@ impl ftd::Collector {
                 .filter_map(|v| v.get(0..1))
                 .collect::<Vec<&str>>()
                 .join("");
-            format!("{}_{}", styles, key)
+            format!("{styles}_{key}")
         }
     }
 
@@ -895,7 +894,7 @@ impl ftd::Text {
         if let Some(p) = &self.line_clamp {
             n.style.insert(s("display"), "-webkit-box".to_string());
             n.style.insert(s("overflow"), "hidden".to_string());
-            n.style.insert(s("-webkit-line-clamp"), format!("{}", p));
+            n.style.insert(s("-webkit-line-clamp"), format!("{p}"));
             n.style
                 .insert(s("-webkit-box-orient"), "vertical".to_string());
         }
@@ -920,10 +919,10 @@ impl ftd::TextBlock {
         let (key, value) = text_align(&self.text_align);
         n.style.insert(s(key.as_str()), value);
         if let Some(p) = self.size {
-            n.style.insert(s("font-size"), format!("{}px", p));
+            n.style.insert(s("font-size"), format!("{p}px"));
         }
         if let Some(p) = self.line_height {
-            n.style.insert(s("line-height"), format!("{}px", p));
+            n.style.insert(s("line-height"), format!("{p}px"));
         } else if !&self.line {
             n.style.insert(s("line-height"), s("26px"));
         }
@@ -951,7 +950,7 @@ impl ftd::TextBlock {
         if let Some(p) = &self.line_clamp {
             n.style.insert(s("display"), "-webkit-box".to_string());
             n.style.insert(s("overflow"), "hidden".to_string());
-            n.style.insert(s("-webkit-line-clamp"), format!("{}", p));
+            n.style.insert(s("-webkit-line-clamp"), format!("{p}"));
             n.style
                 .insert(s("-webkit-box-orient"), "vertical".to_string());
         }
@@ -998,7 +997,7 @@ impl ftd::Code {
         if let Some(p) = &self.line_clamp {
             n.style.insert(s("display"), "-webkit-box".to_string());
             n.style.insert(s("overflow"), "hidden".to_string());
-            n.style.insert(s("-webkit-line-clamp"), format!("{}", p));
+            n.style.insert(s("-webkit-line-clamp"), format!("{p}"));
             n.style
                 .insert(s("-webkit-box-orient"), "vertical".to_string());
         }
@@ -1025,7 +1024,7 @@ impl ftd::Image {
                 if let Some(ref id) = self.common.data_id {
                     n.attrs.insert(
                         s("data-id"),
-                        ftd::html::escape(format!("{}:parent", id).as_str()),
+                        ftd::html::escape(format!("{id}:parent").as_str()),
                     );
                 }
                 let mut img = update_img(
@@ -1110,7 +1109,7 @@ impl ftd::Markups {
         if let Some(p) = &self.line_clamp {
             n.style.insert(s("display"), "-webkit-box".to_string());
             n.style.insert(s("overflow"), "hidden".to_string());
-            n.style.insert(s("-webkit-line-clamp"), format!("{}", p));
+            n.style.insert(s("-webkit-line-clamp"), format!("{p}"));
             n.style
                 .insert(s("-webkit-box-orient"), "vertical".to_string());
         }
@@ -1256,62 +1255,50 @@ impl ftd::Common {
         }
 
         if let Some(p) = self.padding {
-            d.insert(s("padding"), format!("{}px", p));
+            d.insert(s("padding"), format!("{p}px"));
         }
         if let Some(p) = self.padding_left {
-            d.insert(s("padding-left"), format!("{}px", p));
+            d.insert(s("padding-left"), format!("{p}px"));
         }
         if let Some(ref cursor) = self.cursor {
             d.insert(s("cursor"), s(cursor));
         }
         if let Some(p) = self.padding_vertical {
-            d.insert(s("padding-top"), format!("{}px", p));
-            d.insert(s("padding-bottom"), format!("{}px", p));
+            d.insert(s("padding-top"), format!("{p}px"));
+            d.insert(s("padding-bottom"), format!("{p}px"));
         }
         if let Some(p) = self.padding_horizontal {
-            d.insert(s("padding-left"), format!("{}px", p));
-            d.insert(s("padding-right"), format!("{}px", p));
+            d.insert(s("padding-left"), format!("{p}px"));
+            d.insert(s("padding-right"), format!("{p}px"));
         }
         if let Some(p) = self.padding_right {
-            d.insert(s("padding-right"), format!("{}px", p));
+            d.insert(s("padding-right"), format!("{p}px"));
         }
         if let Some(p) = self.padding_top {
-            d.insert(s("padding-top"), format!("{}px", p));
+            d.insert(s("padding-top"), format!("{p}px"));
         }
         if let Some(p) = self.padding_bottom {
-            d.insert(s("padding-bottom"), format!("{}px", p));
+            d.insert(s("padding-bottom"), format!("{p}px"));
         }
 
         if let Some(p) = self.border_top_radius {
-            d.insert(s("border-top-left-radius"), format!("{}px !important", p));
-            d.insert(s("border-top-right-radius"), format!("{}px !important", p));
+            d.insert(s("border-top-left-radius"), format!("{p}px !important"));
+            d.insert(s("border-top-right-radius"), format!("{p}px !important"));
         }
 
         if let Some(p) = self.border_left_radius {
-            d.insert(s("border-top-left-radius"), format!("{}px !important", p));
-            d.insert(
-                s("border-bottom-left-radius"),
-                format!("{}px !important", p),
-            );
+            d.insert(s("border-top-left-radius"), format!("{p}px !important"));
+            d.insert(s("border-bottom-left-radius"), format!("{p}px !important"));
         }
 
         if let Some(p) = self.border_right_radius {
-            d.insert(s("border-top-right-radius"), format!("{}px !important", p));
-            d.insert(
-                s("border-bottom-right-radius"),
-                format!("{}px !important", p),
-            );
+            d.insert(s("border-top-right-radius"), format!("{p}px !important"));
+            d.insert(s("border-bottom-right-radius"), format!("{p}px !important"));
         }
 
         if let Some(p) = self.border_bottom_radius {
-            d.insert(
-                s("border-bottom-right-radius"),
-                format!("{}px !important", p),
-            );
-            d.insert(
-                s("border-bottom-left-radius"),
-                format!("{}px !important", p),
-            );
+            d.insert(s("border-bottom-right-radius"), format!("{p}px !important"));
+            d.insert(s("border-bottom-left-radius"), format!("{p}px !important"));
         }
 
         if let Some(p) = &self.width {
@@ -1339,28 +1326,28 @@ impl ftd::Common {
             d.insert(s(key.as_str()), value);
         }
         if let Some(p) = self.border_left {
-            d.insert(s("border-left-width"), format!("{}px !important", p));
+            d.insert(s("border-left-width"), format!("{p}px !important"));
         }
         if let Some(p) = self.border_right {
-            d.insert(s("border-right-width"), format!("{}px !important", p));
+            d.insert(s("border-right-width"), format!("{p}px !important"));
         }
         if let Some(p) = self.border_top {
-            d.insert(s("border-top-width"), format!("{}px !important", p));
+            d.insert(s("border-top-width"), format!("{p}px !important"));
         }
         if let Some(p) = self.border_bottom {
-            d.insert(s("border-bottom-width"), format!("{}px !important", p));
+            d.insert(s("border-bottom-width"), format!("{p}px !important"));
         }
         if let Some(p) = self.margin_left {
-            d.insert(s("margin-left"), format!("{}px", p));
+            d.insert(s("margin-left"), format!("{p}px"));
         }
         if let Some(p) = self.margin_right {
-            d.insert(s("margin-right"), format!("{}px", p));
+            d.insert(s("margin-right"), format!("{p}px"));
         }
         if let Some(p) = self.margin_top {
-            d.insert(s("margin-top"), format!("{}px", p));
+            d.insert(s("margin-top"), format!("{p}px"));
         }
         if let Some(p) = self.margin_bottom {
-            d.insert(s("margin-bottom"), format!("{}px", p));
+            d.insert(s("margin-bottom"), format!("{p}px"));
         }
         if let Some(p) = &self.background_color {
             if self.conditional_attribute.contains_key("background-color") {
@@ -1429,16 +1416,16 @@ impl ftd::Common {
             d.insert(s("position"), s("sticky"));
         }
         if let Some(p) = &self.top {
-            d.insert(s("top"), format!("{}px", p));
+            d.insert(s("top"), format!("{p}px"));
         }
         if let Some(p) = &self.bottom {
-            d.insert(s("bottom"), format!("{}px", p));
+            d.insert(s("bottom"), format!("{p}px"));
         }
         if let Some(p) = &self.left {
-            d.insert(s("left"), format!("{}px", p));
+            d.insert(s("left"), format!("{p}px"));
         }
         if let Some(p) = &self.right {
-            d.insert(s("right"), format!("{}px", p));
+            d.insert(s("right"), format!("{p}px"));
         }
         if self.submit.is_some() {
             d.insert(s("cursor"), s("pointer"));
@@ -1539,7 +1526,7 @@ impl ftd::Common {
 
         if let Some(p) = translate {
             let data = if let Some(d) = d.get_mut("transform") {
-                format!("{} {}", d, p)
+                format!("{d} {p}")
             } else {
                 p
             };
@@ -1636,7 +1623,7 @@ fn s(s: &str) -> String {
 
 pub fn color(c: &ftd::ColorValue) -> String {
     let ftd::ColorValue { r, g, b, alpha } = c;
-    format!("rgba({},{},{},{})", r, g, b, alpha)
+    format!("rgba({r},{g},{b},{alpha})")
 }
 
 pub fn length(l: &ftd::Length, f: &str) -> (String, String) {
@@ -1644,15 +1631,15 @@ pub fn length(l: &ftd::Length, f: &str) -> (String, String) {
     match l {
         ftd::Length::Fill => (s, "100%".to_string()),
         ftd::Length::Auto => (s, "auto".to_string()),
-        ftd::Length::Px { value } => (s, format!("{}px", value)),
+        ftd::Length::Px { value } => (s, format!("{value}px")),
         ftd::Length::Portion { value } => ("flex-grow".to_string(), value.to_string()),
-        ftd::Length::Percent { value } => (s, format!("{}%", value)),
+        ftd::Length::Percent { value } => (s, format!("{value}%")),
         ftd::Length::FitContent => (s, "fit-content".to_string()),
-        ftd::Length::Calc { value } => (s, format!("calc({})", value)),
-        ftd::Length::VH { value } => (s, format!("{}vh", value)),
-        ftd::Length::VW { value } => (s, format!("{}vw", value)),
-        ftd::Length::VMIN { value } => (s, format!("{}vmin", value)),
-        ftd::Length::VMAX { value } => (s, format!("{}vmax", value)),
+        ftd::Length::Calc { value } => (s, format!("calc({value})")),
+        ftd::Length::VH { value } => (s, format!("{value}vh")),
+        ftd::Length::VW { value } => (s, format!("{value}vw")),
+        ftd::Length::VMIN { value } => (s, format!("{value}vmin")),
+        ftd::Length::VMAX { value } => (s, format!("{value}vmax")),
 
         _ => (s, "100%".to_string()),
         //        ftd::Length::Shrink => (s, "width".to_string()),   TODO
@@ -1692,9 +1679,9 @@ fn gradient(d: &ftd::GradientDirection, c: &[ftd::ColorValue]) -> String {
             "linear-gradient(to bottom left".to_string()
         }
         ftd::GradientDirection::Center => "radial-gradient(circle ".to_string(),
-        ftd::GradientDirection::Angle { value } => format!("linear-gradient({}deg", value),
+        ftd::GradientDirection::Angle { value } => format!("linear-gradient({value}deg"),
     };
-    format!("{}, {} )", gradient_style, color)
+    format!("{gradient_style}, {color} )")
 }
 
 pub fn anchor(l: &ftd::Anchor) -> String {
@@ -1987,43 +1974,43 @@ fn get_translate(
                 0,
             );
         }
-        (Some(l), None, None, None) => Some(format!("translateX(-{}px) ", l)),
-        (Some(l), None, Some(u), None) => Some(format!("translate(-{}px, -{}px) ", l, u)),
-        (Some(l), None, None, Some(d)) => Some(format!("translate(-{}px, {}px) ", l, d)),
-        (None, Some(r), None, None) => Some(format!("translateX({}px) ", r)),
-        (None, Some(r), Some(u), None) => Some(format!("translate({}px, -{}px) ", r, u)),
-        (None, Some(r), None, Some(d)) => Some(format!("translate({}px, {}px) ", r, d)),
-        (None, None, Some(u), None) => Some(format!("translateY(-{}px) ", u)),
-        (None, None, None, Some(d)) => Some(format!("translateY({}px) ", d)),
+        (Some(l), None, None, None) => Some(format!("translateX(-{l}px) ")),
+        (Some(l), None, Some(u), None) => Some(format!("translate(-{l}px, -{u}px) ")),
+        (Some(l), None, None, Some(d)) => Some(format!("translate(-{l}px, {d}px) ")),
+        (None, Some(r), None, None) => Some(format!("translateX({r}px) ")),
+        (None, Some(r), Some(u), None) => Some(format!("translate({r}px, -{u}px) ")),
+        (None, Some(r), None, Some(d)) => Some(format!("translate({r}px, {d}px) ")),
+        (None, None, Some(u), None) => Some(format!("translateY(-{u}px) ")),
+        (None, None, None, Some(d)) => Some(format!("translateY({d}px) ")),
         _ => None,
     };
 
     if let Some(scale) = scale {
         if let Some(d) = translate {
-            translate = Some(format!("{} scale({})", d, scale));
+            translate = Some(format!("{d} scale({scale})"));
         } else {
-            translate = Some(format!("scale({})", scale));
+            translate = Some(format!("scale({scale})"));
         };
     }
     if let Some(scale) = scale_x {
         if let Some(d) = translate {
-            translate = Some(format!("{} scaleX({})", d, scale));
+            translate = Some(format!("{d} scaleX({scale})"));
         } else {
-            translate = Some(format!("scaleX({})", scale));
+            translate = Some(format!("scaleX({scale})"));
         };
     }
     if let Some(scale) = scale_y {
         if let Some(d) = translate {
-            translate = Some(format!("{} scaleY({})", d, scale));
+            translate = Some(format!("{d} scaleY({scale})"));
         } else {
-            translate = Some(format!("scaleY({})", scale));
+            translate = Some(format!("scaleY({scale})"));
         };
     }
     if let Some(rotate) = rotate {
         if let Some(d) = translate {
-            translate = Some(format!("{} rotate({}deg)", d, rotate));
+            translate = Some(format!("{d} rotate({rotate}deg)"));
         } else {
-            translate = Some(format!("rotate({}deg)", rotate));
+            translate = Some(format!("rotate({rotate}deg)"));
         };
     }
     Ok(translate)

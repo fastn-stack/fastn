@@ -116,7 +116,7 @@ impl Header {
             if k == name {
                 return v.parse().map_err(|e: std::num::ParseIntError| {
                     ftd::ftd2021::p1::Error::ParseError {
-                        message: format!("{:?}", e),
+                        message: format!("{e:?}"),
                         doc_id: doc_id.to_string(),
                         line_number: *l,
                     }
@@ -135,7 +135,7 @@ impl Header {
             if k == name {
                 return v.parse().map_err(|e: std::num::ParseIntError| {
                     ftd::ftd2021::p1::Error::ParseError {
-                        message: format!("{:?}", e),
+                        message: format!("{e:?}"),
                         doc_id: doc_id.to_string(),
                         line_number: *l,
                     }
@@ -167,7 +167,7 @@ impl Header {
             if k == name {
                 return v.parse().map_err(|e: std::num::ParseFloatError| {
                     ftd::ftd2021::p1::Error::ParseError {
-                        message: format!("{:?}", e),
+                        message: format!("{e:?}"),
                         doc_id: doc_id.to_string(),
                         line_number: *l,
                     }
@@ -288,7 +288,7 @@ impl Header {
             Err(Error::NotFound {
                 doc_id: doc.name.to_string(),
                 line_number,
-                key: format!("`{}` header is missing", name),
+                key: format!("`{name}` header is missing"),
             })
         } else {
             Ok(conditional_vector)
@@ -305,7 +305,7 @@ impl Header {
         Err(Error::NotFound {
             doc_id: doc_id.to_string(),
             line_number,
-            key: format!("`{}` header is missing", name),
+            key: format!("`{name}` header is missing"),
         })
     }
 

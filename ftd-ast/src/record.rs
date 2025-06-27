@@ -24,7 +24,7 @@ impl Record {
     pub(crate) fn from_p1(section: &ftd_p1::Section, doc_id: &str) -> ftd_ast::Result<Record> {
         if !Self::is_record(section) {
             return ftd_ast::parse_error(
-                format!("Section is not record section, found `{:?}`", section),
+                format!("Section is not record section, found `{section:?}`"),
                 doc_id,
                 section.line_number,
             );
@@ -61,7 +61,7 @@ impl Field {
     pub(crate) fn from_header(header: &ftd_p1::Header, doc_id: &str) -> ftd_ast::Result<Field> {
         if !Self::is_field(header) {
             return ftd_ast::parse_error(
-                format!("Header is not argument, found `{:?}`", header),
+                format!("Header is not argument, found `{header:?}`"),
                 doc_id,
                 header.get_line_number(),
             );

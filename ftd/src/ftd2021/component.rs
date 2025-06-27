@@ -102,7 +102,7 @@ impl Property {
         doc: &ftd::ftd2021::p2::TDoc,
     ) -> ftd::ftd2021::p1::Result<&ftd::PropertyValue> {
         let mut property_value = ftd::ftd2021::p2::utils::e2(
-            format!("condition is not complete, name: {}", name),
+            format!("condition is not complete, name: {name}"),
             doc.name,
             line_number,
         );
@@ -220,7 +220,7 @@ impl ChildComponent {
                     "ftd#row" | "ftd#column" | "ftd#scene" | "ftd#grid" | "ftd#text" => {}
                     t => {
                         return ftd::ftd2021::p2::utils::e2(
-                            format!("{} cant have children", t),
+                            format!("{t} cant have children"),
                             doc.name,
                             self.line_number,
                         );
@@ -230,7 +230,7 @@ impl ChildComponent {
             (ftd::Element::Markup(_), _) => {}
             (t, false) => {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("cant have children: {:?}", t),
+                    format!("cant have children: {t:?}"),
                     doc.name,
                     self.line_number,
                 );
@@ -378,7 +378,7 @@ impl ChildComponent {
             };
             let string_container =
                 ftd::ftd2021::p2::utils::get_string_container(local_container.as_slice());
-            let loop_name = doc.resolve_name(0, format!("$loop$@{}", string_container).as_str())?;
+            let loop_name = doc.resolve_name(0, format!("$loop$@{string_container}").as_str())?;
             doc.local_variables.insert(
                 loop_name,
                 ftd::ftd2021::p2::Thing::Variable(ftd::Variable {
@@ -745,7 +745,7 @@ fn markup_get_named_container(
                 }
                 None => {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("cannot find name for container {:?}", container),
+                        format!("cannot find name for container {container:?}"),
                         doc.name,
                         0,
                     );
@@ -891,8 +891,7 @@ fn reevalute_markup(
             if *idx >= text.len() {
                 return ftd::ftd2021::p2::utils::e2(
                     format!(
-                        "cannot find closing-parenthesis before the string ends: {}",
-                        traverse_string
+                        "cannot find closing-parenthesis before the string ends: {traverse_string}"
                     ),
                     doc_id,
                     0,
@@ -992,10 +991,7 @@ fn reevalute_markup(
             }
             t => {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!(
-                        "expected type istext, integer, boolean, decimal. found: {:?}",
-                        t
-                    ),
+                    format!("expected type istext, integer, boolean, decimal. found: {t:?}"),
                     doc.name,
                     0,
                 );
@@ -1010,7 +1006,7 @@ fn reevalute_markup(
         let mut root =
             doc.get_component(0, name)
                 .map_err(|_| ftd::ftd2021::p1::Error::ParseError {
-                    message: format!("This component not found in ftd.text {}", name),
+                    message: format!("This component not found in ftd.text {name}"),
                     doc_id: doc.name.to_string(),
                     line_number: 0,
                 })?;
@@ -1022,8 +1018,7 @@ fn reevalute_markup(
         } else {
             return ftd::ftd2021::p2::utils::e2(
                 format!(
-                    "expected type for ftd.text are text, integer, decimal and boolean, {:?}",
-                    root
+                    "expected type for ftd.text are text, integer, decimal and boolean, {root:?}"
                 ),
                 doc.name,
                 0,
@@ -1065,7 +1060,7 @@ fn resolve_recursive_property(
         }
     }
     ftd::ftd2021::p2::utils::e2(
-        format!("$loop$ not found in properties {:?}", self_properties),
+        format!("$loop$ not found in properties {self_properties:?}"),
         doc.name,
         line_number,
     )
@@ -1339,13 +1334,13 @@ fn get_conditional_attributes(
         Ok(if style_integer.contains(&name) {
             match value {
                 ftd::Value::Integer { value: v } => ftd::ConditionalValue {
-                    value: serde_json::Value::String(format!("{}px", v)),
+                    value: serde_json::Value::String(format!("{v}px")),
                     important: false,
                     reference,
                 },
                 v => {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("expected int, found3: {:?}", v),
+                        format!("expected int, found3: {v:?}"),
                         doc.name,
                         line_number,
                     );
@@ -1354,13 +1349,13 @@ fn get_conditional_attributes(
         } else if style_integer_important.contains(&name) {
             match value {
                 ftd::Value::Integer { value: v } => ftd::ConditionalValue {
-                    value: serde_json::Value::String(format!("{}px", v)),
+                    value: serde_json::Value::String(format!("{v}px")),
                     important: true,
                     reference,
                 },
                 v => {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("expected int, found4: {:?}", v),
+                        format!("expected int, found4: {v:?}"),
                         doc.name,
                         line_number,
                     );
@@ -1377,7 +1372,7 @@ fn get_conditional_attributes(
                 },
                 v => {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("expected string, found 8: {:?}", v),
+                        format!("expected string, found 8: {v:?}"),
                         doc.name,
                         line_number,
                     );
@@ -1420,7 +1415,7 @@ fn get_conditional_attributes(
                 }
                 v => {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("expected string, found 9: {:?}", v),
+                        format!("expected string, found 9: {v:?}"),
                         doc.name,
                         line_number,
                     );
@@ -1437,7 +1432,7 @@ fn get_conditional_attributes(
                 },
                 v => {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("expected string, found 10: {:?}", v),
+                        format!("expected string, found 10: {v:?}"),
                         doc.name,
                         line_number,
                     );
@@ -1452,7 +1447,7 @@ fn get_conditional_attributes(
                 },
                 v => {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("expected string, found 11: {:?}", v),
+                        format!("expected string, found 11: {v:?}"),
                         doc.name,
                         line_number,
                     );
@@ -1467,7 +1462,7 @@ fn get_conditional_attributes(
                 },
                 v => {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("expected string, found 12: {:?}", v),
+                        format!("expected string, found 12: {v:?}"),
                         doc.name,
                         line_number,
                     );
@@ -1484,7 +1479,7 @@ fn get_conditional_attributes(
                 },
                 v => {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("expected boolean, found: {:?}", v),
+                        format!("expected boolean, found: {v:?}"),
                         doc.name,
                         line_number,
                     );
@@ -1501,7 +1496,7 @@ fn get_conditional_attributes(
                 },
                 v => {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("expected boolean, found: {:?}", v),
+                        format!("expected boolean, found: {v:?}"),
                         doc.name,
                         line_number,
                     );
@@ -1516,7 +1511,7 @@ fn get_conditional_attributes(
                 },
                 v => {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("expected int, found5: {:?}", v),
+                        format!("expected int, found5: {v:?}"),
                         doc.name,
                         line_number,
                     );
@@ -1528,7 +1523,7 @@ fn get_conditional_attributes(
                     let areas = v.split('|').map(|v| v.trim()).collect::<Vec<&str>>();
                     let mut css_areas = "".to_string();
                     for area in areas {
-                        css_areas = format!("{}'{}'", css_areas, area);
+                        css_areas = format!("{css_areas}'{area}'");
                     }
                     ftd::ConditionalValue {
                         value: serde_json::Value::String(css_areas),
@@ -1538,7 +1533,7 @@ fn get_conditional_attributes(
                 }
                 v => {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("expected string, found 13: {:?}", v),
+                        format!("expected string, found 13: {v:?}"),
                         doc.name,
                         line_number,
                     );
@@ -1546,7 +1541,7 @@ fn get_conditional_attributes(
             }
         } else {
             return ftd::ftd2021::p2::utils::e2(
-                format!("unknown style name: `{}` value:`{:?}`", name, value),
+                format!("unknown style name: `{name}` value:`{value:?}`"),
                 doc.name,
                 line_number,
             );
@@ -1679,7 +1674,7 @@ impl Component {
                             _ => {}
                         }
                         return ftd::ftd2021::p2::utils::e2(
-                            format!("{:?}", e),
+                            format!("{e:?}"),
                             doc.name,
                             line_number,
                         );
@@ -2153,7 +2148,7 @@ pub fn recursive_child_component(
         }
 
         if k == "if" && contains_loop_ref(&loop_ref, v) {
-            let v = v.replace(&format!("${}", loop_ref), "$loop$");
+            let v = v.replace(&format!("${loop_ref}"), "$loop$");
             let (_, left, right) =
                 ftd::ftd2021::p2::Boolean::boolean_left_right(i.to_owned(), &v, doc.name)?;
             if left.contains("$loop$") {
@@ -2166,8 +2161,8 @@ pub fn recursive_child_component(
             }
         }
 
-        if contains_loop_ref(&loop_ref, v) && v.starts_with(&format!("${}", loop_ref)) {
-            let reference = v.to_string().replace(&format!("${}", loop_ref), "$loop$");
+        if contains_loop_ref(&loop_ref, v) && v.starts_with(&format!("${loop_ref}")) {
+            let reference = v.to_string().replace(&format!("${loop_ref}"), "$loop$");
             let value = resolve_loop_reference(i, &recursive_kind, doc, reference)?;
             properties.insert(k.to_string(), value);
         } else {
@@ -2229,7 +2224,7 @@ pub fn recursive_child_component(
     let mut new_caption = sub.caption.clone();
     if let (Some(caption), Some(caption_arg)) = (sub.caption.clone(), caption) {
         if contains_loop_ref(&loop_ref, &caption) {
-            let reference = caption.replace(&format!("${}", loop_ref), "$loop$");
+            let reference = caption.replace(&format!("${loop_ref}"), "$loop$");
             let value = resolve_loop_reference(&sub.line_number, &recursive_kind, doc, reference)?;
             properties.insert(caption_arg, value);
             new_caption = None;
@@ -2289,7 +2284,7 @@ pub fn recursive_child_component(
         arguments.insert("$loop$".to_string(), recursive_kind.to_owned());
         let property = ftd::PropertyValue::resolve_value(
             *line_number,
-            &format!("${}", reference),
+            &format!("${reference}"),
             None,
             doc,
             &arguments,
@@ -2303,11 +2298,11 @@ pub fn recursive_child_component(
     }
 
     fn contains_loop_ref(loop_ref: &str, pattern: &str) -> bool {
-        let ref1 = format!("${}.", loop_ref);
+        let ref1 = format!("${loop_ref}.");
         let pattern_vec: Vec<&str> = pattern.split(' ').collect();
         let partern_bool = pattern_vec
             .iter()
-            .map(|v| v.contains(&ref1) || v == &format!("${}", loop_ref))
+            .map(|v| v.contains(&ref1) || v == &format!("${loop_ref}"))
             .collect::<Vec<bool>>();
         for p in partern_bool {
             if p {
@@ -2446,8 +2441,7 @@ fn check_input_conflicting_values(
 
             Err(ftd::ftd2021::p1::Error::ForbiddenUsage {
                 message: format!(
-                    "value: \'{}\', default-value: \'{}\' both are used in ftd.input",
-                    value, default_value
+                    "value: \'{value}\', default-value: \'{default_value}\' both are used in ftd.input"
                 ),
                 doc_id: doc.name.to_string(),
                 line_number,
@@ -2519,8 +2513,7 @@ pub fn read_properties(
                 } else {
                     return ftd::ftd2021::p2::utils::e2(
                         format!(
-                            "{} is calling {}, without a required argument 1 `{}`",
-                            fn_name, root, name
+                            "{fn_name} is calling {root}, without a required argument 1 `{name}`"
                         ),
                         doc.name,
                         line_number,
@@ -2542,8 +2535,7 @@ pub fn read_properties(
                 } else {
                     return ftd::ftd2021::p2::utils::e2(
                         format!(
-                            "{} is calling {}, without a required argument `{}`",
-                            fn_name, root, name
+                            "{fn_name} is calling {root}, without a required argument `{name}`"
                         ),
                         doc.name,
                         line_number,
@@ -2557,10 +2549,7 @@ pub fn read_properties(
         for (idx, value, conditional_attribute, is_referenced) in conditional_vector {
             if kind.is_reference() && !is_referenced {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!(
-                        "{} is calling {}, without a referenced argument `{}`",
-                        fn_name, root, value
-                    ),
+                    format!("{fn_name} is calling {root}, without a referenced argument `{value}`"),
                     doc.name,
                     line_number,
                 );
@@ -2824,8 +2813,7 @@ fn assert_caption_body_checks(
                             {
                                 return Err(ftd::ftd2021::p1::Error::ForbiddenUsage {
                                     message: format!(
-                                        "pass either body or caption or header_value, ambiguity in \'{}\'",
-                                        arg
+                                        "pass either body or caption or header_value, ambiguity in \'{arg}\'"
                                     ),
                                     doc_id: doc.name.to_string(),
                                     line_number,
@@ -2844,8 +2832,7 @@ fn assert_caption_body_checks(
                             {
                                 return Err(ftd::ftd2021::p1::Error::MissingData {
                                     message: format!(
-                                        "body or caption or header_value, none of them are passed for \'{}\'",
-                                        arg
+                                        "body or caption or header_value, none of them are passed for \'{arg}\'"
                                     ),
                                     doc_id: doc.name.to_string(),
                                     line_number,
@@ -2870,8 +2857,7 @@ fn assert_caption_body_checks(
                             {
                                 return Err(ftd::ftd2021::p1::Error::ForbiddenUsage {
                                     message: format!(
-                                        "pass either caption or header_value for header \'{}\'",
-                                        arg
+                                        "pass either caption or header_value for header \'{arg}\'"
                                     ),
                                     doc_id: doc.name.to_string(),
                                     line_number,
@@ -2889,8 +2875,7 @@ fn assert_caption_body_checks(
                             {
                                 return Err(ftd::ftd2021::p1::Error::MissingData {
                                     message: format!(
-                                        "caption or header_value, none of them are passed for \'{}\'",
-                                        arg
+                                        "caption or header_value, none of them are passed for \'{arg}\'"
                                     ),
                                     doc_id: doc.name.to_string(),
                                     line_number,
@@ -2910,8 +2895,7 @@ fn assert_caption_body_checks(
                             {
                                 return Err(ftd::ftd2021::p1::Error::ForbiddenUsage {
                                     message: format!(
-                                        "pass either body or header_value for header \'{}\'",
-                                        arg
+                                        "pass either body or header_value for header \'{arg}\'"
                                     ),
                                     doc_id: doc.name.to_string(),
                                     line_number,
@@ -2929,8 +2913,7 @@ fn assert_caption_body_checks(
                             {
                                 return Err(ftd::ftd2021::p1::Error::MissingData {
                                     message: format!(
-                                        "body or header_value, none of them are passed for \'{}\'",
-                                        arg
+                                        "body or header_value, none of them are passed for \'{arg}\'"
                                     ),
                                     doc_id: doc.name.to_string(),
                                     line_number,
@@ -2961,8 +2944,7 @@ fn assert_caption_body_checks(
                     if ((has_property || has_value) && has_caption) || (has_value && has_property) {
                         return Err(ftd::ftd2021::p1::Error::ForbiddenUsage {
                             message: format!(
-                                "pass either caption or header_value for header \'{}\'",
-                                arg
+                                "pass either caption or header_value for header \'{arg}\'"
                             ),
                             doc_id: doc.name.to_string(),
                             line_number,
@@ -2978,8 +2960,7 @@ fn assert_caption_body_checks(
                     {
                         return Err(ftd::ftd2021::p1::Error::MissingData {
                             message: format!(
-                                "caption or header_value, none of them are passed for \'{}\'",
-                                arg
+                                "caption or header_value, none of them are passed for \'{arg}\'"
                             ),
                             doc_id: doc.name.to_string(),
                             line_number,
@@ -3101,7 +3082,7 @@ fn root_properties_from_inherits(
     for inherit in inherits {
         let pv = ftd::PropertyValue::resolve_value(
             line_number,
-            &format!("${}", inherit),
+            &format!("${inherit}"),
             None,
             doc,
             arguments,
@@ -3159,7 +3140,7 @@ fn read_arguments(
                             continue;
                         }
                         return Err(ftd::ftd2021::p1::Error::ForbiddenUsage {
-                            message: format!("repeated usage of \'{}\' not allowed !!", k),
+                            message: format!("repeated usage of \'{k}\' not allowed !!"),
                             doc_id: doc.name.to_string(),
                             line_number: *i,
                         });

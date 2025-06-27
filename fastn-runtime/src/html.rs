@@ -61,7 +61,7 @@ impl HtmlData {
                 .package
                 .base_url
                 .as_ref()
-                .map(|v| format!("<base href=\"{}\">", v))
+                .map(|v| format!("<base href=\"{v}\">"))
                 .unwrap_or_default(),
             favicon_html_tag = self
                 .package

@@ -23,7 +23,7 @@ pub fn reference_to_js(s: &str) -> String {
         let (p21, p22) = get_doc_name_and_remaining(remaining);
         match p21.parse::<i64>() {
             Ok(num) if p22.is_none() => {
-                p1 = format!("{}.get({})", p1, num);
+                p1 = format!("{p1}.get({num})");
                 wrapper_function = Some("fastn_utils.getListItem");
             }
             _ => {
@@ -42,7 +42,7 @@ pub fn reference_to_js(s: &str) -> String {
         prefix.map(|v| format!("{v}.")).unwrap_or_default()
     );
     if let Some(func) = wrapper_function {
-        return format!("{}({})", func, p1);
+        return format!("{func}({p1})");
     }
     p1
 }
@@ -55,11 +55,11 @@ pub(crate) fn get_doc_name_and_remaining(s: &str) -> (String, Option<String>) {
     let mut part1 = "".to_string();
     let mut pattern_to_split_at = s.to_string();
     if let Some((p1, p2)) = s.split_once('#') {
-        part1 = format!("{}#", p1);
+        part1 = format!("{p1}#");
         pattern_to_split_at = p2.to_string();
     }
     if let Some((p1, p2)) = pattern_to_split_at.split_once('.') {
-        (format!("{}{}", part1, p1), Some(p2.to_string()))
+        (format!("{part1}{p1}"), Some(p2.to_string()))
     } else {
         (s.to_string(), None)
     }
@@ -109,7 +109,7 @@ pub fn name_to_js_(s: &str) -> String {
     let mut s = s.to_string();
     //todo: remove this
     if s.as_bytes()[0].is_ascii_digit() {
-        s = format!("_{}", s);
+        s = format!("_{s}");
     }
     s.replace('#', "__")
         .replace('-', "_")

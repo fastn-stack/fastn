@@ -161,8 +161,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                 function.resolve(&kind, &values, doc, line_number)?.ok_or(
                     ftd::interpreter::Error::ParseError {
                         message: format!(
-                            "Expected return value of type {:?} for function {}",
-                            kind, name
+                            "Expected return value of type {kind:?} for function {name}"
                         ),
                         doc_id: doc.name.to_string(),
                         line_number,
@@ -274,8 +273,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                             Some(ekind) if !ekind.kind.is_same_as(&found_kind.kind) => {
                                 return ftd::interpreter::utils::e2(
                                     format!(
-                                        "3.1 Expected kind `{:?}`, found: `{:?}`",
-                                        ekind, found_kind
+                                        "3.1 Expected kind `{ekind:?}`, found: `{found_kind:?}`"
                                     )
                                     .as_str(),
                                     doc.name,
@@ -379,8 +377,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                     }
                     Some(ekind) if !ekind.kind.is_same_as(&found_kind.kind) => {
                         return ftd::interpreter::utils::e2(
-                            format!("Expected kind `{:?}`, found: `{:?}`", ekind, found_kind)
-                                .as_str(),
+                            format!("Expected kind `{ekind:?}`, found: `{found_kind:?}`").as_str(),
                             doc.name,
                             value.line_number(),
                         );
@@ -449,8 +446,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                     }
                     Some(ekind) if !ekind.kind.is_same_as(&found_kind.kind) => {
                         return ftd::interpreter::utils::e2(
-                            format!("Expected kind `{:?}`, found: `{:?}`", ekind, found_kind)
-                                .as_str(),
+                            format!("Expected kind `{ekind:?}`, found: `{found_kind:?}`").as_str(),
                             doc.name,
                             value.line_number(),
                         );
@@ -539,7 +535,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                     }
                     Some(ekind) if !ekind.kind.is_same_as(&found_kind.kind) => {
                         return ftd::interpreter::utils::e2(
-                            format!("3.2 Expected kind `{:?}`, found: `{:?}`", ekind, found_kind)
+                            format!("3.2 Expected kind `{ekind:?}`, found: `{found_kind:?}`")
                                 .as_str(),
                             doc.name,
                             value.line_number(),
@@ -568,8 +564,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                     if !is_variable_mutable {
                         return ftd::interpreter::utils::e2(
                             format!(
-                                "Cannot have mutable reference of immutable variable `{}`",
-                                reference
+                                "Cannot have mutable reference of immutable variable `{reference}`"
                             ),
                             doc.name,
                             value.line_number(),
@@ -735,7 +730,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                             value.line_number(),
                         )?) {
                             return ftd::interpreter::utils::e2(
-                                format!("Expected list of `{:?}`, found: `{}`", kind, key),
+                                format!("Expected list of `{kind:?}`, found: `{key}`"),
                                 doc.name,
                                 value.line_number(),
                             );
@@ -797,8 +792,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                             })
                             .ok_or(ftd::interpreter::Error::ParseError {
                                 message: format!(
-                                    "Expected variant `{}` in or-type `{}`",
-                                    variant_name, name
+                                    "Expected variant `{variant_name}` in or-type `{name}`"
                                 ),
                                 doc_id: doc.name.to_string(),
                                 line_number: value.line_number(),
@@ -838,7 +832,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                                 {
                                     let (name, variant, _full_variant) =
                                         regular.kind.kind.get_or_type().unwrap();
-                                    let variant_name = format!("{}.{}", name, variant_name);
+                                    let variant_name = format!("{name}.{variant_name}");
                                     fastn_resolved::Kind::or_type_with_variant(
                                         name.as_str(),
                                         variant.unwrap_or_else(|| variant_name.clone()).as_str(),
@@ -962,7 +956,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
         match self {
             fastn_resolved::PropertyValue::Value { value, .. } => Ok(value),
             t => ftd::interpreter::utils::e2(
-                format!("Expected value found `{:?}`", t).as_str(),
+                format!("Expected value found `{t:?}`").as_str(),
                 doc_id,
                 line_number,
             ),
@@ -981,7 +975,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
     {
         if !(value.is_record() || value.is_string()) {
             return ftd::interpreter::utils::e2(
-                format!("`{:?}` value is npt supported yet", value),
+                format!("`{value:?}` value is npt supported yet"),
                 doc.name,
                 value.line_number(),
             );
@@ -1089,15 +1083,14 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                         ..
                     } if source.is_local(name) => {
                         if let Some(field_name) =
-                            refernence.strip_prefix(format!("{}.", name).as_str())
+                            refernence.strip_prefix(format!("{name}.").as_str())
                         {
                             // Todo: field_name is empty throw error
                             let property_value = result_field
                                 .get(field_name)
                                 .ok_or(ftd::interpreter::Error::ParseError {
                                     message: format!(
-                                        "field `{}` not found in record: `{}`",
-                                        field_name, name
+                                        "field `{field_name}` not found in record: `{name}`"
                                     ),
                                     doc_id: doc.name.to_string(),
                                     line_number,
@@ -1420,7 +1413,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
         match self {
             fastn_resolved::PropertyValue::Value { value, .. } => Ok(value),
             t => ftd::interpreter::utils::e2(
-                format!("Expected value found `{:?}`", t).as_str(),
+                format!("Expected value found `{t:?}`").as_str(),
                 doc_id,
                 line_number,
             ),
@@ -1581,7 +1574,7 @@ impl ValueExt for fastn_resolved::Value {
         match self {
             fastn_resolved::Value::String { text } => Ok(text.to_string()),
             t => ftd::interpreter::utils::e2(
-                format!("Expected String, found: `{:?}`", t),
+                format!("Expected String, found: `{t:?}`"),
                 doc_id,
                 line_number,
             ),
@@ -1592,7 +1585,7 @@ impl ValueExt for fastn_resolved::Value {
         match self {
             fastn_resolved::Value::Decimal { value } => Ok(*value),
             t => ftd::interpreter::utils::e2(
-                format!("Expected Decimal, found: `{:?}`", t),
+                format!("Expected Decimal, found: `{t:?}`"),
                 doc_id,
                 line_number,
             ),
@@ -1603,7 +1596,7 @@ impl ValueExt for fastn_resolved::Value {
         match self {
             fastn_resolved::Value::Integer { value } => Ok(*value),
             t => ftd::interpreter::utils::e2(
-                format!("Expected Integer, found: `{:?}`", t),
+                format!("Expected Integer, found: `{t:?}`"),
                 doc_id,
                 line_number,
             ),
@@ -1614,7 +1607,7 @@ impl ValueExt for fastn_resolved::Value {
         match self {
             fastn_resolved::Value::Boolean { value } => Ok(*value),
             t => ftd::interpreter::utils::e2(
-                format!("Expected Boolean, found: `{:?}`", t),
+                format!("Expected Boolean, found: `{t:?}`"),
                 doc_id,
                 line_number,
             ),
@@ -1636,7 +1629,7 @@ impl ValueExt for fastn_resolved::Value {
             }
             fastn_resolved::Value::Integer { value } => Ok(Some(*value)),
             t => ftd::interpreter::utils::e2(
-                format!("Expected Optional Integer, found: `{:?}`", t),
+                format!("Expected Optional Integer, found: `{t:?}`"),
                 doc_id,
                 line_number,
             ),
@@ -1663,7 +1656,7 @@ impl ValueExt for fastn_resolved::Value {
             }
             fastn_resolved::Value::String { text } => Ok(vec![text.to_string()]),
             t => ftd::interpreter::utils::e2(
-                format!("Expected String list, found: `{:?}`", t),
+                format!("Expected String list, found: `{t:?}`"),
                 doc.name,
                 line_number,
             ),
@@ -1683,7 +1676,7 @@ impl ValueExt for fastn_resolved::Value {
                 ..
             } => Ok((name, variant, value)),
             t => ftd::interpreter::utils::e2(
-                format!("Expected or-type, found: `{:?}`", t),
+                format!("Expected or-type, found: `{t:?}`"),
                 doc_id,
                 line_number,
             ),
@@ -1698,7 +1691,7 @@ impl ValueExt for fastn_resolved::Value {
         match self {
             fastn_resolved::Value::UI { component, .. } => Ok(component.to_owned()),
             t => ftd::interpreter::utils::e2(
-                format!("Expected UI, found: `{:?}`", t),
+                format!("Expected UI, found: `{t:?}`"),
                 doc_id,
                 line_number,
             ),
@@ -1713,7 +1706,7 @@ impl ValueExt for fastn_resolved::Value {
         match self {
             Self::Record { fields, .. } => Ok(fields.to_owned()),
             t => ftd::interpreter::utils::e2(
-                format!("Expected record, found: `{:?}`", t),
+                format!("Expected record, found: `{t:?}`"),
                 doc_id,
                 line_number,
             ),
@@ -1728,7 +1721,7 @@ impl ValueExt for fastn_resolved::Value {
         match self {
             Self::KwArgs { arguments } => Ok(arguments.to_owned()),
             t => ftd::interpreter::utils::e2(
-                format!("Expected kwargs, found: `{:?}`", t),
+                format!("Expected kwargs, found: `{t:?}`"),
                 doc_id,
                 line_number,
             ),
@@ -1871,7 +1864,7 @@ impl ValueExt for fastn_resolved::Value {
             }
             t => {
                 return ftd::interpreter::utils::e2(
-                    format!("Expected kind: `{:?}`, found: `{:?}`", expected_kind, t),
+                    format!("Expected kind: `{expected_kind:?}`, found: `{t:?}`"),
                     doc_name,
                     line_number,
                 );
@@ -1928,7 +1921,7 @@ impl ValueExt for fastn_resolved::Value {
         match self {
             Self::KwArgs { arguments } => Ok(arguments),
             t => ftd::interpreter::utils::e2(
-                format!("Expected kw-args, found: `{:?}`", t),
+                format!("Expected kw-args, found: `{t:?}`"),
                 doc_id,
                 line_number,
             ),
@@ -1950,7 +1943,7 @@ impl ValueExt for fastn_resolved::Value {
             }
             fastn_resolved::Value::String { text } => Ok(Some(text.to_string())),
             t => ftd::interpreter::utils::e2(
-                format!("Expected Optional String, found: `{:?}`", t),
+                format!("Expected Optional String, found: `{t:?}`"),
                 doc_id,
                 line_number,
             ),
@@ -2059,7 +2052,7 @@ impl ValueExt for fastn_resolved::Value {
         match self {
             fastn_resolved::Value::String { text } => {
                 if use_quotes {
-                    Ok(Some(format!("\"{}\"", text)))
+                    Ok(Some(format!("\"{text}\"")))
                 } else {
                     Ok(Some(text.to_string()))
                 }

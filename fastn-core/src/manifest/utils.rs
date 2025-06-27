@@ -16,10 +16,8 @@ fn extract_github_details(package_name: &str) -> Option<(String, String)> {
 pub fn get_zipball_url(package_name: &str) -> Option<String> {
     // For github packages
     if let Some((username, repository)) = extract_github_details(package_name) {
-        let url = format!(
-            "https://codeload.github.com/{}/{}/zip/refs/heads/main",
-            username, repository
-        );
+        let url =
+            format!("https://codeload.github.com/{username}/{repository}/zip/refs/heads/main");
 
         return Some(url);
     }

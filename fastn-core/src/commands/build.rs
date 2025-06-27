@@ -204,7 +204,7 @@ mod cache {
 }
 
 fn get_dependency_name_without_package_name(package_name: &str, dependency_name: &str) -> String {
-    if let Some(remaining) = dependency_name.strip_prefix(&format!("{}/", package_name)) {
+    if let Some(remaining) = dependency_name.strip_prefix(&format!("{package_name}/")) {
         remaining.to_string()
     } else {
         dependency_name.to_string()

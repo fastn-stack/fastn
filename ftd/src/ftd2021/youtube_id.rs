@@ -27,7 +27,7 @@ pub fn from_raw(raw: &str) -> Option<String> {
         pattern.captures(raw).map(|c| {
             // will never panic because each pattern has an <id> defined
             let id = c.name("id").unwrap().as_str();
-            format!("https://youtube.com/embed/{}", id)
+            format!("https://youtube.com/embed/{id}")
         })
     })
 }

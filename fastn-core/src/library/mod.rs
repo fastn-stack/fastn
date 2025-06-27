@@ -67,7 +67,7 @@ impl Library2 {
             .get(current_package_name)
             .map(|p| p.get().to_owned())
             .ok_or_else(|| ftd::ftd2021::p1::Error::ParseError {
-                message: format!("Can't find current package: {}", current_package_name),
+                message: format!("Can't find current package: {current_package_name}"),
                 doc_id: "".to_string(),
                 line_number: 0,
             })
@@ -95,7 +95,7 @@ impl FastnLibrary {
     ) -> ftd::ftd2021::p1::Result<String> {
         match self.get(name, doc) {
             Some(v) => Ok(v),
-            None => ftd::ftd2021::p2::utils::e2(format!("library not found 2: {}", name), "", 0),
+            None => ftd::ftd2021::p2::utils::e2(format!("library not found 2: {name}"), "", 0),
         }
     }
 }

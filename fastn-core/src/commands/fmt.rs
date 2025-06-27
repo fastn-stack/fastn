@@ -208,7 +208,7 @@ fn end_section(input: &mut String, sections: &mut Vec<Section>) -> bool {
         }
     }
 
-    panic!("cannot find section {} to end", section_name)
+    panic!("cannot find section {section_name} to end")
 }
 
 fn end_section_name(input: &str) -> Option<String> {

@@ -230,7 +230,7 @@ impl Package {
                     |realm_lang::Error::InvalidCode { ref found }| {
                         ftd::interpreter::Error::ParseError {
                             message: found.clone(),
-                            doc_id: format!("{}/FASTN.ftd", package_name),
+                            doc_id: format!("{package_name}/FASTN.ftd"),
                             line_number: 0,
                         }
                     },
@@ -281,7 +281,7 @@ impl Package {
                 for dependency in &self.dependencies {
                     if let Some(alias) = &dependency.alias {
                         if alias.as_str().eq(ai.path.as_str())
-                            || ai.path.starts_with(format!("{}/", alias).as_str())
+                            || ai.path.starts_with(format!("{alias}/").as_str())
                         {
                             import_doc_path = ai.path.replacen(
                                 dependency.alias.as_ref()?.as_str(),
@@ -320,7 +320,7 @@ impl Package {
                 pre.unwrap_or_default(),
                 &import_doc_path,
                 match &ai.alias {
-                    Some(a) => format!(" as {}", a),
+                    Some(a) => format!(" as {a}"),
                     None => String::new(),
                 },
                 if ai.exposing.is_empty() {
@@ -364,8 +364,8 @@ impl Package {
 
                 let extended_front = self.get_full_path_from_alias(front);
                 match extended_front {
-                    Some(ext_front) => Ok(format!("{}/{}", ext_front, rem)),
-                    None => Ok(format!("{}/{}", front, rem)),
+                    Some(ext_front) => Ok(format!("{ext_front}/{rem}")),
+                    None => Ok(format!("{front}/{rem}")),
                 }
             }
             (Some(front), None) => {
@@ -375,7 +375,7 @@ impl Package {
                 let extended_front = self.get_full_path_from_alias(front);
                 match extended_front {
                     Some(ext_front) => match with_alias {
-                        true => Ok(format!("{} as {}", ext_front, front)),
+                        true => Ok(format!("{ext_front} as {front}")),
                         false => Ok(ext_front),
                     },
                     None => Ok(front.to_string()),
@@ -409,7 +409,7 @@ impl Package {
 
                 let extended_front =
                     self.fix_aliased_import_type1(front, id, line_number, false)?;
-                Ok(format!("{} as {}", extended_front, alias))
+                Ok(format!("{extended_front} as {alias}"))
             }
             _ => {
                 // Throw error for unknown type-2 import
@@ -507,7 +507,7 @@ impl Package {
         };
         match self.generate_prefix_string(current_package, with_alias) {
             Some(s) => {
-                let t = format!("{}\n\n{}", s, body);
+                let t = format!("{s}\n\n{body}");
                 self.fix_imports_in_body(t.as_str(), id).ok().unwrap_or(t)
             }
             None => self
@@ -538,12 +538,11 @@ impl Package {
                 .unwrap_or_else(|| path.trim_matches('/'))
                 .to_string();
             if !url.ends_with(".html") {
-                url = format!("{}/", url);
+                url = format!("{url}/");
             }
 
             return format!(
-                "\n<link rel=\"canonical\" href=\"{url}\" /><meta property=\"og:url\" content=\"{url}\" />",
-                url = url
+                "\n<link rel=\"canonical\" href=\"{url}\" /><meta property=\"og:url\" content=\"{url}\" />"
             );
         }
 
@@ -568,13 +567,11 @@ impl Package {
                 let url = if url.ends_with('/') {
                     url
                 } else {
-                    format!("{}/", url)
+                    format!("{url}/")
                 };
                 // Ignore the fastn document as that path won't exist in the reference website
                 format!(
-                    "\n<link rel=\"canonical\" href=\"{canonical_base}{path}\" /><meta property=\"og:url\" content=\"{canonical_base}{path}\" />",
-                    canonical_base = url,
-                    path = path
+                    "\n<link rel=\"canonical\" href=\"{url}{path}\" /><meta property=\"og:url\" content=\"{url}{path}\" />"
                 )
             }
             None => "".to_string(),

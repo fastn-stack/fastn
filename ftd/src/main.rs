@@ -83,12 +83,12 @@ pub fn main() {
             let path = entry.expect("no files inside ./benchmark-2022").path();
             let source = path
                 .to_str()
-                .unwrap_or_else(|| panic!("Path {:?} cannot be convert to string", path));
+                .unwrap_or_else(|| panic!("Path {path:?} cannot be convert to string"));
             let split: Vec<_> = source.split('/').collect();
             let id = split.last().expect("Filename should be present");
             if id.contains(".ftd") {
                 let start = std::time::Instant::now();
-                log = format!("{}Processing: {} ... ", log, id);
+                log = format!("{log}Processing: {id} ... ");
                 let doc = std::fs::read_to_string(source).expect("cant read file");
                 ftd_v2_write(id, doc.as_str());
                 log = format!("{}Done {:?}\n", log, start.elapsed());
@@ -123,7 +123,7 @@ padding-bottom.px: 20
             let path = entry.expect("no files inside ./examples").path();
             let source = path
                 .to_str()
-                .unwrap_or_else(|| panic!("Path {:?} cannot be convert to string", path));
+                .unwrap_or_else(|| panic!("Path {path:?} cannot be convert to string"));
             let split: Vec<_> = source.split('/').collect();
             let id = split.last().expect("Filename should be present");
             if id.contains(".ftd") {
@@ -139,7 +139,7 @@ padding-bottom.px: 20
         }
     }
 
-    write_doc = format!("{}\n-- end: ftd.column\n", write_doc,);
+    write_doc = format!("{write_doc}\n-- end: ftd.column\n",);
 
     ftd_v2_write("index.ftd", write_doc.as_str());
 
@@ -152,25 +152,25 @@ padding-bottom.px: 20
         let source = path
             .to_str()
             .map(ToString::to_string)
-            .unwrap_or_else(|| panic!("Path {:?} cannot be convert to string", path));
+            .unwrap_or_else(|| panic!("Path {path:?} cannot be convert to string"));
         let split: Vec<_> = source.split('/').collect();
         let id = split.last().expect("Filename should be present");
-        std::fs::copy(path, format!("./docs/ftd/ftd/t/assets/{}", id).as_str())
-            .unwrap_or_else(|_| panic!("failed to copy {}", id));
+        std::fs::copy(path, format!("./docs/ftd/ftd/t/assets/{id}").as_str())
+            .unwrap_or_else(|_| panic!("failed to copy {id}"));
     }
 }
 
 fn ftd_v2_write(id: &str, s: &str) {
     use std::io::Write;
     let start = std::time::Instant::now();
-    print!("Processing: {} ... ", id);
+    print!("Processing: {id} ... ");
     let doc =
-        ftd::test_helper::ftd_v2_interpret_helper("foo", s).unwrap_or_else(|e| panic!("{:?}", e));
+        ftd::test_helper::ftd_v2_interpret_helper("foo", s).unwrap_or_else(|e| panic!("{e:?}"));
     let executor =
-        ftd::executor::ExecuteDoc::from_interpreter(doc).unwrap_or_else(|e| panic!("{:?}", e));
+        ftd::executor::ExecuteDoc::from_interpreter(doc).unwrap_or_else(|e| panic!("{e:?}"));
     let node = ftd::node::NodeData::from_rt(executor);
-    let html_ui = ftd::html::HtmlUI::from_node_data(node, "main", false)
-        .unwrap_or_else(|e| panic!("{:?}", e));
+    let html_ui =
+        ftd::html::HtmlUI::from_node_data(node, "main", false).unwrap_or_else(|e| panic!("{e:?}"));
     let ftd_js = std::fs::read_to_string("./ftd/build.js").expect("build.js not found");
     let html_str = ftd::html::utils::trim_all_lines(
         std::fs::read_to_string("./ftd/build.html")
@@ -218,5 +218,5 @@ fn ftd_v2_write(id: &str, s: &str) {
     f.write_all(html_str.as_bytes())
         .expect("failed to write to .html file");
     let duration = start.elapsed();
-    println!("Done {:?}", duration);
+    println!("Done {duration:?}");
 }

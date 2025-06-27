@@ -426,7 +426,7 @@ impl FieldExt for fastn_resolved::Field {
             ) {
                 Ok(swt) => Ok(swt),
                 Err(e2) => {
-                    ftd::interpreter::utils::e2(format!("{:?} {:?}", e1, e2), doc.name, line_number)
+                    ftd::interpreter::utils::e2(format!("{e1:?} {e2:?}"), doc.name, line_number)
                 }
             },
         }
@@ -483,30 +483,24 @@ impl FieldExt for fastn_resolved::Field {
                     .iter()
                     .find(|v| {
                         v.name()
-                            .trim_start_matches(format!("{}.", name).as_str())
+                            .trim_start_matches(format!("{name}.").as_str())
                             .eq(variant_name.as_str())
                     })
                     .ok_or(ftd::interpreter::Error::ParseError {
-                        message: format!(
-                            "Cannot find variant `{}` for or-type `{}`",
-                            variant, name
-                        ),
+                        message: format!("Cannot find variant `{variant}` for or-type `{name}`"),
                         doc_id: doc.name.to_string(),
                         line_number,
                     })?;
 
                 check_variant_if_constant(or_variant, remaining, doc)?;
-                let variant = Some(format!("{}.{}", name, variant));
+                let variant = Some(format!("{name}.{variant}"));
 
                 v.clone_from(&variant);
                 *full_variant = variant;
                 Ok(ftd::interpreter::StateWithThing::new_thing(()))
             }
             t => ftd::interpreter::utils::e2(
-                format!(
-                    "Expected or-type for variant `{}`, found: `{:?}`",
-                    variant, t
-                ),
+                format!("Expected or-type for variant `{variant}`, found: `{t:?}`"),
                 doc.name,
                 line_number,
             ),

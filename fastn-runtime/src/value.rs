@@ -279,7 +279,7 @@ pub(crate) fn ftd_to_js_variant(
 ) -> (String, bool) {
     // returns (JSVariant, has_value)
     let variant = variant
-        .strip_prefix(format!("{}.", name).as_str())
+        .strip_prefix(format!("{name}.").as_str())
         .unwrap_or(full_variant);
     match name {
         "ftd#resizing" => {
@@ -288,23 +288,23 @@ pub(crate) fn ftd_to_js_variant(
         }
         "ftd#link-rel" => {
             let js_variant = link_rel_variants(variant);
-            (format!("fastn_dom.LinkRel.{}", js_variant), false)
+            (format!("fastn_dom.LinkRel.{js_variant}"), false)
         }
         "ftd#length" => {
             let js_variant = length_variants(variant);
-            (format!("fastn_dom.Length.{}", js_variant), true)
+            (format!("fastn_dom.Length.{js_variant}"), true)
         }
         "ftd#border-style" => {
             let js_variant = border_style_variants(variant);
-            (format!("fastn_dom.BorderStyle.{}", js_variant), false)
+            (format!("fastn_dom.BorderStyle.{js_variant}"), false)
         }
         "ftd#background" => {
             let js_variant = background_variants(variant);
-            (format!("fastn_dom.BackgroundStyle.{}", js_variant), true)
+            (format!("fastn_dom.BackgroundStyle.{js_variant}"), true)
         }
         "ftd#background-repeat" => {
             let js_variant = background_repeat_variants(variant);
-            (format!("fastn_dom.BackgroundRepeat.{}", js_variant), false)
+            (format!("fastn_dom.BackgroundRepeat.{js_variant}"), false)
         }
         "ftd#background-size" => {
             let js_variant = background_size_variants(variant);
@@ -329,15 +329,15 @@ pub(crate) fn ftd_to_js_variant(
         }
         "ftd#font-size" => {
             let js_variant = font_size_variants(variant);
-            (format!("fastn_dom.FontSize.{}", js_variant), true)
+            (format!("fastn_dom.FontSize.{js_variant}"), true)
         }
         "ftd#overflow" => {
             let js_variant = overflow_variants(variant);
-            (format!("fastn_dom.Overflow.{}", js_variant), false)
+            (format!("fastn_dom.Overflow.{js_variant}"), false)
         }
         "ftd#display" => {
             let js_variant = display_variants(variant);
-            (format!("fastn_dom.Display.{}", js_variant), false)
+            (format!("fastn_dom.Display.{js_variant}"), false)
         }
         "ftd#spacing" => {
             let js_variant = spacing_variants(variant);
@@ -345,27 +345,27 @@ pub(crate) fn ftd_to_js_variant(
         }
         "ftd#text-transform" => {
             let js_variant = text_transform_variants(variant);
-            (format!("fastn_dom.TextTransform.{}", js_variant), false)
+            (format!("fastn_dom.TextTransform.{js_variant}"), false)
         }
         "ftd#text-align" => {
             let js_variant = text_align_variants(variant);
-            (format!("fastn_dom.TextAlign.{}", js_variant), false)
+            (format!("fastn_dom.TextAlign.{js_variant}"), false)
         }
         "ftd#cursor" => {
             let js_variant = cursor_variants(variant);
-            (format!("fastn_dom.Cursor.{}", js_variant), false)
+            (format!("fastn_dom.Cursor.{js_variant}"), false)
         }
         "ftd#resize" => {
             let js_variant = resize_variants(variant);
-            (format!("fastn_dom.Resize.{}", js_variant), false)
+            (format!("fastn_dom.Resize.{js_variant}"), false)
         }
         "ftd#white-space" => {
             let js_variant = whitespace_variants(variant);
-            (format!("fastn_dom.WhiteSpace.{}", js_variant), false)
+            (format!("fastn_dom.WhiteSpace.{js_variant}"), false)
         }
         "ftd#align-self" => {
             let js_variant = align_self_variants(variant);
-            (format!("fastn_dom.AlignSelf.{}", js_variant), false)
+            (format!("fastn_dom.AlignSelf.{js_variant}"), false)
         }
         "ftd#anchor" => {
             let js_variant = anchor_variants(variant);
@@ -373,43 +373,43 @@ pub(crate) fn ftd_to_js_variant(
         }
         "ftd#device-data" => {
             let js_variant = device_data_variants(variant);
-            (format!("fastn_dom.DeviceData.{}", js_variant), false)
+            (format!("fastn_dom.DeviceData.{js_variant}"), false)
         }
         "ftd#text-style" => {
             let js_variant = text_style_variants(variant);
-            (format!("fastn_dom.TextStyle.{}", js_variant), false)
+            (format!("fastn_dom.TextStyle.{js_variant}"), false)
         }
         "ftd#region" => {
             let js_variant = region_variants(variant);
-            (format!("fastn_dom.Region.{}", js_variant), false)
+            (format!("fastn_dom.Region.{js_variant}"), false)
         }
         "ftd#align" => {
             let js_variant = align_variants(variant);
-            (format!("fastn_dom.AlignContent.{}", js_variant), false)
+            (format!("fastn_dom.AlignContent.{js_variant}"), false)
         }
         "ftd#text-input-type" => {
             let js_variant = text_input_type_variants(variant);
-            (format!("fastn_dom.TextInputType.{}", js_variant), false)
+            (format!("fastn_dom.TextInputType.{js_variant}"), false)
         }
         "ftd#loading" => {
             let js_variant = loading_variants(variant);
-            (format!("fastn_dom.Loading.{}", js_variant), false)
+            (format!("fastn_dom.Loading.{js_variant}"), false)
         }
         "ftd#image-fit" => {
             let js_variant = object_fit_variants(variant);
-            (format!("fastn_dom.Fit.{}", js_variant), false)
+            (format!("fastn_dom.Fit.{js_variant}"), false)
         }
         "ftd#image-fetch-priority" => {
             let js_variant = object_fetch_priority_variants(variant);
-            (format!("fastn_dom.FetchPriority.{}", js_variant), false)
+            (format!("fastn_dom.FetchPriority.{js_variant}"), false)
         }
         "ftd#backdrop-filter" => {
             let js_variant = backdrop_filter_variants(variant);
-            (format!("fastn_dom.BackdropFilter.{}", js_variant), true)
+            (format!("fastn_dom.BackdropFilter.{js_variant}"), true)
         }
         "ftd#mask" => {
             let js_variant = mask_variants(variant);
-            (format!("fastn_dom.Mask.{}", js_variant), true)
+            (format!("fastn_dom.Mask.{js_variant}"), true)
         }
         "ftd#mask-size" => {
             let js_variant = mask_size_variants(variant);
@@ -417,7 +417,7 @@ pub(crate) fn ftd_to_js_variant(
         }
         "ftd#mask-repeat" => {
             let js_variant = mask_repeat_variants(variant);
-            (format!("fastn_dom.MaskRepeat.{}", js_variant), false)
+            (format!("fastn_dom.MaskRepeat.{js_variant}"), false)
         }
         "ftd#mask-position" => {
             let js_variant = mask_position_variants(variant);
@@ -431,7 +431,7 @@ pub(crate) fn ftd_to_js_variant(
                 return match value {
                     fastn_resolved::Value::Integer { value } => (value.to_string(), false),
                     fastn_resolved::Value::Decimal { value } => (value.to_string(), false),
-                    fastn_resolved::Value::String { text } => (format!("\"{}\"", text), false),
+                    fastn_resolved::Value::String { text } => (format!("\"{text}\""), false),
                     fastn_resolved::Value::Boolean { value } => (value.to_string(), false),
                     _ => todo!("{} {}", t, variant),
                 };
@@ -450,7 +450,7 @@ fn resizing_variants(name: &str) -> (&'static str, bool) {
         "fill-container" => ("FillContainer", false),
         "hug-content" => ("HugContent", false),
         "auto" => ("Auto", false),
-        t => panic!("invalid resizing variant {}", t),
+        t => panic!("invalid resizing variant {t}"),
     }
 }
 
@@ -459,7 +459,7 @@ fn link_rel_variants(name: &str) -> &'static str {
         "no-follow" => "NoFollow",
         "sponsored" => "Sponsored",
         "ugc" => "Ugc",
-        t => panic!("invalid link rel variant {}", t),
+        t => panic!("invalid link rel variant {t}"),
     }
 }
 

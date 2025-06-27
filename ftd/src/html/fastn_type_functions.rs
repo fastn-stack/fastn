@@ -79,7 +79,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
             fastn_resolved::PropertyValue::Reference { name, .. } => Some(format!(
                 "resolve_reference(\"{}\", data){}",
                 ftd::html::utils::js_reference_name(name),
-                field.map(|v| format!(".{}", v)).unwrap_or_default()
+                field.map(|v| format!(".{v}")).unwrap_or_default()
             )),
             fastn_resolved::PropertyValue::FunctionCall(function_call) => {
                 let action = serde_json::to_string(&ftd::html::Action::from_function_call(
@@ -89,8 +89,7 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                 )?)
                 .unwrap();
                 Some(format!(
-                    "window.ftd.handle_function(event, '{}', '{}', this)",
-                    id, action
+                    "window.ftd.handle_function(event, '{id}', '{action}', this)"
                 ))
             }
             fastn_resolved::PropertyValue::Value {
@@ -127,7 +126,7 @@ impl ValueExt for fastn_resolved::Value {
 
         Ok(match self {
             fastn_resolved::Value::String { text } if !string_needs_no_quotes => {
-                Some(format!("\"{}\"", text))
+                Some(format!("\"{text}\""))
             }
             fastn_resolved::Value::String { text } if string_needs_no_quotes => {
                 Some(text.to_string())
@@ -179,7 +178,7 @@ impl ValueExt for fastn_resolved::Value {
                             doc.name,
                             line_number,
                         ) {
-                            Some(format!("`{}`.format(JSON.stringify({}))", pattern, value))
+                            Some(format!("`{pattern}`.format(JSON.stringify({value}))"))
                         } else {
                             Some(value)
                         }
@@ -194,7 +193,7 @@ impl ValueExt for fastn_resolved::Value {
                             doc.name,
                             line_number,
                         ) {
-                            Some(format!("`{}`.format(JSON.stringify({}))", pattern, value))
+                            Some(format!("`{pattern}`.format(JSON.stringify({value}))"))
                         } else {
                             Some(value)
                         }
@@ -213,7 +212,7 @@ impl ValueExt for fastn_resolved::Value {
                     } else {
                         "null".to_string()
                     };
-                    values.push(format!("\"{}\": {}", k, value));
+                    values.push(format!("\"{k}\": {value}"));
                 }
 
                 Some(format!("{{{}}}", values.join(", ")))

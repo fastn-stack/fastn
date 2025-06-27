@@ -9,8 +9,7 @@ pub async fn post_build_check(config: &fastn_core::Config) -> fastn_core::Result
     // if build_path.is_dir() {
     if !config.ds.exists(&build_path.join(INDEX_FILE), &None).await {
         return Err(fastn_core::Error::NotFound(format!(
-            "Couldn't find {} in package root folder",
-            INDEX_FILE
+            "Couldn't find {INDEX_FILE} in package root folder"
         )));
     }
     // check_index_in_folders(build_path, build_directory.as_str())

@@ -42,7 +42,7 @@ impl ThingExt for Thing {
         match self {
             ftd::interpreter::Thing::Variable(v) => Ok(v),
             t => ftd::interpreter::utils::e2(
-                format!("Expected Variable, found: `{:?}`", t),
+                format!("Expected Variable, found: `{t:?}`"),
                 doc_id,
                 line_number,
             ),
@@ -57,7 +57,7 @@ impl ThingExt for Thing {
         match self {
             ftd::interpreter::Thing::Record(v) => Ok(v.clone()),
             t => ftd::interpreter::utils::e2(
-                format!("Expected Record, found: `{:?}`", t),
+                format!("Expected Record, found: `{t:?}`"),
                 doc_id,
                 line_number,
             ),
@@ -72,7 +72,7 @@ impl ThingExt for Thing {
         match self {
             ftd::interpreter::Thing::WebComponent(v) => Ok(v.to_owned()),
             t => ftd::interpreter::utils::e2(
-                format!("Expected WebComponent, found: `{:?}`", t),
+                format!("Expected WebComponent, found: `{t:?}`"),
                 doc_id,
                 line_number,
             ),
@@ -87,7 +87,7 @@ impl ThingExt for Thing {
         match self {
             ftd::interpreter::Thing::Function(v) => Ok(v.to_owned()),
             t => ftd::interpreter::utils::e2(
-                format!("Expected Function, found: `{:?}`", t),
+                format!("Expected Function, found: `{t:?}`"),
                 doc_id,
                 line_number,
             ),

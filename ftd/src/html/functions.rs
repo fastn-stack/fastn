@@ -55,7 +55,7 @@ impl FunctionGenerator {
         let mut arguments = arguments.iter().map(|(k, _)| k).join(",");
 
         if !arguments.is_empty() {
-            arguments = format!("{},args,data,id", arguments);
+            arguments = format!("{arguments},args,data,id");
         } else {
             arguments = "args,data,id".to_string();
         }
@@ -120,7 +120,7 @@ impl ExpressionGenerator {
             };
 
             return if root && !is_assignment_or_chain && !f.is_empty() {
-                format!("return {};", f)
+                format!("return {f};")
             } else {
                 f
             };

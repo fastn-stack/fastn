@@ -63,7 +63,7 @@ pub(crate) fn get_value_from_properties_using_key_and_arguments_dummy(
             .iter()
             .find(|v| v.name.eq(key))
             .ok_or(ftd::executor::Error::ParseError {
-                message: format!("Cannot find `{}` argument", key),
+                message: format!("Cannot find `{key}` argument"),
                 doc_id: doc.name.to_string(),
                 line_number,
             })?;
@@ -166,7 +166,7 @@ pub(crate) fn find_value_by_argument(
             } else if p.condition.is_none() {
                 if let Some(v) = p.value.get_reference_or_clone() {
                     value = Some(fastn_resolved::Value::new_string(
-                        format!("{{{}}}", v).as_str(),
+                        format!("{{{v}}}").as_str(),
                     ));
                     line_number = Some(p.line_number);
                 }
@@ -220,7 +220,7 @@ pub fn string_list(
             value.properties,
         )),
         t => ftd::executor::utils::parse_error(
-            format!("Expected value of type string list, found: {:?}", t),
+            format!("Expected value of type string list, found: {t:?}"),
             doc.name,
             line_number,
         ),
@@ -252,7 +252,7 @@ pub fn string(
             value.properties,
         )),
         t => ftd::executor::utils::parse_error(
-            format!("Expected value of type string, found: {:?}", t),
+            format!("Expected value of type string, found: {t:?}"),
             doc.name,
             line_number,
         ),
@@ -282,10 +282,7 @@ pub fn record(
             ftd::executor::Value::new(fields, value.line_number, value.properties),
         ),
         t => ftd::executor::utils::parse_error(
-            format!(
-                "Expected value of type record `{}`, found: {:?}",
-                rec_name, t
-            ),
+            format!("Expected value of type record `{rec_name}`, found: {t:?}"),
             doc.name,
             line_number,
         ),
@@ -316,7 +313,7 @@ pub fn i64(
             value.properties,
         )),
         t => ftd::executor::utils::parse_error(
-            format!("Expected value of type integer, found: {:?}", t),
+            format!("Expected value of type integer, found: {t:?}"),
             doc.name,
             line_number,
         ),
@@ -347,7 +344,7 @@ pub fn f64(
             value.properties,
         )),
         t => ftd::executor::utils::parse_error(
-            format!("Expected value of type decimal, found: {:?}", t),
+            format!("Expected value of type decimal, found: {t:?}"),
             doc.name,
             line_number,
         ),
@@ -378,7 +375,7 @@ pub fn bool(
             value.properties,
         )),
         t => ftd::executor::utils::parse_error(
-            format!("Expected value of type boolean, found: {:?}", t),
+            format!("Expected value of type boolean, found: {t:?}"),
             doc.name,
             line_number,
         ),
@@ -415,7 +412,7 @@ pub fn bool_with_default(
             value.properties,
         )),
         t => ftd::executor::utils::parse_error(
-            format!("Expected value of type optional bool, found: {:?}", t),
+            format!("Expected value of type optional bool, found: {t:?}"),
             doc.name,
             line_number,
         ),
@@ -455,7 +452,7 @@ pub fn optional_i64(
             value.properties,
         )),
         t => ftd::executor::utils::parse_error(
-            format!("Expected value of type optional integer, found: {:?}", t),
+            format!("Expected value of type optional integer, found: {t:?}"),
             doc.name,
             line_number,
         ),
@@ -492,7 +489,7 @@ pub fn string_with_default(
             value.properties,
         )),
         t => ftd::executor::utils::parse_error(
-            format!("Expected value of type optional string, found: {:?}", t),
+            format!("Expected value of type optional string, found: {t:?}"),
             doc.name,
             line_number,
         ),
@@ -528,7 +525,7 @@ pub fn optional_string(
             value.properties,
         )),
         t => ftd::executor::utils::parse_error(
-            format!("Expected value of type optional string, found: {:?}", t),
+            format!("Expected value of type optional string, found: {t:?}"),
             doc.name,
             line_number,
         ),
@@ -569,7 +566,7 @@ pub fn dummy_optional_string(
             value.properties,
         )),
         t => ftd::executor::utils::parse_error(
-            format!("Expected value of type optional string, found: {:?}", t),
+            format!("Expected value of type optional string, found: {t:?}"),
             doc.name,
             line_number,
         ),
@@ -608,7 +605,7 @@ pub fn optional_bool(
             value.properties,
         )),
         t => ftd::executor::utils::parse_error(
-            format!("Expected value of type optional boolean, found: {:?}", t),
+            format!("Expected value of type optional boolean, found: {t:?}"),
             doc.name,
             line_number,
         ),
@@ -645,7 +642,7 @@ pub fn optional_f64(
             value.properties,
         )),
         t => ftd::executor::utils::parse_error(
-            format!("Expected value of type optional decimal, found: {:?}", t),
+            format!("Expected value of type optional decimal, found: {t:?}"),
             doc.name,
             line_number,
         ),
@@ -684,10 +681,7 @@ pub fn optional_record_inherited(
             value.properties,
         )),
         t => ftd::executor::utils::parse_error(
-            format!(
-                "Expected value of type record `{}`, found: {:?}",
-                rec_name, t
-            ),
+            format!("Expected value of type record `{rec_name}`, found: {t:?}"),
             doc.name,
             line_number,
         ),
@@ -733,10 +727,7 @@ pub fn optional_or_type(
             value.properties,
         )),
         t => ftd::executor::utils::parse_error(
-            format!(
-                "Expected value of type or-type `{}`, found: {:?}",
-                rec_name, t
-            ),
+            format!("Expected value of type or-type `{rec_name}`, found: {t:?}"),
             doc.name,
             line_number,
         ),
@@ -788,10 +779,7 @@ pub fn optional_or_type_list(
             value.properties,
         )),
         t => ftd::executor::utils::parse_error(
-            format!(
-                "Expected value of type or-type `{}`, found: {:?}",
-                rec_name, t
-            ),
+            format!("Expected value of type or-type `{rec_name}`, found: {t:?}"),
             doc.name,
             line_number,
         ),

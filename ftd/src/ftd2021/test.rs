@@ -387,7 +387,7 @@ mod interpreter {
     ///
     /// root_id = \[doc_id\]#\[var_name\]@\[level\]
     fn make_root<T: std::fmt::Display>(var_name: &str, doc_id: &str, count: T) -> String {
-        format!("{}#{}@{}", doc_id, var_name, count)
+        format!("{doc_id}#{var_name}@{count}")
     }
 
     /// inserts all default universal arguments in the bag at the mentioned levels

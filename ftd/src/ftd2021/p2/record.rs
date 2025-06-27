@@ -121,7 +121,7 @@ impl Record {
                     }
                     t => {
                         return ftd::ftd2021::p2::utils::e2(
-                            format!("not yet implemented: {:?}", t),
+                            format!("not yet implemented: {t:?}"),
                             doc.name,
                             p1.line_number,
                         );
@@ -210,7 +210,7 @@ impl Record {
                     }
                     t => {
                         return ftd::ftd2021::p2::utils::e2(
-                            format!("not yet implemented: {:?}", t),
+                            format!("not yet implemented: {t:?}"),
                             doc.name,
                             p1.line_number,
                         );
@@ -218,7 +218,7 @@ impl Record {
                 },
                 (Ok(_), _) => {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("'{:?}' ('{}') can not be a sub-section", kind, name),
+                        format!("'{kind:?}' ('{name}') can not be a sub-section"),
                         doc.name,
                         p1.line_number,
                     );
@@ -423,7 +423,7 @@ fn assert_fields_valid(
                 match &caption_field {
                     Some(c) => {
                         return ftd::ftd2021::p2::utils::e2(
-                            format!("both {} and {} are caption fields", name, c),
+                            format!("both {name} and {c} are caption fields"),
                             doc_id,
                             line_number,
                         );
@@ -435,7 +435,7 @@ fn assert_fields_valid(
                 match &body_field {
                     Some(c) => {
                         return ftd::ftd2021::p2::utils::e2(
-                            format!("both {} and {} are body fields", name, c),
+                            format!("both {name} and {c} are body fields"),
                             doc_id,
                             line_number,
                         );

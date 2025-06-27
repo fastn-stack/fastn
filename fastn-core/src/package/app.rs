@@ -38,8 +38,7 @@ impl AppTemp {
                 None => {
                     return Err(fastn_core::Error::PackageError {
                         message: format!(
-                            "package-config-error, wrong header in an fastn app, format is <key>=<value>, config: {}",
-                            key_value
+                            "package-config-error, wrong header in an fastn app, format is <key>=<value>, config: {key_value}"
                         ),
                     });
                 }
@@ -53,8 +52,7 @@ impl AppTemp {
                     None => {
                         return Err(fastn_core::Error::PackageError {
                             message: format!(
-                                "package-config-error, wrong $ENV in an fastn app, format is <key>=$ENV.env_var_name, key: {}, value: {}",
-                                key, value
+                                "package-config-error, wrong $ENV in an fastn app, format is <key>=$ENV.env_var_name, key: {key}, value: {value}"
                             ),
                         });
                     }
@@ -63,8 +61,7 @@ impl AppTemp {
                 let value =
                     std::env::var(env_var_name).map_err(|err| fastn_core::Error::PackageError {
                         message: format!(
-                            "package-config-error,$ENV {} variable is not set for {}, err: {}",
-                            env_var_name, value, err
+                            "package-config-error,$ENV {env_var_name} variable is not set for {value}, err: {err}"
                         ),
                     })?;
                 hm.insert(key.to_string(), value.to_string());

@@ -26,7 +26,7 @@ impl Event {
                         .push(ftd::ftd2021::event::ParameterData { value, reference });
                 } else {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("Can't convert value to string {:?}", value),
+                        format!("Can't convert value to string {value:?}"),
                         doc.name,
                         line_number,
                     );
@@ -169,7 +169,7 @@ impl std::fmt::Display for EventName {
             Self::OnGlobalKey(keys) => format!("onglobalkey[{}]", keys.join("-")),
             Self::OnGlobalKeySeq(keys) => format!("onglobalkeyseq[{}]", keys.join("-")),
         };
-        write!(f, "{}", value)
+        write!(f, "{value}")
     }
 }
 
@@ -202,7 +202,7 @@ impl EventName {
                     .collect_vec();
                 Ok(Self::OnGlobalKeySeq(keys))
             }
-            t => ftd::ftd2021::p2::utils::e2(format!("{} is not a valid event", t), doc_id, 0),
+            t => ftd::ftd2021::p2::utils::e2(format!("{t} is not a valid event"), doc_id, 0),
         }
     }
 }
@@ -379,8 +379,7 @@ impl Action {
                 if !kind.is_list() && !kind.is_optional() {
                     return ftd::ftd2021::p2::utils::e2(
                         format!(
-                            "clear should have target of kind: `list` or `optional`, found: {:?}",
-                            kind
+                            "clear should have target of kind: `list` or `optional`, found: {kind:?}"
                         ),
                         doc.name,
                         line_number,
@@ -444,8 +443,7 @@ impl Action {
                 } else {
                     return ftd::ftd2021::p2::utils::e2(
                         format!(
-                            "target not found, expected `{} something` found: {}",
-                            action_string, a
+                            "target not found, expected `{action_string} something` found: {a}"
                         ),
                         doc.name,
                         line_number,
@@ -469,8 +467,7 @@ impl Action {
                             if min > idx {
                                 return ftd::ftd2021::p2::utils::e2(
                                     format!(
-                                        "minumum number of arguments for {} are {}, found: {}",
-                                        current_parameter, min, idx
+                                        "minumum number of arguments for {current_parameter} are {min}, found: {idx}"
                                     ),
                                     doc.name,
                                     line_number,
@@ -521,10 +518,7 @@ impl Action {
                     val.to_string()
                 } else {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!(
-                            "target not found, expected `insert into <something>` found: {}",
-                            a
-                        ),
+                        format!("target not found, expected `insert into <something>` found: {a}"),
                         doc.name,
                         line_number,
                     );
@@ -535,10 +529,7 @@ impl Action {
                     kind.as_ref().to_owned()
                 } else {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!(
-                            "expected target `{}` kind is list found: `{:?}`",
-                            value, kind
-                        ),
+                        format!("expected target `{value}` kind is list found: `{kind:?}`"),
                         doc.name,
                         line_number,
                     );
@@ -553,8 +544,7 @@ impl Action {
                             if min > idx {
                                 return ftd::ftd2021::p2::utils::e2(
                                     format!(
-                                        "minumum number of arguments for {} are {}, found: {}",
-                                        current_parameter, min, idx
+                                        "minumum number of arguments for {current_parameter} are {min}, found: {idx}"
                                     ),
                                     doc.name,
                                     line_number,
@@ -681,7 +671,7 @@ impl Action {
             }
             t => {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("{} is not a valid action", t),
+                    format!("{t} is not a valid action"),
                     doc.name,
                     line_number,
                 );

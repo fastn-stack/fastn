@@ -104,7 +104,7 @@ impl ConfigTemp {
         }) {
             Ok(package_dependency.package.name.clone())
         } else {
-            fastn_core::usage_error(format!("Can't find package for module {}", module_name))
+            fastn_core::usage_error(format!("Can't find package for module {module_name}"))
         }
     }
 

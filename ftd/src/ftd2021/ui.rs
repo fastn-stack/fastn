@@ -415,9 +415,9 @@ impl Element {
 
                             let external_id = Some({
                                 if let Some(ref ext_id) = external_id {
-                                    format!("{}.{}-external:{}", ext_id, id, index_string)
+                                    format!("{ext_id}.{id}-external:{index_string}")
                                 } else {
-                                    format!("{}-external:{}", id, index_string)
+                                    format!("{id}-external:{index_string}")
                                 }
                             });
                             col.common.data_id.clone_from(&external_id);
@@ -511,7 +511,7 @@ impl Element {
         ) {
             let external_id = {
                 if let Some(external_id) = external_id {
-                    format!(":{}", external_id)
+                    format!(":{external_id}")
                 } else {
                     "".to_string()
                 }
@@ -523,9 +523,9 @@ impl Element {
             };
 
             if let Some(id) = id {
-                *id = format!("{}:{}{}{}", id, index_string, external_id, dummy_str);
+                *id = format!("{id}:{index_string}{external_id}{dummy_str}");
             } else {
-                *id = Some(format!("{}{}{}", index_string, external_id, dummy_str));
+                *id = Some(format!("{index_string}{external_id}{dummy_str}"));
             }
         }
 
@@ -1363,7 +1363,7 @@ impl Element {
                         }
                         return reference
                             .into_iter()
-                            .map(|v| format!("{}.{}", key, v))
+                            .map(|v| format!("{key}.{v}"))
                             .collect();
                     }
                 }
@@ -1457,7 +1457,7 @@ impl Element {
                         }
                         return reference
                             .into_iter()
-                            .map(|v| format!("{}.{}", key, v))
+                            .map(|v| format!("{key}.{v}"))
                             .collect();
                     }
                 }
@@ -1800,7 +1800,7 @@ impl Element {
                                     e.push(ftd::Element::Column(main))
                                 }
                             }
-                            _ => panic!("{} has no external_children data", id),
+                            _ => panic!("{id} has no external_children data"),
                         }
                     } else {
                         container.children.append(&mut children);
@@ -1868,7 +1868,7 @@ impl Length {
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::Calc { value: v })),
                 Err(_) => {
-                    ftd::ftd2021::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0)
+                    ftd::ftd2021::p2::utils::e2(format!("{v} is not a valid integer"), doc_id, 0)
                 } // TODO
             };
         }
@@ -1882,7 +1882,7 @@ impl Length {
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::Portion { value: v })),
                 Err(_) => {
-                    ftd::ftd2021::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0)
+                    ftd::ftd2021::p2::utils::e2(format!("{v} is not a valid integer"), doc_id, 0)
                 } // TODO
             };
         }
@@ -1891,7 +1891,7 @@ impl Length {
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::Percent { value: v })),
                 Err(_) => {
-                    ftd::ftd2021::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0)
+                    ftd::ftd2021::p2::utils::e2(format!("{v} is not a valid integer"), doc_id, 0)
                 } // TODO
             };
         }
@@ -1900,7 +1900,7 @@ impl Length {
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::VH { value: v })),
                 Err(_) => {
-                    ftd::ftd2021::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0)
+                    ftd::ftd2021::p2::utils::e2(format!("{v} is not a valid integer"), doc_id, 0)
                 } // TODO
             };
         }
@@ -1909,7 +1909,7 @@ impl Length {
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::VW { value: v })),
                 Err(_) => {
-                    ftd::ftd2021::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0)
+                    ftd::ftd2021::p2::utils::e2(format!("{v} is not a valid integer"), doc_id, 0)
                 } // TODO
             };
         }
@@ -1919,7 +1919,7 @@ impl Length {
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::VMIN { value: v })),
                 Err(_) => {
-                    ftd::ftd2021::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0)
+                    ftd::ftd2021::p2::utils::e2(format!("{v} is not a valid integer"), doc_id, 0)
                 } // TODO
             };
         }
@@ -1929,16 +1929,14 @@ impl Length {
             return match v.parse() {
                 Ok(v) => Ok(Some(Length::VMAX { value: v })),
                 Err(_) => {
-                    ftd::ftd2021::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0)
+                    ftd::ftd2021::p2::utils::e2(format!("{v} is not a valid integer"), doc_id, 0)
                 } // TODO
             };
         }
 
         match l.parse() {
             Ok(v) => Ok(Some(Length::Px { value: v })),
-            Err(_) => {
-                ftd::ftd2021::p2::utils::e2(format!("{} is not a valid integer", l), doc_id, 0)
-            }
+            Err(_) => ftd::ftd2021::p2::utils::e2(format!("{l} is not a valid integer"), doc_id, 0),
         }
     }
 }
@@ -1980,7 +1978,7 @@ impl Position {
             Some("bottom-right") => Some(Self::BottomRight),
             Some(t) => {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("{} is not a valid alignment", t),
+                    format!("{t} is not a valid alignment"),
                     doc_id,
                     0,
                 );
@@ -2032,7 +2030,7 @@ impl Display for Region {
             Self::AnnounceUrgently => "announce-urgently",
         }
         .to_string();
-        write!(f, "{}", str)
+        write!(f, "{str}")
     }
 }
 
@@ -2057,7 +2055,7 @@ impl Region {
             Some("announce-urgently") => Self::AnnounceUrgently,
             Some(t) => {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("{} is not a valid alignment", t),
+                    format!("{t} is not a valid alignment"),
                     doc_id,
                     0,
                 );
@@ -2099,7 +2097,7 @@ impl Region {
             Self::H6 => Ok(-6),
             Self::H7 => Ok(-7),
             _ => ftd::ftd2021::p2::utils::e2(
-                format!("{} is not a valid heading region", self),
+                format!("{self} is not a valid heading region"),
                 doc_id,
                 0,
             ),
@@ -2168,7 +2166,7 @@ impl Overflow {
             Some("scroll") => Self::Scroll,
             Some(t) => {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("{} is not a valid property", t),
+                    format!("{t} is not a valid property"),
                     doc_id,
                     0,
                 );
@@ -2198,8 +2196,7 @@ impl Anchor {
             t => {
                 return ftd::ftd2021::p2::utils::e2(
                     format!(
-                        "invalid value for `absolute` expected `window` or `parent` found: {}",
-                        t
+                        "invalid value for `absolute` expected `window` or `parent` found: {t}"
                     ),
                     doc_id,
                     0, // TODO
@@ -2274,7 +2271,7 @@ impl GradientDirection {
             return match v.parse() {
                 Ok(v) => Ok(Some(GradientDirection::Angle { value: v })),
                 Err(_) => {
-                    ftd::ftd2021::p2::utils::e2(format!("{} is not a valid integer", v), doc_id, 0)
+                    ftd::ftd2021::p2::utils::e2(format!("{v} is not a valid integer"), doc_id, 0)
                 }
             };
         }
@@ -2448,7 +2445,7 @@ impl Loading {
             "lazy" => Ok(Loading::Lazy),
             "eager" => Ok(Loading::Eager),
             _ => ftd::ftd2021::p2::utils::e2(
-                format!("{} is not a valid alignment, allowed: lazy, eager", s),
+                format!("{s} is not a valid alignment, allowed: lazy, eager"),
                 doc_id,
                 0,
             ),
@@ -2527,10 +2524,7 @@ impl TextAlign {
             Some("justify") => ftd::TextAlign::Justify,
             Some(t) => {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!(
-                        "{} is not a valid alignment, allowed: center, left, right, justify",
-                        t
-                    ),
+                    format!("{t} is not a valid alignment, allowed: center, left, right, justify"),
                     doc_id,
                     0,
                 );
@@ -2555,7 +2549,7 @@ impl FontDisplay {
             Some("block") => ftd::FontDisplay::Block,
             Some(t) => {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("{} is not a valid alignment, allowed: swap, block", t),
+                    format!("{t} is not a valid alignment, allowed: swap, block"),
                     doc_id,
                     0,
                 );
@@ -2676,7 +2670,7 @@ impl Type {
             let property_value =
                 ftd::ftd2021::p2::utils::record_optional(name, &properties, doc.name, 0)?
                     .ok_or_else(|| ftd::ftd2021::p1::Error::ParseError {
-                        message: format!("expected record, for: `{}` found: `None`", name),
+                        message: format!("expected record, for: `{name}` found: `None`"),
                         doc_id: doc.name.to_string(),
                         line_number,
                     })?;
@@ -2725,7 +2719,7 @@ impl Display for NamedFont {
             ftd::NamedFont::Named { value } => value,
         }
         .to_string();
-        write!(f, "{}", str)
+        write!(f, "{str}")
     }
 }
 
@@ -2833,7 +2827,7 @@ impl Style {
                 }
                 t => {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("{} is not a valid style", t),
+                        format!("{t} is not a valid style"),
                         doc_id,
                         0,
                     );
@@ -2902,7 +2896,7 @@ impl TextFormat {
             Some("text") => ftd::TextFormat::Text,
             Some(t) => {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("{} is not a valid format", t),
+                    format!("{t} is not a valid format"),
                     doc_id,
                     0,
                 );

@@ -1407,7 +1407,7 @@ pub fn color_from(
 
         // (7thSigil) unlike original js code, NaN is impossible
         if iv > 0xffffffff {
-            return ftd::ftd2021::p2::utils::e2(format!("{} is not a valid color", v), doc_id, 0);
+            return ftd::ftd2021::p2::utils::e2(format!("{v} is not a valid color"), doc_id, 0);
         }
 
         //Code for accepting 6-digit hexa-color code
@@ -1425,11 +1425,9 @@ pub fn color_from(
                 b: v.b,
                 alpha: v.a,
             })),
-            Err(e) => ftd::ftd2021::p2::utils::e2(
-                format!("{} is not a valid color: {:?}", v, e),
-                doc_id,
-                0,
-            ),
+            Err(e) => {
+                ftd::ftd2021::p2::utils::e2(format!("{v} is not a valid color: {e:?}"), doc_id, 0)
+            }
         }
     }
 }

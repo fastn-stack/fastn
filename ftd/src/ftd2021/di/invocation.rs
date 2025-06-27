@@ -21,7 +21,7 @@ impl Invocation {
     ) -> ftd::ftd2021::di::Result<Invocation> {
         if !Self::is_invocation(section) {
             return ftd::ftd2021::di::parse_error(
-                format!("Section is not `invocation`, found `{:?}`", section),
+                format!("Section is not `invocation`, found `{section:?}`"),
                 doc_id,
                 section.line_number,
             );

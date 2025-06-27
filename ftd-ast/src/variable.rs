@@ -46,10 +46,7 @@ impl VariableDefinition {
     ) -> ftd_ast::Result<VariableDefinition> {
         if !Self::is_variable_definition(section) {
             return ftd_ast::parse_error(
-                format!(
-                    "Section is not variable definition section, found `{:?}`",
-                    section
-                ),
+                format!("Section is not variable definition section, found `{section:?}`"),
                 doc_id,
                 section.line_number,
             );
@@ -126,10 +123,7 @@ impl VariableInvocation {
     ) -> ftd_ast::Result<VariableInvocation> {
         if !Self::is_variable_invocation(section) {
             return ftd_ast::parse_error(
-                format!(
-                    "Section is not variable invocation section, found `{:?}`",
-                    section
-                ),
+                format!("Section is not variable invocation section, found `{section:?}`"),
                 doc_id,
                 section.line_number,
             );
@@ -183,14 +177,14 @@ impl VariableFlags {
             ftd_p1::Header::KV(kv) => kv,
             ftd_p1::Header::Section(s) => {
                 return ftd_ast::parse_error(
-                    format!("Expected the boolean value for flag, found: `{:?}`", s),
+                    format!("Expected the boolean value for flag, found: `{s:?}`"),
                     doc_id,
                     header.get_line_number(),
                 );
             }
             ftd_p1::Header::BlockRecordHeader(b) => {
                 return ftd_ast::parse_error(
-                    format!("Expected the boolean value for flag, found: `{:?}`", b),
+                    format!("Expected the boolean value for flag, found: `{b:?}`"),
                     doc_id,
                     header.get_line_number(),
                 );
@@ -215,7 +209,7 @@ impl VariableFlags {
                     Ok(VariableFlags::new())
                 }
             }
-            t => ftd_ast::parse_error(format!("Unknown flag found`{}`", t), doc_id, kv.line_number),
+            t => ftd_ast::parse_error(format!("Unknown flag found`{t}`"), doc_id, kv.line_number),
         }
     }
 }

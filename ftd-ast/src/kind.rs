@@ -63,7 +63,7 @@ impl VariableKind {
         let expr = kind.split_whitespace().collect::<Vec<&str>>();
         if expr.len() > 5 || expr.is_empty() {
             return ftd_ast::parse_error(
-                format!("Invalid variable kind, found: `{}`", kind),
+                format!("Invalid variable kind, found: `{kind}`"),
                 doc_id,
                 line_number,
             );
@@ -77,7 +77,7 @@ impl VariableKind {
             None => expr.join(" "),
             _ => {
                 return ftd_ast::parse_error(
-                    format!("Invalid variable kind, found: `{}`", kind),
+                    format!("Invalid variable kind, found: `{kind}`"),
                     doc_id,
                     line_number,
                 );
@@ -186,7 +186,7 @@ impl HeaderValues {
 
         self.0
             .iter()
-            .filter(|v| v.key.eq(key) || v.key.starts_with(format!("{}.", key).as_str()))
+            .filter(|v| v.key.eq(key) || v.key.starts_with(format!("{key}.").as_str()))
             .collect_vec()
     }
 
@@ -203,7 +203,7 @@ impl HeaderValues {
             .collect::<Vec<_>>();
         if values.len() > 1 {
             ftd_ast::parse_error(
-                format!("Multiple header found `{}`", name),
+                format!("Multiple header found `{name}`"),
                 doc_id,
                 line_number,
             )
@@ -223,7 +223,7 @@ impl HeaderValues {
         let values = self.get_by_key(key);
         if values.len() > 1 {
             ftd_ast::parse_error(
-                format!("Multiple header found `{}`", key),
+                format!("Multiple header found `{key}`"),
                 doc_id,
                 line_number,
             )
@@ -335,7 +335,7 @@ impl VariableValue {
             VariableValue::String { value, .. } => Ok(value),
             VariableValue::Constant { value, .. } => Ok(value),
             t => ftd_ast::parse_error(
-                format!("Expect Variable value string, found: `{:?}`", t),
+                format!("Expect Variable value string, found: `{t:?}`"),
                 doc_id,
                 t.line_number(),
             ),
@@ -456,7 +456,7 @@ impl VariableValue {
                         Ok(value.into_iter().map(|v| (v.key, v.value)).collect_vec())
                     }
                     t => ftd_ast::parse_error(
-                        format!("Invalid bracket list, found: `{:?}`", t),
+                        format!("Invalid bracket list, found: `{t:?}`"),
                         doc_name,
                         t.line_number(),
                     ),
@@ -466,7 +466,7 @@ impl VariableValue {
                 Ok(value.into_iter().map(|v| (v.key, v.value)).collect_vec())
             }
             t => ftd_ast::parse_error(
-                format!("Expected list, found: `{:?}`", t),
+                format!("Expected list, found: `{t:?}`"),
                 doc_name,
                 t.line_number(),
             ),
@@ -504,7 +504,7 @@ impl VariableValue {
                 ..
             } => Ok((name, caption, headers, body, values, *line_number)),
             t => ftd_ast::parse_error(
-                format!("Expected Record, found: `{:?}`", t),
+                format!("Expected Record, found: `{t:?}`"),
                 doc_id,
                 self.line_number(),
             ),
@@ -532,7 +532,7 @@ impl VariableValue {
                 Ok(value)
             }
             t => ftd_ast::parse_error(
-                format!("Expected Body, found: `{:?}`", t),
+                format!("Expected Body, found: `{t:?}`"),
                 doc_id,
                 self.line_number(),
             ),
@@ -620,7 +620,7 @@ impl VariableValue {
                     }
                 } else {
                     ftd_ast::parse_error(
-                        format!("Expected List found: `{:?}`", self),
+                        format!("Expected List found: `{self:?}`"),
                         doc_id,
                         self.line_number(),
                     )

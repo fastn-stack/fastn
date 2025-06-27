@@ -17,7 +17,7 @@ impl Record {
     ) -> ftd::ftd2021::di::Result<Record> {
         if !Self::is_record(section) {
             return ftd::ftd2021::di::parse_error(
-                format!("Section is not record section, found `{:?}`", section),
+                format!("Section is not record section, found `{section:?}`"),
                 doc_id,
                 section.line_number,
             );
@@ -69,10 +69,7 @@ impl Field {
             }) => {
                 if condition.is_some() {
                     return ftd::ftd2021::di::parse_error(
-                        format!(
-                            "Record field can't have condition: `{:?}` `{:?}`",
-                            key, condition
-                        ),
+                        format!("Record field can't have condition: `{key:?}` `{condition:?}`"),
                         doc_id,
                         *line_number,
                     );
@@ -85,7 +82,7 @@ impl Field {
                     })
                 } else {
                     ftd::ftd2021::di::parse_error(
-                        format!("Can't find kind for record field: `{:?}`", key),
+                        format!("Can't find kind for record field: `{key:?}`"),
                         doc_id,
                         *line_number,
                     )

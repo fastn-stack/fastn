@@ -67,7 +67,7 @@ impl OrTypeVariantExt for fastn_resolved::OrTypeVariant {
         match self {
             fastn_resolved::OrTypeVariant::Constant(c) => Ok(c),
             t => ftd::interpreter::utils::e2(
-                format!("Expected constant, found: {:?}", t),
+                format!("Expected constant, found: {t:?}"),
                 doc_id,
                 t.line_number(),
             ),

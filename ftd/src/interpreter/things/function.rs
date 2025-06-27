@@ -358,7 +358,7 @@ impl FunctionCallExt for fastn_resolved::FunctionCall {
                         resolved_function_name = format!("{name}#{function}");
                     } else {
                         return ftd::interpreter::utils::e2(
-                            format!("No function found: {}", expression),
+                            format!("No function found: {expression}"),
                             doc.name,
                             argument.line_number,
                         );
@@ -396,8 +396,7 @@ impl FunctionCallExt for fastn_resolved::FunctionCall {
                 if !(mutable.eq(&argument.mutable)) {
                     return ftd::interpreter::utils::e2(
                         format!(
-                            "Mutability conflict in argument `{}` for function `{}`",
-                            property_key, resolved_function_name
+                            "Mutability conflict in argument `{property_key}` for function `{resolved_function_name}`"
                         ),
                         doc.name,
                         line_number,

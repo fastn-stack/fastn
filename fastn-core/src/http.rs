@@ -164,7 +164,7 @@ impl fastn_ds::RequestType for Request {
             self.cookies()
                 .iter()
                 // TODO: check if extra escaping is needed
-                .map(|(k, v)| format!("{}={}", k, v).replace(';', "%3B"))
+                .map(|(k, v)| format!("{k}={v}").replace(';', "%3B"))
                 .collect::<Vec<_>>()
                 .join(";"),
         )

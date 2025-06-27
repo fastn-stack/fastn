@@ -50,9 +50,9 @@ impl Uploader {
             let body = resp.text().await?;
 
             if status_code.is_success() {
-                println!("upload done: {}", status_code);
+                println!("upload done: {status_code}");
             } else {
-                println!("upload failed: {}", status_code);
+                println!("upload failed: {status_code}");
                 println!("body: {}", body.as_str());
                 return Err(UploaderError::S3PutError(status_code, body));
             }

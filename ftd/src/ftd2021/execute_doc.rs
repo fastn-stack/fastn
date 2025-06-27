@@ -394,7 +394,7 @@ impl ExecuteDoc<'_> {
                         e.extend(external_children);
                     } else {
                         return ftd::ftd2021::p2::utils::e2(
-                            format!("expected external_children data for id: {}", append_at),
+                            format!("expected external_children data for id: {append_at}"),
                             "",
                             0,
                         );
@@ -525,7 +525,7 @@ fn change_container(
     *current_container = match named_containers.get(name.as_str()) {
         Some(v) => v.get(0).unwrap().to_owned(),
         None => {
-            let error_msg = format!("no such container: {}", name);
+            let error_msg = format!("no such container: {name}");
             return ftd::ftd2021::p2::utils::e2(error_msg.as_str(), doc_id, 0);
         }
     };
@@ -547,7 +547,7 @@ fn update_named_container(
             let container_id = if key_with_container {
                 container_id
                     .clone()
-                    .map_or(format!("#{}", key), |v| format!("{}#{}", v, key))
+                    .map_or(format!("#{key}"), |v| format!("{v}#{key}"))
             } else {
                 key.clone()
             };

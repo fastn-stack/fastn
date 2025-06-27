@@ -691,8 +691,8 @@ impl InterpreterState {
         ) -> ftd::ftd2021::p1::Result<Option<String>> {
             match property_value {
                 ftd::PropertyValue::Value { value } => Ok(value.to_string()),
-                ftd::PropertyValue::Variable { name, .. } => Ok(Some(format!("${}", name))),
-                ftd::PropertyValue::Reference { name, .. } => Ok(Some(format!("${}", name))),
+                ftd::PropertyValue::Variable { name, .. } => Ok(Some(format!("${name}"))),
+                ftd::PropertyValue::Reference { name, .. } => Ok(Some(format!("${name}"))),
             }
         }
 
@@ -839,9 +839,9 @@ impl InterpreterState {
 
             fn get_depth_number(current_depth_index: usize, number: &Option<String>) -> String {
                 if let Some(number) = number {
-                    return format!("{}.{}", number, current_depth_index);
+                    return format!("{number}.{current_depth_index}");
                 }
-                format!("{}", current_depth_index)
+                format!("{current_depth_index}")
             }
 
             let current_depth_nodes = tree_nodes.len();
@@ -1353,8 +1353,7 @@ impl InterpreterState {
                                 .get_mut(target_subsection_index)
                                 .ok_or_else(|| ftd::ftd2021::p1::Error::UnknownData {
                                     message: format!(
-                                        "No subsection present at index {} in sub_sections",
-                                        target_subsection_index
+                                        "No subsection present at index {target_subsection_index} in sub_sections"
                                     ),
                                     doc_id: self.id.clone(),
                                     line_number: *ln,
@@ -1433,8 +1432,8 @@ impl InterpreterState {
                         // In case, the link is escaped, ignore it
                         if !prefix.is_empty() && prefix.eq(r"\") {
                             let match_without_prefix = match ahead.is_empty() {
-                                true => format!("[{}]", linked_text),
-                                false => format!("[{}]({})", linked_text, ahead),
+                                true => format!("[{linked_text}]"),
+                                false => format!("[{linked_text}]({ahead})"),
                             };
                             matches_with_replacements.push((
                                 match_without_prefix,
@@ -1466,15 +1465,14 @@ impl InterpreterState {
                                 doc_id: doc_id.clone(),
                                 line_number,
                                 key: format!(
-                                    "{} not found in id_map while replacing for links",
-                                    captured_id
+                                    "{captured_id} not found in id_map while replacing for links"
                                 ),
                             }
                         })?;
 
-                        let mut replacement = format!("[{}]({})", linked_text, link);
+                        let mut replacement = format!("[{linked_text}]({link})");
                         if !prefix.is_empty() {
-                            replacement = format!("{}{}", prefix, replacement);
+                            replacement = format!("{prefix}{replacement}");
                         }
 
                         matches_with_replacements.push((
@@ -1498,7 +1496,7 @@ impl InterpreterState {
 
                         // In case, the link is escaped, ignore it
                         if !prefix.is_empty() && prefix.eq(r"\") {
-                            let match_without_prefix = format!("[{}]({})", linked_text, type1);
+                            let match_without_prefix = format!("[{linked_text}]({type1})");
                             matches_with_replacements.push((
                                 match_without_prefix,
                                 match_start_index,
@@ -1517,15 +1515,14 @@ impl InterpreterState {
                                 doc_id: doc_id.clone(),
                                 line_number,
                                 key: format!(
-                                    "{} not found in id_map while replacing for links",
-                                    captured_id
+                                    "{captured_id} not found in id_map while replacing for links"
                                 ),
                             }
                         })?;
 
-                        let mut replacement = format!("[{}]({})", linked_text, link);
+                        let mut replacement = format!("[{linked_text}]({link})");
                         if !prefix.is_empty() {
-                            replacement = format!("{}{}", prefix, replacement);
+                            replacement = format!("{prefix}{replacement}");
                         }
 
                         matches_with_replacements.push((

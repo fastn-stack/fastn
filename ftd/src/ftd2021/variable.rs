@@ -103,7 +103,7 @@ impl PropertyValue {
         {
             if !value.contains(':') {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("expected `:`, found: `{}`", value),
+                    format!("expected `:`, found: `{value}`"),
                     doc.name,
                     line_number,
                 );
@@ -171,7 +171,7 @@ impl PropertyValue {
                             kind.clone()
                         } else {
                             return ftd::ftd2021::p2::utils::e2(
-                                format!("{}.{:?} expected kind for parent variable", part1, part2),
+                                format!("{part1}.{part2:?} expected kind for parent variable"),
                                 doc.name,
                                 line_number,
                             );
@@ -191,7 +191,7 @@ impl PropertyValue {
                         }
                         e => {
                             return ftd::ftd2021::p2::utils::e2(
-                                format!("{} is not present in doc, {:?}", part1, e),
+                                format!("{part1} is not present in doc, {e:?}"),
                                 doc.name,
                                 line_number,
                             );
@@ -266,7 +266,7 @@ impl PropertyValue {
                     },
                     t => {
                         return ftd::ftd2021::p2::utils::e2(
-                            format!("can't resolve value {} to expected kind {:?}", string, t),
+                            format!("can't resolve value {string} to expected kind {t:?}"),
                             doc.name,
                             line_number,
                         );
@@ -314,11 +314,10 @@ impl PropertyValue {
                             doc.get_or_type(line_number, &name)?
                                 .variants
                                 .into_iter()
-                                .find(|v| v.name.eq(&format!("{}.{}", name, variant)))
+                                .find(|v| v.name.eq(&format!("{name}.{variant}")))
                                 .ok_or_else(|| ftd::ftd2021::p1::Error::ParseError {
                                     message: format!(
-                                        "expected variant `{}` in or_type `{}`",
-                                        variant, name
+                                        "expected variant `{variant}` in or_type `{name}`"
                                     ),
                                     doc_id: doc.name.to_string(),
                                     line_number,
@@ -342,7 +341,7 @@ impl PropertyValue {
                     Some(kind) => kind.to_owned(),
                     _ => {
                         return ftd::ftd2021::p2::utils::e2(
-                            format!("{} is not present in {} of type {:?}", p1, name, fields),
+                            format!("{p1} is not present in {name} of type {fields:?}"),
                             doc.name,
                             line_number,
                         );
@@ -354,7 +353,7 @@ impl PropertyValue {
                     && !matches!(e_kind, ftd::ftd2021::p2::Kind::Element)
                 {
                     return ftd::ftd2021::p2::utils::e2(
-                        format!("expected {:?} found {:?}", e_kind, found_kind),
+                        format!("expected {e_kind:?} found {found_kind:?}"),
                         doc.name,
                         line_number,
                     );
@@ -461,7 +460,7 @@ impl TextSource {
             ftd::ftd2021::p2::Kind::Element => TextSource::Header,
             t => {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("expected string kind, found: {:?}", t),
+                    format!("expected string kind, found: {t:?}"),
                     doc_id,
                     line_number,
                 );
@@ -744,7 +743,7 @@ impl Variable {
         )?;
         if !kind.is_list() {
             return ftd::ftd2021::p2::utils::e2(
-                format!("Expected list found: {:?}", p1),
+                format!("Expected list found: {p1:?}"),
                 doc.name,
                 p1.line_number,
             );
@@ -946,7 +945,7 @@ impl Variable {
                     }
                     t => {
                         return ftd::ftd2021::p2::utils::e2(
-                            format!("unexpected thing found: {:?}", t),
+                            format!("unexpected thing found: {t:?}"),
                             doc.name,
                             p1.line_number,
                         );
@@ -1005,7 +1004,7 @@ impl Variable {
                 match doc.get_thing(p1.line_number, name)? {
                     ftd::ftd2021::p2::Thing::Record(r) => r.create(p1, doc),
                     t => ftd::ftd2021::p2::utils::e2(
-                        format!("expected record type, found: {:?}", t),
+                        format!("expected record type, found: {t:?}"),
                         doc.name,
                         p1.line_number,
                     ),
@@ -1018,14 +1017,14 @@ impl Variable {
                         e.create(p1, variant, doc)
                     }
                     t => ftd::ftd2021::p2::utils::e2(
-                        format!("expected or-type type, found: {:?}", t),
+                        format!("expected or-type type, found: {t:?}"),
                         doc.name,
                         p1.line_number,
                     ),
                 }
             }
             t => ftd::ftd2021::p2::utils::e2(
-                format!("unexpected type found: {:?}", t),
+                format!("unexpected type found: {t:?}"),
                 doc.name,
                 p1.line_number,
             ),
@@ -1268,7 +1267,7 @@ impl VariableData {
             || s == "container"
         {
             return ftd::ftd2021::p2::utils::e2(
-                format!("invalid declaration, found: `{}`", s),
+                format!("invalid declaration, found: `{s}`"),
                 doc.name,
                 line_number,
             );
@@ -1276,7 +1275,7 @@ impl VariableData {
         let expr = s.split_whitespace().collect::<Vec<&str>>();
         if expr.len() > 4 || expr.len() <= 1 {
             return ftd::ftd2021::p2::utils::e2(
-                format!("invalid declaration, found: `{}`", s),
+                format!("invalid declaration, found: `{s}`"),
                 doc.name,
                 line_number,
             );
@@ -1290,7 +1289,7 @@ impl VariableData {
                 name = expr.get(3);
             } else {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("invalid variable or list declaration, found: `{}`", s),
+                    format!("invalid variable or list declaration, found: `{s}`"),
                     doc.name,
                     line_number,
                 );
@@ -1306,7 +1305,7 @@ impl VariableData {
                 kind = expr.get(1).map(|k| k.to_string());
             } else {
                 return ftd::ftd2021::p2::utils::e2(
-                    format!("invalid variable or list declaration, found: `{}`", s),
+                    format!("invalid variable or list declaration, found: `{s}`"),
                     doc.name,
                     line_number,
                 );
@@ -1314,7 +1313,7 @@ impl VariableData {
         }
 
         let var_kind = kind.ok_or(ftd::ftd2021::p1::Error::ParseError {
-            message: format!("kind not found `{}`", s),
+            message: format!("kind not found `{s}`"),
             doc_id: doc.name.to_string(),
             line_number,
         })?;
@@ -1333,7 +1332,7 @@ impl VariableData {
         };
 
         let name = name.ok_or(ftd::ftd2021::p1::Error::ParseError {
-            message: format!("name not found `{}`", s),
+            message: format!("name not found `{s}`"),
             doc_id: doc.name.to_string(),
             line_number,
         })?;

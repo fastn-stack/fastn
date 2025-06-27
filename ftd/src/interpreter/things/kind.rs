@@ -14,7 +14,7 @@ impl KindExt for fastn_resolved::Kind {
         match &self {
             fastn_resolved::Kind::List { kind } => Ok(kind.as_ref().clone()),
             t => ftd::interpreter::utils::e2(
-                format!("Expected List, found: `{:?}`", t),
+                format!("Expected List, found: `{t:?}`"),
                 doc_name,
                 line_number,
             ),
@@ -98,7 +98,7 @@ impl KindDataExt for fastn_resolved::KindData {
             "children" => {
                 if let Some(modifier) = var_kind.modifier {
                     return ftd::interpreter::utils::e2(
-                        format!("Can't add modifier `{:?}`", modifier),
+                        format!("Can't add modifier `{modifier:?}`"),
                         doc.name,
                         line_number,
                     );
@@ -124,7 +124,7 @@ impl KindDataExt for fastn_resolved::KindData {
                 ftd::interpreter::Thing::Variable(v) => v.kind.kind,
                 t => {
                     return ftd::interpreter::utils::e2(
-                        format!("Can't get find for `{:?}`", t),
+                        format!("Can't get find for `{t:?}`"),
                         doc.name,
                         line_number,
                     );

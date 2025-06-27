@@ -170,7 +170,7 @@ pub async fn get_file(
 
     if !doc_path.to_string().starts_with(&base_path_str) {
         return Err(fastn_core::Error::UsageError {
-            message: format!("{:?} should be a file", doc_path),
+            message: format!("{doc_path:?} should be a file"),
         });
     }
 

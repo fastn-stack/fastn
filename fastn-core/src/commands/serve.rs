@@ -26,10 +26,7 @@ async fn serve_file(
         .auto_import_language(config.request.cookie("fastn-lang"), None)
     {
         return if config.config.test_command_running {
-            fastn_core::http::not_found_without_warning(format!(
-                "fastn-Error: path: {}, {:?}",
-                path, e
-            ))
+            fastn_core::http::not_found_without_warning(format!("fastn-Error: path: {path}, {e:?}"))
         } else {
             fastn_core::not_found!("fastn-Error: path: {}, {:?}", path, e)
         };
@@ -48,8 +45,7 @@ async fn serve_file(
             );
             return if config.config.test_command_running {
                 fastn_core::http::not_found_without_warning(format!(
-                    "fastn-Error: path: {}, {:?}",
-                    path, e
+                    "fastn-Error: path: {path}, {e:?}"
                 ))
             } else {
                 fastn_core::not_found!("fastn-Error: path: {}, {:?}", path, e)
@@ -489,7 +485,7 @@ async fn handle_static_route(
                 Some(if remaining.ends_with("-dark") {
                     format!("{}.{}", remaining.trim_end_matches("-dark"), ext)
                 } else {
-                    format!("{}-dark.{}", remaining, ext)
+                    format!("{remaining}-dark.{ext}")
                 })
             }
             _ => None,

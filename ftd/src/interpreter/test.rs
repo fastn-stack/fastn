@@ -22,10 +22,7 @@ fn p(
                 return;
             } else {
                 if t.is_some() {
-                    panic!(
-                        "{:?} file not expected. found: {:?}",
-                        file_location, expected_error
-                    );
+                    panic!("{file_location:?} file not expected. found: {expected_error:?}");
                 }
                 match e.as_ref() {
                     Some(found_error) => {
@@ -38,7 +35,7 @@ fn p(
                         return;
                     }
                     None => {
-                        panic!("{:?}", expected_error);
+                        panic!("{expected_error:?}");
                     }
                 }
             }
@@ -53,7 +50,7 @@ fn p(
         return;
     }
     let t: ftd::interpreter::Document = serde_json::from_str(&t.clone().unwrap_or_default())
-        .unwrap_or_else(|e| panic!("{:?} Expected JSON: {}", e, expected_json));
+        .unwrap_or_else(|e| panic!("{e:?} Expected JSON: {expected_json}"));
     assert_eq!(&t, &i, "Expected JSON: {}", expected_json)
 }
 
@@ -131,7 +128,7 @@ fn filename_with_second_last_extension_replaced_with_json(
                 None => stem,
             }
         )),
-        path.with_file_name(format!("{}.error", stem)),
+        path.with_file_name(format!("{stem}.error")),
     )
 }
 

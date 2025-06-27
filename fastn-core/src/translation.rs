@@ -167,7 +167,7 @@ impl TranslatedDocument {
                     original_document
                 } else {
                     return Err(fastn_core::Error::PackageError {
-                        message: format!("Could not find `{}` in original package", file),
+                        message: format!("Could not find `{file}` in original package"),
                     });
                 };
             if !translated_documents.contains_key(&file) {
@@ -303,6 +303,6 @@ impl Display for TranslationStatusSummary {
             out_dated = self.out_dated,
             upto_date = self.upto_date
         );
-        write!(f, "{}", str)
+        write!(f, "{str}")
     }
 }

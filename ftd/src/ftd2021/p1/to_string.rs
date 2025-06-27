@@ -13,11 +13,11 @@ impl std::fmt::Display for ftd::ftd2021::p1::Section {
             write!(f, "-- {}:", self.name.as_str())?;
         }
         if let Some(ref caption) = self.caption {
-            write!(f, " {}", caption)?;
+            write!(f, " {caption}")?;
         }
 
         for (_, k, v) in self.header.0.iter() {
-            write!(f, "\n{}: {}", k, v)?;
+            write!(f, "\n{k}: {v}")?;
         }
 
         writeln!(f)?;
@@ -27,7 +27,7 @@ impl std::fmt::Display for ftd::ftd2021::p1::Section {
         }
 
         for sub in self.sub_sections.0.iter() {
-            write!(f, "\n{}", sub)?;
+            write!(f, "\n{sub}")?;
         }
 
         Ok(())
@@ -42,11 +42,11 @@ impl std::fmt::Display for ftd::ftd2021::p1::SubSection {
             write!(f, "--- {}:", self.name.as_str())?;
         }
         if let Some(ref caption) = self.caption {
-            write!(f, " {}", caption)?;
+            write!(f, " {caption}")?;
         }
 
         for (_, k, v) in self.header.0.iter() {
-            write!(f, "\n{}: {}", k, v)?;
+            write!(f, "\n{k}: {v}")?;
         }
 
         if let Some(ref body) = self.body {

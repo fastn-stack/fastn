@@ -33,10 +33,7 @@ impl WebComponentDefinition {
     ) -> ftd_ast::Result<WebComponentDefinition> {
         if !Self::is_web_component_definition(section) {
             return ftd_ast::parse_error(
-                format!(
-                    "Section is not web component definition section, found `{:?}`",
-                    section
-                ),
+                format!("Section is not web component definition section, found `{section:?}`"),
                 doc_id,
                 section.line_number,
             );

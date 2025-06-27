@@ -11,9 +11,9 @@ pub fn get_js_html(external_js: &[String]) -> String {
     let mut result = "".to_string();
     for js in external_js {
         if let Some((js, tags)) = js.rsplit_once(':') {
-            result = format!("{}<script src=\"{}\" {}></script>", result, js, tags);
+            result = format!("{result}<script src=\"{js}\" {tags}></script>");
         } else {
-            result = format!("{}<script src=\"{}\"></script>", result, js);
+            result = format!("{result}<script src=\"{js}\"></script>");
         }
     }
     result
@@ -22,7 +22,7 @@ pub fn get_js_html(external_js: &[String]) -> String {
 pub fn get_css_html(external_css: &[String]) -> String {
     let mut result = "".to_string();
     for css in external_css {
-        result = format!("{}<link rel=\"stylesheet\" href=\"{}\">", result, css);
+        result = format!("{result}<link rel=\"stylesheet\" href=\"{css}\">");
     }
     result
 }
@@ -305,12 +305,12 @@ pub(crate) fn get_doc_name_and_remaining(s: &str) -> (String, Option<String>) {
     let mut part1 = "".to_string();
     let mut pattern_to_split_at = s.to_string();
     if let Some((p1, p2)) = s.split_once('#') {
-        part1 = format!("{}#", p1);
+        part1 = format!("{p1}#");
         pattern_to_split_at = p2.to_string();
     }
     if pattern_to_split_at.contains('.') {
         let (p1, p2) = split(pattern_to_split_at.as_str(), ".").unwrap();
-        (format!("{}{}", part1, p1), Some(p2))
+        (format!("{part1}{p1}"), Some(p2))
     } else {
         (s.to_string(), None)
     }
@@ -368,14 +368,14 @@ pub fn resolve_name(name: &str, doc_name: &str, aliases: &fastn_builtins::Map<St
     let doc_name = doc_name.trim_end_matches('/');
     match fastn_runtime::utils::split_module(name.as_str()) {
         (Some(m), v, None) => match aliases.get(m) {
-            Some(m) => format!("{}#{}", m, v),
-            None => format!("{}#{}.{}", doc_name, m, v),
+            Some(m) => format!("{m}#{v}"),
+            None => format!("{doc_name}#{m}.{v}"),
         },
         (Some(m), v, Some(c)) => match aliases.get(m) {
-            Some(m) => format!("{}#{}.{}", m, v, c),
-            None => format!("{}#{}.{}.{}", doc_name, m, v, c),
+            Some(m) => format!("{m}#{v}.{c}"),
+            None => format!("{doc_name}#{m}.{v}.{c}"),
         },
-        (None, v, None) => format!("{}#{}", doc_name, v),
+        (None, v, None) => format!("{doc_name}#{v}"),
         _ => unimplemented!(),
     }
 }

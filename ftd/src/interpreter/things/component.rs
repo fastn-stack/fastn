@@ -263,7 +263,7 @@ pub(crate) fn search_things_for_module(
                 m_alias = m.to_string();
             }
 
-            let thing_real_name = format!("{}#{}", m_alias, thing);
+            let thing_real_name = format!("{m_alias}#{thing}");
 
             if unresolved_thing.is_some() {
                 new_doc.scan_thing(&thing_real_name, line_number)?;
@@ -330,7 +330,7 @@ fn get_module_name_and_thing(
                         return Ok((name.to_string(), thing.clone()));
                     } else {
                         return ftd::interpreter::utils::e2(
-                            format!("Expected module, found: {:?}", property_value),
+                            format!("Expected module, found: {property_value:?}"),
                             doc.name,
                             module_property.line_number,
                         );
@@ -343,7 +343,7 @@ fn get_module_name_and_thing(
                     fastn_resolved::Value::Module { name, things } => return Ok((name, things)),
                     t => {
                         return ftd::interpreter::utils::e2(
-                            format!("Expected module, found: {:?}", t),
+                            format!("Expected module, found: {t:?}"),
                             doc.name,
                             module_property.line_number,
                         );
@@ -360,7 +360,7 @@ fn get_module_name_and_thing(
     {
         fastn_resolved::Value::Module { name, things } => Ok((name, things)),
         t => ftd::interpreter::utils::e2(
-            format!("Expected module, found: {:?}", t),
+            format!("Expected module, found: {t:?}"),
             doc.name,
             module_property.line_number,
         ),
@@ -869,8 +869,7 @@ impl PropertyExt for fastn_resolved::Property {
                     .find(|v| v.is_caption())
                     .ok_or(ftd::interpreter::Error::ParseError {
                         message: format!(
-                            "Caption type argument not found for component `{}`",
-                            component_name
+                            "Caption type argument not found for component `{component_name}`"
                         ),
                         doc_id: doc.name.to_string(),
                         line_number: ast_property.line_number,
@@ -883,8 +882,7 @@ impl PropertyExt for fastn_resolved::Property {
                     .find(|v| v.is_body())
                     .ok_or(ftd::interpreter::Error::ParseError {
                         message: format!(
-                            "Body type argument not found for component `{}`",
-                            component_name
+                            "Body type argument not found for component `{component_name}`"
                         ),
                         doc_id: doc.name.to_string(),
                         line_number: ast_property.line_number,
@@ -899,8 +897,7 @@ impl PropertyExt for fastn_resolved::Property {
                     .or(kw_args.as_ref())
                     .ok_or(ftd::interpreter::Error::ParseError {
                         message: format!(
-                            "Header type `{}` mutable: `{}` argument not found for component `{}`",
-                            name, mutable, component_name
+                            "Header type `{name}` mutable: `{mutable}` argument not found for component `{component_name}`"
                         ),
                         doc_id: doc.name.to_string(),
                         line_number: ast_property.line_number,
@@ -934,8 +931,7 @@ impl PropertyExt for fastn_resolved::Property {
 
     fn get_local_argument(&self, component_name: &str) -> Option<String> {
         if let Some(reference) = self.value.get_reference_or_clone() {
-            if let Some(reference) = reference.strip_prefix(format!("{}.", component_name).as_str())
-            {
+            if let Some(reference) = reference.strip_prefix(format!("{component_name}.").as_str()) {
                 return Some(reference.to_string());
             }
         }
@@ -1217,9 +1213,8 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
                 if private_arguments.contains(name.as_str()) {
                     return Err(ftd::interpreter::Error::InvalidAccessError {
                         message: format!(
-                            "{} argument is private and can't be accessed on \
-                        invocation",
-                            name
+                            "{name} argument is private and can't be accessed on \
+                        invocation"
                         ),
                         line_number: property.line_number,
                     });
@@ -1312,8 +1307,7 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
             Some(property) => property,
             None => {
                 return Err(ftd::interpreter::Error::OtherError(format!(
-                    "kw-args '{}' does not exists on component.",
-                    kwargs_name
+                    "kw-args '{kwargs_name}' does not exists on component."
                 )));
             }
         };
@@ -1406,7 +1400,7 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
                                 fastn_resolved::Value::Module { name, things } => (name, things),
                                 t => {
                                     return ftd::interpreter::utils::e2(
-                                        format!("Expected module, found: {:?}", t),
+                                        format!("Expected module, found: {t:?}"),
                                         doc.name,
                                         line_number,
                                     );
@@ -1543,7 +1537,7 @@ impl LoopExt for fastn_resolved::Loop {
         match kind {
             fastn_resolved::Kind::List { kind } => Ok(kind.as_ref().to_owned()),
             t => ftd::interpreter::utils::e2(
-                format!("Expected list kind, found: {:?}", t),
+                format!("Expected list kind, found: {t:?}"),
                 doc_id,
                 self.line_number,
             ),
@@ -1783,9 +1777,7 @@ impl EventNameExt for fastn_resolved::EventName {
                     .to_string();
                 Ok(fastn_resolved::EventName::RivePause(pause))
             }
-            t => {
-                ftd::interpreter::utils::e2(format!("`{}` event not found", t), doc_id, line_number)
-            }
+            t => ftd::interpreter::utils::e2(format!("`{t}` event not found"), doc_id, line_number),
         }
     }
 }
