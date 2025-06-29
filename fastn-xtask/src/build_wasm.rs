@@ -1,11 +1,6 @@
-use std::env;
-use std::fs;
-use std::path::PathBuf;
-use std::process::Command;
-
 pub fn build_wasm() -> fastn_core::Result<()> {
     println!("Building WASM target...");
-    let build_status = Command::new("cargo")
+    let build_status = std::process::Command::new("cargo")
         .args([
             "build",
             "--release",
@@ -25,7 +20,7 @@ pub fn build_wasm() -> fastn_core::Result<()> {
         ));
     }
 
-    let current_dir = env::current_dir().map_err(|e| {
+    let current_dir = std::env::current_dir().map_err(|e| {
         fastn_core::Error::GenericError(format!("Failed to get current directory: {}", e))
     })?;
     let workspace_root = current_dir.parent().ok_or_else(|| {
@@ -33,10 +28,10 @@ pub fn build_wasm() -> fastn_core::Result<()> {
     })?;
     let source1 = workspace_root.join("target/wasm32-unknown-unknown/release");
 
-    let home_dir = env::var("HOME").map_err(|_| {
+    let home_dir = std::env::var("HOME").map_err(|_| {
         fastn_core::Error::GenericError("HOME environment variable not set".to_string())
     })?;
-    let source2 = PathBuf::from(&home_dir).join("target/wasm32-unknown-unknown/release");
+    let source2 = std::path::PathBuf::from(&home_dir).join("target/wasm32-unknown-unknown/release");
 
     let source_dir = if source1.exists() {
         source1
@@ -48,11 +43,11 @@ pub fn build_wasm() -> fastn_core::Result<()> {
         ));
     };
 
-    let entries = fs::read_dir(workspace_root).map_err(|e| {
+    let entries = std::fs::read_dir(workspace_root).map_err(|e| {
         fastn_core::Error::GenericError(format!("Failed to read workspace directory: {}", e))
     })?;
 
-    let dest_dirs: Vec<PathBuf> = entries
+    let dest_dirs: Vec<std::path::PathBuf> = entries
         .filter_map(|entry| {
             let entry = entry.ok()?;
             let path = entry.path();
@@ -81,7 +76,7 @@ pub fn build_wasm() -> fastn_core::Result<()> {
     }
 
     for dest_dir in dest_dirs {
-        fs::copy(&wasm_file, dest_dir.join("backend.wasm")).map_err(|e| {
+        std::fs::copy(&wasm_file, dest_dir.join("backend.wasm")).map_err(|e| {
             fastn_core::Error::GenericError(format!(
                 "Failed to copy WASM file to {:?}: {}",
                 dest_dir, e

@@ -9,14 +9,8 @@ repository.workspace = true
 homepage.workspace = true
 rust-version.workspace = true
 
-# Define the library crate
-[lib]
-name = "fastn_xtask"
-path = "src/lib.rs"
-
 [dependencies]
 clap = { workspace = true, features = ["derive"] }
 reqwest.workspace = true
 zip.workspace = true
 fastn-core = { path = "../fastn-core" }
-regex = "1.5.4"

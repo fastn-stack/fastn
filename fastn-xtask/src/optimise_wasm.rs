@@ -1,27 +1,22 @@
-use std::env;
-use std::fs;
-use std::path::{Path, PathBuf};
-use std::process::Command;
-
 const DEFAULT_BINARYEN_VERSION: &str = "version_119";
 
 pub fn optimise_wasm() -> fastn_core::Result<()> {
     println!("Starting WASM optimization...");
 
     let binaryen_version =
-        env::var("BINARYEN_VERSION").unwrap_or_else(|_| DEFAULT_BINARYEN_VERSION.to_string());
+        std::env::var("BINARYEN_VERSION").unwrap_or_else(|_| DEFAULT_BINARYEN_VERSION.to_string());
 
     let wasm_opt_cmd = ensure_wasm_opt(&binaryen_version)?;
 
-    let current_dir = env::current_dir().map_err(|e| {
+    let current_dir = std::env::current_dir().map_err(|e| {
         fastn_core::Error::GenericError(format!("Failed to get current directory: {}", e))
     })?;
 
-    let entries = fs::read_dir(&current_dir).map_err(|e| {
+    let entries = std::fs::read_dir(&current_dir).map_err(|e| {
         fastn_core::Error::GenericError(format!("Failed to read workspace directory: {}", e))
     })?;
 
-    let fifthtry_dirs: Vec<PathBuf> = entries
+    let fifthtry_dirs: Vec<std::path::PathBuf> = entries
         .filter_map(|entry| {
             let entry = entry.ok()?;
             let path = entry.path();
@@ -54,7 +49,7 @@ pub fn optimise_wasm() -> fastn_core::Result<()> {
 }
 
 fn ensure_wasm_opt(binaryen_version: &str) -> fastn_core::Result<String> {
-    if let Ok(output) = Command::new("wasm-opt").arg("--version").output() {
+    if let Ok(output) = std::process::Command::new("wasm-opt").arg("--version").output() {
         if output.status.success() {
             println!("Using globally installed wasm-opt");
             return Ok("wasm-opt".to_string());
@@ -63,7 +58,7 @@ fn ensure_wasm_opt(binaryen_version: &str) -> fastn_core::Result<String> {
 
     println!("wasm-opt not found in PATH. Setting up local version...");
 
-    let os = env::consts::OS;
+    let os = std::env::consts::OS;
     let binary_name = match os {
         "linux" => format!("binaryen-{}-x86_64-linux.tar.gz", binaryen_version),
         "macos" | "darwin" => format!("binaryen-{}-x86_64-macos.tar.gz", binaryen_version),
@@ -78,15 +73,15 @@ fn ensure_wasm_opt(binaryen_version: &str) -> fastn_core::Result<String> {
     let repo_name = "WebAssembly/binaryen";
     let local_install_dir = format!("./bin/binaryen-{}", binaryen_version);
 
-    fs::create_dir_all("./bin").map_err(|e| {
+    std::fs::create_dir_all("./bin").map_err(|e| {
         fastn_core::Error::GenericError(format!("Failed to create bin directory: {}", e))
     })?;
 
-    if !Path::new(&local_install_dir).exists() {
+    if !std::path::Path::new(&local_install_dir).exists() {
         download_release(repo_name, binaryen_version, &binary_name)?;
 
         println!("Extracting {}...", binary_name);
-        let extract_status = Command::new("tar")
+        let extract_status = std::process::Command::new("tar")
             .args(["-xzf", &binary_name, "-C", "./bin/"])
             .status()
             .map_err(|e| {
@@ -100,13 +95,13 @@ fn ensure_wasm_opt(binaryen_version: &str) -> fastn_core::Result<String> {
         }
 
         println!("Removing {}...", binary_name);
-        fs::remove_file(&binary_name).map_err(|e| {
+        std::fs::remove_file(&binary_name).map_err(|e| {
             fastn_core::Error::GenericError(format!("Failed to remove archive: {}", e))
         })?;
     }
 
     let wasm_opt_path = format!("{}/bin/wasm-opt", local_install_dir);
-    if !Path::new(&wasm_opt_path).exists() {
+    if !std::path::Path::new(&wasm_opt_path).exists() {
         return Err(fastn_core::Error::GenericError(
             "wasm-opt not found in the extracted files".to_string(),
         ));
@@ -123,7 +118,7 @@ fn download_release(repo_name: &str, version: &str, binary_name: &str) -> fastn_
     );
     println!("Downloading release from {}", url);
 
-    let status = Command::new("curl")
+    let status = std::process::Command::new("curl")
         .args(["-L", "-o", binary_name, &url])
         .status()
         .map_err(|e| {
@@ -140,16 +135,16 @@ fn download_release(repo_name: &str, version: &str, binary_name: &str) -> fastn_
     Ok(())
 }
 
-fn optimise_wasm_file(wasm_opt_cmd: &str, wasm_file: &Path) -> fastn_core::Result<()> {
+fn optimise_wasm_file(wasm_opt_cmd: &str, wasm_file: &std::path::Path) -> fastn_core::Result<()> {
     println!("Optimizing: {}", wasm_file.display());
 
-    let before_size = fs::metadata(wasm_file)
+    let before_size = std::fs::metadata(wasm_file)
         .map_err(|e| {
             fastn_core::Error::GenericError(format!("Failed to get file metadata: {}", e))
         })?
         .len();
 
-    let status = Command::new(wasm_opt_cmd)
+    let status = std::process::Command::new(wasm_opt_cmd)
         .args([
             "-Oz",
             &wasm_file.to_string_lossy(),
@@ -165,7 +160,7 @@ fn optimise_wasm_file(wasm_opt_cmd: &str, wasm_file: &Path) -> fastn_core::Resul
         ));
     }
 
-    let after_size = fs::metadata(wasm_file)
+    let after_size = std::fs::metadata(wasm_file)
         .map_err(|e| {
             fastn_core::Error::GenericError(format!("Failed to get file metadata: {}", e))
         })?

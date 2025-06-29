@@ -1,20 +1,11 @@
-use std::env;
-use std::fs;
-use std::io::Write;
-use std::path::PathBuf;
-use std::process::Command;
-
-use crate::build_wasm;
-use crate::optimise_wasm;
-
 pub fn publish_app() -> fastn_core::Result<()> {
     println!("Starting app publishing process...");
 
     println!("Building WASM...");
-    build_wasm::build_wasm()?;
+    crate::build_wasm::build_wasm()?;
 
     println!("Optimizing WASM...");
-    optimise_wasm::optimise_wasm()?;
+    crate::optimise_wasm::optimise_wasm()?;
 
     println!("Updating .gitignore...");
     update_gitignore()?;
@@ -22,15 +13,15 @@ pub fn publish_app() -> fastn_core::Result<()> {
     println!("Installing latest fastn...");
     install_fastn()?;
 
-    let current_dir = env::current_dir().map_err(|e| {
+    let current_dir = std::env::current_dir().map_err(|e| {
         fastn_core::Error::GenericError(format!("Failed to get current directory: {}", e))
     })?;
 
-    let entries = fs::read_dir(&current_dir).map_err(|e| {
+    let entries = std::fs::read_dir(&current_dir).map_err(|e| {
         fastn_core::Error::GenericError(format!("Failed to read workspace directory: {}", e))
     })?;
 
-    let site_dirs: Vec<PathBuf> = entries
+    let site_dirs: Vec<std::path::PathBuf> = entries
         .filter_map(|entry| {
             let entry = entry.ok()?;
             let path = entry.path();
@@ -62,23 +53,23 @@ pub fn publish_app() -> fastn_core::Result<()> {
 
 fn update_gitignore() -> fastn_core::Result<()> {
     let gitignore_path = ".gitignore";
-    if fs::metadata(gitignore_path).is_ok() {
-        fs::remove_file(gitignore_path).map_err(|e| {
+    if std::fs::metadata(gitignore_path).is_ok() {
+        std::fs::remove_file(gitignore_path).map_err(|e| {
             fastn_core::Error::GenericError(format!("Failed to remove existing .gitignore: {}", e))
         })?;
     }
 
-    let mut file = fs::File::create(gitignore_path).map_err(|e| {
+    let mut file = std::fs::File::create(gitignore_path).map_err(|e| {
         fastn_core::Error::GenericError(format!("Failed to create .gitignore: {}", e))
     })?;
 
-    writeln!(file, ".packages").map_err(|e| {
+    std::io::Write::write_all(&mut file, b".packages\n").map_err(|e| {
         fastn_core::Error::GenericError(format!("Failed to write to .gitignore: {}", e))
     })?;
-    writeln!(file, ".fastn").map_err(|e| {
+    std::io::Write::write_all(&mut file, b".fastn\n").map_err(|e| {
         fastn_core::Error::GenericError(format!("Failed to write to .gitignore: {}", e))
     })?;
-    writeln!(file, ".is-local").map_err(|e| {
+    std::io::Write::write_all(&mut file, b".is-local\n").map_err(|e| {
         fastn_core::Error::GenericError(format!("Failed to write to .gitignore: {}", e))
     })?;
 
@@ -86,7 +77,7 @@ fn update_gitignore() -> fastn_core::Result<()> {
 }
 
 fn install_fastn() -> fastn_core::Result<()> {
-    let status = Command::new("sh")
+    let status = std::process::Command::new("sh")
         .args(["-c", "$(curl -fsSL https://fastn.com/install.sh)"])
         .status()
         .map_err(|e| fastn_core::Error::GenericError(format!("Failed to install fastn: {}", e)))?;
@@ -100,12 +91,12 @@ fn install_fastn() -> fastn_core::Result<()> {
     Ok(())
 }
 
-fn upload_to_fastn(site_dir: &PathBuf) -> fastn_core::Result<()> {
-    env::set_current_dir(site_dir).map_err(|e| {
+fn upload_to_fastn(site_dir: &std::path::PathBuf) -> fastn_core::Result<()> {
+    std::env::set_current_dir(site_dir).map_err(|e| {
         fastn_core::Error::GenericError(format!("Failed to change to site directory: {}", e))
     })?;
 
-    let status = Command::new("fastn")
+    let status = std::process::Command::new("fastn")
         .args(["upload", "test"])
         .status()
         .map_err(|e| {
