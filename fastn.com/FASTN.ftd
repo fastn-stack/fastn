@@ -706,6 +706,8 @@ skip: true
 - `ftd` Events: /events/
   document: ftd/events.ftd
   description: on-click, on-click-outside, on-mouse-enter, on-mouse-leave, on-input, on-change, on-blur, on-focus, on-global-key, on-global-key-seq
+- Translation: /translation/
+  document: ftd/translation.ftd
 - Rive Events: /rive-events/
   document: ftd/rive-events.ftd
   decription: animation, on-rive-play, on-rive-pause, on-rive-state-change

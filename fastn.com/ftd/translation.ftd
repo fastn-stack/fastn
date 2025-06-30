@@ -1,0 +1,97 @@
+-- ds.page: Translation
+
+`fastn` comes with in-built support for translation. To use this feature you
+have to designate ftd files for each language you want to support. Then, you
+can use the auto imported `$lang` variable wherever you want to use
+jnternationalized texts.
+
+Below is the list of supported languages and their associated 2 character code:
+
+- English (en)
+- Hindi (hi)
+- Chinese (zh)
+- Spanish (es)
+- Arabic (ar)
+- Portuguese (pt)
+- Russian (ru)
+- French (fr)
+- German (de)
+- Japanese (ja)
+- Bengali (bn)
+- Urdu (ur)
+- Indonesian (id)
+- Turkish (tr)
+- Vietnamese (vi)
+- Italian (it)
+- Polish (pl)
+- Thai (th)
+- Dutch (nl)
+- Korean (ko)
+
+To request a new language, please open an issue on the [fastn-stack/fastn](https://github.com/fastn-stack/fastn/) repository.
+
+-- ds.h1: Adding support for multiple languages
+
+Let's take an example of adding support for Hindi (hi) and English (en) in a website:
+
+-- ds.code: FASTN.ftd
+lang: ftd
+
+\-- import: fastn
+
+\-- fastn.package: my-package
+default-language: en
+translation-en: my-package/i18n/en
+translation-hi: my-package/i18n/hi
+
+-- ds.markdown:
+
+You can use `translation-<2 character code>` to specify the translation file for
+the respective language. The `default-language` is the language that will be used
+if user has not specified any language.
+
+-- ds.h2: Creating translation files
+
+As specified above, you need to create two files for Hindi and English translations
+in the `my-package/i18n/` directory.
+
+-- ds.code: my-package/i18n/hi.ftd
+lang: ftd
+
+\-- string title: `fastn` सब्के लिए
+
+-- ds.code: my-package/i18n/en.ftd
+lang: ftd
+
+\-- string title: `fastn` for Everyone
+
+-- ds.h2: Using internationalized values
+
+Use the `$lang` variable to access the translated strings in your
+components or pages. For example, you can use it in a page like this:
+
+-- ds.code: my-package/index.ftd
+lang: ftd
+
+\-- ftd.text: $lang.title \;; $lang is auto imported
+
+-- ds.markdown:
+
+Add more variables in your translation files for each piece of
+internationalized text.
+
+-- ds.h2: Change current language
+
+Use the [`$ftd.set-current-language`](/built-in-functions/#set-current-languagelang-string) function to set the current language.
+
+-- ds.code: my-package/index.ftd
+lang: ftd
+
+\-- ftd.text: Show this page in English
+$on-click$: $ftd.set-current-language(lang = en)
+
+\-- ftd.text: Show this page in Hindi
+$on-click$: $ftd.set-current-language(lang = hi)
+
+
+-- end: ds.page

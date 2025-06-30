@@ -706,6 +706,23 @@ if: { ftd.is_app_mounted("lets-auth") } ;; this will return true
 if: { !ftd.is_app_mounted("lets-auth") } ;; Notice the !
 
 
+-- ds.h2: `set-current-language(lang: string)`
+
+Changes the value of `fastn-lang` cookie to `lang`. See [/translation/](/translation/) for more details.
+
+-- ds.h3: Example
+
+-- ds.code:
+lang: ftd
+
+\;; "translation-en" must be configured in your FASTN.ftd
+\-- ftd.text: Switch to English version of this website
+$on-click$: $ftd.set-current-language(lang = en)
+
+\;; "translation-hi" must be configured in your FASTN.ftd
+\-- ftd.text: Switch to Hindi version of this website
+$on-click$: $ftd.set-current-language(lang = hi)
+
 
 -- ds.h1: Common Components used within sample codes to render content
 
