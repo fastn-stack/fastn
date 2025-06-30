@@ -506,9 +506,16 @@ pub(crate) async fn read_ftd_2023(
     let package_name = config.config.package.name.to_string();
     let c = &config.config.clone();
 
-    let current_package = config
+    let mut current_package = config
         .config
         .find_package_else_default(main.package_name.as_str(), None);
+
+    current_package.auto_import_language(
+        config.config.package.requested_language.clone(),
+        config.config.package.selected_language.clone(),
+    )?;
+
+    let current_package = current_package; // remove mut binding
 
     config.document_id.clone_from(&main.id);
     config.base_url = base_url.to_string();

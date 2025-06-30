@@ -1007,6 +1007,40 @@ pub fn default_bag() -> indexmap::IndexMap<String, fastn_resolved::Definition> {
             })
         ),
         (
+            "ftd#set-current-language".to_string(),
+            fastn_resolved::Definition::Function(fastn_resolved::Function {
+                name: "ftd#set-current-language".to_string(),
+                return_kind: fastn_resolved::KindData {
+                    kind: fastn_resolved::Kind::void(),
+                    caption: false,
+                    body: false,
+                },
+                arguments: vec![
+                    fastn_resolved::Argument {
+                        name: "lang".to_string(),
+                        kind: fastn_resolved::KindData {
+                            kind: fastn_resolved::Kind::string(),
+                            caption: false,
+                            body: false,
+                        },
+                        mutable: false,
+                        value: None,
+                        access_modifier: Default::default(),
+                        line_number: 0,
+                    },
+                ],
+                expression: vec![
+                    fastn_resolved::FunctionExpression {
+                        expression: "ftd.set_current_language(lang)".to_string(),
+                        line_number: 0,
+                    }
+                ],
+                js: None,
+                line_number: 0,
+                external_implementation: true
+            })
+        ),
+        (
             "ftd#copy-to-clipboard".to_string(),
             fastn_resolved::Definition::Function(fastn_resolved::Function {
                 name: "ftd#copy-to-clipboard".to_string(),

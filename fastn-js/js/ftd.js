@@ -508,9 +508,12 @@ const ftd = (function () {
     };
 
     // Language related functions ---------------------------------------------
-    exports.set_current_language = function (language) {
-        language = fastn_utils.getStaticValue(language);
-        fastn_utils.private.setCookie("fastn-lang", language);
+    exports.set_current_language = function (args) {
+        let lang = args.lang;
+        if (lang instanceof fastn.mutableClass)
+            lang = fastn_utils.getStaticValue(lang);
+
+        fastn_utils.private.setCookie("fastn-lang", lang);
         location.reload();
     };
 
