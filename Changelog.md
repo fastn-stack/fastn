@@ -1,5 +1,12 @@
 # `fastn` Change Log
 
+## 30 June 2025
+
+### fastn: 0.4.107
+
+- bb676ea45 - `$ftd.set-current-language(lang: string)` function.
+- 47c8e20a8 - Resolve requested language before auto processing imports.
+
 ## 19 June 2025
 
 ### fastn: 0.4.106
