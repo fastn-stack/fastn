@@ -38,11 +38,22 @@ async fn async_main() -> Result<(), Error> {
     set_env_vars(matches.subcommand_matches("test").is_some());
 
     futures::try_join!(
+        fastn_ui(&matches),
         fastn_core_commands(&matches),
         check_for_update_cmd(&matches)
     )?;
 
     Ok(())
+}
+
+async fn fastn_ui(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
+    let Some(package_name) = matches.get_one::<String>("package_name") else {
+        return Ok(());
+    };
+
+    println!("Launching fastn package: {package_name}");
+
+    todo!()
 }
 
 async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
@@ -261,11 +272,24 @@ async fn check_for_update(report: bool) -> fastn_core::Result<()> {
 fn app(version: &'static str) -> clap::Command {
     clap::Command::new("fastn: Full-stack Web Development Made Easy")
         .version(version)
-        .arg(clap::arg!(-c --"check-for-updates" "Check for updates"))
         .arg_required_else_help(true)
+        .subcommand_negates_reqs(true)
+        .arg(clap::arg!(-c --"check-for-updates" "Check for updates"))
         .arg(clap::arg!(verbose: -v "Sets the level of verbosity"))
         .arg(clap::arg!(--test "Runs the command in test mode").hide(true))
         .arg(clap::arg!(--trace "Activate tracing").hide(true))
+        .arg(
+            clap::Arg::new("package_name")
+                .help("Name of the package to launch in a native window")
+                .required(true)
+                .index(1),
+        )
+        .group(
+            clap::ArgGroup::new("ui_mode")
+                .args(["package_name"])
+                .required(true)
+                .multiple(false),
+        )
         .subcommand(
             clap::Command::new("build")
                 .about("Build static site from this fastn package")
