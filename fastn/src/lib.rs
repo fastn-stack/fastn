@@ -7,7 +7,8 @@ pub async fn fastn_ui(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
 
     println!("Launching fastn package: {package_name}");
 
-    todo!()
+    tauri::run();
+    Ok(())
 }
 
 pub async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
