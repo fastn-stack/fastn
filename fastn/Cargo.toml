@@ -13,20 +13,30 @@ default = ["fifthtry", "use-config-json"]
 fifthtry = ["clift"]
 use-config-json = []
 
+[lib]
+name = "fastn_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
 [dependencies]
-clift = { workspace = true, optional = true }
+actix-web.workspace = true
+camino.workspace = true
 clap.workspace = true
+clift = { workspace = true, optional = true }
+deadpool-postgres.workspace = true
+dotenvy.workspace = true
+fastn-core.workspace = true
+fastn-ds.workspace = true
 fastn-observer.workspace = true
 fastn-update.workspace = true
-fastn-core.workspace = true
 futures.workspace = true
+log.workspace = true
 reqwest.workspace = true
+scc.workspace = true
 serde.workspace = true
+tauri-plugin-log.workspace = true
+tauri.workspace = true
 thiserror.workspace = true
 tokio.workspace = true
-dotenvy.workspace = true
-fastn-ds.workspace = true
-camino.workspace = true
-actix-web.workspace = true
-scc.workspace = true
-deadpool-postgres.workspace = true
+
+[build-dependencies]
+tauri-build.workspace = true
