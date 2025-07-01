@@ -33,9 +33,6 @@ pub enum Error {
     #[error("FTDHtmlError: {}", _0)]
     FTDHtmlError(#[from] ftd::html::Error),
 
-    #[error("IgnoreError: {}", _0)]
-    IgnoreError(#[from] ignore::Error),
-
     #[error("FromPathBufError: {}", _0)]
     FromPathBufError(#[from] camino::FromPathBufError),
 

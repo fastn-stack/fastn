@@ -12,8 +12,6 @@ pub async fn fastn_ui(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
 }
 
 pub async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
-    use fastn_core::utils::ValueOf;
-
     if matches.subcommand_name().is_none() {
         return Ok(());
     }
@@ -401,4 +399,20 @@ pub fn serve_cmd() -> clap::Command {
           clap::arg!(identities: --identities <IDENTITIES> "Http request identities, fastn allows these identities to access documents")
             .hide(true) // this is only for testing purpose
         )
+}
+
+pub trait ValueOf {
+    fn value_of_(&self, name: &str) -> Option<&str>;
+    fn values_of_(&self, name: &str) -> Vec<String>;
+}
+
+impl ValueOf for clap::ArgMatches {
+    fn value_of_(&self, name: &str) -> Option<&str> {
+        self.get_one::<String>(name).map(|v| v.as_str())
+    }
+    fn values_of_(&self, name: &str) -> Vec<String> {
+        self.get_many(name)
+            .map(|v| v.cloned().collect::<Vec<String>>())
+            .unwrap_or_default()
+    }
 }
