@@ -14,6 +14,18 @@ pub mod update_template;
 
 
 pub fn main() -> Result<(), String> {
+    let default_commands = [
+        ("build-wasm", "Builds the WASM target from backend."),
+        ("run-ui", "Builds and serves the UI for the lets-XXX app, which is served on port 8002."),
+        ("update-ui", "Updates UI dependencies for the lets-XXX app, run this only when modifying dependencies in lets-XXX.fifthtry.site/FASTN.ftd or during the initial setup."),
+        ("run-template", "Runs the backend and tests end-to-end functionality of the lets-XXX app."),
+        ("update-template", "Updates dependencies for the lets-XXX app's backend template. Run this only when modifying dependencies or during the initial setup."),
+        ("run-www", "Serves and tests the public website for the lets-XXX app."),
+        ("update-www", "Updates dependencies for the lets-XXX app's public website. Run this only when modifying dependencies or during the initial setup."),
+        ("optimise-wasm", "Optimises the generated WASM binary."),
+        ("publish-app", "Publishes the lets-XXX app."),
+        ("help", "Prints this help message."),
+    ];
     let task = std::env::args().nth(1);
     match task.as_deref() {
         Some("build-wasm") => build_wasm::build_wasm().map_err(|e| e.to_string())?,
@@ -25,45 +37,23 @@ pub fn main() -> Result<(), String> {
         Some("update-www") => update_www::update_www().map_err(|e| e.to_string())?,
         Some("run-www") => run_www::run_www().map_err(|e| e.to_string())?,
         Some("update-template") => update_template::update_template().map_err(|e| e.to_string())?,
-        _ => print_help(None),
+        _ => print_help(Some(&default_commands)),
     }
 
     Ok(())
 }
 
-pub fn print_help(additional_commands: Option<&[(&str, &str)]>) {
+pub fn print_help(commands: Option<&[(&str, &str)]>) {
     eprintln!("fastn xtask CLI");
     eprintln!();
     eprintln!("USAGE:");
     eprintln!("    cargo xtask <COMMAND>");
     eprintln!();
     eprintln!("COMMANDS:");
-    
-    eprintln!("    build-wasm: Builds the WASM target from backend.");
-    eprintln!();
-    eprintln!("    run-ui: Builds and serves the UI for the lets-XXX app, which is served on port 8002.");
-    eprintln!();
-    eprintln!("    update-ui: Updates UI dependencies for the lets-XXX app, run this only when modifying dependencies in lets-XXX.fifthtry.site/FASTN.ftd or during the initial setup.");
-    eprintln!();
-    eprintln!("    run-template: Runs the backend and tests end-to-end functionality of the lets-XXX app.");
-    eprintln!();
-    eprintln!("    update-template: Updates dependencies for the lets-XXX app's backend template. Run this only when modifying dependencies or during the initial setup.");
-    eprintln!();
-    eprintln!("    run-www: Serves and tests the public website for the lets-XXX app.");
-    eprintln!();
-    eprintln!("    update-www: Updates dependencies for the lets-XXX app's public website. Run this only when modifying dependencies or during the initial setup.");
-    eprintln!();
-    eprintln!("    optimise-wasm: Optimises the generated WASM binary.");
-    eprintln!();
-    eprintln!("    publish-app: Publishes the lets-XXX app.");
-    eprintln!();
-    
-    if let Some(additional) = additional_commands {
-        for (command, description) in additional {
+    if let Some(cmds) = commands {
+        for (command, description) in cmds {
             eprintln!("    {}: {}", command, description);
             eprintln!();
         }
     }
-    
-    eprintln!("    help: Prints this help message.");
 }
