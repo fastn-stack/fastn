@@ -1,5 +1,5 @@
 pub fn run_template() -> fastn_core::Result<()> {
-    let template_dir = crate::helpers::find_directory(
+    let template_dir = fastn_xtask::helpers::find_directory(
         |name| name.ends_with("-template.fifthtry.site"),
         "No template directory found (looking for *-template.fifthtry.site)",
     )?;
@@ -14,10 +14,10 @@ pub fn run_template() -> fastn_core::Result<()> {
     })?;
 
     println!("Building WASM...");
-    crate::build_wasm::build_wasm()?;
+    fastn_xtask::build_wasm::build_wasm()?;
 
     println!("Starting fastn serve in offline mode...");
-    let fastn_bin = crate::helpers::get_fastn_binary()?;
+    let fastn_bin = fastn_xtask::helpers::get_fastn_binary()?;
 
     let status = std::process::Command::new(fastn_bin)
         .args(["--trace", "serve", "--offline"])

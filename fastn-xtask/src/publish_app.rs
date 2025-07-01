@@ -2,10 +2,10 @@ pub fn publish_app() -> fastn_core::Result<()> {
     println!("Starting app publishing process...");
 
     println!("Building WASM...");
-    crate::build_wasm::build_wasm()?;
+    fastn_xtask::build_wasm::build_wasm()?;
 
     println!("Optimizing WASM...");
-    crate::optimise_wasm::optimise_wasm()?;
+    fastn_xtask::optimise_wasm::optimise_wasm()?;
 
     println!("Updating .gitignore...");
     update_gitignore()?;

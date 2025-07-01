@@ -1,7 +1,7 @@
 pub fn update_ui() -> fastn_core::Result<()> {
     println!("Updating UI");
 
-    let ui_dir = crate::helpers::find_directory(
+    let ui_dir = fastn_xtask::helpers::find_directory(
         |name| name.ends_with(".fifthtry.site") && !name.ends_with("-template.fifthtry.site"),
         "No directory matching '*.fifthtry.site' (excluding *-template.fifthtry.site) found",
     )?;

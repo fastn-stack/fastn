@@ -1,7 +1,7 @@
 pub fn update_www() -> fastn_core::Result<()> {
     println!("Updating WWW site");
 
-    let www_dir = crate::helpers::find_directory(
+    let www_dir = fastn_xtask::helpers::find_directory(
         |name| name.ends_with(".fifthtry-community.com"),
         "No directory matching '*.fifthtry-community.com' found",
     )?;

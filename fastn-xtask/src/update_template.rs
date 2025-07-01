@@ -1,7 +1,7 @@
 pub fn update_template() -> fastn_core::Result<()> {
     println!("Updating template");
 
-    let template_dir = crate::helpers::find_directory(
+    let template_dir = fastn_xtask::helpers::find_directory(
         |name| name.ends_with("-template.fifthtry.site"),
         "No directory matching '*-template.fifthtry.site' found",
     )?;
