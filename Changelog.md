@@ -1,5 +1,11 @@
 # `fastn` Change Log
 
+## 3 July 2025
+
+### fastn: 0.4.108
+
+- fix: Filter out `null` from url query params in the http processor.
+
 ## 30 June 2025
 
 ### fastn: 0.4.107
