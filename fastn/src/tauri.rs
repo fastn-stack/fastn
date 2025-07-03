@@ -18,7 +18,7 @@ pub fn run(fastn_serve_port: u16) {
                 .get_webview_window("main")
                 .expect("main label is created by tauri");
 
-            let url = format!("http://localhost:{fastn_serve_port}")
+            let url = format!("http://127.0.0.1:{fastn_serve_port}")
                 .parse()
                 .unwrap();
 
