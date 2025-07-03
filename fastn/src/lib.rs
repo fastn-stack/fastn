@@ -1,11 +1,27 @@
 mod tauri;
 
-#[tracing::instrument(skip(matches))]
-pub async fn fastn_ui(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
+/// Launch a native window displaying the `package_slug` got from cli args
+pub async fn fastn_ui_cli(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
+    // We return with Ok so that other subcmds can run if `package_slug` is not provided
     let Some(slug) = matches.get_one::<String>("package_slug") else {
         return Ok(());
     };
 
+    fastn_ui(slug).await
+}
+
+/// The main entry point for the fastn UI application.
+#[allow(unexpected_cfgs)]
+#[cfg_attr(mobile, tauri::mobile_entry_point)]
+pub async fn fastn_app() {
+    // Launch UI with the default package
+    // TODO: use lets-os for the default pkg
+    let slug = "design-sytem";
+    fastn_ui(slug).await.expect("Failed to launch fastn UI");
+}
+
+#[tracing::instrument]
+pub async fn fastn_ui(slug: &str) -> fastn_core::Result<()> {
     let pkg_dir = {
         let mut data_dir = dirs::data_dir().unwrap();
         data_dir.push("packages");

@@ -1,5 +1,3 @@
-#[allow(unexpected_cfgs)]
-#[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run(fastn_serve_port: u16) {
     // fastn main has setup tokio so we make tauri use that
     tauri::async_runtime::set(tokio::runtime::Handle::current());

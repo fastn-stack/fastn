@@ -38,7 +38,7 @@ async fn async_main() -> Result<(), Error> {
     fastn_lib::set_env_vars(matches.subcommand_matches("test").is_some());
 
     futures::try_join!(
-        fastn_lib::fastn_ui(&matches),
+        fastn_lib::fastn_ui_cli(&matches),
         fastn_lib::fastn_core_commands(&matches),
         fastn_lib::check_for_update_cmd(&matches)
     )?;
