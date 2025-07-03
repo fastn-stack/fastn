@@ -1832,6 +1832,7 @@ dependencies = [
  "clap",
  "clift",
  "deadpool-postgres",
+ "dirs",
  "dotenvy",
  "fastn-core",
  "fastn-ds",
@@ -1845,8 +1846,11 @@ dependencies = [
  "tauri",
  "tauri-build",
  "tauri-plugin-log",
+ "tempfile",
  "thiserror 2.0.12",
  "tokio",
+ "tracing",
+ "zip",
 ]
 
 [[package]]
@@ -2075,6 +2079,12 @@ dependencies = [
  "tracing",
  "wasmtime",
 ]
+
+[[package]]
+name = "fastrand"
+version = "2.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "37909eebbb50d72f9059c3b6d82c0463f2ff062c9e95845c43a6c9c0355411be"
 
 [[package]]
 name = "fbt"
@@ -6149,6 +6159,19 @@ dependencies = [
  "embed-resource",
  "indexmap 2.10.0",
  "toml",
+]
+
+[[package]]
+name = "tempfile"
+version = "3.20.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e8a64e3985349f2441a1a9ef0b853f869006c3855f2cda6862a94d26ebb9d6a1"
+dependencies = [
+ "fastrand",
+ "getrandom 0.3.3",
+ "once_cell",
+ "rustix 1.0.7",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]

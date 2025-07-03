@@ -23,6 +23,7 @@ camino.workspace = true
 clap.workspace = true
 clift = { workspace = true, optional = true }
 deadpool-postgres.workspace = true
+dirs.workspace = true
 dotenvy.workspace = true
 fastn-core.workspace = true
 fastn-ds.workspace = true
@@ -35,8 +36,11 @@ scc.workspace = true
 serde.workspace = true
 tauri-plugin-log.workspace = true
 tauri.workspace = true
+tempfile.workspace = true
 thiserror.workspace = true
+tracing.workspace = true
 tokio.workspace = true
+zip.workspace = true
 
 [build-dependencies]
 tauri-build.workspace = true

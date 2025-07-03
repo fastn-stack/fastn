@@ -1,13 +1,84 @@
 mod tauri;
 
+#[tracing::instrument(skip(matches))]
 pub async fn fastn_ui(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
-    let Some(package_name) = matches.get_one::<String>("package_name") else {
+    let Some(slug) = matches.get_one::<String>("package_slug") else {
         return Ok(());
     };
 
-    println!("Launching fastn package: {package_name}");
+    let pkg_dir = {
+        let mut data_dir = dirs::data_dir().unwrap();
+        data_dir.push("packages");
+        data_dir.push(slug);
 
-    tauri::run();
+        data_dir
+    };
+
+    tracing::info!(?pkg_dir);
+
+    if !std::fs::exists(&pkg_dir)? {
+        use std::io::Write;
+
+        let url = format!("https://www.fifthtry.com/{}.zip", slug);
+        tracing::info!("Downloading package from: {url}");
+
+        let tmp_dir = tempfile::tempdir()?;
+        let zip_path = tmp_dir.path().join(format!("{}.zip", slug));
+
+        tracing::info!(?zip_path);
+
+        let mut zip_file = std::fs::File::create(&zip_path)?;
+
+        let response = reqwest::get(&url).await?;
+        let bytes = response.bytes().await?;
+        zip_file.write_all(&bytes)?;
+        zip_file.sync_all()?;
+
+        std::fs::create_dir_all(&pkg_dir)?;
+        let zip_file = std::fs::File::open(&zip_path)?;
+        let mut archive = zip::ZipArchive::new(zip_file)?;
+        for i in 0..archive.len() {
+            let mut file = archive.by_index(i)?;
+            let outpath = pkg_dir.join(file.name());
+            if file.name().ends_with('/') {
+                std::fs::create_dir_all(&outpath)?;
+            } else {
+                if let Some(p) = outpath.parent() {
+                    if !p.exists() {
+                        std::fs::create_dir_all(p)?;
+                    }
+                }
+                let mut outfile = std::fs::File::create(&outpath)?;
+                std::io::copy(&mut file, &mut outfile)?;
+            }
+        }
+        // tempdir will be cleaned up automatically
+    }
+
+    tracing::info!(
+        "Package directory exists at: {:?}. Launcing fastn serve",
+        pkg_dir
+    );
+
+    let pkg_dir = camino::Utf8Path::from_path(&pkg_dir).unwrap();
+    let pg_pools: actix_web::web::Data<scc::HashMap<String, deadpool_postgres::Pool>> =
+        actix_web::web::Data::new(scc::HashMap::new());
+    let ds = fastn_ds::DocumentStore::new(pkg_dir, pg_pools);
+
+    fastn_update::update(&ds, false).await.unwrap();
+
+    let config = fastn_core::Config::read(ds, false, &None).await.unwrap();
+
+    let (server, port) =
+        fastn_core::commands::serve::make_server(std::sync::Arc::new(config), "127.0.0.1", None)
+            .await?;
+
+    tracing::info!("Fastn server is running on port: {}", port);
+    tokio::task::spawn(server);
+
+    tracing::info!("Fastn server is running. Launching Tauri...");
+
+    tauri::run(port);
     Ok(())
 }
 
@@ -293,14 +364,14 @@ pub fn cmd() -> clap::Command {
         .arg(clap::arg!(--test "Runs the command in test mode").hide(true))
         .arg(clap::arg!(--trace "Activate tracing").hide(true))
         .arg(
-            clap::Arg::new("package_name")
-                .help("Name of the package to launch in a native window")
+            clap::Arg::new("package_slug")
+                .help("Slug of the package to launch in a native window. The slug should be downloadable from fifthtry.com")
                 .required(true)
                 .index(1),
         )
         .group(
             clap::ArgGroup::new("ui_mode")
-                .args(["package_name"])
+                .args(["package_slug"])
                 .required(true)
                 .multiple(false),
         )

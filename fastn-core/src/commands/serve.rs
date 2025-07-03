@@ -716,12 +716,29 @@ async fn route(
     actual_route(&config, req, body, &None).await
 }
 
+/// Creates an actix-web server that listens on the specified bind address and port.
 #[allow(clippy::too_many_arguments)]
 pub async fn listen(
     config: std::sync::Arc<fastn_core::Config>,
     bind_address: &str,
     port: Option<u16>,
 ) -> fastn_core::Result<()> {
+    let (server, port) = make_server(config, bind_address, port).await?;
+
+    println!("### Server Started ###");
+    println!("Go to: http://{}:{}", bind_address, port,);
+
+    server.await?;
+    Ok(())
+}
+
+/// Same as [listen] but returns the server instead of awaiting on it.
+#[allow(clippy::too_many_arguments)]
+pub async fn make_server(
+    config: std::sync::Arc<fastn_core::Config>,
+    bind_address: &str,
+    port: Option<u16>,
+) -> fastn_core::Result<(actix_web::dev::Server, u16)> {
     use colored::Colorize;
     env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
 
@@ -760,15 +777,9 @@ You can try without providing port, it will automatically pick unused port."#,
             .route("/{path:.*}", actix_web::web::route().to(route))
     };
 
-    println!("### Server Started ###");
-    println!(
-        "Go to: http://{}:{}",
-        bind_address,
-        tcp_listener.local_addr()?.port()
-    );
-    actix_web::HttpServer::new(app)
-        .listen(tcp_listener)?
-        .run()
-        .await?;
-    Ok(())
+    let port = tcp_listener.local_addr()?.port();
+    Ok((
+        actix_web::HttpServer::new(app).listen(tcp_listener)?.run(),
+        port,
+    ))
 }
