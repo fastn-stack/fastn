@@ -241,7 +241,7 @@ impl std::fmt::Display for fastn_section::IdentifierReference {
                 format!("{}.{}", module.str(), name.str())
             }
         };
-        write!(f, "{}", str)
+        write!(f, "{str}")
     }
 }
 

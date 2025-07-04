@@ -29,7 +29,7 @@ impl fastn::commands::Serve {
                     .serve_connection(io, hyper::service::service_fn(render))
                     .await
                 {
-                    eprintln!("Error serving connection: {:?}", err);
+                    eprintln!("Error serving connection: {err:?}");
                 }
             });
         }

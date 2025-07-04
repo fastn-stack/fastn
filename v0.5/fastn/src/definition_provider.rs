@@ -6,7 +6,7 @@ fn find_all_definitions_in_a_module(
     let source = match std::fs::File::open(file.as_str()).and_then(std::io::read_to_string) {
         Ok(v) => v,
         Err(e) => {
-            println!("failed to read file {}.ftd: {e:?}", file);
+            println!("failed to read file {file}.ftd: {e:?}");
             return vec![];
         }
     };

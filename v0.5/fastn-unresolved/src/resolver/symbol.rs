@@ -157,7 +157,7 @@ mod tests {
         let mut arena = fastn_section::Arena::default();
 
         let document = {
-            let source = format!("--{}: basic", name_to_resolve);
+            let source = format!("--{name_to_resolve}: basic");
             let module = if current_module.is_empty() {
                 fastn_section::Module::main(&mut arena)
             } else {
