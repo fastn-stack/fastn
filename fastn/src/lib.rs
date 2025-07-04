@@ -16,7 +16,7 @@ pub async fn fastn_ui_cli(matches: &clap::ArgMatches) -> fastn_core::Result<()> 
 pub async fn fastn_app() {
     // Launch UI with the default package
     // TODO: use lets-os for the default pkg
-    let slug = "design-sytem";
+    let slug = "design-system";
     fastn_ui(slug).await.expect("Failed to launch fastn UI");
 }
 
