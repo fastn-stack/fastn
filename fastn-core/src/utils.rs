@@ -1,19 +1,3 @@
-pub trait ValueOf {
-    fn value_of_(&self, name: &str) -> Option<&str>;
-    fn values_of_(&self, name: &str) -> Vec<String>;
-}
-
-impl ValueOf for clap::ArgMatches {
-    fn value_of_(&self, name: &str) -> Option<&str> {
-        self.get_one::<String>(name).map(|v| v.as_str())
-    }
-    fn values_of_(&self, name: &str) -> Vec<String> {
-        self.get_many(name)
-            .map(|v| v.cloned().collect::<Vec<String>>())
-            .unwrap_or_default()
-    }
-}
-
 // https://stackoverflow.com/questions/71985357/whats-the-best-way-to-write-a-custom-format-macro
 #[macro_export]
 macro_rules! warning {
