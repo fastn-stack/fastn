@@ -5,6 +5,7 @@
 ### fastn: 0.4.108
 
 - fix: Filter out `null` from url query params in the http processor.
+- windows release: windows-2019 -> 2021 because 2019 is retired by Github.
 
 ## 30 June 2025
 
@@ -24,8 +25,10 @@
 
 ### fastn: 0.4.105
 
-- fix(http processor): Send unquoted string in url query param to preserve old behaviour.
-- fix: Handle import of system packages from `inherited-` caller module correctly.
+- fix(http processor): Send unquoted string in url query param to preserve old
+  behaviour.
+- fix: Handle import of system packages from `inherited-` caller module
+  correctly.
 - fix: Only consider main package when resolving imports for `provided-via`.
 - See: https://github.com/fastn-stack/fastn/pull/2151 for more details.
 
@@ -33,16 +36,20 @@
 
 ### fastn: 0.4.104
 
-- 348030b8a: Fix correctly reflect overriden components for system packages. See issue #2139.
+- 348030b8a: Fix correctly reflect overriden components for system packages. See
+  issue #2139.
 - a42da86f6: Handle package local relative urls in http processor. See PR #2144.
-- 7551fc8f4: Handle wasm modules in mountpoint of app dependencies when called through http processor. See PR #2144.
+- 7551fc8f4: Handle wasm modules in mountpoint of app dependencies when called
+  through http processor. See PR #2144.
 
 ## 10 June 2025
 
 ### fastn: 0.4.103
 
-- Fix: Send POST request body with a wasm+proxy:// url used in an http processor.
-- 2757a1e68: Support for tuple style POST body params is in ftd.submit_form, this works similar to the ftd.http function.
+- Fix: Send POST request body with a wasm+proxy:// url used in an http
+  processor.
+- 2757a1e68: Support for tuple style POST body params is in ftd.submit_form,
+  this works similar to the ftd.http function.
 - bcdf41325: Support form form level errors in ftd.submit_form.
 
 ## 25 May 2025
@@ -64,7 +71,6 @@
 
 - Add `autofocus` attribute to `ftd.text-input` component.
 
-
 # FTD Change Log (Old)
 
 ## 23 February 2023
@@ -74,6 +80,7 @@
 - http -> ftd.http
 
 ## 2 February 2023
+
 - [Added enabled property in ftd.checkbox and ftd.text-input](https://github.com/ftd-lang/ftd/commit/12425b68b56c2f475f3630ddb0484de70479aad0)
 
 ## 1 February 2023
@@ -132,22 +139,21 @@ a = (((a - min) + by) % (max - min)) + min
 </details>
 
 ## 31 January 2023
-  
+
 <details>
 
 <summary><b>Breaking change</b> <a href="https://github.com/ftd-lang/ftd/pull/566/commits/e1722eacf386d3c515000c79a86e7ffb91f2df6c">Inherited types changed</a></summary>
 
 Breaking changes
-  
+
 - `$inherited.types.copy-relaxed` -> `$inherited.types.copy-regular`
 - `$inherited.types.copy-tight` -> `$inherited.types.copy-small`
 - `$inherited.types.label-big` -> `$inherited.types.label-large`
 
-
-Headings: 
+Headings:
 
 - `$inherited.types.heading-tiny` is added
-- rest have weight, line-height, weight updates 
+- rest have weight, line-height, weight updates
 
 Copy:
 
@@ -156,18 +162,19 @@ Copy:
 
 Specialized Text:
 
-- `$inherited.types.source-code` is added 
+- `$inherited.types.source-code` is added
 - rest have size and line-height changes
 
-Labels: 
+Labels:
 
 - `$inherited.types.label-big` is changed to label-large
 - `$inherited.types.label-small` is updated with new size and line-height values
 
-Button: 
+Button:
 
 - All button types which are added are new
-- added `$inherited.types.button-large`, `$inherited.types.button-medium`, `$inherited.types.button-small`, link types
+- added `$inherited.types.button-large`, `$inherited.types.button-medium`,
+  `$inherited.types.button-small`, link types
 
 </details>
 
@@ -181,29 +188,37 @@ Button:
 
 <summary><b>Breaking change</b>: <a href="https://github.com/ftd-lang/ftd/pull/557/commits/37569f9df70ce60f161a1260e6fa09827f8f0875">Merged spacing with spacing-mode</a></summary>
 
-  - use `spacing.fixed.px: 20` instead of `spacing.px: 20`
-  - use `spacing: space-around` instead of `spacing-mode: space-around` (same for `space-between` and `space-evenly`)
+- use `spacing.fixed.px: 20` instead of `spacing.px: 20`
+- use `spacing: space-around` instead of `spacing-mode: space-around` (same for
+  `space-between` and `space-evenly`)
 
 </details>
 
 ## 25 January 2023
 
 - [Added sticky css](https://github.com/ftd-lang/ftd/pull/553/commits/a3b43d09b7b968d8242559e96dbff7c356104880)
-- [Added `id` attr](https://github.com/ftd-lang/ftd/pull/554/commits/7321ba5253d565683e35e078606567f302633eaf)
-- [Added slugify `id` for `region`s](https://github.com/ftd-lang/ftd/pull/556/commits/a419d0155bd4299c4efab91ad55557f92bc21f0f)
-- [Added `LOOP.COUNTER`](https://github.com/ftd-lang/ftd/commit/9d31c722814d5cd9ded21be9de2b310b1d4cb0b8)
+- [Added
+  `id` attr](https://github.com/ftd-lang/ftd/pull/554/commits/7321ba5253d565683e35e078606567f302633eaf)
+- [Added slugify `id` for
+  `region`s](https://github.com/ftd-lang/ftd/pull/556/commits/a419d0155bd4299c4efab91ad55557f92bc21f0f)
+- [Added
+  `LOOP.COUNTER`](https://github.com/ftd-lang/ftd/commit/9d31c722814d5cd9ded21be9de2b310b1d4cb0b8)
 
 ## 24 January 2023
+
 - [Added border-style](https://github.com/ftd-lang/ftd/pull/549/commits/6f08e0ce2b9eeb5aa8da5bb418b60fcc0b221d05)
 - [Added ftd.enable-dark-mode, ftd.enable-light-mode, ftd.enable-system-mode](https://github.com/ftd-lang/ftd/commit/723b1f50e3e1564c112c926ec024198fa843e42f)
 
 ## 23 January 2023
+
 - [Added line-clamp](https://github.com/ftd-lang/ftd/pull/544/commits/b50d8ef371ead95679838e862d0ea956e7655b39)
 
 ## 19 January 2023
+
 - [Added ftd.text-input](https://github.com/ftd-lang/ftd/pull/543/commits/b86f74b45322e53f8a9acf43155b4bb0aa1a19b3)
 
 ## 18 January 2023
+
 - [Added on-blur, on-focus events](https://github.com/ftd-lang/ftd/pull/540/commits/d0416a7eb2d5b4fa6172b4f32cf442161427e4db)
 - [Added on-change, on-input events](https://github.com/ftd-lang/ftd/commit/06d6d91fb10c63e01dbfbe02d4913b8b8e8f1594)
 - [Added ftd.decimal](https://github.com/ftd-lang/ftd/pull/536/commits/114c1af8a9e159b11f9f2eb62dfd3839b1dd9e4b)
@@ -211,29 +226,37 @@ Button:
 
 ## 17 January 2023
 
-- [Added `ftd.input`](https://github.com/ftd-lang/ftd/pull/535/commits/99702d33ce6b3485ed9a7481709cb85f3ee7fddf)
+- [Added
+  `ftd.input`](https://github.com/ftd-lang/ftd/pull/535/commits/99702d33ce6b3485ed9a7481709cb85f3ee7fddf)
 
 ## 13 January 2023
 
-- Major Change: [Converted executor from recursion to loop](https://github.com/ftd-lang/ftd/pull/529/commits/f305bc187f006bb49e2cbdaf1f35bbd62e151d67)
+- Major
+  Change: [Converted executor from recursion to loop](https://github.com/ftd-lang/ftd/pull/529/commits/f305bc187f006bb49e2cbdaf1f35bbd62e151d67)
 
 ## 12 January 2023
 
-- [Added `ftd.iframe`](https://github.com/ftd-lang/ftd/pull/523/commits/dbddbff69ff203e338b594f31c165a4fcf10afbe)
-- [Added `z-index`](https://github.com/ftd-lang/ftd/pull/523/commits/6acf81e42290901ef127cf23687f39ea48e88d9a)
+- [Added
+  `ftd.iframe`](https://github.com/ftd-lang/ftd/pull/523/commits/dbddbff69ff203e338b594f31c165a4fcf10afbe)
+- [Added
+  `z-index`](https://github.com/ftd-lang/ftd/pull/523/commits/6acf81e42290901ef127cf23687f39ea48e88d9a)
 
 ## 11th January 2023
 
 - [Added text-transform css](https://github.com/ftd-lang/ftd/pull/529/commits/0cae01d1a5b9b7a3775bd60d1c36a8230e5d74cc)
-- [Added `auto` variant in `ftd.resizing`](https://github.com/ftd-lang/ftd/pull/523/commits/939fce3398b6f5612eceffab8931c71d7341af55)
+- [Added `auto` variant in
+  `ftd.resizing`](https://github.com/ftd-lang/ftd/pull/523/commits/939fce3398b6f5612eceffab8931c71d7341af55)
 
 ## 10th January 2023
 
 - [Added white-space css](https://github.com/ftd-lang/ftd/pull/523/commits/af5b339f1b6ff04a0738dbbfda4186d57d27fd27)
 - [Added basic ftd functions](https://github.com/ftd-lang/ftd/pull/524/commits/f268014568ef75e86e989ef80de0089ad614e07f)
-- [Added `ftd.breakpoint-width`](https://github.com/ftd-lang/ftd/pull/524/commits/537b8cfd356f91e0059edbd04987c0a3f0dbf8a6)
-- [`ftd.device` type string to or-type](https://github.com/ftd-lang/ftd/pull/524/commits/85da36d3eecddcefad8b3acc9800458d4c740f34)
-- [Added `ftd.code`](https://github.com/ftd-lang/ftd/commit/5c5a8214d69276fe587949a364199ab8a2407e71)
+- [Added
+  `ftd.breakpoint-width`](https://github.com/ftd-lang/ftd/pull/524/commits/537b8cfd356f91e0059edbd04987c0a3f0dbf8a6)
+- [
+  `ftd.device` type string to or-type](https://github.com/ftd-lang/ftd/pull/524/commits/85da36d3eecddcefad8b3acc9800458d4c740f34)
+- [Added
+  `ftd.code`](https://github.com/ftd-lang/ftd/commit/5c5a8214d69276fe587949a364199ab8a2407e71)
 
 ## 9th January 2023
 
@@ -244,7 +267,8 @@ Button:
 ## 6th January 2023
 
 - [Added `ftd.responsive-length` and `responsive` variant of type `ftd.
-  responsive-length` in `ftd.length`](https://github.com/ftd-lang/ftd/commit/2376c2746670fc8fef67b909b5798bf16e3d8986)
+  responsive-length` in
+  `ftd.length`](https://github.com/ftd-lang/ftd/commit/2376c2746670fc8fef67b909b5798bf16e3d8986)
 
 ## 5th January 2023
 
@@ -263,10 +287,10 @@ Button:
 - [Added cursor property and cursor as pointer in event](https://github.com/ftd-lang/ftd/commit/64aa657a13ab24d932d56a2ddf9bcb77982a7752)
 - [Added http and copy_to_clipboard in build.js](https://github.com/ftd-lang/ftd/commit/7eb9e879ff94ced3ed53d7d1584d63975b1a6b2f)
 
-
 ## 30th December 2022
 
-- Major Change: [`ftd.length variant from `anonymous record` to `regular`](https://github.com/ftd-lang/ftd/commit/c4e7e591e515c5dfef1647e3f447e77a2f94c538)
+- Major Change: [`ftd.length variant from `anonymous record
+  ` to `regular`](https://github.com/ftd-lang/ftd/commit/c4e7e591e515c5dfef1647e3f447e77a2f94c538)
 - [Added set_value_by_id in js](https://github.com/ftd-lang/ftd/commit/e6f65267cbe57888e0fd510dd15bb56032bf8e7a)
 
 ## 29th December 2022
@@ -279,7 +303,7 @@ Button:
 
 - Added resize
 - [Change min-height, min-width, max-width, max-height type from ftd.length to ftd.resizing](https://github.com/ftd-lang/ftd/commit/edad6b2899d940c11bd30c47fb15b08c6c04ad78)
-- [or-type constant construction shorthand (only short-hand allowed)](https://github.com/ftd-lang/ftd/commit/a1ae3726eef848554ccf81a7f4270aeb6daa37ce) 
+- [or-type constant construction shorthand (only short-hand allowed)](https://github.com/ftd-lang/ftd/commit/a1ae3726eef848554ccf81a7f4270aeb6daa37ce)
   [The Video link](https://www.loom.com/share/ee239d4840a74eb087f53ad6445a49a8)
 
 ## 27th December 2022
@@ -289,12 +313,12 @@ Button:
 - [Added default function(is_empty, enable_dark_mode, enable_light_mode,
   enable_system_mode)](https://github.com/ftd-lang/ftd/commit/46d7a1596259e8a916d76228cb6997caaf3fb226)
 
-
 ## 26th December 2022
 
-- [Added more variants in `ftd.length` (calc, vh, vw, em, rem)](https://github.com/ftd-lang/ftd/commit/60bd50c5a9306be1b305601c037e39810ef6206a)
-- [Added `open-in-new-tab`](https://github.com/ftd-lang/ftd/commit/048024c468f8cc5a47f72dabdd2454499aaca314)
-
+- [Added more variants in
+  `ftd.length` (calc, vh, vw, em, rem)](https://github.com/ftd-lang/ftd/commit/60bd50c5a9306be1b305601c037e39810ef6206a)
+- [Added
+  `open-in-new-tab`](https://github.com/ftd-lang/ftd/commit/048024c468f8cc5a47f72dabdd2454499aaca314)
 
 ## 24th December 2022
 
