@@ -44,8 +44,15 @@ pub fn publish_app() -> fastn_core::Result<()> {
     let site_dir = &site_dirs[0];
     println!("Using site directory: {}", site_dir.display());
 
-    println!("Uploading to fastn...");
-    upload_to_fastn(site_dir)?;
+    // Extract site name from directory name
+    let site_name = site_dir
+        .file_name()
+        .and_then(|n| n.to_str())
+        .and_then(|n| n.strip_suffix(".fifthtry.site"))
+        .ok_or_else(|| fastn_core::Error::GenericError("Failed to extract site name from directory".to_string()))?;
+
+    println!("Uploading to fastn as site: {}...", site_name);
+    upload_to_fastn(site_dir, site_name)?;
 
     println!("App published successfully!");
     Ok(())
@@ -91,13 +98,13 @@ fn install_fastn() -> fastn_core::Result<()> {
     Ok(())
 }
 
-fn upload_to_fastn(site_dir: &std::path::PathBuf) -> fastn_core::Result<()> {
+fn upload_to_fastn(site_dir: &std::path::PathBuf, site_name: &str) -> fastn_core::Result<()> {
     std::env::set_current_dir(site_dir).map_err(|e| {
         fastn_core::Error::GenericError(format!("Failed to change to site directory: {}", e))
     })?;
 
     let status = std::process::Command::new("fastn")
-        .args(["upload", "test"])
+        .args(["upload", site_name])
         .status()
         .map_err(|e| {
             fastn_core::Error::GenericError(format!("Failed to run fastn upload: {}", e))
