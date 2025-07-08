@@ -35,10 +35,14 @@ async fn async_main() -> Result<(), Error> {
 
     let matches = app.get_matches();
 
+    // TODO: figure out how to load .env files for packages run from fastn UI
     fastn_lib::set_env_vars(matches.subcommand_matches("test").is_some());
 
     futures::try_join!(
+        // launches a UI with the [package_name] provided
+        // no args passed to the cli means a UI launch with the default pkg
         fastn_lib::fastn_ui_cli(&matches),
+        // handles subcmds like "serve", "test" etc
         fastn_lib::fastn_core_commands(&matches),
         fastn_lib::check_for_update_cmd(&matches)
     )?;

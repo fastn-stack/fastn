@@ -1,9 +1,16 @@
 mod tauri;
 
 /// Launch a native window displaying the `package_slug` got from cli args
+/// or launch the default pkg if no cli args are provided
 pub async fn fastn_ui_cli(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
-    // We return with Ok so that other subcmds can run if `package_slug` is not provided
+    // Act as an app if no arg is supplied
+    if std::env::args().count() == 1 {
+        fastn_app().await;
+        return Ok(());
+    }
+
     let Some(slug) = matches.get_one::<String>("package_slug") else {
+        // We return with Ok so that other subcmds can run if `package_slug` is not provided
         return Ok(());
     };
 
