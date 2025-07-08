@@ -531,7 +531,26 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                         if ekind.kind.is_list()
                             && ekind.kind.ref_inner_list().is_same_as(&found_kind.kind) =>
                     {
-                        return Ok(ftd::interpreter::StateWithThing::new_thing(None));
+                        let reference_full_name =
+                            source.get_reference_name(reference.as_str(), doc);
+                        let kind = get_kind(expected_kind, &found_kind);
+
+                        return Ok(ftd::interpreter::StateWithThing::new_thing(Some(
+                            fastn_resolved::PropertyValue::Value {
+                                value: fastn_resolved::Value::List {
+                                    data: vec![fastn_resolved::PropertyValue::Reference {
+                                        name: reference_full_name,
+                                        kind,
+                                        source,
+                                        is_mutable: mutable,
+                                        line_number: value.line_number(),
+                                    }],
+                                    kind: ekind.kind.clone().inner_list().into_kind_data(),
+                                },
+                                is_mutable: false,
+                                line_number: 0,
+                            },
+                        )));
                     }
                     Some(ekind) if !ekind.kind.is_same_as(&found_kind.kind) => {
                         return ftd::interpreter::utils::e2(
