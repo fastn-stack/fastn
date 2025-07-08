@@ -547,8 +547,9 @@ impl PropertyValueExt for fastn_resolved::PropertyValue {
                                     }],
                                     kind: ekind.kind.clone().inner_list().into_kind_data(),
                                 },
-                                is_mutable: false,
-                                line_number: 0,
+                                // does not matter, ftd code can never access this variable
+                                is_mutable: false, 
+                                line_number: value.line_number(),
                             },
                         )));
                     }
