@@ -16,14 +16,14 @@ pub mod update_template;
 pub fn main() -> Result<(), String> {
     let default_commands = [
         ("build-wasm", "Builds the WASM target from backend."),
-        ("run-ui", "Builds and serves the UI for the lets-XXX app, which is served on port 8002."),
-        ("update-ui", "Updates UI dependencies for the lets-XXX app, run this only when modifying dependencies in lets-XXX.fifthtry.site/FASTN.ftd or during the initial setup."),
-        ("run-template", "Runs the backend and tests end-to-end functionality of the lets-XXX app."),
-        ("update-template", "Updates dependencies for the lets-XXX app's backend template. Run this only when modifying dependencies or during the initial setup."),
-        ("run-www", "Serves and tests the public website for the lets-XXX app."),
-        ("update-www", "Updates dependencies for the lets-XXX app's public website. Run this only when modifying dependencies or during the initial setup."),
+        ("run-ui", "Builds and serves the UI for the app, which is served on port 8002."),
+        ("update-ui", "Updates UI dependencies for the app, run this only when modifying dependencies in *.fifthtry.site/FASTN.ftd or during the initial setup."),
+        ("run-template", "Runs the backend and tests end-to-end functionality of the app."),
+        ("update-template", "Updates dependencies for the app's backend template. Run this only when modifying dependencies or during the initial setup."),
+        ("run-www", "Serves and tests the public website for the app."),
+        ("update-www", "Updates dependencies for the app's public website. Run this only when modifying dependencies or during the initial setup."),
         ("optimise-wasm", "Optimises the generated WASM binary."),
-        ("publish-app", "Publishes the lets-XXX app."),
+        ("publish-app", "Publishes the app."),
         ("help", "Prints this help message."),
     ];
     let task = std::env::args().nth(1);
