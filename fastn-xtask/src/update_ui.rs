@@ -1,0 +1,39 @@
+pub fn update_ui() -> fastn_core::Result<()> {
+    println!("Updating UI");
+
+    let ui_dir = fastn_xtask::helpers::find_directory(
+        |name| name.ends_with(".fifthtry.site") && !name.ends_with("-template.fifthtry.site"),
+        "No directory matching '*.fifthtry.site' (excluding *-template.fifthtry.site) found",
+    )?;
+
+    let current_dir = std::env::current_dir().map_err(|e| {
+        fastn_core::Error::GenericError(format!("Failed to get current directory: {}", e))
+    })?;
+
+    std::env::set_current_dir(&ui_dir).map_err(|e| {
+        fastn_core::Error::GenericError(format!("Failed to change to UI directory: {}", e))
+    })?;
+
+    let fastn_binary = std::env::var("FASTN_BINARY").unwrap_or_else(|_| "fastn".to_string());
+
+    println!("Running fastn update...");
+    let status = std::process::Command::new(&fastn_binary)
+        .arg("update")
+        .status()
+        .map_err(|e| {
+            fastn_core::Error::GenericError(format!("Failed to run fastn update: {}", e))
+        })?;
+
+    if !status.success() {
+        return Err(fastn_core::Error::GenericError(
+            "fastn update failed".to_string(),
+        ));
+    }
+
+    std::env::set_current_dir(current_dir).map_err(|e| {
+        fastn_core::Error::GenericError(format!("Failed to return to original directory: {}", e))
+    })?;
+
+    println!("UI updated successfully!");
+    Ok(())
+}
