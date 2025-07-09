@@ -31,10 +31,12 @@
             rust-analyzer-unwrapped
 
             cargo-tauri
+
+            git
           ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Foundation ];
 
           shellHook = ''
-            export PATH="$PATH:$HOME/.cargo/bin"
+            source ./scripts/auto.sh
           '';
 
           RUST_SRC_PATH = "${toolchain}/lib/rustlib/src/rust/library";

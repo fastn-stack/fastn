@@ -723,6 +723,8 @@ pub async fn listen(
     bind_address: &str,
     port: Option<u16>,
 ) -> fastn_core::Result<()> {
+    env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
+
     let (server, port) = make_server(config, bind_address, port).await?;
 
     println!("### Server Started ###");
@@ -740,7 +742,6 @@ pub async fn make_server(
     port: Option<u16>,
 ) -> fastn_core::Result<(actix_web::dev::Server, u16)> {
     use colored::Colorize;
-    env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
 
     let tcp_listener = match fastn_core::http::get_available_port(port, bind_address) {
         Some(listener) => listener,

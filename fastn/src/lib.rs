@@ -1,11 +1,31 @@
 mod tauri;
 
+// TODO: use lets-os
+const DEFAULT_UI_PKG: &str = "design-system";
+
+/// WARN: Do not call this function!
+/// The main entry point for the fastn UI application.
+#[allow(unexpected_cfgs, unused)]
+#[cfg_attr(mobile, tauri_macros::mobile_entry_point)]
+fn fastn_app_entrypoint() {
+    async fn inner() {
+        log::info!("=========================== FASTN UI ============================");
+        tauri::run(tauri::FastnPackage::Default);
+    }
+
+    tokio::runtime::Builder::new_multi_thread()
+        .enable_all()
+        .build()
+        .unwrap()
+        .block_on(inner())
+}
+
 /// Launch a native window displaying the `package_slug` got from cli args
 /// or launch the default pkg if no cli args are provided
 pub async fn fastn_ui_cli(matches: &clap::ArgMatches) -> fastn_core::Result<()> {
     // Act as an app if no arg is supplied
     if std::env::args().count() == 1 {
-        fastn_app().await;
+        tauri::run(tauri::FastnPackage::Default);
         return Ok(());
     }
 
@@ -14,94 +34,8 @@ pub async fn fastn_ui_cli(matches: &clap::ArgMatches) -> fastn_core::Result<()> 
         return Ok(());
     };
 
-    fastn_ui(slug).await
-}
+    tauri::run(tauri::FastnPackage::Custom(slug.as_str()));
 
-/// The main entry point for the fastn UI application.
-#[allow(unexpected_cfgs)]
-#[cfg_attr(mobile, tauri::mobile_entry_point)]
-pub async fn fastn_app() {
-    // Launch UI with the default package
-    // TODO: use lets-os for the default pkg
-    let slug = "design-system";
-    fastn_ui(slug).await.expect("Failed to launch fastn UI");
-}
-
-#[tracing::instrument]
-pub async fn fastn_ui(slug: &str) -> fastn_core::Result<()> {
-    let pkg_dir = {
-        let mut data_dir = dirs::data_dir().unwrap();
-        data_dir.push("packages");
-        data_dir.push(slug);
-
-        data_dir
-    };
-
-    tracing::info!(?pkg_dir);
-
-    if !std::fs::exists(&pkg_dir)? {
-        use std::io::Write;
-
-        let url = format!("https://www.fifthtry.com/{}.zip", slug);
-        tracing::info!("Downloading package from: {url}");
-
-        let tmp_dir = tempfile::tempdir()?;
-        let zip_path = tmp_dir.path().join(format!("{}.zip", slug));
-
-        tracing::info!(?zip_path);
-
-        let mut zip_file = std::fs::File::create(&zip_path)?;
-
-        let response = reqwest::get(&url).await?;
-        let bytes = response.bytes().await?;
-        zip_file.write_all(&bytes)?;
-        zip_file.sync_all()?;
-
-        std::fs::create_dir_all(&pkg_dir)?;
-        let zip_file = std::fs::File::open(&zip_path)?;
-        let mut archive = zip::ZipArchive::new(zip_file)?;
-        for i in 0..archive.len() {
-            let mut file = archive.by_index(i)?;
-            let outpath = pkg_dir.join(file.name());
-            if file.name().ends_with('/') {
-                std::fs::create_dir_all(&outpath)?;
-            } else {
-                if let Some(p) = outpath.parent() {
-                    if !p.exists() {
-                        std::fs::create_dir_all(p)?;
-                    }
-                }
-                let mut outfile = std::fs::File::create(&outpath)?;
-                std::io::copy(&mut file, &mut outfile)?;
-            }
-        }
-        // tempdir will be cleaned up automatically
-    }
-
-    tracing::info!(
-        "Package directory exists at: {:?}. Launcing fastn serve",
-        pkg_dir
-    );
-
-    let pkg_dir = camino::Utf8Path::from_path(&pkg_dir).unwrap();
-    let pg_pools: actix_web::web::Data<scc::HashMap<String, deadpool_postgres::Pool>> =
-        actix_web::web::Data::new(scc::HashMap::new());
-    let ds = fastn_ds::DocumentStore::new(pkg_dir, pg_pools);
-
-    fastn_update::update(&ds, false).await.unwrap();
-
-    let config = fastn_core::Config::read(ds, false, &None).await.unwrap();
-
-    let (server, port) =
-        fastn_core::commands::serve::make_server(std::sync::Arc::new(config), "127.0.0.1", None)
-            .await?;
-
-    tracing::info!("Fastn server is running on port: {}", port);
-    tokio::task::spawn(server);
-
-    tracing::info!("Fastn server is running. Launching Tauri...");
-
-    tauri::run(port);
     Ok(())
 }
 
