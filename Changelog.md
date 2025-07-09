@@ -1,5 +1,11 @@
 # `fastn` Change Log
 
+## 9 July 2025
+
+### fastn: 0.4.109
+
+- c17958678: Avoid infinite loop in certain conditions. See PR #2170 for more.
+
 ## 3 July 2025
 
 ### fastn: 0.4.108
