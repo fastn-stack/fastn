@@ -15,14 +15,6 @@ pub fn run(slug: FastnPackage) {
 
     tauri::Builder::default()
         .setup(move |app| {
-            if cfg!(debug_assertions) {
-                app.handle().plugin(
-                    tauri_plugin_log::Builder::default()
-                        .level(log::LevelFilter::Info)
-                        .build(),
-                )?;
-            }
-
             let slug = slug.clone();
             let handle = app.handle().clone();
             tokio::task::spawn(setup(handle, slug));
@@ -34,19 +26,19 @@ pub fn run(slug: FastnPackage) {
 }
 
 pub async fn run_backend_server(slug: &str, pkg_dir: &std::path::Path) -> fastn_core::Result<u16> {
-    log::info!("setting up pkg");
-    log::info!("{:?}", pkg_dir);
+    tracing::info!("setting up pkg");
+    tracing::info!("{:?}", pkg_dir);
 
     if !std::fs::exists(&pkg_dir)? {
         use std::io::Write;
 
         let url = format!("https://www.fifthtry.com/{}.zip", slug);
-        log::info!("Downloading package from: {}", url);
+        tracing::info!("Downloading package from: {}", url);
 
         let tmp_dir = tempfile::tempdir()?;
         let zip_path = tmp_dir.path().join(format!("{}.zip", slug));
 
-        log::info!("{:?}", zip_path);
+        tracing::info!("{:?}", zip_path);
 
         let mut zip_file = std::fs::File::create(&zip_path)?;
 
@@ -76,7 +68,7 @@ pub async fn run_backend_server(slug: &str, pkg_dir: &std::path::Path) -> fastn_
         // tempdir will be cleaned up automatically
     }
 
-    log::info!(
+    tracing::info!(
         "Package directory exists at: {:?}. Launcing fastn serve",
         pkg_dir
     );
@@ -86,24 +78,24 @@ pub async fn run_backend_server(slug: &str, pkg_dir: &std::path::Path) -> fastn_
         actix_web::web::Data::new(scc::HashMap::new());
     let ds = fastn_ds::DocumentStore::new(pkg_dir, pg_pools);
 
-    log::info!("running fastn update");
+    tracing::info!("running fastn update");
     fastn_update::update(&ds, false).await.unwrap();
-    log::info!("ran fastn update");
+    tracing::info!("ran fastn update");
 
     let config = fastn_core::Config::read(ds, false, &None).await.unwrap();
 
-    log::info!("read config");
+    tracing::info!("read config");
 
     let (server, port) =
         fastn_core::commands::serve::make_server(std::sync::Arc::new(config), "127.0.0.1", None)
             .await?;
 
-    log::info!("started server");
+    tracing::info!("started server");
 
-    log::info!("Fastn server is running on port: {}", port);
+    tracing::info!("Fastn server is running on port: {}", port);
     tokio::task::spawn(server);
 
-    log::info!("Fastn server is running");
+    tracing::info!("Fastn server is running");
 
     Ok(port)
 }
@@ -111,14 +103,14 @@ pub async fn run_backend_server(slug: &str, pkg_dir: &std::path::Path) -> fastn_
 async fn setup(app: tauri::AppHandle, slug: String) {
     use tauri::Manager;
 
-    log::info!("Setting up fastn UI...");
+    tracing::info!("Setting up fastn UI...");
 
     let pkg_dir = {
         let mut data_dir = app
             .path()
             .app_data_dir()
             .inspect_err(|e| {
-                log::error!("Failed to get app data dir: {e}");
+                tracing::error!("Failed to get app data dir: {e}");
             })
             .unwrap();
         data_dir.push(&slug);
@@ -128,7 +120,7 @@ async fn setup(app: tauri::AppHandle, slug: String) {
     let port = run_backend_server(&slug, &pkg_dir)
         .await
         .inspect_err(|e| {
-            log::error!("Failed to setup package: {e}");
+            tracing::error!("Failed to setup package: {e}");
         })
         .unwrap();
 

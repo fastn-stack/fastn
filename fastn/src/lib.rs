@@ -9,9 +9,13 @@ const DEFAULT_UI_PKG: &str = "design-system";
 #[cfg_attr(mobile, tauri_macros::mobile_entry_point)]
 fn fastn_app_entrypoint() {
     async fn inner() {
-        log::info!("=========================== FASTN UI ============================");
+        tracing::info!("=========================== FASTN UI ============================");
         tauri::run(tauri::FastnPackage::Default);
     }
+
+    tracing_subscriber::fmt()
+        .with_env_filter("fastn_lib=debug,fastn=debug,fastn_core=debug")
+        .init();
 
     tokio::runtime::Builder::new_multi_thread()
         .enable_all()
