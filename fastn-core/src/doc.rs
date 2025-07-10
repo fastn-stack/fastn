@@ -9,8 +9,6 @@ fn cached_parse(
         doc: ftd::interpreter::ParsedDocument,
     }
 
-    let hash = fastn_core::utils::generate_hash(source);
-
     /* if let Some(c) = fastn_core::utils::get_cached::<C>(id) {
         if c.hash == hash {
             tracing::debug!("cache hit");
@@ -22,7 +20,21 @@ fn cached_parse(
     }*/
 
     let doc = ftd::interpreter::ParsedDocument::parse_with_line_number(id, source, line_number)?;
-    fastn_core::utils::cache_it(id, C { doc, hash }).map(|v| v.doc)
+
+    // TODO: handle caching on mobile
+    // This does not work yet as the `fastn_core::utils::cache_it` function is not can't make a
+    // cache dir using the `dirs` crate. We have to get the cache dir from tauri/fastn (outside
+    // fastn-core crate)
+    #[cfg(target_os = "android")]
+    {
+        return Ok(doc);
+    }
+
+    #[cfg(not(target_os = "android"))]
+    {
+        let hash = fastn_core::utils::generate_hash(source);
+        return fastn_core::utils::cache_it(id, C { doc, hash }).map(|v| v.doc);
+    }
 }
 
 pub fn package_dependent_builtins(
