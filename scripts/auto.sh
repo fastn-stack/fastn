@@ -8,6 +8,11 @@ function build-android-apk() {
     cargo tauri android build --apk --target aarch64 --target armv7
 }
 
+# runs a **release** build in an android emulator
+function run-android() {
+    cargo tauri android dev --release
+}
+
 # build a macos .app that can be copied to the Applications folder
 # FIXME: don't know if it works for intel macs
 function build-macos-app() {
