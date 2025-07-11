@@ -25,7 +25,6 @@ colored.workspace = true
 deadpool.workspace = true
 diffy.workspace = true
 dirs.workspace = true
-env_logger.workspace = true
 fastn-ds.workspace = true
 fastn-expr.workspace = true
 fastn-js.workspace = true

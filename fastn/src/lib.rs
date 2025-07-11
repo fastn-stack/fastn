@@ -74,7 +74,7 @@ pub async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Resu
             }
         });
 
-        let bind = serve.value_of_("bind").unwrap_or("127.0.0.1").to_string();
+        let bind_addr = serve.value_of_("bind").unwrap_or("127.0.0.1").to_string();
         let edition = serve.value_of_("edition");
         let external_js = serve.values_of_("external-js");
         let inline_js = serve.values_of_("js");
@@ -94,7 +94,20 @@ pub async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Resu
             .add_external_css(external_css.clone())
             .add_inline_css(inline_css.clone());
 
-        return fastn_core::listen(std::sync::Arc::new(config), bind.as_str(), port).await;
+        // NOTE: This might not be needed but is kept to preserve the output of old
+        // [fastn_core::listen]
+        env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
+
+        let config = std::sync::Arc::new(config);
+        let (server, port) =
+            pista_lib::make_server(config, &bind_addr, port, fastn_core::route_handler).await?;
+
+        println!("### Server Started ###");
+        println!("Go to: http://{}:{}", &bind_addr, port,);
+
+        server.await?;
+
+        return Ok(());
     }
 
     if let Some(test) = matches.subcommand_matches("test") {

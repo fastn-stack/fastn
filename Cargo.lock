@@ -1732,11 +1732,13 @@ dependencies = [
  "deadpool-postgres",
  "dirs",
  "dotenvy",
+ "env_logger",
  "fastn-core",
  "fastn-ds",
  "fastn-observer",
  "fastn-update",
  "futures",
+ "pista-lib",
  "reqwest",
  "scc",
  "serde",
@@ -1777,7 +1779,6 @@ dependencies = [
  "deadpool",
  "diffy",
  "dirs",
- "env_logger",
  "fastn-ds",
  "fastn-expr",
  "fastn-js",
@@ -4233,6 +4234,16 @@ name = "pin-utils"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8b870d8c151b6f2fb93e84a13146138f05d02ed11c7e7c54f8826aaaf7c9f184"
+
+[[package]]
+name = "pista-lib"
+version = "0.1.0"
+dependencies = [
+ "actix-web",
+ "colored",
+ "futures-core",
+ "futures-util",
+]
 
 [[package]]
 name = "pkg-config"

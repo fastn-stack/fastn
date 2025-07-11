@@ -707,80 +707,13 @@ async fn actual_route(
         .map(|(r, _)| r)
 }
 
+/// Handle the request by serving .ftd or static files.
+/// Also supports .wasm modules written with ft_sdk
 #[tracing::instrument(skip_all)]
-async fn route(
+pub async fn route_handler(
     req: actix_web::HttpRequest,
     body: actix_web::web::Bytes,
     config: actix_web::web::Data<std::sync::Arc<fastn_core::Config>>,
 ) -> fastn_core::Result<fastn_core::http::Response> {
     actual_route(&config, req, body, &None).await
-}
-
-/// Creates an actix-web server that listens on the specified bind address and port.
-#[allow(clippy::too_many_arguments)]
-pub async fn listen(
-    config: std::sync::Arc<fastn_core::Config>,
-    bind_address: &str,
-    port: Option<u16>,
-) -> fastn_core::Result<()> {
-    env_logger::init_from_env(env_logger::Env::new().default_filter_or("info"));
-
-    let (server, port) = make_server(config, bind_address, port).await?;
-
-    println!("### Server Started ###");
-    println!("Go to: http://{}:{}", bind_address, port,);
-
-    server.await?;
-    Ok(())
-}
-
-/// Same as [listen] but returns the server instead of awaiting on it.
-#[allow(clippy::too_many_arguments)]
-pub async fn make_server(
-    config: std::sync::Arc<fastn_core::Config>,
-    bind_address: &str,
-    port: Option<u16>,
-) -> fastn_core::Result<(actix_web::dev::Server, u16)> {
-    use colored::Colorize;
-
-    let tcp_listener = match fastn_core::http::get_available_port(port, bind_address) {
-        Some(listener) => listener,
-        None => {
-            eprintln!(
-                "{}",
-                port.map(|x| format!(
-                    r#"Provided port {} is not available.
-
-You can try without providing port, it will automatically pick unused port."#,
-                    x.to_string().red()
-                ))
-                .unwrap_or_else(|| {
-                    "Tried picking port between port 8000 to 9000, none are available :-("
-                        .to_string()
-                })
-            );
-            std::process::exit(2);
-        }
-    };
-
-    let app = move || {
-        actix_web::App::new()
-            .app_data(actix_web::web::Data::new(std::sync::Arc::clone(&config)))
-            .app_data(actix_web::web::PayloadConfig::new(1024 * 1024 * 10))
-            .wrap(actix_web::middleware::Compress::default())
-            .wrap(fastn_core::catch_panic::CatchPanic::default())
-            .wrap(
-                actix_web::middleware::Logger::new(
-                    r#""%r" %Ts %s %b %a "%{Referer}i" "%{User-Agent}i""#,
-                )
-                .log_target(""),
-            )
-            .route("/{path:.*}", actix_web::web::route().to(route))
-    };
-
-    let port = tcp_listener.local_addr()?.port();
-    Ok((
-        actix_web::HttpServer::new(app).listen(tcp_listener)?.run(),
-        port,
-    ))
 }

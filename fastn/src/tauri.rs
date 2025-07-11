@@ -86,9 +86,13 @@ pub async fn run_backend_server(slug: &str, pkg_dir: &std::path::Path) -> fastn_
 
     tracing::info!("read config");
 
-    let (server, port) =
-        fastn_core::commands::serve::make_server(std::sync::Arc::new(config), "127.0.0.1", None)
-            .await?;
+    let (server, port) = pista_lib::make_server(
+        std::sync::Arc::new(config),
+        "127.0.0.1",
+        None,
+        fastn_core::route_handler,
+    )
+    .await?;
 
     tracing::info!("started server");
 
