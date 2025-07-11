@@ -513,26 +513,6 @@ pub async fn http_get_with_cookie(
     Ok((Ok(res.body().clone()), resp_cookies))
 }
 
-pub(crate) fn get_available_port(
-    port: Option<u16>,
-    bind_address: &str,
-) -> Option<std::net::TcpListener> {
-    let available_listener =
-        |port: u16, bind_address: &str| std::net::TcpListener::bind((bind_address, port));
-
-    if let Some(port) = port {
-        return available_listener(port, bind_address).ok();
-    }
-
-    for x in 8000..9000 {
-        match available_listener(x, bind_address) {
-            Ok(l) => return Some(l),
-            Err(_) => continue,
-        }
-    }
-    None
-}
-
 /// construct `ftd.http` consumable error responses
 /// https://github.com/fastn-stack/fastn/blob/7f0b79a/fastn-js/js/ftd.js#L218C45-L229
 /// ```json

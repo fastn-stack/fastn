@@ -756,7 +756,7 @@ impl Sitemap {
             Ok(())
         }
 
-        #[async_recursion::async_recursion(?Send)]
+        #[async_recursion::async_recursion]
         async fn resolve_toc(
             toc: &mut toc::TocItem,
             package_root: &fastn_ds::Path,

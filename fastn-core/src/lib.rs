@@ -34,7 +34,7 @@ pub(crate) mod host_builtins;
 
 pub(crate) use auto_import::AutoImport;
 pub use commands::{
-    build::build, check::post_build_check, fmt::fmt, query::query, serve::listen, test::test,
+    build::build, check::post_build_check, fmt::fmt, query::query, serve::route_handler, test::test,
 };
 pub use config::{Config, ConfigTemp, FTDEdition, RequestConfig, config_temp};
 pub use doc::resolve_foreign_variable2;

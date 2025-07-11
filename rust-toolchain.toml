@@ -1,3 +1,5 @@
 [toolchain]
 channel = "1.88.0"
 components = ["rustfmt", "clippy"]
+targets = ["aarch64-linux-android", "armv7-linux-androideabi",
+            "aarch64-apple-ios", "aarch64-apple-ios-sim"]
