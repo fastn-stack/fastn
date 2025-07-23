@@ -1,120 +1,57 @@
 pub fn publish_app() -> fastn_core::Result<()> {
-    println!("Starting app publishing process...");
-
-    println!("Building WASM...");
     fastn_xtask::build_wasm::build_wasm()?;
-
-    println!("Optimizing WASM...");
     fastn_xtask::optimise_wasm::optimise_wasm()?;
+    
+    let gitignore_path = ".gitignore";
+    if std::fs::metadata(gitignore_path).is_ok() {
+        fastn_xtask::helpers::with_context(
+            std::fs::remove_file(gitignore_path),
+            "Failed to remove existing .gitignore",
+        )?;
+    }
+    let mut file = fastn_xtask::helpers::with_context(
+        std::fs::File::create(gitignore_path),
+        "Failed to create .gitignore",
+    )?;
+    fastn_xtask::helpers::with_context(
+        std::io::Write::write_all(&mut file, b".packages\n"),
+        "Failed to write to .gitignore",
+    )?;
+    fastn_xtask::helpers::with_context(
+        std::io::Write::write_all(&mut file, b".fastn\n"),
+        "Failed to write to .gitignore",
+    )?;
+    fastn_xtask::helpers::with_context(
+        std::io::Write::write_all(&mut file, b".is-local\n"),
+        "Failed to write to .gitignore",
+    )?;
 
-    println!("Updating .gitignore...");
-    update_gitignore()?;
+    fastn_xtask::helpers::run_command(
+        "sh",
+        ["-c", "$(curl -fsSL https://fastn.com/install.sh)"],
+        "install fastn",
+    )?;
 
-    println!("Installing latest fastn...");
-    install_fastn()?;
-
-    let current_dir = std::env::current_dir().map_err(|e| {
-        fastn_core::Error::GenericError(format!("Failed to get current directory: {}", e))
-    })?;
-
-    let entries = std::fs::read_dir(&current_dir).map_err(|e| {
-        fastn_core::Error::GenericError(format!("Failed to read workspace directory: {}", e))
-    })?;
-
-    let site_dirs: Vec<std::path::PathBuf> = entries
-        .filter_map(|entry| {
-            let entry = entry.ok()?;
-            let path = entry.path();
-            if path.is_dir() {
-                let name = path.file_name()?.to_string_lossy();
-                if name.ends_with(".fifthtry.site") && !name.ends_with("-template.fifthtry.site") {
-                    return Some(path);
-                }
-            }
-            None
-        })
-        .collect();
-
-    if site_dirs.is_empty() {
-        return Err(fastn_core::Error::GenericError(
-            "No site directory found (looking for *.fifthtry.site)".to_string(),
-        ));
+    let site_dir = fastn_xtask::helpers::find_directory(
+        |name| name.ends_with(".fifthtry.site") && !name.ends_with("-template.fifthtry.site"),
+        "No site directory found (looking for *.fifthtry.site)",
+    )?;
+    let js_dir = site_dir.join("js");
+    if js_dir.is_dir() {
+        let original_dir = std::env::current_dir().unwrap();
+        fastn_xtask::helpers::set_current_dir(&js_dir, "js")?;
+        fastn_xtask::helpers::run_command("npm", ["install"], "npm install")?;
+        fastn_xtask::helpers::run_command("npm", ["run", "build"], "npm run build")?;
+        fastn_xtask::helpers::set_current_dir(&site_dir, "site")?;
     }
 
-    let site_dir = &site_dirs[0];
-    println!("Using site directory: {}", site_dir.display());
-
-    // Extract site name from directory name
     let site_name = site_dir
         .file_name()
         .and_then(|n| n.to_str())
         .and_then(|n| n.strip_suffix(".fifthtry.site"))
         .ok_or_else(|| fastn_core::Error::GenericError("Failed to extract site name from directory".to_string()))?;
 
-    println!("Uploading to fastn as site: {}...", site_name);
-    upload_to_fastn(site_dir, site_name)?;
-
-    println!("App published successfully!");
-    Ok(())
-}
-
-fn update_gitignore() -> fastn_core::Result<()> {
-    let gitignore_path = ".gitignore";
-    if std::fs::metadata(gitignore_path).is_ok() {
-        std::fs::remove_file(gitignore_path).map_err(|e| {
-            fastn_core::Error::GenericError(format!("Failed to remove existing .gitignore: {}", e))
-        })?;
-    }
-
-    let mut file = std::fs::File::create(gitignore_path).map_err(|e| {
-        fastn_core::Error::GenericError(format!("Failed to create .gitignore: {}", e))
-    })?;
-
-    std::io::Write::write_all(&mut file, b".packages\n").map_err(|e| {
-        fastn_core::Error::GenericError(format!("Failed to write to .gitignore: {}", e))
-    })?;
-    std::io::Write::write_all(&mut file, b".fastn\n").map_err(|e| {
-        fastn_core::Error::GenericError(format!("Failed to write to .gitignore: {}", e))
-    })?;
-    std::io::Write::write_all(&mut file, b".is-local\n").map_err(|e| {
-        fastn_core::Error::GenericError(format!("Failed to write to .gitignore: {}", e))
-    })?;
-
-    Ok(())
-}
-
-fn install_fastn() -> fastn_core::Result<()> {
-    let status = std::process::Command::new("sh")
-        .args(["-c", "$(curl -fsSL https://fastn.com/install.sh)"])
-        .status()
-        .map_err(|e| fastn_core::Error::GenericError(format!("Failed to install fastn: {}", e)))?;
-
-    if !status.success() {
-        return Err(fastn_core::Error::GenericError(
-            "Failed to install fastn".to_string(),
-        ));
-    }
-
-    Ok(())
-}
-
-fn upload_to_fastn(site_dir: &std::path::PathBuf, site_name: &str) -> fastn_core::Result<()> {
-    std::env::set_current_dir(site_dir).map_err(|e| {
-        fastn_core::Error::GenericError(format!("Failed to change to site directory: {}", e))
-    })?;
-
-    let status = std::process::Command::new("fastn")
-        .args(["upload", site_name])
-        .status()
-        .map_err(|e| {
-            fastn_core::Error::GenericError(format!("Failed to run fastn upload: {}", e))
-        })?;
-
-    if !status.success() {
-        return Err(fastn_core::Error::GenericError(
-            "fastn upload failed".to_string(),
-        ));
-    }
-
+    fastn_xtask::helpers::set_current_dir(&site_dir, "site")?;
+    fastn_xtask::helpers::run_command("fastn", ["upload", site_name], "fastn upload")?;
     Ok(())
 }

@@ -3,38 +3,20 @@ pub fn run_template() -> fastn_core::Result<()> {
         |name| name.ends_with("-template.fifthtry.site"),
         "No template directory found (looking for *-template.fifthtry.site)",
     )?;
-    println!("Using template directory: {}", template_dir.display());
 
-    let current_dir = std::env::current_dir().map_err(|e| {
-        fastn_core::Error::GenericError(format!("Failed to get current directory: {}", e))
-    })?;
+    let current_dir = fastn_xtask::helpers::with_context(
+        std::env::current_dir(),
+        "Failed to get current directory",
+    )?;
 
-    std::env::set_current_dir(&template_dir).map_err(|e| {
-        fastn_core::Error::GenericError(format!("Failed to change to template directory: {}", e))
-    })?;
-
-    println!("Building WASM...");
     fastn_xtask::build_wasm::build_wasm()?;
-
-    println!("Starting fastn serve in offline mode...");
     let fastn_bin = fastn_xtask::helpers::get_fastn_binary()?;
-
-    let status = std::process::Command::new(fastn_bin)
-        .args(["--trace", "serve", "--offline"])
-        .status()
-        .map_err(|e| {
-            fastn_core::Error::GenericError(format!("Failed to execute fastn serve: {}", e))
-        })?;
-
-    if !status.success() {
-        return Err(fastn_core::Error::GenericError(
-            "fastn serve failed".to_string(),
-        ));
-    }
-
-    std::env::set_current_dir(current_dir).map_err(|e| {
-        fastn_core::Error::GenericError(format!("Failed to return to original directory: {}", e))
-    })?;
-
+    fastn_xtask::helpers::set_current_dir(&template_dir, "template")?;
+    fastn_xtask::helpers::run_command(
+        &fastn_bin,
+        ["--trace", "serve", "--offline"],
+        "fastn serve",
+    )?;
+    fastn_xtask::helpers::set_current_dir(&current_dir, "original")?;
     Ok(())
 }

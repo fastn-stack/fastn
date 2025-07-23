@@ -56,36 +56,51 @@ pub fn run_fastn_serve(
     args: &[&str],
     service_name: &str,
 ) -> fastn_core::Result<()> {
-    let current_dir = std::env::current_dir().map_err(|e| {
-        fastn_core::Error::GenericError(format!("Failed to get current directory: {}", e))
-    })?;
+    let current_dir = with_context(
+        std::env::current_dir(),
+        "Failed to get current directory",
+    )?;
 
-    std::env::set_current_dir(target_dir).map_err(|e| {
-        fastn_core::Error::GenericError(format!("Failed to change to {} directory: {}", service_name, e))
-    })?;
-
+    set_current_dir(target_dir, service_name)?;
     let fastn_binary = std::env::var("FASTN_BINARY").unwrap_or_else(|_| "fastn".to_string());
 
-    println!(
-        "Using {} to serve {}/",
-        fastn_binary,
-        target_dir.file_name().unwrap().to_string_lossy()
-    );
+    let context = format!("fastn serve for {}", service_name);
+    let result = run_command(&fastn_binary, args, &context);
+    if let Err(e) = &result {
+        eprintln!(
+            "fastn failed, ensure it's installed, and also consider running update-{}: {}",
+            service_name, e
+        );
+    }
+    set_current_dir(&current_dir, "original")?;
+    result
+}
 
-    let status = std::process::Command::new(&fastn_binary)
+#[inline]
+pub fn with_context<T, E: std::fmt::Display>(result: Result<T, E>, msg: &str) -> fastn_core::Result<T> {
+    result.map_err(|e| fastn_core::Error::GenericError(format!("{}: {}", msg, e)))
+}
+
+pub fn set_current_dir<P: AsRef<std::path::Path>>(path: P, context: &str) -> fastn_core::Result<()> {
+    std::env::set_current_dir(&path)
+        .map_err(|e| fastn_core::Error::GenericError(format!("Failed to change to {} directory: {}", context, e)))
+}
+
+pub fn run_command<I, S>(
+    program: &str,
+    args: I,
+    context: &str,
+) -> fastn_core::Result<()> 
+where
+    I: IntoIterator<Item = S>,
+    S: AsRef<std::ffi::OsStr>,
+{
+    let status = std::process::Command::new(program)
         .args(args)
         .status()
-        .map_err(|e| {
-            fastn_core::Error::GenericError(format!("Failed to run fastn serve: {}", e))
-        })?;
-
+        .map_err(|e| fastn_core::Error::GenericError(format!("Failed to run {}: {}", context, e)))?;
     if !status.success() {
-        println!("fastn failed, ensure it's installed, and also consider running update-{}", service_name);
+        return Err(fastn_core::Error::GenericError(format!("{} failed", context)));
     }
-
-    std::env::set_current_dir(current_dir).map_err(|e| {
-        fastn_core::Error::GenericError(format!("Failed to return to original directory: {}", e))
-    })?;
-
     Ok(())
 } 

@@ -1,36 +1,27 @@
 pub fn build_wasm() -> fastn_core::Result<()> {
-    println!("Building WASM target...");
-    let build_status = std::process::Command::new("cargo")
-        .args([
+    fastn_xtask::helpers::run_command(
+        "cargo",
+        [
             "build",
             "--release",
             "--target",
             "wasm32-unknown-unknown",
             "--package",
             "backend",
-        ])
-        .status()
-        .map_err(|e| {
-            fastn_core::Error::GenericError(format!("Failed to execute cargo build: {}", e))
-        })?;
+        ],
+        "cargo build",
+    )?;
 
-    if !build_status.success() {
-        return Err(fastn_core::Error::GenericError(
-            "Cargo build failed".to_string(),
-        ));
-    }
+    let current_dir = fastn_xtask::helpers::with_context(
+        std::env::current_dir(),
+        "Failed to get current directory",
+    )?;
 
-    let current_dir = std::env::current_dir().map_err(|e| {
-        fastn_core::Error::GenericError(format!("Failed to get current directory: {}", e))
-    })?;
-    let workspace_root = current_dir.parent().ok_or_else(|| {
-        fastn_core::Error::GenericError("Failed to get parent directory".to_string())
-    })?;
-    let source1 = workspace_root.join("target/wasm32-unknown-unknown/release");
-
-    let home_dir = std::env::var("HOME").map_err(|_| {
-        fastn_core::Error::GenericError("HOME environment variable not set".to_string())
-    })?;
+    let source1 = std::path::PathBuf::from("./target/wasm32-unknown-unknown/release");
+    let home_dir = fastn_xtask::helpers::with_context(
+        std::env::var("HOME"),
+        "HOME environment variable not set",
+    )?;
     let source2 = std::path::PathBuf::from(&home_dir).join("target/wasm32-unknown-unknown/release");
 
     let source_dir = if source1.exists() {
@@ -43,23 +34,25 @@ pub fn build_wasm() -> fastn_core::Result<()> {
         ));
     };
 
-    let entries = std::fs::read_dir(workspace_root).map_err(|e| {
-        fastn_core::Error::GenericError(format!("Failed to read workspace directory: {}", e))
-    })?;
-
-    let dest_dirs: Vec<std::path::PathBuf> = entries
-        .filter_map(|entry| {
-            let entry = entry.ok()?;
-            let path = entry.path();
-            if path.is_dir() {
-                let name = path.file_name()?.to_string_lossy();
-                if name.ends_with(".fifthtry.site") {
-                    return Some(path);
+    let dest_dirs = {
+        let entries = fastn_xtask::helpers::with_context(
+            std::fs::read_dir(&current_dir),
+            "Failed to read current directory",
+        )?;
+        entries
+            .filter_map(|entry| {
+                let entry = entry.ok()?;
+                let path = entry.path();
+                if path.is_dir() {
+                    let name = path.file_name()?.to_string_lossy();
+                    if name.ends_with(".fifthtry.site") {
+                        return Some(path);
+                    }
                 }
-            }
-            None
-        })
-        .collect();
+                None
+            })
+            .collect::<Vec<_>>()
+    };
 
     if dest_dirs.is_empty() {
         return Err(fastn_core::Error::GenericError(
@@ -76,14 +69,10 @@ pub fn build_wasm() -> fastn_core::Result<()> {
     }
 
     for dest_dir in dest_dirs {
-        std::fs::copy(&wasm_file, dest_dir.join("backend.wasm")).map_err(|e| {
-            fastn_core::Error::GenericError(format!(
-                "Failed to copy WASM file to {:?}: {}",
-                dest_dir, e
-            ))
-        })?;
-
-        println!("WASM file copied successfully to {}", dest_dir.display());
+        fastn_xtask::helpers::with_context(
+            std::fs::copy(&wasm_file, dest_dir.join("backend.wasm")),
+            &format!("Failed to copy WASM file to {:?}", dest_dir),
+        )?;
     }
 
     Ok(())

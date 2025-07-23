@@ -1,7 +1,6 @@
 extern crate self as fastn_xtask;
 
 pub mod helpers;
-
 pub mod build_wasm;
 pub mod run_template;
 pub mod optimise_wasm;
