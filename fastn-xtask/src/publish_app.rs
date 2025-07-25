@@ -28,7 +28,7 @@ pub fn publish_app() -> fastn_core::Result<()> {
 
     fastn_xtask::helpers::run_command(
         "sh",
-        ["-c", "$(curl -fsSL https://fastn.com/install.sh)"],
+        ["-c", "curl -fsSL https://fastn.com/install.sh | sh"],
         "install fastn",
     )?;
 
