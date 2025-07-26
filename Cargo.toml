@@ -13,6 +13,7 @@ members = [
     "fastn-runtime",
     "fastn-update",
     "fastn-utils",
+    "fastn-xtask",
     "fbt",
     "fbt_lib",
     "ftd",

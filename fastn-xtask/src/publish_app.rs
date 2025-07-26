@@ -1,7 +1,7 @@
 pub fn publish_app() -> fastn_core::Result<()> {
     fastn_xtask::build_wasm::build_wasm()?;
     fastn_xtask::optimise_wasm::optimise_wasm()?;
-    
+
     let gitignore_path = ".gitignore";
     if std::fs::metadata(gitignore_path).is_ok() {
         fastn_xtask::helpers::with_context(
@@ -38,7 +38,6 @@ pub fn publish_app() -> fastn_core::Result<()> {
     )?;
     let js_dir = site_dir.join("js");
     if js_dir.is_dir() {
-        let original_dir = std::env::current_dir().unwrap();
         fastn_xtask::helpers::set_current_dir(&js_dir, "js")?;
         fastn_xtask::helpers::run_command("npm", ["install"], "npm install")?;
         fastn_xtask::helpers::run_command("npm", ["run", "build"], "npm run build")?;
@@ -49,7 +48,11 @@ pub fn publish_app() -> fastn_core::Result<()> {
         .file_name()
         .and_then(|n| n.to_str())
         .and_then(|n| n.strip_suffix(".fifthtry.site"))
-        .ok_or_else(|| fastn_core::Error::GenericError("Failed to extract site name from directory".to_string()))?;
+        .ok_or_else(|| {
+            fastn_core::Error::GenericError(
+                "Failed to extract site name from directory".to_string(),
+            )
+        })?;
 
     fastn_xtask::helpers::set_current_dir(&site_dir, "site")?;
     fastn_xtask::helpers::run_command("fastn", ["upload", site_name], "fastn upload")?;

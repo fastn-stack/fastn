@@ -1,10 +1,13 @@
 const DEFAULT_BINARYEN_VERSION: &str = "version_119";
 
 pub fn optimise_wasm() -> fastn_core::Result<()> {
-    let binaryen_version = std::env::var("BINARYEN_VERSION")
-        .unwrap_or_else(|_| DEFAULT_BINARYEN_VERSION.to_string());
+    let binaryen_version =
+        std::env::var("BINARYEN_VERSION").unwrap_or_else(|_| DEFAULT_BINARYEN_VERSION.to_string());
 
-    let wasm_opt_cmd = if let Ok(output) = std::process::Command::new("wasm-opt").arg("--version").output() {
+    let wasm_opt_cmd = if let Ok(output) = std::process::Command::new("wasm-opt")
+        .arg("--version")
+        .output()
+    {
         if output.status.success() {
             "wasm-opt".to_string()
         } else {
@@ -18,17 +21,16 @@ pub fn optimise_wasm() -> fastn_core::Result<()> {
     } else {
         let os = std::env::consts::OS;
         let binary_name = match os {
-            "linux" => format!("binaryen-{}-x86_64-linux.tar.gz", binaryen_version),
-            "macos" | "darwin" => format!("binaryen-{}-x86_64-macos.tar.gz", binaryen_version),
+            "linux" => format!("binaryen-{binaryen_version}-x86_64-linux.tar.gz"),
+            "macos" | "darwin" => format!("binaryen-{binaryen_version}-x86_64-macos.tar.gz"),
             _ => {
                 return Err(fastn_core::Error::GenericError(format!(
-                    "Unsupported platform: {}",
-                    os
+                    "Unsupported platform: {os}",
                 )));
             }
         };
         let repo_name = "WebAssembly/binaryen";
-        let local_install_dir = format!("./bin/binaryen-{}", binaryen_version);
+        let local_install_dir = format!("./bin/binaryen-{binaryen_version}");
         fastn_xtask::helpers::with_context(
             std::fs::create_dir_all("./bin"),
             "Failed to create bin directory",
@@ -36,8 +38,7 @@ pub fn optimise_wasm() -> fastn_core::Result<()> {
         if !std::path::Path::new(&local_install_dir).exists() {
             // Inline download_release
             let url = format!(
-                "https://github.com/{}/releases/download/{}/{}",
-                repo_name, binaryen_version, binary_name
+                "https://github.com/{repo_name}/releases/download/{binaryen_version}/{binary_name}",
             );
             fastn_xtask::helpers::run_command(
                 "curl",
@@ -54,7 +55,7 @@ pub fn optimise_wasm() -> fastn_core::Result<()> {
                 "Failed to remove archive",
             )?;
         }
-        let wasm_opt_path = format!("{}/bin/wasm-opt", local_install_dir);
+        let wasm_opt_path = format!("{local_install_dir}/bin/wasm-opt");
         if !std::path::Path::new(&wasm_opt_path).exists() {
             return Err(fastn_core::Error::GenericError(
                 "wasm-opt not found in the extracted files".to_string(),
@@ -96,16 +97,23 @@ pub fn optimise_wasm() -> fastn_core::Result<()> {
             let before_size = fastn_xtask::helpers::with_context(
                 std::fs::metadata(&wasm_file),
                 "Failed to get file metadata",
-            )?.len();
+            )?
+            .len();
             fastn_xtask::helpers::run_command(
                 &wasm_opt_cmd,
-                ["-Oz", &wasm_file.to_string_lossy(), "-o", &wasm_file.to_string_lossy()],
+                [
+                    "-Oz",
+                    &wasm_file.to_string_lossy(),
+                    "-o",
+                    &wasm_file.to_string_lossy(),
+                ],
                 "wasm-opt",
             )?;
             let after_size = fastn_xtask::helpers::with_context(
                 std::fs::metadata(&wasm_file),
                 "Failed to get file metadata",
-            )?.len();
+            )?
+            .len();
             let size_diff = before_size.saturating_sub(after_size);
             let size_diff_percentage = if before_size > 0 {
                 (size_diff as f64 * 100.0 / before_size as f64) as u64
@@ -119,7 +127,7 @@ pub fn optimise_wasm() -> fastn_core::Result<()> {
                 } else if size >= 1_024 {
                     format!("{:.1}KB", size as f64 / 1_024.0)
                 } else {
-                    format!("{}B", size)
+                    format!("{size}B")
                 }
             };
             println!(

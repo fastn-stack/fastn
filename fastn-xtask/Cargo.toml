@@ -10,7 +10,4 @@ homepage.workspace = true
 rust-version.workspace = true
 
 [dependencies]
-clap = { workspace = true, features = ["derive"] }
-reqwest.workspace = true
-zip.workspace = true
 fastn-core = { path = "../fastn-core" }

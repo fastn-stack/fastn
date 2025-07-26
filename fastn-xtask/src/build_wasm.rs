@@ -63,15 +63,14 @@ pub fn build_wasm() -> fastn_core::Result<()> {
     let wasm_file = source_dir.join("backend.wasm");
     if !wasm_file.exists() {
         return Err(fastn_core::Error::GenericError(format!(
-            "WASM file not found at {:?}",
-            wasm_file
+            "WASM file not found at {wasm_file:?}",
         )));
     }
 
     for dest_dir in dest_dirs {
         fastn_xtask::helpers::with_context(
             std::fs::copy(&wasm_file, dest_dir.join("backend.wasm")),
-            &format!("Failed to copy WASM file to {:?}", dest_dir),
+            &format!("Failed to copy WASM file to {dest_dir:?}"),
         )?;
     }
 

@@ -1566,6 +1566,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "fastn-xtask"
+version = "0.1.0"
+dependencies = [
+ "fastn-core",
+]
+
+[[package]]
 name = "fbt"
 version = "0.1.18"
 dependencies = [
