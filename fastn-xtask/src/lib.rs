@@ -1,6 +1,7 @@
 extern crate self as fastn_xtask;
 
 pub mod helpers;
+pub use helpers::{Error, Result};
 pub mod build_wasm;
 pub mod run_template;
 pub mod optimise_wasm;
@@ -11,9 +12,8 @@ pub mod update_www;
 pub mod run_www;
 pub mod update_template;
 
-
 pub fn main() {
-    let result: Result<(), String> = (|| {
+    let result: Result<()> = (|| {
         let default_commands = [
             ("build-wasm", "Builds the WASM target from backend."),
             ("run-ui", "Builds and serves the UI for the app, which is served on port 8002."),
@@ -28,15 +28,15 @@ pub fn main() {
         ];
         let task = std::env::args().nth(1);
         match task.as_deref() {
-            Some("build-wasm") => build_wasm::build_wasm().map_err(|e| e.to_string())?,
-            Some("run-template") => run_template::run_template().map_err(|e| e.to_string())?,
-            Some("optimise-wasm") => optimise_wasm::optimise_wasm().map_err(|e| e.to_string())?,
-            Some("publish-app") => publish_app::publish_app().map_err(|e| e.to_string())?,
-            Some("update-ui") => update_ui::update_ui().map_err(|e| e.to_string())?,
-            Some("run-ui") => run_ui::run_ui().map_err(|e| e.to_string())?,
-            Some("update-www") => update_www::update_www().map_err(|e| e.to_string())?,
-            Some("run-www") => run_www::run_www().map_err(|e| e.to_string())?,
-            Some("update-template") => update_template::update_template().map_err(|e| e.to_string())?,
+            Some("build-wasm") => build_wasm::build_wasm()?,
+            Some("run-template") => run_template::run_template()?,
+            Some("optimise-wasm") => optimise_wasm::optimise_wasm()?,
+            Some("publish-app") => publish_app::publish_app()?,
+            Some("update-ui") => update_ui::update_ui()?,
+            Some("run-ui") => run_ui::run_ui()?,
+            Some("update-www") => update_www::update_www()?,
+            Some("run-www") => run_www::run_www()?,
+            Some("update-template") => update_template::update_template()?,
             _ => print_help(Some(&default_commands)),
         }
         Ok(())

@@ -1,6 +1,6 @@
 const DEFAULT_BINARYEN_VERSION: &str = "version_119";
 
-pub fn optimise_wasm() -> fastn_core::Result<()> {
+pub fn optimise_wasm() -> fastn_xtask::Result<()> {
     let binaryen_version = std::env::var("BINARYEN_VERSION")
         .unwrap_or_else(|_| DEFAULT_BINARYEN_VERSION.to_string());
 
@@ -21,7 +21,7 @@ pub fn optimise_wasm() -> fastn_core::Result<()> {
             "linux" => format!("binaryen-{}-x86_64-linux.tar.gz", binaryen_version),
             "macos" | "darwin" => format!("binaryen-{}-x86_64-macos.tar.gz", binaryen_version),
             _ => {
-                return Err(fastn_core::Error::GenericError(format!(
+                return Err(fastn_xtask::Error::GenericError(format!(
                     "Unsupported platform: {}",
                     os
                 )));
@@ -56,7 +56,7 @@ pub fn optimise_wasm() -> fastn_core::Result<()> {
         }
         let wasm_opt_path = format!("{}/bin/wasm-opt", local_install_dir);
         if !std::path::Path::new(&wasm_opt_path).exists() {
-            return Err(fastn_core::Error::GenericError(
+            return Err(fastn_xtask::Error::GenericError(
                 "wasm-opt not found in the extracted files".to_string(),
             ));
         }
@@ -85,7 +85,7 @@ pub fn optimise_wasm() -> fastn_core::Result<()> {
         })
         .collect();
     if fifthtry_dirs.is_empty() {
-        return Err(fastn_core::Error::GenericError(
+        return Err(fastn_xtask::Error::GenericError(
             "No directories matching pattern '*.fifthtry.site' found".to_string(),
         ));
     }
@@ -112,7 +112,6 @@ pub fn optimise_wasm() -> fastn_core::Result<()> {
             } else {
                 0
             };
-            // Inline to_human_readable
             let to_human_readable = |size: u64| {
                 if size >= 1_048_576 {
                     format!("{:.1}MB", size as f64 / 1_048_576.0)

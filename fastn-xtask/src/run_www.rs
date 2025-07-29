@@ -1,4 +1,4 @@
-pub fn run_www() -> fastn_core::Result<()> {
+pub fn run_www() -> fastn_xtask::Result<()> {
     let www_dir = fastn_xtask::helpers::find_directory(
         |name| name.ends_with(".fifthtry-community.com"),
         "No directory matching '*.fifthtry-community.com' found",

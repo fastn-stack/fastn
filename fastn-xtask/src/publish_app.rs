@@ -1,4 +1,4 @@
-pub fn publish_app() -> fastn_core::Result<()> {
+pub fn publish_app() -> fastn_xtask::Result<()> {
     fastn_xtask::build_wasm::build_wasm()?;
     fastn_xtask::optimise_wasm::optimise_wasm()?;
     
@@ -49,7 +49,7 @@ pub fn publish_app() -> fastn_core::Result<()> {
         .file_name()
         .and_then(|n| n.to_str())
         .and_then(|n| n.strip_suffix(".fifthtry.site"))
-        .ok_or_else(|| fastn_core::Error::GenericError("Failed to extract site name from directory".to_string()))?;
+        .ok_or_else(|| fastn_xtask::Error::GenericError("Failed to extract site name from directory".to_string()))?;
 
     fastn_xtask::helpers::set_current_dir(&site_dir, "site")?;
     fastn_xtask::helpers::run_command("fastn", ["upload", site_name], "fastn upload")?;

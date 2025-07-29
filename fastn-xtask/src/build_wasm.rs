@@ -1,4 +1,4 @@
-pub fn build_wasm() -> fastn_core::Result<()> {
+pub fn build_wasm() -> fastn_xtask::Result<()> {
     fastn_xtask::helpers::run_command(
         "cargo",
         [
@@ -29,7 +29,7 @@ pub fn build_wasm() -> fastn_core::Result<()> {
     } else if source2.exists() {
         source2
     } else {
-        return Err(fastn_core::Error::GenericError(
+        return Err(fastn_xtask::Error::GenericError(
             "Source folder not found".to_string(),
         ));
     };
@@ -55,14 +55,14 @@ pub fn build_wasm() -> fastn_core::Result<()> {
     };
 
     if dest_dirs.is_empty() {
-        return Err(fastn_core::Error::GenericError(
+        return Err(fastn_xtask::Error::GenericError(
             "No destination directories matching pattern '*.fifthtry.site' found".to_string(),
         ));
     }
 
     let wasm_file = source_dir.join("backend.wasm");
     if !wasm_file.exists() {
-        return Err(fastn_core::Error::GenericError(format!(
+        return Err(fastn_xtask::Error::GenericError(format!(
             "WASM file not found at {:?}",
             wasm_file
         )));

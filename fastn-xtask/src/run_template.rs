@@ -1,4 +1,4 @@
-pub fn run_template() -> fastn_core::Result<()> {
+pub fn run_template() -> fastn_xtask::Result<()> {
     let template_dir = fastn_xtask::helpers::find_directory(
         |name| name.ends_with("-template.fifthtry.site"),
         "No template directory found (looking for *-template.fifthtry.site)",
