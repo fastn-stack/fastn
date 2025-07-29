@@ -151,14 +151,17 @@ pub(crate) fn update_reference(reference: &str, rdata: &fastn_runtime::ResolverD
     }
 
     if let Some(loop_counter_alias) = rdata.loop_counter_alias {
-        if let Some(ref doc_name) = rdata.doc_name {
+        if let Some(ref doc_id) = rdata.doc_name {
+            let (doc_name, _, _) =
+                fastn_runtime::utils::get_doc_name_and_thing_name_and_remaining(&name, doc_id);
+
             let resolved_alias = fastn_runtime::utils::resolve_name(
                 loop_counter_alias,
-                doc_name.as_str(),
+                &doc_name,
                 &fastn_builtins::default_aliases(),
             );
 
-            if name.eq(resolved_alias.as_str()) {
+            if name == resolved_alias {
                 return "index".to_string();
             }
         }
