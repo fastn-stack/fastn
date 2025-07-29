@@ -2,7 +2,9 @@ pub struct Store<STORE: StoreExt> {
     pub wasm_package: String,
     pub main_package: String,
     pub req: ft_sys_shared::Request,
+    #[cfg(feature = "postgres")]
     pub clients: std::sync::Arc<async_lock::Mutex<Vec<Conn>>>,
+    #[cfg(feature = "postgres")]
     pub pg_pools: std::sync::Arc<scc::HashMap<String, deadpool_postgres::Pool>>,
     pub sqlite: Option<std::sync::Arc<async_lock::Mutex<Box<dyn ConnectionExt>>>>,
     pub response: Option<ft_sys_shared::Request>,
@@ -32,11 +34,13 @@ pub trait StoreExt: Send {
     }
 }
 
+#[cfg(feature = "postgres")]
 pub struct Conn {
     pub client: deadpool::managed::Object<deadpool_postgres::Manager>,
 }
 
 impl<STORE: StoreExt> Store<STORE> {
+    #[cfg(feature = "postgres")]
     #[expect(clippy::too_many_arguments)]
     pub fn new(
         main_package: String,
@@ -70,6 +74,43 @@ impl<STORE: StoreExt> Store<STORE> {
             response: None,
             clients: Default::default(),
             pg_pools,
+            db_url,
+            sqlite: None,
+            inner,
+        }
+    }
+
+    #[cfg(not(feature = "postgres"))]
+    #[expect(clippy::too_many_arguments)]
+    pub fn new(
+        main_package: String,
+        wasm_package: String,
+        mut req: ft_sys_shared::Request,
+        db_url: String,
+        inner: STORE,
+        app_url: String,
+        app_mounts: std::collections::HashMap<String, String>,
+    ) -> Store<STORE> {
+        req.headers.push((
+            FASTN_MAIN_PACKAGE_HEADER.to_string(),
+            main_package.clone().into_bytes(),
+        ));
+        req.headers.push((
+            FASTN_WASM_PACKAGE_HEADER.to_string(),
+            wasm_package.clone().into_bytes(),
+        ));
+        req.headers
+            .push((FASTN_APP_URL_HEADER.to_string(), app_url.into_bytes()));
+
+        let app_mounts = serde_json::to_string(&app_mounts).unwrap();
+        req.headers
+            .push((FASTN_APP_URLS_HEADER.to_string(), app_mounts.into_bytes()));
+
+        Self {
+            req,
+            wasm_package,
+            main_package,
+            response: None,
             db_url,
             sqlite: None,
             inner,

@@ -17,7 +17,7 @@ camino.workspace = true
 deadpool-postgres.workspace = true
 dirs.workspace = true
 fastn-utils.workspace = true
-fastn-wasm.workspace = true
+fastn-wasm = { workspace = true, features = ["postgres"] }
 ft-sys-shared = { workspace = true, features = ["rusqlite"] }
 http.workspace = true
 ignore.workspace = true

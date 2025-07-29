@@ -9,15 +9,17 @@ repository.workspace = true
 homepage.workspace = true
 rust-version.workspace = true
 
+[features]
+default = []
+postgres = ["dep:deadpool-postgres", "dep:tokio-postgres", "dep:bytes", "dep:deadpool", "dep:futures-util"]
+
 [dependencies]
 async-lock.workspace = true
-bytes.workspace = true
 chrono.workspace = true
-deadpool-postgres.workspace = true
-deadpool.workspace = true
 ft-sys-shared.workspace = true
-futures-util.workspace = true
 http.workspace = true
+
+
 libsqlite3-sys.workspace = true
 magic-crypt.workspace = true
 once_cell.workspace = true
@@ -28,6 +30,12 @@ scc.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
-tokio-postgres.workspace = true
 tracing.workspace = true
 wasmtime.workspace = true
+
+# PostgreSQL dependencies - only included when postgres feature is enabled
+bytes = { workspace = true, optional = true }
+deadpool = { workspace = true, optional = true }
+deadpool-postgres = { workspace = true, optional = true }
+futures-util = { workspace = true, optional = true }
+tokio-postgres = { workspace = true, optional = true }

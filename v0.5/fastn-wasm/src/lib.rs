@@ -12,6 +12,7 @@ pub(crate) mod env;
 pub(crate) mod helpers;
 pub(crate) mod http;
 pub(crate) mod macros;
+#[cfg(feature = "postgres")]
 pub mod pg;
 mod process_http_request;
 pub(crate) mod register;
@@ -19,6 +20,7 @@ mod sqlite;
 mod store;
 
 pub use process_http_request::{WasmError, handle, process_http_request};
+#[cfg(feature = "postgres")]
 pub(crate) use store::Conn;
 pub use store::{ConnectionExt, SQLError, Store, StoreExt, StoreImpl};
 pub use store::{

@@ -24,10 +24,13 @@ impl<STORE: fastn_wasm::StoreExt + 'static> fastn_wasm::Store<STORE> {
         );
 
         // pg related stuff
-        fastn_wasm::func2ret!(linker, "pg_connect", fastn_wasm::pg::connect);
-        fastn_wasm::func3ret!(linker, "pg_query", fastn_wasm::pg::query);
-        fastn_wasm::func3ret!(linker, "pg_execute", fastn_wasm::pg::execute);
-        fastn_wasm::func3ret!(linker, "pg_batch_execute", fastn_wasm::pg::batch_execute);
+        #[cfg(feature = "postgres")]
+        {
+            fastn_wasm::func2ret!(linker, "pg_connect", fastn_wasm::pg::connect);
+            fastn_wasm::func3ret!(linker, "pg_query", fastn_wasm::pg::query);
+            fastn_wasm::func3ret!(linker, "pg_execute", fastn_wasm::pg::execute);
+            fastn_wasm::func3ret!(linker, "pg_batch_execute", fastn_wasm::pg::batch_execute);
+        }
 
         // request related stuff
         fastn_wasm::func0ret!(linker, "http_get_request", fastn_wasm::http::get_request);

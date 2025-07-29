@@ -34,7 +34,7 @@ fastn-observer.workspace = true
 fastn-package.workspace = true
 fastn-resolved.workspace = true
 fastn-utils.workspace = true
-fastn-wasm.workspace = true
+fastn-wasm = { workspace = true, features = ["postgres"] }
 ft-sys-shared.workspace = true
 ftd-ast.workspace = true
 ftd-p1.workspace = true
