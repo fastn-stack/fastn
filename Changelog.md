@@ -1,5 +1,11 @@
 # `fastn` Change Log
 
+## 29 July 2025
+
+### fastn: 0.4.110
+
+- d93c5b1da: Fix `for` loops counter when working across modules. See PR #2172 for more.
+
 ## 9 July 2025
 
 ### fastn: 0.4.109
