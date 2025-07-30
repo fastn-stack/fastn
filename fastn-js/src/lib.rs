@@ -62,6 +62,8 @@ pub fn fastn_test_js() -> &'static str {
 
 pub fn all_js_without_test_and_ftd_langugage_js() -> String {
     let markdown_js = fastn_js::markdown_js();
+    // Core JS files - order is important for dependencies
+    let benchmark_utils_js = include_str_with_debug!("../js/benchmark-utils.js");
     let fastn_js = include_str_with_debug!("../js/fastn.js");
     let dom_js = include_str_with_debug!("../js/dom.js");
     let utils_js = include_str_with_debug!("../js/utils.js");
@@ -71,9 +73,10 @@ pub fn all_js_without_test_and_ftd_langugage_js() -> String {
     let post_init_js = include_str_with_debug!("../js/postInit.js");
 
     // the order is important
+    // benchmark-utils must come first to define fastn_perf
     // global variable defined in dom_js might be read in virtual_js
     format!(
-        "{markdown_js}{fastn_js}{dom_js}{utils_js}{virtual_js}{web_component_js}{ftd_js}{post_init_js}"
+        "{benchmark_utils_js}{markdown_js}{fastn_js}{dom_js}{utils_js}{virtual_js}{web_component_js}{ftd_js}{post_init_js}"
     )
 }
 

@@ -137,6 +137,65 @@ fastn_dom.getClassesAsStringWithoutStyleTag = function () {
     return classes.join("\n\t");
 };
 
+// Benchmarkable CSS system with caching and performance monitoring
+const fastn_css = {
+    cache: new Map(),
+    stats: {
+        hits: 0,
+        misses: 0,
+        creations: 0,
+    },
+
+    createStyle(cssClass, obj) {
+        if (typeof fastn_perf !== "undefined") fastn_perf.mark("css-creation");
+        if (typeof fastn_perf !== "undefined")
+            fastn_perf.count("css-creations");
+
+        const cacheKey = `${cssClass}-${JSON.stringify(obj)}`;
+
+        if (this.cache.has(cacheKey)) {
+            this.stats.hits++;
+            if (typeof fastn_perf !== "undefined")
+                fastn_perf.count("css-cache-hits");
+            const result = this.cache.get(cacheKey);
+            if (typeof fastn_perf !== "undefined")
+                fastn_perf.measure("css-creation");
+            return result;
+        }
+
+        this.stats.misses++;
+        if (typeof fastn_perf !== "undefined")
+            fastn_perf.count("css-cache-misses");
+
+        const result = getClassAsString(cssClass, obj);
+        this.cache.set(cacheKey, result);
+        this.stats.creations++;
+
+        if (typeof fastn_perf !== "undefined")
+            fastn_perf.measure("css-creation");
+        return result;
+    },
+
+    // For benchmarking
+    clearCache() {
+        this.cache.clear();
+        this.stats = { hits: 0, misses: 0, creations: 0 };
+    },
+
+    getCacheSize() {
+        return this.cache.size;
+    },
+
+    getStats() {
+        return { ...this.stats };
+    },
+
+    getCacheHitRatio() {
+        const total = this.stats.hits + this.stats.misses;
+        return total > 0 ? this.stats.hits / total : 0;
+    },
+};
+
 function getClassAsString(className, obj) {
     if (typeof obj.value === "object" && obj.value !== null) {
         let value = "";

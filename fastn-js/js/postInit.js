@@ -1,3 +1,85 @@
+// Benchmarkable event system with isolated testing capabilities
+const fastn_events = {
+    handlers: {
+        resize: [],
+        click: [],
+        clickOutside: [],
+        keydown: [],
+        keyup: [],
+        globalKey: [],
+        globalKeySeq: [],
+    },
+
+    stats: {
+        triggeredEvents: {},
+        handlerExecutions: 0,
+    },
+
+    register(type, handler, metadata = {}) {
+        if (typeof fastn_perf !== "undefined")
+            fastn_perf.count(`event-register-${type}`);
+
+        if (!this.handlers[type]) {
+            this.handlers[type] = [];
+        }
+
+        this.handlers[type].push({
+            handler,
+            metadata,
+            registeredAt: Date.now(),
+        });
+    },
+
+    trigger(type, event, targetHandlers = null) {
+        if (typeof fastn_perf !== "undefined")
+            fastn_perf.mark(`events-${type}`);
+        if (typeof fastn_perf !== "undefined")
+            fastn_perf.count(`event-trigger-${type}`);
+
+        const handlers = targetHandlers || this.handlers[type] || [];
+
+        handlers.forEach((handlerObj) => {
+            try {
+                if (typeof handlerObj === "function") {
+                    handlerObj(event);
+                } else if (handlerObj.handler) {
+                    handlerObj.handler(event);
+                }
+                this.stats.handlerExecutions++;
+            } catch (error) {
+                console.error(`Error in ${type} event handler:`, error);
+            }
+        });
+
+        this.stats.triggeredEvents[type] =
+            (this.stats.triggeredEvents[type] || 0) + 1;
+
+        if (typeof fastn_perf !== "undefined")
+            fastn_perf.measure(`events-${type}`);
+    },
+
+    // For benchmarking
+    clear(type) {
+        if (type) {
+            this.handlers[type] = [];
+        } else {
+            Object.keys(this.handlers).forEach((key) => {
+                this.handlers[key] = [];
+            });
+        }
+        this.stats = { triggeredEvents: {}, handlerExecutions: 0 };
+    },
+
+    getHandlerCount(type) {
+        return this.handlers[type] ? this.handlers[type].length : 0;
+    },
+
+    getStats() {
+        return { ...this.stats };
+    },
+};
+
+// Maintain backward compatibility
 ftd.clickOutsideEvents = [];
 ftd.globalKeyEvents = [];
 ftd.globalKeySeqEvents = [];
@@ -40,9 +122,21 @@ ftd.post_init = function () {
     const DARK_MODE_CLASS = "dark";
     let last_device = ftd.device.get();
 
-    window.onresize = function () {
+    // Benchmarkable resize handler
+    const optimizedResizeHandler = function () {
+        if (typeof fastn_perf !== "undefined")
+            fastn_perf.mark("resize-handler");
+        if (typeof fastn_perf !== "undefined")
+            fastn_perf.count("resize-events");
+
         initialise_device();
+        fastn_events.trigger("resize", { timestamp: Date.now() });
+
+        if (typeof fastn_perf !== "undefined")
+            fastn_perf.measure("resize-handler");
     };
+
+    window.onresize = optimizedResizeHandler;
     function initialise_click_outside_events() {
         document.addEventListener("click", function (event) {
             ftd.clickOutsideEvents.forEach(([ftdNode, func]) => {
