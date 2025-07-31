@@ -73,8 +73,7 @@ const fastn_perf = {
     },
 };
 
-// Expose benchmark API for isolated testing
-window.fastn_benchmark_api = {
+const fastn_benchmark_api = {
     // Performance monitoring
     perf: fastn_perf,
 
@@ -224,4 +223,6 @@ if (typeof window !== "undefined") {
         window.FASTN_BENCHMARK ||
         window.location.search.includes("benchmark=true") ||
         window.location.hostname === "localhost";
+
+    window.fastn_benchmark_api = fastn_benchmark_api;
 }
