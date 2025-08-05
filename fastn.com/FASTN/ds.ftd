@@ -68,7 +68,7 @@ ftd.ui list fluid-wrap:
 	site-logo: $fastn-assets.files.images.fastn.svg
 	site-url: /
 	social-links: $footer.social-links
-	copyright: Copyright © 2023 - fastn.com
+	copyright: Copyright © 2025 - fastn.com
 	full-width: false
 	max-width.fixed.px: 1340
 	
