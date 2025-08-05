@@ -38,7 +38,7 @@ pub fn publish_app() -> fastn_xtask::Result<()> {
     )?;
     let js_dir = site_dir.join("js");
     if js_dir.is_dir() {
-        let original_dir = std::env::current_dir().unwrap();
+        std::env::current_dir().unwrap();
         fastn_xtask::helpers::set_current_dir(&js_dir, "js")?;
         fastn_xtask::helpers::run_command("npm", ["install"], "npm install")?;
         fastn_xtask::helpers::run_command("npm", ["run", "build"], "npm run build")?;
