@@ -1069,6 +1069,8 @@ skip: true
 - Typography json to FTD: /typo-json-to-ftd/
   document: typo/typo-json-to-ftd
 
+# Contribute: /contribute/
+
 # Community: /champion-program/
   document: student-programs/champion.ftd
 
@@ -1249,7 +1251,6 @@ skip: true
 - Portfolio page: /workshop/portfolio/
   document: workshop/17-portfolio.ftd
   skip: true
-
 
 # Blog: /blog/
 
