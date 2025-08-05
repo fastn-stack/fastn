@@ -615,6 +615,230 @@ skip: true
 
 # Docs: /ftd/data-modelling/
 
+## `fastn` Made Easy: /book/
+
+- Introduction: 
+  - Why was `fastn` created?: /book/why-fastn/
+    document: book/01-introduction/00-why-fastn.ftd
+  - FifthTry Offerings: /book/fifthtry/
+    document: book/01-introduction/01-fifthtry.ftd
+- Get Started: /book/local-setup/
+  document: book/02-local-setup/01-local-setup.ftd
+  - Install fastn: /book/install/
+  document: author/how-to/install.ftd
+  - On MacOS/Linux: /book/macos/
+    document: author/setup/macos.ftd
+    description: Install on MacOS/Linux
+  - On Windows: /book/windows/
+    document: author/setup/windows.ftd
+    description: Install on Windows
+  - Uninstall fastn: /book/uninstall/
+    document: author/setup/uninstall.ftd
+    decription: Uninstall fastn
+  - Install GitHub: /book/github/
+    document: /get-started/github.ftd
+    skip: true
+  - Install Text Editor: /book/editor/
+    document: /get-started/editor.ftd
+    - Syntax Highlighting Sublime: /book/sublime/
+      document: author/how-to/sublime.ftd
+    - Syntax Highlighting VS Code: /book/vscode/
+      document: author/how-to/vscode.ftd  
+  - First Program - Hello World: /book/hello-world/
+    document: book/01-introduction/03-hello-world.ftd
+- FifthTry Online Editor (IDE)     
+  - Develop and Preview in FifthTry IDE: /book/create-website/
+    document: book/01-introduction/05-create-website.ftd
+  - FifthTry Domain Setting and Hosting: /book/fifthtry-hosting/
+    document: author/how-to/fifthtry-hosting.ftd
+  - Edit FifthTry Website and Upload: /book/manual-upload/
+    document: book/01-introduction/06-manual-upload.ftd
+  - Uploading Images in the FifthTry Editor: /book/upload-image-ide/
+    document: author/how-to/upload-image-ide.ftd 
+- `fastn` Essentials : /book/fastn-essentials/
+  document: book/01-introduction/07-fastn-essentials.ftd
+  - `FASTN.ftd` : /book/about-fastn/
+  document: book/01-introduction/08-about-fastn.ftd
+  - index.ftd : /book/about-index/
+  document: book/01-introduction/09-about-index.ftd
+  - Markdown: /book/markdown/
+    document: expander/ds/markdown.ftd
+  - Change Theme: /book/theme/
+    document: get-started/theme.ftd
+    skip: true
+  - Sitemap: /book/sitemap/
+    document: expander/ds/understanding-sitemap.ftd
+  - Meta Data: /book/seo-meta/
+      document: expander/ds/meta-data.ftd
+  - Redirects: /book/redirects/
+      document: backend/redirects.ftd
+  - URL: /book/clean-urls/
+      document: expander/sitemap-document.ftd    
+- Web Design and Development Essentials: 
+  - How to Change Color Scheme: /book/color-scheme/
+    document: expander/ds/ds-cs.ftd
+  - How to change Typography: /book/typography/
+    document: expander/ds/ds-typography.ftd
+  - How to access fonts: /book/accessing-fonts/
+    document: ftd-host/accessing-fonts.ftd  
+  - How to create `fastn` package: /book/create-fastn-package/
+    document: author/how-to/create-fastn-package.ftd  
+  - How to use components: /book/components/
+    document:/expander/components.ftd
+  - How to use images in documents: /book/using-images/
+    document: /expander/imagemodule/index.ftd  
+  - How to access files: /book/accessing-files/
+    document: ftd-host/accessing-files.ftd
+  - How to make page responsive: /book/making-responsive-pages/
+    document: frontend/make-page-responsive.ftd   
+  - How to use `import`: /book/import/
+    document: ftd-host/import.ftd
+  - How to use export/exposing: /book/using-export-exposing/
+    document: ftd/export-exposing.ftd      
+- `fastn` basics : 
+  - Data Modelling: /book/data-modelling/
+      document: ftd/data-modelling.ftd
+    - Variables: /book/variables/
+      document: ftd/variables.ftd
+    - Built-in Types: /book/built-in-types/
+      document: ftd/built-in-types.ftd
+      description: boolean, integer, decimal, string, caption, body, caption or body, ftd.ui, children, ftd.align-self, ftd.align, ftd.anchor, ftd.linear-gradient, ftd.linear-gradient-color, ftd.breakpoint-width-data, ftd.linear-gradient-directions, ftd.background-image, ftd.background-position, ftd.background-repeat, ftd.background-size, ftd.background, ftd.border-style, ftd.color, ftd.display, ftd.color-scheme, ftd.cursor, ftd.image-src, ftd.length, ftd.length-pair, ftd.loading, ftd.overflow, ftd.region, ftd.resize, ftd.resizing, ftd.responsive-type, ftd.shadow, ftd.spacing, ftd.text-align, ftd.text-input-type, ftd.text-style, ftd.text-transform, ftd.type, ftd.white-space, ftd.type-data, ftd.fetch-priority
+    - `record`: /book/record/
+      document: ftd/record.ftd
+    - `or-type`: /book/or-type/
+      document: ftd/or-type.ftd
+    - `list`: /book/list/
+      document: ftd/list.ftd
+  - Understanding Loops: /book/loop/
+    document: ftd/loop.ftd
+  - `component`: /book/components/
+    document: ftd/components.ftd
+  - Headers: /book/headers/
+    document: ftd/headers.ftd
+  - Visibility: /book/visibility/
+    document: ftd/visibility.ftd
+  - Module: /book/module/
+    document: ftd/module.ftd
+    skip: true
+  - Commenting: /book/comments/
+    document: ftd/comments.ftd
+- Kernel Components: /book/kernel/
+  document: ftd/kernel.ftd
+  - `ftd.document` 🚧: /book/document/
+    document: ftd/document.ftd
+  - `ftd.row`: /book/row/
+    document: ftd/row.ftd
+  - `ftd.column`: /book/column/
+    document: ftd/column.ftd
+  - `ftd.container`: /book/container/
+    document: ftd/container.ftd
+  - `ftd.text`: /book/text/
+    document: ftd/text.ftd
+  - `ftd.image`: /book/image/
+    document: ftd/image.ftd
+  - `ftd.video`: /book/video/
+    document: ftd/video.ftd
+  - `ftd.rive` (animation): /book/rive/
+    document: ftd/rive.ftd
+    description: animation
+  - `ftd.iframe`: /book/iframe/
+    document: ftd/iframe.ftd
+  - `ftd.integer`: /book/integer/
+    document: ftd/integer.ftd
+  - `ftd.decimal`: /book/decimal/
+    document: ftd/decimal.ftd
+  - `ftd.boolean`: /book/boolean/
+    document: ftd/boolean.ftd
+  - `ftd.code`: /book/code/
+    document: ftd/code.ftd
+  - `ftd.text-input`: /book/text-input/
+    document: ftd/text-input.ftd
+  - `ftd.checkbox`: /book/checkbox/
+    document: ftd/checkbox.ftd
+  - `ftd.desktop`: /book/desktop/
+    document: ftd/desktop.ftd
+  - `ftd.mobile`: /book/mobile/
+    document: ftd/mobile.ftd
+- Attributes: /book/attributes/
+  document: ftd/attributes.ftd
+  - Common Attributes: /book/common-attributes/
+    document: ftd/common.ftd
+    description: id, padding, padding-vertical, padding-horizontal, padding-left, padding-right, padding-top, padding-bottom, margin, margin-vertical, margin-horizontal, margin-left, margin-right, margin-top, margin-bottom, align-self, color, width, min-width, max-width, height, min-height, max-height, background, border-width, border-left-width, border-right-width, border-top-width, border-bottom-width, border-radius, border-top-left-radius, border-top-right-radius, border-bottom-left-radius, border-bottom-right-radius, border-color, border-left-color, border-right-color, border-top-color, border-bottom-color, border-style, border-style-left, border-style-right, border-style-top, border-style-bottom, border-style-horizontal, border-style-vertical, overflow, overflow-x, overflow-y, cursor, region, link, open-in-new-tab, role, resize, sticky, shadow, anchor, opacity, whitespace, text-transform, classes, top, bottom, left, right, css, js, z-index, border-radius.px, border-top-left-radius.px, border-top-right-radius.px, border-bottom-left-radius.px, border-bottom-right-radius.px, width.fixed.px, min-width, max-width, height, min-height, max-height, overflow-x, overflow-y, cursor, region, border-width.px, border-top-width.px, border-bottom-width.px, border-left-width.px, border-right-width.px, submit, background-gradient, background-image, background-repeat, background-parallax, sticky, anchor, z-index, white-space, text-transform
+  - Text Attributes: /book/text-attributes/
+    document: ftd/text-attributes.ftd
+    description: style: (underline, strike, italic, heavy, extra-bold, semi-bold, bold, regular, medium, light, extra-light, hairline), text-align, text-indent
+  - Container Attributes: /book/container-attributes/
+    document: ftd/container-attributes.ftd
+    description: wrap, align-content, spacing
+  - Container Root Attributes: /book/container-root-attributes/
+    document: ftd/container-root-attributes.ftd
+    description: children, colors, types
+- Functions: /book/functions/
+  document: ftd/functions.ftd
+  description: clamp
+- Built-in Functions: /book/built-in-functions/
+  document: ftd/built-in-functions.ftd
+  description: len, length, ftd.append, ftd.insert_at, ftd.delete_at, ftd.clear, enable_dark_mode, enable_light_mode, enable_system_mode, copy-to-clipboard, toggle, increment, increment-by, set-bool, set-string, set-integer, is_empty, light mode, dark mode, system mode
+- Built-in Rive Functions: /book/built-in-rive-functions/
+  document: ftd/built-in-rive-functions.ftd
+  description: animation, ftd.toggle-play-rive, ftd.play-rive, ftd.pause-rive, ftd.fire-rive, ftd.set-rive-integer, ftd.toggle-rive-boolean, ftd.set-rive-boolean
+- Built-in Local Storage Functions: /book/local-storage/
+  document: ftd/local-storage.ftd
+  description: ftd.local_storage.set, ftd.local_storage.get, ftd.local_storage.delete
+- Built-in Variables: /book/built-in-variables/
+  document: ftd/built-in-variables.ftd
+  description: ftd.dark-mode, ftd.system-dark-mode, ftd.follow-system-dark-mode, ftd.device, ftd.mobile-breakpoint, light mode, dark mode, system mode
+- `ftd` Events: /book/events/
+  document: ftd/events.ftd
+  description: on-click, on-click-outside, on-mouse-enter, on-mouse-leave, on-input, on-change, on-blur, on-focus, on-global-key, on-global-key-seq
+- Rive Events: /book/rive-events/
+  document: ftd/rive-events.ftd
+  decription: animation, on-rive-play, on-rive-pause, on-rive-state-change
+- `processor`: /book/processor/
+  document: ftd-host/processor.ftd
+- `foreign variables`: /book/foreign-variable/
+  document: ftd-host/foreign-variable.ftd
+- `assets`: /book/assets/
+  document: ftd-host/assets.ftd
+- Interoperability with JS/CSS: /book/use-js-css/
+  document: ftd/use-js-css.ftd
+  - JS in function: /book/js-in-function/
+    document: ftd/js-in-function.ftd
+  - Web Component: /book/web-component/
+    document: ftd/web-component.ftd
+  - Using External CSS: /book/external-css/
+    document: ftd/external-css.ftd
+- Best Practices: /book/best-practices/
+  - Formatting: /book/formatting/
+    document: best-practices/formatting.ftd
+  - Import: /book/importing-packages/
+    document: best-practices/import.ftd
+  - Auto-import: /auto-import/
+    document: /book/best-practices/auto-import.ftd
+  - Device: /device-guidelines/
+    document: best-practices/device.ftd
+  - Conditions: /book/how-to-use-conditions/
+    document: best-practices/use-conditions.ftd
+  - Container: /book/container-guidelines/
+    document: best-practices/container-guidelines.ftd
+  - Same argument & attribute types: /book/same-argument-attribute-type/
+    document: best-practices/same-argument-attribute-type.ftd
+  - FScript: /book/fscript-guidelines/
+    document: best-practices/fscript-guidelines.ftd
+  - Inherited Types: /book/inherited-guidelines/
+    document: best-practices/inherited-types.ftd
+  - Variable & it's Type: /book/variable-type-guidelines/
+    document: best-practices/variable-type.ftd
+  - Optional Arguments: /book/optional-argument-guidelines/
+    document: best-practices/optional-arg-not-null.ftd
+  - Commenting: /book/commenting-guidelines/
+    document: best-practices/commenting-guidelines.ftd
+  - Self referencing: /book/self-referencing-guidelines/
+    document: best-practices/self-referencing.ftd
+  - Property: /book/property-guidelines/
+    document: best-practices/property-guidelines.ftd  
+
+
 ## Frontend: /ftd/data-modelling/
 
 - Data Modelling: /ftd/data-modelling/
@@ -1025,232 +1249,6 @@ skip: true
 - Portfolio page: /workshop/portfolio/
   document: workshop/17-portfolio.ftd
   skip: true
-
-# `fastn` Made Easy - For the Curious & the Creative: /book/
-  document: book/index.ftd
-
-- Introduction: 
-  - Why was `fastn` created?: /book/why-fastn/
-    document: book/01-introduction/00-why-fastn.ftd
-  - FifthTry Offerings: /book/fifthtry/
-    document: book/01-introduction/01-fifthtry.ftd
-- Get Started: /book/local-setup/
-  document: book/02-local-setup/01-local-setup.ftd
-  - Install fastn: /book/install/
-  document: author/how-to/install.ftd
-  - On MacOS/Linux: /book/macos/
-    document: author/setup/macos.ftd
-    description: Install on MacOS/Linux
-  - On Windows: /book/windows/
-    document: author/setup/windows.ftd
-    description: Install on Windows
-  - Uninstall fastn: /book/uninstall/
-    document: author/setup/uninstall.ftd
-    decription: Uninstall fastn
-  - Install GitHub: /book/github/
-    document: /get-started/github.ftd
-    skip: true
-  - Install Text Editor: /book/editor/
-    document: /get-started/editor.ftd
-    - Syntax Highlighting Sublime: /book/sublime/
-      document: author/how-to/sublime.ftd
-    - Syntax Highlighting VS Code: /book/vscode/
-      document: author/how-to/vscode.ftd  
-  - First Program - Hello World: /book/hello-world/
-    document: book/01-introduction/03-hello-world.ftd
-- FifthTry Online Editor (IDE)     
-  - Develop and Preview in FifthTry IDE: /book/create-website/
-    document: book/01-introduction/05-create-website.ftd
-  - FifthTry Domain Setting and Hosting: /book/fifthtry-hosting/
-    document: author/how-to/fifthtry-hosting.ftd
-  - Edit FifthTry Website and Upload: /book/manual-upload/
-    document: book/01-introduction/06-manual-upload.ftd
-  - Uploading Images in the FifthTry Editor: /book/upload-image-ide/
-    document: author/how-to/upload-image-ide.ftd 
-- `fastn` Essentials : /book/fastn-essentials/
-  document: book/01-introduction/07-fastn-essentials.ftd
-  - `FASTN.ftd` : /book/about-fastn/
-  document: book/01-introduction/08-about-fastn.ftd
-  - index.ftd : /book/about-index/
-  document: book/01-introduction/09-about-index.ftd
-  - Markdown: /book/markdown/
-    document: expander/ds/markdown.ftd
-  - Change Theme: /book/theme/
-    document: get-started/theme.ftd
-    skip: true
-  - Sitemap: /book/sitemap/
-    document: expander/ds/understanding-sitemap.ftd
-  - Meta Data: /book/seo-meta/
-      document: expander/ds/meta-data.ftd
-  - Redirects: /book/redirects/
-      document: backend/redirects.ftd
-  - URL: /book/clean-urls/
-      document: expander/sitemap-document.ftd    
-- Web Design and Development Essentials: 
-  - How to Change Color Scheme: /book/color-scheme/
-    document: expander/ds/ds-cs.ftd
-  - How to change Typography: /book/typography/
-    document: expander/ds/ds-typography.ftd
-  - How to access fonts: /book/accessing-fonts/
-    document: ftd-host/accessing-fonts.ftd  
-  - How to create `fastn` package: /book/create-fastn-package/
-    document: author/how-to/create-fastn-package.ftd  
-  - How to use components: /book/components/
-    document:/expander/components.ftd
-  - How to use images in documents: /book/using-images/
-    document: /expander/imagemodule/index.ftd  
-  - How to access files: /book/accessing-files/
-    document: ftd-host/accessing-files.ftd
-  - How to make page responsive: /book/making-responsive-pages/
-    document: frontend/make-page-responsive.ftd   
-  - How to use `import`: /book/import/
-    document: ftd-host/import.ftd
-  - How to use export/exposing: /book/using-export-exposing/
-    document: ftd/export-exposing.ftd      
-- `fastn` basics : 
-  - Data Modelling: /book/data-modelling/
-      document: ftd/data-modelling.ftd
-    - Variables: /book/variables/
-      document: ftd/variables.ftd
-    - Built-in Types: /book/built-in-types/
-      document: ftd/built-in-types.ftd
-      description: boolean, integer, decimal, string, caption, body, caption or body, ftd.ui, children, ftd.align-self, ftd.align, ftd.anchor, ftd.linear-gradient, ftd.linear-gradient-color, ftd.breakpoint-width-data, ftd.linear-gradient-directions, ftd.background-image, ftd.background-position, ftd.background-repeat, ftd.background-size, ftd.background, ftd.border-style, ftd.color, ftd.display, ftd.color-scheme, ftd.cursor, ftd.image-src, ftd.length, ftd.length-pair, ftd.loading, ftd.overflow, ftd.region, ftd.resize, ftd.resizing, ftd.responsive-type, ftd.shadow, ftd.spacing, ftd.text-align, ftd.text-input-type, ftd.text-style, ftd.text-transform, ftd.type, ftd.white-space, ftd.type-data, ftd.fetch-priority
-    - `record`: /book/record/
-      document: ftd/record.ftd
-    - `or-type`: /book/or-type/
-      document: ftd/or-type.ftd
-    - `list`: /book/list/
-      document: ftd/list.ftd
-  - Understanding Loops: /book/loop/
-    document: ftd/loop.ftd
-  - `component`: /book/components/
-    document: ftd/components.ftd
-  - Headers: /book/headers/
-    document: ftd/headers.ftd
-  - Visibility: /book/visibility/
-    document: ftd/visibility.ftd
-  - Module: /book/module/
-    document: ftd/module.ftd
-    skip: true
-  - Commenting: /book/comments/
-    document: ftd/comments.ftd
-- Kernel Components: /book/kernel/
-  document: ftd/kernel.ftd
-  - `ftd.document` 🚧: /book/document/
-    document: ftd/document.ftd
-  - `ftd.row`: /book/row/
-    document: ftd/row.ftd
-  - `ftd.column`: /book/column/
-    document: ftd/column.ftd
-  - `ftd.container`: /book/container/
-    document: ftd/container.ftd
-  - `ftd.text`: /book/text/
-    document: ftd/text.ftd
-  - `ftd.image`: /book/image/
-    document: ftd/image.ftd
-  - `ftd.video`: /book/video/
-    document: ftd/video.ftd
-  - `ftd.rive` (animation): /book/rive/
-    document: ftd/rive.ftd
-    description: animation
-  - `ftd.iframe`: /book/iframe/
-    document: ftd/iframe.ftd
-  - `ftd.integer`: /book/integer/
-    document: ftd/integer.ftd
-  - `ftd.decimal`: /book/decimal/
-    document: ftd/decimal.ftd
-  - `ftd.boolean`: /book/boolean/
-    document: ftd/boolean.ftd
-  - `ftd.code`: /book/code/
-    document: ftd/code.ftd
-  - `ftd.text-input`: /book/text-input/
-    document: ftd/text-input.ftd
-  - `ftd.checkbox`: /book/checkbox/
-    document: ftd/checkbox.ftd
-  - `ftd.desktop`: /book/desktop/
-    document: ftd/desktop.ftd
-  - `ftd.mobile`: /book/mobile/
-    document: ftd/mobile.ftd
-- Attributes: /book/attributes/
-  document: ftd/attributes.ftd
-  - Common Attributes: /book/common-attributes/
-    document: ftd/common.ftd
-    description: id, padding, padding-vertical, padding-horizontal, padding-left, padding-right, padding-top, padding-bottom, margin, margin-vertical, margin-horizontal, margin-left, margin-right, margin-top, margin-bottom, align-self, color, width, min-width, max-width, height, min-height, max-height, background, border-width, border-left-width, border-right-width, border-top-width, border-bottom-width, border-radius, border-top-left-radius, border-top-right-radius, border-bottom-left-radius, border-bottom-right-radius, border-color, border-left-color, border-right-color, border-top-color, border-bottom-color, border-style, border-style-left, border-style-right, border-style-top, border-style-bottom, border-style-horizontal, border-style-vertical, overflow, overflow-x, overflow-y, cursor, region, link, open-in-new-tab, role, resize, sticky, shadow, anchor, opacity, whitespace, text-transform, classes, top, bottom, left, right, css, js, z-index, border-radius.px, border-top-left-radius.px, border-top-right-radius.px, border-bottom-left-radius.px, border-bottom-right-radius.px, width.fixed.px, min-width, max-width, height, min-height, max-height, overflow-x, overflow-y, cursor, region, border-width.px, border-top-width.px, border-bottom-width.px, border-left-width.px, border-right-width.px, submit, background-gradient, background-image, background-repeat, background-parallax, sticky, anchor, z-index, white-space, text-transform
-  - Text Attributes: /book/text-attributes/
-    document: ftd/text-attributes.ftd
-    description: style: (underline, strike, italic, heavy, extra-bold, semi-bold, bold, regular, medium, light, extra-light, hairline), text-align, text-indent
-  - Container Attributes: /book/container-attributes/
-    document: ftd/container-attributes.ftd
-    description: wrap, align-content, spacing
-  - Container Root Attributes: /book/container-root-attributes/
-    document: ftd/container-root-attributes.ftd
-    description: children, colors, types
-- Functions: /book/functions/
-  document: ftd/functions.ftd
-  description: clamp
-- Built-in Functions: /book/built-in-functions/
-  document: ftd/built-in-functions.ftd
-  description: len, length, ftd.append, ftd.insert_at, ftd.delete_at, ftd.clear, enable_dark_mode, enable_light_mode, enable_system_mode, copy-to-clipboard, toggle, increment, increment-by, set-bool, set-string, set-integer, is_empty, light mode, dark mode, system mode
-- Built-in Rive Functions: /book/built-in-rive-functions/
-  document: ftd/built-in-rive-functions.ftd
-  description: animation, ftd.toggle-play-rive, ftd.play-rive, ftd.pause-rive, ftd.fire-rive, ftd.set-rive-integer, ftd.toggle-rive-boolean, ftd.set-rive-boolean
-- Built-in Local Storage Functions: /book/local-storage/
-  document: ftd/local-storage.ftd
-  description: ftd.local_storage.set, ftd.local_storage.get, ftd.local_storage.delete
-- Built-in Variables: /book/built-in-variables/
-  document: ftd/built-in-variables.ftd
-  description: ftd.dark-mode, ftd.system-dark-mode, ftd.follow-system-dark-mode, ftd.device, ftd.mobile-breakpoint, light mode, dark mode, system mode
-- `ftd` Events: /book/events/
-  document: ftd/events.ftd
-  description: on-click, on-click-outside, on-mouse-enter, on-mouse-leave, on-input, on-change, on-blur, on-focus, on-global-key, on-global-key-seq
-- Rive Events: /book/rive-events/
-  document: ftd/rive-events.ftd
-  decription: animation, on-rive-play, on-rive-pause, on-rive-state-change
-- `processor`: /book/processor/
-  document: ftd-host/processor.ftd
-- `foreign variables`: /book/foreign-variable/
-  document: ftd-host/foreign-variable.ftd
-- `assets`: /book/assets/
-  document: ftd-host/assets.ftd
-- Interoperability with JS/CSS: /book/use-js-css/
-  document: ftd/use-js-css.ftd
-  - JS in function: /book/js-in-function/
-    document: ftd/js-in-function.ftd
-  - Web Component: /book/web-component/
-    document: ftd/web-component.ftd
-  - Using External CSS: /book/external-css/
-    document: ftd/external-css.ftd
-- Best Practices: /book/best-practices/
-  - Formatting: /book/formatting/
-    document: best-practices/formatting.ftd
-  - Import: /book/importing-packages/
-    document: best-practices/import.ftd
-  - Auto-import: /auto-import/
-    document: /book/best-practices/auto-import.ftd
-  - Device: /device-guidelines/
-    document: best-practices/device.ftd
-  - Conditions: /book/how-to-use-conditions/
-    document: best-practices/use-conditions.ftd
-  - Container: /book/container-guidelines/
-    document: best-practices/container-guidelines.ftd
-  - Same argument & attribute types: /book/same-argument-attribute-type/
-    document: best-practices/same-argument-attribute-type.ftd
-  - FScript: /book/fscript-guidelines/
-    document: best-practices/fscript-guidelines.ftd
-  - Inherited Types: /book/inherited-guidelines/
-    document: best-practices/inherited-types.ftd
-  - Variable & it's Type: /book/variable-type-guidelines/
-    document: best-practices/variable-type.ftd
-  - Optional Arguments: /book/optional-argument-guidelines/
-    document: best-practices/optional-arg-not-null.ftd
-  - Commenting: /book/commenting-guidelines/
-    document: best-practices/commenting-guidelines.ftd
-  - Self referencing: /book/self-referencing-guidelines/
-    document: best-practices/self-referencing.ftd
-  - Property: /book/property-guidelines/
-    document: best-practices/property-guidelines.ftd  
-
-
 
 
 # Blog: /blog/
