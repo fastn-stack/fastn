@@ -1,0 +1,27 @@
+-- import: fastn.com/content-library as lib
+-- import: site-banner.fifthtry.site as banner
+
+-- ds.page:
+
+-- ds.page.banner:
+
+    -- banner.cta-banner:
+	cta-text: show your support!
+	cta-link: https://github.com/fastn-stack/fastn
+	bgcolor: $inherited.colors.cta-primary.base
+	
+    Enjoying `fastn`? Please consider giving us a star ⭐️ on
+    GitHub to
+
+-- end: ds.page.banner
+
+-- ds.h2: Chat with [@amitu](https://github.com/amitu/) and [@siddhantk232](https://github.com/siddhantk232/)
+
+4th August, 2025
+
+We talk about the future of FifthTry, fastn and, p2p apps.
+
+-- lib.cta-primary-small: Watch on Youtube
+link: https://www.youtube.com/watch?v=RJ6iBcvdmZA
+
+-- end: ds.page
