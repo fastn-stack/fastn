@@ -1,0 +1,51 @@
+-- import: fastn.com/assets
+
+-- component links-row:
+optional string discord-link:
+optional string linkedin-link:
+optional string github-link:
+private boolean $discord-mouse-in: false
+private boolean $github-mouse-in: false
+private boolean $linkedin-mouse-in: false
+
+-- ftd.row:
+width: hug-content
+padding-vertical.px: 20
+color: $inherited.colors.text-strong
+role: $inherited.types.copy-small
+spacing.fixed.px: 20
+background.solid: $inherited.colors.background.base
+
+-- ftd.image:
+if: { links-row.discord-link != NULL }
+src: $assets.files.assets.discord.svg
+src if { links-row.discord-mouse-in }: $assets.files.assets.discord-hover.svg
+width.fixed.px: 35
+height.fixed.px: 35
+link: $links-row.discord-link
+$on-mouse-enter$: $ftd.set-bool($a = $links-row.discord-mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $links-row.discord-mouse-in, v = false)
+
+-- ftd.image:
+if: { links-row.linkedin-link != NULL }
+src: $assets.files.assets.linkedin.svg
+src if { links-row.linkedin-mouse-in }: $assets.files.assets.linkedin-hover.svg
+width.fixed.px: 35
+height.fixed.px: 35
+link: $links-row.linkedin-link
+$on-mouse-enter$: $ftd.set-bool($a = $links-row.linkedin-mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $links-row.linkedin-mouse-in, v = false)
+
+-- ftd.image:
+if: { links-row.github-link != NULL }
+src: $assets.files.assets.github.svg
+src if { links-row.github-mouse-in }: $assets.files.assets.github-hover.svg
+width.fixed.px: 35
+height.fixed.px: 35
+link: $links-row.github-link
+$on-mouse-enter$: $ftd.set-bool($a = $links-row.github-mouse-in, v = true)
+$on-mouse-leave$: $ftd.set-bool($a = $links-row.github-mouse-in, v = false)
+
+-- end: ftd.row
+
+-- end: links-row
