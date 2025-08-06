@@ -1,7 +1,6 @@
 -- import: dark-flame-cs.fifthtry.site
 -- import: fastn-typography.fifthtry.site as typo
 -- import: fastn.com/utils
--- import: fastn.com/notification
 -- import: site-banner.fifthtry.site as banner
 -- import: fastn.com/content-library as footer
 -- import: doc-site.fifthtry.site/common
@@ -164,13 +163,6 @@ search-url: $page.search-url
 fluid-width: false
 max-width.fixed.px: 1340
 fluid-wrap: $page.fluid-wrap
-
-	-- doc-site.page.header-logo-ui:
-	
-		-- notification.display-notifications:
-		if: { ftd.device == "desktop" }
-		
-	-- end: doc-site.page.header-logo-ui
 
 	-- ftd.column:
 	margin-top.em if { ftd.device == "mobile" }: 0.5
