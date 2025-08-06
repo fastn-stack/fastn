@@ -1,4 +1,5 @@
 -- import: fastn.com/components/utils
+-- import: fastn.com/components/social-links
 
 -- ftd.color title-hover-color: #ef8434
 
@@ -60,7 +61,7 @@ spacing.fixed.px: 24
 width.fixed.px: 1250
 align-content: right
 
--- social-links:
+-- social-links.links-row:
 discord-link: $display-certificate.discord-link
 github-link: $display-certificate.github-link
 linkedin-link: $display-certificate.linkedin-link
@@ -88,62 +89,6 @@ open-in-new-tab: true
 -- end: ftd.row
 
 -- end: display-certificate
-
-
-
-
--- component social-links:
-string discord-link:
-string linkedin-link:
-string github-link:
-boolean $discord-mouse-in: false
-boolean $github-mouse-in: false
-boolean $linkedin-mouse-in: false
-
--- ftd.row:
-width: hug-content
-align-self: end
-padding-horizontal.px: 12
-padding-vertical.px: 20
-color: $inherited.colors.text-strong
-role: $inherited.types.copy-small
-spacing.fixed.px: 20
-margin-left.px if { ftd.device == "desktop"  }: 20
-background.solid: $inherited.colors.background.base
-
--- ftd.image:
-if: { social-links.discord-link != NULL }
-src: $assets.files.assets.discord.svg
-src if { social-links.discord-mouse-in }: $assets.files.assets.discord-hover.svg
-width.fixed.px: 35
-height.fixed.px: 35
-link: $social-links.discord-link
-$on-mouse-enter$: $ftd.set-bool($a = $social-links.discord-mouse-in, v = true)
-$on-mouse-leave$: $ftd.set-bool($a = $social-links.discord-mouse-in, v = false)
-
--- ftd.image:
-if: { social-links.linkedin-link != NULL }
-src: $assets.files.assets.linkedin.svg
-src if { social-links.linkedin-mouse-in }: $assets.files.assets.linkedin-hover.svg
-width.fixed.px: 35
-height.fixed.px: 35
-link: $social-links.linkedin-link
-$on-mouse-enter$: $ftd.set-bool($a = $social-links.linkedin-mouse-in, v = true)
-$on-mouse-leave$: $ftd.set-bool($a = $social-links.linkedin-mouse-in, v = false)
-
--- ftd.image:
-if: { social-links.github-link != NULL }
-src: $assets.files.assets.github.svg
-src if { social-links.github-mouse-in }: $assets.files.assets.github-hover.svg
-width.fixed.px: 35
-height.fixed.px: 35
-link: $social-links.github-link
-$on-mouse-enter$: $ftd.set-bool($a = $social-links.github-mouse-in, v = true)
-$on-mouse-leave$: $ftd.set-bool($a = $social-links.github-mouse-in, v = false)
-
--- end: ftd.row
-
--- end: social-links
 
 
 

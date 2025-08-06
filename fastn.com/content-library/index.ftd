@@ -446,30 +446,6 @@ spacing.fixed.px: 25
 
 
 
-
-
-
--- component hero-content:
-
--- hero-section: Build your next web project faster with fastn
-primary-cta: Try
-primary-cta-link: /r/acme/
-secondary-cta: Get started
-secondary-cta-link: /quick-build/
-subtitle: fastn is the best choice to build your company’s website
-know-more: Scroll to know why
-
-An easy-to-learn, open-source solution for building
-modern content-centric and database-driven websites.
-
--- end: hero-section
-
--- end: hero-content
-
-
-
-
-
 -- component get-started:
 
 -- utils.install: Get Started with fastn
@@ -2136,10 +2112,12 @@ width: fill-container
 				width.fixed.px: 420
 				
 					-- cta-secondary-medium: $hero-section.primary-cta
+                    if: { hero-section.primary-cta }
 					link: $hero-section.primary-cta-link
 					icon: $fastn-assets.files.images.landing.doc-icon.svg
 					
 					-- cta-primary-large: $hero-section.secondary-cta
+                    if: { hero-section.secondary-cta }
 					link: $hero-section.secondary-cta-link
 					icon: $fastn-assets.files.images.landing.arrow-icon.svg
 					
@@ -2152,6 +2130,7 @@ width: fill-container
 			align-content: center
 			spacing.fixed.px: 8
 			padding-bottom.px: 98
+            if: { hero-section.subtitle && hero-section.know-more }
 			
 				-- ftd.text: $hero-section.subtitle
 				role: $inherited.types.heading-small
@@ -2216,10 +2195,12 @@ width: fill-container
 				width.fixed.px: 225
 				
 					-- cta-secondary-medium: $hero-section.primary-cta
+                    if: { hero-section.primary-cta }
 					link: $hero-section.primary-cta-link
 					icon: $fastn-assets.files.images.landing.doc-icon.svg
 					
 					-- cta-primary-large: $hero-section.secondary-cta
+                    if: { hero-section.secondary-cta }
 					link: $hero-section.secondary-cta-link
 					icon: $fastn-assets.files.images.landing.arrow-icon.svg
 					
@@ -2233,6 +2214,7 @@ width: fill-container
 			spacing.fixed.px: 8
 			padding-bottom.px: 98
 			padding-top.px: 24
+            if: { hero-section.subtitle && hero-section.know-more }
 			
 				-- ftd.text: $hero-section.subtitle
 				role: $inherited.types.heading-medium
@@ -3021,7 +3003,7 @@ boolean transparent: false
 -- ftd.column:
 width: fill-container
 background.solid if { !cards-section.transparent }: $inherited.colors.background.step-1
-padding.px if { !cards-section.transparent }: 24
+padding.px: 24
 margin-bottom.px: 48
 border-radius.px: 16
 max-width.fixed.px: 1440
