@@ -1,0 +1,243 @@
+-- import: fastn.com/assets
+-- import: fastn.com/components/social-links
+-- import: fastn.com/content-library as lib
+-- import: site-banner.fifthtry.site as banner
+
+
+-- ds.page:
+document-title: Hire Us
+document-description: We provide Rust consulting services. Learn more about us on this page.
+;; TODO: add a relevant og image
+;; document-image: https://fastn.com/-/fastn.com/images/fastn-dot-com-og-image.jpg
+full-width: true
+sidebar: false
+
+-- ds.page.banner:
+
+    -- banner.cta-banner:
+	cta-text: show your support!
+	cta-link: https://github.com/fastn-stack/fastn
+	bgcolor: $inherited.colors.cta-primary.base
+	
+    Enjoying `fastn`? Please consider giving us a star ⭐️ on
+    GitHub to
+
+-- end: ds.page.banner
+
+-- ds.page.fluid-wrap:
+
+    -- lib.hero-section: Get help you with your Rust project!
+    secondary-cta: Talk Now
+    secondary-cta-link: mailto:amitu@fifthtry.com
+
+    Our just development experience can help you build your next project faster and better.
+
+    -- lib.cards-section:
+    transparent: true
+
+    -- lib.heart-line-title-card: Our Work
+
+    -- project: Malai
+    image: $assets.files.assets.malai-scrot.png
+
+    [Malai](https://malai.sh/) is a p2p, networking tool for exposing local
+    HTTP, TCP, or SSH services without relying on a central server. Built using
+    Rust and the [iroh](https://www.iroh.computer/) library.
+
+    -- ds.h3: Key Features
+
+    - Share your local HTTP/TCP with anyone, without any central server.
+    - Use public `*.kulfi.site` http bridge to access exposed http services or host your own.
+    - Built on top of [iroh](https://www.iroh.computer/), a p2p networking library.
+
+    -- end: project
+
+    -- project: fastn
+    image: $assets.files.assets.fastn-example.png
+
+    [fastn](https://github.com/fastn-stack/fastn/) is an all-in-one framework
+    and programming language written in Rust for building user interfaces and
+    content-driven websites. Designed to be simple and accessible especially for
+    non-programmers. It compiles to static HTML/CSS/JS and supports dynamic
+    features, WASM, SQL, and more. With built-in package management and hosting,
+    fastn enables a seamless, low-maintenance web development experience.
+
+    -- ds.h3: Key Features
+
+    - A compiler to convert ftd files to html/css/js.
+    - A mid-size Rust project spanned across multiple crates.
+    - Supports pluggable backends written in Rust compiled to wasm with our in-house [ft-sdk](https://github.com/fastn-stack/ft-sdk/).
+
+    -- end: project
+
+    -- project: FifthTry Hosting
+    image: $assets.files.assets.ide-scrot.png
+
+    Our hosting platform is entirely written in rust. You can try it at
+    fifthtry.com. The hosting service is a single c5.xlarge AWS EC2 instance that
+    runs a single Rust binary that serves requests for all websites hosted by
+    FifthTry. There are about 600 websites created on FifthTry as of writing this.
+
+    -- ds.h3: Key Features
+
+    - Hosts public fastn packages (like [lets-auth](https://lets-auth.fifthtry-community.com/), [lets-talk](https://lets-talk.fifthtry-community.com/) and more!).
+    - Built-in IDE for fastn development right in your browser. Written in Rust, compiled to WASM.
+    - Supports custom domains, automatic SSL and more.
+
+    -- end: project
+		
+	-- end: lib.cards-section
+	
+
+	-- lib.cards-section:
+    transparent: true
+	
+    -- lib.heart-line-title-card: The Team
+
+    -- team-member: Amit Upadhyay
+    image: $assets.files.images.amitu-big.jpg
+    linkedin-url: https://www.linkedin.com/in/amitu/
+    github-url: https://github.com/amitu/
+
+    Founder & CEO at FifthTry, with 20+ years leading engineering teams and
+    building developer-focused products. Previously VP Engineering at Acko,
+    Coverfox, and BrowserStack. Passionate about software tooling,
+    entrepreneurship, and empowering developers through better infrastructure. IIT
+    Bombay alumnus, currently building fastn — a web platform for modern teams.
+
+    -- team-member: Siddhant Kumar
+    image: $assets.files.images.blog.siddhant.jpg
+    linkedin-url: https://www.linkedin.com/in/siddhantCodes/
+    github-url: https://github.com/siddhantk232/
+
+    Software developer passionate about Rust, functional programming, and
+    low-level computing. I've contributed to open-source projects and built tools
+    like Malai and lets-talk at FifthTry. Skilled in Rust, C++, and JavaScript,
+    with experience in WASM, NixOS, and CI automation. Focused on building simpler,
+    easier-to-maintain software systems and developer tools.
+
+	-- end: lib.cards-section
+	
+-- end: ds.page.fluid-wrap
+
+-- end: ds.page
+
+
+-- component team-member:
+caption name: Amit Upadhyay
+ftd.image-src image:
+string linkedin-url:
+string github-url:
+body description: A rust engineer with 10+ years of experience in building scalable and reliable systems.
+
+    -- ftd.column:
+
+    -- ftd.mobile:
+
+    -- ftd.column:
+
+        -- ds.image:
+        src: $team-member.image
+
+        -- ds.h2: $team-member.name
+
+        $team-member.description
+
+        -- social-links.links-row:
+        ;; discord-link: https://discord.gg/fastn
+        github-link: $team-member.github-url
+        linkedin-link: $team-member.linkedin-url
+
+    -- end: ftd.column
+
+    -- end: ftd.mobile
+
+    -- ftd.desktop:
+
+    -- ftd.row:
+    align-content: center
+
+        -- ftd.image:
+        src: $team-member.image
+        margin-right.px: 24
+        border-radius.px: 8
+
+        -- ftd.column:
+        align-content: left
+
+            -- ds.h2: $team-member.name
+
+            $team-member.description
+
+            -- social-links.links-row:
+            ;; discord-link: https://discord.gg/fastn
+            github-link: $team-member.github-url
+            linkedin-link: $team-member.linkedin-url
+
+        -- end: ftd.column
+
+    -- end: ftd.row
+
+    -- end: ftd.desktop
+
+    -- end: ftd.column
+
+-- end: team-member
+
+
+-- component project:
+caption title: fastn
+ftd.image-src image:
+body description: A web platform for modern teams to build and deploy applications faster.
+children more-detail-ui:
+
+-- ftd.column:
+
+-- ftd.mobile:
+
+-- ftd.column:
+
+-- ftd.image:
+src: $project.image
+width.fixed.percent: 100
+border-radius.px: 8
+
+-- ds.h2: $project.title
+
+$project.description
+
+-- end: ftd.column
+
+-- end: ftd.mobile
+
+-- ftd.desktop:
+
+-- ftd.row:
+width: fill-container
+align-content: center
+spacing.fixed.px: 32
+
+-- ftd.column:
+
+-- ds.h2: $project.title
+
+$project.description
+
+-- ftd.row:
+children: $project.more-detail-ui
+
+-- end: ftd.column
+
+-- ftd.image:
+width.fixed.percent: 40
+src: $project.image
+border-radius.px: 8
+
+-- end: ftd.row
+
+
+-- end: ftd.desktop
+
+-- end: ftd.column
+
+-- end: project
