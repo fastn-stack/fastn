@@ -68,10 +68,18 @@ pub fn headers(
         headers.push(fastn_section::Header {
             name: kinded_name.name,
             kind: kinded_name.kind,
+            // Documentation comments for headers (e.g., `;;; This header controls X` before the header)
+            // Would need to track and associate doc comments with the following header
             doc: None,
+            // Visibility modifiers (e.g., `public name: value` or `private<module> secret: value`)
+            // Would need to check for visibility keywords before parsing kinded_name
             visibility: None,
+            // Conditional inclusion (e.g., `name if $condition: value` or `name: value if $condition`)
+            // Would need to parse `if` keyword and condition expression after name or value
             condition: None,
             value,
+            // Whether header is commented out (e.g., `/name: value` or `/string name: value`)
+            // Would need to check for `/` prefix at the start of the header line
             is_commented: false,
         });
 
