@@ -22,6 +22,8 @@ pub enum Error {
     ImportMustHaveCaption,
     ImportPackageNotFound,
     BodyNotAllowed,
+    /// Body content found without required double newline separator after headers
+    BodyWithoutDoubleNewline,
     ExtraArgumentFound,
     ArgumentValueRequired,
     ComponentIsNotAFunction,
