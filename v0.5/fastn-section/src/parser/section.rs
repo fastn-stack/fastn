@@ -43,7 +43,7 @@ pub fn section(
     // Check for comment marker before section
     scanner.skip_spaces();
     let is_commented = scanner.take('/');
-    
+
     let section_init = fastn_section::parser::section_init(scanner)?;
 
     scanner.skip_spaces();
@@ -68,9 +68,9 @@ pub fn section(
         caption,
         headers,
         body,
-        children: vec![],    // children is populated by the wiggin::ender.
+        children: vec![], // children is populated by the wiggin::ender.
         is_commented,
-        has_end: false,      // has_end is populated by the wiggin::ender.
+        has_end: false, // has_end is populated by the wiggin::ender.
     })
 }
 

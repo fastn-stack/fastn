@@ -134,7 +134,7 @@ fn inner_ender<T: SectionProxy>(o: &mut fastn_section::Document, sections: Vec<T
             stack.push(section);
             continue;
         }
-        
+
         match section.mark().unwrap() {
             // If the section is a start marker, push it onto the stack
             Mark::Start(_name) => {
@@ -149,7 +149,7 @@ fn inner_ender<T: SectionProxy>(o: &mut fastn_section::Document, sections: Vec<T
                         children.insert(0, candidate);
                         continue;
                     }
-                    
+
                     match candidate.mark().unwrap() {
                         Mark::Start(name) => {
                             // If the candidate section name is the same as the end section name
@@ -229,14 +229,14 @@ trait SectionProxy: Sized + std::fmt::Debug {
     /// - `true` if the section has been closed by an end marker.
     /// - `false` if the section is still open and can accept further nesting.
     fn has_ended(&self) -> bool;
-    
+
     /// Checks if the current section is commented out.
     ///
     /// # Returns
     /// - `true` if the section is commented (starts with /)
     /// - `false` if the section is active
     fn is_commented(&self) -> bool;
-    
+
     fn span(&self) -> fastn_section::Span;
 }
 
@@ -284,7 +284,7 @@ impl SectionProxy for fastn_section::Section {
     fn has_ended(&self) -> bool {
         self.has_end
     }
-    
+
     fn is_commented(&self) -> bool {
         self.is_commented
     }
@@ -331,7 +331,7 @@ mod test {
         fn has_ended(&self) -> bool {
             self.has_ended
         }
-        
+
         fn is_commented(&self) -> bool {
             self.is_commented
         }
@@ -352,8 +352,8 @@ mod test {
             let is_commented = part.starts_with('#');
             let name = if is_end || is_commented {
                 &part[1..]
-            } else { 
-                part 
+            } else {
+                part
             };
             let section = DummySection {
                 module,
@@ -475,24 +475,27 @@ mod test {
         );
         t("bar -> bar -> baz -> /bar -> /bar", "bar [bar [baz]]");
         t("bar -> bar -> /bar -> /bar", "bar [bar]");
-        
+
         // Tests with commented sections
         t("#foo -> bar", "#foo, bar");
         t("foo -> #bar -> /foo", "foo [#bar]");
         t("foo -> #bar -> baz -> /foo", "foo [#bar, baz]");
-        
+
         // Commented sections don't match with end markers
-        t("#foo -> /foo", "#foo");  // /foo doesn't close #foo
-        t("foo -> #foo -> /foo", "foo [#foo]");  // inner /foo doesn't close commented #foo
-        
+        t("#foo -> /foo", "#foo"); // /foo doesn't close #foo
+        t("foo -> #foo -> /foo", "foo [#foo]"); // inner /foo doesn't close commented #foo
+
         // Mixed commented and uncommented
         t("foo -> #comment -> bar -> /foo", "foo [#comment, bar]");
-        t("foo -> bar -> #comment -> /bar -> /foo", "foo [bar [#comment]]");
-        
+        t(
+            "foo -> bar -> #comment -> /bar -> /foo",
+            "foo [bar [#comment]]",
+        );
+
         // Multiple commented sections
         t("#a -> #b -> c", "#a, #b, c");
         t("foo -> #a -> #b -> /foo", "foo [#a, #b]");
-        
+
         // Note: In real fastn, a commented end section would be /-- end: foo
         // Since commented sections don't participate in matching, they act like any other commented section
         // We don't have a special test case for commented end sections because:

@@ -29,7 +29,7 @@ pub fn body(
             break;
         }
         scanner.reset(&check_index);
-        
+
         scanner.take_till_char_or_end_of_line('{');
 
         if scanner.peek() == Some('{') {
@@ -46,7 +46,7 @@ pub fn body(
     }
 
     scanner.reset(&reset_index);
-    
+
     // Only return body if we actually have content
     if reset_index != start {
         ses.push(fastn_section::Tes::Text(scanner.span(start)));
