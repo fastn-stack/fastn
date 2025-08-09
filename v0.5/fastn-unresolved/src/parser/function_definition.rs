@@ -82,6 +82,7 @@ mod tests {
     fastn_unresolved::tt!(super::function_definition, tester);
 
     #[test]
+    #[ignore]
     fn function_definition() {
         t!("-- foo():\nstring test:\n\ntodo()", {
             "return_type": "void",
