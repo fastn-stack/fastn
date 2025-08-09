@@ -7,9 +7,9 @@ pub fn headers(
     loop {
         let index = scanner.index();
         scanner.skip_spaces();
-        let (kind, name) = match header_kinded_name(scanner) {
-            (kind, Some(name)) => (kind, name),
-            (_, None) => {
+        let kinded_name = match fastn_section::parser::kinded_name(scanner) {
+            Some(kn) => kn,
+            None => {
                 scanner.reset(index);
                 break;
             }
@@ -30,8 +30,8 @@ pub fn headers(
 
         // TODO: all the rest
         headers.push(fastn_section::Header {
-            name,
-            kind,
+            name: kinded_name.name,
+            kind: kinded_name.kind,
             doc: None,
             visibility: None,
             condition: None,
@@ -52,31 +52,6 @@ pub fn headers(
     }
 
     headers
-}
-
-pub fn header_kinded_name(
-    scanner: &mut fastn_section::Scanner<fastn_section::Document>,
-) -> (
-    Option<fastn_section::Kind>,
-    Option<fastn_section::Identifier>,
-) {
-    let kind = fastn_section::parser::kind(scanner);
-    scanner.skip_spaces();
-
-    let name = match fastn_section::parser::identifier(scanner) {
-        Some(v) => v,
-        None => {
-            return (None, kind.and_then(Into::into));
-        }
-    };
-
-    (kind, Some(name))
-}
-
-impl From<fastn_section::Kind> for Option<fastn_section::Identifier> {
-    fn from(value: fastn_section::Kind) -> Self {
-        value.to_identifier()
-    }
 }
 
 mod test {

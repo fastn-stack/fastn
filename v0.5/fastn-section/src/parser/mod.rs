@@ -19,7 +19,6 @@ pub use headers::headers;
 pub use identifier::identifier;
 pub use identifier_reference::identifier_reference;
 pub use kind::kind;
-#[expect(unused)]
 pub use kinded_name::kinded_name;
 pub use kinded_reference::kinded_reference;
 // pub use module_name::module_name;
