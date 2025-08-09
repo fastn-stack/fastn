@@ -24,7 +24,7 @@ pub fn body(
         scanner.take_till_char_or_end_of_line('{');
 
         if scanner.peek() == Some('{') {
-            todo!();  // Expression support to be implemented
+            todo!(); // Expression support to be implemented
         }
 
         if !scanner.take('\n') {
@@ -49,7 +49,7 @@ mod test {
     fn body() {
         // Simple single line body
         t!("hello world", ["hello world"]);
-        
+
         // Multi-line body
         t!(
             "
@@ -57,7 +57,7 @@ mod test {
              world",
             ["hello \n world"]
         );
-        
+
         // Body stops at section marker (single newline before marker)
         t!(
             "
@@ -67,7 +67,7 @@ mod test {
             ["hello \n world\n"],
             "-- foo:"
         );
-        
+
         // Body stops at section marker (double newline before marker)
         t!(
             "
@@ -78,7 +78,7 @@ mod test {
             ["hello \n world\n\n"],
             "-- foo:"
         );
-        
+
         // Body stops at commented section marker
         t!(
             "
@@ -89,7 +89,7 @@ mod test {
             ["hello \n world\n\n"],
             "/-- foo:"
         );
-        
+
         // Body with multiple paragraphs
         t!(
             "
@@ -100,7 +100,7 @@ mod test {
             also with text",
             ["First paragraph\nwith multiple lines\n\nSecond paragraph\nalso with text"]
         );
-        
+
         // Body with indented text
         t!(
             "
@@ -110,7 +110,7 @@ mod test {
             back to normal",
             ["Some text\n    indented content\n    more indented\nback to normal"]
         );
-        
+
         // Empty lines in body
         t!(
             "
@@ -120,7 +120,7 @@ mod test {
             Line 2",
             ["Line 1\n\n\nLine 2"]
         );
-        
+
         // Body ending at EOF without newline
         t!("no newline at end", ["no newline at end"]);
     }
