@@ -1,3 +1,39 @@
+/// Parses a section from the scanner.
+///
+/// A section is the fundamental building block of fastn documents, consisting of:
+/// - Section initialization (`-- name:` with optional type and function marker)
+/// - Optional caption (inline content after the colon)
+/// - Optional headers (key-value pairs on subsequent lines)
+/// - Optional body (free-form content after double newline)
+/// - Optional children sections (populated later by wiggin::ender)
+///
+/// # Grammar
+/// ```text
+/// section = section_init [caption] "\n" [headers] ["\n\n" body]
+/// section_init = "--" spaces [kind] spaces identifier_reference ["()"] ":"
+/// headers = (header "\n")*
+/// body = <any content until next section or end>
+/// ```
+///
+/// # Examples
+/// ```text
+/// -- foo: Caption text
+/// header1: value1
+/// header2: value2
+///
+/// This is the body content
+/// ```
+///
+/// # Parsing Rules
+/// - Headers must be on consecutive lines after the section init
+/// - Body must be separated from headers by a double newline
+/// - If body content appears without double newline, an error is reported
+/// - Children sections are handled separately by the wiggin::ender
+///
+/// # Error Recovery
+/// If body content is detected without proper double newline separator,
+/// the parser reports a `BodyWithoutDoubleNewline` error but continues
+/// parsing to avoid cascading errors.
 pub fn section(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Option<fastn_section::Section> {
@@ -91,9 +127,14 @@ mod test {
 
     #[test]
     fn section() {
+        // Basic section with just caption
         t!("-- foo: Hello World", {"init": {"name": "foo"}, "caption": ["Hello World"]});
+
+        // Section with one header
         t!(
-            "-- foo: Hello World\ngreeting: hello",
+            "
+            -- foo: Hello World
+            greeting: hello",
             {
                 "init": {"name": "foo"},
                 "caption": ["Hello World"],
@@ -103,8 +144,13 @@ mod test {
                 }]
             }
         );
+
+        // Section with multiple headers
         t!(
-            "-- foo: Hello World\ngreeting: hello\nwishes: Be happy",
+            "
+            -- foo: Hello World
+            greeting: hello
+            wishes: Be happy",
             {
                 "init": {"name": "foo"},
                 "caption": ["Hello World"],
@@ -121,23 +167,38 @@ mod test {
             }
         );
 
+        // Section with body only (no caption, no headers)
         t!(
-            "-- foo:\n\nMy greetings to world!",
+            "
+            -- foo:
+
+            My greetings to world!",
             {
                 "init": {"name": "foo"},
                 "body": ["My greetings to world!"]
             }
         );
+
+        // Section with caption and body
         t!(
-            "-- foo: Hello World\n\nMy greetings to world!",
+            "
+            -- foo: Hello World
+
+            My greetings to world!",
             {
                 "init": {"name": "foo"},
                 "caption": ["Hello World"],
                 "body": ["My greetings to world!"]
             }
         );
+
+        // Section with caption, headers, and body
         t!(
-            "-- foo: Hello World\ngreeting: hello\n\nMy greetings to world!",
+            "
+            -- foo: Hello World
+            greeting: hello
+
+            My greetings to world!",
             {
                 "init": {"name": "foo"},
                 "caption": ["Hello World"],
@@ -149,7 +210,135 @@ mod test {
             }
         );
 
-        // Test: Headers followed by body without double newline
+        // Section with typed name
+        t!(
+            "
+            -- string message: Important",
+            {
+                "init": {"name": "message", "kind": "string"},
+                "caption": ["Important"]
+            }
+        );
+
+        // Section with generic typed name
+        t!(
+            "
+            -- list<string> items: Shopping List
+            count: 5",
+            {
+                "init": {
+                    "name": "items",
+                    "kind": {"name": "list", "args": ["string"]}
+                },
+                "caption": ["Shopping List"],
+                "headers": [{
+                    "name": "count",
+                    "value": ["5"]
+                }]
+            }
+        );
+
+        // Section with qualified name (component invocation)
+        t!(
+            "
+            -- ftd.text: Hello World
+            color: red",
+            {
+                "init": {"name": "ftd.text"},
+                "caption": ["Hello World"],
+                "headers": [{
+                    "name": "color",
+                    "value": ["red"]
+                }]
+            }
+        );
+
+        // Section with function marker
+        t!(
+            "
+            -- foo():
+            param: value",
+            {
+                "init": {"function": "foo"},
+                "headers": [{
+                    "name": "param",
+                    "value": ["value"]
+                }]
+            }
+        );
+
+        // Section with empty header value
+        t!(
+            "
+            -- foo: Caption
+            empty:
+            filled: value",
+            {
+                "init": {"name": "foo"},
+                "caption": ["Caption"],
+                "headers": [
+                    {"name": "empty"},
+                    {"name": "filled", "value": ["value"]}
+                ]
+            }
+        );
+
+        // Headers with types
+        t!(
+            "
+            -- foo:
+            string name: John
+            integer age: 30",
+            {
+                "init": {"name": "foo"},
+                "headers": [
+                    {"name": "name", "kind": "string", "value": ["John"]},
+                    {"name": "age", "kind": "integer", "value": ["30"]}
+                ]
+            }
+        );
+
+        // Body with multiple lines
+        t!(
+            "
+            -- foo:
+
+            Line 1
+            Line 2
+            Line 3",
+            {
+                "init": {"name": "foo"},
+                "body": ["Line 1\nLine 2\nLine 3"]
+            }
+        );
+
+        // Consecutive sections (no body in first)
+        t!(
+            "-- first: One
+            -- second: Two",
+            {
+                "init": {"name": "first"},
+                "caption": ["One"]
+            },
+            "-- second: Two"
+        );
+
+        // Section stops at next section marker
+        t!(
+            "
+            -- foo: First
+
+            Body content
+            -- bar: Second",
+            {
+                "init": {"name": "foo"},
+                "caption": ["First"],
+                "body": ["Body content\n"]
+            },
+            "-- bar: Second"
+        );
+
+        // Error case: Headers followed by body without double newline
         // This should parse the section WITH body but also report an error
         // The body is parsed to allow subsequent sections to be parsed
         // TODO: Verify that BodyWithoutDoubleNewline error is reported at the correct position
@@ -163,6 +352,37 @@ mod test {
                 "caption": ["Hello"],
                 "headers": [{"name": "bar", "value": ["baz"]}],
                 "body": ["This is invalid body"]
+            }
+        );
+
+        // Section with no content after colon
+        t!(
+            "-- foo:",
+            {
+                "init": {"name": "foo"}
+            }
+        );
+
+        // Section with whitespace-only caption (whitespace is consumed)
+        t!(
+            "-- foo:   ",
+            {
+                "init": {"name": "foo"}
+            }
+        );
+
+        // Headers with unicode names and values
+        t!(
+            "
+            -- foo:
+            नाम: राम
+            名前: 太郎",
+            {
+                "init": {"name": "foo"},
+                "headers": [
+                    {"name": "नाम", "value": ["राम"]},
+                    {"name": "名前", "value": ["太郎"]}
+                ]
             }
         );
     }
