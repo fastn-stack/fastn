@@ -20,6 +20,12 @@ pub struct Index<'input> {
     chars: std::iter::Peekable<std::str::CharIndices<'input>>,
 }
 
+impl<'input> PartialEq for Index<'input> {
+    fn eq(&self, other: &Self) -> bool {
+        self.index == other.index
+    }
+}
+
 impl<'input, T: ECey> Scanner<'input, T> {
     pub fn add_error(&mut self, span: fastn_section::Span, message: fastn_section::Error) {
         self.output.add_error(span, message)
