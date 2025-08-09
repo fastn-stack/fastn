@@ -134,6 +134,84 @@ impl<'input, T: ECey> Scanner<'input, T> {
         }
     }
 
+    /// Skips all whitespace including spaces, tabs, newlines, and comments.
+    ///
+    /// This method repeatedly skips:
+    /// - Spaces and tabs (via `skip_spaces`)
+    /// - Newlines (via `skip_new_lines`)
+    /// - Comments starting with `;;` (via `skip_comment`)
+    ///
+    /// It continues until no more whitespace or comments can be skipped.
+    /// This is useful for parsing constructs that allow arbitrary whitespace
+    /// and comments between tokens, such as generic type parameters.
+    ///
+    /// # Example
+    /// ```text
+    /// foo<
+    ///   ;; This comment is skipped
+    ///   bar
+    ///   ;; So is this one
+    ///   <
+    ///     k>
+    /// >
+    /// ```
+    pub fn skip_all_whitespace(&mut self) {
+        // Skip all whitespace including spaces, tabs, newlines, and comments
+        // We need to loop because these might be interleaved
+        loop {
+            let start_index = self.index();
+            self.skip_spaces();
+            self.skip_new_lines();
+            self.skip_comment(); // Skip ;; comments
+            // If we didn't advance, we're done
+            if self.index() == start_index {
+                break;
+            }
+        }
+    }
+
+    /// Skips a line comment if the scanner is positioned at one.
+    ///
+    /// Comments in fastn start with `;;` and continue until the end of the line.
+    /// The newline character itself is not consumed.
+    ///
+    /// Returns `true` if a comment was found and skipped, `false` otherwise.
+    ///
+    /// # Example
+    /// ```text
+    /// ;; This is a comment
+    /// foo<
+    ///   ;; Comments can appear in generic parameters
+    ///   bar
+    /// >
+    /// ```
+    ///
+    /// If the scanner is not at a comment (doesn't start with `;;`), the scanner
+    /// position remains unchanged.
+    pub fn skip_comment(&mut self) -> bool {
+        // Check if we're at the start of a comment
+        let start = self.index();
+        if self.peek() != Some(';') {
+            return false;
+        }
+        self.pop();
+        if self.peek() != Some(';') {
+            // Not a comment, restore position
+            self.reset(start);
+            return false;
+        }
+        self.pop();
+
+        // Skip until end of line
+        while let Some(c) = self.peek() {
+            if c == '\n' {
+                break;
+            }
+            self.pop();
+        }
+        true
+    }
+
     pub fn take_till_char_or_end_of_line(&mut self, t: char) -> Option<fastn_section::Span> {
         self.take_while(|c| c != t && c != '\n')
     }

@@ -1,17 +1,3 @@
-fn skip_all_whitespace(scanner: &mut fastn_section::Scanner<fastn_section::Document>) {
-    // Skip all whitespace including spaces, tabs, and newlines
-    // We need to loop because spaces and newlines might be interleaved
-    loop {
-        let start_index = scanner.index();
-        scanner.skip_spaces();
-        scanner.skip_new_lines();
-        // If we didn't advance, we're done
-        if scanner.index() == start_index {
-            break;
-        }
-    }
-}
-
 pub fn kind(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Option<fastn_section::Kind> {
@@ -22,7 +8,7 @@ pub fn kind(
     // This block performs a look-ahead to check for an optional `<>` part.
     {
         let index = scanner.index();
-        skip_all_whitespace(scanner);
+        scanner.skip_all_whitespace();
 
         // Check if there's a `<`, indicating the start of generic arguments.
         if !scanner.take('<') {
@@ -32,7 +18,7 @@ pub fn kind(
         }
     }
 
-    skip_all_whitespace(scanner);
+    scanner.skip_all_whitespace();
     // Parse arguments within the `<...>`
     let mut args = Vec::new();
 
@@ -40,7 +26,7 @@ pub fn kind(
     while let Some(arg) = kind(scanner) {
         args.push(arg);
 
-        skip_all_whitespace(scanner);
+        scanner.skip_all_whitespace();
 
         // If a `>` is found, end of arguments
         if scanner.take('>') {
@@ -53,7 +39,7 @@ pub fn kind(
             return None;
         }
 
-        skip_all_whitespace(scanner);
+        scanner.skip_all_whitespace();
     }
 
     // Return a `Kind` with the parsed `name` and `args`
@@ -163,11 +149,18 @@ mod test {
             "  moo"
         );
 
-        // Comments aren't handled yet - this test will fail
-        // t!(
-        //     "foo<\n  ;; some comment\n bar \n ;; more comments \n<\n k>\n>  moo",
-        //     {"name": "foo", "args": [{"name": "bar", "args": ["k"]}]},
-        //     "  moo"
-        // );
+        // Test with comments in generic parameters
+        t!(
+            "
+            foo<
+              ;; some comment
+              bar
+              ;; more comments
+              <
+                k>
+            >  moo",
+            {"name": "foo", "args": [{"name": "bar", "args": ["k"]}]},
+            "  moo"
+        );
     }
 }
