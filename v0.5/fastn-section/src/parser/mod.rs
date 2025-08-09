@@ -100,7 +100,7 @@ macro_rules! tt {
         macro_rules! t {
             ($source:expr, $debug:tt, $remaining:expr) => {
                 fastn_section::parser::p(
-                    &arcstr::literal!($source),
+                    &arcstr::ArcStr::from(indoc::indoc!($source)),
                     $f,
                     serde_json::json!($debug),
                     $remaining,
@@ -108,7 +108,7 @@ macro_rules! tt {
             };
             ($source:expr, $debug:tt) => {
                 fastn_section::parser::p(
-                    &arcstr::literal!($source),
+                    &arcstr::ArcStr::from(indoc::indoc!($source)),
                     $f,
                     serde_json::json!($debug),
                     "",
@@ -119,7 +119,7 @@ macro_rules! tt {
         macro_rules! f {
             ($source:expr) => {
                 fastn_section::parser::p(
-                    &arcstr::literal!($source),
+                    &arcstr::ArcStr::from(indoc::indoc!($source)),
                     $f,
                     serde_json::json!(null),
                     $source,

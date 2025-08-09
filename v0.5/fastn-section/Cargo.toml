@@ -17,3 +17,6 @@ string-interner.workspace = true
 id-arena.workspace = true
 fastn-continuation.workspace = true
 tracing.workspace = true
+
+[dev-dependencies]
+indoc.workspace = true

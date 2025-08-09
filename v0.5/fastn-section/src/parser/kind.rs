@@ -151,9 +151,14 @@ mod test {
         // Can't start with number
         f!("123type");
 
-        // Test with newlines in generic parameters
+        // Test with newlines in generic parameters - now more readable with indoc!
         t!(
-            "foo<\n  bar \n <\n k>\n>  moo",
+            "
+            foo<
+              bar
+              <
+                k>
+            >  moo",
             {"name": "foo", "args": [{"name": "bar", "args": ["k"]}]},
             "  moo"
         );

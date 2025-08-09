@@ -829,6 +829,7 @@ dependencies = [
  "arcstr",
  "fastn-continuation",
  "id-arena",
+ "indoc",
  "serde",
  "serde_json",
  "string-interner",
