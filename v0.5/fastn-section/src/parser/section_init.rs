@@ -5,7 +5,9 @@ pub fn section_init(
     scanner.skip_spaces();
     let dashdash = scanner.token("--")?;
     scanner.skip_spaces();
-    let kinded_name = fastn_section::parser::kinded_name(scanner)?;
+
+    let kinded_ref = fastn_section::parser::kinded_reference(scanner)?;
+
     scanner.skip_spaces();
 
     let function_marker = scanner.token("(");
@@ -20,8 +22,8 @@ pub fn section_init(
 
     Some(fastn_section::SectionInit {
         dashdash,
-        name: kinded_name.name,
-        kind: kinded_name.kind,
+        name: kinded_ref.name,
+        kind: kinded_ref.kind,
         colon,
         function_marker,
         doc: None,

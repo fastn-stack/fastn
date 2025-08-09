@@ -127,6 +127,17 @@ impl fastn_section::JDebug for fastn_section::KindedName {
     }
 }
 
+impl fastn_section::JDebug for fastn_section::KindedReference {
+    fn debug(&self) -> serde_json::Value {
+        let mut o = serde_json::Map::new();
+        if let Some(kind) = &self.kind {
+            o.insert("kind".into(), kind.debug());
+        }
+        o.insert("name".into(), self.name.debug());
+        serde_json::Value::Object(o)
+    }
+}
+
 impl fastn_section::JDebug for fastn_section::Tes {
     fn debug(&self) -> serde_json::Value {
         match self {

@@ -4,6 +4,7 @@ mod headers;
 mod identifier;
 mod kind;
 mod kinded_name;
+mod kinded_reference;
 // mod module_name;
 // mod package_name;
 // mod qualified_identifier;
@@ -18,7 +19,9 @@ pub use headers::headers;
 pub use identifier::identifier;
 pub use identifier_reference::identifier_reference;
 pub use kind::kind;
+#[expect(unused)]
 pub use kinded_name::kinded_name;
+pub use kinded_reference::kinded_reference;
 // pub use module_name::module_name;
 // pub use package_name::package_name;
 // pub use qualified_identifier::qualified_identifier;

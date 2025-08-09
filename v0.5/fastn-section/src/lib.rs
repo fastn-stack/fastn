@@ -237,5 +237,11 @@ pub struct Fuel {
 #[derive(Debug)]
 pub struct KindedName {
     pub kind: Option<Kind>,
+    pub name: Identifier,
+}
+
+#[derive(Debug)]
+pub struct KindedReference {
+    pub kind: Option<Kind>,
     pub name: IdentifierReference,
 }

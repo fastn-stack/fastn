@@ -1,13 +1,49 @@
+/// Parses a kinded name from the scanner.
+///
+/// A kinded name consists of an optional type/kind followed by a name.
+/// This is commonly used in function parameters, variable declarations, and
+/// component definitions where you specify both the type and the name.
+///
+/// # Grammar
+/// ```text
+/// kinded_name = [kind] spaces name
+/// ```
+///
+/// # Examples
+/// - `string foo` - type "string" with name "foo"
+/// - `list<int> items` - generic type "list<int>" with name "items"
+/// - `foo` - just a name "foo" with no explicit type
+/// - `map<string, list<int>> data` - nested generic type with name "data"
+///
+/// Only spaces and tabs are allowed between the kind and name (not newlines).
+/// However, newlines ARE allowed within generic type parameters themselves,
+/// e.g., `list<\n  int\n> items` is valid.
+///
+/// # Special Cases
+/// If only a simple kind is present (like `string` or `foo`), it's interpreted
+/// as a name without a type through the `From<Kind>` implementation.
+/// However, complex kinds with generics (like `list<int>`) or qualified names
+/// (like `module.Type`) cannot be converted to plain identifiers and will
+/// cause the parse to fail.
 pub fn kinded_name(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Option<fastn_section::KindedName> {
+    let start = scanner.index();
     let kind = fastn_section::parser::kind(scanner);
-    scanner.skip_spaces();
+    scanner.skip_spaces(); // Only spaces/tabs between kind and name, not newlines
 
-    let name = match fastn_section::parser::identifier_reference(scanner) {
+    let name = match fastn_section::parser::identifier(scanner) {
         Some(v) => v,
         None => {
-            return kind.and_then(Into::into);
+            // If we have a kind but no name, try to convert the kind to a name
+            match kind.and_then(Into::into) {
+                Some(kinded_name) => return Some(kinded_name),
+                None => {
+                    // Conversion failed, backtrack
+                    scanner.reset(start);
+                    return None;
+                }
+            }
         }
     };
 
@@ -18,7 +54,7 @@ impl From<fastn_section::Kind> for Option<fastn_section::KindedName> {
     fn from(value: fastn_section::Kind) -> Self {
         Some(fastn_section::KindedName {
             kind: None,
-            name: value.to_identifier_reference()?,
+            name: value.to_identifier()?,
         })
     }
 }
@@ -62,5 +98,15 @@ mod test {
 
         // Just a plain identifier (no kind)
         t!("list", {"name": "list"});
+
+        // IMPORTANT: Generic types without a following name should fail
+        // because they can't be converted to plain identifiers
+        f!("list<int>");
+        f!("map<string, int>");
+
+        // IMPORTANT: Qualified types without a following name should also fail
+        // because they contain dots/hashes which can't be in plain identifiers
+        f!("module.Type");
+        f!("package#Type");
     }
 }
