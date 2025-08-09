@@ -1,3 +1,39 @@
+/// Parses a sequence of headers from the scanner.
+///
+/// Headers are key-value pairs that appear after a section initialization,
+/// each on its own line. They provide metadata and configuration for sections.
+///
+/// # Grammar
+/// ```text
+/// headers = (header "\n")*
+/// header = spaces [kind] spaces identifier ":" spaces [header_value]
+/// ```
+///
+/// # Parsing Rules
+/// - Each header must be on a separate line
+/// - Headers can optionally have a type prefix (e.g., `string name: value`)
+/// - Headers must have a colon after the name
+/// - Headers stop when:
+///   - A double newline is encountered (indicating start of body)
+///   - No valid kinded name can be parsed
+///   - No colon is found after a kinded name
+///   - End of input is reached
+/// - Empty values are allowed (e.g., `key:` with no value)
+/// - Whitespace is allowed around the colon
+///
+/// # Examples
+/// ```text
+/// name: John
+/// age: 30
+/// string city: New York
+/// list<string> items: apple, banana
+/// empty:
+/// ```
+///
+/// # Returns
+/// Returns `Some(Vec<Header>)` if at least one header is successfully parsed,
+/// `None` if no headers are found. The scanner position is reset to before
+/// the terminating newline (if any) to allow proper body parsing.
 pub fn headers(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Option<Vec<fastn_section::Header>> {
