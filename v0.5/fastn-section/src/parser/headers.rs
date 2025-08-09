@@ -1,3 +1,120 @@
+/// Represents the initial parts of a header that were successfully parsed
+struct ParsedHeaderPrefix {
+    kinded_name: fastn_section::KindedName,
+    visibility: Option<fastn_section::Spanned<fastn_section::Visibility>>,
+    is_commented: bool,
+}
+
+/// Attempts to parse a single header from the scanner
+///
+/// Returns Some(header) if successful, None if no valid header found.
+/// The scanner is reset to the original position if parsing fails.
+fn parse_single_header(
+    scanner: &mut fastn_section::Scanner<fastn_section::Document>,
+) -> Option<fastn_section::Header> {
+    let index = scanner.index();
+    scanner.skip_spaces();
+
+    // Parse the header prefix (comment marker, visibility, name)
+    let prefix = match parse_header_prefix(scanner, &index) {
+        Some(p) => p,
+        None => {
+            scanner.reset(&index);
+            return None;
+        }
+    };
+
+    // Expect a colon after the name
+    if scanner.token(":").is_none() {
+        scanner.reset(&index);
+        return None;
+    }
+
+    // Parse the header value
+    scanner.skip_spaces();
+    let value = fastn_section::parser::header_value(scanner).unwrap_or_default();
+
+    Some(fastn_section::Header {
+        name: prefix.kinded_name.name,
+        kind: prefix.kinded_name.kind,
+        doc: None, // TODO: implement doc comments
+        visibility: prefix.visibility,
+        condition: None, // TODO: implement conditions
+        value,
+        is_commented: prefix.is_commented,
+    })
+}
+
+/// Parses the prefix of a header: comment marker, visibility, and kinded name
+///
+/// This handles the complex interaction between:
+/// - Comment markers (/)
+/// - Visibility modifiers (public, private, public<scope>)
+/// - The fact that visibility keywords can also be valid identifiers
+fn parse_header_prefix<'input>(
+    scanner: &mut fastn_section::Scanner<'input, fastn_section::Document>,
+    start_index: &fastn_section::scanner::Index<'input>,
+) -> Option<ParsedHeaderPrefix> {
+    // Check for comment marker
+    let is_commented = scanner.take('/');
+    if is_commented {
+        scanner.skip_spaces();
+    }
+
+    // Try to parse visibility modifier
+    let visibility_start = scanner.index();
+    let visibility = fastn_section::parser::visibility(scanner).map(|v| {
+        let visibility_end = scanner.index();
+        fastn_section::Spanned {
+            span: scanner.span_range(visibility_start, visibility_end),
+            value: v,
+        }
+    });
+
+    scanner.skip_spaces();
+
+    // Try to parse the kinded name
+    match fastn_section::parser::kinded_name(scanner) {
+        Some(kn) => Some(ParsedHeaderPrefix {
+            kinded_name: kn,
+            visibility,
+            is_commented,
+        }),
+        None if visibility.is_some() => {
+            // If we parsed visibility but can't find a kinded_name,
+            // the visibility keyword might actually be the identifier name.
+            // Reset and try parsing without visibility.
+            parse_header_prefix_without_visibility(scanner, start_index)
+        }
+        None => None,
+    }
+}
+
+/// Fallback parser when a visibility keyword might actually be an identifier
+///
+/// This handles cases like "public: value" where "public" is the header name,
+/// not a visibility modifier.
+fn parse_header_prefix_without_visibility<'input>(
+    scanner: &mut fastn_section::Scanner<'input, fastn_section::Document>,
+    start_index: &fastn_section::scanner::Index<'input>,
+) -> Option<ParsedHeaderPrefix> {
+    scanner.reset(start_index);
+    scanner.skip_spaces();
+
+    // Re-parse comment marker if present
+    let is_commented = scanner.take('/');
+    if is_commented {
+        scanner.skip_spaces();
+    }
+
+    // Try parsing as a regular kinded_name (no visibility)
+    fastn_section::parser::kinded_name(scanner).map(|kn| ParsedHeaderPrefix {
+        kinded_name: kn,
+        visibility: None,
+        is_commented,
+    })
+}
+
 /// Parses a sequence of headers from the scanner.
 ///
 /// Headers are key-value pairs that appear after a section initialization,
@@ -6,11 +123,13 @@
 /// # Grammar
 /// ```text
 /// headers = (header "\n")*
-/// header = spaces [kind] spaces identifier ":" spaces [header_value]
+/// header = spaces ["/"] spaces [visibility] spaces [kind] spaces identifier ":" spaces [header_value]
 /// ```
 ///
 /// # Parsing Rules
 /// - Each header must be on a separate line
+/// - Headers can optionally be commented out with a "/" prefix
+/// - Headers can optionally have a visibility modifier (public, private, etc.)
 /// - Headers can optionally have a type prefix (e.g., `string name: value`)
 /// - Headers must have a colon after the name
 /// - Headers stop when:
@@ -26,6 +145,8 @@
 /// name: John
 /// age: 30
 /// string city: New York
+/// /disabled: true
+/// public api_key: secret
 /// list<string> items: apple, banana
 /// empty:
 /// ```
@@ -42,76 +163,22 @@ pub fn headers(
 
     loop {
         let index = scanner.index();
-        scanner.skip_spaces();
 
-        // Try to parse visibility modifier first
-        let visibility_start = scanner.index();
-        let visibility = fastn_section::parser::visibility(scanner).map(|v| {
-            let visibility_end = scanner.index();
-            fastn_section::Spanned {
-                span: scanner.span_range(visibility_start, visibility_end),
-                value: v,
-            }
-        });
-
-        // After visibility (if any), skip spaces and parse the kinded_name
-        scanner.skip_spaces();
-        let (kinded_name, visibility) = match fastn_section::parser::kinded_name(scanner) {
-            Some(kn) => (kn, visibility),
-            None => {
-                // If we parsed visibility but can't find a kinded_name,
-                // reset and try again without visibility (visibility keyword might be the name)
-                if visibility.is_some() {
-                    scanner.reset(&index);
-                    scanner.skip_spaces();
-                    // Try parsing as a regular kinded_name (visibility keywords can be identifiers)
-                    match fastn_section::parser::kinded_name(scanner) {
-                        Some(kn) => (kn, None), // No visibility in this case
-                        None => {
-                            scanner.reset(&index);
-                            break;
-                        }
-                    }
-                } else {
-                    scanner.reset(&index);
-                    break;
-                }
-            }
-        };
-        let colon = scanner.token(":");
-        if colon.is_none() {
-            scanner.reset(&index);
-            break;
-        }
-
+        // Check if we can continue parsing headers
         if found_new_line_at_header_end.is_none() {
             scanner.reset(&index);
             break;
         }
 
-        scanner.skip_spaces();
-        let value = fastn_section::parser::header_value(scanner).unwrap_or_default();
+        // Try to parse a single header
+        match parse_single_header(scanner) {
+            Some(header) => headers.push(header),
+            None => break,
+        }
 
-        // TODO: implement remaining features
-        headers.push(fastn_section::Header {
-            name: kinded_name.name,
-            kind: kinded_name.kind,
-            // Documentation comments for headers (e.g., `;;; This header controls X` before the header)
-            // Would need to track and associate doc comments with the following header
-            doc: None,
-            visibility,
-            // Conditional inclusion (e.g., `name if $condition: value` or `name: value if $condition`)
-            // Would need to parse `if` keyword and condition expression after name or value
-            condition: None,
-            value,
-            // Whether header is commented out (e.g., `/name: value` or `/string name: value`)
-            // Would need to check for `/` prefix at the start of the header line
-            is_commented: false,
-        });
-
+        // Track newline position for proper termination
         found_new_line_at_header_end = Some(scanner.index());
-        let new_line = scanner.token("\n");
-        if new_line.is_none() {
+        if scanner.token("\n").is_none() {
             found_new_line_at_header_end = None;
         }
     }
@@ -487,5 +554,121 @@ mod test {
                 }
             ]
         );
+
+        // Test commented headers
+        t!("/name: John", [{
+            "name": "name",
+            "is_commented": true,
+            "value": ["John"]
+        }]);
+
+        // Commented header with type
+        t!("/string name: Alice", [{
+            "name": "name",
+            "kind": "string",
+            "is_commented": true,
+            "value": ["Alice"]
+        }]);
+
+        // Multiple headers with some commented
+        t!(
+            "
+            name: Bob
+            /age: 30
+            city: New York",
+            [
+                {
+                    "name": "name",
+                    "value": ["Bob"]
+                },
+                {
+                    "name": "age",
+                    "is_commented": true,
+                    "value": ["30"]
+                },
+                {
+                    "name": "city",
+                    "value": ["New York"]
+                }
+            ]
+        );
+
+        // Commented header with visibility
+        t!("/public name: Test", [{
+            "name": "name",
+            "visibility": "Public",
+            "is_commented": true,
+            "value": ["Test"]
+        }]);
+
+        // Commented header with visibility and type
+        t!("/public string api_key: secret123", [{
+            "name": "api_key",
+            "kind": "string",
+            "visibility": "Public",
+            "is_commented": true,
+            "value": ["secret123"]
+        }]);
+
+        // Commented header with package visibility
+        t!("/public<package> internal: data", [{
+            "name": "internal",
+            "visibility": "Package",
+            "is_commented": true,
+            "value": ["data"]
+        }]);
+
+        // Mixed commented and uncommented with visibility
+        t!(
+            "
+            public name: Active
+            /private secret: hidden
+            public<module> config: enabled
+            /config2: disabled",
+            [
+                {
+                    "name": "name",
+                    "visibility": "Public",
+                    "value": ["Active"]
+                },
+                {
+                    "name": "secret",
+                    "visibility": "Private",
+                    "is_commented": true,
+                    "value": ["hidden"]
+                },
+                {
+                    "name": "config",
+                    "visibility": "Module",
+                    "value": ["enabled"]
+                },
+                {
+                    "name": "config2",
+                    "is_commented": true,
+                    "value": ["disabled"]
+                }
+            ]
+        );
+
+        // Commented header with generic type
+        t!("/list<string> items: apple, banana", [{
+            "name": "items",
+            "kind": {"name": "list", "args": ["string"]},
+            "is_commented": true,
+            "value": ["apple, banana"]
+        }]);
+
+        // Commented empty header
+        t!("/empty:", [{
+            "name": "empty",
+            "is_commented": true
+        }]);
+
+        // Edge case: visibility keyword as name when commented
+        t!("/public: this is a value", [{
+            "name": "public",
+            "is_commented": true,
+            "value": ["this is a value"]
+        }]);
     }
 }
