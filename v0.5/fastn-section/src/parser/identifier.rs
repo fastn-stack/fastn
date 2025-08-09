@@ -8,7 +8,7 @@ pub fn identifier(
     }
 
     // later characters should be is_alphanumeric or `_` or `-`
-    let span = scanner.take_while(|c| c.is_alphabetic() || c == '_' || c == '-')?;
+    let span = scanner.take_while(|c| c.is_alphanumeric() || c == '_' || c == '-')?;
 
     Some(fastn_section::Identifier { name: span })
 }
@@ -33,5 +33,17 @@ mod test {
         t!("नम😦", "नम", "😦");
         t!("नम 😦", "नम", " 😦");
         t!("😦नम ", null, "😦नम ");
+        
+        // identifiers with numbers (new feature)
+        t!("foo123", "foo123");
+        t!("test_42", "test_42");
+        t!("var-2-name", "var-2-name");
+        t!("_9lives", "_9lives");
+        // can't start with a number
+        t!("123foo", null, "123foo");
+        t!("42", null, "42");
+        // mixed alphanumeric with unicode
+        t!("नाम123", "नाम123");
+        t!("test123 bar", "test123", " bar");
     }
 }
