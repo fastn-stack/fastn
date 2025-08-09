@@ -1,3 +1,14 @@
+/// Parses a plain identifier from the scanner.
+///
+/// A plain identifier can only contain:
+/// - First character: alphabetic or underscore
+/// - Subsequent characters: alphanumeric, underscore, or hyphen
+///
+/// This is used for simple, unqualified names like variable names, function names, etc.
+/// For qualified names with dots, hashes, or slashes, use `identifier_reference` instead.
+///
+/// Examples:
+/// - `foo`, `bar`, `test123`, `_private`, `my-var`, `नाम123`
 pub fn identifier(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Option<fastn_section::Identifier> {
@@ -33,7 +44,7 @@ mod test {
         t!("नम😦", "नम", "😦");
         t!("नम 😦", "नम", " 😦");
         t!("😦नम ", null, "😦नम ");
-        
+
         // identifiers with numbers (new feature)
         t!("foo123", "foo123");
         t!("test_42", "test_42");

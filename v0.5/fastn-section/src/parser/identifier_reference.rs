@@ -1,3 +1,24 @@
+/// Parses an identifier reference from the scanner.
+///
+/// An identifier reference can be:
+/// - A simple local identifier: `foo`, `bar_baz`, `test-123`
+/// - A qualified reference with dots: `module.name`, `ftd.text`
+/// - An absolute reference with hash: `package#item`, `foo.com#bar`
+/// - A path reference with slashes: `foo.com/bar#item`
+///
+/// The identifier must start with an alphabetic character or underscore.
+/// Subsequent characters can be alphanumeric, underscore, hyphen, dot, hash, or slash.
+/// Numbers are allowed after the first character (e.g., `foo123`, `test_42`).
+///
+/// This differs from a plain identifier which only allows alphanumeric, underscore, and hyphen.
+/// The additional characters (`.`, `#`, `/`) enable parsing of qualified module references
+/// and package paths used throughout the fastn system.
+///
+/// Examples:
+/// - `foo` - simple local identifier
+/// - `ftd.text` - qualified reference to text in ftd module
+/// - `foo.com#bar` - absolute reference to bar in foo.com package
+/// - `foo.com/bar#item` - reference to item in bar module of foo.com package
 pub fn identifier_reference(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Option<fastn_section::IdentifierReference> {
@@ -7,10 +28,10 @@ pub fn identifier_reference(
         return None;
     }
 
-    // later characters should be is_alphanumeric or `_` or `-`
+    // later characters should be is_alphanumeric or `_` or `-` or special qualifiers
     let span = scanner.take_while(|c| {
         // we allow foo-bar.com/bar#yo as valid identifier reference
-        c.is_alphabetic() || c == '_' || c == '-' || c == '.' || c == '#' || c == '/'
+        c.is_alphanumeric() || c == '_' || c == '-' || c == '.' || c == '#' || c == '/'
     })?;
 
     match from_span(span.clone()) {
@@ -80,5 +101,37 @@ mod test {
         t!("नम😦", "नम", "😦");
         t!("नम 😦", "नम", " 😦");
         t!("😦नम ", null, "😦नम ");
+
+        // Numbers in identifiers (after first character)
+        t!("foo123", "foo123");
+        t!("test_42", "test_42");
+        t!("var-2-name", "var-2-name");
+        t!("_9lives", "_9lives");
+        t!("item0", "item0");
+        t!("v2", "v2");
+
+        // Can't start with a number
+        t!("123foo", null, "123foo");
+        t!("42", null, "42");
+        t!("9_lives", null, "9_lives");
+
+        // Mixed with unicode and numbers
+        t!("नाम123", "नाम123");
+        t!("test123 bar", "test123", " bar");
+
+        // Valid qualified identifier references with . # /
+        t!("module123.name456", "module123.name456");
+        t!("pkg99#item2", "pkg99#item2");
+        t!("foo123.com#bar456", "foo123.com#bar456");
+
+        // With spaces, the identifier stops at the space
+        t!("module123 . name456", "module123", " . name456");
+        t!("pkg99 # item2", "pkg99", " # item2");
+        t!("foo123 / bar", "foo123", " / bar");
+        t!("test_42  .  field", "test_42", "  .  field");
+        t!("var-2-name\t#\titem", "var-2-name", "\t#\titem");
+        t!("_9lives   /   path", "_9lives", "   /   path");
+        t!("item0 #", "item0", " #");
+        t!("v2 .", "v2", " .");
     }
 }

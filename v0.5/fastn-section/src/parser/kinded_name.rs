@@ -29,7 +29,38 @@ mod test {
 
     #[test]
     fn kinded_name() {
+        // Basic cases
         t!("string", {"name": "string"});
         t!("string foo", {"name": "foo", "kind": "string"});
+
+        // Generic types with plain identifiers
+        t!("list<string> items", {"name": "items", "kind": {"name": "list", "args": ["string"]}});
+        t!("map<string, int> data", {
+            "name": "data",
+            "kind": {"name": "map", "args": ["string", "int"]}
+        });
+
+        // Nested generics
+        t!("map<string, list<int>> nested", {
+            "name": "nested",
+            "kind": {"name": "map", "args": ["string", {"name": "list", "args": ["int"]}]}
+        });
+
+        // Multiple spaces between kind and name
+        t!("string    foo", {"name": "foo", "kind": "string"});
+
+        // Underscores
+        t!("string _private", {"name": "_private", "kind": "string"});
+        t!("_", {"name": "_"});
+
+        // Numbers in identifiers (valid after our identifier update)
+        t!("int value123", {"name": "value123", "kind": "int"});
+        t!("list<int> item_42", {"name": "item_42", "kind": {"name": "list", "args": ["int"]}});
+
+        // Unicode identifiers
+        t!("string नाम", {"name": "नाम", "kind": "string"});
+
+        // Just a plain identifier (no kind)
+        t!("list", {"name": "list"});
     }
 }
