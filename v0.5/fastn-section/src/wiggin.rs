@@ -129,6 +129,12 @@ fn header_value_ender(
 fn inner_ender<T: SectionProxy>(o: &mut fastn_section::Document, sections: Vec<T>) -> Vec<T> {
     let mut stack = Vec::new();
     'outer: for section in sections {
+        // Skip commented sections entirely - they don't participate in start/end matching
+        if section.is_commented() {
+            stack.push(section);
+            continue;
+        }
+        
         match section.mark().unwrap() {
             // If the section is a start marker, push it onto the stack
             Mark::Start(_name) => {
@@ -138,6 +144,12 @@ fn inner_ender<T: SectionProxy>(o: &mut fastn_section::Document, sections: Vec<T
             Mark::End(e_name) => {
                 let mut children = Vec::new(); // Collect children for the matching section
                 while let Some(mut candidate) = stack.pop() {
+                    // Commented sections are just added to children, they don't match with end markers
+                    if candidate.is_commented() {
+                        children.insert(0, candidate);
+                        continue;
+                    }
+                    
                     match candidate.mark().unwrap() {
                         Mark::Start(name) => {
                             // If the candidate section name is the same as the end section name
@@ -217,6 +229,14 @@ trait SectionProxy: Sized + std::fmt::Debug {
     /// - `true` if the section has been closed by an end marker.
     /// - `false` if the section is still open and can accept further nesting.
     fn has_ended(&self) -> bool;
+    
+    /// Checks if the current section is commented out.
+    ///
+    /// # Returns
+    /// - `true` if the section is commented (starts with /)
+    /// - `false` if the section is active
+    fn is_commented(&self) -> bool;
+    
     fn span(&self) -> fastn_section::Span;
 }
 
@@ -264,6 +284,10 @@ impl SectionProxy for fastn_section::Section {
     fn has_ended(&self) -> bool {
         self.has_end
     }
+    
+    fn is_commented(&self) -> bool {
+        self.is_commented
+    }
 
     fn span(&self) -> fastn_section::Span {
         self.init.dashdash.clone()
@@ -285,6 +309,8 @@ mod test {
         // `foo -> /foo`
         // where `foo` has ended by `/foo`
         has_ended: bool,
+        // is the section commented out
+        is_commented: bool,
         children: Vec<DummySection>,
     }
 
@@ -305,24 +331,36 @@ mod test {
         fn has_ended(&self) -> bool {
             self.has_ended
         }
+        
+        fn is_commented(&self) -> bool {
+            self.is_commented
+        }
 
         fn span(&self) -> fastn_section::Span {
             fastn_section::Span::with_module(self.module)
         }
     }
 
-    // format: foo -> bar -> /foo (
+    // format: foo -> bar -> /foo -> #commented
+    // `/foo` means end marker for foo
+    // `#foo` means commented section foo
     fn parse(name: &str, module: fastn_section::Module) -> Vec<DummySection> {
         let mut sections = vec![];
         let current = &mut sections;
         for part in name.split(" -> ") {
             let is_end = part.starts_with('/');
-            let name = if is_end { &part[1..] } else { part };
+            let is_commented = part.starts_with('#');
+            let name = if is_end || is_commented {
+                &part[1..]
+            } else { 
+                part 
+            };
             let section = DummySection {
                 module,
                 name: name.to_string(),
                 has_end_mark: is_end,
                 has_ended: false,
+                is_commented,
                 children: vec![],
             };
             current.push(section);
@@ -336,6 +374,9 @@ mod test {
             // we are using peekable iterator so we can check if we are at the end
             let mut iterator = sections.iter().peekable();
             while let Some(section) = iterator.next() {
+                if section.is_commented {
+                    s.push('#');
+                }
                 s.push_str(&section.name);
                 if section.children.is_empty() {
                     if iterator.peek().is_some() {
@@ -434,5 +475,28 @@ mod test {
         );
         t("bar -> bar -> baz -> /bar -> /bar", "bar [bar [baz]]");
         t("bar -> bar -> /bar -> /bar", "bar [bar]");
+        
+        // Tests with commented sections
+        t("#foo -> bar", "#foo, bar");
+        t("foo -> #bar -> /foo", "foo [#bar]");
+        t("foo -> #bar -> baz -> /foo", "foo [#bar, baz]");
+        
+        // Commented sections don't match with end markers
+        t("#foo -> /foo", "#foo");  // /foo doesn't close #foo
+        t("foo -> #foo -> /foo", "foo [#foo]");  // inner /foo doesn't close commented #foo
+        
+        // Mixed commented and uncommented
+        t("foo -> #comment -> bar -> /foo", "foo [#comment, bar]");
+        t("foo -> bar -> #comment -> /bar -> /foo", "foo [bar [#comment]]");
+        
+        // Multiple commented sections
+        t("#a -> #b -> c", "#a, #b, c");
+        t("foo -> #a -> #b -> /foo", "foo [#a, #b]");
+        
+        // Note: In real fastn, a commented end section would be /-- end: foo
+        // Since commented sections don't participate in matching, they act like any other commented section
+        // We don't have a special test case for commented end sections because:
+        // 1. A section with is_commented=true won't be processed by the end matching logic
+        // 2. Whether it's named "end" or anything else doesn't matter when commented
     }
 }
