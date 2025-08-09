@@ -60,7 +60,7 @@ pub fn visibility(
     scanner.skip_spaces(); // Only spaces/tabs, not newlines or comments
 
     if !scanner.take('<') {
-        scanner.reset(index);
+        scanner.reset(&index);
         return Some(fastn_section::Visibility::Public);
     }
     scanner.skip_all_whitespace();

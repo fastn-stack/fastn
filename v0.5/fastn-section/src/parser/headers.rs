@@ -43,37 +43,63 @@ pub fn headers(
     loop {
         let index = scanner.index();
         scanner.skip_spaces();
-        let kinded_name = match fastn_section::parser::kinded_name(scanner) {
-            Some(kn) => kn,
+
+        // Try to parse visibility modifier first
+        let visibility_start = scanner.index();
+        let visibility = fastn_section::parser::visibility(scanner).map(|v| {
+            let visibility_end = scanner.index();
+            fastn_section::Spanned {
+                span: scanner.span_range(visibility_start, visibility_end),
+                value: v,
+            }
+        });
+
+        // After visibility (if any), skip spaces and parse the kinded_name
+        scanner.skip_spaces();
+        let (kinded_name, visibility) = match fastn_section::parser::kinded_name(scanner) {
+            Some(kn) => (kn, visibility),
             None => {
-                scanner.reset(index);
-                break;
+                // If we parsed visibility but can't find a kinded_name,
+                // reset and try again without visibility (visibility keyword might be the name)
+                if visibility.is_some() {
+                    scanner.reset(&index);
+                    scanner.skip_spaces();
+                    // Try parsing as a regular kinded_name (visibility keywords can be identifiers)
+                    match fastn_section::parser::kinded_name(scanner) {
+                        Some(kn) => (kn, None), // No visibility in this case
+                        None => {
+                            scanner.reset(&index);
+                            break;
+                        }
+                    }
+                } else {
+                    scanner.reset(&index);
+                    break;
+                }
             }
         };
         let colon = scanner.token(":");
         if colon.is_none() {
-            scanner.reset(index);
+            scanner.reset(&index);
             break;
         }
 
         if found_new_line_at_header_end.is_none() {
-            scanner.reset(index);
+            scanner.reset(&index);
             break;
         }
 
         scanner.skip_spaces();
         let value = fastn_section::parser::header_value(scanner).unwrap_or_default();
 
-        // TODO: all the rest
+        // TODO: implement remaining features
         headers.push(fastn_section::Header {
             name: kinded_name.name,
             kind: kinded_name.kind,
             // Documentation comments for headers (e.g., `;;; This header controls X` before the header)
             // Would need to track and associate doc comments with the following header
             doc: None,
-            // Visibility modifiers (e.g., `public name: value` or `private<module> secret: value`)
-            // Would need to check for visibility keywords before parsing kinded_name
-            visibility: None,
+            visibility,
             // Conditional inclusion (e.g., `name if $condition: value` or `name: value if $condition`)
             // Would need to parse `if` keyword and condition expression after name or value
             condition: None,
@@ -92,7 +118,7 @@ pub fn headers(
 
     // Reset the scanner before the new line
     if let Some(index) = found_new_line_at_header_end {
-        scanner.reset(index);
+        scanner.reset(&index);
     }
 
     if headers.is_empty() {
@@ -302,5 +328,164 @@ mod test {
 
         // Missing colon - returns None and doesn't consume
         f!("no colon here");
+
+        // Simple visibility test - single header
+        t!("public name: John", [{
+            "name": "name",
+            "visibility": "Public",
+            "value": ["John"]
+        }]);
+
+        // Headers with visibility modifiers
+        t!(
+            "
+            public name: John
+            private age: 30",
+            [
+                {
+                    "name": "name",
+                    "visibility": "Public",
+                    "value": ["John"]
+                },
+                {
+                    "name": "age",
+                    "visibility": "Private",
+                    "value": ["30"]
+                }
+            ]
+        );
+
+        // Headers with package/module visibility
+        t!(
+            "
+            public<package> api_key: secret123
+            public<module> internal_id: 42",
+            [
+                {
+                    "name": "api_key",
+                    "visibility": "Package",
+                    "value": ["secret123"]
+                },
+                {
+                    "name": "internal_id",
+                    "visibility": "Module",
+                    "value": ["42"]
+                }
+            ]
+        );
+
+        // Visibility with types
+        t!(
+            "
+            public string name: Alice
+            public<module> integer count: 100",
+            [
+                {
+                    "name": "name",
+                    "kind": "string",
+                    "visibility": "Public",
+                    "value": ["Alice"]
+                },
+                {
+                    "name": "count",
+                    "kind": "integer",
+                    "visibility": "Module",
+                    "value": ["100"]
+                }
+            ]
+        );
+
+        // Visibility with generic types
+        t!(
+            "
+            public list<string> tags: web, api
+            private map<string, int> scores: math: 95",
+            [
+                {
+                    "name": "tags",
+                    "kind": {"name": "list", "args": ["string"]},
+                    "visibility": "Public",
+                    "value": ["web, api"]
+                },
+                {
+                    "name": "scores",
+                    "kind": {"name": "map", "args": ["string", "int"]},
+                    "visibility": "Private",
+                    "value": ["math: 95"]
+                }
+            ]
+        );
+
+        // Visibility with spaces
+        t!(
+            "
+            public   name: value
+            public <module>  config: setting",
+            [
+                {
+                    "name": "name",
+                    "visibility": "Public",
+                    "value": ["value"]
+                },
+                {
+                    "name": "config",
+                    "visibility": "Module",
+                    "value": ["setting"]
+                }
+            ]
+        );
+
+        // Visibility with newlines inside angle brackets
+        t!(
+            "
+            public<
+              package
+            > distributed: true
+            public<
+              ;; Module-only setting
+              module
+            > debug: false",
+            [
+                {
+                    "name": "distributed",
+                    "visibility": "Package",
+                    "value": ["true"]
+                },
+                {
+                    "name": "debug",
+                    "visibility": "Module",
+                    "value": ["false"]
+                }
+            ]
+        );
+
+        // Mixed headers with and without visibility
+        t!(
+            "
+            name: Default
+            public visible: yes
+            private hidden: secret
+            config: value",
+            [
+                {
+                    "name": "name",
+                    "value": ["Default"]
+                },
+                {
+                    "name": "visible",
+                    "visibility": "Public",
+                    "value": ["yes"]
+                },
+                {
+                    "name": "hidden",
+                    "visibility": "Private",
+                    "value": ["secret"]
+                },
+                {
+                    "name": "config",
+                    "value": ["value"]
+                }
+            ]
+        );
     }
 }

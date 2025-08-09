@@ -49,13 +49,13 @@ pub fn kinded_reference(
             // Only treat it as a name if it's a simple kind (no generics)
             if k.args.is_some() {
                 // Complex kind with generics, can't be just a name
-                scanner.reset(start);
+                scanner.reset(&start);
                 return None;
             }
 
             // It's a simple kind, could be a name
             // Reset and parse it as an identifier_reference
-            scanner.reset(start);
+            scanner.reset(&start);
             let name = fastn_section::parser::identifier_reference(scanner)?;
             Some(fastn_section::KindedReference { kind: None, name })
         }

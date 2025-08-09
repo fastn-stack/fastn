@@ -12,7 +12,7 @@ pub fn kind(
 
         // Check if there's a `<`, indicating the start of generic arguments.
         if !scanner.take('<') {
-            scanner.reset(index);
+            scanner.reset(&index);
             // No generics, return as simple `Kind`
             return Some(qi.into());
         }

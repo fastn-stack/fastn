@@ -90,7 +90,7 @@ fn parse_body_with_separator_check(
     // Check if the next content is a new section (starts with --)
     if scanner.token("--").is_some() {
         // This is a new section, not body content
-        scanner.reset(index);
+        scanner.reset(&index);
         return None;
     }
 
@@ -108,14 +108,14 @@ fn parse_body_with_separator_check(
         scanner.add_error(error_sample, fastn_section::Error::BodyWithoutDoubleNewline);
 
         // Reset to before we sampled the error
-        scanner.reset(sample_start);
+        scanner.reset(&sample_start);
 
         // Parse the body anyway to consume it and allow parsing to continue
         return fastn_section::parser::body(scanner);
     }
 
     // No content after single newline
-    scanner.reset(index);
+    scanner.reset(&index);
 
     // No content after single newline - no body to parse
     None

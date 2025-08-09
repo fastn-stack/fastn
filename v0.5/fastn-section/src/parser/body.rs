@@ -36,7 +36,7 @@ pub fn body(
         reset_index = scanner.index();
     }
 
-    scanner.reset(reset_index);
+    scanner.reset(&reset_index);
     ses.push(fastn_section::Tes::Text(scanner.span(start)));
     Some(fastn_section::HeaderValue(ses))
 }

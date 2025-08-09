@@ -40,7 +40,6 @@ impl fastn_section::JDebug for fastn_section::Document {
 
 impl fastn_section::JDebug for fastn_section::Section {
     fn debug(&self) -> serde_json::Value {
-        // todo: add headers etc (only if they are not null)
         let mut o = serde_json::Map::new();
         o.insert("init".to_string(), self.init.debug());
 
@@ -56,6 +55,18 @@ impl fastn_section::JDebug for fastn_section::Section {
             o.insert("body".to_string(), b.0.debug());
         }
 
+        if !self.children.is_empty() {
+            o.insert("children".into(), self.children.debug());
+        }
+
+        if self.is_commented {
+            o.insert("is_commented".into(), self.is_commented.into());
+        }
+
+        if self.has_end {
+            o.insert("has_end".into(), self.has_end.into());
+        }
+
         serde_json::Value::Object(o)
     }
 }
@@ -67,8 +78,20 @@ impl fastn_section::JDebug for fastn_section::Header {
             o.insert("kind".into(), kind.debug());
         }
         o.insert("name".into(), self.name.debug());
+        if let Some(doc) = &self.doc {
+            o.insert("doc".into(), doc.debug());
+        }
+        if let Some(visibility) = &self.visibility {
+            o.insert("visibility".into(), visibility.value.debug());
+        }
+        if let Some(condition) = &self.condition {
+            o.insert("condition".into(), condition.debug());
+        }
         if !self.value.0.is_empty() {
             o.insert("value".into(), self.value.debug());
+        }
+        if self.is_commented {
+            o.insert("is_commented".into(), self.is_commented.into());
         }
         serde_json::Value::Object(o)
     }

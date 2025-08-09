@@ -40,7 +40,7 @@ pub fn kinded_name(
                 Some(kinded_name) => return Some(kinded_name),
                 None => {
                     // Conversion failed, backtrack
-                    scanner.reset(start);
+                    scanner.reset(&start);
                     return None;
                 }
             }

@@ -289,8 +289,10 @@ impl fastn_section::Collector for fastn_section::Document {
     }
 
     fn add_warning(&mut self, span: fastn_section::Span, warning: fastn_section::Warning) {
-        self.warnings
-            .push(fastn_section::Spanned { span, value: warning });
+        self.warnings.push(fastn_section::Spanned {
+            span,
+            value: warning,
+        });
     }
 
     fn add_comment(&mut self, comment: fastn_section::Span) {

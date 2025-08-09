@@ -6,10 +6,10 @@
 pub trait Collector {
     /// Adds an error with its location to the collection.
     fn add_error(&mut self, span: fastn_section::Span, error: fastn_section::Error);
-    
+
     /// Adds a warning with its location to the collection.
     fn add_warning(&mut self, span: fastn_section::Span, warning: fastn_section::Warning);
-    
+
     /// Records the location of a comment in the source.
     fn add_comment(&mut self, span: fastn_section::Span);
 }
@@ -42,6 +42,7 @@ pub struct Scanner<'input, T: Collector> {
 /// `Index` captures both the byte position and the character iterator state,
 /// allowing the scanner to restore to a previous position when parsing fails
 /// or when trying alternative parse paths.
+#[derive(Clone)]
 pub struct Index<'input> {
     index: usize,
     chars: std::iter::Peekable<std::str::CharIndices<'input>>,
@@ -147,9 +148,9 @@ impl<'input, T: Collector> Scanner<'input, T> {
     ///
     /// This is used for backtracking when a parse attempt fails and
     /// an alternative needs to be tried.
-    pub fn reset(&mut self, index: Index<'input>) {
+    pub fn reset(&mut self, index: &Index<'input>) {
         self.index = index.index;
-        self.chars = index.chars;
+        self.chars = index.chars.clone();
     }
 
     /// Looks at the next character without consuming it.
@@ -272,7 +273,7 @@ impl<'input, T: Collector> Scanner<'input, T> {
         self.pop();
         if self.peek() != Some(';') {
             // Not a comment, restore position
-            self.reset(start);
+            self.reset(&start);
             return false;
         }
         self.pop();
@@ -345,7 +346,7 @@ impl<'input, T: Collector> Scanner<'input, T> {
         let start = self.index();
         for char in t.chars() {
             if self.peek() != Some(char) {
-                self.reset(start);
+                self.reset(&start);
                 return None;
             }
             self.pop();

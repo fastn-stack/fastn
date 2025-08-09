@@ -1,5 +1,5 @@
 /// The Wiggin Module - named after "Ender Wiggin" from Orson Scott Card's "Ender's Game"
-
+///
 /// Processes a list of sections and their nested children recursively.
 ///
 /// This function performs a two-phase processing:
