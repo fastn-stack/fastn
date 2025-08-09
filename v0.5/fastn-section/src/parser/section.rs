@@ -9,7 +9,7 @@
 ///
 /// # Grammar
 /// ```text
-/// section = section_init [caption] "\n" [headers] ["\n\n" body]
+/// section = ["/"] section_init [caption] "\n" [headers] ["\n\n" body]
 /// section_init = "--" spaces [kind] spaces identifier_reference ["()"] ":"
 /// headers = (header "\n")*
 /// body = <any content until next section or end>
@@ -22,6 +22,9 @@
 /// header2: value2
 ///
 /// This is the body content
+///
+/// /-- commented: This section is commented out
+/// /header: also commented
 /// ```
 ///
 /// # Parsing Rules
@@ -37,6 +40,10 @@
 pub fn section(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Option<fastn_section::Section> {
+    // Check for comment marker before section
+    scanner.skip_spaces();
+    let is_commented = scanner.take('/');
+    
     let section_init = fastn_section::parser::section_init(scanner)?;
 
     scanner.skip_spaces();
@@ -62,7 +69,7 @@ pub fn section(
         headers,
         body,
         children: vec![],    // children is populated by the wiggin::ender.
-        is_commented: false, // TODO
+        is_commented,
         has_end: false,      // has_end is populated by the wiggin::ender.
     })
 }
@@ -385,5 +392,115 @@ mod test {
                 ]
             }
         );
+
+        // Test commented sections
+        t!("/-- foo: Commented", {
+            "init": {"name": "foo"},
+            "caption": ["Commented"],
+            "is_commented": true
+        });
+
+        // Commented section with headers
+        t!(
+            "
+            /-- foo: Caption
+            header1: value1
+            header2: value2",
+            {
+                "init": {"name": "foo"},
+                "caption": ["Caption"],
+                "is_commented": true,
+                "headers": [
+                    {"name": "header1", "value": ["value1"]},
+                    {"name": "header2", "value": ["value2"]}
+                ]
+            }
+        );
+
+        // Commented section with body
+        t!(
+            "
+            /-- foo: Test
+
+            This is the body",
+            {
+                "init": {"name": "foo"},
+                "caption": ["Test"],
+                "is_commented": true,
+                "body": ["This is the body"]
+            }
+        );
+
+        // Commented section with everything
+        t!(
+            "
+            /-- foo: Complete
+            prop: value
+
+            Body content here",
+            {
+                "init": {"name": "foo"},
+                "caption": ["Complete"],
+                "is_commented": true,
+                "headers": [{"name": "prop", "value": ["value"]}],
+                "body": ["Body content here"]
+            }
+        );
+
+        // Commented section with type
+        t!("/-- string msg: Hello", {
+            "init": {"name": "msg", "kind": "string"},
+            "caption": ["Hello"],
+            "is_commented": true
+        });
+
+        // Commented section with function marker
+        t!("/-- foo(): Func", {
+            "init": {"function": "foo"},
+            "caption": ["Func"],
+            "is_commented": true
+        });
+
+        // Commented section with qualified name
+        t!("/-- ftd.text: Commented text", {
+            "init": {"name": "ftd.text"},
+            "caption": ["Commented text"],
+            "is_commented": true
+        });
+
+        // Mix of commented and uncommented sections
+        t!(
+            "-- active: Yes
+            /-- inactive: No",
+            {
+                "init": {"name": "active"},
+                "caption": ["Yes"]
+            },
+            "/-- inactive: No"
+        );
+
+        // Commented section with commented headers
+        t!(
+            "
+            /-- foo: Section
+            /header1: also commented
+            header2: normal",
+            {
+                "init": {"name": "foo"},
+                "caption": ["Section"],
+                "is_commented": true,
+                "headers": [
+                    {"name": "header1", "value": ["also commented"], "is_commented": true},
+                    {"name": "header2", "value": ["normal"]}
+                ]
+            }
+        );
+
+        // Commented section with spaces
+        t!("  /-- foo: Spaced", {
+            "init": {"name": "foo"},
+            "caption": ["Spaced"],
+            "is_commented": true
+        });
     }
 }

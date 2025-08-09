@@ -20,7 +20,16 @@ pub fn body(
     let mut ses = Vec::new();
     let start = scanner.index();
     let mut reset_index = scanner.index();
-    while scanner.one_of(&["-- ", "/--"]).is_none() {
+    loop {
+        // Check for section markers, allowing for leading spaces
+        let check_index = scanner.index();
+        scanner.skip_spaces();
+        if scanner.one_of(&["-- ", "/--"]).is_some() {
+            scanner.reset(&check_index);
+            break;
+        }
+        scanner.reset(&check_index);
+        
         scanner.take_till_char_or_end_of_line('{');
 
         if scanner.peek() == Some('{') {
@@ -37,8 +46,14 @@ pub fn body(
     }
 
     scanner.reset(&reset_index);
-    ses.push(fastn_section::Tes::Text(scanner.span(start)));
-    Some(fastn_section::HeaderValue(ses))
+    
+    // Only return body if we actually have content
+    if reset_index != start {
+        ses.push(fastn_section::Tes::Text(scanner.span(start)));
+        Some(fastn_section::HeaderValue(ses))
+    } else {
+        None
+    }
 }
 
 #[cfg(test)]
