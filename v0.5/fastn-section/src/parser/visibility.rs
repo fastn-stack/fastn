@@ -57,7 +57,7 @@ pub fn visibility(
     let index = scanner.index();
 
     // we are here means we have `public`
-    scanner.skip_spaces();  // Only spaces/tabs, not newlines or comments
+    scanner.skip_spaces(); // Only spaces/tabs, not newlines or comments
 
     if !scanner.take('<') {
         scanner.reset(index);
@@ -95,19 +95,19 @@ mod test {
         t!("public ", "Public", " ");
         t!("private", "Private");
         t!("private ", "Private", " ");
-        
+
         // Package visibility - simple
         t!("public<package>", "Package");
         t!("public <package> ", "Package", " ");
         t!("public < package>", "Package");
         t!("public< package > ", "Package", " ");
         t!("public<package >   \t", "Package", "   \t");
-        
+
         // Module visibility - simple
         t!("public  <module>", "Module");
         t!("public  <    module>", "Module");
         t!("public\t<  \t  module\t> ", "Module", " ");
-        
+
         // Newlines inside angle brackets
         t!(
             "
@@ -115,7 +115,7 @@ mod test {
             package>",
             "Package"
         );
-        
+
         t!(
             "
             public<
@@ -123,7 +123,7 @@ mod test {
             >",
             "Package"
         );
-        
+
         t!(
             "
             public<
@@ -133,7 +133,7 @@ mod test {
             >",
             "Module"
         );
-        
+
         // Comments inside angle brackets
         t!(
             "
@@ -141,7 +141,7 @@ mod test {
             package>",
             "Package"
         );
-        
+
         t!(
             "
             public<
@@ -150,7 +150,7 @@ mod test {
             >",
             "Package"
         );
-        
+
         t!(
             "
             public<
@@ -160,7 +160,7 @@ mod test {
             >",
             "Module"
         );
-        
+
         // Mixed whitespace and comments
         t!(
             "

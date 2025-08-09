@@ -1,5 +1,29 @@
-/// calls `inner_ender` for all the embedded section inside section in the
-/// list and then calls `ender` for the list itself
+/// The Wiggin Module - named after "Ender Wiggin" from Orson Scott Card's "Ender's Game"
+
+/// Processes a list of sections and their nested children recursively.
+///
+/// This function performs a two-phase processing:
+/// 1. **Recursive phase**: Processes all embedded sections within each section
+/// 2. **Structure phase**: Organizes sections based on their start/end markers
+///
+/// # Algorithm
+/// The function recursively processes nested sections first (depth-first),
+/// then uses `inner_ender` to match `-- end: <name>` markers with their
+/// corresponding section starts to build the proper hierarchy.
+///
+/// # Parameters
+/// - `o`: The document to collect any errors during processing
+/// - `sections`: Flat list of sections that may contain end markers
+///
+/// # Returns
+/// A properly nested vector of sections where children are contained
+/// within their parent sections based on end markers.
+///
+/// # Example
+/// ```text
+/// Input:  [-- foo:, -- bar:, -- end: bar, -- end: foo]
+/// Output: [foo [bar []]]
+/// ```
 #[allow(dead_code)]
 pub fn ender(
     o: &mut fastn_section::Document,
@@ -12,6 +36,16 @@ pub fn ender(
     inner_ender(o, sections)
 }
 
+/// Recursively processes a single section and all its components.
+///
+/// Applies the ender logic to:
+/// - Caption (if present)
+/// - All headers
+/// - Body content (if present)  
+/// - All child sections
+///
+/// This ensures that any embedded sections within captions, headers, or body
+/// are properly structured before the section itself is processed.
 fn section_ender(
     o: &mut fastn_section::Document,
     mut section: fastn_section::Section,
@@ -34,6 +68,15 @@ fn section_ender(
     section
 }
 
+/// Processes embedded content within header values.
+///
+/// Header values can contain:
+/// - Plain text
+/// - Expressions (with nested header values)
+/// - Embedded sections
+///
+/// This function recursively processes any nested structures within
+/// the header value to ensure proper hierarchy.
 fn header_value_ender(
     o: &mut fastn_section::Document,
     header: fastn_section::HeaderValue,
@@ -61,10 +104,28 @@ fn header_value_ender(
     )
 }
 
-/// converts a section list, with interleaved `-- end: <section-name>`, into a nested section list
+/// Converts a flat section list with `-- end: <section-name>` markers into a properly nested hierarchy.
 ///
-/// example:
-/// [{section: "foo"}, {section: "bar"}, "-- end: foo"] -> [{section: "foo", children: [{section: "bar"}]}]
+/// This is the core algorithm that matches section end markers with their corresponding
+/// start sections to build a tree structure. It uses a stack-based approach to handle
+/// arbitrary nesting depth.
+///
+/// # Algorithm
+/// 1. Iterate through sections sequentially
+/// 2. Push regular sections onto a stack
+/// 3. When an end marker is found, pop sections from the stack until finding the matching start
+/// 4. Sections popped become children of the matched parent section
+/// 5. Report errors for unmatched end markers
+///
+/// # Example
+/// ```text
+/// Input:  [{section: "foo"}, {section: "bar"}, "-- end: foo"]
+/// Output: [{section: "foo", children: [{section: "bar"}]}]
+/// ```
+///
+/// # Error Handling
+/// If an end marker is found without a corresponding start section,
+/// an `EndWithoutStart` error is added to the document's error list.
 fn inner_ender<T: SectionProxy>(o: &mut fastn_section::Document, sections: Vec<T>) -> Vec<T> {
     let mut stack = Vec::new();
     'outer: for section in sections {
@@ -118,13 +179,29 @@ fn inner_ender<T: SectionProxy>(o: &mut fastn_section::Document, sections: Vec<T
     stack
 }
 
+/// Represents whether a section starts or ends a hierarchical block.
+///
+/// Used by the ender algorithm to distinguish between:
+/// - Regular sections that start a new scope (`Start`)
+/// - End markers that close a scope (`End`)
 enum Mark {
+    /// A regular section that may contain children
     Start(String),
+    /// An end marker (e.g., `-- end: foo`) that closes a section
     End(String),
 }
 
-/// we are using a proxy trait so we can write tests against a fake type, and then implement the
-/// trait for the real Section type
+/// Abstraction trait for section-like types to enable testing and modularity.
+///
+/// This trait allows the ender algorithm to work with both real `Section` types
+/// and test doubles. It defines the minimal interface needed for the hierarchical
+/// processing logic.
+///
+/// # Why a trait?
+/// Using a trait here enables:
+/// - Unit testing with simplified mock sections
+/// - Potential reuse with different section representations
+/// - Clear separation of the algorithm from the data structure
 trait SectionProxy: Sized + std::fmt::Debug {
     /// returns the name of the section, and if it starts or ends the section
     fn mark(&self) -> Result<Mark, fastn_section::Error>;
