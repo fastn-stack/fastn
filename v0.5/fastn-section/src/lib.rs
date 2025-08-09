@@ -14,7 +14,7 @@ mod wiggin;
 
 pub use error::Error;
 pub use fastn_section::warning::Warning;
-pub use scanner::{ECey, Scanner};
+pub use scanner::{Collector, Scanner};
 
 pub type Aliases = std::collections::HashMap<String, fastn_section::SoM>;
 pub type AliasesSimple = std::collections::HashMap<String, fastn_section::SoMBase<String, String>>;

@@ -282,10 +282,15 @@ impl fastn_section::Section {
     }
 }
 
-impl fastn_section::ECey for fastn_section::Document {
+impl fastn_section::Collector for fastn_section::Document {
     fn add_error(&mut self, span: fastn_section::Span, error: fastn_section::Error) {
         self.errors
             .push(fastn_section::Spanned { span, value: error });
+    }
+
+    fn add_warning(&mut self, span: fastn_section::Span, warning: fastn_section::Warning) {
+        self.warnings
+            .push(fastn_section::Spanned { span, value: warning });
     }
 
     fn add_comment(&mut self, comment: fastn_section::Span) {
