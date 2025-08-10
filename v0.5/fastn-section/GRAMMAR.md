@@ -70,9 +70,16 @@ Body content here
 <header> ::= {<spaces>} [<doc_comment>] ["/"] {<spaces>} [<visibility>] {<spaces>} 
              [<kind>] {<spaces>} <identifier> [<condition>] ":" {<spaces>} [<header_value>]
 
-<condition> ::= {<spaces>} "if" {<spaces>} "{" {<spaces>} <condition_expr> {<spaces>} "}"
+<condition> ::= {<spaces>} "if" {<spaces>} <condition_expression>
 
-<condition_expr> ::= {<char_except_brace>}
+<condition_expression> ::= "{" <condition_tes_list> "}"
+
+<condition_tes_list> ::= {<condition_tes>}
+
+<condition_tes> ::= <text>
+                  | "{" <condition_tes_list> "}"
+                  | "${" <condition_tes_list> "}"
+                  // Note: inline sections (starting with --) are NOT allowed
 
 <header_value> ::= <tes_list_till_newline>
 ```
@@ -365,7 +372,7 @@ setting: new-value
 
 ### Conditional Headers
 
-Headers can have conditional values that depend on runtime conditions:
+Headers can have conditional values where the condition is a TES expression (see Text-Expression-Section grammar). The fastn-section parser only handles the TES structure - the actual condition language semantics are defined by later compiler stages.
 
 ```ftd
 -- ftd.text: Responsive Text
@@ -373,16 +380,51 @@ Headers can have conditional values that depend on runtime conditions:
 color: black
 size: 16px
 
-;; Conditional values
-color if { dark-mode }: white
-color if { high-contrast }: yellow
-size if { mobile }: 14px
-size if { tablet }: 16px
-size if { desktop }: 18px
+;; Simple text conditions (content is opaque text to fastn-section)
+color if { some-condition }: white
+color if { another-condition }: yellow
+size if { yet-another }: 14px
 
-;; Complex conditions (parsed as opaque text by fastn-section)
-background if { dark-mode && high-contrast }: #333
-opacity if { hover || focus }: 0.8
+;; Conditions with dollar expressions (TES handles ${} syntax)
+background if { some text ${expr} more text }: #333
+border if { prefix ${value} suffix }: gold
+
+;; Multi-line conditions with comments
+margin if {
+  ;; Comments are parsed by TES
+  some condition text
+  ;; Another comment
+  more condition text
+}: 20px
+
+padding if {
+  text here
+  ;; Comment in between
+  ${ expression here } 
+  more text
+}: 10px
+
+;; Nested expressions in conditions (TES handles {} nesting)
+visibility if {
+  outer text {nested expression} more text
+}: visible
+
+opacity if { 
+  some text
+  {
+    nested content
+    ;; Comments work here too
+    more nested 
+  } 
+  final text
+}: 0.8
+
+
+;; Note: The actual meaning of the text/expressions inside conditions
+;; (e.g., whether "&&" means AND, how comparisons work, what variables are available)
+;; is NOT defined at the fastn-section level. This parser only ensures the
+;; TES structure is valid (matching braces, proper ${} expressions).
+;; IMPORTANT: Inline sections (-- syntax) are NOT allowed inside conditions.
 ```
 
 **Conditional Header Coalescing:**
@@ -392,18 +434,18 @@ When multiple headers have the same name with different conditions, they are coa
 ```ftd
 ;; These three header lines:
 color: black
-color if { dark-mode }: white
-color if { high-contrast }: yellow
+color if { condition-one }: white
+color if { condition-two }: yellow
 
 ;; Result in one Header with three ConditionalValue entries:
 ;; Header {
 ;;   name: "color",
 ;;   values: [
 ;;     ConditionalValue { condition: None, value: "black" },
-;;     ConditionalValue { condition: Some("dark-mode"), value: "white" },
-;;     ConditionalValue { condition: Some("high-contrast"), value: "yellow" }
+;;     ConditionalValue { condition: Some(HeaderValue([Text("condition-one")])), value: "white" },
+;;     ConditionalValue { condition: Some(HeaderValue([Text("condition-two")])), value: "yellow" }
 ;;   ]
 ;; }
 ```
 
-**Note:** The fastn-section parser treats conditions as opaque text. The actual condition evaluation and logic is handled by later stages of the fastn compiler.
+**Note:** The condition is stored as a `HeaderValue` (which can contain text, expressions, and inline sections per TES grammar). The actual semantics of condition evaluation are handled by later stages of the fastn compiler.
