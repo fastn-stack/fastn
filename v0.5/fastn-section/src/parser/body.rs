@@ -21,13 +21,31 @@ pub fn body(
     let start = scanner.index();
     let mut reset_index = scanner.index();
     loop {
-        // Check for section markers, allowing for leading spaces
+        // Check for section markers or doc comments, allowing for leading spaces
         let check_index = scanner.index();
         scanner.skip_spaces();
+
+        // Check for section markers
         if scanner.one_of(&["-- ", "/--"]).is_some() {
             scanner.reset(&check_index);
             break;
         }
+
+        // Check for doc comments (;;;)
+        if scanner.peek() == Some(';') {
+            let save = scanner.index();
+            scanner.pop();
+            if scanner.peek() == Some(';') {
+                scanner.pop();
+                if scanner.peek() == Some(';') {
+                    // Found doc comment, stop body here
+                    scanner.reset(&check_index);
+                    break;
+                }
+            }
+            scanner.reset(&save);
+        }
+
         scanner.reset(&check_index);
 
         scanner.take_till_char_or_end_of_line('{');
@@ -138,5 +156,26 @@ mod test {
 
         // Body ending at EOF without newline
         t!("no newline at end", ["no newline at end"]);
+
+        // Body stops at doc comment
+        t!(
+            "
+            Some body text
+            
+            ;;; Doc comment
+            -- next-section:",
+            ["Some body text\n\n"],
+            ";;; Doc comment\n-- next-section:"
+        );
+
+        // Body stops at doc comment with spaces
+        t!(
+            "
+            Body content
+                ;;; Indented doc comment
+            -- section:",
+            ["Body content\n"],
+            "    ;;; Indented doc comment\n-- section:"
+        );
     }
 }

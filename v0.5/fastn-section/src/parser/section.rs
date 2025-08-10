@@ -40,11 +40,31 @@
 pub fn section(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Option<fastn_section::Section> {
+    // Save position before checking for doc comments
+    let start_pos = scanner.index();
+
+    // Check for doc comments before section
+    let doc = fastn_section::parser::doc_comment(scanner);
+
     // Check for comment marker before section
     scanner.skip_spaces();
     let is_commented = scanner.take('/');
 
-    let section_init = fastn_section::parser::section_init(scanner)?;
+    let section_init = match fastn_section::parser::section_init(scanner) {
+        Some(mut init) => {
+            init.doc = doc;
+            init
+        }
+        None => {
+            // No section found
+            if doc.is_some() || is_commented {
+                // We consumed a doc comment or comment marker but found no section
+                // Reset to start so the document parser can handle it
+                scanner.reset(&start_pos);
+            }
+            return None;
+        }
+    };
 
     scanner.skip_spaces();
     let caption = fastn_section::parser::header_value(scanner);
@@ -502,5 +522,144 @@ mod test {
             "caption": ["Spaced"],
             "is_commented": true
         });
+
+        // Section with doc comment
+        t!(
+            "
+            ;;; This is documentation
+            -- foo: Hello",
+            {
+                "init": {
+                    "name": "foo",
+                    "doc": ";;; This is documentation\n"
+                },
+                "caption": ["Hello"]
+            }
+        );
+
+        // Section with multi-line doc comment
+        t!(
+            "
+            ;;; This is line 1
+            ;;; This is line 2
+            ;;; This is line 3
+            -- foo: Test",
+            {
+                "init": {
+                    "name": "foo",
+                    "doc": ";;; This is line 1\n;;; This is line 2\n;;; This is line 3\n"
+                },
+                "caption": ["Test"]
+            }
+        );
+
+        // Section with doc comment and headers
+        t!(
+            "
+            ;;; Documentation for section
+            -- foo: Caption
+            header1: value1
+            header2: value2",
+            {
+                "init": {
+                    "name": "foo",
+                    "doc": ";;; Documentation for section\n"
+                },
+                "caption": ["Caption"],
+                "headers": [
+                    {"name": "header1", "value": ["value1"]},
+                    {"name": "header2", "value": ["value2"]}
+                ]
+            }
+        );
+
+        // Section with doc comment and body
+        t!(
+            "
+            ;;; Section docs
+            -- foo: Test
+
+            Body content here",
+            {
+                "init": {
+                    "name": "foo",
+                    "doc": ";;; Section docs\n"
+                },
+                "caption": ["Test"],
+                "body": ["Body content here"]
+            }
+        );
+
+        // Commented section with doc comment
+        t!(
+            "
+            ;;; This section is commented
+            /-- foo: Commented",
+            {
+                "init": {
+                    "name": "foo",
+                    "doc": ";;; This section is commented\n"
+                },
+                "caption": ["Commented"],
+                "is_commented": true
+            }
+        );
+
+        // Section with indented doc comment
+        t!(
+            "    ;;; Indented doc
+            -- foo: Test",
+            {
+                "init": {
+                    "name": "foo",
+                    "doc": "    ;;; Indented doc\n"
+                },
+                "caption": ["Test"]
+            }
+        );
+
+        // Section with doc comment containing special characters
+        t!(
+            "
+            ;;; This uses special chars: @#$%^&*()
+            ;;; And unicode: नमस्ते 你好
+            -- foo: International",
+            {
+                "init": {
+                    "name": "foo",
+                    "doc": ";;; This uses special chars: @#$%^&*()\n;;; And unicode: नमस्ते 你好\n"
+                },
+                "caption": ["International"]
+            }
+        );
+
+        // Section with typed name and doc comment
+        t!(
+            "
+            ;;; String type section
+            -- string msg: Hello",
+            {
+                "init": {
+                    "name": "msg",
+                    "kind": "string",
+                    "doc": ";;; String type section\n"
+                },
+                "caption": ["Hello"]
+            }
+        );
+
+        // Section with function marker and doc comment
+        t!(
+            "
+            ;;; Function documentation
+            -- foo(): Calculate",
+            {
+                "init": {
+                    "function": "foo",
+                    "doc": ";;; Function documentation\n"
+                },
+                "caption": ["Calculate"]
+            }
+        );
     }
 }
