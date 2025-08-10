@@ -8,7 +8,7 @@ struct ParsedHeaderPrefix {
 /// Result of attempting to parse a single header
 enum HeaderParseResult {
     /// Successfully parsed a header
-    Success(fastn_section::Header),
+    Success(Box<fastn_section::Header>),
     /// Failed to parse, but consumed input and added errors (e.g., orphaned doc comment)
     FailedWithProgress,
     /// Failed to parse, no input consumed, no errors added
@@ -30,7 +30,7 @@ fn parse_single_header(
 
     // Save position after doc comment but before skipping spaces
     let after_doc = scanner.index();
-    
+
     scanner.skip_spaces();
 
     // Save position after doc comment and spaces
@@ -73,7 +73,7 @@ fn parse_single_header(
     scanner.skip_spaces();
     let value = fastn_section::parser::header_value(scanner).unwrap_or_default();
 
-    HeaderParseResult::Success(fastn_section::Header {
+    HeaderParseResult::Success(Box::new(fastn_section::Header {
         name: prefix.kinded_name.name,
         kind: prefix.kinded_name.kind,
         doc,
@@ -81,7 +81,7 @@ fn parse_single_header(
         condition: None, // TODO: implement conditions
         value,
         is_commented: prefix.is_commented,
-    })
+    }))
 }
 
 /// Parses the prefix of a header: comment marker, visibility, and kinded name
@@ -212,7 +212,7 @@ pub fn headers(
 
         // Try to parse a single header
         match parse_single_header(scanner) {
-            HeaderParseResult::Success(header) => headers.push(header),
+            HeaderParseResult::Success(header) => headers.push(*header),
             HeaderParseResult::FailedWithProgress => {
                 // We consumed input and added errors, don't reset
                 made_progress = true;
@@ -897,7 +897,12 @@ mod test {
 
         // Orphaned doc comment followed by invalid header (missing colon) - also reports error
         // The doc comment is consumed, but the invalid header text remains
-        t_err_raw!(";;; Documentation\nno_colon", [], "unexpected_doc_comment", "no_colon");
+        t_err_raw!(
+            ";;; Documentation\nno_colon",
+            [],
+            "unexpected_doc_comment",
+            "no_colon"
+        );
         t_err_raw!(
             "    ;;; Documentation\n    no_colon",
             [],
