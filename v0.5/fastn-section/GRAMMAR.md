@@ -68,7 +68,11 @@ Body content here
 <headers> ::= {<header> <newline>}
 
 <header> ::= {<spaces>} [<doc_comment>] ["/"] {<spaces>} [<visibility>] {<spaces>} 
-             [<kind>] {<spaces>} <identifier> ":" {<spaces>} [<header_value>]
+             [<kind>] {<spaces>} <identifier> [<condition>] ":" {<spaces>} [<header_value>]
+
+<condition> ::= {<spaces>} "if" {<spaces>} "{" {<spaces>} <condition_expr> {<spaces>} "}"
+
+<condition_expr> ::= {<char_except_brace>}
 
 <header_value> ::= <tes_list_till_newline>
 ```
@@ -80,6 +84,26 @@ public string email: john@example.com
 list<string> tags: admin, moderator
 /disabled: true
 empty:
+
+# Conditional headers
+color: black                           # Default value
+color if { dark-mode }: white         # Conditional value
+size if { mobile }: small
+size if { tablet }: medium
+size if { desktop }: large
+```
+
+### Conditional Headers
+
+Headers can have conditional values based on conditions. Multiple headers with the same name but different conditions will coalesce into a single header with multiple conditional values:
+
+```ftd
+-- ftd.text: Hello World
+color: black                         # Default/unconditional value
+color if { dark-mode }: white       # When dark-mode is true
+color if { high-contrast }: yellow  # When high-contrast is true
+
+# These three headers will be merged into one header with three conditional values
 ```
 
 ## Body
@@ -338,3 +362,48 @@ integer y: 20
 -- active-feature: Enabled
 setting: new-value
 ```
+
+### Conditional Headers
+
+Headers can have conditional values that depend on runtime conditions:
+
+```ftd
+-- ftd.text: Responsive Text
+;; Default values (no condition)
+color: black
+size: 16px
+
+;; Conditional values
+color if { dark-mode }: white
+color if { high-contrast }: yellow
+size if { mobile }: 14px
+size if { tablet }: 16px
+size if { desktop }: 18px
+
+;; Complex conditions (parsed as opaque text by fastn-section)
+background if { dark-mode && high-contrast }: #333
+opacity if { hover || focus }: 0.8
+```
+
+**Conditional Header Coalescing:**
+
+When multiple headers have the same name with different conditions, they are coalesced into a single header with multiple conditional values:
+
+```ftd
+;; These three header lines:
+color: black
+color if { dark-mode }: white
+color if { high-contrast }: yellow
+
+;; Result in one Header with three ConditionalValue entries:
+;; Header {
+;;   name: "color",
+;;   values: [
+;;     ConditionalValue { condition: None, value: "black" },
+;;     ConditionalValue { condition: Some("dark-mode"), value: "white" },
+;;     ConditionalValue { condition: Some("high-contrast"), value: "yellow" }
+;;   ]
+;; }
+```
+
+**Note:** The fastn-section parser treats conditions as opaque text. The actual condition evaluation and logic is handled by later stages of the fastn compiler.
