@@ -11,7 +11,13 @@
 
 <Section> ::= <Space>? '--' <Space>? <KindedName> <Space>? '()'? <Space>? ':' <HeaderValue>
 
-<HeaderValue> ::= <AnyCharacterExceptNewline>* '\n'
+<HeaderValue> ::= <Tes>* '\n'
+
+<Tes> ::= <Text> | <Expression> | <InlineSection>
+<Text> ::= (<AnyCharacterExcept '{' or '}'>)+
+<Expression> ::= '{' <Tes>* '}' | '${' <Tes>* '}'
+<InlineSection> ::= '{--' <Space>? <SectionContent> '}'
+<SectionContent> ::= <Identifier> [':' <Tes>*] [<Headers>] [<Body>]
 
 
 <KindedName> ::= <Kind>? <Name>

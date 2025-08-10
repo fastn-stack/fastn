@@ -32,7 +32,7 @@
 pub fn header_value(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Option<fastn_section::HeaderValue> {
-    let tes = fastn_section::parser::tes_till_newline(scanner);
+    let tes = fastn_section::parser::tes_till_newline(scanner)?;
 
     if tes.is_empty() {
         return None;

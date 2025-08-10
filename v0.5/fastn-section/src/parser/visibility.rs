@@ -44,7 +44,6 @@
 ///
 /// # Returns
 /// Returns `Some(Visibility)` if a valid visibility modifier is found, `None` otherwise.
-#[allow(dead_code)]
 pub fn visibility(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Option<fastn_section::Visibility> {

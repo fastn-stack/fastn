@@ -52,6 +52,11 @@ pub fn section(
 
     let section_init = match fastn_section::parser::section_init(scanner) {
         Some(mut init) => {
+            // Check if colon was missing and add error if needed
+            if init.colon.is_none() {
+                let error_span = init.name.span();
+                scanner.add_error(error_span, fastn_section::Error::ColonNotFound);
+            }
             init.doc = doc;
             init
         }

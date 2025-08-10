@@ -258,7 +258,7 @@ impl fastn_section::Section {
                 kind: None,
                 doc: None,
                 name: name.into(),
-                colon: fastn_section::Span::with_module(module),
+                colon: Some(fastn_section::Span::with_module(module)),
                 function_marker,
                 visibility: None,
             },

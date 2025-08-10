@@ -8,10 +8,16 @@
 /// # Grammar
 /// ```text
 /// tes = text | expression | section
-/// text = <any content except '{'>
+/// text = <any content except '{' or '}'>
 /// expression = '{' tes* '}' | '${' tes* '}'
-/// section = '{' '--' <section content> '}'
+/// section = '{--' section_content '}'
 /// ```
+///
+/// # Special Handling
+/// - Unmatched closing brace `}` stops parsing immediately (not treated as text)
+/// - Unclosed opening brace `{` triggers error recovery but continues parsing
+/// - `{--` is always treated as inline section attempt, even without following space
+/// - Expressions can span multiple lines (newlines allowed inside `{}`)
 ///
 /// # Returns
 /// Returns a vector of Tes elements parsed from the current position
@@ -28,6 +34,12 @@ pub fn tes_till(
             break;
         }
 
+        // Check for unmatched closing brace - this is a parse failure
+        if scanner.peek() == Some('}') {
+            // Don't consume it - leave it for caller to see
+            break;
+        }
+
         // Try to get text up to '{' or '${'
         let text_start = scanner.index();
         let mut found_expr = false;
@@ -35,6 +47,11 @@ pub fn tes_till(
 
         while let Some(ch) = scanner.peek() {
             if terminator(scanner) {
+                break;
+            }
+            // Check for unmatched } in text
+            if ch == '}' {
+                // Stop here - unmatched } should cause parse to stop
                 break;
             }
             if ch == '{' {
@@ -89,22 +106,21 @@ pub fn tes_till(
 
 /// Parse a single expression starting at '{'
 ///
+/// This function handles both regular expressions `{...}` and dollar expressions `${...}`.
+/// It also detects and delegates to inline section parsing for `{--...}` patterns.
+///
+/// # Returns
+/// - `Some(Tes::Expression)` for valid or recovered expressions
+/// - `Some(Tes::Section)` if an inline section pattern is detected
+/// - `None` if no opening brace is found
+///
 /// # Error Recovery for Unclosed Braces
 ///
-/// When an opening brace `{` is not matched with a closing `}`, we need to recover
-/// gracefully. The challenge is that `{...}` expressions are specifically designed
-/// to allow multi-line content in headers and body, so we can't simply stop at a
-/// newline.
+/// When an opening brace `{` is not matched with a closing `}`, we recover
+/// gracefully. Since `{...}` expressions can span multiple lines (especially
+/// in body content), we can't simply stop at newlines.
 ///
-/// ## Recovery Strategy Options (Considered)
-///
-/// 1. **Stop at newline**: Simple but wrong - defeats the purpose of `{...}`
-/// 2. **Next closing brace**: Could match wrong `}` if nested expressions exist
-/// 3. **Balanced brace counting**: Good but what if no matching `}` exists?
-/// 4. **Stop at structural markers**: Safe but might consume too much content
-/// 5. **Maximum lookahead**: Arbitrary limits might cut off valid content
-///
-/// ## Chosen Strategy: Hybrid Approach
+/// ## Recovery Strategy: Hybrid Approach
 ///
 /// We implement a hybrid recovery strategy that:
 /// 1. Tracks nesting depth while scanning for closing braces
@@ -118,7 +134,7 @@ pub fn tes_till(
 ///   - Line starting with `-- ` or `/--` (section start)
 ///   - Line starting with `;;;` (doc comment)
 /// - Stop if we exceed maximum lookahead (1000 characters or 100 lines)
-/// - Everything scanned becomes part of the error recovery
+/// - Record an `UnclosedBrace` error and return the partial content
 ///
 /// ### Trade-offs:
 /// - ✅ Respects document structure (won't consume next section)
@@ -146,15 +162,10 @@ fn parse_expression(
         let save = scanner.index();
         scanner.pop(); // consume first '-'
         if scanner.peek() == Some('-') {
-            scanner.pop(); // consume second '-'
-            if scanner.peek() == Some(' ')
-                || scanner.peek() == Some('\t')
-                || scanner.peek() == Some('\n')
-            {
-                // This is an inline section!
-                scanner.reset(&check_index); // Reset to after '{'
-                return parse_inline_section(scanner, start_index);
-            }
+            // Found '--' - this is an inline section attempt
+            // Even if there's no space after, treat it as a section
+            scanner.reset(&check_index); // Reset to after '{'
+            return parse_inline_section(scanner, start_index);
         }
         scanner.reset(&save);
     }
@@ -210,6 +221,15 @@ fn parse_expression(
 }
 
 /// Parse an inline section that starts with {--
+///
+/// Inline sections allow embedding section content within expressions.
+/// Format: `{-- section-name: caption ...}`
+///
+/// # Special Handling
+/// - Missing colon after section name triggers `ColonNotFound` error but continues parsing
+/// - Section can contain headers and body content, all within the braces
+/// - Unclosed inline section triggers `UnclosedBrace` error with recovery
+/// - Always returns `Some(Tes::Section)` even for incomplete sections (with errors recorded)
 fn parse_inline_section(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
     start_index: fastn_section::scanner::Index,
@@ -217,11 +237,13 @@ fn parse_inline_section(
     // We're positioned right after the '{', and we know '--' follows
     // We need to parse sections but stop at the closing '}'
     let mut sections = Vec::new();
+    let mut found_closing_brace = false;
 
     loop {
         // Check if we've reached the closing brace
         if scanner.peek() == Some('}') {
             scanner.pop(); // consume the '}'
+            found_closing_brace = true;
             break;
         }
 
@@ -245,11 +267,18 @@ fn parse_inline_section(
         // Check again for closing brace after whitespace
         if scanner.peek() == Some('}') {
             scanner.pop(); // consume the '}'
+            found_closing_brace = true;
             break;
         }
 
         // Try to parse a section init
         if let Some(section_init) = fastn_section::parser::section_init(scanner) {
+            // Check if colon was missing and add error if needed
+            if section_init.colon.is_none() {
+                let error_span = section_init.name.span();
+                scanner.add_error(error_span, fastn_section::Error::ColonNotFound);
+            }
+
             // Parse caption - but stop at newline or '}'
             let caption = if scanner.peek() != Some('\n') && scanner.peek() != Some('}') {
                 scanner.skip_spaces();
@@ -367,7 +396,19 @@ fn parse_inline_section(
         }
     }
 
-    // Successfully parsed inline sections
+    // Check if we found a closing brace
+    // If we broke out of the loop without finding '}', it's an error
+    if !found_closing_brace {
+        // No closing brace - error recovery
+        find_recovery_point(scanner);
+
+        let recovery_end = scanner.index();
+        let error_span = scanner.span_range(start_index, recovery_end);
+        scanner.add_error(error_span, fastn_section::Error::UnclosedBrace);
+    }
+    // Note: We already consumed the closing brace in the loop if it was found
+
+    // Return the sections (even if incomplete)
     Some(fastn_section::Tes::Section(sections))
 }
 
@@ -461,12 +502,38 @@ fn parse_expression_content(
 }
 
 /// Parse Tes elements until end of line (for header values)
+///
+/// This function is specifically designed for parsing single-line content
+/// like header values and captions. It stops at the first newline character.
+///
+/// # Special Behavior
+/// - Stops at newline without consuming it (newline remains in scanner)
+/// - Returns `None` if input starts with `}` (even with leading spaces)
+/// - Expressions `{...}` can contain newlines and will parse until closed or recovered
+/// - Empty input returns `Some(vec![])` not `None`
+///
+/// # Returns
+/// - `None` if unmatched closing brace `}` is found at start
+/// - `Some(Vec<Tes>)` with parsed elements otherwise
 pub fn tes_till_newline(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
-) -> Vec<fastn_section::Tes> {
+) -> Option<Vec<fastn_section::Tes>> {
+    // Check for unmatched } at the very start (with optional leading spaces)
+    let start_pos = scanner.index();
+    scanner.skip_spaces();
+    if scanner.peek() == Some('}') {
+        scanner.reset(&start_pos);
+        return None;
+    }
+    scanner.reset(&start_pos);
+
     let terminator =
         |s: &mut fastn_section::Scanner<fastn_section::Document>| s.peek() == Some('\n');
-    tes_till(scanner, &terminator)
+    let result = tes_till(scanner, &terminator);
+
+    // If we parsed something successfully, return it even if there's a } after
+    // The } will be left for the next parser
+    Some(result)
 }
 
 #[cfg(test)]
@@ -624,5 +691,121 @@ mod test {
         //         ]
         //     }]}]
         // );
+    }
+
+    #[test]
+    fn edge_cases() {
+        // Empty input
+        t!("", []);
+
+        // Unclosed opening braces - should recover with error
+        t_err!("{", [{"expression": []}], "unclosed_brace");
+        t_err!("{{", [{"expression": [{"expression": []}]}], ["unclosed_brace", "unclosed_brace"]);
+        t_err!("{{{", [{"expression": [{"expression": [{"expression": []}]}]}], ["unclosed_brace", "unclosed_brace", "unclosed_brace"]);
+        t_err!("{ ", [{"expression": [" "]}], "unclosed_brace");
+        t_err!("{ { ", [{"expression": [" ", {"expression": [" "]}]}], ["unclosed_brace", "unclosed_brace"]);
+        t_err!("{ { }", [{"expression": [" ", {"expression": [" "]}]}], "unclosed_brace");
+
+        // Unmatched closing braces - should fail to parse from the start
+        f!("}");
+        f!("}}");
+        f!(" }");
+
+        // Valid expression followed by unmatched closing - parses valid part and intervening text, leaves }
+        t!("{ } }", [{"expression": [" "]}, " "], "}");
+        t!("{}}", [{"expression": []}], "}");
+
+        // Unclosed with newlines and tabs - recover with error
+        t_err_raw!("{\n", [{"expression": ["\n"]}], "unclosed_brace");
+        t_raw!("\n{", [], "\n{"); // Stops at newline, nothing before it
+        t_err_raw!("{\n\n", [{"expression": ["\n\n"]}], "unclosed_brace");
+        t_err_raw!("{\t", [{"expression": ["\t"]}], "unclosed_brace");
+        t_err_raw!("\t{", ["\t", {"expression": []}], "unclosed_brace");
+
+        // Unmatched closing braces on same line - should fail
+        f_raw!("}");
+        f_raw!("\t}");
+
+        // Content after newline is not parsed by tes_till_newline
+        f_raw!("}\n"); // Fails immediately due to }
+        t_raw!("\n}", [], "\n}"); // Stops at newline
+
+        // Mixed unmatched cases
+        t_err!("{{}", [{"expression": [{"expression": []}]}], "unclosed_brace");
+
+        // Unmatched braces with text
+        t_err!("text {", ["text ", {"expression": []}], "unclosed_brace");
+        f!("} text"); // Fails immediately on }
+        t_err!("a { b", ["a ", {"expression": [" b"]}], "unclosed_brace");
+        t!("a } b", ["a "], "} b"); // Parses "a ", stops at }
+        t_err!("hello { world { nested",
+            ["hello ", {"expression": [" world ", {"expression": [" nested"]}]}],
+            ["unclosed_brace", "unclosed_brace"]
+        );
+        t!("hello } world } nested", ["hello "], "} world } nested"); // Parses "hello ", stops at }
+
+        // Dollar expressions unclosed - recover with error
+        t_err!("${", [{"$expression": []}], "unclosed_brace");
+        t_err!("${{", [{"$expression": [{"expression": []}]}], ["unclosed_brace", "unclosed_brace"]);
+        t_err!("${ ", [{"$expression": [" "]}], "unclosed_brace");
+        t_err!("${ hello", [{"$expression": [" hello"]}], "unclosed_brace");
+        t_err!("${hello {", [{"$expression": ["hello ", {"expression": []}]}], ["unclosed_brace", "unclosed_brace"]);
+        t_err!("${hello {world}", [{"$expression": ["hello ", {"expression": ["world"]}]}], "unclosed_brace");
+
+        // Multiple levels of unclosed
+        t_err!(
+            "{a {b {c {d",
+            [{"expression": ["a ", {"expression": ["b ", {"expression": ["c ", {"expression": ["d"]}]}]}]}],
+            ["unclosed_brace", "unclosed_brace", "unclosed_brace", "unclosed_brace"]
+        );
+
+        // Proper nesting works (no errors)
+        t!(
+            "{{{}}}",
+            [{"expression": [{"expression": [{"expression": []}]}]}]
+        );
+
+        // Deep nesting (valid)
+        t!(
+            "{a{b{c{d{e}}}}}",
+            [{"expression": ["a", {"expression": ["b", {"expression": ["c", {"expression": ["d", {"expression": ["e"]}]}]}]}]}]
+        );
+
+        // Mixed dollar and regular (valid)
+        t!(
+            "${a {b ${c}}}",
+            [{"$expression": ["a ", {"expression": ["b ", {"$expression": ["c"]}]}]}]
+        );
+
+        // Edge cases with whitespace (valid)
+        t!("   ", ["   "]);
+        t_raw!("\n", [], "\n"); // Stops at newline, doesn't consume it
+        t!("\t\t", ["\t\t"]);
+
+        // Expression with only whitespace (valid)
+        t!("{   }", [{"expression": ["   "]}]);
+        t_raw!("${\n}", [{"$expression": ["\n"]}]); // Valid expression with newline inside
+
+        // Text with special characters (valid)
+        t!("@#$%^&*()", ["@#$%^&*()"]);
+        t_raw!("hello\tworld\n", ["hello\tworld"], "\n");
+
+        // Expression containing special chars (valid)
+        t!("{@#$%}", [{"expression": ["@#$%"]}]);
+
+        // Inline section edge cases
+        t_err!("{--", [{"section": []}], "unclosed_brace"); // Unclosed inline section
+        t_err!("{-- ", [{"section": []}], "unclosed_brace"); // Unclosed with space
+        t_err!("{-- foo", [{"section": [{"init": {"name": "foo"}}]}], ["colon_not_found", "unclosed_brace"]); // Missing colon and unclosed
+
+        // Valid inline section variations
+        t!("{-- foo:}", [{"section": [{"init": {"name": "foo"}}]}]);
+        t!("{-- foo: }", [{"section": [{"init": {"name": "foo"}}]}]);
+
+        // Complex inline section with expressions in caption (valid)
+        t!(
+            "{-- foo: text {expr} more}",
+            [{"section": [{"init": {"name": "foo"}, "caption": ["text ", {"expression": ["expr"]}, " more"]}]}]
+        );
     }
 }

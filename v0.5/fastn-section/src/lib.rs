@@ -150,7 +150,7 @@ pub struct SectionInit {
     pub kind: Option<fastn_section::Kind>,
     pub doc: Option<fastn_section::Span>,
     pub visibility: Option<fastn_section::Spanned<fastn_section::Visibility>>,
-    pub colon: fastn_section::Span, // for syntax highlighting and formatting
+    pub colon: Option<fastn_section::Span>, // for syntax highlighting and formatting
     pub function_marker: Option<fastn_section::Span>,
 }
 
