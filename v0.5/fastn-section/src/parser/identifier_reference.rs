@@ -133,5 +133,12 @@ mod test {
         t!("_9lives   /   path", "_9lives", "   /   path");
         t!("item0 #", "item0", " #");
         t!("v2 .", "v2", " .");
+
+        // Test complex patterns that module_name/qualified_identifier would handle
+        t!("foo.com#bar", "foo.com#bar");
+        t!("foo.com/module#item", "foo.com/module#item");
+        t!("foo.com/path/to/module#item", "foo.com/path/to/module#item");
+        t!("package#simple", "package#simple");
+        t!("ftd.text", "ftd.text");
     }
 }

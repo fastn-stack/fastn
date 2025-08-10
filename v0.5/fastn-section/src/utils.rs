@@ -245,15 +245,6 @@ impl std::fmt::Display for fastn_section::IdentifierReference {
     }
 }
 
-// impl fastn_section::QualifiedIdentifier {
-//     pub fn new(
-//         module: Option<fastn_section::ModuleName>,
-//         terms: Vec<fastn_section::Identifier>,
-//     ) -> Self {
-//         assert!(module.is_some() || !terms.is_empty());
-//         fastn_section::QualifiedIdentifier { module, terms }
-//     }
-// }
 
 impl fastn_section::Section {
     pub fn with_name(
