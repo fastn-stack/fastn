@@ -68,7 +68,7 @@ mod test {
 
         // Unclosed brace - now recovers by consuming content
         t_err!(
-            "hello {world", 
+            "hello {world",
             ["hello ", {"expression": ["world"]}],
             "unclosed_brace"
         );

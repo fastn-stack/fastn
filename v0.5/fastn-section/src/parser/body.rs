@@ -205,7 +205,7 @@ mod test {
 
         // Body with unclosed brace - now recovers
         t_err!(
-            "Text before {unclosed", 
+            "Text before {unclosed",
             ["Text before ", {"expression": ["unclosed"]}],
             "unclosed_brace"
         );

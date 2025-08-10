@@ -177,7 +177,11 @@ impl fastn_section::JDebug for fastn_section::Tes {
                 o.insert(key.to_string(), content.0.debug());
                 serde_json::Value::Object(o)
             }
-            fastn_section::Tes::Section(e) => e.debug(),
+            fastn_section::Tes::Section(e) => {
+                let mut o = serde_json::Map::new();
+                o.insert("section".to_string(), e.debug());
+                serde_json::Value::Object(o)
+            }
         }
     }
 }

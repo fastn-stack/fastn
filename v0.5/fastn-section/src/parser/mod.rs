@@ -142,9 +142,11 @@ fn p_err<
     let result = f(&mut scanner);
     assert_eq!(result.debug(), debug, "parsed output mismatch");
     assert_eq!(scanner.remaining(), remaining, "remaining input mismatch");
-    
+
     // Check errors - extract just the error names
-    let errors_debug: Vec<_> = scanner.output.errors
+    let errors_debug: Vec<_> = scanner
+        .output
+        .errors
         .iter()
         .map(|e| {
             // Extract just the error string from {"error": "error_name"}
@@ -160,21 +162,18 @@ fn p_err<
             }
         })
         .collect::<Vec<String>>();
-    
+
     // Convert expected_errors to comparable format
     let expected = match expected_errors {
         serde_json::Value::String(s) => vec![s.as_str().to_string()],
-        serde_json::Value::Array(arr) => arr.iter()
+        serde_json::Value::Array(arr) => arr
+            .iter()
             .filter_map(|v| v.as_str().map(|s| s.to_string()))
             .collect(),
         _ => vec![],
     };
-    
-    assert_eq!(
-        errors_debug, 
-        expected, 
-        "errors mismatch"
-    );
+
+    assert_eq!(errors_debug, expected, "errors mismatch");
 }
 
 #[macro_export]
