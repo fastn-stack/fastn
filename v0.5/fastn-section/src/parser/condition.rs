@@ -30,21 +30,24 @@ pub fn condition(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Option<fastn_section::HeaderValue> {
     let start = scanner.index();
-    
+
+    // Skip spaces before checking for "if"
+    scanner.skip_spaces();
+
     // Check for "if" keyword
-    if !scanner.token("if").is_some() {
+    if scanner.token("if").is_none() {
         scanner.reset(&start);
         return None;
     }
-    
+
     scanner.skip_spaces();
-    
+
     // Check for opening brace
     if scanner.peek() != Some('{') {
         scanner.reset(&start);
         return None;
     }
-    
+
     // Parse the condition expression using a restricted TES parser
     // that doesn't allow inline sections
     let error_count_before = scanner.output.errors.len();
@@ -68,10 +71,10 @@ fn parse_condition_expression(
     if !scanner.take('{') {
         return None;
     }
-    
+
     let mut result = Vec::new();
     let mut text_start = scanner.index();
-    
+
     while let Some(ch) = scanner.peek() {
         match ch {
             '}' => {
@@ -95,7 +98,7 @@ fn parse_condition_expression(
                         result.push(fastn_section::Tes::Text(span));
                     }
                 }
-                
+
                 // Parse nested expression
                 let expr_start = scanner.index();
                 if let Some(nested) = parse_condition_expression(scanner) {
@@ -128,14 +131,15 @@ fn parse_condition_expression(
                             result.push(fastn_section::Tes::Text(span));
                         }
                     }
-                    
+
                     // Parse dollar expression - remember the $ position
                     let dollar_start = dollar_pos.clone();
                     let expr_start_idx = scanner.index();
                     if let Some(nested) = parse_condition_expression(scanner) {
                         let expr_end_idx = scanner.index();
                         // Calculate positions for the Tes::Expression
-                        let expr_span_start = scanner.span_range(dollar_start.clone(), expr_start_idx);
+                        let expr_span_start =
+                            scanner.span_range(dollar_start.clone(), expr_start_idx);
                         let expr_span_end = scanner.span_range(dollar_start, expr_end_idx);
                         result.push(fastn_section::Tes::Expression {
                             start: expr_span_start.start(),
@@ -164,7 +168,7 @@ fn parse_condition_expression(
                             result.push(fastn_section::Tes::Text(span));
                         }
                     }
-                    
+
                     // Skip the comment
                     scanner.pop(); // consume second ;
                     while let Some(ch) = scanner.peek() {
@@ -188,17 +192,26 @@ fn parse_condition_expression(
                     scanner.pop(); // consume second -
                     scanner.skip_spaces();
                     // If we see an identifier after --, this is an inline section attempt
-                    if scanner.peek().map_or(false, |c| c.is_alphabetic() || c == '_') {
+                    if scanner
+                        .peek()
+                        .is_some_and(|c| c.is_alphabetic() || c == '_')
+                    {
                         // This is an inline section - not allowed in conditions
                         // Add error and fail the condition parsing
                         let error_start = dash_pos;
                         // Consume the section name for error reporting
-                        while scanner.peek().map_or(false, |c| c.is_alphanumeric() || c == '_' || c == '-') {
+                        while scanner
+                            .peek()
+                            .is_some_and(|c| c.is_alphanumeric() || c == '_' || c == '-')
+                        {
                             scanner.pop();
                         }
                         let error_end = scanner.index();
                         let error_span = scanner.span_range(error_start, error_end);
-                        scanner.add_error(error_span, fastn_section::Error::SectionNotAllowedInCondition);
+                        scanner.add_error(
+                            error_span,
+                            fastn_section::Error::SectionNotAllowedInCondition,
+                        );
                         // Continue scanning to find the closing brace to satisfy invariant
                         // (parser must advance if it adds an error)
                         let mut brace_depth = 1;
@@ -224,7 +237,7 @@ fn parse_condition_expression(
             }
         }
     }
-    
+
     // Unclosed brace
     None
 }
@@ -232,77 +245,80 @@ fn parse_condition_expression(
 #[cfg(test)]
 mod test {
     fastn_section::tt!(super::condition);
-    
+
     #[test]
     fn condition() {
         // Basic conditions
-        t!("if { dark-mode }", [" dark-mode "]);
-        t!("if { mobile }", [" mobile "]);
-        t!("if {desktop}", ["desktop"]);
-        
+        t!("if { dark-mode }", " dark-mode ");
+        t!("if { mobile }", " mobile ");
+        t!("if {desktop}", "desktop");
+
         // Conditions with operators (as plain text, $ is just text)
-        t!("if { $count > 5 }", [" $count > 5 "]);  // $ is just text
-        t!("if { dark-mode && high-contrast }", [" dark-mode && high-contrast "]);
-        t!("if { hover || focus }", [" hover || focus "]);
-        
+        t!("if { $count > 5 }", " $count > 5 "); // $ is just text
+        t!(
+            "if { dark-mode && high-contrast }",
+            " dark-mode && high-contrast "
+        );
+        t!("if { hover || focus }", " hover || focus ");
+
         // Conditions with spaces
-        t!("if   {   spaced   }", ["   spaced   "]);
-        t!("if{tight}", ["tight"]);
-        
+        t!("if   {   spaced   }", "   spaced   ");
+        t!("if{tight}", "tight");
+
         // Complex conditions ($ is just text)
-        t!("if { user.role == 'admin' }", [" user.role == 'admin' "]);
-        t!("if { (a && b) || c }", [" (a && b) || c "]);
-        t!("if { $var.field }", [" $var.field "]);  // $ is just text
-        
+        t!("if { user.role == 'admin' }", " user.role == 'admin' ");
+        t!("if { (a && b) || c }", " (a && b) || c ");
+        t!("if { $var.field }", " $var.field "); // $ is just text
+
         // Actual dollar expressions use ${}
         t!("if { ${count} > 5 }", [" ", {"$expression": ["count"]}, " > 5 "]);
         t!("if { dark-mode && ${user.premium} }", [" dark-mode && ", {"$expression": ["user.premium"]}, " "]);
         t!("if { prefix${value}suffix }", [" prefix", {"$expression": ["value"]}, "suffix "]);
-        
+
         // Nested expressions in condition
         t!("if { check {nested} }", [" check ", {"expression": ["nested"]}, " "]);
         t!("if { a || {b && c} }", [" a || ", {"expression": ["b && c"]}, " "]);
-        
+
         // Mixed nested and dollar expressions
         t!("if { ${outer {inner}} }", [" ", {"$expression": ["outer ", {"expression": ["inner"]}]}, " "]);
-        
+
         // Conditions with newlines using indoc
         t!(
             "if {
               dark-mode
             }",
-            ["\n  dark-mode\n"]
+            "\n  dark-mode\n"
         );
-        
+
         t!(
             "if {
               mobile &&
               logged-in
             }",
-            ["\n  mobile &&\n  logged-in\n"]
+            "\n  mobile &&\n  logged-in\n"
         );
-        
+
         t!(
             "if {
             
               multi-line
             
             }",
-            ["\n\n  multi-line\n\n"]
+            "\n\n  multi-line\n\n"
         );
-        
+
         // Conditions with comments (comments are skipped, not included in output)
         // Using t_raw to preserve exact spacing
         t_raw!(
             "if { ;; this is a comment\n              value }",
             [" ", "\n              value "]
         );
-        
+
         t_raw!(
             "if { before ;; inline comment\n              after }",
             [" before ", "\n              after "]
         );
-        
+
         t!(
             "if {
               ;; Comment at start
@@ -311,9 +327,14 @@ mod test {
               high-contrast
               ;; Comment at end
             }",
-            ["\n  ", "\n  dark-mode &&\n  ", "\n  high-contrast\n  ", "\n"]
+            [
+                "\n  ",
+                "\n  dark-mode &&\n  ",
+                "\n  high-contrast\n  ",
+                "\n"
+            ]
         );
-        
+
         // Multi-line with mixed content
         t!(
             "if {
@@ -323,34 +344,51 @@ mod test {
             }",
             ["\n  ", {"$expression": ["value"]}, " &&\n  ", {"expression": ["nested\n    content"]}, "\n"]
         );
-        
+
         // Comments don't affect parsing
         t_raw!(
             "if { a ;; comment here\n             && b }",
             [" a ", "\n             && b "]
         );
-        
+
         t_raw!(
             "if { ;; start comment\n             x ;; middle\n             ;; end comment\n             }",
-            [" ", "\n             x ", "\n             ", "\n             "]
+            [
+                " ",
+                "\n             x ",
+                "\n             ",
+                "\n             "
+            ]
         );
-        
+
         // No condition
         f!("no condition here");
         f!("if without braces");
-        f!("if {");  // Unclosed brace
-        f!("if }");  // No opening brace
-        
+        f!("if {"); // Unclosed brace
+        f!("if }"); // No opening brace
+
         // Not quite conditions
         f!("iff { not if }");
         f!("if");
         f!("{ just braces }");
-        
+
         // Inline sections are NOT allowed in conditions (even with newlines)
-        t_err!("if { -- section: not allowed }", null, "section_not_allowed_in_condition");
-        t_err!("if { text -- foo: bar }", null, "section_not_allowed_in_condition");
-        t_err!("if { before -- component: test }", null, "section_not_allowed_in_condition");
-        
+        t_err!(
+            "if { -- section: not allowed }",
+            null,
+            "section_not_allowed_in_condition"
+        );
+        t_err!(
+            "if { text -- foo: bar }",
+            null,
+            "section_not_allowed_in_condition"
+        );
+        t_err!(
+            "if { before -- component: test }",
+            null,
+            "section_not_allowed_in_condition"
+        );
+
         t_err!(
             "if {
               -- section: nope
@@ -358,7 +396,7 @@ mod test {
             null,
             "section_not_allowed_in_condition"
         );
-        
+
         t_err!(
             "if { ;; comment
               -- foo: bar

@@ -64,14 +64,14 @@ mod test {
     #[test]
     fn body() {
         // Simple single line body
-        t!("hello world", ["hello world"]);
+        t!("hello world", "hello world");
 
         // Multi-line body
         t!(
             "
             hello 
              world",
-            ["hello \n world"]
+            "hello \n world"
         );
 
         // Body stops at section marker (single newline before marker)
@@ -80,7 +80,7 @@ mod test {
             hello 
              world
             -- foo:",
-            ["hello \n world\n"],
+            "hello \n world\n",
             "-- foo:"
         );
 
@@ -91,7 +91,7 @@ mod test {
              world
 
             -- foo:",
-            ["hello \n world\n\n"],
+            "hello \n world\n\n",
             "-- foo:"
         );
 
@@ -102,7 +102,7 @@ mod test {
              world
 
             /-- foo:",
-            ["hello \n world\n\n"],
+            "hello \n world\n\n",
             "/-- foo:"
         );
 
@@ -114,7 +114,7 @@ mod test {
             
             Second paragraph
             also with text",
-            ["First paragraph\nwith multiple lines\n\nSecond paragraph\nalso with text"]
+            "First paragraph\nwith multiple lines\n\nSecond paragraph\nalso with text"
         );
 
         // Body with indented text
@@ -124,7 +124,7 @@ mod test {
                 indented content
                 more indented
             back to normal",
-            ["Some text\n    indented content\n    more indented\nback to normal"]
+            "Some text\n    indented content\n    more indented\nback to normal"
         );
 
         // Empty lines in body
@@ -134,11 +134,11 @@ mod test {
             
             
             Line 2",
-            ["Line 1\n\n\nLine 2"]
+            "Line 1\n\n\nLine 2"
         );
 
         // Body ending at EOF without newline
-        t!("no newline at end", ["no newline at end"]);
+        t!("no newline at end", "no newline at end");
 
         // Body stops at doc comment
         t!(
@@ -147,7 +147,7 @@ mod test {
             
             ;;; Doc comment
             -- next-section:",
-            ["Some body text\n\n"],
+            "Some body text\n\n",
             ";;; Doc comment\n-- next-section:"
         );
 
@@ -157,7 +157,7 @@ mod test {
             Body content
                 ;;; Indented doc comment
             -- section:",
-            ["Body content\n"],
+            "Body content\n",
             "    ;;; Indented doc comment\n-- section:"
         );
 

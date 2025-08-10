@@ -9,8 +9,8 @@
 ///
 /// # Grammar
 /// ```text
-/// section = ["/"] section_init [caption] "\n" [headers] ["\n\n" body]
-/// section_init = "--" spaces [kind] spaces identifier_reference ["()"] ":"
+/// section = ["/" section_init [caption] "\n" [headers] ["\n\n" body]
+/// section_init = "--" spaces [kind] spaces identifier_reference ["()" ":"
 /// headers = (header "\n")*
 /// body = <any content until next section or end>
 /// ```
@@ -156,7 +156,7 @@ mod test {
     #[test]
     fn section() {
         // Basic section with just caption
-        t!("-- foo: Hello World", {"init": {"name": "foo"}, "caption": ["Hello World"]});
+        t!("-- foo: Hello World", {"init": {"name": "foo"}, "caption": "Hello World"});
 
         // Section with one header
         t!(
@@ -165,10 +165,10 @@ mod test {
             greeting: hello",
             {
                 "init": {"name": "foo"},
-                "caption": ["Hello World"],
+                "caption": "Hello World",
                 "headers": [{
                     "name": "greeting",
-                    "values": ["hello"]
+                    "value": "hello"
                 }]
             }
         );
@@ -181,15 +181,15 @@ mod test {
             wishes: Be happy",
             {
                 "init": {"name": "foo"},
-                "caption": ["Hello World"],
+                "caption": "Hello World",
                 "headers": [
                     {
                         "name": "greeting",
-                        "values": ["hello"]
+                        "value": "hello"
                     },
                     {
                         "name": "wishes",
-                        "values": ["Be happy"]
+                        "value": "Be happy"
                     }
                 ]
             }
@@ -203,7 +203,7 @@ mod test {
             My greetings to world!",
             {
                 "init": {"name": "foo"},
-                "body": ["My greetings to world!"]
+                "body": "My greetings to world!"
             }
         );
 
@@ -215,8 +215,8 @@ mod test {
             My greetings to world!",
             {
                 "init": {"name": "foo"},
-                "caption": ["Hello World"],
-                "body": ["My greetings to world!"]
+                "caption": "Hello World",
+                "body": "My greetings to world!"
             }
         );
 
@@ -229,12 +229,12 @@ mod test {
             My greetings to world!",
             {
                 "init": {"name": "foo"},
-                "caption": ["Hello World"],
+                "caption": "Hello World",
                 "headers": [{
                     "name": "greeting",
-                    "values": ["hello"]
+                    "value": "hello"
                 }],
-                "body": ["My greetings to world!"]
+                "body": "My greetings to world!"
             }
         );
 
@@ -244,7 +244,7 @@ mod test {
             -- string message: Important",
             {
                 "init": {"name": "message", "kind": "string"},
-                "caption": ["Important"]
+                "caption": "Important"
             }
         );
 
@@ -258,10 +258,10 @@ mod test {
                     "name": "items",
                     "kind": {"name": "list", "args": ["string"]}
                 },
-                "caption": ["Shopping List"],
+                "caption": "Shopping List",
                 "headers": [{
                     "name": "count",
-                    "values": ["5"]
+                    "value": "5"
                 }]
             }
         );
@@ -273,10 +273,10 @@ mod test {
             color: red",
             {
                 "init": {"name": "ftd.text"},
-                "caption": ["Hello World"],
+                "caption": "Hello World",
                 "headers": [{
                     "name": "color",
-                    "values": ["red"]
+                    "value": "red"
                 }]
             }
         );
@@ -290,7 +290,7 @@ mod test {
                 "init": {"function": "foo"},
                 "headers": [{
                     "name": "param",
-                    "values": ["value"]
+                    "value": "value"
                 }]
             }
         );
@@ -303,10 +303,10 @@ mod test {
             filled: value",
             {
                 "init": {"name": "foo"},
-                "caption": ["Caption"],
+                "caption": "Caption",
                 "headers": [
                     {"name": "empty"},
-                    {"name": "filled", "values": ["value"]}
+                    {"name": "filled", "value": "value"}
                 ]
             }
         );
@@ -320,8 +320,8 @@ mod test {
             {
                 "init": {"name": "foo"},
                 "headers": [
-                    {"name": "name", "kind": "string", "values": ["John"]},
-                    {"name": "age", "kind": "integer", "values": ["30"]}
+                    {"name": "name", "kind": "string", "value": "John"},
+                    {"name": "age", "kind": "integer", "value": "30"}
                 ]
             }
         );
@@ -336,7 +336,7 @@ mod test {
             Line 3",
             {
                 "init": {"name": "foo"},
-                "body": ["Line 1\nLine 2\nLine 3"]
+                "body": "Line 1\nLine 2\nLine 3"
             }
         );
 
@@ -346,7 +346,7 @@ mod test {
             -- second: Two",
             {
                 "init": {"name": "first"},
-                "caption": ["One"]
+                "caption": "One"
             },
             "-- second: Two"
         );
@@ -360,8 +360,8 @@ mod test {
             -- bar: Second",
             {
                 "init": {"name": "foo"},
-                "caption": ["First"],
-                "body": ["Body content\n"]
+                "caption": "First",
+                "body": "Body content\n"
             },
             "-- bar: Second"
         );
@@ -376,9 +376,9 @@ mod test {
             This is invalid body",
             {
                 "init": {"name": "foo"},
-                "caption": ["Hello"],
-                "headers": [{"name": "bar", "values": ["baz"]}],
-                "body": ["This is invalid body"]
+                "caption": "Hello",
+                "headers": [{"name": "bar", "value": "baz"}],
+                "body": "This is invalid body"
             },
             "body_without_double_newline"
         );
@@ -408,8 +408,8 @@ mod test {
             {
                 "init": {"name": "foo"},
                 "headers": [
-                    {"name": "नाम", "values": ["राम"]},
-                    {"name": "名前", "values": ["太郎"]}
+                    {"name": "नाम", "value": "राम"},
+                    {"name": "名前", "value": "太郎"}
                 ]
             }
         );
@@ -417,7 +417,7 @@ mod test {
         // Test commented sections
         t!("/-- foo: Commented", {
             "init": {"name": "foo"},
-            "caption": ["Commented"],
+            "caption": "Commented",
             "is_commented": true
         });
 
@@ -429,11 +429,11 @@ mod test {
             header2: value2",
             {
                 "init": {"name": "foo"},
-                "caption": ["Caption"],
+                "caption": "Caption",
                 "is_commented": true,
                 "headers": [
-                    {"name": "header1", "values": ["value1"]},
-                    {"name": "header2", "values": ["value2"]}
+                    {"name": "header1", "value": "value1"},
+                    {"name": "header2", "value": "value2"}
                 ]
             }
         );
@@ -446,9 +446,9 @@ mod test {
             This is the body",
             {
                 "init": {"name": "foo"},
-                "caption": ["Test"],
+                "caption": "Test",
                 "is_commented": true,
-                "body": ["This is the body"]
+                "body": "This is the body"
             }
         );
 
@@ -461,31 +461,31 @@ mod test {
             Body content here",
             {
                 "init": {"name": "foo"},
-                "caption": ["Complete"],
+                "caption": "Complete",
                 "is_commented": true,
-                "headers": [{"name": "prop", "values": ["value"]}],
-                "body": ["Body content here"]
+                "headers": [{"name": "prop", "value": "value"}],
+                "body": "Body content here"
             }
         );
 
         // Commented section with type
         t!("/-- string msg: Hello", {
             "init": {"name": "msg", "kind": "string"},
-            "caption": ["Hello"],
+            "caption": "Hello",
             "is_commented": true
         });
 
         // Commented section with function marker
         t!("/-- foo(): Func", {
             "init": {"function": "foo"},
-            "caption": ["Func"],
+            "caption": "Func",
             "is_commented": true
         });
 
         // Commented section with qualified name
         t!("/-- ftd.text: Commented text", {
             "init": {"name": "ftd.text"},
-            "caption": ["Commented text"],
+            "caption": "Commented text",
             "is_commented": true
         });
 
@@ -495,7 +495,7 @@ mod test {
             /-- inactive: No",
             {
                 "init": {"name": "active"},
-                "caption": ["Yes"]
+                "caption": "Yes"
             },
             "/-- inactive: No"
         );
@@ -508,11 +508,11 @@ mod test {
             header2: normal",
             {
                 "init": {"name": "foo"},
-                "caption": ["Section"],
+                "caption": "Section",
                 "is_commented": true,
                 "headers": [
-                    {"name": "header1", "values": [{"is_commented": true, "value": ["also commented"]}]},
-                    {"name": "header2", "values": ["normal"]}
+                    {"name": "header1", "value": {"is_commented": true, "value": "also commented"}},
+                    {"name": "header2", "value": "normal"}
                 ]
             }
         );
@@ -520,7 +520,7 @@ mod test {
         // Commented section with spaces
         t!("  /-- foo: Spaced", {
             "init": {"name": "foo"},
-            "caption": ["Spaced"],
+            "caption": "Spaced",
             "is_commented": true
         });
 
@@ -534,7 +534,7 @@ mod test {
                     "name": "foo",
                     "doc": ";;; This is documentation\n"
                 },
-                "caption": ["Hello"]
+                "caption": "Hello"
             }
         );
 
@@ -550,7 +550,7 @@ mod test {
                     "name": "foo",
                     "doc": ";;; This is line 1\n;;; This is line 2\n;;; This is line 3\n"
                 },
-                "caption": ["Test"]
+                "caption": "Test"
             }
         );
 
@@ -566,10 +566,10 @@ mod test {
                     "name": "foo",
                     "doc": ";;; Documentation for section\n"
                 },
-                "caption": ["Caption"],
+                "caption": "Caption",
                 "headers": [
-                    {"name": "header1", "values": ["value1"]},
-                    {"name": "header2", "values": ["value2"]}
+                    {"name": "header1", "value": "value1"},
+                    {"name": "header2", "value": "value2"}
                 ]
             }
         );
@@ -586,8 +586,8 @@ mod test {
                     "name": "foo",
                     "doc": ";;; Section docs\n"
                 },
-                "caption": ["Test"],
-                "body": ["Body content here"]
+                "caption": "Test",
+                "body": "Body content here"
             }
         );
 
@@ -601,7 +601,7 @@ mod test {
                     "name": "foo",
                     "doc": ";;; This section is commented\n"
                 },
-                "caption": ["Commented"],
+                "caption": "Commented",
                 "is_commented": true
             }
         );
@@ -615,7 +615,7 @@ mod test {
                     "name": "foo",
                     "doc": "    ;;; Indented doc\n"
                 },
-                "caption": ["Test"]
+                "caption": "Test"
             }
         );
 
@@ -630,7 +630,7 @@ mod test {
                     "name": "foo",
                     "doc": ";;; This uses special chars: @#$%^&*()\n;;; And unicode: नमस्ते 你好\n"
                 },
-                "caption": ["International"]
+                "caption": "International"
             }
         );
 
@@ -645,7 +645,7 @@ mod test {
                     "kind": "string",
                     "doc": ";;; String type section\n"
                 },
-                "caption": ["Hello"]
+                "caption": "Hello"
             }
         );
 
@@ -659,7 +659,7 @@ mod test {
                     "function": "foo",
                     "doc": ";;; Function documentation\n"
                 },
-                "caption": ["Calculate"]
+                "caption": "Calculate"
             }
         );
 
@@ -673,17 +673,17 @@ mod test {
             header2: value2",
             {
                 "init": {"name": "foo"},
-                "caption": ["Section"],
+                "caption": "Section",
                 "headers": [
                     {
                         "name": "header1",
                         "doc": ";;; Documentation for header1\n",
-                        "values": ["value1"]
+                        "value": "value1"
                     },
                     {
                         "name": "header2",
                         "doc": ";;; Documentation for header2\n",
-                        "values": ["value2"]
+                        "value": "value2"
                     }
                 ]
             }
@@ -701,11 +701,11 @@ mod test {
                     "name": "foo",
                     "doc": ";;; Section documentation\n"
                 },
-                "caption": ["Test"],
+                "caption": "Test",
                 "headers": [{
                     "name": "param",
                     "doc": ";;; Header doc\n",
-                    "values": ["value"]
+                    "value": "value"
                 }]
             }
         );
@@ -722,17 +722,17 @@ mod test {
             timeout: 60",
             {
                 "init": {"name": "config"},
-                "caption": ["Settings"],
+                "caption": "Settings",
                 "headers": [
                     {
                         "name": "endpoint",
                         "doc": ";;; API endpoint URL\n;;; Should use HTTPS\n",
-                        "values": ["https://api.example.com"]
+                        "value": "https://api.example.com"
                     },
                     {
                         "name": "timeout",
                         "doc": ";;; Timeout in seconds\n;;; Default is 30\n",
-                        "values": ["60"]
+                        "value": "60"
                     }
                 ]
             }
@@ -748,17 +748,17 @@ mod test {
             /old: false",
             {
                 "init": {"name": "foo"},
-                "caption": ["Test"],
+                "caption": "Test",
                 "headers": [
                     {
                         "name": "active",
                         "doc": ";;; Active setting\n",
-                        "values": ["true"]
+                        "value": "true"
                     },
                     {
                         "name": "old",
                         "doc": ";;; Deprecated setting\n",
-                        "values": [{"is_commented": true, "value": ["false"]}]
+                        "value": {"is_commented": true, "value": "false"}
                     }
                 ]
             }
@@ -774,20 +774,20 @@ mod test {
             private api_key: secret",
             {
                 "init": {"name": "foo"},
-                "caption": ["Complex"],
+                "caption": "Complex",
                 "headers": [
                     {
                         "name": "config",
                         "kind": "string",
                         "visibility": "Public",
                         "doc": ";;; Public configuration\n",
-                        "values": ["production"]
+                        "value": "production"
                     },
                     {
                         "name": "api_key",
                         "visibility": "Private",
                         "doc": ";;; Private key\n",
-                        "values": ["secret"]
+                        "value": "secret"
                     }
                 ]
             }

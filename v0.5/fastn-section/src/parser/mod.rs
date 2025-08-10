@@ -109,7 +109,7 @@ mod document_tests {
                 "module-doc": ";-; This is a module doc\n;-; It describes the entire file\n",
                 "sections": [{
                     "init": {"name": "foo"},
-                    "caption": ["Hello World"]
+                    "caption": "Hello World"
                 }]
             }
         );
@@ -120,7 +120,7 @@ mod document_tests {
             {
                 "sections": [{
                     "init": {"name": "foo"},
-                    "caption": ["Hello World"]
+                    "caption": "Hello World"
                 }]
             }
         );
@@ -131,11 +131,11 @@ mod document_tests {
                 "sections": [
                     {
                         "init": {"name": "foo"},
-                        "caption": ["Hello World from foo"]
+                        "caption": "Hello World from foo"
                     },
                     {
                         "init": {"name": "bar"},
-                        "caption": ["Hello World from bar"]
+                        "caption": "Hello World from bar"
                     }
                 ]
             }
@@ -152,7 +152,7 @@ mod document_tests {
                         "name": "foo",
                         "doc": ";;; Documentation\n"
                     },
-                    "caption": ["Hello"]
+                    "caption": "Hello"
                 }]
             }
         );
@@ -172,14 +172,14 @@ mod document_tests {
                             "name": "foo",
                             "doc": ";;; First section docs\n"
                         },
-                        "caption": ["First"]
+                        "caption": "First"
                     },
                     {
                         "init": {
                             "name": "bar",
                             "doc": ";;; Second section docs\n"
                         },
-                        "caption": ["Second"]
+                        "caption": "Second"
                     }
                 ]
             }
@@ -194,7 +194,7 @@ mod document_tests {
             {
                 "sections": [{
                     "init": {"name": "foo"},
-                    "caption": ["Section"]
+                    "caption": "Section"
                 }]
             },
             "unexpected_doc_comment"
@@ -211,7 +211,7 @@ mod document_tests {
             {
                 "sections": [{
                     "init": {"name": "foo"},
-                    "caption": ["Section"]
+                    "caption": "Section"
                 }]
             },
             ["unexpected_doc_comment", "unexpected_doc_comment"]
@@ -226,7 +226,7 @@ mod document_tests {
             {
                 "sections": [{
                     "init": {"name": "foo"},
-                    "caption": ["Section"]
+                    "caption": "Section"
                 }]
             },
             "unexpected_doc_comment"
@@ -244,11 +244,11 @@ mod document_tests {
                 "sections": [
                     {
                         "init": {"name": "foo"},
-                        "caption": ["First"]
+                        "caption": "First"
                     },
                     {
                         "init": {"name": "bar"},
-                        "caption": ["Second"]
+                        "caption": "Second"
                     }
                 ]
             },

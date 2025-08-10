@@ -605,7 +605,7 @@ mod test {
         // Inline section - basic case
         t!(
             "text {-- foo: bar} more",
-            ["text ", {"section": [{"init": {"name": "foo"}, "caption": ["bar"]}]}, " more"]
+            ["text ", {"section": [{"init": {"name": "foo"}, "caption": "bar"}]}, " more"]
         );
 
         // Multiple inline sections
@@ -614,8 +614,8 @@ mod test {
             {-- foo: one
             -- bar: two}",
             [{"section": [
-                {"init": {"name": "foo"}, "caption": ["one"]},
-                {"init": {"name": "bar"}, "caption": ["two"]}
+                {"init": {"name": "foo"}, "caption": "one"},
+                {"init": {"name": "bar"}, "caption": "two"}
             ]}]
         );
 
@@ -623,19 +623,19 @@ mod test {
         // After "foo: caption" we have \n, then another \n for empty line, then body
         t_raw!(
             "{-- foo: caption\n\nbody content}",
-            [{"section": [{"init": {"name": "foo"}, "caption": ["caption"], "body": ["body content"]}]}]
+            [{"section": [{"init": {"name": "foo"}, "caption": "caption", "body": "body content"}]}]
         );
 
         // Mixed expression and inline section
         t!(
             "start {expr} middle {-- inline: section} end",
-            ["start ", {"expression": ["expr"]}, " middle ", {"section": [{"init": {"name": "inline"}, "caption": ["section"]}]}, " end"]
+            ["start ", {"expression": ["expr"]}, " middle ", {"section": [{"init": {"name": "inline"}, "caption": "section"}]}, " end"]
         );
 
         // Unclosed inline section
         t_err!(
             "{-- foo: bar",
-            [{"section": [{"init": {"name": "foo"}, "caption": ["bar"]}]}],
+            [{"section": [{"init": {"name": "foo"}, "caption": "bar"}]}],
             "unclosed_brace"
         );
 
@@ -653,7 +653,7 @@ mod test {
         //             " ",
         //             {"expression": ["nested ", {"expression": ["deep"]}]},
         //             " ",
-        //             {"section": [{"init": {"name": "inner"}, "caption": ["section"]}]}
+        //             {"section": [{"init": {"name": "inner"}, "caption": "section"}]}
         //         ]
         //     }]}]
         // );
@@ -663,9 +663,9 @@ mod test {
             "{-- foo: caption\nbar: value\n\nbody}",
             [{"section": [{
                 "init": {"name": "foo"},
-                "caption": ["caption"],
-                "headers": [{"name": "bar", "values": ["value"]}],
-                "body": ["body"]
+                "caption": "caption",
+                "headers": [{"name": "bar", "value": "value"}],
+                "body": "body"
             }]}]
         );
 
@@ -674,10 +674,10 @@ mod test {
             "{-- outer: title\n\nBody with {-- nested: inline section} inside}",
             [{"section": [{
                 "init": {"name": "outer"},
-                "caption": ["title"],
+                "caption": "title",
                 "body": [
                     "Body with ",
-                    {"section": [{"init": {"name": "nested"}, "caption": ["inline section"]}]},
+                    {"section": [{"init": {"name": "nested"}, "caption": "inline section"}]},
                     " inside"
                 ]
             }]}]

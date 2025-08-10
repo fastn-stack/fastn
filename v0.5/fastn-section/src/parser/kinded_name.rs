@@ -32,6 +32,23 @@ pub fn kinded_name(
     let kind = fastn_section::parser::kind(scanner);
     scanner.skip_spaces(); // Only spaces/tabs between kind and name, not newlines
 
+    // Check if the next token is "if" - if so, treat the kind as the name
+    // This handles cases like "color if { condition }" where "color" is the header name
+    // and "if { condition }" is a conditional expression, not "color" being a type for "if"
+    let check_pos = scanner.index();
+    if scanner.token("if").is_some() {
+        // Found "if" keyword - reset and treat kind as name
+        scanner.reset(&check_pos);
+        match kind.and_then(Into::into) {
+            Some(kinded_name) => return Some(kinded_name),
+            None => {
+                scanner.reset(&start);
+                return None;
+            }
+        }
+    }
+    scanner.reset(&check_pos);
+
     let name = match fastn_section::parser::identifier(scanner) {
         Some(v) => v,
         None => {

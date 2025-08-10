@@ -55,7 +55,12 @@ fn parse_single_header(
         }
     };
 
-    // Expect a colon after the name
+    // Check for condition BEFORE looking for colon
+    scanner.skip_spaces();
+    let condition = fastn_section::parser::condition::condition(scanner);
+
+    // Now expect a colon (after name and optional condition)
+    scanner.skip_spaces();
     if scanner.token(":").is_none() {
         // If we found a doc comment but the header is malformed, that's an error
         if let Some(doc_span) = doc {
@@ -69,23 +74,6 @@ fn parse_single_header(
         }
     }
 
-    // Check for condition after the header name
-    scanner.skip_spaces();
-    let condition = fastn_section::parser::condition::condition(scanner);
-    
-    // Parse the colon after condition (if any)
-    if condition.is_some() {
-        scanner.skip_spaces();
-        if !scanner.take(':') {
-            // If we found a condition but no colon after it, that's an error
-            scanner.add_error(
-                scanner.span_range(scanner.index(), scanner.index()),
-                fastn_section::Error::HeaderColonMissing,
-            );
-            return HeaderParseResult::FailedNoProgress;
-        }
-    }
-    
     // Parse the header value
     scanner.skip_spaces();
     let value = fastn_section::parser::header_value(scanner).unwrap_or_default();
@@ -220,7 +208,7 @@ fn parse_header_prefix_without_visibility<'input>(
 pub fn headers(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Option<Vec<fastn_section::Header>> {
-    let mut headers = vec![];
+    let mut headers: Vec<fastn_section::Header> = vec![];
     let mut found_new_line_at_header_end = Some(scanner.index());
     let mut made_progress = false;
 
@@ -235,7 +223,20 @@ pub fn headers(
 
         // Try to parse a single header
         match parse_single_header(scanner) {
-            HeaderParseResult::Success(header) => headers.push(*header),
+            HeaderParseResult::Success(header) => {
+                // Check if we already have a header with this name and coalesce
+                if let Some(existing) = headers
+                    .iter_mut()
+                    .find(|h| h.name.name.str() == header.name.name.str())
+                {
+                    // Merge the new header's values into the existing header
+                    // Keep the first header's metadata (kind, visibility, doc)
+                    existing.values.extend(header.values);
+                } else {
+                    // New header name, add it to the list
+                    headers.push(*header);
+                }
+            }
             HeaderParseResult::FailedWithProgress => {
                 // We consumed input and added errors, don't reset
                 made_progress = true;
@@ -282,8 +283,8 @@ mod test {
     #[test]
     fn headers() {
         // Basic cases
-        t!("greeting: hello", [{"name": "greeting", "values": ["hello"]}]);
-        t!("greeting: hello\n", [{"name": "greeting", "values": ["hello"]}], "\n");
+        t!("greeting: hello", [{"name": "greeting", "value": "hello"}]);
+        t!("greeting: hello\n", [{"name": "greeting", "value": "hello"}], "\n");
 
         // Multiple headers
         t!(
@@ -294,11 +295,11 @@ mod test {
             [
                 {
                     "name": "greeting",
-                    "values": ["hello"]
+                    "value": "hello"
                 },
                 {
                     "name": "wishes",
-                    "values": ["Happy New Year"]
+                    "value": "Happy New Year"
                 }
             ],
             "\n"
@@ -314,11 +315,11 @@ mod test {
             [
                 {
                     "name": "greeting",
-                    "values": ["hello"]
+                    "value": "hello"
                 },
                 {
                     "name": "wishes",
-                    "values": ["Happy New Year"]
+                    "value": "Happy New Year"
                 }
             ],
             "\n\nI am not header"
@@ -335,11 +336,11 @@ mod test {
             [
                 {
                     "name": "greeting",
-                    "values": ["hello"]
+                    "value": "hello"
                 },
                 {
                     "name": "wishes",
-                    "values": ["Happy New Year"]
+                    "value": "Happy New Year"
                 }
             ],
             "\n\nbody: This looks like a header\nbut: it is not"
@@ -354,12 +355,12 @@ mod test {
                 {
                     "name": "name",
                     "kind": "string",
-                    "values": ["John"]
+                    "value": "John"
                 },
                 {
                     "name": "age",
                     "kind": "integer",
-                    "values": ["30"]
+                    "value": "30"
                 }
             ]
         );
@@ -373,12 +374,12 @@ mod test {
                 {
                     "name": "items",
                     "kind": {"name": "list", "args": ["string"]},
-                    "values": ["apple, banana"]
+                    "value": "apple, banana"
                 },
                 {
                     "name": "scores",
                     "kind": {"name": "map", "args": ["string", "int"]},
-                    "values": ["math: 95"]
+                    "value": "math: 95"
                 }
             ]
         );
@@ -394,23 +395,23 @@ mod test {
             [
                 {
                     "name": "first_name",
-                    "values": ["Alice"]
+                    "value": "Alice"
                 },
                 {
                     "name": "last-name",
-                    "values": ["Smith"]
+                    "value": "Smith"
                 },
                 {
                     "name": "_private",
-                    "values": ["secret"]
+                    "value": "secret"
                 },
                 {
                     "name": "value123",
-                    "values": ["test"]
+                    "value": "test"
                 },
                 {
                     "name": "item_42",
-                    "values": ["answer"]
+                    "value": "answer"
                 }
             ]
         );
@@ -426,7 +427,7 @@ mod test {
                 },
                 {
                     "name": "another",
-                    "values": ["value"]
+                    "value": "value"
                 }
             ]
         );
@@ -439,11 +440,11 @@ mod test {
             [
                 {
                     "name": "spaced",
-                    "values": ["value"]
+                    "value": "value"
                 },
                 {
                     "name": "tight",
-                    "values": ["value"]
+                    "value": "value"
                 }
             ]
         );
@@ -453,7 +454,7 @@ mod test {
             [
                 {
                     "name": "string",
-                    "values": ["some value"]
+                    "value": "some value"
                 }
             ]
         );
@@ -463,7 +464,7 @@ mod test {
             [
                 {
                     "name": "a",
-                    "values": ["1 b: 2"]
+                    "value": "1 b: 2"
                 }
             ]
         );
@@ -481,7 +482,7 @@ mod test {
         t!("public name: John", [{
             "name": "name",
             "visibility": "Public",
-            "values": ["John"]
+            "value": "John"
         }]);
 
         // Headers with visibility modifiers
@@ -493,12 +494,12 @@ mod test {
                 {
                     "name": "name",
                     "visibility": "Public",
-                    "values": ["John"]
+                    "value": "John"
                 },
                 {
                     "name": "age",
                     "visibility": "Private",
-                    "values": ["30"]
+                    "value": "30"
                 }
             ]
         );
@@ -512,12 +513,12 @@ mod test {
                 {
                     "name": "api_key",
                     "visibility": "Package",
-                    "values": ["secret123"]
+                    "value": "secret123"
                 },
                 {
                     "name": "internal_id",
                     "visibility": "Module",
-                    "values": ["42"]
+                    "value": "42"
                 }
             ]
         );
@@ -532,13 +533,13 @@ mod test {
                     "name": "name",
                     "kind": "string",
                     "visibility": "Public",
-                    "values": ["Alice"]
+                    "value": "Alice"
                 },
                 {
                     "name": "count",
                     "kind": "integer",
                     "visibility": "Module",
-                    "values": ["100"]
+                    "value": "100"
                 }
             ]
         );
@@ -553,13 +554,13 @@ mod test {
                     "name": "tags",
                     "kind": {"name": "list", "args": ["string"]},
                     "visibility": "Public",
-                    "values": ["web, api"]
+                    "value": "web, api"
                 },
                 {
                     "name": "scores",
                     "kind": {"name": "map", "args": ["string", "int"]},
                     "visibility": "Private",
-                    "values": ["math: 95"]
+                    "value": "math: 95"
                 }
             ]
         );
@@ -573,12 +574,12 @@ mod test {
                 {
                     "name": "name",
                     "visibility": "Public",
-                    "values": ["value"]
+                    "value": "value"
                 },
                 {
                     "name": "config",
                     "visibility": "Module",
-                    "values": ["setting"]
+                    "value": "setting"
                 }
             ]
         );
@@ -597,12 +598,12 @@ mod test {
                 {
                     "name": "distributed",
                     "visibility": "Package",
-                    "values": ["true"]
+                    "value": "true"
                 },
                 {
                     "name": "debug",
                     "visibility": "Module",
-                    "values": ["false"]
+                    "value": "false"
                 }
             ]
         );
@@ -617,21 +618,21 @@ mod test {
             [
                 {
                     "name": "name",
-                    "values": ["Default"]
+                    "value": "Default"
                 },
                 {
                     "name": "visible",
                     "visibility": "Public",
-                    "values": ["yes"]
+                    "value": "yes"
                 },
                 {
                     "name": "hidden",
                     "visibility": "Private",
-                    "values": ["secret"]
+                    "value": "secret"
                 },
                 {
                     "name": "config",
-                    "values": ["value"]
+                    "value": "value"
                 }
             ]
         );
@@ -639,14 +640,14 @@ mod test {
         // Test commented headers
         t!("/name: John", [{
             "name": "name",
-            "values": [{"is_commented": true, "value": ["John"]}]
+            "value": {"is_commented": true, "value": "John"}
         }]);
 
         // Commented header with type
         t!("/string name: Alice", [{
             "name": "name",
             "kind": "string",
-            "values": [{"is_commented": true, "value": ["Alice"]}]
+            "value": {"is_commented": true, "value": "Alice"}
         }]);
 
         // Multiple headers with some commented
@@ -658,15 +659,15 @@ mod test {
             [
                 {
                     "name": "name",
-                    "values": ["Bob"]
+                    "value": "Bob"
                 },
                 {
                     "name": "age",
-                    "values": [{"is_commented": true, "value": ["30"]}]
+                    "value": {"is_commented": true, "value": "30"}
                 },
                 {
                     "name": "city",
-                    "values": ["New York"]
+                    "value": "New York"
                 }
             ]
         );
@@ -675,7 +676,7 @@ mod test {
         t!("/public name: Test", [{
             "name": "name",
             "visibility": "Public",
-            "values": [{"is_commented": true, "value": ["Test"]}]
+            "value": {"is_commented": true, "value": "Test"}
         }]);
 
         // Commented header with visibility and type
@@ -683,14 +684,14 @@ mod test {
             "name": "api_key",
             "kind": "string",
             "visibility": "Public",
-            "values": [{"is_commented": true, "value": ["secret123"]}]
+            "value": {"is_commented": true, "value": "secret123"}
         }]);
 
         // Commented header with package visibility
         t!("/public<package> internal: data", [{
             "name": "internal",
             "visibility": "Package",
-            "values": [{"is_commented": true, "value": ["data"]}]
+            "value": {"is_commented": true, "value": "data"}
         }]);
 
         // Mixed commented and uncommented with visibility
@@ -704,21 +705,21 @@ mod test {
                 {
                     "name": "name",
                     "visibility": "Public",
-                    "values": ["Active"]
+                    "value": "Active"
                 },
                 {
                     "name": "secret",
                     "visibility": "Private",
-                    "values": [{"is_commented": true, "value": ["hidden"]}]
+                    "value": {"is_commented": true, "value": "hidden"}
                 },
                 {
                     "name": "config",
                     "visibility": "Module",
-                    "values": ["enabled"]
+                    "value": "enabled"
                 },
                 {
                     "name": "config2",
-                    "values": [{"is_commented": true, "value": ["disabled"]}]
+                    "value": {"is_commented": true, "value": "disabled"}
                 }
             ]
         );
@@ -727,19 +728,19 @@ mod test {
         t!("/list<string> items: apple, banana", [{
             "name": "items",
             "kind": {"name": "list", "args": ["string"]},
-            "values": [{"is_commented": true, "value": ["apple, banana"]}]
+            "value": {"is_commented": true, "value": "apple, banana"}
         }]);
 
         // Commented empty header
         t!("/empty:", [{
             "name": "empty",
-            "values": [{"is_commented": true}]
+            "value": {"is_commented": true}
         }]);
 
         // Edge case: visibility keyword as name when commented
         t!("/public: this is a value", [{
             "name": "public",
-            "values": [{"is_commented": true, "value": ["this is a value"]}]
+            "value": {"is_commented": true, "value": "this is a value"}
         }]);
 
         // Header with doc comment
@@ -750,7 +751,7 @@ mod test {
             [{
                 "name": "name",
                 "doc": ";;; This is documentation for name\n",
-                "values": ["John"]
+                "value": "John"
             }]
         );
 
@@ -765,12 +766,12 @@ mod test {
                 {
                     "name": "name",
                     "doc": ";;; User's full name\n",
-                    "values": ["Alice"]
+                    "value": "Alice"
                 },
                 {
                     "name": "age",
                     "doc": ";;; User's age in years\n",
-                    "values": ["25"]
+                    "value": "25"
                 }
             ]
         );
@@ -785,7 +786,7 @@ mod test {
             [{
                 "name": "api_key",
                 "doc": ";;; API key for authentication\n;;; Should be kept secret\n;;; Rotate every 90 days\n",
-                "values": ["sk_123456"]
+                "value": "sk_123456"
             }]
         );
 
@@ -798,7 +799,7 @@ mod test {
                 "name": "config",
                 "kind": "string",
                 "doc": ";;; Configuration value\n",
-                "values": ["production"]
+                "value": "production"
             }]
         );
 
@@ -811,7 +812,7 @@ mod test {
                 "name": "endpoint",
                 "visibility": "Public",
                 "doc": ";;; Public API endpoint\n",
-                "values": ["/api/v1"]
+                "value": "/api/v1"
             }]
         );
 
@@ -825,7 +826,7 @@ mod test {
                 "kind": {"name": "list", "args": ["string"]},
                 "visibility": "Public",
                 "doc": ";;; List of supported features\n",
-                "values": ["auth, logging"]
+                "value": "auth, logging"
             }]
         );
 
@@ -837,7 +838,7 @@ mod test {
             [{
                 "name": "old_config",
                 "doc": ";;; Deprecated setting\n",
-                "values": [{"is_commented": true, "value": ["value"]}]
+                "value": {"is_commented": true, "value": "value"}
             }]
         );
 
@@ -853,16 +854,16 @@ mod test {
                 {
                     "name": "config",
                     "doc": ";;; Main configuration\n",
-                    "values": ["value1"]
+                    "value": "value1"
                 },
                 {
                     "name": "simple",
-                    "values": ["value2"]
+                    "value": "value2"
                 },
                 {
                     "name": "documented",
                     "doc": ";;; Another documented header\n",
-                    "values": ["value3"]
+                    "value": "value3"
                 }
             ]
         );
@@ -887,7 +888,7 @@ mod test {
             [{
                 "name": "price",
                 "doc": ";;; Price in USD ($)\n;;; Use format: $XX.XX\n",
-                "values": ["$19.99"]
+                "value": "$19.99"
             }]
         );
 
@@ -920,6 +921,128 @@ mod test {
             [],
             "unexpected_doc_comment",
             "    no_colon"
+        );
+
+        // Test header coalescing - multiple headers with same name merge into one
+        t!(
+            "
+            color: black
+            color if { dark-mode }: white
+            color if { high-contrast }: yellow",
+            [{
+                "name": "color",
+                "values": [
+                    "black",
+                    {"condition": " dark-mode ", "value": "white"},
+                    {"condition": " high-contrast ", "value": "yellow"}
+                ]
+            }]
+        );
+
+        // Interleaved headers (ABAB pattern) still coalesce correctly
+        t!(
+            "
+            color: black
+            size: 16px
+            color if { dark-mode }: white
+            size if { mobile }: 14px
+            color if { high-contrast }: yellow
+            size if { tablet }: 18px",
+            [
+                {
+                    "name": "color",
+                    "values": [
+                        "black",
+                        {"condition": " dark-mode ", "value": "white"},
+                        {"condition": " high-contrast ", "value": "yellow"}
+                    ]
+                },
+                {
+                    "name": "size",
+                    "values": [
+                        "16px",
+                        {"condition": " mobile ", "value": "14px"},
+                        {"condition": " tablet ", "value": "18px"}
+                    ]
+                }
+            ]
+        );
+
+        // Complex interleaving with multiple headers
+        t!(
+            "
+            margin: 10px
+            padding: 20px
+            color: red
+            margin if { compact }: 5px
+            padding if { compact }: 10px
+            color if { dark }: blue
+            margin if { mobile }: 2px",
+            [
+                {
+                    "name": "margin",
+                    "values": [
+                        "10px",
+                        {"condition": " compact ", "value": "5px"},
+                        {"condition": " mobile ", "value": "2px"}
+                    ]
+                },
+                {
+                    "name": "padding",
+                    "values": [
+                        "20px",
+                        {"condition": " compact ", "value": "10px"}
+                    ]
+                },
+                {
+                    "name": "color",
+                    "values": [
+                        "red",
+                        {"condition": " dark ", "value": "blue"}
+                    ]
+                }
+            ]
+        );
+
+        // Coalescing preserves first header's metadata (kind, visibility, doc)
+        t!(
+            "
+            ;;; Color configuration
+            public string color: black
+            size: normal
+            color if { dark-mode }: white",
+            [
+                {
+                    "name": "color",
+                    "kind": "string",
+                    "visibility": "Public",
+                    "doc": ";;; Color configuration\n",
+                    "values": [
+                        "black",
+                        {"condition": " dark-mode ", "value": "white"}
+                    ]
+                },
+                {
+                    "name": "size",
+                    "value": "normal"
+                }
+            ]
+        );
+
+        // Coalescing with commented values
+        t!(
+            "
+            enabled: true
+            /enabled if { debug }: false
+            enabled if { production }: true",
+            [{
+                "name": "enabled",
+                "values": [
+                    "true",
+                    {"condition": " debug ", "value": "false", "is_commented": true},
+                    {"condition": " production ", "value": "true"}
+                ]
+            }]
         );
     }
 }

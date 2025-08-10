@@ -48,8 +48,8 @@ mod test {
     #[test]
     fn tes() {
         // Plain text
-        t!("hello", ["hello"]);
-        t!("hèllo", ["hèllo"]);
+        t!("hello", "hello");
+        t!("hèllo", "hèllo");
 
         // Text with expression
         t!("hello {world}", ["hello ", {"expression": ["world"]}]);
@@ -80,6 +80,6 @@ mod test {
         t!("${a} and {b}", [{"$expression": ["a"]}, " and ", {"expression": ["b"]}]);
 
         // Dollar without brace
-        t!("price: $100", ["price: $100"]);
+        t!("price: $100", "price: $100");
     }
 }

@@ -42,7 +42,7 @@ impl fastn_section::JDebug for fastn_section::Section {
         o.insert("init".to_string(), self.init.debug());
 
         if let Some(c) = &self.caption {
-            o.insert("caption".to_string(), c.0.debug());
+            o.insert("caption".to_string(), c.debug());
         }
 
         if !self.headers.is_empty() {
@@ -50,7 +50,7 @@ impl fastn_section::JDebug for fastn_section::Section {
         }
 
         if let Some(b) = &self.body {
-            o.insert("body".to_string(), b.0.debug());
+            o.insert("body".to_string(), b.debug());
         }
 
         if !self.children.is_empty() {
@@ -71,8 +71,12 @@ impl fastn_section::JDebug for fastn_section::Section {
 
 impl fastn_section::JDebug for fastn_section::ConditionalValue {
     fn debug(&self) -> serde_json::Value {
-        // Special case: if this is just an empty value with no condition and not commented,
-        // return an empty object (will be filtered out by Header's debug)
+        // For simple unconditional, uncommented values, just return the value directly
+        if self.condition.is_none() && !self.is_commented && !self.value.0.is_empty() {
+            return self.value.debug();
+        }
+
+        // Special case: empty value with no condition and not commented
         if self.condition.is_none() && self.value.0.is_empty() && !self.is_commented {
             return serde_json::Value::Object(serde_json::Map::new());
         }
@@ -85,6 +89,7 @@ impl fastn_section::JDebug for fastn_section::ConditionalValue {
             }
         }
         if !self.value.0.is_empty() {
+            // Use the simplified HeaderValue debug which handles single text values
             o.insert("value".into(), self.value.debug());
         }
         if self.is_commented {
@@ -107,32 +112,24 @@ impl fastn_section::JDebug for fastn_section::Header {
         if let Some(visibility) = &self.visibility {
             o.insert("visibility".into(), visibility.value.debug());
         }
-        
-        // Simplify output when there's only one unconditional, uncommented value
-        if self.values.len() == 1 {
-            let v = &self.values[0];
-            if v.condition.is_none() && !v.is_commented && !v.value.0.is_empty() {
-                // Simple case: just show the value directly
-                o.insert("values".into(), v.value.debug());
-            } else if !v.value.0.is_empty() || v.condition.is_some() || v.is_commented {
-                // Single value but with condition or comment - show as single object
-                o.insert("values".into(), serde_json::Value::Array(vec![v.debug()]));
-            }
-        } else {
-            // Multiple values or complex cases - show as array
-            let non_empty_values: Vec<_> = self
-                .values
-                .iter()
-                .filter(|v| {
-                    // Keep if it has a condition, has a non-empty value, or is commented
-                    v.condition.is_some() || !v.value.0.is_empty() || v.is_commented
-                })
-                .map(|v| v.debug())
-                .collect();
 
-            if !non_empty_values.is_empty() {
-                o.insert("values".into(), serde_json::Value::Array(non_empty_values));
-            }
+        // Handle values based on count and complexity
+        let non_empty_values: Vec<_> = self
+            .values
+            .iter()
+            .filter(|v| {
+                // Keep if it has a condition, has a non-empty value, or is commented
+                v.condition.is_some() || !v.value.0.is_empty() || v.is_commented
+            })
+            .map(|v| v.debug())
+            .collect();
+
+        if non_empty_values.len() == 1 {
+            // Single value - use singular "value" key without array wrapper
+            o.insert("value".into(), non_empty_values[0].clone());
+        } else if !non_empty_values.is_empty() {
+            // Multiple values - use plural "values" key with array
+            o.insert("values".into(), serde_json::Value::Array(non_empty_values));
         }
         serde_json::Value::Object(o)
     }
@@ -181,6 +178,13 @@ impl fastn_section::JDebug for fastn_section::Kind {
 
 impl fastn_section::JDebug for fastn_section::HeaderValue {
     fn debug(&self) -> serde_json::Value {
+        // Simplify when it's just a single text value
+        if self.0.len() == 1 {
+            if let fastn_section::Tes::Text(text) = &self.0[0] {
+                return text.debug();
+            }
+        }
+        // Otherwise return the full array
         self.0.debug()
     }
 }
