@@ -6,7 +6,7 @@ extern crate self as fastn_section;
 
 mod debug;
 mod error;
-mod parser;
+pub mod parser;
 mod scanner;
 mod utils;
 mod warning;

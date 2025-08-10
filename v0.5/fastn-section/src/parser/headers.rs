@@ -219,6 +219,7 @@ pub fn headers(
     }
 }
 
+#[cfg(test)]
 mod test {
     fastn_section::tt!(super::headers);
 
