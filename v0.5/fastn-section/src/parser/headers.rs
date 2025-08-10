@@ -5,18 +5,32 @@ struct ParsedHeaderPrefix {
     is_commented: bool,
 }
 
+/// Result of attempting to parse a single header
+enum HeaderParseResult {
+    /// Successfully parsed a header
+    Success(fastn_section::Header),
+    /// Failed to parse, but consumed input and added errors (e.g., orphaned doc comment)
+    FailedWithProgress,
+    /// Failed to parse, no input consumed, no errors added
+    FailedNoProgress,
+}
+
 /// Attempts to parse a single header from the scanner
 ///
-/// Returns Some(header) if successful, None if no valid header found.
-/// The scanner is reset to the original position if parsing fails.
+/// Returns a result indicating whether parsing succeeded, failed with progress,
+/// or failed without progress. This distinction is important for maintaining
+/// parser invariants.
 fn parse_single_header(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
-) -> Option<fastn_section::Header> {
+) -> HeaderParseResult {
     let start_index = scanner.index();
 
     // Check for doc comments before the header
     let doc = fastn_section::parser::doc_comment(scanner);
 
+    // Save position after doc comment but before skipping spaces
+    let after_doc = scanner.index();
+    
     scanner.skip_spaces();
 
     // Save position after doc comment and spaces
@@ -29,11 +43,15 @@ fn parse_single_header(
             // If we found a doc comment but no header follows, that's an error
             if let Some(doc_span) = doc {
                 scanner.add_error(doc_span, fastn_section::Error::UnexpectedDocComment);
+                // Reset to after doc comment but before spaces - don't consume trailing spaces
+                scanner.reset(&after_doc);
+                // The doc comment has been consumed, so we've made progress
+                return HeaderParseResult::FailedWithProgress;
             } else {
                 // No doc comment and no header, reset to original position
                 scanner.reset(&start_index);
+                return HeaderParseResult::FailedNoProgress;
             }
-            return None;
         }
     };
 
@@ -42,17 +60,20 @@ fn parse_single_header(
         // If we found a doc comment but the header is malformed, that's an error
         if let Some(doc_span) = doc {
             scanner.add_error(doc_span, fastn_section::Error::UnexpectedDocComment);
+            // Reset to after doc comment but before we started parsing the header
+            scanner.reset(&after_doc);
+            return HeaderParseResult::FailedWithProgress;
         } else {
             scanner.reset(&start_index);
+            return HeaderParseResult::FailedNoProgress;
         }
-        return None;
     }
 
     // Parse the header value
     scanner.skip_spaces();
     let value = fastn_section::parser::header_value(scanner).unwrap_or_default();
 
-    Some(fastn_section::Header {
+    HeaderParseResult::Success(fastn_section::Header {
         name: prefix.kinded_name.name,
         kind: prefix.kinded_name.kind,
         doc,
@@ -178,6 +199,7 @@ pub fn headers(
 ) -> Option<Vec<fastn_section::Header>> {
     let mut headers = vec![];
     let mut found_new_line_at_header_end = Some(scanner.index());
+    let mut made_progress = false;
 
     loop {
         let index = scanner.index();
@@ -190,10 +212,15 @@ pub fn headers(
 
         // Try to parse a single header
         match parse_single_header(scanner) {
-            Some(header) => headers.push(header),
-            None => {
-                // If this was the first header attempt and it failed, reset
-                if headers.is_empty() {
+            HeaderParseResult::Success(header) => headers.push(header),
+            HeaderParseResult::FailedWithProgress => {
+                // We consumed input and added errors, don't reset
+                made_progress = true;
+                break;
+            }
+            HeaderParseResult::FailedNoProgress => {
+                // No progress made, reset if this was the first attempt
+                if headers.is_empty() && !made_progress {
                     scanner.reset(&index);
                 }
                 break;
@@ -207,13 +234,19 @@ pub fn headers(
         }
     }
 
-    // Reset the scanner before the new line
-    if let Some(index) = found_new_line_at_header_end {
-        scanner.reset(&index);
+    // Reset the scanner before the new line (but only if we didn't fail with progress)
+    if !made_progress {
+        if let Some(index) = found_new_line_at_header_end {
+            scanner.reset(&index);
+        }
     }
 
-    if headers.is_empty() {
+    if headers.is_empty() && !made_progress {
         None
+    } else if headers.is_empty() {
+        // Made progress (consumed input with errors) but found no valid headers
+        // Return empty vector to indicate we processed something
+        Some(vec![])
     } else {
         Some(headers)
     }
@@ -846,22 +879,30 @@ mod test {
             }]
         );
 
-        // Orphaned doc comment (no header after doc comment) - should return None with error
+        // Orphaned doc comment (no header after doc comment) - returns empty vector with error
+        // The parser must advance when adding errors to satisfy invariants
         // Test with raw strings to avoid indoc issues
-        f_raw!(
+        t_err_raw!(
             ";;; This doc comment has no header\n",
-            "unexpected_doc_comment"
+            [],
+            "unexpected_doc_comment",
+            ""
         );
-        f_raw!(
+        t_err_raw!(
             "    ;;; This doc comment has no header\n    ",
-            "unexpected_doc_comment"
+            [],
+            "unexpected_doc_comment",
+            "    "
         );
 
         // Orphaned doc comment followed by invalid header (missing colon) - also reports error
-        f_raw!(";;; Documentation\nno_colon", "unexpected_doc_comment");
-        f_raw!(
+        // The doc comment is consumed, but the invalid header text remains
+        t_err_raw!(";;; Documentation\nno_colon", [], "unexpected_doc_comment", "no_colon");
+        t_err_raw!(
             "    ;;; Documentation\n    no_colon",
-            "unexpected_doc_comment"
+            [],
+            "unexpected_doc_comment",
+            "    no_colon"
         );
     }
 }

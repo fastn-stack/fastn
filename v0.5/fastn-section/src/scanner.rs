@@ -54,6 +54,14 @@ impl<'input> PartialEq for Index<'input> {
     }
 }
 
+#[cfg(test)]
+impl<'input> Index<'input> {
+    /// Returns the byte position in the source text (test only)
+    pub fn pos(&self) -> usize {
+        self.index
+    }
+}
+
 impl<'input, T: Collector> Scanner<'input, T> {
     pub fn add_error(&mut self, span: fastn_section::Span, error: fastn_section::Error) {
         self.output.add_error(span, error)
