@@ -226,7 +226,7 @@ fn parse_expression(
 /// Format: `{-- section-name: caption ...}`
 ///
 /// # Special Handling
-/// - Missing colon after section name triggers `ColonNotFound` error but continues parsing
+/// - Missing colon after section name triggers `SectionColonMissing` error but continues parsing
 /// - Section can contain headers and body content, all within the braces
 /// - Unclosed inline section triggers `UnclosedBrace` error with recovery
 /// - Always returns `Some(Tes::Section)` even for incomplete sections (with errors recorded)
@@ -273,11 +273,8 @@ fn parse_inline_section(
 
         // Try to parse a section init
         if let Some(section_init) = fastn_section::parser::section_init(scanner) {
-            // Check if colon was missing and add error if needed
-            if section_init.colon.is_none() {
-                let error_span = section_init.name.span();
-                scanner.add_error(error_span, fastn_section::Error::ColonNotFound);
-            }
+            // section_init parser already handles error reporting for missing colon
+            // No need to add duplicate errors here
 
             // Parse caption - but stop at newline or '}'
             let caption = if scanner.peek() != Some('\n') && scanner.peek() != Some('}') {
@@ -794,9 +791,9 @@ mod test {
         t!("{@#$%}", [{"expression": ["@#$%"]}]);
 
         // Inline section edge cases
-        t_err!("{--", [{"section": []}], "unclosed_brace"); // Unclosed inline section
-        t_err!("{-- ", [{"section": []}], "unclosed_brace"); // Unclosed with space
-        t_err!("{-- foo", [{"section": [{"init": {"name": "foo"}}]}], ["colon_not_found", "unclosed_brace"]); // Missing colon and unclosed
+        t_err!("{--", [{"section": [{"init": {}}]}], ["missing_name", "section_colon_missing", "unclosed_brace"]); // Unclosed inline section, no name, no colon
+        t_err!("{-- ", [{"section": [{"init": {}}]}], ["missing_name", "section_colon_missing", "unclosed_brace"]); // Unclosed with space, no name, no colon
+        t_err!("{-- foo", [{"section": [{"init": {"name": "foo"}}]}], ["section_colon_missing", "unclosed_brace"]); // Missing colon and unclosed
 
         // Valid inline section variations
         t!("{-- foo:}", [{"section": [{"init": {"name": "foo"}}]}]);

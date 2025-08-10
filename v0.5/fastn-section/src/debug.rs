@@ -100,10 +100,15 @@ impl fastn_section::JDebug for fastn_section::Header {
 impl fastn_section::JDebug for fastn_section::SectionInit {
     fn debug(&self) -> serde_json::Value {
         let mut o = serde_json::Map::new();
-        if self.function_marker.is_some() {
-            o.insert("function".into(), self.name.debug());
-        } else {
-            o.insert("name".into(), self.name.debug());
+        
+        // Check if name is empty (for error recovery cases)
+        let name_str = self.name.to_string();
+        if !name_str.is_empty() {
+            if self.function_marker.is_some() {
+                o.insert("function".into(), self.name.debug());
+            } else {
+                o.insert("name".into(), self.name.debug());
+            }
         }
         if let Some(v) = &self.visibility {
             o.insert("visibility".into(), v.debug());
@@ -209,7 +214,8 @@ fn error(e: &fastn_section::Error, _s: Option<fastn_section::Span>) -> serde_jso
         fastn_section::Error::UnexpectedDocComment => "unexpected_doc_comment",
         fastn_section::Error::UnwantedTextFound => "unwanted_text_found",
         fastn_section::Error::EmptyAngleText => "empty_angle_text",
-        fastn_section::Error::ColonNotFound => "colon_not_found",
+        fastn_section::Error::SectionColonMissing => "section_colon_missing",
+        fastn_section::Error::HeaderColonMissing => "header_colon_missing",
         fastn_section::Error::DashDashNotFound => "dashdash_not_found",
         fastn_section::Error::KindedNameNotFound => "kinded_name_not_found",
         fastn_section::Error::SectionNameNotFoundForEnd => "section_name_not_found_for_end",
@@ -227,6 +233,9 @@ fn error(e: &fastn_section::Error, _s: Option<fastn_section::Span>) -> serde_jso
         fastn_section::Error::InvalidPackageFile => "invalid_package_file",
         fastn_section::Error::BodyWithoutDoubleNewline => "body_without_double_newline",
         fastn_section::Error::UnclosedBrace => "unclosed_brace",
+        fastn_section::Error::DashCountError => "dash_count_error",
+        fastn_section::Error::MissingName => "missing_name",
+        fastn_section::Error::UnclosedParen => "unclosed_paren",
         _ => todo!(),
     };
 

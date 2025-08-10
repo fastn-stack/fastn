@@ -13,7 +13,8 @@ pub enum Error {
     /// we are looking for dash-dash, but found something else
     DashDashNotFound,
     KindedNameNotFound,
-    ColonNotFound,
+    SectionColonMissing,  // Missing colon after section name: -- foo
+    HeaderColonMissing,   // Missing colon after header name: bar
     SectionNameNotFoundForEnd,
     EndContainsData,
     EndWithoutStart,
@@ -26,6 +27,12 @@ pub enum Error {
     BodyWithoutDoubleNewline,
     /// Unclosed brace in expression
     UnclosedBrace,
+    /// Wrong number of dashes in section marker (e.g., - or ---)
+    DashCountError,
+    /// Missing name in section declaration
+    MissingName,
+    /// Unclosed parenthesis in function marker
+    UnclosedParen,
     ExtraArgumentFound,
     ArgumentValueRequired,
     ComponentIsNotAFunction,
