@@ -845,13 +845,22 @@ mod test {
             }]
         );
 
-        // Orphaned doc comment (no header after doc comment) - should return None
+        // Orphaned doc comment (no header after doc comment) - should return None with error
         // Test with raw strings to avoid indoc issues
-        f_raw!(";;; This doc comment has no header\n");
-        f_raw!("    ;;; This doc comment has no header\n    ");
+        f_raw!(
+            ";;; This doc comment has no header\n",
+            "unexpected_doc_comment"
+        );
+        f_raw!(
+            "    ;;; This doc comment has no header\n    ",
+            "unexpected_doc_comment"
+        );
 
-        // Orphaned doc comment followed by invalid header (missing colon)
-        f_raw!(";;; Documentation\nno_colon");
-        f_raw!("    ;;; Documentation\n    no_colon");
+        // Orphaned doc comment followed by invalid header (missing colon) - also reports error
+        f_raw!(";;; Documentation\nno_colon", "unexpected_doc_comment");
+        f_raw!(
+            "    ;;; Documentation\n    no_colon",
+            "unexpected_doc_comment"
+        );
     }
 }

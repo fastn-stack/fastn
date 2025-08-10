@@ -108,6 +108,13 @@ fn p<
     let result = f(&mut scanner);
     assert_eq!(result.debug(), debug);
     assert_eq!(scanner.remaining(), remaining);
+
+    // Ensure no errors were generated
+    assert!(
+        scanner.output.errors.is_empty(),
+        "Unexpected errors in test: {:?}",
+        scanner.output.errors
+    );
 }
 
 #[cfg(test)]
@@ -208,6 +215,15 @@ macro_rules! tt {
                     $source,
                 );
             };
+            ($source:expr, $errors:tt) => {
+                fastn_section::parser::p_err(
+                    &arcstr::ArcStr::from(indoc::indoc!($source)),
+                    $f,
+                    serde_json::json!(null),
+                    $source,
+                    serde_json::json!($errors),
+                );
+            };
         }
         #[allow(unused_macros)]
         macro_rules! t_err {
@@ -258,6 +274,15 @@ macro_rules! tt {
                     $f,
                     serde_json::json!(null),
                     $source,
+                );
+            };
+            ($source:expr, $errors:tt) => {
+                fastn_section::parser::p_err(
+                    &arcstr::ArcStr::from($source),
+                    $f,
+                    serde_json::json!(null),
+                    $source,
+                    serde_json::json!($errors),
                 );
             };
         }
@@ -368,24 +393,22 @@ mod test {
         );
 
         // Orphaned doc comment at beginning
-        t!(
+        t_err!(
             "
             ;;; This is orphaned
             
             -- foo: Section",
             {
-                "errors": [{
-                    "error": "unexpected_doc_comment"
-                }],
                 "sections": [{
                     "init": {"name": "foo"},
                     "caption": ["Section"]
                 }]
-            }
+            },
+            "unexpected_doc_comment"
         );
 
         // Multiple orphaned doc comments
-        t!(
+        t_err!(
             "
             ;;; First orphan
             
@@ -393,19 +416,16 @@ mod test {
             
             -- foo: Section",
             {
-                "errors": [
-                    {"error": "unexpected_doc_comment"},
-                    {"error": "unexpected_doc_comment"}
-                ],
                 "sections": [{
                     "init": {"name": "foo"},
                     "caption": ["Section"]
                 }]
-            }
+            },
+            ["unexpected_doc_comment", "unexpected_doc_comment"]
         );
 
         // Orphaned doc comment at end of file
-        t!(
+        t_err!(
             "
             -- foo: Section
             
@@ -414,15 +434,13 @@ mod test {
                 "sections": [{
                     "init": {"name": "foo"},
                     "caption": ["Section"]
-                }],
-                "errors": [{
-                    "error": "unexpected_doc_comment"
                 }]
-            }
+            },
+            "unexpected_doc_comment"
         );
 
         // Orphaned doc comment between sections (with blank line)
-        t!(
+        t_err!(
             "
             -- foo: First
             
@@ -439,11 +457,9 @@ mod test {
                         "init": {"name": "bar"},
                         "caption": ["Second"]
                     }
-                ],
-                "errors": [{
-                    "error": "unexpected_doc_comment"
-                }]
-            }
+                ]
+            },
+            "unexpected_doc_comment"
         );
     }
 }

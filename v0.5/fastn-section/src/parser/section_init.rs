@@ -30,7 +30,7 @@ pub fn section_init(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Option<fastn_section::SectionInit> {
     scanner.skip_spaces();
-    
+
     // Check for dash markers - we want to handle -, --, --- etc for error recovery
     let start_pos = scanner.index();
     let mut dash_count = 0;
@@ -41,19 +41,19 @@ pub fn section_init(
             break; // Stop at 3 or more dashes
         }
     }
-    
+
     // If no dashes found, return None
     if dash_count == 0 {
         return None;
     }
-    
+
     let dashdash = scanner.span(start_pos.clone());
-    
+
     // Record error if not exactly 2 dashes
     if dash_count != 2 {
         scanner.add_error(dashdash.clone(), fastn_section::Error::DashCountError);
     }
-    
+
     scanner.skip_spaces();
 
     // Try to parse kinded_reference - if missing, record error but continue
@@ -63,7 +63,7 @@ pub fn section_init(
             // No name found - record error
             let error_span = dashdash.clone();
             scanner.add_error(error_span, fastn_section::Error::MissingName);
-            
+
             // Check if there's a function marker without name (like "-- ():")
             scanner.skip_spaces();
             let func_marker = if scanner.peek() == Some('(') {
@@ -78,17 +78,17 @@ pub fn section_init(
             } else {
                 None
             };
-            
+
             // Check for colon
             scanner.skip_spaces();
             let colon = scanner.token(":");
-            
+
             // If colon is also missing, report that error too
             if colon.is_none() {
                 let error_span = dashdash.clone();
                 scanner.add_error(error_span, fastn_section::Error::SectionColonMissing);
             }
-            
+
             // Return partial SectionInit for error recovery
             return Some(fastn_section::SectionInit {
                 dashdash,
@@ -109,7 +109,7 @@ pub fn section_init(
     if function_marker.is_some() {
         // Allow whitespace, newlines and comments between ()
         scanner.skip_all_whitespace();
-        
+
         if !scanner.take(')') {
             // Unclosed parenthesis - record error
             let error_span = scanner.span(start_pos);
@@ -119,7 +119,7 @@ pub fn section_init(
 
     scanner.skip_spaces();
     let colon = scanner.token(":");
-    
+
     // Report missing colon error if needed
     if colon.is_none() {
         let error_span = name.span();
@@ -148,74 +148,74 @@ mod test {
         t!("-- foo:", {"name": "foo"});
         t!("-- foo: ", {"name": "foo"}, " ");
         t!("-- foo: hello", {"name": "foo"}, " hello");
-        
+
         // With type/kind
         t!("-- integer foo: hello", {"name": "foo", "kind": "integer"}, " hello");
         t!("-- string msg:", {"name": "msg", "kind": "string"});
-        
+
         // Unicode identifiers
         t!("-- integer héllo: foo", {"name": "héllo", "kind": "integer"}, " foo");
-        t!("-- नाम: value", {"name": "नाम"}, " value");  // Devanagari "naam" (name)
-        
+        t!("-- नाम: value", {"name": "नाम"}, " value"); // Devanagari "naam" (name)
+
         // Function markers
         t!("-- foo():", {"function": "foo"});
         t!("-- integer foo():", {"function": "foo", "kind": "integer"});
-        t!("-- foo( ):", {"function": "foo"});  // Space inside parens
+        t!("-- foo( ):", {"function": "foo"}); // Space inside parens
         t!("-- foo(  ):", {"function": "foo"}); // Multiple spaces
         t!("-- foo(\n):", {"function": "foo"}); // Newline inside parens
         t!("-- foo(\n  \n):", {"function": "foo"}); // Multiple newlines and spaces
         t!("-- foo(;; comment\n):", {"function": "foo"}); // Comment inside parens
         t!("-- foo(\n  ;; a comment\n  ):", {"function": "foo"}); // Comment with whitespace
-        
+
         // Qualified names
         t!("-- ftd.text:", {"name": "ftd.text"});
         t!("-- module.component:", {"name": "module.component"});
         t!("-- package#name:", {"name": "package#name"});
-        
+
         // Missing colon (now allowed for error recovery)
-        t!("-- foo", {"name": "foo"});
-        t!("-- integer bar", {"name": "bar", "kind": "integer"});
-        t!("-- baz()", {"function": "baz"});
-        
+        t_err!("-- foo", {"name": "foo"}, "section_colon_missing");
+        t_err!("-- integer bar", {"name": "bar", "kind": "integer"}, "section_colon_missing");
+        t_err!("-- baz()", {"function": "baz"}, "section_colon_missing");
+
         // Extra spacing
         t!("--   foo  :", {"name": "foo"});
         t!("-- \t foo\t:", {"name": "foo"});
         t!("--  integer  foo  :", {"name": "foo", "kind": "integer"});
-        
+
         // Generic types (already supported!)
         t!("-- list<integer> foo:", {"name": "foo", "kind": {"name": "list", "args": ["integer"]}});
         t!("-- map<string, integer> data:", {"name": "data", "kind": {"name": "map", "args": ["string", "integer"]}});
         t!("-- option<string> maybe:", {"name": "maybe", "kind": {"name": "option", "args": ["string"]}});
-        
+
         // Partial parsing - stops at certain points
         t!("-- foo: bar\n", {"name": "foo"}, " bar\n");
         t!("-- foo: {expr}", {"name": "foo"}, " {expr}");
-        
+
         // No section marker at all - returns None
-        f!("foo:");       // No dashes at all
-        f!("");           // Empty input
+        f!("foo:"); // No dashes at all
+        f!(""); // Empty input
     }
-    
-    #[test] 
+
+    #[test]
     fn section_init_error_recovery() {
         // We need t_err! macro for these cases - parse with errors
         // Single dash - parse what we can, report error
         t_err!("- foo:", {"name": "foo"}, "dash_count_error");
         t_err!("- integer bar:", {"name": "bar", "kind": "integer"}, "dash_count_error");
-        
-        // Triple dash - parse what we can, report error  
+
+        // Triple dash - parse what we can, report error
         t_err!("--- foo:", {"name": "foo"}, "dash_count_error");
-        
+
         // Just dashes with no name - parse partial, report both missing name and colon
         t_err!("--", {}, ["missing_name", "section_colon_missing"]);
         t_err!("-- ", {}, ["missing_name", "section_colon_missing"]);
-        t_err!("--:", {}, "missing_name");  // Has colon, only missing name
-        t_err!("-- :", {}, "missing_name");  // Has colon, only missing name
-        
+        t_err!("--:", {}, "missing_name"); // Has colon, only missing name
+        t_err!("-- :", {}, "missing_name"); // Has colon, only missing name
+
         // Function marker without name - parse partial, report error
         t_err!("-- ():", {}, "missing_name");
         t_err!("-- ( ):", {}, "missing_name");
-        
+
         // Unclosed function marker - still treated as function with error
         t_err!("-- foo(:", {"function": "foo"}, "unclosed_paren");
         t_err!("-- foo( :", {"function": "foo"}, "unclosed_paren");

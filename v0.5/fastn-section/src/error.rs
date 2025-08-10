@@ -13,8 +13,8 @@ pub enum Error {
     /// we are looking for dash-dash, but found something else
     DashDashNotFound,
     KindedNameNotFound,
-    SectionColonMissing,  // Missing colon after section name: -- foo
-    HeaderColonMissing,   // Missing colon after header name: bar
+    SectionColonMissing, // Missing colon after section name: -- foo
+    HeaderColonMissing,  // Missing colon after header name: bar
     SectionNameNotFoundForEnd,
     EndContainsData,
     EndWithoutStart,

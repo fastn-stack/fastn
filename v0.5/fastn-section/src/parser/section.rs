@@ -115,8 +115,8 @@ fn parse_body_with_separator_check(
     let index = scanner.index();
     scanner.skip_spaces();
 
-    // Check if the next content is a new section (starts with --)
-    if scanner.token("--").is_some() {
+    // Check if the next content is a new section (starts with -- or /--)
+    if scanner.token("--").is_some() || scanner.token("/--").is_some() {
         // This is a new section, not body content
         scanner.reset(&index);
         return None;
@@ -369,8 +369,7 @@ mod test {
         // Error case: Headers followed by body without double newline
         // This should parse the section WITH body but also report an error
         // The body is parsed to allow subsequent sections to be parsed
-        // TODO: Verify that BodyWithoutDoubleNewline error is reported at the correct position
-        t!(
+        t_err!(
             "
             -- foo: Hello
             bar: baz
@@ -380,7 +379,8 @@ mod test {
                 "caption": ["Hello"],
                 "headers": [{"name": "bar", "value": ["baz"]}],
                 "body": ["This is invalid body"]
-            }
+            },
+            "body_without_double_newline"
         );
 
         // Section with no content after colon

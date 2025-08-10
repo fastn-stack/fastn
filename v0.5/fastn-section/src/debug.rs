@@ -21,9 +21,7 @@ impl fastn_section::JDebug for fastn_section::Document {
             // TODO: can we create a map with `&'static str` keys to avoid this to_string()?
             o.insert("module-doc".to_string(), self.module_doc.debug());
         }
-        if !self.errors.is_empty() {
-            o.insert("errors".to_string(), self.errors.debug());
-        }
+        // Don't include errors in debug output - they're checked separately in tests
         if !self.comments.is_empty() {
             o.insert("comments".to_string(), self.comments.debug());
         }
@@ -100,7 +98,7 @@ impl fastn_section::JDebug for fastn_section::Header {
 impl fastn_section::JDebug for fastn_section::SectionInit {
     fn debug(&self) -> serde_json::Value {
         let mut o = serde_json::Map::new();
-        
+
         // Check if name is empty (for error recovery cases)
         let name_str = self.name.to_string();
         if !name_str.is_empty() {
