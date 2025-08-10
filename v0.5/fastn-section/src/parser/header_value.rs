@@ -66,12 +66,20 @@ mod test {
         // Empty expression
         t!("{}", [{"expression": []}]);
 
-        // Unclosed brace - stops at the brace
-        t!("hello {world", ["hello "], "{world");
+        // Unclosed brace - now recovers by consuming content
+        t_err!(
+            "hello {world", 
+            ["hello ", {"expression": ["world"]}],
+            "unclosed_brace"
+        );
 
-        // Dollar expression - currently $ is just treated as text before {
-        // The Expression variant doesn't distinguish between {} and ${}
-        // This will be addressed in Step 5
-        t!("hello ${world}", ["hello $", {"expression": ["world"]}]);
+        // Dollar expression - now properly handled
+        t!("hello ${world}", ["hello ", {"$expression": ["world"]}]);
+
+        // Mixed expressions
+        t!("${a} and {b}", [{"$expression": ["a"]}, " and ", {"expression": ["b"]}]);
+
+        // Dollar without brace
+        t!("price: $100", ["price: $100"]);
     }
 }

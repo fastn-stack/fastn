@@ -208,6 +208,7 @@ pub enum Tes {
         start: usize,
         end: usize,
         content: HeaderValue,
+        is_dollar: bool,
     },
     Section(Vec<Section>),
 }

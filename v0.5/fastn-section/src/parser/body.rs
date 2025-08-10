@@ -22,13 +22,13 @@ pub fn body(
         // Save position to check ahead
         let check_index = s.index();
         s.skip_spaces();
-        
+
         // Check for section markers
         if s.one_of(&["-- ", "/--"]).is_some() {
             s.reset(&check_index);
             return true;
         }
-        
+
         // Check for doc comments (;;;)
         if s.peek() == Some(';') {
             let save = s.index();
@@ -43,17 +43,17 @@ pub fn body(
             }
             s.reset(&save);
         }
-        
+
         s.reset(&check_index);
         false
     };
-    
+
     let tes = fastn_section::parser::tes_till(scanner, &body_terminator);
-    
+
     if tes.is_empty() {
         return None;
     }
-    
+
     Some(fastn_section::HeaderValue(tes))
 }
 
@@ -160,56 +160,56 @@ mod test {
             ["Body content\n"],
             "    ;;; Indented doc comment\n-- section:"
         );
-        
+
         // Body with expression
         t!(
             "Hello {world}!",
             ["Hello ", {"expression": ["world"]}, "!"]
         );
-        
+
         // Body with multiple expressions
         t!(
             "Start {expr1} middle {expr2} end",
             ["Start ", {"expression": ["expr1"]}, " middle ", {"expression": ["expr2"]}, " end"]
         );
-        
+
         // Body with nested expressions
         t!(
             "Outer {inner {nested} text} more",
             ["Outer ", {"expression": ["inner ", {"expression": ["nested"]}, " text"]}, " more"]
         );
-        
+
         // Body with expression preserving leading whitespace
         t_raw!(
             "    Indented {expression} text",
             ["    Indented ", {"expression": ["expression"]}, " text"]
         );
-        
+
         // Body with expression across lines preserving indentation
         t_raw!(
             "Line one {expression\n    with indented\n        continuation} here",
             ["Line one ", {"expression": ["expression\n    with indented\n        continuation"]}, " here"]
         );
-        
+
         // Body with deeply indented expression
         t_raw!(
             "        Deep indent {expr} text\n    More content",
             ["        Deep indent ", {"expression": ["expr"]}, " text\n    More content"]
         );
-        
+
         // Body with tabs and spaces before expression
         t_raw!(
             "\t\tTabbed {content} here",
             ["\t\tTabbed ", {"expression": ["content"]}, " here"]
         );
-        
-        // Body with unclosed brace
-        t!(
-            "Text before {unclosed",
-            ["Text before "],
-            "{unclosed"
+
+        // Body with unclosed brace - now recovers
+        t_err!(
+            "Text before {unclosed", 
+            ["Text before ", {"expression": ["unclosed"]}],
+            "unclosed_brace"
         );
-        
+
         // Body with expression followed by section
         t!(
             "

@@ -165,9 +165,16 @@ impl fastn_section::JDebug for fastn_section::Tes {
     fn debug(&self) -> serde_json::Value {
         match self {
             fastn_section::Tes::Text(e) => e.debug(),
-            fastn_section::Tes::Expression { content, .. } => {
+            fastn_section::Tes::Expression {
+                content, is_dollar, ..
+            } => {
                 let mut o = serde_json::Map::new();
-                o.insert("expression".to_string(), content.0.debug());
+                let key = if *is_dollar {
+                    "$expression"
+                } else {
+                    "expression"
+                };
+                o.insert(key.to_string(), content.0.debug());
                 serde_json::Value::Object(o)
             }
             fastn_section::Tes::Section(e) => e.debug(),

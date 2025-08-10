@@ -91,10 +91,12 @@ fn header_value_ender(
                     start,
                     end,
                     content,
+                    is_dollar,
                 } => fastn_section::Tes::Expression {
                     start,
                     end,
                     content: header_value_ender(o, content),
+                    is_dollar,
                 },
                 fastn_section::Tes::Section(sections) => {
                     fastn_section::Tes::Section(ender(o, sections))
