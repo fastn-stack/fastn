@@ -449,3 +449,60 @@ color if { condition-two }: yellow
 ```
 
 **Note:** The condition is stored as a `HeaderValue` (which can contain text, expressions, and inline sections per TES grammar). The actual semantics of condition evaluation are handled by later stages of the fastn compiler.
+
+## 10. End Sections
+
+End sections are used to explicitly mark the end of a section's scope, creating hierarchical structures.
+
+```
+end_section = "-- end:" spaces caption
+```
+
+**Examples:**
+
+```ftd
+;; Basic usage
+-- foo: Parent section
+Some content
+
+-- bar: Child section
+Child content
+
+-- end: foo
+
+;; The above creates: foo contains bar as a child
+
+
+;; Nested sections with explicit ends
+-- outer: Outer section
+
+-- middle: Middle section
+
+-- inner: Inner section
+
+-- end: inner
+
+-- end: middle
+
+-- end: outer
+
+
+;; Commented end sections
+/-- end: foo  ;; This end section is commented out
+```
+
+**Processing:**
+
+End sections are parsed as regular sections with name "end" and the section name as caption. The `wiggin` module processes these after parsing to:
+
+1. Match each `-- end: name` with its corresponding `-- name:` section
+2. Sections between the start and end become children of the parent
+3. Report `EndWithoutStart` errors for unmatched end markers
+4. Set the `has_end` field to `true` on sections closed by end markers
+
+**Special Rules:**
+
+- End sections should only have a caption (the section name to close)
+- Additional headers or body content in end sections trigger errors
+- Commented sections do not match with end markers
+- End markers themselves are removed from the final structure
