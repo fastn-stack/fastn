@@ -32,20 +32,13 @@
 pub fn header_value(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Option<fastn_section::HeaderValue> {
-    let mut ses = Vec::new();
-    while let Some(text) = scanner.take_till_char_or_end_of_line('{') {
-        ses.push(fastn_section::Tes::Text(text));
-        if !scanner.take('{') {
-            // we have reached the end of the scanner
-            break;
-        }
-    }
+    let tes = fastn_section::parser::tes_till_newline(scanner);
 
-    if ses.is_empty() {
+    if tes.is_empty() {
         return None;
     }
 
-    Some(fastn_section::HeaderValue(ses))
+    Some(fastn_section::HeaderValue(tes))
 }
 
 #[cfg(test)]
@@ -54,8 +47,31 @@ mod test {
 
     #[test]
     fn tes() {
+        // Plain text
         t!("hello", ["hello"]);
         t!("hèllo", ["hèllo"]);
-        // t!("hello ${world}", [{ "text": "hello $" }, /* expression containing "world" */], "");
+
+        // Text with expression
+        t!("hello {world}", ["hello ", {"expression": ["world"]}]);
+
+        // Multiple expressions
+        t!("a {b} c", ["a ", {"expression": ["b"]}, " c"]);
+
+        // Nested expressions
+        t!("outer {inner {nested}}", [
+            "outer ",
+            {"expression": ["inner ", {"expression": ["nested"]}]}
+        ]);
+
+        // Empty expression
+        t!("{}", [{"expression": []}]);
+
+        // Unclosed brace - stops at the brace
+        t!("hello {world", ["hello "], "{world");
+
+        // Dollar expression - currently $ is just treated as text before {
+        // The Expression variant doesn't distinguish between {} and ${}
+        // This will be addressed in Step 5
+        t!("hello ${world}", ["hello $", {"expression": ["world"]}]);
     }
 }

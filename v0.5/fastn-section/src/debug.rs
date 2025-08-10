@@ -165,7 +165,11 @@ impl fastn_section::JDebug for fastn_section::Tes {
     fn debug(&self) -> serde_json::Value {
         match self {
             fastn_section::Tes::Text(e) => e.debug(),
-            fastn_section::Tes::Expression { content, .. } => content.debug(),
+            fastn_section::Tes::Expression { content, .. } => {
+                let mut o = serde_json::Map::new();
+                o.insert("expression".to_string(), content.0.debug());
+                serde_json::Value::Object(o)
+            }
             fastn_section::Tes::Section(e) => e.debug(),
         }
     }
@@ -211,6 +215,7 @@ fn error(e: &fastn_section::Error, _s: Option<fastn_section::Span>) -> serde_jso
         fastn_section::Error::UnexpectedCaption => "unexpected_caption",
         fastn_section::Error::InvalidPackageFile => "invalid_package_file",
         fastn_section::Error::BodyWithoutDoubleNewline => "body_without_double_newline",
+        fastn_section::Error::UnclosedBrace => "unclosed_brace",
         _ => todo!(),
     };
 

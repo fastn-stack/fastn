@@ -24,6 +24,8 @@ pub enum Error {
     BodyNotAllowed,
     /// Body content found without required double newline separator after headers
     BodyWithoutDoubleNewline,
+    /// Unclosed brace in expression
+    UnclosedBrace,
     ExtraArgumentFound,
     ArgumentValueRequired,
     ComponentIsNotAFunction,

@@ -245,7 +245,6 @@ impl std::fmt::Display for fastn_section::IdentifierReference {
     }
 }
 
-
 impl fastn_section::Section {
     pub fn with_name(
         name: fastn_section::Span,
