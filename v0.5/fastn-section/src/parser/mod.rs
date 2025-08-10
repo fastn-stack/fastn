@@ -1,4 +1,5 @@
 mod body;
+mod condition;
 mod doc_comment;
 mod header_value;
 mod headers;
@@ -16,6 +17,7 @@ mod visibility;
 pub mod test;
 
 pub use body::body;
+pub use condition::condition;
 pub use doc_comment::{module_doc_comment, regular_doc_comment};
 pub use header_value::header_value;
 pub use headers::headers;
