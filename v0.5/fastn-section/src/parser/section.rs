@@ -661,5 +661,136 @@ mod test {
                 "caption": ["Calculate"]
             }
         );
+
+        // Section with headers that have doc comments
+        t!(
+            "
+            -- foo: Section
+            ;;; Documentation for header1
+            header1: value1
+            ;;; Documentation for header2
+            header2: value2",
+            {
+                "init": {"name": "foo"},
+                "caption": ["Section"],
+                "headers": [
+                    {
+                        "name": "header1",
+                        "doc": ";;; Documentation for header1\n",
+                        "value": ["value1"]
+                    },
+                    {
+                        "name": "header2",
+                        "doc": ";;; Documentation for header2\n",
+                        "value": ["value2"]
+                    }
+                ]
+            }
+        );
+
+        // Section with doc comment and headers with doc comments
+        t!(
+            "
+            ;;; Section documentation
+            -- foo: Test
+            ;;; Header doc
+            param: value",
+            {
+                "init": {
+                    "name": "foo",
+                    "doc": ";;; Section documentation\n"
+                },
+                "caption": ["Test"],
+                "headers": [{
+                    "name": "param",
+                    "doc": ";;; Header doc\n",
+                    "value": ["value"]
+                }]
+            }
+        );
+
+        // Section with multi-line doc comments on headers
+        t!(
+            "
+            -- config: Settings
+            ;;; API endpoint URL
+            ;;; Should use HTTPS
+            endpoint: https://api.example.com
+            ;;; Timeout in seconds
+            ;;; Default is 30
+            timeout: 60",
+            {
+                "init": {"name": "config"},
+                "caption": ["Settings"],
+                "headers": [
+                    {
+                        "name": "endpoint",
+                        "doc": ";;; API endpoint URL\n;;; Should use HTTPS\n",
+                        "value": ["https://api.example.com"]
+                    },
+                    {
+                        "name": "timeout",
+                        "doc": ";;; Timeout in seconds\n;;; Default is 30\n",
+                        "value": ["60"]
+                    }
+                ]
+            }
+        );
+
+        // Section with commented headers that have doc comments
+        t!(
+            "
+            -- foo: Test
+            ;;; Active setting
+            active: true
+            ;;; Deprecated setting
+            /old: false",
+            {
+                "init": {"name": "foo"},
+                "caption": ["Test"],
+                "headers": [
+                    {
+                        "name": "active",
+                        "doc": ";;; Active setting\n",
+                        "value": ["true"]
+                    },
+                    {
+                        "name": "old",
+                        "doc": ";;; Deprecated setting\n",
+                        "is_commented": true,
+                        "value": ["false"]
+                    }
+                ]
+            }
+        );
+
+        // Section with headers having doc comments, types, and visibility
+        t!(
+            "
+            -- foo: Complex
+            ;;; Public configuration
+            public string config: production
+            ;;; Private key
+            private api_key: secret",
+            {
+                "init": {"name": "foo"},
+                "caption": ["Complex"],
+                "headers": [
+                    {
+                        "name": "config",
+                        "kind": "string",
+                        "visibility": "Public",
+                        "doc": ";;; Public configuration\n",
+                        "value": ["production"]
+                    },
+                    {
+                        "name": "api_key",
+                        "visibility": "Private",
+                        "doc": ";;; Private key\n",
+                        "value": ["secret"]
+                    }
+                ]
+            }
+        );
     }
 }

@@ -12,21 +12,39 @@ struct ParsedHeaderPrefix {
 fn parse_single_header(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Option<fastn_section::Header> {
-    let index = scanner.index();
+    let start_index = scanner.index();
+
+    // Check for doc comments before the header
+    let doc = fastn_section::parser::doc_comment(scanner);
+
     scanner.skip_spaces();
 
+    // Save position after doc comment and spaces
+    let header_start = scanner.index();
+
     // Parse the header prefix (comment marker, visibility, name)
-    let prefix = match parse_header_prefix(scanner, &index) {
+    let prefix = match parse_header_prefix(scanner, &header_start) {
         Some(p) => p,
         None => {
-            scanner.reset(&index);
+            // If we found a doc comment but no header follows, that's an error
+            if let Some(doc_span) = doc {
+                scanner.add_error(doc_span, fastn_section::Error::UnexpectedDocComment);
+            } else {
+                // No doc comment and no header, reset to original position
+                scanner.reset(&start_index);
+            }
             return None;
         }
     };
 
     // Expect a colon after the name
     if scanner.token(":").is_none() {
-        scanner.reset(&index);
+        // If we found a doc comment but the header is malformed, that's an error
+        if let Some(doc_span) = doc {
+            scanner.add_error(doc_span, fastn_section::Error::UnexpectedDocComment);
+        } else {
+            scanner.reset(&start_index);
+        }
         return None;
     }
 
@@ -37,7 +55,7 @@ fn parse_single_header(
     Some(fastn_section::Header {
         name: prefix.kinded_name.name,
         kind: prefix.kinded_name.kind,
-        doc: None, // TODO: implement doc comments
+        doc,
         visibility: prefix.visibility,
         condition: None, // TODO: implement conditions
         value,
@@ -173,7 +191,13 @@ pub fn headers(
         // Try to parse a single header
         match parse_single_header(scanner) {
             Some(header) => headers.push(header),
-            None => break,
+            None => {
+                // If this was the first header attempt and it failed, reset
+                if headers.is_empty() {
+                    scanner.reset(&index);
+                }
+                break;
+            }
         }
 
         // Track newline position for proper termination
@@ -670,5 +694,164 @@ mod test {
             "is_commented": true,
             "value": ["this is a value"]
         }]);
+
+        // Header with doc comment
+        t!(
+            "
+            ;;; This is documentation for name
+            name: John",
+            [{
+                "name": "name",
+                "doc": ";;; This is documentation for name\n",
+                "value": ["John"]
+            }]
+        );
+
+        // Multiple headers with doc comments
+        t!(
+            "
+            ;;; User's full name
+            name: Alice
+            ;;; User's age in years
+            age: 25",
+            [
+                {
+                    "name": "name",
+                    "doc": ";;; User's full name\n",
+                    "value": ["Alice"]
+                },
+                {
+                    "name": "age",
+                    "doc": ";;; User's age in years\n",
+                    "value": ["25"]
+                }
+            ]
+        );
+
+        // Header with multi-line doc comment
+        t!(
+            "
+            ;;; API key for authentication
+            ;;; Should be kept secret
+            ;;; Rotate every 90 days
+            api_key: sk_123456",
+            [{
+                "name": "api_key",
+                "doc": ";;; API key for authentication\n;;; Should be kept secret\n;;; Rotate every 90 days\n",
+                "value": ["sk_123456"]
+            }]
+        );
+
+        // Header with doc comment and type
+        t!(
+            "
+            ;;; Configuration value
+            string config: production",
+            [{
+                "name": "config",
+                "kind": "string",
+                "doc": ";;; Configuration value\n",
+                "value": ["production"]
+            }]
+        );
+
+        // Header with doc comment and visibility
+        t!(
+            "
+            ;;; Public API endpoint
+            public endpoint: /api/v1",
+            [{
+                "name": "endpoint",
+                "visibility": "Public",
+                "doc": ";;; Public API endpoint\n",
+                "value": ["/api/v1"]
+            }]
+        );
+
+        // Header with doc comment, visibility, and type
+        t!(
+            "
+            ;;; List of supported features
+            public list<string> features: auth, logging",
+            [{
+                "name": "features",
+                "kind": {"name": "list", "args": ["string"]},
+                "visibility": "Public",
+                "doc": ";;; List of supported features\n",
+                "value": ["auth, logging"]
+            }]
+        );
+
+        // Commented header with doc comment
+        t!(
+            "
+            ;;; Deprecated setting
+            /old_config: value",
+            [{
+                "name": "old_config",
+                "is_commented": true,
+                "doc": ";;; Deprecated setting\n",
+                "value": ["value"]
+            }]
+        );
+
+        // Mixed headers with and without doc comments
+        t!(
+            "
+            ;;; Main configuration
+            config: value1
+            simple: value2
+            ;;; Another documented header
+            documented: value3",
+            [
+                {
+                    "name": "config",
+                    "doc": ";;; Main configuration\n",
+                    "value": ["value1"]
+                },
+                {
+                    "name": "simple",
+                    "value": ["value2"]
+                },
+                {
+                    "name": "documented",
+                    "doc": ";;; Another documented header\n",
+                    "value": ["value3"]
+                }
+            ]
+        );
+
+        // Header with empty value and doc comment
+        t!(
+            "
+            ;;; Optional field
+            optional:",
+            [{
+                "name": "optional",
+                "doc": ";;; Optional field\n"
+            }]
+        );
+
+        // Doc comment with special characters in documentation
+        t!(
+            "
+            ;;; Price in USD ($)
+            ;;; Use format: $XX.XX
+            price: $19.99",
+            [{
+                "name": "price",
+                "doc": ";;; Price in USD ($)\n;;; Use format: $XX.XX\n",
+                "value": ["$19.99"]
+            }]
+        );
+
+        // Orphaned doc comment (no header after doc comment) - should return None
+        // Test with raw strings to avoid indoc issues
+        f_raw!(";;; This doc comment has no header\n");
+        f_raw!("    ;;; This doc comment has no header\n    ");
+
+        // Orphaned doc comment followed by invalid header (missing colon)
+        f_raw!(";;; Documentation\nno_colon");
+        f_raw!("    ;;; Documentation\n    no_colon");
     }
 }
