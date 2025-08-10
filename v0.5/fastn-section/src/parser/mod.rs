@@ -23,7 +23,7 @@ pub use kinded_name::kinded_name;
 pub use kinded_reference::kinded_reference;
 pub use section::section;
 pub use section_init::section_init;
-pub use tes::tes_till_newline;
+pub use tes::{tes_till, tes_till_newline};
 pub use visibility::visibility;
 
 impl fastn_section::Document {

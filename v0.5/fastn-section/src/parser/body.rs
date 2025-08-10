@@ -9,7 +9,7 @@
 /// ```text
 /// body = (text | expression)*
 /// text = <any content except '{' or section markers>
-/// expression = '{' ... '}' (not yet implemented)
+/// expression = '{' ... '}'
 /// ```
 ///
 /// # Returns
@@ -17,61 +17,44 @@
 pub fn body(
     scanner: &mut fastn_section::Scanner<fastn_section::Document>,
 ) -> Option<fastn_section::HeaderValue> {
-    let mut ses = Vec::new();
-    let start = scanner.index();
-    let mut reset_index = scanner.index();
-    loop {
-        // Check for section markers or doc comments, allowing for leading spaces
-        let check_index = scanner.index();
-        scanner.skip_spaces();
-
+    // Create a terminator that stops at section markers or doc comments
+    let body_terminator = |s: &mut fastn_section::Scanner<fastn_section::Document>| {
+        // Save position to check ahead
+        let check_index = s.index();
+        s.skip_spaces();
+        
         // Check for section markers
-        if scanner.one_of(&["-- ", "/--"]).is_some() {
-            scanner.reset(&check_index);
-            break;
+        if s.one_of(&["-- ", "/--"]).is_some() {
+            s.reset(&check_index);
+            return true;
         }
-
+        
         // Check for doc comments (;;;)
-        if scanner.peek() == Some(';') {
-            let save = scanner.index();
-            scanner.pop();
-            if scanner.peek() == Some(';') {
-                scanner.pop();
-                if scanner.peek() == Some(';') {
-                    // Found doc comment, stop body here
-                    scanner.reset(&check_index);
-                    break;
+        if s.peek() == Some(';') {
+            let save = s.index();
+            s.pop();
+            if s.peek() == Some(';') {
+                s.pop();
+                if s.peek() == Some(';') {
+                    // Found doc comment
+                    s.reset(&check_index);
+                    return true;
                 }
             }
-            scanner.reset(&save);
+            s.reset(&save);
         }
-
-        scanner.reset(&check_index);
-
-        scanner.take_till_char_or_end_of_line('{');
-
-        if scanner.peek() == Some('{') {
-            todo!(); // Expression support to be implemented
-        }
-
-        if !scanner.take('\n') {
-            // we have reached the end of the scanner
-            ses.push(fastn_section::Tes::Text(scanner.span(start)));
-            return Some(fastn_section::HeaderValue(ses));
-        }
-
-        reset_index = scanner.index();
+        
+        s.reset(&check_index);
+        false
+    };
+    
+    let tes = fastn_section::parser::tes_till(scanner, &body_terminator);
+    
+    if tes.is_empty() {
+        return None;
     }
-
-    scanner.reset(&reset_index);
-
-    // Only return body if we actually have content
-    if reset_index != start {
-        ses.push(fastn_section::Tes::Text(scanner.span(start)));
-        Some(fastn_section::HeaderValue(ses))
-    } else {
-        None
-    }
+    
+    Some(fastn_section::HeaderValue(tes))
 }
 
 #[cfg(test)]
@@ -176,6 +159,64 @@ mod test {
             -- section:",
             ["Body content\n"],
             "    ;;; Indented doc comment\n-- section:"
+        );
+        
+        // Body with expression
+        t!(
+            "Hello {world}!",
+            ["Hello ", {"expression": ["world"]}, "!"]
+        );
+        
+        // Body with multiple expressions
+        t!(
+            "Start {expr1} middle {expr2} end",
+            ["Start ", {"expression": ["expr1"]}, " middle ", {"expression": ["expr2"]}, " end"]
+        );
+        
+        // Body with nested expressions
+        t!(
+            "Outer {inner {nested} text} more",
+            ["Outer ", {"expression": ["inner ", {"expression": ["nested"]}, " text"]}, " more"]
+        );
+        
+        // Body with expression preserving leading whitespace
+        t_raw!(
+            "    Indented {expression} text",
+            ["    Indented ", {"expression": ["expression"]}, " text"]
+        );
+        
+        // Body with expression across lines preserving indentation
+        t_raw!(
+            "Line one {expression\n    with indented\n        continuation} here",
+            ["Line one ", {"expression": ["expression\n    with indented\n        continuation"]}, " here"]
+        );
+        
+        // Body with deeply indented expression
+        t_raw!(
+            "        Deep indent {expr} text\n    More content",
+            ["        Deep indent ", {"expression": ["expr"]}, " text\n    More content"]
+        );
+        
+        // Body with tabs and spaces before expression
+        t_raw!(
+            "\t\tTabbed {content} here",
+            ["\t\tTabbed ", {"expression": ["content"]}, " here"]
+        );
+        
+        // Body with unclosed brace
+        t!(
+            "Text before {unclosed",
+            ["Text before "],
+            "{unclosed"
+        );
+        
+        // Body with expression followed by section
+        t!(
+            "
+            Text {expr} more
+            -- next:",
+            ["Text ", {"expression": ["expr"]}, " more\n"],
+            "-- next:"
         );
     }
 }
