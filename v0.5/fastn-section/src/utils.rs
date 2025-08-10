@@ -107,7 +107,11 @@ impl fastn_section::Section {
         self.headers
             .iter()
             .find(|h| h.name() == name)
-            .and_then(|h| h.value.as_plain_span())
+            .and_then(|h| {
+                // For now, just get the first value (we currently only create one)
+                // TODO: When we implement conditions, this should return the default/unconditional value
+                h.values.first().and_then(|v| v.value.as_plain_span())
+            })
     }
 }
 

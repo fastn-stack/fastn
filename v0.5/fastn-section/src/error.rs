@@ -33,6 +33,8 @@ pub enum Error {
     MissingName,
     /// Unclosed parenthesis in function marker
     UnclosedParen,
+    /// Inline sections (-- syntax) are not allowed inside condition expressions
+    SectionNotAllowedInCondition,
     ExtraArgumentFound,
     ArgumentValueRequired,
     ComponentIsNotAFunction,

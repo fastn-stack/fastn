@@ -57,7 +57,14 @@ fn section_ender(
         .headers
         .into_iter()
         .map(|mut h| {
-            h.value = header_value_ender(o, h.value);
+            h.values = h
+                .values
+                .into_iter()
+                .map(|mut v| {
+                    v.value = header_value_ender(o, v.value);
+                    v
+                })
+                .collect();
             h
         })
         .collect();

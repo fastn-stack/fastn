@@ -155,14 +155,19 @@ pub struct SectionInit {
 }
 
 #[derive(Debug, PartialEq, Clone)]
+pub struct ConditionalValue {
+    pub condition: Option<fastn_section::HeaderValue>,
+    pub value: fastn_section::HeaderValue,
+    pub is_commented: bool,
+}
+
+#[derive(Debug, PartialEq, Clone)]
 pub struct Header {
     pub name: fastn_section::Identifier,
     pub kind: Option<fastn_section::Kind>,
     pub doc: Option<fastn_section::Span>,
     pub visibility: Option<fastn_section::Spanned<fastn_section::Visibility>>,
-    pub condition: Option<fastn_section::Span>,
-    pub value: fastn_section::HeaderValue,
-    pub is_commented: bool,
+    pub values: Vec<fastn_section::ConditionalValue>,
 }
 
 // Note: doc and visibility technically do not belong to Kind, but we are keeping them here

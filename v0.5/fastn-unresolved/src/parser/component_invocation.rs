@@ -15,13 +15,16 @@ pub(super) fn component_invocation(
         let mut properties = vec![];
         for header in section.headers {
             // Todo: check header should not have kind and visibility etc
-            // Todo handle condition
-            properties.push(fastn_unresolved::UR::UnResolved(
-                fastn_unresolved::Property {
-                    name: header.name,
-                    value: header.value,
-                },
-            ))
+            // Todo handle condition - for now just take the first value
+            // In the future, we'll need to handle multiple conditional values
+            if let Some(first_value) = header.values.first() {
+                properties.push(fastn_unresolved::UR::UnResolved(
+                    fastn_unresolved::Property {
+                        name: header.name,
+                        value: first_value.value.clone(),
+                    },
+                ))
+            }
         }
         properties
     };

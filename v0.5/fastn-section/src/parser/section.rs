@@ -168,7 +168,7 @@ mod test {
                 "caption": ["Hello World"],
                 "headers": [{
                     "name": "greeting",
-                    "value": ["hello"]
+                    "values": ["hello"]
                 }]
             }
         );
@@ -185,11 +185,11 @@ mod test {
                 "headers": [
                     {
                         "name": "greeting",
-                        "value": ["hello"]
+                        "values": ["hello"]
                     },
                     {
                         "name": "wishes",
-                        "value": ["Be happy"]
+                        "values": ["Be happy"]
                     }
                 ]
             }
@@ -232,7 +232,7 @@ mod test {
                 "caption": ["Hello World"],
                 "headers": [{
                     "name": "greeting",
-                    "value": ["hello"]
+                    "values": ["hello"]
                 }],
                 "body": ["My greetings to world!"]
             }
@@ -261,7 +261,7 @@ mod test {
                 "caption": ["Shopping List"],
                 "headers": [{
                     "name": "count",
-                    "value": ["5"]
+                    "values": ["5"]
                 }]
             }
         );
@@ -276,7 +276,7 @@ mod test {
                 "caption": ["Hello World"],
                 "headers": [{
                     "name": "color",
-                    "value": ["red"]
+                    "values": ["red"]
                 }]
             }
         );
@@ -290,7 +290,7 @@ mod test {
                 "init": {"function": "foo"},
                 "headers": [{
                     "name": "param",
-                    "value": ["value"]
+                    "values": ["value"]
                 }]
             }
         );
@@ -306,7 +306,7 @@ mod test {
                 "caption": ["Caption"],
                 "headers": [
                     {"name": "empty"},
-                    {"name": "filled", "value": ["value"]}
+                    {"name": "filled", "values": ["value"]}
                 ]
             }
         );
@@ -320,8 +320,8 @@ mod test {
             {
                 "init": {"name": "foo"},
                 "headers": [
-                    {"name": "name", "kind": "string", "value": ["John"]},
-                    {"name": "age", "kind": "integer", "value": ["30"]}
+                    {"name": "name", "kind": "string", "values": ["John"]},
+                    {"name": "age", "kind": "integer", "values": ["30"]}
                 ]
             }
         );
@@ -377,7 +377,7 @@ mod test {
             {
                 "init": {"name": "foo"},
                 "caption": ["Hello"],
-                "headers": [{"name": "bar", "value": ["baz"]}],
+                "headers": [{"name": "bar", "values": ["baz"]}],
                 "body": ["This is invalid body"]
             },
             "body_without_double_newline"
@@ -408,8 +408,8 @@ mod test {
             {
                 "init": {"name": "foo"},
                 "headers": [
-                    {"name": "नाम", "value": ["राम"]},
-                    {"name": "名前", "value": ["太郎"]}
+                    {"name": "नाम", "values": ["राम"]},
+                    {"name": "名前", "values": ["太郎"]}
                 ]
             }
         );
@@ -432,8 +432,8 @@ mod test {
                 "caption": ["Caption"],
                 "is_commented": true,
                 "headers": [
-                    {"name": "header1", "value": ["value1"]},
-                    {"name": "header2", "value": ["value2"]}
+                    {"name": "header1", "values": ["value1"]},
+                    {"name": "header2", "values": ["value2"]}
                 ]
             }
         );
@@ -463,7 +463,7 @@ mod test {
                 "init": {"name": "foo"},
                 "caption": ["Complete"],
                 "is_commented": true,
-                "headers": [{"name": "prop", "value": ["value"]}],
+                "headers": [{"name": "prop", "values": ["value"]}],
                 "body": ["Body content here"]
             }
         );
@@ -511,8 +511,8 @@ mod test {
                 "caption": ["Section"],
                 "is_commented": true,
                 "headers": [
-                    {"name": "header1", "value": ["also commented"], "is_commented": true},
-                    {"name": "header2", "value": ["normal"]}
+                    {"name": "header1", "values": [{"is_commented": true, "value": ["also commented"]}]},
+                    {"name": "header2", "values": ["normal"]}
                 ]
             }
         );
@@ -568,8 +568,8 @@ mod test {
                 },
                 "caption": ["Caption"],
                 "headers": [
-                    {"name": "header1", "value": ["value1"]},
-                    {"name": "header2", "value": ["value2"]}
+                    {"name": "header1", "values": ["value1"]},
+                    {"name": "header2", "values": ["value2"]}
                 ]
             }
         );
@@ -678,12 +678,12 @@ mod test {
                     {
                         "name": "header1",
                         "doc": ";;; Documentation for header1\n",
-                        "value": ["value1"]
+                        "values": ["value1"]
                     },
                     {
                         "name": "header2",
                         "doc": ";;; Documentation for header2\n",
-                        "value": ["value2"]
+                        "values": ["value2"]
                     }
                 ]
             }
@@ -705,7 +705,7 @@ mod test {
                 "headers": [{
                     "name": "param",
                     "doc": ";;; Header doc\n",
-                    "value": ["value"]
+                    "values": ["value"]
                 }]
             }
         );
@@ -727,12 +727,12 @@ mod test {
                     {
                         "name": "endpoint",
                         "doc": ";;; API endpoint URL\n;;; Should use HTTPS\n",
-                        "value": ["https://api.example.com"]
+                        "values": ["https://api.example.com"]
                     },
                     {
                         "name": "timeout",
                         "doc": ";;; Timeout in seconds\n;;; Default is 30\n",
-                        "value": ["60"]
+                        "values": ["60"]
                     }
                 ]
             }
@@ -753,13 +753,12 @@ mod test {
                     {
                         "name": "active",
                         "doc": ";;; Active setting\n",
-                        "value": ["true"]
+                        "values": ["true"]
                     },
                     {
                         "name": "old",
                         "doc": ";;; Deprecated setting\n",
-                        "is_commented": true,
-                        "value": ["false"]
+                        "values": [{"is_commented": true, "value": ["false"]}]
                     }
                 ]
             }
@@ -782,13 +781,13 @@ mod test {
                         "kind": "string",
                         "visibility": "Public",
                         "doc": ";;; Public configuration\n",
-                        "value": ["production"]
+                        "values": ["production"]
                     },
                     {
                         "name": "api_key",
                         "visibility": "Private",
                         "doc": ";;; Private key\n",
-                        "value": ["secret"]
+                        "values": ["secret"]
                     }
                 ]
             }

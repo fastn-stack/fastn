@@ -664,7 +664,7 @@ mod test {
             [{"section": [{
                 "init": {"name": "foo"},
                 "caption": ["caption"],
-                "headers": [{"name": "bar", "value": ["value"]}],
+                "headers": [{"name": "bar", "values": ["value"]}],
                 "body": ["body"]
             }]}]
         );

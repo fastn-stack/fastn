@@ -69,6 +69,31 @@ impl fastn_section::JDebug for fastn_section::Section {
     }
 }
 
+impl fastn_section::JDebug for fastn_section::ConditionalValue {
+    fn debug(&self) -> serde_json::Value {
+        // Special case: if this is just an empty value with no condition and not commented,
+        // return an empty object (will be filtered out by Header's debug)
+        if self.condition.is_none() && self.value.0.is_empty() && !self.is_commented {
+            return serde_json::Value::Object(serde_json::Map::new());
+        }
+
+        let mut o = serde_json::Map::new();
+        if let Some(condition) = &self.condition {
+            // Only include condition if it's not empty
+            if !condition.0.is_empty() {
+                o.insert("condition".into(), condition.debug());
+            }
+        }
+        if !self.value.0.is_empty() {
+            o.insert("value".into(), self.value.debug());
+        }
+        if self.is_commented {
+            o.insert("is_commented".into(), self.is_commented.into());
+        }
+        serde_json::Value::Object(o)
+    }
+}
+
 impl fastn_section::JDebug for fastn_section::Header {
     fn debug(&self) -> serde_json::Value {
         let mut o = serde_json::Map::new();
@@ -82,14 +107,32 @@ impl fastn_section::JDebug for fastn_section::Header {
         if let Some(visibility) = &self.visibility {
             o.insert("visibility".into(), visibility.value.debug());
         }
-        if let Some(condition) = &self.condition {
-            o.insert("condition".into(), condition.debug());
-        }
-        if !self.value.0.is_empty() {
-            o.insert("value".into(), self.value.debug());
-        }
-        if self.is_commented {
-            o.insert("is_commented".into(), self.is_commented.into());
+        
+        // Simplify output when there's only one unconditional, uncommented value
+        if self.values.len() == 1 {
+            let v = &self.values[0];
+            if v.condition.is_none() && !v.is_commented && !v.value.0.is_empty() {
+                // Simple case: just show the value directly
+                o.insert("values".into(), v.value.debug());
+            } else if !v.value.0.is_empty() || v.condition.is_some() || v.is_commented {
+                // Single value but with condition or comment - show as single object
+                o.insert("values".into(), serde_json::Value::Array(vec![v.debug()]));
+            }
+        } else {
+            // Multiple values or complex cases - show as array
+            let non_empty_values: Vec<_> = self
+                .values
+                .iter()
+                .filter(|v| {
+                    // Keep if it has a condition, has a non-empty value, or is commented
+                    v.condition.is_some() || !v.value.0.is_empty() || v.is_commented
+                })
+                .map(|v| v.debug())
+                .collect();
+
+            if !non_empty_values.is_empty() {
+                o.insert("values".into(), serde_json::Value::Array(non_empty_values));
+            }
         }
         serde_json::Value::Object(o)
     }
@@ -234,6 +277,7 @@ fn error(e: &fastn_section::Error, _s: Option<fastn_section::Span>) -> serde_jso
         fastn_section::Error::DashCountError => "dash_count_error",
         fastn_section::Error::MissingName => "missing_name",
         fastn_section::Error::UnclosedParen => "unclosed_paren",
+        fastn_section::Error::SectionNotAllowedInCondition => "section_not_allowed_in_condition",
         _ => todo!(),
     };
 
