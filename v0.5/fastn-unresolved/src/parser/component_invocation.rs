@@ -67,23 +67,23 @@ mod tests {
 
     #[test]
     fn component_invocation() {
-        t!("-- ftd.text: hello", {"content": "ftd.text", "caption": ["hello"]});
+        t!("-- ftd.text: hello", {"content": "ftd.text", "caption": "hello"});
         t!(
             "-- ftd.text: hello\ncolor: red",
             {
                 "content": "ftd.text",
-                "caption": ["hello"],
-                "properties": [{"name": "color", "value": ["red"]}]
+                "caption": "hello",
+                "properties": [{"name": "color", "value": "red"}]
             }
         );
         t!(
             "-- ftd.text: hello\ncolor: red\nstyle: bold",
             {
                 "content": "ftd.text",
-                "caption": ["hello"],
+                "caption": "hello",
                 "properties": [
-                    {"name": "color", "value": ["red"]},
-                    {"name": "style", "value": ["bold"]}
+                    {"name": "color", "value": "red"},
+                    {"name": "style", "value": "bold"}
                 ]
             }
         );
