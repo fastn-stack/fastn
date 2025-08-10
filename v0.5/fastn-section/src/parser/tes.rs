@@ -294,56 +294,59 @@ fn parse_inline_section(
             };
 
             // Skip to next line if we're at a newline
-            scanner.take('\n');
+            let consumed_first_newline = scanner.take('\n');
 
             // Parse headers - stop at double newline, '}', or next section
             let mut headers = Vec::new();
-            while scanner.peek() != Some('}') && scanner.peek().is_some() {
-                // Check for double newline (body separator)
-                if scanner.peek() == Some('\n') {
-                    // We're at a newline, check if it's a double newline
-                    let check_pos = scanner.index();
-                    scanner.take('\n');
+            let mut found_body_separator = false;
+
+            // Check if we have a body separator (empty line)
+            // We already consumed one newline, check if there's another
+            if consumed_first_newline && scanner.peek() == Some('\n') {
+                scanner.take('\n'); // Consume the second newline (empty line)
+                found_body_separator = true;
+            }
+
+            // Only try to parse headers if we didn't find a body separator
+            if !found_body_separator {
+                while scanner.peek() != Some('}') && scanner.peek().is_some() {
+                    // Check for double newline (body separator)
                     if scanner.peek() == Some('\n') {
-                        // Found double newline - reset and break to parse body
-                        scanner.reset(&check_pos);
-                        break;
+                        // We're at a newline, check if it's a double newline
+                        scanner.take('\n');
+                        if scanner.peek() == Some('\n') {
+                            // Found double newline - consume it and mark for body parsing
+                            scanner.take('\n');
+                            found_body_separator = true;
+                            break;
+                        }
+                        // Single newline - could be before a header
+                        // Continue to check for headers
                     }
-                    // Single newline - could be before a header
-                    // Continue to check for headers
-                }
 
-                // Check for next section
-                scanner.skip_spaces();
-                if scanner.peek() == Some('-') {
-                    let save = scanner.index();
-                    scanner.pop();
+                    // Check for next section
+                    scanner.skip_spaces();
                     if scanner.peek() == Some('-') {
-                        // Found next section
+                        let save = scanner.index();
+                        scanner.pop();
+                        if scanner.peek() == Some('-') {
+                            // Found next section
+                            scanner.reset(&save);
+                            break;
+                        }
                         scanner.reset(&save);
+                    }
+
+                    // Try to parse a header
+                    if let Some(header) = fastn_section::parser::headers(scanner) {
+                        headers.extend(header);
+                    } else {
                         break;
                     }
-                    scanner.reset(&save);
-                }
-
-                // Try to parse a header
-                if let Some(header) = fastn_section::parser::headers(scanner) {
-                    headers.extend(header);
-                } else {
-                    break;
                 }
             }
 
-            // Parse body if there's a double newline
-            let check_newline = scanner.index();
-            let has_double_newline = scanner.take('\n') && scanner.peek() == Some('\n');
-            if has_double_newline {
-                scanner.take('\n'); // consume second newline
-            } else {
-                scanner.reset(&check_newline); // reset if no double newline
-            }
-
-            let body = if has_double_newline {
+            let body = if found_body_separator {
                 // Parse body until '}' or next section
                 let body_terminator = |s: &mut fastn_section::Scanner<fastn_section::Document>| {
                     if s.peek() == Some('}') {
@@ -616,14 +619,12 @@ mod test {
             ]}]
         );
 
-        // Inline section with body - FIXME: body parsing not working yet
-        // t!(
-        //     "
-        //     {-- foo: caption
-        //
-        //     body content}",
-        //     [{"section": [{"init": {"name": "foo"}, "caption": ["caption"], "body": ["body content"]}]}]
-        // );
+        // Inline section with body - the newline after caption is important
+        // After "foo: caption" we have \n, then another \n for empty line, then body
+        t_raw!(
+            "{-- foo: caption\n\nbody content}",
+            [{"section": [{"init": {"name": "foo"}, "caption": ["caption"], "body": ["body content"]}]}]
+        );
 
         // Mixed expression and inline section
         t!(
@@ -657,37 +658,30 @@ mod test {
         //     }]}]
         // );
 
-        // // Inline section with headers - TODO
-        // t!(
-        //     "
-        //     {-- foo: caption
-        //     bar: value
-        //
-        //     body}",
-        //     [{"section": [{
-        //         "init": {"name": "foo"},
-        //         "caption": ["caption"],
-        //         "headers": [{"name": "bar", "value": ["value"]}],
-        //         "body": ["body"]
-        //     }]}]
-        // );
+        // Inline section with headers
+        t_raw!(
+            "{-- foo: caption\nbar: value\n\nbody}",
+            [{"section": [{
+                "init": {"name": "foo"},
+                "caption": ["caption"],
+                "headers": [{"name": "bar", "value": ["value"]}],
+                "body": ["body"]
+            }]}]
+        );
 
-        // // Nested inline sections in body - TODO
-        // t!(
-        //     "
-        //     {-- outer: title
-        //
-        //     Body with {-- nested: inline section} inside}",
-        //     [{"section": [{
-        //         "init": {"name": "outer"},
-        //         "caption": ["title"],
-        //         "body": [
-        //             "Body with ",
-        //             {"section": [{"init": {"name": "nested"}, "caption": ["inline section"]}]},
-        //             " inside"
-        //         ]
-        //     }]}]
-        // );
+        // Nested inline sections in body
+        t_raw!(
+            "{-- outer: title\n\nBody with {-- nested: inline section} inside}",
+            [{"section": [{
+                "init": {"name": "outer"},
+                "caption": ["title"],
+                "body": [
+                    "Body with ",
+                    {"section": [{"init": {"name": "nested"}, "caption": ["inline section"]}]},
+                    " inside"
+                ]
+            }]}]
+        );
     }
 
     #[test]
