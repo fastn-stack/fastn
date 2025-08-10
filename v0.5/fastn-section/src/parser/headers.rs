@@ -26,7 +26,7 @@ fn parse_single_header(
     let start_index = scanner.index();
 
     // Check for doc comments before the header
-    let doc = fastn_section::parser::doc_comment(scanner);
+    let doc = fastn_section::parser::regular_doc_comment(scanner);
 
     // Save position after doc comment but before skipping spaces
     let after_doc = scanner.index();

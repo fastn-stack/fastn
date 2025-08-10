@@ -44,7 +44,7 @@ pub fn section(
     let start_pos = scanner.index();
 
     // Check for doc comments before section
-    let doc = fastn_section::parser::doc_comment(scanner);
+    let doc = fastn_section::parser::regular_doc_comment(scanner);
 
     // Check for comment marker before section
     scanner.skip_spaces();

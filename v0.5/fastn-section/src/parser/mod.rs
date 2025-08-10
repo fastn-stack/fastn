@@ -16,7 +16,7 @@ mod visibility;
 pub mod test;
 
 pub use body::body;
-pub use doc_comment::doc_comment;
+pub use doc_comment::{module_doc_comment, regular_doc_comment};
 pub use header_value::header_value;
 pub use headers::headers;
 pub use identifier::identifier;
@@ -54,8 +54,13 @@ impl fastn_section::Document {
 }
 
 pub fn document(scanner: &mut fastn_section::Scanner<fastn_section::Document>) {
-    // TODO: parse module_doc, comments etc
+    // Parse module-level documentation at the start of the file
     scanner.skip_spaces();
+    scanner.output.module_doc = fastn_section::parser::module_doc_comment(scanner);
+    scanner.skip_spaces();
+    scanner.skip_new_lines();
+    scanner.skip_spaces();
+
     loop {
         // Try to parse a section (which will handle its own doc comments)
         if let Some(section) = fastn_section::parser::section(scanner) {
@@ -65,7 +70,7 @@ pub fn document(scanner: &mut fastn_section::Scanner<fastn_section::Document>) {
             scanner.skip_spaces();
         } else {
             // No section found - check if there's an orphaned doc comment
-            if let Some(doc_span) = fastn_section::parser::doc_comment(scanner) {
+            if let Some(doc_span) = fastn_section::parser::regular_doc_comment(scanner) {
                 // Orphaned doc comment - report error
                 scanner.add_error(doc_span, fastn_section::Error::UnexpectedDocComment);
                 scanner.skip_spaces();
@@ -92,6 +97,22 @@ mod document_tests {
     fastn_section::tt!(doc);
     #[test]
     fn document() {
+        // Document with module doc
+        t!(
+            ";-; This is a module doc
+            ;-; It describes the entire file
+
+            -- foo: Hello World",
+            {
+                "module-doc": ";-; This is a module doc\n;-; It describes the entire file\n",
+                "sections": [{
+                    "init": {"name": "foo"},
+                    "caption": ["Hello World"]
+                }]
+            }
+        );
+
+        // Document without module doc
         t!(
             "-- foo: Hello World",
             {
