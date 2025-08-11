@@ -1297,7 +1297,7 @@ skip: true
 - Using Custom Breakpoints: /breakpoint/
   document: blog/breakpoint.ftd
 
-# Hire Us: /consulting/
+# Hire Us!: /consulting/
 
 # dev: /d/
   skip: true
