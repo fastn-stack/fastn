@@ -6,7 +6,7 @@
 
 -- ds.page:
 document-title: Hire Us
-document-description: We provide Rust consulting services. Learn more about us on this page.
+document-description: We provide Rust consulting services. Get an audit of your rust codebase for 200$.
 ;; TODO: add a relevant og image
 ;; document-image: https://fastn.com/-/fastn.com/images/fastn-dot-com-og-image.jpg
 full-width: true
@@ -26,11 +26,12 @@ sidebar: false
 
 -- ds.page.fluid-wrap:
 
-    -- lib.hero-section: Get help you with your Rust project!
+    -- lib.hero-section: Get help for your awesome Rust project!
     secondary-cta: Talk Now
     secondary-cta-link: mailto:amitu@fifthtry.com
 
-    Our just development experience can help you build your next project faster and better.
+    Get an audit of your Rust codebase for **$200**. Or reach out to us for any
+    Rust-related consulting work.
 
     -- lib.cards-section:
     transparent: true
@@ -117,6 +118,18 @@ sidebar: false
     easier-to-maintain software systems and developer tools.
 
 	-- end: lib.cards-section
+
+    -- lib.purple-section: Get an audit of your Rust codebase for $200.
+    cta-primary-text: Talk Now
+    cta-primary-link: mailto:amitu@fifthtry.com
+
+    Feel free to reach out to us for any Rust-related consulting work. We can help you with:
+
+    - Code reviews and audits
+    - Architecture design
+    - Training and mentoring
+
+    -- end: lib.purple-section
 	
 -- end: ds.page.fluid-wrap
 

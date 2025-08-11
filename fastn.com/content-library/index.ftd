@@ -739,11 +739,12 @@ align-content: center
 
 
 
--- component learn-fastn:
+-- component purple-section:
 caption title:
 optional string cta-primary-text:
 optional string cta-primary-link:
-ftd.image-src image:
+optional ftd.image-src image:
+optional body body:
 
 -- ftd.row:
 width: fill-container
@@ -753,8 +754,8 @@ margin-bottom.px if { ftd.device == "mobile"}: 40
 padding-vertical.px: 40
 
 	-- ftd.image:
-	if: { ftd.device != "mobile"}
-	src: $learn-fastn.image
+	if: { ftd.device != "mobile" && purple-section.image}
+	src: $purple-section.image
 	width.fixed.percent: 20
 	anchor: parent
 	right.percent: 10
@@ -773,12 +774,17 @@ padding-vertical.px: 40
 		spacing.fixed.px:36
 		padding-horizontal.px if { ftd.device == "mobile"}: 24
 		
-			-- ftd.text: $learn-fastn.title
+			-- ftd.text: $purple-section.title
 			color: #FFFFFF
 			role: $inherited.types.heading-medium
+
+            -- ftd.text: $purple-section.body
+            if: { purple-section.body }
+            color: #FFFFFF
+			role: $inherited.types.copy-regular
 			
-			-- cta-secondary: $learn-fastn.cta-primary-text
-			link: $learn-fastn.cta-primary-link
+			-- cta-secondary: $purple-section.cta-primary-text
+			link: $purple-section.cta-primary-link
 			icon: $fastn-assets.files.images.landing.right-arrow.svg
 			
 		-- end: ftd.column
@@ -787,7 +793,7 @@ padding-vertical.px: 40
 
 -- end: ftd.row
 
--- end: learn-fastn
+-- end: purple-section
 
 
 

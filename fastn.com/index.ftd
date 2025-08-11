@@ -102,7 +102,7 @@ sidebar: false
 
 	-- end: lib.feature-card
 
-    -- lib.learn-fastn: Support us by becoming a stargazer! 🚀
+    -- lib.purple-section: Support us by becoming a stargazer! 🚀
     cta-primary-text: Click here
 	cta-primary-link: https://github.com/fastn-stack/fastn/
 	image: $fastn-assets.files.images.landing.crash-course.svg
