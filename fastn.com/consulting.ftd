@@ -75,9 +75,9 @@ sidebar: false
     image: $assets.files.assets.ide-scrot.png
 
     Our hosting platform is entirely written in rust. You can try it at
-    fifthtry.com. The hosting service is a single c5.xlarge AWS EC2 instance that
-    runs a single Rust binary that serves requests for all websites hosted by
-    FifthTry. There are about 600 websites created on FifthTry as of writing this.
+    fifthtry.com. The hosting service is a c5.xlarge AWS EC2 instance that runs a
+    single Rust binary that serves requests for all websites hosted by FifthTry.
+    There are about 600 websites created on FifthTry as of writing this.
 
     -- ds.h3: Key Features
 
