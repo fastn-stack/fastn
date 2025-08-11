@@ -1073,6 +1073,9 @@ skip: true
 
 # Contribute: /contribute/
 
+## Donate: /donate/
+## Code: /contribute-code/
+
 # Community: /champion-program/
   document: student-programs/champion.ftd
 
