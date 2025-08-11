@@ -113,9 +113,11 @@ sidebar: false
 
     Software developer passionate about Rust, functional programming, and
     low-level computing. I've contributed to open-source projects and built tools
-    like Malai and lets-talk at FifthTry. Skilled in Rust, C++, and JavaScript,
-    with experience in WASM, NixOS, and CI automation. Focused on building simpler,
-    easier-to-maintain software systems and developer tools.
+    like [Malai](https://malai.sh/) and
+    [lets-talk](https://github.com/fifthtry-community/lets-talk/) at FifthTry.
+    Skilled in Rust, C++, and JavaScript, with experience in WASM, NixOS, and CI
+    automation. Focused on building simpler, easier-to-maintain software systems
+    and developer tools.
 
 	-- end: lib.cards-section
 
