@@ -1,0 +1,30 @@
+-- import: fastn.com/content-library as lib
+-- import: site-banner.fifthtry.site as banner
+
+-- ds.page:
+
+-- ds.page.banner:
+
+    -- banner.cta-banner:
+	cta-text: show your support!
+	cta-link: https://github.com/fastn-stack/fastn
+	bgcolor: $inherited.colors.cta-primary.base
+	
+    Enjoying `fastn`? Please consider giving us a star ⭐️ on
+    GitHub to
+
+-- end: ds.page.banner
+
+-- ds.h1: Donate using Open Collective
+
+`fastn` uses [Open Collective](https://opencollective.com/) to manage the
+finances so everyone can see where money comes from and how it's used.
+
+With Open Collective, you can make a **single** or **recurring** contribution.
+
+Thank You!
+
+-- lib.cta-primary-small: Donate using Open Collective
+link: https://opencollective.com/fastn/
+
+-- end: ds.page

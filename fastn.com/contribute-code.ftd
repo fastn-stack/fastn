@@ -1,0 +1,26 @@
+-- import: fastn.com/content-library as lib
+-- import: site-banner.fifthtry.site as banner
+
+-- ds.page:
+
+-- ds.page.banner:
+
+    -- banner.cta-banner:
+	cta-text: show your support!
+	cta-link: https://github.com/fastn-stack/fastn
+	bgcolor: $inherited.colors.cta-primary.base
+	
+    Enjoying `fastn`? Please consider giving us a star ⭐️ on
+    GitHub to
+
+-- end: ds.page.banner
+
+-- ds.h1: Contribute code
+
+`fastn` source code is hosted on GitHub. Feel free to raise issues or [create a
+discussion](https://github.com/orgs/fastn-stack/discussions).
+
+-- lib.cta-primary-small: fastn on GitHub
+link: https://github.com/fastn-stack/fastn/
+
+-- end: ds.page
