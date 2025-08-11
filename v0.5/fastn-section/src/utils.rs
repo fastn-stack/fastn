@@ -31,11 +31,12 @@ pub fn extend_spanned<T>(
 impl fastn_section::Kind {
     #[allow(dead_code)]
     pub fn span(&self) -> fastn_section::Span {
-        todo!()
-        // let mut span = self.doc.clone();
-        // extend_spanned(&mut span, &self.visibility);
-        //
-        // span.unwrap()
+        // Return the span of the name (the main identifier of the kind)
+        match &self.name {
+            fastn_section::IdentifierReference::Local(span) => span.clone(),
+            fastn_section::IdentifierReference::Imported { module: _, name } => name.clone(),
+            fastn_section::IdentifierReference::Absolute { name, .. } => name.clone(),
+        }
     }
 }
 

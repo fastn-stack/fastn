@@ -850,6 +850,7 @@ dependencies = [
  "fastn-package",
  "fastn-resolved",
  "fastn-section",
+ "indoc",
  "serde_json",
  "tracing",
 ]

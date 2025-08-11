@@ -94,7 +94,152 @@ where
     // assert everything else is empty
     parser(section, &mut document, &mut arena, &None);
 
+    // Ensure t!() fails if there are any errors - use t_err!() for cases with errors
+    assert!(
+        document.errors.is_empty(),
+        "t!() should not be used when errors are expected. Use t_err!() instead. Errors: {:?}",
+        document.errors
+    );
+
     tester(document, expected, &arena);
+}
+
+#[cfg(test)]
+#[track_caller]
+pub fn f1<PARSER>(source: &str, expected_errors: serde_json::Value, parser: PARSER)
+where
+    PARSER: Fn(
+        fastn_section::Section,
+        &mut fastn_unresolved::Document,
+        &mut fastn_section::Arena,
+        &Option<&fastn_package::Package>,
+    ),
+{
+    println!("--------- testing failure -----------\n{source}\n--------- source ------------");
+
+    let mut arena = fastn_section::Arena::default();
+    let module = fastn_section::Module::main(&mut arena);
+    let parsed_doc = fastn_section::Document::parse(&arcstr::ArcStr::from(source), module);
+    let (mut document, sections) = fastn_unresolved::Document::new(module, parsed_doc, &mut arena);
+
+    if sections.len() == 1 {
+        let section = sections.into_iter().next().unwrap();
+        parser(section, &mut document, &mut arena, &None);
+    }
+
+    // Check that we have the expected errors
+    let actual_errors: Vec<String> = document
+        .errors
+        .iter()
+        .map(|e| format!("{:?}", e.value))
+        .collect();
+
+    let expected_errors = if expected_errors.is_array() {
+        expected_errors
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|e| e.as_str().unwrap().to_string())
+            .collect::<Vec<_>>()
+    } else if expected_errors.is_string() {
+        vec![expected_errors.as_str().unwrap().to_string()]
+    } else {
+        panic!("Expected errors must be a string or array of strings");
+    };
+
+    assert_eq!(
+        actual_errors, expected_errors,
+        "Error mismatch for source: {source}"
+    );
+}
+
+#[cfg(test)]
+#[track_caller]
+fn t_err1<PARSER, TESTER>(
+    source: &str,
+    expected: serde_json::Value,
+    expected_errors: serde_json::Value,
+    parser: PARSER,
+    tester: TESTER,
+) where
+    PARSER: Fn(
+        fastn_section::Section,
+        &mut fastn_unresolved::Document,
+        &mut fastn_section::Arena,
+        &Option<&fastn_package::Package>,
+    ),
+    TESTER: FnOnce(fastn_unresolved::Document, serde_json::Value, &fastn_section::Arena),
+{
+    println!("--------- testing with errors -----------\n{source}\n--------- source ------------");
+
+    let mut arena = fastn_section::Arena::default();
+    let module = fastn_section::Module::main(&mut arena);
+    let (mut document, sections) = fastn_unresolved::Document::new(
+        module,
+        fastn_section::Document::parse(&arcstr::ArcStr::from(source), module),
+        &mut arena,
+    );
+
+    let section = {
+        assert_eq!(sections.len(), 1);
+        sections.into_iter().next().unwrap()
+    };
+
+    parser(section, &mut document, &mut arena, &None);
+
+    // Check errors
+    let actual_errors: Vec<String> = document
+        .errors
+        .iter()
+        .map(|e| format!("{:?}", e.value))
+        .collect();
+
+    let expected_errors_vec = if expected_errors.is_array() {
+        expected_errors
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|e| e.as_str().unwrap().to_string())
+            .collect::<Vec<_>>()
+    } else if expected_errors.is_string() {
+        vec![expected_errors.as_str().unwrap().to_string()]
+    } else {
+        panic!("Expected errors must be a string or array of strings");
+    };
+
+    assert_eq!(
+        actual_errors, expected_errors_vec,
+        "Error mismatch for source: {source}"
+    );
+
+    // Clear errors before calling tester (since tester doesn't expect errors)
+    document.errors.clear();
+
+    tester(document, expected, &arena);
+}
+
+#[cfg(test)]
+#[macro_export]
+macro_rules! tt_error {
+    ($p:expr) => {
+        #[allow(unused_macros)]
+        macro_rules! f {
+            ($source:expr, $expected_errors:tt) => {
+                fastn_unresolved::parser::f1(
+                    indoc::indoc!($source),
+                    serde_json::json!($expected_errors),
+                    $p,
+                );
+            };
+        }
+
+        #[allow(unused_macros)]
+        macro_rules! f_raw {
+            ($source:expr, $expected_errors:tt) => {
+                fastn_unresolved::parser::f1($source, serde_json::json!($expected_errors), $p);
+            };
+        }
+    };
 }
 
 #[cfg(test)]
@@ -104,7 +249,63 @@ macro_rules! tt {
         #[allow(unused_macros)]
         macro_rules! t {
             ($source:expr, $expected:tt) => {
+                fastn_unresolved::parser::t1(
+                    indoc::indoc!($source),
+                    serde_json::json!($expected),
+                    $p,
+                    $d,
+                );
+            };
+        }
+
+        #[allow(unused_macros)]
+        macro_rules! t_raw {
+            ($source:expr, $expected:tt) => {
                 fastn_unresolved::parser::t1($source, serde_json::json!($expected), $p, $d);
+            };
+        }
+
+        #[allow(unused_macros)]
+        macro_rules! f {
+            ($source:expr, $expected_errors:tt) => {
+                fastn_unresolved::parser::f1(
+                    indoc::indoc!($source),
+                    serde_json::json!($expected_errors),
+                    $p,
+                );
+            };
+        }
+
+        #[allow(unused_macros)]
+        macro_rules! f_raw {
+            ($source:expr, $expected_errors:tt) => {
+                fastn_unresolved::parser::f1($source, serde_json::json!($expected_errors), $p);
+            };
+        }
+
+        #[allow(unused_macros)]
+        macro_rules! t_err {
+            ($source:expr, $expected:tt, $expected_errors:tt) => {
+                fastn_unresolved::parser::t_err1(
+                    indoc::indoc!($source),
+                    serde_json::json!($expected),
+                    serde_json::json!($expected_errors),
+                    $p,
+                    $d,
+                );
+            };
+        }
+
+        #[allow(unused_macros)]
+        macro_rules! t_err_raw {
+            ($source:expr, $expected:tt, $expected_errors:tt) => {
+                fastn_unresolved::parser::t_err1(
+                    $source,
+                    serde_json::json!($expected),
+                    serde_json::json!($expected_errors),
+                    $p,
+                    $d,
+                );
             };
         }
     };

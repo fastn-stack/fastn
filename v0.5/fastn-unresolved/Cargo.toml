@@ -21,3 +21,5 @@ tracing.workspace = true
 
 [dev-dependencies]
 serde_json.workspace = true
+fastn-package = { workspace = true, features = ["test-utils"] }
+indoc.workspace = true

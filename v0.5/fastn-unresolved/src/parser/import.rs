@@ -1,3 +1,61 @@
+/// Parses import statements in fastn.
+///
+/// ## Grammar
+///
+/// ```ftd
+/// -- import: <package-name>[/<module-name>] [as <alias>]
+/// [exposing: <symbol-list>]   ; Import specific symbols from module
+/// [export: <symbol-list>]      ; Re-export symbols (main package only)
+///
+/// <symbol-list> := * | <aliasable-symbol> [, <aliasable-symbol>]*
+/// <aliasable-symbol> := <symbol-name> [as <alias>]
+/// <alias> := <plain-identifier>  ; Must be plain (foo, bar), not dotted (foo.bar)
+/// ```
+///
+/// ## Features
+///
+/// ### Basic Import
+/// - `-- import: foo` - Imports package/module 'foo' with alias 'foo'
+/// - `-- import: foo/bar` - Imports module 'bar' from package 'foo' with alias 'bar'
+/// - `-- import: foo as f` - Imports 'foo' with custom alias 'f'
+///
+/// ### Exposing (Import specific symbols)
+/// - `-- import: foo\nexposing: *` - Imports all symbols from 'foo'
+/// - `-- import: foo\nexposing: bar` - Imports only symbol 'bar' from 'foo'
+/// - `-- import: foo\nexposing: bar as b` - Imports 'bar' with alias 'b'
+/// - `-- import: foo\nexposing: bar, baz as z` - Multiple symbols with aliases
+/// - `-- import: foo\nexposing: *, bar as b` - All symbols, but 'bar' aliased as 'b' (not both)
+/// - Creates direct aliases: `foo#bar` becomes accessible as just `bar` (or alias)
+///
+/// ### Export (Re-export symbols - main package only)
+/// - `-- import: foo\nexport: *` - Re-exports all symbols from imported module
+/// - `-- import: foo\nexport: bar` - Re-exports symbol 'bar' from imported module
+/// - `-- import: foo\nexport: bar as b` - Re-exports 'bar' with alias 'b'
+/// - `-- import: foo\nexport: *, bar as b` - Exports all, but 'bar' as 'b' only (not both)
+/// - Only works in main package (not in dependencies)
+/// - Makes imported symbols available to consumers of this package
+///
+/// ### Combining Exposing and Export
+/// - `-- import: foo\nexposing: bar\nexport: baz` - Import 'bar', re-export 'baz'
+/// - `-- import: foo\nexposing: *\nexport: bar` - Import all, but only re-export 'bar'
+/// - When both are present:
+///   - `exposing` controls what's imported into current module
+///   - `export` controls what's re-exported (main package only)
+///
+/// ### Validation
+/// - Import must have a caption (package/module name)
+/// - Import cannot have a type (e.g., `-- string import:` is invalid)
+/// - Section name must be exactly "import" (not "impart", etc.)
+/// - Imported packages must be in dependencies (unless self-import)
+/// - Aliases must be plain identifiers (e.g., 'foo', 'bar'), not dotted ('foo.bar')
+/// - No body, children, or extra headers allowed
+///
+/// ### Error Cases
+/// - `ImportMustHaveCaption` - Missing package/module name
+/// - `ImportCantHaveType` - Type specified for import
+/// - `ImportMustBeImport` - Wrong section name (e.g., "impart" instead of "import")
+/// - `ImportPackageNotFound` - Package not in dependencies
+/// - `ImportAliasMustBePlain` - Alias contains dots or other non-identifier characters
 pub(super) fn import(
     section: fastn_section::Section,
     document: &mut fastn_unresolved::Document,
@@ -34,7 +92,7 @@ pub(super) fn import(
     // ensure there are no extra headers, children or body
     fastn_unresolved::utils::assert_no_body(&section, document);
     fastn_unresolved::utils::assert_no_children(&section, document);
-    fastn_unresolved::utils::assert_no_extra_headers(&section, document, &["exports", "exposing"]);
+    fastn_unresolved::utils::assert_no_extra_headers(&section, document, &["export", "exposing"]);
     validate_import_module_in_dependencies(section, document, arena, package, &i);
 
     // Add import in document
@@ -133,9 +191,11 @@ fn validate_import_module_in_dependencies(
             let imported_package_name = i.module.package(arena);
 
             // Check if the imported package exists in dependencies or matches the current package name
-            let is_valid_import = package.dependencies.iter().any(|dep| {
-                dep.name.as_str() == imported_package_name || dep.name.as_str() == package.name
-            });
+            let is_valid_import = imported_package_name == package.name
+                || package
+                    .dependencies
+                    .iter()
+                    .any(|dep| dep.name.as_str() == imported_package_name);
 
             if !is_valid_import {
                 document.errors.push(
@@ -275,25 +335,44 @@ mod tests {
             t!("-- import: foo as f", { "import": "foo=>f" });
 
             // import with exposing
-            t!("-- import: foo\nexposing: bar", { "import": "foo", "symbols": ["foo#bar"] });
-            t!("-- import: foo as f\nexposing: bar", { "import": "foo=>f", "symbols": ["foo#bar"] });
             t!(
-                "-- import: foo as f\nexposing: bar, moo",
+                "-- import: foo
+                exposing: bar",
+                { "import": "foo", "symbols": ["foo#bar"] }
+            );
+            t!(
+                "-- import: foo as f
+                exposing: bar",
+                { "import": "foo=>f", "symbols": ["foo#bar"] }
+            );
+            t!(
+                "-- import: foo as f
+                exposing: bar, moo",
                 { "import": "foo=>f", "symbols": ["foo#bar", "foo#moo"] }
             );
             t!(
-                "-- import: foo as f\nexposing: bar as b, moo",
+                "-- import: foo as f
+                exposing: bar as b, moo",
                 { "import": "foo=>f", "symbols": ["foo#bar=>b", "foo#moo"] }
             );
 
-            // import with export
-            t!("-- import: foo\nexport: bar", { "import": "foo" });
-
-            // import with both exposing or export
+            // import with export - no error but no symbols added (main package only processes exposing)
             t!(
-                "-- import: foo\nexposing: bar\nexport: moo",
+                "-- import: foo
+                export: bar",
+                { "import": "foo" }
+            );
+
+            // import with both exposing and export - only exposing adds symbols in main package
+            t!(
+                "-- import: foo
+                exposing: bar
+                export: moo",
                 { "import": "foo", "symbols": ["foo#bar"] }
             );
+
+            // Test that self-imports work (importing from the same package)
+            t!("-- import: main/module", { "import": "main/module=>module" });
         }
     }
 
@@ -305,15 +384,25 @@ mod tests {
             // import without exposing or export
             t!("-- import: foo", { "import": "foo" });
 
-            // import with export
-            t!("-- import: foo\nexport: bar", { "import": "foo", "symbols": ["foo#bar"] });
-
-            // import with exposing
-            t!("-- import: foo\nexposing: bar", { "import": "foo" });
-
-            // import with both exposing or export
+            // import with export - adds symbols (other packages only process export)
             t!(
-                "-- import: foo\nexposing: bar\nexport: moo",
+                "-- import: foo
+                export: bar",
+                { "import": "foo", "symbols": ["foo#bar"] }
+            );
+
+            // import with exposing - no symbols added (other packages don't process exposing)
+            t!(
+                "-- import: foo
+                exposing: bar",
+                { "import": "foo" }
+            );
+
+            // import with both exposing and export - only export adds symbols in other packages
+            t!(
+                "-- import: foo
+                exposing: bar
+                export: moo",
                 { "import": "foo", "symbols": ["foo#moo"] }
             );
         }
@@ -341,12 +430,13 @@ mod tests {
         arena: &mut fastn_section::Arena,
         _package: &Option<&fastn_package::Package>,
     ) {
-        let package = fastn_package::Package {
-            name: "main".to_string(),
-            dependencies: vec![],
-            auto_imports: vec![],
-            favicon: None,
-        };
+        let package = fastn_package::Package::new_for_test(
+            "main",
+            vec![
+                fastn_package::Dependency::new_for_test("foo"),
+                fastn_package::Dependency::new_for_test("foo.fifthtry.site"),
+            ],
+        );
 
         super::import(section, document, arena, &Some(&package), "main");
     }
@@ -357,37 +447,72 @@ mod tests {
         arena: &mut fastn_section::Arena,
         _package: &Option<&fastn_package::Package>,
     ) {
-        let package = fastn_package::Package {
-            name: "other".to_string(),
-            dependencies: vec![],
-            auto_imports: vec![],
-            favicon: None,
-        };
+        let package = fastn_package::Package::new_for_test(
+            "other",
+            vec![fastn_package::Dependency::new_for_test("foo")],
+        );
 
         super::import(section, document, arena, &Some(&package), "main");
     }
 
-    mod fail {
-
-        fastn_unresolved::tt!(super::import_in_other_package_function, super::tester);
+    mod error_cases {
         #[test]
-        #[should_panic]
-        fn failing_tests() {
-            t!("-- import: foo as f\nexposing: x", { "import": "foo=>f", "exposing": ["x"] });
-            t!("-- import: foo\nexposing: x", { "import": "foo", "exposing": ["x"] });
-            t!("-- import: foo\nexposing: x, y, z", { "import": "foo", "exposing": ["x", "y", "z"] });
-            t!("-- import: foo as f\nexposing: x as y", { "import": "foo as f", "exposing": ["x=>y"] });
-            t!("-- import: foo as f\nexposing: x as y, z", { "import": "foo as f", "exposing": ["x=>y", "z"] });
-            t!("-- import: foo as f\nexport: x", { "import": "foo=>f", "export": ["x"] });
-            t!("-- import: foo\nexport: x", { "import": "foo", "export": ["x"] });
-            t!("-- import: foo\nexport: x, y, z", { "import": "foo", "export": ["x", "y", "z"] });
-            t!("-- import: foo as f\nexport: x as y", { "import": "foo as f", "export": ["x=>y"] });
-            t!("-- import: foo as f\nexport: x as y, z", { "import": "foo as f", "export": ["x=>y", "z"] });
-            t!("-- import: foo as f\nexport: x\nexposing: y", { "import": "foo=>f", "export": ["x"], "exposing": ["y"] });
-            t!("-- import: foo\nexport: x\nexposing: y", { "import": "foo", "export": ["x"], "exposing": ["y"] });
-            t!("-- import: foo\nexport: x, y, z\nexposing: y", { "import": "foo", "export": ["x", "y", "z"], "exposing": ["y"] });
-            t!("-- import: foo as f\nexport: x as y\nexposing: y", { "import": "foo as f", "export": ["x=>y"], "exposing": ["y"] });
-            t!("-- import: foo as f\nexport: x as y, z\nexposing: y", { "import": "foo as f", "export": ["x=>y", "z"], "exposing": ["y"] });
+        fn test_import_non_existent_package() {
+            let mut arena = fastn_section::Arena::default();
+            let module = fastn_section::Module::main(&mut arena);
+            let source = arcstr::ArcStr::from("-- import: non_existent_package");
+            let parsed_doc = fastn_section::Document::parse(&source, module);
+
+            let (mut document, sections) =
+                fastn_unresolved::Document::new(module, parsed_doc, &mut arena);
+
+            let section = sections.into_iter().next().unwrap();
+
+            let package = fastn_package::Package::new_for_test(
+                "test",
+                vec![], // No dependencies - should cause error
+            );
+
+            super::super::import(section, &mut document, &mut arena, &Some(&package), "test");
+
+            // Should have an error for missing package
+            assert_eq!(document.errors.len(), 1);
+            assert!(matches!(
+                document.errors[0].value,
+                fastn_section::Error::ImportPackageNotFound
+            ));
+        }
+    }
+
+    fn import_with_no_deps_function(
+        section: fastn_section::Section,
+        document: &mut fastn_unresolved::Document,
+        arena: &mut fastn_section::Arena,
+        _package: &Option<&fastn_package::Package>,
+    ) {
+        let package = fastn_package::Package::new_for_test("test", vec![]);
+        super::import(section, document, arena, &Some(&package), "test");
+    }
+
+    mod import_errors {
+        fastn_unresolved::tt!(super::import_with_no_deps_function, super::tester);
+
+        #[test]
+        fn test_import_errors() {
+            // Import from non-existent package - produces partial result with error
+            t_err!("-- import: non_existent", {"import": "non_existent"}, "ImportPackageNotFound");
+
+            // Import with type - produces partial result with multiple errors
+            t_err!("-- string import: foo", {"import": "foo"}, ["ImportCantHaveType", "ImportPackageNotFound"]);
+
+            // Wrong section name - still parses as import, produces result with errors
+            t_err!("-- impart: foo", {"import": "foo"}, ["ImportMustBeImport", "ImportPackageNotFound"]);
+
+            // Import without caption - no partial result, just error
+            f!("-- import:", "ImportMustHaveCaption");
+
+            // Multiple errors with partial result
+            t_err!("-- integer import: non_existent", {"import": "non_existent"}, ["ImportCantHaveType", "ImportPackageNotFound"]);
         }
     }
 

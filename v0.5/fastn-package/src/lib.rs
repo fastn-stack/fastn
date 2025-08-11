@@ -6,6 +6,8 @@
 extern crate self as fastn_package;
 
 mod reader;
+#[cfg(any(test, feature = "test-utils"))]
+pub mod test;
 
 pub use reader::reader;
 
