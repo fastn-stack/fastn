@@ -6,7 +6,7 @@
 
 -- ds.page:
 document-title: Hire Us
-document-description: We provide Rust consulting services. Get an audit of your rust codebase for 200$.
+document-description: We provide Rust consulting services. Get an audit of your rust codebase from 200$.
 ;; TODO: add a relevant og image
 ;; document-image: https://fastn.com/-/fastn.com/images/fastn-dot-com-og-image.jpg
 full-width: true
@@ -30,7 +30,7 @@ sidebar: false
     secondary-cta: Talk Now
     secondary-cta-link: mailto:amitu@fifthtry.com
 
-    Get an audit of your Rust codebase for **$200**. Or reach out to us for any
+    Get an audit of your Rust codebase from **$200**. Or reach out to us for any
     Rust-related consulting work.
 
     -- lib.cards-section:
@@ -119,20 +119,25 @@ sidebar: false
     automation. Focused on building simpler, easier-to-maintain software systems
     and developer tools.
 
-	-- end: lib.cards-section
+    -- end: lib.cards-section
 
-    -- lib.purple-section: Get an audit of your Rust codebase for $200.
-    cta-primary-text: Talk Now
-    cta-primary-link: mailto:amitu@fifthtry.com
+    -- lib.feature-card: Audit your Rust codebase from $200.
+    cta-text: Talk Now
+    cta-link: mailto:amitu@fifthtry.com
+    icon: $fastn-assets.files.images.landing.smile-icon.svg
+    transparent: true
+    is-child: true
 
-    Feel free to reach out to us for any Rust-related consulting work. We can help you with:
+        -- lib.feature-card.body:
 
-    - Code reviews and audits
-    - Architecture design
-    - Training and mentoring
+        Feel free to reach out to us for any Rust-related consulting work. We can help you with:
 
-    -- end: lib.purple-section
-	
+        - Code reviews and audits
+        - Architecture design
+        - Training and mentoring
+
+    -- end: lib.feature-card
+
 -- end: ds.page.fluid-wrap
 
 -- end: ds.page
