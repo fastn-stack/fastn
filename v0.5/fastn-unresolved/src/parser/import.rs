@@ -12,6 +12,39 @@
 /// <alias> := <plain-identifier>  ; Must be plain (foo, bar), not dotted (foo.bar)
 /// ```
 ///
+/// ## Internal Behavior and Data Structures
+///
+/// The import parser manages a document's `aliases` field, which is a HashMap<String, SoM> where:
+/// - **SoM** (Symbol or Module) is an enum that can be either:
+///   - `Module(m)`: A reference to an imported module
+///   - `Symbol(s)`: A reference to a specific symbol from a module
+///
+/// ### Processing Steps:
+///
+/// 1. **Module Import**: Always adds a `SoM::Module` entry to aliases
+///    - `-- import: foo` → aliases["foo"] = SoM::Module(foo)
+///    - `-- import: foo as f` → aliases["f"] = SoM::Module(foo)
+///
+/// 2. **Symbol Processing** (depends on package context):
+///    - **In main package**: Processes `exposing` field
+///    - **In other packages**: Processes `export` field
+///    
+///    For each symbol listed, adds a `SoM::Symbol` entry:
+///    - `exposing: bar` → aliases["bar"] = SoM::Symbol(foo#bar)
+///    - `export: bar as b` → aliases["b"] = SoM::Symbol(foo#bar)
+///
+/// ### Package-Dependent Behavior:
+///
+/// The function uses `is_main_package()` to determine which field to process:
+/// - **Main package** (package.name == main_package_name):
+///   - Processes `exposing` to add symbol aliases
+///   - Ignores `export` (no symbols added to aliases)
+/// - **Other packages** (package.name != main_package_name):
+///   - Processes `export` to add symbol aliases  
+///   - Ignores `exposing` (no symbols added to aliases)
+///
+/// This asymmetry may be intentional for controlling symbol visibility across package boundaries.
+///
 /// ## Features
 ///
 /// ### Basic Import

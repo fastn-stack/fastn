@@ -127,6 +127,37 @@ where
         parser(section, &mut document, &mut arena, &None);
     }
 
+    // Invariant: f!() should not produce any partial results
+    assert!(
+        document.definitions.is_empty(),
+        "f!() should not produce definitions. Found: {:?}",
+        document.definitions
+    );
+    assert!(
+        document.content.is_empty(),
+        "f!() should not produce content. Found: {:?}",
+        document.content
+    );
+    
+    // Check if aliases were modified beyond defaults
+    let default_aliases_id = arena.default_aliases();
+    if let Some(aliases_id) = document.aliases {
+        // If aliases were modified, they would have a different ID than the defaults
+        // Note: This check assumes that parsers create new aliases when adding entries
+        // rather than modifying the default ones in place
+        if aliases_id != default_aliases_id {
+            let aliases = arena.aliases.get(aliases_id).unwrap();
+            let default_aliases = arena.aliases.get(default_aliases_id).unwrap();
+            if aliases.len() != default_aliases.len() {
+                panic!(
+                    "f!() should not add aliases. Expected {} default aliases, found {}",
+                    default_aliases.len(),
+                    aliases.len()
+                );
+            }
+        }
+    }
+
     // Check that we have the expected errors
     let actual_errors: Vec<String> = document
         .errors
@@ -150,6 +181,12 @@ where
     assert_eq!(
         actual_errors, expected_errors,
         "Error mismatch for source: {source}"
+    );
+    
+    // Additional invariant: Must have at least one error
+    assert!(
+        !document.errors.is_empty(),
+        "f!() must produce at least one error"
     );
 }
 
@@ -210,6 +247,27 @@ fn t_err1<PARSER, TESTER>(
     assert_eq!(
         actual_errors, expected_errors_vec,
         "Error mismatch for source: {source}"
+    );
+    
+    // Invariant: t_err!() must produce at least one error
+    assert!(
+        !document.errors.is_empty(),
+        "t_err!() must produce at least one error"
+    );
+    
+    // Invariant: t_err!() should produce some partial results
+    // (otherwise use f!() for error-only cases)
+    let has_results = !document.definitions.is_empty() 
+        || !document.content.is_empty() 
+        || (document.aliases.is_some() && {
+            let aliases = arena.aliases.get(document.aliases.unwrap()).unwrap();
+            let default_aliases = arena.aliases.get(arena.default_aliases()).unwrap();
+            aliases.len() > default_aliases.len()
+        });
+    
+    assert!(
+        has_results,
+        "t_err!() should produce partial results. Use f!() for error-only cases"
     );
 
     // Clear errors before calling tester (since tester doesn't expect errors)
