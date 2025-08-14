@@ -263,10 +263,12 @@ children uis:
 common.post-meta meta:
 string og-title: $blog-page.meta.title
 string og-description: $blog-page.meta.body
+ftd.raw-image-src og-image: https://fastn.com/-/fastn.com/images/fastn-logo.png
 
 -- page:
 document-title: $blog-page.og-title
 document-description: $blog-page.og-description
+document-image: $blog-page.og-image
 sidebar: false
 right-sidebar: []
 
