@@ -35,4 +35,12 @@ Thank You!
 -- lib.cta-primary-small: Donate using Open Collective
 link: https://opencollective.com/fastn/
 
+-- ds.h1: Hire us for Rust consulting
+
+We provide Rust consulting services. Get an audit of your Rust codebase from
+**$200**. Or reach out to us for any Rust-related consulting work.
+
+-- lib.cta-primary-small: Learn more
+link: /consulting/
+
 -- end: ds.page

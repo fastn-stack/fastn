@@ -1,0 +1,454 @@
+-- import: fastn.com/blog/authors
+-- import: doc-site.fifthtry.site/common
+-- import: bling.fifthtry.site/note
+-- import: fastn.com/utils
+
+
+-- common.post-meta meta: Chat with [@amitu](https://github.com/amitu/) about FifthTry, fastn and, p2p
+published-on: 4 Aug, 2025
+post-url: /podcast/chat-with-amitu-about-ft-fastn-and-p2p/
+author: $authors.siddhant
+read-time: 13-20 minutes
+
+A candid discussion between Siddhant and Amitu about building fastn, the
+challenges of open source sustainability, and our transition to peer-to-peer
+architecture.
+
+-- ds.blog-page:
+meta: $meta
+
+-- ds.youtube:
+v: RJ6iBcvdmZA
+
+-- ds.h2: Setting the Scene
+
+Hello everyone, I'm [Siddhant](https://github.com/siddhantk232/) and I have
+[amitu](https://github.com/amitu/) with me. I joined FifthTry last year and
+I've been working here for about one and a half years. FifthTry existed since
+2020 before I joined, many people have worked here before, and there's been a
+lot that's happened already. During the time I've joined, we've done quite a
+few things, and recently we've been discussing our next course of action. This
+conversation captures where FifthTry stands today and where it's heading.
+
+-- ds.h2: The Deep Roots
+
+**Amitu**: I've been programming since 1998, and by 1999, I'd built my first
+web application that was used by over 500 people. The journey to fastn and
+FifthTry actually began much earlier than 2020 - the conceptual foundation goes
+back to 2010.
+
+I've had a consistent career in web development, always being an early adopter.
+At [Gupshup](https://www.gupshup.io/en/) (originally Webaroo), I was the first
+employee. At [Browserstack](https://www.browserstack.com/), I was the third
+person, sitting in cafes with the founders before they even had an office.
+Interestingly, those founders had been interns at my first company - a hardware
+startup I was running in 2002-2004. When they started Browserstack, I joined
+and helped build it until they reached 70-80 developers.
+
+I've always been passionate about two main areas: authoring languages and web
+frameworks. When Django emerged, I was probably the first team in India using
+it in production, even before version 1.0 - we were using Django 0.95. I
+contributed patches to Django and am listed among the Django authors.
+
+-- ds.h2: The Book Authoring Problem (2010)
+
+The original inspiration for fastn dates back to 2010 when I was working on a
+book authoring tool. The problem was clear: there are tons of beginner
+programming books but few intermediate ones. Every development team uses
+multiple technologies - Linux, PostgreSQL, Git, JavaScript, Python, Django -
+but no single book covers exactly what your team needs.
+
+The idea was: what if books could be remixed like open source
+software? Instead of requiring team members to read seven different books, a
+team lead could create a custom book by selecting Chapter 3.1 from Django,
+specific PostgreSQL sections, and relevant Python chapters. You'd end up with a
+laser-focused, practical guide tailored to your exact tech stack.
+
+The tool would let people drag and drop table of contents sections, creating
+very custom, tiny, laser-precision books. At that time, I considered LaTeX as
+the underlying format. Markdown wasn't the standard it is today (2010-11), and
+restructured text was more popular due to Python's adoption of it.
+
+But I wasn't satisfied with any of these formats. I started thinking about what
+the authoring language for the next 100 years should be. Microsoft Word, Google
+Docs, Markdown, and LaTeX all felt like intermediate solutions rather than the
+long-term answer.
+
+-- ds.h2: The Acko Years: Building Rust Infrastructure
+
+The real technical foundation for fastn was laid during my four years at
+[Acko](https://www.acko.com/), one of India's most interesting digital
+insurance companies. They had one of the largest seed rounds globally at one
+point and are now a billion-dollar company. As CTO, I built the entire
+technology infrastructure until we had around 150 developers.
+
+At Acko, we built a Rust-based web framework called
+[Realm](https://github.com/fifthtry/realm/) that used
+[Elm](https://elm-lang.org/) for the frontend. This wasn't just an experiment -
+Realm was our primary web framework for five to six years in production. We
+extracted it from Acko's codebase and open-sourced it.
+
+We also built a CMS called Graft, which had the basic syntax structure that
+would later appear in fastn - the "-- <something>: <value>" format. Graft was
+actually the first concrete implementation of ideas I'd been developing since
+2015-16 with an earlier project called [CF (CoverFox)
+Blog](https://github.com/coverfox/cfblog/).
+
+-- ds.h2: The Documentation Revolution at Acko
+
+One of the most important innovations at Acko was our approach to
+documentation. I created what I call "continuous documentation" - analogous to
+continuous integration for testing.
+
+The problem with documentation is fundamental: slightly out-of-date
+documentation is like slightly poisoned food. If you don't know which 1% is
+wrong, you have to treat the whole thing as unreliable.
+
+I developed a litmus test for documentation culture: if your documentation says
+one thing and the CTO says something else, who do you trust? If you're confused
+about this question, you don't have a documentation culture.
+
+At Acko, we implemented a rigorous process. We had a single PDF containing our
+entire documentation - eventually 1,700 pages, with roughly 70-80% screenshots.
+For every single PR, our manual QA team would rebuild this PDF and verify that
+what the documentation said matched exactly what they saw in the UAT
+environment.
+If there was any discrepancy - even a changed border radius - the PR was
+rejected. This created something remarkable: a documentation culture where
+everyone trusted the documentation absolutely. I remember board meetings where
+the CFO could immediately open our PDF, navigate to chapter 12.1, and settle
+complex business discussions definitively because everyone knew the
+documentation was accurate.
+
+-- ds.h2: From FifthTry to fastn: The Technical Evolution
+
+**Siddhant**: So the idea of fastn existed around 2010, but FifthTry as a
+company started around 2020. Looking at your [Y Combinator
+page](https://www.ycombinator.com/companies/fifthtry/), the story there focuses
+on syncing code with documents. How did you go from the authoring tools passion
+to this specific problem?
+
+**Amitu**: When I started FifthTry in 2020 after leaving Acko, I realized I
+couldn't sell a new documentation format directly. Developers needed a tool
+that solved an immediate problem. So we built something focused on keeping
+documentation synchronized with code - essentially the productized version of
+the continuous documentation process I'd developed at Acko.
+
+The language itself went through multiple iterations:
+
+- **[CF Blog (2015-16)](https://github.com/coverfox/cfblog/)**: Early attempt at the authoring language concept
+- **Graft (2017-18)**: The CMS at Acko with basic fastn syntax
+- **FTD (2019)**: "FifthTry Document" - initially just my file format name
+- **fastn (2021+)**: The full framework and platform vision
+
+-- ds.h2: $ftd.empty
+
+Initially, FTD 0.2 was limited - essentially Markdown with a few extensions. At
+this stage, I was still planning to use Realm for the actual web framework,
+with FTD handling just content.
+
+But building the version control system, change request system, FifthTry signup
+infrastructure, and the language itself became too much to manage in one
+codebase. I decided to pause and focus on the language, doing an FTD launch on
+Hacker News in October/November 2021. The reception was lukewarm because the
+vision was incredibly ambitious - we wanted to be a data language, template
+language, and content language all at once.
+
+We had a period where we split the project into FTD (the language) and FPM (FTD
+Package Manager). But you couldn't use FTD without FPM, and having separate
+documentation on ftd.dev and fpm.dev created confusion. Eventually, we merged
+them back together, someone suggested the name "fastn", and I loved it.
+
+-- ds.h2: What Makes fastn Different: The Excel Philosophy
+
+**Siddhant**: How would you compare fastn to existing frameworks? Is it more
+like Ruby on Rails/Django, or more like React with a JSON backend?
+
+**Amitu**: fastn is more similar to Excel than either of those options. Think
+about Excel: it's about data and formulas (backend-like logic), yet it has UI
+with conditional formatting (frontend-like features). When you change something
+in one cell, all related cells update automatically. Excel is actually a
+UI-based programming environment where data and interface are unified.
+
+Traditional programming languages are designed around stdio - the "hello world"
+of every language is a print statement. But we don't interact with stdio except
+in terminals. We interact with UIs.
+
+Even JavaScript, supposedly a UI-related language, is much closer to Python in
+its fundamental design than to Excel. JavaScript doesn't natively understand
+UI - it just has APIs that could theoretically be made available to Python too.
+
+In fastn, there's no print statement. Everything is inherently UI-based. The
+fastn compiler automatically eliminates any code that isn't referenced by the
+UI. If you create a variable that doesn't affect what the user sees, the
+compiler deletes it.
+
+This is fundamentally different. In Django, you're generating HTML through
+string formatting, but there's no native concept of HTML or UI. In fastn, you
+can't split frontend and backend because they're unified concepts. We're a
+UI-based language more like Excel than text-based languages with API support
+for UI.
+
+-- ds.h2: The Money Reality: Five Years Without Profit
+
+**Siddhant**: FifthTry has existed for about 5 years now. Have we made any
+money, and if not, why?
+
+**Amitu**: Maybe I'm a good tech person but I suck as a founder. We haven't
+made meaningful money. We got into Y Combinator very quickly - about two months
+after I left Acko - and raised a modest seed round. But currently, I can only
+support the two of us. We have less than one year of runway at very modest
+salaries.
+
+From 2021-2023, we were in a comfortable position - we could hire a few
+developers and maybe a designer. But starting in 2024, we began cutting the
+team out of necessity. We're now down to just the two of us.
+
+Building a programming language is incredibly hard - harder than you think even
+when you know it's hard. fastn 0.4 is a decent language but has terrible
+performance implementation and infinite technical debt. fastn 0.5 will probably
+require a complete rewrite.
+
+In 2021, we intentionally moved away from our SaaS documentation product to
+focus entirely on open source fastn development. I was fortunate to have
+investors who supported this transition. I wanted to save fastn from the
+typical funded company trajectory where you build an open source product, get
+adoption, then do a "rug pull" by changing licensing or business models.
+
+-- ds.h2: Building Community and College Tours
+
+We've built a community of over 3,000 people on our Discord server, which is
+significant for a new programming language. We accomplished this primarily
+through college visits and giving away free t-shirts - roughly $2-3 per new
+Discord user.
+
+When we taught fastn to college students, they understood it quickly,
+validating our positioning as an "easy language." The main friction wasn't the
+language but installation - we didn't have signed binaries, so Windows and Mac
+showed security warnings. Most of our time in sessions was spent just getting
+fastn installed.
+
+We also discovered many students don't have GitHub accounts, so we ended up
+creating around 500 GitHub accounts for students. Since our hosting required
+GitHub integration, we also created many Vercel accounts because we didn't have
+our own platform.
+
+-- ds.h2: The 2024 Hosting Experiment: Performance Reality
+
+In 2024, we built an online IDE and [launched fastn
+hosting](https://www.fifthtry.com/) with about 600 websites on a single server.
+We added WebAssembly support to run arbitrary backend code and created what
+seemed like a great platform. But we hit severe performance issues.
+
+When one of our hosted sites [reached the Hacker News front
+page](https://www.linkedin.com/posts/amitu_huge-moment-for-fastn-super-excited-ugcPost-7244190035112034304-h65R?utm_source=social_share_send&utm_medium=member_desktop_web&rcm=ACoAACYKUf0B-Kw7FuDSEdya1jZZ6zDKLZAR42w),
+we experienced multiple outages. Language performance issues are fundamentally
+different from typical startup scaling problems. When you're running
+user-provided code that can trigger non-optimized compiler behavior, problems
+become very difficult to solve.
+
+We had situations where the Rust program would consume CPU so aggressively that
+we couldn't even SSH into machines to investigate. Unlike Python or Node.js
+that might slow down gracefully, poorly performing Rust code can create tight
+loops that completely overwhelm hardware resources.
+
+**Siddhant**: You could have launched a pricing page and started charging
+despite the issues.
+
+**Amitu**: As a founder, I couldn't recommend fastn hosting with a straight
+face knowing the fault patterns. Once you start generating revenue, it's hard
+to stop, and you become proud of the growth metrics. But if someone pays and
+then experiences multiple downtimes, you're just educating people not to trust
+you.
+
+The fundamental problem is you can't quickly fix compiler performance issues
+like you can fix a slow SQL query. Every page request involves document parsing
+and compilation, creating an enormous surface area for problems.
+
+-- ds.h2: The P2P Evolution: Eliminating Server Dependencies
+
+**Siddhant**: The hosting problems triggered a shift toward peer-to-peer
+architecture, right?
+
+**Amitu**: Yes, but I've been interested in P2P since 2015 when I got involved
+with WebRTC at Browserstack. WebRTC amazed me because it enabled true
+peer-to-peer applications where both browsers formed the complete application
+with minimal server involvement.
+
+In 2015, I built a peer-to-peer file sharing tool using Go's WebRTC support. It
+had unique IDs per peer relationship, but management became extremely
+difficult. That project taught me about Go's limitations for complex programs
+and led me to seriously explore Rust.
+
+The core insight is simple: your current phone has more CPU and RAM than the
+desktop computer I learned programming on. A Raspberry Pi today is more
+powerful than my original development machine. Yet we treat these devices as
+dumb terminals dependent on cloud services.
+
+Why should learning programming require a credit card for server access? This
+excludes enormous populations who could benefit from programming education.
+
+-- ds.h2: Current P2P Vision: HTTP Over Peer-to-Peer
+
+We're building HTTP over peer-to-peer protocols using Iroh (a Rust crate).
+Since HTTP already enables everything from Google Docs to WhatsApp, making HTTP
+work over peer-to-peer without requiring IP addresses or domain names could
+enable the same range of applications.
+
+**Siddhant**: Would it be correct to say we're building an ecosystem on top of
+a BitTorrent-like base layer where you talk in terms of UI and information
+rather than just files?
+
+**Amitu**: The way you phrase it sounds more complex than how I think about it.
+We're simply putting HTTP over peer-to-peer. With HTTP, you can do virtually
+everything - file sharing, chat, collaborative documents. Just that HTTP
+normally requires IP addresses and domain names.
+
+Beyond HTTP over Iroh, we're creating a rich ecosystem. In peer-to-peer, both
+peers need compatible software installed, unlike client-server where only the
+server needs dependencies. Since peers come and go (unlike servers with DevOps
+teams), we're building syncing solutions for offline-first applications.
+
+We have two connection modalities:
+1. **Syncing**: For applications like shared documents where both peers need
+the same data.
+2. **Live Access**: For public content like blogs where you don't want to
+download everything.
+
+-- ds.h2: $ftd.empty
+
+We're implementing three storage layers - SQLite, auto-merge documents, and
+object store - each requiring different syncing strategies.
+
+-- ds.h2: The Current Challenge: Funding and Sustainability
+
+**Siddhant**: What do we do today that brings money, and what are we thinking
+for the future?
+
+**Amitu**: Two things have been dear to me: democratizing programming (making
+it accessible to non-programmers like Excel did) and solving the
+hosting/infrastructure problem. Even if you make programming easier, you're
+still stuck with AWS and credit card requirements.
+
+I strongly believe every human should have access to good computing devices
+with electricity and network, then not be dependent on data centers or SaaS.
+When I saw our performance issues, I realized for single-user applications,
+fastn is still good enough, and the only remaining question was networking.
+
+We're repositioning from traditional website hosting to running "stable P2P
+instances." Instead of serving hundreds of thousands of users directly, we'd
+primarily handle syncing between small numbers of company-internal users,
+dramatically reducing our performance demands.
+
+-- ds.h2: Why VCs Shouldn't Fund Us (And We're Okay With That)
+
+We're a mission-oriented company that was VC funded, which creates tension.
+Thankfully, we're no longer VC darlings - they're looking for AI companies now,
+and I can't get investment for fastn. But I'm saying this with a smile because
+being free from VC pressure allows us to focus on what's right for fastn and
+humanity rather than quarterly metrics.
+
+So far, I've had the luxury of optimizing for "what is the right thing to do"
+without worrying about immediate revenue. When you start focusing too much on
+money, you might compromise on what's right for the technology and users.
+
+-- ds.h2: Three-Path Sustainability Strategy
+
+We're exploring several approaches:
+
+1. **fastn-cloud SaaS**
+
+    We're building a better hosting platform designed for peer-to-peer,
+    offline-first applications. Instead of traditional website hosting, we're
+    positioning as providers of "stable P2P hosts" - running your primary fastn
+    instance with backups and bandwidth while users run secondary instances
+    anywhere.
+
+2. **Open Source Sponsorships and Grants**
+
+    Our work serves a mission larger than our company. We're seeking sponsorships
+    and have applied for European funding programs. We want to start taking
+    sponsorships and explore government grants for promoting programming education,
+    resilience, cryptography, and peer-to-peer independence.
+
+    We're also looking at partnerships - for example, with our Malai project (an
+    HTTP bridge), we could partner with companies like DigitalOcean or Browserstack
+    for "powered by" relationships.
+
+3. **Rust Consulting**
+
+    We've been using Rust in production since 2017 and have built complex systems
+    with it. Rather than becoming a development shop, we want to offer consulting -
+    helping teams architect better systems, review code, and solve technical
+    problems.
+
+    This approach has a nice property: all sales are inbound. Open source projects
+    with stars build authority. When companies need Rust expertise, they naturally
+    look to people who've proven themselves by building Rust projects.
+
+    We're not great at sales, and this leverages the authority we've built through
+    open source work. We don't want to write code for clients, but we can sit with
+    developers and help them write better Rust code, organize programs better, and
+    handle logging, tracing, and error handling.
+
+-- ds.h2: The Hardware Vision
+
+We've even discussed hardware possibilities. Since we're not tied to SaaS, we
+could create educational hardware solutions - taking cheap but powerful devices
+like Raspberry PIs to villages and teaching programming without requiring
+internet infrastructure or money.
+
+Self hosted hardware is also fascinating.
+
+-- ds.h2: The Mission Continues
+
+Despite financial constraints, we remain committed to our core mission. Excel
+proved non-programmers can create sophisticated applications when given the
+right tools. We believe fastn can extend that democratization to web
+applications.
+
+**Siddhant**: One thing I really like that you said is that today we have
+Raspberry Pis - cheap, powerful hardware. If you solve networking and make it
+almost free, we have a tool we can take to villages and teach kids programming,
+which is fascinating.
+**Amitu**: Exactly. And in terms of FifthTry's roadmap, I want to add even
+hardware products - since we're not doing SaaS, we can do hardware.
+
+-- ds.h2: The Honest Sales Challenge
+
+We're terrible at sales - you can probably tell from how we talk about
+consulting just to keep working on the technology we love. We'd rather spend
+time building than pitching.
+
+But we're committed to finding sustainable funding because this work matters.
+We need enough money to pay salaries for two developers so we can stop worrying
+about funding and focus on building technology that's good for humanity.
+
+We don't have big money ambitions - we just want to ensure two developers can
+work sustainably on problems that matter. So far we were not open for business.
+Now we are open for business.
+
+If you go to Malai, Kulfi, fastn, or FifthTry websites, you'll hopefully soon
+see "hire us" callouts. We're not great at selling, but we're hoping some
+people will click and see how it goes.
+
+-- ds.h2: Looking Forward
+
+The future of computing doesn't have to be dominated by a few large platforms.
+Sometimes it takes a small, dedicated team working for years to prove different
+approaches are possible.
+
+Peer-to-peer systems, programming languages for everyone - these should exist.
+If not us, someone else should do it, but it should exist. We're building fastn
+and peer-to-peer infrastructure not because it's easy or profitable, but
+because it's necessary for a more democratic digital future.
+
+**Siddhant**: It almost feels like we're selling our souls so we can keep
+working on the stuff we like.
+
+**Amitu**: This is how bad we are at selling - the most honest thing you can do
+is feel like you're selling your soul to work on something you love. That's not
+exactly making us look excited about selling our services, but we need to. I'm
+hopeful.
+
+-- end: ds.blog-page
