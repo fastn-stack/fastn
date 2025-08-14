@@ -4,17 +4,18 @@
 -- import: fastn.com/utils
 
 
--- common.post-meta meta: Chat with [@amitu](https://github.com/amitu/) about FifthTry, fastn and, p2p
+-- common.post-meta meta: Open Source Sustainability for fastn - FifthTry Launches Rust Consultancy
 published-on: 4 Aug, 2025
 post-url: /podcast/chat-with-amitu-about-ft-fastn-and-p2p/
 author: $authors.siddhant
 read-time: 13-20 minutes
 
-A candid discussion between Siddhant and Amitu about building fastn, the challenges of open source sustainability, and our transition to peer-to-peer architecture.
+A candid discussion between Siddhant and AmitU about building fastn, the
+challenges of open source sustainability, and launching our Rust Consultancy
 
 -- ds.blog-page:
 meta: $meta
-og-title: Chat with @amitu about FifthTry, fastn and, p2p
+og-title: Open Source Sustainability for fastn - FifthTry Launches Rust Consultancy
 og-image: https://fastn.com/-/fastn.com/images/podcast/chat-with-amitu-podcast-og-img.png
 
 -- ds.youtube:
@@ -450,5 +451,8 @@ working on the stuff we like.
 is feel like you're selling your soul to work on something you love. That's not
 exactly making us look excited about selling our services, but we need to. I'm
 hopeful.
+
+That's all for today! Do [donate](/donate/) to fastn or [hire us as your
+Rust Consultant](/consulting/).
 
 -- end: ds.blog-page
