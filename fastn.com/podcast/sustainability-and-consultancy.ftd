@@ -6,7 +6,7 @@
 
 -- common.post-meta meta: Open Source Sustainability for fastn - FifthTry Launches Rust Consultancy
 published-on: 4 Aug, 2025
-post-url: /podcast/chat-with-amitu-about-ft-fastn-and-p2p/
+post-url: /podcast/sustainability-and-consultancy/
 author: $authors.siddhant
 read-time: 13-20 minutes
 
@@ -33,7 +33,7 @@ conversation captures where FifthTry stands today and where it's heading.
 
 -- ds.h2: The Deep Roots
 
-**Amitu**: I've been programming since 1998, and by 1999, I'd built my first
+**AmitU**: I've been programming since 1998, and by 1999, I'd built my first
 web application that was used by over 500 people. The journey to fastn and
 FifthTry actually began much earlier than 2020 - the conceptual foundation goes
 back to 2010.
@@ -129,7 +129,7 @@ page](https://www.ycombinator.com/companies/fifthtry/), the story there focuses
 on syncing code with documents. How did you go from the authoring tools passion
 to this specific problem?
 
-**Amitu**: When I started FifthTry in 2020 after leaving Acko, I realized I
+**AmitU**: When I started FifthTry in 2020 after leaving Acko, I realized I
 couldn't sell a new documentation format directly. Developers needed a tool
 that solved an immediate problem. So we built something focused on keeping
 documentation synchronized with code - essentially the productized version of
@@ -165,7 +165,7 @@ them back together, someone suggested the name "fastn", and I loved it.
 **Siddhant**: How would you compare fastn to existing frameworks? Is it more
 like Ruby on Rails/Django, or more like React with a JSON backend?
 
-**Amitu**: fastn is more similar to Excel than either of those options. Think
+**AmitU**: fastn is more similar to Excel than either of those options. Think
 about Excel: it's about data and formulas (backend-like logic), yet it has UI
 with conditional formatting (frontend-like features). When you change something
 in one cell, all related cells update automatically. Excel is actually a
@@ -195,7 +195,7 @@ for UI.
 **Siddhant**: FifthTry has existed for about 5 years now. Have we made any
 money, and if not, why?
 
-**Amitu**: Maybe I'm a good tech person but I suck as a founder. We haven't
+**AmitU**: Maybe I'm a good tech person but I suck as a founder. We haven't
 made meaningful money. We got into Y Combinator very quickly - about two months
 after I left Acko - and raised a modest seed round. But currently, I can only
 support the two of us. We have less than one year of runway at very modest
@@ -256,7 +256,7 @@ loops that completely overwhelm hardware resources.
 **Siddhant**: You could have launched a pricing page and started charging
 despite the issues.
 
-**Amitu**: As a founder, I couldn't recommend fastn hosting with a straight
+**AmitU**: As a founder, I couldn't recommend fastn hosting with a straight
 face knowing the fault patterns. Once you start generating revenue, it's hard
 to stop, and you become proud of the growth metrics. But if someone pays and
 then experiences multiple downtimes, you're just educating people not to trust
@@ -271,7 +271,7 @@ and compilation, creating an enormous surface area for problems.
 **Siddhant**: The hosting problems triggered a shift toward peer-to-peer
 architecture, right?
 
-**Amitu**: Yes, but I've been interested in P2P since 2015 when I got involved
+**AmitU**: Yes, but I've been interested in P2P since 2015 when I got involved
 with WebRTC at Browserstack. WebRTC amazed me because it enabled true
 peer-to-peer applications where both browsers formed the complete application
 with minimal server involvement.
@@ -300,7 +300,7 @@ enable the same range of applications.
 a BitTorrent-like base layer where you talk in terms of UI and information
 rather than just files?
 
-**Amitu**: The way you phrase it sounds more complex than how I think about it.
+**AmitU**: The way you phrase it sounds more complex than how I think about it.
 We're simply putting HTTP over peer-to-peer. With HTTP, you can do virtually
 everything - file sharing, chat, collaborative documents. Just that HTTP
 normally requires IP addresses and domain names.
@@ -326,7 +326,7 @@ object store - each requiring different syncing strategies.
 **Siddhant**: What do we do today that brings money, and what are we thinking
 for the future?
 
-**Amitu**: Two things have been dear to me: democratizing programming (making
+**AmitU**: Two things have been dear to me: democratizing programming (making
 it accessible to non-programmers like Excel did) and solving the
 hosting/infrastructure problem. Even if you make programming easier, you're
 still stuck with AWS and credit card requirements.
@@ -412,7 +412,7 @@ applications.
 Raspberry Pis - cheap, powerful hardware. If you solve networking and make it
 almost free, we have a tool we can take to villages and teach kids programming,
 which is fascinating.
-**Amitu**: Exactly. And in terms of FifthTry's roadmap, I want to add even
+**AmitU**: Exactly. And in terms of FifthTry's roadmap, I want to add even
 hardware products - since we're not doing SaaS, we can do hardware.
 
 -- ds.h2: The Honest Sales Challenge
@@ -447,7 +447,7 @@ because it's necessary for a more democratic digital future.
 **Siddhant**: It almost feels like we're selling our souls so we can keep
 working on the stuff we like.
 
-**Amitu**: This is how bad we are at selling - the most honest thing you can do
+**AmitU**: This is how bad we are at selling - the most honest thing you can do
 is feel like you're selling your soul to work on something you love. That's not
 exactly making us look excited about selling our services, but we need to. I'm
 hopeful.

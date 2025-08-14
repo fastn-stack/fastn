@@ -1299,7 +1299,7 @@ skip: true
 # Podcast: /podcast/
 
 - Open Source Sustainability for fastn - FifthTry Launches Rust Consultancy
-  url: /podcast/chat-with-amitu-about-ft-fastn-and-p2p/
+  url: /podcast/sustainability-and-consultancy/
 
 # Hire Us!: /consulting/
 
@@ -1447,3 +1447,4 @@ skip: true
 /loops/ -> /loop/
 /use-js/ -> /use-js-css/
 /use-css/ -> /external-css/
+/podcast/chat-with-amitu-about-ft-fastn-and-p2p/ -> /podcast/sustainability-and-consultancy/
