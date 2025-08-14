@@ -1,11 +1,11 @@
--- import: fastn.com/podcast/chat-with-amitu-about-ft-fastn-and-p2p
+-- import: fastn.com/podcast/sustainability-and-consultancy
 
 -- ds.page-with-no-right-sidebar:
 
 -- ds.posts:
 
 -- ds.featured-post:
-post-data: $chat-with-amitu-about-ft-fastn-and-p2p.meta
+post-data: $sustainability-and-consultancy.meta
 
 -- end: ds.posts
 
