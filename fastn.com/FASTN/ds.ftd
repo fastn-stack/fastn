@@ -261,8 +261,12 @@ $page-with-no-right-sidebar.body
 -- component blog-page:
 children uis:
 common.post-meta meta:
+string og-title: $blog-page.meta.title
+string og-description: $blog-page.meta.body
 
 -- page:
+document-title: $blog-page.og-title
+document-description: $blog-page.og-description
 sidebar: false
 right-sidebar: []
 
