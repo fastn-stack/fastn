@@ -36,8 +36,6 @@ zip: https://codeload.github.com/fastn-stack/fastn/zip/refs/heads/main
 
 # Explore: /frontend/
 
-## Podcast: /podcast/
-
 ## Features: /frontend/
 
 - Frontend: /frontend/
@@ -1071,10 +1069,11 @@ skip: true
 - Typography json to FTD: /typo-json-to-ftd/
   document: typo/typo-json-to-ftd
 
-# Contribute: /contribute/
+# Support Us: /support/
 
 ## Donate: /donate/
-## Code: /contribute-code/
+## Contribute Code: /contribute-code/
+## Hire Us For Rust Consulting: /consulting/
 
 # Community: /champion-program/
   document: student-programs/champion.ftd
@@ -1296,6 +1295,10 @@ skip: true
   document: blog/show-cs.ftd
 - Using Custom Breakpoints: /breakpoint/
   document: blog/breakpoint.ftd
+
+# Podcast: /podcast/
+
+- Chat with @amitu about FifthTry, fastn and, p2p: /podcast/chat-with-amitu-about-ft-fastn-and-p2p/
 
 # Hire Us!: /consulting/
 

@@ -1,0 +1,12 @@
+-- import: fastn.com/podcast/chat-with-amitu-about-ft-fastn-and-p2p
+
+-- ds.page-with-no-right-sidebar:
+
+-- ds.posts:
+
+-- ds.featured-post:
+post-data: $chat-with-amitu-about-ft-fastn-and-p2p.meta
+
+-- end: ds.posts
+
+-- end: ds.page-with-no-right-sidebar
