@@ -10,12 +10,11 @@ post-url: /podcast/chat-with-amitu-about-ft-fastn-and-p2p/
 author: $authors.siddhant
 read-time: 13-20 minutes
 
-A candid discussion between Siddhant and Amitu about building fastn, the
-challenges of open source sustainability, and our transition to peer-to-peer
-architecture.
+A candid discussion between Siddhant and Amitu about building fastn, the challenges of open source sustainability, and our transition to peer-to-peer architecture.
 
 -- ds.blog-page:
 meta: $meta
+og-title: Chat with @amitu about FifthTry, fastn and, p2p
 
 -- ds.youtube:
 v: RJ6iBcvdmZA
