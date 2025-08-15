@@ -1245,6 +1245,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "fastn-entity"
+version = "0.1.0"
+dependencies = [
+ "eyre",
+ "fastn-id52",
+ "rusqlite",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
 name = "fastn-id52"
 version = "0.1.2"
 dependencies = [

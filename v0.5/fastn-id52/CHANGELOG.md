@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- `Clone` trait implementation for `SecretKey`
+  - Allows copying secret keys when needed in structs
+  - Clones by reconstructing from bytes
+- `Debug` trait implementation for `SecretKey`
+  - Shows only the public ID52 in debug output
+  - Omits the actual 32-byte secret key material for security
+  - Format: `SecretKey { id52: "..." }`
+
+### Changed
+
+- `SecretKey` now derives `Clone` and `Debug` for better ergonomics
+- Debug output for `SecretKey` no longer exposes sensitive key material
+
 ## [0.1.2] - 2025-08-15
 
 ### Added

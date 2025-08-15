@@ -32,6 +32,9 @@ Ed25519 public key. This format is designed to be:
 - **Key Generation**: Secure random entity key generation
 - **Signature Operations**: Sign and verify messages between entities
 - **Type Safety**: Strongly typed keys and signatures
+- **Trait Support**: 
+  - `PublicKey` and `Signature` implement `Copy`, `Clone`, `Debug`
+  - `SecretKey` implements `Clone` and custom `Debug` (shows ID52 only, not key material)
 
 ## Installation
 
@@ -242,12 +245,15 @@ All errors implement `std::error::Error` and provide descriptive messages.
 ## Security Considerations
 
 - **Secret Keys**: Never expose secret keys. They should be stored securely and
-  never logged or transmitted.
+  never logged or transmitted. The `Debug` implementation for `SecretKey` only
+  shows the public ID52, not the actual key material.
 - **Random Generation**: Uses `rand::rngs::OsRng` for cryptographically secure
   randomness
 - **Constant Time**: Ed25519 operations are designed to be constant-time to
   prevent timing attacks
 - **Key Derivation**: Each secret key deterministically derives its public key
+- **Debug Safety**: `SecretKey` implements a custom `Debug` that omits sensitive
+  key material, showing only `SecretKey { id52: "..." }`
 
 ## Examples
 

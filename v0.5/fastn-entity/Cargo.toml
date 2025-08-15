@@ -8,7 +8,7 @@ homepage.workspace = true
 license.workspace = true
 
 [dependencies]
-fastn-id52 = { path = "../fastn-id52", version = "0.1.1" }
+fastn-id52 = { path = "../fastn-id52", version = "0.1.2" }
 eyre.workspace = true
 rusqlite.workspace = true
 serde.workspace = true

@@ -59,6 +59,25 @@ pub struct PublicKey(InnerPublicKey);
 /// ```
 pub struct SecretKey(InnerSecretKey);
 
+// Manual Clone implementation for SecretKey
+impl Clone for SecretKey {
+    fn clone(&self) -> Self {
+        // Clone by reconstructing from bytes
+        SecretKey::from_bytes(&self.to_bytes())
+    }
+}
+
+// Manual Debug implementation to avoid exposing the secret key material.
+// Only shows the public ID52, omitting the actual 32-byte secret key value
+// that would be exposed by a derived Debug implementation.
+impl fmt::Debug for SecretKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("SecretKey")
+            .field("id52", &self.id52())
+            .finish()
+    }
+}
+
 /// Ed25519 digital signature.
 ///
 /// A `Signature` is a 64-byte Ed25519 signature created by signing a message with
