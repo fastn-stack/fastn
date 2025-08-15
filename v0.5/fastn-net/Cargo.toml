@@ -1,6 +1,6 @@
 [package]
 name = "fastn-net"
-version = "0.1.1"
+version = "0.1.2"
 edition.workspace = true
 authors.workspace = true
 description = "Network utilities for fastn"
@@ -8,7 +8,7 @@ homepage.workspace = true
 license.workspace = true
 
 [dependencies]
-fastn-id52 = { path = "../fastn-id52", version = "0.1.0" }
+fastn-id52 = { path = "../fastn-id52", version = "0.1.1" }
 bb8.workspace = true
 bytes.workspace = true
 colored.workspace = true

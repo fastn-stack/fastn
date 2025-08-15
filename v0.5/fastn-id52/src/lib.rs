@@ -16,7 +16,34 @@
 //! - DNS-compatible (can be used in subdomains)
 //! - URL-safe without special encoding
 //!
-//! ## Quick Start
+//! ## Installation
+//!
+//! This crate can be used as a library or installed as a CLI tool:
+//!
+//! ```bash
+//! # As a library dependency
+//! cargo add fastn-id52
+//!
+//! # As a CLI tool
+//! cargo install fastn-id52
+//! ```
+//!
+//! ## CLI Usage
+//!
+//! The `fastn-id52` CLI tool generates entity identities:
+//!
+//! ```bash
+//! # Generate and save to default file (.fastn.secret-key)
+//! fastn-id52 generate --file
+//!
+//! # Generate and save to custom file
+//! fastn-id52 generate --file my-entity.key
+//!
+//! # Generate and print to stdout (requires explicit flag)
+//! fastn-id52 generate --print
+//! ```
+//!
+//! ## Quick Start (Library)
 //!
 //! ```
 //! use fastn_id52::SecretKey;

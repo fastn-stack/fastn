@@ -65,16 +65,19 @@
 //! // Component 1: Accept incoming P2P connections
 //! let p2p_graceful = graceful.clone();
 //! graceful.spawn(async move {
-//!     while let Ok(conn) = endpoint.accept().await {
-//!         if p2p_graceful.is_cancelled() {
-//!             break;
+//!     while let Some(conn) = endpoint.accept().await {
+//!         tokio::select! {
+//!             _ = p2p_graceful.cancelled() => {
+//!                 break;
+//!             }
+//!             else => {
+//!                 // Handle each connection in a tracked task
+//!                 p2p_graceful.spawn(async move {
+//!                     // Process P2P connection...
+//!                     Ok::<(), eyre::Error>(())
+//!                 });
+//!             }
 //!         }
-//!         
-//!         // Handle each connection in a tracked task
-//!         p2p_graceful.spawn(async move {
-//!             // Process P2P connection...
-//!             Ok::<(), eyre::Error>(())
-//!         });
 //!     }
 //!     Ok::<(), eyre::Error>(())
 //! });
@@ -83,9 +86,15 @@
 //! let api_graceful = graceful.clone();
 //! graceful.spawn(async move {
 //!     // Run HTTP server with cancellation check
-//!     while !api_graceful.is_cancelled() {
-//!         // Handle HTTP requests...
-//!         tokio::time::sleep(std::time::Duration::from_millis(100)).await;
+//!     loop {
+//!         tokio::select! {
+//!             _ = api_graceful.cancelled() => {
+//!                 break;
+//!             }
+//!             _ = tokio::time::sleep(std::time::Duration::from_millis(100)) => {
+//!                 // Handle HTTP requests...
+//!             }
+//!         }
 //!     }
 //!     Ok::<(), eyre::Error>(())
 //! });
@@ -94,7 +103,7 @@
 //! tokio::select! {
 //!     _ = tokio::signal::ctrl_c() => {
 //!         println!("Shutting down gracefully...");
-//!         graceful.shutdown().await;
+//!         graceful.shutdown().await?;
 //!         println!("All tasks completed");
 //!     }
 //! }
@@ -107,8 +116,8 @@
 //! 1. **Clone for each component**: Each async task or component should get
 //!    its own clone of `Graceful` to spawn sub-tasks.
 //!
-//! 2. **Check cancellation in loops**: Long-running loops should periodically
-//!    check `is_cancelled()` or use `select!` with `cancelled()`.
+//! 2. **Check cancellation in loops**: Long-running loops should use
+//!    `select!` with `cancelled()` for proper cancellation handling.
 //!
 //! 3. **Use spawn() for all tasks**: Always use `graceful.spawn()` instead of
 //!    `tokio::spawn()` to ensure tasks are tracked.

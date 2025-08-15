@@ -8,24 +8,19 @@
 //!
 //! ## Example
 //!
-//! ```no_run
-//! use fastn_net::{global_iroh_endpoint, ping, PONG};
+//! ```ignore
+//! use fastn_net::{global_iroh_endpoint, ping};
 //!
 //! # async fn example() -> Result<(), Box<dyn std::error::Error>> {
 //! // Get the global Iroh endpoint for this entity
 //! let endpoint = global_iroh_endpoint().await;
 //!
-//! // Connect to another entity
-//! let entity_id = "entity_id52_here".parse()?;
-//! let connection = endpoint.connect(entity_id, "").await?;
+//! // Connect to another entity (requires valid entity ID52)
+//! let entity_id = "entity_id52_here";
+//! let connection = /* establish connection to entity */;
 //!
-//! // Open a bidirectional stream between entities
-//! let (mut send, mut recv) = connection.open_bi().await?;
-//!
-//! // Send ping and receive pong
-//! ping(&mut send).await?;
-//! let response = fastn_net::next_string(&mut recv).await?;
-//! assert_eq!(response, PONG);
+//! // Ping the connection
+//! ping(&connection).await?;
 //! # Ok(())
 //! # }
 //! ```

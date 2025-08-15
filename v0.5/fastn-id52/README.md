@@ -35,6 +35,8 @@ Ed25519 public key. This format is designed to be:
 
 ## Installation
 
+### As a Library
+
 Add this to your `Cargo.toml`:
 
 ```toml
@@ -42,7 +44,62 @@ Add this to your `Cargo.toml`:
 fastn-id52 = "0.1"
 ```
 
-## Usage
+### As a CLI Tool
+
+Install the `fastn-id52` command-line tool using cargo:
+
+```bash
+cargo install fastn-id52
+```
+
+Or build from source:
+
+```bash
+git clone https://github.com/fastn-stack/fastn
+cd fastn/v0.5/fastn-id52
+cargo install --path .
+```
+
+## CLI Usage
+
+The `fastn-id52` command-line tool generates entity identities for the fastn P2P network.
+
+### Generate a New Entity Identity
+
+```bash
+# Save to default file (.fastn.secret-key)
+fastn-id52 generate --file
+
+# Save to custom file
+fastn-id52 generate --file my-entity.key
+
+# Print to stdout (requires explicit flag for safety)
+fastn-id52 generate --print
+```
+
+### Command Reference
+
+```
+fastn-id52 - Entity identity generation for fastn peer-to-peer network
+
+Usage:
+  fastn-id52 <COMMAND>
+
+Commands:
+  generate    Generate a new entity identity
+  help        Print help message
+
+Generate command options:
+  -f, --file [FILENAME]   Save to file (default: .fastn.secret-key)
+  -p, --print             Print to stdout (requires explicit flag)
+```
+
+### Security Notes
+
+- The CLI requires explicit flags (`--print` or `--file`) to output secret keys, preventing accidental exposure
+- File operations check for existing files to prevent accidental overwriting
+
+## Library Usage
 
 ### Generating Keys
 

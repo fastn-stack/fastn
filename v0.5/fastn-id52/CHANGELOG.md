@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] - 2025-08-15
+
+### Added
+
+- CLI binary `fastn-id52` for entity key generation
+  - `generate` command to create new entity identities
+  - `--file` option to save keys to files (default: `.fastn.secret-key`)
+  - `--print` option to output keys to stdout
+  - Safety checks to prevent accidental key overwriting
+
+### Security
+
+- CLI requires explicit flags (`--print` or `--file`) to output secret keys
+- File operations check for existing files to prevent accidental overwriting
+
 ## [0.1.0] - 2025-08-15
 
 ### Added

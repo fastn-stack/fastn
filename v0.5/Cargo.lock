@@ -1246,7 +1246,7 @@ dependencies = [
 
 [[package]]
 name = "fastn-id52"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "data-encoding",
  "ed25519-dalek",
@@ -1270,7 +1270,7 @@ dependencies = [
 
 [[package]]
 name = "fastn-net"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [
  "bb8",
  "bytes",

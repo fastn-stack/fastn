@@ -17,6 +17,7 @@ Network utilities and P2P communication for the fastn ecosystem.
 - Connection pooling for HTTP clients
 - Protocol multiplexing (HTTP, TCP, SOCKS5, Ping) over single connections
 - Entity identification via ID52 encoding
+- Graceful shutdown management for async tasks
 
 ## Installation
 
@@ -27,20 +28,36 @@ fastn-net = "0.1"
 
 ## Usage
 
+### Basic Connection and Ping
+
 ```rust
-use fastn_net::{global_iroh_endpoint, ping, PONG, Protocol};
+use fastn_net::{global_iroh_endpoint, ping};
 
 // Get the global Iroh endpoint for entity connections
 let endpoint = global_iroh_endpoint().await;
 
-// Connect to another entity and open a stream
-let connection = endpoint.connect(entity_node_id, "").await?;
-let (mut send, mut recv) = connection.open_bi().await?;
+// Connect to another entity
+let connection = endpoint.connect(entity_node_addr, b"").await?;
 
-// Send a ping to test connectivity between entities
-ping(&mut send).await?;
-let response = fastn_net::next_string(&mut recv).await?;
-assert_eq!(response, PONG);
+// Test connectivity with ping
+ping(&connection).await?;
+```
+
+### Graceful Shutdown
+
+```rust
+use fastn_net::Graceful;
+
+let graceful = Graceful::new();
+
+// Spawn tracked tasks
+graceful.spawn(async move {
+    // Your async work here
+    Ok::<(), eyre::Error>(())
+});
+
+// Shutdown gracefully on Ctrl+C
+graceful.shutdown().await?;
 ```
 
 ## Supported Protocols

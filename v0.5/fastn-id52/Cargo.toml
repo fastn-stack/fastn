@@ -1,11 +1,15 @@
 [package]
 name = "fastn-id52"
-version = "0.1.0"
+version = "0.1.1"
 edition.workspace = true
 authors.workspace = true
 description = "fastn ID52 identity and cryptographic key management"
 homepage.workspace = true
 license.workspace = true
+
+[[bin]]
+name = "fastn-id52"
+path = "src/main.rs"
 
 [dependencies]
 ed25519-dalek.workspace = true
