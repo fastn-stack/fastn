@@ -103,8 +103,7 @@ fn test_bytes_representation() {
 #[test]
 fn test_generate_and_parse() {
     // Generate a new key and verify it roundtrips correctly
-    let (_id52, secret) =
-        fastn_net::generate_secret_key().expect("Failed to generate secret key");
+    let (_id52, secret) = fastn_net::generate_secret_key().expect("Failed to generate secret key");
 
     let hex = secret.to_string();
     assert_eq!(hex.len(), 64, "Generated key should be 64 hex chars");

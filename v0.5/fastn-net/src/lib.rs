@@ -39,8 +39,7 @@
 
 extern crate self as fastn_net;
 
-pub // Internal entity configuration management
-mod dot_fastn;
+pub mod dot_fastn;
 pub mod get_endpoint;
 mod get_stream;
 mod graceful;
