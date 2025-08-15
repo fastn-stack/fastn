@@ -8,6 +8,7 @@ homepage.workspace = true
 license.workspace = true
 
 [dependencies]
+directories = "5"
 fastn-id52 = { path = "../fastn-id52", version = "0.1.2" }
 eyre.workspace = true
 rusqlite.workspace = true

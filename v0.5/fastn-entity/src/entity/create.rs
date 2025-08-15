@@ -33,7 +33,10 @@ impl fastn_entity::Entity {
         std::fs::write(&id52_file, &id52).wrap_err("Failed to write entity.id52 file")?;
 
         // Store private key based on SKIP_KEYRING environment variable
-        if std::env::var("SKIP_KEYRING").map(|v| v == "true").unwrap_or(false) {
+        if std::env::var("SKIP_KEYRING")
+            .map(|v| v == "true")
+            .unwrap_or(false)
+        {
             // If SKIP_KEYRING=true, save to file
             tracing::info!(
                 "SKIP_KEYRING is set, saving private key to file for {}",
@@ -56,11 +59,11 @@ impl fastn_entity::Entity {
             rusqlite::Connection::open(&db_path).wrap_err("Failed to create SQLite database")?;
 
         fastn_entity::migration::migrate(&conn).wrap_err("Failed to run database migrations")?;
-        
+
         let conn = std::sync::Arc::new(tokio::sync::Mutex::new(conn));
 
         Ok(fastn_entity::Entity {
-            id52: id52.clone(),
+            public_key: secret_key.public_key(),
             path: entity_path,
             secret_key,
             conn,

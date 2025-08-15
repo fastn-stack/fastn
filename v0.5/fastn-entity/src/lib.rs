@@ -38,7 +38,10 @@
 extern crate self as fastn_entity;
 
 mod entity;
+mod entity_manager;
 mod migration;
+
+pub use entity_manager::EntityManager;
 
 /// Represents a single entity in the fastn P2P network.
 ///
@@ -48,12 +51,19 @@ mod migration;
 /// - A cryptographic identity for P2P communication
 #[derive(Debug, Clone)]
 pub struct Entity {
-    /// The entity's ID52 identifier
-    pub(crate) id52: String,
+    /// The entity's public key
+    pub(crate) public_key: fastn_id52::PublicKey,
     /// Path to the entity's folder
     pub(crate) path: std::path::PathBuf,
     /// The entity's secret key (loaded from keyring or file)
     pub(crate) secret_key: fastn_id52::SecretKey,
     /// The entity's database connection
     pub(crate) conn: std::sync::Arc<tokio::sync::Mutex<rusqlite::Connection>>,
+}
+
+impl Entity {
+    /// Get the entity's ID52 string
+    pub fn id52(&self) -> String {
+        self.public_key.to_string()
+    }
 }

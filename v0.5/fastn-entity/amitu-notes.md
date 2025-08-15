@@ -15,4 +15,15 @@ the default behaviour for entity folder is to store entity.id52 file, its public
 key, and get the private key from the keyring. does id52 crate take care of
 reading secret key from keyring? if the entity.private-key is found it will be
 read first. both .private-key and .id52 is an ERROR (we are strict). when an
-identity is getting created we try to store the key in keyring by default.  
+identity is getting created we try to store the key in keyring by default.
+
+how can multiple identity exist in new? i think this new is both new and load.
+in new mode it should create a default entity but not in load. actually there is
+more, we will need config.json in this folder to decide the last identity,
+we will discuss this later, make it the new entity whenever a new entity is
+created, and then we need which entities are online or offline, not all
+entities are online all the time. so even more reason to have new vs load.
+
+we should store online status for each entity, so update Entity struct. also
+store last: String. actually we should store fastn_id52::PublicKey instead of
+String when storing id52
