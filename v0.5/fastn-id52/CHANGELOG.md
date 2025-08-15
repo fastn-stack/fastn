@@ -6,6 +6,39 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres
 to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.2] - 2025-08-15
+
+### Added
+
+- System keyring integration for secure secret key storage
+  - Default storage now uses system keyring (password manager)
+  - `SecretKey::store_in_keyring()` method to save keys
+  - `SecretKey::from_keyring(id52)` method to load keys
+  - `SecretKey::delete_from_keyring()` method to remove keys
+  - `KeyringError` type for keyring operation failures
+- CLI improvements
+  - Keyring storage is now the default behavior
+  - `--keyring` / `-k` flag for explicit keyring storage
+  - `--short` / `-s` flag for minimal output (only ID52)
+  - Support for `-` as filename to output to stdout
+  - Improved argument parsing with structured `Cli` type
+
+### Changed
+
+- **BREAKING**: CLI default behavior now stores in keyring instead of requiring flags
+- **BREAKING**: Removed `--print` option (use `--file -` or `-f -` instead)
+- CLI now requires explicit `--file` flag for file storage (security improvement)
+- Refactored CLI parsing with proper command structure
+- Keys stored in keyring as hex strings for password manager compatibility
+- Keyring service name: "fastn", account: ID52 of the entity
+
+### Security
+
+- No automatic fallback from keyring to file storage
+- File storage requires explicit user consent via `--file` flag
+- Clear error messages when keyring is unavailable
+- Support for legacy keyring format (raw bytes) while preferring hex format
+
 ## [0.1.1] - 2025-08-15
 
 ### Added
@@ -59,5 +92,6 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
     - `SecretKey` deliberately does not derive Copy to encourage explicit
       cloning of sensitive data
 
+[0.1.2]: https://github.com/fastn-stack/fastn/releases/tag/fastn-id52-v0.1.2
 [0.1.1]: https://github.com/fastn-stack/fastn/releases/tag/fastn-id52-v0.1.1
 [0.1.0]: https://github.com/fastn-stack/fastn/releases/tag/fastn-id52-v0.1.0

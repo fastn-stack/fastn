@@ -33,15 +33,28 @@
 //! The `fastn-id52` CLI tool generates entity identities:
 //!
 //! ```bash
-//! # Generate and save to default file (.fastn.secret-key)
+//! # Default: Generate and store in system keyring
+//! fastn-id52 generate
+//! # Output: ID52 printed to stdout, secret key stored in keyring
+//!
+//! # Save to file (less secure, requires explicit flag)
 //! fastn-id52 generate --file
-//!
-//! # Generate and save to custom file
 //! fastn-id52 generate --file my-entity.key
+//! # Output: Secret key saved to file, ID52 printed to stderr
 //!
-//! # Generate and print to stdout (requires explicit flag)
-//! fastn-id52 generate --print
+//! # Print to stdout
+//! fastn-id52 generate --file -
+//! fastn-id52 generate -f -
+//! # Output: Secret key (hex) printed to stdout, ID52 printed to stderr
+//!
+//! # Short output (only ID52, no descriptive messages)
+//! fastn-id52 generate --short
+//! fastn-id52 generate -f - -s
+//! # Output: Secret key stored in keyring, only ID52 printed (no messages)
 //! ```
+//!
+//! By default, secret keys are stored securely in the system keyring and can be
+//! viewed in your password manager. File storage requires explicit user consent.
 //!
 //! ## Quick Start (Library)
 //!
@@ -75,6 +88,7 @@
 //! - [`ParseSecretKeyError`]: Errors parsing secret key strings
 //! - [`InvalidSignatureBytesError`]: Invalid signature byte format
 //! - [`SignatureVerificationError`]: Signature verification failures
+//! - [`KeyringError`]: Errors when accessing the system keyring
 //!
 //! ## Security
 //!
@@ -83,10 +97,12 @@
 //! uses the operating system's secure random number generator.
 
 mod errors;
+mod keyring;
 mod keys;
 
 pub use errors::{
     InvalidKeyBytesError, InvalidSignatureBytesError, ParseId52Error, ParseSecretKeyError,
     SignatureVerificationError,
 };
+pub use keyring::KeyringError;
 pub use keys::{PublicKey, SecretKey, Signature};

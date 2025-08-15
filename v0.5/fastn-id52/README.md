@@ -67,14 +67,37 @@ The `fastn-id52` command-line tool generates entity identities for the fastn P2P
 ### Generate a New Entity Identity
 
 ```bash
-# Save to default file (.fastn.secret-key)
-fastn-id52 generate --file
+# Default: Store in system keyring (most secure)
+fastn-id52 generate
+# Output: ID52 printed to stdout, secret key stored in keyring
 
-# Save to custom file
-fastn-id52 generate --file my-entity.key
+# Explicitly use keyring (same as default)
+fastn-id52 generate --keyring
+fastn-id52 generate -k
+# Output: ID52 printed to stdout, secret key stored in keyring
 
-# Print to stdout (requires explicit flag for safety)
-fastn-id52 generate --print
+# Save to file (requires explicit flag for security)
+fastn-id52 generate --file                  # saves to .fastn.secret-key
+fastn-id52 generate --file my-entity.key     # saves to specified file
+fastn-id52 generate -f my-entity.key
+# Output: Secret key saved to file, ID52 printed to stderr
+
+# Print to stdout
+fastn-id52 generate --file -                 # prints secret to stdout, ID52 to stderr
+fastn-id52 generate -f -                     # same as above
+# Output: Secret key (hex) printed to stdout, ID52 printed to stderr
+
+# Short output (only ID52, no descriptive messages) - ideal for scripting
+fastn-id52 generate --short                  # store in keyring, only ID52 on stderr
+fastn-id52 generate -s                       # same as above
+# Output: Secret key stored in keyring, only ID52 printed to stderr (no messages)
+# Use case: Capture ID52 in scripts without parsing descriptive text
+
+fastn-id52 generate -f - -s                  # secret to stdout, only ID52 on stderr
+# Output: Secret key (hex) to stdout, only ID52 to stderr (no messages)
+
+fastn-id52 generate -f my.key -s             # save to file, only ID52 on stderr
+# Output: Secret key saved to file, only ID52 to stderr (no messages)
 ```
 
 ### Command Reference
@@ -90,14 +113,31 @@ Commands:
   help        Print help message
 
 Generate command options:
-  -f, --file [FILENAME]   Save to file (default: .fastn.secret-key)
-  -p, --print             Print to stdout (requires explicit flag)
+  -k, --keyring           Store in system keyring (default behavior)
+  -f, --file [FILENAME]   Save to file (use '-' for stdout)
+  -s, --short             Only print ID52, no descriptive messages (for scripting)
+
+By default, the secret key is stored in the system keyring and only the
+public key (ID52) is printed. Use -f to override this behavior.
+
+Examples:
+  fastn-id52 generate              # Store in keyring, print ID52
+                                    # Output: ID52 to stdout, secret in keyring
+  fastn-id52 generate -s           # Store in keyring, only ID52 on stderr
+                                    # Output: Only ID52 to stderr (no messages)
+  fastn-id52 generate -f -         # Print secret to stdout, ID52 to stderr
+                                    # Output: Secret (hex) to stdout, ID52 to stderr
+  fastn-id52 generate -f - -s      # Print secret to stdout, only ID52 on stderr
+                                    # Output: Secret (hex) to stdout, only ID52 to stderr
 ```
 
 ### Security Notes
 
-- The CLI requires explicit flags (`--print` or `--file`) to output secret keys, preventing accidental exposure
-- File operations check for existing files to prevent accidental overwriting
+- **Default is Secure**: By default, keys are stored in the system keyring (encrypted)
+- **Explicit File Storage**: The CLI requires explicit `--file` flag to save keys to disk
+- **No Automatic Fallback**: If keyring is unavailable, the tool will error rather than fall back to file storage
+- **File Safety**: File operations check for existing files to prevent accidental overwriting
+- **Password Manager Compatible**: Keys stored in keyring can be viewed in your password manager
 
 ## Library Usage
 

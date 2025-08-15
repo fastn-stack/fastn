@@ -1,6 +1,6 @@
 [package]
 name = "fastn-id52"
-version = "0.1.1"
+version = "0.1.2"
 edition.workspace = true
 authors.workspace = true
 description = "fastn ID52 identity and cryptographic key management"
@@ -16,3 +16,4 @@ ed25519-dalek.workspace = true
 data-encoding.workspace = true
 serde.workspace = true
 rand.workspace = true
+keyring.workspace = true

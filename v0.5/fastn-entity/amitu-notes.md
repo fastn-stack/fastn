@@ -1,0 +1,18 @@
+lets create a new crate called fastn-entity. it will have a type Entity and
+EntityManager. EntityManager will read all entries from provided path, and if
+path is not provided it will read from dot-fastn folder. each entity is
+stored in a folder named after entity's id52. each entity has a sqlite file call
+db.sqlite. each entity has a id52 secret key. entity manager has a method to
+create default entity if there are no entities. in fact we auto create default
+entity if there are no entities and we are creating an instance of entity
+manager. entity manager need not keep list of entities, as it can go stale, and
+should read off disc when need be. entity manager has explicit method to
+create a new entity as well. when creating an entity entity manager creates the
+identity also, or maybe entity::create will take care of this logic. lets
+add all this to README/lib.rs of the new crate.
+
+the default behaviour for entity folder is to store entity.id52 file, its public
+key, and get the private key from the keyring. does id52 crate take care of
+reading secret key from keyring? if the entity.private-key is found it will be
+read first. both .private-key and .id52 is an ERROR (we are strict). when an
+identity is getting created we try to store the key in keyring by default.  
