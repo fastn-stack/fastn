@@ -260,8 +260,9 @@ fn t_err1<PARSER, TESTER>(
     let has_results = !document.definitions.is_empty() 
         || !document.content.is_empty() 
         || (document.aliases.is_some() && {
+            let default_aliases_id = arena.default_aliases();
             let aliases = arena.aliases.get(document.aliases.unwrap()).unwrap();
-            let default_aliases = arena.aliases.get(arena.default_aliases()).unwrap();
+            let default_aliases = arena.aliases.get(default_aliases_id).unwrap();
             aliases.len() > default_aliases.len()
         });
     
