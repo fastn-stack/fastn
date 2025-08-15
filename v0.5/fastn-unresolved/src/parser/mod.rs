@@ -138,7 +138,7 @@ where
         "f!() should not produce content. Found: {:?}",
         document.content
     );
-    
+
     // Check if aliases were modified beyond defaults
     let default_aliases_id = arena.default_aliases();
     if let Some(aliases_id) = document.aliases {
@@ -182,7 +182,7 @@ where
         actual_errors, expected_errors,
         "Error mismatch for source: {source}"
     );
-    
+
     // Additional invariant: Must have at least one error
     assert!(
         !document.errors.is_empty(),
@@ -248,24 +248,24 @@ fn t_err1<PARSER, TESTER>(
         actual_errors, expected_errors_vec,
         "Error mismatch for source: {source}"
     );
-    
+
     // Invariant: t_err!() must produce at least one error
     assert!(
         !document.errors.is_empty(),
         "t_err!() must produce at least one error"
     );
-    
+
     // Invariant: t_err!() should produce some partial results
     // (otherwise use f!() for error-only cases)
-    let has_results = !document.definitions.is_empty() 
-        || !document.content.is_empty() 
+    let has_results = !document.definitions.is_empty()
+        || !document.content.is_empty()
         || (document.aliases.is_some() && {
             let default_aliases_id = arena.default_aliases();
             let aliases = arena.aliases.get(document.aliases.unwrap()).unwrap();
             let default_aliases = arena.aliases.get(default_aliases_id).unwrap();
             aliases.len() > default_aliases.len()
         });
-    
+
     assert!(
         has_results,
         "t_err!() should produce partial results. Use f!() for error-only cases"

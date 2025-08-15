@@ -63,19 +63,29 @@ pub struct SecretKey(InnerSecretKey);
 ///
 /// A `Signature` is a 64-byte Ed25519 signature created by signing a message with
 /// a [`SecretKey`]. Signatures can be verified using the corresponding [`PublicKey`].
+/// The signature is displayed using hexadecimal encoding (128 characters).
 ///
 /// # Examples
 ///
 /// ```
 /// use fastn_id52::{SecretKey, Signature};
+/// use std::str::FromStr;
 ///
 /// let secret_key = SecretKey::generate();
 /// let message = b"Hello, world!";
 /// let signature = secret_key.sign(message);
 ///
+/// // Convert to hex string (128 characters)
+/// let hex = signature.to_string();
+/// assert_eq!(hex.len(), 128);
+///
+/// // Parse from hex string
+/// let parsed = Signature::from_str(&hex).unwrap();
+///
 /// // Convert to bytes
 /// let bytes: [u8; 64] = signature.to_bytes();
 /// ```
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Signature(InnerSignature);
 
 // ============== PublicKey Implementation ==============
@@ -310,6 +320,59 @@ impl Signature {
     }
 }
 
+// Display implementation - uses hex encoding (128 characters)
+impl fmt::Display for Signature {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", data_encoding::HEXLOWER.encode(&self.to_bytes()))
+    }
+}
+
+// FromStr implementation - accepts hex format
+impl FromStr for Signature {
+    type Err = InvalidSignatureBytesError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        // Expect 128 hex characters for 64 bytes
+        if s.len() != 128 {
+            return Err(InvalidSignatureBytesError {
+                expected: 64,
+                got: s.len() / 2,
+            });
+        }
+
+        let mut bytes = [0u8; 64];
+        data_encoding::HEXLOWER
+            .decode_mut(s.as_bytes(), &mut bytes)
+            .map_err(|_| InvalidSignatureBytesError {
+                expected: 64,
+                got: 0, // Invalid hex encoding
+            })?;
+
+        Self::from_bytes(&bytes)
+    }
+}
+
+// Serialize as hex string
+impl Serialize for Signature {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(&self.to_string())
+    }
+}
+
+// Deserialize from hex string
+impl<'de> Deserialize<'de> for Signature {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let s = String::deserialize(deserializer)?;
+        Signature::from_str(&s).map_err(serde::de::Error::custom)
+    }
+}
+
 // Implement From for Vec<u8> conversion
 impl From<Signature> for Vec<u8> {
     fn from(sig: Signature) -> Vec<u8> {
@@ -358,5 +421,23 @@ mod tests {
 
         let wrong_message = b"wrong message";
         assert!(public_key.verify(wrong_message, &signature).is_err());
+    }
+
+    #[test]
+    fn test_signature_hex_roundtrip() {
+        let secret_key = SecretKey::generate();
+        let message = b"test message";
+        let signature = secret_key.sign(message);
+
+        // Test hex encoding/decoding
+        let hex = signature.to_string();
+        assert_eq!(hex.len(), 128); // 64 bytes * 2 hex chars per byte
+
+        let parsed = Signature::from_str(&hex).unwrap();
+        assert_eq!(parsed.to_bytes(), signature.to_bytes());
+
+        // Verify the parsed signature still works
+        let public_key = secret_key.public_key();
+        assert!(public_key.verify(message, &parsed).is_ok());
     }
 }
