@@ -1,13 +1,11 @@
-use crate::Entity;
-
-impl Entity {
+impl fastn_entity::Entity {
     /// Creates a new entity in the specified directory.
     ///
     /// This will:
     /// 1. Generate a new cryptographic identity
     /// 2. Create the entity directory named by its ID52
     /// 3. Save the public key to `entity.id52`
-    /// 4. Store the private key in the system keyring (or file if SKIP_KEYRING is set)
+    /// 4. Store the private key in the system keyring (or file if SKIP_KEYRING=true)
     /// 5. Create an empty SQLite database
     ///
     /// # Errors
@@ -35,8 +33,8 @@ impl Entity {
         std::fs::write(&id52_file, &id52).wrap_err("Failed to write entity.id52 file")?;
 
         // Store private key based on SKIP_KEYRING environment variable
-        if std::env::var("SKIP_KEYRING").is_ok() {
-            // If SKIP_KEYRING is set, save to file
+        if std::env::var("SKIP_KEYRING").map(|v| v == "true").unwrap_or(false) {
+            // If SKIP_KEYRING=true, save to file
             tracing::info!(
                 "SKIP_KEYRING is set, saving private key to file for {}",
                 id52
@@ -57,12 +55,15 @@ impl Entity {
         let conn =
             rusqlite::Connection::open(&db_path).wrap_err("Failed to create SQLite database")?;
 
-        crate::migration::migrate(&conn).wrap_err("Failed to run database migrations")?;
+        fastn_entity::migration::migrate(&conn).wrap_err("Failed to run database migrations")?;
+        
+        let db = std::sync::Arc::new(tokio::sync::Mutex::new(conn));
 
-        Ok(Entity {
+        Ok(fastn_entity::Entity {
             id52: id52.clone(),
             path: entity_path,
             secret_key,
+            db,
         })
     }
 }

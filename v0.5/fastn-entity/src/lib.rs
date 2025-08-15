@@ -35,6 +35,8 @@
 //! 3. Error if both `.id52` and `.private-key` files exist (strict mode)
 //! 4. Read `.private-key` file if it exists (less secure, explicit user choice)
 
+extern crate self as fastn_entity;
+
 mod entity;
 mod migration;
 
@@ -55,4 +57,7 @@ pub struct Entity {
     /// The entity's secret key (loaded from keyring or file)
     #[expect(dead_code)]
     pub(crate) secret_key: fastn_id52::SecretKey,
+    /// The entity's database connection
+    #[expect(dead_code)]
+    pub(crate) db: std::sync::Arc<tokio::sync::Mutex<rusqlite::Connection>>,
 }
