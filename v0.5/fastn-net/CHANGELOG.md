@@ -63,4 +63,5 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Async runtime with tokio
 - Migrated from kulfi-utils to fastn ecosystem
 
-[0.1.1]: https://github.com/fastn-stack/fastn/releases/tag/fastn-net-v0.1.0
+[0.1.2]: https://github.com/fastn-stack/fastn/releases/tag/fastn-net-v0.1.2
+[0.1.1]: https://github.com/fastn-stack/fastn/releases/tag/fastn-net-v0.1.1

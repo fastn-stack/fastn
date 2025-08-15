@@ -59,4 +59,5 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
     - `SecretKey` deliberately does not derive Copy to encourage explicit
       cloning of sensitive data
 
+[0.1.1]: https://github.com/fastn-stack/fastn/releases/tag/fastn-id52-v0.1.1
 [0.1.0]: https://github.com/fastn-stack/fastn/releases/tag/fastn-id52-v0.1.0
