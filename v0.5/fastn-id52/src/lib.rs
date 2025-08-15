@@ -1,30 +1,33 @@
 //! # fastn-id52
 //!
-//! ID52 identity and cryptographic key management for the fastn ecosystem.
+//! Entity identity and cryptographic key management for the fastn P2P network.
 //!
-//! This crate provides a secure implementation of ID52 encoding for Ed25519 public keys,
-//! along with comprehensive cryptographic operations including key generation, signature
-//! creation, and verification.
+//! This crate provides entity identity for fastn's peer-to-peer network. Each fastn
+//! instance is called an "entity" and is uniquely identified by an ID52 - a 52-character
+//! encoded Ed25519 public key.
 //!
 //! ## What is ID52?
 //!
-//! ID52 is a 52-character encoding format using BASE32_DNSSEC that provides a compact,
-//! URL-safe representation of Ed25519 public keys. Each ID52 string is exactly 52 characters
-//! long and uses only lowercase letters and digits, making it ideal for use in URLs, DNS
-//! records, and other contexts where special characters might cause issues.
+//! ID52 is the identity of an entity on the fastn peer-to-peer network. It's a
+//! 52-character string using BASE32_DNSSEC encoding that uniquely identifies each
+//! entity. The format is:
+//! - Exactly 52 characters long
+//! - Uses only lowercase letters and digits
+//! - DNS-compatible (can be used in subdomains)
+//! - URL-safe without special encoding
 //!
 //! ## Quick Start
 //!
 //! ```
 //! use fastn_id52::SecretKey;
 //!
-//! // Generate a new key pair
+//! // Generate a new entity identity
 //! let secret_key = SecretKey::generate();
 //! let public_key = secret_key.public_key();
 //!
-//! // Get the ID52 representation
-//! let id52 = public_key.to_string();
-//! assert_eq!(id52.len(), 52);
+//! // Get the entity's ID52 identifier
+//! let entity_id52 = public_key.to_string();
+//! assert_eq!(entity_id52.len(), 52);
 //!
 //! // Sign and verify a message
 //! let message = b"Hello, fastn!";
@@ -34,9 +37,9 @@
 //!
 //! ## Key Types
 //!
-//! - [`SecretKey`]: Ed25519 secret key for signing operations
-//! - [`PublicKey`]: Ed25519 public key with ID52 encoding
-//! - [`Signature`]: Ed25519 signature (64 bytes)
+//! - [`SecretKey`]: Entity's private key for signing operations
+//! - [`PublicKey`]: Entity's public key with ID52 encoding
+//! - [`Signature`]: Ed25519 signature for entity authentication
 //!
 //! ## Error Types
 //!

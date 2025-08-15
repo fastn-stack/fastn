@@ -4,32 +4,33 @@
 [![Documentation](https://docs.rs/fastn-id52/badge.svg)](https://docs.rs/fastn-id52)
 [![License](https://img.shields.io/crates/l/fastn-id52.svg)](LICENSE)
 
-ID52 identity and cryptographic key management for the fastn ecosystem.
+ID52 entity identity and cryptographic key management for the fastn P2P network.
 
 ## Overview
 
-`fastn-id52` provides a secure and efficient implementation of ID52 encoding for
-Ed25519 public keys, along with comprehensive cryptographic operations including
-key generation, signature creation, and verification.
+`fastn-id52` provides entity identity for the fastn P2P network. Each fastn instance
+(called an "entity") is identified by an ID52 - a 52-character encoded Ed25519 public
+key that uniquely identifies the entity on the network.
 
 ### What is ID52?
 
-ID52 is a 52-character encoding format using BASE32_DNSSEC that provides a
-compact, URL-safe representation of Ed25519 public keys. This format is designed
-to be:
+ID52 is the identity of an entity on the fastn peer-to-peer network. It's a
+52-character encoding format using BASE32_DNSSEC that represents the entity's
+Ed25519 public key. This format is designed to be:
 
+- Unique identifier for each fastn entity
 - Human-readable and copyable
-- DNS-compatible
+- DNS-compatible (can be used in subdomains)
 - URL-safe without encoding
 - Fixed length (always 52 characters)
 
 ## Features
 
+- **Entity Identity**: ID52 uniquely identifies fastn entities on the P2P network
 - **ID52 Encoding**: 52-character BASE32_DNSSEC encoded public keys
 - **Ed25519 Cryptography**: Industry-standard elliptic curve signatures
-- **Key Generation**: Secure random key generation
-- **Signature Operations**: Sign and verify messages
-- **Zero Dependencies**: Only core cryptographic libraries required
+- **Key Generation**: Secure random entity key generation
+- **Signature Operations**: Sign and verify messages between entities
 - **Type Safety**: Strongly typed keys and signatures
 
 ## Installation

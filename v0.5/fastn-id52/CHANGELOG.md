@@ -11,8 +11,9 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Initial release of fastn-id52 crate
-- ID52 encoding/decoding for public keys (52-character BASE32_DNSSEC format)
-- Ed25519 public/private key pair support
+- Entity identity for fastn P2P network
+- ID52 encoding/decoding for entity public keys (52-character BASE32_DNSSEC format)
+- Ed25519 public/private key pair support for entity authentication
 - Key generation and serialization
 - Digital signature creation and verification
 - Hexadecimal encoding for secret keys
