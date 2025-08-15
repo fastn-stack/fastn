@@ -17,6 +17,22 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - Shows only the public ID52 in debug output
   - Omits the actual 32-byte secret key material for security
   - Format: `SecretKey { id52: "..." }`
+- New `SecretKey` helper methods for key loading:
+  - `load_from_dir(dir, prefix)`: Comprehensive key loading from directory
+    - Checks for `{prefix}.id52` and `{prefix}.private-key` files
+    - Enforces strict mode (errors if both files exist)
+    - Returns tuple of (ID52, SecretKey)
+  - `load_for_id52(id52)`: Load key with automatic fallback
+    - Tries system keyring first
+    - Falls back to `FASTN_SECRET_KEYS` environment variable
+- Environment variable support for secret keys:
+  - `FASTN_SECRET_KEYS`: Keys directly in environment variable
+  - `FASTN_SECRET_KEYS_FILE`: Path to file containing keys (more secure)
+  - Cannot have both set (strict mode enforcement)
+  - Format: `prefix1: hexkey1\nprefix2: hexkey2` (spaces around `:` are optional)
+  - Files support comments (lines starting with `#`) and empty lines
+  - Flexible prefix matching using `starts_with`
+  - Use as many or few characters as needed for unique identification
 
 ### Changed
 

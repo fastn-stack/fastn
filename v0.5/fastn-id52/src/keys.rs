@@ -254,6 +254,169 @@ impl SecretKey {
         use ed25519_dalek::Signer;
         Signature(self.0.sign(message))
     }
+
+    /// Loads a secret key from a directory with comprehensive fallback logic.
+    ///
+    /// Checks for keys in the following locations:
+    /// 1. `{prefix}.id52` file → load ID52, then check keyring → env fallback
+    /// 2. `{prefix}.private-key` file → load key directly
+    ///
+    /// Returns error if both files exist (strict mode).
+    ///
+    /// # Arguments
+    ///
+    /// * `dir` - Directory to look for key files
+    /// * `prefix` - File prefix (e.g., "entity" for "entity.id52")
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if:
+    /// - Both `.id52` and `.private-key` files exist
+    /// - Neither file exists
+    /// - Key cannot be loaded or parsed
+    pub fn load_from_dir(
+        dir: &std::path::Path,
+        prefix: &str,
+    ) -> Result<(String, Self), crate::KeyringError> {
+        let id52_file = dir.join(format!("{prefix}.id52"));
+        let private_key_file = dir.join(format!("{prefix}.private-key"));
+
+        // Check for conflicting files (strict mode)
+        if id52_file.exists() && private_key_file.exists() {
+            return Err(crate::KeyringError::InvalidKey(format!(
+                "Both {prefix}.id52 and {prefix}.private-key files exist in {}. This is not allowed in strict mode.",
+                dir.display()
+            )));
+        }
+
+        if id52_file.exists() {
+            // Load ID52 and get private key using fallback logic
+            let id52 = std::fs::read_to_string(&id52_file)
+                .map_err(|e| {
+                    crate::KeyringError::Access(format!("Failed to read {prefix}.id52 file: {e}"))
+                })?
+                .trim()
+                .to_string();
+
+            // Try keyring first, then env fallback
+            let secret_key = Self::load_for_id52(&id52)?;
+
+            Ok((id52, secret_key))
+        } else if private_key_file.exists() {
+            // Load from private key file
+            let key_str = std::fs::read_to_string(&private_key_file).map_err(|e| {
+                crate::KeyringError::Access(format!(
+                    "Failed to read {prefix}.private-key file: {e}"
+                ))
+            })?;
+
+            let secret_key = Self::from_str(key_str.trim()).map_err(|e| {
+                crate::KeyringError::InvalidKey(format!("Failed to parse private key: {e}"))
+            })?;
+
+            let id52 = secret_key.id52();
+
+            Ok((id52, secret_key))
+        } else {
+            Err(crate::KeyringError::NotFound(format!(
+                "Neither {prefix}.id52 nor {prefix}.private-key file found in {}",
+                dir.display()
+            )))
+        }
+    }
+
+    /// Loads a secret key for the given ID52 with fallback logic.
+    ///
+    /// Attempts to load the key in the following order:
+    /// 1. From system keyring
+    /// 2. From FASTN_SECRET_KEYS_FILE (path to file with keys) or
+    ///    FASTN_SECRET_KEYS (keys directly in env var)
+    ///
+    /// Cannot have both FASTN_SECRET_KEYS_FILE and FASTN_SECRET_KEYS set (strict mode).
+    ///
+    /// The keys format is:
+    /// ```text
+    /// prefix1: hexkey1
+    /// prefix2: hexkey2
+    /// # Comments are allowed in files
+    /// ```
+    /// Where prefix can be any unique prefix of the ID52.
+    /// Uses starts_with matching for flexibility (e.g., "i66f" or "i66fo538").
+    /// Spaces around the colon are optional and trimmed.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if the key cannot be loaded from any source.
+    pub fn load_for_id52(id52: &str) -> Result<Self, crate::KeyringError> {
+        // Try keyring first
+        match Self::from_keyring(id52) {
+            Ok(key) => Ok(key),
+            Err(keyring_err) => {
+                // Try environment variable fallback
+                Self::load_from_env(id52).ok_or_else(|| {
+                    crate::KeyringError::NotFound(format!(
+                        "Key not found in keyring ({keyring_err}) or FASTN_SECRET_KEYS env"
+                    ))
+                })
+            }
+        }
+    }
+
+    /// Loads a secret key from FASTN_SECRET_KEYS environment variable or file.
+    ///
+    /// Checks in strict order:
+    /// 1. FASTN_SECRET_KEYS_FILE env var pointing to a file with keys
+    /// 2. FASTN_SECRET_KEYS env var with keys directly
+    ///
+    /// Cannot have both set (strict mode).
+    ///
+    /// Format: "prefix1: hexkey1\nprefix2: hexkey2\n..."
+    /// Where prefix can be any unique prefix of the ID52 (e.g., first 4-8 chars).
+    /// Uses starts_with matching, so you can use as many or few characters as needed
+    /// to uniquely identify the key. Spaces around the colon are allowed.
+    fn load_from_env(id52: &str) -> Option<Self> {
+        let has_file = std::env::var("FASTN_SECRET_KEYS_FILE").is_ok();
+        let has_direct = std::env::var("FASTN_SECRET_KEYS").is_ok();
+
+        // Strict mode: cannot have both
+        if has_file && has_direct {
+            eprintln!(
+                "ERROR: Both FASTN_SECRET_KEYS_FILE and FASTN_SECRET_KEYS are set. \
+                      This is not allowed in strict mode. Please use only one."
+            );
+            return None;
+        }
+
+        // Try file first if FASTN_SECRET_KEYS_FILE is set
+        let keys_content = if has_file {
+            let file_path = std::env::var("FASTN_SECRET_KEYS_FILE").ok()?;
+            std::fs::read_to_string(&file_path).ok()?
+        } else if has_direct {
+            std::env::var("FASTN_SECRET_KEYS").ok()?
+        } else {
+            return None;
+        };
+
+        // Parse the keys content
+        for line in keys_content.lines() {
+            let line = line.trim();
+            if line.is_empty() || line.starts_with('#') {
+                // Allow comments in file
+                continue;
+            }
+
+            if let Some((key_prefix, hex_key)) = line.split_once(':') {
+                let key_prefix = key_prefix.trim();
+                let hex_key = hex_key.trim();
+
+                if id52.starts_with(key_prefix) {
+                    return std::str::FromStr::from_str(hex_key).ok();
+                }
+            }
+        }
+
+        None
+    }
 }
 
 // Display implementation - always uses hex encoding

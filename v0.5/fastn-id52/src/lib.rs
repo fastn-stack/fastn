@@ -81,6 +81,29 @@
 //! - [`PublicKey`]: Entity's public key with ID52 encoding
 //! - [`Signature`]: Ed25519 signature for entity authentication
 //!
+//! ## Key Loading
+//!
+//! The crate provides comprehensive key loading with automatic fallback:
+//!
+//! ```rust,no_run
+//! use fastn_id52::SecretKey;
+//! use std::path::Path;
+//!
+//! // Load from directory (checks for .id52 or .private-key files)
+//! let (id52, key) = SecretKey::load_from_dir(Path::new("/path"), "entity")?;
+//!
+//! // Load with fallback: keyring → FASTN_SECRET_KEYS_FILE → FASTN_SECRET_KEYS
+//! let key = SecretKey::load_for_id52("i66fo538...")?;
+//! # Ok::<(), Box<dyn std::error::Error>>(())
+//! ```
+//!
+//! ### Environment Variables
+//!
+//! - `FASTN_SECRET_KEYS`: Keys directly in env var (format: `prefix: hexkey`)
+//! - `FASTN_SECRET_KEYS_FILE`: Path to file containing keys (more secure)
+//!
+//! Cannot have both set (strict mode). Files support comments (`#`) and empty lines.
+//!
 //! ## Error Types
 //!
 //! - [`ParseId52Error`]: Errors when parsing ID52 strings

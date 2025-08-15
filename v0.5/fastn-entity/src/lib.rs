@@ -49,15 +49,11 @@ mod migration;
 #[derive(Debug, Clone)]
 pub struct Entity {
     /// The entity's ID52 identifier
-    #[expect(dead_code)]
     pub(crate) id52: String,
     /// Path to the entity's folder
-    #[expect(dead_code)]
     pub(crate) path: std::path::PathBuf,
     /// The entity's secret key (loaded from keyring or file)
-    #[expect(dead_code)]
     pub(crate) secret_key: fastn_id52::SecretKey,
     /// The entity's database connection
-    #[expect(dead_code)]
-    pub(crate) db: std::sync::Arc<tokio::sync::Mutex<rusqlite::Connection>>,
+    pub(crate) conn: std::sync::Arc<tokio::sync::Mutex<rusqlite::Connection>>,
 }

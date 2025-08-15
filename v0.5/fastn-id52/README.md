@@ -289,6 +289,58 @@ let public_id52 = fs::read_to_string("public.id52") ?;
 let public_key = PublicKey::from_str( & public_id52) ?;
 ```
 
+### Advanced Key Loading with Fallback
+
+The crate provides comprehensive key loading with automatic fallback:
+
+```rust
+use fastn_id52::SecretKey;
+use std::path::Path;
+
+// Load from directory with automatic file detection
+// Looks for {prefix}.id52 or {prefix}.private-key files
+// Errors if both exist (strict mode)
+let (id52, secret_key) = SecretKey::load_from_dir(
+    Path::new("/path/to/entity"),
+    "entity"
+)?;
+
+// Load with ID52 and automatic fallback chain:
+// 1. System keyring
+// 2. FASTN_SECRET_KEYS_FILE or FASTN_SECRET_KEYS env var
+let secret_key = SecretKey::load_for_id52("i66fo538...")?;
+```
+
+#### Environment Variable Configuration
+
+For CI/CD and containerized environments, you can use environment variables:
+
+```bash
+# Option 1: Keys directly in environment variable
+export FASTN_SECRET_KEYS="
+i66f: hexkey1
+j77g: hexkey2
+"
+
+# Option 2: Path to file with keys (more secure)
+export FASTN_SECRET_KEYS_FILE="/secure/path/to/keys.txt"
+
+# File format (supports comments and empty lines):
+# Production keys
+i66f: hexkey1
+j77g: hexkey2
+
+# Test keys
+test1: testhexkey
+```
+
+**Important**: You cannot set both `FASTN_SECRET_KEYS_FILE` and `FASTN_SECRET_KEYS` (strict mode).
+
+Key features:
+- Flexible prefix matching (e.g., `i66f` matches `i66fo538...`)
+- Spaces around colons are optional
+- Files support comments (lines starting with `#`) and empty lines
+
 ## License
 
 This project is licensed under the UPL-1.0 License - see the LICENSE file for

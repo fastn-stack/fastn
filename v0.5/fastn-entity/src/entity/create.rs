@@ -57,13 +57,13 @@ impl fastn_entity::Entity {
 
         fastn_entity::migration::migrate(&conn).wrap_err("Failed to run database migrations")?;
         
-        let db = std::sync::Arc::new(tokio::sync::Mutex::new(conn));
+        let conn = std::sync::Arc::new(tokio::sync::Mutex::new(conn));
 
         Ok(fastn_entity::Entity {
             id52: id52.clone(),
             path: entity_path,
             secret_key,
-            db,
+            conn,
         })
     }
 }
