@@ -54,6 +54,7 @@ chrono = { version = "0.4", features = ["serde"] }
 colored = "2"
 deadpool = "0.10"
 deadpool-postgres = "0.12"
+directories = "6"
 fastn-builtins = { path = "../fastn-builtins" }
 fastn-compiler = { path = "fastn-compiler" }
 fastn-continuation = { path = "fastn-continuation" }
