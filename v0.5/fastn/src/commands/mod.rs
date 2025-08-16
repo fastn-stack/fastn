@@ -1,9 +1,11 @@
 mod build;
 mod parse;
 mod render;
+mod run;
 mod serve;
 
 pub use parse::parse;
+pub use run::run;
 
 // fastn <path> key=value
 // or echo {json} | fastn <path>
@@ -72,6 +74,7 @@ pub struct Build {
 }
 
 pub enum Cli {
+    Run, // Default when no arguments provided
     Render(Render),
     Build(Build),
     Serve(Serve),
