@@ -6,23 +6,46 @@
 //! instance is an "entity" identified by an ID52 - a 52-character encoded Ed25519
 //! public key. Entities have their own SQLite database and cryptographic identity.
 //!
+//! ## Quick Start
+//!
+//! ```no_run
+//! use fastn_entity::{EntityManager, Entity};
+//!
+//! # async fn example() -> eyre::Result<()> {
+//! // Initialize EntityManager (auto-creates default entity if needed)
+//! let mut manager = EntityManager::new(None).await?;
+//!
+//! // Load the last used entity
+//! let entity = manager.load_entity(manager.last()).await?;
+//! println!("Loaded entity: {}", entity.id52());
+//!
+//! // Create a new entity
+//! let new_entity = manager.create_entity().await?;
+//!
+//! // Manage online status
+//! manager.set_online(&new_entity.id52(), true)?;
+//! # Ok(())
+//! # }
+//! ```
+//!
 //! ## Overview
 //!
 //! - **Entity**: A single fastn instance with ID52 identity and SQLite database
+//! - **EntityManager**: Manages multiple entities with persistent configuration
 //! - **Storage**: Each entity stored in folder named by its ID52
 //! - **Security**: Private keys stored in system keyring by default
 //!
 //! ## Entity Storage Structure
 //!
-//! ```txt
-//! .fastn/
-//! ├── entities/
-//! │   ├── {id52}/
-//! │   │   ├── entity.id52      # Public key (ID52 format)
-//! │   │   └── db.sqlite        # Entity's SQLite database
-//! │   └── {another-id52}/
-//! │       ├── entity.id52
-//! │       └── db.sqlite
+//! ```text
+//! {entities_dir}/
+//! ├── config.json              # EntityManager configuration
+//! ├── {id52}/                  # Entity folder (named by ID52)
+//! │   ├── entity.id52          # Public key (ID52 format)
+//! │   ├── entity.private-key   # Private key (if not in keyring)
+//! │   └── db.sqlite            # Entity's SQLite database
+//! └── {another_id52}/
+//!     └── ...
 //! ```
 //!
 //! ## Key Management
