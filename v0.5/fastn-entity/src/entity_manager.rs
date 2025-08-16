@@ -116,4 +116,124 @@ impl EntityManager {
             }
         }
     }
+    
+    /// Loads an entity by its ID52.
+    ///
+    /// The entity folder must be named by its ID52.
+    ///
+    /// # Arguments
+    ///
+    /// * `id52` - The ID52 of the entity to load
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if:
+    /// - Entity folder doesn't exist
+    /// - Entity cannot be loaded (invalid keys, missing database, etc.)
+    pub async fn load_entity(&self, id52: &str) -> eyre::Result<fastn_entity::Entity> {
+        use eyre::WrapErr;
+        
+        let entity_path = self.path.join(id52);
+        
+        if !entity_path.exists() {
+            return Err(eyre::eyre!("Entity folder for '{}' not found", id52));
+        }
+        
+        if !entity_path.is_dir() {
+            return Err(eyre::eyre!("Path for '{}' is not a directory", id52));
+        }
+        
+        fastn_entity::Entity::load(&entity_path).await
+            .wrap_err_with(|| format!("Failed to load entity '{}' from {entity_path:?}", id52))
+    }
+    
+    /// Creates a new entity.
+    ///
+    /// The entity folder will be named by its generated ID52.
+    /// Updates config.json with the new entity's online status.
+    ///
+    /// # Returns
+    ///
+    /// The newly created Entity.
+    ///
+    /// # Errors
+    ///
+    /// Returns an error if:
+    /// - Entity creation fails
+    /// - Config update fails
+    pub async fn create_entity(&mut self) -> eyre::Result<fastn_entity::Entity> {
+        use eyre::WrapErr;
+        
+        // Create the entity (it creates its own folder named by ID52)
+        let entity = fastn_entity::Entity::create(&self.path).await
+            .wrap_err("Failed to create new entity")?;
+        
+        let id52 = entity.id52();
+        
+        // Add to online status map (new entities start online)
+        self.online_status.insert(id52.clone(), true);
+        
+        // Update last to the newly created entity
+        self.last = id52.clone();
+        
+        // Save updated config
+        self.save_config()
+            .wrap_err("Failed to update config.json after creating entity")?;
+        
+        tracing::info!("Created new entity: {}", id52);
+        
+        Ok(entity)
+    }
+    
+    /// Sets the online status for an entity.
+    ///
+    /// Updates the in-memory map and persists to config.json.
+    pub fn set_online(&mut self, id52: &str, online: bool) -> eyre::Result<()> {
+        use eyre::WrapErr;
+        
+        self.online_status.insert(id52.to_string(), online);
+        self.save_config()
+            .wrap_err("Failed to save config after updating online status")?;
+        
+        tracing::info!("Set entity {} to {}", id52, if online { "online" } else { "offline" });
+        Ok(())
+    }
+    
+    /// Gets the online status for an entity.
+    ///
+    /// Returns false if the entity is not in the map.
+    pub fn is_online(&self, id52: &str) -> bool {
+        self.online_status.get(id52).copied().unwrap_or(false)
+    }
+    
+    /// Sets the last used entity.
+    ///
+    /// Updates the in-memory field and persists to config.json.
+    pub fn set_last(&mut self, id52: &str) -> eyre::Result<()> {
+        use eyre::WrapErr;
+        
+        self.last = id52.to_string();
+        self.save_config()
+            .wrap_err("Failed to save config after updating last entity")?;
+        
+        tracing::info!("Set last entity to {}", id52);
+        Ok(())
+    }
+    
+    /// Gets the last used entity's ID52.
+    pub fn last(&self) -> &str {
+        &self.last
+    }
+    
+    /// Save the current configuration to config.json.
+    fn save_config(&self) -> eyre::Result<()> {
+        use eyre::WrapErr;
+        
+        let config_path = self.path.join("config.json");
+        let config_json = serde_json::to_string_pretty(&self)?;
+        std::fs::write(&config_path, config_json)
+            .wrap_err("Failed to write config.json")?;
+        
+        Ok(())
+    }
 }
