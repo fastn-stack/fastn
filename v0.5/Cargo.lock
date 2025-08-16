@@ -1275,6 +1275,7 @@ dependencies = [
  "rusqlite",
  "serde",
  "serde_json",
+ "tempfile",
  "tokio",
  "tracing",
 ]
@@ -4567,6 +4568,19 @@ name = "target-lexicon"
 version = "0.13.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e502f78cdbb8ba4718f566c418c52bc729126ffd16baee5baa718cf25dd5a69a"
+
+[[package]]
+name = "tempfile"
+version = "3.20.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e8a64e3985349f2441a1a9ef0b853f869006c3855f2cda6862a94d26ebb9d6a1"
+dependencies = [
+ "fastrand",
+ "getrandom 0.3.3",
+ "once_cell",
+ "rustix 1.0.8",
+ "windows-sys 0.59.0",
+]
 
 [[package]]
 name = "termcolor"

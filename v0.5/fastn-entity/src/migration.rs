@@ -1,6 +1,5 @@
 /// Run database migrations to set up the entity's SQLite schema.
 pub fn migrate(db: &rusqlite::Connection) -> rusqlite::Result<()> {
-    // https://chatgpt.com/share/687baa1b-ffd8-8000-b57d-546f68170b70
     db.execute_batch(
         r#"
         -- Create tables for entity data storage

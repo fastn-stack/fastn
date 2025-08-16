@@ -28,16 +28,12 @@ impl fastn_entity::Entity {
         std::fs::create_dir_all(&entity_path)
             .wrap_err_with(|| format!("Failed to create entity directory at {entity_path:?}"))?;
 
-        // Save public key to file
-        let id52_file = entity_path.join("entity.id52");
-        std::fs::write(&id52_file, &id52).wrap_err("Failed to write entity.id52 file")?;
-
-        // Store private key based on SKIP_KEYRING environment variable
+        // Store key based on SKIP_KEYRING environment variable
         if std::env::var("SKIP_KEYRING")
             .map(|v| v == "true")
             .unwrap_or(false)
         {
-            // If SKIP_KEYRING=true, save to file
+            // If SKIP_KEYRING=true, save private key to file (no id52 file)
             tracing::info!(
                 "SKIP_KEYRING is set, saving private key to file for {}",
                 id52
@@ -46,6 +42,9 @@ impl fastn_entity::Entity {
             std::fs::write(&private_key_file, secret_key.to_string())
                 .wrap_err("Failed to write entity.private-key file")?;
         } else {
+            // Default: save public key to file and store private key in keyring
+            let id52_file = entity_path.join("entity.id52");
+            std::fs::write(&id52_file, &id52).wrap_err("Failed to write entity.id52 file")?;
             // Default: store in keyring
             secret_key
                 .store_in_keyring()

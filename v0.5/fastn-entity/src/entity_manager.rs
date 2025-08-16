@@ -69,7 +69,14 @@ impl EntityManager {
             // Update path in case it was moved
             manager.path = path;
 
-            // TODO: Verify the last entity exists
+            // Verify the last entity exists
+            let last_entity_path = manager.path.join(&manager.last);
+            if !last_entity_path.exists() || !last_entity_path.is_dir() {
+                return Err(eyre::eyre!(
+                    "Last entity '{}' referenced in config.json does not exist",
+                    manager.last
+                ));
+            }
 
             tracing::info!("Loaded EntityManager with last entity: {}", manager.last);
 
@@ -229,6 +236,13 @@ impl EntityManager {
     /// Gets the last used entity's ID52.
     pub fn last(&self) -> &str {
         &self.last
+    }
+
+    /// Loads the default (last used) entity.
+    ///
+    /// This is a convenience method that loads the entity referenced by `last`.
+    pub async fn default_entity(&self) -> eyre::Result<fastn_entity::Entity> {
+        self.load_entity(&self.last).await
     }
 
     /// Save the current configuration to config.json.
