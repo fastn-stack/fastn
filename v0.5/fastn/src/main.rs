@@ -4,8 +4,8 @@ async fn main() {
     let command = fastn::commands::parse();
 
     // Handle Run command separately since it doesn't need package/router
-    if matches!(command, fastn::commands::Cli::Run) {
-        fastn::commands::run().await;
+    if let fastn::commands::Cli::Run { home } = command {
+        fastn::commands::run(home).await;
         return;
     }
 
@@ -17,7 +17,7 @@ async fn main() {
     // read config here and pass to everyone?
     // do common build stuff here
     match command {
-        fastn::commands::Cli::Run => unreachable!(), // Already handled above
+        fastn::commands::Cli::Run { .. } => unreachable!(), // Already handled above
         fastn::commands::Cli::Serve(input) => input.run(package, router).await,
         fastn::commands::Cli::Render(input) => input.run(&mut package, router).await,
         fastn::commands::Cli::Build(input) => input.run(package).await,

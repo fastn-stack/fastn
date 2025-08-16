@@ -1217,6 +1217,7 @@ dependencies = [
  "arcstr",
  "fastn-compiler",
  "fastn-continuation",
+ "fastn-entity",
  "fastn-observer",
  "fastn-package",
  "fastn-router",

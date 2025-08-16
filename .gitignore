@@ -32,3 +32,6 @@ fastn-core/tests/**/.packages/fifthtry.github.io/package-info/
 docs
 .env
 .env.swp
+
+# Test directories
+v0.5/test-fastn-home*

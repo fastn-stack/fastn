@@ -74,7 +74,9 @@ pub struct Build {
 }
 
 pub enum Cli {
-    Run, // Default when no arguments provided
+    Run {
+        home: Option<std::path::PathBuf>,
+    }, // Default when no arguments provided
     Render(Render),
     Build(Build),
     Serve(Serve),
