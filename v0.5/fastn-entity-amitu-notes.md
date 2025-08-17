@@ -1,3 +1,7 @@
+# fastn-entity Original Notes
+
+## Original Design Notes (Preserved from fastn-entity/amitu-notes.md)
+
 lets create a new crate called fastn-entity. it will have a type Entity and
 EntityManager. EntityManager will read all entries from provided path, and if
 path is not provided it will read from dot-fastn folder. each entity is
@@ -27,3 +31,17 @@ entities are online all the time. so even more reason to have new vs load.
 we should store online status for each entity, so update Entity struct. also
 store last: String. actually we should store fastn_id52::PublicKey instead of
 String when storing id52
+
+## Evolution from fastn-entity
+
+The original fastn-entity concept has evolved into the current three-entity system:
+
+1. **Rig** - The coordinator (was the EntityManager concept)
+2. **Account** - User identities with aliases (evolved from Entity)
+3. **Device** - Client entities (planned, not yet implemented)
+
+The key improvements:
+- Separation of concerns: Rig manages, Accounts hold user data
+- Three-database architecture for better isolation
+- Explicit online/offline status tracking in Rig database
+- Multi-alias support in Accounts for privacy

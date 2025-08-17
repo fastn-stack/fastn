@@ -5,7 +5,6 @@ members = [
     "fastn-automerge",
     "fastn-compiler",
     "fastn-continuation",
-    "fastn-entity",
     "fastn-id52",
     "fastn-net",
     "fastn-package",
