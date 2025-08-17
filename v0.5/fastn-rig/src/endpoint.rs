@@ -198,11 +198,11 @@ async fn endpoint_listener(
 /// Handle an incoming connection using fastn-net protocol utilities
 async fn handle_connection(
     endpoint_id52: String,
-    _owner_type: fastn_rig::OwnerType,
+    owner_type: fastn_rig::OwnerType,
     conn: iroh::endpoint::Connection,
-    _message_tx: tokio::sync::mpsc::Sender<(String, fastn_rig::OwnerType, Vec<u8>)>,
+    message_tx: tokio::sync::mpsc::Sender<(String, fastn_rig::OwnerType, Vec<u8>)>,
     graceful: fastn_net::Graceful,
-    _peer_stream_senders: fastn_net::PeerStreamSenders,
+    #[allow(unused)] peer_stream_senders: fastn_net::PeerStreamSenders,
 ) -> eyre::Result<()> {
     // Get remote ID52
     let remote_id52 = fastn_net::get_remote_id52(&conn).await?;
@@ -223,21 +223,46 @@ async fn handle_connection(
             }
 
             else => {
-                // For now, accept any incoming bi-directional stream
-                // In the future, we'll define our own protocol types for Account/Device/Rig messages
-                match conn.accept_bi().await {
+                // Determine expected protocol based on owner type
+                let expected_protocol = match owner_type {
+                    fastn_rig::OwnerType::Account => {
+                        // Accounts can receive from Devices or other Accounts
+                        // For now, we'll accept AccountToAccount as default
+                        fastn_net::Protocol::AccountToAccount
+                    }
+                    fastn_rig::OwnerType::Device => {
+                        // Devices receive from Accounts
+                        fastn_net::Protocol::AccountToDevice
+                    }
+                    fastn_rig::OwnerType::Rig => {
+                        // Rig receives control messages
+                        fastn_net::Protocol::RigControl
+                    }
+                };
+
+                // Accept a bidirectional stream with protocol negotiation
+                match fastn_net::accept_bi(&conn, expected_protocol).await {
                     Ok((mut send, mut recv)) => {
-                        // Read the message using fastn-net utilities
+                        // Read the actual message content
                         match fastn_net::next_string(&mut recv).await {
                             Ok(message_str) => {
-                                // TODO: Process the message based on content and owner_type
+                                // TODO: Parse and process the message based on protocol type
                                 // For now, just log it
                                 tracing::info!(
-                                    "Received message on {} from {}: {} bytes",
+                                    "Received {:?} message on {} from {}: {} bytes",
+                                    expected_protocol,
                                     endpoint_id52,
                                     remote_id52,
                                     message_str.len()
                                 );
+
+                                // Send the message through the channel for processing
+                                if let Err(e) = message_tx
+                                    .send((endpoint_id52.clone(), owner_type.clone(), message_str.into_bytes()))
+                                    .await
+                                {
+                                    tracing::error!("Failed to send message to channel: {}", e);
+                                }
 
                                 // Send acknowledgment
                                 if let Err(e) = send.write_all(format!("{}\n", fastn_net::ACK).as_bytes()).await {
@@ -251,8 +276,12 @@ async fn handle_connection(
                         }
                     }
                     Err(e) => {
-                        tracing::error!("Failed to accept bi-stream: {}", e);
-                        break;
+                        // This might happen if the protocol doesn't match
+                        // Try to accept as a different protocol or handle ping
+                        tracing::debug!("Protocol mismatch or error: {}", e);
+                        // The accept_bi function already handles Ping internally
+                        // For now, we'll continue to the next iteration
+                        continue;
                     }
                 }
             }

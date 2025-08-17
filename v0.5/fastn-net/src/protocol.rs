@@ -81,7 +81,7 @@
 //! protocols (RTP/RTCP for audio/video) might benefit from dedicated connections
 //! to avoid head-of-line blocking. This design decision will be re-evaluated
 //! based on performance requirements.
-#[derive(Debug, serde::Serialize, serde::Deserialize, PartialEq)]
+#[derive(Debug, Clone, Copy, serde::Serialize, serde::Deserialize, PartialEq)]
 pub enum Protocol {
     /// client can send this message to check if the connection is open / healthy.
     Ping,
@@ -99,6 +99,16 @@ pub enum Protocol {
     Socks5,
     Tcp,
     // TODO: RTP/"RTCP" for audio video streaming
+
+    // Fastn-specific protocols for entity communication
+    /// Messages from Device to Account (sync requests, status reports, etc.)
+    DeviceToAccount,
+    /// Messages between Accounts (email, file sharing, automerge sync, etc.)
+    AccountToAccount,
+    /// Messages from Account to Device (commands, config updates, notifications, etc.)
+    AccountToDevice,
+    /// Control messages for Rig management (bring online/offline, set current, etc.)
+    RigControl,
 }
 
 /// Single ALPN protocol identifier for all fastn entity connections.
