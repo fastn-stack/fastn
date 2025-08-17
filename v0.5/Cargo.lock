@@ -1467,6 +1467,7 @@ dependencies = [
  "eyre",
  "fastn-account",
  "fastn-id52",
+ "fastn-net",
  "file-guard",
  "iroh",
  "rusqlite",

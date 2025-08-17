@@ -87,8 +87,11 @@ pub async fn run(home: Option<std::path::PathBuf>) -> eyre::Result<()> {
         manager
     };
 
-    // Create EndpointManager
-    let (mut endpoint_manager, mut message_rx) = fastn_rig::EndpointManager::new();
+    // Create graceful shutdown handler
+    let graceful = fastn_net::Graceful::new();
+
+    // Create EndpointManager with graceful
+    let (mut endpoint_manager, mut message_rx) = fastn_rig::EndpointManager::new(graceful.clone());
 
     // Get all endpoints from all accounts
     let all_endpoints = account_manager.get_all_endpoints().await?;
@@ -133,60 +136,67 @@ pub async fn run(home: Option<std::path::PathBuf>) -> eyre::Result<()> {
 
     // Spawn P2P message handler as a background task
     let p2p_endpoint_manager = std::sync::Arc::new(tokio::sync::Mutex::new(endpoint_manager));
-    let p2p_handle = tokio::spawn(async move {
+    let p2p_graceful = graceful.clone();
+    let _p2p_handle = graceful.spawn(async move {
         println!("\n📬 P2P handler started...");
-        while let Some((endpoint_id52, owner_type, message)) = message_rx.recv().await {
-            tracing::info!(
-                "Received message on endpoint {} (type: {:?})",
-                endpoint_id52,
-                owner_type
-            );
+        loop {
+            tokio::select! {
+                Some((endpoint_id52, owner_type, message)) = message_rx.recv() => {
+                    tracing::info!(
+                        "Received message on endpoint {} (type: {:?})",
+                        endpoint_id52,
+                        owner_type
+                    );
 
-            // Route message based on owner type
-            let result = match owner_type {
-                fastn_rig::OwnerType::Account => {
-                    process_account_message(&account_manager, &endpoint_id52, message).await
-                }
-                fastn_rig::OwnerType::Device => {
-                    process_device_message(&endpoint_id52, message).await
-                }
-                fastn_rig::OwnerType::Rig => process_rig_message(&endpoint_id52, message).await,
-            };
+                    // Route message based on owner type
+                    let result = match owner_type {
+                        fastn_rig::OwnerType::Account => {
+                            process_account_message(&account_manager, &endpoint_id52, message).await
+                        }
+                        fastn_rig::OwnerType::Device => {
+                            process_device_message(&endpoint_id52, message).await
+                        }
+                        fastn_rig::OwnerType::Rig => process_rig_message(&endpoint_id52, message).await,
+                    };
 
-            if let Err(e) = result {
-                tracing::error!("Failed to process message: {}", e);
+                    if let Err(e) = result {
+                        tracing::error!("Failed to process message: {}", e);
+                    }
+                }
+                _ = p2p_graceful.cancelled() => {
+                    tracing::info!("P2P handler shutting down");
+                    break;
+                }
             }
         }
-        tracing::info!("P2P handler stopped");
     });
 
     // Future: spawn other servers here
-    // let smtp_handle = tokio::spawn(smtp_server());
-    // let http_handle = tokio::spawn(http_server());
-    // let imap_handle = tokio::spawn(imap_server());
+    // let smtp_graceful = graceful.clone();
+    // let smtp_handle = graceful.spawn(async move {
+    //     smtp_server(smtp_graceful).await
+    // });
+    //
+    // let http_graceful = graceful.clone();
+    // let http_handle = graceful.spawn(async move {
+    //     http_server(http_graceful).await
+    // });
+    //
+    // let imap_graceful = graceful.clone();
+    // let imap_handle = graceful.spawn(async move {
+    //     imap_server(imap_graceful).await
+    // });
 
-    // Wait for Ctrl+C
-    tokio::signal::ctrl_c()
-        .await
-        .expect("Failed to install Ctrl+C handler");
+    // Use graceful shutdown to wait for Ctrl+C and manage all tasks
+    graceful.shutdown().await?;
 
-    println!("\n🛑 Shutting down...");
-
-    // Shutdown all endpoints
+    // Clean shutdown of all endpoints
     println!("Stopping all endpoints...");
     let mut endpoint_manager = p2p_endpoint_manager.lock().await;
     for id52 in endpoint_manager.active_endpoints() {
         rig.set_endpoint_online(&id52, false).await;
     }
     endpoint_manager.shutdown_all().await?;
-
-    // Abort the P2P handler task
-    p2p_handle.abort();
-
-    // Future: shutdown other servers
-    // smtp_handle.abort();
-    // http_handle.abort();
-    // imap_handle.abort();
 
     println!("🔓 Releasing lock...");
     println!("👋 Goodbye!");

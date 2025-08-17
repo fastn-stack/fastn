@@ -63,6 +63,8 @@ pub struct EndpointManager {
     pub(crate) active: std::collections::HashMap<String, fastn_rig::EndpointHandle>,
     /// Channel to send all incoming messages with owner type
     pub(crate) message_tx: tokio::sync::mpsc::Sender<(String, fastn_rig::OwnerType, Vec<u8>)>,
+    /// Graceful handler for spawning tasks
+    pub(crate) graceful: fastn_net::Graceful,
 }
 
 /// Handle for an active endpoint
@@ -78,8 +80,6 @@ pub(crate) struct EndpointHandle {
     pub(crate) owner_path: std::path::PathBuf,
     /// The Iroh endpoint
     pub(crate) endpoint: iroh::Endpoint,
-    /// Shutdown signal sender
-    pub(crate) shutdown_tx: tokio::sync::oneshot::Sender<()>,
     /// Task handle
     pub(crate) handle: tokio::task::JoinHandle<()>,
 }

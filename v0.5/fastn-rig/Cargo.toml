@@ -11,6 +11,7 @@ homepage.workspace = true
 # Core dependencies
 fastn-account.workspace = true
 fastn-id52.workspace = true
+fastn-net.workspace = true
 iroh.workspace = true
 eyre.workspace = true
 tracing.workspace = true

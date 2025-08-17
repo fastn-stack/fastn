@@ -1,6 +1,8 @@
 impl fastn_rig::EndpointManager {
     /// Create a new EndpointManager with a message channel
-    pub fn new() -> (
+    pub fn new(
+        graceful: fastn_net::Graceful,
+    ) -> (
         Self,
         tokio::sync::mpsc::Receiver<(String, fastn_rig::OwnerType, Vec<u8>)>,
     ) {
@@ -10,6 +12,7 @@ impl fastn_rig::EndpointManager {
             Self {
                 active: std::collections::HashMap::new(),
                 message_tx,
+                graceful,
             },
             message_rx,
         )
@@ -31,53 +34,51 @@ impl fastn_rig::EndpointManager {
         tracing::info!("Bringing endpoint {} online", id52);
 
         // Convert secret key bytes to Iroh SecretKey
-        // Note: fastn_id52 uses ed25519, Iroh also uses ed25519, so we can convert
-        // secret_key is a Vec<u8> that should contain exactly 32 bytes
         let secret_key_array: [u8; 32] = secret_key
             .as_slice()
             .try_into()
             .map_err(|_| eyre::eyre!("Secret key must be exactly 32 bytes"))?;
         let iroh_secret_key = iroh::SecretKey::from_bytes(&secret_key_array);
 
-        // Create Iroh endpoint with this identity
+        // Create Iroh endpoint with this identity using proper ALPN
         let endpoint = iroh::Endpoint::builder()
             .secret_key(iroh_secret_key.clone())
-            .alpns(vec![b"fastn/email/0".to_vec()])
+            .alpns(vec![fastn_net::APNS_IDENTITY.into()])
             .relay_mode(iroh::RelayMode::Default)
+            .discovery_n0()
+            .discovery_local_network()
             .bind()
             .await?;
 
         // Get endpoint info for logging
         let node_id = endpoint.node_id();
-        let _addrs = endpoint.direct_addresses(); // Will use this when we need to display addresses
         tracing::info!("Endpoint {} (node_id: {}) listening", id52, node_id);
 
-        // Setup listener task
-        let (shutdown_tx, shutdown_rx) = tokio::sync::oneshot::channel();
+        // Spawn the endpoint listener using graceful
         let id52_clone = id52.clone();
         let endpoint_clone = endpoint.clone();
-        let message_tx = self.message_tx.clone();
-
         let owner_type_clone = owner_type.clone();
-        let handle = tokio::spawn(async move {
+        let message_tx = self.message_tx.clone();
+        let graceful_for_endpoint = self.graceful.clone();
+
+        let handle = self.graceful.spawn(async move {
             endpoint_listener(
                 id52_clone,
                 endpoint_clone,
                 owner_type_clone,
                 message_tx,
-                shutdown_rx,
+                graceful_for_endpoint,
             )
             .await;
         });
 
         self.active.insert(
-            id52,
+            id52.clone(),
             fastn_rig::EndpointHandle {
                 secret_key,
                 owner_type,
                 owner_path,
                 endpoint,
-                shutdown_tx,
                 handle,
             },
         );
@@ -90,14 +91,8 @@ impl fastn_rig::EndpointManager {
         if let Some(handle) = self.active.remove(id52) {
             tracing::info!("Taking endpoint {} offline", id52);
 
-            // Signal shutdown
-            let _ = handle.shutdown_tx.send(());
-
-            // Wait with timeout
-            match tokio::time::timeout(std::time::Duration::from_secs(5), handle.handle).await {
-                Ok(_) => tracing::debug!("Endpoint {} stopped gracefully", id52),
-                Err(_) => tracing::warn!("Endpoint {} shutdown timed out", id52),
-            }
+            // Abort the task
+            handle.handle.abort();
 
             // Close the endpoint
             handle.endpoint.close().await;
@@ -128,49 +123,62 @@ impl fastn_rig::EndpointManager {
     }
 }
 
-/// Generic endpoint listener - forwards messages to the channel
+/// Endpoint listener that uses fastn-net utilities for proper connection handling
 async fn endpoint_listener(
     id52: String,
     endpoint: iroh::Endpoint,
     owner_type: fastn_rig::OwnerType,
     message_tx: tokio::sync::mpsc::Sender<(String, fastn_rig::OwnerType, Vec<u8>)>,
-    mut shutdown_rx: tokio::sync::oneshot::Receiver<()>,
+    graceful: fastn_net::Graceful,
 ) {
     tracing::debug!("Starting listener for endpoint {}", id52);
+
+    // Create connection pool for reusing connections
+    let peer_stream_senders = fastn_net::PeerStreamSenders::default();
 
     loop {
         tokio::select! {
             // Accept incoming connections
-            incoming = endpoint.accept() => {
-                match incoming {
-                    Some(incoming) => {
-                        match incoming.await {
-                            Ok(conn) => {
-                                tracing::info!("Accepted connection on endpoint {}", id52);
-
-                                // Spawn a task to handle this connection
-                                let id52_clone = id52.clone();
-                                let owner_type_clone = owner_type.clone();
-                                let message_tx_clone = message_tx.clone();
-
-                                tokio::spawn(async move {
-                                    handle_connection(id52_clone, owner_type_clone, conn, message_tx_clone).await;
-                                });
-                            }
-                            Err(e) => {
-                                tracing::error!("Failed to accept connection: {}", e);
-                            }
-                        }
-                    }
+            conn = endpoint.accept() => {
+                let conn = match conn {
+                    Some(conn) => conn,
                     None => {
                         tracing::debug!("Endpoint {} closed", id52);
                         break;
                     }
-                }
+                };
+
+                // Spawn a task to handle the incoming connection
+                let id52_clone = id52.clone();
+                let owner_type_clone = owner_type.clone();
+                let message_tx_clone = message_tx.clone();
+                let peer_stream_senders_clone = peer_stream_senders.clone();
+                let graceful_for_conn = graceful.clone();
+
+                graceful.spawn(async move {
+                    let conn = match conn.await {
+                        Ok(c) => c,
+                        Err(e) => {
+                            tracing::error!("Failed to accept connection: {}", e);
+                            return;
+                        }
+                    };
+
+                    if let Err(e) = handle_connection(
+                        id52_clone,
+                        owner_type_clone,
+                        conn,
+                        message_tx_clone,
+                        graceful_for_conn,
+                        peer_stream_senders_clone,
+                    ).await {
+                        tracing::error!("Connection error: {}", e);
+                    }
+                });
             }
 
-            // Handle shutdown signal
-            _ = &mut shutdown_rx => {
+            // Handle graceful shutdown
+            _ = graceful.cancelled() => {
                 tracing::debug!("Shutting down listener for endpoint {}", id52);
                 break;
             }
@@ -178,46 +186,70 @@ async fn endpoint_listener(
     }
 }
 
-/// Handle an incoming connection
+/// Handle an incoming connection using fastn-net protocol utilities
 async fn handle_connection(
     endpoint_id52: String,
-    owner_type: fastn_rig::OwnerType,
+    _owner_type: fastn_rig::OwnerType,
     conn: iroh::endpoint::Connection,
-    message_tx: tokio::sync::mpsc::Sender<(String, fastn_rig::OwnerType, Vec<u8>)>,
-) {
-    tracing::debug!("Handling connection for endpoint {}", endpoint_id52);
+    _message_tx: tokio::sync::mpsc::Sender<(String, fastn_rig::OwnerType, Vec<u8>)>,
+    graceful: fastn_net::Graceful,
+    _peer_stream_senders: fastn_net::PeerStreamSenders,
+) -> eyre::Result<()> {
+    // Get remote ID52
+    let remote_id52 = fastn_net::get_remote_id52(&conn).await?;
 
-    // Accept a bi-directional stream
-    match conn.accept_bi().await {
-        Ok((mut send, mut recv)) => {
-            // Read message from the stream
-            match recv.read_chunk(1024 * 1024, true).await {
-                Ok(Some(chunk)) => {
-                    let buffer = chunk.bytes.to_vec();
+    tracing::debug!(
+        "Handling connection from {} to endpoint {}",
+        remote_id52,
+        endpoint_id52
+    );
 
-                    // Send to message channel
-                    if let Err(e) = message_tx
-                        .send((endpoint_id52.clone(), owner_type.clone(), buffer))
-                        .await
-                    {
-                        tracing::error!("Failed to send message to channel: {}", e);
+    // Handle multiple streams on this connection
+    loop {
+        tokio::select! {
+            // Accept bidirectional streams with protocol negotiation
+            _ = graceful.cancelled() => {
+                tracing::debug!("Connection handler cancelled");
+                break;
+            }
+
+            else => {
+                // For now, accept any incoming bi-directional stream
+                // In the future, we'll define our own protocol types for Account/Device/Rig messages
+                match conn.accept_bi().await {
+                    Ok((mut send, mut recv)) => {
+                        // Read the message using fastn-net utilities
+                        match fastn_net::next_string(&mut recv).await {
+                            Ok(message_str) => {
+                                // TODO: Process the message based on content and owner_type
+                                // For now, just log it
+                                tracing::info!(
+                                    "Received message on {} from {}: {} bytes",
+                                    endpoint_id52,
+                                    remote_id52,
+                                    message_str.len()
+                                );
+
+                                // Send acknowledgment
+                                if let Err(e) = send.write_all(format!("{}\n", fastn_net::ACK).as_bytes()).await {
+                                    tracing::error!("Failed to send ACK: {}", e);
+                                }
+                            }
+                            Err(e) => {
+                                tracing::error!("Failed to read message: {}", e);
+                                break;
+                            }
+                        }
                     }
-
-                    // Send acknowledgment
-                    if let Err(e) = send.write_all(b"ACK").await {
-                        tracing::error!("Failed to send ACK: {}", e);
+                    Err(e) => {
+                        tracing::error!("Failed to accept bi-stream: {}", e);
+                        break;
                     }
-                }
-                Ok(None) => {
-                    tracing::debug!("Stream closed");
-                }
-                Err(e) => {
-                    tracing::error!("Failed to read chunk: {}", e);
                 }
             }
         }
-        Err(e) => {
-            tracing::error!("Failed to accept bi-stream: {}", e);
-        }
     }
+
+    // Connection ended
+    Ok(())
 }

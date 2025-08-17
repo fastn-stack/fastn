@@ -66,6 +66,7 @@ fastn-builtins = { path = "../fastn-builtins" }
 fastn-compiler = { path = "fastn-compiler" }
 fastn-continuation = { path = "fastn-continuation" }
 fastn-id52 = { path = "fastn-id52" }
+fastn-net = { path = "fastn-net" }
 fastn-package = { path = "fastn-package" }
 fastn-resolved = { path = "../fastn-resolved" }
 fastn-rig = { path = "fastn-rig" }
