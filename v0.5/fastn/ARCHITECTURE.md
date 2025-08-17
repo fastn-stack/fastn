@@ -138,7 +138,7 @@ accounts/{account_id52}/
 
 #### Key Design Decisions
 - **Username-based folders**: All emails for `alice@` go in `mails/alice/` regardless of which alias
-- **Timestamp prefixes**: Files named as `{unix_timestamp}-{uuid}.eml` for chronological ordering
+- **Timestamp prefixes**: Files named as `{unix_timestamp}-{id}.eml` for chronological ordering
 - **Metadata sidecar**: JSON file alongside each .eml with FASTN-specific metadata
 - **SQLite index**: For fast searching without scanning all files
 
@@ -156,7 +156,7 @@ CREATE TABLE email_users (
 
 -- Email index for fast queries
 CREATE TABLE emails (
-    email_id          TEXT PRIMARY KEY,     -- UUID
+    email_id          TEXT PRIMARY KEY,     -- Generated ID
     username          TEXT NOT NULL,        -- Local username
     folder            TEXT NOT NULL,        -- 'inbox', 'sent', 'drafts', 'trash'
     
@@ -402,7 +402,7 @@ Each entity stores their own copy in SQLite, so the same logical document may ha
 **`mine/-/config`** (Account-wide Settings)
 ```json
 {
-  "account_id": "550e8400-e29b-41d4-a716-446655440000",
+  "primary_alias": "abc123...",  // First alias, used for folder naming
   "my_aliases": {
     "abc123...": {
       "name": "work",

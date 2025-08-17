@@ -1,0 +1,27 @@
+[package]
+name = "fastn-account"
+version = "0.1.0"
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+
+[dependencies]
+# Core dependencies
+fastn-id52.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+eyre.workspace = true
+tracing.workspace = true
+tokio.workspace = true
+
+# For Automerge documents
+automerge.workspace = true
+
+# For database storage
+rusqlite.workspace = true
+
+# For password hashing (will add when needed)
+# argon2.workspace = true
+# rand.workspace = true

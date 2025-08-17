@@ -1,6 +1,7 @@
 [workspace]
 members = [
     "fastn",
+    "fastn-account",
     "fastn-compiler",
     "fastn-continuation",
     "fastn-entity",
@@ -47,7 +48,9 @@ rust-version = "1.86"
 # using the latest dependency, and what is the plan to move to the latest version.
 
 arcstr = "1"
+argon2 = "0.5"
 async-lock = "3"
+automerge = "=1.0.0-beta.3"
 bb8 = "0.9"
 bytes = "1"
 chrono = { version = "0.4", features = ["serde"] }
@@ -55,9 +58,11 @@ colored = "2"
 deadpool = "0.10"
 deadpool-postgres = "0.12"
 directories = "6"
+fastn-account = { path = "fastn-account" }
 fastn-builtins = { path = "../fastn-builtins" }
 fastn-compiler = { path = "fastn-compiler" }
 fastn-continuation = { path = "fastn-continuation" }
+fastn-id52 = { path = "fastn-id52" }
 fastn-package = { path = "fastn-package" }
 fastn-resolved = { path = "../fastn-resolved" }
 fastn-router = { path = "fastn-router" }
