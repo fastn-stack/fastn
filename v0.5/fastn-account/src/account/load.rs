@@ -59,6 +59,14 @@ impl fastn_account::Account {
         let user =
             rusqlite::Connection::open(&user_path).wrap_err("Failed to open user database")?;
 
+        // Run migrations in case schema has changed since last load
+        fastn_automerge::migration::initialize_database(&automerge)
+            .wrap_err("Failed to run automerge database migrations")?;
+        fastn_account::Account::migrate_mail_database(&mail)
+            .wrap_err("Failed to run mail database migrations")?;
+        fastn_account::Account::migrate_user_database(&user)
+            .wrap_err("Failed to run user database migrations")?;
+
         // Load aliases from the aliases directory
         let aliases_dir = account_dir.join("aliases");
         let mut aliases = Vec::new();

@@ -13,8 +13,8 @@ rust-version.workspace = true
 arcstr.workspace = true
 fastn-compiler.workspace = true
 fastn-continuation = { workspace = true, features = ["async_provider"] }
-fastn-entity = { path = "../fastn-entity" }
 fastn-package.workspace = true
+fastn-rig.workspace = true
 fastn-router.workspace = true
 fastn-runtime.workspace = true
 fastn-section.workspace = true

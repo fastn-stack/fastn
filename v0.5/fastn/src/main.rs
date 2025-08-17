@@ -5,7 +5,10 @@ async fn main() {
 
     // Handle Run command separately since it doesn't need package/router
     if let fastn::commands::Cli::Run { home } = command {
-        fastn::commands::run(home).await;
+        if let Err(e) = fastn_rig::run(home).await {
+            eprintln!("Error: {e}");
+            std::process::exit(1);
+        }
         return;
     }
 

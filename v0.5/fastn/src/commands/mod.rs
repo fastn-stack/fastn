@@ -1,11 +1,9 @@
 mod build;
 mod parse;
 mod render;
-mod run;
 mod serve;
 
 pub use parse::parse;
-pub use run::run;
 
 // fastn <path> key=value
 // or echo {json} | fastn <path>

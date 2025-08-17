@@ -1285,9 +1285,9 @@ dependencies = [
  "arcstr",
  "fastn-compiler",
  "fastn-continuation",
- "fastn-entity",
  "fastn-observer",
  "fastn-package",
+ "fastn-rig",
  "fastn-router",
  "fastn-runtime",
  "fastn-section",
@@ -1457,6 +1457,23 @@ version = "0.1.1"
 dependencies = [
  "indexmap",
  "serde",
+]
+
+[[package]]
+name = "fastn-rig"
+version = "0.1.0"
+dependencies = [
+ "directories",
+ "eyre",
+ "fastn-account",
+ "fastn-id52",
+ "file-guard",
+ "iroh",
+ "rusqlite",
+ "serde",
+ "serde_json",
+ "tokio",
+ "tracing",
 ]
 
 [[package]]

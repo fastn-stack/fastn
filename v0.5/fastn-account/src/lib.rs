@@ -1,10 +1,39 @@
 //! # fastn-account
 //!
-//! Account management for the fastn P2P network with support for multiple aliases.
+//! Multi-alias account management for the FASTN P2P network.
 //!
-//! This crate provides account management where each account can have multiple
-//! aliases (ID52 identities). This is different from fastn-entity which assumes
-//! one ID52 per entity.
+//! An Account in FASTN represents a user with potentially multiple identities (aliases).
+//! Each alias has its own ID52 identity, allowing users to maintain separate personas
+//! for different contexts (work, personal, etc.).
+//!
+//! ## Key Features
+//!
+//! - **Multiple Aliases**: Each account can have multiple ID52 identities
+//! - **Three Databases**: Separation of concerns with automerge.sqlite, mail.sqlite, db.sqlite
+//! - **Key Management**: Secure storage of private keys via keyring or files
+//! - **Email Integration**: Built-in support for email handling per alias
+//!
+//! ## Architecture
+//!
+//! Each account is stored in a directory named by its primary alias ID52:
+//! ```text
+//! accounts/
+//!   {primary-id52}/
+//!     aliases/          # Keys for all aliases
+//!     automerge.sqlite  # Automerge documents (config, etc.)
+//!     mail.sqlite       # Email storage
+//!     db.sqlite         # User data
+//! ```
+//!
+//! ## Usage
+//!
+//! ```ignore
+//! // Create a new account
+//! let account = fastn_account::Account::create(&accounts_dir).await?;
+//!
+//! // Load existing account
+//! let account = fastn_account::Account::load(&account_path).await?;
+//! ```
 
 extern crate self as fastn_account;
 
@@ -60,12 +89,7 @@ pub struct Alias {
 #[derive(Debug, Clone)]
 pub struct AccountManager {
     /// Path to the fastn_home directory
-    #[expect(unused)]
     pub(crate) path: std::path::PathBuf,
-    /// Map of account ID52 to online/offline status
-    pub(crate) online_status: std::collections::HashMap<String, bool>,
-    /// The last used account's ID52
-    pub(crate) last: Option<String>,
 }
 
 #[cfg(test)]

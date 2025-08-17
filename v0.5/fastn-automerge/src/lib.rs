@@ -1,9 +1,35 @@
 //! # fastn-automerge
 //!
-//! Automerge document management for fastn.
+//! CRDT document storage layer for FASTN using Automerge.
 //!
-//! This crate provides a unified interface for storing and managing Automerge
-//! documents in SQLite, used by both fastn-account and fastn-device.
+//! This crate provides persistent storage for Automerge CRDT documents in SQLite,
+//! enabling conflict-free replicated data across the FASTN network. It's used by
+//! both fastn-account and fastn-device for storing configuration and metadata.
+//!
+//! ## Key Features
+//!
+//! - **CRDT Storage**: Persistent storage of Automerge documents
+//! - **Path-based Access**: Documents organized by filesystem-like paths
+//! - **Version Tracking**: Maintains document version history
+//! - **Shared Schema**: Common database schema for accounts and devices
+//!
+//! ## Document Paths
+//!
+//! Documents use filesystem-like paths:
+//! - `/-/config`: Main configuration document
+//! - `/-/aliases/{id52}/readme`: Public alias information
+//! - `/-/aliases/{id52}/notes`: Private alias notes
+//!
+//! ## Database Schema
+//!
+//! ```sql
+//! CREATE TABLE fastn_documents (
+//!     path     TEXT PRIMARY KEY,
+//!     data     BLOB NOT NULL,
+//!     version  INTEGER NOT NULL,
+//!     updated  TEXT NOT NULL
+//! );
+//! ```
 
 extern crate self as fastn_automerge;
 

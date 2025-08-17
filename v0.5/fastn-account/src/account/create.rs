@@ -80,11 +80,11 @@ impl fastn_account::Account {
         let user =
             rusqlite::Connection::open(&user_path).wrap_err("Failed to create user database")?;
 
-        // Initialize database schemas
+        // Run database migrations
         fastn_automerge::migration::initialize_database(&automerge)
-            .wrap_err("Failed to initialize automerge database")?;
-        Self::initialize_mail_database(&mail).wrap_err("Failed to initialize mail database")?;
-        Self::initialize_user_database(&user).wrap_err("Failed to initialize user database")?;
+            .wrap_err("Failed to run automerge database migrations")?;
+        Self::migrate_mail_database(&mail).wrap_err("Failed to run mail database migrations")?;
+        Self::migrate_user_database(&user).wrap_err("Failed to run user database migrations")?;
 
         // Create primary alias
         let primary_alias = fastn_account::Alias {
@@ -111,8 +111,8 @@ impl fastn_account::Account {
         })
     }
 
-    /// Initialize mail database with email-specific tables
-    fn initialize_mail_database(conn: &rusqlite::Connection) -> eyre::Result<()> {
+    /// Run migrations for mail database
+    pub(crate) fn migrate_mail_database(conn: &rusqlite::Connection) -> eyre::Result<()> {
         use eyre::WrapErr;
 
         conn.execute_batch(
@@ -163,8 +163,8 @@ impl fastn_account::Account {
         Ok(())
     }
 
-    /// Initialize user database (for user-created tables)
-    fn initialize_user_database(conn: &rusqlite::Connection) -> eyre::Result<()> {
+    /// Run migrations for user database
+    pub(crate) fn migrate_user_database(conn: &rusqlite::Connection) -> eyre::Result<()> {
         use eyre::WrapErr;
 
         // User database starts empty - user can create their own tables
