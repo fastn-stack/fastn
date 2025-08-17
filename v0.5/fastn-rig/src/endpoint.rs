@@ -91,11 +91,20 @@ impl fastn_rig::EndpointManager {
         if let Some(handle) = self.active.remove(id52) {
             tracing::info!("Taking endpoint {} offline", id52);
 
-            // Abort the task
-            handle.handle.abort();
-
-            // Close the endpoint
+            // Close the endpoint - this will cause accept() to return None
+            // and the listener task will exit gracefully
             handle.endpoint.close().await;
+
+            // Wait for the task to finish with a timeout
+            match tokio::time::timeout(std::time::Duration::from_secs(5), handle.handle).await {
+                Ok(Ok(())) => tracing::debug!("Endpoint {} stopped gracefully", id52),
+                Ok(Err(e)) => tracing::warn!("Endpoint {} task error: {}", id52, e),
+                Err(_) => {
+                    tracing::warn!("Endpoint {} shutdown timed out", id52);
+                    // Task didn't finish in time, but since we closed the endpoint,
+                    // it should eventually stop on its own
+                }
+            }
         }
 
         Ok(())
