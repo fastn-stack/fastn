@@ -76,11 +76,24 @@ For the MVP, we'll use an auto-generated password system:
 3. **Username Format**: `default@alias_id52` (only valid username)
 4. **Password**: The auto-generated password
 
+### Database Architecture
+
+MVP uses two SQLite databases:
+
+1. **automerge.sqlite** - Configuration and documents
+   - Stores account config, aliases, settings
+   - All tables prefixed with `fastn_`
+   
+2. **mail.sqlite** - Email system
+   - Email index, peers, sessions
+   - All tables prefixed with `fastn_`
+   - Has read-only access to automerge.sqlite
+
 ### Database Schema
 
 ```sql
--- Automerge documents storage (local only, no sync in MVP)
-CREATE TABLE documents (
+-- In automerge.sqlite:
+CREATE TABLE fastn_documents (
     path              TEXT PRIMARY KEY,     -- e.g., '/-/config', '/-/aliases/{id52}/readme'
     automerge_binary  BLOB NOT NULL,        -- Automerge document as binary
     heads             TEXT NOT NULL,        -- JSON array of head hashes
@@ -88,8 +101,8 @@ CREATE TABLE documents (
     updated_at        INTEGER NOT NULL
 );
 
--- Email index (all emails stored under 'default' username)
-CREATE TABLE emails (
+-- In mail.sqlite:
+CREATE TABLE fastn_emails (
     email_id          TEXT PRIMARY KEY,
     folder            TEXT NOT NULL,        -- 'inbox', 'sent', 'drafts', 'trash'
     
@@ -131,7 +144,7 @@ CREATE TABLE emails (
 );
 
 -- Peer connections for email delivery
-CREATE TABLE email_peers (
+CREATE TABLE fastn_email_peers (
     peer_alias        TEXT PRIMARY KEY,  -- Their alias ID52
     last_seen         INTEGER,
     endpoint          BLOB,              -- Iroh endpoint info
@@ -141,7 +154,7 @@ CREATE TABLE email_peers (
 );
 
 -- Authentication sessions (for connection tracking)
-CREATE TABLE auth_sessions (
+CREATE TABLE fastn_auth_sessions (
     session_id        TEXT PRIMARY KEY,
     username          TEXT NOT NULL,
     alias_used        TEXT NOT NULL,

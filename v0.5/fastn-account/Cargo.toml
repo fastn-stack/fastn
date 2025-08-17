@@ -10,6 +10,7 @@ homepage.workspace = true
 [dependencies]
 # Core dependencies
 fastn-id52.workspace = true
+fastn-automerge.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 eyre.workspace = true

@@ -51,7 +51,9 @@ Key principles:
     - Each alias can have different public profiles
     - Folder uses first alias ID52 (implementation detail only)
 - **Storage**: `{fastn_home}/accounts/{first_alias_id52}/` containing:
-    - `db.sqlite` - SQLite database (contains Automerge documents as blobs)
+    - `automerge.sqlite` - Automerge documents and derived/cache tables
+    - `mail.sqlite` - Email index and metadata
+    - `db.sqlite` - User-defined tables (future use)
     - `aliases/` - All alias keys (including first one)
         - `{alias1_id52}.id52` - Public key
         - `{alias1_id52}.private-key` - Private key
@@ -607,7 +609,42 @@ When checking if alias X has permission to document D:
    - Recursively check nested groups
 3. Cache resolution results for performance
 
-### Database Schema (Automerge-only)
+### Database Architecture
+
+FASTN uses three separate SQLite databases per account for isolation and performance:
+
+#### 1. automerge.sqlite - Configuration & Sync
+- **Purpose**: Store all Automerge documents and sync state
+- **Accessed by**: Sync logic, configuration management
+- **Tables**: All prefixed with `fastn_`
+  - `fastn_documents` - Automerge document blobs
+  - `fastn_sync_state` - Sync state per peer
+  - `fastn_relationship_cache` - Derived from relationship documents
+  - `fastn_permission_cache` - Derived from meta documents
+  - `fastn_group_cache` - Derived from group documents
+
+#### 2. mail.sqlite - Email System
+- **Purpose**: Email index and metadata
+- **Accessed by**: Email delivery, IMAP/SMTP servers
+- **Cross-DB access**: Read-only connection to automerge.sqlite for config
+- **Tables**: All prefixed with `fastn_`
+  - `fastn_emails` - Email index
+  - `fastn_email_peers` - Known email peers
+  - `fastn_auth_sessions` - IMAP/SMTP sessions
+
+#### 3. db.sqlite - User Space
+- **Purpose**: User-defined tables for applications
+- **Accessed by**: User applications via WASM
+- **Tables**: No `fastn_` prefix - user owns this namespace
+
+Benefits of this separation:
+- **Reduced contention**: Each subsystem uses its own database
+- **Security**: User cannot accidentally corrupt system tables
+- **Performance**: Parallel access to different databases
+- **Backup**: Each database can be backed up independently
+- **Migration**: Easier to upgrade schema per subsystem
+
+### Database Schema (Automerge)
 
 Since we've moved all configuration and relationship data to Automerge documents, we only need tables for:
 1. Storing Automerge document binaries
@@ -615,8 +652,10 @@ Since we've moved all configuration and relationship data to Automerge documents
 3. Caching for performance
 
 ```sql
+-- In automerge.sqlite:
+
 -- Core Automerge document storage
-CREATE TABLE documents (
+CREATE TABLE fastn_documents (
     path             TEXT PRIMARY KEY,     -- mine/doc or {alias}/doc
     automerge_binary BLOB NOT NULL,        -- Current Automerge state
     heads            TEXT NOT NULL,        -- JSON array of head hashes
@@ -627,7 +666,7 @@ CREATE TABLE documents (
 );
 
 -- Automerge sync state per document per peer
-CREATE TABLE sync_state (
+CREATE TABLE fastn_sync_state (
     document_path    TEXT NOT NULL,
     peer_id52        TEXT NOT NULL,
     
@@ -647,7 +686,7 @@ CREATE TABLE sync_state (
 -- Cache tables (derived from Automerge for performance)
 
 -- Relationship cache (extracted from mine/-/relationships/*)
-CREATE TABLE relationship_cache (
+CREATE TABLE fastn_relationship_cache (
     their_alias      TEXT PRIMARY KEY,
     my_alias_used    TEXT NOT NULL,
     relationship_type TEXT,
@@ -658,7 +697,7 @@ CREATE TABLE relationship_cache (
 );
 
 -- Permission cache (extracted from */meta documents)
-CREATE TABLE permission_cache (
+CREATE TABLE fastn_permission_cache (
     document_path    TEXT NOT NULL,
     grantee_alias    TEXT,
     grantee_group    TEXT,
@@ -670,7 +709,7 @@ CREATE TABLE permission_cache (
 );
 
 -- Group membership cache (extracted from mine/-/groups/*)
-CREATE TABLE group_cache (
+CREATE TABLE fastn_group_cache (
     group_name       TEXT NOT NULL,
     member_alias     TEXT,                  -- Direct member
     member_group     TEXT,                  -- Nested group

@@ -1308,11 +1308,25 @@ version = "0.1.0"
 dependencies = [
  "automerge",
  "eyre",
+ "fastn-automerge",
  "fastn-id52",
  "rusqlite",
  "serde",
  "serde_json",
  "tokio",
+ "tracing",
+]
+
+[[package]]
+name = "fastn-automerge"
+version = "0.1.0"
+dependencies = [
+ "automerge",
+ "chrono",
+ "eyre",
+ "rusqlite",
+ "serde",
+ "serde_json",
  "tracing",
 ]
 
