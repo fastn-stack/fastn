@@ -1,11 +1,28 @@
-+  # FASTN Architecture & Core Concepts
++  # FASTN Architecture
+
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Core Entity Types](#core-entity-types)
+3. [Automerge Documents](#automerge-documents)
+4. [Connection Model](#connection-model)
+5. [Email System](#email-system)
+6. [File Serving & Web Capabilities](#file-serving--web-capabilities)
+7. [Network Protocol](#network-protocol)
+8. [Security Model](#security-model)
+9. [Future Considerations](#future-considerations)
 
 ## Overview
 
-FASTN is a peer-to-peer (P2P) network where every node is a **Rig** that can
+FASTN is a decentralized peer-to-peer network built on Iroh. Every node runs a **Rig** that can
 host multiple **Accounts** and **Devices**. Each entity has its own
-cryptographic + identity (ID52) and can communicate with other entities over the
-Iroh network protocol.
+cryptographic identity (ID52) and communicates over the Iroh protocol.
+
+Key principles:
+- **Automerge First**: Configuration and metadata stored as Automerge documents
+- **No Central Servers**: Direct P2P communication between entities
+- **Privacy by Design**: Multiple aliases, device ID protection
+- **Offline First**: Full functionality offline with sync when reconnected
 
 ## Core Entity Types
 
@@ -24,19 +41,17 @@ Iroh network protocol.
 
 ### 2. Account
 
-- **Definition**: A user or group identity that can have multiple aliases
+- **Definition**: A user or organization identity with multiple aliases
 - **Types**:
-    - **Personal Account**: Owned by an individual
+    - **Personal Account**: Root account, not owned by any other account
     - **Group Account**: Owned by another account (organization, team, etc.)
-- **Identity**: Collection of aliases, each alias is a separate ID52 with its
-  own keypair
-- **No Primary**: All aliases are equal, no special "primary" alias
-- **Folder Name**: Uses first created alias ID52 as folder name (implementation
-  detail only)
+- **Identity**: 
+    - Collection of aliases (each alias is a separate ID52 with own keypair)
+    - All aliases are equal - no "primary" alias concept
+    - Each alias can have different public profiles
+    - Folder uses first alias ID52 (implementation detail only)
 - **Storage**: `{fastn_home}/accounts/{first_alias_id52}/` containing:
-    - `db.sqlite` - Account database (includes Automerge documents)
-    - `profile.json` - Account metadata
-    - `public/` - Public web content (folder-based routing)
+    - `db.sqlite` - SQLite database (contains Automerge documents as blobs)
     - `aliases/` - All alias keys (including first one)
         - `{alias1_id52}.id52` - Public key
         - `{alias1_id52}.private-key` - Private key
@@ -50,6 +65,7 @@ Iroh network protocol.
         - `bob/` - All emails to/from bob@ any alias
             - `inbox/` - Received emails
             - `sent/` - Sent emails
+    - `public/` - Public web content (folder-based routing)
 - **Relationships**:
     - Can own multiple Devices
     - Can own other Accounts (group accounts)
@@ -64,8 +80,7 @@ Iroh network protocol.
 - **Storage**: `{fastn_home}/devices/{device_id52}/` containing:
     - `device.id52` - Public key
     - `device.private-key` - Private key
-    - `db.sqlite` - Device database (includes synced Automerge documents)
-    - `device_info.json` - Device metadata
+    - `db.sqlite` - SQLite database (contains synced Automerge documents as blobs)
     - `public/` - Public web content (folder-based routing)
 - **Relationships**:
     - Can only connect directly to its owner Account using device ID52
@@ -284,56 +299,6 @@ SMTP Server:
 5. **Email Backup**: Automated backup to owned devices
 6. **External Gateway**: Bridge to regular email (optional)
 
-## Identity & Aliases
-
-### Account Aliases
-
-An Account is not just a single identity but a collection of aliases. This
-provides:
-
-1. **Privacy**: Different aliases for different social contexts
-2. **Security**: Compartmentalization of relationships
-3. **Flexibility**: Can retire aliases without losing the account
-4. **Equality**: No "primary" alias - all aliases are equal peers
-
- ```
- Account (folder named after first alias for technical reasons)
- ├── Alias 1: abc123... (work contacts)
- ├── Alias 2: def456... (family) 
- ├── Alias 3: ghi789... (gaming friends)
- └── All equal - no primary
- ```
-
-### Why No Primary Alias?
-
-Having a "primary" alias creates privacy risks:
-
-- Developers might default to primary when they should choose carefully
-- Users might accidentally expose their "main" identity
-- It creates a false hierarchy where all aliases should be equal
-- The folder name using first alias is purely an implementation detail
-
-### Alias Usage in Connections
-
-When Account A connects to Account B:
-
-- A MUST choose which alias to use (no default)
-- B only knows about that specific alias of A
-- A can have different aliases for different peers
-
-Example:
-
- ```
- Alice's Account:
- - Alias 1: alice_work (used with work colleagues)
- - Alias 2: alice_family (used with family)
- - Alias 3: alice_gaming (used with gaming friends)
- 
- When connecting to Bob (work colleague):
- - Alice explicitly chooses alice_work alias
- - Bob only knows alice_work, not her other aliases
- - No risk of accidentally using alice_family
- ```
 
 ## File Serving & Web Capabilities
 
@@ -395,79 +360,559 @@ Every entity uses a single `public/` directory with folder-based routing:
 FASTN uses Automerge for collaborative, conflict-free document synchronization
 across entities.
 
+### Document Paths and Ownership
+
+Document paths encode ownership:
+- **`mine/{doc-name}`** - Documents owned by this account (any of our aliases)
+- **`{owner-alias-id52}/{doc-name}`** - Documents owned by others
+
+Examples:
+- `mine/project-notes` - My project notes
+- `mine/-/config` - My account configuration  
+- `abc123.../shared-doc` - Document owned by alias abc123...
+- `abc123.../-/readme` - Public profile of alias abc123...
+
+Each entity stores their own copy in SQLite, so the same logical document may have different paths:
+- Alice sees her doc as: `mine/project`
+- Bob sees Alice's doc as: `alice-id52/project`
+- Carol sees Alice's doc as: `alice-id52/project`
+
 ### Document Storage
 
-- Documents stored in SQLite as binary blobs
-- Each document has a unique ID and owner
+- Documents stored in SQLite as binary blobs with path as key
+- Same document may have different paths in different accounts
 - Document changes tracked as Automerge operations
 - Sync state tracked per peer/device
 
-### Document Ownership & Sharing
+### Document Naming Convention
 
- ```sql
- CREATE TABLE automerge_documents
- (
-     document_id    TEXT PRIMARY KEY,
-     owner_id52     TEXT    NOT NULL, -- Account that owns this document
-     document_type  TEXT    NOT NULL, -- 'note', 'spreadsheet', 'canvas', etc.
-     title          TEXT,
-     automerge_data BLOB    NOT NULL, -- Automerge binary format
-     created_at     INTEGER NOT NULL,
-     updated_at     INTEGER NOT NULL,
-     is_public      BOOLEAN DEFAULT FALSE
- );
+**Special Documents**: Use `/-/` prefix within paths to prevent conflicts
+- `mine/-/config` - My account configuration
+- `mine/-/groups/{name}` - My permission groups
+- `{path}/-/meta` - Metadata for any document
 
-CREATE TABLE document_shares
-(
-    document_id      TEXT    NOT NULL,
-    shared_with_id52 TEXT    NOT NULL, -- ID52 of account/device with access
-    permission       TEXT    NOT NULL, -- 'read', 'write', 'admin'
-    shared_at        INTEGER NOT NULL,
-    shared_by_id52   TEXT    NOT NULL, -- Who shared it
-    PRIMARY KEY (document_id, shared_with_id52),
-    FOREIGN KEY (document_id) REFERENCES automerge_documents (document_id)
+**User Documents**: Any path without `/-/` in the name
+- Users can create documents with any name
+- Each user document has an associated `/-/meta` document
+
+### Special Documents (System-managed)
+
+#### Account Configuration
+
+**`mine/-/config`** (Account-wide Settings)
+```json
+{
+  "account_id": "550e8400-e29b-41d4-a716-446655440000",
+  "my_aliases": {
+    "abc123...": {
+      "name": "work",
+      "created_at": 1234567890,
+      "readme": {
+        "display_name": "Alice Smith (Work)",
+        "bio": "Software engineer at Example Corp"
+      }
+    },
+    "def456...": {
+      "name": "personal", 
+      "created_at": 1234567890,
+      "readme": {
+        "display_name": "Alice",
+        "bio": "Indie developer"
+      }
+    }
+  },
+  "settings": {
+    "email_enabled": true,
+    "default_permissions": "read"
+  }
+}
+```
+- Uses special path `mine/-/config`
+- Contains all my aliases and their public profiles
+- Only synced with my owned devices
+
+#### Groups (Permission Management)
+
+**`mine/-/groups/{group-name}`** (My Permission Groups)
+```json
+{
+  "name": "engineering-team",
+  "description": "Engineering team members",
+  "created_by": "abc123...",
+  "created_at": 1234567890,
+  "members": {
+    "accounts": [
+      "def456...",  // Bob's alias
+      "ghi789...",  // Carol's alias
+      "jkl012..."   // Dave's alias
+    ],
+    "groups": [
+      "senior-engineers",  // Nested group
+      "contractors"        // Another nested group
+    ]
+  },
+  "settings": {
+    "allow_members_to_see_members": true,
+    "allow_members_to_add_members": false
+  }
+}
+```
+- Groups simplify permission management
+- Can contain account aliases and other groups (nested)
+- Synced with anyone who needs to resolve group membership
+- Documents can grant permissions to entire groups
+
+#### Alias Documents (About Others)
+
+**`{alias-id52}/-/readme`** (Their Public Profile)
+```json
+{
+  "display_name": "Bob Johnson",
+  "bio": "Designer and developer",
+  "avatar_url": "...",
+  "services": ["email", "chat"],
+  "created_at": 1234567890
+}
+```
+- Public profile maintained by that alias owner
+- Automatically synced when connected
+
+**`{alias-id52}/-/notes`** (My Private Notes)
+```json
+{
+  "nickname": "Bob from conference",
+  "trust_level": 8,
+  "tags": ["work", "design"],
+  "notes": "Great designer, met at P2P conf",
+  "my_aliases_that_know_them": ["abc123..."],
+  "blocked": false
+}
+```
+- My private notes about this specific alias
+- Only synced between my account and my devices
+- Never shared with the alias owner
+
+#### Device Documents
+
+**`mine/-/devices/{device-id52}/readme`** (Device Info)
+```json
+{
+  "device_name": "Alice's Laptop",
+  "device_type": "laptop",
+  "os": "macOS 14.0",
+  "last_seen": 1234567890,
+  "capabilities": ["email", "automerge", "wasm"],
+  "browsing_id52": "xyz789..."  // For anonymous browsing
+}
+```
+- Device information and capabilities
+- Synced between my account and all my devices
+
+**`mine/-/devices/{device-id52}/config`** (Device Settings)
+```json
+{
+  "sync_enabled": true,
+  "sync_interval": 300,
+  "storage_limit": 5368709120,
+  "proxy_mode": "direct"  // or "via-account"
+}
+```
+
+#### Relationship Documents
+
+**`mine/-/relationships/{alias-id52}`** (Peer Relationships)
+```json
+{
+  "their_alias": "ghi789...",
+  "my_alias_used": "abc123...",  // Which of my aliases knows them
+  "relationship_type": "peer",    // or "owner", "owned_by"
+  "first_met": 1234567890,
+  "last_seen": 1234567890,
+  "permissions": {
+    "can_email": true,
+    "can_share_docs": true
+  }
+}
+```
+- Replaces traditional `fastn_account` table
+- Tracks which of my aliases knows which of their aliases
+- Auto-synced via Automerge protocol
+
+### User Documents (User-created)
+
+User documents can have any path (except containing `/-/`). Each has an associated meta document for sharing control.
+
+#### Document Content
+
+**`mine/project-notes`** (My Document)
+```json
+{
+  "title": "Project Notes",
+  "content": "...",
+  "created_by": "abc123...",
+  "created_at": 1234567890
+}
+```
+
+**`def456.../shared-doc`** (Their Document I Have Access To)
+- Document owned by alias def456...
+- I have access based on permissions in their meta
+
+#### Document Metadata
+
+**`mine/project-notes/-/meta`** (Sharing & Metadata)
+```json
+{
+  "owner": "abc123...",
+  "created_at": 1234567890,
+  "updated_at": 1234567890,
+  "permissions": {
+    "def456...": {
+      "level": "write",      // admin, share, write, comment, read
+      "granted_at": 1234567890,
+      "granted_by": "abc123..."
+    },
+    "group:engineering-team": {
+      "level": "read",
+      "granted_at": 1234567890,
+      "granted_by": "abc123..."
+    }
+  },
+  "settings": {
+    "public": false,
+    "link_sharing": false
+  }
+}
+```
+- Permissions can be granted to aliases or groups (prefixed with "group:")
+- **Meta document is shared with everyone who has ANY permission**
+- This allows participants to see who else has access (transparency)
+- Groups are resolved recursively to find all members
+
+### Permission Levels
+
+1. **admin**: Full control, can delete document, change all permissions
+2. **share**: Can grant/revoke read, comment, write permissions to others
+3. **write**: Can edit document content
+4. **comment**: Can add comments but not edit content
+5. **read**: Can only view document
+
+### Group Resolution
+
+When checking if alias X has permission to document D:
+1. Check direct permission for X in D's meta
+2. For each group G in D's meta:
+   - Load `mine/-/groups/G` or `{owner}/-/groups/G`
+   - Check if X is in G's accounts
+   - Recursively check nested groups
+3. Cache resolution results for performance
+
+### Database Schema (Automerge-only)
+
+Since we've moved all configuration and relationship data to Automerge documents, we only need tables for:
+1. Storing Automerge document binaries
+2. Tracking sync state
+3. Caching for performance
+
+```sql
+-- Core Automerge document storage
+CREATE TABLE documents (
+    path             TEXT PRIMARY KEY,     -- mine/doc or {alias}/doc
+    automerge_binary BLOB NOT NULL,        -- Current Automerge state
+    heads            TEXT NOT NULL,        -- JSON array of head hashes
+    actor_id         TEXT NOT NULL,        -- Our actor ID for this doc
+    updated_at       INTEGER NOT NULL,
+    
+    INDEX idx_updated (updated_at DESC)
 );
 
-CREATE TABLE document_sync_state
-(
-    document_id TEXT    NOT NULL,
-    peer_id52   TEXT    NOT NULL, -- Peer we're syncing with
-    last_sync   INTEGER NOT NULL, -- Timestamp of last sync
-    sync_vector BLOB,             -- Automerge sync state vector
-    PRIMARY KEY (document_id, peer_id52)
+-- Automerge sync state per document per peer
+CREATE TABLE sync_state (
+    document_path    TEXT NOT NULL,
+    peer_id52        TEXT NOT NULL,
+    
+    -- Automerge sync protocol state
+    sync_state       BLOB NOT NULL,        -- Binary sync state from Automerge
+    their_heads      TEXT,                 -- JSON array of their head hashes
+    our_heads        TEXT,                 -- JSON array of our head hashes
+    
+    -- Metadata
+    last_sync_at     INTEGER NOT NULL,
+    sync_errors      INTEGER DEFAULT 0,
+    
+    PRIMARY KEY (document_path, peer_id52),
+    INDEX idx_last_sync (last_sync_at)
 );
- ```
+
+-- Cache tables (derived from Automerge for performance)
+
+-- Relationship cache (extracted from mine/-/relationships/*)
+CREATE TABLE relationship_cache (
+    their_alias      TEXT PRIMARY KEY,
+    my_alias_used    TEXT NOT NULL,
+    relationship_type TEXT,
+    last_seen        INTEGER,
+    extracted_at     INTEGER NOT NULL,     -- When we extracted from Automerge
+    
+    INDEX idx_my_alias (my_alias_used)
+);
+
+-- Permission cache (extracted from */meta documents)
+CREATE TABLE permission_cache (
+    document_path    TEXT NOT NULL,
+    grantee_alias    TEXT,
+    grantee_group    TEXT,
+    permission_level TEXT NOT NULL,         -- admin, share, write, comment, read
+    extracted_at     INTEGER NOT NULL,
+    
+    INDEX idx_path (document_path),
+    INDEX idx_grantee (grantee_alias)
+);
+
+-- Group membership cache (extracted from mine/-/groups/*)
+CREATE TABLE group_cache (
+    group_name       TEXT NOT NULL,
+    member_alias     TEXT,                  -- Direct member
+    member_group     TEXT,                  -- Nested group
+    extracted_at     INTEGER NOT NULL,
+    
+    INDEX idx_group (group_name),
+    INDEX idx_member (member_alias)
+);
+```
+
+**Important Notes:**
+- No more `fastn_account` or `account_aliases` tables - this data lives in Automerge documents
+- Cache tables are rebuilt from Automerge documents and can be dropped/recreated
+- `extracted_at` timestamps help identify stale cache entries
+- All source of truth is in Automerge documents
+
+### Automerge Sync Implementation
+
+#### How Sync State Works
+
+```rust
+use automerge::{AutoCommit, sync::{self, SyncState, Message}};
+use rusqlite::{Connection, params};
+
+// Structure to hold sync state from database
+struct StoredSyncState {
+    sync_state: Vec<u8>,      // Binary blob
+    their_heads: Vec<String>,  // Their document version hashes
+    our_heads: Vec<String>,     // Our document version hashes
+}
+
+// Initialize sync for a new peer relationship
+async fn init_sync_state(
+    db: &Connection,
+    document_path: &str,
+    peer_id52: &str,
+    doc: &AutoCommit,
+) -> Result<SyncState> {
+    let sync_state = SyncState::new();
+    
+    // Get current document heads (version hashes)
+    let our_heads: Vec<String> = doc.get_heads()
+        .iter()
+        .map(|h| h.to_string())
+        .collect();
+    
+    // Store initial sync state
+    db.execute(
+        "INSERT INTO sync_state (document_path, peer_id52, sync_state, our_heads, their_heads, last_sync_at)
+         VALUES (?1, ?2, ?3, ?4, '[]', ?5)",
+        params![
+            document_path,
+            peer_id52,
+            sync_state.encode(),  // Serialize to binary
+            serde_json::to_string(&our_heads)?,
+            chrono::Utc::now().timestamp(),
+        ],
+    )?;
+    
+    Ok(sync_state)
+}
+
+// Load sync state for existing peer
+async fn load_sync_state(
+    db: &Connection,
+    document_path: &str,
+    peer_id52: &str,
+) -> Result<Option<SyncState>> {
+    let row = db.query_row(
+        "SELECT sync_state FROM sync_state WHERE document_path = ?1 AND peer_id52 = ?2",
+        params![document_path, peer_id52],
+        |row| {
+            let blob: Vec<u8> = row.get(0)?;
+            Ok(blob)
+        },
+    ).optional()?;
+    
+    match row {
+        Some(blob) => Ok(Some(SyncState::decode(&blob)?)),
+        None => Ok(None),
+    }
+}
+
+// Perform one sync round with a peer
+async fn sync_document_with_peer(
+    db: &Connection,
+    document_path: &str,
+    peer_id52: &str,
+    doc: &mut AutoCommit,
+    peer_connection: &mut PeerConnection,
+) -> Result<()> {
+    // 1. Load or create sync state
+    let mut sync_state = match load_sync_state(db, document_path, peer_id52).await? {
+        Some(state) => state,
+        None => init_sync_state(db, document_path, peer_id52, doc).await?,
+    };
+    
+    // 2. Generate sync message to send to peer
+    // This contains only the changes the peer hasn't seen yet
+    let message_to_send = doc.sync().generate_sync_message(&mut sync_state);
+    
+    if let Some(message) = message_to_send {
+        // 3. Send our changes to peer
+        peer_connection.send_sync_message(document_path, &message).await?;
+        
+        // The sync_state now tracks that we've sent these changes
+    }
+    
+    // 4. Receive sync message from peer
+    if let Some(peer_message) = peer_connection.receive_sync_message().await? {
+        // 5. Apply peer's changes to our document
+        doc.sync().receive_sync_message(&mut sync_state, peer_message)?;
+        
+        // The document now contains merged changes
+        // The sync_state tracks what we've received
+    }
+    
+    // 6. Update database with new sync state
+    update_sync_state_in_db(db, document_path, peer_id52, &sync_state, doc).await?;
+    
+    Ok(())
+}
+
+// Update sync state after successful sync
+async fn update_sync_state_in_db(
+    db: &Connection,
+    document_path: &str,
+    peer_id52: &str,
+    sync_state: &SyncState,
+    doc: &AutoCommit,
+) -> Result<()> {
+    let our_heads: Vec<String> = doc.get_heads()
+        .iter()
+        .map(|h| h.to_string())
+        .collect();
+    
+    // Note: Getting their_heads requires tracking from sync messages
+    // In practice, you'd extract this from the peer's sync messages
+    
+    db.execute(
+        "UPDATE sync_state 
+         SET sync_state = ?1, 
+             our_heads = ?2,
+             last_sync_at = ?3,
+             sync_errors = 0
+         WHERE document_path = ?4 AND peer_id52 = ?5",
+        params![
+            sync_state.encode(),
+            serde_json::to_string(&our_heads)?,
+            chrono::Utc::now().timestamp(),
+            document_path,
+            peer_id52,
+        ],
+    )?;
+    
+    Ok(())
+}
+
+// Continuous sync loop for a document
+async fn sync_loop(
+    db: Arc<Mutex<Connection>>,
+    document_path: String,
+    peer_id52: String,
+) {
+    let mut interval = tokio::time::interval(Duration::from_secs(5));
+    
+    loop {
+        interval.tick().await;
+        
+        // Load document from database
+        let mut doc = load_document(&db, &document_path).await?;
+        
+        // Sync with peer
+        if let Err(e) = sync_document_with_peer(
+            &db, 
+            &document_path, 
+            &peer_id52, 
+            &mut doc,
+            &peer_connection,
+        ).await {
+            // Increment error counter on failure
+            db.execute(
+                "UPDATE sync_state SET sync_errors = sync_errors + 1 
+                 WHERE document_path = ?1 AND peer_id52 = ?2",
+                params![document_path, peer_id52],
+            )?;
+        }
+        
+        // Save updated document
+        save_document(&db, &document_path, &doc).await?;
+    }
+}
+```
+
+#### Key Concepts
+
+1. **SyncState is Opaque**: Automerge's `SyncState` is an opaque type that tracks:
+   - What changes we've sent to each peer
+   - What changes we've received from each peer
+   - Efficiently determines what needs to be sent next
+
+2. **Incremental Sync**: The sync protocol only sends changes since last sync:
+   - First sync: sends entire document history
+   - Subsequent syncs: only new changes
+   - Handles network failures gracefully (can resume)
+
+3. **Convergence**: All peers converge to the same state:
+   - CRDTs ensure conflict-free merging
+   - Order of sync doesn't matter
+   - Eventually consistent
+
+4. **Peer-Specific State**: Each (document, peer) pair has its own sync state:
+   - Can sync same document with multiple peers
+   - Each peer relationship tracked independently
+   - Allows different sync progress per peer
 
 ### Sync Rules
 
-1. **Owner → Devices**: Documents automatically sync to all devices owned by the
-   account
-2. **Peer Sharing**: Documents sync with peers based on sharing permissions
-3. **Conflict Resolution**: Automerge handles conflicts automatically
+#### Document Path Translation
+- When syncing `mine/project` to peer, it becomes `{my-alias}/project` in their system
+- When receiving `{their-alias}/doc`, it stays as `{their-alias}/doc` in my system
+- Devices see the same paths as their owner account
+
+#### Sync Patterns
+
+1. **My Documents** (`mine/*`):
+   - Automatically sync to all my devices
+   - Sync to peers based on `mine/{doc}/-/meta` permissions
+   - Become `{my-alias}/*` in peer systems
+
+2. **Others' Documents** (`{alias-id52}/*`):
+   - Sync if I have permission in their meta
+   - Path remains unchanged across syncs
+   - My devices inherit my access
+
+3. **Special Documents**:
+   - `mine/-/config`: Only my devices
+   - `mine/-/groups/*`: Shared with those needing resolution
+   - `{alias}/-/readme`: Public, synced when connected
+   - `{alias}/-/notes`: My private notes, only my devices
+
 4. **Offline Support**: Changes accumulate locally and sync when connected
-
-## Ownership Hierarchy
-
-### Account Ownership Types
-
-1. **Personal Account**: Not owned by any other account (root ownership)
-2. **Group Account**: Owned by another account
-
- ```
- amitu (Personal Account)
- ├── owns → fifthtry (Group Account)
- │          ├── owns → fifthtry_marketing (Sub-group Account)
- │          └── owns → fifthtry_engineering (Sub-group Account)
- └── owns → amitu_phone (Device)
- ```
-
-### Ownership Rules
-
-- An Account can own multiple other Accounts (groups/organizations)
-- An Account can be owned by at most one other Account
-- Ownership creates a tree hierarchy (no cycles allowed)
-- Owner has full control over owned accounts
-
 ## Connection Model
 
 ### Device ↔ Account (Owner Relationship)
@@ -557,79 +1002,8 @@ Devices NEVER expose their real ID52 to non-owner accounts. Three browsing modes
 
 **PROHIBITED**: Devices can NEVER communicate directly with each other, even if owned by the same account. All device-to-device data flow must go through the owner account.
 
-## Database Schema
 
-### Core Tables
 
- ```sql
- -- Peer relationships
-CREATE TABLE fastn_account
-(
-    peer_id52            TEXT PRIMARY KEY,
-    peer_name            TEXT,
-    relationship_type    TEXT    NOT NULL, -- 'peer', 'owner', 'owned_by'
-    our_alias_id52       TEXT    NOT NULL, -- Which of our aliases they know
-    first_seen           INTEGER NOT NULL,
-    last_seen            INTEGER,
-    connection_direction TEXT,
-    notes                TEXT,
-    trust_level          INTEGER DEFAULT 0,
-    FOREIGN KEY (our_alias_id52) REFERENCES account_aliases (id52)
-);
-
--- Account aliases (ALL aliases including first)
-CREATE TABLE account_aliases
-(
-    id52                 TEXT PRIMARY KEY,
-    alias_name           TEXT,
-    created_at           INTEGER NOT NULL,
-    private_key_location TEXT -- 'keyring' or 'file'
-);
-
--- No is_primary field! All aliases are equal
- ```
-
-## Directory Structure Example
-
- ```
- {fastn_home}/
- ├── rig/
- │   ├── rig.id52
- │   ├── rig.private-key
- │   ├── rig.db
- │   ├── rig.json
- │   └── public/                    # Folder-based routing
- │       ├── index.html
- │       └── api/
- │           └── status.wasm
- ├── accounts/
- │   └── {first_alias_id52}/        # Folder named after first alias (implementation detail)
- │       ├── db.sqlite
- │       ├── profile.json
- │       ├── aliases/               # ALL aliases stored here
- │       │   ├── abc123.id52
- │       │   ├── abc123.private-key
- │       │   ├── def456.id52
- │       │   └── def456.private-key
- │       ├── public/
- │       │   ├── index.html
- │       │   └── blog/
- │       │       └── post1.html
- │       └── mails/                # Organized by username
- │           ├── alice/            # All alice@ emails
- │           │   ├── inbox/
- │           │   └── sent/
- │           └── bob/              # All bob@ emails
- │               ├── inbox/
- │               └── sent/
- └── devices/
-     └── {device_id52}/
-         ├── device.id52
-         ├── device.private-key
-         ├── db.sqlite
-         └── public/
-             └── index.html
- ```
 
 ## Network Protocol
 
