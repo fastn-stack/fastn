@@ -190,12 +190,9 @@ pub async fn run(home: Option<std::path::PathBuf>) -> eyre::Result<()> {
     // Use graceful shutdown to wait for Ctrl+C and manage all tasks
     graceful.shutdown().await?;
 
-    // Clean shutdown of all endpoints
+    // Clean shutdown of all endpoints (but don't change their online status in DB)
     println!("Stopping all endpoints...");
     let mut endpoint_manager = p2p_endpoint_manager.lock().await;
-    for id52 in endpoint_manager.active_endpoints() {
-        rig.set_endpoint_online(&id52, false).await;
-    }
     endpoint_manager.shutdown_all().await?;
 
     println!("🔓 Releasing lock...");
