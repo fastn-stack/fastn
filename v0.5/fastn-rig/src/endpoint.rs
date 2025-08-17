@@ -223,26 +223,28 @@ async fn handle_connection(
             }
 
             else => {
-                // Determine expected protocol based on owner type
-                let expected_protocol = match owner_type {
+                // Determine expected protocols based on owner type
+                let expected_protocols: Vec<fastn_net::Protocol> = match owner_type {
                     fastn_rig::OwnerType::Account => {
                         // Accounts can receive from Devices or other Accounts
-                        // For now, we'll accept AccountToAccount as default
-                        fastn_net::Protocol::AccountToAccount
+                        vec![
+                            fastn_net::Protocol::DeviceToAccount,
+                            fastn_net::Protocol::AccountToAccount,
+                        ]
                     }
                     fastn_rig::OwnerType::Device => {
                         // Devices receive from Accounts
-                        fastn_net::Protocol::AccountToDevice
+                        vec![fastn_net::Protocol::AccountToDevice]
                     }
                     fastn_rig::OwnerType::Rig => {
                         // Rig receives control messages
-                        fastn_net::Protocol::RigControl
+                        vec![fastn_net::Protocol::RigControl]
                     }
                 };
 
                 // Accept a bidirectional stream with protocol negotiation
-                match fastn_net::accept_bi(&conn, expected_protocol).await {
-                    Ok((mut send, mut recv)) => {
+                match fastn_net::accept_bi(&conn, &expected_protocols).await {
+                    Ok((protocol, mut send, mut recv)) => {
                         // Read the actual message content
                         match fastn_net::next_string(&mut recv).await {
                             Ok(message_str) => {
@@ -250,7 +252,7 @@ async fn handle_connection(
                                 // For now, just log it
                                 tracing::info!(
                                     "Received {:?} message on {} from {}: {} bytes",
-                                    expected_protocol,
+                                    protocol,
                                     endpoint_id52,
                                     remote_id52,
                                     message_str.len()

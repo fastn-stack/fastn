@@ -36,18 +36,31 @@ async fn ack(send: &mut iroh::endpoint::SendStream) -> eyre::Result<()> {
     Ok(())
 }
 
-/// Accepts an incoming bidirectional stream with the expected protocol.
+/// Accepts an incoming bidirectional stream with any of the expected protocols.
 ///
-/// Continuously accepts incoming streams until one matches the expected protocol.
+/// Continuously accepts incoming streams until one matches any of the expected protocols.
 /// Automatically handles and responds to ping messages.
+///
+/// # Parameters
+///
+/// * `expected` - A slice of acceptable protocols. Pass a single-element slice for
+///   backward compatibility with code expecting a single protocol.
+///
+/// # Returns
+///
+/// Returns the actual protocol received along with the send and receive streams.
 ///
 /// # Errors
 ///
-/// Returns an error if a non-ping stream has unexpected protocol.
+/// Returns an error if a non-ping stream has none of the expected protocols.
 pub async fn accept_bi(
     conn: &iroh::endpoint::Connection,
-    expected: crate::Protocol,
-) -> eyre::Result<(iroh::endpoint::SendStream, iroh::endpoint::RecvStream)> {
+    expected: &[crate::Protocol],
+) -> eyre::Result<(
+    crate::Protocol,
+    iroh::endpoint::SendStream,
+    iroh::endpoint::RecvStream,
+)> {
     loop {
         tracing::trace!("accepting bidirectional stream");
         match accept_bi_(conn).await? {
@@ -61,10 +74,12 @@ pub async fn accept_bi(
             }
             (s, r, found) => {
                 tracing::trace!("got bidirectional stream: {found:?}");
-                if found != expected {
-                    return Err(eyre::anyhow!("expected: {expected:?}, got {found:?}"));
+                if expected.contains(&found) {
+                    return Ok((found, s, r));
                 }
-                return Ok((s, r));
+                return Err(eyre::anyhow!(
+                    "expected one of: {expected:?}, got {found:?}"
+                ));
             }
         }
     }
@@ -84,14 +99,19 @@ pub async fn accept_bi(
 /// Returns an error if protocol doesn't match or deserialization fails.
 pub async fn accept_bi_with<T: serde::de::DeserializeOwned>(
     conn: &iroh::endpoint::Connection,
-    expected: crate::Protocol,
-) -> eyre::Result<(T, iroh::endpoint::SendStream, iroh::endpoint::RecvStream)> {
-    let (send, mut recv) = accept_bi(conn, expected).await?;
+    expected: &[crate::Protocol],
+) -> eyre::Result<(
+    crate::Protocol,
+    T,
+    iroh::endpoint::SendStream,
+    iroh::endpoint::RecvStream,
+)> {
+    let (protocol, send, mut recv) = accept_bi(conn, expected).await?;
     let next = next_json(&mut recv)
         .await
         .inspect_err(|e| tracing::error!("failed to read next message: {e}"))?;
 
-    Ok((next, send, recv))
+    Ok((protocol, next, send, recv))
 }
 
 async fn accept_bi_(
