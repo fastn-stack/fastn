@@ -53,6 +53,7 @@ Key principles:
     - Each alias can have different public profiles
     - Folder uses first alias ID52 (implementation detail only)
 - **Storage**: `{fastn_home}/accounts/{first_alias_id52}/` containing:
+    - `automerge.actor-id` - Account actor ID: `{first-alias}-1` (device 1 is always the account itself)
     - `mail.sqlite` - Email index and metadata
     - `automerge.sqlite` - Automerge documents and derived/cache tables
     - `db.sqlite` - User-defined tables (future use)
@@ -85,6 +86,7 @@ Key principles:
 - **Storage**: `{fastn_home}/devices/{device_id52}/` containing:
     - `device.id52` - Public key
     - `device.private-key` - Private key
+    - `automerge.actor-id` - Device actor ID: `{owner-alias}-{device-num}` (received from account during acceptance)
     - `automerge.sqlite` - Automerge documents and derived/cache tables
     - `db.sqlite` - User-defined tables (future use)
     - `public/` - Public web content (folder-based routing)
@@ -92,6 +94,10 @@ Key principles:
     - Can only connect directly to its owner Account using device ID52
     - Never connects directly to other Devices
     - Can browse non-owner Accounts using temporary browsing identities
+- **Actor ID Assignment**:
+    - When device is accepted by account, account assigns the actor ID
+    - Format: `{account-alias}-{device-num}` where device-num is next available number
+    - Device stores this in `automerge.actor-id` file for all future operations
 
 ## Email System
 
@@ -385,6 +391,37 @@ Every entity uses a single `public/` directory with folder-based routing:
 FASTN uses Automerge for collaborative, conflict-free document synchronization
 across entities.
 
+### Actor ID Design
+
+FASTN uses a simplified actor ID system with creation-alias optimization:
+
+#### Actor ID Format
+- **Structure**: `{alias-id52}-{device-number}` (e.g., `1oem6e10...-1`)
+- **Creation Alias**: Each document stores the alias used at creation
+- **Consistency**: All edits use the creation alias as actor prefix
+- **No GUID needed**: Direct use of alias IDs throughout
+
+#### Optimization Strategy
+1. **Common case (90%+)**: Same alias for creation and sharing = no history rewriting
+2. **Rare case**: Different alias for sharing = history rewrite on export only
+3. **Storage**: `created_alias` field in database tracks the creation alias
+
+#### Security Properties
+1. **Attribution**: Can track edits to specific devices
+2. **Verification**: Can verify all edits come from claimed alias
+3. **Consistency**: Document maintains same actor throughout its lifecycle
+4. **Efficiency**: No rewriting overhead in common single-alias case
+
+Example flow:
+```
+Alice creates with alice123...: actor = alice123...-1 (stored)
+Alice edits: uses alice123...-1 (no rewrite)
+Alice shares with Bob: no rewrite needed (same alias)
+Bob receives: sees alice123...-1 as actor
+Bob creates response: actor = bob456...-1 (stored)
+Bob shares back: no rewrite needed
+```
+
 ### Document Paths and Ownership
 
 Document paths encode ownership:
@@ -457,6 +494,28 @@ have different paths:
 - Each user document has an associated `/-/meta` document
 
 ### Special Documents (System-managed)
+
+#### Alias Notes and Permissions
+
+**`/-/{alias-id52}/notes`** (Private notes about an alias and their permissions)
+
+```json
+{
+  "alias": "bob456...",
+  "relationship": "coworker",
+  "notes": "Met at conference 2024",
+  "permissions": {
+    "can_manage_groups": true,
+    "can_grant_access": true,
+    "is_admin": false
+  },
+  "trusted": true,
+  "created_at": 1234567890,
+  "last_interaction": 1234567890
+}
+```
+
+Note: Only account owner and their devices can manage groups unless `can_manage_groups` is true.
 
 #### Account Configuration
 
@@ -610,29 +669,6 @@ have different paths:
 }
 ```
 
-#### Relationship Documents
-
-**`mine/-/relationships/{alias-id52}`** (Peer Relationships)
-
-```json
-{
-  "their_alias": "ghi789...",
-  "my_alias_used": "abc123...",
-  // Which of my aliases knows them
-  "relationship_type": "peer",
-  // or "owner", "owned_by"
-  "first_met": 1234567890,
-  "last_seen": 1234567890,
-  "permissions": {
-    "can_email": true,
-    "can_share_docs": true
-  }
-}
-```
-
-- Replaces traditional `fastn_account` table
-- Tracks which of my aliases knows which of their aliases
-- Auto-synced via Automerge protocol
 
 ### User Documents (User-created)
 
@@ -767,11 +803,13 @@ CREATE TABLE fastn_documents
     path             TEXT PRIMARY KEY, -- mine/doc or {alias}/doc
     automerge_binary BLOB    NOT NULL, -- Current Automerge state
     heads            TEXT    NOT NULL, -- JSON array of head hashes
-    actor_id         TEXT    NOT NULL, -- Our actor ID for this doc
     updated_at       INTEGER NOT NULL,
 
     INDEX            idx_updated(updated_at DESC)
 );
+-- Note: actor_id not stored - determined at runtime:
+--   Internal: {account-guid}-{device-num}
+--   External: {alias-id52}-{device-num}
 
 -- Automerge sync state per document per peer
 CREATE TABLE fastn_sync_state
@@ -794,16 +832,19 @@ CREATE TABLE fastn_sync_state
 
 -- Cache tables (derived from Automerge for performance)
 
--- Relationship cache (extracted from mine/-/relationships/*)
-CREATE TABLE fastn_relationship_cache
+-- Alias notes cache (extracted from /-/{alias-id52}/notes)
+CREATE TABLE fastn_alias_cache
 (
-    their_alias       TEXT PRIMARY KEY,
-    my_alias_used     TEXT    NOT NULL,
-    relationship_type TEXT,
-    last_seen         INTEGER,
-    extracted_at      INTEGER NOT NULL, -- When we extracted from Automerge
+    alias_id52        TEXT PRIMARY KEY,
+    relationship      TEXT,
+    can_manage_groups INTEGER DEFAULT 0,  -- Boolean: can manage our groups
+    can_grant_access  INTEGER DEFAULT 0,  -- Boolean: can grant access
+    is_admin          INTEGER DEFAULT 0,  -- Boolean: admin privileges
+    trusted           INTEGER DEFAULT 0,  -- Boolean: trusted peer
+    last_interaction  INTEGER,
+    extracted_at      INTEGER NOT NULL,   -- When we extracted from Automerge
 
-    INDEX             idx_my_alias(my_alias_used)
+    INDEX             idx_trusted(trusted)
 );
 
 -- Permission cache (extracted from */meta documents)
@@ -819,16 +860,17 @@ CREATE TABLE fastn_permission_cache
     INDEX            idx_grantee(grantee_alias)
 );
 
--- Group membership cache (extracted from mine/-/groups/*)
+-- Group membership cache (extracted from /-/groups/*)
 CREATE TABLE fastn_group_cache
 (
-    group_name   TEXT    NOT NULL,
-    member_alias TEXT, -- Direct member
-    member_group TEXT, -- Nested group
-    extracted_at INTEGER NOT NULL,
+    group_name    TEXT    NOT NULL,
+    member_alias  TEXT,              -- Direct account member (NULL if group)
+    member_group  TEXT,              -- Nested group member (NULL if account)
+    extracted_at  INTEGER NOT NULL,
 
-    INDEX        idx_group(group_name),
-    INDEX        idx_member(member_alias)
+    PRIMARY KEY (group_name, COALESCE(member_alias, member_group)),
+    INDEX       idx_group(group_name),
+    INDEX       idx_member(member_alias)
 );
 ```
 
