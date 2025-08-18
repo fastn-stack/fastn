@@ -51,7 +51,10 @@ rust-version = "1.86"
 arcstr = "1"
 argon2 = "0.5"
 async-lock = "3"
-automerge = "=1.0.0-beta.3"
+# Using automerge 0.6.1 to match autosurgeon 0.8's dependency version
+# TODO: Upgrade to automerge 1.0 once autosurgeon supports it
+automerge = "0.6.1"
+autosurgeon = "0.8"
 bb8 = "0.9"
 bytes = "1"
 chrono = { version = "0.4", features = ["serde"] }

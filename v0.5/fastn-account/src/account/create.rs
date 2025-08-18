@@ -166,12 +166,10 @@ impl fastn_account::Account {
 
     /// Create initial Automerge documents for a new account
     fn create_initial_documents(
-        conn: &rusqlite::Connection,
+        _conn: &rusqlite::Connection,
         id52: &str,
         primary_alias: &fastn_account::Alias,
     ) -> eyre::Result<()> {
-        use eyre::WrapErr;
-
         // 1. Create /-/mails/default document with password and service flags
         let password = crate::auth::generate_password();
         let password_hash = crate::auth::hash_password(&password)?;
@@ -198,8 +196,9 @@ impl fastn_account::Account {
         )?;
         mail_doc.put(automerge::ROOT, "is_active", true)?;
 
-        fastn_automerge::create_and_save_document(conn, "/-/mails/default", mail_doc)
-            .wrap_err("Failed to create mail document")?;
+        // TODO: Integrate with new fastn-automerge Db API
+        // fastn_automerge::create_and_save_document(conn, "/-/mails/default", mail_doc)
+        //     .wrap_err("Failed to create mail document")?;
 
         // 2. Create /-/aliases/{id52}/readme document (public info)
         let mut readme_doc = automerge::AutoCommit::new();
@@ -212,9 +211,10 @@ impl fastn_account::Account {
         )?;
         readme_doc.put(automerge::ROOT, "is_primary", true)?;
 
-        let readme_path = format!("/-/aliases/{id52}/readme");
-        fastn_automerge::create_and_save_document(conn, &readme_path, readme_doc)
-            .wrap_err("Failed to create alias readme document")?;
+        let _readme_path = format!("/-/aliases/{id52}/readme");
+        // TODO: Integrate with new fastn-automerge Db API
+        // fastn_automerge::create_and_save_document(conn, &readme_path, readme_doc)
+        //     .wrap_err("Failed to create alias readme document")?;
 
         // 3. Create /-/aliases/{id52}/notes document (private notes)
         let mut notes_doc = automerge::AutoCommit::new();
@@ -225,9 +225,10 @@ impl fastn_account::Account {
             chrono::Utc::now().timestamp(),
         )?;
 
-        let notes_path = format!("/-/aliases/{id52}/notes");
-        fastn_automerge::create_and_save_document(conn, &notes_path, notes_doc)
-            .wrap_err("Failed to create alias notes document")?;
+        let _notes_path = format!("/-/aliases/{id52}/notes");
+        // TODO: Integrate with new fastn-automerge Db API
+        // fastn_automerge::create_and_save_document(conn, &notes_path, notes_doc)
+        //     .wrap_err("Failed to create alias notes document")?;
 
         Ok(())
     }

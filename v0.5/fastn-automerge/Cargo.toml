@@ -8,11 +8,6 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
-# Core dependencies
 automerge.workspace = true
+autosurgeon.workspace = true
 rusqlite.workspace = true
-serde.workspace = true
-serde_json.workspace = true
-eyre.workspace = true
-tracing.workspace = true
-chrono.workspace = true
