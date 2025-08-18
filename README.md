@@ -170,6 +170,13 @@ Pages](https://fastn.com/github-pages/) and
   [responsive UIs](https://fastn.com/making-responsive-pages/). Oh My!
 
 
+## `fastn` 0.5
+
+We're currently working on `fastn` 0.5, which will be a major release with
+breaking changes. You can learn more about the development by going through
+[existing github
+discussions](https://github.com/orgs/fastn-stack/discussions?discussions_q=is%3Aopen+label%3A0.5-brainstorm).
+
 ## FifthTry Hosting
 
 We, [FifthTry](https://www.fifthtry.com) also offer our own hosting solution for
