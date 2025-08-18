@@ -36,8 +36,9 @@ struct Config {
 
 fn main() -> Result<()> {
     // Open with actor ID (required for all operations)
-    let actor_id = "a3f2b1c8-9d4e-4a6b-8c3d-1e2f3a4b5c6d-1";
-    let db = Db::open_with_actor(actor_id)?;
+    let actor_id = "a3f2b1c8-9d4e-4a6b-8c3d-1e2f3a4b5c6d-1".to_string();
+    let db_path = std::path::Path::new("fastn-automerge.sqlite");
+    let db = Db::open_with_actor(db_path, actor_id)?;
     
     // Create
     let config = Config { name: "app".into(), version: 1 };
@@ -46,38 +47,38 @@ fn main() -> Result<()> {
     // Read
     let loaded: Config = db.get("/-/config")?;
     
-    // Update (uses creation alias internally, marks for sync)
-    db.modify::<Config, _>("/-/config", |c| c.version = 2)?;
+    // Update entire document
+    let mut updated_config = loaded;
+    updated_config.version = 2;
+    db.update("/-/config", &updated_config)?;
     
-    // Get patches for peer when they come online
-    let patches = db.get_pending_patches_for_peer("alice123...", "bob456...")?;
-    // Vec<(doc_path, patch)> - all docs bob needs
+    // Or modify in place
+    db.modify::<Config, _>("/-/config", |c| c.version = 3)?;
     
-    // Check who needs sync
-    let peers = db.get_peers_needing_sync()?;
-    // Vec<(peer_alias, our_alias, doc_count)>
+    // Check if document exists
+    if db.exists("/-/config")? {
+        println!("Config exists!");
+    }
     
-    // Apply received patch
-    db.apply_patch_from_alias("/-/peer/config", &patch, "bob456...")?;
+    // List documents
+    let all_docs = db.list(None)?;
+    let config_docs = db.list(Some("/-/config"))?;
     
-    // Group management
-    db.create_group("engineers", "Engineering team")?;
-    db.add_account_to_group("engineers", "alice123...")?;
-    db.add_group_to_group("engineers", "backend-team")?;  // Nested
-    db.remove_account_from_group("engineers", "alice123...")?;
-    db.remove_group_from_group("engineers", "backend-team")?;
+    // Get document history
+    let history = db.history("/-/config", None)?;
+    println!("Document has {} edits", history.edits.len());
     
-    // Grant permissions
-    db.grant_account_access("/-/config", "bob456...", Permission::Read)?;
-    db.grant_group_access("/-/config", "engineers", Permission::Write)?;
-    db.revoke_account_access("/-/config", "bob456...")?;
-    db.revoke_group_access("/-/config", "engineers")?;
+    // Get raw AutoCommit document for advanced operations
+    let raw_doc = db.get_document("/-/config")?;
+    
+    // Delete document
+    db.delete("/-/config")?;
     
     Ok(())
 }
 ```
 
-## CLI Usage
+## CLI Usage (Coming Soon)
 
 ```bash
 # Initialize database
@@ -91,6 +92,12 @@ fastn-automerge delete /-/config
 
 # List documents
 fastn-automerge list --prefix /-/config
+
+# Clean database
+fastn-automerge clean [--force]
+
+# Show document history
+fastn-automerge history <doc-id> [<commit-hash>] [--short]
 ```
 
 ## Documentation
@@ -99,7 +106,7 @@ fastn-automerge list --prefix /-/config
 - [API Docs](https://docs.rs/fastn-automerge) - Full API reference
 - [CLI Reference](#cli-commands) - Command-line tool documentation
 
-## CLI Commands
+## CLI Commands (Coming Soon)
 
 ### Core Commands
 
@@ -110,6 +117,8 @@ fastn-automerge list --prefix /-/config
 - `set <path> <json>` - Create or replace a document
 - `delete <path>` - Delete a document
 - `list` - List all documents
+- `clean [--force]` - Clean up database (remove all documents)
+- `history <doc-id> [<commit-hash>] [--short]` - Show document edit history
 - `info <path>` - Show document metadata
 
 ### Options

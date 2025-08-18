@@ -32,15 +32,13 @@ fastn-automerge provides a high-level interface for working with Automerge CRDT 
 ```rust
 use fastn_automerge::{Db, Reconcile, Hydrate, Result};
 
-// Open default database (fastn-automerge.sqlite in current directory)
-let db = Db::open()?;
+// Open database with actor ID (required)
+let actor_id = "alice123-1".to_string();
+let db_path = std::path::Path::new("fastn-automerge.sqlite");
+let db = Db::open_with_actor(db_path, actor_id)?;
 
-// Open specific database
-let db = Db::open_at("/path/to/database.sqlite")?;
-
-// Initialize new database (fails if exists)
-let db = Db::init()?;
-let db = Db::init_at("/path/to/new.sqlite")?;
+// The database will be created automatically if it doesn't exist
+// Migration tables are set up on first connection
 ```
 
 ### Defining Your Data Structures
@@ -103,9 +101,6 @@ fn create_example(db: &Db) -> Result<()> {
     // Create new document (fails if exists)
     db.create("/-/users/user123", &user)?;
     
-    // Create or replace (upsert)
-    db.set("/-/users/user123", &user)?;
-    
     Ok(())
 }
 ```
@@ -127,6 +122,11 @@ fn read_example(db: &Db) -> Result<()> {
         Err(e) => return Err(e),
     }
     
+    // Check if document exists
+    if db.exists("/-/users/user123")? {
+        println!("User exists!");
+    }
+    
     Ok(())
 }
 ```
@@ -141,15 +141,15 @@ fn update_example(db: &Db) -> Result<()> {
         user.email = "alice.new@example.com".to_string();
     })?;
     
-    // Method 2: Load, modify, update
+    // Method 2: Load, modify, update (replaces entire document)
     let mut user: User = db.get("/-/users/user123")?;
     user.active = false;
     db.update("/-/users/user123", &user)?;
     
-    // Method 3: Partial update with raw document
+    // Method 3: Work with raw document for advanced operations
     let mut doc = db.get_document("/-/users/user123")?;
     doc.put(automerge::ROOT, "last_login", chrono::Utc::now().timestamp())?;
-    db.save_document("/-/users/user123", &doc)?;
+    // Note: save_document method not available yet - use modify() instead
     
     Ok(())
 }
@@ -267,7 +267,7 @@ fn advanced_example(db: &Db) -> Result<()> {
 
 ## CLI Usage
 
-### Installation
+### Installation (Coming Soon)
 
 ```bash
 # Install globally
@@ -279,7 +279,7 @@ cd fastn-automerge
 cargo build --release
 ```
 
-### Basic Commands
+### Basic Commands (Coming Soon)
 
 ```bash
 # Initialize a new database
@@ -312,6 +312,12 @@ fastn-automerge delete /-/config --confirm
 fastn-automerge list
 fastn-automerge list --prefix /-/users/
 fastn-automerge list --details
+
+# Clean database
+fastn-automerge clean [--force]
+
+# Show document history
+fastn-automerge history <doc-id> [<commit-hash>] [--short]
 
 # Show metadata
 fastn-automerge info /-/config
