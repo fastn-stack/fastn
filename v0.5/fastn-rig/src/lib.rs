@@ -29,7 +29,6 @@
 extern crate self as fastn_rig;
 
 pub mod endpoint;
-pub mod migration;
 mod rig;
 mod run;
 
@@ -51,10 +50,10 @@ pub struct Rig {
     pub(crate) path: std::path::PathBuf,
     /// Rig's identity
     pub(crate) secret_key: fastn_id52::SecretKey,
-    /// Optional owner account public key
-    pub(crate) owner: Option<fastn_id52::PublicKey>,
-    /// Rig database connection
-    pub(crate) db: std::sync::Arc<tokio::sync::Mutex<rusqlite::Connection>>,
+    /// Owner account public key (first account created)
+    pub(crate) owner: fastn_id52::PublicKey,
+    /// Automerge database connection
+    pub(crate) automerge: std::sync::Arc<tokio::sync::Mutex<rusqlite::Connection>>,
 }
 
 /// Manages all network endpoints

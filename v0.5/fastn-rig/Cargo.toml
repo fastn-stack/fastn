@@ -10,8 +10,10 @@ homepage.workspace = true
 [dependencies]
 # Core dependencies
 fastn-account.workspace = true
+fastn-automerge.workspace = true
 fastn-id52.workspace = true
 fastn-net.workspace = true
+automerge.workspace = true
 iroh.workspace = true
 eyre.workspace = true
 tracing.workspace = true
@@ -21,5 +23,6 @@ serde.workspace = true
 serde_json.workspace = true
 directories.workspace = true
 file-guard.workspace = true
+chrono.workspace = true
 
 # Future: fastn-device when created

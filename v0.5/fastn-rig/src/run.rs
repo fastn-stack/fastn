@@ -51,41 +51,33 @@ pub async fn run(home: Option<std::path::PathBuf>) -> eyre::Result<()> {
     println!("🚀 Starting fastn at {}", fastn_home.display());
     println!("🔒 Lock acquired: {}", lock_path.display());
 
-    // Initialize or load Rig based on whether fastn_home is initialized
-    let rig = if is_initialized {
+    // Initialize or load Rig and AccountManager based on whether fastn_home is initialized
+    let (rig, account_manager) = if is_initialized {
         println!("📂 Loading existing fastn_home...");
-        fastn_rig::Rig::load(fastn_home.clone())
-            .wrap_err("Failed to load Rig from existing fastn_home")?
+        let rig = fastn_rig::Rig::load(fastn_home.clone())
+            .wrap_err("Failed to load Rig from existing fastn_home")?;
+        let account_manager = fastn_account::AccountManager::load(fastn_home.clone())
+            .await
+            .wrap_err("Failed to load AccountManager from existing fastn_home")?;
+        (rig, account_manager)
     } else {
         println!("🎉 Initializing new fastn_home...");
-        // For now, create without an owner. In the future, we can prompt or accept as CLI arg
-        fastn_rig::Rig::create(fastn_home.clone(), None).wrap_err("Failed to create new Rig")?
-    };
-
-    println!("🔑 Rig ID52: {}", rig.id52());
-    if let Some(owner) = rig.owner() {
-        println!("👤 Owner: {owner}");
-    }
-    if let Some(current) = rig.get_current().await {
-        println!("📍 Current entity: {current}");
-    }
-
-    // Initialize or load AccountManager based on whether fastn_home is initialized
-    let account_manager = if is_initialized {
-        fastn_account::AccountManager::load(fastn_home.clone())
+        let (rig, account_manager, primary_id52) = fastn_rig::Rig::create(fastn_home.clone())
             .await
-            .wrap_err("Failed to load AccountManager from existing fastn_home")?
-    } else {
-        let (manager, primary_id52) = fastn_account::AccountManager::create(fastn_home.clone())
-            .await
-            .wrap_err("Failed to create new AccountManager")?;
+            .wrap_err("Failed to create new Rig and first account")?;
 
         // Set the newly created account as current and online
         rig.set_endpoint_online(&primary_id52, true).await;
         rig.set_current(&primary_id52).await?;
 
-        manager
+        (rig, account_manager)
     };
+
+    println!("🔑 Rig ID52: {}", rig.id52());
+    println!("👤 Owner: {}", rig.owner());
+    if let Some(current) = rig.get_current().await {
+        println!("📍 Current entity: {current}");
+    }
 
     // Create graceful shutdown handler
     let graceful = fastn_net::Graceful::new();

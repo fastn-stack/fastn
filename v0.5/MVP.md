@@ -85,28 +85,15 @@ Rig (fastn_home)
 - Each alias acts as an independent email domain
 - **MVP Simplification**: Only "default" username, all emails go to default folder
 
+## Rig Ownership
+
+The first Account created on a Rig becomes its owner. This ownership is stored in the Rig's `/-/rig/{rig_id52}/config` Automerge document in `automerge.sqlite`.
+
 ## Database Schema (Actual Implementation)
 
-### 1. Rig Database (rig.db)
+### automerge.sqlite (Universal Schema)
 
-```sql
--- From fastn-rig/src/migration.rs
-CREATE TABLE fastn_endpoints (
-    id52              TEXT PRIMARY KEY,
-    is_online         INTEGER NOT NULL DEFAULT 0,
-    is_current        INTEGER NOT NULL DEFAULT 0
-);
-
--- Indexes
-CREATE INDEX idx_endpoints_online ON fastn_endpoints(is_online);
-CREATE UNIQUE INDEX idx_endpoints_current_unique 
-    ON fastn_endpoints(is_current) 
-    WHERE is_current = 1;
-```
-
-### 2. Account Databases (Three Separate SQLite Files)
-
-#### 2.1 automerge.sqlite - Configuration & Documents
+The same schema is used in Rig, Account, and Device automerge.sqlite databases:
 
 ```sql
 -- From fastn-automerge/src/migration.rs
@@ -156,7 +143,40 @@ CREATE TABLE fastn_group_cache (
 );
 ```
 
-#### 2.2 mail.sqlite - Email System
+### Document Types by Entity
+
+#### Rig Documents
+- `/-/rig/{rig_id52}/config`: Rig configuration
+  - `owner_id52`: ID52 of the owner account
+  - `created_at`: Timestamp
+  - `current_entity`: Currently active entity ID52
+  - `current_set_at`: When current was set
+- `/-/endpoints/{id52}/status`: Endpoint status
+  - `id52`: Endpoint ID52
+  - `is_online`: Whether endpoint is online
+  - `created_at`: When first created
+  - `updated_at`: Last status change
+
+#### Account Documents
+- `/-/mails/{username}`: Email account configuration (e.g., `/-/mails/default`)
+  - `username`: Email username
+  - `password_hash`: Argon2 hashed password
+  - `smtp_enabled`: Whether SMTP is enabled
+  - `imap_enabled`: Whether IMAP is enabled
+  - `created_at`: Creation timestamp
+  - `is_active`: Whether account is active
+- `/-/aliases/{id52}/readme`: Public alias profile
+  - `name`: Public display name
+  - `display_name`: Alias display name
+  - `created_at`: Creation timestamp
+  - `is_primary`: Whether this is the primary alias
+- `/-/aliases/{id52}/notes`: Private alias notes
+  - `reason`: Why this alias exists (private)
+  - `created_at`: Creation timestamp
+
+### Account-Specific Databases
+
+#### mail.sqlite - Email System
 
 ```sql
 -- From fastn-account/src/account/create.rs
@@ -193,7 +213,7 @@ CREATE TABLE fastn_email_peers (
 );
 ```
 
-#### 2.3 db.sqlite - User Space
+#### db.sqlite - User Space
 
 ```sql
 -- Empty database for user-defined tables

@@ -33,12 +33,12 @@ Key principles:
 - **Definition**: The fundamental node in the FASTN network
 - **Identity**: Has its own ID52 (52-character public key)
 - **Role**: Hosts and manages Accounts and Devices
+- **Ownership**: The first Account created owns the Rig (stored in `/-/rig/{rig_id52}/config` Automerge document)
 - **Cardinality**: One Rig per `fastn_home` directory
 - **Storage**: `{fastn_home}/rig/` directory containing:
     - `rig.id52` - Public key
     - `rig.private-key` - Private key (or keyring reference)
-    - `rig.db` - SQLite database
-    - `rig.json` - Configuration
+    - `automerge.sqlite` - Automerge documents and configuration
     - `public/` - Public web content (folder-based routing)
 
 ### 2. Account
@@ -73,7 +73,7 @@ Key principles:
 - **Relationships**:
     - Can own multiple Devices
     - Can own other Accounts (group accounts)
-    - Can own rigs
+    - Can own the Rig (first Account created becomes owner)
     - Can have peer relationships with other Accounts
     - Each peer relationship uses a specific alias
 
@@ -389,8 +389,12 @@ across entities.
 
 Document paths encode ownership:
 
+**For Accounts:**
 - **`mine/{doc-name}`** - Documents owned by this account (any of our aliases)
 - **`{owner-alias-id52}/{doc-name}`** - Documents owned by others
+
+**For Rigs:**
+- **`/-/rig/{rig_id52}/config`** - Rig configuration (includes owner account ID52)
 
 Examples:
 
@@ -398,6 +402,7 @@ Examples:
 - `mine/-/config` - My account configuration
 - `abc123.../shared-doc` - Document owned by alias abc123...
 - `abc123.../-/readme` - Public profile of alias abc123...
+- `/-/rig/{rig_id52}/config` - Rig configuration (rig's automerge.sqlite)
 
 Each entity stores their own copy in SQLite, so the same logical document may
 have different paths:
@@ -405,6 +410,31 @@ have different paths:
 - Alice sees her doc as: `mine/project`
 - Bob sees Alice's doc as: `alice-id52/project`
 - Carol sees Alice's doc as: `alice-id52/project`
+
+### System Document Types
+
+#### Rig Documents
+- **`/-/rig/{rig_id52}/config`** - Rig configuration
+  - `owner_id52`: ID52 of the owner account (first account created)
+  - `created_at`: Timestamp when rig was created
+  - `name`: Optional human-readable name for the rig
+
+#### Account Documents  
+- **`/-/mails/{username}`** - Email account configuration
+  - `username`: Email username
+  - `password_hash`: Argon2 hashed password
+  - `smtp_enabled`: Whether SMTP is enabled
+  - `imap_enabled`: Whether IMAP is enabled
+  - `created_at`: Creation timestamp
+  - `is_active`: Whether account is active
+- **`/-/aliases/{id52}/readme`** - Public alias profile
+  - `name`: Public display name
+  - `display_name`: Alias display name
+  - `created_at`: Creation timestamp
+  - `is_primary`: Whether this is the primary alias
+- **`/-/aliases/{id52}/notes`** - Private alias notes
+  - `reason`: Why this alias exists (private)
+  - `created_at`: Creation timestamp
 
 ### Document Storage
 

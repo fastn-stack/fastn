@@ -1472,9 +1472,12 @@ dependencies = [
 name = "fastn-rig"
 version = "0.1.0"
 dependencies = [
+ "automerge",
+ "chrono",
  "directories",
  "eyre",
  "fastn-account",
+ "fastn-automerge",
  "fastn-id52",
  "fastn-net",
  "file-guard",
