@@ -1,9 +1,9 @@
 <div align="center">
 
-![Contributors](https://img.shields.io/github/contributors/fastn-stack/fastn?color=dark-green)
-![Issues](https://img.shields.io/github/issues/fastn-stack/fastn)
-![License](https://img.shields.io/github/license/fastn-stack/fastn)
-[![Discord](https://dcbadge.vercel.app/api/server/eNXVBMq4xt?style=flat)](https://fastn.com/discord/)
+[![Contributors](https://img.shields.io/github/contributors/fastn-stack/fastn?color=dark-green)](https://github.com/fastn-stack/fastn/graphs/contributors)
+[![Issues](https://img.shields.io/github/issues/fastn-stack/fastn)](https://github.com/fastn-stack/fastn/issues)
+[![License](https://img.shields.io/github/license/fastn-stack/fastn)](https://github.com/fastn-stack/fastn/blob/main/LICENSE)
+[![Discord](https://img.shields.io/discord/793929082483769345?logo=discord)](https://fastn.com/discord/)
 
 </div>
 
@@ -13,198 +13,162 @@
 
 # `fastn` - Full-stack Web Development Made Easy
 
-`fastn` is a programming language for building user interfaces and
-content-centric websites. `fastn` is easy to learn, especially for
-non-programmers, but does not compromise on what you can build with it.
+`fastn` is a programming language and a web-framework for building user
+interfaces and content-centric websites. `fastn` is easy to learn, especially
+for non-programmers, but does not compromise on what you can build with it.
 
-`fastn` is also a web-framework, a content management system, and an integrated
-development environment. `fastn` is a webserver, and compiles `fastn` files
-to HTML/CSS/JS, and can be deployed on your server, or on
-[FifthTry](https://www.fifthtry.com).
+Install from https://fastn.com/install/ or download directly from [GitHub
+Releases](https://github.com/fastn-stack/fastn/releases).
 
-The quickest way to learn `fastn` is the [short video course we have created:
-expander](https://fastn.com/expander/), it takes you through the basics.
+## Features
 
-Then checkout the [frontend](https://fastn.com/frontend/)
-and [backend](https://fastn.com/backend/) sections of
-our documentation.
+## Minimal Syntax
 
-## `fastn`: Programming Language For The Next Billion Programmers
-
-`fastn` is designed with minimal and uniform syntax, and at first glance
-does not even look like a programming language.
-
-**No quotes for string, multi-line strings are easy**
+A Hello World program in `fastn`:
 
 ```ftd
--- amitu: Hello World! 😀
-
--- amitu:
-
-you can also write multiline messages easily!
-
-no quotes. and **markdown** is *supported*.
+;; comments begin with `;;`
+;; save this file as index.ftd
+-- ftd.text: Hello World! 😀
 ```
 
-We have called a "function" named "amitu" with "Hello World! 😀" as input,
-yet it does not feel technical.
-
-This is what it produces:
-
-<a href="https://fastn.com/#ftd-programming-language-for-the-next-billion-programmers" rel="nofollow"><img src="assets/img.png" alt="img.png" style="max-width: 100%; width: 450px;"></a>
-
-Learn more about [`ftd` Programming Language](https://fastn.com/ftd/).
-
-## There are a lot of ready made `ftd` components available today
-
-**Ready made components can be imported and used.**
+You'll also need a `FASTN.ftd` file that stores information about your fastn
+package:
 
 ```ftd
--- import: fifthtry.github.io/bling/quote
+-- import: fastn
 
--- quote.charcoal: Amit Upadhyay
-label: Creator of FTD
-avatar: $fastn-assets.files.images.amitu.jpg
-logo: $fastn-assets.files.images.logo-fifthtry.svg
-
-The web has lost some of the exuberance from the
-early 2000s, and it makes me a little sad.
+;; your package name
+-- fastn.package: my-first-fastn-package
 ```
 
-[![img_1.png](assets/img_1.png)](https://fastn.com/#there-are-a-lot-of-ready-made-ftd-components-available-today)
+Save these two files and run `fastn serve` from the project dir. Visit the
+printed URL and you'll see "Hello World! 😀" printed in your browser.
 
-## Or you can create your own components
+In addition to `ftd.text`, other kernel components exist that helps you create
+UIs. You can learn abou them at https://fastn.com/kernel/.
 
-**Creating a custom component**
+You can create custom components on top of these kernel components:
 
 ```ftd
--- component toggle-text:
-boolean $current: false
+;; Component Definition
+-- component card:
+;; these are the arguments along with their types. `caption` is just string
+;; with a special position
 caption title:
+;; `ftd.image-src` is a record type that allows you to specify two image urls,
+;; for dark and light mode.
+ftd.image-src background:
+;; `body` is a `string` type but gets a special position to help you write
+;; multi-line texts.
+body description:
 
--- ftd.text: $toggle-text.title
-align-self: center
-text-align: center
-color if { toggle-text.current }: #D42D42
-color: $inherited.colors.cta-primary.text
-background.solid: $inherited.colors.cta-primary.base
-$on-click$: $ftd.toggle($a = $toggle-text.current)
-border-radius.px: 5
+;; component body begins after a newline
+-- ftd.column:
 
--- end: toggle-text
+-- ftd.image:
+src: $card.background
 
--- toggle-text: `ftd` is cool!
+-- ftd.text: $card.title
+role: h2
+
+-- ftd.text: $card.description
+
+-- end: ftd.column
+
+-- end: card
+
+;; This is how you call the `card` component
+-- card: Hello world! **markdown is supported!**
+;; `$fastn-assets` is a special import. See: https://fastn.com/assets/
+background: $fastn-assets.files.images.fastn.svg
+
+A `body` is just a `string` type but gets a special position to help you
+write multi-line texts. And markdown is supported so you can 
+[ask for donation!](https://fastn.com/donate/) ;)
 ```
 
-<a href="https://fastn.com/#or-you-can-create-your-own-components" align="center" rel="nofollow"><img src="assets/img_2.png" alt="toggle button" style="max-width: 100%; width: 225px;"></a>
+If you had used `string` instead of `caption` and `body` then you'd have to do:
 
-`ftd`'s event handling capabilities can be used for form validation, ajax
-requests etc, to create fully functional frontend applications.
+```ftd
+-- card: 
+title: Hello world! **markdown is supported!**
+background: $fastn-assets.files.images.fastn.svg
 
-## You Use `fastn` To Work With `ftd`
+-- card.body:
 
-We ship pre built binaries for Linux, Mac and Windows.
+A `body` is just a `string` type but gets a special position to help you
+write multi-line texts. And markdown is supported so you can 
+[ask for donation!](https://fastn.com/donate/) ;)
 
-```shell
-curl -fsSL https://fastn.com/install.sh | bash
+-- end: card
 ```
 
-[![fastn.png](assets/fastn.png)](https://fastn.com/#you-use-fastn-to-work-with-ftd)
+You can learn more about built in data types at https://fastn.com/built-in-types/.
 
-## Integrated Web Development Experience
+A short **language tour** is available at https://fastn.com/geeks/.
 
-`fastn` comes with package management, web server, opinionated design
-system, dark mode and responsive by default.
+## Routing
 
-If you are getting started with frontend development, `fastn` framework takes
-care of a lot of things for you, and all you have to focus on is your product.
+`fastn` support file-system based routing. For the following fs hierarchy:
 
-We are working towards our own hosted web based IDE, version controlled code
-hosting and collaboration platform so you and your team gets a one stop solution
-for building websites.
+```
+├── ednet
+│   ├── intro.ftd
+│   └── xray.ftd
+├── fastn
+│   ├── index.ftd
+├── FASTN.ftd
+├── index.ftd
+├── new.png
+```
+
+`/ednet/{intro, xray}`, `/fastn/`, `/` and `/new.png` URLs will be served by
+`fastn serve` webserver automatically.
+
+`fastn` also supports [dynamic-urls](https://fastn.com/dynamic-urls/),
+[sitemap](https://fastn.com/understanding-sitemap/-/build/) and,
+[url-mappings](https://fastn.com/redirects/-/backend/).
+
+## Processors
+
+processors are executed on the server side, and can be used to fetch data from
+APIs, databases, or any other source. They are used to collect data before
+rendering it on the client side.
+
+```ftd
+-- import: fastn/processors
+
+-- record user:
+string email:
+string name:
+
+-- user my-user:
+$processor$: processors.http
+url: https://jsonplaceholder.typicode.com/users/1
+
+-- ftd.text: $my-user.email
+```
+
+See https://fastn.com/http/ to learn more about the `http` and other processors.
 
 ## `fastn` for Static Sites
 
-`fastn` websites can be compiled into static html, js, css etc, and can be
-deployed on any static hosting providers
-eg [Github Pages](https://fastn.com/github-pages/),
-[Vercel](https://fastn.com/vercel/)  etc.
+`fastn` websites can be compiled into static html, css and, js and can be
+deployed on any static hosting providers like [Github
+Pages](https://fastn.com/github-pages/) and
+[Vercel](https://fastn.com/vercel/).
 
-**`ftd` source code of the page you are reading**
+## More Features
 
-```ftd
--- import: fifthtry.github.io/bling/quote
--- import: fastn.com/ftd as ftd-index
+- Support for custom backends using WASM and [`ft-sdk`](https://github.com/fastn-stack/ft-sdk/).
+- Support for custom css and js. See https://fastn.com/use-js-css/.
+- First class support for for web-components. See https://fastn.com/web-component/.
+- Easy to migrate from a static site generator like 11ty, Hugo, etc.
+- Built-in package management system, opinionated [design
+  system](https://design-system.fifthtry.site/), dark mode support, designed for
+  [responsive UIs](https://fastn.com/making-responsive-pages/). Oh My!
 
--- my-ds.page: Overview of `fastn` and `ftd`
-
-`ftd` is a programming language for building user interfaces and content centric
-websites. `ftd` is easy to learn, especially for non programmers, but does not
-compromise on what you can build with it.
-```
-
-`ftd` is a good alternative for content websites like blogs, knowledge bases,
-portfolio websites, project and marketing websites etc. It is cheap, fast, and
-requires little maintenance.
-
-[![github-pages.png](assets/github-pages.png)](https://fastn.com/#fastn-for-static-sites)
-
-## Data Driven Website
-
-**fetching data from API**
-
-```ftd
--- import: fastn/processors as pr
-
--- result r:
-$processor$: pr.http
-url: https://api.github.com/search/repositories
-sort: stars
-order: desc
-q: language:python
-```
-
-**Working With SQL Is Breeze**
-
-```ftd
--- import: fastn/processors as pr
-
--- people:
-$processor$: pr.package-query
-db: db.sqlite
-
-SELECT * FROM user;
-
-
--- show-person: $p
-$loop$: $people as $p
-```
-
-`fastn` can be used to create data driven website, dashboards.
-
-**Dynamic URLs**
-
-```ftd
--- fastn.dynamic-urls:
-
-# Profile Page
-url: /<string:username>/
-document: profile.ftd
-```
-
-`fastn` can be used for creating a lot of web application backends as well.
-
-## WASM Support
-
-`fastn` supports running Rust programs compiled as wasm.
-[`ft-sdk`](https://docs.rs/ft-sdk/latest/ft_sdk/) can be used to write backend
-applications.
-
-<a href="https://fastn.com/#upcoming-wasm-support" rel="nofollow"><img src="assets/wasm.png" alt="wasm.png" style="max-width: 100%; width: 450px;"></a>
-
-## Hosting Dynamic Sites
-
-For dynamic sites you can deploy `fastn` cli on the platform of your choice.
 
 ## FifthTry Hosting
 
@@ -212,34 +176,6 @@ We, [FifthTry](https://www.fifthtry.com) also offer our own hosting solution for
 your static and dynamic sites. Using FifthTry hosting frees you from devops
 needs, and you get a fully integrated, managed hosting solution, that a
 non-programmers can use with ease.
-
-## Usage with Nix
-
-```sh
-nix run github:fastn-stack/fastn
-```
-
-In a `flake.nix` file:
-
-```Nix
-{
-  inputs = {
-    flake-utils.url = "github:numtide/flake-utils";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    fastn.url = "github:fastn-stack/fastn";
-  };
-
-  outputs = { self, flake-utils, nixpkgs, fastn }:
-    flake-utils.lib.eachDefaultSystem (system:
-      rec {
-        # nix develop
-        devShell = pkgs.mkShell {
-          nativeBuildInputs = [ fastn ];
-        };
-      }
-    );
-}
-```
 
 ## Contributors
 
@@ -272,13 +208,3 @@ In a `flake.nix` file:
 ## License
 
 This project is licensed under the terms of the **UPL-1.0**.
-
-## Examples
-
-The following examples are intended for testing purposes and showcase the of
-capabilities of `fastn` language, from basic to advanced use cases. These
-examples also help ensure the proper functioning of `fastn`, by acting as a
-test.
-
-You can find the examples at the following
-link: https://fastn-stack.github.io/fastn/
