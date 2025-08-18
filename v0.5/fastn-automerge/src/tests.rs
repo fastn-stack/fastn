@@ -29,7 +29,7 @@ mod test {
         let db_path = temp_dir.join(format!("{random_id}.db"));
         // Clean up any existing test database
         let _ = std::fs::remove_file(&db_path);
-        let db = Db::open_with_actor(&db_path, "test-device-1".to_string())?;
+        let db = Db::init_with_actor(&db_path, "test-device-1".to_string())?;
         Ok((db, db_path))
     }
 

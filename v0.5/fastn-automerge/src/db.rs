@@ -1,6 +1,45 @@
 impl crate::Db {
-    /// Open database with actor ID
+    /// Open existing database with actor ID (assumes init was already done)
     pub fn open_with_actor(db_path: &std::path::Path, actor_id: String) -> crate::Result<Self> {
+        if !db_path.exists() {
+            return Err(Box::new(crate::Error::NotFound(format!(
+                "Database not found: {}. Run 'init' first.",
+                db_path.display()
+            ))));
+        }
+
+        let conn = rusqlite::Connection::open(db_path)?;
+
+        // Check if database is properly initialized by looking for our tables
+        let table_exists: bool = conn.query_row(
+            "SELECT COUNT(*) > 0 FROM sqlite_master WHERE type='table' AND name='fastn_documents'",
+            [],
+            |row| row.get(0),
+        ).unwrap_or(false);
+
+        if !table_exists {
+            return Err(Box::new(crate::Error::Database(
+                rusqlite::Error::SqliteFailure(
+                    rusqlite::ffi::Error::new(rusqlite::ffi::SQLITE_CORRUPT),
+                    Some("Database exists but is not initialized. Run 'init' first.".to_string()),
+                ),
+            )));
+        }
+
+        Ok(Self { conn, actor_id })
+    }
+
+    /// Initialize a new database with actor ID
+    pub fn init_with_actor(db_path: &std::path::Path, actor_id: String) -> crate::Result<Self> {
+        if db_path.exists() {
+            return Err(Box::new(crate::Error::Database(
+                rusqlite::Error::SqliteFailure(
+                    rusqlite::ffi::Error::new(rusqlite::ffi::SQLITE_CONSTRAINT),
+                    Some(format!("Database already exists at {}", db_path.display())),
+                ),
+            )));
+        }
+
         let conn = rusqlite::Connection::open(db_path)?;
         crate::migration::initialize_database(&conn)?;
         Ok(Self { conn, actor_id })
@@ -22,9 +61,11 @@ impl crate::Db {
             .unwrap_or(false);
 
         if exists {
-            return Err(crate::Error::Database(rusqlite::Error::SqliteFailure(
-                rusqlite::ffi::Error::new(rusqlite::ffi::SQLITE_CONSTRAINT),
-                Some("Document already exists".to_string()),
+            return Err(Box::new(crate::Error::Database(
+                rusqlite::Error::SqliteFailure(
+                    rusqlite::ffi::Error::new(rusqlite::ffi::SQLITE_CONSTRAINT),
+                    Some("Document already exists".to_string()),
+                ),
             )));
         }
 
@@ -74,7 +115,7 @@ impl crate::Db {
                 [path],
                 |row| row.get(0),
             )
-            .map_err(|_| crate::Error::NotFound(path.to_string()))?;
+            .map_err(|_| Box::new(crate::Error::NotFound(path.to_string())))?;
 
         let doc = automerge::AutoCommit::load(&binary)?;
         let value: T = autosurgeon::hydrate(&doc)?;
@@ -94,7 +135,7 @@ impl crate::Db {
                 [path],
                 |row| Ok((row.get(0)?, row.get(1)?)),
             )
-            .map_err(|_| crate::Error::NotFound(path.to_string()))?;
+            .map_err(|_| Box::new(crate::Error::NotFound(path.to_string())))?;
 
         let mut doc = automerge::AutoCommit::load(&binary)?;
 
@@ -151,7 +192,7 @@ impl crate::Db {
                 [path],
                 |row| Ok((row.get(0)?, row.get(1)?)),
             )
-            .map_err(|_| crate::Error::NotFound(path.to_string()))?;
+            .map_err(|_| Box::new(crate::Error::NotFound(path.to_string())))?;
 
         let mut doc = automerge::AutoCommit::load(&binary)?;
 
@@ -206,7 +247,7 @@ impl crate::Db {
             .execute("DELETE FROM fastn_documents WHERE path = ?1", [path])?;
 
         if rows_affected == 0 {
-            Err(crate::Error::NotFound(path.to_string()))
+            Err(Box::new(crate::Error::NotFound(path.to_string())))
         } else {
             Ok(())
         }
@@ -252,7 +293,7 @@ impl crate::Db {
                 [path],
                 |row| row.get(0),
             )
-            .map_err(|_| crate::Error::NotFound(path.to_string()))?;
+            .map_err(|_| Box::new(crate::Error::NotFound(path.to_string())))?;
 
         Ok(automerge::AutoCommit::load(&binary)?)
     }
@@ -289,7 +330,7 @@ impl crate::Db {
             "SELECT automerge_binary, created_alias, updated_at FROM fastn_documents WHERE path = ?1",
             [path],
             |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?)),
-        ).map_err(|_| crate::Error::NotFound(path.to_string()))?;
+        ).map_err(|_| Box::new(crate::Error::NotFound(path.to_string())))?;
 
         let mut doc = automerge::AutoCommit::load(&binary)?;
 

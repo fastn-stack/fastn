@@ -12,26 +12,26 @@ impl std::fmt::Display for crate::Error {
 
 impl std::error::Error for crate::Error {}
 
-impl From<rusqlite::Error> for crate::Error {
-    fn from(e: rusqlite::Error) -> Self {
-        crate::Error::Database(e)
+impl From<rusqlite::Error> for Box<crate::Error> {
+    fn from(err: rusqlite::Error) -> Self {
+        Box::new(crate::Error::Database(err))
     }
 }
 
-impl From<automerge::AutomergeError> for crate::Error {
-    fn from(e: automerge::AutomergeError) -> Self {
-        crate::Error::Automerge(e)
+impl From<automerge::AutomergeError> for Box<crate::Error> {
+    fn from(err: automerge::AutomergeError) -> Self {
+        Box::new(crate::Error::Automerge(err))
     }
 }
 
-impl From<autosurgeon::HydrateError> for crate::Error {
-    fn from(e: autosurgeon::HydrateError) -> Self {
-        crate::Error::Autosurgeon(e)
+impl From<autosurgeon::HydrateError> for Box<crate::Error> {
+    fn from(err: autosurgeon::HydrateError) -> Self {
+        Box::new(crate::Error::Autosurgeon(err))
     }
 }
 
-impl From<autosurgeon::ReconcileError> for crate::Error {
-    fn from(e: autosurgeon::ReconcileError) -> Self {
-        crate::Error::ReconcileError(e)
+impl From<autosurgeon::ReconcileError> for Box<crate::Error> {
+    fn from(err: autosurgeon::ReconcileError) -> Self {
+        Box::new(crate::Error::ReconcileError(err))
     }
 }

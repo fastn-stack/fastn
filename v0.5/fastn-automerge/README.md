@@ -78,26 +78,108 @@ fn main() -> Result<()> {
 }
 ```
 
-## CLI Usage (Coming Soon)
+## CLI Usage
+
+### Installation
 
 ```bash
-# Initialize database
-fastn-automerge init
+# Build from source (CLI binary will be available in target/debug/)
+cargo build -p fastn-automerge
+```
 
-# CRUD operations
-fastn-automerge create /-/config '{"name": "test", "version": 1}'
-fastn-automerge get /-/config
-fastn-automerge update /-/config '{"version": 2}'
-fastn-automerge delete /-/config
+### Example Session
 
-# List documents
-fastn-automerge list --prefix /-/config
+```bash
+# Initialize a new database
+$ fastn-automerge init
+Initialized database at fastn-automerge.sqlite
 
-# Clean database
-fastn-automerge clean [--force]
+# Create a document with JSON data
+$ fastn-automerge create /-/config '{"app_name": "MyApp", "version": 1, "debug": true}'
+Created document at /-/config
 
-# Show document history
-fastn-automerge history <doc-id> [<commit-hash>] [--short]
+# Read the document with pretty printing
+$ fastn-automerge get /-/config --pretty
+{
+  "app_name": "MyApp",
+  "debug": true,
+  "version": 1
+}
+
+# Create another document
+$ fastn-automerge create /-/users/alice '{"name": "Alice", "age": 30, "email": "alice@example.com"}'
+Created document at /-/users/alice
+
+# List all documents
+$ fastn-automerge list
+/-/config
+/-/users/alice
+
+# List with prefix filter
+$ fastn-automerge list --prefix /-/users/
+/-/users/alice
+
+# Update a document
+$ fastn-automerge update /-/config '{"app_name": "MyApp", "version": 2, "debug": false}'
+Updated document at /-/config
+
+# Get updated document
+$ fastn-automerge get /-/config
+{"app_name": "MyApp", "debug": false, "version": 2}
+
+# Show document info
+$ fastn-automerge info /-/config
+Document: /-/config
+Created by: cli
+Updated at: 1755542350
+Heads: 959d239ec8e7517de8007f48ba3aa324c3b46bf5b3bd094721caf0705a0faae0
+Total edits: 2
+
+# Show document history (short)
+$ fastn-automerge history /-/config --short
+History for /-/config
+Created by: cli
+Updated at: 1755542350
+Heads: 959d239ec8e7517de8007f48ba3aa324c3b46bf5b3bd094721caf0705a0faae0
+
+2 edits total
+
+# Show document history (detailed)
+$ fastn-automerge history /-/config
+History for /-/config
+Created by: cli
+Updated at: 1755542350
+Heads: 959d239ec8e7517de8007f48ba3aa324c3b46bf5b3bd094721caf0705a0faae0
+
+Edit #1: 8cca91226eea1bc54e16f3b3cde4aec815849b4638757f7ba79079486b2454dc
+  Actor: 636c692d757365722d31
+  Timestamp: 0
+  Operations: 1 ops
+    Set { path: [], key: "(2 operations in this change)", value: "Details not yet implemented" }
+
+Edit #2: 959d239ec8e7517de8007f48ba3aa324c3b46bf5b3bd094721caf0705a0faae0
+  Actor: 636c692d31
+  Timestamp: 0
+  Operations: 1 ops
+    Set { path: [], key: "(2 operations in this change)", value: "Details not yet implemented" }
+
+# Create or replace document (set command)
+$ fastn-automerge set /-/settings '{"theme": "dark", "notifications": true}'
+Set document at /-/settings
+
+# Write output to file
+$ fastn-automerge get /-/config --pretty --output config.json
+Output written to config.json
+
+# Read from file
+$ echo '{"name": "Bob", "role": "admin"}' > user.json
+$ fastn-automerge create /-/users/bob --file user.json
+Created document at /-/users/bob
+
+# Clean database (with confirmation)
+$ fastn-automerge clean
+This will delete ALL documents. Are you sure? (y/N): y
+Deleted 4 documents
 ```
 
 ## Documentation

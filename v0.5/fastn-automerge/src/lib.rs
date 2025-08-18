@@ -10,7 +10,7 @@ pub use autosurgeon::{Hydrate, Reconcile, hydrate, reconcile};
 // Re-export automerge types we use
 pub use automerge::AutoCommit;
 
-pub type Result<T> = std::result::Result<T, Error>;
+pub type Result<T> = std::result::Result<T, Box<Error>>;
 
 #[derive(Debug)]
 pub enum Error {
