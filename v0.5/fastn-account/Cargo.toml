@@ -23,6 +23,9 @@ automerge.workspace = true
 # For database storage
 rusqlite.workspace = true
 
-# For password hashing (will add when needed)
-# argon2.workspace = true
-# rand.workspace = true
+# For password hashing
+argon2.workspace = true
+rand.workspace = true
+
+# For timestamps
+chrono.workspace = true

@@ -40,6 +40,7 @@ extern crate self as fastn_account;
 mod account;
 mod account_manager;
 mod alias;
+pub mod auth;
 
 /// Thread-safe handle to an account
 #[derive(Debug, Clone)]

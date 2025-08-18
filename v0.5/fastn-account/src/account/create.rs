@@ -1,3 +1,5 @@
+use automerge::transaction::Transactable;
+
 impl fastn_account::Account {
     /// Creates a new account in the specified parent directory.
     ///
@@ -95,9 +97,8 @@ impl fastn_account::Account {
             is_primary: true,
         };
 
-        // TODO: Create Automerge documents for /-/aliases/{id52}/readme and /-/aliases/{id52}/notes
-        // The readme document should contain the public name
-        // The notes document should contain the private reason
+        // Create Automerge documents for the account
+        Self::create_initial_documents(&automerge, &id52, &primary_alias)?;
 
         tracing::info!("Created new account with primary alias: {}", id52);
 
@@ -159,6 +160,74 @@ impl fastn_account::Account {
             "#,
         )
         .wrap_err("Failed to initialize mail database schema")?;
+
+        Ok(())
+    }
+
+    /// Create initial Automerge documents for a new account
+    fn create_initial_documents(
+        conn: &rusqlite::Connection,
+        id52: &str,
+        primary_alias: &fastn_account::Alias,
+    ) -> eyre::Result<()> {
+        use eyre::WrapErr;
+
+        // 1. Create /-/mails/default document with password and service flags
+        let password = crate::auth::generate_password();
+        let password_hash = crate::auth::hash_password(&password)?;
+
+        // Print password to stdout (one-time display)
+        println!("==================================================");
+        println!("Account created successfully!");
+        println!("ID52: {id52}");
+        println!("Username: default@{id52}");
+        println!("Password: {password}");
+        println!("==================================================");
+        println!("IMPORTANT: Save this password - it cannot be recovered!");
+        println!("==================================================");
+
+        let mut mail_doc = automerge::AutoCommit::new();
+        mail_doc.put(automerge::ROOT, "username", "default")?;
+        mail_doc.put(automerge::ROOT, "password_hash", password_hash)?;
+        mail_doc.put(automerge::ROOT, "smtp_enabled", true)?;
+        mail_doc.put(automerge::ROOT, "imap_enabled", true)?;
+        mail_doc.put(
+            automerge::ROOT,
+            "created_at",
+            chrono::Utc::now().timestamp(),
+        )?;
+        mail_doc.put(automerge::ROOT, "is_active", true)?;
+
+        fastn_automerge::create_and_save_document(conn, "/-/mails/default", mail_doc)
+            .wrap_err("Failed to create mail document")?;
+
+        // 2. Create /-/aliases/{id52}/readme document (public info)
+        let mut readme_doc = automerge::AutoCommit::new();
+        readme_doc.put(automerge::ROOT, "name", primary_alias.name())?;
+        readme_doc.put(automerge::ROOT, "display_name", primary_alias.name())?;
+        readme_doc.put(
+            automerge::ROOT,
+            "created_at",
+            chrono::Utc::now().timestamp(),
+        )?;
+        readme_doc.put(automerge::ROOT, "is_primary", true)?;
+
+        let readme_path = format!("/-/aliases/{id52}/readme");
+        fastn_automerge::create_and_save_document(conn, &readme_path, readme_doc)
+            .wrap_err("Failed to create alias readme document")?;
+
+        // 3. Create /-/aliases/{id52}/notes document (private notes)
+        let mut notes_doc = automerge::AutoCommit::new();
+        notes_doc.put(automerge::ROOT, "reason", primary_alias.reason())?;
+        notes_doc.put(
+            automerge::ROOT,
+            "created_at",
+            chrono::Utc::now().timestamp(),
+        )?;
+
+        let notes_path = format!("/-/aliases/{id52}/notes");
+        fastn_automerge::create_and_save_document(conn, &notes_path, notes_doc)
+            .wrap_err("Failed to create alias notes document")?;
 
         Ok(())
     }

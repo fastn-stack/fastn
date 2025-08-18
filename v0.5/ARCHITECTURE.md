@@ -1,4 +1,4 @@
-+  # FASTN Architecture
+# FASTN Architecture
 
 ## Table of Contents
 
@@ -14,11 +14,13 @@
 
 ## Overview
 
-FASTN is a decentralized peer-to-peer network built on Iroh. Every node runs a **Rig** that can
+FASTN is a decentralized peer-to-peer network built on Iroh. Every node runs a *
+*Rig** that can
 host multiple **Accounts** and **Devices**. Each entity has its own
 cryptographic identity (ID52) and communicates over the Iroh protocol.
 
 Key principles:
+
 - **Automerge First**: Configuration and metadata stored as Automerge documents
 - **No Central Servers**: Direct P2P communication between entities
 - **Privacy by Design**: Multiple aliases, device ID protection
@@ -45,14 +47,14 @@ Key principles:
 - **Types**:
     - **Personal Account**: Root account, not owned by any other account
     - **Group Account**: Owned by another account (organization, team, etc.)
-- **Identity**: 
+- **Identity**:
     - Collection of aliases (each alias is a separate ID52 with own keypair)
     - All aliases are equal - no "primary" alias concept
     - Each alias can have different public profiles
     - Folder uses first alias ID52 (implementation detail only)
 - **Storage**: `{fastn_home}/accounts/{first_alias_id52}/` containing:
-    - `automerge.sqlite` - Automerge documents and derived/cache tables
     - `mail.sqlite` - Email index and metadata
+    - `automerge.sqlite` - Automerge documents and derived/cache tables
     - `db.sqlite` - User-defined tables (future use)
     - `aliases/` - All alias keys (including first one)
         - `{alias1_id52}.id52` - Public key
@@ -71,6 +73,7 @@ Key principles:
 - **Relationships**:
     - Can own multiple Devices
     - Can own other Accounts (group accounts)
+    - Can own rigs
     - Can have peer relationships with other Accounts
     - Each peer relationship uses a specific alias
 
@@ -82,7 +85,8 @@ Key principles:
 - **Storage**: `{fastn_home}/devices/{device_id52}/` containing:
     - `device.id52` - Public key
     - `device.private-key` - Private key
-    - `db.sqlite` - SQLite database (contains synced Automerge documents as blobs)
+    - `automerge.sqlite` - Automerge documents and derived/cache tables
+    - `db.sqlite` - User-defined tables (future use)
     - `public/` - Public web content (folder-based routing)
 - **Relationships**:
     - Can only connect directly to its owner Account using device ID52
@@ -94,6 +98,7 @@ Key principles:
 ### Overview
 
 FASTN implements a fully decentralized email system where:
+
 - Accounts send emails directly to each other via P2P (no central servers)
 - Each alias acts as an independent email domain
 - Emails are organized by username across all aliases
@@ -103,17 +108,19 @@ FASTN implements a fully decentralized email system where:
 ### Email Addressing
 
 #### Address Format
+
 - **Pattern**: `username@alias_id52`
-- **Username Rules**: 
-  - Alphanumeric, dots, dashes, underscores
-  - Case-insensitive (alice@... same as Alice@...)
-  - Max 64 characters
+- **Username Rules**:
+    - Alphanumeric, dots, dashes, underscores
+    - Case-insensitive (alice@... same as Alice@...)
+    - Max 64 characters
 - **Alias**: The full 52-character ID52 of the account alias
 - **Examples**:
-  - `alice@abc123...def456` (alice using alias abc123...def456)
-  - `admin.backup@ghi789...xyz123` (admin.backup using alias ghi789...xyz123)
+    - `alice@abc123...def456` (alice using alias abc123...def456)
+    - `admin.backup@ghi789...xyz123` (admin.backup using alias ghi789...xyz123)
 
 #### Address Resolution
+
 1. Extract username and alias from email address
 2. Look up alias ID52 in peer database or via discovery
 3. Connect to peer using Iroh with that ID52
@@ -122,6 +129,7 @@ FASTN implements a fully decentralized email system where:
 ### Storage Organization
 
 #### Filesystem Layout
+
 ```
 accounts/{account_id52}/
 └── mails/
@@ -135,20 +143,25 @@ accounts/{account_id52}/
     │   │   └── {timestamp}-{id}.eml
     │   └── trash/
     │       └── {timestamp}-{id}.eml
-    └── .mail-index.db              # SQLite index for fast queries
+└── mail.db                   # SQLite index for fast queries
 ```
 
 #### Key Design Decisions
-- **Username-based folders**: All emails for `alice@` go in `mails/alice/` regardless of which alias
-- **Timestamp prefixes**: Files named as `{unix_timestamp}-{id}.eml` for chronological ordering
-- **Metadata sidecar**: JSON file alongside each .eml with FASTN-specific metadata
+
+- **Username-based folders**: All emails for `alice@` go in `mails/alice/`
+  regardless of which alias
+- **Timestamp prefixes**: Files named as `{unix_timestamp}-{id}.eml` for
+  chronological ordering
+- **Metadata sidecar**: JSON file alongside each .eml with FASTN-specific
+  metadata
 - **SQLite index**: For fast searching without scanning all files
 
 ### Database Schema
 
 ```sql
 -- Email user accounts (local usernames)
-CREATE TABLE email_users (
+CREATE TABLE email_users
+(
     username     TEXT PRIMARY KEY,
     display_name TEXT,
     signature    TEXT,
@@ -157,65 +170,68 @@ CREATE TABLE email_users (
 );
 
 -- Email index for fast queries
-CREATE TABLE emails (
-    email_id          TEXT PRIMARY KEY,     -- Generated ID
-    username          TEXT NOT NULL,        -- Local username
-    folder            TEXT NOT NULL,        -- 'inbox', 'sent', 'drafts', 'trash'
-    
+CREATE TABLE emails
+(
+    email_id          TEXT PRIMARY KEY,        -- Generated ID
+    username          TEXT    NOT NULL,        -- Local username
+    folder            TEXT    NOT NULL,        -- 'inbox', 'sent', 'drafts', 'trash'
+
     -- Addressing
-    from_address      TEXT NOT NULL,        -- Full: username@id52
-    to_addresses      TEXT NOT NULL,        -- JSON array of addresses
-    cc_addresses      TEXT,                 -- JSON array of addresses
-    bcc_addresses     TEXT,                 -- JSON array of addresses
-    
+    from_address      TEXT    NOT NULL,        -- Full: username@id52
+    to_addresses      TEXT    NOT NULL,        -- JSON array of addresses
+    cc_addresses      TEXT,                    -- JSON array of addresses
+    bcc_addresses     TEXT,                    -- JSON array of addresses
+
     -- Alias tracking
-    received_at_alias TEXT,                 -- Which of our aliases received this
-    sent_from_alias   TEXT,                 -- Which of our aliases sent this
-    
+    received_at_alias TEXT,                    -- Which of our aliases received this
+    sent_from_alias   TEXT,                    -- Which of our aliases sent this
+
     -- Content
     subject           TEXT,
-    body_preview      TEXT,                 -- First 200 chars
+    body_preview      TEXT,                    -- First 200 chars
     has_attachments   BOOLEAN DEFAULT FALSE,
-    
+
     -- Metadata
-    file_path         TEXT NOT NULL UNIQUE, -- Path to .eml file
+    file_path         TEXT    NOT NULL UNIQUE, -- Path to .eml file
     size_bytes        INTEGER NOT NULL,
-    message_id        TEXT,                 -- RFC 2822 Message-ID
-    in_reply_to       TEXT,                 -- Threading
-    references        TEXT,                 -- Threading (JSON array)
-    
+    message_id        TEXT,                    -- RFC 2822 Message-ID
+    in_reply_to       TEXT,                    -- Threading
+    references        TEXT,                    -- Threading (JSON array)
+
     -- Timestamps
-    date_sent         INTEGER,              -- From email header
-    date_received     INTEGER,              -- When we received it
-    
+    date_sent         INTEGER,                 -- From email header
+    date_received     INTEGER,                 -- When we received it
+
     -- Status
     is_read           BOOLEAN DEFAULT FALSE,
     is_starred        BOOLEAN DEFAULT FALSE,
-    flags             TEXT,                 -- JSON array: answered, forwarded, etc.
-    
+    flags             TEXT,                    -- JSON array: answered, forwarded, etc.
+
     -- Indexes
-    FOREIGN KEY (username) REFERENCES email_users(username),
-    INDEX idx_username_folder (username, folder),
-    INDEX idx_date (date_received DESC),
-    INDEX idx_from (from_address),
-    INDEX idx_subject (subject)
+    FOREIGN KEY (username) REFERENCES email_users (username),
+    INDEX             idx_username_folder(username, folder),
+    INDEX             idx_date(date_received DESC),
+    INDEX             idx_from(from_address),
+    INDEX             idx_subject(subject)
 );
 
 -- Email attachments
-CREATE TABLE email_attachments (
+CREATE TABLE email_attachments
+(
     attachment_id TEXT PRIMARY KEY,
     email_id      TEXT NOT NULL,
     filename      TEXT NOT NULL,
     content_type  TEXT,
     size_bytes    INTEGER,
-    file_path     TEXT,                    -- If saved separately
-    FOREIGN KEY (email_id) REFERENCES emails(email_id)
+    file_path     TEXT, -- If saved separately
+    FOREIGN KEY (email_id) REFERENCES emails (email_id)
 );
 ```
 
 ### P2P Email Protocol
 
 #### Sending Email Flow
+
 1. **Compose**: User creates email via client (SMTP or API)
 2. **Resolve**: Look up recipient's alias ID52
 3. **Connect**: Establish Iroh connection to recipient
@@ -224,6 +240,7 @@ CREATE TABLE email_attachments (
 6. **Confirm**: Wait for delivery acknowledgment
 
 #### Receiving Email Flow
+
 1. **Accept**: Receive EmailDelivery message via Iroh
 2. **Validate**: Check recipient alias belongs to us
 3. **Parse**: Extract email content and metadata
@@ -232,15 +249,16 @@ CREATE TABLE email_attachments (
 6. **Acknowledge**: Send delivery confirmation
 
 #### Message Format
+
 ```rust
 pub struct EmailDelivery {
     // Envelope
     from: String,           // username@sender_alias_id52
     to: Vec<String>,        // username@recipient_alias_id52
-    
+
     // Content (RFC 2822 format)
     raw_email: Vec<u8>,     // Complete email with headers
-    
+
     // Metadata
     timestamp: u64,
     message_id: String,
@@ -250,30 +268,34 @@ pub struct EmailDelivery {
 ### IMAP/SMTP Bridge
 
 #### Server Configuration
+
 ```yaml
 IMAP Server:
   Host: localhost
   Port: 143 (plain), 993 (TLS)
   Auth: Username + Password
-  
+
 SMTP Server:
-  Host: localhost  
+  Host: localhost
   Port: 587 (submission), 465 (TLS)
   Auth: Username + Password
 ```
 
 #### Authentication
+
 - **Username format**: `username@alias_id52`
 - **Password**: Account-specific or per-username
 - Server extracts alias from username to determine which identity to use
 
 #### IMAP Features
+
 - **Folders**: INBOX, Sent, Drafts, Trash (mapped to filesystem)
 - **Flags**: \Seen, \Answered, \Flagged, \Deleted, \Draft
 - **Search**: SEARCH command uses SQLite index
 - **Threading**: THREAD command using References headers
 
-#### SMTP Features  
+#### SMTP Features
+
 - **Submission**: Accept emails from authenticated users
 - **Relay**: Only for P2P delivery (no external SMTP)
 - **Queue**: Retry failed P2P deliveries
@@ -282,11 +304,13 @@ SMTP Server:
 ### Email Security
 
 #### Transport Security
+
 - All P2P connections encrypted via Iroh
 - No email content on devices (account-only)
 - Each alias has independent email identity
 
 #### Anti-Spam Considerations
+
 - No open relay (only authenticated sending)
 - Rate limiting per sender
 - Allowlist/blocklist by sender ID52
@@ -300,7 +324,6 @@ SMTP Server:
 4. **Full-Text Search**: Advanced search capabilities
 5. **Email Backup**: Automated backup to owned devices
 6. **External Gateway**: Bridge to regular email (optional)
-
 
 ## File Serving & Web Capabilities
 
@@ -365,16 +388,20 @@ across entities.
 ### Document Paths and Ownership
 
 Document paths encode ownership:
+
 - **`mine/{doc-name}`** - Documents owned by this account (any of our aliases)
 - **`{owner-alias-id52}/{doc-name}`** - Documents owned by others
 
 Examples:
+
 - `mine/project-notes` - My project notes
-- `mine/-/config` - My account configuration  
+- `mine/-/config` - My account configuration
 - `abc123.../shared-doc` - Document owned by alias abc123...
 - `abc123.../-/readme` - Public profile of alias abc123...
 
-Each entity stores their own copy in SQLite, so the same logical document may have different paths:
+Each entity stores their own copy in SQLite, so the same logical document may
+have different paths:
+
 - Alice sees her doc as: `mine/project`
 - Bob sees Alice's doc as: `alice-id52/project`
 - Carol sees Alice's doc as: `alice-id52/project`
@@ -389,11 +416,13 @@ Each entity stores their own copy in SQLite, so the same logical document may ha
 ### Document Naming Convention
 
 **Special Documents**: Use `/-/` prefix within paths to prevent conflicts
+
 - `mine/-/config` - My account configuration
 - `mine/-/groups/{name}` - My permission groups
 - `{path}/-/meta` - Metadata for any document
 
 **User Documents**: Any path without `/-/` in the name
+
 - Users can create documents with any name
 - Each user document has an associated `/-/meta` document
 
@@ -402,9 +431,11 @@ Each entity stores their own copy in SQLite, so the same logical document may ha
 #### Account Configuration
 
 **`mine/-/config`** (Account-wide Settings)
+
 ```json
 {
-  "primary_alias": "abc123...",  // First alias, used for folder naming
+  "primary_alias": "abc123...",
+  // First alias, used for folder naming
   "my_aliases": {
     "abc123...": {
       "name": "work",
@@ -415,7 +446,7 @@ Each entity stores their own copy in SQLite, so the same logical document may ha
       }
     },
     "def456...": {
-      "name": "personal", 
+      "name": "personal",
       "created_at": 1234567890,
       "readme": {
         "display_name": "Alice",
@@ -429,6 +460,7 @@ Each entity stores their own copy in SQLite, so the same logical document may ha
   }
 }
 ```
+
 - Uses special path `mine/-/config`
 - Contains all my aliases and their public profiles
 - Only synced with my owned devices
@@ -436,6 +468,7 @@ Each entity stores their own copy in SQLite, so the same logical document may ha
 #### Groups (Permission Management)
 
 **`mine/-/groups/{group-name}`** (My Permission Groups)
+
 ```json
 {
   "name": "engineering-team",
@@ -444,13 +477,18 @@ Each entity stores their own copy in SQLite, so the same logical document may ha
   "created_at": 1234567890,
   "members": {
     "accounts": [
-      "def456...",  // Bob's alias
-      "ghi789...",  // Carol's alias
-      "jkl012..."   // Dave's alias
+      "def456...",
+      // Bob's alias
+      "ghi789...",
+      // Carol's alias
+      "jkl012..."
+      // Dave's alias
     ],
     "groups": [
-      "senior-engineers",  // Nested group
-      "contractors"        // Another nested group
+      "senior-engineers",
+      // Nested group
+      "contractors"
+      // Another nested group
     ]
   },
   "settings": {
@@ -459,6 +497,7 @@ Each entity stores their own copy in SQLite, so the same logical document may ha
   }
 }
 ```
+
 - Groups simplify permission management
 - Can contain account aliases and other groups (nested)
 - Synced with anyone who needs to resolve group membership
@@ -467,29 +506,41 @@ Each entity stores their own copy in SQLite, so the same logical document may ha
 #### Alias Documents (About Others)
 
 **`{alias-id52}/-/readme`** (Their Public Profile)
+
 ```json
 {
   "display_name": "Bob Johnson",
   "bio": "Designer and developer",
   "avatar_url": "...",
-  "services": ["email", "chat"],
+  "services": [
+    "email",
+    "chat"
+  ],
   "created_at": 1234567890
 }
 ```
+
 - Public profile maintained by that alias owner
 - Automatically synced when connected
 
 **`{alias-id52}/-/notes`** (My Private Notes)
+
 ```json
 {
   "nickname": "Bob from conference",
   "trust_level": 8,
-  "tags": ["work", "design"],
+  "tags": [
+    "work",
+    "design"
+  ],
   "notes": "Great designer, met at P2P conf",
-  "my_aliases_that_know_them": ["abc123..."],
+  "my_aliases_that_know_them": [
+    "abc123..."
+  ],
   "blocked": false
 }
 ```
+
 - My private notes about this specific alias
 - Only synced between my account and my devices
 - Never shared with the alias owner
@@ -497,37 +548,49 @@ Each entity stores their own copy in SQLite, so the same logical document may ha
 #### Device Documents
 
 **`mine/-/devices/{device-id52}/readme`** (Device Info)
+
 ```json
 {
   "device_name": "Alice's Laptop",
   "device_type": "laptop",
   "os": "macOS 14.0",
   "last_seen": 1234567890,
-  "capabilities": ["email", "automerge", "wasm"],
-  "browsing_id52": "xyz789..."  // For anonymous browsing
+  "capabilities": [
+    "email",
+    "automerge",
+    "wasm"
+  ],
+  "browsing_id52": "xyz789..."
+  // For anonymous browsing
 }
 ```
+
 - Device information and capabilities
 - Synced between my account and all my devices
 
 **`mine/-/devices/{device-id52}/config`** (Device Settings)
+
 ```json
 {
   "sync_enabled": true,
   "sync_interval": 300,
   "storage_limit": 5368709120,
-  "proxy_mode": "direct"  // or "via-account"
+  "proxy_mode": "direct"
+  // or "via-account"
 }
 ```
 
 #### Relationship Documents
 
 **`mine/-/relationships/{alias-id52}`** (Peer Relationships)
+
 ```json
 {
   "their_alias": "ghi789...",
-  "my_alias_used": "abc123...",  // Which of my aliases knows them
-  "relationship_type": "peer",    // or "owner", "owned_by"
+  "my_alias_used": "abc123...",
+  // Which of my aliases knows them
+  "relationship_type": "peer",
+  // or "owner", "owned_by"
   "first_met": 1234567890,
   "last_seen": 1234567890,
   "permissions": {
@@ -536,17 +599,20 @@ Each entity stores their own copy in SQLite, so the same logical document may ha
   }
 }
 ```
+
 - Replaces traditional `fastn_account` table
 - Tracks which of my aliases knows which of their aliases
 - Auto-synced via Automerge protocol
 
 ### User Documents (User-created)
 
-User documents can have any path (except containing `/-/`). Each has an associated meta document for sharing control.
+User documents can have any path (except containing `/-/`). Each has an
+associated meta document for sharing control.
 
 #### Document Content
 
 **`mine/project-notes`** (My Document)
+
 ```json
 {
   "title": "Project Notes",
@@ -557,12 +623,14 @@ User documents can have any path (except containing `/-/`). Each has an associat
 ```
 
 **`def456.../shared-doc`** (Their Document I Have Access To)
+
 - Document owned by alias def456...
 - I have access based on permissions in their meta
 
 #### Document Metadata
 
 **`mine/project-notes/-/meta`** (Sharing & Metadata)
+
 ```json
 {
   "owner": "abc123...",
@@ -570,7 +638,8 @@ User documents can have any path (except containing `/-/`). Each has an associat
   "updated_at": 1234567890,
   "permissions": {
     "def456...": {
-      "level": "write",      // admin, share, write, comment, read
+      "level": "write",
+      // admin, share, write, comment, read
       "granted_at": 1234567890,
       "granted_by": "abc123..."
     },
@@ -586,9 +655,9 @@ User documents can have any path (except containing `/-/`). Each has an associat
   }
 }
 ```
+
 - Permissions can be granted to aliases or groups (prefixed with "group:")
-- **Meta document is shared with everyone who has ANY permission**
-- This allows participants to see who else has access (transparency)
+- **Meta document is shared with everyone who has SHARE permission**
 - Groups are resolved recursively to find all members
 
 ### Permission Levels
@@ -602,42 +671,48 @@ User documents can have any path (except containing `/-/`). Each has an associat
 ### Group Resolution
 
 When checking if alias X has permission to document D:
+
 1. Check direct permission for X in D's meta
 2. For each group G in D's meta:
-   - Load `mine/-/groups/G` or `{owner}/-/groups/G`
-   - Check if X is in G's accounts
-   - Recursively check nested groups
+    - Load `mine/-/groups/G` or `{owner}/-/groups/G`
+    - Check if X is in G's accounts
+    - Recursively check nested groups
 3. Cache resolution results for performance
 
 ### Database Architecture
 
-FASTN uses three separate SQLite databases per account for isolation and performance:
+FASTN uses three separate SQLite databases per account for isolation and
+performance:
 
 #### 1. automerge.sqlite - Configuration & Sync
+
 - **Purpose**: Store all Automerge documents and sync state
 - **Accessed by**: Sync logic, configuration management
 - **Tables**: All prefixed with `fastn_`
-  - `fastn_documents` - Automerge document blobs
-  - `fastn_sync_state` - Sync state per peer
-  - `fastn_relationship_cache` - Derived from relationship documents
-  - `fastn_permission_cache` - Derived from meta documents
-  - `fastn_group_cache` - Derived from group documents
+    - `fastn_documents` - Automerge document blobs
+    - `fastn_sync_state` - Sync state per peer
+    - `fastn_relationship_cache` - Derived from relationship documents
+    - `fastn_permission_cache` - Derived from meta documents
+    - `fastn_group_cache` - Derived from group documents
 
 #### 2. mail.sqlite - Email System
+
 - **Purpose**: Email index and metadata
 - **Accessed by**: Email delivery, IMAP/SMTP servers
 - **Cross-DB access**: Read-only connection to automerge.sqlite for config
 - **Tables**: All prefixed with `fastn_`
-  - `fastn_emails` - Email index
-  - `fastn_email_peers` - Known email peers
-  - `fastn_auth_sessions` - IMAP/SMTP sessions
+    - `fastn_emails` - Email index
+    - `fastn_email_peers` - Known email peers
+    - `fastn_auth_sessions` - IMAP/SMTP sessions
 
 #### 3. db.sqlite - User Space
+
 - **Purpose**: User-defined tables for applications
 - **Accessed by**: User applications via WASM
 - **Tables**: No `fastn_` prefix - user owns this namespace
 
 Benefits of this separation:
+
 - **Reduced contention**: Each subsystem uses its own database
 - **Security**: User cannot accidentally corrupt system tables
 - **Performance**: Parallel access to different databases
@@ -646,7 +721,9 @@ Benefits of this separation:
 
 ### Database Schema (Automerge)
 
-Since we've moved all configuration and relationship data to Automerge documents, we only need tables for:
+Since we've moved all configuration and relationship data to Automerge
+documents, we only need tables for:
+
 1. Storing Automerge document binaries
 2. Tracking sync state
 3. Caching for performance
@@ -655,73 +732,80 @@ Since we've moved all configuration and relationship data to Automerge documents
 -- In automerge.sqlite:
 
 -- Core Automerge document storage
-CREATE TABLE fastn_documents (
-    path             TEXT PRIMARY KEY,     -- mine/doc or {alias}/doc
-    automerge_binary BLOB NOT NULL,        -- Current Automerge state
-    heads            TEXT NOT NULL,        -- JSON array of head hashes
-    actor_id         TEXT NOT NULL,        -- Our actor ID for this doc
+CREATE TABLE fastn_documents
+(
+    path             TEXT PRIMARY KEY, -- mine/doc or {alias}/doc
+    automerge_binary BLOB    NOT NULL, -- Current Automerge state
+    heads            TEXT    NOT NULL, -- JSON array of head hashes
+    actor_id         TEXT    NOT NULL, -- Our actor ID for this doc
     updated_at       INTEGER NOT NULL,
-    
-    INDEX idx_updated (updated_at DESC)
+
+    INDEX            idx_updated(updated_at DESC)
 );
 
 -- Automerge sync state per document per peer
-CREATE TABLE fastn_sync_state (
-    document_path    TEXT NOT NULL,
-    peer_id52        TEXT NOT NULL,
-    
+CREATE TABLE fastn_sync_state
+(
+    document_path TEXT    NOT NULL,
+    peer_id52     TEXT    NOT NULL,
+
     -- Automerge sync protocol state
-    sync_state       BLOB NOT NULL,        -- Binary sync state from Automerge
-    their_heads      TEXT,                 -- JSON array of their head hashes
-    our_heads        TEXT,                 -- JSON array of our head hashes
-    
+    sync_state    BLOB    NOT NULL, -- Binary sync state from Automerge
+    their_heads   TEXT,             -- JSON array of their head hashes
+    our_heads     TEXT,             -- JSON array of our head hashes
+
     -- Metadata
-    last_sync_at     INTEGER NOT NULL,
-    sync_errors      INTEGER DEFAULT 0,
-    
+    last_sync_at  INTEGER NOT NULL,
+    sync_errors   INTEGER DEFAULT 0,
+
     PRIMARY KEY (document_path, peer_id52),
-    INDEX idx_last_sync (last_sync_at)
+    INDEX         idx_last_sync(last_sync_at)
 );
 
 -- Cache tables (derived from Automerge for performance)
 
 -- Relationship cache (extracted from mine/-/relationships/*)
-CREATE TABLE fastn_relationship_cache (
-    their_alias      TEXT PRIMARY KEY,
-    my_alias_used    TEXT NOT NULL,
+CREATE TABLE fastn_relationship_cache
+(
+    their_alias       TEXT PRIMARY KEY,
+    my_alias_used     TEXT    NOT NULL,
     relationship_type TEXT,
-    last_seen        INTEGER,
-    extracted_at     INTEGER NOT NULL,     -- When we extracted from Automerge
-    
-    INDEX idx_my_alias (my_alias_used)
+    last_seen         INTEGER,
+    extracted_at      INTEGER NOT NULL, -- When we extracted from Automerge
+
+    INDEX             idx_my_alias(my_alias_used)
 );
 
 -- Permission cache (extracted from */meta documents)
-CREATE TABLE fastn_permission_cache (
-    document_path    TEXT NOT NULL,
+CREATE TABLE fastn_permission_cache
+(
+    document_path    TEXT    NOT NULL,
     grantee_alias    TEXT,
     grantee_group    TEXT,
-    permission_level TEXT NOT NULL,         -- admin, share, write, comment, read
+    permission_level TEXT    NOT NULL, -- admin, share, write, comment, read
     extracted_at     INTEGER NOT NULL,
-    
-    INDEX idx_path (document_path),
-    INDEX idx_grantee (grantee_alias)
+
+    INDEX            idx_path(document_path),
+    INDEX            idx_grantee(grantee_alias)
 );
 
 -- Group membership cache (extracted from mine/-/groups/*)
-CREATE TABLE fastn_group_cache (
-    group_name       TEXT NOT NULL,
-    member_alias     TEXT,                  -- Direct member
-    member_group     TEXT,                  -- Nested group
-    extracted_at     INTEGER NOT NULL,
-    
-    INDEX idx_group (group_name),
-    INDEX idx_member (member_alias)
+CREATE TABLE fastn_group_cache
+(
+    group_name   TEXT    NOT NULL,
+    member_alias TEXT, -- Direct member
+    member_group TEXT, -- Nested group
+    extracted_at INTEGER NOT NULL,
+
+    INDEX        idx_group(group_name),
+    INDEX        idx_member(member_alias)
 );
 ```
 
 **Important Notes:**
-- No more `fastn_account` or `account_aliases` tables - this data lives in Automerge documents
+
+- No more `fastn_account` or `account_aliases` tables - this data lives in
+  Automerge documents
 - Cache tables are rebuilt from Automerge documents and can be dropped/recreated
 - `extracted_at` timestamps help identify stale cache entries
 - All source of truth is in Automerge documents
@@ -749,13 +833,13 @@ async fn init_sync_state(
     doc: &AutoCommit,
 ) -> Result<SyncState> {
     let sync_state = SyncState::new();
-    
+
     // Get current document heads (version hashes)
     let our_heads: Vec<String> = doc.get_heads()
         .iter()
         .map(|h| h.to_string())
         .collect();
-    
+
     // Store initial sync state
     db.execute(
         "INSERT INTO sync_state (document_path, peer_id52, sync_state, our_heads, their_heads, last_sync_at)
@@ -768,7 +852,7 @@ async fn init_sync_state(
             chrono::Utc::now().timestamp(),
         ],
     )?;
-    
+
     Ok(sync_state)
 }
 
@@ -786,7 +870,7 @@ async fn load_sync_state(
             Ok(blob)
         },
     ).optional()?;
-    
+
     match row {
         Some(blob) => Ok(Some(SyncState::decode(&blob)?)),
         None => Ok(None),
@@ -806,30 +890,30 @@ async fn sync_document_with_peer(
         Some(state) => state,
         None => init_sync_state(db, document_path, peer_id52, doc).await?,
     };
-    
+
     // 2. Generate sync message to send to peer
     // This contains only the changes the peer hasn't seen yet
     let message_to_send = doc.sync().generate_sync_message(&mut sync_state);
-    
+
     if let Some(message) = message_to_send {
         // 3. Send our changes to peer
         peer_connection.send_sync_message(document_path, &message).await?;
-        
+
         // The sync_state now tracks that we've sent these changes
     }
-    
+
     // 4. Receive sync message from peer
     if let Some(peer_message) = peer_connection.receive_sync_message().await? {
         // 5. Apply peer's changes to our document
         doc.sync().receive_sync_message(&mut sync_state, peer_message)?;
-        
+
         // The document now contains merged changes
         // The sync_state tracks what we've received
     }
-    
+
     // 6. Update database with new sync state
     update_sync_state_in_db(db, document_path, peer_id52, &sync_state, doc).await?;
-    
+
     Ok(())
 }
 
@@ -845,10 +929,10 @@ async fn update_sync_state_in_db(
         .iter()
         .map(|h| h.to_string())
         .collect();
-    
+
     // Note: Getting their_heads requires tracking from sync messages
     // In practice, you'd extract this from the peer's sync messages
-    
+
     db.execute(
         "UPDATE sync_state 
          SET sync_state = ?1, 
@@ -864,7 +948,7 @@ async fn update_sync_state_in_db(
             peer_id52,
         ],
     )?;
-    
+
     Ok(())
 }
 
@@ -875,18 +959,18 @@ async fn sync_loop(
     peer_id52: String,
 ) {
     let mut interval = tokio::time::interval(Duration::from_secs(5));
-    
+
     loop {
         interval.tick().await;
-        
+
         // Load document from database
         let mut doc = load_document(&db, &document_path).await?;
-        
+
         // Sync with peer
         if let Err(e) = sync_document_with_peer(
-            &db, 
-            &document_path, 
-            &peer_id52, 
+            &db,
+            &document_path,
+            &peer_id52,
             &mut doc,
             &peer_connection,
         ).await {
@@ -897,7 +981,7 @@ async fn sync_loop(
                 params![document_path, peer_id52],
             )?;
         }
-        
+
         // Save updated document
         save_document(&db, &document_path, &doc).await?;
     }
@@ -906,52 +990,57 @@ async fn sync_loop(
 
 #### Key Concepts
 
-1. **SyncState is Opaque**: Automerge's `SyncState` is an opaque type that tracks:
-   - What changes we've sent to each peer
-   - What changes we've received from each peer
-   - Efficiently determines what needs to be sent next
+1. **SyncState is Opaque**: Automerge's `SyncState` is an opaque type that
+   tracks:
+    - What changes we've sent to each peer
+    - What changes we've received from each peer
+    - Efficiently determines what needs to be sent next
 
 2. **Incremental Sync**: The sync protocol only sends changes since last sync:
-   - First sync: sends entire document history
-   - Subsequent syncs: only new changes
-   - Handles network failures gracefully (can resume)
+    - First sync: sends entire document history
+    - Subsequent syncs: only new changes
+    - Handles network failures gracefully (can resume)
 
 3. **Convergence**: All peers converge to the same state:
-   - CRDTs ensure conflict-free merging
-   - Order of sync doesn't matter
-   - Eventually consistent
+    - CRDTs ensure conflict-free merging
+    - Order of sync doesn't matter
+    - Eventually consistent
 
 4. **Peer-Specific State**: Each (document, peer) pair has its own sync state:
-   - Can sync same document with multiple peers
-   - Each peer relationship tracked independently
-   - Allows different sync progress per peer
+    - Can sync same document with multiple peers
+    - Each peer relationship tracked independently
+    - Allows different sync progress per peer
 
 ### Sync Rules
 
 #### Document Path Translation
-- When syncing `mine/project` to peer, it becomes `{my-alias}/project` in their system
-- When receiving `{their-alias}/doc`, it stays as `{their-alias}/doc` in my system
+
+- When syncing `mine/project` to peer, it becomes `{my-alias}/project` in their
+  system
+- When receiving `{their-alias}/doc`, it stays as `{their-alias}/doc` in my
+  system
 - Devices see the same paths as their owner account
 
 #### Sync Patterns
 
 1. **My Documents** (`mine/*`):
-   - Automatically sync to all my devices
-   - Sync to peers based on `mine/{doc}/-/meta` permissions
-   - Become `{my-alias}/*` in peer systems
+    - Automatically sync to all my devices
+    - Sync to peers based on `mine/{doc}/-/meta` permissions
+    - Become `{my-alias}/*` in peer systems
 
 2. **Others' Documents** (`{alias-id52}/*`):
-   - Sync if I have permission in their meta
-   - Path remains unchanged across syncs
-   - My devices inherit my access
+    - Sync if I have permission in their meta
+    - Path remains unchanged across syncs
+    - My devices inherit my access
 
 3. **Special Documents**:
-   - `mine/-/config`: Only my devices
-   - `mine/-/groups/*`: Shared with those needing resolution
-   - `{alias}/-/readme`: Public, synced when connected
-   - `{alias}/-/notes`: My private notes, only my devices
+    - `mine/-/config`: Only my devices
+    - `mine/-/groups/*`: Shared with those needing resolution
+    - `{alias}/-/readme`: Public, synced when connected
+    - `{alias}/-/notes`: My private notes, only my devices
 
 4. **Offline Support**: Changes accumulate locally and sync when connected
+
 ## Connection Model
 
 ### Device ↔ Account (Owner Relationship)
@@ -968,9 +1057,11 @@ async fn sync_loop(
 
 ### Device → Foreign Account Browsing
 
-Devices NEVER expose their real ID52 to non-owner accounts. Three browsing modes:
+Devices NEVER expose their real ID52 to non-owner accounts. Three browsing
+modes:
 
 #### 1. Direct Anonymous Browsing
+
  ```
  Device D1 → [Temporary ID52] → Foreign Account B
     ↑
@@ -981,7 +1072,8 @@ Devices NEVER expose their real ID52 to non-owner accounts. Three browsing modes
     └─ No authentication - appears as anonymous visitor
  ```
 
-#### 2. Proxied Anonymous Browsing (Maximum Privacy)
+#### 2. Proxied Browsing (Maximum Privacy)
+
  ```
  Device D1 → Owner Account A → [A's connection] → Foreign Account B
     ↑
@@ -992,7 +1084,10 @@ Devices NEVER expose their real ID52 to non-owner accounts. Three browsing modes
     └─ Still anonymous to foreign account
  ```
 
+Anonymous or not depends on the mode.
+
 #### 3. Delegated Browsing (Acting as Owner Account)
+
  ```
  Device D1 → [Browsing ID52 + Signed Token] → Foreign Account B
     ↑
@@ -1004,6 +1099,7 @@ Devices NEVER expose their real ID52 to non-owner accounts. Three browsing modes
  ```
 
 **Delegation Flow:**
+
 1. Device creates/reuses browsing ID52
 2. Device requests delegation from owner account (via P2P)
 3. Owner account signs: "browsing_id52 X can act as alias Y"
@@ -1011,6 +1107,7 @@ Devices NEVER expose their real ID52 to non-owner accounts. Three browsing modes
 5. Foreign account validates signature and treats as authenticated
 
 **Privacy vs Performance Trade-offs:**
+
 - **Direct Anonymous**: Fast, hides identity but not IP
 - **Proxied Anonymous**: Slower, complete IP privacy
 - **Delegated**: Fast, authenticated but not anonymous
@@ -1039,10 +1136,9 @@ Devices NEVER expose their real ID52 to non-owner accounts. Three browsing modes
 
 ### Device-to-Device Communication
 
-**PROHIBITED**: Devices can NEVER communicate directly with each other, even if owned by the same account. All device-to-device data flow must go through the owner account.
-
-
-
+**PROHIBITED**: Devices can NEVER communicate directly with each other, even if
+owned by the same account. All device-to-device data flow must go through the
+owner account.
 
 ## Network Protocol
 
@@ -1082,10 +1178,13 @@ Devices NEVER expose their real ID52 to non-owner accounts. Three browsing modes
 
 ### Device Privacy
 
-- **Device ID52 Protection**: Real device ID52 is NEVER exposed to non-owner accounts
+- **Device ID52 Protection**: Real device ID52 is NEVER exposed to non-owner
+  accounts
 - **Browsing ID52 Isolation**: Temporary browsing ID52s prevent correlation
-- **Delegation Security**: Signed tokens prove authorization without exposing device identity
-- **Connection Reuse**: Browsing ID52 can be reused to reduce latency while maintaining privacy
+- **Delegation Security**: Signed tokens prove authorization without exposing
+  device identity
+- **Connection Reuse**: Browsing ID52 can be reused to reduce latency while
+  maintaining privacy
 
 ### Email Security
 
@@ -1093,7 +1192,6 @@ Devices NEVER expose their real ID52 to non-owner accounts. Three browsing modes
 - Each email tracks which alias sent/received it
 - P2P delivery without intermediaries
 - No email content on devices (only on accounts)
-
 
 ## Future Considerations
 
