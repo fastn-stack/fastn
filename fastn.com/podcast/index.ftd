@@ -1,8 +1,12 @@
 -- import: fastn.com/podcast/sustainability-and-consultancy
+-- import: fastn.com/podcast/fastn-p2p-emails
 
 -- ds.page-with-no-right-sidebar:
 
 -- ds.posts:
+
+-- ds.featured-post:
+post-data: $fastn-p2p-emails.meta
 
 -- ds.featured-post:
 post-data: $sustainability-and-consultancy.meta
