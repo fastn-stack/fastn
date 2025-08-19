@@ -62,6 +62,8 @@ pub fn fastn_test_js() -> &'static str {
 
 pub fn all_js_without_test_and_ftd_langugage_js() -> String {
     let markdown_js = fastn_js::markdown_js();
+    // Core JS files - order is important for dependencies
+    let benchmark_utils_js = include_str_with_debug!("../js/benchmark-utils.js");
     let fastn_js = include_str_with_debug!("../js/fastn.js");
     let dom_js = include_str_with_debug!("../js/dom.js");
     let utils_js = include_str_with_debug!("../js/utils.js");
@@ -71,9 +73,10 @@ pub fn all_js_without_test_and_ftd_langugage_js() -> String {
     let post_init_js = include_str_with_debug!("../js/postInit.js");
 
     // the order is important
+    // benchmark-utils must come first to define fastn_perf
     // global variable defined in dom_js might be read in virtual_js
     format!(
-        "{markdown_js}{fastn_js}{dom_js}{utils_js}{virtual_js}{web_component_js}{ftd_js}{post_init_js}"
+        "{benchmark_utils_js}{markdown_js}{fastn_js}{dom_js}{utils_js}{virtual_js}{web_component_js}{ftd_js}{post_init_js}"
     )
 }
 
@@ -102,30 +105,30 @@ pub fn all_js_with_test() -> String {
 }
 
 pub fn markdown_js() -> &'static str {
-    include_str!("../marked.js")
+    include_str!("../js/vendor/marked.js")
 }
 
 pub fn prism_css() -> String {
-    let prism_line_highlight = include_str!("../prism/prism-line-highlight.css");
-    let prism_line_numbers = include_str!("../prism/prism-line-numbers.css");
+    let prism_line_highlight = include_str!("../js/vendor/prism/prism-line-highlight.css");
+    let prism_line_numbers = include_str!("../js/vendor/prism/prism-line-numbers.css");
     format!("{prism_line_highlight}{prism_line_numbers}")
 }
 
 pub fn prism_js() -> String {
-    let prism = include_str!("../prism/prism.js");
-    let prism_line_highlight = include_str!("../prism/prism-line-highlight.js");
-    let prism_line_numbers = include_str!("../prism/prism-line-numbers.js");
+    let prism = include_str!("../js/vendor/prism/prism.js");
+    let prism_line_highlight = include_str!("../js/vendor/prism/prism-line-highlight.js");
+    let prism_line_numbers = include_str!("../js/vendor/prism/prism-line-numbers.js");
 
     // Languages supported
     // Rust, Json, Python, Markdown, SQL, Bash, JavaScript
-    let prism_rust = include_str!("../prism/prism-rust.js");
-    let prism_json = include_str!("../prism/prism-json.js");
-    let prism_python = include_str!("../prism/prism-python.js");
-    let prism_markdown = include_str!("../prism/prism-markdown.js");
-    let prism_sql = include_str!("../prism/prism-sql.js");
-    let prism_bash = include_str!("../prism/prism-bash.js");
-    let prism_javascript = include_str!("../prism/prism-javascript.js");
-    let prism_diff = include_str!("../prism/prism-diff.js");
+    let prism_rust = include_str!("../js/vendor/prism/prism-rust.js");
+    let prism_json = include_str!("../js/vendor/prism/prism-json.js");
+    let prism_python = include_str!("../js/vendor/prism/prism-python.js");
+    let prism_markdown = include_str!("../js/vendor/prism/prism-markdown.js");
+    let prism_sql = include_str!("../js/vendor/prism/prism-sql.js");
+    let prism_bash = include_str!("../js/vendor/prism/prism-bash.js");
+    let prism_javascript = include_str!("../js/vendor/prism/prism-javascript.js");
+    let prism_diff = include_str!("../js/vendor/prism/prism-diff.js");
 
     format!(
         "{prism}{prism_line_highlight}{prism_line_numbers}{prism_rust}{prism_json}{prism_python\
