@@ -46,7 +46,7 @@ Save these two files and run `fastn serve` from the project dir. Visit the
 printed URL and you'll see "Hello World! 😀" printed in your browser.
 
 In addition to `ftd.text`, other kernel components exist that helps you create
-UIs. You can learn abou them at https://fastn.com/kernel/.
+UIs. You can learn about them at https://fastn.com/kernel/.
 
 You can create custom components on top of these kernel components:
 
@@ -84,11 +84,11 @@ role: h2
 background: $fastn-assets.files.images.fastn.svg
 
 A `body` is just a `string` type but gets a special position to help you
-write multi-line texts. And markdown is supported so you can 
+write multi-line texts. And markdown is supported so I can 
 [ask for donation!](https://fastn.com/donate/) ;)
 ```
 
-If you had used `string` instead of `caption` and `body` then you'd have to do:
+If you had used `string` instead of `caption` and `body`, then you'd have to do:
 
 ```ftd
 -- card: 
@@ -98,7 +98,7 @@ background: $fastn-assets.files.images.fastn.svg
 -- card.body:
 
 A `body` is just a `string` type but gets a special position to help you
-write multi-line texts. And markdown is supported so you can 
+write multi-line texts. And markdown is supported so I can 
 [ask for donation!](https://fastn.com/donate/) ;)
 
 -- end: card
