@@ -10,6 +10,15 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- **Automerge CRDT support** (optional feature: `automerge`)
+  - `PublicKey`, `SecretKey`, and `Signature` now implement `autosurgeon::Reconcile` and `autosurgeon::Hydrate`
+  - Enables type-safe storage in Automerge CRDT documents
+  - Keys stored as ID52/hex strings and automatically converted back to typed objects
+  - Feature-gated to avoid unnecessary dependencies
+  - Usage: `fastn-id52 = { workspace = true, features = ["automerge"] }`
+- **PublicKey convenience method**
+  - Added `id52()` method to `PublicKey` for consistency with `SecretKey`
+  - Returns the ID52 string representation directly
 - `Clone` trait implementation for `SecretKey`
   - Allows copying secret keys when needed in structs
   - Clones by reconstructing from bytes

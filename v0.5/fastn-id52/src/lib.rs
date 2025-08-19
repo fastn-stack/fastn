@@ -129,3 +129,6 @@ pub use errors::{
 };
 pub use keyring::KeyringError;
 pub use keys::{PublicKey, SecretKey, Signature};
+
+#[cfg(feature = "automerge")]
+mod automerge;

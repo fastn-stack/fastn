@@ -130,6 +130,11 @@ impl PublicKey {
         *self.0.as_bytes()
     }
 
+    /// Returns the ID52 string representation of this public key.
+    pub fn id52(&self) -> String {
+        self.to_string()
+    }
+
     /// Verifies an Ed25519 signature for the given message.
     ///
     /// # Errors

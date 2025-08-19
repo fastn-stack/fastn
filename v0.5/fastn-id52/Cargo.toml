@@ -17,3 +17,10 @@ data-encoding.workspace = true
 serde.workspace = true
 rand.workspace = true
 keyring.workspace = true
+
+# Optional autosurgeon support
+autosurgeon = { workspace = true, optional = true }
+automerge = { workspace = true, optional = true }
+
+[features]
+automerge = ["dep:autosurgeon", "dep:automerge"]
