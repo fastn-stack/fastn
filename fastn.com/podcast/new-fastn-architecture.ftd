@@ -1,0 +1,277 @@
+-- import: fastn.com/blog/authors
+-- import: doc-site.fifthtry.site/common
+-- import: bling.fifthtry.site/note
+-- import: fastn.com/utils
+
+-- common.post-meta meta: The New fastn Architecture - Peer-to-Peer Web Framework Deep Dive
+published-on: 19th Aug, 2025
+post-url: /podcast/new-fastn-architecture/
+author: $authors.siddhant
+read-time: 12 minutes
+
+A comprehensive walkthrough of fastn's new peer-to-peer architecture, including
+entities, automerge documents, and the fastn mail system.
+
+-- ds.blog-page:
+meta: $meta
+og-title: The New fastn Architecture - Peer-to-Peer Web Framework Deep Dive
+og-image: https://fastn.com/-/fastn.com/images/podcast/new-fastn-architecture.png
+
+-- ds.youtube:
+v: H9d1Dn8Jn0I
+
+-- ds.h2: Introduction
+
+**Siddhant**: Hello everyone, I am Siddhant and I have Amitu with me. Today we
+are going to talk about the new fastn architecture that we have been working on
+recently and we are also going to talk about fastn mail, which is the P2P email
+service that we have been trying to architect recently. Amitu, you can start.
+
+**Amitu**: In our previous discussion, we had higher-level philosophical ideas
+about fastn as a language, company, and open source project. Today we're going
+to talk about something newish that we're going to start working on - it's a
+very interesting time for us to build in public.
+
+The stuff we're discussing doesn't exist technically yet. fastn exists as a
+language and platform, but it doesn't yet exist as a peer-to-peer web
+framework. fastn is going to evolve from a general-purpose web framework to one
+optimized for offline-first use cases and building peer-to-peer applications.
+
+-- ds.h2: From Client-Server to Peer-to-Peer
+
+Unlike traditional web frameworks like Django, Rails, and PHP that are designed
+for client-server models where the framework runs on a server and browsers act
+    as clients, we're talking about a different model where software runs on
+    your infrastructure - your laptop, mobile, and other devices.
+
+We built fastn with this as our highest guiding principle: at some point,
+you'll be running fastn completely on very low-powered devices like smart TVs,
+webcams, door cameras, Raspberry Pis, and all sorts of smart devices. We want
+fastn to be a language for solving UI at all levels.
+
+To solve something like a smart TV, we need to solve not just the UI and
+programming logic, but also the networking - how will my laptop connect to my
+TV when neither has a public IP address? Django and PHP don't have solutions
+for this; they assume you must have an IP address or you're out of luck.
+
+-- ds.h2: The Technical Foundation
+
+We're starting almost from scratch. We've done work with peer-to-peer through
+fastn-net (formerly Kulfi) and Malai projects. The idea of integrating
+peer-to-peer was in my head way back - local support existed in 2019 in the
+first version of FifthTry that I used as personal note-taking software.
+
+We're working towards fastn 0.5, which is almost going to be a rewrite. Our
+current crate structure has many crates at the top level and bunches of crates
+at the fastn 0.5 level. Some crates are shared between fastn 0.4 and 0.5.
+
+-- ds.h2: The Peer-to-Peer Memory Model
+
+In traditional cloud applications, you create a users table storing all users
+in a single table, with every other table having foreign keys to users - this
+is centralized architecture.
+
+In fastn, you don't think like that. You don't have multiple users in the
+traditional sense. We're thinking about a completely inverted model where there
+are multiple devices that you have, all running separate fastn servers on your
+behalf.
+
+We're not talking about one fastn server serving thousands or millions of
+users. We're talking about a single person having 10 fastn servers running -
+one on each device - and they're capable of talking to each other.
+
+-- ds.h2: Data Distribution and Syncing
+
+In this universe, your data lives in your database and my data lives in my
+database. Our applications (fastn servers) talk to each other to exchange data.
+When you're accessing data, you're accessing your fastn server, and I'm
+accessing mine.
+
+For example, if we're both working on a Google Docs-like application - a shared
+document we're both editing - we'll both have that document in our respective
+databases, possibly multiple times. If I have the document on my laptop and
+phone, it might reside in multiple databases.
+
+Each device has a database, and they somehow talk to each other, syncing data.
+Any edit on any device will propagate to all other relevant devices. As a
+framework, fastn takes care of all this complexity.
+
+-- ds.h2: The Developer Experience
+
+As an application developer, you simply get a document store - like a NoSQL
+JSON object store where you have keys and values as tree structures. You write
+your application with just that, and when you save a document, it automatically
+syncs with all the people it's supposed to.
+
+When documents change, you can write update notification callbacks that update
+your UI. If you want to build real-time applications where multiple people are
+typing simultaneously and seeing changes in near real-time, you can build that
+with fastn without much complexity.
+
+-- ds.h2: Core Architecture: Entities
+
+fastn is like BitTorrent or Bitcoin - completely decentralized, running on
+individual laptops and devices. It's built on top of Iroh, a brilliant Rust
+ecosystem for peer-to-peer networking.
+
+When you start fastn, currently it has a `fastn serve` command. We're adding a
+new `fastn run` command, which will eventually become the primary way to run
+fastn. This will be available as desktop and mobile apps.
+
+When you run `fastn run`, we create a folder in your operating system's data
+directory. This fastn home folder represents your node (which we call an
+"entity") in the decentralized network.
+
+-- ds.h3: Types of Entities
+
+There are three types of entities, each with their own ID52 (public-private key
+pair):
+
+1. **Rig**: The entity you talk to for controlling the fastn run server 2.
+**Accounts**: Represent either a user or organization  3. **Devices**:
+Individual devices belonging to an account
+
+-- ds.h2: Storage Structure
+
+The fastn home folder contains:
+- **rig/**: Contains rig configuration and keys
+- **accounts/**: Account-specific data
+- **public/**: fastn applications and files
+
+Each entity stores its ID52 (public key) and private key, with fallback
+mechanisms for key storage including keychain integration.
+
+-- ds.h2: Accounts vs Devices
+
+Every fastn machine has at least one account. Each account represents either a
+user or organization - we strongly recommend against group accounts where
+multiple people share access.
+
+**Accounts** should have high uptime because:
+- When accounts are down, devices can't sync data with each other
+- Emails sent to you will bounce during downtime
+- Optimal service requires accounts to be online most of the time
+
+**Devices** belong to accounts and can have more relaxed uptime requirements.
+We recommend running accounts on:
+- Cloud servers (Linode, DigitalOcean, AWS)
+- Raspberry Pi or desktop at home/office with reliable internet and power
+- Our hosted fastn cloud service
+
+-- ds.h2: Email Architecture
+
+Every fastn account has email capabilities. When you create an account, fastn
+automatically starts IMAP, POP3, and SMTP protocol servers.
+
+-- ds.h3: Email Organization
+
+Key decisions we've made:
+- Each alias you create is an email domain
+- You can share different email addresses with different people
+- We organize emails by usernames, not by aliases
+- Most users want a single mailbox with multiple aliases rather than multiple
+  separate mailboxes
+
+-- ds.h3: Address Format
+
+Email addresses use the format: `username@alias-id52` or
+`username@alias-id52.com` (for compatibility with email clients expecting .com
+domains).
+
+-- ds.h3: Email Storage
+
+- Emails are stored in account folders, not device folders
+- This prevents email duplication (10GB in fastn folder + 10GB copied by email
+  clients)
+- Devices sync with accounts for email access
+
+-- ds.h2: Automerge Documents
+
+We're automerge first, meaning we use automerge documents as our fundamental
+feature. Anything you store uses key-value pairs where each value is a document
+that can easily sync between instances.
+
+Configuration and metadata are stored in automerge because syncing is
+automatic. For example, if you change your name on your phone, it updates on
+all your devices without custom syncing code.
+
+-- ds.h2: Document Organization
+
+Documents have paths that encode ownership:
+- Your documents use your account ID as prefix
+- Shared documents use the sharing alias as prefix
+- Special documents use `/dash` prefix for system configuration
+
+-- ds.h3: Document Types
+
+- **Config documents**: Account-specific configuration
+- **Alias documents**: Public profiles and information  
+- **Notes documents**: Private notes about contacts
+- **User documents**: Application-specific data
+- **Meta documents**: Sharing and permission metadata
+
+-- ds.h2: Permission System
+
+We have an ascending permission system:
+- **Admin**: Full control
+- **Share**: Can share with others
+- **Write**: Can modify content
+- **Comment**: Can add comments
+- **Read**: Can view content
+
+We support groups for organizing users and nested group relationships, with SQL
+caches for efficient permission queries.
+
+-- ds.h2: Connection and Browsing Models
+
+-- ds.h3: Device-Account Connections
+
+- Devices only connect to their owning account
+- This minimizes network connections and complexity
+- Prevents accidental privacy leaks through device IDs
+
+-- ds.h3: Browsing Foreign Accounts
+
+Two methods for browsing other accounts:
+
+1. **Direct Anonymous Browsing**: Creates temporary browsing ID, but device IP
+may be visible 2. **Proxied Browsing**: Device asks account to make connection,
+only account ID is visible
+
+-- ds.h3: Delegated Access
+
+Devices can request temporary tokens from accounts to browse other accounts
+directly while maintaining authentication, useful for high-bandwidth operations
+like video streaming or file downloads.
+
+-- ds.h2: Implementation Timeline
+
+We're targeting end of August for the first release focusing on fastn mail.
+This requires:
+- Automatic account creation
+- Automerge documents storing username/password
+- SMTP, IMAP, and POP protocol implementation
+- Email folder organization and SQLite syncing
+- Basic email client compatibility testing
+
+September will focus on cloud infrastructure and advanced features.
+
+-- ds.h2: Development Approach
+
+We're building completely in public. The architecture described here is fresh
+and not yet implemented in code. We're documenting our development process
+through these conversations and will continue building transparently.
+
+This represents a fundamental shift from traditional client-server web
+development to a peer-to-peer, offline-first model where users truly own their
+data and infrastructure.
+
+-- ds.h2: Looking Forward
+
+Next week we'll discuss whatever we've built during the week, hopefully with
+some demos. The goal is to create a comprehensive peer-to-peer web framework
+that makes building distributed, offline-first applications as easy as
+traditional web development, while giving users complete control over their
+data and infrastructure.
+
+-- end: ds.blog-page
