@@ -11,7 +11,8 @@ homepage.workspace = true
 # Core dependencies
 fastn-account.workspace = true
 fastn-automerge.workspace = true
-fastn-id52.workspace = true
+autosurgeon.workspace = true
+fastn-id52 = { workspace = true, features = ["automerge"] }
 fastn-net.workspace = true
 automerge.workspace = true
 iroh.workspace = true

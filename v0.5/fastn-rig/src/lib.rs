@@ -28,6 +28,7 @@
 
 extern crate self as fastn_rig;
 
+pub mod automerge;
 pub mod endpoint;
 mod rig;
 mod run;
