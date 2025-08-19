@@ -1,0 +1,219 @@
+-- import: fastn.com/blog/authors
+-- import: doc-site.fifthtry.site/common
+-- import: bling.fifthtry.site/note
+-- import: fastn.com/utils
+
+
+-- common.post-meta meta: fastn p2p emails
+published-on: 19th Aug, 2025
+post-url: /podcast/fastn-p2p-emails/
+author: $authors.siddhant
+read-time: 8 minutes
+
+Our plan to build peer-to-peer email using fastn-net (formerly Kulfi) and how
+it could change the way we think about email independence.
+
+-- ds.blog-page:
+meta: $meta
+og-title: fastn p2p emails
+og-image: https://fastn.com/-/fastn.com/images/podcast/fastn-p2p-emails.png
+
+-- ds.youtube:
+v: 6wLnKJ5fBZk
+
+-- ds.h2: The Core Idea: fastn Mail
+
+**Amitu**: I had this idea that we can record for the future. In fastn-net, we
+can add a new command called "fastn mail." The concept is making existing email
+clients work with fastn-net, including Gmail, Outlook, and anything that
+supports POP, IMAP, and SMTP.
+
+If you have an email client like Apple Mail, Pine, or any other client, you
+normally need a POP server and SMTP server for incoming and outgoing mail.
+fastn mail will start both these servers for you, listening on two ports.
+
+The key question is port accessibility. Most likely you'd run the fastn mail
+command on the same machine as your email client, though that's not always
+possible (like with iPhone). In that case, you may need a service that does it
+for you - either on an IP address you own or through a hosted solution.
+
+-- ds.h2: How Peer-to-Peer Email Works
+
+Here's where it gets interesting: when you run fastn mail, instead of your
+emails going through intermediaries like Gmail, the mail goes directly
+peer-to-peer. No intermediaries at all.
+
+Everyone who runs fastn mail gets an email address at their ID52 (fastn's peer
+identifier). So I could send an email to siddhant@your-id52.fastn-net, and this
+mail wouldn't go through traditional email infrastructure.
+
+Your email client will accept it - they might have some email validation rules,
+but we can work around that. If needed, we could create something like ID52.com
+as a dummy domain. The point is, the email client doesn't try to connect
+directly to that address - it sends the mail to the SMTP server, which is fastn
+mail.
+
+fastn mail acts as the SMTP server and knows this looks like a peer-to-peer
+mail rather than traditional email. It will then connect to the other peer via
+fastn-net protocol using the ID52 and deliver the mail directly if that peer is
+online.
+
+-- ds.h2: Handling Offline Scenarios
+
+If the recipient isn't online, we'll implement retry logic similar to
+traditional SMTP servers. The system will queue messages and keep trying to
+deliver them.
+
+This is where it becomes important that your ID52 is permanent - it will get
+stored in people's address books, so you can't lose this key. Unlike our test
+servers where we regenerated keys without concern, this email address becomes
+part of your identity.
+
+-- ds.h2: Domain Integration
+
+We can extend this further. The fastn mail SMTP server can look at any domain
+and first do a DNS lookup. If that DNS lookup shows there's an fastn-name
+record associated with amitu.com, for example, then emails to amitu@amitu.com
+get routed directly peer-to-peer instead of through traditional MX servers.
+
+This means as long as I maintain amitu.com with proper fastn-name records, mail
+gets routed directly from peer to peer, bypassing traditional email
+infrastructure entirely.
+
+-- ds.h2: Technical Implementation
+
+**Siddhant**: How do you integrate this into third-party clients that already
+use SMTP and POP?
+
+**Amitu**: When you set up any email client, it asks for your POP/IMAP server
+for incoming mail and SMTP server for outgoing mail. These are standard
+protocols every email client supports.
+
+For clients like Gmail's web interface, that's a different challenge. We'll
+need to figure out how to make that work separately. But for now, let's focus
+on standard email clients - every iPhone has an email client, Android has one,
+Mac has Mail, Windows has Outlook.
+
+The beautiful thing is we can get significant fastn mail usage with just people
+comfortable with email clients, because they don't need any other tooling
+beyond running fastn mail somewhere.
+
+-- ds.h2: Mailbox Management and Multi-User Support
+
+When you run fastn mail, you need storage space for emails. The system can be
+mailbox-aware, so one fastn mail instance can handle multiple email addresses
+for a family or company.
+
+The SMTP and POP servers implement authentication using username/password,
+which is what SMTP supports. You can create email addresses for family members
+or company employees, sharing the same server infrastructure.
+
+-- ds.h2: Revenue Potential and Cloud Services
+
+This has clear revenue potential. For users who can't run their own server, we
+can provide fastn cloud hosting that runs fastn mail on their behalf. It's
+similar to what Proton Mail offers, but with the key difference that the
+underlying protocol is open and peer-to-peer.
+
+-- ds.h2: Spam and Security Considerations
+
+Since our system is peer-to-peer, spam becomes less of an issue because
+outsiders who want to send mail must have access to fastn mail - that becomes a
+prerequisite. You can keep sending mail to the outside world, but the
+peer-to-peer network remains more controlled.
+
+-- ds.h2: UI Strategy: No Custom Client Needed
+
+One major advantage is we don't need to build a custom email UI. We're
+leveraging existing email clients, so on day one we're as feature-complete as
+any regular email client. Whether Apple Mail is better than Gmail's interface
+is subjective, but we're not losing functionality.
+
+Of course, our mail server needs to become more sophisticated - separate
+mailboxes per username, backup systems, retry logic for failed deliveries, and
+spam handling.
+
+-- ds.h2: Web Interface Option
+
+fastn mail can also expose an HTTP service through fastn-net's bridge
+functionality, providing a web mail interface. This would use the same
+username/password authentication as SMTP, allowing users to access their email
+without needing a dedicated client.
+
+We could integrate existing web mail solutions, though I'd prefer keeping
+everything in Rust and potentially using fastn for the web interface to
+maintain consistency.
+
+-- ds.h2: Extending to Chat: fastn Chat
+
+The same concept could apply to chat. We could create fastn chat that works
+with existing chat clients like Pidgin, which has a plugin infrastructure for
+connecting to multiple chat services.
+
+Unlike email, there's no standard chat protocol, so we'd be creating our own.
+But we could still leverage existing clients through plugins, and our fastn-net
+bridge could provide a basic web chat interface.
+
+We could even create Discord bot bridges - any message sent on a Discord
+channel could automatically be mirrored to peer-to-peer chat and vice versa.
+
+-- ds.h2: Strategic Positioning
+
+This approach solves a fundamental problem: in our current centralized
+internet, everything depends on SaaS services. Mail is one of the most critical
+dependencies. Making mail distributed and peer-to-peer is a significant step
+toward digital independence.
+
+fastn is about building a decentralized, peer-to-peer world from the ground up.
+This requires a good programming language that ordinary people can use, a great
+platform, auto-merge capabilities, and now mail functionality.
+
+-- ds.h2: Launch Strategy
+
+Instead of waiting to complete Pista (our collaborative document platform),
+which requires auto-merge, identity management, and relationship handling,
+fastn mail only requires POP and SMTP implementation. It has revenue potential
+and addresses a real need.
+
+We can position this as fastn mail rather than creating yet another brand. This
+fits into the broader fastn ecosystem - we're building a comprehensive platform
+for the decentralized web.
+
+-- ds.h2: Development Plan
+
+**Siddhant**: This gives me a good coding project and content creation
+opportunity. I can work on fastn mail while you continue with Pista, and
+document the development process through blog posts and videos.
+
+**Amitu**: Exactly. Let's build fastn mail in public. We can release this
+conversation as our next podcast episode, then create a series documenting the
+development process. Every coding session, every design decision - let's record
+it all.
+
+This solves our content problem and invites people who align with our vision to
+contribute. We'll have something concrete to show instead of just talking about
+future plans.
+
+-- ds.h2: The Bigger Picture
+
+We're not just building email - we're building the foundation for a new
+internet. One where individuals own their data, run their own infrastructure
+(or choose who runs it for them), and aren't dependent on large centralized
+platforms.
+
+fastn mail is our entry point into this vision. It's technically achievable,
+has clear utility, and demonstrates the power of peer-to-peer systems using
+existing, familiar interfaces.
+
+-- ds.h2: Looking Forward
+
+This represents a shift in our development strategy. Instead of building
+everything behind closed doors, we're committing to building in public,
+creating content around our development process, and inviting the community to
+participate in creating the decentralized web.
+
+fastn mail will be our first major product launch in this new approach, and it
+could be the beginning of a much larger transformation in how we think about
+digital independence and peer-to-peer computing.
+
+-- end: ds.blog-page
