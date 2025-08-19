@@ -172,10 +172,16 @@ Pages](https://fastn.com/github-pages/) and
 
 ## `fastn` 0.5
 
-We're currently working on `fastn` 0.5, which will be a major release with
-breaking changes. You can learn more about the development by going through
-[existing github
-discussions](https://github.com/orgs/fastn-stack/discussions?discussions_q=is%3Aopen+label%3A0.5-brainstorm).
+We're currently working on `fastn` 0.5. It will add support for making
+offline-first p2p apps based on [iroh](https://github.com/n0-computer/iroh) and
+[automerge](https://github.com/automerge/automerge) along with some breaking
+changes to the language.
+
+To learn more, see:
+
+- [0.5 ARCHITECTURE.md](https://github.com/fastn-stack/fastn/blob/main/v0.5/ARCHITECTURE.md).
+- [Video discussion on YouTube](https://www.youtube.com/watch?v=H9d1Dn8Jn0I).
+- [Existing github discussions](https://github.com/orgs/fastn-stack/discussions?discussions_q=is%3Aopen+label%3A0.5-brainstorm).
 
 ## FifthTry Hosting
 
