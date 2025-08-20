@@ -1306,7 +1306,7 @@ dependencies = [
 
 [[package]]
 name = "fastn"
-version = "0.4.110"
+version = "0.4.111"
 dependencies = [
  "actix-web",
  "camino",
