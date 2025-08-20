@@ -142,3 +142,12 @@ pub(crate) fn ends_with_exact_suffix(name: &str, separator: &str, suffix: &str) 
 pub(crate) fn is_asset_path(name: &str) -> bool {
     ends_with_exact_suffix(name, "/", "assets#files")
 }
+
+pub(crate) fn escape_string(s: String) -> String {
+    s.replace('\\', "\\\\")
+        .replace('\"', "\\\"")
+        .replace('\n', "\\n")
+        .replace('\r', "\\r")
+        .replace('\t', "\\t")
+        .replace('\0', "\\0")
+}
