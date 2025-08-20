@@ -1,5 +1,11 @@
 # `fastn` Change Log
 
+## 20 August 2025
+
+### fastn: 0.4.111
+
+- dce62c437 - Add support for simple function calls in `url` header of the `http` processor. See PR #2179.
+
 ## 29 July 2025
 
 ### fastn: 0.4.110
