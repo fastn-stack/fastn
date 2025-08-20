@@ -217,10 +217,9 @@ impl Value {
         use itertools::Itertools;
         match self {
             Value::String(s) => {
-                let s = s
-                    .replace('\n', "\\n") // escape new line character
-                    .replace(r#"\""#, "\"") // unescape an already escaped seq
-                    .replace('\"', "\\\""); // escape " (quote)
+                // unescape an already escaped seq. See PR #2044
+                let s = s.replace(r#"\""#, "\""); 
+                let s = fastn_js::utils::escape_string(s);
                 format!("\"{s}\"")
             }
             Value::Integer(i) => i.to_string(),
