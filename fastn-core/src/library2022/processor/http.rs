@@ -519,7 +519,8 @@ mod tests {
 
     #[test]
     fn test_parse_function_call_complex_values() {
-        let result = parse_function_call("$my-func(url = https://example.com/api, path = /some/path)");
+        let result =
+            parse_function_call("$my-func(url = https://example.com/api, path = /some/path)");
         assert_eq!(
             result,
             Some((
@@ -544,8 +545,17 @@ mod tests {
     #[test]
     // TODO: throw errors for these
     fn test_parse_function_call_malformed() {
-        assert_eq!(parse_function_call("$func(arg without equals)"), Some(("func".to_string(), vec![])));
-        assert_eq!(parse_function_call("$func(arg1 = val1, malformed)"), Some(("func".to_string(), vec![("arg1".to_string(), "val1".to_string())])));
+        assert_eq!(
+            parse_function_call("$func(arg without equals)"),
+            Some(("func".to_string(), vec![]))
+        );
+        assert_eq!(
+            parse_function_call("$func(arg1 = val1, malformed)"),
+            Some((
+                "func".to_string(),
+                vec![("arg1".to_string(), "val1".to_string())]
+            ))
+        );
     }
 
     #[test]
