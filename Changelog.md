@@ -2,6 +2,10 @@
 
 ## 20 August 2025
 
+### fastn: 0.4.112
+
+- fix: Escape more chars while constructing a string for js output. See PR #2180.
+
 ### fastn: 0.4.111
 
 - dce62c437 - Add support for simple function calls in `url` header of the `http` processor. See PR #2179.
