@@ -1,3 +1,4 @@
+use ftd::interpreter::FunctionExt;
 use ftd::interpreter::{PropertyValueExt, ValueExt};
 
 #[tracing::instrument(name = "http_processor", skip_all)]
@@ -31,26 +32,60 @@ pub async fn process(
     }
 
     let url = match headers.get_optional_string_by_key("url", doc.name, line_number)? {
-        Some(v) if v.starts_with('$') => match doc.get_thing(v.as_str(), line_number) {
-            Ok(ftd::interpreter::Thing::Variable(v)) => v
-                .value
-                .resolve(doc, line_number)?
-                .string(doc.name, line_number)?,
-            Ok(v2) => {
-                return ftd::interpreter::utils::e2(
-                    format!("{v} is not a variable, it's a {v2:?}"),
-                    doc.name,
+        Some(v) if v.starts_with('$') => {
+            if let Some((function_name, args)) = parse_function_call(&v) {
+                let function_call = create_function_call(&function_name, args, doc, line_number)?;
+                let function = doc.get_function(&function_name, line_number)?;
+
+                if function.js.is_some() {
+                    return ftd::interpreter::utils::e2(
+                        format!(
+                            "{v} is a function with JavaScript which is not supported for HTTP URLs"
+                        ),
+                        doc.name,
+                        line_number,
+                    );
+                }
+
+                match function.resolve(
+                    &function_call.kind,
+                    &function_call.values,
+                    doc,
                     line_number,
-                );
+                )? {
+                    Some(resolved_value) => resolved_value.string(doc.name, line_number)?,
+                    None => {
+                        return ftd::interpreter::utils::e2(
+                            format!("{v} function returned no value"),
+                            doc.name,
+                            line_number,
+                        );
+                    }
+                }
+            } else {
+                // This is a simple variable reference - handle as before
+                match doc.get_thing(v.as_str(), line_number) {
+                    Ok(ftd::interpreter::Thing::Variable(var)) => var
+                        .value
+                        .resolve(doc, line_number)?
+                        .string(doc.name, line_number)?,
+                    Ok(v2) => {
+                        return ftd::interpreter::utils::e2(
+                            format!("{v} is not a variable or function, it's a {v2:?}"),
+                            doc.name,
+                            line_number,
+                        );
+                    }
+                    Err(e) => {
+                        return ftd::interpreter::utils::e2(
+                            format!("${v} not found in the document: {e:?}"),
+                            doc.name,
+                            line_number,
+                        );
+                    }
+                }
             }
-            Err(e) => {
-                return ftd::interpreter::utils::e2(
-                    format!("${v} not found in the document: {e:?}"),
-                    doc.name,
-                    line_number,
-                );
-            }
-        },
+        }
         Some(v) => v,
         None => {
             return ftd::interpreter::utils::e2(
@@ -281,4 +316,256 @@ pub async fn process(
         .map_err(|e| ftd::interpreter::Error::Serde { source: e })?;
 
     doc.from_json(&response_json, &kind, &value)
+}
+
+/// Parse a function call string like "$function_name(arg1 = value1, arg2 = value2)" into name and named arguments
+fn parse_function_call(expr: &str) -> Option<(String, Vec<(String, String)>)> {
+    if !expr.starts_with('$') {
+        return None;
+    }
+
+    let expr = &expr[1..];
+
+    if let Some(open_paren) = expr.find('(') {
+        if let Some(close_paren) = expr.rfind(')') {
+            if close_paren > open_paren {
+                let function_name = expr[..open_paren].trim().to_string();
+                let args_str = &expr[open_paren + 1..close_paren];
+
+                if args_str.trim().is_empty() {
+                    return Some((function_name, vec![]));
+                }
+
+                let mut args = vec![];
+
+                for arg_pair in args_str.split(',') {
+                    let arg_pair = arg_pair.trim();
+                    if arg_pair.is_empty() {
+                        continue;
+                    }
+
+                    if let Some(eq_pos) = arg_pair.find('=') {
+                        let arg_name = arg_pair[..eq_pos].trim().to_string();
+                        let arg_value = arg_pair[eq_pos + 1..].trim().to_string();
+                        args.push((arg_name, arg_value));
+                    }
+                }
+
+                return Some((function_name, args));
+            }
+        }
+    }
+
+    None
+}
+
+/// Create a FunctionCall with the given named arguments
+fn create_function_call(
+    function_name: &str,
+    args: Vec<(String, String)>,
+    doc: &ftd::interpreter::TDoc,
+    line_number: usize,
+) -> ftd::interpreter::Result<fastn_resolved::FunctionCall> {
+    let function = doc.get_function(function_name, line_number)?;
+
+    let mut values = ftd::Map::new();
+    let mut order = vec![];
+
+    for (arg_name, arg_value) in args {
+        let param = function
+            .arguments
+            .iter()
+            .find(|p| p.name == arg_name)
+            .ok_or_else(|| ftd::interpreter::Error::ParseError {
+                message: format!("Function {function_name} has no parameter named '{arg_name}'"),
+                doc_id: doc.name.to_string(),
+                line_number,
+            })?;
+
+        let property_value = if let Some(name) = arg_value.strip_prefix('$') {
+            fastn_resolved::PropertyValue::Reference {
+                name: name.to_string(),
+                // TODO(siddhantk232): type check function params and args. We don't have enough info here to
+                // do this yet.
+                kind: param.kind.clone(),
+                // TODO: support component local args
+                source: fastn_resolved::PropertyValueSource::Global,
+                is_mutable: false,
+                line_number,
+            }
+        } else {
+            fastn_resolved::PropertyValue::Value {
+                value: fastn_resolved::Value::String {
+                    text: arg_value.clone(),
+                },
+                is_mutable: false,
+                line_number,
+            }
+        };
+
+        order.push(arg_name.clone());
+        values.insert(arg_name, property_value);
+    }
+
+    Ok(fastn_resolved::FunctionCall {
+        name: function_name.to_string(),
+        kind: function.return_kind.clone(),
+        is_mutable: false,
+        line_number,
+        values,
+        order,
+        module_name: None,
+    })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::parse_function_call;
+
+    #[test]
+    fn test_parse_function_call_simple() {
+        let result = parse_function_call("$my-func()");
+        assert_eq!(result, Some(("my-func".to_string(), vec![])));
+    }
+
+    #[test]
+    fn test_parse_function_call_single_arg() {
+        // Test function call with one argument
+        let result = parse_function_call("$my-func(arg1 = value1)");
+        assert_eq!(
+            result,
+            Some((
+                "my-func".to_string(),
+                vec![("arg1".to_string(), "value1".to_string())]
+            ))
+        );
+    }
+
+    #[test]
+    fn test_parse_function_call_multiple_args() {
+        let result = parse_function_call("$my-func(arg1 = value1, arg2 = value2)");
+        assert_eq!(
+            result,
+            Some((
+                "my-func".to_string(),
+                vec![
+                    ("arg1".to_string(), "value1".to_string()),
+                    ("arg2".to_string(), "value2".to_string())
+                ]
+            ))
+        );
+    }
+
+    #[test]
+    fn test_parse_function_call_with_variables() {
+        let result = parse_function_call("$my-func(arg1 = $some-var, arg2 = $another-var)");
+        assert_eq!(
+            result,
+            Some((
+                "my-func".to_string(),
+                vec![
+                    ("arg1".to_string(), "$some-var".to_string()),
+                    ("arg2".to_string(), "$another-var".to_string())
+                ]
+            ))
+        );
+    }
+
+    #[test]
+    fn test_parse_function_call_mixed_args() {
+        let result = parse_function_call("$my-func(literal = hello, variable = $some-var)");
+        assert_eq!(
+            result,
+            Some((
+                "my-func".to_string(),
+                vec![
+                    ("literal".to_string(), "hello".to_string()),
+                    ("variable".to_string(), "$some-var".to_string())
+                ]
+            ))
+        );
+    }
+
+    #[test]
+    fn test_parse_function_call_hyphenated_names() {
+        // Test function call with hyphenated function and argument names
+        let result = parse_function_call("$some-func(arg-1 = val-1, arg-2 = val-2)");
+        assert_eq!(
+            result,
+            Some((
+                "some-func".to_string(),
+                vec![
+                    ("arg-1".to_string(), "val-1".to_string()),
+                    ("arg-2".to_string(), "val-2".to_string())
+                ]
+            ))
+        );
+    }
+
+    #[test]
+    fn test_parse_function_call_with_spaces() {
+        let result = parse_function_call("$my-func( arg1 = value1 , arg2 = value2 )");
+        assert_eq!(
+            result,
+            Some((
+                "my-func".to_string(),
+                vec![
+                    ("arg1".to_string(), "value1".to_string()),
+                    ("arg2".to_string(), "value2".to_string())
+                ]
+            ))
+        );
+    }
+
+    #[test]
+    fn test_parse_function_call_complex_values() {
+        let result = parse_function_call("$my-func(url = https://example.com/api, path = /some/path)");
+        assert_eq!(
+            result,
+            Some((
+                "my-func".to_string(),
+                vec![
+                    ("url".to_string(), "https://example.com/api".to_string()),
+                    ("path".to_string(), "/some/path".to_string())
+                ]
+            ))
+        );
+    }
+
+    #[test]
+    fn test_parse_function_call_not_a_function() {
+        assert_eq!(parse_function_call("$simple-var"), None);
+        assert_eq!(parse_function_call("not-a-function"), None);
+        assert_eq!(parse_function_call(""), None);
+        assert_eq!(parse_function_call("$func-without-closing-paren("), None);
+        assert_eq!(parse_function_call("$func-without-opening-paren)"), None);
+    }
+
+    #[test]
+    // TODO: throw errors for these
+    fn test_parse_function_call_malformed() {
+        assert_eq!(parse_function_call("$func(arg without equals)"), Some(("func".to_string(), vec![])));
+        assert_eq!(parse_function_call("$func(arg1 = val1, malformed)"), Some(("func".to_string(), vec![("arg1".to_string(), "val1".to_string())])));
+    }
+
+    #[test]
+    fn test_parse_function_call_empty_args() {
+        let result = parse_function_call("$my-func(   )");
+        assert_eq!(result, Some(("my-func".to_string(), vec![])));
+    }
+
+    #[test]
+    fn test_parse_function_call_trailing_comma() {
+        let result = parse_function_call("$my-func(arg1 = val1, arg2 = val2,)");
+        assert_eq!(
+            result,
+            Some((
+                "my-func".to_string(),
+                vec![
+                    ("arg1".to_string(), "val1".to_string()),
+                    ("arg2".to_string(), "val2".to_string())
+                ]
+            ))
+        );
+    }
 }
