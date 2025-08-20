@@ -217,6 +217,20 @@ impl Operator {
                 } else if let (Ok(a), Ok(b)) = (arguments[0].as_number(), arguments[1].as_number())
                 {
                     Ok(Value::Float(a + b))
+                } else if let (Ok(a), Ok(b)) = (arguments[0].as_string(), arguments[1].as_number())
+                {
+                    let b = format!("{}", b);
+                    let mut result = String::with_capacity(a.len() + b.len());
+                    result.push_str(&a);
+                    result.push_str(&b);
+                    Ok(Value::String(result))
+                } else if let (Ok(a), Ok(b)) = (arguments[0].as_number(), arguments[1].as_string())
+                {
+                    let a = format!("{}", a);
+                    let mut result = String::with_capacity(a.len() + b.len());
+                    result.push_str(&a);
+                    result.push_str(&b);
+                    Ok(Value::String(result))
                 } else {
                     Err(EvalexprError::wrong_type_combination(
                         self.clone(),
