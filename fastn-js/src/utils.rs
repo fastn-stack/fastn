@@ -144,8 +144,7 @@ pub(crate) fn is_asset_path(name: &str) -> bool {
 }
 
 pub(crate) fn escape_string(s: String) -> String {
-    s.replace('\\', "\\\\")
-        .replace('\"', "\\\"")
+    s.replace('\"', "\\\"")
         .replace('\n', "\\n")
         .replace('\r', "\\r")
         .replace('\t', "\\t")
