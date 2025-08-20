@@ -218,7 +218,7 @@ impl Value {
         match self {
             Value::String(s) => {
                 // unescape an already escaped seq. See PR #2044
-                let s = s.replace(r#"\""#, "\""); 
+                let s = s.replace(r#"\""#, "\"");
                 let s = fastn_js::utils::escape_string(s);
                 format!("\"{s}\"")
             }
