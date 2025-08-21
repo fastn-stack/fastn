@@ -1561,6 +1561,11 @@ dependencies = [
  "thiserror 2.0.16",
  "tokio",
  "tracing",
+ "eyre",
+ "futures",
+ "regex",
+ "tokio",
+ "tokio-util",
 ]
 
 [[package]]

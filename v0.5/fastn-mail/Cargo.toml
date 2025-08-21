@@ -8,19 +8,23 @@ repository.workspace = true
 homepage.workspace = true
 
 [dependencies]
-# Core dependencies
-fastn-automerge.workspace = true
-autosurgeon.workspace = true
 automerge.workspace = true
+autosurgeon.workspace = true
+chrono.workspace = true
+description = "SMTP and IMAP implementation for fastn p2p email"
+eyre.workspace = true
+fastn-automerge.workspace = true
 fastn-id52 = { workspace = true, features = ["automerge"] }
+futures.workspace = true
+regex.workspace = true
+rusqlite.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
-tracing.workspace = true
+tokio-util.workspace = true
 tokio.workspace = true
+tracing.workspace = true
 
-# For database storage
-rusqlite.workspace = true
-
-# For timestamps
-chrono.workspace = true
+[[bin]]
+name = "fastn-mail"
+path = "src/main.rs"
