@@ -1,5 +1,4 @@
-use automerge::ReadDoc;
-use automerge::transaction::Transactable;
+use std::str::FromStr;
 
 impl fastn_rig::Rig {
     /// Create a new Rig and initialize the fastn_home with the first account
@@ -40,13 +39,10 @@ impl fastn_rig::Rig {
 
         tracing::info!("Creating new Rig with ID52: {}", id52);
 
-        // Create automerge database
+        // Initialize automerge database with rig's actor ID
         let automerge_path = fastn_home.join("automerge.sqlite");
-        let automerge_conn = rusqlite::Connection::open(&automerge_path)
-            .wrap_err("Failed to create automerge database")?;
-
-        // Initialize automerge schema
-        fastn_automerge::migration::initialize_database(&automerge_conn)
+        let actor_id = format!("{id52}-1"); // Device 1 is the rig itself
+        let automerge_db = fastn_automerge::Db::init_with_actor(&automerge_path, actor_id)
             .wrap_err("Failed to initialize automerge database")?;
 
         // Create AccountManager and first account
@@ -59,19 +55,20 @@ impl fastn_rig::Rig {
         let owner = fastn_id52::PublicKey::from_str(&primary_id52)
             .wrap_err("Failed to parse owner public key")?;
 
-        // Create rig config document with owner
-        let mut config_doc = automerge::AutoCommit::new();
-        config_doc.put(
-            automerge::ROOT,
-            "created_at",
-            chrono::Utc::now().timestamp(),
-        )?;
-        config_doc.put(automerge::ROOT, "owner_id52", primary_id52.clone())?;
+        // Create rig config struct with all configuration data
+        let rig_config = crate::automerge::RigConfig {
+            owner,
+            created_at: std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap()
+                .as_secs() as i64,
+            current_entity: owner, // Owner is the initial current entity
+        };
 
-        let _config_path = format!("/-/rig/{id52}/config");
-        // TODO: Integrate with new fastn-automerge Db API
-        // fastn_automerge::create_and_save_document(&automerge_conn, &config_path, config_doc)
-        //     .wrap_err("Failed to create rig config document")?;
+        // Store the complete config struct in the database
+        rig_config
+            .save(&automerge_db, &secret_key.public_key())
+            .wrap_err("Failed to create rig config document")?;
 
         tracing::info!(
             "Created new Rig with ID52: {} (owner: {})",
@@ -83,7 +80,7 @@ impl fastn_rig::Rig {
             path: fastn_home,
             secret_key,
             owner,
-            automerge: std::sync::Arc::new(tokio::sync::Mutex::new(automerge_conn)),
+            automerge: std::sync::Arc::new(tokio::sync::Mutex::new(automerge_db)),
         };
 
         Ok((rig, account_manager, primary_id52))
@@ -92,74 +89,35 @@ impl fastn_rig::Rig {
     /// Load an existing Rig from fastn_home
     pub fn load(fastn_home: std::path::PathBuf) -> eyre::Result<Self> {
         use eyre::WrapErr;
-        use std::str::FromStr;
 
         // Load rig's secret key
         let rig_key_path = fastn_home.join("rig");
         let (rig_id52, secret_key) = fastn_id52::SecretKey::load_from_dir(&rig_key_path, "rig")
             .wrap_err("Failed to load rig secret key")?;
 
-        // Open automerge database
+        // Open existing automerge database
         let automerge_path = fastn_home.join("automerge.sqlite");
-        let automerge_conn = if automerge_path.exists() {
-            let conn = rusqlite::Connection::open(&automerge_path)
-                .wrap_err("Failed to open automerge database")?;
-            // Run migrations in case schema has changed
-            fastn_automerge::migration::initialize_database(&conn)
-                .wrap_err("Failed to migrate automerge database")?;
-            conn
-        } else {
-            // Create automerge database for older rigs
-            let conn = rusqlite::Connection::open(&automerge_path)
-                .wrap_err("Failed to create automerge database")?;
-            fastn_automerge::migration::initialize_database(&conn)
-                .wrap_err("Failed to initialize automerge database")?;
+        let actor_id = format!("{rig_id52}-1"); // Device 1 is the rig itself
+        let automerge_db = fastn_automerge::Db::open_with_actor(&automerge_path, actor_id)
+            .wrap_err("Failed to open automerge database")?;
 
-            return Err(eyre::eyre!(
-                "Rig automerge database missing - corrupt installation"
-            ));
-        };
+        // Load owner from Automerge document using typed API
+        let config = crate::automerge::RigConfig::load(&automerge_db, &secret_key.public_key())
+            .wrap_err("Failed to load rig config document")?;
 
-        // Load owner from Automerge document
-        let _config_path = format!("/-/rig/{rig_id52}/config");
-        // TODO: Integrate with new fastn-automerge Db API
-        // let config_doc = fastn_automerge::load_document(&automerge_conn, &config_path)?
-        //     .ok_or_else(|| eyre::eyre!("Rig config document not found at {}", config_path))?;
-        struct TempWrapper {
-            doc: automerge::AutoCommit,
-        }
-        let config_doc = TempWrapper {
-            doc: automerge::AutoCommit::new(),
-        }; // Temporary placeholder
-
-        let owner_id52 = config_doc
-            .doc
-            .get(automerge::ROOT, "owner_id52")
-            .wrap_err("Failed to get owner_id52 from config")?
-            .ok_or_else(|| eyre::eyre!("owner_id52 not found in rig config"))?;
-
-        let owner_id52_str = match &owner_id52 {
-            (automerge::Value::Scalar(s), _) => match s.as_ref() {
-                automerge::ScalarValue::Str(str_val) => str_val.to_string(),
-                _ => return Err(eyre::eyre!("owner_id52 is not a string")),
-            },
-            _ => return Err(eyre::eyre!("owner_id52 is not a scalar value")),
-        };
-
-        let owner = fastn_id52::PublicKey::from_str(&owner_id52_str)
-            .wrap_err("Failed to parse owner public key")?;
+        let owner = config.owner;
 
         tracing::info!(
             "Loaded Rig with ID52: {} (owner: {})",
             rig_id52,
-            owner_id52_str
+            owner.id52()
         );
 
         Ok(Self {
             path: fastn_home,
             secret_key,
             owner,
-            automerge: std::sync::Arc::new(tokio::sync::Mutex::new(automerge_conn)),
+            automerge: std::sync::Arc::new(tokio::sync::Mutex::new(automerge_db)),
         })
     }
 
@@ -183,121 +141,52 @@ impl fastn_rig::Rig {
         &self.owner
     }
 
-    /// Check if an endpoint is online
-    pub async fn is_endpoint_online(&self, id52: &str) -> bool {
-        let _automerge = self.automerge.lock().await;
-        let _endpoint_path = format!("/-/endpoints/{id52}/status");
+    /// Check if an entity is online
+    pub async fn is_entity_online(&self, id52: &str) -> eyre::Result<bool> {
+        let automerge_db = self.automerge.lock().await;
 
-        // TODO: Integrate with new fastn-automerge Db API
-        // match fastn_automerge::load_document(&automerge, &endpoint_path) {
-        match Ok(None::<automerge::AutoCommit>)
-            as Result<Option<automerge::AutoCommit>, rusqlite::Error>
-        {
-            Ok(Some(doc)) => doc
-                .get(automerge::ROOT, "is_online")
-                .ok()
-                .and_then(|v| v)
-                .and_then(|(v, _)| match v {
-                    automerge::Value::Scalar(s) => match s.as_ref() {
-                        automerge::ScalarValue::Boolean(b) => Some(*b),
-                        _ => None,
-                    },
-                    _ => None,
-                })
-                .unwrap_or(false),
-            _ => false,
-        }
+        // Parse entity ID52 to PublicKey for type safety
+        let entity_key = fastn_id52::PublicKey::from_str(id52)?;
+
+        let is_online = crate::automerge::EntityStatus::is_online(&automerge_db, &entity_key)?;
+        Ok(is_online)
     }
 
-    /// Set endpoint online status
-    pub async fn set_endpoint_online(&self, id52: &str, online: bool) {
-        let _automerge = self.automerge.lock().await;
-        let _endpoint_path = format!("/-/endpoints/{id52}/status");
+    /// Set entity online status
+    pub async fn set_entity_online(&self, id52: &str, online: bool) -> eyre::Result<()> {
+        let automerge_db = self.automerge.lock().await;
 
-        // TODO: Integrate with new fastn-automerge Db API
-        // let mut doc = match fastn_automerge::load_document(&automerge, &endpoint_path) {
-        let mut doc = match Ok(None::<automerge::AutoCommit>)
-            as Result<Option<automerge::AutoCommit>, rusqlite::Error>
-        {
-            Ok(Some(stored)) => stored,
-            _ => {
-                let mut doc = automerge::AutoCommit::new();
-                doc.put(automerge::ROOT, "id52", id52).ok();
-                doc.put(
-                    automerge::ROOT,
-                    "created_at",
-                    chrono::Utc::now().timestamp(),
-                )
-                .ok();
-                doc
-            }
-        };
+        // Parse entity ID52 to PublicKey for type safety
+        let entity_key = fastn_id52::PublicKey::from_str(id52)?;
 
-        doc.put(automerge::ROOT, "is_online", online).ok();
-        doc.put(
-            automerge::ROOT,
-            "updated_at",
-            chrono::Utc::now().timestamp(),
-        )
-        .ok();
+        crate::automerge::EntityStatus::set_online(&automerge_db, &entity_key, online)?;
 
-        if online {
-            // TODO: Integrate with new fastn-automerge Db API
-            // fastn_automerge::update_document(&automerge, &endpoint_path, &mut doc).ok();
-        } else {
-            // TODO: Integrate with new fastn-automerge Db API
-            // fastn_automerge::create_and_save_document(&automerge, &endpoint_path, doc).ok();
-        }
+        Ok(())
     }
 
     /// Get the current entity's ID52
-    pub async fn get_current(&self) -> Option<String> {
-        let _automerge = self.automerge.lock().await;
-        let rig_id52 = self.id52();
-        let _config_path = format!("/-/rig/{rig_id52}/config");
+    pub async fn get_current(&self) -> eyre::Result<String> {
+        let automerge_db = self.automerge.lock().await;
 
-        // TODO: Integrate with new fastn-automerge Db API
-        // match fastn_automerge::load_document(&automerge, &config_path) {
-        match Ok(None::<automerge::AutoCommit>)
-            as Result<Option<automerge::AutoCommit>, rusqlite::Error>
-        {
-            Ok(Some(doc)) => doc
-                .get(automerge::ROOT, "current_entity")
-                .ok()
-                .and_then(|v| v)
-                .and_then(|(v, _)| match v {
-                    automerge::Value::Scalar(s) => match s.as_ref() {
-                        automerge::ScalarValue::Str(str_val) => Some(str_val.to_string()),
-                        _ => None,
-                    },
-                    _ => None,
-                }),
-            _ => None,
-        }
+        let current_entity = crate::automerge::RigConfig::get_current_entity(
+            &automerge_db,
+            &self.secret_key.public_key(),
+        )?;
+        Ok(current_entity.id52())
     }
 
     /// Set the current entity
     pub async fn set_current(&self, id52: &str) -> eyre::Result<()> {
-        let _automerge = self.automerge.lock().await;
-        let rig_id52 = self.id52();
-        let _config_path = format!("/-/rig/{rig_id52}/config");
+        let automerge_db = self.automerge.lock().await;
 
-        // TODO: Integrate with new fastn-automerge Db API
-        // let mut doc = fastn_automerge::load_document(&automerge, &config_path)?
-        //     .ok_or_else(|| eyre::eyre!("Rig config not found"))?
-        //     .doc;
-        let mut doc = automerge::AutoCommit::new(); // Temporary placeholder
+        // Parse entity ID52 to PublicKey for type safety
+        let entity_key = fastn_id52::PublicKey::from_str(id52)?;
 
-        doc.put(automerge::ROOT, "current_entity", id52)?;
-        doc.put(
-            automerge::ROOT,
-            "current_set_at",
-            chrono::Utc::now().timestamp(),
+        crate::automerge::RigConfig::update_current_entity(
+            &automerge_db,
+            &self.secret_key.public_key(),
+            &entity_key,
         )?;
-
-        // TODO: Integrate with new fastn-automerge Db API
-        // fastn_automerge::update_document(&automerge, &config_path, &mut doc)
-        //     .wrap_err("Failed to update current entity")?;
 
         tracing::info!("Set current entity to {}", id52);
         Ok(())

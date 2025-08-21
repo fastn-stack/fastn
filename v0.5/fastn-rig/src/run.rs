@@ -67,7 +67,7 @@ pub async fn run(home: Option<std::path::PathBuf>) -> eyre::Result<()> {
             .wrap_err("Failed to create new Rig and first account")?;
 
         // Set the newly created account as current and online
-        rig.set_endpoint_online(&primary_id52, true).await;
+        rig.set_entity_online(&primary_id52, true).await?;
         rig.set_current(&primary_id52).await?;
 
         (rig, account_manager)
@@ -75,8 +75,12 @@ pub async fn run(home: Option<std::path::PathBuf>) -> eyre::Result<()> {
 
     println!("🔑 Rig ID52: {}", rig.id52());
     println!("👤 Owner: {}", rig.owner());
-    if let Some(current) = rig.get_current().await {
-        println!("📍 Current entity: {current}");
+    match rig.get_current().await {
+        Ok(current) => println!("📍 Current entity: {current}"),
+        Err(e) => {
+            eprintln!("⚠️  Failed to get current entity: {e}");
+            return Err(e);
+        }
     }
 
     // Create graceful shutdown handler
@@ -92,7 +96,7 @@ pub async fn run(home: Option<std::path::PathBuf>) -> eyre::Result<()> {
     let mut total_endpoints = 0;
     for (id52, secret_key, account_path) in all_endpoints {
         // Check if this endpoint is online in the rig database
-        if rig.is_endpoint_online(&id52).await {
+        if rig.is_entity_online(&id52).await? {
             endpoint_manager
                 .bring_online(
                     id52,
@@ -107,7 +111,7 @@ pub async fn run(home: Option<std::path::PathBuf>) -> eyre::Result<()> {
 
     // Also bring the Rig's own endpoint online
     let rig_id52 = rig.id52();
-    rig.set_endpoint_online(&rig_id52, true).await;
+    rig.set_entity_online(&rig_id52, true).await?;
     endpoint_manager
         .bring_online(
             rig_id52,

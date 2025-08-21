@@ -53,8 +53,8 @@ pub struct Rig {
     pub(crate) secret_key: fastn_id52::SecretKey,
     /// Owner account public key (first account created)
     pub(crate) owner: fastn_id52::PublicKey,
-    /// Automerge database connection
-    pub(crate) automerge: std::sync::Arc<tokio::sync::Mutex<rusqlite::Connection>>,
+    /// Automerge database
+    pub(crate) automerge: std::sync::Arc<tokio::sync::Mutex<fastn_automerge::Db>>,
 }
 
 /// Manages all network endpoints

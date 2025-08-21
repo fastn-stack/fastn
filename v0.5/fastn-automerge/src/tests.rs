@@ -17,8 +17,18 @@ mod test {
     }
 
     fn temp_db() -> crate::Result<(Db, std::path::PathBuf)> {
-        let temp_dir = std::env::temp_dir();
-        let random_id = format!(
+        // Use tempfile for better isolation
+        let temp_dir = tempfile::TempDir::new().map_err(|e| {
+            Box::new(crate::Error::Database(rusqlite::Error::InvalidColumnType(
+                0,
+                format!("Failed to create temp dir: {e}"),
+                rusqlite::types::Type::Text,
+            )))
+        })?;
+        let db_path = temp_dir.path().join("test.db");
+
+        // Create unique actor ID per test
+        let actor_id = format!(
             "test-{}-{}",
             std::process::id(),
             std::time::SystemTime::now()
@@ -26,11 +36,12 @@ mod test {
                 .unwrap()
                 .as_nanos()
         );
-        let db_path = temp_dir.join(format!("{random_id}.db"));
-        // Clean up any existing test database
-        let _ = std::fs::remove_file(&db_path);
-        let db = Db::init_with_actor(&db_path, "test-device-1".to_string())?;
-        Ok((db, db_path))
+
+        let db = Db::init_with_actor(&db_path, actor_id)?;
+
+        // Keep temp_dir alive by storing path
+        let persistent_path = temp_dir.into_path();
+        Ok((db, persistent_path.join("test.db")))
     }
 
     #[test]
