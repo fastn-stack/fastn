@@ -12,6 +12,63 @@ pub use automerge::AutoCommit;
 
 pub type Result<T> = std::result::Result<T, Box<Error>>;
 
+#[derive(Debug, Clone, PartialEq)]
+pub enum PathError {
+    Empty,
+    TooManyPrefixes { count: usize },
+}
+
+impl std::fmt::Display for PathError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            PathError::Empty => write!(f, "Path cannot be empty"),
+            PathError::TooManyPrefixes { count } => {
+                write!(f, "Path can contain at most one '/-/' prefix, found {count}")
+            }
+        }
+    }
+}
+
+impl std::error::Error for PathError {}
+
+/// Generic typed path that can only be created by path constructors
+#[derive(Debug, Clone, PartialEq)]
+pub struct Path(String);
+
+impl Path {
+    /// Create path from string with validation - the only way to create paths
+    pub fn from_string(path: &str) -> std::result::Result<Self, PathError> {
+        // Add basic validation for all paths
+        if path.is_empty() {
+            return Err(PathError::Empty);
+        }
+        
+        // Check that at most one /-/ prefix exists
+        let slash_dash_count = path.matches("/-/").count();
+        if slash_dash_count > 1 {
+            return Err(PathError::TooManyPrefixes { count: slash_dash_count });
+        }
+        
+        Ok(Self(path.to_string()))
+    }
+    
+    pub fn as_str(&self) -> &str {
+        &self.0
+    }
+}
+
+impl rusqlite::ToSql for Path {
+    fn to_sql(&self) -> rusqlite::Result<rusqlite::types::ToSqlOutput<'_>> {
+        self.0.to_sql()
+    }
+}
+
+impl std::fmt::Display for Path {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
 #[derive(Debug)]
 pub enum Error {
     NotFound(String),
