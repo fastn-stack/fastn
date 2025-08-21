@@ -7,7 +7,7 @@ pub fn run_command(cli: super::Cli) -> eyre::Result<()> {
         _ => {
             // For all other commands, open the existing database
             let actor_id = super::utils::get_actor_id();
-            let db = fastn_automerge::Db::open_with_actor(std::path::Path::new(&cli.db), actor_id)?;
+            let db = crate::Db::open_with_actor(std::path::Path::new(&cli.db), actor_id)?;
             
             match cli.command {
                 super::Commands::Init => unreachable!(),
@@ -60,16 +60,16 @@ pub fn run_command(cli: super::Cli) -> eyre::Result<()> {
 fn init_database(db_path: &str) -> eyre::Result<()> {
     let actor_id = super::utils::get_actor_id();
     let path = std::path::Path::new(db_path);
-    let _db = fastn_automerge::Db::init_with_actor(path, actor_id)?;
+    let _db = crate::Db::init_with_actor(path, actor_id)?;
     Ok(())
 }
 
-fn create_document(db: &fastn_automerge::Db, path: &str, json: &str) -> eyre::Result<()> {
+fn create_document(db: &crate::Db, path: &str, json: &str) -> eyre::Result<()> {
     // Validate JSON first
     let _value = super::utils::parse_json(json)?;
 
     // Create typed path with validation
-    let doc_id = fastn_automerge::DocumentId::from_string(path)?;
+    let doc_id = crate::DocumentId::from_string(path)?;
     
     // For CLI simplicity, store JSON as string with metadata
     let mut data = std::collections::HashMap::new();
@@ -80,8 +80,8 @@ fn create_document(db: &fastn_automerge::Db, path: &str, json: &str) -> eyre::Re
     Ok(())
 }
 
-fn get_document(db: &fastn_automerge::Db, path: &str, pretty: bool, output: Option<&str>) -> eyre::Result<()> {
-    let doc_id = fastn_automerge::DocumentId::from_string(path)?;
+fn get_document(db: &crate::Db, path: &str, pretty: bool, output: Option<&str>) -> eyre::Result<()> {
+    let doc_id = crate::DocumentId::from_string(path)?;
     let data: std::collections::HashMap<String, String> = db.get(&doc_id)?;
     
     // Extract JSON data
@@ -107,12 +107,12 @@ fn get_document(db: &fastn_automerge::Db, path: &str, pretty: bool, output: Opti
     Ok(())
 }
 
-fn update_document(db: &fastn_automerge::Db, path: &str, json: &str) -> eyre::Result<()> {
+fn update_document(db: &crate::Db, path: &str, json: &str) -> eyre::Result<()> {
     // Validate JSON first
     let _value = super::utils::parse_json(json)?;
 
     // Create typed path
-    let doc_id = fastn_automerge::DocumentId::from_string(path)?;
+    let doc_id = crate::DocumentId::from_string(path)?;
     
     // Update with new JSON data
     let mut data = std::collections::HashMap::new();
@@ -123,12 +123,12 @@ fn update_document(db: &fastn_automerge::Db, path: &str, json: &str) -> eyre::Re
     Ok(())
 }
 
-fn set_document(db: &fastn_automerge::Db, path: &str, json: &str) -> eyre::Result<()> {
+fn set_document(db: &crate::Db, path: &str, json: &str) -> eyre::Result<()> {
     // Validate JSON first
     let _value = super::utils::parse_json(json)?;
 
     // Create typed path
-    let doc_id = fastn_automerge::DocumentId::from_string(path)?;
+    let doc_id = crate::DocumentId::from_string(path)?;
     
     // Prepare data
     let mut data = std::collections::HashMap::new();
@@ -144,8 +144,8 @@ fn set_document(db: &fastn_automerge::Db, path: &str, json: &str) -> eyre::Resul
     Ok(())
 }
 
-fn delete_document(db: &fastn_automerge::Db, path: &str, confirm: bool) -> eyre::Result<()> {
-    let doc_id = fastn_automerge::DocumentId::from_string(path)?;
+fn delete_document(db: &crate::Db, path: &str, confirm: bool) -> eyre::Result<()> {
+    let doc_id = crate::DocumentId::from_string(path)?;
     
     if !confirm && !super::utils::confirm_action(&format!("Delete document at {path}?")) {
         println!("Cancelled");
@@ -156,12 +156,12 @@ fn delete_document(db: &fastn_automerge::Db, path: &str, confirm: bool) -> eyre:
     Ok(())
 }
 
-fn list_documents(db: &fastn_automerge::Db, prefix: Option<&str>, details: bool) -> eyre::Result<()> {
+fn list_documents(db: &crate::Db, prefix: Option<&str>, details: bool) -> eyre::Result<()> {
     let documents = db.list(prefix)?;
     
     if details {
         for path in documents {
-            let doc_id = fastn_automerge::DocumentId::from_string(&path)?;
+            let doc_id = crate::DocumentId::from_string(&path)?;
             if db.exists(&doc_id)? {
                 println!("{path}");
             }
@@ -175,7 +175,7 @@ fn list_documents(db: &fastn_automerge::Db, prefix: Option<&str>, details: bool)
     Ok(())
 }
 
-fn clean_database(db: &fastn_automerge::Db, force: bool) -> eyre::Result<()> {
+fn clean_database(db: &crate::Db, force: bool) -> eyre::Result<()> {
     if !force && !super::utils::confirm_action("This will delete ALL documents. Are you sure?") {
         println!("Cancelled");
         return Ok(());
@@ -186,8 +186,8 @@ fn clean_database(db: &fastn_automerge::Db, force: bool) -> eyre::Result<()> {
     Ok(())
 }
 
-fn show_history(db: &fastn_automerge::Db, path: &str, commit_hash: Option<&str>, short: bool) -> eyre::Result<()> {
-    let doc_id = fastn_automerge::DocumentId::from_string(path)?;
+fn show_history(db: &crate::Db, path: &str, commit_hash: Option<&str>, short: bool) -> eyre::Result<()> {
+    let doc_id = crate::DocumentId::from_string(path)?;
     let history = db.history(&doc_id, commit_hash)?;
     
     println!("History for {}", history.path);
@@ -217,8 +217,8 @@ fn show_history(db: &fastn_automerge::Db, path: &str, commit_hash: Option<&str>,
     Ok(())
 }
 
-fn show_info(db: &fastn_automerge::Db, path: &str) -> eyre::Result<()> {
-    let doc_id = fastn_automerge::DocumentId::from_string(path)?;
+fn show_info(db: &crate::Db, path: &str) -> eyre::Result<()> {
+    let doc_id = crate::DocumentId::from_string(path)?;
     
     if !db.exists(&doc_id)? {
         return Err(eyre::eyre!("Document not found: {path}"));
