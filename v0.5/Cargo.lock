@@ -1414,6 +1414,7 @@ version = "0.1.0"
 dependencies = [
  "argon2",
  "automerge",
+ "autosurgeon",
  "chrono",
  "eyre",
  "fastn-automerge",
@@ -1433,6 +1434,7 @@ dependencies = [
  "automerge",
  "autosurgeon",
  "clap",
+ "eyre",
  "rusqlite",
  "serde_json",
  "tempfile",

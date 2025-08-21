@@ -1,29 +1,15 @@
-/// Typed path for rig configuration documents
-#[derive(Debug, Clone, PartialEq)]
-pub struct RigConfigPath(String);
-
-impl RigConfigPath {
-    pub fn new(rig_id52: &fastn_id52::PublicKey) -> Self {
-        Self(format!("/-/rig/{}/config", rig_id52.id52()))
-    }
-
-    pub fn as_str(&self) -> &str {
-        &self.0
-    }
+/// Document ID constructor for rig configuration documents
+pub fn rig_config_id(rig_id52: &fastn_id52::PublicKey) -> fastn_automerge::DocumentId {
+    let id_str = format!("/-/rig/{}/config", rig_id52.id52());
+    fastn_automerge::DocumentId::from_string(&id_str)
+        .expect("Generated rig config document ID should be valid")
 }
 
-/// Typed path for entity status documents
-#[derive(Debug, Clone, PartialEq)]
-pub struct EntityStatusPath(String);
-
-impl EntityStatusPath {
-    pub fn new(entity_id52: &fastn_id52::PublicKey) -> Self {
-        Self(format!("/-/entities/{}/status", entity_id52.id52()))
-    }
-
-    pub fn as_str(&self) -> &str {
-        &self.0
-    }
+/// Document ID constructor for entity status documents
+pub fn entity_status_id(entity_id52: &fastn_id52::PublicKey) -> fastn_automerge::DocumentId {
+    let id_str = format!("/-/entities/{}/status", entity_id52.id52());
+    fastn_automerge::DocumentId::from_string(&id_str)
+        .expect("Generated entity status document ID should be valid")
 }
 
 #[derive(Debug, Clone, PartialEq, fastn_automerge::Reconcile, fastn_automerge::Hydrate)]
@@ -37,24 +23,17 @@ pub struct RigConfig {
 }
 
 impl RigConfig {
-    pub fn load(
-        db: &fastn_automerge::Db,
-        rig_id52: &fastn_id52::PublicKey,
-    ) -> fastn_automerge::Result<Self> {
-        let path = RigConfigPath::new(rig_id52);
-        db.get(path.as_str())
+    pub fn load(db: &fastn_automerge::Db, rig_id52: &fastn_id52::PublicKey) -> fastn_automerge::Result<Self> {
+        let doc_id = rig_config_id(rig_id52);
+        db.get(&doc_id)
     }
 
-    pub fn save(
-        &self,
-        db: &fastn_automerge::Db,
-        rig_id52: &fastn_id52::PublicKey,
-    ) -> fastn_automerge::Result<()> {
-        let path = RigConfigPath::new(rig_id52);
-        if db.exists(path.as_str())? {
-            db.update(path.as_str(), self)
+    pub fn save(&self, db: &fastn_automerge::Db, rig_id52: &fastn_id52::PublicKey) -> fastn_automerge::Result<()> {
+        let doc_id = rig_config_id(rig_id52);
+        if db.exists(&doc_id)? {
+            db.update(&doc_id, self)
         } else {
-            db.create(path.as_str(), self)
+            db.create(&doc_id, self)
         }
     }
 
@@ -63,8 +42,8 @@ impl RigConfig {
         rig_id52: &fastn_id52::PublicKey,
         entity: &fastn_id52::PublicKey,
     ) -> fastn_automerge::Result<()> {
-        let path = RigConfigPath::new(rig_id52);
-        db.modify::<Self, _>(path.as_str(), |config| {
+        let doc_id = rig_config_id(rig_id52);
+        db.modify::<Self, _>(&doc_id, |config| {
             config.current_entity = *entity;
         })
     }
@@ -89,24 +68,17 @@ pub struct EntityStatus {
 }
 
 impl EntityStatus {
-    pub fn load(
-        db: &fastn_automerge::Db,
-        entity_id52: &fastn_id52::PublicKey,
-    ) -> fastn_automerge::Result<Self> {
-        let path = EntityStatusPath::new(entity_id52);
-        db.get(path.as_str())
+    pub fn load(db: &fastn_automerge::Db, entity_id52: &fastn_id52::PublicKey) -> fastn_automerge::Result<Self> {
+        let doc_id = entity_status_id(entity_id52);
+        db.get(&doc_id)
     }
 
-    pub fn save(
-        &self,
-        db: &fastn_automerge::Db,
-        entity_id52: &fastn_id52::PublicKey,
-    ) -> fastn_automerge::Result<()> {
-        let path = EntityStatusPath::new(entity_id52);
-        if db.exists(path.as_str())? {
-            db.update(path.as_str(), self)
+    pub fn save(&self, db: &fastn_automerge::Db, entity_id52: &fastn_id52::PublicKey) -> fastn_automerge::Result<()> {
+        let doc_id = entity_status_id(entity_id52);
+        if db.exists(&doc_id)? {
+            db.update(&doc_id, self)
         } else {
-            db.create(path.as_str(), self)
+            db.create(&doc_id, self)
         }
     }
 
@@ -125,11 +97,11 @@ impl EntityStatus {
         entity_id52: &fastn_id52::PublicKey,
         online: bool,
     ) -> fastn_automerge::Result<()> {
-        let path = EntityStatusPath::new(entity_id52);
-
+        let doc_id = entity_status_id(entity_id52);
+        
         // Try to update existing document, create if it doesn't exist
-        if db.exists(path.as_str())? {
-            db.modify::<Self, _>(path.as_str(), |status| {
+        if db.exists(&doc_id)? {
+            db.modify::<Self, _>(&doc_id, |status| {
                 status.is_online = online;
                 status.updated_at = std::time::SystemTime::now()
                     .duration_since(std::time::UNIX_EPOCH)
@@ -146,7 +118,7 @@ impl EntityStatus {
                     .unwrap()
                     .as_secs() as i64,
             };
-            db.create(path.as_str(), &status)
+            db.create(&doc_id, &status)
         }
     }
 }

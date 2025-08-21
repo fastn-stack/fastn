@@ -37,6 +37,7 @@
 
 extern crate self as fastn_account;
 
+pub mod automerge;
 mod account;
 mod account_manager;
 mod alias;
