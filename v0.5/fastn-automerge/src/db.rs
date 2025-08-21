@@ -329,13 +329,22 @@ impl crate::Db {
         }
     }
 
+}
+
+#[derive(Debug)]
+pub enum ExistsError {
+    ActorNotSet(crate::ActorIdNotSet),
+    Database(rusqlite::Error),
+}
+
+impl crate::Db {
     /// Check if a document exists
-    pub fn exists(&self, path: &crate::DocumentId) -> crate::Result<bool> {
+    pub fn exists(&self, path: &crate::DocumentId) -> std::result::Result<bool, ExistsError> {
         let count: i32 = self.conn.query_row(
             "SELECT COUNT(*) FROM fastn_documents WHERE path = ?1",
             [path],
             |row| row.get(0),
-        )?;
+        ).map_err(ExistsError::Database)?;
         Ok(count > 0)
     }
 

@@ -128,6 +128,7 @@ impl std::error::Error for crate::db::InitError {}
 impl std::error::Error for crate::db::CreateError {}
 impl std::error::Error for crate::db::UpdateError {}
 impl std::error::Error for crate::db::DeleteError {}
+impl std::error::Error for crate::db::ExistsError {}
 
 // Add missing Display implementations that were removed
 impl std::fmt::Display for crate::db::LoadError {
@@ -172,6 +173,15 @@ impl std::fmt::Display for crate::db::UpdateError {
             crate::db::UpdateError::Database(e) => write!(f, "Database error: {e}"),
             crate::db::UpdateError::Automerge(e) => write!(f, "Automerge error: {e}"),
             crate::db::UpdateError::Reconcile(e) => write!(f, "Reconcile error: {e}"),
+        }
+    }
+}
+
+impl std::fmt::Display for crate::db::ExistsError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            crate::db::ExistsError::ActorNotSet(e) => write!(f, "{e}"),
+            crate::db::ExistsError::Database(e) => write!(f, "Database error: {e}"),
         }
     }
 }

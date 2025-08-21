@@ -135,7 +135,32 @@ pub struct ActorIdNotSet;
 #[derive(Debug, Clone, PartialEq)]
 pub struct ActorIdAlreadySet;
 
+// Common document operation errors for all consumers
+#[derive(Debug)]
+pub enum DocumentLoadError {
+    Get(GetError),
+}
 
+#[derive(Debug)]
+pub enum DocumentSaveError {
+    Exists(db::ExistsError),
+    Update(db::UpdateError),
+    Create(db::CreateError),
+}
+
+// TODO: Add derive macro for document structs:
+// #[derive(Document)]
+// struct MyDoc {
+//     #[document_id_field]
+//     id: PublicKey,
+//     data: String,
+// }
+// 
+// This would auto-generate:
+// - `load(db, id) -> Result<Self, DocumentLoadError>`
+// - `save(&self, db) -> Result<(), DocumentSaveError>` 
+// - Document ID constructor function
+// - Uses the #[document_id_field] to determine the ID
 
 #[derive(Debug)]
 pub enum CreateError {
