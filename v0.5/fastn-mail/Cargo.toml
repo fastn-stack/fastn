@@ -6,6 +6,7 @@ authors.workspace = true
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
+description = "SMTP and IMAP implementation for fastn p2p email"
 
 [[bin]]
 name = "fastn-mail"
@@ -16,24 +17,21 @@ required-features = ["cli"]
 cli = ["clap", "tracing-subscriber"]
 
 [dependencies]
-# Core dependencies
-fastn-automerge.workspace = true
-autosurgeon.workspace = true
 automerge.workspace = true
+autosurgeon.workspace = true
+chrono.workspace = true
+eyre.workspace = true
+fastn-automerge.workspace = true
 fastn-id52 = { workspace = true, features = ["automerge"] }
+futures.workspace = true
+regex.workspace = true
+rusqlite.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
-tracing.workspace = true
+tokio-util.workspace = true
 tokio.workspace = true
-
-# For database storage
-rusqlite.workspace = true
-
-# For timestamps
-chrono.workspace = true
-
-# For email parsing
+tracing.workspace = true
 mail-parser = "0.9"
 
 # CLI dependencies (optional)
