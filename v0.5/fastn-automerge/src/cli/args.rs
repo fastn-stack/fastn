@@ -90,4 +90,11 @@ pub enum Commands {
         /// Document path
         path: String,
     },
+    
+    // TODO: Add actor ID management commands for proper multi-device support:
+    // - set-actor-id <entity_id52> <device_number> - Set the database actor ID
+    // - next-actor-id <entity_id52> - Get next device number for entity  
+    // - get-actor-id - Show current database actor ID
+    // - actor-info - Show database identity and actor counter status
+    // These commands are needed to replace the dummy "cli-dummy-entity" usage
 }

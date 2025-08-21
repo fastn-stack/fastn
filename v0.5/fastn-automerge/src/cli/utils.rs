@@ -1,11 +1,14 @@
-pub fn get_actor_id() -> String {
-    // Try environment variable first
-    if let Ok(actor_id) = std::env::var("FASTN_AUTOMERGE_ACTOR_ID") {
-        return actor_id;
+/// WARNING: This generates a DUMMY entity ID for CLI testing only!
+/// Real applications should use actual entity ID52 values.
+/// This function exists only for CLI convenience and should NOT be used in production code.
+pub fn get_dummy_cli_entity_id() -> String {
+    // Try environment variable first (for testing)
+    if let Ok(entity_id) = std::env::var("FASTN_AUTOMERGE_ENTITY_ID") {
+        return entity_id;
     }
 
-    // Generate a simple default actor ID
-    format!("cli-user-{}", 1)
+    // Generate a dummy entity ID for CLI testing
+    "cli-dummy-entity".to_string()
 }
 
 pub fn read_json_file(file_path: &str) -> eyre::Result<String> {

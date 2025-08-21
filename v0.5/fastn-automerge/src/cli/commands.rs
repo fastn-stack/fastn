@@ -6,8 +6,8 @@ pub fn run_command(cli: super::Cli) -> eyre::Result<()> {
         }
         _ => {
             // For all other commands, open the existing database
-            let actor_id = super::utils::get_actor_id();
-            let db = fastn_automerge::Db::open_with_actor(std::path::Path::new(&cli.db), actor_id)?;
+            // WARNING: Using dummy entity ID for CLI - real apps should use actual entity ID52
+            let db = fastn_automerge::Db::open(std::path::Path::new(&cli.db))?;
 
             match cli.command {
                 super::Commands::Init => unreachable!(),
@@ -66,9 +66,10 @@ pub fn run_command(cli: super::Cli) -> eyre::Result<()> {
 }
 
 fn init_database(db_path: &str) -> eyre::Result<()> {
-    let actor_id = super::utils::get_actor_id();
+    // WARNING: Using dummy entity ID for CLI - real apps should use actual entity ID52
+    let dummy_entity_id = super::utils::get_dummy_cli_entity_id();
     let path = std::path::Path::new(db_path);
-    let _db = fastn_automerge::Db::init_with_actor(path, actor_id)?;
+    let _db = fastn_automerge::Db::init(path, &dummy_entity_id)?;
     Ok(())
 }
 
@@ -150,10 +151,10 @@ fn set_document(db: &fastn_automerge::Db, path: &str, json: &str) -> eyre::Resul
 
     // Set = create if not exists, update if exists
     if db.exists(&doc_id)? {
-        db.update(&doc_id, &data)
+        db.update(&doc_id, &data)?;
     } else {
-        db.create(&doc_id, &data)
-    }?;
+        db.create(&doc_id, &data)?;
+    }
     Ok(())
 }
 

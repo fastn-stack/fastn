@@ -27,17 +27,9 @@ mod test {
         })?;
         let db_path = temp_dir.path().join("test.db");
 
-        // Create unique actor ID per test
-        let actor_id = format!(
-            "test-{}-{}",
-            std::process::id(),
-            std::time::SystemTime::now()
-                .duration_since(std::time::UNIX_EPOCH)
-                .unwrap()
-                .as_nanos()
-        );
+        // Use simple test entity ID since init() now handles actor ID setup
 
-        let db = Db::init_with_actor(&db_path, actor_id)?;
+        let db = Db::init(&db_path, "test-entity")?;
 
         // Return temp_dir to keep it alive
         Ok((db, temp_dir))
