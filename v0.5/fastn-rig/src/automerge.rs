@@ -23,13 +23,16 @@ pub struct RigConfig {
 }
 
 impl RigConfig {
-    pub fn load(db: &fastn_automerge::Db, rig_id52: &fastn_id52::PublicKey) -> fastn_automerge::Result<Self> {
+    pub fn load(
+        db: &fastn_automerge::Db,
+        rig_id52: &fastn_id52::PublicKey,
+    ) -> fastn_automerge::Result<Self> {
         let doc_id = rig_config_id(rig_id52);
         db.get(&doc_id)
     }
 
-    pub fn save(&self, db: &fastn_automerge::Db, rig_id52: &fastn_id52::PublicKey) -> fastn_automerge::Result<()> {
-        let doc_id = rig_config_id(rig_id52);
+    pub fn save(&self, db: &fastn_automerge::Db) -> fastn_automerge::Result<()> {
+        let doc_id = rig_config_id(&self.owner);
         if db.exists(&doc_id)? {
             db.update(&doc_id, self)
         } else {
@@ -68,13 +71,16 @@ pub struct EntityStatus {
 }
 
 impl EntityStatus {
-    pub fn load(db: &fastn_automerge::Db, entity_id52: &fastn_id52::PublicKey) -> fastn_automerge::Result<Self> {
+    pub fn load(
+        db: &fastn_automerge::Db,
+        entity_id52: &fastn_id52::PublicKey,
+    ) -> fastn_automerge::Result<Self> {
         let doc_id = entity_status_id(entity_id52);
         db.get(&doc_id)
     }
 
-    pub fn save(&self, db: &fastn_automerge::Db, entity_id52: &fastn_id52::PublicKey) -> fastn_automerge::Result<()> {
-        let doc_id = entity_status_id(entity_id52);
+    pub fn save(&self, db: &fastn_automerge::Db) -> fastn_automerge::Result<()> {
+        let doc_id = entity_status_id(&self.entity);
         if db.exists(&doc_id)? {
             db.update(&doc_id, self)
         } else {
@@ -98,7 +104,7 @@ impl EntityStatus {
         online: bool,
     ) -> fastn_automerge::Result<()> {
         let doc_id = entity_status_id(entity_id52);
-        
+
         // Try to update existing document, create if it doesn't exist
         if db.exists(&doc_id)? {
             db.modify::<Self, _>(&doc_id, |status| {

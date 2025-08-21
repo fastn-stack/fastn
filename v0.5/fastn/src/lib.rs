@@ -7,6 +7,9 @@ extern crate self as fastn;
 // we are adding this so we can continue to use unused_crate_dependencies, as only
 // main depends on tokio, and if we do not have the following unused_crate_dependencies
 // complains
+use clap as _;
+use eyre as _;
+use fastn_automerge as _;
 use fastn_observer as _;
 use fastn_rig as _;
 

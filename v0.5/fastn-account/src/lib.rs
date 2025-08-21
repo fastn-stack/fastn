@@ -37,11 +37,11 @@
 
 extern crate self as fastn_account;
 
-pub mod automerge;
 mod account;
 mod account_manager;
 mod alias;
 pub mod auth;
+pub mod automerge;
 
 /// Thread-safe handle to an account
 #[derive(Debug, Clone)]

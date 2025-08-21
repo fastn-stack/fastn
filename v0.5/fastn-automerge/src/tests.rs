@@ -16,7 +16,7 @@ mod test {
         optional: Option<String>,
     }
 
-    fn temp_db() -> crate::Result<(Db, std::path::PathBuf)> {
+    fn temp_db() -> crate::Result<(Db, tempfile::TempDir)> {
         // Use tempfile for better isolation
         let temp_dir = tempfile::TempDir::new().map_err(|e| {
             Box::new(crate::Error::Database(rusqlite::Error::InvalidColumnType(
@@ -39,9 +39,8 @@ mod test {
 
         let db = Db::init_with_actor(&db_path, actor_id)?;
 
-        // Keep temp_dir alive by storing path  
-        let persistent_path = temp_dir.into_path();
-        Ok((db, persistent_path.join("test.db")))
+        // Return temp_dir to keep it alive
+        Ok((db, temp_dir))
     }
 
     // Helper function for tests to create document IDs easily
@@ -51,7 +50,7 @@ mod test {
 
     #[test]
     fn test_create_and_get() -> crate::Result<()> {
-        let (db, _db_path) = temp_db()?;
+        let (db, _temp_dir) = temp_db()?;
 
         let doc = TestDoc {
             name: "test document".to_string(),
@@ -71,7 +70,7 @@ mod test {
 
     #[test]
     fn test_create_duplicate_fails() -> crate::Result<()> {
-        let (db, _db_path) = temp_db()?;
+        let (db, _temp_dir) = temp_db()?;
 
         let doc = TestDoc {
             name: "test".to_string(),
@@ -90,7 +89,7 @@ mod test {
 
     #[test]
     fn test_update() -> crate::Result<()> {
-        let (db, _db_path) = temp_db()?;
+        let (db, _temp_dir) = temp_db()?;
 
         let original = TestDoc {
             name: "original".to_string(),
@@ -116,7 +115,7 @@ mod test {
 
     #[test]
     fn test_modify() -> crate::Result<()> {
-        let (db, _db_path) = temp_db()?;
+        let (db, _temp_dir) = temp_db()?;
 
         let doc = TestDoc {
             name: "modify test".to_string(),
@@ -142,7 +141,7 @@ mod test {
 
     #[test]
     fn test_delete() -> crate::Result<()> {
-        let (db, _db_path) = temp_db()?;
+        let (db, _temp_dir) = temp_db()?;
 
         let doc = TestDoc {
             name: "to delete".to_string(),
@@ -167,7 +166,7 @@ mod test {
 
     #[test]
     fn test_delete_nonexistent_fails() -> crate::Result<()> {
-        let (db, _db_path) = temp_db()?;
+        let (db, _temp_dir) = temp_db()?;
 
         assert!(db.delete(&doc_id("/nonexistent")).is_err());
 
@@ -176,7 +175,7 @@ mod test {
 
     #[test]
     fn test_exists() -> crate::Result<()> {
-        let (db, _db_path) = temp_db()?;
+        let (db, _temp_dir) = temp_db()?;
 
         assert!(!db.exists(&doc_id("/test/nonexistent"))?);
 
@@ -194,7 +193,7 @@ mod test {
 
     #[test]
     fn test_list() -> crate::Result<()> {
-        let (db, _db_path) = temp_db()?;
+        let (db, _temp_dir) = temp_db()?;
 
         let doc = TestDoc {
             name: "list test".to_string(),
@@ -225,7 +224,7 @@ mod test {
 
     #[test]
     fn test_nested_structures() -> crate::Result<()> {
-        let (db, _db_path) = temp_db()?;
+        let (db, _temp_dir) = temp_db()?;
 
         let nested = NestedDoc {
             title: "nested document".to_string(),
@@ -249,7 +248,7 @@ mod test {
 
     #[test]
     fn test_get_document() -> crate::Result<()> {
-        let (db, _db_path) = temp_db()?;
+        let (db, _temp_dir) = temp_db()?;
 
         let doc = TestDoc {
             name: "raw doc".to_string(),
@@ -271,7 +270,7 @@ mod test {
 
     #[test]
     fn test_actor_id_consistency() -> crate::Result<()> {
-        let (db, _db_path) = temp_db()?;
+        let (db, _temp_dir) = temp_db()?;
 
         let doc1 = TestDoc {
             name: "doc1".to_string(),

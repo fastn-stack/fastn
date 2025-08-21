@@ -55,13 +55,16 @@ pub struct AliasReadme {
 }
 
 impl AliasReadme {
-    pub fn load(db: &fastn_automerge::Db, alias_id52: &fastn_id52::PublicKey) -> fastn_automerge::Result<Self> {
+    pub fn load(
+        db: &fastn_automerge::Db,
+        alias_id52: &fastn_id52::PublicKey,
+    ) -> fastn_automerge::Result<Self> {
         let doc_id = alias_readme_id(alias_id52);
         db.get(&doc_id)
     }
 
-    pub fn save(&self, db: &fastn_automerge::Db, alias_id52: &fastn_id52::PublicKey) -> fastn_automerge::Result<()> {
-        let doc_id = alias_readme_id(alias_id52);
+    pub fn save(&self, db: &fastn_automerge::Db) -> fastn_automerge::Result<()> {
+        let doc_id = alias_readme_id(&self.alias);
         if db.exists(&doc_id)? {
             db.update(&doc_id, self)
         } else {
@@ -83,13 +86,16 @@ pub struct AliasNotes {
 }
 
 impl AliasNotes {
-    pub fn load(db: &fastn_automerge::Db, alias_id52: &fastn_id52::PublicKey) -> fastn_automerge::Result<Self> {
+    pub fn load(
+        db: &fastn_automerge::Db,
+        alias_id52: &fastn_id52::PublicKey,
+    ) -> fastn_automerge::Result<Self> {
         let doc_id = alias_notes_id(alias_id52);
         db.get(&doc_id)
     }
 
-    pub fn save(&self, db: &fastn_automerge::Db, alias_id52: &fastn_id52::PublicKey) -> fastn_automerge::Result<()> {
-        let doc_id = alias_notes_id(alias_id52);
+    pub fn save(&self, db: &fastn_automerge::Db) -> fastn_automerge::Result<()> {
+        let doc_id = alias_notes_id(&self.alias);
         if db.exists(&doc_id)? {
             db.update(&doc_id, self)
         } else {

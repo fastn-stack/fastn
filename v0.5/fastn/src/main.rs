@@ -1,11 +1,26 @@
 #[tokio::main]
 async fn main() {
     fastn_observer::observe();
-    let command = fastn::commands::parse();
+    let command = clap::Parser::parse();
 
     // Handle Run command separately since it doesn't need package/router
-    if let fastn::commands::Cli::Run { home } = command {
-        if let Err(e) = fastn_rig::run(home).await {
+    if let fastn::commands::Cli::Run { home } = &command {
+        if let Err(e) = fastn_rig::run(home.clone()).await {
+            eprintln!("Error: {e}");
+            std::process::exit(1);
+        }
+        return;
+    }
+
+    // Handle Automerge command by delegating to fastn-automerge
+    if let fastn::commands::Cli::Automerge(automerge_cmd) = command {
+        // Create a full fastn-automerge CLI with the global db option
+        let automerge_cli = fastn_automerge::cli::Cli {
+            db: "fastn-automerge.sqlite".to_string(), // Default db path
+            command: automerge_cmd,
+        };
+
+        if let Err(e) = fastn_automerge::cli::run_command(automerge_cli) {
             eprintln!("Error: {e}");
             std::process::exit(1);
         }
@@ -21,13 +36,14 @@ async fn main() {
     // do common build stuff here
     match command {
         fastn::commands::Cli::Run { .. } => unreachable!(), // Already handled above
+        fastn::commands::Cli::Automerge(_) => unreachable!(), // Already handled above
         fastn::commands::Cli::Serve(input) => input.run(package, router).await,
         fastn::commands::Cli::Render(input) => input.run(&mut package, router).await,
         fastn::commands::Cli::Build(input) => input.run(package).await,
         fastn::commands::Cli::Static { .. } => {}
         fastn::commands::Cli::Test { .. } => {}
-        fastn::commands::Cli::Fmt(_) => {}
+        fastn::commands::Cli::Fmt { .. } => {}
         fastn::commands::Cli::Upload { .. } => {}
-        fastn::commands::Cli::Clone(_) => {}
+        fastn::commands::Cli::Clone { .. } => {}
     };
 }

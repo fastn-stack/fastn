@@ -7,8 +7,8 @@ pub fn run_command(cli: super::Cli) -> eyre::Result<()> {
         _ => {
             // For all other commands, open the existing database
             let actor_id = super::utils::get_actor_id();
-            let db = crate::Db::open_with_actor(std::path::Path::new(&cli.db), actor_id)?;
-            
+            let db = fastn_automerge::Db::open_with_actor(std::path::Path::new(&cli.db), actor_id)?;
+
             match cli.command {
                 super::Commands::Init => unreachable!(),
                 super::Commands::Create { path, json, file } => {
@@ -23,7 +23,11 @@ pub fn run_command(cli: super::Cli) -> eyre::Result<()> {
                     create_document(&db, &path, &json_data)?;
                     println!("Created document at {path}");
                 }
-                super::Commands::Get { path, pretty, output } => {
+                super::Commands::Get {
+                    path,
+                    pretty,
+                    output,
+                } => {
                     get_document(&db, &path, pretty, output.as_deref())?;
                 }
                 super::Commands::Update { path, json } => {
@@ -44,7 +48,11 @@ pub fn run_command(cli: super::Cli) -> eyre::Result<()> {
                 super::Commands::Clean { force } => {
                     clean_database(&db, force)?;
                 }
-                super::Commands::History { path, commit_hash, short } => {
+                super::Commands::History {
+                    path,
+                    commit_hash,
+                    short,
+                } => {
                     show_history(&db, &path, commit_hash.as_deref(), short)?;
                 }
                 super::Commands::Info { path } => {
@@ -53,24 +61,24 @@ pub fn run_command(cli: super::Cli) -> eyre::Result<()> {
             }
         }
     }
-    
+
     Ok(())
 }
 
 fn init_database(db_path: &str) -> eyre::Result<()> {
     let actor_id = super::utils::get_actor_id();
     let path = std::path::Path::new(db_path);
-    let _db = crate::Db::init_with_actor(path, actor_id)?;
+    let _db = fastn_automerge::Db::init_with_actor(path, actor_id)?;
     Ok(())
 }
 
-fn create_document(db: &crate::Db, path: &str, json: &str) -> eyre::Result<()> {
+fn create_document(db: &fastn_automerge::Db, path: &str, json: &str) -> eyre::Result<()> {
     // Validate JSON first
     let _value = super::utils::parse_json(json)?;
 
     // Create typed path with validation
-    let doc_id = crate::DocumentId::from_string(path)?;
-    
+    let doc_id = fastn_automerge::DocumentId::from_string(path)?;
+
     // For CLI simplicity, store JSON as string with metadata
     let mut data = std::collections::HashMap::new();
     data.insert("json_data".to_string(), json.to_string());
@@ -80,15 +88,20 @@ fn create_document(db: &crate::Db, path: &str, json: &str) -> eyre::Result<()> {
     Ok(())
 }
 
-fn get_document(db: &crate::Db, path: &str, pretty: bool, output: Option<&str>) -> eyre::Result<()> {
-    let doc_id = crate::DocumentId::from_string(path)?;
+fn get_document(
+    db: &fastn_automerge::Db,
+    path: &str,
+    pretty: bool,
+    output: Option<&str>,
+) -> eyre::Result<()> {
+    let doc_id = fastn_automerge::DocumentId::from_string(path)?;
     let data: std::collections::HashMap<String, String> = db.get(&doc_id)?;
-    
+
     // Extract JSON data
-    let json_str = data.get("json_data").ok_or_else(|| {
-        eyre::eyre!("Document does not contain JSON data")
-    })?;
-    
+    let json_str = data
+        .get("json_data")
+        .ok_or_else(|| eyre::eyre!("Document does not contain JSON data"))?;
+
     let json_output = if pretty {
         // Parse and re-format for pretty printing
         let value = super::utils::parse_json(json_str)?;
@@ -96,45 +109,45 @@ fn get_document(db: &crate::Db, path: &str, pretty: bool, output: Option<&str>) 
     } else {
         json_str.clone()
     };
-    
+
     if let Some(output_path) = output {
         std::fs::write(output_path, &json_output)?;
         println!("Output written to {output_path}");
     } else {
         println!("{json_output}");
     }
-    
+
     Ok(())
 }
 
-fn update_document(db: &crate::Db, path: &str, json: &str) -> eyre::Result<()> {
+fn update_document(db: &fastn_automerge::Db, path: &str, json: &str) -> eyre::Result<()> {
     // Validate JSON first
     let _value = super::utils::parse_json(json)?;
 
     // Create typed path
-    let doc_id = crate::DocumentId::from_string(path)?;
-    
+    let doc_id = fastn_automerge::DocumentId::from_string(path)?;
+
     // Update with new JSON data
     let mut data = std::collections::HashMap::new();
     data.insert("json_data".to_string(), json.to_string());
     data.insert("content_type".to_string(), "application/json".to_string());
-    
+
     db.update(&doc_id, &data)?;
     Ok(())
 }
 
-fn set_document(db: &crate::Db, path: &str, json: &str) -> eyre::Result<()> {
+fn set_document(db: &fastn_automerge::Db, path: &str, json: &str) -> eyre::Result<()> {
     // Validate JSON first
     let _value = super::utils::parse_json(json)?;
 
     // Create typed path
-    let doc_id = crate::DocumentId::from_string(path)?;
-    
+    let doc_id = fastn_automerge::DocumentId::from_string(path)?;
+
     // Prepare data
     let mut data = std::collections::HashMap::new();
     data.insert("json_data".to_string(), json.to_string());
     data.insert("content_type".to_string(), "application/json".to_string());
-    
+
     // Set = create if not exists, update if exists
     if db.exists(&doc_id)? {
         db.update(&doc_id, &data)
@@ -144,24 +157,28 @@ fn set_document(db: &crate::Db, path: &str, json: &str) -> eyre::Result<()> {
     Ok(())
 }
 
-fn delete_document(db: &crate::Db, path: &str, confirm: bool) -> eyre::Result<()> {
-    let doc_id = crate::DocumentId::from_string(path)?;
-    
+fn delete_document(db: &fastn_automerge::Db, path: &str, confirm: bool) -> eyre::Result<()> {
+    let doc_id = fastn_automerge::DocumentId::from_string(path)?;
+
     if !confirm && !super::utils::confirm_action(&format!("Delete document at {path}?")) {
         println!("Cancelled");
         return Ok(());
     }
-    
+
     db.delete(&doc_id)?;
     Ok(())
 }
 
-fn list_documents(db: &crate::Db, prefix: Option<&str>, details: bool) -> eyre::Result<()> {
+fn list_documents(
+    db: &fastn_automerge::Db,
+    prefix: Option<&str>,
+    details: bool,
+) -> eyre::Result<()> {
     let documents = db.list(prefix)?;
-    
+
     if details {
         for path in documents {
-            let doc_id = crate::DocumentId::from_string(&path)?;
+            let doc_id = fastn_automerge::DocumentId::from_string(&path)?;
             if db.exists(&doc_id)? {
                 println!("{path}");
             }
@@ -171,31 +188,36 @@ fn list_documents(db: &crate::Db, prefix: Option<&str>, details: bool) -> eyre::
             println!("{path}");
         }
     }
-    
+
     Ok(())
 }
 
-fn clean_database(db: &crate::Db, force: bool) -> eyre::Result<()> {
+fn clean_database(db: &fastn_automerge::Db, force: bool) -> eyre::Result<()> {
     if !force && !super::utils::confirm_action("This will delete ALL documents. Are you sure?") {
         println!("Cancelled");
         return Ok(());
     }
-    
+
     let count = db.clear()?;
     println!("Deleted {count} documents");
     Ok(())
 }
 
-fn show_history(db: &crate::Db, path: &str, commit_hash: Option<&str>, short: bool) -> eyre::Result<()> {
-    let doc_id = crate::DocumentId::from_string(path)?;
+fn show_history(
+    db: &fastn_automerge::Db,
+    path: &str,
+    commit_hash: Option<&str>,
+    short: bool,
+) -> eyre::Result<()> {
+    let doc_id = fastn_automerge::DocumentId::from_string(path)?;
     let history = db.history(&doc_id, commit_hash)?;
-    
+
     println!("History for {}", history.path);
     println!("Created by: {}", history.created_alias);
     println!("Updated at: {}", history.updated_at);
     println!("Heads: {}", history.heads.join(", "));
     println!();
-    
+
     if short {
         println!("{} edits total", history.edits.len());
     } else {
@@ -213,24 +235,24 @@ fn show_history(db: &crate::Db, path: &str, commit_hash: Option<&str>, short: bo
             println!();
         }
     }
-    
+
     Ok(())
 }
 
-fn show_info(db: &crate::Db, path: &str) -> eyre::Result<()> {
-    let doc_id = crate::DocumentId::from_string(path)?;
-    
+fn show_info(db: &fastn_automerge::Db, path: &str) -> eyre::Result<()> {
+    let doc_id = fastn_automerge::DocumentId::from_string(path)?;
+
     if !db.exists(&doc_id)? {
         return Err(eyre::eyre!("Document not found: {path}"));
     }
-    
+
     let history = db.history(&doc_id, None)?;
-    
+
     println!("Document: {path}");
     println!("Created by: {}", history.created_alias);
     println!("Updated at: {}", history.updated_at);
     println!("Heads: {}", history.heads.join(", "));
     println!("Total edits: {}", history.edits.len());
-    
+
     Ok(())
 }

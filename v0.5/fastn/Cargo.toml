@@ -14,6 +14,7 @@ arcstr.workspace = true
 fastn-compiler.workspace = true
 fastn-continuation = { workspace = true, features = ["async_provider"] }
 fastn-package.workspace = true
+fastn-automerge.workspace = true
 fastn-rig.workspace = true
 fastn-router.workspace = true
 fastn-runtime.workspace = true
@@ -28,3 +29,5 @@ serde_json.workspace = true
 tokio.workspace = true
 tracing.workspace = true
 fastn-observer.workspace = true
+clap = { version = "4", features = ["derive"] }
+eyre.workspace = true

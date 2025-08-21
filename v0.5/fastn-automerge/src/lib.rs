@@ -1,3 +1,5 @@
+extern crate self as fastn_automerge;
+
 pub mod cli;
 pub mod db;
 pub mod error;
@@ -24,7 +26,10 @@ impl std::fmt::Display for DocumentIdError {
         match self {
             DocumentIdError::Empty => write!(f, "Document ID cannot be empty"),
             DocumentIdError::TooManyPrefixes { count } => {
-                write!(f, "Document ID can contain at most one '/-/' prefix, found {count}")
+                write!(
+                    f,
+                    "Document ID can contain at most one '/-/' prefix, found {count}"
+                )
             }
         }
     }
@@ -43,16 +48,18 @@ impl DocumentId {
         if id.is_empty() {
             return Err(DocumentIdError::Empty);
         }
-        
+
         // Check that at most one /-/ prefix exists
         let slash_dash_count = id.matches("/-/").count();
         if slash_dash_count > 1 {
-            return Err(DocumentIdError::TooManyPrefixes { count: slash_dash_count });
+            return Err(DocumentIdError::TooManyPrefixes {
+                count: slash_dash_count,
+            });
         }
-        
+
         Ok(Self(id.to_string()))
     }
-    
+
     pub fn as_str(&self) -> &str {
         &self.0
     }

@@ -1389,6 +1389,9 @@ name = "fastn"
 version = "0.1.0"
 dependencies = [
  "arcstr",
+ "clap",
+ "eyre",
+ "fastn-automerge",
  "fastn-compiler",
  "fastn-continuation",
  "fastn-observer",

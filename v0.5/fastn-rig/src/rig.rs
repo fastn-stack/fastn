@@ -67,7 +67,7 @@ impl fastn_rig::Rig {
 
         // Store the complete config struct in the database
         rig_config
-            .save(&automerge_db, &secret_key.public_key())
+            .save(&automerge_db)
             .wrap_err("Failed to create rig config document")?;
 
         tracing::info!(

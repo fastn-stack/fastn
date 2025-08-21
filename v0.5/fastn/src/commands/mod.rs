@@ -1,9 +1,6 @@
 mod build;
-mod parse;
 mod render;
 mod serve;
-
-pub use parse::parse;
 
 // fastn <path> key=value
 // or echo {json} | fastn <path>
@@ -45,51 +42,121 @@ pub enum UI {
     Browser,
 }
 
+#[derive(clap::Args)]
 pub struct Render {
-    pub path: String, // e.g., /foo/bar/, which maps to either foo/bar.ftd or foo/bar/index.ftd
-    // how to handle stdin?
+    /// Path to render (default: /)
+    #[arg(default_value = "/")]
+    pub path: String,
+    /// Key-value pairs for rendering
+    #[arg(skip = vec![])]
     pub key_values: Vec<(String, serde_json::Value)>,
+    /// Action type
+    #[arg(skip = fastn::Action::Read)]
     pub action: fastn::Action,
+    /// Output type
+    #[arg(skip)]
     pub output: Option<fastn::OutputRequested>,
+    /// Browse mode
+    #[arg(long)]
     pub browse: bool,
+    /// Strict mode
+    #[arg(long)]
     pub strict: bool,
+    /// UI type
+    #[arg(skip = UI::Terminal)]
     pub ui: UI,
+    /// Offline mode
+    #[arg(long)]
     pub offline: bool,
 }
 
+#[derive(clap::Args)]
 pub struct Serve {
+    /// Protocol to use
+    #[arg(long, default_value = "http")]
     pub protocol: String,
+    /// Address to listen on
+    #[arg(long, default_value = "127.0.0.1:8000")]
     pub listen: std::net::SocketAddr,
+    /// Watch for changes
+    #[arg(long)]
     pub watch: bool,
+    /// Build before serving
+    #[arg(long)]
     pub build: bool,
+    /// Offline mode
+    #[arg(long)]
     pub offline: bool,
 }
 
+#[derive(clap::Args)]
 pub struct Build {
+    /// Offline mode
+    #[arg(long)]
     pub offline: bool,
+    /// Watch for changes
+    #[arg(long)]
     pub watch: bool,
+    /// Strict mode
+    #[arg(long)]
     pub strict: bool,
 }
 
+#[derive(clap::Parser)]
+#[command(name = "fastn")]
+#[command(about = "A full-stack web development framework")]
+#[command(version)]
 pub enum Cli {
+    /// Start the P2P networking node (default when no arguments)
+    #[command(name = "run")]
     Run {
+        /// Path to fastn home directory
+        #[arg(long)]
         home: Option<std::path::PathBuf>,
-    }, // Default when no arguments provided
+    },
+    /// Render pages to HTML
     Render(Render),
+    /// Build the project
     Build(Build),
+    /// Start development server
     Serve(Serve),
+    /// Manage static files
     Static {
+        /// Build static files
+        #[arg(long)]
         build: bool,
+        /// Offline mode
+        #[arg(long)]
         offline: bool,
     },
+    /// Run tests
     Test {
+        /// Offline mode
+        #[arg(long)]
         offline: bool,
     },
-    Fmt(Option<String>), // which file to format
+    /// Format FTD files
+    Fmt {
+        /// File to format (optional)
+        file: Option<String>,
+    },
+    /// Upload to cloud
     Upload {
+        /// Build before upload
+        #[arg(long)]
         build: bool,
+        /// Skip linting
+        #[arg(long)]
         no_lint: bool,
+        /// Upload slug
         slug: String,
     },
-    Clone(String),
+    /// Clone a repository
+    Clone {
+        /// Repository URL
+        url: String,
+    },
+    /// Manage Automerge CRDT documents
+    #[command(subcommand)]
+    Automerge(fastn_automerge::cli::Commands),
 }
