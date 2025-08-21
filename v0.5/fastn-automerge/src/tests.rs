@@ -39,9 +39,14 @@ mod test {
 
         let db = Db::init_with_actor(&db_path, actor_id)?;
 
-        // Keep temp_dir alive by storing path
+        // Keep temp_dir alive by storing path  
         let persistent_path = temp_dir.into_path();
         Ok((db, persistent_path.join("test.db")))
+    }
+
+    // Helper function for tests to create document IDs easily
+    fn doc_id(s: &str) -> crate::DocumentId {
+        crate::DocumentId::from_string(s).expect("Test document ID should be valid")
     }
 
     #[test]
@@ -55,10 +60,10 @@ mod test {
         };
 
         // Create document
-        db.create("/test/doc1", &doc)?;
+        db.create(&doc_id("/test/doc1"), &doc)?;
 
         // Get document
-        let retrieved: TestDoc = db.get("/test/doc1")?;
+        let retrieved: TestDoc = db.get(&doc_id("/test/doc1"))?;
         assert_eq!(retrieved, doc);
 
         Ok(())
@@ -75,10 +80,10 @@ mod test {
         };
 
         // First create should succeed
-        db.create("/test/doc", &doc)?;
+        db.create(&doc_id("/test/doc"), &doc)?;
 
         // Second create should fail
-        assert!(db.create("/test/doc", &doc).is_err());
+        assert!(db.create(&doc_id("/test/doc"), &doc).is_err());
 
         Ok(())
     }
@@ -93,7 +98,7 @@ mod test {
             items: vec!["a".to_string()],
         };
 
-        db.create("/test/update", &original)?;
+        db.create(&doc_id("/test/update"), &original)?;
 
         let updated = TestDoc {
             name: "updated".to_string(),
@@ -101,9 +106,9 @@ mod test {
             items: vec!["a".to_string(), "b".to_string()],
         };
 
-        db.update("/test/update", &updated)?;
+        db.update(&doc_id("/test/update"), &updated)?;
 
-        let retrieved: TestDoc = db.get("/test/update")?;
+        let retrieved: TestDoc = db.get(&doc_id("/test/update"))?;
         assert_eq!(retrieved, updated);
 
         Ok(())
@@ -119,15 +124,15 @@ mod test {
             items: vec!["initial".to_string()],
         };
 
-        db.create("/test/modify", &doc)?;
+        db.create(&doc_id("/test/modify"), &doc)?;
 
         // Modify the document
-        db.modify("/test/modify", |d: &mut TestDoc| {
+        db.modify(&doc_id("/test/modify"), |d: &mut TestDoc| {
             d.value *= 2;
             d.items.push("added".to_string());
         })?;
 
-        let retrieved: TestDoc = db.get("/test/modify")?;
+        let retrieved: TestDoc = db.get(&doc_id("/test/modify"))?;
         assert_eq!(retrieved.value, 20);
         assert_eq!(retrieved.items.len(), 2);
         assert_eq!(retrieved.items[1], "added");
@@ -145,17 +150,17 @@ mod test {
             items: vec![],
         };
 
-        db.create("/test/delete", &doc)?;
+        db.create(&doc_id("/test/delete"), &doc)?;
 
         // Verify it exists
-        assert!(db.exists("/test/delete")?);
+        assert!(db.exists(&doc_id("/test/delete"))?);
 
         // Delete it
-        db.delete("/test/delete")?;
+        db.delete(&doc_id("/test/delete"))?;
 
         // Verify it's gone
-        assert!(!db.exists("/test/delete")?);
-        assert!(db.get::<TestDoc>("/test/delete").is_err());
+        assert!(!db.exists(&doc_id("/test/delete"))?);
+        assert!(db.get::<TestDoc>(&doc_id("/test/delete")).is_err());
 
         Ok(())
     }
@@ -164,7 +169,7 @@ mod test {
     fn test_delete_nonexistent_fails() -> crate::Result<()> {
         let (db, _db_path) = temp_db()?;
 
-        assert!(db.delete("/nonexistent").is_err());
+        assert!(db.delete(&doc_id("/nonexistent")).is_err());
 
         Ok(())
     }
@@ -173,7 +178,7 @@ mod test {
     fn test_exists() -> crate::Result<()> {
         let (db, _db_path) = temp_db()?;
 
-        assert!(!db.exists("/test/nonexistent")?);
+        assert!(!db.exists(&doc_id("/test/nonexistent"))?);
 
         let doc = TestDoc {
             name: "exists test".to_string(),
@@ -181,8 +186,8 @@ mod test {
             items: vec![],
         };
 
-        db.create("/test/exists", &doc)?;
-        assert!(db.exists("/test/exists")?);
+        db.create(&doc_id("/test/exists"), &doc)?;
+        assert!(db.exists(&doc_id("/test/exists"))?);
 
         Ok(())
     }
@@ -198,9 +203,9 @@ mod test {
         };
 
         // Create multiple documents
-        db.create("/docs/a", &doc)?;
-        db.create("/docs/b", &doc)?;
-        db.create("/other/c", &doc)?;
+        db.create(&doc_id("/docs/a"), &doc)?;
+        db.create(&doc_id("/docs/b"), &doc)?;
+        db.create(&doc_id("/other/c"), &doc)?;
 
         // List all
         let all = db.list(None)?;
@@ -232,9 +237,9 @@ mod test {
             optional: Some("present".to_string()),
         };
 
-        db.create("/test/nested", &nested)?;
+        db.create(&doc_id("/test/nested"), &nested)?;
 
-        let retrieved: NestedDoc = db.get("/test/nested")?;
+        let retrieved: NestedDoc = db.get(&doc_id("/test/nested"))?;
         assert_eq!(retrieved, nested);
         assert_eq!(retrieved.nested.items.len(), 3);
         assert_eq!(retrieved.optional, Some("present".to_string()));
@@ -252,7 +257,7 @@ mod test {
             items: vec!["item".to_string()],
         };
 
-        db.create("/test/raw", &doc)?;
+        db.create(&doc_id("/test/raw"), &doc)?;
 
         // Get raw AutoCommit document
         let raw_doc = db.get_document("/test/raw")?;
@@ -281,20 +286,20 @@ mod test {
         };
 
         // Create two documents
-        db.create("/test/actor1", &doc1)?;
-        db.create("/test/actor2", &doc2)?;
+        db.create(&doc_id("/test/actor1"), &doc1)?;
+        db.create(&doc_id("/test/actor2"), &doc2)?;
 
         // Update them
-        db.update("/test/actor1", &doc2)?;
-        db.update("/test/actor2", &doc1)?;
+        db.update(&doc_id("/test/actor1"), &doc2)?;
+        db.update(&doc_id("/test/actor2"), &doc1)?;
 
         // Both should have consistent actor IDs throughout their history
         let _raw1 = db.get_document("/test/actor1")?;
         let _raw2 = db.get_document("/test/actor2")?;
 
         // Check that we can still retrieve them
-        let retrieved1: TestDoc = db.get("/test/actor1")?;
-        let retrieved2: TestDoc = db.get("/test/actor2")?;
+        let retrieved1: TestDoc = db.get(&doc_id("/test/actor1"))?;
+        let retrieved2: TestDoc = db.get(&doc_id("/test/actor2"))?;
 
         assert_eq!(retrieved1, doc2);
         assert_eq!(retrieved2, doc1);

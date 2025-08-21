@@ -46,7 +46,7 @@ impl crate::Db {
     }
 
     /// Create a new document
-    pub fn create<T>(&self, path: &crate::Path, value: &T) -> crate::Result<()>
+    pub fn create<T>(&self, path: &crate::DocumentId, value: &T) -> crate::Result<()>
     where
         T: autosurgeon::Reconcile,
     {
@@ -104,7 +104,7 @@ impl crate::Db {
     }
 
     /// Get a document
-    pub fn get<T>(&self, path: &crate::Path) -> crate::Result<T>
+    pub fn get<T>(&self, path: &crate::DocumentId) -> crate::Result<T>
     where
         T: autosurgeon::Hydrate,
     {
@@ -123,7 +123,7 @@ impl crate::Db {
     }
 
     /// Update a document
-    pub fn update<T>(&self, path: &crate::Path, value: &T) -> crate::Result<()>
+    pub fn update<T>(&self, path: &crate::DocumentId, value: &T) -> crate::Result<()>
     where
         T: autosurgeon::Reconcile,
     {
@@ -179,7 +179,7 @@ impl crate::Db {
     }
 
     /// Modify a document with a closure
-    pub fn modify<T, F>(&self, path: &crate::Path, modifier: F) -> crate::Result<()>
+    pub fn modify<T, F>(&self, path: &crate::DocumentId, modifier: F) -> crate::Result<()>
     where
         T: autosurgeon::Hydrate + autosurgeon::Reconcile,
         F: FnOnce(&mut T),
@@ -241,7 +241,7 @@ impl crate::Db {
     }
 
     /// Delete a document
-    pub fn delete(&self, path: &crate::Path) -> crate::Result<()> {
+    pub fn delete(&self, path: &crate::DocumentId) -> crate::Result<()> {
         let rows_affected = self
             .conn
             .execute("DELETE FROM fastn_documents WHERE path = ?1", [path])?;
@@ -254,7 +254,7 @@ impl crate::Db {
     }
 
     /// Check if a document exists
-    pub fn exists(&self, path: &crate::Path) -> crate::Result<bool> {
+    pub fn exists(&self, path: &crate::DocumentId) -> crate::Result<bool> {
         let count: i32 = self.conn.query_row(
             "SELECT COUNT(*) FROM fastn_documents WHERE path = ?1",
             [path],
@@ -285,7 +285,7 @@ impl crate::Db {
     }
 
     /// Get raw AutoCommit document for advanced operations
-    pub fn get_document(&self, path: &crate::Path) -> crate::Result<automerge::AutoCommit> {
+    pub fn get_document(&self, path: &crate::DocumentId) -> crate::Result<automerge::AutoCommit> {
         let binary: Vec<u8> = self
             .conn
             .query_row(
@@ -323,7 +323,7 @@ impl crate::Db {
     /// If None, shows complete history up to current heads.
     pub fn history(
         &self,
-        path: &crate::Path,
+        path: &crate::DocumentId,
         up_to_head: Option<&str>,
     ) -> crate::Result<crate::DocumentHistory> {
         let (binary, created_alias, updated_at): (Vec<u8>, String, i64) = self.conn.query_row(

@@ -13,43 +13,43 @@ pub use automerge::AutoCommit;
 pub type Result<T> = std::result::Result<T, Box<Error>>;
 
 #[derive(Debug, Clone, PartialEq)]
-pub enum PathError {
+pub enum DocumentIdError {
     Empty,
     TooManyPrefixes { count: usize },
 }
 
-impl std::fmt::Display for PathError {
+impl std::fmt::Display for DocumentIdError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            PathError::Empty => write!(f, "Path cannot be empty"),
-            PathError::TooManyPrefixes { count } => {
-                write!(f, "Path can contain at most one '/-/' prefix, found {count}")
+            DocumentIdError::Empty => write!(f, "Document ID cannot be empty"),
+            DocumentIdError::TooManyPrefixes { count } => {
+                write!(f, "Document ID can contain at most one '/-/' prefix, found {count}")
             }
         }
     }
 }
 
-impl std::error::Error for PathError {}
+impl std::error::Error for DocumentIdError {}
 
-/// Generic typed path that can only be created by path constructors
+/// Generic typed document ID that can only be created by ID constructors
 #[derive(Debug, Clone, PartialEq)]
-pub struct Path(String);
+pub struct DocumentId(String);
 
-impl Path {
-    /// Create path from string with validation - the only way to create paths
-    pub fn from_string(path: &str) -> std::result::Result<Self, PathError> {
-        // Add basic validation for all paths
-        if path.is_empty() {
-            return Err(PathError::Empty);
+impl DocumentId {
+    /// Create document ID from string with validation - the only way to create document IDs
+    pub fn from_string(id: &str) -> std::result::Result<Self, DocumentIdError> {
+        // Add basic validation for all document IDs
+        if id.is_empty() {
+            return Err(DocumentIdError::Empty);
         }
         
         // Check that at most one /-/ prefix exists
-        let slash_dash_count = path.matches("/-/").count();
+        let slash_dash_count = id.matches("/-/").count();
         if slash_dash_count > 1 {
-            return Err(PathError::TooManyPrefixes { count: slash_dash_count });
+            return Err(DocumentIdError::TooManyPrefixes { count: slash_dash_count });
         }
         
-        Ok(Self(path.to_string()))
+        Ok(Self(id.to_string()))
     }
     
     pub fn as_str(&self) -> &str {
@@ -57,13 +57,13 @@ impl Path {
     }
 }
 
-impl rusqlite::ToSql for Path {
+impl rusqlite::ToSql for DocumentId {
     fn to_sql(&self) -> rusqlite::Result<rusqlite::types::ToSqlOutput<'_>> {
         self.0.to_sql()
     }
 }
 
-impl std::fmt::Display for Path {
+impl std::fmt::Display for DocumentId {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.0)
     }

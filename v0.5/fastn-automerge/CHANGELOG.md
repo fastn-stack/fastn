@@ -9,20 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **Type-safe Path system** - `fastn_automerge::Path` with validation
-- **CLI architecture improvements** - Database instance passed to commands
-- `PathError` enum for structured validation errors
+- **Type-safe DocumentId system** - `fastn_automerge::DocumentId` with validation
+- **CLI architecture improvements** - Database instance passed to commands  
+- `DocumentIdError` enum for structured validation
 
 ### Changed
 
-- **Breaking: Database API uses typed paths** - All methods accept `&Path` instead of `&str`
-- **Breaking: CLI uses `eyre::Result`** - Removed global error enum mixing
-- Path validation: non-empty, at most one '/-/' prefix
+- **Breaking: Database API uses typed document IDs** - All methods accept `&DocumentId` instead of `&str`
+- **Breaking: CLI uses `eyre::Result`** - Precise error types instead of global enum
+- Document ID validation: non-empty, at most one '/-/' prefix
 
 ### Removed
 
-- Global `fastn_automerge::Result` usage in CLI (now uses `eyre::Result`)
-- Duplicate database connection wrapper functions
+- Global error enum mixing in CLI contexts
+- Duplicate database wrapper functions
 
 ## [0.1.0] - 2025-08-21
 
