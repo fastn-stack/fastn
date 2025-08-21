@@ -9,27 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **Type-safe Path system** for document path validation
-  - `fastn_automerge::Path` type prevents string-based path construction
-  - `Path::from_string()` with validation - the only way to create paths from strings
-  - `PathError` enum for structured path validation errors
-  - Path validation enforces: non-empty paths, at most one '/-/' prefix
-  - `rusqlite::ToSql` implementation for seamless database integration
-  - `Display` trait for user-friendly path output
+- **Type-safe Path system** - `fastn_automerge::Path` with validation
+- **CLI architecture improvements** - Database instance passed to commands
+- `PathError` enum for structured validation errors
 
 ### Changed
 
-- **Database API now uses typed paths**
-  - All methods (`create`, `get`, `update`, `delete`, `exists`, `modify`, `get_document`) now accept `&Path` instead of `&str`
-  - Compile-time path safety prevents typos and invalid paths
-  - Breaking change: requires updating all path usage to use `Path::from_string()`
+- **Breaking: Database API uses typed paths** - All methods accept `&Path` instead of `&str`
+- **Breaking: CLI uses `eyre::Result`** - Removed global error enum mixing
+- Path validation: non-empty, at most one '/-/' prefix
 
-### Security
+### Removed
 
-- **Path validation prevents malformed document paths**
-  - Enforces consistent path structure across the application
-  - Prevents empty paths and malformed '/-/' prefixes
-  - Centralized validation logic for all path construction
+- Global `fastn_automerge::Result` usage in CLI (now uses `eyre::Result`)
+- Duplicate database connection wrapper functions
 
 ## [0.1.0] - 2025-08-21
 

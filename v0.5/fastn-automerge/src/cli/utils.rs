@@ -8,25 +8,16 @@ pub fn get_actor_id() -> String {
     format!("cli-user-{}", 1)
 }
 
-pub fn open_db(db_path: &str) -> fastn_automerge::Result<fastn_automerge::Db> {
-    let actor_id = get_actor_id();
-    let path = std::path::Path::new(db_path);
-    fastn_automerge::Db::open_with_actor(path, actor_id)
-}
 
-pub fn json_error(msg: String) -> Box<fastn_automerge::Error> {
-    Box::new(fastn_automerge::Error::Database(
-        rusqlite::Error::InvalidColumnType(0, msg, rusqlite::types::Type::Text),
-    ))
-}
 
-pub fn read_json_file(file_path: &str) -> fastn_automerge::Result<String> {
+pub fn read_json_file(file_path: &str) -> eyre::Result<String> {
     std::fs::read_to_string(file_path)
-        .map_err(|e| json_error(format!("Failed to read file {file_path}: {e}")))
+        .map_err(|e| eyre::eyre!("Failed to read file {file_path}: {e}"))
 }
 
-pub fn parse_json(json_str: &str) -> fastn_automerge::Result<serde_json::Value> {
-    serde_json::from_str(json_str).map_err(|e| json_error(format!("JSON parse error: {e}")))
+pub fn parse_json(json_str: &str) -> eyre::Result<serde_json::Value> {
+    serde_json::from_str(json_str)
+        .map_err(|e| eyre::eyre!("JSON parse error: {e}"))
 }
 
 pub fn confirm_action(message: &str) -> bool {

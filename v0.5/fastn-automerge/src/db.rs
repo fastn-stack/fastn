@@ -323,7 +323,7 @@ impl crate::Db {
     /// If None, shows complete history up to current heads.
     pub fn history(
         &self,
-        path: &str,
+        path: &crate::Path,
         up_to_head: Option<&str>,
     ) -> crate::Result<crate::DocumentHistory> {
         let (binary, created_alias, updated_at): (Vec<u8>, String, i64) = self.conn.query_row(
