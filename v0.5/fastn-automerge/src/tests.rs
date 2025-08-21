@@ -260,7 +260,7 @@ mod test {
         db.create(&doc_id("/test/raw"), &doc)?;
 
         // Get raw AutoCommit document
-        let raw_doc = db.get_document("/test/raw")?;
+        let raw_doc = db.get_document(&doc_id("/test/raw"))?;
 
         // Should be able to hydrate from it
         let hydrated: TestDoc = autosurgeon::hydrate(&raw_doc)?;
@@ -294,8 +294,8 @@ mod test {
         db.update(&doc_id("/test/actor2"), &doc1)?;
 
         // Both should have consistent actor IDs throughout their history
-        let _raw1 = db.get_document("/test/actor1")?;
-        let _raw2 = db.get_document("/test/actor2")?;
+        let _raw1 = db.get_document(&doc_id("/test/actor1"))?;
+        let _raw2 = db.get_document(&doc_id("/test/actor2"))?;
 
         // Check that we can still retrieve them
         let retrieved1: TestDoc = db.get(&doc_id("/test/actor1"))?;
