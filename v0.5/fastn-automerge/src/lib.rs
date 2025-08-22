@@ -102,7 +102,7 @@ impl Db {
     }
     
     /// Update device number (can only be called from device 0 to assign new device numbers)
-    pub fn update_device_number(&mut self, new_device_number: u32) -> Result<(), DeviceNumberError> {
+    pub fn update_device_number(&mut self, new_device_number: u32) -> std::result::Result<(), DeviceNumberError> {
         if self.device_number != 0 {
             return Err(DeviceNumberError::NotPrimaryDevice);
         }
@@ -120,17 +120,27 @@ pub enum DeviceNumberError {
     InvalidDeviceNumber,
 }
 
+// Keep minimal types for compatibility during transition
+#[derive(Debug, Clone, PartialEq)]
+pub struct ActorIdNotSet;
+
+#[derive(Debug, Clone, PartialEq)]  
+pub struct ActorIdAlreadySet;
+
 // Common document operation errors for all consumers
 #[derive(Debug)]
 pub enum DocumentLoadError {
-    Get(GetError),
+    Get(db::GetError),
 }
 
 #[derive(Debug)]
-pub enum DocumentSaveError {
-    Exists(db::ExistsError),
-    Update(db::UpdateError),
+pub enum DocumentCreateError {
     Create(db::CreateError),
+}
+
+#[derive(Debug)]
+pub enum DocumentUpdateError {
+    Update(db::UpdateError),
 }
 
 // TODO: Add derive macro for document structs:
@@ -147,43 +157,14 @@ pub enum DocumentSaveError {
 // - Document ID constructor function
 // - Uses the #[document_id_field] to determine the ID
 
-#[derive(Debug)]
-pub enum CreateError {
-    ActorNotSet(ActorIdNotSet),
-    DocumentExists(DocumentPath),
-    Database(rusqlite::Error),
-    Automerge(automerge::AutomergeError),
-    Reconcile(autosurgeon::ReconcileError),
-}
-
-
-
-#[derive(Debug)]
-pub enum GetError {
-    ActorNotSet(ActorIdNotSet),
-    NotFound(DocumentPath),
-    Database(rusqlite::Error),
-    Automerge(automerge::AutomergeError),
-    Hydrate(autosurgeon::HydrateError),
-}
-
-
-
-#[derive(Debug)]
-pub enum UpdateError {
-    ActorNotSet(ActorIdNotSet),
-    NotFound(DocumentPath),
-    Database(rusqlite::Error),
-    Automerge(automerge::AutomergeError),
-    Reconcile(autosurgeon::ReconcileError),
-}
+// Error types moved to db.rs next to their functions
 
 
 
 impl std::fmt::Debug for Db {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("Db")
-            .field("entity_id52", &self.entity_id52)
+            .field("entity", &self.entity)
             .field("device_number", &self.device_number)
             .field("conn", &"<rusqlite::Connection>")
             .finish()

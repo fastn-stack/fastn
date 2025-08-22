@@ -43,7 +43,7 @@ impl crate::Db {
             .map_err(|_| LoadError::MissingActorCounter)?;
 
         // Parse stored entity ID back to PublicKey
-        let entity = fastn_id52::PublicKey::from_str(&counter.entity_id52)
+        let entity = std::str::FromStr::from_str(&counter.entity_id52)
             .map_err(|_| LoadError::MissingActorCounter)?;
             
         Ok(Self {
@@ -96,7 +96,6 @@ impl crate::Db {
 
 #[derive(Debug)]
 pub enum CreateError {
-    ActorNotSet(crate::ActorIdNotSet),
     DocumentExists(crate::DocumentPath),
     Database(rusqlite::Error),
     Automerge(automerge::AutomergeError),
@@ -110,7 +109,7 @@ impl crate::Db {
         T: autosurgeon::Reconcile,
     {
         // Ensure actor ID is initialized
-        self.require_initialized().map_err(CreateError::ActorNotSet)?;
+        // No need for initialization check - entity is always set during init/open
         
         // Check if document already exists
         let exists: bool = self
@@ -147,7 +146,7 @@ impl crate::Db {
              VALUES (?1, ?2, ?3, ?4, ?5)",
             rusqlite::params![
                 path,
-                self.entity_id52.as_str(),
+                &self.entity.id52(),
                 doc.save(),
                 heads,
                 std::time::SystemTime::now()
@@ -183,7 +182,6 @@ impl crate::Db {
 
 #[derive(Debug)]
 pub enum UpdateError {
-    ActorNotSet(crate::ActorIdNotSet),
     NotFound(crate::DocumentPath),
     Database(rusqlite::Error),
     Automerge(automerge::AutomergeError),
@@ -313,7 +311,6 @@ impl crate::Db {
 
 #[derive(Debug)]
 pub enum DeleteError {
-    ActorNotSet(crate::ActorIdNotSet),
     NotFound(crate::DocumentPath),
     Database(rusqlite::Error),
 }
@@ -337,7 +334,6 @@ impl crate::Db {
 
 #[derive(Debug)]
 pub enum ExistsError {
-    ActorNotSet(crate::ActorIdNotSet),
     Database(rusqlite::Error),
 }
 

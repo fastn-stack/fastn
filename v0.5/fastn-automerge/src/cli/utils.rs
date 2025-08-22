@@ -7,8 +7,8 @@ pub fn get_dummy_cli_entity_id() -> String {
         return entity_id;
     }
 
-    // Generate a dummy entity ID for CLI testing
-    "cli-dummy-entity".to_string()
+    // Generate a dummy entity ID52 for CLI testing (must be valid ID52 format)
+    "clitempdum000000000000000000000000000000000000000000000000".to_string()
 }
 
 pub fn read_json_file(file_path: &str) -> eyre::Result<String> {

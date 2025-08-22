@@ -46,7 +46,7 @@ mod test {
 
     // Helper function for tests to create document IDs easily
     fn doc_id(s: &str) -> crate::DocumentId {
-        crate::DocumentId::from_string(s).expect("Test document ID should be valid")
+        crate::DocumentPath::from_string(s).expect("Test document ID should be valid")
     }
 
     #[test]

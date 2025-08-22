@@ -38,18 +38,18 @@ impl From<autosurgeon::ReconcileError> for Box<crate::Error> {
 
 // Error implementations for new specific error types
 
-impl std::fmt::Display for crate::DocumentIdError {
+impl std::fmt::Display for crate::DocumentPathError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            crate::DocumentIdError::Empty => write!(f, "Document ID cannot be empty"),
-            crate::DocumentIdError::TooManyPrefixes { count } => {
+            crate::DocumentPathError::Empty => write!(f, "Document ID cannot be empty"),
+            crate::DocumentPathError::TooManyPrefixes { count } => {
                 write!(f, "Document ID can contain at most one '/-/' prefix, found {count}")
             }
         }
     }
 }
 
-impl std::error::Error for crate::DocumentIdError {}
+impl std::error::Error for crate::DocumentPathError {}
 
 impl std::fmt::Display for crate::LoadError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -83,11 +83,11 @@ impl std::error::Error for crate::ActorIdAlreadySet {}
 impl std::fmt::Display for crate::CreateError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            crate::CreateError::ActorNotSet(e) => write!(f, "{e}"),
-            crate::CreateError::DocumentExists(id) => write!(f, "Document already exists: {id}"),
-            crate::CreateError::Database(e) => write!(f, "Database error: {e}"),
-            crate::CreateError::Automerge(e) => write!(f, "Automerge error: {e}"),
-            crate::CreateError::Reconcile(e) => write!(f, "Reconcile error: {e}"),
+            crate::db::CreateError::// ActorNotSet removed - no longer needed
+            crate::db::CreateError::DocumentExists(id) => write!(f, "Document already exists: {id}"),
+            crate::db::CreateError::Database(e) => write!(f, "Database error: {e}"),
+            crate::db::CreateError::Automerge(e) => write!(f, "Automerge error: {e}"),
+            crate::db::CreateError::Reconcile(e) => write!(f, "Reconcile error: {e}"),
         }
     }
 }
@@ -97,7 +97,7 @@ impl std::error::Error for crate::CreateError {}
 impl std::fmt::Display for crate::GetError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            crate::GetError::ActorNotSet(e) => write!(f, "{e}"),
+            crate::GetError::// ActorNotSet removed - no longer needed
             crate::GetError::NotFound(id) => write!(f, "Document not found: {id}"),
             crate::GetError::Database(e) => write!(f, "Database error: {e}"),
             crate::GetError::Automerge(e) => write!(f, "Automerge error: {e}"),
@@ -111,7 +111,7 @@ impl std::error::Error for crate::GetError {}
 impl std::fmt::Display for crate::UpdateError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            crate::UpdateError::ActorNotSet(e) => write!(f, "{e}"),
+            crate::UpdateError::// ActorNotSet removed - no longer needed
             crate::UpdateError::NotFound(id) => write!(f, "Document not found: {id}"),
             crate::UpdateError::Database(e) => write!(f, "Database error: {e}"),
             crate::UpdateError::Automerge(e) => write!(f, "Automerge error: {e}"),
@@ -156,7 +156,7 @@ impl std::fmt::Display for crate::db::InitError {
 impl std::fmt::Display for crate::db::CreateError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            crate::db::CreateError::ActorNotSet(e) => write!(f, "{e}"),
+            crate::db::CreateError::// ActorNotSet removed - no longer needed
             crate::db::CreateError::DocumentExists(id) => write!(f, "Document already exists: {id}"),
             crate::db::CreateError::Database(e) => write!(f, "Database error: {e}"),
             crate::db::CreateError::Automerge(e) => write!(f, "Automerge error: {e}"),
@@ -168,7 +168,7 @@ impl std::fmt::Display for crate::db::CreateError {
 impl std::fmt::Display for crate::db::UpdateError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            crate::db::UpdateError::ActorNotSet(e) => write!(f, "{e}"),
+            crate::db::UpdateError::// ActorNotSet removed - no longer needed
             crate::db::UpdateError::NotFound(id) => write!(f, "Document not found: {id}"),
             crate::db::UpdateError::Database(e) => write!(f, "Database error: {e}"),
             crate::db::UpdateError::Automerge(e) => write!(f, "Automerge error: {e}"),
@@ -180,7 +180,7 @@ impl std::fmt::Display for crate::db::UpdateError {
 impl std::fmt::Display for crate::db::ExistsError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            crate::db::ExistsError::ActorNotSet(e) => write!(f, "{e}"),
+            crate::db::ExistsError::// ActorNotSet removed - no longer needed
             crate::db::ExistsError::Database(e) => write!(f, "Database error: {e}"),
         }
     }
@@ -189,7 +189,7 @@ impl std::fmt::Display for crate::db::ExistsError {
 impl std::fmt::Display for crate::db::DeleteError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            crate::db::DeleteError::ActorNotSet(e) => write!(f, "{e}"),
+            crate::db::DeleteError::// ActorNotSet removed - no longer needed
             crate::db::DeleteError::NotFound(id) => write!(f, "Document not found: {id}"),
             crate::db::DeleteError::Database(e) => write!(f, "Database error: {e}"),
         }
