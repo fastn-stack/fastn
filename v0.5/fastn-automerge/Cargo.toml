@@ -20,6 +20,6 @@ clap.workspace = true
 eyre.workspace = true
 fastn-automerge-derive.workspace = true
 fastn-id52 = { workspace = true, features = ["automerge"] }
+tempfile = "3"
 
 [dev-dependencies]
-tempfile = "3"

@@ -13,6 +13,9 @@ pub use autosurgeon::{Hydrate, Reconcile, hydrate, reconcile};
 // Re-export derive macro for convenience
 pub use fastn_automerge_derive::Document;
 
+// Re-export test utilities
+pub use utils::create_test_db;
+
 // Re-export automerge types we use
 pub use automerge::AutoCommit;
 
