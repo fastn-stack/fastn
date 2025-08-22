@@ -1,0 +1,245 @@
+use crate::db::{LoadError, InitError, CreateError, UpdateError, DeleteError, ExistsError, GetError};
+
+impl std::fmt::Display for crate::Error {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            crate::Error::NotFound(path) => write!(f, "Document not found: {path}"),
+            crate::Error::Database(e) => write!(f, "Database error: {e}"),
+            crate::Error::Automerge(e) => write!(f, "Automerge error: {e}"),
+            crate::Error::Autosurgeon(e) => write!(f, "Hydrate error: {e}"),
+            crate::Error::ReconcileError(e) => write!(f, "Reconcile error: {e}"),
+        }
+    }
+}
+
+impl std::error::Error for crate::Error {}
+
+impl From<rusqlite::Error> for Box<crate::Error> {
+    fn from(err: rusqlite::Error) -> Self {
+        Box::new(crate::Error::Database(err))
+    }
+}
+
+impl From<automerge::AutomergeError> for Box<crate::Error> {
+    fn from(err: automerge::AutomergeError) -> Self {
+        Box::new(crate::Error::Automerge(err))
+    }
+}
+
+impl From<autosurgeon::HydrateError> for Box<crate::Error> {
+    fn from(err: autosurgeon::HydrateError) -> Self {
+        Box::new(crate::Error::Autosurgeon(err))
+    }
+}
+
+impl From<autosurgeon::ReconcileError> for Box<crate::Error> {
+    fn from(err: autosurgeon::ReconcileError) -> Self {
+        Box::new(crate::Error::ReconcileError(err))
+    }
+}
+
+// Error implementations for new specific error types
+
+impl std::fmt::Display for crate::DocumentPathError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            crate::DocumentPathError::Empty => write!(f, "Document ID cannot be empty"),
+            crate::DocumentPathError::TooManyPrefixes { count } => {
+                write!(f, "Document ID can contain at most one '/-/' prefix, found {count}")
+            }
+        }
+    }
+}
+
+impl std::error::Error for crate::DocumentPathError {}
+
+impl std::fmt::Display for crate::LoadError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            crate::LoadError::NotFound(path) => write!(f, "Database not found: {}. Run 'init' first.", path.display()),
+            crate::LoadError::NotInitialized(path) => write!(f, "Database at {} exists but is not initialized. Run 'init' first.", path.display()),
+            crate::LoadError::MissingActorCounter => write!(f, "Database missing actor counter - not properly initialized"),
+            crate::LoadError::DatabaseError(e) => write!(f, "Database error: {e}"),
+        }
+    }
+}
+
+impl std::error::Error for crate::LoadError {}
+
+impl std::fmt::Display for crate::ActorIdNotSet {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Database not initialized - call set_actor_id() first")
+    }
+}
+
+impl std::error::Error for crate::ActorIdNotSet {}
+
+impl std::fmt::Display for crate::ActorIdAlreadySet {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Actor ID already initialized - cannot change")
+    }
+}
+
+impl std::error::Error for crate::ActorIdAlreadySet {}
+
+impl std::fmt::Display for CreateError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            CreateError::// ActorNotSet removed - no longer needed
+            CreateError::DocumentExists(id) => write!(f, "Document already exists: {id}"),
+            CreateError::Database(e) => write!(f, "Database error: {e}"),
+            CreateError::Automerge(e) => write!(f, "Automerge error: {e}"),
+            CreateError::Reconcile(e) => write!(f, "Reconcile error: {e}"),
+        }
+    }
+}
+
+impl std::error::Error for CreateError {}
+
+impl std::fmt::Display for GetError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            GetError::// ActorNotSet removed - no longer needed
+            GetError::NotFound(id) => write!(f, "Document not found: {id}"),
+            GetError::Database(e) => write!(f, "Database error: {e}"),
+            GetError::Automerge(e) => write!(f, "Automerge error: {e}"),
+            GetError::Hydrate(e) => write!(f, "Hydrate error: {e}"),
+        }
+    }
+}
+
+impl std::error::Error for GetError {}
+
+impl std::fmt::Display for UpdateError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            UpdateError::// ActorNotSet removed - no longer needed
+            UpdateError::NotFound(id) => write!(f, "Document not found: {id}"),
+            UpdateError::Database(e) => write!(f, "Database error: {e}"),
+            UpdateError::Automerge(e) => write!(f, "Automerge error: {e}"),
+            UpdateError::Reconcile(e) => write!(f, "Reconcile error: {e}"),
+        }
+    }
+}
+
+impl std::error::Error for UpdateError {}
+
+// Missing Error trait implementations
+impl std::error::Error for LoadError {}
+impl std::error::Error for InitError {}
+impl std::error::Error for CreateError {}
+impl std::error::Error for UpdateError {}
+impl std::error::Error for DeleteError {}
+impl std::error::Error for ExistsError {}
+impl std::error::Error for GetError {}
+
+// Add missing Display implementations that were removed
+impl std::fmt::Display for LoadError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            LoadError::NotFound(path) => write!(f, "Database not found: {}. Run 'init' first.", path.display()),
+            LoadError::NotInitialized(path) => write!(f, "Database at {} exists but is not initialized. Run 'init' first.", path.display()),
+            LoadError::MissingActorCounter => write!(f, "Database missing actor counter - not properly initialized"),
+            LoadError::DatabaseError(e) => write!(f, "Database error: {e}"),
+        }
+    }
+}
+
+impl std::fmt::Display for InitError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            InitError::DatabaseExists(path) => write!(f, "Database already exists: {}", path.display()),
+            InitError::Database(e) => write!(f, "Database error: {e}"),
+            InitError::Migration(e) => write!(f, "Migration error: {e}"),
+            InitError::Create(e) => write!(f, "Create error: {e}"),
+        }
+    }
+}
+
+impl std::fmt::Display for CreateError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            CreateError::// ActorNotSet removed - no longer needed
+            CreateError::DocumentExists(id) => write!(f, "Document already exists: {id}"),
+            CreateError::Database(e) => write!(f, "Database error: {e}"),
+            CreateError::Automerge(e) => write!(f, "Automerge error: {e}"),
+            CreateError::Reconcile(e) => write!(f, "Reconcile error: {e}"),
+        }
+    }
+}
+
+impl std::fmt::Display for UpdateError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            UpdateError::// ActorNotSet removed - no longer needed
+            UpdateError::NotFound(id) => write!(f, "Document not found: {id}"),
+            UpdateError::Database(e) => write!(f, "Database error: {e}"),
+            UpdateError::Automerge(e) => write!(f, "Automerge error: {e}"),
+            UpdateError::Reconcile(e) => write!(f, "Reconcile error: {e}"),
+        }
+    }
+}
+
+impl std::fmt::Display for ExistsError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ExistsError::// ActorNotSet removed - no longer needed
+            ExistsError::Database(e) => write!(f, "Database error: {e}"),
+        }
+    }
+}
+
+impl std::fmt::Display for DeleteError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            DeleteError::// ActorNotSet removed - no longer needed
+            DeleteError::NotFound(id) => write!(f, "Document not found: {id}"),
+            DeleteError::Database(e) => write!(f, "Database error: {e}"),
+        }
+    }
+}
+
+// From implementations for CreateError
+impl From<rusqlite::Error> for CreateError {
+    fn from(err: rusqlite::Error) -> Self {
+        CreateError::Database(err)
+    }
+}
+
+impl From<automerge::AutomergeError> for CreateError {
+    fn from(err: automerge::AutomergeError) -> Self {
+        CreateError::Automerge(err)
+    }
+}
+
+impl From<autosurgeon::ReconcileError> for CreateError {
+    fn from(err: autosurgeon::ReconcileError) -> Self {
+        CreateError::Reconcile(err)
+    }
+}
+
+// From implementations for InitError
+impl From<rusqlite::Error> for InitError {
+    fn from(err: rusqlite::Error) -> Self {
+        InitError::Database(err)
+    }
+}
+
+// From implementations for UpdateError
+impl From<rusqlite::Error> for UpdateError {
+    fn from(err: rusqlite::Error) -> Self {
+        UpdateError::Database(err)
+    }
+}
+
+impl From<automerge::AutomergeError> for UpdateError {
+    fn from(err: automerge::AutomergeError) -> Self {
+        UpdateError::Automerge(err)
+    }
+}
+
+impl From<autosurgeon::ReconcileError> for UpdateError {
+    fn from(err: autosurgeon::ReconcileError) -> Self {
+        UpdateError::Reconcile(err)
+    }
+}

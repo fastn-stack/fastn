@@ -127,21 +127,11 @@ pub struct ActorIdNotSet;
 #[derive(Debug, Clone, PartialEq)]  
 pub struct ActorIdAlreadySet;
 
-// Common document operation errors for all consumers
-#[derive(Debug)]
-pub enum DocumentLoadError {
-    Get(db::GetError),
-}
-
-#[derive(Debug)]
-pub enum DocumentCreateError {
-    Create(db::CreateError),
-}
-
-#[derive(Debug)]
-pub enum DocumentUpdateError {
-    Update(db::UpdateError),
-}
+// TODO: Common document operation errors for all consumers
+// Will be implemented once specific error types are refined
+// pub enum DocumentLoadError { Get(db::GetError) }
+// pub enum DocumentCreateError { Create(db::CreateError) } 
+// pub enum DocumentUpdateError { Update(db::UpdateError) }
 
 // TODO: Add derive macro for document structs:
 // #[derive(Document)]

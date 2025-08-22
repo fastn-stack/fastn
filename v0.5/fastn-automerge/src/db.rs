@@ -8,13 +8,12 @@ pub enum LoadError {
 
 impl crate::Db {
     /// Open existing database
-    pub fn open(db_path: &std::path::Path) -> std::result::Result<Self, LoadError> {
+    pub fn open(db_path: &std::path::Path) -> crate::Result<Self> {
         if !db_path.exists() {
-            return Err(LoadError::NotFound(db_path.to_path_buf()));
+            return Err(eyre::eyre!("Database not found: {}. Run 'init' first.", db_path.display()));
         }
 
-        let conn = rusqlite::Connection::open(db_path)
-            .map_err(LoadError::DatabaseError)?;
+        let conn = rusqlite::Connection::open(db_path)?;
 
         // Check if database is properly initialized by looking for our tables
         let table_exists: bool = conn.query_row(
@@ -24,7 +23,7 @@ impl crate::Db {
         ).unwrap_or(false);
 
         if !table_exists {
-            return Err(LoadError::NotInitialized(db_path.to_path_buf()));
+            return Err(eyre::eyre!("Database at {} exists but is not initialized. Run 'init' first.", db_path.display()));
         }
 
         // Read the actor counter directly from SQL to get stored entity
@@ -35,16 +34,13 @@ impl crate::Db {
             "SELECT automerge_binary FROM fastn_documents WHERE path = ?1",
             [&counter_doc_path],
             |row| row.get(0),
-        ).map_err(|_| LoadError::MissingActorCounter)?;
+        ).map_err(|e| eyre::eyre!("Missing actor counter: {e}"))?;
 
-        let doc = automerge::AutoCommit::load(&binary)
-            .map_err(LoadError::DatabaseError)?;
-        let counter: crate::ActorCounter = autosurgeon::hydrate(&doc)
-            .map_err(|_| LoadError::MissingActorCounter)?;
+        let doc = automerge::AutoCommit::load(&binary)?;
+        let counter: crate::ActorCounter = autosurgeon::hydrate(&doc)?;
 
         // Parse stored entity ID back to PublicKey
-        let entity = std::str::FromStr::from_str(&counter.entity_id52)
-            .map_err(|_| LoadError::MissingActorCounter)?;
+        let entity = std::str::FromStr::from_str(&counter.entity_id52)?;
             
         Ok(Self {
             conn,
@@ -66,13 +62,13 @@ pub enum InitError {
 
 impl crate::Db {
     /// Initialize a new database for an entity (primary device)
-    pub fn init(db_path: &std::path::Path, entity: &fastn_id52::PublicKey) -> Result<Self, InitError> {
+    pub fn init(db_path: &std::path::Path, entity: &fastn_id52::PublicKey) -> crate::Result<Self> {
         if db_path.exists() {
-            return Err(InitError::DatabaseExists(db_path.to_path_buf()));
+            return Err(eyre::eyre!("Database already exists at {}", db_path.display()));
         }
 
-        let conn = rusqlite::Connection::open(db_path).map_err(InitError::Database)?;
-        crate::migration::initialize_database(&conn).map_err(|e| InitError::Migration(e))?;
+        let conn = rusqlite::Connection::open(db_path)?;
+        crate::migration::initialize_database(&conn)?;
         
         let db = Self { 
             conn, 
@@ -88,7 +84,7 @@ impl crate::Db {
             entity_id52: entity.id52(), // Store as string in the document for now
             next_device: 1, // Next device will be 1
         };
-        db.create(&counter_doc_path, &counter).map_err(InitError::Create)?;
+        db.create(&counter_doc_path, &counter)?;
         
         Ok(db)
     }
@@ -104,7 +100,7 @@ pub enum CreateError {
 
 impl crate::Db {
     /// Create a new document
-    pub fn create<T>(&self, path: &crate::DocumentPath, value: &T) -> Result<(), CreateError>
+    pub fn create<T>(&self, path: &crate::DocumentPath, value: &T) -> crate::Result<()>
     where
         T: autosurgeon::Reconcile,
     {
@@ -122,7 +118,7 @@ impl crate::Db {
             .unwrap_or(false);
 
         if exists {
-            return Err(CreateError::DocumentExists(path.clone()));
+            return Err(eyre::eyre!("Document already exists: {}", path));
         }
 
         // Create new document with actor
@@ -159,6 +155,17 @@ impl crate::Db {
         Ok(())
     }
 
+}
+
+#[derive(Debug)]
+pub enum GetError {
+    NotFound(crate::DocumentPath),
+    Database(rusqlite::Error),
+    Automerge(automerge::AutomergeError),
+    Hydrate(autosurgeon::HydrateError),
+}
+
+impl crate::Db {
     /// Get a document
     pub fn get<T>(&self, path: &crate::DocumentPath) -> crate::Result<T>
     where
@@ -171,7 +178,7 @@ impl crate::Db {
                 [path],
                 |row| row.get(0),
             )
-            .map_err(UpdateError::Database)?;
+?;
 
         let doc = automerge::AutoCommit::load(&binary)?;
         let value: T = autosurgeon::hydrate(&doc)?;
@@ -190,7 +197,7 @@ pub enum UpdateError {
 
 impl crate::Db {
     /// Update a document
-    pub fn update<T>(&self, path: &crate::DocumentPath, value: &T) -> Result<(), UpdateError>
+    pub fn update<T>(&self, path: &crate::DocumentPath, value: &T) -> crate::Result<()>
     where
         T: autosurgeon::Reconcile,
     {
@@ -202,7 +209,7 @@ impl crate::Db {
                 [path],
                 |row| Ok((row.get(0)?, row.get(1)?)),
             )
-            .map_err(UpdateError::Database)?;
+            ?;
 
         let mut doc = automerge::AutoCommit::load(&binary)?;
 
@@ -259,7 +266,7 @@ impl crate::Db {
                 [path],
                 |row| Ok((row.get(0)?, row.get(1)?)),
             )
-            .map_err(UpdateError::Database)?;
+            ?;
 
         let mut doc = automerge::AutoCommit::load(&binary)?;
 
@@ -317,14 +324,14 @@ pub enum DeleteError {
 
 impl crate::Db {
     /// Delete a document
-    pub fn delete(&self, path: &crate::DocumentPath) -> std::result::Result<(), DeleteError> {
+    pub fn delete(&self, path: &crate::DocumentPath) -> crate::Result<()> {
         let rows_affected = self
             .conn
             .execute("DELETE FROM fastn_documents WHERE path = ?1", [path])
-            .map_err(DeleteError::Database)?;
+            ?;
 
         if rows_affected == 0 {
-            Err(DeleteError::NotFound(path.clone()))
+            Err(eyre::eyre!("Document not found: {}", path))
         } else {
             Ok(())
         }
@@ -339,12 +346,12 @@ pub enum ExistsError {
 
 impl crate::Db {
     /// Check if a document exists
-    pub fn exists(&self, path: &crate::DocumentPath) -> std::result::Result<bool, ExistsError> {
+    pub fn exists(&self, path: &crate::DocumentPath) -> crate::Result<bool> {
         let count: i32 = self.conn.query_row(
             "SELECT COUNT(*) FROM fastn_documents WHERE path = ?1",
             [path],
             |row| row.get(0),
-        ).map_err(ExistsError::Database)?;
+)?;
         Ok(count > 0)
     }
 
@@ -378,7 +385,7 @@ impl crate::Db {
                 [path],
                 |row| row.get(0),
             )
-            .map_err(UpdateError::Database)?;
+            ?;
 
         Ok(automerge::AutoCommit::load(&binary)?)
     }
