@@ -51,5 +51,35 @@ impl std::fmt::Display for crate::DocumentPathError {
 
 impl std::error::Error for crate::DocumentPathError {}
 
+impl std::fmt::Display for crate::DocumentLoadError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            crate::DocumentLoadError::Get(e) => write!(f, "Load error: {e}"),
+        }
+    }
+}
+
+impl std::error::Error for crate::DocumentLoadError {}
+
+impl std::fmt::Display for crate::DocumentCreateError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            crate::DocumentCreateError::Create(e) => write!(f, "Create error: {e}"),
+        }
+    }
+}
+
+impl std::error::Error for crate::DocumentCreateError {}
+
+impl std::fmt::Display for crate::DocumentUpdateError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            crate::DocumentUpdateError::Update(e) => write!(f, "Update error: {e}"),
+        }
+    }
+}
+
+impl std::error::Error for crate::DocumentUpdateError {}
+
 // TODO: Add proper error implementations for specific database error types
 // For now, they will use eyre::Result for flexibility
