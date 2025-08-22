@@ -16,8 +16,10 @@ automerge.workspace = true
 autosurgeon.workspace = true
 rusqlite.workspace = true
 serde_json.workspace = true
-clap = { version = "4", features = ["derive"] }
+clap.workspace = true
 eyre.workspace = true
+fastn-automerge-derive.workspace = true
+fastn-id52 = { workspace = true, features = ["automerge"] }
 
 [dev-dependencies]
 tempfile = "3"

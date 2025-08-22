@@ -1,8 +1,5 @@
 extern crate self as fastn_automerge;
 
-/// Sentinel value for uninitialized entity ID
-pub const UNINITIALIZED_ENTITY: &str = "uninitialized";
-
 pub mod cli;
 pub mod db;
 pub mod error;
@@ -13,6 +10,9 @@ pub mod utils;
 // Re-export autosurgeon traits and functions
 pub use autosurgeon::{Hydrate, Reconcile, hydrate, reconcile};
 
+// Re-export derive macro for convenience
+pub use fastn_automerge_derive::Document;
+
 // Re-export automerge types we use
 pub use automerge::AutoCommit;
 
@@ -20,7 +20,7 @@ pub use automerge::AutoCommit;
 pub type Result<T> = eyre::Result<T>;
 
 #[derive(Debug, Clone, PartialEq)]
-pub enum DocumentIdError {
+pub enum DocumentPathError {
     Empty,
     TooManyPrefixes { count: usize },
 }
@@ -28,20 +28,20 @@ pub enum DocumentIdError {
 
 /// Generic typed document ID that can only be created by ID constructors
 #[derive(Debug, Clone, PartialEq)]
-pub struct DocumentId(String);
+pub struct DocumentPath(String);
 
-impl DocumentId {
+impl DocumentPath {
     /// Create document ID from string with validation - the only way to create document IDs
-    pub fn from_string(id: &str) -> std::result::Result<Self, DocumentIdError> {
+    pub fn from_string(id: &str) -> std::result::Result<Self, DocumentPathError> {
         // Add basic validation for all document IDs
         if id.is_empty() {
-            return Err(DocumentIdError::Empty);
+            return Err(DocumentPathError::Empty);
         }
 
         // Check that at most one /-/ prefix exists
         let slash_dash_count = id.matches("/-/").count();
         if slash_dash_count > 1 {
-            return Err(DocumentIdError::TooManyPrefixes {
+            return Err(DocumentPathError::TooManyPrefixes {
                 count: slash_dash_count,
             });
         }
@@ -54,13 +54,13 @@ impl DocumentId {
     }
 }
 
-impl rusqlite::ToSql for DocumentId {
+impl rusqlite::ToSql for DocumentPath {
     fn to_sql(&self) -> rusqlite::Result<rusqlite::types::ToSqlOutput<'_>> {
         self.0.to_sql()
     }
 }
 
-impl std::fmt::Display for DocumentId {
+impl std::fmt::Display for DocumentPath {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.0)
     }
@@ -88,7 +88,7 @@ pub enum LoadError {
 pub struct Db {
     pub(crate) conn: rusqlite::Connection,
     /// Entity this database belongs to
-    pub(crate) entity_id52: String,
+    pub(crate) entity: fastn_id52::PublicKey,
     /// Device number for this database
     pub(crate) device_number: u32,
     /// Mutex for serializing all database operations
@@ -96,44 +96,29 @@ pub struct Db {
 }
 
 impl Db {
-    /// Check if the actor ID has been properly initialized
-    pub fn is_actor_id_initialized(&self) -> bool {
-        self.entity_id52 != UNINITIALIZED_ENTITY
-    }
-    
-    /// Get the full actor ID string (panics if not properly initialized)
+    /// Get the full actor ID string
     pub fn actor_id(&self) -> String {
-        assert_ne!(self.entity_id52, UNINITIALIZED_ENTITY, 
-            "Database actor ID not properly initialized - call set_actor_id() first");
-        format!("{}-{}", self.entity_id52, self.device_number)
+        format!("{}-{}", self.entity, self.device_number)
     }
     
-    /// Set the actor ID (can only be called once during initialization)
-    pub fn set_actor_id(&mut self, entity_id52: &str, device_number: u32) -> eyre::Result<()> {
-        if self.is_actor_id_initialized() {
-            return Err(eyre::eyre!("Actor ID already initialized - cannot change"));
+    /// Update device number (can only be called from device 0 to assign new device numbers)
+    pub fn update_device_number(&mut self, new_device_number: u32) -> Result<(), DeviceNumberError> {
+        if self.device_number != 0 {
+            return Err(DeviceNumberError::NotPrimaryDevice);
         }
-        self.entity_id52 = entity_id52.to_string();
-        self.device_number = device_number;
-        Ok(())
-    }
-    
-    /// Ensure actor ID is initialized before database operations
-    fn require_initialized(&self) -> std::result::Result<(), ActorIdNotSet> {
-        if !self.is_actor_id_initialized() {
-            return Err(ActorIdNotSet);
+        if new_device_number == 0 {
+            return Err(DeviceNumberError::InvalidDeviceNumber);
         }
+        self.device_number = new_device_number;
         Ok(())
     }
 }
 
 #[derive(Debug, Clone, PartialEq)]
-pub struct ActorIdNotSet;
-
-
-
-#[derive(Debug, Clone, PartialEq)]
-pub struct ActorIdAlreadySet;
+pub enum DeviceNumberError {
+    NotPrimaryDevice,
+    InvalidDeviceNumber,
+}
 
 // Common document operation errors for all consumers
 #[derive(Debug)]
@@ -165,7 +150,7 @@ pub enum DocumentSaveError {
 #[derive(Debug)]
 pub enum CreateError {
     ActorNotSet(ActorIdNotSet),
-    DocumentExists(DocumentId),
+    DocumentExists(DocumentPath),
     Database(rusqlite::Error),
     Automerge(automerge::AutomergeError),
     Reconcile(autosurgeon::ReconcileError),
@@ -176,7 +161,7 @@ pub enum CreateError {
 #[derive(Debug)]
 pub enum GetError {
     ActorNotSet(ActorIdNotSet),
-    NotFound(DocumentId),
+    NotFound(DocumentPath),
     Database(rusqlite::Error),
     Automerge(automerge::AutomergeError),
     Hydrate(autosurgeon::HydrateError),
@@ -187,7 +172,7 @@ pub enum GetError {
 #[derive(Debug)]
 pub enum UpdateError {
     ActorNotSet(ActorIdNotSet),
-    NotFound(DocumentId),
+    NotFound(DocumentPath),
     Database(rusqlite::Error),
     Automerge(automerge::AutomergeError),
     Reconcile(autosurgeon::ReconcileError),

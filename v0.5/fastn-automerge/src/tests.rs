@@ -9,6 +9,15 @@ mod test {
         items: Vec<String>,
     }
 
+    // Test the derive macro
+    #[derive(crate::Document)]
+    struct TestEntity {
+        #[document_id]
+        entity: fastn_id52::PublicKey,
+        name: String,
+        data: Option<String>,
+    }
+
     #[derive(Debug, Clone, PartialEq, Hydrate, Reconcile)]
     struct NestedDoc {
         title: String,

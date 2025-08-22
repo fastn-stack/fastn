@@ -27,26 +27,30 @@ impl crate::Db {
             return Err(LoadError::NotInitialized(db_path.to_path_buf()));
         }
 
-        let db = Self { 
-            conn, 
-            entity_id52: crate::UNINITIALIZED_ENTITY.to_string(),
-            device_number: 0,
-            mutex: std::sync::Mutex::new(()),
-        };
-        
-        // Read the entity identity from the actor counter (strict - must exist)
-        let counter_doc_id = crate::DocumentId::from_string("/-/system/actor_counter")
-            .expect("System document ID should be valid");
-        
-        let counter = db.get::<crate::ActorCounter>(&counter_doc_id)
+        // Read the actor counter directly from SQL to get stored entity
+        let counter_doc_path = crate::DocumentPath::from_string("/-/system/actor_counter")
+            .expect("System document path should be valid");
+            
+        let binary: Vec<u8> = conn.query_row(
+            "SELECT automerge_binary FROM fastn_documents WHERE path = ?1",
+            [&counter_doc_path],
+            |row| row.get(0),
+        ).map_err(|_| LoadError::MissingActorCounter)?;
+
+        let doc = automerge::AutoCommit::load(&binary)
+            .map_err(LoadError::DatabaseError)?;
+        let counter: crate::ActorCounter = autosurgeon::hydrate(&doc)
             .map_err(|_| LoadError::MissingActorCounter)?;
-        
-        // Update with actual entity identity
+
+        // Parse stored entity ID back to PublicKey
+        let entity = fastn_id52::PublicKey::from_str(&counter.entity_id52)
+            .map_err(|_| LoadError::MissingActorCounter)?;
+            
         Ok(Self {
-            conn: db.conn,
-            entity_id52: counter.entity_id52,
+            conn,
+            entity,
             device_number: 0, // Primary device
-            mutex: db.mutex,
+            mutex: std::sync::Mutex::new(()),
         })
     }
 
@@ -62,7 +66,7 @@ pub enum InitError {
 
 impl crate::Db {
     /// Initialize a new database for an entity (primary device)
-    pub fn init(db_path: &std::path::Path, entity_id52: &str) -> Result<Self, InitError> {
+    pub fn init(db_path: &std::path::Path, entity: &fastn_id52::PublicKey) -> Result<Self, InitError> {
         if db_path.exists() {
             return Err(InitError::DatabaseExists(db_path.to_path_buf()));
         }
@@ -72,19 +76,19 @@ impl crate::Db {
         
         let db = Self { 
             conn, 
-            entity_id52: entity_id52.to_string(),
+            entity: *entity, // Store PublicKey directly
             device_number: 0, // Primary device is always 0
             mutex: std::sync::Mutex::new(()),
         };
         
         // Initialize the actor counter with database identity
-        let counter_doc_id = crate::DocumentId::from_string("/-/system/actor_counter")
-            .expect("System document ID should be valid");
+        let counter_doc_path = crate::DocumentPath::from_string("/-/system/actor_counter")
+            .expect("System document path should be valid");
         let counter = crate::ActorCounter { 
-            entity_id52: entity_id52.to_string(),
+            entity_id52: entity.id52(), // Store as string in the document for now
             next_device: 1, // Next device will be 1
         };
-        db.create(&counter_doc_id, &counter).map_err(InitError::Create)?;
+        db.create(&counter_doc_path, &counter).map_err(InitError::Create)?;
         
         Ok(db)
     }
@@ -93,7 +97,7 @@ impl crate::Db {
 #[derive(Debug)]
 pub enum CreateError {
     ActorNotSet(crate::ActorIdNotSet),
-    DocumentExists(crate::DocumentId),
+    DocumentExists(crate::DocumentPath),
     Database(rusqlite::Error),
     Automerge(automerge::AutomergeError),
     Reconcile(autosurgeon::ReconcileError),
@@ -101,7 +105,7 @@ pub enum CreateError {
 
 impl crate::Db {
     /// Create a new document
-    pub fn create<T>(&self, path: &crate::DocumentId, value: &T) -> Result<(), CreateError>
+    pub fn create<T>(&self, path: &crate::DocumentPath, value: &T) -> Result<(), CreateError>
     where
         T: autosurgeon::Reconcile,
     {
@@ -157,7 +161,7 @@ impl crate::Db {
     }
 
     /// Get a document
-    pub fn get<T>(&self, path: &crate::DocumentId) -> crate::Result<T>
+    pub fn get<T>(&self, path: &crate::DocumentPath) -> crate::Result<T>
     where
         T: autosurgeon::Hydrate,
     {
@@ -180,7 +184,7 @@ impl crate::Db {
 #[derive(Debug)]
 pub enum UpdateError {
     ActorNotSet(crate::ActorIdNotSet),
-    NotFound(crate::DocumentId),
+    NotFound(crate::DocumentPath),
     Database(rusqlite::Error),
     Automerge(automerge::AutomergeError),
     Reconcile(autosurgeon::ReconcileError),
@@ -188,7 +192,7 @@ pub enum UpdateError {
 
 impl crate::Db {
     /// Update a document
-    pub fn update<T>(&self, path: &crate::DocumentId, value: &T) -> Result<(), UpdateError>
+    pub fn update<T>(&self, path: &crate::DocumentPath, value: &T) -> Result<(), UpdateError>
     where
         T: autosurgeon::Reconcile,
     {
@@ -244,7 +248,7 @@ impl crate::Db {
     }
 
     /// Modify a document with a closure
-    pub fn modify<T, F>(&self, path: &crate::DocumentId, modifier: F) -> crate::Result<()>
+    pub fn modify<T, F>(&self, path: &crate::DocumentPath, modifier: F) -> crate::Result<()>
     where
         T: autosurgeon::Hydrate + autosurgeon::Reconcile,
         F: FnOnce(&mut T),
@@ -310,13 +314,13 @@ impl crate::Db {
 #[derive(Debug)]
 pub enum DeleteError {
     ActorNotSet(crate::ActorIdNotSet),
-    NotFound(crate::DocumentId),
+    NotFound(crate::DocumentPath),
     Database(rusqlite::Error),
 }
 
 impl crate::Db {
     /// Delete a document
-    pub fn delete(&self, path: &crate::DocumentId) -> std::result::Result<(), DeleteError> {
+    pub fn delete(&self, path: &crate::DocumentPath) -> std::result::Result<(), DeleteError> {
         let rows_affected = self
             .conn
             .execute("DELETE FROM fastn_documents WHERE path = ?1", [path])
@@ -339,7 +343,7 @@ pub enum ExistsError {
 
 impl crate::Db {
     /// Check if a document exists
-    pub fn exists(&self, path: &crate::DocumentId) -> std::result::Result<bool, ExistsError> {
+    pub fn exists(&self, path: &crate::DocumentPath) -> std::result::Result<bool, ExistsError> {
         let count: i32 = self.conn.query_row(
             "SELECT COUNT(*) FROM fastn_documents WHERE path = ?1",
             [path],
@@ -370,7 +374,7 @@ impl crate::Db {
     }
 
     /// Get raw AutoCommit document for advanced operations
-    pub fn get_document(&self, path: &crate::DocumentId) -> crate::Result<automerge::AutoCommit> {
+    pub fn get_document(&self, path: &crate::DocumentPath) -> crate::Result<automerge::AutoCommit> {
         let binary: Vec<u8> = self
             .conn
             .query_row(
@@ -408,7 +412,7 @@ impl crate::Db {
     /// If None, shows complete history up to current heads.
     pub fn history(
         &self,
-        path: &crate::DocumentId,
+        path: &crate::DocumentPath,
         up_to_head: Option<&str>,
     ) -> crate::Result<crate::DocumentHistory> {
         let (binary, created_alias, updated_at): (Vec<u8>, String, i64) = self.conn.query_row(
@@ -493,7 +497,7 @@ impl crate::Db {
         // Lock for atomic operation
         let _lock = self.mutex.lock().unwrap();
         
-        let counter_doc_id = crate::DocumentId::from_string("/-/system/actor_counter")
+        let counter_doc_id = crate::DocumentPath::from_string("/-/system/actor_counter")
             .expect("System document ID should be valid");
         
         // Load or create actor counter document
