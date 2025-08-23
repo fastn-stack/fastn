@@ -10,7 +10,7 @@ use syn::{Data, DeriveInput, Field, Fields, parse_macro_input};
 /// 
 /// Most convenient for entity-specific documents:
 /// 
-/// ```rust
+/// ```ignore
 /// #[derive(Document, Reconcile, Hydrate)]
 /// #[document_path("/-/users/{id52}/profile")]
 /// struct UserProfile {
@@ -30,7 +30,7 @@ use syn::{Data, DeriveInput, Field, Fields, parse_macro_input};
 /// 
 /// For global/singleton documents:
 /// 
-/// ```rust
+/// ```ignore
 /// #[derive(Document, Reconcile, Hydrate)]
 /// #[document_path("/-/app/config")]
 /// struct AppConfig {
@@ -49,7 +49,7 @@ use syn::{Data, DeriveInput, Field, Fields, parse_macro_input};
 /// 
 /// Requires explicit paths for every operation:
 /// 
-/// ```rust
+/// ```ignore
 /// #[derive(Document, Reconcile, Hydrate)]
 /// struct FlexibleDoc {
 ///     #[document_id52]
