@@ -1,306 +1,201 @@
 # fastn-automerge
 
-A high-level Rust library managing Automerge CRDT documents with SQLite
-storage. Built for the FASTN P2P system but usable as a standalone tool.
+A high-level Rust library for managing Automerge CRDT documents with SQLite storage. 
+Provides three different APIs through derive macros for maximum flexibility and type safety.
 
-The CLI is only for testing.
+## 🚀 Quick Start
 
-## Features
+```rust
+use fastn_automerge::{Db, Document, Reconcile, Hydrate};
+use fastn_id52::PublicKey;
 
-- 🗄️ SQLite-backed persistent storage for Automerge documents
-- 🔍 Path-based document organization (filesystem-like paths)
-- 🦀 Type-safe Rust API with derive macros
-- 🛠️ CLI for document management operations
-- 📦 Zero-copy document access where possible
-- 🔄 Preserves full document history and metadata
-- 🎭 Unique actor ID per document for clean history
+#[derive(Debug, Clone, Document, Reconcile, Hydrate)]
+#[document_path("/-/users/{id52}/profile")]
+struct UserProfile {
+    #[document_id52]
+    id: PublicKey,
+    name: String,
+    bio: Option<String>,
+}
 
-## Quick Start
+// Simple usage
+let db = Db::init("app.sqlite", &entity)?;
+let user = UserProfile { /* ... */ };
+user.save(&db)?;
+let loaded = UserProfile::load(&db, &user.id)?;
+let all_users = UserProfile::document_list(&db)?; // List all users!
+```
 
-### Installation
+## 📋 Three APIs for Different Use Cases
 
+| API | When to Use | Example | Generated Functions |
+|-----|-------------|---------|-------------------|
+| **Template-based** | Entity-specific documents | `#[document_path("/-/users/{id52}/profile")]` | `save(db)`, `load(db, &id)`, `document_list(db)` |
+| **Singleton** | Global/config documents | `#[document_path("/-/app/settings")]` | `save(db)`, `load(db)` |
+| **Path-based** | Maximum flexibility | No `#[document_path]` | `save(db, &path)`, `load(db, &path)` |
+
+## 🎯 Features
+
+- **🦀 Type-safe**: Compile-time path validation and type checking
+- **🔍 Smart listing**: `document_list()` with exact DNSSEC32 validation  
+- **⚡ Performance**: SQL prefix filtering + Rust validation
+- **🗄️ SQLite storage**: Efficient persistence with indexing
+- **🔄 CRDT support**: Built on Automerge for conflict-free editing
+- **🎭 Actor tracking**: Automatic device/entity management
+- **📦 Feature-gated CLI**: Optional command-line tools
+- **📚 Full history**: Complete edit history inspection
+
+## 📖 Documentation
+
+- **[Tutorial](TUTORIAL.md)** - Comprehensive guide with examples
+- **[API Docs](https://docs.rs/fastn-automerge)** - Full API reference  
+- **[CLI Guide](#cli-usage)** - Command-line tool documentation
+
+## 🛠️ Installation
+
+### Library Only (Recommended)
 ```toml
 [dependencies]
 fastn-automerge = "0.1"
 ```
+*Lightweight build - no CLI dependencies*
 
-No need to add `autosurgeon` separately - we re-export everything you need.
+### With CLI Tools
+```toml
+[dependencies]
+fastn-automerge = { version = "0.1", features = ["cli"] }
+```
 
-### Basic Usage
+### CLI Binary
+```bash
+cargo install fastn-automerge --features=cli
+```
+
+## 💡 Examples
+
+### Template-based API (Most Common)
 
 ```rust
-use fastn_automerge::{Db, Reconcile, Hydrate, Result};
+#[derive(Document, Reconcile, Hydrate)]
+#[document_path("/-/notes/{id52}/content")]
+struct Note {
+    #[document_id52] id: PublicKey,
+    title: String,
+    content: String,
+    tags: Vec<String>,
+}
 
-#[derive(Debug, Clone, Reconcile, Hydrate)]
+// Usage
+note.save(&db)?;                     // Auto path: /-/notes/abc123.../content
+let loaded = Note::load(&db, &id)?;  // Load by ID
+let all_notes = Note::document_list(&db)?; // List all notes
+```
+
+### Singleton API (Global State)
+
+```rust  
+#[derive(Document, Reconcile, Hydrate)]
+#[document_path("/-/app/config")]
 struct Config {
-    name: String,
-    version: u32,
+    theme: String,
+    debug: bool,
 }
 
-fn main() -> Result<()> {
-    // Open with actor ID (required for all operations)
-    let actor_id = "a3f2b1c8-9d4e-4a6b-8c3d-1e2f3a4b5c6d-1".to_string();
-    let db_path = std::path::Path::new("fastn-automerge.sqlite");
-    let db = Db::open_with_actor(db_path, actor_id)?;
-
-    // Create
-    let config = Config { name: "app".into(), version: 1 };
-    db.create("/-/config", &config)?;
-
-    // Read
-    let loaded: Config = db.get("/-/config")?;
-
-    // Update entire document
-    let mut updated_config = loaded;
-    updated_config.version = 2;
-    db.update("/-/config", &updated_config)?;
-
-    // Or modify in place
-    db.modify::<Config, _>("/-/config", |c| c.version = 3)?;
-
-    // Check if document exists
-    if db.exists("/-/config")? {
-        println!("Config exists!");
-    }
-
-    // List documents
-    let all_docs = db.list(None)?;
-    let config_docs = db.list(Some("/-/config"))?;
-
-    // Get document history
-    let history = db.history("/-/config", None)?;
-    println!("Document has {} edits", history.edits.len());
-
-    // Get raw AutoCommit document for advanced operations
-    let raw_doc = db.get_document("/-/config")?;
-
-    // Delete document
-    db.delete("/-/config")?;
-
-    Ok(())
-}
+// Usage
+config.save(&db)?;           // Fixed path: /-/app/config
+let loaded = Config::load(&db)?; // No ID needed
 ```
 
-## CLI Usage
+### Path-based API (Maximum Flexibility)
 
-### Installation
+```rust
+#[derive(Document, Reconcile, Hydrate)]
+struct FlexibleDoc {
+    #[document_id52] id: PublicKey,
+    data: String,
+}
+
+// Usage  
+let path = DocumentPath::from_string("/-/custom/path")?;
+doc.save(&db, &path)?;           // Explicit path required
+let loaded = FlexibleDoc::load(&db, &path)?;
+```
+
+## 🎯 CLI Usage
 
 ```bash
-# Build from source (CLI binary will be available in target/debug/)
-cargo build -p fastn-automerge
+# Initialize database
+fastn-automerge init
+
+# Document operations
+fastn-automerge create /-/users/alice '{"name": "Alice", "age": 30}'
+fastn-automerge get /-/users/alice --pretty
+fastn-automerge update /-/users/alice '{"age": 31}'
+fastn-automerge list --prefix /-/users/
+
+# Document history
+fastn-automerge history /-/users/alice
+fastn-automerge info /-/users/alice
+
+# Cleanup
+fastn-automerge delete /-/users/alice
 ```
 
-### Example Session
+## 🔧 Advanced Features
 
-```bash
-# Initialize a new database
-$ fastn-automerge init
-Initialized database at fastn-automerge.sqlite
+### Document History Inspection
 
-# Create a document with JSON data
-$ fastn-automerge create /-/config '{"app_name": "MyApp", "version": 1, "debug": true}'
-Created document at /-/config
-
-# Read the document with pretty printing
-$ fastn-automerge get /-/config --pretty
-{
-  "app_name": "MyApp",
-  "debug": true,
-  "version": 1
-}
-
-# Create another document
-$ fastn-automerge create /-/users/alice '{"name": "Alice", "age": 30, "email": "alice@example.com"}'
-Created document at /-/users/alice
-
-# List all documents
-$ fastn-automerge list
-/-/config
-/-/users/alice
-
-# List with prefix filter
-$ fastn-automerge list --prefix /-/users/
-/-/users/alice
-
-# Update a document
-$ fastn-automerge update /-/config '{"app_name": "MyApp", "version": 2, "debug": false}'
-Updated document at /-/config
-
-# Get updated document
-$ fastn-automerge get /-/config
-{"app_name": "MyApp", "debug": false, "version": 2}
-
-# Show document info
-$ fastn-automerge info /-/config
-Document: /-/config
-Created by: cli
-Updated at: 1755542350
-Heads: 959d239ec8e7517de8007f48ba3aa324c3b46bf5b3bd094721caf0705a0faae0
-Total edits: 2
-
-# Show document history (short)
-$ fastn-automerge history /-/config --short
-History for /-/config
-Created by: cli
-Updated at: 1755542350
-Heads: 959d239ec8e7517de8007f48ba3aa324c3b46bf5b3bd094721caf0705a0faae0
-
-2 edits total
-
-# Show document history (detailed)
-$ fastn-automerge history /-/config
-History for /-/config
-Created by: cli
-Updated at: 1755542350
-Heads: 959d239ec8e7517de8007f48ba3aa324c3b46bf5b3bd094721caf0705a0faae0
-
-Edit #1: 8cca91226eea1bc54e16f3b3cde4aec815849b4638757f7ba79079486b2454dc
-  Actor: 636c692d757365722d31
-  Timestamp: 0
-  Operations: 1 ops
-    Set { path: [], key: "(2 operations in this change)", value: "Details not yet implemented" }
-
-Edit #2: 959d239ec8e7517de8007f48ba3aa324c3b46bf5b3bd094721caf0705a0faae0
-  Actor: 636c692d31
-  Timestamp: 0
-  Operations: 1 ops
-    Set { path: [], key: "(2 operations in this change)", value: "Details not yet implemented" }
-
-# Create or replace document (set command)
-$ fastn-automerge set /-/settings '{"theme": "dark", "notifications": true}'
-Set document at /-/settings
-
-# Write output to file
-$ fastn-automerge get /-/config --pretty --output config.json
-Output written to config.json
-
-# Read from file
-$ echo '{"name": "Bob", "role": "admin"}' > user.json
-$ fastn-automerge create /-/users/bob --file user.json
-Created document at /-/users/bob
-```
-
-## Documentation
-
-- [Tutorial](TUTORIAL.md) - Comprehensive guide with examples
-- [API Docs](https://docs.rs/fastn-automerge) - Full API reference
-- [CLI Reference](#cli-commands) - Command-line tool documentation
-
-## CLI Commands (Coming Soon)
-
-### Core Commands
-
-- `init` - Initialize a new database
-- `create <path> <json>` - Create a new document
-- `get <path>` - Read a document as JSON
-- `update <path> <json>` - Update an existing document
-- `set <path> <json>` - Create or replace a document
-- `delete <path>` - Delete a document
-- `list` - List all documents
-- `history <doc-id> [<commit-hash>] [--short]` - Show document edit history
-- `info <path>` - Show document metadata
-
-### Options
-
-All commands support:
-
-- `--db <path>` - Use custom database (default: `fastn-automerge.sqlite`)
-- `--pretty` - Pretty-print JSON output
-- `--help` - Show command help
-
-## Path Conventions
-
-Documents use filesystem-like paths:
-
-- `/-/config` - Global configuration
-- `/-/accounts/{id}` - Account documents
-- `/-/rig/{id}/config` - Rig configuration
-
-## Design: Actor IDs and Permissions
-
-### Actor ID Scheme
-
-- **Format**: `{alias-id52}-{device-number}` (e.g., `1oem6e10...-1`)
-- **Creation**: Each document stores its creation alias in database
-- **Consistency**: All edits use the creation alias (no history rewriting in
-  common case)
-- **Cross-alias sharing**: History rewritten only when sharing with different
-  alias (rare)
-
-### Permission System
-
-- **Built-in enforcement**: Read-only documents cannot be edited locally
-- **Metadata documents**: Stored at `{doc_path}/-/meta` for each document
-- **Group documents**: Stored at `/-/groups/{group-name}`
-- **Permission levels**: Read, Write, Admin
-- **Permission propagation**: Meta documents shared alongside content
-- **Nested groups**: Groups can contain other groups
-- **Permission inheritance**: Members inherit permissions from their groups
-
-#### Document Structure
-
-**Group Document** (`/-/groups/{name}`):
-
-```json
-{
-  "name": "engineers",
-  "description": "Engineering team",
-  "accounts": [
-    "alice123...",
-    "bob456..."
-  ],
-  "groups": [
-    "backend-team",
-    "frontend-team"
-  ],
-  // Nested groups
-  "created_by": "alice123...",
-  "created_at": 1234567890
+```rust
+let history = db.history(&path, None)?;
+for edit in &history.edits {
+    println!("Edit by {}: {} operations", edit.actor_id, edit.operations.len());
 }
 ```
 
-**Document Metadata** (`{doc_path}/-/meta`):
+### Bulk Operations with `document_list()`
 
-```json
-{
-  "owner": "alice123...",
-  "permissions": {
-    "accounts": {
-      "bob456...": "read",
-      "carol789...": "write"
-    },
-    "groups": {
-      "engineers": "write",
-      "managers": "admin"
+```rust
+// Process all user profiles
+let user_paths = UserProfile::document_list(&db)?;
+for path in user_paths {
+    if let Some(id) = extract_id_from_path(&path) {
+        let user = UserProfile::load(&db, &id)?;
+        // Process user...
     }
-  },
-  "created_at": 1234567890
 }
 ```
 
-### Optimization
+### Error Handling
 
-- **Single alias optimization**: Most users have one alias, no rewriting needed
-- **Creation alias stored**: In `fastn_documents.created_alias` column
-- **History rewrite only on mismatch**: When sharing alias differs from creation
-  alias
+```rust
+use fastn_automerge::db::{GetError, CreateError};
 
-## Database Schema
-
-```sql
-CREATE TABLE fastn_documents
-(
-    path             TEXT PRIMARY KEY,
-    created_alias    TEXT    NOT NULL, -- Alias used at creation (for actor ID)
-    automerge_binary BLOB    NOT NULL,
-    heads            TEXT    NOT NULL, -- JSON array
-    updated_at       INTEGER NOT NULL  -- Unix timestamp
-);
-
--- Actor ID format: {created_alias}-{device-num}
--- No history rewriting needed when using same alias
+match UserProfile::load(&db, &user_id) {
+    Ok(profile) => { /* use profile */ },
+    Err(GetError::NotFound(_)) => { /* create default */ },
+    Err(e) => return Err(e.into()),
+}
 ```
 
-## License
+## 🏗️ Architecture
+
+- **Automerge**: CRDT for conflict-free collaborative editing
+- **Autosurgeon**: Type-safe serialization with derive macros  
+- **SQLite**: Persistent storage with efficient indexing
+- **Actor ID system**: Device/entity tracking for privacy protection
+- **Path validation**: Compile-time and runtime path checking
+
+## 🔒 Privacy & Security
+
+- **Actor ID rewriting**: Prevents account linkage across aliases
+- **Device management**: Automatic device number assignment
+- **History preservation**: Full audit trail of all changes
+- **Path validation**: Prevents injection and malformed paths
+
+## 📄 License
 
 MIT
+
+---
+
+**Built for the FASTN P2P system** but designed as a standalone library for any application needing collaborative document storage.

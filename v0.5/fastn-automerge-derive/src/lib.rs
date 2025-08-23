@@ -4,36 +4,71 @@ use syn::{Data, DeriveInput, Field, Fields, parse_macro_input};
 
 /// Derive macro for fastn-automerge document structs
 ///
-/// Generates two different APIs based on whether #[document_path] is provided:
+/// Generates three different APIs based on your document structure:
 ///
-/// ## With document_path attribute (template-based API):
+/// ## 1. Template with `{id52}` placeholder
+/// 
+/// Most convenient for entity-specific documents:
+/// 
 /// ```rust
-/// #[derive(Document)]
+/// #[derive(Document, Reconcile, Hydrate)]
 /// #[document_path("/-/users/{id52}/profile")]
-/// struct User {
-///     #[document_id52] id: PublicKey,
+/// struct UserProfile {
+///     #[document_id52] 
+///     user_id: fastn_id52::PublicKey,
 ///     name: String,
 /// }
 /// 
-/// // Generates:
-/// // - User::load(db, &id) -> Result<User, GetError>
-/// // - user.save(db) -> Result<(), SaveError>  
-/// // - User::document_list(db) -> Result<Vec<DocumentPath>, ListError>
+/// // Generated API:
+/// // UserProfile::load(db, &user_id) -> Result<UserProfile, GetError>
+/// // profile.save(db) -> Result<(), SaveError>
+/// // UserProfile::document_list(db) -> Result<Vec<DocumentPath>, ListError> ← NEW!
+/// // UserProfile::document_path(&user_id) -> DocumentPath
 /// ```
 ///
-/// ## Without document_path attribute (path-based API):
+/// ## 2. Template without `{id52}` (singleton)
+/// 
+/// For global/singleton documents:
+/// 
 /// ```rust
-/// #[derive(Document)]
-/// struct User {
-///     #[document_id52] id: PublicKey,
-///     name: String,
+/// #[derive(Document, Reconcile, Hydrate)]
+/// #[document_path("/-/app/config")]
+/// struct AppConfig {
+///     version: String,
+///     features: Vec<String>,
 /// }
 /// 
-/// // Generates:
-/// // - User::load(db, &path) -> Result<User, GetError>
-/// // - user.save(db, &path) -> Result<(), SaveError>
-/// // - No document_list() function
+/// // Generated API:
+/// // AppConfig::load(db) -> Result<AppConfig, GetError>
+/// // config.save(db) -> Result<(), SaveError>
+/// // AppConfig::document_path() -> DocumentPath
+/// // No document_list() - only one instance
 /// ```
+///
+/// ## 3. No template (maximum flexibility)
+/// 
+/// Requires explicit paths for every operation:
+/// 
+/// ```rust
+/// #[derive(Document, Reconcile, Hydrate)]
+/// struct FlexibleDoc {
+///     #[document_id52]
+///     id: fastn_id52::PublicKey,
+///     data: String,
+/// }
+/// 
+/// // Generated API:
+/// // FlexibleDoc::load(db, &path) -> Result<FlexibleDoc, GetError>
+/// // doc.save(db, &path) -> Result<(), SaveError>
+/// // No document_path() or document_list() - paths are explicit
+/// ```
+///
+/// ## Pattern Matching Details
+///
+/// `document_list()` uses exact DNSSEC32 validation:
+/// - Template: `"/-/users/{id52}/notes"` 
+/// - Matches: `"/-/users/abc123...xyz/notes"` (exactly 52 alphanumeric chars)
+/// - Rejects: `"/-/users/short/notes"`, `"/-/users/has-dashes/notes"`
 #[proc_macro_derive(Document, attributes(document_id52, document_path))]
 pub fn derive_document(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DeriveInput);
