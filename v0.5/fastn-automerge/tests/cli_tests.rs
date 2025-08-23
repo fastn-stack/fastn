@@ -70,10 +70,6 @@ impl CliTest {
         self.run(&["list", "--prefix", prefix])
     }
 
-    fn clean_force(&self) -> CliOutput {
-        self.run(&["clean", "--force"])
-    }
-
     fn history(&self, path: &str) -> CliOutput {
         self.run(&["history", path])
     }
@@ -297,27 +293,4 @@ fn test_cli_errors() {
 
     // Test update non-existent
     test.update("/-/missing", r#"{"id": 1}"#).should_fail();
-}
-
-#[test]
-fn test_cli_clean() {
-    let test = CliTest::new("clean");
-
-    test.init().should_succeed();
-    test.create("/-/doc1", r#"{"id": 1}"#).should_succeed();
-    test.create("/-/doc2", r#"{"id": 2}"#).should_succeed();
-
-    test.list()
-        .should_succeed()
-        .stdout_contains("/-/doc1")
-        .stdout_contains("/-/doc2");
-
-    test.clean_force()
-        .should_succeed()
-        .stdout_contains("Deleted 2 documents");
-
-    test.list()
-        .should_succeed()
-        .stdout_not_contains("/-/doc1")
-        .stdout_not_contains("/-/doc2");
 }

@@ -1,6 +1,9 @@
 # fastn-automerge
 
-A high-level Rust library and CLI for managing Automerge CRDT documents with SQLite storage. Built for the FASTN P2P system but usable as a standalone tool.
+A high-level Rust library managing Automerge CRDT documents with SQLite
+storage. Built for the FASTN P2P system but usable as a standalone tool.
+
+The CLI is only for testing.
 
 ## Features
 
@@ -39,41 +42,41 @@ fn main() -> Result<()> {
     let actor_id = "a3f2b1c8-9d4e-4a6b-8c3d-1e2f3a4b5c6d-1".to_string();
     let db_path = std::path::Path::new("fastn-automerge.sqlite");
     let db = Db::open_with_actor(db_path, actor_id)?;
-    
+
     // Create
     let config = Config { name: "app".into(), version: 1 };
     db.create("/-/config", &config)?;
-    
+
     // Read
     let loaded: Config = db.get("/-/config")?;
-    
+
     // Update entire document
     let mut updated_config = loaded;
     updated_config.version = 2;
     db.update("/-/config", &updated_config)?;
-    
+
     // Or modify in place
     db.modify::<Config, _>("/-/config", |c| c.version = 3)?;
-    
+
     // Check if document exists
     if db.exists("/-/config")? {
         println!("Config exists!");
     }
-    
+
     // List documents
     let all_docs = db.list(None)?;
     let config_docs = db.list(Some("/-/config"))?;
-    
+
     // Get document history
     let history = db.history("/-/config", None)?;
     println!("Document has {} edits", history.edits.len());
-    
+
     // Get raw AutoCommit document for advanced operations
     let raw_doc = db.get_document("/-/config")?;
-    
+
     // Delete document
     db.delete("/-/config")?;
-    
+
     Ok(())
 }
 ```
@@ -175,11 +178,6 @@ Output written to config.json
 $ echo '{"name": "Bob", "role": "admin"}' > user.json
 $ fastn-automerge create /-/users/bob --file user.json
 Created document at /-/users/bob
-
-# Clean database (with confirmation)
-$ fastn-automerge clean
-This will delete ALL documents. Are you sure? (y/N): y
-Deleted 4 documents
 ```
 
 ## Documentation
@@ -199,13 +197,13 @@ Deleted 4 documents
 - `set <path> <json>` - Create or replace a document
 - `delete <path>` - Delete a document
 - `list` - List all documents
-- `clean [--force]` - Clean up database (remove all documents)
 - `history <doc-id> [<commit-hash>] [--short]` - Show document edit history
 - `info <path>` - Show document metadata
 
 ### Options
 
 All commands support:
+
 - `--db <path>` - Use custom database (default: `fastn-automerge.sqlite`)
 - `--pretty` - Pretty-print JSON output
 - `--help` - Show command help
@@ -213,19 +211,24 @@ All commands support:
 ## Path Conventions
 
 Documents use filesystem-like paths:
+
 - `/-/config` - Global configuration
-- `/-/accounts/{id}` - Account documents  
+- `/-/accounts/{id}` - Account documents
 - `/-/rig/{id}/config` - Rig configuration
 
 ## Design: Actor IDs and Permissions
 
 ### Actor ID Scheme
+
 - **Format**: `{alias-id52}-{device-number}` (e.g., `1oem6e10...-1`)
 - **Creation**: Each document stores its creation alias in database
-- **Consistency**: All edits use the creation alias (no history rewriting in common case)
-- **Cross-alias sharing**: History rewritten only when sharing with different alias (rare)
+- **Consistency**: All edits use the creation alias (no history rewriting in
+  common case)
+- **Cross-alias sharing**: History rewritten only when sharing with different
+  alias (rare)
 
 ### Permission System
+
 - **Built-in enforcement**: Read-only documents cannot be edited locally
 - **Metadata documents**: Stored at `{doc_path}/-/meta` for each document
 - **Group documents**: Stored at `/-/groups/{group-name}`
@@ -237,18 +240,27 @@ Documents use filesystem-like paths:
 #### Document Structure
 
 **Group Document** (`/-/groups/{name}`):
+
 ```json
 {
   "name": "engineers",
   "description": "Engineering team",
-  "accounts": ["alice123...", "bob456..."],
-  "groups": ["backend-team", "frontend-team"],  // Nested groups
+  "accounts": [
+    "alice123...",
+    "bob456..."
+  ],
+  "groups": [
+    "backend-team",
+    "frontend-team"
+  ],
+  // Nested groups
   "created_by": "alice123...",
   "created_at": 1234567890
 }
 ```
 
 **Document Metadata** (`{doc_path}/-/meta`):
+
 ```json
 {
   "owner": "alice123...",
@@ -267,19 +279,22 @@ Documents use filesystem-like paths:
 ```
 
 ### Optimization
+
 - **Single alias optimization**: Most users have one alias, no rewriting needed
 - **Creation alias stored**: In `fastn_documents.created_alias` column
-- **History rewrite only on mismatch**: When sharing alias differs from creation alias
+- **History rewrite only on mismatch**: When sharing alias differs from creation
+  alias
 
 ## Database Schema
 
 ```sql
-CREATE TABLE fastn_documents (
-    path              TEXT PRIMARY KEY,
-    created_alias     TEXT NOT NULL,      -- Alias used at creation (for actor ID)
-    automerge_binary  BLOB NOT NULL,
-    heads             TEXT NOT NULL,      -- JSON array
-    updated_at        INTEGER NOT NULL    -- Unix timestamp
+CREATE TABLE fastn_documents
+(
+    path             TEXT PRIMARY KEY,
+    created_alias    TEXT    NOT NULL, -- Alias used at creation (for actor ID)
+    automerge_binary BLOB    NOT NULL,
+    heads            TEXT    NOT NULL, -- JSON array
+    updated_at       INTEGER NOT NULL  -- Unix timestamp
 );
 
 -- Actor ID format: {created_alias}-{device-num}

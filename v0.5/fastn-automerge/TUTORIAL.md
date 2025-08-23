@@ -1,6 +1,7 @@
 # fastn-automerge Tutorial
 
-This tutorial covers the fastn-automerge library and CLI in detail, with practical examples and best practices.
+This tutorial covers the fastn-automerge library and CLI in detail, with
+practical examples and best practices.
 
 ## Table of Contents
 
@@ -12,7 +13,8 @@ This tutorial covers the fastn-automerge library and CLI in detail, with practic
 
 ## Introduction
 
-fastn-automerge provides a high-level interface for working with Automerge CRDT documents stored in SQLite. It combines:
+fastn-automerge provides a high-level interface for working with Automerge CRDT
+documents stored in SQLite. It combines:
 
 - **Automerge**: A CRDT that enables automatic merging of concurrent changes
 - **Autosurgeon**: Type-safe serialization with derive macros
@@ -35,7 +37,7 @@ use fastn_automerge::{Db, Reconcile, Hydrate, Result};
 // Open database with actor ID (required)
 let actor_id = "alice123-1".to_string();
 let db_path = std::path::Path::new("fastn-automerge.sqlite");
-let db = Db::open_with_actor(db_path, actor_id)?;
+let db = Db::open_with_actor(db_path, actor_id) ?;
 
 // The database will be created automatically if it doesn't exist
 // Migration tables are set up on first connection
@@ -97,10 +99,10 @@ fn create_example(db: &Db) -> Result<()> {
         age: 30,
         active: true,
     };
-    
+
     // Create new document (fails if exists)
     db.create("/-/users/user123", &user)?;
-    
+
     Ok(())
 }
 ```
@@ -112,7 +114,7 @@ fn read_example(db: &Db) -> Result<()> {
     // Type-safe read
     let user: User = db.get("/-/users/user123")?;
     println!("User: {} ({})", user.name, user.email);
-    
+
     // Handle not found
     match db.get::<User>("/-/users/unknown") {
         Ok(user) => println!("Found: {}", user.name),
@@ -121,12 +123,12 @@ fn read_example(db: &Db) -> Result<()> {
         }
         Err(e) => return Err(e),
     }
-    
+
     // Check if document exists
     if db.exists("/-/users/user123")? {
         println!("User exists!");
     }
-    
+
     Ok(())
 }
 ```
@@ -140,17 +142,17 @@ fn update_example(db: &Db) -> Result<()> {
         user.age = 31;
         user.email = "alice.new@example.com".to_string();
     })?;
-    
+
     // Method 2: Load, modify, update (replaces entire document)
     let mut user: User = db.get("/-/users/user123")?;
     user.active = false;
     db.update("/-/users/user123", &user)?;
-    
+
     // Method 3: Work with raw document for advanced operations
     let mut doc = db.get_document("/-/users/user123")?;
     doc.put(automerge::ROOT, "last_login", chrono::Utc::now().timestamp())?;
     // Note: save_document method not available yet - use modify() instead
-    
+
     Ok(())
 }
 ```
@@ -161,12 +163,12 @@ fn update_example(db: &Db) -> Result<()> {
 fn delete_example(db: &Db) -> Result<()> {
     // Delete document
     db.delete("/-/users/user123")?;
-    
+
     // Check if exists before deleting
     if db.exists("/-/users/user123")? {
         db.delete("/-/users/user123")?;
     }
-    
+
     Ok(())
 }
 ```
@@ -180,17 +182,17 @@ fn list_example(db: &Db) -> Result<()> {
     for path in &all_paths {
         println!("Document: {}", path);
     }
-    
+
     // List with prefix
     let users = db.list(Some("/-/users/"))?;
     println!("Found {} users", users.len());
-    
+
     // Load multiple documents
     for path in db.list(Some("/-/users/"))? {
         let user: User = db.get(&path)?;
         println!("- {} ({})", user.name, user.email);
     }
-    
+
     Ok(())
 }
 ```
@@ -218,22 +220,22 @@ fn collections_example(db: &Db) -> Result<()> {
         tags: vec!["important".to_string()],
         contributors: vec!["alice".to_string()],
     };
-    
+
     // Modify Text (CRDT-aware)
     doc.content.push_str("Hello world!");
-    
+
     // Increment Counter (CRDT-aware)
     doc.views.increment(1);
-    
+
     db.create("/-/docs/doc1", &doc)?;
-    
+
     // Later updates merge automatically
     db.modify::<Document, _>("/-/docs/doc1", |doc| {
         doc.tags.push("reviewed".to_string());
         doc.contributors.push("bob".to_string());
         doc.views.increment(1);
     })?;
-    
+
     Ok(())
 }
 ```
@@ -246,21 +248,21 @@ use automerge::AutoCommit;
 fn advanced_example(db: &Db) -> Result<()> {
     // Get both typed value and raw document
     let (user, mut doc): (User, AutoCommit) = db.get_with_document("/-/users/user123")?;
-    
+
     // Access document metadata
     println!("Actor: {}", doc.get_actor());
     println!("Heads: {:?}", doc.get_heads());
-    
+
     // Add custom fields not in the struct
     doc.put(automerge::ROOT, "last_modified_by", "system")?;
     doc.put(automerge::ROOT, "schema_version", 2)?;
-    
+
     // Save the modified document
     db.save_document("/-/users/user123", &doc)?;
-    
+
     // Get just the raw document
     let doc = db.get_document("/-/users/user123")?;
-    
+
     Ok(())
 }
 ```
@@ -312,9 +314,6 @@ fastn-automerge delete /-/config --confirm
 fastn-automerge list
 fastn-automerge list --prefix /-/users/
 fastn-automerge list --details
-
-# Clean database
-fastn-automerge clean [--force]
 
 # Show document history
 fastn-automerge history <doc-id> [<commit-hash>] [--short]
@@ -369,22 +368,25 @@ fi
 
 ### Actor ID Design
 
-fastn-automerge uses a simplified actor ID system optimized for single-alias usage.
+fastn-automerge uses a simplified actor ID system optimized for single-alias
+usage.
 
 #### Actor ID Format
 
 - **Structure**: `{alias-id52}-{device-number}` (e.g., `alice123...-1`)
 - **No GUID needed**: Direct use of alias IDs, no internal/external distinction
-- **Device numbering**: 
-  - Device 1: The account itself
-  - Device 2+: Additional devices owned by the account
+- **Device numbering**:
+    - Device 1: The account itself
+    - Device 2+: Additional devices owned by the account
 
 #### Creation Alias Optimization
 
-1. **Document creation**: Stores the alias used at creation in `created_alias` field
+1. **Document creation**: Stores the alias used at creation in `created_alias`
+   field
 2. **Consistent editing**: All edits use the creation alias as actor prefix
 3. **No rewriting in common case**: When sharing with same alias (90%+ of cases)
-4. **Rewrite only on mismatch**: When sharing with different alias (rare cross-alias shares)
+4. **Rewrite only on mismatch**: When sharing with different alias (rare
+   cross-alias shares)
 
 #### How It Works
 
@@ -393,20 +395,20 @@ fastn-automerge uses a simplified actor ID system optimized for single-alias usa
 let actor_id = "alice123...-1";  // Device 1 is the account
 
 // Create document (stores creation alias)
-db.create_with_alias("mine/doc", &content, "alice123...")?;
+db.create_with_alias("mine/doc", & content, "alice123...") ?;
 
 // Edit document (uses stored creation alias)
-db.update("mine/doc", &updates)?;  // Uses alice123...-1 automatically
+db.update("mine/doc", & updates) ?;  // Uses alice123...-1 automatically
 // This marks document as needing sync with all peers who have access
 
 // When peer comes online, get ALL patches they need
-let pending = db.get_pending_patches_for_peer("alice123...", "bob456...")?;
+let pending = db.get_pending_patches_for_peer("alice123...", "bob456...") ?;
 // Returns Vec<(doc_path, patch)> for all docs bob456 needs
 // Handles history rewriting if our_alias != created_alias
 // Updates sync state to mark as synced
 
 // Periodic sync check - who needs updates?
-let outdated_peers = db.get_peers_needing_sync()?;
+let outdated_peers = db.get_peers_needing_sync() ?;
 // Returns Vec<(peer_alias, our_alias, doc_count)>
 // Example: [("bob456...", "alice123...", 3), ("carol789...", "alice-work...", 1)]
 ```
@@ -428,14 +430,14 @@ impl Db {
             actor_id: actor_id.into(),
         })
     }
-    
+
     /// Initialize database with actor ID from file
     pub fn open_from_path(base_path: &Path) -> Result<Self> {
         let actor_id = std::fs::read_to_string(base_path.join("automerge.actor-id"))?;
         let conn = Connection::open(base_path.join("automerge.sqlite"))?;
         Ok(Self { conn, actor_id })
     }
-    
+
     /// Update document with current actor (internal use)
     pub fn update<T: Reconcile>(&self, path: &str, value: &T) -> Result<()> {
         let mut doc = self.load_document(path)?;
@@ -444,10 +446,10 @@ impl Db {
         self.save_document(path, &doc)?;
         Ok(())
     }
-    
+
     /// Get pending patches for a peer
     pub fn get_pending_patches_for_peer(
-        &self, 
+        &self,
         our_alias: &str,
         peer_alias: &str
     ) -> Result<Vec<(String, Vec<u8>)>> {
@@ -456,31 +458,31 @@ impl Db {
         // Return (doc_path, patch) pairs
         Ok(vec![])
     }
-    
+
     /// Get list of peers needing sync
     pub fn get_peers_needing_sync(&self) -> Result<Vec<(String, String, usize)>> {
         // Return (peer_alias, our_alias, doc_count)
         Ok(vec![])
     }
-    
+
     /// Group management
     pub fn create_group(&self, name: &str, description: &str) -> Result<()> {
         let path = format!("/-/groups/{}", name);
         // Create group document
         Ok(())
     }
-    
+
     pub fn add_account_to_group(&self, group: &str, account: &str) -> Result<()> {
         let path = format!("/-/groups/{}", group);
         // Update group document
         Ok(())
     }
-    
+
     /// Permission management
     pub fn grant_account_access(
-        &self, 
-        doc_path: &str, 
-        account: &str, 
+        &self,
+        doc_path: &str,
+        account: &str,
         perm: Permission
     ) -> Result<()> {
         let meta_path = format!("{}/-/meta", doc_path);
@@ -491,14 +493,14 @@ impl Db {
 
 /// Rewrite actor IDs for cross-alias sharing (rare case)
 fn rewrite_actor_history(
-    doc: AutoCommit, 
+    doc: AutoCommit,
     from_alias: &str,    // e.g., "alice123..."
     to_alias: &str       // e.g., "alice-work..."
 ) -> Result<AutoCommit> {
     // Extract device numbers and rewrite
     // from: alice123...-1, alice123...-2
     // to: alice-work...-1, alice-work...-2
-    
+
     // (Implementation would use Automerge's internal APIs)
     Ok(rewritten_doc)
 }
@@ -529,30 +531,30 @@ fn verify_actor_history(doc: &AutoCommit, expected_alias: &str) -> Result<()> {
 let alice_actor = "alice123...-1";
 
 // Alice creates document (stores creation alias)
-db.create("/-/docs/shared", &doc)?;  // Uses alice123...-1
+db.create("/-/docs/shared", & doc) ?;  // Uses alice123...-1
 // DB stores created_alias = "alice123..."
 
 // Alice shares with Bob (same alias - no rewrite!)
-let shared_binary = db.get_patch("/-/docs/shared")?;
+let shared_binary = db.get_patch("/-/docs/shared") ?;
 // Still shows alice123...-1 as actor
 
 // Bob receives and verifies
-let doc = bob_db.apply_patch_from_alias(&shared_binary, "alice123...")?;
+let doc = bob_db.apply_patch_from_alias( & shared_binary, "alice123...") ?;
 // ✓ Verified: all edits from alice123...-{device}
 
 // Bob creates his response
-bob_db.create("/-/response", &response)?;  // Uses bob456...-1
+bob_db.create("/-/response", & response) ?;  // Uses bob456...-1
 // DB stores created_alias = "bob456..."
 
 // Bob shares back (no rewrite needed)
-let return_binary = bob_db.get_patch("/-/response")?;
+let return_binary = bob_db.get_patch("/-/response") ?;
 
 // Alice receives and verifies Bob's edits
-alice_db.apply_patch_from_alias(&return_binary, "bob456...")?;
+alice_db.apply_patch_from_alias( & return_binary, "bob456...") ?;
 // ✓ All edits show bob456...-1
 
 // Rare case: Alice shares with different alias
-let work_patch = db.get_patch_for_alias("/-/docs/shared", "alice-work...")?;
+let work_patch = db.get_patch_for_alias("/-/docs/shared", "alice-work...") ?;
 // NOW history is rewritten: alice123...-1 → alice-work...-1
 ```
 
@@ -572,19 +574,19 @@ fn concurrent_edits(db: &Db) -> Result<()> {
         doc.title = "Updated by A".to_string();
         doc.tags.push("a-tag".to_string());
     })?;
-    
+
     // User B's changes (same document actor_id)
     db.modify::<Document, _>("/-/doc", |doc| {
         doc.content.push_str(" Added by B");
         doc.tags.push("b-tag".to_string());
     })?;
-    
+
     // Both changes are preserved with the same actor!
     let doc: Document = db.get("/-/doc")?;
     assert!(doc.title.contains("A"));
     assert!(doc.tags.contains(&"a-tag".to_string()));
     assert!(doc.tags.contains(&"b-tag".to_string()));
-    
+
     Ok(())
 }
 ```
@@ -601,13 +603,13 @@ fn batch_operations(db: &Db) -> Result<()> {
     //     }
     //     Ok(())
     // })?;
-    
+
     // For now, use bulk operations when possible
     let mut doc = AutoCommit::new();
     let items = (0..1000).map(|i| Item { id: i }).collect::<Vec<_>>();
     items.reconcile(&mut doc, automerge::ROOT)?;
     db.save_document("/-/items", &doc)?;
-    
+
     Ok(())
 }
 ```
@@ -624,12 +626,12 @@ fn robust_operations(db: &Db) -> Result<()> {
         Err(Error::NotFound(_)) => Config::default(),
         Err(e) => return Err(e),
     };
-    
+
     // Pattern 2: Create if not exists
     if !db.exists("/-/config")? {
         db.create("/-/config", &Config::default())?;
     }
-    
+
     // Pattern 3: Retry on database lock
     let mut retries = 3;
     loop {
@@ -643,7 +645,7 @@ fn robust_operations(db: &Db) -> Result<()> {
             Err(e) => return Err(e),
         }
     }
-    
+
     Ok(())
 }
 ```
@@ -673,12 +675,12 @@ Keep documents reasonably sized:
 
 ```rust
 // Good: Separate documents for different concerns
-db.create("/-/users/alice/profile", &profile)?;
-db.create("/-/users/alice/settings", &settings)?;
-db.create("/-/users/alice/activity", &activity)?;
+db.create("/-/users/alice/profile", & profile) ?;
+db.create("/-/users/alice/settings", & settings) ?;
+db.create("/-/users/alice/activity", & activity) ?;
 
 // Avoid: One huge document
-db.create("/-/users/alice", &giant_user_object)?;
+db.create("/-/users/alice", & giant_user_object) ?;
 ```
 
 ### 3. Schema Evolution
@@ -709,14 +711,14 @@ Design for concurrent modifications:
 
 ```rust
 // Good: Modify specific fields
-db.modify::<User, _>("/-/users/alice", |u| {
-    u.last_seen = Utc::now();
-})?;
+db.modify::<User, _ > ("/-/users/alice", | u| {
+u.last_seen = Utc::now();
+}) ?;
 
 // Avoid: Replace entire document for small changes
-let mut user = db.get::<User>("/-/users/alice")?;
+let mut user = db.get::<User>("/-/users/alice") ?;
 user.last_seen = Utc::now();
-db.set("/-/users/alice", &user)?;  // Overwrites concurrent changes!
+db.set("/-/users/alice", & user) ?;  // Overwrites concurrent changes!
 ```
 
 ### 5. Testing
@@ -726,20 +728,20 @@ db.set("/-/users/alice", &user)?;  // Overwrites concurrent changes!
 mod tests {
     use super::*;
     use tempfile::TempDir;
-    
+
     #[test]
     fn test_operations() -> Result<()> {
         let tmp = TempDir::new()?;
         let db_path = tmp.path().join("test.sqlite");
         let db = Db::init_at(&db_path)?;
-        
+
         // Test your operations
         let user = User { /* ... */ };
         db.create("/-/test", &user)?;
-        
+
         let loaded: User = db.get("/-/test")?;
         assert_eq!(user.id, loaded.id);
-        
+
         Ok(())
     }
 }
@@ -750,16 +752,17 @@ mod tests {
 ### Common Issues
 
 1. **Database Locked**: SQLite only allows one writer at a time
-   - Solution: Use connection pooling or retry logic
+    - Solution: Use connection pooling or retry logic
 
 2. **Document Not Found**: Trying to update non-existent document
-   - Solution: Use `db.set()` instead of `db.update()` or check with `db.exists()`
+    - Solution: Use `db.set()` instead of `db.update()` or check with
+      `db.exists()`
 
 3. **Serialization Errors**: Type mismatch between stored and expected
-   - Solution: Include version field and handle migrations
+    - Solution: Include version field and handle migrations
 
 4. **Performance Issues**: Large documents or too many documents
-   - Solution: Split large documents, use indexes, batch operations
+    - Solution: Split large documents, use indexes, batch operations
 
 ## Further Reading
 

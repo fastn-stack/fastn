@@ -45,9 +45,6 @@ pub fn run_command(cli: super::Cli) -> eyre::Result<()> {
                 super::Commands::List { prefix, details } => {
                     list_documents(&db, prefix.as_deref(), details)?;
                 }
-                super::Commands::Clean { force } => {
-                    clean_database(&db, force)?;
-                }
                 super::Commands::History {
                     path,
                     commit_hash,
@@ -65,6 +62,7 @@ pub fn run_command(cli: super::Cli) -> eyre::Result<()> {
     Ok(())
 }
 
+#[track_caller]
 fn init_database(db_path: &str) -> eyre::Result<()> {
     // WARNING: Using dummy entity for CLI - real apps should use actual PublicKey
     let dummy_entity_str = super::utils::get_dummy_cli_entity_id();
@@ -191,17 +189,6 @@ fn list_documents(
         }
     }
 
-    Ok(())
-}
-
-fn clean_database(db: &fastn_automerge::Db, force: bool) -> eyre::Result<()> {
-    if !force && !super::utils::confirm_action("This will delete ALL documents. Are you sure?") {
-        println!("Cancelled");
-        return Ok(());
-    }
-
-    let count = db.clear()?;
-    println!("Deleted {count} documents");
     Ok(())
 }
 

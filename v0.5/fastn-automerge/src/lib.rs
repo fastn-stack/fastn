@@ -31,7 +31,6 @@ pub enum DocumentPathError {
     TooManyPrefixes { count: usize },
 }
 
-
 /// Generic typed document ID that can only be created by ID constructors
 #[derive(Debug, Clone, PartialEq)]
 pub struct DocumentPath(String);
@@ -72,7 +71,6 @@ impl std::fmt::Display for DocumentPath {
     }
 }
 
-
 #[derive(Debug)]
 pub enum Error {
     NotFound(String),
@@ -90,7 +88,6 @@ pub enum LoadError {
     DatabaseError(rusqlite::Error),
 }
 
-
 pub struct Db {
     pub(crate) conn: rusqlite::Connection,
     /// Entity this database belongs to
@@ -106,9 +103,12 @@ impl Db {
     pub fn actor_id(&self) -> String {
         format!("{}-{}", self.entity, self.device_number)
     }
-    
+
     /// Update device number (can only be called from device 0 to assign new device numbers)
-    pub fn update_device_number(&mut self, new_device_number: u32) -> std::result::Result<(), DeviceNumberError> {
+    pub fn update_device_number(
+        &mut self,
+        new_device_number: u32,
+    ) -> std::result::Result<(), DeviceNumberError> {
         if self.device_number != 0 {
             return Err(DeviceNumberError::NotPrimaryDevice);
         }
@@ -130,7 +130,7 @@ pub enum DeviceNumberError {
 #[derive(Debug, Clone, PartialEq)]
 pub struct ActorIdNotSet;
 
-#[derive(Debug, Clone, PartialEq)]  
+#[derive(Debug, Clone, PartialEq)]
 pub struct ActorIdAlreadySet;
 
 // Common document operation errors for all consumers
@@ -156,16 +156,14 @@ pub enum DocumentUpdateError {
 //     id: PublicKey,
 //     data: String,
 // }
-// 
+//
 // This would auto-generate:
 // - `load(db, id) -> Result<Self, DocumentLoadError>`
-// - `save(&self, db) -> Result<(), DocumentSaveError>` 
+// - `save(&self, db) -> Result<(), DocumentSaveError>`
 // - Document ID constructor function
 // - Uses the #[document_id_field] to determine the ID
 
 // Error types moved to db.rs next to their functions
-
-
 
 impl std::fmt::Debug for Db {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -205,7 +203,7 @@ impl std::fmt::Debug for Db {
 /// - Recipient can link alias1 and alias2 as same account ❌
 ///
 /// **The Solution**: Actor ID rewriting ensures each shared alias appears independent:
-/// - When sharing from alias1: All edits appear as `alias1_id52-0` 
+/// - When sharing from alias1: All edits appear as `alias1_id52-0`
 /// - When sharing from alias2: All edits appear as `alias2_id52-0`
 /// - Recipients cannot link different aliases ✅
 ///
@@ -219,7 +217,7 @@ impl std::fmt::Debug for Db {
 /// - `db.next_actor_id(entity_id52)` - Gets next device number atomically (thread-safe)
 ///
 /// Actor counter document stored at /-/system/actor_counter
-/// 
+///
 /// **Important**: Only account databases generate and assign device IDs to new devices.
 /// Individual device databases do not need to track next_device.
 #[derive(Debug, Clone, PartialEq, Reconcile, Hydrate)]

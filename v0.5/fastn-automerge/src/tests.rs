@@ -230,12 +230,17 @@ mod test {
         db.create(&doc_path("/docs/b"), &doc)?;
         db.create(&doc_path("/other/c"), &doc)?;
 
-        // List all
+        // List all (excluding system documents)
         let all = db.list(None)?;
-        assert_eq!(all.len(), 3);
-        assert!(all.contains(&"/docs/a".to_string()));
-        assert!(all.contains(&"/docs/b".to_string()));
-        assert!(all.contains(&"/other/c".to_string()));
+        let user_docs: Vec<String> = all
+            .into_iter()
+            .filter(|path| !path.starts_with("/-/system/"))
+            .collect();
+
+        assert_eq!(user_docs.len(), 3);
+        assert!(user_docs.contains(&"/docs/a".to_string()));
+        assert!(user_docs.contains(&"/docs/b".to_string()));
+        assert!(user_docs.contains(&"/other/c".to_string()));
 
         // List with prefix
         let docs_only = db.list(Some("/docs"))?;

@@ -43,7 +43,10 @@ impl std::fmt::Display for crate::DocumentPathError {
         match self {
             crate::DocumentPathError::Empty => write!(f, "Document path cannot be empty"),
             crate::DocumentPathError::TooManyPrefixes { count } => {
-                write!(f, "Document path can contain at most one '/-/' prefix, found {count}")
+                write!(
+                    f,
+                    "Document path can contain at most one '/-/' prefix, found {count}"
+                )
             }
         }
     }
@@ -85,7 +88,9 @@ impl std::error::Error for crate::DocumentUpdateError {}
 impl std::fmt::Display for crate::db::CreateError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            crate::db::CreateError::DocumentExists(path) => write!(f, "Document already exists: {path}"),
+            crate::db::CreateError::DocumentExists(path) => {
+                write!(f, "Document already exists: {path}")
+            }
             crate::db::CreateError::Database(e) => write!(f, "Database error: {e}"),
             crate::db::CreateError::Automerge(e) => write!(f, "Automerge error: {e}"),
             crate::db::CreateError::Reconcile(e) => write!(f, "Reconcile error: {e}"),
@@ -135,9 +140,20 @@ impl std::error::Error for crate::db::DeleteError {}
 impl std::fmt::Display for crate::db::OpenError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            crate::db::OpenError::NotFound(path) => write!(f, "Database not found: {}. Run 'init' first.", path.display()),
-            crate::db::OpenError::NotInitialized(path) => write!(f, "Database at {} exists but is not initialized. Run 'init' first.", path.display()),
-            crate::db::OpenError::MissingActorCounter => write!(f, "Database missing actor counter - not properly initialized"),
+            crate::db::OpenError::NotFound(path) => write!(
+                f,
+                "Database not found: {}. Run 'init' first.",
+                path.display()
+            ),
+            crate::db::OpenError::NotInitialized(path) => write!(
+                f,
+                "Database at {} exists but is not initialized. Run 'init' first.",
+                path.display()
+            ),
+            crate::db::OpenError::MissingActorCounter => write!(
+                f,
+                "Database missing actor counter - not properly initialized"
+            ),
             crate::db::OpenError::Database(e) => write!(f, "Database error: {e}"),
             crate::db::OpenError::Automerge(e) => write!(f, "Automerge error: {e}"),
             crate::db::OpenError::Hydrate(e) => write!(f, "Hydrate error: {e}"),
@@ -151,7 +167,9 @@ impl std::error::Error for crate::db::OpenError {}
 impl std::fmt::Display for crate::db::InitError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            crate::db::InitError::DatabaseExists(path) => write!(f, "Database already exists: {}", path.display()),
+            crate::db::InitError::DatabaseExists(path) => {
+                write!(f, "Database already exists: {}", path.display())
+            }
             crate::db::InitError::Database(e) => write!(f, "Database error: {e}"),
             crate::db::InitError::Migration(e) => write!(f, "Migration error: {e}"),
             crate::db::InitError::Create(e) => write!(f, "Create error: {e}"),

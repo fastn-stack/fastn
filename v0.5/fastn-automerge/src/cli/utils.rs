@@ -1,14 +1,15 @@
 /// WARNING: This generates a DUMMY entity ID for CLI testing only!
 /// Real applications should use actual entity ID52 values.
 /// This function exists only for CLI convenience and should NOT be used in production code.
+#[track_caller]
 pub fn get_dummy_cli_entity_id() -> String {
     // Try environment variable first (for testing)
     if let Ok(entity_id) = std::env::var("FASTN_AUTOMERGE_ENTITY_ID") {
         return entity_id;
     }
 
-    // Generate a dummy entity ID52 for CLI testing (must be valid ID52 format)
-    "clitempdum000000000000000000000000000000000000000000000000".to_string()
+    // Generate a dummy entity ID52 for CLI testing (must be exactly 52 chars)
+    "clitempdum000000000000000000000000000000000000000000".to_string()
 }
 
 pub fn read_json_file(file_path: &str) -> eyre::Result<String> {

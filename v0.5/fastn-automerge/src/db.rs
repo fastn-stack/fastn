@@ -412,25 +412,6 @@ impl crate::Db {
         Ok(automerge::AutoCommit::load(&binary)?)
     }
 
-    /// Clear all documents from the database
-    pub fn clear(&self) -> crate::Result<usize> {
-        let count = self
-            .conn
-            .query_row("SELECT COUNT(*) FROM fastn_documents", [], |row| {
-                row.get::<_, usize>(0)
-            })?;
-
-        self.conn.execute("DELETE FROM fastn_documents", [])?;
-        self.conn.execute("DELETE FROM fastn_sync_state", [])?;
-        self.conn.execute("DELETE FROM fastn_document_access", [])?;
-        self.conn.execute("DELETE FROM fastn_alias_cache", [])?;
-        self.conn
-            .execute("DELETE FROM fastn_permission_cache", [])?;
-        self.conn.execute("DELETE FROM fastn_group_cache", [])?;
-
-        Ok(count)
-    }
-
     /// Get document history with detailed operations
     ///
     /// If `up_to_head` is provided, shows history up to that specific head/change.
