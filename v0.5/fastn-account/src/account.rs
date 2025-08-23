@@ -34,8 +34,8 @@ impl crate::Account {
     /// Create a test account in memory (for testing only)
     #[cfg(test)]
     pub(crate) async fn new_for_test(path: std::path::PathBuf, aliases: Vec<crate::Alias>) -> Self {
-        // Create in-memory databases for testing
-        let automerge = rusqlite::Connection::open_in_memory().unwrap();
+        // Create test databases - use fastn-automerge test utility
+        let (automerge, _temp_dir) = fastn_automerge::create_test_db().unwrap();
         let mail = rusqlite::Connection::open_in_memory().unwrap();
         let user = rusqlite::Connection::open_in_memory().unwrap();
 

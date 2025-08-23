@@ -1,4 +1,3 @@
-use automerge::transaction::Transactable;
 
 impl fastn_account::Account {
     /// Creates a new account in the specified parent directory.
@@ -75,16 +74,16 @@ impl fastn_account::Account {
         let mail_path = account_path.join("mail.sqlite");
         let user_path = account_path.join("db.sqlite");
 
-        let automerge = rusqlite::Connection::open(&automerge_path)
-            .wrap_err("Failed to create automerge database")?;
+        // Initialize automerge database
+        let automerge_db = fastn_automerge::Db::init(&automerge_path, &public_key)
+            .wrap_err("Failed to initialize automerge database")?;
+
         let mail =
             rusqlite::Connection::open(&mail_path).wrap_err("Failed to create mail database")?;
         let user =
             rusqlite::Connection::open(&user_path).wrap_err("Failed to create user database")?;
 
-        // Run database migrations
-        fastn_automerge::migration::initialize_database(&automerge)
-            .wrap_err("Failed to run automerge database migrations")?;
+        // Run database migrations for mail and user databases
         Self::migrate_mail_database(&mail).wrap_err("Failed to run mail database migrations")?;
         Self::migrate_user_database(&user).wrap_err("Failed to run user database migrations")?;
 
@@ -97,8 +96,8 @@ impl fastn_account::Account {
             is_primary: true,
         };
 
-        // Create Automerge documents for the account
-        Self::create_initial_documents(&automerge, &id52, &primary_alias)?;
+        // Create Automerge documents for the account using type-safe API
+        Self::create_initial_documents(&automerge_db, &public_key, None, None)?;
 
         tracing::info!("Created new account with primary alias: {}", id52);
 
@@ -106,7 +105,7 @@ impl fastn_account::Account {
         Ok(Self {
             path: std::sync::Arc::new(account_path),
             aliases: std::sync::Arc::new(tokio::sync::RwLock::new(vec![primary_alias])),
-            automerge: std::sync::Arc::new(tokio::sync::Mutex::new(automerge)),
+            automerge: std::sync::Arc::new(tokio::sync::Mutex::new(automerge_db)),
             mail: std::sync::Arc::new(tokio::sync::Mutex::new(mail)),
             user: std::sync::Arc::new(tokio::sync::Mutex::new(user)),
         })
@@ -166,10 +165,13 @@ impl fastn_account::Account {
 
     /// Create initial Automerge documents for a new account
     fn create_initial_documents(
-        _conn: &rusqlite::Connection,
-        id52: &str,
-        primary_alias: &fastn_account::Alias,
+        db: &fastn_automerge::Db,
+        public_key: &fastn_id52::PublicKey,
+        name: Option<String>,
+        bio: Option<String>,
     ) -> eyre::Result<()> {
+        let id52 = public_key.id52();
+        
         // 1. Create /-/mails/default document with password and service flags
         let password = crate::auth::generate_password();
         let password_hash = crate::auth::hash_password(&password)?;
@@ -184,51 +186,37 @@ impl fastn_account::Account {
         println!("IMPORTANT: Save this password - it cannot be recovered!");
         println!("==================================================");
 
-        let mut mail_doc = automerge::AutoCommit::new();
-        mail_doc.put(automerge::ROOT, "username", "default")?;
-        mail_doc.put(automerge::ROOT, "password_hash", password_hash)?;
-        mail_doc.put(automerge::ROOT, "smtp_enabled", true)?;
-        mail_doc.put(automerge::ROOT, "imap_enabled", true)?;
-        mail_doc.put(
-            automerge::ROOT,
-            "created_at",
-            chrono::Utc::now().timestamp(),
-        )?;
-        mail_doc.put(automerge::ROOT, "is_active", true)?;
-
-        // TODO: Integrate with new fastn-automerge Db API
-        // fastn_automerge::create_and_save_document(conn, "/-/mails/default", mail_doc)
-        //     .wrap_err("Failed to create mail document")?;
+        // Create default mail document using type-safe API
+        let default_mail = crate::automerge::DefaultMail {
+            password_hash,
+            is_active: true,
+            created_at: std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap()
+                .as_secs() as i64,
+        };
+        default_mail.save(db)?;
 
         // 2. Create /-/aliases/{id52}/readme document (public info)
-        let mut readme_doc = automerge::AutoCommit::new();
-        readme_doc.put(automerge::ROOT, "name", primary_alias.name())?;
-        readme_doc.put(automerge::ROOT, "display_name", primary_alias.name())?;
-        readme_doc.put(
-            automerge::ROOT,
-            "created_at",
-            chrono::Utc::now().timestamp(),
-        )?;
-        readme_doc.put(automerge::ROOT, "is_primary", true)?;
-
-        let _readme_path = format!("/-/aliases/{id52}/readme");
-        // TODO: Integrate with new fastn-automerge Db API
-        // fastn_automerge::create_and_save_document(conn, &readme_path, readme_doc)
-        //     .wrap_err("Failed to create alias readme document")?;
+        let alias_readme = crate::automerge::AliasReadme {
+            alias: *public_key,
+            name,
+            bio,
+        };
+        alias_readme.save(db)?;
 
         // 3. Create /-/aliases/{id52}/notes document (private notes)
-        let mut notes_doc = automerge::AutoCommit::new();
-        notes_doc.put(automerge::ROOT, "reason", primary_alias.reason())?;
-        notes_doc.put(
-            automerge::ROOT,
-            "created_at",
-            chrono::Utc::now().timestamp(),
-        )?;
-
-        let _notes_path = format!("/-/aliases/{id52}/notes");
-        // TODO: Integrate with new fastn-automerge Db API
-        // fastn_automerge::create_and_save_document(conn, &notes_path, notes_doc)
-        //     .wrap_err("Failed to create alias notes document")?;
+        // For our own account, we don't need notes initially
+        let alias_notes = crate::automerge::AliasNotes {
+            alias: *public_key,
+            nickname: None,
+            notes: None,
+            relationship_started_at: std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap()
+                .as_secs() as i64,
+        };
+        alias_notes.save(db)?;
 
         Ok(())
     }

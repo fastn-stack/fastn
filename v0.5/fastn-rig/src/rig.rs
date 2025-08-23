@@ -39,17 +39,28 @@ impl fastn_rig::Rig {
 
         tracing::info!("Creating new Rig with ID52: {}", id52);
 
-        // Initialize automerge database with rig's actor ID
+        // Initialize automerge database with rig's entity
         let automerge_path = fastn_home.join("automerge.sqlite");
-        let actor_id = format!("{id52}-1"); // Device 1 is the rig itself
-        let automerge_db = fastn_automerge::Db::init_with_actor(&automerge_path, actor_id)
+
+        eprintln!(
+            "🔍 Debug: Initializing automerge DB at {}",
+            automerge_path.display()
+        );
+        eprintln!("🔍 Debug: Rig entity = {}", secret_key.public_key());
+
+        let automerge_db = fastn_automerge::Db::init(&automerge_path, &secret_key.public_key())
             .wrap_err("Failed to initialize automerge database")?;
 
+        eprintln!("🔍 Debug: Automerge DB initialized successfully");
+
         // Create AccountManager and first account
+        eprintln!("🔍 Debug: Creating AccountManager...");
         let (account_manager, primary_id52) =
             fastn_account::AccountManager::create(fastn_home.clone())
                 .await
                 .wrap_err("Failed to create AccountManager and first account")?;
+
+        eprintln!("🔍 Debug: AccountManager created, primary_id52 = {primary_id52}");
 
         // Parse owner key
         let owner = fastn_id52::PublicKey::from_str(&primary_id52)
@@ -57,7 +68,8 @@ impl fastn_rig::Rig {
 
         // Create rig config struct with all configuration data
         let rig_config = crate::automerge::RigConfig {
-            owner,
+            rig: secret_key.public_key(), // Rig's own identity
+            owner,                        // Account that owns this rig
             created_at: std::time::SystemTime::now()
                 .duration_since(std::time::UNIX_EPOCH)
                 .unwrap()
@@ -97,8 +109,7 @@ impl fastn_rig::Rig {
 
         // Open existing automerge database
         let automerge_path = fastn_home.join("automerge.sqlite");
-        let actor_id = format!("{rig_id52}-1"); // Device 1 is the rig itself
-        let automerge_db = fastn_automerge::Db::open_with_actor(&automerge_path, actor_id)
+        let automerge_db = fastn_automerge::Db::open(&automerge_path)
             .wrap_err("Failed to open automerge database")?;
 
         // Load owner from Automerge document using typed API

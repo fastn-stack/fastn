@@ -1,19 +1,22 @@
 #[derive(Debug)]
-pub enum LoadError {
+pub enum OpenError {
     NotFound(std::path::PathBuf),
     NotInitialized(std::path::PathBuf),
     MissingActorCounter,
-    DatabaseError(rusqlite::Error),
+    Database(rusqlite::Error),
+    Automerge(automerge::AutomergeError),
+    Hydrate(autosurgeon::HydrateError),
+    InvalidEntity(String),
 }
 
 impl crate::Db {
     /// Open existing database
-    pub fn open(db_path: &std::path::Path) -> crate::Result<Self> {
+    pub fn open(db_path: &std::path::Path) -> Result<Self, OpenError> {
         if !db_path.exists() {
-            return Err(eyre::eyre!("Database not found: {}. Run 'init' first.", db_path.display()));
+            return Err(OpenError::NotFound(db_path.to_path_buf()));
         }
 
-        let conn = rusqlite::Connection::open(db_path)?;
+        let conn = rusqlite::Connection::open(db_path).map_err(OpenError::Database)?;
 
         // Check if database is properly initialized by looking for our tables
         let table_exists: bool = conn.query_row(
@@ -23,25 +26,29 @@ impl crate::Db {
         ).unwrap_or(false);
 
         if !table_exists {
-            return Err(eyre::eyre!("Database at {} exists but is not initialized. Run 'init' first.", db_path.display()));
+            return Err(OpenError::NotInitialized(db_path.to_path_buf()));
         }
 
         // Read the actor counter directly from SQL to get stored entity
         let counter_doc_path = crate::DocumentPath::from_string("/-/system/actor_counter")
             .expect("System document path should be valid");
-            
-        let binary: Vec<u8> = conn.query_row(
-            "SELECT automerge_binary FROM fastn_documents WHERE path = ?1",
-            [&counter_doc_path],
-            |row| row.get(0),
-        ).map_err(|e| eyre::eyre!("Missing actor counter: {e}"))?;
 
-        let doc = automerge::AutoCommit::load(&binary)?;
-        let counter: crate::ActorCounter = autosurgeon::hydrate(&doc)?;
+        let binary: Vec<u8> = conn
+            .query_row(
+                "SELECT automerge_binary FROM fastn_documents WHERE path = ?1",
+                [&counter_doc_path],
+                |row| row.get(0),
+            )
+            .map_err(|_| OpenError::MissingActorCounter)?;
+
+        let doc = automerge::AutoCommit::load(&binary).map_err(OpenError::Automerge)?;
+        let counter: crate::ActorCounter =
+            autosurgeon::hydrate(&doc).map_err(OpenError::Hydrate)?;
 
         // Parse stored entity ID back to PublicKey
-        let entity = std::str::FromStr::from_str(&counter.entity_id52)?;
-            
+        let entity = std::str::FromStr::from_str(&counter.entity_id52)
+            .map_err(|e| OpenError::InvalidEntity(format!("Invalid entity ID52: {e}")))?;
+
         Ok(Self {
             conn,
             entity,
@@ -49,7 +56,6 @@ impl crate::Db {
             mutex: std::sync::Mutex::new(()),
         })
     }
-
 }
 
 #[derive(Debug)]
@@ -57,35 +63,39 @@ pub enum InitError {
     DatabaseExists(std::path::PathBuf),
     Database(rusqlite::Error),
     Migration(eyre::Report),
-    Create(CreateError),
+    Create(Box<CreateError>),
 }
 
 impl crate::Db {
     /// Initialize a new database for an entity (primary device)
-    pub fn init(db_path: &std::path::Path, entity: &fastn_id52::PublicKey) -> crate::Result<Self> {
+    pub fn init(
+        db_path: &std::path::Path,
+        entity: &fastn_id52::PublicKey,
+    ) -> Result<Self, InitError> {
         if db_path.exists() {
-            return Err(eyre::eyre!("Database already exists at {}", db_path.display()));
+            return Err(InitError::DatabaseExists(db_path.to_path_buf()));
         }
 
-        let conn = rusqlite::Connection::open(db_path)?;
-        crate::migration::initialize_database(&conn)?;
-        
-        let db = Self { 
-            conn, 
-            entity: *entity, // Store PublicKey directly
+        let conn = rusqlite::Connection::open(db_path).map_err(InitError::Database)?;
+        crate::migration::initialize_database(&conn).map_err(InitError::Migration)?;
+
+        let db = Self {
+            conn,
+            entity: *entity,  // Store PublicKey directly
             device_number: 0, // Primary device is always 0
             mutex: std::sync::Mutex::new(()),
         };
-        
+
         // Initialize the actor counter with database identity
         let counter_doc_path = crate::DocumentPath::from_string("/-/system/actor_counter")
             .expect("System document path should be valid");
-        let counter = crate::ActorCounter { 
+        let counter = crate::ActorCounter {
             entity_id52: entity.id52(), // Store as string in the document for now
-            next_device: 1, // Next device will be 1
+            next_device: 1,             // Next device will be 1
         };
-        db.create(&counter_doc_path, &counter)?;
-        
+        db.create(&counter_doc_path, &counter)
+            .map_err(|e| InitError::Create(Box::new(e)))?;
+
         Ok(db)
     }
 }
@@ -100,13 +110,13 @@ pub enum CreateError {
 
 impl crate::Db {
     /// Create a new document
-    pub fn create<T>(&self, path: &crate::DocumentPath, value: &T) -> crate::Result<()>
+    pub fn create<T>(&self, path: &crate::DocumentPath, value: &T) -> Result<(), CreateError>
     where
         T: autosurgeon::Reconcile,
     {
         // Ensure actor ID is initialized
         // No need for initialization check - entity is always set during init/open
-        
+
         // Check if document already exists
         let exists: bool = self
             .conn
@@ -118,7 +128,7 @@ impl crate::Db {
             .unwrap_or(false);
 
         if exists {
-            return Err(eyre::eyre!("Document already exists: {}", path));
+            return Err(CreateError::DocumentExists(path.clone()));
         }
 
         // Create new document with actor
@@ -126,7 +136,7 @@ impl crate::Db {
         doc.set_actor(automerge::ActorId::from(self.actor_id().as_bytes()));
 
         // Reconcile value into document root
-        autosurgeon::reconcile(&mut doc, value)?;
+        autosurgeon::reconcile(&mut doc, value).map_err(CreateError::Reconcile)?;
 
         // Get heads as string
         let heads = doc
@@ -150,11 +160,10 @@ impl crate::Db {
                     .unwrap()
                     .as_secs() as i64,
             ],
-        )?;
+        ).map_err(CreateError::Database)?;
 
         Ok(())
     }
-
 }
 
 #[derive(Debug)]
@@ -167,7 +176,7 @@ pub enum GetError {
 
 impl crate::Db {
     /// Get a document
-    pub fn get<T>(&self, path: &crate::DocumentPath) -> crate::Result<T>
+    pub fn get<T>(&self, path: &crate::DocumentPath) -> Result<T, GetError>
     where
         T: autosurgeon::Hydrate,
     {
@@ -178,13 +187,15 @@ impl crate::Db {
                 [path],
                 |row| row.get(0),
             )
-?;
+            .map_err(|e| match e {
+                rusqlite::Error::QueryReturnedNoRows => GetError::NotFound(path.clone()),
+                _ => GetError::Database(e),
+            })?;
 
-        let doc = automerge::AutoCommit::load(&binary)?;
-        let value: T = autosurgeon::hydrate(&doc)?;
+        let doc = automerge::AutoCommit::load(&binary).map_err(GetError::Automerge)?;
+        let value: T = autosurgeon::hydrate(&doc).map_err(GetError::Hydrate)?;
         Ok(value)
     }
-
 }
 
 #[derive(Debug)]
@@ -197,7 +208,7 @@ pub enum UpdateError {
 
 impl crate::Db {
     /// Update a document
-    pub fn update<T>(&self, path: &crate::DocumentPath, value: &T) -> crate::Result<()>
+    pub fn update<T>(&self, path: &crate::DocumentPath, value: &T) -> Result<(), UpdateError>
     where
         T: autosurgeon::Reconcile,
     {
@@ -209,21 +220,20 @@ impl crate::Db {
                 [path],
                 |row| Ok((row.get(0)?, row.get(1)?)),
             )
-            ?;
+            .map_err(|e| match e {
+                rusqlite::Error::QueryReturnedNoRows => UpdateError::NotFound(path.clone()),
+                _ => UpdateError::Database(e),
+            })?;
 
-        let mut doc = automerge::AutoCommit::load(&binary)?;
+        let mut doc = automerge::AutoCommit::load(&binary).map_err(UpdateError::Automerge)?;
 
         // Use creation alias for actor to maintain consistency
-        let actor_id = format!(
-            "{}-{}",
-            created_alias,
-            self.device_number
-        );
+        let actor_id = format!("{}-{}", created_alias, self.device_number);
         doc.set_actor(automerge::ActorId::from(actor_id.as_bytes()));
 
         // Clear and reconcile new value
         // Note: This is a full replacement. For partial updates, use modify()
-        autosurgeon::reconcile(&mut doc, value)?;
+        autosurgeon::reconcile(&mut doc, value).map_err(UpdateError::Reconcile)?;
 
         // Get heads as string
         let heads = doc
@@ -234,26 +244,39 @@ impl crate::Db {
             .join(",");
 
         // Update in database
-        self.conn.execute(
-            "UPDATE fastn_documents 
+        self.conn
+            .execute(
+                "UPDATE fastn_documents 
              SET automerge_binary = ?1, heads = ?2, updated_at = ?3 
              WHERE path = ?4",
-            rusqlite::params![
-                doc.save(),
-                heads,
-                std::time::SystemTime::now()
-                    .duration_since(std::time::UNIX_EPOCH)
-                    .unwrap()
-                    .as_secs() as i64,
-                path,
-            ],
-        )?;
+                rusqlite::params![
+                    doc.save(),
+                    heads,
+                    std::time::SystemTime::now()
+                        .duration_since(std::time::UNIX_EPOCH)
+                        .unwrap()
+                        .as_secs() as i64,
+                    path,
+                ],
+            )
+            .map_err(UpdateError::Database)?;
 
         Ok(())
     }
+}
 
+#[derive(Debug)]
+pub enum ModifyError {
+    NotFound(crate::DocumentPath),
+    Database(rusqlite::Error),
+    Automerge(automerge::AutomergeError),
+    Hydrate(autosurgeon::HydrateError),
+    Reconcile(autosurgeon::ReconcileError),
+}
+
+impl crate::Db {
     /// Modify a document with a closure
-    pub fn modify<T, F>(&self, path: &crate::DocumentPath, modifier: F) -> crate::Result<()>
+    pub fn modify<T, F>(&self, path: &crate::DocumentPath, modifier: F) -> Result<(), ModifyError>
     where
         T: autosurgeon::Hydrate + autosurgeon::Reconcile,
         F: FnOnce(&mut T),
@@ -266,26 +289,25 @@ impl crate::Db {
                 [path],
                 |row| Ok((row.get(0)?, row.get(1)?)),
             )
-            ?;
+            .map_err(|e| match e {
+                rusqlite::Error::QueryReturnedNoRows => ModifyError::NotFound(path.clone()),
+                _ => ModifyError::Database(e),
+            })?;
 
-        let mut doc = automerge::AutoCommit::load(&binary)?;
+        let mut doc = automerge::AutoCommit::load(&binary).map_err(ModifyError::Automerge)?;
 
         // Use creation alias for actor
-        let actor_id = format!(
-            "{}-{}",
-            created_alias,
-            self.device_number
-        );
+        let actor_id = format!("{}-{}", created_alias, self.device_number);
         doc.set_actor(automerge::ActorId::from(actor_id.as_bytes()));
 
         // Hydrate current value
-        let mut value: T = autosurgeon::hydrate(&doc)?;
+        let mut value: T = autosurgeon::hydrate(&doc).map_err(ModifyError::Hydrate)?;
 
         // Apply modifications
         modifier(&mut value);
 
         // Reconcile back
-        autosurgeon::reconcile(&mut doc, &value)?;
+        autosurgeon::reconcile(&mut doc, &value).map_err(ModifyError::Reconcile)?;
 
         // Get heads as string
         let heads = doc
@@ -296,24 +318,25 @@ impl crate::Db {
             .join(",");
 
         // Save back
-        self.conn.execute(
-            "UPDATE fastn_documents 
+        self.conn
+            .execute(
+                "UPDATE fastn_documents 
              SET automerge_binary = ?1, heads = ?2, updated_at = ?3 
              WHERE path = ?4",
-            rusqlite::params![
-                doc.save(),
-                heads,
-                std::time::SystemTime::now()
-                    .duration_since(std::time::UNIX_EPOCH)
-                    .unwrap()
-                    .as_secs() as i64,
-                path,
-            ],
-        )?;
+                rusqlite::params![
+                    doc.save(),
+                    heads,
+                    std::time::SystemTime::now()
+                        .duration_since(std::time::UNIX_EPOCH)
+                        .unwrap()
+                        .as_secs() as i64,
+                    path,
+                ],
+            )
+            .map_err(ModifyError::Database)?;
 
         Ok(())
     }
-
 }
 
 #[derive(Debug)]
@@ -324,19 +347,18 @@ pub enum DeleteError {
 
 impl crate::Db {
     /// Delete a document
-    pub fn delete(&self, path: &crate::DocumentPath) -> crate::Result<()> {
+    pub fn delete(&self, path: &crate::DocumentPath) -> Result<(), DeleteError> {
         let rows_affected = self
             .conn
             .execute("DELETE FROM fastn_documents WHERE path = ?1", [path])
-            ?;
+            .map_err(DeleteError::Database)?;
 
         if rows_affected == 0 {
-            Err(eyre::eyre!("Document not found: {}", path))
+            Err(DeleteError::NotFound(path.clone()))
         } else {
             Ok(())
         }
     }
-
 }
 
 #[derive(Debug)]
@@ -346,12 +368,15 @@ pub enum ExistsError {
 
 impl crate::Db {
     /// Check if a document exists
-    pub fn exists(&self, path: &crate::DocumentPath) -> crate::Result<bool> {
-        let count: i32 = self.conn.query_row(
-            "SELECT COUNT(*) FROM fastn_documents WHERE path = ?1",
-            [path],
-            |row| row.get(0),
-)?;
+    pub fn exists(&self, path: &crate::DocumentPath) -> Result<bool, ExistsError> {
+        let count: i32 = self
+            .conn
+            .query_row(
+                "SELECT COUNT(*) FROM fastn_documents WHERE path = ?1",
+                [path],
+                |row| row.get(0),
+            )
+            .map_err(ExistsError::Database)?;
         Ok(count > 0)
     }
 
@@ -378,14 +403,11 @@ impl crate::Db {
 
     /// Get raw AutoCommit document for advanced operations
     pub fn get_document(&self, path: &crate::DocumentPath) -> crate::Result<automerge::AutoCommit> {
-        let binary: Vec<u8> = self
-            .conn
-            .query_row(
-                "SELECT automerge_binary FROM fastn_documents WHERE path = ?1",
-                [path],
-                |row| row.get(0),
-            )
-            ?;
+        let binary: Vec<u8> = self.conn.query_row(
+            "SELECT automerge_binary FROM fastn_documents WHERE path = ?1",
+            [path],
+            |row| row.get(0),
+        )?;
 
         Ok(automerge::AutoCommit::load(&binary)?)
     }
@@ -499,36 +521,44 @@ impl crate::Db {
     pub fn next_actor_id(&self, entity_id52: &str) -> crate::Result<String> {
         // Lock for atomic operation
         let _lock = self.mutex.lock().unwrap();
-        
+
         let counter_doc_id = crate::DocumentPath::from_string("/-/system/actor_counter")
             .expect("System document ID should be valid");
-        
+
         // Load or create actor counter document
         let mut counter = match self.get::<crate::ActorCounter>(&counter_doc_id) {
             Ok(counter) => counter,
             Err(_) => {
                 // Create new counter starting at 0
-                crate::ActorCounter { 
+                crate::ActorCounter {
                     entity_id52: entity_id52.to_string(),
-                    next_device: 0 
+                    next_device: 0,
                 }
             }
         };
-        
+
         // Get current device number
         let current_device = counter.next_device;
-        
+
         // Increment for next time
         counter.next_device += 1;
-        
+
         // Save the updated counter
         if self.exists(&counter_doc_id)? {
             self.update(&counter_doc_id, &counter)?;
         } else {
             self.create(&counter_doc_id, &counter)?;
         }
-        
+
         // Return the actor ID for the current device
         Ok(format!("{entity_id52}-{current_device}"))
     }
+}
+
+// SaveError for the derive macro's save() method
+#[derive(Debug)]
+pub enum SaveError {
+    Exists(ExistsError),
+    Create(CreateError),
+    Update(UpdateError),
 }

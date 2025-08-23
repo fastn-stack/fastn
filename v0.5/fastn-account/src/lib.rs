@@ -54,7 +54,7 @@ pub struct Account {
 
     /// Database connection for Automerge documents and configuration
     #[expect(unused)]
-    pub(crate) automerge: std::sync::Arc<tokio::sync::Mutex<rusqlite::Connection>>,
+    pub(crate) automerge: std::sync::Arc<tokio::sync::Mutex<fastn_automerge::Db>>,
 
     /// Database connection for email storage
     #[expect(unused)]

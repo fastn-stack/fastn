@@ -52,16 +52,17 @@ impl fastn_account::Account {
             return Err(eyre::eyre!("User database not found: {user_path:?}"));
         }
 
-        let automerge = rusqlite::Connection::open(&automerge_path)
+        // Get account ID from directory name (which is the primary alias ID52)
+        // let account_id52 = account_dir.file_name()
+        //     .and_then(|name| name.to_str())
+        //     .ok_or_else(|| eyre::eyre!("Invalid account directory name"))?;
+
+        let automerge_db = fastn_automerge::Db::open(&automerge_path)
             .wrap_err("Failed to open automerge database")?;
         let mail =
             rusqlite::Connection::open(&mail_path).wrap_err("Failed to open mail database")?;
         let user =
             rusqlite::Connection::open(&user_path).wrap_err("Failed to open user database")?;
-
-        // Run migrations in case schema has changed since last load
-        fastn_automerge::migration::initialize_database(&automerge)
-            .wrap_err("Failed to run automerge database migrations")?;
         fastn_account::Account::migrate_mail_database(&mail)
             .wrap_err("Failed to run mail database migrations")?;
         fastn_account::Account::migrate_user_database(&user)
@@ -134,7 +135,7 @@ impl fastn_account::Account {
         Ok(Self {
             path: std::sync::Arc::new(account_dir.to_path_buf()),
             aliases: std::sync::Arc::new(tokio::sync::RwLock::new(aliases)),
-            automerge: std::sync::Arc::new(tokio::sync::Mutex::new(automerge)),
+            automerge: std::sync::Arc::new(tokio::sync::Mutex::new(automerge_db)),
             mail: std::sync::Arc::new(tokio::sync::Mutex::new(mail)),
             user: std::sync::Arc::new(tokio::sync::Mutex::new(user)),
         })

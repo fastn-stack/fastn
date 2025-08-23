@@ -55,7 +55,9 @@ pub async fn run(home: Option<std::path::PathBuf>) -> eyre::Result<()> {
     let (rig, account_manager) = if is_initialized {
         println!("📂 Loading existing fastn_home...");
         let rig = fastn_rig::Rig::load(fastn_home.clone())
-            .wrap_err("Failed to load Rig from existing fastn_home")?;
+            .wrap_err_with(|| {
+                format!("Failed to load Rig from existing fastn_home at {}", fastn_home.display())
+            })?;
         let account_manager = fastn_account::AccountManager::load(fastn_home.clone())
             .await
             .wrap_err("Failed to load AccountManager from existing fastn_home")?;
