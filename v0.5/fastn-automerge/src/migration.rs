@@ -7,6 +7,7 @@ pub fn initialize_database(conn: &rusqlite::Connection) -> Result<(), rusqlite::
             path              TEXT PRIMARY KEY,
             created_alias     TEXT NOT NULL,      -- Alias used at creation (for actor ID)
             automerge_binary  BLOB NOT NULL,
+            json_data         TEXT NOT NULL,      -- JSON representation for querying
             heads             TEXT NOT NULL,
             updated_at        INTEGER NOT NULL
         );

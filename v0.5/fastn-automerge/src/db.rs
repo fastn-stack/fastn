@@ -128,7 +128,7 @@ impl crate::Db {
     #[doc(hidden)]
     pub fn create_impl<T>(&self, path: &crate::DocumentPath, value: &T) -> Result<(), CreateError>
     where
-        T: autosurgeon::Reconcile,
+        T: autosurgeon::Reconcile + serde::Serialize,
     {
         // Ensure actor ID is initialized
         // No need for initialization check - entity is always set during init/open
@@ -162,14 +162,20 @@ impl crate::Db {
             .collect::<Vec<_>>()
             .join(",");
 
+        // Serialize to JSON for querying (SQLite will store as JSONB)
+        let json_data = serde_json::to_string(value).map_err(|e| {
+            CreateError::Database(rusqlite::Error::ToSqlConversionFailure(Box::new(e)))
+        })?;
+
         // Save to database
         self.conn.execute(
-            "INSERT INTO fastn_documents (path, created_alias, automerge_binary, heads, updated_at) 
-             VALUES (?1, ?2, ?3, ?4, ?5)",
+            "INSERT INTO fastn_documents (path, created_alias, automerge_binary, json_data, heads, updated_at) 
+             VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
             rusqlite::params![
                 path,
                 &self.entity.id52(),
                 doc.save(),
+                json_data,
                 heads,
                 std::time::SystemTime::now()
                     .duration_since(std::time::UNIX_EPOCH)
@@ -185,7 +191,7 @@ impl crate::Db {
     #[deprecated(note = "Use the #[derive(Document)] macro and call document.create(&db) instead")]
     pub fn create<T>(&self, path: &crate::DocumentPath, value: &T) -> Result<(), CreateError>
     where
-        T: autosurgeon::Reconcile,
+        T: autosurgeon::Reconcile + serde::Serialize,
     {
         self.create_impl(path, value)
     }
@@ -256,7 +262,7 @@ impl crate::Db {
     #[doc(hidden)]
     pub fn update_impl<T>(&self, path: &crate::DocumentPath, value: &T) -> Result<(), UpdateError>
     where
-        T: autosurgeon::Reconcile,
+        T: autosurgeon::Reconcile + serde::Serialize,
     {
         // Load existing document with creation alias
         let (binary, created_alias): (Vec<u8>, String) = self
@@ -289,14 +295,20 @@ impl crate::Db {
             .collect::<Vec<_>>()
             .join(",");
 
+        // Serialize to JSON for querying
+        let json_data = serde_json::to_string(value).map_err(|e| {
+            UpdateError::Database(rusqlite::Error::ToSqlConversionFailure(Box::new(e)))
+        })?;
+
         // Update in database
         self.conn
             .execute(
                 "UPDATE fastn_documents 
-             SET automerge_binary = ?1, heads = ?2, updated_at = ?3 
-             WHERE path = ?4",
+             SET automerge_binary = ?1, json_data = ?2, heads = ?3, updated_at = ?4 
+             WHERE path = ?5",
                 rusqlite::params![
                     doc.save(),
+                    json_data,
                     heads,
                     std::time::SystemTime::now()
                         .duration_since(std::time::UNIX_EPOCH)
@@ -314,7 +326,7 @@ impl crate::Db {
     #[deprecated(note = "Use the #[derive(Document)] macro and call document.update(&db) instead")]
     pub fn update<T>(&self, path: &crate::DocumentPath, value: &T) -> Result<(), UpdateError>
     where
-        T: autosurgeon::Reconcile,
+        T: autosurgeon::Reconcile + serde::Serialize,
     {
         self.update_impl(path, value)
     }
@@ -339,7 +351,7 @@ impl crate::Db {
     #[deprecated(note = "Use the #[derive(Document)] macro and load/modify/save pattern instead")]
     pub fn modify<T, F>(&self, path: &crate::DocumentPath, modifier: F) -> Result<(), ModifyError>
     where
-        T: autosurgeon::Hydrate + autosurgeon::Reconcile,
+        T: autosurgeon::Hydrate + autosurgeon::Reconcile + serde::Serialize,
         F: FnOnce(&mut T),
     {
         // Load existing
@@ -378,14 +390,20 @@ impl crate::Db {
             .collect::<Vec<_>>()
             .join(",");
 
+        // Serialize to JSON for querying
+        let json_data = serde_json::to_string(&value).map_err(|e| {
+            ModifyError::Database(rusqlite::Error::ToSqlConversionFailure(Box::new(e)))
+        })?;
+
         // Save back
         self.conn
             .execute(
                 "UPDATE fastn_documents 
-             SET automerge_binary = ?1, heads = ?2, updated_at = ?3 
-             WHERE path = ?4",
+             SET automerge_binary = ?1, json_data = ?2, heads = ?3, updated_at = ?4 
+             WHERE path = ?5",
                 rusqlite::params![
                     doc.save(),
+                    json_data,
                     heads,
                     std::time::SystemTime::now()
                         .duration_since(std::time::UNIX_EPOCH)
@@ -494,6 +512,110 @@ impl crate::Db {
             .map_err(ListError::Database)?;
 
         Ok(paths)
+    }
+
+    /// Find documents where a field equals a specific value
+    pub fn find_where<V>(&self, field_path: &str, value: V) -> Result<Vec<crate::DocumentPath>, ListError> 
+    where
+        V: serde::Serialize,
+    {
+        let json_path = if field_path.starts_with('$') {
+            field_path.to_string()
+        } else {
+            format!("$.{field_path}")
+        };
+        
+        // Convert value to what json_extract returns (the raw JSON value, not JSON-encoded)
+        let value_for_comparison = match serde_json::to_value(value).map_err(|e| {
+            ListError::Database(rusqlite::Error::ToSqlConversionFailure(Box::new(e)))
+        })? {
+            serde_json::Value::String(s) => s,
+            serde_json::Value::Number(n) => n.to_string(),
+            serde_json::Value::Bool(b) => if b { "true".to_string() } else { "false".to_string() },
+            serde_json::Value::Null => "null".to_string(),
+            v => serde_json::to_string(&v).map_err(|e| {
+                ListError::Database(rusqlite::Error::ToSqlConversionFailure(Box::new(e)))
+            })?,
+        };
+        
+        let query = "SELECT path FROM fastn_documents WHERE json_extract(json_data, ?) = ? ORDER BY path";
+        let mut stmt = self.conn.prepare(query).map_err(ListError::Database)?;
+        
+        let paths: Result<Vec<_>, _> = stmt.query_map([&json_path, &value_for_comparison], |row| {
+            let path_str: String = row.get(0)?;
+            crate::DocumentPath::from_string(&path_str).map_err(|_| {
+                rusqlite::Error::InvalidPath("Invalid document path in database".into())
+            })
+        })
+        .map_err(ListError::Database)?
+        .collect();
+
+        paths.map_err(ListError::Database)
+    }
+
+    /// Find documents where a field exists (is not null)
+    pub fn find_exists(&self, field_path: &str) -> Result<Vec<crate::DocumentPath>, ListError> {
+        let json_path = if field_path.starts_with('$') {
+            field_path.to_string()
+        } else {
+            format!("$.{field_path}")
+        };
+        
+        let query = "SELECT path FROM fastn_documents WHERE json_extract(json_data, ?) IS NOT NULL ORDER BY path";
+        let mut stmt = self.conn.prepare(query).map_err(ListError::Database)?;
+        
+        let paths: Result<Vec<_>, _> = stmt.query_map([&json_path], |row| {
+            let path_str: String = row.get(0)?;
+            crate::DocumentPath::from_string(&path_str).map_err(|_| {
+                rusqlite::Error::InvalidPath("Invalid document path in database".into())
+            })
+        })
+        .map_err(ListError::Database)?
+        .collect();
+
+        paths.map_err(ListError::Database)
+    }
+
+    /// Find documents where an array field contains a specific value
+    pub fn find_contains<V>(&self, field_path: &str, value: V) -> Result<Vec<crate::DocumentPath>, ListError>
+    where
+        V: serde::Serialize,
+    {
+        let json_path = if field_path.starts_with('$') {
+            field_path.to_string()
+        } else {
+            format!("$.{field_path}")
+        };
+        
+        let value_json = serde_json::to_value(value).map_err(|e| {
+            ListError::Database(rusqlite::Error::ToSqlConversionFailure(Box::new(e)))
+        })?;
+        
+        let value_str = serde_json::to_string(&value_json).map_err(|e| {
+            ListError::Database(rusqlite::Error::ToSqlConversionFailure(Box::new(e)))
+        })?;
+        
+        let query = r#"
+            SELECT path FROM fastn_documents 
+            WHERE EXISTS (
+                SELECT 1 FROM json_each(json_extract(json_data, ?)) 
+                WHERE value = json(?)
+            ) 
+            ORDER BY path
+        "#;
+        
+        let mut stmt = self.conn.prepare(query).map_err(ListError::Database)?;
+        
+        let paths: Result<Vec<_>, _> = stmt.query_map([&json_path, &value_str], |row| {
+            let path_str: String = row.get(0)?;
+            crate::DocumentPath::from_string(&path_str).map_err(|_| {
+                rusqlite::Error::InvalidPath("Invalid document path in database".into())
+            })
+        })
+        .map_err(ListError::Database)?
+        .collect();
+
+        paths.map_err(ListError::Database)
     }
 
     /// Get raw AutoCommit document for advanced operations

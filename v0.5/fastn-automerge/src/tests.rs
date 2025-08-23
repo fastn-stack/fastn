@@ -3,7 +3,7 @@ mod test {
     use crate::{Db, Hydrate, Reconcile};
 
     // Test Case 1: With document_id52 field + custom document_path
-    #[derive(Debug, Clone, PartialEq, crate::Reconcile, crate::Hydrate, crate::Document)]
+    #[derive(Debug, Clone, PartialEq, serde::Serialize, crate::Reconcile, crate::Hydrate, crate::Document)]
     #[document_path("/-/users/{id52}/profile")]
     struct UserProfile {
         #[document_id52]
@@ -13,7 +13,7 @@ mod test {
     }
 
     // Test Case 2: With document_id52 field + NO document_path (should generate default)
-    #[derive(Debug, Clone, PartialEq, crate::Reconcile, crate::Hydrate, crate::Document)]
+    #[derive(Debug, Clone, PartialEq, serde::Serialize, crate::Reconcile, crate::Hydrate, crate::Document)]
     struct DefaultPathDoc {
         #[document_id52]
         entity: fastn_id52::PublicKey,
@@ -21,7 +21,7 @@ mod test {
     }
 
     // Test Case 3: WITHOUT document_id52 field + custom document_path (singleton)
-    #[derive(Debug, Clone, PartialEq, crate::Reconcile, crate::Hydrate, crate::Document)]
+    #[derive(Debug, Clone, PartialEq, serde::Serialize, crate::Reconcile, crate::Hydrate, crate::Document)]
     #[document_path("/-/app/settings")]
     struct AppSettings {
         theme: String,
@@ -29,7 +29,7 @@ mod test {
     }
 
     // Test Case 4: Complex path template
-    #[derive(Debug, Clone, PartialEq, crate::Reconcile, crate::Hydrate, crate::Document)]
+    #[derive(Debug, Clone, PartialEq, serde::Serialize, crate::Reconcile, crate::Hydrate, crate::Document)]
     #[document_path("/-/complex/{id52}/nested/path")]
     struct ComplexPath {
         #[document_id52]
@@ -38,7 +38,7 @@ mod test {
     }
 
     // Test Case 5: Basic document for comprehensive testing
-    #[derive(Debug, Clone, PartialEq, Hydrate, Reconcile, crate::Document)]
+    #[derive(Debug, Clone, PartialEq, serde::Serialize, Hydrate, Reconcile, crate::Document)]
     #[document_path("/-/test/{id52}")]
     struct TestDoc {
         #[document_id52]
@@ -49,7 +49,7 @@ mod test {
     }
 
     // Test Case 6: Path-based API (no document_path attribute)
-    #[derive(Debug, Clone, PartialEq, Hydrate, Reconcile, crate::Document)]
+    #[derive(Debug, Clone, PartialEq, serde::Serialize, Hydrate, Reconcile, crate::Document)]
     struct PathBasedDoc {
         #[document_id52]
         id: fastn_id52::PublicKey,
@@ -428,6 +428,53 @@ mod test {
 
         // Test that the document doesn't have document_list function
         // (This is verified by compilation - if it existed, we could call it)
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_json_queries() -> Result<(), Box<dyn std::error::Error>> {
+        let (db, _temp_dir) = temp_db();
+
+        // Create test documents with different data
+        let user1_id = fastn_id52::SecretKey::generate().public_key();
+        let user1 = UserProfile {
+            user_id: user1_id,
+            name: "Alice".to_string(),
+            bio: Some("Engineer".to_string()),
+        };
+        user1.save(&db)?;
+
+        let user2_id = fastn_id52::SecretKey::generate().public_key();
+        let user2 = UserProfile {
+            user_id: user2_id,
+            name: "Bob".to_string(),
+            bio: None,
+        };
+        user2.save(&db)?;
+
+        let user3_id = fastn_id52::SecretKey::generate().public_key();
+        let user3 = UserProfile {
+            user_id: user3_id,
+            name: "Alice".to_string(),  // Same name as user1
+            bio: Some("Designer".to_string()),
+        };
+        user3.save(&db)?;
+
+        // Test find_where: find users named "Alice"
+        let alice_paths = db.find_where("name", "Alice")?;
+        assert_eq!(alice_paths.len(), 2); // user1 and user3
+
+        // Test find_where: find users named "Bob" 
+        let bob_paths = db.find_where("name", "Bob")?;
+        assert_eq!(bob_paths.len(), 1);
+
+        // Test find_exists: find users with bio
+        let users_with_bio = db.find_exists("bio")?;
+        assert_eq!(users_with_bio.len(), 2); // user1 and user3 have bio
+
+        // Test nested path queries would work with more complex documents
+        // For now, our simple UserProfile doesn't have nested fields
 
         Ok(())
     }

@@ -15,7 +15,7 @@
 //! use fastn_automerge::{Db, Document, Reconcile, Hydrate};
 //! use fastn_id52::PublicKey;
 //!
-//! #[derive(Debug, Clone, Document, Reconcile, Hydrate)]
+//! #[derive(Debug, Clone, serde::Serialize, Document, Reconcile, Hydrate)]
 //! #[document_path("/-/users/{id52}/profile")]
 //! struct UserProfile {
 //!     #[document_id52]
@@ -53,7 +53,7 @@
 //!
 //! ```rust
 //! # use fastn_automerge::{Db, Document, Reconcile, Hydrate};
-//! #[derive(Debug, Clone, Document, Reconcile, Hydrate)]
+//! #[derive(Debug, Clone, serde::Serialize, Document, Reconcile, Hydrate)]
 //! #[document_path("/-/app/settings")]
 //! struct AppSettings {
 //!     theme: String,
@@ -85,7 +85,7 @@
 //! ```rust
 //! # use fastn_automerge::{Db, Document, DocumentPath, Reconcile, Hydrate};
 //! # use fastn_id52::PublicKey;
-//! #[derive(Debug, Clone, Document, Reconcile, Hydrate)]
+//! #[derive(Debug, Clone, serde::Serialize, Document, Reconcile, Hydrate)]
 //! struct FlexibleDoc {
 //!     #[document_id52]
 //!     id: PublicKey,
@@ -129,12 +129,14 @@
 //! use std::path::Path;
 //!
 //! # fn main() -> Result<(), Box<dyn std::error::Error>> {
+//! # let temp_dir = tempfile::TempDir::new()?;
+//! # let db_path = temp_dir.path().join("test.db");
 //! // Initialize new database
 //! let entity = fastn_id52::SecretKey::generate().public_key();
-//! let db = Db::init(Path::new("app.sqlite"), &entity)?;
+//! let db = Db::init(&db_path, &entity)?;
 //!
 //! // Or open existing database  
-//! let db = Db::open(Path::new("app.sqlite"))?;
+//! let db = Db::open(&db_path)?;
 //! # Ok(())
 //! # }
 //! ```
@@ -268,7 +270,7 @@ impl std::fmt::Debug for Db {
 // =============================================================================
 
 /// Internal actor counter for device ID management
-#[derive(Debug, Clone, PartialEq, Reconcile, Hydrate)]
+#[derive(Debug, Clone, PartialEq, Reconcile, Hydrate, serde::Serialize)]
 pub(crate) struct ActorCounter {
     pub entity_id52: String,
     pub next_device: u32,

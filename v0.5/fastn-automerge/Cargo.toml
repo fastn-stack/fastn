@@ -14,7 +14,7 @@ required-features = ["cli"]
 
 [features]
 default = []
-cli = ["clap", "eyre", "serde_json"]
+cli = ["clap", "eyre"]
 
 [dependencies]
 # Core library dependencies
@@ -22,6 +22,8 @@ automerge.workspace = true
 autosurgeon.workspace = true
 rusqlite.workspace = true
 thiserror.workspace = true
+serde.workspace = true
+serde_json.workspace = true
 fastn-automerge-derive.workspace = true
 fastn-id52 = { workspace = true, features = ["automerge"] }
 tempfile = "3"
@@ -29,6 +31,5 @@ tempfile = "3"
 # CLI-only dependencies
 clap = { workspace = true, optional = true }
 eyre = { workspace = true, optional = true }
-serde_json = { workspace = true, optional = true }
 
 [dev-dependencies]
