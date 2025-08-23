@@ -83,8 +83,18 @@ impl EntityStatus {
         entity_id52: &fastn_id52::PublicKey,
         online: bool,
     ) -> eyre::Result<()> {
-        // Load existing document (strict - must exist)
-        let mut status = Self::load(db, entity_id52)?;
+        // Load existing document or create new one
+        let mut status = match Self::load(db, entity_id52) {
+            Ok(status) => status,
+            Err(_) => {
+                // Create new status document
+                Self {
+                    entity: *entity_id52,
+                    is_online: false,
+                    updated_at: 0,
+                }
+            }
+        };
 
         // Update status
         status.is_online = online;
@@ -93,7 +103,7 @@ impl EntityStatus {
             .unwrap()
             .as_secs() as i64;
 
-        // Save updated document
+        // Save document
         Ok(status.save(db)?)
     }
 }

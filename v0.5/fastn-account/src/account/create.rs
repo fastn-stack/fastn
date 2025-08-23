@@ -135,7 +135,7 @@ impl fastn_account::Account {
                 size_bytes        INTEGER NOT NULL,
                 message_id        TEXT,
                 in_reply_to       TEXT,
-                references        TEXT,
+                email_references  TEXT,
                 date_sent         INTEGER,
                 date_received     INTEGER,
                 is_read           INTEGER DEFAULT 0,

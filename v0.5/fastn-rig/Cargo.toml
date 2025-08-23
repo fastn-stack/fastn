@@ -7,6 +7,10 @@ license.workspace = true
 repository.workspace = true
 homepage.workspace = true
 
+[[bin]]
+name = "fastn-rig"
+path = "src/main.rs"
+
 [dependencies]
 # Core dependencies
 fastn-account.workspace = true
@@ -25,5 +29,11 @@ serde_json.workspace = true
 directories.workspace = true
 file-guard.workspace = true
 chrono.workspace = true
+clap.workspace = true
+tracing-subscriber.workspace = true
+
+[dev-dependencies]
+tempfile = "3"
+dirs = "5"
 
 # Future: fastn-device when created
