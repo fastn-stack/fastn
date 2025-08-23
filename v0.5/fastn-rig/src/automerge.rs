@@ -29,17 +29,17 @@ impl RigConfig {
         db: &fastn_automerge::Db,
         rig_id52: &fastn_id52::PublicKey,
         entity: &fastn_id52::PublicKey,
-    ) -> fastn_automerge::Result<()> {
-        let doc_path = RigConfig::document_path(rig_id52);
-        Ok(db.modify::<Self, _>(&doc_path, |config| {
-            config.current_entity = *entity;
-        })?)
+    ) -> eyre::Result<()> {
+        // Use derive macro pattern instead of deprecated modify
+        let mut config = Self::load(db, rig_id52)?;
+        config.current_entity = *entity;
+        Ok(config.update(db)?)
     }
 
     pub fn get_current_entity(
         db: &fastn_automerge::Db,
         rig_id52: &fastn_id52::PublicKey,
-    ) -> fastn_automerge::Result<fastn_id52::PublicKey> {
+    ) -> eyre::Result<fastn_id52::PublicKey> {
         let config = Self::load(db, rig_id52)?;
         Ok(config.current_entity)
     }
@@ -69,7 +69,7 @@ impl EntityStatus {
     pub fn is_online(
         db: &fastn_automerge::Db,
         entity_id52: &fastn_id52::PublicKey,
-    ) -> fastn_automerge::Result<bool> {
+    ) -> eyre::Result<bool> {
         match Self::load(db, entity_id52) {
             Ok(status) => Ok(status.is_online),
             Err(_) => Ok(false), // Default to offline if document doesn't exist
@@ -80,7 +80,7 @@ impl EntityStatus {
         db: &fastn_automerge::Db,
         entity_id52: &fastn_id52::PublicKey,
         online: bool,
-    ) -> fastn_automerge::Result<()> {
+    ) -> eyre::Result<()> {
         // Load existing document (strict - must exist)
         let mut status = Self::load(db, entity_id52)?;
 

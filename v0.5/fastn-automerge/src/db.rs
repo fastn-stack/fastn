@@ -405,7 +405,7 @@ pub enum ListError {
 impl std::fmt::Display for ListError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            ListError::Database(e) => write!(f, "Database error: {}", e),
+            ListError::Database(e) => write!(f, "Database error: {e}"),
         }
     }
 }
@@ -420,10 +420,10 @@ impl std::error::Error for ListError {
 
 #[derive(Debug)]
 pub enum NextActorIdError {
-    Get(GetError),
-    Create(CreateError),
-    Update(UpdateError),
-    Exists(ExistsError),
+    Get(Box<GetError>),
+    Create(Box<CreateError>),
+    Update(Box<UpdateError>),
+    Exists(Box<ExistsError>),
 }
 
 impl crate::Db {
@@ -472,7 +472,7 @@ impl crate::Db {
             _ => GetError::Database(e),
         })?;
 
-        Ok(automerge::AutoCommit::load(&binary).map_err(GetError::Automerge)?)
+        automerge::AutoCommit::load(&binary).map_err(GetError::Automerge)
     }
 
     /// Get document history with detailed operations
@@ -591,10 +591,10 @@ impl crate::Db {
         counter.next_device += 1;
 
         // Save the updated counter
-        if self.exists(&counter_doc_id).map_err(NextActorIdError::Exists)? {
-            self.update_impl(&counter_doc_id, &counter).map_err(NextActorIdError::Update)?;
+        if self.exists(&counter_doc_id).map_err(|e| NextActorIdError::Exists(Box::new(e)))? {
+            self.update_impl(&counter_doc_id, &counter).map_err(|e| NextActorIdError::Update(Box::new(e)))?;
         } else {
-            self.create_impl(&counter_doc_id, &counter).map_err(NextActorIdError::Create)?;
+            self.create_impl(&counter_doc_id, &counter).map_err(|e| NextActorIdError::Create(Box::new(e)))?;
         }
 
         // Return the actor ID for the current device

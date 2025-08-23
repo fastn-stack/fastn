@@ -146,7 +146,7 @@ mod test {
         settings.create(&db)?;
         let loaded = AppSettings::load(&db)?;
         assert_eq!(loaded.theme, "dark");
-        assert_eq!(loaded.debug_mode, true);
+        assert!(loaded.debug_mode);
 
         // Test update
         let mut updated = loaded;
@@ -156,7 +156,7 @@ mod test {
 
         let final_settings = AppSettings::load(&db)?;
         assert_eq!(final_settings.theme, "light");
-        assert_eq!(final_settings.debug_mode, false);
+        assert!(!final_settings.debug_mode);
 
         Ok(())
     }
@@ -218,8 +218,8 @@ mod test {
                 let id = fastn_id52::SecretKey::generate().public_key();
                 TestDoc {
                     id,
-                    name: format!("Test Doc {}", i),
-                    value: i as i32,
+                    name: format!("Test Doc {i}"),
+                    value: i,
                     items: vec![format!("item-{}", i)],
                 }
             })
@@ -246,9 +246,9 @@ mod test {
         assert_eq!(updated.value, 999);
 
         // Verify other documents unchanged
-        for i in 1..test_docs.len() {
-            let unchanged = TestDoc::load(&db, &test_docs[i].id)?;
-            assert_eq!(unchanged, test_docs[i]);
+        for doc in test_docs.iter().skip(1) {
+            let unchanged = TestDoc::load(&db, &doc.id)?;
+            assert_eq!(unchanged, *doc);
         }
 
         Ok(())
@@ -292,7 +292,7 @@ mod test {
 
         let final_settings = AppSettings::load(&db)?;
         assert_eq!(final_settings.theme, "system");
-        assert_eq!(final_settings.debug_mode, false);
+        assert!(!final_settings.debug_mode);
 
         Ok(())
     }
