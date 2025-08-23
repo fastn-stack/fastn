@@ -51,25 +51,20 @@ mod test {
         optional: Option<String>,
     }
 
-    fn temp_db() -> crate::Result<(Db, tempfile::TempDir)> {
+    #[track_caller]
+    fn temp_db() -> (Db, tempfile::TempDir) {
         // Use tempfile for better isolation
-        let temp_dir = tempfile::TempDir::new().map_err(|e| {
-            Box::new(crate::Error::Database(rusqlite::Error::InvalidColumnType(
-                0,
-                format!("Failed to create temp dir: {e}"),
-                rusqlite::types::Type::Text,
-            )))
-        })?;
+        let temp_dir = tempfile::TempDir::new().unwrap();
         let db_path = temp_dir.path().join("test.db");
 
         // Use simple test entity ID since init() now handles actor ID setup
 
         // Create a test PublicKey for the entity
         let test_entity = fastn_id52::SecretKey::generate().public_key();
-        let db = Db::init(&db_path, &test_entity)?;
+        let db = Db::init(&db_path, &test_entity).unwrap();
 
         // Return temp_dir to keep it alive
-        Ok((db, temp_dir))
+        (db, temp_dir)
     }
 
     // Helper function for tests to create document paths easily
@@ -79,7 +74,7 @@ mod test {
 
     #[test]
     fn test_create_and_get() -> crate::Result<()> {
-        let (db, _temp_dir) = temp_db()?;
+        let (db, _temp_dir) = temp_db();
 
         let doc = TestDoc {
             name: "test document".to_string(),
@@ -99,7 +94,7 @@ mod test {
 
     #[test]
     fn test_create_duplicate_fails() -> crate::Result<()> {
-        let (db, _temp_dir) = temp_db()?;
+        let (db, _temp_dir) = temp_db();
 
         let doc = TestDoc {
             name: "test".to_string(),
@@ -118,7 +113,7 @@ mod test {
 
     #[test]
     fn test_update() -> crate::Result<()> {
-        let (db, _temp_dir) = temp_db()?;
+        let (db, _temp_dir) = temp_db();
 
         let original = TestDoc {
             name: "original".to_string(),
@@ -144,7 +139,7 @@ mod test {
 
     #[test]
     fn test_modify() -> crate::Result<()> {
-        let (db, _temp_dir) = temp_db()?;
+        let (db, _temp_dir) = temp_db();
 
         let doc = TestDoc {
             name: "modify test".to_string(),
@@ -170,7 +165,7 @@ mod test {
 
     #[test]
     fn test_delete() -> crate::Result<()> {
-        let (db, _temp_dir) = temp_db()?;
+        let (db, _temp_dir) = temp_db();
 
         let doc = TestDoc {
             name: "to delete".to_string(),
@@ -195,7 +190,7 @@ mod test {
 
     #[test]
     fn test_delete_nonexistent_fails() -> crate::Result<()> {
-        let (db, _temp_dir) = temp_db()?;
+        let (db, _temp_dir) = temp_db();
 
         assert!(db.delete(&doc_path("/nonexistent")).is_err());
 
@@ -204,7 +199,7 @@ mod test {
 
     #[test]
     fn test_exists() -> crate::Result<()> {
-        let (db, _temp_dir) = temp_db()?;
+        let (db, _temp_dir) = temp_db();
 
         assert!(!db.exists(&doc_path("/test/nonexistent"))?);
 
@@ -222,7 +217,7 @@ mod test {
 
     #[test]
     fn test_list() -> crate::Result<()> {
-        let (db, _temp_dir) = temp_db()?;
+        let (db, _temp_dir) = temp_db();
 
         let doc = TestDoc {
             name: "list test".to_string(),
@@ -253,7 +248,7 @@ mod test {
 
     #[test]
     fn test_nested_structures() -> crate::Result<()> {
-        let (db, _temp_dir) = temp_db()?;
+        let (db, _temp_dir) = temp_db();
 
         let nested = NestedDoc {
             title: "nested document".to_string(),
@@ -277,7 +272,7 @@ mod test {
 
     #[test]
     fn test_get_document() -> crate::Result<()> {
-        let (db, _temp_dir) = temp_db()?;
+        let (db, _temp_dir) = temp_db();
 
         let doc = TestDoc {
             name: "raw doc".to_string(),
@@ -299,7 +294,7 @@ mod test {
 
     #[test]
     fn test_actor_id_consistency() -> crate::Result<()> {
-        let (db, _temp_dir) = temp_db()?;
+        let (db, _temp_dir) = temp_db();
 
         let doc1 = TestDoc {
             name: "doc1".to_string(),
@@ -337,7 +332,7 @@ mod test {
 
     #[test]
     fn test_derive_with_id52_and_custom_path() -> crate::Result<()> {
-        let (db, _temp_dir) = temp_db()?;
+        let (db, _temp_dir) = temp_db();
 
         let user_id = fastn_id52::SecretKey::generate().public_key();
 
@@ -380,7 +375,7 @@ mod test {
 
     #[test]
     fn test_derive_with_id52_default_path() -> crate::Result<()> {
-        let (db, _temp_dir) = temp_db()?;
+        let (db, _temp_dir) = temp_db();
 
         let entity = fastn_id52::SecretKey::generate().public_key();
 
@@ -404,7 +399,7 @@ mod test {
 
     #[test]
     fn test_derive_singleton_custom_path() -> crate::Result<()> {
-        let (db, _temp_dir) = temp_db()?;
+        let (db, _temp_dir) = temp_db();
 
         // Test static path (no ID52 substitution)
         let generated_path = AppSettings::document_path();
@@ -436,7 +431,7 @@ mod test {
 
     #[test]
     fn test_derive_complex_path_template() -> crate::Result<()> {
-        let (db, _temp_dir) = temp_db()?;
+        let (db, _temp_dir) = temp_db();
 
         let owner = fastn_id52::SecretKey::generate().public_key();
 
@@ -457,7 +452,7 @@ mod test {
 
     #[test]
     fn test_derive_error_handling() -> crate::Result<()> {
-        let (db, _temp_dir) = temp_db()?;
+        let (db, _temp_dir) = temp_db();
 
         let user_id = fastn_id52::SecretKey::generate().public_key();
         let profile = UserProfile {
@@ -494,7 +489,7 @@ mod test {
 
     #[test]
     fn test_derive_multiple_instances() -> crate::Result<()> {
-        let (db, _temp_dir) = temp_db()?;
+        let (db, _temp_dir) = temp_db();
 
         // Test multiple users in the same database
         let alice_id = fastn_id52::SecretKey::generate().public_key();
