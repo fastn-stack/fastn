@@ -16,6 +16,8 @@ impl CliTest {
             .arg("run")
             .arg("-p")
             .arg("fastn-automerge")
+            .arg("--features")
+            .arg("cli")
             .arg("--")
             .arg("--db")
             .arg(&self.db_path)

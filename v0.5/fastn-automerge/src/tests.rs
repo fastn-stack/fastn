@@ -260,7 +260,7 @@ mod test {
 
         // Test a comprehensive workflow using the derive macro
         let user_id = fastn_id52::SecretKey::generate().public_key();
-        
+
         // 1. Create initial document
         let profile = UserProfile {
             user_id,
@@ -288,7 +288,10 @@ mod test {
         // 5. Verify all operations
         let final_profile = UserProfile::load(&db, &user_id)?;
         assert_eq!(final_profile.name, "John D. Doe");
-        assert_eq!(final_profile.bio, Some("Senior Software Engineer".to_string()));
+        assert_eq!(
+            final_profile.bio,
+            Some("Senior Software Engineer".to_string())
+        );
 
         let final_settings = AppSettings::load(&db)?;
         assert_eq!(final_settings.theme, "system");

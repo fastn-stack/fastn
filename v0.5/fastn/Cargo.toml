@@ -14,7 +14,7 @@ arcstr.workspace = true
 fastn-compiler.workspace = true
 fastn-continuation = { workspace = true, features = ["async_provider"] }
 fastn-package.workspace = true
-fastn-automerge.workspace = true
+fastn-automerge = { workspace = true, features = ["cli"] }
 fastn-rig.workspace = true
 fastn-router.workspace = true
 fastn-runtime.workspace = true

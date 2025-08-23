@@ -1,4 +1,3 @@
-
 pub fn run_command(cli: super::Cli) -> eyre::Result<()> {
     match cli.command {
         super::Commands::Init => {
@@ -64,6 +63,7 @@ pub fn run_command(cli: super::Cli) -> eyre::Result<()> {
 }
 
 #[track_caller]
+#[allow(dead_code)] // clippy false positive: called by Init command
 fn init_database(db_path: &str) -> eyre::Result<()> {
     // WARNING: Using dummy entity for CLI - real apps should use actual PublicKey
     let dummy_entity_str = super::utils::get_dummy_cli_entity_id();
@@ -73,6 +73,7 @@ fn init_database(db_path: &str) -> eyre::Result<()> {
     Ok(())
 }
 
+#[allow(dead_code)] // clippy false positive: called by Create command
 fn create_document(db: &fastn_automerge::Db, path: &str, json: &str) -> eyre::Result<()> {
     // Validate JSON first
     let _value = super::utils::parse_json(json)?;
@@ -89,6 +90,7 @@ fn create_document(db: &fastn_automerge::Db, path: &str, json: &str) -> eyre::Re
     Ok(())
 }
 
+#[allow(dead_code)] // clippy false positive: called by Get command
 fn get_document(
     db: &fastn_automerge::Db,
     path: &str,
@@ -121,6 +123,7 @@ fn get_document(
     Ok(())
 }
 
+#[allow(dead_code)] // clippy false positive: called by Update command
 fn update_document(db: &fastn_automerge::Db, path: &str, json: &str) -> eyre::Result<()> {
     // Validate JSON first
     let _value = super::utils::parse_json(json)?;
@@ -137,6 +140,7 @@ fn update_document(db: &fastn_automerge::Db, path: &str, json: &str) -> eyre::Re
     Ok(())
 }
 
+#[allow(dead_code)] // clippy false positive: called by Set command
 fn set_document(db: &fastn_automerge::Db, path: &str, json: &str) -> eyre::Result<()> {
     // Validate JSON first
     let _value = super::utils::parse_json(json)?;
@@ -158,6 +162,7 @@ fn set_document(db: &fastn_automerge::Db, path: &str, json: &str) -> eyre::Resul
     Ok(())
 }
 
+#[allow(dead_code)] // clippy false positive: called by Delete command
 fn delete_document(db: &fastn_automerge::Db, path: &str, confirm: bool) -> eyre::Result<()> {
     let doc_id = fastn_automerge::DocumentPath::from_string(path)?;
 
@@ -170,6 +175,7 @@ fn delete_document(db: &fastn_automerge::Db, path: &str, confirm: bool) -> eyre:
     Ok(())
 }
 
+#[allow(dead_code)] // clippy false positive: called by List command
 fn list_documents(
     db: &fastn_automerge::Db,
     prefix: Option<&str>,
@@ -193,6 +199,7 @@ fn list_documents(
     Ok(())
 }
 
+#[allow(dead_code)] // clippy false positive: called by History command
 fn show_history(
     db: &fastn_automerge::Db,
     path: &str,
@@ -229,6 +236,7 @@ fn show_history(
     Ok(())
 }
 
+#[allow(dead_code)] // clippy false positive: called by Info command
 fn show_info(db: &fastn_automerge::Db, path: &str) -> eyre::Result<()> {
     let doc_id = fastn_automerge::DocumentPath::from_string(path)?;
 
