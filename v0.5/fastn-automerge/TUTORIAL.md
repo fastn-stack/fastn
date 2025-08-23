@@ -9,8 +9,9 @@ This tutorial covers the fastn-automerge library in detail, focusing on the thre
 3. [Template-based API](#template-based-api)
 4. [Singleton API](#singleton-api)
 5. [Path-based API](#path-based-api)
-6. [Advanced Features](#advanced-features)
-7. [Best Practices](#best-practices)
+6. [JSON Querying](#json-querying)
+7. [Advanced Features](#advanced-features)
+8. [Best Practices](#best-practices)
 
 ## Introduction
 
@@ -41,7 +42,7 @@ The `#[derive(Document)]` macro generates three different APIs depending on your
 use fastn_automerge::{Db, Document, Reconcile, Hydrate};
 use fastn_id52::PublicKey;
 
-#[derive(Debug, Clone, Document, Reconcile, Hydrate)]
+#[derive(Debug, Clone, serde::Serialize, Document, Reconcile, Hydrate)]
 #[document_path("/-/users/{id52}/profile")]
 struct UserProfile {
     #[document_id52]
@@ -51,7 +52,7 @@ struct UserProfile {
     last_active: i64,
 }
 
-#[derive(Debug, Clone, Document, Reconcile, Hydrate)]
+#[derive(Debug, Clone, serde::Serialize, Document, Reconcile, Hydrate)]
 #[document_path("/-/projects/{id52}/metadata")]
 struct ProjectMetadata {
     #[document_id52]
@@ -61,6 +62,8 @@ struct ProjectMetadata {
     tags: Vec<String>,
 }
 ```
+
+**Important**: All Document types now require `serde::Serialize` for JSON query support.
 
 ### Basic Operations
 
@@ -148,7 +151,7 @@ fn extract_id52_from_path(path: &fastn_automerge::DocumentPath) -> Option<String
 ```rust
 use fastn_automerge::{Db, Document, Reconcile, Hydrate};
 
-#[derive(Debug, Clone, Document, Reconcile, Hydrate)]
+#[derive(Debug, Clone, serde::Serialize, Document, Reconcile, Hydrate)]
 #[document_path("/-/app/settings")]
 struct AppSettings {
     theme: String,
@@ -156,7 +159,7 @@ struct AppSettings {
     max_users: usize,
 }
 
-#[derive(Debug, Clone, Document, Reconcile, Hydrate)]
+#[derive(Debug, Clone, serde::Serialize, Document, Reconcile, Hydrate)]
 #[document_path("/-/system/stats")]
 struct SystemStats {
     startup_time: i64,
@@ -202,7 +205,7 @@ fn singleton_example(db: &Db) -> Result<(), Box<dyn std::error::Error>> {
 use fastn_automerge::{Db, Document, DocumentPath, Reconcile, Hydrate};
 use fastn_id52::PublicKey;
 
-#[derive(Debug, Clone, Document, Reconcile, Hydrate)]
+#[derive(Debug, Clone, serde::Serialize, Document, Reconcile, Hydrate)]
 struct FlexibleDoc {
     #[document_id52]
     id: PublicKey,
@@ -210,7 +213,7 @@ struct FlexibleDoc {
     metadata: std::collections::HashMap<String, String>,
 }
 
-#[derive(Debug, Clone, Document, Reconcile, Hydrate)]
+#[derive(Debug, Clone, serde::Serialize, Document, Reconcile, Hydrate)]
 struct GenericData {
     value: serde_json::Value,
     created_at: i64,
@@ -253,6 +256,144 @@ fn path_based_example(db: &Db) -> Result<(), Box<dyn std::error::Error>> {
 
     Ok(())
 }
+```
+
+## JSON Querying
+
+fastn-automerge automatically stores a JSON representation alongside the Automerge binary for efficient querying. This enables powerful, type-safe queries without SQL injection risks.
+
+### Available Query Functions
+
+```rust
+use fastn_automerge::Db;
+
+// Find documents where a field equals a specific value
+let alice_users = db.find_where("name", "Alice")?;
+let active_projects = db.find_where("status", "active")?;
+let debug_configs = db.find_where("settings.debug", true)?;  // Nested fields
+
+// Find documents where a field exists (is not null)
+let users_with_bio = db.find_exists("bio")?;
+let projects_with_deadline = db.find_exists("deadline")?;
+
+// Find documents where an array contains a specific value
+let rust_projects = db.find_contains("tags", "rust")?;
+let admin_users = db.find_contains("roles", "admin")?;
+```
+
+### Practical Examples
+
+```rust
+#[derive(Debug, Clone, serde::Serialize, Document, Reconcile, Hydrate)]
+#[document_path("/-/projects/{id52}/metadata")]
+struct Project {
+    #[document_id52]
+    id: fastn_id52::PublicKey,
+    title: String,
+    status: String,
+    tags: Vec<String>,
+    settings: ProjectSettings,
+}
+
+#[derive(Debug, Clone, serde::Serialize, Reconcile, Hydrate)]
+struct ProjectSettings {
+    public: bool,
+    priority: String,
+    deadline: Option<i64>,
+}
+
+fn query_examples(db: &Db) -> Result<(), Box<dyn std::error::Error>> {
+    // Find all active projects
+    let active_projects = db.find_where("status", "active")?;
+    println!("Active projects: {}", active_projects.len());
+
+    // Find projects tagged with "urgent"
+    let urgent_projects = db.find_contains("tags", "urgent")?;
+    
+    // Find public projects
+    let public_projects = db.find_where("settings.public", true)?;
+    
+    // Find projects with deadlines
+    let projects_with_deadlines = db.find_exists("settings.deadline")?;
+
+    // Load and process query results
+    for path in urgent_projects {
+        // Extract project ID from path to load the document
+        if let Some(id_str) = extract_id52_from_path(&path) {
+            if let Ok(project_id) = fastn_id52::PublicKey::from_string(&id_str) {
+                let project = Project::load(&db, &project_id)?;
+                println!("Urgent project: {}", project.title);
+            }
+        }
+    }
+
+    Ok(())
+}
+```
+
+### Query Performance
+
+The JSON queries are optimized for performance:
+
+- **Dual storage**: Documents stored as both Automerge binary (for CRDT) and JSON (for queries)
+- **SQL optimization**: Uses SQLite's efficient `json_extract()` function
+- **Type safety**: Compile-time validation prevents runtime query errors
+- **Index support**: Can add indexes on `json_extract(json_data, '$.field')` for faster queries
+
+### Advanced Query Patterns
+
+```rust
+fn advanced_queries(db: &Db) -> Result<(), Box<dyn std::error::Error>> {
+    // Combine multiple conditions using multiple queries
+    let senior_engineers = db.find_where("role", "engineer")?
+        .into_iter()
+        .filter(|path| {
+            // Additional filtering can be done in Rust for complex conditions
+            if let Some(id) = extract_id_from_path(path) {
+                if let Ok(user) = UserProfile::load(&db, &id) {
+                    return user.name.contains("Senior");
+                }
+            }
+            false
+        })
+        .collect::<Vec<_>>();
+
+    // Find documents by nested field values
+    let high_priority = db.find_where("settings.priority", "high")?;
+    
+    // Existence checks for optional fields
+    let completed_tasks = db.find_exists("completed_at")?;
+
+    println!("Senior engineers: {}", senior_engineers.len());
+    println!("High priority items: {}", high_priority.len());
+    println!("Completed tasks: {}", completed_tasks.len());
+
+    Ok(())
+}
+```
+
+### Query Limitations and Workarounds
+
+**Current limitations:**
+- No range queries (use Rust filtering after basic query)
+- No complex boolean logic (combine multiple queries in Rust)
+- No full-text search (use prefix matching and Rust filtering)
+
+**Workarounds:**
+```rust
+// Range queries: Get all, then filter in Rust
+let all_users = UserProfile::document_list(&db)?;
+let adult_users = all_users.into_iter()
+    .filter_map(|path| extract_and_load_user(&db, &path))
+    .filter(|user| user.age >= 18)
+    .collect::<Vec<_>>();
+
+// Complex boolean: Combine query results
+let rust_devs = db.find_contains("skills", "rust")?;
+let senior_devs = db.find_where("level", "senior")?;
+let senior_rust_devs = rust_devs.into_iter()
+    .filter(|path| senior_devs.contains(path))
+    .collect::<Vec<_>>();
 ```
 
 ## Advanced Features
@@ -365,20 +506,20 @@ fn multi_type_example(db: &Db) -> Result<(), Box<dyn std::error::Error>> {
 
 ```rust
 // Good: Clear hierarchy with templates
-#[derive(Document, Reconcile, Hydrate)]
+#[derive(serde::Serialize, Document, Reconcile, Hydrate)]
 #[document_path("/-/users/{id52}/profile")]
 struct UserProfile { /* ... */ }
 
-#[derive(Document, Reconcile, Hydrate)]
+#[derive(serde::Serialize, Document, Reconcile, Hydrate)]
 #[document_path("/-/users/{id52}/settings")]
 struct UserSettings { /* ... */ }
 
-#[derive(Document, Reconcile, Hydrate)]
+#[derive(serde::Serialize, Document, Reconcile, Hydrate)]
 #[document_path("/-/projects/{id52}/metadata")]
 struct ProjectMetadata { /* ... */ }
 
 // Good: Singleton for global state
-#[derive(Document, Reconcile, Hydrate)]
+#[derive(serde::Serialize, Document, Reconcile, Hydrate)]
 #[document_path("/-/app/config")]
 struct AppConfig { /* ... */ }
 ```
@@ -512,7 +653,7 @@ let loaded: User = db.get(&path)?;
 ### New API (Recommended)
 ```rust
 // New way - clean and type-safe
-#[derive(Document, Reconcile, Hydrate)]
+#[derive(serde::Serialize, Document, Reconcile, Hydrate)]
 #[document_path("/-/users/{id52}/profile")]
 struct User { #[document_id52] id: PublicKey, /* ... */ }
 

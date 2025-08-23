@@ -42,6 +42,12 @@
 //! 
 //! // List all user profiles with exact DNSSEC32 validation
 //! let all_users = UserProfile::document_list(&db)?;  // Only when {id52} present
+//! 
+//! // JSON querying - safe and type-safe
+//! let alice_users = db.find_where("name", "Alice")?;     // Find by field value
+//! let active_users = db.find_exists("bio")?;             // Find where field exists
+//! let engineers = db.find_contains("tags", "engineer")?; // Find arrays containing value
+//! 
 //! println!("Found {} users", all_users.len());
 //! # Ok(())
 //! # }
@@ -117,7 +123,9 @@
 //! - **CRDT support**: Built on Automerge for conflict-free collaborative editing
 //! - **Type safety**: Compile-time path validation and type checking  
 //! - **Smart path management**: Three different APIs for different use cases
+//! - **JSON querying**: Safe, type-safe queries with `find_where()`, `find_exists()`, `find_contains()`
 //! - **Exact pattern matching**: `document_list()` uses precise DNSSEC32 validation
+//! - **Dual storage**: Automerge binary + JSON for both CRDT and query performance
 //! - **SQLite storage**: Efficient persistence with SQL optimization
 //! - **Actor ID management**: Automatic device/entity tracking for privacy
 //! - **Feature-gated CLI**: Optional command-line tools for database inspection

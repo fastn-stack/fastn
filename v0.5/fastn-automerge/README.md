@@ -37,8 +37,9 @@ let all_users = UserProfile::document_list(&db)?; // List all users!
 ## 🎯 Features
 
 - **🦀 Type-safe**: Compile-time path validation and type checking
-- **🔍 Smart listing**: `document_list()` with exact DNSSEC32 validation  
-- **⚡ Performance**: SQL prefix filtering + Rust validation
+- **🔍 Smart listing**: `document_list()` with exact DNSSEC32 validation
+- **🔎 JSON querying**: Safe queries with `find_where()`, `find_exists()`, `find_contains()`  
+- **⚡ Performance**: SQL prefix filtering + Rust validation + dual storage
 - **🗄️ SQLite storage**: Efficient persistence with indexing
 - **🔄 CRDT support**: Built on Automerge for conflict-free editing
 - **🎭 Actor tracking**: Automatic device/entity management
@@ -89,6 +90,10 @@ struct Note {
 note.save(&db)?;                     // Auto path: /-/notes/abc123.../content
 let loaded = Note::load(&db, &id)?;  // Load by ID
 let all_notes = Note::document_list(&db)?; // List all notes
+
+// JSON querying
+let important_notes = db.find_contains("tags", "important")?; // Find by tag
+let recent_notes = db.find_exists("updated_at")?;            // Find with timestamps
 ```
 
 ### Singleton API (Global State)
