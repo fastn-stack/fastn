@@ -529,6 +529,6 @@ impl crate::Db {
         }
         
         // Return the actor ID for the current device
-        Ok(format!("{}-{}", entity_id52, current_device))
+        Ok(format!("{entity_id52}-{current_device}"))
     }
 }

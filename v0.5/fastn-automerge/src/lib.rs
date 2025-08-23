@@ -1,5 +1,7 @@
 extern crate self as fastn_automerge;
 
+// TODO: Add comprehensive crate documentation once derive macro testing is complete
+
 pub mod cli;
 pub mod db;
 pub mod error;
@@ -214,7 +216,7 @@ impl std::fmt::Debug for Db {
 /// - `Db::open()` - Opens database with temporary actor ID  
 /// - `db.set_actor_id(entity_id52, device_num)` - Sets proper actor ID after creation/opening
 /// - `db.next_actor_id(entity_id52)` - Gets next device number atomically (thread-safe)
-
+///
 /// Actor counter document stored at /-/system/actor_counter
 /// 
 /// **Important**: Only account databases generate and assign device IDs to new devices.
