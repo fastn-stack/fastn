@@ -98,28 +98,28 @@ pub fn derive_document(input: TokenStream) -> TokenStream {
             /// Load document from database
             #load_signature {
                 #load_call
-                db.get(&doc_path).map_err(|e| e)
+                db.get_impl(&doc_path).map_err(|e| e)
             }
 
             /// Create new document in database (fails if exists)
             pub fn create(&self, db: &fastn_automerge::Db) -> std::result::Result<(), fastn_automerge::db::CreateError> {
                 #save_call
-                db.create(&doc_path, self)
+                db.create_impl(&doc_path, self)
             }
 
             /// Update existing document in database (fails if not exists)
             pub fn update(&self, db: &fastn_automerge::Db) -> std::result::Result<(), fastn_automerge::db::UpdateError> {
                 #save_call
-                db.update(&doc_path, self)
+                db.update_impl(&doc_path, self)
             }
 
             /// Save document to database (create if not exists, update if exists)
             pub fn save(&self, db: &fastn_automerge::Db) -> std::result::Result<(), fastn_automerge::db::SaveError> {
                 #save_call
                 if db.exists(&doc_path).map_err(fastn_automerge::db::SaveError::Exists)? {
-                    db.update(&doc_path, self).map_err(fastn_automerge::db::SaveError::Update)
+                    db.update_impl(&doc_path, self).map_err(fastn_automerge::db::SaveError::Update)
                 } else {
-                    db.create(&doc_path, self).map_err(fastn_automerge::db::SaveError::Create)
+                    db.create_impl(&doc_path, self).map_err(fastn_automerge::db::SaveError::Create)
                 }
             }
         }

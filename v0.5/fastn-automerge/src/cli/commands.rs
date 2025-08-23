@@ -1,3 +1,4 @@
+
 pub fn run_command(cli: super::Cli) -> eyre::Result<()> {
     match cli.command {
         super::Commands::Init => {
@@ -84,7 +85,7 @@ fn create_document(db: &fastn_automerge::Db, path: &str, json: &str) -> eyre::Re
     data.insert("json_data".to_string(), json.to_string());
     data.insert("content_type".to_string(), "application/json".to_string());
 
-    db.create(&doc_id, &data)?;
+    db.create_impl(&doc_id, &data)?;
     Ok(())
 }
 
@@ -95,7 +96,7 @@ fn get_document(
     output: Option<&str>,
 ) -> eyre::Result<()> {
     let doc_id = fastn_automerge::DocumentPath::from_string(path)?;
-    let data: std::collections::HashMap<String, String> = db.get(&doc_id)?;
+    let data: std::collections::HashMap<String, String> = db.get_impl(&doc_id)?;
 
     // Extract JSON data
     let json_str = data
@@ -132,7 +133,7 @@ fn update_document(db: &fastn_automerge::Db, path: &str, json: &str) -> eyre::Re
     data.insert("json_data".to_string(), json.to_string());
     data.insert("content_type".to_string(), "application/json".to_string());
 
-    db.update(&doc_id, &data)?;
+    db.update_impl(&doc_id, &data)?;
     Ok(())
 }
 
@@ -150,9 +151,9 @@ fn set_document(db: &fastn_automerge::Db, path: &str, json: &str) -> eyre::Resul
 
     // Set = create if not exists, update if exists
     if db.exists(&doc_id)? {
-        db.update(&doc_id, &data)?;
+        db.update_impl(&doc_id, &data)?;
     } else {
-        db.create(&doc_id, &data)?;
+        db.create_impl(&doc_id, &data)?;
     }
     Ok(())
 }

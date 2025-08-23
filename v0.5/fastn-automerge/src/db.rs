@@ -62,7 +62,7 @@ impl crate::Db {
 pub enum InitError {
     DatabaseExists(std::path::PathBuf),
     Database(rusqlite::Error),
-    Migration(eyre::Report),
+    Migration(rusqlite::Error),
     Create(Box<CreateError>),
 }
 
@@ -93,7 +93,7 @@ impl crate::Db {
             entity_id52: entity.id52(), // Store as string in the document for now
             next_device: 1,             // Next device will be 1
         };
-        db.create(&counter_doc_path, &counter)
+        db.create_impl(&counter_doc_path, &counter)
             .map_err(|e| InitError::Create(Box::new(e)))?;
 
         Ok(db)
@@ -109,8 +109,9 @@ pub enum CreateError {
 }
 
 impl crate::Db {
-    /// Create a new document
-    pub fn create<T>(&self, path: &crate::DocumentPath, value: &T) -> Result<(), CreateError>
+    /// Create a new document (internal implementation - use derive macro instead)
+    #[doc(hidden)]
+    pub fn create_impl<T>(&self, path: &crate::DocumentPath, value: &T) -> Result<(), CreateError>
     where
         T: autosurgeon::Reconcile,
     {
@@ -164,6 +165,15 @@ impl crate::Db {
 
         Ok(())
     }
+
+    /// Create a new document
+    #[deprecated(note = "Use the #[derive(Document)] macro and call document.create(&db) instead")]
+    pub fn create<T>(&self, path: &crate::DocumentPath, value: &T) -> Result<(), CreateError>
+    where
+        T: autosurgeon::Reconcile,
+    {
+        self.create_impl(path, value)
+    }
 }
 
 #[derive(Debug)]
@@ -175,8 +185,9 @@ pub enum GetError {
 }
 
 impl crate::Db {
-    /// Get a document
-    pub fn get<T>(&self, path: &crate::DocumentPath) -> Result<T, GetError>
+    /// Get a document (internal implementation - use derive macro instead)
+    #[doc(hidden)]
+    pub fn get_impl<T>(&self, path: &crate::DocumentPath) -> Result<T, GetError>
     where
         T: autosurgeon::Hydrate,
     {
@@ -196,6 +207,15 @@ impl crate::Db {
         let value: T = autosurgeon::hydrate(&doc).map_err(GetError::Hydrate)?;
         Ok(value)
     }
+
+    /// Get a document
+    #[deprecated(note = "Use the #[derive(Document)] macro and call DocumentType::load(&db, &id) instead")]
+    pub fn get<T>(&self, path: &crate::DocumentPath) -> Result<T, GetError>
+    where
+        T: autosurgeon::Hydrate,
+    {
+        self.get_impl(path)
+    }
 }
 
 #[derive(Debug)]
@@ -207,8 +227,9 @@ pub enum UpdateError {
 }
 
 impl crate::Db {
-    /// Update a document
-    pub fn update<T>(&self, path: &crate::DocumentPath, value: &T) -> Result<(), UpdateError>
+    /// Update a document (internal implementation - use derive macro instead)
+    #[doc(hidden)]
+    pub fn update_impl<T>(&self, path: &crate::DocumentPath, value: &T) -> Result<(), UpdateError>
     where
         T: autosurgeon::Reconcile,
     {
@@ -263,6 +284,15 @@ impl crate::Db {
 
         Ok(())
     }
+
+    /// Update a document
+    #[deprecated(note = "Use the #[derive(Document)] macro and call document.update(&db) instead")]
+    pub fn update<T>(&self, path: &crate::DocumentPath, value: &T) -> Result<(), UpdateError>
+    where
+        T: autosurgeon::Reconcile,
+    {
+        self.update_impl(path, value)
+    }
 }
 
 #[derive(Debug)]
@@ -276,6 +306,7 @@ pub enum ModifyError {
 
 impl crate::Db {
     /// Modify a document with a closure
+    #[deprecated(note = "Use the #[derive(Document)] macro and load/modify/save pattern instead")]
     pub fn modify<T, F>(&self, path: &crate::DocumentPath, modifier: F) -> Result<(), ModifyError>
     where
         T: autosurgeon::Hydrate + autosurgeon::Reconcile,
@@ -366,6 +397,35 @@ pub enum ExistsError {
     Database(rusqlite::Error),
 }
 
+#[derive(Debug)]
+pub enum ListError {
+    Database(rusqlite::Error),
+}
+
+impl std::fmt::Display for ListError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ListError::Database(e) => write!(f, "Database error: {}", e),
+        }
+    }
+}
+
+impl std::error::Error for ListError {
+    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+        match self {
+            ListError::Database(e) => Some(e),
+        }
+    }
+}
+
+#[derive(Debug)]
+pub enum NextActorIdError {
+    Get(GetError),
+    Create(CreateError),
+    Update(UpdateError),
+    Exists(ExistsError),
+}
+
 impl crate::Db {
     /// Check if a document exists
     pub fn exists(&self, path: &crate::DocumentPath) -> Result<bool, ExistsError> {
@@ -381,35 +441,38 @@ impl crate::Db {
     }
 
     /// List documents with optional prefix
-    pub fn list(&self, prefix: Option<&str>) -> crate::Result<Vec<String>> {
+    pub fn list(&self, prefix: Option<&str>) -> Result<Vec<String>, ListError> {
         let query = if prefix.is_some() {
             "SELECT path FROM fastn_documents WHERE path LIKE ?1 || '%' ORDER BY path"
         } else {
             "SELECT path FROM fastn_documents ORDER BY path"
         };
 
-        let mut stmt = self.conn.prepare(query)?;
+        let mut stmt = self.conn.prepare(query).map_err(ListError::Database)?;
 
         let paths = if let Some(prefix) = prefix {
-            stmt.query_map([prefix], |row| row.get(0))?
+            stmt.query_map([prefix], |row| row.get(0)).map_err(ListError::Database)?
                 .collect::<std::result::Result<Vec<String>, _>>()
         } else {
-            stmt.query_map([], |row| row.get(0))?
+            stmt.query_map([], |row| row.get(0)).map_err(ListError::Database)?
                 .collect::<std::result::Result<Vec<String>, _>>()
-        }?;
+        }.map_err(ListError::Database)?;
 
         Ok(paths)
     }
 
     /// Get raw AutoCommit document for advanced operations
-    pub fn get_document(&self, path: &crate::DocumentPath) -> crate::Result<automerge::AutoCommit> {
+    pub fn get_document(&self, path: &crate::DocumentPath) -> Result<automerge::AutoCommit, GetError> {
         let binary: Vec<u8> = self.conn.query_row(
             "SELECT automerge_binary FROM fastn_documents WHERE path = ?1",
             [path],
             |row| row.get(0),
-        )?;
+        ).map_err(|e| match e {
+            rusqlite::Error::QueryReturnedNoRows => GetError::NotFound(path.clone()),
+            _ => GetError::Database(e),
+        })?;
 
-        Ok(automerge::AutoCommit::load(&binary)?)
+        Ok(automerge::AutoCommit::load(&binary).map_err(GetError::Automerge)?)
     }
 
     /// Get document history with detailed operations
@@ -420,14 +483,17 @@ impl crate::Db {
         &self,
         path: &crate::DocumentPath,
         up_to_head: Option<&str>,
-    ) -> crate::Result<crate::DocumentHistory> {
+    ) -> Result<crate::DocumentHistory, GetError> {
         let (binary, created_alias, updated_at): (Vec<u8>, String, i64) = self.conn.query_row(
             "SELECT automerge_binary, created_alias, updated_at FROM fastn_documents WHERE path = ?1",
             [path],
             |row| Ok((row.get(0)?, row.get(1)?, row.get(2)?)),
-        ).map_err(|_| Box::new(crate::Error::NotFound(path.to_string())))?;
+        ).map_err(|e| match e {
+            rusqlite::Error::QueryReturnedNoRows => GetError::NotFound(path.clone()),
+            _ => GetError::Database(e),
+        })?;
 
-        let mut doc = automerge::AutoCommit::load(&binary)?;
+        let mut doc = automerge::AutoCommit::load(&binary).map_err(GetError::Automerge)?;
 
         // Get the heads to show history up to
         let target_heads = doc.get_heads();
@@ -473,7 +539,7 @@ impl crate::Db {
 /// Extract human-readable operations from an Automerge change
 fn extract_operations_from_change(
     change: &automerge::Change,
-) -> crate::Result<Vec<crate::Operation>> {
+) -> Result<Vec<crate::Operation>, GetError> {
     let mut operations = Vec::new();
 
     // Note: Automerge 0.6.1 doesn't expose detailed operation information easily
@@ -499,7 +565,7 @@ fn extract_operations_from_change(
 
 impl crate::Db {
     /// Get the next actor ID for this database's entity and increment the counter (thread-safe)
-    pub fn next_actor_id(&self, entity_id52: &str) -> crate::Result<String> {
+    pub fn next_actor_id(&self, entity_id52: &str) -> Result<String, NextActorIdError> {
         // Lock for atomic operation
         let _lock = self.mutex.lock().unwrap();
 
@@ -507,7 +573,7 @@ impl crate::Db {
             .expect("System document ID should be valid");
 
         // Load or create actor counter document
-        let mut counter = match self.get::<crate::ActorCounter>(&counter_doc_id) {
+        let mut counter = match self.get_impl::<crate::ActorCounter>(&counter_doc_id) {
             Ok(counter) => counter,
             Err(_) => {
                 // Create new counter starting at 0
@@ -525,10 +591,10 @@ impl crate::Db {
         counter.next_device += 1;
 
         // Save the updated counter
-        if self.exists(&counter_doc_id)? {
-            self.update(&counter_doc_id, &counter)?;
+        if self.exists(&counter_doc_id).map_err(NextActorIdError::Exists)? {
+            self.update_impl(&counter_doc_id, &counter).map_err(NextActorIdError::Update)?;
         } else {
-            self.create(&counter_doc_id, &counter)?;
+            self.create_impl(&counter_doc_id, &counter).map_err(NextActorIdError::Create)?;
         }
 
         // Return the actor ID for the current device

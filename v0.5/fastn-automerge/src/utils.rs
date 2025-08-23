@@ -84,9 +84,8 @@ impl std::fmt::Display for crate::DocumentHistory {
 }
 
 /// Create a test database with a random entity (for testing only)
-pub fn create_test_db() -> crate::Result<(crate::Db, tempfile::TempDir)> {
-    let temp_dir = tempfile::TempDir::new()
-        .map_err(|e| eyre::eyre!("Failed to create temp directory: {e}"))?;
+pub fn create_test_db() -> Result<(crate::Db, tempfile::TempDir), Box<dyn std::error::Error>> {
+    let temp_dir = tempfile::TempDir::new()?;
     let db_path = temp_dir.path().join("test.db");
 
     // Create a test entity

@@ -1,5 +1,5 @@
 /// Initialize the Automerge document storage tables in SQLite
-pub fn initialize_database(conn: &rusqlite::Connection) -> crate::Result<()> {
+pub fn initialize_database(conn: &rusqlite::Connection) -> Result<(), rusqlite::Error> {
     conn.execute_batch(
         r#"
         -- Automerge documents storage

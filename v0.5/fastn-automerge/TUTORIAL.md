@@ -86,9 +86,9 @@ enum Permission {
 }
 ```
 
-### CRUD Operations
+### Document Operations
 
-#### Create
+#### Creating Documents
 
 ```rust
 fn create_example(db: &Db) -> Result<()> {

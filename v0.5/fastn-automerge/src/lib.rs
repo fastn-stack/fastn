@@ -9,6 +9,7 @@ pub mod migration;
 pub mod tests;
 pub mod utils;
 
+
 // Re-export autosurgeon traits and functions
 pub use autosurgeon::{Hydrate, Reconcile, hydrate, reconcile};
 
@@ -20,10 +21,6 @@ pub use utils::create_test_db;
 
 // Re-export automerge types we use
 pub use automerge::AutoCommit;
-
-// eyre::Result for methods not yet converted to specific error types
-// TODO: Convert remaining methods to use specific error types
-pub type Result<T> = eyre::Result<T>;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum DocumentPathError {
