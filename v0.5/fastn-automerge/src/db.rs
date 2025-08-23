@@ -483,6 +483,19 @@ impl crate::Db {
         Ok(paths)
     }
 
+    /// List documents matching a SQL LIKE pattern
+    pub fn list_with_pattern(&self, pattern: &str) -> Result<Vec<String>, ListError> {
+        let query = "SELECT path FROM fastn_documents WHERE path LIKE ?1 ORDER BY path";
+        let mut stmt = self.conn.prepare(query).map_err(ListError::Database)?;
+        
+        let paths = stmt.query_map([pattern], |row| row.get(0))
+            .map_err(ListError::Database)?
+            .collect::<std::result::Result<Vec<String>, _>>()
+            .map_err(ListError::Database)?;
+
+        Ok(paths)
+    }
+
     /// Get raw AutoCommit document for advanced operations
     #[allow(dead_code)] // clippy false positive: used for advanced document operations
     pub(crate) fn get_document(

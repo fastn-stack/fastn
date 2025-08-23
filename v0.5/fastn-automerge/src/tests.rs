@@ -48,6 +48,14 @@ mod test {
         items: Vec<String>,
     }
 
+    // Test Case 6: Path-based API (no document_path attribute)
+    #[derive(Debug, Clone, PartialEq, Hydrate, Reconcile, crate::Document)]
+    struct PathBasedDoc {
+        #[document_id52]
+        id: fastn_id52::PublicKey,
+        data: String,
+    }
+
     #[track_caller]
     fn temp_db() -> (Db, tempfile::TempDir) {
         // Use tempfile for better isolation
@@ -106,24 +114,22 @@ mod test {
     }
 
     #[test]
-    fn test_derive_with_id52_default_path() -> Result<(), Box<dyn std::error::Error>> {
+    fn test_derive_path_based_api() -> Result<(), Box<dyn std::error::Error>> {
         let (db, _temp_dir) = temp_db();
 
         let entity_id = fastn_id52::SecretKey::generate().public_key();
 
-        // Test default path generation (should be /-/{struct_name}/{id52})
-        let expected_path = format!("/-/defaultpathdoc/{}", entity_id.id52());
-        let generated_path = DefaultPathDoc::document_path(&entity_id);
-        assert_eq!(generated_path.as_str(), expected_path);
+        // Path-based API: no document_path attribute means explicit paths required
+        let doc_path = crate::DocumentPath::from_string("/-/custom/location/for/default")?;
 
-        // Test basic operations
         let doc = DefaultPathDoc {
             entity: entity_id,
             data: "test data".to_string(),
         };
 
-        doc.create(&db)?;
-        let loaded = DefaultPathDoc::load(&db, &entity_id)?;
+        // All operations now require explicit path parameter
+        doc.create(&db, &doc_path)?;
+        let loaded = DefaultPathDoc::load(&db, &doc_path)?;
         assert_eq!(loaded.data, "test data");
 
         Ok(())
@@ -157,6 +163,10 @@ mod test {
         let final_settings = AppSettings::load(&db)?;
         assert_eq!(final_settings.theme, "light");
         assert!(!final_settings.debug_mode);
+
+        // Test that AppSettings does NOT have document_list() function
+        // (This is verified by compilation - if document_list existed, we could uncomment this:)
+        // let _ = AppSettings::document_list(&db)?; // This should NOT compile
 
         Ok(())
     }
@@ -296,6 +306,128 @@ mod test {
         let final_settings = AppSettings::load(&db)?;
         assert_eq!(final_settings.theme, "system");
         assert!(!final_settings.debug_mode);
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_document_list() -> Result<(), Box<dyn std::error::Error>> {
+        let (db, _temp_dir) = temp_db();
+
+        // Create multiple test documents with different IDs
+        let test_docs = (0..3)
+            .map(|i| {
+                let id = fastn_id52::SecretKey::generate().public_key();
+                TestDoc {
+                    id,
+                    name: format!("Test Doc {i}"),
+                    value: i,
+                    items: vec![format!("item-{i}")],
+                }
+            })
+            .collect::<Vec<_>>();
+
+        // Create all documents
+        for doc in &test_docs {
+            doc.create(&db)?;
+        }
+
+        // Also create a user profile to make sure it doesn't interfere
+        let user_id = fastn_id52::SecretKey::generate().public_key();
+        let profile = UserProfile {
+            user_id,
+            name: "Alice".to_string(),
+            bio: Some("Developer".to_string()),
+        };
+        profile.create(&db)?;
+
+        // Test document_list for TestDoc
+        let test_doc_paths = TestDoc::document_list(&db)?;
+        assert_eq!(test_doc_paths.len(), 3);
+
+        // Verify all our test documents are found
+        for doc in &test_docs {
+            let expected_path = TestDoc::document_path(&doc.id);
+            assert!(test_doc_paths.iter().any(|p| p.as_str() == expected_path.as_str()));
+        }
+
+        // Test document_list for UserProfile  
+        let user_profile_paths = UserProfile::document_list(&db)?;
+        assert_eq!(user_profile_paths.len(), 1);
+
+        let expected_profile_path = UserProfile::document_path(&user_id);
+        assert_eq!(user_profile_paths[0].as_str(), expected_profile_path.as_str());
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_document_list_exact_validation() -> Result<(), Box<dyn std::error::Error>> {
+        let (db, _temp_dir) = temp_db();
+
+        // Create valid TestDoc
+        let valid_id = fastn_id52::SecretKey::generate().public_key();
+        let valid_doc = TestDoc {
+            id: valid_id,
+            name: "Valid Doc".to_string(),
+            value: 42,
+            items: vec!["valid".to_string()],
+        };
+        valid_doc.create(&db)?;
+
+        // Test that document_list only returns valid paths
+        let paths = TestDoc::document_list(&db)?;
+        assert_eq!(paths.len(), 1);
+
+        // Verify the path is exactly what we expect
+        let expected_path = TestDoc::document_path(&valid_id);
+        assert_eq!(paths[0].as_str(), expected_path.as_str());
+
+        // Verify the ID part is exactly 52 characters
+        let path_str = paths[0].as_str();
+        let id_part = &path_str[8..60]; // "/-/test/" = 8 chars, then 52 chars for ID
+        assert_eq!(id_part.len(), 52);
+        assert!(id_part.chars().all(|c| c.is_alphanumeric()));
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_path_based_api() -> Result<(), Box<dyn std::error::Error>> {
+        let (db, _temp_dir) = temp_db();
+
+        let doc_id = fastn_id52::SecretKey::generate().public_key();
+        let doc = PathBasedDoc {
+            id: doc_id,
+            data: "path-based test".to_string(),
+        };
+
+        // Path-based API requires explicit DocumentPath parameter
+        let doc_path = crate::DocumentPath::from_string("/-/custom/path/for/test")?;
+
+        // Test create with explicit path
+        doc.create(&db, &doc_path)?;
+
+        // Test load with explicit path  
+        let loaded = PathBasedDoc::load(&db, &doc_path)?;
+        assert_eq!(loaded.data, "path-based test");
+        assert_eq!(loaded.id, doc_id);
+
+        // Test update with explicit path
+        let mut updated = loaded;
+        updated.data = "updated data".to_string();
+        updated.update(&db, &doc_path)?;
+
+        // Test save with explicit path
+        updated.data = "saved data".to_string();
+        updated.save(&db, &doc_path)?;
+
+        // Verify final state
+        let final_doc = PathBasedDoc::load(&db, &doc_path)?;
+        assert_eq!(final_doc.data, "saved data");
+
+        // Test that the document doesn't have document_list function
+        // (This is verified by compilation - if it existed, we could call it)
 
         Ok(())
     }
