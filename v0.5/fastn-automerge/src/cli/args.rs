@@ -65,9 +65,9 @@ pub enum Commands {
         /// Filter by path prefix
         #[arg(long)]
         prefix: Option<String>,
-        /// Show detailed information
+        /// Show document values along with paths
         #[arg(long)]
-        details: bool,
+        values: bool,
     },
     /// Show document edit history
     History {

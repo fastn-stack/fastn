@@ -42,8 +42,8 @@ pub fn run_command(cli: super::Cli) -> eyre::Result<()> {
                     delete_document(&db, &path, confirm)?;
                     println!("Deleted document at {path}");
                 }
-                super::Commands::List { prefix, details } => {
-                    list_documents(&db, prefix.as_deref(), details)?;
+                super::Commands::List { prefix, values } => {
+                    list_documents(&db, prefix.as_deref(), values)?;
                 }
                 super::Commands::History {
                     path,
@@ -175,15 +175,36 @@ fn delete_document(db: &fastn_automerge::Db, path: &str, confirm: bool) -> eyre:
 fn list_documents(
     db: &fastn_automerge::Db,
     prefix: Option<&str>,
-    details: bool,
+    values: bool,
 ) -> eyre::Result<()> {
     let documents = db.list(prefix)?;
 
-    if details {
+    if values {
         for path in documents {
             let doc_id = fastn_automerge::DocumentPath::from_string(&path)?;
             if db.exists(&doc_id)? {
-                println!("{path}");
+                println!("📄 {path}");
+
+                // Get the document content and show it
+                match db.get_document(&doc_id) {
+                    Ok(doc) => {
+                        match serde_json::to_string_pretty(&automerge::AutoSerde::from(&doc)) {
+                            Ok(json) => {
+                                // Show pretty-printed JSON with indentation
+                                for line in json.lines() {
+                                    println!("   {line}");
+                                }
+                            }
+                            Err(e) => {
+                                println!("   ❌ Error serializing document: {e}");
+                            }
+                        }
+                    }
+                    Err(e) => {
+                        println!("   ❌ Error loading document: {e}");
+                    }
+                }
+                println!(); // Add blank line between documents
             }
         }
     } else {
