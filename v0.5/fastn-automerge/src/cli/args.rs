@@ -6,7 +6,7 @@ use clap::{Parser, Subcommand};
 #[command(version)]
 pub struct Cli {
     /// Use custom database path
-    #[arg(long, global = true, default_value = "fastn-automerge.sqlite")]
+    #[arg(long, global = true, default_value = "automerge.sqlite")]
     pub db: String,
 
     #[command(subcommand)]
