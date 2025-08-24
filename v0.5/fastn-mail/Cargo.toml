@@ -1,5 +1,5 @@
 [package]
-name = "fastn-account"
+name = "fastn-mail"
 version = "0.1.0"
 edition.workspace = true
 authors.workspace = true
@@ -9,25 +9,18 @@ homepage.workspace = true
 
 [dependencies]
 # Core dependencies
-fastn-id52 = { workspace = true, features = ["automerge"] }
 fastn-automerge.workspace = true
-fastn-mail.workspace = true
 autosurgeon.workspace = true
+automerge.workspace = true
+fastn-id52 = { workspace = true, features = ["automerge"] }
 serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
 tracing.workspace = true
 tokio.workspace = true
 
-# For Automerge documents
-automerge.workspace = true
-
 # For database storage
 rusqlite.workspace = true
-
-# For password hashing
-argon2.workspace = true
-rand.workspace = true
 
 # For timestamps
 chrono.workspace = true

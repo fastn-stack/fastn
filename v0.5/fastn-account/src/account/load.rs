@@ -63,7 +63,8 @@ impl fastn_account::Account {
                 source: Box::new(e),
             }
         })?;
-        let mail = rusqlite::Connection::open(&mail_path).map_err(|e| {
+        // Load mail system
+        let mail = fastn_mail::Mail::load(account_dir).await.map_err(|e| {
             fastn_account::AccountLoadError::DatabaseOpenFailed {
                 path: mail_path.clone(),
                 source: Box::new(e),
@@ -76,9 +77,13 @@ impl fastn_account::Account {
             }
         })?;
 
-        // Run migrations (ignore errors since these are idempotent)
-        let _ = fastn_account::Account::migrate_mail_database(&mail);
-        let _ = fastn_account::Account::migrate_user_database(&user);
+        // Run user database migrations
+        fastn_account::Account::migrate_user_database(&user).map_err(|e| {
+            fastn_account::AccountLoadError::DatabaseOpenFailed {
+                path: user_path.clone(),
+                source: Box::new(e),
+            }
+        })?;
 
         // Load aliases from the aliases directory
         let aliases_dir = account_dir.join("aliases");
@@ -157,7 +162,7 @@ impl fastn_account::Account {
             path: std::sync::Arc::new(account_dir.to_path_buf()),
             aliases: std::sync::Arc::new(tokio::sync::RwLock::new(aliases)),
             automerge: std::sync::Arc::new(tokio::sync::Mutex::new(automerge_db)),
-            mail: std::sync::Arc::new(tokio::sync::Mutex::new(mail)),
+            mail,
             user: std::sync::Arc::new(tokio::sync::Mutex::new(user)),
         })
     }

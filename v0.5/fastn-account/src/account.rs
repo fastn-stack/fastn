@@ -39,14 +39,14 @@ impl fastn_account::Account {
     ) -> Self {
         // Create test databases - use fastn-automerge test utility
         let (automerge, _temp_dir) = fastn_automerge::create_test_db().unwrap();
-        let mail = rusqlite::Connection::open_in_memory().unwrap();
+        let mail = fastn_mail::Mail::new_for_test();
         let user = rusqlite::Connection::open_in_memory().unwrap();
 
         Self {
             path: std::sync::Arc::new(path),
             aliases: std::sync::Arc::new(tokio::sync::RwLock::new(aliases)),
             automerge: std::sync::Arc::new(tokio::sync::Mutex::new(automerge)),
-            mail: std::sync::Arc::new(tokio::sync::Mutex::new(mail)),
+            mail,
             user: std::sync::Arc::new(tokio::sync::Mutex::new(user)),
         }
     }

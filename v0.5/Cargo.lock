@@ -1442,6 +1442,7 @@ dependencies = [
  "chrono",
  "fastn-automerge",
  "fastn-id52",
+ "fastn-mail",
  "rand 0.8.5",
  "rusqlite",
  "serde",
@@ -1534,6 +1535,23 @@ dependencies = [
  "quick-js",
  "rquickjs",
  "thiserror 2.0.14",
+]
+
+[[package]]
+name = "fastn-mail"
+version = "0.1.0"
+dependencies = [
+ "automerge",
+ "autosurgeon",
+ "chrono",
+ "fastn-automerge",
+ "fastn-id52",
+ "rusqlite",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.14",
+ "tokio",
+ "tracing",
 ]
 
 [[package]]

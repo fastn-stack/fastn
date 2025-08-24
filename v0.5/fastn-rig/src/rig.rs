@@ -145,11 +145,11 @@ impl fastn_rig::Rig {
 
         // Set the rig itself online by default
         let rig_id52 = rig.id52();
-        rig.set_entity_online(&rig_id52, true)
-            .await
-            .map_err(|e| fastn_rig::RigCreateError::RigConfigCreationFailed {
+        rig.set_entity_online(&rig_id52, true).await.map_err(|e| {
+            fastn_rig::RigCreateError::RigConfigCreationFailed {
                 source: Box::new(e),
-            })?;
+            }
+        })?;
 
         Ok((rig, account_manager, primary_id52))
     }

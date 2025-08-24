@@ -7,6 +7,7 @@ members = [
     "fastn-compiler",
     "fastn-continuation",
     "fastn-id52",
+    "fastn-mail",
     "fastn-net",
     "fastn-package",
     "fastn-rig",
@@ -71,6 +72,7 @@ fastn-builtins = { path = "../fastn-builtins" }
 fastn-compiler = { path = "fastn-compiler" }
 fastn-continuation = { path = "fastn-continuation" }
 fastn-id52 = { path = "fastn-id52" }
+fastn-mail = { path = "fastn-mail" }
 fastn-net = { path = "fastn-net" }
 fastn-package = { path = "fastn-package" }
 fastn-resolved = { path = "../fastn-resolved" }

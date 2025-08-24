@@ -54,37 +54,6 @@ impl fastn_account::Account {
             }
         })?;
 
-        let inbox_path = account_path.join("mails/default/inbox");
-        std::fs::create_dir_all(&inbox_path).map_err(|e| {
-            fastn_account::AccountCreateError::DirectoryCreationFailed {
-                path: inbox_path,
-                source: e,
-            }
-        })?;
-
-        let sent_path = account_path.join("mails/default/sent");
-        std::fs::create_dir_all(&sent_path).map_err(|e| {
-            fastn_account::AccountCreateError::DirectoryCreationFailed {
-                path: sent_path,
-                source: e,
-            }
-        })?;
-
-        let drafts_path = account_path.join("mails/default/drafts");
-        std::fs::create_dir_all(&drafts_path).map_err(|e| {
-            fastn_account::AccountCreateError::DirectoryCreationFailed {
-                path: drafts_path,
-                source: e,
-            }
-        })?;
-
-        let trash_path = account_path.join("mails/default/trash");
-        std::fs::create_dir_all(&trash_path).map_err(|e| {
-            fastn_account::AccountCreateError::DirectoryCreationFailed {
-                path: trash_path,
-                source: e,
-            }
-        })?;
 
         // Store keys based on SKIP_KEYRING environment variable
         let key_path = account_path.join("aliases").join(&id52);
@@ -117,9 +86,8 @@ impl fastn_account::Account {
             })?;
         }
 
-        // Create and initialize three databases
+        // Create and initialize databases
         let automerge_path = account_path.join("automerge.sqlite");
-        let mail_path = account_path.join("mail.sqlite");
         let user_path = account_path.join("db.sqlite");
 
         // Initialize automerge database
@@ -130,10 +98,9 @@ impl fastn_account::Account {
                 }
             })?;
 
-        let mail = rusqlite::Connection::open(&mail_path).map_err(|_| {
-            fastn_account::AccountCreateError::DatabaseConnectionFailed {
-                path: mail_path.clone(),
-            }
+        // Create mail system
+        let mail = fastn_mail::Mail::create(&account_path).await.map_err(|e| {
+            fastn_account::AccountCreateError::MailCreationFailed { source: e }
         })?;
 
         let user = rusqlite::Connection::open(&user_path).map_err(|_| {
@@ -142,10 +109,7 @@ impl fastn_account::Account {
             }
         })?;
 
-        // Run database migrations for mail and user databases
-        Self::migrate_mail_database(&mail)
-            .map_err(|e| fastn_account::AccountCreateError::MailMigrationFailed { source: e })?;
-
+        // Run user database migrations
         Self::migrate_user_database(&user)
             .map_err(|e| fastn_account::AccountCreateError::UserMigrationFailed { source: e })?;
 
@@ -168,63 +132,9 @@ impl fastn_account::Account {
             path: std::sync::Arc::new(account_path),
             aliases: std::sync::Arc::new(tokio::sync::RwLock::new(vec![primary_alias])),
             automerge: std::sync::Arc::new(tokio::sync::Mutex::new(automerge_db)),
-            mail: std::sync::Arc::new(tokio::sync::Mutex::new(mail)),
+            mail,
             user: std::sync::Arc::new(tokio::sync::Mutex::new(user)),
         })
-    }
-
-    /// Run migrations for mail database
-    pub(crate) fn migrate_mail_database(
-        conn: &rusqlite::Connection,
-    ) -> Result<(), fastn_account::MigrateMailDatabaseError> {
-        conn.execute_batch(
-            r#"
-            -- Email index
-            CREATE TABLE IF NOT EXISTS fastn_emails (
-                email_id          TEXT PRIMARY KEY,
-                folder            TEXT NOT NULL,
-                original_to       TEXT NOT NULL,
-                from_address      TEXT NOT NULL,
-                to_addresses      TEXT NOT NULL,
-                cc_addresses      TEXT,
-                bcc_addresses     TEXT,
-                received_at_alias TEXT,
-                sent_from_alias   TEXT,
-                subject           TEXT,
-                body_preview      TEXT,
-                has_attachments   INTEGER DEFAULT 0,
-                file_path         TEXT NOT NULL UNIQUE,
-                size_bytes        INTEGER NOT NULL,
-                message_id        TEXT,
-                in_reply_to       TEXT,
-                email_references  TEXT,
-                date_sent         INTEGER,
-                date_received     INTEGER,
-                is_read           INTEGER DEFAULT 0,
-                is_starred        INTEGER DEFAULT 0,
-                flags             TEXT
-            );
-
-            CREATE INDEX IF NOT EXISTS idx_folder ON fastn_emails(folder);
-            CREATE INDEX IF NOT EXISTS idx_date ON fastn_emails(date_received DESC);
-            CREATE INDEX IF NOT EXISTS idx_message_id ON fastn_emails(message_id);
-
-            -- Email peers
-            CREATE TABLE IF NOT EXISTS fastn_email_peers (
-                peer_alias        TEXT PRIMARY KEY,
-                last_seen         INTEGER,
-                endpoint          BLOB,
-                our_alias_used    TEXT NOT NULL
-            );
-
-            CREATE INDEX IF NOT EXISTS idx_our_alias ON fastn_email_peers(our_alias_used);
-            "#,
-        )
-        .map_err(|e| {
-            fastn_account::MigrateMailDatabaseError::SchemaInitializationFailed { source: e }
-        })?;
-
-        Ok(())
     }
 
     /// Create initial Automerge documents for a new account

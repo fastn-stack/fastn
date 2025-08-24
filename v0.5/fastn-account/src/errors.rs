@@ -46,10 +46,10 @@ pub enum AccountCreateError {
         source: Box<dyn std::error::Error + Send + Sync>,
     },
 
-    #[error("Mail database migration failed")]
-    MailMigrationFailed {
+    #[error("Mail creation failed")]
+    MailCreationFailed {
         #[source]
-        source: MigrateMailDatabaseError,
+        source: fastn_mail::MailCreateError,
     },
 
     #[error("User database migration failed")]
@@ -158,15 +158,8 @@ pub enum GetAllEndpointsError {
     },
 }
 
-/// Error type for migrate_mail_database function
-#[derive(Error, Debug)]
-pub enum MigrateMailDatabaseError {
-    #[error("Failed to initialize mail database schema")]
-    SchemaInitializationFailed {
-        #[source]
-        source: rusqlite::Error,
-    },
-}
+// Re-export mail error types from fastn-mail
+pub use fastn_mail::MigrateMailDatabaseError;
 
 /// Error type for migrate_user_database function
 #[derive(Error, Debug)]
