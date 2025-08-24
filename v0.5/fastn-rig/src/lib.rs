@@ -36,6 +36,23 @@ mod run;
 
 pub use run::run;
 
+/// Resolve fastn_home path with fallback logic
+pub fn resolve_fastn_home(
+    home: Option<std::path::PathBuf>,
+) -> Result<std::path::PathBuf, RunError> {
+    match home {
+        Some(path) => Ok(path),
+        None => match std::env::var("FASTN_HOME") {
+            Ok(env_path) => Ok(std::path::PathBuf::from(env_path)),
+            Err(_) => {
+                let proj_dirs = directories::ProjectDirs::from("com", "fastn", "fastn")
+                    .ok_or(RunError::FastnHomeResolutionFailed)?;
+                Ok(proj_dirs.data_dir().to_path_buf())
+            }
+        },
+    }
+}
+
 // Re-export specific error types
 pub use errors::{
     CurrentEntityError, EndpointError, EntityStatusError, MessageProcessingError, RigCreateError,

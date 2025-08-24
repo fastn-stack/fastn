@@ -1,6 +1,12 @@
 use std::str::FromStr;
 
 impl fastn_rig::Rig {
+    /// Check if a fastn_home directory is already initialized
+    pub fn is_initialized(fastn_home: &std::path::Path) -> bool {
+        let lock_path = fastn_home.join(".fastn.lock");
+        lock_path.exists()
+    }
+
     /// Create a new Rig and initialize the fastn_home with the first account
     /// Returns (Rig, AccountManager, primary_account_id52)
     pub async fn create(
@@ -12,6 +18,15 @@ impl fastn_rig::Rig {
         std::fs::create_dir_all(&fastn_home).map_err(|e| {
             fastn_rig::RigCreateError::FastnHomeCreationFailed {
                 path: fastn_home.clone(),
+                source: e,
+            }
+        })?;
+
+        // Create the lock file to mark fastn_home as initialized
+        let lock_path = fastn_home.join(".fastn.lock");
+        std::fs::write(&lock_path, "").map_err(|e| {
+            fastn_rig::RigCreateError::KeyFileWriteFailed {
+                path: lock_path,
                 source: e,
             }
         })?;
@@ -115,6 +130,26 @@ impl fastn_rig::Rig {
             owner,
             automerge: std::sync::Arc::new(tokio::sync::Mutex::new(automerge_db)),
         };
+
+        // Set the newly created account as current and online
+        rig.set_entity_online(&primary_id52, true)
+            .await
+            .map_err(|e| fastn_rig::RigCreateError::RigConfigCreationFailed {
+                source: Box::new(e),
+            })?;
+        rig.set_current(&primary_id52).await.map_err(|e| {
+            fastn_rig::RigCreateError::RigConfigCreationFailed {
+                source: Box::new(e),
+            }
+        })?;
+
+        // Set the rig itself online by default
+        let rig_id52 = rig.id52();
+        rig.set_entity_online(&rig_id52, true)
+            .await
+            .map_err(|e| fastn_rig::RigCreateError::RigConfigCreationFailed {
+                source: Box::new(e),
+            })?;
 
         Ok((rig, account_manager, primary_id52))
     }

@@ -1,32 +1,20 @@
 /// Main run function for fastn
 pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunError> {
-    // Determine the fastn home directory
-    // Priority: 1. --home argument, 2. FASTN_HOME env var, 3. default via ProjectDirs
-    let fastn_home = match home {
-        Some(path) => path,
-        None => match std::env::var("FASTN_HOME") {
-            Ok(env_path) => std::path::PathBuf::from(env_path),
-            Err(_) => {
-                let proj_dirs = directories::ProjectDirs::from("com", "fastn", "fastn")
-                    .ok_or_else(|| fastn_rig::RunError::FastnHomeResolutionFailed)?;
-                proj_dirs.data_dir().to_path_buf()
-            }
-        },
-    };
+    // Resolve fastn_home path
+    let fastn_home = fastn_rig::resolve_fastn_home(home)?;
 
-    // Ensure fastn_home directory exists
-    std::fs::create_dir_all(&fastn_home).map_err(|e| {
-        fastn_rig::RunError::FastnHomeCreationFailed {
-            path: fastn_home.clone(),
-            source: e,
-        }
-    })?;
+    // Check if already initialized
+    let is_initialized = fastn_rig::Rig::is_initialized(&fastn_home);
 
-    // Check if fastn_home is already initialized
+    // If not initialized, run should fail - user must run init first
+    if !is_initialized {
+        eprintln!("❌ fastn_home not initialized at {}", fastn_home.display());
+        eprintln!("   Run 'fastn-rig init' first to initialize the rig");
+        return Err(fastn_rig::RunError::FastnHomeResolutionFailed);
+    }
+
+    // Acquire exclusive lock for runtime
     let lock_path = fastn_home.join(".fastn.lock");
-    let is_initialized = lock_path.exists();
-
-    // Open or create lock file
     let lock_file = std::fs::OpenOptions::new()
         .create(true)
         .truncate(false)
@@ -37,7 +25,6 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
             source: e,
         })?;
 
-    // Acquire exclusive lock to ensure only one instance runs
     let _lock_guard = match file_guard::lock(&lock_file, file_guard::Lock::Exclusive, 0, 1) {
         Ok(guard) => guard,
         Err(e) => {
@@ -57,31 +44,13 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
     println!("🚀 Starting fastn at {}", fastn_home.display());
     println!("🔒 Lock acquired: {}", lock_path.display());
 
-    // Initialize or load Rig and AccountManager based on whether fastn_home is initialized
-    let (rig, account_manager) = if is_initialized {
-        println!("📂 Loading existing fastn_home...");
-        let rig = fastn_rig::Rig::load(fastn_home.clone())
-            .map_err(|e| fastn_rig::RunError::RigLoadingFailed { source: e })?;
-        let account_manager = fastn_account::AccountManager::load(fastn_home.clone())
-            .await
-            .map_err(|e| fastn_rig::RunError::AccountManagerLoadFailed { source: e })?;
-        (rig, account_manager)
-    } else {
-        println!("🎉 Initializing new fastn_home...");
-        let (rig, account_manager, primary_id52) = fastn_rig::Rig::create(fastn_home.clone())
-            .await
-            .map_err(|e| fastn_rig::RunError::RigCreationFailed { source: e })?;
-
-        // Set the newly created account as current and online
-        rig.set_entity_online(&primary_id52, true)
-            .await
-            .map_err(|e| fastn_rig::RunError::EntityOnlineStatusFailed { source: e })?;
-        rig.set_current(&primary_id52)
-            .await
-            .map_err(|e| fastn_rig::RunError::CurrentEntityFailed { source: e })?;
-
-        (rig, account_manager)
-    };
+    // Load Rig and AccountManager (we know it's initialized)
+    println!("📂 Loading existing fastn_home...");
+    let rig = fastn_rig::Rig::load(fastn_home.clone())
+        .map_err(|e| fastn_rig::RunError::RigLoadingFailed { source: e })?;
+    let account_manager = fastn_account::AccountManager::load(fastn_home.clone())
+        .await
+        .map_err(|e| fastn_rig::RunError::AccountManagerLoadFailed { source: e })?;
 
     println!("🔑 Rig ID52: {}", rig.id52());
     println!("👤 Owner: {}", rig.owner());
@@ -127,22 +96,27 @@ pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunE
         }
     }
 
-    // Also bring the Rig's own endpoint online
+    // Bring the Rig's own endpoint online if it's marked as online
     let rig_id52 = rig.id52();
-    rig.set_entity_online(&rig_id52, true)
+    if rig
+        .is_entity_online(&rig_id52)
         .await
-        .map_err(|e| fastn_rig::RunError::EntityOnlineStatusFailed { source: e })?;
-    endpoint_manager
-        .bring_online(
-            rig_id52,
-            rig.secret_key().to_bytes().to_vec(),
-            fastn_rig::OwnerType::Rig,
-            fastn_home.clone(),
-        )
-        .await
-        .map_err(|e| fastn_rig::RunError::EndpointOnlineFailed { source: e })?;
-    total_endpoints += 1;
-    println!("✅ Rig endpoint online");
+        .map_err(|e| fastn_rig::RunError::EntityOnlineStatusFailed { source: e })?
+    {
+        endpoint_manager
+            .bring_online(
+                rig_id52,
+                rig.secret_key().to_bytes().to_vec(),
+                fastn_rig::OwnerType::Rig,
+                fastn_home.clone(),
+            )
+            .await
+            .map_err(|e| fastn_rig::RunError::EndpointOnlineFailed { source: e })?;
+        total_endpoints += 1;
+        println!("✅ Rig endpoint online");
+    } else {
+        println!("⏸️  Rig endpoint offline (use 'set-online' to bring online)");
+    }
 
     // Display service information
     println!("\n📨 fastn is running. Press Ctrl+C to stop.");

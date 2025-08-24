@@ -46,7 +46,8 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
     let cli = Cli::parse();
 
     // Determine fastn_home
-    let fastn_home = get_fastn_home(cli.home)?;
+    let fastn_home = fastn_rig::resolve_fastn_home(cli.home)
+        .map_err(|e| Box::new(e) as Box<dyn Error + Send + Sync>)?;
 
     match cli.command {
         Commands::Init => init_rig(fastn_home).await,
@@ -55,20 +56,6 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
         Commands::SetCurrent { id52 } => set_current_entity(fastn_home, id52).await,
         Commands::SetOnline { id52, online } => set_entity_online(fastn_home, id52, online).await,
         Commands::Run => run_rig(fastn_home).await,
-    }
-}
-
-fn get_fastn_home(home: Option<PathBuf>) -> Result<PathBuf, Box<dyn Error + Send + Sync>> {
-    match home {
-        Some(path) => Ok(path),
-        None => match std::env::var("FASTN_HOME") {
-            Ok(env_path) => Ok(PathBuf::from(env_path)),
-            Err(_) => {
-                let proj_dirs = directories::ProjectDirs::from("com", "fastn", "fastn")
-                    .ok_or("Failed to determine project directories")?;
-                Ok(proj_dirs.data_dir().to_path_buf())
-            }
-        },
     }
 }
 
