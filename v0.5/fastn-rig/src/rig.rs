@@ -57,7 +57,7 @@ impl fastn_rig::Rig {
         tracing::info!("Creating new Rig with ID52: {}", id52);
 
         // Initialize automerge database with rig's entity
-        let automerge_path = fastn_home.join("automerge.sqlite");
+        let automerge_path = rig_key_path.join("automerge.sqlite");
 
         eprintln!(
             "🔍 Debug: Initializing automerge DB at {}",
@@ -125,12 +125,12 @@ impl fastn_rig::Rig {
         let rig_key_path = fastn_home.join("rig");
         let (rig_id52, secret_key) = fastn_id52::SecretKey::load_from_dir(&rig_key_path, "rig")
             .map_err(|e| fastn_rig::RigLoadError::KeyLoadingFailed {
-                path: rig_key_path,
+                path: rig_key_path.clone(),
                 source: Box::new(e),
             })?;
 
         // Open existing automerge database
-        let automerge_path = fastn_home.join("automerge.sqlite");
+        let automerge_path = rig_key_path.join("automerge.sqlite");
         let automerge_db = fastn_automerge::Db::open(&automerge_path).map_err(|e| {
             fastn_rig::RigLoadError::AutomergeDatabaseOpenFailed {
                 path: automerge_path,
