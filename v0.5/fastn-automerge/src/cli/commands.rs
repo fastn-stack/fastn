@@ -98,19 +98,15 @@ fn get_document(
     output: Option<&str>,
 ) -> eyre::Result<()> {
     let doc_id = fastn_automerge::DocumentPath::from_string(path)?;
-    let data: std::collections::HashMap<String, String> = db.get_impl(&doc_id)?;
 
-    // Extract JSON data
-    let json_str = data
-        .get("json_data")
-        .ok_or_else(|| eyre::eyre!("Document does not contain JSON data"))?;
+    // Get the raw automerge document
+    let doc = db.get_document(&doc_id)?;
 
+    // Convert automerge document to JSON using AutoSerde
     let json_output = if pretty {
-        // Parse and re-format for pretty printing
-        let value = super::utils::parse_json(json_str)?;
-        serde_json::to_string_pretty(&value).unwrap()
+        serde_json::to_string_pretty(&automerge::AutoSerde::from(&doc))?
     } else {
-        json_str.clone()
+        serde_json::to_string(&automerge::AutoSerde::from(&doc))?
     };
 
     if let Some(output_path) = output {
