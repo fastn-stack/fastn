@@ -39,15 +39,15 @@
 //! // Template-based operations (no path needed)
 //! user.save(&db)?;                           // Uses /-/users/{id52}/profile
 //! let loaded = UserProfile::load(&db, &user_id)?;
-//! 
+//!
 //! // List all user profiles with exact DNSSEC32 validation
 //! let all_users = UserProfile::document_list(&db)?;  // Only when {id52} present
-//! 
+//!
 //! // JSON querying - safe and type-safe
 //! let alice_users = db.find_where("name", "Alice")?;     // Find by field value
 //! let active_users = db.find_exists("bio")?;             // Find where field exists
 //! let engineers = db.find_contains("tags", "engineer")?; // Find arrays containing value
-//! 
+//!
 //! println!("Found {} users", all_users.len());
 //! # Ok(())
 //! # }

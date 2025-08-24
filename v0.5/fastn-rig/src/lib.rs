@@ -30,10 +30,17 @@ extern crate self as fastn_rig;
 
 pub mod automerge;
 pub mod endpoint;
+pub mod errors;
 mod rig;
 mod run;
 
 pub use run::run;
+
+// Re-export specific error types
+pub use errors::{
+    CurrentEntityError, EndpointError, EntityStatusError, MessageProcessingError, RigCreateError,
+    RigLoadError, RunError,
+};
 
 /// Type of owner for an endpoint
 #[derive(Clone, Debug)]

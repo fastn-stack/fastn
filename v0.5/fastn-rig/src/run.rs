@@ -1,6 +1,5 @@
 /// Main run function for fastn
-pub async fn run(home: Option<std::path::PathBuf>) -> eyre::Result<()> {
-    use eyre::WrapErr;
+pub async fn run(home: Option<std::path::PathBuf>) -> Result<(), fastn_rig::RunError> {
     // Determine the fastn home directory
     // Priority: 1. --home argument, 2. FASTN_HOME env var, 3. default via ProjectDirs
     let fastn_home = match home {
@@ -9,15 +8,19 @@ pub async fn run(home: Option<std::path::PathBuf>) -> eyre::Result<()> {
             Ok(env_path) => std::path::PathBuf::from(env_path),
             Err(_) => {
                 let proj_dirs = directories::ProjectDirs::from("com", "fastn", "fastn")
-                    .ok_or_else(|| eyre::eyre!("Failed to determine project directories"))?;
+                    .ok_or_else(|| fastn_rig::RunError::FastnHomeResolutionFailed)?;
                 proj_dirs.data_dir().to_path_buf()
             }
         },
     };
 
     // Ensure fastn_home directory exists
-    std::fs::create_dir_all(&fastn_home)
-        .wrap_err_with(|| format!("Failed to create fastn_home directory at {fastn_home:?}"))?;
+    std::fs::create_dir_all(&fastn_home).map_err(|e| {
+        fastn_rig::RunError::FastnHomeCreationFailed {
+            path: fastn_home.clone(),
+            source: e,
+        }
+    })?;
 
     // Check if fastn_home is already initialized
     let lock_path = fastn_home.join(".fastn.lock");
@@ -29,7 +32,10 @@ pub async fn run(home: Option<std::path::PathBuf>) -> eyre::Result<()> {
         .truncate(false)
         .write(true)
         .open(&lock_path)
-        .wrap_err_with(|| format!("Failed to open lock file at {lock_path:?}"))?;
+        .map_err(|e| fastn_rig::RunError::LockFileOpenFailed {
+            path: lock_path.clone(),
+            source: e,
+        })?;
 
     // Acquire exclusive lock to ensure only one instance runs
     let _lock_guard = match file_guard::lock(&lock_file, file_guard::Lock::Exclusive, 0, 1) {
@@ -44,7 +50,7 @@ pub async fn run(home: Option<std::path::PathBuf>) -> eyre::Result<()> {
             eprintln!(
                 "\nIf you're sure no other instance is running, delete the lock file and try again."
             );
-            return Err(eyre::eyre!("Failed to acquire lock"));
+            return Err(fastn_rig::RunError::LockAcquisitionFailed);
         }
     };
 
@@ -55,22 +61,24 @@ pub async fn run(home: Option<std::path::PathBuf>) -> eyre::Result<()> {
     let (rig, account_manager) = if is_initialized {
         println!("📂 Loading existing fastn_home...");
         let rig = fastn_rig::Rig::load(fastn_home.clone())
-            .wrap_err_with(|| {
-                format!("Failed to load Rig from existing fastn_home at {}", fastn_home.display())
-            })?;
+            .map_err(|e| fastn_rig::RunError::RigLoadingFailed { source: e })?;
         let account_manager = fastn_account::AccountManager::load(fastn_home.clone())
             .await
-            .wrap_err("Failed to load AccountManager from existing fastn_home")?;
+            .map_err(|e| fastn_rig::RunError::AccountManagerLoadFailed { source: e })?;
         (rig, account_manager)
     } else {
         println!("🎉 Initializing new fastn_home...");
         let (rig, account_manager, primary_id52) = fastn_rig::Rig::create(fastn_home.clone())
             .await
-            .wrap_err("Failed to create new Rig and first account")?;
+            .map_err(|e| fastn_rig::RunError::RigCreationFailed { source: e })?;
 
         // Set the newly created account as current and online
-        rig.set_entity_online(&primary_id52, true).await?;
-        rig.set_current(&primary_id52).await?;
+        rig.set_entity_online(&primary_id52, true)
+            .await
+            .map_err(|e| fastn_rig::RunError::EntityOnlineStatusFailed { source: e })?;
+        rig.set_current(&primary_id52)
+            .await
+            .map_err(|e| fastn_rig::RunError::CurrentEntityFailed { source: e })?;
 
         (rig, account_manager)
     };
@@ -81,7 +89,7 @@ pub async fn run(home: Option<std::path::PathBuf>) -> eyre::Result<()> {
         Ok(current) => println!("📍 Current entity: {current}"),
         Err(e) => {
             eprintln!("⚠️  Failed to get current entity: {e}");
-            return Err(e);
+            return Err(fastn_rig::RunError::CurrentEntityFailed { source: e });
         }
     }
 
@@ -92,13 +100,20 @@ pub async fn run(home: Option<std::path::PathBuf>) -> eyre::Result<()> {
     let (mut endpoint_manager, mut message_rx) = fastn_rig::EndpointManager::new(graceful.clone());
 
     // Get all endpoints from all accounts
-    let all_endpoints = account_manager.get_all_endpoints().await?;
+    let all_endpoints = account_manager
+        .get_all_endpoints()
+        .await
+        .map_err(|e| fastn_rig::RunError::EndpointEnumerationFailed { source: e })?;
 
     // Start endpoints that are marked as online
     let mut total_endpoints = 0;
     for (id52, secret_key, account_path) in all_endpoints {
         // Check if this endpoint is online in the rig database
-        if rig.is_entity_online(&id52).await? {
+        if rig
+            .is_entity_online(&id52)
+            .await
+            .map_err(|e| fastn_rig::RunError::EntityOnlineStatusFailed { source: e })?
+        {
             endpoint_manager
                 .bring_online(
                     id52,
@@ -106,14 +121,17 @@ pub async fn run(home: Option<std::path::PathBuf>) -> eyre::Result<()> {
                     fastn_rig::OwnerType::Account,
                     account_path,
                 )
-                .await?;
+                .await
+                .map_err(|e| fastn_rig::RunError::EndpointOnlineFailed { source: e })?;
             total_endpoints += 1;
         }
     }
 
     // Also bring the Rig's own endpoint online
     let rig_id52 = rig.id52();
-    rig.set_entity_online(&rig_id52, true).await?;
+    rig.set_entity_online(&rig_id52, true)
+        .await
+        .map_err(|e| fastn_rig::RunError::EntityOnlineStatusFailed { source: e })?;
     endpoint_manager
         .bring_online(
             rig_id52,
@@ -121,7 +139,8 @@ pub async fn run(home: Option<std::path::PathBuf>) -> eyre::Result<()> {
             fastn_rig::OwnerType::Rig,
             fastn_home.clone(),
         )
-        .await?;
+        .await
+        .map_err(|e| fastn_rig::RunError::EndpointOnlineFailed { source: e })?;
     total_endpoints += 1;
     println!("✅ Rig endpoint online");
 
@@ -186,12 +205,22 @@ pub async fn run(home: Option<std::path::PathBuf>) -> eyre::Result<()> {
     // });
 
     // Use graceful shutdown to wait for Ctrl+C and manage all tasks
-    graceful.shutdown().await?;
+    graceful
+        .shutdown()
+        .await
+        .map_err(|e| fastn_rig::RunError::ShutdownFailed {
+            source: Box::new(std::io::Error::other(format!(
+                "Graceful shutdown failed: {e}"
+            ))) as Box<dyn std::error::Error + Send + Sync>,
+        })?;
 
     // Clean shutdown of all endpoints (but don't change their online status in DB)
     println!("Stopping all endpoints...");
     let mut endpoint_manager = p2p_endpoint_manager.lock().await;
-    endpoint_manager.shutdown_all().await?;
+    endpoint_manager
+        .shutdown_all()
+        .await
+        .map_err(|e| fastn_rig::RunError::EndpointOnlineFailed { source: e })?;
 
     println!("🔓 Releasing lock...");
     println!("👋 Goodbye!");
@@ -204,7 +233,7 @@ async fn process_account_message(
     _account_manager: &fastn_account::AccountManager,
     endpoint_id52: &str,
     message: Vec<u8>,
-) -> eyre::Result<()> {
+) -> Result<(), fastn_rig::MessageProcessingError> {
     // TODO: Find which account owns this endpoint and process the email
     println!(
         "📨 Account message on {}: {} bytes",
@@ -220,7 +249,10 @@ async fn process_account_message(
 }
 
 /// Process a message received on a device endpoint
-async fn process_device_message(endpoint_id52: &str, message: Vec<u8>) -> eyre::Result<()> {
+async fn process_device_message(
+    endpoint_id52: &str,
+    message: Vec<u8>,
+) -> Result<(), fastn_rig::MessageProcessingError> {
     // TODO: Handle device sync messages
     println!(
         "📱 Device message on {}: {} bytes",
@@ -232,7 +264,10 @@ async fn process_device_message(endpoint_id52: &str, message: Vec<u8>) -> eyre::
 }
 
 /// Process a message received on the rig endpoint
-async fn process_rig_message(endpoint_id52: &str, message: Vec<u8>) -> eyre::Result<()> {
+async fn process_rig_message(
+    endpoint_id52: &str,
+    message: Vec<u8>,
+) -> Result<(), fastn_rig::MessageProcessingError> {
     // TODO: Handle rig control messages
     println!(
         "⚙️ Rig message on {}: {} bytes",

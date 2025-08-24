@@ -30,18 +30,31 @@ impl RigConfig {
         db: &fastn_automerge::Db,
         rig_id52: &fastn_id52::PublicKey,
         entity: &fastn_id52::PublicKey,
-    ) -> eyre::Result<()> {
+    ) -> Result<(), fastn_rig::CurrentEntityError> {
         // Use derive macro pattern instead of deprecated modify
-        let mut config = Self::load(db, rig_id52)?;
+        let mut config = Self::load(db, rig_id52).map_err(|e| {
+            fastn_rig::CurrentEntityError::DatabaseAccessFailed {
+                source: Box::new(e) as Box<dyn std::error::Error + Send + Sync>,
+            }
+        })?;
         config.current_entity = *entity;
-        Ok(config.update(db)?)
+        config
+            .update(db)
+            .map_err(|e| fastn_rig::CurrentEntityError::DatabaseAccessFailed {
+                source: Box::new(e) as Box<dyn std::error::Error + Send + Sync>,
+            })?;
+        Ok(())
     }
 
     pub fn get_current_entity(
         db: &fastn_automerge::Db,
         rig_id52: &fastn_id52::PublicKey,
-    ) -> eyre::Result<fastn_id52::PublicKey> {
-        let config = Self::load(db, rig_id52)?;
+    ) -> Result<fastn_id52::PublicKey, fastn_rig::CurrentEntityError> {
+        let config = Self::load(db, rig_id52).map_err(|e| {
+            fastn_rig::CurrentEntityError::DatabaseAccessFailed {
+                source: Box::new(e) as Box<dyn std::error::Error + Send + Sync>,
+            }
+        })?;
         Ok(config.current_entity)
     }
 }
@@ -71,7 +84,7 @@ impl EntityStatus {
     pub fn is_online(
         db: &fastn_automerge::Db,
         entity_id52: &fastn_id52::PublicKey,
-    ) -> eyre::Result<bool> {
+    ) -> Result<bool, fastn_rig::EntityStatusError> {
         match Self::load(db, entity_id52) {
             Ok(status) => Ok(status.is_online),
             Err(_) => Ok(false), // Default to offline if document doesn't exist
@@ -82,7 +95,7 @@ impl EntityStatus {
         db: &fastn_automerge::Db,
         entity_id52: &fastn_id52::PublicKey,
         online: bool,
-    ) -> eyre::Result<()> {
+    ) -> Result<(), fastn_rig::EntityStatusError> {
         // Load existing document or create new one
         let mut status = match Self::load(db, entity_id52) {
             Ok(status) => status,
@@ -104,6 +117,11 @@ impl EntityStatus {
             .as_secs() as i64;
 
         // Save document
-        Ok(status.save(db)?)
+        status
+            .save(db)
+            .map_err(|e| fastn_rig::EntityStatusError::DatabaseAccessFailed {
+                source: Box::new(e) as Box<dyn std::error::Error + Send + Sync>,
+            })?;
+        Ok(())
     }
 }

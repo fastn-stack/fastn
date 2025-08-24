@@ -41,9 +41,9 @@ pub enum AccountCreateError {
     DatabaseConnectionFailed { path: std::path::PathBuf },
 
     #[error("Failed to initialize automerge database")]
-    AutomergeInitFailed { 
+    AutomergeInitFailed {
         #[source]
-        source: Box<dyn std::error::Error + Send + Sync>
+        source: Box<dyn std::error::Error + Send + Sync>,
     },
 
     #[error("Mail database migration failed")]
@@ -93,20 +93,20 @@ pub enum AccountLoadError {
     AutomergeDatabaseNotFound { path: std::path::PathBuf },
 
     #[error("Failed to open database: {path}")]
-    DatabaseOpenFailed { 
+    DatabaseOpenFailed {
         path: std::path::PathBuf,
         #[source]
-        source: Box<dyn std::error::Error + Send + Sync>
+        source: Box<dyn std::error::Error + Send + Sync>,
     },
 
     #[error("No aliases found in account")]
     NoAliasesFound,
 
     #[error("Failed to load alias: {id52}")]
-    AliasLoadingFailed { 
+    AliasLoadingFailed {
         id52: String,
         #[source]
-        source: Box<dyn std::error::Error + Send + Sync>
+        source: Box<dyn std::error::Error + Send + Sync>,
     },
 }
 
@@ -130,7 +130,7 @@ pub enum AccountManagerLoadError {
     AccountsDirectoryNotFound { path: std::path::PathBuf },
 
     #[error("Failed to scan accounts directory: {path}")]
-    AccountsScanFailed { 
+    AccountsScanFailed {
         path: std::path::PathBuf,
         #[source]
         source: std::io::Error,
@@ -144,14 +144,14 @@ pub enum AccountManagerLoadError {
 #[derive(Error, Debug)]
 pub enum GetAllEndpointsError {
     #[error("Failed to scan accounts directory: {path}")]
-    AccountsScanFailed { 
+    AccountsScanFailed {
         path: std::path::PathBuf,
         #[source]
         source: std::io::Error,
     },
 
     #[error("Failed to load account: {path}")]
-    AccountLoadFailed { 
+    AccountLoadFailed {
         path: std::path::PathBuf,
         #[source]
         source: AccountLoadError,
@@ -193,4 +193,3 @@ pub enum CreateInitialDocumentsError {
         source: Box<dyn std::error::Error + Send + Sync>,
     },
 }
-

@@ -46,16 +46,9 @@ pub mod errors;
 
 // Re-export specific error types
 pub use errors::{
-    HashPasswordError,
-    VerifyPasswordError,
-    AccountCreateError,
-    AccountLoadError,
-    AccountManagerCreateError,
-    AccountManagerLoadError,
-    GetAllEndpointsError,
-    MigrateMailDatabaseError,
-    MigrateUserDatabaseError,
-    CreateInitialDocumentsError,
+    AccountCreateError, AccountLoadError, AccountManagerCreateError, AccountManagerLoadError,
+    CreateInitialDocumentsError, GetAllEndpointsError, HashPasswordError, MigrateMailDatabaseError,
+    MigrateUserDatabaseError, VerifyPasswordError,
 };
 
 /// Thread-safe handle to an account

@@ -1,5 +1,5 @@
-use std::process::Command;
 use std::path::PathBuf;
+use std::process::Command;
 use tempfile::TempDir;
 
 fn get_binary_path() -> PathBuf {
@@ -8,16 +8,19 @@ fn get_binary_path() -> PathBuf {
         .args(["build", "-p", "fastn-rig", "--bin", "fastn-rig"])
         .output()
         .expect("Failed to build binary");
-    
+
     if !output.status.success() {
-        panic!("Failed to build binary: {}", String::from_utf8_lossy(&output.stderr));
+        panic!(
+            "Failed to build binary: {}",
+            String::from_utf8_lossy(&output.stderr)
+        );
     }
 
     let target_dir = std::env::var("CARGO_TARGET_DIR")
         .map(PathBuf::from)
         .unwrap_or_else(|_| {
             // Default location in home directory
-PathBuf::from(std::env::var("HOME").unwrap()).join("target")
+            PathBuf::from(std::env::var("HOME").unwrap()).join("target")
         });
     target_dir.join("debug").join("fastn-rig")
 }
@@ -51,7 +54,11 @@ fn test_cli_init_and_status() {
         .output()
         .expect("Failed to execute init");
 
-    assert!(output.status.success(), "Init failed: {}", String::from_utf8_lossy(&output.stderr));
+    assert!(
+        output.status.success(),
+        "Init failed: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
     let stdout = String::from_utf8(output.stdout).unwrap();
     assert!(stdout.contains("Rig initialized successfully!"));
     assert!(stdout.contains("Rig ID52:"));
@@ -66,7 +73,11 @@ fn test_cli_init_and_status() {
         .output()
         .expect("Failed to execute status");
 
-    assert!(output.status.success(), "Status failed: {}", String::from_utf8_lossy(&output.stderr));
+    assert!(
+        output.status.success(),
+        "Status failed: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
     let stdout = String::from_utf8(output.stdout).unwrap();
     assert!(stdout.contains("Rig Status"));
     assert!(stdout.contains("Rig ID52:"));
@@ -97,7 +108,11 @@ fn test_cli_entities() {
         .output()
         .expect("Failed to execute entities");
 
-    assert!(output.status.success(), "Entities failed: {}", String::from_utf8_lossy(&output.stderr));
+    assert!(
+        output.status.success(),
+        "Entities failed: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
     let stdout = String::from_utf8(output.stdout).unwrap();
     assert!(stdout.contains("Entities"));
     assert!(stdout.contains("(rig)"));
@@ -128,9 +143,10 @@ fn test_cli_set_online() {
         .output()
         .expect("Failed to execute status");
     assert!(output.status.success());
-    
+
     let stdout = String::from_utf8(output.stdout).unwrap();
-    let rig_id52 = stdout.lines()
+    let rig_id52 = stdout
+        .lines()
         .find(|line| line.contains("Rig ID52:"))
         .and_then(|line| line.split("Rig ID52: ").nth(1))
         .expect("Could not find rig ID52");
@@ -146,7 +162,11 @@ fn test_cli_set_online() {
         .output()
         .expect("Failed to execute set-online");
 
-    assert!(output.status.success(), "Set-online failed: {}", String::from_utf8_lossy(&output.stderr));
+    assert!(
+        output.status.success(),
+        "Set-online failed: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
     let stdout = String::from_utf8(output.stdout).unwrap();
     assert!(stdout.contains("Set") && stdout.contains("to OFFLINE"));
 }
@@ -167,5 +187,9 @@ fn test_status_without_init() {
 
     assert!(!output.status.success());
     let stderr = String::from_utf8(output.stderr).unwrap();
-    assert!(stderr.contains("Failed to load rig") || stderr.contains("Run 'init' first"));
+    assert!(
+        stderr.contains("KeyLoadingFailed")
+            || stderr.contains("Failed to load rig")
+            || stderr.contains("Run 'init' first")
+    );
 }

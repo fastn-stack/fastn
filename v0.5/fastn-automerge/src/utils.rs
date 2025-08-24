@@ -1,7 +1,7 @@
-impl std::fmt::Display for crate::Operation {
+impl std::fmt::Display for fastn_automerge::Operation {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            crate::Operation::Set { path, key, value } => {
+            fastn_automerge::Operation::Set { path, key, value } => {
                 let full_path = if path.is_empty() {
                     key.clone()
                 } else {
@@ -9,7 +9,7 @@ impl std::fmt::Display for crate::Operation {
                 };
                 write!(f, "Set {full_path} = {value}")
             }
-            crate::Operation::Delete { path, key } => {
+            fastn_automerge::Operation::Delete { path, key } => {
                 let full_path = if path.is_empty() {
                     key.clone()
                 } else {
@@ -17,7 +17,7 @@ impl std::fmt::Display for crate::Operation {
                 };
                 write!(f, "Delete {full_path}")
             }
-            crate::Operation::Insert { path, index, value } => {
+            fastn_automerge::Operation::Insert { path, index, value } => {
                 let path_str = if path.is_empty() {
                     String::from("[]")
                 } else {
@@ -25,7 +25,7 @@ impl std::fmt::Display for crate::Operation {
                 };
                 write!(f, "Insert {path_str}[{index}] = {value}")
             }
-            crate::Operation::Remove { path, index } => {
+            fastn_automerge::Operation::Remove { path, index } => {
                 let path_str = if path.is_empty() {
                     String::from("[]")
                 } else {
@@ -33,7 +33,7 @@ impl std::fmt::Display for crate::Operation {
                 };
                 write!(f, "Remove {path_str}[{index}]")
             }
-            crate::Operation::Increment { path, key, delta } => {
+            fastn_automerge::Operation::Increment { path, key, delta } => {
                 let full_path = if path.is_empty() {
                     key.clone()
                 } else {
@@ -45,7 +45,7 @@ impl std::fmt::Display for crate::Operation {
     }
 }
 
-impl std::fmt::Display for crate::Edit {
+impl std::fmt::Display for fastn_automerge::Edit {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         writeln!(
             f,
@@ -66,7 +66,7 @@ impl std::fmt::Display for crate::Edit {
     }
 }
 
-impl std::fmt::Display for crate::DocumentHistory {
+impl std::fmt::Display for fastn_automerge::DocumentHistory {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         writeln!(f, "Document: {}", self.path)?;
         writeln!(f, "Created by: {}", self.created_alias)?;
@@ -84,13 +84,14 @@ impl std::fmt::Display for crate::DocumentHistory {
 }
 
 /// Create a test database with a random entity (for testing only)
-pub fn create_test_db() -> Result<(crate::Db, tempfile::TempDir), Box<dyn std::error::Error>> {
+pub fn create_test_db()
+-> Result<(fastn_automerge::Db, tempfile::TempDir), Box<dyn std::error::Error>> {
     let temp_dir = tempfile::TempDir::new()?;
     let db_path = temp_dir.path().join("test.db");
 
     // Create a test entity
     let test_entity = fastn_id52::SecretKey::generate().public_key();
-    let db = crate::Db::init(&db_path, &test_entity)?;
+    let db = fastn_automerge::Db::init(&db_path, &test_entity)?;
 
     Ok((db, temp_dir))
 }

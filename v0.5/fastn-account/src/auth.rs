@@ -20,7 +20,7 @@ pub fn generate_password() -> String {
 }
 
 /// Hash a password using Argon2
-pub fn hash_password(password: &str) -> Result<String, crate::HashPasswordError> {
+pub fn hash_password(password: &str) -> Result<String, fastn_account::HashPasswordError> {
     use argon2::{
         Argon2,
         password_hash::{PasswordHasher, SaltString, rand_core::OsRng},
@@ -31,8 +31,8 @@ pub fn hash_password(password: &str) -> Result<String, crate::HashPasswordError>
 
     let password_hash = argon2
         .hash_password(password.as_bytes(), &salt)
-        .map_err(|e| crate::HashPasswordError::HashingFailed { 
-            message: e.to_string() 
+        .map_err(|e| fastn_account::HashPasswordError::HashingFailed {
+            message: e.to_string(),
         })?
         .to_string();
 
@@ -40,12 +40,15 @@ pub fn hash_password(password: &str) -> Result<String, crate::HashPasswordError>
 }
 
 /// Verify a password against a hash
-pub fn verify_password(password: &str, hash: &str) -> Result<bool, crate::VerifyPasswordError> {
+pub fn verify_password(
+    password: &str,
+    hash: &str,
+) -> Result<bool, fastn_account::VerifyPasswordError> {
     use argon2::{Argon2, PasswordHash, PasswordVerifier};
 
     let parsed_hash = PasswordHash::new(hash).map_err(|e| {
-        crate::VerifyPasswordError::HashParsingFailed { 
-            message: e.to_string() 
+        fastn_account::VerifyPasswordError::HashParsingFailed {
+            message: e.to_string(),
         }
     })?;
 

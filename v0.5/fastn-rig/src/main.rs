@@ -1,5 +1,5 @@
 use clap::{Parser, Subcommand};
-use eyre::{Result, WrapErr};
+use std::error::Error;
 use std::path::PathBuf;
 
 #[derive(Parser)]
@@ -39,7 +39,7 @@ enum Commands {
 }
 
 #[tokio::main]
-async fn main() -> Result<()> {
+async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
     // Initialize tracing
     tracing_subscriber::fmt::init();
 
@@ -58,26 +58,24 @@ async fn main() -> Result<()> {
     }
 }
 
-fn get_fastn_home(home: Option<PathBuf>) -> Result<PathBuf> {
+fn get_fastn_home(home: Option<PathBuf>) -> Result<PathBuf, Box<dyn Error + Send + Sync>> {
     match home {
         Some(path) => Ok(path),
         None => match std::env::var("FASTN_HOME") {
             Ok(env_path) => Ok(PathBuf::from(env_path)),
             Err(_) => {
                 let proj_dirs = directories::ProjectDirs::from("com", "fastn", "fastn")
-                    .ok_or_else(|| eyre::eyre!("Failed to determine project directories"))?;
+                    .ok_or("Failed to determine project directories")?;
                 Ok(proj_dirs.data_dir().to_path_buf())
             }
         },
     }
 }
 
-async fn init_rig(fastn_home: PathBuf) -> Result<()> {
+async fn init_rig(fastn_home: PathBuf) -> Result<(), Box<dyn Error + Send + Sync>> {
     println!("🎉 Initializing new rig at {}", fastn_home.display());
 
-    let (rig, _account_manager, primary_id52) = fastn_rig::Rig::create(fastn_home)
-        .await
-        .wrap_err("Failed to create new rig")?;
+    let (rig, _account_manager, primary_id52) = fastn_rig::Rig::create(fastn_home).await?;
 
     println!("✅ Rig initialized successfully!");
     println!("🔑 Rig ID52: {}", rig.id52());
@@ -87,8 +85,8 @@ async fn init_rig(fastn_home: PathBuf) -> Result<()> {
     Ok(())
 }
 
-async fn show_status(fastn_home: PathBuf) -> Result<()> {
-    let rig = fastn_rig::Rig::load(fastn_home).wrap_err("Failed to load rig. Run 'init' first.")?;
+async fn show_status(fastn_home: PathBuf) -> Result<(), Box<dyn Error + Send + Sync>> {
+    let rig = fastn_rig::Rig::load(fastn_home)?;
 
     println!("📊 Rig Status");
     println!("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -103,13 +101,10 @@ async fn show_status(fastn_home: PathBuf) -> Result<()> {
     Ok(())
 }
 
-async fn list_entities(fastn_home: PathBuf) -> Result<()> {
-    let rig = fastn_rig::Rig::load(fastn_home.clone())
-        .wrap_err("Failed to load rig. Run 'init' first.")?;
+async fn list_entities(fastn_home: PathBuf) -> Result<(), Box<dyn Error + Send + Sync>> {
+    let rig = fastn_rig::Rig::load(fastn_home.clone())?;
 
-    let account_manager = fastn_account::AccountManager::load(fastn_home)
-        .await
-        .wrap_err("Failed to load account manager")?;
+    let account_manager = fastn_account::AccountManager::load(fastn_home).await?;
 
     println!("👥 Entities");
     println!("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -139,30 +134,36 @@ async fn list_entities(fastn_home: PathBuf) -> Result<()> {
     Ok(())
 }
 
-async fn set_current_entity(fastn_home: PathBuf, id52: String) -> Result<()> {
-    let rig = fastn_rig::Rig::load(fastn_home).wrap_err("Failed to load rig. Run 'init' first.")?;
+async fn set_current_entity(
+    fastn_home: PathBuf,
+    id52: String,
+) -> Result<(), Box<dyn Error + Send + Sync>> {
+    let rig = fastn_rig::Rig::load(fastn_home)?;
 
-    rig.set_current(&id52)
-        .await
-        .wrap_err("Failed to set current entity")?;
+    rig.set_current(&id52).await?;
 
     println!("✅ Set current entity to: {id52}");
 
     Ok(())
 }
 
-async fn set_entity_online(fastn_home: PathBuf, id52: String, online: String) -> Result<()> {
-    let rig = fastn_rig::Rig::load(fastn_home).wrap_err("Failed to load rig. Run 'init' first.")?;
+async fn set_entity_online(
+    fastn_home: PathBuf,
+    id52: String,
+    online: String,
+) -> Result<(), Box<dyn Error + Send + Sync>> {
+    let rig = fastn_rig::Rig::load(fastn_home)?;
 
     let online_bool = match online.as_str() {
         "true" => true,
         "false" => false,
-        _ => return Err(eyre::eyre!("Online status must be 'true' or 'false'")),
+        _ => {
+            eprintln!("Error: Online status must be 'true' or 'false'");
+            std::process::exit(1);
+        }
     };
 
-    rig.set_entity_online(&id52, online_bool)
-        .await
-        .wrap_err("Failed to set entity online status")?;
+    rig.set_entity_online(&id52, online_bool).await?;
 
     let status = if online_bool { "ONLINE" } else { "OFFLINE" };
     println!("✅ Set {id52} to {status}");
@@ -170,7 +171,9 @@ async fn set_entity_online(fastn_home: PathBuf, id52: String, online: String) ->
     Ok(())
 }
 
-async fn run_rig(fastn_home: PathBuf) -> Result<()> {
+async fn run_rig(fastn_home: PathBuf) -> Result<(), Box<dyn Error + Send + Sync>> {
     println!("🚀 Starting rig daemon...");
-    fastn_rig::run(Some(fastn_home)).await
+    fastn_rig::run(Some(fastn_home))
+        .await
+        .map_err(|e| Box::new(e) as Box<dyn Error + Send + Sync>)
 }

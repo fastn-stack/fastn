@@ -7,18 +7,18 @@ use syn::{Data, DeriveInput, Field, Fields, parse_macro_input};
 /// Generates three different APIs based on your document structure:
 ///
 /// ## 1. Template with `{id52}` placeholder
-/// 
+///
 /// Most convenient for entity-specific documents:
-/// 
+///
 /// ```ignore
 /// #[derive(Document, Reconcile, Hydrate)]
 /// #[document_path("/-/users/{id52}/profile")]
 /// struct UserProfile {
-///     #[document_id52] 
+///     #[document_id52]
 ///     user_id: fastn_id52::PublicKey,
 ///     name: String,
 /// }
-/// 
+///
 /// // Generated API:
 /// // UserProfile::load(db, &user_id) -> Result<UserProfile, GetError>
 /// // profile.save(db) -> Result<(), SaveError>
@@ -27,9 +27,9 @@ use syn::{Data, DeriveInput, Field, Fields, parse_macro_input};
 /// ```
 ///
 /// ## 2. Template without `{id52}` (singleton)
-/// 
+///
 /// For global/singleton documents:
-/// 
+///
 /// ```ignore
 /// #[derive(Document, Reconcile, Hydrate)]
 /// #[document_path("/-/app/config")]
@@ -37,7 +37,7 @@ use syn::{Data, DeriveInput, Field, Fields, parse_macro_input};
 ///     version: String,
 ///     features: Vec<String>,
 /// }
-/// 
+///
 /// // Generated API:
 /// // AppConfig::load(db) -> Result<AppConfig, GetError>
 /// // config.save(db) -> Result<(), SaveError>
@@ -46,9 +46,9 @@ use syn::{Data, DeriveInput, Field, Fields, parse_macro_input};
 /// ```
 ///
 /// ## 3. No template (maximum flexibility)
-/// 
+///
 /// Requires explicit paths for every operation:
-/// 
+///
 /// ```ignore
 /// #[derive(Document, Reconcile, Hydrate)]
 /// struct FlexibleDoc {
@@ -56,7 +56,7 @@ use syn::{Data, DeriveInput, Field, Fields, parse_macro_input};
 ///     id: fastn_id52::PublicKey,
 ///     data: String,
 /// }
-/// 
+///
 /// // Generated API:
 /// // FlexibleDoc::load(db, &path) -> Result<FlexibleDoc, GetError>
 /// // doc.save(db, &path) -> Result<(), SaveError>
@@ -66,7 +66,7 @@ use syn::{Data, DeriveInput, Field, Fields, parse_macro_input};
 /// ## Pattern Matching Details
 ///
 /// `document_list()` uses exact DNSSEC32 validation:
-/// - Template: `"/-/users/{id52}/notes"` 
+/// - Template: `"/-/users/{id52}/notes"`
 /// - Matches: `"/-/users/abc123...xyz/notes"` (exactly 52 alphanumeric chars)
 /// - Rejects: `"/-/users/short/notes"`, `"/-/users/has-dashes/notes"`
 #[proc_macro_derive(Document, attributes(document_id52, document_path))]
@@ -81,7 +81,7 @@ pub fn derive_document(input: TokenStream) -> TokenStream {
         // Template-based API: has document_path attribute
         generate_template_based_api(struct_name, id52_field, &template)
     } else {
-        // Path-based API: no document_path attribute  
+        // Path-based API: no document_path attribute
         generate_path_based_api(struct_name, id52_field)
     }
 }
@@ -92,7 +92,7 @@ fn generate_template_based_api(
     template: &str,
 ) -> TokenStream {
     let has_id52_field = id52_field.is_some();
-    
+
     if has_id52_field {
         let field = id52_field.unwrap();
         let field_name = &field.ident;
@@ -136,7 +136,7 @@ fn generate_template_based_api(
                 }
             }
         };
-        
+
         // Only add document_list if template contains {id52}
         let list_fn = if template.contains("{id52}") {
             quote! {
@@ -149,10 +149,10 @@ fn generate_template_based_api(
                         } else {
                             #template
                         };
-                        
+
                         // Get all paths with this prefix
                         let all_paths = db.list(Some(prefix))?;
-                        
+
                         // Filter to match exact pattern with 52-char ID52
                         let matching_paths: std::result::Result<Vec<_>, _> = all_paths
                             .into_iter()
@@ -162,7 +162,7 @@ fn generate_template_based_api(
                             })
                             .map(|p| fastn_automerge::DocumentPath::from_string(&p))
                             .collect();
-                            
+
                         matching_paths.map_err(|_| fastn_automerge::db::ListError::Database(
                             rusqlite::Error::InvalidPath("Invalid document path returned from database".into())
                         ))
@@ -174,20 +174,20 @@ fn generate_template_based_api(
                         if let Some(id52_pos) = template.find("{id52}") {
                             let prefix = &template[..id52_pos];
                             let suffix = &template[id52_pos + 6..]; // Skip "{id52}"
-                            
+
                             // Check prefix and suffix match
                             if !path.starts_with(prefix) || !path.ends_with(suffix) {
                                 return false;
                             }
-                            
+
                             // Extract the ID part and validate it's exactly 52 alphanumeric chars
                             let id_start = prefix.len();
                             let id_end = path.len() - suffix.len();
-                            
+
                             if id_end <= id_start {
                                 return false;
                             }
-                            
+
                             let id_part = &path[id_start..id_end];
                             id_part.len() == 52 && id_part.chars().all(|c| c.is_alphanumeric())
                         } else {
@@ -200,12 +200,12 @@ fn generate_template_based_api(
         } else {
             quote! {} // No list function for singleton documents
         };
-        
+
         let combined = quote! {
             #expanded
             #list_fn
         };
-        
+
         TokenStream::from(combined)
     } else {
         // Singleton document with template but no ID field
@@ -250,12 +250,9 @@ fn generate_template_based_api(
     }
 }
 
-fn generate_path_based_api(
-    struct_name: &syn::Ident,
-    _id52_field: Option<&Field>,
-) -> TokenStream {
+fn generate_path_based_api(struct_name: &syn::Ident, _id52_field: Option<&Field>) -> TokenStream {
     // Path-based API: all functions require explicit DocumentPath parameter
-    
+
     let expanded = quote! {
         impl #struct_name {
             /// Load document from database using explicit path

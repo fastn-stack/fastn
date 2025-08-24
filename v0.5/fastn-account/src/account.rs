@@ -1,7 +1,7 @@
 mod create;
 mod load;
 
-impl crate::Account {
+impl fastn_account::Account {
     /// Get the primary alias ID52 (used for folder naming)
     pub async fn primary_id52(&self) -> Option<String> {
         let aliases = self.aliases.read().await;
@@ -9,7 +9,7 @@ impl crate::Account {
     }
 
     /// Get the primary alias
-    pub async fn primary_alias(&self) -> Option<crate::Alias> {
+    pub async fn primary_alias(&self) -> Option<fastn_account::Alias> {
         let aliases = self.aliases.read().await;
         aliases.iter().find(|a| a.is_primary).cloned()
     }
@@ -26,14 +26,17 @@ impl crate::Account {
     }
 
     /// Get all aliases (returns a clone)
-    pub async fn aliases(&self) -> Vec<crate::Alias> {
+    pub async fn aliases(&self) -> Vec<fastn_account::Alias> {
         let aliases = self.aliases.read().await;
         aliases.clone()
     }
 
     /// Create a test account in memory (for testing only)
     #[cfg(test)]
-    pub(crate) async fn new_for_test(path: std::path::PathBuf, aliases: Vec<crate::Alias>) -> Self {
+    pub(crate) async fn new_for_test(
+        path: std::path::PathBuf,
+        aliases: Vec<fastn_account::Alias>,
+    ) -> Self {
         // Create test databases - use fastn-automerge test utility
         let (automerge, _temp_dir) = fastn_automerge::create_test_db().unwrap();
         let mail = rusqlite::Connection::open_in_memory().unwrap();

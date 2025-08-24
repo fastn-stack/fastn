@@ -1,9 +1,17 @@
 #[cfg(test)]
 mod test {
-    use crate::{Db, Hydrate, Reconcile};
+    use fastn_automerge::{Db, Hydrate, Reconcile};
 
     // Test Case 1: With document_id52 field + custom document_path
-    #[derive(Debug, Clone, PartialEq, serde::Serialize, crate::Reconcile, crate::Hydrate, crate::Document)]
+    #[derive(
+        Debug,
+        Clone,
+        PartialEq,
+        serde::Serialize,
+        fastn_automerge::Reconcile,
+        fastn_automerge::Hydrate,
+        fastn_automerge::Document,
+    )]
     #[document_path("/-/users/{id52}/profile")]
     struct UserProfile {
         #[document_id52]
@@ -13,7 +21,15 @@ mod test {
     }
 
     // Test Case 2: With document_id52 field + NO document_path (should generate default)
-    #[derive(Debug, Clone, PartialEq, serde::Serialize, crate::Reconcile, crate::Hydrate, crate::Document)]
+    #[derive(
+        Debug,
+        Clone,
+        PartialEq,
+        serde::Serialize,
+        fastn_automerge::Reconcile,
+        fastn_automerge::Hydrate,
+        fastn_automerge::Document,
+    )]
     struct DefaultPathDoc {
         #[document_id52]
         entity: fastn_id52::PublicKey,
@@ -21,7 +37,15 @@ mod test {
     }
 
     // Test Case 3: WITHOUT document_id52 field + custom document_path (singleton)
-    #[derive(Debug, Clone, PartialEq, serde::Serialize, crate::Reconcile, crate::Hydrate, crate::Document)]
+    #[derive(
+        Debug,
+        Clone,
+        PartialEq,
+        serde::Serialize,
+        fastn_automerge::Reconcile,
+        fastn_automerge::Hydrate,
+        fastn_automerge::Document,
+    )]
     #[document_path("/-/app/settings")]
     struct AppSettings {
         theme: String,
@@ -29,7 +53,15 @@ mod test {
     }
 
     // Test Case 4: Complex path template
-    #[derive(Debug, Clone, PartialEq, serde::Serialize, crate::Reconcile, crate::Hydrate, crate::Document)]
+    #[derive(
+        Debug,
+        Clone,
+        PartialEq,
+        serde::Serialize,
+        fastn_automerge::Reconcile,
+        fastn_automerge::Hydrate,
+        fastn_automerge::Document,
+    )]
     #[document_path("/-/complex/{id52}/nested/path")]
     struct ComplexPath {
         #[document_id52]
@@ -38,7 +70,9 @@ mod test {
     }
 
     // Test Case 5: Basic document for comprehensive testing
-    #[derive(Debug, Clone, PartialEq, serde::Serialize, Hydrate, Reconcile, crate::Document)]
+    #[derive(
+        Debug, Clone, PartialEq, serde::Serialize, Hydrate, Reconcile, fastn_automerge::Document,
+    )]
     #[document_path("/-/test/{id52}")]
     struct TestDoc {
         #[document_id52]
@@ -49,7 +83,9 @@ mod test {
     }
 
     // Test Case 6: Path-based API (no document_path attribute)
-    #[derive(Debug, Clone, PartialEq, serde::Serialize, Hydrate, Reconcile, crate::Document)]
+    #[derive(
+        Debug, Clone, PartialEq, serde::Serialize, Hydrate, Reconcile, fastn_automerge::Document,
+    )]
     struct PathBasedDoc {
         #[document_id52]
         id: fastn_id52::PublicKey,
@@ -120,7 +156,8 @@ mod test {
         let entity_id = fastn_id52::SecretKey::generate().public_key();
 
         // Path-based API: no document_path attribute means explicit paths required
-        let doc_path = crate::DocumentPath::from_string("/-/custom/location/for/default")?;
+        let doc_path =
+            fastn_automerge::DocumentPath::from_string("/-/custom/location/for/default")?;
 
         let doc = DefaultPathDoc {
             entity: entity_id,
@@ -348,15 +385,22 @@ mod test {
         // Verify all our test documents are found
         for doc in &test_docs {
             let expected_path = TestDoc::document_path(&doc.id);
-            assert!(test_doc_paths.iter().any(|p| p.as_str() == expected_path.as_str()));
+            assert!(
+                test_doc_paths
+                    .iter()
+                    .any(|p| p.as_str() == expected_path.as_str())
+            );
         }
 
-        // Test document_list for UserProfile  
+        // Test document_list for UserProfile
         let user_profile_paths = UserProfile::document_list(&db)?;
         assert_eq!(user_profile_paths.len(), 1);
 
         let expected_profile_path = UserProfile::document_path(&user_id);
-        assert_eq!(user_profile_paths[0].as_str(), expected_profile_path.as_str());
+        assert_eq!(
+            user_profile_paths[0].as_str(),
+            expected_profile_path.as_str()
+        );
 
         Ok(())
     }
@@ -403,12 +447,12 @@ mod test {
         };
 
         // Path-based API requires explicit DocumentPath parameter
-        let doc_path = crate::DocumentPath::from_string("/-/custom/path/for/test")?;
+        let doc_path = fastn_automerge::DocumentPath::from_string("/-/custom/path/for/test")?;
 
         // Test create with explicit path
         doc.create(&db, &doc_path)?;
 
-        // Test load with explicit path  
+        // Test load with explicit path
         let loaded = PathBasedDoc::load(&db, &doc_path)?;
         assert_eq!(loaded.data, "path-based test");
         assert_eq!(loaded.id, doc_id);
@@ -456,7 +500,7 @@ mod test {
         let user3_id = fastn_id52::SecretKey::generate().public_key();
         let user3 = UserProfile {
             user_id: user3_id,
-            name: "Alice".to_string(),  // Same name as user1
+            name: "Alice".to_string(), // Same name as user1
             bio: Some("Designer".to_string()),
         };
         user3.save(&db)?;
@@ -465,7 +509,7 @@ mod test {
         let alice_paths = db.find_where("name", "Alice")?;
         assert_eq!(alice_paths.len(), 2); // user1 and user3
 
-        // Test find_where: find users named "Bob" 
+        // Test find_where: find users named "Bob"
         let bob_paths = db.find_where("name", "Bob")?;
         assert_eq!(bob_paths.len(), 1);
 

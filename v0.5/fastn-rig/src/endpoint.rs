@@ -25,10 +25,9 @@ impl fastn_rig::EndpointManager {
         secret_key: Vec<u8>,
         owner_type: fastn_rig::OwnerType,
         owner_path: std::path::PathBuf,
-    ) -> eyre::Result<()> {
+    ) -> Result<(), fastn_rig::EndpointError> {
         if self.active.contains_key(&id52) {
-            tracing::debug!("Endpoint {} already online", id52);
-            return Ok(());
+            return Err(fastn_rig::EndpointError::EndpointAlreadyOnline { id52 });
         }
 
         tracing::info!("Bringing endpoint {} online", id52);
@@ -37,7 +36,7 @@ impl fastn_rig::EndpointManager {
         let secret_key_array: [u8; 32] = secret_key
             .as_slice()
             .try_into()
-            .map_err(|_| eyre::eyre!("Secret key must be exactly 32 bytes"))?;
+            .map_err(|_| fastn_rig::EndpointError::InvalidSecretKeyLength)?;
         let iroh_secret_key = iroh::SecretKey::from_bytes(&secret_key_array);
 
         // Create Iroh endpoint with this identity using proper ALPN
@@ -48,7 +47,10 @@ impl fastn_rig::EndpointManager {
             .discovery_n0()
             .discovery_local_network()
             .bind()
-            .await?;
+            .await
+            .map_err(|e| fastn_rig::EndpointError::IrohEndpointCreationFailed {
+                source: Box::new(e) as Box<dyn std::error::Error + Send + Sync>,
+            })?;
 
         // Get endpoint info for logging
         let node_id = endpoint.node_id();
@@ -87,7 +89,7 @@ impl fastn_rig::EndpointManager {
     }
 
     /// Take an endpoint offline
-    pub async fn take_offline(&mut self, id52: &str) -> eyre::Result<()> {
+    pub async fn take_offline(&mut self, id52: &str) -> Result<(), fastn_rig::EndpointError> {
         if let Some(handle) = self.active.remove(id52) {
             tracing::info!("Taking endpoint {} offline", id52);
 
@@ -121,7 +123,7 @@ impl fastn_rig::EndpointManager {
     }
 
     /// Shutdown all endpoints
-    pub async fn shutdown_all(&mut self) -> eyre::Result<()> {
+    pub async fn shutdown_all(&mut self) -> Result<(), fastn_rig::EndpointError> {
         let endpoints: Vec<String> = self.active.keys().cloned().collect();
 
         for id52 in endpoints {
@@ -203,9 +205,15 @@ async fn handle_connection(
     message_tx: tokio::sync::mpsc::Sender<(String, fastn_rig::OwnerType, Vec<u8>)>,
     graceful: fastn_net::Graceful,
     #[allow(unused)] peer_stream_senders: fastn_net::PeerStreamSenders,
-) -> eyre::Result<()> {
+) -> Result<(), fastn_rig::EndpointError> {
     // Get remote ID52
-    let remote_id52 = fastn_net::get_remote_id52(&conn).await?;
+    let remote_id52 = fastn_net::get_remote_id52(&conn).await.map_err(|e| {
+        fastn_rig::EndpointError::ConnectionHandlingFailed {
+            source: Box::new(std::io::Error::other(format!(
+                "Failed to get remote ID52: {e}"
+            ))) as Box<dyn std::error::Error + Send + Sync>,
+        }
+    })?;
 
     tracing::debug!(
         "Handling connection from {} to endpoint {}",

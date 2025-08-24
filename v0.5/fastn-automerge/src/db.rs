@@ -16,7 +16,7 @@ pub enum OpenError {
     InvalidEntity(String),
 }
 
-impl crate::Db {
+impl fastn_automerge::Db {
     /// Open existing database
     pub fn open(db_path: &std::path::Path) -> Result<Self, OpenError> {
         if !db_path.exists() {
@@ -37,8 +37,9 @@ impl crate::Db {
         }
 
         // Read the actor counter directly from SQL to get stored entity
-        let counter_doc_path = crate::DocumentPath::from_string("/-/system/actor_counter")
-            .expect("System document path should be valid");
+        let counter_doc_path =
+            fastn_automerge::DocumentPath::from_string("/-/system/actor_counter")
+                .expect("System document path should be valid");
 
         let binary: Vec<u8> = conn
             .query_row(
@@ -49,7 +50,7 @@ impl crate::Db {
             .map_err(|_| OpenError::MissingActorCounter)?;
 
         let doc = automerge::AutoCommit::load(&binary).map_err(OpenError::Automerge)?;
-        let counter: crate::ActorCounter =
+        let counter: fastn_automerge::ActorCounter =
             autosurgeon::hydrate(&doc).map_err(OpenError::Hydrate)?;
 
         // Parse stored entity ID back to PublicKey
@@ -77,7 +78,7 @@ pub enum InitError {
     Create(Box<CreateError>),
 }
 
-impl crate::Db {
+impl fastn_automerge::Db {
     /// Initialize a new database for an entity (primary device)
     pub fn init(
         db_path: &std::path::Path,
@@ -88,7 +89,7 @@ impl crate::Db {
         }
 
         let conn = rusqlite::Connection::open(db_path).map_err(InitError::Database)?;
-        crate::migration::initialize_database(&conn).map_err(InitError::Migration)?;
+        fastn_automerge::migration::initialize_database(&conn).map_err(InitError::Migration)?;
 
         let db = Self {
             conn,
@@ -98,9 +99,10 @@ impl crate::Db {
         };
 
         // Initialize the actor counter with database identity
-        let counter_doc_path = crate::DocumentPath::from_string("/-/system/actor_counter")
-            .expect("System document path should be valid");
-        let counter = crate::ActorCounter {
+        let counter_doc_path =
+            fastn_automerge::DocumentPath::from_string("/-/system/actor_counter")
+                .expect("System document path should be valid");
+        let counter = fastn_automerge::ActorCounter {
             entity_id52: entity.id52(), // Store as string in the document for now
             next_device: 1,             // Next device will be 1
         };
@@ -114,7 +116,7 @@ impl crate::Db {
 #[derive(Debug, thiserror::Error)]
 pub enum CreateError {
     #[error("Document already exists: {0}")]
-    DocumentExists(crate::DocumentPath),
+    DocumentExists(fastn_automerge::DocumentPath),
     #[error("Database error: {0}")]
     Database(#[from] rusqlite::Error),
     #[error("Automerge error: {0}")]
@@ -123,10 +125,14 @@ pub enum CreateError {
     Reconcile(#[from] autosurgeon::ReconcileError),
 }
 
-impl crate::Db {
+impl fastn_automerge::Db {
     /// Create a new document (internal implementation - use derive macro instead)
     #[doc(hidden)]
-    pub fn create_impl<T>(&self, path: &crate::DocumentPath, value: &T) -> Result<(), CreateError>
+    pub fn create_impl<T>(
+        &self,
+        path: &fastn_automerge::DocumentPath,
+        value: &T,
+    ) -> Result<(), CreateError>
     where
         T: autosurgeon::Reconcile + serde::Serialize,
     {
@@ -189,7 +195,11 @@ impl crate::Db {
 
     /// Create a new document
     #[deprecated(note = "Use the #[derive(Document)] macro and call document.create(&db) instead")]
-    pub fn create<T>(&self, path: &crate::DocumentPath, value: &T) -> Result<(), CreateError>
+    pub fn create<T>(
+        &self,
+        path: &fastn_automerge::DocumentPath,
+        value: &T,
+    ) -> Result<(), CreateError>
     where
         T: autosurgeon::Reconcile + serde::Serialize,
     {
@@ -200,7 +210,7 @@ impl crate::Db {
 #[derive(Debug, thiserror::Error)]
 pub enum GetError {
     #[error("Document not found: {0}")]
-    NotFound(crate::DocumentPath),
+    NotFound(fastn_automerge::DocumentPath),
     #[error("Database error: {0}")]
     Database(#[from] rusqlite::Error),
     #[error("Automerge error: {0}")]
@@ -209,10 +219,10 @@ pub enum GetError {
     Hydrate(#[from] autosurgeon::HydrateError),
 }
 
-impl crate::Db {
+impl fastn_automerge::Db {
     /// Get a document (internal implementation - use derive macro instead)
     #[doc(hidden)]
-    pub fn get_impl<T>(&self, path: &crate::DocumentPath) -> Result<T, GetError>
+    pub fn get_impl<T>(&self, path: &fastn_automerge::DocumentPath) -> Result<T, GetError>
     where
         T: autosurgeon::Hydrate,
     {
@@ -237,7 +247,7 @@ impl crate::Db {
     #[deprecated(
         note = "Use the #[derive(Document)] macro and call DocumentType::load(&db, &id) instead"
     )]
-    pub fn get<T>(&self, path: &crate::DocumentPath) -> Result<T, GetError>
+    pub fn get<T>(&self, path: &fastn_automerge::DocumentPath) -> Result<T, GetError>
     where
         T: autosurgeon::Hydrate,
     {
@@ -248,7 +258,7 @@ impl crate::Db {
 #[derive(Debug, thiserror::Error)]
 pub enum UpdateError {
     #[error("Document not found: {0}")]
-    NotFound(crate::DocumentPath),
+    NotFound(fastn_automerge::DocumentPath),
     #[error("Database error: {0}")]
     Database(#[from] rusqlite::Error),
     #[error("Automerge error: {0}")]
@@ -257,10 +267,14 @@ pub enum UpdateError {
     Reconcile(#[from] autosurgeon::ReconcileError),
 }
 
-impl crate::Db {
+impl fastn_automerge::Db {
     /// Update a document (internal implementation - use derive macro instead)
     #[doc(hidden)]
-    pub fn update_impl<T>(&self, path: &crate::DocumentPath, value: &T) -> Result<(), UpdateError>
+    pub fn update_impl<T>(
+        &self,
+        path: &fastn_automerge::DocumentPath,
+        value: &T,
+    ) -> Result<(), UpdateError>
     where
         T: autosurgeon::Reconcile + serde::Serialize,
     {
@@ -324,7 +338,11 @@ impl crate::Db {
 
     /// Update a document
     #[deprecated(note = "Use the #[derive(Document)] macro and call document.update(&db) instead")]
-    pub fn update<T>(&self, path: &crate::DocumentPath, value: &T) -> Result<(), UpdateError>
+    pub fn update<T>(
+        &self,
+        path: &fastn_automerge::DocumentPath,
+        value: &T,
+    ) -> Result<(), UpdateError>
     where
         T: autosurgeon::Reconcile + serde::Serialize,
     {
@@ -335,7 +353,7 @@ impl crate::Db {
 #[derive(Debug, thiserror::Error)]
 pub enum ModifyError {
     #[error("Document not found: {0}")]
-    NotFound(crate::DocumentPath),
+    NotFound(fastn_automerge::DocumentPath),
     #[error("Database error: {0}")]
     Database(#[from] rusqlite::Error),
     #[error("Automerge error: {0}")]
@@ -346,10 +364,14 @@ pub enum ModifyError {
     Reconcile(#[from] autosurgeon::ReconcileError),
 }
 
-impl crate::Db {
+impl fastn_automerge::Db {
     /// Modify a document with a closure
     #[deprecated(note = "Use the #[derive(Document)] macro and load/modify/save pattern instead")]
-    pub fn modify<T, F>(&self, path: &crate::DocumentPath, modifier: F) -> Result<(), ModifyError>
+    pub fn modify<T, F>(
+        &self,
+        path: &fastn_automerge::DocumentPath,
+        modifier: F,
+    ) -> Result<(), ModifyError>
     where
         T: autosurgeon::Hydrate + autosurgeon::Reconcile + serde::Serialize,
         F: FnOnce(&mut T),
@@ -421,14 +443,14 @@ impl crate::Db {
 #[derive(Debug, thiserror::Error)]
 pub enum DeleteError {
     #[error("Document not found: {0}")]
-    NotFound(crate::DocumentPath),
+    NotFound(fastn_automerge::DocumentPath),
     #[error("Database error: {0}")]
     Database(#[from] rusqlite::Error),
 }
 
-impl crate::Db {
+impl fastn_automerge::Db {
     /// Delete a document
-    pub fn delete(&self, path: &crate::DocumentPath) -> Result<(), DeleteError> {
+    pub fn delete(&self, path: &fastn_automerge::DocumentPath) -> Result<(), DeleteError> {
         let rows_affected = self
             .conn
             .execute("DELETE FROM fastn_documents WHERE path = ?1", [path])
@@ -463,9 +485,9 @@ pub(crate) enum NextActorIdError {
     Exists(Box<ExistsError>),
 }
 
-impl crate::Db {
+impl fastn_automerge::Db {
     /// Check if a document exists
-    pub fn exists(&self, path: &crate::DocumentPath) -> Result<bool, ExistsError> {
+    pub fn exists(&self, path: &fastn_automerge::DocumentPath) -> Result<bool, ExistsError> {
         let count: i32 = self
             .conn
             .query_row(
@@ -505,8 +527,9 @@ impl crate::Db {
     pub fn list_with_pattern(&self, pattern: &str) -> Result<Vec<String>, ListError> {
         let query = "SELECT path FROM fastn_documents WHERE path LIKE ?1 ORDER BY path";
         let mut stmt = self.conn.prepare(query).map_err(ListError::Database)?;
-        
-        let paths = stmt.query_map([pattern], |row| row.get(0))
+
+        let paths = stmt
+            .query_map([pattern], |row| row.get(0))
             .map_err(ListError::Database)?
             .collect::<std::result::Result<Vec<String>, _>>()
             .map_err(ListError::Database)?;
@@ -515,7 +538,11 @@ impl crate::Db {
     }
 
     /// Find documents where a field equals a specific value
-    pub fn find_where<V>(&self, field_path: &str, value: V) -> Result<Vec<crate::DocumentPath>, ListError> 
+    pub fn find_where<V>(
+        &self,
+        field_path: &str,
+        value: V,
+    ) -> Result<Vec<fastn_automerge::DocumentPath>, ListError>
     where
         V: serde::Serialize,
     {
@@ -524,60 +551,76 @@ impl crate::Db {
         } else {
             format!("$.{field_path}")
         };
-        
+
         // Convert value to what json_extract returns (the raw JSON value, not JSON-encoded)
         let value_for_comparison = match serde_json::to_value(value).map_err(|e| {
             ListError::Database(rusqlite::Error::ToSqlConversionFailure(Box::new(e)))
         })? {
             serde_json::Value::String(s) => s,
             serde_json::Value::Number(n) => n.to_string(),
-            serde_json::Value::Bool(b) => if b { "true".to_string() } else { "false".to_string() },
+            serde_json::Value::Bool(b) => {
+                if b {
+                    "true".to_string()
+                } else {
+                    "false".to_string()
+                }
+            }
             serde_json::Value::Null => "null".to_string(),
             v => serde_json::to_string(&v).map_err(|e| {
                 ListError::Database(rusqlite::Error::ToSqlConversionFailure(Box::new(e)))
             })?,
         };
-        
-        let query = "SELECT path FROM fastn_documents WHERE json_extract(json_data, ?) = ? ORDER BY path";
+
+        let query =
+            "SELECT path FROM fastn_documents WHERE json_extract(json_data, ?) = ? ORDER BY path";
         let mut stmt = self.conn.prepare(query).map_err(ListError::Database)?;
-        
-        let paths: Result<Vec<_>, _> = stmt.query_map([&json_path, &value_for_comparison], |row| {
-            let path_str: String = row.get(0)?;
-            crate::DocumentPath::from_string(&path_str).map_err(|_| {
-                rusqlite::Error::InvalidPath("Invalid document path in database".into())
+
+        let paths: Result<Vec<_>, _> = stmt
+            .query_map([&json_path, &value_for_comparison], |row| {
+                let path_str: String = row.get(0)?;
+                fastn_automerge::DocumentPath::from_string(&path_str).map_err(|_| {
+                    rusqlite::Error::InvalidPath("Invalid document path in database".into())
+                })
             })
-        })
-        .map_err(ListError::Database)?
-        .collect();
+            .map_err(ListError::Database)?
+            .collect();
 
         paths.map_err(ListError::Database)
     }
 
     /// Find documents where a field exists (is not null)
-    pub fn find_exists(&self, field_path: &str) -> Result<Vec<crate::DocumentPath>, ListError> {
+    pub fn find_exists(
+        &self,
+        field_path: &str,
+    ) -> Result<Vec<fastn_automerge::DocumentPath>, ListError> {
         let json_path = if field_path.starts_with('$') {
             field_path.to_string()
         } else {
             format!("$.{field_path}")
         };
-        
+
         let query = "SELECT path FROM fastn_documents WHERE json_extract(json_data, ?) IS NOT NULL ORDER BY path";
         let mut stmt = self.conn.prepare(query).map_err(ListError::Database)?;
-        
-        let paths: Result<Vec<_>, _> = stmt.query_map([&json_path], |row| {
-            let path_str: String = row.get(0)?;
-            crate::DocumentPath::from_string(&path_str).map_err(|_| {
-                rusqlite::Error::InvalidPath("Invalid document path in database".into())
+
+        let paths: Result<Vec<_>, _> = stmt
+            .query_map([&json_path], |row| {
+                let path_str: String = row.get(0)?;
+                fastn_automerge::DocumentPath::from_string(&path_str).map_err(|_| {
+                    rusqlite::Error::InvalidPath("Invalid document path in database".into())
+                })
             })
-        })
-        .map_err(ListError::Database)?
-        .collect();
+            .map_err(ListError::Database)?
+            .collect();
 
         paths.map_err(ListError::Database)
     }
 
     /// Find documents where an array field contains a specific value
-    pub fn find_contains<V>(&self, field_path: &str, value: V) -> Result<Vec<crate::DocumentPath>, ListError>
+    pub fn find_contains<V>(
+        &self,
+        field_path: &str,
+        value: V,
+    ) -> Result<Vec<fastn_automerge::DocumentPath>, ListError>
     where
         V: serde::Serialize,
     {
@@ -586,15 +629,15 @@ impl crate::Db {
         } else {
             format!("$.{field_path}")
         };
-        
+
         let value_json = serde_json::to_value(value).map_err(|e| {
             ListError::Database(rusqlite::Error::ToSqlConversionFailure(Box::new(e)))
         })?;
-        
+
         let value_str = serde_json::to_string(&value_json).map_err(|e| {
             ListError::Database(rusqlite::Error::ToSqlConversionFailure(Box::new(e)))
         })?;
-        
+
         let query = r#"
             SELECT path FROM fastn_documents 
             WHERE EXISTS (
@@ -603,17 +646,18 @@ impl crate::Db {
             ) 
             ORDER BY path
         "#;
-        
+
         let mut stmt = self.conn.prepare(query).map_err(ListError::Database)?;
-        
-        let paths: Result<Vec<_>, _> = stmt.query_map([&json_path, &value_str], |row| {
-            let path_str: String = row.get(0)?;
-            crate::DocumentPath::from_string(&path_str).map_err(|_| {
-                rusqlite::Error::InvalidPath("Invalid document path in database".into())
+
+        let paths: Result<Vec<_>, _> = stmt
+            .query_map([&json_path, &value_str], |row| {
+                let path_str: String = row.get(0)?;
+                fastn_automerge::DocumentPath::from_string(&path_str).map_err(|_| {
+                    rusqlite::Error::InvalidPath("Invalid document path in database".into())
+                })
             })
-        })
-        .map_err(ListError::Database)?
-        .collect();
+            .map_err(ListError::Database)?
+            .collect();
 
         paths.map_err(ListError::Database)
     }
@@ -622,7 +666,7 @@ impl crate::Db {
     #[allow(dead_code)] // clippy false positive: used for advanced document operations
     pub(crate) fn get_document(
         &self,
-        path: &crate::DocumentPath,
+        path: &fastn_automerge::DocumentPath,
     ) -> Result<automerge::AutoCommit, GetError> {
         let binary: Vec<u8> = self
             .conn
@@ -645,9 +689,9 @@ impl crate::Db {
     /// If None, shows complete history up to current heads.
     pub fn history(
         &self,
-        path: &crate::DocumentPath,
+        path: &fastn_automerge::DocumentPath,
         up_to_head: Option<&str>,
-    ) -> Result<crate::DocumentHistory, GetError> {
+    ) -> Result<fastn_automerge::DocumentHistory, GetError> {
         let (binary, created_alias, updated_at): (Vec<u8>, String, i64) = self.conn.query_row(
             "SELECT automerge_binary, created_alias, updated_at FROM fastn_documents WHERE path = ?1",
             [path],
@@ -674,7 +718,7 @@ impl crate::Db {
             if up_to_head.is_none() || up_to_head == Some(&change_hash.to_string()) {
                 let operations = extract_operations_from_change(change)?;
 
-                edits.push(crate::Edit {
+                edits.push(fastn_automerge::Edit {
                     index: i + 1,
                     hash: change_hash.to_string(),
                     actor_id: change.actor_id().to_string(),
@@ -690,7 +734,7 @@ impl crate::Db {
             }
         }
 
-        Ok(crate::DocumentHistory {
+        Ok(fastn_automerge::DocumentHistory {
             path: path.to_string(),
             created_alias,
             updated_at,
@@ -703,7 +747,7 @@ impl crate::Db {
 /// Extract human-readable operations from an Automerge change
 fn extract_operations_from_change(
     change: &automerge::Change,
-) -> Result<Vec<crate::Operation>, GetError> {
+) -> Result<Vec<fastn_automerge::Operation>, GetError> {
     let mut operations = Vec::new();
 
     // Note: Automerge 0.6.1 doesn't expose detailed operation information easily
@@ -717,7 +761,7 @@ fn extract_operations_from_change(
     // Placeholder: Just indicate how many operations occurred
     let op_count = change.len();
     if op_count > 0 {
-        operations.push(crate::Operation::Set {
+        operations.push(fastn_automerge::Operation::Set {
             path: vec![],
             key: format!("({op_count} operations in this change)"),
             value: "Details not yet implemented".to_string(),
@@ -727,22 +771,22 @@ fn extract_operations_from_change(
     Ok(operations)
 }
 
-impl crate::Db {
+impl fastn_automerge::Db {
     /// Get the next actor ID for this database's entity and increment the counter (thread-safe)
     #[allow(dead_code)] // clippy false positive: used for device ID management
     pub(crate) fn next_actor_id(&self, entity_id52: &str) -> Result<String, NextActorIdError> {
         // Lock for atomic operation
         let _lock = self.mutex.lock().unwrap();
 
-        let counter_doc_id = crate::DocumentPath::from_string("/-/system/actor_counter")
+        let counter_doc_id = fastn_automerge::DocumentPath::from_string("/-/system/actor_counter")
             .expect("System document ID should be valid");
 
         // Load or create actor counter document
-        let mut counter = match self.get_impl::<crate::ActorCounter>(&counter_doc_id) {
+        let mut counter = match self.get_impl::<fastn_automerge::ActorCounter>(&counter_doc_id) {
             Ok(counter) => counter,
             Err(_) => {
                 // Create new counter starting at 0
-                crate::ActorCounter {
+                fastn_automerge::ActorCounter {
                     entity_id52: entity_id52.to_string(),
                     next_device: 0,
                 }

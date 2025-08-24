@@ -1,4 +1,4 @@
-impl crate::Alias {
+impl fastn_account::Alias {
     /// Get the ID52 string for this alias
     pub fn id52(&self) -> String {
         self.public_key.to_string()

@@ -1,86 +1,86 @@
-use crate::db::{LoadError, InitError, CreateError, UpdateError, DeleteError, ExistsError, GetError};
+use fastn_automerge::db::{LoadError, InitError, CreateError, UpdateError, DeleteError, ExistsError, GetError};
 
-impl std::fmt::Display for crate::Error {
+impl std::fmt::Display for fastn_automerge::Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            crate::Error::NotFound(path) => write!(f, "Document not found: {path}"),
-            crate::Error::Database(e) => write!(f, "Database error: {e}"),
-            crate::Error::Automerge(e) => write!(f, "Automerge error: {e}"),
-            crate::Error::Autosurgeon(e) => write!(f, "Hydrate error: {e}"),
-            crate::Error::ReconcileError(e) => write!(f, "Reconcile error: {e}"),
+            fastn_automerge::Error::NotFound(path) => write!(f, "Document not found: {path}"),
+            fastn_automerge::Error::Database(e) => write!(f, "Database error: {e}"),
+            fastn_automerge::Error::Automerge(e) => write!(f, "Automerge error: {e}"),
+            fastn_automerge::Error::Autosurgeon(e) => write!(f, "Hydrate error: {e}"),
+            fastn_automerge::Error::ReconcileError(e) => write!(f, "Reconcile error: {e}"),
         }
     }
 }
 
-impl std::error::Error for crate::Error {}
+impl std::error::Error for fastn_automerge::Error {}
 
-impl From<rusqlite::Error> for Box<crate::Error> {
+impl From<rusqlite::Error> for Box<fastn_automerge::Error> {
     fn from(err: rusqlite::Error) -> Self {
-        Box::new(crate::Error::Database(err))
+        Box::new(fastn_automerge::Error::Database(err))
     }
 }
 
-impl From<automerge::AutomergeError> for Box<crate::Error> {
+impl From<automerge::AutomergeError> for Box<fastn_automerge::Error> {
     fn from(err: automerge::AutomergeError) -> Self {
-        Box::new(crate::Error::Automerge(err))
+        Box::new(fastn_automerge::Error::Automerge(err))
     }
 }
 
-impl From<autosurgeon::HydrateError> for Box<crate::Error> {
+impl From<autosurgeon::HydrateError> for Box<fastn_automerge::Error> {
     fn from(err: autosurgeon::HydrateError) -> Self {
-        Box::new(crate::Error::Autosurgeon(err))
+        Box::new(fastn_automerge::Error::Autosurgeon(err))
     }
 }
 
-impl From<autosurgeon::ReconcileError> for Box<crate::Error> {
+impl From<autosurgeon::ReconcileError> for Box<fastn_automerge::Error> {
     fn from(err: autosurgeon::ReconcileError) -> Self {
-        Box::new(crate::Error::ReconcileError(err))
+        Box::new(fastn_automerge::Error::ReconcileError(err))
     }
 }
 
 // Error implementations for new specific error types
 
-impl std::fmt::Display for crate::DocumentPathError {
+impl std::fmt::Display for fastn_automerge::DocumentPathError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            crate::DocumentPathError::Empty => write!(f, "Document ID cannot be empty"),
-            crate::DocumentPathError::TooManyPrefixes { count } => {
+            fastn_automerge::DocumentPathError::Empty => write!(f, "Document ID cannot be empty"),
+            fastn_automerge::DocumentPathError::TooManyPrefixes { count } => {
                 write!(f, "Document ID can contain at most one '/-/' prefix, found {count}")
             }
         }
     }
 }
 
-impl std::error::Error for crate::DocumentPathError {}
+impl std::error::Error for fastn_automerge::DocumentPathError {}
 
-impl std::fmt::Display for crate::LoadError {
+impl std::fmt::Display for fastn_automerge::LoadError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            crate::LoadError::NotFound(path) => write!(f, "Database not found: {}. Run 'init' first.", path.display()),
-            crate::LoadError::NotInitialized(path) => write!(f, "Database at {} exists but is not initialized. Run 'init' first.", path.display()),
-            crate::LoadError::MissingActorCounter => write!(f, "Database missing actor counter - not properly initialized"),
-            crate::LoadError::DatabaseError(e) => write!(f, "Database error: {e}"),
+            fastn_automerge::LoadError::NotFound(path) => write!(f, "Database not found: {}. Run 'init' first.", path.display()),
+            fastn_automerge::LoadError::NotInitialized(path) => write!(f, "Database at {} exists but is not initialized. Run 'init' first.", path.display()),
+            fastn_automerge::LoadError::MissingActorCounter => write!(f, "Database missing actor counter - not properly initialized"),
+            fastn_automerge::LoadError::DatabaseError(e) => write!(f, "Database error: {e}"),
         }
     }
 }
 
-impl std::error::Error for crate::LoadError {}
+impl std::error::Error for fastn_automerge::LoadError {}
 
-impl std::fmt::Display for crate::ActorIdNotSet {
+impl std::fmt::Display for fastn_automerge::ActorIdNotSet {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "Database not initialized - call set_actor_id() first")
     }
 }
 
-impl std::error::Error for crate::ActorIdNotSet {}
+impl std::error::Error for fastn_automerge::ActorIdNotSet {}
 
-impl std::fmt::Display for crate::ActorIdAlreadySet {
+impl std::fmt::Display for fastn_automerge::ActorIdAlreadySet {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "Actor ID already initialized - cannot change")
     }
 }
 
-impl std::error::Error for crate::ActorIdAlreadySet {}
+impl std::error::Error for fastn_automerge::ActorIdAlreadySet {}
 
 impl std::fmt::Display for CreateError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {

@@ -20,7 +20,7 @@ fastn-id52 = { workspace = true, features = ["automerge"] }
 fastn-net.workspace = true
 automerge.workspace = true
 iroh.workspace = true
-eyre.workspace = true
+thiserror.workspace = true
 tracing.workspace = true
 tokio.workspace = true
 rusqlite.workspace = true
