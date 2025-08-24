@@ -20,7 +20,7 @@ pub fn generate_password() -> String {
 }
 
 /// Hash a password using Argon2
-pub fn hash_password(password: &str) -> eyre::Result<String> {
+pub fn hash_password(password: &str) -> Result<String, crate::HashPasswordError> {
     use argon2::{
         Argon2,
         password_hash::{PasswordHasher, SaltString, rand_core::OsRng},
@@ -31,18 +31,23 @@ pub fn hash_password(password: &str) -> eyre::Result<String> {
 
     let password_hash = argon2
         .hash_password(password.as_bytes(), &salt)
-        .map_err(|e| eyre::eyre!("Failed to hash password: {}", e))?
+        .map_err(|e| crate::HashPasswordError::HashingFailed { 
+            message: e.to_string() 
+        })?
         .to_string();
 
     Ok(password_hash)
 }
 
 /// Verify a password against a hash
-pub fn verify_password(password: &str, hash: &str) -> eyre::Result<bool> {
+pub fn verify_password(password: &str, hash: &str) -> Result<bool, crate::VerifyPasswordError> {
     use argon2::{Argon2, PasswordHash, PasswordVerifier};
 
-    let parsed_hash =
-        PasswordHash::new(hash).map_err(|e| eyre::eyre!("Invalid password hash: {}", e))?;
+    let parsed_hash = PasswordHash::new(hash).map_err(|e| {
+        crate::VerifyPasswordError::HashParsingFailed { 
+            message: e.to_string() 
+        }
+    })?;
 
     Ok(Argon2::default()
         .verify_password(password.as_bytes(), &parsed_hash)

@@ -9,7 +9,7 @@ struct Cli {
     /// Path to fastn home directory
     #[arg(long, global = true)]
     home: Option<PathBuf>,
-    
+
     #[command(subcommand)]
     command: Commands,
 }
@@ -42,12 +42,12 @@ enum Commands {
 async fn main() -> Result<()> {
     // Initialize tracing
     tracing_subscriber::fmt::init();
-    
+
     let cli = Cli::parse();
-    
+
     // Determine fastn_home
     let fastn_home = get_fastn_home(cli.home)?;
-    
+
     match cli.command {
         Commands::Init => init_rig(fastn_home).await,
         Commands::Status => show_status(fastn_home).await,
@@ -74,90 +74,99 @@ fn get_fastn_home(home: Option<PathBuf>) -> Result<PathBuf> {
 
 async fn init_rig(fastn_home: PathBuf) -> Result<()> {
     println!("🎉 Initializing new rig at {}", fastn_home.display());
-    
-    let (rig, _account_manager, primary_id52) = fastn_rig::Rig::create(fastn_home).await
+
+    let (rig, _account_manager, primary_id52) = fastn_rig::Rig::create(fastn_home)
+        .await
         .wrap_err("Failed to create new rig")?;
-    
+
     println!("✅ Rig initialized successfully!");
     println!("🔑 Rig ID52: {}", rig.id52());
     println!("👤 Owner: {}", rig.owner().id52());
-    println!("📍 Primary account: {}", primary_id52);
-    
+    println!("📍 Primary account: {primary_id52}");
+
     Ok(())
 }
 
 async fn show_status(fastn_home: PathBuf) -> Result<()> {
-    let rig = fastn_rig::Rig::load(fastn_home)
-        .wrap_err("Failed to load rig. Run 'init' first.")?;
-    
+    let rig = fastn_rig::Rig::load(fastn_home).wrap_err("Failed to load rig. Run 'init' first.")?;
+
     println!("📊 Rig Status");
     println!("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     println!("🔑 Rig ID52: {}", rig.id52());
     println!("👤 Owner: {}", rig.owner().id52());
-    
+
     match rig.get_current().await {
-        Ok(current) => println!("📍 Current entity: {}", current),
-        Err(e) => println!("❌ Error getting current entity: {}", e),
+        Ok(current) => println!("📍 Current entity: {current}"),
+        Err(e) => println!("❌ Error getting current entity: {e}"),
     }
-    
+
     Ok(())
 }
 
 async fn list_entities(fastn_home: PathBuf) -> Result<()> {
     let rig = fastn_rig::Rig::load(fastn_home.clone())
         .wrap_err("Failed to load rig. Run 'init' first.")?;
-    
-    let account_manager = fastn_account::AccountManager::load(fastn_home).await
+
+    let account_manager = fastn_account::AccountManager::load(fastn_home)
+        .await
         .wrap_err("Failed to load account manager")?;
-    
+
     println!("👥 Entities");
     println!("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    
+
     // List rig itself
     let rig_id52 = rig.id52();
     let rig_online = rig.is_entity_online(&rig_id52).await.unwrap_or(false);
-    let status = if rig_online { "🟢 ONLINE" } else { "🔴 OFFLINE" };
-    println!("⚙️  {} (rig) - {}", rig_id52, status);
-    
+    let status = if rig_online {
+        "🟢 ONLINE"
+    } else {
+        "🔴 OFFLINE"
+    };
+    println!("⚙️  {rig_id52} (rig) - {status}");
+
     // List all accounts
     let all_endpoints = account_manager.get_all_endpoints().await?;
     for (id52, _secret_key, _account_path) in all_endpoints {
         let online = rig.is_entity_online(&id52).await.unwrap_or(false);
-        let status = if online { "🟢 ONLINE" } else { "🔴 OFFLINE" };
-        println!("👤 {} (account) - {}", id52, status);
+        let status = if online {
+            "🟢 ONLINE"
+        } else {
+            "🔴 OFFLINE"
+        };
+        println!("👤 {id52} (account) - {status}");
     }
-    
+
     Ok(())
 }
 
 async fn set_current_entity(fastn_home: PathBuf, id52: String) -> Result<()> {
-    let rig = fastn_rig::Rig::load(fastn_home)
-        .wrap_err("Failed to load rig. Run 'init' first.")?;
-    
-    rig.set_current(&id52).await
+    let rig = fastn_rig::Rig::load(fastn_home).wrap_err("Failed to load rig. Run 'init' first.")?;
+
+    rig.set_current(&id52)
+        .await
         .wrap_err("Failed to set current entity")?;
-    
-    println!("✅ Set current entity to: {}", id52);
-    
+
+    println!("✅ Set current entity to: {id52}");
+
     Ok(())
 }
 
 async fn set_entity_online(fastn_home: PathBuf, id52: String, online: String) -> Result<()> {
-    let rig = fastn_rig::Rig::load(fastn_home)
-        .wrap_err("Failed to load rig. Run 'init' first.")?;
-    
+    let rig = fastn_rig::Rig::load(fastn_home).wrap_err("Failed to load rig. Run 'init' first.")?;
+
     let online_bool = match online.as_str() {
         "true" => true,
         "false" => false,
         _ => return Err(eyre::eyre!("Online status must be 'true' or 'false'")),
     };
-    
-    rig.set_entity_online(&id52, online_bool).await
+
+    rig.set_entity_online(&id52, online_bool)
+        .await
         .wrap_err("Failed to set entity online status")?;
-    
+
     let status = if online_bool { "ONLINE" } else { "OFFLINE" };
-    println!("✅ Set {} to {}", id52, status);
-    
+    println!("✅ Set {id52} to {status}");
+
     Ok(())
 }
 

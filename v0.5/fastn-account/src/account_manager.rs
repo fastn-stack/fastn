@@ -7,23 +7,32 @@ impl fastn_account::AccountManager {
     /// * `fastn_home` - The fastn_home directory path (provided by fastn crate)
     ///
     /// Returns the AccountManager and the primary ID52 of the created account
-    pub async fn create(fastn_home: std::path::PathBuf) -> eyre::Result<(Self, String)> {
+    pub async fn create(fastn_home: std::path::PathBuf) -> Result<(Self, String), crate::AccountManagerCreateError> {
         tracing::info!("Creating AccountManager at {fastn_home:?}");
 
         let manager = Self { path: fastn_home };
 
         // Create accounts directory
         let accounts_dir = manager.path.join("accounts");
-        std::fs::create_dir_all(&accounts_dir)?;
+        std::fs::create_dir_all(&accounts_dir).map_err(|e| {
+            crate::AccountManagerCreateError::AccountCreationFailed {
+                source: crate::AccountCreateError::DirectoryCreationFailed {
+                    path: accounts_dir.clone(),
+                    source: e,
+                }
+            }
+        })?;
 
         // Create default account
         println!("📝 Creating default account...");
-        let account = fastn_account::Account::create(&accounts_dir).await?;
+        let account = fastn_account::Account::create(&accounts_dir).await.map_err(|e| {
+            crate::AccountManagerCreateError::AccountCreationFailed { source: e }
+        })?;
 
         let primary_id52 = account
             .primary_id52()
             .await
-            .ok_or_else(|| eyre::eyre!("Failed to get primary ID52 for new account"))?;
+            .ok_or_else(|| crate::AccountManagerCreateError::PrimaryAccountIdNotFound)?;
 
         println!("✅ Created new account: {primary_id52}");
 
@@ -36,16 +45,23 @@ impl fastn_account::AccountManager {
     /// # Arguments
     ///
     /// * `fastn_home` - The fastn_home directory path (provided by fastn crate)
-    pub async fn load(fastn_home: std::path::PathBuf) -> eyre::Result<Self> {
+    pub async fn load(fastn_home: std::path::PathBuf) -> Result<Self, crate::AccountManagerLoadError> {
         tracing::info!("Loading AccountManager from {fastn_home:?}");
 
         let accounts_dir = fastn_home.join("accounts");
         if !accounts_dir.exists() {
-            return Err(eyre::eyre!(
-                "Accounts directory not found at {:?}",
-                accounts_dir
-            ));
+            return Err(crate::AccountManagerLoadError::AccountsDirectoryNotFound {
+                path: accounts_dir,
+            });
         }
+
+        // Test that we can read the directory
+        std::fs::read_dir(&accounts_dir).map_err(|e| {
+            crate::AccountManagerLoadError::AccountsScanFailed {
+                path: accounts_dir.clone(),
+                source: e,
+            }
+        })?;
 
         Ok(Self { path: fastn_home })
     }
@@ -54,12 +70,24 @@ impl fastn_account::AccountManager {
     /// Returns a tuple of (endpoint_id52, secret_key_bytes, account_path)
     pub async fn get_all_endpoints(
         &self,
-    ) -> eyre::Result<Vec<(String, Vec<u8>, std::path::PathBuf)>> {
+    ) -> Result<Vec<(String, Vec<u8>, std::path::PathBuf)>, crate::GetAllEndpointsError> {
         let accounts_dir = self.path.join("accounts");
         let mut all_endpoints = Vec::new();
 
-        for entry in std::fs::read_dir(&accounts_dir)? {
-            let entry = entry?;
+        let entries = std::fs::read_dir(&accounts_dir).map_err(|e| {
+            crate::GetAllEndpointsError::AccountsScanFailed {
+                path: accounts_dir.clone(),
+                source: e,
+            }
+        })?;
+
+        for entry in entries {
+            let entry = entry.map_err(|e| {
+                crate::GetAllEndpointsError::AccountsScanFailed {
+                    path: accounts_dir.clone(),
+                    source: e,
+                }
+            })?;
             let path = entry.path();
 
             if path.is_dir() {
@@ -79,7 +107,10 @@ impl fastn_account::AccountManager {
                         }
                     }
                     Err(e) => {
-                        tracing::warn!("Failed to load account at {:?}: {}", path, e);
+                        return Err(crate::GetAllEndpointsError::AccountLoadFailed {
+                            path,
+                            source: e,
+                        });
                     }
                 }
             }

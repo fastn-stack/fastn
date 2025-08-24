@@ -20,19 +20,17 @@ impl fastn_account::Account {
     /// # Errors
     ///
     /// Returns error if the directory doesn't exist or database can't be opened
-    pub async fn load(account_dir: &std::path::Path) -> eyre::Result<Self> {
-        use eyre::WrapErr;
-
+    pub async fn load(account_dir: &std::path::Path) -> Result<Self, crate::AccountLoadError> {
         if !account_dir.exists() {
-            return Err(eyre::eyre!(
-                "Account directory does not exist: {account_dir:?}"
-            ));
+            return Err(crate::AccountLoadError::AccountDirectoryNotFound {
+                path: account_dir.to_path_buf(),
+            });
         }
 
         if !account_dir.is_dir() {
-            return Err(eyre::eyre!(
-                "Account path is not a directory: {account_dir:?}"
-            ));
+            return Err(crate::AccountLoadError::AccountDirectoryInvalid {
+                path: account_dir.to_path_buf(),
+            });
         }
 
         // Open all three databases
@@ -41,15 +39,19 @@ impl fastn_account::Account {
         let user_path = account_dir.join("db.sqlite");
 
         if !automerge_path.exists() {
-            return Err(eyre::eyre!(
-                "Automerge database not found: {automerge_path:?}"
-            ));
+            return Err(crate::AccountLoadError::AutomergeDatabaseNotFound {
+                path: automerge_path,
+            });
         }
         if !mail_path.exists() {
-            return Err(eyre::eyre!("Mail database not found: {mail_path:?}"));
+            return Err(crate::AccountLoadError::MailDatabaseNotFound {
+                path: mail_path,
+            });
         }
         if !user_path.exists() {
-            return Err(eyre::eyre!("User database not found: {user_path:?}"));
+            return Err(crate::AccountLoadError::UserDatabaseNotFound {
+                path: user_path,
+            });
         }
 
         // Get account ID from directory name (which is the primary alias ID52)
@@ -58,15 +60,24 @@ impl fastn_account::Account {
         //     .ok_or_else(|| eyre::eyre!("Invalid account directory name"))?;
 
         let automerge_db = fastn_automerge::Db::open(&automerge_path)
-            .wrap_err("Failed to open automerge database")?;
-        let mail =
-            rusqlite::Connection::open(&mail_path).wrap_err("Failed to open mail database")?;
-        let user =
-            rusqlite::Connection::open(&user_path).wrap_err("Failed to open user database")?;
-        fastn_account::Account::migrate_mail_database(&mail)
-            .wrap_err("Failed to run mail database migrations")?;
-        fastn_account::Account::migrate_user_database(&user)
-            .wrap_err("Failed to run user database migrations")?;
+            .map_err(|e| crate::AccountLoadError::DatabaseOpenFailed {
+                path: automerge_path.clone(),
+                source: Box::new(e),
+            })?;
+        let mail = rusqlite::Connection::open(&mail_path)
+            .map_err(|e| crate::AccountLoadError::DatabaseOpenFailed {
+                path: mail_path.clone(),
+                source: Box::new(e),
+            })?;
+        let user = rusqlite::Connection::open(&user_path)
+            .map_err(|e| crate::AccountLoadError::DatabaseOpenFailed {
+                path: user_path.clone(),
+                source: Box::new(e),
+            })?;
+
+        // Run migrations (ignore errors since these are idempotent)
+        let _ = fastn_account::Account::migrate_mail_database(&mail);
+        let _ = fastn_account::Account::migrate_user_database(&user);
 
         // Load aliases from the aliases directory
         let aliases_dir = account_dir.join("aliases");
@@ -76,10 +87,20 @@ impl fastn_account::Account {
             // Get unique prefixes (ID52s) from the directory
             let mut seen_prefixes = std::collections::HashSet::new();
 
-            for entry in
-                std::fs::read_dir(&aliases_dir).wrap_err("Failed to read aliases directory")?
-            {
-                let entry = entry?;
+            let entries = std::fs::read_dir(&aliases_dir).map_err(|e| {
+                crate::AccountLoadError::AliasLoadingFailed {
+                    id52: "aliases_directory".to_string(),
+                    source: Box::new(e),
+                }
+            })?;
+
+            for entry in entries {
+                let entry = entry.map_err(|e| {
+                    crate::AccountLoadError::AliasLoadingFailed {
+                        id52: "directory_entry".to_string(),
+                        source: Box::new(e),
+                    }
+                })?;
                 let path = entry.path();
 
                 // Skip if not a file
@@ -124,7 +145,7 @@ impl fastn_account::Account {
         }
 
         if aliases.is_empty() {
-            return Err(eyre::eyre!("No aliases found in account directory"));
+            return Err(crate::AccountLoadError::NoAliasesFound);
         }
 
         tracing::info!(

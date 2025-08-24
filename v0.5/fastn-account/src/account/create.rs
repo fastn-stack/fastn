@@ -20,8 +20,7 @@ impl fastn_account::Account {
     /// # Errors
     ///
     /// Returns error if directory creation or database initialization fails
-    pub async fn create(parent_dir: &std::path::Path) -> eyre::Result<Self> {
-        use eyre::WrapErr;
+    pub async fn create(parent_dir: &std::path::Path) -> Result<Self, crate::AccountCreateError> {
 
         // Generate primary alias
         let secret_key = fastn_id52::SecretKey::generate();
@@ -31,21 +30,61 @@ impl fastn_account::Account {
         // Account folder is named by primary alias ID52
         let account_path = parent_dir.join(&id52);
 
+        // Check if account already exists
+        if account_path.exists() {
+            return Err(crate::AccountCreateError::AccountAlreadyExists {
+                path: account_path,
+            });
+        }
+
         // Create account directory structure
-        std::fs::create_dir_all(&account_path)
-            .wrap_err_with(|| format!("Failed to create account directory at {account_path:?}"))?;
+        std::fs::create_dir_all(&account_path).map_err(|e| {
+            crate::AccountCreateError::DirectoryCreationFailed {
+                path: account_path.clone(),
+                source: e,
+            }
+        })?;
 
         // Create subdirectories
-        std::fs::create_dir_all(account_path.join("aliases"))
-            .wrap_err("Failed to create aliases directory")?;
-        std::fs::create_dir_all(account_path.join("mails/default/inbox"))
-            .wrap_err("Failed to create mail directories")?;
-        std::fs::create_dir_all(account_path.join("mails/default/sent"))
-            .wrap_err("Failed to create sent directory")?;
-        std::fs::create_dir_all(account_path.join("mails/default/drafts"))
-            .wrap_err("Failed to create drafts directory")?;
-        std::fs::create_dir_all(account_path.join("mails/default/trash"))
-            .wrap_err("Failed to create trash directory")?;
+        let aliases_path = account_path.join("aliases");
+        std::fs::create_dir_all(&aliases_path).map_err(|e| {
+            crate::AccountCreateError::DirectoryCreationFailed {
+                path: aliases_path,
+                source: e,
+            }
+        })?;
+
+        let inbox_path = account_path.join("mails/default/inbox");
+        std::fs::create_dir_all(&inbox_path).map_err(|e| {
+            crate::AccountCreateError::DirectoryCreationFailed {
+                path: inbox_path,
+                source: e,
+            }
+        })?;
+
+        let sent_path = account_path.join("mails/default/sent");
+        std::fs::create_dir_all(&sent_path).map_err(|e| {
+            crate::AccountCreateError::DirectoryCreationFailed {
+                path: sent_path,
+                source: e,
+            }
+        })?;
+
+        let drafts_path = account_path.join("mails/default/drafts");
+        std::fs::create_dir_all(&drafts_path).map_err(|e| {
+            crate::AccountCreateError::DirectoryCreationFailed {
+                path: drafts_path,
+                source: e,
+            }
+        })?;
+
+        let trash_path = account_path.join("mails/default/trash");
+        std::fs::create_dir_all(&trash_path).map_err(|e| {
+            crate::AccountCreateError::DirectoryCreationFailed {
+                path: trash_path,
+                source: e,
+            }
+        })?;
 
         // Store keys based on SKIP_KEYRING environment variable
         let key_path = account_path.join("aliases").join(&id52);
@@ -56,17 +95,28 @@ impl fastn_account::Account {
             // Save private key to file
             tracing::info!("SKIP_KEYRING set, saving private key to file");
             let private_key_file = key_path.with_extension("private-key");
-            std::fs::write(&private_key_file, secret_key.to_string())
-                .wrap_err("Failed to write private key file")?;
+            std::fs::write(&private_key_file, secret_key.to_string()).map_err(|e| {
+                crate::AccountCreateError::FileWriteFailed {
+                    path: private_key_file,
+                    source: e,
+                }
+            })?;
         } else {
             // Save public key to file and store private key in keyring
             let id52_file = key_path.with_extension("id52");
-            std::fs::write(&id52_file, &id52).wrap_err("Failed to write ID52 file")?;
+            std::fs::write(&id52_file, &id52).map_err(|e| {
+                crate::AccountCreateError::FileWriteFailed {
+                    path: id52_file,
+                    source: e,
+                }
+            })?;
 
             // Store in keyring
-            secret_key
-                .store_in_keyring()
-                .wrap_err("Failed to store private key in keyring")?;
+            secret_key.store_in_keyring().map_err(|_| {
+                crate::AccountCreateError::KeyringStorageFailed { 
+                    id52: id52.clone() 
+                }
+            })?;
         }
 
         // Create and initialize three databases
@@ -76,16 +126,30 @@ impl fastn_account::Account {
 
         // Initialize automerge database
         let automerge_db = fastn_automerge::Db::init(&automerge_path, &public_key)
-            .wrap_err("Failed to initialize automerge database")?;
+            .map_err(|e| crate::AccountCreateError::AutomergeInitFailed {
+                source: Box::new(e)
+            })?;
 
-        let mail =
-            rusqlite::Connection::open(&mail_path).wrap_err("Failed to create mail database")?;
-        let user =
-            rusqlite::Connection::open(&user_path).wrap_err("Failed to create user database")?;
+        let mail = rusqlite::Connection::open(&mail_path).map_err(|_| {
+            crate::AccountCreateError::DatabaseConnectionFailed { 
+                path: mail_path.clone() 
+            }
+        })?;
+
+        let user = rusqlite::Connection::open(&user_path).map_err(|_| {
+            crate::AccountCreateError::DatabaseConnectionFailed { 
+                path: user_path.clone() 
+            }
+        })?;
 
         // Run database migrations for mail and user databases
-        Self::migrate_mail_database(&mail).wrap_err("Failed to run mail database migrations")?;
-        Self::migrate_user_database(&user).wrap_err("Failed to run user database migrations")?;
+        Self::migrate_mail_database(&mail).map_err(|e| {
+            crate::AccountCreateError::MailMigrationFailed { source: e }
+        })?;
+
+        Self::migrate_user_database(&user).map_err(|e| {
+            crate::AccountCreateError::UserMigrationFailed { source: e }
+        })?;
 
         // Create primary alias
         let primary_alias = fastn_account::Alias {
@@ -112,8 +176,7 @@ impl fastn_account::Account {
     }
 
     /// Run migrations for mail database
-    pub(crate) fn migrate_mail_database(conn: &rusqlite::Connection) -> eyre::Result<()> {
-        use eyre::WrapErr;
+    pub(crate) fn migrate_mail_database(conn: &rusqlite::Connection) -> Result<(), crate::MigrateMailDatabaseError> {
 
         conn.execute_batch(
             r#"
@@ -158,7 +221,7 @@ impl fastn_account::Account {
             CREATE INDEX IF NOT EXISTS idx_our_alias ON fastn_email_peers(our_alias_used);
             "#,
         )
-        .wrap_err("Failed to initialize mail database schema")?;
+        .map_err(|e| crate::MigrateMailDatabaseError::SchemaInitializationFailed { source: e })?;
 
         Ok(())
     }
@@ -169,12 +232,16 @@ impl fastn_account::Account {
         public_key: &fastn_id52::PublicKey,
         name: Option<String>,
         bio: Option<String>,
-    ) -> eyre::Result<()> {
+    ) -> Result<(), crate::CreateInitialDocumentsError> {
         let id52 = public_key.id52();
         
         // 1. Create /-/mails/default document with password and service flags
         let password = crate::auth::generate_password();
-        let password_hash = crate::auth::hash_password(&password)?;
+        let password_hash = crate::auth::hash_password(&password).map_err(|e| {
+            crate::CreateInitialDocumentsError::AccountConfigCreationFailed {
+                source: Box::new(e),
+            }
+        })?;
 
         // Print password to stdout (one-time display)
         println!("==================================================");
@@ -195,7 +262,11 @@ impl fastn_account::Account {
                 .unwrap()
                 .as_secs() as i64,
         };
-        default_mail.save(db)?;
+        default_mail.save(db).map_err(|e| {
+            crate::CreateInitialDocumentsError::AccountConfigCreationFailed {
+                source: Box::new(e),
+            }
+        })?;
 
         // 2. Create /-/aliases/{id52}/readme document (public info)
         let alias_readme = crate::automerge::AliasReadme {
@@ -203,7 +274,11 @@ impl fastn_account::Account {
             name,
             bio,
         };
-        alias_readme.save(db)?;
+        alias_readme.save(db).map_err(|e| {
+            crate::CreateInitialDocumentsError::AliasDocumentCreationFailed {
+                source: Box::new(e),
+            }
+        })?;
 
         // 3. Create /-/aliases/{id52}/notes document (private notes)
         // For our own account, we don't need notes initially
@@ -216,15 +291,17 @@ impl fastn_account::Account {
                 .unwrap()
                 .as_secs() as i64,
         };
-        alias_notes.save(db)?;
+        alias_notes.save(db).map_err(|e| {
+            crate::CreateInitialDocumentsError::AliasDocumentCreationFailed {
+                source: Box::new(e),
+            }
+        })?;
 
         Ok(())
     }
 
     /// Run migrations for user database
-    pub(crate) fn migrate_user_database(conn: &rusqlite::Connection) -> eyre::Result<()> {
-        use eyre::WrapErr;
-
+    pub(crate) fn migrate_user_database(conn: &rusqlite::Connection) -> Result<(), crate::MigrateUserDatabaseError> {
         // User database starts empty - user can create their own tables
         // We might add fastn_ prefixed system tables here in the future
         conn.execute_batch(
@@ -234,7 +311,7 @@ impl fastn_account::Account {
             PRAGMA journal_mode = WAL;
             "#,
         )
-        .wrap_err("Failed to initialize user database")?;
+        .map_err(|e| crate::MigrateUserDatabaseError::SchemaInitializationFailed { source: e })?;
 
         Ok(())
     }

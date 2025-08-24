@@ -42,6 +42,21 @@ mod account_manager;
 mod alias;
 pub mod auth;
 pub mod automerge;
+pub mod errors;
+
+// Re-export specific error types
+pub use errors::{
+    HashPasswordError,
+    VerifyPasswordError,
+    AccountCreateError,
+    AccountLoadError,
+    AccountManagerCreateError,
+    AccountManagerLoadError,
+    GetAllEndpointsError,
+    MigrateMailDatabaseError,
+    MigrateUserDatabaseError,
+    CreateInitialDocumentsError,
+};
 
 /// Thread-safe handle to an account
 #[derive(Debug, Clone)]
