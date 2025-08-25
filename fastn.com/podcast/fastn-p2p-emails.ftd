@@ -23,7 +23,7 @@ v: 6wLnKJ5fBZk
 
 -- ds.h2: The Core Idea: fastn Mail
 
-**Amitu**: I had this idea that we can record for the future. In fastn-net, we
+**amitu**: I had this idea that we can record for the future. In fastn-net, we
 can add a new command called "fastn mail." The concept is making existing email
 clients work with fastn-net, including Gmail, Outlook, and anything that
 supports POP, IMAP, and SMTP.
@@ -85,7 +85,7 @@ infrastructure entirely.
 **Siddhant**: How do you integrate this into third-party clients that already
 use SMTP and POP?
 
-**Amitu**: When you set up any email client, it asks for your POP/IMAP server
+**amitu**: When you set up any email client, it asks for your POP/IMAP server
 for incoming mail and SMTP server for outgoing mail. These are standard
 protocols every email client supports.
 
@@ -185,7 +185,7 @@ for the decentralized web.
 opportunity. I can work on fastn mail while you continue with Pista, and
 document the development process through blog posts and videos.
 
-**Amitu**: Exactly. Let's build fastn mail in public. We can release this
+**amitu**: Exactly. Let's build fastn mail in public. We can release this
 conversation as our next podcast episode, then create a series documenting the
 development process. Every coding session, every design decision - let's record
 it all.

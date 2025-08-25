@@ -22,12 +22,12 @@ v: H9d1Dn8Jn0I
 
 -- ds.h2: Introduction
 
-**Siddhant**: Hello everyone, I am Siddhant and I have Amitu with me. Today we
+**Siddhant**: Hello everyone, I am Siddhant and I have amitu with me. Today we
 are going to talk about the new fastn architecture that we have been working on
 recently and we are also going to talk about fastn mail, which is the P2P email
-service that we have been trying to architect recently. Amitu, you can start.
+service that we have been trying to architect recently. amitu, you can start.
 
-**Amitu**: In our previous discussion, we had higher-level philosophical ideas
+**amitu**: In our previous discussion, we had higher-level philosophical ideas
 about fastn as a language, company, and open source project. Today we're going
 to talk about something newish that we're going to start working on - it's a
 very interesting time for us to build in public.
