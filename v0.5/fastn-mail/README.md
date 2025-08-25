@@ -65,7 +65,7 @@ CREATE TABLE fastn_emails
 
     -- Threading Support (RFC 5322)
     in_reply_to      TEXT,                    -- In-Reply-To header
-    references       TEXT,                    -- References header (space-separated)
+    email_references TEXT,                    -- References header (space-separated)
 
     -- Timestamps
     date_sent        INTEGER,                 -- Date header (unix timestamp)
@@ -93,7 +93,7 @@ CREATE INDEX idx_folder ON fastn_emails (folder);
 CREATE INDEX idx_date_received ON fastn_emails (date_received DESC);
 CREATE INDEX idx_date_sent ON fastn_emails (date_sent DESC);
 CREATE INDEX idx_message_id ON fastn_emails (message_id);
-CREATE INDEX idx_thread ON fastn_emails (in_reply_to, references);
+CREATE INDEX idx_thread ON fastn_emails (in_reply_to, email_references);
 CREATE INDEX idx_from ON fastn_emails (from_addr);
 CREATE INDEX idx_subject ON fastn_emails (subject);
 

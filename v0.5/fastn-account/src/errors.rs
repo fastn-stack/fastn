@@ -49,7 +49,7 @@ pub enum AccountCreateError {
     #[error("Mail creation failed")]
     MailCreationFailed {
         #[source]
-        source: fastn_mail::MailCreateError,
+        source: fastn_mail::StoreCreateError,
     },
 
     #[error("User database migration failed")]
@@ -159,7 +159,7 @@ pub enum GetAllEndpointsError {
 }
 
 // Re-export mail error types from fastn-mail
-pub use fastn_mail::MigrateMailDatabaseError;
+pub use fastn_mail::StoreCreateError;
 
 /// Error type for migrate_user_database function
 #[derive(Error, Debug)]

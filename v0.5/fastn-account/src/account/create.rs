@@ -98,7 +98,7 @@ impl fastn_account::Account {
             })?;
 
         // Create mail system
-        let mail = fastn_mail::Mail::create(&account_path)
+        let mail = fastn_mail::Store::create(&account_path)
             .await
             .map_err(|e| fastn_account::AccountCreateError::MailCreationFailed { source: e })?;
 

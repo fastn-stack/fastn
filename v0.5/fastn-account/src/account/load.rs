@@ -64,7 +64,7 @@ impl fastn_account::Account {
             }
         })?;
         // Load mail system
-        let mail = fastn_mail::Mail::load(account_dir).await.map_err(|e| {
+        let mail = fastn_mail::Store::load(account_dir).await.map_err(|e| {
             fastn_account::AccountLoadError::DatabaseOpenFailed {
                 path: mail_path.clone(),
                 source: Box::new(e),

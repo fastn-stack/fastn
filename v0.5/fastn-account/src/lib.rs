@@ -48,7 +48,7 @@ pub mod errors;
 // Re-export specific error types
 pub use errors::{
     AccountCreateError, AccountLoadError, AccountManagerCreateError, AccountManagerLoadError,
-    CreateInitialDocumentsError, GetAllEndpointsError, HashPasswordError, MigrateMailDatabaseError,
+    CreateInitialDocumentsError, GetAllEndpointsError, HashPasswordError, StoreCreateError,
     MigrateUserDatabaseError, VerifyPasswordError,
 };
 
@@ -67,7 +67,7 @@ pub struct Account {
 
     /// Mail handling system
     #[expect(unused)]
-    pub(crate) mail: fastn_mail::Mail,
+    pub(crate) mail: fastn_mail::Store,
 
     /// Database connection for user space data
     #[expect(unused)]
