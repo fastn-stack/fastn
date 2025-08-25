@@ -158,6 +158,25 @@ pub enum GetAllEndpointsError {
     },
 }
 
+/// Error type for AccountManager::handle_account_message function
+#[derive(Error, Debug)]
+pub enum HandleAccountMessageError {
+    #[error("Account not found for endpoint: {endpoint_id52}")]
+    AccountNotFound { endpoint_id52: fastn_id52::PublicKey },
+
+    #[error("Failed to store email message")]
+    EmailStorageFailed {
+        #[source]
+        source: Box<dyn std::error::Error + Send + Sync>,
+    },
+
+    #[error("Invalid message format")]
+    InvalidMessage { reason: String },
+
+    #[error("Permission denied for peer: {peer_id52}")]
+    PermissionDenied { peer_id52: String },
+}
+
 // Re-export mail error types from fastn-mail
 pub use fastn_mail::StoreCreateError;
 

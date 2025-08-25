@@ -101,7 +101,11 @@ impl Store {
         // TODO: Insert parsed data into fastn_emails table
         // TODO: If external recipient, insert into fastn_email_delivery table
         
-        todo!("Implement SMTP message parsing and storage")
+        // For now, return a proper error indicating this is not yet implemented
+        // This prevents catastrophic panics while indicating the feature is incomplete
+        Err(SmtpReceiveError::MessageParsingFailed {
+            message: "SMTP message parsing and storage not yet implemented".to_string(),
+        })
     }
 
     // === P2P Delivery Queue Management ===

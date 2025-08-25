@@ -128,4 +128,31 @@ impl fastn_account::AccountManager {
 
         Ok(all_endpoints)
     }
+
+    /// Handle an incoming P2P message from another account
+    pub async fn handle_account_message(
+        &self,
+        peer_id52: &fastn_id52::PublicKey,
+        our_endpoint_id52: &fastn_id52::PublicKey,
+        message: crate::AccountToAccountMessage,
+    ) -> Result<(), crate::HandleAccountMessageError> {
+        // TODO: Implement account message handling
+        // 1. Find which account owns our_endpoint_id52
+        // 2. Process the message based on type (Email, etc.)
+        // 3. Store in appropriate mailbox using account.mail.smtp_receive()
+        // 4. Update peer tracking information
+        
+        println!(
+            "📨 Handling account message from {} to {} (message size: {} bytes)",
+            peer_id52.id52(),
+            our_endpoint_id52.id52(),
+            message.size()
+        );
+        
+        // For now, return a proper error indicating this is not yet implemented
+        // This prevents catastrophic panics while indicating the feature is incomplete
+        Err(crate::HandleAccountMessageError::InvalidMessage {
+            reason: "Account message handling not yet implemented".to_string(),
+        })
+    }
 }

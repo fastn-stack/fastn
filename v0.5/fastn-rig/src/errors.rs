@@ -195,6 +195,21 @@ pub enum RunError {
 /// Error type for message processing functions
 #[derive(Error, Debug)]
 pub enum MessageProcessingError {
+    #[error("Failed to deserialize P2P message")]
+    MessageDeserializationFailed {
+        #[source]
+        source: serde_json::Error,
+    },
+
+    #[error("Invalid endpoint ID52: {endpoint_id52}")]
+    InvalidEndpointId52 { endpoint_id52: String },
+
+    #[error("Failed to handle account message")]
+    AccountMessageHandlingFailed {
+        #[source]
+        source: fastn_account::HandleAccountMessageError,
+    },
+
     #[error("Message processing not implemented for endpoint: {endpoint_id52}")]
     NotImplemented { endpoint_id52: String },
 }

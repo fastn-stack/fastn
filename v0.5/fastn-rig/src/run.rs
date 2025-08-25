@@ -213,18 +213,28 @@ async fn process_account_message(
     endpoint_id52: &str,
     message: Vec<u8>,
 ) -> Result<(), fastn_rig::MessageProcessingError> {
-    // TODO: Find which account owns this endpoint and process the email
     println!(
         "📨 Account message on {}: {} bytes",
         endpoint_id52,
         message.len()
     );
 
-    // In the future:
-    // 1. Find which account owns this endpoint
-    // 2. Call account.process_email(endpoint_id52, message)
+    // Parse the P2P message
+    let _p2p_message = serde_json::from_slice::<fastn_account::AccountToAccountMessage>(&message)
+        .map_err(|e| fastn_rig::MessageProcessingError::MessageDeserializationFailed { source: e })?;
 
-    Ok(())
+    // Parse endpoint ID52 string to PublicKey
+    let _our_endpoint_id52: fastn_id52::PublicKey = endpoint_id52.parse()
+        .map_err(|_| fastn_rig::MessageProcessingError::InvalidEndpointId52 {
+            endpoint_id52: endpoint_id52.to_string(),
+        })?;
+
+    // TODO: Get actual peer ID52 from P2P connection context
+    // Current limitation: message channel doesn't include peer information
+    // For now, return error indicating missing peer context
+    Err(fastn_rig::MessageProcessingError::NotImplemented {
+        endpoint_id52: "Peer ID52 extraction from P2P connection not yet implemented".to_string(),
+    })
 }
 
 /// Process a message received on a device endpoint

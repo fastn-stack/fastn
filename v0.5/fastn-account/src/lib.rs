@@ -44,13 +44,17 @@ mod alias;
 pub mod auth;
 pub mod automerge;
 pub mod errors;
+pub mod p2p;
 
 // Re-export specific error types
 pub use errors::{
     AccountCreateError, AccountLoadError, AccountManagerCreateError, AccountManagerLoadError,
-    CreateInitialDocumentsError, GetAllEndpointsError, HashPasswordError, StoreCreateError,
-    MigrateUserDatabaseError, VerifyPasswordError,
+    CreateInitialDocumentsError, GetAllEndpointsError, HandleAccountMessageError, HashPasswordError, 
+    MigrateUserDatabaseError, StoreCreateError, VerifyPasswordError,
 };
+
+// Re-export message types
+pub use p2p::AccountToAccountMessage;
 
 /// Thread-safe handle to an account
 #[derive(Debug, Clone)]
