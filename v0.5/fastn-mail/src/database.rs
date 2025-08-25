@@ -57,7 +57,6 @@ pub fn migrate_database(conn: &rusqlite::Connection) -> Result<(), MigrateMailDa
         CREATE TABLE IF NOT EXISTS fastn_email_peers (
             peer_alias        TEXT PRIMARY KEY,
             last_seen         INTEGER,
-            endpoint          BLOB,
             our_alias_used    TEXT NOT NULL
         );
 

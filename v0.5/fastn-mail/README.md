@@ -51,11 +51,16 @@ CREATE TABLE fastn_emails
 
     -- RFC 5322 Headers (extracted for IMAP indexing)
     message_id       TEXT UNIQUE,             -- Message-ID header
-    from_addr        TEXT    NOT NULL,        -- From header
+    from_addr        TEXT    NOT NULL,        -- From header (full email address)
     to_addr          TEXT    NOT NULL,        -- To header (comma-separated)
     cc_addr          TEXT,                    -- CC header (comma-separated)
     bcc_addr         TEXT,                    -- BCC header (comma-separated)
     subject          TEXT,                    -- Subject header
+    
+    -- P2P Routing Information (extracted from email addresses)
+    our_alias_used   TEXT,                    -- Which of our aliases was used in this email
+    their_alias      TEXT,                    -- Other party's alias (sender if inbound, recipient if outbound)
+    their_username   TEXT,                    -- Other party's username (extracted from email address)
 
     -- Threading Support (RFC 5322)
     in_reply_to      TEXT,                    -- In-Reply-To header
@@ -91,11 +96,15 @@ CREATE INDEX idx_thread ON fastn_emails (in_reply_to, references);
 CREATE INDEX idx_from ON fastn_emails (from_addr);
 CREATE INDEX idx_subject ON fastn_emails (subject);
 
+-- Indexes for P2P routing and delivery
+CREATE INDEX idx_our_alias ON fastn_emails (our_alias_used);
+CREATE INDEX idx_their_alias ON fastn_emails (their_alias);
+CREATE INDEX idx_alias_pair ON fastn_emails (our_alias_used, their_alias);
+
 CREATE TABLE fastn_email_peers
 (
     peer_alias     TEXT PRIMARY KEY, -- Peer's alias ID52
     last_seen      INTEGER,          -- Last interaction timestamp
-    endpoint       BLOB,             -- P2P endpoint information
     our_alias_used TEXT NOT NULL     -- Which of our aliases they know
 );
 ```
@@ -110,12 +119,8 @@ Main object for mail operations following create/load pattern:
 
 ```rust
 pub struct Mail {
-    pub fn create(account_path: &Path) -> Result< Self,
-    MailCreateError>;
-    pub fn load(account_path: &Path) -> Result< Self,
-    MailLoadError>;
-    pub fn db_path( & self ) -> & Path;
-    pub fn connection( & self ) -> & Arc<Mutex<Connection> >;
+    pub fn create(account_path: &Path) -> Result<Self, MailCreateError>;
+    pub fn load(account_path: &Path) -> Result<Self, MailLoadError>;
     pub fn create_test() -> Self; // For testing
 }
 ```
@@ -132,65 +137,66 @@ pub struct DefaultMail {
 }
 ```
 
-### **Database Functions**
-
-```rust
-// Database operations
-pub fn create_connection(mail_path: &Path) -> Result<Connection, MailDatabaseConnectionError>;
-pub fn database_exists(mail_path: &Path) -> bool;
-pub fn migrate_database(conn: &Connection) -> Result<(), MigrateMailDatabaseError>;
-
-// Directory management
-pub fn create_mail_directories(account_path: &Path) -> Result<(), std::io::Error>;
-```
-
 ### **Error Types**
 
 - `MailCreateError` - Mail::create() failures
 - `MailLoadError` - Mail::load() failures
-- `MigrateMailDatabaseError` - Database migration failures
-- `MailDatabaseConnectionError` - Connection failures
 
-## SMTP/IMAP Integration (Future)
+## Public API Methods
 
-### **SMTP Operations** (Planned)
+### **A. P2P Mail Delivery**
 
 ```rust
 impl Mail {
-    // Incoming SMTP delivery (from external SMTP or P2P)
-    pub async fn smtp_deliver(&self, raw_message: Vec<u8>, folder: &str) -> Result<String, MailError>;
-
-    // Outgoing SMTP (queue for P2P delivery)
-    pub async fn smtp_send(&self, raw_message: Vec<u8>) -> Result<String, MailError>;
-
-    // Parse email addresses to extract ID52s
-    pub fn parse_address(&self, address: &str) -> Option<(String, String)>; // (username, id52)
-    pub fn extract_recipient_id52s(&self, raw_message: &[u8]) -> Result<Vec<String>, MailError>;
+    // Periodic task - check what needs to be delivered
+    pub async fn get_pending_deliveries(&self) -> Result<Vec<PendingDelivery>, MailError>;
+    
+    // Peer inbound - when peer contacts us for their emails
+    pub async fn get_emails_for_peer(&self, peer_id52: &fastn_id52::PublicKey) -> Result<Vec<EmailForDelivery>, MailError>;
+    
+    // Mark email as successfully delivered to peer
+    pub async fn mark_delivered_to_peer(&self, email_id: &str, peer_id52: &fastn_id52::PublicKey) -> Result<(), MailError>;
 }
 ```
 
-### **P2P Delivery Queue Management**
+### **B. SMTP Operations**
 
 ```rust
 impl Mail {
-    // Called by periodic task to check outbound queue
-    pub async fn get_pending_deliveries(&self) -> Result<Vec<PendingDelivery>, MailError>;
-
-    // Called when peer contacts us requesting their emails
-    pub async fn get_emails_for_peer(&self, peer_id52: &str) -> Result<Vec<EmailForDelivery>, MailError>;
-
-    // Mark email as delivered to peer
-    pub async fn mark_delivered_to_peer(&self, email_id: &str, peer_id52: &str) -> Result<(), MailError>;
-
-    // Queue outgoing email for P2P delivery
-    pub async fn queue_for_delivery(&self, raw_message: Vec<u8>) -> Result<(), MailError>;
+    // Incoming SMTP delivery (store email from SMTP server or P2P)
+    pub async fn smtp_deliver(&self, raw_message: Vec<u8>, folder: &str) -> Result<String, MailError>;
+    
+    // Outgoing SMTP (queue email for P2P delivery to other FASTN nodes)
+    pub async fn smtp_send(&self, raw_message: Vec<u8>) -> Result<String, MailError>;
 }
+```
 
-// Supporting types
+### **C. IMAP Operations**
+
+```rust
+impl Mail {
+    // Folder management
+    pub async fn imap_list_folders(&self) -> Result<Vec<String>, MailError>;
+    pub async fn imap_select_folder(&self, folder: &str) -> Result<FolderInfo, MailError>;
+    
+    // Message operations
+    pub async fn imap_fetch(&self, folder: &str, uid: u32) -> Result<Vec<u8>, MailError>;
+    pub async fn imap_search(&self, folder: &str, criteria: &str) -> Result<Vec<u32>, MailError>;
+    pub async fn imap_store_flags(&self, folder: &str, uid: u32, flags: &[String]) -> Result<(), MailError>;
+    pub async fn imap_expunge(&self, folder: &str) -> Result<Vec<u32>, MailError>;
+    
+    // Threading
+    pub async fn imap_thread(&self, folder: &str, algorithm: &str) -> Result<ThreadTree, MailError>;
+}
+```
+
+### **Supporting Types**
+
+```rust
 pub struct PendingDelivery {
-    pub peer_id52: String,           // Which peer needs emails
-    pub email_count: usize,          // How many emails pending
-    pub oldest_email_date: i64,      // When oldest email was queued
+    pub peer_id52: fastn_id52::PublicKey,  // Which peer needs emails
+    pub email_count: usize,                // How many emails pending
+    pub oldest_email_date: i64,            // When oldest email was queued
 }
 
 pub struct EmailForDelivery {
@@ -198,23 +204,6 @@ pub struct EmailForDelivery {
     pub raw_message: Vec<u8>,        // Complete RFC 5322 message
     pub size_bytes: usize,           // Message size
     pub date_queued: i64,            // When queued for delivery
-}
-```
-
-### **IMAP Operations** (Planned)
-
-```rust
-impl Mail {
-    // Core IMAP operations
-    pub async fn imap_list_folders(&self) -> Result<Vec<String>, MailError>;
-    pub async fn imap_select_folder(&self, folder: &str) -> Result<FolderInfo, MailError>;
-    pub async fn imap_fetch(&self, folder: &str, uid: u32) -> Result<Vec<u8>, MailError>;
-    pub async fn imap_search(&self, folder: &str, criteria: &str) -> Result<Vec<u32>, MailError>;
-    pub async fn imap_store_flags(&self, folder: &str, uid: u32, flags: &[String]) -> Result<(), MailError>;
-    pub async fn imap_expunge(&self, folder: &str) -> Result<Vec<u32>, MailError>;
-
-    // Threading support
-    pub async fn imap_thread(&self, folder: &str, algorithm: &str) -> Result<ThreadTree, MailError>;
 }
 ```
 
@@ -257,13 +246,30 @@ pub enum AccountToAccountMessage {
 6. **Local Delivery**: Peer stores in local INBOX using `smtp_deliver()`
 7. **IMAP Access**: User's email client accesses via IMAP server
 
-### **Address Format**
+### **Address Format and Alias Mapping**
 
 - **Format**: `username@id52` (e.g., `alice@abc123def456ghi789`)
 - **ID52**: 64-character base32 public key identifier
 - **Username**: Human-readable local part (can be any valid email local part)
-- **Parsing**: Extract ID52 for P2P routing, preserve full address for RFC 5322
-  headers
+
+#### **Alias Mapping Logic**
+For each email, we extract and store alias relationships:
+
+**Inbound Email** (received in INBOX):
+- `our_alias_used` = our alias that received this email (from To/CC/BCC headers)
+- `their_alias` = sender's alias (extracted from From header)
+- `their_username` = sender's username part
+
+**Outbound Email** (stored in Sent):
+- `our_alias_used` = our alias that sent this email (from From header)
+- `their_alias` = recipient's alias (extracted from To header, primary recipient)
+- `their_username` = recipient's username part
+
+This allows us to:
+- **Route P2P delivery**: Use `their_alias` to find the recipient's FASTN node
+- **Track conversations**: Pair `(our_alias_used, their_alias)` represents a conversation
+- **Reconstruct addresses**: Combine `their_username@their_alias` for IMAP clients
+- **Handle multi-alias accounts**: Know which persona was used in each conversation
 
 ### **Delivery Status Tracking**
 
