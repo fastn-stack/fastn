@@ -1,60 +1,314 @@
 # fastn-mail
 
-Email handling and storage for FASTN accounts.
+Complete email handling and storage system for FASTN accounts with full
+SMTP/IMAP compatibility.
 
-## Features
+## Overview
 
-- **Mail Database**: SQLite schema for email storage and indexing
-- **Automerge Documents**: Mail configuration documents (DefaultMail)
-- **Directory Management**: Creates proper mail folder structure
-- **Database Migrations**: Handles mail database schema setup
+The fastn-mail crate provides a **hybrid storage system** that combines the best
+of database indexing and file-based storage to support real-world email clients.
+This design ensures full RFC 5322 compliance while enabling fast IMAP
+operations.
 
-## Usage
+## Storage Architecture
+
+### **Hybrid Storage Design**
+
+- **Database (mail.sqlite)**: Headers and envelope information for fast IMAP
+  operations (search, threading, flags)
+- **Files (mails/folder/)**: Complete raw RFC 5322 message content for full
+  compatibility
+- **Best of both worlds**: Fast indexing + perfect SMTP/IMAP client support
+
+### **Directory Structure**
+
+```
+account/{primary-id52}/
+  mail.sqlite                    # Headers and indexing database
+  mails/
+    default/                     # Default mail identity
+      INBOX/
+        20250825_001234_msg1.eml # Raw RFC 5322 message files
+        20250825_001235_msg2.eml
+      Sent/
+        20250825_001240_msg3.eml
+      Drafts/
+        draft_20250825_001245.eml
+      Trash/
+        deleted_20250825_001250.eml
+      Custom_Folder/             # User-created folders
+        ...
+```
+
+### **Database Schema**
+
+```sql
+CREATE TABLE fastn_emails
+(
+    email_id         TEXT PRIMARY KEY,        -- Unique ID for this email
+    folder           TEXT    NOT NULL,        -- inbox, sent, drafts, trash
+    file_path        TEXT    NOT NULL UNIQUE, -- Relative path to .eml file
+
+    -- RFC 5322 Headers (extracted for IMAP indexing)
+    message_id       TEXT UNIQUE,             -- Message-ID header
+    from_addr        TEXT    NOT NULL,        -- From header
+    to_addr          TEXT    NOT NULL,        -- To header (comma-separated)
+    cc_addr          TEXT,                    -- CC header (comma-separated)
+    bcc_addr         TEXT,                    -- BCC header (comma-separated)
+    subject          TEXT,                    -- Subject header
+
+    -- Threading Support (RFC 5322)
+    in_reply_to      TEXT,                    -- In-Reply-To header
+    references       TEXT,                    -- References header (space-separated)
+
+    -- Timestamps
+    date_sent        INTEGER,                 -- Date header (unix timestamp)
+    date_received    INTEGER NOT NULL,        -- When we received it
+
+    -- MIME Information
+    content_type     TEXT,                    -- Content-Type header
+    content_encoding TEXT,                    -- Content-Transfer-Encoding
+    has_attachments  BOOLEAN DEFAULT 0,       -- Multipart/mixed detection
+
+    -- File Metadata
+    size_bytes       INTEGER NOT NULL,        -- Complete message size
+
+    -- IMAP Flags
+    is_seen          BOOLEAN DEFAULT 0,       -- \Seen flag
+    is_flagged       BOOLEAN DEFAULT 0,       -- \Flagged flag
+    is_draft         BOOLEAN DEFAULT 0,       -- \Draft flag
+    is_answered      BOOLEAN DEFAULT 0,       -- \Answered flag
+    is_deleted       BOOLEAN DEFAULT 0,       -- \Deleted flag
+    custom_flags     TEXT                     -- JSON array of custom IMAP flags
+);
+
+-- Indexes for fast IMAP operations
+CREATE INDEX idx_folder ON fastn_emails (folder);
+CREATE INDEX idx_date_received ON fastn_emails (date_received DESC);
+CREATE INDEX idx_date_sent ON fastn_emails (date_sent DESC);
+CREATE INDEX idx_message_id ON fastn_emails (message_id);
+CREATE INDEX idx_thread ON fastn_emails (in_reply_to, references);
+CREATE INDEX idx_from ON fastn_emails (from_addr);
+CREATE INDEX idx_subject ON fastn_emails (subject);
+
+CREATE TABLE fastn_email_peers
+(
+    peer_alias     TEXT PRIMARY KEY, -- Peer's alias ID52
+    last_seen      INTEGER,          -- Last interaction timestamp
+    endpoint       BLOB,             -- P2P endpoint information
+    our_alias_used TEXT NOT NULL     -- Which of our aliases they know
+);
+```
+
+## Public API
+
+### **Core Types**
+
+#### `Mail` struct
+
+Main object for mail operations following create/load pattern:
 
 ```rust
-use fastn_mail;
-
-// Create mail directory structure
-fastn_mail::create_mail_directories(&account_path)?;
-
-// Create mail database connection
-let mail_conn = fastn_mail::create_connection(&mail_db_path)?;
-
-// Run database migrations
-fastn_mail::migrate_database(&mail_conn)?;
-
-// Check if database exists
-if fastn_mail::database_exists(&mail_db_path) {
-    // Database already exists
+pub struct Mail {
+    pub fn create(account_path: &Path) -> Result< Self,
+    MailCreateError>;
+    pub fn load(account_path: &Path) -> Result< Self,
+    MailLoadError>;
+    pub fn db_path( & self ) -> & Path;
+    pub fn connection( & self ) -> & Arc<Mutex<Connection> >;
+    pub fn create_test() -> Self; // For testing
 }
 ```
 
-## Database Schema
+#### `DefaultMail` (Automerge Document)
 
-### fastn_emails Table
-- Email storage with full metadata (subject, body preview, attachments, etc.)
-- Folder organization (inbox, sent, drafts, trash)
-- Full-text search indexes on key fields
+Mail configuration stored in automerge:
 
-### fastn_email_peers Table  
-- P2P email peer tracking
-- Endpoint information for email routing
-- Alias-based peer relationships
-
-## Directory Structure
-
-```
-account/
-  mails/
-    default/
-      inbox/     # Incoming emails
-      sent/      # Sent emails  
-      drafts/    # Draft emails
-      trash/     # Deleted emails
+```rust
+pub struct DefaultMail {
+    pub password_hash: String,    // SMTP/IMAP authentication
+    pub is_active: bool,         // Whether mail service is enabled
+    pub created_at: i64,         // Creation timestamp
+}
 ```
 
-## Integration
+### **Database Functions**
 
-- `fastn-automerge`: Mail configuration documents
-- `fastn-id52`: Email peer identification
-- `rusqlite`: Email storage and querying
+```rust
+// Database operations
+pub fn create_connection(mail_path: &Path) -> Result<Connection, MailDatabaseConnectionError>;
+pub fn database_exists(mail_path: &Path) -> bool;
+pub fn migrate_database(conn: &Connection) -> Result<(), MigrateMailDatabaseError>;
+
+// Directory management
+pub fn create_mail_directories(account_path: &Path) -> Result<(), std::io::Error>;
+```
+
+### **Error Types**
+
+- `MailCreateError` - Mail::create() failures
+- `MailLoadError` - Mail::load() failures
+- `MigrateMailDatabaseError` - Database migration failures
+- `MailDatabaseConnectionError` - Connection failures
+
+## SMTP/IMAP Integration (Future)
+
+### **SMTP Operations** (Planned)
+
+```rust
+impl Mail {
+    // Incoming SMTP delivery (from external SMTP or P2P)
+    pub async fn smtp_deliver(&self, raw_message: Vec<u8>, folder: &str) -> Result<String, MailError>;
+
+    // Outgoing SMTP (queue for P2P delivery)
+    pub async fn smtp_send(&self, raw_message: Vec<u8>) -> Result<String, MailError>;
+
+    // Parse email addresses to extract ID52s
+    pub fn parse_address(&self, address: &str) -> Option<(String, String)>; // (username, id52)
+    pub fn extract_recipient_id52s(&self, raw_message: &[u8]) -> Result<Vec<String>, MailError>;
+}
+```
+
+### **P2P Delivery Queue Management**
+
+```rust
+impl Mail {
+    // Called by periodic task to check outbound queue
+    pub async fn get_pending_deliveries(&self) -> Result<Vec<PendingDelivery>, MailError>;
+
+    // Called when peer contacts us requesting their emails
+    pub async fn get_emails_for_peer(&self, peer_id52: &str) -> Result<Vec<EmailForDelivery>, MailError>;
+
+    // Mark email as delivered to peer
+    pub async fn mark_delivered_to_peer(&self, email_id: &str, peer_id52: &str) -> Result<(), MailError>;
+
+    // Queue outgoing email for P2P delivery
+    pub async fn queue_for_delivery(&self, raw_message: Vec<u8>) -> Result<(), MailError>;
+}
+
+// Supporting types
+pub struct PendingDelivery {
+    pub peer_id52: String,           // Which peer needs emails
+    pub email_count: usize,          // How many emails pending
+    pub oldest_email_date: i64,      // When oldest email was queued
+}
+
+pub struct EmailForDelivery {
+    pub email_id: String,            // Internal email ID
+    pub raw_message: Vec<u8>,        // Complete RFC 5322 message
+    pub size_bytes: usize,           // Message size
+    pub date_queued: i64,            // When queued for delivery
+}
+```
+
+### **IMAP Operations** (Planned)
+
+```rust
+impl Mail {
+    // Core IMAP operations
+    pub async fn imap_list_folders(&self) -> Result<Vec<String>, MailError>;
+    pub async fn imap_select_folder(&self, folder: &str) -> Result<FolderInfo, MailError>;
+    pub async fn imap_fetch(&self, folder: &str, uid: u32) -> Result<Vec<u8>, MailError>;
+    pub async fn imap_search(&self, folder: &str, criteria: &str) -> Result<Vec<u32>, MailError>;
+    pub async fn imap_store_flags(&self, folder: &str, uid: u32, flags: &[String]) -> Result<(), MailError>;
+    pub async fn imap_expunge(&self, folder: &str) -> Result<Vec<u32>, MailError>;
+
+    // Threading support
+    pub async fn imap_thread(&self, folder: &str, algorithm: &str) -> Result<ThreadTree, MailError>;
+}
+```
+
+## P2P Message Format
+
+For peer-to-peer email delivery between FASTN accounts:
+
+```rust
+// In fastn-account crate
+pub enum AccountToAccountMessage {
+    Email {
+        /// Complete RFC 5322 message as bytes
+        /// Contains all headers, body, attachments, MIME encoding
+        raw_message: Vec<u8>,
+    }
+}
+```
+
+## Email Delivery Workflow
+
+### **Outbound Email Flow**
+
+1. **SMTP Submission**: User's email client sends email via SMTP to FASTN
+2. **Address Parsing**: Extract ID52s from recipients (username@id52 format)
+3. **Queue for Delivery**: Store in outbound queue with delivery status
+4. **Periodic Delivery Task**: Every minute, check `get_pending_deliveries()`
+5. **P2P Connection**: Connect to recipient's FASTN node using ID52
+6. **Message Transfer**: Send `AccountToAccountMessage::Email` with raw RFC 5322
+   bytes
+7. **Delivery Confirmation**: Mark as delivered using `mark_delivered_to_peer()`
+
+### **Inbound Email Flow**
+
+1. **P2P Connection**: Peer FASTN node connects to deliver email
+2. **Authentication**: Verify peer identity using ID52 cryptographic
+   verification
+3. **Email Request**: Peer requests emails for specific ID52 recipient
+4. **Email Retrieval**: Use `get_emails_for_peer()` to get queued emails
+5. **Transfer**: Send queued emails as `AccountToAccountMessage::Email`
+6. **Local Delivery**: Peer stores in local INBOX using `smtp_deliver()`
+7. **IMAP Access**: User's email client accesses via IMAP server
+
+### **Address Format**
+
+- **Format**: `username@id52` (e.g., `alice@abc123def456ghi789`)
+- **ID52**: 64-character base32 public key identifier
+- **Username**: Human-readable local part (can be any valid email local part)
+- **Parsing**: Extract ID52 for P2P routing, preserve full address for RFC 5322
+  headers
+
+### **Delivery Status Tracking**
+
+```sql
+-- Additional table for delivery tracking
+CREATE TABLE fastn_email_delivery
+(
+    email_id        TEXT NOT NULL,     -- References fastn_emails.email_id
+    recipient_id52  TEXT NOT NULL,     -- Target peer ID52
+    delivery_status TEXT NOT NULL,     -- queued, delivered, failed
+    attempts        INTEGER DEFAULT 0, -- Delivery attempt count
+    last_attempt    INTEGER,           -- Last delivery attempt timestamp
+    next_retry      INTEGER,           -- When to retry delivery
+    error_message   TEXT,              -- Last delivery error (if any)
+
+    PRIMARY KEY (email_id, recipient_id52),
+    FOREIGN KEY (email_id) REFERENCES fastn_emails (email_id)
+);
+```
+
+### **Periodic Tasks**
+
+- **Every 1 minute**: Check `get_pending_deliveries()` and attempt P2P delivery
+- **Every 5 minutes**: Retry failed deliveries with exponential backoff
+- **Every hour**: Clean up old delivered messages and expired delivery attempts
+- **Every day**: Compact database and optimize indexes
+
+## Benefits
+
+- ✅ **Full SMTP/IMAP Compatibility**: Raw RFC 5322 messages work with any email
+  client (Thunderbird, Outlook, Apple Mail, etc.)
+- ✅ **Fast IMAP Operations**: Database indexing enables efficient search,
+  threading, flags, sorting
+- ✅ **Simple P2P Protocol**: Just raw message bytes, no complex envelope parsing
+  in transit
+- ✅ **Storage Efficiency**: Headers indexed once, content stored as standard
+  .eml files
+- ✅ **Real-world Ready**: Handles any email that existing mail servers can
+  handle
+- ✅ **Delivery Reliability**: Retry logic, delivery tracking, failure handling
+- ✅ **Threading Support**: Full RFC 5322 threading with In-Reply-To and
+  References
+- ✅ **Multi-client Support**: Multiple email clients can connect via IMAP
+  simultaneously
+
+This design ensures that FASTN can act as a drop-in replacement for traditional
+mail servers (like Postfix + Dovecot) while providing decentralized P2P email
+delivery.
