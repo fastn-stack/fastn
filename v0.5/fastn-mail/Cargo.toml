@@ -6,12 +6,12 @@ authors.workspace = true
 license.workspace = true
 repository.workspace = true
 homepage.workspace = true
+description = "SMTP and IMAP implementation for fastn p2p email"
 
 [dependencies]
 automerge.workspace = true
 autosurgeon.workspace = true
 chrono.workspace = true
-description = "SMTP and IMAP implementation for fastn p2p email"
 eyre.workspace = true
 fastn-automerge.workspace = true
 fastn-id52 = { workspace = true, features = ["automerge"] }
