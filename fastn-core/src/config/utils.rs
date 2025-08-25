@@ -195,14 +195,13 @@ pub async fn get_clean_url(
         let relative_path = url.trim_start_matches(&e.mountpoint);
 
         let mut full_url = format!("{endpoint_url}/{relative_path}");
-        if package.name.ne(&req_config.config.package.name) {
-            if let Some(endpoint_url) = endpoint_url.strip_prefix("wasm+proxy://") {
+        if package.name.ne(&req_config.config.package.name)
+            && let Some(endpoint_url) = endpoint_url.strip_prefix("wasm+proxy://") {
                 full_url = format!(
                     "wasm+proxy://.packages/{}/{}/{}",
                     package.name, endpoint_url, relative_path
                 );
             }
-        }
 
         let mut mount_point = e.mountpoint.to_string();
 

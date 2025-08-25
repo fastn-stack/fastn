@@ -1142,8 +1142,8 @@ impl ExpressionGenerator {
 
 pub fn get_chained_getter_string(value: &str) -> String {
     let chain_dot_operator_count = value.matches('.').count();
-    if chain_dot_operator_count > 1 {
-        if let Some((variable, key)) = value.rsplit_once('.') {
+    if chain_dot_operator_count > 1
+        && let Some((variable, key)) = value.rsplit_once('.') {
             // Ignore values which are already resolved with get()
             if key.contains("get") {
                 return value.to_string();
@@ -1154,7 +1154,6 @@ pub fn get_chained_getter_string(value: &str) -> String {
                 key.replace('-', "_") // record fields are stored in snake case
             );
         }
-    }
     value.to_string()
 }
 

@@ -295,8 +295,8 @@ async fn remove_deleted_documents(
         config.ds.remove(&folder_path).await?;
 
         // If the parent folder of the file's output folder is also empty, delete it as well.
-        if let Some(folder_parent) = folder_parent {
-            if config
+        if let Some(folder_parent) = folder_parent
+            && config
                 .ds
                 .get_all_file_path(&folder_parent, &[])
                 .await
@@ -304,7 +304,6 @@ async fn remove_deleted_documents(
             {
                 config.ds.remove(&folder_parent).await?;
             }
-        }
 
         c.documents.remove(removed_doc_id);
     }
@@ -400,15 +399,14 @@ async fn incremental_build(
                     .await?;
 
                     resolved_dependencies.push(unresolved_dependency.to_string());
-                    if unresolved_dependencies.is_empty() {
-                        if let Some(resolving_dependency) = resolving_dependencies.pop() {
+                    if unresolved_dependencies.is_empty()
+                        && let Some(resolving_dependency) = resolving_dependencies.pop() {
                             if resolving_dependency.eq(&unresolved_dependency.as_str()) {
                                 // println!("[INCREMENTAL][CIRCULAR]: {}", &unresolved_dependency);
                                 continue;
                             }
                             unresolved_dependencies.push(resolving_dependency);
                         }
-                    }
                 } else {
                     // println!("Adding to RD: {}", unresolved_dependency.as_str());
                     resolving_dependencies.push(unresolved_dependency.to_string());
@@ -434,15 +432,14 @@ async fn incremental_build(
 
                     resolved_dependencies.push(unresolved_dependency.clone());
                 }
-                if unresolved_dependencies.is_empty() {
-                    if let Some(resolving_dependency) = resolving_dependencies.pop() {
+                if unresolved_dependencies.is_empty()
+                    && let Some(resolving_dependency) = resolving_dependencies.pop() {
                         if resolving_dependency.eq(&unresolved_dependency.as_str()) {
                             // println!("[INCREMENTAL][CIRCULAR]: {}", &unresolved_dependency);
                             continue;
                         }
                         unresolved_dependencies.push(resolving_dependency);
                     }
-                }
             }
         }
 

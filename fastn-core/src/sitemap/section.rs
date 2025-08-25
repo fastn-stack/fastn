@@ -276,11 +276,10 @@ impl Subsection {
     /// path: /foo/demo/
     /// path: /
     fn path_exists(&self, path: &str) -> bool {
-        if let Some(id) = self.id.as_ref() {
-            if fastn_core::utils::ids_matches(path, id.as_str()) {
+        if let Some(id) = self.id.as_ref()
+            && fastn_core::utils::ids_matches(path, id.as_str()) {
                 return true;
             }
-        }
 
         for toc in self.toc.iter() {
             if toc.path_exists(path) {

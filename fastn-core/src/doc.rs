@@ -312,8 +312,8 @@ pub async fn resolve_foreign_variable2022(
         let files = variable.trim_start_matches("files.").to_string();
         let package_name = doc_name.trim_end_matches("/assets").to_string();
 
-        if package.name.eq(&package_name) {
-            if let Ok(value) = get_assets_value(
+        if package.name.eq(&package_name)
+            && let Ok(value) = get_assets_value(
                 doc_name,
                 &package,
                 files.as_str(),
@@ -326,7 +326,6 @@ pub async fn resolve_foreign_variable2022(
             {
                 return Ok(value);
             }
-        }
         for (alias, package) in package.aliases() {
             if alias.eq(&package_name) {
                 let package = lib
@@ -632,22 +631,20 @@ pub async fn resolve_foreign_variable2(
     }
 
     if let Some((package_name, files)) = variable.split_once("/assets#files.") {
-        if package.name.eq(package_name) {
-            if let Ok(value) =
+        if package.name.eq(package_name)
+            && let Ok(value) =
                 get_assets_value(&package, files, lib, base_url, download_assets, session_id).await
             {
                 return Ok(value);
             }
-        }
         for (alias, package) in package.aliases() {
-            if alias.eq(package_name) {
-                if let Ok(value) =
+            if alias.eq(package_name)
+                && let Ok(value) =
                     get_assets_value(package, files, lib, base_url, download_assets, session_id)
                         .await
                 {
                     return Ok(value);
                 }
-            }
         }
     }
 

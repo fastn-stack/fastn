@@ -314,16 +314,15 @@ fn get_module_name_and_thing(
             );
         }
     };
-    if let Some(module_name) = module_property.value.get_reference_or_clone() {
-        if let Some((argument, ..)) =
+    if let Some(module_name) = module_property.value.get_reference_or_clone()
+        && let Some((argument, ..)) =
             ftd::interpreter::utils::get_component_argument_for_reference_and_remaining(
                 module_name,
                 doc.name,
                 definition_name_with_arguments,
                 module_property.line_number,
             )?
-        {
-            if let Some(ref mut property_value) = argument.value {
+            && let Some(ref mut property_value) = argument.value {
                 if let fastn_resolved::PropertyValue::Value { value, .. } = property_value {
                     if let Some((name, thing)) = value.mut_module_optional() {
                         thing.extend(default_things);
@@ -350,8 +349,6 @@ fn get_module_name_and_thing(
                     }
                 }
             }
-        }
-    }
 
     match module_property
         .resolve(doc, &Default::default())?
@@ -837,11 +834,10 @@ impl PropertyExt for fastn_resolved::Property {
 
         let source = {
             let mut source = fastn_resolved::PropertySource::from_ast(ast_property.source);
-            if !argument.kind.is_kwargs() {
-                if let fastn_resolved::PropertySource::Header { name, .. } = &mut source {
+            if !argument.kind.is_kwargs()
+                && let fastn_resolved::PropertySource::Header { name, .. } = &mut source {
                     *name = argument.name;
                 }
-            }
             source
         };
 
@@ -930,11 +926,10 @@ impl PropertyExt for fastn_resolved::Property {
     }
 
     fn get_local_argument(&self, component_name: &str) -> Option<String> {
-        if let Some(reference) = self.value.get_reference_or_clone() {
-            if let Some(reference) = reference.strip_prefix(format!("{component_name}.").as_str()) {
+        if let Some(reference) = self.value.get_reference_or_clone()
+            && let Some(reference) = reference.strip_prefix(format!("{component_name}.").as_str()) {
                 return Some(reference.to_string());
             }
-        }
         None
     }
 }
@@ -1209,8 +1204,8 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
         }
 
         for property in properties.iter() {
-            if let fastn_resolved::PropertySource::Header { name, .. } = &property.source {
-                if private_arguments.contains(name.as_str()) {
+            if let fastn_resolved::PropertySource::Header { name, .. } = &property.source
+                && private_arguments.contains(name.as_str()) {
                     return Err(ftd::interpreter::Error::InvalidAccessError {
                         message: format!(
                             "{name} argument is private and can't be accessed on \
@@ -1219,7 +1214,6 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
                         line_number: property.line_number,
                     });
                 }
-            }
         }
 
         Ok(())
@@ -1280,8 +1274,8 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
         if let fastn_resolved::Value::UI { component, .. } = value {
             return Ok(vec![component]);
         }
-        if let fastn_resolved::Value::List { data, kind } = value {
-            if kind.is_ui() {
+        if let fastn_resolved::Value::List { data, kind } = value
+            && kind.is_ui() {
                 let mut children = vec![];
                 for value in data {
                     let value = value.resolve(doc, property.line_number)?;
@@ -1291,7 +1285,6 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
                 }
                 return Ok(children);
             }
-        }
 
         Ok(vec![])
     }
@@ -1378,17 +1371,16 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
                 None
             };
 
-            if var_name.is_none() {
-                if let Ok(variable) = doc.search_variable(name.as_str(), line_number) {
+            if var_name.is_none()
+                && let Ok(variable) = doc.search_variable(name.as_str(), line_number) {
                     try_ok_state!(variable);
                     var_name = Some((name.to_string(), None));
                 }
-            }
 
             if let Some((name, arg)) = var_name {
                 let mut properties = vec![];
-                if let Some(arg) = arg {
-                    if arg.kind.is_module() {
+                if let Some(arg) = arg
+                    && arg.kind.is_module() {
                         let component_name = {
                             let (m_name, _) = match arg
                                 .value
@@ -1429,7 +1421,6 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
                             )?
                         );
                     }
-                }
 
                 return Ok(ftd::interpreter::StateWithThing::new_thing(Some(
                     fastn_resolved::ComponentInvocation {
@@ -1491,8 +1482,8 @@ impl LoopExt for fastn_resolved::Loop {
             &None,
         )?);
 
-        if let Some(reference) = ast_loop.on.strip_prefix(ftd::interpreter::utils::REFERENCE) {
-            if let Ok(ftd::interpreter::StateWithThing::Thing(t)) = doc.get_kind_with_argument(
+        if let Some(reference) = ast_loop.on.strip_prefix(ftd::interpreter::utils::REFERENCE)
+            && let Ok(ftd::interpreter::StateWithThing::Thing(t)) = doc.get_kind_with_argument(
                 reference,
                 ast_loop.line_number,
                 definition_name_with_arguments,
@@ -1500,7 +1491,6 @@ impl LoopExt for fastn_resolved::Loop {
             ) {
                 on.set_mutable(t.2);
             }
-        }
 
         if ast_loop.on.starts_with(ftd::interpreter::utils::CLONE) {
             on.set_mutable(true);

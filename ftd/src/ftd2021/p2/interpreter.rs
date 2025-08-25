@@ -629,8 +629,8 @@ impl InterpreterState {
             child: &ftd::ChildComponent,
             doc: &ftd::ftd2021::p2::TDoc,
         ) -> Option<(Option<String>, Option<String>)> {
-            if let ftd::Instruction::ChildComponent { child: cc } = instruction {
-                if cc.root.eq("ftd#text") {
+            if let ftd::Instruction::ChildComponent { child: cc } = instruction
+                && cc.root.eq("ftd#text") {
                     let text_region =
                         cc.properties
                             .get("region")
@@ -639,8 +639,8 @@ impl InterpreterState {
                                     .resolve_default_value_string(doc, cc.line_number)
                                     .ok()
                             });
-                    if let Some(text_region) = text_region {
-                        if text_region.eq("title") {
+                    if let Some(text_region) = text_region
+                        && text_region.eq("title") {
                             let header_and_title = cc
                                 .properties
                                 .get("text")
@@ -657,9 +657,7 @@ impl InterpreterState {
 
                             return header_and_title;
                         }
-                    }
                 }
-            }
             None
         }
 
@@ -861,8 +859,8 @@ impl InterpreterState {
                 return Ok(new_heading_number);
             }
 
-            if let Some(last_heading) = tree_nodes.last_mut() {
-                if let (Some(current_heading_region), Some(last_heading_region)) =
+            if let Some(last_heading) = tree_nodes.last_mut()
+                && let (Some(current_heading_region), Some(last_heading_region)) =
                     (&new_heading.region, &last_heading.region)
                 {
                     let last_heading_priority =
@@ -880,7 +878,6 @@ impl InterpreterState {
                         );
                     }
                 }
-            }
 
             new_heading.number = Some(new_heading_number.clone());
             if new_heading.url.is_none() {
@@ -939,13 +936,12 @@ impl InterpreterState {
             foreign_variables: &[String],
             doc: &ftd::ftd2021::p2::TDoc,
         ) -> ftd::ftd2021::p1::Result<Option<String>> {
-            if let Some(caption) = caption {
-                if let Some(cap) =
+            if let Some(caption) = caption
+                && let Some(cap) =
                     process_foreign_variables(caption, foreign_variables, doc, line_number)?
                 {
                     return Ok(Some(cap));
                 }
-            }
 
             for (line_number, _, header) in header.0.iter_mut() {
                 if let Some(h) =
@@ -955,13 +951,12 @@ impl InterpreterState {
                 }
             }
 
-            if let Some((line_number, body)) = body {
-                if let Some(b) =
+            if let Some((line_number, body)) = body
+                && let Some(b) =
                     process_foreign_variables(body, foreign_variables, doc, *line_number)?
                 {
                     return Ok(Some(b));
                 }
-            }
 
             Ok(None)
         }
@@ -975,15 +970,14 @@ impl InterpreterState {
             if value.contains('#') {
                 return Ok(None);
             }
-            if let Some(val) = value.clone().strip_prefix('$') {
-                if is_foreign_variable(val, foreign_variables, doc, line_number)? {
+            if let Some(val) = value.clone().strip_prefix('$')
+                && is_foreign_variable(val, foreign_variables, doc, line_number)? {
                     let val = doc.resolve_name(line_number, val)?;
                     *value = ftd::ftd2021::InterpreterState::resolve_foreign_variable_name(
                         format!("${}", val.as_str()).as_str(),
                     );
                     return Ok(Some(val));
                 }
-            }
             Ok(None)
         }
 
@@ -1025,11 +1019,10 @@ impl InterpreterState {
             doc,
             var_types,
             section.line_number,
-        )? {
-            if let ftd::ftd2021::p2::Thing::Component(c) =
+        )?
+            && let ftd::ftd2021::p2::Thing::Component(c) =
                 doc.get_thing(section.line_number, section.name.as_str())?
-            {
-                if ftd::ftd2021::p2::utils::is_markdown_component(
+                && ftd::ftd2021::p2::utils::is_markdown_component(
                     doc,
                     c.full_name.as_str(),
                     section.line_number,
@@ -1043,8 +1036,6 @@ impl InterpreterState {
                         0,
                     ));
                 }
-            }
-        }
 
         for (subsection_index, subsection) in itertools::enumerate(section.sub_sections.0.iter()) {
             if ftd::ftd2021::p2::utils::is_section_subsection_component(
@@ -1052,11 +1043,10 @@ impl InterpreterState {
                 doc,
                 var_types,
                 subsection.line_number,
-            )? {
-                if let ftd::ftd2021::p2::Thing::Component(c) =
+            )?
+                && let ftd::ftd2021::p2::Thing::Component(c) =
                     doc.get_thing(subsection.line_number, subsection.name.as_str())?
-                {
-                    if ftd::ftd2021::p2::utils::is_markdown_component(
+                    && ftd::ftd2021::p2::utils::is_markdown_component(
                         doc,
                         c.full_name.as_str(),
                         subsection.line_number,
@@ -1070,8 +1060,6 @@ impl InterpreterState {
                             subsection_index,
                         ));
                     }
-                }
-            }
         }
 
         return Ok(replace_blocks);
@@ -1316,8 +1304,8 @@ impl InterpreterState {
         // it received from the current processing section
         // NOTE: need to run regex again to find link syntax
         // match for the given id and replace it with the url received
-        if let Some(current_processing_document) = self.document_stack.last_mut() {
-            if let Some(current_processing_section) =
+        if let Some(current_processing_document) = self.document_stack.last_mut()
+            && let Some(current_processing_section) =
                 current_processing_document.get_last_mut_section()
             {
                 for (id_map, source, ln) in replace_blocks.iter() {
@@ -1392,7 +1380,6 @@ impl InterpreterState {
                 }
                 current_processing_section.done_processing_links();
             }
-        }
 
         return self.continue_();
 

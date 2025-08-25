@@ -17,13 +17,11 @@ where
         let entry = entry
             .map_err(|e| fastn_core::Error::GenericError(format!("Failed to read entry: {e}")))?;
         let path = entry.path();
-        if path.is_dir() {
-            if let Some(name) = path.file_name().and_then(|n| n.to_str()) {
-                if predicate(name) {
+        if path.is_dir()
+            && let Some(name) = path.file_name().and_then(|n| n.to_str())
+                && predicate(name) {
                     return Ok(path);
                 }
-            }
-        }
     }
 
     Err(fastn_core::Error::GenericError(error_message.to_string()))
@@ -33,11 +31,9 @@ pub fn get_fastn_binary() -> fastn_core::Result<String> {
     if let Ok(status) = std::process::Command::new("fastn")
         .arg("--version")
         .status()
-    {
-        if status.success() {
+        && status.success() {
             return Ok("fastn".to_string());
         }
-    }
 
     let home_dir = std::env::var("HOME").map_err(|_| {
         fastn_core::Error::GenericError("HOME environment variable not set".to_string())

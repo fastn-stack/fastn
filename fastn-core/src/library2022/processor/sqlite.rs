@@ -106,11 +106,10 @@ fn resolve_variable_from_headers(
         None => return Ok(ft_sys_shared::SqliteRawValue::Null),
     };
 
-    if let ftd_ast::VariableValue::String { value, .. } = &header.value {
-        if let Some(stripped) = value.strip_prefix('$') {
+    if let ftd_ast::VariableValue::String { value, .. } = &header.value
+        && let Some(stripped) = value.strip_prefix('$') {
             return resolve_variable_from_doc(stripped, doc, line_number);
         }
-    }
 
     Ok(header_value_to_bind(&header.value))
 }

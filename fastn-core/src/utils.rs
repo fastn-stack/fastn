@@ -46,12 +46,11 @@ pub fn get_cache_file(id: &str) -> Option<std::path::PathBuf> {
     let cache_dir = dirs::cache_dir()?;
     let base_path = cache_dir.join("fastn.com");
 
-    if !base_path.exists() {
-        if let Err(err) = std::fs::create_dir_all(&base_path) {
+    if !base_path.exists()
+        && let Err(err) = std::fs::create_dir_all(&base_path) {
             eprintln!("Failed to create cache directory: {err}");
             return None;
         }
-    }
 
     Some(
         base_path
@@ -280,7 +279,7 @@ pub fn value_to_colored_string_without_null(
     }
 }
 
-pub fn time(msg: &str) -> Timer {
+pub fn time(msg: &str) -> Timer<'_> {
     Timer {
         start: std::time::Instant::now(),
         msg,

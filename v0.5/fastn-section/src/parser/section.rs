@@ -73,11 +73,11 @@ pub fn section(
     // Get headers
     let mut new_line = scanner.token("\n");
     let mut headers = vec![];
-    if new_line.is_some() {
-        if let Some(h) = fastn_section::parser::headers(scanner) {
-            headers = h;
-            new_line = scanner.token("\n");
-        }
+    if new_line.is_some()
+        && let Some(h) = fastn_section::parser::headers(scanner)
+    {
+        headers = h;
+        new_line = scanner.token("\n");
     }
 
     // Get body

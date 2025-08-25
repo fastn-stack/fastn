@@ -54,7 +54,6 @@ impl fastn_account::Account {
             }
         })?;
 
-
         // Store keys based on SKIP_KEYRING environment variable
         let key_path = account_path.join("aliases").join(&id52);
         if std::env::var("SKIP_KEYRING")
@@ -99,9 +98,9 @@ impl fastn_account::Account {
             })?;
 
         // Create mail system
-        let mail = fastn_mail::Mail::create(&account_path).await.map_err(|e| {
-            fastn_account::AccountCreateError::MailCreationFailed { source: e }
-        })?;
+        let mail = fastn_mail::Mail::create(&account_path)
+            .await
+            .map_err(|e| fastn_account::AccountCreateError::MailCreationFailed { source: e })?;
 
         let user = rusqlite::Connection::open(&user_path).map_err(|_| {
             fastn_account::AccountCreateError::DatabaseConnectionFailed {

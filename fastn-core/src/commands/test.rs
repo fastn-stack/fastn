@@ -78,11 +78,10 @@ pub async fn test(
     let ftd_documents = config.get_test_files().await?;
 
     for document in ftd_documents {
-        if let Some(id) = only_id {
-            if !document.id.contains(id) {
+        if let Some(id) = only_id
+            && !document.id.contains(id) {
                 continue;
             }
-        }
         let mut test_parameters = TestParameters::new(script, verbose);
         println!("Running test file: {}", document.id.magenta());
         read_ftd_test_file(document, config, &mut test_parameters).await?;
@@ -954,13 +953,12 @@ pub fn assert_location_and_status(
     let response_location = get_response_location(response)?.unwrap_or_default();
     let expected_location = params.get(HTTP_LOCATION_HEADER);
 
-    if let Some(expected_location) = expected_location {
-        if !expected_location.eq(response_location.as_str()) {
+    if let Some(expected_location) = expected_location
+        && !expected_location.eq(response_location.as_str()) {
             return fastn_core::assert_error(format!(
                 "HTTP Location mismatch. Expected \"{expected_location:?}\", Found \"{response_location:?}\""
             ));
         }
-    }
 
     Ok((response_status_code, response_location))
 }

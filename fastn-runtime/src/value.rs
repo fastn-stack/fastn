@@ -36,8 +36,8 @@ impl Value {
                 value.to_fastn_js_value(doc, rdata, has_rive_components, should_return)
             }
             Value::Reference(data) => {
-                if let Some(value) = &data.value {
-                    if let fastn_resolved::Kind::OrType {
+                if let Some(value) = &data.value
+                    && let fastn_resolved::Kind::OrType {
                         name,
                         variant: Some(variant),
                         full_variant: Some(full_variant),
@@ -69,7 +69,6 @@ impl Value {
                             value: None,
                         });
                     }
-                }
 
                 // for other datatypes, simply return a reference
                 fastn_js::SetPropertyValue::Reference(fastn_runtime::utils::update_reference(

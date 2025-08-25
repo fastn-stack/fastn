@@ -820,13 +820,11 @@ impl VariableValue {
     pub fn has_request_data_header(&self) -> bool {
         if let Some(ftd_ast::VariableValue::Record { headers, .. }) = self.inner() {
             for h in headers.0.iter() {
-                if h.key.trim_end_matches('$').eq("processor") {
-                    if let ftd_ast::VariableValue::String { ref value, .. } = h.value {
-                        if value.contains("request-data") {
+                if h.key.trim_end_matches('$').eq("processor")
+                    && let ftd_ast::VariableValue::String { ref value, .. } = h.value
+                        && value.contains("request-data") {
                             return true;
                         }
-                    }
-                }
             }
         }
         false

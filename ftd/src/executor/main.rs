@@ -480,8 +480,8 @@ impl ExecuteDoc<'_> {
                     break;
                 }
 
-                if let Some(condition) = instruction.condition.as_ref() {
-                    if condition.is_static(&doc.itdoc()) && !condition.eval(&doc.itdoc())? {
+                if let Some(condition) = instruction.condition.as_ref()
+                    && condition.is_static(&doc.itdoc()) && !condition.eval(&doc.itdoc())? {
                         ExecuteDoc::insert_element(
                             &mut elements,
                             container.as_slice(),
@@ -491,7 +491,6 @@ impl ExecuteDoc<'_> {
                         );
                         break;
                     }
-                }
 
                 if let Ok(web_component_definition) = doc
                     .itdoc()

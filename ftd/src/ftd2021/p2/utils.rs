@@ -126,11 +126,9 @@ pub fn boolean_and_ref(
                             ftd::PropertyValue::Reference { name, .. }
                             | ftd::PropertyValue::Variable { name, .. },
                     }) = condition
-                    {
-                        if name.eq(reference) {
+                        && name.eq(reference) {
                             return Ok((false, complete_reference(&Some(reference.to_owned()))));
                         }
-                    }
 
                     // In case when the optional string is null.
                     // Return the empty string
@@ -174,8 +172,7 @@ pub fn boolean_and_ref(
                     ftd::PropertyValue::Reference { name, .. }
                     | ftd::PropertyValue::Variable { name, .. },
             }) = condition
-            {
-                if name.eq({
+                && name.eq({
                     if let Some(reference) = reference.strip_prefix('@') {
                         reference
                     } else {
@@ -184,7 +181,6 @@ pub fn boolean_and_ref(
                 }) {
                     return Ok((false, complete_reference(&Some(reference.to_owned()))));
                 }
-            }
             ftd::ftd2021::p2::utils::e2(
                 format!("expected boolean, found: {kind:?}"),
                 doc.name,
@@ -241,11 +237,9 @@ pub fn integer_and_ref(
                             ftd::PropertyValue::Reference { name, .. }
                             | ftd::PropertyValue::Variable { name, .. },
                     }) = condition
-                    {
-                        if name.eq(reference) {
+                        && name.eq(reference) {
                             return Ok((0, complete_reference(&Some(reference.to_owned()))));
                         }
-                    }
 
                     // In case when the optional string is null.
                     // Return the empty string
@@ -289,8 +283,7 @@ pub fn integer_and_ref(
                     ftd::PropertyValue::Reference { name, .. }
                     | ftd::PropertyValue::Variable { name, .. },
             }) = condition
-            {
-                if name.eq({
+                && name.eq({
                     if let Some(reference) = reference.strip_prefix('@') {
                         reference
                     } else {
@@ -299,7 +292,6 @@ pub fn integer_and_ref(
                 }) {
                     return Ok((0, complete_reference(&Some(reference.to_owned()))));
                 }
-            }
             ftd::ftd2021::p2::utils::e2(
                 format!("expected integer, found 2: {kind:?}"),
                 doc.name,
@@ -356,11 +348,9 @@ pub fn decimal_and_ref(
                             ftd::PropertyValue::Reference { name, .. }
                             | ftd::PropertyValue::Variable { name, .. },
                     }) = condition
-                    {
-                        if name.eq(reference) {
+                        && name.eq(reference) {
                             return Ok((0.0, complete_reference(&Some(reference.to_owned()))));
                         }
-                    }
 
                     // In case when the optional string is null.
                     // Return the empty string
@@ -404,8 +394,7 @@ pub fn decimal_and_ref(
                     ftd::PropertyValue::Reference { name, .. }
                     | ftd::PropertyValue::Variable { name, .. },
             }) = condition
-            {
-                if name.eq({
+                && name.eq({
                     if let Some(reference) = reference.strip_prefix('@') {
                         reference
                     } else {
@@ -414,7 +403,6 @@ pub fn decimal_and_ref(
                 }) {
                     return Ok((0.0, complete_reference(&Some(reference.to_owned()))));
                 }
-            }
             ftd::ftd2021::p2::utils::e2(
                 format!("expected decimal, found: {kind:?}"),
                 doc.name,
@@ -477,15 +465,13 @@ pub fn string_and_source_and_ref(
                             ftd::PropertyValue::Reference { name, .. }
                             | ftd::PropertyValue::Variable { name, .. },
                     }) = condition
-                    {
-                        if name.eq(reference) {
+                        && name.eq(reference) {
                             return Ok((
                                 "".to_string(),
                                 source,
                                 complete_reference(&Some(reference.to_owned())),
                             ));
                         }
-                    }
 
                     // In case when the optional string is null.
                     // Return the empty string
@@ -540,8 +526,7 @@ pub fn string_and_source_and_ref(
                     ftd::PropertyValue::Reference { name, .. }
                     | ftd::PropertyValue::Variable { name, .. },
             }) = condition
-            {
-                if name.eq({
+                && name.eq({
                     if let Some(reference) = reference.strip_prefix('@') {
                         reference
                     } else {
@@ -554,7 +539,6 @@ pub fn string_and_source_and_ref(
                         complete_reference(&Some(reference.to_owned())),
                     ));
                 }
-            }
             ftd::ftd2021::p2::utils::e2(
                 format!("expected string, found 6: {kind:?}"),
                 doc.name,
@@ -573,15 +557,14 @@ pub fn string_and_source_and_ref(
 // todo: remove this
 pub fn complete_reference(reference: &Option<String>) -> Option<String> {
     let mut reference = (*reference).to_owned();
-    if let Some(ref r) = reference {
-        if let Some(name) = r.strip_prefix('@') {
+    if let Some(ref r) = reference
+        && let Some(name) = r.strip_prefix('@') {
             if name.eq("$loop$") {
                 return None;
             } else if name.eq("MOUSE-IN") {
                 reference = Some("$MOUSE-IN".to_string());
             }
         }
-    }
     reference
 }
 
@@ -627,14 +610,12 @@ pub fn record_and_ref(
                             ftd::PropertyValue::Reference { name, .. }
                             | ftd::PropertyValue::Variable { name, .. },
                     }) = condition
-                    {
-                        if name.eq(reference) {
+                        && name.eq(reference) {
                             return Ok((
                                 Default::default(),
                                 complete_reference(&Some(reference.to_owned())),
                             ));
                         }
-                    }
 
                     // In case when the optional string is null.
                     // Return the empty string
@@ -681,8 +662,7 @@ pub fn record_and_ref(
                     ftd::PropertyValue::Reference { name, .. }
                     | ftd::PropertyValue::Variable { name, .. },
             }) = condition
-            {
-                if name.eq({
+                && name.eq({
                     if let Some(reference) = reference.strip_prefix('@') {
                         reference
                     } else {
@@ -694,7 +674,6 @@ pub fn record_and_ref(
                         complete_reference(&Some(reference.to_owned())),
                     ));
                 }
-            }
             ftd::ftd2021::p2::utils::e2(
                 format!("expected record, found: {kind:?}"),
                 doc.name,
@@ -1578,15 +1557,14 @@ pub fn arguments_on_condition(
             ftd::PropertyValue::Value { .. } => {}
             ftd::PropertyValue::Reference { name, kind }
             | ftd::PropertyValue::Variable { name, kind } => {
-                if let ftd::ftd2021::p2::Kind::Optional { kind, .. } = kind {
-                    if doc.get_value(line_number, name).is_err() {
+                if let ftd::ftd2021::p2::Kind::Optional { kind, .. } = kind
+                    && doc.get_value(line_number, name).is_err() {
                         is_visible = false;
                         arguments.insert(
                             name.to_string(),
                             kind_to_value(kind, line_number, doc.name)?,
                         );
                     }
-                }
                 // TODO: Check if it's parent variable then don't throw error else throw error
                 /* else {
                     return ftd::ftd2021::p2::utils::e2(
@@ -1745,11 +1723,10 @@ pub fn is_section_subsection_component(
         return Ok(false);
     }
 
-    if doc.get_thing(line_number, name).is_ok() {
-        if let ftd::ftd2021::p2::Thing::Component(_) = doc.get_thing(line_number, name)? {
+    if doc.get_thing(line_number, name).is_ok()
+        && let ftd::ftd2021::p2::Thing::Component(_) = doc.get_thing(line_number, name)? {
             return Ok(true);
         }
-    }
 
     Ok(false)
 }

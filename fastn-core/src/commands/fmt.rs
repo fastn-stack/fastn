@@ -14,11 +14,10 @@ pub async fn fmt(
         .collect_vec();
 
     for ftd_document in documents {
-        if let Some(file) = file {
-            if !ftd_document.id.eq(file) {
+        if let Some(file) = file
+            && !ftd_document.id.eq(file) {
                 continue;
             }
-        }
 
         print!("Formatting {} ... ", ftd_document.id);
 
@@ -273,17 +272,15 @@ fn remove_comment_from_section_value_if_its_comment_for_other_section(
     input: &mut String,
     value: &mut String,
 ) {
-    if !value.trim().is_empty() {
-        if let Some((v, probable_comment_section)) = value.rsplit_once("\n\n") {
+    if !value.trim().is_empty()
+        && let Some((v, probable_comment_section)) = value.rsplit_once("\n\n") {
             let mut probable_comment_section = probable_comment_section.to_string();
-            if let Some(comment_section) = comment_section(&mut probable_comment_section) {
-                if probable_comment_section.trim().is_empty() {
+            if let Some(comment_section) = comment_section(&mut probable_comment_section)
+                && probable_comment_section.trim().is_empty() {
                     *input = format!("{}\n{}", comment_section.value, input);
                     *value = format!("{v}\n");
                 }
-            }
         }
-    }
 }
 
 fn get_section_name(input: &str) -> Option<String> {

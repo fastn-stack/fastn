@@ -65,8 +65,8 @@ impl Node {
         let all_children = {
             let mut children: Vec<ftd::Node> = self.children.to_vec();
             // #[allow(clippy::blocks_in_conditions)]
-            if let Some(ext_children) = external_children {
-                if *external_open_id
+            if let Some(ext_children) = external_children
+                && *external_open_id
                     == self.attrs.get("data-id").map(|v| {
                         if v.contains(':') {
                             let mut part = v.splitn(2, ':');
@@ -93,7 +93,6 @@ impl Node {
                     }
                     *external_children = None;
                 }
-            }
             children
         };
 
@@ -222,11 +221,10 @@ impl Node {
                     if container < &index {
                         continue;
                     }
-                    if let Some(child) = all_children.get(*container) {
-                        if !child.node.is_empty() {
+                    if let Some(child) = all_children.get(*container)
+                        && !child.node.is_empty() {
                             return true;
                         }
-                    }
                 }
             }
             false
@@ -1592,11 +1590,10 @@ impl ftd::Container {
                 .iter()
                 .filter(|v| {
                     let mut bool = false;
-                    if let Some(common) = v.get_common() {
-                        if Some(ftd::Anchor::Parent) == common.anchor {
+                    if let Some(common) = v.get_common()
+                        && Some(ftd::Anchor::Parent) == common.anchor {
                             bool = true;
                         }
-                    }
                     bool
                 })
                 .count()

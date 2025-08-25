@@ -33,7 +33,7 @@ description = "fastn: Full-stack Web Development Made Easy"
 license = "UPL-1.0"
 repository = "https://github.com/fastn-stack/fastn"
 homepage = "https://fastn.com"
-rust-version = "1.86"
+rust-version = "1.89"
 
 
 [workspace.dependencies]
@@ -61,7 +61,7 @@ bb8 = "0.9"
 bytes = "1"
 chrono = { version = "0.4", features = ["serde"] }
 clap = { version = "4", features = ["derive"] }
-colored = "2"
+colored = "3"
 deadpool = "0.10"
 deadpool-postgres = "0.12"
 directories = "6"
@@ -115,7 +115,7 @@ tokio-util = "0.7"
 tracing = "0.1"
 tracing-subscriber = "0.3"
 trait-variant = "0.1"
-wasmtime = "35"
+wasmtime = "36"
 
 [workspace.dependencies.fastn-observer]
 git = "https://github.com/fastn-stack/fastn-observer"

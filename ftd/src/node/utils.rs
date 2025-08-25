@@ -56,11 +56,10 @@ pub(crate) fn count_children_with_absolute_parent(children: &[ftd::executor::Ele
         .iter()
         .filter(|v| {
             let mut bool = false;
-            if let Some(common) = v.get_common() {
-                if Some(ftd::executor::Anchor::Parent) == common.anchor.value {
+            if let Some(common) = v.get_common()
+                && Some(ftd::executor::Anchor::Parent) == common.anchor.value {
                     bool = true;
                 }
-            }
             bool
         })
         .count()

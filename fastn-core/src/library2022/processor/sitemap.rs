@@ -58,6 +58,7 @@ pub fn full_sitemap_process(
 }
 
 #[derive(Default, Debug, serde::Serialize)]
+#[allow(dead_code)]
 pub struct TocItemCompat {
     pub id: String,
     pub title: Option<String>,
@@ -75,6 +76,7 @@ pub struct TocItemCompat {
 }
 
 #[derive(Default, Debug, serde::Serialize)]
+#[allow(dead_code)]
 pub struct SubSectionCompat {
     pub id: Option<String>,
     pub title: Option<String>,
@@ -93,6 +95,7 @@ pub struct SubSectionCompat {
 }
 
 #[derive(Default, Debug, serde::Serialize)]
+#[allow(dead_code)]
 pub struct SectionCompat {
     id: String,
     title: Option<String>,
@@ -109,6 +112,7 @@ pub struct SectionCompat {
 }
 
 #[derive(Default, Debug, serde::Serialize)]
+#[allow(dead_code)]
 pub struct SiteMapCompat {
     sections: Vec<SectionCompat>,
     readers: Vec<String>,

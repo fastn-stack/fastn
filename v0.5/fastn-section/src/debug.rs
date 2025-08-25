@@ -179,10 +179,10 @@ impl fastn_section::JDebug for fastn_section::Kind {
 impl fastn_section::JDebug for fastn_section::HeaderValue {
     fn debug(&self) -> serde_json::Value {
         // Simplify when it's just a single text value
-        if self.0.len() == 1 {
-            if let fastn_section::Tes::Text(text) = &self.0[0] {
-                return text.debug();
-            }
+        if self.0.len() == 1
+            && let fastn_section::Tes::Text(text) = &self.0[0]
+        {
+            return text.debug();
         }
         // Otherwise return the full array
         self.0.debug()

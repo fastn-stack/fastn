@@ -318,11 +318,10 @@ fn section_value_from_caption_or_body(
     section: &ftd_p1::Section,
     doc_id: &str,
 ) -> ftd2021::interpreter::Result<String> {
-    if let Some(ref header) = section.caption {
-        if let Some(value) = header.get_value(doc_id)? {
+    if let Some(ref header) = section.caption
+        && let Some(value) = header.get_value(doc_id)? {
             return Ok(value);
         }
-    }
 
     if let Some(ref body) = section.body {
         return Ok(body.value.to_string());

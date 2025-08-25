@@ -13,7 +13,7 @@ pub struct TDoc<'a> {
 }
 
 impl TDoc<'_> {
-    pub(crate) fn itdoc(&self) -> ftd::interpreter::TDoc {
+    pub(crate) fn itdoc(&self) -> ftd::interpreter::TDoc<'_> {
         ftd::interpreter::TDoc::new(self.name, self.aliases, self.bag)
     }
 
@@ -140,8 +140,8 @@ impl TDoc<'_> {
         )?;
 
         let name_in_component_definition = format!("{}.{}", component_name, argument.name);
-        if argument.kind.is_module() {
-            if let fastn_resolved::Value::Module { name, .. } = properties
+        if argument.kind.is_module()
+            && let fastn_resolved::Value::Module { name, .. } = properties
                 .first()
                 .unwrap()
                 .resolve(&self.itdoc(), &Default::default())?
@@ -150,7 +150,6 @@ impl TDoc<'_> {
             {
                 return Ok(Some((name_in_component_definition, name, vec![])));
             }
-        }
 
         let (default, conditions) = properties.into_iter().fold(
             (None, vec![]),

@@ -252,11 +252,10 @@ pub async fn process(
 
                 let mut resp_cookies = vec![];
                 r.headers.into_iter().for_each(|(k, v)| {
-                    if k.as_str().eq("set-cookie") {
-                        if let Ok(v) = String::from_utf8(v) {
+                    if k.as_str().eq("set-cookie")
+                        && let Ok(v) = String::from_utf8(v) {
                             resp_cookies.push(v.to_string());
                         }
-                    }
                 });
                 Ok((Ok(r.body.into()), resp_cookies))
             }
@@ -326,9 +325,9 @@ fn parse_function_call(expr: &str) -> Option<(String, Vec<(String, String)>)> {
 
     let expr = &expr[1..];
 
-    if let Some(open_paren) = expr.find('(') {
-        if let Some(close_paren) = expr.rfind(')') {
-            if close_paren > open_paren {
+    if let Some(open_paren) = expr.find('(')
+        && let Some(close_paren) = expr.rfind(')')
+            && close_paren > open_paren {
                 let function_name = expr[..open_paren].trim().to_string();
                 let args_str = &expr[open_paren + 1..close_paren];
 
@@ -353,8 +352,6 @@ fn parse_function_call(expr: &str) -> Option<(String, Vec<(String, String)>)> {
 
                 return Some((function_name, args));
             }
-        }
-    }
 
     None
 }

@@ -11,7 +11,7 @@ impl CliTest {
         Self { temp_dir, db_path }
     }
 
-    fn run(&self, args: &[&str]) -> CliOutput {
+    fn run(&self, args: &[&str]) -> CliOutput<'_> {
         let output = std::process::Command::new("cargo")
             .arg("run")
             .arg("-p")
@@ -28,59 +28,59 @@ impl CliTest {
         CliOutput { output, test: self }
     }
 
-    fn init(&self) -> CliOutput {
+    fn init(&self) -> CliOutput<'_> {
         self.run(&["init"])
     }
 
-    fn create(&self, path: &str, json: &str) -> CliOutput {
+    fn create(&self, path: &str, json: &str) -> CliOutput<'_> {
         self.run(&["create", path, json])
     }
 
-    fn create_from_file(&self, path: &str, file: &str) -> CliOutput {
+    fn create_from_file(&self, path: &str, file: &str) -> CliOutput<'_> {
         self.run(&["create", path, "--file", file])
     }
 
-    fn get(&self, path: &str) -> CliOutput {
+    fn get(&self, path: &str) -> CliOutput<'_> {
         self.run(&["get", path])
     }
 
-    fn get_pretty(&self, path: &str) -> CliOutput {
+    fn get_pretty(&self, path: &str) -> CliOutput<'_> {
         self.run(&["get", path, "--pretty"])
     }
 
-    fn get_to_file(&self, path: &str, output: &str) -> CliOutput {
+    fn get_to_file(&self, path: &str, output: &str) -> CliOutput<'_> {
         self.run(&["get", path, "--output", output])
     }
 
-    fn update(&self, path: &str, json: &str) -> CliOutput {
+    fn update(&self, path: &str, json: &str) -> CliOutput<'_> {
         self.run(&["update", path, json])
     }
 
-    fn set(&self, path: &str, json: &str) -> CliOutput {
+    fn set(&self, path: &str, json: &str) -> CliOutput<'_> {
         self.run(&["set", path, json])
     }
 
-    fn delete(&self, path: &str) -> CliOutput {
+    fn delete(&self, path: &str) -> CliOutput<'_> {
         self.run(&["delete", path, "--confirm"])
     }
 
-    fn list(&self) -> CliOutput {
+    fn list(&self) -> CliOutput<'_> {
         self.run(&["list"])
     }
 
-    fn list_prefix(&self, prefix: &str) -> CliOutput {
+    fn list_prefix(&self, prefix: &str) -> CliOutput<'_> {
         self.run(&["list", "--prefix", prefix])
     }
 
-    fn history(&self, path: &str) -> CliOutput {
+    fn history(&self, path: &str) -> CliOutput<'_> {
         self.run(&["history", path])
     }
 
-    fn history_short(&self, path: &str) -> CliOutput {
+    fn history_short(&self, path: &str) -> CliOutput<'_> {
         self.run(&["history", path, "--short"])
     }
 
-    fn info(&self, path: &str) -> CliOutput {
+    fn info(&self, path: &str) -> CliOutput<'_> {
         self.run(&["info", path])
     }
 }

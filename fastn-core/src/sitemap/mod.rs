@@ -851,8 +851,8 @@ impl Sitemap {
                 ));
             }
             for subsection in section.subsections.iter() {
-                if subsection.visible {
-                    if let Some(ref file_location) = subsection.file_location {
+                if subsection.visible
+                    && let Some(ref file_location) = subsection.file_location {
                         locations.push((
                             file_location,
                             &subsection.translation_file_location,
@@ -865,7 +865,6 @@ impl Sitemap {
                                 }),
                         ));
                     }
-                }
                 for toc in subsection.toc.iter() {
                     if let Some(ref file_location) = toc.file_location {
                         locations.push((
@@ -1290,14 +1289,13 @@ impl Sitemap {
             sub_section: &section::Subsection,
             path: &str,
         ) -> Option<(String, std::collections::BTreeMap<String, String>)> {
-            if let Some(id) = sub_section.id.as_ref() {
-                if fastn_core::utils::ids_matches(path, id.as_str()) {
+            if let Some(id) = sub_section.id.as_ref()
+                && fastn_core::utils::ids_matches(path, id.as_str()) {
                     return sub_section
                         .document
                         .clone()
                         .map(|v| (v, sub_section.extra_data.clone()));
                 }
-            }
 
             for toc in sub_section.toc.iter() {
                 let document = resolve_in_toc(toc, path);
@@ -1474,11 +1472,10 @@ pub fn resolve(
     path: &str,
 ) -> fastn_core::Result<fastn_core::sitemap::dynamic_urls::ResolveDocOutput> {
     // resolve in sitemap
-    if let Some(sitemap) = package.sitemap.as_ref() {
-        if let Some((document, extra_data)) = sitemap.resolve_document(path) {
+    if let Some(sitemap) = package.sitemap.as_ref()
+        && let Some((document, extra_data)) = sitemap.resolve_document(path) {
             return Ok((Some(document), vec![], extra_data));
-        }
-    };
+        };
 
     // resolve in dynamic-urls
     if let Some(dynamic_urls) = package.dynamic_urls.as_ref() {

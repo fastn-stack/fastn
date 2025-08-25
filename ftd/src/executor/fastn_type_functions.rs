@@ -40,8 +40,8 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
         if let fastn_resolved::Value::UI { component, .. } = value {
             return Ok(vec![component]);
         }
-        if let fastn_resolved::Value::List { data, kind } = value {
-            if kind.is_ui() {
+        if let fastn_resolved::Value::List { data, kind } = value
+            && kind.is_ui() {
                 let mut children = vec![];
                 for value in data {
                     let value = value.resolve(doc, property.line_number)?;
@@ -51,7 +51,6 @@ impl ComponentExt for fastn_resolved::ComponentInvocation {
                 }
                 return Ok(children);
             }
-        }
 
         Ok(vec![])
     }

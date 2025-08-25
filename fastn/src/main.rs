@@ -184,12 +184,11 @@ async fn fastn_core_commands(matches: &clap::ArgMatches) -> fastn_core::Result<(
         .await;
     }
 
-    if let Some(wasmc) = matches.subcommand_matches("wasmc") {
-        if let Err(e) = fastn_ds::wasmc(wasmc.value_of_("file").unwrap()).await {
+    if let Some(wasmc) = matches.subcommand_matches("wasmc")
+        && let Err(e) = fastn_ds::wasmc(wasmc.value_of_("file").unwrap()).await {
             eprintln!("failed to compile: {e:?}");
             std::process::exit(1);
         }
-    }
 
     if let Some(query) = matches.subcommand_matches("query") {
         return fastn_core::query(

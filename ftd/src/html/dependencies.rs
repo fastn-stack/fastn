@@ -980,58 +980,48 @@ fn is_static_expression(
     use ftd::html::fastn_type_functions::KindExt;
     use ftd::interpreter::ValueExt;
 
-    if property_value.kind().is_ftd_length() {
-        if let fastn_resolved::PropertyValue::Value {
+    if property_value.kind().is_ftd_length()
+        && let fastn_resolved::PropertyValue::Value {
             value, line_number, ..
         } = property_value
-        {
-            if !value
+            && !value
                 .get_or_type(doc.name, *line_number)
                 .map(|v| v.2.is_value())
                 .unwrap_or(false)
             {
                 return false;
             }
-        }
-    }
 
-    if property_value.kind().is_ftd_resizing() {
-        if let fastn_resolved::PropertyValue::Value {
+    if property_value.kind().is_ftd_resizing()
+        && let fastn_resolved::PropertyValue::Value {
             value, line_number, ..
         } = property_value
         {
             let property_value = value.get_or_type(doc.name, *line_number).unwrap().2;
-            if property_value.kind().is_ftd_length() {
-                if let fastn_resolved::PropertyValue::Value {
+            if property_value.kind().is_ftd_length()
+                && let fastn_resolved::PropertyValue::Value {
                     value, line_number, ..
                 } = property_value
-                {
-                    if !value
+                    && !value
                         .get_or_type(doc.name, *line_number)
                         .map(|v| v.2.is_value())
                         .unwrap_or(false)
                     {
                         return false;
                     }
-                }
-            }
         }
-    }
 
-    if property_value.kind().is_ftd_image_src() || property_value.kind().is_ftd_color() {
-        if let fastn_resolved::PropertyValue::Value {
+    if (property_value.kind().is_ftd_image_src() || property_value.kind().is_ftd_color())
+        && let fastn_resolved::PropertyValue::Value {
             value, line_number, ..
         } = property_value
-        {
-            if !value
+            && !value
                 .record_fields(doc.name, *line_number)
                 .map(|v| v.get("dark").unwrap().is_value() && v.get("light").unwrap().is_value())
                 .unwrap_or(false)
             {
                 return false;
             }
-        }
-    }
 
     if condition.is_some() || !property_value.is_value() {
         return false;

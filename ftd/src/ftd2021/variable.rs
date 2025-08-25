@@ -581,11 +581,10 @@ impl Value {
     }
 
     pub fn is_empty(&self) -> bool {
-        if let Self::List { data, .. } = self {
-            if data.is_empty() {
+        if let Self::List { data, .. } = self
+            && data.is_empty() {
                 return true;
             }
-        }
         false
     }
 
@@ -657,22 +656,20 @@ impl Value {
             Value::Object { values } => {
                 let mut new_values: ftd::Map<serde_json::Value> = Default::default();
                 for (k, v) in values {
-                    if let ftd::PropertyValue::Value { value } = v {
-                        if let Some(v) = value.to_serde_value() {
+                    if let ftd::PropertyValue::Value { value } = v
+                        && let Some(v) = value.to_serde_value() {
                             new_values.insert(k.to_owned(), v);
                         }
-                    }
                 }
                 serde_json::to_value(&new_values).ok()
             }
             Value::Record { fields, .. } => {
                 let mut new_values: ftd::Map<serde_json::Value> = Default::default();
                 for (k, v) in fields {
-                    if let ftd::PropertyValue::Value { value } = v {
-                        if let Some(v) = value.to_serde_value() {
+                    if let ftd::PropertyValue::Value { value } = v
+                        && let Some(v) = value.to_serde_value() {
                             new_values.insert(k.to_owned(), v);
                         }
-                    }
                 }
                 serde_json::to_value(&new_values).ok()
             }
@@ -697,22 +694,20 @@ impl Value {
             Value::Object { values } => {
                 let mut new_values: ftd::Map<String> = Default::default();
                 for (k, v) in values {
-                    if let ftd::PropertyValue::Value { value } = v {
-                        if let Some(v) = value.to_string() {
+                    if let ftd::PropertyValue::Value { value } = v
+                        && let Some(v) = value.to_string() {
                             new_values.insert(k.to_owned(), v);
                         }
-                    }
                 }
                 serde_json::to_string(&new_values).ok()
             }
             Value::Record { fields, .. } => {
                 let mut new_values: ftd::Map<String> = Default::default();
                 for (k, v) in fields {
-                    if let ftd::PropertyValue::Value { value } = v {
-                        if let Some(v) = value.to_string() {
+                    if let ftd::PropertyValue::Value { value } = v
+                        && let Some(v) = value.to_string() {
                             new_values.insert(k.to_owned(), v);
                         }
-                    }
                 }
                 serde_json::to_string(&new_values).ok()
             }
@@ -748,8 +743,8 @@ impl Variable {
                 p1.line_number,
             );
         }
-        if let Some(ref caption) = p1.caption {
-            if let Some(text) = caption.strip_prefix('$') {
+        if let Some(ref caption) = p1.caption
+            && let Some(text) = caption.strip_prefix('$') {
                 return Ok(Variable {
                     name,
                     value: ftd::PropertyValue::Reference {
@@ -768,7 +763,6 @@ impl Variable {
                     )?,
                 });
             }
-        }
 
         Ok(Variable {
             name,
@@ -1172,8 +1166,8 @@ fn read_object(
     doc: &ftd::ftd2021::p2::TDoc,
 ) -> ftd::ftd2021::p1::Result<ftd::PropertyValue> {
     let mut values: ftd::Map<PropertyValue> = Default::default();
-    if let Some(ref caption) = p1.caption {
-        if let Some(text) = caption.strip_prefix('$') {
+    if let Some(ref caption) = p1.caption
+        && let Some(text) = caption.strip_prefix('$') {
             return Ok(ftd::PropertyValue::Reference {
                 name: doc.resolve_name(p1.line_number, text)?,
                 kind: ftd::ftd2021::p2::Kind::Object {
@@ -1182,7 +1176,6 @@ fn read_object(
                 },
             });
         }
-    }
     for (line_number, k, v) in p1.header.0.iter() {
         let line_number = line_number.to_owned();
         let value = if v.trim().starts_with('$') {

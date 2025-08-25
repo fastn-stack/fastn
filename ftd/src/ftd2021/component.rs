@@ -56,14 +56,13 @@ impl Instruction {
             Instruction::Component { parent, .. } => parent.properties.get("id"),
             _ => None,
         };
-        if let Some(property) = id {
-            if let Some(ftd::PropertyValue::Value {
+        if let Some(property) = id
+            && let Some(ftd::PropertyValue::Value {
                 value: ftd::ftd2021::variable::Value::String { text, .. },
             }) = &property.default
             {
                 return Some(text.as_str());
             }
-        }
         None
     }
 }
@@ -138,11 +137,10 @@ impl Property {
         doc: &ftd::ftd2021::p2::TDoc,
         line_number: usize,
     ) -> ftd::ftd2021::p1::Result<String> {
-        if let Some(property_value) = &self.default {
-            if let Some(val) = property_value.resolve(line_number, doc)?.to_string() {
+        if let Some(property_value) = &self.default
+            && let Some(val) = property_value.resolve(line_number, doc)?.to_string() {
                 return Ok(val);
             }
-        }
         Ok("".to_string())
     }
 }
@@ -242,8 +240,8 @@ impl ChildComponent {
         // They act as the component variables which are, then, referred to in markup text
         // container_children copy there properties to the reference in markup text
 
-        if let ftd::Element::Markup(ref mut markups) = element {
-            if !children.is_empty() {
+        if let ftd::Element::Markup(ref mut markups) = element
+            && !children.is_empty() {
                 let named_container = markup_get_named_container(
                     children,
                     self.root.as_str(),
@@ -254,7 +252,6 @@ impl ChildComponent {
                 )?;
                 reevalute_markups(markups, named_container, doc)?;
             }
-        }
 
         Ok(ElementWithContainer {
             element,
@@ -281,12 +278,11 @@ impl ChildComponent {
 
         let reference_name = {
             let mut reference_name = None;
-            if let Some(value) = self.properties.get("$loop$") {
-                if let Ok(ftd::PropertyValue::Reference { name, .. }) = value.eval(0, "$loop$", doc)
+            if let Some(value) = self.properties.get("$loop$")
+                && let Ok(ftd::PropertyValue::Reference { name, .. }) = value.eval(0, "$loop$", doc)
                 {
                     reference_name = Some(name);
                 }
-            }
             reference_name
         };
 
@@ -302,15 +298,14 @@ impl ChildComponent {
                     is_child,
                     local_container,
                 )?;
-                if let Some(name) = reference_name {
-                    if let Some(common) = element.element.get_mut_common() {
+                if let Some(name) = reference_name
+                    && let Some(common) = element.element.get_mut_common() {
                         common.reference = Some(name.to_string());
                     }
-                }
                 elements.push(element);
             }
-            if let Some(tmp_data) = construct_tmp_data(&kind) {
-                if let Some(name) = reference_name {
+            if let Some(tmp_data) = construct_tmp_data(&kind)
+                && let Some(name) = reference_name {
                     let mut element = construct_element(
                         self,
                         &tmp_data,
@@ -327,7 +322,6 @@ impl ChildComponent {
                         elements.push(element);
                     }
                 }
-            }
         }
         return Ok(elements);
 
@@ -412,8 +406,8 @@ impl ChildComponent {
 
             let is_visible = {
                 let mut visible = true;
-                if let Some(ref b) = child_component.condition {
-                    if b.is_constant() && !b.eval(child_component.line_number, doc)? {
+                if let Some(ref b) = child_component.condition
+                    && b.is_constant() && !b.eval(child_component.line_number, doc)? {
                         visible = false;
                         if let Ok(true) = b.set_null(child_component.line_number, doc.name) {
                             return Ok(ElementWithContainer {
@@ -423,7 +417,6 @@ impl ChildComponent {
                             });
                         }
                     }
-                }
                 visible
             };
             let conditional_attribute = get_conditional_attributes(
@@ -474,17 +467,15 @@ impl ChildComponent {
         id: Option<String>,
         external_children_count: &Option<usize>,
     ) -> ftd::ftd2021::p1::Result<ElementWithContainer> {
-        if let Some(ref b) = self.condition {
-            if b.is_constant() && !b.eval(self.line_number, doc)? {
-                if let Ok(true) = b.set_null(self.line_number, doc.name) {
+        if let Some(ref b) = self.condition
+            && b.is_constant() && !b.eval(self.line_number, doc)?
+                && let Ok(true) = b.set_null(self.line_number, doc.name) {
                     return Ok(ElementWithContainer {
                         element: ftd::Element::Null,
                         children: vec![],
                         child_container: None,
                     });
                 }
-            }
-        }
 
         let mut root = {
             // NOTE: doing unwrap to force bug report if we following fails, this function
@@ -627,8 +618,8 @@ impl ChildComponent {
         ) -> ftd::ftd2021::p1::Result<ftd::Map<Property>> {
             let mut properties: ftd::Map<Property> =
                 root_properties_from_inherits(line_number, arguments, inherits, doc)?;
-            if let Some(caption) = caption {
-                if let Ok(name) = doc.resolve_name(line_number, name) {
+            if let Some(caption) = caption
+                && let Ok(name) = doc.resolve_name(line_number, name) {
                     let kind = match name.as_str() {
                         "ftd#integer" => ftd::ftd2021::p2::Kind::integer(),
                         "ftd#boolean" => ftd::ftd2021::p2::Kind::boolean(),
@@ -653,7 +644,6 @@ impl ChildComponent {
                         );
                     }
                 }
-            }
             Ok(properties)
         }
     }
@@ -1029,8 +1019,7 @@ fn reevalute_markup(
             default: Some(ftd::PropertyValue::Variable { kind, .. }),
             ..
         } = property_value
-        {
-            if !kind.has_default_value() {
+            && !kind.has_default_value() {
                 let property = ftd::ftd2021::component::Property {
                     default: Some(ftd::PropertyValue::Value {
                         value: ftd::Value::String {
@@ -1043,7 +1032,6 @@ fn reevalute_markup(
                 root.properties.insert("text".to_string(), property.clone());
                 root.properties.insert("value".to_string(), property);
             }
-        }
         root.arguments = Default::default();
         Ok(root.call_without_values(doc)?.element)
     }
@@ -1054,11 +1042,10 @@ fn resolve_recursive_property(
     self_properties: &ftd::Map<Property>,
     doc: &ftd::ftd2021::p2::TDoc,
 ) -> ftd::ftd2021::p1::Result<ftd::Value> {
-    if let Some(value) = self_properties.get("$loop$") {
-        if let Ok(property_value) = value.eval(line_number, "$loop$", doc) {
+    if let Some(value) = self_properties.get("$loop$")
+        && let Ok(property_value) = value.eval(line_number, "$loop$", doc) {
             return property_value.resolve(line_number, doc);
         }
-    }
     ftd::ftd2021::p2::utils::e2(
         format!("$loop$ not found in properties {self_properties:?}"),
         doc.name,
@@ -1085,11 +1072,10 @@ pub fn resolve_properties_by_id(
         if name == "$loop$" {
             continue;
         }
-        if let Some(ref id) = id {
-            if !id.eq(name) {
+        if let Some(ref id) = id
+            && !id.eq(name) {
                 continue;
             }
-        }
         if let Ok(property_value) = value.eval(line_number, name, doc) {
             properties.insert(name.to_string(), property_value.resolve(line_number, doc)?);
         }
@@ -1649,8 +1635,7 @@ impl Component {
                                         ftd::PropertyValue::Reference { ref name, .. }
                                         | ftd::PropertyValue::Variable { ref name, .. },
                                 }) = child.condition
-                                {
-                                    if name.eq({
+                                    && name.eq({
                                         if let Some(reference) = c.0.strip_prefix('@') {
                                             reference
                                         } else {
@@ -1669,7 +1654,6 @@ impl Component {
                                         };
                                         return Ok(());
                                     }
-                                }
                             }
                             _ => {}
                         }
@@ -1688,11 +1672,10 @@ impl Component {
     pub fn get_caption(&self) -> Option<String> {
         let mut new_caption_title = None;
         for (arg, arg_kind) in self.arguments.clone() {
-            if let ftd::ftd2021::p2::Kind::String { caption, .. } = arg_kind {
-                if caption {
+            if let ftd::ftd2021::p2::Kind::String { caption, .. } = arg_kind
+                && caption {
                     new_caption_title = Some(arg);
                 }
-            }
         }
         new_caption_title
     }
@@ -2031,8 +2014,8 @@ impl Component {
                         ..
                     } = self.call_sub_functions(doc, invocations, local_container, id)?;
 
-                    if let Some(ref append_at) = container.append_at {
-                        if let Some(ref child_container) = child_container {
+                    if let Some(ref append_at) = container.append_at
+                        && let Some(ref child_container) = child_container {
                             let id = if append_at.contains('.') {
                                 ftd::ftd2021::p2::utils::split(append_at.to_string(), ".")?.1
                             } else {
@@ -2044,7 +2027,6 @@ impl Component {
                                 container.external_children = Some((id, c.to_owned(), vec![]));
                             }
                         }
-                    }
                     if let Some(child_container) = child_container {
                         match containers {
                             Some(ref mut containers) => {
@@ -2154,11 +2136,10 @@ pub fn recursive_child_component(
             if left.contains("$loop$") {
                 left_boolean = resolve_loop_reference(i, &recursive_kind, doc, left)?.default;
             }
-            if let Some(r) = right {
-                if r.contains("$loop$") {
+            if let Some(r) = right
+                && r.contains("$loop$") {
                     right_boolean = resolve_loop_reference(i, &recursive_kind, doc, r)?.default;
                 }
-            }
         }
 
         if contains_loop_ref(&loop_ref, v) && v.starts_with(&format!("${loop_ref}")) {
@@ -2222,14 +2203,13 @@ pub fn recursive_child_component(
     };
 
     let mut new_caption = sub.caption.clone();
-    if let (Some(caption), Some(caption_arg)) = (sub.caption.clone(), caption) {
-        if contains_loop_ref(&loop_ref, &caption) {
+    if let (Some(caption), Some(caption_arg)) = (sub.caption.clone(), caption)
+        && contains_loop_ref(&loop_ref, &caption) {
             let reference = caption.replace(&format!("${loop_ref}"), "$loop$");
             let value = resolve_loop_reference(&sub.line_number, &recursive_kind, doc, reference)?;
             properties.insert(caption_arg, value);
             new_caption = None;
         }
-    }
 
     assert_caption_body_checks(
         full_name.as_str(),

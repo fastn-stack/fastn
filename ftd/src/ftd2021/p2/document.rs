@@ -36,11 +36,9 @@ impl Document {
                 if let ftd::ftd2021::variable::VariableFlags {
                     always_include: Some(f),
                 } = flag
-                {
-                    if *f {
+                    && *f {
                         always_include.push(k.to_string());
                     }
-                }
             }
         }
         return (d, always_include);
@@ -92,8 +90,8 @@ impl Document {
                         );
                     }
                     for (k, v) in fields {
-                        if let Ok(val) = v.resolve(0, doc) {
-                            if let Some(val) = get_value(&val, doc) {
+                        if let Ok(val) = v.resolve(0, doc)
+                            && let Some(val) = get_value(&val, doc) {
                                 value_fields.insert(
                                     if k.eq("size") {
                                         "font-size".to_string()
@@ -103,7 +101,6 @@ impl Document {
                                     val,
                                 );
                             }
-                        }
                     }
                     if let Some(val) = value_fields.get_mut("font-size") {
                         let size = serde_json::to_string(val).unwrap();
@@ -493,11 +490,10 @@ impl Document {
                             return Some(t);
                         }
 
-                        if let Some((_, _, ref external_children)) = container.external_children {
-                            if let Some(t) = finder(external_children, f) {
+                        if let Some((_, _, ref external_children)) = container.external_children
+                            && let Some(t) = finder(external_children, f) {
                                 return Some(t);
                             }
-                        }
                     }
                     ftd::Element::Null => {}
                 }
@@ -796,14 +792,12 @@ pub fn set_region_id(elements: &mut [ftd::Element]) {
             | ftd::Element::Row(ftd::Row { common, .. }) => {
                 if common.region.as_ref().filter(|v| v.is_heading()).is_some()
                     && common.data_id.is_none()
-                {
-                    if let Some(h) = ftd::ftd2021::p2::Document::get_heading(
+                    && let Some(h) = ftd::ftd2021::p2::Document::get_heading(
                         vec![element.clone()].as_slice(),
                         &|r| r.is_heading(),
                     ) {
                         map.insert(idx, slug::slugify(h.original));
                     }
-                }
             }
             _ => continue,
         }

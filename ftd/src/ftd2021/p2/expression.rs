@@ -324,11 +324,9 @@ impl Boolean {
                 left: ftd::PropertyValue::Variable { name, .. },
                 right: ftd::PropertyValue::Value { .. },
             } = self
-            {
-                if name.starts_with("$loop$") {
+                && name.starts_with("$loop$") {
                     constant = true;
                 }
-            }
             constant
         };
         (!matches!(
@@ -357,11 +355,9 @@ impl Boolean {
                 left: ftd::PropertyValue::Variable { name, .. },
                 right: ftd::PropertyValue::Value { .. },
             } = self
-            {
-                if name.starts_with("$loop$") {
+                && name.starts_with("$loop$") {
                     constant = true;
                 }
-            }
             constant
         };
         (!matches!(

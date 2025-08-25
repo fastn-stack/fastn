@@ -163,11 +163,10 @@ impl InterpreterState {
     /// Increments the scan count of the first element in the
     /// AST stack of the `to_process` field of `InterpreterState` instance.
     pub fn increase_scan_count(&mut self) {
-        if let Some((_, ast_list)) = self.to_process.stack.last_mut() {
-            if let Some(item) = ast_list.first_mut() {
+        if let Some((_, ast_list)) = self.to_process.stack.last_mut()
+            && let Some(item) = ast_list.first_mut() {
                 item.number_of_scan += 1;
             }
-        }
     }
 
     /// Detects cycles in the component processing sequence and raises an error if a cycle is found.
@@ -609,8 +608,8 @@ impl InterpreterState {
     /// usize, and the ast as a reference to an ftd_ast::AST. If either the last element of the
     /// stack or the first element of the ast_list field do not exist, the method returns None.
     pub fn peek_stack(&self) -> Option<(String, usize, &ftd_ast::Ast)> {
-        if let Some((doc_name, ast_list)) = self.to_process.stack.last() {
-            if let Some(ftd::interpreter::ToProcessItem {
+        if let Some((doc_name, ast_list)) = self.to_process.stack.last()
+            && let Some(ftd::interpreter::ToProcessItem {
                 number_of_scan,
                 ast,
                 ..
@@ -618,7 +617,6 @@ impl InterpreterState {
             {
                 return Some((doc_name.to_string(), *number_of_scan, ast));
             }
-        }
         None
     }
 
@@ -632,8 +630,8 @@ impl InterpreterState {
     /// continues the loop. If the stack is empty, it returns None.
     pub fn get_next_ast(&mut self) -> Option<(String, usize, ftd_ast::Ast, Vec<String>)> {
         loop {
-            if let Some((doc_name, ast_list)) = self.to_process.stack.last() {
-                if let Some(ftd::interpreter::ToProcessItem {
+            if let Some((doc_name, ast_list)) = self.to_process.stack.last()
+                && let Some(ftd::interpreter::ToProcessItem {
                     number_of_scan,
                     ast,
                     exports: export,
@@ -646,7 +644,6 @@ impl InterpreterState {
                         export.clone(),
                     ));
                 }
-            }
 
             if self
                 .to_process
@@ -1287,7 +1284,7 @@ pub struct Document {
 }
 
 impl Document {
-    pub fn tdoc(&self) -> ftd::interpreter::TDoc {
+    pub fn tdoc(&self) -> ftd::interpreter::TDoc<'_> {
         ftd::interpreter::TDoc {
             name: self.name.as_str(),
             aliases: &self.aliases,
@@ -1443,14 +1440,13 @@ impl Document {
                 Some(fastn_resolved::Value::KwArgs { arguments }) => {
                     let mut headers: fastn_resolved::Map<String> = Default::default();
                     for (name, value) in arguments {
-                        if let Some(name) = name.strip_prefix("header-") {
-                            if let Some(value) = value
+                        if let Some(name) = name.strip_prefix("header-")
+                            && let Some(value) = value
                                 .resolve(&tdoc, v.line_number)?
                                 .to_json_string(&tdoc, false)?
                             {
                                 headers.insert(name.to_string(), value.to_string());
                             }
-                        }
                     }
                     headers
                 }

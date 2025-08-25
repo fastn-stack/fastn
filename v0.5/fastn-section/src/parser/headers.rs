@@ -259,10 +259,8 @@ pub fn headers(
     }
 
     // Reset the scanner before the new line (but only if we didn't fail with progress)
-    if !made_progress {
-        if let Some(index) = found_new_line_at_header_end {
-            scanner.reset(&index);
-        }
+    if !made_progress && let Some(index) = found_new_line_at_header_end {
+        scanner.reset(&index);
     }
 
     if headers.is_empty() && !made_progress {

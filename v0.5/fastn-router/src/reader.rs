@@ -71,16 +71,16 @@ fn get_dependencies(doc: fastn_section::Document) -> Option<(String, Vec<String>
     let mut deps = vec![];
 
     for section in doc.sections.iter() {
-        if let Some("package") = section.simple_name() {
-            if let Some(n) = section.simple_caption() {
-                name = Some(n.to_string());
-            }
+        if let Some("package") = section.simple_name()
+            && let Some(n) = section.simple_caption()
+        {
+            name = Some(n.to_string());
         }
 
-        if let Some("dependency") = section.simple_name() {
-            if let Some(name) = section.simple_caption() {
-                deps.push(name.to_string());
-            }
+        if let Some("dependency") = section.simple_name()
+            && let Some(name) = section.simple_caption()
+        {
+            deps.push(name.to_string());
         }
     }
 

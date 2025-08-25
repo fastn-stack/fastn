@@ -110,12 +110,10 @@ impl Library2022 {
                     .apps
                     .iter()
                     .find(|app| app.package.name == package_name)
-                {
-                    if let Some(val) = get_for_package_(name, lib, &app.package, session_id).await?
+                    && let Some(val) = get_for_package_(name, lib, &app.package, session_id).await?
                     {
                         return Ok(val);
                     }
-                }
             }
 
             if let Some(val) = get_for_package_(name, lib, &package, session_id).await? {

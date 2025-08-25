@@ -107,11 +107,10 @@ impl TDoc<'_> {
                     0,
                 );
             };
-            if let ftd::PropertyValue::Variable { ref mut name, .. } = default {
-                if !self.local_variables.contains_key(name) && !self.bag.contains_key(name) {
+            if let ftd::PropertyValue::Variable { ref mut name, .. } = default
+                && !self.local_variables.contains_key(name) && !self.bag.contains_key(name) {
                     *name = self.resolve_local_variable_name(0, name, string_container)?;
                 }
-            }
             if let Some(name) = default.get_passed_by_variable() {
                 self.referenced_local_variables.insert(
                     self.resolve_local_variable_name(0, k, string_container)?,
@@ -1176,12 +1175,11 @@ impl TDoc<'_> {
         if name.contains('#') {
             let (name, remaining_value) = {
                 let mut full_name = (name.to_string(), None);
-                if let Some((s, n)) = name.split_once('#') {
-                    if let Some((v, remaining_value)) = n.split_once('.') {
+                if let Some((s, n)) = name.split_once('#')
+                    && let Some((v, remaining_value)) = n.split_once('.') {
                         full_name.0 = format!("{s}#{v}");
                         full_name.1 = Some(remaining_value.to_string());
                     }
-                }
                 full_name
             };
             return match self.bag.get(name.as_str()) {

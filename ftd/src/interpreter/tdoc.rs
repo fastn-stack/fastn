@@ -626,8 +626,8 @@ impl<'a> TDoc<'a> {
                 )
             };
 
-        if let Some(remaining) = remaining {
-            if !initial_kind.is_module()
+        if let Some(remaining) = remaining
+            && !initial_kind.is_module()
                 && !initial_kind
                     .kind
                     .is_or_type_with_variant(&initial_kind.kind.get_name(), remaining.as_str())
@@ -643,7 +643,6 @@ impl<'a> TDoc<'a> {
                     mutable,
                 )));
             }
-        }
 
         return Ok(ftd::interpreter::StateWithThing::new_thing((
             source,
@@ -1434,14 +1433,13 @@ impl<'a> TDoc<'a> {
                                 initial_thing
                             };
 
-                            if property_value.unwrap().is_clone() {
-                                if let Ok(mut variable) =
+                            if property_value.unwrap().is_clone()
+                                && let Ok(mut variable) =
                                     thing.clone().variable(doc.name, thing.line_number())
                                 {
                                     variable.mutable = mutable;
                                     thing = ftd::interpreter::Thing::Variable(variable);
                                 }
-                            }
 
                             thing
                         }

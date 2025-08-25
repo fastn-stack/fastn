@@ -279,9 +279,9 @@ impl Package {
             if !with_alias {
                 // Check for the aliases and map them to the full path
                 for dependency in &self.dependencies {
-                    if let Some(alias) = &dependency.alias {
-                        if alias.as_str().eq(ai.path.as_str())
-                            || ai.path.starts_with(format!("{alias}/").as_str())
+                    if let Some(alias) = &dependency.alias
+                        && (alias.as_str().eq(ai.path.as_str())
+                            || ai.path.starts_with(format!("{alias}/").as_str()))
                         {
                             import_doc_path = ai.path.replacen(
                                 dependency.alias.as_ref()?.as_str(),
@@ -289,7 +289,6 @@ impl Package {
                                 1,
                             );
                         }
-                    }
                 }
             }
 
@@ -338,11 +337,10 @@ impl Package {
         let mut full_path: Option<String> = None;
 
         for dependency in &self.dependencies {
-            if let Some(dep_alias) = &dependency.alias {
-                if dep_alias.as_str().eq(alias) {
+            if let Some(dep_alias) = &dependency.alias
+                && dep_alias.as_str().eq(alias) {
                     full_path = Some(dependency.package.name.clone());
                 }
-            }
         }
 
         full_path
@@ -768,8 +766,8 @@ impl Package {
         // validation logic TODO: It should be ordered
         fastn_core::utils::validate_base_url(&package)?;
 
-        if package.import_auto_imports_from_original {
-            if let Some(ref original_package) = package.translation_of {
+        if package.import_auto_imports_from_original
+            && let Some(ref original_package) = package.translation_of {
                 if package.auto_import.is_empty() {
                     package
                         .auto_import
@@ -783,7 +781,6 @@ impl Package {
                     });
                 }
             }
-        }
 
         Ok(package)
     }
@@ -808,14 +805,12 @@ impl Package {
         }
 
         if lang_module_path_with_language.is_none() && !main_package_selected_language.eq(&req_lang)
-        {
-            if let Some(main_package_selected_language) = main_package_selected_language.as_ref() {
+            && let Some(main_package_selected_language) = main_package_selected_language.as_ref() {
                 lang_module_path_with_language = lang
                     .available_languages
                     .get(main_package_selected_language)
                     .map(|module| (module, main_package_selected_language.to_string()));
             }
-        }
 
         if lang_module_path_with_language.is_none() {
             lang_module_path_with_language = lang

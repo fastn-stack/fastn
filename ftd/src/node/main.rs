@@ -368,11 +368,10 @@ impl ftd::executor::Row {
         );
 
         if let Some(jc) = n.style.get_mut("justify-content") {
-            if let Some(old_value) = jc.value.as_ref() {
-                if old_value.eq("unset") {
+            if let Some(old_value) = jc.value.as_ref()
+                && old_value.eq("unset") {
                     jc.value = align_content_value.value;
                 }
-            }
             jc.properties.extend(align_content_value.properties);
         } else {
             n.style
@@ -435,11 +434,10 @@ impl ftd::executor::Column {
         );
 
         if let Some(jc) = n.style.get_mut("justify-content") {
-            if let Some(old_value) = jc.value.as_ref() {
-                if old_value.eq("unset") {
+            if let Some(old_value) = jc.value.as_ref()
+                && old_value.eq("unset") {
                     jc.value = align_content_value.value;
                 }
-            }
             jc.properties.extend(align_content_value.properties);
         } else {
             n.style
@@ -1131,11 +1129,10 @@ impl ftd::executor::Common {
 
         let mut d: ftd::Map<ftd::node::Value> = Default::default();
 
-        if let Some(id) = self.id.value.as_ref() {
-            if anchor_ids.contains(id) {
+        if let Some(id) = self.id.value.as_ref()
+            && anchor_ids.contains(id) {
                 d.check_and_insert("position", ftd::node::Value::from_string("relative"));
             }
-        }
 
         if let Some(ftd::executor::Anchor::Id(anchor_id)) = self.anchor.value.as_ref() {
             anchor_ids.push(anchor_id.clone());

@@ -29,10 +29,7 @@ pub mod errors;
 
 // Re-export main types
 pub use errors::{
-    MigrateMailDatabaseError,
-    MailDatabaseConnectionError,
-    MailCreateError,
-    MailLoadError,
+    MailCreateError, MailDatabaseConnectionError, MailLoadError, MigrateMailDatabaseError,
 };
 
 pub use automerge::DefaultMail;
@@ -50,7 +47,7 @@ impl Mail {
     /// Create new mail system for an account
     pub async fn create(account_path: &std::path::Path) -> Result<Self, MailCreateError> {
         let mail_path = account_path.join("mail.sqlite");
-        
+
         // Create mail directory structure
         database::create_mail_directories(account_path).map_err(|e| {
             MailCreateError::DirectoryCreationFailed {
@@ -62,7 +59,7 @@ impl Mail {
         // Create and connect to database
         let connection = database::create_connection(&mail_path)
             .map_err(|e| MailCreateError::ConnectionFailed { source: e })?;
-        
+
         // Run migrations
         database::migrate_database(&connection)
             .map_err(|e| MailCreateError::MigrationFailed { source: e })?;
@@ -76,27 +73,24 @@ impl Mail {
     /// Load existing mail system for an account
     pub async fn load(account_path: &std::path::Path) -> Result<Self, MailLoadError> {
         let mail_path = account_path.join("mail.sqlite");
-        
+
         // Check if database exists
         if !database::database_exists(&mail_path) {
-            return Err(MailLoadError::DatabaseNotFound {
-                path: mail_path,
-            });
+            return Err(MailLoadError::DatabaseNotFound { path: mail_path });
         }
 
         // Connect to existing database
-        let connection = database::create_connection(&mail_path)
-            .map_err(|e| MailLoadError::ConnectionFailed { 
-                path: mail_path.clone(),
-                source: Box::new(e),
-            })?;
-        
-        // Run migrations
-        database::migrate_database(&connection).map_err(|e| {
+        let connection = database::create_connection(&mail_path).map_err(|e| {
             MailLoadError::ConnectionFailed {
                 path: mail_path.clone(),
                 source: Box::new(e),
             }
+        })?;
+
+        // Run migrations
+        database::migrate_database(&connection).map_err(|e| MailLoadError::ConnectionFailed {
+            path: mail_path.clone(),
+            source: Box::new(e),
         })?;
 
         Ok(Self {
@@ -116,8 +110,7 @@ impl Mail {
     }
 
     /// Create a test mail system in memory (for testing only)
-    #[cfg(test)]
-    pub fn new_for_test() -> Self {
+    pub fn create_test() -> Self {
         let connection = rusqlite::Connection::open_in_memory().unwrap();
         Self {
             db_path: std::path::PathBuf::from(":memory:"),

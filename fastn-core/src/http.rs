@@ -214,8 +214,8 @@ impl Request {
             headers: &reqwest::header::HeaderMap,
         ) -> std::collections::HashMap<String, String> {
             let mut cookies = std::collections::HashMap::new();
-            if let Some(cookie) = headers.get("cookie") {
-                if let Ok(cookie) = cookie.to_str() {
+            if let Some(cookie) = headers.get("cookie")
+                && let Ok(cookie) = cookie.to_str() {
                     for cookie in cookie.split(';') {
                         let cookie = cookie.trim();
                         if let Some(index) = cookie.find('=') {
@@ -226,7 +226,6 @@ impl Request {
                         }
                     }
                 }
-            }
             cookies
         }
     }
@@ -416,11 +415,10 @@ pub async fn http_post_with_cookie(
 
     let mut resp_cookies = vec![];
     res.headers().iter().for_each(|(k, v)| {
-        if k.as_str().eq("set-cookie") {
-            if let Ok(v) = v.to_str() {
+        if k.as_str().eq("set-cookie")
+            && let Ok(v) = v.to_str() {
                 resp_cookies.push(v.to_string());
             }
-        }
     });
 
     if !res.status().eq(&http::StatusCode::OK) {
@@ -484,11 +482,10 @@ pub async fn http_get_with_cookie(
 
     let mut resp_cookies = vec![];
     res.headers().iter().for_each(|(k, v)| {
-        if k.as_str().eq("set-cookie") {
-            if let Ok(v) = v.to_str() {
+        if k.as_str().eq("set-cookie")
+            && let Ok(v) = v.to_str() {
                 resp_cookies.push(v.to_string());
             }
-        }
     });
 
     if !res.status().eq(&http::StatusCode::OK) {

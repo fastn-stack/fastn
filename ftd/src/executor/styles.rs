@@ -54,11 +54,10 @@ impl Length {
         use ftd::interpreter::PropertyValueExt;
         if let Some(value) = or_type_value {
             let binding = value.clone().resolve(&doc.itdoc(), line_number)?;
-            if let fastn_resolved::Value::Optional { data, .. } = &binding {
-                if data.is_none() {
+            if let fastn_resolved::Value::Optional { data, .. } = &binding
+                && data.is_none() {
                     return Ok(None);
                 }
-            }
             return Ok(Some(Length::from_value(value, doc, line_number)?));
         }
         Ok(None)
@@ -1576,11 +1575,10 @@ impl BackgroundRepeat {
         use ftd::interpreter::{PropertyValueExt, ValueExt};
 
         let binding = value.resolve(&doc.itdoc(), line_number)?;
-        if let fastn_resolved::Value::Optional { data, .. } = &binding {
-            if data.is_none() {
+        if let fastn_resolved::Value::Optional { data, .. } = &binding
+            && data.is_none() {
                 return Ok(None);
             }
-        }
 
         let value = binding.get_or_type(doc.name, line_number)?;
         let value = (value.1.to_owned(), value.2.to_owned());
@@ -1652,11 +1650,10 @@ impl BackgroundSize {
         use ftd::interpreter::{PropertyValueExt, ValueExt};
 
         let binding = value.resolve(&doc.itdoc(), line_number)?;
-        if let fastn_resolved::Value::Optional { data, .. } = &binding {
-            if data.is_none() {
+        if let fastn_resolved::Value::Optional { data, .. } = &binding
+            && data.is_none() {
                 return Ok(None);
             }
-        }
 
         let value = binding.get_or_type(doc.name, line_number)?;
         let value = (value.1.to_owned(), value.2.to_owned());
@@ -1727,11 +1724,10 @@ impl BackgroundPosition {
         use ftd::interpreter::{PropertyValueExt, ValueExt};
 
         let binding = value.resolve(&doc.itdoc(), line_number)?;
-        if let fastn_resolved::Value::Optional { data, .. } = &binding {
-            if data.is_none() {
+        if let fastn_resolved::Value::Optional { data, .. } = &binding
+            && data.is_none() {
                 return Ok(None);
             }
-        }
 
         let value = binding.get_or_type(doc.name, line_number)?;
         let value = (value.1.to_owned(), value.2.to_owned());

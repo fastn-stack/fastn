@@ -394,11 +394,10 @@ impl DocumentStore {
         let full_path = self.root.join(&path.path);
 
         // Create the directory if it doesn't exist
-        if let Some(parent) = full_path.parent() {
-            if !parent.path.exists() {
+        if let Some(parent) = full_path.parent()
+            && !parent.path.exists() {
                 tokio::fs::create_dir_all(parent.path).await?;
             }
-        }
 
         let mut file = tokio::fs::File::create(full_path.path).await?;
         file.write_all(data).await?;

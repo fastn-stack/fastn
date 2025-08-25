@@ -502,11 +502,10 @@ impl ExecuteDoc<'_> {
 }
 
 fn match_parent_id(c: &str, parent_id: &Option<String>) -> bool {
-    if let Some(p) = parent_id {
-        if c == p {
+    if let Some(p) = parent_id
+        && c == p {
             return true;
         }
-    }
     false
 }
 

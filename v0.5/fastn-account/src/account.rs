@@ -39,7 +39,7 @@ impl fastn_account::Account {
     ) -> Self {
         // Create test databases - use fastn-automerge test utility
         let (automerge, _temp_dir) = fastn_automerge::create_test_db().unwrap();
-        let mail = fastn_mail::Mail::new_for_test();
+        let mail = fastn_mail::Mail::create_test();
         let user = rusqlite::Connection::open_in_memory().unwrap();
 
         Self {

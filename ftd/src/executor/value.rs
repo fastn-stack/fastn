@@ -163,14 +163,13 @@ pub(crate) fn find_value_by_argument(
                 if p.condition.is_some() {
                     break;
                 }
-            } else if p.condition.is_none() {
-                if let Some(v) = p.value.get_reference_or_clone() {
+            } else if p.condition.is_none()
+                && let Some(v) = p.value.get_reference_or_clone() {
                     value = Some(fastn_resolved::Value::new_string(
                         format!("{{{v}}}").as_str(),
                     ));
                     line_number = Some(p.line_number);
                 }
-            }
         }
     }
 

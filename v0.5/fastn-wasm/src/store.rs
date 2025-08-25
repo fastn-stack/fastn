@@ -124,7 +124,7 @@ pub enum SQLError {
 }
 
 pub trait ConnectionExt: Send {
-    fn prepare(&self, sql: &str) -> Result<rusqlite::Statement, SQLError>;
+    fn prepare(&self, sql: &str) -> Result<rusqlite::Statement<'_>, SQLError>;
     fn execute(
         &self,
         query: &str,
@@ -134,7 +134,7 @@ pub trait ConnectionExt: Send {
 }
 
 impl fastn_wasm::ConnectionExt for rusqlite::Connection {
-    fn prepare(&self, sql: &str) -> Result<rusqlite::Statement, fastn_wasm::SQLError> {
+    fn prepare(&self, sql: &str) -> Result<rusqlite::Statement<'_>, fastn_wasm::SQLError> {
         self.prepare(sql).map_err(fastn_wasm::SQLError::Rusqlite)
     }
 

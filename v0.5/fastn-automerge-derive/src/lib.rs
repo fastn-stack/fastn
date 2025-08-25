@@ -285,14 +285,14 @@ fn generate_path_based_api(struct_name: &syn::Ident, _id52_field: Option<&Field>
 }
 
 fn find_document_id52_field(input: &DeriveInput) -> Option<&Field> {
-    if let Data::Struct(data_struct) = &input.data {
-        if let Fields::Named(fields) = &data_struct.fields {
-            for field in &fields.named {
-                // Look for #[document_id52] attribute
-                for attr in &field.attrs {
-                    if attr.path().is_ident("document_id52") {
-                        return Some(field);
-                    }
+    if let Data::Struct(data_struct) = &input.data
+        && let Fields::Named(fields) = &data_struct.fields
+    {
+        for field in &fields.named {
+            // Look for #[document_id52] attribute
+            for attr in &field.attrs {
+                if attr.path().is_ident("document_id52") {
+                    return Some(field);
                 }
             }
         }
