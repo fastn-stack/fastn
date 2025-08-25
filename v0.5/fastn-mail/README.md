@@ -59,6 +59,7 @@ CREATE TABLE fastn_emails
     
     -- P2P Routing Information (extracted from email addresses)
     our_alias_used   TEXT,                    -- Which of our aliases was used in this email
+    our_username     TEXT,                    -- Our username (extracted from our email address)
     their_alias      TEXT,                    -- Other party's alias (sender if inbound, recipient if outbound)
     their_username   TEXT,                    -- Other party's username (extracted from email address)
 
@@ -163,11 +164,8 @@ impl Mail {
 
 ```rust
 impl Mail {
-    // Incoming SMTP delivery (store email from SMTP server or P2P)
-    pub async fn smtp_deliver(&self, raw_message: Vec<u8>, folder: &str) -> Result<String, MailError>;
-    
-    // Outgoing SMTP (queue email for P2P delivery to other FASTN nodes)
-    pub async fn smtp_send(&self, raw_message: Vec<u8>) -> Result<String, MailError>;
+    // SMTP server receives an email and handles delivery (local storage or P2P queuing)
+    pub async fn smtp_receive(&self, raw_message: Vec<u8>) -> Result<String, MailError>;
 }
 ```
 
@@ -204,6 +202,26 @@ pub struct EmailForDelivery {
     pub raw_message: Vec<u8>,        // Complete RFC 5322 message
     pub size_bytes: usize,           // Message size
     pub date_queued: i64,            // When queued for delivery
+}
+
+pub struct FolderInfo {
+    pub name: String,                // Folder name
+    pub exists: u32,                 // Number of messages
+    pub recent: u32,                 // Number of recent messages
+    pub unseen: u32,                 // Number of unseen messages
+    pub uid_validity: u32,           // UID validity number
+    pub uid_next: u32,               // Next UID to be assigned
+}
+
+pub struct ThreadTree {
+    pub root_message_id: String,     // Root message of the thread
+    pub children: Vec<ThreadNode>,   // Child threads
+}
+
+pub struct ThreadNode {
+    pub message_id: String,          // This message's ID
+    pub uid: u32,                    // IMAP UID
+    pub children: Vec<ThreadNode>,   // Replies to this message
 }
 ```
 
@@ -257,19 +275,22 @@ For each email, we extract and store alias relationships:
 
 **Inbound Email** (received in INBOX):
 - `our_alias_used` = our alias that received this email (from To/CC/BCC headers)
+- `our_username` = our username that received this email (from To/CC/BCC headers)
 - `their_alias` = sender's alias (extracted from From header)
-- `their_username` = sender's username part
+- `their_username` = sender's username part (extracted from From header)
 
 **Outbound Email** (stored in Sent):
 - `our_alias_used` = our alias that sent this email (from From header)
+- `our_username` = our username that sent this email (from From header)
 - `their_alias` = recipient's alias (extracted from To header, primary recipient)
-- `their_username` = recipient's username part
+- `their_username` = recipient's username part (extracted from To header)
 
 This allows us to:
 - **Route P2P delivery**: Use `their_alias` to find the recipient's FASTN node
 - **Track conversations**: Pair `(our_alias_used, their_alias)` represents a conversation
-- **Reconstruct addresses**: Combine `their_username@their_alias` for IMAP clients
+- **Reconstruct addresses**: Combine `our_username@our_alias_used` and `their_username@their_alias` for IMAP clients
 - **Handle multi-alias accounts**: Know which persona was used in each conversation
+- **Display names**: Show proper email addresses in email clients
 
 ### **Delivery Status Tracking**
 
