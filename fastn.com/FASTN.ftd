@@ -1298,6 +1298,12 @@ skip: true
 
 # Podcast: /podcast/
 
+- The New fastn Architecture - Peer-to-Peer Web Framework Deep Dive
+  url: /podcast/new-fastn-architecture/
+
+- fastn p2p emails
+  url: /podcast/fastn-p2p-emails/
+
 - Open Source Sustainability for fastn - FifthTry Launches Rust Consultancy
   url: /podcast/sustainability-and-consultancy/
 
