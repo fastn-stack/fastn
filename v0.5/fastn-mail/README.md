@@ -114,14 +114,14 @@ CREATE TABLE fastn_email_peers
 
 ### **Core Types**
 
-#### `Mail` struct
+#### `Store` struct
 
-Main object for mail operations following create/load pattern:
+Main object for mail storage operations following create/load pattern:
 
 ```rust
-pub struct Mail {
-    pub fn create(account_path: &Path) -> Result<Self, MailCreateError>;
-    pub fn load(account_path: &Path) -> Result<Self, MailLoadError>;
+pub struct Store {
+    pub fn create(account_path: &Path) -> Result<Self, StoreCreateError>;
+    pub fn load(account_path: &Path) -> Result<Self, StoreLoadError>;
     pub fn create_test() -> Self; // For testing
 }
 ```
@@ -140,51 +140,51 @@ pub struct DefaultMail {
 
 ### **Error Types**
 
-- `MailCreateError` - Mail::create() failures
-- `MailLoadError` - Mail::load() failures
+- `StoreCreateError` - Store::create() failures
+- `StoreLoadError` - Store::load() failures
 
 ## Public API Methods
 
 ### **A. P2P Mail Delivery**
 
 ```rust
-impl Mail {
+impl Store {
     // Periodic task - check what needs to be delivered
-    pub async fn get_pending_deliveries(&self) -> Result<Vec<PendingDelivery>, MailError>;
+    pub async fn get_pending_deliveries(&self) -> Result<Vec<PendingDelivery>, StoreError>;
     
     // Peer inbound - when peer contacts us for their emails
-    pub async fn get_emails_for_peer(&self, peer_id52: &fastn_id52::PublicKey) -> Result<Vec<EmailForDelivery>, MailError>;
+    pub async fn get_emails_for_peer(&self, peer_id52: &fastn_id52::PublicKey) -> Result<Vec<EmailForDelivery>, StoreError>;
     
     // Mark email as successfully delivered to peer
-    pub async fn mark_delivered_to_peer(&self, email_id: &str, peer_id52: &fastn_id52::PublicKey) -> Result<(), MailError>;
+    pub async fn mark_delivered_to_peer(&self, email_id: &str, peer_id52: &fastn_id52::PublicKey) -> Result<(), StoreError>;
 }
 ```
 
 ### **B. SMTP Operations**
 
 ```rust
-impl Mail {
+impl Store {
     // SMTP server receives an email and handles delivery (local storage or P2P queuing)
-    pub async fn smtp_receive(&self, raw_message: Vec<u8>) -> Result<String, MailError>;
+    pub async fn smtp_receive(&self, raw_message: Vec<u8>) -> Result<String, StoreError>;
 }
 ```
 
 ### **C. IMAP Operations**
 
 ```rust
-impl Mail {
+impl Store {
     // Folder management
-    pub async fn imap_list_folders(&self) -> Result<Vec<String>, MailError>;
-    pub async fn imap_select_folder(&self, folder: &str) -> Result<FolderInfo, MailError>;
+    pub async fn imap_list_folders(&self) -> Result<Vec<String>, StoreError>;
+    pub async fn imap_select_folder(&self, folder: &str) -> Result<FolderInfo, StoreError>;
     
     // Message operations
-    pub async fn imap_fetch(&self, folder: &str, uid: u32) -> Result<Vec<u8>, MailError>;
-    pub async fn imap_search(&self, folder: &str, criteria: &str) -> Result<Vec<u32>, MailError>;
-    pub async fn imap_store_flags(&self, folder: &str, uid: u32, flags: &[String]) -> Result<(), MailError>;
-    pub async fn imap_expunge(&self, folder: &str) -> Result<Vec<u32>, MailError>;
+    pub async fn imap_fetch(&self, folder: &str, uid: u32) -> Result<Vec<u8>, StoreError>;
+    pub async fn imap_search(&self, folder: &str, criteria: &str) -> Result<Vec<u32>, StoreError>;
+    pub async fn imap_store_flags(&self, folder: &str, uid: u32, flags: &[Flag]) -> Result<(), StoreError>;
+    pub async fn imap_expunge(&self, folder: &str) -> Result<Vec<u32>, StoreError>;
     
     // Threading
-    pub async fn imap_thread(&self, folder: &str, algorithm: &str) -> Result<ThreadTree, MailError>;
+    pub async fn imap_thread(&self, folder: &str, algorithm: &str) -> Result<ThreadTree, StoreError>;
 }
 ```
 
